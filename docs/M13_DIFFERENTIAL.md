@@ -29,15 +29,15 @@ amplification was not established.
 
 ## Budget experiment
 
-The default governor never activates on this path because calls are forced.
-Allowing forced skips still does not activate while the scene threshold is
-positive: its work counters become positive after the compile decision. With a
-zero threshold the mechanism activates and reduced sampled spikes, but it
+The main render caller passes `forced=false`; M14 corrected the earlier forced-call
+description. The default governor still does not activate while the scene
+threshold is positive because its work counters become positive after the
+compile decision. With a zero threshold the mechanism activates and reduced sampled spikes, but it
 returned `false` 31,742,420 times for only 324 accepted compiles in the final
 200-frame window, still produced three compile spikes, and reached a 61.8 ms
 maximum compile stage. The caller immediately retries deferred work, creating
 a busy retry storm. M13 rejects this governor configuration as a mitigation.
 
-The next useful experiment is inside the chunk rebuild/caller path: measure why
-forced compiles recur, then budget a bounded number of accepted rebuilds without
-returning a retryable failure in a hot loop.
+M14 subsequently measured the caller and dirty queue, attributed most stable
+pressure to an initial backlog, and prototyped bounded accepted work without
+returning a retryable failure in the hot loop.

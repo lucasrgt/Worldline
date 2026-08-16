@@ -15,9 +15,10 @@ path. Raw worlds and logs remain ignored derived artifacts.
 - Both dense and Aero-disabled empty scenes exercise chunk compilation above
   10 ms; exploratory repetitions crossed the 25 ms frame threshold in both.
 - No stable dense-scene amplification is claimed.
-- Making the current compile governor apply to forced calls and all frames
-  produces over 100 skipped retries per accepted compile, so it is rejected as
-  a mitigation despite reducing sampled spikes.
+- Making the current compile governor active on all frames produces over 100
+  skipped retries per accepted compile, so it is rejected as a mitigation
+  despite reducing sampled spikes. M14 later proved the main calls are
+  non-forced and that each `false` is immediately retried until the deadline.
 
 Frame times, threshold crossings, and exact counts are reported but not frozen. The invariant report,
 Aero revision, seed, and control topology are frozen.

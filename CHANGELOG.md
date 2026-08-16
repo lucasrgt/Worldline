@@ -4,6 +4,24 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.2.0 - M14 Chunk Backlog
+
+Status: GO for caller semantics, initial-backlog isolation, and the bounded
+non-retry prototype; the policy remains experimental.
+
+- Proved that the primary render caller passes `forced=false` and retries
+  `compileChunks` while it returns `false`, until the frame deadline.
+- Measured thousands of dirty builders after warmup and continuous rebuilds in
+  mostly quiet frames, attributing stable-camera pressure primarily to the
+  initial queue rather than continuous new dirtiness.
+- Added a smoke-only policy that uses vanilla priority ordering, performs two
+  real rebuilds in one call per frame, and returns `true` without a retry storm.
+- Added strict chunk-probe parsing, same-input fresh-world comparison, and
+  explicit terrain-latency and visual-equivalence non-claims.
+
+The frozen M14 invariant-report SHA-256 is
+`65f43a875d18e96066441cb308fed7089bab8414b087f4398c1555211f2bae6a`.
+
 ## 1.1.0 - M13 Aero Differential
 
 Status: GO for persistence isolation and the bounded chunk-path differential.
@@ -13,7 +31,7 @@ Status: GO for persistence isolation and the bounded chunk-path differential.
 - Added equal-control dense and Aero-disabled captures; both exercise the same
   substantial chunk-compilation path and exploratory runs spike in both, so a
   stable dense amplification is not claimed.
-- Exercised the optional compile governor on forced calls and rejected it after
+- Exercised the optional compile governor on the render path and rejected it after
   the always-active control produced a hot retry storm.
 - Added a strict Aero diagnostics adapter and a four-mode executable gate while
   retaining only per-file source limits.

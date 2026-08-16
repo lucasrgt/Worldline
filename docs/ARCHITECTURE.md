@@ -239,6 +239,11 @@ fields needed by the smoke. Persistence scanning stays inside the mapped test
 hook; conclusions and invariant checks stay in the bounded smoke. No governor
 or Aero behavior is promoted into Worldline product modules.
 
+M14 adds frame-scoped queue, rebuild, invalidation, call, and return probes to
+the same overlay. `AeroChunkProbe` owns their mapped vocabulary. The bounded
+experiment reuses vanilla's priority sorter but exists only in the smoke
+runtime; it is not an API, kernel feature, Aero patch, or approved mitigation.
+
 ## Compatibility boundary
 
 Product modules currently compile with `--release 8`; tooling runs on JDK 21.

@@ -10,7 +10,7 @@ Status: **GO - persistence isolated and compile-budget hypothesis tested**.
 | Reload the exact dense save | PASS |
 | Compare dense and Aero-disabled scenes under equal controls | PASS |
 | Exercise substantial compile pressure without Aero content | PASS |
-| Exercise the governor on forced calls | PASS |
+| Exercise the governor on the render compile path | PASS |
 | Detect and reject its retry storm | PASS |
 | Freeze an invariant report | PASS |
 

@@ -25,18 +25,21 @@ gradle.projectsEvaluated {
     def run = new File(project.projectDir, 'run')
     def ticks = (project.findProperty('worldlineTicks') ?: '240').toString()
     def mode = (project.findProperty('worldlineMode') ?: 'dense').toString()
-    def minimum = (project.findProperty('worldlineMinBEs') ?:
-        (mode == 'empty' || mode == 'reload' ? '0' : '500')).toString()
+    def emptyMode = mode == 'empty' || mode == 'reload' || mode == 'probe' || mode == 'bounded'
+    def minimum = (project.findProperty('worldlineMinBEs') ?: (emptyMode ? '0' : '500')).toString()
     def spikeMs = (project.findProperty('worldlineSpikeMs') ?: '25').toString()
     def warmup = (project.findProperty('worldlineWarmupTicks') ?: '0').toString()
     def logValue = (project.findProperty('worldlineLog') ?:
         new File(run, 'worldline-aero-frames.log').absolutePath).toString()
     def log = new File(logValue)
     if (!log.isAbsolute()) log = new File(run, logValue)
-    def modeArgs = mode == 'empty' ? ['-Daero.testmod.disabled=true'] : ['-Daero.mega=true']
+    def modeArgs = emptyMode && mode != 'reload' ? ['-Daero.testmod.disabled=true'] : ['-Daero.mega=true']
     if (mode == 'budget') modeArgs.addAll([
         '-Daero.chunkCompileBudget=true', '-Daero.chunkCompileBudget.minCellWork=0',
         '-Daero.chunkCompileBudget.skipForced=true'])
+    if (mode == 'probe' || mode == 'bounded') modeArgs.add('-Dworldline.chunkProbe.enabled=true')
+    if (mode == 'bounded') modeArgs.addAll([
+        '-Dworldline.chunkPolicy.enabled=true', '-Dworldline.chunkPolicy.batch=2'])
     task.jvmArgs(([
         '-Dworldline.capture.enabled=true',
         '-Dworldline.capture.seed=17320110707',

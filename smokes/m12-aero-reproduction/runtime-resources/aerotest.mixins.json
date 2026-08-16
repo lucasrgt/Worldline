@@ -6,7 +6,10 @@
   "client": [
     "MinecraftFrameSpikeMixin",
     "WorldSaveSpikeMixin",
-    "WorldlineCaptureMixin"
+    "WorldlineCaptureMixin",
+    "WorldlineChunkBuilderProbeMixin",
+    "WorldlineChunkProbeFrameMixin",
+    "WorldlineChunkProbeMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.1.0 - M13 Aero Differential (GO)**.
+Current official milestone: **Worldline v1.2.0 - M14 Chunk Backlog (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -82,6 +82,14 @@ chunk-compilation pressure remains with the Aero fixture disabled, and
 exploratory runs spike in both modes; dense amplification is not established. Aero's
 compile governor is rejected in this path because an always-active control
 causes tens of millions of immediate retries. See `docs/M13_DIFFERENTIAL.md`.
+
+M14 corrects the caller model and isolates the stable-camera pressure. The
+principal call is non-forced, `false` triggers another invocation before the
+frame deadline, and a fresh empty world still has thousands of dirty chunk
+builders after warmup. A smoke-only policy performs two real priority-ordered
+rebuilds once per frame and returns `true`, eliminating immediate retries while
+explicitly trading for slower queue drainage. It remains experimental; see
+`docs/M14_CHUNK_BACKLOG.md`.
 
 ## Verify
 
@@ -192,7 +200,9 @@ controlled dense scenes, ingests their real frame logs, reproduces the
 chunk-compilation spike, and minimizes each evidence window. Their exact
 boundaries are in the corresponding `MAP.md` files.
 `smokes/m13-aero-differential` then reloads the exact dense save, compares it
-with an Aero-disabled world, and tests the forced-call compile governor.
+with an Aero-disabled world, and tests the compile governor.
+`smokes/m14-chunk-backlog` instruments the non-forced caller and dirty queue,
+then compares vanilla with a real two-rebuild, non-retry bounded policy.
 
 The gate then runs `smokes/lab-cycle`, restores deterministic checkpoints in
 fresh clients, compares hypotheses, exercises GUI selectors, and compiles and
@@ -217,6 +227,7 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M11_CYCLE.md` is the v0.9.0 Aero-attribution GO audit.
 `M12_CYCLE.md` is the v1.0.0 real-Aero-reproduction GO audit.
 `M13_CYCLE.md` is the v1.1.0 Aero persistence/differential GO audit.
+`M14_CYCLE.md` is the v1.2.0 chunk-backlog/caller-policy GO audit.
 
 After preparing the local runtime with the canonical smoke gate, replay a
 bundle with:

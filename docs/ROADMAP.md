@@ -18,6 +18,7 @@ Passing an experiment does not silently promote its API.
 | v0.9.0 / M11 | Render-work attribution and exact Aero qualification | GO - bounded attribution and StationAPI load |
 | v1.0.0 / M12 | Real Aero scene capture, repeated spike classification, and evidence minimization | GO - chunk-compilation spike reproduced; persistence split deferred |
 | v1.1.0 / M13 | Aero persistence isolation, dense/empty differential, and compile-budget test | GO - real BEs persist; empty retains compile pressure; budget rejected |
+| v1.2.0 / M14 | Chunk caller semantics, initial-backlog attribution, and bounded non-retry policy | GO - caller/backlog isolated; policy experimental |
 
 ## Promotion rule
 
@@ -26,10 +27,10 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.1.0 direction
+## Immediate post-v1.2.0 direction
 
-M14 should instrument the forced chunk-rebuild caller and queue. The target is
-to explain why stable fixed-camera scenes keep compiling, separate useful
-rebuilds from immediate retries, and prototype a bounded accepted-work policy
-that does not signal retryable failure inside a hot loop. The historical random
-spike remains a non-claim until that path is causally narrowed.
+M15 should replace the Boolean caller ambiguity at an Aero-owned integration
+point with explicit accepted/deferred work, then measure dirty-queue age and
+visible-chunk readiness. A candidate needs visual correctness and terrain
+latency evidence before promotion. The historical random spike remains a
+non-claim until the path is causally narrowed beyond the initial backlog.
