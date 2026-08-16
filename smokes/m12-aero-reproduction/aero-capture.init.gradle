@@ -24,20 +24,30 @@ gradle.projectsEvaluated {
     task.actions.remove(0)
     def run = new File(project.projectDir, 'run')
     def ticks = (project.findProperty('worldlineTicks') ?: '240').toString()
+    def mode = (project.findProperty('worldlineMode') ?: 'dense').toString()
+    def minimum = (project.findProperty('worldlineMinBEs') ?:
+        (mode == 'empty' || mode == 'reload' ? '0' : '500')).toString()
+    def spikeMs = (project.findProperty('worldlineSpikeMs') ?: '25').toString()
+    def warmup = (project.findProperty('worldlineWarmupTicks') ?: '0').toString()
     def logValue = (project.findProperty('worldlineLog') ?:
         new File(run, 'worldline-aero-frames.log').absolutePath).toString()
     def log = new File(logValue)
     if (!log.isAbsolute()) log = new File(run, logValue)
-    task.jvmArgs(
+    def modeArgs = mode == 'empty' ? ['-Daero.testmod.disabled=true'] : ['-Daero.mega=true']
+    if (mode == 'budget') modeArgs.addAll([
+        '-Daero.chunkCompileBudget=true', '-Daero.chunkCompileBudget.minCellWork=0',
+        '-Daero.chunkCompileBudget.skipForced=true'])
+    task.jvmArgs(([
         '-Dworldline.capture.enabled=true',
         '-Dworldline.capture.seed=17320110707',
         '-Dworldline.capture.ticks=' + ticks,
-        '-Daero.mega=true',
+        '-Dworldline.capture.minBlockEntities=' + minimum,
+        '-Dworldline.capture.minWarmupTicks=' + warmup,
         '-Daero.benchmark.skipNonForcedSaves=true',
         '-Daero.spikelog=true',
-        '-Daero.spikelog.ms=25',
+        '-Daero.spikelog.ms=' + spikeMs,
         '-Daero.spikelog.heartbeatMs=500',
         '-Daero.spikelog.sync=true',
         '-Daero.spikelog.file=' + log.absolutePath,
-        '-Xms2G', '-Xmx4G')
+        '-Xms2G', '-Xmx4G'] + modeArgs) as List)
 }

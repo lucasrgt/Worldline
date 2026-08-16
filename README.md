@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.0.0 - M12 Aero Reproduction (GO)**.
+Current official milestone: **Worldline v1.1.0 - M13 Aero Differential (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -70,11 +70,18 @@ expanded named work counters from a runtime stall with stable work. See
 `docs/M11_ATTRIBUTION.md` for the bounded contract and non-claims.
 
 M12 drives two real dense Aero clients from a fixed seed, chunk set, camera,
-and 240-tick window. Both captures reproduce a frame spike attributed to
-expanded chunk-compilation work, and each record window minimizes to one
+and 240-tick window. Both captures reproduce a frame spike with at least 10 ms
+inside chunk compilation, and each record window minimizes to one
 qualifying frame. The generated save is captured, but the current test
-fixture's custom BlockEntities do not survive reload; see
+fixture persistence was not yet distinguished; see
 `docs/M12_CAPTURE.md` for that boundary and the historical-spike non-claim.
+
+M13 resolves that boundary: 576 real entity blocks persist while roughly half
+of the fresh world's global BlockEntity list is phantom state. Substantial
+chunk-compilation pressure remains with the Aero fixture disabled, and
+exploratory runs spike in both modes; dense amplification is not established. Aero's
+compile governor is rejected in this path because an always-active control
+causes tens of millions of immediate retries. See `docs/M13_DIFFERENTIAL.md`.
 
 ## Verify
 
@@ -184,6 +191,8 @@ neutral work-attribution boundary. `smokes/m12-aero-reproduction` creates two
 controlled dense scenes, ingests their real frame logs, reproduces the
 chunk-compilation spike, and minimizes each evidence window. Their exact
 boundaries are in the corresponding `MAP.md` files.
+`smokes/m13-aero-differential` then reloads the exact dense save, compares it
+with an Aero-disabled world, and tests the forced-call compile governor.
 
 The gate then runs `smokes/lab-cycle`, restores deterministic checkpoints in
 fresh clients, compares hypotheses, exercises GUI selectors, and compiles and
@@ -207,6 +216,7 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M10_CYCLE.md` is the v0.8.0 native/offscreen-render GO audit.
 `M11_CYCLE.md` is the v0.9.0 Aero-attribution GO audit.
 `M12_CYCLE.md` is the v1.0.0 real-Aero-reproduction GO audit.
+`M13_CYCLE.md` is the v1.1.0 Aero persistence/differential GO audit.
 
 After preparing the local runtime with the canonical smoke gate, replay a
 bundle with:

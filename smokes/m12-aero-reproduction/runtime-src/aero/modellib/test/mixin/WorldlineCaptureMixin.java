@@ -3,6 +3,8 @@ package aero.modellib.test.mixin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.InteractionManager;
 import net.minecraft.client.SingleplayerInteractionManager;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockWithEntity;
 import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,6 +31,10 @@ public abstract class WorldlineCaptureMixin {
         Integer.getInteger("worldline.capture.ticks", 240);
     @Unique private static final int WORLDLINE_Y =
         Integer.getInteger("worldline.capture.y", 67);
+    @Unique private static final int WORLDLINE_MIN_BES =
+        Integer.getInteger("worldline.capture.minBlockEntities", 500);
+    @Unique private static final int WORLDLINE_MIN_WARMUP =
+        Integer.getInteger("worldline.capture.minWarmupTicks", 0);
     @Unique private int worldlinePhase;
     @Unique private int worldlineTicks;
     @Unique private int worldlineY;
@@ -55,10 +61,13 @@ public abstract class WorldlineCaptureMixin {
         player.setPositionAndAngles(8.5D, worldlineY, 8.5D, 45.0F, 0.0F);
         if (worldlinePhase == 1) {
             worldlineWarmup++;
-            if (world.blockEntities.size() < 500 && worldlineWarmup < 400) return;
+            if ((worldlineWarmup < WORLDLINE_MIN_WARMUP
+                    || world.blockEntities.size() < WORLDLINE_MIN_BES)
+                    && worldlineWarmup < 400) return;
             worldlinePhase = 2;
             System.out.println("[WorldlineCapture] ready blockEntities="
-                    + world.blockEntities.size() + " x=8.5 y=" + worldlineY + " z=8.5");
+                    + world.blockEntities.size() + " entityBlocks="
+                    + worldlineEntityBlocks() + " x=8.5 y=" + worldlineY + " z=8.5");
         }
         worldlineTicks++;
         if (worldlineTicks >= WORLDLINE_TICKS) {
@@ -66,5 +75,16 @@ public abstract class WorldlineCaptureMixin {
             worldlinePhase = 3;
             scheduleStop();
         }
+    }
+
+    @Unique
+    private int worldlineEntityBlocks() {
+        int count = 0;
+        for (int x = -16; x < 32; x++) for (int z = -16; z < 32; z++)
+            for (int y = 0; y < 128; y++) {
+                int id = world.getBlockId(x, y, z);
+                if (id > 0 && Block.BLOCKS[id] instanceof BlockWithEntity) count++;
+            }
+        return count;
     }
 }

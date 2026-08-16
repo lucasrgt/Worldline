@@ -59,6 +59,7 @@ public final class AeroReproductionCycle {
         run(root, command("javac", "-encoding", "UTF-8", "--release", "8", "-Xlint:all,-options",
                 "-Werror", "-classpath", cp, "-d", classes.toString(),
                 root.resolve("adapters/aero-model-lib/src/main/java/worldline/aero/AeroFrameLog.java").toString(),
+                root.resolve("adapters/aero-model-lib/src/main/java/worldline/aero/AeroDiagnostics.java").toString(),
                 smoke.resolve("src/worldline/smoke/m12/AeroReproductionSmoke.java").toString()));
         String output = output(root, command("java", "-classpath",
                 classes + System.getProperty("path.separator") + cp,
@@ -71,9 +72,9 @@ public final class AeroReproductionCycle {
                 + "\n" + output;
         Files.write(build.resolve("evidence.txt"), evidence.getBytes(StandardCharsets.UTF_8));
         System.out.println("Aero reproduction cycle passed");
-        System.out.println("  saved world: captured; test BEs do not survive current reload");
+        System.out.println("  saved world: captured; persistence split is qualified by M13");
         System.out.println("  replay: same seed and fixed camera recreated twice");
-        System.out.println("  recurring spike: chunk compilation logical work");
+        System.out.println("  recurring spike: localized to chunk compile stage");
         System.out.println("  minimized evidence: one frame record per capture");
         System.out.println("  evidence: " + root.relativize(build.resolve("evidence.txt")));
     }

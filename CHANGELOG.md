@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.1.0 - M13 Aero Differential
+
+Status: GO for persistence isolation and the bounded chunk-path differential.
+
+- Distinguished global BlockEntities from real entity blocks and proved that
+  the 576 real fixture blocks persist while excess phantom entries disappear.
+- Added equal-control dense and Aero-disabled captures; both exercise the same
+  substantial chunk-compilation path and exploratory runs spike in both, so a
+  stable dense amplification is not claimed.
+- Exercised the optional compile governor on forced calls and rejected it after
+  the always-active control produced a hot retry storm.
+- Added a strict Aero diagnostics adapter and a four-mode executable gate while
+  retaining only per-file source limits.
+
+The frozen M13 invariant-report SHA-256 is
+`1759de8beeeef257a4027fd79f590ec7a72d364729863d1cb5fe373741399e80`.
+
 ## 1.0.0 - M12 Aero Reproduction
 
 Status: GO for controlled real-scene capture and bounded spike reproduction.
@@ -12,16 +29,17 @@ Status: GO for controlled real-scene capture and bounded spike reproduction.
   world, forces the target chunks, fixes camera and velocity, and stops after a
   bounded 240-tick measurement window without modifying the Aero checkout.
 - Captured two real Fabric Loader/StationAPI/LWJGL frame logs with dense Aero
-  work and reproduced spikes attributed to expanded chunk-compilation work.
+  work and reproduced spikes localized to the chunk-compilation stage.
 - Reused the M9 minimizer to reduce each stable-scene record window to one
   qualifying frame while retaining M11's neutral attribution boundary.
-- Captured and hashed the generated save, and recorded that the current test
-  fixture's custom MEGA BlockEntities do not survive a fresh save reload.
+- Captured and hashed the generated save; M13 later distinguished its
+  persistent real entity blocks from non-persistent phantom global entries.
 - Removed repository-wide line caps while retaining enforced per-file limits:
   250 product lines, 300 harness lines, and 150 smoke/adapter lines.
 
-The frozen M12 invariant-report SHA-256 is
-`a1d766e049b7382ae81e13e9b4ef4de3531c870869d7fe442e053f507af9169e`.
+M13 corrected the M12 oracle so stable single-call slow compiles are not
+misreported as expanded logical-work counts. The corrected M12 invariant SHA-256 is
+`804915ae89a1adef9f350adc020ed8a77986b2d3d4c1d84205009a4382ed051c`.
 
 ## 0.9.0 - M11 Aero Attribution
 

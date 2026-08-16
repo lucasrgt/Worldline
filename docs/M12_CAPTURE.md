@@ -29,18 +29,21 @@ chunk compilation. Representative frames from the qualification run were:
 | 1 | 45.7 ms | 36.3 ms | 34.3 ms | 0 ms |
 | 2 | 61.8 ms | 50.7 ms | 50.7 ms | 6 ms |
 
-The neutral M11 attribution model classifies the recurring bounded-fixture
-spike as `LOGICAL_WORK` with `chunks.compiled` as its top expanded counter.
-The M9 minimizer independently reduces each captured record window to one
-frame that preserves that exact predicate.
+The initial M12 run also observed expanded `chunks.compiled` call counts, but
+M13 repetitions showed slow frames with a single compile call. The corrected
+oracle therefore localizes the result to at least 10 ms in `compileChunks`
+inside a frame of at least 25 ms; it does not universally classify the cause as
+expanded logical work. The M9 minimizer reduces each record window to one frame
+that preserves this stage-timing predicate.
 
 ## Persistence finding and non-claims
 
-The generated save is captured and hashed, but the current Aero test fixture's
-custom MEGA BlockEntities do not survive a fresh save reload. World generation
-prints `Attempted to place a tile entity where there was no entity tile`, and
-the reloaded scene loses the dense model workload. M12 therefore recreates the
-same seed and camera twice instead of claiming byte-snapshot replay.
+The generated save is captured and hashed. M12 observed placement warnings and
+a smaller reloaded workload but did not distinguish persistent entity blocks
+from phantom entries in the world's global BlockEntity list. M13 supersedes the
+coarse finding: 576 real entity blocks persist, while excess phantom entries
+created by rejected placements disappear. M12 still recreates the same seed
+and camera twice instead of claiming byte-snapshot replay.
 
 M12 proves a repeatable chunk-compilation spike in the controlled MEGA fixture.
 It does not prove that this is the historical user-reported random spike, that

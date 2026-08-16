@@ -233,6 +233,12 @@ stay derived, while the existing analysis and minimization modules consume
 only adapter-neutral frames and opaque record indices. No M12 behavior enters
 the API, kernel, or maintained product graph.
 
+M13 reuses that overlay but adds a fixed warmup and four explicit runtime modes.
+`AeroDiagnostics` remains game-specific and exposes only the timing/counter
+fields needed by the smoke. Persistence scanning stays inside the mapped test
+hook; conclusions and invariant checks stay in the bounded smoke. No governor
+or Aero behavior is promoted into Worldline product modules.
+
 ## Compatibility boundary
 
 Product modules currently compile with `--release 8`; tooling runs on JDK 21.
