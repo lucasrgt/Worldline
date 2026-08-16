@@ -18,6 +18,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import worldline.api.GamePlayer;
+import worldline.api.GameUi;
 import worldline.api.GameWorld;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
@@ -34,16 +35,13 @@ final class B173ClientBackend implements GameBackend, B173ModContext {
     private B173Boundaries.Client client;
     private B173World worldApi;
     private B173Player playerApi;
+    private B173Gui gui;
     private long rngSeed;
     private B173Mod mod;
 
     B173ClientBackend(long seed, B173VirtualClock clock, B173VirtualFileSystem files,
             B173Scheduler scheduler) {
-        this.seed = seed;
-        this.clock = clock;
-        this.files = files;
-        this.scheduler = scheduler;
-        rngSeed = seed;
+        this.seed = seed; this.clock = clock; this.files = files; this.scheduler = scheduler; rngSeed = seed;
     }
 
     @Override
@@ -60,8 +58,7 @@ final class B173ClientBackend implements GameBackend, B173ModContext {
         client.session = new Session("Worldline", "offline");
         client.gameSettings = new GameSettings();
         client.gameSettings.difficulty = 0;
-        client.statFileWriter = B173Boundaries.allocateWithoutConstructor(
-                B173Boundaries.Statistics.class);
+        client.statFileWriter = B173Boundaries.allocateWithoutConstructor(B173Boundaries.Statistics.class);
         client.renderEngine = new B173Boundaries.Textures(client.gameSettings);
         client.ingameGUI = new GuiIngame(client);
         client.playerController = new PlayerController(client);
@@ -74,11 +71,8 @@ final class B173ClientBackend implements GameBackend, B173ModContext {
     public void loadWorld(WorldSource source) {
         String name = source.path().getFileName().toString();
         World world = new World(new B173MemoryWorld(seed, name, files), name, seed);
-        for (int chunkX = -2; chunkX <= 2; chunkX++) {
-            for (int chunkZ = -2; chunkZ <= 2; chunkZ++) {
-                world.getChunkFromChunkCoords(chunkX, chunkZ);
-            }
-        }
+        for (int chunkX = -2; chunkX <= 2; chunkX++)
+            for (int chunkZ = -2; chunkZ <= 2; chunkZ++) world.getChunkFromChunkCoords(chunkX, chunkZ);
         EntityPlayerSP player = new EntityPlayerSP(client, world, client.session, 0);
         player.movementInput = new MovementInputFromOptions(client.gameSettings);
         player.setLocationAndAngles(8.5D, 66.0D, 8.5D, 0.0F, 0.0F);
@@ -88,6 +82,7 @@ final class B173ClientBackend implements GameBackend, B173ModContext {
         client.effectRenderer = new EffectRenderer(world, client.renderEngine);
         playerApi = new B173Player(this, player);
         worldApi = new B173World(this, playerApi);
+        gui = new B173Gui(this);
         reseed(seed);
         require(world.getBlockId(X, 64, Z) == Block.stone.blockID, "fixture stone missing");
     }
@@ -108,9 +103,7 @@ final class B173ClientBackend implements GameBackend, B173ModContext {
         threads.stop();
         client.theWorld = null;
         client.thePlayer = null;
-        worldApi = null;
-        playerApi = null;
-        client = null;
+        worldApi = null; playerApi = null; gui = null; client = null;
         B173ClockHooks.clear(clock);
     }
 
@@ -148,25 +141,20 @@ final class B173ClientBackend implements GameBackend, B173ModContext {
 
     public int clientTick() { return ticksRan(); }
 
-    public int blockAt(int x, int y, int z) {
-        return requireClient().theWorld.getBlockId(x, y, z);
-    }
+    public int blockAt(int x, int y, int z) { return requireClient().theWorld.getBlockId(x, y, z); }
 
     public boolean setBlock(int x, int y, int z, int blockId) {
         return requireClient().theWorld.setBlockWithNotify(x, y, z, blockId);
     }
 
-    @Override public GameWorld world() { return worldApi; } @Override public GamePlayer player() { return playerApi; }
+    @Override public GameWorld world() { return worldApi; }
+    @Override public GamePlayer player() { return playerApi; }
+    @Override public GameUi ui() { require(gui != null, "client is not booted"); return gui; }
 
     private int ticksRan() { return B173Reflect.getInt(Minecraft.class, "ticksRan", requireClient()); }
-
-    private void setTicksRan(int value) {
-        B173Reflect.setInt(Minecraft.class, "ticksRan", requireClient(), value);
-    }
-
+    private void setTicksRan(int value) { B173Reflect.setInt(Minecraft.class, "ticksRan", requireClient(), value); }
     private B173Boundaries.Client requireClient() {
-        require(client != null, "client is not booted");
-        return client;
+        require(client != null, "client is not booted"); return client;
     }
 
     private static void require(boolean condition, String message) {

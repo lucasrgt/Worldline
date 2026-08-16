@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## Unreleased - Game UI Tree
+
+Status: experimental evidence.
+
+- Added `UiMinecraftRuntime`, `GameUi`, and immutable `GameUiNode` values for a
+  semantic inventory tree (`screen`, `slot`, `node`, `click`).
+- Added a four-process official-JAR differential that opens, inspects, clicks,
+  and closes the inventory screen without mapped types in the caller.
+- Added `GameUiSpec` so Aero Machine Maker `guiComponents` and a live `GameUi`
+  tree share role/name/index without pixels.
+- Added a Flutter-inspired `Ui.screen/row/slot` declaration that flattens to
+  the same spec. Layout widgets do not become DOM nodes.
+
+The frozen GUI-tree SHA-256 is
+`ab13a631ed766de32f2947fae1a6e0a86d9b6cde3cbc7e1557ff76f76ccc60cf`.
+
 ## 0.7.0 - M9 Automatic Scenario Minimization
 
 Status: GO.

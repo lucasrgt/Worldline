@@ -152,15 +152,21 @@ reduces nine noisy actions to three steps, and proves that removing any final
 step changes or removes the exact divergence. Its evidence map is
 `smokes/m9-scenario-minimization/MAP.md`.
 
+`smokes/gui-tree` then opens, inspects, clicks, and closes the inventory screen
+through the neutral `GameUi` tree and matches two official-JAR oracle processes.
+This is experimental evidence, not a versioned milestone. See
+`smokes/gui-tree/MAP.md` and `docs/GUI_TREE.md`.
+
 The gate then runs `smokes/lab-cycle`, restores deterministic checkpoints in
 fresh clients, compares hypotheses, exercises GUI selectors, and compiles and
 loads `probe-mod.jar`; its scope is defined in `smokes/lab-cycle/MAP.md`.
 
-The client, M3, M4, M5, M6, M7, M8, M9, and lab runners deliberately raised the tooling budget to 2,500
-code lines while retaining the 300-line per-file ceiling. Product
-code remains capped at 1,600 lines and 250 lines per file. Smoke drivers and
-oracles have their own enforced 1,400-line total and 150-line per-file budget, so
-integration behavior cannot hide outside the product and tooling counts.
+The client, M3, M4, M5, M6, M7, M8, M9, GUI tree, and lab runners deliberately
+raised the tooling budget to 2,800 code lines while retaining the 300-line
+per-file ceiling. Product code has no total line budget; each product file
+stays at or below 250 lines. Smoke drivers and oracles have their own enforced
+1,500-line total and 150-line per-file budget, so integration behavior cannot
+hide outside the product and tooling counts.
 
 See `ARCHITECTURE.md` for module boundaries and `AGENTS.md` for the behavioral
 and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;

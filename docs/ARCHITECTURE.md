@@ -61,6 +61,11 @@ conventional.
 Owns stable concepts visible to a scenario author. It must not expose RetroMCP,
 LWJGL, mappings, instrumentation, or decompiled Minecraft types.
 
+The experimental Game UI Tree adds opt-in `UiMinecraftRuntime` and immutable
+`GameUiNode` values. `GameUi` exposes the current screen, a snapshot of semantic
+nodes, role/name lookup, inventory open/close, and slot clicks. Only the
+inventory screen is promoted; other screens fail closed.
+
 M3 adds the opt-in `AutomatedMinecraftRuntime` extension and neutral
 `GameWorld`, `GamePlayer`, and `GameEntity` handles. Coordinates and block
 states are immutable API values. Live handles are lifecycle-guarded: they are

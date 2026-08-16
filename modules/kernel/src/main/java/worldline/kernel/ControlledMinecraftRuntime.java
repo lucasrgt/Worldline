@@ -1,14 +1,15 @@
 package worldline.kernel;
 
 import java.util.Objects;
-import worldline.api.AutomatedMinecraftRuntime;
 import worldline.api.GamePlayer;
+import worldline.api.GameUi;
 import worldline.api.GameWorld;
 import worldline.api.RuntimeState;
+import worldline.api.UiMinecraftRuntime;
 import worldline.api.WorldSource;
 
 /** Lifecycle policy shared by every future game backend. */
-public final class ControlledMinecraftRuntime implements AutomatedMinecraftRuntime {
+public final class ControlledMinecraftRuntime implements UiMinecraftRuntime {
     private final GameBackend backend;
     private RuntimeState state = RuntimeState.NEW;
 
@@ -46,6 +47,12 @@ public final class ControlledMinecraftRuntime implements AutomatedMinecraftRunti
     public GamePlayer player() {
         requireState(RuntimeState.WORLD_LOADED, "access the player");
         return backend.player();
+    }
+
+    @Override
+    public GameUi ui() {
+        requireState(RuntimeState.WORLD_LOADED, "access the UI");
+        return backend.ui();
     }
 
     @Override

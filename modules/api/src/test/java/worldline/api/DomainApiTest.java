@@ -7,6 +7,7 @@ public final class DomainApiTest {
         valueEqualityIsExact();
         invalidValuesFailClosed();
         snapshotsAreBoundedAndImmutable();
+        uiSpecRoundTripsBuilderAndInventory();
         System.out.println("DomainApiTest passed");
     }
 
@@ -15,6 +16,8 @@ public final class DomainApiTest {
         equal(new BlockState(20, 7), new BlockState(20, 7), "block state");
         equal(new GamePosition(1.25D, 2.5D, -3.75D),
                 new GamePosition(1.25D, 2.5D, -3.75D), "game position");
+        equal(new GameUiNode(GameUiNode.SLOT, "0", 0, -1, 0),
+                new GameUiNode(GameUiNode.SLOT, "0", 0, -1, 0), "ui node");
     }
 
     private static void invalidValuesFailClosed() {
@@ -22,6 +25,8 @@ public final class DomainApiTest {
         failure(() -> new BlockState(1, 16));
         failure(() -> new GamePosition(Double.NaN, 0.0D, 0.0D));
         failure(() -> new GamePosition(0.0D, Double.POSITIVE_INFINITY, 0.0D));
+        failure(() -> new GameUiNode("", "inventory", -1, -1, 0));
+        failure(() -> new GameUiNode(GameUiNode.SLOT, "0", 0, -2, 0));
     }
 
     private static void snapshotsAreBoundedAndImmutable() {
@@ -38,6 +43,40 @@ public final class DomainApiTest {
         }
         failure(() -> RuntimeSnapshot.of(new byte[0]));
         failure(() -> RuntimeSnapshot.of(new byte[RuntimeSnapshot.MAX_BYTES + 1]));
+    }
+
+    private static void uiSpecRoundTripsBuilderAndInventory() {
+        GameUiSpec inventory = GameUiSpec.inventory();
+        if (!GameUiNode.INVENTORY.equals(inventory.screen()) || inventory.nodes().size() != 46
+                || !inventory.matchesStructure(inventory.nodes())
+                || inventory.node(GameUiNode.SLOT, "0").index() != 0) {
+            throw new AssertionError("vanilla inventory spec failed");
+        }
+        java.util.List<GameUiSpec.Part> parts = java.util.Arrays.asList(
+                new GameUiSpec.Part("slot", null, "input"),
+                new GameUiSpec.Part("progress_arrow", null, null),
+                new GameUiSpec.Part("slot", null, "output"),
+                new GameUiSpec.Part("energy_bar", null, null),
+                new GameUiSpec.Part("separator", null, null));
+        GameUiSpec crusher = GameUiSpec.fromBuilder("crusher", parts);
+        if (crusher.nodes().size() != 41 || crusher.node(GameUiNode.SLOT, "input").index() != 0
+                || crusher.node(GameUiNode.SLOT, "output").index() != 1
+                || crusher.node(GameUiNode.PROGRESS, "craft").index() != -1
+                || crusher.node(GameUiNode.ENERGY, "energy").index() != -1
+                || crusher.node(GameUiNode.SLOT, "player.0").index() != 2
+                || !crusher.matchesStructure(crusher.nodes())) {
+            throw new AssertionError("builder spec mapping failed: " + crusher.nodes());
+        }
+        failure(() -> GameUiSpec.fromBuilder("x", java.util.Collections.singletonList(
+                new GameUiSpec.Part("unknown", null, null))));
+        GameUiSpec declared = Ui.screen("crusher",
+                Ui.row("process", Ui.slot("input"), Ui.progress("craft"), Ui.slot("output")),
+                Ui.energy("energy"),
+                Ui.playerInventory());
+        equal(crusher, declared, "ui language");
+        if (Ui.screen("bare", Ui.slot("input")).nodes().size() != 2) {
+            throw new AssertionError("layout flatten or player opt-in failed");
+        }
     }
 
     private static void failure(Runnable action) {

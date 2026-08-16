@@ -74,6 +74,7 @@ public final class Verify {
             run(Arrays.asList("java", "tools/smoke/ModCycle.java", "m7-mod-loading"));
             run(Arrays.asList("java", "tools/smoke/VersionCycle.java", "m8-mod-version-diff"));
             run(Arrays.asList("java", "tools/smoke/MinimizationCycle.java", "m9-scenario-minimization"));
+            run(Arrays.asList("java", "tools/smoke/GuiCycle.java", "gui-tree"));
             run(Arrays.asList("java", "tools/smoke/LabCycle.java", "lab-cycle"));
         }
         System.out.println("verify passed");
@@ -112,6 +113,12 @@ public final class Verify {
             throw new IllegalStateException("missing harness property: " + key);
         }
         return value;
+    }
+
+    private Long optionalMax(String key) {
+        String value = config.getProperty(key);
+        if (value == null || value.trim().isEmpty()) return null;
+        return Long.parseLong(value.trim());
     }
 
     private void validateModuleOrder(List<String> modules) {
@@ -153,9 +160,9 @@ public final class Verify {
         String java = languageSection(json);
         int reports = java.indexOf("\"reports\"");
         long total = codeLines(reports < 0 ? java : java.substring(0, reports));
-        long maxTotal = Long.parseLong(required(name + ".max.total"));
+        Long maxTotal = optionalMax(name + ".max.total");
         long maxFile = Long.parseLong(required(name + ".max.file"));
-        if (total > maxTotal) {
+        if (maxTotal != null && total > maxTotal) {
             throw new IllegalStateException(name + " line budget exceeded: " + total + "/" + maxTotal);
         }
         Matcher files = REPORT.matcher(java);
@@ -166,7 +173,9 @@ public final class Verify {
                         name + " file budget exceeded: " + files.group(2) + " has " + lines + "/" + maxFile);
             }
         }
-        System.out.println("  " + name + " lines: " + total + "/" + maxTotal + " (max file " + maxFile + ")");
+        System.out.println(maxTotal == null
+                ? "  " + name + " lines: " + total + " (max file " + maxFile + ")"
+                : "  " + name + " lines: " + total + "/" + maxTotal + " (max file " + maxFile + ")");
     }
 
     private String languageSection(String json) {

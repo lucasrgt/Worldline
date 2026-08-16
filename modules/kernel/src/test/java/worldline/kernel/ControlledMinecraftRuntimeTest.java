@@ -70,6 +70,7 @@ public final class ControlledMinecraftRuntimeTest {
         runtime.bootHeadless();
         runtime.loadWorld(WorldSource.at(Paths.get("memory", "domain-access")));
         expectFailure(runtime::world, "world automation is unavailable");
+        expectFailure(runtime::ui, "ui automation is unavailable");
         runtime.close();
         expectFailure(runtime::player, "expected WORLD_LOADED");
     }
