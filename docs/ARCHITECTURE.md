@@ -196,6 +196,13 @@ and opens fresh mod classloaders/runtimes for both versions on every candidate.
 Two outer JVMs must produce the same one-minimal scenario, evaluation count,
 provenance hashes, and exact divergence fingerprint.
 
+`smokes/m10-native-render/` is a separate native evidence lane. It never places
+the adapter's headless LWJGL substitutions on its classpath. Instead, it invokes
+mapped and official Minecraft `Tessellator` bytecode through the pinned real
+LWJGL JAR and Windows native library, draws into a Pbuffer, and compares complete
+RGBA readbacks. This lane introduces no product-module or adapter dependency and
+does not promote a rendering API.
+
 ## Adapter direction
 
 Game-specific work will enter through new adapter modules, not through the API

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v0.7.0 - M9 Automatic Scenario Minimization (GO)**.
+Current official milestone: **Worldline v0.8.0 - M10 Native/Offscreen Render (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -55,6 +55,12 @@ M9 adds canonical `.wlscenario` artifacts, exact first-divergence fingerprints,
 and a deterministic budgeted delta debugger that proves one-minimality through
 final individual-removal checks. See `docs/M9_MINIMIZATION.md` for guarantees
 and the adapter/evaluator boundary.
+
+M10 adds a real offscreen graphics boundary: Minecraft's `Tessellator` draws
+through hash-pinned LWJGL and a native Windows OpenGL Pbuffer, then the gate
+reads and hashes the RGBA framebuffer. Two mapped and two official-JAR processes
+must agree. The original Aero artifact was not available, so its runtime
+compatibility is explicitly `NOT_RUN`; see `docs/M10_RENDER.md`.
 
 ## Verify
 
@@ -152,11 +158,17 @@ reduces nine noisy actions to three steps, and proves that removing any final
 step changes or removes the exact divergence. Its evidence map is
 `smokes/m9-scenario-minimization/MAP.md`.
 
+`smokes/m10-native-render` then excludes all headless LWJGL stubs, creates a
+real 64 by 64 Pbuffer, draws an exact quad through Minecraft's renderer, and
+requires four-process mapped/official framebuffer equality. It also records
+the Aero candidate as absent without claiming compatibility. Its boundary is
+in `smokes/m10-native-render/MAP.md`.
+
 The gate then runs `smokes/lab-cycle`, restores deterministic checkpoints in
 fresh clients, compares hypotheses, exercises GUI selectors, and compiles and
 loads `probe-mod.jar`; its scope is defined in `smokes/lab-cycle/MAP.md`.
 
-The client, M3, M4, M5, M6, M7, M8, M9, and lab runners deliberately raised the tooling budget to 2,500
+The client, M3, M4, M5, M6, M7, M8, M9, M10, and lab runners use a tooling budget of 2,500
 code lines while retaining the 300-line per-file ceiling. Product
 code remains capped at 1,600 lines and 250 lines per file. Smoke drivers and
 oracles have their own enforced 1,400-line total and 150-line per-file budget, so
@@ -172,6 +184,7 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M7_CYCLE.md` is the v0.5.0 general-mod-loading and compatibility GO audit.
 `M8_CYCLE.md` is the v0.6.0 differential-mod-testing GO audit.
 `M9_CYCLE.md` is the v0.7.0 automatic-scenario-minimization GO audit.
+`M10_CYCLE.md` is the v0.8.0 native/offscreen-render GO audit.
 
 After preparing the local runtime with the canonical smoke gate, replay a
 bundle with:

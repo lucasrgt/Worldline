@@ -19,3 +19,8 @@ differential or invariant test.
 The first official result is deliberately small: Worldline v0.0.1 boots the
 real b1.7.3 client headlessly, loads a world, advances one manual client tick,
 and matches the official vanilla oracle.
+
+Worldline v0.8.0 adds a separate real graphics boundary. A mapped and official
+Minecraft renderer produce the same frozen RGBA frame through LWJGL and an
+offscreen native OpenGL context. This is infrastructure for later causal render
+experiments, not a claim of complete game-frame or cross-GPU determinism.

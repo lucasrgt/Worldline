@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 0.8.0 - M10 Native/Offscreen Render
+
+Status: GO for the bounded render contract.
+
+- Added a real 64 by 64 LWJGL/OpenGL Pbuffer lane isolated from the existing
+  headless substitutions.
+- Drew deterministic geometry through Minecraft's own `Tessellator`, verified
+  exact pixel colors and coverage, and hashed the complete RGBA framebuffer.
+- Added two mapped and two official-JAR processes with repetition, provenance,
+  cross-boundary equality, and frozen-output checks.
+- Investigated the original Aero target and recorded `artifact-absent` plus
+  runtime compatibility `NOT_RUN`; no compatibility result was inferred.
+
+The frozen M10 framebuffer SHA-256 is
+`3f7da2d7ed9eeeff4c1ac7ad3767c82a5cb95b066cdb28bd3788e0cbcd3141ff`.
+
 ## 0.7.0 - M9 Automatic Scenario Minimization
 
 Status: GO.

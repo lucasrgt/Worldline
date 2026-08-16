@@ -1,0 +1,7 @@
+# owner kind descriptor named official
+net/minecraft/src/Tessellator	c		net/minecraft/src/Tessellator	nw
+net/minecraft/src/Tessellator	f	Lnet/minecraft/src/Tessellator;	instance	a
+net/minecraft/src/Tessellator	m	()V	startDrawingQuads	b
+net/minecraft/src/Tessellator	m	(IIII)V	setColorRGBA	a
+net/minecraft/src/Tessellator	m	(DDD)V	addVertex	a
+net/minecraft/src/Tessellator	m	()V	draw	a
