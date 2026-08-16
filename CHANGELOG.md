@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 0.4.0 - M6 Trace Explorer
+
+Status: GO.
+
+- Added strict parsing and immutable models for schema-bearing canonical `v2`
+  state traces.
+- Added stable tabular rendering and structural first-divergence analysis for
+  seed, schema, record labels/count, and individual field values.
+- Extended the CLI and repository launcher with runtime-independent `trace
+  show` and `trace diff` commands and explicit equality/divergence exit codes.
+- Added fresh mapped/official trace equality, injected field divergence,
+  reverse comparison, and malformed-schema rejection evidence.
+
+The frozen M6 divergence-report SHA-256 is
+`7eb4f707427c4e58ab3e481cc61f5801518325d5bbdfe045828325ab5ed2ea06`.
+
 ## 0.3.0 - M5 Reproduction Bundle
 
 Status: GO.

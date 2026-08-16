@@ -10,7 +10,7 @@ Passing an experiment does not silently promote its API.
 | v0.1.0 / M3 | Stable world, player, entity, and block automation API | GO - stable milestone |
 | v0.2.0 / M4 | Durable snapshot format and cross-process restore | GO - stable milestone |
 | v0.3.0 / M5 | Portable reproduction bundles and replay CLI | GO - stable milestone |
-| M6 | Trace viewer and first-divergence explorer | Not started |
+| v0.4.0 / M6 | Trace viewer and first-divergence explorer | GO - stable milestone |
 | M7 | General mod loading and compatibility contracts | Isolated probe seam passes |
 | M8 | Differential mod/version testing | Not started |
 | M9 | Automatic scenario minimization | Not started |
@@ -23,8 +23,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v0.3.0 direction
+## Immediate post-v0.4.0 direction
 
-M6 should make canonical state traces inspectable and identify the first
-divergence between two executions before the original Aero spike. The current
-`B173ModContext` remains an experiment seam, not an Aero compatibility claim.
+M7 should promote general mod loading and compatibility contracts from the
+current isolated probe seam before attempting the original Aero integration.

@@ -30,13 +30,16 @@ bundle -> worldline-cli -> worldline-reproduction
                               |
                               v
                          b173 adapter
+
+trace files -> worldline-cli -> worldline-analysis -> worldline-trace
 ```
 
 The modules are physical source roots and are compiled separately. The API is
 compiled with no product classpath. The kernel is compiled with only the API on
 its classpath. Reproduction depends only on the API; CLI depends only on API
-and reproduction. This makes every declared dependency direction executable
-rather than conventional.
+and the stable product modules it exposes. Analysis depends only on trace.
+This makes every declared dependency direction executable rather than
+conventional.
 
 ### `api`
 
@@ -59,6 +62,11 @@ owns the canonical bundle envelope and replay SPI; `worldline-cli` owns command
 parsing and stable machine-readable output. It discovers the b1.7.3 provider at
 runtime, so neither module depends on mapped Minecraft classes. The repository
 launcher only assembles the already verified local runtime classpath.
+
+M6 adds `worldline-analysis` above the existing trace protocol. The trace
+module owns strict `v2` parsing and immutable data; analysis owns rendering and
+first-divergence semantics. The CLI can therefore inspect trace files with no
+adapter, game JAR, RetroMCP checkout, or native library on its classpath.
 
 ### `kernel`
 
@@ -135,6 +143,12 @@ input declarations. Two pack processes must emit identical bytes; the CLI must
 replay both the original and a copied path into the same state; a direct
 official-client process supplies the behavioral oracle. Corrupt content and
 validly encoded bundles naming the wrong client or toolchain must fail closed.
+
+`smokes/m6-trace-explorer/` obtains fresh state traces through both the mapped
+client and direct official-JAR paths. Equality is established before a single
+field is changed in a copied trace. The CLI must identify the exact record,
+label, field index, field name, and ordered values; malformed protocol input
+must fail before analysis.
 
 ## Adapter direction
 

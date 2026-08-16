@@ -70,6 +70,7 @@ public final class Verify {
             run(Arrays.asList("java", "tools/smoke/ApiCycle.java", "m3-domain-api"));
             run(Arrays.asList("java", "tools/smoke/SnapshotCycle.java", "m4-durable-snapshot"));
             run(Arrays.asList("java", "tools/smoke/BundleCycle.java", "m5-reproduction-bundle"));
+            run(Arrays.asList("java", "tools/smoke/TraceCycle.java", "m6-trace-explorer"));
             run(Arrays.asList("java", "tools/smoke/LabCycle.java", "lab-cycle"));
         }
         System.out.println("verify passed");

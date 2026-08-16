@@ -5,9 +5,14 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import worldline.analysis.TraceDiff;
+import worldline.analysis.TraceRenderer;
 import worldline.reproduction.ReplayProvider;
 import worldline.reproduction.ReplayReport;
 import worldline.reproduction.ReproductionBundle;
+import worldline.trace.CanonicalStateDocument;
 
 /** Stable command-line entrypoint for portable Worldline reproduction bundles. */
 public final class WorldlineCli {
@@ -21,28 +26,60 @@ public final class WorldlineCli {
     }
 
     public static int run(String[] arguments, PrintStream output, PrintStream error) {
-        if (arguments == null || arguments.length != 2 || !"replay".equals(arguments[0])) {
-            error.println("usage: worldline replay <bundle.wlrb>"); return 2;
-        }
+        if (arguments == null) return usage(error);
         try {
-            ReproductionBundle bundle = ReproductionBundle.parse(
-                    Files.readAllBytes(Paths.get(arguments[1])));
-            String type = System.getProperty("worldline.replay.provider", DEFAULT_PROVIDER);
-            ReplayProvider provider = Class.forName(type).asSubclass(ReplayProvider.class)
-                    .getDeclaredConstructor().newInstance();
-            require(provider.runtimeId().equals(bundle.runtimeId()), "no provider for " + bundle.runtimeId());
-            ReplayReport report = replayQuietly(provider, bundle);
-            require(report.runtimeId().equals(bundle.runtimeId()), "replay provider returned wrong runtime");
-            output.println("WORLDLINE_REPLAY=PASS");
-            output.println("bundle.sha256=" + bundle.sha256());
-            output.println("snapshot.sha256=" + bundle.snapshot().sha256());
-            output.println("runtime=" + report.runtimeId());
-            output.println("tick=" + report.tick());
-            output.println("state=" + report.state());
-            return 0;
+            if (arguments.length == 2 && "replay".equals(arguments[0]))
+                return replay(arguments[1], output);
+            if (arguments.length == 3 && "trace".equals(arguments[0])
+                    && "show".equals(arguments[1])) return show(arguments[2], output);
+            if (arguments.length == 4 && "trace".equals(arguments[0])
+                    && "diff".equals(arguments[1])) return diff(arguments[2], arguments[3], output);
+            return usage(error);
         } catch (IOException | ReflectiveOperationException | RuntimeException failure) {
-            error.println("worldline replay failed: " + failure.getMessage()); return 1;
+            error.println("worldline command failed: " + failure.getMessage()); return 1;
         }
+    }
+
+    private static int replay(String path, PrintStream output)
+            throws IOException, ReflectiveOperationException {
+        ReproductionBundle bundle = ReproductionBundle.parse(Files.readAllBytes(Paths.get(path)));
+        String type = System.getProperty("worldline.replay.provider", DEFAULT_PROVIDER);
+        ReplayProvider provider = Class.forName(type).asSubclass(ReplayProvider.class)
+                .getDeclaredConstructor().newInstance();
+        require(provider.runtimeId().equals(bundle.runtimeId()), "no provider for " + bundle.runtimeId());
+        ReplayReport report = replayQuietly(provider, bundle);
+        require(report.runtimeId().equals(bundle.runtimeId()), "replay provider returned wrong runtime");
+        output.println("WORLDLINE_REPLAY=PASS");
+        output.println("bundle.sha256=" + bundle.sha256());
+        output.println("snapshot.sha256=" + bundle.snapshot().sha256());
+        output.println("runtime=" + report.runtimeId()); output.println("tick=" + report.tick());
+        output.println("state=" + report.state()); return 0;
+    }
+
+    private static int show(String path, PrintStream output) throws IOException {
+        output.print("WORLDLINE_TRACE_SHOW=PASS\n");
+        output.print(TraceRenderer.render(readTrace(path))); return 0;
+    }
+
+    private static int diff(String left, String right, PrintStream output) throws IOException {
+        TraceDiff difference = TraceDiff.compare(readTrace(left), readTrace(right));
+        output.print("WORLDLINE_TRACE_DIFF=" + (difference.diverged() ? "DIVERGED\n" : "EQUAL\n"));
+        output.print(difference.render()); return difference.diverged() ? 3 : 0;
+    }
+
+    private static CanonicalStateDocument readTrace(String path) throws IOException {
+        byte[] bytes = Files.readAllBytes(Paths.get(path));
+        require(bytes.length > 0 && bytes.length <= CanonicalStateDocument.MAX_CHARACTERS,
+                "invalid trace file size");
+        String value = new String(bytes, StandardCharsets.UTF_8);
+        require(Arrays.equals(bytes, value.getBytes(StandardCharsets.UTF_8)), "trace is not strict UTF-8");
+        return CanonicalStateDocument.parse(value);
+    }
+
+    private static int usage(PrintStream error) {
+        error.println("usage: worldline replay <bundle.wlrb>");
+        error.println("   or: worldline trace show <trace.wltrace>");
+        error.println("   or: worldline trace diff <left.wltrace> <right.wltrace>"); return 2;
     }
 
     private static void require(boolean condition, String message) {
