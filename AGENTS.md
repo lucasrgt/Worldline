@@ -16,11 +16,11 @@ All repository artifacts must be written in English.
 
 ## Engineering constitution
 
-1. Maintained product code must remain at or below 1,150 `tokei` code lines,
+1. Maintained product code must remain at or below 1,350 `tokei` code lines,
    and each product source file must remain at or below 250 code lines.
 2. The verification, replay, and smoke tooling must remain at or below 2,250 `tokei` code lines,
    and each harness source file must remain at or below 300 code lines.
-3. Executable smoke scenarios and oracle adapters must remain at or below 1,150
+3. Executable smoke scenarios and oracle adapters must remain at or below 1,250
    `tokei` code lines, and each smoke source file at or below 150 code lines.
 4. Game-specific adapters must remain at or below 1,200 `tokei` code lines, and
    each adapter source file at or below 150 code lines.

@@ -72,6 +72,7 @@ public final class Verify {
             run(Arrays.asList("java", "tools/smoke/BundleCycle.java", "m5-reproduction-bundle"));
             run(Arrays.asList("java", "tools/smoke/TraceCycle.java", "m6-trace-explorer"));
             run(Arrays.asList("java", "tools/smoke/ModCycle.java", "m7-mod-loading"));
+            run(Arrays.asList("java", "tools/smoke/VersionCycle.java", "m8-mod-version-diff"));
             run(Arrays.asList("java", "tools/smoke/LabCycle.java", "lab-cycle"));
         }
         System.out.println("verify passed");

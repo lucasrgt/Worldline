@@ -37,6 +37,11 @@ mod JAR -> worldline-cli -> worldline-mods
                               |
                               v
                    descriptor-selected entrypoint
+
+mod + trace -> worldline-cli -> worldline-modtest -> worldline-analysis
+                                        |                  |
+                                        v                  v
+                                  worldline-mods      worldline-trace
 ```
 
 The modules are physical source roots and are compiled separately. The API is
@@ -78,6 +83,11 @@ bounded inspection, SHA-256 provenance, exact compatibility results, and the
 generic isolated loader. The CLI depends on this module for metadata-only
 inspection. At execution time an adapter supplies its own entrypoint interface,
 so the package module never depends on b1.7.3 or mapped game types.
+
+M8 adds `worldline-modtest` above mods, trace, and analysis. It owns the durable
+provenance-bound result envelope and comparison metadata, while delegating trace
+parsing and first-divergence order to their existing modules. The CLI records
+and compares results without loading an adapter or executing mod code.
 
 ### `kernel`
 
@@ -165,6 +175,11 @@ must fail before analysis.
 then selects two different entrypoints solely from canonical JAR descriptors.
 It proves code origin and deterministic glass/gold effects while separately
 rejecting metadata mismatches, invalid descriptors, and a wrong Java subtype.
+
+`smokes/m8-mod-version-diff/` packages two deterministic versions of one mod,
+executes each twice beside a repeated no-mod baseline, records durable results,
+and verifies exact baseline/version and version/version divergences plus result
+corruption rejection.
 
 ## Adapter direction
 

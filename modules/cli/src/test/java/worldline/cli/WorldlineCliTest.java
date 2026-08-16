@@ -20,12 +20,17 @@ public final class WorldlineCliTest {
         Path left = Files.createTempFile("worldline-cli-left", ".wltrace");
         Path right = Files.createTempFile("worldline-cli-right", ".wltrace");
         Path mod = Files.createTempFile("worldline-cli-mod", ".jar");
+        Path secondMod = Files.createTempFile("worldline-cli-mod-two", ".jar");
+        Path leftResult = Files.createTempFile("worldline-cli-left", ".wlmtest");
+        Path rightResult = Files.createTempFile("worldline-cli-right", ".wlmtest");
         String previous = System.getProperty("worldline.replay.provider");
         try {
             ReproductionBundle value = ReproductionBundle.create("test-runtime", "1.2.3",
                     repeat('a', 64), repeat('b', 40), RuntimeSnapshot.of(new byte[] {1}));
             Files.write(bundle, value.bytes());
-            writeMod(mod, "b1.7.3");
+            writeMod(mod, "1.0.0", "b1.7.3");
+            writeMod(secondMod, "1.1.0", "b1.7.3");
+            Files.delete(leftResult); Files.delete(rightResult);
             System.setProperty("worldline.replay.provider", FakeProvider.class.getName());
             ByteArrayOutputStream output = new ByteArrayOutputStream(), error = new ByteArrayOutputStream();
             int status = WorldlineCli.run(new String[] {"replay", bundle.toString()},
@@ -58,6 +63,33 @@ public final class WorldlineCliTest {
                     && output.toString().contains("id=worldline.probe")
                     && output.toString().contains("compatibility=COMPATIBLE"),
                     "CLI mod inspection failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"mod", "test", "record", mod.toString(),
+                    left.toString(), leftResult.toString()}, new PrintStream(output), new PrintStream(error));
+            require(status == 0 && Files.isRegularFile(leftResult)
+                    && output.toString().contains("WORLDLINE_MOD_TEST_RECORD=PASS"),
+                    "CLI mod test record failed");
+            byte[] recorded = Files.readAllBytes(leftResult); output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"mod", "test", "record", mod.toString(),
+                    right.toString(), leftResult.toString()}, new PrintStream(output), new PrintStream(error));
+            require(status == 1 && java.util.Arrays.equals(recorded, Files.readAllBytes(leftResult)),
+                    "CLI overwrote an existing mod test result");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"mod", "test", "record", secondMod.toString(),
+                    right.toString(), rightResult.toString()}, new PrintStream(output), new PrintStream(error));
+            require(status == 0 && Files.isRegularFile(rightResult), "CLI second mod test record failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"mod", "test", "diff", leftResult.toString(),
+                    rightResult.toString()}, new PrintStream(output), new PrintStream(error));
+            require(status == 3 && output.toString().contains("WORLDLINE_MOD_TEST_DIFF=DIVERGED")
+                    && output.toString().contains("same.mod=true")
+                    && output.toString().contains("same.version=false")
+                    && output.toString().contains("field=y"), "CLI mod version diff failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"mod", "test", "diff", leftResult.toString(),
+                    leftResult.toString()}, new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("WORLDLINE_MOD_TEST_DIFF=EQUAL"),
+                    "CLI equal mod test diff failed");
             require(WorldlineCli.run(new String[0], System.out, new PrintStream(error)) == 2,
                     "CLI usage did not fail");
         } finally {
@@ -66,6 +98,8 @@ public final class WorldlineCliTest {
             Files.deleteIfExists(bundle);
             Files.deleteIfExists(left); Files.deleteIfExists(right);
             Files.deleteIfExists(mod);
+            Files.deleteIfExists(secondMod); Files.deleteIfExists(leftResult);
+            Files.deleteIfExists(rightResult);
         }
         System.out.println("WorldlineCliTest passed");
     }
@@ -80,8 +114,8 @@ public final class WorldlineCliTest {
         StringBuilder result = new StringBuilder(); while (result.length() < count) result.append(value);
         return result.toString();
     }
-    private static void writeMod(Path path, String runtime) throws Exception {
-        String descriptor = "format=1\nid=worldline.probe\nversion=1.0.0\n"
+    private static void writeMod(Path path, String version, String runtime) throws Exception {
+        String descriptor = "format=1\nid=worldline.probe\nversion=" + version + "\n"
                 + "entrypoint=worldline.benchmark.ProbeMod\nworldline.api=1\nruntime="
                 + runtime + "\n";
         try (JarOutputStream output = new JarOutputStream(Files.newOutputStream(path))) {

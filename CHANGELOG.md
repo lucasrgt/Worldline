@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 0.6.0 - M8 Differential Mod Testing
+
+Status: GO.
+
+- Added canonical `.wlmtest` results that bind mod identity, version, entrypoint,
+  whole-JAR SHA-256, runtime/API declarations, and a canonical `v2` trace.
+- Added stable mod-test comparison metadata and reused M6 first-divergence
+  semantics without introducing a second trace comparison implementation.
+- Extended the CLI and launcher with non-overwriting `mod test record` and
+  equality/divergence-aware `mod test diff` commands.
+- Added deterministic JAR packaging and repeated controlled-client evidence for
+  a baseline and two versions of one mod, plus corrupt-result rejection.
+
+The frozen M8 evidence-report SHA-256 is
+`b08aa9f46b2d8522e6b8ac991553b2b6f946a63190d5956e59cbf6d544eb8938`.
+
 ## 0.5.0 - M7 General Mod Loading
 
 Status: GO.

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v0.5.0 - M7 General Mod Loading (GO)**.
+Current official milestone: **Worldline v0.6.0 - M8 Differential Mod Testing (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -45,6 +45,11 @@ M7 adds strict, bounded mod-JAR descriptors, SHA-256 provenance, explicit
 runtime/API compatibility, and isolated descriptor-selected entrypoint loading.
 The neutral CLI can inspect compatibility without executing mod code or loading
 Minecraft. See `docs/M7_MODS.md` for the exact package and trust boundary.
+
+M8 adds canonical `.wlmtest` results that bind an exact mod artifact and
+descriptor to a canonical state trace. The neutral CLI records results and
+compares mod versions with M6 first-divergence semantics. See
+`docs/M8_RESULTS.md` for the result format and attestation boundary.
 
 ## Verify
 
@@ -132,14 +137,19 @@ distinct glass and gold effects through the real controlled client, and rejects
 wrong runtime, API, entrypoint type, malformed, and missing descriptor cases.
 Its exact evidence boundary is in `smokes/m7-mod-loading/MAP.md`.
 
+`smokes/m8-mod-version-diff` executes a no-mod baseline and versions `1.0.0`
+and `1.1.0` of the same mod twice each, freezes deterministic JAR/trace/result
+hashes, and requires exact baseline/version and version/version divergences.
+Its scope is in `smokes/m8-mod-version-diff/MAP.md`.
+
 The gate then runs `smokes/lab-cycle`, restores deterministic checkpoints in
 fresh clients, compares hypotheses, exercises GUI selectors, and compiles and
 loads `probe-mod.jar`; its scope is defined in `smokes/lab-cycle/MAP.md`.
 
-The client, M3, M4, M5, M6, M7, and lab runners deliberately raised the tooling budget to 2,250
+The client, M3, M4, M5, M6, M7, M8, and lab runners deliberately raised the tooling budget to 2,250
 code lines while retaining the 300-line per-file ceiling. Product
-code remains capped at 1,150 lines and 250 lines per file. Smoke drivers and
-oracles have their own enforced 1,150-line total and 150-line per-file budget, so
+code remains capped at 1,350 lines and 250 lines per file. Smoke drivers and
+oracles have their own enforced 1,250-line total and 150-line per-file budget, so
 integration behavior cannot hide outside the product and tooling counts.
 
 See `ARCHITECTURE.md` for module boundaries and `AGENTS.md` for the behavioral
@@ -150,6 +160,7 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M5_CYCLE.md` is the v0.3.0 reproduction-bundle and replay-CLI GO audit.
 `M6_CYCLE.md` is the v0.4.0 trace-viewer and first-divergence GO audit.
 `M7_CYCLE.md` is the v0.5.0 general-mod-loading and compatibility GO audit.
+`M8_CYCLE.md` is the v0.6.0 differential-mod-testing GO audit.
 
 After preparing the local runtime with the canonical smoke gate, replay a
 bundle with:
@@ -169,6 +180,13 @@ Inspect a local Worldline mod package without executing it:
 
 ```text
 java tools/replay/Replay.java mod inspect path/to/mod.jar
+```
+
+Record and compare provenance-bound mod test results:
+
+```text
+java tools/replay/Replay.java mod test record mod.jar run.wltrace run.wlmtest
+java tools/replay/Replay.java mod test diff baseline.wlmtest candidate.wlmtest
 ```
 
 Version and frozen evidence are authoritative in

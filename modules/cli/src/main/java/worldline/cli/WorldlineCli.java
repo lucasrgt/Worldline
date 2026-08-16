@@ -6,11 +6,14 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import worldline.analysis.TraceDiff;
 import worldline.analysis.TraceRenderer;
 import worldline.mods.ModArtifact;
 import worldline.mods.ModLoader;
+import worldline.modtest.ModTestComparison;
+import worldline.modtest.ModTestResult;
 import worldline.reproduction.ReplayProvider;
 import worldline.reproduction.ReplayReport;
 import worldline.reproduction.ReproductionBundle;
@@ -39,6 +42,12 @@ public final class WorldlineCli {
                     && "diff".equals(arguments[1])) return diff(arguments[2], arguments[3], output);
             if (arguments.length == 3 && "mod".equals(arguments[0])
                     && "inspect".equals(arguments[1])) return inspectMod(arguments[2], output);
+            if (arguments.length == 6 && "mod".equals(arguments[0])
+                    && "test".equals(arguments[1]) && "record".equals(arguments[2]))
+                return recordModTest(arguments[3], arguments[4], arguments[5], output);
+            if (arguments.length == 5 && "mod".equals(arguments[0])
+                    && "test".equals(arguments[1]) && "diff".equals(arguments[2]))
+                return diffModTests(arguments[3], arguments[4], output);
             return usage(error);
         } catch (IOException | ReflectiveOperationException | RuntimeException failure) {
             error.println("worldline command failed: " + failure.getMessage()); return 1;
@@ -94,11 +103,42 @@ public final class WorldlineCli {
         return artifact.compatible() ? 0 : 3;
     }
 
+    private static int recordModTest(String modPath, String tracePath, String resultPath,
+            PrintStream output) throws IOException {
+        ModArtifact artifact = ModLoader.inspect(Paths.get(modPath), MOD_RUNTIME, MOD_API);
+        require(artifact.compatible(), "cannot record an incompatible mod");
+        ModTestResult result = ModTestResult.create(artifact, readTrace(tracePath));
+        Files.write(Paths.get(resultPath), result.bytes(), StandardOpenOption.CREATE_NEW,
+                StandardOpenOption.WRITE);
+        output.println("WORLDLINE_MOD_TEST_RECORD=PASS");
+        output.println("mod=" + result.modId() + "@" + result.modVersion());
+        output.println("artifact.sha256=" + result.artifactSha256());
+        output.println("trace.sha256=" + result.trace().signature());
+        output.println("result.sha256=" + result.sha256()); return 0;
+    }
+
+    private static int diffModTests(String leftPath, String rightPath, PrintStream output)
+            throws IOException {
+        ModTestComparison comparison = ModTestComparison.compare(
+                readModTest(leftPath), readModTest(rightPath));
+        output.println("WORLDLINE_MOD_TEST_DIFF="
+                + (comparison.behaviorDiverged() ? "DIVERGED" : "EQUAL"));
+        output.print(comparison.render()); return comparison.behaviorDiverged() ? 3 : 0;
+    }
+
+    private static ModTestResult readModTest(String path) throws IOException {
+        long size = Files.size(Paths.get(path));
+        require(size > 0 && size <= ModTestResult.MAX_BYTES, "invalid mod test result size");
+        return ModTestResult.parse(Files.readAllBytes(Paths.get(path)));
+    }
+
     private static int usage(PrintStream error) {
         error.println("usage: worldline replay <bundle.wlrb>");
         error.println("   or: worldline trace show <trace.wltrace>");
         error.println("   or: worldline trace diff <left.wltrace> <right.wltrace>");
-        error.println("   or: worldline mod inspect <mod.jar>"); return 2;
+        error.println("   or: worldline mod inspect <mod.jar>");
+        error.println("   or: worldline mod test record <mod.jar> <trace.wltrace> <result.wlmtest>");
+        error.println("   or: worldline mod test diff <left.wlmtest> <right.wlmtest>"); return 2;
     }
 
     private static void require(boolean condition, String message) {
