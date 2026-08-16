@@ -38,10 +38,11 @@ public final class ReleaseCheck {
         Properties m6 = load("smokes/m6-trace-explorer/smoke.properties");
         Properties m7 = load("smokes/m7-mod-loading/smoke.properties");
         Properties m8 = load("smokes/m8-mod-version-diff/smoke.properties");
+        Properties m9 = load("smokes/m9-scenario-minimization/smoke.properties");
         Properties lab = load("smokes/lab-cycle/smoke.properties");
         match(release, "id", "worldline");
-        match(release, "version", "0.6.0");
-        match(release, "milestone", "m8-mod-version-diff");
+        match(release, "version", "0.7.0");
+        match(release, "milestone", "m9-scenario-minimization");
         match(release, "status", "go");
         match(release, "scope", "local-research");
         match(release, "canonical.command", "java tools/harness/Verify.java --smoke");
@@ -57,6 +58,7 @@ public final class ReleaseCheck {
         same(release, "m6.signature", m6, "expected.divergence.sha256");
         same(release, "m7.signature", m7, "expected.signature");
         same(release, "m8.signature", m8, "expected.signature");
+        same(release, "m9.signature", m9, "expected.signature");
         same(release, "lab.signature", lab, "expected.signature");
         requireText("modules/api/src/main/java/worldline/api/WorldlineVersion.java",
                 "public static final String VERSION = \"" + value(release, "version") + "\";");
@@ -77,8 +79,12 @@ public final class ReleaseCheck {
                 "smokes/m8-mod-version-diff/MAP.md")) {
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         }
+        for (String file : Arrays.asList("docs/M9_MINIMIZATION.md", "docs/M9_CYCLE.md",
+                "smokes/m9-scenario-minimization/MAP.md")) {
+            if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
+        }
         verifyPublicTree();
-        System.out.println("  release: Worldline v0.6.0 M8 differential mod testing GO");
+        System.out.println("  release: Worldline v0.7.0 M9 automatic scenario minimization GO");
         System.out.println("  public artifact boundary: verified");
     }
 

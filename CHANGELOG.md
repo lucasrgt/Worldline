@@ -4,6 +4,21 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 0.7.0 - M9 Automatic Scenario Minimization
+
+Status: GO.
+
+- Added canonical checksum-protected `.wlscenario` artifacts with bounded,
+  ordered, adapter-neutral steps.
+- Added exact first-divergence fingerprints and a deterministic delta debugger
+  with cached evaluations, explicit budgets, and final one-step verification.
+- Added CLI scenario creation/inspection with create-new output semantics.
+- Added repeated real-runtime minimization across the two M8 mod versions,
+  reducing nine noisy steps to a proven one-minimal three-step reproducer.
+
+The frozen M9 minimization-report SHA-256 is
+`706ff2a6fbeb2de5049749a573de95ba75ff43229326e7fd27a20aaf75b39a69`.
+
 ## 0.6.0 - M8 Differential Mod Testing
 
 Status: GO.

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v0.6.0 - M8 Differential Mod Testing (GO)**.
+Current official milestone: **Worldline v0.7.0 - M9 Automatic Scenario Minimization (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -50,6 +50,11 @@ M8 adds canonical `.wlmtest` results that bind an exact mod artifact and
 descriptor to a canonical state trace. The neutral CLI records results and
 compares mod versions with M6 first-divergence semantics. See
 `docs/M8_RESULTS.md` for the result format and attestation boundary.
+
+M9 adds canonical `.wlscenario` artifacts, exact first-divergence fingerprints,
+and a deterministic budgeted delta debugger that proves one-minimality through
+final individual-removal checks. See `docs/M9_MINIMIZATION.md` for guarantees
+and the adapter/evaluator boundary.
 
 ## Verify
 
@@ -142,14 +147,19 @@ and `1.1.0` of the same mod twice each, freezes deterministic JAR/trace/result
 hashes, and requires exact baseline/version and version/version divergences.
 Its scope is in `smokes/m8-mod-version-diff/MAP.md`.
 
+`smokes/m9-scenario-minimization` repeatedly reexecutes both M8 mod versions,
+reduces nine noisy actions to three steps, and proves that removing any final
+step changes or removes the exact divergence. Its evidence map is
+`smokes/m9-scenario-minimization/MAP.md`.
+
 The gate then runs `smokes/lab-cycle`, restores deterministic checkpoints in
 fresh clients, compares hypotheses, exercises GUI selectors, and compiles and
 loads `probe-mod.jar`; its scope is defined in `smokes/lab-cycle/MAP.md`.
 
-The client, M3, M4, M5, M6, M7, M8, and lab runners deliberately raised the tooling budget to 2,250
+The client, M3, M4, M5, M6, M7, M8, M9, and lab runners deliberately raised the tooling budget to 2,500
 code lines while retaining the 300-line per-file ceiling. Product
-code remains capped at 1,350 lines and 250 lines per file. Smoke drivers and
-oracles have their own enforced 1,250-line total and 150-line per-file budget, so
+code remains capped at 1,600 lines and 250 lines per file. Smoke drivers and
+oracles have their own enforced 1,400-line total and 150-line per-file budget, so
 integration behavior cannot hide outside the product and tooling counts.
 
 See `ARCHITECTURE.md` for module boundaries and `AGENTS.md` for the behavioral
@@ -161,6 +171,7 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M6_CYCLE.md` is the v0.4.0 trace-viewer and first-divergence GO audit.
 `M7_CYCLE.md` is the v0.5.0 general-mod-loading and compatibility GO audit.
 `M8_CYCLE.md` is the v0.6.0 differential-mod-testing GO audit.
+`M9_CYCLE.md` is the v0.7.0 automatic-scenario-minimization GO audit.
 
 After preparing the local runtime with the canonical smoke gate, replay a
 bundle with:
@@ -187,6 +198,13 @@ Record and compare provenance-bound mod test results:
 ```text
 java tools/replay/Replay.java mod test record mod.jar run.wltrace run.wlmtest
 java tools/replay/Replay.java mod test diff baseline.wlmtest candidate.wlmtest
+```
+
+Create or inspect a canonical scenario artifact:
+
+```text
+java tools/replay/Replay.java scenario create run.wlscenario tick observe:target
+java tools/replay/Replay.java scenario inspect run.wlscenario
 ```
 
 Version and frozen evidence are authoritative in

@@ -42,6 +42,11 @@ mod + trace -> worldline-cli -> worldline-modtest -> worldline-analysis
                                         |                  |
                                         v                  v
                                   worldline-mods      worldline-trace
+
+scenario -> worldline-cli -> worldline-minimization -> worldline-analysis
+                                   ^
+                                   |
+                          adapter-owned evaluator
 ```
 
 The modules are physical source roots and are compiled separately. The API is
@@ -88,6 +93,11 @@ M8 adds `worldline-modtest` above mods, trace, and analysis. It owns the durable
 provenance-bound result envelope and comparison metadata, while delegating trace
 parsing and first-divergence order to their existing modules. The CLI records
 and compares results without loading an adapter or executing mod code.
+
+M9 adds `worldline-minimization` above analysis. It owns canonical opaque-step
+scenarios, exact divergence fingerprints, and deterministic delta debugging.
+Adapters remain responsible for step interpretation and isolated evaluation,
+so the neutral module does not acquire game, mod, or runtime dependencies.
 
 ### `kernel`
 
@@ -180,6 +190,11 @@ rejecting metadata mismatches, invalid descriptors, and a wrong Java subtype.
 executes each twice beside a repeated no-mod baseline, records durable results,
 and verifies exact baseline/version and version/version divergences plus result
 corruption rejection.
+
+`smokes/m9-scenario-minimization/` reuses the exact deterministic M8 artifacts
+and opens fresh mod classloaders/runtimes for both versions on every candidate.
+Two outer JVMs must produce the same one-minimal scenario, evaluation count,
+provenance hashes, and exact divergence fingerprint.
 
 ## Adapter direction
 

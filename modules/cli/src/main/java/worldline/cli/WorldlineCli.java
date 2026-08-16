@@ -14,6 +14,7 @@ import worldline.mods.ModArtifact;
 import worldline.mods.ModLoader;
 import worldline.modtest.ModTestComparison;
 import worldline.modtest.ModTestResult;
+import worldline.minimization.Scenario;
 import worldline.reproduction.ReplayProvider;
 import worldline.reproduction.ReplayReport;
 import worldline.reproduction.ReproductionBundle;
@@ -48,6 +49,11 @@ public final class WorldlineCli {
             if (arguments.length == 5 && "mod".equals(arguments[0])
                     && "test".equals(arguments[1]) && "diff".equals(arguments[2]))
                 return diffModTests(arguments[3], arguments[4], output);
+            if (arguments.length >= 3 && "scenario".equals(arguments[0])
+                    && "create".equals(arguments[1]))
+                return createScenario(arguments[2], Arrays.asList(arguments).subList(3, arguments.length), output);
+            if (arguments.length == 3 && "scenario".equals(arguments[0])
+                    && "inspect".equals(arguments[1])) return inspectScenario(arguments[2], output);
             return usage(error);
         } catch (IOException | ReflectiveOperationException | RuntimeException failure) {
             error.println("worldline command failed: " + failure.getMessage()); return 1;
@@ -132,13 +138,41 @@ public final class WorldlineCli {
         return ModTestResult.parse(Files.readAllBytes(Paths.get(path)));
     }
 
+    private static int createScenario(String path, java.util.List<String> steps, PrintStream output)
+            throws IOException {
+        Scenario scenario = Scenario.of(steps);
+        Files.write(Paths.get(path), scenario.bytes(), StandardOpenOption.CREATE_NEW,
+                StandardOpenOption.WRITE);
+        output.println("WORLDLINE_SCENARIO_CREATE=PASS");
+        output.println("steps=" + scenario.size());
+        output.println("scenario.sha256=" + scenario.sha256()); return 0;
+    }
+
+    private static int inspectScenario(String path, PrintStream output) throws IOException {
+        Scenario scenario = readScenario(path);
+        output.println("WORLDLINE_SCENARIO_INSPECT=PASS");
+        output.println("steps=" + scenario.size());
+        output.println("scenario.sha256=" + scenario.sha256());
+        for (int index = 0; index < scenario.size(); index++)
+            output.println(index + "=" + scenario.step(index));
+        return 0;
+    }
+
+    private static Scenario readScenario(String path) throws IOException {
+        long size = Files.size(Paths.get(path));
+        require(size > 0 && size <= Scenario.MAX_BYTES, "invalid scenario size");
+        return Scenario.parse(Files.readAllBytes(Paths.get(path)));
+    }
+
     private static int usage(PrintStream error) {
         error.println("usage: worldline replay <bundle.wlrb>");
         error.println("   or: worldline trace show <trace.wltrace>");
         error.println("   or: worldline trace diff <left.wltrace> <right.wltrace>");
         error.println("   or: worldline mod inspect <mod.jar>");
         error.println("   or: worldline mod test record <mod.jar> <trace.wltrace> <result.wlmtest>");
-        error.println("   or: worldline mod test diff <left.wlmtest> <right.wlmtest>"); return 2;
+        error.println("   or: worldline mod test diff <left.wlmtest> <right.wlmtest>");
+        error.println("   or: worldline scenario create <output.wlscenario> [step ...]");
+        error.println("   or: worldline scenario inspect <scenario.wlscenario>"); return 2;
     }
 
     private static void require(boolean condition, String message) {

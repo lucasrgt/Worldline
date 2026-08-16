@@ -28,12 +28,17 @@ public final class Replay {
                 && arguments[2].equals("record")) || (arguments.length == 5
                 && arguments[0].equals("mod") && arguments[1].equals("test")
                 && arguments[2].equals("diff"));
-        if (!replay && !trace && !mod) { System.err.println("usage: java tools/replay/Replay.java replay <bundle.wlrb>");
+        boolean scenario = (arguments.length >= 3 && arguments[0].equals("scenario")
+                && arguments[1].equals("create")) || (arguments.length == 3
+                && arguments[0].equals("scenario") && arguments[1].equals("inspect"));
+        if (!replay && !trace && !mod && !scenario) { System.err.println("usage: java tools/replay/Replay.java replay <bundle.wlrb>");
             System.err.println("   or: java tools/replay/Replay.java trace show <trace.wltrace>");
             System.err.println("   or: java tools/replay/Replay.java trace diff <left.wltrace> <right.wltrace>");
             System.err.println("   or: java tools/replay/Replay.java mod inspect <mod.jar>");
             System.err.println("   or: java tools/replay/Replay.java mod test record <mod.jar> <trace> <result>");
-            System.err.println("   or: java tools/replay/Replay.java mod test diff <left> <right>"); return 2; }
+            System.err.println("   or: java tools/replay/Replay.java mod test diff <left> <right>");
+            System.err.println("   or: java tools/replay/Replay.java scenario create <output> [step ...]");
+            System.err.println("   or: java tools/replay/Replay.java scenario inspect <scenario>"); return 2; }
         if (replay) { int inputs = new ProcessBuilder("java", "tools/harness/RuntimeCheck.java", "--required")
                 .directory(root.toFile()).inheritIO().start().waitFor(); if (inputs != 0) return inputs; }
         Path classes = root.resolve(".worldline/build/classes");
@@ -42,6 +47,7 @@ public final class Replay {
         List<Path> paths = new ArrayList<>(Arrays.asList(classes.resolve("cli"),
                 classes.resolve("reproduction"), classes.resolve("api"), classes.resolve("trace"),
                 classes.resolve("mods"), classes.resolve("analysis"), classes.resolve("modtest")));
+        paths.add(classes.resolve("minimization"));
         if (replay) paths.addAll(Arrays.asList(classes.resolve("kernel"), client.resolve("adapter-classes"),
                 client.resolve("instrumented-client"), client.resolve("headless-classes"),
                 workspace.resolve("minecraft/bin"), workspace.resolve("jars/minecraft.jar")));

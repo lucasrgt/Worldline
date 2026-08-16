@@ -23,6 +23,7 @@ public final class WorldlineCliTest {
         Path secondMod = Files.createTempFile("worldline-cli-mod-two", ".jar");
         Path leftResult = Files.createTempFile("worldline-cli-left", ".wlmtest");
         Path rightResult = Files.createTempFile("worldline-cli-right", ".wlmtest");
+        Path scenario = Files.createTempFile("worldline-cli", ".wlscenario");
         String previous = System.getProperty("worldline.replay.provider");
         try {
             ReproductionBundle value = ReproductionBundle.create("test-runtime", "1.2.3",
@@ -30,7 +31,7 @@ public final class WorldlineCliTest {
             Files.write(bundle, value.bytes());
             writeMod(mod, "1.0.0", "b1.7.3");
             writeMod(secondMod, "1.1.0", "b1.7.3");
-            Files.delete(leftResult); Files.delete(rightResult);
+            Files.delete(leftResult); Files.delete(rightResult); Files.delete(scenario);
             System.setProperty("worldline.replay.provider", FakeProvider.class.getName());
             ByteArrayOutputStream output = new ByteArrayOutputStream(), error = new ByteArrayOutputStream();
             int status = WorldlineCli.run(new String[] {"replay", bundle.toString()},
@@ -90,6 +91,23 @@ public final class WorldlineCliTest {
                     leftResult.toString()}, new PrintStream(output), new PrintStream(error));
             require(status == 0 && output.toString().contains("WORLDLINE_MOD_TEST_DIFF=EQUAL"),
                     "CLI equal mod test diff failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"scenario", "create", scenario.toString(),
+                    "noise:a", "tick", "observe:target"}, new PrintStream(output), new PrintStream(error));
+            require(status == 0 && Files.isRegularFile(scenario)
+                    && output.toString().contains("WORLDLINE_SCENARIO_CREATE=PASS")
+                    && output.toString().contains("steps=3"), "CLI scenario creation failed");
+            byte[] scenarioBytes = Files.readAllBytes(scenario); output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"scenario", "create", scenario.toString(), "tick"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 1 && java.util.Arrays.equals(scenarioBytes, Files.readAllBytes(scenario)),
+                    "CLI overwrote an existing scenario");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"scenario", "inspect", scenario.toString()},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("WORLDLINE_SCENARIO_INSPECT=PASS")
+                    && output.toString().contains("1=tick")
+                    && output.toString().contains("2=observe:target"), "CLI scenario inspection failed");
             require(WorldlineCli.run(new String[0], System.out, new PrintStream(error)) == 2,
                     "CLI usage did not fail");
         } finally {
@@ -100,6 +118,7 @@ public final class WorldlineCliTest {
             Files.deleteIfExists(mod);
             Files.deleteIfExists(secondMod); Files.deleteIfExists(leftResult);
             Files.deleteIfExists(rightResult);
+            Files.deleteIfExists(scenario);
         }
         System.out.println("WorldlineCliTest passed");
     }
