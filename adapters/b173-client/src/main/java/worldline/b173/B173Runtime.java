@@ -1,0 +1,105 @@
+package worldline.b173;
+
+import java.util.ArrayList;
+import java.util.List;
+import worldline.api.MinecraftRuntime;
+import worldline.api.RuntimeState;
+import worldline.api.WorldSource;
+import worldline.kernel.ControlledMinecraftRuntime;
+
+/** Reusable controlled runtime backed by the mapped Beta 1.7.3 client. */
+public final class B173Runtime implements MinecraftRuntime {
+    private final B173ClientBackend backend;
+    private final MinecraftRuntime lifecycle;
+    private final B173VirtualClock clock;
+    private final B173VirtualFileSystem files;
+    private final B173Scheduler scheduler;
+    private final long seed;
+    private final long initialMillis;
+    private final List<B173Action> actions = new ArrayList<>();
+    private WorldSource source;
+    private final B173Gui gui = new B173Gui(this);
+
+    B173Runtime(long seed, long initialMillis) {
+        this.seed = seed;
+        this.initialMillis = initialMillis;
+        clock = new B173VirtualClock(initialMillis);
+        files = new B173VirtualFileSystem();
+        scheduler = new B173Scheduler();
+        backend = new B173ClientBackend(seed, clock, files, scheduler);
+        lifecycle = new ControlledMinecraftRuntime(backend);
+    }
+
+    @Override
+    public void bootHeadless() { lifecycle.bootHeadless(); }
+
+    @Override
+    public void loadWorld(WorldSource source) { lifecycle.loadWorld(source); this.source = source; }
+
+    @Override
+    public void tick() { lifecycle.tick(); }
+
+    @Override
+    public RuntimeState state() { return lifecycle.state(); }
+
+    @Override
+    public void close() { lifecycle.close(); }
+
+    public B173Observation observe() { return backend.observe(); }
+
+    public void assertHeadless() { backend.assertHeadless(); }
+
+    public String minecraftClassSource() { return backend.minecraftClassSource(); }
+
+    public B173VirtualClock clock() { return clock; }
+
+    public B173VirtualFileSystem fileSystem() { return files; }
+
+    public B173Scheduler scheduler() { return scheduler; }
+
+    public void key(int key, boolean pressed) { key(key, pressed, (char) 0); }
+
+    public void key(int key, boolean pressed, char character) {
+        backend.key(key, pressed, character);
+        actions.add(B173Action.key(scheduler.currentTick(), key, pressed, character));
+    }
+
+    public void tap(int key) { key(key, true); key(key, false); }
+
+    public void mouse(int button, boolean pressed, int wheel, int x, int y) {
+        backend.mouse(button, pressed, wheel, x, y);
+        actions.add(B173Action.mouse(scheduler.currentTick(), button, pressed, wheel, x, y));
+    }
+
+    public void reseed(long seed) {
+        backend.reseed(seed);
+        actions.add(B173Action.reseed(scheduler.currentTick(), seed));
+    }
+
+    public boolean networkConnected() { return false; }
+
+    public boolean timerThreadAlive() { return backend.timerThreadAlive(); }
+
+    public B173Gui gui() { return gui; }
+
+    public void installMod(B173Mod mod) {
+        if (mod == null) throw new NullPointerException("mod");
+        backend.install(mod);
+    }
+
+    public B173Checkpoint snapshot() {
+        if (state() != RuntimeState.WORLD_LOADED || source == null) {
+            throw new IllegalStateException("snapshot requires a loaded world");
+        }
+        if (scheduler.pendingActions() != 0) {
+            throw new IllegalStateException("snapshot requires a drained scheduler");
+        }
+        B173Observation observation = observe();
+        return new B173Checkpoint(seed, initialMillis, source.path(), observation.clientTick(),
+                actions, observation.fingerprint());
+    }
+
+    B173ClientBackend backend() { return backend; }
+
+    void acceptReplay(List<B173Action> history) { actions.addAll(history); }
+}

@@ -1,0 +1,36 @@
+# owner kind descriptor named client server
+net/minecraft/client/Minecraft	c	-	net/minecraft/client/Minecraft	net/minecraft/client/Minecraft
+net/minecraft/client/Minecraft	f	I	ticksRan	V
+net/minecraft/client/Minecraft	m	()V	runTick	k
+net/minecraft/src/World	c	-	net/minecraft/src/World	fd	dj
+net/minecraft/src/World	f	Ljava/util/List;	loadedEntityList	b	b
+net/minecraft/src/World	m	()V	tick	l	h
+net/minecraft/src/World	m	()V	updateEntities	g	e
+net/minecraft/src/World	m	()J	getWorldTime	t	m
+net/minecraft/src/World	m	(II)Lnet/minecraft/src/Chunk;	getChunkFromChunkCoords	c	c
+net/minecraft/src/Chunk	c	-	net/minecraft/src/Chunk	lm	hi
+net/minecraft/src/Chunk	m	()V	func_1024_c	c
+net/minecraft/src/Block	c	-	net/minecraft/src/Block	uu	na
+net/minecraft/src/Block	f	I	blockID	bn	bn
+net/minecraft/src/Block	f	Lnet/minecraft/src/Block;	stone	u	u
+net/minecraft/src/Block	f	Lnet/minecraft/src/Block;	bedrock	A	A
+net/minecraft/src/Entity	c	-	net/minecraft/src/Entity	sn	lq
+net/minecraft/src/Entity	m	(DDDFF)V	setLocationAndAngles	c	c
+net/minecraft/src/EntityPlayerSP	c	-	net/minecraft/src/EntityPlayerSP	dc
+net/minecraft/src/EntityPlayerSP	f	Lnet/minecraft/src/MovementInput;	movementInput	a
+net/minecraft/src/RenderEngine	c	-	net/minecraft/src/RenderEngine	ji
+net/minecraft/src/RenderEngine	m	(Ljava/lang/String;)I	getTexture	b
+net/minecraft/src/RenderEngine	m	()V	updateDynamicTextures	a
+net/minecraft/src/StatFileWriter	c	-	net/minecraft/src/StatFileWriter	xi
+net/minecraft/src/StatFileWriter	m	()V	func_27178_d	d
+net/minecraft/src/RenderGlobal	c	-	net/minecraft/src/RenderGlobal	n
+net/minecraft/src/RenderGlobal	m	()V	updateClouds	d
+net/minecraft/src/EntityRenderer	c	-	net/minecraft/src/EntityRenderer	px
+net/minecraft/src/EntityRenderer	m	(F)V	getMouseOver	a
+net/minecraft/src/EntityRenderer	m	()V	updateRenderer	a
+net/minecraft/src/GuiIngame	c	-	net/minecraft/src/GuiIngame	uq
+net/minecraft/src/GuiIngame	m	()V	updateTick	a
+net/minecraft/src/EffectRenderer	c	-	net/minecraft/src/EffectRenderer	dn
+net/minecraft/src/EffectRenderer	m	()V	updateEffects	a
+net/minecraft/src/PlayerController	c	-	net/minecraft/src/PlayerController	ob
+net/minecraft/src/PlayerController	m	()V	updateController	c

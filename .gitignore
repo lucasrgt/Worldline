@@ -1,0 +1,7 @@
+.worldline/
+*.class
+*.jar
+
+# The official game, decompiled sources, assets, and local runtime material
+# must never be committed. Local experiments live under this ignored root.
+local/

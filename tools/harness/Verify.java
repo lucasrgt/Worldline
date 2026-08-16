@@ -1,0 +1,288 @@
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+/** Zero-dependency repository gate. Run with: java tools/harness/Verify.java */
+public final class Verify {
+    private static final Pattern CODE = Pattern.compile("\\\"code\\\"\\s*:\\s*(\\d+)");
+    private static final Pattern REPORT = Pattern.compile(
+            "\\{\\\"name\\\":\\\"([^\\\"]+)\\\".*?\\\"stats\\\":\\{(.*?)\\}", Pattern.DOTALL);
+
+    private final Path root = Paths.get("").toAbsolutePath().normalize();
+    private final Path build = root.resolve(".worldline/build");
+    private final Properties config = new Properties();
+    private final boolean requireLocalArtifacts;
+    private final boolean runSmoke;
+
+    private Verify(boolean requireLocalArtifacts, boolean runSmoke) {
+        this.requireLocalArtifacts = requireLocalArtifacts;
+        this.runSmoke = runSmoke;
+    }
+
+    public static void main(String[] arguments) {
+        boolean runtime = Arrays.equals(arguments, new String[] {"--runtime"});
+        boolean smoke = Arrays.equals(arguments, new String[] {"--smoke"});
+        if (arguments.length > 0 && !runtime && !smoke) {
+            System.err.println("usage: java tools/harness/Verify.java [--runtime|--smoke]");
+            System.exit(2);
+        }
+        try {
+            new Verify(runtime || smoke, smoke).execute();
+        } catch (Exception error) {
+            System.err.println("verify failed: " + error.getMessage());
+            System.exit(1);
+        }
+    }
+
+    private void execute() throws Exception {
+        System.out.println("Worldline repository verification");
+        loadConfiguration();
+        run(Arrays.asList("java", "tools/harness/ReleaseCheck.java"));
+        if (runSmoke) {
+            run(Arrays.asList("java", "tools/toolchains/Bootstrap.java", "retromcp"));
+        }
+        verifyRuntimeInputs();
+        List<String> modules = values("modules");
+        validateModuleOrder(modules);
+        enforceBudget("product", productionRoots(modules));
+        enforceBudget("harness", Collections.singletonList(root.resolve("tools")));
+        enforceBudget("smoke", Collections.singletonList(root.resolve("smokes")));
+        enforceBudget("adapter", Collections.singletonList(root.resolve("adapters")));
+        recreateBuildDirectory();
+        List<Path> outputs = compileModules(modules);
+        Path testOutput = compileTests(modules, outputs);
+        runTests(outputs, testOutput);
+        if (runSmoke) {
+            run(Arrays.asList("java", "tools/smoke/Run.java", "deterministic-world-tick"));
+            run(Arrays.asList("java", "tools/smoke/ClientCycle.java", "controlled-client-tick"));
+            run(Arrays.asList("java", "tools/smoke/LabCycle.java", "lab-cycle"));
+        }
+        System.out.println("verify passed");
+    }
+
+    private void loadConfiguration() throws IOException {
+        Path path = root.resolve("harness.properties");
+        try (java.io.Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+            config.load(reader);
+        }
+    }
+
+    private void verifyRuntimeInputs() throws Exception {
+        List<String> command = new ArrayList<>(Arrays.asList(
+                "java", "tools/harness/RuntimeCheck.java"));
+        if (requireLocalArtifacts) {
+            command.add("--required");
+        }
+        run(command);
+    }
+
+    private List<String> values(String key) {
+        String raw = required(key).trim();
+        if (raw.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return Arrays.stream(raw.split(","))
+                .map(String::trim)
+                .filter(value -> !value.isEmpty())
+                .collect(Collectors.toList());
+    }
+
+    private String required(String key) {
+        String value = config.getProperty(key);
+        if (value == null) {
+            throw new IllegalStateException("missing harness property: " + key);
+        }
+        return value;
+    }
+
+    private void validateModuleOrder(List<String> modules) {
+        if (modules.isEmpty()) {
+            throw new IllegalStateException("at least one module is required");
+        }
+        List<String> seen = new ArrayList<>();
+        for (String module : modules) {
+            Path main = moduleRoot(module).resolve("src/main/java");
+            if (!Files.isDirectory(main)) {
+                throw new IllegalStateException("missing production source root: " + relative(main));
+            }
+            for (String dependency : values("module." + module + ".dependencies")) {
+                if (!seen.contains(dependency)) {
+                    throw new IllegalStateException(
+                            "module " + module + " depends on undeclared, unknown, or later module " + dependency);
+                }
+            }
+            seen.add(module);
+        }
+    }
+
+    private List<Path> productionRoots(List<String> modules) {
+        return modules.stream()
+                .map(module -> moduleRoot(module).resolve("src/main/java"))
+                .collect(Collectors.toList());
+    }
+
+    private Path moduleRoot(String module) {
+        return root.resolve("modules").resolve(module);
+    }
+
+    private void enforceBudget(String name, List<Path> roots) throws Exception {
+        List<String> command = new ArrayList<>();
+        command.add("tokei");
+        roots.forEach(path -> command.add(path.toString()));
+        command.addAll(Arrays.asList("--output", "json"));
+        String json = capture(command);
+        String java = languageSection(json);
+        int reports = java.indexOf("\"reports\"");
+        long total = codeLines(reports < 0 ? java : java.substring(0, reports));
+        long maxTotal = Long.parseLong(required(name + ".max.total"));
+        long maxFile = Long.parseLong(required(name + ".max.file"));
+        if (total > maxTotal) {
+            throw new IllegalStateException(name + " line budget exceeded: " + total + "/" + maxTotal);
+        }
+        Matcher files = REPORT.matcher(java);
+        while (files.find()) {
+            long lines = codeLines(files.group(2));
+            if (lines > maxFile) {
+                throw new IllegalStateException(
+                        name + " file budget exceeded: " + files.group(1) + " has " + lines + "/" + maxFile);
+            }
+        }
+        System.out.println("  " + name + " lines: " + total + "/" + maxTotal + " (max file " + maxFile + ")");
+    }
+
+    private String languageSection(String json) {
+        int start = json.indexOf("\"Java\":{");
+        if (start < 0) {
+            throw new IllegalStateException("tokei JSON did not contain Java");
+        }
+        return json.substring(start + 8);
+    }
+
+    private long codeLines(String json) {
+        Matcher matcher = CODE.matcher(json);
+        if (!matcher.find()) {
+            throw new IllegalStateException("tokei JSON did not contain a code count");
+        }
+        return Long.parseLong(matcher.group(1));
+    }
+
+    private void recreateBuildDirectory() throws IOException {
+        if (Files.exists(build)) {
+            if (!build.startsWith(root) || build.equals(root)) {
+                throw new IllegalStateException("refusing to delete unsafe build path: " + build);
+            }
+            try (Stream<Path> paths = Files.walk(build)) {
+                for (Path path : paths.sorted(Comparator.reverseOrder()).collect(Collectors.toList())) {
+                    Files.delete(path);
+                }
+            }
+        }
+        Files.createDirectories(build);
+    }
+
+    private List<Path> compileModules(List<String> modules) throws Exception {
+        List<Path> outputs = new ArrayList<>();
+        for (String module : modules) {
+            Path output = build.resolve("classes").resolve(module);
+            Files.createDirectories(output);
+            List<Path> dependencyOutputs = values("module." + module + ".dependencies").stream()
+                    .map(dependency -> build.resolve("classes").resolve(dependency))
+                    .collect(Collectors.toList());
+            compile(javaFiles(moduleRoot(module).resolve("src/main/java")), output, dependencyOutputs);
+            outputs.add(output);
+            System.out.println("  compiled module " + module);
+        }
+        return outputs;
+    }
+
+    private Path compileTests(List<String> modules, List<Path> outputs) throws Exception {
+        List<Path> tests = new ArrayList<>();
+        for (String module : modules) {
+            Path root = moduleRoot(module).resolve("src/test/java");
+            if (Files.isDirectory(root)) {
+                tests.addAll(javaFiles(root));
+            }
+        }
+        if (tests.isEmpty()) {
+            throw new IllegalStateException("no tests found");
+        }
+        Path output = build.resolve("test-classes");
+        Files.createDirectories(output);
+        compile(tests, output, outputs);
+        System.out.println("  compiled tests");
+        return output;
+    }
+
+    private void compile(List<Path> sources, Path output, List<Path> classpath) throws Exception {
+        if (sources.isEmpty()) {
+            throw new IllegalStateException("no Java sources for " + relative(output));
+        }
+        List<String> command = new ArrayList<>(Arrays.asList(
+                "javac", "-encoding", "UTF-8", "--release", required("java.release"),
+                "-Xlint:all,-options", "-Werror", "-d", output.toString()));
+        if (!classpath.isEmpty()) {
+            command.add("-classpath");
+            command.add(joinPaths(classpath));
+        }
+        sources.forEach(path -> command.add(path.toString()));
+        run(command);
+    }
+
+    private void runTests(List<Path> outputs, Path testOutput) throws Exception {
+        List<Path> classpath = new ArrayList<>(outputs);
+        classpath.add(testOutput);
+        for (String suite : values("test.suites")) {
+            run(Arrays.asList("java", "-ea", "-classpath", joinPaths(classpath), suite));
+        }
+    }
+
+    private List<Path> javaFiles(Path sourceRoot) throws IOException {
+        try (Stream<Path> paths = Files.walk(sourceRoot)) {
+            return paths.filter(path -> path.toString().endsWith(".java"))
+                    .sorted()
+                    .collect(Collectors.toList());
+        }
+    }
+
+    private String joinPaths(List<Path> paths) {
+        return paths.stream().map(Path::toString).collect(Collectors.joining(System.getProperty("path.separator")));
+    }
+
+    private void run(List<String> command) throws Exception {
+        String output = capture(command);
+        if (!output.trim().isEmpty()) {
+            System.out.print(output);
+        }
+    }
+
+    private String capture(List<String> command) throws Exception {
+        Process process;
+        try {
+            process = new ProcessBuilder(command).directory(root.toFile()).redirectErrorStream(true).start();
+        } catch (IOException error) {
+            throw new IllegalStateException("could not start " + command.get(0) + ": " + error.getMessage(), error);
+        }
+        String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        int exit = process.waitFor();
+        if (exit != 0) {
+            throw new IllegalStateException(command.get(0) + " exited " + exit + "\n" + output);
+        }
+        return output;
+    }
+
+    private String relative(Path path) {
+        return root.relativize(path).toString();
+    }
+}
