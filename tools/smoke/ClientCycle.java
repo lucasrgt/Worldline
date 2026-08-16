@@ -56,7 +56,7 @@ public final class ClientCycle {
         Path stubs = compile(adapterRoot.resolve("headless-src"), build.resolve("headless-classes"),
                 new ArrayList<>(), "headless boundary compilation");
         List<Path> libraries = jarFiles(workspace.resolve("libraries"));
-        List<Path> adapterDependencies = paths(stubs, mapped, product("api"), product("kernel"));
+        List<Path> adapterDependencies = paths(stubs, mapped, product("api"), product("kernel"), product("reproduction"));
         adapterDependencies.addAll(libraries);
         Path adapter = compile(adapterRoot.resolve("src/main/java"), build.resolve("adapter-classes"),
                 adapterDependencies, "reusable b1.7.3 adapter compilation");
@@ -164,7 +164,7 @@ public final class ClientCycle {
                 .replace("(GuiScreen)var1", "var1").replace("public abstract class Minecraft",
                         "@SuppressWarnings(\"this-escape\")\npublic abstract class Minecraft");
         Files.write(generated, transformed.getBytes(StandardCharsets.UTF_8));
-        List<Path> dependencies = paths(adapter, mapped, product("api"), product("kernel"));
+        List<Path> dependencies = paths(adapter, mapped, product("api"), product("kernel"), product("reproduction"));
         dependencies.addAll(libraries);
         dependencies.add(stubs);
         return compile(build.resolve("instrumented-src"), build.resolve("instrumented-client"),

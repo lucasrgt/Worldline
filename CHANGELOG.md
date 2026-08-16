@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 0.3.0 - M5 Reproduction Bundle
+
+Status: GO.
+
+- Added canonical `ReproductionBundle`, `ReplayProvider`, and `ReplayReport`
+  contracts in an independently compiled module.
+- Added a neutral replay CLI and a repository launcher that verifies local
+  runtime inputs before starting the controlled b1.7.3 provider.
+- Bundles embed the durable M4 snapshot while declaring the exact Worldline,
+  runtime, official-client hash, and RetroMCP revision required for replay.
+- Added two-process deterministic packing, copied-path CLI replay, official-JAR
+  state comparison, and negative corruption/runtime/dependency evidence.
+
+The frozen M5 bundle SHA-256 is
+`840dca117939412dbba24594a1091c44d4b312b1e9700cec7aab7f47e0cc0181`.
+
 ## 0.2.0 - M4 Durable Snapshot
 
 Status: GO.

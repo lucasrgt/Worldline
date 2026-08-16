@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v0.2.0 - M4 Durable Snapshot (GO)**.
+Current official milestone: **Worldline v0.3.0 - M5 Reproduction Bundle (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -28,6 +28,12 @@ The b1.7.3 adapter captures a canonical replay-backed document with an embedded
 checksum, restores it in a fresh runtime, and rejects corrupt, non-canonical,
 wrong-version, or wrong-runtime input. See `docs/M4_SNAPSHOT.md` for the exact
 format and portability boundary.
+
+M5 adds a canonical `ReproductionBundle` that embeds the M4 snapshot and
+declares the exact Worldline version, runtime ID, official client SHA-256, and
+RetroMCP revision required to replay it. A neutral CLI loads a runtime provider
+and restores the bundle without distributing the official JAR or mapped game
+classes. See `docs/M5_BUNDLE.md` for the format and command contract.
 
 ## Verify
 
@@ -98,11 +104,17 @@ on a corrupted artifact plus explicit rejection of unknown versions and runtime
 identities. Its scope is defined in
 `smokes/m4-durable-snapshot/MAP.md`.
 
+`smokes/m5-reproduction-bundle` next produces byte-identical bundles in two
+fresh pack JVMs, replays the original and a copied artifact through the public
+CLI, matches the direct official-client state, and rejects corruption plus
+incompatible client and toolchain declarations. Its exact boundary is in
+`smokes/m5-reproduction-bundle/MAP.md`.
+
 The gate then runs `smokes/lab-cycle`, restores deterministic checkpoints in
 fresh clients, compares hypotheses, exercises GUI selectors, and compiles and
 loads `probe-mod.jar`; its scope is defined in `smokes/lab-cycle/MAP.md`.
 
-The client, M3, M4, and lab runners deliberately raised the tooling budget to 1,600
+The client, M3, M4, M5, and lab runners deliberately raised the tooling budget to 1,850
 code lines while retaining the 300-line per-file ceiling. Product
 code remains capped at 1,000 lines and 250 lines per file. Smoke drivers and
 oracles have their own enforced 1,000-line total and 150-line per-file budget, so
@@ -113,6 +125,14 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `LAB_CYCLE.md` is the seven-step laboratory GO audit.
 `M3_CYCLE.md` is the v0.1.0 stable domain-API GO audit.
 `M4_CYCLE.md` is the v0.2.0 durable-snapshot GO audit.
+`M5_CYCLE.md` is the v0.3.0 reproduction-bundle and replay-CLI GO audit.
+
+After preparing the local runtime with the canonical smoke gate, replay a
+bundle with:
+
+```text
+java tools/replay/Replay.java replay path/to/reproduction.wlrb
+```
 
 Version and frozen evidence are authoritative in
 `release/worldline.properties`. See `CHANGELOG.md` for stable scope and

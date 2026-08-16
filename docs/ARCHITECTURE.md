@@ -22,12 +22,21 @@ worldline-trace      independent canonical observation protocol
   ^            ^
   |            |
 subject        official-JAR oracle
+
+bundle -> worldline-cli -> worldline-reproduction
+                              |
+                              v
+                       ReplayProvider SPI
+                              |
+                              v
+                         b173 adapter
 ```
 
 The modules are physical source roots and are compiled separately. The API is
 compiled with no product classpath. The kernel is compiled with only the API on
-its classpath. This makes the declared dependency direction executable rather
-than conventional.
+its classpath. Reproduction depends only on the API; CLI depends only on API
+and reproduction. This makes every declared dependency direction executable
+rather than conventional.
 
 ### `api`
 
@@ -44,6 +53,12 @@ M4 adds `SnapshotMinecraftRuntime` and the opaque, immutable
 `RuntimeSnapshot` byte artifact. The API owns only bounded value semantics;
 the b1.7.3 adapter owns its versioned replay format and restore interpretation.
 This keeps mapped events and fingerprints out of the neutral public module.
+
+M5 adds two separately compiled product modules. `worldline-reproduction`
+owns the canonical bundle envelope and replay SPI; `worldline-cli` owns command
+parsing and stable machine-readable output. It discovers the b1.7.3 provider at
+runtime, so neither module depends on mapped Minecraft classes. The repository
+launcher only assembles the already verified local runtime classpath.
 
 ### `kernel`
 
@@ -114,6 +129,12 @@ restore JVMs must reproduce the same internal fingerprint and direct
 official-client tick-4 state. A separately corrupted artifact must fail its
 embedded checksum. The artifact describes reconstruction and realized events;
 it is not a serialized heap or a self-contained reproduction bundle.
+
+`smokes/m5-reproduction-bundle/` packages that artifact with exact runtime
+input declarations. Two pack processes must emit identical bytes; the CLI must
+replay both the original and a copied path into the same state; a direct
+official-client process supplies the behavioral oracle. Corrupt content and
+validly encoded bundles naming the wrong client or toolchain must fail closed.
 
 ## Adapter direction
 
