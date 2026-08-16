@@ -19,6 +19,7 @@ Passing an experiment does not silently promote its API.
 | v1.0.0 / M12 | Real Aero scene capture, repeated spike classification, and evidence minimization | GO - chunk-compilation spike reproduced; persistence split deferred |
 | v1.1.0 / M13 | Aero persistence isolation, dense/empty differential, and compile-budget test | GO - real BEs persist; empty retains compile pressure; budget rejected |
 | v1.2.0 / M14 | Chunk caller semantics, initial-backlog attribution, and bounded non-retry policy | GO - caller/backlog isolated; policy experimental |
+| v1.3.0 / M15 | Explicit accepted/deferred contract, visible readiness, and geometry oracle | GO - contract qualified; fixed batch rejected |
 
 ## Promotion rule
 
@@ -27,10 +28,10 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.2.0 direction
+## Immediate post-v1.3.0 direction
 
-M15 should replace the Boolean caller ambiguity at an Aero-owned integration
-point with explicit accepted/deferred work, then measure dirty-queue age and
-visible-chunk readiness. A candidate needs visual correctness and terrain
-latency evidence before promotion. The historical random spike remains a
-non-claim until the path is causally narrowed beyond the initial backlog.
+M16 should retain next-frame accepted/deferred semantics while adapting work to
+visible dirty debt and a bounded time/work envelope. It must close the readiness
+gap exposed by M15 without recreating the retry loop, then add fixed-tick render
+evidence. The historical random spike remains a non-claim beyond the isolated
+initial-backlog path.

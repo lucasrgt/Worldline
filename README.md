@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.2.0 - M14 Chunk Backlog (GO)**.
+Current official milestone: **Worldline v1.3.0 - M15 Chunk Contract (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -90,6 +90,13 @@ builders after warmup. A smoke-only policy performs two real priority-ordered
 rebuilds once per frame and returns `true`, eliminating immediate retries while
 explicitly trading for slower queue drainage. It remains experimental; see
 `docs/M14_CHUNK_BACKLOG.md`.
+
+M15 replaces the Boolean ambiguity experimentally with explicit complete,
+accepted/deferred, and stalled/deferred outcomes, then measures the cost from
+the first world frame. The contract eliminates same-frame retries and produces
+broad exact chunk-geometry agreement, but a fixed two-rebuild batch leaves far
+more visible chunks dirty than vanilla. That policy is rejected; see
+`docs/M15_CHUNK_CONTRACT.md`.
 
 ## Verify
 
@@ -203,6 +210,10 @@ boundaries are in the corresponding `MAP.md` files.
 with an Aero-disabled world, and tests the compile governor.
 `smokes/m14-chunk-backlog` instruments the non-forced caller and dirty queue,
 then compares vanilla with a real two-rebuild, non-retry bounded policy.
+`smokes/m15-chunk-contract` moves that experiment to an adapter-owned explicit
+work result, measures dirty age and visible readiness, and compares exact chunk
+vertex signatures before rejecting the fixed batch on visible latency and
+unresolved temporal visual divergence.
 
 The gate then runs `smokes/lab-cycle`, restores deterministic checkpoints in
 fresh clients, compares hypotheses, exercises GUI selectors, and compiles and
@@ -228,6 +239,7 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M12_CYCLE.md` is the v1.0.0 real-Aero-reproduction GO audit.
 `M13_CYCLE.md` is the v1.1.0 Aero persistence/differential GO audit.
 `M14_CYCLE.md` is the v1.2.0 chunk-backlog/caller-policy GO audit.
+`M15_CYCLE.md` is the v1.3.0 explicit-contract/readiness GO audit.
 
 After preparing the local runtime with the canonical smoke gate, replay a
 bundle with:

@@ -244,6 +244,12 @@ the same overlay. `AeroChunkProbe` owns their mapped vocabulary. The bounded
 experiment reuses vanilla's priority sorter but exists only in the smoke
 runtime; it is not an API, kernel feature, Aero patch, or approved mitigation.
 
+M15 introduces a small adapter-runtime contract with explicit complete,
+accepted/deferred, and stalled/deferred outcomes. A caller redirect is the only
+place that maps those states back to vanilla's Boolean. Separate readiness and
+Tessellator probes remain smoke-owned; neutral parsers consume their logs. This
+qualifies the boundary without coupling product modules to mapped game types.
+
 ## Compatibility boundary
 
 Product modules currently compile with `--release 8`; tooling runs on JDK 21.

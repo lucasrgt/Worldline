@@ -8,6 +8,7 @@ gradle.projectsEvaluated {
     def smoke = new File(root, 'smokes/m12-aero-reproduction')
     def project = gradle.rootProject
     project.sourceSets.main.java.srcDir(new File(smoke, 'runtime-src'))
+    project.sourceSets.main.java.srcDir(new File(root, 'adapters/aero-model-lib/runtime-src'))
     project.tasks.named('processResources').configure {
         doLast {
             copy {
@@ -25,7 +26,8 @@ gradle.projectsEvaluated {
     def run = new File(project.projectDir, 'run')
     def ticks = (project.findProperty('worldlineTicks') ?: '240').toString()
     def mode = (project.findProperty('worldlineMode') ?: 'dense').toString()
-    def emptyMode = mode == 'empty' || mode == 'reload' || mode == 'probe' || mode == 'bounded'
+    def emptyMode = mode == 'empty' || mode == 'reload' || mode == 'probe' || mode == 'bounded' ||
+        mode == 'm15baseline' || mode == 'm15contract'
     def minimum = (project.findProperty('worldlineMinBEs') ?: (emptyMode ? '0' : '500')).toString()
     def spikeMs = (project.findProperty('worldlineSpikeMs') ?: '25').toString()
     def warmup = (project.findProperty('worldlineWarmupTicks') ?: '0').toString()
@@ -40,6 +42,11 @@ gradle.projectsEvaluated {
     if (mode == 'probe' || mode == 'bounded') modeArgs.add('-Dworldline.chunkProbe.enabled=true')
     if (mode == 'bounded') modeArgs.addAll([
         '-Dworldline.chunkPolicy.enabled=true', '-Dworldline.chunkPolicy.batch=2'])
+    if (mode == 'm15baseline' || mode == 'm15contract') modeArgs.addAll([
+        '-Dworldline.chunkProbe.enabled=true', '-Dworldline.chunkReadiness.enabled=true',
+        '-Dworldline.chunkGeometry.enabled=true'])
+    if (mode == 'm15contract') modeArgs.addAll([
+        '-Dworldline.chunkContract.enabled=true', '-Dworldline.chunkContract.batch=2'])
     task.jvmArgs(([
         '-Dworldline.capture.enabled=true',
         '-Dworldline.capture.seed=17320110707',

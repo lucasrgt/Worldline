@@ -4,6 +4,24 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.3.0 - M15 Explicit Chunk Contract
+
+Status: GO for the explicit accepted/deferred boundary and readiness evidence;
+the fixed two-rebuild policy is rejected.
+
+- Added adapter-owned `COMPLETE`, `ACCEPTED_DEFERRED`, and `STALLED_DEFERRED`
+  outcomes, mapped to vanilla's Boolean only at the render caller.
+- Proved one contract invocation per frame with two real accepted rebuilds,
+  next-frame resumption, and no same-frame retries or stalled batches.
+- Measured dirty age and visible built/clean state from the first world frame;
+  the fixed batch substantially lagged vanilla visible readiness.
+- Added an exact Tessellator vertex-stream oracle. Most common non-empty chunks
+  match exactly while nonzero tick-dependent temporal differences are retained.
+- Retained only per-file source limits and left the pinned Aero checkout clean.
+
+The frozen M15 invariant-report SHA-256 is
+`aa3b77e6531cd832f75f9afab1c79abf2427bf7341b34b01578d6bf0cb445a73`.
+
 ## 1.2.0 - M14 Chunk Backlog
 
 Status: GO for caller semantics, initial-backlog isolation, and the bounded

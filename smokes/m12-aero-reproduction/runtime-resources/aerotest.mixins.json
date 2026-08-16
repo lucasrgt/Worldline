@@ -7,9 +7,13 @@
     "MinecraftFrameSpikeMixin",
     "WorldSaveSpikeMixin",
     "WorldlineCaptureMixin",
+    "WorldlineChunkBuilderAccess",
     "WorldlineChunkBuilderProbeMixin",
+    "WorldlineChunkCallerMixin",
     "WorldlineChunkProbeFrameMixin",
-    "WorldlineChunkProbeMixin"
+    "WorldlineChunkProbeMixin",
+    "WorldlineTessellatorProbeMixin",
+    "WorldlineWorldRendererAccess"
   ],
   "injectors": {
     "defaultRequire": 1

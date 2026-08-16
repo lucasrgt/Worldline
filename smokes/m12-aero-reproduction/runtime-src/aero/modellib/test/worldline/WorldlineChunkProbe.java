@@ -6,6 +6,8 @@ public final class WorldlineChunkProbe {
     private static int calls, falseReturns, trueReturns, forced, rebuilds;
     private static int queueStart, queueEnd, queueMax, invalidates, marks, sorts;
     private static int ambient, reloads, policyBatches, policyRebuilds, policyRemaining;
+    private static int accepted, deferred, completed, stalled, contractRemaining;
+    private static int dirty, visible, visibleDirty, visibleReady, oldest, oldestVisible;
     private static long compileNs, compileStart;
     private static boolean compiling;
 
@@ -17,6 +19,8 @@ public final class WorldlineChunkProbe {
         queueStart = queueEnd = queueMax = -1;
         invalidates = marks = sorts = ambient = reloads = 0;
         policyBatches = policyRebuilds = policyRemaining = 0;
+        accepted = deferred = completed = stalled = contractRemaining = 0;
+        dirty = visible = visibleDirty = visibleReady = oldest = oldestVisible = -1;
         compileNs = compileStart = 0L; compiling = false;
     }
 
@@ -46,6 +50,22 @@ public final class WorldlineChunkProbe {
         policyBatches++; policyRebuilds += built; policyRemaining = remaining;
     }
 
+    public static void contract(String status, int built, int remaining) {
+        if (!ENABLED) return;
+        accepted += built; contractRemaining = remaining;
+        if ("COMPLETE".equals(status)) completed++;
+        else if ("ACCEPTED_DEFERRED".equals(status)) deferred++;
+        else stalled++;
+    }
+
+    public static void readiness(int queue, int dirtyCount, int visibleCount,
+            int visibleDirtyCount, int visibleReadyCount, int maxAge, int maxVisibleAge) {
+        if (!ENABLED) return;
+        queueEnd = queue; dirty = dirtyCount; visible = visibleCount;
+        visibleDirty = visibleDirtyCount; visibleReady = visibleReadyCount;
+        oldest = maxAge; oldestVisible = maxVisibleAge;
+    }
+
     public static void endFrame() {
         if (!ENABLED) return;
         System.out.println("[WorldlineChunkProbe] calls=" + calls + " false=" + falseReturns
@@ -54,6 +74,11 @@ public final class WorldlineChunkProbe {
                 + " invalidates=" + invalidates + " marks=" + marks + " sorts=" + sorts
                 + " ambient=" + ambient + " reloads=" + reloads
                 + " policyBatches=" + policyBatches + " policyRebuilds=" + policyRebuilds
-                + " policyRemaining=" + policyRemaining + " compileUs=" + compileNs / 1000L);
+                + " policyRemaining=" + policyRemaining + " accepted=" + accepted
+                + " deferred=" + deferred + " completed=" + completed + " stalled=" + stalled
+                + " contractRemaining=" + contractRemaining + " dirty=" + dirty
+                + " visible=" + visible + " visibleDirty=" + visibleDirty
+                + " visibleReady=" + visibleReady + " oldest=" + oldest
+                + " oldestVisible=" + oldestVisible + " compileUs=" + compileNs / 1000L);
     }
 }

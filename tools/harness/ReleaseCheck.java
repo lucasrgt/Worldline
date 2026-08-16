@@ -44,10 +44,11 @@ public final class ReleaseCheck {
         Properties m12 = load("smokes/m12-aero-reproduction/smoke.properties");
         Properties m13 = load("smokes/m13-aero-differential/smoke.properties");
         Properties m14 = load("smokes/m14-chunk-backlog/smoke.properties");
+        Properties m15 = load("smokes/m15-chunk-contract/smoke.properties");
         Properties lab = load("smokes/lab-cycle/smoke.properties");
         match(release, "id", "worldline");
-        match(release, "version", "1.2.0");
-        match(release, "milestone", "m14-chunk-backlog");
+        match(release, "version", "1.3.0");
+        match(release, "milestone", "m15-chunk-contract");
         match(release, "status", "go");
         match(release, "scope", "local-research");
         match(release, "canonical.command", "java tools/harness/Verify.java --smoke");
@@ -78,6 +79,9 @@ public final class ReleaseCheck {
         same(release, "m14.signature", m14, "expected.signature");
         same(release, "m14.aero.revision", m14, "aero.revision");
         same(release, "m14.seed", m14, "seed");
+        same(release, "m15.signature", m15, "expected.signature");
+        same(release, "m15.aero.revision", m15, "aero.revision");
+        same(release, "m15.seed", m15, "seed");
         same(release, "lab.signature", lab, "expected.signature");
         requireText("modules/api/src/main/java/worldline/api/WorldlineVersion.java",
                 "public static final String VERSION = \"" + value(release, "version") + "\";");
@@ -122,8 +126,12 @@ public final class ReleaseCheck {
                 "smokes/m14-chunk-backlog/MAP.md")) {
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         }
+        for (String file : Arrays.asList("docs/M15_CHUNK_CONTRACT.md", "docs/M15_CYCLE.md",
+                "smokes/m15-chunk-contract/MAP.md")) {
+            if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
+        }
         verifyPublicTree();
-        System.out.println("  release: Worldline v1.2.0 M14 chunk backlog GO");
+        System.out.println("  release: Worldline v1.3.0 M15 chunk contract GO");
         System.out.println("  public artifact boundary: verified");
     }
 
