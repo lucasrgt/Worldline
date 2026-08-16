@@ -34,6 +34,12 @@ than conventional.
 Owns stable concepts visible to a scenario author. It must not expose RetroMCP,
 LWJGL, mappings, instrumentation, or decompiled Minecraft types.
 
+M3 adds the opt-in `AutomatedMinecraftRuntime` extension and neutral
+`GameWorld`, `GamePlayer`, and `GameEntity` handles. Coordinates and block
+states are immutable API values. Live handles are lifecycle-guarded: they are
+usable only while their runtime owns a loaded world, and retained handles fail
+closed after the runtime closes.
+
 ### `kernel`
 
 Owns control-flow policy: valid lifecycle transitions and the narrow backend
@@ -89,6 +95,13 @@ loads an original client `World`, and executes exactly one externally requested
 the frozen official JAR. The runner checks class origins, bytecode call paths,
 four-process determinism, cross-boundary equality, and a frozen trace. The exact
 scope and non-claims are normative in that smoke's `MAP.md`.
+
+`smokes/m3-domain-api/` qualifies the stable domain surface. The subject uses
+only `AutomatedMinecraftRuntime` and neutral API types after runtime creation;
+the independent oracle performs the same reads, mutation, teleport, hotbar
+selection, and ticks directly through official obfuscated symbols. Two fresh
+subject and two fresh oracle JVMs must agree with each other, across the
+differential boundary, and with the frozen M3 signature.
 
 ## Adapter direction
 

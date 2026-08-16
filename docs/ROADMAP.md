@@ -7,7 +7,7 @@ Passing an experiment does not silently promote its API.
 | --- | --- | --- |
 | v0.0.1 | Headless b1.7.3 boot, world load, one manual client tick, official oracle match | GO - stable milestone |
 | M2 | Virtual clock, input, RNG, filesystem, network, scheduler, and thread control | Experimental evidence passes |
-| M3 | Stable world, player, entity, and block automation API | Not started |
+| v0.1.0 / M3 | Stable world, player, entity, and block automation API | GO - stable milestone |
 | M4 | Durable snapshot format and restore | Replay-backed in-process prototype passes |
 | M5 | Portable reproduction bundles and replay CLI | Not started |
 | M6 | Trace viewer and first-divergence explorer | Not started |
@@ -23,8 +23,8 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v0.0.1 direction
+## Immediate post-v0.1.0 direction
 
-The next stable milestone should promote a neutral world/player/entity API and
-portable reproduction bundle before attempting the original Aero spike. The
-current `B173ModContext` is an experiment seam, not an Aero compatibility claim.
+The next stable milestone should define a durable, portable reproduction bundle
+and replay CLI before attempting the original Aero spike. The current
+`B173ModContext` remains an experiment seam, not an Aero compatibility claim.

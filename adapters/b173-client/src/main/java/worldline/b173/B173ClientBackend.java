@@ -17,6 +17,8 @@ import net.minecraft.src.World;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import worldline.api.GamePlayer;
+import worldline.api.GameWorld;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
 
@@ -30,6 +32,8 @@ final class B173ClientBackend implements GameBackend, B173ModContext {
     private final B173Scheduler scheduler;
     private final B173ThreadControl threads = new B173ThreadControl();
     private B173Boundaries.Client client;
+    private B173World worldApi;
+    private B173Player playerApi;
     private long rngSeed;
     private B173Mod mod;
 
@@ -82,6 +86,8 @@ final class B173ClientBackend implements GameBackend, B173ModContext {
         client.thePlayer = player;
         client.renderViewEntity = player;
         client.effectRenderer = new EffectRenderer(world, client.renderEngine);
+        playerApi = new B173Player(this, player);
+        worldApi = new B173World(this, playerApi);
         reseed(seed);
         require(world.getBlockId(X, 64, Z) == Block.stone.blockID, "fixture stone missing");
     }
@@ -102,6 +108,8 @@ final class B173ClientBackend implements GameBackend, B173ModContext {
         threads.stop();
         client.theWorld = null;
         client.thePlayer = null;
+        worldApi = null;
+        playerApi = null;
         client = null;
         B173ClockHooks.clear(clock);
     }
@@ -147,6 +155,8 @@ final class B173ClientBackend implements GameBackend, B173ModContext {
     public boolean setBlock(int x, int y, int z, int blockId) {
         return requireClient().theWorld.setBlockWithNotify(x, y, z, blockId);
     }
+
+    @Override public GameWorld world() { return worldApi; } @Override public GamePlayer player() { return playerApi; }
 
     private int ticksRan() { return B173Reflect.getInt(Minecraft.class, "ticksRan", requireClient()); }
 

@@ -14,6 +14,7 @@ public final class ControlledMinecraftRuntimeTest {
         validLifecycleDelegatesInOrder();
         invalidTransitionsFailClosed();
         countedTicksValidateAndDelegate();
+        domainAccessIsLifecycleGuarded();
         backendFailureDoesNotAdvanceState();
         closeIsIdempotent();
         System.out.println("ControlledMinecraftRuntimeTest passed");
@@ -61,6 +62,16 @@ public final class ControlledMinecraftRuntimeTest {
 
         expectFailure(runtime::bootHeadless, "backend boot failed");
         equal(RuntimeState.NEW, runtime.state(), "state after failed boot");
+    }
+
+    private static void domainAccessIsLifecycleGuarded() {
+        ControlledMinecraftRuntime runtime = new ControlledMinecraftRuntime(new RecordingBackend());
+        expectFailure(runtime::world, "expected WORLD_LOADED");
+        runtime.bootHeadless();
+        runtime.loadWorld(WorldSource.at(Paths.get("memory", "domain-access")));
+        expectFailure(runtime::world, "world automation is unavailable");
+        runtime.close();
+        expectFailure(runtime::player, "expected WORLD_LOADED");
     }
 
     private static void closeIsIdempotent() {

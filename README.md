@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v0.0.1 - Controlled Tick (GO)**.
+Current official milestone: **Worldline v0.1.0 - M3 Domain API (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -16,6 +16,12 @@ window, loads a deterministic in-memory world, advances exactly one requested
 client JAR through 16 ticks in four fresh JVMs. A second two-process lab proof
 adds replay-backed checkpoints, restoration, branching, semantic inventory GUI
 control, and an independently packaged benchmark mod JAR.
+
+The stable M3 surface adds `AutomatedMinecraftRuntime`, `GameWorld`,
+`GamePlayer`, `GameEntity`, `BlockPosition`, `BlockState`, and `GamePosition`.
+It supports neutral world time and block access, block mutation, active-entity
+enumeration, player identity/state, teleportation, and hotbar selection. See
+`docs/M3_API.md` for lifecycle rules and non-claims.
 
 ## Verify
 
@@ -73,19 +79,26 @@ the committed SHA-256 signature. See
 `smokes/controlled-client-tick/MAP.md` for the exact symbol map, external
 boundary inventory, headless substitutions, and pass conditions.
 
+The gate next runs `smokes/m3-domain-api`. Two fresh JVMs exercise the stable,
+neutral Worldline API while two independent JVMs perform the equivalent
+operations directly against the official obfuscated client JAR. All four must
+produce the frozen M3 trace and signature documented in
+`smokes/m3-domain-api/MAP.md`.
+
 The gate then runs `smokes/lab-cycle`, restores deterministic checkpoints in
 fresh clients, compares hypotheses, exercises GUI selectors, and compiles and
 loads `probe-mod.jar`; its scope is defined in `smokes/lab-cycle/MAP.md`.
 
-The client and lab runners deliberately raised the tooling budget to 1,400
+The client, M3, and lab runners deliberately raised the tooling budget to 1,600
 code lines while retaining the 300-line per-file ceiling. Product
-code remains capped at 1,000 lines and 250 lines per file. Smoke adapters and
-oracles have their own enforced 800-line total and 150-line per-file budget, so
+code remains capped at 1,000 lines and 250 lines per file. Smoke drivers and
+oracles have their own enforced 1,000-line total and 150-line per-file budget, so
 integration behavior cannot hide outside the product and tooling counts.
 
 See `ARCHITECTURE.md` for module boundaries and `AGENTS.md` for the behavioral
 and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `LAB_CYCLE.md` is the seven-step laboratory GO audit.
+`M3_CYCLE.md` is the v0.1.0 stable domain-API GO audit.
 
 Version and frozen evidence are authoritative in
 `release/worldline.properties`. See `CHANGELOG.md` for stable scope and

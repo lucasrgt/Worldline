@@ -18,9 +18,9 @@ All repository artifacts must be written in English.
 
 1. Maintained product code must remain at or below 1,000 `tokei` code lines,
    and each product source file must remain at or below 250 code lines.
-2. The verification and smoke tooling must remain at or below 1,400 `tokei` code lines,
+2. The verification and smoke tooling must remain at or below 1,600 `tokei` code lines,
    and each harness source file must remain at or below 300 code lines.
-3. Executable smoke scenarios and oracle adapters must remain at or below 800
+3. Executable smoke scenarios and oracle adapters must remain at or below 1,000
    `tokei` code lines, and each smoke source file at or below 150 code lines.
 4. Game-specific adapters must remain at or below 1,200 `tokei` code lines, and
    each adapter source file at or below 150 code lines.

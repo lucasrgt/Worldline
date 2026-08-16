@@ -1,12 +1,14 @@
 package worldline.kernel;
 
 import java.util.Objects;
-import worldline.api.MinecraftRuntime;
+import worldline.api.AutomatedMinecraftRuntime;
+import worldline.api.GamePlayer;
+import worldline.api.GameWorld;
 import worldline.api.RuntimeState;
 import worldline.api.WorldSource;
 
 /** Lifecycle policy shared by every future game backend. */
-public final class ControlledMinecraftRuntime implements MinecraftRuntime {
+public final class ControlledMinecraftRuntime implements AutomatedMinecraftRuntime {
     private final GameBackend backend;
     private RuntimeState state = RuntimeState.NEW;
 
@@ -32,6 +34,18 @@ public final class ControlledMinecraftRuntime implements MinecraftRuntime {
     public void tick() {
         requireState(RuntimeState.WORLD_LOADED, "tick");
         backend.tick();
+    }
+
+    @Override
+    public GameWorld world() {
+        requireState(RuntimeState.WORLD_LOADED, "access the world");
+        return backend.world();
+    }
+
+    @Override
+    public GamePlayer player() {
+        requireState(RuntimeState.WORLD_LOADED, "access the player");
+        return backend.player();
     }
 
     @Override

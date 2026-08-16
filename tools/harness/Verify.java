@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 public final class Verify {
     private static final Pattern CODE = Pattern.compile("\\\"code\\\"\\s*:\\s*(\\d+)");
     private static final Pattern REPORT = Pattern.compile(
-            "\\{\\\"name\\\":\\\"([^\\\"]+)\\\".*?\\\"stats\\\":\\{(.*?)\\}", Pattern.DOTALL);
+            "\\{\\\"stats\\\":\\{(.*?)\\},\\\"name\\\":\\\"([^\\\"]+)\\\"", Pattern.DOTALL);
 
     private final Path root = Paths.get("").toAbsolutePath().normalize();
     private final Path build = root.resolve(".worldline/build");
@@ -67,6 +67,7 @@ public final class Verify {
         if (runSmoke) {
             run(Arrays.asList("java", "tools/smoke/Run.java", "deterministic-world-tick"));
             run(Arrays.asList("java", "tools/smoke/ClientCycle.java", "controlled-client-tick"));
+            run(Arrays.asList("java", "tools/smoke/ApiCycle.java", "m3-domain-api"));
             run(Arrays.asList("java", "tools/smoke/LabCycle.java", "lab-cycle"));
         }
         System.out.println("verify passed");
@@ -153,10 +154,10 @@ public final class Verify {
         }
         Matcher files = REPORT.matcher(java);
         while (files.find()) {
-            long lines = codeLines(files.group(2));
+            long lines = codeLines(files.group(1));
             if (lines > maxFile) {
                 throw new IllegalStateException(
-                        name + " file budget exceeded: " + files.group(1) + " has " + lines + "/" + maxFile);
+                        name + " file budget exceeded: " + files.group(2) + " has " + lines + "/" + maxFile);
             }
         }
         System.out.println("  " + name + " lines: " + total + "/" + maxTotal + " (max file " + maxFile + ")");

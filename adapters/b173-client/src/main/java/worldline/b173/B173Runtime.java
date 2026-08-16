@@ -2,15 +2,17 @@ package worldline.b173;
 
 import java.util.ArrayList;
 import java.util.List;
-import worldline.api.MinecraftRuntime;
+import worldline.api.AutomatedMinecraftRuntime;
+import worldline.api.GamePlayer;
+import worldline.api.GameWorld;
 import worldline.api.RuntimeState;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
 
 /** Reusable controlled runtime backed by the mapped Beta 1.7.3 client. */
-public final class B173Runtime implements MinecraftRuntime {
+public final class B173Runtime implements AutomatedMinecraftRuntime {
     private final B173ClientBackend backend;
-    private final MinecraftRuntime lifecycle;
+    private final AutomatedMinecraftRuntime lifecycle;
     private final B173VirtualClock clock;
     private final B173VirtualFileSystem files;
     private final B173Scheduler scheduler;
@@ -41,6 +43,12 @@ public final class B173Runtime implements MinecraftRuntime {
 
     @Override
     public RuntimeState state() { return lifecycle.state(); }
+
+    @Override
+    public GameWorld world() { return lifecycle.world(); }
+
+    @Override
+    public GamePlayer player() { return lifecycle.player(); }
 
     @Override
     public void close() { lifecycle.close(); }
