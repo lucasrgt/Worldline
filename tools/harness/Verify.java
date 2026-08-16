@@ -75,6 +75,7 @@ public final class Verify {
             run(Arrays.asList("java", "tools/smoke/VersionCycle.java", "m8-mod-version-diff"));
             run(Arrays.asList("java", "tools/smoke/MinimizationCycle.java", "m9-scenario-minimization"));
             run(Arrays.asList("java", "tools/smoke/NativeRenderCycle.java", "m10-native-render"));
+            run(Arrays.asList("java", "tools/smoke/AeroAttributionCycle.java", "m11-aero-attribution"));
             run(Arrays.asList("java", "tools/smoke/LabCycle.java", "lab-cycle"));
         }
         System.out.println("verify passed");

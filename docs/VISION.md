@@ -24,3 +24,8 @@ Worldline v0.8.0 adds a separate real graphics boundary. A mapped and official
 Minecraft renderer produce the same frozen RGBA frame through LWJGL and an
 offscreen native OpenGL context. This is infrastructure for later causal render
 experiments, not a claim of complete game-frame or cross-GPU determinism.
+
+Worldline v0.9.0 adds bounded render-work attribution and qualifies the exact
+Aero Model Lib 3.0.0 source through tests, build, consumer compilation, and a
+real StationAPI loader boot. It can distinguish expanded deterministic work
+from a runtime stall in captured frame records; real-spike capture is next.

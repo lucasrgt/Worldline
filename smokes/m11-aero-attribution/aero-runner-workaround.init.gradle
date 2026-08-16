@@ -1,0 +1,11 @@
+gradle.projectsEvaluated {
+    if (gradle.rootProject.name != 'aero-model-lib-test') return
+    def task = gradle.rootProject.tasks.findByName('runClient')
+    if (task == null || task.actions.size() != 2 ||
+            !task.actions[0].getClass().name.endsWith('ClosureTaskAction')) {
+        throw new GradleException('Aero runClient action shape drifted')
+    }
+    // Upstream commit 436d65b splits a println across lines with unary `+`.
+    // Remove only that doFirst closure; preserve Loom's JavaExec action.
+    task.actions.remove(0)
+}

@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 0.9.0 - M11 Aero Attribution
+
+Status: GO for bounded work attribution and exact-candidate qualification.
+
+- Added adapter-neutral frame-work comparison with explicit `LOGICAL_WORK`,
+  `RUNTIME_STALL`, `MIXED`, and `INCONCLUSIVE` outcomes.
+- Counted renderer work above the M10 Pbuffer without changing its frozen RGBA
+  result and added an isolated Aero frame-log adapter.
+- Pinned Aero Model Lib 3.0.0 at commit `436d65b`, ran all 222 core tests,
+  built its StationAPI JAR and consumer, and loaded both test entrypoints in a
+  real Fabric Loader/StationAPI client boot.
+- Recorded the non-fatal startup diagnostic where showcase-block UV resolution
+  occurs before atlas readiness; no historical-spike root cause is claimed.
+
+The frozen M11 attribution SHA-256 is
+`42e656576b70c53919761570abf016f93f76ddfbe49f3e40b79f2de0518eaecc`.
+
 ## 0.8.0 - M10 Native/Offscreen Render
 
 Status: GO for the bounded render contract.

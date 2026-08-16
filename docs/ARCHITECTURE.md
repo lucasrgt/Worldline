@@ -220,6 +220,12 @@ this direction. Replay-backed checkpoints, branch comparison, semantic GUI
 control, and the narrow mod API remain adapter-side because their implementation
 necessarily knows b1.7.3.
 
+M11 applies the same rule to performance evidence. `FrameAttribution` in the
+neutral analysis module accepts only named counters and times. The separate
+`adapters/aero-model-lib` parser owns Aero's log vocabulary and maps it into
+that neutral model. The native smoke counts submitted renderer operations
+above the Pbuffer; neither the API nor kernel learns about Aero or OpenGL.
+
 ## Compatibility boundary
 
 Product modules currently compile with `--release 8`; tooling runs on JDK 21.

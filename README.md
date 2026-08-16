@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v0.8.0 - M10 Native/Offscreen Render (GO)**.
+Current official milestone: **Worldline v0.9.0 - M11 Aero Attribution (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -61,6 +61,13 @@ through hash-pinned LWJGL and a native Windows OpenGL Pbuffer, then the gate
 reads and hashes the RGBA framebuffer. Two mapped and two official-JAR processes
 must agree. The original Aero artifact was not available, so its runtime
 compatibility is explicitly `NOT_RUN`; see `docs/M10_RENDER.md`.
+
+M11 qualifies the supplied Aero Model Lib 3.0.0 source revision: all 222 core
+tests pass, the StationAPI library and test consumer build, Fabric Loader boots
+the real client with both Aero test entrypoints, and an isolated probe loads
+the built JAR. A neutral analyzer now distinguishes a slow frame caused by
+expanded named work counters from a runtime stall with stable work. See
+`docs/M11_ATTRIBUTION.md` for the bounded contract and non-claims.
 
 ## Verify
 

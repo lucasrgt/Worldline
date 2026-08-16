@@ -82,6 +82,8 @@ public final class NativeRenderCycle {
         require(output.contains("WORLDLINE_RENDER_CONTEXT=Pbuffer"), "Pbuffer proof is absent");
         require(output.contains("WORLDLINE_RENDER_DISPLAY_CREATED=false"), "offscreen proof is absent");
         require(output.contains("WORLDLINE_RENDER_GEOMETRY_PIXELS=1280"), "coverage proof is absent");
+        require(line(output, "WORLDLINE_RENDER_WORK=").equals(value("expected.work")),
+                "native render work attribution drifted");
         String provenance = line(output, "WORLDLINE_RENDER_PROVENANCE=").replace('\\', '/');
         require(provenance.contains(role.equals("mapped") ? "minecraft/bin/" : "jars/minecraft.jar"),
                 "wrong " + role + " renderer provenance: " + provenance);
@@ -111,6 +113,7 @@ public final class NativeRenderCycle {
         String text = "id=" + ID + "\nprocesses=4\ncontext=Pbuffer\ndisplay.created=false"
                 + "\nrenderer.path=Minecraft-Tessellator->LWJGL->OpenGL->RGBA"
                 + "\nofficial.oracle=MATCH\nframe.sha256=" + hash
+                + "\nrender.work=" + value("expected.work")
                 + "\naero.artifact=ABSENT\naero.runtime.compatibility=NOT_RUN\n";
         Files.write(evidence, text.getBytes(StandardCharsets.UTF_8));
         return evidence;

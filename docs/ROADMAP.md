@@ -15,6 +15,7 @@ Passing an experiment does not silently promote its API.
 | v0.6.0 / M8 | Differential mod/version testing | GO - stable milestone |
 | v0.7.0 / M9 | Automatic scenario minimization | GO - stable milestone |
 | v0.8.0 / M10 | Native/offscreen render E2E and Aero investigation | GO - render stable; Aero artifact absent |
+| v0.9.0 / M11 | Render-work attribution and exact Aero qualification | GO - bounded attribution and StationAPI load |
 
 ## Promotion rule
 
@@ -23,9 +24,9 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v0.8.0 direction
+## Immediate post-v0.9.0 direction
 
-M11 should add render-work attribution above the qualified Pbuffer boundary and
-execute explicit Aero loading/compatibility checks when the exact user-owned
-artifact, version, and dependencies are supplied. Absence must not be treated
-as compatibility.
+M12 should capture a real Aero saved-world/frame sequence, replay the same
+logical state repeatedly, ingest per-frame Aero work records, and minimize a
+reproduced spike. M11 proves the measurement and compatibility path; it does
+not claim the historical random spike has already been reproduced.

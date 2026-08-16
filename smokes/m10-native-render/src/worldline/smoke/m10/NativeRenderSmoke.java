@@ -30,17 +30,20 @@ public final class NativeRenderSmoke {
             configureOpenGl();
             Class<?> rendererType = Class.forName(arguments[1]);
             Object renderer = rendererType.getField(arguments[2]).get(null);
+            int colorChanges = 0, vertices = 0, drawCalls = 0;
             invoke(rendererType, renderer, arguments[3], new Class<?>[0]);
             invoke(rendererType, renderer, arguments[4],
                     new Class<?>[] {int.class, int.class, int.class, int.class},
                     204, 68, 102, 255);
+            colorChanges++;
             Method vertex = rendererType.getMethod(arguments[5],
                     double.class, double.class, double.class);
-            vertex.invoke(renderer, 16.0, 12.0, 0.0);
-            vertex.invoke(renderer, 48.0, 12.0, 0.0);
-            vertex.invoke(renderer, 48.0, 52.0, 0.0);
-            vertex.invoke(renderer, 16.0, 52.0, 0.0);
+            vertex.invoke(renderer, 16.0, 12.0, 0.0); vertices++;
+            vertex.invoke(renderer, 48.0, 12.0, 0.0); vertices++;
+            vertex.invoke(renderer, 48.0, 52.0, 0.0); vertices++;
+            vertex.invoke(renderer, 16.0, 52.0, 0.0); vertices++;
             invoke(rendererType, renderer, arguments[6], new Class<?>[0]);
+            drawCalls++;
             GL11.glFinish();
             ByteBuffer pixels = BufferUtils.createByteBuffer(WIDTH * HEIGHT * 4);
             GL11.glReadBuffer(GL11.GL_FRONT);
@@ -55,6 +58,9 @@ public final class NativeRenderSmoke {
             System.out.println("WORLDLINE_RENDER_CONTEXT=Pbuffer");
             System.out.println("WORLDLINE_RENDER_DISPLAY_CREATED=" + Display.isCreated());
             System.out.println("WORLDLINE_RENDER_GEOMETRY_PIXELS=" + geometryPixels);
+            System.out.println("WORLDLINE_RENDER_WORK=draw.calls=" + drawCalls
+                    + ",color.changes=" + colorChanges + ",vertices=" + vertices
+                    + ",texture.binds=0");
             System.out.println("WORLDLINE_RENDER_SHA256=" + sha256(pixels));
             System.out.println("WORLDLINE_RENDER_PROVENANCE="
                     + rendererType.getProtectionDomain().getCodeSource().getLocation());

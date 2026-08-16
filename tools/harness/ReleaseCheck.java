@@ -40,10 +40,11 @@ public final class ReleaseCheck {
         Properties m8 = load("smokes/m8-mod-version-diff/smoke.properties");
         Properties m9 = load("smokes/m9-scenario-minimization/smoke.properties");
         Properties m10 = load("smokes/m10-native-render/smoke.properties");
+        Properties m11 = load("smokes/m11-aero-attribution/smoke.properties");
         Properties lab = load("smokes/lab-cycle/smoke.properties");
         match(release, "id", "worldline");
-        match(release, "version", "0.8.0");
-        match(release, "milestone", "m10-native-render");
+        match(release, "version", "0.9.0");
+        match(release, "milestone", "m11-aero-attribution");
         match(release, "status", "go");
         match(release, "scope", "local-research");
         match(release, "canonical.command", "java tools/harness/Verify.java --smoke");
@@ -62,6 +63,9 @@ public final class ReleaseCheck {
         same(release, "m9.signature", m9, "expected.signature");
         same(release, "m10.signature", m10, "expected.frame.sha256");
         same(release, "m10.aero.status", m10, "aero.status");
+        same(release, "m11.signature", m11, "expected.signature");
+        same(release, "m11.aero.revision", m11, "aero.revision");
+        same(release, "m11.aero.version", m11, "aero.version");
         same(release, "lab.signature", lab, "expected.signature");
         requireText("modules/api/src/main/java/worldline/api/WorldlineVersion.java",
                 "public static final String VERSION = \"" + value(release, "version") + "\";");
@@ -90,8 +94,12 @@ public final class ReleaseCheck {
                 "smokes/m10-native-render/MAP.md")) {
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         }
+        for (String file : Arrays.asList("docs/M11_ATTRIBUTION.md", "docs/M11_CYCLE.md",
+                "smokes/m11-aero-attribution/MAP.md")) {
+            if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
+        }
         verifyPublicTree();
-        System.out.println("  release: Worldline v0.8.0 M10 native/offscreen render GO");
+        System.out.println("  release: Worldline v0.9.0 M11 Aero attribution GO");
         System.out.println("  public artifact boundary: verified");
     }
 
