@@ -6,11 +6,13 @@ import worldline.api.AutomatedMinecraftRuntime;
 import worldline.api.GamePlayer;
 import worldline.api.GameWorld;
 import worldline.api.RuntimeState;
+import worldline.api.RuntimeSnapshot;
+import worldline.api.SnapshotMinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
 
 /** Reusable controlled runtime backed by the mapped Beta 1.7.3 client. */
-public final class B173Runtime implements AutomatedMinecraftRuntime {
+public final class B173Runtime implements SnapshotMinecraftRuntime {
     private final B173ClientBackend backend;
     private final AutomatedMinecraftRuntime lifecycle;
     private final B173VirtualClock clock;
@@ -95,7 +97,10 @@ public final class B173Runtime implements AutomatedMinecraftRuntime {
         backend.install(mod);
     }
 
-    public B173Checkpoint snapshot() {
+    @Override
+    public RuntimeSnapshot snapshot() { return B173SnapshotCodec.encode(checkpoint()); }
+
+    public B173Checkpoint checkpoint() {
         if (state() != RuntimeState.WORLD_LOADED || source == null) {
             throw new IllegalStateException("snapshot requires a loaded world");
         }

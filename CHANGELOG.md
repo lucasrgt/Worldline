@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 0.2.0 - M4 Durable Snapshot
+
+Status: GO.
+
+- Added neutral `SnapshotMinecraftRuntime` and immutable, bounded
+  `RuntimeSnapshot` contracts.
+- Promoted the b1.7.3 replay checkpoint to a versioned canonical UTF-8 format
+  with a body checksum and a frozen full-document SHA-256.
+- Added strict parsing for runtime/version identity, field order, event count,
+  numeric ranges, relative logical world sources, UTF-8, checksum, and exact
+  canonical round-trip.
+- Added cross-process capture and restore evidence, direct official-client
+  state comparison, and executable corruption rejection.
+
+The frozen M4 snapshot SHA-256 is
+`a6e6589f9fdac1e40170f7a3b7fca7fc06b643b20a86249a464f9b2ab5b53bd2`.
+
 ## 0.1.0 - M3 Domain API
 
 Status: GO.

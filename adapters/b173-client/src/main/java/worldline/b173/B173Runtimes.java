@@ -1,5 +1,6 @@
 package worldline.b173;
 
+import worldline.api.RuntimeSnapshot;
 import worldline.api.WorldSource;
 
 /** Public construction entrypoint for the reusable b1.7.3 adapter. */
@@ -37,6 +38,11 @@ public final class B173Runtimes {
             runtime.close();
             throw error;
         }
+    }
+
+    public static B173Runtime restore(RuntimeSnapshot snapshot) {
+        if (snapshot == null) throw new NullPointerException("snapshot");
+        return replay(B173SnapshotCodec.decode(snapshot));
     }
 
     private static int apply(B173Checkpoint checkpoint, B173Runtime runtime, int tick, int start) {

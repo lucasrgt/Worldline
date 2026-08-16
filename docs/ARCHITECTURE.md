@@ -40,6 +40,11 @@ states are immutable API values. Live handles are lifecycle-guarded: they are
 usable only while their runtime owns a loaded world, and retained handles fail
 closed after the runtime closes.
 
+M4 adds `SnapshotMinecraftRuntime` and the opaque, immutable
+`RuntimeSnapshot` byte artifact. The API owns only bounded value semantics;
+the b1.7.3 adapter owns its versioned replay format and restore interpretation.
+This keeps mapped events and fingerprints out of the neutral public module.
+
 ### `kernel`
 
 Owns control-flow policy: valid lifecycle transitions and the narrow backend
@@ -102,6 +107,13 @@ the independent oracle performs the same reads, mutation, teleport, hotbar
 selection, and ticks directly through official obfuscated symbols. Two fresh
 subject and two fresh oracle JVMs must agree with each other, across the
 differential boundary, and with the frozen M3 signature.
+
+`smokes/m4-durable-snapshot/` promotes the earlier in-memory checkpoint to a
+durable canonical artifact. Two capture JVMs must write identical bytes; two
+restore JVMs must reproduce the same internal fingerprint and direct
+official-client tick-4 state. A separately corrupted artifact must fail its
+embedded checksum. The artifact describes reconstruction and realized events;
+it is not a serialized heap or a self-contained reproduction bundle.
 
 ## Adapter direction
 

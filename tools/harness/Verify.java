@@ -68,6 +68,7 @@ public final class Verify {
             run(Arrays.asList("java", "tools/smoke/Run.java", "deterministic-world-tick"));
             run(Arrays.asList("java", "tools/smoke/ClientCycle.java", "controlled-client-tick"));
             run(Arrays.asList("java", "tools/smoke/ApiCycle.java", "m3-domain-api"));
+            run(Arrays.asList("java", "tools/smoke/SnapshotCycle.java", "m4-durable-snapshot"));
             run(Arrays.asList("java", "tools/smoke/LabCycle.java", "lab-cycle"));
         }
         System.out.println("verify passed");

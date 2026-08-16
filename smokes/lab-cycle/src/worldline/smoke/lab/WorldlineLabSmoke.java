@@ -58,7 +58,7 @@ public final class WorldlineLabSmoke {
             runtime.scheduler().afterTicks(2, () -> runtime.tap(B173Keys.SLOT_1 + 2));
             runtime.tick(4);
             require(runtime.scheduler().pendingActions() == 0, "checkpoint scheduler is not drained");
-            return runtime.snapshot();
+            return runtime.checkpoint();
         } finally {
             runtime.close();
         }

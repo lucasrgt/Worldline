@@ -6,6 +6,7 @@ public final class DomainApiTest {
     public static void main(String[] arguments) {
         valueEqualityIsExact();
         invalidValuesFailClosed();
+        snapshotsAreBoundedAndImmutable();
         System.out.println("DomainApiTest passed");
     }
 
@@ -21,6 +22,22 @@ public final class DomainApiTest {
         failure(() -> new BlockState(1, 16));
         failure(() -> new GamePosition(Double.NaN, 0.0D, 0.0D));
         failure(() -> new GamePosition(0.0D, Double.POSITIVE_INFINITY, 0.0D));
+    }
+
+    private static void snapshotsAreBoundedAndImmutable() {
+        byte[] source = new byte[] {1, 2, 3};
+        RuntimeSnapshot snapshot = RuntimeSnapshot.of(source);
+        source[0] = 9;
+        byte[] copy = snapshot.bytes();
+        copy[1] = 9;
+        equal(RuntimeSnapshot.of(new byte[] {1, 2, 3}), snapshot, "runtime snapshot");
+        if (snapshot.size() != 3 || snapshot.bytes()[0] != 1 || snapshot.bytes()[1] != 2
+                || !snapshot.sha256().equals(
+                        "039058c6f2c0cb492c533b0a4d14ef77cc0f78abccced5287d84a1a2011cfb81")) {
+            throw new AssertionError("runtime snapshot immutability failed");
+        }
+        failure(() -> RuntimeSnapshot.of(new byte[0]));
+        failure(() -> RuntimeSnapshot.of(new byte[RuntimeSnapshot.MAX_BYTES + 1]));
     }
 
     private static void failure(Runnable action) {

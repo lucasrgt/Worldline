@@ -16,6 +16,17 @@ public final class B173Checkpoint {
 
     B173Checkpoint(long seed, long initialMillis, Path world, int tick,
             List<B173Action> actions, String state) {
+        if (world == null) throw new NullPointerException("world");
+        if (actions == null) throw new NullPointerException("actions");
+        if (state == null) throw new NullPointerException("state");
+        if (tick < 0) throw new IllegalArgumentException("checkpoint tick must not be negative");
+        int previous = -1;
+        for (B173Action action : actions) {
+            if (action == null || action.tick < previous || action.tick > tick) {
+                throw new IllegalArgumentException("checkpoint actions are not ordered within its tick");
+            }
+            previous = action.tick;
+        }
         this.seed = seed;
         this.initialMillis = initialMillis;
         this.world = world;

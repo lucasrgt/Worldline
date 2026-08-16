@@ -33,10 +33,11 @@ public final class ReleaseCheck {
         Properties server = load("smokes/deterministic-world-tick/smoke.properties");
         Properties client = load("smokes/controlled-client-tick/smoke.properties");
         Properties m3 = load("smokes/m3-domain-api/smoke.properties");
+        Properties m4 = load("smokes/m4-durable-snapshot/smoke.properties");
         Properties lab = load("smokes/lab-cycle/smoke.properties");
         match(release, "id", "worldline");
-        match(release, "version", "0.1.0");
-        match(release, "milestone", "m3-domain-api");
+        match(release, "version", "0.2.0");
+        match(release, "milestone", "m4-durable-snapshot");
         match(release, "status", "go");
         match(release, "scope", "local-research");
         match(release, "canonical.command", "java tools/harness/Verify.java --smoke");
@@ -47,17 +48,19 @@ public final class ReleaseCheck {
         same(release, "client.signature", client, "expected.signature");
         same(release, "client.state.signature", client, "expected.state.signature");
         same(release, "m3.signature", m3, "expected.signature");
+        same(release, "m4.signature", m4, "expected.snapshot.sha256");
         same(release, "lab.signature", lab, "expected.signature");
         requireText("modules/api/src/main/java/worldline/api/WorldlineVersion.java",
                 "public static final String VERSION = \"" + value(release, "version") + "\";");
         for (String file : Arrays.asList("README.md", "CHANGELOG.md", "AGENTS.md",
                 "docs/VISION.md", "docs/ROADMAP.md", "docs/ARCHITECTURE.md",
                 "docs/FIRST_CYCLE.md", "docs/M3_API.md", "docs/M3_CYCLE.md",
-                "smokes/controlled-client-tick/MAP.md", "smokes/m3-domain-api/MAP.md")) {
+                "docs/M4_SNAPSHOT.md", "docs/M4_CYCLE.md", "smokes/controlled-client-tick/MAP.md",
+                "smokes/m3-domain-api/MAP.md", "smokes/m4-durable-snapshot/MAP.md")) {
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         }
         verifyPublicTree();
-        System.out.println("  release: Worldline v0.1.0 M3 domain API GO");
+        System.out.println("  release: Worldline v0.2.0 M4 durable snapshot GO");
         System.out.println("  public artifact boundary: verified");
     }
 

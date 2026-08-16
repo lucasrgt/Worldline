@@ -35,10 +35,35 @@ final class B173Action {
         return new B173Action(tick, RESEED, 0, 0, 0, 0, seed);
     }
 
+    static B173Action decoded(int tick, int kind, int a, int b, int c, int d, long value) {
+        require(tick >= 0, "action tick must not be negative");
+        require(b == 0 || b == 1, "action pressed flag must be 0 or 1");
+        if (kind == KEY) {
+            require(c >= Character.MIN_VALUE && c <= Character.MAX_VALUE && d == 0 && value == 0L,
+                    "invalid key action");
+        } else if (kind == MOUSE) {
+            require(value >= Integer.MIN_VALUE && value <= Integer.MAX_VALUE, "invalid mouse y");
+        } else if (kind == RESEED) {
+            require(a == 0 && b == 0 && c == 0 && d == 0, "invalid reseed action");
+        } else throw new IllegalArgumentException("unknown replay action " + kind);
+        return new B173Action(tick, kind, a, b, c, d, value);
+    }
+
+    int kind() { return kind; }
+    int a() { return a; }
+    int b() { return b; }
+    int c() { return c; }
+    int d() { return d; }
+    long value() { return value; }
+
     void apply(B173ClientBackend backend) {
         if (kind == KEY) backend.key(a, b != 0, (char) c);
         else if (kind == MOUSE) backend.mouse(a, b != 0, c, d, (int) value);
         else if (kind == RESEED) backend.reseed(value);
         else throw new IllegalStateException("unknown replay action " + kind);
+    }
+
+    private static void require(boolean condition, String message) {
+        if (!condition) throw new IllegalArgumentException(message);
     }
 }
