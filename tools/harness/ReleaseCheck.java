@@ -36,10 +36,11 @@ public final class ReleaseCheck {
         Properties m4 = load("smokes/m4-durable-snapshot/smoke.properties");
         Properties m5 = load("smokes/m5-reproduction-bundle/smoke.properties");
         Properties m6 = load("smokes/m6-trace-explorer/smoke.properties");
+        Properties m7 = load("smokes/m7-mod-loading/smoke.properties");
         Properties lab = load("smokes/lab-cycle/smoke.properties");
         match(release, "id", "worldline");
-        match(release, "version", "0.4.0");
-        match(release, "milestone", "m6-trace-explorer");
+        match(release, "version", "0.5.0");
+        match(release, "milestone", "m7-mod-loading");
         match(release, "status", "go");
         match(release, "scope", "local-research");
         match(release, "canonical.command", "java tools/harness/Verify.java --smoke");
@@ -53,6 +54,7 @@ public final class ReleaseCheck {
         same(release, "m4.signature", m4, "expected.snapshot.sha256");
         same(release, "m5.signature", m5, "expected.bundle.sha256");
         same(release, "m6.signature", m6, "expected.divergence.sha256");
+        same(release, "m7.signature", m7, "expected.signature");
         same(release, "lab.signature", lab, "expected.signature");
         requireText("modules/api/src/main/java/worldline/api/WorldlineVersion.java",
                 "public static final String VERSION = \"" + value(release, "version") + "\";");
@@ -65,8 +67,12 @@ public final class ReleaseCheck {
                 "smokes/m5-reproduction-bundle/MAP.md", "smokes/m6-trace-explorer/MAP.md")) {
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         }
+        for (String file : Arrays.asList("docs/M7_MODS.md", "docs/M7_CYCLE.md",
+                "smokes/m7-mod-loading/MAP.md")) {
+            if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
+        }
         verifyPublicTree();
-        System.out.println("  release: Worldline v0.4.0 M6 trace explorer GO");
+        System.out.println("  release: Worldline v0.5.0 M7 general mod loading GO");
         System.out.println("  public artifact boundary: verified");
     }
 

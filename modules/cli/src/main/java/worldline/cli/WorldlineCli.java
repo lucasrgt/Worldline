@@ -9,14 +9,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import worldline.analysis.TraceDiff;
 import worldline.analysis.TraceRenderer;
+import worldline.mods.ModArtifact;
+import worldline.mods.ModLoader;
 import worldline.reproduction.ReplayProvider;
 import worldline.reproduction.ReplayReport;
 import worldline.reproduction.ReproductionBundle;
 import worldline.trace.CanonicalStateDocument;
 
-/** Stable command-line entrypoint for portable Worldline reproduction bundles. */
+/** Stable command-line entrypoint for replay, trace, and mod package operations. */
 public final class WorldlineCli {
     private static final String DEFAULT_PROVIDER = "worldline.b173.B173ReplayProvider";
+    private static final String MOD_RUNTIME = "b1.7.3", MOD_API = "1";
 
     private WorldlineCli() {}
 
@@ -34,6 +37,8 @@ public final class WorldlineCli {
                     && "show".equals(arguments[1])) return show(arguments[2], output);
             if (arguments.length == 4 && "trace".equals(arguments[0])
                     && "diff".equals(arguments[1])) return diff(arguments[2], arguments[3], output);
+            if (arguments.length == 3 && "mod".equals(arguments[0])
+                    && "inspect".equals(arguments[1])) return inspectMod(arguments[2], output);
             return usage(error);
         } catch (IOException | ReflectiveOperationException | RuntimeException failure) {
             error.println("worldline command failed: " + failure.getMessage()); return 1;
@@ -76,10 +81,24 @@ public final class WorldlineCli {
         return CanonicalStateDocument.parse(value);
     }
 
+    private static int inspectMod(String path, PrintStream output) throws IOException {
+        ModArtifact artifact = ModLoader.inspect(Paths.get(path), MOD_RUNTIME, MOD_API);
+        output.println("WORLDLINE_MOD_INSPECT=" + (artifact.compatible() ? "PASS" : "INCOMPATIBLE"));
+        output.println("id=" + artifact.descriptor().id());
+        output.println("version=" + artifact.descriptor().version());
+        output.println("entrypoint=" + artifact.descriptor().entrypoint());
+        output.println("runtime=" + artifact.descriptor().runtime());
+        output.println("worldline.api=" + artifact.descriptor().worldlineApi());
+        output.println("artifact.sha256=" + artifact.sha256());
+        output.println("compatibility=" + artifact.compatibility());
+        return artifact.compatible() ? 0 : 3;
+    }
+
     private static int usage(PrintStream error) {
         error.println("usage: worldline replay <bundle.wlrb>");
         error.println("   or: worldline trace show <trace.wltrace>");
-        error.println("   or: worldline trace diff <left.wltrace> <right.wltrace>"); return 2;
+        error.println("   or: worldline trace diff <left.wltrace> <right.wltrace>");
+        error.println("   or: worldline mod inspect <mod.jar>"); return 2;
     }
 
     private static void require(boolean condition, String message) {

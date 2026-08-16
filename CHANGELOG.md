@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 0.5.0 - M7 General Mod Loading
+
+Status: GO.
+
+- Added a game-independent mod package module with strict canonical descriptor
+  parsing, bounded JAR inspection, SHA-256 provenance, and explicit runtime/API
+  compatibility results.
+- Added descriptor-selected isolated entrypoint loading with type and code-origin
+  checks; compatible code is never initialized before metadata acceptance.
+- Extended the neutral CLI and repository launcher with `mod inspect` and stable
+  compatible, incompatible, invalid-input, and usage exit codes.
+- Added real controlled-client evidence for two independently selected mods and
+  fail-closed runtime, API, entrypoint-type, malformed, and missing-descriptor cases.
+
+The frozen M7 compatibility-report SHA-256 is
+`bd13989879dba605a0cf790312c24a0f6947e87fb0b4d3ecd6f8cb265cbfb537`.
+
 ## 0.4.0 - M6 Trace Explorer
 
 Status: GO.

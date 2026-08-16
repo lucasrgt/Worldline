@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v0.4.0 - M6 Trace Explorer (GO)**.
+Current official milestone: **Worldline v0.5.0 - M7 General Mod Loading (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -15,7 +15,7 @@ window, loads a deterministic in-memory world, advances exactly one requested
 `Minecraft.runTick()`, and matches the equivalent execution from the official
 client JAR through 16 ticks in four fresh JVMs. A second two-process lab proof
 adds replay-backed checkpoints, restoration, branching, semantic inventory GUI
-control, and an independently packaged benchmark mod JAR.
+control, and descriptor-selected independently packaged benchmark mod JARs.
 
 The stable M3 surface adds `AutomatedMinecraftRuntime`, `GameWorld`,
 `GamePlayer`, `GameEntity`, `BlockPosition`, `BlockState`, and `GamePosition`.
@@ -40,6 +40,11 @@ viewer, and a first-divergence analyzer that reports the earliest seed, schema,
 record, or field mismatch with exact indices and values. Both viewer and diff
 are available through the neutral CLI without requiring Minecraft runtime
 inputs. See `docs/M6_TRACE.md` for ordering and exit-code semantics.
+
+M7 adds strict, bounded mod-JAR descriptors, SHA-256 provenance, explicit
+runtime/API compatibility, and isolated descriptor-selected entrypoint loading.
+The neutral CLI can inspect compatibility without executing mod code or loading
+Minecraft. See `docs/M7_MODS.md` for the exact package and trust boundary.
 
 ## Verify
 
@@ -122,14 +127,19 @@ the CLI to locate that exact first divergence in both comparison directions.
 It also rejects a malformed schema; details are in
 `smokes/m6-trace-explorer/MAP.md`.
 
+`smokes/m7-mod-loading` then builds two descriptor-selected mods, executes their
+distinct glass and gold effects through the real controlled client, and rejects
+wrong runtime, API, entrypoint type, malformed, and missing descriptor cases.
+Its exact evidence boundary is in `smokes/m7-mod-loading/MAP.md`.
+
 The gate then runs `smokes/lab-cycle`, restores deterministic checkpoints in
 fresh clients, compares hypotheses, exercises GUI selectors, and compiles and
 loads `probe-mod.jar`; its scope is defined in `smokes/lab-cycle/MAP.md`.
 
-The client, M3, M4, M5, M6, and lab runners deliberately raised the tooling budget to 2,050
+The client, M3, M4, M5, M6, M7, and lab runners deliberately raised the tooling budget to 2,250
 code lines while retaining the 300-line per-file ceiling. Product
-code remains capped at 1,000 lines and 250 lines per file. Smoke drivers and
-oracles have their own enforced 1,000-line total and 150-line per-file budget, so
+code remains capped at 1,150 lines and 250 lines per file. Smoke drivers and
+oracles have their own enforced 1,150-line total and 150-line per-file budget, so
 integration behavior cannot hide outside the product and tooling counts.
 
 See `ARCHITECTURE.md` for module boundaries and `AGENTS.md` for the behavioral
@@ -139,6 +149,7 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M4_CYCLE.md` is the v0.2.0 durable-snapshot GO audit.
 `M5_CYCLE.md` is the v0.3.0 reproduction-bundle and replay-CLI GO audit.
 `M6_CYCLE.md` is the v0.4.0 trace-viewer and first-divergence GO audit.
+`M7_CYCLE.md` is the v0.5.0 general-mod-loading and compatibility GO audit.
 
 After preparing the local runtime with the canonical smoke gate, replay a
 bundle with:
@@ -152,6 +163,12 @@ Inspect or compare canonical state traces without a Minecraft runtime:
 ```text
 java tools/replay/Replay.java trace show run.wltrace
 java tools/replay/Replay.java trace diff baseline.wltrace candidate.wltrace
+```
+
+Inspect a local Worldline mod package without executing it:
+
+```text
+java tools/replay/Replay.java mod inspect path/to/mod.jar
 ```
 
 Version and frozen evidence are authoritative in

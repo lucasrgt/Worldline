@@ -1,6 +1,6 @@
 package worldline.b173;
 
-/** Narrow game-neutral capabilities granted to a controlled mod tick. */
+/** Narrow capabilities granted to a controlled b1.7.3 mod tick. */
 public interface B173ModContext {
     int clientTick();
 

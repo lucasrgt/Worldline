@@ -32,6 +32,11 @@ bundle -> worldline-cli -> worldline-reproduction
                          b173 adapter
 
 trace files -> worldline-cli -> worldline-analysis -> worldline-trace
+
+mod JAR -> worldline-cli -> worldline-mods
+                              |
+                              v
+                   descriptor-selected entrypoint
 ```
 
 The modules are physical source roots and are compiled separately. The API is
@@ -67,6 +72,12 @@ M6 adds `worldline-analysis` above the existing trace protocol. The trace
 module owns strict `v2` parsing and immutable data; analysis owns rendering and
 first-divergence semantics. The CLI can therefore inspect trace files with no
 adapter, game JAR, RetroMCP checkout, or native library on its classpath.
+
+M7 adds dependency-free `worldline-mods`. It owns canonical package metadata,
+bounded inspection, SHA-256 provenance, exact compatibility results, and the
+generic isolated loader. The CLI depends on this module for metadata-only
+inspection. At execution time an adapter supplies its own entrypoint interface,
+so the package module never depends on b1.7.3 or mapped game types.
 
 ### `kernel`
 
@@ -149,6 +160,11 @@ client and direct official-JAR paths. Equality is established before a single
 field is changed in a copied trace. The CLI must identify the exact record,
 label, field index, field name, and ordered values; malformed protocol input
 must fail before analysis.
+
+`smokes/m7-mod-loading/` consumes the already oracle-qualified client adapter,
+then selects two different entrypoints solely from canonical JAR descriptors.
+It proves code origin and deterministic glass/gold effects while separately
+rejecting metadata mismatches, invalid descriptors, and a wrong Java subtype.
 
 ## Adapter direction
 
