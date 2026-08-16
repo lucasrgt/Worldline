@@ -41,10 +41,11 @@ public final class ReleaseCheck {
         Properties m9 = load("smokes/m9-scenario-minimization/smoke.properties");
         Properties m10 = load("smokes/m10-native-render/smoke.properties");
         Properties m11 = load("smokes/m11-aero-attribution/smoke.properties");
+        Properties m12 = load("smokes/m12-aero-reproduction/smoke.properties");
         Properties lab = load("smokes/lab-cycle/smoke.properties");
         match(release, "id", "worldline");
-        match(release, "version", "0.9.0");
-        match(release, "milestone", "m11-aero-attribution");
+        match(release, "version", "1.0.0");
+        match(release, "milestone", "m12-aero-reproduction");
         match(release, "status", "go");
         match(release, "scope", "local-research");
         match(release, "canonical.command", "java tools/harness/Verify.java --smoke");
@@ -66,6 +67,9 @@ public final class ReleaseCheck {
         same(release, "m11.signature", m11, "expected.signature");
         same(release, "m11.aero.revision", m11, "aero.revision");
         same(release, "m11.aero.version", m11, "aero.version");
+        same(release, "m12.signature", m12, "expected.signature");
+        same(release, "m12.aero.revision", m12, "aero.revision");
+        same(release, "m12.seed", m12, "seed");
         same(release, "lab.signature", lab, "expected.signature");
         requireText("modules/api/src/main/java/worldline/api/WorldlineVersion.java",
                 "public static final String VERSION = \"" + value(release, "version") + "\";");
@@ -98,8 +102,12 @@ public final class ReleaseCheck {
                 "smokes/m11-aero-attribution/MAP.md")) {
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         }
+        for (String file : Arrays.asList("docs/M12_CAPTURE.md", "docs/M12_CYCLE.md",
+                "smokes/m12-aero-reproduction/MAP.md")) {
+            if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
+        }
         verifyPublicTree();
-        System.out.println("  release: Worldline v0.9.0 M11 Aero attribution GO");
+        System.out.println("  release: Worldline v1.0.0 M12 Aero reproduction GO");
         System.out.println("  public artifact boundary: verified");
     }
 

@@ -1,0 +1,70 @@
+package aero.modellib.test.mixin;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.InteractionManager;
+import net.minecraft.client.SingleplayerInteractionManager;
+import net.minecraft.entity.player.ClientPlayerEntity;
+import net.minecraft.world.World;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+/** Drives a fixed real-world capture from the Minecraft main thread. */
+@Mixin(Minecraft.class)
+public abstract class WorldlineCaptureMixin {
+    @Shadow public World world;
+    @Shadow public ClientPlayerEntity player;
+    @Shadow public InteractionManager interactionManager;
+    @Shadow public abstract void startGame(String directory, String name, long seed);
+    @Shadow public abstract void scheduleStop();
+
+    @Unique private static final boolean WORLDLINE_ENABLED =
+        Boolean.getBoolean("worldline.capture.enabled");
+    @Unique private static final long WORLDLINE_SEED =
+        Long.getLong("worldline.capture.seed", 17320110707L);
+    @Unique private static final int WORLDLINE_TICKS =
+        Integer.getInteger("worldline.capture.ticks", 240);
+    @Unique private static final int WORLDLINE_Y =
+        Integer.getInteger("worldline.capture.y", 67);
+    @Unique private int worldlinePhase;
+    @Unique private int worldlineTicks;
+    @Unique private int worldlineY;
+    @Unique private int worldlineWarmup;
+
+    @Inject(method = "tick()V", at = @At("HEAD"))
+    private void worldlineCapture(CallbackInfo callback) {
+        if (!WORLDLINE_ENABLED) return;
+        if (worldlinePhase == 0 && world == null) {
+            worldlinePhase = 1;
+            interactionManager = new SingleplayerInteractionManager((Minecraft) (Object) this);
+            System.out.println("[WorldlineCapture] start seed=" + WORLDLINE_SEED);
+            startGame("WorldlineAero", "Worldline Aero", WORLDLINE_SEED);
+            return;
+        }
+        if (world == null || player == null) return;
+        if (worldlinePhase >= 3) return;
+        if (worldlinePhase == 1) {
+            worldlineY = WORLDLINE_Y;
+            if (worldlineWarmup == 0) for (int x = -1; x <= 1; x++)
+                for (int z = -1; z <= 1; z++) world.getChunk(x, z);
+        }
+        player.velocityX = 0.0D; player.velocityY = 0.0D; player.velocityZ = 0.0D;
+        player.setPositionAndAngles(8.5D, worldlineY, 8.5D, 45.0F, 0.0F);
+        if (worldlinePhase == 1) {
+            worldlineWarmup++;
+            if (world.blockEntities.size() < 500 && worldlineWarmup < 400) return;
+            worldlinePhase = 2;
+            System.out.println("[WorldlineCapture] ready blockEntities="
+                    + world.blockEntities.size() + " x=8.5 y=" + worldlineY + " z=8.5");
+        }
+        worldlineTicks++;
+        if (worldlineTicks >= WORLDLINE_TICKS) {
+            System.out.println("[WorldlineCapture] complete ticks=" + worldlineTicks);
+            worldlinePhase = 3;
+            scheduleStop();
+        }
+    }
+}

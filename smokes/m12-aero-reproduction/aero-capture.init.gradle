@@ -1,0 +1,43 @@
+gradle.projectsEvaluated {
+    if (gradle.rootProject.name != 'aero-model-lib-test') return
+    def script = gradle.startParameter.initScripts.find {
+        it.name == 'aero-capture.init.gradle'
+    }
+    if (script == null) throw new GradleException('Worldline capture script path missing')
+    def root = script.parentFile.parentFile.parentFile.canonicalFile
+    def smoke = new File(root, 'smokes/m12-aero-reproduction')
+    def project = gradle.rootProject
+    project.sourceSets.main.java.srcDir(new File(smoke, 'runtime-src'))
+    project.tasks.named('processResources').configure {
+        doLast {
+            copy {
+                from new File(smoke, 'runtime-resources/aerotest.mixins.json')
+                into destinationDir
+            }
+        }
+    }
+    def task = project.tasks.named('runClient').get()
+    if (task.actions.size() != 2 ||
+            !task.actions[0].getClass().name.endsWith('ClosureTaskAction')) {
+        throw new GradleException('Aero runClient action shape drifted')
+    }
+    task.actions.remove(0)
+    def run = new File(project.projectDir, 'run')
+    def ticks = (project.findProperty('worldlineTicks') ?: '240').toString()
+    def logValue = (project.findProperty('worldlineLog') ?:
+        new File(run, 'worldline-aero-frames.log').absolutePath).toString()
+    def log = new File(logValue)
+    if (!log.isAbsolute()) log = new File(run, logValue)
+    task.jvmArgs(
+        '-Dworldline.capture.enabled=true',
+        '-Dworldline.capture.seed=17320110707',
+        '-Dworldline.capture.ticks=' + ticks,
+        '-Daero.mega=true',
+        '-Daero.benchmark.skipNonForcedSaves=true',
+        '-Daero.spikelog=true',
+        '-Daero.spikelog.ms=25',
+        '-Daero.spikelog.heartbeatMs=500',
+        '-Daero.spikelog.sync=true',
+        '-Daero.spikelog.file=' + log.absolutePath,
+        '-Xms2G', '-Xmx4G')
+}

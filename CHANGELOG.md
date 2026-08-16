@@ -4,6 +4,25 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.0.0 - M12 Aero Reproduction
+
+Status: GO for controlled real-scene capture and bounded spike reproduction.
+
+- Added a test-only mapped runtime hook that creates a fixed-seed Aero MEGA
+  world, forces the target chunks, fixes camera and velocity, and stops after a
+  bounded 240-tick measurement window without modifying the Aero checkout.
+- Captured two real Fabric Loader/StationAPI/LWJGL frame logs with dense Aero
+  work and reproduced spikes attributed to expanded chunk-compilation work.
+- Reused the M9 minimizer to reduce each stable-scene record window to one
+  qualifying frame while retaining M11's neutral attribution boundary.
+- Captured and hashed the generated save, and recorded that the current test
+  fixture's custom MEGA BlockEntities do not survive a fresh save reload.
+- Removed repository-wide line caps while retaining enforced per-file limits:
+  250 product lines, 300 harness lines, and 150 smoke/adapter lines.
+
+The frozen M12 invariant-report SHA-256 is
+`a1d766e049b7382ae81e13e9b4ef4de3531c870869d7fe442e053f507af9169e`.
+
 ## 0.9.0 - M11 Aero Attribution
 
 Status: GO for bounded work attribution and exact-candidate qualification.

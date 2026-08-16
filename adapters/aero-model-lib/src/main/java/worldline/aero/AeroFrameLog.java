@@ -12,7 +12,8 @@ public final class AeroFrameLog {
         {"batchQueued", "batch.queued"}, {"batchFlushed", "batch.flushed"},
         {"batchBatches", "batch.calls"}, {"batchImmediate", "batch.immediate"},
         {"atRestRenders", "rest.renders"}, {"atRestListCalls", "rest.listcalls"},
-        {"cellCalls", "cell.calls"}, {"cellRebuilds", "cell.rebuilds"},
+        {"cellQueued", "cell.queued"}, {"cellCalls", "cell.calls"},
+        {"cellRebuilds", "cell.rebuilds"}, {"beViewCulled", "view.culled"},
         {"compileChunksCalls", "chunks.compiled"}, {"renderChunksCalls", "chunks.rendered"},
         {"dlLive", "displaylists.live"}, {"prewarmDrained", "prewarm.drained"},
         {"visibleChunks", "chunks.visible"}

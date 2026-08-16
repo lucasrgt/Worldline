@@ -226,6 +226,13 @@ neutral analysis module accepts only named counters and times. The separate
 that neutral model. The native smoke counts submitted renderer operations
 above the Pbuffer; neither the API nor kernel learns about Aero or OpenGL.
 
+M12 keeps runtime control in a smoke-only Aero integration overlay. A Gradle
+init script adds one mapped Mixin to the upstream test consumer; it controls
+seed, chunks, camera, and duration on the game thread. Raw saves and frame logs
+stay derived, while the existing analysis and minimization modules consume
+only adapter-neutral frames and opaque record indices. No M12 behavior enters
+the API, kernel, or maintained product graph.
+
 ## Compatibility boundary
 
 Product modules currently compile with `--release 8`; tooling runs on JDK 21.

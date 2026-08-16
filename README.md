@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v0.9.0 - M11 Aero Attribution (GO)**.
+Current official milestone: **Worldline v1.0.0 - M12 Aero Reproduction (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -69,12 +69,19 @@ the built JAR. A neutral analyzer now distinguishes a slow frame caused by
 expanded named work counters from a runtime stall with stable work. See
 `docs/M11_ATTRIBUTION.md` for the bounded contract and non-claims.
 
+M12 drives two real dense Aero clients from a fixed seed, chunk set, camera,
+and 240-tick window. Both captures reproduce a frame spike attributed to
+expanded chunk-compilation work, and each record window minimizes to one
+qualifying frame. The generated save is captured, but the current test
+fixture's custom BlockEntities do not survive reload; see
+`docs/M12_CAPTURE.md` for that boundary and the historical-spike non-claim.
+
 ## Verify
 
 Requirements:
 
 - JDK 21 for the repository harness;
-- `tokei` 14 or newer for source budgets.
+- `tokei` 14 or newer for per-file source limits.
 
 Run the canonical gate from the repository root:
 
@@ -82,7 +89,7 @@ Run the canonical gate from the repository root:
 java tools/harness/Verify.java
 ```
 
-The gate checks product and harness line budgets, compiles product modules to
+The gate checks per-file source limits, compiles product modules to
 Java 8 bytecode in their declared dependency order, compiles the tests, and
 runs every registered test suite. Derived output is written to the ignored
 `.worldline/build/` directory.
@@ -171,15 +178,21 @@ requires four-process mapped/official framebuffer equality. It also records
 the Aero candidate as absent without claiming compatibility. Its boundary is
 in `smokes/m10-native-render/MAP.md`.
 
+`smokes/m11-aero-attribution` then pins and builds Aero Model Lib 3.0.0,
+executes all 222 core tests, boots its StationAPI consumer, and qualifies the
+neutral work-attribution boundary. `smokes/m12-aero-reproduction` creates two
+controlled dense scenes, ingests their real frame logs, reproduces the
+chunk-compilation spike, and minimizes each evidence window. Their exact
+boundaries are in the corresponding `MAP.md` files.
+
 The gate then runs `smokes/lab-cycle`, restores deterministic checkpoints in
 fresh clients, compares hypotheses, exercises GUI selectors, and compiles and
 loads `probe-mod.jar`; its scope is defined in `smokes/lab-cycle/MAP.md`.
 
-The client, M3, M4, M5, M6, M7, M8, M9, M10, and lab runners use a tooling budget of 2,500
-code lines while retaining the 300-line per-file ceiling. Product
-code remains capped at 1,600 lines and 250 lines per file. Smoke drivers and
-oracles have their own enforced 1,400-line total and 150-line per-file budget, so
-integration behavior cannot hide outside the product and tooling counts.
+The repository has no total line cap. Product files remain limited to 250 code
+lines, harness files to 300, and smoke/oracle and game-specific adapter files
+to 150. This preserves modular pressure without preventing the project from
+growing through new cohesive files and modules.
 
 See `ARCHITECTURE.md` for module boundaries and `AGENTS.md` for the behavioral
 and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
@@ -192,6 +205,8 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M8_CYCLE.md` is the v0.6.0 differential-mod-testing GO audit.
 `M9_CYCLE.md` is the v0.7.0 automatic-scenario-minimization GO audit.
 `M10_CYCLE.md` is the v0.8.0 native/offscreen-render GO audit.
+`M11_CYCLE.md` is the v0.9.0 Aero-attribution GO audit.
+`M12_CYCLE.md` is the v1.0.0 real-Aero-reproduction GO audit.
 
 After preparing the local runtime with the canonical smoke gate, replay a
 bundle with:

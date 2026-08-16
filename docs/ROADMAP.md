@@ -16,6 +16,7 @@ Passing an experiment does not silently promote its API.
 | v0.7.0 / M9 | Automatic scenario minimization | GO - stable milestone |
 | v0.8.0 / M10 | Native/offscreen render E2E and Aero investigation | GO - render stable; Aero artifact absent |
 | v0.9.0 / M11 | Render-work attribution and exact Aero qualification | GO - bounded attribution and StationAPI load |
+| v1.0.0 / M12 | Real Aero scene capture, repeated spike classification, and evidence minimization | GO - chunk-compilation spike reproduced; save reload remains open |
 
 ## Promotion rule
 
@@ -24,9 +25,10 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v0.9.0 direction
+## Immediate post-v1.0.0 direction
 
-M12 should capture a real Aero saved-world/frame sequence, replay the same
-logical state repeatedly, ingest per-frame Aero work records, and minimize a
-reproduced spike. M11 proves the measurement and compatibility path; it does
-not claim the historical random spike has already been reproduced.
+M13 should repair or isolate the Aero test fixture's BlockEntity persistence,
+compare the dense scene with an empty/no-Aero scene under the same chunk path,
+and then test chunk-compile budgeting as a hypothesis. M12 identifies a
+repeatable bounded-fixture cause; it does not equate it with the historical
+random spike without that differential evidence.

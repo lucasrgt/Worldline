@@ -16,14 +16,14 @@ All repository artifacts must be written in English.
 
 ## Engineering constitution
 
-1. Maintained product code must remain at or below 1,600 `tokei` code lines,
-   and each product source file must remain at or below 250 code lines.
-2. The verification, replay, and smoke tooling must remain at or below 2,750 `tokei` code lines,
-   and each harness source file must remain at or below 300 code lines.
-3. Executable smoke scenarios and oracle adapters must remain at or below 1,400
-   `tokei` code lines, and each smoke source file at or below 150 code lines.
-4. Game-specific adapters must remain at or below 1,250 `tokei` code lines, and
-   each adapter source file at or below 150 code lines.
+1. Each maintained product source file must remain at or below 250 `tokei`
+   code lines.
+2. Each verification, replay, or smoke-tooling source file must remain at or
+   below 300 code lines.
+3. Each executable smoke scenario or oracle source file must remain at or
+   below 150 code lines.
+4. Each game-specific adapter source file must remain at or below 150 code
+   lines.
 5. Tests are unlimited. Product behavior may not be moved into tests, generated
    files, or harness code to evade a budget.
 6. Modules follow the dependency order declared in `harness.properties`.
@@ -35,8 +35,10 @@ All repository artifacts must be written in English.
 8. Missing tools, missing tests, illegal dependencies, and unresolved checks
    fail closed.
 
-The initial budgets are intentionally small. A deliberate milestone may revise
-them in the same reviewed change, but silent growth is forbidden.
+There is deliberately no repository-wide line cap. Growth must happen through
+small cohesive files and explicit modules rather than oversized source files.
+A deliberate milestone may revise a per-file limit in the same reviewed
+change, but silent growth is forbidden.
 
 ## Canonical verification
 

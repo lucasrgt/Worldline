@@ -52,7 +52,8 @@ public final class AeroAttributionSmoke {
         return "[Aero_FrameSpike] frameMs=" + frameMs + " gcTimeDeltaMs=" + gcMs
                 + " animAccepted=" + accepted + " animRejected=0 batchQueued=" + flushed
                 + " batchFlushed=" + flushed + " batchBatches=" + batches + " batchImmediate=0"
-                + " atRestRenders=4 atRestListCalls=4 cellCalls=2 cellRebuilds=0"
+                + " atRestRenders=4 atRestListCalls=4 cellQueued=2 cellCalls=2 cellRebuilds=0"
+                + " beViewCulled=0"
                 + " compileChunksCalls=0 renderChunksCalls=4 dlLive=16 prewarmDrained=0 visibleChunks=128";
     }
 
