@@ -106,7 +106,8 @@ public final class TraceCycle {
             "-Djava.awt.headless=true", "-classpath", classpath(paths), type); }
     private List<Path> subjectPaths() throws Exception { Path workspace = root.resolve("local/workspaces/b1.7.3");
         List<Path> paths = new ArrayList<>(Arrays.asList(client.resolve("classes"), client.resolve("instrumented-client"),
-                client.resolve("adapter-classes"), client.resolve("headless-classes"), product("api"), product("trace"),
+                client.resolve("adapter-classes"), client.resolve("headless-classes"), product("api"),
+                product("invariants"), product("trace"),
                 product("kernel"), product("reproduction"), workspace.resolve("minecraft/bin"),
                 workspace.resolve("jars/minecraft.jar"))); paths.addAll(jars(workspace.resolve("libraries"))); return paths; }
     private List<Path> officialPaths() throws Exception { Path workspace = root.resolve("local/workspaces/b1.7.3");

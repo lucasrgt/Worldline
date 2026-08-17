@@ -10,6 +10,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import worldline.analysis.TraceDiff;
 import worldline.analysis.TraceRenderer;
+import worldline.semantics.SemanticFields;
 import worldline.mods.ModArtifact;
 import worldline.mods.ModLoader;
 import worldline.modtest.ModTestComparison;
@@ -86,7 +87,10 @@ public final class WorldlineCli {
     private static int diff(String left, String right, PrintStream output) throws IOException {
         TraceDiff difference = TraceDiff.compare(readTrace(left), readTrace(right));
         output.print("WORLDLINE_TRACE_DIFF=" + (difference.diverged() ? "DIVERGED\n" : "EQUAL\n"));
-        output.print(difference.render()); return difference.diverged() ? 3 : 0;
+        output.print(difference.render());
+        String role = SemanticFields.role(difference.field());
+        if (!role.isEmpty()) output.println("role=" + role);
+        return difference.diverged() ? 3 : 0;
     }
 
     private static CanonicalStateDocument readTrace(String path) throws IOException {

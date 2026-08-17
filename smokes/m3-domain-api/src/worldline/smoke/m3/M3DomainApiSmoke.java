@@ -34,6 +34,9 @@ public final class M3DomainApiSmoke {
             require(world.block(TARGET).equals(new BlockState(0, 0)), "target is not air");
             require(player.type().equals("minecraft:player") && player.username().equals("Worldline"),
                     "player semantic identity failed");
+            require(player.items().total() == 0 && world.items().total() == 0
+                    && world.blocks().count(1) > 0,
+                    "fresh census failed");
             assertEntityCollection(world.entities(), player);
             CanonicalStateTrace trace = trace();
             record(trace, "loaded", world, player);
@@ -43,7 +46,8 @@ public final class M3DomainApiSmoke {
             record(trace, "mutated", world, player);
             runtime.tick(3);
             record(trace, "tick3", world, player);
-            require(world.time() == 3L && player.selectedHotbarSlot() == 4,
+            require(world.time() == 3L && player.selectedHotbarSlot() == 4
+                    && player.items().total() == 0,
                     "domain state did not survive controlled ticks");
             System.out.println("WORLDLINE_M3_SOURCE=" + minecraftClassSource());
             System.out.println("WORLDLINE_M3_TRACE=" + trace.value());

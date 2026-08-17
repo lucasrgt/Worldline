@@ -157,6 +157,14 @@ through the neutral `GameUi` tree and matches two official-JAR oracle processes.
 This is experimental evidence, not a versioned milestone. See
 `smokes/gui-tree/MAP.md` and `docs/GUI_TREE.md`.
 
+The experimental Invariant Engine observes item, block, entity, wear, health,
+and time samples and fails closed when a rule is broken. The controlled
+client cycle watches `standard(runtime)` on every live tick. Transfers,
+imports, recipes, harvest, mob drops, eggs, fish, breeding, grass/fluid
+transforms, falling sand, food, and peaceful regen hold; unexplained
+creation, unearned healing, silent repair, and rewound time do not.
+See `docs/INVARIANTS.md`.
+
 The experimental semantic catalog annotates the 24 controlled-boundary
 categories from the original plan, both `symbols.map` files, and the
 adapter/oracle/item/recipe/domain surfaces Worldline already executes. Each

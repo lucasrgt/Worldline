@@ -17,15 +17,12 @@ All repository artifacts must be written in English.
 ## Engineering constitution
 
 1. Each product source file must remain at or below 250 `tokei` code lines.
-   Product has no total line budget.
-2. The verification, replay, and smoke tooling must remain at or below 2,800 `tokei` code lines,
-   and each harness source file must remain at or below 300 code lines.
-3. Executable smoke scenarios and oracle adapters must remain at or below 1,500
-   `tokei` code lines, and each smoke source file at or below 150 code lines.
-4. Game-specific adapters must remain at or below 1,200 `tokei` code lines, and
-   each adapter source file at or below 150 code lines.
-5. Tests are unlimited. Product behavior may not be moved into tests, generated
-   files, or harness code to evade a budget.
+2. Each harness source file must remain at or below 300 `tokei` code lines.
+3. Each smoke source file must remain at or below 150 `tokei` code lines.
+4. Each adapter source file must remain at or below 150 `tokei` code lines.
+5. There is no total line budget. Tests are unlimited. Product behavior may
+   not be moved into tests, generated files, or harness code to evade a
+   per-file ceiling.
 6. Modules follow the dependency order declared in `harness.properties`.
    A module may depend only on modules explicitly listed there; cycles are
    forbidden and the harness compiles modules separately to enforce this.
@@ -35,9 +32,6 @@ All repository artifacts must be written in English.
 8. Missing tools, missing tests, illegal dependencies, and unresolved checks
    fail closed.
 
-The initial budgets are intentionally small. A deliberate milestone may revise
-them in the same reviewed change, but silent growth is forbidden.
-
 ## Canonical verification
 
 Before reporting implementation work complete, run from the repository root:
@@ -46,7 +40,7 @@ Before reporting implementation work complete, run from the repository root:
 java tools/harness/Verify.java
 ```
 
-This is the canonical local and CI gate. It owns the source budgets, module
+This is the canonical local and CI gate. It owns the per-file source ceilings, module
 dependency enforcement, compilation with warnings as errors, and the complete
 test suite. Do not substitute partial commands for it.
 

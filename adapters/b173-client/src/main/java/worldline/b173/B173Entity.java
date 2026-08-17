@@ -1,7 +1,6 @@
 package worldline.b173;
 
 import net.minecraft.src.Entity;
-import net.minecraft.src.EntityPlayer;
 import worldline.api.GameEntity;
 import worldline.api.GamePosition;
 
@@ -20,7 +19,7 @@ class B173Entity implements GameEntity {
     @Override public int id() { return value().entityId; }
 
     @Override public String type() {
-        return value() instanceof EntityPlayer ? "minecraft:player" : "worldline:unknown";
+        return B173Types.of(value());
     }
 
     @Override public GamePosition position() {

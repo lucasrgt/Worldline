@@ -55,7 +55,8 @@ public final class WorldlineCliTest {
             status = WorldlineCli.run(new String[] {"trace", "diff", left.toString(), right.toString()},
                     new PrintStream(output), new PrintStream(error));
             require(status == 3 && output.toString().contains("WORLDLINE_TRACE_DIFF=DIVERGED")
-                    && output.toString().contains("field=y") && output.toString().contains("right=9"),
+                    && output.toString().contains("field=y") && output.toString().contains("right=9")
+                    && output.toString().contains("role=ENTITY_POS_Y"),
                     "CLI divergent trace diff failed");
             output.reset(); error.reset();
             status = WorldlineCli.run(new String[] {"mod", "inspect", mod.toString()},

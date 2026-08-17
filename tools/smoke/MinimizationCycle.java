@@ -33,7 +33,8 @@ public final class MinimizationCycle {
         require(Files.isDirectory(adapter) && Files.isRegularFile(v1) && Files.isRegularFile(v2),
                 "run client and M8 cycles before M9"); recreate(build);
         Path classes = compile(smoke.resolve("src"), build.resolve("classes"), Arrays.asList(adapter,
-                product("api"), product("trace"), product("mods"), product("analysis"), product("minimization")));
+                product("api"), product("semantics"), product("trace"), product("mods"),
+                product("analysis"), product("minimization")));
         List<Path> runtime = gamePath(classes, adapter);
         Path originalA = build.resolve("original-a.wlscenario"), minimizedA = build.resolve("minimized-a.wlscenario");
         Path originalB = build.resolve("original-b.wlscenario"), minimizedB = build.resolve("minimized-b.wlscenario");
@@ -71,13 +72,15 @@ public final class MinimizationCycle {
     }
 
     private Result cli(String... arguments) throws Exception { return process(Arrays.asList(product("cli"),
-            product("reproduction"), product("api"), product("trace"), product("mods"), product("analysis"),
-            product("modtest"), product("minimization")), "worldline.cli.WorldlineCli", arguments); }
+            product("reproduction"), product("api"), product("semantics"), product("trace"), product("mods"),
+            product("analysis"), product("modtest"), product("minimization")),
+            "worldline.cli.WorldlineCli", arguments); }
     private List<Path> gamePath(Path scenario, Path adapter) throws IOException {
         Path workspace = root.resolve("local/workspaces/b1.7.3"); List<Path> result = new ArrayList<>(Arrays.asList(
                 scenario, client.resolve("instrumented-client"), adapter, client.resolve("headless-classes"),
-                product("api"), product("trace"), product("kernel"), product("mods"), product("analysis"),
-                product("minimization"), workspace.resolve("minecraft/bin"), workspace.resolve("jars/minecraft.jar")));
+                product("api"), product("semantics"), product("trace"), product("kernel"), product("mods"),
+                product("analysis"), product("minimization"), workspace.resolve("minecraft/bin"),
+                workspace.resolve("jars/minecraft.jar")));
         try (Stream<Path> paths = Files.walk(workspace.resolve("libraries"))) { result.addAll(paths
                 .filter(path -> path.toString().endsWith(".jar")).sorted().collect(Collectors.toList())); }
         return result;

@@ -114,6 +114,20 @@ owns immutable `SemanticMapping` values, including optional official client
 aliases. Category files annotate controlled b1.7.3 symbols already evidenced
 by Worldline; unknown or duplicate symbols fail closed.
 
+The experimental Invariant Engine adds `worldline-invariants` above the API.
+It owns fail-closed rules and the observation loop. The API owns the immutable
+`ItemCensus`, `EntityCensus`, `WearCensus`, `ItemCensusObserver`, and
+`InvariantViolation`. The kernel's opt-in `watch` samples items, loaded
+blocks, living entities, newly loaded chunk items and blocks, wear, health,
+and world time after every tick. Item conservation accepts loss, transfers,
+imports, recipes, and cause drops. Entity spawn accepts imports, eggs, and
+breeding, grass/water/spawner hosts, and slime split. Block conservation
+accepts imports, ID swaps, fluid/fire/plant presence, sapling-to-tree, and
+cobble from fluid. Health conservation accepts food, cake bites, and
+peaceful regen. Durability
+conservation forbids repair without a new stack. `TimeMonotonic` forbids
+time moving backward. There is no energy invariant.
+
 ### `kernel`
 
 Owns control-flow policy: valid lifecycle transitions and the narrow backend

@@ -15,6 +15,7 @@ Passing an experiment does not silently promote its API.
 | v0.6.0 / M8 | Differential mod/version testing | GO - stable milestone |
 | v0.7.0 / M9 | Automatic scenario minimization | GO - stable milestone |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | Experimental evidence passes |
+| Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | Experimental evidence complete |
 | Semantic mappings | Closed 24-category catalog, map coverage, and static role graph | Experimental evidence passes |
 | M10 | Native/offscreen render E2E and Aero investigation | Not started |
 
