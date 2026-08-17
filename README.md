@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.25.0 - M37 Route Correction Policy (GO)**.
+Current official milestone: **Worldline v1.26.0 - M38 Explicit Movement Fallback (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -222,6 +222,10 @@ the authoritative pose and persists successfully. See
 M37 adds explicit `CONTINUE` and `STOP_ON_CORRECTION` route policies. The stop
 policy ends immediately after a corrected obstacle with no retry and leaves a
 later step absent from persisted server state. See `docs/M37_ROUTE_POLICY.md`.
+
+M38 adds caller-supplied primary/fallback pairs. A fallback is skipped after an
+unchallenged primary and executes once after a corrected primary, with no
+automatic retry or path discovery. See `docs/M38_EXPLICIT_FALLBACK.md`.
 
 ## Verify
 

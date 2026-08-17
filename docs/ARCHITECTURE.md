@@ -312,6 +312,12 @@ the neutral route loop immediately after recording the correction; it neither
 retries the failed step nor sends later steps. The policy contains no hidden
 path selection and requires no adapter change.
 
+M38 adds explicit primary/fallback pairs above the same resolved movement
+boundary. A fallback is conditional on an actual corrected primary and executes
+at most once; an unchallenged primary skips it. Thirty-two pairs cap the worst
+case at the existing 64-outcome ceiling. The orchestrator neither retries nor
+derives an alternate movement and still requires no adapter change.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

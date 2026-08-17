@@ -18,7 +18,18 @@ public final class DomainApiTest {
         movementOutcomeIsExactAndFailClosed();
         movementRouteIsImmutableAndRecovers();
         movementRoutePolicyStopsWithoutRetry();
+        movementAlternativeIsExplicitAndFailClosed();
         System.out.println("DomainApiTest passed");
+    }
+
+    private static void movementAlternativeIsExplicitAndFailClosed() {
+        MovementStep primary = new MovementStep(.125D, 0D, 0D, 5);
+        MovementStep fallback = new MovementStep(0D, 0D, .125D, 5);
+        MovementAlternative alternative = new MovementAlternative(primary, fallback);
+        if (alternative.primary() != primary || alternative.fallback() != fallback)
+            throw new AssertionError("movement alternative accessors drifted");
+        failure(() -> new MovementAlternative(null, fallback));
+        failure(() -> new MovementAlternative(primary, null));
     }
 
     private static void movementRoutePolicyStopsWithoutRetry() {

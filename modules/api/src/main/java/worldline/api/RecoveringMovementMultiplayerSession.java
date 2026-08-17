@@ -23,4 +23,18 @@ public interface RecoveringMovementMultiplayerSession extends ResolvedMovementMu
         }
         return new MovementRouteResult(outcomes);
     }
+
+    default MovementRouteResult moveRouteWithFallback(List<MovementAlternative> alternatives) {
+        if (alternatives == null || alternatives.isEmpty() || alternatives.size() > 32)
+            throw new IllegalArgumentException("invalid movement alternatives");
+        List<MovementOutcome> outcomes = new ArrayList<>(alternatives.size() * 2);
+        for (MovementAlternative alternative : alternatives) {
+            if (alternative == null) throw new IllegalArgumentException("null movement alternative");
+            MovementStep step = alternative.primary(); MovementOutcome primary = moveAndObserve(
+                    step.deltaX(), step.deltaY(), step.deltaZ(), step.ticks()); outcomes.add(primary);
+            if (primary.corrected()) { step = alternative.fallback(); outcomes.add(moveAndObserve(
+                    step.deltaX(), step.deltaY(), step.deltaZ(), step.ticks())); }
+        }
+        return new MovementRouteResult(outcomes);
+    }
 }

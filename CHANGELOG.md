@@ -4,6 +4,21 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.26.0 - M38 Explicit Movement Fallback
+
+Status: GO for caller-supplied single fallback after correction.
+
+- Added immutable neutral `MovementAlternative` primary/fallback pairs with a
+  bounded 32-pair route entrypoint.
+- Skipped fallback after an unchallenged primary and executed exactly one
+  fallback after a corrected primary.
+- Proved the exact `UNCHALLENGED`, `CORRECTED`, `UNCHALLENGED` outcome sequence
+  on two fresh official servers without retrying the blocked primary.
+- Preserved the remote cache and persisted the explicit fallback's final pose.
+
+The frozen M38 semantic SHA-256 is
+`850b6e29ed5e8aab12e48625ebde6b8ce1902b581d9e07f55c8488f2d7bfd947`.
+
 ## 1.25.0 - M37 Route Correction Policy
 
 Status: GO for explicit retry-free stop-on-correction routing.
