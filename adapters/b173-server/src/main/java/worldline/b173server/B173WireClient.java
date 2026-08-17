@@ -15,12 +15,12 @@ import worldline.api.RemoteWorldView;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.MovementOutcome;
-import worldline.api.ItemCollectionMultiplayerSession;
+import worldline.api.BlockPlacementMultiplayerSession;
 import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteHeldItem;
 
 /** Minimal original protocol-14 client for headless multiplayer qualification. */
-public final class B173WireClient implements ItemCollectionMultiplayerSession {
+public final class B173WireClient implements BlockPlacementMultiplayerSession {
     public static final int PROTOCOL = 14;
     private final String host, username; private final int port, timeoutMillis;
     private MultiplayerConnection connection = MultiplayerConnection.NEW;
@@ -155,8 +155,8 @@ public final class B173WireClient implements ItemCollectionMultiplayerSession {
 
     @Override public RemoteInventoryView awaitInventory() { return B173ItemAccess.awaitInventory(channel()); }
     @Override public RemoteInventoryView inventory() { return B173ItemAccess.inventory(channel()); }
-    @Override public void selectHeldSlot(int slot) { B173ItemAccess.selectHeldSlot(channel(), slot); }
-    @Override public void dropHeldItem() { B173ItemAccess.dropHeldItem(channel()); }
+    @Override public void selectHeldSlot(int slot) { B173ItemAccess.selectHeldSlot(channel(), slot); } @Override public void dropHeldItem() { B173ItemAccess.dropHeldItem(channel()); }
+    @Override public void placeHeldBlock(BlockPosition support, worldline.api.BlockFace face) { B173ItemAccess.placeHeldBlock(channel(), support, face); }
     @Override public RemoteHeldItem awaitPeerHeldItem(RemoteHeldItem expected) { return B173ItemAccess.awaitPeerHeldItem(channel(), expected); }
     @Override public worldline.api.RemoteDroppedItem awaitDroppedItem(worldline.api.RemoteItemStack expected) { return B173ItemAccess.awaitDroppedItem(channel(), expected); }
     @Override public worldline.api.RemoteItemCollection awaitItemCollection(worldline.api.RemoteDroppedItem expected, String username) { return B173ItemAccess.awaitItemCollection(channel(), expected, username); }

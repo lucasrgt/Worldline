@@ -17,13 +17,14 @@ final class B173PlayChannel {
     private final DataInputStream input;
     private final DataOutputStream output;
     private final B173PlayInbound inbound;
+    private final B173HeldItemChannel held;
     private PlayerPose pose;
     private double stanceHeight;
 
     B173PlayChannel(DataInputStream input, DataOutputStream output, int timeoutMillis,
             int localEntityId, String localUsername) throws IOException {
         this.input = input; this.output = output;
-        this.inbound = new B173PlayInbound(input, output, timeoutMillis, localEntityId, localUsername);
+        this.inbound = new B173PlayInbound(input, output, timeoutMillis, localEntityId, localUsername); this.held = new B173HeldItemChannel(output, inbound);
     }
     B173PlayChannel(DataInputStream input, DataOutputStream output, int timeoutMillis) throws IOException {
         this(input, output, timeoutMillis, 0, "Worldline"); }
@@ -123,8 +124,9 @@ final class B173PlayChannel {
     B173PlayInbound inbound() { require(pose != null, "play channel is not synchronized"); return inbound; }
 
     void selectHeldSlot(int slot) throws IOException { require(pose != null, "play channel is not synchronized");
-        if (slot < 0 || slot > 8) throw new IllegalArgumentException("invalid held hotbar slot"); output.writeByte(16); output.writeShort(slot); output.flush(); }
-    void dropHeldItem() throws IOException { require(pose != null, "play channel is not synchronized"); output.writeByte(14); output.writeByte(4); output.writeInt(0); output.writeByte(0); output.writeInt(0); output.writeByte(0); output.flush(); }
+        held.select(slot); }
+    void dropHeldItem() throws IOException { require(pose != null, "play channel is not synchronized"); held.drop(); }
+    void placeHeldBlock(worldline.api.BlockPosition support, worldline.api.BlockFace face) throws IOException { require(pose != null, "play channel is not synchronized"); held.place(support, face); }
 
     MovementOutcome moveAndObserve(double dx, double dy, double dz, int ticks)
             throws IOException, InterruptedException {

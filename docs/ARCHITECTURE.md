@@ -397,6 +397,13 @@ entity with Packet22 collector identity and later Packet29 removal. Destruction
 without collection remains a valid terminal lifecycle but cannot satisfy the
 collection contract.
 
+M53 extracts outbound selected-item behavior into `B173HeldItemChannel`.
+Packet16 selection, Packet14 drop, and Packet15 placement share one selected
+hotbar index. Placement derives the exact stack from the current immutable
+window-0 slot and rejects empty or non-block selections; callers supply only a
+neutral support position and `BlockFace`. Packet53 and inventory trackers remain
+the independent inbound authority.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

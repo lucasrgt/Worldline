@@ -6,6 +6,8 @@ import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteDroppedItem;
 import worldline.api.RemoteItemStack;
 import worldline.api.RemoteItemCollection;
+import worldline.api.BlockFace;
+import worldline.api.BlockPosition;
 
 /** Unchecked public-client boundary for the bounded item channel. */
 final class B173ItemAccess {
@@ -26,6 +28,11 @@ final class B173ItemAccess {
     static void dropHeldItem(B173PlayChannel channel) {
         try { channel.dropHeldItem(); }
         catch (IOException error) { throw new IllegalStateException("held-item drop failed", error); }
+    }
+
+    static void placeHeldBlock(B173PlayChannel channel, BlockPosition support, BlockFace face) {
+        try { channel.placeHeldBlock(support, face); }
+        catch (IOException error) { throw new IllegalStateException("held-block placement failed", error); }
     }
 
     static RemoteHeldItem awaitPeerHeldItem(B173PlayChannel channel, RemoteHeldItem expected) {

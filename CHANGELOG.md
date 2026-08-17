@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.41.0 - M53 Held Block Placement
+
+Status: GO for selected held-block placement with two independent world views.
+
+- Added neutral block faces and a bounded held-block placement session contract.
+- Derived the Packet15 stack from the selected authoritative inventory slot.
+- Proved Packet53 stone replacement in two immutable remote-world caches.
+- Confirmed Packet103/Packet5 consumption and zero clean saved inventory entries.
+
+The frozen M53 semantic SHA-256 is
+`3b27d76f04b4e55d0c3197a091a0b98b39a0f9a5fdeee3b34b92f725e91e2472`.
+
 ## 1.40.0 - M52 Named Item Collection
 
 Status: GO for exact named collection with terminal removal evidence.

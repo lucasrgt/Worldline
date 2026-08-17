@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.40.0 - M52 Named Item Collection (GO)**.
+Current official milestone: **Worldline v1.41.0 - M53 Held Block Placement (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -278,6 +278,10 @@ client. See `docs/M51_DROPPED_ITEM_SPAWN.md`.
 M52 follows that exact entity through Packet22 collection by a validated named
 player and Packet29 terminal removal, then proves the restored live and saved
 inventory. See `docs/M52_ITEM_COLLECTION.md`.
+
+M53 places the selected observed block through Packet15 and proves the exact
+Packet53 stone replacement in two immutable remote caches, plus consumed local,
+peer, and persisted inventory. See `docs/M53_HELD_BLOCK_PLACEMENT.md`.
 
 ## Verify
 
