@@ -89,7 +89,7 @@ public final class WorldlineCli {
         output.print("WORLDLINE_TRACE_DIFF=" + (difference.diverged() ? "DIVERGED\n" : "EQUAL\n"));
         output.print(difference.render());
         String role = SemanticFields.role(difference.field());
-        if (!role.isEmpty()) output.println("role=" + role);
+        if (!role.isEmpty()) output.print("role=" + role + "\n");
         return difference.diverged() ? 3 : 0;
     }
 

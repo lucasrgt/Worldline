@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## Unreleased - M2 Controlled Runtime
+
+Status: GO.
+
+- Promoted virtual clock, programmable input, RNG reseed, filesystem
+  journal/failure injection, offline network, tick scheduler, and timer-thread
+  supervision from experimental evidence to a stable milestone.
+- The public product version remains 0.7.0 / M9. M2 does not add
+  `worldline-api` types; boundary controls stay on the b1.7.3 adapter.
+- Frozen evidence is the existing four-process 16-tick client state signature
+  `e8cdeba39a44b772a70c48c0acd9ae3983f3d95a8c10c545df5d66fb953db554`.
+
 ## Unreleased - Semantic Mappings
 
 Status: experimental evidence.
@@ -19,7 +31,8 @@ Status: experimental evidence.
 - Added CLI `semantics show|graph|category|role` inspection without loading
   Minecraft.
 - Trace CLI diffs print a catalog `role=` alias for known fields. Scenario
-  minimization tries disposable lab/noise steps first.
+  minimization tries disposable lab/noise steps first. Frozen M6/M8 CLI-report
+  hashes now include those role lines; M9 evidence uses 21 evaluator calls.
 
 ## Unreleased - Invariant Engine
 

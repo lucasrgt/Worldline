@@ -20,7 +20,7 @@ Status: GO.
 The frozen full evidence-report SHA-256 is:
 
 ```text
-b08aa9f46b2d8522e6b8ac991553b2b6f946a63190d5956e59cbf6d544eb8938
+28855e0c1dd9ba94447003fdf92b52606277e5d94515aa5473ea3c984e829cde
 ```
 
 The report freezes all three trace signatures, both JAR hashes, both result

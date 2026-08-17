@@ -33,10 +33,11 @@ field.index=1
 field=block65
 left=20
 right=0
+role=BLOCK_ID_READ
 ```
 
 The frozen evidence SHA-256 is
-`b08aa9f46b2d8522e6b8ac991553b2b6f946a63190d5956e59cbf6d544eb8938`.
+`28855e0c1dd9ba94447003fdf92b52606277e5d94515aa5473ea3c984e829cde`.
 Generated JARs, traces, results, classes, and evidence remain under ignored
 `.worldline/`.
 

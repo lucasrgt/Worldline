@@ -27,9 +27,8 @@ public final class ClientCycle {
             System.err.println("usage: java tools/smoke/ClientCycle.java " + ID);
             System.exit(2);
         }
-        try {
-            new ClientCycle().execute();
-        } catch (Exception error) {
+        try { new ClientCycle().execute(); }
+        catch (Exception error) {
             System.err.println("client cycle failed: " + error.getMessage());
             System.exit(1);
         }
@@ -199,6 +198,9 @@ public final class ClientCycle {
         require(output.contains("WORLDLINE_CLIENT_ROOT=" + rootName), "wrong client tick root");
         require(output.contains("WORLDLINE_CLIENT_HEADLESS=true"), "headless proof is absent");
         require(output.replace('\\', '/').contains(sourceMarker), "wrong Minecraft class source");
+        require(!type.contains("ControlledClientTickSmoke") || output.contains(
+                "WORLDLINE_BOUNDARIES=clock,input,rng,scheduler,filesystem,network,threading"),
+                "M2 boundary proof is absent");
         return new Outcome(line(output, TRACE), line(output, SIGNATURE),
                 line(output, STATE_TRACE), line(output, STATE_SIGNATURE));
     }
@@ -316,15 +318,10 @@ public final class ClientCycle {
     }
 
     private static final class Outcome {
-        private final String trace;
-        private final String signature;
-        private final String stateTrace;
-        private final String stateSignature;
+        private final String trace, signature, stateTrace, stateSignature;
         private Outcome(String trace, String signature, String stateTrace, String stateSignature) {
-            this.trace = trace;
-            this.signature = signature;
-            this.stateTrace = stateTrace;
-            this.stateSignature = stateSignature;
+            this.trace = trace; this.signature = signature;
+            this.stateTrace = stateTrace; this.stateSignature = stateSignature;
         }
     }
 }

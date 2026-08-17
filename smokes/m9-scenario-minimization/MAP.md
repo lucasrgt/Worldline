@@ -31,10 +31,10 @@ observe:target
 Removing `observe:before` shifts the divergence record from index 1 to 0;
 removing `tick` removes the value delta; removing `observe:target` removes the
 target record. Each therefore fails the full fingerprint. Two fresh outer JVMs
-must agree on the 24 evaluations and byte-identical original/minimized files.
+must agree on the 21 evaluations and byte-identical original/minimized files.
 
 The frozen evidence SHA-256 is
-`706ff2a6fbeb2de5049749a573de95ba75ff43229326e7fd27a20aaf75b39a69`.
+`90add5dbac4599dfbb8556efd233a7b53371644200d60e9356605ca7854268b3`.
 All derived scenarios, classes, and evidence remain under ignored `.worldline/`.
 
 ## Boundary
