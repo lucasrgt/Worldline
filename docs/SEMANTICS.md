@@ -1,6 +1,6 @@
 # Semantic Mappings
 
-The experimental semantic catalog annotates controlled b1.7.3 symbols without
+The semantic catalog annotates controlled b1.7.3 symbols without
 trusting decompiled source as exact. Each entry binds a mapped or Worldline
 boundary symbol to a role, category, read/write sets, external dependency,
 evidence tokens, an optional official client alias, and a confidence in parts

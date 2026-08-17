@@ -132,8 +132,8 @@ public final class VersionCycle {
     }
 
     private Result cli(String... arguments) throws Exception { return process(Arrays.asList(product("cli"),
-            product("reproduction"), product("api"), product("semantics"), product("trace"),
-            product("mods"), product("analysis"), product("modtest")),
+            product("reproduction"), product("api"), product("invariants"), product("semantics"),
+            product("trace"), product("mods"), product("analysis"), product("modtest")),
             "worldline.cli.WorldlineCli", arguments); }
     private List<Path> gamePath(Path scenario, Path adapter) throws IOException {
         Path workspace = root.resolve("local/workspaces/b1.7.3"); List<Path> result = new ArrayList<>(Arrays.asList(

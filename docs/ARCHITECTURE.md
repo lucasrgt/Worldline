@@ -65,7 +65,7 @@ conventional.
 Owns stable concepts visible to a scenario author. It must not expose RetroMCP,
 LWJGL, mappings, instrumentation, or decompiled Minecraft types.
 
-The experimental Game UI Tree adds opt-in `UiMinecraftRuntime` and immutable
+The Game UI Tree adds opt-in `UiMinecraftRuntime` and immutable
 `GameUiNode` values. `GameUi` exposes the current screen, a snapshot of semantic
 nodes, role/name lookup, inventory open/close, and slot clicks. Only the
 inventory screen is promoted; other screens fail closed.
@@ -108,13 +108,13 @@ scenarios, exact divergence fingerprints, and deterministic delta debugging.
 Adapters remain responsible for step interpretation and isolated evaluation,
 so the neutral module does not acquire game, mod, or runtime dependencies.
 
-The experimental semantic catalog adds `worldline-semantics` above the API.
+The semantic catalog adds `worldline-semantics` above the API.
 It owns the closed 24-category role contract, static role graph, and fail-closed lookup. The API
 owns immutable `SemanticMapping` values, including optional official client
 aliases. Category files annotate controlled b1.7.3 symbols already evidenced
 by Worldline; unknown or duplicate symbols fail closed.
 
-The experimental Invariant Engine adds `worldline-invariants` above the API.
+The Invariant Engine adds `worldline-invariants` above the API.
 It owns fail-closed rules and the observation loop. The API owns the immutable
 `ItemCensus`, `EntityCensus`, `WearCensus`, `ItemCensusObserver`, and
 `InvariantViolation`. The kernel's opt-in `watch` samples items, loaded

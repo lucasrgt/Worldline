@@ -18,7 +18,7 @@ Status: GO.
 
 ## Unreleased - Semantic Mappings
 
-Status: experimental evidence.
+Status: GO.
 
 - Added `SemanticMapping` so a b1.7.3 symbol can carry role, category,
   reads/writes, dependencies, evidence, an optional official client alias,
@@ -33,10 +33,13 @@ Status: experimental evidence.
 - Trace CLI diffs print a catalog `role=` alias for known fields. Scenario
   minimization tries disposable lab/noise steps first. Frozen M6/M8 CLI-report
   hashes now include those role lines; M9 evidence uses 21 evaluator calls.
+- Diverged conservation fields also print `invariant=<rule>` after the M6
+  document. `block65` names `block-conservation`. Frozen M8/M9 hashes include
+  that line.
 
 ## Unreleased - Invariant Engine
 
-Status: experimental evidence.
+Status: GO.
 
 - Added `ItemCensus` and `InvariantViolation` so observed item totals are
   immutable API values.
@@ -66,7 +69,7 @@ Status: experimental evidence.
 
 ## Unreleased - Game UI Tree
 
-Status: experimental evidence.
+Status: GO.
 
 - Added `UiMinecraftRuntime`, `GameUi`, and immutable `GameUiNode` values for a
   semantic inventory tree (`screen`, `slot`, `node`, `click`).

@@ -160,23 +160,20 @@ step changes or removes the exact divergence. Its evidence map is
 
 `smokes/gui-tree` then opens, inspects, clicks, and closes the inventory screen
 through the neutral `GameUi` tree and matches two official-JAR oracle processes.
-This is experimental evidence, not a versioned milestone. See
+This is a stable milestone; the public product version stays 0.7.0 / M9. See
 `smokes/gui-tree/MAP.md` and `docs/GUI_TREE.md`.
 
-The experimental Invariant Engine observes item, block, entity, wear, health,
-and time samples and fails closed when a rule is broken. The controlled
-client cycle watches `standard(runtime)` on every live tick. Transfers,
-imports, recipes, harvest, mob drops, eggs, fish, breeding, grass/fluid
-transforms, falling sand, food, and peaceful regen hold; unexplained
-creation, unearned healing, silent repair, and rewound time do not.
-See `docs/INVARIANTS.md`.
+The Invariant Engine observes item, block, entity, wear, health, and time
+samples and fails closed when a rule is broken. The controlled client cycle
+watches `standard(runtime)` on every live tick. Trace and mod-test diffs
+name the matching rule for known conservation fields. See
+`docs/INVARIANTS.md`.
 
-The experimental semantic catalog annotates the 24 controlled-boundary
-categories from the original plan, both `symbols.map` files, and the
-adapter/oracle/item/recipe/domain surfaces Worldline already executes. Each
-required role has one symbol, optional official alias, evidence tokens, and
-a confidence score. A coverage gate and static role graph fail closed on
-unknown tokens or unmapped `symbols.map` names. See `docs/SEMANTICS.md`.
+The semantic catalog annotates the 24 controlled-boundary categories, both
+`symbols.map` files, and the adapter/oracle/item/recipe/domain surfaces
+Worldline already executes. A coverage gate and static role graph fail closed
+on unknown tokens or unmapped names. Trace diffs print `role=` for known
+fields. See `docs/SEMANTICS.md`.
 
 The gate then runs `smokes/lab-cycle`, restores deterministic checkpoints in
 fresh clients, compares hypotheses, exercises GUI selectors, and compiles and
@@ -197,6 +194,9 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M7_CYCLE.md` is the v0.5.0 general-mod-loading and compatibility GO audit.
 `M8_CYCLE.md` is the v0.6.0 differential-mod-testing GO audit.
 `M9_CYCLE.md` is the v0.7.0 automatic-scenario-minimization GO audit.
+`GUI_CYCLE.md` is the inventory Game UI tree GO audit.
+`INVARIANTS_CYCLE.md` is the conservation-rule GO audit.
+`SEMANTICS_CYCLE.md` is the catalog and role-graph GO audit.
 
 After preparing the local runtime with the canonical smoke gate, replay a
 bundle with:

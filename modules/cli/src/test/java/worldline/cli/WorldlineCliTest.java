@@ -56,8 +56,19 @@ public final class WorldlineCliTest {
                     new PrintStream(output), new PrintStream(error));
             require(status == 3 && output.toString().contains("WORLDLINE_TRACE_DIFF=DIVERGED")
                     && output.toString().contains("field=y") && output.toString().contains("right=9")
-                    && output.toString().contains("role=ENTITY_POS_Y"),
+                    && output.toString().contains("role=ENTITY_POS_Y")
+                    && !output.toString().contains("invariant="),
                     "CLI divergent trace diff failed");
+            Files.write(left, "v2|seed=7|schema=block65|tick0=0".getBytes(StandardCharsets.UTF_8));
+            Files.write(right, "v2|seed=7|schema=block65|tick0=20".getBytes(StandardCharsets.UTF_8));
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"trace", "diff", left.toString(), right.toString()},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 3 && output.toString().contains("field=block65")
+                    && output.toString().contains("invariant=block-conservation"),
+                    "CLI invariant alias failed");
+            Files.write(left, "v2|seed=7|schema=x,y|tick0=1,2".getBytes(StandardCharsets.UTF_8));
+            Files.write(right, "v2|seed=7|schema=x,y|tick0=1,9".getBytes(StandardCharsets.UTF_8));
             output.reset(); error.reset();
             status = WorldlineCli.run(new String[] {"mod", "inspect", mod.toString()},
                     new PrintStream(output), new PrintStream(error));

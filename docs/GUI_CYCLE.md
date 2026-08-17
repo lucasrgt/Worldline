@@ -1,11 +1,12 @@
-# Game UI Tree Cycle
+# Worldline Game UI Tree GO Audit
 
-Status: experimental evidence. This is not a versioned product milestone and
-does not replace M10 native/offscreen render.
+Status: **GO**
 
-## Promotion evidence
+The Game UI Tree does not change the public product version. Worldline remains
+v0.7.0 / M9. This audit promotes the inventory-tree evidence to a stable
+milestone. It does not replace M10 native/offscreen render.
 
-| Requirement | Evidence | State |
+| Requirement | Authoritative evidence | Result |
 | --- | --- | --- |
 | Neutral tree | Subject uses only `UiMinecraftRuntime` and `GameUi` after factory creation | PASS |
 | Official oracle | Independent process uses official obfuscated GUI symbols | PASS |
@@ -14,14 +15,17 @@ does not replace M10 native/offscreen render.
 | Click | Vanilla container click is executed on slot 0 | PASS |
 | Four processes | Two subject and two oracle JVMs emit one frozen signature | PASS |
 
-The frozen GUI-tree SHA-256 is:
+Frozen GUI-tree SHA-256:
 
 ```text
 ab13a631ed766de32f2947fae1a6e0a86d9b6cde3cbc7e1557ff76f76ccc60cf
 ```
 
-Canonical command:
+Canonical qualification command:
 
 ```text
 java tools/harness/Verify.java --smoke
 ```
+
+The contract and non-claims are in `docs/GUI_TREE.md`. Layout declaration
+without pixels is in `docs/GUI_SPEC.md`.
