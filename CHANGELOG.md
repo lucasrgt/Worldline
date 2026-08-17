@@ -18,6 +18,38 @@ Status: experimental evidence.
   a catalog role, plus `SemanticGraph` over static read/write/dep tokens.
 - Added CLI `semantics show|graph|category|role` inspection without loading
   Minecraft.
+- Trace CLI diffs print a catalog `role=` alias for known fields. Scenario
+  minimization tries disposable lab/noise steps first.
+
+## Unreleased - Invariant Engine
+
+Status: experimental evidence.
+
+- Added `ItemCensus` and `InvariantViolation` so observed item totals are
+  immutable API values.
+- Added `worldline-invariants` with `InvariantEngine` and `ItemConservation`.
+  The first census is the baseline; later gains fail closed, losses do not.
+- Added `GamePlayer.items()` and opt-in `watch` so each controlled tick samples
+  player and world totals without opening a screen.
+- World census includes dropped items and loaded container inventories.
+- Item conservation is now consecutive and recipe-aware. A gain holds when a
+  `RecipeBook` can account for it; unexplained creation still fails closed.
+- Crafting container leftovers (empty buckets from milk) are folded into
+  recipe outputs so cake no longer looks like item creation.
+- `GameWorld.blocks()` and block-drop recipes explain harvest gains (stone
+  to cobble, log to log), including sampled random quantities.
+- `EntityCensus`, `CauseDrop`, and `DropBook` explain mob death, chicken
+  eggs, and caught fish. Newly loaded chunk items are imports, not creation.
+- Added `TimeMonotonic` and `InvariantEngine.standard` so world time cannot
+  move backward.
+- Added `EntitySpawn`, `BlockConservation`, `HealthConservation`, and
+  `DurabilityConservation`. `standard(runtime)` also loads block transforms,
+  fluid/fire/plant presence, food heal amounts, and host spawn rules.
+- The controlled-client cycle watches `standard(runtime)` for 16 live ticks.
+  Falling sand, thrown items, lit-block swaps, and `GameWorld.peaceful()`
+  complete the world-tick cause book.
+- Removed total line budgets for harness, smoke, and adapter. Only per-file
+  ceilings remain.
 
 ## Unreleased - Game UI Tree
 

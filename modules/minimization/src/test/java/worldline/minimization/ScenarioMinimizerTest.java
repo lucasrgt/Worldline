@@ -14,7 +14,8 @@ public final class ScenarioMinimizerTest {
         require(original.equals(parsed) && parsed.size() == 5 && parsed.step(1).equals("cause"),
                 "scenario round trip failed");
         ScenarioMinimizer.Result result = ScenarioMinimizer.minimize(original, 100,
-                candidate -> candidate.steps().contains("cause") && candidate.steps().contains("observe"));
+                candidate -> candidate.steps().contains("cause") && candidate.steps().contains("observe"),
+                step -> step.startsWith("noise:"));
         require(result.complete() && result.minimized().steps().equals(Arrays.asList("cause", "observe"))
                 && result.removedSteps() == 3 && result.evaluations() > 1, "scenario was not minimized");
         for (int index = 0; index < result.minimized().size(); index++) {

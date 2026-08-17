@@ -18,6 +18,7 @@ import worldline.b173.B173Runtimes;
 import worldline.minimization.DivergenceFingerprint;
 import worldline.minimization.Scenario;
 import worldline.minimization.ScenarioMinimizer;
+import worldline.semantics.SemanticSteps;
 import worldline.mods.LoadedMod;
 import worldline.mods.ModLoader;
 import worldline.trace.CanonicalStateDocument;
@@ -37,7 +38,7 @@ public final class M9MinimizationSmoke {
         Scenario original = Scenario.of(STEPS);
         DivergenceFingerprint target = DivergenceFingerprint.from(compare(original, v1, v2));
         ScenarioMinimizer.Result result = ScenarioMinimizer.minimize(original, 100,
-                candidate -> preserves(candidate, v1, v2, target));
+                candidate -> preserves(candidate, v1, v2, target), SemanticSteps::disposable);
         require(result.complete() && result.minimized().steps().equals(
                 Arrays.asList("observe:before", "tick", "observe:target")),
                 "unexpected minimized scenario: " + result.minimized().steps());

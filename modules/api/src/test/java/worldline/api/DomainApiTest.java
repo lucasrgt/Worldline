@@ -8,6 +8,7 @@ public final class DomainApiTest {
         invalidValuesFailClosed();
         snapshotsAreBoundedAndImmutable();
         uiSpecRoundTripsBuilderAndInventory();
+        itemCensusIsExactAndFailClosed();
         semanticMappingIsExactAndFailClosed();
         System.out.println("DomainApiTest passed");
     }
@@ -78,6 +79,37 @@ public final class DomainApiTest {
         if (Ui.screen("bare", Ui.slot("input")).nodes().size() != 2) {
             throw new AssertionError("layout flatten or player opt-in failed");
         }
+    }
+
+    private static void itemCensusIsExactAndFailClosed() {
+        ItemCensus iron = ItemCensus.of(265, 10);
+        equal(iron.plus(50, 0), iron, "zero plus is identity");
+        equal(ItemCensus.fromNodes(java.util.Arrays.asList(
+                new GameUiNode(GameUiNode.SLOT, "0", 0, 265, 4),
+                new GameUiNode(GameUiNode.SLOT, "1", 1, 265, 6))), iron, "node census");
+        equal(iron.plus(ItemCensus.of(50, 2)), iron.plus(50, 2), "census merge");
+        equal(iron.decrease(ItemCensus.of(265, 7)), ItemCensus.of(265, 3), "census decrease");
+        equal(new ItemRecipe(ItemCensus.of(17, 1), ItemCensus.of(5, 4)),
+                new ItemRecipe(ItemCensus.of(17, 1), ItemCensus.of(5, 4)), "item recipe");
+        equal(EntityCensus.of("minecraft:zombie", 2),
+                EntityCensus.of("minecraft:zombie", 1).plus("minecraft:zombie", 1), "entity census");
+        equal(CauseDrop.death("minecraft:zombie", ItemCensus.of(288, 2)),
+                CauseDrop.death("minecraft:zombie", ItemCensus.of(288, 2)), "cause drop");
+        equal(new SpawnRule("block:2", "minecraft:pig", 4),
+                new SpawnRule("block:2", "minecraft:pig", 4), "spawn rule");
+        equal(EntityCensus.of("minecraft:pig", 1).plus(EntityCensus.of("minecraft:cow", 1)),
+                EntityCensus.of("minecraft:pig", 1).plus("minecraft:cow", 1), "census merge");
+        if (iron.total() != 10 || iron.count(265) != 10 || iron.exceeds(iron)
+                || !iron.plus(265, 1).exceeds(iron) || ItemCensus.empty().exceeds(iron)
+                || !iron.contains(ItemCensus.of(265, 10)) || iron.contains(ItemCensus.of(265, 11))) {
+            throw new AssertionError("item census totals failed");
+        }
+        failure(() -> ItemCensus.of(-1, 1));
+        failure(() -> ItemCensus.of(1, -1));
+        failure(() -> new ItemRecipe(ItemCensus.empty(), ItemCensus.of(1, 1)));
+        failure(() -> new InvariantViolation("", "detail"));
+        failure(() -> new SpawnRule("", "minecraft:pig", 1));
+        failure(() -> new SpawnRule("block:2", "minecraft:pig", 0));
     }
 
     private static void semanticMappingIsExactAndFailClosed() {

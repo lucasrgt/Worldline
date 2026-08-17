@@ -6,6 +6,7 @@ import worldline.b173.B173Keys;
 import worldline.b173.B173Observation;
 import worldline.b173.B173Runtime;
 import worldline.b173.B173Runtimes;
+import worldline.invariants.InvariantEngine;
 import worldline.trace.CanonicalStateTrace;
 import worldline.trace.CanonicalTrace;
 
@@ -23,6 +24,7 @@ public final class ControlledClientTickSmoke {
         runtime.bootHeadless();
         try {
             runtime.loadWorld(WorldSource.at(Paths.get("memory", "worldline-client-cycle")));
+            runtime.watch(InvariantEngine.standard(runtime));
             runtime.reseed(RNG_SEED);
             runtime.scheduler().afterTicks(2, () -> runtime.tap(B173Keys.SLOT_1 + 2));
             CanonicalTrace trace = new CanonicalTrace(SEED);

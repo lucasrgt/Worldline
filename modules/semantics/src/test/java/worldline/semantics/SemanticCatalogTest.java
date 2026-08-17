@@ -13,6 +13,7 @@ public final class SemanticCatalogTest {
         lookupFailsClosed();
         incompleteCatalogFails();
         symbolMapsAreCovered();
+        traceFieldsAndStepsResolve();
         System.out.println("SemanticCatalogTest passed");
     }
 
@@ -69,6 +70,16 @@ public final class SemanticCatalogTest {
                 "INPUT", "WORLD", "CLOCK", "controlled-client-tick", 9998);
         failure(() -> SemanticCatalog.of(Collections.singletonList(tick)));
         failure(() -> SemanticCatalog.of(Arrays.asList(tick, tick)));
+    }
+
+    private static void traceFieldsAndStepsResolve() {
+        require("ENTITY_POS_Y".equals(SemanticFields.role("y")), "trace y role");
+        require("HOTBAR_SLOT".equals(SemanticFields.role("slot")), "trace slot role");
+        require(SemanticFields.role("schema").isEmpty(), "structural field has no role");
+        require(SemanticSteps.disposable("observe:target"), "observe is disposable");
+        require(SemanticSteps.boundary("tap:2") && SemanticSteps.boundary("tick"), "boundary steps");
+        require(!SemanticSteps.disposable("tick") && SemanticSteps.category("reseed:1").equals("rng"),
+                "tick and reseed classification");
     }
 
     private static void symbolMapsAreCovered() {

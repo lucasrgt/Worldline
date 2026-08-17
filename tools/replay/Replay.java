@@ -45,8 +45,9 @@ public final class Replay {
         Path client = root.resolve(".worldline/smokes/controlled-client-tick");
         Path workspace = root.resolve("local/workspaces/b1.7.3");
         List<Path> paths = new ArrayList<>(Arrays.asList(classes.resolve("cli"),
-                classes.resolve("reproduction"), classes.resolve("api"), classes.resolve("trace"),
-                classes.resolve("mods"), classes.resolve("analysis"), classes.resolve("modtest")));
+                classes.resolve("reproduction"), classes.resolve("api"), classes.resolve("semantics"),
+                classes.resolve("trace"), classes.resolve("mods"), classes.resolve("analysis"),
+                classes.resolve("modtest")));
         paths.add(classes.resolve("minimization"));
         if (replay) paths.addAll(Arrays.asList(classes.resolve("kernel"), client.resolve("adapter-classes"),
                 client.resolve("instrumented-client"), client.resolve("headless-classes"),
