@@ -208,6 +208,14 @@ time, waits for save completion, observes persisted state, and closes cleanly.
 The server remains natively ticking throughout, so this is control and
 observation rather than external tick stepping.
 
+M22 adds `MultiplayerSession`, `MultiplayerState`, and
+`MultiplayerServerRuntime`. The b1.7.3 wire adapter owns the protocol-14 packet
+encoding and localhost socket; neutral callers see only connection state,
+username, protocol version, entity ID, and server player lists. The smoke uses
+two fresh original wire clients against two unmodified official servers and
+requires presence followed by clean absence. It intentionally stops before the
+full play protocol or official graphical-client boundary.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

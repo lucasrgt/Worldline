@@ -21,11 +21,15 @@ final class B173ServerLog {
     synchronized int size() { return lines.size(); }
 
     void await(Process process, int start, String marker, Duration timeout) {
+        awaitLine(process, start, marker, timeout);
+    }
+
+    String awaitLine(Process process, int start, String marker, Duration timeout) {
         long deadline = System.nanoTime() + timeout.toNanos();
         while (System.nanoTime() < deadline) {
             synchronized (this) {
                 for (int index = Math.min(start, lines.size()); index < lines.size(); index++)
-                    if (lines.get(index).contains(marker)) return;
+                    if (lines.get(index).contains(marker)) return lines.get(index);
             }
             if (!process.isAlive()) throw new IllegalStateException(
                     "server exited before " + marker + "\n" + tail());

@@ -93,6 +93,8 @@ public final class Verify {
                     "m20-server-bootstrap"));
             run(Arrays.asList("java", "tools/smoke/ServerControlCycle.java",
                     "m21-server-control"));
+            run(Arrays.asList("java", "tools/smoke/MultiplayerWireCycle.java",
+                    "m22-multiplayer-wire"));
             run(Arrays.asList("java", "tools/smoke/GuiCycle.java", "gui-tree"));
             run(Arrays.asList("java", "tools/smoke/LabCycle.java", "lab-cycle"));
         }

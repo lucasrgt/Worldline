@@ -11,6 +11,7 @@ public final class DomainApiTest {
         itemCensusIsExactAndFailClosed();
         semanticMappingIsExactAndFailClosed();
         serverStateIsExactAndFailClosed();
+        multiplayerStateIsExactAndFailClosed();
         System.out.println("DomainApiTest passed");
     }
 
@@ -25,6 +26,19 @@ public final class DomainApiTest {
         failure(() -> new ServerState(ServerLifecycle.NEW, 0, false, -1L, 0));
         failure(() -> new ServerState(ServerLifecycle.RUNNING, 25565, false, -2L, 0));
         failure(() -> new ServerState(ServerLifecycle.STOPPED, 25565, false, 0L, -1));
+    }
+
+    private static void multiplayerStateIsExactAndFailClosed() {
+        MultiplayerState state = new MultiplayerState(
+                MultiplayerConnection.CONNECTED, "Worldline", 14, 7);
+        equal(state, new MultiplayerState(MultiplayerConnection.CONNECTED, "Worldline", 14, 7),
+                "multiplayer state");
+        if (state.connection() != MultiplayerConnection.CONNECTED
+                || !state.username().equals("Worldline") || state.protocolVersion() != 14
+                || state.entityId() != 7) throw new AssertionError("multiplayer state accessors drifted");
+        failure(() -> new MultiplayerState(MultiplayerConnection.NEW, "", 14, -1));
+        failure(() -> new MultiplayerState(MultiplayerConnection.NEW, "Worldline", -1, -1));
+        failure(() -> new MultiplayerState(MultiplayerConnection.CONNECTED, "Worldline", 14, -2));
     }
 
     private static void valueEqualityIsExact() {

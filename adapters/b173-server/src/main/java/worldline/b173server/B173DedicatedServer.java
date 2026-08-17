@@ -10,12 +10,15 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
-import worldline.api.DedicatedServerRuntime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import worldline.api.MultiplayerServerRuntime;
 import worldline.api.ServerLifecycle;
 import worldline.api.ServerState;
 
 /** Process adapter for the unmodified official Beta 1.7.3 dedicated server. */
-public final class B173DedicatedServer implements DedicatedServerRuntime {
+public final class B173DedicatedServer implements MultiplayerServerRuntime {
     private final Path officialJar, directory;
     private final int port;
     private final long seed;
@@ -69,6 +72,19 @@ public final class B173DedicatedServer implements DedicatedServerRuntime {
         Path level = directory.resolve("world/level.dat");
         long time = Files.isRegularFile(level) ? B173LevelDat.worldTime(level) : ServerState.UNKNOWN_TIME;
         return new ServerState(lifecycle, port, false, time, saves);
+    }
+
+    @Override
+    public List<String> players() {
+        require(lifecycle == ServerLifecycle.RUNNING, "server is not running");
+        int start = log.size();
+        write("list");
+        String line = log.awaitLine(process, start, "Connected players:", timeout);
+        String value = line.substring(line.indexOf("Connected players:") + "Connected players:".length()).trim();
+        if (value.isEmpty()) return Collections.emptyList();
+        List<String> result = new ArrayList<>();
+        for (String item : value.split(",")) result.add(item.trim());
+        return Collections.unmodifiableList(result);
     }
 
     @Override

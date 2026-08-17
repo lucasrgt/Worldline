@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.10.0 - M22 Multiplayer Wire Harness
+
+Status: GO for localhost protocol-14 login and player-presence control.
+
+- Added neutral `MultiplayerSession`, `MultiplayerState`, and
+  `MultiplayerServerRuntime` contracts.
+- Added an original minimal b1.7.3 protocol-14 client for the native offline
+  handshake and login response.
+- Repeated two fresh scenarios where the official server lists exactly one
+  Worldline client, then returns to an empty list after socket disconnect.
+- Kept the official graphical client, movement, full play packets, and tick
+  determinism as explicit later milestones.
+
+The frozen M22 multiplayer SHA-256 is
+`723f96819bd972ec5f2a4d932251840099f2d6472edf590c4386641a7d7e08f9`.
+
 ## 1.9.0 - M21 Dedicated Server Control
 
 Status: GO for neutral command, save, and persisted-state control.
