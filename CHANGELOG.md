@@ -4,6 +4,24 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.21.0 - M33 Chunk Traversal Lifecycle
+
+Status: GO for deliberate cross-chunk movement and rendered cache turnover.
+
+- Rose eight blocks for collision-free clearance, then crossed two eastward
+  chunk boundaries in bounded quarter-block movement steps.
+- Preserved M30 strict prechunk qualification before movement, then enabled
+  bounded implicit edge MapChunk loads observed from the official server.
+- Required at least one immutable cached chunk removal and one decoded addition
+  after the traversal on each of two fresh servers.
+- Rendered before/after cache topologies through mapped Minecraft
+  `Tessellator`, native LWJGL, and an offscreen Pbuffer.
+- Required a removed chunk pixel to clear, an added chunk pixel to appear, and
+  the complete RGBA frame hash to change.
+
+The frozen M33 semantic SHA-256 is
+`8f2860494fba146931fbe768d01a5c0dc063d05cc2ac01afd3fa9cce4c8b7e0d`.
+
 ## 1.20.0 - M32 Sustained Remote Terrain Render
 
 Status: GO for sustained protocol-14 cache-to-native-render composition.

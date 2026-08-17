@@ -56,14 +56,12 @@ public final class ReleaseCheck {
         Properties m22 = load("smokes/m22-multiplayer-wire/smoke.properties");
         Properties m23 = load("smokes/m23-player-persistence/smoke.properties");
         Properties m24 = load("smokes/m24-play-pose/smoke.properties");
-        Properties m25 = load("smokes/m25-player-movement/smoke.properties");
-        Properties m26 = load("smokes/m26-native-multiplayer/smoke.properties");
+        Properties m25 = load("smokes/m25-player-movement/smoke.properties"); Properties m26 = load("smokes/m26-native-multiplayer/smoke.properties");
         Properties m27 = load("smokes/m27-multiplayer-chat/smoke.properties");
-        Properties m28 = load("smokes/m28-remote-chunk/smoke.properties");
-        Properties m29 = load("smokes/m29-remote-chunk-snapshot/smoke.properties"), m30 = load("smokes/m30-remote-world-cache/smoke.properties"), m31 = load("smokes/m31-incremental-world/smoke.properties"), m32 = load("smokes/m32-remote-terrain-render/smoke.properties");
+        Properties m28 = load("smokes/m28-remote-chunk/smoke.properties"); Properties m29 = load("smokes/m29-remote-chunk-snapshot/smoke.properties"), m30 = load("smokes/m30-remote-world-cache/smoke.properties"), m31 = load("smokes/m31-incremental-world/smoke.properties"), m32 = load("smokes/m32-remote-terrain-render/smoke.properties"), m33 = load("smokes/m33-chunk-traversal/smoke.properties");
         Properties lab = load("smokes/lab-cycle/smoke.properties"); Properties gui = load("smokes/gui-tree/smoke.properties");
         match(release, "id", "worldline");
-        match(release, "version", "1.20.0"); match(release, "milestone", "m32-remote-terrain-render");
+        match(release, "version", "1.21.0"); match(release, "milestone", "m33-chunk-traversal");
         match(release, "status", "go");
         match(release, "scope", "local-research");
         match(release, "canonical.command", "java tools/harness/Verify.java --smoke");
@@ -137,6 +135,7 @@ public final class ReleaseCheck {
         same(release, "m30.signature", m30, "expected.signature"); same(release, "server.sha256", m30, "server.jar.sha256");
         same(release, "m31.signature", m31, "expected.signature"); same(release, "server.sha256", m31, "server.jar.sha256");
         same(release, "m32.signature", m32, "expected.signature"); same(release, "server.sha256", m32, "server.jar.sha256"); same(release, "client.sha256", m32, "client.jar.sha256");
+        same(release, "m33.signature", m33, "expected.signature"); same(release, "server.sha256", m33, "server.jar.sha256"); same(release, "client.sha256", m33, "client.jar.sha256");
         same(release, "lab.signature", lab, "expected.signature");
         same(release, "gui.signature", gui, "expected.signature");
         same(release, "invariants.signature", client, "expected.state.signature");
@@ -257,8 +256,9 @@ public final class ReleaseCheck {
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         for (String file : Arrays.asList("docs/M31_INCREMENTAL_WORLD.md", "docs/M31_CYCLE.md", "smokes/m31-incremental-world/MAP.md")) if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         for (String file : Arrays.asList("docs/M32_REMOTE_TERRAIN_RENDER.md", "docs/M32_CYCLE.md", "smokes/m32-remote-terrain-render/MAP.md")) if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
+        for (String file : Arrays.asList("docs/M33_CHUNK_TRAVERSAL.md", "docs/M33_CYCLE.md", "smokes/m33-chunk-traversal/MAP.md")) if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         verifyPublicTree();
-        System.out.println("  release: Worldline v1.20.0 M32 remote terrain render GO"); System.out.println("  public artifact boundary: verified");
+        System.out.println("  release: Worldline v1.21.0 M33 chunk traversal GO"); System.out.println("  public artifact boundary: verified");
     }
 
     private void verifyPublicTree() throws IOException {

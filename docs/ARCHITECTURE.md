@@ -280,6 +280,13 @@ chunks. A smoke-only renderer converts an exact cached vertical slice into
 mapped `Tessellator` quads in native LWJGL; it does not move rendering policy or
 Minecraft classes into the neutral API.
 
+M33 composes `moveBy` and `sustainTicks` into quarter-block traversal. The cache
+remains strict before deliberate movement; movement enables bounded implicit
+MapChunk loads because the official server can stream a new view-edge Packet51
+without a preceding Packet50. Packet50 unload still evicts immediately. Native
+topology frames prove both sides of the cache transition without placing LWJGL
+in the neutral API.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

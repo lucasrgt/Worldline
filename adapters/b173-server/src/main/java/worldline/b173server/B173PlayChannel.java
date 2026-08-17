@@ -62,6 +62,7 @@ final class B173PlayChannel {
 
     PlayerPose moveBy(double deltaX, double deltaY, double deltaZ) throws IOException {
         require(pose != null, "play channel is not synchronized");
+        inbound.enableImplicitChunks();
         PlayerPose target = new PlayerPose(pose.x() + deltaX, pose.y() + deltaY,
                 pose.z() + deltaZ, pose.yaw(), pose.pitch());
         output.writeByte(13);

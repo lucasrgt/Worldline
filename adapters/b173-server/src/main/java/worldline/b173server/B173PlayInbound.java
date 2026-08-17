@@ -101,6 +101,8 @@ final class B173PlayInbound {
 
     RemoteWorldView snapshot() { return cache.snapshot(); }
 
+    void enableImplicitChunks() { cache.enableImplicitLoads(); }
+
     private Thread pulse() {
         Thread thread = new Thread(() -> { try { while (!Thread.currentThread().isInterrupted()) {
             synchronized (output) { output.writeByte(10); output.writeBoolean(false); output.flush(); }

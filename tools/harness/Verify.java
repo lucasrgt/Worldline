@@ -107,7 +107,7 @@ public final class Verify {
             run(Arrays.asList("java", "tools/smoke/RemoteChunkCycle.java", "m28-remote-chunk"));
             run(Arrays.asList("java", "tools/smoke/RemoteChunkSnapshotCycle.java", "m29-remote-chunk-snapshot"));
             run(Arrays.asList("java", "tools/smoke/RemoteWorldCacheCycle.java", "m30-remote-world-cache"));
-            run(Arrays.asList("java", "tools/smoke/IncrementalWorldCycle.java", "m31-incremental-world")); run(Arrays.asList("java", "tools/smoke/RemoteTerrainRenderCycle.java", "m32-remote-terrain-render"));
+            run(Arrays.asList("java", "tools/smoke/IncrementalWorldCycle.java", "m31-incremental-world")); run(Arrays.asList("java", "tools/smoke/RemoteTerrainRenderCycle.java", "m32-remote-terrain-render")); run(Arrays.asList("java", "tools/smoke/ChunkTraversalCycle.java", "m33-chunk-traversal"));
             run(Arrays.asList("java", "tools/smoke/GuiCycle.java", "gui-tree"));
             run(Arrays.asList("java", "tools/smoke/LabCycle.java", "lab-cycle"));
         }

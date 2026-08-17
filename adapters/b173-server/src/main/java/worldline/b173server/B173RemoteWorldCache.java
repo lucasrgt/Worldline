@@ -15,6 +15,7 @@ import worldline.api.BlockPosition;
 final class B173RemoteWorldCache {
     private final Map<Long, RemoteChunkSnapshot> chunks = new LinkedHashMap<>();
     private int changes;
+    private boolean implicitLoads;
 
     void preChunk(DataInputStream input) throws IOException {
         int x = input.readInt(), z = input.readInt(); boolean load = input.readBoolean();
@@ -31,9 +32,16 @@ final class B173RemoteWorldCache {
                 || region.y() != 0 || Math.floorMod(region.x(), 16) != 0
                 || Math.floorMod(region.z(), 16) != 0) return false;
         long key = key(Math.floorDiv(region.x(), 16), Math.floorDiv(region.z(), 16));
-        if (!chunks.containsKey(key)) throw new IOException("chunk data arrived before prechunk load");
+        if (!chunks.containsKey(key)) {
+            if (!implicitLoads) throw new IOException("chunk data arrived before prechunk load: "
+                    + Math.floorDiv(region.x(), 16) + ":" + Math.floorDiv(region.z(), 16));
+            if (chunks.size() >= RemoteWorldView.MAX_CHUNKS)
+                throw new IOException("remote chunk cache limit exceeded");
+        }
         chunks.put(key, snapshot); return true;
     }
+
+    void enableImplicitLoads() { implicitLoads = true; }
 
     int decoded() {
         int count = 0;

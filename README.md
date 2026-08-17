@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.20.0 - M32 Sustained Remote Terrain Render (GO)**.
+Current official milestone: **Worldline v1.21.0 - M33 Chunk Traversal Lifecycle (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -197,6 +197,11 @@ M32 sustains the vanilla protocol-14 heartbeat for 40 ticks, grows the decoded
 remote cache, and renders an exact block slice through mapped Minecraft
 `Tessellator` in a native offscreen context. A Packet53 block change must alter
 the corresponding native pixel. See `docs/M32_REMOTE_TERRAIN_RENDER.md`.
+
+M33 rises to collision-free clearance and crosses two chunk boundaries in
+quarter-block movement steps. The official server must turn over the bounded remote cache, and native before/after chunk
+maps must clear one removed pixel and add one loaded pixel. See
+`docs/M33_CHUNK_TRAVERSAL.md`.
 
 ## Verify
 
@@ -405,6 +410,8 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M31_CYCLE.md` is the v1.19.0 server-authoritative incremental-world GO audit.
 
 `M32_CYCLE.md` is the v1.20.0 sustained cache-to-native-render GO audit.
+
+`M33_CYCLE.md` is the v1.21.0 chunk-traversal lifecycle GO audit.
 `GUI_CYCLE.md` is the inventory Game UI tree GO audit.
 `INVARIANTS_CYCLE.md` is the conservation-rule GO audit.
 `SEMANTICS_CYCLE.md` is the catalog and role-graph GO audit.
