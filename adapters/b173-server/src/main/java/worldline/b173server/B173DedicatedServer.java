@@ -13,12 +13,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import worldline.api.MultiplayerServerRuntime;
+import worldline.api.PersistentMultiplayerServerRuntime;
+import worldline.api.ServerPlayerState;
 import worldline.api.ServerLifecycle;
 import worldline.api.ServerState;
 
 /** Process adapter for the unmodified official Beta 1.7.3 dedicated server. */
-public final class B173DedicatedServer implements MultiplayerServerRuntime {
+public final class B173DedicatedServer implements PersistentMultiplayerServerRuntime {
     private final Path officialJar, directory;
     private final int port;
     private final long seed;
@@ -85,6 +86,15 @@ public final class B173DedicatedServer implements MultiplayerServerRuntime {
         List<String> result = new ArrayList<>();
         for (String item : value.split(",")) result.add(item.trim());
         return Collections.unmodifiableList(result);
+    }
+
+    @Override
+    public ServerPlayerState player(String username) {
+        if (username == null || !username.matches("[A-Za-z0-9_]{1,16}"))
+            throw new IllegalArgumentException("invalid player username");
+        Path path = directory.resolve("world/players").resolve(username + ".dat").normalize();
+        require(path.startsWith(directory) && Files.isRegularFile(path), "persisted player is absent");
+        return B173PlayerDat.read(path, username);
     }
 
     @Override

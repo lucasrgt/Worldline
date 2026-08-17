@@ -27,6 +27,7 @@ Passing an experiment does not silently promote its API.
 | v1.8.0 / M20 | Official b1.7.3 dedicated-server identity and lifecycle bootstrap | GO - two clean localhost boot/save/stop processes |
 | v1.9.0 / M21 | Neutral dedicated-server command, save, and persisted-state control | GO - two official controller/server pairs |
 | v1.10.0 / M22 | Protocol-14 localhost login, player presence, and clean disconnect | GO - two fresh wire-client/server scenarios |
+| v1.11.0 / M23 | Persisted multiplayer player identity, position, health, and inventory | GO - two official player NBT observations |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -38,11 +39,10 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.10.0 direction
+## Immediate post-v1.11.0 direction
 
 The next multiplayer milestone expands the wire client through spawn/time/chat
-and movement acknowledgement, then compares server-side persisted player state.
-The official graphical client remains a separate native milestone. A later
-instrumentation milestone can pause or externally step the server tick thread;
-console and packet control do not imply tick control. Save-path and M17 visual
-research remain independent lines.
+and movement acknowledgement, then compares a deliberate position change with
+persisted player state. The official graphical client remains a separate native
+milestone. A later instrumentation milestone can pause or externally step the
+server tick thread; console and packet control do not imply tick control.

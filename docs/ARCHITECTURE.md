@@ -216,6 +216,13 @@ two fresh original wire clients against two unmodified official servers and
 requires presence followed by clean absence. It intentionally stops before the
 full play protocol or official graphical-client boundary.
 
+M23 adds `PersistentMultiplayerServerRuntime` and immutable
+`ServerPlayerState`. The b1.7.3 adapter resolves only validated usernames and
+parses generated gzip/NBT player files without server classes. Its smoke proves
+that two real login/logout sessions produce bounded persisted dimension,
+position, health, and inventory observations; exact spawn coordinates remain
+outside the frozen trace.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.10.0 - M22 Multiplayer Wire Harness (GO)**.
+Current official milestone: **Worldline v1.11.0 - M23 Player Persistence (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -147,6 +147,11 @@ protocol-14 client. Two fresh scenarios each connect to an official localhost
 server, complete the native offline handshake/login, appear in the server's
 player list, disconnect, and disappear cleanly. See
 `docs/M22_MULTIPLAYER_WIRE.md`.
+
+M23 observes the official server state produced by those sessions. After
+login/disconnect and a forced save, the b1.7.3 adapter reads the generated
+player NBT through a neutral immutable value and verifies dimension, finite
+position, health, and inventory. See `docs/M23_PLAYER_PERSISTENCE.md`.
 
 ## Verify
 
@@ -341,6 +346,7 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M20_CYCLE.md` is the v1.8.0 official-server identity and lifecycle GO audit.
 `M21_CYCLE.md` is the v1.9.0 dedicated-server command/save/state GO audit.
 `M22_CYCLE.md` is the v1.10.0 protocol-14 multiplayer login/disconnect GO audit.
+`M23_CYCLE.md` is the v1.11.0 persisted multiplayer player-state GO audit.
 `GUI_CYCLE.md` is the inventory Game UI tree GO audit.
 `INVARIANTS_CYCLE.md` is the conservation-rule GO audit.
 `SEMANTICS_CYCLE.md` is the catalog and role-graph GO audit.

@@ -12,6 +12,7 @@ public final class DomainApiTest {
         semanticMappingIsExactAndFailClosed();
         serverStateIsExactAndFailClosed();
         multiplayerStateIsExactAndFailClosed();
+        serverPlayerStateIsExactAndFailClosed();
         System.out.println("DomainApiTest passed");
     }
 
@@ -39,6 +40,18 @@ public final class DomainApiTest {
         failure(() -> new MultiplayerState(MultiplayerConnection.NEW, "", 14, -1));
         failure(() -> new MultiplayerState(MultiplayerConnection.NEW, "Worldline", -1, -1));
         failure(() -> new MultiplayerState(MultiplayerConnection.CONNECTED, "Worldline", 14, -2));
+    }
+
+    private static void serverPlayerStateIsExactAndFailClosed() {
+        ServerPlayerState state = new ServerPlayerState("Worldline", 0, 1.5D, 64.0D, -2.5D, 20, 0);
+        equal(state, new ServerPlayerState("Worldline", 0, 1.5D, 64.0D, -2.5D, 20, 0),
+                "server player state");
+        if (!state.username().equals("Worldline") || state.dimension() != 0 || state.x() != 1.5D
+                || state.y() != 64.0D || state.z() != -2.5D || state.health() != 20
+                || state.inventoryItems() != 0) throw new AssertionError("player state accessors drifted");
+        failure(() -> new ServerPlayerState("../x", 0, 0, 0, 0, 20, 0));
+        failure(() -> new ServerPlayerState("Worldline", 0, Double.NaN, 0, 0, 20, 0));
+        failure(() -> new ServerPlayerState("Worldline", 0, 0, 0, 0, -1, 0));
     }
 
     private static void valueEqualityIsExact() {

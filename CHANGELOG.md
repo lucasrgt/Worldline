@@ -4,6 +4,21 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.11.0 - M23 Multiplayer Player Persistence
+
+Status: GO for persisted multiplayer player observation.
+
+- Added immutable `ServerPlayerState` and a persistent multiplayer server
+  boundary for username, dimension, position, health, and inventory count.
+- Added an original safe gzip/NBT reader for official server player files.
+- Repeated two login/logout/save scenarios and verified bounded player state
+  without freezing machine/world-dependent spawn coordinates.
+- Kept movement, full play packets, graphical client, and tick determinism as
+  later milestones.
+
+The frozen M23 persistence SHA-256 is
+`cce8512d97119d2c7fd010110a1760bebe7d86bed4f3d8cc1fefe39e58fb8928`.
+
 ## 1.10.0 - M22 Multiplayer Wire Harness
 
 Status: GO for localhost protocol-14 login and player-presence control.
