@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.38.0 - M50 Drop Held Item
+
+Status: GO for drop-current-item with local and independent peer evidence.
+
+- Added an explicit empty held-item value and bounded drop session contract.
+- Sent the original Packet14 status-4 drop-current-item action.
+- Proved Packet103 local-slot and Packet5 named-peer empty transitions.
+- Confirmed zero remaining inventory entries after clean disconnect and save.
+
+The frozen M50 semantic SHA-256 is
+`f47c950ee765fa26735061bdf45cbbafbe66a0c8f8251dbd713bcc7c44ec4f3f`.
+
 ## 1.37.0 - M49 Held Item Peer Observation
 
 Status: GO for bounded held-slot selection with independent peer evidence.

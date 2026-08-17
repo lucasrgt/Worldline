@@ -377,6 +377,12 @@ server-authoritative carried item. Packet16 selection remains a small outbound
 channel action restricted to hotbar indexes 0 through 8. No shared registry or
 server-memory access connects the two peers.
 
+M50 extends only the held-item session boundary with a drop-current action.
+The adapter writes Packet14 status 4 and relies on the official server for all
+state transitions. Packet103 empties the actor's immutable inventory view;
+Packet5 empties the independently named peer observation. Empty sentinels are
+decoded strictly, and malformed negative item identifiers fail closed.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

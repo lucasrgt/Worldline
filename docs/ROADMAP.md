@@ -54,6 +54,7 @@ Passing an experiment does not silently promote its API.
 | v1.35.0 / M47 | Immutable batch route/outcome/correction counts | GO - bounded aggregates without event replay or flattening |
 | v1.36.0 / M48 | Server-authoritative inventory window and slot observation | GO - immutable Packet104 snapshot plus matching Packet103 deltas |
 | v1.37.0 / M49 | Held hotbar selection with independent peer observation | GO - Packet16 selection proven through named Packet5 equipment update |
+| v1.38.0 / M50 | Drop-current-item with local, peer, and persistence evidence | GO - Packet14 status 4 proven through Packet103 and Packet5 empty transitions |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -65,9 +66,9 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.37.0 direction
+## Immediate post-v1.38.0 direction
 
-The next milestone can add a bounded drop-current-item action and prove both
-the initiating inventory delta and the peer's transition to an empty carried
-item. Inventory control still does not imply arbitrary container writes,
-server tick control, world-scale pathfinding, or a complete physics simulation.
+The next milestone can decode the official Packet21 spawn for the item produced
+by M50 and expose one bounded immutable dropped-item observation. Drop evidence
+still does not imply collection correlation, arbitrary container writes, server
+tick control, world-scale pathfinding, or a complete physics simulation.

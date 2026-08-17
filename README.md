@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.37.0 - M49 Held Item Peer Observation (GO)**.
+Current official milestone: **Worldline v1.38.0 - M50 Drop Held Item (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -266,6 +266,10 @@ matching incremental slot updates. See `docs/M48_INVENTORY_OBSERVATION.md`.
 
 M49 selects a bounded held hotbar slot and proves the authoritative carried
 item through an independent named protocol peer. See `docs/M49_HELD_ITEM_PEER.md`.
+
+M50 drops the current held stack through Packet14 status 4 and proves the
+resulting empty local slot, empty peer-carried item, and clean persisted
+inventory. See `docs/M50_DROP_HELD_ITEM.md`.
 
 ## Verify
 

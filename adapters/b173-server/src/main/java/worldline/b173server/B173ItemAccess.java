@@ -20,6 +20,11 @@ final class B173ItemAccess {
         catch (IOException error) { throw new IllegalStateException("held-slot selection failed", error); }
     }
 
+    static void dropHeldItem(B173PlayChannel channel) {
+        try { channel.dropHeldItem(); }
+        catch (IOException error) { throw new IllegalStateException("held-item drop failed", error); }
+    }
+
     static RemoteHeldItem awaitPeerHeldItem(B173PlayChannel channel, RemoteHeldItem expected) {
         try { return channel.awaitPeerHeldItem(expected); }
         catch (IOException error) { throw new IllegalStateException("peer held-item receive failed", error); }

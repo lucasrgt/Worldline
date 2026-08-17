@@ -125,6 +125,7 @@ final class B173PlayChannel {
 
     void selectHeldSlot(int slot) throws IOException { require(pose != null, "play channel is not synchronized");
         if (slot < 0 || slot > 8) throw new IllegalArgumentException("invalid held hotbar slot"); output.writeByte(16); output.writeShort(slot); output.flush(); }
+    void dropHeldItem() throws IOException { require(pose != null, "play channel is not synchronized"); output.writeByte(14); output.writeByte(4); output.writeInt(0); output.writeByte(0); output.writeInt(0); output.writeByte(0); output.flush(); }
 
     MovementOutcome moveAndObserve(double dx, double dy, double dz, int ticks)
             throws IOException, InterruptedException {
@@ -169,6 +170,5 @@ final class B173PlayChannel {
     }
 
     private static void require(boolean condition, String message) {
-        if (!condition) throw new IllegalStateException(message);
-    }
+        if (!condition) throw new IllegalStateException(message); }
 }
