@@ -260,6 +260,13 @@ runtime-compiled mapped `NibbleArray` provides the layout oracle without
 vendoring decompiled source. The snapshot is isolated evidence, not a chunk
 cache, entity stream, or native client world.
 
+M30 introduces a bounded adapter-private lifecycle cache and immutable neutral
+view. One shared play pump retains Packet50 load/unload state while callers wait
+for pose, chat, chunks, or a minimum decoded world. Packet51 data cannot enter
+the cache before a load reservation, unload removes it, and 256 tracked regions
+is a hard fail-closed ceiling. Incremental updates and native world/render state
+remain outside this layer.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

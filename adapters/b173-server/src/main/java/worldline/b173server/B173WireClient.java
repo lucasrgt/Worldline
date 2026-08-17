@@ -11,10 +11,11 @@ import worldline.api.MultiplayerState;
 import worldline.api.PlayerPose;
 import worldline.api.RemoteChunkObservation;
 import worldline.api.RemoteChunkSnapshot;
-import worldline.api.RemoteWorldMultiplayerSession;
+import worldline.api.CachedRemoteWorldMultiplayerSession;
+import worldline.api.RemoteWorldView;
 
 /** Minimal original protocol-14 client for headless multiplayer qualification. */
-public final class B173WireClient implements RemoteWorldMultiplayerSession {
+public final class B173WireClient implements CachedRemoteWorldMultiplayerSession {
     public static final int PROTOCOL = 14;
     private final String host, username;
     private final int port, timeoutMillis;
@@ -109,6 +110,13 @@ public final class B173WireClient implements RemoteWorldMultiplayerSession {
         require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
         try { return play.awaitChunkSnapshot(); }
         catch (IOException error) { throw new IllegalStateException("chunk decode failed", error); }
+    }
+
+    @Override
+    public RemoteWorldView awaitRemoteWorld(int minimumChunks) {
+        require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
+        try { return play.awaitRemoteWorld(minimumChunks); }
+        catch (IOException error) { throw new IllegalStateException("remote world receive failed", error); }
     }
 
     @Override

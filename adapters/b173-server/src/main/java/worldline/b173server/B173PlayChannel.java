@@ -6,16 +6,18 @@ import java.io.IOException;
 import worldline.api.PlayerPose;
 import worldline.api.RemoteChunkObservation;
 import worldline.api.RemoteChunkSnapshot;
+import worldline.api.RemoteWorldView;
 
 /** Original bounded codec for the protocol-14 initial play-position exchange. */
 final class B173PlayChannel {
     private final DataInputStream input;
     private final DataOutputStream output;
+    private final B173PlayInbound inbound;
     private PlayerPose pose;
     private double stanceHeight;
 
     B173PlayChannel(DataInputStream input, DataOutputStream output) {
-        this.input = input; this.output = output;
+        this.input = input; this.output = output; this.inbound = new B173PlayInbound(input);
     }
 
     PlayerPose synchronize() throws IOException {
@@ -39,7 +41,7 @@ final class B173PlayChannel {
                 acknowledge(x, feetY, clientY, z, yaw, pitch);
                 return pose;
             }
-            try { skipPrelude(packet); }
+            try { inbound.skip(packet); }
             catch (IOException error) { throw new IOException(
                     "play prelude failed after packets " + packets, error); }
         }
@@ -76,40 +78,22 @@ final class B173PlayChannel {
 
     String awaitChat() throws IOException {
         require(pose != null, "play channel is not synchronized");
-        for (int count = 0; count < 2048; count++) {
-            int packet = input.readUnsignedByte();
-            if (packet == 3) return B173InboundPacket.string(input, 119);
-            if (packet == 255) throw new IOException(
-                    "server disconnected: " + B173InboundPacket.string(input, 256));
-            B173InboundPacket.skip(input, packet);
-        }
-        throw new IOException("chat packet absent from bounded inbound window");
+        return inbound.awaitChat();
     }
 
     RemoteChunkObservation awaitChunk() throws IOException {
         require(pose != null, "play channel is not synchronized");
-        for (int count = 0; count < 4096; count++) {
-            int packet = input.readUnsignedByte();
-            if (packet == 51) return B173InboundPacket.chunk(input);
-            if (packet == 3) { B173InboundPacket.string(input, 119); continue; }
-            if (packet == 255) throw new IOException(
-                    "server disconnected: " + B173InboundPacket.string(input, 256));
-            B173InboundPacket.skip(input, packet);
-        }
-        throw new IOException("chunk packet absent from bounded inbound window");
+        return inbound.awaitChunk().observation();
     }
 
     RemoteChunkSnapshot awaitChunkSnapshot() throws IOException {
         require(pose != null, "play channel is not synchronized");
-        for (int count = 0; count < 4096; count++) {
-            int packet = input.readUnsignedByte();
-            if (packet == 51) return B173ChunkCodec.read(input);
-            if (packet == 3) { B173InboundPacket.string(input, 119); continue; }
-            if (packet == 255) throw new IOException(
-                    "server disconnected: " + B173InboundPacket.string(input, 256));
-            B173InboundPacket.skip(input, packet);
-        }
-        throw new IOException("chunk packet absent from bounded inbound window");
+        return inbound.awaitChunk();
+    }
+
+    RemoteWorldView awaitRemoteWorld(int minimumChunks) throws IOException {
+        require(pose != null, "play channel is not synchronized");
+        return inbound.awaitWorld(minimumChunks);
     }
 
     private void acknowledge(double x, double feetY, double clientY, double z,
@@ -118,13 +102,6 @@ final class B173PlayChannel {
         output.writeDouble(x); output.writeDouble(feetY); output.writeDouble(clientY);
         output.writeDouble(z); output.writeFloat(yaw); output.writeFloat(pitch);
         output.writeBoolean(false); output.flush();
-    }
-
-    private void skipPrelude(int packet) throws IOException {
-        if (packet == 3) B173InboundPacket.string(input, 119);
-        else if (packet == 255) throw new IOException(
-                "server disconnected: " + B173InboundPacket.string(input, 256));
-        else B173InboundPacket.skip(input, packet);
     }
 
     private void writeString(String value) throws IOException {

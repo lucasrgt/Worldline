@@ -34,6 +34,7 @@ Passing an experiment does not silently promote its API.
 | v1.15.0 / M27 | Two simultaneous clients and bounded inbound chat packet pump | GO - two exact peer broadcasts |
 | v1.16.0 / M28 | Neutral bounded observation of official remote chunk envelopes | GO - two full chunk regions |
 | v1.17.0 / M29 | Strict chunk inflation and coordinate-addressable neutral block view | GO - mapped layout oracle plus two official chunks |
+| v1.18.0 / M30 | Packet50-qualified bounded multi-chunk remote-world cache | GO - load/unload oracle plus two official views |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -45,10 +46,10 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.17.0 direction
+## Immediate post-v1.18.0 direction
 
-The next milestone tracks native prechunk load/unload lifecycle and assembles a
-bounded multi-chunk remote-world cache. M29 decodes isolated snapshots only; it
-does not construct a complete client world. A later instrumentation milestone
-can pause or externally step the server tick thread; packet control does not
-imply tick control.
+The next milestone applies native single-block and multi-block change packets
+to the bounded cache and proves server-authoritative incremental updates. M30
+holds full snapshots only; it is not a complete client. A later instrumentation
+milestone can pause or externally step the server tick thread; packet control
+does not imply tick control.

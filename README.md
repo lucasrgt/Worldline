@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.17.0 - M29 Remote Chunk Snapshot (GO)**.
+Current official milestone: **Worldline v1.18.0 - M30 Remote World Cache (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -182,6 +182,11 @@ M29 strictly inflates that payload and exposes immutable coordinate-based block
 state and light queries. A mapped vanilla `NibbleArray` oracle checks all
 32,768 coordinates of a fixture, then two fresh official servers provide real
 full chunks. See `docs/M29_REMOTE_CHUNK_SNAPSHOT.md`.
+
+M30 preserves native prechunk load/unload events in the shared inbound pump and
+assembles decoded snapshots into an immutable, 256-region neutral world view.
+A lifecycle oracle proves eviction and bounds; two official servers each
+provide a lifecycle-qualified addressable chunk. See `docs/M30_REMOTE_WORLD_CACHE.md`.
 
 ## Verify
 
@@ -384,6 +389,8 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M28_CYCLE.md` is the v1.16.0 remote chunk-envelope observation GO audit.
 
 `M29_CYCLE.md` is the v1.17.0 strict remote chunk-snapshot GO audit.
+
+`M30_CYCLE.md` is the v1.18.0 bounded remote-world cache GO audit.
 `GUI_CYCLE.md` is the inventory Game UI tree GO audit.
 `INVARIANTS_CYCLE.md` is the conservation-rule GO audit.
 `SEMANTICS_CYCLE.md` is the catalog and role-graph GO audit.

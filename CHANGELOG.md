@@ -4,6 +4,25 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.18.0 - M30 Remote World Cache
+
+Status: GO for bounded prechunk-qualified remote-world caching.
+
+- Added immutable `RemoteWorldView` and `CachedRemoteWorldMultiplayerSession`.
+- Unified pose/chat/chunk inbound consumption so native Packet50 load/unload
+  lifecycle is retained while other packet types are awaited.
+- Required a load reservation before accepting decoded Packet51 data, evicted
+  it on unload, and enforced a hard 256-region bound.
+- Consumed partial Packet51 regions without caching them, keeping incremental
+  range application outside this milestone.
+- Proved two-chunk cache semantics in the lifecycle oracle, negative-safe world
+  addressing, and one qualified full chunk from each of two official servers.
+- Kept incremental block/entity updates, native world construction, rendering,
+  and server tick stepping as later milestones.
+
+The frozen M30 semantic SHA-256 is
+`efa8065f90fda3c466ccdf7c22d1b54b8a6470fbb61354176467635f3e980631`.
+
 ## 1.17.0 - M29 Remote Chunk Snapshot
 
 Status: GO for strict native chunk inflation and neutral block access.

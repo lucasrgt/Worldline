@@ -14,6 +14,7 @@ public final class DomainApiTest {
         multiplayerStateIsExactAndFailClosed();
         serverPlayerStateIsExactAndFailClosed();
         remoteChunkSnapshotIsImmutableAndAddressable();
+        remoteWorldViewIsSortedAndAddressable();
         System.out.println("DomainApiTest passed");
     }
 
@@ -87,6 +88,23 @@ public final class DomainApiTest {
         failure(() -> snapshot.blockAt(2, 0, 0));
         failure(() -> new RemoteChunkSnapshot(region, new byte[7], new byte[4],
                 new byte[4], new byte[4]));
+    }
+
+    private static void remoteWorldViewIsSortedAndAddressable() {
+        byte[] ids = new byte[32768]; ids[0] = 7;
+        RemoteChunkSnapshot west = new RemoteChunkSnapshot(
+                new RemoteChunkObservation(-16, 0, -16, 16, 128, 16, 1024), ids,
+                new byte[16384], new byte[16384], new byte[16384]);
+        RemoteChunkSnapshot east = new RemoteChunkSnapshot(
+                new RemoteChunkObservation(0, 0, -16, 16, 128, 16, 1024), new byte[32768],
+                new byte[16384], new byte[16384], new byte[16384]);
+        RemoteWorldView view = new RemoteWorldView(java.util.Arrays.asList(east, west));
+        if (view.loadedChunks() != 2 || !view.containsChunk(-1, -1)
+                || view.chunks().get(0) != west || view.chunkAt(0, -1) != east
+                || !view.blockAt(-16, 0, -16).equals(new BlockState(7, 0)))
+            throw new AssertionError("remote world indexing drifted");
+        failure(() -> view.chunkAt(1, 1));
+        failure(() -> new RemoteWorldView(java.util.Arrays.asList(west, west)));
     }
 
     private static void valueEqualityIsExact() {
