@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.34.0 - M46 Exact Batch Terminal Event
+
+Status: GO for identity-bound batch terminal summaries.
+
+- Added `EVENT`, `AFTER_ROUTE`, and `EXHAUSTED` terminal kinds.
+- Bound every batch result to its exact final indexed correlated event.
+- Preserved the M45 result API through delegation to the richer execution.
+- Proved all three terminal boundaries across two fresh official servers.
+
+The frozen M46 semantic SHA-256 is
+`23e11f826866e54447461ec94740a5e77d76abad7761fabcdf08d0ae5108e521`.
+
 ## 1.33.0 - M45 Event-Boundary Batch Stop
 
 Status: GO for batch-wide cancellation at a movement event boundary.

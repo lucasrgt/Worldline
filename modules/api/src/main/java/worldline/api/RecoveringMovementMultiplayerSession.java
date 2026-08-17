@@ -123,31 +123,48 @@ public interface RecoveringMovementMultiplayerSession extends ResolvedMovementMu
             List<CorrelatedMovementRoutePlan> plans, CorrelatedMovementRouteController routeController,
             CorrelatedMovementRouteBatchController batchController,
             CorrelatedMovementRouteBatchEventController eventController) {
+        return moveCorrelatedRouteBatchExecutionUntilEvent(
+                plans, routeController, batchController, eventController).result();
+    }
+
+    default CorrelatedMovementRouteBatchExecution moveCorrelatedRouteBatchExecutionUntilEvent(
+            List<CorrelatedMovementRoutePlan> plans, CorrelatedMovementRouteController routeController,
+            CorrelatedMovementRouteBatchController batchController,
+            CorrelatedMovementRouteBatchEventController eventController) {
         if (plans == null || plans.isEmpty() || plans.size() > 16)
             throw new IllegalArgumentException("invalid correlated route batch");
         if (routeController == null || batchController == null || eventController == null)
             throw new IllegalArgumentException("null correlated route batch controller");
         List<CorrelatedMovementRouteExecution> executions = new ArrayList<>(plans.size());
-        boolean stopped = false;
+        boolean stopped = false; MovementRouteBatchTerminalKind terminalKind =
+                MovementRouteBatchTerminalKind.EXHAUSTED;
+        CorrelatedMovementRouteBatchEvent terminalEvent = null;
         for (int index = 0; index < plans.size(); index++) {
             CorrelatedMovementRoutePlan plan = plans.get(index);
             if (plan == null) throw new IllegalArgumentException("null correlated route plan");
             final int routeIndex = index; final boolean[] eventStopped = {false};
+            final CorrelatedMovementRouteBatchEvent[] observed = {null};
             CorrelatedMovementRouteExecution execution = moveRouteWithFallbackCorrelated(
                     plan.alternatives(), plan.correlation(), event -> {
-                        MovementRouteDirective directive = eventController.after(
-                                new CorrelatedMovementRouteBatchEvent(routeIndex, event));
+                        CorrelatedMovementRouteBatchEvent batchEvent =
+                                new CorrelatedMovementRouteBatchEvent(routeIndex, event);
+                        observed[0] = batchEvent;
+                        MovementRouteDirective directive = eventController.after(batchEvent);
                         if (directive == null) throw new IllegalStateException("null batch event directive");
                         if (directive == MovementRouteDirective.STOP) { eventStopped[0] = true; return directive; }
                         return routeController.after(event);
                     });
-            executions.add(execution);
-            if (eventStopped[0]) { stopped = true; break; }
+            executions.add(execution); terminalEvent = observed[0];
+            if (eventStopped[0]) { stopped = true;
+                terminalKind = MovementRouteBatchTerminalKind.EVENT; break; }
             MovementRouteDirective directive = batchController.after(execution);
             if (directive == null) throw new IllegalStateException("null movement route batch directive");
-            if (directive == MovementRouteDirective.STOP) { stopped = true; break; }
+            if (directive == MovementRouteDirective.STOP) { stopped = true;
+                terminalKind = MovementRouteBatchTerminalKind.AFTER_ROUTE; break; }
         }
-        return new CorrelatedMovementRouteBatchResult(executions, stopped
-                ? MovementRouteBatchTermination.CONTROLLER_STOP : MovementRouteBatchTermination.EXHAUSTED);
+        CorrelatedMovementRouteBatchResult result = new CorrelatedMovementRouteBatchResult(executions,
+                stopped ? MovementRouteBatchTermination.CONTROLLER_STOP
+                        : MovementRouteBatchTermination.EXHAUSTED);
+        return new CorrelatedMovementRouteBatchExecution(result, terminalKind, terminalEvent);
     }
 }

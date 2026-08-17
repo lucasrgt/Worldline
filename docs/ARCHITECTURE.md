@@ -356,6 +356,11 @@ route's controller termination and the batch termination before any later
 alternative or plan is sent. Already resolved outcomes remain immutable; no
 rollback, concurrency, queue, or adapter behavior is introduced.
 
+M46 wraps the batch result with an exact terminal kind and the last M44 batch
+event. The event is the identical wrapper delivered at the final resolved
+movement and retains the final execution's correlated event by identity.
+Existing M45 callers still receive the original result through delegation.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested
