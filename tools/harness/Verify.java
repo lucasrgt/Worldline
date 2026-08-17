@@ -97,6 +97,8 @@ public final class Verify {
                     "m22-multiplayer-wire"));
             run(Arrays.asList("java", "tools/smoke/PlayerPersistenceCycle.java",
                     "m23-player-persistence"));
+            run(Arrays.asList("java", "tools/smoke/PlayPoseCycle.java",
+                    "m24-play-pose"));
             run(Arrays.asList("java", "tools/smoke/GuiCycle.java", "gui-tree"));
             run(Arrays.asList("java", "tools/smoke/LabCycle.java", "lab-cycle"));
         }

@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.12.0 - M24 Multiplayer Play Pose
+
+Status: GO for the bidirectional initial play-position exchange.
+
+- Added immutable `PlayerPose` and a neutral playable multiplayer-session
+  boundary for synchronization and look intent.
+- Added a bounded protocol-14 play codec for spawn/time/chunk prelude packets,
+  position decoding, native feet/stance acknowledgement, and client look.
+- Extended persisted player observation with yaw and pitch from official NBT.
+- Repeated two fresh official server scenarios and matched acknowledged
+  position plus the exact requested `135.0/-22.5` rotation.
+- Kept collision-qualified movement, the graphical client, continuous packet
+  pumping, and server tick stepping as later milestones.
+
+The frozen M24 play-pose SHA-256 is
+`e43923f84231be276ae24a78a94f1d50aef3d5229dc59f10bcc5fd83c7cbc0db`.
+
 ## 1.11.0 - M23 Multiplayer Player Persistence
 
 Status: GO for persisted multiplayer player observation.

@@ -48,10 +48,18 @@ public final class DomainApiTest {
                 "server player state");
         if (!state.username().equals("Worldline") || state.dimension() != 0 || state.x() != 1.5D
                 || state.y() != 64.0D || state.z() != -2.5D || state.health() != 20
+                || state.yaw() != 0.0F || state.pitch() != 0.0F
                 || state.inventoryItems() != 0) throw new AssertionError("player state accessors drifted");
+        ServerPlayerState rotated = new ServerPlayerState(
+                "Worldline", 0, 1.5D, 64.0D, -2.5D, 135.0F, -22.5F, 20, 0);
+        if (rotated.yaw() != 135.0F || rotated.pitch() != -22.5F)
+            throw new AssertionError("player rotation accessors drifted");
+        equal(new PlayerPose(1.5D, 64.0D, -2.5D, 135.0F, -22.5F),
+                new PlayerPose(1.5D, 64.0D, -2.5D, 135.0F, -22.5F), "player pose");
         failure(() -> new ServerPlayerState("../x", 0, 0, 0, 0, 20, 0));
         failure(() -> new ServerPlayerState("Worldline", 0, Double.NaN, 0, 0, 20, 0));
         failure(() -> new ServerPlayerState("Worldline", 0, 0, 0, 0, -1, 0));
+        failure(() -> new PlayerPose(0, 0, 0, 0, 91));
     }
 
     private static void valueEqualityIsExact() {

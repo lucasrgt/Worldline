@@ -223,6 +223,12 @@ that two real login/logout sessions produce bounded persisted dimension,
 position, health, and inventory observations; exact spawn coordinates remain
 outside the frozen trace.
 
+M24 adds `PlayableMultiplayerSession` and immutable `PlayerPose`. A separate
+bounded play codec owns Beta 1.7.3's packet IDs, prelude lengths, and inverted
+feet/stance acknowledgement; the neutral API sees only pose and look intent.
+The persisted-player value now includes rotation. Unknown packet IDs and
+invalid lengths fail closed rather than silently approximating a full client.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

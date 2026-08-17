@@ -16,6 +16,7 @@ final class B173PlayerDat {
             input.readUTF();
             int dimension = Integer.MIN_VALUE, health = -1, inventory = -1;
             double[] position = null;
+            float[] rotation = null;
             while (true) {
                 int type = input.readUnsignedByte();
                 if (type == 0) break;
@@ -23,14 +24,25 @@ final class B173PlayerDat {
                 if (type == 3 && name.equals("Dimension")) dimension = input.readInt();
                 else if (type == 2 && name.equals("Health")) health = input.readShort();
                 else if (type == 9 && name.equals("Pos")) position = doubles(input, 3);
+                else if (type == 9 && name.equals("Rotation")) rotation = floats(input, 2);
                 else if (type == 9 && name.equals("Inventory")) inventory = listSizeAndSkip(input);
                 else skipPayload(input, type);
             }
-            require(dimension != Integer.MIN_VALUE && health >= 0 && inventory >= 0 && position != null,
+            require(dimension != Integer.MIN_VALUE && health >= 0 && inventory >= 0
+                    && position != null && rotation != null,
                     "player NBT fields are incomplete");
             return new ServerPlayerState(username, dimension, position[0], position[1], position[2],
-                    health, inventory);
+                    rotation[0], rotation[1], health, inventory);
         } catch (IOException error) { throw new IllegalStateException("could not read player data", error); }
+    }
+
+    private static float[] floats(DataInputStream input, int expected) throws IOException {
+        require(input.readUnsignedByte() == 5, "rotation list is not float");
+        int count = input.readInt();
+        require(count == expected, "rotation list length drift");
+        float[] result = new float[count];
+        for (int index = 0; index < count; index++) result[index] = input.readFloat();
+        return result;
     }
 
     private static double[] doubles(DataInputStream input, int expected) throws IOException {

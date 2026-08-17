@@ -7,17 +7,19 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.time.Duration;
 import worldline.api.MultiplayerConnection;
-import worldline.api.MultiplayerSession;
 import worldline.api.MultiplayerState;
+import worldline.api.PlayableMultiplayerSession;
+import worldline.api.PlayerPose;
 
 /** Minimal original protocol-14 client for headless multiplayer qualification. */
-public final class B173WireClient implements MultiplayerSession {
+public final class B173WireClient implements PlayableMultiplayerSession {
     public static final int PROTOCOL = 14;
     private final String host, username;
     private final int port, timeoutMillis;
     private MultiplayerConnection connection = MultiplayerConnection.NEW;
     private int entityId = MultiplayerState.UNKNOWN_ENTITY;
     private Socket socket;
+    private B173PlayChannel play;
 
     public B173WireClient(String host, int port, String username, Duration timeout) {
         if (host == null || host.isEmpty()) throw new IllegalArgumentException("empty host");
@@ -48,6 +50,7 @@ public final class B173WireClient implements MultiplayerSession {
             entityId = input.readInt();
             readString(input, 16); input.readLong(); input.readByte();
             require(entityId >= 0, "server returned invalid entity id");
+            play = new B173PlayChannel(input, output);
             connection = MultiplayerConnection.CONNECTED;
         } catch (IOException error) { closeSocket(); throw new IllegalStateException("multiplayer login failed", error); }
     }
@@ -55,6 +58,20 @@ public final class B173WireClient implements MultiplayerSession {
     @Override
     public MultiplayerState state() {
         return new MultiplayerState(connection, username, PROTOCOL, entityId);
+    }
+
+    @Override
+    public PlayerPose synchronizePose() {
+        require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
+        try { return play.synchronize(); }
+        catch (IOException error) { throw new IllegalStateException("play synchronization failed", error); }
+    }
+
+    @Override
+    public void look(float yaw, float pitch) {
+        require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
+        try { play.look(yaw, pitch); }
+        catch (IOException error) { throw new IllegalStateException("play look failed", error); }
     }
 
     @Override
@@ -67,7 +84,7 @@ public final class B173WireClient implements MultiplayerSession {
         if (socket == null) return;
         try { socket.close(); }
         catch (IOException error) { throw new IllegalStateException("could not close multiplayer socket", error); }
-        finally { socket = null; }
+        finally { socket = null; play = null; }
     }
 
     private static void writeString(DataOutputStream output, String value) throws IOException {
