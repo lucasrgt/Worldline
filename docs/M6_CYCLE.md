@@ -7,7 +7,7 @@ Status: **GO**
 | Modular parsing | Trace and analysis modules compile without Minecraft, adapter, or reproduction dependencies | PASS |
 | Strict viewer | Real 17-record `v2` trace renders schema, rows, count, and canonical signature | PASS |
 | Oracle equality | Fresh mapped and official client traces compare equal | PASS |
-| First divergence | One injected `tick9.slot` change reports record 9, field 11, and values 2 to 4 | PASS |
+| First divergence | One injected `tick9.slot` change reports record 9, field 11, values 2 to 4, and `role=HOTBAR_SLOT` | PASS |
 | Directionality | Reverse comparison retains the location and reverses ordered values | PASS |
 | Invalid input | Duplicate schema field fails before viewing or comparison | PASS |
 | Regression safety | All earlier release and laboratory signatures remain frozen | PASS |
@@ -15,7 +15,7 @@ Status: **GO**
 Frozen divergence-report SHA-256:
 
 ```text
-7eb4f707427c4e58ab3e481cc61f5801518325d5bbdfe045828325ab5ed2ea06
+fc5baa700a2da8bedff3a17aff5647b17ae831acd2dbb839bb767229538c4436
 ```
 
 Canonical qualification command:

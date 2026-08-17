@@ -184,6 +184,12 @@ the frozen official JAR. The runner checks class origins, bytecode call paths,
 four-process determinism, cross-boundary equality, and a frozen trace. The exact
 scope and non-claims are normative in that smoke's `MAP.md`.
 
+M2 promotes the process boundaries used by that cycle: virtual clock,
+programmable input, RNG reseed, in-memory filesystem journal and failure
+injection, offline network, tick-keyed scheduler, and supervision of the
+vanilla timer thread. Those controls stay on the b1.7.3 adapter; they are
+not `worldline-api` types. The contract is `docs/M2_RUNTIME.md`.
+
 `smokes/m3-domain-api/` qualifies the stable domain surface. The subject uses
 only `AutomatedMinecraftRuntime` and neutral API types after runtime creation;
 the independent oracle performs the same reads, mutation, teleport, hotbar

@@ -52,6 +52,7 @@ public final class ReleaseCheck {
         same(release, "server.signature", server, "expected.signature");
         same(release, "client.signature", client, "expected.signature");
         same(release, "client.state.signature", client, "expected.state.signature");
+        same(release, "m2.signature", client, "expected.state.signature");
         same(release, "m3.signature", m3, "expected.signature");
         same(release, "m4.signature", m4, "expected.snapshot.sha256");
         same(release, "m5.signature", m5, "expected.bundle.sha256");
@@ -64,7 +65,8 @@ public final class ReleaseCheck {
                 "public static final String VERSION = \"" + value(release, "version") + "\";");
         for (String file : Arrays.asList("README.md", "CHANGELOG.md", "AGENTS.md",
                 "docs/VISION.md", "docs/ROADMAP.md", "docs/ARCHITECTURE.md",
-                "docs/FIRST_CYCLE.md", "docs/M3_API.md", "docs/M3_CYCLE.md",
+                "docs/FIRST_CYCLE.md", "docs/M2_RUNTIME.md", "docs/M2_CYCLE.md",
+                "docs/M3_API.md", "docs/M3_CYCLE.md",
                 "docs/M4_SNAPSHOT.md", "docs/M4_CYCLE.md", "smokes/controlled-client-tick/MAP.md",
                 "docs/M5_BUNDLE.md", "docs/M5_CYCLE.md", "smokes/m3-domain-api/MAP.md",
                 "docs/M6_TRACE.md", "docs/M6_CYCLE.md", "smokes/m4-durable-snapshot/MAP.md",

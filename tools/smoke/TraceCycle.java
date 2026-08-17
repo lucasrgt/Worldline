@@ -93,7 +93,7 @@ public final class TraceCycle {
     }
     private String expectedDifference(String left, String right) { return "WORLDLINE_TRACE_DIFF=DIVERGED\n"
             + "kind=VALUE\nrecord.index=9\nrecord.label=tick9\nfield.index=11\nfield=slot\nleft="
-            + left + "\nright=" + right + "\n"; }
+            + left + "\nright=" + right + "\nrole=HOTBAR_SLOT\n"; }
     private Path write(String name, String value) throws Exception { Path path = build.resolve(name);
         Files.write(path, value.getBytes(StandardCharsets.UTF_8)); return path; }
     private Result result(List<String> command) throws Exception { Process process = new ProcessBuilder(command)

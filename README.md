@@ -112,6 +112,12 @@ the committed SHA-256 signature. See
 `smokes/controlled-client-tick/MAP.md` for the exact symbol map, external
 boundary inventory, headless substitutions, and pass conditions.
 
+M2 promotes those process boundaries to a stable milestone: virtual clock,
+programmable input, RNG reseed, filesystem journal/failure injection, offline
+network, tick scheduler, and timer-thread supervision. The public product
+version stays 0.7.0 / M9; the frozen evidence is the same 16-tick state
+signature. See `docs/M2_RUNTIME.md` and `docs/M2_CYCLE.md`.
+
 The gate next runs `smokes/m3-domain-api`. Two fresh JVMs exercise the stable,
 neutral Worldline API while two independent JVMs perform the equivalent
 operations directly against the official obfuscated client JAR. All four must
@@ -182,6 +188,7 @@ each harness file at or below 300, and each smoke or adapter file at or below
 
 See `ARCHITECTURE.md` for module boundaries and `AGENTS.md` for the behavioral
 and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
+`M2_CYCLE.md` is the controlled-runtime-boundary GO audit;
 `LAB_CYCLE.md` is the seven-step laboratory GO audit.
 `M3_CYCLE.md` is the v0.1.0 stable domain-API GO audit.
 `M4_CYCLE.md` is the v0.2.0 durable-snapshot GO audit.
