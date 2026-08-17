@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.9.0 - M21 Dedicated Server Control
+
+Status: GO for neutral command, save, and persisted-state control.
+
+- Added `DedicatedServerRuntime`, `ServerLifecycle`, and immutable `ServerState`
+  as the first game-neutral dedicated-server surface.
+- Added a b1.7.3 process adapter that uses native console commands and reads
+  persisted `level.dat` NBT without patching or decompiling the server.
+- Booted two fresh official servers, set time to 6000, forced saves, observed
+  the persisted time, and required clean native shutdown.
+- Kept tick stepping, client login, packets, and multiplayer determinism as
+  explicit later milestones.
+
+The frozen M21 control SHA-256 is
+`87035c21599513c04b6fe5b5622232a485a7f5c5e52778ecf11428ef671b4d4f`.
+
 ## 1.8.0 - M20 Official Server Bootstrap
 
 Status: GO for official dedicated-server identity and lifecycle control.

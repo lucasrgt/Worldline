@@ -91,6 +91,8 @@ public final class Verify {
                     "m19-forced-autosave"));
             run(Arrays.asList("java", "tools/smoke/ServerBootstrapCycle.java",
                     "m20-server-bootstrap"));
+            run(Arrays.asList("java", "tools/smoke/ServerControlCycle.java",
+                    "m21-server-control"));
             run(Arrays.asList("java", "tools/smoke/GuiCycle.java", "gui-tree"));
             run(Arrays.asList("java", "tools/smoke/LabCycle.java", "lab-cycle"));
         }

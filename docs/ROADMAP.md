@@ -25,6 +25,7 @@ Passing an experiment does not silently promote its API.
 | v1.6.0 / M18 | Save/GC/compile attribution of the historical random spike | GO - timeline colocated; spike NON-CLAIM |
 | v1.7.0 / M19 | Forced dirty-set autosave and opt-in one-chunk save cap | GO - synthetic hitch bounded; cap default-off |
 | v1.8.0 / M20 | Official b1.7.3 dedicated-server identity and lifecycle bootstrap | GO - two clean localhost boot/save/stop processes |
+| v1.9.0 / M21 | Neutral dedicated-server command, save, and persisted-state control | GO - two official controller/server pairs |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -36,11 +37,11 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.8.0 direction
+## Immediate post-v1.9.0 direction
 
-The next server milestone instruments a bounded dedicated-server tick and
-compares a neutral state trace against the official server boundary. The next
-multiplayer milestone then boots one official client against one isolated
-localhost server and controls login, tick advancement, observation, and clean
-disconnect. The save-path fat-chunk/NBT question and M17 visual divergences
-remain open independent research lines.
+The next milestone boots one official client against one isolated localhost
+server and controls login, player observation, command/save, and clean
+disconnect. A later instrumentation milestone can pause or externally step the
+server tick thread; M21 deliberately does not infer tick control from console
+commands. The save-path fat-chunk/NBT question and M17 visual divergences remain
+open independent research lines.

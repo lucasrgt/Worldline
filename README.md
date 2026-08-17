@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.8.0 - M20 Official Server Bootstrap (GO)**.
+Current official milestone: **Worldline v1.9.0 - M21 Dedicated Server Control (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -135,6 +135,12 @@ the native `Done` marker, accept `stop`, save, and exit cleanly. This is the
 foundation for server instrumentation and multiplayer tests; it does not yet
 connect a client or claim multiplayer determinism. See
 `docs/M20_SERVER_BOOTSTRAP.md`.
+
+M21 adds neutral `DedicatedServerRuntime` and immutable `ServerState` contracts.
+The b1.7.3 adapter boots the official process, sets world time through the
+native console, forces a save, reads the persisted gzip/NBT `Time` tag, and
+requires clean shutdown. Two fresh controller/server pairs qualify that path;
+see `docs/M21_SERVER_CONTROL.md`.
 
 ## Verify
 
@@ -327,6 +333,7 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M18_CYCLE.md` is the v1.6.0 save-attribution GO and historical-spike non-claim.
 `M19_CYCLE.md` is the v1.7.0 forced-autosave and opt-in save-cap GO audit.
 `M20_CYCLE.md` is the v1.8.0 official-server identity and lifecycle GO audit.
+`M21_CYCLE.md` is the v1.9.0 dedicated-server command/save/state GO audit.
 `GUI_CYCLE.md` is the inventory Game UI tree GO audit.
 `INVARIANTS_CYCLE.md` is the conservation-rule GO audit.
 `SEMANTICS_CYCLE.md` is the catalog and role-graph GO audit.

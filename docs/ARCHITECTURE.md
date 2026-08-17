@@ -200,6 +200,14 @@ native readiness, sends the native stop command, and requires clean save/exit.
 Generated properties, logs, worlds, and the server JAR remain ignored. Later
 server-tick and multiplayer adapters build above this lifecycle proof.
 
+M21 adds `DedicatedServerRuntime` and `ServerState` to the neutral API. The
+`b173-server` adapter owns process startup, native stdin/stdout commands, and
+the gzip/NBT reader for generated `level.dat`; callers never depend on
+obfuscated server classes. Its smoke starts two controller/server pairs, sets
+time, waits for save completion, observes persisted state, and closes cleanly.
+The server remains natively ticking throughout, so this is control and
+observation rather than external tick stepping.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

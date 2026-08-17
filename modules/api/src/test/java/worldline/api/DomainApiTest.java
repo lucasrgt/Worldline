@@ -10,7 +10,21 @@ public final class DomainApiTest {
         uiSpecRoundTripsBuilderAndInventory();
         itemCensusIsExactAndFailClosed();
         semanticMappingIsExactAndFailClosed();
+        serverStateIsExactAndFailClosed();
         System.out.println("DomainApiTest passed");
+    }
+
+    private static void serverStateIsExactAndFailClosed() {
+        ServerState state = new ServerState(ServerLifecycle.RUNNING, 25565, false, 6001L, 1);
+        equal(state, new ServerState(ServerLifecycle.RUNNING, 25565, false, 6001L, 1),
+                "server state");
+        if (state.lifecycle() != ServerLifecycle.RUNNING || state.port() != 25565
+                || state.onlineMode() || state.worldTime() != 6001L || state.completedSaves() != 1) {
+            throw new AssertionError("server state accessors drifted");
+        }
+        failure(() -> new ServerState(ServerLifecycle.NEW, 0, false, -1L, 0));
+        failure(() -> new ServerState(ServerLifecycle.RUNNING, 25565, false, -2L, 0));
+        failure(() -> new ServerState(ServerLifecycle.STOPPED, 25565, false, 0L, -1));
     }
 
     private static void valueEqualityIsExact() {

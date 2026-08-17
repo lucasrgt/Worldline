@@ -52,11 +52,12 @@ public final class ReleaseCheck {
         Properties m18 = load("smokes/m18-save-attribution/smoke.properties");
         Properties m19 = load("smokes/m19-forced-autosave/smoke.properties");
         Properties m20 = load("smokes/m20-server-bootstrap/smoke.properties");
+        Properties m21 = load("smokes/m21-server-control/smoke.properties");
         Properties lab = load("smokes/lab-cycle/smoke.properties");
         Properties gui = load("smokes/gui-tree/smoke.properties");
         match(release, "id", "worldline");
-        match(release, "version", "1.8.0");
-        match(release, "milestone", "m20-server-bootstrap");
+        match(release, "version", "1.9.0");
+        match(release, "milestone", "m21-server-control");
         match(release, "status", "go");
         match(release, "scope", "local-research");
         match(release, "canonical.command", "java tools/harness/Verify.java --smoke");
@@ -108,6 +109,8 @@ public final class ReleaseCheck {
         same(release, "m19.seed", m19, "seed");
         same(release, "m20.signature", m20, "expected.signature");
         same(release, "server.sha256", m20, "server.jar.sha256");
+        same(release, "m21.signature", m21, "expected.signature");
+        same(release, "server.sha256", m21, "server.jar.sha256");
         same(release, "lab.signature", lab, "expected.signature");
         same(release, "gui.signature", gui, "expected.signature");
         same(release, "invariants.signature", client, "expected.state.signature");
@@ -188,8 +191,12 @@ public final class ReleaseCheck {
                 "smokes/m20-server-bootstrap/MAP.md")) {
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         }
+        for (String file : Arrays.asList("docs/M21_SERVER_CONTROL.md", "docs/M21_CYCLE.md",
+                "smokes/m21-server-control/MAP.md")) {
+            if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
+        }
         verifyPublicTree();
-        System.out.println("  release: Worldline v1.8.0 M20 official server bootstrap GO");
+        System.out.println("  release: Worldline v1.9.0 M21 dedicated server control GO");
         System.out.println("  public artifact boundary: verified");
     }
 
