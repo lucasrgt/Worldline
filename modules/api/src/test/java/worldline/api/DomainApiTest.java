@@ -16,7 +16,29 @@ public final class DomainApiTest {
         remoteChunkSnapshotIsImmutableAndAddressable();
         remoteWorldViewIsSortedAndAddressable();
         movementOutcomeIsExactAndFailClosed();
+        movementRouteIsImmutableAndRecovers();
         System.out.println("DomainApiTest passed");
+    }
+
+    private static void movementRouteIsImmutableAndRecovers() {
+        if (!ResolvedMovementMultiplayerSession.class.isAssignableFrom(
+                RecoveringMovementMultiplayerSession.class)) throw new AssertionError("recovering session hierarchy drifted");
+        MovementStep step = new MovementStep(.125D, 0D, 0D, 5);
+        if (step.deltaX() != .125D || step.deltaY() != 0D || step.deltaZ() != 0D || step.ticks() != 5)
+            throw new AssertionError("movement step accessors drifted");
+        PlayerPose first = new PlayerPose(1D, 64D, 2D, 0F, 0F);
+        PlayerPose second = new PlayerPose(1.125D, 64D, 2D, 0F, 0F);
+        java.util.List<MovementOutcome> source = new java.util.ArrayList<>();
+        source.add(new MovementOutcome(first, first, MovementDisposition.UNCHALLENGED));
+        source.add(new MovementOutcome(second, first, MovementDisposition.CORRECTED));
+        MovementRouteResult result = new MovementRouteResult(source); source.clear();
+        if (result.outcomes().size() != 2 || result.corrections() != 1 || result.finalPose() != first)
+            throw new AssertionError("movement route result drifted");
+        failure(() -> new MovementStep(0D, 0D, 0D, 5));
+        failure(() -> new MovementStep(.125D, 0D, 0D, 0));
+        failure(() -> new MovementRouteResult(java.util.Collections.emptyList()));
+        try { result.outcomes().clear(); throw new AssertionError("mutable movement outcomes"); }
+        catch (UnsupportedOperationException expected) { }
     }
 
     private static void movementOutcomeIsExactAndFailClosed() {

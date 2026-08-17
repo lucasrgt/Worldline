@@ -300,6 +300,12 @@ and returns the attempted pose, resulting pose, and whether an actual correction
 arrived. No correction is named `UNCHALLENGED`, not accepted; only the official
 persisted-player oracle upgrades the tested small move to acceptance evidence.
 
+M36 composes bounded relative steps in a default neutral orchestrator. Each
+step calls the M35 boundary, and the next delta therefore starts from whatever
+pose the previous outcome produced, including an authoritative rollback.
+Inputs and ordered outcomes are bounded to 64 and immutable at the public edge;
+the adapter gains no route planner or collision model.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

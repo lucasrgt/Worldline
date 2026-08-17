@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.24.0 - M36 Route Recovery
+
+Status: GO for bounded relative-route continuation after correction.
+
+- Added immutable neutral `MovementStep` and `MovementRouteResult` values plus
+  a recovering session contract with a bounded 64-step ceiling.
+- Executed route steps relative to the latest resulting pose, including after
+  a server-authoritative correction.
+- Qualified the exact ordered outcomes `UNCHALLENGED`, `CORRECTED`,
+  `UNCHALLENGED` on two fresh official servers.
+- Required one correction, preserved the original cache chunk, and persisted
+  the final recovered pose after clean disconnect.
+
+The frozen M36 semantic SHA-256 is
+`895c39dd8b5e5d0f18c7eac81b76c5da77df74b98ecb434aad93adf49cfbc0c8`.
+
 ## 1.23.0 - M35 Bounded Movement Outcome
 
 Status: GO for bounded unchallenged/corrected movement classification.

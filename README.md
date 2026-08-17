@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.23.0 - M35 Bounded Movement Outcome (GO)**.
+Current official milestone: **Worldline v1.24.0 - M36 Route Recovery (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -213,6 +213,11 @@ M35 exposes bounded movement outcomes as `UNCHALLENGED` or `CORRECTED`. Two
 fresh sessions persist a small unchallenged move, then force collision rollback
 to that accepted pose without losing the remote cache. See
 `docs/M35_MOVEMENT_OUTCOME.md`.
+
+M36 composes those outcomes into an immutable three-step route. After a solid
+collision corrects the middle step, the final relative movement continues from
+the authoritative pose and persists successfully. See
+`docs/M36_ROUTE_RECOVERY.md`.
 
 ## Verify
 

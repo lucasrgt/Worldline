@@ -15,10 +15,10 @@ import worldline.api.RemoteWorldView;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.MovementOutcome;
-import worldline.api.ResolvedMovementMultiplayerSession;
+import worldline.api.RecoveringMovementMultiplayerSession;
 
 /** Minimal original protocol-14 client for headless multiplayer qualification. */
-public final class B173WireClient implements ResolvedMovementMultiplayerSession {
+public final class B173WireClient implements RecoveringMovementMultiplayerSession {
     public static final int PROTOCOL = 14;
     private final String host, username;
     private final int port, timeoutMillis;
