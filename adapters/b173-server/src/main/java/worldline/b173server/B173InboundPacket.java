@@ -50,8 +50,6 @@ final class B173InboundPacket {
             case 71: bytes(input, 1); break;
             case 100: openWindow(input); break;
             case 101: bytes(input, 1); break;
-            case 103: bytes(input, 3); item(input); break;
-            case 104: windowItems(input); break;
             case 105: bytes(input, 5); break;
             case 106: bytes(input, 4); break;
             case 130: sign(input); break;
@@ -97,11 +95,6 @@ final class B173InboundPacket {
     }
     private static void openWindow(DataInputStream input) throws IOException {
         bytes(input, 2); string(input, 32); bytes(input, 1);
-    }
-    private static void windowItems(DataInputStream input) throws IOException {
-        bytes(input, 1); int count = input.readShort();
-        if (count < 0 || count > 1024) throw new IOException("invalid window item count " + count);
-        for (int index = 0; index < count; index++) item(input);
     }
     private static void item(DataInputStream input) throws IOException {
         short id = input.readShort(); if (id >= 0) bytes(input, 3);

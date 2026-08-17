@@ -365,6 +365,12 @@ M47 computes bounded aggregate counts once while constructing the immutable
 batch result. Counts preserve the original execution graph and do not flatten,
 replay, synthesize, or replace route outcomes or events.
 
+M48 composes an independent inventory tracker into the protocol-14 inbound
+pump. Packet104 atomically replaces the bounded immutable window; Packet103
+replaces one slot only when its window and index match the current view.
+Neutral API values represent legacy item stacks and explicit empty slots. Live
+observation never reads server memory or persistence files.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.35.0 - M47 Immutable Batch Counts (GO)**.
+Current official milestone: **Worldline v1.36.0 - M48 Server Inventory Observation (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -260,6 +260,9 @@ stop, after-route stop, and exhaustion. See `docs/M46_BATCH_TERMINAL.md`.
 
 M47 exposes immutable completed-route, outcome, and correction counts without
 flattening the identity-bound result graph. See `docs/M47_BATCH_COUNTS.md`.
+
+M48 exposes immutable server-authoritative inventory windows and applies
+matching incremental slot updates. See `docs/M48_INVENTORY_OBSERVATION.md`.
 
 ## Verify
 

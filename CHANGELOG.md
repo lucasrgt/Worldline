@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.36.0 - M48 Server Inventory Observation
+
+Status: GO for bounded server-authoritative inventory observation.
+
+- Added immutable neutral item-stack, indexed-slot, and inventory-window types.
+- Decoded Packet104 full windows and applied matching Packet103 slot deltas.
+- Proved an empty 45-slot player window followed by a real stone pickup in slot 36.
+- Independently confirmed the observed stack in persisted player NBT.
+
+The frozen M48 semantic SHA-256 is
+`a501a36c74fa73d37995c8da8050f0718539e38db187539808e6fc491ba55abb`.
+
 ## 1.35.0 - M47 Immutable Batch Counts
 
 Status: GO for bounded aggregate batch counts.

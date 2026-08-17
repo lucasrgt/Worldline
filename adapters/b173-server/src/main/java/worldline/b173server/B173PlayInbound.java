@@ -8,12 +8,14 @@ import worldline.api.RemoteWorldView;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.PlayerPose;
+import worldline.api.RemoteInventoryView;
 
 /** Single bounded inbound pump that preserves Packet50/51 lifecycle state. */
 final class B173PlayInbound {
     private final DataInputStream input;
     private final DataOutputStream output;
     private final B173RemoteWorldCache cache = new B173RemoteWorldCache();
+    private final B173InventoryTracker inventory = new B173InventoryTracker();
     private final long timeoutNanos;
     private Correction correction;
 
@@ -30,6 +32,7 @@ final class B173PlayInbound {
         if (packet == 51) { cache.accept(B173ChunkCodec.read(input)); return; }
         if (packet == 52) { cache.multiBlock(input); return; }
         if (packet == 53) { cache.singleBlock(input); return; }
+        if (packet == 103 || packet == 104) { inventory.accept(packet, input); return; }
         if (packet == 255) throw disconnect();
         B173InboundPacket.skip(input, packet);
     }
@@ -103,6 +106,20 @@ final class B173PlayInbound {
     }
 
     RemoteWorldView snapshot() { return cache.snapshot(); }
+
+    RemoteInventoryView awaitInventory() throws IOException {
+        if (inventory.snapshot() != null) return inventory.snapshot();
+        for (int count = 0; count < 8192; count++) {
+            skip(input.readUnsignedByte());
+            if (inventory.snapshot() != null) return inventory.snapshot();
+        }
+        throw new IOException("inventory window absent from bounded inbound window");
+    }
+
+    RemoteInventoryView inventory() {
+        if (inventory.snapshot() == null) throw new IllegalStateException("inventory window is not observed");
+        return inventory.snapshot();
+    }
 
     void enableImplicitChunks() { cache.enableImplicitLoads(); }
 

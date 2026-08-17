@@ -52,6 +52,7 @@ Passing an experiment does not silently promote its API.
 | v1.33.0 / M45 | Batch-wide stop at a movement event boundary | GO - later alternatives and plans remain unsent |
 | v1.34.0 / M46 | Exact terminal event for every batch return | GO - EVENT, AFTER_ROUTE, and EXHAUSTED identity-bound summaries |
 | v1.35.0 / M47 | Immutable batch route/outcome/correction counts | GO - bounded aggregates without event replay or flattening |
+| v1.36.0 / M48 | Server-authoritative inventory window and slot observation | GO - immutable Packet104 snapshot plus matching Packet103 deltas |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -63,9 +64,9 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.35.0 direction
+## Immediate post-v1.36.0 direction
 
-The next milestone can move beyond movement orchestration into bounded
-server-authoritative inventory observation, beginning with held-slot and window
-item packets. Packet control still does not imply server tick control,
-world-scale pathfinding, or a complete physics simulation.
+The next milestone can add bounded held-hotbar selection and qualify the
+server-authoritative carried-item result through a second protocol peer.
+Inventory observation still does not imply arbitrary container writes, server
+tick control, world-scale pathfinding, or a complete physics simulation.

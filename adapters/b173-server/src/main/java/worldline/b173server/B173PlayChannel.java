@@ -11,6 +11,7 @@ import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.MovementDisposition;
 import worldline.api.MovementOutcome;
+import worldline.api.RemoteInventoryView;
 
 /** Original bounded codec for the protocol-14 initial play-position exchange. */
 final class B173PlayChannel {
@@ -117,6 +118,9 @@ final class B173PlayChannel {
     RemoteWorldView sustainTicks(int ticks) throws IOException, InterruptedException {
         sustain(ticks); return inbound.snapshot();
     }
+
+    RemoteInventoryView awaitInventory() throws IOException { return inbound.awaitInventory(); }
+    RemoteInventoryView inventory() { return inbound.inventory(); }
 
     MovementOutcome moveAndObserve(double dx, double dy, double dz, int ticks)
             throws IOException, InterruptedException {

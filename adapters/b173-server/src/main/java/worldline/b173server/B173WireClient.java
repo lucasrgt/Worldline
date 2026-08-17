@@ -15,10 +15,11 @@ import worldline.api.RemoteWorldView;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.MovementOutcome;
-import worldline.api.RecoveringMovementMultiplayerSession;
+import worldline.api.InventoryMultiplayerSession;
+import worldline.api.RemoteInventoryView;
 
 /** Minimal original protocol-14 client for headless multiplayer qualification. */
-public final class B173WireClient implements RecoveringMovementMultiplayerSession {
+public final class B173WireClient implements InventoryMultiplayerSession {
     public static final int PROTOCOL = 14;
     private final String host, username;
     private final int port, timeoutMillis;
@@ -61,8 +62,7 @@ public final class B173WireClient implements RecoveringMovementMultiplayerSessio
         } catch (IOException error) { closeSocket(); throw new IllegalStateException("multiplayer login failed", error); }
     }
 
-    @Override public MultiplayerState state() {
-        return new MultiplayerState(connection, username, PROTOCOL, entityId); }
+    @Override public MultiplayerState state() { return new MultiplayerState(connection, username, PROTOCOL, entityId); }
 
     @Override public PlayerPose synchronizePose() {
         require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
@@ -153,18 +153,23 @@ public final class B173WireClient implements RecoveringMovementMultiplayerSessio
             throw new IllegalStateException("movement observation interrupted", error); }
     }
 
-    @Override public void close() {
-        closeSocket();
+    @Override public RemoteInventoryView awaitInventory() { require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
+        try { return play.awaitInventory(); } catch (IOException error) {
+            throw new IllegalStateException("inventory receive failed", error); }
+    }
+
+    @Override public RemoteInventoryView inventory() {
+        require(connection == MultiplayerConnection.CONNECTED, "session is not connected"); return play.inventory(); }
+
+    @Override public void close() { closeSocket();
         if (connection != MultiplayerConnection.NEW) connection = MultiplayerConnection.DISCONNECTED; }
 
-    private void closeSocket() {
-        if (socket == null) return;
-        try { socket.close(); }
-        catch (IOException error) { throw new IllegalStateException("could not close multiplayer socket", error); }
+    private void closeSocket() { if (socket == null) return;
+        try { socket.close(); } catch (IOException error) {
+            throw new IllegalStateException("could not close multiplayer socket", error); }
         finally { socket = null; play = null; }
     }
 
     private static void require(boolean condition, String message) {
-        if (!condition) throw new IllegalStateException(message);
-    }
+        if (!condition) throw new IllegalStateException(message); }
 }
