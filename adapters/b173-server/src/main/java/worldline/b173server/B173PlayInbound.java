@@ -9,6 +9,7 @@ import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.PlayerPose;
 import worldline.api.RemoteInventoryView;
+import worldline.api.RemoteHeldItem;
 
 /** Single bounded inbound pump that preserves Packet50/51 lifecycle state. */
 final class B173PlayInbound {
@@ -16,6 +17,7 @@ final class B173PlayInbound {
     private final DataOutputStream output;
     private final B173RemoteWorldCache cache = new B173RemoteWorldCache();
     private final B173InventoryTracker inventory = new B173InventoryTracker();
+    private final B173PeerEquipmentTracker equipment = new B173PeerEquipmentTracker();
     private final long timeoutNanos;
     private Correction correction;
 
@@ -27,7 +29,9 @@ final class B173PlayInbound {
         if (packet == 0) { synchronized (output) {
             output.writeByte(10); output.writeBoolean(false); output.flush(); } return; }
         if (packet == 3) { B173InboundPacket.string(input, 119); return; }
+        if (packet == 5) { equipment.equipment(input); return; }
         if (packet == 13) { position(); return; }
+        if (packet == 20) { equipment.spawn(input); return; }
         if (packet == 50) { cache.preChunk(input); return; }
         if (packet == 51) { cache.accept(B173ChunkCodec.read(input)); return; }
         if (packet == 52) { cache.multiBlock(input); return; }
@@ -119,6 +123,15 @@ final class B173PlayInbound {
     RemoteInventoryView inventory() {
         if (inventory.snapshot() == null) throw new IllegalStateException("inventory window is not observed");
         return inventory.snapshot();
+    }
+
+    RemoteHeldItem awaitPeerHeldItem(RemoteHeldItem expected) throws IOException {
+        if (expected == null) throw new IllegalArgumentException("null expected peer held item");
+        if (equipment.matches(expected)) return expected;
+        for (int count = 0; count < 8192; count++) {
+            skip(input.readUnsignedByte()); if (equipment.matches(expected)) return expected;
+        }
+        throw new IOException("expected peer held item absent from bounded inbound window");
     }
 
     void enableImplicitChunks() { cache.enableImplicitLoads(); }

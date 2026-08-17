@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.36.0 - M48 Server Inventory Observation (GO)**.
+Current official milestone: **Worldline v1.37.0 - M49 Held Item Peer Observation (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -263,6 +263,9 @@ flattening the identity-bound result graph. See `docs/M47_BATCH_COUNTS.md`.
 
 M48 exposes immutable server-authoritative inventory windows and applies
 matching incremental slot updates. See `docs/M48_INVENTORY_OBSERVATION.md`.
+
+M49 selects a bounded held hotbar slot and proves the authoritative carried
+item through an independent named protocol peer. See `docs/M49_HELD_ITEM_PEER.md`.
 
 ## Verify
 

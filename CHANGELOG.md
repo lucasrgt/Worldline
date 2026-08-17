@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.37.0 - M49 Held Item Peer Observation
+
+Status: GO for bounded held-slot selection with independent peer evidence.
+
+- Added a neutral held-item value and held-item multiplayer session contract.
+- Sent Packet16 only for hotbar indexes 0 through 8.
+- Correlated Packet20 named spawns with Packet5 carried-item updates.
+- Proved slot-1 dirt selection through a second client on two fresh servers.
+
+The frozen M49 semantic SHA-256 is
+`df1873f6f3d7c48c3b34a400cad1a86a6579378b4b25cd5c99d90dcf63453039`.
+
 ## 1.36.0 - M48 Server Inventory Observation
 
 Status: GO for bounded server-authoritative inventory observation.

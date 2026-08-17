@@ -371,6 +371,12 @@ replaces one slot only when its window and index match the current view.
 Neutral API values represent legacy item stacks and explicit empty slots. Live
 observation never reads server memory or persistence files.
 
+M49 adds a separate peer-equipment tracker. Packet20 establishes the bounded
+entity-ID-to-username correlation, while Packet5 slot zero supplies the
+server-authoritative carried item. Packet16 selection remains a small outbound
+channel action restricted to hotbar indexes 0 through 8. No shared registry or
+server-memory access connects the two peers.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

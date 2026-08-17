@@ -12,6 +12,7 @@ import worldline.api.BlockState;
 import worldline.api.MovementDisposition;
 import worldline.api.MovementOutcome;
 import worldline.api.RemoteInventoryView;
+import worldline.api.RemoteHeldItem;
 
 /** Original bounded codec for the protocol-14 initial play-position exchange. */
 final class B173PlayChannel {
@@ -116,11 +117,14 @@ final class B173PlayChannel {
     }
 
     RemoteWorldView sustainTicks(int ticks) throws IOException, InterruptedException {
-        sustain(ticks); return inbound.snapshot();
-    }
+        sustain(ticks); return inbound.snapshot(); }
 
     RemoteInventoryView awaitInventory() throws IOException { return inbound.awaitInventory(); }
     RemoteInventoryView inventory() { return inbound.inventory(); }
+    RemoteHeldItem awaitPeerHeldItem(RemoteHeldItem expected) throws IOException { return inbound.awaitPeerHeldItem(expected); }
+
+    void selectHeldSlot(int slot) throws IOException { require(pose != null, "play channel is not synchronized");
+        if (slot < 0 || slot > 8) throw new IllegalArgumentException("invalid held hotbar slot"); output.writeByte(16); output.writeShort(slot); output.flush(); }
 
     MovementOutcome moveAndObserve(double dx, double dy, double dz, int ticks)
             throws IOException, InterruptedException {

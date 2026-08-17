@@ -35,11 +35,7 @@ public final class InventoryObservationSmoke {
             awaitPlayers(server, Collections.singletonList(username)); PlayerPose pose = client.synchronizePose();
             initial = client.awaitInventory(); require(initial.windowId() == 0 && initial.size() == 45
                     && initial.occupiedSlots() == 0, "initial player inventory drifted");
-            client.look(pose.yaw(), 90F);
-            for (int step = 0; step < 6; step++) client.moveAndObserve(0D, .25D, 0D, 3);
-            client.sendChat("/give " + username + " 1 1"); client.sustainTicks(50);
-            for (int step = 0; step < 8; step++) client.moveAndObserve(0D, -.25D, 0D, 3);
-            client.sustainTicks(50); updated = client.inventory();
+            client.look(pose.yaw(), 90F); acquire(client, username, 1, 1); updated = client.inventory();
             RemoteItemStack stone = new RemoteItemStack(1, 1, 0);
             require(updated.windowId() == 0 && updated.size() == 45 && updated.occupiedSlots() == 1
                     && !updated.slot(36).empty() && updated.slot(36).item().equals(stone),
@@ -63,6 +59,13 @@ public final class InventoryObservationSmoke {
             throws InterruptedException { long deadline = System.currentTimeMillis() + 5000L;
         while (System.currentTimeMillis() < deadline) { if (server.players().equals(expected)) return;
             Thread.sleep(100L); } throw new IllegalStateException("player list did not become " + expected); }
+    private static void acquire(InventoryMultiplayerSession client, String username, int item, int occupied) {
+        for (int step = 0; step < 10; step++) client.moveAndObserve(0D, 5D, 0D, 3);
+        client.sendChat("/give " + username + " " + item + " 1"); client.sustainTicks(40);
+        for (int step = 0; step < 15 && client.inventory().occupiedSlots() < occupied; step++)
+            client.moveAndObserve(0D, -5D, 0D, 3);
+        client.sustainTicks(10);
+    }
     private static String sha256(String value) throws Exception { byte[] bytes = MessageDigest.getInstance("SHA-256")
             .digest(value.getBytes(StandardCharsets.UTF_8)); StringBuilder result = new StringBuilder();
         for (byte item : bytes) result.append(String.format("%02x", item & 255)); return result.toString(); }

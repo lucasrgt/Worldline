@@ -15,11 +15,12 @@ import worldline.api.RemoteWorldView;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.MovementOutcome;
-import worldline.api.InventoryMultiplayerSession;
+import worldline.api.HeldItemMultiplayerSession;
 import worldline.api.RemoteInventoryView;
+import worldline.api.RemoteHeldItem;
 
 /** Minimal original protocol-14 client for headless multiplayer qualification. */
-public final class B173WireClient implements InventoryMultiplayerSession {
+public final class B173WireClient implements HeldItemMultiplayerSession {
     public static final int PROTOCOL = 14;
     private final String host, username;
     private final int port, timeoutMillis;
@@ -153,13 +154,10 @@ public final class B173WireClient implements InventoryMultiplayerSession {
             throw new IllegalStateException("movement observation interrupted", error); }
     }
 
-    @Override public RemoteInventoryView awaitInventory() { require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
-        try { return play.awaitInventory(); } catch (IOException error) {
-            throw new IllegalStateException("inventory receive failed", error); }
-    }
-
-    @Override public RemoteInventoryView inventory() {
-        require(connection == MultiplayerConnection.CONNECTED, "session is not connected"); return play.inventory(); }
+    @Override public RemoteInventoryView awaitInventory() { return B173ItemAccess.awaitInventory(channel()); }
+    @Override public RemoteInventoryView inventory() { return B173ItemAccess.inventory(channel()); }
+    @Override public void selectHeldSlot(int slot) { B173ItemAccess.selectHeldSlot(channel(), slot); }
+    @Override public RemoteHeldItem awaitPeerHeldItem(RemoteHeldItem expected) { return B173ItemAccess.awaitPeerHeldItem(channel(), expected); }
 
     @Override public void close() { closeSocket();
         if (connection != MultiplayerConnection.NEW) connection = MultiplayerConnection.DISCONNECTED; }
@@ -169,6 +167,8 @@ public final class B173WireClient implements InventoryMultiplayerSession {
             throw new IllegalStateException("could not close multiplayer socket", error); }
         finally { socket = null; play = null; }
     }
+
+    private B173PlayChannel channel() { require(connection == MultiplayerConnection.CONNECTED, "session is not connected"); return play; }
 
     private static void require(boolean condition, String message) {
         if (!condition) throw new IllegalStateException(message); }

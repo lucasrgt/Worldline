@@ -13,7 +13,6 @@ final class B173InboundPacket {
         switch (packet) {
             case 0: break;
             case 4: bytes(input, 8); break;
-            case 5: bytes(input, 10); break;
             case 6: bytes(input, 12); break;
             case 8: bytes(input, 2); break;
             case 9: bytes(input, 1); break;
@@ -23,7 +22,6 @@ final class B173InboundPacket {
             case 13: bytes(input, 41); break;
             case 17: bytes(input, 14); break;
             case 18: bytes(input, 5); break;
-            case 20: namedPlayer(input); break;
             case 21: bytes(input, 24); break;
             case 22: bytes(input, 8); break;
             case 23: bytes(input, 17); break;
@@ -72,9 +70,6 @@ final class B173InboundPacket {
         for (int index = 0; index < value.length(); index++) output.writeChar(value.charAt(index));
     }
 
-    private static void namedPlayer(DataInputStream input) throws IOException {
-        bytes(input, 4); string(input, 16); bytes(input, 16);
-    }
     private static void mob(DataInputStream input) throws IOException {
         bytes(input, 19); metadata(input);
     }
