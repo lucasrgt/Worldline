@@ -17,7 +17,43 @@ public final class DomainApiTest {
         remoteWorldViewIsSortedAndAddressable();
         movementOutcomeIsExactAndFailClosed();
         movementRouteIsImmutableAndRecovers();
+        movementRoutePolicyStopsWithoutRetry();
         System.out.println("DomainApiTest passed");
+    }
+
+    private static void movementRoutePolicyStopsWithoutRetry() {
+        java.util.List<MovementDisposition> script = new java.util.ArrayList<>(java.util.Arrays.asList(
+                MovementDisposition.UNCHALLENGED, MovementDisposition.CORRECTED,
+                MovementDisposition.UNCHALLENGED));
+        class Session implements RecoveringMovementMultiplayerSession {
+            int calls; PlayerPose pose = new PlayerPose(0D, 64D, 0D, 0F, 0F);
+            @Override public MovementOutcome moveAndObserve(double x, double y, double z, int ticks) {
+                PlayerPose attempted = new PlayerPose(pose.x() + x, pose.y() + y, pose.z() + z, 0F, 0F);
+                MovementDisposition disposition = script.get(calls++); PlayerPose result = disposition
+                        == MovementDisposition.CORRECTED ? pose : attempted; pose = result;
+                return new MovementOutcome(attempted, result, disposition);
+            }
+            @Override public RemoteWorldView sustainTicks(int ticks) { throw new UnsupportedOperationException(); }
+            @Override public void connect() { } @Override public void close() { }
+            @Override public MultiplayerState state() { return new MultiplayerState(MultiplayerConnection.CONNECTED, "Worldline", 14, 1); }
+            @Override public PlayerPose synchronizePose() { return pose; }
+            @Override public void look(float yaw, float pitch) { }
+            @Override public PlayerPose moveBy(double x, double y, double z) { throw new UnsupportedOperationException(); }
+            @Override public String awaitChat() { throw new UnsupportedOperationException(); }
+            @Override public void sendChat(String message) { throw new UnsupportedOperationException(); }
+            @Override public RemoteChunkObservation awaitChunk() { throw new UnsupportedOperationException(); }
+            @Override public RemoteChunkSnapshot awaitChunkSnapshot() { throw new UnsupportedOperationException(); }
+            @Override public RemoteWorldView awaitRemoteWorld(int minimum) { throw new UnsupportedOperationException(); }
+            @Override public RemoteWorldView awaitRemoteChunk(int x, int z) { throw new UnsupportedOperationException(); }
+            @Override public void beginBreak(BlockPosition position) { throw new UnsupportedOperationException(); }
+            @Override public void finishBreak(BlockPosition position) { throw new UnsupportedOperationException(); }
+            @Override public RemoteWorldView awaitBlock(BlockPosition p, BlockState s) { throw new UnsupportedOperationException(); }
+        }
+        Session session = new Session(); MovementStep step = new MovementStep(.125D, 0D, 0D, 1);
+        MovementRouteResult stopped = session.moveRoute(java.util.Arrays.asList(step, step, step),
+                RouteCorrectionPolicy.STOP_ON_CORRECTION);
+        if (session.calls != 2 || stopped.outcomes().size() != 2 || stopped.corrections() != 1)
+            throw new AssertionError("stop-on-correction policy retried or continued");
     }
 
     private static void movementRouteIsImmutableAndRecovers() {

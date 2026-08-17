@@ -4,6 +4,21 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.25.0 - M37 Route Correction Policy
+
+Status: GO for explicit retry-free stop-on-correction routing.
+
+- Added neutral `RouteCorrectionPolicy` values for continued and stopping
+  route execution.
+- Preserved M36's continue behavior as the default overload.
+- Stopped a three-step route immediately after its second, corrected step on
+  two fresh official servers, producing exactly two outcomes and one correction.
+- Required zero retry, cache retention, and persisted proof that the third step
+  was never applied.
+
+The frozen M37 semantic SHA-256 is
+`4a9a43b61c171fd05ab6156b07c963b7c1ebcdedc6ab7ea42d7a40db04cdf649`.
+
 ## 1.24.0 - M36 Route Recovery
 
 Status: GO for bounded relative-route continuation after correction.

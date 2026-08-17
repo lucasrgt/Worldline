@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.24.0 - M36 Route Recovery (GO)**.
+Current official milestone: **Worldline v1.25.0 - M37 Route Correction Policy (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -218,6 +218,10 @@ M36 composes those outcomes into an immutable three-step route. After a solid
 collision corrects the middle step, the final relative movement continues from
 the authoritative pose and persists successfully. See
 `docs/M36_ROUTE_RECOVERY.md`.
+
+M37 adds explicit `CONTINUE` and `STOP_ON_CORRECTION` route policies. The stop
+policy ends immediately after a corrected obstacle with no retry and leaves a
+later step absent from persisted server state. See `docs/M37_ROUTE_POLICY.md`.
 
 ## Verify
 

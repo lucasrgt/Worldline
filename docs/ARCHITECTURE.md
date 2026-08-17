@@ -306,6 +306,12 @@ pose the previous outcome produced, including an authoritative rollback.
 Inputs and ordered outcomes are bounded to 64 and immutable at the public edge;
 the adapter gains no route planner or collision model.
 
+M37 makes post-correction control flow explicit with `CONTINUE` and
+`STOP_ON_CORRECTION`. The default remains M36 continuation. Stop policy breaks
+the neutral route loop immediately after recording the correction; it neither
+retries the failed step nor sends later steps. The policy contains no hidden
+path selection and requires no adapter change.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested
