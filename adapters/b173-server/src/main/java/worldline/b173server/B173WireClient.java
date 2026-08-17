@@ -8,11 +8,12 @@ import java.net.Socket;
 import java.time.Duration;
 import worldline.api.MultiplayerConnection;
 import worldline.api.MultiplayerState;
-import worldline.api.ChatMultiplayerSession;
+import worldline.api.ChunkMultiplayerSession;
 import worldline.api.PlayerPose;
+import worldline.api.RemoteChunkObservation;
 
 /** Minimal original protocol-14 client for headless multiplayer qualification. */
-public final class B173WireClient implements ChatMultiplayerSession {
+public final class B173WireClient implements ChunkMultiplayerSession {
     public static final int PROTOCOL = 14;
     private final String host, username;
     private final int port, timeoutMillis;
@@ -93,6 +94,13 @@ public final class B173WireClient implements ChatMultiplayerSession {
         require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
         try { return play.awaitChat(); }
         catch (IOException error) { throw new IllegalStateException("chat receive failed", error); }
+    }
+
+    @Override
+    public RemoteChunkObservation awaitChunk() {
+        require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
+        try { return play.awaitChunk(); }
+        catch (IOException error) { throw new IllegalStateException("chunk receive failed", error); }
     }
 
     @Override

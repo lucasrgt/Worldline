@@ -247,6 +247,12 @@ qualified payload lengths and bounds. Two simultaneous wire sessions exercise
 native server broadcast after queued entity/chunk traffic. No packet vocabulary
 enters the neutral API, and payload skipping is not presented as world decoding.
 
+M28 adds a chunk-observation extension without changing that ownership. The
+inbound codec parses the native chunk envelope and consumes its bounded payload;
+the API receives only origin, dimensions, and byte count. Compression format,
+block layout, packet IDs, and mapped types remain adapter-side. Observation is
+explicitly separate from decompression, caching, and world construction.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

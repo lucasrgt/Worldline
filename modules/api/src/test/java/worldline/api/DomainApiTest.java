@@ -56,10 +56,17 @@ public final class DomainApiTest {
             throw new AssertionError("player rotation accessors drifted");
         equal(new PlayerPose(1.5D, 64.0D, -2.5D, 135.0F, -22.5F),
                 new PlayerPose(1.5D, 64.0D, -2.5D, 135.0F, -22.5F), "player pose");
+        RemoteChunkObservation chunk = new RemoteChunkObservation(-16, 0, 32, 16, 128, 16, 4096);
+        equal(chunk, new RemoteChunkObservation(-16, 0, 32, 16, 128, 16, 4096),
+                "remote chunk observation");
+        if (chunk.width() != 16 || chunk.height() != 128 || chunk.depth() != 16
+                || chunk.payloadBytes() != 4096) throw new AssertionError("chunk accessors drifted");
         failure(() -> new ServerPlayerState("../x", 0, 0, 0, 0, 20, 0));
         failure(() -> new ServerPlayerState("Worldline", 0, Double.NaN, 0, 0, 20, 0));
         failure(() -> new ServerPlayerState("Worldline", 0, 0, 0, 0, -1, 0));
         failure(() -> new PlayerPose(0, 0, 0, 0, 91));
+        failure(() -> new RemoteChunkObservation(0, 0, 0, 0, 128, 16, 1));
+        failure(() -> new RemoteChunkObservation(0, 0, 0, 16, 128, 16, 0));
     }
 
     private static void valueEqualityIsExact() {

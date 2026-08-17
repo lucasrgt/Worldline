@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.15.0 - M27 Multiplayer Chat (GO)**.
+Current official milestone: **Worldline v1.16.0 - M28 Remote Chunk (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -172,6 +172,11 @@ M27 runs two clients simultaneously and adds a bounded inbound packet pump.
 `WorldlineA` sends native chat through an official server and `WorldlineB`
 receives the exact broadcast after queued chunk/entity traffic. See
 `docs/M27_MULTIPLAYER_CHAT.md`.
+
+M28 turns the first inbound chunk packet into a neutral observation. Two fresh
+clients consume official `Packet51` envelopes and verify bounded full
+`16 x 128 x 16` regions without exposing compressed bytes or mapped classes.
+See `docs/M28_REMOTE_CHUNK.md`.
 
 ## Verify
 
@@ -371,6 +376,7 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M25_CYCLE.md` is the v1.13.0 persisted multiplayer movement GO audit.
 `M26_CYCLE.md` is the v1.14.0 native multiplayer render-bridge GO audit.
 `M27_CYCLE.md` is the v1.15.0 two-client native chat/pump GO audit.
+`M28_CYCLE.md` is the v1.16.0 remote chunk-envelope observation GO audit.
 `GUI_CYCLE.md` is the inventory Game UI tree GO audit.
 `INVARIANTS_CYCLE.md` is the conservation-rule GO audit.
 `SEMANTICS_CYCLE.md` is the catalog and role-graph GO audit.

@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.16.0 - M28 Remote Chunk Observation
+
+Status: GO for bounded native chunk-envelope observation.
+
+- Added immutable `RemoteChunkObservation` and a chunk-capable multiplayer
+  session extension.
+- Parsed official `Packet51MapChunk` origin/dimensions and consumed its bounded
+  compressed payload inside the b1.7.3 adapter.
+- Repeated two fresh client/server scenarios and required complete
+  `16 x 128 x 16` remote regions.
+- Kept spawn-dependent origins and compressed sizes observational.
+- Kept decompression, block/world construction, chunk caching, and server tick
+  stepping as later milestones.
+
+The frozen M28 observation SHA-256 is
+`45179dd32117513e55cbf0698ec09e51440b3e3007188c100bcdd234257f0be4`.
+
 ## 1.15.0 - M27 Two-Client Multiplayer Chat
 
 Status: GO for native peer chat through a bounded inbound packet pump.

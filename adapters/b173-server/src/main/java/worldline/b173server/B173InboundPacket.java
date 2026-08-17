@@ -2,6 +2,7 @@ package worldline.b173server;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import worldline.api.RemoteChunkObservation;
 
 /** Bounded payload skipper for qualified protocol-14 server packets. */
 final class B173InboundPacket {
@@ -38,7 +39,7 @@ final class B173InboundPacket {
             case 39: bytes(input, 8); break;
             case 40: bytes(input, 4); metadata(input); break;
             case 50: bytes(input, 9); break;
-            case 51: mapChunk(input); break;
+            case 51: chunk(input); break;
             case 52: multiBlock(input); break;
             case 53: bytes(input, 11); break;
             case 54: bytes(input, 12); break;
@@ -76,8 +77,13 @@ final class B173InboundPacket {
     private static void painting(DataInputStream input) throws IOException {
         bytes(input, 4); string(input, 13); bytes(input, 13);
     }
-    private static void mapChunk(DataInputStream input) throws IOException {
-        bytes(input, 13); boundedBytes(input, input.readInt(), 4_000_000);
+    static RemoteChunkObservation chunk(DataInputStream input) throws IOException {
+        int x = input.readInt(), y = input.readShort(), z = input.readInt();
+        int width = input.readUnsignedByte() + 1;
+        int height = input.readUnsignedByte() + 1;
+        int depth = input.readUnsignedByte() + 1;
+        int payload = input.readInt(); boundedBytes(input, payload, 4_000_000);
+        return new RemoteChunkObservation(x, y, z, width, height, depth, payload);
     }
     private static void multiBlock(DataInputStream input) throws IOException {
         bytes(input, 8); int count = input.readShort();
