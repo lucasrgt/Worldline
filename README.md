@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.21.0 - M33 Chunk Traversal Lifecycle (GO)**.
+Current official milestone: **Worldline v1.22.0 - M34 Server-authoritative Pose Correction (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -202,6 +202,12 @@ M33 rises to collision-free clearance and crosses two chunk boundaries in
 quarter-block movement steps. The official server must turn over the bounded remote cache, and native before/after chunk
 maps must clear one removed pixel and add one loaded pixel. See
 `docs/M33_CHUNK_TRAVERSAL.md`.
+
+M34 decodes the official server's Packet13 correction, acknowledges its exact
+wire order, and replaces the neutral session pose and stance. Two fresh clients
+deliberately enter a decoded solid block, return exactly to their initial
+server-authoritative poses, and retain the original cached chunk. See
+`docs/M34_POSE_CORRECTION.md`.
 
 ## Verify
 

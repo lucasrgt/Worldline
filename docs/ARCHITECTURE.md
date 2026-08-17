@@ -287,6 +287,13 @@ without a preceding Packet50. Packet50 unload still evicts immediately. Native
 topology frames prove both sides of the cache transition without placing LWJGL
 in the neutral API.
 
+M34 promotes inbound Packet13 from skipped traffic to an adapter-owned
+authoritative correction. The inbound pump decodes the server field order,
+validates the stance interval, writes the required client-order acknowledgement,
+and retains only the newest correction. `sustainTicks` then atomically replaces
+the channel pose and stance before returning its immutable cache view. No
+prediction, collision model, or mapped packet type crosses the neutral API.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

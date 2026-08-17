@@ -7,6 +7,7 @@ import worldline.api.RemoteChunkSnapshot;
 import worldline.api.RemoteWorldView;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
+import worldline.api.PlayerPose;
 
 /** Single bounded inbound pump that preserves Packet50/51 lifecycle state. */
 final class B173PlayInbound {
@@ -14,6 +15,7 @@ final class B173PlayInbound {
     private final DataOutputStream output;
     private final B173RemoteWorldCache cache = new B173RemoteWorldCache();
     private final long timeoutNanos;
+    private Correction correction;
 
     B173PlayInbound(DataInputStream input, DataOutputStream output, int timeoutMillis) {
         this.input = input; this.output = output; this.timeoutNanos = timeoutMillis * 1_000_000L;
@@ -23,6 +25,7 @@ final class B173PlayInbound {
         if (packet == 0) { synchronized (output) {
             output.writeByte(10); output.writeBoolean(false); output.flush(); } return; }
         if (packet == 3) { B173InboundPacket.string(input, 119); return; }
+        if (packet == 13) { position(); return; }
         if (packet == 50) { cache.preChunk(input); return; }
         if (packet == 51) { cache.accept(B173ChunkCodec.read(input)); return; }
         if (packet == 52) { cache.multiBlock(input); return; }
@@ -103,6 +106,21 @@ final class B173PlayInbound {
 
     void enableImplicitChunks() { cache.enableImplicitLoads(); }
 
+    Correction takeCorrection() { Correction result = correction; correction = null; return result; }
+
+    private void position() throws IOException {
+        double x = input.readDouble(), clientY = input.readDouble(), feetY = input.readDouble();
+        double z = input.readDouble(); float yaw = input.readFloat(), pitch = input.readFloat();
+        input.readBoolean();
+        if (clientY <= feetY || clientY - feetY >= 2D) throw new IOException("server correction stance drift");
+        synchronized (output) {
+            output.writeByte(13); output.writeDouble(x); output.writeDouble(feetY);
+            output.writeDouble(clientY); output.writeDouble(z); output.writeFloat(yaw);
+            output.writeFloat(pitch); output.writeBoolean(false); output.flush();
+        }
+        correction = new Correction(new PlayerPose(x, feetY, z, yaw, pitch), clientY - feetY);
+    }
+
     private Thread pulse() {
         Thread thread = new Thread(() -> { try { while (!Thread.currentThread().isInterrupted()) {
             synchronized (output) { output.writeByte(10); output.writeBoolean(false); output.flush(); }
@@ -117,4 +135,7 @@ final class B173PlayInbound {
     private IOException disconnect() throws IOException {
         return new IOException("server disconnected: " + B173InboundPacket.string(input, 256));
     }
+
+    static final class Correction { final PlayerPose pose; final double stance;
+        Correction(PlayerPose pose, double stance) { this.pose = pose; this.stance = stance; } }
 }

@@ -119,9 +119,14 @@ final class B173PlayChannel {
             if (tick % 20 == 0) acknowledge(pose.x(), pose.y(), pose.y() + stanceHeight,
                     pose.z(), pose.yaw(), pose.pitch());
             else { output.writeByte(10); output.writeBoolean(false); output.flush(); }
-            Thread.sleep(50L); inbound.pumpAvailable();
+            Thread.sleep(50L); inbound.pumpAvailable(); applyCorrection();
         }
         return inbound.snapshot();
+    }
+
+    private void applyCorrection() {
+        B173PlayInbound.Correction value = inbound.takeCorrection();
+        if (value != null) { pose = value.pose; stanceHeight = value.stance; }
     }
 
     private void acknowledge(double x, double feetY, double clientY, double z,

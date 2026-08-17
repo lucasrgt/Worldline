@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.22.0 - M34 Server-authoritative Pose Correction
+
+Status: GO for correction decode, acknowledgement, and neutral pose convergence.
+
+- Decoded server Packet13 with its server-side stance/feet field order and
+  rejected invalid stance intervals.
+- Acknowledged each correction in the exact client Packet13 field order before
+  exposing it to the sustained neutral session.
+- Deliberately moved into a solid block selected from the decoded cache on two
+  fresh official servers and required exact convergence to the initial pose.
+- Preserved the original cached chunk across correction; outbound invalid
+  movement alone never counted as success.
+
+The frozen M34 semantic SHA-256 is
+`b62641c2a99876737d070566eb1330ab14a569e7e2f7a7ea66293e1e768a302f`.
+
 ## 1.21.0 - M33 Chunk Traversal Lifecycle
 
 Status: GO for deliberate cross-chunk movement and rendered cache turnover.
