@@ -324,6 +324,12 @@ the event retains the exact outcome object later returned in the route result.
 Observers run on the caller thread; no game callback, executor, queue, or
 adapter behavior is introduced.
 
+M40 adds a separate synchronous controller boundary so the non-controlling M39
+observer remains source compatible. After each immutable event, the controller
+returns an explicit `CONTINUE` or `STOP`; `STOP` is applied before any fallback
+or later alternative. The controller cannot retract a resolved outcome, invent
+a movement, or schedule asynchronous work, and requires no adapter change.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

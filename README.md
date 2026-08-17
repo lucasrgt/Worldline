@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.27.0 - M39 Synchronous Route Observation (GO)**.
+Current official milestone: **Worldline v1.28.0 - M40 Observer-Directed Route Control (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -230,6 +230,11 @@ automatic retry or path discovery. See `docs/M38_EXPLICIT_FALLBACK.md`.
 M39 emits synchronous indexed observations immediately after each resolved
 primary or fallback attempt. Events remain on the caller thread and retain the
 same outcome objects returned by the route. See `docs/M39_ROUTE_OBSERVATION.md`.
+
+M40 lets a caller-thread controller return `CONTINUE` or `STOP` immediately
+after an immutable route event. A stop prevents every later caller-supplied
+attempt without adding retries or asynchronous control. See
+`docs/M40_OBSERVER_CONTROL.md`.
 
 ## Verify
 

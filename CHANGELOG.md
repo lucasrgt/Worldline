@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.28.0 - M40 Observer-Directed Route Control
+
+Status: GO for synchronous event-directed route cancellation.
+
+- Added `MovementRouteController` and explicit `CONTINUE`/`STOP` directives
+  without changing the M39 observation API.
+- Applied each decision immediately after its immutable indexed event and
+  before any fallback or later alternative could be sent.
+- Proved a corrected primary, accepted fallback, synchronous stop, and absent
+  later alternative across two fresh official servers.
+- Preserved event/outcome identity, remote cache coherence, and final player
+  persistence without an executor, queue, or adapter change.
+
+The frozen M40 semantic SHA-256 is
+`6a3285b118eccd8b3f1e95ba51e7f6de46933c168b9f56f2623b11d8d266da7b`.
+
 ## 1.27.0 - M39 Synchronous Route Observation
 
 Status: GO for caller-thread indexed route outcome observation.
