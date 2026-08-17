@@ -8,11 +8,11 @@ import java.net.Socket;
 import java.time.Duration;
 import worldline.api.MultiplayerConnection;
 import worldline.api.MultiplayerState;
-import worldline.api.PlayableMultiplayerSession;
+import worldline.api.ChatMultiplayerSession;
 import worldline.api.PlayerPose;
 
 /** Minimal original protocol-14 client for headless multiplayer qualification. */
-public final class B173WireClient implements PlayableMultiplayerSession {
+public final class B173WireClient implements ChatMultiplayerSession {
     public static final int PROTOCOL = 14;
     private final String host, username;
     private final int port, timeoutMillis;
@@ -79,6 +79,20 @@ public final class B173WireClient implements PlayableMultiplayerSession {
         require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
         try { return play.moveBy(deltaX, deltaY, deltaZ); }
         catch (IOException error) { throw new IllegalStateException("play movement failed", error); }
+    }
+
+    @Override
+    public void sendChat(String message) {
+        require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
+        try { play.sendChat(message); }
+        catch (IOException error) { throw new IllegalStateException("chat send failed", error); }
+    }
+
+    @Override
+    public String awaitChat() {
+        require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
+        try { return play.awaitChat(); }
+        catch (IOException error) { throw new IllegalStateException("chat receive failed", error); }
     }
 
     @Override

@@ -241,6 +241,12 @@ and `Tessellator`. Connected protocol state selects the frame, but neither API
 nor server adapter depends on graphics. M10's mapped/official renderer equality
 is reused rather than duplicated as a new full-client claim.
 
+M27 adds a chat-specific neutral extension and a separate inbound packet codec.
+The play channel owns semantic chat send/receive while the codec owns only
+qualified payload lengths and bounds. Two simultaneous wire sessions exercise
+native server broadcast after queued entity/chunk traffic. No packet vocabulary
+enters the neutral API, and payload skipping is not presented as world decoding.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

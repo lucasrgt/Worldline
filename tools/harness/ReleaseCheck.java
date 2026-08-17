@@ -58,11 +58,12 @@ public final class ReleaseCheck {
         Properties m24 = load("smokes/m24-play-pose/smoke.properties");
         Properties m25 = load("smokes/m25-player-movement/smoke.properties");
         Properties m26 = load("smokes/m26-native-multiplayer/smoke.properties");
+        Properties m27 = load("smokes/m27-multiplayer-chat/smoke.properties");
         Properties lab = load("smokes/lab-cycle/smoke.properties");
         Properties gui = load("smokes/gui-tree/smoke.properties");
         match(release, "id", "worldline");
-        match(release, "version", "1.14.0");
-        match(release, "milestone", "m26-native-multiplayer");
+        match(release, "version", "1.15.0");
+        match(release, "milestone", "m27-multiplayer-chat");
         match(release, "status", "go");
         match(release, "scope", "local-research");
         match(release, "canonical.command", "java tools/harness/Verify.java --smoke");
@@ -127,6 +128,8 @@ public final class ReleaseCheck {
         same(release, "m26.signature", m26, "expected.signature");
         same(release, "server.sha256", m26, "server.jar.sha256");
         same(release, "client.sha256", m26, "client.jar.sha256");
+        same(release, "m27.signature", m27, "expected.signature");
+        same(release, "server.sha256", m27, "server.jar.sha256");
         same(release, "lab.signature", lab, "expected.signature");
         same(release, "gui.signature", gui, "expected.signature");
         same(release, "invariants.signature", client, "expected.state.signature");
@@ -231,8 +234,12 @@ public final class ReleaseCheck {
                 "smokes/m26-native-multiplayer/MAP.md")) {
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         }
+        for (String file : Arrays.asList("docs/M27_MULTIPLAYER_CHAT.md", "docs/M27_CYCLE.md",
+                "smokes/m27-multiplayer-chat/MAP.md")) {
+            if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
+        }
         verifyPublicTree();
-        System.out.println("  release: Worldline v1.14.0 M26 native multiplayer GO");
+        System.out.println("  release: Worldline v1.15.0 M27 multiplayer chat GO");
         System.out.println("  public artifact boundary: verified");
     }
 

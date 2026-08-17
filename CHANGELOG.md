@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.15.0 - M27 Two-Client Multiplayer Chat
+
+Status: GO for native peer chat through a bounded inbound packet pump.
+
+- Added `ChatMultiplayerSession` for bounded chat send and receive.
+- Added a fail-closed protocol-14 inbound codec for qualified login/play packet
+  lengths, including chunk, entity, metadata, inventory, and block traffic.
+- Connected two clients simultaneously to each official server and required
+  exact two-player presence.
+- Sent `worldline-m27` from `WorldlineA` and received the exact native broadcast
+  on `WorldlineB` in two fresh scenarios.
+- Kept chunk/world decoding, asynchronous pumping, remote-player rendering, and
+  server tick stepping as later milestones.
+
+The frozen M27 chat SHA-256 is
+`7d264e3b365a4ab223d45cd95eb17aa90683ef123af51775defc120d7635aa12`.
+
 ## 1.14.0 - M26 Native Multiplayer Render Bridge
 
 Status: GO for native offscreen rendering composed with a real multiplayer session.

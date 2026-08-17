@@ -18,8 +18,11 @@ final class B173PlayChannel {
 
     PlayerPose synchronize() throws IOException {
         require(pose == null, "play channel was already synchronized");
+        StringBuilder packets = new StringBuilder();
         for (int count = 0; count < 128; count++) {
             int packet = input.readUnsignedByte();
+            if (packets.length() > 0) packets.append(',');
+            packets.append(packet);
             if (packet == 13) {
                 double x = input.readDouble();
                 double clientY = input.readDouble();
@@ -34,7 +37,9 @@ final class B173PlayChannel {
                 acknowledge(x, feetY, clientY, z, yaw, pitch);
                 return pose;
             }
-            skipPrelude(packet);
+            try { skipPrelude(packet); }
+            catch (IOException error) { throw new IOException(
+                    "play prelude failed after packets " + packets, error); }
         }
         throw new IOException("initial play position packet absent");
     }
@@ -60,6 +65,25 @@ final class B173PlayChannel {
         pose = target; return target;
     }
 
+    void sendChat(String message) throws IOException {
+        require(pose != null, "play channel is not synchronized");
+        if (message == null || message.trim().isEmpty() || message.length() > 100)
+            throw new IllegalArgumentException("invalid chat message");
+        output.writeByte(3); writeString(message); output.flush();
+    }
+
+    String awaitChat() throws IOException {
+        require(pose != null, "play channel is not synchronized");
+        for (int count = 0; count < 2048; count++) {
+            int packet = input.readUnsignedByte();
+            if (packet == 3) return B173InboundPacket.string(input, 119);
+            if (packet == 255) throw new IOException(
+                    "server disconnected: " + B173InboundPacket.string(input, 256));
+            B173InboundPacket.skip(input, packet);
+        }
+        throw new IOException("chat packet absent from bounded inbound window");
+    }
+
     private void acknowledge(double x, double feetY, double clientY, double z,
             float yaw, float pitch) throws IOException {
         output.writeByte(13);
@@ -69,41 +93,15 @@ final class B173PlayChannel {
     }
 
     private void skipPrelude(int packet) throws IOException {
-        switch (packet) {
-            case 0: break;
-            case 3: readString(256); break;
-            case 4: skip(8); break;
-            case 6: skip(12); break;
-            case 50: skip(9); break;
-            case 51: skipMapChunk(); break;
-            case 70: skip(1); break;
-            case 255: throw new IOException("server disconnected: " + readString(256));
-            default: throw new IOException("unexpected play prelude packet " + packet);
-        }
+        if (packet == 3) B173InboundPacket.string(input, 119);
+        else if (packet == 255) throw new IOException(
+                "server disconnected: " + B173InboundPacket.string(input, 256));
+        else B173InboundPacket.skip(input, packet);
     }
 
-    private void skipMapChunk() throws IOException {
-        skip(13);
-        int compressedBytes = input.readInt();
-        if (compressedBytes < 0 || compressedBytes > 4_000_000)
-            throw new IOException("invalid map chunk length " + compressedBytes);
-        skip(compressedBytes);
-    }
-
-    private String readString(int maximum) throws IOException {
-        int length = input.readShort();
-        if (length < 0 || length > maximum) throw new IOException("invalid string length " + length);
-        StringBuilder value = new StringBuilder(length);
-        for (int index = 0; index < length; index++) value.append(input.readChar());
-        return value.toString();
-    }
-
-    private void skip(int bytes) throws IOException {
-        for (int remaining = bytes; remaining > 0; ) {
-            int count = input.skipBytes(remaining);
-            if (count <= 0) throw new IOException("truncated play prelude");
-            remaining -= count;
-        }
+    private void writeString(String value) throws IOException {
+        output.writeShort(value.length());
+        for (int index = 0; index < value.length(); index++) output.writeChar(value.charAt(index));
     }
 
     private static void require(boolean condition, String message) {

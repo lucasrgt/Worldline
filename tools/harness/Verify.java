@@ -103,6 +103,8 @@ public final class Verify {
                     "m25-player-movement"));
             run(Arrays.asList("java", "tools/smoke/NativeMultiplayerCycle.java",
                     "m26-native-multiplayer"));
+            run(Arrays.asList("java", "tools/smoke/MultiplayerChatCycle.java",
+                    "m27-multiplayer-chat"));
             run(Arrays.asList("java", "tools/smoke/GuiCycle.java", "gui-tree"));
             run(Arrays.asList("java", "tools/smoke/LabCycle.java", "lab-cycle"));
         }
