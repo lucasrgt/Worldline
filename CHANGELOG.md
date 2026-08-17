@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.23.0 - M35 Bounded Movement Outcome
+
+Status: GO for bounded unchallenged/corrected movement classification.
+
+- Added immutable neutral `MovementOutcome` and `MovementDisposition` values
+  plus a resolved sustained-session contract.
+- Classified a move as corrected only after an inbound Packet13 was consumed;
+  absence during the bounded window remains explicitly `UNCHALLENGED`.
+- Persisted a collision-safe `+0.125 X` move in player NBT on two fresh official
+  servers, qualifying the live unchallenged evidence as accepted.
+- Forced a solid-block collision afterward and required rollback to that last
+  accepted pose while retaining the original decoded chunk.
+
+The frozen M35 semantic SHA-256 is
+`414c83fa237a0affd1c36ab171e04f07ab110487fc2ebd75698f54e55d92417a`.
+
 ## 1.22.0 - M34 Server-authoritative Pose Correction
 
 Status: GO for correction decode, acknowledgement, and neutral pose convergence.

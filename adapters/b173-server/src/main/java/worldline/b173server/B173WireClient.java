@@ -11,13 +11,14 @@ import worldline.api.MultiplayerState;
 import worldline.api.PlayerPose;
 import worldline.api.RemoteChunkObservation;
 import worldline.api.RemoteChunkSnapshot;
-import worldline.api.SustainedRemoteWorldMultiplayerSession;
 import worldline.api.RemoteWorldView;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
+import worldline.api.MovementOutcome;
+import worldline.api.ResolvedMovementMultiplayerSession;
 
 /** Minimal original protocol-14 client for headless multiplayer qualification. */
-public final class B173WireClient implements SustainedRemoteWorldMultiplayerSession {
+public final class B173WireClient implements ResolvedMovementMultiplayerSession {
     public static final int PROTOCOL = 14;
     private final String host, username;
     private final int port, timeoutMillis;
@@ -44,16 +45,16 @@ public final class B173WireClient implements SustainedRemoteWorldMultiplayerSess
             socket.setSoTimeout(timeoutMillis);
             DataInputStream input = new DataInputStream(socket.getInputStream());
             DataOutputStream output = new DataOutputStream(socket.getOutputStream());
-            output.writeByte(2); writeString(output, username); output.flush();
+            output.writeByte(2); B173InboundPacket.string(output, username); output.flush();
             require(input.readUnsignedByte() == 2, "handshake response packet drift");
-            require(readString(input, 32).equals("-"), "server did not use offline handshake");
-            output.writeByte(1); output.writeInt(PROTOCOL); writeString(output, username);
+            require(B173InboundPacket.string(input, 32).equals("-"), "server did not use offline handshake");
+            output.writeByte(1); output.writeInt(PROTOCOL); B173InboundPacket.string(output, username);
             output.writeLong(0L); output.writeByte(0); output.flush();
             int packet = input.readUnsignedByte();
-            if (packet == 255) throw new IllegalStateException("login rejected: " + readString(input, 256));
+            if (packet == 255) throw new IllegalStateException("login rejected: " + B173InboundPacket.string(input, 256));
             require(packet == 1, "login response packet drift: " + packet);
             entityId = input.readInt();
-            readString(input, 16); input.readLong(); input.readByte();
+            B173InboundPacket.string(input, 16); input.readLong(); input.readByte();
             require(entityId >= 0, "server returned invalid entity id");
             play = new B173PlayChannel(input, output, timeoutMillis);
             connection = MultiplayerConnection.CONNECTED;
@@ -144,6 +145,14 @@ public final class B173WireClient implements SustainedRemoteWorldMultiplayerSess
             throw new IllegalStateException("play heartbeat interrupted", error); }
     }
 
+    @Override public MovementOutcome moveAndObserve(double dx, double dy, double dz, int ticks) {
+        require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
+        try { return play.moveAndObserve(dx, dy, dz, ticks); }
+        catch (IOException error) { throw new IllegalStateException("movement observation failed", error); }
+        catch (InterruptedException error) { Thread.currentThread().interrupt();
+            throw new IllegalStateException("movement observation interrupted", error); }
+    }
+
     @Override public void close() {
         closeSocket();
         if (connection != MultiplayerConnection.NEW) connection = MultiplayerConnection.DISCONNECTED; }
@@ -153,19 +162,6 @@ public final class B173WireClient implements SustainedRemoteWorldMultiplayerSess
         try { socket.close(); }
         catch (IOException error) { throw new IllegalStateException("could not close multiplayer socket", error); }
         finally { socket = null; play = null; }
-    }
-
-    private static void writeString(DataOutputStream output, String value) throws IOException {
-        output.writeShort(value.length());
-        for (int index = 0; index < value.length(); index++) output.writeChar(value.charAt(index));
-    }
-
-    private static String readString(DataInputStream input, int maximum) throws IOException {
-        int length = input.readShort();
-        if (length < 0 || length > maximum) throw new IOException("invalid string length " + length);
-        StringBuilder result = new StringBuilder(length);
-        for (int index = 0; index < length; index++) result.append(input.readChar());
-        return result.toString();
     }
 
     private static void require(boolean condition, String message) {

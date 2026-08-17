@@ -294,6 +294,12 @@ and retains only the newest correction. `sustainTicks` then atomically replaces
 the channel pose and stance before returning its immutable cache view. No
 prediction, collision model, or mapped packet type crosses the neutral API.
 
+M35 adds a neutral classification over that pump boundary. `moveAndObserve`
+sends one movement intent, sustains a caller-bounded number of protocol ticks,
+and returns the attempted pose, resulting pose, and whether an actual correction
+arrived. No correction is named `UNCHALLENGED`, not accepted; only the official
+persisted-player oracle upgrades the tested small move to acceptance evidence.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

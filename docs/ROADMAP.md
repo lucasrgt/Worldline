@@ -39,6 +39,7 @@ Passing an experiment does not silently promote its API.
 | v1.20.0 / M32 | Sustained protocol-14 cache composed with mapped native terrain geometry | GO - byte oracle plus two live frame deltas |
 | v1.21.0 / M33 | Deliberate chunk-boundary traversal and rendered cache lifecycle | GO - strict/implicit oracle plus two official turnovers |
 | v1.22.0 / M34 | Server-authoritative position correction and cache coherence | GO - byte oracle plus two official correction round trips |
+| v1.23.0 / M35 | Bounded accepted-versus-corrected movement outcome | GO - persisted small moves plus collision rollbacks |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -50,9 +51,9 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.22.0 direction
+## Immediate post-v1.23.0 direction
 
-The next milestone uses the corrected pose as the basis for bounded
-collision-sensitive movement, distinguishing accepted motion from rollback
-without losing cache coherence. Packet control still does not imply server tick
-control or a complete physics simulation.
+The next milestone composes bounded movement outcomes into a short route that
+can recover from a corrected step and continue from the authoritative pose.
+Packet control still does not imply server tick control, pathfinding, or a
+complete physics simulation.

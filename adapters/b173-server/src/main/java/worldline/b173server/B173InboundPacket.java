@@ -1,6 +1,7 @@
 package worldline.b173server;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import worldline.api.RemoteChunkObservation;
 
@@ -66,6 +67,11 @@ final class B173InboundPacket {
         StringBuilder value = new StringBuilder(length);
         for (int index = 0; index < length; index++) value.append(input.readChar());
         return value.toString();
+    }
+
+    static void string(DataOutputStream output, String value) throws IOException {
+        output.writeShort(value.length());
+        for (int index = 0; index < value.length(); index++) output.writeChar(value.charAt(index));
     }
 
     private static void namedPlayer(DataInputStream input) throws IOException {

@@ -15,7 +15,25 @@ public final class DomainApiTest {
         serverPlayerStateIsExactAndFailClosed();
         remoteChunkSnapshotIsImmutableAndAddressable();
         remoteWorldViewIsSortedAndAddressable();
+        movementOutcomeIsExactAndFailClosed();
         System.out.println("DomainApiTest passed");
+    }
+
+    private static void movementOutcomeIsExactAndFailClosed() {
+        if (!SustainedRemoteWorldMultiplayerSession.class.isAssignableFrom(
+                ResolvedMovementMultiplayerSession.class)) throw new AssertionError("resolved session hierarchy drifted");
+        PlayerPose attempted = new PlayerPose(1.125D, 64D, 2D, 0F, 0F);
+        PlayerPose original = new PlayerPose(1D, 64D, 2D, 0F, 0F);
+        MovementOutcome accepted = new MovementOutcome(
+                attempted, attempted, MovementDisposition.UNCHALLENGED);
+        MovementOutcome corrected = new MovementOutcome(
+                attempted, original, MovementDisposition.CORRECTED);
+        equal(accepted, new MovementOutcome(attempted, attempted,
+                MovementDisposition.UNCHALLENGED), "unchallenged movement outcome");
+        if (accepted.corrected() || !corrected.corrected()
+                || corrected.resulting() != original || corrected.attempted() != attempted)
+            throw new AssertionError("movement outcome accessors drifted");
+        failure(() -> new MovementOutcome(attempted, original, MovementDisposition.UNCHALLENGED));
     }
 
     private static void serverStateIsExactAndFailClosed() {

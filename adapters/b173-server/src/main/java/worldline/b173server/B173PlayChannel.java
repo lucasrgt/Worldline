@@ -9,6 +9,8 @@ import worldline.api.RemoteChunkSnapshot;
 import worldline.api.RemoteWorldView;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
+import worldline.api.MovementDisposition;
+import worldline.api.MovementOutcome;
 
 /** Original bounded codec for the protocol-14 initial play-position exchange. */
 final class B173PlayChannel {
@@ -77,7 +79,7 @@ final class B173PlayChannel {
         require(pose != null, "play channel is not synchronized");
         if (message == null || message.trim().isEmpty() || message.length() > 100)
             throw new IllegalArgumentException("invalid chat message");
-        output.writeByte(3); writeString(message); output.flush();
+        output.writeByte(3); B173InboundPacket.string(output, message); output.flush();
     }
 
     String awaitChat() throws IOException {
@@ -113,20 +115,33 @@ final class B173PlayChannel {
     }
 
     RemoteWorldView sustainTicks(int ticks) throws IOException, InterruptedException {
+        sustain(ticks); return inbound.snapshot();
+    }
+
+    MovementOutcome moveAndObserve(double dx, double dy, double dz, int ticks)
+            throws IOException, InterruptedException {
+        PlayerPose attempted = moveBy(dx, dy, dz); boolean corrected = sustain(ticks);
+        return new MovementOutcome(attempted, pose, corrected
+                ? MovementDisposition.CORRECTED : MovementDisposition.UNCHALLENGED);
+    }
+
+    private boolean sustain(int ticks) throws IOException, InterruptedException {
         require(pose != null, "play channel is not synchronized");
         if (ticks < 1 || ticks > 1200) throw new IllegalArgumentException("invalid heartbeat tick count");
+        boolean corrected = false;
         for (int tick = 1; tick <= ticks; tick++) {
             if (tick % 20 == 0) acknowledge(pose.x(), pose.y(), pose.y() + stanceHeight,
                     pose.z(), pose.yaw(), pose.pitch());
             else { output.writeByte(10); output.writeBoolean(false); output.flush(); }
-            Thread.sleep(50L); inbound.pumpAvailable(); applyCorrection();
+            Thread.sleep(50L); inbound.pumpAvailable(); corrected |= applyCorrection();
         }
-        return inbound.snapshot();
+        return corrected;
     }
 
-    private void applyCorrection() {
+    private boolean applyCorrection() {
         B173PlayInbound.Correction value = inbound.takeCorrection();
-        if (value != null) { pose = value.pose; stanceHeight = value.stance; }
+        if (value == null) return false;
+        pose = value.pose; stanceHeight = value.stance; return true;
     }
 
     private void acknowledge(double x, double feetY, double clientY, double z,
@@ -143,11 +158,6 @@ final class B173PlayChannel {
             throw new IllegalArgumentException("invalid dig position");
         output.writeByte(14); output.writeByte(status); output.writeInt(position.x());
         output.writeByte(position.y()); output.writeInt(position.z()); output.writeByte(1); output.flush();
-    }
-
-    private void writeString(String value) throws IOException {
-        output.writeShort(value.length());
-        for (int index = 0; index < value.length(); index++) output.writeChar(value.charAt(index));
     }
 
     private static void require(boolean condition, String message) {

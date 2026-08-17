@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.22.0 - M34 Server-authoritative Pose Correction (GO)**.
+Current official milestone: **Worldline v1.23.0 - M35 Bounded Movement Outcome (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -208,6 +208,11 @@ wire order, and replaces the neutral session pose and stance. Two fresh clients
 deliberately enter a decoded solid block, return exactly to their initial
 server-authoritative poses, and retain the original cached chunk. See
 `docs/M34_POSE_CORRECTION.md`.
+
+M35 exposes bounded movement outcomes as `UNCHALLENGED` or `CORRECTED`. Two
+fresh sessions persist a small unchallenged move, then force collision rollback
+to that accepted pose without losing the remote cache. See
+`docs/M35_MOVEMENT_OUTCOME.md`.
 
 ## Verify
 
