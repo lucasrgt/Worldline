@@ -100,7 +100,10 @@ gradle.projectsEvaluated {
             (project.findProperty('worldlinePath') ?: 'stationary').toString(),
         '-Dworldline.capture.viewDistance=' +
             (project.findProperty('worldlineViewDistance') ?: '-1').toString(),
-        '-Daero.benchmark.skipNonForcedSaves=true',
+        '-Dworldline.capture.saveTick=' +
+            (project.findProperty('worldlineSaveTick') ?: '-1').toString(),
+        '-Daero.benchmark.skipNonForcedSaves=' +
+            (project.findProperty('worldlineSkipSaves') ?: 'true').toString(),
         '-Daero.spikelog=true',
         '-Daero.spikelog.ms=' + spikeMs,
         '-Daero.spikelog.heartbeatMs=500',

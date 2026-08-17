@@ -4,6 +4,24 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.6.0 - M18 Save Attribution
+
+Status: GO for paired save-path attribution; the historical random spike
+remains a non-claim.
+
+- Parameterized the Aero capture skip-saves flag so M12-M17 keep cancelling
+  non-forced saves while M18 can turn them back on.
+- Injected one non-forced world save at a known tick from the Worldline
+  capture mixin, without editing the pinned Aero checkout.
+- Proved the skipped dense twin cancels that save and the live twin records
+  `worldSaveMs` on the same line as compile, GC, heap, and allocation
+  counters.
+- Left the adaptive scheduler lab-only NO-GO and kept M16's framebuffer
+  threshold unchanged.
+
+The frozen M18 invariant-report SHA-256 is
+`855ae55bc5944ae98d3fb6b66fe6840fc7561d425ce620b9ba45a55720f6c7bd`.
+
 ## 1.5.0 - M17 Scheduler Hardening
 
 Status: GO for the three-scenario qualification matrix; NO-GO for scheduler

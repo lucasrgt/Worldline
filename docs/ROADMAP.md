@@ -22,6 +22,7 @@ Passing an experiment does not silently promote its API.
 | v1.3.0 / M15 | Explicit accepted/deferred contract, visible readiness, and geometry oracle | GO - contract qualified; fixed batch experimental |
 | v1.4.0 / M16 | Visible-first adaptive chunk envelope and fixed-state framebuffer oracle | GO - scheduler qualified; post-overlay visual divergence |
 | v1.5.0 / M17 | Three-scenario scheduler hardening and upstream evaluation profile | GO - matrix complete; promotion NO-GO |
+| v1.6.0 / M18 | Save/GC/compile attribution of the historical random spike | GO - timeline colocated; spike NON-CLAIM |
 
 ## Promotion rule
 
@@ -30,11 +31,11 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.5.0 direction
+## Immediate post-v1.6.0 direction
 
-M18 should split or preempt oversized chunk rebuild work, then attribute the
-three M17 framebuffer divergences without weakening M16's strict threshold. It
-should rerun the same stationary/moving matrix before reconsidering the
-default-off Aero evaluation profile. Semantic mappings may advance in parallel;
-the historical random spike remains a non-claim beyond the isolated initial-
-backlog path.
+M19 should reproduce the post-load autosave suspect with a forced dirty-chunk
+set, then test a default-off cap below vanilla's 24-chunk non-forced save batch.
+The same timeline must distinguish save, compile, and GC without treating one
+synthetic hitch as the user's historical spike. The three M17 framebuffer
+divergences and non-preemptive chunk rebuilds remain open; semantic mappings
+may continue independently.

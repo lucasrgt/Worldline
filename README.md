@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.5.0 - M17 Scheduler Matrix (GO; promotion NO-GO)**.
+Current official milestone: **Worldline v1.6.0 - M18 Save Attribution (GO; historical spike NON-CLAIM)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -112,6 +112,11 @@ preserves one completion per frame and drains background work, but moving
 readiness/timing remain observational; non-preemptive budget overshoot and three strict
 framebuffer divergences block promotion. Its evaluation profile is packaged
 default-off and marked lab-only NO-GO; see `docs/M17_SCHEDULER_HARDENING.md`.
+
+M18 turns the capture skip-saves flag back on for one restored dense twin and
+injects a non-forced world save at a known tick. The skipped twin cancels it;
+the live twin places that save on the same compile/GC/heap timeline. The
+historical random spike remains a non-claim; see `docs/M18_SAVE_ATTRIBUTION.md`.
 
 ## Verify
 
@@ -235,6 +240,9 @@ drains the global queue, and bounds differences across every RGBA pixel.
 `smokes/m17-scheduler-hardening` extends that proof across three stationary and
 moving scenarios, records governor backlog, adaptive overshoot and global
 drainage, and fails promotion on the observed strict framebuffer divergences.
+`smokes/m18-save-attribution` restores one dense save into skip and live
+processes, injects one non-forced save, and freezes the colocated timeline
+without claiming the historical spike is gone.
 
 The gate then runs `smokes/lab-cycle`, restores deterministic checkpoints in
 fresh clients, compares hypotheses, exercises GUI selectors, and compiles and
@@ -263,6 +271,7 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M15_CYCLE.md` is the v1.3.0 explicit-contract/readiness GO audit.
 `M16_CYCLE.md` is the v1.4.0 adaptive-scheduler/framebuffer GO audit.
 `M17_CYCLE.md` is the v1.5.0 matrix GO and scheduler-promotion NO-GO audit.
+`M18_CYCLE.md` is the v1.6.0 save-attribution GO and historical-spike non-claim.
 
 After preparing the local runtime with the canonical smoke gate, replay a
 bundle with:

@@ -83,6 +83,8 @@ public final class Verify {
             run(Arrays.asList("java", "tools/smoke/AeroAdaptiveChunkCycle.java", "m16-adaptive-chunks"));
             run(Arrays.asList("java", "tools/smoke/AeroSchedulerHardeningCycle.java",
                     "m17-scheduler-hardening"));
+            run(Arrays.asList("java", "tools/smoke/AeroSaveAttributionCycle.java",
+                    "m18-save-attribution"));
             run(Arrays.asList("java", "tools/smoke/LabCycle.java", "lab-cycle"));
         }
         System.out.println("verify passed");

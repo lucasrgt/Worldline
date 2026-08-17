@@ -258,6 +258,12 @@ readiness, and hashes the complete RGBA framebuffer. The runner restores one
 canonical save snapshot for both modes so world generation is outside the
 differential boundary. None of this enters the API, kernel, or Aero checkout.
 
+M18 keeps that Aero-checkout rule and only parameterizes the existing test-mod
+save skip. A smoke-owned tick injects one non-forced world save so skip and
+live twins can place `worldSaveMs` on the same Aero line as compile, GC, heap,
+and allocation counters. The historical random spike stays a non-claim; no
+scheduler or visual-threshold change enters product modules.
+
 ## Compatibility boundary
 
 Product modules currently compile with `--release 8`; tooling runs on JDK 21.

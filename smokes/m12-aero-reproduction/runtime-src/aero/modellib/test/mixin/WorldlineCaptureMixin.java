@@ -43,6 +43,8 @@ public abstract class WorldlineCaptureMixin {
         Integer.getInteger("worldline.capture.viewDistance", -1);
     @Unique private static final boolean WORLDLINE_STABILIZE_SCENE =
         Boolean.getBoolean("worldline.frameOracle.stabilizeScene");
+    @Unique private static final int WORLDLINE_SAVE_TICK =
+        Integer.getInteger("worldline.capture.saveTick", -1);
     @Unique private int worldlinePhase;
     @Unique private int worldlineTicks;
     @Unique private int worldlineY;
@@ -88,6 +90,8 @@ public abstract class WorldlineCaptureMixin {
                     + " view=" + WORLDLINE_VIEW_DISTANCE);
         }
         worldlineTicks++;
+        if (WORLDLINE_SAVE_TICK > 0 && worldlineTicks == WORLDLINE_SAVE_TICK)
+            world.saveWithLoadingDisplay(false, null);
         if (worldlineTicks >= WORLDLINE_TICKS) {
             System.out.println("[WorldlineCapture] complete ticks=" + worldlineTicks);
             worldlinePhase = 3;
