@@ -17,13 +17,13 @@ final class B173PlayChannel {
     private final DataInputStream input;
     private final DataOutputStream output;
     private final B173PlayInbound inbound;
-    private final B173HeldItemChannel held;
+    private final B173HeldItemChannel held; private final B173PersonalWindowChannel personal;
     private PlayerPose pose; private double stanceHeight;
 
     B173PlayChannel(DataInputStream input, DataOutputStream output, int timeoutMillis,
             int localEntityId, String localUsername) throws IOException {
         this.input = input; this.output = output;
-        this.inbound = new B173PlayInbound(input, output, timeoutMillis, localEntityId, localUsername); this.held = new B173HeldItemChannel(output, inbound);
+        this.inbound = new B173PlayInbound(input, output, timeoutMillis, localEntityId, localUsername); this.held = new B173HeldItemChannel(output, inbound); this.personal = new B173PersonalWindowChannel(output, inbound);
     }
     B173PlayChannel(DataInputStream input, DataOutputStream output, int timeoutMillis) throws IOException {
         this(input, output, timeoutMillis, 0, "Worldline"); }
@@ -126,7 +126,7 @@ final class B173PlayChannel {
         held.select(slot); }
     void dropHeldItem() throws IOException { require(pose != null, "play channel is not synchronized"); held.drop(); }
     void placeHeldBlock(worldline.api.BlockPosition support, worldline.api.BlockFace face) throws IOException { require(pose != null, "play channel is not synchronized"); held.place(support, face); }
-    worldline.api.RemoteContainerWindow openChest(BlockPosition position, worldline.api.BlockFace face) throws IOException { require(pose != null, "play channel is not synchronized"); held.use(position, face); inbound.beginChest(); return inbound.awaitChest(); }
+    worldline.api.RemoteContainerWindow openChest(BlockPosition position, worldline.api.BlockFace face) throws IOException { require(pose != null, "play channel is not synchronized"); held.use(position, face); inbound.beginChest(); return inbound.awaitChest(); } worldline.api.RemotePersonalTransaction clickPersonalSlot(int slot) throws IOException { require(pose != null, "play channel is not synchronized"); return personal.click(slot); }
 
     MovementOutcome moveAndObserve(double dx, double dy, double dz, int ticks)
             throws IOException, InterruptedException {

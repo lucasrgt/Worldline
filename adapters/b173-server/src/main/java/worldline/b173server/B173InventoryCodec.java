@@ -1,6 +1,7 @@
 package worldline.b173server;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +23,18 @@ final class B173InventoryCodec {
         return new RemoteInventoryView(windowId, slots);
     }
 
-    static RemoteInventoryView slot(RemoteInventoryView current, DataInputStream input) throws IOException {
-        int windowId = input.readByte(), index = input.readShort(); RemoteItemStack item = item(input);
-        if (current == null || windowId != current.windowId() || index < 0 || index >= current.size())
-            return current;
-        List<RemoteInventorySlot> slots = new ArrayList<>(current.slots());
-        slots.set(index, new RemoteInventorySlot(index, item));
-        return new RemoteInventoryView(windowId, slots);
+    static B173InventoryUpdate update(DataInputStream input) throws IOException {
+        return new B173InventoryUpdate(input.readByte(), input.readShort(), item(input));
+    }
+
+    static void item(DataOutputStream output, RemoteItemStack item) throws IOException {
+        if (item == null) { output.writeShort(-1); return; }
+        output.writeShort(item.legacyId()); output.writeByte(item.count()); output.writeShort(item.damage());
     }
 
     private static RemoteItemStack item(DataInputStream input) throws IOException {
-        int id = input.readShort(); if (id < 0) return null;
+        int id = input.readShort(); if (id == -1) return null;
+        if (id < -1) throw new IOException("invalid remote empty-item sentinel");
         int count = input.readUnsignedByte(), damage = input.readShort();
         try { return new RemoteItemStack(id, count, damage); }
         catch (IllegalArgumentException error) { throw new IOException("invalid remote item stack", error); }

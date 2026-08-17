@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.42.0 - M54 Chest Window (GO)**.
+Current official milestone: **Worldline v1.43.0 - M55 Accepted Personal Transaction (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -286,6 +286,11 @@ peer, and persisted inventory. See `docs/M53_HELD_BLOCK_PLACEMENT.md`.
 M54 activates a placed single chest with an empty selected hand, decodes the
 Packet100 modified-UTF descriptor, and pairs it with the exact 63-slot Packet104
 combined view. See `docs/M54_CHEST_WINDOW.md`.
+
+M55 stages exact personal-window left-click predictions and commits them only
+after correlated Packet106 accepted acknowledgements. An independent peer
+proves the server-side held-stack transitions. See
+`docs/M55_ACCEPTED_PERSONAL_TRANSACTION.md`.
 
 ## Verify
 

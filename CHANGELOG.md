@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.43.0 - M55 Accepted Personal Transaction
+
+Status: GO for accepted personal-window left-click transactions.
+
+- Added immutable accepted personal-transaction values and a bounded session API.
+- Encoded exact Packet102 action 1/2 predictions for take and place transitions.
+- Committed staged slot/cursor state only after matching Packet106 true ACKs.
+- Proved server state through peer Packet5 stone/empty/stone and one saved entry.
+
+The frozen M55 semantic SHA-256 is
+`c9abcffdd4d7663f0ce225d94bb59f73b07c632512e751f8c403f22ed0e2320e`.
+
 ## 1.42.0 - M54 Chest Window
 
 Status: GO for a single-chest descriptor and immutable combined-window read.

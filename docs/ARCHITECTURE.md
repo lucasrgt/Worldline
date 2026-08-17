@@ -410,6 +410,13 @@ UTF, then correlates only the matching Packet104 window ID and exact 63-slot
 shape. The immutable API pairs that descriptor with the combined view; window
 close and transaction state remain outside this boundary.
 
+M55 separates personal-window prediction into `B173PersonalWindowChannel` and
+acknowledgement correlation into `B173PersonalTransactionTracker`. The inbound
+inventory tracker retains the signed Packet103 cursor sentinel and preserves
+window 0 independently of container Packet104 views. A staged immutable
+left-click transition becomes visible only after the exact Packet106 true ACK
+and does not require a Packet103 correction.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested
