@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.40.0 - M52 Named Item Collection
+
+Status: GO for exact named collection with terminal removal evidence.
+
+- Added an immutable completed item-collection value and bounded session wait.
+- Correlated Packet21 item IDs through Packet22 collector and Packet29 removal.
+- Unified local login and remote Packet20 identities in a bounded item coordinator.
+- Proved Packet103/Packet5 inventory restoration and one clean saved entry.
+
+The frozen M52 semantic SHA-256 is
+`905fe8b02bdc2f81e2280d4658b81440e4d975e6d52ff83a4fd573d0ad8f77af`.
+
 ## 1.39.0 - M51 Dropped Item Spawn
 
 Status: GO for immutable dropped-item observation from an independent peer.

@@ -11,8 +11,6 @@ import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.MovementDisposition;
 import worldline.api.MovementOutcome;
-import worldline.api.RemoteInventoryView;
-import worldline.api.RemoteHeldItem;
 
 /** Original bounded codec for the protocol-14 initial play-position exchange. */
 final class B173PlayChannel {
@@ -22,10 +20,13 @@ final class B173PlayChannel {
     private PlayerPose pose;
     private double stanceHeight;
 
-    B173PlayChannel(DataInputStream input, DataOutputStream output, int timeoutMillis) {
+    B173PlayChannel(DataInputStream input, DataOutputStream output, int timeoutMillis,
+            int localEntityId, String localUsername) throws IOException {
         this.input = input; this.output = output;
-        this.inbound = new B173PlayInbound(input, output, timeoutMillis);
+        this.inbound = new B173PlayInbound(input, output, timeoutMillis, localEntityId, localUsername);
     }
+    B173PlayChannel(DataInputStream input, DataOutputStream output, int timeoutMillis) throws IOException {
+        this(input, output, timeoutMillis, 0, "Worldline"); }
 
     PlayerPose synchronize() throws IOException {
         require(pose == null, "play channel was already synchronized");
@@ -119,10 +120,7 @@ final class B173PlayChannel {
     RemoteWorldView sustainTicks(int ticks) throws IOException, InterruptedException {
         sustain(ticks); return inbound.snapshot(); }
 
-    RemoteInventoryView awaitInventory() throws IOException { return inbound.awaitInventory(); }
-    RemoteInventoryView inventory() { return inbound.inventory(); }
-    RemoteHeldItem awaitPeerHeldItem(RemoteHeldItem expected) throws IOException { return inbound.awaitPeerHeldItem(expected); }
-    worldline.api.RemoteDroppedItem awaitDroppedItem(worldline.api.RemoteItemStack expected) throws IOException { return inbound.awaitDroppedItem(expected); }
+    B173PlayInbound inbound() { require(pose != null, "play channel is not synchronized"); return inbound; }
 
     void selectHeldSlot(int slot) throws IOException { require(pose != null, "play channel is not synchronized");
         if (slot < 0 || slot > 8) throw new IllegalArgumentException("invalid held hotbar slot"); output.writeByte(16); output.writeShort(slot); output.flush(); }

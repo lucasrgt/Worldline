@@ -8,19 +8,21 @@ import worldline.api.RemoteHeldItem;
 
 /** Correlates named-player spawns with authoritative carried-item equipment updates. */
 final class B173PeerEquipmentTracker {
-    private final Map<Integer, String> names = new HashMap<>();
+    private final B173EntityIdentityTracker identities;
     private final Map<String, RemoteHeldItem> held = new HashMap<>();
+
+    B173PeerEquipmentTracker(B173EntityIdentityTracker identities) { this.identities = identities; }
 
     void spawn(DataInputStream input) throws IOException {
         int entityId = input.readInt(); String username = B173InboundPacket.string(input, 16);
         input.readInt(); input.readInt(); input.readInt(); input.readByte(); input.readByte();
-        int itemId = input.readShort(); names.put(entityId, username);
+        int itemId = input.readShort(); identities.bind(entityId, username);
         held.put(username, spawnItem(username, itemId));
     }
 
     void equipment(DataInputStream input) throws IOException {
         int entityId = input.readInt(), slot = input.readShort();
-        int itemId = input.readShort(), damage = input.readShort(); String username = names.get(entityId);
+        int itemId = input.readShort(), damage = input.readShort(); String username = identities.username(entityId);
         if (username != null && slot == 0) held.put(username, equipmentItem(username, itemId, damage));
     }
 

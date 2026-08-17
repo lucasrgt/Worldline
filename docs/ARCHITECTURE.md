@@ -389,6 +389,14 @@ legacy stack, fixed-point coordinates, and signed-byte velocity. The tracker
 retains only the latest spawn needed by the bounded wait; it is not a shared
 entity registry, trajectory simulator, or server-memory view.
 
+M52 extracts item traffic into `B173ItemInbound`, keeping the general inbound
+pump below its per-file limit while composing inventory, peer equipment,
+identity, and dropped-item trackers. Login identity seeds the local entity;
+Packet20 binds remote names. A bounded item map correlates one exact Packet21
+entity with Packet22 collector identity and later Packet29 removal. Destruction
+without collection remains a valid terminal lifecycle but cannot satisfy the
+collection contract.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

@@ -10,34 +10,32 @@ import worldline.api.BlockState;
 import worldline.api.PlayerPose;
 import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteHeldItem;
+import worldline.api.RemoteItemCollection;
 
 /** Single bounded inbound pump that preserves Packet50/51 lifecycle state. */
 final class B173PlayInbound {
     private final DataInputStream input;
     private final DataOutputStream output;
     private final B173RemoteWorldCache cache = new B173RemoteWorldCache();
-    private final B173InventoryTracker inventory = new B173InventoryTracker();
-    private final B173PeerEquipmentTracker equipment = new B173PeerEquipmentTracker();
-    private final B173DroppedItemTracker dropped = new B173DroppedItemTracker();
+    private final B173ItemInbound items;
     private final long timeoutNanos;
     private Correction correction;
 
-    B173PlayInbound(DataInputStream input, DataOutputStream output, int timeoutMillis) { this.input = input;
-        this.output = output; this.timeoutNanos = timeoutMillis * 1_000_000L; }
+    B173PlayInbound(DataInputStream input, DataOutputStream output, int timeoutMillis,
+            int localEntityId, String localUsername) throws IOException { this.input = input;
+        this.output = output; this.timeoutNanos = timeoutMillis * 1_000_000L;
+        this.items = new B173ItemInbound(localEntityId, localUsername); }
 
     void skip(int packet) throws IOException {
         if (packet == 0) { synchronized (output) {
             output.writeByte(10); output.writeBoolean(false); output.flush(); } return; }
+        if (items.accept(packet, input)) return;
         if (packet == 3) { B173InboundPacket.string(input, 119); return; }
-        if (packet == 5) { equipment.equipment(input); return; }
         if (packet == 13) { position(); return; }
-        if (packet == 20) { equipment.spawn(input); return; }
-        if (packet == 21) { dropped.spawn(input); return; }
         if (packet == 50) { cache.preChunk(input); return; }
         if (packet == 51) { cache.accept(B173ChunkCodec.read(input)); return; }
         if (packet == 52) { cache.multiBlock(input); return; }
         if (packet == 53) { cache.singleBlock(input); return; }
-        if (packet == 103 || packet == 104) { inventory.accept(packet, input); return; }
         if (packet == 255) throw disconnect();
         B173InboundPacket.skip(input, packet);
     }
@@ -112,30 +110,14 @@ final class B173PlayInbound {
 
     RemoteWorldView snapshot() { return cache.snapshot(); }
 
-    RemoteInventoryView awaitInventory() throws IOException {
-        if (inventory.snapshot() != null) return inventory.snapshot();
-        for (int count = 0; count < 8192; count++) {
-            skip(input.readUnsignedByte());
-            if (inventory.snapshot() != null) return inventory.snapshot();
-        }
-        throw new IOException("inventory window absent from bounded inbound window");
-    }
-
-    RemoteInventoryView inventory() { if (inventory.snapshot() == null)
-        throw new IllegalStateException("inventory window is not observed"); return inventory.snapshot(); }
-
-    RemoteHeldItem awaitPeerHeldItem(RemoteHeldItem expected) throws IOException { if (expected == null) throw new IllegalArgumentException("null expected peer held item");
-        if (equipment.matches(expected)) return expected;
-        for (int count = 0; count < 8192; count++) { skip(input.readUnsignedByte());
-            if (equipment.matches(expected)) return expected; }
-        throw new IOException("expected peer held item absent from bounded inbound window");
-    }
-
-    worldline.api.RemoteDroppedItem awaitDroppedItem(worldline.api.RemoteItemStack expected) throws IOException { worldline.api.RemoteDroppedItem ready = dropped.matching(expected); if (ready != null) return ready;
-        for (int count = 0; count < 8192; count++) { skip(input.readUnsignedByte());
-            ready = dropped.matching(expected); if (ready != null) return ready; }
-        throw new IOException("expected dropped-item spawn absent from bounded inbound window");
-    }
+    RemoteInventoryView awaitInventory() throws IOException { return items.awaitInventory(this::pumpOne); }
+    RemoteInventoryView inventory() { return items.inventory(); }
+    RemoteHeldItem awaitPeerHeldItem(RemoteHeldItem expected) throws IOException {
+        return items.awaitPeerHeldItem(expected, this::pumpOne); }
+    worldline.api.RemoteDroppedItem awaitDroppedItem(worldline.api.RemoteItemStack expected) throws IOException {
+        return items.awaitDroppedItem(expected, this::pumpOne); }
+    RemoteItemCollection awaitItemCollection(worldline.api.RemoteDroppedItem expected, String username)
+            throws IOException { return items.awaitCollection(expected, username, this::pumpOne); }
 
     void enableImplicitChunks() { cache.enableImplicitLoads(); }
 
@@ -164,6 +146,8 @@ final class B173PlayInbound {
     }
 
     B173RemoteWorldCache cache() { return cache; }
+
+    private void pumpOne() throws IOException { skip(input.readUnsignedByte()); }
 
     private IOException disconnect() throws IOException { return new IOException(
             "server disconnected: " + B173InboundPacket.string(input, 256)); }

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.39.0 - M51 Dropped Item Spawn (GO)**.
+Current official milestone: **Worldline v1.40.0 - M52 Named Item Collection (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -274,6 +274,10 @@ inventory. See `docs/M50_DROP_HELD_ITEM.md`.
 M51 decodes the resulting Packet21 item entity into an immutable stack,
 fixed-point position, and bounded launch velocity observed by an independent
 client. See `docs/M51_DROPPED_ITEM_SPAWN.md`.
+
+M52 follows that exact entity through Packet22 collection by a validated named
+player and Packet29 terminal removal, then proves the restored live and saved
+inventory. See `docs/M52_ITEM_COLLECTION.md`.
 
 ## Verify
 

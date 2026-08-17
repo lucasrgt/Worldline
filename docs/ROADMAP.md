@@ -56,6 +56,7 @@ Passing an experiment does not silently promote its API.
 | v1.37.0 / M49 | Held hotbar selection with independent peer observation | GO - Packet16 selection proven through named Packet5 equipment update |
 | v1.38.0 / M50 | Drop-current-item with local, peer, and persistence evidence | GO - Packet14 status 4 proven through Packet103 and Packet5 empty transitions |
 | v1.39.0 / M51 | Immutable dropped-item spawn observation | GO - exact Packet21 stack with bounded position and velocity evidence |
+| v1.40.0 / M52 | Named dropped-item collection lifecycle | GO - Packet21 entity correlated through Packet22 collector and Packet29 removal |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -67,10 +68,9 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.39.0 direction
+## Immediate post-v1.40.0 direction
 
-The next milestone can correlate the M51 entity ID with Packet22 collection,
-the collector's validated Packet20 identity, Packet29 terminal removal, and the
-actor's restored inventory. Spawn evidence still does not imply arbitrary
-container writes, server tick control, world-scale pathfinding, or a complete
-physics simulation.
+The next milestone can place the selected held block through Packet15 and prove
+the resulting Packet53 world-cache update, inventory consumption, and empty
+peer hand. Item lifecycle evidence still does not imply arbitrary container
+writes, server tick control, world-scale pathfinding, or complete physics.
