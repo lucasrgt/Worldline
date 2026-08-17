@@ -50,6 +50,12 @@ final class B173ItemAccess {
         catch (IOException error) { throw new IllegalStateException("remote window close failed", error); }
     }
 
+    static worldline.api.RemoteChestTransfer storeInOpenChest(B173PlayChannel channel,
+            int personalSlot, int chestSlot) {
+        try { return channel.storeInOpenChest(personalSlot, chestSlot); }
+        catch (IOException error) { throw new IllegalStateException("chest transfer failed", error); }
+    }
+
     static RemotePersonalTransaction clickPersonalSlot(B173PlayChannel channel, int slot) {
         try { return channel.clickPersonalSlot(slot); }
         catch (IOException error) { throw new IllegalStateException("personal transaction failed", error); }

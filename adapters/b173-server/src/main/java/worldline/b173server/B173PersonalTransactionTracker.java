@@ -22,9 +22,10 @@ final class B173PersonalTransactionTracker {
         pending = new B173PersonalStep(action, slot, predicted, before, after, cursorBefore, cursorAfter);
     }
 
-    void acknowledge(DataInputStream input, DataOutputStream output,
+    boolean pending() { return pending != null; }
+
+    void acknowledge(int windowId, int action, boolean allowed, DataOutputStream output,
             B173InventoryTracker inventory) throws IOException {
-        int windowId = input.readByte(), action = input.readShort(); boolean allowed = input.readBoolean();
         if (pending == null || recovering || windowId != 0 || action != pending.action)
             throw new IOException("personal transaction acknowledgement drift");
         if (!allowed) { synchronized (output) { output.writeByte(106); output.writeByte(0);

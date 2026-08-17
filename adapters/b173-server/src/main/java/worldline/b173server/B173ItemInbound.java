@@ -21,6 +21,7 @@ final class B173ItemInbound {
     private final B173DroppedItemTracker dropped = new B173DroppedItemTracker();
     private final B173WindowTracker windows = new B173WindowTracker();
     private final B173PersonalTransactionTracker transactions = new B173PersonalTransactionTracker();
+    private final B173ContainerTransactionTracker containerTransactions = new B173ContainerTransactionTracker();
     private final DataOutputStream output;
 
     B173ItemInbound(int localEntityId, String localUsername, DataOutputStream output) throws IOException {
@@ -40,8 +41,19 @@ final class B173ItemInbound {
         else if (packet == 104) { RemoteInventoryView view = B173InventoryCodec.window(input);
             if (view.windowId() == 0 && transactions.recovering()) transactions.resyncWindow(view);
             else if (view.windowId() == 0) inventory.window(view);
-            else windows.contents(view); }
-        else if (packet == 106) transactions.acknowledge(input, output, inventory);
+            else { RemoteInventoryView personal = inventory.snapshot();
+                if (personal == null || view.size() != 63) throw new IOException("container tail base absent");
+                for (int slot = 9; slot <= 44; slot++) {
+                    worldline.api.RemoteInventorySlot own = personal.slot(slot), combined = view.slot(slot + 18);
+                    if (own.empty() != combined.empty() || !own.empty() && !own.item().equals(combined.item()))
+                        throw new IOException("container tail differs from personal inventory"); }
+                windows.contents(view); } }
+        else if (packet == 106) { int windowId = input.readByte(), action = input.readShort();
+            boolean allowed = input.readBoolean();
+            if (transactions.pending()) transactions.acknowledge(windowId, action, allowed, output, inventory);
+            else if (containerTransactions.pending()) containerTransactions.acknowledge(
+                    windowId, action, allowed, inventory, windows);
+            else throw new IOException("unexpected transaction acknowledgement"); }
         else return false;
         return true;
     }
@@ -61,6 +73,7 @@ final class B173ItemInbound {
     void beginPersonalTransaction(int action, int slot, RemoteItemStack predicted,
             RemoteInventoryView before, RemoteInventoryView after,
             RemoteItemStack cursorBefore, RemoteItemStack cursorAfter) {
+        if (containerTransactions.pending()) throw new IllegalStateException("container transaction pending");
         transactions.begin(action, slot, predicted, before, after, cursorBefore, cursorAfter); }
 
     RemotePersonalTransaction awaitPersonalTransaction(Pump pump) throws IOException {
@@ -79,6 +92,15 @@ final class B173ItemInbound {
         throw new IOException("accepted personal crafting step absent from bounded inbound window");
     }
 
+    void beginContainerTransaction(B173ContainerStep step) {
+        if (transactions.pending()) throw new IllegalStateException("personal transaction pending");
+        containerTransactions.begin(step); }
+    B173ContainerStep awaitContainerTransaction(Pump pump) throws IOException {
+        for (int count = 0; count < 8192; count++) { pump.one();
+            B173ContainerStep result = containerTransactions.take(); if (result != null) return result; }
+        throw new IOException("accepted container transaction absent from bounded inbound window");
+    }
+
     RemoteContainerWindow awaitChest(Pump pump) throws IOException {
         if (windows.snapshot() != null) return windows.snapshot();
         for (int count = 0; count < 8192; count++) { pump.one();
@@ -89,6 +111,7 @@ final class B173ItemInbound {
     void beginChest() { windows.begin(); }
     int activeWindowId() { return windows.activeId(); }
     RemoteContainerWindow activeWindow() { return windows.activeWindow(); }
+    long activeWindowEpoch() { return windows.activeEpoch(); }
     boolean windowActive() { return windows.active(); }
     void closeWindow(int windowId) throws IOException { windows.close(windowId); }
 

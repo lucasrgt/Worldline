@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.47.0 - M59 Chest Transfer and Restart
+
+Status: GO for accepted player-to-chest transfer and restart persistence.
+
+- Added immutable two-action chest-transfer evidence.
+- Reconciled the combined 63-slot view, canonical window 0, and cursor atomically.
+- Reset action IDs by window-open epoch rather than reusable numeric ID.
+- Reopened a fresh official server process and observed the persisted chest slot.
+
+The frozen M59 semantic SHA-256 is
+`4f1bfe9bca33138e8c833162aba2e62e1b120488dac8af034d47b60d10c73c9a`.
+
 ## 1.46.0 - M58 Remote Window Lifecycle
 
 Status: GO for explicit remote-window close and confirmed personal restoration.

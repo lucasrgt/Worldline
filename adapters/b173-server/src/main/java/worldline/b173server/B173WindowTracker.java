@@ -12,6 +12,7 @@ final class B173WindowTracker {
     private RemoteWindowDescriptor pending;
     private RemoteContainerWindow ready;
     private boolean expected;
+    private long epoch;
 
     void begin() {
         if (expected || pending != null || ready != null)
@@ -32,7 +33,7 @@ final class B173WindowTracker {
         if (pending == null || ready != null) return;
         if (inventory.windowId() == 0) return;
         if (inventory.windowId() != pending.windowId()) throw new IOException("remote chest window ID drift");
-        try { ready = new RemoteContainerWindow(pending, inventory); pending = null; expected = false; }
+        try { ready = new RemoteContainerWindow(pending, inventory); pending = null; expected = false; epoch++; }
         catch (IllegalArgumentException error) { throw new IOException("invalid remote chest contents", error); }
     }
 
@@ -45,6 +46,7 @@ final class B173WindowTracker {
 
     RemoteContainerWindow activeWindow() {
         if (ready == null) throw new IllegalStateException("remote window is not open"); return ready; }
+    long activeEpoch() { if (ready == null) throw new IllegalStateException("remote window is not open"); return epoch; }
 
     boolean active() { return ready != null || pending != null || expected; }
 
@@ -53,4 +55,16 @@ final class B173WindowTracker {
             throw new IOException("remote window close identity drift");
         ready = null; pending = null; expected = false;
     }
+
+    void commit(RemoteInventoryView before, RemoteInventoryView after) throws IOException {
+        if (ready == null || !ready.inventory().equals(before)
+                || before.windowId() != after.windowId())
+            throw new IOException("remote window transaction base drift");
+        try { ready = new RemoteContainerWindow(ready.descriptor(), after); }
+        catch (IllegalArgumentException error) { throw new IOException("invalid remote window commit", error); }
+    }
+
+    boolean matches(RemoteInventoryView expected) {
+        return ready != null && ready.inventory().equals(expected); }
+    void adopt(RemoteInventoryView after) { ready = new RemoteContainerWindow(ready.descriptor(), after); }
 }

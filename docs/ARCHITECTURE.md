@@ -433,6 +433,12 @@ window active locally, then issues an empty-slot no-op through the shared
 personal transaction counter. Only Packet106 true on window 0 closes the local
 lifecycle and publishes immutable `RemoteWindowClosure` evidence.
 
+M59 adds a separate per-container action counter keyed by window-open epoch.
+Before any active-window mutation, the 36-slot combined tail is reconciled by
+item content with canonical personal slots 9-44. Each Packet106 true atomically
+adopts the predicted 63-slot view, window-0 view, and cursor; partial commits are
+not published. A clean server restart and fresh Packet104 are the persistence oracle.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

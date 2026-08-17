@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.46.0 - M58 Remote Window Lifecycle (GO)**.
+Current official milestone: **Worldline v1.47.0 - M59 Chest Transfer and Restart (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -304,6 +304,11 @@ See `docs/M57_PERSONAL_CRAFTING.md`.
 M58 closes the active remote chest with Packet101, then requires an accepted
 no-op Packet102 on personal window 0 before publishing immutable closure
 evidence. See `docs/M58_WINDOW_LIFECYCLE.md`.
+
+M59 transfers an occupied personal slot into an empty single-chest slot through
+two accepted container actions, reconciles both inventory views and the cursor,
+then proves chest persistence by reopening after a clean server restart. See
+`docs/M59_CHEST_TRANSFER.md`.
 
 ## Verify
 

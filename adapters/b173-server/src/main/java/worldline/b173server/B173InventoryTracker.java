@@ -44,6 +44,11 @@ final class B173InventoryTracker {
         view = after; cursor = nextCursor;
     }
 
+    boolean matches(RemoteInventoryView expectedView, RemoteItemStack expectedCursor) {
+        return cursorObserved && expectedView.equals(view) && Objects.equals(cursor, expectedCursor); }
+    void adopt(RemoteInventoryView nextView, RemoteItemStack nextCursor) {
+        view = nextView; cursor = nextCursor; cursorObserved = true; }
+
     void recover(RemoteInventoryView authoritative, RemoteItemStack authoritativeCursor) {
         view = authoritative; cursor = authoritativeCursor; cursorObserved = true;
     }

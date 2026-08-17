@@ -114,7 +114,7 @@ final class B173PlayInbound {
     RemoteInventoryView inventory() { return items.inventory(); }
     worldline.api.RemoteContainerWindow awaitChest() throws IOException {
         return items.awaitChest(this::pumpOne); }
-    void beginChest() { items.beginChest(); } int activeWindowId() { return items.activeWindowId(); } worldline.api.RemoteContainerWindow activeWindow() { return items.activeWindow(); } boolean windowActive() { return items.windowActive(); } void closeWindow(int id) throws IOException { items.closeWindow(id); }
+    void beginChest() { items.beginChest(); } int activeWindowId() { return items.activeWindowId(); } worldline.api.RemoteContainerWindow activeWindow() { return items.activeWindow(); } long activeWindowEpoch() { return items.activeWindowEpoch(); } boolean windowActive() { return items.windowActive(); } void closeWindow(int id) throws IOException { items.closeWindow(id); }
     boolean cursorObserved() { return items.cursorObserved(); }
     worldline.api.RemoteItemStack cursor() { return items.cursor(); }
     void beginPersonalTransaction(int action, int slot, worldline.api.RemoteItemStack predicted,
@@ -123,6 +123,7 @@ final class B173PlayInbound {
         items.beginPersonalTransaction(action, slot, predicted, before, after, cursorBefore, cursorAfter); }
     worldline.api.RemotePersonalTransaction awaitPersonalTransaction() throws IOException {
         return items.awaitPersonalTransaction(this::pumpOne); } B173PersonalStep awaitPersonalStep() throws IOException { return items.awaitPersonalStep(this::pumpOne); }
+    void beginContainerTransaction(B173ContainerStep step) { items.beginContainerTransaction(step); } B173ContainerStep awaitContainerTransaction() throws IOException { return items.awaitContainerTransaction(this::pumpOne); }
     RemoteHeldItem awaitPeerHeldItem(RemoteHeldItem expected) throws IOException {
         return items.awaitPeerHeldItem(expected, this::pumpOne); }
     worldline.api.RemoteDroppedItem awaitDroppedItem(worldline.api.RemoteItemStack expected) throws IOException {
