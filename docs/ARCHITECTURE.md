@@ -273,6 +273,13 @@ after an official inbound update reaches the shared pump. This keeps server
 authority explicit and leaves mining prediction, drops, entities, and rendering
 outside the neutral cache.
 
+M32 adds a bounded synchronous play heartbeat: Packet10 carries unchanged
+flying state on ordinary ticks, while every twentieth tick resends Packet13
+pose state. Between ticks the same inbound pump accumulates lifecycle-qualified
+chunks. A smoke-only renderer converts an exact cached vertical slice into
+mapped `Tessellator` quads in native LWJGL; it does not move rendering policy or
+Minecraft classes into the neutral API.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

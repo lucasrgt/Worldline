@@ -111,6 +111,18 @@ final class B173PlayChannel {
         return inbound.awaitBlock(position, expected);
     }
 
+    RemoteWorldView sustainTicks(int ticks) throws IOException, InterruptedException {
+        require(pose != null, "play channel is not synchronized");
+        if (ticks < 1 || ticks > 1200) throw new IllegalArgumentException("invalid heartbeat tick count");
+        for (int tick = 1; tick <= ticks; tick++) {
+            if (tick % 20 == 0) acknowledge(pose.x(), pose.y(), pose.y() + stanceHeight,
+                    pose.z(), pose.yaw(), pose.pitch());
+            else { output.writeByte(10); output.writeBoolean(false); output.flush(); }
+            Thread.sleep(50L); inbound.pumpAvailable();
+        }
+        return inbound.snapshot();
+    }
+
     private void acknowledge(double x, double feetY, double clientY, double z,
             float yaw, float pitch) throws IOException {
         output.writeByte(13);

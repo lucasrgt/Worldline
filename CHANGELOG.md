@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.20.0 - M32 Sustained Remote Terrain Render
+
+Status: GO for sustained protocol-14 cache-to-native-render composition.
+
+- Added a neutral 40-tick sustained remote-world session contract.
+- Reproduced the unchanged vanilla cadence byte-for-byte: 38 flying packets
+  and two periodic pose packets.
+- Pumped a multi-chunk decoded view (at least four chunks) while keeping each
+  session connected to an unmodified official server.
+- Rendered cache-derived 8x8 terrain slices through mapped Minecraft
+  `Tessellator`, native LWJGL, and an offscreen Pbuffer.
+- Required Packet53 to turn both the exact cached block and its corresponding
+  native frame pixel into air before accepting the update.
+
+The frozen M32 semantic SHA-256 is
+`7ca1a2fd0d3c4d172e3f123c1b1382a2b939c5ebe0a09e7570acf7a381399f00`.
+
 ## 1.19.0 - M31 Incremental Remote World
 
 Status: GO for server-authoritative incremental block updates.

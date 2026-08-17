@@ -94,6 +94,13 @@ final class B173PlayInbound {
         } finally { pulse.interrupt(); }
     }
 
+    void pumpAvailable() throws IOException {
+        for (int count = 0; count < 4096 && input.available() > 0; count++)
+            skip(input.readUnsignedByte());
+    }
+
+    RemoteWorldView snapshot() { return cache.snapshot(); }
+
     private Thread pulse() {
         Thread thread = new Thread(() -> { try { while (!Thread.currentThread().isInterrupted()) {
             synchronized (output) { output.writeByte(10); output.writeBoolean(false); output.flush(); }

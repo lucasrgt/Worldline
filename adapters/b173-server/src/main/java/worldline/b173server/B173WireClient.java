@@ -11,14 +11,13 @@ import worldline.api.MultiplayerState;
 import worldline.api.PlayerPose;
 import worldline.api.RemoteChunkObservation;
 import worldline.api.RemoteChunkSnapshot;
-import worldline.api.CachedRemoteWorldMultiplayerSession;
-import worldline.api.IncrementalRemoteWorldMultiplayerSession;
+import worldline.api.SustainedRemoteWorldMultiplayerSession;
 import worldline.api.RemoteWorldView;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 
 /** Minimal original protocol-14 client for headless multiplayer qualification. */
-public final class B173WireClient implements IncrementalRemoteWorldMultiplayerSession {
+public final class B173WireClient implements SustainedRemoteWorldMultiplayerSession {
     public static final int PROTOCOL = 14;
     private final String host, username;
     private final int port, timeoutMillis;
@@ -61,20 +60,16 @@ public final class B173WireClient implements IncrementalRemoteWorldMultiplayerSe
         } catch (IOException error) { closeSocket(); throw new IllegalStateException("multiplayer login failed", error); }
     }
 
-    @Override
-    public MultiplayerState state() {
-        return new MultiplayerState(connection, username, PROTOCOL, entityId);
-    }
+    @Override public MultiplayerState state() {
+        return new MultiplayerState(connection, username, PROTOCOL, entityId); }
 
-    @Override
-    public PlayerPose synchronizePose() {
+    @Override public PlayerPose synchronizePose() {
         require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
         try { return play.synchronize(); }
         catch (IOException error) { throw new IllegalStateException("play synchronization failed", error); }
     }
 
-    @Override
-    public void look(float yaw, float pitch) {
+    @Override public void look(float yaw, float pitch) {
         require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
         try { play.look(yaw, pitch); }
         catch (IOException error) { throw new IllegalStateException("play look failed", error); }
@@ -141,11 +136,17 @@ public final class B173WireClient implements IncrementalRemoteWorldMultiplayerSe
             throw new IllegalStateException("expected block receive failed", error); }
     }
 
-    @Override
-    public void close() {
-        closeSocket();
-        if (connection != MultiplayerConnection.NEW) connection = MultiplayerConnection.DISCONNECTED;
+    @Override public RemoteWorldView sustainTicks(int ticks) {
+        require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
+        try { return play.sustainTicks(ticks); }
+        catch (IOException error) { throw new IllegalStateException("play heartbeat failed", error); }
+        catch (InterruptedException error) { Thread.currentThread().interrupt();
+            throw new IllegalStateException("play heartbeat interrupted", error); }
     }
+
+    @Override public void close() {
+        closeSocket();
+        if (connection != MultiplayerConnection.NEW) connection = MultiplayerConnection.DISCONNECTED; }
 
     private void closeSocket() {
         if (socket == null) return;

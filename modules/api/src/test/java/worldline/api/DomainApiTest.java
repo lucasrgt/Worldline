@@ -32,6 +32,8 @@ public final class DomainApiTest {
     }
 
     private static void multiplayerStateIsExactAndFailClosed() {
+        if (!IncrementalRemoteWorldMultiplayerSession.class.isAssignableFrom(
+                SustainedRemoteWorldMultiplayerSession.class)) throw new AssertionError("sustained session hierarchy drifted");
         MultiplayerState state = new MultiplayerState(
                 MultiplayerConnection.CONNECTED, "Worldline", 14, 7);
         equal(state, new MultiplayerState(MultiplayerConnection.CONNECTED, "Worldline", 14, 7),

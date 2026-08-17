@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.19.0 - M31 Incremental World (GO)**.
+Current official milestone: **Worldline v1.20.0 - M32 Sustained Remote Terrain Render (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -192,6 +192,11 @@ M31 applies Packet52/53 block changes by immutable cache replacement. Two
 operator-qualified clients break nearby blocks, but Worldline accepts success
 only when each official server reports the exact target as air. See
 `docs/M31_INCREMENTAL_WORLD.md`.
+
+M32 sustains the vanilla protocol-14 heartbeat for 40 ticks, grows the decoded
+remote cache, and renders an exact block slice through mapped Minecraft
+`Tessellator` in a native offscreen context. A Packet53 block change must alter
+the corresponding native pixel. See `docs/M32_REMOTE_TERRAIN_RENDER.md`.
 
 ## Verify
 
@@ -398,6 +403,8 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M30_CYCLE.md` is the v1.18.0 bounded remote-world cache GO audit.
 
 `M31_CYCLE.md` is the v1.19.0 server-authoritative incremental-world GO audit.
+
+`M32_CYCLE.md` is the v1.20.0 sustained cache-to-native-render GO audit.
 `GUI_CYCLE.md` is the inventory Game UI tree GO audit.
 `INVARIANTS_CYCLE.md` is the conservation-rule GO audit.
 `SEMANTICS_CYCLE.md` is the catalog and role-graph GO audit.
