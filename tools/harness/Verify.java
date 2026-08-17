@@ -107,6 +107,7 @@ public final class Verify {
                     "m27-multiplayer-chat"));
             run(Arrays.asList("java", "tools/smoke/RemoteChunkCycle.java",
                     "m28-remote-chunk"));
+            run(Arrays.asList("java", "tools/smoke/RemoteChunkSnapshotCycle.java", "m29-remote-chunk-snapshot"));
             run(Arrays.asList("java", "tools/smoke/GuiCycle.java", "gui-tree"));
             run(Arrays.asList("java", "tools/smoke/LabCycle.java", "lab-cycle"));
         }

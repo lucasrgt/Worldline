@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import worldline.api.PlayerPose;
 import worldline.api.RemoteChunkObservation;
+import worldline.api.RemoteChunkSnapshot;
 
 /** Original bounded codec for the protocol-14 initial play-position exchange. */
 final class B173PlayChannel {
@@ -90,6 +91,19 @@ final class B173PlayChannel {
         for (int count = 0; count < 4096; count++) {
             int packet = input.readUnsignedByte();
             if (packet == 51) return B173InboundPacket.chunk(input);
+            if (packet == 3) { B173InboundPacket.string(input, 119); continue; }
+            if (packet == 255) throw new IOException(
+                    "server disconnected: " + B173InboundPacket.string(input, 256));
+            B173InboundPacket.skip(input, packet);
+        }
+        throw new IOException("chunk packet absent from bounded inbound window");
+    }
+
+    RemoteChunkSnapshot awaitChunkSnapshot() throws IOException {
+        require(pose != null, "play channel is not synchronized");
+        for (int count = 0; count < 4096; count++) {
+            int packet = input.readUnsignedByte();
+            if (packet == 51) return B173ChunkCodec.read(input);
             if (packet == 3) { B173InboundPacket.string(input, 119); continue; }
             if (packet == 255) throw new IOException(
                     "server disconnected: " + B173InboundPacket.string(input, 256));

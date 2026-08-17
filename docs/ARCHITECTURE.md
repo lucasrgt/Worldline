@@ -253,6 +253,13 @@ the API receives only origin, dimensions, and byte count. Compression format,
 block layout, packet IDs, and mapped types remain adapter-side. Observation is
 explicitly separate from decompression, caching, and world construction.
 
+M29 adds an immutable neutral snapshot above that observation. The b1.7.3
+adapter alone owns zlib completion and legacy four-plane/nibble interpretation;
+the API exposes only coordinate-addressable block state and light values. A
+runtime-compiled mapped `NibbleArray` provides the layout oracle without
+vendoring decompiled source. The snapshot is isolated evidence, not a chunk
+cache, entity stream, or native client world.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

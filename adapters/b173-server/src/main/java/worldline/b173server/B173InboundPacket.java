@@ -78,12 +78,7 @@ final class B173InboundPacket {
         bytes(input, 4); string(input, 13); bytes(input, 13);
     }
     static RemoteChunkObservation chunk(DataInputStream input) throws IOException {
-        int x = input.readInt(), y = input.readShort(), z = input.readInt();
-        int width = input.readUnsignedByte() + 1;
-        int height = input.readUnsignedByte() + 1;
-        int depth = input.readUnsignedByte() + 1;
-        int payload = input.readInt(); boundedBytes(input, payload, 4_000_000);
-        return new RemoteChunkObservation(x, y, z, width, height, depth, payload);
+        return B173ChunkCodec.read(input).observation();
     }
     private static void multiBlock(DataInputStream input) throws IOException {
         bytes(input, 8); int count = input.readShort();

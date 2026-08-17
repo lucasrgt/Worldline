@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.17.0 - M29 Remote Chunk Snapshot
+
+Status: GO for strict native chunk inflation and neutral block access.
+
+- Added immutable `RemoteChunkSnapshot` and `RemoteWorldMultiplayerSession`.
+- Required exact bounded zlib completion and split native payloads into block
+  ID, metadata, block-light, and sky-light planes inside the b1.7.3 adapter.
+- Compiled mapped vanilla `NibbleArray` from the pinned local workspace and
+  compared every coordinate of a synthetic full chunk without vendoring source.
+- Decoded real full chunks from two fresh official client/server scenarios.
+- Kept prechunk lifecycle, multi-chunk caching, entities, native world
+  construction, rendering, and server tick stepping as later milestones.
+
+The frozen M29 semantic SHA-256 is
+`aec53757fe91829f4e425428a590b703595088ed02955b01ba41179ed4969b0b`.
+
 ## 1.16.0 - M28 Remote Chunk Observation
 
 Status: GO for bounded native chunk-envelope observation.

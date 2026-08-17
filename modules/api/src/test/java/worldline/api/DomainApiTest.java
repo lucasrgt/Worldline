@@ -13,6 +13,7 @@ public final class DomainApiTest {
         serverStateIsExactAndFailClosed();
         multiplayerStateIsExactAndFailClosed();
         serverPlayerStateIsExactAndFailClosed();
+        remoteChunkSnapshotIsImmutableAndAddressable();
         System.out.println("DomainApiTest passed");
     }
 
@@ -67,6 +68,25 @@ public final class DomainApiTest {
         failure(() -> new PlayerPose(0, 0, 0, 0, 91));
         failure(() -> new RemoteChunkObservation(0, 0, 0, 0, 128, 16, 1));
         failure(() -> new RemoteChunkObservation(0, 0, 0, 16, 128, 16, 0));
+    }
+
+    private static void remoteChunkSnapshotIsImmutableAndAddressable() {
+        RemoteChunkObservation region = new RemoteChunkObservation(32, 4, -16, 2, 2, 2, 32);
+        byte[] ids = new byte[] {0, 1, 2, 3, 4, 5, 6, 7};
+        byte[] metadata = new byte[] {0x10, 0x32, 0x54, 0x76};
+        byte[] blockLight = new byte[] {0x21, 0x43, 0x65, (byte) 0x87};
+        byte[] skyLight = new byte[] {(byte) 0xfe, (byte) 0xdc, (byte) 0xba, (byte) 0x98};
+        RemoteChunkSnapshot snapshot = new RemoteChunkSnapshot(
+                region, ids, metadata, blockLight, skyLight);
+        ids[7] = 0; metadata[3] = 0; blockLight[3] = 0; skyLight[3] = 0;
+        equal(snapshot.blockAt(1, 1, 1), new BlockState(7, 7), "remote block state");
+        if (snapshot.blockCount() != 8 || snapshot.nonAirBlocks() != 7
+                || snapshot.blockLightAt(1, 1, 1) != 8
+                || snapshot.skyLightAt(1, 1, 1) != 9)
+            throw new AssertionError("remote chunk snapshot accessors drifted");
+        failure(() -> snapshot.blockAt(2, 0, 0));
+        failure(() -> new RemoteChunkSnapshot(region, new byte[7], new byte[4],
+                new byte[4], new byte[4]));
     }
 
     private static void valueEqualityIsExact() {
