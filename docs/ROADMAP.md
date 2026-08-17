@@ -24,6 +24,7 @@ Passing an experiment does not silently promote its API.
 | v1.5.0 / M17 | Three-scenario scheduler hardening and upstream evaluation profile | GO - matrix complete; promotion NO-GO |
 | v1.6.0 / M18 | Save/GC/compile attribution of the historical random spike | GO - timeline colocated; spike NON-CLAIM |
 | v1.7.0 / M19 | Forced dirty-set autosave and opt-in one-chunk save cap | GO - synthetic hitch bounded; cap default-off |
+| v1.8.0 / M20 | Official b1.7.3 dedicated-server identity and lifecycle bootstrap | GO - two clean localhost boot/save/stop processes |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -35,10 +36,11 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.7.0 direction
+## Immediate post-v1.8.0 direction
 
-The next save-path question is the remaining fat individual chunk: measure NBT
-cost and unchanged block-entity writes before considering any broader flush
-policy. The historical real-map spike remains unproven. The three M17
-framebuffer divergences and non-preemptive chunk rebuilds remain open; semantic
-mappings and the optimization ledger may continue independently.
+The next server milestone instruments a bounded dedicated-server tick and
+compares a neutral state trace against the official server boundary. The next
+multiplayer milestone then boots one official client against one isolated
+localhost server and controls login, tick advancement, observation, and clean
+disconnect. The save-path fat-chunk/NBT question and M17 visual divergences
+remain open independent research lines.

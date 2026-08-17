@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.8.0 - M20 Official Server Bootstrap
+
+Status: GO for official dedicated-server identity and lifecycle control.
+
+- Added a frozen public descriptor for the unmodified Beta 1.7.3 dedicated
+  server while keeping the proprietary JAR under ignored `local/artifacts/`.
+- Added an HTTPS artifact acquisition tool that validates byte length, SHA-1,
+  and SHA-256 before installing either the client or server JAR.
+- Started two fresh localhost-only official servers, reached native readiness,
+  issued `stop`, observed save/shutdown, and required clean exits.
+- Kept server instrumentation, client connection, and multiplayer determinism
+  as explicit later milestones.
+
+The frozen M20 lifecycle SHA-256 is
+`7d1edb19b978300465878cfade247ec0db7db37b9a5fbcfd9a595566bfb06b60`.
+
 ## 1.7.0 - M19 Forced Autosave
 
 Status: GO for the default-off one-chunk save cap; the historical random spike

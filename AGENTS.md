@@ -4,13 +4,14 @@ All repository artifacts must be written in English.
 
 ## Behavioral constitution
 
-1. The official Minecraft Beta 1.7.3 JAR is the behavioral oracle.
+1. The official Minecraft Beta 1.7.3 client and dedicated-server JARs are the
+   behavioral oracles.
 2. Never assume decompiled source is semantically exact.
 3. Every invasive runtime modification must preserve vanilla-observable
    behavior or be explicitly enabled in controlled-runtime mode.
 4. Every controlled boundary must eventually have a differential or invariant
    test before it can be called implemented.
-5. Never commit or distribute the official JAR, original assets, or decompiled
+5. Never commit or distribute official JARs, original assets, or decompiled
    Minecraft sources. Commit original Worldline code, mappings, patches, and
    transforms only.
 

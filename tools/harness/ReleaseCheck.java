@@ -29,6 +29,7 @@ public final class ReleaseCheck {
         Properties release = load("release/worldline.properties");
         Properties harness = load("harness.properties");
         Properties artifact = load("artifacts/minecraft-b1.7.3-client.properties");
+        Properties serverArtifact = load("artifacts/minecraft-b1.7.3-server.properties");
         Properties toolchain = load("toolchains/retromcp.properties");
         Properties server = load("smokes/deterministic-world-tick/smoke.properties");
         Properties client = load("smokes/controlled-client-tick/smoke.properties");
@@ -50,16 +51,18 @@ public final class ReleaseCheck {
         Properties m17Profile = load("adapters/aero-model-lib/opt-in/worldline-adaptive.properties");
         Properties m18 = load("smokes/m18-save-attribution/smoke.properties");
         Properties m19 = load("smokes/m19-forced-autosave/smoke.properties");
+        Properties m20 = load("smokes/m20-server-bootstrap/smoke.properties");
         Properties lab = load("smokes/lab-cycle/smoke.properties");
         Properties gui = load("smokes/gui-tree/smoke.properties");
         match(release, "id", "worldline");
-        match(release, "version", "1.7.0");
-        match(release, "milestone", "m19-forced-autosave");
+        match(release, "version", "1.8.0");
+        match(release, "milestone", "m20-server-bootstrap");
         match(release, "status", "go");
         match(release, "scope", "local-research");
         match(release, "canonical.command", "java tools/harness/Verify.java --smoke");
         same(release, "java.release", harness, "java.release");
         same(release, "client.sha256", artifact, "expected.sha256");
+        same(release, "server.sha256", serverArtifact, "expected.sha256");
         same(release, "retromcp.revision", toolchain, "revision");
         same(release, "server.signature", server, "expected.signature");
         same(release, "client.signature", client, "expected.signature");
@@ -103,6 +106,8 @@ public final class ReleaseCheck {
         same(release, "m19.signature", m19, "expected.signature");
         same(release, "m19.aero.revision", m19, "aero.revision");
         same(release, "m19.seed", m19, "seed");
+        same(release, "m20.signature", m20, "expected.signature");
+        same(release, "server.sha256", m20, "server.jar.sha256");
         same(release, "lab.signature", lab, "expected.signature");
         same(release, "gui.signature", gui, "expected.signature");
         same(release, "invariants.signature", client, "expected.state.signature");
@@ -178,8 +183,13 @@ public final class ReleaseCheck {
                 "smokes/m19-forced-autosave/MAP.md")) {
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         }
+        for (String file : Arrays.asList("artifacts/minecraft-b1.7.3-server.properties",
+                "docs/M20_SERVER_BOOTSTRAP.md", "docs/M20_CYCLE.md",
+                "smokes/m20-server-bootstrap/MAP.md")) {
+            if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
+        }
         verifyPublicTree();
-        System.out.println("  release: Worldline v1.7.0 M19 save cap GO; spike NON-CLAIM");
+        System.out.println("  release: Worldline v1.8.0 M20 official server bootstrap GO");
         System.out.println("  public artifact boundary: verified");
     }
 

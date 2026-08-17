@@ -89,6 +89,8 @@ public final class Verify {
                     "m18-save-attribution"));
             run(Arrays.asList("java", "tools/smoke/AeroForcedAutosaveCycle.java",
                     "m19-forced-autosave"));
+            run(Arrays.asList("java", "tools/smoke/ServerBootstrapCycle.java",
+                    "m20-server-bootstrap"));
             run(Arrays.asList("java", "tools/smoke/GuiCycle.java", "gui-tree"));
             run(Arrays.asList("java", "tools/smoke/LabCycle.java", "lab-cycle"));
         }

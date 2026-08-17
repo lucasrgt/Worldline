@@ -1,7 +1,7 @@
 # Worldline Vision
 
 Worldline is a programmable laboratory for Minecraft Beta 1.7.3. It executes
-the real game under external control, treats the official JAR as the behavioral
+the real game under external control, treats official client/server JARs as behavioral
 oracle, and virtualizes external boundaries only where an experiment requires
 control.
 

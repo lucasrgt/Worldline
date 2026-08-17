@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.HexFormat;
 import java.util.Properties;
 
-/** Verifies proprietary runtime input and the pinned open-source toolchain. */
+/** Verifies proprietary client/server inputs and the pinned open-source toolchain. */
 public final class RuntimeCheck {
     private final Path root = Paths.get("").toAbsolutePath().normalize();
     private final boolean required;
@@ -33,22 +33,29 @@ public final class RuntimeCheck {
     }
 
     private void execute() throws Exception {
-        Properties artifact = load("artifacts/minecraft-b1.7.3-client.properties");
+        Properties client = load("artifacts/minecraft-b1.7.3-client.properties");
+        Properties server = load("artifacts/minecraft-b1.7.3-server.properties");
         Properties toolchain = load("toolchains/retromcp.properties");
-        Path jar = localPath(artifact, "local.path");
+        Path clientJar = localPath(client, "local.path");
+        Path serverJar = localPath(server, "local.path");
         Path checkout = localPath(toolchain, "local.path");
-        boolean jarPresent = Files.isRegularFile(jar);
+        boolean clientPresent = Files.isRegularFile(clientJar);
+        boolean serverPresent = Files.isRegularFile(serverJar);
         boolean toolchainPresent = Files.isDirectory(checkout.resolve(".git"));
-        if (!jarPresent && !toolchainPresent && !required) {
+        if (!clientPresent && !serverPresent && !toolchainPresent && !required) {
             System.out.println("  runtime inputs: absent (runtime checks not requested)");
             return;
         }
-        if (!jarPresent || !toolchainPresent) {
-            throw new IllegalStateException("runtime inputs are incomplete; run the artifact and toolchain setup");
+        if (required && (!clientPresent || !serverPresent || !toolchainPresent)) {
+            throw new IllegalStateException(
+                    "runtime inputs are incomplete; run Acquire.java all and the toolchain setup");
         }
-        verifyArtifact(artifact, jar);
-        verifyToolchain(toolchain, checkout);
-        System.out.println("  runtime inputs: verified b1.7.3 client and pinned RetroMCP");
+        if (clientPresent) verifyArtifact(client, clientJar);
+        if (serverPresent) verifyArtifact(server, serverJar);
+        if (toolchainPresent) verifyToolchain(toolchain, checkout);
+        System.out.println(clientPresent && serverPresent && toolchainPresent
+                ? "  runtime inputs: verified b1.7.3 client/server and pinned RetroMCP"
+                : "  runtime inputs: available inputs verified (runtime profile not requested)");
     }
 
     private void verifyArtifact(Properties descriptor, Path jar) throws Exception {
@@ -61,7 +68,8 @@ public final class RuntimeCheck {
         if (Files.size(jar) != expectedBytes
                 || !digest(jar, "SHA-1").equals(sha1)
                 || !digest(jar, "SHA-256").equals(sha256)) {
-            throw new IllegalStateException("local artifact does not match the frozen b1.7.3 descriptor");
+            throw new IllegalStateException("local artifact does not match frozen descriptor "
+                    + required(descriptor, "id"));
         }
     }
 

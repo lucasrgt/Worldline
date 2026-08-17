@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.7.0 - M19 Forced Autosave (GO; cap default-off)**.
+Current official milestone: **Worldline v1.8.0 - M20 Official Server Bootstrap (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -129,6 +129,13 @@ non-forced save batch with a default-off one-chunk cap and a save-cancelled
 control. The cap reduces the worst synthetic save without claiming the real
 historical spike is eliminated; see `docs/M19_FORCED_AUTOSAVE.md`.
 
+M20 adds the unmodified official Beta 1.7.3 dedicated server as a second
+hash-pinned local artifact. Two fresh localhost-only server processes reach
+the native `Done` marker, accept `stop`, save, and exit cleanly. This is the
+foundation for server instrumentation and multiplayer tests; it does not yet
+connect a client or claim multiplayer determinism. See
+`docs/M20_SERVER_BOOTSTRAP.md`.
+
 ## Verify
 
 Requirements:
@@ -153,9 +160,16 @@ Runtime-bound work uses the stricter profile:
 java tools/harness/Verify.java --runtime
 ```
 
-It additionally requires `local/artifacts/minecraft-b1.7.3-client.jar` and
-verifies its byte length, SHA-1, and SHA-256 against the committed descriptor.
-The descriptor is metadata; the JAR remains ignored and local.
+It additionally requires both official b1.7.3 client and dedicated-server JARs
+under `local/artifacts/` and verifies their byte lengths, SHA-1, and SHA-256
+against committed descriptors. The descriptors are metadata; the JARs remain
+ignored and local. Acquire either or both frozen artifacts with:
+
+```text
+java tools/artifacts/Acquire.java client
+java tools/artifacts/Acquire.java server
+java tools/artifacts/Acquire.java all
+```
 
 Bootstrap the pinned RetroMCP upstream checkout and CLI under `local/` with:
 
@@ -312,6 +326,7 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M17_CYCLE.md` is the v1.5.0 matrix GO and scheduler-promotion NO-GO audit.
 `M18_CYCLE.md` is the v1.6.0 save-attribution GO and historical-spike non-claim.
 `M19_CYCLE.md` is the v1.7.0 forced-autosave and opt-in save-cap GO audit.
+`M20_CYCLE.md` is the v1.8.0 official-server identity and lifecycle GO audit.
 `GUI_CYCLE.md` is the inventory Game UI tree GO audit.
 `INVARIANTS_CYCLE.md` is the conservation-rule GO audit.
 `SEMANTICS_CYCLE.md` is the catalog and role-graph GO audit.
@@ -356,7 +371,7 @@ Version and frozen evidence are authoritative in
 
 ## Legal boundary
 
-Do not place the official JAR, original assets, or decompiled Minecraft source
+Do not place official JARs, original assets, or decompiled Minecraft source
 in Git. Local artifacts and experiments belong under the ignored `local/`
 directory. Public work should consist of original code, mappings, patches, and
 transforms.

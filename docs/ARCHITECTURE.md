@@ -167,9 +167,11 @@ sides agree on game behavior by itself.
 ## Artifact and toolchain provenance
 
 `artifacts/` contains public descriptors, never game binaries. The b1.7.3
-descriptor freezes Mojang's byte length and SHA-1 plus the observed SHA-256.
-Runtime verification accepts only the matching local JAR under the ignored
-`local/artifacts/` root.
+client and dedicated-server descriptors freeze byte length, SHA-1, and
+SHA-256. Runtime verification accepts only matching local JARs under the
+ignored `local/artifacts/` root. The acquisition tool downloads through a
+partial file and installs an artifact only after all frozen identity fields
+match.
 
 `toolchains/` pins external open-source tooling by repository and immutable Git
 revision. Bootstrap checkouts and builds live under `local/toolchains/`; no
@@ -190,6 +192,13 @@ sharing their Minecraft access paths.
 
 This establishes controlled vanilla `World.tick()` execution and differential
 equivalence for one narrow observed fixture.
+
+`smokes/m20-server-bootstrap/` adds the dedicated-server process boundary. It
+does not reuse mapped server classes: it starts the unmodified official server
+JAR twice in fresh directories, confines each process to localhost, waits for
+native readiness, sends the native stop command, and requires clean save/exit.
+Generated properties, logs, worlds, and the server JAR remain ignored. Later
+server-tick and multiplayer adapters build above this lifecycle proof.
 
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
