@@ -18,12 +18,12 @@ final class B173PlayInbound {
     private final B173RemoteWorldCache cache = new B173RemoteWorldCache();
     private final B173InventoryTracker inventory = new B173InventoryTracker();
     private final B173PeerEquipmentTracker equipment = new B173PeerEquipmentTracker();
+    private final B173DroppedItemTracker dropped = new B173DroppedItemTracker();
     private final long timeoutNanos;
     private Correction correction;
 
-    B173PlayInbound(DataInputStream input, DataOutputStream output, int timeoutMillis) {
-        this.input = input; this.output = output; this.timeoutNanos = timeoutMillis * 1_000_000L;
-    }
+    B173PlayInbound(DataInputStream input, DataOutputStream output, int timeoutMillis) { this.input = input;
+        this.output = output; this.timeoutNanos = timeoutMillis * 1_000_000L; }
 
     void skip(int packet) throws IOException {
         if (packet == 0) { synchronized (output) {
@@ -32,6 +32,7 @@ final class B173PlayInbound {
         if (packet == 5) { equipment.equipment(input); return; }
         if (packet == 13) { position(); return; }
         if (packet == 20) { equipment.spawn(input); return; }
+        if (packet == 21) { dropped.spawn(input); return; }
         if (packet == 50) { cache.preChunk(input); return; }
         if (packet == 51) { cache.accept(B173ChunkCodec.read(input)); return; }
         if (packet == 52) { cache.multiBlock(input); return; }
@@ -120,18 +121,20 @@ final class B173PlayInbound {
         throw new IOException("inventory window absent from bounded inbound window");
     }
 
-    RemoteInventoryView inventory() {
-        if (inventory.snapshot() == null) throw new IllegalStateException("inventory window is not observed");
-        return inventory.snapshot();
+    RemoteInventoryView inventory() { if (inventory.snapshot() == null)
+        throw new IllegalStateException("inventory window is not observed"); return inventory.snapshot(); }
+
+    RemoteHeldItem awaitPeerHeldItem(RemoteHeldItem expected) throws IOException { if (expected == null) throw new IllegalArgumentException("null expected peer held item");
+        if (equipment.matches(expected)) return expected;
+        for (int count = 0; count < 8192; count++) { skip(input.readUnsignedByte());
+            if (equipment.matches(expected)) return expected; }
+        throw new IOException("expected peer held item absent from bounded inbound window");
     }
 
-    RemoteHeldItem awaitPeerHeldItem(RemoteHeldItem expected) throws IOException {
-        if (expected == null) throw new IllegalArgumentException("null expected peer held item");
-        if (equipment.matches(expected)) return expected;
-        for (int count = 0; count < 8192; count++) {
-            skip(input.readUnsignedByte()); if (equipment.matches(expected)) return expected;
-        }
-        throw new IOException("expected peer held item absent from bounded inbound window");
+    worldline.api.RemoteDroppedItem awaitDroppedItem(worldline.api.RemoteItemStack expected) throws IOException { worldline.api.RemoteDroppedItem ready = dropped.matching(expected); if (ready != null) return ready;
+        for (int count = 0; count < 8192; count++) { skip(input.readUnsignedByte());
+            ready = dropped.matching(expected); if (ready != null) return ready; }
+        throw new IOException("expected dropped-item spawn absent from bounded inbound window");
     }
 
     void enableImplicitChunks() { cache.enableImplicitLoads(); }
@@ -162,9 +165,8 @@ final class B173PlayInbound {
 
     B173RemoteWorldCache cache() { return cache; }
 
-    private IOException disconnect() throws IOException {
-        return new IOException("server disconnected: " + B173InboundPacket.string(input, 256));
-    }
+    private IOException disconnect() throws IOException { return new IOException(
+            "server disconnected: " + B173InboundPacket.string(input, 256)); }
 
     static final class Correction { final PlayerPose pose; final double stance;
         Correction(PlayerPose pose, double stance) { this.pose = pose; this.stance = stance; } }

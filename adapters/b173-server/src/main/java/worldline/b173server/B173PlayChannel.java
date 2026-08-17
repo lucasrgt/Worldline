@@ -122,6 +122,7 @@ final class B173PlayChannel {
     RemoteInventoryView awaitInventory() throws IOException { return inbound.awaitInventory(); }
     RemoteInventoryView inventory() { return inbound.inventory(); }
     RemoteHeldItem awaitPeerHeldItem(RemoteHeldItem expected) throws IOException { return inbound.awaitPeerHeldItem(expected); }
+    worldline.api.RemoteDroppedItem awaitDroppedItem(worldline.api.RemoteItemStack expected) throws IOException { return inbound.awaitDroppedItem(expected); }
 
     void selectHeldSlot(int slot) throws IOException { require(pose != null, "play channel is not synchronized");
         if (slot < 0 || slot > 8) throw new IllegalArgumentException("invalid held hotbar slot"); output.writeByte(16); output.writeShort(slot); output.flush(); }
@@ -169,6 +170,5 @@ final class B173PlayChannel {
         output.writeByte(position.y()); output.writeInt(position.z()); output.writeByte(1); output.flush();
     }
 
-    private static void require(boolean condition, String message) {
-        if (!condition) throw new IllegalStateException(message); }
+    private static void require(boolean condition, String message) { if (!condition) throw new IllegalStateException(message); }
 }

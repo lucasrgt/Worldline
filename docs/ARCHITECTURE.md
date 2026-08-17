@@ -383,6 +383,12 @@ state transitions. Packet103 empties the actor's immutable inventory view;
 Packet5 empties the independently named peer observation. Empty sentinels are
 decoded strictly, and malformed negative item identifiers fail closed.
 
+M51 composes a dedicated dropped-item tracker into the same bounded inbound
+pump. Packet21 is decoded into a neutral immutable item entity with the exact
+legacy stack, fixed-point coordinates, and signed-byte velocity. The tracker
+retains only the latest spawn needed by the bounded wait; it is not a shared
+entity registry, trajectory simulator, or server-memory view.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

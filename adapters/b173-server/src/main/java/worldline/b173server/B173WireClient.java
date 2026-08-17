@@ -15,12 +15,12 @@ import worldline.api.RemoteWorldView;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.MovementOutcome;
-import worldline.api.DropItemMultiplayerSession;
+import worldline.api.DroppedItemMultiplayerSession;
 import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteHeldItem;
 
 /** Minimal original protocol-14 client for headless multiplayer qualification. */
-public final class B173WireClient implements DropItemMultiplayerSession {
+public final class B173WireClient implements DroppedItemMultiplayerSession {
     public static final int PROTOCOL = 14;
     private final String host, username;
     private final int port, timeoutMillis;
@@ -159,6 +159,7 @@ public final class B173WireClient implements DropItemMultiplayerSession {
     @Override public void selectHeldSlot(int slot) { B173ItemAccess.selectHeldSlot(channel(), slot); }
     @Override public void dropHeldItem() { B173ItemAccess.dropHeldItem(channel()); }
     @Override public RemoteHeldItem awaitPeerHeldItem(RemoteHeldItem expected) { return B173ItemAccess.awaitPeerHeldItem(channel(), expected); }
+    @Override public worldline.api.RemoteDroppedItem awaitDroppedItem(worldline.api.RemoteItemStack expected) { return B173ItemAccess.awaitDroppedItem(channel(), expected); }
 
     @Override public void close() { closeSocket(); if (connection != MultiplayerConnection.NEW) connection = MultiplayerConnection.DISCONNECTED; }
 
@@ -170,6 +171,5 @@ public final class B173WireClient implements DropItemMultiplayerSession {
 
     private B173PlayChannel channel() { require(connection == MultiplayerConnection.CONNECTED, "session is not connected"); return play; }
 
-    private static void require(boolean condition, String message) {
-        if (!condition) throw new IllegalStateException(message); }
+    private static void require(boolean condition, String message) { if (!condition) throw new IllegalStateException(message); }
 }

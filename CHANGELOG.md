@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.39.0 - M51 Dropped Item Spawn
+
+Status: GO for immutable dropped-item observation from an independent peer.
+
+- Added a neutral immutable dropped-item value and bounded observation session.
+- Strictly decoded Packet21 stack, fixed-point position, and signed velocity.
+- Proved the spawn near the dropping actor with non-zero bounded launch motion.
+- Retained independent local, peer-held, and clean persistence empty evidence.
+
+The frozen M51 semantic SHA-256 is
+`6051025c444760d21cf5a283358b4594612188234b72c7ae363c0a50d907e92f`.
+
 ## 1.38.0 - M50 Drop Held Item
 
 Status: GO for drop-current-item with local and independent peer evidence.

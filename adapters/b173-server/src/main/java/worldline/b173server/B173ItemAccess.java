@@ -3,6 +3,8 @@ package worldline.b173server;
 import java.io.IOException;
 import worldline.api.RemoteHeldItem;
 import worldline.api.RemoteInventoryView;
+import worldline.api.RemoteDroppedItem;
+import worldline.api.RemoteItemStack;
 
 /** Unchecked public-client boundary for the bounded item channel. */
 final class B173ItemAccess {
@@ -28,5 +30,10 @@ final class B173ItemAccess {
     static RemoteHeldItem awaitPeerHeldItem(B173PlayChannel channel, RemoteHeldItem expected) {
         try { return channel.awaitPeerHeldItem(expected); }
         catch (IOException error) { throw new IllegalStateException("peer held-item receive failed", error); }
+    }
+
+    static RemoteDroppedItem awaitDroppedItem(B173PlayChannel channel, RemoteItemStack expected) {
+        try { return channel.awaitDroppedItem(expected); }
+        catch (IOException error) { throw new IllegalStateException("dropped-item receive failed", error); }
     }
 }
