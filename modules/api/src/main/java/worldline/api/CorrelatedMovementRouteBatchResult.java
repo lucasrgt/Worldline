@@ -9,6 +9,7 @@ import java.util.Objects;
 public final class CorrelatedMovementRouteBatchResult {
     private final List<CorrelatedMovementRouteExecution> executions;
     private final MovementRouteBatchTermination termination;
+    private final MovementRouteBatchCounts counts;
 
     public CorrelatedMovementRouteBatchResult(List<CorrelatedMovementRouteExecution> executions,
             MovementRouteBatchTermination termination) {
@@ -19,10 +20,17 @@ public final class CorrelatedMovementRouteBatchResult {
             copy.add(Objects.requireNonNull(execution, "execution"));
         this.executions = Collections.unmodifiableList(copy);
         this.termination = Objects.requireNonNull(termination, "termination");
+        int outcomes = 0, corrections = 0;
+        for (CorrelatedMovementRouteExecution execution : copy) {
+            outcomes += execution.execution().result().outcomes().size();
+            corrections += execution.execution().result().corrections();
+        }
+        this.counts = new MovementRouteBatchCounts(copy.size(), outcomes, corrections);
     }
 
     public List<CorrelatedMovementRouteExecution> executions() { return executions; }
     public MovementRouteBatchTermination termination() { return termination; }
+    public MovementRouteBatchCounts counts() { return counts; }
     public CorrelatedMovementRouteExecution finalExecution() {
         return executions.get(executions.size() - 1);
     }

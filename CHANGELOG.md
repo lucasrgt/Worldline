@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.35.0 - M47 Immutable Batch Counts
+
+Status: GO for bounded aggregate batch counts.
+
+- Added immutable completed-route, outcome, and correction counts.
+- Computed counts once from immutable route results without replaying events.
+- Preserved execution and terminal-event identity.
+- Proved exact `2 routes / 3 outcomes / 0 corrections` on two fresh servers.
+
+The frozen M47 semantic SHA-256 is
+`5937694a83f953037612da32bd49301d7413eedfe4aab84df98f341cc686bb5f`.
+
 ## 1.34.0 - M46 Exact Batch Terminal Event
 
 Status: GO for identity-bound batch terminal summaries.

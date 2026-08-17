@@ -361,6 +361,10 @@ event. The event is the identical wrapper delivered at the final resolved
 movement and retains the final execution's correlated event by identity.
 Existing M45 callers still receive the original result through delegation.
 
+M47 computes bounded aggregate counts once while constructing the immutable
+batch result. Counts preserve the original execution graph and do not flatten,
+replay, synthesize, or replace route outcomes or events.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

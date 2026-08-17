@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.34.0 - M46 Exact Batch Terminal Event (GO)**.
+Current official milestone: **Worldline v1.35.0 - M47 Immutable Batch Counts (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -257,6 +257,9 @@ later alternatives or plans are sent. See `docs/M45_EVENT_BATCH_STOP.md`.
 
 M46 returns the exact terminal kind and last resolved batch event for event
 stop, after-route stop, and exhaustion. See `docs/M46_BATCH_TERMINAL.md`.
+
+M47 exposes immutable completed-route, outcome, and correction counts without
+flattening the identity-bound result graph. See `docs/M47_BATCH_COUNTS.md`.
 
 ## Verify
 
