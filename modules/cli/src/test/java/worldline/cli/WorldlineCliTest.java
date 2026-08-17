@@ -108,6 +108,26 @@ public final class WorldlineCliTest {
             require(status == 0 && output.toString().contains("WORLDLINE_SCENARIO_INSPECT=PASS")
                     && output.toString().contains("1=tick")
                     && output.toString().contains("2=observe:target"), "CLI scenario inspection failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"semantics", "show"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("WORLDLINE_SEMANTICS=PASS")
+                    && output.toString().contains("complete=true")
+                    && output.toString().contains("CLIENT_TICK_ROOT"), "CLI semantics show failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"semantics", "role", "CLIENT_TICK_ROOT"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("runTick"), "CLI semantics role failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"semantics", "graph"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("WORLDLINE_SEMANTICS_GRAPH=PASS")
+                    && output.toString().contains("complete=true"), "CLI semantics graph failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"semantics", "category", "energy"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 1 && error.toString().contains("unknown category"),
+                    "CLI unknown semantics category failed");
             require(WorldlineCli.run(new String[0], System.out, new PrintStream(error)) == 2,
                     "CLI usage did not fail");
         } finally {

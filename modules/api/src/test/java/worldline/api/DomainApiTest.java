@@ -8,6 +8,7 @@ public final class DomainApiTest {
         invalidValuesFailClosed();
         snapshotsAreBoundedAndImmutable();
         uiSpecRoundTripsBuilderAndInventory();
+        semanticMappingIsExactAndFailClosed();
         System.out.println("DomainApiTest passed");
     }
 
@@ -77,6 +78,30 @@ public final class DomainApiTest {
         if (Ui.screen("bare", Ui.slot("input")).nodes().size() != 2) {
             throw new AssertionError("layout flatten or player opt-in failed");
         }
+    }
+
+    private static void semanticMappingIsExactAndFailClosed() {
+        SemanticMapping tick = SemanticMapping.of("tick", "CLIENT_TICK_ROOT",
+                "net/minecraft/client/Minecraft", "method", "runTick", "()V",
+                "INPUT,CLOCK", "WORLD,PLAYER,GUI", "CLOCK", "controlled-client-tick", 9998);
+        equal(tick, SemanticMapping.of("tick", "CLIENT_TICK_ROOT",
+                "net/minecraft/client/Minecraft", "method", "runTick", "()V",
+                "INPUT,CLOCK", "WORLD,PLAYER,GUI", "CLOCK", "controlled-client-tick", 9998),
+                "semantic mapping");
+        SemanticMapping named = SemanticMapping.of("tick", "CLIENT_TICK_ROOT",
+                "net/minecraft/client/Minecraft", "method", "runTick", "()V",
+                "INPUT,CLOCK", "WORLD,PLAYER,GUI", "CLOCK", "controlled-client-tick", "k", 9998);
+        if (!tick.known() || tick.confidence() != 9998 || tick.reads().size() != 2
+                || !tick.canonical().contains("CLIENT_TICK_ROOT") || !tick.official().isEmpty()
+                || !"k".equals(named.official())) {
+            throw new AssertionError("semantic mapping fields failed");
+        }
+        failure(() -> SemanticMapping.of("", "CLIENT_TICK_ROOT",
+                "net/minecraft/client/Minecraft", "method", "runTick", "()V",
+                "", "", "", "lab-cycle", 9998));
+        failure(() -> SemanticMapping.of("tick", "CLIENT_TICK_ROOT",
+                "net/minecraft/client/Minecraft", "method", "runTick", "()V",
+                "", "", "", "lab-cycle", 0));
     }
 
     private static void failure(Runnable action) {
