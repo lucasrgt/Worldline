@@ -4,6 +4,29 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.4.0 - M16 Adaptive Chunks
+
+Status: GO for the visible-first adaptive scheduler and fixed-state framebuffer
+evidence; the scheduler remains an adapter candidate.
+
+- Added visible-debt bands of 2/4/6/8 accepted rebuilds under a 12 ms rebuild
+  envelope while preserving one explicit accepted/deferred call per frame.
+- Closed the first-300-frame visible readiness gap relative to vanilla and
+  reduced the release-gate run's worst frame from 735.2 ms to 218.6 ms.
+- Added a frozen-tick framebuffer oracle that fixes camera/interpolation, drains
+  global chunk work, and compares every baseline/candidate RGBA pixel under a
+  64-pixel, 2-channel-level tolerance.
+- Added canonical save snapshot/restore so independently ordered world
+  generation cannot contaminate the scheduler differential.
+- Hardened the legacy M15 gate to compare normalized visible readiness and
+  queue drainage instead of incomparable absolute frustum counts, and to apply
+  its geometry threshold to the fixed-camera comparable cohort.
+- Preserved the pinned Aero revision and the repository's per-file-only source
+  limits.
+
+The frozen M16 invariant-report SHA-256 is
+`eef21fc6cfc48d002038d0bfaea1764ca14cff2d5939897dc6dad6ab5d5fcbf4`.
+
 ## 1.3.0 - M15 Explicit Chunk Contract
 
 Status: GO for the explicit accepted/deferred boundary and readiness evidence;

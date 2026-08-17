@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.3.0 - M15 Chunk Contract (GO)**.
+Current official milestone: **Worldline v1.4.0 - M16 Adaptive Chunks (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -97,6 +97,14 @@ the first world frame. The contract eliminates same-frame retries and produces
 broad exact chunk-geometry agreement, but a fixed two-rebuild batch leaves far
 more visible chunks dirty than vanilla. That policy is rejected; see
 `docs/M15_CHUNK_CONTRACT.md`.
+
+M16 keeps that explicit boundary and selects visible dirty work with an adaptive
+2/4/6/8 accepted-work envelope plus a 12 ms rebuild budget. It preserves one
+caller completion per frame, closes the initial visible-readiness gap, and
+substantially reduces the observed worst frame. A canonical save snapshot and
+frozen tick require baseline and candidate to drain all chunk work and satisfy
+a strict whole-frame pixel comparison. The policy is qualified as an adapter
+candidate, not an Aero release; see `docs/M16_ADAPTIVE_CHUNKS.md`.
 
 ## Verify
 
@@ -214,6 +222,9 @@ then compares vanilla with a real two-rebuild, non-retry bounded policy.
 work result, measures dirty age and visible readiness, and compares exact chunk
 vertex signatures before rejecting the fixed batch on visible latency and
 unresolved temporal visual divergence.
+`smokes/m16-adaptive-chunks` restores one canonical save into both modes,
+applies visible-first adaptive work under a time envelope, freezes tick 20,
+drains the global queue, and bounds differences across every RGBA pixel.
 
 The gate then runs `smokes/lab-cycle`, restores deterministic checkpoints in
 fresh clients, compares hypotheses, exercises GUI selectors, and compiles and
@@ -240,6 +251,7 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M13_CYCLE.md` is the v1.1.0 Aero persistence/differential GO audit.
 `M14_CYCLE.md` is the v1.2.0 chunk-backlog/caller-policy GO audit.
 `M15_CYCLE.md` is the v1.3.0 explicit-contract/readiness GO audit.
+`M16_CYCLE.md` is the v1.4.0 adaptive-scheduler/framebuffer GO audit.
 
 After preparing the local runtime with the canonical smoke gate, replay a
 bundle with:

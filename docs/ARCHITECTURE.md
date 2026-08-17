@@ -250,6 +250,14 @@ place that maps those states back to vanilla's Boolean. Separate readiness and
 Tessellator probes remain smoke-owned; neutral parsers consume their logs. This
 qualifies the boundary without coupling product modules to mapped game types.
 
+M16 adds a smoke-owned scheduler over that contract. It derives an accepted-work
+limit from visible dirty debt, applies a rebuild-time envelope, and leaves the
+vanilla priority sorter authoritative within the selected cohort. A separate
+frame oracle freezes interpolation and game ticks, waits for global and visible
+readiness, and hashes the complete RGBA framebuffer. The runner restores one
+canonical save snapshot for both modes so world generation is outside the
+differential boundary. None of this enters the API, kernel, or Aero checkout.
+
 ## Compatibility boundary
 
 Product modules currently compile with `--release 8`; tooling runs on JDK 21.

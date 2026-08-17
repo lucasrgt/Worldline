@@ -27,7 +27,8 @@ gradle.projectsEvaluated {
     def ticks = (project.findProperty('worldlineTicks') ?: '240').toString()
     def mode = (project.findProperty('worldlineMode') ?: 'dense').toString()
     def emptyMode = mode == 'empty' || mode == 'reload' || mode == 'probe' || mode == 'bounded' ||
-        mode == 'm15baseline' || mode == 'm15contract'
+        mode == 'm15baseline' || mode == 'm15contract' ||
+        mode == 'm16baseline' || mode == 'm16adaptive'
     def minimum = (project.findProperty('worldlineMinBEs') ?: (emptyMode ? '0' : '500')).toString()
     def spikeMs = (project.findProperty('worldlineSpikeMs') ?: '25').toString()
     def warmup = (project.findProperty('worldlineWarmupTicks') ?: '0').toString()
@@ -44,9 +45,24 @@ gradle.projectsEvaluated {
         '-Dworldline.chunkPolicy.enabled=true', '-Dworldline.chunkPolicy.batch=2'])
     if (mode == 'm15baseline' || mode == 'm15contract') modeArgs.addAll([
         '-Dworldline.chunkProbe.enabled=true', '-Dworldline.chunkReadiness.enabled=true',
-        '-Dworldline.chunkGeometry.enabled=true'])
+        '-Dworldline.chunkGeometry.enabled=true', '-Dworldline.frameOracle.fixedDelta=true'])
     if (mode == 'm15contract') modeArgs.addAll([
         '-Dworldline.chunkContract.enabled=true', '-Dworldline.chunkContract.batch=2'])
+    if (mode == 'm16baseline' || mode == 'm16adaptive') modeArgs.addAll([
+        '-Dworldline.chunkProbe.enabled=true', '-Dworldline.chunkReadiness.enabled=true',
+        '-Dworldline.frameOracle.enabled=true',
+        '-Dworldline.frameOracle.tick=20', '-Dworldline.frameOracle.stableFrames=20',
+        '-Dworldline.frameOracle.maxFrames=4000'])
+    if (mode == 'm16adaptive') modeArgs.addAll([
+        '-Dworldline.chunkContract.enabled=true', '-Dworldline.chunkContract.adaptive=true',
+        '-Dworldline.chunkContract.maxBatch=' +
+            (project.findProperty('worldlineAdaptiveMax') ?: '8').toString(),
+        '-Dworldline.chunkContract.budgetUs=' +
+            (project.findProperty('worldlineBudgetUs') ?: '12000').toString()])
+    if ((mode == 'm16baseline' || mode == 'm16adaptive') &&
+            project.findProperty('worldlineFrameOutput'))
+        modeArgs.add('-Dworldline.frameOracle.output=' +
+            project.findProperty('worldlineFrameOutput').toString())
     task.jvmArgs(([
         '-Dworldline.capture.enabled=true',
         '-Dworldline.capture.seed=17320110707',

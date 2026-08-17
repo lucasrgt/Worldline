@@ -45,5 +45,6 @@ public final class WorldlineChunkReadiness {
         }
         WorldlineChunkProbe.readiness(queue.size(), dirty, visible, visibleDirty, visibleReady,
                 oldest, oldestVisible);
+        WorldlineFrameOracle.readiness(dirty, visible, visibleDirty, visibleReady);
     }
 }

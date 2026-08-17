@@ -15,18 +15,32 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(GameRenderer.class)
 public abstract class WorldlineChunkCallerMixin {
     private static final boolean ENABLED = Boolean.getBoolean("worldline.chunkContract.enabled");
+    private static final boolean ADAPTIVE = Boolean.getBoolean("worldline.chunkContract.adaptive");
 
     @Redirect(method = "renderFrame(FJ)V", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/render/WorldRenderer;compileChunks"
                     + "(Lnet/minecraft/entity/LivingEntity;Z)Z"))
     private boolean worldlineSchedule(WorldRenderer renderer, LivingEntity camera, boolean forced) {
         if (!ENABLED) return renderer.compileChunks(camera, forced);
-        WorldlineChunkWork queue = new WorldlineChunkWork(renderer, camera, forced);
+        long budgetUs = Long.getLong("worldline.chunkContract.budgetUs", 0L);
+        WorldlineChunkWork queue = new WorldlineChunkWork(renderer, camera, forced, ADAPTIVE, budgetUs);
+        int debt = queue.visibleDebt();
+        int limit = ADAPTIVE ? adaptiveLimit(debt)
+                : Math.max(1, Integer.getInteger("worldline.chunkContract.batch", 2));
         WorldlineChunkProbe.beginCompile(queue.size(), forced);
-        Result result = Aero_ChunkWorkContract.execute(queue,
-                Math.max(1, Integer.getInteger("worldline.chunkContract.batch", 2)));
-        WorldlineChunkProbe.contract(result.status.name(), result.accepted, result.remaining);
+        Result result = Aero_ChunkWorkContract.execute(queue, limit);
+        WorldlineChunkProbe.contract(result.status.name(), result.accepted, result.remaining,
+                limit, debt, queue.visibleAccepted(), queue.budgetStopped());
         WorldlineChunkProbe.endCompile(result.remaining, result.endCurrentFrame());
         return result.endCurrentFrame();
+    }
+
+    private static int adaptiveLimit(int debt) {
+        int maximum = Math.max(2, Integer.getInteger("worldline.chunkContract.maxBatch", 8));
+        if (debt == 0) return maximum;
+        if (debt > 1024) return maximum;
+        if (debt > 512) return Math.min(maximum, 6);
+        if (debt > 128) return Math.min(maximum, 4);
+        return Math.min(maximum, 2);
     }
 }

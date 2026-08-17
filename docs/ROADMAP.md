@@ -20,6 +20,7 @@ Passing an experiment does not silently promote its API.
 | v1.1.0 / M13 | Aero persistence isolation, dense/empty differential, and compile-budget test | GO - real BEs persist; empty retains compile pressure; budget rejected |
 | v1.2.0 / M14 | Chunk caller semantics, initial-backlog attribution, and bounded non-retry policy | GO - caller/backlog isolated; policy experimental |
 | v1.3.0 / M15 | Explicit accepted/deferred contract, visible readiness, and geometry oracle | GO - contract qualified; fixed batch rejected |
+| v1.4.0 / M16 | Visible-first adaptive chunk envelope and fixed-state framebuffer oracle | GO - candidate qualified with strict pixel parity |
 
 ## Promotion rule
 
@@ -28,10 +29,10 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.3.0 direction
+## Immediate post-v1.4.0 direction
 
-M16 should retain next-frame accepted/deferred semantics while adapting work to
-visible dirty debt and a bounded time/work envelope. It must close the readiness
-gap exposed by M15 without recreating the retry loop, then add fixed-tick render
-evidence. The historical random spike remains a non-claim beyond the isolated
-initial-backlog path.
+M17 should harden the candidate across multiple canonical saves, camera paths,
+view distances, and budget values, then package an opt-in Aero integration for
+upstream evaluation. It must preserve next-frame deferral and strict fixed-state
+pixel parity. The historical random spike remains a non-claim beyond the
+isolated initial-backlog path.

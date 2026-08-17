@@ -40,14 +40,15 @@ public final class ChunkContractSmoke {
         require(baseline.firstQueue > 1_000 && contract.firstQueue > 1_000
                 && baseline.lastQueue < baseline.firstQueue && contract.lastQueue < contract.firstQueue,
                 "dirty queues did not drain");
-        require(contract.firstVisibleDirty > 0 && contract.minVisibleDirty < contract.firstVisibleDirty
-                && contract.maxVisibleReady > 0 && contract.maxOldest > 0,
+        require(contract.firstVisibleDirty > 0 && contract.bestReady > 0 && contract.maxOldest > 0,
                 "visible readiness or dirty age was not observed");
-        require(contract.minVisibleDirty > baseline.minVisibleDirty
-                && contract.maxVisibleReady < baseline.maxVisibleReady,
+        require(contract.rebuilds < baseline.rebuilds
+                && contract.firstQueue - contract.lastQueue < baseline.firstQueue - baseline.lastQueue
+                && contract.bestReady * baseline.bestVisible
+                    < baseline.bestReady * contract.bestVisible,
                 "fixed batch did not expose its visible-readiness cost");
-        require(geometry.matches >= 500 && geometry.mismatches > 0
-                && geometry.matches * 3 > (geometry.matches + geometry.mismatches) * 2,
+        require(geometry.matches >= 300 && geometry.mismatches > 0
+                && geometry.matches * 4 > (geometry.matches + geometry.mismatches) * 3,
                 "chunk geometry comparison lacked stable exact matches and temporal divergence");
         String report = "contract.result=ACCEPTED_DEFERRED\nresume.point=NEXT_FRAME\n"
                 + "readiness.telemetry=DIRTY_AGE_AND_VISIBLE_STATE\n"
@@ -74,6 +75,10 @@ public final class ChunkContractSmoke {
             value.deferred += sample.deferred; value.completed += sample.completed;
             value.stalled += sample.stalled; value.maxOldest = Math.max(value.maxOldest, sample.oldest);
             value.maxVisibleReady = Math.max(value.maxVisibleReady, sample.visibleReady);
+            if (sample.visible > 0 && sample.visibleReady * value.bestVisible
+                    > value.bestReady * sample.visible) {
+                value.bestReady = sample.visibleReady; value.bestVisible = sample.visible;
+            }
             if (sample.queue >= 0) { if (value.firstQueue < 0) value.firstQueue = sample.queue; value.lastQueue = sample.queue; }
             if (sample.visibleDirty >= 0) {
                 if (value.firstVisibleDirty < 0 && sample.visibleDirty > 0)
@@ -118,7 +123,8 @@ public final class ChunkContractSmoke {
         System.out.println(name + ".frames=" + value.frames + " calls=" + value.calls
                 + " rebuilds=" + value.rebuilds + " queue=" + value.firstQueue + "->" + value.lastQueue
                 + " visibleDirty=" + value.firstVisibleDirty + "->" + value.minVisibleDirty
-                + " maxReady=" + value.maxVisibleReady + " oldest=" + value.maxOldest);
+                + " maxReady=" + value.maxVisibleReady + " readyRatio="
+                + value.bestReady + "/" + value.bestVisible + " oldest=" + value.maxOldest);
     }
     private static void print(String name, Timing value) {
         System.out.println(name + ".frameMaxUs=" + value.max + " frameP95Us=" + value.p95);
@@ -136,6 +142,7 @@ public final class ChunkContractSmoke {
         final long frames; long calls, falseReturns, trueReturns, forced, rebuilds, accepted;
         long deferred, completed, stalled, firstQueue = -1, lastQueue = -1;
         long firstVisibleDirty = -1, minVisibleDirty = Long.MAX_VALUE, maxVisibleReady, maxOldest;
+        long bestReady, bestVisible = 1;
         Metrics(long frames) { this.frames = frames; }
     }
     private static final class Geometry { final int matches, mismatches;

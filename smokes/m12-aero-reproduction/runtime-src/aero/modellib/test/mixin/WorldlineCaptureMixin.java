@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.world.World;
+import aero.modellib.test.worldline.WorldlineFrameOracle;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -40,7 +41,7 @@ public abstract class WorldlineCaptureMixin {
     @Unique private int worldlineY;
     @Unique private int worldlineWarmup;
 
-    @Inject(method = "tick()V", at = @At("HEAD"))
+    @Inject(method = "tick()V", at = @At("HEAD"), cancellable = true)
     private void worldlineCapture(CallbackInfo callback) {
         if (!WORLDLINE_ENABLED) return;
         if (worldlinePhase == 0 && world == null) {
@@ -52,6 +53,13 @@ public abstract class WorldlineCaptureMixin {
         }
         if (world == null || player == null) return;
         if (worldlinePhase >= 3) return;
+        if (worldlinePhase == 2 && WorldlineFrameOracle.freeze(worldlineTicks)) {
+            Minecraft game = (Minecraft) (Object) this;
+            game.currentScreen = null; game.options.hideHud = true; game.options.bobView = false;
+            player.velocityX = 0.0D; player.velocityY = 0.0D; player.velocityZ = 0.0D;
+            player.setPositionAndAngles(8.5D, worldlineY, 8.5D, 45.0F, 0.0F);
+            callback.cancel(); return;
+        }
         if (worldlinePhase == 1) {
             worldlineY = WORLDLINE_Y;
             if (worldlineWarmup == 0) for (int x = -1; x <= 1; x++)

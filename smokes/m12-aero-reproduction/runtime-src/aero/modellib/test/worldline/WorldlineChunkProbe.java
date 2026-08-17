@@ -7,6 +7,7 @@ public final class WorldlineChunkProbe {
     private static int queueStart, queueEnd, queueMax, invalidates, marks, sorts;
     private static int ambient, reloads, policyBatches, policyRebuilds, policyRemaining;
     private static int accepted, deferred, completed, stalled, contractRemaining;
+    private static int proposed, visibleDebt, visibleAccepted, budgetStops;
     private static int dirty, visible, visibleDirty, visibleReady, oldest, oldestVisible;
     private static long compileNs, compileStart;
     private static boolean compiling;
@@ -20,6 +21,7 @@ public final class WorldlineChunkProbe {
         invalidates = marks = sorts = ambient = reloads = 0;
         policyBatches = policyRebuilds = policyRemaining = 0;
         accepted = deferred = completed = stalled = contractRemaining = 0;
+        proposed = visibleDebt = visibleAccepted = budgetStops = 0;
         dirty = visible = visibleDirty = visibleReady = oldest = oldestVisible = -1;
         compileNs = compileStart = 0L; compiling = false;
     }
@@ -50,9 +52,12 @@ public final class WorldlineChunkProbe {
         policyBatches++; policyRebuilds += built; policyRemaining = remaining;
     }
 
-    public static void contract(String status, int built, int remaining) {
+    public static void contract(String status, int built, int remaining, int offered,
+            int debt, int builtVisible, boolean budgetStopped) {
         if (!ENABLED) return;
         accepted += built; contractRemaining = remaining;
+        proposed += offered; visibleDebt = debt; visibleAccepted += builtVisible;
+        if (budgetStopped) budgetStops++;
         if ("COMPLETE".equals(status)) completed++;
         else if ("ACCEPTED_DEFERRED".equals(status)) deferred++;
         else stalled++;
@@ -76,7 +81,9 @@ public final class WorldlineChunkProbe {
                 + " policyBatches=" + policyBatches + " policyRebuilds=" + policyRebuilds
                 + " policyRemaining=" + policyRemaining + " accepted=" + accepted
                 + " deferred=" + deferred + " completed=" + completed + " stalled=" + stalled
-                + " contractRemaining=" + contractRemaining + " dirty=" + dirty
+                + " contractRemaining=" + contractRemaining + " proposed=" + proposed
+                + " visibleDebt=" + visibleDebt + " visibleAccepted=" + visibleAccepted
+                + " budgetStops=" + budgetStops + " dirty=" + dirty
                 + " visible=" + visible + " visibleDirty=" + visibleDirty
                 + " visibleReady=" + visibleReady + " oldest=" + oldest
                 + " oldestVisible=" + oldestVisible + " compileUs=" + compileNs / 1000L);

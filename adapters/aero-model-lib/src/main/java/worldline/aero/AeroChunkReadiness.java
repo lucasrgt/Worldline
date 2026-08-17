@@ -15,7 +15,9 @@ public final class AeroChunkReadiness {
         return new Sample(value(fields, "calls"), value(fields, "false"), value(fields, "true"),
                 value(fields, "forced"), value(fields, "rebuilds"), value(fields, "queueEnd"),
                 value(fields, "accepted"), value(fields, "deferred"), value(fields, "completed"),
-                value(fields, "stalled"), value(fields, "dirty"), value(fields, "visible"),
+                value(fields, "stalled"), value(fields, "proposed"), value(fields, "visibleDebt"),
+                value(fields, "visibleAccepted"), value(fields, "budgetStops"),
+                value(fields, "dirty"), value(fields, "visible"),
                 value(fields, "visibleDirty"), value(fields, "visibleReady"), value(fields, "oldest"),
                 value(fields, "oldestVisible"), value(fields, "compileUs"));
     }
@@ -42,16 +44,20 @@ public final class AeroChunkReadiness {
     public static final class Sample {
         public final long calls, falseReturns, trueReturns, forced, rebuilds, queue;
         public final long accepted, deferred, completed, stalled, dirty;
+        public final long proposed, visibleDebt, visibleAccepted, budgetStops;
         public final long visible, visibleDirty, visibleReady, oldest, oldestVisible, compileUs;
 
         Sample(long calls, long falseReturns, long trueReturns, long forced, long rebuilds,
-                long queue, long accepted, long deferred, long completed, long stalled, long dirty,
+                long queue, long accepted, long deferred, long completed, long stalled,
+                long proposed, long visibleDebt, long visibleAccepted, long budgetStops, long dirty,
                 long visible, long visibleDirty, long visibleReady, long oldest,
                 long oldestVisible, long compileUs) {
             this.calls = calls; this.falseReturns = falseReturns; this.trueReturns = trueReturns;
             this.forced = forced; this.rebuilds = rebuilds; this.queue = queue;
             this.accepted = accepted; this.deferred = deferred; this.completed = completed;
-            this.stalled = stalled; this.dirty = dirty; this.visible = visible;
+            this.stalled = stalled; this.proposed = proposed; this.visibleDebt = visibleDebt;
+            this.visibleAccepted = visibleAccepted; this.budgetStops = budgetStops;
+            this.dirty = dirty; this.visible = visible;
             this.visibleDirty = visibleDirty; this.visibleReady = visibleReady;
             this.oldest = oldest; this.oldestVisible = oldestVisible; this.compileUs = compileUs;
         }
