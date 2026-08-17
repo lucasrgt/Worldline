@@ -341,6 +341,11 @@ reference. Correlation is preserved by object identity and is never inspected,
 serialized, compared by value, or placed in a registry. The correlated wrapper
 does not change route execution, controller timing, or adapter behavior.
 
+M43 composes at most 16 correlated route plans sequentially. Each completed
+execution retains its own route termination; an independent synchronous batch
+controller can stop before the next plan. No plans execute concurrently and no
+correlation registry or adapter behavior is introduced.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

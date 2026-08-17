@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.31.0 - M43 Bounded Correlated Route Batch
+
+Status: GO for sequential correlated-route batch control.
+
+- Added immutable correlated route plans and batch results with a 16-plan cap.
+- Preserved each route's correlation, terminal event, and termination reason.
+- Applied a synchronous batch `STOP` before the next unsent plan.
+- Added no parallelism, registry, retry, scheduling, or adapter change.
+
+The frozen M43 semantic SHA-256 is
+`3b09e9188cd0948cb17f11f3f203888bfd04845bf599ea20fbd004b1d1a94e44`.
+
 ## 1.30.0 - M42 Caller-Owned Route Correlation
 
 Status: GO for identity-preserving opaque route correlation.

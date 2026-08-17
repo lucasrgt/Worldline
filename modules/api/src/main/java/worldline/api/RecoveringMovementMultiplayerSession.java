@@ -84,4 +84,25 @@ public interface RecoveringMovementMultiplayerSession extends ResolvedMovementMu
         });
         return new CorrelatedMovementRouteExecution(correlation, execution, terminal[0]);
     }
+
+    default CorrelatedMovementRouteBatchResult moveCorrelatedRouteBatch(
+            List<CorrelatedMovementRoutePlan> plans, CorrelatedMovementRouteController routeController,
+            CorrelatedMovementRouteBatchController batchController) {
+        if (plans == null || plans.isEmpty() || plans.size() > 16)
+            throw new IllegalArgumentException("invalid correlated route batch");
+        if (routeController == null || batchController == null)
+            throw new IllegalArgumentException("null correlated route batch controller");
+        List<CorrelatedMovementRouteExecution> executions = new ArrayList<>(plans.size());
+        boolean stopped = false;
+        for (CorrelatedMovementRoutePlan plan : plans) {
+            if (plan == null) throw new IllegalArgumentException("null correlated route plan");
+            CorrelatedMovementRouteExecution execution = moveRouteWithFallbackCorrelated(
+                    plan.alternatives(), plan.correlation(), routeController);
+            executions.add(execution); MovementRouteDirective directive = batchController.after(execution);
+            if (directive == null) throw new IllegalStateException("null movement route batch directive");
+            if (directive == MovementRouteDirective.STOP) { stopped = true; break; }
+        }
+        return new CorrelatedMovementRouteBatchResult(executions, stopped
+                ? MovementRouteBatchTermination.CONTROLLER_STOP : MovementRouteBatchTermination.EXHAUSTED);
+    }
 }

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.30.0 - M42 Caller-Owned Route Correlation (GO)**.
+Current official milestone: **Worldline v1.31.0 - M43 Bounded Correlated Route Batch (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -243,6 +243,10 @@ event and distinguishes `EXHAUSTED` from `CONTROLLER_STOP`. See
 M42 carries one opaque caller-owned reference by identity through synchronous
 route events and the terminal execution summary, without a global registry.
 See `docs/M42_ROUTE_CORRELATION.md`.
+
+M43 executes at most 16 correlated route plans sequentially and returns an
+immutable per-route batch result with an explicit batch termination. See
+`docs/M43_CORRELATED_BATCH.md`.
 
 ## Verify
 
