@@ -58,6 +58,7 @@ Passing an experiment does not silently promote its API.
 | v1.39.0 / M51 | Immutable dropped-item spawn observation | GO - exact Packet21 stack with bounded position and velocity evidence |
 | v1.40.0 / M52 | Named dropped-item collection lifecycle | GO - Packet21 entity correlated through Packet22 collector and Packet29 removal |
 | v1.41.0 / M53 | Selected held-block placement with two remote caches | GO - Packet15 derived stack proven through Packet53, Packet103, and Packet5 |
+| v1.42.0 / M54 | Single-chest open and immutable combined-window read | GO - Packet100 readUTF descriptor paired with exact 63-slot Packet104 view |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -69,9 +70,9 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.41.0 direction
+## Immediate post-v1.42.0 direction
 
-The next milestone can open the placed chest boundary through Packet15 use and
-strictly pair Packet100 metadata with its Packet104 combined window. Placement
-evidence still does not imply click-window writes, crafting, server tick
+The next milestone can qualify an accepted Packet102 personal-window
+transaction and its Packet106 acknowledgement. Chest observation still does
+not imply click-window writes, close reconciliation, crafting, server tick
 control, world-scale pathfinding, or complete physics.

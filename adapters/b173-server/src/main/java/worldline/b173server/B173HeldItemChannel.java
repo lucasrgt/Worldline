@@ -46,6 +46,18 @@ final class B173HeldItemChannel {
         output.writeShort(item.damage()); output.flush();
     }
 
+    void use(BlockPosition position, BlockFace face) throws IOException {
+        if (position == null || face == null || position.y() < 0 || position.y() >= 128)
+            throw new IllegalArgumentException("invalid block activation");
+        RemoteInventoryView inventory = inbound.inventory();
+        if (inventory.windowId() != 0 || inventory.size() != 45
+                || !inventory.slot(36 + selectedSlot).empty())
+            throw new IllegalStateException("block activation requires an empty selected hand");
+        output.writeByte(16); output.writeShort(selectedSlot); output.writeByte(15);
+        output.writeInt(position.x()); output.writeByte(position.y()); output.writeInt(position.z());
+        output.writeByte(face(face)); output.writeShort(-1); output.flush();
+    }
+
     private static int face(BlockFace face) {
         switch (face) {
             case DOWN: return 0;

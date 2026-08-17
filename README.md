@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.41.0 - M53 Held Block Placement (GO)**.
+Current official milestone: **Worldline v1.42.0 - M54 Chest Window (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -282,6 +282,10 @@ inventory. See `docs/M52_ITEM_COLLECTION.md`.
 M53 places the selected observed block through Packet15 and proves the exact
 Packet53 stone replacement in two immutable remote caches, plus consumed local,
 peer, and persisted inventory. See `docs/M53_HELD_BLOCK_PLACEMENT.md`.
+
+M54 activates a placed single chest with an empty selected hand, decodes the
+Packet100 modified-UTF descriptor, and pairs it with the exact 63-slot Packet104
+combined view. See `docs/M54_CHEST_WINDOW.md`.
 
 ## Verify
 

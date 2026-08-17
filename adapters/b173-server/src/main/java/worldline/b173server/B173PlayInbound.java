@@ -112,6 +112,9 @@ final class B173PlayInbound {
 
     RemoteInventoryView awaitInventory() throws IOException { return items.awaitInventory(this::pumpOne); }
     RemoteInventoryView inventory() { return items.inventory(); }
+    worldline.api.RemoteContainerWindow awaitChest() throws IOException {
+        return items.awaitChest(this::pumpOne); }
+    void beginChest() { items.beginChest(); }
     RemoteHeldItem awaitPeerHeldItem(RemoteHeldItem expected) throws IOException {
         return items.awaitPeerHeldItem(expected, this::pumpOne); }
     worldline.api.RemoteDroppedItem awaitDroppedItem(worldline.api.RemoteItemStack expected) throws IOException {

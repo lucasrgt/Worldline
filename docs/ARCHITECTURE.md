@@ -404,6 +404,12 @@ window-0 slot and rejects empty or non-block selections; callers supply only a
 neutral support position and `BlockFace`. Packet53 and inventory trackers remain
 the independent inbound authority.
 
+M54 adds a strict `B173WindowTracker` beside the item coordinator. An explicit
+chest activation expects one Packet100 descriptor decoded with Java modified
+UTF, then correlates only the matching Packet104 window ID and exact 63-slot
+shape. The immutable API pairs that descriptor with the combined view; window
+close and transaction state remain outside this boundary.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

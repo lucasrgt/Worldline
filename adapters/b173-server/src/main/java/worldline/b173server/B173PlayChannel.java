@@ -18,8 +18,7 @@ final class B173PlayChannel {
     private final DataOutputStream output;
     private final B173PlayInbound inbound;
     private final B173HeldItemChannel held;
-    private PlayerPose pose;
-    private double stanceHeight;
+    private PlayerPose pose; private double stanceHeight;
 
     B173PlayChannel(DataInputStream input, DataOutputStream output, int timeoutMillis,
             int localEntityId, String localUsername) throws IOException {
@@ -127,6 +126,7 @@ final class B173PlayChannel {
         held.select(slot); }
     void dropHeldItem() throws IOException { require(pose != null, "play channel is not synchronized"); held.drop(); }
     void placeHeldBlock(worldline.api.BlockPosition support, worldline.api.BlockFace face) throws IOException { require(pose != null, "play channel is not synchronized"); held.place(support, face); }
+    worldline.api.RemoteContainerWindow openChest(BlockPosition position, worldline.api.BlockFace face) throws IOException { require(pose != null, "play channel is not synchronized"); held.use(position, face); inbound.beginChest(); return inbound.awaitChest(); }
 
     MovementOutcome moveAndObserve(double dx, double dy, double dz, int ticks)
             throws IOException, InterruptedException {

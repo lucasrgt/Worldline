@@ -7,6 +7,7 @@ import worldline.api.RemoteHeldItem;
 import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteItemCollection;
 import worldline.api.RemoteItemStack;
+import worldline.api.RemoteContainerWindow;
 
 /** Modular bounded coordinator for protocol-14 inventory and item-entity traffic. */
 final class B173ItemInbound {
@@ -14,6 +15,7 @@ final class B173ItemInbound {
     private final B173InventoryTracker inventory = new B173InventoryTracker();
     private final B173PeerEquipmentTracker equipment = new B173PeerEquipmentTracker(identities);
     private final B173DroppedItemTracker dropped = new B173DroppedItemTracker();
+    private final B173WindowTracker windows = new B173WindowTracker();
 
     B173ItemInbound(int localEntityId, String localUsername) throws IOException {
         identities.bind(localEntityId, localUsername); }
@@ -24,7 +26,9 @@ final class B173ItemInbound {
         else if (packet == 21) dropped.spawn(input);
         else if (packet == 22) dropped.collect(input, identities);
         else if (packet == 29) dropped.destroy(input);
-        else if (packet == 103 || packet == 104) inventory.accept(packet, input);
+        else if (packet == 100) windows.open(input);
+        else if (packet == 103 || packet == 104) { inventory.accept(packet, input);
+            if (packet == 104) windows.contents(inventory.snapshot()); }
         else return false;
         return true;
     }
@@ -38,6 +42,15 @@ final class B173ItemInbound {
 
     RemoteInventoryView inventory() { if (inventory.snapshot() == null)
         throw new IllegalStateException("inventory window is not observed"); return inventory.snapshot(); }
+
+    RemoteContainerWindow awaitChest(Pump pump) throws IOException {
+        if (windows.snapshot() != null) return windows.snapshot();
+        for (int count = 0; count < 8192; count++) { pump.one();
+            if (windows.snapshot() != null) return windows.snapshot(); }
+        throw new IOException("chest window absent from bounded inbound window");
+    }
+
+    void beginChest() { windows.begin(); }
 
     RemoteHeldItem awaitPeerHeldItem(RemoteHeldItem expected, Pump pump) throws IOException {
         if (expected == null) throw new IllegalArgumentException("null expected peer held item");

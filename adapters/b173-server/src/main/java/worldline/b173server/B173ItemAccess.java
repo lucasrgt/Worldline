@@ -8,6 +8,7 @@ import worldline.api.RemoteItemStack;
 import worldline.api.RemoteItemCollection;
 import worldline.api.BlockFace;
 import worldline.api.BlockPosition;
+import worldline.api.RemoteContainerWindow;
 
 /** Unchecked public-client boundary for the bounded item channel. */
 final class B173ItemAccess {
@@ -33,6 +34,11 @@ final class B173ItemAccess {
     static void placeHeldBlock(B173PlayChannel channel, BlockPosition support, BlockFace face) {
         try { channel.placeHeldBlock(support, face); }
         catch (IOException error) { throw new IllegalStateException("held-block placement failed", error); }
+    }
+
+    static RemoteContainerWindow openChest(B173PlayChannel channel, BlockPosition position, BlockFace face) {
+        try { return channel.openChest(position, face); }
+        catch (IOException error) { throw new IllegalStateException("chest window receive failed", error); }
     }
 
     static RemoteHeldItem awaitPeerHeldItem(B173PlayChannel channel, RemoteHeldItem expected) {

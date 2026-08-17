@@ -89,7 +89,7 @@ final class B173InboundPacket {
         boundedBytes(input, Math.multiplyExact(count, 3), 3_000_000);
     }
     private static void openWindow(DataInputStream input) throws IOException {
-        bytes(input, 2); string(input, 32); bytes(input, 1);
+        bytes(input, 2); input.readUTF(); bytes(input, 1);
     }
     private static void item(DataInputStream input) throws IOException {
         short id = input.readShort(); if (id >= 0) bytes(input, 3);

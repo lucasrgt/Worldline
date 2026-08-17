@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.42.0 - M54 Chest Window
+
+Status: GO for a single-chest descriptor and immutable combined-window read.
+
+- Added neutral immutable remote-window descriptor and container values.
+- Corrected Packet100 decoding to its exceptional modified-UTF title format.
+- Correlated type 0, title `Chest`, and 27 owned slots with a 63-slot Packet104 view.
+- Proved the empty combined view after authoritative chest placement in two fresh worlds.
+
+The frozen M54 semantic SHA-256 is
+`c3fe36b177bb6263b467d92726ec430f16fc832f012417a1d5cd20be269a038f`.
+
 ## 1.41.0 - M53 Held Block Placement
 
 Status: GO for selected held-block placement with two independent world views.
