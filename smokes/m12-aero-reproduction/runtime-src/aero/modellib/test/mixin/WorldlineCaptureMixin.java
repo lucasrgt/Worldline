@@ -9,6 +9,7 @@ import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.world.World;
 import java.util.Collections;
 import aero.modellib.test.worldline.WorldlineFrameOracle;
+import aero.modellib.test.worldline.WorldlineSaveForce;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -45,6 +46,10 @@ public abstract class WorldlineCaptureMixin {
         Boolean.getBoolean("worldline.frameOracle.stabilizeScene");
     @Unique private static final int WORLDLINE_SAVE_TICK =
         Integer.getInteger("worldline.capture.saveTick", -1);
+    @Unique private static final int WORLDLINE_DIRTY_TICK =
+        Integer.getInteger("worldline.capture.dirtyTick", -1);
+    @Unique private static final int WORLDLINE_DIRTY_CHUNKS =
+        Integer.getInteger("worldline.capture.dirtyChunks", 0);
     @Unique private int worldlinePhase;
     @Unique private int worldlineTicks;
     @Unique private int worldlineY;
@@ -92,6 +97,9 @@ public abstract class WorldlineCaptureMixin {
         worldlineTicks++;
         if (WORLDLINE_SAVE_TICK > 0 && worldlineTicks == WORLDLINE_SAVE_TICK)
             world.saveWithLoadingDisplay(false, null);
+        if (WORLDLINE_DIRTY_TICK > 0 && worldlineTicks == WORLDLINE_DIRTY_TICK)
+            System.out.println("[WorldlineCapture] dirtyChunks="
+                    + WorldlineSaveForce.markDirty(world, WORLDLINE_DIRTY_CHUNKS));
         if (worldlineTicks >= WORLDLINE_TICKS) {
             System.out.println("[WorldlineCapture] complete ticks=" + worldlineTicks);
             worldlinePhase = 3;
@@ -113,12 +121,13 @@ public abstract class WorldlineCaptureMixin {
 
     @Unique
     private void worldlinePlacePlayer() {
+        boolean look = "look".equals(WORLDLINE_PATH);
         int step = "moving".equals(WORLDLINE_PATH) ? Math.min(worldlineTicks, 60) : 0;
         double x = 8.5D + step * 0.25D, z = 8.5D + step * 0.125D;
-        float yaw = 45.0F + step * 2.0F;
-        player.setPositionAndAngles(x, worldlineY, z, yaw, 0.0F);
-        WorldlineFrameOracle.pose(WORLDLINE_PATH, WORLDLINE_VIEW_DISTANCE,
-                x, worldlineY, z, yaw);
+        double y = worldlineY + (look && worldlineTicks % 10 < 5 ? 1.2D : 0.0D);
+        float yaw = 45.0F + (look ? worldlineTicks * 12.0F : step * 2.0F);
+        player.setPositionAndAngles(x, y, z, yaw, look ? 20.0F : 0.0F);
+        WorldlineFrameOracle.pose(WORLDLINE_PATH, WORLDLINE_VIEW_DISTANCE, x, y, z, yaw);
     }
 
     @Unique

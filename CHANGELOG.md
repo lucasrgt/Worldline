@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.7.0 - M19 Forced Autosave
+
+Status: GO for the default-off one-chunk save cap; the historical random spike
+remains a non-claim.
+
+- Added a look/jump/spin tower path and marked 60 loaded chunks dirty before
+  native 40-tick autosaves.
+- Compared vanilla's 24-chunk non-forced batch, an opt-in one-chunk cap, and
+  the existing save-cancelled control on restored copies of one dense save.
+- Proved that the cap keeps saves active while reducing the observed worst
+  save; exact timings remain machine-local observations.
+- Kept the cap default-off, the adaptive scheduler lab-only, and the M16 visual
+  threshold unchanged.
+
+The frozen M19 invariant-report SHA-256 is
+`9ca8c14f03615b25891a8468a946bbbe7b889d8de747a8d0e03cb73665970bb1`.
+
 ## 1.6.0 - M18 Save Attribution
 
 Status: GO for paired save-path attribution; the historical random spike

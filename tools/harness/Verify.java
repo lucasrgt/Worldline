@@ -85,6 +85,8 @@ public final class Verify {
                     "m17-scheduler-hardening"));
             run(Arrays.asList("java", "tools/smoke/AeroSaveAttributionCycle.java",
                     "m18-save-attribution"));
+            run(Arrays.asList("java", "tools/smoke/AeroForcedAutosaveCycle.java",
+                    "m19-forced-autosave"));
             run(Arrays.asList("java", "tools/smoke/LabCycle.java", "lab-cycle"));
         }
         System.out.println("verify passed");

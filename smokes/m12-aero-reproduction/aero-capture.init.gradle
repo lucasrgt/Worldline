@@ -102,6 +102,12 @@ gradle.projectsEvaluated {
             (project.findProperty('worldlineViewDistance') ?: '-1').toString(),
         '-Dworldline.capture.saveTick=' +
             (project.findProperty('worldlineSaveTick') ?: '-1').toString(),
+        '-Dworldline.capture.dirtyTick=' +
+            (project.findProperty('worldlineDirtyTick') ?: '-1').toString(),
+        '-Dworldline.capture.dirtyChunks=' +
+            (project.findProperty('worldlineDirtyChunks') ?: '0').toString(),
+        '-Dworldline.saveBudget.chunks=' +
+            (project.findProperty('worldlineSaveBudget') ?: '0').toString(),
         '-Daero.benchmark.skipNonForcedSaves=' +
             (project.findProperty('worldlineSkipSaves') ?: 'true').toString(),
         '-Daero.spikelog=true',

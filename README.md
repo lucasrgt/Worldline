@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.6.0 - M18 Save Attribution (GO; historical spike NON-CLAIM)**.
+Current official milestone: **Worldline v1.7.0 - M19 Forced Autosave (GO; cap default-off)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -117,6 +117,11 @@ M18 turns the capture skip-saves flag back on for one restored dense twin and
 injects a non-forced world save at a known tick. The skipped twin cancels it;
 the live twin places that save on the same compile/GC/heap timeline. The
 historical random spike remains a non-claim; see `docs/M18_SAVE_ATTRIBUTION.md`.
+
+M19 forces a 60-chunk dirty set beside the tower and compares vanilla's
+non-forced save batch with a default-off one-chunk cap and a save-cancelled
+control. The cap reduces the worst synthetic save without claiming the real
+historical spike is eliminated; see `docs/M19_FORCED_AUTOSAVE.md`.
 
 ## Verify
 
@@ -243,6 +248,8 @@ drainage, and fails promotion on the observed strict framebuffer divergences.
 `smokes/m18-save-attribution` restores one dense save into skip and live
 processes, injects one non-forced save, and freezes the colocated timeline
 without claiming the historical spike is gone.
+`smokes/m19-forced-autosave` forces a dirty set and proves the opt-in one-chunk
+non-forced save cap lowers the worst synthetic batch while staying default-off.
 
 The gate then runs `smokes/lab-cycle`, restores deterministic checkpoints in
 fresh clients, compares hypotheses, exercises GUI selectors, and compiles and
@@ -272,6 +279,7 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M16_CYCLE.md` is the v1.4.0 adaptive-scheduler/framebuffer GO audit.
 `M17_CYCLE.md` is the v1.5.0 matrix GO and scheduler-promotion NO-GO audit.
 `M18_CYCLE.md` is the v1.6.0 save-attribution GO and historical-spike non-claim.
+`M19_CYCLE.md` is the v1.7.0 forced-autosave and opt-in save-cap GO audit.
 
 After preparing the local runtime with the canonical smoke gate, replay a
 bundle with:

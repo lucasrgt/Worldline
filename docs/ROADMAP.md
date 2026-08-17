@@ -23,6 +23,7 @@ Passing an experiment does not silently promote its API.
 | v1.4.0 / M16 | Visible-first adaptive chunk envelope and fixed-state framebuffer oracle | GO - scheduler qualified; post-overlay visual divergence |
 | v1.5.0 / M17 | Three-scenario scheduler hardening and upstream evaluation profile | GO - matrix complete; promotion NO-GO |
 | v1.6.0 / M18 | Save/GC/compile attribution of the historical random spike | GO - timeline colocated; spike NON-CLAIM |
+| v1.7.0 / M19 | Forced dirty-set autosave and opt-in one-chunk save cap | GO - synthetic hitch bounded; cap default-off |
 
 ## Promotion rule
 
@@ -31,11 +32,10 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.6.0 direction
+## Immediate post-v1.7.0 direction
 
-M19 should reproduce the post-load autosave suspect with a forced dirty-chunk
-set, then test a default-off cap below vanilla's 24-chunk non-forced save batch.
-The same timeline must distinguish save, compile, and GC without treating one
-synthetic hitch as the user's historical spike. The three M17 framebuffer
-divergences and non-preemptive chunk rebuilds remain open; semantic mappings
-may continue independently.
+The next save-path question is the remaining fat individual chunk: measure NBT
+cost and unchanged block-entity writes before considering any broader flush
+policy. The historical real-map spike remains unproven. The three M17
+framebuffer divergences and non-preemptive chunk rebuilds remain open; semantic
+mappings and the optimization ledger may continue independently.

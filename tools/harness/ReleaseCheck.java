@@ -49,10 +49,11 @@ public final class ReleaseCheck {
         Properties m17 = load("smokes/m17-scheduler-hardening/smoke.properties");
         Properties m17Profile = load("adapters/aero-model-lib/opt-in/worldline-adaptive.properties");
         Properties m18 = load("smokes/m18-save-attribution/smoke.properties");
+        Properties m19 = load("smokes/m19-forced-autosave/smoke.properties");
         Properties lab = load("smokes/lab-cycle/smoke.properties");
         match(release, "id", "worldline");
-        match(release, "version", "1.6.0");
-        match(release, "milestone", "m18-save-attribution");
+        match(release, "version", "1.7.0");
+        match(release, "milestone", "m19-forced-autosave");
         match(release, "status", "go");
         match(release, "scope", "local-research");
         match(release, "canonical.command", "java tools/harness/Verify.java --smoke");
@@ -97,6 +98,9 @@ public final class ReleaseCheck {
         same(release, "m18.signature", m18, "expected.signature");
         same(release, "m18.aero.revision", m18, "aero.revision");
         same(release, "m18.seed", m18, "seed");
+        same(release, "m19.signature", m19, "expected.signature");
+        same(release, "m19.aero.revision", m19, "aero.revision");
+        same(release, "m19.seed", m19, "seed");
         same(release, "lab.signature", lab, "expected.signature");
         requireText("modules/api/src/main/java/worldline/api/WorldlineVersion.java",
                 "public static final String VERSION = \"" + value(release, "version") + "\";");
@@ -157,8 +161,12 @@ public final class ReleaseCheck {
                 "smokes/m18-save-attribution/MAP.md")) {
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         }
+        for (String file : Arrays.asList("docs/M19_FORCED_AUTOSAVE.md", "docs/M19_CYCLE.md",
+                "smokes/m19-forced-autosave/MAP.md")) {
+            if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
+        }
         verifyPublicTree();
-        System.out.println("  release: Worldline v1.6.0 M18 save attribution GO; spike NON-CLAIM");
+        System.out.println("  release: Worldline v1.7.0 M19 save cap GO; spike NON-CLAIM");
         System.out.println("  public artifact boundary: verified");
     }
 

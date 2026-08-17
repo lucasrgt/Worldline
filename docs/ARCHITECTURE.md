@@ -264,6 +264,11 @@ live twins can place `worldSaveMs` on the same Aero line as compile, GC, heap,
 and allocation counters. The historical random spike stays a non-claim; no
 scheduler or visual-threshold change enters product modules.
 
+M19 extends only the smoke overlay: it can mark a bounded loaded-chunk set
+dirty and replace vanilla's non-forced 24-chunk save constant with a positive
+opt-in cap. Missing/zero configuration and every forced save retain vanilla
+behavior. No save-budget API enters product modules or the Aero checkout.
+
 ## Compatibility boundary
 
 Product modules currently compile with `--release 8`; tooling runs on JDK 21.
