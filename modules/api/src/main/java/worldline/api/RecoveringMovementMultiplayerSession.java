@@ -71,4 +71,17 @@ public interface RecoveringMovementMultiplayerSession extends ResolvedMovementMu
         return new MovementRouteExecution(new MovementRouteResult(outcomes), stopped
                 ? MovementRouteTermination.CONTROLLER_STOP : MovementRouteTermination.EXHAUSTED, terminal);
     }
+
+    default CorrelatedMovementRouteExecution moveRouteWithFallbackCorrelated(
+            List<MovementAlternative> alternatives, Object correlation,
+            CorrelatedMovementRouteController controller) {
+        if (correlation == null) throw new IllegalArgumentException("null movement route correlation");
+        if (controller == null) throw new IllegalArgumentException("null correlated route controller");
+        final CorrelatedMovementRouteEvent[] terminal = new CorrelatedMovementRouteEvent[1];
+        MovementRouteExecution execution = moveRouteWithFallbackExecution(alternatives, event -> {
+            CorrelatedMovementRouteEvent correlated = new CorrelatedMovementRouteEvent(correlation, event);
+            terminal[0] = correlated; return controller.after(correlated);
+        });
+        return new CorrelatedMovementRouteExecution(correlation, execution, terminal[0]);
+    }
 }

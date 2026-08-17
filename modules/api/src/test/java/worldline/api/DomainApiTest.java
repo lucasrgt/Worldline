@@ -21,7 +21,25 @@ public final class DomainApiTest {
         movementAlternativeIsExplicitAndFailClosed();
         movementRouteEventIsIndexedAndFailClosed();
         movementRouteExecutionIsExactAndFailClosed();
+        correlatedRouteExecutionPreservesIdentity();
         System.out.println("DomainApiTest passed");
+    }
+
+    private static void correlatedRouteExecutionPreservesIdentity() {
+        Object correlation = new Object(); PlayerPose pose = new PlayerPose(0D, 64D, 0D, 0F, 0F);
+        MovementOutcome outcome = new MovementOutcome(pose, pose, MovementDisposition.UNCHALLENGED);
+        MovementRouteResult result = new MovementRouteResult(java.util.Collections.singletonList(outcome));
+        MovementRouteEvent event = new MovementRouteEvent(0, 0, MovementAttemptKind.PRIMARY, outcome);
+        MovementRouteExecution execution = new MovementRouteExecution(
+                result, MovementRouteTermination.EXHAUSTED, event);
+        CorrelatedMovementRouteEvent correlated = new CorrelatedMovementRouteEvent(correlation, event);
+        CorrelatedMovementRouteExecution value = new CorrelatedMovementRouteExecution(
+                correlation, execution, correlated);
+        if (value.correlation() != correlation || value.execution() != execution
+                || value.terminalEvent() != correlated)
+            throw new AssertionError("correlated route identity drifted");
+        failure(() -> new CorrelatedMovementRouteExecution(
+                new Object(), execution, correlated));
     }
 
     private static void movementRouteExecutionIsExactAndFailClosed() {

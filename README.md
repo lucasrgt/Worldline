@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.29.0 - M41 Immutable Route Termination (GO)**.
+Current official milestone: **Worldline v1.30.0 - M42 Caller-Owned Route Correlation (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -239,6 +239,10 @@ attempt without adding retries or asynchronous control. See
 M41 returns an immutable execution summary that identifies the exact terminal
 event and distinguishes `EXHAUSTED` from `CONTROLLER_STOP`. See
 `docs/M41_ROUTE_TERMINATION.md`.
+
+M42 carries one opaque caller-owned reference by identity through synchronous
+route events and the terminal execution summary, without a global registry.
+See `docs/M42_ROUTE_CORRELATION.md`.
 
 ## Verify
 

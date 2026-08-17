@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.30.0 - M42 Caller-Owned Route Correlation
+
+Status: GO for identity-preserving opaque route correlation.
+
+- Added correlated event, controller, and execution wrappers around the M41
+  route boundary.
+- Preserved the exact caller-owned reference by identity in every synchronous
+  event and the terminal summary.
+- Proved correlated safe movement, terminal stop, and later-movement absence
+  across two fresh official servers.
+- Added no global registry, serialization, value interpretation, retry,
+  scheduling, or adapter change.
+
+The frozen M42 semantic SHA-256 is
+`0256ed450183c49365c4ba2475f49203c7f5a1c180caefa5adf017cf87250237`.
+
 ## 1.29.0 - M41 Immutable Route Termination
 
 Status: GO for exact stopped-versus-exhausted route summaries.

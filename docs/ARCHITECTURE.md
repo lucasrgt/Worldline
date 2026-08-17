@@ -336,6 +336,11 @@ is the same final event delivered synchronously to the controller, retaining
 the identical last outcome object. This is a summary of completed work, not a
 goal, scheduler state, inferred path, or adapter concern.
 
+M42 decorates those events and the execution with one opaque caller-owned
+reference. Correlation is preserved by object identity and is never inspected,
+serialized, compared by value, or placed in a registry. The correlated wrapper
+does not change route execution, controller timing, or adapter behavior.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested
