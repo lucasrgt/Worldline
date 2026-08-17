@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.45.0 - M57 Personal 2x2 Crafting (GO)**.
+Current official milestone: **Worldline v1.46.0 - M58 Remote Window Lifecycle (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -300,6 +300,10 @@ M57 composes accepted clicks into one bounded personal 2x2 recipe: log
 `17x1:0` becomes planks `5x4:0`. Four accepted actions stage the grid, result,
 consumption, and storage; an M56 recovery audit then proves the official state.
 See `docs/M57_PERSONAL_CRAFTING.md`.
+
+M58 closes the active remote chest with Packet101, then requires an accepted
+no-op Packet102 on personal window 0 before publishing immutable closure
+evidence. See `docs/M58_WINDOW_LIFECYCLE.md`.
 
 ## Verify
 

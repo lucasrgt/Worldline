@@ -24,7 +24,7 @@ final class B173PersonalWindowChannel {
 
     RemotePersonalCraft craft2x2(int slot) throws IOException {
         RemoteInventoryView before = inbound.inventory(); RemoteItemStack log = new RemoteItemStack(17, 1, 0);
-        if (action > 32763 || slot < 9 || slot > 44 || !inbound.cursorObserved() || inbound.cursor() != null
+        if (inbound.windowActive() || action > 32763 || slot < 9 || slot > 44 || !inbound.cursorObserved() || inbound.cursor() != null
                 || before.slot(slot).empty() || !before.slot(slot).item().equals(log) || !emptyCraft(before))
             throw new IllegalStateException("personal 2x2 craft requires one log and an empty matrix/cursor");
         RemotePersonalTransaction take = click(slot, false); RemoteItemStack planks = new RemoteItemStack(5, 4, 0);
@@ -37,7 +37,25 @@ final class B173PersonalWindowChannel {
                 log, planks, before, matrix, crafted, stored.after());
     }
 
+    int personalProofSlot() {
+        if (action == 32767 || !inbound.cursorObserved() || inbound.cursor() != null)
+            throw new IllegalStateException("personal-window proof requires an observed empty cursor");
+        RemoteInventoryView view = inbound.inventory(); int slot = 9;
+        while (slot <= 44 && !view.slot(slot).empty()) slot++;
+        if (slot > 44) throw new IllegalStateException("personal-window proof requires an empty storage slot");
+        return slot;
+    }
+
+    B173PersonalStep provePersonalWindow(int slot) throws IOException {
+        RemoteInventoryView view = inbound.inventory();
+        if (action == 32767 || !inbound.cursorObserved() || inbound.cursor() != null
+                || slot < 9 || slot > 44 || !view.slot(slot).empty())
+            throw new IllegalStateException("personal-window proof preflight drifted");
+        return step(slot, null, view, null);
+    }
+
     private RemotePersonalTransaction click(int slot, boolean staleEmptyPrediction) throws IOException {
+        if (inbound.windowActive()) throw new IllegalStateException("personal window is not active");
         RemoteInventoryView before = inbound.inventory();
         if (before.windowId() != 0 || before.size() != 45 || slot < 9 || slot > 44)
             throw new IllegalArgumentException("invalid personal inventory slot");

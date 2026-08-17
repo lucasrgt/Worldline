@@ -427,6 +427,12 @@ crafting composition shares the M55/M56 action counter and correlator, stages
 multi-slot grid/result predictions, and commits each only on Packet106 true.
 The package-private rejection probe supplies an authoritative post-craft audit.
 
+M58 treats Packet101 as a request rather than an acknowledgement. The adapter
+sends the tracked active ID only with an observed empty cursor, keeps the remote
+window active locally, then issues an empty-slot no-op through the shared
+personal transaction counter. Only Packet106 true on window 0 closes the local
+lifecycle and publishes immutable `RemoteWindowClosure` evidence.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

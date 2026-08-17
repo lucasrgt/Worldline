@@ -37,4 +37,20 @@ final class B173WindowTracker {
     }
 
     RemoteContainerWindow snapshot() { return ready; }
+
+    int activeId() {
+        if (ready == null) throw new IllegalStateException("remote window is not open");
+        return ready.descriptor().windowId();
+    }
+
+    RemoteContainerWindow activeWindow() {
+        if (ready == null) throw new IllegalStateException("remote window is not open"); return ready; }
+
+    boolean active() { return ready != null || pending != null || expected; }
+
+    void close(int windowId) throws IOException {
+        if (ready == null || ready.descriptor().windowId() != windowId)
+            throw new IOException("remote window close identity drift");
+        ready = null; pending = null; expected = false;
+    }
 }

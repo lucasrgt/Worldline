@@ -33,6 +33,7 @@ final class B173ItemInbound {
         else if (packet == 22) dropped.collect(input, identities);
         else if (packet == 29) dropped.destroy(input);
         else if (packet == 100) windows.open(input);
+        else if (packet == 101) windows.close(input.readUnsignedByte());
         else if (packet == 103) { B173InventoryUpdate update = B173InventoryCodec.update(input);
             if (transactions.recovering()) transactions.resyncCursor(update, inventory);
             else inventory.apply(update); }
@@ -86,6 +87,10 @@ final class B173ItemInbound {
     }
 
     void beginChest() { windows.begin(); }
+    int activeWindowId() { return windows.activeId(); }
+    RemoteContainerWindow activeWindow() { return windows.activeWindow(); }
+    boolean windowActive() { return windows.active(); }
+    void closeWindow(int windowId) throws IOException { windows.close(windowId); }
 
     RemoteHeldItem awaitPeerHeldItem(RemoteHeldItem expected, Pump pump) throws IOException {
         if (expected == null) throw new IllegalArgumentException("null expected peer held item");

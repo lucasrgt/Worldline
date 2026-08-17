@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.46.0 - M58 Remote Window Lifecycle
+
+Status: GO for explicit remote-window close and confirmed personal restoration.
+
+- Added immutable remote-window closure evidence.
+- Sent Packet101 only for the exact locally active window and an empty cursor.
+- Confirmed server closure through an accepted no-op Packet102 on window 0.
+- Proved later personal transactions, peer held-state, and saved inventory.
+
+The frozen M58 semantic SHA-256 is
+`d74f622bc7b86332ec099b367830281038962f547c1a3d80a293a2e56a2ceda4`.
+
 ## 1.45.0 - M57 Personal 2x2 Crafting
 
 Status: GO for the bounded personal log-to-planks recipe.

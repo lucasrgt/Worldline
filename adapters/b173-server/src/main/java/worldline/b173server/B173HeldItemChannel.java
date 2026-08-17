@@ -58,6 +58,13 @@ final class B173HeldItemChannel {
         output.writeByte(face(face)); output.writeShort(-1); output.flush();
     }
 
+    int closeWindow() throws IOException {
+        if (!inbound.cursorObserved() || inbound.cursor() != null)
+            throw new IllegalStateException("remote window close requires an observed empty cursor");
+        int windowId = inbound.activeWindowId(); output.writeByte(101); output.writeByte(windowId);
+        output.flush(); return windowId;
+    }
+
     private static int face(BlockFace face) {
         switch (face) {
             case DOWN: return 0;
