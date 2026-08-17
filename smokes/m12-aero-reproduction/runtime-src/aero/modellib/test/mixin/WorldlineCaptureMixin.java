@@ -54,6 +54,7 @@ public abstract class WorldlineCaptureMixin {
     @Unique private int worldlineTicks;
     @Unique private int worldlineY;
     @Unique private int worldlineWarmup;
+    @Unique private boolean worldlineDisplayReady;
 
     @Inject(method = "tick()V", at = @At("HEAD"), cancellable = true)
     private void worldlineCapture(CallbackInfo callback) {
@@ -83,6 +84,10 @@ public abstract class WorldlineCaptureMixin {
         }
         player.velocityX = 0.0D; player.velocityY = 0.0D; player.velocityZ = 0.0D;
         worldlinePlacePlayer();
+        if (!worldlineDisplayReady) {
+            worldlineDisplayReady = true;
+            worldlinePrepareDisplay();
+        }
         if (worldlinePhase == 1) {
             worldlineWarmup++;
             if ((worldlineWarmup < WORLDLINE_MIN_WARMUP
@@ -112,7 +117,7 @@ public abstract class WorldlineCaptureMixin {
         Minecraft game = (Minecraft) (Object) this;
         game.currentScreen = null;
         game.paused = false;
-        game.skipGameRender = false;
+        game.skipGameRender = !worldlineDisplayReady;
         game.options.hideHud = true;
         game.options.bobView = false;
         if (WORLDLINE_VIEW_DISTANCE >= 0)
