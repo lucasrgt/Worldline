@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.48.0 - M60 Furnace Smelt
+
+Status: GO for exact live furnace loading and smelt observation.
+
+- Added typed Furnace/3/39 remote-window decoding and exact tail reconciliation.
+- Loaded sand and coal through four correlated accepted container actions.
+- Reconciled asynchronous furnace Packet103 updates into the active window.
+- Qualified cook/burn Packet105 progression through exact glass output.
+
+The frozen M60 semantic SHA-256 is
+`4d18743104fc8bb5efa84e46268323c5d77af8d121e315b156ea3305cf69b5de`.
+
 ## 1.47.0 - M59 Chest Transfer and Restart
 
 Status: GO for accepted player-to-chest transfer and restart persistence.

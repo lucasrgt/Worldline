@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import worldline.api.RemoteChestTransfer;
 import worldline.api.RemoteContainerWindow;
+import worldline.api.RemoteFurnaceLoad;
 import worldline.api.RemoteInventorySlot;
 import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteItemStack;
@@ -24,19 +25,48 @@ final class B173ContainerWindowChannel {
                 || personalSlot < 9 || personalSlot > 44 || chestSlot < 0 || chestSlot > 26
                 || !inbound.cursorObserved() || inbound.cursor() != null)
             throw new IllegalStateException("invalid chest transfer boundary");
+        prepare(before, 2); Move move = move(personalSlot, chestSlot);
+        return new RemoteChestTransfer(personalSlot, chestSlot, move.take.action, move.put.action,
+                move.stack, before, move.put.after);
+    }
+
+    RemoteFurnaceLoad loadFurnace(int inputPersonalSlot, int fuelPersonalSlot) throws IOException {
+        RemoteContainerWindow active = inbound.activeWindow(); RemoteInventoryView before = active.inventory();
+        RemoteInventoryView personalBefore = inbound.inventory();
+        RemoteItemStack sand = new RemoteItemStack(12, 1, 0), coal = new RemoteItemStack(263, 1, 0);
+        if (active.descriptor().kind() != RemoteWindowKind.FURNACE || before.size() != 39
+                || inputPersonalSlot < 9 || inputPersonalSlot > 44 || fuelPersonalSlot < 9
+                || fuelPersonalSlot > 44 || inputPersonalSlot == fuelPersonalSlot
+                || before.slot(inputPersonalSlot - 6).empty() || before.slot(fuelPersonalSlot - 6).empty()
+                || !before.slot(inputPersonalSlot - 6).item().equals(sand)
+                || !before.slot(fuelPersonalSlot - 6).item().equals(coal)
+                || !before.slot(0).empty() || !before.slot(1).empty() || !before.slot(2).empty()
+                || !inbound.cursorObserved() || inbound.cursor() != null)
+            throw new IllegalStateException("invalid furnace load boundary");
+        prepare(before, 4); Move input = move(inputPersonalSlot, 0); Move fuel = move(fuelPersonalSlot, 1);
+        return new RemoteFurnaceLoad(inputPersonalSlot, fuelPersonalSlot, input.take.action,
+                input.put.action, fuel.take.action, fuel.put.action, input.stack, fuel.stack,
+                before, fuel.put.after, personalBefore, inbound.inventory());
+    }
+
+    private void prepare(RemoteInventoryView view, int actions) {
         long activeEpoch = inbound.activeWindowEpoch();
-        if (epoch != activeEpoch) { epoch = activeEpoch; windowId = before.windowId(); action = 0; }
-        if (action > 32765) throw new IllegalStateException("container transaction counter exhausted");
-        int combined = personalSlot + 18;
-        if (before.slot(combined).empty() || !before.slot(chestSlot).empty())
-            throw new IllegalStateException("chest transfer requires occupied source and empty target");
+        if (epoch != activeEpoch) { epoch = activeEpoch; windowId = view.windowId(); action = 0; }
+        if (action > 32767 - actions) throw new IllegalStateException("container transaction counter exhausted");
+    }
+
+    private Move move(int personalSlot, int ownedSlot) throws IOException {
+        RemoteContainerWindow active = inbound.activeWindow(); RemoteInventoryView before = active.inventory();
+        int owned = active.descriptor().containerSlots(), combined = owned + personalSlot - 9;
+        if (personalSlot < 9 || personalSlot > 44 || ownedSlot < 0 || ownedSlot >= owned
+                || before.slot(combined).empty() || !before.slot(ownedSlot).empty())
+            throw new IllegalStateException("container move requires occupied source and empty target");
         RemoteItemStack stack = before.slot(combined).item(); RemoteInventoryView personal = inbound.inventory();
         RemoteInventoryView taken = replace(before, combined, null), personalTaken = replace(personal, personalSlot, null);
         B173ContainerStep take = step(combined, stack, taken, personal, personalTaken, stack);
-        RemoteInventoryView stored = replace(take.after, chestSlot, stack);
-        B173ContainerStep put = step(chestSlot, null, stored, personalTaken, personalTaken, null);
-        return new RemoteChestTransfer(personalSlot, chestSlot, take.action, put.action,
-                stack, before, put.after);
+        B173ContainerStep put = step(ownedSlot, null, replace(take.after, ownedSlot, stack),
+                personalTaken, personalTaken, null);
+        return new Move(stack, take, put);
     }
 
     private B173ContainerStep step(int slot, RemoteItemStack predicted, RemoteInventoryView after,
@@ -54,4 +84,7 @@ final class B173ContainerWindowChannel {
     private static RemoteInventoryView replace(RemoteInventoryView source, int slot, RemoteItemStack item) {
         List<RemoteInventorySlot> slots = new ArrayList<>(source.slots());
         slots.set(slot, new RemoteInventorySlot(slot, item)); return new RemoteInventoryView(source.windowId(), slots); }
+    private static final class Move { final RemoteItemStack stack; final B173ContainerStep take, put;
+        Move(RemoteItemStack stack, B173ContainerStep take, B173ContainerStep put) {
+            this.stack = stack; this.take = take; this.put = put; } }
 }

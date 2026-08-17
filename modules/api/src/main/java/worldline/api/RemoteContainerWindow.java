@@ -10,9 +10,8 @@ public final class RemoteContainerWindow {
     public RemoteContainerWindow(RemoteWindowDescriptor descriptor, RemoteInventoryView inventory) {
         if (descriptor == null || inventory == null || descriptor.windowId() != inventory.windowId())
             throw new IllegalArgumentException("remote window identity mismatch");
-        if (descriptor.kind() == RemoteWindowKind.CHEST
-                && inventory.size() != descriptor.containerSlots() + 36)
-            throw new IllegalArgumentException("remote chest window shape mismatch");
+        if (inventory.size() != descriptor.containerSlots() + 36)
+            throw new IllegalArgumentException("remote container window shape mismatch");
         this.descriptor = descriptor; this.inventory = inventory;
     }
 

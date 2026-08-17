@@ -17,6 +17,8 @@ public final class RemoteWindowDescriptor {
             throw new IllegalArgumentException("invalid container slot count");
         if (kind == RemoteWindowKind.CHEST && (!"Chest".equals(title) || containerSlots != 27))
             throw new IllegalArgumentException("invalid single-chest descriptor");
+        if (kind == RemoteWindowKind.FURNACE && (!"Furnace".equals(title) || containerSlots != 3))
+            throw new IllegalArgumentException("invalid furnace descriptor");
         this.windowId = windowId; this.kind = kind; this.title = title; this.containerSlots = containerSlots;
     }
 

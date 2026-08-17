@@ -22,6 +22,7 @@ final class B173ItemInbound {
     private final B173WindowTracker windows = new B173WindowTracker();
     private final B173PersonalTransactionTracker transactions = new B173PersonalTransactionTracker();
     private final B173ContainerTransactionTracker containerTransactions = new B173ContainerTransactionTracker();
+    private final B173FurnaceTracker furnace = new B173FurnaceTracker();
     private final DataOutputStream output;
 
     B173ItemInbound(int localEntityId, String localUsername, DataOutputStream output) throws IOException {
@@ -37,17 +38,21 @@ final class B173ItemInbound {
         else if (packet == 101) windows.close(input.readUnsignedByte());
         else if (packet == 103) { B173InventoryUpdate update = B173InventoryCodec.update(input);
             if (transactions.recovering()) transactions.resyncCursor(update, inventory);
-            else inventory.apply(update); }
+            else if (update.cursor() || update.windowId == 0) inventory.apply(update);
+            else { int personalSlot = windows.update(update); if (personalSlot >= 9)
+                inventory.apply(new B173InventoryUpdate(0, personalSlot, update.item)); } }
         else if (packet == 104) { RemoteInventoryView view = B173InventoryCodec.window(input);
             if (view.windowId() == 0 && transactions.recovering()) transactions.resyncWindow(view);
             else if (view.windowId() == 0) inventory.window(view);
             else { RemoteInventoryView personal = inventory.snapshot();
-                if (personal == null || view.size() != 63) throw new IOException("container tail base absent");
+                int owned = windows.pendingContainerSlots();
+                if (personal == null || view.size() != owned + 36) throw new IOException("container tail base absent");
                 for (int slot = 9; slot <= 44; slot++) {
-                    worldline.api.RemoteInventorySlot own = personal.slot(slot), combined = view.slot(slot + 18);
+                    worldline.api.RemoteInventorySlot own = personal.slot(slot), combined = view.slot(owned + slot - 9);
                     if (own.empty() != combined.empty() || !own.empty() && !own.item().equals(combined.item()))
                         throw new IOException("container tail differs from personal inventory"); }
                 windows.contents(view); } }
+        else if (packet == 105) furnace.progress(input, windows);
         else if (packet == 106) { int windowId = input.readByte(), action = input.readShort();
             boolean allowed = input.readBoolean();
             if (transactions.pending()) transactions.acknowledge(windowId, action, allowed, output, inventory);
@@ -108,7 +113,15 @@ final class B173ItemInbound {
         throw new IOException("chest window absent from bounded inbound window");
     }
 
-    void beginChest() { windows.begin(); }
+    worldline.api.RemoteFurnaceSmelt awaitFurnaceSmelt(Pump pump) throws IOException {
+        worldline.api.RemoteFurnaceSmelt ready = furnace.ready(windows); if (ready != null) return ready;
+        for (int count = 0; count < 8192; count++) { pump.one(); ready = furnace.ready(windows);
+            if (ready != null) return ready; }
+        throw new IOException("expected furnace smelt absent from bounded inbound window");
+    }
+
+    void beginChest() { windows.begin(worldline.api.RemoteWindowKind.CHEST); }
+    void beginFurnace() { windows.begin(worldline.api.RemoteWindowKind.FURNACE); }
     int activeWindowId() { return windows.activeId(); }
     RemoteContainerWindow activeWindow() { return windows.activeWindow(); }
     long activeWindowEpoch() { return windows.activeEpoch(); }

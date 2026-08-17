@@ -56,6 +56,22 @@ final class B173ItemAccess {
         catch (IOException error) { throw new IllegalStateException("chest transfer failed", error); }
     }
 
+    static worldline.api.RemoteContainerWindow openFurnace(B173PlayChannel channel,
+            BlockPosition position, BlockFace face) {
+        try { return channel.openFurnace(position, face); }
+        catch (IOException error) { throw new IllegalStateException("furnace window receive failed", error); }
+    }
+
+    static worldline.api.RemoteFurnaceLoad loadFurnace(B173PlayChannel channel, int inputSlot, int fuelSlot) {
+        try { return channel.loadFurnace(inputSlot, fuelSlot); }
+        catch (IOException error) { throw new IllegalStateException("furnace load failed", error); }
+    }
+
+    static worldline.api.RemoteFurnaceSmelt awaitFurnaceSmelt(B173PlayChannel channel) {
+        try { return channel.awaitFurnaceSmelt(); }
+        catch (IOException error) { throw new IllegalStateException("furnace smelt receive failed", error); }
+    }
+
     static RemotePersonalTransaction clickPersonalSlot(B173PlayChannel channel, int slot) {
         try { return channel.clickPersonalSlot(slot); }
         catch (IOException error) { throw new IllegalStateException("personal transaction failed", error); }

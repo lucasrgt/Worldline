@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.47.0 - M59 Chest Transfer and Restart (GO)**.
+Current official milestone: **Worldline v1.48.0 - M60 Furnace Smelt (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -309,6 +309,11 @@ M59 transfers an occupied personal slot into an empty single-chest slot through
 two accepted container actions, reconciles both inventory views and the cursor,
 then proves chest persistence by reopening after a clean server restart. See
 `docs/M59_CHEST_TRANSFER.md`.
+
+M60 opens a typed furnace, loads exact sand and coal through four accepted
+container actions, then correlates asynchronous Packet103 slot changes with the
+full Packet105 cook/burn progression to one glass output. See
+`docs/M60_FURNACE_SMELT.md`.
 
 ## Verify
 

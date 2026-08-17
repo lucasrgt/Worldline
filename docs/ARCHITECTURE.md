@@ -439,6 +439,13 @@ item content with canonical personal slots 9-44. Each Packet106 true atomically
 adopts the predicted 63-slot view, window-0 view, and cursor; partial commits are
 not published. A clean server restart and fresh Packet104 are the persistence oracle.
 
+M60 generalizes the same epoch-bound container channel to a typed furnace with
+three owned slots and a 39-slot combined view. Packet103 updates reconcile
+asynchronous furnace-owned changes while Packet105 is coalesced into bounded
+cook, burn, fuel-duration, and completion-reset evidence. The exact sand/coal
+workflow publishes only after the output, empty input/fuel, epoch, and progress
+oracles agree.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested
