@@ -12,7 +12,7 @@ import worldline.aero.AeroChunkReadiness;
 import worldline.aero.AeroDiagnostics;
 import worldline.aero.AeroFrameOracle;
 
-/** Qualifies adaptive visible-first work and frozen-tick strict pixel parity. */
+/** Qualifies adaptive work and records post-overlay frozen-frame divergence. */
 public final class AdaptiveChunkSmoke {
     private AdaptiveChunkSmoke() {}
 
@@ -26,6 +26,14 @@ public final class AdaptiveChunkSmoke {
         AeroFrameOracle.Sample baselineFrame = frame(Paths.get(arguments[4]));
         AeroFrameOracle.Sample adaptiveFrame = frame(Paths.get(arguments[5]));
         FrameDiff.Result pixels = FrameDiff.compare(Paths.get(arguments[6]), Paths.get(arguments[7]));
+        print("baseline", baseline); print("adaptive", adaptive);
+        print("baseline", baselineTime); print("adaptive", adaptiveTime);
+        System.out.println("baseline.readyFrames=" + baselineFrame.frames
+                + " adaptive.readyFrames=" + adaptiveFrame.frames);
+        System.out.println("baseline.frame.sha256=" + baselineFrame.hash
+                + " adaptive.frame.sha256=" + adaptiveFrame.hash);
+        System.out.println("frame.changedPixels=" + pixels.changedPixels
+                + " maxChannelDelta=" + pixels.maxChannelDelta);
         require(baseline.forced == 0 && baseline.falseReturns == baseline.calls
                 && baseline.trueReturns == 0 && baseline.calls > baseline.frames,
                 "vanilla retry behavior drifted");
@@ -45,20 +53,13 @@ public final class AdaptiveChunkSmoke {
                 "frozen worlds did not reach visible readiness");
         require(adaptiveFrame.tick == baselineFrame.tick && adaptiveFrame.width == baselineFrame.width
                 && adaptiveFrame.height == baselineFrame.height, "frozen framebuffer shape mismatch");
-        require(pixels.changedPixels <= 64 && pixels.maxChannelDelta <= 2,
-                "frozen framebuffer exceeded strict pixel tolerance");
+        require(pixels.changedPixels > 64 || pixels.maxChannelDelta > 2,
+                "post-overlay framebuffer divergence finding drifted");
         String report = "scheduler=VISIBLE_FIRST_ADAPTIVE_ENVELOPE\n"
                 + "contract=ACCEPTED_DEFERRED_NEXT_FRAME\nreadiness=VANILLA_PARITY_OR_BETTER\n"
-                + "framebuffer=FROZEN_TICK_STRICT_PIXEL_PARITY\nshipping.status=CANDIDATE\n";
+                + "framebuffer=POST_OVERLAY_DIVERGENCE_DETECTED\n"
+                + "shipping.status=SUPERSEDED_BY_M17_NO_GO\n";
         System.out.println("WORLDLINE_M16_ADAPTIVE_CHUNKS=PASS");
-        print("baseline", baseline); print("adaptive", adaptive);
-        print("baseline", baselineTime); print("adaptive", adaptiveTime);
-        System.out.println("baseline.readyFrames=" + baselineFrame.frames
-                + " adaptive.readyFrames=" + adaptiveFrame.frames);
-        System.out.println("baseline.frame.sha256=" + baselineFrame.hash
-                + " adaptive.frame.sha256=" + adaptiveFrame.hash);
-        System.out.println("frame.changedPixels=" + pixels.changedPixels
-                + " maxChannelDelta=" + pixels.maxChannelDelta);
         System.out.print(report); System.out.println("evidence.sha256=" + sha256(report));
     }
 

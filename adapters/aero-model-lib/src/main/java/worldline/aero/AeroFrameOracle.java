@@ -26,11 +26,19 @@ public final class AeroFrameOracle {
             throw new IllegalArgumentException("frame was not visibly ready");
         String hash = required(fields, "sha256");
         if (!hash.matches("[0-9a-f]{64}")) throw new IllegalArgumentException("invalid frame hash");
-        return new Sample(tick, frames, stable, width, height, hash);
+        return new Sample(tick, frames, stable, width, height, required(fields, "path"),
+                integer(fields, "view"), decimal(fields, "x"), decimal(fields, "y"),
+                decimal(fields, "z"), decimal(fields, "yaw"), hash);
     }
 
     private static int integer(Map<String, String> fields, String name) {
         try { return Integer.parseInt(required(fields, name)); }
+        catch (NumberFormatException error) {
+            throw new IllegalArgumentException("invalid frame field " + name, error);
+        }
+    }
+    private static double decimal(Map<String, String> fields, String name) {
+        try { return Double.parseDouble(required(fields, name)); }
         catch (NumberFormatException error) {
             throw new IllegalArgumentException("invalid frame field " + name, error);
         }
@@ -42,11 +50,15 @@ public final class AeroFrameOracle {
     }
 
     public static final class Sample {
-        public final int tick, frames, stable, width, height;
+        public final int tick, frames, stable, width, height, view;
+        public final double x, y, z, yaw;
+        public final String path;
         public final String hash;
-        Sample(int tick, int frames, int stable, int width, int height, String hash) {
+        Sample(int tick, int frames, int stable, int width, int height, String path,
+                int view, double x, double y, double z, double yaw, String hash) {
             this.tick = tick; this.frames = frames; this.stable = stable;
-            this.width = width; this.height = height; this.hash = hash;
+            this.width = width; this.height = height; this.path = path; this.view = view;
+            this.x = x; this.y = y; this.z = z; this.yaw = yaw; this.hash = hash;
         }
     }
 }

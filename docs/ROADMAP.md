@@ -19,8 +19,9 @@ Passing an experiment does not silently promote its API.
 | v1.0.0 / M12 | Real Aero scene capture, repeated spike classification, and evidence minimization | GO - chunk-compilation spike reproduced; persistence split deferred |
 | v1.1.0 / M13 | Aero persistence isolation, dense/empty differential, and compile-budget test | GO - real BEs persist; empty retains compile pressure; budget rejected |
 | v1.2.0 / M14 | Chunk caller semantics, initial-backlog attribution, and bounded non-retry policy | GO - caller/backlog isolated; policy experimental |
-| v1.3.0 / M15 | Explicit accepted/deferred contract, visible readiness, and geometry oracle | GO - contract qualified; fixed batch rejected |
-| v1.4.0 / M16 | Visible-first adaptive chunk envelope and fixed-state framebuffer oracle | GO - candidate qualified with strict pixel parity |
+| v1.3.0 / M15 | Explicit accepted/deferred contract, visible readiness, and geometry oracle | GO - contract qualified; fixed batch experimental |
+| v1.4.0 / M16 | Visible-first adaptive chunk envelope and fixed-state framebuffer oracle | GO - scheduler qualified; post-overlay visual divergence |
+| v1.5.0 / M17 | Three-scenario scheduler hardening and upstream evaluation profile | GO - matrix complete; promotion NO-GO |
 
 ## Promotion rule
 
@@ -29,10 +30,11 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.4.0 direction
+## Immediate post-v1.5.0 direction
 
-M17 should harden the candidate across multiple canonical saves, camera paths,
-view distances, and budget values, then package an opt-in Aero integration for
-upstream evaluation. It must preserve next-frame deferral and strict fixed-state
-pixel parity. The historical random spike remains a non-claim beyond the
-isolated initial-backlog path.
+M18 should split or preempt oversized chunk rebuild work, then attribute the
+three M17 framebuffer divergences without weakening M16's strict threshold. It
+should rerun the same stationary/moving matrix before reconsidering the
+default-off Aero evaluation profile. Semantic mappings may advance in parallel;
+the historical random spike remains a non-claim beyond the isolated initial-
+backlog path.

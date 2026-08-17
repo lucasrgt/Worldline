@@ -26,9 +26,11 @@ gradle.projectsEvaluated {
     def run = new File(project.projectDir, 'run')
     def ticks = (project.findProperty('worldlineTicks') ?: '240').toString()
     def mode = (project.findProperty('worldlineMode') ?: 'dense').toString()
+    def density = (project.findProperty('worldlineDensity') ?: 'dense').toString()
+    def m17 = mode == 'm17baseline' || mode == 'm17governor' || mode == 'm17adaptive'
     def emptyMode = mode == 'empty' || mode == 'reload' || mode == 'probe' || mode == 'bounded' ||
         mode == 'm15baseline' || mode == 'm15contract' ||
-        mode == 'm16baseline' || mode == 'm16adaptive'
+        mode == 'm16baseline' || mode == 'm16adaptive' || (m17 && density == 'empty')
     def minimum = (project.findProperty('worldlineMinBEs') ?: (emptyMode ? '0' : '500')).toString()
     def spikeMs = (project.findProperty('worldlineSpikeMs') ?: '25').toString()
     def warmup = (project.findProperty('worldlineWarmupTicks') ?: '0').toString()
@@ -59,8 +61,33 @@ gradle.projectsEvaluated {
             (project.findProperty('worldlineAdaptiveMax') ?: '8').toString(),
         '-Dworldline.chunkContract.budgetUs=' +
             (project.findProperty('worldlineBudgetUs') ?: '12000').toString()])
+    if (m17) modeArgs.addAll([
+        '-Dworldline.chunkProbe.enabled=true', '-Dworldline.chunkReadiness.enabled=true'])
+    if (mode == 'm17governor') modeArgs.addAll([
+        '-Daero.chunkCompileBudget=true', '-Daero.chunkCompileBudget.minCellWork=0',
+        '-Daero.chunkCompileBudget.skipForced=true'])
+    if (mode == 'm17adaptive') modeArgs.addAll([
+        '-Dworldline.chunkContract.enabled=true', '-Dworldline.chunkContract.adaptive=true',
+        '-Dworldline.chunkContract.maxBatch=' +
+            (project.findProperty('worldlineAdaptiveMax') ?: '8').toString(),
+        '-Dworldline.chunkContract.budgetUs=' +
+            (project.findProperty('worldlineBudgetUs') ?: '12000').toString()])
+    def m17Oracle = m17 && mode != 'm17governor' &&
+        (project.findProperty('worldlineFrameOracle') ?: 'false').toString() == 'true'
+    if (m17Oracle) modeArgs.addAll([
+        '-Dworldline.frameOracle.enabled=true',
+        '-Dworldline.frameOracle.stabilizeScene=true',
+        '-Dworldline.frameOracle.tick=' +
+            (project.findProperty('worldlineFreezeTick') ?: '60').toString(),
+        '-Dworldline.frameOracle.stableFrames=' +
+            (project.findProperty('worldlineOracleStableFrames') ?: '20').toString(),
+        '-Dworldline.frameOracle.maxFrames=' +
+            (project.findProperty('worldlineOracleMaxFrames') ?: '5000').toString()])
     if ((mode == 'm16baseline' || mode == 'm16adaptive') &&
             project.findProperty('worldlineFrameOutput'))
+        modeArgs.add('-Dworldline.frameOracle.output=' +
+            project.findProperty('worldlineFrameOutput').toString())
+    if (m17Oracle && project.findProperty('worldlineFrameOutput'))
         modeArgs.add('-Dworldline.frameOracle.output=' +
             project.findProperty('worldlineFrameOutput').toString())
     task.jvmArgs(([
@@ -69,6 +96,10 @@ gradle.projectsEvaluated {
         '-Dworldline.capture.ticks=' + ticks,
         '-Dworldline.capture.minBlockEntities=' + minimum,
         '-Dworldline.capture.minWarmupTicks=' + warmup,
+        '-Dworldline.capture.path=' +
+            (project.findProperty('worldlinePath') ?: 'stationary').toString(),
+        '-Dworldline.capture.viewDistance=' +
+            (project.findProperty('worldlineViewDistance') ?: '-1').toString(),
         '-Daero.benchmark.skipNonForcedSaves=true',
         '-Daero.spikelog=true',
         '-Daero.spikelog.ms=' + spikeMs,

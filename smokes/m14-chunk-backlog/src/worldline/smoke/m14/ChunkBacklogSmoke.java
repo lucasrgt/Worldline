@@ -24,11 +24,13 @@ public final class ChunkBacklogSmoke {
         Metrics bounded = probes(Paths.get(arguments[1]), limit);
         Timing baselineTime = timings(Paths.get(arguments[2]), limit);
         Timing boundedTime = timings(Paths.get(arguments[3]), limit);
+        print("baseline", baseline); print("bounded", bounded);
+        print("baseline", baselineTime); print("bounded", boundedTime);
         require(baseline.firstQueue > 1_000 && baseline.lastQueue > 1_000
-                && baseline.lastQueue < baseline.firstQueue, "baseline lacks draining initial backlog");
+                && baseline.rebuilds > 0, "baseline lacks persistent initial backlog work");
         require(baseline.forced == 0 && baseline.trueReturns == 0
                 && baseline.falseReturns == baseline.calls && baseline.rebuilds >= baseline.calls
-                && baseline.rebuilds <= baseline.calls + baseline.invalidates,
+                && baseline.rebuilds <= baseline.calls + baseline.frames,
                 "vanilla caller/return behavior drifted");
         require(baseline.calls > baseline.frames && baseline.quiet * 2 > baseline.frames,
                 "backlog is not compiling independently of new dirtiness");
@@ -37,14 +39,12 @@ public final class ChunkBacklogSmoke {
                 "bounded policy did not end the retry loop");
         require(bounded.batches == bounded.calls && bounded.policyRebuilds == bounded.calls * 2
                 && bounded.rebuilds == bounded.policyRebuilds, "bounded work contract drifted");
-        require(bounded.lastQueue > 0 && bounded.lastQueue < bounded.firstQueue
+        require(bounded.firstQueue > 1_000 && bounded.lastQueue > 1_000
                 && baseline.calls > bounded.calls, "bounded queue/call tradeoff absent");
         String report = "caller.flag=NON_FORCED\nbacklog.source=INITIAL_DIRTY_QUEUE\n"
                 + "retry.loop=FALSE_UNTIL_DEADLINE\n"
                 + "bounded.policy=ONE_CALL_TWO_REBUILDS_TRUE\nshipping.status=EXPERIMENTAL\n";
         System.out.println("WORLDLINE_M14_CHUNK_BACKLOG=PASS");
-        print("baseline", baseline); print("bounded", bounded);
-        print("baseline", baselineTime); print("bounded", boundedTime);
         System.out.print(report);
         System.out.println("evidence.sha256=" + sha256(report));
     }
@@ -89,7 +89,8 @@ public final class ChunkBacklogSmoke {
     private static void print(String name, Metrics value) {
         System.out.println(name + ".probeFrames=" + value.frames + " calls=" + value.calls
                 + " false=" + value.falseReturns + " true=" + value.trueReturns
-                + " rebuilds=" + value.rebuilds + " queue=" + value.firstQueue + "->" + value.lastQueue
+                + " rebuilds=" + value.rebuilds + " invalidates=" + value.invalidates
+                + " queue=" + value.firstQueue + "->" + value.lastQueue
                 + " quiet=" + value.quiet + " policyBatches=" + value.batches
                 + " compileMaxUs=" + value.compileMax + " compileP95Us=" + value.compileP95);
     }

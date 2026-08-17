@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.GameRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -16,9 +17,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GameRenderer.class)
 public abstract class WorldlineChunkProbeFrameMixin {
     @Shadow private Minecraft client;
+    @Shadow private long lastInactiveTime;
+    @Unique private static final boolean WORLDLINE_CAPTURE =
+        Boolean.getBoolean("worldline.capture.enabled");
 
     @Inject(method = "onFrameUpdate(F)V", at = @At("HEAD"))
     private void worldlineProbeBegin(float tickDelta, CallbackInfo callback) {
+        if (WORLDLINE_CAPTURE) lastInactiveTime = System.currentTimeMillis();
         WorldlineFrameOracle.prepare(client);
         WorldlineChunkProbe.beginFrame();
     }

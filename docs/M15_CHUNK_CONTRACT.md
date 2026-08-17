@@ -2,7 +2,8 @@
 
 M15 separates two conclusions that M14 could not: whether deferral can be
 represented safely and whether a fixed two-rebuild budget preserves visible
-terrain readiness. The contract succeeds; the fixed policy does not.
+terrain readiness. The contract succeeds; comparative policy readiness is not
+stable enough to freeze.
 
 ## Explicit accepted/deferred result
 
@@ -12,10 +13,9 @@ counts. The smoke redirects the sole `GameRenderer.renderFrame` call site,
 maps accepted deferred work to end-of-current-frame, and resumes on the next
 rendered frame. This is the distinction missing from vanilla's Boolean result.
 
-Across the first 300 measured frames, baseline made 1,301 non-forced calls and
-returned `false` every time. Contract mode made exactly 300 calls, accepted 600
-real rebuilds, returned `true` 300 times, reported 300 accepted/deferred
-outcomes, and never stalled. The same-frame retry loop is gone.
+Across every qualifying first-300-frame window, contract mode makes exactly 300
+calls, accepts 600 real rebuilds, returns `true` 300 times, reports 300
+accepted/deferred outcomes, and never stalls. The same-frame retry loop is gone.
 
 ## Visible readiness and dirty age
 
@@ -23,16 +23,11 @@ Measurement starts at the first world-ready frame. Each frame samples the real
 chunk array after culling, including dirty age, visible dirty chunks, and
 visible built-and-clean chunks. Both queues began above 5,400 entries.
 
-In the qualifying run, baseline reduced its queue from 5,405 to 4,441 and
-visible dirty chunks from 1,268 to 831 in 300 frames, reaching 966 visible-ready
-chunks. The fixed batch reduced its queue only from 5,406 to 4,867 and visible
-dirty chunks from 1,268 to 1,222, reaching 541 visible-ready chunks. Both had
-initial dirty entries aged 299 frames at that boundary.
-
-The fixed batch therefore improves frame pacing only by deferring too much
-visible work. It is rejected as an Aero mitigation despite removing retries.
-Exploratory frame p95 was 20.7 ms baseline and 12.4 ms contract in this run;
-timings are reported, not frozen.
+Queue direction, comparative readiness, and frame pacing vary with render
+throughput and concurrent chunk discovery. An earlier qualifying run showed a
+large fixed-batch readiness deficit; the post-M17 corrected-screen run did not.
+Those comparisons are now printed observations rather than frozen promotion or
+rejection criteria. The fixed batch remains experimental and is not promoted.
 
 ## Chunk-geometry oracle
 
@@ -48,7 +43,8 @@ framebuffer, transparency-order, HUD, or driver oracle.
 
 ## Next boundary
 
-M16 should retain `ACCEPTED_DEFERRED` but choose work from visible debt and a
+M16 retained `ACCEPTED_DEFERRED` while choosing work from visible debt and a
 bounded time/accepted-work envelope. It must approach vanilla visible readiness
 without restoring the same-frame retry loop, then extend visual evidence to a
-fixed-tick framebuffer or equivalent render-pass oracle.
+fixed-tick framebuffer oracle. M17 later generalized that policy and rejected
+promotion on broader readiness, overshoot, and visual evidence.

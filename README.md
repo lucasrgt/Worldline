@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.4.0 - M16 Adaptive Chunks (GO)**.
+Current official milestone: **Worldline v1.5.0 - M17 Scheduler Matrix (GO; promotion NO-GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -105,6 +105,13 @@ substantially reduces the observed worst frame. A canonical save snapshot and
 frozen tick require baseline and candidate to drain all chunk work and satisfy
 a strict whole-frame pixel comparison. The policy is qualified as an adapter
 candidate, not an Aero release; see `docs/M16_ADAPTIVE_CHUNKS.md`.
+
+M17 runs that candidate against stationary-empty, stationary-dense, and
+moving-dense saves alongside vanilla and Aero's rejected governor. Adaptive
+preserves one completion per frame and drains background work, but moving
+readiness, non-preemptive budget overshoot, mixed latency, and three strict
+framebuffer divergences block promotion. Its evaluation profile is packaged
+default-off and marked lab-only NO-GO; see `docs/M17_SCHEDULER_HARDENING.md`.
 
 ## Verify
 
@@ -220,11 +227,14 @@ with an Aero-disabled world, and tests the compile governor.
 then compares vanilla with a real two-rebuild, non-retry bounded policy.
 `smokes/m15-chunk-contract` moves that experiment to an adapter-owned explicit
 work result, measures dirty age and visible readiness, and compares exact chunk
-vertex signatures before rejecting the fixed batch on visible latency and
-unresolved temporal visual divergence.
+vertex signatures. Comparative fixed-batch readiness is observational; the
+policy remains experimental and temporal visual divergence remains unresolved.
 `smokes/m16-adaptive-chunks` restores one canonical save into both modes,
 applies visible-first adaptive work under a time envelope, freezes tick 20,
 drains the global queue, and bounds differences across every RGBA pixel.
+`smokes/m17-scheduler-hardening` extends that proof across three stationary and
+moving scenarios, records governor backlog, adaptive overshoot and global
+drainage, and fails promotion on the observed strict framebuffer divergences.
 
 The gate then runs `smokes/lab-cycle`, restores deterministic checkpoints in
 fresh clients, compares hypotheses, exercises GUI selectors, and compiles and
@@ -252,6 +262,7 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M14_CYCLE.md` is the v1.2.0 chunk-backlog/caller-policy GO audit.
 `M15_CYCLE.md` is the v1.3.0 explicit-contract/readiness GO audit.
 `M16_CYCLE.md` is the v1.4.0 adaptive-scheduler/framebuffer GO audit.
+`M17_CYCLE.md` is the v1.5.0 matrix GO and scheduler-promotion NO-GO audit.
 
 After preparing the local runtime with the canonical smoke gate, replay a
 bundle with:

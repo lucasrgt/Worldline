@@ -4,18 +4,40 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.5.0 - M17 Scheduler Hardening
+
+Status: GO for the three-scenario qualification matrix; NO-GO for scheduler
+promotion.
+
+- Added stationary-empty, stationary-dense, and moving-dense comparisons of
+  vanilla retries, Aero's old governor, and the visible-first adaptive policy.
+- Proved one adaptive completion per frame and eventual global drainage without
+  background starvation across the matrix.
+- Confirmed that the old governor retains backlog, while the adaptive envelope
+  remains non-preemptive and can overshoot on one expensive rebuild.
+- Recorded moving-window readiness lag and scenario-dependent timing instead of
+  generalizing M16's single-scene improvement.
+- Stabilized checkpoint entities, daylight, weather, camera, and interpolation;
+  all three framebuffer pairs still exceed M16's strict pixel tolerance.
+- Packaged a default-off evaluation profile marked `lab-only-no-go`; the pinned
+  Aero checkout remains unchanged.
+
+The frozen M17 invariant-report SHA-256 is
+`27add12df594ab97e330b33fc0118918fcbabbf3189f171089967fdafe5955a0`.
+
 ## 1.4.0 - M16 Adaptive Chunks
 
-Status: GO for the visible-first adaptive scheduler and fixed-state framebuffer
-evidence; the scheduler remains an adapter candidate.
+Status: GO for the visible-first adaptive scheduler; corrected startup rendering
+does not reproduce the original fixed-state pixel parity.
 
 - Added visible-debt bands of 2/4/6/8 accepted rebuilds under a 12 ms rebuild
   envelope while preserving one explicit accepted/deferred call per frame.
 - Closed the first-300-frame visible readiness gap relative to vanilla and
   reduced the release-gate run's worst frame from 735.2 ms to 218.6 ms.
 - Added a frozen-tick framebuffer oracle that fixes camera/interpolation, drains
-  global chunk work, and compares every baseline/candidate RGBA pixel under a
-  64-pixel, 2-channel-level tolerance.
+  global chunk work, and compares every baseline/candidate RGBA pixel against a
+  64-pixel, 2-channel-level decision threshold. M17's overlay correction now
+  records a threshold violation.
 - Added canonical save snapshot/restore so independently ordered world
   generation cannot contaminate the scheduler differential.
 - Hardened the legacy M15 gate to compare normalized visible readiness and
@@ -25,25 +47,25 @@ evidence; the scheduler remains an adapter candidate.
   limits.
 
 The frozen M16 invariant-report SHA-256 is
-`eef21fc6cfc48d002038d0bfaea1764ca14cff2d5939897dc6dad6ab5d5fcbf4`.
+`f274b0970e16939ba56b8f8796360d54c5f7981168a1e52e9d85da95585eb26b`.
 
 ## 1.3.0 - M15 Explicit Chunk Contract
 
 Status: GO for the explicit accepted/deferred boundary and readiness evidence;
-the fixed two-rebuild policy is rejected.
+the fixed two-rebuild policy remains experimental.
 
 - Added adapter-owned `COMPLETE`, `ACCEPTED_DEFERRED`, and `STALLED_DEFERRED`
   outcomes, mapped to vanilla's Boolean only at the render caller.
 - Proved one contract invocation per frame with two real accepted rebuilds,
   next-frame resumption, and no same-frame retries or stalled batches.
 - Measured dirty age and visible built/clean state from the first world frame;
-  the fixed batch substantially lagged vanilla visible readiness.
+  comparative readiness is reported but no longer frozen across machines.
 - Added an exact Tessellator vertex-stream oracle. Most common non-empty chunks
   match exactly while nonzero tick-dependent temporal differences are retained.
 - Retained only per-file source limits and left the pinned Aero checkout clean.
 
 The frozen M15 invariant-report SHA-256 is
-`aa3b77e6531cd832f75f9afab1c79abf2427bf7341b34b01578d6bf0cb445a73`.
+`64f635a1ed85ce0d9d30b468937b7803a06418e783f6ae8643da69877d597ba1`.
 
 ## 1.2.0 - M14 Chunk Backlog
 

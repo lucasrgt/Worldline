@@ -38,19 +38,20 @@ one canonical fully generated save, copies it, and restores those exact bytes
 before both measured processes. Generated saves, images, and logs remain under
 ignored roots.
 
-Both queues reached zero before comparison. The release-gate run matched all
-409,920 pixels exactly; exploratory repetitions exposed up to 12 low-bit edge
-pixels within the frozen limit of 64 pixels and delta 2. Baseline required 1,924
-frozen render frames and adaptive 1,887. Its observed worst frame fell from
-735.2 ms to 218.6 ms; p95 and absolute timing remain reported observations
+Both queues reach zero before comparison. The original release-gate run matched
+all 409,920 pixels exactly, but that run preceded the startup-overlay correction.
+With the world rendered and unpaused from startup, the fixed-state pair exceeds
+the frozen limit of 64 pixels and delta 2. M17 repeats the divergence across all
+three broader scenarios. Frame counts and timings remain reported observations
 rather than frozen cross-machine thresholds.
 
 ## Decision and non-claims
 
-The visible-first adaptive envelope is a qualified adapter candidate. It is not
-merged into Aero, exposed as a Worldline product API, or claimed optimal. The
-proof covers the pinned Aero revision, fixed seed/save, camera, view settings,
-tick, configured 8-work/12-ms maximum, and declared strict pixel tolerance.
+The visible-first adaptive envelope remains qualified for its call contract,
+readiness, and drainage behavior, but is no longer an adapter promotion
+candidate. It is not merged into Aero, exposed as a Worldline product API, or
+claimed optimal. The proof covers the pinned Aero revision, fixed seed/save,
+camera, view settings, tick, and configured 8-work/12-ms maximum.
 
 M16 does not prove elimination of every historical random spike or generalize
 performance across hardware, saves, camera paths, view distances, or mods. M17

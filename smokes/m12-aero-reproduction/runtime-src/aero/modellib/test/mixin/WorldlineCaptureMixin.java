@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.world.World;
+import java.util.Collections;
 import aero.modellib.test.worldline.WorldlineFrameOracle;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -36,6 +37,12 @@ public abstract class WorldlineCaptureMixin {
         Integer.getInteger("worldline.capture.minBlockEntities", 500);
     @Unique private static final int WORLDLINE_MIN_WARMUP =
         Integer.getInteger("worldline.capture.minWarmupTicks", 0);
+    @Unique private static final String WORLDLINE_PATH =
+        System.getProperty("worldline.capture.path", "stationary");
+    @Unique private static final int WORLDLINE_VIEW_DISTANCE =
+        Integer.getInteger("worldline.capture.viewDistance", -1);
+    @Unique private static final boolean WORLDLINE_STABILIZE_SCENE =
+        Boolean.getBoolean("worldline.frameOracle.stabilizeScene");
     @Unique private int worldlinePhase;
     @Unique private int worldlineTicks;
     @Unique private int worldlineY;
@@ -48,6 +55,7 @@ public abstract class WorldlineCaptureMixin {
             worldlinePhase = 1;
             interactionManager = new SingleplayerInteractionManager((Minecraft) (Object) this);
             System.out.println("[WorldlineCapture] start seed=" + WORLDLINE_SEED);
+            worldlinePrepareDisplay();
             startGame("WorldlineAero", "Worldline Aero", WORLDLINE_SEED);
             worldlinePrepareDisplay();
             return;
@@ -57,7 +65,8 @@ public abstract class WorldlineCaptureMixin {
         worldlinePrepareDisplay();
         if (worldlinePhase == 2 && WorldlineFrameOracle.freeze(worldlineTicks)) {
             player.velocityX = 0.0D; player.velocityY = 0.0D; player.velocityZ = 0.0D;
-            player.setPositionAndAngles(8.5D, worldlineY, 8.5D, 45.0F, 0.0F);
+            if (WORLDLINE_STABILIZE_SCENE) worldlineStabilizeScene();
+            worldlinePlacePlayer();
             callback.cancel(); return;
         }
         if (worldlinePhase == 1) {
@@ -66,7 +75,7 @@ public abstract class WorldlineCaptureMixin {
                 for (int z = -1; z <= 1; z++) world.getChunk(x, z);
         }
         player.velocityX = 0.0D; player.velocityY = 0.0D; player.velocityZ = 0.0D;
-        player.setPositionAndAngles(8.5D, worldlineY, 8.5D, 45.0F, 0.0F);
+        worldlinePlacePlayer();
         if (worldlinePhase == 1) {
             worldlineWarmup++;
             if ((worldlineWarmup < WORLDLINE_MIN_WARMUP
@@ -75,7 +84,8 @@ public abstract class WorldlineCaptureMixin {
             worldlinePhase = 2;
             System.out.println("[WorldlineCapture] ready blockEntities="
                     + world.blockEntities.size() + " entityBlocks="
-                    + worldlineEntityBlocks() + " x=8.5 y=" + worldlineY + " z=8.5");
+                    + worldlineEntityBlocks() + " path=" + WORLDLINE_PATH
+                    + " view=" + WORLDLINE_VIEW_DISTANCE);
         }
         worldlineTicks++;
         if (worldlineTicks >= WORLDLINE_TICKS) {
@@ -89,8 +99,33 @@ public abstract class WorldlineCaptureMixin {
     private void worldlinePrepareDisplay() {
         Minecraft game = (Minecraft) (Object) this;
         game.currentScreen = null;
+        game.paused = false;
+        game.skipGameRender = false;
         game.options.hideHud = true;
         game.options.bobView = false;
+        if (WORLDLINE_VIEW_DISTANCE >= 0)
+            game.options.viewDistance = Math.min(3, WORLDLINE_VIEW_DISTANCE);
+    }
+
+    @Unique
+    private void worldlinePlacePlayer() {
+        int step = "moving".equals(WORLDLINE_PATH) ? Math.min(worldlineTicks, 60) : 0;
+        double x = 8.5D + step * 0.25D, z = 8.5D + step * 0.125D;
+        float yaw = 45.0F + step * 2.0F;
+        player.setPositionAndAngles(x, worldlineY, z, yaw, 0.0F);
+        WorldlineFrameOracle.pose(WORLDLINE_PATH, WORLDLINE_VIEW_DISTANCE,
+                x, worldlineY, z, yaw);
+    }
+
+    @Unique
+    private void worldlineStabilizeScene() {
+        world.setTime(6000L);
+        world.getProperties().setRaining(false);
+        world.getProperties().setThundering(false);
+        world.setRainGradient(0.0F);
+        world.entities.retainAll(Collections.singleton(player));
+        world.globalEntities.clear();
+        ((Minecraft) (Object) this).raining = false;
     }
 
     @Unique

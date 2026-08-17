@@ -18,6 +18,10 @@ public final class WorldlineFrameOracle {
     private static final int MAX_FRAMES = Integer.getInteger("worldline.frameOracle.maxFrames", 2500);
     private static boolean frozen, complete;
     private static int tick, frames, stable, lastVisible = -1;
+    private static String path = "unknown";
+    private static int view = -1;
+    private static double x, y, z;
+    private static float yaw;
 
     private WorldlineFrameOracle() {}
 
@@ -29,9 +33,15 @@ public final class WorldlineFrameOracle {
 
     public static boolean fixedDelta() { return FIXED_DELTA || ENABLED && frozen; }
 
+    public static void pose(String value, int distance, double px, double py, double pz, float angle) {
+        path = value; view = distance; x = px; y = py; z = pz; yaw = angle;
+    }
+
     public static void prepare(Minecraft client) {
         if (!ENABLED || !frozen) return;
         client.currentScreen = null;
+        client.paused = false;
+        client.skipGameRender = false;
         client.options.hideHud = true;
         client.options.bobView = false;
     }
@@ -46,44 +56,62 @@ public final class WorldlineFrameOracle {
 
     public static void capture(Minecraft client) {
         if (!frozen || complete || (stable < STABLE_FRAMES && frames < MAX_FRAMES)) return;
-        complete = true;
         if (stable < STABLE_FRAMES) {
+            complete = true;
             System.out.println("[WorldlineFrameOracle] timeout tick=" + tick + " frames=" + frames);
         } else {
-            String hash = framebuffer(client.displayWidth, client.displayHeight);
+            Snapshot snapshot = framebuffer(client.displayWidth, client.displayHeight);
+            if (snapshot.nonBlack == 0 && frames < MAX_FRAMES) return;
+            complete = true;
+            writeImage(snapshot.bytes, client.displayWidth, client.displayHeight);
             System.out.println("[WorldlineFrameOracle] tick=" + tick + " frames=" + frames
                     + " stable=" + stable + " globalReady=true visibleReady=true width=" + client.displayWidth
-                    + " height=" + client.displayHeight + " sha256=" + hash);
+                    + " height=" + client.displayHeight + " path=" + path + " view=" + view
+                    + " x=" + x + " y=" + y + " z=" + z + " yaw=" + yaw
+                    + " sha256=" + snapshot.hash);
         }
         System.out.println("[WorldlineCapture] complete frozenTick=" + tick + " renderFrames=" + frames);
         client.scheduleStop();
     }
 
-    private static String framebuffer(int width, int height) {
+    private static Snapshot framebuffer(int width, int height) {
         try {
             ByteBuffer pixels = BufferUtils.createByteBuffer(width * height * 4);
             GL11.glReadPixels(0, 0, width, height, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, pixels);
             byte[] bytes = new byte[pixels.remaining()]; pixels.get(bytes);
-            writeImage(bytes, width, height);
+            int nonBlack = 0;
+            for (int index = 0; index < bytes.length; index += 4)
+                if (bytes[index] != 0 || bytes[index + 1] != 0 || bytes[index + 2] != 0) nonBlack++;
             byte[] digest = MessageDigest.getInstance("SHA-256").digest(bytes);
             StringBuilder result = new StringBuilder();
             for (byte item : digest) result.append(String.format("%02x", item & 255));
-            return result.toString();
+            return new Snapshot(bytes, result.toString(), nonBlack);
         } catch (Exception error) {
             throw new IllegalStateException("could not hash framebuffer", error);
         }
     }
 
-    private static void writeImage(byte[] bytes, int width, int height) throws Exception {
+    private static void writeImage(byte[] bytes, int width, int height) {
         String output = System.getProperty("worldline.frameOracle.output", "");
         if (output.isEmpty()) return;
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        for (int y = 0; y < height; y++) for (int x = 0; x < width; x++) {
-            int index = (y * width + x) * 4;
-            int rgba = (bytes[index] & 255) << 16 | (bytes[index + 1] & 255) << 8
-                    | bytes[index + 2] & 255 | (bytes[index + 3] & 255) << 24;
-            image.setRGB(x, height - 1 - y, rgba);
+        try {
+            BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            for (int y = 0; y < height; y++) for (int x = 0; x < width; x++) {
+                int index = (y * width + x) * 4;
+                int rgba = (bytes[index] & 255) << 16 | (bytes[index + 1] & 255) << 8
+                        | bytes[index + 2] & 255 | (bytes[index + 3] & 255) << 24;
+                image.setRGB(x, height - 1 - y, rgba);
+            }
+            ImageIO.write(image, "png", new File(output));
+        } catch (Exception error) {
+            throw new IllegalStateException("could not write framebuffer", error);
         }
-        ImageIO.write(image, "png", new File(output));
+    }
+
+    private static final class Snapshot {
+        final byte[] bytes; final String hash; final int nonBlack;
+        Snapshot(byte[] bytes, String hash, int nonBlack) {
+            this.bytes = bytes; this.hash = hash; this.nonBlack = nonBlack;
+        }
     }
 }

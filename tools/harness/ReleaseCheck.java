@@ -46,10 +46,12 @@ public final class ReleaseCheck {
         Properties m14 = load("smokes/m14-chunk-backlog/smoke.properties");
         Properties m15 = load("smokes/m15-chunk-contract/smoke.properties");
         Properties m16 = load("smokes/m16-adaptive-chunks/smoke.properties");
+        Properties m17 = load("smokes/m17-scheduler-hardening/smoke.properties");
+        Properties m17Profile = load("adapters/aero-model-lib/opt-in/worldline-adaptive.properties");
         Properties lab = load("smokes/lab-cycle/smoke.properties");
         match(release, "id", "worldline");
-        match(release, "version", "1.4.0");
-        match(release, "milestone", "m16-adaptive-chunks");
+        match(release, "version", "1.5.0");
+        match(release, "milestone", "m17-scheduler-hardening");
         match(release, "status", "go");
         match(release, "scope", "local-research");
         match(release, "canonical.command", "java tools/harness/Verify.java --smoke");
@@ -86,6 +88,11 @@ public final class ReleaseCheck {
         same(release, "m16.signature", m16, "expected.signature");
         same(release, "m16.aero.revision", m16, "aero.revision");
         same(release, "m16.seed", m16, "seed");
+        same(release, "m17.signature", m17, "expected.signature");
+        same(release, "m17.aero.revision", m17, "aero.revision");
+        same(release, "m17.seed", m17, "seed");
+        match(m17Profile, "default.enabled", "false");
+        match(m17Profile, "shipping.status", "lab-only-no-go");
         same(release, "lab.signature", lab, "expected.signature");
         requireText("modules/api/src/main/java/worldline/api/WorldlineVersion.java",
                 "public static final String VERSION = \"" + value(release, "version") + "\";");
@@ -138,8 +145,12 @@ public final class ReleaseCheck {
                 "smokes/m16-adaptive-chunks/MAP.md")) {
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         }
+        for (String file : Arrays.asList("docs/M17_SCHEDULER_HARDENING.md", "docs/M17_CYCLE.md",
+                "smokes/m17-scheduler-hardening/MAP.md")) {
+            if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
+        }
         verifyPublicTree();
-        System.out.println("  release: Worldline v1.4.0 M16 adaptive chunks GO");
+        System.out.println("  release: Worldline v1.5.0 M17 matrix GO; scheduler promotion NO-GO");
         System.out.println("  public artifact boundary: verified");
     }
 

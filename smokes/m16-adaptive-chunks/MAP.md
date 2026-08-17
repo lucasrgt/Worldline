@@ -25,8 +25,9 @@ builders, and applies an 8-item maximum plus 12 ms elapsed-work envelope.
 - The oracle disables HUD/bobbing, fixes interpolation to current player state,
   waits for zero global dirty builders and 20 stable visible-ready frames, then
   hashes every RGBA framebuffer byte.
-- Tick and dimensions must match. Across the complete framebuffer, no more than
-  64 pixels may differ and no channel may differ by more than 2 of 255.
+- Tick and dimensions must match. The complete framebuffer is still compared
+  against the original 64-pixel/delta-2 threshold. After the startup-overlay
+  correction, the gate requires and records the observed threshold violation.
 
 ## Frozen conclusion
 
@@ -36,16 +37,17 @@ The invariant report is:
 scheduler=VISIBLE_FIRST_ADAPTIVE_ENVELOPE
 contract=ACCEPTED_DEFERRED_NEXT_FRAME
 readiness=VANILLA_PARITY_OR_BETTER
-framebuffer=FROZEN_TICK_STRICT_PIXEL_PARITY
-shipping.status=CANDIDATE
+framebuffer=POST_OVERLAY_DIVERGENCE_DETECTED
+shipping.status=SUPERSEDED_BY_M17_NO_GO
 ```
 
 Its SHA-256 is
-`eef21fc6cfc48d002038d0bfaea1764ca14cff2d5939897dc6dad6ab5d5fcbf4`.
+`f274b0970e16939ba56b8f8796360d54c5f7981168a1e52e9d85da95585eb26b`.
 
 ## Non-claims
 
-Frame timings and raw framebuffer hashes are run evidence, not frozen
-cross-machine constants. The full-frame tolerance is frozen. This smoke does not
-modify Aero, establish an optimal budget, cover moving cameras or multiple
-saves, or prove elimination of the historical random spike.
+Frame timings, raw framebuffer hashes, and divergence counts are run evidence,
+not frozen cross-machine constants. The original full-frame threshold remains
+the decision boundary. This smoke does not modify Aero, establish an optimal
+budget, cover moving cameras or multiple saves, or prove elimination of the
+historical random spike.
