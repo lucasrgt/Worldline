@@ -4,6 +4,21 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## Unreleased - Semantic Mappings
+
+Status: experimental evidence.
+
+- Added `SemanticMapping` so a b1.7.3 symbol can carry role, category,
+  reads/writes, dependencies, evidence, an optional official client alias,
+  and confidence.
+- Added `worldline-semantics` with a fail-closed catalog of the 24 control
+  categories and 188 required roles, including both `symbols.map` files,
+  adapter/oracle fields, and item/recipe/domain surfaces.
+- Added a fail-closed coverage gate so every named `symbols.map` symbol has
+  a catalog role, plus `SemanticGraph` over static read/write/dep tokens.
+- Added CLI `semantics show|graph|category|role` inspection without loading
+  Minecraft.
+
 ## Unreleased - Game UI Tree
 
 Status: experimental evidence.

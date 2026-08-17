@@ -69,7 +69,7 @@ Run the canonical gate from the repository root:
 java tools/harness/Verify.java
 ```
 
-The gate checks product and harness line budgets, compiles product modules to
+The gate checks per-file line ceilings, compiles product modules to
 Java 8 bytecode in their declared dependency order, compiles the tests, and
 runs every registered test suite. Derived output is written to the ignored
 `.worldline/build/` directory.
@@ -157,16 +157,20 @@ through the neutral `GameUi` tree and matches two official-JAR oracle processes.
 This is experimental evidence, not a versioned milestone. See
 `smokes/gui-tree/MAP.md` and `docs/GUI_TREE.md`.
 
+The experimental semantic catalog annotates the 24 controlled-boundary
+categories from the original plan, both `symbols.map` files, and the
+adapter/oracle/item/recipe/domain surfaces Worldline already executes. Each
+required role has one symbol, optional official alias, evidence tokens, and
+a confidence score. A coverage gate and static role graph fail closed on
+unknown tokens or unmapped `symbols.map` names. See `docs/SEMANTICS.md`.
+
 The gate then runs `smokes/lab-cycle`, restores deterministic checkpoints in
 fresh clients, compares hypotheses, exercises GUI selectors, and compiles and
 loads `probe-mod.jar`; its scope is defined in `smokes/lab-cycle/MAP.md`.
 
-The client, M3, M4, M5, M6, M7, M8, M9, GUI tree, and lab runners deliberately
-raised the tooling budget to 2,800 code lines while retaining the 300-line
-per-file ceiling. Product code has no total line budget; each product file
-stays at or below 250 lines. Smoke drivers and oracles have their own enforced
-1,500-line total and 150-line per-file budget, so integration behavior cannot
-hide outside the product and tooling counts.
+There is no total line budget. Each product file stays at or below 250 lines,
+each harness file at or below 300, and each smoke or adapter file at or below
+150, so a single source file cannot hide an unbounded implementation.
 
 See `ARCHITECTURE.md` for module boundaries and `AGENTS.md` for the behavioral
 and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;

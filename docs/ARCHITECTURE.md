@@ -47,6 +47,10 @@ scenario -> worldline-cli -> worldline-minimization -> worldline-analysis
                                    ^
                                    |
                           adapter-owned evaluator
+
+ItemCensus / GameUi.nodes() -> worldline-invariants
+
+SemanticMapping -> worldline-semantics
 ```
 
 The modules are physical source roots and are compiled separately. The API is
@@ -104,6 +108,12 @@ scenarios, exact divergence fingerprints, and deterministic delta debugging.
 Adapters remain responsible for step interpretation and isolated evaluation,
 so the neutral module does not acquire game, mod, or runtime dependencies.
 
+The experimental semantic catalog adds `worldline-semantics` above the API.
+It owns the closed 24-category role contract, static role graph, and fail-closed lookup. The API
+owns immutable `SemanticMapping` values, including optional official client
+aliases. Category files annotate controlled b1.7.3 symbols already evidenced
+by Worldline; unknown or duplicate symbols fail closed.
+
 ### `kernel`
 
 Owns control-flow policy: valid lifecycle transitions and the narrow backend
@@ -114,7 +124,7 @@ Kernel unit tests use a recording fake. The server smoke supplies a test-scoped
 `VanillaWorldBackend` for direct world-level evidence. The client cycles use the
 reusable `B173Runtime` adapter, which constructs the original client tick object
 graph and reaches `Minecraft.runTick()` through the same port. The adapter has
-its own enforced source budget and compiles against local, ignored Minecraft
+its own per-file source ceiling and compiles against local, ignored Minecraft
 classes; no game binary or decompiled source enters the repository.
 
 ### `trace`

@@ -54,6 +54,8 @@ public final class WorldlineCli {
                 return createScenario(arguments[2], Arrays.asList(arguments).subList(3, arguments.length), output);
             if (arguments.length == 3 && "scenario".equals(arguments[0])
                     && "inspect".equals(arguments[1])) return inspectScenario(arguments[2], output);
+            if (arguments.length >= 2 && "semantics".equals(arguments[0]))
+                return SemanticsCommand.run(arguments, output, error);
             return usage(error);
         } catch (IOException | ReflectiveOperationException | RuntimeException failure) {
             error.println("worldline command failed: " + failure.getMessage()); return 1;
@@ -172,7 +174,11 @@ public final class WorldlineCli {
         error.println("   or: worldline mod test record <mod.jar> <trace.wltrace> <result.wlmtest>");
         error.println("   or: worldline mod test diff <left.wlmtest> <right.wlmtest>");
         error.println("   or: worldline scenario create <output.wlscenario> [step ...]");
-        error.println("   or: worldline scenario inspect <scenario.wlscenario>"); return 2;
+        error.println("   or: worldline scenario inspect <scenario.wlscenario>");
+        error.println("   or: worldline semantics show");
+        error.println("   or: worldline semantics graph");
+        error.println("   or: worldline semantics category <name>");
+        error.println("   or: worldline semantics role <ROLE>"); return 2;
     }
 
     private static void require(boolean condition, String message) {
