@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.26.0 - M38 Explicit Movement Fallback (GO)**.
+Current official milestone: **Worldline v1.27.0 - M39 Synchronous Route Observation (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -226,6 +226,10 @@ later step absent from persisted server state. See `docs/M37_ROUTE_POLICY.md`.
 M38 adds caller-supplied primary/fallback pairs. A fallback is skipped after an
 unchallenged primary and executes once after a corrected primary, with no
 automatic retry or path discovery. See `docs/M38_EXPLICIT_FALLBACK.md`.
+
+M39 emits synchronous indexed observations immediately after each resolved
+primary or fallback attempt. Events remain on the caller thread and retain the
+same outcome objects returned by the route. See `docs/M39_ROUTE_OBSERVATION.md`.
 
 ## Verify
 

@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.27.0 - M39 Synchronous Route Observation
+
+Status: GO for caller-thread indexed route outcome observation.
+
+- Added immutable `MovementRouteEvent`, `MovementAttemptKind`, and a synchronous
+  `MovementRouteObserver` boundary.
+- Emitted each primary/fallback event immediately after its bounded movement
+  resolved, with stable alternative and outcome indexes.
+- Preserved object identity between observed outcomes and the immutable final
+  route result across two fresh official servers.
+- Added no thread or asynchronous game callback; cache and persistence remained
+  coherent through the observed route.
+
+The frozen M39 semantic SHA-256 is
+`df2973b510807bc1ebce5b49ba2921e14137bd2970fba351d61df46f44165222`.
+
 ## 1.26.0 - M38 Explicit Movement Fallback
 
 Status: GO for caller-supplied single fallback after correction.

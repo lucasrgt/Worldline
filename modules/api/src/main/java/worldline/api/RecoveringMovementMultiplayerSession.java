@@ -25,15 +25,26 @@ public interface RecoveringMovementMultiplayerSession extends ResolvedMovementMu
     }
 
     default MovementRouteResult moveRouteWithFallback(List<MovementAlternative> alternatives) {
+        return moveRouteWithFallback(alternatives, MovementRouteObserver.NONE);
+    }
+
+    default MovementRouteResult moveRouteWithFallback(List<MovementAlternative> alternatives,
+            MovementRouteObserver observer) {
         if (alternatives == null || alternatives.isEmpty() || alternatives.size() > 32)
             throw new IllegalArgumentException("invalid movement alternatives");
+        if (observer == null) throw new IllegalArgumentException("null movement route observer");
         List<MovementOutcome> outcomes = new ArrayList<>(alternatives.size() * 2);
-        for (MovementAlternative alternative : alternatives) {
+        for (int index = 0; index < alternatives.size(); index++) {
+            MovementAlternative alternative = alternatives.get(index);
             if (alternative == null) throw new IllegalArgumentException("null movement alternative");
             MovementStep step = alternative.primary(); MovementOutcome primary = moveAndObserve(
                     step.deltaX(), step.deltaY(), step.deltaZ(), step.ticks()); outcomes.add(primary);
-            if (primary.corrected()) { step = alternative.fallback(); outcomes.add(moveAndObserve(
-                    step.deltaX(), step.deltaY(), step.deltaZ(), step.ticks())); }
+            observer.observe(new MovementRouteEvent(index, outcomes.size() - 1,
+                    MovementAttemptKind.PRIMARY, primary));
+            if (primary.corrected()) { step = alternative.fallback(); MovementOutcome fallback = moveAndObserve(
+                    step.deltaX(), step.deltaY(), step.deltaZ(), step.ticks()); outcomes.add(fallback);
+                observer.observe(new MovementRouteEvent(index, outcomes.size() - 1,
+                        MovementAttemptKind.FALLBACK, fallback)); }
         }
         return new MovementRouteResult(outcomes);
     }

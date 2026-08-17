@@ -318,6 +318,12 @@ at most once; an unchallenged primary skips it. Thirty-two pairs cap the worst
 case at the existing 64-outcome ceiling. The orchestrator neither retries nor
 derives an alternate movement and still requires no adapter change.
 
+M39 emits immutable route events synchronously after each resolved primary or
+fallback. Alternative and outcome indexes are bounded by the M38 ceilings, and
+the event retains the exact outcome object later returned in the route result.
+Observers run on the caller thread; no game callback, executor, queue, or
+adapter behavior is introduced.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

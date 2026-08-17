@@ -19,7 +19,20 @@ public final class DomainApiTest {
         movementRouteIsImmutableAndRecovers();
         movementRoutePolicyStopsWithoutRetry();
         movementAlternativeIsExplicitAndFailClosed();
+        movementRouteEventIsIndexedAndFailClosed();
         System.out.println("DomainApiTest passed");
+    }
+
+    private static void movementRouteEventIsIndexedAndFailClosed() {
+        PlayerPose pose = new PlayerPose(0D, 64D, 0D, 0F, 0F);
+        MovementOutcome outcome = new MovementOutcome(pose, pose, MovementDisposition.UNCHALLENGED);
+        MovementRouteEvent event = new MovementRouteEvent(2, 3, MovementAttemptKind.FALLBACK, outcome);
+        if (event.alternativeIndex() != 2 || event.outcomeIndex() != 3
+                || event.kind() != MovementAttemptKind.FALLBACK || event.outcome() != outcome)
+            throw new AssertionError("movement route event accessors drifted");
+        failure(() -> new MovementRouteEvent(-1, 0, MovementAttemptKind.PRIMARY, outcome));
+        failure(() -> new MovementRouteEvent(0, 64, MovementAttemptKind.PRIMARY, outcome));
+        failure(() -> new MovementRouteEvent(0, 0, null, outcome));
     }
 
     private static void movementAlternativeIsExplicitAndFailClosed() {
