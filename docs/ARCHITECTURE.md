@@ -330,6 +330,12 @@ returns an explicit `CONTINUE` or `STOP`; `STOP` is applied before any fallback
 or later alternative. The controller cannot retract a resolved outcome, invent
 a movement, or schedule asynchronous work, and requires no adapter change.
 
+M41 wraps a controlled route in an immutable `MovementRouteExecution`. Its
+termination is exactly `EXHAUSTED` or `CONTROLLER_STOP`, and its terminal event
+is the same final event delivered synchronously to the controller, retaining
+the identical last outcome object. This is a summary of completed work, not a
+goal, scheduler state, inferred path, or adapter concern.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

@@ -4,6 +4,21 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.29.0 - M41 Immutable Route Termination
+
+Status: GO for exact stopped-versus-exhausted route summaries.
+
+- Added immutable `MovementRouteExecution` and `MovementRouteTermination`
+  values without changing the M39 or M40 entrypoints.
+- Bound every summary to its exact final event and identical final outcome.
+- Proved `CONTROLLER_STOP` after a fallback and `EXHAUSTED` after a complete
+  route across two fresh official servers.
+- Preserved later-movement absence, remote cache coherence, and player
+  persistence without goal inference, retry, scheduling, or adapter changes.
+
+The frozen M41 semantic SHA-256 is
+`f3134a8e626058fc196b5ad3787199c6e0cd7f71a25a8a5db228289b886cdf7a`.
+
 ## 1.28.0 - M40 Observer-Directed Route Control
 
 Status: GO for synchronous event-directed route cancellation.

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.28.0 - M40 Observer-Directed Route Control (GO)**.
+Current official milestone: **Worldline v1.29.0 - M41 Immutable Route Termination (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -235,6 +235,10 @@ M40 lets a caller-thread controller return `CONTINUE` or `STOP` immediately
 after an immutable route event. A stop prevents every later caller-supplied
 attempt without adding retries or asynchronous control. See
 `docs/M40_OBSERVER_CONTROL.md`.
+
+M41 returns an immutable execution summary that identifies the exact terminal
+event and distinguishes `EXHAUSTED` from `CONTROLLER_STOP`. See
+`docs/M41_ROUTE_TERMINATION.md`.
 
 ## Verify
 

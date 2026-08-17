@@ -38,29 +38,37 @@ public interface RecoveringMovementMultiplayerSession extends ResolvedMovementMu
 
     default MovementRouteResult moveRouteWithFallbackUntil(List<MovementAlternative> alternatives,
             MovementRouteController controller) {
+        return moveRouteWithFallbackExecution(alternatives, controller).result();
+    }
+
+    default MovementRouteExecution moveRouteWithFallbackExecution(List<MovementAlternative> alternatives,
+            MovementRouteController controller) {
         if (alternatives == null || alternatives.isEmpty() || alternatives.size() > 32)
             throw new IllegalArgumentException("invalid movement alternatives");
         if (controller == null) throw new IllegalArgumentException("null movement route controller");
         List<MovementOutcome> outcomes = new ArrayList<>(alternatives.size() * 2);
-        boolean stopped = false;
+        boolean stopped = false; MovementRouteEvent terminal = null;
         for (int index = 0; index < alternatives.size(); index++) {
             MovementAlternative alternative = alternatives.get(index);
             if (alternative == null) throw new IllegalArgumentException("null movement alternative");
             MovementStep step = alternative.primary(); MovementOutcome primary = moveAndObserve(
                     step.deltaX(), step.deltaY(), step.deltaZ(), step.ticks()); outcomes.add(primary);
-            MovementRouteDirective directive = controller.after(new MovementRouteEvent(
-                    index, outcomes.size() - 1, MovementAttemptKind.PRIMARY, primary));
+            terminal = new MovementRouteEvent(
+                    index, outcomes.size() - 1, MovementAttemptKind.PRIMARY, primary);
+            MovementRouteDirective directive = controller.after(terminal);
             if (directive == null) throw new IllegalStateException("null movement route directive");
             stopped = directive == MovementRouteDirective.STOP;
             if (stopped) break;
             if (primary.corrected()) { step = alternative.fallback(); MovementOutcome fallback = moveAndObserve(
                     step.deltaX(), step.deltaY(), step.deltaZ(), step.ticks()); outcomes.add(fallback);
-                directive = controller.after(new MovementRouteEvent(index, outcomes.size() - 1,
-                        MovementAttemptKind.FALLBACK, fallback));
+                terminal = new MovementRouteEvent(index, outcomes.size() - 1,
+                        MovementAttemptKind.FALLBACK, fallback);
+                directive = controller.after(terminal);
                 if (directive == null) throw new IllegalStateException("null movement route directive");
                 stopped = directive == MovementRouteDirective.STOP; }
             if (stopped) break;
         }
-        return new MovementRouteResult(outcomes);
+        return new MovementRouteExecution(new MovementRouteResult(outcomes), stopped
+                ? MovementRouteTermination.CONTROLLER_STOP : MovementRouteTermination.EXHAUSTED, terminal);
     }
 }
