@@ -16,10 +16,10 @@ confirming the retry-loop failure diagnosed in M13.
 
 ## What did not generalize
 
-The moving camera's readiness frontier trails vanilla during the measured
-window before eventually draining. Timing is mixed by scenario and therefore
-remains observational. The 12 ms envelope can stop only between rebuilds; one
-large rebuild can overshoot it substantially.
+Moving-camera comparative readiness and timing change direction across
+qualifying repetitions and therefore remain observational. Both policies
+eventually drain. The 12 ms envelope can stop only between rebuilds; one large
+rebuild can overshoot it substantially.
 
 The frozen-frame oracle removes non-player entities, fixes time, weather,
 camera, interpolation, and HUD, then requires 200 globally drained stable

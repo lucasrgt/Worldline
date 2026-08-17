@@ -12,8 +12,9 @@ path. Raw worlds and logs remain ignored derived artifacts.
 - The fresh fixture has more global BlockEntities than real entity blocks.
 - Real entity blocks retain the same count after reload; the excess phantom
   BlockEntities disappear.
-- Both dense and Aero-disabled empty scenes exercise chunk compilation above
-  10 ms; exploratory repetitions crossed the 25 ms frame threshold in both.
+- Both dense and Aero-disabled empty scenes exercise chunk compilation;
+  exploratory repetitions crossed the 10 ms compile and 25 ms frame
+  thresholds, but those timing crossings are observations rather than gates.
 - No stable dense-scene amplification is claimed.
 - Making the current compile governor active on all frames produces over 100
   skipped retries per accepted compile, so it is rejected as a mitigation

@@ -60,7 +60,7 @@ public final class SchedulerHardeningSmoke {
                 + "scheduler=VISIBLE_FIRST_ADAPTIVE_ENVELOPE\n"
                 + "contract=ONE_CALL_ACCEPTED_DEFERRED_NEXT_FRAME\n"
                 + "governor=REJECT_RETRYABLE_BACKLOG\n"
-                + "readiness=STATIONARY_BETTER_MOVING_EVENTUAL_DRAIN\n"
+                + "readiness=STATIONARY_PARITY_OR_BETTER_MOVING_OBSERVED_NOT_FROZEN\n"
                 + "starvation=NONE_AT_GLOBAL_DRAIN\n"
                 + "budget=COOPERATIVE_NON_PREEMPTIVE_OVERSHOOT\n"
                 + "latency=OBSERVED_NOT_FROZEN\n"

@@ -26,8 +26,8 @@ drain the complete chunk queue, and hold readiness for 200 rendered frames.
 - The old governor records rejected work but leaves substantial queue debt in
   each bounded run. It remains rejected.
 - Adaptive reaches at least vanilla's normalized readiness frontier while
-  stationary. The moving run lags that frontier during the measurement window
-  but reaches complete global drainage.
+  stationary. Moving-window comparative readiness varies by run and is not
+  frozen; both policies reach complete global drainage.
 - The elapsed budget stops batches, but one individual rebuild cannot be
   preempted and can exceed the configured 12 ms envelope.
 - All three final framebuffer pairs exceed M16's 64-pixel/delta-2 tolerance.

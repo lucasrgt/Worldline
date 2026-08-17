@@ -109,7 +109,7 @@ candidate, not an Aero release; see `docs/M16_ADAPTIVE_CHUNKS.md`.
 M17 runs that candidate against stationary-empty, stationary-dense, and
 moving-dense saves alongside vanilla and Aero's rejected governor. Adaptive
 preserves one completion per frame and drains background work, but moving
-readiness, non-preemptive budget overshoot, mixed latency, and three strict
+readiness/timing remain observational; non-preemptive budget overshoot and three strict
 framebuffer divergences block promotion. Its evaluation profile is packaged
 default-off and marked lab-only NO-GO; see `docs/M17_SCHEDULER_HARDENING.md`.
 

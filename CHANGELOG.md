@@ -15,15 +15,17 @@ promotion.
   background starvation across the matrix.
 - Confirmed that the old governor retains backlog, while the adaptive envelope
   remains non-preemptive and can overshoot on one expensive rebuild.
-- Recorded moving-window readiness lag and scenario-dependent timing instead of
-  generalizing M16's single-scene improvement.
+- Kept moving-window readiness and scenario-dependent timing observational
+  after qualifying repetitions changed their comparative direction.
+- Corrected M13's historical scene-pressure gate to require exercised chunk
+  compilation without freezing a machine-dependent 10 ms timing crossing.
 - Stabilized checkpoint entities, daylight, weather, camera, and interpolation;
   all three framebuffer pairs still exceed M16's strict pixel tolerance.
 - Packaged a default-off evaluation profile marked `lab-only-no-go`; the pinned
   Aero checkout remains unchanged.
 
 The frozen M17 invariant-report SHA-256 is
-`27add12df594ab97e330b33fc0118918fcbabbf3189f171089967fdafe5955a0`.
+`fa008e18e53b8d63003196e91d2b554f4ce973e602a68df4c7a7dc77096f7456`.
 
 ## 1.4.0 - M16 Adaptive Chunks
 
