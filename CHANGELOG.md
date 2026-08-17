@@ -4,6 +4,24 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.19.0 - M31 Incremental Remote World
+
+Status: GO for server-authoritative incremental block updates.
+
+- Added neutral begin/finish break intent and exact expected-block waiting.
+- Decoded Packet53 single-block and Packet52 packed multi-block updates into
+  immutable replacement snapshots while preserving prior values and light.
+- Proved exact mapped coordinate/state application in a deterministic fixture.
+- Broke one nearby block in each of two fresh official servers and required the
+  inbound target state `0:0`; outbound intent alone never counted as success.
+- Bounded exact-state waits by elapsed time even while keepalives arrive, and
+  ensured failed server boots terminate their child process.
+- Kept mining prediction, drops, full client heartbeat, entities, rendering,
+  and server tick stepping as later milestones.
+
+The frozen M31 semantic SHA-256 is
+`f238ca0cb8dc430ba88e17dc25425d158569d08d7dc9abda01b97cdc87cde6bf`.
+
 ## 1.18.0 - M30 Remote World Cache
 
 Status: GO for bounded prechunk-qualified remote-world caching.

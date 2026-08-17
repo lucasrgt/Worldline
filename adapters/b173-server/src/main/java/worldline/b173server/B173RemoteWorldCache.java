@@ -8,10 +8,13 @@ import java.util.Map;
 import worldline.api.RemoteChunkObservation;
 import worldline.api.RemoteChunkSnapshot;
 import worldline.api.RemoteWorldView;
+import worldline.api.BlockState;
+import worldline.api.BlockPosition;
 
 /** Adapter-private Packet50 lifecycle state for a bounded decoded chunk set. */
 final class B173RemoteWorldCache {
     private final Map<Long, RemoteChunkSnapshot> chunks = new LinkedHashMap<>();
+    private int changes;
 
     void preChunk(DataInputStream input) throws IOException {
         int x = input.readInt(), z = input.readInt(); boolean load = input.readBoolean();
@@ -49,6 +52,44 @@ final class B173RemoteWorldCache {
         ArrayList<RemoteChunkSnapshot> decoded = new ArrayList<>();
         for (RemoteChunkSnapshot snapshot : chunks.values()) if (snapshot != null) decoded.add(snapshot);
         return new RemoteWorldView(decoded);
+    }
+
+    int changes() { return changes; }
+
+    boolean matches(BlockPosition position, BlockState expected) {
+        long key = key(Math.floorDiv(position.x(), 16), Math.floorDiv(position.z(), 16));
+        RemoteChunkSnapshot chunk = chunks.get(key);
+        return chunk != null && position.y() >= 0 && position.y() < 128
+                && chunk.blockAt(Math.floorMod(position.x(), 16), position.y(),
+                        Math.floorMod(position.z(), 16)).equals(expected);
+    }
+
+    void singleBlock(DataInputStream input) throws IOException {
+        int x = input.readInt(), y = input.readUnsignedByte(), z = input.readInt();
+        apply(x, y, z, input.readUnsignedByte(), input.readUnsignedByte());
+    }
+
+    void multiBlock(DataInputStream input) throws IOException {
+        int chunkX = input.readInt(), chunkZ = input.readInt(), count = input.readUnsignedShort();
+        short[] coordinates = new short[count];
+        for (int index = 0; index < count; index++) coordinates[index] = input.readShort();
+        byte[] ids = new byte[count], metadata = new byte[count];
+        input.readFully(ids); input.readFully(metadata);
+        for (int index = 0; index < count; index++) {
+            int packed = coordinates[index] & 65535;
+            apply(chunkX * 16 + (packed >> 12 & 15), packed & 255,
+                    chunkZ * 16 + (packed >> 8 & 15), ids[index] & 255, metadata[index] & 15);
+        }
+    }
+
+    private void apply(int x, int y, int z, int id, int metadata) {
+        if (y < 0 || y >= 128) return;
+        long key = key(Math.floorDiv(x, 16), Math.floorDiv(z, 16));
+        RemoteChunkSnapshot chunk = chunks.get(key); if (chunk == null) return;
+        int localX = Math.floorMod(x, 16), localZ = Math.floorMod(z, 16);
+        BlockState next = new BlockState(id, metadata);
+        if (chunk.blockAt(localX, y, localZ).equals(next)) return;
+        chunks.put(key, chunk.withBlock(localX, y, localZ, next)); changes++;
     }
 
     private static long key(int x, int z) { return ((long) x << 32) ^ (z & 0xffffffffL); }

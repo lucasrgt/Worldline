@@ -60,11 +60,11 @@ public final class ReleaseCheck {
         Properties m26 = load("smokes/m26-native-multiplayer/smoke.properties");
         Properties m27 = load("smokes/m27-multiplayer-chat/smoke.properties");
         Properties m28 = load("smokes/m28-remote-chunk/smoke.properties");
-        Properties m29 = load("smokes/m29-remote-chunk-snapshot/smoke.properties"), m30 = load("smokes/m30-remote-world-cache/smoke.properties");
+        Properties m29 = load("smokes/m29-remote-chunk-snapshot/smoke.properties"), m30 = load("smokes/m30-remote-world-cache/smoke.properties"), m31 = load("smokes/m31-incremental-world/smoke.properties");
         Properties lab = load("smokes/lab-cycle/smoke.properties");
         Properties gui = load("smokes/gui-tree/smoke.properties");
         match(release, "id", "worldline");
-        match(release, "version", "1.18.0"); match(release, "milestone", "m30-remote-world-cache");
+        match(release, "version", "1.19.0"); match(release, "milestone", "m31-incremental-world");
         match(release, "status", "go");
         match(release, "scope", "local-research");
         match(release, "canonical.command", "java tools/harness/Verify.java --smoke");
@@ -136,6 +136,7 @@ public final class ReleaseCheck {
         same(release, "m29.signature", m29, "expected.signature");
         same(release, "server.sha256", m29, "server.jar.sha256");
         same(release, "m30.signature", m30, "expected.signature"); same(release, "server.sha256", m30, "server.jar.sha256");
+        same(release, "m31.signature", m31, "expected.signature"); same(release, "server.sha256", m31, "server.jar.sha256");
         same(release, "lab.signature", lab, "expected.signature");
         same(release, "gui.signature", gui, "expected.signature");
         same(release, "invariants.signature", client, "expected.state.signature");
@@ -252,12 +253,11 @@ public final class ReleaseCheck {
                 "smokes/m29-remote-chunk-snapshot/MAP.md")) {
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         }
-        for (String file : Arrays.asList("docs/M30_REMOTE_WORLD_CACHE.md", "docs/M30_CYCLE.md",
-                "smokes/m30-remote-world-cache/MAP.md")) {
+        for (String file : Arrays.asList("docs/M30_REMOTE_WORLD_CACHE.md", "docs/M30_CYCLE.md", "smokes/m30-remote-world-cache/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        }
+        for (String file : Arrays.asList("docs/M31_INCREMENTAL_WORLD.md", "docs/M31_CYCLE.md", "smokes/m31-incremental-world/MAP.md")) if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         verifyPublicTree();
-        System.out.println("  release: Worldline v1.18.0 M30 remote world cache GO");
+        System.out.println("  release: Worldline v1.19.0 M31 incremental world GO");
         System.out.println("  public artifact boundary: verified");
     }
 

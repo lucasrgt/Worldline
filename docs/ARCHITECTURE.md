@@ -267,6 +267,12 @@ the cache before a load reservation, unload removes it, and 256 tracked regions
 is a hard fail-closed ceiling. Incremental updates and native world/render state
 remain outside this layer.
 
+M31 applies Packet52/53 changes by immutable snapshot replacement. Outbound
+begin/finish dig packets express intent only; the cache changes exclusively
+after an official inbound update reaches the shared pump. This keeps server
+authority explicit and leaves mining prediction, drops, entities, and rendering
+outside the neutral cache.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

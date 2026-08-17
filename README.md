@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.18.0 - M30 Remote World Cache (GO)**.
+Current official milestone: **Worldline v1.19.0 - M31 Incremental World (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -187,6 +187,11 @@ M30 preserves native prechunk load/unload events in the shared inbound pump and
 assembles decoded snapshots into an immutable, 256-region neutral world view.
 A lifecycle oracle proves eviction and bounds; two official servers each
 provide a lifecycle-qualified addressable chunk. See `docs/M30_REMOTE_WORLD_CACHE.md`.
+
+M31 applies Packet52/53 block changes by immutable cache replacement. Two
+operator-qualified clients break nearby blocks, but Worldline accepts success
+only when each official server reports the exact target as air. See
+`docs/M31_INCREMENTAL_WORLD.md`.
 
 ## Verify
 
@@ -391,6 +396,8 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M29_CYCLE.md` is the v1.17.0 strict remote chunk-snapshot GO audit.
 
 `M30_CYCLE.md` is the v1.18.0 bounded remote-world cache GO audit.
+
+`M31_CYCLE.md` is the v1.19.0 server-authoritative incremental-world GO audit.
 `GUI_CYCLE.md` is the inventory Game UI tree GO audit.
 `INVARIANTS_CYCLE.md` is the conservation-rule GO audit.
 `SEMANTICS_CYCLE.md` is the catalog and role-graph GO audit.

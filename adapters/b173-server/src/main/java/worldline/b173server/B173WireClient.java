@@ -12,10 +12,13 @@ import worldline.api.PlayerPose;
 import worldline.api.RemoteChunkObservation;
 import worldline.api.RemoteChunkSnapshot;
 import worldline.api.CachedRemoteWorldMultiplayerSession;
+import worldline.api.IncrementalRemoteWorldMultiplayerSession;
 import worldline.api.RemoteWorldView;
+import worldline.api.BlockPosition;
+import worldline.api.BlockState;
 
 /** Minimal original protocol-14 client for headless multiplayer qualification. */
-public final class B173WireClient implements CachedRemoteWorldMultiplayerSession {
+public final class B173WireClient implements IncrementalRemoteWorldMultiplayerSession {
     public static final int PROTOCOL = 14;
     private final String host, username;
     private final int port, timeoutMillis;
@@ -53,7 +56,7 @@ public final class B173WireClient implements CachedRemoteWorldMultiplayerSession
             entityId = input.readInt();
             readString(input, 16); input.readLong(); input.readByte();
             require(entityId >= 0, "server returned invalid entity id");
-            play = new B173PlayChannel(input, output);
+            play = new B173PlayChannel(input, output, timeoutMillis);
             connection = MultiplayerConnection.CONNECTED;
         } catch (IOException error) { closeSocket(); throw new IllegalStateException("multiplayer login failed", error); }
     }
@@ -108,15 +111,34 @@ public final class B173WireClient implements CachedRemoteWorldMultiplayerSession
     @Override
     public RemoteChunkSnapshot awaitChunkSnapshot() {
         require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
-        try { return play.awaitChunkSnapshot(); }
-        catch (IOException error) { throw new IllegalStateException("chunk decode failed", error); }
+        try { return play.awaitChunkSnapshot(); } catch (IOException error) { throw new IllegalStateException("chunk decode failed", error); }
     }
 
     @Override
     public RemoteWorldView awaitRemoteWorld(int minimumChunks) {
         require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
-        try { return play.awaitRemoteWorld(minimumChunks); }
-        catch (IOException error) { throw new IllegalStateException("remote world receive failed", error); }
+        try { return play.awaitRemoteWorld(minimumChunks); } catch (IOException error) { throw new IllegalStateException("remote world receive failed", error); }
+    }
+
+    @Override public RemoteWorldView awaitRemoteChunk(int chunkX, int chunkZ) {
+        require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
+        try { return play.awaitRemoteChunk(chunkX, chunkZ); } catch (IOException error) { throw new IllegalStateException("remote chunk receive failed", error); }
+    }
+
+    @Override public void beginBreak(BlockPosition position) {
+        require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
+        try { play.beginBreak(position); } catch (IOException error) { throw new IllegalStateException("begin break failed", error); }
+    }
+
+    @Override public void finishBreak(BlockPosition position) {
+        require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
+        try { play.finishBreak(position); } catch (IOException error) { throw new IllegalStateException("finish break failed", error); }
+    }
+
+    @Override public RemoteWorldView awaitBlock(BlockPosition position, BlockState expected) {
+        require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
+        try { return play.awaitBlock(position, expected); } catch (IOException error) {
+            throw new IllegalStateException("expected block receive failed", error); }
     }
 
     @Override

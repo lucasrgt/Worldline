@@ -81,9 +81,12 @@ public final class DomainApiTest {
                 region, ids, metadata, blockLight, skyLight);
         ids[7] = 0; metadata[3] = 0; blockLight[3] = 0; skyLight[3] = 0;
         equal(snapshot.blockAt(1, 1, 1), new BlockState(7, 7), "remote block state");
+        RemoteChunkSnapshot changed = snapshot.withBlock(1, 1, 1, new BlockState(20, 3));
         if (snapshot.blockCount() != 8 || snapshot.nonAirBlocks() != 7
                 || snapshot.blockLightAt(1, 1, 1) != 8
-                || snapshot.skyLightAt(1, 1, 1) != 9)
+                || snapshot.skyLightAt(1, 1, 1) != 9
+                || !snapshot.blockAt(1, 1, 1).equals(new BlockState(7, 7))
+                || !changed.blockAt(1, 1, 1).equals(new BlockState(20, 3)))
             throw new AssertionError("remote chunk snapshot accessors drifted");
         failure(() -> snapshot.blockAt(2, 0, 0));
         failure(() -> new RemoteChunkSnapshot(region, new byte[7], new byte[4],

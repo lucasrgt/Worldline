@@ -21,7 +21,8 @@ import worldline.api.ServerState;
 /** Process adapter for the unmodified official Beta 1.7.3 dedicated server. */
 public final class B173DedicatedServer implements PersistentMultiplayerServerRuntime {
     private final Path officialJar, directory;
-    private final int port;
+    private final int port, viewDistance;
+    private final boolean allowFlight;
     private final long seed;
     private final Duration timeout;
     private final B173ServerLog log = new B173ServerLog();
@@ -30,13 +31,21 @@ public final class B173DedicatedServer implements PersistentMultiplayerServerRun
     private int saves;
 
     public B173DedicatedServer(Path officialJar, Path directory, int port, long seed, Duration timeout) {
+        this(officialJar, directory, port, seed, timeout, 3, false);
+    }
+
+    public B173DedicatedServer(Path officialJar, Path directory, int port, long seed,
+            Duration timeout, int viewDistance, boolean allowFlight) {
         if (!Files.isRegularFile(officialJar)) throw new IllegalArgumentException("server JAR is absent");
         if (port < 1 || port > 65535) throw new IllegalArgumentException("invalid port");
+        if (viewDistance < 3 || viewDistance > 15) throw new IllegalArgumentException("invalid view distance");
         this.officialJar = officialJar.toAbsolutePath().normalize();
         this.directory = directory.toAbsolutePath().normalize();
         this.port = port;
         this.seed = seed;
         this.timeout = timeout;
+        this.viewDistance = viewDistance;
+        this.allowFlight = allowFlight;
     }
 
     @Override
@@ -54,6 +63,10 @@ public final class B173DedicatedServer implements PersistentMultiplayerServerRun
             require(log.contains("Starting minecraft server version Beta 1.7.3"), "version marker absent");
             lifecycle = ServerLifecycle.RUNNING;
         } catch (IOException error) { throw new IllegalStateException("could not boot server", error); }
+        finally {
+            if (lifecycle != ServerLifecycle.RUNNING && process != null && process.isAlive())
+                process.destroyForcibly();
+        }
     }
 
     @Override
@@ -66,6 +79,12 @@ public final class B173DedicatedServer implements PersistentMultiplayerServerRun
     public void save() {
         send("save-all", "Save complete.");
         saves++;
+    }
+
+    public void operator(String username) {
+        if (username == null || !username.matches("[A-Za-z0-9_]{1,16}"))
+            throw new IllegalArgumentException("invalid operator username");
+        send("op " + username, "Opping " + username);
     }
 
     @Override
@@ -132,7 +151,8 @@ public final class B173DedicatedServer implements PersistentMultiplayerServerRun
     private String properties() {
         return "allow-nether=false\nlevel-name=world\nlevel-seed=" + seed
                 + "\nmax-players=4\nonline-mode=false\nserver-ip=127.0.0.1\nserver-port=" + port
-                + "\nspawn-animals=false\nspawn-monsters=false\nview-distance=3\n";
+                + "\nspawn-animals=false\nspawn-monsters=false\nview-distance=" + viewDistance
+                + "\nallow-flight=" + allowFlight + "\n";
     }
 
     private String javaCommand() {

@@ -103,11 +103,11 @@ public final class Verify {
                     "m25-player-movement"));
             run(Arrays.asList("java", "tools/smoke/NativeMultiplayerCycle.java",
                     "m26-native-multiplayer"));
-            run(Arrays.asList("java", "tools/smoke/MultiplayerChatCycle.java",
-                    "m27-multiplayer-chat"));
+            run(Arrays.asList("java", "tools/smoke/MultiplayerChatCycle.java", "m27-multiplayer-chat"));
             run(Arrays.asList("java", "tools/smoke/RemoteChunkCycle.java", "m28-remote-chunk"));
             run(Arrays.asList("java", "tools/smoke/RemoteChunkSnapshotCycle.java", "m29-remote-chunk-snapshot"));
             run(Arrays.asList("java", "tools/smoke/RemoteWorldCacheCycle.java", "m30-remote-world-cache"));
+            run(Arrays.asList("java", "tools/smoke/IncrementalWorldCycle.java", "m31-incremental-world"));
             run(Arrays.asList("java", "tools/smoke/GuiCycle.java", "gui-tree"));
             run(Arrays.asList("java", "tools/smoke/LabCycle.java", "lab-cycle"));
         }

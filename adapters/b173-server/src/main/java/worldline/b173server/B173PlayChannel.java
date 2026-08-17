@@ -7,6 +7,8 @@ import worldline.api.PlayerPose;
 import worldline.api.RemoteChunkObservation;
 import worldline.api.RemoteChunkSnapshot;
 import worldline.api.RemoteWorldView;
+import worldline.api.BlockPosition;
+import worldline.api.BlockState;
 
 /** Original bounded codec for the protocol-14 initial play-position exchange. */
 final class B173PlayChannel {
@@ -16,8 +18,9 @@ final class B173PlayChannel {
     private PlayerPose pose;
     private double stanceHeight;
 
-    B173PlayChannel(DataInputStream input, DataOutputStream output) {
-        this.input = input; this.output = output; this.inbound = new B173PlayInbound(input);
+    B173PlayChannel(DataInputStream input, DataOutputStream output, int timeoutMillis) {
+        this.input = input; this.output = output;
+        this.inbound = new B173PlayInbound(input, output, timeoutMillis);
     }
 
     PlayerPose synchronize() throws IOException {
@@ -96,12 +99,32 @@ final class B173PlayChannel {
         return inbound.awaitWorld(minimumChunks);
     }
 
+    RemoteWorldView awaitRemoteChunk(int chunkX, int chunkZ) throws IOException {
+        require(pose != null, "play channel is not synchronized"); return inbound.awaitChunk(chunkX, chunkZ);
+    }
+
+    void beginBreak(BlockPosition position) throws IOException { dig(position, 0); }
+    void finishBreak(BlockPosition position) throws IOException { dig(position, 2); }
+
+    RemoteWorldView awaitBlock(BlockPosition position, BlockState expected) throws IOException {
+        require(pose != null, "play channel is not synchronized");
+        return inbound.awaitBlock(position, expected);
+    }
+
     private void acknowledge(double x, double feetY, double clientY, double z,
             float yaw, float pitch) throws IOException {
         output.writeByte(13);
         output.writeDouble(x); output.writeDouble(feetY); output.writeDouble(clientY);
         output.writeDouble(z); output.writeFloat(yaw); output.writeFloat(pitch);
         output.writeBoolean(false); output.flush();
+    }
+
+    private void dig(BlockPosition position, int status) throws IOException {
+        require(pose != null, "play channel is not synchronized");
+        if (position == null || position.y() < 0 || position.y() >= 128)
+            throw new IllegalArgumentException("invalid dig position");
+        output.writeByte(14); output.writeByte(status); output.writeInt(position.x());
+        output.writeByte(position.y()); output.writeInt(position.z()); output.writeByte(1); output.flush();
     }
 
     private void writeString(String value) throws IOException {

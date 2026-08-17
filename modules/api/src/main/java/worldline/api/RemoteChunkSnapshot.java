@@ -47,6 +47,17 @@ public final class RemoteChunkSnapshot {
         return count;
     }
 
+    public RemoteChunkSnapshot withBlock(int localX, int localY, int localZ, BlockState state) {
+        if (state == null) throw new IllegalArgumentException("null block state");
+        int index = index(localX, localY, localZ);
+        byte[] ids = blockIds.clone(), data = metadata.clone();
+        ids[index] = (byte) state.legacyId();
+        int pair = data[index >> 1] & 255;
+        data[index >> 1] = (byte) ((index & 1) == 0
+                ? pair & 240 | state.metadata() : pair & 15 | state.metadata() << 4);
+        return new RemoteChunkSnapshot(observation, ids, data, blockLight, skyLight);
+    }
+
     private int index(int x, int y, int z) {
         if (x < 0 || x >= observation.width() || y < 0 || y >= observation.height()
                 || z < 0 || z >= observation.depth())
