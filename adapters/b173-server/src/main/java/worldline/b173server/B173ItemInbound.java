@@ -1,6 +1,7 @@
 package worldline.b173server;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import worldline.api.RemoteDroppedItem;
 import worldline.api.RemoteHeldItem;
@@ -9,6 +10,8 @@ import worldline.api.RemoteItemCollection;
 import worldline.api.RemoteItemStack;
 import worldline.api.RemoteContainerWindow;
 import worldline.api.RemotePersonalTransaction;
+import worldline.api.RemoteRejectedTransaction;
+import worldline.api.RemoteTransactionRejectedException;
 
 /** Modular bounded coordinator for protocol-14 inventory and item-entity traffic. */
 final class B173ItemInbound {
@@ -18,9 +21,10 @@ final class B173ItemInbound {
     private final B173DroppedItemTracker dropped = new B173DroppedItemTracker();
     private final B173WindowTracker windows = new B173WindowTracker();
     private final B173PersonalTransactionTracker transactions = new B173PersonalTransactionTracker();
+    private final DataOutputStream output;
 
-    B173ItemInbound(int localEntityId, String localUsername) throws IOException {
-        identities.bind(localEntityId, localUsername); }
+    B173ItemInbound(int localEntityId, String localUsername, DataOutputStream output) throws IOException {
+        this.output = output; identities.bind(localEntityId, localUsername); }
 
     boolean accept(int packet, DataInputStream input) throws IOException {
         if (packet == 5) equipment.equipment(input);
@@ -29,10 +33,14 @@ final class B173ItemInbound {
         else if (packet == 22) dropped.collect(input, identities);
         else if (packet == 29) dropped.destroy(input);
         else if (packet == 100) windows.open(input);
-        else if (packet == 103) inventory.slot(input);
+        else if (packet == 103) { B173InventoryUpdate update = B173InventoryCodec.update(input);
+            if (transactions.recovering()) transactions.resyncCursor(update, inventory);
+            else inventory.apply(update); }
         else if (packet == 104) { RemoteInventoryView view = B173InventoryCodec.window(input);
-            if (view.windowId() == 0) inventory.window(view); else windows.contents(view); }
-        else if (packet == 106) transactions.acknowledge(input, inventory);
+            if (view.windowId() == 0 && transactions.recovering()) transactions.resyncWindow(view);
+            else if (view.windowId() == 0) inventory.window(view);
+            else windows.contents(view); }
+        else if (packet == 106) transactions.acknowledge(input, output, inventory);
         else return false;
         return true;
     }
@@ -56,6 +64,8 @@ final class B173ItemInbound {
 
     RemotePersonalTransaction awaitPersonalTransaction(Pump pump) throws IOException {
         for (int count = 0; count < 8192; count++) { pump.one();
+            RemoteRejectedTransaction rejected = transactions.takeRejected();
+            if (rejected != null) throw new RemoteTransactionRejectedException(rejected);
             RemotePersonalTransaction result = transactions.take(); if (result != null) return result; }
         throw new IOException("accepted personal transaction absent from bounded inbound window");
     }

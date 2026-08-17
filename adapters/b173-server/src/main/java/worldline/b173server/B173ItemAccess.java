@@ -10,6 +10,8 @@ import worldline.api.BlockFace;
 import worldline.api.BlockPosition;
 import worldline.api.RemoteContainerWindow;
 import worldline.api.RemotePersonalTransaction;
+import worldline.api.RemoteRejectedTransaction;
+import worldline.api.RemoteTransactionRejectedException;
 
 /** Unchecked public-client boundary for the bounded item channel. */
 final class B173ItemAccess {
@@ -45,6 +47,13 @@ final class B173ItemAccess {
     static RemotePersonalTransaction clickPersonalSlot(B173PlayChannel channel, int slot) {
         try { return channel.clickPersonalSlot(slot); }
         catch (IOException error) { throw new IllegalStateException("personal transaction failed", error); }
+    }
+
+    static RemoteRejectedTransaction rejectedTakeProbe(B173PlayChannel channel, int slot) {
+        try { channel.rejectedTakeProbe(slot);
+            throw new IllegalStateException("rejected-take probe was unexpectedly accepted"); }
+        catch (RemoteTransactionRejectedException expected) { return expected.recovery(); }
+        catch (IOException error) { throw new IllegalStateException("rejected-take probe failed", error); }
     }
 
     static RemoteHeldItem awaitPeerHeldItem(B173PlayChannel channel, RemoteHeldItem expected) {

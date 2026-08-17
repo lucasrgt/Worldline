@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.44.0 - M56 Rejected Transaction Recovery
+
+Status: GO for rejected personal-click reconciliation and transaction re-enable.
+
+- Added typed immutable rejected-transaction recovery evidence.
+- Sent the exact Packet106 true re-enable ACK immediately after Packet106 false.
+- Staged Packet104 and cursor Packet103 before atomic authoritative replacement.
+- Proved recovery by a subsequent accepted action 2 and one saved inventory entry.
+
+The frozen M56 semantic SHA-256 is
+`707a15cd2055ee67795cf2d074d648e4395d644024015ef7ba999fd3c000f85b`.
+
 ## 1.43.0 - M55 Accepted Personal Transaction
 
 Status: GO for accepted personal-window left-click transactions.

@@ -24,7 +24,7 @@ final class B173PlayInbound {
     B173PlayInbound(DataInputStream input, DataOutputStream output, int timeoutMillis,
             int localEntityId, String localUsername) throws IOException { this.input = input;
         this.output = output; this.timeoutNanos = timeoutMillis * 1_000_000L;
-        this.items = new B173ItemInbound(localEntityId, localUsername); }
+        this.items = new B173ItemInbound(localEntityId, localUsername, output); }
 
     void skip(int packet) throws IOException {
         if (packet == 0) { synchronized (output) {

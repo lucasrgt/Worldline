@@ -417,6 +417,11 @@ window 0 independently of container Packet104 views. A staged immutable
 left-click transition becomes visible only after the exact Packet106 true ACK
 and does not require a Packet103 correction.
 
+M56 extends the transaction tracker with rejected recovery phases. Packet106
+false triggers the exact client Packet106 true re-enable ACK before further
+reads. Packet104 and the cursor Packet103 are staged in order and atomically
+replace inventory/cursor only after both validate; no partial correction leaks.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

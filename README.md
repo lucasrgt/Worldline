@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.43.0 - M55 Accepted Personal Transaction (GO)**.
+Current official milestone: **Worldline v1.44.0 - M56 Rejected Transaction Recovery (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -291,6 +291,10 @@ M55 stages exact personal-window left-click predictions and commits them only
 after correlated Packet106 accepted acknowledgements. An independent peer
 proves the server-side held-stack transitions. See
 `docs/M55_ACCEPTED_PERSONAL_TRANSACTION.md`.
+
+M56 handles Packet106 false by immediately acknowledging re-enable, staging the
+ordered Packet104/cursor Packet103 correction, and atomically publishing the
+recovered state. See `docs/M56_REJECTED_TRANSACTION_RECOVERY.md`.
 
 ## Verify
 

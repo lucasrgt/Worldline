@@ -126,7 +126,7 @@ final class B173PlayChannel {
         held.select(slot); }
     void dropHeldItem() throws IOException { require(pose != null, "play channel is not synchronized"); held.drop(); }
     void placeHeldBlock(worldline.api.BlockPosition support, worldline.api.BlockFace face) throws IOException { require(pose != null, "play channel is not synchronized"); held.place(support, face); }
-    worldline.api.RemoteContainerWindow openChest(BlockPosition position, worldline.api.BlockFace face) throws IOException { require(pose != null, "play channel is not synchronized"); held.use(position, face); inbound.beginChest(); return inbound.awaitChest(); } worldline.api.RemotePersonalTransaction clickPersonalSlot(int slot) throws IOException { require(pose != null, "play channel is not synchronized"); return personal.click(slot); }
+    worldline.api.RemoteContainerWindow openChest(BlockPosition position, worldline.api.BlockFace face) throws IOException { require(pose != null, "play channel is not synchronized"); held.use(position, face); inbound.beginChest(); return inbound.awaitChest(); } worldline.api.RemotePersonalTransaction clickPersonalSlot(int slot) throws IOException { require(pose != null, "play channel is not synchronized"); return personal.click(slot); } worldline.api.RemotePersonalTransaction rejectedTakeProbe(int slot) throws IOException { require(pose != null, "play channel is not synchronized"); return personal.rejectedTakeProbe(slot); }
 
     MovementOutcome moveAndObserve(double dx, double dy, double dz, int ticks)
             throws IOException, InterruptedException {

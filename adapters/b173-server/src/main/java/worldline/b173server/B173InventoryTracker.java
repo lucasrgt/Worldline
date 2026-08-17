@@ -20,13 +20,16 @@ final class B173InventoryTracker {
     }
 
     B173InventoryUpdate slot(DataInputStream input) throws IOException {
-        B173InventoryUpdate update = B173InventoryCodec.update(input);
-        if (update.cursor()) { cursor = update.item; cursorObserved = true; return update; }
+        B173InventoryUpdate update = B173InventoryCodec.update(input); apply(update); return update;
+    }
+
+    void apply(B173InventoryUpdate update) {
+        if (update.cursor()) { cursor = update.item; cursorObserved = true; return; }
         if (view == null || update.windowId != view.windowId()
-                || update.slot < 0 || update.slot >= view.size()) return update;
+                || update.slot < 0 || update.slot >= view.size()) return;
         List<RemoteInventorySlot> slots = new ArrayList<>(view.slots());
         slots.set(update.slot, new RemoteInventorySlot(update.slot, update.item));
-        view = new RemoteInventoryView(view.windowId(), slots); return update;
+        view = new RemoteInventoryView(view.windowId(), slots);
     }
 
     RemoteInventoryView snapshot() { return view; }
@@ -39,5 +42,9 @@ final class B173InventoryTracker {
         if (!cursorObserved || !before.equals(view) || !Objects.equals(cursor, expectedCursor))
             throw new IOException("personal transaction base state drift");
         view = after; cursor = nextCursor;
+    }
+
+    void recover(RemoteInventoryView authoritative, RemoteItemStack authoritativeCursor) {
+        view = authoritative; cursor = authoritativeCursor; cursorObserved = true;
     }
 }
