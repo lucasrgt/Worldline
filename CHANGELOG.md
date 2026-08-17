@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.14.0 - M26 Native Multiplayer Render Bridge
+
+Status: GO for native offscreen rendering composed with a real multiplayer session.
+
+- Combined official-server protocol-14 login/pose synchronization with mapped
+  Minecraft `Tessellator` in one client process.
+- Rendered connected state through native LWJGL and an OpenGL Pbuffer while
+  requiring that no onscreen `Display` exists.
+- Repeated two fresh client/server scenarios with exact pixel coverage and the
+  M10-qualified mapped/official frame hash.
+- Kept the complete Minecraft gameplay loop, chunk rendering, interactive GUI,
+  and server tick stepping as explicit later milestones.
+
+The frozen M26 bridge SHA-256 is
+`c2d85227a2cb542e0c9b21aa77dd71a0bbfaab7162a1db6c0fb0955876dbb2ce`.
+
 ## 1.13.0 - M25 Multiplayer Player Movement
 
 Status: GO for bounded movement accepted by the official server.

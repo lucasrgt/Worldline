@@ -235,6 +235,12 @@ position/look packet; the official server remains authoritative. The smoke uses
 a within-block displacement, then observes native persisted NBT rather than
 assuming that sending a packet means the server accepted it.
 
+M26 composes the b1.7.3 server/wire adapter with the separately qualified native
+render path. The smoke controls orchestration; a render-only helper owns LWJGL
+and `Tessellator`. Connected protocol state selects the frame, but neither API
+nor server adapter depends on graphics. M10's mapped/official renderer equality
+is reused rather than duplicated as a new full-client claim.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested
