@@ -229,6 +229,12 @@ feet/stance acknowledgement; the neutral API sees only pose and look intent.
 The persisted-player value now includes rotation. Unknown packet IDs and
 invalid lengths fail closed rather than silently approximating a full client.
 
+M25 extends only that neutral playable-session boundary with relative movement.
+The adapter preserves the server-provided stance height and emits the original
+position/look packet; the official server remains authoritative. The smoke uses
+a within-block displacement, then observes native persisted NBT rather than
+assuming that sending a packet means the server accepted it.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

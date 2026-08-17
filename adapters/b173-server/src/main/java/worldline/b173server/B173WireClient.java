@@ -75,6 +75,13 @@ public final class B173WireClient implements PlayableMultiplayerSession {
     }
 
     @Override
+    public PlayerPose moveBy(double deltaX, double deltaY, double deltaZ) {
+        require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
+        try { return play.moveBy(deltaX, deltaY, deltaZ); }
+        catch (IOException error) { throw new IllegalStateException("play movement failed", error); }
+    }
+
+    @Override
     public void close() {
         closeSocket();
         if (connection != MultiplayerConnection.NEW) connection = MultiplayerConnection.DISCONNECTED;

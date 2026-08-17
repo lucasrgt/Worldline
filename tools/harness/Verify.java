@@ -99,6 +99,8 @@ public final class Verify {
                     "m23-player-persistence"));
             run(Arrays.asList("java", "tools/smoke/PlayPoseCycle.java",
                     "m24-play-pose"));
+            run(Arrays.asList("java", "tools/smoke/PlayerMovementCycle.java",
+                    "m25-player-movement"));
             run(Arrays.asList("java", "tools/smoke/GuiCycle.java", "gui-tree"));
             run(Arrays.asList("java", "tools/smoke/LabCycle.java", "lab-cycle"));
         }

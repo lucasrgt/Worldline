@@ -56,11 +56,12 @@ public final class ReleaseCheck {
         Properties m22 = load("smokes/m22-multiplayer-wire/smoke.properties");
         Properties m23 = load("smokes/m23-player-persistence/smoke.properties");
         Properties m24 = load("smokes/m24-play-pose/smoke.properties");
+        Properties m25 = load("smokes/m25-player-movement/smoke.properties");
         Properties lab = load("smokes/lab-cycle/smoke.properties");
         Properties gui = load("smokes/gui-tree/smoke.properties");
         match(release, "id", "worldline");
-        match(release, "version", "1.12.0");
-        match(release, "milestone", "m24-play-pose");
+        match(release, "version", "1.13.0");
+        match(release, "milestone", "m25-player-movement");
         match(release, "status", "go");
         match(release, "scope", "local-research");
         match(release, "canonical.command", "java tools/harness/Verify.java --smoke");
@@ -120,6 +121,8 @@ public final class ReleaseCheck {
         same(release, "server.sha256", m23, "server.jar.sha256");
         same(release, "m24.signature", m24, "expected.signature");
         same(release, "server.sha256", m24, "server.jar.sha256");
+        same(release, "m25.signature", m25, "expected.signature");
+        same(release, "server.sha256", m25, "server.jar.sha256");
         same(release, "lab.signature", lab, "expected.signature");
         same(release, "gui.signature", gui, "expected.signature");
         same(release, "invariants.signature", client, "expected.state.signature");
@@ -216,8 +219,12 @@ public final class ReleaseCheck {
                 "smokes/m24-play-pose/MAP.md")) {
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         }
+        for (String file : Arrays.asList("docs/M25_PLAYER_MOVEMENT.md", "docs/M25_CYCLE.md",
+                "smokes/m25-player-movement/MAP.md")) {
+            if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
+        }
         verifyPublicTree();
-        System.out.println("  release: Worldline v1.12.0 M24 play pose GO");
+        System.out.println("  release: Worldline v1.13.0 M25 player movement GO");
         System.out.println("  public artifact boundary: verified");
     }
 

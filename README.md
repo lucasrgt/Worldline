@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.12.0 - M24 Play Pose (GO)**.
+Current official milestone: **Worldline v1.13.0 - M25 Player Movement (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -157,6 +157,11 @@ M24 advances the wire session into the play channel. It consumes the bounded
 official spawn/time/chunk prelude, acknowledges the server's initial position,
 sends a deliberate look packet, and requires the exact yaw/pitch in persisted
 player NBT across two fresh servers. See `docs/M24_PLAY_POSE.md`.
+
+M25 sends a collision-bounded relative movement through that play channel. A
+`+0.125 X` displacement remains inside the spawn block footprint, and two fresh
+official servers must persist the exact requested target. See
+`docs/M25_PLAYER_MOVEMENT.md`.
 
 ## Verify
 
@@ -353,6 +358,7 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M22_CYCLE.md` is the v1.10.0 protocol-14 multiplayer login/disconnect GO audit.
 `M23_CYCLE.md` is the v1.11.0 persisted multiplayer player-state GO audit.
 `M24_CYCLE.md` is the v1.12.0 multiplayer position/look exchange GO audit.
+`M25_CYCLE.md` is the v1.13.0 persisted multiplayer movement GO audit.
 `GUI_CYCLE.md` is the inventory Game UI tree GO audit.
 `INVARIANTS_CYCLE.md` is the conservation-rule GO audit.
 `SEMANTICS_CYCLE.md` is the catalog and role-graph GO audit.

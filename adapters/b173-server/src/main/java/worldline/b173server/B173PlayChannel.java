@@ -10,6 +10,7 @@ final class B173PlayChannel {
     private final DataInputStream input;
     private final DataOutputStream output;
     private PlayerPose pose;
+    private double stanceHeight;
 
     B173PlayChannel(DataInputStream input, DataOutputStream output) {
         this.input = input; this.output = output;
@@ -28,6 +29,7 @@ final class B173PlayChannel {
                 input.readBoolean();
                 require(clientY > feetY && clientY - feetY < 2.0D,
                         "server position stance drift");
+                stanceHeight = clientY - feetY;
                 pose = new PlayerPose(x, feetY, z, yaw, pitch);
                 acknowledge(x, feetY, clientY, z, yaw, pitch);
                 return pose;
@@ -44,6 +46,18 @@ final class B173PlayChannel {
         output.writeFloat(yaw); output.writeFloat(pitch); output.writeBoolean(false);
         output.flush();
         pose = new PlayerPose(pose.x(), pose.y(), pose.z(), yaw, pitch);
+    }
+
+    PlayerPose moveBy(double deltaX, double deltaY, double deltaZ) throws IOException {
+        require(pose != null, "play channel is not synchronized");
+        PlayerPose target = new PlayerPose(pose.x() + deltaX, pose.y() + deltaY,
+                pose.z() + deltaZ, pose.yaw(), pose.pitch());
+        output.writeByte(13);
+        output.writeDouble(target.x()); output.writeDouble(target.y());
+        output.writeDouble(target.y() + stanceHeight); output.writeDouble(target.z());
+        output.writeFloat(target.yaw()); output.writeFloat(target.pitch());
+        output.writeBoolean(true); output.flush();
+        pose = target; return target;
     }
 
     private void acknowledge(double x, double feetY, double clientY, double z,

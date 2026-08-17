@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.13.0 - M25 Multiplayer Player Movement
+
+Status: GO for bounded movement accepted by the official server.
+
+- Added relative movement intent to `PlayableMultiplayerSession`.
+- Preserved the exact server-provided stance height when encoding native
+  protocol-14 position/look packets.
+- Used a within-spawn-block `+0.125 X` displacement independent of adjacent
+  random terrain.
+- Repeated two fresh official server scenarios and required exact target X/Y/Z
+  in persisted player NBT.
+- Kept arbitrary collision correction, continuous packet pumping, graphical
+  client control, and server tick stepping as later milestones.
+
+The frozen M25 movement SHA-256 is
+`fb5715319d1347b180aea28652c173a9278d67dedbd3f6e9b486fe358d31f6d6`.
+
 ## 1.12.0 - M24 Multiplayer Play Pose
 
 Status: GO for the bidirectional initial play-position exchange.
