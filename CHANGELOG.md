@@ -4,6 +4,20 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## Unreleased - Optimization Metadata SDK
+
+- Added dependency-free, source-retained `OptimizationRef` metadata in its own
+  optional module; it injects no runtime behavior or bytecode.
+- Added a properties-backed record schema for status, defaults, behavior delta,
+  risks, rollback, source symbols, and evidence.
+- Added fail-closed canonical checks for unknown IDs, incomplete records,
+  unevidenced decisions, unsafe defaults, and annotation/symbol tracking drift.
+- Made repository ownership explicit: Worldline contains only the neutral SDK
+  and its own records; mods own implementation-specific catalogs and Worldline
+  evidence refers to their stable IDs.
+- Added isolated positive and negative checker fixtures without coupling mod
+  sources or implementation knowledge to Worldline.
+
 ## Unreleased - M2 Controlled Runtime
 
 Status: GO.

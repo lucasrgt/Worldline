@@ -31,6 +31,10 @@ All repository artifacts must be written in English.
    behavior than it introduces.
 8. Missing tools, missing tests, illegal dependencies, and unresolved checks
    fail closed.
+9. Maintained Worldline performance changes must have a stable optimization
+   ID. Worldline-owned sites may use source-only `OptimizationRef`. External
+   projects own their optimization records; Worldline may reference their IDs
+   in evidence but must not copy project-specific implementation catalogs.
 
 ## Canonical verification
 

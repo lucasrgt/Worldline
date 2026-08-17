@@ -50,6 +50,8 @@ public final class Verify {
         System.out.println("Worldline repository verification");
         loadConfiguration();
         run(Arrays.asList("java", "tools/harness/ReleaseCheck.java"));
+        run(Arrays.asList("java", "tools/harness/OptimizationCatalogCheckTest.java"));
+        run(Arrays.asList("java", "tools/harness/OptimizationCatalogCheck.java"));
         if (runSmoke) {
             run(Arrays.asList("java", "tools/toolchains/Bootstrap.java", "retromcp"));
         }

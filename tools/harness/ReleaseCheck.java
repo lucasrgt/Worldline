@@ -71,6 +71,7 @@ public final class ReleaseCheck {
         requireText("docs/SEMANTICS_CYCLE.md", value(release, "semantics.signature"));
         for (String file : Arrays.asList("README.md", "CHANGELOG.md", "AGENTS.md",
                 "docs/VISION.md", "docs/ROADMAP.md", "docs/ARCHITECTURE.md",
+                "optimizations/TEMPLATE.properties",
                 "docs/FIRST_CYCLE.md", "docs/M2_RUNTIME.md", "docs/M2_CYCLE.md",
                 "docs/M3_API.md", "docs/M3_CYCLE.md",
                 "docs/M4_SNAPSHOT.md", "docs/M4_CYCLE.md", "smokes/controlled-client-tick/MAP.md",
@@ -90,7 +91,9 @@ public final class ReleaseCheck {
         for (String file : Arrays.asList("docs/M9_MINIMIZATION.md", "docs/M9_CYCLE.md",
                 "smokes/m9-scenario-minimization/MAP.md", "docs/GUI_TREE.md", "docs/GUI_CYCLE.md",
                 "smokes/gui-tree/MAP.md", "docs/INVARIANTS.md", "docs/INVARIANTS_CYCLE.md",
-                "docs/SEMANTICS.md", "docs/SEMANTICS_CYCLE.md")) {
+                "docs/SEMANTICS.md", "docs/SEMANTICS_CYCLE.md",
+                "docs/OPTIMIZATION_SDK.md",
+                "optimizations/catalog/README.md")) {
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         }
         verifyPublicTree();

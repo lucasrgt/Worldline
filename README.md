@@ -7,6 +7,12 @@ first goal is deliberately small: boot the real game headlessly, load a world,
 advance one externally controlled tick, and compare the observable result with
 the official vanilla artifact.
 
+Worldline includes a neutral optimization metadata SDK: a source-only
+`OptimizationRef`, a portable record schema, and a fail-closed validator.
+Project-specific catalogs stay in the repository that owns the implementation;
+Worldline experiments reference external IDs without copying their records.
+See `docs/OPTIMIZATION_SDK.md`.
+
 The controlled-runtime baseline and first laboratory cycle are complete. The repository contains a
 small public lifecycle contract, an independently compiled kernel, an
 independent canonical-trace protocol, and a fail-closed verification gate. Its

@@ -51,6 +51,8 @@ scenario -> worldline-cli -> worldline-minimization -> worldline-analysis
 ItemCensus / GameUi.nodes() -> worldline-invariants
 
 SemanticMapping -> worldline-semantics
+
+OptimizationRef -> worldline-optimization -> owner-controlled catalog
 ```
 
 The modules are physical source roots and are compiled separately. The API is
@@ -59,6 +61,16 @@ its classpath. Reproduction depends only on the API; CLI depends only on API
 and the stable product modules it exposes. Analysis depends only on trace.
 This makes every declared dependency direction executable rather than
 conventional.
+
+### `optimization`
+
+Owns only the source-retained `OptimizationRef` metadata annotation. It has no
+dependencies and performs no runtime work. Modules opt into this compile-time
+dependency only when they annotate an owned optimization site. A separate
+harness check validates records and references; it never enables features or
+transforms bytecode. External projects keep their records beside their own
+implementations. Worldline evidence may cite an external stable ID, but the
+Worldline catalog must not describe mod-specific algorithms or flags.
 
 ### `api`
 
