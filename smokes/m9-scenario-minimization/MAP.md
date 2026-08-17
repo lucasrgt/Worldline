@@ -20,7 +20,8 @@ and v1.1.0 JARs through separate fresh classloaders, creates a fresh controlled
 b1.7.3 runtime for each, interprets the remaining steps, and compares their
 canonical traces.
 
-The completed result contains exactly:
+The completed result names `invariant=block-conservation` for the `block65`
+predicate and contains exactly:
 
 ```text
 observe:before
@@ -34,7 +35,7 @@ target record. Each therefore fails the full fingerprint. Two fresh outer JVMs
 must agree on the 21 evaluations and byte-identical original/minimized files.
 
 The frozen evidence SHA-256 is
-`90add5dbac4599dfbb8556efd233a7b53371644200d60e9356605ca7854268b3`.
+`f713ff2457bcaf1fcaada80e0026c76d64bc69fdec713abfdcadcb7a9f0da55f`.
 All derived scenarios, classes, and evidence remain under ignored `.worldline/`.
 
 ## Boundary

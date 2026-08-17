@@ -36,4 +36,5 @@ Official names used by the oracle: `currentScreen` `r`, `GuiInventory` `ue`,
 
 The fixture covers one empty player inventory and the inventory screen only.
 It does not establish item movement, other screens, layout, or render pixels.
-The normative scope is in `docs/GUI_TREE.md`.
+The normative scope is in `docs/GUI_TREE.md`. The GO audit is
+`docs/GUI_CYCLE.md`.

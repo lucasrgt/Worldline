@@ -49,6 +49,10 @@ public final class InvariantEngineTest {
         arrowFromBowHolds();
         uiNodesFeedTheCensus();
         engineRejectsEmptyConfiguration();
+        require(InvariantFields.rule("block65").equals(BlockConservation.NAME)
+                && InvariantFields.rule("health").equals(HealthConservation.NAME)
+                && InvariantFields.rule("slot").isEmpty(),
+                "trace field aliases");
         System.out.println("InvariantEngineTest passed");
     }
 

@@ -57,6 +57,7 @@ worldline mod test diff <left.wlmtest> <right.wlmtest>
 
 The output identifies both `id@version` values, whether mod ID, version,
 runtime, and API match, both artifact hashes, and the exact M6 first divergence.
+Known conservation fields also print `invariant=<rule>` after that document.
 Metadata differences remain provenance facts: exit 0 means the embedded traces
 are behaviorally equal, while exit 3 means they diverge. Invalid/corrupt input
 exits 1 and usage errors exit 2. Left/right values preserve command order.

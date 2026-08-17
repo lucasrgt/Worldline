@@ -36,7 +36,10 @@ public final class SemanticCatalogTest {
         require("StatFileWriter".equals(first.role("STAT_FILE").name()), "stat file");
         require("IBlockAccess".equals(first.role("BLOCK_ACCESS").name()), "block access");
         require("GameWorld".equals(first.role("WORLD_API").name()), "domain world");
-        require(first.sha256().equals(second.sha256()), "catalog hash drifted");
+        require(first.sha256().equals(second.sha256())
+                && first.sha256().equals(
+                "7b67267df9b2804b52a607ac5c7f167c857530de65c7a5e5462af8d89cfb6e10"),
+                "catalog hash drifted");
         require(first.canonical().equals(second.canonical()), "catalog canonical drifted");
         require(first.render().contains("complete=true"), "render completeness");
         require(first.role("CLIENT_TICK_ROOT").name().equals("runTick"), "tick root");

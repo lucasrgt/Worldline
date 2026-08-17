@@ -40,6 +40,7 @@ public final class ReleaseCheck {
         Properties m8 = load("smokes/m8-mod-version-diff/smoke.properties");
         Properties m9 = load("smokes/m9-scenario-minimization/smoke.properties");
         Properties lab = load("smokes/lab-cycle/smoke.properties");
+        Properties gui = load("smokes/gui-tree/smoke.properties");
         match(release, "id", "worldline");
         match(release, "version", "0.7.0");
         match(release, "milestone", "m9-scenario-minimization");
@@ -61,8 +62,13 @@ public final class ReleaseCheck {
         same(release, "m8.signature", m8, "expected.signature");
         same(release, "m9.signature", m9, "expected.signature");
         same(release, "lab.signature", lab, "expected.signature");
+        same(release, "gui.signature", gui, "expected.signature");
+        same(release, "invariants.signature", client, "expected.state.signature");
+        match(release, "semantics.signature",
+                "7b67267df9b2804b52a607ac5c7f167c857530de65c7a5e5462af8d89cfb6e10");
         requireText("modules/api/src/main/java/worldline/api/WorldlineVersion.java",
                 "public static final String VERSION = \"" + value(release, "version") + "\";");
+        requireText("docs/SEMANTICS_CYCLE.md", value(release, "semantics.signature"));
         for (String file : Arrays.asList("README.md", "CHANGELOG.md", "AGENTS.md",
                 "docs/VISION.md", "docs/ROADMAP.md", "docs/ARCHITECTURE.md",
                 "docs/FIRST_CYCLE.md", "docs/M2_RUNTIME.md", "docs/M2_CYCLE.md",
@@ -82,7 +88,9 @@ public final class ReleaseCheck {
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         }
         for (String file : Arrays.asList("docs/M9_MINIMIZATION.md", "docs/M9_CYCLE.md",
-                "smokes/m9-scenario-minimization/MAP.md")) {
+                "smokes/m9-scenario-minimization/MAP.md", "docs/GUI_TREE.md", "docs/GUI_CYCLE.md",
+                "smokes/gui-tree/MAP.md", "docs/INVARIANTS.md", "docs/INVARIANTS_CYCLE.md",
+                "docs/SEMANTICS.md", "docs/SEMANTICS_CYCLE.md")) {
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         }
         verifyPublicTree();

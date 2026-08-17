@@ -50,8 +50,10 @@ Equal traces emit `WORLDLINE_TRACE_DIFF=EQUAL` and exit 0. A difference is a
 successful analysis result: it emits `WORLDLINE_TRACE_DIFF=DIVERGED`, kind,
 record index/label, field index/name, ordered left/right values, and exits 3.
 When the diverged field has a closed catalog alias, the CLI also prints
-`role=<ROLE>`. The exact `TraceDiff` document is unchanged so fingerprints
-stay stable. Usage errors exit 2; unreadable or invalid traces exit 1.
+`role=<ROLE>`. When it names a conservation rule, the CLI also prints
+`invariant=<rule>`. The exact `TraceDiff` document is unchanged so
+fingerprints stay stable. Usage errors exit 2; unreadable or invalid traces
+exit 1.
 
 ## Non-claims
 

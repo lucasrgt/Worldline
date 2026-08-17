@@ -1,6 +1,7 @@
 # Invariant Engine
 
-The Invariant Engine is a fail-closed observer. A scenario can feed samples
+The Invariant Engine is a fail-closed observer and a stable milestone. A
+scenario can feed samples
 directly, or attach the engine so every controlled tick records items, blocks,
 entities, chunk imports, wear, health, and world time.
 
@@ -19,7 +20,10 @@ that appeared only because a chunk loaded. `GamePlayer.wear()` and
 None of these methods open a screen or mutate state.
 
 `InvariantEngine.itemConservation()` stays item-only.
-`InvariantEngine.standard(runtime)` runs the six rules below.
+`InvariantEngine.standard(runtime)` runs the six rules below. Trace and
+mod-test diffs print `invariant=<rule>` for known conservation fields
+(`block65` to `block-conservation`, `health` to `health-conservation`).
+Unknown fields stay empty.
 
 ```java
 InvariantMinecraftRuntime runtime = B173Runtimes.create(seed);

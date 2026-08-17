@@ -10,6 +10,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import worldline.analysis.TraceDiff;
 import worldline.analysis.TraceRenderer;
+import worldline.invariants.InvariantFields;
 import worldline.semantics.SemanticFields;
 import worldline.mods.ModArtifact;
 import worldline.mods.ModLoader;
@@ -88,8 +89,7 @@ public final class WorldlineCli {
         TraceDiff difference = TraceDiff.compare(readTrace(left), readTrace(right));
         output.print("WORLDLINE_TRACE_DIFF=" + (difference.diverged() ? "DIVERGED\n" : "EQUAL\n"));
         output.print(difference.render());
-        String role = SemanticFields.role(difference.field());
-        if (!role.isEmpty()) output.print("role=" + role + "\n");
+        explain(difference, output);
         return difference.diverged() ? 3 : 0;
     }
 
@@ -135,7 +135,9 @@ public final class WorldlineCli {
                 readModTest(leftPath), readModTest(rightPath));
         output.println("WORLDLINE_MOD_TEST_DIFF="
                 + (comparison.behaviorDiverged() ? "DIVERGED" : "EQUAL"));
-        output.print(comparison.render()); return comparison.behaviorDiverged() ? 3 : 0;
+        output.print(comparison.render());
+        explain(comparison.traceDiff(), output);
+        return comparison.behaviorDiverged() ? 3 : 0;
     }
 
     private static ModTestResult readModTest(String path) throws IOException {
@@ -183,6 +185,13 @@ public final class WorldlineCli {
         error.println("   or: worldline semantics graph");
         error.println("   or: worldline semantics category <name>");
         error.println("   or: worldline semantics role <ROLE>"); return 2;
+    }
+
+    private static void explain(TraceDiff difference, PrintStream output) {
+        String role = SemanticFields.role(difference.field());
+        if (!role.isEmpty()) output.print("role=" + role + "\n");
+        String rule = InvariantFields.rule(difference.field());
+        if (!rule.isEmpty()) output.print("invariant=" + rule + "\n");
     }
 
     private static void require(boolean condition, String message) {
