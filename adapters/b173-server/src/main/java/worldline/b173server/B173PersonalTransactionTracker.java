@@ -10,8 +10,7 @@ import worldline.api.RemoteRejectedTransaction;
 
 /** Stages one personal-window prediction and commits it only on matching Packet106 true. */
 final class B173PersonalTransactionTracker {
-    private Pending pending;
-    private RemotePersonalTransaction accepted;
+    private B173PersonalStep pending, accepted;
     private RemoteRejectedTransaction rejected;
     private boolean recovering, fullResync;
     private RemoteInventoryView resyncView;
@@ -20,7 +19,7 @@ final class B173PersonalTransactionTracker {
             RemoteInventoryView after, RemoteItemStack cursorBefore, RemoteItemStack cursorAfter) {
         if (pending != null || accepted != null || rejected != null)
             throw new IllegalStateException("personal transaction is pending");
-        pending = new Pending(action, slot, predicted, before, after, cursorBefore, cursorAfter);
+        pending = new B173PersonalStep(action, slot, predicted, before, after, cursorBefore, cursorAfter);
     }
 
     void acknowledge(DataInputStream input, DataOutputStream output,
@@ -32,12 +31,15 @@ final class B173PersonalTransactionTracker {
             output.writeShort(action); output.writeBoolean(true); output.flush(); }
             recovering = true; return; }
         inventory.commit(pending.before, pending.after, pending.cursorBefore, pending.cursorAfter);
-        accepted = new RemotePersonalTransaction(pending.action, pending.slot, pending.predicted,
-                pending.before, pending.after, pending.cursorBefore, pending.cursorAfter); pending = null;
+        accepted = pending; pending = null;
     }
 
     RemotePersonalTransaction take() {
-        RemotePersonalTransaction result = accepted; accepted = null; return result; }
+        B173PersonalStep result = takeStep(); return result == null ? null : new RemotePersonalTransaction(
+                result.action, result.slot, result.predicted, result.before, result.after,
+                result.cursorBefore, result.cursorAfter); }
+
+    B173PersonalStep takeStep() { B173PersonalStep result = accepted; accepted = null; return result; }
 
     boolean recovering() { return recovering; }
 
@@ -60,14 +62,4 @@ final class B173PersonalTransactionTracker {
     RemoteRejectedTransaction takeRejected() {
         RemoteRejectedTransaction result = rejected; rejected = null; return result; }
 
-    private static final class Pending {
-        final int action, slot; final RemoteItemStack predicted, cursorBefore, cursorAfter;
-        final RemoteInventoryView before, after;
-        Pending(int action, int slot, RemoteItemStack predicted, RemoteInventoryView before,
-                RemoteInventoryView after, RemoteItemStack cursorBefore, RemoteItemStack cursorAfter) {
-            this.action = action; this.slot = slot; this.predicted = predicted;
-            this.before = before; this.after = after;
-            this.cursorBefore = cursorBefore; this.cursorAfter = cursorAfter;
-        }
-    }
 }

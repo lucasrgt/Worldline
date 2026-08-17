@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.44.0 - M56 Rejected Transaction Recovery (GO)**.
+Current official milestone: **Worldline v1.45.0 - M57 Personal 2x2 Crafting (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -295,6 +295,11 @@ proves the server-side held-stack transitions. See
 M56 handles Packet106 false by immediately acknowledging re-enable, staging the
 ordered Packet104/cursor Packet103 correction, and atomically publishing the
 recovered state. See `docs/M56_REJECTED_TRANSACTION_RECOVERY.md`.
+
+M57 composes accepted clicks into one bounded personal 2x2 recipe: log
+`17x1:0` becomes planks `5x4:0`. Four accepted actions stage the grid, result,
+consumption, and storage; an M56 recovery audit then proves the official state.
+See `docs/M57_PERSONAL_CRAFTING.md`.
 
 ## Verify
 

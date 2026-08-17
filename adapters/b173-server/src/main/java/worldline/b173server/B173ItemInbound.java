@@ -70,6 +70,14 @@ final class B173ItemInbound {
         throw new IOException("accepted personal transaction absent from bounded inbound window");
     }
 
+    B173PersonalStep awaitPersonalStep(Pump pump) throws IOException {
+        for (int count = 0; count < 8192; count++) { pump.one();
+            RemoteRejectedTransaction rejected = transactions.takeRejected();
+            if (rejected != null) throw new RemoteTransactionRejectedException(rejected);
+            B173PersonalStep result = transactions.takeStep(); if (result != null) return result; }
+        throw new IOException("accepted personal crafting step absent from bounded inbound window");
+    }
+
     RemoteContainerWindow awaitChest(Pump pump) throws IOException {
         if (windows.snapshot() != null) return windows.snapshot();
         for (int count = 0; count < 8192; count++) { pump.one();

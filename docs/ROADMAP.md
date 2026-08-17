@@ -61,6 +61,7 @@ Passing an experiment does not silently promote its API.
 | v1.42.0 / M54 | Single-chest open and immutable combined-window read | GO - Packet100 readUTF descriptor paired with exact 63-slot Packet104 view |
 | v1.43.0 / M55 | Accepted personal-window left-click transactions | GO - exact Packet102 predictions committed only on correlated Packet106 true |
 | v1.44.0 / M56 | Rejected personal transaction recovery | GO - immediate re-enable ACK plus atomic Packet104/cursor Packet103 resync |
+| v1.45.0 / M57 | Personal 2x2 log-to-planks crafting | GO - four accepted predictions plus authoritative recovery audit |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -72,8 +73,9 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.44.0 direction
+## Immediate post-v1.45.0 direction
 
-The next milestone can compose accepted clicks into the personal 2x2 crafting
-grid and exact result consumption. Recovery still does not imply shift/right
-click, container writes, furnace progress, or complete physics.
+The next milestone can extend typed window lifecycle beyond the read-only chest
+boundary, then reuse accepted/rejected transactions for container persistence.
+Personal crafting still does not imply generic recipes, shift/right click,
+container writes, furnace progress, or complete physics.

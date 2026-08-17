@@ -422,6 +422,11 @@ false triggers the exact client Packet106 true re-enable ACK before further
 reads. Packet104 and the cursor Packet103 are staged in order and atomically
 replace inventory/cursor only after both validate; no partial correction leaks.
 
+M57 keeps recipe knowledge outside the generic click API. A bounded personal
+crafting composition shares the M55/M56 action counter and correlator, stages
+multi-slot grid/result predictions, and commits each only on Packet106 true.
+The package-private rejection probe supplies an authoritative post-craft audit.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

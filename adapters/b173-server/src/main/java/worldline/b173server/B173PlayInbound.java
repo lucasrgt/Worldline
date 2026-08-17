@@ -122,7 +122,7 @@ final class B173PlayInbound {
             worldline.api.RemoteItemStack cursorBefore, worldline.api.RemoteItemStack cursorAfter) {
         items.beginPersonalTransaction(action, slot, predicted, before, after, cursorBefore, cursorAfter); }
     worldline.api.RemotePersonalTransaction awaitPersonalTransaction() throws IOException {
-        return items.awaitPersonalTransaction(this::pumpOne); }
+        return items.awaitPersonalTransaction(this::pumpOne); } B173PersonalStep awaitPersonalStep() throws IOException { return items.awaitPersonalStep(this::pumpOne); }
     RemoteHeldItem awaitPeerHeldItem(RemoteHeldItem expected) throws IOException {
         return items.awaitPeerHeldItem(expected, this::pumpOne); }
     worldline.api.RemoteDroppedItem awaitDroppedItem(worldline.api.RemoteItemStack expected) throws IOException {

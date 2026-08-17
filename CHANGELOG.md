@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.45.0 - M57 Personal 2x2 Crafting
+
+Status: GO for the bounded personal log-to-planks recipe.
+
+- Added immutable four-action personal crafting evidence.
+- Predicted the 2x2 grid/result locally and committed each step only on Packet106 true.
+- Reused rejected-transaction recovery for an authoritative empty-grid/planks audit.
+- Proved terminal peer-held planks and one saved player-inventory entry.
+
+The frozen M57 semantic SHA-256 is
+`a7ca218db3ec5f4fe14ee8f7ec54955d49eb343c9185c62ab6982add0a2e8c7d`.
+
 ## 1.44.0 - M56 Rejected Transaction Recovery
 
 Status: GO for rejected personal-click reconciliation and transaction re-enable.

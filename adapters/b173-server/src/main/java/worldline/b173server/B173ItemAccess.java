@@ -10,6 +10,7 @@ import worldline.api.BlockFace;
 import worldline.api.BlockPosition;
 import worldline.api.RemoteContainerWindow;
 import worldline.api.RemotePersonalTransaction;
+import worldline.api.RemotePersonalCraft;
 import worldline.api.RemoteRejectedTransaction;
 import worldline.api.RemoteTransactionRejectedException;
 
@@ -47,6 +48,11 @@ final class B173ItemAccess {
     static RemotePersonalTransaction clickPersonalSlot(B173PlayChannel channel, int slot) {
         try { return channel.clickPersonalSlot(slot); }
         catch (IOException error) { throw new IllegalStateException("personal transaction failed", error); }
+    }
+
+    static RemotePersonalCraft craftPersonal2x2(B173PlayChannel channel, int slot) {
+        try { return channel.craftPersonal2x2(slot); }
+        catch (IOException error) { throw new IllegalStateException("personal crafting failed", error); }
     }
 
     static RemoteRejectedTransaction rejectedTakeProbe(B173PlayChannel channel, int slot) {
