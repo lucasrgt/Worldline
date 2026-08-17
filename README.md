@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.32.0 - M44 Synchronous Batch Observation (GO)**.
+Current official milestone: **Worldline v1.33.0 - M45 Event-Boundary Batch Stop (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -251,6 +251,9 @@ immutable per-route batch result with an explicit batch termination. See
 M44 emits caller-thread batch events with a stable route index while retaining
 each correlated route event and its internal indexes. See
 `docs/M44_BATCH_OBSERVATION.md`.
+
+M45 lets a batch-wide controller stop at an indexed movement event, before
+later alternatives or plans are sent. See `docs/M45_EVENT_BATCH_STOP.md`.
 
 ## Verify
 

@@ -4,6 +4,19 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.33.0 - M45 Event-Boundary Batch Stop
+
+Status: GO for batch-wide cancellation at a movement event boundary.
+
+- Added a synchronous batch event controller distinct from after-route control.
+- Applied `STOP` immediately after the indexed event and before later movement.
+- Proved one resolved outcome, absent later alternative, and absent later plan
+  across two fresh official servers.
+- Added no rollback, async delivery, parallelism, registry, retry, or adapter change.
+
+The frozen M45 semantic SHA-256 is
+`84d799547e96d434049f4879778606a592b3159626bf9df9b7e8225aeb9ca5d6`.
+
 ## 1.32.0 - M44 Synchronous Batch Observation
 
 Status: GO for stable-index caller-thread batch observation.

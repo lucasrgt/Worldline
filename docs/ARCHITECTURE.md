@@ -351,6 +351,11 @@ only the bounded route index and retains the exact M42 correlated event, so
 alternative/outcome indexes and correlation identity remain unchanged. Delivery
 occurs on the caller thread before the existing route controller decision.
 
+M45 adds a separate batch event controller. Its `STOP` becomes both the current
+route's controller termination and the batch termination before any later
+alternative or plan is sent. Already resolved outcomes remain immutable; no
+rollback, concurrency, queue, or adapter behavior is introduced.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested
