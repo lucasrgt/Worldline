@@ -49,13 +49,13 @@ public abstract class WorldlineCaptureMixin {
             interactionManager = new SingleplayerInteractionManager((Minecraft) (Object) this);
             System.out.println("[WorldlineCapture] start seed=" + WORLDLINE_SEED);
             startGame("WorldlineAero", "Worldline Aero", WORLDLINE_SEED);
+            worldlinePrepareDisplay();
             return;
         }
         if (world == null || player == null) return;
         if (worldlinePhase >= 3) return;
+        worldlinePrepareDisplay();
         if (worldlinePhase == 2 && WorldlineFrameOracle.freeze(worldlineTicks)) {
-            Minecraft game = (Minecraft) (Object) this;
-            game.currentScreen = null; game.options.hideHud = true; game.options.bobView = false;
             player.velocityX = 0.0D; player.velocityY = 0.0D; player.velocityZ = 0.0D;
             player.setPositionAndAngles(8.5D, worldlineY, 8.5D, 45.0F, 0.0F);
             callback.cancel(); return;
@@ -83,6 +83,14 @@ public abstract class WorldlineCaptureMixin {
             worldlinePhase = 3;
             scheduleStop();
         }
+    }
+
+    @Unique
+    private void worldlinePrepareDisplay() {
+        Minecraft game = (Minecraft) (Object) this;
+        game.currentScreen = null;
+        game.options.hideHud = true;
+        game.options.bobView = false;
     }
 
     @Unique
