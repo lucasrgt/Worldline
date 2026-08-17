@@ -41,3 +41,10 @@ net/minecraft/src/IChunkLoader	m	(Lnet/minecraft/src/World;Lnet/minecraft/src/Ch
 net/minecraft/src/IChunkLoader	m	(Lnet/minecraft/src/World;Lnet/minecraft/src/Chunk;)V	saveExtraChunkData	b	b
 net/minecraft/src/IChunkLoader	m	()V	func_661_a		a
 net/minecraft/src/IChunkLoader	m	()V	saveExtraData	b	b
+net/minecraft/src/IChunkProvider	c	-	net/minecraft/src/IChunkProvider	cl	bl
+net/minecraft/src/IChunkProvider	m	(ZLnet/minecraft/src/IProgressUpdate;)Z	saveChunks	a	a
+net/minecraft/src/World	f	I	autosavePeriod	p	p
+net/minecraft/src/World	m	(ZLnet/minecraft/src/IProgressUpdate;)V	saveWorld	a	a
+net/minecraft/src/Chunk	f	Z	isModified	o	o
+net/minecraft/src/Chunk	m	()V	setChunkModified	g	f
+net/minecraft/src/Chunk	m	(Z)Z	needsSaving	a	a

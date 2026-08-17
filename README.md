@@ -170,10 +170,12 @@ name the matching rule for known conservation fields. See
 `docs/INVARIANTS.md`.
 
 The semantic catalog annotates the 24 controlled-boundary categories, both
-`symbols.map` files, and the adapter/oracle/item/recipe/domain surfaces
-Worldline already executes. A coverage gate and static role graph fail closed
-on unknown tokens or unmapped names. Trace diffs print `role=` for known
-fields. See `docs/SEMANTICS.md`.
+`symbols.map` files, the adapter/oracle/item/recipe/domain surfaces Worldline
+already executes, and the native autosave/chunk-save/compile-chunk symbols.
+Adapter manifests bind Worldline-owned sites to those roles and reject Aero
+types. A coverage gate and static role graph fail closed on unknown tokens
+or unmapped names. Trace diffs print `role=` for known fields. See
+`docs/SEMANTICS.md`.
 
 The gate then runs `smokes/lab-cycle`, restores deterministic checkpoints in
 fresh clients, compares hypotheses, exercises GUI selectors, and compiles and

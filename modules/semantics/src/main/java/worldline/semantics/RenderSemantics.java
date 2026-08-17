@@ -72,6 +72,11 @@ final class RenderSemantics {
                 SemanticMapping.of("render", "PLAYER_CONTROLLER_FIELD",
                         "net/minecraft/client/Minecraft", "field", "playerController",
                         "Lnet/minecraft/src/PlayerController;", "PLAYER", "PLAYER", "TICK",
-                        "controlled-client-tick,lab-cycle,gui-tree", "c", 9920)));
+                        "controlled-client-tick,lab-cycle,gui-tree", "c", 9920),
+                SemanticMapping.of("render", "COMPILE_CHUNKS",
+                        "net/minecraft/src/RenderGlobal", "method", "updateRenderers",
+                        "(Lnet/minecraft/src/EntityLiving;Z)Z",
+                        "WORLD,RENDER", "RENDER", "RENDER",
+                        "controlled-client-tick,symbols.map", "a", 9998)));
     }
 }

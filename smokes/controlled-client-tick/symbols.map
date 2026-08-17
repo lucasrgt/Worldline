@@ -37,6 +37,14 @@ net/minecraft/src/PlayerController	m	()V	updateController	c
 net/minecraft/src/IBlockAccess	c	-	net/minecraft/src/IBlockAccess	xp	pb
 net/minecraft/src/IBlockAccess	m	(III)I	getBlockMetadata	e	c
 net/minecraft/src/World	m	(IIIII)Z	setBlockAndMetadataWithNotify	b	b
+net/minecraft/src/World	f	I	autosavePeriod	p	p
+net/minecraft/src/World	m	(ZLnet/minecraft/src/IProgressUpdate;)V	saveWorld	a	a
+net/minecraft/src/IChunkProvider	c	-	net/minecraft/src/IChunkProvider	cl	bl
+net/minecraft/src/IChunkProvider	m	(ZLnet/minecraft/src/IProgressUpdate;)Z	saveChunks	a	a
+net/minecraft/src/Chunk	f	Z	isModified	o	o
+net/minecraft/src/Chunk	m	()V	setChunkModified	g	f
+net/minecraft/src/Chunk	m	(Z)Z	needsSaving	a	a
+net/minecraft/src/RenderGlobal	m	(Lnet/minecraft/src/EntityLiving;Z)Z	updateRenderers	a
 net/minecraft/src/Entity	f	I	entityId	aD	aG
 net/minecraft/src/Entity	f	Z	isDead	be	bh
 net/minecraft/src/Entity	f	D	posX	aM	aP

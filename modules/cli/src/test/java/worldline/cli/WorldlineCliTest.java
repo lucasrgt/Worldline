@@ -140,6 +140,11 @@ public final class WorldlineCliTest {
                     new PrintStream(output), new PrintStream(error));
             require(status == 1 && error.toString().contains("unknown category"),
                     "CLI unknown semantics category failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"semantics", "adapter"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("b173-client="),
+                    "CLI semantics adapter failed");
             require(WorldlineCli.run(new String[0], System.out, new PrintStream(error)) == 2,
                     "CLI usage did not fail");
         } finally {

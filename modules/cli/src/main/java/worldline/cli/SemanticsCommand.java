@@ -1,9 +1,12 @@
 package worldline.cli;
 
 import java.io.PrintStream;
+import java.nio.file.Paths;
+import java.util.List;
+import worldline.api.SemanticMapping;
+import worldline.semantics.AdapterManifest;
 import worldline.semantics.SemanticCatalog;
 import worldline.semantics.SemanticGraph;
-import worldline.api.SemanticMapping;
 
 /** Neutral inspection of the closed b1.7.3 semantic catalog. */
 final class SemanticsCommand {
@@ -16,10 +19,15 @@ final class SemanticsCommand {
             return category(arguments[2], output, error);
         if (arguments.length == 3 && "role".equals(arguments[1]))
             return role(arguments[2], output, error);
+        if (arguments.length == 2 && "adapter".equals(arguments[1]))
+            return adapters(output, error);
+        if (arguments.length == 3 && "adapter".equals(arguments[1]))
+            return adapter(arguments[2], output, error);
         error.println("usage: worldline semantics show");
         error.println("   or: worldline semantics graph");
         error.println("   or: worldline semantics category <name>");
         error.println("   or: worldline semantics role <ROLE>");
+        error.println("   or: worldline semantics adapter [name]");
         return 2;
     }
 
@@ -57,6 +65,39 @@ final class SemanticsCommand {
             error.println("worldline command failed: " + failure.getMessage());
             return 1;
         }
+    }
+
+    private static int adapters(PrintStream output, PrintStream error) {
+        try {
+            output.println("WORLDLINE_SEMANTICS_ADAPTER=PASS");
+            for (AdapterManifest manifest : load()) {
+                output.println(manifest.adapter() + "=" + manifest.sites().size());
+            }
+            return 0;
+        } catch (Exception failure) {
+            error.println("worldline command failed: " + failure.getMessage());
+            return 1;
+        }
+    }
+
+    private static int adapter(String name, PrintStream output, PrintStream error) {
+        try {
+            for (AdapterManifest manifest : load()) {
+                if (!manifest.adapter().equals(name)) continue;
+                output.print("WORLDLINE_SEMANTICS_ADAPTER=PASS\n");
+                output.print(manifest.render());
+                return 0;
+            }
+            error.println("worldline command failed: unknown adapter " + name);
+            return 1;
+        } catch (Exception failure) {
+            error.println("worldline command failed: " + failure.getMessage());
+            return 1;
+        }
+    }
+
+    private static List<AdapterManifest> load() throws Exception {
+        return AdapterManifest.loadAll(Paths.get("adapters"), SemanticCatalog.standard());
     }
 
     private static void line(PrintStream output, SemanticMapping mapping) {

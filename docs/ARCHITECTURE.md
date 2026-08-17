@@ -109,10 +109,13 @@ Adapters remain responsible for step interpretation and isolated evaluation,
 so the neutral module does not acquire game, mod, or runtime dependencies.
 
 The semantic catalog adds `worldline-semantics` above the API.
-It owns the closed 24-category role contract, static role graph, and fail-closed lookup. The API
-owns immutable `SemanticMapping` values, including optional official client
-aliases. Category files annotate controlled b1.7.3 symbols already evidenced
-by Worldline; unknown or duplicate symbols fail closed.
+It owns the closed 24-category role contract, static role graph, fail-closed
+lookup, and adapter manifests. The API owns immutable `SemanticMapping`
+values, including optional official client aliases. Category files annotate
+controlled b1.7.3 symbols already evidenced by Worldline; unknown or
+duplicate symbols fail closed. Adapter manifests bind Worldline-owned sites
+to those roles. External libraries such as Aero stay out of the catalog and
+may depend on Worldline later; Worldline does not depend on them.
 
 The Invariant Engine adds `worldline-invariants` above the API.
 It owns fail-closed rules and the observation loop. The API owns the immutable
@@ -242,8 +245,8 @@ scenario/driver -> kernel -> backend port <- retromcp/lwjgl adapter
                          +-> trace/oracle observers
 ```
 
-An adapter may depend on the API and kernel. The API and kernel must never
-depend on an adapter. The reusable client adapter is an executable proof of
+An adapter may depend on the API, kernel, and semantic catalog. The API,
+kernel, and catalog must never depend on an adapter. The reusable client adapter is an executable proof of
 this direction. Replay-backed checkpoints, branch comparison, semantic GUI
 control, and the narrow mod API remain adapter-side because their implementation
 necessarily knows b1.7.3.

@@ -24,8 +24,11 @@ Status: GO.
   reads/writes, dependencies, evidence, an optional official client alias,
   and confidence.
 - Added `worldline-semantics` with a fail-closed catalog of the 24 control
-  categories and 188 required roles, including both `symbols.map` files,
-  adapter/oracle fields, and item/recipe/domain surfaces.
+  categories and 196 required roles, including both `symbols.map` files,
+  adapter/oracle fields, item/recipe/domain surfaces, and the native
+  autosave, chunk-save, and compile-chunk symbols.
+- Added `AdapterManifest` so Worldline adapters declare catalog sites without
+  placing Aero or other external types in `SemanticCatalog.standard()`.
 - Added a fail-closed coverage gate so every named `symbols.map` symbol has
   a catalog role, plus `SemanticGraph` over static read/write/dep tokens.
 - Added CLI `semantics show|graph|category|role` inspection without loading

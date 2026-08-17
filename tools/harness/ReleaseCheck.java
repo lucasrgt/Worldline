@@ -65,7 +65,7 @@ public final class ReleaseCheck {
         same(release, "gui.signature", gui, "expected.signature");
         same(release, "invariants.signature", client, "expected.state.signature");
         match(release, "semantics.signature",
-                "7b67267df9b2804b52a607ac5c7f167c857530de65c7a5e5462af8d89cfb6e10");
+                "b4d1f4fdf968f785cc5c94b2400d5f4ad4966f8f7b042d0fd2372d24e9dadf88");
         requireText("modules/api/src/main/java/worldline/api/WorldlineVersion.java",
                 "public static final String VERSION = \"" + value(release, "version") + "\";");
         requireText("docs/SEMANTICS_CYCLE.md", value(release, "semantics.signature"));

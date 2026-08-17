@@ -184,7 +184,8 @@ public final class WorldlineCli {
         error.println("   or: worldline semantics show");
         error.println("   or: worldline semantics graph");
         error.println("   or: worldline semantics category <name>");
-        error.println("   or: worldline semantics role <ROLE>"); return 2;
+        error.println("   or: worldline semantics role <ROLE>");
+        error.println("   or: worldline semantics adapter [name]"); return 2;
     }
 
     private static void explain(TraceDiff difference, PrintStream output) {

@@ -49,6 +49,15 @@ final class PersistenceSemantics {
                         "", "WORLD", "FILESYSTEM", "lab-cycle", "", 9920),
                 SemanticMapping.of("persistence", "SPAWN_POSITION",
                         "net/minecraft/src/WorldInfo", "method", "setSpawnPosition", "(III)V",
-                        "", "WORLD", "FILESYSTEM", "deterministic-world-tick", "", 9200)));
+                        "", "WORLD", "FILESYSTEM", "deterministic-world-tick", "", 9200),
+                SemanticMapping.of("persistence", "AUTOSAVE_PERIOD",
+                        "net/minecraft/src/World", "field", "autosavePeriod", "I",
+                        "CLOCK", "PERSISTENCE", "PERSISTENCE",
+                        "controlled-client-tick,symbols.map", "p", 9998),
+                SemanticMapping.of("persistence", "NATIVE_WORLD_SAVE",
+                        "net/minecraft/src/World", "method", "saveWorld",
+                        "(ZLnet/minecraft/src/IProgressUpdate;)V",
+                        "CHUNK", "FILESYSTEM", "CHUNK,FILESYSTEM",
+                        "controlled-client-tick,symbols.map", "a", 9998)));
     }
 }
