@@ -4,6 +4,20 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.32.0 - M44 Synchronous Batch Observation
+
+Status: GO for stable-index caller-thread batch observation.
+
+- Added immutable batch events and a non-controlling synchronous observer.
+- Indexed routes independently while preserving embedded alternative/outcome
+  indexes and caller-owned correlation identity.
+- Proved two exhausted routes, exact event order, cache coherence, and final
+  persistence across two fresh official servers.
+- Added no asynchronous delivery, parallelism, registry, retry, or adapter change.
+
+The frozen M44 semantic SHA-256 is
+`67a4fbc25b7288613c49431a9137a7104293d3262d7bd5898cbd0472b516287b`.
+
 ## 1.31.0 - M43 Bounded Correlated Route Batch
 
 Status: GO for sequential correlated-route batch control.

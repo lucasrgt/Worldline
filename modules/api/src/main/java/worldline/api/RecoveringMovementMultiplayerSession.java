@@ -88,16 +88,29 @@ public interface RecoveringMovementMultiplayerSession extends ResolvedMovementMu
     default CorrelatedMovementRouteBatchResult moveCorrelatedRouteBatch(
             List<CorrelatedMovementRoutePlan> plans, CorrelatedMovementRouteController routeController,
             CorrelatedMovementRouteBatchController batchController) {
+        return moveCorrelatedRouteBatch(
+                plans, routeController, batchController, CorrelatedMovementRouteBatchObserver.NONE);
+    }
+
+    default CorrelatedMovementRouteBatchResult moveCorrelatedRouteBatch(
+            List<CorrelatedMovementRoutePlan> plans, CorrelatedMovementRouteController routeController,
+            CorrelatedMovementRouteBatchController batchController,
+            CorrelatedMovementRouteBatchObserver batchObserver) {
         if (plans == null || plans.isEmpty() || plans.size() > 16)
             throw new IllegalArgumentException("invalid correlated route batch");
-        if (routeController == null || batchController == null)
+        if (routeController == null || batchController == null || batchObserver == null)
             throw new IllegalArgumentException("null correlated route batch controller");
         List<CorrelatedMovementRouteExecution> executions = new ArrayList<>(plans.size());
         boolean stopped = false;
-        for (CorrelatedMovementRoutePlan plan : plans) {
+        for (int index = 0; index < plans.size(); index++) {
+            CorrelatedMovementRoutePlan plan = plans.get(index);
             if (plan == null) throw new IllegalArgumentException("null correlated route plan");
+            final int routeIndex = index;
             CorrelatedMovementRouteExecution execution = moveRouteWithFallbackCorrelated(
-                    plan.alternatives(), plan.correlation(), routeController);
+                    plan.alternatives(), plan.correlation(), event -> {
+                        batchObserver.observe(new CorrelatedMovementRouteBatchEvent(routeIndex, event));
+                        return routeController.after(event);
+                    });
             executions.add(execution); MovementRouteDirective directive = batchController.after(execution);
             if (directive == null) throw new IllegalStateException("null movement route batch directive");
             if (directive == MovementRouteDirective.STOP) { stopped = true; break; }

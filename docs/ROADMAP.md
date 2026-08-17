@@ -48,6 +48,7 @@ Passing an experiment does not silently promote its API.
 | v1.29.0 / M41 | Immutable stopped-versus-exhausted route summary | GO - exact terminal event and identity-bound final outcome |
 | v1.30.0 / M42 | Caller-owned opaque route correlation | GO - identity preserved in events and terminal summary; no registry |
 | v1.31.0 / M43 | Bounded sequential correlated route batch | GO - per-route termination plus stop before unsent plan |
+| v1.32.0 / M44 | Synchronous stable-index batch observation | GO - route indexes preserve embedded event indexes and identity |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -59,9 +60,9 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.31.0 direction
+## Immediate post-v1.32.0 direction
 
-The next milestone can expose synchronous batch observations with stable route
-indexes while preserving the existing per-route event indexes. Packet control
-still does not imply server tick control, world-scale pathfinding, or a complete
-physics simulation.
+The next milestone can add observer-directed batch cancellation at an event
+boundary, distinct from the existing after-route batch controller. Packet
+control still does not imply server tick control, world-scale pathfinding, or a
+complete physics simulation.
