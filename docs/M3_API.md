@@ -49,4 +49,6 @@ M3 does not include entity spawning/removal, a complete entity-type registry,
 inventory item manipulation, dimensions, chunks, tile entities, arbitrary save
 loading, multiplayer/server automation, thread safety, durable entity IDs, or
 a version-independent block registry. Those require later contracts and their
-own official-JAR evidence.
+own official-JAR evidence. The experimental `GamePlayer.items()`,
+`GameWorld.items()`, and `GameWorld.blocks()` censuses are the Invariant
+Engine observation surface; they are not M3 inventory or world mutation.

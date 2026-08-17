@@ -27,9 +27,8 @@ public final class ClientCycle {
             System.err.println("usage: java tools/smoke/ClientCycle.java " + ID);
             System.exit(2);
         }
-        try {
-            new ClientCycle().execute();
-        } catch (Exception error) {
+        try { new ClientCycle().execute(); }
+        catch (Exception error) {
             System.err.println("client cycle failed: " + error.getMessage());
             System.exit(1);
         }
@@ -61,7 +60,7 @@ public final class ClientCycle {
         Path adapter = compile(adapterRoot.resolve("src/main/java"), build.resolve("adapter-classes"),
                 adapterDependencies, "reusable b1.7.3 adapter compilation");
         Path instrumented = instrumentClient(workspace, build, adapter, stubs, mapped, libraries);
-        List<Path> subjectDependencies = paths(adapter, product("api"), product("trace"));
+        List<Path> subjectDependencies = paths(adapter, product("api"), product("invariants"), product("trace"));
         Path subject = compile(smoke.resolve("src"), build.resolve("classes"),
                 subjectDependencies, "mapped client scenario compilation");
         Path officialJar = workspace.resolve("jars/minecraft.jar");
@@ -72,7 +71,7 @@ public final class ClientCycle {
         verifyControlPath(subject, adapter, instrumented, oracle, mapped, officialJar, stubs, libraries);
 
         List<Path> subjectRuntime = paths(subject, instrumented, adapter, stubs, product("api"),
-                product("trace"), product("kernel"), mapped, officialJar);
+                product("invariants"), product("trace"), product("kernel"), mapped, officialJar);
         subjectRuntime.addAll(libraries);
         List<Path> oracleRuntime = paths(oracle, stubs, product("trace"), officialJar);
         oracleRuntime.addAll(libraries);
@@ -174,7 +173,7 @@ public final class ClientCycle {
     private void verifyControlPath(Path subject, Path adapter, Path instrumented, Path oracle,
             Path mapped, Path official, Path stubs, List<Path> libraries) throws Exception {
         List<Path> subjectPaths = paths(subject, instrumented, adapter, stubs, product("api"),
-                product("trace"), product("kernel"), mapped, official);
+                product("invariants"), product("trace"), product("kernel"), mapped, official);
         subjectPaths.addAll(libraries);
         List<Path> oraclePaths = paths(oracle, stubs, product("trace"), official);
         oraclePaths.addAll(libraries);
@@ -199,6 +198,9 @@ public final class ClientCycle {
         require(output.contains("WORLDLINE_CLIENT_ROOT=" + rootName), "wrong client tick root");
         require(output.contains("WORLDLINE_CLIENT_HEADLESS=true"), "headless proof is absent");
         require(output.replace('\\', '/').contains(sourceMarker), "wrong Minecraft class source");
+        require(!type.contains("ControlledClientTickSmoke") || output.contains(
+                "WORLDLINE_BOUNDARIES=clock,input,rng,scheduler,filesystem,network,threading"),
+                "M2 boundary proof is absent");
         return new Outcome(line(output, TRACE), line(output, SIGNATURE),
                 line(output, STATE_TRACE), line(output, STATE_SIGNATURE));
     }
@@ -316,15 +318,10 @@ public final class ClientCycle {
     }
 
     private static final class Outcome {
-        private final String trace;
-        private final String signature;
-        private final String stateTrace;
-        private final String stateSignature;
+        private final String trace, signature, stateTrace, stateSignature;
         private Outcome(String trace, String signature, String stateTrace, String stateSignature) {
-            this.trace = trace;
-            this.signature = signature;
-            this.stateTrace = stateTrace;
-            this.stateSignature = stateSignature;
+            this.trace = trace; this.signature = signature;
+            this.stateTrace = stateTrace; this.stateSignature = stateSignature;
         }
     }
 }

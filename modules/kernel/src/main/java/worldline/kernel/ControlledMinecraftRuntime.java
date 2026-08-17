@@ -1,16 +1,26 @@
 package worldline.kernel;
 
+import java.util.HashSet;
 import java.util.Objects;
-import worldline.api.AutomatedMinecraftRuntime;
+import java.util.Set;
+import worldline.api.EntityCensus;
 import worldline.api.GamePlayer;
+import worldline.api.GameUi;
 import worldline.api.GameWorld;
+import worldline.api.InvariantMinecraftRuntime;
+import worldline.api.InvariantSample;
+import worldline.api.ItemCensus;
+import worldline.api.ItemCensusObserver;
 import worldline.api.RuntimeState;
+import worldline.api.UiMinecraftRuntime;
 import worldline.api.WorldSource;
 
 /** Lifecycle policy shared by every future game backend. */
-public final class ControlledMinecraftRuntime implements AutomatedMinecraftRuntime {
+public final class ControlledMinecraftRuntime implements UiMinecraftRuntime, InvariantMinecraftRuntime {
     private final GameBackend backend;
     private RuntimeState state = RuntimeState.NEW;
+    private ItemCensusObserver observer;
+    private Set<Long> previousChunks;
 
     public ControlledMinecraftRuntime(GameBackend backend) {
         this.backend = Objects.requireNonNull(backend, "backend");
@@ -34,6 +44,40 @@ public final class ControlledMinecraftRuntime implements AutomatedMinecraftRunti
     public void tick() {
         requireState(RuntimeState.WORLD_LOADED, "tick");
         backend.tick();
+        if (observer != null) {
+            observer.observe(sample());
+        }
+    }
+
+    @Override
+    public void watch(ItemCensusObserver observer) {
+        if (state == RuntimeState.CLOSED) {
+            throw new IllegalStateException("Cannot watch invariants while runtime state is CLOSED");
+        }
+        this.observer = Objects.requireNonNull(observer, "observer");
+        this.previousChunks = null;
+    }
+
+    private InvariantSample sample() {
+        GameWorld world = world();
+        Set<Long> chunks = world.loadedChunks();
+        ItemCensus imported = ItemCensus.empty();
+        ItemCensus importedBlocks = ItemCensus.empty();
+        EntityCensus importedEntities = EntityCensus.empty();
+        if (previousChunks != null) {
+            Set<Long> added = new HashSet<Long>(chunks);
+            added.removeAll(previousChunks);
+            if (!added.isEmpty()) {
+                imported = world.itemsInChunks(added);
+                importedBlocks = world.blocksInChunks(added);
+                importedEntities = EntityCensus.inChunks(world.entities(), added);
+            }
+        }
+        previousChunks = new HashSet<Long>(chunks);
+        GamePlayer player = player();
+        return InvariantSample.of(player.items().plus(world.items()), world.blocks(),
+                EntityCensus.from(world.entities()), imported, importedBlocks, importedEntities,
+                player.wear().plus(world.wear()), world.time(), player.health(), world.peaceful());
     }
 
     @Override
@@ -46,6 +90,12 @@ public final class ControlledMinecraftRuntime implements AutomatedMinecraftRunti
     public GamePlayer player() {
         requireState(RuntimeState.WORLD_LOADED, "access the player");
         return backend.player();
+    }
+
+    @Override
+    public GameUi ui() {
+        requireState(RuntimeState.WORLD_LOADED, "access the UI");
+        return backend.ui();
     }
 
     @Override

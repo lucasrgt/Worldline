@@ -14,14 +14,14 @@ and rows through `tick16`.
 
 The runner copies the official trace and changes only `tick9.slot` from 2 to 4.
 Forward comparison must report record index 9, label `tick9`, field index 11,
-field `slot`, left 2, and right 4. Reverse comparison must retain the location
-and reverse the values. A second copy with duplicate `clientTick` schema fields
-must fail strict parsing.
+field `slot`, left 2, right 4, and catalog `role=HOTBAR_SLOT`. Reverse
+comparison must retain the location and reverse the values. A second copy with
+duplicate `clientTick` schema fields must fail strict parsing.
 
 Frozen SHA-256 of the exact forward divergence report:
 
 ```text
-7eb4f707427c4e58ab3e481cc61f5801518325d5bbdfe045828325ab5ed2ea06
+fc5baa700a2da8bedff3a17aff5647b17ae831acd2dbb839bb767229538c4436
 ```
 
 ## Boundary

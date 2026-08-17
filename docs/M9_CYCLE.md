@@ -25,10 +25,10 @@ the preceding `observe:before` step is causal to this exact predicate.
 The frozen M9 evidence-report SHA-256 is:
 
 ```text
-706ff2a6fbeb2de5049749a573de95ba75ff43229326e7fd27a20aaf75b39a69
+f713ff2457bcaf1fcaada80e0026c76d64bc69fdec713abfdcadcb7a9f0da55f
 ```
 
-The minimizer used 24 evaluator calls. The smoke additionally reexecutes the
+The minimizer used 21 evaluator calls. The smoke additionally reexecutes the
 final result and every one-step deletion independently of the algorithm's own
 cache before declaring the result one-minimal.
 

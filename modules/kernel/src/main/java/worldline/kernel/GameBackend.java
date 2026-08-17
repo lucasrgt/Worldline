@@ -1,6 +1,7 @@
 package worldline.kernel;
 
 import worldline.api.GamePlayer;
+import worldline.api.GameUi;
 import worldline.api.GameWorld;
 import worldline.api.WorldSource;
 
@@ -15,6 +16,8 @@ public interface GameBackend {
     default GameWorld world() { throw new UnsupportedOperationException("world automation is unavailable"); }
 
     default GamePlayer player() { throw new UnsupportedOperationException("player automation is unavailable"); }
+
+    default GameUi ui() { throw new UnsupportedOperationException("ui automation is unavailable"); }
 
     void close();
 }

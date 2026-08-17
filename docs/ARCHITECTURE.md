@@ -47,6 +47,12 @@ scenario -> worldline-cli -> worldline-minimization -> worldline-analysis
                                    ^
                                    |
                           adapter-owned evaluator
+
+ItemCensus / GameUi.nodes() -> worldline-invariants
+
+SemanticMapping -> worldline-semantics
+
+OptimizationRef -> worldline-optimization -> owner-controlled catalog
 ```
 
 The modules are physical source roots and are compiled separately. The API is
@@ -56,10 +62,25 @@ and the stable product modules it exposes. Analysis depends only on trace.
 This makes every declared dependency direction executable rather than
 conventional.
 
+### `optimization`
+
+Owns only the source-retained `OptimizationRef` metadata annotation. It has no
+dependencies and performs no runtime work. Modules opt into this compile-time
+dependency only when they annotate an owned optimization site. A separate
+harness check validates records and references; it never enables features or
+transforms bytecode. External projects keep their records beside their own
+implementations. Worldline evidence may cite an external stable ID, but the
+Worldline catalog must not describe mod-specific algorithms or flags.
+
 ### `api`
 
 Owns stable concepts visible to a scenario author. It must not expose RetroMCP,
 LWJGL, mappings, instrumentation, or decompiled Minecraft types.
+
+The Game UI Tree adds opt-in `UiMinecraftRuntime` and immutable
+`GameUiNode` values. `GameUi` exposes the current screen, a snapshot of semantic
+nodes, role/name lookup, inventory open/close, and slot clicks. Only the
+inventory screen is promoted; other screens fail closed.
 
 M3 adds the opt-in `AutomatedMinecraftRuntime` extension and neutral
 `GameWorld`, `GamePlayer`, and `GameEntity` handles. Coordinates and block
@@ -99,6 +120,29 @@ scenarios, exact divergence fingerprints, and deterministic delta debugging.
 Adapters remain responsible for step interpretation and isolated evaluation,
 so the neutral module does not acquire game, mod, or runtime dependencies.
 
+The semantic catalog adds `worldline-semantics` above the API.
+It owns the closed 24-category role contract, static role graph, fail-closed
+lookup, and adapter manifests. The API owns immutable `SemanticMapping`
+values, including optional official client aliases. Category files annotate
+controlled b1.7.3 symbols already evidenced by Worldline; unknown or
+duplicate symbols fail closed. Adapter manifests bind Worldline-owned sites
+to those roles. External libraries such as Aero stay out of the catalog and
+may depend on Worldline later; Worldline does not depend on them.
+
+The Invariant Engine adds `worldline-invariants` above the API.
+It owns fail-closed rules and the observation loop. The API owns the immutable
+`ItemCensus`, `EntityCensus`, `WearCensus`, `ItemCensusObserver`, and
+`InvariantViolation`. The kernel's opt-in `watch` samples items, loaded
+blocks, living entities, newly loaded chunk items and blocks, wear, health,
+and world time after every tick. Item conservation accepts loss, transfers,
+imports, recipes, and cause drops. Entity spawn accepts imports, eggs, and
+breeding, grass/water/spawner hosts, and slime split. Block conservation
+accepts imports, ID swaps, fluid/fire/plant presence, sapling-to-tree, and
+cobble from fluid. Health conservation accepts food, cake bites, and
+peaceful regen. Durability
+conservation forbids repair without a new stack. `TimeMonotonic` forbids
+time moving backward. There is no energy invariant.
+
 ### `kernel`
 
 Owns control-flow policy: valid lifecycle transitions and the narrow backend
@@ -109,7 +153,7 @@ Kernel unit tests use a recording fake. The server smoke supplies a test-scoped
 `VanillaWorldBackend` for direct world-level evidence. The client cycles use the
 reusable `B173Runtime` adapter, which constructs the original client tick object
 graph and reaches `Minecraft.runTick()` through the same port. The adapter has
-its own enforced source budget and compiles against local, ignored Minecraft
+its own per-file source ceiling and compiles against local, ignored Minecraft
 classes; no game binary or decompiled source enters the repository.
 
 ### `trace`
@@ -154,6 +198,12 @@ loads an original client `World`, and executes exactly one externally requested
 the frozen official JAR. The runner checks class origins, bytecode call paths,
 four-process determinism, cross-boundary equality, and a frozen trace. The exact
 scope and non-claims are normative in that smoke's `MAP.md`.
+
+M2 promotes the process boundaries used by that cycle: virtual clock,
+programmable input, RNG reseed, in-memory filesystem journal and failure
+injection, offline network, tick-keyed scheduler, and supervision of the
+vanilla timer thread. Those controls stay on the b1.7.3 adapter; they are
+not `worldline-api` types. The contract is `docs/M2_RUNTIME.md`.
 
 `smokes/m3-domain-api/` qualifies the stable domain surface. The subject uses
 only `AutomatedMinecraftRuntime` and neutral API types after runtime creation;
@@ -214,8 +264,8 @@ scenario/driver -> kernel -> backend port <- retromcp/lwjgl adapter
                          +-> trace/oracle observers
 ```
 
-An adapter may depend on the API and kernel. The API and kernel must never
-depend on an adapter. The reusable client adapter is an executable proof of
+An adapter may depend on the API, kernel, and semantic catalog. The API,
+kernel, and catalog must never depend on an adapter. The reusable client adapter is an executable proof of
 this direction. Replay-backed checkpoints, branch comparison, semantic GUI
 control, and the narrow mod API remain adapter-side because their implementation
 necessarily knows b1.7.3.

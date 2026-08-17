@@ -51,6 +51,7 @@ public final class ReleaseCheck {
         Properties m18 = load("smokes/m18-save-attribution/smoke.properties");
         Properties m19 = load("smokes/m19-forced-autosave/smoke.properties");
         Properties lab = load("smokes/lab-cycle/smoke.properties");
+        Properties gui = load("smokes/gui-tree/smoke.properties");
         match(release, "id", "worldline");
         match(release, "version", "1.7.0");
         match(release, "milestone", "m19-forced-autosave");
@@ -63,6 +64,7 @@ public final class ReleaseCheck {
         same(release, "server.signature", server, "expected.signature");
         same(release, "client.signature", client, "expected.signature");
         same(release, "client.state.signature", client, "expected.state.signature");
+        same(release, "m2.signature", client, "expected.state.signature");
         same(release, "m3.signature", m3, "expected.signature");
         same(release, "m4.signature", m4, "expected.snapshot.sha256");
         same(release, "m5.signature", m5, "expected.bundle.sha256");
@@ -102,11 +104,18 @@ public final class ReleaseCheck {
         same(release, "m19.aero.revision", m19, "aero.revision");
         same(release, "m19.seed", m19, "seed");
         same(release, "lab.signature", lab, "expected.signature");
+        same(release, "gui.signature", gui, "expected.signature");
+        same(release, "invariants.signature", client, "expected.state.signature");
+        match(release, "semantics.signature",
+                "b4d1f4fdf968f785cc5c94b2400d5f4ad4966f8f7b042d0fd2372d24e9dadf88");
         requireText("modules/api/src/main/java/worldline/api/WorldlineVersion.java",
                 "public static final String VERSION = \"" + value(release, "version") + "\";");
+        requireText("docs/SEMANTICS_CYCLE.md", value(release, "semantics.signature"));
         for (String file : Arrays.asList("README.md", "CHANGELOG.md", "AGENTS.md",
                 "docs/VISION.md", "docs/ROADMAP.md", "docs/ARCHITECTURE.md",
-                "docs/FIRST_CYCLE.md", "docs/M3_API.md", "docs/M3_CYCLE.md",
+                "optimizations/TEMPLATE.properties",
+                "docs/FIRST_CYCLE.md", "docs/M2_RUNTIME.md", "docs/M2_CYCLE.md",
+                "docs/M3_API.md", "docs/M3_CYCLE.md",
                 "docs/M4_SNAPSHOT.md", "docs/M4_CYCLE.md", "smokes/controlled-client-tick/MAP.md",
                 "docs/M5_BUNDLE.md", "docs/M5_CYCLE.md", "smokes/m3-domain-api/MAP.md",
                 "docs/M6_TRACE.md", "docs/M6_CYCLE.md", "smokes/m4-durable-snapshot/MAP.md",
@@ -122,7 +131,11 @@ public final class ReleaseCheck {
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         }
         for (String file : Arrays.asList("docs/M9_MINIMIZATION.md", "docs/M9_CYCLE.md",
-                "smokes/m9-scenario-minimization/MAP.md")) {
+                "smokes/m9-scenario-minimization/MAP.md", "docs/GUI_TREE.md", "docs/GUI_CYCLE.md",
+                "smokes/gui-tree/MAP.md", "docs/INVARIANTS.md", "docs/INVARIANTS_CYCLE.md",
+                "docs/SEMANTICS.md", "docs/SEMANTICS_CYCLE.md",
+                "docs/OPTIMIZATION_SDK.md",
+                "optimizations/catalog/README.md")) {
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         }
         for (String file : Arrays.asList("docs/M10_RENDER.md", "docs/M10_CYCLE.md",

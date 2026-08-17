@@ -84,6 +84,9 @@ exercising the complete client tick root.
 | Audio | The vanilla sound manager exists but is never initialized with an audio backend and no sound path is reached by this fixture. |
 | Threading | The original constructor's daemon timer-hack thread is captured, observed alive during execution, interrupted, joined, and observed stopped on close. |
 
+M2 promotes this inventory to a stable milestone. The contract and non-claims
+are in `docs/M2_RUNTIME.md`; the GO audit is `docs/M2_CYCLE.md`.
+
 Every substitution is original Worldline smoke code and is applied identically
 to the named subject and official oracle. No decompiled or proprietary source
 is tracked.

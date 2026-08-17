@@ -7,6 +7,9 @@ public final class DomainApiTest {
         valueEqualityIsExact();
         invalidValuesFailClosed();
         snapshotsAreBoundedAndImmutable();
+        uiSpecRoundTripsBuilderAndInventory();
+        itemCensusIsExactAndFailClosed();
+        semanticMappingIsExactAndFailClosed();
         System.out.println("DomainApiTest passed");
     }
 
@@ -15,6 +18,8 @@ public final class DomainApiTest {
         equal(new BlockState(20, 7), new BlockState(20, 7), "block state");
         equal(new GamePosition(1.25D, 2.5D, -3.75D),
                 new GamePosition(1.25D, 2.5D, -3.75D), "game position");
+        equal(new GameUiNode(GameUiNode.SLOT, "0", 0, -1, 0),
+                new GameUiNode(GameUiNode.SLOT, "0", 0, -1, 0), "ui node");
     }
 
     private static void invalidValuesFailClosed() {
@@ -22,6 +27,8 @@ public final class DomainApiTest {
         failure(() -> new BlockState(1, 16));
         failure(() -> new GamePosition(Double.NaN, 0.0D, 0.0D));
         failure(() -> new GamePosition(0.0D, Double.POSITIVE_INFINITY, 0.0D));
+        failure(() -> new GameUiNode("", "inventory", -1, -1, 0));
+        failure(() -> new GameUiNode(GameUiNode.SLOT, "0", 0, -2, 0));
     }
 
     private static void snapshotsAreBoundedAndImmutable() {
@@ -38,6 +45,95 @@ public final class DomainApiTest {
         }
         failure(() -> RuntimeSnapshot.of(new byte[0]));
         failure(() -> RuntimeSnapshot.of(new byte[RuntimeSnapshot.MAX_BYTES + 1]));
+    }
+
+    private static void uiSpecRoundTripsBuilderAndInventory() {
+        GameUiSpec inventory = GameUiSpec.inventory();
+        if (!GameUiNode.INVENTORY.equals(inventory.screen()) || inventory.nodes().size() != 46
+                || !inventory.matchesStructure(inventory.nodes())
+                || inventory.node(GameUiNode.SLOT, "0").index() != 0) {
+            throw new AssertionError("vanilla inventory spec failed");
+        }
+        java.util.List<GameUiSpec.Part> parts = java.util.Arrays.asList(
+                new GameUiSpec.Part("slot", null, "input"),
+                new GameUiSpec.Part("progress_arrow", null, null),
+                new GameUiSpec.Part("slot", null, "output"),
+                new GameUiSpec.Part("energy_bar", null, null),
+                new GameUiSpec.Part("separator", null, null));
+        GameUiSpec crusher = GameUiSpec.fromBuilder("crusher", parts);
+        if (crusher.nodes().size() != 41 || crusher.node(GameUiNode.SLOT, "input").index() != 0
+                || crusher.node(GameUiNode.SLOT, "output").index() != 1
+                || crusher.node(GameUiNode.PROGRESS, "craft").index() != -1
+                || crusher.node(GameUiNode.ENERGY, "energy").index() != -1
+                || crusher.node(GameUiNode.SLOT, "player.0").index() != 2
+                || !crusher.matchesStructure(crusher.nodes())) {
+            throw new AssertionError("builder spec mapping failed: " + crusher.nodes());
+        }
+        failure(() -> GameUiSpec.fromBuilder("x", java.util.Collections.singletonList(
+                new GameUiSpec.Part("unknown", null, null))));
+        GameUiSpec declared = Ui.screen("crusher",
+                Ui.row("process", Ui.slot("input"), Ui.progress("craft"), Ui.slot("output")),
+                Ui.energy("energy"),
+                Ui.playerInventory());
+        equal(crusher, declared, "ui language");
+        if (Ui.screen("bare", Ui.slot("input")).nodes().size() != 2) {
+            throw new AssertionError("layout flatten or player opt-in failed");
+        }
+    }
+
+    private static void itemCensusIsExactAndFailClosed() {
+        ItemCensus iron = ItemCensus.of(265, 10);
+        equal(iron.plus(50, 0), iron, "zero plus is identity");
+        equal(ItemCensus.fromNodes(java.util.Arrays.asList(
+                new GameUiNode(GameUiNode.SLOT, "0", 0, 265, 4),
+                new GameUiNode(GameUiNode.SLOT, "1", 1, 265, 6))), iron, "node census");
+        equal(iron.plus(ItemCensus.of(50, 2)), iron.plus(50, 2), "census merge");
+        equal(iron.decrease(ItemCensus.of(265, 7)), ItemCensus.of(265, 3), "census decrease");
+        equal(new ItemRecipe(ItemCensus.of(17, 1), ItemCensus.of(5, 4)),
+                new ItemRecipe(ItemCensus.of(17, 1), ItemCensus.of(5, 4)), "item recipe");
+        equal(EntityCensus.of("minecraft:zombie", 2),
+                EntityCensus.of("minecraft:zombie", 1).plus("minecraft:zombie", 1), "entity census");
+        equal(CauseDrop.death("minecraft:zombie", ItemCensus.of(288, 2)),
+                CauseDrop.death("minecraft:zombie", ItemCensus.of(288, 2)), "cause drop");
+        equal(new SpawnRule("block:2", "minecraft:pig", 4),
+                new SpawnRule("block:2", "minecraft:pig", 4), "spawn rule");
+        equal(EntityCensus.of("minecraft:pig", 1).plus(EntityCensus.of("minecraft:cow", 1)),
+                EntityCensus.of("minecraft:pig", 1).plus("minecraft:cow", 1), "census merge");
+        if (iron.total() != 10 || iron.count(265) != 10 || iron.exceeds(iron)
+                || !iron.plus(265, 1).exceeds(iron) || ItemCensus.empty().exceeds(iron)
+                || !iron.contains(ItemCensus.of(265, 10)) || iron.contains(ItemCensus.of(265, 11))) {
+            throw new AssertionError("item census totals failed");
+        }
+        failure(() -> ItemCensus.of(-1, 1));
+        failure(() -> ItemCensus.of(1, -1));
+        failure(() -> new ItemRecipe(ItemCensus.empty(), ItemCensus.of(1, 1)));
+        failure(() -> new InvariantViolation("", "detail"));
+        failure(() -> new SpawnRule("", "minecraft:pig", 1));
+        failure(() -> new SpawnRule("block:2", "minecraft:pig", 0));
+    }
+
+    private static void semanticMappingIsExactAndFailClosed() {
+        SemanticMapping tick = SemanticMapping.of("tick", "CLIENT_TICK_ROOT",
+                "net/minecraft/client/Minecraft", "method", "runTick", "()V",
+                "INPUT,CLOCK", "WORLD,PLAYER,GUI", "CLOCK", "controlled-client-tick", 9998);
+        equal(tick, SemanticMapping.of("tick", "CLIENT_TICK_ROOT",
+                "net/minecraft/client/Minecraft", "method", "runTick", "()V",
+                "INPUT,CLOCK", "WORLD,PLAYER,GUI", "CLOCK", "controlled-client-tick", 9998),
+                "semantic mapping");
+        SemanticMapping named = SemanticMapping.of("tick", "CLIENT_TICK_ROOT",
+                "net/minecraft/client/Minecraft", "method", "runTick", "()V",
+                "INPUT,CLOCK", "WORLD,PLAYER,GUI", "CLOCK", "controlled-client-tick", "k", 9998);
+        if (!tick.known() || tick.confidence() != 9998 || tick.reads().size() != 2
+                || !tick.canonical().contains("CLIENT_TICK_ROOT") || !tick.official().isEmpty()
+                || !"k".equals(named.official())) {
+            throw new AssertionError("semantic mapping fields failed");
+        }
+        failure(() -> SemanticMapping.of("", "CLIENT_TICK_ROOT",
+                "net/minecraft/client/Minecraft", "method", "runTick", "()V",
+                "", "", "", "lab-cycle", 9998));
+        failure(() -> SemanticMapping.of("tick", "CLIENT_TICK_ROOT",
+                "net/minecraft/client/Minecraft", "method", "runTick", "()V",
+                "", "", "", "lab-cycle", 0));
     }
 
     private static void failure(Runnable action) {

@@ -192,6 +192,102 @@ Status: GO for the bounded render contract.
 The frozen M10 framebuffer SHA-256 is
 `3f7da2d7ed9eeeff4c1ac7ad3767c82a5cb95b066cdb28bd3788e0cbcd3141ff`.
 
+## Unreleased - Optimization Metadata SDK
+
+- Added dependency-free, source-retained `OptimizationRef` metadata in its own
+  optional module; it injects no runtime behavior or bytecode.
+- Added a properties-backed record schema for status, defaults, behavior delta,
+  risks, rollback, source symbols, and evidence.
+- Added fail-closed canonical checks for unknown IDs, incomplete records,
+  unevidenced decisions, unsafe defaults, and annotation/symbol tracking drift.
+- Made repository ownership explicit: Worldline contains only the neutral SDK
+  and its own records; mods own implementation-specific catalogs and Worldline
+  evidence refers to their stable IDs.
+- Added isolated positive and negative checker fixtures without coupling mod
+  sources or implementation knowledge to Worldline.
+
+## Unreleased - M2 Controlled Runtime
+
+Status: GO.
+
+- Promoted virtual clock, programmable input, RNG reseed, filesystem
+  journal/failure injection, offline network, tick scheduler, and timer-thread
+  supervision from experimental evidence to a stable milestone.
+- The public product version remains 0.7.0 / M9. M2 does not add
+  `worldline-api` types; boundary controls stay on the b1.7.3 adapter.
+- Frozen evidence is the existing four-process 16-tick client state signature
+  `e8cdeba39a44b772a70c48c0acd9ae3983f3d95a8c10c545df5d66fb953db554`.
+
+## Unreleased - Semantic Mappings
+
+Status: GO.
+
+- Added `SemanticMapping` so a b1.7.3 symbol can carry role, category,
+  reads/writes, dependencies, evidence, an optional official client alias,
+  and confidence.
+- Added `worldline-semantics` with a fail-closed catalog of the 24 control
+  categories and 196 required roles, including both `symbols.map` files,
+  adapter/oracle fields, item/recipe/domain surfaces, and the native
+  autosave, chunk-save, and compile-chunk symbols.
+- Added `AdapterManifest` so Worldline adapters declare catalog sites without
+  placing Aero or other external types in `SemanticCatalog.standard()`.
+- Added a fail-closed coverage gate so every named `symbols.map` symbol has
+  a catalog role, plus `SemanticGraph` over static read/write/dep tokens.
+- Added CLI `semantics show|graph|category|role` inspection without loading
+  Minecraft.
+- Trace CLI diffs print a catalog `role=` alias for known fields. Scenario
+  minimization tries disposable lab/noise steps first. Frozen M6/M8 CLI-report
+  hashes now include those role lines; M9 evidence uses 21 evaluator calls.
+- Diverged conservation fields also print `invariant=<rule>` after the M6
+  document. `block65` names `block-conservation`. Frozen M8/M9 hashes include
+  that line.
+
+## Unreleased - Invariant Engine
+
+Status: GO.
+
+- Added `ItemCensus` and `InvariantViolation` so observed item totals are
+  immutable API values.
+- Added `worldline-invariants` with `InvariantEngine` and `ItemConservation`.
+  The first census is the baseline; later gains fail closed, losses do not.
+- Added `GamePlayer.items()` and opt-in `watch` so each controlled tick samples
+  player and world totals without opening a screen.
+- World census includes dropped items and loaded container inventories.
+- Item conservation is now consecutive and recipe-aware. A gain holds when a
+  `RecipeBook` can account for it; unexplained creation still fails closed.
+- Crafting container leftovers (empty buckets from milk) are folded into
+  recipe outputs so cake no longer looks like item creation.
+- `GameWorld.blocks()` and block-drop recipes explain harvest gains (stone
+  to cobble, log to log), including sampled random quantities.
+- `EntityCensus`, `CauseDrop`, and `DropBook` explain mob death, chicken
+  eggs, and caught fish. Newly loaded chunk items are imports, not creation.
+- Added `TimeMonotonic` and `InvariantEngine.standard` so world time cannot
+  move backward.
+- Added `EntitySpawn`, `BlockConservation`, `HealthConservation`, and
+  `DurabilityConservation`. `standard(runtime)` also loads block transforms,
+  fluid/fire/plant presence, food heal amounts, and host spawn rules.
+- The controlled-client cycle watches `standard(runtime)` for 16 live ticks.
+  Falling sand, thrown items, lit-block swaps, and `GameWorld.peaceful()`
+  complete the world-tick cause book.
+- Removed total line budgets for harness, smoke, and adapter. Only per-file
+  ceilings remain.
+
+## Unreleased - Game UI Tree
+
+Status: GO.
+
+- Added `UiMinecraftRuntime`, `GameUi`, and immutable `GameUiNode` values for a
+  semantic inventory tree (`screen`, `slot`, `node`, `click`).
+- Added a four-process official-JAR differential that opens, inspects, clicks,
+  and closes the inventory screen without mapped types in the caller.
+- Added `GameUiSpec` so Aero Machine Maker `guiComponents` and a live `GameUi`
+  tree share role/name/index without pixels.
+- Added a Flutter-inspired `Ui.screen/row/slot` declaration that flattens to
+  the same spec. Layout widgets do not become DOM nodes.
+
+The frozen GUI-tree SHA-256 is
+`ab13a631ed766de32f2947fae1a6e0a86d9b6cde3cbc7e1557ff76f76ccc60cf`.
+
 ## 0.7.0 - M9 Automatic Scenario Minimization
 
 Status: GO.

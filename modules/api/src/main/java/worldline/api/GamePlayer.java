@@ -9,4 +9,11 @@ public interface GamePlayer extends GameEntity {
     int selectedHotbarSlot();
 
     void selectHotbarSlot(int slot);
+
+    /** Read-only main, armor, and cursor totals. Not inventory manipulation. */
+    ItemCensus items();
+
+    default WearCensus wear() {
+        return WearCensus.empty();
+    }
 }

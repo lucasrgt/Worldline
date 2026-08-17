@@ -24,8 +24,9 @@ All repository artifacts must be written in English.
    below 150 code lines.
 4. Each game-specific adapter source file must remain at or below 150 code
    lines.
-5. Tests are unlimited. Product behavior may not be moved into tests, generated
-   files, or harness code to evade a budget.
+5. There is no total line budget. Tests are unlimited. Product behavior may
+   not be moved into tests, generated files, or harness code to evade a
+   per-file ceiling.
 6. Modules follow the dependency order declared in `harness.properties`.
    A module may depend only on modules explicitly listed there; cycles are
    forbidden and the harness compiles modules separately to enforce this.
@@ -34,6 +35,10 @@ All repository artifacts must be written in English.
    behavior than it introduces.
 8. Missing tools, missing tests, illegal dependencies, and unresolved checks
    fail closed.
+9. Maintained Worldline performance changes must have a stable optimization
+   ID. Worldline-owned sites may use source-only `OptimizationRef`. External
+   projects own their optimization records; Worldline may reference their IDs
+   in evidence but must not copy project-specific implementation catalogs.
 
 There is deliberately no repository-wide line cap. Growth must happen through
 small cohesive files and explicit modules rather than oversized source files.
@@ -48,7 +53,7 @@ Before reporting implementation work complete, run from the repository root:
 java tools/harness/Verify.java
 ```
 
-This is the canonical local and CI gate. It owns the source budgets, module
+This is the canonical local and CI gate. It owns the per-file source ceilings, module
 dependency enforcement, compilation with warnings as errors, and the complete
 test suite. Do not substitute partial commands for it.
 

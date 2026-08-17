@@ -50,6 +50,8 @@ public final class Verify {
         System.out.println("Worldline repository verification");
         loadConfiguration();
         run(Arrays.asList("java", "tools/harness/ReleaseCheck.java"));
+        run(Arrays.asList("java", "tools/harness/OptimizationCatalogCheckTest.java"));
+        run(Arrays.asList("java", "tools/harness/OptimizationCatalogCheck.java"));
         if (runSmoke) {
             run(Arrays.asList("java", "tools/toolchains/Bootstrap.java", "retromcp"));
         }
@@ -87,6 +89,7 @@ public final class Verify {
                     "m18-save-attribution"));
             run(Arrays.asList("java", "tools/smoke/AeroForcedAutosaveCycle.java",
                     "m19-forced-autosave"));
+            run(Arrays.asList("java", "tools/smoke/GuiCycle.java", "gui-tree"));
             run(Arrays.asList("java", "tools/smoke/LabCycle.java", "lab-cycle"));
         }
         System.out.println("verify passed");

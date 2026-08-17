@@ -7,6 +7,12 @@ first goal is deliberately small: boot the real game headlessly, load a world,
 advance one externally controlled tick, and compare the observable result with
 the official vanilla artifact.
 
+Worldline includes a neutral optimization metadata SDK: a source-only
+`OptimizationRef`, a portable record schema, and a fail-closed validator.
+Project-specific catalogs stay in the repository that owns the implementation;
+Worldline experiments reference external IDs without copying their records.
+See `docs/OPTIMIZATION_SDK.md`.
+
 The controlled-runtime baseline and first laboratory cycle are complete. The repository contains a
 small public lifecycle contract, an independently compiled kernel, an
 independent canonical-trace protocol, and a fail-closed verification gate. Its
@@ -179,6 +185,12 @@ the committed SHA-256 signature. See
 `smokes/controlled-client-tick/MAP.md` for the exact symbol map, external
 boundary inventory, headless substitutions, and pass conditions.
 
+M2 promotes those process boundaries to a stable milestone: virtual clock,
+programmable input, RNG reseed, filesystem journal/failure injection, offline
+network, tick scheduler, and timer-thread supervision. The public product
+version stays 0.7.0 / M9; the frozen evidence is the same 16-tick state
+signature. See `docs/M2_RUNTIME.md` and `docs/M2_CYCLE.md`.
+
 The gate next runs `smokes/m3-domain-api`. Two fresh JVMs exercise the stable,
 neutral Worldline API while two independent JVMs perform the equivalent
 operations directly against the official obfuscated client JAR. All four must
@@ -251,6 +263,25 @@ without claiming the historical spike is gone.
 `smokes/m19-forced-autosave` forces a dirty set and proves the opt-in one-chunk
 non-forced save cap lowers the worst synthetic batch while staying default-off.
 
+`smokes/gui-tree` then opens, inspects, clicks, and closes the inventory screen
+through the neutral `GameUi` tree and matches two official-JAR oracle processes.
+This is a stable milestone; the public product version stays 0.7.0 / M9. See
+`smokes/gui-tree/MAP.md` and `docs/GUI_TREE.md`.
+
+The Invariant Engine observes item, block, entity, wear, health, and time
+samples and fails closed when a rule is broken. The controlled client cycle
+watches `standard(runtime)` on every live tick. Trace and mod-test diffs
+name the matching rule for known conservation fields. See
+`docs/INVARIANTS.md`.
+
+The semantic catalog annotates the 24 controlled-boundary categories, both
+`symbols.map` files, the adapter/oracle/item/recipe/domain surfaces Worldline
+already executes, and the native autosave/chunk-save/compile-chunk symbols.
+Adapter manifests bind Worldline-owned sites to those roles and reject Aero
+types. A coverage gate and static role graph fail closed on unknown tokens
+or unmapped names. Trace diffs print `role=` for known fields. See
+`docs/SEMANTICS.md`.
+
 The gate then runs `smokes/lab-cycle`, restores deterministic checkpoints in
 fresh clients, compares hypotheses, exercises GUI selectors, and compiles and
 loads `probe-mod.jar`; its scope is defined in `smokes/lab-cycle/MAP.md`.
@@ -262,6 +293,7 @@ growing through new cohesive files and modules.
 
 See `ARCHITECTURE.md` for module boundaries and `AGENTS.md` for the behavioral
 and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
+`M2_CYCLE.md` is the controlled-runtime-boundary GO audit;
 `LAB_CYCLE.md` is the seven-step laboratory GO audit.
 `M3_CYCLE.md` is the v0.1.0 stable domain-API GO audit.
 `M4_CYCLE.md` is the v0.2.0 durable-snapshot GO audit.
@@ -280,6 +312,9 @@ and engineering constitution. `FIRST_CYCLE.md` is the v0.0.1 GO audit;
 `M17_CYCLE.md` is the v1.5.0 matrix GO and scheduler-promotion NO-GO audit.
 `M18_CYCLE.md` is the v1.6.0 save-attribution GO and historical-spike non-claim.
 `M19_CYCLE.md` is the v1.7.0 forced-autosave and opt-in save-cap GO audit.
+`GUI_CYCLE.md` is the inventory Game UI tree GO audit.
+`INVARIANTS_CYCLE.md` is the conservation-rule GO audit.
+`SEMANTICS_CYCLE.md` is the catalog and role-graph GO audit.
 
 After preparing the local runtime with the canonical smoke gate, replay a
 bundle with:

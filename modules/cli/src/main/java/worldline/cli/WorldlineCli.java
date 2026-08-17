@@ -10,6 +10,8 @@ import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import worldline.analysis.TraceDiff;
 import worldline.analysis.TraceRenderer;
+import worldline.invariants.InvariantFields;
+import worldline.semantics.SemanticFields;
 import worldline.mods.ModArtifact;
 import worldline.mods.ModLoader;
 import worldline.modtest.ModTestComparison;
@@ -54,6 +56,8 @@ public final class WorldlineCli {
                 return createScenario(arguments[2], Arrays.asList(arguments).subList(3, arguments.length), output);
             if (arguments.length == 3 && "scenario".equals(arguments[0])
                     && "inspect".equals(arguments[1])) return inspectScenario(arguments[2], output);
+            if (arguments.length >= 2 && "semantics".equals(arguments[0]))
+                return SemanticsCommand.run(arguments, output, error);
             return usage(error);
         } catch (IOException | ReflectiveOperationException | RuntimeException failure) {
             error.println("worldline command failed: " + failure.getMessage()); return 1;
@@ -84,7 +88,9 @@ public final class WorldlineCli {
     private static int diff(String left, String right, PrintStream output) throws IOException {
         TraceDiff difference = TraceDiff.compare(readTrace(left), readTrace(right));
         output.print("WORLDLINE_TRACE_DIFF=" + (difference.diverged() ? "DIVERGED\n" : "EQUAL\n"));
-        output.print(difference.render()); return difference.diverged() ? 3 : 0;
+        output.print(difference.render());
+        explain(difference, output);
+        return difference.diverged() ? 3 : 0;
     }
 
     private static CanonicalStateDocument readTrace(String path) throws IOException {
@@ -129,7 +135,9 @@ public final class WorldlineCli {
                 readModTest(leftPath), readModTest(rightPath));
         output.println("WORLDLINE_MOD_TEST_DIFF="
                 + (comparison.behaviorDiverged() ? "DIVERGED" : "EQUAL"));
-        output.print(comparison.render()); return comparison.behaviorDiverged() ? 3 : 0;
+        output.print(comparison.render());
+        explain(comparison.traceDiff(), output);
+        return comparison.behaviorDiverged() ? 3 : 0;
     }
 
     private static ModTestResult readModTest(String path) throws IOException {
@@ -172,7 +180,19 @@ public final class WorldlineCli {
         error.println("   or: worldline mod test record <mod.jar> <trace.wltrace> <result.wlmtest>");
         error.println("   or: worldline mod test diff <left.wlmtest> <right.wlmtest>");
         error.println("   or: worldline scenario create <output.wlscenario> [step ...]");
-        error.println("   or: worldline scenario inspect <scenario.wlscenario>"); return 2;
+        error.println("   or: worldline scenario inspect <scenario.wlscenario>");
+        error.println("   or: worldline semantics show");
+        error.println("   or: worldline semantics graph");
+        error.println("   or: worldline semantics category <name>");
+        error.println("   or: worldline semantics role <ROLE>");
+        error.println("   or: worldline semantics adapter [name]"); return 2;
+    }
+
+    private static void explain(TraceDiff difference, PrintStream output) {
+        String role = SemanticFields.role(difference.field());
+        if (!role.isEmpty()) output.print("role=" + role + "\n");
+        String rule = InvariantFields.rule(difference.field());
+        if (!rule.isEmpty()) output.print("invariant=" + rule + "\n");
     }
 
     private static void require(boolean condition, String message) {

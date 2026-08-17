@@ -13,12 +13,30 @@ public final class ScenarioMinimizer {
     public interface Evaluator { boolean preserves(Scenario candidate); }
 
     public static Result minimize(Scenario original, int maxEvaluations, Evaluator evaluator) {
-        if (original == null || evaluator == null) throw new NullPointerException("minimization input");
+        return minimize(original, maxEvaluations, evaluator, new java.util.function.Predicate<String>() {
+            @Override public boolean test(String step) { return false; }
+        });
+    }
+
+    public static Result minimize(Scenario original, int maxEvaluations, Evaluator evaluator,
+            java.util.function.Predicate<String> tryFirst) {
+        if (original == null || evaluator == null || tryFirst == null) {
+            throw new NullPointerException("minimization input");
+        }
         if (maxEvaluations <= 0) throw new IllegalArgumentException("evaluation budget must be positive");
         Session session = new Session(maxEvaluations, evaluator);
         Boolean initial = session.test(original);
         if (!Boolean.TRUE.equals(initial)) throw new IllegalArgumentException("original scenario fails predicate");
-        List<String> current = new ArrayList<>(original.steps()); int granularity = 2;
+        List<String> current = new ArrayList<String>(original.steps());
+        for (int index = 0; index < current.size();) {
+            if (!tryFirst.test(current.get(index))) { index++; continue; }
+            Scenario candidate = without(current, index, index + 1);
+            Boolean accepted = session.test(candidate);
+            if (accepted == null) return result(original, current, session, false);
+            if (accepted) current = new ArrayList<String>(candidate.steps());
+            else index++;
+        }
+        int granularity = 2;
         while (current.size() >= 2) {
             int chunk = (current.size() + granularity - 1) / granularity; boolean reduced = false;
             for (int start = 0; start < current.size(); start += chunk) {

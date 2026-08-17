@@ -2,19 +2,25 @@ package worldline.b173;
 
 import java.util.ArrayList;
 import java.util.List;
-import worldline.api.AutomatedMinecraftRuntime;
 import worldline.api.GamePlayer;
+import worldline.api.GameUi;
 import worldline.api.GameWorld;
+import worldline.api.InvariantMinecraftRuntime;
+import worldline.api.CauseDrop;
+import worldline.api.ItemCensusObserver;
+import worldline.api.ItemRecipe;
 import worldline.api.RuntimeState;
 import worldline.api.RuntimeSnapshot;
 import worldline.api.SnapshotMinecraftRuntime;
+import worldline.api.UiMinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
 
 /** Reusable controlled runtime backed by the mapped Beta 1.7.3 client. */
-public final class B173Runtime implements SnapshotMinecraftRuntime {
+public final class B173Runtime implements SnapshotMinecraftRuntime, UiMinecraftRuntime,
+        InvariantMinecraftRuntime {
     private final B173ClientBackend backend;
-    private final AutomatedMinecraftRuntime lifecycle;
+    private final ControlledMinecraftRuntime lifecycle;
     private final B173VirtualClock clock;
     private final B173VirtualFileSystem files;
     private final B173Scheduler scheduler;
@@ -22,7 +28,6 @@ public final class B173Runtime implements SnapshotMinecraftRuntime {
     private final long initialMillis;
     private final List<B173Action> actions = new ArrayList<>();
     private WorldSource source;
-    private final B173Gui gui = new B173Gui(this);
 
     B173Runtime(long seed, long initialMillis) {
         this.seed = seed;
@@ -51,6 +56,30 @@ public final class B173Runtime implements SnapshotMinecraftRuntime {
 
     @Override
     public GamePlayer player() { return lifecycle.player(); }
+
+    @Override
+    public GameUi ui() { return lifecycle.ui(); }
+
+    @Override
+    public void watch(ItemCensusObserver observer) { lifecycle.watch(observer); }
+
+    @Override
+    public List<ItemRecipe> recipes() { return B173Recipes.snapshot(); }
+
+    @Override
+    public List<CauseDrop> drops() { return B173Causes.withMobs(); }
+
+    @Override
+    public List<ItemRecipe> transforms() { return B173Transforms.swaps(); }
+
+    @Override
+    public List<CauseDrop> fluids() { return B173Transforms.fluids(); }
+
+    @Override
+    public List<worldline.api.FoodHeal> foods() { return B173Foods.snapshot(); }
+
+    @Override
+    public List<worldline.api.SpawnRule> spawns() { return B173Spawns.snapshot(); }
 
     @Override
     public void close() { lifecycle.close(); }
@@ -90,7 +119,7 @@ public final class B173Runtime implements SnapshotMinecraftRuntime {
 
     public boolean timerThreadAlive() { return backend.timerThreadAlive(); }
 
-    public B173Gui gui() { return gui; }
+    public B173Gui gui() { return (B173Gui) ui(); }
 
     public void installMod(B173Mod mod) {
         if (mod == null) throw new NullPointerException("mod");

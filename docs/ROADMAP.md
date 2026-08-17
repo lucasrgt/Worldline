@@ -6,7 +6,7 @@ Passing an experiment does not silently promote its API.
 | Stage | Objective | Current state |
 | --- | --- | --- |
 | v0.0.1 | Headless b1.7.3 boot, world load, one manual client tick, official oracle match | GO - stable milestone |
-| M2 | Virtual clock, input, RNG, filesystem, network, scheduler, and thread control | Experimental evidence passes |
+| M2 | Virtual clock, input, RNG, filesystem, network, scheduler, and thread control | GO - stable milestone |
 | v0.1.0 / M3 | Stable world, player, entity, and block automation API | GO - stable milestone |
 | v0.2.0 / M4 | Durable snapshot format and cross-process restore | GO - stable milestone |
 | v0.3.0 / M5 | Portable reproduction bundles and replay CLI | GO - stable milestone |
@@ -24,6 +24,9 @@ Passing an experiment does not silently promote its API.
 | v1.5.0 / M17 | Three-scenario scheduler hardening and upstream evaluation profile | GO - matrix complete; promotion NO-GO |
 | v1.6.0 / M18 | Save/GC/compile attribution of the historical random spike | GO - timeline colocated; spike NON-CLAIM |
 | v1.7.0 / M19 | Forced dirty-set autosave and opt-in one-chunk save cap | GO - synthetic hitch bounded; cap default-off |
+| GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
+| Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
+| Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
 
 ## Promotion rule
 

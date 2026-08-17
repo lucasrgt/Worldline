@@ -96,7 +96,8 @@ public final class ModCycle {
 
     private Result cli(Path jar) throws Exception {
         List<Path> path = Arrays.asList(product("cli"), product("reproduction"), product("api"),
-                product("trace"), product("mods"), product("analysis"));
+                product("invariants"), product("semantics"), product("trace"), product("mods"),
+                product("analysis"));
         return process(path, "worldline.cli.WorldlineCli", "mod", "inspect", jar.toString());
     }
 
