@@ -1,0 +1,18 @@
+schema = 1
+
+[storage]
+root = ".csm"
+
+[tools]
+enabled = [
+    "nya",
+    "rtw",
+    "wtw",
+    "nwc",
+]
+
+[instructions]
+files = ["AGENTS.md"]
+
+[workflow]
+proof = []
