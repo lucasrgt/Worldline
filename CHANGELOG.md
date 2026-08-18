@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.57.0 - M69 Named Peer Swing
+
+Status: GO for one isolated Packet18 request and named peer observation.
+
+- Added a cumulative peer-swing session without changing M66 attack semantics.
+- Froze the production Packet18 encoder as an exact six-byte message.
+- Correlated animation 1 to Packet20 identity after Packet5 sword bootstrap.
+- Repeated the official-server boundary and preserved clean persistence.
+
+The frozen M69 semantic SHA-256 is
+`4362b6b5b0cffbbf3429c6cfdad25ff3e077ed5be9a3f7e2f729f3806b9b69b3`.
+
 ## 1.56.0 - M68 Aero Multiplayer Login
 
 Status: GO for real StationAPI/Aero client and vanilla multiplayer composition.

@@ -654,3 +654,8 @@ M68 adds no product API. A test-only Gradle overlay drives the pinned real
 StationAPI/Aero client through vanilla `ConnectScreen`, records Packet1/13/51
 handler boundaries, and correlates subsequent renderer frames with Aero logs.
 All generated worlds, logs, and official artifacts remain outside the public tree.
+
+M69 keeps Packet18 in the modular combat boundary. The outbound channel emits
+one exact swing request, while the inbound tracker resolves the observed entity
+through the shared Packet20 identity registry. The typed API deliberately keeps
+request and observation separate because Packet18 carries no target or damage.

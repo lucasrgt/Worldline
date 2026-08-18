@@ -28,7 +28,15 @@ public final class DomainApiTest {
         RemoteArmorEquipmentTest.run();
         RemoteCombatTest.run();
         RemoteChestRetrievalTest.run();
+        peerSwingValuesAreExactAndFailClosed();
         System.out.println("DomainApiTest passed");
+    }
+
+    private static void peerSwingValuesAreExactAndFailClosed() {
+        equal(new RemoteSwingRequest("SwingActor69", 7), new RemoteSwingRequest("SwingActor69", 7), "swing request");
+        equal(new RemotePeerSwing("SwingActor69", 7), new RemotePeerSwing("SwingActor69", 7), "peer swing");
+        if (new RemotePeerSwing("SwingActor69", 7).animation() != 1) throw new AssertionError("swing animation drifted");
+        failure(() -> new RemoteSwingRequest("bad name", 7)); failure(() -> new RemotePeerSwing("peer", -1));
     }
 
     private static void correlatedRouteExecutionPreservesIdentity() {

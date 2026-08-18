@@ -73,6 +73,7 @@ Passing an experiment does not silently promote its API.
 | v1.54.0 / M66 | Bounded armored player combat and local health | GO - Packet7 correlates dual Packet38 evidence and victim Packet8 20 to 18 |
 | v1.55.0 / M67 | Exact single-chest retrieval and final persistence | GO - accepted actions move chest0 to personal36 and survive restart |
 | v1.56.0 / M68 | Real StationAPI/Aero client login and remote render composition | GO - Packet1/13/51 readiness precedes bounded frames and Aero logs |
+| v1.57.0 / M69 | Exact held-item swing request and named Packet18 peer observation | GO - production bytes and Packet20 identity qualify animation 1 without attack claims |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -84,9 +85,10 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.56.0 direction
+## Immediate post-v1.57.0 direction
 
-The next milestone can align the M66 combat seam with the now-qualified real
-client frame/Aero log boundary, without claiming causal spike attribution.
+The next milestone can compose the M66 combat seam, M68 real-client renderer,
+and M69 swing marker into a bounded Packet18-before-Packet38 Aero frame window,
+without claiming causal spike attribution or a performance difference.
 Generic combat, synchronized Aero server content, merging, shift clicks, and
 broad container automation remain outside the stable contract.

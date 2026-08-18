@@ -132,6 +132,10 @@ final class B173ItemAccess {
         return channel.attackPlayer(target); } catch (IOException error) { throw new IllegalStateException("combat attack failed", error); } }
     static worldline.api.RemoteIncomingHit awaitIncomingHit(B173PlayChannel channel, int health) { try {
         return channel.awaitIncomingHit(health); } catch (IOException error) { throw new IllegalStateException("incoming combat receive failed", error); } }
+    static worldline.api.RemoteSwingRequest swingHeldItem(B173PlayChannel channel) { try { return channel.swingHeldItem(); }
+        catch (IOException error) { throw new IllegalStateException("swing request failed", error); } }
+    static worldline.api.RemotePeerSwing awaitPeerSwing(B173PlayChannel channel, String username) { try { return channel.inbound().awaitPeerSwing(username); }
+        catch (IOException error) { throw new IllegalStateException("peer swing receive failed", error); } }
 
     static RemoteDroppedItem awaitDroppedItem(B173PlayChannel channel, RemoteItemStack expected) {
         try { return channel.inbound().awaitDroppedItem(expected); }

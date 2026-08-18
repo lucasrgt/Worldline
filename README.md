@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.56.0 - M68 Aero Multiplayer Login (GO)**.
+Current official milestone: **Worldline v1.57.0 - M69 Named Peer Swing (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -351,6 +351,11 @@ M68 drives the pinned real StationAPI/Aero client through vanilla multiplayer
 login, observes Packet1/13/51 readiness, renders bounded remote-world frames,
 and requires post-ready Aero logs before a clean disconnect. See
 `docs/M68_AERO_MULTIPLAYER_LOGIN.md`.
+
+M69 emits the exact authenticated Packet18 held-item swing boundary and
+correlates the resulting animation-1 observation to a Packet20-named peer. It
+does not treat the animation as an attack acknowledgment. See
+`docs/M69_PEER_SWING.md`.
 
 ## Verify
 

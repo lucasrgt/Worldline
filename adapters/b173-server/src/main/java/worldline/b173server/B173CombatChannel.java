@@ -3,8 +3,9 @@ package worldline.b173server;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import worldline.api.RemoteCombatStrike;
+import worldline.api.RemoteSwingRequest;
 
-/** Exact Packet7 diamond-sword named-player attack request. */
+/** Exact Packet7 attack and Packet18 held-item swing requests. */
 final class B173CombatChannel {
     private final DataOutputStream output; private final B173PlayInbound inbound;
     private final int localId; private final String localName;
@@ -17,4 +18,6 @@ final class B173CombatChannel {
         output.writeInt(target); output.writeByte(1); output.flush();
         return inbound.awaitCombatStrike();
     }
+    RemoteSwingRequest swing() throws IOException { B173CombatPacket.swing(output, localId);
+        output.flush(); return new RemoteSwingRequest(localName, localId); }
 }

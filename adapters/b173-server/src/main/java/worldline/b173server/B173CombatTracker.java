@@ -5,11 +5,11 @@ import java.io.IOException;
 import worldline.api.RemoteCombatStrike;
 import worldline.api.RemoteIncomingHit;
 
-/** Correlates fresh Packet38 hurt status with outgoing target or local Packet8 health. */
+/** Correlates Packet18 peer swings and fresh Packet38/8 combat evidence. */
 final class B173CombatTracker {
     private final B173EntityIdentityTracker identities; private final int localId; private final String localName;
-    private int health = Integer.MIN_VALUE, outgoingTarget = -1; private boolean localHurt;
-    private RemoteCombatStrike outgoing; private RemoteIncomingHit incoming;
+    private int health = Integer.MIN_VALUE, outgoingTarget = -1, expectedSwing = -1; private boolean localHurt;
+    private RemoteCombatStrike outgoing; private RemoteIncomingHit incoming; private worldline.api.RemotePeerSwing swing;
     B173CombatTracker(B173EntityIdentityTracker identities, int localId, String localName) {
         this.identities = identities; this.localId = localId; this.localName = localName; }
     void health(DataInputStream input) throws IOException {
@@ -26,6 +26,10 @@ final class B173CombatTracker {
         if (entityId == localId) { if (health != 20 || localHurt) throw new IOException("local hurt baseline drift");
             localHurt = true; }
     }
+    void animation(DataInputStream input) throws IOException { int entityId = input.readInt(), code = input.readByte();
+        if (entityId != expectedSwing) return; if (code != 1 || swing != null) throw new IOException("peer swing drift");
+        String name = identities.username(entityId); if (name == null) throw new IOException("peer swing identity absent");
+        swing = new worldline.api.RemotePeerSwing(name, entityId); expectedSwing = -1; }
     void beginOutgoing(int target) { if (target < 0 || outgoingTarget >= 0 || outgoing != null)
         throw new IllegalStateException("outgoing combat request pending"); outgoingTarget = target; }
     RemoteCombatStrike takeOutgoing() { RemoteCombatStrike value = outgoing; outgoing = null; return value; }
@@ -33,4 +37,7 @@ final class B173CombatTracker {
         if (incoming.healthAfter() != expectedHealth) throw new IOException("incoming health expectation drift");
         RemoteIncomingHit value = incoming; incoming = null; return value; }
     int entityId(String username) { return identities.entityId(username); }
+    void expectSwing(String username) { int id = identities.entityId(username); if (id < 0 || expectedSwing >= 0 || swing != null)
+        throw new IllegalStateException("peer swing expectation invalid"); expectedSwing = id; }
+    worldline.api.RemotePeerSwing takeSwing() { worldline.api.RemotePeerSwing value = swing; swing = null; return value; }
 }
