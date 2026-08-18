@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.69.0 - M81 Natural Multipage Rebuild
+
+Status: GO for one server-authored two-cell change spanning two natural Aero
+pages in the synchronized sixteen-identity scene.
+
+- Fixed the same-plan fixture across Z=31/32 and removed exact indices zero and
+  eight after retained record 300 with one typed request and acknowledgement.
+- Proved both client blocks became air, membership `16 -> 14`, exactly two
+  page rebuilds, two cached pages/calls, two flush calls, and zero fallback.
+- Cross-bound a 40-byte request/event artifact to complete M74 and M78 records
+  across two fresh same-plan/nonce replicas.
+- Kept arbitrary topology, additions, repeated/dense waves, causal cost,
+  regression, and historical lag outside the claim.
+
+The frozen M81 semantic SHA-256 is
+`f30116757d3fcf070289bdb013181744abdaf8da806426cc2efc76128484bc6d`.
+
 ## 1.68.0 - M80 Natural Membership Rebuild
 
 Status: GO for one server-authored content removal and the corresponding real

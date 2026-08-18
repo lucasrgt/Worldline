@@ -744,3 +744,10 @@ remove one exact synchronized cell. Client primitive state binds the exact ACK,
 air block, first fifteen-member renderer record, and one natural page rebuild;
 a 36-byte sidecar is written only after seal. A stale legacy BE lookup is not
 treated as live renderer membership and remains outside the claim.
+
+M81 adds no public API or product adapter behavior and leaves M74-M80 frozen.
+Its smoke-owned message boundary validates and removes two exact synchronized
+cells positioned on opposite sides of a natural page boundary. Client state
+binds one ACK, two air blocks, the first fourteen-member record, and exactly
+two page rebuilds into a 40-byte post-seal sidecar. The common/server closure
+remains free of Aero and client imports; timings remain descriptive.

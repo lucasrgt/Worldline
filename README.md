@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.68.0 - M80 Natural Membership Rebuild (GO)**.
+Current official milestone: **Worldline v1.69.0 - M81 Natural Multipage Rebuild (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -421,6 +421,12 @@ and the first altered record carries one natural page rebuild with zero direct
 fallback. Request latency and timings remain descriptive; generic invalidation
 and stale BE cleanup are not claimed. See
 `docs/M80_NATURAL_MEMBERSHIP_REBUILD.md`.
+
+M81 moves the fixed scene across a natural page boundary and removes exact
+indices zero and eight in one acknowledged request. Both client blocks become
+air, membership changes `16 -> 14`, and the first altered record carries two
+page rebuilds with two cached pages and zero fallback. See
+`docs/M81_NATURAL_MULTIPAGE_REBUILD.md`.
 
 ## Verify
 
