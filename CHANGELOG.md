@@ -4,6 +4,19 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.60.0 - M72 Aero Server Content
+
+Status: GO for one exact server-authored custom block/entity rendered by Aero.
+
+- Added a server-safe StationAPI content closure with no Aero/client imports.
+- Sent distinct server-only state nonces through an explicit M72 content message.
+- Bound identifier, raw ID, coordinates, block-entity type, and nonce client-side.
+- Invoked the real pinned Aero at-rest renderer and completed twenty later frames.
+- Repeated the boundary in two fresh modded server/client/worktree sets.
+
+The frozen M72 semantic SHA-256 is
+`6dff186ed904bdce57466038dd32a9824888d6de7ddb1a20041663cb8cec0501`.
+
 ## 1.59.0 - M71 Paired Aero Window
 
 Status: GO for balanced paired acquisition and descriptive selected-row summaries.

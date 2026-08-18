@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.59.0 - M71 Paired Aero Window (GO)**.
+Current official milestone: **Worldline v1.60.0 - M72 Aero Server Content (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -366,6 +366,12 @@ M71 repeats matched fresh control/event arms around one exact Packet3 anchor,
 balances order across four pairs, and reports only descriptive distributions of
 logger-selected Aero rows and pair deltas. It makes no causal, significance, or
 performance-regression claim. See `docs/M71_PAIRED_AERO_WINDOW.md`.
+
+M72 loads one server-safe StationAPI content definition without Aero on the
+server, transfers one server-only block-entity nonce through an explicit content
+message, and renders the exact remote block through a real pinned Aero client.
+It qualifies one fixture, not generic synchronization or performance. See
+`docs/M72_AERO_SERVER_CONTENT.md`.
 
 ## Verify
 

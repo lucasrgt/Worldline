@@ -674,3 +674,10 @@ it never reads the asynchronously buffered Aero file in-process. The runner
 segments logger stdout after exit, excludes WorldFlush, strictly parses selected
 frame rows, confirms them against the normally flushed file, and emits dynamic
 descriptive per-arm and per-pair summaries without an inferential verdict.
+
+M72 also adds no public API or adapter behavior. Its smoke-owned universal mod
+keeps common/server classes free of Aero and client imports, while a client-only
+entrypoint owns the Aero renderer. Separate StationAPI server/client worktrees
+load the same content definition; an explicit coordinate-and-nonce message
+bridges the plain block entity because generic NBT update synchronization is not
+claimed. Generated runtimes and content artifacts remain outside the public tree.

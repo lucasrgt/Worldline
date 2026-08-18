@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "worldline-m72-content",
+  "version": "1.0.0",
+  "name": "Worldline M72 Split Content Probe",
+  "environment": "*",
+  "mixins": ["worldline-m72.mixins.json"],
+  "entrypoints": {
+    "stationapi:event_bus": ["worldline.m72.WorldlineContentMod"],
+    "stationapi:event_bus_server": ["worldline.m72.WorldlineContentServer"],
+    "stationapi:event_bus_client": ["worldline.m72.client.WorldlineContentClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "1.0.0-beta.7.3",
+    "stationapi": "*"
+  },
+  "suggests": {
+    "aero-model-lib": "*"
+  }
+}
