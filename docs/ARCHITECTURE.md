@@ -458,6 +458,12 @@ declares its nine matrix slots while the result slot makes the combined player
 tail begin at 10. Packet104 shape checks, tail reconciliation, Packet103 reverse
 mapping, and close safety all consume that single derived layout.
 
+M63 adds a button field to adapter-private container steps and uses it only in
+one bounded workbench workflow. A left-take followed by three right placements
+commits the active view, canonical personal view, and cursor after each ACK.
+SlotCrafting results remain explicitly modeled until the next output click can
+compare the final slabs prediction with the official server.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

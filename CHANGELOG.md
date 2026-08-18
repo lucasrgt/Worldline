@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.51.0 - M63 Workbench Preparation
+
+Status: GO for bounded three-wide workbench matrix preparation.
+
+- Added adapter-owned left-take and right-place Packet102 actions.
+- Correlated the modeled row and cursor count transitions to each accepted ACK.
+- Kept pressure-plate/slabs result values explicitly modeled until M64.
+- Rejected Packet101 close while workbench result or matrix remains occupied.
+
+The frozen M63 semantic SHA-256 is
+`9fd2fb1869b8221cc5e2c9173a548224fb65ca6c6dc9c37858eeb88cd24bf289`.
+
 ## 1.50.0 - M62 Workbench Window
 
 Status: GO for typed workbench open/read and safe empty-grid close.

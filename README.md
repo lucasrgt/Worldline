@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.50.0 - M62 Workbench Window (GO)**.
+Current official milestone: **Worldline v1.51.0 - M63 Workbench Preparation (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -323,6 +323,11 @@ M62 opens the official workbench as a typed read-only window and preserves its
 asymmetric wire layout: Packet100 declares nine matrix slots while Packet104
 contains result, matrix, and player tail for 46 total slots. See
 `docs/M62_WORKBENCH_WINDOW.md`.
+
+M63 left-takes three planks and right-places one into each slot of the first
+workbench row through four accepted transactions. It models the recipe result
+locally and rejects close while the grid remains occupied. See
+`docs/M63_WORKBENCH_PREPARATION.md`.
 
 ## Verify
 
