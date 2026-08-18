@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.63.0 - M75 Aero Exposure Ladder (GO)**.
+Current official milestone: **Worldline v1.64.0 - M76 Renderer Decomposition (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -390,6 +390,12 @@ then forwards nested subsets of `0/1/4/16` calls into Aero under two mirrored
 fresh ladders. It qualifies exact exposure acquisition and descriptive census
 summaries, not a monotonic, causal, or density-response result. See
 `docs/M75_AERO_DENSITY_LADDER.md`.
+
+M76 keeps the sixteen-entity fixture constant and splits it into renderer
+registration removed, renderer body without Aero, and renderer body with Aero.
+Exact `0/0`, `16/0`, and `16/16` per-record call pairs qualify the structural
+decomposition. Mixed mirrored timings do not establish stable stage cost or
+causal attribution. See `docs/M76_RENDERER_DECOMPOSITION.md`.
 
 ## Verify
 

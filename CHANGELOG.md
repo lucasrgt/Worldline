@@ -4,6 +4,21 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.64.0 - M76 Renderer Decomposition
+
+Status: GO for exact complete-census acquisition across renderer-absent,
+renderer-only, and renderer-plus-Aero treatments over one constant scene.
+
+- Removed the renderer registration only after readiness for the `0/0` arm.
+- Preserved sixteen renderer calls while independently suppressing or forwarding
+  all sixteen nested Aero calls for exact `16/0` and `16/16` records.
+- Fixed and runtime-checked vanilla max framerate plus disabled Aero pacing.
+- Ran two fresh mirrored triplets and reported mixed descriptive stage deltas
+  without a stable-cost, causal, regression, or historical-lag verdict.
+
+The frozen M76 semantic SHA-256 is
+`973ae93f8127bae80ceeddc372713f5968213aa1f2fb3a8978c58af61439ac40`.
+
 ## 1.63.0 - M75 Aero Exposure Ladder
 
 Status: GO for exact complete-census acquisition at nested Aero call levels

@@ -705,3 +705,11 @@ overlay compiles the M74 fixture unchanged, then redirects only the client-side
 camera, renderer dispatch, and census remain constant. A separate runner owns
 fresh mirrored ladders, exact per-record treatment validation, and descriptive
 level summaries; all artifacts remain ignored evidence.
+
+M76 adds no public API or product adapter behavior and leaves M74/M75 frozen.
+Its client overlay removes one exact renderer mapping or redirects the nested
+Aero call while retaining the same synchronized sixteen-cell fixture. Treatment
+setup is excluded before the retained baseline; vanilla max framerate and Aero
+pacer-off state are runtime gates. A separate runner owns fresh mirrored
+triplets, exact per-record `0/0`, `16/0`, or `16/16` validation, and descriptive
+stage deltas. Mixed timing is evidence, not stage-cost attribution.
