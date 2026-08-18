@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import worldline.api.RemoteChestTransfer;
+import worldline.api.RemoteChestRetrieval;
 import worldline.api.RemoteContainerWindow;
 import worldline.api.RemoteFurnaceLoad;
 import worldline.api.RemoteFurnaceExtraction;
@@ -29,6 +30,25 @@ final class B173ContainerWindowChannel {
         prepare(before, 2); Move move = move(personalSlot, chestSlot);
         return new RemoteChestTransfer(personalSlot, chestSlot, move.take.action, move.put.action,
                 move.stack, before, move.put.after);
+    }
+
+    RemoteChestRetrieval retrieve(int chestSlot, int personalSlot) throws IOException {
+        RemoteContainerWindow active = inbound.activeWindow(); RemoteInventoryView before = active.inventory();
+        RemoteInventoryView personalBefore = inbound.inventory(); int combined = personalSlot + 18;
+        RemoteItemStack stone = new RemoteItemStack(1, 1, 0);
+        if (active.descriptor().kind() != RemoteWindowKind.CHEST || before.size() != 63
+                || chestSlot < 0 || chestSlot > 26 || personalSlot < 9 || personalSlot > 44
+                || before.slot(chestSlot).empty() || !before.slot(chestSlot).item().equals(stone)
+                || !before.slot(combined).empty() || !personalBefore.slot(personalSlot).empty()
+                || !inbound.cursorObserved() || inbound.cursor() != null)
+            throw new IllegalStateException("invalid chest retrieval boundary");
+        prepare(before, 2); RemoteInventoryView taken = replace(before, chestSlot, null);
+        B173ContainerStep take = step(chestSlot, stone, taken, personalBefore, personalBefore, stone);
+        RemoteInventoryView stored = replace(take.after, combined, stone);
+        RemoteInventoryView personalStored = replace(personalBefore, personalSlot, stone);
+        B173ContainerStep put = step(combined, null, stored, personalBefore, personalStored, null);
+        return new RemoteChestRetrieval(chestSlot, personalSlot, take.action, put.action, stone,
+                before, put.after, personalBefore, personalStored);
     }
 
     RemoteFurnaceLoad loadFurnace(int inputPersonalSlot, int fuelPersonalSlot) throws IOException {

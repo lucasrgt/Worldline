@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.54.0 - M66 Player Combat (GO)**.
+Current official milestone: **Worldline v1.55.0 - M67 Chest Retrieval (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -341,6 +341,11 @@ and proves local and peer state after restart. See `docs/M65_PEER_ARMOR.md`.
 M66 composes that armor with one named diamond-sword PvP strike, separates the
 attacker's Packet38 proof from the victim's Packet38/Packet8 health transition,
 and persists health 18. See `docs/M66_PLAYER_COMBAT.md`.
+
+M67 reopens an M59 chest, retrieves exact stone through two accepted active-
+container actions, atomically updates combined and personal views, and proves
+empty chest plus player persistence after restart. See
+`docs/M67_CHEST_RETRIEVAL.md`.
 
 ## Verify
 

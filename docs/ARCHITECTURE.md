@@ -483,6 +483,12 @@ the connection's local entity ID plus the resolved target ID. Attacker and
 victim streams remain distinct evidence: fresh target Packet38 on one side,
 ordered local Packet38 then Packet8 on the other.
 
+M67 reuses the active-container transaction sequencer in the reverse direction.
+The chest source is adapter-owned, the destination is mapped through the single-
+chest player tail, and matching Packet106 commits the active view, canonical
+personal view, and cursor together. Restart evidence keeps persistence outside
+the public value contract.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

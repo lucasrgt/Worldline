@@ -56,6 +56,12 @@ final class B173ItemAccess {
         catch (IOException error) { throw new IllegalStateException("chest transfer failed", error); }
     }
 
+    static worldline.api.RemoteChestRetrieval retrieveFromOpenChest(B173PlayChannel channel,
+            int chestSlot, int personalSlot) {
+        try { return channel.retrieveFromOpenChest(chestSlot, personalSlot); }
+        catch (IOException error) { throw new IllegalStateException("chest retrieval failed", error); }
+    }
+
     static worldline.api.RemoteContainerWindow openFurnace(B173PlayChannel channel,
             BlockPosition position, BlockFace face) {
         try { return channel.openFurnace(position, face); }

@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.55.0 - M67 Chest Retrieval
+
+Status: GO for exact single-chest retrieval and final-state persistence.
+
+- Added a bounded chest-to-player retrieval contract for exact stone.
+- Committed active63, personal45, and cursor state only on matching Packet106.
+- Reopened the stored chest before retrieval and closed through M58 proofs.
+- Proved empty chest0 and exact personal36 stone after a clean restart.
+
+The frozen M67 semantic SHA-256 is
+`cbeb29b97d06faa167bb524366feb7b9d1a92fa03edeb432470d7f1ff0a7b469`.
+
 ## 1.54.0 - M66 Player Combat
 
 Status: GO for one bounded armored PvP strike.
