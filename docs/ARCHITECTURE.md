@@ -861,3 +861,10 @@ record gate requires all four pages to rebuild and the cumulative eviction
 counter to advance by four on every retained record, with no direct fallback.
 This removes M96's equal-age tie mode for the exact fixture. Common/server code
 remains Aero-free.
+
+M98 adds no public API or product adapter behavior and leaves M74-M97 frozen.
+It passes literal cache maximum zero into the client runtime while retaining
+M97's expected observed cache size one. The pinned eviction loop cannot remove
+its protected freshly compiled key when no other victim exists, so each later
+compile displaces the prior page and preserves a one-page floor. Common/server
+code remains Aero-free.

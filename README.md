@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.85.0 - M97 Page-Capacity-One Thrash (GO)**.
+Current official milestone: **Worldline v1.86.0 - M98 Configured-Zero Protected Cache Floor (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -502,6 +502,10 @@ capacity-eviction delta exactly to the rebuild count. See
 M97 lowers the same fixture to one cache entry. Every retained record rebuilds
 and evicts all four pages, with zero direct fallback and no capacity-two tie
 mode. See `docs/M97_PAGE_CAPACITY_ONE_THRASH.md`.
+
+M98 sets the configured maximum to zero but proves the protected compiled page
+still leaves an effective cache floor of one; all four pages rebuild/evict per
+record. See `docs/M98_ZERO_CAPACITY_FLOOR.md`.
 
 ## Verify
 

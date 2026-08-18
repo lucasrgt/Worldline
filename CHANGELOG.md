@@ -4,6 +4,20 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.86.0 - M98 Configured-Zero Protected Cache Floor
+
+Status: GO for the protected one-page floor under literal max-cache zero.
+
+- Froze `maxCachedPages=0` with TTL 100000 and the exact four-page fixture.
+- Proved every retained record nevertheless had cache1, pageCalls4, direct0,
+  rebuild4, and capacity-eviction delta four.
+- Retained 4133/3991 complete records with zero rebuild3 records.
+- Documented that protected-key eviction prevents zero from disabling paging
+  or producing an empty cache in this path.
+
+The frozen M98 semantic SHA-256 is
+`0da3de05b8d5c493b974e04eaf1767e07f54b087f387badfdaf5dd48b6f1bb31`.
+
 ## 1.85.0 - M97 Page-Capacity-One Thrash
 
 Status: GO for exact all-page rebuild/eviction behavior under a one-entry Aero

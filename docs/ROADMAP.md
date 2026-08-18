@@ -102,6 +102,7 @@ Passing an experiment does not silently promote its API.
 | v1.83.0 / M95 | Four-page capacity-three cache thrash | GO - every retained record keeps cache3 and rebuilds/evicts exactly two pages |
 | v1.84.0 / M96 | Four-page capacity-two bounded thrash | GO - rebuild mode 3 or 4 with exact per-record eviction coupling |
 | v1.85.0 / M97 | Four-page capacity-one thrash | GO - every retained record rebuilds and evicts all four pages |
+| v1.86.0 / M98 | Configured-zero protected cache floor | GO - literal max0 retains one protected page and rebuilds/evicts four per record |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -113,13 +114,13 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.85.0 direction
+## Immediate post-v1.86.0 direction
 
-M97 lowers the same four requested keys to capacity one and proves all four are
-rebuilt/evicted every retained record. The 4/3/2/1 cache points are now
-structurally qualified for this exact scene, including M96's bounded tie mode.
-Other capacities/topologies, exhaustive hash outcomes, concurrency,
-merge/repacking, and uninstrumented cost remain outside scope. M71-M97 do not
-establish causal spike attribution.
+M98 proves literal max-cache zero has an effective protected floor of one and
+does not disable paging. The configured 4/3/2/1/0 points are now structurally
+qualified for this exact scene, including M96's bounded tie mode. Unlimited
+cache, alternative disabling controls, other topologies, exhaustive hash
+outcomes, concurrency, merge/repacking, and uninstrumented cost remain outside
+scope. M71-M98 do not establish causal spike attribution.
 Generic synchronization, persistence, multiple clients, merging, shift clicks,
 and broad automation remain outside the stable contract.
