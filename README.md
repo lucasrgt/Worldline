@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.72.0 - M84 Four-Page Topology Contrast (GO)**.
+Current official milestone: **Worldline v1.73.0 - M85 Natural Membership Recovery (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -445,6 +445,11 @@ cached pages while preserving membership thirteen, three cached pages/page
 calls, one singleton direct fallback, and two flush calls. Event rebuilds are
 exactly one versus three; timings remain descriptive. See
 `docs/M84_FOUR_PAGE_TOPOLOGY_CONTRAST.md`.
+
+M85 removes one exact synchronized cell and restores that same server-authored
+identity after thirty retained records. The topology moves from four cached
+pages to three cached pages plus one direct fallback, then recovers four cached
+pages with exactly one rebuild. See `docs/M85_NATURAL_MEMBERSHIP_RECOVERY.md`.
 
 ## Verify
 

@@ -771,3 +771,11 @@ four-page-key scene. The client-only overlay preserves three cached batch pages
 plus one singleton direct fallback in both arms, requires ACK and three air
 blocks, and binds one-versus-three rebuild records to distinct 44-byte
 post-seal artifacts. The common/server closure remains Aero-free.
+
+M85 adds no public API or product adapter behavior and leaves M74-M84 frozen.
+Its server-safe two-phase handler validates one exact removal and restoration
+at the same coordinate. A distinct restore-state message buffers the original
+derived nonce until the flattened block update is visible client-side. The
+client overlay binds `16 -> 15 -> 16` membership, cached-page/direct-fallback
+transitions, and the single restoration rebuild to a fixed 52-byte post-seal
+artifact. The common/server closure remains Aero-free.

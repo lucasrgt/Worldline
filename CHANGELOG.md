@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.73.0 - M85 Natural Membership Recovery
+
+Status: GO for one exact natural remove-then-restore sequence over the same
+server-authored synchronized Aero cell.
+
+- Removed cell index zero after retained record 300, with strict block, BE,
+  root nonce, derived nonce, server ACK, and client air-block validation.
+- Restored the same cell after thirty retained records with a dedicated
+  buffered state packet and exact block-entity/nonce convergence.
+- Proved membership `16 -> 15 -> 16`, page calls `4 -> 3 -> 4`, direct fallback
+  and render/list calls `0 -> 1 -> 0`, and one rebuild only at restoration.
+- Bound both request/event pairs to a 52-byte sidecar and complete M74/M78
+  records in two fresh same-plan replicas; timing remains descriptive.
+
+The frozen M85 semantic SHA-256 is
+`6afe38b10186f67d95eef5d1a1beca81bd168417d7d32d3579dfd654aae0445b`.
+
 ## 1.72.0 - M84 Four-Page Topology Contrast
 
 Status: GO for a constant-three-member one-page versus three-page structural
