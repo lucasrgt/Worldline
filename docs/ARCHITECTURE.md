@@ -840,3 +840,10 @@ target cache entry, then restores one member directly and recompiles at two.
 The 184-byte sidecar binds the expiry record/counters and twelve transitions.
 High-memory, explicit-TTL, and max-cache eviction paths remain outside scope;
 common/server code remains Aero-free.
+
+M95 adds no public API or product adapter behavior and leaves M74-M94 frozen.
+It reuses M78's exact four-page scene under a three-entry client cache, with a
+long TTL that excludes expiry. A client-only overlay records cumulative
+capacity evictions beside the existing page state and timing spans. Complete
+records require two rebuilds and two new evictions per frame, three resident
+pages, and zero direct fallback. Common/server code remains Aero-free.

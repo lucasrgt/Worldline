@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.82.0 - M94 Default-TTL Page Recovery (GO)**.
+Current official milestone: **Worldline v1.83.0 - M95 Page-Capacity Thrash (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -488,6 +488,11 @@ See `docs/M93_FULL_PAGE_DEPLETION_RECOVERY.md`.
 M94 leaves the empty target page idle under Aero's normal default 600-frame
 TTL, proves its cache expiration, then restores the page through direct-one
 and rebuilt-two-member states. See `docs/M94_DEFAULT_TTL_PAGE_RECOVERY.md`.
+
+M95 constrains M78's exact four requested pages to a three-entry cache. Every
+retained record rebuilds and evicts exactly two pages while preserving sixteen
+enqueues, four page calls, and zero direct fallback. See
+`docs/M95_PAGE_CAPACITY_THRASH.md`.
 
 ## Verify
 

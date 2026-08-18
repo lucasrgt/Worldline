@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.83.0 - M95 Page-Capacity Thrash
+
+Status: GO for the exact four-page fixture under a three-entry Aero page cache.
+
+- Froze cache capacity three, page TTL 100000, rebuild budget eight, and the
+  existing fixed sixteen-cell/four-page scene.
+- Proved every retained record had cache3, pageCalls4, direct0, rebuild2, and
+  exactly two new capacity evictions.
+- Bound cumulative evictions and renderer/enqueue/flush spans to aligned
+  56-byte records and reparsed every complete M74/M95 record in two replicas.
+- Observed 5565/5549 samples with eviction ranges 5..11133 and 5..11101;
+  timing values remain descriptive.
+
+The frozen M95 semantic SHA-256 is
+`4792da7a14435f7c4abeb761e4b22021b7afe0dc617b33422afba4d087035fa5`.
+
 ## 1.82.0 - M94 Default-TTL Page Recovery
 
 Status: GO for default-TTL expiration and reverse recovery of M93's exact
