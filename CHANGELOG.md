@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.62.0 - M74 Complete Aero Census
+
+Status: GO for bounded complete renderer-interval acquisition over the paired
+zero-versus-sixteen Aero-content fixture.
+
+- Added a fixed-capacity primitive HEAD-to-HEAD interval recorder after exact
+  fixture readiness, without retained per-sample allocation or I/O.
+- Disabled the selective Aero logger and reset pinned at-rest counters through
+  a test-only invoker at each measured renderer HEAD.
+- Wrote one versioned binary artifact only after sealing and reparsed every
+  record, aggregate, treatment state, plan, and nonce fail closed.
+- Reported whole-census summaries and pair deltas descriptively, without a
+  causal, inferential, regression, density, or historical-lag verdict.
+
+The frozen M74 semantic SHA-256 is
+`2cc4533688aa06ba1d69309639c36e16688b09eb4deeeb27d044277550d2d1a7`.
+
 ## 1.61.0 - M73 Paired Aero Content
 
 Status: GO for balanced absent/present acquisition of sixteen synchronized Aero

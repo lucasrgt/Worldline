@@ -691,3 +691,10 @@ The runner owns fresh StationAPI server/client worktrees,
 balanced order, async log segmentation, strict structural treatment checks, and
 descriptive summaries. The server closure remains free of Aero/client/LWJGL
 imports.
+
+M74 adds no public API or product adapter behavior. Its isolated smoke reuses
+the tracked paired content protocol but disables the selective Aero logger and
+records complete renderer HEAD-to-HEAD intervals in preallocated primitive
+arrays. A test-only invoker resets pinned at-rest counters independently of
+logger/Mixin order. Binary serialization and typed parsing occur only after the
+measurement bracket seals; generated artifacts stay outside the public tree.

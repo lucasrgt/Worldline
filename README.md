@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.61.0 - M73 Paired Aero Content (GO)**.
+Current official milestone: **Worldline v1.62.0 - M74 Complete Aero Census (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -378,6 +378,12 @@ pairs. The present arm synchronizes and renders sixteen exact instances while
 the absent arm preserves the same plan and trigger with zero mutations. A
 tracked-plan acknowledgement replaces timing-only placement readiness. Dynamic
 row summaries remain descriptive only. See `docs/M73_PAIRED_AERO_CONTENT.md`.
+
+M74 keeps the same paired structural fixture but replaces selected logger rows
+with a preallocated in-memory census of every complete renderer interval in the
+bounded bracket. Binary artifacts are flushed and strictly parsed only after
+measurement; summaries and pair deltas remain descriptive. See
+`docs/M74_COMPLETE_AERO_CENSUS.md`.
 
 ## Verify
 
