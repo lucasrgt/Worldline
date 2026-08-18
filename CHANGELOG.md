@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.70.0 - M82 Natural Wave Ladder
+
+Status: GO for a three-arm structural ladder over one fixed two-page Aero
+scene, without a performance or dose-response claim.
+
+- Ran fresh target-count arms 1, 2, and 4 with exact balanced target sets,
+  server validation, acknowledgements, and client air-block oracles.
+- Proved membership `15/14/12`, event rebuilds `1/2/2`, two cached pages/calls,
+  two flush calls, and zero fallback.
+- Bound each arm to a 44-byte post-seal sidecar and complete M74/M78 records.
+- Kept additive cost, arbitrary topology/cardinality, causality, regression,
+  improvement, inference, and historical lag outside the claim.
+
+The frozen M82 semantic SHA-256 is
+`2727138a7c9b2eb9e38b7a40a9ae8518a3c3c7b0739c188d2ae152edbbb47bab`.
+
 ## 1.69.0 - M81 Natural Multipage Rebuild
 
 Status: GO for one server-authored two-cell change spanning two natural Aero

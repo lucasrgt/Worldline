@@ -751,3 +751,10 @@ cells positioned on opposite sides of a natural page boundary. Client state
 binds one ACK, two air blocks, the first fourteen-member record, and exactly
 two page rebuilds into a 40-byte post-seal sidecar. The common/server closure
 remains free of Aero and client imports; timings remain descriptive.
+
+M82 adds no public API or product adapter behavior and leaves M74-M81 frozen.
+A server-safe message handler validates three exact target-set variants while
+the client-only overlay records one reduced-membership transition per fresh
+arm. Fixed 44-byte sidecars bind cardinality and expected rebuild count to the
+M74/M78 artifacts. A smoke-local camera normalization removes legacy input
+quantization before the inherited strict pose gate; no product code changes.
