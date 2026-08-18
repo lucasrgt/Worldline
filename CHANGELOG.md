@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.74.0 - M86 Repeated Membership Recovery
+
+Status: GO for two generation-bound remove/restore cycles over the same exact
+server-authored synchronized Aero cell.
+
+- Preserved M85's seed, plan, nonce, camera, cache, and recording window while
+  adding generations one and two to requests, ACKs, and restore state.
+- Proved membership `16 -> 15 -> 16 -> 15 -> 16`, the same three-page plus one
+  fallback topology in both removed intervals, and one rebuild at each restore.
+- Rejected duplicate, skipped, reordered, cross-generation, wrong-coordinate,
+  and wrong-nonce protocol state.
+- Bound four request/event pairs to a 60-byte sidecar and reparsed topology from
+  the corresponding complete M74/M78 records in two fresh replicas.
+
+The frozen M86 semantic SHA-256 is
+`841b311c16d11cbbe669756fd0fc020c4371b650ad9c185d8ab717c7217abc44`.
+
 ## 1.73.0 - M85 Natural Membership Recovery
 
 Status: GO for one exact natural remove-then-restore sequence over the same

@@ -779,3 +779,11 @@ derived nonce until the flattened block update is visible client-side. The
 client overlay binds `16 -> 15 -> 16` membership, cached-page/direct-fallback
 transitions, and the single restoration rebuild to a fixed 52-byte post-seal
 artifact. The common/server closure remains Aero-free.
+
+M86 adds no public API or product adapter behavior and leaves M74-M85 frozen.
+Its common protocol adds an exact generation and operation to same-cell
+remove/restore requests, ACKs, and restore-state delivery. Primitive client
+state rejects duplicate, skipped, reordered, cross-generation, coordinate, and
+nonce drift. A fixed 60-byte post-seal sidecar binds four request/event pairs;
+complete M74/M78 records remain authoritative for topology and rebuilds. The
+common/server closure remains Aero-free.

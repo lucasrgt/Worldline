@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.73.0 - M85 Natural Membership Recovery (GO)**.
+Current official milestone: **Worldline v1.74.0 - M86 Repeated Membership Recovery (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -450,6 +450,11 @@ M85 removes one exact synchronized cell and restores that same server-authored
 identity after thirty retained records. The topology moves from four cached
 pages to three cached pages plus one direct fallback, then recovers four cached
 pages with exactly one rebuild. See `docs/M85_NATURAL_MEMBERSHIP_RECOVERY.md`.
+
+M86 repeats that same-cell recovery with two explicit generations. Four typed
+requests prove `16 -> 15 -> 16 -> 15 -> 16`, the same fallback topology during
+both removals, and one rebuild at each restoration. See
+`docs/M86_REPEATED_MEMBERSHIP_RECOVERY.md`.
 
 ## Verify
 
