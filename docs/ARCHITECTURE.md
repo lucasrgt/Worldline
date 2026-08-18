@@ -464,6 +464,12 @@ commits the active view, canonical personal view, and cursor after each ACK.
 SlotCrafting results remain explicitly modeled until the next output click can
 compare the final slabs prediction with the official server.
 
+M64 extracts that workflow into a dedicated epoch-bound workbench channel.
+Output action 5 requires the exact slabs return and crafted-stat side effect
+before atomically clearing result/matrix; action 6 stores into both combined and
+canonical personal views. Empty owned state then composes with the existing
+safe-close proof and restart oracle.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

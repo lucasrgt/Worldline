@@ -74,6 +74,11 @@ final class B173ItemAccess {
         catch (IOException error) { throw new IllegalStateException("workbench preparation failed", error); }
     }
 
+    static worldline.api.RemoteWorkbenchOutput takeWorkbenchSlabs(B173PlayChannel channel, int personalSlot) {
+        try { return channel.takeWorkbenchSlabs(personalSlot); }
+        catch (IOException error) { throw new IllegalStateException("workbench output failed", error); }
+    }
+
     static worldline.api.RemoteFurnaceLoad loadFurnace(B173PlayChannel channel, int inputSlot, int fuelSlot) {
         try { return channel.loadFurnace(inputSlot, fuelSlot); }
         catch (IOException error) { throw new IllegalStateException("furnace load failed", error); }

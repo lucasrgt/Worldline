@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.52.0 - M64 Workbench Output
+
+Status: GO for exact workbench output, consumption, and persistence.
+
+- Confirmed M63's modeled result with accepted slabs44x3:2 prediction.
+- Required Packet200 crafted statistic 16842796 with increment three.
+- Consumed result/matrix and stored exact slabs in personal slot 36.
+- Closed safely and reopened after restart with persistent player/workbench state.
+
+The frozen M64 semantic SHA-256 is
+`fa5b92b7450d785451e527f7ecbab2597f99e0b9977b31333541a4e0a155253b`.
+
 ## 1.51.0 - M63 Workbench Preparation
 
 Status: GO for bounded three-wide workbench matrix preparation.

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.51.0 - M63 Workbench Preparation (GO)**.
+Current official milestone: **Worldline v1.52.0 - M64 Workbench Output (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -328,6 +328,11 @@ M63 left-takes three planks and right-places one into each slot of the first
 workbench row through four accepted transactions. It models the recipe result
 locally and rejects close while the grid remains occupied. See
 `docs/M63_WORKBENCH_PREPARATION.md`.
+
+M64 confirms that model through an accepted exact slabs output prediction,
+observes the crafted-stat side effect, consumes the grid, stores the result,
+closes safely, and proves persistence after restart. See
+`docs/M64_WORKBENCH_OUTPUT.md`.
 
 ## Verify
 

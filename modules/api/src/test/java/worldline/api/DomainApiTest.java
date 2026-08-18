@@ -24,6 +24,7 @@ public final class DomainApiTest {
         correlatedRouteExecutionPreservesIdentity();
         RemoteWindowLayoutTest.run();
         RemoteWorkbenchPreparationTest.run();
+        RemoteWorkbenchOutputTest.run();
         System.out.println("DomainApiTest passed");
     }
 

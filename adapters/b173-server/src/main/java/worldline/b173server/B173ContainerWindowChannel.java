@@ -12,7 +12,6 @@ import worldline.api.RemoteInventorySlot;
 import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteItemStack;
 import worldline.api.RemoteWindowKind;
-import worldline.api.RemoteWorkbenchPreparation;
 
 /** Exact two-click accepted transfer from personal storage into a single chest. */
 final class B173ContainerWindowChannel {
@@ -71,32 +70,6 @@ final class B173ContainerWindowChannel {
                 before, put.after, personalBefore, personalStored);
     }
 
-    RemoteWorkbenchPreparation prepareWorkbenchSlabs(int personalSlot) throws IOException {
-        RemoteContainerWindow active = inbound.activeWindow(); RemoteInventoryView before = active.inventory();
-        RemoteInventoryView personalBefore = inbound.inventory(); int source = personalSlot + 1;
-        RemoteItemStack planks = new RemoteItemStack(5, 3, 0), one = new RemoteItemStack(5, 1, 0);
-        if (active.descriptor().kind() != RemoteWindowKind.WORKBENCH || before.size() != 46
-                || personalSlot < 9 || personalSlot > 44 || before.slot(source).empty()
-                || !before.slot(source).item().equals(planks) || !inbound.cursorObserved() || inbound.cursor() != null)
-            throw new IllegalStateException("invalid workbench preparation boundary");
-        for (int slot = 0; slot < 10; slot++) if (!before.slot(slot).empty())
-            throw new IllegalStateException("workbench preparation requires an empty result and matrix");
-        prepare(before, 4); RemoteInventoryView personalAfter = replace(personalBefore, personalSlot, null);
-        B173ContainerStep take = step(source, planks, replace(before, source, null),
-                personalBefore, personalAfter, planks); RemoteInventoryView first = replace(take.after, 1, one);
-        B173ContainerStep firstStep = step(1, null, first, personalAfter, personalAfter,
-                new RemoteItemStack(5, 2, 0), 1);
-        RemoteInventoryView twoWide = replace(replace(inbound.activeWindow().inventory(), 2, one), 0,
-                new RemoteItemStack(72, 1, 0)); B173ContainerStep second = step(2, null, twoWide,
-                personalAfter, personalAfter, one, 1); RemoteInventoryView prepared = replace(
-                replace(second.after, 3, one), 0, new RemoteItemStack(44, 3, 2));
-        B173ContainerStep third = step(3, null, prepared, personalAfter, personalAfter, null, 1);
-        return new RemoteWorkbenchPreparation(personalSlot, take.action, firstStep.action, second.action,
-                third.action, planks, new RemoteItemStack(72, 1, 0), new RemoteItemStack(44, 3, 2),
-                take.cursorAfter, firstStep.cursorAfter, second.cursorAfter, third.cursorAfter == null,
-                before, firstStep.after, twoWide, third.after, personalBefore, personalAfter);
-    }
-
     private void prepare(RemoteInventoryView view, int actions) {
         long activeEpoch = inbound.activeWindowEpoch();
         if (epoch != activeEpoch) { epoch = activeEpoch; windowId = view.windowId(); action = 0; }
@@ -128,13 +101,6 @@ final class B173ContainerWindowChannel {
         output.writeShort(slot); output.writeByte(0); output.writeShort(nextAction); output.writeBoolean(false);
         B173InventoryCodec.item(output, predicted); output.flush(); action = nextAction;
         return inbound.awaitContainerTransaction();
-    }
-    private B173ContainerStep step(int slot, RemoteItemStack predicted, RemoteInventoryView after,
-            RemoteInventoryView personalBefore, RemoteInventoryView personalAfter,
-            RemoteItemStack cursorAfter, int button) throws IOException {
-        B173ContainerStep step = new B173ContainerStep(windowId, action + 1, slot, button, predicted,
-                inbound.activeWindow().inventory(), after, personalBefore, personalAfter, inbound.cursor(), cursorAfter);
-        send(step); action++; return inbound.awaitContainerTransaction();
     }
     private B173ContainerStep step(int slot, RemoteItemStack predicted, RemoteInventoryView after,
             RemoteInventoryView personalBefore, RemoteInventoryView personalAfter,

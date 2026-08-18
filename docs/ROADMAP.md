@@ -68,6 +68,7 @@ Passing an experiment does not silently promote its API.
 | v1.49.0 / M61 | Furnace glass output retrieval and restart persistence | GO - actions5/6 plus Packet200 move exact glass into persisted personal storage |
 | v1.50.0 / M62 | Typed workbench open/read and asymmetric combined layout | GO - Packet100 declared9 maps to result+matrix+player Packet104 total46 |
 | v1.51.0 / M63 | Three-wide workbench request/model preparation | GO - byte-exact right clicks drive an ACK-correlated row/cursor model |
+| v1.52.0 / M64 | Exact workbench slabs output and persistence | GO - actions5/6 confirm result, consume grid, store and survive restart |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -79,8 +80,8 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.51.0 direction
+## Immediate post-v1.52.0 direction
 
-The next milestone can take the modeled slabs output with the exact prediction,
-thereby confirming the M63 recipe against the official server, consume the
-three ingredients, store the result, close safely, and prove persistence.
+The next milestone can move beyond the completed window workflow into another
+bounded multiplayer behavior, while generic crafting, merging, shift clicks,
+and broad container automation remain outside the stable contract.
