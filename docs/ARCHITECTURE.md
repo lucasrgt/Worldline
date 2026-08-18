@@ -666,3 +666,11 @@ Packet20 identities, applies Packet18 then Packet38 at handler TAIL, and counts
 subsequent renderer frames and log rows. These clocks remain evidence streams,
 not a causal performance model. The adapter also retires terminal dropped-item
 IDs when the official server reuses them, while live duplicate IDs still fail.
+
+M71 adds no public API or adapter behavior. A separate test overlay preserves
+M70 and reconstructs fresh matched control/event arms around an exact Packet3
+handler anchor. Its probe uses only network-handler and renderer TAIL markers;
+it never reads the asynchronously buffered Aero file in-process. The runner
+segments logger stdout after exit, excludes WorldFlush, strictly parses selected
+frame rows, confirms them against the normally flushed file, and emits dynamic
+descriptive per-arm and per-pair summaries without an inferential verdict.

@@ -4,6 +4,19 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.59.0 - M71 Paired Aero Window
+
+Status: GO for balanced paired acquisition and descriptive selected-row summaries.
+
+- Added four fresh matched control/event pairs in balanced order.
+- Anchored both arms to one exact Packet3 broadcast observed by the real client.
+- Required exact combat absence in control and Packet18-before-Packet38 order in event.
+- Captured fixed warmup/window bounds and at least thirty strictly parsed Aero rows per arm.
+- Reported per-arm summaries and event-minus-control pair deltas without inferential classification.
+
+The frozen M71 semantic SHA-256 is
+`0b26d07ed6b08195a067bf8730b43f49ec596dae274c74f335f8a44576cb1d2b`.
+
 ## 1.58.0 - M70 Aero Combat Window
 
 Status: GO for ordered combat-event observation and subsequent Aero frames.

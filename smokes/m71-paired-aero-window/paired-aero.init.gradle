@@ -1,0 +1,37 @@
+gradle.projectsEvaluated {
+    if (gradle.rootProject.name != 'aero-model-lib-test') return
+    def script = gradle.startParameter.initScripts.find { it.name == 'paired-aero.init.gradle' }
+    if (script == null) throw new GradleException('Worldline paired script path missing')
+    def root = script.parentFile.parentFile.parentFile.canonicalFile
+    def m70 = new File(root, 'smokes/m70-aero-combat-window')
+    def smoke = new File(root, 'smokes/m71-paired-aero-window')
+    def project = gradle.rootProject
+    project.sourceSets.main.java.srcDir(new File(m70, 'runtime-src'))
+    project.sourceSets.main.java.srcDir(new File(smoke, 'runtime-src'))
+    project.tasks.named('processResources').configure {
+        doLast { copy { from new File(smoke, 'runtime-resources/aerotest.mixins.json'); into destinationDir } }
+    }
+    def task = project.tasks.named('runClient').get()
+    if (task.actions.size() != 2 || !task.actions[0].getClass().name.endsWith('ClosureTaskAction'))
+        throw new GradleException('Aero runClient action shape drifted')
+    task.actions.remove(0)
+    def property = { name -> project.findProperty(name).toString() }
+    def log = new File(property('worldlineLog')).absoluteFile
+    log.parentFile.mkdirs(); if (log.exists()) log.delete()
+    task.jvmArgs([
+        '-Dworldline.combat.enabled=true', '-Dworldline.combat.host=127.0.0.1',
+        '-Dworldline.combat.port=' + property('worldlinePort'),
+        '-Dworldline.combat.username=' + property('worldlineObserver'),
+        '-Dworldline.pair.arm=' + property('worldlineArm'),
+        '-Dworldline.pair.attacker=' + property('worldlineAttacker'),
+        '-Dworldline.pair.victim=' + property('worldlineVictim'),
+        '-Dworldline.pair.trigger=' + property('worldlineTrigger'),
+        '-Dworldline.pair.warmupFrames=' + property('worldlineWarmupFrames'),
+        '-Dworldline.pair.warmupSeconds=' + property('worldlineWarmupSeconds'),
+        '-Dworldline.pair.windowFrames=' + property('worldlineWindowFrames'),
+        '-Dworldline.pair.windowSeconds=' + property('worldlineWindowSeconds'),
+        '-Daero.testmod.disabled=true', '-Daero.spikelog=true', '-Daero.spikelog.ms=25',
+        '-Daero.spikelog.heartbeatMs=200', '-Daero.spikelog.sync=false',
+        '-Daero.spikelog.file=' + log.absolutePath, '-Xms2G', '-Xmx2G'
+    ] as List)
+}

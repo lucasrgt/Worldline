@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.58.0 - M70 Aero Combat Window (GO)**.
+Current official milestone: **Worldline v1.59.0 - M71 Paired Aero Window (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -361,6 +361,11 @@ M70 composes M66, M68, and M69 in one official-server session: the real Aero
 observer applies Packet18 before Packet38, then completes a bounded frame/log
 window. It makes no spike or performance-causality claim. See
 `docs/M70_AERO_COMBAT_WINDOW.md`.
+
+M71 repeats matched fresh control/event arms around one exact Packet3 anchor,
+balances order across four pairs, and reports only descriptive distributions of
+logger-selected Aero rows and pair deltas. It makes no causal, significance, or
+performance-regression claim. See `docs/M71_PAIRED_AERO_WINDOW.md`.
 
 ## Verify
 
