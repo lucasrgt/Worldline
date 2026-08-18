@@ -1,0 +1,17 @@
+schema = 1
+
+[[tools]]
+id = "nwc"
+version = "0.3.1"
+
+[[tools]]
+id = "nya"
+version = "1.1.6"
+
+[[tools]]
+id = "rtw"
+version = "0.1.4"
+
+[[tools]]
+id = "wtw"
+version = "0.1.6"
