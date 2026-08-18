@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.49.0 - M61 Furnace Output Retrieval
+
+Status: GO for exact glass retrieval and restart persistence.
+
+- Continued the M60 container epoch with accepted actions 5 and 6.
+- Required the exact glass Packet200 crafted-stat side effect before commit.
+- Reconciled output, combined player tail, window 0, and cursor atomically.
+- Reopened after restart with personal glass and an empty furnace output.
+
+The frozen M61 semantic SHA-256 is
+`3759ec0bd9b8f31341f5c783a82f30592ab69bc97a54da45bd14708f781ff51c`.
+
 ## 1.48.0 - M60 Furnace Smelt
 
 Status: GO for exact live furnace loading and smelt observation.

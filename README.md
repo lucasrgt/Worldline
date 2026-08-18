@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.48.0 - M60 Furnace Smelt (GO)**.
+Current official milestone: **Worldline v1.49.0 - M61 Furnace Output Retrieval (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -314,6 +314,10 @@ M60 opens a typed furnace, loads exact sand and coal through four accepted
 container actions, then correlates asynchronous Packet103 slot changes with the
 full Packet105 cook/burn progression to one glass output. See
 `docs/M60_FURNACE_SMELT.md`.
+
+M61 retrieves that glass through accepted actions 5 and 6, requires the exact
+Packet200 crafted-stat side effect, and proves player/output persistence after
+a clean restart. See `docs/M61_FURNACE_OUTPUT.md`.
 
 ## Verify
 

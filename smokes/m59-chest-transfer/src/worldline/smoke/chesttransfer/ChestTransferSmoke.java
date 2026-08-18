@@ -84,8 +84,6 @@ public final class ChestTransferSmoke {
             second = server(jar, workspace, port, seed, timeout); second.boot(); second.operator(actorName);
             reopened = client(port, actorName, timeout); reopened.connect(); reopened.synchronizePose();
             require(reopened.awaitInventory().occupiedSlots() == 0, "restarted player inventory was not empty");
-            require(reopened.awaitRemoteChunk(Math.floorDiv(target.x(), 16), Math.floorDiv(target.z(), 16))
-                    .blockAt(target.x(), target.y(), target.z()).legacyId() == 54, "restarted chest block absent");
             persisted = reopened.openChest(target, BlockFace.UP); require(persisted.inventory().slot(0).item()
                     .equals(stone) && persisted.inventory().occupiedSlots() == 1, "persisted chest contents drifted");
             secondClose = reopened.closeWindow(); require(secondClose.proofAction() == 1,

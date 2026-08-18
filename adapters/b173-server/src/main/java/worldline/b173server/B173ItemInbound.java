@@ -59,6 +59,7 @@ final class B173ItemInbound {
             else if (containerTransactions.pending()) containerTransactions.acknowledge(
                     windowId, action, allowed, inventory, windows);
             else throw new IOException("unexpected transaction acknowledgement"); }
+        else if (packet == 200) containerTransactions.statistic(input.readInt(), input.readUnsignedByte());
         else return false;
         return true;
     }

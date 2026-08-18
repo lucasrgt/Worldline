@@ -446,6 +446,12 @@ cook, burn, fuel-duration, and completion-reset evidence. The exact sand/coal
 workflow publishes only after the output, empty input/fuel, epoch, and progress
 oracles agree.
 
+M61 extends each adapter-private container step with an optional expected
+statistic side effect. Furnace output action 5 can commit only after exact
+Packet200 glass-stat evidence and its correlated Packet106 true; action 6 then
+stores the cursor in the personal tail. The existing transaction tracker still
+publishes the active view, window-0 view, and cursor as one logical transition.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

@@ -65,6 +65,7 @@ Passing an experiment does not silently promote its API.
 | v1.46.0 / M58 | Explicit remote-window lifecycle | GO - Packet101 close confirmed by accepted window-0 no-op proof |
 | v1.47.0 / M59 | Player-to-chest transfer and restart persistence | GO - accepted actions reconcile both views and survive reopen |
 | v1.48.0 / M60 | Typed furnace loading and complete live smelt observation | GO - Packet103 slots and Packet105 progress produce exact glass output |
+| v1.49.0 / M61 | Furnace glass output retrieval and restart persistence | GO - actions5/6 plus Packet200 move exact glass into persisted personal storage |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -76,8 +77,8 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.48.0 direction
+## Immediate post-v1.49.0 direction
 
-The next milestone can extend bounded container work to retrieval or workbench
-recipes while retaining the same fail-closed lifecycle. This still does not
-imply generic recipes, shift/right click, arbitrary merges, or complete physics.
+The next milestone can add the asymmetric workbench layout (Packet100 declares
+9 matrix slots while Packet104 contains result + matrix + player tail) before
+any 3x3 recipe write. This still does not imply generic recipes or merges.

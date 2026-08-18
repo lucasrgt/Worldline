@@ -7,6 +7,7 @@ import java.util.List;
 import worldline.api.RemoteChestTransfer;
 import worldline.api.RemoteContainerWindow;
 import worldline.api.RemoteFurnaceLoad;
+import worldline.api.RemoteFurnaceExtraction;
 import worldline.api.RemoteInventorySlot;
 import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteItemStack;
@@ -49,6 +50,26 @@ final class B173ContainerWindowChannel {
                 before, fuel.put.after, personalBefore, inbound.inventory());
     }
 
+    RemoteFurnaceExtraction takeFurnaceOutput(int personalSlot) throws IOException {
+        RemoteContainerWindow active = inbound.activeWindow(); RemoteInventoryView before = active.inventory();
+        RemoteInventoryView personalBefore = inbound.inventory(); int combined = personalSlot - 6;
+        RemoteItemStack glass = new RemoteItemStack(20, 1, 0);
+        if (active.descriptor().kind() != RemoteWindowKind.FURNACE || before.size() != 39
+                || personalSlot < 9 || personalSlot > 44 || !before.slot(0).empty()
+                || !before.slot(1).empty() || before.slot(2).empty()
+                || !before.slot(2).item().equals(glass) || !before.slot(combined).empty()
+                || !personalBefore.slot(personalSlot).empty()
+                || !inbound.cursorObserved() || inbound.cursor() != null)
+            throw new IllegalStateException("invalid furnace extraction boundary");
+        prepare(before, 2); RemoteInventoryView taken = replace(before, 2, null);
+        B173ContainerStep take = step(2, glass, taken, personalBefore, personalBefore, glass,
+                16842772, 1); RemoteInventoryView stored = replace(take.after, combined, glass);
+        RemoteInventoryView personalStored = replace(personalBefore, personalSlot, glass);
+        B173ContainerStep put = step(combined, null, stored, personalBefore, personalStored, null);
+        return new RemoteFurnaceExtraction(personalSlot, take.action, put.action, 1, glass,
+                before, put.after, personalBefore, personalStored);
+    }
+
     private void prepare(RemoteInventoryView view, int actions) {
         long activeEpoch = inbound.activeWindowEpoch();
         if (epoch != activeEpoch) { epoch = activeEpoch; windowId = view.windowId(); action = 0; }
@@ -80,6 +101,21 @@ final class B173ContainerWindowChannel {
         output.writeShort(slot); output.writeByte(0); output.writeShort(nextAction); output.writeBoolean(false);
         B173InventoryCodec.item(output, predicted); output.flush(); action = nextAction;
         return inbound.awaitContainerTransaction();
+    }
+    private B173ContainerStep step(int slot, RemoteItemStack predicted, RemoteInventoryView after,
+            RemoteInventoryView personalBefore, RemoteInventoryView personalAfter,
+            RemoteItemStack cursorAfter, int statisticId, int statisticIncrement) throws IOException {
+        RemoteContainerWindow active = inbound.activeWindow(); RemoteInventoryView before = active.inventory();
+        RemoteItemStack cursorBefore = inbound.cursor(); int nextAction = action + 1;
+        B173ContainerStep step = new B173ContainerStep(windowId, nextAction, slot, predicted,
+                before, after, personalBefore, personalAfter, cursorBefore, cursorAfter,
+                statisticId, statisticIncrement); send(step); action = nextAction;
+        return inbound.awaitContainerTransaction();
+    }
+    private void send(B173ContainerStep step) throws IOException {
+        inbound.beginContainerTransaction(step); output.writeByte(102); output.writeByte(windowId);
+        output.writeShort(step.slot); output.writeByte(0); output.writeShort(step.action);
+        output.writeBoolean(false); B173InventoryCodec.item(output, step.predicted); output.flush();
     }
     private static RemoteInventoryView replace(RemoteInventoryView source, int slot, RemoteItemStack item) {
         List<RemoteInventorySlot> slots = new ArrayList<>(source.slots());

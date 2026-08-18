@@ -72,6 +72,11 @@ final class B173ItemAccess {
         catch (IOException error) { throw new IllegalStateException("furnace smelt receive failed", error); }
     }
 
+    static worldline.api.RemoteFurnaceExtraction takeFurnaceOutput(B173PlayChannel channel, int personalSlot) {
+        try { return channel.takeFurnaceOutput(personalSlot); }
+        catch (IOException error) { throw new IllegalStateException("furnace output extraction failed", error); }
+    }
+
     static RemotePersonalTransaction clickPersonalSlot(B173PlayChannel channel, int slot) {
         try { return channel.clickPersonalSlot(slot); }
         catch (IOException error) { throw new IllegalStateException("personal transaction failed", error); }
