@@ -151,7 +151,7 @@ public final class B173DedicatedServer implements PersistentMultiplayerServerRun
     private String properties() {
         return "allow-nether=false\nlevel-name=world\nlevel-seed=" + seed
                 + "\nmax-players=4\nonline-mode=false\nserver-ip=127.0.0.1\nserver-port=" + port
-                + "\nspawn-animals=false\nspawn-monsters=false\nview-distance=" + viewDistance
+                + "\npvp=true\nspawn-animals=false\nspawn-monsters=false\nview-distance=" + viewDistance
                 + "\nallow-flight=" + allowFlight + "\n";
     }
 

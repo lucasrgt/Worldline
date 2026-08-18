@@ -71,6 +71,8 @@ final class B173HeldItemChannel {
         int windowId = inbound.activeWindowId(); output.writeByte(101); output.writeByte(windowId);
         output.flush(); return windowId;
     }
+    boolean selectedEquals(RemoteItemStack expected) { RemoteInventoryView inventory = inbound.inventory();
+        RemoteInventorySlot slot = inventory.slot(36 + selectedSlot); return !slot.empty() && slot.item().equals(expected); }
 
     private static int face(BlockFace face) {
         switch (face) {

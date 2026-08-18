@@ -26,6 +26,7 @@ public final class DomainApiTest {
         RemoteWorkbenchPreparationTest.run();
         RemoteWorkbenchOutputTest.run();
         RemoteArmorEquipmentTest.run();
+        RemoteCombatTest.run();
         System.out.println("DomainApiTest passed");
     }
 

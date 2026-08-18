@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.53.0 - M65 Peer Armor Equipment (GO)**.
+Current official milestone: **Worldline v1.54.0 - M66 Player Combat (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -337,6 +337,10 @@ closes safely, and proves persistence after restart. See
 M65 equips the exact leather set through accepted personal-window actions,
 observes every reversed armor mapping through a named peer's Packet5 stream,
 and proves local and peer state after restart. See `docs/M65_PEER_ARMOR.md`.
+
+M66 composes that armor with one named diamond-sword PvP strike, separates the
+attacker's Packet38 proof from the victim's Packet38/Packet8 health transition,
+and persists health 18. See `docs/M66_PLAYER_COMBAT.md`.
 
 ## Verify
 

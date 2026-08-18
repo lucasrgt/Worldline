@@ -19,4 +19,6 @@ final class B173EntityIdentityTracker {
     }
 
     String username(int entityId) { return names.get(entityId); }
+    int entityId(String username) { for (Map.Entry<Integer, String> entry : names.entrySet())
+        if (entry.getValue().equals(username)) return entry.getKey(); return -1; }
 }

@@ -477,6 +477,12 @@ mapping between window slots 5..8 and equipment slots 4..1. Restart evidence
 pairs the actor's count-bearing Packet104 view with the peer's count-free
 Packet5 state.
 
+M66 adds a dedicated combat channel and tracker while retaining the shared
+Packet20 identity authority. Outbound Packet7 accepts only a username and uses
+the connection's local entity ID plus the resolved target ID. Attacker and
+victim streams remain distinct evidence: fresh target Packet38 on one side,
+ordered local Packet38 then Packet8 on the other.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

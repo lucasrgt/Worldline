@@ -122,6 +122,10 @@ final class B173ItemAccess {
     static worldline.api.RemoteArmorPiece awaitPeerArmor(B173PlayChannel channel,
             worldline.api.RemoteArmorPiece expected) { try { return channel.inbound().awaitPeerArmor(expected); }
         catch (IOException error) { throw new IllegalStateException("peer armor receive failed", error); } }
+    static worldline.api.RemoteCombatStrike attackPlayer(B173PlayChannel channel, String target) { try {
+        return channel.attackPlayer(target); } catch (IOException error) { throw new IllegalStateException("combat attack failed", error); } }
+    static worldline.api.RemoteIncomingHit awaitIncomingHit(B173PlayChannel channel, int health) { try {
+        return channel.awaitIncomingHit(health); } catch (IOException error) { throw new IllegalStateException("incoming combat receive failed", error); } }
 
     static RemoteDroppedItem awaitDroppedItem(B173PlayChannel channel, RemoteItemStack expected) {
         try { return channel.inbound().awaitDroppedItem(expected); }

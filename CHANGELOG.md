@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.54.0 - M66 Player Combat
+
+Status: GO for one bounded armored PvP strike.
+
+- Added username-resolved Packet7 attack requests without exposing raw IDs.
+- Correlated a fresh target Packet38 on the attacker stream.
+- Ordered victim-local Packet38 before Packet8 health `20 -> 18`.
+- Proved diamond-sword wear `0 -> 1` and persisted victim health 18.
+
+The frozen M66 semantic SHA-256 is
+`8d05a812d9bfa62ac53321d1cca3f96c2cf9ff76668e36cdf0605945b883022c`.
+
 ## 1.53.0 - M65 Peer Armor Equipment
 
 Status: GO for exact leather equipment and named-peer observation.

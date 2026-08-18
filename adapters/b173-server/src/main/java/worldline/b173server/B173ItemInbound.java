@@ -22,14 +22,15 @@ final class B173ItemInbound {
     private final B173WindowTracker windows = new B173WindowTracker();
     private final B173PersonalTransactionTracker transactions = new B173PersonalTransactionTracker();
     private final B173ContainerTransactionTracker containerTransactions = new B173ContainerTransactionTracker();
-    private final B173FurnaceTracker furnace = new B173FurnaceTracker();
+    private final B173FurnaceTracker furnace = new B173FurnaceTracker(); private final B173CombatTracker combat;
     private final DataOutputStream output;
 
     B173ItemInbound(int localEntityId, String localUsername, DataOutputStream output) throws IOException {
-        this.output = output; identities.bind(localEntityId, localUsername); }
+        this.output = output; identities.bind(localEntityId, localUsername); this.combat = new B173CombatTracker(identities, localEntityId, localUsername); }
 
     boolean accept(int packet, DataInputStream input) throws IOException {
         if (packet == 5) equipment.equipment(input);
+        else if (packet == 8) combat.health(input); else if (packet == 38) combat.status(input);
         else if (packet == 20) equipment.spawn(input);
         else if (packet == 21) dropped.spawn(input);
         else if (packet == 22) dropped.collect(input, identities);
@@ -137,6 +138,10 @@ final class B173ItemInbound {
             if (equipment.matches(expected)) return expected; }
         throw new IOException("expected peer held item absent from bounded inbound window");
     }
+
+    int combatEntityId(String username) { return combat.entityId(username); } void beginCombat(int target) { combat.beginOutgoing(target); }
+    worldline.api.RemoteCombatStrike awaitCombatStrike(Pump pump) throws IOException { for (int count = 0; count < 8192; count++) { pump.one(); worldline.api.RemoteCombatStrike value = combat.takeOutgoing(); if (value != null) return value; } throw new IOException("fresh combat hurt status absent"); }
+    worldline.api.RemoteIncomingHit awaitIncomingHit(int health, Pump pump) throws IOException { worldline.api.RemoteIncomingHit value = combat.takeIncoming(health); if (value != null) return value; for (int count = 0; count < 8192; count++) { pump.one(); value = combat.takeIncoming(health); if (value != null) return value; } throw new IOException("incoming combat health absent"); }
 
     worldline.api.RemoteArmorPiece awaitPeerArmor(worldline.api.RemoteArmorPiece expected, Pump pump)
             throws IOException { if (expected == null) throw new IllegalArgumentException("null expected peer armor");
