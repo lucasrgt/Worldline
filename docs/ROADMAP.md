@@ -101,6 +101,7 @@ Passing an experiment does not silently promote its API.
 | v1.82.0 / M94 | Default-TTL page recovery | GO - empty target cache expires 4-to-3 under default600, then direct-one/rebuild-two restores cache4 |
 | v1.83.0 / M95 | Four-page capacity-three cache thrash | GO - every retained record keeps cache3 and rebuilds/evicts exactly two pages |
 | v1.84.0 / M96 | Four-page capacity-two bounded thrash | GO - rebuild mode 3 or 4 with exact per-record eviction coupling |
+| v1.85.0 / M97 | Four-page capacity-one thrash | GO - every retained record rebuilds and evicts all four pages |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -112,13 +113,13 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.84.0 direction
+## Immediate post-v1.85.0 direction
 
-M96 lowers the same four requested keys to capacity two and bounds pinned
-JVM/hash tie behavior: a retained record rebuilds three or four pages and its
-capacity-eviction delta must match exactly. Capacity one, exhaustive hash
-outcomes, arbitrary pages, concurrency, merge/repacking, and uninstrumented
-page-count cost remain outside scope. M71-M96 do not establish causal spike
-attribution.
+M97 lowers the same four requested keys to capacity one and proves all four are
+rebuilt/evicted every retained record. The 4/3/2/1 cache points are now
+structurally qualified for this exact scene, including M96's bounded tie mode.
+Other capacities/topologies, exhaustive hash outcomes, concurrency,
+merge/repacking, and uninstrumented cost remain outside scope. M71-M97 do not
+establish causal spike attribution.
 Generic synchronization, persistence, multiple clients, merging, shift clicks,
 and broad automation remain outside the stable contract.

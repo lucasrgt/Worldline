@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.85.0 - M97 Page-Capacity-One Thrash
+
+Status: GO for exact all-page rebuild/eviction behavior under a one-entry Aero
+page cache.
+
+- Froze capacity one with TTL 100000, rebuild budget eight, and the existing
+  sixteen-cell/four-page fixture.
+- Proved all retained records had cache1, pageCalls4, direct0, rebuild4, and
+  cumulative capacity-eviction delta four.
+- Retained 5067/4581 complete records with `rebuild3=0`, separating the result
+  from M96's capacity-two tie modes.
+- Reparsed every M74/M97 record and required clean pinned lifecycle/provenance.
+
+The frozen M97 semantic SHA-256 is
+`93c51ccdd98d0abd4e6da174f6ea76d8ca10ddb31cfed965117945473a39c551`.
+
 ## 1.84.0 - M96 Page-Capacity-Two Bounded Thrash
 
 Status: GO for bounded rebuild/eviction behavior of the exact four-page scene

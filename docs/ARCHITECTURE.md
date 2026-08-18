@@ -854,3 +854,10 @@ cache entries are traversed through pinned `HashMap` order, fresh JVMs may
 settle into rebuild mode three or four. The client-only parser accepts only
 those values and couples every cumulative capacity-eviction delta to the same
 record's rebuild count. Common/server code remains Aero-free.
+
+M97 adds no public API or product adapter behavior and leaves M74-M96 frozen.
+It sets the same four-page fixture's client cache to one entry. The client-only
+record gate requires all four pages to rebuild and the cumulative eviction
+counter to advance by four on every retained record, with no direct fallback.
+This removes M96's equal-age tie mode for the exact fixture. Common/server code
+remains Aero-free.
