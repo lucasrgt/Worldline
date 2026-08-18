@@ -91,6 +91,7 @@ Passing an experiment does not silently promote its API.
 | v1.72.0 / M84 | Four-page-key constant-cardinality topology contrast | GO - three targets in one vs three cached pages, membership 13, rebuilds 1 vs 3 |
 | v1.73.0 / M85 | Natural membership remove/restore recovery | GO - exact cell 16-to-15-to-16, direct fallback 0-to-1-to-0, one restore rebuild |
 | v1.74.0 / M86 | Repeated same-cell membership recovery | GO - two generation-bound 16-to-15-to-16 cycles with exact fallback/rebuild recovery |
+| v1.75.0 / M87 | Sequential two-cell membership recovery | GO - index0 fallback recovery followed by index1 immediate-rebuild recovery |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -102,13 +103,12 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.74.0 direction
+## Immediate post-v1.75.0 direction
 
-M86 qualifies two bounded generations of exact recovery on one cell. It does
-not qualify different or multiple cells, more than two generations,
-concurrent mutations, stale client block-entity cleanup, merge/repacking
-policy, or page-count cost. The next boundary should introduce one bounded
-second-cell recovery sequence without concurrency before broader churn.
-M71-M86 do not establish causal spike attribution.
+M87 qualifies sequential recovery of two exact cells and exposes an
+order-dependent fallback-versus-rebuild path. It does not qualify reversed
+order, more than two cells, concurrency, stale cleanup, merge/repacking, or
+page-count cost. The next boundary should reverse the two-cell order in fresh
+arms before broader churn. M71-M87 do not establish causal spike attribution.
 Generic synchronization, persistence, multiple clients, merging, shift clicks,
 and broad automation remain outside the stable contract.

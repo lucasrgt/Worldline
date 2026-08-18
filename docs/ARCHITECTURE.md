@@ -787,3 +787,9 @@ state rejects duplicate, skipped, reordered, cross-generation, coordinate, and
 nonce drift. A fixed 60-byte post-seal sidecar binds four request/event pairs;
 complete M74/M78 records remain authoritative for topology and rebuilds. The
 common/server closure remains Aero-free.
+
+M87 adds no public API or product adapter behavior and leaves M74-M86 frozen.
+Its generation protocol additionally binds exact cell indices zero and one.
+The 76-byte sidecar records four request/event/index triples; complete M74/M78
+records prove fallback recovery for index zero and immediate rebuild recovery
+for index one. Mutations remain sequential and the server closure Aero-free.

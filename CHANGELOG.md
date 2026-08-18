@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.75.0 - M87 Two-Cell Membership Recovery
+
+Status: GO for sequential generation-bound recovery over two distinct cells in
+one exact server-authored synchronized Aero fixture.
+
+- Removed and restored cell indices zero and one in separate generations, with
+  exact coordinate, derived-nonce, operation, generation, and index binding.
+- Proved membership `16 -> 15 -> 16 -> 15 -> 16` while preserving the complete
+  M74 state and identity mask in every retained record.
+- Observed the first removal use the qualified direct fallback, while the second
+  removal rebuilt immediately after the first recovery and did not fall back.
+- Bound all four request/event/index triples to a 76-byte sidecar and reparsed
+  the corresponding complete M74/M78 records in two fresh replicas.
+
+The frozen M87 semantic SHA-256 is
+`091dd5a68a9e7650ef91496f86cbc9dc5e82e006863d097a8e3c637402a103a4`.
+
 ## 1.74.0 - M86 Repeated Membership Recovery
 
 Status: GO for two generation-bound remove/restore cycles over the same exact
