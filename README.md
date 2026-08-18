@@ -398,9 +398,10 @@ decomposition. Mixed mirrored timings do not establish stable stage cost or
 causal attribution. See `docs/M76_RENDERER_DECOMPOSITION.md`.
 
 M77 keeps the same synchronized scene and directly times the complete renderer,
-its sixteen nested Aero enqueue calls, and both per-frame flush calls. A
-post-seal binary sidecar is index-bound to every M74 census record. The spans
-are descriptive under timing instrumentation, not additive or causal costs.
+its sixteen nested Aero `queueAtRest` direct-fallback calls, and both empty-page
+flush calls. A post-seal binary sidecar is index-bound to every M74 census
+record. The spans are descriptive under timing instrumentation, not paged,
+additive, or causal costs.
 See `docs/M77_DIRECT_STAGE_TIMING.md`.
 
 ## Verify

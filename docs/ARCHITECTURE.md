@@ -715,9 +715,10 @@ triplets, exact per-record `0/0`, `16/0`, or `16/16` validation, and descriptive
 stage deltas. Mixed timing is evidence, not stage-cost attribution.
 
 M77 adds no public API or product adapter behavior and leaves M74-M76 frozen.
-Its client-only overlay wraps one Worldline renderer method plus Aero's enqueue
-and flush methods with primitive synchronous timers. A separate fixed-capacity
+Its client-only overlay wraps one Worldline renderer method plus Aero's
+`queueAtRest` direct-fallback and empty-flush methods with primitive synchronous
+timers. A separate fixed-capacity
 sidecar is index-aligned to the M74 census and written only after seal. The
 server closure remains free of Aero/client imports; all generated binaries and
 timing evidence remain ignored local artifacts. Timings are instrumented
-descriptions, not additive, causal, or uninstrumented stage costs.
+descriptions, not paged, additive, causal, or uninstrumented stage costs.

@@ -6,8 +6,9 @@ framerate and disabled Aero pacing, discards only an empty partial baseline,
 then records three synchronous boundaries with primitive `nanoTime` totals:
 
 - complete `WorldlineCensusRenderer.render` aggregate: exactly 16 calls;
-- nested `Aero_BECellRenderer.queueAtRest` aggregate: exactly 16 calls;
-- `Aero_BECellRenderer.flush` aggregate: exactly 2 calls.
+- nested `Aero_BECellRenderer.queueAtRest` direct-fallback aggregate: exactly
+  16 calls because the server-safe plain BE does not implement Aero's marker;
+- `Aero_BECellRenderer.flush` empty-page aggregate: exactly 2 calls.
 
 Each sidecar record is index-aligned with one M74 record and binds the same
 nonce, plan, count, and elapsed duration. M74 simultaneously proves exact
@@ -27,6 +28,7 @@ v1|design=2-fresh-same-plan-nonce-replicas|fixture=constant16-synced-aero+exact-
 
 SHA-256: `4ac829480cfb8a9409d89c35e002246e43a0a143815303e1ac520e8990988a4c`.
 
-Nonclaims: uninstrumented or isolated cost, additive renderer-plus-queue time,
-causality, regression/improvement, inference, pixels, cross-machine generality,
-combat relation, or historical lag reproduction.
+Nonclaims: page enqueue or populated-page flush cost, uninstrumented or isolated
+cost, additive renderer-plus-queue time, causality, regression/improvement,
+inference, pixels, cross-machine generality, combat relation, or historical lag
+reproduction.

@@ -10,7 +10,8 @@ bracket seals. The parser binds their schema, exact file length and EOF, nonce,
 plan, record count, elapsed time, and every corresponding structural record.
 M74 must retain sixteen synchronized calls, state `0x1010`, identity mask
 `0xffff`, and visible chunks. M77 must retain sixteen renderer calls, sixteen
-queue calls, and two flush calls at every index.
+`queueAtRest` direct-fallback calls, and two empty-page flush calls at every
+index. The plain BE's server-safe class closure is also checked.
 
 Renderer and queue totals must be positive and the enclosing renderer total
 must not be smaller than its nested queue total. Flush totals are nonnegative
