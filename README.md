@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.83.0 - M95 Page-Capacity Thrash (GO)**.
+Current official milestone: **Worldline v1.84.0 - M96 Page-Capacity-Two Bounded Thrash (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -493,6 +493,11 @@ M95 constrains M78's exact four requested pages to a three-entry cache. Every
 retained record rebuilds and evicts exactly two pages while preserving sixteen
 enqueues, four page calls, and zero direct fallback. See
 `docs/M95_PAGE_CAPACITY_THRASH.md`.
+
+M96 lowers that exact fixture to capacity two and exposes bounded tie behavior:
+fresh JVMs select rebuild mode three or four, while every record couples its
+capacity-eviction delta exactly to the rebuild count. See
+`docs/M96_PAGE_CAPACITY_TWO_THRASH.md`.
 
 ## Verify
 

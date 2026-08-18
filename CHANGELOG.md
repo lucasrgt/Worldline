@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.84.0 - M96 Page-Capacity-Two Bounded Thrash
+
+Status: GO for bounded rebuild/eviction behavior of the exact four-page scene
+under a two-entry Aero page cache.
+
+- Froze capacity two with TTL 100000, rebuild budget eight, and the existing
+  sixteen-cell/four-page fixture.
+- Accepted only rebuild counts three or four and required each record's
+  cumulative eviction delta to equal its rebuild count exactly.
+- Observed one 4980-record rebuild3 replica and one 4552-record rebuild4
+  replica, exposing pinned JVM/hash tie behavior without fixing mode assignment.
+- Preserved four page calls, zero direct fallback, two flushes, and complete
+  M74/M96 artifact reconciliation throughout.
+
+The frozen M96 semantic SHA-256 is
+`96142417765b773152dc82aba8194765319c2c7bd987d513c5b8b8fd34b89acb`.
+
 ## 1.83.0 - M95 Page-Capacity Thrash
 
 Status: GO for the exact four-page fixture under a three-entry Aero page cache.

@@ -847,3 +847,10 @@ long TTL that excludes expiry. A client-only overlay records cumulative
 capacity evictions beside the existing page state and timing spans. Complete
 records require two rebuilds and two new evictions per frame, three resident
 pages, and zero direct fallback. Common/server code remains Aero-free.
+
+M96 adds no public API or product adapter behavior and leaves M74-M95 frozen.
+It runs the same four page keys under a two-entry cache. Because equally recent
+cache entries are traversed through pinned `HashMap` order, fresh JVMs may
+settle into rebuild mode three or four. The client-only parser accepts only
+those values and couples every cumulative capacity-eviction delta to the same
+record's rebuild count. Common/server code remains Aero-free.
