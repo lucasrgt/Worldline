@@ -98,6 +98,7 @@ Passing an experiment does not silently promote its API.
 | v1.79.0 / M91 | Larger-page depletion recovery | GO - indices1/2 deplete six-member page to four and reverse-recover with fully batched rebuilds |
 | v1.80.0 / M92 | Third-member depletion recovery | GO - indices1/2/3 deplete six-member page to three and reverse-recover with fully batched rebuilds |
 | v1.81.0 / M93 | Full-page depletion recovery | GO - exact six-member page crosses batched, direct-one, empty, and reverse-recovery states |
+| v1.82.0 / M94 | Default-TTL page recovery | GO - empty target cache expires 4-to-3 under default600, then direct-one/rebuild-two restores cache4 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -109,13 +110,13 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.81.0 direction
+## Immediate post-v1.82.0 direction
 
-M93 depletes the exact qualified six-member page to zero and restores it in
-reverse under a runtime-gated 100000-frame page TTL. It distinguishes batched
-counts two through six, the direct one-member route, and the empty-page route.
-The next bounded question is default-TTL eviction and stale-cache recovery;
-arbitrary cell sizes/pages, concurrency, merge/repacking, and page-count cost
-remain outside scope. M71-M93 do not establish causal spike attribution.
+M94 qualifies normal-default TTL expiration and recovery for M93's exact empty
+page: cache 4-to-3, expired counter +1, direct one-member restoration, then a
+two-member rebuild back to cache4. High-memory/explicit TTLs and max-cache
+eviction are still separate boundaries. Arbitrary pages, concurrency,
+merge/repacking, and page-count cost remain outside scope. M71-M94 do not
+establish causal spike attribution.
 Generic synchronization, persistence, multiple clients, merging, shift clicks,
 and broad automation remain outside the stable contract.

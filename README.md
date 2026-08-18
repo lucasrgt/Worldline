@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.81.0 - M93 Full-Page Depletion Recovery (GO)**.
+Current official milestone: **Worldline v1.82.0 - M94 Default-TTL Page Recovery (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -484,6 +484,10 @@ M93 removes all six identities from that exact page, then restores them in
 reverse. It qualifies the two-member batched threshold, one-member direct
 fallback, empty-page boundary, and symmetric recovery under a fixed page TTL.
 See `docs/M93_FULL_PAGE_DEPLETION_RECOVERY.md`.
+
+M94 leaves the empty target page idle under Aero's normal default 600-frame
+TTL, proves its cache expiration, then restores the page through direct-one
+and rebuilt-two-member states. See `docs/M94_DEFAULT_TTL_PAGE_RECOVERY.md`.
 
 ## Verify
 

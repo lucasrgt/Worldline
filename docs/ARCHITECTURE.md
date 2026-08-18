@@ -832,3 +832,11 @@ Complete records distinguish batched counts two through six, the direct
 one-member route, and the empty-page route. Page TTL is fixed at 100000 frames
 to isolate cardinality; default-TTL eviction remains outside the claim.
 Common/server code remains Aero-free.
+
+M94 adds no public API or product adapter behavior and leaves M74-M93 frozen.
+It reuses M93's exact page but leaves the pinned normal TTL properties absent.
+The client waits for the 600-frame default sweeper to retire only the empty
+target cache entry, then restores one member directly and recompiles at two.
+The 184-byte sidecar binds the expiry record/counters and twelve transitions.
+High-memory, explicit-TTL, and max-cache eviction paths remain outside scope;
+common/server code remains Aero-free.

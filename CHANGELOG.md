@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.82.0 - M94 Default-TTL Page Recovery
+
+Status: GO for default-TTL expiration and reverse recovery of M93's exact
+empty six-member page.
+
+- Left both `aero.becell.pageTtlFrames` and `aero.perf.memory` unset, binding
+  the pinned normal default of 600 frames.
+- Proved one empty-page cache expiration: cached pages `4 -> 3`, expired
+  counter `0 -> 1`, and zero max-cache evictions in two fresh replicas.
+- Delayed restoration until 30 complete records after the expiry record;
+  first member stayed direct/cache3 and second rebuilt/cache4.
+- Bound expiry counters plus all twelve transitions to a 184-byte sidecar and
+  reparsed every complete M74/M78 record.
+
+The frozen M94 semantic SHA-256 is
+`c2617f80713c9054acdf8ade17e4474a3a1ed275a2c092fc6d455363493acfcf`.
+
 ## 1.81.0 - M93 Full-Page Depletion Recovery
 
 Status: GO for complete depletion and reverse recovery of one exact pinned
