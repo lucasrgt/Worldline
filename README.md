@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.62.0 - M74 Complete Aero Census (GO)**.
+Current official milestone: **Worldline v1.63.0 - M75 Aero Exposure Ladder (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -384,6 +384,12 @@ with a preallocated in-memory census of every complete renderer interval in the
 bounded bracket. Binary artifacts are flushed and strictly parsed only after
 measurement; summaries and pair deltas remain descriptive. See
 `docs/M74_COMPLETE_AERO_CENSUS.md`.
+
+M75 keeps all sixteen synchronized entities and renderer dispatches constant,
+then forwards nested subsets of `0/1/4/16` calls into Aero under two mirrored
+fresh ladders. It qualifies exact exposure acquisition and descriptive census
+summaries, not a monotonic, causal, or density-response result. See
+`docs/M75_AERO_DENSITY_LADDER.md`.
 
 ## Verify
 

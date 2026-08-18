@@ -698,3 +698,10 @@ records complete renderer HEAD-to-HEAD intervals in preallocated primitive
 arrays. A test-only invoker resets pinned at-rest counters independently of
 logger/Mixin order. Binary serialization and typed parsing occur only after the
 measurement bracket seals; generated artifacts stay outside the public tree.
+
+M75 adds no public API or product adapter behavior and leaves M74 frozen. Its
+overlay compiles the M74 fixture unchanged, then redirects only the client-side
+`queueAtRest` invocation for a nested level. Server content, synchronization,
+camera, renderer dispatch, and census remain constant. A separate runner owns
+fresh mirrored ladders, exact per-record treatment validation, and descriptive
+level summaries; all artifacts remain ignored evidence.

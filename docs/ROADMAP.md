@@ -79,6 +79,7 @@ Passing an experiment does not silently promote its API.
 | v1.60.0 / M72 | Server-authored StationAPI content rendered by real Aero client | GO - exact identifier/coordinates/nonce message plus renderer return and bounded frames |
 | v1.61.0 / M73 | Balanced absent/present synchronized Aero-content window | GO - tracked activation, 0 vs 16 structural treatment, descriptive selected-row deltas |
 | v1.62.0 / M74 | Complete bounded renderer-interval census over the paired Aero fixture | GO - primitive in-memory capture and post-seal binary artifacts |
+| v1.63.0 / M75 | Mirrored 0/1/4/16 Aero-call exposure ladder over a constant scene | GO - exact per-record treatment and descriptive whole-census summaries |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -90,13 +91,13 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.62.0 direction
+## Immediate post-v1.63.0 direction
 
-M74 qualifies a complete bounded renderer-interval census over zero versus
-sixteen synchronized instances, but it does not convert two pairs into an
-inferential result. A later 0/1/4/16 density ladder may now use this measurement
-substrate as feasibility evidence; any causal campaign still needs a
-preregistered estimand, sample size, and control of machine/order effects.
-M71-M74 do not establish causal spike attribution.
+M75 qualifies exact multi-level Aero exposure acquisition while holding the
+sixteen-entity scene constant. Its two mirrored ladders remain feasibility
+evidence, not a monotonic or causal estimate. The next analytical step should
+inspect whether both ladders show a stable ordering and define an estimand before
+expanding repetitions; a larger campaign needs preregistered sample size and
+machine/order controls. M71-M75 do not establish causal spike attribution.
 Generic synchronization, persistence, multiple clients, merging, shift clicks,
 and broad automation remain outside the stable contract.

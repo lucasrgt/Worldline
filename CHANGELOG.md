@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.63.0 - M75 Aero Exposure Ladder
+
+Status: GO for exact complete-census acquisition at nested Aero call levels
+`0/1/4/16` over one constant synchronized scene.
+
+- Held sixteen server-authored block entities, network state, camera, plan, and
+  renderer dispatches constant while varying only the Aero queue boundary.
+- Required every binary record to contain sixteen dispatches and exactly the
+  configured number of real at-rest renders and list calls.
+- Ran two fresh mirrored ladders in forward and reverse order.
+- Reported level-minus-zero summaries without a monotonicity, dose-response,
+  causal, regression, or historical-lag verdict.
+
+The frozen M75 semantic SHA-256 is
+`92c9e4e28b17dd1df6750e5aff15022619211a1e981ffb9c3ccea461a3d9da05`.
+
 ## 1.62.0 - M74 Complete Aero Census
 
 Status: GO for bounded complete renderer-interval acquisition over the paired
