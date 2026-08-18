@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.67.0 - M79 Cold Page Rebuild
+
+Status: GO for one explicitly armed Aero cell-page cache disposal and rebuild
+over the synchronized sixteen-entity scene.
+
+- Preserved the Aero-free common/server class closure while accessing the exact
+  renderer model only from a client Mixin.
+- Fired once after 300 retained records and required cache `4 -> 0 -> 4`,
+  deleted/compiled deltas of four, four rebuilds/calls, and zero fallback.
+- Required every other record to remain on M78's warmed rebuild-free path and
+  cross-bound a 68-byte cold artifact to the M74/M78 artifacts.
+- Ran two fresh same-plan/nonce replicas without an automatic-invalidation,
+  causal, regression, or historical-lag verdict.
+
+The frozen M79 semantic SHA-256 is
+`94b95453ff0ba5944e7592bbdd8251c064dd0d7aa966cfa2c8b343ce92267d08`.
+
 ## 1.66.0 - M78 Paged Stage Timing
 
 Status: GO for real steady-state Aero cell-page enqueue/flush acquisition over

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.66.0 - M78 Paged Stage Timing (GO)**.
+Current official milestone: **Worldline v1.67.0 - M79 Cold Page Rebuild (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -409,6 +409,11 @@ common/server class remains Aero-free. The same scene now produces sixteen real
 enqueues and four cached page calls with no fallback or rebuild in every
 record. Direct steady-state spans remain descriptive. See
 `docs/M78_PAGED_STAGE_TIMING.md`.
+
+M79 disposes that exact warmed model once after 300 retained records and proves
+cache `4 -> 0 -> 4`, four deleted/compiled page deltas, and exactly four
+rebuilds without fallback in the aligned event record. Event and warmed spans
+remain descriptive. See `docs/M79_COLD_PAGE_REBUILD.md`.
 
 ## Verify
 

@@ -729,3 +729,11 @@ compiled common/server class remains Aero-free. A client recorder binds direct
 renderer/enqueue/flush spans and public page counters to the M74 record index,
 then writes a distinct binary artifact post-seal. The qualified bracket is
 warmed and rebuild-free; cold cache construction remains outside the claim.
+
+M79 adds no public API or product adapter behavior and leaves M74-M78 frozen.
+A client-only model accessor calls pinned Aero's public disposal boundary once
+after 300 retained records. The event recorder keeps a fixed primitive state
+and writes a 68-byte artifact after seal; M78's existing page sidecar carries
+the corresponding rebuild record. The server/common closure remains Aero-free.
+This qualifies an explicit cold transition, not a natural invalidation policy
+or an uninstrumented/causal cost.
