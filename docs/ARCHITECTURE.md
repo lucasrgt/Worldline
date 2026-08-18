@@ -793,3 +793,9 @@ Its generation protocol additionally binds exact cell indices zero and one.
 The 76-byte sidecar records four request/event/index triples; complete M74/M78
 records prove fallback recovery for index zero and immediate rebuild recovery
 for index one. Mutations remain sequential and the server closure Aero-free.
+
+M88 adds no public API or product adapter behavior and leaves M74-M87 frozen.
+It reverses only the two generation-bound cell identities. The same 76-byte
+sidecar and complete records prove that index one still rebuilds immediately
+when first and index zero still uses direct fallback when second. This is an
+exact-fixture distinction, not a general positional causality claim.

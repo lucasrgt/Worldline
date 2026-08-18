@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.75.0 - M87 Two-Cell Membership Recovery (GO)**.
+Current official milestone: **Worldline v1.76.0 - M88 Reverse Two-Cell Membership Recovery (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -459,6 +459,10 @@ both removals, and one rebuild at each restoration. See
 M87 recovers index zero and then adjacent index one. It proves fallback on the
 first removal and immediate rebuild on the second, while both restores rebuild
 once. See `docs/M87_TWO_CELL_MEMBERSHIP_RECOVERY.md`.
+
+M88 reverses those exact cells and preserves their distinct behavior: index one
+rebuilds even when first, while index zero falls back even when second. See
+`docs/M88_REVERSE_TWO_CELL_RECOVERY.md`.
 
 ## Verify
 

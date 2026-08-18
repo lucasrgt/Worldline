@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.76.0 - M88 Reverse Two-Cell Membership Recovery
+
+Status: GO for reverse-order generation-bound recovery over the two exact M87
+cells in the same synchronized Aero fixture.
+
+- Removed/restored index one before index zero while preserving the M87 seed,
+  plan, nonce, camera, cache, protocol, spacing, and complete record window.
+- Proved membership `16 -> 15 -> 16 -> 15 -> 16` with exact generation/index
+  ACK and restore-state binding in two fresh replicas.
+- Observed index one rebuild immediately even when first, while index zero used
+  the direct fallback even when second; both restores rebuilt once.
+- Bound four request/event/index triples to the 76-byte sidecar and reparsed
+  every corresponding M74/M78 record.
+
+The frozen M88 semantic SHA-256 is
+`986d67c17068113e152c7cec8614bbc518629fff4c27619ec488da6c2548c079`.
+
 ## 1.75.0 - M87 Two-Cell Membership Recovery
 
 Status: GO for sequential generation-bound recovery over two distinct cells in
