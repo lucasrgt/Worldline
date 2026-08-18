@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.71.0 - M83 Page Topology Contrast
+
+Status: GO for constant-two-member same-page versus cross-page structural
+transitions over one fixed two-page scene.
+
+- Removed exact indices `0,1` and `0,4` in fresh otherwise-equal arms with
+  strict server validation, ACK, and client air-block oracles.
+- Proved membership fourteen in both arms, but event rebuilds one versus two,
+  while cached pages/calls remain two and fallback remains zero.
+- Bound each topology to a 44-byte post-seal artifact and complete M74/M78
+  records.
+- Kept additive page cost, performance direction, causality, inference, and
+  historical lag outside the claim.
+
+The frozen M83 semantic SHA-256 is
+`2418e988f23571a72a07c2521eb9ee7cb9ebc8b436957a74d7cf226fe4878f10`.
+
 ## 1.70.0 - M82 Natural Wave Ladder
 
 Status: GO for a three-arm structural ladder over one fixed two-page Aero

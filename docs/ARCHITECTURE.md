@@ -758,3 +758,9 @@ the client-only overlay records one reduced-membership transition per fresh
 arm. Fixed 44-byte sidecars bind cardinality and expected rebuild count to the
 M74/M78 artifacts. A smoke-local camera normalization removes legacy input
 quantization before the inherited strict pose gate; no product code changes.
+
+M83 adds no public API or product adapter behavior and leaves M74-M82 frozen.
+Its common server-safe handler accepts only two exact topology codes and two
+exact target sets. The client-only overlay shares M82's camera normalization,
+requires ACK plus both air blocks, and binds one-versus-two rebuild records to
+fixed 44-byte post-seal artifacts. The server closure remains Aero-free.

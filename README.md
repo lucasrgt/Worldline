@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.70.0 - M82 Natural Wave Ladder (GO)**.
+Current official milestone: **Worldline v1.71.0 - M83 Page Topology Contrast (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -433,6 +433,11 @@ exact target sets of one, two, and four members. Membership becomes 15, 14,
 and 12 while event rebuilds are 1, 2, and 2: within this bounded fixture,
 rebuild count tracks affected pages rather than removed-member count. See
 `docs/M82_NATURAL_WAVE_LADDER.md`.
+
+M83 holds removed-member count at two and contrasts indices `0,1` within one
+page against `0,4` across two pages. Both arms end at membership fourteen;
+event rebuilds are one versus two, with two cached pages and no fallback. See
+`docs/M83_PAGE_TOPOLOGY_CONTRAST.md`.
 
 ## Verify
 

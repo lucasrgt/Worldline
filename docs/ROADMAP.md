@@ -87,6 +87,7 @@ Passing an experiment does not silently promote its API.
 | v1.68.0 / M80 | Server-authored natural membership rebuild | GO - exact cell removal, membership 16-to-15, one rebuild, zero fallback |
 | v1.69.0 / M81 | Server-authored natural two-page rebuild wave | GO - exact two-cell removal, membership 16-to-14, two rebuilds, zero fallback |
 | v1.70.0 / M82 | Natural membership-wave cardinality ladder | GO - fixed-plan 1/2/4 targets, membership 15/14/12, rebuilds 1/2/2 |
+| v1.71.0 / M83 | Constant-cardinality page-topology contrast | GO - two targets in one vs two pages, membership 14, rebuilds 1 vs 2 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -98,13 +99,12 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.70.0 direction
+## Immediate post-v1.71.0 direction
 
-M82 separates removed-member count from affected-page count for one fixed
-two-page topology, but it does not qualify additions, stale block-entity
-cleanup, repeated changes, larger page counts, or a dense rebuild wave. The
-next boundary should vary affected-page count independently from member count
-before any performance attribution. M71-M82 do not establish causal spike
-attribution.
+M83 isolates affected-page count from member count for one/two pages, but it
+does not qualify additions, stale block-entity cleanup, repeated changes,
+three-or-more page waves, or dense rebuild pressure. The next boundary should
+extend the fixed-cardinality contrast to a larger natural page topology before
+any performance attribution. M71-M83 do not establish causal spike attribution.
 Generic synchronization, persistence, multiple clients, merging, shift clicks,
 and broad automation remain outside the stable contract.
