@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.67.0 - M79 Cold Page Rebuild (GO)**.
+Current official milestone: **Worldline v1.68.0 - M80 Natural Membership Rebuild (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -414,6 +414,13 @@ M79 disposes that exact warmed model once after 300 retained records and proves
 cache `4 -> 0 -> 4`, four deleted/compiled page deltas, and exactly four
 rebuilds without fallback in the aligned event record. Event and warmed spans
 remain descriptive. See `docs/M79_COLD_PAGE_REBUILD.md`.
+
+M80 replaces explicit disposal with one server-authored removal. An exact
+acknowledged cell becomes air, live renderer membership changes `16 -> 15`,
+and the first altered record carries one natural page rebuild with zero direct
+fallback. Request latency and timings remain descriptive; generic invalidation
+and stale BE cleanup are not claimed. See
+`docs/M80_NATURAL_MEMBERSHIP_REBUILD.md`.
 
 ## Verify
 

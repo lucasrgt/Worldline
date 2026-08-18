@@ -737,3 +737,10 @@ and writes a 68-byte artifact after seal; M78's existing page sidecar carries
 the corresponding rebuild record. The server/common closure remains Aero-free.
 This qualifies an explicit cold transition, not a natural invalidation policy
 or an uninstrumented/causal cost.
+
+M80 adds no public API or product adapter behavior and leaves M74-M79 frozen.
+A smoke-owned common message boundary asks the Aero-free server to validate and
+remove one exact synchronized cell. Client primitive state binds the exact ACK,
+air block, first fifteen-member renderer record, and one natural page rebuild;
+a 36-byte sidecar is written only after seal. A stale legacy BE lookup is not
+treated as live renderer membership and remains outside the claim.

@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.68.0 - M80 Natural Membership Rebuild
+
+Status: GO for one server-authored content removal and the corresponding real
+Aero membership rebuild over the synchronized sixteen-identity scene.
+
+- Sent one typed removal request after record 300 and required exact server
+  validation, acknowledgement, and an air block at the client coordinate.
+- Proved live renderer/enqueue membership `16 -> 15`, one page rebuild, two
+  cached pages/calls, two flush calls, and zero direct fallback.
+- Cross-bound a 36-byte request/event artifact to complete M74 and M78 records
+  across two fresh same-plan/nonce replicas.
+- Kept legacy stale block-entity cleanup, generic invalidation, dense waves,
+  causal cost, regression, and historical lag outside the claim.
+
+The frozen M80 semantic SHA-256 is
+`3df82b51703daacc031e1f745f86fc7af6678d2da74901eb6c00183915e8a77a`.
+
 ## 1.67.0 - M79 Cold Page Rebuild
 
 Status: GO for one explicitly armed Aero cell-page cache disposal and rebuild

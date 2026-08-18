@@ -84,6 +84,7 @@ Passing an experiment does not silently promote its API.
 | v1.65.0 / M77 | Direct renderer/fallback/empty-flush timing aligned to the complete census | GO - exact 16/16/2 call spans in two fresh same-plan replicas |
 | v1.66.0 / M78 | Real warmed Aero cell-page enqueue/flush timing | GO - exact 16 enqueues, four cached pages/calls, zero fallback/rebuild |
 | v1.67.0 / M79 | Single explicitly armed cold page rebuild | GO - cache 4-to-0-to-4, four deleted/compiled/rebuild deltas, zero fallback |
+| v1.68.0 / M80 | Server-authored natural membership rebuild | GO - exact cell removal, membership 16-to-15, one rebuild, zero fallback |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -95,13 +96,12 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.67.0 direction
+## Immediate post-v1.68.0 direction
 
-M79 closes the single explicit cold-rebuild seam, but it does not qualify a
-real runtime invalidation source or a dense rebuild wave. The next boundary
-should exercise a bounded content-state/membership change that naturally
-invalidates one page, preserving the same complete census and exact identity
-oracles before scaling page count. M71-M79 do not establish causal spike
-attribution.
+M80 closes one natural server-authored removal/rebuild seam, but it does not
+qualify additions, stale block-entity cleanup, repeated changes, or a dense
+rebuild wave. The next boundary should exercise a bounded multi-cell change
+while preserving exact membership and complete-census oracles before any
+performance attribution. M71-M80 do not establish causal spike attribution.
 Generic synchronization, persistence, multiple clients, merging, shift clicks,
 and broad automation remain outside the stable contract.
