@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.61.0 - M73 Paired Aero Content
+
+Status: GO for balanced absent/present acquisition of sixteen synchronized Aero
+content instances.
+
+- Added one exact post-warm-up activation plus tracked-plan readiness handshake
+  shared by both paired arms.
+- Qualified zero placement/rendering in absent arms and sixteen exact synchronized
+  renderer identities in present arms through explicit per-cell content messages.
+- Ran two fresh balanced pairs with fixed time/frame windows and async logger files.
+- Reported selected-row summaries and mixed pair deltas without an inferential or
+  performance verdict.
+
+The frozen M73 semantic SHA-256 is
+`41422dda87ca7a8ed192e8c23c9946c55518f87e123cf69d6b1662d689b3b500`.
+
 ## 1.60.0 - M72 Aero Server Content
 
 Status: GO for one exact server-authored custom block/entity rendered by Aero.

@@ -681,3 +681,13 @@ entrypoint owns the Aero renderer. Separate StationAPI server/client worktrees
 load the same content definition; an explicit coordinate-and-nonce message
 bridges the plain block entity because generic NBT update synchronization is not
 claimed. Generated runtimes and content artifacts remain outside the public tree.
+
+M73 likewise adds no public API or product adapter behavior. A separate
+smoke-owned content mod extends the explicit-message pattern to a fixed
+sixteen-cell tracker, an identical client activation message, and a tracked-plan
+readiness acknowledgement in absent/present arms. The server sends every
+present-cell state through an explicit content message after that acknowledgement.
+The runner owns fresh StationAPI server/client worktrees,
+balanced order, async log segmentation, strict structural treatment checks, and
+descriptive summaries. The server closure remains free of Aero/client/LWJGL
+imports.

@@ -77,6 +77,7 @@ Passing an experiment does not silently promote its API.
 | v1.58.0 / M70 | Real Aero combat-event frame/log window | GO - observer applies Packet18 before Packet38, then completes bounded frames and Aero rows |
 | v1.59.0 / M71 | Balanced paired Aero control/event acquisition | GO - exact common anchor plus descriptive selected-row summaries and pair deltas |
 | v1.60.0 / M72 | Server-authored StationAPI content rendered by real Aero client | GO - exact identifier/coordinates/nonce message plus renderer return and bounded frames |
+| v1.61.0 / M73 | Balanced absent/present synchronized Aero-content window | GO - tracked activation, 0 vs 16 structural treatment, descriptive selected-row deltas |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -88,12 +89,14 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.60.0 direction
+## Immediate post-v1.61.0 direction
 
-M72 proves one synchronized Aero-rendered content instance but not a dense or
-historical scene. The next useful step is a bounded content-density ladder or a
-paired content-present/content-absent feasibility window before any inferential
-campaign. M71's four pairs and M72's two content runs remain descriptive and do
-not establish causal spike attribution. Generic synchronization, persistence,
-multiple clients, merging, shift clicks, and broad automation remain outside the
-stable contract.
+M73 proves balanced acquisition for zero versus sixteen synchronized instances,
+but its two pairs show mixed descriptive timing deltas and no inferential effect.
+The next useful step is a bounded in-memory complete frame census over the same
+0-versus-16 fixture, flushed only after the measured window. A later 0/1/4/16
+density ladder should use that qualified measurement substrate and remain
+feasibility unless a preregistered estimand and sample size are justified.
+M71-M73 do not establish causal spike attribution.
+Generic synchronization, persistence, multiple clients, merging, shift clicks,
+and broad automation remain outside the stable contract.

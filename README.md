@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.60.0 - M72 Aero Server Content (GO)**.
+Current official milestone: **Worldline v1.61.0 - M73 Paired Aero Content (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -372,6 +372,12 @@ server, transfers one server-only block-entity nonce through an explicit content
 message, and renders the exact remote block through a real pinned Aero client.
 It qualifies one fixture, not generic synchronization or performance. See
 `docs/M72_AERO_SERVER_CONTENT.md`.
+
+M73 activates the same registered content mod in two balanced absent/present
+pairs. The present arm synchronizes and renders sixteen exact instances while
+the absent arm preserves the same plan and trigger with zero mutations. A
+tracked-plan acknowledgement replaces timing-only placement readiness. Dynamic
+row summaries remain descriptive only. See `docs/M73_PAIRED_AERO_CONTENT.md`.
 
 ## Verify
 
