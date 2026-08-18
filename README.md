@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.71.0 - M83 Page Topology Contrast (GO)**.
+Current official milestone: **Worldline v1.72.0 - M84 Four-Page Topology Contrast (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -438,6 +438,13 @@ M83 holds removed-member count at two and contrasts indices `0,1` within one
 page against `0,4` across two pages. Both arms end at membership fourteen;
 event rebuilds are one versus two, with two cached pages and no fallback. See
 `docs/M83_PAGE_TOPOLOGY_CONTRAST.md`.
+
+M84 moves the fixed-cardinality contrast to four natural page keys. It removes
+three exact members from one cached page or one member from each of three
+cached pages while preserving membership thirteen, three cached pages/page
+calls, one singleton direct fallback, and two flush calls. Event rebuilds are
+exactly one versus three; timings remain descriptive. See
+`docs/M84_FOUR_PAGE_TOPOLOGY_CONTRAST.md`.
 
 ## Verify
 

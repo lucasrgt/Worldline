@@ -764,3 +764,10 @@ Its common server-safe handler accepts only two exact topology codes and two
 exact target sets. The client-only overlay shares M82's camera normalization,
 requires ACK plus both air blocks, and binds one-versus-two rebuild records to
 fixed 44-byte post-seal artifacts. The server closure remains Aero-free.
+
+M84 adds no public API or product adapter behavior and leaves M74-M83 frozen.
+Its server-safe handler accepts two exact three-member topologies over a
+four-page-key scene. The client-only overlay preserves three cached batch pages
+plus one singleton direct fallback in both arms, requires ACK and three air
+blocks, and binds one-versus-three rebuild records to distinct 44-byte
+post-seal artifacts. The common/server closure remains Aero-free.

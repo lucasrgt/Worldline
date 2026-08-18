@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.72.0 - M84 Four-Page Topology Contrast
+
+Status: GO for a constant-three-member one-page versus three-page structural
+transition over one fixed four-page-key scene.
+
+- Aligned a 4x4 scene across Y/Z page boundaries with populations `9/3/3/1`.
+- Removed exact indices `0,1,2` and `0,3,12` in fresh otherwise-equal arms,
+  with strict server validation, ACK, and client air-block oracles.
+- Proved membership thirteen in both arms and event rebuilds one versus three
+  while cached pages/calls remain three and singleton fallback remains one.
+- Bound each topology to a 44-byte post-seal artifact and complete M74/M78
+  records; additive cost and performance direction remain outside the claim.
+
+The frozen M84 semantic SHA-256 is
+`ab9789101de12052aa945af741a37394c4a4b06fb78fa2d3d0737120a45eb39b`.
+
 ## 1.71.0 - M83 Page Topology Contrast
 
 Status: GO for constant-two-member same-page versus cross-page structural
