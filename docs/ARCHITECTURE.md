@@ -659,3 +659,10 @@ M69 keeps Packet18 in the modular combat boundary. The outbound channel emits
 one exact swing request, while the inbound tracker resolves the observed entity
 through the shared Packet20 identity registry. The typed API deliberately keeps
 request and observation separate because Packet18 carries no target or damage.
+
+M70 adds no public API. Its test orchestration and runtime mixins let a wire fixture own the
+official server and M66/M69 actors; a real Aero observer independently binds
+Packet20 identities, applies Packet18 then Packet38 at handler TAIL, and counts
+subsequent renderer frames and log rows. These clocks remain evidence streams,
+not a causal performance model. The adapter also retires terminal dropped-item
+IDs when the official server reuses them, while live duplicate IDs still fail.

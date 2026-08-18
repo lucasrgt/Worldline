@@ -4,6 +4,19 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.58.0 - M70 Aero Combat Window
+
+Status: GO for ordered combat-event observation and subsequent Aero frames.
+
+- Composed the M66 combat fixture with the M68 real graphical observer.
+- Sent the M69 swing immediately before the M66 attack request.
+- Applied named Packet18 before victim Packet38 on the observer stream.
+- Captured twenty post-event frames and strictly parsed post-event Aero rows.
+- Allowed official reuse of destroyed dropped-item IDs while rejecting live duplicates.
+
+The frozen M70 semantic SHA-256 is
+`977bf908fc7edf5e0cf707f81fffaf6208183440a0f07cca81e2b9a22d03e571`.
+
 ## 1.57.0 - M69 Named Peer Swing
 
 Status: GO for one isolated Packet18 request and named peer observation.

@@ -24,7 +24,9 @@ final class B173DroppedItemTracker {
         double y = input.readInt() / 32D, z = input.readInt() / 32D;
         double velocityX = input.readByte() / 128D, velocityY = input.readByte() / 128D;
         double velocityZ = input.readByte() / 128D;
-        if (spawned.containsKey(entityId)) throw new IOException("duplicate dropped-item entity ID");
+        if (spawned.containsKey(entityId) && !destroyed.contains(entityId))
+            throw new IOException("duplicate live dropped-item entity ID");
+        if (destroyed.remove(entityId)) { spawned.remove(entityId); collectors.remove(entityId); }
         if (spawned.size() >= MAX_ITEMS) throw new IOException("dropped-item bound exceeded");
         try { spawned.put(entityId, new RemoteDroppedItem(entityId, new RemoteItemStack(itemId, count, damage),
                 x, y, z, velocityX, velocityY, velocityZ)); }

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.57.0 - M69 Named Peer Swing (GO)**.
+Current official milestone: **Worldline v1.58.0 - M70 Aero Combat Window (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -356,6 +356,11 @@ M69 emits the exact authenticated Packet18 held-item swing boundary and
 correlates the resulting animation-1 observation to a Packet20-named peer. It
 does not treat the animation as an attack acknowledgment. See
 `docs/M69_PEER_SWING.md`.
+
+M70 composes M66, M68, and M69 in one official-server session: the real Aero
+observer applies Packet18 before Packet38, then completes a bounded frame/log
+window. It makes no spike or performance-causality claim. See
+`docs/M70_AERO_COMBAT_WINDOW.md`.
 
 ## Verify
 
