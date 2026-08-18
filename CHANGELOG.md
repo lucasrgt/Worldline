@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.81.0 - M93 Full-Page Depletion Recovery
+
+Status: GO for complete depletion and reverse recovery of one exact pinned
+six-member Aero page under a fixed page TTL.
+
+- Removed indices `1,2,3,5,6,7`, then restored `7,6,5,3,2,1` with exact
+  ordinal, operation, index, coordinate, nonce, ACK, and state validation.
+- Proved membership `16 -> 15 -> 14 -> 13 -> 12 -> 11 -> 10 -> 11 -> 12 ->
+  13 -> 14 -> 15 -> 16` across two fresh same-plan replicas.
+- Distinguished the batched two-through-six-member route, the direct
+  one-member route, and the zero-member route, with symmetric restoration.
+- Runtime-gated page TTL at 100000 frames and bound twelve transitions to a
+  172-byte sidecar; default-TTL eviction remains a nonclaim.
+
+The frozen M93 semantic SHA-256 is
+`f0f506ffa69950d8d4030819a4c6c5ca3f190edcfd3f4ba29f3a4ef4129959ad`.
+
 ## 1.80.0 - M92 Third-Member Depletion Recovery
 
 Status: GO for sequential three-cell depletion and reverse recovery inside one

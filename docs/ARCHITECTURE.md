@@ -824,3 +824,11 @@ It additionally removes exact index three, reaching three remaining members,
 then restores indices three/two/one. The 100-byte sidecar binds six transitions;
 complete records prove four page calls, zero direct fallback, and one rebuild
 throughout. Common/server code remains Aero-free.
+
+M93 adds no public API or product adapter behavior and leaves M74-M92 frozen.
+It removes the exact six-member page at indices one/two/three/five/six/seven,
+then restores it in reverse. A 172-byte sidecar binds twelve transitions.
+Complete records distinguish batched counts two through six, the direct
+one-member route, and the empty-page route. Page TTL is fixed at 100000 frames
+to isolate cardinality; default-TTL eviction remains outside the claim.
+Common/server code remains Aero-free.
