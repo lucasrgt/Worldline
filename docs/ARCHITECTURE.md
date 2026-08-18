@@ -811,3 +811,10 @@ It targets exact index two at `(x,y+2,z)`, a sibling in index one's pinned
 six-member page. The 52-byte sidecar and complete records prove fully batched
 rebuilds at both removal and restoration, with zero direct fallback. The result
 is fixture-specific; common/server code remains Aero-free.
+
+M91 adds no public API or product adapter behavior and leaves M74-M90 frozen.
+It removes indices one and two from their exact pinned six-member page, then
+restores them in reverse. Ordinal/operation/index-bound messages and the
+76-byte sidecar bind all four transitions; complete records prove four page
+calls, zero direct fallback, and one rebuild throughout. Common/server code
+remains Aero-free.

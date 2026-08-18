@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.78.0 - M90 Larger-Page Sibling Recovery (GO)**.
+Current official milestone: **Worldline v1.79.0 - M91 Larger-Page Depletion Recovery (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -471,6 +471,10 @@ two-member page, and reproduces the same fallback/restore-rebuild path. See
 M90 recovers index two, a sibling of index one in a pinned six-member page, and
 reproduces the same fully batched rebuild path. See
 `docs/M90_LARGER_PAGE_SIBLING_RECOVERY.md`.
+
+M91 removes both qualified identities from that six-member page before
+restoring them in reverse, preserving the fully batched rebuild route at all
+four transitions. See `docs/M91_LARGER_PAGE_DEPLETION_RECOVERY.md`.
 
 ## Verify
 

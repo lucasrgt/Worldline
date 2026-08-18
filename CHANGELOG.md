@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.79.0 - M91 Larger-Page Depletion Recovery
+
+Status: GO for sequential two-cell depletion and reverse recovery inside one
+exact pinned six-member Aero page.
+
+- Removed indices one and two, then restored two and one with exact ordinal,
+  operation, index, coordinate, nonce, ACK, and restore-state validation.
+- Proved membership `16 -> 15 -> 14 -> 15 -> 16`; every transition retained
+  four page calls, zero direct fallback/render/list calls, and one rebuild.
+- Preserved four cached pages and complete M74 state `0x1010/0xffff`.
+- Bound all four transitions to a 76-byte sidecar and reparsed every matching
+  M74/M78 record in two fresh same-plan replicas.
+
+The frozen M91 semantic SHA-256 is
+`5f019eb32c7f34b31ca907e9fdbec3b827254a08cdf0cbe11a91c703644b2f7e`.
+
 ## 1.78.0 - M90 Larger-Page Sibling Recovery
 
 Status: GO for exact index-two removal/restoration in index one's natural
