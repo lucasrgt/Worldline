@@ -4,6 +4,21 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.87.0 - M99 Rebuild-Budget Fallback
+
+Status: GO for the exact two-page rebuild budget under one-entry cache pressure.
+
+- Froze cache1, TTL100000, rebuild budget2, and the existing four-page scene.
+- Proved every retained record had pageCalls2, directInstances4, rebuild2,
+  cache1, and capacity-eviction delta two.
+- Independently required M74 direct renderer/list counters 4/4 and all sixteen
+  synchronized identities in 5003/4223 complete records.
+- Kept descriptive timings dynamic and limited the split to this exact sorted
+  page topology and membership distribution.
+
+The frozen M99 semantic SHA-256 is
+`bc072d0104007b86828550033fb0aa3e84c179aa5caee84dcd22552c3c9a4ce7`.
+
 ## 1.86.0 - M98 Configured-Zero Protected Cache Floor
 
 Status: GO for the protected one-page floor under literal max-cache zero.

@@ -868,3 +868,9 @@ M97's expected observed cache size one. The pinned eviction loop cannot remove
 its protected freshly compiled key when no other victim exists, so each later
 compile displaces the prior page and preserves a one-page floor. Common/server
 code remains Aero-free.
+
+M99 adds no public API or product adapter behavior and leaves M74-M98 frozen.
+It restores a one-entry cache but lowers the per-frame rebuild budget to two.
+For the exact sorted four-page fixture, two pages rebuild, the other two keys'
+four instances use direct rendering, and the eviction counter advances by two
+in every retained record. Common/server code remains Aero-free.

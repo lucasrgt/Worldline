@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.86.0 - M98 Configured-Zero Protected Cache Floor (GO)**.
+Current official milestone: **Worldline v1.87.0 - M99 Rebuild-Budget Fallback (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -506,6 +506,11 @@ mode. See `docs/M97_PAGE_CAPACITY_ONE_THRASH.md`.
 M98 sets the configured maximum to zero but proves the protected compiled page
 still leaves an effective cache floor of one; all four pages rebuild/evict per
 record. See `docs/M98_ZERO_CAPACITY_FLOOR.md`.
+
+M99 returns to a one-entry cache and limits page rebuilds to two per frame.
+Every retained record compiles two pages, renders four remaining instances by
+direct fallback, and advances capacity evictions by two. See
+`docs/M99_REBUILD_BUDGET_FALLBACK.md`.
 
 ## Verify
 
