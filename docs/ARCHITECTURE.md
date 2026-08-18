@@ -649,3 +649,8 @@ Checkpoint restoration is reconstruction plus deterministic event replay, not
 heap serialization. This makes the state contract explicit and fail-closed.
 The mod context is intentionally small so an Aero-specific adapter can be
 introduced later without exposing mapped Minecraft classes to mod code.
+
+M68 adds no product API. A test-only Gradle overlay drives the pinned real
+StationAPI/Aero client through vanilla `ConnectScreen`, records Packet1/13/51
+handler boundaries, and correlates subsequent renderer frames with Aero logs.
+All generated worlds, logs, and official artifacts remain outside the public tree.

@@ -1,0 +1,32 @@
+gradle.projectsEvaluated {
+    if (gradle.rootProject.name != 'aero-model-lib-test') return
+    def script = gradle.startParameter.initScripts.find { it.name == 'aero-multiplayer.init.gradle' }
+    if (script == null) throw new GradleException('Worldline multiplayer script path missing')
+    def root = script.parentFile.parentFile.parentFile.canonicalFile
+    def smoke = new File(root, 'smokes/m68-aero-multiplayer-login')
+    def project = gradle.rootProject
+    project.sourceSets.main.java.srcDir(new File(smoke, 'runtime-src'))
+    project.tasks.named('processResources').configure {
+        doLast { copy { from new File(smoke, 'runtime-resources/aerotest.mixins.json'); into destinationDir } }
+    }
+    def task = project.tasks.named('runClient').get()
+    if (task.actions.size() != 2 || !task.actions[0].getClass().name.endsWith('ClosureTaskAction'))
+        throw new GradleException('Aero runClient action shape drifted')
+    task.actions.remove(0)
+    def port = (project.findProperty('worldlinePort') ?: '25565').toString()
+    def frames = (project.findProperty('worldlineFrames') ?: '60').toString()
+    def username = (project.findProperty('worldlineUsername') ?: 'AeroPeer68').toString()
+    def log = new File(project.findProperty('worldlineLog').toString()).absoluteFile
+    log.parentFile.mkdirs(); if (log.exists()) log.delete()
+    task.jvmArgs([
+        '-Dworldline.multiplayer.enabled=true',
+        '-Dworldline.multiplayer.host=127.0.0.1',
+        '-Dworldline.multiplayer.port=' + port,
+        '-Dworldline.multiplayer.username=' + username,
+        '-Dworldline.multiplayer.frames=' + frames,
+        '-Daero.testmod.disabled=true',
+        '-Daero.spikelog=true', '-Daero.spikelog.ms=1000000', '-Daero.spikelog.heartbeatMs=200',
+        '-Daero.spikelog.sync=true', '-Daero.spikelog.file=' + log.absolutePath,
+        '-Xms1G', '-Xmx2G'
+    ] as List)
+}

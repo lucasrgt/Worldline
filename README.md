@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.55.0 - M67 Chest Retrieval (GO)**.
+Current official milestone: **Worldline v1.56.0 - M68 Aero Multiplayer Login (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -346,6 +346,11 @@ M67 reopens an M59 chest, retrieves exact stone through two accepted active-
 container actions, atomically updates combined and personal views, and proves
 empty chest plus player persistence after restart. See
 `docs/M67_CHEST_RETRIEVAL.md`.
+
+M68 drives the pinned real StationAPI/Aero client through vanilla multiplayer
+login, observes Packet1/13/51 readiness, renders bounded remote-world frames,
+and requires post-ready Aero logs before a clean disconnect. See
+`docs/M68_AERO_MULTIPLAYER_LOGIN.md`.
 
 ## Verify
 

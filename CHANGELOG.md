@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.56.0 - M68 Aero Multiplayer Login
+
+Status: GO for real StationAPI/Aero client and vanilla multiplayer composition.
+
+- Connected a real graphical b1.7.3 client through production `ConnectScreen`.
+- Observed Packet1, first Packet13, and applied Packet51 remote readiness.
+- Completed twenty post-ready renderer updates with post-ready Aero logs.
+- Repeated clean client disconnect/server shutdown from a pinned clean checkout.
+
+The frozen M68 semantic SHA-256 is
+`a7978b0bb7e1277d846528036ff3ded3c5541ea5b11bd0935d32580b574e969f`.
+
 ## 1.55.0 - M67 Chest Retrieval
 
 Status: GO for exact single-chest retrieval and final-state persistence.
