@@ -9,6 +9,8 @@ import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteItemStack;
 import worldline.api.RemotePersonalCraft;
 import worldline.api.RemotePersonalTransaction;
+import worldline.api.RemoteArmorEquip;
+import worldline.api.RemoteArmorSlot;
 
 /** Exact left-click predictor for bounded personal-window take/place transitions. */
 final class B173PersonalWindowChannel {
@@ -21,6 +23,23 @@ final class B173PersonalWindowChannel {
 
     RemotePersonalTransaction click(int slot) throws IOException { return click(slot, false); }
     RemotePersonalTransaction rejectedTakeProbe(int slot) throws IOException { return click(slot, true); }
+
+    RemoteArmorEquip equipLeather(int personalSlot, RemoteArmorSlot armor) throws IOException {
+        if (inbound.windowActive() || action > 32765 || armor == null || personalSlot < 9 || personalSlot > 44
+                || !inbound.cursorObserved() || inbound.cursor() != null)
+            throw new IllegalStateException("leather armor equip preflight failed");
+        RemoteInventoryView before = inbound.inventory(); RemoteItemStack stack =
+                new RemoteItemStack(armor.leatherItemId(), 1, 0);
+        if (before.windowId() != 0 || before.size() != 45 || before.slot(personalSlot).empty()
+                || !before.slot(personalSlot).item().equals(stack) || !before.slot(armor.containerSlot()).empty())
+            throw new IllegalStateException("leather armor source or destination drifted");
+        RemoteInventoryView taken = replace(before, personalSlot, null);
+        B173PersonalStep take = step(personalSlot, stack, taken, stack);
+        RemoteInventoryView after = replace(taken, armor.containerSlot(), stack);
+        B173PersonalStep place = step(armor.containerSlot(), null, after, null);
+        return new RemoteArmorEquip(personalSlot, armor, take.action, place.action,
+                stack, before, taken, after);
+    }
 
     RemotePersonalCraft craft2x2(int slot) throws IOException {
         RemoteInventoryView before = inbound.inventory(); RemoteItemStack log = new RemoteItemStack(17, 1, 0);
@@ -74,8 +93,7 @@ final class B173PersonalWindowChannel {
         if (action == 32767) throw new IllegalStateException("personal transaction counter exhausted");
         int nextAction = action + 1;
         inbound.beginPersonalTransaction(nextAction, slot, wirePrediction, before, after, cursor, nextCursor);
-        output.writeByte(102); output.writeByte(0); output.writeShort(slot); output.writeByte(0);
-        output.writeShort(nextAction); output.writeBoolean(false); B173InventoryCodec.item(output, wirePrediction);
+        B173ContainerPacket.write(output, 0, slot, 0, nextAction, wirePrediction);
         output.flush(); action = nextAction; return inbound.awaitPersonalTransaction();
     }
 
@@ -85,8 +103,7 @@ final class B173PersonalWindowChannel {
         if (action == 32767) throw new IllegalStateException("personal transaction counter exhausted");
         int nextAction = action + 1;
         inbound.beginPersonalTransaction(nextAction, slot, predicted, before, after, cursorBefore, cursorAfter);
-        output.writeByte(102); output.writeByte(0); output.writeShort(slot); output.writeByte(0);
-        output.writeShort(nextAction); output.writeBoolean(false); B173InventoryCodec.item(output, predicted);
+        B173ContainerPacket.write(output, 0, slot, 0, nextAction, predicted);
         output.flush(); action = nextAction; return inbound.awaitPersonalStep();
     }
 
@@ -97,6 +114,10 @@ final class B173PersonalWindowChannel {
         slots.set(secondSlot, new RemoteInventorySlot(secondSlot, second));
         return new RemoteInventoryView(0, slots);
     }
+
+    private static RemoteInventoryView replace(RemoteInventoryView source, int slot, RemoteItemStack item) {
+        List<RemoteInventorySlot> slots = new ArrayList<>(source.slots());
+        slots.set(slot, new RemoteInventorySlot(slot, item)); return new RemoteInventoryView(0, slots); }
 
     private static boolean emptyCraft(RemoteInventoryView view) {
         for (int slot = 0; slot < 5; slot++) if (!view.slot(slot).empty()) return false; return true; }

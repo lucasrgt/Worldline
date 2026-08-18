@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.52.0 - M64 Workbench Output (GO)**.
+Current official milestone: **Worldline v1.53.0 - M65 Peer Armor Equipment (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -333,6 +333,10 @@ M64 confirms that model through an accepted exact slabs output prediction,
 observes the crafted-stat side effect, consumes the grid, stores the result,
 closes safely, and proves persistence after restart. See
 `docs/M64_WORKBENCH_OUTPUT.md`.
+
+M65 equips the exact leather set through accepted personal-window actions,
+observes every reversed armor mapping through a named peer's Packet5 stream,
+and proves local and peer state after restart. See `docs/M65_PEER_ARMOR.md`.
 
 ## Verify
 

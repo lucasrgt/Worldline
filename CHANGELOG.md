@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.53.0 - M65 Peer Armor Equipment
+
+Status: GO for exact leather equipment and named-peer observation.
+
+- Added typed leather moves into personal-window armor slots 5..8.
+- Froze all eight Packet102 messages through the production encoder.
+- Correlated the reversed armor layout with peer Packet5 slots 4..1.
+- Proved Packet104, Packet5 bootstrap, and four NBT entries after restart.
+
+The frozen M65 semantic SHA-256 is
+`7bf03514d4331779e14ecaf3379ecf89d3bea276115ca77e909e5a9160587fe4`.
+
 ## 1.52.0 - M64 Workbench Output
 
 Status: GO for exact workbench output, consumption, and persistence.

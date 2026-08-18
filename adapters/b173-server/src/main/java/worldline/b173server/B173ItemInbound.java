@@ -138,6 +138,12 @@ final class B173ItemInbound {
         throw new IOException("expected peer held item absent from bounded inbound window");
     }
 
+    worldline.api.RemoteArmorPiece awaitPeerArmor(worldline.api.RemoteArmorPiece expected, Pump pump)
+            throws IOException { if (expected == null) throw new IllegalArgumentException("null expected peer armor");
+        if (equipment.matches(expected)) return expected; for (int count = 0; count < 8192; count++) { pump.one();
+            if (equipment.matches(expected)) return expected; }
+        throw new IOException("expected peer armor absent from bounded inbound window"); }
+
     RemoteDroppedItem awaitDroppedItem(RemoteItemStack expected, Pump pump) throws IOException {
         RemoteDroppedItem ready = dropped.matching(expected); if (ready != null) return ready;
         for (int count = 0; count < 8192; count++) { pump.one(); ready = dropped.matching(expected);

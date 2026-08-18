@@ -116,6 +116,13 @@ final class B173ItemAccess {
         catch (IOException error) { throw new IllegalStateException("peer held-item receive failed", error); }
     }
 
+    static worldline.api.RemoteArmorEquip equipLeatherArmor(B173PlayChannel channel, int personalSlot,
+            worldline.api.RemoteArmorSlot slot) { try { return channel.equipLeatherArmor(personalSlot, slot); }
+        catch (IOException error) { throw new IllegalStateException("leather armor equip failed", error); } }
+    static worldline.api.RemoteArmorPiece awaitPeerArmor(B173PlayChannel channel,
+            worldline.api.RemoteArmorPiece expected) { try { return channel.inbound().awaitPeerArmor(expected); }
+        catch (IOException error) { throw new IllegalStateException("peer armor receive failed", error); } }
+
     static RemoteDroppedItem awaitDroppedItem(B173PlayChannel channel, RemoteItemStack expected) {
         try { return channel.inbound().awaitDroppedItem(expected); }
         catch (IOException error) { throw new IllegalStateException("dropped-item receive failed", error); }

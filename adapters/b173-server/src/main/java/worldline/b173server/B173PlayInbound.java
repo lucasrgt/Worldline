@@ -127,6 +127,7 @@ final class B173PlayInbound {
     void beginContainerTransaction(B173ContainerStep step) { items.beginContainerTransaction(step); } B173ContainerStep awaitContainerTransaction() throws IOException { return items.awaitContainerTransaction(this::pumpOne); }
     RemoteHeldItem awaitPeerHeldItem(RemoteHeldItem expected) throws IOException {
         return items.awaitPeerHeldItem(expected, this::pumpOne); }
+    worldline.api.RemoteArmorPiece awaitPeerArmor(worldline.api.RemoteArmorPiece expected) throws IOException { return items.awaitPeerArmor(expected, this::pumpOne); }
     worldline.api.RemoteDroppedItem awaitDroppedItem(worldline.api.RemoteItemStack expected) throws IOException {
         return items.awaitDroppedItem(expected, this::pumpOne); }
     RemoteItemCollection awaitItemCollection(worldline.api.RemoteDroppedItem expected, String username)

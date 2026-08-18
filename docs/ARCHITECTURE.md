@@ -470,6 +470,13 @@ before atomically clearing result/matrix; action 6 stores into both combined and
 canonical personal views. Empty owned state then composes with the existing
 safe-close proof and restart oracle.
 
+M65 keeps the personal-window action counter as the single owner of armor
+Packet102 transitions. A bounded peer equipment tracker correlates Packet5
+entity IDs with previously bound usernames and preserves the legacy reversed
+mapping between window slots 5..8 and equipment slots 4..1. Restart evidence
+pairs the actor's count-bearing Packet104 view with the peer's count-free
+Packet5 state.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested
