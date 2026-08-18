@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.64.0 - M76 Renderer Decomposition (GO)**.
+Current official milestone: **Worldline v1.65.0 - M77 Direct Stage Timing (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -396,6 +396,12 @@ registration removed, renderer body without Aero, and renderer body with Aero.
 Exact `0/0`, `16/0`, and `16/16` per-record call pairs qualify the structural
 decomposition. Mixed mirrored timings do not establish stable stage cost or
 causal attribution. See `docs/M76_RENDERER_DECOMPOSITION.md`.
+
+M77 keeps the same synchronized scene and directly times the complete renderer,
+its sixteen nested Aero enqueue calls, and both per-frame flush calls. A
+post-seal binary sidecar is index-bound to every M74 census record. The spans
+are descriptive under timing instrumentation, not additive or causal costs.
+See `docs/M77_DIRECT_STAGE_TIMING.md`.
 
 ## Verify
 

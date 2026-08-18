@@ -81,6 +81,7 @@ Passing an experiment does not silently promote its API.
 | v1.62.0 / M74 | Complete bounded renderer-interval census over the paired Aero fixture | GO - primitive in-memory capture and post-seal binary artifacts |
 | v1.63.0 / M75 | Mirrored 0/1/4/16 Aero-call exposure ladder over a constant scene | GO - exact per-record treatment and descriptive whole-census summaries |
 | v1.64.0 / M76 | Renderer registration/body/Aero-call decomposition over a constant sixteen-entity scene | GO - exact 0/0, 16/0, and 16/16 records; mixed descriptive timing |
+| v1.65.0 / M77 | Direct renderer/enqueue/flush timing aligned to the complete census | GO - exact 16/16/2 call spans in two fresh same-plan replicas |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -92,13 +93,13 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.64.0 direction
+## Immediate post-v1.65.0 direction
 
-M76 qualifies an exact renderer/Aero stage decomposition while holding the
-sixteen-entity scene constant. Its two mirrored triplets show mixed temporal
-ordering, so the next analytical step should reduce remaining runtime variance
-or add a lower-level stage timer before expanding repetitions. A larger campaign
-still needs a defined estimand, preregistered sample size, and machine/order
-controls. M71-M76 do not establish causal spike attribution.
+M77 qualifies direct synchronous renderer, queue, and flush span acquisition
+while holding the sixteen-entity scene constant. It does not turn these nested,
+instrumented timings into uninstrumented or causal costs. The next analytical
+step should decide whether to expand matched repetitions under a preregistered
+estimand or isolate another concrete stage with the same record alignment.
+M71-M77 do not establish causal spike attribution.
 Generic synchronization, persistence, multiple clients, merging, shift clicks,
 and broad automation remain outside the stable contract.

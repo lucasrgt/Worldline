@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.65.0 - M77 Direct Stage Timing
+
+Status: GO for index-aligned direct synchronous renderer, Aero enqueue, and
+flush spans over the constant sixteen-entity complete census.
+
+- Added preallocated primitive timers around the full renderer, sixteen nested
+  queue calls, and two flush calls per retained record.
+- Wrote a versioned sidecar only after the M74 bracket sealed and cross-bound
+  every record to the M74 nonce, plan, count, elapsed time, and fixture state.
+- Preserved sub-clock-resolution flush aggregates as zero while requiring a
+  positive full series and exact call cardinality.
+- Ran two fresh same-plan/nonce replicas and reported descriptive spans without
+  an uninstrumented-cost, causal, regression, or historical-lag verdict.
+
+The frozen M77 semantic SHA-256 is
+`4ac829480cfb8a9409d89c35e002246e43a0a143815303e1ac520e8990988a4c`.
+
 ## 1.64.0 - M76 Renderer Decomposition
 
 Status: GO for exact complete-census acquisition across renderer-absent,
