@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.65.0 - M77 Direct Stage Timing (GO)**.
+Current official milestone: **Worldline v1.66.0 - M78 Paged Stage Timing (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -403,6 +403,12 @@ flush calls. A post-seal binary sidecar is index-bound to every M74 census
 record. The spans are descriptive under timing instrumentation, not paged,
 additive, or causal costs.
 See `docs/M77_DIRECT_STAGE_TIMING.md`.
+
+M78 adds a client-only Aero marker to the remote presentation class while the
+common/server class remains Aero-free. The same scene now produces sixteen real
+enqueues and four cached page calls with no fallback or rebuild in every
+record. Direct steady-state spans remain descriptive. See
+`docs/M78_PAGED_STAGE_TIMING.md`.
 
 ## Verify
 

@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.66.0 - M78 Paged Stage Timing
+
+Status: GO for real steady-state Aero cell-page enqueue/flush acquisition over
+the synchronized sixteen-entity scene.
+
+- Added a client-only Aero marker while retaining an Aero-free common/server
+  block-entity class closure.
+- Required exact per-record `16` enqueues, `4` cached pages/page calls, zero
+  direct fallbacks/rebuilds, and the corresponding M74 structural counters.
+- Bound direct renderer/enqueue/flush spans and page counters to every M74
+  census index in a post-seal versioned sidecar.
+- Ran two fresh same-plan/nonce replicas without a cold-build, causal,
+  regression, or historical-lag verdict.
+
+The frozen M78 semantic SHA-256 is
+`dbb52fb098cf377aa90027c4000ab7073efa6cbe5bc4f4fa56fa2090d38ae894`.
+
 ## 1.65.0 - M77 Direct Stage Timing
 
 Status: GO for index-aligned direct synchronous renderer, Aero enqueue, and

@@ -722,3 +722,10 @@ sidecar is index-aligned to the M74 census and written only after seal. The
 server closure remains free of Aero/client imports; all generated binaries and
 timing evidence remain ignored local artifacts. Timings are instrumented
 descriptions, not paged, additive, causal, or uninstrumented stage costs.
+
+M78 adds no public API or product adapter behavior. Its client-only Mixin adds
+the Aero page marker to the remote M74 block-entity class at runtime; the
+compiled common/server class remains Aero-free. A client recorder binds direct
+renderer/enqueue/flush spans and public page counters to the M74 record index,
+then writes a distinct binary artifact post-seal. The qualified bracket is
+warmed and rebuild-free; cold cache construction remains outside the claim.
