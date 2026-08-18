@@ -115,7 +115,7 @@ final class B173PlayInbound {
     worldline.api.RemoteContainerWindow awaitChest() throws IOException {
         return items.awaitChest(this::pumpOne); }
     worldline.api.RemoteFurnaceSmelt awaitFurnaceSmelt() throws IOException { return items.awaitFurnaceSmelt(this::pumpOne); }
-    void beginChest() { items.beginChest(); } void beginFurnace() { items.beginFurnace(); } int activeWindowId() { return items.activeWindowId(); } worldline.api.RemoteContainerWindow activeWindow() { return items.activeWindow(); } long activeWindowEpoch() { return items.activeWindowEpoch(); } boolean windowActive() { return items.windowActive(); } void closeWindow(int id) throws IOException { items.closeWindow(id); }
+    void beginChest() { items.beginChest(); } void beginFurnace() { items.beginFurnace(); } void beginWorkbench() { items.beginWorkbench(); } int activeWindowId() { return items.activeWindowId(); } worldline.api.RemoteContainerWindow activeWindow() { return items.activeWindow(); } long activeWindowEpoch() { return items.activeWindowEpoch(); } boolean windowActive() { return items.windowActive(); } void closeWindow(int id) throws IOException { items.closeWindow(id); }
     boolean cursorObserved() { return items.cursorObserved(); }
     worldline.api.RemoteItemStack cursor() { return items.cursor(); }
     void beginPersonalTransaction(int action, int slot, worldline.api.RemoteItemStack predicted,

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.49.0 - M61 Furnace Output Retrieval (GO)**.
+Current official milestone: **Worldline v1.50.0 - M62 Workbench Window (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -318,6 +318,11 @@ full Packet105 cook/burn progression to one glass output. See
 M61 retrieves that glass through accepted actions 5 and 6, requires the exact
 Packet200 crafted-stat side effect, and proves player/output persistence after
 a clean restart. See `docs/M61_FURNACE_OUTPUT.md`.
+
+M62 opens the official workbench as a typed read-only window and preserves its
+asymmetric wire layout: Packet100 declares nine matrix slots while Packet104
+contains result, matrix, and player tail for 46 total slots. See
+`docs/M62_WORKBENCH_WINDOW.md`.
 
 ## Verify
 

@@ -7,6 +7,8 @@ import worldline.api.BlockPosition;
 import worldline.api.RemoteInventorySlot;
 import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteItemStack;
+import worldline.api.RemoteContainerWindow;
+import worldline.api.RemoteWindowKind;
 
 /** Strict outbound selected-item actions derived from authoritative inventory. */
 final class B173HeldItemChannel {
@@ -61,6 +63,11 @@ final class B173HeldItemChannel {
     int closeWindow() throws IOException {
         if (!inbound.cursorObserved() || inbound.cursor() != null)
             throw new IllegalStateException("remote window close requires an observed empty cursor");
+        RemoteContainerWindow active = inbound.activeWindow();
+        if (active.descriptor().kind() == RemoteWindowKind.WORKBENCH)
+            for (int slot = 0; slot < active.descriptor().playerTailOffset(); slot++)
+                if (!active.inventory().slot(slot).empty())
+                    throw new IllegalStateException("workbench close requires an empty result and matrix");
         int windowId = inbound.activeWindowId(); output.writeByte(101); output.writeByte(windowId);
         output.flush(); return windowId;
     }

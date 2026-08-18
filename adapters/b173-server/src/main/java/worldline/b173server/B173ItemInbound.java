@@ -45,10 +45,10 @@ final class B173ItemInbound {
             if (view.windowId() == 0 && transactions.recovering()) transactions.resyncWindow(view);
             else if (view.windowId() == 0) inventory.window(view);
             else { RemoteInventoryView personal = inventory.snapshot();
-                int owned = windows.pendingContainerSlots();
-                if (personal == null || view.size() != owned + 36) throw new IOException("container tail base absent");
+                int offset = windows.pendingPlayerTailOffset();
+                if (personal == null || view.size() != offset + 36) throw new IOException("container tail base absent");
                 for (int slot = 9; slot <= 44; slot++) {
-                    worldline.api.RemoteInventorySlot own = personal.slot(slot), combined = view.slot(owned + slot - 9);
+                    worldline.api.RemoteInventorySlot own = personal.slot(slot), combined = view.slot(offset + slot - 9);
                     if (own.empty() != combined.empty() || !own.empty() && !own.item().equals(combined.item()))
                         throw new IOException("container tail differs from personal inventory"); }
                 windows.contents(view); } }
@@ -123,6 +123,7 @@ final class B173ItemInbound {
 
     void beginChest() { windows.begin(worldline.api.RemoteWindowKind.CHEST); }
     void beginFurnace() { windows.begin(worldline.api.RemoteWindowKind.FURNACE); }
+    void beginWorkbench() { windows.begin(worldline.api.RemoteWindowKind.WORKBENCH); }
     int activeWindowId() { return windows.activeId(); }
     RemoteContainerWindow activeWindow() { return windows.activeWindow(); }
     long activeWindowEpoch() { return windows.activeEpoch(); }

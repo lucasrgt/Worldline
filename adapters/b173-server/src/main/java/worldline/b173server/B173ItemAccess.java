@@ -62,6 +62,12 @@ final class B173ItemAccess {
         catch (IOException error) { throw new IllegalStateException("furnace window receive failed", error); }
     }
 
+    static worldline.api.RemoteContainerWindow openWorkbench(B173PlayChannel channel,
+            BlockPosition position, BlockFace face) {
+        try { return channel.openWorkbench(position, face); }
+        catch (IOException error) { throw new IllegalStateException("workbench window receive failed", error); }
+    }
+
     static worldline.api.RemoteFurnaceLoad loadFurnace(B173PlayChannel channel, int inputSlot, int fuelSlot) {
         try { return channel.loadFurnace(inputSlot, fuelSlot); }
         catch (IOException error) { throw new IllegalStateException("furnace load failed", error); }

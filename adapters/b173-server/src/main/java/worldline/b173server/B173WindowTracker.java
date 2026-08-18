@@ -27,6 +27,7 @@ final class B173WindowTracker {
         int windowId = input.readUnsignedByte(), type = input.readUnsignedByte();
         String title = input.readUTF(); int slots = input.readUnsignedByte();
         RemoteWindowKind kind = type == 0 ? RemoteWindowKind.CHEST
+                : type == 1 ? RemoteWindowKind.WORKBENCH
                 : type == 2 ? RemoteWindowKind.FURNACE : null;
         if (expectedKind == null || kind != expectedKind || pending != null || ready != null
                 || windowId < 1 || windowId > 100)
@@ -55,9 +56,9 @@ final class B173WindowTracker {
     long activeEpoch() { if (ready == null) throw new IllegalStateException("remote window is not open"); return epoch; }
 
     boolean active() { return ready != null || pending != null || expectedKind != null; }
-    int pendingContainerSlots() {
+    int pendingPlayerTailOffset() {
         if (pending == null) throw new IllegalStateException("remote window descriptor is absent");
-        return pending.containerSlots(); }
+        return pending.playerTailOffset(); }
 
     void close(int windowId) throws IOException {
         if (ready == null || ready.descriptor().windowId() != windowId)
@@ -85,7 +86,7 @@ final class B173WindowTracker {
         slots.set(update.slot, new RemoteInventorySlot(update.slot, update.item));
         ready = new RemoteContainerWindow(ready.descriptor(),
                 new RemoteInventoryView(update.windowId, slots));
-        int owned = ready.descriptor().containerSlots();
-        return update.slot < owned ? -1 : update.slot - owned + 9;
+        int offset = ready.descriptor().playerTailOffset();
+        return update.slot < offset ? -1 : update.slot - offset + 9;
     }
 }

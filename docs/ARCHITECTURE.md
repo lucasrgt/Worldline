@@ -452,6 +452,12 @@ Packet200 glass-stat evidence and its correlated Packet106 true; action 6 then
 stores the cursor in the personal tail. The existing transaction tracker still
 publishes the active view, window-0 view, and cursor as one logical transition.
 
+M62 separates a remote window's wire-declared container count from its player
+tail offset. Chest and furnace retain offsets 27 and 3; workbench Packet100
+declares its nine matrix slots while the result slot makes the combined player
+tail begin at 10. Packet104 shape checks, tail reconciliation, Packet103 reverse
+mapping, and close safety all consume that single derived layout.
+
 `smokes/controlled-client-tick/` completes the client-level cycle. It invokes
 the original `Minecraft` constructor, installs explicit headless boundaries,
 loads an original client `World`, and executes exactly one externally requested

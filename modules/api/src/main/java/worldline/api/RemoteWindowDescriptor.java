@@ -19,6 +19,8 @@ public final class RemoteWindowDescriptor {
             throw new IllegalArgumentException("invalid single-chest descriptor");
         if (kind == RemoteWindowKind.FURNACE && (!"Furnace".equals(title) || containerSlots != 3))
             throw new IllegalArgumentException("invalid furnace descriptor");
+        if (kind == RemoteWindowKind.WORKBENCH && (!"Crafting".equals(title) || containerSlots != 9))
+            throw new IllegalArgumentException("invalid workbench descriptor");
         this.windowId = windowId; this.kind = kind; this.title = title; this.containerSlots = containerSlots;
     }
 
@@ -26,6 +28,8 @@ public final class RemoteWindowDescriptor {
     public RemoteWindowKind kind() { return kind; }
     public String title() { return title; }
     public int containerSlots() { return containerSlots; }
+    public int playerTailOffset() { return kind == RemoteWindowKind.WORKBENCH ? 10 : containerSlots; }
+    public int totalSlots() { return playerTailOffset() + 36; }
 
     @Override public boolean equals(Object other) {
         if (!(other instanceof RemoteWindowDescriptor)) return false;

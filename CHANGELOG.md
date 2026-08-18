@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.50.0 - M62 Workbench Window
+
+Status: GO for typed workbench open/read and safe empty-grid close.
+
+- Preserved Packet100's exact `Crafting` descriptor and declared count of nine.
+- Modeled the separate result slot and exact 46-slot Packet104 combined view.
+- Reconciled personal slot 36 with combined slot 37 through one layout offset.
+- Rejected workbench close unless result, matrix, and cursor are empty.
+
+The frozen M62 semantic SHA-256 is
+`975a1e57c412953d693d00c7a6105b5cbdfed428ab8bdc5e58a4ce04dd974fdf`.
+
 ## 1.49.0 - M61 Furnace Output Retrieval
 
 Status: GO for exact glass retrieval and restart persistence.

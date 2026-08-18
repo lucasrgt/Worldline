@@ -78,7 +78,7 @@ final class B173ContainerWindowChannel {
 
     private Move move(int personalSlot, int ownedSlot) throws IOException {
         RemoteContainerWindow active = inbound.activeWindow(); RemoteInventoryView before = active.inventory();
-        int owned = active.descriptor().containerSlots(), combined = owned + personalSlot - 9;
+        int owned = active.descriptor().playerTailOffset(), combined = owned + personalSlot - 9;
         if (personalSlot < 9 || personalSlot > 44 || ownedSlot < 0 || ownedSlot >= owned
                 || before.slot(combined).empty() || !before.slot(ownedSlot).empty())
             throw new IllegalStateException("container move requires occupied source and empty target");

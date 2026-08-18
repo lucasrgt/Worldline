@@ -22,6 +22,7 @@ public final class DomainApiTest {
         movementRouteEventIsIndexedAndFailClosed();
         movementRouteExecutionIsExactAndFailClosed();
         correlatedRouteExecutionPreservesIdentity();
+        RemoteWindowLayoutTest.run();
         System.out.println("DomainApiTest passed");
     }
 
