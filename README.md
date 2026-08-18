@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.79.0 - M91 Larger-Page Depletion Recovery (GO)**.
+Current official milestone: **Worldline v1.80.0 - M92 Third-Member Depletion Recovery (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -475,6 +475,10 @@ reproduces the same fully batched rebuild path. See
 M91 removes both qualified identities from that six-member page before
 restoring them in reverse, preserving the fully batched rebuild route at all
 four transitions. See `docs/M91_LARGER_PAGE_DEPLETION_RECOVERY.md`.
+
+M92 removes the third identity in that exact page too, reducing it from six to
+three members before reverse recovery while preserving the batched route. See
+`docs/M92_THIRD_MEMBER_DEPLETION_RECOVERY.md`.
 
 ## Verify
 

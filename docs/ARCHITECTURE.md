@@ -818,3 +818,9 @@ restores them in reverse. Ordinal/operation/index-bound messages and the
 76-byte sidecar bind all four transitions; complete records prove four page
 calls, zero direct fallback, and one rebuild throughout. Common/server code
 remains Aero-free.
+
+M92 adds no public API or product adapter behavior and leaves M74-M91 frozen.
+It additionally removes exact index three, reaching three remaining members,
+then restores indices three/two/one. The 100-byte sidecar binds six transitions;
+complete records prove four page calls, zero direct fallback, and one rebuild
+throughout. Common/server code remains Aero-free.

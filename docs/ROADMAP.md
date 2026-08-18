@@ -96,6 +96,7 @@ Passing an experiment does not silently promote its API.
 | v1.77.0 / M89 | Sibling-cell membership recovery | GO - index4 matches index0's two-member-page fallback and restore rebuild |
 | v1.78.0 / M90 | Larger-page sibling recovery | GO - index2 matches index1's six-member-page batched rebuild route |
 | v1.79.0 / M91 | Larger-page depletion recovery | GO - indices1/2 deplete six-member page to four and reverse-recover with fully batched rebuilds |
+| v1.80.0 / M92 | Third-member depletion recovery | GO - indices1/2/3 deplete six-member page to three and reverse-recover with fully batched rebuilds |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -107,13 +108,13 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.79.0 direction
+## Immediate post-v1.80.0 direction
 
-M91 depletes the qualified six-member page from six to four members and
-reverse-recovers it while retaining the fully batched rebuild path. It does not
-qualify further depletion toward a threshold, arbitrary cell sizes/pages,
-concurrency, stale cleanup, merge/repacking, or page-count cost. The next
-boundary should test one further bounded depletion step before any threshold
-claim. M71-M91 do not establish causal spike attribution.
+M92 depletes the qualified six-member page from six to three members and
+reverse-recovers it while retaining the fully batched rebuild path. The frozen
+fixture has no fourth identity in that page, so empty-page behavior requires a
+new bounded fixture rather than extrapolation. Arbitrary cell sizes/pages,
+concurrency, stale cleanup, merge/repacking, and page-count cost remain outside
+scope. M71-M92 do not establish causal spike attribution.
 Generic synchronization, persistence, multiple clients, merging, shift clicks,
 and broad automation remain outside the stable contract.
