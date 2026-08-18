@@ -805,3 +805,9 @@ It targets exact index four at `(x,y,z+1)`, the other identity in index zero's
 pinned natural two-member page. The 52-byte sidecar and complete records prove
 the same fallback during removal and one rebuild at restoration. The result is
 fixture-specific; common/server code remains Aero-free.
+
+M90 adds no public API or product adapter behavior and leaves M74-M89 frozen.
+It targets exact index two at `(x,y+2,z)`, a sibling in index one's pinned
+six-member page. The 52-byte sidecar and complete records prove fully batched
+rebuilds at both removal and restoration, with zero direct fallback. The result
+is fixture-specific; common/server code remains Aero-free.

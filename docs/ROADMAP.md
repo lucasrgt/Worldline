@@ -94,6 +94,7 @@ Passing an experiment does not silently promote its API.
 | v1.75.0 / M87 | Sequential two-cell membership recovery | GO - index0 fallback recovery followed by index1 immediate-rebuild recovery |
 | v1.76.0 / M88 | Reverse two-cell membership recovery | GO - index1 rebuild-first followed by index0 fallback-second under the same plan |
 | v1.77.0 / M89 | Sibling-cell membership recovery | GO - index4 matches index0's two-member-page fallback and restore rebuild |
+| v1.78.0 / M90 | Larger-page sibling recovery | GO - index2 matches index1's six-member-page batched rebuild route |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -105,13 +106,14 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.77.0 direction
+## Immediate post-v1.78.0 direction
 
-M89 shows that both exact identities in one pinned two-member page enter the
-same fallback path when either is removed. It does not qualify arbitrary cell
-sizes/pages, larger-page siblings, more than two cells, concurrency, stale
-cleanup, merge/repacking, or page-count cost. The next boundary should test a
-second identity in index one's larger page before broader churn. M71-M89 do not
-establish causal spike attribution.
+M90 establishes paired exact identities for both observed routes: indices 0/4
+fall back when their two-member page drops to one, while indices 1/2 rebuild
+and stay batched in their six-member page. It does not qualify arbitrary cell
+sizes/pages, depletion toward the batch threshold, concurrency, stale cleanup,
+merge/repacking, or page-count cost. The next boundary should begin bounded
+depletion of the six-member page. M71-M90 do not establish causal spike
+attribution.
 Generic synchronization, persistence, multiple clients, merging, shift clicks,
 and broad automation remain outside the stable contract.

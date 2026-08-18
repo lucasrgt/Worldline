@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.77.0 - M89 Sibling-Cell Membership Recovery (GO)**.
+Current official milestone: **Worldline v1.78.0 - M90 Larger-Page Sibling Recovery (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -467,6 +467,10 @@ rebuilds even when first, while index zero falls back even when second. See
 M89 recovers index four, the other identity in index zero's pinned natural
 two-member page, and reproduces the same fallback/restore-rebuild path. See
 `docs/M89_SIBLING_CELL_RECOVERY.md`.
+
+M90 recovers index two, a sibling of index one in a pinned six-member page, and
+reproduces the same fully batched rebuild path. See
+`docs/M90_LARGER_PAGE_SIBLING_RECOVERY.md`.
 
 ## Verify
 

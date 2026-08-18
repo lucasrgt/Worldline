@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.78.0 - M90 Larger-Page Sibling Recovery
+
+Status: GO for exact index-two removal/restoration in index one's natural
+six-member page under the pinned Aero configuration.
+
+- Targeted `(x,y+2,z)` and derived nonce `root*100+3`, with exact block,
+  block-entity, phase, ACK, and restored-state validation.
+- Proved membership `16 -> 15 -> 16` while page calls remained four, direct
+  fallback/render/list calls remained zero, and both transitions rebuilt once.
+- Preserved four cached pages and complete M74 state `0x1010/0xffff` throughout.
+- Bound both request/event pairs to the 52-byte sidecar and reparsed every
+  corresponding M74/M78 record.
+
+The frozen M90 semantic SHA-256 is
+`aac17bb2f371a10cf09b7350c228e000700ac36270dc6d3535e3de74a132a402`.
+
 ## 1.77.0 - M89 Sibling-Cell Membership Recovery
 
 Status: GO for exact index-four removal/restoration in index zero's natural
