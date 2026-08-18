@@ -93,6 +93,7 @@ Passing an experiment does not silently promote its API.
 | v1.74.0 / M86 | Repeated same-cell membership recovery | GO - two generation-bound 16-to-15-to-16 cycles with exact fallback/rebuild recovery |
 | v1.75.0 / M87 | Sequential two-cell membership recovery | GO - index0 fallback recovery followed by index1 immediate-rebuild recovery |
 | v1.76.0 / M88 | Reverse two-cell membership recovery | GO - index1 rebuild-first followed by index0 fallback-second under the same plan |
+| v1.77.0 / M89 | Sibling-cell membership recovery | GO - index4 matches index0's two-member-page fallback and restore rebuild |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -104,13 +105,13 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.76.0 direction
+## Immediate post-v1.77.0 direction
 
-M88 shows that the two exact M87 paths survive order reversal: index one
-rebuilds and index zero falls back. It does not qualify a general positional
-mechanism, more than two cells, concurrency, stale cleanup, merge/repacking, or
-page-count cost. The next boundary should test another fixed identity within
-the same page before broader churn. M71-M88 do not establish causal spike
-attribution.
+M89 shows that both exact identities in one pinned two-member page enter the
+same fallback path when either is removed. It does not qualify arbitrary cell
+sizes/pages, larger-page siblings, more than two cells, concurrency, stale
+cleanup, merge/repacking, or page-count cost. The next boundary should test a
+second identity in index one's larger page before broader churn. M71-M89 do not
+establish causal spike attribution.
 Generic synchronization, persistence, multiple clients, merging, shift clicks,
 and broad automation remain outside the stable contract.

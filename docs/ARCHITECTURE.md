@@ -799,3 +799,9 @@ It reverses only the two generation-bound cell identities. The same 76-byte
 sidecar and complete records prove that index one still rebuilds immediately
 when first and index zero still uses direct fallback when second. This is an
 exact-fixture distinction, not a general positional causality claim.
+
+M89 adds no public API or product adapter behavior and leaves M74-M88 frozen.
+It targets exact index four at `(x,y,z+1)`, the other identity in index zero's
+pinned natural two-member page. The 52-byte sidecar and complete records prove
+the same fallback during removal and one rebuild at restoration. The result is
+fixture-specific; common/server code remains Aero-free.
