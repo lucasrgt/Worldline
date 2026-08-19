@@ -4,6 +4,20 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.128.0 - M140 Bonemeal Tree Growth
+
+Status: GO for one official player-triggered vegetation generation boundary.
+
+- Built a raised dry dirt fixture with exact oak sapling `6:0`.
+- Applied bonemeal `351:15` through Packet15 and observed root log `17:0`.
+- Required a persisted bounded-positive trunk and canopy while leaving exact
+  randomized tree geometry server-authoritative.
+- Reproduced the normalized root and structural evidence in two fresh official
+  server JVMs.
+
+The frozen M140 semantic SHA-256 is
+`d5bca5667d5f93503d8c2226bf52d4e49d9395d51c2e2da675497b7d6a57d896`.
+
 ## 1.127.0 - M139 Water-Lava Reaction
 
 Status: GO for one bounded official fluid-material reaction.

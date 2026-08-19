@@ -1129,3 +1129,8 @@ same Packet53 cache and fresh Packet51 persistence boundaries to qualify one
 official material rule: still water beside still lava converts the lava source
 to obsidian. The two-cell causal hash excludes unrelated scheduled and random
 world changes.
+
+M140 adds no public API. It composes generic held-item Packet15 use with the
+incremental world cache and fresh Packet51 persistence oracle. The deterministic
+sapling-root transition is hashed, while the randomized vanilla oak geometry is
+validated structurally rather than frozen as a universal layout.

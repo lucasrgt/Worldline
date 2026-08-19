@@ -144,6 +144,7 @@ Passing an experiment does not silently promote its API.
 | v1.125.0 / M137 | TNT explosion | GO - an official fuse emits Beta-specific Packet60, removes a constructed support in the live cache and persists the blast |
 | v1.126.0 / M138 | Horizontal lava | GO - opening one raised stone-trench cell schedules exact still-lava target `11:2` with one scoped persistent delta |
 | v1.127.0 / M139 | Water-lava reaction | GO - still water `9:0` beside still lava `11:0` produces persisted obsidian `49:0` with exactly two scoped deltas |
+| v1.128.0 / M140 | Bonemeal tree growth | GO - Packet15 bonemeal changes oak sapling root `6:0→17:0` and persists a bounded-positive trunk and canopy |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -155,7 +156,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.127.0 direction
+## Immediate post-v1.128.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
@@ -171,7 +172,8 @@ first official Nether session, M131's typed dual-dimension boundary, M132's
 official portal activation, M133's live traversal, M134's complete roundtrip
 M135's same-dimension death/respawn lifecycle and M136's Nether-to-Overworld
 respawn, M137's first full explosion boundary, M138's scheduled lava and M139's
-first fluid-material reaction into additional physics/worldgen,
+first fluid-material reaction and M140's first player-triggered vegetation
+generation into additional physics/worldgen,
 entity AI, dimensions
 and persistence/multiplayer composition.
 M71-M110 remain frozen Aero laboratory evidence; no new Aero milestone is
