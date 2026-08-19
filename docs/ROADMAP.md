@@ -115,6 +115,7 @@ Passing an experiment does not silently promote its API.
 | v1.96.0 / M108 | Balanced paired cell-size control | GO - same aligned scene forms four size-two pages versus one size-eight page |
 | v1.97.0 / M109 | Cell-size lower-bound clamp control | GO - raw zero and explicit one converge on sixteen single-member direct cells |
 | v1.98.0 / M110 | Cell-size upper-bound clamp control | GO - raw thirty-three and explicit thirty-two converge on one cached page |
+| v1.99.0 / M111 | Fixed-seed absolute terrain | GO - two fresh official worlds match the complete ID volume and top-Y/ID/metadata surface of chunk `(0,0)` |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -126,13 +127,12 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.98.0 direction
+## Immediate post-v1.99.0 direction
 
-M110 pairs raw cell-size thirty-three with the explicit supported ceiling
-thirty-two, proving both converge on one effective32 page under the same scene.
-Other invalid values, implicit defaults, alignment, memory cost, visual
-equivalence, page-order independence, concurrency, merge/repacking, and
-uninstrumented cost remain outside scope. M71-M110 do not establish causal
-spike attribution.
-Generic synchronization, persistence, multiple clients, merging, shift clicks,
-and broad automation remain outside the stable contract.
+Worldline's active roadmap is now vanilla-only until its Beta 1.7.3 model
+reaches state of the art. M111 establishes deterministic block-state terrain
+at one absolute chunk while correctly excluding the version's variable player
+spawn. The next causal gaps are lighting, fluids, redstone, entity AI,
+dimensions and persistence/multiplayer composition. M71-M110 remain frozen
+Aero laboratory evidence; no new Aero configuration milestone is planned
+before the vanilla foundation is complete.

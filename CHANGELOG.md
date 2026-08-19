@@ -4,6 +4,20 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.99.0 - M111 Fixed-Seed Terrain
+
+Status: GO for deterministic vanilla terrain at one absolute chunk.
+
+- Generated two fresh worlds with the unmodified official Beta 1.7.3 server
+  and fixed seed `17320110707`.
+- Decoded all 32,768 block IDs in absolute chunk `(0,0)` and proved identical
+  full-volume and 256-column top-Y/ID/metadata surface digests.
+- Kept the version's variable player spawn, lighting, biomes, other chunks,
+  alternate seeds, dimensions and persistence outside qualification.
+
+The frozen M111 semantic SHA-256 is
+`1242a03c15a6e0c36adbefb6ca2b89b166ab1b57f5fb20cf6d3f402a0bec50b1`.
+
 ## 1.98.0 - M110 Cell Size Ceiling
 
 Status: GO for the raw-thirty-three/explicit-thirty-two clamp comparison.

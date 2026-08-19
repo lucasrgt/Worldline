@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.98.0 - M110 Cell Size Ceiling (GO)**.
+Current official milestone: **Worldline v1.99.0 - M111 Fixed-Seed Terrain (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -564,6 +564,12 @@ fallbacks with no cached pages. See `docs/M109_CELL_SIZE_FLOOR.md`.
 M110 pairs raw cell-size thirty-three with the explicit ceiling thirty-two.
 Both resolve to effective size thirty-two and reproduce one cached page holding
 all sixteen identities. See `docs/M110_CELL_SIZE_CEILING.md`.
+
+M111 returns the active roadmap to vanilla Minecraft. Two fresh official
+Beta 1.7.3 worlds with the fixed Worldline seed expose the same absolute
+chunk `(0,0)`: 16,342 non-air blocks, an identical complete ID volume, and an
+identical 256-column top-Y/ID/metadata surface profile. Player spawn remains
+observational. See `docs/M111_FIXED_SEED_TERRAIN.md`.
 
 ## Verify
 

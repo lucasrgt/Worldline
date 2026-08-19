@@ -943,3 +943,11 @@ It pairs raw cell-size thirty-three with explicit thirty-two and proves the
 pinned upper clamp publishes effective size thirty-two. Both arms group all
 sixteen identities into the same one-page path. Common/server code remains
 Aero-free.
+
+M111 adds no public API or adapter mutation. It reuses the bounded protocol-14
+chunk cache against two fresh unmodified official servers and addresses
+absolute chunk `(0,0)`, separating deterministic terrain from Beta 1.7.3's
+variable initial player spawn. The semantic digest covers every legacy block
+ID plus a derived top-Y/ID/metadata surface profile; the complete metadata and
+lighting planes remain separate boundaries. M71-M110 are frozen while the
+active architecture roadmap returns to vanilla systems.
