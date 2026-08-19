@@ -1141,3 +1141,9 @@ protocol-14 metadata field type into a bounded queue; `B173PlayInbound` owns the
 single reader and exposes typed waits. The first qualified producer is an
 official default pig spawner observed identically by two peers. Movement and AI
 remain separate downstream boundaries rather than inferred from creation.
+
+M142 adds no public API or adapter behavior. It composes the existing held-block
+placement, lever activation, heartbeat, incremental Packet53 cache and fresh
+Packet51 persistence boundaries around the official piston block event. The
+oracle freezes only the raised fixture volume; generated water below the tower
+is outside the causal attribution boundary.

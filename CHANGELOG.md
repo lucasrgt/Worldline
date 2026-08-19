@@ -4,6 +4,21 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.130.0 - M142 Piston Extension
+
+Status: GO for one official lever-powered piston displacement.
+
+- Built a west-facing normal piston with one stone in front and a side lever.
+- Observed exact base `33:4→33:12`, stone-to-head `1:0→34:4`, and
+  air-to-displaced-stone `0:0→1:0` transitions.
+- Scoped the immutable delta to the raised fixture so generated water beneath
+  the artificial tower is not falsely attributed.
+- Reproduced the exact four-cell delta and fresh-session persisted states in
+  two official server JVMs.
+
+The frozen M142 semantic SHA-256 is
+`48c199a75f4cb6d77ffd1cfec3081c5fa9880915553d5b7e913ddc7cb6a38a20`.
+
 ## 1.129.0 - M141 Pig Spawner Observation
 
 Status: GO for one official living-entity creation and Packet24 observation.
