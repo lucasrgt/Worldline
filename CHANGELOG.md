@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.190.0 - M202 Sapling
+
+Status: GO for official oak-sapling placement on dirt.
+
+- Placed dirt `3` then oak sapling `6` as `6:0`.
+- That plant cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M202 semantic SHA-256 is
+`7772115ec090ef211b01204fa558371ea9983994367b0ceb0899a44441bdb24d`.
+
 ## 1.189.0 - M201 Red mushroom
 
 Status: GO for official red-mushroom placement in a dark pocket.

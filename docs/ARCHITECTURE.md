@@ -1344,3 +1344,6 @@ M200 adds no public API. Brown mushroom `39` in a dark dirt pocket places
 
 M201 adds no public API. Red mushroom `40` in a dark dirt pocket places
 `40:0` and persists.
+
+M202 adds no public API. Oak sapling `6` on dirt `3` places `6:0` and
+persists.
