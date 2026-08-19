@@ -1258,3 +1258,6 @@ type `62` with thrower 0.
 
 M170 adds no public API. Repeater item `356` places unpowered `93:3`; a side
 lever produces powered `94:3` after one tick and returns to `93:3`.
+
+M171 adds no public API. Pumpkin item `86` with look yaw `-90` places `86:1`
+and that facing persists.

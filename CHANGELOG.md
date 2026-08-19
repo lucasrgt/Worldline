@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.159.0 - M171 Pumpkin
+
+Status: GO for official pumpkin placement facing.
+
+- Placed pumpkin item `86` as `86:1` with look yaw `-90`.
+- That exact metadata survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M171 semantic SHA-256 is
+`239e38d65add8b63f1afa9dba90e1832f5b70b91bf6b6e5fee0df381e48c12e0`.
+
 ## 1.158.0 - M170 Repeater
 
 Status: GO for official 1-tick repeater pulse.

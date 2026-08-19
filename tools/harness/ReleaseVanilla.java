@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m167 = load(root, "smokes/m167-cactus/smoke.properties");
         Properties m168 = load(root, "smokes/m168-water-bucket/smoke.properties");
         Properties m169 = load(root, "smokes/m169-egg-throw/smoke.properties");
         Properties m170 = load(root, "smokes/m170-repeater/smoke.properties");
-        match(release, "version", "1.158.0");
-        match(release, "milestone", "m170-repeater");
-        same(release, "m167.signature", m167, "expected.signature");
-        same(release, "server.sha256", m167, "server.jar.sha256");
+        Properties m171 = load(root, "smokes/m171-pumpkin/smoke.properties");
+        match(release, "version", "1.159.0");
+        match(release, "milestone", "m171-pumpkin");
         same(release, "m168.signature", m168, "expected.signature");
         same(release, "server.sha256", m168, "server.jar.sha256");
         same(release, "m169.signature", m169, "expected.signature");
         same(release, "server.sha256", m169, "server.jar.sha256");
         same(release, "m170.signature", m170, "expected.signature");
         same(release, "server.sha256", m170, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M167_CACTUS.md", "docs/M167_CYCLE.md",
-                "smokes/m167-cactus/MAP.md", "docs/M168_WATER_BUCKET.md", "docs/M168_CYCLE.md",
+        same(release, "m171.signature", m171, "expected.signature");
+        same(release, "server.sha256", m171, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M168_WATER_BUCKET.md", "docs/M168_CYCLE.md",
                 "smokes/m168-water-bucket/MAP.md", "docs/M169_EGG_THROW.md", "docs/M169_CYCLE.md",
                 "smokes/m169-egg-throw/MAP.md", "docs/M170_REPEATER.md", "docs/M170_CYCLE.md",
-                "smokes/m170-repeater/MAP.md"))
+                "smokes/m170-repeater/MAP.md", "docs/M171_PUMPKIN.md", "docs/M171_CYCLE.md",
+                "smokes/m171-pumpkin/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.158.0 M170 Repeater GO");
+        System.out.println("  release: Worldline v1.159.0 M171 Pumpkin GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
