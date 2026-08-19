@@ -251,6 +251,7 @@ final class SmokeSuite {
         {"tools/smoke/CoalOreCycle.java", "m225-coal-ore"},
         {"tools/smoke/IronOreCycle.java", "m226-iron-ore"},
         {"tools/smoke/GoldOreCycle.java", "m227-gold-ore"},
+        {"tools/smoke/DiamondOreCycle.java", "m228-diamond-ore"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

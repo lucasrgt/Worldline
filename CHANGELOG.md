@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.216.0 - M228 Diamond ore
+
+Status: GO for official diamond-ore placement.
+
+- Placed diamond ore item `56` on a raised stone support as `56:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M228 semantic SHA-256 is
+`d8899da5d17c18d27351804645eead6a4a792f1d0497886d4bd24a15bedef72b`.
+
 ## 1.215.0 - M227 Gold ore
 
 Status: GO for official gold-ore placement.
