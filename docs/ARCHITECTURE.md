@@ -1310,3 +1310,5 @@ M186 adds no public API. Oak stairs item `53` with look yaw `-90` places
 
 M187 adds no public API. Cobble stairs item `67` with look yaw `-90` places
 `67:0` and persists.
+
+M188 adds no public API. Stone slab item `44` places `44:0` and persists.

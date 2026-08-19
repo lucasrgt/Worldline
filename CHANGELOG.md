@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.176.0 - M188 Stone slab
+
+Status: GO for official single stone-slab placement.
+
+- Placed stone slab item `44` on a raised stone support as `44:0`.
+- That single-slab cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M188 semantic SHA-256 is
+`58238d33d76d1cd336bbd528ecfe662b6e821d1118c643e6c3023f1b18c800f1`.
+
 ## 1.175.0 - M187 Cobble stairs
 
 Status: GO for official cobble-stairs facing.
