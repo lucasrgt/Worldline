@@ -1298,3 +1298,6 @@ and persists.
 
 M183 adds no public API. Rail item `66` with look yaw `0` places `66:0` and
 persists.
+
+M184 adds no public API. Powered rail item `27` places unpowered `27:0` and
+persists.

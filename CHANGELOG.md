@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.172.0 - M184 Powered rail
+
+Status: GO for official unpowered powered-rail placement.
+
+- Placed powered rail item `27` on a raised stone support as unpowered `27:0`.
+- Powered bit 8 stayed 0 without redstone and persisted after save plus login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M184 semantic SHA-256 is
+`d017b9f94e15a87ad2465679091958308c683a77948158ee7b9b3fb241c56264`.
+
 ## 1.171.0 - M183 Rails
 
 Status: GO for official north-south rail placement.

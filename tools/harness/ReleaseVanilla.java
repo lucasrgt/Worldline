@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m180 = load(root, "smokes/m180-fishing-rod/smoke.properties");
         Properties m181 = load(root, "smokes/m181-lava-bucket/smoke.properties");
         Properties m182 = load(root, "smokes/m182-redstone-torch/smoke.properties");
         Properties m183 = load(root, "smokes/m183-rails/smoke.properties");
-        match(release, "version", "1.171.0");
-        match(release, "milestone", "m183-rails");
-        same(release, "m180.signature", m180, "expected.signature");
-        same(release, "server.sha256", m180, "server.jar.sha256");
+        Properties m184 = load(root, "smokes/m184-powered-rail/smoke.properties");
+        match(release, "version", "1.172.0");
+        match(release, "milestone", "m184-powered-rail");
         same(release, "m181.signature", m181, "expected.signature");
         same(release, "server.sha256", m181, "server.jar.sha256");
         same(release, "m182.signature", m182, "expected.signature");
         same(release, "server.sha256", m182, "server.jar.sha256");
         same(release, "m183.signature", m183, "expected.signature");
         same(release, "server.sha256", m183, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M180_FISHING_ROD.md", "docs/M180_CYCLE.md",
-                "smokes/m180-fishing-rod/MAP.md", "docs/M181_LAVA_BUCKET.md", "docs/M181_CYCLE.md",
+        same(release, "m184.signature", m184, "expected.signature");
+        same(release, "server.sha256", m184, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M181_LAVA_BUCKET.md", "docs/M181_CYCLE.md",
                 "smokes/m181-lava-bucket/MAP.md", "docs/M182_REDSTONE_TORCH.md", "docs/M182_CYCLE.md",
                 "smokes/m182-redstone-torch/MAP.md", "docs/M183_RAILS.md", "docs/M183_CYCLE.md",
-                "smokes/m183-rails/MAP.md"))
+                "smokes/m183-rails/MAP.md", "docs/M184_POWERED_RAIL.md", "docs/M184_CYCLE.md",
+                "smokes/m184-powered-rail/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.171.0 M183 Rails GO");
+        System.out.println("  release: Worldline v1.172.0 M184 Powered rail GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
