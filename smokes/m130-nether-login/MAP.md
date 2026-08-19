@@ -5,9 +5,9 @@ The server profile opts into the official Nether. Before first login,
 The official server accepts that state, sends normal login/pose/chunk traffic,
 and saves the player back in dimension `-1`.
 
-The first decoded chunk contains exact netherrack, bedrock and lava counts plus
-an ordered structural terrain hash. Mushroom decorations 39/40 are normalized
-to air because their count varied with fresh generation order.
+The first decoded chunk contains exact netherrack and bedrock counts plus an
+ordered structural terrain hash. Lava 10/11 and mushroom decorations 39/40 are
+normalized to air because scheduled flow and decoration varied before capture.
 
 Frozen semantic SHA-256:
-`ec56849776288464b6b19f00d5e977802847f155bcd1d8139a3816c7c53b7824`.
+`d04ef062cdda13bb2209d8f6651f0559495d9a9f63f946f460b0e8610c41c4a8`.

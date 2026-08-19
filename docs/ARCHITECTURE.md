@@ -1071,3 +1071,7 @@ constructors retain `allow-nether=false`. Server-property composition moves to
 a bounded helper, and player seeding admits only vanilla dimensions `0` and
 `-1`. The official server remains authoritative for world selection, terrain
 generation, protocol traffic and persisted dimension state.
+
+The v1.118.1 oracle hardening keeps exact netherrack/bedrock positions while
+normalizing lava and mushroom cells whose scheduled/decorative state varied
+before the first client snapshot.

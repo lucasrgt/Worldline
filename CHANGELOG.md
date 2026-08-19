@@ -4,6 +4,19 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.118.1 - M130 Nether Oracle Hardening
+
+Status: GO after separating stable Nether structure from scheduled fluid and
+decoration changes.
+
+- Retained exact positional netherrack and bedrock evidence.
+- Normalized lava 10/11 and mushroom decoration 39/40 after fresh runs exposed
+  legitimate pre-capture variation.
+- Refroze the honest structural signature without broadening M130's claim.
+
+The hardened M130 semantic SHA-256 is
+`d04ef062cdda13bb2209d8f6651f0559495d9a9f63f946f460b0e8610c41c4a8`.
+
 ## 1.118.0 - M130 Nether Login
 
 Status: GO for one official dimension-seeded Nether login and chunk decode.
@@ -11,11 +24,11 @@ Status: GO for one official dimension-seeded Nether login and chunk decode.
 - Added an opt-in `allow-nether=true` server profile without changing defaults.
 - Added exact Overworld/Nether player NBT seeding.
 - Decoded and structurally hashed the first official Nether chunk and verified
-  saved `Dimension=-1` after clean logout; variable mushroom decoration is
-  explicitly excluded.
+  saved `Dimension=-1` after clean logout; variable lava flow and mushroom
+  decoration are explicitly excluded.
 
 The frozen M130 semantic SHA-256 is
-`ec56849776288464b6b19f00d5e977802847f155bcd1d8139a3816c7c53b7824`.
+`d04ef062cdda13bb2209d8f6651f0559495d9a9f63f946f460b0e8610c41c4a8`.
 
 ## 1.117.0 - M129 Cross-Chunk Iron Door Recovery
 
