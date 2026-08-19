@@ -1239,3 +1239,6 @@ empty-hand use toggles `96:7` and back. The closed state persists.
 
 M164 adds no public API. Stone pressure plate `70:0` powers to `70:1` when the
 headless actor steps on it and depowers when they step off.
+
+M165 adds no public API. Stone button `77:1` powers to `77:9` on empty-hand
+use and depowers after the official 20-tick delay.

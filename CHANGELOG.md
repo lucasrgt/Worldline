@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.153.0 - M165 Stone Button
+
+Status: GO for official stone-button pulse and automatic depower.
+
+- Placed button item `77` on an east stone face as `77:1`.
+- Empty-hand activation powered to `77:9`.
+- After the official 20-tick delay the button returned to `77:1`.
+- The unpowered button survived save plus a fresh login.
+
+The frozen M165 semantic SHA-256 is
+`293f5014cd6d64c96de7f120544a33fdc68c2ac3843deba132c1d00ee8e00300`.
+
 ## 1.152.0 - M164 Pressure Plate
 
 Status: GO for official stone pressure-plate press and release.
