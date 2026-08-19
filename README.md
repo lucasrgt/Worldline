@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.100.0 - M112 Fixed-Seed Lighting (GO)**.
+Current official milestone: **Worldline v1.101.0 - M113 Causal Lighting (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -576,6 +576,12 @@ boundary. Two fresh official worlds reproduce exact block-light and sky-light
 hashes and their complete 0–15 histograms. This is a snapshot oracle; source
 attribution and light-engine transitions remain open. See
 `docs/M112_FIXED_SEED_LIGHTING.md`.
+
+M113 performs the first causal vanilla light transition. An official
+Packet15 placement adds one glowstone source; after a bounded update window, a
+fresh session's Packet51 contains exactly 68 increased block-light samples,
+level 15 at the source, and no sky-light changes. See
+`docs/M113_CAUSAL_LIGHTING.md`.
 
 ## Verify
 

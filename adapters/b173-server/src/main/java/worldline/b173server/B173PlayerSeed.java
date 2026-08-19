@@ -11,6 +11,19 @@ public final class B173PlayerSeed {
     private B173PlayerSeed() {}
 
     public static void write(Path serverDirectory, String username, double x, double y, double z) {
+        write(serverDirectory, username, x, y, z, 0, 0, 0);
+    }
+
+    /** Writes one player whose selected hotbar slot contains an exact legacy block stack. */
+    public static void writeHolding(Path serverDirectory, String username, double x, double y, double z,
+            int legacyId, int count, int damage) {
+        if (legacyId < 1 || legacyId > 255 || count < 1 || count > 64 || damage < 0 || damage > 32767)
+            throw new IllegalArgumentException("invalid held player seed");
+        write(serverDirectory, username, x, y, z, legacyId, count, damage);
+    }
+
+    private static void write(Path serverDirectory, String username, double x, double y, double z,
+            int legacyId, int count, int damage) {
         if (serverDirectory == null || username == null
                 || !username.matches("[A-Za-z0-9_]{1,16}") || !finite(x) || !finite(y) || !finite(z))
             throw new IllegalArgumentException("invalid player seed");
@@ -27,7 +40,9 @@ public final class B173PlayerSeed {
                 list(output, "Rotation", 5, 2); output.writeFloat(0); output.writeFloat(0);
                 floating(output, "FallDistance", 0); shortTag(output, "Fire", -20);
                 shortTag(output, "Air", 300); byteTag(output, "OnGround", 0);
-                intTag(output, "Dimension", 0); list(output, "Inventory", 10, 0);
+                intTag(output, "Dimension", 0); list(output, "Inventory", 10, legacyId == 0 ? 0 : 1);
+                if (legacyId != 0) { shortTag(output, "id", legacyId); byteTag(output, "Count", count);
+                    shortTag(output, "Damage", damage); byteTag(output, "Slot", 0); output.writeByte(0); }
                 shortTag(output, "Health", 20); shortTag(output, "HurtTime", 0);
                 shortTag(output, "DeathTime", 0); shortTag(output, "AttackTime", 0);
                 intTag(output, "Score", 0); output.writeByte(0);

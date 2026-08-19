@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.101.0 - M113 Causal Lighting
+
+Status: GO for one server-authored vanilla light-source transition.
+
+- Seeded one exact glowstone stack in official-format player NBT and placed it
+  through the existing protocol-14 selected-slot/block-placement boundary.
+- Required Packet53 acceptance, forty update heartbeats, clean disconnect/save
+  and a fresh Packet51 light-plane observation.
+- Froze exactly 68 increased block-light samples, maximum delta 15 and source
+  level 15; sky light remained unchanged.
+- Kept generic propagation/removal, cross-chunk light, rendering, other
+  sources, alternate terrain and dimensions outside qualification.
+
+The frozen M113 semantic SHA-256 is
+`c54effdf42a0dcf7c37c7417e2a35d0abfdc85297b2b47398af1d4d86632c822`.
+
 ## 1.100.0 - M112 Fixed-Seed Lighting
 
 Status: GO for deterministic vanilla block-light and sky-light snapshots.

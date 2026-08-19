@@ -959,3 +959,11 @@ deterministic light-state input without claiming a light-engine cause, update,
 renderer effect or cross-chunk rule. A new adapter-side NBT seed places only
 the pre-login player pose at the target chunk; world blocks remain
 server-generated and the existing 256-chunk cache bound stays unchanged.
+
+M113 adds no public API. It extends the adapter-side player seed with one
+optional exact hotbar block stack, then composes already-qualified Packet15,
+Packet53, heartbeat and Packet51 boundaries. Lighting evidence comes only from
+a fresh full-chunk send after the unmodified official server accepts and
+settles the glowstone placement; the incremental cache is never treated as a
+client light engine. The ordered delta remains a smoke oracle rather than a
+generic lighting implementation.
