@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.167.0 - M179 Wheat
+
+Status: GO for official wheat planting on hydrated farmland.
+
+- Wooden hoe `290` tilled dirt into farmland; still water hydrated a plot to `60:7`.
+- Seeds `295` planted wheat `59:0` on that moist cell.
+- The crop remained `59:0` after a live hold plus save and a fresh login.
+
+The frozen M179 semantic SHA-256 is
+`00d861629497b91621c26cc02b6ec8d56763ad9b4f365028fd10188e36694be8`.
+
 ## 1.166.0 - M178 Jukebox
 
 Status: GO for official jukebox disc insert.

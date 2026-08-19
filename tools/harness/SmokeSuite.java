@@ -202,6 +202,7 @@ final class SmokeSuite {
         {"tools/smoke/SignCycle.java", "m176-sign"},
         {"tools/smoke/PaintingCycle.java", "m177-painting"},
         {"tools/smoke/JukeboxCycle.java", "m178-jukebox"},
+        {"tools/smoke/WheatCycle.java", "m179-wheat"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 
