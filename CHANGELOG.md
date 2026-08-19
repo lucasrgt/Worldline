@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.205.0 - M217 Mossy cobble
+
+Status: GO for official mossy-cobblestone placement.
+
+- Placed mossy cobblestone item `48` on a raised stone support as `48:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M217 semantic SHA-256 is
+`e7a7a8e7b99473c5e1e123d0d2542636867e0e5ebae855883295e487ee937a43`.
+
 ## 1.204.0 - M216 Obsidian
 
 Status: GO for official inventory obsidian placement.
