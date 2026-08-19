@@ -30,6 +30,14 @@ final class B173HeldItemChannel {
     }
 
     void place(BlockPosition support, BlockFace face) throws IOException {
+        useHeldItem(support, face, true);
+    }
+
+    void useHeldItem(BlockPosition support, BlockFace face) throws IOException {
+        useHeldItem(support, face, false);
+    }
+
+    private void useHeldItem(BlockPosition support, BlockFace face, boolean blockOnly) throws IOException {
         if (support == null || face == null) throw new IllegalArgumentException("null block placement");
         BlockPosition target = face.adjacent(support);
         if (support.y() < 0 || support.y() >= 128 || target.y() < 0 || target.y() >= 128)
@@ -40,8 +48,9 @@ final class B173HeldItemChannel {
         RemoteInventorySlot slot = inventory.slot(36 + selectedSlot);
         if (slot.empty()) throw new IllegalStateException("selected held slot is empty");
         RemoteItemStack item = slot.item();
-        if (item.legacyId() < 1 || item.legacyId() > 255)
-            throw new IllegalStateException("selected held item is not a legacy block");
+        if (item.legacyId() < 1 || item.legacyId() > (blockOnly ? 255 : 32767))
+            throw new IllegalStateException(blockOnly ? "selected held item is not a legacy block"
+                    : "selected held item is outside the protocol item range");
         output.writeByte(16); output.writeShort(selectedSlot); output.writeByte(15);
         output.writeInt(support.x()); output.writeByte(support.y()); output.writeInt(support.z());
         output.writeByte(face(face)); output.writeShort(item.legacyId()); output.writeByte(item.count());

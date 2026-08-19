@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.104.0 - M116 Redstone Wire Power
+
+Status: GO for one server-authored lever-to-wire propagation result.
+
+- Added selected held-item-on-block use across the positive protocol item-ID
+  range while retaining authoritative inventory and cursor/window guards.
+- Used redstone dust 331 to create official wire `55:0` on M115's stabilized
+  fixture.
+- Proved lever activation changes `69:1 -> 69:9` and propagates wire power
+  `55:0 -> 55:15` through Packet53 and a fresh Packet51.
+- Froze exactly two full-chunk state deltas and kept generic redstone networks,
+  attenuation, depowering, consumers and timing outside qualification.
+
+The frozen M116 semantic SHA-256 is
+`973fb75a9541e4f8015d8133d7c99779e6c1ab8b6ef095120609e6a6fcab5587`.
+
 ## 1.103.0 - M115 Lever Activation
 
 Status: GO for one server-authored redstone-component activation.

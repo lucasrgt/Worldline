@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.103.0 - M115 Lever Activation (GO)**.
+Current official milestone: **Worldline v1.104.0 - M116 Redstone Wire Power (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -592,6 +592,11 @@ M115 adds bounded empty-hand block activation and applies it to an official
 lever. After a stabilized server-authored fixture, Packet15 changes `69:1` to
 `69:9`; Packet53 and a fresh Packet51 prove exactly one chunk-state delta.
 See `docs/M115_LEVER_ACTIVATION.md`.
+
+M116 adds generic held-item-on-block use for the positive protocol item range
+and places dust 331 as wire 55. Activating the adjacent lever changes the wire
+from power zero to fifteen; exactly the lever and wire states differ in the
+live and fresh-session world views. See `docs/M116_REDSTONE_WIRE_POWER.md`.
 
 ## Verify
 

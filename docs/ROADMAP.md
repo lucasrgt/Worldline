@@ -120,6 +120,7 @@ Passing an experiment does not silently promote its API.
 | v1.101.0 / M113 | Causal vanilla lighting | GO - one official glowstone placement produces an exact 68-sample block-light transition after fresh chunk reload |
 | v1.102.0 / M114 | Causal vanilla water flow | GO - one official dig opens a generated-water floor cell and settles exactly one block to water `9:8` |
 | v1.103.0 / M115 | Causal lever activation | GO - empty-hand Packet15 toggles one stabilized official side lever from `69:1` to `69:9` with an exact one-state delta |
+| v1.104.0 / M116 | Lever-to-wire propagation | GO - official dust placement yields wire `55:0`, then lever activation publishes exact power 15 with two-state delta |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -131,14 +132,15 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.103.0 direction
+## Immediate post-v1.104.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
 initial light planes, and M113 proves the first server-authored causal light
 transition, and M114 qualifies the first scheduled water response. The active
-sequence now deepens fluid behavior and advances from M115's redstone
-component state into observable signal propagation, then world-generation
-breadth, entity AI, dimensions and persistence/multiplayer composition.
+sequence now deepens fluid behavior and advances from M115's component state
+through M116's first observed signal propagation into attenuation/depowering
+and powered consumers, then world-generation breadth, entity AI, dimensions
+and persistence/multiplayer composition.
 M71-M110 remain frozen Aero laboratory evidence; no new Aero milestone is
 planned before the vanilla foundation is complete.

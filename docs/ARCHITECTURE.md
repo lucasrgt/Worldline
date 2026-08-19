@@ -984,3 +984,10 @@ empty-hand Packet15 encoder but exposes it without arming a container-window
 expectation. The lever fixture separates construction from treatment with a
 200-tick stabilization boundary, and only Packet53 plus a fresh Packet51 can
 publish the state transition. No redstone evaluator exists in Worldline.
+
+M116 extends that same neutral surface with selected held-item use, allowing
+official item behavior rather than only ItemBlock placement. The b1.7.3 path
+accepts positive signed-short item IDs but still derives the entire stack from
+window zero and refuses active-container/cursor drift. Redstone simulation
+remains wholly server-side: Worldline observes dust placement, lever state and
+wire strength only through Packet53 and a fresh Packet51.
