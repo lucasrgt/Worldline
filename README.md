@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.112.0 - M124 Cross-Chunk Light Recovery (GO)**.
+Current official milestone: **Worldline v1.113.0 - M125 Cross-Chunk Water (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -636,6 +636,10 @@ that block light propagates into water in chunk `x=1`: source `0→15`, neighbor
 M124 removes that exact edge source, observes water `9:0` return, and proves
 both complete block-light planes recover byte-for-byte to their baselines. See
 `docs/M124_CROSS_CHUNK_LIGHT_RECOVERY.md`.
+
+M125 opens a bounded trench from source water at global `x=15` into chunk 1.
+The source chunk remains unchanged while exactly one neighbor state becomes
+water `9:1`. See `docs/M125_CROSS_CHUNK_WATER.md`.
 
 ## Verify
 

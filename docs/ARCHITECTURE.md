@@ -1040,3 +1040,8 @@ M124 adds no public API. A witness captures M123's lit precondition while the
 actor remains connected; source removal and a final reader then produce exact
 decrease and residual comparisons for both chunks. The empty residual deltas
 qualify recovery without introducing a Worldline scheduler or light engine.
+
+M125 adds no public API or fluid evaluator. A constructor builds the same
+bounded source/gate topology as M120 but places source and destination on
+opposite sides of a chunk seam. Separate treatment and reader sessions prove
+the official scheduler mutates only the neighboring chunk target.

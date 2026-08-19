@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.113.0 - M125 Cross-Chunk Water
+
+Status: GO for one bounded fluid transition across a chunk seam.
+
+- Built a stone trench with source `9:0` at global x=15 and a dirt gate at x=16.
+- Opened the sole destination through Packet14 and observed exact water `9:1`.
+- Froze an empty source-chunk delta and exact one-state neighboring-chunk delta.
+
+The frozen M125 semantic SHA-256 is
+`c876ddf9f8686e16db848fb38977ff02ea8eb97dea05e21b0837be68f83a6217`.
+
 ## 1.112.0 - M124 Cross-Chunk Light Recovery
 
 Status: GO for exact recovery of two block-light planes after source removal.
