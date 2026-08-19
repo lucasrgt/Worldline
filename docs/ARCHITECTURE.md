@@ -1270,3 +1270,6 @@ persist.
 
 M174 adds no public API. Ladder item `65` on an east face is `65:5` and
 persists.
+
+M175 adds no public API. Floor torch item `50` on stone is `50:5` and
+persists.

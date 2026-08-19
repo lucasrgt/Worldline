@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.163.0 - M175 Torch
+
+Status: GO for official floor-torch placement.
+
+- Placed torch item `50` on a raised stone support as `50:5`.
+- That floor metadata survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M175 semantic SHA-256 is
+`1b9a95028d397daf378283e42e4657f27df1e1e761003ef151f0fdd1790c3c3d`.
+
 ## 1.162.0 - M174 Ladder
 
 Status: GO for official east-facing ladder placement.
