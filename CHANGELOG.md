@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.151.0 - M163 Trapdoor
+
+Status: GO for official trapdoor open and close.
+
+- Placed trapdoor item `96` on an east stone face as `96:3`.
+- Empty-hand activation opened to `96:7` and closed back to `96:3`.
+- The closed trapdoor survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M163 semantic SHA-256 is
+`a93d386ba46f2b1dd44b2e91c9fc6c758d267a1b17cda83414f994a1d7d9d1a8`.
+
 ## 1.150.0 - M162 Wooden Door
 
 Status: GO for official wooden-door open and close.

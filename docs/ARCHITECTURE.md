@@ -1233,3 +1233,6 @@ emits type `61` with thrower 0 near the actor.
 
 M162 adds no public API. Wooden door item `324` places BlockDoor halves
 `64:0`/`64:8`; empty-hand Packet15 toggles open `64:4`/`64:12` and back.
+
+M163 also adds no public API. Trapdoor item `96` on an east face is `96:3`;
+empty-hand use toggles `96:7` and back. The closed state persists.

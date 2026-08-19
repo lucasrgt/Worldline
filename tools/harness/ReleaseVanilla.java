@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m159 = load(root, "smokes/m159-sugar-cane/smoke.properties");
         Properties m160 = load(root, "smokes/m160-cake-eat/smoke.properties");
         Properties m161 = load(root, "smokes/m161-snowball/smoke.properties");
         Properties m162 = load(root, "smokes/m162-wooden-door/smoke.properties");
-        match(release, "version", "1.150.0");
-        match(release, "milestone", "m162-wooden-door");
-        same(release, "m159.signature", m159, "expected.signature");
-        same(release, "server.sha256", m159, "server.jar.sha256");
+        Properties m163 = load(root, "smokes/m163-trapdoor/smoke.properties");
+        match(release, "version", "1.151.0");
+        match(release, "milestone", "m163-trapdoor");
         same(release, "m160.signature", m160, "expected.signature");
         same(release, "server.sha256", m160, "server.jar.sha256");
         same(release, "m161.signature", m161, "expected.signature");
         same(release, "server.sha256", m161, "server.jar.sha256");
         same(release, "m162.signature", m162, "expected.signature");
         same(release, "server.sha256", m162, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M159_SUGAR_CANE.md", "docs/M159_CYCLE.md",
-                "smokes/m159-sugar-cane/MAP.md", "docs/M160_CAKE_EAT.md", "docs/M160_CYCLE.md",
+        same(release, "m163.signature", m163, "expected.signature");
+        same(release, "server.sha256", m163, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M160_CAKE_EAT.md", "docs/M160_CYCLE.md",
                 "smokes/m160-cake-eat/MAP.md", "docs/M161_SNOWBALL.md", "docs/M161_CYCLE.md",
                 "smokes/m161-snowball/MAP.md", "docs/M162_WOODEN_DOOR.md", "docs/M162_CYCLE.md",
-                "smokes/m162-wooden-door/MAP.md"))
+                "smokes/m162-wooden-door/MAP.md", "docs/M163_TRAPDOOR.md", "docs/M163_CYCLE.md",
+                "smokes/m163-trapdoor/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.150.0 M162 Wooden-door GO");
+        System.out.println("  release: Worldline v1.151.0 M163 Trapdoor GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
