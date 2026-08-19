@@ -1123,3 +1123,9 @@ heartbeat, Packet53 cache update and fresh Packet51 persistence boundaries.
 Because the lava schedule permits unrelated world random ticks during the same
 window, the immutable delta oracle is explicitly limited to the declared
 source and target cells instead of overclaiming whole-chunk causality.
+
+M139 also adds no public API. It composes accepted block placement with the
+same Packet53 cache and fresh Packet51 persistence boundaries to qualify one
+official material rule: still water beside still lava converts the lava source
+to obsidian. The two-cell causal hash excludes unrelated scheduled and random
+world changes.

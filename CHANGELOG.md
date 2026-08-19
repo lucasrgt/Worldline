@@ -4,6 +4,20 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.127.0 - M139 Water-Lava Reaction
+
+Status: GO for one bounded official fluid-material reaction.
+
+- Built a raised stone-confined basin with still lava `11:0` beside exact air.
+- Placed still water `9:0` and observed vanilla neighbor processing convert the
+  adjacent lava source to obsidian `49:0`.
+- Scoped the causal hash to the two declared cells and reproduced both exact
+  deltas in two fresh official server JVMs.
+- Proved the water and obsidian states again after clean save and fresh login.
+
+The frozen M139 semantic SHA-256 is
+`1ba936e8c311e4af488c393c17f5f68031f6fbb2c7a8b4ae2831985900fcd326`.
+
 ## 1.126.0 - M138 Horizontal Lava
 
 Status: GO for one bounded official scheduled lava transition.
