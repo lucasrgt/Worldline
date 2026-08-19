@@ -175,6 +175,7 @@ final class SmokeSuite {
         {"tools/smoke/PigDeathCycle.java", "m149-pig-death"},
         {"tools/smoke/PigPorkDropCycle.java", "m150-pig-pork-drop"},
         {"tools/smoke/NetherrackFireCycle.java", "m151-netherrack-fire"},
+        {"tools/smoke/FireWoolConsumptionCycle.java", "m152-fire-wool-consumption"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

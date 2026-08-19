@@ -1195,3 +1195,7 @@ oracle is the first shared Packet21 stack `319:1:0` after a bounded retry.
 M151 adds no public API. It composes held-item Packet15 flint and steel with
 the Packet53 cache and a fresh Packet51 login to prove netherrack fire `51:0`
 is not a random-tick extinguish candidate.
+
+M152 also adds no public API. It places wool `35` beside the M151 flame and
+uses a fresh-login Packet51 snapshot as the consumption oracle, because the
+live Packet53 window may miss the random-tick consume.

@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.140.0 - M152 Fire Wool Consumption
+
+Status: GO for official wool consumption beside a netherrack flame.
+
+- Ignited netherrack fire `51` with flint and steel.
+- Placed wool `35` face-adjacent to that fire.
+- After a bounded 1200-tick wait, a fresh login proved the wool cell consumed.
+- Netherrack fire remained. Delay and air-versus-fire remainder are not hashed.
+
+The frozen M152 semantic SHA-256 is
+`76938b3c1a673ae193cb53be581ebf52977feb975f5edc7a614a544267681e46`.
+
 ## 1.139.0 - M151 Netherrack Fire
 
 Status: GO for one official netherrack flame that survives a live hold and restart.
