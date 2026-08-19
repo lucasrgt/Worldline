@@ -57,4 +57,8 @@ final class B173PlayWaits {
     worldline.api.RemoteSignText sign() throws IOException {
         return until(() -> inbound.signs().take(), "expected Packet130 sign text absent before deadline");
     }
+
+    worldline.api.RemotePaintingSpawn painting() throws IOException {
+        return until(() -> inbound.paintings().take(), "expected Packet25 painting absent before deadline");
+    }
 }

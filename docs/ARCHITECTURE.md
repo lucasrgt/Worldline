@@ -1276,3 +1276,6 @@ persists.
 
 M176 adds `RemoteSignText` and a Packet130 tracker. Standing sign `63`
 accepts four UCS-2 lines that survive a fresh login.
+
+M177 adds `RemotePaintingSpawn` and a Packet25 tracker. Two peers correlate
+the same painting entity, pose and direction. Title is observed, not hashed.

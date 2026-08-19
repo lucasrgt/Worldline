@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.165.0 - M177 Painting
+
+Status: GO for official Packet25 painting spawn.
+
+- Placed painting item `321` on a raised 2x2 stone wall.
+- Two headless peers decoded the same Packet25 identity, pose and direction.
+- Art title is observed but not hashed, because it can differ across JVMs.
+
+The frozen M177 semantic SHA-256 is
+`05ecb02dc2be9a42ab00eeae2c8c1eaf34609b0fe89c3c60aae4774b5e0e90d4`.
+
 ## 1.164.0 - M176 Sign
 
 Status: GO for official standing-sign Packet130 text.
