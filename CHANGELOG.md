@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.175.0 - M187 Cobble stairs
+
+Status: GO for official cobble-stairs facing.
+
+- Placed cobblestone stairs item `67` with look yaw `-90` as east-facing `67:0`.
+- That facing survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M187 semantic SHA-256 is
+`a569478836d30464768b7bc64d771b5cd735b7fb65e33ab5bb5a661e1f318a96`.
+
 ## 1.174.0 - M186 Oak stairs
 
 Status: GO for official oak-stairs facing.

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.174.0 - M186 Oak stairs (GO)**.
+Current official milestone: **Worldline v1.175.0 - M187 Cobble stairs (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

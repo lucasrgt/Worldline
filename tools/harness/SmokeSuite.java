@@ -210,6 +210,7 @@ final class SmokeSuite {
         {"tools/smoke/PoweredRailCycle.java", "m184-powered-rail"},
         {"tools/smoke/DetectorRailCycle.java", "m185-detector-rail"},
         {"tools/smoke/OakStairsCycle.java", "m186-oak-stairs"},
+        {"tools/smoke/CobbleStairsCycle.java", "m187-cobble-stairs"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 
