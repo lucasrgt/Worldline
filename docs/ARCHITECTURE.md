@@ -1152,3 +1152,8 @@ M143 adds no public API. It introduces an independent fresh-session precondition
 between extension and retraction, then reuses the same server-authored cache and
 persistence boundaries. Normal-piston stone retention is an observed invariant,
 not generalized to sticky pistons or other payloads.
+
+M144 adds no public API or adapter behavior. It changes only the fixture's
+server item/block from normal piston `33` to sticky piston `29`, preserving the
+same geometry and lifecycle. The resulting stone pullback is therefore a
+server-authored contrast rather than a new client-side model.

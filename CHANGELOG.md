@@ -4,6 +4,21 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.132.0 - M144 Sticky Piston Pull
+
+Status: GO for one official sticky-piston pullback.
+
+- Rebuilt M143's geometry with sticky piston `29` and independently reloaded
+  its exact extended state.
+- Deactivated the lever and observed head `34:12→stone 1:0` plus displaced
+  stone `1:0→air`.
+- Froze the four exact raised transitions that distinguish sticky pullback
+  from normal-piston retention.
+- Repeated the three-session lifecycle in two official server JVMs.
+
+The frozen M144 semantic SHA-256 is
+`a56517b95b971f64b951329f03267a3c65259a557dc00925e24e3f9235fe377a`.
+
 ## 1.131.0 - M143 Piston Retraction
 
 Status: GO for one official normal-piston retraction.

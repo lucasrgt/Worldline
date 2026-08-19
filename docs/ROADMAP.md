@@ -148,6 +148,7 @@ Passing an experiment does not silently promote its API.
 | v1.129.0 / M141 | Pig spawner observation | GO - two peers correlate one official default-spawner pig identity through strictly decoded Packet24 and metadata |
 | v1.130.0 / M142 | Lever-powered piston extension | GO - one official piston event moves exact stone, creates head `34:4` and persists a four-cell raised delta |
 | v1.131.0 / M143 | Normal-piston retraction | GO - fresh-session deactivation retracts base/head while exact displaced stone remains invariant |
+| v1.132.0 / M144 | Sticky-piston pullback | GO - the matched sticky fixture retracts stone into the former head cell with four exact persisted deltas |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -159,7 +160,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.131.0 direction
+## Immediate post-v1.132.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
@@ -179,7 +180,8 @@ first fluid-material reaction and M140's first player-triggered vegetation
 generation and M141's first living-entity identity into movement, entity AI,
 additional physics/worldgen and dimensions
 and persistence/multiplayer composition. M142 adds the first redstone-driven
-block displacement, and M143 proves its exact non-sticky retraction. Sticky
-pulling is now the next useful contrast before expanding to multi-block limits.
+block displacement, M143 proves non-sticky retention, and M144 proves the exact
+sticky pullback contrast. The next piston boundary should deepen payload or
+push-limit behavior rather than repeat the one-block cycle.
 M71-M110 remain frozen Aero laboratory evidence; no new Aero milestone is
 planned before the vanilla foundation is complete.
