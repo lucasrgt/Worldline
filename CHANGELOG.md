@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.135.0 - M147 Piston Push Limit
+
+Status: GO for the exact official twelve-versus-thirteen push boundary.
+
+- Built matched vertical chains with alternating stone and cobblestone.
+- Proved twelve blocks move through thirteen exact chain transitions.
+- Proved thirteen blocks leave the piston and every payload cell invariant.
+- Repeated both arms across four fresh official server JVMs.
+
+The frozen M147 semantic SHA-256 is
+`6fd354f14bc191c11fd670b0d58e6aa0b86072feec3bb2322261cef951ca1a54`.
+
 ## 1.134.0 - M146 Obsidian Piston Rejection
 
 Status: GO for one official immovable obsidian payload.

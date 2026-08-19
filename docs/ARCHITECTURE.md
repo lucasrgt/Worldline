@@ -1168,3 +1168,9 @@ with official obsidian `49:0` while preserving the piston, lever, destination
 and fresh-session lifecycle. The exact negative transition is server-authored:
 only the powered lever changes in the raised fixture, while piston, payload and
 destination remain invariant.
+
+M147 adds no public API or adapter behavior. It composes four fresh official
+server runs into a matched capacity boundary: an alternating twelve-block chain
+is fully displaced, while the same geometry with thirteen blocks is fully
+rejected. Fresh Packet51 snapshots remain the authority for the complete chain;
+the live cache is not promoted beyond its already qualified control states.
