@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.210.0 - M222 Cobble
+
+Status: GO for official cobblestone placement.
+
+- Placed cobblestone item `4` on a raised stone support as `4:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M222 semantic SHA-256 is
+`b85fbf8097da42d8a630be610e6ab4457bd0de302e1f3396daff2d3fd161ac20`.
+
 ## 1.209.0 - M221 Furnace
 
 Status: GO for official idle-furnace placement.
