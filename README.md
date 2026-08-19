@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.169.0 - M181 Lava bucket (GO)**.
+Current official milestone: **Worldline v1.170.0 - M182 Redstone torch (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

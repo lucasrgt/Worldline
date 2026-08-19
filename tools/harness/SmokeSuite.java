@@ -205,6 +205,7 @@ final class SmokeSuite {
         {"tools/smoke/WheatCycle.java", "m179-wheat"},
         {"tools/smoke/FishingRodCycle.java", "m180-fishing-rod"},
         {"tools/smoke/LavaBucketCycle.java", "m181-lava-bucket"},
+        {"tools/smoke/RedstoneTorchCycle.java", "m182-redstone-torch"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

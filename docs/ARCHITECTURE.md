@@ -1292,3 +1292,6 @@ type `90` with thrower `0`; two peers share the hook identity and pose.
 
 M181 adds no public API. Empty bucket `325` picks up still lava `11:0` into
 `327:1:0` and leaves the source cell as air.
+
+M182 adds no public API. Floor redstone torch item `76` on stone is `76:5`
+and persists.

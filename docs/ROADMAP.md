@@ -186,6 +186,7 @@ Passing an experiment does not silently promote its API.
 | v1.167.0 / M179 | Wheat | GO - seeds 295 plant wheat 59:0 on hydrated farmland 60:7 |
 | v1.168.0 / M180 | Fishing rod | GO - rod 346 emits shared Packet23 type 90 with thrower 0 |
 | v1.169.0 / M181 | Lava bucket | GO - empty bucket 325 picks up still lava 11 into 327 |
+| v1.170.0 / M182 | Redstone torch | GO - floor redstone torch 76:5 persists |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -197,7 +198,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.169.0 direction
+## Immediate post-v1.170.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
@@ -230,6 +231,7 @@ milestones should deepen vehicles, projectiles, farming, beds, hostile AI or
 another uncovered vanilla system rather than returning to the already bounded
 piston matrix. M178 opens official jukebox disc insert through Packet61.
 M179 plants wheat `59:0` on hydrated farmland. M180 casts a fishing hook as
-Packet23 type `90`. M181 picks up still lava into bucket `327`.
+Packet23 type `90`. M181 picks up still lava into bucket `327`. M182 places
+floor redstone torch `76:5`.
 M71-M110 remain frozen Aero laboratory evidence; no new Aero milestone is
 planned before the vanilla foundation is complete.

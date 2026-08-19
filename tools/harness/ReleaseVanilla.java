@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m178 = load(root, "smokes/m178-jukebox/smoke.properties");
         Properties m179 = load(root, "smokes/m179-wheat/smoke.properties");
         Properties m180 = load(root, "smokes/m180-fishing-rod/smoke.properties");
         Properties m181 = load(root, "smokes/m181-lava-bucket/smoke.properties");
-        match(release, "version", "1.169.0");
-        match(release, "milestone", "m181-lava-bucket");
-        same(release, "m178.signature", m178, "expected.signature");
-        same(release, "server.sha256", m178, "server.jar.sha256");
+        Properties m182 = load(root, "smokes/m182-redstone-torch/smoke.properties");
+        match(release, "version", "1.170.0");
+        match(release, "milestone", "m182-redstone-torch");
         same(release, "m179.signature", m179, "expected.signature");
         same(release, "server.sha256", m179, "server.jar.sha256");
         same(release, "m180.signature", m180, "expected.signature");
         same(release, "server.sha256", m180, "server.jar.sha256");
         same(release, "m181.signature", m181, "expected.signature");
         same(release, "server.sha256", m181, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M178_JUKEBOX.md", "docs/M178_CYCLE.md",
-                "smokes/m178-jukebox/MAP.md", "docs/M179_WHEAT.md", "docs/M179_CYCLE.md",
+        same(release, "m182.signature", m182, "expected.signature");
+        same(release, "server.sha256", m182, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M179_WHEAT.md", "docs/M179_CYCLE.md",
                 "smokes/m179-wheat/MAP.md", "docs/M180_FISHING_ROD.md", "docs/M180_CYCLE.md",
                 "smokes/m180-fishing-rod/MAP.md", "docs/M181_LAVA_BUCKET.md", "docs/M181_CYCLE.md",
-                "smokes/m181-lava-bucket/MAP.md"))
+                "smokes/m181-lava-bucket/MAP.md", "docs/M182_REDSTONE_TORCH.md", "docs/M182_CYCLE.md",
+                "smokes/m182-redstone-torch/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.169.0 M181 Lava bucket GO");
+        System.out.println("  release: Worldline v1.170.0 M182 Redstone torch GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

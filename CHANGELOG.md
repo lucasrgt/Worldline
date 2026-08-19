@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.170.0 - M182 Redstone torch
+
+Status: GO for official floor redstone-torch placement.
+
+- Placed redstone torch item `76` on a raised stone support as `76:5`.
+- That floor metadata survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M182 semantic SHA-256 is
+`3e8129618cb8674fb0d5a7580c16d55d100162fde4602e17ac89b0af9fdd5d4a`.
+
 ## 1.169.0 - M181 Lava bucket
 
 Status: GO for official still-lava bucket pickup.
