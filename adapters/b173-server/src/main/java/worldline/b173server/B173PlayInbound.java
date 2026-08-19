@@ -19,7 +19,7 @@ final class B173PlayInbound {
     private final B173RemoteWorldCache cache = new B173RemoteWorldCache();
     private final B173ItemInbound items;
     private final long timeoutNanos;
-    private Correction correction; private int dimension; private long respawnEpoch; private worldline.api.RemoteExplosion explosion;
+    private Correction correction; private int dimension; private long respawnEpoch; private worldline.api.RemoteExplosion explosion; private final B173MobTracker mobs=new B173MobTracker();
 
     B173PlayInbound(DataInputStream input, DataOutputStream output, int timeoutMillis,
             int localEntityId, String localUsername, int dimension) throws IOException { this.input = input;
@@ -35,7 +35,7 @@ final class B173PlayInbound {
         if (packet == 50) { cache.preChunk(input); return; }
         if (packet == 51) { cache.accept(B173ChunkCodec.read(input)); return; }
         if (packet == 52) { cache.multiBlock(input); return; }
-        if (packet == 53) { cache.singleBlock(input); return; } if (packet == 60) { if (explosion != null) throw new IOException("unconsumed explosion observation"); explosion = cache.explosion(input); return; }
+        if (packet == 53) { cache.singleBlock(input); return; } if(packet==24){mobs.spawn(input);return;} if (packet == 60) { if (explosion != null) throw new IOException("unconsumed explosion observation"); explosion = cache.explosion(input); return; }
         if (packet == 255) throw disconnect();
         B173InboundPacket.skip(input, packet);
     }
@@ -108,7 +108,7 @@ final class B173PlayInbound {
             skip(input.readUnsignedByte());
     }
 
-    RemoteWorldView snapshot() { return cache.snapshot(); } int dimension() { return dimension; } int awaitDimension(int expected) throws IOException { if (expected != 0 && expected != -1) throw new IllegalArgumentException("invalid expected dimension"); for (int count = 0; count < 8192; count++) { if (dimension == expected) return dimension; skip(input.readUnsignedByte()); } throw new IOException("dimension absent from bounded inbound window"); } long respawnEpoch(){return respawnEpoch;} int awaitRespawn(long before,int expected)throws IOException{for(int count=0;count<8192;count++){if(respawnEpoch>before){if(dimension!=expected)throw new IOException("respawn dimension drift");return dimension;}skip(input.readUnsignedByte());}throw new IOException("respawn packet absent");} int health(){return items.health();} int awaitHealth(int expected)throws IOException{return items.awaitHealth(expected,this::pumpOne);} worldline.api.RemoteExplosion awaitExplosion()throws IOException{for(int count=0;count<8192;count++){if(explosion!=null){worldline.api.RemoteExplosion value=explosion;explosion=null;return value;}pumpOne();}throw new IOException("explosion observation absent");}
+    RemoteWorldView snapshot() { return cache.snapshot(); } int dimension() { return dimension; } int awaitDimension(int expected) throws IOException { if (expected != 0 && expected != -1) throw new IllegalArgumentException("invalid expected dimension"); for (int count = 0; count < 8192; count++) { if (dimension == expected) return dimension; skip(input.readUnsignedByte()); } throw new IOException("dimension absent from bounded inbound window"); } long respawnEpoch(){return respawnEpoch;} int awaitRespawn(long before,int expected)throws IOException{for(int count=0;count<8192;count++){if(respawnEpoch>before){if(dimension!=expected)throw new IOException("respawn dimension drift");return dimension;}skip(input.readUnsignedByte());}throw new IOException("respawn packet absent");} int health(){return items.health();} int awaitHealth(int expected)throws IOException{return items.awaitHealth(expected,this::pumpOne);} worldline.api.RemoteExplosion awaitExplosion()throws IOException{for(int count=0;count<8192;count++){if(explosion!=null){worldline.api.RemoteExplosion value=explosion;explosion=null;return value;}pumpOne();}throw new IOException("explosion observation absent");} worldline.api.RemoteMobSpawn awaitMobSpawn(int type)throws IOException{Thread p=pulse();long deadline=System.nanoTime()+timeoutNanos;try{for(int count=0;count<8192&&System.nanoTime()<deadline;count++){worldline.api.RemoteMobSpawn value=mobs.take(type);if(value!=null)return value;pumpOne();}throw new IOException("expected mob spawn absent before deadline");}finally{p.interrupt();}}
 
     RemoteInventoryView awaitInventory() throws IOException { return items.awaitInventory(this::pumpOne); }
     RemoteInventoryView inventory() { return items.inventory(); }

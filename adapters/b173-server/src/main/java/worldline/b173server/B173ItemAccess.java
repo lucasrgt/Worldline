@@ -13,6 +13,7 @@ import worldline.api.RemotePersonalTransaction;
 import worldline.api.RemotePersonalCraft;
 import worldline.api.RemoteRejectedTransaction;
 import worldline.api.RemoteTransactionRejectedException;
+import worldline.api.RemoteMobSpawn;
 
 /** Unchecked public-client boundary for the bounded item channel. */
 final class B173ItemAccess {
@@ -146,6 +147,8 @@ final class B173ItemAccess {
         catch (IOException error) { throw new IllegalStateException("swing request failed", error); } }
     static worldline.api.RemotePeerSwing awaitPeerSwing(B173PlayChannel channel, String username) { try { return channel.inbound().awaitPeerSwing(username); }
         catch (IOException error) { throw new IllegalStateException("peer swing receive failed", error); } }
+    static RemoteMobSpawn awaitMobSpawn(B173PlayChannel channel,int type){try{return channel.awaitMobSpawn(type);}
+        catch(IOException error){throw new IllegalStateException("mob spawn receive failed",error);}}
 
     static RemoteDroppedItem awaitDroppedItem(B173PlayChannel channel, RemoteItemStack expected) {
         try { return channel.inbound().awaitDroppedItem(expected); }

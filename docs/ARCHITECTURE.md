@@ -1134,3 +1134,10 @@ M140 adds no public API. It composes generic held-item Packet15 use with the
 incremental world cache and fresh Packet51 persistence oracle. The deterministic
 sapling-root transition is hashed, while the randomized vanilla oak geometry is
 validated structurally rather than frozen as a universal layout.
+
+M141 adds `MobObservationSession` and immutable `RemoteMobSpawn` evidence above
+the cumulative session hierarchy. `B173MobTracker` consumes Packet24 and every
+protocol-14 metadata field type into a bounded queue; `B173PlayInbound` owns the
+single reader and exposes typed waits. The first qualified producer is an
+official default pig spawner observed identically by two peers. Movement and AI
+remain separate downstream boundaries rather than inferred from creation.

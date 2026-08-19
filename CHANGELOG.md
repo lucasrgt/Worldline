@@ -4,6 +4,20 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.129.0 - M141 Pig Spawner Observation
+
+Status: GO for one official living-entity creation and Packet24 observation.
+
+- Added immutable `RemoteMobSpawn` and cumulative `MobObservationSession`.
+- Added a bounded Packet24 queue and strict protocol-14 metadata decoder.
+- Built a raised grass platform whose official default spawner creates pig
+  type `90` inside the documented random volume.
+- Correlated the identical positive entity identity and metadata across two
+  simultaneous clients in two fresh official server JVMs.
+
+The frozen M141 semantic SHA-256 is
+`a148241c4e0282a64cf461ef362991e001cc17b1c7b06bd12e3f7b5b555fd522`.
+
 ## 1.128.0 - M140 Bonemeal Tree Growth
 
 Status: GO for one official player-triggered vegetation generation boundary.
