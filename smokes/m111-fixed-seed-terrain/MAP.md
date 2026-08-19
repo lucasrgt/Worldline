@@ -2,8 +2,9 @@
 
 M111 loads absolute chunk `(0,0)` from two newly generated official Beta 1.7.3
 worlds with seed `17320110707`. View distance seven makes the fixed chunk
-available despite the version's variable player-spawn selection while keeping
-the protocol cache below its 256-chunk bound.
+available despite the version's variable player-spawn selection. M112 later
+hardened the fixture by writing a minimal player NBT at chunk `(0,0)` before
+login, without changing M111 terrain evidence.
 
 Packet50 establishes the chunk lifecycle and Packet51 supplies the complete
 `16 x 128 x 16` payload. The decoder hashes all 32,768 legacy block IDs in

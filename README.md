@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.99.0 - M111 Fixed-Seed Terrain (GO)**.
+Current official milestone: **Worldline v1.100.0 - M112 Fixed-Seed Lighting (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -570,6 +570,12 @@ Beta 1.7.3 worlds with the fixed Worldline seed expose the same absolute
 chunk `(0,0)`: 16,342 non-air blocks, an identical complete ID volume, and an
 identical 256-column top-Y/ID/metadata surface profile. Player spawn remains
 observational. See `docs/M111_FIXED_SEED_TERRAIN.md`.
+
+M112 qualifies the two complete Packet51 light planes for that same world
+boundary. Two fresh official worlds reproduce exact block-light and sky-light
+hashes and their complete 0–15 histograms. This is a snapshot oracle; source
+attribution and light-engine transitions remain open. See
+`docs/M112_FIXED_SEED_LIGHTING.md`.
 
 ## Verify
 

@@ -951,3 +951,11 @@ variable initial player spawn. The semantic digest covers every legacy block
 ID plus a derived top-Y/ID/metadata surface profile; the complete metadata and
 lighting planes remain separate boundaries. M71-M110 are frozen while the
 active architecture roadmap returns to vanilla systems.
+
+M112 adds no public API. It consumes the two existing Packet51 nibble planes
+from the same absolute chunk and freezes their complete ordered hashes and
+sixteen-bin histograms across fresh official worlds. This establishes
+deterministic light-state input without claiming a light-engine cause, update,
+renderer effect or cross-chunk rule. A new adapter-side NBT seed places only
+the pre-login player pose at the target chunk; world blocks remain
+server-generated and the existing 256-chunk cache bound stays unchanged.

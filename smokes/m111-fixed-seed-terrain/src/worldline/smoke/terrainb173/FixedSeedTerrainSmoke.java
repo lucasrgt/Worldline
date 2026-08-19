@@ -11,6 +11,7 @@ import worldline.api.PlayerPose;
 import worldline.api.RemoteChunkSnapshot;
 import worldline.api.RemoteWorldView;
 import worldline.b173server.B173DedicatedServer;
+import worldline.b173server.B173PlayerSeed;
 import worldline.b173server.B173WireClient;
 
 /** Observes exact generated block state at one absolute official-world chunk. */
@@ -23,13 +24,14 @@ public final class FixedSeedTerrainSmoke {
         Path jar = Paths.get(arguments[0]), workspace = Paths.get(arguments[1]);
         int port = Integer.parseInt(arguments[2]); long seed = Long.parseLong(arguments[3]);
         Duration timeout = Duration.ofSeconds(90);
-        B173DedicatedServer server = new B173DedicatedServer(jar, workspace, port, seed, timeout, 7, true);
+        B173DedicatedServer server = new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
         B173WireClient client = new B173WireClient(
                 "127.0.0.1", port, arguments[4], timeout);
         int chunkX = Integer.parseInt(arguments[5]), chunkZ = Integer.parseInt(arguments[6]);
         PlayerPose pose; RemoteChunkSnapshot chunk;
         try {
-            server.boot(); client.connect(); pose = client.synchronizePose();
+            server.boot(); B173PlayerSeed.write(workspace, arguments[4], 8.5D, 120.0D, 8.5D);
+            client.connect(); pose = client.synchronizePose();
             RemoteWorldView world = client.awaitRemoteChunk(chunkX, chunkZ);
             chunk = world.chunkAt(chunkX, chunkZ); verify(chunk, chunkX, chunkZ);
         } finally { client.close(); server.close(); }

@@ -4,6 +4,21 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.100.0 - M112 Fixed-Seed Lighting
+
+Status: GO for deterministic vanilla block-light and sky-light snapshots.
+
+- Decoded all 32,768 nibbles from each light plane in absolute chunk `(0,0)`
+  across two fresh official worlds.
+- Froze exact block-light and sky-light hashes plus complete 0–15 histograms.
+- Added a minimal official-format player-NBT seed so fixed-coordinate world
+  observations do not depend on Beta 1.7.3's variable spawn search.
+- Kept source attribution, light updates, cross-chunk propagation, rendering,
+  alternate seeds and dimensions outside qualification.
+
+The frozen M112 semantic SHA-256 is
+`f5180dc49e6d6117c501e903ab16b1015a071cedf027e2444168a40109dc0969`.
+
 ## 1.99.0 - M111 Fixed-Seed Terrain
 
 Status: GO for deterministic vanilla terrain at one absolute chunk.
