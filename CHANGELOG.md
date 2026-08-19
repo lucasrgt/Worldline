@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.221.0 - M233 Note block place
+
+Status: GO for official note-block placement.
+
+- Placed note block item `25` on a raised stone support as `25:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M233 semantic SHA-256 is
+`7b80c1a46b0ca115b927e8ef216452351d1c9bcef2ca26a49e5ab4dc6abedcc9`.
+
 ## 1.220.0 - M232 Chest place
 
 Status: GO for official chest placement.

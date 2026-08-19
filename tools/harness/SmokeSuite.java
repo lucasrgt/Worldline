@@ -256,6 +256,7 @@ final class SmokeSuite {
         {"tools/smoke/LapisOreCycle.java", "m230-lapis-ore"},
         {"tools/smoke/DispenserPlaceCycle.java", "m231-dispenser-place"},
         {"tools/smoke/ChestPlaceCycle.java", "m232-chest-place"},
+        {"tools/smoke/NotePlaceCycle.java", "m233-note-block-place"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

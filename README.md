@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.220.0 - M232 Chest place (GO)**.
+Current official milestone: **Worldline v1.221.0 - M233 Note block place (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
