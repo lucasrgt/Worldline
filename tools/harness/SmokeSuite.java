@@ -196,6 +196,7 @@ final class SmokeSuite {
         {"tools/smoke/RepeaterCycle.java", "m170-repeater"},
         {"tools/smoke/PumpkinCycle.java", "m171-pumpkin"},
         {"tools/smoke/WoodenPlateCycle.java", "m172-wooden-plate"},
+        {"tools/smoke/FenceCycle.java", "m173-fence"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

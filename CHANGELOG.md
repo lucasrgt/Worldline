@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.161.0 - M173 Fence
+
+Status: GO for official adjacent fence placement.
+
+- Placed two fence items `85` as `85:0` on a raised stone support.
+- Both cells survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M173 semantic SHA-256 is
+`87da22ea0cb364e70239d8989a677f835f86ebbe9768dee6955f04ee4be1f74e`.
+
 ## 1.160.0 - M172 Wooden Pressure Plate
 
 Status: GO for official wooden pressure-plate press and release.

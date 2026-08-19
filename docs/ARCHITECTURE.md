@@ -1264,3 +1264,6 @@ and that facing persists.
 
 M172 adds no public API. Wooden pressure plate `72:0` powers to `72:1` when
 the headless actor steps on it and depowers when they step off.
+
+M173 adds no public API. Two adjacent fence items `85` place as `85:0` and
+persist.
