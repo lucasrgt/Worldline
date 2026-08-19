@@ -977,3 +977,10 @@ status-ordered local health decrease rather than treating all hurt as M66's
 `20 -> 18`; the existing expected-health boundary remains fail-closed. M66's
 canonical fixture now uses exact NBT-seeded equipment and bounded position
 heartbeats instead of drop pickup and uncontrolled falling.
+
+M115 adds the first public post-placement interaction surface through
+`BlockActivationMultiplayerSession`. The b1.7.3 adapter reuses its strict
+empty-hand Packet15 encoder but exposes it without arming a container-window
+expectation. The lever fixture separates construction from treatment with a
+200-tick stabilization boundary, and only Packet53 plus a fresh Packet51 can
+publish the state transition. No redstone evaluator exists in Worldline.

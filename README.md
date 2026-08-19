@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.102.0 - M114 Causal Water Flow (GO)**.
+Current official milestone: **Worldline v1.103.0 - M115 Lever Activation (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -587,6 +587,11 @@ M114 opens one dirt cell directly below naturally generated still water. The
 official server first confirms air, then settles the cell to water `9:8` in
 both the live cache and a fresh Packet51, with exactly one full-chunk state
 change. See `docs/M114_CAUSAL_WATER_FLOW.md`.
+
+M115 adds bounded empty-hand block activation and applies it to an official
+lever. After a stabilized server-authored fixture, Packet15 changes `69:1` to
+`69:9`; Packet53 and a fresh Packet51 prove exactly one chunk-state delta.
+See `docs/M115_LEVER_ACTIVATION.md`.
 
 ## Verify
 

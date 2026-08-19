@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.103.0 - M115 Lever Activation
+
+Status: GO for one server-authored redstone-component activation.
+
+- Added a neutral empty-hand `activateBlock(position, face)` multiplayer
+  boundary with personal-window/cursor/selected-hand preconditions.
+- Built a deterministic ten-stone above-water side-lever fixture, fixed yaw and
+  waited 200 ticks to exclude orientation and fluid drift.
+- Proved Packet15 activation changes lever `69:1` to `69:9` through Packet53
+  and a fresh Packet51, with exactly one full-chunk state delta.
+- Kept redstone propagation, circuits, powered consumers and generic block
+  interaction outside qualification.
+
+The frozen M115 semantic SHA-256 is
+`497b5d743a5693c925d69d71c02528cf2d16a63ad5c477980b916a0d2b45ae34`.
+
 ## 1.102.0 - M114 Causal Water Flow
 
 Status: GO for one server-authored downward vanilla-water transition.

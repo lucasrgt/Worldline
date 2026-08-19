@@ -40,6 +40,11 @@ final class B173ItemAccess {
         catch (IOException error) { throw new IllegalStateException("held-block placement failed", error); }
     }
 
+    static void activateBlock(B173PlayChannel channel, BlockPosition position, BlockFace face) {
+        try { channel.activateBlock(position, face); }
+        catch (IOException error) { throw new IllegalStateException("block activation failed", error); }
+    }
+
     static RemoteContainerWindow openChest(B173PlayChannel channel, BlockPosition position, BlockFace face) {
         try { return channel.openChest(position, face); }
         catch (IOException error) { throw new IllegalStateException("chest window receive failed", error); }
