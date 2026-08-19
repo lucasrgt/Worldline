@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.95.0 - M107 Paired Skip Individual
+
+Status: GO for the exact skip-true/skip-false comparison.
+
+- Ran two balanced same-plan fresh-process pairs with minimum2, pages enabled,
+  unlimited cache/rebuild budget, and TTL100000.
+- Proved skip true used sixteen managed pre-dispatch enqueues and zero
+  individual renderer calls in every retained record.
+- Proved skip false used sixteen manual enqueues through sixteen individual
+  renderer calls while retaining the same four-page structural state.
+- Required both arms to keep pageCalls4, direct0, rebuild0, cache4, M74
+  render/list0/0, immediate0, and eviction0.
+- Kept visual equivalence and all timing directions outside qualification.
+
+The frozen M107 semantic SHA-256 is
+`913fff54f216f47e06d3886f94f4682b83c1d5bbf49648991c28926d71e8c6f3`.
+
 ## 1.94.0 - M106 Paired Minimum Instances
 
 Status: GO for the exact minimum-two/minimum-five comparison.

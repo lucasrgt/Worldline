@@ -111,6 +111,7 @@ Passing an experiment does not silently promote its API.
 | v1.92.0 / M104 | Balanced paired pages control | GO - same-plan enabled/disabled structural paths under one recorder schema |
 | v1.93.0 / M105 | Balanced paired cache-capacity control | GO - capacity1 thrash versus negative-one stable four-page retention |
 | v1.94.0 / M106 | Balanced paired minimum-instance control | GO - minimum2 four-page replay versus minimum5 mixed two-page/four-direct path |
+| v1.95.0 / M107 | Balanced paired skip-individual control | GO - managed pre-dispatch queue versus manual renderer queue under the same four pages |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -122,13 +123,14 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.94.0 direction
+## Immediate post-v1.95.0 direction
 
-M106 pairs minimum page populations two and five under the same scene, proving
-the pinned mixed cached/direct threshold. Other render entrypoints, other
-minimums, memory cost, other membership distributions, page-order
-independence, skip-individual controls, other topologies, concurrency,
-merge/repacking, and uninstrumented cost remain outside scope. M71-M106 do not establish causal
+M107 pairs the pinned skip-individual switch under the same minimum2 scene,
+proving managed pre-dispatch and manual renderer entrypoints converge on the
+same four-page structural state. Other render entrypoints, visual equivalence,
+other minimums, memory cost, other membership distributions, page-order
+independence, other topologies, concurrency, merge/repacking, and
+uninstrumented cost remain outside scope. M71-M107 do not establish causal
 spike attribution.
 Generic synchronization, persistence, multiple clients, merging, shift clicks,
 and broad automation remain outside the stable contract.

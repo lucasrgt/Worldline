@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.94.0 - M106 Paired Minimum Instances (GO)**.
+Current official milestone: **Worldline v1.95.0 - M107 Paired Skip Individual (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -545,6 +545,12 @@ M106 pairs page minimums two and five under the same exact scene. Raising the
 minimum preserves two cached pages while routing four low-population instances
 through the direct fallback, with independent M74 counter agreement. See
 `docs/M106_PAIRED_MINIMUM_INSTANCES.md`.
+
+M107 pairs the pinned skip-individual switch under minimum2. The enabled arm
+queues all sixteen identities through the managed pre-dispatch hook with no
+individual renderer calls; the disabled arm reaches the same four cached pages
+through sixteen manual renderer calls. See
+`docs/M107_PAIRED_SKIP_INDIVIDUAL.md`.
 
 ## Verify
 

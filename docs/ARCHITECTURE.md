@@ -918,3 +918,10 @@ four instances directly; the lower threshold keeps all four pages cached. The
 test client fixes yaw/pitch before readiness to remove physical mouse drift,
 while X/Y/Z remain server-authored and strictly validated. Common/server code
 remains Aero-free.
+
+M107 adds no public API or product adapter behavior and leaves M74-M106 frozen.
+It pairs the pinned skip-individual switch under minimum2. A client-only mixin
+implements the managed page-renderable contract and credits exact identities
+only after server nonce reconciliation; the control reaches the same four
+cached pages through the registered renderer. Common/server code remains
+Aero-free.
