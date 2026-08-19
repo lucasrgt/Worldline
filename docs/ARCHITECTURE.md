@@ -1379,3 +1379,5 @@ M215 adds no public API. Lapis block item `22` places `22:0` and persists.
 M216 adds no public API. Obsidian item `49` places `49:0` and persists.
 
 M217 adds no public API. Mossy cobble item `48` places `48:0` and persists.
+
+M218 adds no public API. Supported gravel item `13` places `13:0` and persists.
