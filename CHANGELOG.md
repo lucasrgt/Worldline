@@ -4,6 +4,20 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.120.0 - M132 Nether Portal Activation
+
+Status: GO for an official server-authored obsidian portal activation.
+
+- Built a complete `4x5` frame using fourteen accepted Packet15 placements.
+- Proved six empty interior cells before a flint-and-steel interaction.
+- Observed exactly six portal block `90:0` transitions and retained the full
+  frame and active portal through a fresh client session.
+- Scoped the causal hash to the frame interior rather than unrelated scheduled
+  world changes.
+
+The frozen M132 semantic SHA-256 is
+`033c56bdb9ddf8abbd27735158a33d88a6a07e85cb5294a09bde41e7015d6518`.
+
 ## 1.119.0 - M131 Dual-Dimension Session
 
 Status: GO for simultaneous typed Overworld and Nether protocol sessions.

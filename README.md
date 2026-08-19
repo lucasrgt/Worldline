@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.119.0 - M131 Dual-Dimension Session (GO)**.
+Current official milestone: **Worldline v1.120.0 - M132 Nether Portal Activation (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -666,6 +666,10 @@ back with `Dimension=-1`. See `docs/M130_NETHER_LOGIN.md`.
 M131 exposes typed Packet1/Packet9 dimension state, runs simultaneous Overworld
 and Nether clients, and invalidates old chunks on a real dimension change. See
 `docs/M131_DUAL_DIMENSION_SESSION.md`.
+
+M132 constructs a complete 14-obsidian frame through ordinary protocol-14
+placement, ignites it with flint and steel, and proves six persisted official
+portal blocks through a fresh client. See `docs/M132_NETHER_PORTAL_ACTIVATION.md`.
 
 ## Verify
 

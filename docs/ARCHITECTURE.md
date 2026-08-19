@@ -1080,3 +1080,8 @@ M131 adds `DimensionSession` without removing any earlier multiplayer surface.
 The wire client validates Packet1's dimension byte, while inbound Packet9
 updates the same typed state. Only an actual `0↔-1` change clears the bounded
 remote chunk cache; a same-dimension respawn does not discard valid data.
+
+M132 adds no public API or adapter behavior. It composes the existing inventory,
+placement, held-item use and remote-world boundaries into a complete official
+portal fixture. Its oracle binds fourteen stable obsidian cells to six exact
+air-to-portal transitions and a fresh-session persistence observation.
