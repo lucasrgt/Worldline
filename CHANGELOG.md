@@ -4,6 +4,21 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.90.0 - M102 Unlimited-Rebuild Sentinel
+
+Status: GO for literal negative-one unlimited rebuilding under cache1.
+
+- Froze cache1, TTL100000, rebuild sentinel -1, and the four-page scene.
+- Proved every retained record had pageCalls4, direct0, rebuild4, cache1, and
+  cumulative capacity evictions advancing by four.
+- Independently required M74 direct renderer/list counters 0/0 and all sixteen
+  synchronized identities in 4724/4586 complete records.
+- Kept descriptive timings dynamic and bounded the mechanism to literal -1,
+  the exact fixture, and pinned Aero revision.
+
+The frozen M102 semantic SHA-256 is
+`852d41f2d1654fd1dc83d0b746fddb4c109d370573fd67b25290361ddaefa75b`.
+
 ## 1.89.0 - M101 Rebuild-Budget-Zero Direct Path
 
 Status: GO for the exact zero-rebuild direct path under cache1.

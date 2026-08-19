@@ -886,3 +886,8 @@ It lowers the same cache1 fixture to zero rebuilds per frame. No page can enter
 the cache, so every retained record uses the direct path for all sixteen
 synchronized instances, with zero rebuilds and evictions. Common/server code
 remains Aero-free.
+
+M102 adds no public API or product adapter behavior and leaves M74-M101 frozen.
+It passes literal negative one to the same cache1 fixture; the pinned negative
+predicate removes the rebuild ceiling, so all four page keys compile and evict
+while direct fallback remains zero. Common/server code remains Aero-free.

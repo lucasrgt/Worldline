@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.89.0 - M101 Rebuild-Budget-Zero Direct Path (GO)**.
+Current official milestone: **Worldline v1.90.0 - M102 Unlimited-Rebuild Sentinel (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -520,6 +520,11 @@ M101 lowers the rebuild budget to zero while retaining cache maximum one.
 Every retained record stays cache-empty and renders all sixteen synchronized
 instances directly, with zero page calls, rebuilds, and evictions. See
 `docs/M101_REBUILD_BUDGET_ZERO_DIRECT.md`.
+
+M102 passes the literal negative-one rebuild sentinel and proves the pinned
+unlimited gate: all four page keys rebuild, direct fallback stays zero, and
+capacity evictions advance by four per retained record. See
+`docs/M102_UNLIMITED_REBUILD_SENTINEL.md`.
 
 ## Verify
 
