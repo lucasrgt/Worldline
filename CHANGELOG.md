@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.180.0 - M192 Soul sand
+
+Status: GO for official Overworld soul-sand placement.
+
+- Placed soul sand item `88` on a raised stone support as `88:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M192 semantic SHA-256 is
+`4cf9190cca5bf84eabf13581b40e3e944a7c81c6c62f80bea686b7ff436ea63e`.
+
 ## 1.179.0 - M191 Glowstone
 
 Status: GO for official Overworld glowstone placement.

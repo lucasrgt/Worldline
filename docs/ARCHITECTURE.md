@@ -1320,3 +1320,6 @@ M190 adds no public API. Jack-o-lantern item `91` with look yaw `-90` places
 
 M191 adds no public API. Glowstone item `89` places `89:0` in the Overworld
 and persists.
+
+M192 adds no public API. Soul sand item `88` places `88:0` in the Overworld
+and persists.
