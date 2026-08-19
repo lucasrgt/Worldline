@@ -11,4 +11,8 @@ public final class B173NoteAccess {
         try { return client.channel().awaitNoteEvent(); }
         catch (IOException error) { throw new IllegalStateException("note event receive failed", error); }
     }
+
+    public static RemoteNoteEvent poll(B173WireClient client) {
+        return client.channel().inbound().notes().take();
+    }
 }

@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m174 = load(root, "smokes/m174-ladder/smoke.properties");
         Properties m175 = load(root, "smokes/m175-torch/smoke.properties");
         Properties m176 = load(root, "smokes/m176-sign/smoke.properties");
         Properties m177 = load(root, "smokes/m177-painting/smoke.properties");
-        match(release, "version", "1.165.0");
-        match(release, "milestone", "m177-painting");
-        same(release, "m174.signature", m174, "expected.signature");
-        same(release, "server.sha256", m174, "server.jar.sha256");
+        Properties m178 = load(root, "smokes/m178-jukebox/smoke.properties");
+        match(release, "version", "1.166.0");
+        match(release, "milestone", "m178-jukebox");
         same(release, "m175.signature", m175, "expected.signature");
         same(release, "server.sha256", m175, "server.jar.sha256");
         same(release, "m176.signature", m176, "expected.signature");
         same(release, "server.sha256", m176, "server.jar.sha256");
         same(release, "m177.signature", m177, "expected.signature");
         same(release, "server.sha256", m177, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M174_LADDER.md", "docs/M174_CYCLE.md",
-                "smokes/m174-ladder/MAP.md", "docs/M175_TORCH.md", "docs/M175_CYCLE.md",
+        same(release, "m178.signature", m178, "expected.signature");
+        same(release, "server.sha256", m178, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M175_TORCH.md", "docs/M175_CYCLE.md",
                 "smokes/m175-torch/MAP.md", "docs/M176_SIGN.md", "docs/M176_CYCLE.md",
                 "smokes/m176-sign/MAP.md", "docs/M177_PAINTING.md", "docs/M177_CYCLE.md",
-                "smokes/m177-painting/MAP.md"))
+                "smokes/m177-painting/MAP.md", "docs/M178_JUKEBOX.md", "docs/M178_CYCLE.md",
+                "smokes/m178-jukebox/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.165.0 M177 Painting GO");
+        System.out.println("  release: Worldline v1.166.0 M178 Jukebox GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

@@ -1279,3 +1279,7 @@ accepts four UCS-2 lines that survive a fresh login.
 
 M177 adds `RemotePaintingSpawn` and a Packet25 tracker. Two peers correlate
 the same painting entity, pose and direction. Title is observed, not hashed.
+
+M178 adds `B173NoteAccess.poll`. Jukebox item `84` places `84:0`. Gold disc
+`2256` on that cell emits Packet61 effect `1005` data `2256`, empties the
+selected slot, and writes metadata `84:1` that persists.

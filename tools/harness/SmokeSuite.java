@@ -201,6 +201,7 @@ final class SmokeSuite {
         {"tools/smoke/TorchCycle.java", "m175-torch"},
         {"tools/smoke/SignCycle.java", "m176-sign"},
         {"tools/smoke/PaintingCycle.java", "m177-painting"},
+        {"tools/smoke/JukeboxCycle.java", "m178-jukebox"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

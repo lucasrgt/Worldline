@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.166.0 - M178 Jukebox
+
+Status: GO for official jukebox disc insert.
+
+- Placed jukebox item `84` on a raised stone support as `84:0`.
+- Used gold disc `2256` on that cell and decoded Packet61 effect `1005` data `2256`.
+- The selected slot emptied and metadata `84:1` survived save plus a fresh login.
+
+The frozen M178 semantic SHA-256 is
+`97de107318c1552893e50f28f3483ac127f615e7ae8b5018e70e651c21886a86`.
+
 ## 1.165.0 - M177 Painting
 
 Status: GO for official Packet25 painting spawn.

@@ -182,6 +182,7 @@ Passing an experiment does not silently promote its API.
 | v1.163.0 / M175 | Torch | GO - floor torch 50:5 persists |
 | v1.164.0 / M176 | Sign | GO - standing sign 63 Packet130 text survives login |
 | v1.165.0 / M177 | Painting | GO - Packet25 painting spawn is shared across two peers |
+| v1.166.0 / M178 | Jukebox | GO - gold disc 2256 inserts into jukebox 84:1 via Packet61 1005 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -193,7 +194,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.165.0 direction
+## Immediate post-v1.166.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
@@ -224,6 +225,6 @@ M151 opens the official fire-material rule that netherrack keeps its flame,
 and M152 proves adjacent wool is consumed while that flame remains. The next
 milestones should deepen vehicles, projectiles, farming, beds, hostile AI or
 another uncovered vanilla system rather than returning to the already bounded
-piston matrix.
+piston matrix. M178 opens official jukebox disc insert through Packet61.
 M71-M110 remain frozen Aero laboratory evidence; no new Aero milestone is
 planned before the vanilla foundation is complete.
