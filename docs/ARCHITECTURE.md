@@ -1295,3 +1295,6 @@ M181 adds no public API. Empty bucket `325` picks up still lava `11:0` into
 
 M182 adds no public API. Floor redstone torch item `76` on stone is `76:5`
 and persists.
+
+M183 adds no public API. Rail item `66` with look yaw `0` places `66:0` and
+persists.

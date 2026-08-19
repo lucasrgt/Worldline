@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.171.0 - M183 Rails
+
+Status: GO for official north-south rail placement.
+
+- Placed rail item `66` on a raised stone support as `66:0` with look yaw `0`.
+- That facing survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M183 semantic SHA-256 is
+`189c56b02557d604b8886acbf0eb51505d54eab8cedbb903987462eebb7b3c46`.
+
 ## 1.170.0 - M182 Redstone torch
 
 Status: GO for official floor redstone-torch placement.
