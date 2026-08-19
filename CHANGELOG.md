@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.173.0 - M185 Detector rail
+
+Status: GO for official unpowered detector-rail placement.
+
+- Placed detector rail item `28` on a raised stone support as `28:0`.
+- Detector bit stayed 0 without a minecart and persisted after save plus login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M185 semantic SHA-256 is
+`81cc57ce0d8d5c637a58696af5d3d47097bd3d14016813703c4f7718cb9505a2`.
+
 ## 1.172.0 - M184 Powered rail
 
 Status: GO for official unpowered powered-rail placement.

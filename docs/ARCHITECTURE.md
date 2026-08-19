@@ -1301,3 +1301,6 @@ persists.
 
 M184 adds no public API. Powered rail item `27` places unpowered `27:0` and
 persists.
+
+M185 adds no public API. Detector rail item `28` places unpowered `28:0` and
+persists.
