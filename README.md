@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.136.0 - M148 Pig AI Movement (GO)**.
+Current official milestone: **Worldline v1.137.0 - M149 Pig Death (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

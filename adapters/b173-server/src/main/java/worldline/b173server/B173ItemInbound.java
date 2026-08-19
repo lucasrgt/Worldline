@@ -23,18 +23,18 @@ final class B173ItemInbound {
     private final B173PersonalTransactionTracker transactions = new B173PersonalTransactionTracker();
     private final B173ContainerTransactionTracker containerTransactions = new B173ContainerTransactionTracker();
     private final B173FurnaceTracker furnace = new B173FurnaceTracker(); private final B173CombatTracker combat;
-    private final DataOutputStream output;
+    private final DataOutputStream output; private final B173MobTracker mobs;
 
-    B173ItemInbound(int localEntityId, String localUsername, DataOutputStream output) throws IOException {
-        this.output = output; identities.bind(localEntityId, localUsername); this.combat = new B173CombatTracker(identities, localEntityId, localUsername); }
+    B173ItemInbound(int localEntityId, String localUsername, DataOutputStream output, B173MobTracker mobs) throws IOException {
+        this.output = output; this.mobs = mobs; identities.bind(localEntityId, localUsername); this.combat = new B173CombatTracker(identities, localEntityId, localUsername); }
 
     boolean accept(int packet, DataInputStream input) throws IOException {
         if (packet == 5) equipment.equipment(input);
-        else if (packet == 8) combat.health(input); else if (packet == 18) combat.animation(input); else if (packet == 38) combat.status(input);
+        else if (packet == 8) combat.health(input); else if (packet == 18) combat.animation(input); else if (packet == 38) { int e=input.readInt(),s=input.readByte(); combat.status(e,s); mobs.status(e,s); }
         else if (packet == 20) equipment.spawn(input);
         else if (packet == 21) dropped.spawn(input);
         else if (packet == 22) dropped.collect(input, identities);
-        else if (packet == 29) dropped.destroy(input);
+        else if (packet == 29) { int e=input.readInt(); dropped.destroy(e); mobs.destroy(e); }
         else if (packet == 100) windows.open(input);
         else if (packet == 101) windows.close(input.readUnsignedByte());
         else if (packet == 103) { B173InventoryUpdate update = B173InventoryCodec.update(input);

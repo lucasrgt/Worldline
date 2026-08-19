@@ -1180,3 +1180,9 @@ M148 extends `MobObservationSession` with immutable, fixed-point
 per-entity quantized state and only queues movement for an explicitly observed
 Packet24 identity. The dedicated-server adapter retains its old defaults and
 adds a narrow animal-enabled factory for this official AI fixture.
+
+M149 extends `MobObservationSession` with `attackMob` and immutable
+`RemoteMobDeath`. `B173MobTracker` completes a death only after Packet38 status
+3 and Packet29 destroy for an explicitly observed Packet24 identity, recording
+whether status 2 arrived first. Packet7 is the official diamond-sword cause;
+randomized porkchop drops stay outside the frozen hash.

@@ -20,4 +20,7 @@ final class B173CombatChannel {
     }
     RemoteSwingRequest swing() throws IOException { B173CombatPacket.swing(output, localId);
         output.flush(); return new RemoteSwingRequest(localName, localId); }
+    void attackMob(int target) throws IOException {
+        if (target < 0 || target == localId) throw new IllegalArgumentException("invalid mob target");
+        output.writeByte(7); output.writeInt(localId); output.writeInt(target); output.writeByte(1); output.flush(); }
 }

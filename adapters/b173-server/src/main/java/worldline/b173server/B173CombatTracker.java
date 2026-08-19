@@ -18,8 +18,8 @@ final class B173CombatTracker {
                 incoming = new RemoteIncomingHit(localName, localId, health, next); localHurt = false; }
         health = next;
     }
-    void status(DataInputStream input) throws IOException {
-        int entityId = input.readInt(), status = input.readByte(); if (status != 2) return;
+    void status(int entityId, int status) throws IOException {
+        if (status != 2) return;
         if (entityId == outgoingTarget) { String target = identities.username(entityId);
             if (target == null) throw new IOException("outgoing target identity absent");
             outgoing = new RemoteCombatStrike(localName, localId, target, entityId); outgoingTarget = -1; }

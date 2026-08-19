@@ -4,4 +4,6 @@ package worldline.api;
 public interface MobObservationSession extends ExplosionSession {
     RemoteMobSpawn awaitMobSpawn(int legacyType);
     RemoteMobMovement awaitMobMovement(int entityId);
+    void attackMob(int entityId);
+    RemoteMobDeath awaitMobDeath(int entityId);
 }

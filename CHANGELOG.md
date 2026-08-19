@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.137.0 - M149 Pig Death
+
+Status: GO for one official two-peer pig death transition.
+
+- Added immutable Packet38/Packet29 `RemoteMobDeath` evidence.
+- Added Packet7 diamond-sword mob attack on the existing animal-enabled profile.
+- Correlated one spawned pig's death exactly across two peers.
+- Repeated the complete death fixture in two official server JVMs.
+
+The frozen M149 semantic SHA-256 is
+`c189244beb58382402de4313f9d6be75c90f398e404a7df2ebbbdfa8b34c5048`.
+
 ## 1.136.0 - M148 Pig AI Movement
 
 Status: GO for one official two-peer pig movement transition.

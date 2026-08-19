@@ -150,6 +150,8 @@ final class B173ItemAccess {
     static RemoteMobSpawn awaitMobSpawn(B173PlayChannel channel,int type){try{return channel.awaitMobSpawn(type);}
         catch(IOException error){throw new IllegalStateException("mob spawn receive failed",error);}}
     static worldline.api.RemoteMobMovement awaitMobMovement(B173PlayChannel channel,int entity){try{return channel.awaitMobMovement(entity);}catch(IOException error){throw new IllegalStateException("mob movement receive failed",error);}}
+    static void attackMob(B173PlayChannel channel,int entity){try{channel.attackMob(entity);}catch(IOException error){throw new IllegalStateException("mob attack failed",error);}}
+    static worldline.api.RemoteMobDeath awaitMobDeath(B173PlayChannel channel,int entity){try{return channel.awaitMobDeath(entity);}catch(IOException error){throw new IllegalStateException("mob death receive failed",error);}}
 
     static RemoteDroppedItem awaitDroppedItem(B173PlayChannel channel, RemoteItemStack expected) {
         try { return channel.inbound().awaitDroppedItem(expected); }

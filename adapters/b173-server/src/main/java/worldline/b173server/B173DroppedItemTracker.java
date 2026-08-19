@@ -43,8 +43,8 @@ final class B173DroppedItemTracker {
         collectors.put(itemId, collectorId);
     }
 
-    void destroy(DataInputStream input) throws IOException {
-        int itemId = input.readInt(); if (!spawned.containsKey(itemId)) return;
+    void destroy(int itemId) throws IOException {
+        if (!spawned.containsKey(itemId)) return;
         if (!destroyed.add(itemId)) throw new IOException("duplicate dropped-item destruction");
     }
 
