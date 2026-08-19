@@ -1371,3 +1371,5 @@ persists.
 M212 adds no public API. Gold block item `41` places `41:0` and persists.
 
 M213 adds no public API. Iron block item `42` places `42:0` and persists.
+
+M214 adds no public API. Diamond block item `57` places `57:0` and persists.

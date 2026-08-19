@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.202.0 - M214 Diamond block
+
+Status: GO for official diamond-block placement.
+
+- Placed diamond block item `57` on a raised stone support as `57:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M214 semantic SHA-256 is
+`8915ac3e6a21fca55c8386b8affce516f9b29aa3d4fcb00dca48fec0fb8f4eed`.
+
 ## 1.201.0 - M213 Iron block
 
 Status: GO for official iron-block placement.
