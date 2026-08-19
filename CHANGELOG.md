@@ -4,6 +4,20 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.109.0 - M121 Fixed-Seed Region
+
+Status: GO for one exact nine-chunk vanilla surface and solid-seam census.
+
+- Loaded chunks `(-1,-1)` through `(1,1)` in two fresh fixed-seed worlds and
+  repeated the census after 200 heartbeats, clean save and official restart.
+- Froze the identical 128,529-block aggregate, exact 2,304-column surface and
+  solid occupancy across all internal chunk seams.
+- Preserved divergent interior masks, raw IDs and metadata as diagnostics
+  instead of overstating official scheduled/random-tick determinism.
+
+The frozen M121 semantic SHA-256 is
+`c2a08f5e7e5ec2b6767afbc4b26409d586f2fd4ca296d199d823abe8b2b73d4f`.
+
 ## 1.108.0 - M120 Horizontal Water
 
 Status: GO for one bounded server-authored horizontal fluid transition.

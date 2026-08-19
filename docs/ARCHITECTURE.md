@@ -1015,3 +1015,11 @@ bounded source/gate trench; separate treatment and verifier sessions provide
 fresh Packet51 snapshots on both sides of the mutation. This avoids comparing
 incremental water cache state against a reload and confines the full-chunk
 delta to the sole legal horizontal destination.
+
+M121 adds no public API or world generator. It composes the existing complete
+chunk cache across a fixed 3x3 coordinate region, then repeats the census after
+official save and restart. Aggregate solid count, exact surfaces and solid seam
+pairs remain authoritative. Interior position masks, IDs and metadata are
+retained as diagnostic evidence because equal heartbeat counts do not make
+official scheduled/random-tick outcomes deterministic across fresh process
+replicas.

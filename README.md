@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.108.0 - M120 Horizontal Water (GO)**.
+Current official milestone: **Worldline v1.109.0 - M121 Fixed-Seed Region (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -616,6 +616,12 @@ M120 adds bounded horizontal fluid propagation. A sealed official stone trench
 holds source `9:0` behind dirt; opening its only exit produces target `9:1`
 with exactly one authoritative chunk-state change. See
 `docs/M120_HORIZONTAL_WATER.md`.
+
+M121 expands fixed-seed world observation to a complete 3x3 region after clean
+restart. Two fresh replicas match the aggregate solid count, exact 2,304-column
+surface and solid occupancy across every internal chunk seam. Interior masks,
+IDs and metadata remain explicit diagnostics rather than a false determinism
+claim. See `docs/M121_FIXED_SEED_REGION.md`.
 
 ## Verify
 
