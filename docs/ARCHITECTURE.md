@@ -1210,3 +1210,7 @@ air use is Packet15 at `(-1,255,-1)` direction 255. Type 1 is a boat.
 
 M155 reuses that Packet23 tracker. Minecart item `328` on rail `66` emits type
 `10` with thrower 0 and a quantized pose at the rail center.
+
+M156 adds no public API. Wooden hoe Packet15 turns dirt into farmland `60:0`,
+and a still-water neighbor hydrates at least one plot to `60:7` that survives
+restart.

@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.144.0 - M156 Farmland Hydration
+
+Status: GO for official hoe-to-farmland moisture.
+
+- Wooden hoe Packet15 tilled dirt `3` into farmland `60`.
+- Adjacent still water `9` hydrated at least one of four plots to `60:7`.
+- The moist farmland survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M156 semantic SHA-256 is
+`fec7ee0f7082dd84e4b7dfdfb08bfecf7258e0369cad355481d6c673a7bebb3f`.
+
 ## 1.143.0 - M155 Minecart Spawn
 
 Status: GO for one official Packet23 minecart spawn.

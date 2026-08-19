@@ -179,6 +179,7 @@ final class SmokeSuite {
         {"tools/smoke/DispenserEjectCycle.java", "m153-dispenser-eject"},
         {"tools/smoke/BoatSpawnCycle.java", "m154-boat-spawn"},
         {"tools/smoke/MinecartSpawnCycle.java", "m155-minecart-spawn"},
+        {"tools/smoke/FarmlandHydrationCycle.java", "m156-farmland-hydration"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 
