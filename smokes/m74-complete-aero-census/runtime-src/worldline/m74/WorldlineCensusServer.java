@@ -22,7 +22,8 @@ public final class WorldlineCensusServer {
         Integer fx = Integer.getInteger("worldline.census.planX"), fy = Integer.getInteger("worldline.census.planY"), fz = Integer.getInteger("worldline.census.planZ");
         if ((fx == null) != (fy == null) || (fx == null) != (fz == null)) throw new IllegalStateException("partial M74 plan");
         Vec3i spawn = player.world.getSpawnPos(); x = fx == null ? spawn.x + 2 : fx; z = fz == null ? spawn.z - 2 : fz; y = fy == null ? 1 : fy;
-        if (fy == null) for (int dz = 0; dz < 4; dz++) y = Math.max(y, player.world.getTopSolidBlockY(x, z + dz) + 1);
+        if (fy == null) { for (int dz = 0; dz < 4; dz++) y = Math.max(y, player.world.getTopSolidBlockY(x, z + dz) + 1);
+            y = Math.max(y, player.world.getTopSolidBlockY(x - 2, z + 2) + 1); }
         player.networkHandler.teleport(x - 1.5D, y, z + 2.5D, -90F, 0F); awaiting = true; phase = -1; placed = 0; delay = 1;
         System.out.println("[WorldlineCensus] activation nonce=" + nonce);
     }

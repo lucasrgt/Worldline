@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.91.0 - M103 Pages-Disabled Immediate Direct (GO)**.
+Current official milestone: **Worldline v1.92.0 - M104 Paired Pages Control (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -530,6 +530,11 @@ M103 disables cell pages explicitly and proves every queue entry draws through
 the immediate direct overload. A smoke-owned counter and the M74 census expose
 the work that later empty flushes erase from public cell counters. See
 `docs/M103_PAGES_DISABLED_IMMEDIATE_DIRECT.md`.
+
+M104 directly pairs pages enabled and disabled under the same sixteen-entity
+plan, nonce, camera, and recorder schema in balanced fresh-process order. It
+proves both structural paths without treating timing deltas as causal. See
+`docs/M104_PAIRED_PAGES_CONTROL.md`.
 
 ## Verify
 

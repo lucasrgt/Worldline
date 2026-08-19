@@ -897,3 +897,9 @@ It disables cell pages and adds client-only observation of the exact immediate
 direct overload. This cross-checks sixteen direct calls against M74 renders
 even though subsequent empty flushes reset the public cell counters to zero.
 Common/server code remains Aero-free.
+
+M104 adds no public API or product adapter behavior and leaves M74-M103 frozen.
+It uses one unified client-only sidecar to compare pages enabled and disabled
+in two balanced same-plan pairs. Automatic plans now include the camera support
+column so the unchanged strict pose gate cannot race gravity over depressions.
+Common/server code remains Aero-free.

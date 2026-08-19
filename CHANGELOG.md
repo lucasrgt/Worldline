@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.92.0 - M104 Paired Pages Control
+
+Status: GO for the exact balanced pages-enabled/pages-disabled comparison.
+
+- Ran two balanced fresh-process pairs with the same plan and nonce per pair.
+- Proved the enabled path had queue16/pageCalls4/rebuild4/cache1 and no
+  immediate calls in every record.
+- Proved the disabled path had immediateDirect16 and zero page state in every
+  record, with aligned M74 render/list16/16.
+- Hardened automatic plans to include the camera support column while keeping
+  the strict full-pose readiness gate.
+- Kept paired timing summaries dynamic and made no causal or relative-
+  performance claim.
+
+The frozen M104 semantic SHA-256 is
+`a91f910fbbf2ced951e0a009e1db64924f8b8a33f34aeca4f8b0e6b6e2bc4df8`.
+
 ## 1.91.0 - M103 Pages-Disabled Immediate Direct
 
 Status: GO for the exact explicit pages-disabled control.
