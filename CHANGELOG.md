@@ -4,6 +4,20 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.121.0 - M133 Nether Portal Traversal
+
+Status: GO for one official Overworld-to-Nether portal journey.
+
+- Entered the active M132 portal for a bounded official residence interval.
+- Observed Packet9 change the typed live session from dimension `0` to `-1`.
+- Decoded the destination Nether chunk after old-world cache invalidation.
+- Proved the server-generated 14-obsidian, six-portal counterpart and persisted
+  the traversed player's Nether dimension.
+- Kept the vanilla portal search's varying exact destination coordinate dynamic.
+
+The frozen M133 semantic SHA-256 is
+`5c8ac40f2065949243c4a0e77c0ae9f5757aa4d89247915f6878de01cb72ed5d`.
+
 ## 1.120.0 - M132 Nether Portal Activation
 
 Status: GO for an official server-authored obsidian portal activation.

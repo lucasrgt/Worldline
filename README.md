@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.120.0 - M132 Nether Portal Activation (GO)**.
+Current official milestone: **Worldline v1.121.0 - M133 Nether Portal Traversal (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -670,6 +670,10 @@ and Nether clients, and invalidates old chunks on a real dimension change. See
 M132 constructs a complete 14-obsidian frame through ordinary protocol-14
 placement, ignites it with flint and steel, and proves six persisted official
 portal blocks through a fresh client. See `docs/M132_NETHER_PORTAL_ACTIVATION.md`.
+
+M133 enters that active portal, observes the official Packet9 transition from
+dimension `0` to `-1`, decodes the generated Nether-side portal and persists
+the new player dimension. See `docs/M133_NETHER_PORTAL_TRAVERSAL.md`.
 
 ## Verify
 

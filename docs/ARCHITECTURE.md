@@ -1085,3 +1085,9 @@ M132 adds no public API or adapter behavior. It composes the existing inventory,
 placement, held-item use and remote-world boundaries into a complete official
 portal fixture. Its oracle binds fourteen stable obsidian cells to six exact
 air-to-portal transitions and a fresh-session persistence observation.
+
+M133 adds no public API. It composes M132's constructed portal with M131's typed
+Packet9 lifecycle: the same connection moves into the portal, changes dimension,
+accepts the corrected destination pose and repopulates its cleared chunk cache
+with decoded Nether data. Exact destination search coordinates stay outside the
+frozen contract.
