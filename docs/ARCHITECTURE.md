@@ -1103,3 +1103,10 @@ typed respawn result normalizes that dead state to zero. A production Packet9
 encoder and a monotonic inbound respawn epoch distinguish a real same-dimension
 response from the cached dimension value, while the server remains authoritative
 for the corrected spawn pose, chunk contents and saved player state.
+
+M136 makes the respawn evidence dimension-aware. `RemoteRespawn` retains both
+the request-side and response-side dimension, while the original constructor
+still represents equal source/destination dimensions. The adapter always
+expects vanilla's death destination `0`; a `-1→0` response therefore triggers
+the same cache reset already qualified for portal travel, followed by an
+independent Overworld chunk and persistence oracle.

@@ -4,6 +4,21 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.124.0 - M136 Nether Death Respawn
+
+Status: GO for one official Nether-death to Overworld-respawn lifecycle.
+
+- Generalized `RemoteRespawn` evidence to retain source and destination
+  dimensions while preserving its same-dimension constructor.
+- Froze the production Packet9 Nether request as `09-ff`.
+- Proved a skyless netherrack source view, signed nonpositive death health and
+  authoritative Packet9 `-1→0` plus Packet8 health `20`.
+- Proved dimension-change cache invalidation, Overworld-only replacement
+  chunks and persisted `dimension:health = 0:20`.
+
+The frozen M136 semantic SHA-256 is
+`48c243301cfa00388490bde784ac80eb7597256aa539b83f1777b841d77148a1`.
+
 ## 1.123.0 - M135 Player Respawn
 
 Status: GO for one official void-death and same-dimension respawn lifecycle.
