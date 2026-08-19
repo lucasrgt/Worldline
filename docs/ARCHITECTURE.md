@@ -1317,3 +1317,6 @@ M189 adds no public API. Bookshelf item `47` places `47:0` and persists.
 
 M190 adds no public API. Jack-o-lantern item `91` with look yaw `-90` places
 `91:1` and persists.
+
+M191 adds no public API. Glowstone item `89` places `89:0` in the Overworld
+and persists.

@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.179.0 - M191 Glowstone
+
+Status: GO for official Overworld glowstone placement.
+
+- Placed glowstone item `89` on a raised stone support as `89:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M191 semantic SHA-256 is
+`3b17d9813ae06da188a84e5b3ea33feedbc0bc0f9c537be65e90e2dbf47f2187`.
+
 ## 1.178.0 - M190 Jack-o-lantern
 
 Status: GO for official jack-o-lantern facing.
