@@ -1096,3 +1096,10 @@ M134 keeps the same connection through a second dimension lifecycle. A bounded
 portal-plane detector handles either vanilla orientation and negative world
 coordinates, the player exits for cooldown and Packet9 returns it to dimension
 `0`. Each dimension switch clears and repopulates the remote cache independently.
+
+M135 adds `RespawnSession` without weakening the cumulative multiplayer API.
+The signed Packet8 tracker preserves nonpositive overkill values; only the
+typed respawn result normalizes that dead state to zero. A production Packet9
+encoder and a monotonic inbound respawn epoch distinguish a real same-dimension
+response from the cached dimension value, while the server remains authoritative
+for the corrected spawn pose, chunk contents and saved player state.

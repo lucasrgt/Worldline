@@ -4,6 +4,21 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.123.0 - M135 Player Respawn
+
+Status: GO for one official void-death and same-dimension respawn lifecycle.
+
+- Added typed live health observation and a bounded `RespawnSession` boundary.
+- Froze Packet9 requests for signed dimensions `0` and `-1` through the
+  production encoder.
+- Accepted vanilla's signed nonpositive overkill health without rewriting the
+  packet, then required a fresh same-dimension Packet9 epoch and health `20`.
+- Followed the server-selected corrected spawn into a decoded lit chunk and
+  proved empty inventory plus persisted health after clean disconnect.
+
+The frozen M135 semantic SHA-256 is
+`22275e37f5b927fb38ddbe53bfb3869f752fa11afe00efc1e57d41edca84f81a`.
+
 ## 1.122.0 - M134 Nether Portal Roundtrip
 
 Status: GO for one complete official Overworld-Nether-Overworld journey.

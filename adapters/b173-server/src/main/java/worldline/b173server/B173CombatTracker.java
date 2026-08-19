@@ -33,10 +33,10 @@ final class B173CombatTracker {
         throw new IllegalStateException("outgoing combat request pending"); outgoingTarget = target; }
     RemoteCombatStrike takeOutgoing() { RemoteCombatStrike value = outgoing; outgoing = null; return value; }
     RemoteIncomingHit takeIncoming(int expectedHealth) throws IOException { if (incoming == null) return null;
-        if (incoming.healthAfter() != expectedHealth) throw new IOException("incoming health expectation drift");
+        if (incoming.healthAfter() != expectedHealth) throw new IOException("incoming health expectation drift: " + incoming.healthAfter() + " != " + expectedHealth);
         RemoteIncomingHit value = incoming; incoming = null; return value; }
     int entityId(String username) { return identities.entityId(username); }
     void expectSwing(String username) { int id = identities.entityId(username); if (id < 0 || expectedSwing >= 0 || swing != null)
         throw new IllegalStateException("peer swing expectation invalid"); expectedSwing = id; }
-    worldline.api.RemotePeerSwing takeSwing() { worldline.api.RemotePeerSwing value = swing; swing = null; return value; }
+    worldline.api.RemotePeerSwing takeSwing() { worldline.api.RemotePeerSwing value = swing; swing = null; return value; } int health() { return health; }
 }

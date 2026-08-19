@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.122.0 - M134 Nether Portal Roundtrip (GO)**.
+Current official milestone: **Worldline v1.123.0 - M135 Player Respawn (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

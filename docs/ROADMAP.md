@@ -139,6 +139,7 @@ Passing an experiment does not silently promote its API.
 | v1.120.0 / M132 | Nether portal activation | GO - fourteen accepted obsidian placements plus flint and steel produce six persisted official portal blocks |
 | v1.121.0 / M133 | Nether portal traversal | GO - active portal residence emits Packet9 `0→-1`, repopulates the cache with Nether terrain and creates the counterpart portal |
 | v1.122.0 / M134 | Nether portal roundtrip | GO - generated-portal discovery, bounded cooldown and re-entry produce Packet9 `-1→0` and a valid Overworld portal view |
+| v1.123.0 / M135 | Player death and respawn | GO - official void damage reaches a nonpositive Packet8 state, then a signed Packet9 request restores dimension 0, health 20 and a loaded spawn chunk |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -150,7 +151,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.122.0 direction
+## Immediate post-v1.123.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
@@ -163,8 +164,8 @@ M123's first cross-chunk causal transition, M124's exact recovery, M125's
 cross-chunk fluid flow, M126's cross-chunk redstone signal, M127's exact
 recovery, M128's multiblock consumer, M129's exact consumer recovery and M130's
 first official Nether session, M131's typed dual-dimension boundary, M132's
-official portal activation, M133's live traversal and M134's complete roundtrip
-into respawn transitions, additional
+official portal activation, M133's live traversal, M134's complete roundtrip
+and M135's same-dimension death/respawn lifecycle into additional
 physics/worldgen,
 entity AI, dimensions
 and persistence/multiplayer composition.
