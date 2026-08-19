@@ -132,6 +132,7 @@ Passing an experiment does not silently promote its API.
 | v1.113.0 / M125 | Cross-chunk water propagation | GO - a bounded source at x=15 changes exactly one target cell in chunk 1 to water `9:1` |
 | v1.114.0 / M126 | Cross-chunk redstone propagation | GO - a lever in chunk 1 powers an attached wire in chunk 0 from `0` to `15` |
 | v1.115.0 / M127 | Cross-chunk redstone recovery | GO - fresh-client deactivation restores lever and wire with one inverse delta per chunk and zero residual states |
+| v1.116.0 / M128 | Cross-chunk iron-door consumer | GO - a lever in chunk 1 opens both exact door halves in chunk 0 with a `2 + 1` delta partition |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -143,7 +144,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.115.0 direction
+## Immediate post-v1.116.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
@@ -153,8 +154,8 @@ sequence now deepens fluid behavior and advances from M115's component state
 through M119's block gravity, M120's bounded horizontal fluid transition and
 M121's nine-chunk fixed-seed surface, M122's exact regional light planes and
 M123's first cross-chunk causal transition, M124's exact recovery, M125's
-cross-chunk fluid flow, M126's cross-chunk redstone signal and M127's exact
-recovery into powered consumers, additional physics/worldgen,
+cross-chunk fluid flow, M126's cross-chunk redstone signal, M127's exact
+recovery and M128's multiblock consumer into additional physics/worldgen,
 entity AI, dimensions
 and persistence/multiplayer composition.
 M71-M110 remain frozen Aero laboratory evidence; no new Aero milestone is

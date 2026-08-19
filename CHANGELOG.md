@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.116.0 - M128 Cross-Chunk Iron Door
+
+Status: GO for one cross-chunk redstone source driving a multiblock consumer.
+
+- Placed the lever at global x=16 and the iron door at global x=15.
+- Observed exact lever `1→9`, lower-door `0→4` and upper-door `8→12` metadata.
+- Froze two state deltas in the door chunk and one in the lever chunk.
+
+The frozen M128 semantic SHA-256 is
+`96c3cc2f75a5a3864e6be8991639b6e92c5d89a71ec0a88eb788dfca0c05a3c4`.
+
 ## 1.115.0 - M127 Cross-Chunk Redstone Recovery
 
 Status: GO for exact recovery of one redstone signal across a chunk seam.

@@ -1055,3 +1055,8 @@ M127 adds no public API. It preserves M126's original off snapshots, qualifies
 the powered precondition with a fresh witness, and compares a separate final
 reader against both powered and original states. The exact inverse deltas and
 empty residuals remain immutable observations of the official server.
+
+M128 adds no public API or consumer model. It reuses the edge-column placement
+boundary but places an official two-block iron door above the west support and
+its lever on the east face. Separate complete snapshots retain the official
+server's exact two-door-plus-one-lever state partition.
