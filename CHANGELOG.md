@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.174.0 - M186 Oak stairs
+
+Status: GO for official oak-stairs facing.
+
+- Placed wooden stairs item `53` with look yaw `-90` as east-facing `53:0`.
+- That facing survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M186 semantic SHA-256 is
+`2af3b75842248ca27774c84635352ca60069d3ae89a045bfbe93d37a926c2ccd`.
+
 ## 1.173.0 - M185 Detector rail
 
 Status: GO for official unpowered detector-rail placement.

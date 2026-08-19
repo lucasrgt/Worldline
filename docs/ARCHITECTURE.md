@@ -1304,3 +1304,6 @@ persists.
 
 M185 adds no public API. Detector rail item `28` places unpowered `28:0` and
 persists.
+
+M186 adds no public API. Oak stairs item `53` with look yaw `-90` places
+`53:0` and persists.
