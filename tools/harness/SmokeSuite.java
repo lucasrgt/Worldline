@@ -189,6 +189,7 @@ final class SmokeSuite {
         {"tools/smoke/TrapdoorCycle.java", "m163-trapdoor"},
         {"tools/smoke/PressurePlateCycle.java", "m164-pressure-plate"},
         {"tools/smoke/StoneButtonCycle.java", "m165-stone-button"},
+        {"tools/smoke/NoteBlockCycle.java", "m166-note-block"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

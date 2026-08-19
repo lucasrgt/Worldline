@@ -49,4 +49,8 @@ final class B173PlayWaits {
     worldline.api.RemoteBedUse bed() throws IOException {
         return until(() -> inbound.beds().takeSleep(), "expected Packet17 sleep absent before deadline");
     }
+
+    worldline.api.RemoteNoteEvent note() throws IOException {
+        return until(() -> inbound.notes().take(), "expected note event absent before deadline");
+    }
 }

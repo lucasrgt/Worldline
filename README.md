@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.153.0 - M165 Stone Button (GO)**.
+Current official milestone: **Worldline v1.154.0 - M166 Note Block (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

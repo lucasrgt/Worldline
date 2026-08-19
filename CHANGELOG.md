@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.154.0 - M166 Note Block
+
+Status: GO for official note-block Packet54 click.
+
+- Placed note block `25:0` on a raised stone support.
+- Empty-hand activation emitted Packet54 instrument `1` pitch `1`.
+- Block metadata stayed `25:0` and survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M166 semantic SHA-256 is
+`ef6696d8923a3640502fdd0b5ff70c4945e9d080f7740b484b82d02f2e719228`.
+
 ## 1.153.0 - M165 Stone Button
 
 Status: GO for official stone-button pulse and automatic depower.
