@@ -1075,3 +1075,8 @@ generation, protocol traffic and persisted dimension state.
 The v1.118.1 oracle hardening keeps exact netherrack/bedrock positions while
 normalizing lava and mushroom cells whose scheduled/decorative state varied
 before the first client snapshot.
+
+M131 adds `DimensionSession` without removing any earlier multiplayer surface.
+The wire client validates Packet1's dimension byte, while inbound Packet9
+updates the same typed state. Only an actual `0↔-1` change clears the bounded
+remote chunk cache; a same-dimension respawn does not discard valid data.

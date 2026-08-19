@@ -19,17 +19,17 @@ final class B173PlayInbound {
     private final B173RemoteWorldCache cache = new B173RemoteWorldCache();
     private final B173ItemInbound items;
     private final long timeoutNanos;
-    private Correction correction;
+    private Correction correction; private int dimension;
 
     B173PlayInbound(DataInputStream input, DataOutputStream output, int timeoutMillis,
-            int localEntityId, String localUsername) throws IOException { this.input = input;
+            int localEntityId, String localUsername, int dimension) throws IOException { this.input = input;
         this.output = output; this.timeoutNanos = timeoutMillis * 1_000_000L;
-        this.items = new B173ItemInbound(localEntityId, localUsername, output); }
+        this.items = new B173ItemInbound(localEntityId, localUsername, output); if (dimension != 0 && dimension != -1) throw new IOException("invalid initial dimension"); this.dimension = dimension; }
 
     void skip(int packet) throws IOException {
         if (packet == 0) { synchronized (output) {
             output.writeByte(10); output.writeBoolean(false); output.flush(); } return; }
-        if (items.accept(packet, input)) return;
+        if (packet == 9) { int next = input.readByte(); if (next != 0 && next != -1) throw new IOException("invalid respawn dimension"); if (next != dimension) cache.reset(); dimension = next; return; } if (items.accept(packet, input)) return;
         if (packet == 3) { B173InboundPacket.string(input, 119); return; }
         if (packet == 13) { position(); return; }
         if (packet == 50) { cache.preChunk(input); return; }
@@ -108,7 +108,7 @@ final class B173PlayInbound {
             skip(input.readUnsignedByte());
     }
 
-    RemoteWorldView snapshot() { return cache.snapshot(); }
+    RemoteWorldView snapshot() { return cache.snapshot(); } int dimension() { return dimension; } int awaitDimension(int expected) throws IOException { if (expected != 0 && expected != -1) throw new IllegalArgumentException("invalid expected dimension"); for (int count = 0; count < 8192; count++) { if (dimension == expected) return dimension; skip(input.readUnsignedByte()); } throw new IOException("dimension absent from bounded inbound window"); }
 
     RemoteInventoryView awaitInventory() throws IOException { return items.awaitInventory(this::pumpOne); }
     RemoteInventoryView inventory() { return items.inventory(); }

@@ -4,6 +4,19 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.119.0 - M131 Dual-Dimension Session
+
+Status: GO for simultaneous typed Overworld and Nether protocol sessions.
+
+- Added the cumulative public `DimensionSession` boundary.
+- Preserved Packet1's signed dimension byte and bounded exact-dimension waits.
+- Added Packet9 change handling that clears old-dimension chunks while leaving
+  redundant same-dimension respawns intact.
+- Qualified concurrent dimensions `0` and `-1` with distinct decoded terrain.
+
+The frozen M131 semantic SHA-256 is
+`4fbbe9be7e3cd6ab8fbfddd920b11392711702505cfd14044e93128570b457cd`.
+
 ## 1.118.1 - M130 Nether Oracle Hardening
 
 Status: GO after separating stable Nether structure from scheduled fluid and

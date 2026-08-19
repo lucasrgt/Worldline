@@ -135,6 +135,7 @@ Passing an experiment does not silently promote its API.
 | v1.116.0 / M128 | Cross-chunk iron-door consumer | GO - a lever in chunk 1 opens both exact door halves in chunk 0 with a `2 + 1` delta partition |
 | v1.117.0 / M129 | Cross-chunk iron-door recovery | GO - fresh-client deactivation closes both door halves and restores both complete chunks exactly |
 | v1.118.0 / M130 | Official Nether login | GO - opt-in Nether profile accepts a dimension-`-1` player, publishes exact terrain and persists the dimension |
+| v1.119.0 / M131 | Dual-dimension protocol sessions | GO - simultaneous `0`/`-1` clients retain typed Packet1 state and Packet9 changes clear old chunks |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -146,7 +147,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.118.0 direction
+## Immediate post-v1.119.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
@@ -158,7 +159,8 @@ M121's nine-chunk fixed-seed surface, M122's exact regional light planes and
 M123's first cross-chunk causal transition, M124's exact recovery, M125's
 cross-chunk fluid flow, M126's cross-chunk redstone signal, M127's exact
 recovery, M128's multiblock consumer, M129's exact consumer recovery and M130's
-first official Nether session into portal/respawn transitions, additional
+first official Nether session and M131's typed dual-dimension boundary into
+portal/respawn transitions, additional
 physics/worldgen,
 entity AI, dimensions
 and persistence/multiplayer composition.

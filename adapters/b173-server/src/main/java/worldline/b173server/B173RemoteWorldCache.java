@@ -41,7 +41,7 @@ final class B173RemoteWorldCache {
         chunks.put(key, snapshot); return true;
     }
 
-    void enableImplicitLoads() { implicitLoads = true; }
+    void enableImplicitLoads() { implicitLoads = true; } void reset() { chunks.clear(); changes = 0; }
 
     int decoded() {
         int count = 0;

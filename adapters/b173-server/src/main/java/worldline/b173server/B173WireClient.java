@@ -15,16 +15,16 @@ import worldline.api.RemoteWorldView;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.MovementOutcome;
-import worldline.api.PeerSwingSession;
+import worldline.api.DimensionSession;
 import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteHeldItem;
 
 /** Minimal original protocol-14 client for headless multiplayer qualification. */
-public final class B173WireClient implements PeerSwingSession {
+public final class B173WireClient implements DimensionSession {
     public static final int PROTOCOL = 14;
     private final String host, username; private final int port, timeoutMillis;
     private MultiplayerConnection connection = MultiplayerConnection.NEW;
-    private int entityId = MultiplayerState.UNKNOWN_ENTITY;
+    private int entityId = MultiplayerState.UNKNOWN_ENTITY, dimension;
     private Socket socket;
     private B173PlayChannel play;
 
@@ -55,14 +55,14 @@ public final class B173WireClient implements PeerSwingSession {
             if (packet == 255) throw new IllegalStateException("login rejected: " + B173InboundPacket.string(input, 256));
             require(packet == 1, "login response packet drift: " + packet);
             entityId = input.readInt();
-            B173InboundPacket.string(input, 16); input.readLong(); input.readByte();
+            B173InboundPacket.string(input, 16); input.readLong(); dimension = input.readByte(); require(dimension == 0 || dimension == -1, "server returned invalid dimension");
             require(entityId >= 0, "server returned invalid entity id");
-            play = new B173PlayChannel(input, output, timeoutMillis, entityId, username);
+            play = new B173PlayChannel(input, output, timeoutMillis, entityId, username, dimension);
             connection = MultiplayerConnection.CONNECTED;
         } catch (IOException error) { closeSocket(); throw new IllegalStateException("multiplayer login failed", error); }
     }
 
-    @Override public MultiplayerState state() { return new MultiplayerState(connection, username, PROTOCOL, entityId); }
+    @Override public MultiplayerState state() { return new MultiplayerState(connection, username, PROTOCOL, entityId); } @Override public int dimension() { return channel().dimension(); } @Override public int awaitDimension(int expected) { try { return channel().awaitDimension(expected); } catch (IOException error) { throw new IllegalStateException("dimension transition absent", error); } }
 
     @Override public PlayerPose synchronizePose() {
         require(connection == MultiplayerConnection.CONNECTED, "session is not connected");

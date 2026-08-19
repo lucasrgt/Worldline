@@ -21,12 +21,12 @@ final class B173PlayChannel {
     private PlayerPose pose; private double stanceHeight;
 
     B173PlayChannel(DataInputStream input, DataOutputStream output, int timeoutMillis,
-            int localEntityId, String localUsername) throws IOException {
+            int localEntityId, String localUsername, int dimension) throws IOException {
         this.input = input; this.output = output;
-        this.inbound = new B173PlayInbound(input, output, timeoutMillis, localEntityId, localUsername); this.held = new B173HeldItemChannel(output, inbound); this.personal = new B173PersonalWindowChannel(output, inbound); this.container = new B173ContainerWindowChannel(output, inbound); this.workbench = new B173WorkbenchChannel(output, inbound); this.combat = new B173CombatChannel(output, inbound, localEntityId, localUsername);
+        this.inbound = new B173PlayInbound(input, output, timeoutMillis, localEntityId, localUsername, dimension); this.held = new B173HeldItemChannel(output, inbound); this.personal = new B173PersonalWindowChannel(output, inbound); this.container = new B173ContainerWindowChannel(output, inbound); this.workbench = new B173WorkbenchChannel(output, inbound); this.combat = new B173CombatChannel(output, inbound, localEntityId, localUsername);
     }
     B173PlayChannel(DataInputStream input, DataOutputStream output, int timeoutMillis) throws IOException {
-        this(input, output, timeoutMillis, 0, "Worldline"); }
+        this(input, output, timeoutMillis, 0, "Worldline", 0); }
 
     PlayerPose synchronize() throws IOException {
         require(pose == null, "play channel was already synchronized");
@@ -120,7 +120,7 @@ final class B173PlayChannel {
     RemoteWorldView sustainTicks(int ticks) throws IOException, InterruptedException {
         sustain(ticks); return inbound.snapshot(); }
 
-    B173PlayInbound inbound() { require(pose != null, "play channel is not synchronized"); return inbound; }
+    B173PlayInbound inbound() { require(pose != null, "play channel is not synchronized"); return inbound; } int dimension() { return inbound.dimension(); } int awaitDimension(int expected) throws IOException { return inbound.awaitDimension(expected); }
 
     void selectHeldSlot(int slot) throws IOException { require(pose != null, "play channel is not synchronized");
         held.select(slot); }

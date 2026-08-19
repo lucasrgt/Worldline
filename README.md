@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.118.1 - M130 Nether Login (GO)**.
+Current official milestone: **Worldline v1.119.0 - M131 Dual-Dimension Session (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -662,6 +662,10 @@ deltas plus state-for-state recovery of both complete chunks. See
 M130 adds an opt-in official Nether server profile and dimension-aware player
 seed. A player logs into dimension `-1`, decodes exact Nether terrain and saves
 back with `Dimension=-1`. See `docs/M130_NETHER_LOGIN.md`.
+
+M131 exposes typed Packet1/Packet9 dimension state, runs simultaneous Overworld
+and Nether clients, and invalidates old chunks on a real dimension change. See
+`docs/M131_DUAL_DIMENSION_SESSION.md`.
 
 ## Verify
 
