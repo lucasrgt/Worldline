@@ -1065,3 +1065,9 @@ M129 adds no public API. It qualifies M128's open state through a fresh witness,
 then compares an independent final reader against both open and original closed
 snapshots. Exact inverse deltas and empty residuals remain server-authored
 observations rather than a Worldline consumer simulation.
+
+M130 adds an opt-in Nether flag to the dedicated-server adapter while all prior
+constructors retain `allow-nether=false`. Server-property composition moves to
+a bounded helper, and player seeding admits only vanilla dimensions `0` and
+`-1`. The official server remains authoritative for world selection, terrain
+generation, protocol traffic and persisted dimension state.

@@ -4,6 +4,19 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.118.0 - M130 Nether Login
+
+Status: GO for one official dimension-seeded Nether login and chunk decode.
+
+- Added an opt-in `allow-nether=true` server profile without changing defaults.
+- Added exact Overworld/Nether player NBT seeding.
+- Decoded and structurally hashed the first official Nether chunk and verified
+  saved `Dimension=-1` after clean logout; variable mushroom decoration is
+  explicitly excluded.
+
+The frozen M130 semantic SHA-256 is
+`ec56849776288464b6b19f00d5e977802847f155bcd1d8139a3816c7c53b7824`.
+
 ## 1.117.0 - M129 Cross-Chunk Iron Door Recovery
 
 Status: GO for exact recovery of the cross-chunk multiblock consumer.

@@ -22,7 +22,7 @@ import worldline.api.ServerState;
 public final class B173DedicatedServer implements PersistentMultiplayerServerRuntime {
     private final Path officialJar, directory;
     private final int port, viewDistance;
-    private final boolean allowFlight;
+    private final boolean allowFlight, allowNether;
     private final long seed;
     private final Duration timeout;
     private final B173ServerLog log = new B173ServerLog();
@@ -36,6 +36,11 @@ public final class B173DedicatedServer implements PersistentMultiplayerServerRun
 
     public B173DedicatedServer(Path officialJar, Path directory, int port, long seed,
             Duration timeout, int viewDistance, boolean allowFlight) {
+        this(officialJar, directory, port, seed, timeout, viewDistance, allowFlight, false);
+    }
+
+    public B173DedicatedServer(Path officialJar, Path directory, int port, long seed,
+            Duration timeout, int viewDistance, boolean allowFlight, boolean allowNether) {
         if (!Files.isRegularFile(officialJar)) throw new IllegalArgumentException("server JAR is absent");
         if (port < 1 || port > 65535) throw new IllegalArgumentException("invalid port");
         if (viewDistance < 3 || viewDistance > 15) throw new IllegalArgumentException("invalid view distance");
@@ -46,6 +51,7 @@ public final class B173DedicatedServer implements PersistentMultiplayerServerRun
         this.timeout = timeout;
         this.viewDistance = viewDistance;
         this.allowFlight = allowFlight;
+        this.allowNether = allowNether;
     }
 
     @Override
@@ -149,10 +155,7 @@ public final class B173DedicatedServer implements PersistentMultiplayerServerRun
     }
 
     private String properties() {
-        return "allow-nether=false\nlevel-name=world\nlevel-seed=" + seed
-                + "\nmax-players=4\nonline-mode=false\nserver-ip=127.0.0.1\nserver-port=" + port
-                + "\npvp=true\nspawn-animals=false\nspawn-monsters=false\nview-distance=" + viewDistance
-                + "\nallow-flight=" + allowFlight + "\n";
+        return B173ServerProperties.text(seed, port, viewDistance, allowFlight, allowNether);
     }
 
     private String javaCommand() {

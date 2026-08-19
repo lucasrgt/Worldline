@@ -11,7 +11,14 @@ public final class B173PlayerSeed {
     private B173PlayerSeed() {}
 
     public static void write(Path serverDirectory, String username, double x, double y, double z) {
-        write(serverDirectory, username, x, y, z, new int[0], new int[0], new int[0], new int[0]);
+        write(serverDirectory, username, x, y, z, 0, new int[0], new int[0], new int[0], new int[0]);
+    }
+
+    /** Writes one empty player in an exact vanilla dimension. */
+    public static void writeDimension(Path serverDirectory, String username, double x, double y, double z,
+            int dimension) {
+        if (dimension != 0 && dimension != -1) throw new IllegalArgumentException("invalid player dimension");
+        write(serverDirectory, username, x, y, z, dimension, new int[0], new int[0], new int[0], new int[0]);
     }
 
     /** Writes one player whose selected hotbar slot contains an exact legacy block stack. */
@@ -19,7 +26,7 @@ public final class B173PlayerSeed {
             int legacyId, int count, int damage) {
         if (legacyId < 1 || legacyId > 255 || count < 1 || count > 64 || damage < 0 || damage > 32767)
             throw new IllegalArgumentException("invalid held player seed");
-        write(serverDirectory, username, x, y, z, new int[] {0}, new int[] {legacyId},
+        write(serverDirectory, username, x, y, z, 0, new int[] {0}, new int[] {legacyId},
                 new int[] {count}, new int[] {damage});
     }
 
@@ -36,10 +43,10 @@ public final class B173PlayerSeed {
             for (int prior = 0; prior < index; prior++) if (slots[prior] == slots[index])
                 throw new IllegalArgumentException("duplicate player inventory slot");
         }
-        write(serverDirectory, username, x, y, z, slots.clone(), legacyIds.clone(), counts.clone(), damages.clone());
+        write(serverDirectory, username, x, y, z, 0, slots.clone(), legacyIds.clone(), counts.clone(), damages.clone());
     }
 
-    private static void write(Path serverDirectory, String username, double x, double y, double z,
+    private static void write(Path serverDirectory, String username, double x, double y, double z, int dimension,
             int[] slots, int[] legacyIds, int[] counts, int[] damages) {
         if (serverDirectory == null || username == null
                 || !username.matches("[A-Za-z0-9_]{1,16}") || !finite(x) || !finite(y) || !finite(z))
@@ -57,7 +64,7 @@ public final class B173PlayerSeed {
                 list(output, "Rotation", 5, 2); output.writeFloat(0); output.writeFloat(0);
                 floating(output, "FallDistance", 0); shortTag(output, "Fire", -20);
                 shortTag(output, "Air", 300); byteTag(output, "OnGround", 0);
-                intTag(output, "Dimension", 0); list(output, "Inventory", 10, slots.length);
+                intTag(output, "Dimension", dimension); list(output, "Inventory", 10, slots.length);
                 for (int index = 0; index < slots.length; index++) { shortTag(output, "id", legacyIds[index]);
                     byteTag(output, "Count", counts[index]); shortTag(output, "Damage", damages[index]);
                     byteTag(output, "Slot", slots[index]); output.writeByte(0); }

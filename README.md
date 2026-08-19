@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.117.0 - M129 Cross-Chunk Iron Door Recovery (GO)**.
+Current official milestone: **Worldline v1.118.0 - M130 Nether Login (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -658,6 +658,10 @@ See `docs/M128_CROSS_CHUNK_IRON_DOOR.md`.
 M129 closes the same door through a fresh client and proves exact inverse
 deltas plus state-for-state recovery of both complete chunks. See
 `docs/M129_CROSS_CHUNK_IRON_DOOR_RECOVERY.md`.
+
+M130 adds an opt-in official Nether server profile and dimension-aware player
+seed. A player logs into dimension `-1`, decodes exact Nether terrain and saves
+back with `Dimension=-1`. See `docs/M130_NETHER_LOGIN.md`.
 
 ## Verify
 
