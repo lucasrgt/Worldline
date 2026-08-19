@@ -210,6 +210,7 @@ Passing an experiment does not silently promote its API.
 | v1.191.0 / M203 | Snow layer | GO - snow layer 78:0 persists |
 | v1.192.0 / M204 | Clay | GO - clay 82:0 persists |
 | v1.193.0 / M205 | Brick | GO - brick 45:0 persists |
+| v1.194.0 / M206 | Sponge | GO - sponge 19:0 persists |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -221,7 +222,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.193.0 direction
+## Immediate post-v1.194.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
@@ -259,6 +260,6 @@ floor redstone torch `76:5`. M183 places north-south rail `66:0`. M184 places un
 `27:0`. M185 places unpowered detector rail `28:0`. M186 places east oak stairs
 `53:0`. M187 places east cobble stairs `67:0`. M188 places single stone slab `44:0`. M189 places bookshelf `47:0`. M190 places jack-o-lantern `91:1`. M191 places glowstone `89:0`. M192 places soul sand `88:0`. M193 places ice `79:0`. M194 places snow block `80:0`. M195 places cobweb `30:0`. M196 places glass `20:0`. M197 places white wool `35:0`. M198 plants yellow flower `37:0` on dirt. M199 plants rose `38:0` on dirt. M200 places brown mushroom `39:0` in a
 dark pocket. M201 places red mushroom `40:0` in a dark pocket. M202 plants oak sapling
-`6:0` on dirt. M203 places snow layer `78:0`. M204 places clay `82:0`. M205 places brick `45:0`.
+`6:0` on dirt. M203 places snow layer `78:0`. M204 places clay `82:0`. M205 places brick `45:0`. M206 places sponge `19:0`.
 M71-M110 remain frozen Aero laboratory evidence; no new Aero milestone is
 planned before the vanilla foundation is complete.

@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.194.0 - M206 Sponge
+
+Status: GO for official sponge placement.
+
+- Placed sponge item `19` on a raised stone support as `19:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M206 semantic SHA-256 is
+`f403158d252cd74d08246cef3eee7b0ea15f96a1c88448ec6ce62d608093a441`.
+
 ## 1.193.0 - M205 Brick
 
 Status: GO for official brick-block placement.

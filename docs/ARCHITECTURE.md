@@ -1353,3 +1353,5 @@ M203 adds no public API. Snow layer item `78` places `78:0` and persists.
 M204 adds no public API. Clay item `82` places `82:0` and persists.
 
 M205 adds no public API. Brick item `45` places `45:0` and persists.
+
+M206 adds no public API. Sponge item `19` places `19:0` and persists.
