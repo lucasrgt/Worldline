@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.191.0 - M203 Snow layer (GO)**.
+Current official milestone: **Worldline v1.192.0 - M204 Clay (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

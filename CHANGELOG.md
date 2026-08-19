@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.192.0 - M204 Clay
+
+Status: GO for official clay-block placement.
+
+- Placed clay item `82` on a raised stone support as `82:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M204 semantic SHA-256 is
+`3b76da4b3617c14a154aaf9799e7cd86631ba7e4e9be1d8dd1baf628fb271d8c`.
+
 ## 1.191.0 - M203 Snow layer
 
 Status: GO for official single snow-layer placement.

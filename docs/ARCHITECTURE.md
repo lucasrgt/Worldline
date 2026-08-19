@@ -1349,3 +1349,5 @@ M202 adds no public API. Oak sapling `6` on dirt `3` places `6:0` and
 persists.
 
 M203 adds no public API. Snow layer item `78` places `78:0` and persists.
+
+M204 adds no public API. Clay item `82` places `82:0` and persists.
