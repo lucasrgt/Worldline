@@ -1331,3 +1331,5 @@ M194 adds no public API. Snow block item `80` places `80:0` and persists.
 M195 adds no public API. Cobweb item `30` places `30:0` and persists.
 
 M196 adds no public API. Glass item `20` places `20:0` and persists.
+
+M197 adds no public API. White wool item `35` places `35:0` and persists.

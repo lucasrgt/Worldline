@@ -220,6 +220,7 @@ final class SmokeSuite {
         {"tools/smoke/SnowBlockCycle.java", "m194-snow-block"},
         {"tools/smoke/CobwebCycle.java", "m195-cobweb"},
         {"tools/smoke/GlassCycle.java", "m196-glass"},
+        {"tools/smoke/WoolCycle.java", "m197-wool"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

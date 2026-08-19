@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.185.0 - M197 Wool
+
+Status: GO for official white-wool placement.
+
+- Placed white wool item `35` on a raised stone support as `35:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M197 semantic SHA-256 is
+`b6f11e7750a8b8ece43e987d07cc4862caf7e0e44f636b6ffb32f68b0601e8f6`.
+
 ## 1.184.0 - M196 Glass
 
 Status: GO for official glass placement.
