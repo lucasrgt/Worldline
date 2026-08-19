@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.208.0 - M220 Workbench
+
+Status: GO for official workbench placement.
+
+- Placed workbench item `58` on a raised stone support as `58:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M220 semantic SHA-256 is
+`75f1f8dccff9989eba1c5ac186c1f62a8054452d6d6ebe7c59e09de2742a37ed`.
+
 ## 1.207.0 - M219 TNT place
 
 Status: GO for official unprimed TNT placement.

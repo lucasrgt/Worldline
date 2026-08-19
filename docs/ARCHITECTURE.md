@@ -1383,3 +1383,5 @@ M217 adds no public API. Mossy cobble item `48` places `48:0` and persists.
 M218 adds no public API. Supported gravel item `13` places `13:0` and persists.
 
 M219 adds no public API. Unprimed TNT item `46` places `46:0` and persists.
+
+M220 adds no public API. Workbench item `58` places `58:0` and persists.

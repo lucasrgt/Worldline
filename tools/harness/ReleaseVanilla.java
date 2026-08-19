@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m216 = load(root, "smokes/m216-obsidian/smoke.properties");
         Properties m217 = load(root, "smokes/m217-mossy-cobble/smoke.properties");
         Properties m218 = load(root, "smokes/m218-gravel/smoke.properties");
         Properties m219 = load(root, "smokes/m219-tnt-place/smoke.properties");
-        match(release, "version", "1.207.0");
-        match(release, "milestone", "m219-tnt-place");
-        same(release, "m216.signature", m216, "expected.signature");
-        same(release, "server.sha256", m216, "server.jar.sha256");
+        Properties m220 = load(root, "smokes/m220-workbench/smoke.properties");
+        match(release, "version", "1.208.0");
+        match(release, "milestone", "m220-workbench");
         same(release, "m217.signature", m217, "expected.signature");
         same(release, "server.sha256", m217, "server.jar.sha256");
         same(release, "m218.signature", m218, "expected.signature");
         same(release, "server.sha256", m218, "server.jar.sha256");
         same(release, "m219.signature", m219, "expected.signature");
         same(release, "server.sha256", m219, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M216_OBSIDIAN.md", "docs/M216_CYCLE.md",
-                "smokes/m216-obsidian/MAP.md", "docs/M217_MOSSY_COBBLE.md", "docs/M217_CYCLE.md",
+        same(release, "m220.signature", m220, "expected.signature");
+        same(release, "server.sha256", m220, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M217_MOSSY_COBBLE.md", "docs/M217_CYCLE.md",
                 "smokes/m217-mossy-cobble/MAP.md", "docs/M218_GRAVEL.md", "docs/M218_CYCLE.md",
                 "smokes/m218-gravel/MAP.md", "docs/M219_TNT_PLACE.md", "docs/M219_CYCLE.md",
-                "smokes/m219-tnt-place/MAP.md"))
+                "smokes/m219-tnt-place/MAP.md", "docs/M220_WORKBENCH.md", "docs/M220_CYCLE.md",
+                "smokes/m220-workbench/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.207.0 M219 TNT place GO");
+        System.out.println("  release: Worldline v1.208.0 M220 Workbench GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
