@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.198.0 - M210 Oak planks
+
+Status: GO for official oak-plank placement.
+
+- Placed planks item `5` on a raised stone support as `5:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M210 semantic SHA-256 is
+`00344a185d84b7fb4fd15968e5ef176dc91d8034d17cada76115ac37d3d437f1`.
+
 ## 1.197.0 - M209 Leaves
 
 Status: GO for official oak-leaf placement with an adjacent log.

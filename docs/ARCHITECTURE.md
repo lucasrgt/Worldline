@@ -1362,3 +1362,5 @@ M208 adds no public API. Oak log item `17` places `17:0` and persists.
 
 M209 adds no public API. Oak leaves persist as `18:8` when an adjacent log
 `17:0` keeps the decay-check cell alive.
+
+M210 adds no public API. Oak planks item `5` places `5:0` and persists.

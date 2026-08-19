@@ -233,6 +233,7 @@ final class SmokeSuite {
         {"tools/smoke/SandstoneCycle.java", "m207-sandstone"},
         {"tools/smoke/OakLogCycle.java", "m208-oak-log"},
         {"tools/smoke/LeavesCycle.java", "m209-leaves"},
+        {"tools/smoke/OakPlanksCycle.java", "m210-oak-planks"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 
