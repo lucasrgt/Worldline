@@ -1367,3 +1367,5 @@ M210 adds no public API. Oak planks item `5` places `5:0` and persists.
 
 M211 adds no public API. Double stone slab item `43` places `43:0` and
 persists.
+
+M212 adds no public API. Gold block item `41` places `41:0` and persists.

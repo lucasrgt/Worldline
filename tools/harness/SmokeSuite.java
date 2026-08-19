@@ -235,6 +235,7 @@ final class SmokeSuite {
         {"tools/smoke/LeavesCycle.java", "m209-leaves"},
         {"tools/smoke/OakPlanksCycle.java", "m210-oak-planks"},
         {"tools/smoke/DoubleSlabCycle.java", "m211-double-slab"},
+        {"tools/smoke/GoldBlockCycle.java", "m212-gold-block"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.200.0 - M212 Gold block
+
+Status: GO for official gold-block placement.
+
+- Placed gold block item `41` on a raised stone support as `41:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M212 semantic SHA-256 is
+`c41efdd35e74da0cb05078664f13008bcf8d47032c07fa0360ff0f4e57b9a9ce`.
+
 ## 1.199.0 - M211 Double slab
 
 Status: GO for official double stone-slab placement.
