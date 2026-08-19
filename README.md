@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.181.0 - M193 Ice (GO)**.
+Current official milestone: **Worldline v1.182.0 - M194 Snow block (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

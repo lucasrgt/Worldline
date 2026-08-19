@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.182.0 - M194 Snow block
+
+Status: GO for official snow-block placement.
+
+- Placed snow block item `80` on a raised stone support as `80:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M194 semantic SHA-256 is
+`27b0f59762b6d741c75eb15488c5800f88feb7ca971582557e47532e6cc98a83`.
+
 ## 1.181.0 - M193 Ice
 
 Status: GO for official ice placement.

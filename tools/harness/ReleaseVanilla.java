@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m190 = load(root, "smokes/m190-jack-o-lantern/smoke.properties");
         Properties m191 = load(root, "smokes/m191-glowstone/smoke.properties");
         Properties m192 = load(root, "smokes/m192-soul-sand/smoke.properties");
         Properties m193 = load(root, "smokes/m193-ice/smoke.properties");
-        match(release, "version", "1.181.0");
-        match(release, "milestone", "m193-ice");
-        same(release, "m190.signature", m190, "expected.signature");
-        same(release, "server.sha256", m190, "server.jar.sha256");
+        Properties m194 = load(root, "smokes/m194-snow-block/smoke.properties");
+        match(release, "version", "1.182.0");
+        match(release, "milestone", "m194-snow-block");
         same(release, "m191.signature", m191, "expected.signature");
         same(release, "server.sha256", m191, "server.jar.sha256");
         same(release, "m192.signature", m192, "expected.signature");
         same(release, "server.sha256", m192, "server.jar.sha256");
         same(release, "m193.signature", m193, "expected.signature");
         same(release, "server.sha256", m193, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M190_JACK_O_LANTERN.md", "docs/M190_CYCLE.md",
-                "smokes/m190-jack-o-lantern/MAP.md", "docs/M191_GLOWSTONE.md", "docs/M191_CYCLE.md",
+        same(release, "m194.signature", m194, "expected.signature");
+        same(release, "server.sha256", m194, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M191_GLOWSTONE.md", "docs/M191_CYCLE.md",
                 "smokes/m191-glowstone/MAP.md", "docs/M192_SOUL_SAND.md", "docs/M192_CYCLE.md",
                 "smokes/m192-soul-sand/MAP.md", "docs/M193_ICE.md", "docs/M193_CYCLE.md",
-                "smokes/m193-ice/MAP.md"))
+                "smokes/m193-ice/MAP.md", "docs/M194_SNOW_BLOCK.md", "docs/M194_CYCLE.md",
+                "smokes/m194-snow-block/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.181.0 M193 Ice GO");
+        System.out.println("  release: Worldline v1.182.0 M194 Snow block GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
