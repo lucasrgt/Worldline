@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.152.0 - M164 Pressure Plate
+
+Status: GO for official stone pressure-plate press and release.
+
+- Placed plate item `70` as `70:0` on a raised stone support.
+- Walking onto the cell powered `70:1`; walking off restored `70:0`.
+- The unpowered plate survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M164 semantic SHA-256 is
+`ab14f3bebb0157e814af07dd4950065b472c5d5b99f25736c02b57fd08b1f754`.
+
 ## 1.151.0 - M163 Trapdoor
 
 Status: GO for official trapdoor open and close.

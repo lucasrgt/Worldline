@@ -1236,3 +1236,6 @@ M162 adds no public API. Wooden door item `324` places BlockDoor halves
 
 M163 also adds no public API. Trapdoor item `96` on an east face is `96:3`;
 empty-hand use toggles `96:7` and back. The closed state persists.
+
+M164 adds no public API. Stone pressure plate `70:0` powers to `70:1` when the
+headless actor steps on it and depowers when they step off.
