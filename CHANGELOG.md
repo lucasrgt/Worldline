@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.199.0 - M211 Double slab
+
+Status: GO for official double stone-slab placement.
+
+- Placed double slab item `43` on a raised stone support as `43:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M211 semantic SHA-256 is
+`a5ad4aa55f65cbcb979ce018f5143d7d2036b7db34c77ed5f1369e2624fbf546`.
+
 ## 1.198.0 - M210 Oak planks
 
 Status: GO for official oak-plank placement.

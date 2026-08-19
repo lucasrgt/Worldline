@@ -1364,3 +1364,6 @@ M209 adds no public API. Oak leaves persist as `18:8` when an adjacent log
 `17:0` keeps the decay-check cell alive.
 
 M210 adds no public API. Oak planks item `5` places `5:0` and persists.
+
+M211 adds no public API. Double stone slab item `43` places `43:0` and
+persists.
