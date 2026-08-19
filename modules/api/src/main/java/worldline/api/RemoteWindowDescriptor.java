@@ -21,6 +21,8 @@ public final class RemoteWindowDescriptor {
             throw new IllegalArgumentException("invalid furnace descriptor");
         if (kind == RemoteWindowKind.WORKBENCH && (!"Crafting".equals(title) || containerSlots != 9))
             throw new IllegalArgumentException("invalid workbench descriptor");
+        if (kind == RemoteWindowKind.DISPENSER && (!"Trap".equals(title) || containerSlots != 9))
+            throw new IllegalArgumentException("invalid dispenser descriptor");
         this.windowId = windowId; this.kind = kind; this.title = title; this.containerSlots = containerSlots;
     }
 

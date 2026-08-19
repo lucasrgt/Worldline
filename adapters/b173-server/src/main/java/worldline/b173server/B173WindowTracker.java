@@ -26,9 +26,7 @@ final class B173WindowTracker {
     void open(DataInputStream input) throws IOException {
         int windowId = input.readUnsignedByte(), type = input.readUnsignedByte();
         String title = input.readUTF(); int slots = input.readUnsignedByte();
-        RemoteWindowKind kind = type == 0 ? RemoteWindowKind.CHEST
-                : type == 1 ? RemoteWindowKind.WORKBENCH
-                : type == 2 ? RemoteWindowKind.FURNACE : null;
+        RemoteWindowKind kind = B173WindowKinds.of(type);
         if (expectedKind == null || kind != expectedKind || pending != null || ready != null
                 || windowId < 1 || windowId > 100)
             throw new IOException("unsupported remote window descriptor");

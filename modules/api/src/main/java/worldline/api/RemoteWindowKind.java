@@ -4,5 +4,6 @@ package worldline.api;
 public enum RemoteWindowKind {
     CHEST,
     FURNACE,
-    WORKBENCH
+    WORKBENCH,
+    DISPENSER
 }

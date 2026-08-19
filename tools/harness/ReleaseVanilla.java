@@ -29,20 +29,24 @@ final class ReleaseVanilla {
         Properties m150 = load(root, "smokes/m150-pig-pork-drop/smoke.properties");
         Properties m151 = load(root, "smokes/m151-netherrack-fire/smoke.properties");
         Properties m152 = load(root, "smokes/m152-fire-wool-consumption/smoke.properties");
-        match(release, "version", "1.140.0");
-        match(release, "milestone", "m152-fire-wool-consumption");
+        Properties m153 = load(root, "smokes/m153-dispenser-eject/smoke.properties");
+        match(release, "version", "1.141.0");
+        match(release, "milestone", "m153-dispenser-eject");
         same(release, "m150.signature", m150, "expected.signature");
         same(release, "server.sha256", m150, "server.jar.sha256");
         same(release, "m151.signature", m151, "expected.signature");
         same(release, "server.sha256", m151, "server.jar.sha256");
         same(release, "m152.signature", m152, "expected.signature");
         same(release, "server.sha256", m152, "server.jar.sha256");
+        same(release, "m153.signature", m153, "expected.signature");
+        same(release, "server.sha256", m153, "server.jar.sha256");
         for (String file : Arrays.asList("docs/M150_PIG_PORK_DROP.md", "docs/M150_CYCLE.md",
                 "smokes/m150-pig-pork-drop/MAP.md", "docs/M151_NETHERRACK_FIRE.md", "docs/M151_CYCLE.md",
                 "smokes/m151-netherrack-fire/MAP.md", "docs/M152_FIRE_WOOL_CONSUMPTION.md", "docs/M152_CYCLE.md",
-                "smokes/m152-fire-wool-consumption/MAP.md"))
+                "smokes/m152-fire-wool-consumption/MAP.md", "docs/M153_DISPENSER_EJECT.md", "docs/M153_CYCLE.md",
+                "smokes/m153-dispenser-eject/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.140.0 M152 Fire-wool-consumption GO");
+        System.out.println("  release: Worldline v1.141.0 M153 Dispenser-eject GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

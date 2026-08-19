@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.140.0 - M152 Fire Wool Consumption (GO)**.
+Current official milestone: **Worldline v1.141.0 - M153 Dispenser Eject (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

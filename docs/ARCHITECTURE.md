@@ -1199,3 +1199,7 @@ is not a random-tick extinguish candidate.
 M152 also adds no public API. It places wool `35` beside the M151 flame and
 uses a fresh-login Packet51 snapshot as the consumption oracle, because the
 live Packet53 window may miss the random-tick consume.
+
+M153 adds `RemoteDispenserLoad` and a Trap-window open/load path. Packet100
+type 3 maps to a 9-slot dispenser plus the personal tail. A side lever ejects
+the loaded stack as Packet21.

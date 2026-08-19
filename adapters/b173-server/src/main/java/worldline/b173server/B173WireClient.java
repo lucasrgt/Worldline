@@ -169,7 +169,7 @@ public final class B173WireClient implements MobObservationSession {
         finally { socket = null; play = null; }
     }
 
-    private B173PlayChannel channel() { require(connection == MultiplayerConnection.CONNECTED, "session is not connected"); return play; }
+    B173PlayChannel channel() { require(connection == MultiplayerConnection.CONNECTED, "session is not connected"); return play; }
 
     private static void require(boolean condition, String message) { if (!condition) throw new IllegalStateException(message); }
 }

@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.141.0 - M153 Dispenser Eject
+
+Status: GO for one official dispenser item eject.
+
+- Opened Packet100 Trap window (type 3, 9+36 slots).
+- Loaded cobblestone via accepted Packet102.
+- Powered a west-facing dispenser `23:4` with a side lever.
+- Observed Packet21 cobblestone eject and an empty dispenser slot.
+
+The frozen M153 semantic SHA-256 is
+`e9ac098cef87b90c28a3fdc264de812fb712489a228157a47e92fa23c958d3ec`.
+
 ## 1.140.0 - M152 Fire Wool Consumption
 
 Status: GO for official wool consumption beside a netherrack flame.

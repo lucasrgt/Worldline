@@ -11,6 +11,7 @@ final class RemoteWindowLayoutTest {
         verify(RemoteWindowKind.CHEST, "Chest", 27, 27, 63);
         verify(RemoteWindowKind.FURNACE, "Furnace", 3, 3, 39);
         verify(RemoteWindowKind.WORKBENCH, "Crafting", 9, 10, 46);
+        verify(RemoteWindowKind.DISPENSER, "Trap", 9, 9, 45);
         if (!FurnaceOutputSession.class.isAssignableFrom(WorkbenchSession.class))
             throw new AssertionError("workbench session hierarchy drifted");
         failure(() -> new RemoteWindowDescriptor(1, RemoteWindowKind.WORKBENCH, "Crafting", 10));

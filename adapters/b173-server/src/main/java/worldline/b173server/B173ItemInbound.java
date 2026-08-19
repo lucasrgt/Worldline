@@ -122,9 +122,7 @@ final class B173ItemInbound {
         throw new IOException("expected furnace smelt absent from bounded inbound window");
     }
 
-    void beginChest() { windows.begin(worldline.api.RemoteWindowKind.CHEST); }
-    void beginFurnace() { windows.begin(worldline.api.RemoteWindowKind.FURNACE); }
-    void beginWorkbench() { windows.begin(worldline.api.RemoteWindowKind.WORKBENCH); }
+    void beginWindow(worldline.api.RemoteWindowKind kind) { windows.begin(kind); }
     int activeWindowId() { return windows.activeId(); }
     RemoteContainerWindow activeWindow() { return windows.activeWindow(); }
     long activeWindowEpoch() { return windows.activeEpoch(); }
