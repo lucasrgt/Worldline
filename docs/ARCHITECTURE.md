@@ -1091,3 +1091,8 @@ Packet9 lifecycle: the same connection moves into the portal, changes dimension,
 accepts the corrected destination pose and repopulates its cleared chunk cache
 with decoded Nether data. Exact destination search coordinates stay outside the
 frozen contract.
+
+M134 keeps the same connection through a second dimension lifecycle. A bounded
+portal-plane detector handles either vanilla orientation and negative world
+coordinates, the player exits for cooldown and Packet9 returns it to dimension
+`0`. Each dimension switch clears and repopulates the remote cache independently.

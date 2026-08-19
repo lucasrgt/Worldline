@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.121.0 - M133 Nether Portal Traversal (GO)**.
+Current official milestone: **Worldline v1.122.0 - M134 Nether Portal Roundtrip (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -674,6 +674,10 @@ portal blocks through a fresh client. See `docs/M132_NETHER_PORTAL_ACTIVATION.md
 M133 enters that active portal, observes the official Packet9 transition from
 dimension `0` to `-1`, decodes the generated Nether-side portal and persists
 the new player dimension. See `docs/M133_NETHER_PORTAL_TRAVERSAL.md`.
+
+M134 discovers the generated portal, leaves it for a bounded cooldown and
+re-enters to prove Packet9 `-1→0`, cache replacement, a valid Overworld portal
+and final dimension-`0` persistence. See `docs/M134_NETHER_PORTAL_ROUNDTRIP.md`.
 
 ## Verify
 

@@ -4,6 +4,19 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.122.0 - M134 Nether Portal Roundtrip
+
+Status: GO for one complete official Overworld-Nether-Overworld journey.
+
+- Discovered the generated Nether portal from its decoded six-cell plane.
+- Left the portal for a bounded 220-tick cooldown and re-entered it.
+- Observed Packet9 `-1→0` and a second old-dimension cache invalidation.
+- Proved a six-portal, fourteen-obsidian Overworld structure after return and
+  persisted the player in dimension `0`; source reuse remains dynamic.
+
+The frozen M134 semantic SHA-256 is
+`c2f903638b1e364b9781c247e61c22c77a28a036212dbe444db5c62498e2a74b`.
+
 ## 1.121.0 - M133 Nether Portal Traversal
 
 Status: GO for one official Overworld-to-Nether portal journey.
