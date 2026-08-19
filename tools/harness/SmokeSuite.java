@@ -242,6 +242,7 @@ final class SmokeSuite {
         {"tools/smoke/ObsidianCycle.java", "m216-obsidian"},
         {"tools/smoke/MossyCobbleCycle.java", "m217-mossy-cobble"},
         {"tools/smoke/GravelCycle.java", "m218-gravel"},
+        {"tools/smoke/TntPlaceCycle.java", "m219-tnt-place"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.207.0 - M219 TNT place
+
+Status: GO for official unprimed TNT placement.
+
+- Placed TNT item `46` on a raised stone support as `46:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M219 semantic SHA-256 is
+`4f2b9d0bc3bbd9a35010f5efbb02cf5d5e290dcfb590633b35833a02551912f8`.
+
 ## 1.206.0 - M218 Gravel
 
 Status: GO for official supported-gravel placement.
