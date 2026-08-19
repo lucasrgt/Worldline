@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.222.0 - M234 Sandstone slab
+
+Status: GO for official sandstone-slab placement.
+
+- Placed slab item `44` damage `1` on a raised stone support as `44:1`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M234 semantic SHA-256 is
+`607498ca23a0859d9a2296eba8fb8d4c4c407a3af84801eb6ccf552314e65f2a`.
+
 ## 1.221.0 - M233 Note block place
 
 Status: GO for official note-block placement.

@@ -1411,3 +1411,5 @@ M231 adds no public API. Dispenser item `23` places `23:3` from look yaw `180` a
 M232 adds no public API. Chest item `54` places `54:0` and persists.
 
 M233 adds no public API. Note block item `25` places `25:0` and persists.
+
+M234 adds no public API. Sandstone slab item `44` damage `1` places `44:1` and persists.
