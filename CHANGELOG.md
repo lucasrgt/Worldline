@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.186.0 - M198 Dandelion
+
+Status: GO for official yellow-flower placement on dirt.
+
+- Placed dirt `3` on the raised stone fixture, then yellow flower `37` as `37:0`.
+- That plant cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M198 semantic SHA-256 is
+`616709e090098e93e2e1928b9cde1a0122d5145752b870feee73266b32ce82cd`.
+
 ## 1.185.0 - M197 Wool
 
 Status: GO for official white-wool placement.
