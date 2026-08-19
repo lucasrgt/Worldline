@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.187.0 - M199 Rose
+
+Status: GO for official red-rose placement on dirt.
+
+- Placed dirt `3` on the raised stone fixture, then rose `38` as `38:0`.
+- That plant cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M199 semantic SHA-256 is
+`d79a60342cee16cfece9348ecc6371263bd13bc5f50896d336b8fae6d9d750dd`.
+
 ## 1.186.0 - M198 Dandelion
 
 Status: GO for official yellow-flower placement on dirt.

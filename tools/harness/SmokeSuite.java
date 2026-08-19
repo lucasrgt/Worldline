@@ -222,6 +222,7 @@ final class SmokeSuite {
         {"tools/smoke/GlassCycle.java", "m196-glass"},
         {"tools/smoke/WoolCycle.java", "m197-wool"},
         {"tools/smoke/DandelionCycle.java", "m198-dandelion"},
+        {"tools/smoke/RoseCycle.java", "m199-rose"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

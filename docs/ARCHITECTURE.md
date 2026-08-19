@@ -1336,3 +1336,5 @@ M197 adds no public API. White wool item `35` places `35:0` and persists.
 
 M198 adds no public API. Yellow flower `37` on dirt `3` places `37:0` and
 persists.
+
+M199 adds no public API. Rose `38` on dirt `3` places `38:0` and persists.
