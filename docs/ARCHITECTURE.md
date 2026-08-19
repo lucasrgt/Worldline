@@ -1273,3 +1273,6 @@ persists.
 
 M175 adds no public API. Floor torch item `50` on stone is `50:5` and
 persists.
+
+M176 adds `RemoteSignText` and a Packet130 tracker. Standing sign `63`
+accepts four UCS-2 lines that survive a fresh login.

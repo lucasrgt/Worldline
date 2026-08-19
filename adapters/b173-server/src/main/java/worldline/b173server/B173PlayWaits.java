@@ -53,4 +53,8 @@ final class B173PlayWaits {
     worldline.api.RemoteNoteEvent note() throws IOException {
         return until(() -> inbound.notes().take(), "expected note event absent before deadline");
     }
+
+    worldline.api.RemoteSignText sign() throws IOException {
+        return until(() -> inbound.signs().take(), "expected Packet130 sign text absent before deadline");
+    }
 }

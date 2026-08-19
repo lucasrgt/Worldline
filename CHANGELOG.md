@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.164.0 - M176 Sign
+
+Status: GO for official standing-sign Packet130 text.
+
+- Placed sign item `323` as standing sign `63:4`.
+- Packet130 wrote `World` / `line` / `M176` / `ok`.
+- A fresh login read the same four lines from inbound Packet130.
+
+The frozen M176 semantic SHA-256 is
+`02572936a90d996c81d67465e5507ff4f5ecb33262d10fd9cdb0e2cbe28489ff`.
+
 ## 1.163.0 - M175 Torch
 
 Status: GO for official floor-torch placement.
