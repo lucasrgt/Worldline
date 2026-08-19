@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.147.0 - M159 Sugar Cane
+
+Status: GO for official water-adjacent sugar-cane growth.
+
+- Planted cane item `338` as reed `83` on dirt beside still water `9`.
+- Official random ticks grew the cane to height 2 or more.
+- The grown cane survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M159 semantic SHA-256 is
+`70a49f193de25db52e447675752317f7e567b9817943e16a27eb25a669555d8f`.
+
 ## 1.146.0 - M158 Bed
 
 Status: GO for official bed placement, daytime refusal, and SMP occupy/skip.

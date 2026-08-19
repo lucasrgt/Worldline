@@ -1221,3 +1221,6 @@ type `60` whose thrower is the shooter entity id.
 M158 adds `RemoteBedUse` and a Packet17/70 tracker. Daytime bed use is chat
 refusal; night occupy is Packet17 at the head cell. SMP with monsters off
 skips night and clears the occupied bit. Packet70 reason 0 is not this gate.
+
+M159 adds no public API. Reed item `338` on dirt beside still water grows
+from `83` height 1 to height 2+ by official random ticks and persists.
