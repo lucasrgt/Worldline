@@ -4,6 +4,19 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.111.0 - M123 Cross-Chunk Lighting
+
+Status: GO for one causal vanilla block-light transition across a chunk seam.
+
+- Replaced exact edge water `9:0` at global `x=15` with glowstone `89:0`.
+- Proved source light `0→15` and neighboring-chunk water light `0→12` through
+  fresh complete Packet51 snapshots.
+- Froze 55 source-chunk and 19 neighboring-chunk increases while both skylight
+  planes remained unchanged.
+
+The frozen M123 semantic SHA-256 is
+`7f93c32c82a360dcdc5c546f69838e8fcbc8a221bf8ad2961bd532876608365a`.
+
 ## 1.110.0 - M122 Fixed-Seed Region Lighting
 
 Status: GO for exact block-light and sky-light planes across nine chunks.

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.110.0 - M122 Fixed-Seed Region Lighting (GO)**.
+Current official milestone: **Worldline v1.111.0 - M123 Cross-Chunk Lighting (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -627,6 +627,11 @@ M122 samples every block-light and sky-light nibble across the same nine chunks
 after clean restart. Two fresh replicas match both 294,912-sample plane hashes
 and all histogram bins without normalization. See
 `docs/M122_FIXED_SEED_REGION_LIGHTING.md`.
+
+M123 places one official glowstone at global edge coordinate `x=15` and proves
+that block light propagates into water in chunk `x=1`: source `0→15`, neighbor
+`0→12`, with exact deltas in both chunks and no skylight change. See
+`docs/M123_CROSS_CHUNK_LIGHTING.md`.
 
 ## Verify
 

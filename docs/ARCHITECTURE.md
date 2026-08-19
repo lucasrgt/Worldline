@@ -1029,3 +1029,9 @@ block-light and sky-light accessors across M121's nine complete chunks after
 the same save/restart lifecycle. The two planes are hashed independently with
 no normalization and retain full sixteen-value histograms. All lighting
 generation and propagation remains authoritative inside the official server.
+
+M123 adds no public API or cross-chunk evaluator. It places a qualified held
+block at the final X coordinate of one chunk, then compares fresh complete
+light planes from that chunk and its east neighbor. The exact water attenuation
+and both ordered delta sets remain official-server observations; Worldline only
+correlates the intervention and immutable snapshots.
