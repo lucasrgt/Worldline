@@ -1261,3 +1261,6 @@ lever produces powered `94:3` after one tick and returns to `93:3`.
 
 M171 adds no public API. Pumpkin item `86` with look yaw `-90` places `86:1`
 and that facing persists.
+
+M172 adds no public API. Wooden pressure plate `72:0` powers to `72:1` when
+the headless actor steps on it and depowers when they step off.

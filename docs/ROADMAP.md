@@ -176,6 +176,7 @@ Passing an experiment does not silently promote its API.
 | v1.157.0 / M169 | Egg throw | GO - Packet15 egg 344 emits shared Packet23 type 62 with thrower 0 |
 | v1.158.0 / M170 | Repeater | GO - repeater 93:3 powers to 94:3 from a lever and returns |
 | v1.159.0 / M171 | Pumpkin | GO - pumpkin 86:1 from look yaw -90 persists |
+| v1.160.0 / M172 | Wooden pressure plate | GO - wooden plate 72:0 powers to 72:1 under the actor and depowers |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -187,7 +188,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.159.0 direction
+## Immediate post-v1.160.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.160.0 - M172 Wooden Pressure Plate
+
+Status: GO for official wooden pressure-plate press and release.
+
+- Placed wooden plate item `72` as `72:0` on a raised stone support.
+- Walking onto the cell powered `72:1`; walking off restored `72:0`.
+- The unpowered plate survived save plus a fresh login.
+
+The frozen M172 semantic SHA-256 is
+`ffcac8ad53202102f7e7ff5179823d53d8ecd116c879faba5a3c1ccf9bcd94c1`.
+
 ## 1.159.0 - M171 Pumpkin
 
 Status: GO for official pumpkin placement facing.
