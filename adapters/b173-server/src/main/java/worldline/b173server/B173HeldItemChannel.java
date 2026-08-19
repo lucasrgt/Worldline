@@ -69,6 +69,20 @@ final class B173HeldItemChannel {
         output.writeByte(face(face)); output.writeShort(-1); output.flush();
     }
 
+    void useInAir() throws IOException {
+        RemoteInventoryView inventory = inbound.inventory();
+        if (inventory.windowId() != 0 || inventory.size() != 45)
+            throw new IllegalStateException("player inventory window is not active");
+        RemoteInventorySlot slot = inventory.slot(36 + selectedSlot);
+        if (slot.empty()) throw new IllegalStateException("selected held slot is empty");
+        RemoteItemStack item = slot.item();
+        if (item.legacyId() < 1 || item.legacyId() > 32767)
+            throw new IllegalStateException("selected held item is outside the protocol item range");
+        output.writeByte(15); output.writeInt(-1); output.writeByte(255); output.writeInt(-1);
+        output.writeByte(255); output.writeShort(item.legacyId()); output.writeByte(item.count());
+        output.writeShort(item.damage()); output.flush();
+    }
+
     int closeWindow() throws IOException {
         if (!inbound.cursorObserved() || inbound.cursor() != null)
             throw new IllegalStateException("remote window close requires an observed empty cursor");

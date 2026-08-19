@@ -1203,3 +1203,7 @@ live Packet53 window may miss the random-tick consume.
 M153 adds `RemoteDispenserLoad` and a Trap-window open/load path. Packet100
 type 3 maps to a 9-slot dispenser plus the personal tail. A side lever ejects
 the loaded stack as Packet21.
+
+M154 adds `RemoteObjectSpawn` and `ObjectObservationSession`. Official Packet23
+is 21 bytes plus six velocity shorts when thrower is positive. Selected-item
+air use is Packet15 at `(-1,255,-1)` direction 255. Type 1 is a boat.

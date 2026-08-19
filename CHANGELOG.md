@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.142.0 - M154 Boat Spawn
+
+Status: GO for one official Packet23 boat spawn.
+
+- Used boat item `333` through Packet15 direction 255 in a natural still-water cell.
+- Two headless peers decoded the same Packet23 type `1` identity and pose `144:1993:144`.
+- Public API owns object identity: `useSelectedItemInAir` plus `awaitObjectSpawn(type)`.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M154 semantic SHA-256 is
+`5da646e53a2e386476060c80fb7c8bce2d187f93133cb6adb76ac439e48439a6`.
+
 ## 1.141.0 - M153 Dispenser Eject
 
 Status: GO for one official dispenser item eject.

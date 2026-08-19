@@ -24,7 +24,7 @@ final class B173InboundPacket {
             case 18: bytes(input, 5); break;
             case 21: bytes(input, 24); break;
             case 22: bytes(input, 8); break;
-            case 23: bytes(input, 17); break;
+            case 23: object(input); break;
             case 24: mob(input); break;
             case 25: painting(input); break;
             case 28: bytes(input, 10); break;
@@ -70,6 +70,10 @@ final class B173InboundPacket {
         for (int index = 0; index < value.length(); index++) output.writeChar(value.charAt(index));
     }
 
+    private static void object(DataInputStream input) throws IOException {
+        bytes(input, 17); int thrower = input.readInt();
+        if (thrower > 0) bytes(input, 6);
+    }
     private static void mob(DataInputStream input) throws IOException {
         bytes(input, 19); metadata(input);
     }

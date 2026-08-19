@@ -41,4 +41,8 @@ final class B173PlayWaits {
     RemoteMobDeath observedDeath() throws IOException {
         return death(inbound.mobs().observed());
     }
+
+    worldline.api.RemoteObjectSpawn object(int type) throws IOException {
+        return until(() -> inbound.objects().take(type), "expected object spawn absent before deadline");
+    }
 }

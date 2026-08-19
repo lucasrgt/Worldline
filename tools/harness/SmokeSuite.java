@@ -177,6 +177,7 @@ final class SmokeSuite {
         {"tools/smoke/NetherrackFireCycle.java", "m151-netherrack-fire"},
         {"tools/smoke/FireWoolConsumptionCycle.java", "m152-fire-wool-consumption"},
         {"tools/smoke/DispenserEjectCycle.java", "m153-dispenser-eject"},
+        {"tools/smoke/BoatSpawnCycle.java", "m154-boat-spawn"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

@@ -124,7 +124,7 @@ final class B173PlayChannel {
     void attackObservedMob() throws IOException { require(pose != null && !inbound.windowActive() && inbound.cursorObserved() && inbound.cursor() == null, "observed mob attack requires synchronized play"); require(held.selectedId(276), "observed mob attack requires selected diamond sword"); combat.attackObservedMob(); }
     worldline.api.RemoteMobMovement awaitObservedMobMovement() throws IOException { return inbound.awaitObservedMobMovement(); }
     worldline.api.RemoteMobDeath awaitObservedMobDeath() throws IOException { return inbound.awaitObservedMobDeath(); }
-    worldline.api.RemoteDroppedItem peekDroppedItem(worldline.api.RemoteItemStack expected) { return inbound.peekDroppedItem(expected); }
+    worldline.api.RemoteDroppedItem peekDroppedItem(worldline.api.RemoteItemStack expected) { return inbound.peekDroppedItem(expected); } void useSelectedItemInAir() throws IOException { require(pose != null && !inbound.windowActive() && inbound.cursorObserved() && inbound.cursor() == null, "air use requires synchronized personal window and empty cursor"); held.useInAir(); } worldline.api.RemoteObjectSpawn awaitObjectSpawn(int type) throws IOException { return inbound.awaitObjectSpawn(type); }
 
     void selectHeldSlot(int slot) throws IOException { require(pose != null, "play channel is not synchronized");
         held.select(slot); }

@@ -156,6 +156,8 @@ final class B173ItemAccess {
     static void attackObservedMob(B173PlayChannel channel){try{channel.attackObservedMob();}catch(IOException error){throw new IllegalStateException("observed mob attack failed",error);}}
     static worldline.api.RemoteMobDeath awaitObservedMobDeath(B173PlayChannel channel){try{return channel.awaitObservedMobDeath();}catch(IOException error){throw new IllegalStateException("observed mob death receive failed",error);}}
     static RemoteDroppedItem peekDroppedItem(B173PlayChannel channel, RemoteItemStack expected){return channel.peekDroppedItem(expected);}
+    static void useSelectedItemInAir(B173PlayChannel channel){try{channel.useSelectedItemInAir();}catch(IOException error){throw new IllegalStateException("selected item air use failed",error);}}
+    static worldline.api.RemoteObjectSpawn awaitObjectSpawn(B173PlayChannel channel,int type){try{return channel.awaitObjectSpawn(type);}catch(IOException error){throw new IllegalStateException("object spawn receive failed",error);}}
 
     static RemoteDroppedItem awaitDroppedItem(B173PlayChannel channel, RemoteItemStack expected) {
         try { return channel.inbound().awaitDroppedItem(expected); }
