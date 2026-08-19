@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.148.0 - M160 Cake Eat
+
+Status: GO for one official BlockCake bite.
+
+- Placed cake item `354` as block `92:0` on a raised stone support.
+- Empty-hand Packet15 bit the cake to `92:1` and healed Packet8 `17→20`.
+- The bitten cake and full health survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M160 semantic SHA-256 is
+`ec442ce01a43be294030f3c3fb48319afc75e6eb99291a4e24cab8a54f3d8074`.
+
 ## 1.147.0 - M159 Sugar Cane
 
 Status: GO for official water-adjacent sugar-cane growth.

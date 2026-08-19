@@ -11,14 +11,14 @@ public final class B173PlayerSeed {
     private B173PlayerSeed() {}
 
     public static void write(Path serverDirectory, String username, double x, double y, double z) {
-        write(serverDirectory, username, x, y, z, 0, new int[0], new int[0], new int[0], new int[0]);
+        write(serverDirectory, username, x, y, z, 0, new int[0], new int[0], new int[0], new int[0], 20);
     }
 
     /** Writes one empty player in an exact vanilla dimension. */
     public static void writeDimension(Path serverDirectory, String username, double x, double y, double z,
             int dimension) {
         if (dimension != 0 && dimension != -1) throw new IllegalArgumentException("invalid player dimension");
-        write(serverDirectory, username, x, y, z, dimension, new int[0], new int[0], new int[0], new int[0]);
+        write(serverDirectory, username, x, y, z, dimension, new int[0], new int[0], new int[0], new int[0], 20);
     }
 
     /** Writes one player whose selected hotbar slot contains an exact legacy block stack. */
@@ -27,14 +27,21 @@ public final class B173PlayerSeed {
         if (legacyId < 1 || legacyId > 255 || count < 1 || count > 64 || damage < 0 || damage > 32767)
             throw new IllegalArgumentException("invalid held player seed");
         write(serverDirectory, username, x, y, z, 0, new int[] {0}, new int[] {legacyId},
-                new int[] {count}, new int[] {damage});
+                new int[] {count}, new int[] {damage}, 20);
     }
 
     /** Writes exact main-inventory slots without running commands or spawning item entities. */
     public static void writeInventory(Path serverDirectory, String username, double x, double y, double z,
             int[] slots, int[] legacyIds, int[] counts, int[] damages) {
+        writeInventory(serverDirectory, username, x, y, z, slots, legacyIds, counts, damages, 20);
+    }
+
+    /** Writes exact main-inventory slots and an official Health short. */
+    public static void writeInventory(Path serverDirectory, String username, double x, double y, double z,
+            int[] slots, int[] legacyIds, int[] counts, int[] damages, int health) {
         if (slots == null || legacyIds == null || counts == null || damages == null || slots.length != legacyIds.length
-                || slots.length != counts.length || slots.length != damages.length || slots.length > 36)
+                || slots.length != counts.length || slots.length != damages.length || slots.length > 36
+                || health < 1 || health > 20)
             throw new IllegalArgumentException("invalid player inventory seed");
         for (int index = 0; index < slots.length; index++) {
             if (slots[index] < 0 || slots[index] > 35 || legacyIds[index] < 1 || legacyIds[index] > 32767
@@ -43,11 +50,12 @@ public final class B173PlayerSeed {
             for (int prior = 0; prior < index; prior++) if (slots[prior] == slots[index])
                 throw new IllegalArgumentException("duplicate player inventory slot");
         }
-        write(serverDirectory, username, x, y, z, 0, slots.clone(), legacyIds.clone(), counts.clone(), damages.clone());
+        write(serverDirectory, username, x, y, z, 0, slots.clone(), legacyIds.clone(), counts.clone(), damages.clone(),
+                health);
     }
 
     private static void write(Path serverDirectory, String username, double x, double y, double z, int dimension,
-            int[] slots, int[] legacyIds, int[] counts, int[] damages) {
+            int[] slots, int[] legacyIds, int[] counts, int[] damages, int health) {
         if (serverDirectory == null || username == null
                 || !username.matches("[A-Za-z0-9_]{1,16}") || !finite(x) || !finite(y) || !finite(z))
             throw new IllegalArgumentException("invalid player seed");
@@ -68,7 +76,7 @@ public final class B173PlayerSeed {
                 for (int index = 0; index < slots.length; index++) { shortTag(output, "id", legacyIds[index]);
                     byteTag(output, "Count", counts[index]); shortTag(output, "Damage", damages[index]);
                     byteTag(output, "Slot", slots[index]); output.writeByte(0); }
-                shortTag(output, "Health", 20); shortTag(output, "HurtTime", 0);
+                shortTag(output, "Health", health); shortTag(output, "HurtTime", 0);
                 shortTag(output, "DeathTime", 0); shortTag(output, "AttackTime", 0);
                 intTag(output, "Score", 0); output.writeByte(0);
             }

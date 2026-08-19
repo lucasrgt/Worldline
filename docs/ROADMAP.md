@@ -164,6 +164,7 @@ Passing an experiment does not silently promote its API.
 | v1.145.0 / M157 | Bow arrow | GO - Packet15 bow 261 emits shared Packet23 type 60 with actor thrower |
 | v1.146.0 / M158 | Bed | GO - daytime Packet3 refusal, night Packet17 occupy, SMP skip to morning |
 | v1.147.0 / M159 | Sugar cane | GO - water-adjacent reed 83 grows to height 2+ and persists |
+| v1.148.0 / M160 | Cake eat | GO - BlockCake 92:0 to 92:1 heals Packet8 17 to 20 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -175,7 +176,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.147.0 direction
+## Immediate post-v1.148.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

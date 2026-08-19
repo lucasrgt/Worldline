@@ -183,6 +183,7 @@ final class SmokeSuite {
         {"tools/smoke/BowArrowCycle.java", "m157-bow-arrow"},
         {"tools/smoke/BedCycle.java", "m158-bed"},
         {"tools/smoke/SugarCaneCycle.java", "m159-sugar-cane"},
+        {"tools/smoke/CakeEatCycle.java", "m160-cake-eat"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

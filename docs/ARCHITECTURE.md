@@ -1224,3 +1224,6 @@ skips night and clears the occupied bit. Packet70 reason 0 is not this gate.
 
 M159 adds no public API. Reed item `338` on dirt beside still water grows
 from `83` height 1 to height 2+ by official random ticks and persists.
+
+M160 adds a `B173PlayerSeed.writeInventory` health overload. Empty-hand
+Packet15 on BlockCake `92:0` becomes `92:1` and Packet8 heals 3 hearts.
