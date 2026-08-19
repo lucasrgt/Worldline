@@ -4,6 +4,19 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.112.0 - M124 Cross-Chunk Light Recovery
+
+Status: GO for exact recovery of two block-light planes after source removal.
+
+- Captured M123's lit source and neighbor chunks with an independent client.
+- Removed the edge glowstone through Packet14 and observed ocean water restore
+  exact source state `9:0`.
+- Proved all 55/19 light changes reverse and both baseline-to-final delta sets
+  are empty.
+
+The frozen M124 semantic SHA-256 is
+`60903e4d40e5297e01412eb69996ce5f3e2b641f1898d67f376ff357d016dbce`.
+
 ## 1.111.0 - M123 Cross-Chunk Lighting
 
 Status: GO for one causal vanilla block-light transition across a chunk seam.

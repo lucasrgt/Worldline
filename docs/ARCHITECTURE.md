@@ -1035,3 +1035,8 @@ block at the final X coordinate of one chunk, then compares fresh complete
 light planes from that chunk and its east neighbor. The exact water attenuation
 and both ordered delta sets remain official-server observations; Worldline only
 correlates the intervention and immutable snapshots.
+
+M124 adds no public API. A witness captures M123's lit precondition while the
+actor remains connected; source removal and a final reader then produce exact
+decrease and residual comparisons for both chunks. The empty residual deltas
+qualify recovery without introducing a Worldline scheduler or light engine.
