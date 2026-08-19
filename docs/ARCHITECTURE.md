@@ -1255,3 +1255,6 @@ and water bucket `326:1:0` that persist across restart.
 
 M169 reuses air-use Packet15 and the Packet23 tracker. Egg item `344` emits
 type `62` with thrower 0.
+
+M170 adds no public API. Repeater item `356` places unpowered `93:3`; a side
+lever produces powered `94:3` after one tick and returns to `93:3`.

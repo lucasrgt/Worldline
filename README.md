@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.157.0 - M169 Egg Throw (GO)**.
+Current official milestone: **Worldline v1.158.0 - M170 Repeater (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

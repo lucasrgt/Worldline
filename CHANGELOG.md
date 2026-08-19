@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.158.0 - M170 Repeater
+
+Status: GO for official 1-tick repeater pulse.
+
+- Placed repeater item `356` as unpowered `93:3` facing west.
+- An input-side lever powered it to `94:3` after the 1-tick delay.
+- Lever off restored `93:3`, which survived save plus a fresh login.
+
+The frozen M170 semantic SHA-256 is
+`6c15d889fbdd2c03553d0456cd4206acca9913147855898da285810b5cffe59b`.
+
 ## 1.157.0 - M169 Egg Throw
 
 Status: GO for official Packet23 egg spawn.

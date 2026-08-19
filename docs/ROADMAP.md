@@ -174,6 +174,7 @@ Passing an experiment does not silently promote its API.
 | v1.155.0 / M167 | Cactus | GO - cactus 81 on sand 12 persists through hold and restart |
 | v1.156.0 / M168 | Water bucket | GO - empty bucket 325 picks up still water 9 into 326 |
 | v1.157.0 / M169 | Egg throw | GO - Packet15 egg 344 emits shared Packet23 type 62 with thrower 0 |
+| v1.158.0 / M170 | Repeater | GO - repeater 93:3 powers to 94:3 from a lever and returns |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -185,7 +186,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.157.0 direction
+## Immediate post-v1.158.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
