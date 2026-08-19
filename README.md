@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.148.0 - M160 Cake Eat (GO)**.
+Current official milestone: **Worldline v1.149.0 - M161 Snowball (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

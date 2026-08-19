@@ -1227,3 +1227,6 @@ from `83` height 1 to height 2+ by official random ticks and persists.
 
 M160 adds a `B173PlayerSeed.writeInventory` health overload. Empty-hand
 Packet15 on BlockCake `92:0` becomes `92:1` and Packet8 heals 3 hearts.
+
+M161 reuses air-use Packet15 and the Packet23 tracker. Snowball item `332`
+emits type `61` with thrower 0 near the actor.

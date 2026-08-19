@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.149.0 - M161 Snowball
+
+Status: GO for one official Packet23 snowball spawn.
+
+- Used snowball item `332` through Packet15 direction 255 from a raised platform.
+- Two headless peers decoded the same Packet23 type `61` with thrower 0.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M161 semantic SHA-256 is
+`1865bda95354d11a5a95ac4eaaf3fb8ad521e4b6195e6c651715e6955e7a149d`.
+
 ## 1.148.0 - M160 Cake Eat
 
 Status: GO for one official BlockCake bite.
