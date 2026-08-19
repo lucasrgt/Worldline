@@ -4,6 +4,21 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.88.0 - M100 Rebuild-Budget-One Fallback
+
+Status: GO for the exact alternating one-rebuild path under cache1.
+
+- Froze cache1, TTL100000, rebuild budget1, and the existing four-page scene.
+- Proved strict alternation between `pageCalls2/direct4` and
+  `pageCalls1/direct10`, with aligned M74 renderer/list counters.
+- Required rebuild1, cache1, and capacity-eviction delta one in every one of
+  4771/4892 complete records; mode counts were 2386/2385 and 2446/2446.
+- Kept descriptive timings dynamic and bounded the mechanism to the exact
+  fixture and pinned page order.
+
+The frozen M100 semantic SHA-256 is
+`322cccb6a7643bf79357d81d1c8b3ecf2bc0c7bcad170993ebbb01fc7fa8d76b`.
+
 ## 1.87.0 - M99 Rebuild-Budget Fallback
 
 Status: GO for the exact two-page rebuild budget under one-entry cache pressure.

@@ -874,3 +874,9 @@ It restores a one-entry cache but lowers the per-frame rebuild budget to two.
 For the exact sorted four-page fixture, two pages rebuild, the other two keys'
 four instances use direct rendering, and the eviction counter advances by two
 in every retained record. Common/server code remains Aero-free.
+
+M100 adds no public API or product adapter behavior and leaves M74-M99 frozen.
+It lowers the same cache1 fixture to one rebuild per frame. The retained key
+causes exact alternation between a two-page-call/four-direct record and a
+one-page-call/ten-direct record; rebuild and eviction deltas remain one.
+Common/server code remains Aero-free.

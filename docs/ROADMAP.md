@@ -104,6 +104,7 @@ Passing an experiment does not silently promote its API.
 | v1.85.0 / M97 | Four-page capacity-one thrash | GO - every retained record rebuilds and evicts all four pages |
 | v1.86.0 / M98 | Configured-zero protected cache floor | GO - literal max0 retains one protected page and rebuilds/evicts four per record |
 | v1.87.0 / M99 | Rebuild-budget fallback under one-entry cache pressure | GO - two pages rebuild and four remaining instances render directly per record |
+| v1.88.0 / M100 | Rebuild-budget-one alternating fallback | GO - exact pageCalls2/direct4 and pageCalls1/direct10 alternation |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -115,12 +116,12 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.87.0 direction
+## Immediate post-v1.88.0 direction
 
-M99 proves a rebuild budget of two creates an exact mixed page/direct path in
-the fixed four-page scene under cache1. Budget one and zero, other membership
+M100 proves a rebuild budget of one creates an exact alternating mixed path in
+the fixed four-page scene under cache1. Budget zero, other membership
 distributions, page-order independence, unlimited cache, alternative disabling
 controls, other topologies, concurrency, merge/repacking, and uninstrumented
-cost remain outside scope. M71-M99 do not establish causal spike attribution.
+cost remain outside scope. M71-M100 do not establish causal spike attribution.
 Generic synchronization, persistence, multiple clients, merging, shift clicks,
 and broad automation remain outside the stable contract.
