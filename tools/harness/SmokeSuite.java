@@ -213,6 +213,7 @@ final class SmokeSuite {
         {"tools/smoke/CobbleStairsCycle.java", "m187-cobble-stairs"},
         {"tools/smoke/StoneSlabCycle.java", "m188-stone-slab"},
         {"tools/smoke/BookshelfCycle.java", "m189-bookshelf"},
+        {"tools/smoke/JackOLanternCycle.java", "m190-jack-o-lantern"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

@@ -1314,3 +1314,6 @@ M187 adds no public API. Cobble stairs item `67` with look yaw `-90` places
 M188 adds no public API. Stone slab item `44` places `44:0` and persists.
 
 M189 adds no public API. Bookshelf item `47` places `47:0` and persists.
+
+M190 adds no public API. Jack-o-lantern item `91` with look yaw `-90` places
+`91:1` and persists.

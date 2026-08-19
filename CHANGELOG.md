@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.178.0 - M190 Jack-o-lantern
+
+Status: GO for official jack-o-lantern facing.
+
+- Placed jack-o-lantern item `91` with look yaw `-90` as `91:1`.
+- That facing survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M190 semantic SHA-256 is
+`6d925e40f9f78a804de2b69ee8eb5107d5314dedb78a27dd72a2acb8fd53f77d`.
+
 ## 1.177.0 - M189 Bookshelf
 
 Status: GO for official bookshelf placement.
