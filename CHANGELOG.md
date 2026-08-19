@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.196.0 - M208 Oak log
+
+Status: GO for official oak-log placement.
+
+- Placed log item `17` on a raised stone support as upright oak `17:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M208 semantic SHA-256 is
+`c371df4ca97d388218b9184b3b6a0ba2745803de01514b4b8562c6ca33b533d2`.
+
 ## 1.195.0 - M207 Sandstone
 
 Status: GO for official sandstone placement.

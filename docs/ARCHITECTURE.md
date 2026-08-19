@@ -1357,3 +1357,5 @@ M205 adds no public API. Brick item `45` places `45:0` and persists.
 M206 adds no public API. Sponge item `19` places `19:0` and persists.
 
 M207 adds no public API. Sandstone item `24` places `24:0` and persists.
+
+M208 adds no public API. Oak log item `17` places `17:0` and persists.
