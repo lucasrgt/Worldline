@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.169.0 - M181 Lava bucket
+
+Status: GO for official still-lava bucket pickup.
+
+- Placed still lava `11:0` in a raised stone basin from the south wall.
+- Empty bucket `325` picked up that source into lava bucket `327:1:0`.
+- The empty basin and filled bucket survived save plus a fresh login.
+
+The frozen M181 semantic SHA-256 is
+`8389064523049de74163fc5f5c48e14d5e52eb750aee3eb297010fa2e87116d4`.
+
 ## 1.168.0 - M180 Fishing rod
 
 Status: GO for official fishing-hook Packet23 type 90.

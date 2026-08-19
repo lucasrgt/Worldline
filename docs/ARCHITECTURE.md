@@ -1289,3 +1289,6 @@ M179 adds no public API. Wooden hoe `290` tills dirt; seeds `295` plant wheat
 
 M180 reuses `awaitObjectSpawn(90)`. Fishing rod `346` in air emits Packet23
 type `90` with thrower `0`; two peers share the hook identity and pose.
+
+M181 adds no public API. Empty bucket `325` picks up still lava `11:0` into
+`327:1:0` and leaves the source cell as air.
