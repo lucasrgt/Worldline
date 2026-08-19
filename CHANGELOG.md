@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.212.0 - M224 Netherrack
+
+Status: GO for official Overworld netherrack placement.
+
+- Placed netherrack item `87` on a raised stone support as `87:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M224 semantic SHA-256 is
+`790c2fc12c97371a7b0a14f5a41376c1d23f3bd1fff998120baed91087fd917b`.
+
 ## 1.211.0 - M223 Dirt
 
 Status: GO for official dirt placement.
