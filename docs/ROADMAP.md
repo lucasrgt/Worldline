@@ -109,6 +109,7 @@ Passing an experiment does not silently promote its API.
 | v1.90.0 / M102 | Negative-one unlimited-rebuild sentinel | GO - all four pages rebuild with zero direct fallback |
 | v1.91.0 / M103 | Explicit pages-disabled immediate direct control | GO - sixteen direct overload calls despite reset public counters |
 | v1.92.0 / M104 | Balanced paired pages control | GO - same-plan enabled/disabled structural paths under one recorder schema |
+| v1.93.0 / M105 | Balanced paired cache-capacity control | GO - capacity1 thrash versus negative-one stable four-page retention |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -120,13 +121,13 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.92.0 direction
+## Immediate post-v1.93.0 direction
 
-M104 pairs the literal pages-enabled and pages-disabled paths under the same
-plan, nonce, camera, and recorder. Other render entrypoints, other negative
-values, other membership distributions, page-order independence, unlimited
-cache, skip-individual controls, other topologies, concurrency,
-merge/repacking, and uninstrumented cost remain outside scope. M71-M104 do not
-establish causal spike attribution.
+M105 pairs capacity one and literal negative-one unlimited capacity under the
+same four-page plan. Other render entrypoints, other negative values, memory
+cost, other membership distributions, page-order independence,
+skip-individual controls, other topologies, concurrency, merge/repacking, and
+uninstrumented cost remain outside scope. M71-M105 do not establish causal
+spike attribution.
 Generic synchronization, persistence, multiple clients, merging, shift clicks,
 and broad automation remain outside the stable contract.

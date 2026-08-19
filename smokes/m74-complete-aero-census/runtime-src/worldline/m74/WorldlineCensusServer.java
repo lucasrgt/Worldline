@@ -24,6 +24,7 @@ public final class WorldlineCensusServer {
         Vec3i spawn = player.world.getSpawnPos(); x = fx == null ? spawn.x + 2 : fx; z = fz == null ? spawn.z - 2 : fz; y = fy == null ? 1 : fy;
         if (fy == null) { for (int dz = 0; dz < 4; dz++) y = Math.max(y, player.world.getTopSolidBlockY(x, z + dz) + 1);
             y = Math.max(y, player.world.getTopSolidBlockY(x - 2, z + 2) + 1); }
+        player.world.setBlock(x - 2, y - 1, z + 2, 1); if (player.world.getBlockId(x - 2, y - 1, z + 2) != 1) throw new IllegalStateException("M74 camera support rejected");
         player.networkHandler.teleport(x - 1.5D, y, z + 2.5D, -90F, 0F); awaiting = true; phase = -1; placed = 0; delay = 1;
         System.out.println("[WorldlineCensus] activation nonce=" + nonce);
     }

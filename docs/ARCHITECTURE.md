@@ -903,3 +903,10 @@ It uses one unified client-only sidecar to compare pages enabled and disabled
 in two balanced same-plan pairs. Automatic plans now include the camera support
 column so the unchanged strict pose gate cannot race gravity over depressions.
 Common/server code remains Aero-free.
+
+M105 adds no public API or product adapter behavior and leaves M74-M104 frozen.
+It pairs capacity one with the pinned negative-one unlimited cache sentinel
+under one recorder and same-plan scene. The smoke server now fixes one vanilla
+stone support block outside the sixteen Aero cells before teleport, making
+replayed camera plans independent of gravity timing. Common/server code still
+has no Aero dependency.

@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.93.0 - M105 Paired Cache Capacity
+
+Status: GO for the exact cache1/unlimited-capacity comparison.
+
+- Ran two balanced same-plan fresh-process pairs with pages=true,
+  rebuilds=-1, and TTL100000.
+- Proved capacity1 rebuilt four pages, retained one, and advanced eviction by
+  four in every retained record.
+- Proved capacity-1 retained four warmed pages with rebuild0 and eviction0 in
+  every retained record.
+- Added and validated one vanilla stone support block outside the Aero fixture
+  so the unchanged strict camera pose cannot race gravity in replayed plans.
+- Kept memory cost and all timing directions outside qualification.
+
+The frozen M105 semantic SHA-256 is
+`35da2fabb47ef902a2cbd7b92dc976771d9a80179b76322cf1f26edade4e5898`.
+
 ## 1.92.0 - M104 Paired Pages Control
 
 Status: GO for the exact balanced pages-enabled/pages-disabled comparison.
