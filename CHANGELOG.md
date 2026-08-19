@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.97.0 - M109 Cell Size Floor
+
+Status: GO for the raw-zero/explicit-one clamp comparison.
+
+- Ran two balanced same-plan fresh-process pairs with minimum2,
+  skip-individual false, pages enabled, unlimited cache/rebuild, and TTL100000.
+- Proved raw zero and raw one both exposed effective cell size one.
+- Required every retained record in both arms to keep queue16/rendererCalls16,
+  flush2, pageCalls0, direct16, cache0, M74 render/list16/16, rebuild0,
+  immediate0, and eviction0.
+- Kept generic clamping, configuration quality and all timing directions
+  outside qualification.
+
+The frozen M109 semantic SHA-256 is
+`d5ba4fa589d791959dca34158989889ea9d5c29942b6bc44fca7a18bb800a69e`.
+
 ## 1.96.0 - M108 Paired Cell Size
 
 Status: GO for the exact size-two/size-eight comparison.

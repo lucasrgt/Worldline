@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.96.0 - M108 Paired Cell Size (GO)**.
+Current official milestone: **Worldline v1.97.0 - M109 Cell Size Floor (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -556,6 +556,10 @@ M108 pairs pinned cell sizes two and eight under the same fixed aligned scene.
 Size two produces four cached page calls; size eight produces one, while both
 retain sixteen queue/renderer calls and no fallback or rebuild. See
 `docs/M108_PAIRED_CELL_SIZE.md`.
+
+M109 pairs raw cell-size zero with the explicit supported floor one. Both
+resolve to effective size one and reproduce sixteen single-member direct
+fallbacks with no cached pages. See `docs/M109_CELL_SIZE_FLOOR.md`.
 
 ## Verify
 

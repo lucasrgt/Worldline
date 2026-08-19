@@ -931,3 +931,9 @@ It pairs pinned cell sizes two and eight under minimum2 and skip-individual
 false. A fixed aligned test plan changes only the page partition: four
 size-two pages versus one size-eight page, with the same sixteen identities and
 individual renderer calls. Common/server code remains Aero-free.
+
+M109 adds no public API or product adapter behavior and leaves M74-M108 frozen.
+It pairs raw cell-size zero with explicit one under the same plan and proves
+the pinned lower clamp publishes effective size one. Both arms exercise
+sixteen distinct below-minimum cells and the identical direct-fallback path.
+Common/server code remains Aero-free.
