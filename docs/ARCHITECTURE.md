@@ -910,3 +910,11 @@ under one recorder and same-plan scene. The smoke server now fixes one vanilla
 stone support block outside the sixteen Aero cells before teleport, making
 replayed camera plans independent of gravity timing. Common/server code still
 has no Aero dependency.
+
+M106 adds no public API or product adapter behavior and leaves M74-M105 frozen.
+It pairs literal minimum page populations two and five with unlimited cache and
+rebuild budget. The higher threshold keeps two natural pages cached and routes
+four instances directly; the lower threshold keeps all four pages cached. The
+test client fixes yaw/pitch before readiness to remove physical mouse drift,
+while X/Y/Z remain server-authored and strictly validated. Common/server code
+remains Aero-free.

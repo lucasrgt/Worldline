@@ -24,7 +24,8 @@ public abstract class WorldlineCensusFrameMixin {
         client.options.hideHud = true; client.options.bobView = false;
         if (!sent) { MessagePacket packet = new MessagePacket(WorldlineCensusMod.ACTIVATE); packet.ints = new int[]{WorldlineCensusProbe.nonce()};
             client.getNetworkHandler().sendPacket(packet); sent = true; WorldlineCensusProbe.trigger(); return; }
-        if (!ready) { if (!WorldlineCensusSync.tracked(client.world, client.player.x, client.player.y, client.player.z, client.player.yaw, client.player.pitch)) return;
+        if (!ready) { client.player.yaw = -90F; client.player.pitch = 0F;
+            if (!WorldlineCensusSync.tracked(client.world, client.player.x, client.player.y, client.player.z, client.player.yaw, client.player.pitch)) return;
             MessagePacket packet = new MessagePacket(WorldlineCensusMod.READY); packet.ints = WorldlineCensusSync.plan(); client.getNetworkHandler().sendPacket(packet);
             ready = true; System.out.println("[WorldlineCensus] plan-ready"); return; }
         if (!armed) { if (!WorldlineCensusSync.ready(WorldlineCensusProbe.mask())) return; armed = true;

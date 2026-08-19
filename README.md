@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.93.0 - M105 Paired Cache Capacity (GO)**.
+Current official milestone: **Worldline v1.94.0 - M106 Paired Minimum Instances (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -540,6 +540,11 @@ M105 pairs capacity one with the literal negative-one unlimited page cache.
 The same stable four-page scene either rebuilds/evicts continuously or retains
 all four warmed pages without rebuilds. See
 `docs/M105_PAIRED_CACHE_CAPACITY.md`.
+
+M106 pairs page minimums two and five under the same exact scene. Raising the
+minimum preserves two cached pages while routing four low-population instances
+through the direct fallback, with independent M74 counter agreement. See
+`docs/M106_PAIRED_MINIMUM_INSTANCES.md`.
 
 ## Verify
 

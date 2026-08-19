@@ -4,6 +4,23 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.94.0 - M106 Paired Minimum Instances
+
+Status: GO for the exact minimum-two/minimum-five comparison.
+
+- Ran two balanced same-plan fresh-process pairs with pages enabled, unlimited
+  cache/rebuild budget, and TTL100000.
+- Proved minimum2 retained four cached page calls with no direct fallback and
+  M74 render/list counters0/0 in every retained record.
+- Proved minimum5 retained two cached page calls plus four direct instances and
+  M74 render/list counters4/4 in every retained record.
+- Fixed only test-client yaw/pitch before readiness while preserving strict
+  server-authored X/Y/Z validation, eliminating physical mouse drift.
+- Kept all timing directions outside qualification.
+
+The frozen M106 semantic SHA-256 is
+`f3b298b76961b50be8e4695957f53c7ee1e735d394d0b26886e8c5164553adae`.
+
 ## 1.93.0 - M105 Paired Cache Capacity
 
 Status: GO for the exact cache1/unlimited-capacity comparison.

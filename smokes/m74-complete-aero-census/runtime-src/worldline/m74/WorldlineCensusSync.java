@@ -41,6 +41,6 @@ public final class WorldlineCensusSync {
         return scene && scenePlaced == expected && received == expected && appliedCount == expected && mask == (expected == 16 ? 0xffff : 0); }
     public static synchronized int packed() { return received << 8 | appliedCount; }
     public static synchronized int x() { return x; } public static synchronized int y() { return y; } public static synchronized int z() { return z; }
-    private static void diagnostic(String reason) { if (!trackedDiagnostic) { trackedDiagnostic = true; System.out.println("[WorldlineCensus] tracked-wait " + reason + " expected=" + x + "/" + (y + 1.62D) + "/" + z + "/-90/0"); } }
+    private static void diagnostic(String reason) { if (!trackedDiagnostic) { trackedDiagnostic = true; System.out.println("[WorldlineCensus] tracked-wait " + reason + " expected=" + (x - 1.5D) + "/" + (y + 1.62D) + "/" + (z + 2.5D) + "/-90/0"); } }
     private static String mode() { return System.getProperty("worldline.census.mode", ""); }
 }
