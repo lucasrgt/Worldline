@@ -1230,3 +1230,6 @@ Packet15 on BlockCake `92:0` becomes `92:1` and Packet8 heals 3 hearts.
 
 M161 reuses air-use Packet15 and the Packet23 tracker. Snowball item `332`
 emits type `61` with thrower 0 near the actor.
+
+M162 adds no public API. Wooden door item `324` places BlockDoor halves
+`64:0`/`64:8`; empty-hand Packet15 toggles open `64:4`/`64:12` and back.

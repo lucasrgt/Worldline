@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.150.0 - M162 Wooden Door
+
+Status: GO for official wooden-door open and close.
+
+- Placed door item `324` as lower `64:0` and upper `64:8`.
+- Empty-hand activation opened to `64:4` / `64:12` and closed back.
+- The closed pair survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M162 semantic SHA-256 is
+`d14b3dc599ec9ecd4d0f39074ae46e401c37bd078d558f4b0dd0b477a3f1bfea`.
+
 ## 1.149.0 - M161 Snowball
 
 Status: GO for one official Packet23 snowball spawn.

@@ -185,6 +185,7 @@ final class SmokeSuite {
         {"tools/smoke/SugarCaneCycle.java", "m159-sugar-cane"},
         {"tools/smoke/CakeEatCycle.java", "m160-cake-eat"},
         {"tools/smoke/SnowballCycle.java", "m161-snowball"},
+        {"tools/smoke/WoodenDoorCycle.java", "m162-wooden-door"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 
