@@ -1407,3 +1407,5 @@ M229 adds no public API. Unlit redstone ore item `73` places `73:0` and persists
 M230 adds no public API. Lapis ore item `21` places `21:0` and persists.
 
 M231 adds no public API. Dispenser item `23` places `23:3` from look yaw `180` and persists.
+
+M232 adds no public API. Chest item `54` places `54:0` and persists.
