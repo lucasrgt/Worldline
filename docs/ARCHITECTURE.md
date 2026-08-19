@@ -1009,3 +1009,9 @@ placement, Packet14 support removal, Packet53 cache replacement, bounded
 heartbeats and a fresh Packet51. The complete-chunk oracle proves only the
 source/destination states of one settled fall; the transient entity remains an
 official-server mechanism rather than a Worldline simulation.
+
+M120 adds no public API or fluid evaluator. Its constructor session builds a
+bounded source/gate trench; separate treatment and verifier sessions provide
+fresh Packet51 snapshots on both sides of the mutation. This avoids comparing
+incremental water cache state against a reload and confines the full-chunk
+delta to the sole legal horizontal destination.

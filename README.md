@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.107.0 - M119 Falling Sand (GO)**.
+Current official milestone: **Worldline v1.108.0 - M120 Horizontal Water (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -611,6 +611,11 @@ and the adjacent lever changes its lower and upper metadata from `0/8` to
 M119 adds the first block-gravity outcome. Removing one stone support beneath
 sand moves `12:0` down exactly one cell; the live cache, fresh Packet51 and
 two-state chunk delta agree. See `docs/M119_FALLING_SAND.md`.
+
+M120 adds bounded horizontal fluid propagation. A sealed official stone trench
+holds source `9:0` behind dirt; opening its only exit produces target `9:1`
+with exactly one authoritative chunk-state change. See
+`docs/M120_HORIZONTAL_WATER.md`.
 
 ## Verify
 

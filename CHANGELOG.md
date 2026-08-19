@@ -4,6 +4,19 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.108.0 - M120 Horizontal Water
+
+Status: GO for one bounded server-authored horizontal fluid transition.
+
+- Built a stone trench with exact source water `9:0` and one dirt-gated exit.
+- Used fresh Packet51 baselines before and after treatment to exclude stale
+  incremental ocean-water normalization from the causal delta.
+- Proved Packet14 opening produces target `9:1` and exactly one full-chunk
+  state change while keeping generic fluids and natural bucket use out of scope.
+
+The frozen M120 semantic SHA-256 is
+`c0bbf83eadc6fd56c3697b50ed2d653aebc2fd9e132467354a9bcae89a6daa29`.
+
 ## 1.107.0 - M119 Falling Sand
 
 Status: GO for one server-authored block-gravity transition.

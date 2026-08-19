@@ -124,6 +124,7 @@ Passing an experiment does not silently promote its API.
 | v1.105.0 / M117 | Lever-to-wire recovery | GO - a second official lever activation returns the exact powered `9/15` pair to `1/0` with two-state delta |
 | v1.106.0 / M118 | Powered iron-door consumer | GO - one side lever opens both official block-71 halves with an exact three-state delta |
 | v1.107.0 / M119 | Falling-sand gravity | GO - removing one official stone support settles sand down one cell with an exact two-state delta |
+| v1.108.0 / M120 | Horizontal water propagation | GO - opening the sole exit of a bounded source-water trench produces exact target `9:1` |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -135,15 +136,15 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.107.0 direction
+## Immediate post-v1.108.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
 initial light planes, and M113 proves the first server-authored causal light
 transition, and M114 qualifies the first scheduled water response. The active
 sequence now deepens fluid behavior and advances from M115's component state
-through M118's first powered consumer and M119's first block-gravity outcome
-into additional fluids/physics, world-generation breadth, entity AI, dimensions
+through M119's block gravity and M120's bounded horizontal fluid transition
+into additional physics, world-generation breadth, entity AI, dimensions
 and persistence/multiplayer composition.
 M71-M110 remain frozen Aero laboratory evidence; no new Aero milestone is
 planned before the vanilla foundation is complete.
