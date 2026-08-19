@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.145.0 - M157 Bow Arrow
+
+Status: GO for one official Packet23 arrow spawn.
+
+- Used bow `261` with arrow `262` through Packet15 direction 255.
+- Two headless peers decoded the same Packet23 type `60` with the actor thrower.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M157 semantic SHA-256 is
+`abf0244450acb0b727df9080a6ca53849fcd0ca4ce62de83a13b815d04c8f917`.
+
 ## 1.144.0 - M156 Farmland Hydration
 
 Status: GO for official hoe-to-farmland moisture.

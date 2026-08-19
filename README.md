@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.144.0 - M156 Farmland Hydration (GO)**.
+Current official milestone: **Worldline v1.145.0 - M157 Bow Arrow (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

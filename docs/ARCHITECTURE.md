@@ -1214,3 +1214,6 @@ M155 reuses that Packet23 tracker. Minecart item `328` on rail `66` emits type
 M156 adds no public API. Wooden hoe Packet15 turns dirt into farmland `60:0`,
 and a still-water neighbor hydrates at least one plot to `60:7` that survives
 restart.
+
+M157 reuses air-use Packet15 and the Packet23 tracker. A bow with arrows emits
+type `60` whose thrower is the shooter entity id.
