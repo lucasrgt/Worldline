@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.215.0 - M227 Gold ore
+
+Status: GO for official gold-ore placement.
+
+- Placed gold ore item `14` on a raised stone support as `14:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M227 semantic SHA-256 is
+`0cc34fc524f7aba7d51b5f354569bbbfa7bae8bde9995797972fac9dea8ba1fd`.
+
 ## 1.214.0 - M226 Iron ore
 
 Status: GO for official iron-ore placement.

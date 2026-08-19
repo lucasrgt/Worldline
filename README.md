@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.214.0 - M226 Iron ore (GO)**.
+Current official milestone: **Worldline v1.215.0 - M227 Gold ore (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
