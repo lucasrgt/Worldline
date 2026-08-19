@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.177.0 - M189 Bookshelf
+
+Status: GO for official bookshelf placement.
+
+- Placed bookshelf item `47` on a raised stone support as `47:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M189 semantic SHA-256 is
+`30ee0483e42551b855a4fd5a85002dc5871168bc8f2bed26ec7dcd572b2b97a3`.
+
 ## 1.176.0 - M188 Stone slab
 
 Status: GO for official single stone-slab placement.
