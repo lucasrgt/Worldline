@@ -1157,3 +1157,8 @@ M144 adds no public API or adapter behavior. It changes only the fixture's
 server item/block from normal piston `33` to sticky piston `29`, preserving the
 same geometry and lifecycle. The resulting stone pullback is therefore a
 server-authored contrast rather than a new client-side model.
+
+M145 adds no public API. It preserves the M142 normal-piston treatment while
+expanding the payload to two distinct block states. The distinct middle and
+terminal transitions keep chain displacement observable through the existing
+Packet53/Packet51 world cache instead of inventing per-block identities.

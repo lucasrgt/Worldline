@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.133.0 - M145 Two-Block Piston
+
+Status: GO for one official two-block piston chain.
+
+- Built a normal piston with distinct stone/cobblestone payload cells.
+- Observed all three exact payload transitions without identity ambiguity.
+- Required the five-cell raised digest and fresh-session final states.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M145 semantic SHA-256 is
+`b086d950c86277e5c21762909ed03f11e3a5bd753aa2b5b0aa898edaf9adb88f`.
+
 ## 1.132.0 - M144 Sticky Piston Pull
 
 Status: GO for one official sticky-piston pullback.
