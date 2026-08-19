@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.97.0 - M109 Cell Size Floor (GO)**.
+Current official milestone: **Worldline v1.98.0 - M110 Cell Size Ceiling (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -560,6 +560,10 @@ retain sixteen queue/renderer calls and no fallback or rebuild. See
 M109 pairs raw cell-size zero with the explicit supported floor one. Both
 resolve to effective size one and reproduce sixteen single-member direct
 fallbacks with no cached pages. See `docs/M109_CELL_SIZE_FLOOR.md`.
+
+M110 pairs raw cell-size thirty-three with the explicit ceiling thirty-two.
+Both resolve to effective size thirty-two and reproduce one cached page holding
+all sixteen identities. See `docs/M110_CELL_SIZE_CEILING.md`.
 
 ## Verify
 

@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.98.0 - M110 Cell Size Ceiling
+
+Status: GO for the raw-thirty-three/explicit-thirty-two clamp comparison.
+
+- Ran two balanced same-plan fresh-process pairs with minimum2,
+  skip-individual false, pages enabled, unlimited cache/rebuild, and TTL100000.
+- Proved raw thirty-three and raw thirty-two both exposed effective size32.
+- Required every retained record in both arms to keep queue16/rendererCalls16,
+  flush2, pageCalls1, direct0, cache1, M74 render/list0/0, rebuild0,
+  immediate0, and eviction0.
+- Kept generic clamping, configuration quality and all timing directions
+  outside qualification.
+
+The frozen M110 semantic SHA-256 is
+`4061454ff65c9ef06366042094e79fc165c26e91d6f3af2fcd7f04638a180c0e`.
+
 ## 1.97.0 - M109 Cell Size Floor
 
 Status: GO for the raw-zero/explicit-one clamp comparison.

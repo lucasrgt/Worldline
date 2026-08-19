@@ -937,3 +937,9 @@ It pairs raw cell-size zero with explicit one under the same plan and proves
 the pinned lower clamp publishes effective size one. Both arms exercise
 sixteen distinct below-minimum cells and the identical direct-fallback path.
 Common/server code remains Aero-free.
+
+M110 adds no public API or product adapter behavior and leaves M74-M109 frozen.
+It pairs raw cell-size thirty-three with explicit thirty-two and proves the
+pinned upper clamp publishes effective size thirty-two. Both arms group all
+sixteen identities into the same one-page path. Common/server code remains
+Aero-free.

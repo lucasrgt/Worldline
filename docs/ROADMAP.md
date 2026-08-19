@@ -114,6 +114,7 @@ Passing an experiment does not silently promote its API.
 | v1.95.0 / M107 | Balanced paired skip-individual control | GO - managed pre-dispatch queue versus manual renderer queue under the same four pages |
 | v1.96.0 / M108 | Balanced paired cell-size control | GO - same aligned scene forms four size-two pages versus one size-eight page |
 | v1.97.0 / M109 | Cell-size lower-bound clamp control | GO - raw zero and explicit one converge on sixteen single-member direct cells |
+| v1.98.0 / M110 | Cell-size upper-bound clamp control | GO - raw thirty-three and explicit thirty-two converge on one cached page |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -125,13 +126,13 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.97.0 direction
+## Immediate post-v1.98.0 direction
 
-M109 pairs raw cell-size zero with the explicit supported floor one, proving
-both converge on effective size one and the same sixteen-direct structural
-path. Other invalid values, the upper clamp, implicit defaults, alignment,
-memory cost, visual equivalence, page-order independence, concurrency,
-merge/repacking, and uninstrumented cost remain outside scope. M71-M109 do not
-establish causal spike attribution.
+M110 pairs raw cell-size thirty-three with the explicit supported ceiling
+thirty-two, proving both converge on one effective32 page under the same scene.
+Other invalid values, implicit defaults, alignment, memory cost, visual
+equivalence, page-order independence, concurrency, merge/repacking, and
+uninstrumented cost remain outside scope. M71-M110 do not establish causal
+spike attribution.
 Generic synchronization, persistence, multiple clients, merging, shift clicks,
 and broad automation remain outside the stable contract.
