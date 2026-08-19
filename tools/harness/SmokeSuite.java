@@ -248,6 +248,7 @@ final class SmokeSuite {
         {"tools/smoke/CobbleCycle.java", "m222-cobble"},
         {"tools/smoke/DirtCycle.java", "m223-dirt"},
         {"tools/smoke/NetherrackCycle.java", "m224-netherrack"},
+        {"tools/smoke/CoalOreCycle.java", "m225-coal-ore"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

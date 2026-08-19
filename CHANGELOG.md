@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.213.0 - M225 Coal ore
+
+Status: GO for official coal-ore placement.
+
+- Placed coal ore item `16` on a raised stone support as `16:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M225 semantic SHA-256 is
+`2ff6ed07ba198e90c82b36fb04ced28cc6e6900e1ccca71d4ee74554803e53fd`.
+
 ## 1.212.0 - M224 Netherrack
 
 Status: GO for official Overworld netherrack placement.
