@@ -154,6 +154,7 @@ Passing an experiment does not silently promote its API.
 | v1.135.0 / M147 | Piston push limit | GO - matched alternating chains prove twelve blocks move and thirteen blocks are rejected |
 | v1.136.0 / M148 | Pig AI movement | GO - two peers apply the same official quantized horizontal movement to one shared pig identity |
 | v1.137.0 / M149 | Pig death | GO - two peers observe Packet38 status 3 and Packet29 destroy after one official diamond-sword Packet7 |
+| v1.138.0 / M150 | Pig pork drop | GO - adapter-owned identity reuses movement then death and shares Packet21 porkchop 319 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -165,7 +166,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.137.0 direction
+## Immediate post-v1.138.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
@@ -189,10 +190,11 @@ block displacement, M143 proves non-sticky retention, and M144 proves the exact
 sticky pullback contrast, M145 proves a fully observable two-block chain, and
 M146 proves official rejection of one immovable obsidian payload, and M147
 closes the exact twelve-block capacity versus thirteen-block rejection. The
-M148 adds the first server-authored living-entity movement transition, and M149
-closes that identity through official diamond-sword death. The next milestones
-should deepen entity drops, hostile AI or another uncovered vanilla system such
-as world generation, lighting, fluids and dimensions rather than returning to
-the already bounded piston matrix.
+M148 adds the first server-authored living-entity movement transition, M149
+closes that identity through official diamond-sword death, and M150 requires
+the adapter-owned movement-then-death path plus a shared raw porkchop drop.
+The next milestones should deepen hostile AI, other mob interactions or another
+uncovered vanilla system such as world generation, lighting, fluids and
+dimensions rather than returning to the already bounded piston matrix.
 M71-M110 remain frozen Aero laboratory evidence; no new Aero milestone is
 planned before the vanilla foundation is complete.

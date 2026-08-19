@@ -109,8 +109,8 @@ final class B173PlayChannel {
         require(pose != null, "play channel is not synchronized"); return inbound.awaitChunk(chunkX, chunkZ);
     }
 
-    void beginBreak(BlockPosition position) throws IOException { dig(position, 0); }
-    void finishBreak(BlockPosition position) throws IOException { dig(position, 2); }
+    void beginBreak(BlockPosition position) throws IOException { require(pose != null, "play channel is not synchronized"); B173Dig.write(output, position, 0); }
+    void finishBreak(BlockPosition position) throws IOException { require(pose != null, "play channel is not synchronized"); B173Dig.write(output, position, 2); }
 
     RemoteWorldView awaitBlock(BlockPosition position, BlockState expected) throws IOException {
         require(pose != null, "play channel is not synchronized");
@@ -121,6 +121,10 @@ final class B173PlayChannel {
         sustain(ticks); return inbound.snapshot(); }
 
     B173PlayInbound inbound() { require(pose != null, "play channel is not synchronized"); return inbound; } int dimension() { return inbound.dimension(); } int awaitDimension(int expected) throws IOException { return inbound.awaitDimension(expected); } int health(){return inbound.health();} int awaitHealth(int expected)throws IOException{return inbound.awaitHealth(expected);} worldline.api.RemoteRespawn respawn()throws IOException{require(pose!=null&&!inbound.windowActive()&&inbound.cursorObserved()&&inbound.cursor()==null&&inbound.health()<=0,"respawn requires synchronized dead personal state");long epoch=inbound.respawnEpoch();int before=inbound.dimension();B173RespawnPacket.write(output,before);output.flush();int after=inbound.awaitRespawn(epoch,0),health=inbound.awaitHealth(20);return new worldline.api.RemoteRespawn(before,after,0,health);} worldline.api.RemoteExplosion awaitExplosion()throws IOException{return inbound.awaitExplosion();} worldline.api.RemoteMobSpawn awaitMobSpawn(int type)throws IOException{return inbound.awaitMobSpawn(type);} worldline.api.RemoteMobMovement awaitMobMovement(int entity)throws IOException{return inbound.awaitMobMovement(entity);} void attackMob(int entity)throws IOException{require(pose!=null&&!inbound.windowActive()&&inbound.cursorObserved()&&inbound.cursor()==null,"mob attack requires synchronized play with the personal window and empty cursor");require(held.selectedId(276),"mob attack requires selected diamond sword");combat.attackMob(entity);} worldline.api.RemoteMobDeath awaitMobDeath(int entity)throws IOException{return inbound.awaitMobDeath(entity);}
+    void attackObservedMob() throws IOException { require(pose != null && !inbound.windowActive() && inbound.cursorObserved() && inbound.cursor() == null, "observed mob attack requires synchronized play"); require(held.selectedId(276), "observed mob attack requires selected diamond sword"); combat.attackObservedMob(); }
+    worldline.api.RemoteMobMovement awaitObservedMobMovement() throws IOException { return inbound.awaitObservedMobMovement(); }
+    worldline.api.RemoteMobDeath awaitObservedMobDeath() throws IOException { return inbound.awaitObservedMobDeath(); }
+    worldline.api.RemoteDroppedItem peekDroppedItem(worldline.api.RemoteItemStack expected) { return inbound.peekDroppedItem(expected); }
 
     void selectHeldSlot(int slot) throws IOException { require(pose != null, "play channel is not synchronized");
         held.select(slot); }
@@ -160,14 +164,6 @@ final class B173PlayChannel {
         output.writeDouble(x); output.writeDouble(feetY); output.writeDouble(clientY);
         output.writeDouble(z); output.writeFloat(yaw); output.writeFloat(pitch);
         output.writeBoolean(false); output.flush();
-    }
-
-    private void dig(BlockPosition position, int status) throws IOException {
-        require(pose != null, "play channel is not synchronized");
-        if (position == null || position.y() < 0 || position.y() >= 128)
-            throw new IllegalArgumentException("invalid dig position");
-        output.writeByte(14); output.writeByte(status); output.writeInt(position.x());
-        output.writeByte(position.y()); output.writeInt(position.z()); output.writeByte(1); output.flush();
     }
 
     private static void require(boolean condition, String message) { if (!condition) throw new IllegalStateException(message); }

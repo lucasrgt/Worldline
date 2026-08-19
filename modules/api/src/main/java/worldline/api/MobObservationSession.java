@@ -6,4 +6,8 @@ public interface MobObservationSession extends ExplosionSession {
     RemoteMobMovement awaitMobMovement(int entityId);
     void attackMob(int entityId);
     RemoteMobDeath awaitMobDeath(int entityId);
+    RemoteMobMovement awaitObservedMobMovement();
+    void attackObservedMob();
+    RemoteMobDeath awaitObservedMobDeath();
+    RemoteDroppedItem peekDroppedItem(RemoteItemStack expected);
 }

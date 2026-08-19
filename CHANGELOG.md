@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.138.0 - M150 Pig Pork Drop
+
+Status: GO for one official two-peer porkchop drop after adapter-owned death.
+
+- Added adapter-owned observed movement, Packet7 attack and death waits.
+- Routed Packet38/29 through one shared entity-event reader.
+- Required a prior horizontal AI transition and at least one Packet21 pork `319`.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M150 semantic SHA-256 is
+`90cf54607ffd52b403765121c14d821e80e9996702f158c29efe63aee15b0d33`.
+
 ## 1.137.0 - M149 Pig Death
 
 Status: GO for one official two-peer pig death transition.

@@ -1186,3 +1186,8 @@ M149 extends `MobObservationSession` with `attackMob` and immutable
 3 and Packet29 destroy for an explicitly observed Packet24 identity, recording
 whether status 2 arrived first. Packet7 is the official diamond-sword cause;
 randomized porkchop drops stay outside the frozen hash.
+
+M150 extracts Packet38/29 to `B173EntityEvents` and mob waits to
+`B173PlayWaits`. The last Packet24 identity is adapter-owned: observed
+movement, Packet7 and death no longer accept a caller entity id. The pork
+oracle is the first shared Packet21 stack `319:1:0` after a bounded retry.

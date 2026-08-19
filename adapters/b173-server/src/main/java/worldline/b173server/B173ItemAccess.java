@@ -152,6 +152,10 @@ final class B173ItemAccess {
     static worldline.api.RemoteMobMovement awaitMobMovement(B173PlayChannel channel,int entity){try{return channel.awaitMobMovement(entity);}catch(IOException error){throw new IllegalStateException("mob movement receive failed",error);}}
     static void attackMob(B173PlayChannel channel,int entity){try{channel.attackMob(entity);}catch(IOException error){throw new IllegalStateException("mob attack failed",error);}}
     static worldline.api.RemoteMobDeath awaitMobDeath(B173PlayChannel channel,int entity){try{return channel.awaitMobDeath(entity);}catch(IOException error){throw new IllegalStateException("mob death receive failed",error);}}
+    static worldline.api.RemoteMobMovement awaitObservedMobMovement(B173PlayChannel channel){try{return channel.awaitObservedMobMovement();}catch(IOException error){throw new IllegalStateException("observed mob movement receive failed",error);}}
+    static void attackObservedMob(B173PlayChannel channel){try{channel.attackObservedMob();}catch(IOException error){throw new IllegalStateException("observed mob attack failed",error);}}
+    static worldline.api.RemoteMobDeath awaitObservedMobDeath(B173PlayChannel channel){try{return channel.awaitObservedMobDeath();}catch(IOException error){throw new IllegalStateException("observed mob death receive failed",error);}}
+    static RemoteDroppedItem peekDroppedItem(B173PlayChannel channel, RemoteItemStack expected){return channel.peekDroppedItem(expected);}
 
     static RemoteDroppedItem awaitDroppedItem(B173PlayChannel channel, RemoteItemStack expected) {
         try { return channel.inbound().awaitDroppedItem(expected); }

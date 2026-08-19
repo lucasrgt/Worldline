@@ -23,4 +23,5 @@ final class B173CombatChannel {
     void attackMob(int target) throws IOException {
         if (target < 0 || target == localId) throw new IllegalArgumentException("invalid mob target");
         output.writeByte(7); output.writeInt(localId); output.writeInt(target); output.writeByte(1); output.flush(); }
+    void attackObservedMob() throws IOException { attackMob(inbound.mobs().observed()); }
 }
