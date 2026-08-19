@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.116.0 - M128 Cross-Chunk Iron Door (GO)**.
+Current official milestone: **Worldline v1.117.0 - M129 Cross-Chunk Iron Door Recovery (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -654,6 +654,10 @@ original unpowered snapshots. See
 M128 composes a lever in chunk 1 with a two-block iron door in chunk 0. One
 activation produces the exact lever delta and both official door-half deltas.
 See `docs/M128_CROSS_CHUNK_IRON_DOOR.md`.
+
+M129 closes the same door through a fresh client and proves exact inverse
+deltas plus state-for-state recovery of both complete chunks. See
+`docs/M129_CROSS_CHUNK_IRON_DOOR_RECOVERY.md`.
 
 ## Verify
 

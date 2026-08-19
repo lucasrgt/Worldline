@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.117.0 - M129 Cross-Chunk Iron Door Recovery
+
+Status: GO for exact recovery of the cross-chunk multiblock consumer.
+
+- Qualified the open door and powered lever through a fresh client.
+- Observed exact lever `9→1`, lower-door `4→0` and upper-door `12→8` metadata.
+- Proved inverse `2 + 1` deltas and zero residual states against baseline.
+
+The frozen M129 semantic SHA-256 is
+`5a5478fd4aea68c69ed892984bc98353e208065f354857a047bac7f38c00cfac`.
+
 ## 1.116.0 - M128 Cross-Chunk Iron Door
 
 Status: GO for one cross-chunk redstone source driving a multiblock consumer.

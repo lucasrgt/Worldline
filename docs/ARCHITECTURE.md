@@ -1060,3 +1060,8 @@ M128 adds no public API or consumer model. It reuses the edge-column placement
 boundary but places an official two-block iron door above the west support and
 its lever on the east face. Separate complete snapshots retain the official
 server's exact two-door-plus-one-lever state partition.
+
+M129 adds no public API. It qualifies M128's open state through a fresh witness,
+then compares an independent final reader against both open and original closed
+snapshots. Exact inverse deltas and empty residuals remain server-authored
+observations rather than a Worldline consumer simulation.
