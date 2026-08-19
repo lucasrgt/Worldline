@@ -1117,3 +1117,9 @@ payload and atomically projected into the same remote chunk cache used by
 Packet52/53. The Beta packet carries no later-version motion vector. Blast
 randomness remains server-authored; Worldline freezes structural containment
 and persisted state rather than a variable ray result.
+
+M138 adds no public API. It reuses the accepted block placement, dig, scheduled
+heartbeat, Packet53 cache update and fresh Packet51 persistence boundaries.
+Because the lava schedule permits unrelated world random ticks during the same
+window, the immutable delta oracle is explicitly limited to the declared
+source and target cells instead of overclaiming whole-chunk causality.

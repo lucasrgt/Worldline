@@ -4,6 +4,20 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.126.0 - M138 Horizontal Lava
+
+Status: GO for one bounded official scheduled lava transition.
+
+- Built a raised two-cell stone trench with still source `11:0` and dirt gate.
+- Removed the gate through Packet14 and observed exact Packet53 air.
+- Waited through the slower vanilla schedule and observed target `11:2` while
+  retaining source `11:0`.
+- Scoped the causal hash to source/target so unrelated random ticks are not
+  falsely attributed, then proved both states through a fresh client.
+
+The frozen M138 semantic SHA-256 is
+`f1d5832ac76c05b0cc786b294c8f29126f9d0a668c6326ca2ecae17b2824a760`.
+
 ## 1.125.0 - M137 TNT Explosion
 
 Status: GO for one official isolated TNT blast and Packet60 observation.

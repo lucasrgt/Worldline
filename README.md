@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.125.0 - M137 TNT Explosion (GO)**.
+Current official milestone: **Worldline v1.126.0 - M138 Horizontal Lava (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

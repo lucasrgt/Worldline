@@ -142,6 +142,7 @@ Passing an experiment does not silently promote its API.
 | v1.123.0 / M135 | Player death and respawn | GO - official void damage reaches a nonpositive Packet8 state, then a signed Packet9 request restores dimension 0, health 20 and a loaded spawn chunk |
 | v1.124.0 / M136 | Nether death respawn | GO - a signed Packet9 `-1` request returns a dead Nether player to dimension 0 and replaces the old cache with lit Overworld chunks |
 | v1.125.0 / M137 | TNT explosion | GO - an official fuse emits Beta-specific Packet60, removes a constructed support in the live cache and persists the blast |
+| v1.126.0 / M138 | Horizontal lava | GO - opening one raised stone-trench cell schedules exact still-lava target `11:2` with one scoped persistent delta |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -153,7 +154,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.125.0 direction
+## Immediate post-v1.126.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
@@ -168,7 +169,8 @@ recovery, M128's multiblock consumer, M129's exact consumer recovery and M130's
 first official Nether session, M131's typed dual-dimension boundary, M132's
 official portal activation, M133's live traversal, M134's complete roundtrip
 M135's same-dimension death/respawn lifecycle and M136's Nether-to-Overworld
-respawn and M137's first full explosion boundary into additional physics/worldgen,
+respawn, M137's first full explosion boundary and M138's scheduled lava into
+additional physics/worldgen,
 entity AI, dimensions
 and persistence/multiplayer composition.
 M71-M110 remain frozen Aero laboratory evidence; no new Aero milestone is
