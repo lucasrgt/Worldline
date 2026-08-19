@@ -1191,3 +1191,7 @@ M150 extracts Packet38/29 to `B173EntityEvents` and mob waits to
 `B173PlayWaits`. The last Packet24 identity is adapter-owned: observed
 movement, Packet7 and death no longer accept a caller entity id. The pork
 oracle is the first shared Packet21 stack `319:1:0` after a bounded retry.
+
+M151 adds no public API. It composes held-item Packet15 flint and steel with
+the Packet53 cache and a fresh Packet51 login to prove netherrack fire `51:0`
+is not a random-tick extinguish candidate.

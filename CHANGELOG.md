@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.139.0 - M151 Netherrack Fire
+
+Status: GO for one official netherrack flame that survives a live hold and restart.
+
+- Ignited air above netherrack `87:0` with flint and steel Packet15.
+- Held fire `51:0` for 40 ticks on the live cache.
+- Reloaded the same netherrack/fire pair after a clean save.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M151 semantic SHA-256 is
+`26bb6ad826b35c24a64688c8cc4ded9c503948812eb0c8b6007301c10f10f355`.
+
 ## 1.138.0 - M150 Pig Pork Drop
 
 Status: GO for one official two-peer porkchop drop after adapter-owned death.
