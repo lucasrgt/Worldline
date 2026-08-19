@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.114.0 - M126 Cross-Chunk Redstone
+
+Status: GO for one lever-to-wire signal across a chunk seam.
+
+- Placed lever `(16,64,3)` and wire `(15,65,3)` in adjacent chunks.
+- Proved one Packet15 activation changes lever metadata `1` to `9` and wire
+  power `0` to `15`.
+- Froze exactly one state delta in each complete post-activation chunk snapshot.
+
+The frozen M126 semantic SHA-256 is
+`1464edc1c01b62563d3608f6b60b9ba6ee30470dbf16e2111ac2c2cd59e880e5`.
+
 ## 1.113.0 - M125 Cross-Chunk Water
 
 Status: GO for one bounded fluid transition across a chunk seam.

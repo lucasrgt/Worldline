@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.113.0 - M125 Cross-Chunk Water (GO)**.
+Current official milestone: **Worldline v1.114.0 - M126 Cross-Chunk Redstone (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -640,6 +640,11 @@ both complete block-light planes recover byte-for-byte to their baselines. See
 M125 opens a bounded trench from source water at global `x=15` into chunk 1.
 The source chunk remains unchanged while exactly one neighbor state becomes
 water `9:1`. See `docs/M125_CROSS_CHUNK_WATER.md`.
+
+M126 activates a lever in chunk 1 while its attached support and redstone wire
+remain in chunk 0. The official server changes the lever from metadata `1` to
+`9` and the cross-seam wire from power `0` to `15`. See
+`docs/M126_CROSS_CHUNK_REDSTONE.md`.
 
 ## Verify
 

@@ -1045,3 +1045,8 @@ M125 adds no public API or fluid evaluator. A constructor builds the same
 bounded source/gate topology as M120 but places source and destination on
 opposite sides of a chunk seam. Separate treatment and reader sessions prove
 the official scheduler mutates only the neighboring chunk target.
+
+M126 adds no public API or redstone evaluator. It places the lever block in the
+east chunk and its attached support and wire in the west chunk, then partitions
+the fresh post-activation delta by chunk. Power computation remains entirely
+inside the official server.
