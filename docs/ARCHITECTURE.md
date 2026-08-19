@@ -1003,3 +1003,9 @@ held-item boundary to create both halves of an official iron door, while the
 lever activation boundary supplies its power transition. Worldline records the
 lever and both door metadata changes only after Packet53 and a fresh Packet51;
 consumer logic remains entirely inside the official server.
+
+M119 adds no public API or physics implementation. It composes official sand
+placement, Packet14 support removal, Packet53 cache replacement, bounded
+heartbeats and a fresh Packet51. The complete-chunk oracle proves only the
+source/destination states of one settled fall; the transient entity remains an
+official-server mechanism rather than a Worldline simulation.

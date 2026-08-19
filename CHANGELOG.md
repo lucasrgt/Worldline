@@ -4,6 +4,20 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.107.0 - M119 Falling Sand
+
+Status: GO for one server-authored block-gravity transition.
+
+- Stabilized sand `12:0` above a stone support and removed that support through
+  the qualified Packet14 boundary.
+- Required transient lower air, then exact lower sand and upper air through
+  live Packet53 state and a fresh Packet51.
+- Froze exactly two full-chunk changes while keeping generic gravity, falling
+  entities, long falls, gravel and collision behavior outside scope.
+
+The frozen M119 semantic SHA-256 is
+`ac00ec1900fdfc0489c6e7d4e9621c916411505d522df3c1fc9f3c53a78eb656`.
+
 ## 1.106.0 - M118 Redstone Iron Door
 
 Status: GO for one server-authored powered-consumer transition.

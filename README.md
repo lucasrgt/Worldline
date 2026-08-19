@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.106.0 - M118 Redstone Iron Door (GO)**.
+Current official milestone: **Worldline v1.107.0 - M119 Falling Sand (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -607,6 +607,10 @@ M118 adds the first powered consumer. Item 330 creates the two-block iron door,
 and the adjacent lever changes its lower and upper metadata from `0/8` to
 `4/12`; exactly those halves and the lever differ. See
 `docs/M118_REDSTONE_IRON_DOOR.md`.
+
+M119 adds the first block-gravity outcome. Removing one stone support beneath
+sand moves `12:0` down exactly one cell; the live cache, fresh Packet51 and
+two-state chunk delta agree. See `docs/M119_FALLING_SAND.md`.
 
 ## Verify
 
