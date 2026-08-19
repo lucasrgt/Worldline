@@ -4,6 +4,20 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.91.0 - M103 Pages-Disabled Immediate Direct
+
+Status: GO for the exact explicit pages-disabled control.
+
+- Froze literal pages=false with cache1, rebuild sentinel -1, and TTL100000.
+- Added a primitive sidecar counter on the exact immediate `drawDirect`
+  overload, avoiding the later empty-flush reset of public cell counters.
+- Proved immediateDirect16 and M74 renderer/list16/16 in every one of
+  4021/3673 records while queued/page/rebuild/cache/eviction stayed zero.
+- Kept timing values dynamic and made no relative-performance claim.
+
+The frozen M103 semantic SHA-256 is
+`7ebb83eada0eccda5dbb38d2610d92b60abe893d2483212710eb463e0aa285c6`.
+
 ## 1.90.0 - M102 Unlimited-Rebuild Sentinel
 
 Status: GO for literal negative-one unlimited rebuilding under cache1.

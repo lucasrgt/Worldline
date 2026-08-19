@@ -891,3 +891,9 @@ M102 adds no public API or product adapter behavior and leaves M74-M101 frozen.
 It passes literal negative one to the same cache1 fixture; the pinned negative
 predicate removes the rebuild ceiling, so all four page keys compile and evict
 while direct fallback remains zero. Common/server code remains Aero-free.
+
+M103 adds no public API or product adapter behavior and leaves M74-M102 frozen.
+It disables cell pages and adds client-only observation of the exact immediate
+direct overload. This cross-checks sixteen direct calls against M74 renders
+even though subsequent empty flushes reset the public cell counters to zero.
+Common/server code remains Aero-free.

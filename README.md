@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.90.0 - M102 Unlimited-Rebuild Sentinel (GO)**.
+Current official milestone: **Worldline v1.91.0 - M103 Pages-Disabled Immediate Direct (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -525,6 +525,11 @@ M102 passes the literal negative-one rebuild sentinel and proves the pinned
 unlimited gate: all four page keys rebuild, direct fallback stays zero, and
 capacity evictions advance by four per retained record. See
 `docs/M102_UNLIMITED_REBUILD_SENTINEL.md`.
+
+M103 disables cell pages explicitly and proves every queue entry draws through
+the immediate direct overload. A smoke-owned counter and the M74 census expose
+the work that later empty flushes erase from public cell counters. See
+`docs/M103_PAGES_DISABLED_IMMEDIATE_DIRECT.md`.
 
 ## Verify
 
