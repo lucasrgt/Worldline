@@ -4,6 +4,19 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.110.0 - M122 Fixed-Seed Region Lighting
+
+Status: GO for exact block-light and sky-light planes across nine chunks.
+
+- Reused M121's 200-heartbeat, save, restart and fresh Packet51 lifecycle.
+- Froze 294,912 exact nibbles and sixteen histogram bins independently for
+  each vanilla light plane across chunks `(-1,-1)` through `(1,1)`.
+- Applied no normalization and kept causal lighting and arbitrary regions
+  outside the claim.
+
+The frozen M122 semantic SHA-256 is
+`55f946b28a62caf43a7b02b027f13747f5662e315fbf0c8e70f9cca77a189192`.
+
 ## 1.109.0 - M121 Fixed-Seed Region
 
 Status: GO for one exact nine-chunk vanilla surface and solid-seam census.

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.109.0 - M121 Fixed-Seed Region (GO)**.
+Current official milestone: **Worldline v1.110.0 - M122 Fixed-Seed Region Lighting (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -622,6 +622,11 @@ restart. Two fresh replicas match the aggregate solid count, exact 2,304-column
 surface and solid occupancy across every internal chunk seam. Interior masks,
 IDs and metadata remain explicit diagnostics rather than a false determinism
 claim. See `docs/M121_FIXED_SEED_REGION.md`.
+
+M122 samples every block-light and sky-light nibble across the same nine chunks
+after clean restart. Two fresh replicas match both 294,912-sample plane hashes
+and all histogram bins without normalization. See
+`docs/M122_FIXED_SEED_REGION_LIGHTING.md`.
 
 ## Verify
 

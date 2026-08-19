@@ -1023,3 +1023,9 @@ pairs remain authoritative. Interior position masks, IDs and metadata are
 retained as diagnostic evidence because equal heartbeat counts do not make
 official scheduled/random-tick outcomes deterministic across fresh process
 replicas.
+
+M122 adds no public API or light engine. It traverses the already-published
+block-light and sky-light accessors across M121's nine complete chunks after
+the same save/restart lifecycle. The two planes are hashed independently with
+no normalization and retain full sixteen-value histograms. All lighting
+generation and propagation remains authoritative inside the official server.
