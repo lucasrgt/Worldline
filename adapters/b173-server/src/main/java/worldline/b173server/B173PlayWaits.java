@@ -45,4 +45,8 @@ final class B173PlayWaits {
     worldline.api.RemoteObjectSpawn object(int type) throws IOException {
         return until(() -> inbound.objects().take(type), "expected object spawn absent before deadline");
     }
+
+    worldline.api.RemoteBedUse bed() throws IOException {
+        return until(() -> inbound.beds().takeSleep(), "expected Packet17 sleep absent before deadline");
+    }
 }

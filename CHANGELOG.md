@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.146.0 - M158 Bed
+
+Status: GO for official bed placement, daytime refusal, and SMP occupy/skip.
+
+- Placed bed item `355` as foot `26:0` and head `26:8`.
+- Daytime empty-hand use emitted `You can only sleep at night`.
+- After `time set 18000`, Packet17 occupied the head `26:12` and SMP skipped to morning.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M158 semantic SHA-256 is
+`ab95c0893977d3774ddf9672b77063db206c52479e9645e917f6f0d42d49f2f0`.
+
 ## 1.145.0 - M157 Bow Arrow
 
 Status: GO for one official Packet23 arrow spawn.

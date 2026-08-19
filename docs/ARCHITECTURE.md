@@ -1217,3 +1217,7 @@ restart.
 
 M157 reuses air-use Packet15 and the Packet23 tracker. A bow with arrows emits
 type `60` whose thrower is the shooter entity id.
+
+M158 adds `RemoteBedUse` and a Packet17/70 tracker. Daytime bed use is chat
+refusal; night occupy is Packet17 at the head cell. SMP with monsters off
+skips night and clears the occupied bit. Packet70 reason 0 is not this gate.

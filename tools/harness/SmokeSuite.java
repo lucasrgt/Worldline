@@ -181,6 +181,7 @@ final class SmokeSuite {
         {"tools/smoke/MinecartSpawnCycle.java", "m155-minecart-spawn"},
         {"tools/smoke/FarmlandHydrationCycle.java", "m156-farmland-hydration"},
         {"tools/smoke/BowArrowCycle.java", "m157-bow-arrow"},
+        {"tools/smoke/BedCycle.java", "m158-bed"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

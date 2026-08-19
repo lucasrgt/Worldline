@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m154 = load(root, "smokes/m154-boat-spawn/smoke.properties");
         Properties m155 = load(root, "smokes/m155-minecart-spawn/smoke.properties");
         Properties m156 = load(root, "smokes/m156-farmland-hydration/smoke.properties");
         Properties m157 = load(root, "smokes/m157-bow-arrow/smoke.properties");
-        match(release, "version", "1.145.0");
-        match(release, "milestone", "m157-bow-arrow");
-        same(release, "m154.signature", m154, "expected.signature");
-        same(release, "server.sha256", m154, "server.jar.sha256");
+        Properties m158 = load(root, "smokes/m158-bed/smoke.properties");
+        match(release, "version", "1.146.0");
+        match(release, "milestone", "m158-bed");
         same(release, "m155.signature", m155, "expected.signature");
         same(release, "server.sha256", m155, "server.jar.sha256");
         same(release, "m156.signature", m156, "expected.signature");
         same(release, "server.sha256", m156, "server.jar.sha256");
         same(release, "m157.signature", m157, "expected.signature");
         same(release, "server.sha256", m157, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M154_BOAT_SPAWN.md", "docs/M154_CYCLE.md",
-                "smokes/m154-boat-spawn/MAP.md", "docs/M155_MINECART_SPAWN.md", "docs/M155_CYCLE.md",
+        same(release, "m158.signature", m158, "expected.signature");
+        same(release, "server.sha256", m158, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M155_MINECART_SPAWN.md", "docs/M155_CYCLE.md",
                 "smokes/m155-minecart-spawn/MAP.md", "docs/M156_FARMLAND_HYDRATION.md", "docs/M156_CYCLE.md",
                 "smokes/m156-farmland-hydration/MAP.md", "docs/M157_BOW_ARROW.md", "docs/M157_CYCLE.md",
-                "smokes/m157-bow-arrow/MAP.md"))
+                "smokes/m157-bow-arrow/MAP.md", "docs/M158_BED.md", "docs/M158_CYCLE.md",
+                "smokes/m158-bed/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.145.0 M157 Bow-arrow GO");
+        System.out.println("  release: Worldline v1.146.0 M158 Bed GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
