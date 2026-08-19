@@ -4,6 +4,20 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.131.0 - M143 Piston Retraction
+
+Status: GO for one official normal-piston retraction.
+
+- Rebuilt and extended the exact M142 fixture, then qualified it through a
+  clean save and fresh client before treatment.
+- Deactivated the lever and observed base `33:12→33:4` plus head `34:4→air`.
+- Proved the non-sticky invariant that the displaced stone remains in its new
+  cell while exactly three raised fixture states change.
+- Repeated the complete three-session lifecycle in two official server JVMs.
+
+The frozen M143 semantic SHA-256 is
+`ed36c9824aa5c765b651fa5a53fa268e5427568f47fabaeb082ec26f7639e2e1`.
+
 ## 1.130.0 - M142 Piston Extension
 
 Status: GO for one official lever-powered piston displacement.

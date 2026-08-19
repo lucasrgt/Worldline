@@ -147,6 +147,7 @@ Passing an experiment does not silently promote its API.
 | v1.128.0 / M140 | Bonemeal tree growth | GO - Packet15 bonemeal changes oak sapling root `6:0→17:0` and persists a bounded-positive trunk and canopy |
 | v1.129.0 / M141 | Pig spawner observation | GO - two peers correlate one official default-spawner pig identity through strictly decoded Packet24 and metadata |
 | v1.130.0 / M142 | Lever-powered piston extension | GO - one official piston event moves exact stone, creates head `34:4` and persists a four-cell raised delta |
+| v1.131.0 / M143 | Normal-piston retraction | GO - fresh-session deactivation retracts base/head while exact displaced stone remains invariant |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -158,7 +159,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.130.0 direction
+## Immediate post-v1.131.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
@@ -178,7 +179,7 @@ first fluid-material reaction and M140's first player-triggered vegetation
 generation and M141's first living-entity identity into movement, entity AI,
 additional physics/worldgen and dimensions
 and persistence/multiplayer composition. M142 adds the first redstone-driven
-block displacement; the next piston boundary should prove exact retraction and
-recovery before expanding to sticky or multi-block mechanics.
+block displacement, and M143 proves its exact non-sticky retraction. Sticky
+pulling is now the next useful contrast before expanding to multi-block limits.
 M71-M110 remain frozen Aero laboratory evidence; no new Aero milestone is
 planned before the vanilla foundation is complete.

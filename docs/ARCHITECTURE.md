@@ -1147,3 +1147,8 @@ placement, lever activation, heartbeat, incremental Packet53 cache and fresh
 Packet51 persistence boundaries around the official piston block event. The
 oracle freezes only the raised fixture volume; generated water below the tower
 is outside the causal attribution boundary.
+
+M143 adds no public API. It introduces an independent fresh-session precondition
+between extension and retraction, then reuses the same server-authored cache and
+persistence boundaries. Normal-piston stone retention is an observed invariant,
+not generalized to sticky pistons or other payloads.

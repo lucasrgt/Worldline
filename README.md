@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.130.0 - M142 Piston Extension (GO)**.
+Current official milestone: **Worldline v1.131.0 - M143 Piston Retraction (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
