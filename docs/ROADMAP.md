@@ -230,6 +230,7 @@ Passing an experiment does not silently promote its API.
 | v1.211.0 / M223 | Dirt | GO - dirt 3:0 persists |
 | v1.212.0 / M224 | Netherrack | GO - Overworld netherrack 87:0 persists |
 | v1.213.0 / M225 | Coal ore | GO - coal ore 16:0 persists |
+| v1.214.0 / M226 | Iron ore | GO - iron ore 15:0 persists |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -241,7 +242,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.213.0 direction
+## Immediate post-v1.214.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
@@ -279,6 +280,6 @@ floor redstone torch `76:5`. M183 places north-south rail `66:0`. M184 places un
 `27:0`. M185 places unpowered detector rail `28:0`. M186 places east oak stairs
 `53:0`. M187 places east cobble stairs `67:0`. M188 places single stone slab `44:0`. M189 places bookshelf `47:0`. M190 places jack-o-lantern `91:1`. M191 places glowstone `89:0`. M192 places soul sand `88:0`. M193 places ice `79:0`. M194 places snow block `80:0`. M195 places cobweb `30:0`. M196 places glass `20:0`. M197 places white wool `35:0`. M198 plants yellow flower `37:0` on dirt. M199 plants rose `38:0` on dirt. M200 places brown mushroom `39:0` in a
 dark pocket. M201 places red mushroom `40:0` in a dark pocket. M202 plants oak sapling
-`6:0` on dirt. M203 places snow layer `78:0`. M204 places clay `82:0`. M205 places brick `45:0`. M206 places sponge `19:0`. M207 places sandstone `24:0`. M208 places oak log `17:0`. M209 places oak leaves `18:8` beside a log. M210 places oak planks `5:0`. M211 places double stone slab `43:0`. M212 places gold block `41:0`. M213 places iron block `42:0`. M214 places diamond block `57:0`. M215 places lapis block `22:0`. M216 places obsidian `49:0`. M217 places mossy cobble `48:0`. M218 places supported gravel `13:0`. M219 places unprimed TNT `46:0`. M220 places workbench `58:0`. M221 places idle furnace `61:2`. M222 places cobblestone `4:0`. M223 places dirt `3:0`. M224 places Overworld netherrack `87:0`. M225 places coal ore `16:0`.
+`6:0` on dirt. M203 places snow layer `78:0`. M204 places clay `82:0`. M205 places brick `45:0`. M206 places sponge `19:0`. M207 places sandstone `24:0`. M208 places oak log `17:0`. M209 places oak leaves `18:8` beside a log. M210 places oak planks `5:0`. M211 places double stone slab `43:0`. M212 places gold block `41:0`. M213 places iron block `42:0`. M214 places diamond block `57:0`. M215 places lapis block `22:0`. M216 places obsidian `49:0`. M217 places mossy cobble `48:0`. M218 places supported gravel `13:0`. M219 places unprimed TNT `46:0`. M220 places workbench `58:0`. M221 places idle furnace `61:2`. M222 places cobblestone `4:0`. M223 places dirt `3:0`. M224 places Overworld netherrack `87:0`. M225 places coal ore `16:0`. M226 places iron ore `15:0`.
 M71-M110 remain frozen Aero laboratory evidence; no new Aero milestone is
 planned before the vanilla foundation is complete.

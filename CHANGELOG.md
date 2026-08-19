@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.214.0 - M226 Iron ore
+
+Status: GO for official iron-ore placement.
+
+- Placed iron ore item `15` on a raised stone support as `15:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M226 semantic SHA-256 is
+`a0e1b3a34325710f72942c88c73bd15a8cad197fb7b04c8bbfc5f867b97389b7`.
+
 ## 1.213.0 - M225 Coal ore
 
 Status: GO for official coal-ore placement.

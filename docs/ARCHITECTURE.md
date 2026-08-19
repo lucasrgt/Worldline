@@ -1395,3 +1395,5 @@ M223 adds no public API. Dirt item `3` places `3:0` and persists.
 M224 adds no public API. Overworld netherrack item `87` places `87:0` and persists.
 
 M225 adds no public API. Coal ore item `16` places `16:0` and persists.
+
+M226 adds no public API. Iron ore item `15` places `15:0` and persists.
