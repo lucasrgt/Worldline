@@ -4,6 +4,20 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.105.0 - M117 Redstone Wire Depower
+
+Status: GO for one server-authored lever-to-wire recovery result.
+
+- Rebuilt M116's exact official lever/wire fixture and required the powered
+  `69:9` / `55:15` precondition before treatment.
+- Toggled the same lever off and proved Packet53 plus a fresh Packet51 expose
+  `69:1` / `55:0` after ten bounded signal ticks.
+- Froze exactly the two reverse full-chunk state deltas while keeping generic
+  topology, attenuation, consumers and tick-exact ordering outside scope.
+
+The frozen M117 semantic SHA-256 is
+`87c06977c34465cb580ba9a857102c62e6953ede7cfe339c2730fc9673a699fe`.
+
 ## 1.104.0 - M116 Redstone Wire Power
 
 Status: GO for one server-authored lever-to-wire propagation result.

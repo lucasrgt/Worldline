@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.104.0 - M116 Redstone Wire Power (GO)**.
+Current official milestone: **Worldline v1.105.0 - M117 Redstone Wire Depower (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -597,6 +597,11 @@ M116 adds generic held-item-on-block use for the positive protocol item range
 and places dust 331 as wire 55. Activating the adjacent lever changes the wire
 from power zero to fifteen; exactly the lever and wire states differ in the
 live and fresh-session world views. See `docs/M116_REDSTONE_WIRE_POWER.md`.
+
+M117 closes that first redstone cycle. From the exact powered lever/wire pair,
+a second official activation returns both states to their off/zero values;
+Packet53, fresh Packet51 and the two-state chunk delta all agree. See
+`docs/M117_REDSTONE_WIRE_DEPOWER.md`.
 
 ## Verify
 

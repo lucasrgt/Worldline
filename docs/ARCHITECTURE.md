@@ -991,3 +991,9 @@ accepts positive signed-short item IDs but still derives the entire stack from
 window zero and refuses active-container/cursor drift. Redstone simulation
 remains wholly server-side: Worldline observes dust placement, lever state and
 wire strength only through Packet53 and a fresh Packet51.
+
+M117 adds no public API. It composes the same activation twice around a frozen
+powered precondition and observes the official wire returning from strength 15
+to zero. The complete-chunk comparison admits only the lever and wire cells,
+and a fresh Packet51 must retain both off states. Worldline still implements no
+redstone evaluator, scheduler or topology model.
