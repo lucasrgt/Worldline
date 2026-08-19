@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.217.0 - M229 Redstone ore
+
+Status: GO for official unlit redstone-ore placement.
+
+- Placed redstone ore item `73` on a raised stone support as `73:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M229 semantic SHA-256 is
+`7d3985f4b7402dfe18498e350a010e0aa42df1a87bbb12ac06d7ff9bc4803504`.
+
 ## 1.216.0 - M228 Diamond ore
 
 Status: GO for official diamond-ore placement.

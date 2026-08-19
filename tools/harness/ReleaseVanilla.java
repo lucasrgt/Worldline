@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m225 = load(root, "smokes/m225-coal-ore/smoke.properties");
         Properties m226 = load(root, "smokes/m226-iron-ore/smoke.properties");
         Properties m227 = load(root, "smokes/m227-gold-ore/smoke.properties");
         Properties m228 = load(root, "smokes/m228-diamond-ore/smoke.properties");
-        match(release, "version", "1.216.0");
-        match(release, "milestone", "m228-diamond-ore");
-        same(release, "m225.signature", m225, "expected.signature");
-        same(release, "server.sha256", m225, "server.jar.sha256");
+        Properties m229 = load(root, "smokes/m229-redstone-ore/smoke.properties");
+        match(release, "version", "1.217.0");
+        match(release, "milestone", "m229-redstone-ore");
         same(release, "m226.signature", m226, "expected.signature");
         same(release, "server.sha256", m226, "server.jar.sha256");
         same(release, "m227.signature", m227, "expected.signature");
         same(release, "server.sha256", m227, "server.jar.sha256");
         same(release, "m228.signature", m228, "expected.signature");
         same(release, "server.sha256", m228, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M225_COAL_ORE.md", "docs/M225_CYCLE.md",
-                "smokes/m225-coal-ore/MAP.md", "docs/M226_IRON_ORE.md", "docs/M226_CYCLE.md",
+        same(release, "m229.signature", m229, "expected.signature");
+        same(release, "server.sha256", m229, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M226_IRON_ORE.md", "docs/M226_CYCLE.md",
                 "smokes/m226-iron-ore/MAP.md", "docs/M227_GOLD_ORE.md", "docs/M227_CYCLE.md",
                 "smokes/m227-gold-ore/MAP.md", "docs/M228_DIAMOND_ORE.md", "docs/M228_CYCLE.md",
-                "smokes/m228-diamond-ore/MAP.md"))
+                "smokes/m228-diamond-ore/MAP.md", "docs/M229_REDSTONE_ORE.md", "docs/M229_CYCLE.md",
+                "smokes/m229-redstone-ore/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.216.0 M228 Diamond ore GO");
+        System.out.println("  release: Worldline v1.217.0 M229 Redstone ore GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
