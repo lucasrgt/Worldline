@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m199 = load(root, "smokes/m199-rose/smoke.properties");
         Properties m200 = load(root, "smokes/m200-brown-mushroom/smoke.properties");
         Properties m201 = load(root, "smokes/m201-red-mushroom/smoke.properties");
         Properties m202 = load(root, "smokes/m202-sapling/smoke.properties");
-        match(release, "version", "1.190.0");
-        match(release, "milestone", "m202-sapling");
-        same(release, "m199.signature", m199, "expected.signature");
-        same(release, "server.sha256", m199, "server.jar.sha256");
+        Properties m203 = load(root, "smokes/m203-snow-layer/smoke.properties");
+        match(release, "version", "1.191.0");
+        match(release, "milestone", "m203-snow-layer");
         same(release, "m200.signature", m200, "expected.signature");
         same(release, "server.sha256", m200, "server.jar.sha256");
         same(release, "m201.signature", m201, "expected.signature");
         same(release, "server.sha256", m201, "server.jar.sha256");
         same(release, "m202.signature", m202, "expected.signature");
         same(release, "server.sha256", m202, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M199_ROSE.md", "docs/M199_CYCLE.md",
-                "smokes/m199-rose/MAP.md", "docs/M200_BROWN_MUSHROOM.md", "docs/M200_CYCLE.md",
+        same(release, "m203.signature", m203, "expected.signature");
+        same(release, "server.sha256", m203, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M200_BROWN_MUSHROOM.md", "docs/M200_CYCLE.md",
                 "smokes/m200-brown-mushroom/MAP.md", "docs/M201_RED_MUSHROOM.md", "docs/M201_CYCLE.md",
                 "smokes/m201-red-mushroom/MAP.md", "docs/M202_SAPLING.md", "docs/M202_CYCLE.md",
-                "smokes/m202-sapling/MAP.md"))
+                "smokes/m202-sapling/MAP.md", "docs/M203_SNOW_LAYER.md", "docs/M203_CYCLE.md",
+                "smokes/m203-snow-layer/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.190.0 M202 Sapling GO");
+        System.out.println("  release: Worldline v1.191.0 M203 Snow layer GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

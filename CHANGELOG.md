@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.191.0 - M203 Snow layer
+
+Status: GO for official single snow-layer placement.
+
+- Placed snow layer item `78` on a raised stone support as `78:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M203 semantic SHA-256 is
+`23163bc78dd8ce876aff379a6292ad170fe0b74e5c26f2ee7177508222aa0178`.
+
 ## 1.190.0 - M202 Sapling
 
 Status: GO for official oak-sapling placement on dirt.

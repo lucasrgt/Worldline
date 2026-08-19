@@ -1347,3 +1347,5 @@ M201 adds no public API. Red mushroom `40` in a dark dirt pocket places
 
 M202 adds no public API. Oak sapling `6` on dirt `3` places `6:0` and
 persists.
+
+M203 adds no public API. Snow layer item `78` places `78:0` and persists.
