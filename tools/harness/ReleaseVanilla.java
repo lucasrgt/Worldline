@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m211 = load(root, "smokes/m211-double-slab/smoke.properties");
         Properties m212 = load(root, "smokes/m212-gold-block/smoke.properties");
         Properties m213 = load(root, "smokes/m213-iron-block/smoke.properties");
         Properties m214 = load(root, "smokes/m214-diamond-block/smoke.properties");
-        match(release, "version", "1.202.0");
-        match(release, "milestone", "m214-diamond-block");
-        same(release, "m211.signature", m211, "expected.signature");
-        same(release, "server.sha256", m211, "server.jar.sha256");
+        Properties m215 = load(root, "smokes/m215-lapis-block/smoke.properties");
+        match(release, "version", "1.203.0");
+        match(release, "milestone", "m215-lapis-block");
         same(release, "m212.signature", m212, "expected.signature");
         same(release, "server.sha256", m212, "server.jar.sha256");
         same(release, "m213.signature", m213, "expected.signature");
         same(release, "server.sha256", m213, "server.jar.sha256");
         same(release, "m214.signature", m214, "expected.signature");
         same(release, "server.sha256", m214, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M211_DOUBLE_SLAB.md", "docs/M211_CYCLE.md",
-                "smokes/m211-double-slab/MAP.md", "docs/M212_GOLD_BLOCK.md", "docs/M212_CYCLE.md",
+        same(release, "m215.signature", m215, "expected.signature");
+        same(release, "server.sha256", m215, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M212_GOLD_BLOCK.md", "docs/M212_CYCLE.md",
                 "smokes/m212-gold-block/MAP.md", "docs/M213_IRON_BLOCK.md", "docs/M213_CYCLE.md",
                 "smokes/m213-iron-block/MAP.md", "docs/M214_DIAMOND_BLOCK.md", "docs/M214_CYCLE.md",
-                "smokes/m214-diamond-block/MAP.md"))
+                "smokes/m214-diamond-block/MAP.md", "docs/M215_LAPIS_BLOCK.md", "docs/M215_CYCLE.md",
+                "smokes/m215-lapis-block/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.202.0 M214 Diamond block GO");
+        System.out.println("  release: Worldline v1.203.0 M215 Lapis block GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

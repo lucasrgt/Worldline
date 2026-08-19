@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.203.0 - M215 Lapis block
+
+Status: GO for official lapis-block placement.
+
+- Placed lapis lazuli block item `22` on a raised stone support as `22:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M215 semantic SHA-256 is
+`2eccf7bc9e04af5137d3804025114bea5686598ee5995596d8392a2a88b7fdbf`.
+
 ## 1.202.0 - M214 Diamond block
 
 Status: GO for official diamond-block placement.
