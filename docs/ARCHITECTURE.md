@@ -1359,3 +1359,6 @@ M206 adds no public API. Sponge item `19` places `19:0` and persists.
 M207 adds no public API. Sandstone item `24` places `24:0` and persists.
 
 M208 adds no public API. Oak log item `17` places `17:0` and persists.
+
+M209 adds no public API. Oak leaves persist as `18:8` when an adjacent log
+`17:0` keeps the decay-check cell alive.

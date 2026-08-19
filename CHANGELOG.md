@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.197.0 - M209 Leaves
+
+Status: GO for official oak-leaf placement with an adjacent log.
+
+- Placed oak log `17:0` beside leaves `18:8` so the decay-check bit survives.
+- That leaf cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M209 semantic SHA-256 is
+`aad065fc1b2eee7b0366a5095df49496d2002a0991c39ffefad789bb6896d5bd`.
+
 ## 1.196.0 - M208 Oak log
 
 Status: GO for official oak-log placement.
