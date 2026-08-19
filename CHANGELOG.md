@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.184.0 - M196 Glass
+
+Status: GO for official glass placement.
+
+- Placed glass item `20` on a raised stone support as `20:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M196 semantic SHA-256 is
+`559e9d38c638c27b461ef834cc558063696964fbdff90e68a729877cb3daa13e`.
+
 ## 1.183.0 - M195 Cobweb
 
 Status: GO for official cobweb placement.
