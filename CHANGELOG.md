@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.188.0 - M200 Brown mushroom
+
+Status: GO for official brown-mushroom placement in a dark pocket.
+
+- Placed dirt under a one-block stone roof, then brown mushroom `39` as `39:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M200 semantic SHA-256 is
+`4140e189cc2fa3f53a899ffa1b8332f24d0bf2a320fc2dc5f0050e9026718c70`.
+
 ## 1.187.0 - M199 Rose
 
 Status: GO for official red-rose placement on dirt.

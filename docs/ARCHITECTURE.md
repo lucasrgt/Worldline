@@ -1338,3 +1338,6 @@ M198 adds no public API. Yellow flower `37` on dirt `3` places `37:0` and
 persists.
 
 M199 adds no public API. Rose `38` on dirt `3` places `38:0` and persists.
+
+M200 adds no public API. Brown mushroom `39` in a dark dirt pocket places
+`39:0` and persists.
