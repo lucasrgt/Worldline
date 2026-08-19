@@ -4,6 +4,22 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.96.0 - M108 Paired Cell Size
+
+Status: GO for the exact size-two/size-eight comparison.
+
+- Ran two balanced same-plan fresh-process pairs with minimum2,
+  skip-individual false, pages enabled, unlimited cache/rebuild, and TTL100000.
+- Proved the fixed aligned plan produced pageCalls4/cache4 at size two and
+  pageCalls1/cache1 at size eight in every retained record.
+- Required both arms to keep queue16/rendererCalls16/flush2, direct0, rebuild0,
+  M74 render/list0/0, immediate0, and eviction0.
+- Kept memory cost, visual equivalence, better-size and all timing directions
+  outside qualification.
+
+The frozen M108 semantic SHA-256 is
+`7bd2dd0f5f557a19c07eaf9d79978bfbac81aee3ad313df51ac504740b7c303d`.
+
 ## 1.95.0 - M107 Paired Skip Individual
 
 Status: GO for the exact skip-true/skip-false comparison.

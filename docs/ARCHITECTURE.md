@@ -925,3 +925,9 @@ implements the managed page-renderable contract and credits exact identities
 only after server nonce reconciliation; the control reaches the same four
 cached pages through the registered renderer. Common/server code remains
 Aero-free.
+
+M108 adds no public API or product adapter behavior and leaves M74-M107 frozen.
+It pairs pinned cell sizes two and eight under minimum2 and skip-individual
+false. A fixed aligned test plan changes only the page partition: four
+size-two pages versus one size-eight page, with the same sixteen identities and
+individual renderer calls. Common/server code remains Aero-free.

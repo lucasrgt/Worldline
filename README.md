@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.95.0 - M107 Paired Skip Individual (GO)**.
+Current official milestone: **Worldline v1.96.0 - M108 Paired Cell Size (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -551,6 +551,11 @@ queues all sixteen identities through the managed pre-dispatch hook with no
 individual renderer calls; the disabled arm reaches the same four cached pages
 through sixteen manual renderer calls. See
 `docs/M107_PAIRED_SKIP_INDIVIDUAL.md`.
+
+M108 pairs pinned cell sizes two and eight under the same fixed aligned scene.
+Size two produces four cached page calls; size eight produces one, while both
+retain sixteen queue/renderer calls and no fallback or rebuild. See
+`docs/M108_PAIRED_CELL_SIZE.md`.
 
 ## Verify
 
