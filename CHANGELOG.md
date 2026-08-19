@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.219.0 - M231 Dispenser place
+
+Status: GO for official dispenser placement.
+
+- Placed dispenser item `23` on a raised stone support as `23:3` from look yaw `180`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M231 semantic SHA-256 is
+`0679d7a20880a59f567737898c4d0263b285b13b738810981188b7b8b8fbecf4`.
+
 ## 1.218.0 - M230 Lapis ore
 
 Status: GO for official lapis-ore placement.
