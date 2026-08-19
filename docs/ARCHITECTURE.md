@@ -1286,3 +1286,6 @@ selected slot, and writes metadata `84:1` that persists.
 
 M179 adds no public API. Wooden hoe `290` tills dirt; seeds `295` plant wheat
 `59:0` on hydrated farmland `60:7`. The crop persists at metadata zero.
+
+M180 reuses `awaitObjectSpawn(90)`. Fishing rod `346` in air emits Packet23
+type `90` with thrower `0`; two peers share the hook identity and pose.

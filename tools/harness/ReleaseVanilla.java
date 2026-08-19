@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m176 = load(root, "smokes/m176-sign/smoke.properties");
         Properties m177 = load(root, "smokes/m177-painting/smoke.properties");
         Properties m178 = load(root, "smokes/m178-jukebox/smoke.properties");
         Properties m179 = load(root, "smokes/m179-wheat/smoke.properties");
-        match(release, "version", "1.167.0");
-        match(release, "milestone", "m179-wheat");
-        same(release, "m176.signature", m176, "expected.signature");
-        same(release, "server.sha256", m176, "server.jar.sha256");
+        Properties m180 = load(root, "smokes/m180-fishing-rod/smoke.properties");
+        match(release, "version", "1.168.0");
+        match(release, "milestone", "m180-fishing-rod");
         same(release, "m177.signature", m177, "expected.signature");
         same(release, "server.sha256", m177, "server.jar.sha256");
         same(release, "m178.signature", m178, "expected.signature");
         same(release, "server.sha256", m178, "server.jar.sha256");
         same(release, "m179.signature", m179, "expected.signature");
         same(release, "server.sha256", m179, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M176_SIGN.md", "docs/M176_CYCLE.md",
-                "smokes/m176-sign/MAP.md", "docs/M177_PAINTING.md", "docs/M177_CYCLE.md",
+        same(release, "m180.signature", m180, "expected.signature");
+        same(release, "server.sha256", m180, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M177_PAINTING.md", "docs/M177_CYCLE.md",
                 "smokes/m177-painting/MAP.md", "docs/M178_JUKEBOX.md", "docs/M178_CYCLE.md",
                 "smokes/m178-jukebox/MAP.md", "docs/M179_WHEAT.md", "docs/M179_CYCLE.md",
-                "smokes/m179-wheat/MAP.md"))
+                "smokes/m179-wheat/MAP.md", "docs/M180_FISHING_ROD.md", "docs/M180_CYCLE.md",
+                "smokes/m180-fishing-rod/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.167.0 M179 Wheat GO");
+        System.out.println("  release: Worldline v1.168.0 M180 Fishing rod GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

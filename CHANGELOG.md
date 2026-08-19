@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.168.0 - M180 Fishing rod
+
+Status: GO for official fishing-hook Packet23 type 90.
+
+- Used fishing rod `346` in air from a raised stone platform.
+- Two headless peers decoded the same Packet23 type `90` with thrower `0`.
+- Pose was frozen at `138:2512:144`; catch RNG is not hashed.
+
+The frozen M180 semantic SHA-256 is
+`9eafaf3ce4f443aa63f94304c269f66ab3a4257921e9d595d17a208ef9c8554a`.
+
 ## 1.167.0 - M179 Wheat
 
 Status: GO for official wheat planting on hydrated farmland.

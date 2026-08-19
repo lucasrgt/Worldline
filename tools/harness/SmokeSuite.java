@@ -203,6 +203,7 @@ final class SmokeSuite {
         {"tools/smoke/PaintingCycle.java", "m177-painting"},
         {"tools/smoke/JukeboxCycle.java", "m178-jukebox"},
         {"tools/smoke/WheatCycle.java", "m179-wheat"},
+        {"tools/smoke/FishingRodCycle.java", "m180-fishing-rod"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 
