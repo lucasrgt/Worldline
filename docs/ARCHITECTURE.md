@@ -1389,3 +1389,5 @@ M220 adds no public API. Workbench item `58` places `58:0` and persists.
 M221 adds no public API. Idle furnace item `61` places `61:2` and persists.
 
 M222 adds no public API. Cobblestone item `4` places `4:0` and persists.
+
+M223 adds no public API. Dirt item `3` places `3:0` and persists.

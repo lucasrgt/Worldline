@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.211.0 - M223 Dirt
+
+Status: GO for official dirt placement.
+
+- Placed dirt item `3` on a raised stone support as `3:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M223 semantic SHA-256 is
+`cb51b4a07fd7c818ad09e7ea60fe06e3c01a3f3bca23a3c618cfe10d5a5cb650`.
+
 ## 1.210.0 - M222 Cobble
 
 Status: GO for official cobblestone placement.
