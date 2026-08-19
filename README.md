@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.105.0 - M117 Redstone Wire Depower (GO)**.
+Current official milestone: **Worldline v1.106.0 - M118 Redstone Iron Door (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -602,6 +602,11 @@ M117 closes that first redstone cycle. From the exact powered lever/wire pair,
 a second official activation returns both states to their off/zero values;
 Packet53, fresh Packet51 and the two-state chunk delta all agree. See
 `docs/M117_REDSTONE_WIRE_DEPOWER.md`.
+
+M118 adds the first powered consumer. Item 330 creates the two-block iron door,
+and the adjacent lever changes its lower and upper metadata from `0/8` to
+`4/12`; exactly those halves and the lever differ. See
+`docs/M118_REDSTONE_IRON_DOOR.md`.
 
 ## Verify
 

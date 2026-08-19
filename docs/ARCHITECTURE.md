@@ -997,3 +997,9 @@ powered precondition and observes the official wire returning from strength 15
 to zero. The complete-chunk comparison admits only the lever and wire cells,
 and a fresh Packet51 must retain both off states. Worldline still implements no
 redstone evaluator, scheduler or topology model.
+
+M118 also adds no public API. Item 330 exercises the already-published
+held-item boundary to create both halves of an official iron door, while the
+lever activation boundary supplies its power transition. Worldline records the
+lever and both door metadata changes only after Packet53 and a fresh Packet51;
+consumer logic remains entirely inside the official server.

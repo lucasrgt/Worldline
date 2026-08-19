@@ -4,6 +4,20 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.106.0 - M118 Redstone Iron Door
+
+Status: GO for one server-authored powered-consumer transition.
+
+- Used official iron-door item 330 to create exact block-71 bottom/top states
+  `0/8` above the stabilized column.
+- Activated the adjacent side lever and proved `69:1 -> 69:9`, door bottom
+  `0 -> 4`, and door top `8 -> 12` through Packet53 and fresh Packet51.
+- Froze exactly three full-chunk state changes while keeping generic consumers,
+  closing, topology, collision and tick-exact ordering outside scope.
+
+The frozen M118 semantic SHA-256 is
+`e2000f240f0dce5e5fe233611cca6053e50b31c57113fd564387a00f527d7573`.
+
 ## 1.105.0 - M117 Redstone Wire Depower
 
 Status: GO for one server-authored lever-to-wire recovery result.
