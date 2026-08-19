@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.133.0 - M145 Two-Block Piston (GO)**.
+Current official milestone: **Worldline v1.134.0 - M146 Obsidian Piston Rejection (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

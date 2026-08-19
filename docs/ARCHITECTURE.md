@@ -1162,3 +1162,9 @@ M145 adds no public API. It preserves the M142 normal-piston treatment while
 expanding the payload to two distinct block states. The distinct middle and
 terminal transitions keep chain displacement observable through the existing
 Packet53/Packet51 world cache instead of inventing per-block identities.
+
+M146 adds no public API or adapter behavior. It replaces M142's movable stone
+with official obsidian `49:0` while preserving the piston, lever, destination
+and fresh-session lifecycle. The exact negative transition is server-authored:
+only the powered lever changes in the raised fixture, while piston, payload and
+destination remain invariant.

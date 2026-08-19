@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.134.0 - M146 Obsidian Piston Rejection
+
+Status: GO for one official immovable obsidian payload.
+
+- Built a powered normal piston against exact obsidian `49:0` and air.
+- Proved piston, payload and destination remain invariant after activation.
+- Required the one-cell raised digest containing only the lever transition.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M146 semantic SHA-256 is
+`5deacfe1aa98b05c6667cd13215354e232659bd057f50e1340640017dface768`.
+
 ## 1.133.0 - M145 Two-Block Piston
 
 Status: GO for one official two-block piston chain.
