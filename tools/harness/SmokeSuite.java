@@ -228,6 +228,7 @@ final class SmokeSuite {
         {"tools/smoke/SaplingCycle.java", "m202-sapling"},
         {"tools/smoke/SnowLayerCycle.java", "m203-snow-layer"},
         {"tools/smoke/ClayCycle.java", "m204-clay"},
+        {"tools/smoke/BrickCycle.java", "m205-brick"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

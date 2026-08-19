@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.193.0 - M205 Brick
+
+Status: GO for official brick-block placement.
+
+- Placed brick item `45` on a raised stone support as `45:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M205 semantic SHA-256 is
+`e086305d19013c746cd1e24ea91a5cf8c20cb87ac8b3e0d6c79d11b224a1ac90`.
+
 ## 1.192.0 - M204 Clay
 
 Status: GO for official clay-block placement.
