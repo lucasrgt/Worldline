@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.101.0 - M113 Causal Lighting (GO)**.
+Current official milestone: **Worldline v1.102.0 - M114 Causal Water Flow (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -582,6 +582,11 @@ Packet15 placement adds one glowstone source; after a bounded update window, a
 fresh session's Packet51 contains exactly 68 increased block-light samples,
 level 15 at the source, and no sky-light changes. See
 `docs/M113_CAUSAL_LIGHTING.md`.
+
+M114 opens one dirt cell directly below naturally generated still water. The
+official server first confirms air, then settles the cell to water `9:8` in
+both the live cache and a fresh Packet51, with exactly one full-chunk state
+change. See `docs/M114_CAUSAL_WATER_FLOW.md`.
 
 ## Verify
 

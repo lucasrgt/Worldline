@@ -4,6 +4,26 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.102.0 - M114 Causal Water Flow
+
+Status: GO for one server-authored downward vanilla-water transition.
+
+- Broke one dirt cell below naturally generated still water through the
+  existing Packet14 begin/finish boundary and required Packet53 air first.
+- Proved live and fresh-login observations settle the opened cell from air to
+  water `9:8` after forty heartbeats.
+- Froze one and only one full-chunk state delta across two fresh official
+  worlds and four protocol sessions.
+- Generalized local hurt tracking to accept valid ordered health decreases
+  while preserving caller-supplied expected-health checks.
+- Replaced M66's `/give`/drop/fall fixture with exact official-NBT inventories
+  and bounded air-position heartbeats; its frozen combat evidence is unchanged.
+- Kept generic fluids, lava/mixing, lateral flow, buckets, timing, rendering
+  and cross-chunk behavior outside qualification.
+
+The frozen M114 semantic SHA-256 is
+`658a1cbfc4555fb57b3cef83375f655232f18b834afe547330fd96e64c8a5e3e`.
+
 ## 1.101.0 - M113 Causal Lighting
 
 Status: GO for one server-authored vanilla light-source transition.

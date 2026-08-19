@@ -6,7 +6,6 @@ import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.time.Duration;
 import worldline.api.CombatHealthSession;
-import worldline.api.MovementOutcome;
 import worldline.api.PlayerPose;
 import worldline.api.RemoteArmorSlot;
 import worldline.api.RemoteCombatStrike;
@@ -16,6 +15,7 @@ import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteItemStack;
 import worldline.api.ServerPlayerState;
 import worldline.b173server.B173DedicatedServer;
+import worldline.b173server.B173PlayerSeed;
 import worldline.b173server.B173WireClient;
 
 /** Proves one armored diamond-sword PvP hit through Packet7, Packet38, and Packet8. */
@@ -36,26 +36,28 @@ public final class PlayerCombatSmoke {
         CombatHealthSession victim = client(port, victimName, timeout), attacker = client(port, attackerName, timeout);
         RemoteCombatStrike strike; RemoteIncomingHit hit; ServerPlayerState saved;
         try {
-            server.boot(); server.operator(victimName); server.operator(attackerName); victim.connect(); victim.synchronizePose();
-            require(victim.awaitInventory().occupiedSlots() == 0, "victim inventory was not empty");
-            victim.look(0F, 90F); for (RemoteArmorSlot slot : RemoteArmorSlot.values())
-                acquire(victim, victimName, slot.leatherItemId());
+            server.boot(); B173PlayerSeed.writeInventory(workspace, victimName, 8.5D, 70D, 8.5D,
+                    new int[] {0, 1, 2, 3}, new int[] {298, 299, 300, 301},
+                    new int[] {1, 1, 1, 1}, new int[] {0, 0, 0, 0});
+            B173PlayerSeed.writeInventory(workspace, attackerName, 10.5D, 70D, 8.5D,
+                    new int[] {0}, new int[] {276}, new int[] {1}, new int[] {0});
+            victim.connect(); victim.synchronizePose();
+            require(victim.awaitInventory().occupiedSlots() == 4, "victim inventory seed drifted");
             for (RemoteArmorSlot slot : RemoteArmorSlot.values()) { RemoteItemStack item =
                     new RemoteItemStack(slot.leatherItemId(), 1, 0); int source = find(victim.inventory(), item);
                 require(source >= 36, "leather source absent"); victim.equipLeatherArmor(source, slot); }
             require(victim.inventory().occupiedSlots() == 4, "victim armor count drifted");
-            for (int step = 0; step < 4; step++) victim.moveAndObserve(2.5D, 5D, 0D, 3);
-            attacker.connect(); attacker.synchronizePose(); require(attacker.awaitInventory().occupiedSlots() == 0,
-                    "attacker inventory was not empty"); attacker.look(0F, 90F); acquire(attacker, attackerName, 276);
+            attacker.connect(); attacker.synchronizePose(); require(attacker.awaitInventory().occupiedSlots() == 1,
+                    "attacker inventory seed drifted");
             int swordSlot = find(attacker.inventory(), new RemoteItemStack(276, 1, 0));
             require(swordSlot >= 36, "diamond sword source absent"); attacker.selectHeldSlot(swordSlot - 36);
             victim.awaitPeerHeldItem(new RemoteHeldItem(attackerName, 276, 0));
             for (RemoteArmorSlot slot : RemoteArmorSlot.values()) attacker.awaitPeerArmor(
                     new worldline.api.RemoteArmorPiece(victimName, slot, slot.leatherItemId(), 0));
-            PlayerPose victimAir = raise(victim), attackerAir = raise(attacker);
-            PlayerPose aligned = align(attacker, attackerAir, victimAir);
-            require(distance(victimAir, aligned) < 6D, "combat alignment drifted");
-            victim.sustainTicks(80); attacker.sustainTicks(2);
+            PlayerPose victimAir = null, attackerAir = null;
+            for (int step = 0; step < 80; step++) { victimAir = victim.moveAndObserve(0D, 0.3D, 0D, 1).resulting();
+                attackerAir = attacker.moveAndObserve(0D, 0.3D, 0D, 1).resulting(); }
+            require(distance(victimAir, attackerAir) < 6D, "combat alignment drifted");
             strike = attacker.attackPlayer(victimName); victim.sustainTicks(2); hit = victim.awaitIncomingHit(18);
             require(strike.weaponId() == 276 && strike.hurtStatus() == 2 && strike.target().equals(victimName)
                     && hit.victim().equals(victimName) && hit.healthBefore() == 20 && hit.healthAfter() == 18
@@ -73,24 +75,10 @@ public final class PlayerCombatSmoke {
     }
     private static CombatHealthSession client(int port, String name, Duration timeout) {
         return new B173WireClient("127.0.0.1", port, name, timeout); }
-    private static void acquire(CombatHealthSession client, String username, int item) {
-        int occupied = client.inventory().occupiedSlots() + 1;
-        for (int step = 0; step < 10; step++) client.moveAndObserve(0D, 5D, 0D, 3);
-        client.sendChat("/give " + username + " " + item + " 1"); client.sustainTicks(40);
-        for (int step = 0; step < 15 && client.inventory().occupiedSlots() < occupied; step++)
-            client.moveAndObserve(0D, -5D, 0D, 3); client.sustainTicks(10);
-    }
     private static int find(RemoteInventoryView view, RemoteItemStack expected) { for (int slot = 9; slot <= 44; slot++)
         if (!view.slot(slot).empty() && view.slot(slot).item().equals(expected)) return slot; return -1; }
     private static double distance(PlayerPose a, PlayerPose b) { double x = a.x() - b.x(), y = a.y() - b.y(), z = a.z() - b.z();
         return Math.sqrt(x * x + y * y + z * z); }
-    private static PlayerPose raise(CombatHealthSession client) { MovementOutcome result = null;
-        for (int step = 0; step < 4; step++) result = client.moveAndObserve(0D, 5D, 0D, 3); return result.resulting(); }
-    private static PlayerPose align(CombatHealthSession client, PlayerPose start, PlayerPose target) {
-        PlayerPose current = start; for (int step = 0; step < 8 && distance(current, target) > 3D; step++) {
-            double dx = target.x() + 2D - current.x(), dy = target.y() - current.y(), dz = target.z() - current.z();
-            double scale = Math.max(1D, Math.max(Math.abs(dx), Math.max(Math.abs(dy), Math.abs(dz))) / 4D);
-            current = client.moveAndObserve(dx / scale, dy / scale, dz / scale, 3).resulting(); } return current; }
     private static void awaitPlayers(B173DedicatedServer server, int count) throws InterruptedException {
         long deadline = System.currentTimeMillis() + 5000L; while (System.currentTimeMillis() < deadline) {
             if (server.players().size() == count) return; Thread.sleep(100L); }

@@ -967,3 +967,13 @@ a fresh full-chunk send after the unmodified official server accepts and
 settles the glowstone placement; the incremental cache is never treated as a
 client light engine. The ordered delta remains a smoke oracle rather than a
 generic lighting implementation.
+
+M114 adds no public API. It composes fixed-seed terrain, Packet14 mining,
+Packet53 cache replacement, bounded heartbeats and a fresh Packet51 to observe
+one official scheduled-water transition. The product adapter still contains
+no fluid simulation. A near-source official player-NBT pose keeps the smoke
+inside its fluid boundary. The inbound combat tracker now records any valid
+status-ordered local health decrease rather than treating all hurt as M66's
+`20 -> 18`; the existing expected-health boundary remains fail-closed. M66's
+canonical fixture now uses exact NBT-seeded equipment and bounded position
+heartbeats instead of drop pickup and uncontrolled falling.

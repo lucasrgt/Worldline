@@ -22,7 +22,11 @@ strike observed on the other connection.
 The fixture equips leather IDs 298..301 and selects diamond sword 276. The
 official armor formula applies two points of damage, and Packet103 observes the
 sword's damage field change from zero to one. The dedicated server writes
-`pvp=true` explicitly while retaining `spawn-monsters=false`.
+`pvp=true` explicitly while retaining `spawn-monsters=false`. The maintained
+smoke seeds those exact items through official player NBT and alternates small
+position heartbeats for both clients during the 80-tick invulnerability wait,
+removing item-pickup and uncontrolled-fall nondeterminism without changing the
+wire contract or frozen evidence.
 
 ## Evidence and non-claims
 

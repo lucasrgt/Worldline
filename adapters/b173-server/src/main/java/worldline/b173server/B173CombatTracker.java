@@ -14,8 +14,8 @@ final class B173CombatTracker {
         this.identities = identities; this.localId = localId; this.localName = localName; }
     void health(DataInputStream input) throws IOException {
         int next = input.readShort();
-        if (localHurt) { if (health != 20 || next != 18) throw new IOException("armored combat health drift");
-            incoming = new RemoteIncomingHit(localName, localId, health, next); localHurt = false; }
+        if (localHurt) { if (health >= 1 && health <= 20 && next >= 0 && next < health)
+                incoming = new RemoteIncomingHit(localName, localId, health, next); localHurt = false; }
         health = next;
     }
     void status(DataInputStream input) throws IOException {
@@ -23,8 +23,7 @@ final class B173CombatTracker {
         if (entityId == outgoingTarget) { String target = identities.username(entityId);
             if (target == null) throw new IOException("outgoing target identity absent");
             outgoing = new RemoteCombatStrike(localName, localId, target, entityId); outgoingTarget = -1; }
-        if (entityId == localId) { if (health != 20 || localHurt) throw new IOException("local hurt baseline drift");
-            localHurt = true; }
+        if (entityId == localId) localHurt = true;
     }
     void animation(DataInputStream input) throws IOException { int entityId = input.readInt(), code = input.readByte();
         if (entityId != expectedSwing) return; if (code != 1 || swing != null) throw new IOException("peer swing drift");
