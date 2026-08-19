@@ -10,6 +10,7 @@ import worldline.api.RemoteChunkSnapshot;
 import worldline.api.RemoteWorldView;
 import worldline.api.BlockState;
 import worldline.api.BlockPosition;
+import worldline.api.RemoteExplosion;
 
 /** Adapter-private Packet50 lifecycle state for a bounded decoded chunk set. */
 final class B173RemoteWorldCache {
@@ -88,6 +89,16 @@ final class B173RemoteWorldCache {
             apply(chunkX * 16 + (packed >> 12 & 15), packed & 255,
                     chunkZ * 16 + (packed >> 8 & 15), ids[index] & 255, metadata[index] & 15);
         }
+    }
+
+    RemoteExplosion explosion(DataInputStream input) throws IOException {
+        double x = input.readDouble(), y = input.readDouble(), z = input.readDouble(); float strength = input.readFloat();
+        int count = input.readInt(); if (count < 0 || count > RemoteExplosion.MAX_BLOCKS) throw new IOException("invalid explosion block count");
+        int baseX = (int) Math.floor(x), baseY = (int) Math.floor(y), baseZ = (int) Math.floor(z);
+        ArrayList<BlockPosition> destroyed = new ArrayList<>(count);
+        for (int index = 0; index < count; index++) { BlockPosition position = new BlockPosition(baseX + input.readByte(), baseY + input.readByte(), baseZ + input.readByte());
+            destroyed.add(position); apply(position.x(), position.y(), position.z(), 0, 0); }
+        return new RemoteExplosion(x, y, z, strength, destroyed);
     }
 
     private void apply(int x, int y, int z, int id, int metadata) {

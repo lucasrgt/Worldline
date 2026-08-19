@@ -1110,3 +1110,10 @@ still represents equal source/destination dimensions. The adapter always
 expects vanilla's death destination `0`; a `-1→0` response therefore triggers
 the same cache reset already qualified for portal travel, followed by an
 independent Overworld chunk and persistence oracle.
+
+M137 adds `ExplosionSession` and immutable `RemoteExplosion` evidence. Packet60
+is intercepted before the generic skipper, decoded with the exact protocol-14
+payload and atomically projected into the same remote chunk cache used by
+Packet52/53. The Beta packet carries no later-version motion vector. Blast
+randomness remains server-authored; Worldline freezes structural containment
+and persisted state rather than a variable ray result.

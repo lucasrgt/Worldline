@@ -27,7 +27,7 @@ public final class DomainApiTest {
         RemoteWorkbenchOutputTest.run();
         RemoteArmorEquipmentTest.run();
         RemoteCombatTest.run();
-        RemoteRespawnTest.run();
+        RemoteRespawnTest.run(); RemoteExplosionTest.run();
         RemoteChestRetrievalTest.run();
         peerSwingValuesAreExactAndFailClosed();
         System.out.println("DomainApiTest passed");

@@ -4,6 +4,21 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.125.0 - M137 TNT Explosion
+
+Status: GO for one official isolated TNT blast and Packet60 observation.
+
+- Added immutable `RemoteExplosion` evidence and `ExplosionSession`.
+- Decoded the exact protocol-14 Packet60 layout, including its lack of later
+  motion fields, and applied listed destroyed cells to the remote cache.
+- Ignited TNT `46` with flint and steel, observed strength `4` and required the
+  randomized blast list to contain the constructed stone support.
+- Proved live support/TNT removal and the same air states after save and a
+  fresh client login.
+
+The frozen M137 semantic SHA-256 is
+`bb96106b407266a1f02f9e9e8097e71f5d11de9337293e8cf063277cd00f07ed`.
+
 ## 1.124.0 - M136 Nether Death Respawn
 
 Status: GO for one official Nether-death to Overworld-respawn lifecycle.

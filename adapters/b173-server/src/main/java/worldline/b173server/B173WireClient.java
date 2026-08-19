@@ -15,12 +15,12 @@ import worldline.api.RemoteWorldView;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.MovementOutcome;
-import worldline.api.RespawnSession;
+import worldline.api.ExplosionSession;
 import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteHeldItem;
 
 /** Minimal original protocol-14 client for headless multiplayer qualification. */
-public final class B173WireClient implements RespawnSession {
+public final class B173WireClient implements ExplosionSession {
     public static final int PROTOCOL = 14;
     private final String host, username; private final int port, timeoutMillis;
     private MultiplayerConnection connection = MultiplayerConnection.NEW;
@@ -62,7 +62,7 @@ public final class B173WireClient implements RespawnSession {
         } catch (IOException error) { closeSocket(); throw new IllegalStateException("multiplayer login failed", error); }
     }
 
-    @Override public MultiplayerState state() { return new MultiplayerState(connection, username, PROTOCOL, entityId); } @Override public int dimension() { return channel().dimension(); } @Override public int awaitDimension(int expected) { try { return channel().awaitDimension(expected); } catch (IOException error) { throw new IllegalStateException("dimension transition absent", error); } } @Override public int health(){return channel().health();} @Override public int awaitHealth(int expected){try{return channel().awaitHealth(expected);}catch(IOException error){throw new IllegalStateException("health observation absent",error);}} @Override public worldline.api.RemoteRespawn respawn(){try{return channel().respawn();}catch(IOException error){throw new IllegalStateException("respawn failed",error);}}
+    @Override public MultiplayerState state() { return new MultiplayerState(connection, username, PROTOCOL, entityId); } @Override public int dimension() { return channel().dimension(); } @Override public int awaitDimension(int expected) { try { return channel().awaitDimension(expected); } catch (IOException error) { throw new IllegalStateException("dimension transition absent", error); } } @Override public int health(){return channel().health();} @Override public int awaitHealth(int expected){try{return channel().awaitHealth(expected);}catch(IOException error){throw new IllegalStateException("health observation absent",error);}} @Override public worldline.api.RemoteRespawn respawn(){try{return channel().respawn();}catch(IOException error){throw new IllegalStateException("respawn failed",error);}} @Override public worldline.api.RemoteExplosion awaitExplosion(){try{return channel().awaitExplosion();}catch(IOException error){throw new IllegalStateException("explosion observation absent",error);}}
 
     @Override public PlayerPose synchronizePose() {
         require(connection == MultiplayerConnection.CONNECTED, "session is not connected");

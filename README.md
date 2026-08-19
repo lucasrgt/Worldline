@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.124.0 - M136 Nether Death Respawn (GO)**.
+Current official milestone: **Worldline v1.125.0 - M137 TNT Explosion (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
