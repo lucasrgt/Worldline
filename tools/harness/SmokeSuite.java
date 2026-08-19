@@ -192,6 +192,7 @@ final class SmokeSuite {
         {"tools/smoke/NoteBlockCycle.java", "m166-note-block"},
         {"tools/smoke/CactusCycle.java", "m167-cactus"},
         {"tools/smoke/WaterBucketCycle.java", "m168-water-bucket"},
+        {"tools/smoke/EggThrowCycle.java", "m169-egg-throw"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

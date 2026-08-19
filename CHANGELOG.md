@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.157.0 - M169 Egg Throw
+
+Status: GO for official Packet23 egg spawn.
+
+- Used egg item `344` through Packet15 direction 255 from a raised platform.
+- Two headless peers decoded the same Packet23 type `62` with thrower 0.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M169 semantic SHA-256 is
+`928748cb1070c773bf7991f2ccaa4384b51c7910f12d20cb86102e337da19585`.
+
 ## 1.156.0 - M168 Water Bucket
 
 Status: GO for official still-water pickup into a bucket.
