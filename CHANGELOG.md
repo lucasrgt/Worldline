@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.143.0 - M155 Minecart Spawn
+
+Status: GO for one official Packet23 minecart spawn.
+
+- Placed rail `66` on a raised stone column.
+- Used minecart item `328` on that rail.
+- Two headless peers decoded the same Packet23 type `10` at `144:2331:144`.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M155 semantic SHA-256 is
+`8bbf2ce26b50b36cdb15763b126864882c8e138b89113c1fe6dcd75988703fab`.
+
 ## 1.142.0 - M154 Boat Spawn
 
 Status: GO for one official Packet23 boat spawn.

@@ -159,6 +159,7 @@ Passing an experiment does not silently promote its API.
 | v1.140.0 / M152 | Fire wool consumption | GO - wool adjacent to netherrack fire is consumed while the netherrack flame remains |
 | v1.141.0 / M153 | Dispenser eject | GO - Trap window load plus lever power ejects cobblestone Packet21 |
 | v1.142.0 / M154 | Boat spawn | GO - Packet15 boat 333 in still water emits shared Packet23 type 1 |
+| v1.143.0 / M155 | Minecart spawn | GO - Packet15 minecart 328 on rail 66 emits shared Packet23 type 10 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -170,7 +171,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.142.0 direction
+## Immediate post-v1.143.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

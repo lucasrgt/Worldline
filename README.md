@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.142.0 - M154 Boat Spawn (GO)**.
+Current official milestone: **Worldline v1.143.0 - M155 Minecart Spawn (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
