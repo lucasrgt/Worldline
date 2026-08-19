@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.156.0 - M168 Water Bucket
+
+Status: GO for official still-water pickup into a bucket.
+
+- Placed still water `9:0` in a raised stone basin.
+- Empty bucket `325` plus Packet15 emptied the cell to air and filled `326:1:0`.
+- The empty basin and water bucket survived save plus a fresh login.
+
+The frozen M168 semantic SHA-256 is
+`4ce39f3401e15de5c720a314091f69acf985c459785d211d52f84f4af9e47a7d`.
+
 ## 1.155.0 - M167 Cactus
 
 Status: GO for official cactus placement on sand.

@@ -191,6 +191,7 @@ final class SmokeSuite {
         {"tools/smoke/StoneButtonCycle.java", "m165-stone-button"},
         {"tools/smoke/NoteBlockCycle.java", "m166-note-block"},
         {"tools/smoke/CactusCycle.java", "m167-cactus"},
+        {"tools/smoke/WaterBucketCycle.java", "m168-water-bucket"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

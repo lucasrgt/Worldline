@@ -1249,3 +1249,6 @@ the tile entity, so block metadata stays `25:0`.
 
 M167 adds no public API. Cactus item `81` on sand `12` remains `81:0` after a
 live hold and a fresh login.
+
+M168 adds no public API. Empty bucket `325` on still water `9:0` produces air
+and water bucket `326:1:0` that persist across restart.
