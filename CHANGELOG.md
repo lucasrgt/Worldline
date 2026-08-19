@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.181.0 - M193 Ice
+
+Status: GO for official ice placement.
+
+- Placed ice item `79` on a raised stone support as `79:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M193 semantic SHA-256 is
+`928502e6104af660eee12a0404bcc27b28b4d98e8da3440ba59e805f615f5c2a`.
+
 ## 1.180.0 - M192 Soul sand
 
 Status: GO for official Overworld soul-sand placement.

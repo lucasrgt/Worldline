@@ -1323,3 +1323,5 @@ and persists.
 
 M192 adds no public API. Soul sand item `88` places `88:0` in the Overworld
 and persists.
+
+M193 adds no public API. Ice item `79` places `79:0` and persists.

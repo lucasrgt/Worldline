@@ -197,6 +197,7 @@ Passing an experiment does not silently promote its API.
 | v1.178.0 / M190 | Jack-o-lantern | GO - jack-o-lantern 91:1 with look yaw -90 persists |
 | v1.179.0 / M191 | Glowstone | GO - glowstone 89:0 persists in the Overworld |
 | v1.180.0 / M192 | Soul sand | GO - soul sand 88:0 persists in the Overworld |
+| v1.181.0 / M193 | Ice | GO - ice 79:0 persists |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -208,7 +209,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.180.0 direction
+## Immediate post-v1.181.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
@@ -244,6 +245,6 @@ M179 plants wheat `59:0` on hydrated farmland. M180 casts a fishing hook as
 Packet23 type `90`. M181 picks up still lava into bucket `327`. M182 places
 floor redstone torch `76:5`. M183 places north-south rail `66:0`. M184 places unpowered powered rail
 `27:0`. M185 places unpowered detector rail `28:0`. M186 places east oak stairs
-`53:0`. M187 places east cobble stairs `67:0`. M188 places single stone slab `44:0`. M189 places bookshelf `47:0`. M190 places jack-o-lantern `91:1`. M191 places glowstone `89:0`. M192 places soul sand `88:0`.
+`53:0`. M187 places east cobble stairs `67:0`. M188 places single stone slab `44:0`. M189 places bookshelf `47:0`. M190 places jack-o-lantern `91:1`. M191 places glowstone `89:0`. M192 places soul sand `88:0`. M193 places ice `79:0`.
 M71-M110 remain frozen Aero laboratory evidence; no new Aero milestone is
 planned before the vanilla foundation is complete.
