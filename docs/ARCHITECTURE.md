@@ -1174,3 +1174,9 @@ server runs into a matched capacity boundary: an alternating twelve-block chain
 is fully displaced, while the same geometry with thirteen blocks is fully
 rejected. Fresh Packet51 snapshots remain the authority for the complete chain;
 the live cache is not promoted beyond its already qualified control states.
+
+M148 extends `MobObservationSession` with immutable, fixed-point
+`RemoteMobMovement`. `B173MobTracker` strictly consumes Packet30-34, maintains
+per-entity quantized state and only queues movement for an explicitly observed
+Packet24 identity. The dedicated-server adapter retains its old defaults and
+adds a narrow animal-enabled factory for this official AI fixture.

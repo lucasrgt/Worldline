@@ -4,6 +4,19 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.136.0 - M148 Pig AI Movement
+
+Status: GO for one official two-peer pig movement transition.
+
+- Added immutable fixed-point Packet31/33/34 mob movement evidence.
+- Added an opt-in animal-enabled official-server profile without changing the
+  existing default profile.
+- Correlated one spawned pig's horizontal movement exactly across two peers.
+- Repeated the complete AI fixture in two official server JVMs.
+
+The frozen M148 semantic SHA-256 is
+`c265a9aa7d1e6254b11458774346f05613c82569948443803f4742740e933397`.
+
 ## 1.135.0 - M147 Piston Push Limit
 
 Status: GO for the exact official twelve-versus-thirteen push boundary.

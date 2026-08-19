@@ -22,13 +22,8 @@ import worldline.api.ServerState;
 public final class B173DedicatedServer implements PersistentMultiplayerServerRuntime {
     private final Path officialJar, directory;
     private final int port, viewDistance;
-    private final boolean allowFlight, allowNether;
-    private final long seed;
-    private final Duration timeout;
-    private final B173ServerLog log = new B173ServerLog();
-    private ServerLifecycle lifecycle = ServerLifecycle.NEW;
-    private Process process;
-    private int saves;
+    private final boolean allowFlight, allowNether, spawnAnimals; private final long seed; private final Duration timeout;
+    private final B173ServerLog log = new B173ServerLog(); private ServerLifecycle lifecycle = ServerLifecycle.NEW; private Process process; private int saves;
 
     public B173DedicatedServer(Path officialJar, Path directory, int port, long seed, Duration timeout) {
         this(officialJar, directory, port, seed, timeout, 3, false);
@@ -41,6 +36,10 @@ public final class B173DedicatedServer implements PersistentMultiplayerServerRun
 
     public B173DedicatedServer(Path officialJar, Path directory, int port, long seed,
             Duration timeout, int viewDistance, boolean allowFlight, boolean allowNether) {
+        this(officialJar,directory,port,seed,timeout,viewDistance,allowFlight,allowNether,false); }
+    public static B173DedicatedServer animals(Path jar,Path directory,int port,long seed,Duration timeout,int viewDistance,boolean allowFlight){return new B173DedicatedServer(jar,directory,port,seed,timeout,viewDistance,allowFlight,false,true);}
+    private B173DedicatedServer(Path officialJar, Path directory, int port, long seed,
+            Duration timeout, int viewDistance, boolean allowFlight, boolean allowNether, boolean spawnAnimals) {
         if (!Files.isRegularFile(officialJar)) throw new IllegalArgumentException("server JAR is absent");
         if (port < 1 || port > 65535) throw new IllegalArgumentException("invalid port");
         if (viewDistance < 3 || viewDistance > 15) throw new IllegalArgumentException("invalid view distance");
@@ -52,6 +51,7 @@ public final class B173DedicatedServer implements PersistentMultiplayerServerRun
         this.viewDistance = viewDistance;
         this.allowFlight = allowFlight;
         this.allowNether = allowNether;
+        this.spawnAnimals = spawnAnimals;
     }
 
     @Override
@@ -155,7 +155,7 @@ public final class B173DedicatedServer implements PersistentMultiplayerServerRun
     }
 
     private String properties() {
-        return B173ServerProperties.text(seed, port, viewDistance, allowFlight, allowNether);
+        return B173ServerProperties.text(seed, port, viewDistance, allowFlight, allowNether,spawnAnimals);
     }
 
     private String javaCommand() {

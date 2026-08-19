@@ -149,6 +149,7 @@ final class B173ItemAccess {
         catch (IOException error) { throw new IllegalStateException("peer swing receive failed", error); } }
     static RemoteMobSpawn awaitMobSpawn(B173PlayChannel channel,int type){try{return channel.awaitMobSpawn(type);}
         catch(IOException error){throw new IllegalStateException("mob spawn receive failed",error);}}
+    static worldline.api.RemoteMobMovement awaitMobMovement(B173PlayChannel channel,int entity){try{return channel.awaitMobMovement(entity);}catch(IOException error){throw new IllegalStateException("mob movement receive failed",error);}}
 
     static RemoteDroppedItem awaitDroppedItem(B173PlayChannel channel, RemoteItemStack expected) {
         try { return channel.inbound().awaitDroppedItem(expected); }
