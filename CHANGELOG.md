@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.155.0 - M167 Cactus
+
+Status: GO for official cactus placement on sand.
+
+- Placed sand `12` then cactus item `81` as block `81:0`.
+- The cactus remained after a 40-tick live hold and after save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M167 semantic SHA-256 is
+`9a210a58a09a40ac501c31bf8262bee7846ea1240c7dc0654766374ba627ef30`.
+
 ## 1.154.0 - M166 Note Block
 
 Status: GO for official note-block Packet54 click.

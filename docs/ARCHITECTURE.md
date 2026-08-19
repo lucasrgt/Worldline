@@ -1246,3 +1246,6 @@ use and depowers after the official 20-tick delay.
 M166 adds `RemoteNoteEvent` and a Packet54/61 decoder. The first click of a
 stone-supported note block is Packet54 instrument 1 pitch 1. Pitch lives in
 the tile entity, so block metadata stays `25:0`.
+
+M167 adds no public API. Cactus item `81` on sand `12` remains `81:0` after a
+live hold and a fresh login.

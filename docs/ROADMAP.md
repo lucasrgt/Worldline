@@ -171,6 +171,7 @@ Passing an experiment does not silently promote its API.
 | v1.152.0 / M164 | Pressure plate | GO - stone plate 70:0 powers to 70:1 under the actor and depowers |
 | v1.153.0 / M165 | Stone button | GO - button 77:1 pulses to 77:9 and depowers after 20 ticks |
 | v1.154.0 / M166 | Note block | GO - empty-hand click emits Packet54 instrument 1 pitch 1 |
+| v1.155.0 / M167 | Cactus | GO - cactus 81 on sand 12 persists through hold and restart |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -182,7 +183,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.154.0 direction
+## Immediate post-v1.155.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
