@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.114.0 - M126 Cross-Chunk Redstone (GO)**.
+Current official milestone: **Worldline v1.115.0 - M127 Cross-Chunk Redstone Recovery (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -645,6 +645,11 @@ M126 activates a lever in chunk 1 while its attached support and redstone wire
 remain in chunk 0. The official server changes the lever from metadata `1` to
 `9` and the cross-seam wire from power `0` to `15`. See
 `docs/M126_CROSS_CHUNK_REDSTONE.md`.
+
+M127 deactivates the same cross-seam signal through a fresh client. Lever and
+wire return to metadata `1` and `0`, and both complete chunks exactly match the
+original unpowered snapshots. See
+`docs/M127_CROSS_CHUNK_REDSTONE_RECOVERY.md`.
 
 ## Verify
 

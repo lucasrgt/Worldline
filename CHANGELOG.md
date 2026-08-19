@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.115.0 - M127 Cross-Chunk Redstone Recovery
+
+Status: GO for exact recovery of one redstone signal across a chunk seam.
+
+- Qualified the powered `69:9` lever and `55:15` wire through a fresh client.
+- Deactivated the lever once and observed exact `9→1` and `15→0` transitions.
+- Proved one inverse delta per chunk and zero residual states against baseline.
+
+The frozen M127 semantic SHA-256 is
+`269f3a7043dc7c483f160233c36890ef075faf03e36300801aa5779f06b05aa2`.
+
 ## 1.114.0 - M126 Cross-Chunk Redstone
 
 Status: GO for one lever-to-wire signal across a chunk seam.

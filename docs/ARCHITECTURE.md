@@ -1050,3 +1050,8 @@ M126 adds no public API or redstone evaluator. It places the lever block in the
 east chunk and its attached support and wire in the west chunk, then partitions
 the fresh post-activation delta by chunk. Power computation remains entirely
 inside the official server.
+
+M127 adds no public API. It preserves M126's original off snapshots, qualifies
+the powered precondition with a fresh witness, and compares a separate final
+reader against both powered and original states. The exact inverse deltas and
+empty residuals remain immutable observations of the official server.
