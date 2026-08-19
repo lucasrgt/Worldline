@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.209.0 - M221 Furnace
+
+Status: GO for official idle-furnace placement.
+
+- Placed furnace item `61` on a raised stone support as `61:2`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M221 semantic SHA-256 is
+`88ee8a957cbe3c4c1f6f27f8b4fa73786709b04be0e37ea4c9b50e01737b965c`.
+
 ## 1.208.0 - M220 Workbench
 
 Status: GO for official workbench placement.

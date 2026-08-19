@@ -244,6 +244,7 @@ final class SmokeSuite {
         {"tools/smoke/GravelCycle.java", "m218-gravel"},
         {"tools/smoke/TntPlaceCycle.java", "m219-tnt-place"},
         {"tools/smoke/WorkbenchPlaceCycle.java", "m220-workbench"},
+        {"tools/smoke/FurnacePlaceCycle.java", "m221-furnace"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 
