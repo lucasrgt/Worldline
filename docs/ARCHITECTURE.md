@@ -1267,3 +1267,6 @@ the headless actor steps on it and depowers when they step off.
 
 M173 adds no public API. Two adjacent fence items `85` place as `85:0` and
 persist.
+
+M174 adds no public API. Ladder item `65` on an east face is `65:5` and
+persists.

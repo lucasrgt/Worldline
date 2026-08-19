@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.161.0 - M173 Fence (GO)**.
+Current official milestone: **Worldline v1.162.0 - M174 Ladder (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.162.0 - M174 Ladder
+
+Status: GO for official east-facing ladder placement.
+
+- Placed ladder item `65` on an east stone face as `65:5`.
+- That facing survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M174 semantic SHA-256 is
+`901e76a85d36008f4429e6863549902a4c2b49485980fbfb65a9568725bb491e`.
+
 ## 1.161.0 - M173 Fence
 
 Status: GO for official adjacent fence placement.
