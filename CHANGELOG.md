@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.204.0 - M216 Obsidian
+
+Status: GO for official inventory obsidian placement.
+
+- Placed obsidian item `49` on a raised stone support as `49:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M216 semantic SHA-256 is
+`37b0c135b01ef8c65cbbb0636a135f26610fb0825a3acf378e396d5150a32bce`.
+
 ## 1.203.0 - M215 Lapis block
 
 Status: GO for official lapis-block placement.

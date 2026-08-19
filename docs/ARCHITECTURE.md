@@ -1375,3 +1375,5 @@ M213 adds no public API. Iron block item `42` places `42:0` and persists.
 M214 adds no public API. Diamond block item `57` places `57:0` and persists.
 
 M215 adds no public API. Lapis block item `22` places `22:0` and persists.
+
+M216 adds no public API. Obsidian item `49` places `49:0` and persists.

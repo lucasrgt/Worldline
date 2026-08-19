@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.203.0 - M215 Lapis block (GO)**.
+Current official milestone: **Worldline v1.204.0 - M216 Obsidian (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

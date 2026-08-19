@@ -239,6 +239,7 @@ final class SmokeSuite {
         {"tools/smoke/IronBlockCycle.java", "m213-iron-block"},
         {"tools/smoke/DiamondBlockCycle.java", "m214-diamond-block"},
         {"tools/smoke/LapisBlockCycle.java", "m215-lapis-block"},
+        {"tools/smoke/ObsidianCycle.java", "m216-obsidian"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 
