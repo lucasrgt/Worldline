@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.217.0 - M229 Redstone ore (GO)**.
+Current official milestone: **Worldline v1.218.0 - M230 Lapis ore (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
