@@ -4,6 +4,21 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.89.0 - M101 Rebuild-Budget-Zero Direct Path
+
+Status: GO for the exact zero-rebuild direct path under cache1.
+
+- Froze cache1, TTL100000, rebuild budget0, and the existing four-page scene.
+- Proved every retained record had pageCalls0, directInstances16, rebuild0,
+  cache0, and zero cumulative capacity evictions.
+- Independently required M74 renderer/list counters 16/16 and all sixteen
+  synchronized identities in 4490/4758 complete records.
+- Kept descriptive timings dynamic and bounded the mechanism to the exact
+  fixture and pinned Aero revision.
+
+The frozen M101 semantic SHA-256 is
+`8e0d8ae9c249c8f2967e0ac534c0ee7b7e79ff6a04bd7b407c89dcd2f5e7b0cd`.
+
 ## 1.88.0 - M100 Rebuild-Budget-One Fallback
 
 Status: GO for the exact alternating one-rebuild path under cache1.

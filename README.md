@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.88.0 - M100 Rebuild-Budget-One Fallback (GO)**.
+Current official milestone: **Worldline v1.89.0 - M101 Rebuild-Budget-Zero Direct Path (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
@@ -515,6 +515,11 @@ direct fallback, and advances capacity evictions by two. See
 M100 lowers that budget to one and proves a strict per-frame alternation:
 `pageCalls2/direct4` then `pageCalls1/direct10`, always with rebuild1, cache1,
 and eviction delta one. See `docs/M100_REBUILD_BUDGET_ONE_FALLBACK.md`.
+
+M101 lowers the rebuild budget to zero while retaining cache maximum one.
+Every retained record stays cache-empty and renders all sixteen synchronized
+instances directly, with zero page calls, rebuilds, and evictions. See
+`docs/M101_REBUILD_BUDGET_ZERO_DIRECT.md`.
 
 ## Verify
 

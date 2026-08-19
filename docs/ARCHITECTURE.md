@@ -880,3 +880,9 @@ It lowers the same cache1 fixture to one rebuild per frame. The retained key
 causes exact alternation between a two-page-call/four-direct record and a
 one-page-call/ten-direct record; rebuild and eviction deltas remain one.
 Common/server code remains Aero-free.
+
+M101 adds no public API or product adapter behavior and leaves M74-M100 frozen.
+It lowers the same cache1 fixture to zero rebuilds per frame. No page can enter
+the cache, so every retained record uses the direct path for all sixteen
+synchronized instances, with zero rebuilds and evictions. Common/server code
+remains Aero-free.
