@@ -1831,3 +1831,5 @@ M443 adds no public API. Empty-bucket pickup of still versus flowing water and l
 M444 adds no public API. Pig pork `319` plus sheep undyed wool `35:0` death drops share one remaining-mob-drops-rest family.
 
 M422 adds no public API. Skeleton bone `352` plus bone-meal wheat `59:7` share one skeleton-bone family.
+
+M436 adds no public API. Bow `261` Packet23 type `60` land plus arrow `262` collect share one remaining-arrow-life family.

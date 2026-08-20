@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.432.0 - M436 Remaining arrow life set
+
+Status: GO for official remaining bow-arrow land plus dropped-arrow collect together.
+
+- Bow `261` air-use landed Packet23 type `60`; Packet14 dropped arrow `262` as Packet21.
+- Packet103 restored arrow `262` after the official pickup delay.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M436 semantic SHA-256 is
+`9a370fd980f9abd2ed3f852ff575a9dae9c9b0f461c73fa548d131b40077011c`.
+
 ## 1.431.0 - M422 Skeleton bone set
 
 Status: GO for official skeleton bone drop plus bone-meal wheat together.
