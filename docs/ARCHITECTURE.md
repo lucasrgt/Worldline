@@ -1439,3 +1439,5 @@ M245 adds no public API. Sign item `323` places wall sign `68:5` with Packet130 
 M246 adds no public API. Log item `17` damage `1` places spruce log `17:1` and persists.
 
 M247 adds no public API. Log item `17` damage `2` places birch log `17:2` and persists.
+
+M248 adds no public API. Wool item `35` damage `1` places orange wool `35:1` and persists.
