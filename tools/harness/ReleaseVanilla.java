@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m403 = load(root, "smokes/m403-remaining-boat-break/smoke.properties");
         Properties m404 = load(root, "smokes/m404-remaining-cart-break/smoke.properties");
         Properties m405 = load(root, "smokes/m405-pig-saddle-set/smoke.properties");
         Properties m406 = load(root, "smokes/m406-sheep-dye-set/smoke.properties");
-        match(release, "version", "1.394.0");
-        match(release, "milestone", "m406-sheep-dye-set");
-        same(release, "m403.signature", m403, "expected.signature");
-        same(release, "server.sha256", m403, "server.jar.sha256");
+        Properties m407 = load(root, "smokes/m407-chicken-egg-set/smoke.properties");
+        match(release, "version", "1.395.0");
+        match(release, "milestone", "m407-chicken-egg-set");
         same(release, "m404.signature", m404, "expected.signature");
         same(release, "server.sha256", m404, "server.jar.sha256");
         same(release, "m405.signature", m405, "expected.signature");
         same(release, "server.sha256", m405, "server.jar.sha256");
         same(release, "m406.signature", m406, "expected.signature");
         same(release, "server.sha256", m406, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M403_REMAINING_BOAT_BREAK.md", "docs/M403_CYCLE.md",
-                "smokes/m403-remaining-boat-break/MAP.md", "docs/M404_REMAINING_CART_BREAK.md", "docs/M404_CYCLE.md",
+        same(release, "m407.signature", m407, "expected.signature");
+        same(release, "server.sha256", m407, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M404_REMAINING_CART_BREAK.md", "docs/M404_CYCLE.md",
                 "smokes/m404-remaining-cart-break/MAP.md", "docs/M405_PIG_SADDLE_SET.md", "docs/M405_CYCLE.md",
                 "smokes/m405-pig-saddle-set/MAP.md", "docs/M406_SHEEP_DYE_SET.md", "docs/M406_CYCLE.md",
-                "smokes/m406-sheep-dye-set/MAP.md"))
+                "smokes/m406-sheep-dye-set/MAP.md", "docs/M407_CHICKEN_EGG_SET.md", "docs/M407_CYCLE.md",
+                "smokes/m407-chicken-egg-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.394.0 M406 Sheep dye set GO");
+        System.out.println("  release: Worldline v1.395.0 M407 Chicken egg set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.394.0 - M406 Sheep dye set (GO)**.
+Current official milestone: **Worldline v1.395.0 - M407 Chicken egg set (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

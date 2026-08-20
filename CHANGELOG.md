@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.395.0 - M407 Chicken egg set
+
+Status: GO for official chicken type 93 plus egg 344 / Packet23 type 62 together.
+
+- Spawner retargeted to Chicken; Packet24 type `93` appeared in the same session as egg `344`.
+- Bounded lay wait plus air-use Packet23 type `62` froze the egg family.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M407 semantic SHA-256 is
+`a27d5e84d4fc5e08292a9a78c2ebccf8027e9441118ed789ef3adc30d8ff97a6`.
+
 ## 1.394.0 - M406 Sheep dye set
 
 Status: GO for official rose-red and dandelion-yellow living-sheep dyes together.
