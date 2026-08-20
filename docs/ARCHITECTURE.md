@@ -1823,3 +1823,5 @@ M438 adds no public API. Clock `347` plus empty map `358` air-use share one rema
 M439 adds no public API. Coal ore `16`, lapis ore `21`, and unlit redstone ore `73` share one remaining-ore-place family.
 
 M440 adds no public API. Remaining 2x2 dye mixes `351:7` and `351:13` share one remaining-dye-rest family.
+
+M442 adds no public API. Two jukebox `84` cells plus gold/green discs share one remaining-record-place family.

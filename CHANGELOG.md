@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.428.0 - M442 Remaining record place set
+
+Status: GO for official remaining two-jukebox disc insert together.
+
+- Two jukeboxes `84` accepted gold disc `2256` and green disc `2257` and became `84:1`.
+- Both cells persisted after a clean save plus fresh login; eject is unclaimed.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M442 semantic SHA-256 is
+`b70badf841ffc29e7c9adb0c7d29b5c2b687a43a5bcdb0e85e065170d1f7551a`.
+
 ## 1.427.0 - M440 Remaining dye rest set
 
 Status: GO for official remaining personal 2x2 dye mixes together.
