@@ -1465,3 +1465,5 @@ M258 adds no public API. Bread item `297` air-use heals Packet8 `15 -> 20` and c
 M259 adds no public API. Cooked pork item `320` air-use heals Packet8 `12 -> 20` and consumes the stack.
 
 M260 adds no public API. Apple item `260` air-use heals Packet8 `16 -> 20` and consumes the stack.
+
+M261 adds no public API. Golden apple item `322` air-use heals Packet8 `10 -> 20` and consumes the stack.

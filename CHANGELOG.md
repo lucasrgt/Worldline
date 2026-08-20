@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.249.0 - M261 Golden apple eat
+
+Status: GO for official golden-apple air-use heal.
+
+- Seeded golden apple `322` at health `10` and Packet15 air-use restored Packet8 `10 -> 20`.
+- The held stack was consumed `322:1:0 -> empty` and both health and inventory survived a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M261 semantic SHA-256 is
+`888e7fe8215ede44deaf9a73fa95ecc769f61e554e9262d0781ae75eca2e9fe3`.
+
 ## 1.248.0 - M260 Apple eat
 
 Status: GO for official apple air-use heal.
