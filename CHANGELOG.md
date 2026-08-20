@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.354.0 - M366 Map fill set
+
+Status: GO for official empty-map Packet15 air-use together with persist.
+
+- Empty map `358` was Packet15 air-used; the dedicated server left the stack `358:1:0`.
+- The same empty map survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M366 semantic SHA-256 is
+`048613204222ae9dce7fb157d74dc94b69573ce8faaa9dd90cff64f7aab8f31f`.
+
 ## 1.353.0 - M365 Compass point set
 
 Status: GO for official held compass spawn-point needle reversal together.

@@ -370,6 +370,7 @@ Passing an experiment does not silently promote its API.
 | v1.351.0 / M363 | Hostile identity set | GO - Packet24 zombie 54 and skeleton 51 from spawners |
 | v1.352.0 / M364 | Light opacity set | GO - glass 20, leaves 18:8, ice 79 distinct sky light |
 | v1.353.0 / M365 | Compass point set | GO - held 345 needle reverse plus two spawn-bearing cells |
+| v1.354.0 / M366 | Map fill set | GO - empty map 358 air-use remains 358:1:0 on dedicated |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -381,7 +382,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.353.0 direction
+## Immediate post-v1.354.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

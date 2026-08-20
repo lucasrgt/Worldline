@@ -1675,3 +1675,5 @@ M363 adds no public API. Spawner EntityId Zombie and Skeleton Packet24 types 54 
 M364 adds no public API. Glass `20`, leaves `18:8`, and ice `79` share one translucent sky-light family.
 
 M365 adds no public API. Held compass `345` yaw reversal and two-cell spawn bearing share one compass-point family.
+
+M366 adds no public API. Empty map `358` Packet15 air-use and persist share one map-fill family. The official dedicated server does not rewrite the stack.
