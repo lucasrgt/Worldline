@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.401.0 - M414 Lava obsidian set
+
+Status: GO for official still-lava plus water obsidian in two basins together.
+
+- Lava bucket `327` placed still lava `11`; water bucket `326` placed still water `9` beside each source.
+- Both lava-source cells hardened to obsidian `49`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M414 semantic SHA-256 is
+`856101df96a1dea04d9f18e7a1ceef3018dce576227d046030271fa67825fbff`.
+
 ## 1.400.0 - M412 Slime split set
 
 Status: GO for official slime Packet24 type 55 parent death plus child type-55 split together.
