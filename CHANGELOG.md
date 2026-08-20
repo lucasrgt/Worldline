@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.380.0 - M392 Remaining fluid flow
+
+Status: GO for official horizontal still-water and still-lava flow together.
+
+- Dirt gates opened to air; still water `9:0` flowed as `9:1` and still lava `11:0` flowed as `11:2`.
+- Sources stayed still and both flowed cells persisted after a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M392 semantic SHA-256 is
+`8ec5aefbab73a3cd36a48185fa30c6266c70c3392ce80a5b319f8a6d94f2cfba`.
+
 ## 1.379.0 - M391 Creeper explode set
 
 Status: GO for official creeper Packet60 strength 3 destroying dirt and wool together.
