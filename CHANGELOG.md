@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.225.0 - M237 Stone
+
+Status: GO for official stone placement.
+
+- Placed stone item `1` on a raised stone support as `1:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M237 semantic SHA-256 is
+`a8969e296f04e9e9e445c08139a0fd689dc08bc6796515a90ad78d5b8e4f3ee9`.
+
 ## 1.224.0 - M236 Cobble slab
 
 Status: GO for official cobblestone-slab placement.
