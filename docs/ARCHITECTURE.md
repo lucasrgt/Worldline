@@ -1507,3 +1507,5 @@ M279 adds no public API. Empty-hand Packet15 pulses stone button `77:1` to `77:9
 M280 adds no public API. Wool item `35` damage `2` places magenta wool `35:2` and persists.
 
 M281 adds no public API. Wool item `35` damage `3` places light-blue wool `35:3` and persists.
+
+M282 adds no public API. Wool item `35` damage `5` places lime wool `35:5` and persists.
