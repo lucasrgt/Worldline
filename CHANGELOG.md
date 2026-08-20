@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.331.0 - M343 Fire family set
+
+Status: GO for official netherrack fire persist and wool consumption together.
+
+- Flint-and-steel `259` placed fire `51` on netherrack `87`; adjacent wool `35` was consumed.
+- The netherrack flame remained after the bounded live hold and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M343 semantic SHA-256 is
+`b04d10e87e540d454627a3960abbf311c9912ca625d00f3e71af970ea08e77f6`.
+
 ## 1.330.0 - M342 Gravity block set
 
 Status: GO for official sand and gravel falls together.
