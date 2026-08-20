@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.303.0 - M315 Dye wool crafts (GO)**.
+Current official milestone: **Worldline v1.304.0 - M316 Shears set (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

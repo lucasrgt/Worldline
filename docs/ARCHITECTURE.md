@@ -1575,3 +1575,5 @@ M313 adds no public API. Note block `25` plays instruments on stone, wood, and s
 M314 adds no public API. Iron helmet `306`, chestplate `307`, leggings `308`, and boots `309` share one armor-craft family.
 
 M315 adds no public API. White wool `35:0` plus dyes `351:1`, `351:2`, and `351:4` share one dyed-wool craft family.
+
+M316 adds no public API. Shears item `359` on oak leaves `18` and a living sheep share one harvest family.

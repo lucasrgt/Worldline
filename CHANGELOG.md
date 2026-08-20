@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.304.0 - M316 Shears set
+
+Status: GO for official shears leaf and living-sheep wool together.
+
+- Shears item `359` dropped Packet21 leaf `18` from player-placed `18:8`.
+- Packet7 on a living type-91 sheep dropped Packet21 wool `35` without Packet38 status 3.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M316 semantic SHA-256 is
+`91eec7f3061f3c9cb956cd25ebcc7ece6a66055262a45538081a8ad72d79426e`.
+
 ## 1.303.0 - M315 Dye wool crafts
 
 Status: GO for official 2x2 dyed-wool crafts together.
