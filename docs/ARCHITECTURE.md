@@ -1569,3 +1569,5 @@ M310 adds no public API. Boat type 1 and minecart type 10 mounts share one vehic
 M311 adds no public API. Chest-minecart window and furnace-minecart spawn share one storage-cart family. CHEST windows also accept title `Minecart`.
 
 M312 adds no public API. Redstone torch on `76` inverts to off `75` on the same cell.
+
+M313 adds no public API. Note block `25` plays instruments on stone, wood, and sand together.

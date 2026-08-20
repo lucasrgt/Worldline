@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.301.0 - M313 Note instruments
+
+Status: GO for official note-block instruments on stone, wood, and sand together.
+
+- Packet14 played note block `25` on stone, planks `5`, and sand `12`.
+- Packet54 instruments were `1`, `4`, and `2`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M313 semantic SHA-256 is
+`6e171effe14c350c22319797f836fbb498aa88b559a88bef337aa634f95943b6`.
+
 ## 1.300.0 - M312 Torch invert
 
 Status: GO for official redstone-torch on and off together.

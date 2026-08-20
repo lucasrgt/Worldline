@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.300.0 - M312 Torch invert (GO)**.
+Current official milestone: **Worldline v1.301.0 - M313 Note instruments (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
