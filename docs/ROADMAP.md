@@ -397,6 +397,7 @@ Passing an experiment does not silently promote its API.
 | v1.378.0 / M390 | Remaining spawner set | GO - creeper type 50 and spider type 52 |
 | v1.379.0 / M391 | Creeper explode set | GO - creeper Packet60 strength 3 on dirt and wool |
 | v1.380.0 / M392 | Remaining fluid flow | GO - still water 9 and still lava 11 horizontal flow |
+| v1.381.0 / M393 | Stair facing set | GO - oak 53 and cobble 67 look-yaw facings |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -408,7 +409,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.380.0 direction
+## Immediate post-v1.381.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.381.0 - M393 Stair facing set
+
+Status: GO for official oak and cobble stairs look-yaw facings together.
+
+- Packet15 placed oak stairs `53:0`/`53:1` and cobble stairs `67:0`/`67:1` from look yaw `-90` and `90`.
+- All four cells persisted after a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M393 semantic SHA-256 is
+`1e94922033cceeec477b29842f80b9bce86737cb240b266bad8ad4cf93cf0253`.
+
 ## 1.380.0 - M392 Remaining fluid flow
 
 Status: GO for official horizontal still-water and still-lava flow together.
