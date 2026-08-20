@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.373.0 - M385 Leaf decay set
+
+Status: GO for official oak, spruce, and birch leaf decay together.
+
+- Logs `17:0/1/2` were removed; leaves `18:8/9/10` decayed to air with Packet21 leaf items.
+- The decayed cells persisted after a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M385 semantic SHA-256 is
+`3974fe1e9ab8e39e20e8122dce05d183745ba923b5b1dd4306f63c308e0f2e1c`.
+
 ## 1.372.0 - M384 Cactus sugar set
 
 Status: GO for official cactus and sugar-cane growth together.

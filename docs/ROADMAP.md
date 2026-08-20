@@ -389,6 +389,7 @@ Passing an experiment does not silently promote its API.
 | v1.370.0 / M382 | Portal obsidian set | GO - 14 obsidian frame plus 6 portal 90 cells |
 | v1.371.0 / M383 | Mushroom place set | GO - brown 39 on dirt and red 40 on netherrack |
 | v1.372.0 / M384 | Cactus sugar set | GO - cactus 81 and sugar cane 83 grow to height 2 |
+| v1.373.0 / M385 | Leaf decay set | GO - oak, spruce, birch leaves decay after log break |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -400,7 +401,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.372.0 direction
+## Immediate post-v1.373.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
