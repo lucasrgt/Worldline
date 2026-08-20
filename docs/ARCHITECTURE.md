@@ -1571,3 +1571,5 @@ M311 adds no public API. Chest-minecart window and furnace-minecart spawn share 
 M312 adds no public API. Redstone torch on `76` inverts to off `75` on the same cell.
 
 M313 adds no public API. Note block `25` plays instruments on stone, wood, and sand together.
+
+M314 adds no public API. Iron helmet `306`, chestplate `307`, leggings `308`, and boots `309` share one armor-craft family.

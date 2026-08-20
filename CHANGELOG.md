@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.302.0 - M314 Armor crafts
+
+Status: GO for official iron-armor workbench crafts together.
+
+- Packet102 crafted helmet `306`, chestplate `307`, leggings `308`, and boots `309` from ingots `265`.
+- The four result ids stayed in personal storage and armor slots 5-8 stayed empty.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M314 semantic SHA-256 is
+`914b42df18b53c2afcbb40f2f5c87b8848dc19e4e816eaef927067915c98b437`.
+
 ## 1.301.0 - M313 Note instruments
 
 Status: GO for official note-block instruments on stone, wood, and sand together.
