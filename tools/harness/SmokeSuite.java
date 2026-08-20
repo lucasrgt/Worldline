@@ -267,6 +267,7 @@ final class SmokeSuite {
         {"tools/smoke/IronDoorPlaceCycle.java", "m241-iron-door-place"},
         {"tools/smoke/LeverPlaceCycle.java", "m242-lever-place"},
         {"tools/smoke/RedstoneWireCycle.java", "m243-redstone-wire"},
+        {"tools/smoke/CakePlaceCycle.java", "m244-cake-place"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.232.0 - M244 Cake place
+
+Status: GO for official uneaten cake placement.
+
+- Placed cake item `354` on a raised stone support as `92:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M244 semantic SHA-256 is
+`3c7fa802b04a3eee353f1129e19f03bc24418ba2dfdab4b7598ebb480edc23fd`.
+
 ## 1.231.0 - M243 Redstone wire
 
 Status: GO for official unpowered redstone-wire placement.

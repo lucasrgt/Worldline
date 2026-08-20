@@ -1431,3 +1431,5 @@ M241 adds no public API. Iron door item `330` places lower `71:0` and upper `71:
 M242 adds no public API. Lever item `69` places `69:1` on an east face and persists.
 
 M243 adds no public API. Redstone dust item `331` places unpowered wire `55:0` and persists.
+
+M244 adds no public API. Cake item `354` places uneaten cake `92:0` and persists.
