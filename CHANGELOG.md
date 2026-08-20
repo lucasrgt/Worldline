@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.282.0 - M294 Piston place
+
+Status: GO for official piston placement.
+
+- Placed piston item `33` as block `33:1` on raised stone.
+- The exact cell survived a clean save and a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M294 semantic SHA-256 is
+`3fa31fff0d03751901d6283ff022999a5d94d205d79d1a77106294cc8b041624`.
+
 ## 1.281.0 - M293 Sticky piston place
 
 Status: GO for official sticky piston placement.

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.281.0 - M293 Sticky piston place (GO)**.
+Current official milestone: **Worldline v1.282.0 - M294 Piston place (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

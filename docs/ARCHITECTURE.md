@@ -1531,3 +1531,5 @@ M291 adds no public API. Leaves item `18` damage `1` beside spruce log `17:1` pe
 M292 adds no public API. Leaves item `18` damage `2` beside oak log persist as birch leaves `18:10`.
 
 M293 adds no public API. Sticky piston item `29` places `29:1` and persists.
+
+M294 adds no public API. Piston item `33` places `33:1` and persists.
