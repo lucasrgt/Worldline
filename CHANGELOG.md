@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.400.0 - M412 Slime split set
+
+Status: GO for official slime Packet24 type 55 parent death plus child type-55 split together.
+
+- Slime-chunk `-2,-2` cave below `y=16`; spawner retargeted to Slime with spawn-monsters.
+- Packet24 type `55` parent was killed with diamond sword `276`; child type-`55` Packet24 appeared.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M412 semantic SHA-256 is
+`04232de5b9eb6e2e741dbbf008ade42638370d907b361856800b70fe8cb6e59b`.
+
 ## 1.399.0 - M411 Zombie pigman set
 
 Status: GO for official Nether pigman Packet24 type 57 and cooked-pork 320 drop together.

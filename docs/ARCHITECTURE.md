@@ -1767,3 +1767,5 @@ M409 adds no public API. Spider type `52` string `287` plus cobweb `30` share on
 M410 adds no public API. Nether ghast type `56` plus fireball type `63` share one ghast-fireball family.
 
 M411 adds no public API. Nether pigman type `57` plus cooked pork `320` share one zombie-pigman family.
+
+M412 adds no public API. Slime type `55` parent death plus child type `55` share one slime-split family.

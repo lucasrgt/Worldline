@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m408 = load(root, "smokes/m408-squid-ink-set/smoke.properties");
         Properties m409 = load(root, "smokes/m409-spider-string-set/smoke.properties");
         Properties m410 = load(root, "smokes/m410-ghast-fireball-set/smoke.properties");
         Properties m411 = load(root, "smokes/m411-zombie-pigman-set/smoke.properties");
-        match(release, "version", "1.399.0");
-        match(release, "milestone", "m411-zombie-pigman-set");
-        same(release, "m408.signature", m408, "expected.signature");
-        same(release, "server.sha256", m408, "server.jar.sha256");
+        Properties m412 = load(root, "smokes/m412-slime-split-set/smoke.properties");
+        match(release, "version", "1.400.0");
+        match(release, "milestone", "m412-slime-split-set");
         same(release, "m409.signature", m409, "expected.signature");
         same(release, "server.sha256", m409, "server.jar.sha256");
         same(release, "m410.signature", m410, "expected.signature");
         same(release, "server.sha256", m410, "server.jar.sha256");
         same(release, "m411.signature", m411, "expected.signature");
         same(release, "server.sha256", m411, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M408_SQUID_INK_SET.md", "docs/M408_CYCLE.md",
-                "smokes/m408-squid-ink-set/MAP.md", "docs/M409_SPIDER_STRING_SET.md", "docs/M409_CYCLE.md",
+        same(release, "m412.signature", m412, "expected.signature");
+        same(release, "server.sha256", m412, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M409_SPIDER_STRING_SET.md", "docs/M409_CYCLE.md",
                 "smokes/m409-spider-string-set/MAP.md", "docs/M410_GHAST_FIREBALL_SET.md", "docs/M410_CYCLE.md",
                 "smokes/m410-ghast-fireball-set/MAP.md", "docs/M411_ZOMBIE_PIGMAN_SET.md", "docs/M411_CYCLE.md",
-                "smokes/m411-zombie-pigman-set/MAP.md"))
+                "smokes/m411-zombie-pigman-set/MAP.md", "docs/M412_SLIME_SPLIT_SET.md", "docs/M412_CYCLE.md",
+                "smokes/m412-slime-split-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.399.0 M411 Zombie pigman set GO");
+        System.out.println("  release: Worldline v1.400.0 M412 Slime split set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
