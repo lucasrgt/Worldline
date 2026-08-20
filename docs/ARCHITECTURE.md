@@ -1853,3 +1853,5 @@ M457 adds no public API. Spider type `52` leap toward pose plus Packet8 share on
 M458 adds no public API. Slime type `55` size-1 plus larger Packet8 contact share one slime-touch family.
 
 M459 adds no public API. Nether ghast type `56` Packet23 type `63` Packet60 strength `1` hit share one ghast-fireball-hit family.
+
+M460 adds no public API. Bed occupy `26:12` plus type `54` interrupt leave share one monster-bed-interrupt family.

@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.443.0 - M460 Monster bed interrupt set
+
+Status: GO for official bed occupy plus hostile Packet24 interrupt together.
+
+- Packet15 occupied head `26:8` to `26:12` with Packet17; type `54` returned it to `26:8`.
+- Packet70 stayed `-1`; morning skip was rejected. Distinct from M330 occupy/wake.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M460 semantic SHA-256 is
+`252160a06c2d628ac1441c16105e90c2c1e0047f10a300061765a01948d87c61`.
+
 ## 1.442.0 - M459 Ghast fireball hit set
 
 Status: GO for official Nether ghast Packet23 type 63 fireball hit together.
