@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.385.0 - M397 Dispenser projectiles
+
+Status: GO for official dispenser snowball and egg Packet23 ejections together.
+
+- Trap window loaded snowball `332` and egg `344`; a lever pulse ejected Packet23 types `61` and `62`.
+- Reopened Trap slots 0 and 1 were empty.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M397 semantic SHA-256 is
+`66d497bee36abdc673c44336dad9a75afcc08fcf7ade36676c652023100b1731`.
+
 ## 1.384.0 - M396 Remaining wool crafts
 
 Status: GO for official magenta, light-blue, and lime dyed-wool crafts together.
