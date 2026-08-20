@@ -1661,3 +1661,5 @@ M356 adds no public API. Pumpkin `86` and jack-o-lantern `91` share one lantern-
 M357 adds no public API. Glowstone dust `348` to glowstone `89` is the 2x2 dust-craft family.
 
 M358 adds no public API. Snow block `80` craft and shovel harvest of `78`/`80` share one snow family.
+
+M359 adds no public API. Overworld sleep versus Nether bed explode share one bed-dimension family.

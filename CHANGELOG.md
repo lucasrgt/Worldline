@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.347.0 - M359 Bed nether explode
+
+Status: GO for official Overworld sleep versus Nether bed explode together.
+
+- Dimension `-1` Packet15-used a placed bed `26`; Packet17 was absent and Packet60 fired at strength `5`.
+- Both bed halves were gone after the explosion and after a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M359 semantic SHA-256 is
+`be77b379de881712f9089340681a1a0779977df7934e51508858f83c97a9a7a6`.
+
 ## 1.346.0 - M358 Snow craft set
 
 Status: GO for official snow-block craft plus shovel harvest of layer and block together.

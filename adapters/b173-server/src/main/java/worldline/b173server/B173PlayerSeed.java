@@ -39,9 +39,20 @@ public final class B173PlayerSeed {
     /** Writes exact main-inventory slots and an official Health short. */
     public static void writeInventory(Path serverDirectory, String username, double x, double y, double z,
             int[] slots, int[] legacyIds, int[] counts, int[] damages, int health) {
-        if (slots == null || legacyIds == null || counts == null || damages == null || slots.length != legacyIds.length
-                || slots.length != counts.length || slots.length != damages.length || slots.length > 36
-                || health < 1 || health > 20)
+        inventory(serverDirectory, username, x, y, z, 0, slots, legacyIds, counts, damages, health);
+    }
+
+    /** Writes exact main-inventory slots into an exact vanilla dimension. */
+    public static void writeInventory(Path serverDirectory, String username, double x, double y, double z,
+            int dimension, int[] slots, int[] legacyIds, int[] counts, int[] damages) {
+        inventory(serverDirectory, username, x, y, z, dimension, slots, legacyIds, counts, damages, 20);
+    }
+
+    private static void inventory(Path serverDirectory, String username, double x, double y, double z, int dimension,
+            int[] slots, int[] legacyIds, int[] counts, int[] damages, int health) {
+        if ((dimension != 0 && dimension != -1) || slots == null || legacyIds == null || counts == null
+                || damages == null || slots.length != legacyIds.length || slots.length != counts.length
+                || slots.length != damages.length || slots.length > 36 || health < 1 || health > 20)
             throw new IllegalArgumentException("invalid player inventory seed");
         for (int index = 0; index < slots.length; index++) {
             if (slots[index] < 0 || slots[index] > 35 || legacyIds[index] < 1 || legacyIds[index] > 32767
@@ -50,8 +61,8 @@ public final class B173PlayerSeed {
             for (int prior = 0; prior < index; prior++) if (slots[prior] == slots[index])
                 throw new IllegalArgumentException("duplicate player inventory slot");
         }
-        write(serverDirectory, username, x, y, z, 0, slots.clone(), legacyIds.clone(), counts.clone(), damages.clone(),
-                health);
+        write(serverDirectory, username, x, y, z, dimension, slots.clone(), legacyIds.clone(), counts.clone(),
+                damages.clone(), health);
     }
 
     private static void write(Path serverDirectory, String username, double x, double y, double z, int dimension,
