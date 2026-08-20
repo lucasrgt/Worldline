@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.334.0 - M346 Ore block uncrafts (GO)**.
+Current official milestone: **Worldline v1.335.0 - M347 Gold diamond hoes (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

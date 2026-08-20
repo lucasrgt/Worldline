@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.335.0 - M347 Gold diamond hoes
+
+Status: GO for official gold hoe and diamond hoe crafts together.
+
+- Packet102 crafted gold hoe `294` and diamond hoe `293` in a placed workbench `58`.
+- Both tools survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M347 semantic SHA-256 is
+`db8eed6611d61cb0063b32dcf170a0fd66d46799102196c45721842544e6515b`.
+
 ## 1.334.0 - M346 Ore block uncrafts
 
 Status: GO for official gold, iron, diamond, and lapis block uncrafts together.

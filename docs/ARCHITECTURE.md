@@ -1637,3 +1637,5 @@ M344 adds no public API. Water bucket `326`/`9` and lava bucket `327`/`11` share
 M345 adds no public API. Gold `41`, iron `42`, diamond `57`, and lapis `22` share one ore-block craft family.
 
 M346 adds no public API. Uncrafting `41`, `42`, `57`, and `22` shares one ore-block uncraft family.
+
+M347 adds no public API. Gold hoe `294` and diamond hoe `293` share one hoe-craft family.
