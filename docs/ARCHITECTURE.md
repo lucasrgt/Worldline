@@ -1849,3 +1849,5 @@ M448 adds no public API. Creeper type `50` Packet40 ignited state before Packet6
 M452 adds no public API. Zombie type `54` Packet8 knockback plus hurt-time cooldown share one knockback-cooldown family.
 
 M457 adds no public API. Spider type `52` leap toward pose plus Packet8 share one spider-leap family.
+
+M458 adds no public API. Slime type `55` size-1 plus larger Packet8 contact share one slime-touch family.

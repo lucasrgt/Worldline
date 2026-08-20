@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.441.0 - M458 Slime touch set
+
+Status: GO for official slime Packet24 size family plus AABB Packet8 contact together.
+
+- Packet24 type `55` showed size-1 and larger metadata; walking in emitted Packet38 then Packet8.
+- Distinct from M412 parent-split children and M423 slimeball.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M458 semantic SHA-256 is
+`84cc0baf6465c46adf5437018728a84b237f8d611fa461bcc6335932432f2d26`.
+
 ## 1.440.0 - M457 Spider leap set
 
 Status: GO for official spider Packet24 leap toward the actor plus touch Packet8 together.
