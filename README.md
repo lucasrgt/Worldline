@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.340.0 - M352 Tool durability set (GO)**.
+Current official milestone: **Worldline v1.341.0 - M353 Sword damage set (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

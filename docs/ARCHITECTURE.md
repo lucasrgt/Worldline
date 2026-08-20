@@ -1649,3 +1649,5 @@ M350 adds no public API. Standing sign `63` and wall sign `68` share one sign-te
 M351 adds no public API. West-face and east-face Packet25 paintings share one orientation family.
 
 M352 adds no public API. Wooden `270`, iron `257`, and gold `285` pick remaining damage share one durability family.
+
+M353 adds no public API. Wood `268`, iron `267`, and diamond `276` sword hits share one sword-damage family.

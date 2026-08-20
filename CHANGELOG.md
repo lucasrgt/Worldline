@@ -4,6 +4,16 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.341.0 - M353 Sword damage set
+
+Status: GO for official wood, iron, and diamond sword pig hits together.
+
+- Packet7 with swords `268`, `267`, and `276` recorded live hurts then Packet38 status 3 plus Packet29 death.
+- Attacker Packet8 stayed `20`. Repeated the complete family in two official server JVMs.
+
+The frozen M353 semantic SHA-256 is
+`cfaf1e0d3a43f1bb3a09cd6dadb2462a7d953de08671761856fc1080249424e4`.
+
 ## 1.340.0 - M352 Tool durability set
 
 Status: GO for official wooden, iron, and gold pick durability together.
