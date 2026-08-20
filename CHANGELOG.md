@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.310.0 - M322 Diamond armor crafts
+
+Status: GO for official diamond-armor workbench crafts together.
+
+- Packet102 crafted helmet `310`, chestplate `311`, leggings `312`, and boots `313` from diamonds `264`.
+- The four result ids stayed in personal storage and armor slots 5-8 stayed empty.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M322 semantic SHA-256 is
+`b54acc14a0bba483871701ba342becc842fe45291b56aca8212a1b71a2b5269d`.
+
 ## 1.309.0 - M321 Gold armor crafts
 
 Status: GO for official gold-armor workbench crafts together.

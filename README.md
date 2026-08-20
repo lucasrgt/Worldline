@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.309.0 - M321 Gold armor crafts (GO)**.
+Current official milestone: **Worldline v1.310.0 - M322 Diamond armor crafts (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m318 = load(root, "smokes/m318-gold-diamond-tool-crafts/smoke.properties");
         Properties m319 = load(root, "smokes/m319-stair-slab-crafts/smoke.properties");
         Properties m320 = load(root, "smokes/m320-leather-armor-crafts/smoke.properties");
         Properties m321 = load(root, "smokes/m321-gold-armor-crafts/smoke.properties");
-        match(release, "version", "1.309.0");
-        match(release, "milestone", "m321-gold-armor-crafts");
-        same(release, "m318.signature", m318, "expected.signature");
-        same(release, "server.sha256", m318, "server.jar.sha256");
+        Properties m322 = load(root, "smokes/m322-diamond-armor-crafts/smoke.properties");
+        match(release, "version", "1.310.0");
+        match(release, "milestone", "m322-diamond-armor-crafts");
         same(release, "m319.signature", m319, "expected.signature");
         same(release, "server.sha256", m319, "server.jar.sha256");
         same(release, "m320.signature", m320, "expected.signature");
         same(release, "server.sha256", m320, "server.jar.sha256");
         same(release, "m321.signature", m321, "expected.signature");
         same(release, "server.sha256", m321, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M318_GOLD_DIAMOND_TOOL_CRAFTS.md", "docs/M318_CYCLE.md",
-                "smokes/m318-gold-diamond-tool-crafts/MAP.md", "docs/M319_STAIR_SLAB_CRAFTS.md", "docs/M319_CYCLE.md",
+        same(release, "m322.signature", m322, "expected.signature");
+        same(release, "server.sha256", m322, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M319_STAIR_SLAB_CRAFTS.md", "docs/M319_CYCLE.md",
                 "smokes/m319-stair-slab-crafts/MAP.md", "docs/M320_LEATHER_ARMOR_CRAFTS.md", "docs/M320_CYCLE.md",
                 "smokes/m320-leather-armor-crafts/MAP.md", "docs/M321_GOLD_ARMOR_CRAFTS.md", "docs/M321_CYCLE.md",
-                "smokes/m321-gold-armor-crafts/MAP.md"))
+                "smokes/m321-gold-armor-crafts/MAP.md", "docs/M322_DIAMOND_ARMOR_CRAFTS.md", "docs/M322_CYCLE.md",
+                "smokes/m322-diamond-armor-crafts/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.309.0 M321 Gold armor crafts GO");
+        System.out.println("  release: Worldline v1.310.0 M322 Diamond armor crafts GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
