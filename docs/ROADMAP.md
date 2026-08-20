@@ -399,6 +399,7 @@ Passing an experiment does not silently promote its API.
 | v1.380.0 / M392 | Remaining fluid flow | GO - still water 9 and still lava 11 horizontal flow |
 | v1.381.0 / M393 | Stair facing set | GO - oak 53 and cobble 67 look-yaw facings |
 | v1.382.0 / M394 | Remaining slab place | GO - sandstone, wood, cobble, and double slabs |
+| v1.383.0 / M395 | Remaining dye mix | GO - cyan, pink, and light-blue 2x2 mixes |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -410,7 +411,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.382.0 direction
+## Immediate post-v1.383.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

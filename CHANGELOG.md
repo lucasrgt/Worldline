@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.383.0 - M395 Remaining dye mix
+
+Status: GO for official cyan, pink, and light-blue 2x2 dye mixes together.
+
+- Personal 2x2 mixed cactus green+lapis, rose red+bone meal, and lapis+bone meal.
+- Results were cyan `351x2:6`, pink `351x2:9`, and light blue `351x2:12`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M395 semantic SHA-256 is
+`1ba82fec7effc4370c0a4169136f177851484511a3b86bf1d2aaf76134e1491c`.
+
 ## 1.382.0 - M394 Remaining slab place
 
 Status: GO for official sandstone, wood, cobble, and double slab placement together.

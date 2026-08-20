@@ -1733,3 +1733,5 @@ M392 adds no public API. Still water `9` and still lava `11` horizontal flow sha
 M393 adds no public API. Oak stairs `53` and cobble stairs `67` look-yaw facings share one stair-facing family.
 
 M394 adds no public API. Sandstone, wood, cobble, and double slabs share one remaining-slab-place family.
+
+M395 adds no public API. Cyan, pink, and light-blue personal 2x2 mixes share one remaining-dye-mix family.
