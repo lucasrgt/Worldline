@@ -14,6 +14,19 @@ final class B173PlayWaits {
         return until(() -> inbound.mobs().take(type), "expected mob spawn absent before deadline");
     }
 
+    RemoteMobSpawn spawnAny(int[] types) throws IOException {
+        if (types == null || types.length < 1) throw new IllegalArgumentException("invalid expected mob types");
+        for (int i = 0; i < types.length; i++)
+            if (types[i] < 0 || types[i] > 127) throw new IllegalArgumentException("invalid expected mob type");
+        return until(() -> {
+            for (int type : types) {
+                RemoteMobSpawn value = inbound.mobs().take(type);
+                if (value != null) return value;
+            }
+            return null;
+        }, "expected hostile spawn absent before deadline");
+    }
+
     RemoteMobMovement movement(int entity) throws IOException {
         return until(() -> inbound.mobs().takeMovement(entity),
                 "expected mob movement absent before deadline");

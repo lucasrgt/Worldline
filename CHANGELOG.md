@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.423.0 - M435 Remaining natural spawns
+
+Status: GO for official remaining natural Packet24 hostile identities together.
+
+- Midnight with `spawn-monsters=true` observed at least two of types `50`, `51`, `52`, and `54`.
+- No mob spawner was placed and MobSpawner `EntityId` was not rewritten.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M435 semantic SHA-256 is
+`a81852d5c2fb5cff300186da2b5d585a72f06f637dffb1942c4a8f1f2284d6d3`.
+
 ## 1.422.0 - M432 Remaining rail geometry set
 
 Status: GO for official remaining rail slope and curve metadata together.

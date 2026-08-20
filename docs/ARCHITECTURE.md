@@ -1813,3 +1813,5 @@ M430 adds no public API. Remaining Packet25 motive-size walls 4x2, 4x3, and 4x4 
 M431 adds no public API. Remaining bed `26` west/north/east halves share one remaining-bed-orient family.
 
 M432 adds no public API. Remaining rail `66` slope `2` plus curve `6` share one remaining-rail-geometry family.
+
+M435 adds no public API. Remaining natural Packet24 types among `50/51/52/54` share one remaining-natural-spawns family.

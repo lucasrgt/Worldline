@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m429 = load(root, "smokes/m429-remaining-attach-faces/smoke.properties");
         Properties m430 = load(root, "smokes/m430-remaining-painting-motives/smoke.properties");
         Properties m431 = load(root, "smokes/m431-remaining-bed-orient-set/smoke.properties");
         Properties m432 = load(root, "smokes/m432-remaining-rail-geometry-set/smoke.properties");
-        match(release, "version", "1.422.0");
-        match(release, "milestone", "m432-remaining-rail-geometry-set");
-        same(release, "m429.signature", m429, "expected.signature");
-        same(release, "server.sha256", m429, "server.jar.sha256");
+        Properties m435 = load(root, "smokes/m435-remaining-natural-spawns/smoke.properties");
+        match(release, "version", "1.423.0");
+        match(release, "milestone", "m435-remaining-natural-spawns");
         same(release, "m430.signature", m430, "expected.signature");
         same(release, "server.sha256", m430, "server.jar.sha256");
         same(release, "m431.signature", m431, "expected.signature");
         same(release, "server.sha256", m431, "server.jar.sha256");
         same(release, "m432.signature", m432, "expected.signature");
         same(release, "server.sha256", m432, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M429_REMAINING_ATTACH_FACES.md", "docs/M429_CYCLE.md",
-                "smokes/m429-remaining-attach-faces/MAP.md", "docs/M430_REMAINING_PAINTING_MOTIVES.md", "docs/M430_CYCLE.md",
+        same(release, "m435.signature", m435, "expected.signature");
+        same(release, "server.sha256", m435, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M430_REMAINING_PAINTING_MOTIVES.md", "docs/M430_CYCLE.md",
                 "smokes/m430-remaining-painting-motives/MAP.md", "docs/M431_REMAINING_BED_ORIENT_SET.md", "docs/M431_CYCLE.md",
                 "smokes/m431-remaining-bed-orient-set/MAP.md", "docs/M432_REMAINING_RAIL_GEOMETRY_SET.md", "docs/M432_CYCLE.md",
-                "smokes/m432-remaining-rail-geometry-set/MAP.md"))
+                "smokes/m432-remaining-rail-geometry-set/MAP.md", "docs/M435_REMAINING_NATURAL_SPAWNS.md", "docs/M435_CYCLE.md",
+                "smokes/m435-remaining-natural-spawns/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.422.0 M432 Remaining rail geometry set GO");
+        System.out.println("  release: Worldline v1.423.0 M435 Remaining natural spawns GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
