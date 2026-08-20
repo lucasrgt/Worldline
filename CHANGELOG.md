@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.361.0 - M373 Milk bucket set
+
+Status: GO for official cow milk fill and drink together.
+
+- Packet7 button 0 filled empty bucket `325` from cow Packet24 type `92` to milk `335`.
+- Packet15 air-use drank milk back to empty `325` with health remaining `20`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M373 semantic SHA-256 is
+`0def850e0165e277e1055538ab58e3a7772dcf0239f16acbc88f430b10e9a77c`.
+
 ## 1.360.0 - M372 Placeable item crafts
 
 Status: GO for official painting, sign, and bowl crafts together.

@@ -1689,3 +1689,5 @@ M370 adds no public API. Cactus, log, and clay smelts share one remaining-furnac
 M371 adds no public API. TNT `46`, piston `33`, and sticky piston `29` share one machine-block craft family.
 
 M372 adds no public API. Painting `321`, sign `323`, and bowl `281` share one placeable-item craft family.
+
+M373 adds no public API. Cow milk fill `325→335` and drink `335→325` share one milk-bucket family. `B173SpawnerSeed.cow` and `B173BucketAccess` stay adapter-local.

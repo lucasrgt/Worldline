@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m369 = load(root, "smokes/m369-cake-full-eat-set/smoke.properties");
         Properties m370 = load(root, "smokes/m370-remaining-furnace-smelts/smoke.properties");
         Properties m371 = load(root, "smokes/m371-machine-block-crafts/smoke.properties");
         Properties m372 = load(root, "smokes/m372-placeable-item-crafts/smoke.properties");
-        match(release, "version", "1.360.0");
-        match(release, "milestone", "m372-placeable-item-crafts");
-        same(release, "m369.signature", m369, "expected.signature");
-        same(release, "server.sha256", m369, "server.jar.sha256");
+        Properties m373 = load(root, "smokes/m373-milk-bucket-set/smoke.properties");
+        match(release, "version", "1.361.0");
+        match(release, "milestone", "m373-milk-bucket-set");
         same(release, "m370.signature", m370, "expected.signature");
         same(release, "server.sha256", m370, "server.jar.sha256");
         same(release, "m371.signature", m371, "expected.signature");
         same(release, "server.sha256", m371, "server.jar.sha256");
         same(release, "m372.signature", m372, "expected.signature");
         same(release, "server.sha256", m372, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M369_CAKE_FULL_EAT_SET.md", "docs/M369_CYCLE.md",
-                "smokes/m369-cake-full-eat-set/MAP.md", "docs/M370_REMAINING_FURNACE_SMELTS.md", "docs/M370_CYCLE.md",
+        same(release, "m373.signature", m373, "expected.signature");
+        same(release, "server.sha256", m373, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M370_REMAINING_FURNACE_SMELTS.md", "docs/M370_CYCLE.md",
                 "smokes/m370-remaining-furnace-smelts/MAP.md", "docs/M371_MACHINE_BLOCK_CRAFTS.md", "docs/M371_CYCLE.md",
                 "smokes/m371-machine-block-crafts/MAP.md", "docs/M372_PLACEABLE_ITEM_CRAFTS.md", "docs/M372_CYCLE.md",
-                "smokes/m372-placeable-item-crafts/MAP.md"))
+                "smokes/m372-placeable-item-crafts/MAP.md", "docs/M373_MILK_BUCKET_SET.md", "docs/M373_CYCLE.md",
+                "smokes/m373-milk-bucket-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.360.0 M372 Placeable item crafts GO");
+        System.out.println("  release: Worldline v1.361.0 M373 Milk bucket set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

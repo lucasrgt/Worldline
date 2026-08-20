@@ -19,8 +19,9 @@ public final class B173SpawnerSeed {
     private B173SpawnerSeed() {}
 
     public static void sheep(Path serverDirectory, BlockPosition spawner) {
-        rewrite(serverDirectory, spawner, "Sheep", true);
-    }
+        rewrite(serverDirectory, spawner, "Sheep", true); }
+    public static void cow(Path serverDirectory, BlockPosition spawner) {
+        rewrite(serverDirectory, spawner, "Cow", true); }
 
     /** Replaces one saved MobSpawner EntityId Pig with a hostile vanilla name. */
     public static void entity(Path serverDirectory, BlockPosition spawner, String entityId) {
