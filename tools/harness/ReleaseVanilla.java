@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m387 = load(root, "smokes/m387-remaining-light-set/smoke.properties");
         Properties m388 = load(root, "smokes/m388-hostile-drops-set/smoke.properties");
         Properties m389 = load(root, "smokes/m389-animal-drops-set/smoke.properties");
         Properties m390 = load(root, "smokes/m390-remaining-spawner-set/smoke.properties");
-        match(release, "version", "1.378.0");
-        match(release, "milestone", "m390-remaining-spawner-set");
-        same(release, "m387.signature", m387, "expected.signature");
-        same(release, "server.sha256", m387, "server.jar.sha256");
+        Properties m391 = load(root, "smokes/m391-creeper-explode-set/smoke.properties");
+        match(release, "version", "1.379.0");
+        match(release, "milestone", "m391-creeper-explode-set");
         same(release, "m388.signature", m388, "expected.signature");
         same(release, "server.sha256", m388, "server.jar.sha256");
         same(release, "m389.signature", m389, "expected.signature");
         same(release, "server.sha256", m389, "server.jar.sha256");
         same(release, "m390.signature", m390, "expected.signature");
         same(release, "server.sha256", m390, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M387_REMAINING_LIGHT_SET.md", "docs/M387_CYCLE.md",
-                "smokes/m387-remaining-light-set/MAP.md", "docs/M388_HOSTILE_DROPS_SET.md", "docs/M388_CYCLE.md",
+        same(release, "m391.signature", m391, "expected.signature");
+        same(release, "server.sha256", m391, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M388_HOSTILE_DROPS_SET.md", "docs/M388_CYCLE.md",
                 "smokes/m388-hostile-drops-set/MAP.md", "docs/M389_ANIMAL_DROPS_SET.md", "docs/M389_CYCLE.md",
                 "smokes/m389-animal-drops-set/MAP.md", "docs/M390_REMAINING_SPAWNER_SET.md", "docs/M390_CYCLE.md",
-                "smokes/m390-remaining-spawner-set/MAP.md"))
+                "smokes/m390-remaining-spawner-set/MAP.md", "docs/M391_CREEPER_EXPLODE_SET.md", "docs/M391_CYCLE.md",
+                "smokes/m391-creeper-explode-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.378.0 M390 Remaining spawner set GO");
+        System.out.println("  release: Worldline v1.379.0 M391 Creeper explode set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

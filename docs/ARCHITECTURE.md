@@ -1725,3 +1725,5 @@ M388 adds no public API. Zombie feather `288` and skeleton arrow `262` share one
 M389 adds no public API. Cow leather `334` and chicken feather `288` share one animal-drops family.
 
 M390 adds no public API. Creeper type `50` and spider type `52` share one remaining-spawner identity family.
+
+M391 adds no public API. Creeper Packet60 strength `3` destroying dirt `3` and wool `35` shares one creeper-explode family.

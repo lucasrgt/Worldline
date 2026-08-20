@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.379.0 - M391 Creeper explode set
+
+Status: GO for official creeper Packet60 strength 3 destroying dirt and wool together.
+
+- Spawner retargeted to Creeper; Packet24 type `50` fused by proximity and exploded at Packet60 strength `3`.
+- Dirt `3` and wool `35` crater cells were destroyed and persisted as air.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M391 semantic SHA-256 is
+`2a74b9f63925b31966343a26c78c5b6d87dcdb84096822099fe3988f5d59b771`.
+
 ## 1.378.0 - M390 Remaining spawner set
 
 Status: GO for official creeper and spider Packet24 identities together.
