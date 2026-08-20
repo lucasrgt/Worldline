@@ -1775,3 +1775,5 @@ M414 adds no public API. Still lava `11` plus water `9` hardening two obsidian `
 M415 adds no public API. Flowing lava `10` plus water `9` hardening two cobble `4` share one water-cobble family.
 
 M416 adds no public API. Bookshelf `47` craft, two-cell place, and empty harvest share one remaining-bookshelf family.
+
+M417 adds no public API. Two TNT `46` cells plus flint-and-steel Packet60 chain share one remaining-TNT family.

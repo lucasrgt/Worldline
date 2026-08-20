@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.404.0 - M417 Remaining TNT place
+
+Status: GO for official two-cell TNT place plus flint-and-steel Packet60 chain together.
+
+- Packet15 placed two TNT `46` cells two apart; flint-and-steel `259` primed the first.
+- Packet60 strength `4` chained to the second TNT cell.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M417 semantic SHA-256 is
+`153e7f2258e4d355e0e2c070a630aebe6dfa4262d98a3e4aa3e99b8f99e0205d`.
+
 ## 1.403.0 - M416 Remaining bookshelf place
 
 Status: GO for official bookshelf craft, two-cell place, and empty harvest together.
