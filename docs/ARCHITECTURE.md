@@ -1709,3 +1709,5 @@ M380 adds no public API. Trapdoor `96` four wall faces share one trapdoor-toggle
 M381 adds no public API. TNT `46` flint-steel prime, Packet23 type 50, and Packet60 strength 4 share one TNT-prime family.
 
 M382 adds no public API. Fourteen obsidian `49` cells and six portal `90` cells share one portal-frame family. Traversal is not claimed.
+
+M383 adds no public API. Brown mushroom `39` on dirt and red mushroom `40` on netherrack share one mushroom-place family.

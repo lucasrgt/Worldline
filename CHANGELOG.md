@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.371.0 - M383 Mushroom place set
+
+Status: GO for official brown and red mushroom place together.
+
+- Brown mushroom `39` on dirt `3` and red mushroom `40` on netherrack `87` under a roof.
+- Both cells persisted after a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M383 semantic SHA-256 is
+`3a737afbb664a8e1a32858a9e371ced9062f5a30950b631a9372829456fa9a21`.
+
 ## 1.370.0 - M382 Portal obsidian set
 
 Status: GO for official 14-obsidian nether-portal frame plus interior `90` together.

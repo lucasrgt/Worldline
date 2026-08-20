@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.370.0 - M382 Portal obsidian set (GO)**.
+Current official milestone: **Worldline v1.371.0 - M383 Mushroom place set (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
