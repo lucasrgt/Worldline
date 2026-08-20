@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.395.0 - M407 Chicken egg set (GO)**.
+Current official milestone: **Worldline v1.396.0 - M408 Squid ink set (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

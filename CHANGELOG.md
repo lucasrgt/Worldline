@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.396.0 - M408 Squid ink set
+
+Status: GO for official squid water-habitat and ink-sac drop together.
+
+- Packet24 type `94` spawned in seed water; Packet7 diamond sword `276` killed it.
+- Packet21 ink sac `351:0` was observed.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M408 semantic SHA-256 is
+`4f3c68e6439036720158970ea6fb62f2db5d9bb980f42850dbb0cfdf53ac0f41`.
+
 ## 1.395.0 - M407 Chicken egg set
 
 Status: GO for official chicken type 93 plus egg 344 / Packet23 type 62 together.

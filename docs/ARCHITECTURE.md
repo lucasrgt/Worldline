@@ -1759,3 +1759,5 @@ M405 adds no public API. Pig type `90` saddle `329` consume plus Packet39 mount 
 M406 adds no public API. Dyed sheep wool `35:14` and `35:4` share one sheep-dye family.
 
 M407 adds no public API. Chicken type `93` plus egg `344` / Packet23 type `62` share one chicken-egg family.
+
+M408 adds no public API. Squid type `94` in water plus ink sac `351:0` share one squid-ink family.
