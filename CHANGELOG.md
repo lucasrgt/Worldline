@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.412.0 - M421 Creeper gunpowder set
+
+Status: GO for official creeper gunpowder drop plus TNT craft together.
+
+- Packet24 type `50` was killed with diamond sword `276`; Packet21 gunpowder `289` was observed.
+- Workbench `58` crafted TNT `46` from `289` plus sand `12`; TNT stayed in inventory.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M421 semantic SHA-256 is
+`f01c7a65ddde0ddb0cd8f27f6e1c76e896f866c0bf9cc6f8af973bd1def648dc`.
+
 ## 1.411.0 - M420 Wolf tame set
 
 Status: GO for official wolf Packet24 type 95 bone-tame plus dye collar together.

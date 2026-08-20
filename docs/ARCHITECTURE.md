@@ -1791,3 +1791,5 @@ M434 adds no public API. Sponge `19`, glass `20`, and ice `79` share one remaini
 M441 adds no public API. Cookie `357` plus mushroom stew `282` share one remaining-food-rest family.
 
 M420 adds no public API. Wolf type `95` bone tame plus dye collar share one wolf-tame family.
+
+M421 adds no public API. Creeper gunpowder `289` plus TNT `46` craft share one creeper-gunpowder family.
