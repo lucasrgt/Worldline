@@ -441,6 +441,7 @@ Passing an experiment does not silently promote its API.
 | v1.422.0 / M432 | Remaining rail geometry | GO - rail 66 remaining slope 2 plus curve 6 |
 | v1.423.0 / M435 | Remaining natural spawns | GO - midnight Packet24 types among 50/51/52/54 |
 | v1.424.0 / M437 | Lightning pig set | GO - overworld pig 90 plus nether pigman 57 |
+| v1.425.0 / M438 | Remaining clock map | GO - clock 347 plus empty map 358 unfilled air-use |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -452,7 +453,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.424.0 direction
+## Immediate post-v1.425.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.425.0 - M438 Remaining clock map set
+
+Status: GO for official remaining clock craft plus empty-map air-use together.
+
+- Workbench `58` crafted clock `347`; Packet15 air-use of empty map `358` stayed `358:1:0`.
+- Held clock and unfilled map persisted after a clean save plus fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M438 semantic SHA-256 is
+`9ebe2cca746ab29d741407b8788d0b10a7e942cd691b868eb0d1d2f00e83eb58`.
+
 ## 1.424.0 - M437 Lightning pig set
 
 Status: GO for official Overworld pig plus Nether pigman identity pair together.

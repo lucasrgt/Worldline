@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m431 = load(root, "smokes/m431-remaining-bed-orient-set/smoke.properties");
         Properties m432 = load(root, "smokes/m432-remaining-rail-geometry-set/smoke.properties");
         Properties m435 = load(root, "smokes/m435-remaining-natural-spawns/smoke.properties");
         Properties m437 = load(root, "smokes/m437-lightning-pig-set/smoke.properties");
-        match(release, "version", "1.424.0");
-        match(release, "milestone", "m437-lightning-pig-set");
-        same(release, "m431.signature", m431, "expected.signature");
-        same(release, "server.sha256", m431, "server.jar.sha256");
+        Properties m438 = load(root, "smokes/m438-remaining-clock-map-set/smoke.properties");
+        match(release, "version", "1.425.0");
+        match(release, "milestone", "m438-remaining-clock-map-set");
         same(release, "m432.signature", m432, "expected.signature");
         same(release, "server.sha256", m432, "server.jar.sha256");
         same(release, "m435.signature", m435, "expected.signature");
         same(release, "server.sha256", m435, "server.jar.sha256");
         same(release, "m437.signature", m437, "expected.signature");
         same(release, "server.sha256", m437, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M431_REMAINING_BED_ORIENT_SET.md", "docs/M431_CYCLE.md",
-                "smokes/m431-remaining-bed-orient-set/MAP.md", "docs/M432_REMAINING_RAIL_GEOMETRY_SET.md", "docs/M432_CYCLE.md",
+        same(release, "m438.signature", m438, "expected.signature");
+        same(release, "server.sha256", m438, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M432_REMAINING_RAIL_GEOMETRY_SET.md", "docs/M432_CYCLE.md",
                 "smokes/m432-remaining-rail-geometry-set/MAP.md", "docs/M435_REMAINING_NATURAL_SPAWNS.md", "docs/M435_CYCLE.md",
                 "smokes/m435-remaining-natural-spawns/MAP.md", "docs/M437_LIGHTNING_PIG_SET.md", "docs/M437_CYCLE.md",
-                "smokes/m437-lightning-pig-set/MAP.md"))
+                "smokes/m437-lightning-pig-set/MAP.md", "docs/M438_REMAINING_CLOCK_MAP_SET.md", "docs/M438_CYCLE.md",
+                "smokes/m438-remaining-clock-map-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.424.0 M437 Lightning pig set GO");
+        System.out.println("  release: Worldline v1.425.0 M438 Remaining clock map set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
