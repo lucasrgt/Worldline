@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.445.0 - M467 Difficulty damage set
+
+Status: GO for official Easy then Hard zombie melee Packet8 both `20->18` together.
+
+- Type `54` melee on `difficulty=1` and `difficulty=3` both dropped health `20` to `18`.
+- Official dedicated-server Easy branch; Hard `*3/2` is not reached. Distinct from armor and peaceful.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M467 semantic SHA-256 is
+`61e1ac15b1e84c70af6ec58f615e81db3d5a6ae0c3deaac931da803a16f459d7`.
+
 ## 1.444.0 - M462 Bow mob hit set
 
 Status: GO for official player bow Packet23 type 60 hits on pig and zombie together.

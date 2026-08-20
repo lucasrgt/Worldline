@@ -22,7 +22,7 @@ import worldline.api.ServerState;
 public final class B173DedicatedServer implements PersistentMultiplayerServerRuntime {
     private final Path officialJar, directory;
     private final int port, viewDistance;
-    private final boolean allowFlight, allowNether, spawnAnimals, spawnMonsters; private final long seed; private final Duration timeout;
+    private final boolean allowFlight, allowNether, spawnAnimals, spawnMonsters; private final long seed; private final Duration timeout; private final int difficulty;
     private final B173ServerLog log = new B173ServerLog(); private ServerLifecycle lifecycle = ServerLifecycle.NEW; private Process process; private int saves;
 
     public B173DedicatedServer(Path officialJar, Path directory, int port, long seed, Duration timeout) {
@@ -37,9 +37,9 @@ public final class B173DedicatedServer implements PersistentMultiplayerServerRun
         this(officialJar,directory,port,seed,timeout,viewDistance,allowFlight,allowNether,false,false); }
     public static B173DedicatedServer animals(Path jar,Path directory,int port,long seed,Duration timeout,int viewDistance,boolean allowFlight){return new B173DedicatedServer(jar,directory,port,seed,timeout,viewDistance,allowFlight,false,true,false);}
     public static B173DedicatedServer monsters(Path jar,Path directory,int port,long seed,Duration timeout,int viewDistance,boolean allowFlight){return new B173DedicatedServer(jar,directory,port,seed,timeout,viewDistance,allowFlight,false,false,true);}
-    public static B173DedicatedServer netherMonsters(Path jar,Path directory,int port,long seed,Duration timeout){return new B173DedicatedServer(jar,directory,port,seed,timeout,3,true,true,false,true);}
-    private B173DedicatedServer(Path officialJar, Path directory, int port, long seed,
-            Duration timeout, int viewDistance, boolean allowFlight, boolean allowNether, boolean spawnAnimals, boolean spawnMonsters) {
+    public static B173DedicatedServer netherMonsters(Path jar,Path directory,int port,long seed,Duration timeout){return new B173DedicatedServer(jar,directory,port,seed,timeout,3,true,true,false,true);} public static B173DedicatedServer difficulty(Path jar,Path directory,int port,long seed,Duration timeout,int difficulty){return new B173DedicatedServer(jar,directory,port,seed,timeout,3,true,false,false,true,difficulty);}
+    private B173DedicatedServer(Path officialJar, Path directory, int port, long seed, Duration timeout, int viewDistance, boolean allowFlight, boolean allowNether, boolean spawnAnimals, boolean spawnMonsters) { this(officialJar,directory,port,seed,timeout,viewDistance,allowFlight,allowNether,spawnAnimals,spawnMonsters,B173ServerProperties.difficulty(spawnMonsters)); }
+    private B173DedicatedServer(Path officialJar, Path directory, int port, long seed, Duration timeout, int viewDistance, boolean allowFlight, boolean allowNether, boolean spawnAnimals, boolean spawnMonsters, int difficulty) {
         if (!Files.isRegularFile(officialJar)) throw new IllegalArgumentException("server JAR is absent");
         if (port < 1 || port > 65535) throw new IllegalArgumentException("invalid port");
         if (viewDistance < 3 || viewDistance > 15) throw new IllegalArgumentException("invalid view distance");
@@ -51,7 +51,7 @@ public final class B173DedicatedServer implements PersistentMultiplayerServerRun
         this.viewDistance = viewDistance;
         this.allowFlight = allowFlight;
         this.allowNether = allowNether;
-        this.spawnAnimals = spawnAnimals; this.spawnMonsters = spawnMonsters;
+        this.spawnAnimals = spawnAnimals; this.spawnMonsters = spawnMonsters; this.difficulty = difficulty;
     }
 
     @Override
@@ -155,7 +155,7 @@ public final class B173DedicatedServer implements PersistentMultiplayerServerRun
     }
 
     private String properties() {
-        return B173ServerProperties.text(seed, port, viewDistance, allowFlight, allowNether, spawnAnimals, spawnMonsters);
+        return B173ServerProperties.text(seed, port, viewDistance, allowFlight, allowNether, spawnAnimals, spawnMonsters, difficulty);
     }
 
     private String javaCommand() {
