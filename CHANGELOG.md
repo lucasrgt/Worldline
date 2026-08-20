@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.363.0 - M375 Remaining pick breaks
+
+Status: GO for official mossy cobble, gold ore, and obsidian pick harvests together.
+
+- Gold pick `285` and diamond pick `278` broke mossy cobble `48`, gold ore `14`, and obsidian `49`.
+- Packet21 dropped `48`, `14`, and `49`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M375 semantic SHA-256 is
+`22503c04e191d5edd6c2374799f5062269ff1e38d71c15709e468a2d2e787869`.
+
 ## 1.362.0 - M374 Remaining food eat
 
 Status: GO for official apple, cooked pork, and golden apple heals together.
