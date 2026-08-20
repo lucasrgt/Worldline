@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.440.0 - M457 Spider leap set
+
+Status: GO for official spider Packet24 leap toward the actor plus touch Packet8 together.
+
+- Packet24 type `52` leaped toward the actor on the grass pad, then Packet8 hurt.
+- Distinct from spider climb, string/cobweb, and natural-spawn identity.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M457 semantic SHA-256 is
+`c1acc30fb89383a980963eda9ae54bd6fcc4a2c8eaff785ee3a10b3206e3153c`.
+
 ## 1.439.0 - M452 Knockback cooldown set
 
 Status: GO for official zombie melee Packet8 knockback plus hurt-time cooldown together.
