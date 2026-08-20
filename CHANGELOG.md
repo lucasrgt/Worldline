@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.306.0 - M318 Gold diamond tool crafts
+
+Status: GO for official gold and diamond tool crafts together.
+
+- Packet102 crafted gold tools `283,285,286,284` and diamond tools `276,278,279,277`.
+- The eight result ids persisted after a clean save.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M318 semantic SHA-256 is
+`ea2a3772ad997141d967212b9f93a52ec0b5f633dde29b2b0192e844a377005e`.
+
 ## 1.305.0 - M317 Slow blocks
 
 Status: GO for official cobweb and soul-sand slowdown together.

@@ -1579,3 +1579,5 @@ M315 adds no public API. White wool `35:0` plus dyes `351:1`, `351:2`, and `351:
 M316 adds no public API. Shears item `359` on oak leaves `18` and a living sheep share one harvest family.
 
 M317 adds no public API. Cobweb `30` and soul sand `88` share one slowdown family.
+
+M318 adds no public API. Gold tools `283-286` and diamond tools `276-279` share one workbench-craft family.
