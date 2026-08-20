@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.414.0 - M424 Furnace cart motion set
+
+Status: GO for official furnace-cart type 12 coal push plus detector occupancy together.
+
+- Unfueled type `12` held idle on rail `66`; coal `263` Packet7 consumed and pushed the cart.
+- Detector `28:0` became `28:8` after the fueled move.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M424 semantic SHA-256 is
+`536398b8e8c64ca3dc8e527842ae556bf4175363fc0b8e554d2ba0ec52811b1b`.
+
 ## 1.413.0 - M423 Slimeball set
 
 Status: GO for official size-1 slimeball drop plus sticky-piston craft together.
