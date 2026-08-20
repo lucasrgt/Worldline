@@ -458,6 +458,7 @@ Passing an experiment does not silently promote its API.
 | v1.439.0 / M452 | Knockback cooldown | GO - type 54 Packet8 20->18 plus hurt-time hold |
 | v1.440.0 / M457 | Spider leap set | GO - type 52 leap toward pose plus Packet8 |
 | v1.441.0 / M458 | Slime touch set | GO - type 55 size-1+larger plus Packet8 contact |
+| v1.442.0 / M459 | Ghast fireball hit | GO - type 56 type 63 Packet60 strength 1 hit |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -469,7 +470,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.441.0 direction
+## Immediate post-v1.442.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

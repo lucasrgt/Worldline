@@ -1851,3 +1851,5 @@ M452 adds no public API. Zombie type `54` Packet8 knockback plus hurt-time coold
 M457 adds no public API. Spider type `52` leap toward pose plus Packet8 share one spider-leap family.
 
 M458 adds no public API. Slime type `55` size-1 plus larger Packet8 contact share one slime-touch family.
+
+M459 adds no public API. Nether ghast type `56` Packet23 type `63` Packet60 strength `1` hit share one ghast-fireball-hit family.

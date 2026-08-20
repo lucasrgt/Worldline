@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.442.0 - M459 Ghast fireball hit set
+
+Status: GO for official Nether ghast Packet23 type 63 fireball hit together.
+
+- Packet24 type `56` threw Packet23 type `63`; Packet60 strength `1` hit as Packet8 and/or crater.
+- Distinct from M410 spawn-only type `63` and M411 pigman pork.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M459 semantic SHA-256 is
+`491a34451873fea634086ff4a8c83a68e25ff5a8ed43d75033d4ed22b63f5042`.
+
 ## 1.441.0 - M458 Slime touch set
 
 Status: GO for official slime Packet24 size family plus AABB Packet8 contact together.
