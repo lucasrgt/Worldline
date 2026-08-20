@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.355.0 - M367 Piston motion set
+
+Status: GO for official piston extend, retract, and sticky pull together.
+
+- West-facing piston `33` extended `4->12` then retracted `12->4` with stone retained.
+- Sticky piston `29` extended and pulled the same stone back.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M367 semantic SHA-256 is
+`eeb597ce51f18b3841a00e606375efae5dfb531672564e34670469f420f304a8`.
+
 ## 1.354.0 - M366 Map fill set
 
 Status: GO for official empty-map Packet15 air-use together with persist.

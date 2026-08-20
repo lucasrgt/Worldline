@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.354.0 - M366 Map fill set (GO)**.
+Current official milestone: **Worldline v1.355.0 - M367 Piston motion set (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

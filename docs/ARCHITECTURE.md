@@ -1677,3 +1677,5 @@ M364 adds no public API. Glass `20`, leaves `18:8`, and ice `79` share one trans
 M365 adds no public API. Held compass `345` yaw reversal and two-cell spawn bearing share one compass-point family.
 
 M366 adds no public API. Empty map `358` Packet15 air-use and persist share one map-fill family. The official dedicated server does not rewrite the stack.
+
+M367 adds no public API. Piston `33` extend/retract and sticky `29` pull share one piston-motion family.
