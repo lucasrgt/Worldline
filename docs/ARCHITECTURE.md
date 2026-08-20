@@ -1497,3 +1497,5 @@ M274 adds no public API. Removing stone under gravel `13:0` settles one cell dow
 M275 adds no public API. Contact with cactus `81:0` drops Packet8 health `20 -> 19`.
 
 M276 adds no public API. Standing in fire `51:0` on netherrack drops Packet8 health `20 -> 19`.
+
+M277 adds no public API. Empty-hand Packet15 opens wooden door halves `64:0/64:8` to `64:4/64:12`.

@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.265.0 - M277 Wooden door open
+
+Status: GO for official wooden-door toggle.
+
+- Placed wooden door `64:0` / `64:8` then empty-hand Packet15 opened both halves to `64:4` / `64:12`.
+- The open pair survived a clean save and a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M277 semantic SHA-256 is
+`1f0b2fd8a64b2092de4a093f2d5cf0c8110b4363e2ee0199faf1ca2ae7ff2eb0`.
+
 ## 1.264.0 - M276 Fire damage
 
 Status: GO for official netherrack-fire contact damage.
