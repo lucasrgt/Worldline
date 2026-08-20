@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.318.0 - M330 Bed sleep set
+
+Status: GO for official bed occupy and wake together.
+
+- Packet15 placed bed `26` foot/head, then occupied `26:8 -> 26:12` at night.
+- Packet17 sleep entered the head cell; Packet70 reason stayed `-1`; skip left `26:8`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M330 semantic SHA-256 is
+`1415f89a64178b9c0135d108239ba04eb9fca293f9d8ee9005347624eb6842af`.
+
 ## 1.317.0 - M329 Utility block crafts
 
 Status: GO for official fence, ladder, and bookshelf crafts together.

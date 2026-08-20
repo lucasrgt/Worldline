@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m326 = load(root, "smokes/m326-vehicle-crafts/smoke.properties");
         Properties m327 = load(root, "smokes/m327-food-crafts/smoke.properties");
         Properties m328 = load(root, "smokes/m328-dye-family-crafts/smoke.properties");
         Properties m329 = load(root, "smokes/m329-utility-block-crafts/smoke.properties");
-        match(release, "version", "1.317.0");
-        match(release, "milestone", "m329-utility-block-crafts");
-        same(release, "m326.signature", m326, "expected.signature");
-        same(release, "server.sha256", m326, "server.jar.sha256");
+        Properties m330 = load(root, "smokes/m330-bed-sleep-set/smoke.properties");
+        match(release, "version", "1.318.0");
+        match(release, "milestone", "m330-bed-sleep-set");
         same(release, "m327.signature", m327, "expected.signature");
         same(release, "server.sha256", m327, "server.jar.sha256");
         same(release, "m328.signature", m328, "expected.signature");
         same(release, "server.sha256", m328, "server.jar.sha256");
         same(release, "m329.signature", m329, "expected.signature");
         same(release, "server.sha256", m329, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M326_VEHICLE_CRAFTS.md", "docs/M326_CYCLE.md",
-                "smokes/m326-vehicle-crafts/MAP.md", "docs/M327_FOOD_CRAFTS.md", "docs/M327_CYCLE.md",
+        same(release, "m330.signature", m330, "expected.signature");
+        same(release, "server.sha256", m330, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M327_FOOD_CRAFTS.md", "docs/M327_CYCLE.md",
                 "smokes/m327-food-crafts/MAP.md", "docs/M328_DYE_FAMILY_CRAFTS.md", "docs/M328_CYCLE.md",
                 "smokes/m328-dye-family-crafts/MAP.md", "docs/M329_UTILITY_BLOCK_CRAFTS.md", "docs/M329_CYCLE.md",
-                "smokes/m329-utility-block-crafts/MAP.md"))
+                "smokes/m329-utility-block-crafts/MAP.md", "docs/M330_BED_SLEEP_SET.md", "docs/M330_CYCLE.md",
+                "smokes/m330-bed-sleep-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.317.0 M329 Utility block crafts GO");
+        System.out.println("  release: Worldline v1.318.0 M330 Bed sleep set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

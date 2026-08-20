@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.317.0 - M329 Utility block crafts (GO)**.
+Current official milestone: **Worldline v1.318.0 - M330 Bed sleep set (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
