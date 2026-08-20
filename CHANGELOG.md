@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.294.0 - M306 Closables
+
+Status: GO for official wooden-door and trapdoor close together.
+
+- Empty-hand Packet15 opened then closed wooden door `64` (`0/8 → 4/12 → 0/8`).
+- Empty-hand Packet15 opened then closed trapdoor `96` (`3 → 7 → 3`).
+- Both closed states survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M306 semantic SHA-256 is
+`0287dd23ec4f04c0960b98f43f8e16ff75d416ad1fb8ffb16478c579b8bc4865`.
+
 ## 1.293.0 - M305 Plant growth
 
 Status: GO for official wheat, cactus, and sugar-cane growth together.
