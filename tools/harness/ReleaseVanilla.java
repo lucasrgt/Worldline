@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m269 = load(root, "smokes/m269-shears-leaves/smoke.properties");
         Properties m270 = load(root, "smokes/m270-iron-helmet/smoke.properties");
         Properties m271 = load(root, "smokes/m271-gold-chestplate/smoke.properties");
         Properties m272 = load(root, "smokes/m272-diamond-leggings/smoke.properties");
-        match(release, "version", "1.260.0");
-        match(release, "milestone", "m272-diamond-leggings");
-        same(release, "m269.signature", m269, "expected.signature");
-        same(release, "server.sha256", m269, "server.jar.sha256");
+        Properties m273 = load(root, "smokes/m273-chain-boots/smoke.properties");
+        match(release, "version", "1.261.0");
+        match(release, "milestone", "m273-chain-boots");
         same(release, "m270.signature", m270, "expected.signature");
         same(release, "server.sha256", m270, "server.jar.sha256");
         same(release, "m271.signature", m271, "expected.signature");
         same(release, "server.sha256", m271, "server.jar.sha256");
         same(release, "m272.signature", m272, "expected.signature");
         same(release, "server.sha256", m272, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M269_SHEARS_LEAVES.md", "docs/M269_CYCLE.md",
-                "smokes/m269-shears-leaves/MAP.md", "docs/M270_IRON_HELMET.md", "docs/M270_CYCLE.md",
+        same(release, "m273.signature", m273, "expected.signature");
+        same(release, "server.sha256", m273, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M270_IRON_HELMET.md", "docs/M270_CYCLE.md",
                 "smokes/m270-iron-helmet/MAP.md", "docs/M271_GOLD_CHESTPLATE.md", "docs/M271_CYCLE.md",
                 "smokes/m271-gold-chestplate/MAP.md", "docs/M272_DIAMOND_LEGGINGS.md", "docs/M272_CYCLE.md",
-                "smokes/m272-diamond-leggings/MAP.md"))
+                "smokes/m272-diamond-leggings/MAP.md", "docs/M273_CHAIN_BOOTS.md", "docs/M273_CYCLE.md",
+                "smokes/m273-chain-boots/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.260.0 M272 Diamond leggings GO");
+        System.out.println("  release: Worldline v1.261.0 M273 Chain boots GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

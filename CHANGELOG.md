@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.261.0 - M273 Chain boots
+
+Status: GO for official chain-boots equipment.
+
+- Window-0 click moved chain boots `305` into armor slot 8; peer Packet5 slot 1 showed `305`.
+- The piece is distinct from leather `301` and survived a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M273 semantic SHA-256 is
+`509d729ffedcf64fb1478260c71654e80183c1936480c9db878459abe189ec16`.
+
 ## 1.260.0 - M272 Diamond leggings
 
 Status: GO for official diamond-leggings equipment.

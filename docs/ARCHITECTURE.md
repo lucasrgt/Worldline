@@ -1489,3 +1489,5 @@ M270 adds no public API. Iron helmet item `306` equips into armor slot 5 / Packe
 M271 adds no public API. Gold chestplate item `315` equips into armor slot 6 / Packet5 slot 3.
 
 M272 adds no public API. Diamond leggings item `312` equip into armor slot 7 / Packet5 slot 2.
+
+M273 adds no public API. Chain boots item `305` equip into armor slot 8 / Packet5 slot 1.

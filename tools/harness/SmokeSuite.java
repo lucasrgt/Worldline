@@ -296,7 +296,7 @@ final class SmokeSuite {
         {"tools/smoke/IronHelmetCycle.java", "m270-iron-helmet"},
         {"tools/smoke/GoldChestplateCycle.java", "m271-gold-chestplate"},
         {"tools/smoke/DiamondLeggingsCycle.java", "m272-diamond-leggings"},
-        {"tools/smoke/LabCycle.java", "lab-cycle"}
+        {"tools/smoke/ChainBootsCycle.java", "m273-chain-boots"}, {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 
     private SmokeSuite() {}
