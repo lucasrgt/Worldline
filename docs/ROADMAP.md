@@ -421,6 +421,7 @@ Passing an experiment does not silently promote its API.
 | v1.402.0 / M415 | Water cobble set | GO - flowing lava 10 plus water 9 harden two cobble 4 |
 | v1.403.0 / M416 | Remaining bookshelf place | GO - craft two 47, harvest one with no book drop |
 | v1.404.0 / M417 | Remaining TNT place | GO - two TNT 46 flint-and-steel Packet60 chain |
+| v1.405.0 / M418 | Remaining obsidian place | GO - four-cell 49 frame fragment plus pick harvest |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -432,7 +433,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.404.0 direction
+## Immediate post-v1.405.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

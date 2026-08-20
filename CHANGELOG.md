@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.405.0 - M418 Remaining obsidian place
+
+Status: GO for official four-cell obsidian frame fragment plus pick harvest together.
+
+- Packet15 placed four obsidian `49` cells as an unlit L-shaped frame fragment.
+- Diamond pickaxe `278` harvested the cap cell; Packet21 obsidian `49` dropped; portal `90` stayed absent.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M418 semantic SHA-256 is
+`7c15aa18aedb3ac5e34f9b7fbc2836311b51f88fc0737ed40298e3d3e65be80e`.
+
 ## 1.404.0 - M417 Remaining TNT place
 
 Status: GO for official two-cell TNT place plus flint-and-steel Packet60 chain together.
