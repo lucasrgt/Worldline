@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.407.0 - M413 Fire spread set
+
+Status: GO for official netherrack fire spreading onto planks, leaves, and wool together.
+
+- Flint-and-steel `259` placed fire `51` on netherrack `87`.
+- Adjacent planks `5`, leaves `18`, and wool `35` caught or consumed while the netherrack flame persisted.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M413 semantic SHA-256 is
+`e8fdef86a6fe2bd49b4575a296bc67cfe62dce1f2eb89aefd7ca2e89aa70843c`.
+
 ## 1.406.0 - M419 Remaining netherrack place
 
 Status: GO for official Nether netherrack, soul sand, and glowstone place together.

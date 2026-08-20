@@ -1781,3 +1781,5 @@ M417 adds no public API. Two TNT `46` cells plus flint-and-steel Packet60 chain 
 M418 adds no public API. Four-cell obsidian `49` frame fragment plus pick harvest share one remaining-obsidian family.
 
 M419 adds no public API. Nether netherrack `87`, soul sand `88`, and glowstone `89` share one remaining-netherrack family.
+
+M413 adds no public API. Netherrack fire `51` catching planks `5`, leaves `18`, and wool `35` share one fire-spread family.
