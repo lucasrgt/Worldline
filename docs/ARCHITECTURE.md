@@ -1783,3 +1783,5 @@ M418 adds no public API. Four-cell obsidian `49` frame fragment plus pick harves
 M419 adds no public API. Nether netherrack `87`, soul sand `88`, and glowstone `89` share one remaining-netherrack family.
 
 M413 adds no public API. Netherrack fire `51` catching planks `5`, leaves `18`, and wool `35` share one fire-spread family.
+
+M433 adds no public API. Isolated look-yaw chest `54` plus EW and NS pairs share one remaining-chest-orient family.

@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.408.0 - M433 Remaining chest orient set
+
+Status: GO for official isolated look-yaw chests plus EW and NS adjacent pairs together.
+
+- Packet15 placed two isolated chests `54` from look `-90` and `90`.
+- East-west and north-south adjacent pairs were placed in the same session and persisted.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M433 semantic SHA-256 is
+`b9750e81a03028d1bb7345d6699d951772dea723fefb2cb303312f4c43423f03`.
+
 ## 1.407.0 - M413 Fire spread set
 
 Status: GO for official netherrack fire spreading onto planks, leaves, and wool together.
