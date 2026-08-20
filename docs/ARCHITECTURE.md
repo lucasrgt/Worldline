@@ -1719,3 +1719,5 @@ M385 adds no public API. Oak, spruce, and birch log-backed leaves share one leaf
 M386 adds no public API. Ice `79` to water `9` and snow `78` to air share one light-melt family.
 
 M387 adds no public API. Glowstone `89`, jack-o-lantern `91:1`, and floor torch `50:5` share one remaining-light family.
+
+M388 adds no public API. Zombie feather `288` and skeleton arrow `262` share one hostile-drops family.

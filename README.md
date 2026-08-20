@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.375.0 - M387 Remaining light set (GO)**.
+Current official milestone: **Worldline v1.376.0 - M388 Hostile drops set (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

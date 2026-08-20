@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.376.0 - M388 Hostile drops set
+
+Status: GO for official zombie feather and skeleton arrow drops together.
+
+- Spawners retargeted to Zombie and Skeleton; Packet24 types `54` and `51` were killed with diamond sword `276`.
+- Packet21 feather `288` and arrow `262` were observed.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M388 semantic SHA-256 is
+`af71fe63de80f6405617a61a51d16c2027b51a4b9d198ef70cc5286faa026b45`.
+
 ## 1.375.0 - M387 Remaining light set
 
 Status: GO for official glowstone, jack-o-lantern, and floor-torch light cells together.
