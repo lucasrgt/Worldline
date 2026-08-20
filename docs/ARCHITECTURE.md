@@ -1599,3 +1599,5 @@ M325 adds no public API. Compass `345`, clock `347`, and empty map `358` share o
 M326 adds no public API. Boat `333`, minecart `328`, chest minecart `342`, and furnace minecart `343` share one vehicle-craft family.
 
 M327 adds no public API. Stew `282`, bread `297`, cookies `357`, and cake `354` share one food-craft family.
+
+M328 adds no public API. Bone meal `351:15`, rose red `351:1`, dandelion yellow `351:11`, and gray `351:8` share one dye-craft family.

@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m324 = load(root, "smokes/m324-furnace-rest-smelts/smoke.properties");
         Properties m325 = load(root, "smokes/m325-navigation-crafts/smoke.properties");
         Properties m326 = load(root, "smokes/m326-vehicle-crafts/smoke.properties");
         Properties m327 = load(root, "smokes/m327-food-crafts/smoke.properties");
-        match(release, "version", "1.315.0");
-        match(release, "milestone", "m327-food-crafts");
-        same(release, "m324.signature", m324, "expected.signature");
-        same(release, "server.sha256", m324, "server.jar.sha256");
+        Properties m328 = load(root, "smokes/m328-dye-family-crafts/smoke.properties");
+        match(release, "version", "1.316.0");
+        match(release, "milestone", "m328-dye-family-crafts");
         same(release, "m325.signature", m325, "expected.signature");
         same(release, "server.sha256", m325, "server.jar.sha256");
         same(release, "m326.signature", m326, "expected.signature");
         same(release, "server.sha256", m326, "server.jar.sha256");
         same(release, "m327.signature", m327, "expected.signature");
         same(release, "server.sha256", m327, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M324_FURNACE_REST_SMELTS.md", "docs/M324_CYCLE.md",
-                "smokes/m324-furnace-rest-smelts/MAP.md", "docs/M325_NAVIGATION_CRAFTS.md", "docs/M325_CYCLE.md",
+        same(release, "m328.signature", m328, "expected.signature");
+        same(release, "server.sha256", m328, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M325_NAVIGATION_CRAFTS.md", "docs/M325_CYCLE.md",
                 "smokes/m325-navigation-crafts/MAP.md", "docs/M326_VEHICLE_CRAFTS.md", "docs/M326_CYCLE.md",
                 "smokes/m326-vehicle-crafts/MAP.md", "docs/M327_FOOD_CRAFTS.md", "docs/M327_CYCLE.md",
-                "smokes/m327-food-crafts/MAP.md"))
+                "smokes/m327-food-crafts/MAP.md", "docs/M328_DYE_FAMILY_CRAFTS.md", "docs/M328_CYCLE.md",
+                "smokes/m328-dye-family-crafts/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.315.0 M327 Food crafts GO");
+        System.out.println("  release: Worldline v1.316.0 M328 Dye family crafts GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

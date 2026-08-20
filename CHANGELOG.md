@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.316.0 - M328 Dye family crafts
+
+Status: GO for official dye-item crafts together.
+
+- Packet102 crafted bone meal `351:15`, rose red `351:1`, dandelion yellow `351:11`, and gray `351:8`.
+- The four dye stacks survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M328 semantic SHA-256 is
+`7ae29bcd82b147e1286ec7a3b4655087822ac5f5379f18142eab3fd163dda815`.
+
 ## 1.315.0 - M327 Food crafts
 
 Status: GO for official stew, bread, cookie, and cake crafts together.
