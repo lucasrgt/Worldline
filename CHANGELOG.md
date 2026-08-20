@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.224.0 - M236 Cobble slab
+
+Status: GO for official cobblestone-slab placement.
+
+- Placed slab item `44` damage `3` on a raised stone support as `44:3`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M236 semantic SHA-256 is
+`0659df1d047139297efabd6988985a6f3c1bb9b16e6dfa93f6bc1387d8dbc335`.
+
 ## 1.223.0 - M235 Wood slab
 
 Status: GO for official wood-slab placement.
