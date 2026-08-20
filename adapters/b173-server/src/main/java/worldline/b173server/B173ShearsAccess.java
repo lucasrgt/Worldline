@@ -3,7 +3,7 @@ package worldline.b173server;
 import java.io.IOException;
 import worldline.api.RemoteMobDeath;
 
-/** Public smoke boundary for shears Packet7 entity use and a non-blocking death peek. */
+/** Public smoke boundary for shears Packet7 entity use and non-blocking hurt/death peeks. */
 public final class B173ShearsAccess {
     private B173ShearsAccess() {}
 
@@ -18,5 +18,9 @@ public final class B173ShearsAccess {
 
     public static RemoteMobDeath peekDeath(B173WireClient client, int entity) {
         return client.channel().inbound().mobs().peekDeath(entity);
+    }
+
+    public static boolean peekHurt(B173WireClient client, int entity) {
+        return client.channel().inbound().mobs().peekHurt(entity);
     }
 }

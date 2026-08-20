@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.444.0 - M462 Bow mob hit set
+
+Status: GO for official player bow Packet23 type 60 hits on pig and zombie together.
+
+- Bow `261` air-use hit Packet24 types `90` and `54` with Packet38 status `2`.
+- Distinct from M436 collect, M332 shoot-only, and skeleton arrows.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M462 semantic SHA-256 is
+`bbe6e87049578c8e26c8cca6f79ed7ac1f3c530df498b2d9da63a8f195578e22`.
+
 ## 1.443.0 - M460 Monster bed interrupt set
 
 Status: GO for official bed occupy plus hostile Packet24 interrupt together.

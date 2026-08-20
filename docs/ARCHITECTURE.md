@@ -1855,3 +1855,5 @@ M458 adds no public API. Slime type `55` size-1 plus larger Packet8 contact shar
 M459 adds no public API. Nether ghast type `56` Packet23 type `63` Packet60 strength `1` hit share one ghast-fireball-hit family.
 
 M460 adds no public API. Bed occupy `26:12` plus type `54` interrupt leave share one monster-bed-interrupt family.
+
+M462 adds no public API. Player bow `261` Packet23 type `60` Packet38 hits on pig `90` and zombie `54` share one bow-mob-hit family.

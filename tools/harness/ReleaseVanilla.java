@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m457 = load(root, "smokes/m457-spider-leap-set/smoke.properties");
         Properties m458 = load(root, "smokes/m458-slime-touch-set/smoke.properties");
         Properties m459 = load(root, "smokes/m459-ghast-fireball-hit-set/smoke.properties");
         Properties m460 = load(root, "smokes/m460-monster-bed-interrupt-set/smoke.properties");
-        match(release, "version", "1.443.0");
-        match(release, "milestone", "m460-monster-bed-interrupt-set");
-        same(release, "m457.signature", m457, "expected.signature");
-        same(release, "server.sha256", m457, "server.jar.sha256");
+        Properties m462 = load(root, "smokes/m462-bow-mob-hit-set/smoke.properties");
+        match(release, "version", "1.444.0");
+        match(release, "milestone", "m462-bow-mob-hit-set");
         same(release, "m458.signature", m458, "expected.signature");
         same(release, "server.sha256", m458, "server.jar.sha256");
         same(release, "m459.signature", m459, "expected.signature");
         same(release, "server.sha256", m459, "server.jar.sha256");
         same(release, "m460.signature", m460, "expected.signature");
         same(release, "server.sha256", m460, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M457_SPIDER_LEAP_SET.md", "docs/M457_CYCLE.md",
-                "smokes/m457-spider-leap-set/MAP.md", "docs/M458_SLIME_TOUCH_SET.md", "docs/M458_CYCLE.md",
+        same(release, "m462.signature", m462, "expected.signature");
+        same(release, "server.sha256", m462, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M458_SLIME_TOUCH_SET.md", "docs/M458_CYCLE.md",
                 "smokes/m458-slime-touch-set/MAP.md", "docs/M459_GHAST_FIREBALL_HIT_SET.md", "docs/M459_CYCLE.md",
                 "smokes/m459-ghast-fireball-hit-set/MAP.md", "docs/M460_MONSTER_BED_INTERRUPT_SET.md", "docs/M460_CYCLE.md",
-                "smokes/m460-monster-bed-interrupt-set/MAP.md"))
+                "smokes/m460-monster-bed-interrupt-set/MAP.md", "docs/M462_BOW_MOB_HIT_SET.md", "docs/M462_CYCLE.md",
+                "smokes/m462-bow-mob-hit-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.443.0 M460 Monster bed interrupt set GO");
+        System.out.println("  release: Worldline v1.444.0 M462 Bow mob hit set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
