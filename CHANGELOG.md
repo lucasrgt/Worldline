@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.417.0 - M427 Remaining piston orient set
+
+Status: GO for official remaining piston and sticky-piston place-facings together.
+
+- Piston `33` and sticky piston `29` placed remaining metas `0/2/3/4/5`.
+- All ten cells persisted after a clean save plus fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M427 semantic SHA-256 is
+`467d62056ad74b5561c6e6bf67533b1608d7fc66644062154b00b81109e8ad76`.
+
 ## 1.416.0 - M426 Remaining redstone faces
 
 Status: GO for official remaining lever wall/ground faces plus remaining repeater delay-facing family together.
