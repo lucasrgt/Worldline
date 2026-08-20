@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.290.0 - M302 Shovel soft breaks
+
+Status: GO for official dirt, sand, gravel, and clay shovel harvests.
+
+- Gold shovel `284` broke dirt `3`, sand `12`, gravel `13`, and clay `82`.
+- Packet21 drops were dirt, sand, gravel, and clay balls `337`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M302 semantic SHA-256 is
+`83e1acd8df0e978483bdfe1199d46021b2f5b8a4908c646ca1045c002e7228d9`.
+
 ## 1.289.0 - M301 Axe log breaks
 
 Status: GO for official oak, spruce, and birch log harvests.
