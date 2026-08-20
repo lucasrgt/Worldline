@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m351 = load(root, "smokes/m351-painting-orient-set/smoke.properties");
         Properties m352 = load(root, "smokes/m352-tool-durability-set/smoke.properties");
         Properties m353 = load(root, "smokes/m353-sword-damage-set/smoke.properties");
         Properties m354 = load(root, "smokes/m354-farmland-hydrate-set/smoke.properties");
-        match(release, "version", "1.342.0");
-        match(release, "milestone", "m354-farmland-hydrate-set");
-        same(release, "m351.signature", m351, "expected.signature");
-        same(release, "server.sha256", m351, "server.jar.sha256");
+        Properties m355 = load(root, "smokes/m355-note-rest-instruments/smoke.properties");
+        match(release, "version", "1.343.0");
+        match(release, "milestone", "m355-note-rest-instruments");
         same(release, "m352.signature", m352, "expected.signature");
         same(release, "server.sha256", m352, "server.jar.sha256");
         same(release, "m353.signature", m353, "expected.signature");
         same(release, "server.sha256", m353, "server.jar.sha256");
         same(release, "m354.signature", m354, "expected.signature");
         same(release, "server.sha256", m354, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M351_PAINTING_ORIENT_SET.md", "docs/M351_CYCLE.md",
-                "smokes/m351-painting-orient-set/MAP.md", "docs/M352_TOOL_DURABILITY_SET.md", "docs/M352_CYCLE.md",
+        same(release, "m355.signature", m355, "expected.signature");
+        same(release, "server.sha256", m355, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M352_TOOL_DURABILITY_SET.md", "docs/M352_CYCLE.md",
                 "smokes/m352-tool-durability-set/MAP.md", "docs/M353_SWORD_DAMAGE_SET.md", "docs/M353_CYCLE.md",
                 "smokes/m353-sword-damage-set/MAP.md", "docs/M354_FARMLAND_HYDRATE_SET.md", "docs/M354_CYCLE.md",
-                "smokes/m354-farmland-hydrate-set/MAP.md"))
+                "smokes/m354-farmland-hydrate-set/MAP.md", "docs/M355_NOTE_REST_INSTRUMENTS.md", "docs/M355_CYCLE.md",
+                "smokes/m355-note-rest-instruments/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.342.0 M354 Farmland hydrate set GO");
+        System.out.println("  release: Worldline v1.343.0 M355 Note rest instruments GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

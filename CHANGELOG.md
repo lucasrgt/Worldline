@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.343.0 - M355 Note rest instruments
+
+Status: GO for official glass and gold note-block instruments together.
+
+- Packet14 on note blocks `25` over glass `20` and gold `41` emitted Packet54 instruments `3` and `0`.
+- Both note cells survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M355 semantic SHA-256 is
+`0b8bfa875138db6748a105c9ca98ad10bd8f4ff277dbe49e5d1d96e5790cf868`.
+
 ## 1.342.0 - M354 Farmland hydrate set
 
 Status: GO for official dry and hydrated farmland together.
