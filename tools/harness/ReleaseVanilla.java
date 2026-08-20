@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m336 = load(root, "smokes/m336-slab-meta-crafts/smoke.properties");
         Properties m337 = load(root, "smokes/m337-utility-item-crafts/smoke.properties");
         Properties m338 = load(root, "smokes/m338-furnace-fuel-set/smoke.properties");
         Properties m339 = load(root, "smokes/m339-sapling-growth-set/smoke.properties");
-        match(release, "version", "1.327.0");
-        match(release, "milestone", "m339-sapling-growth-set");
-        same(release, "m336.signature", m336, "expected.signature");
-        same(release, "server.sha256", m336, "server.jar.sha256");
+        Properties m340 = load(root, "smokes/m340-redstone-input-set/smoke.properties");
+        match(release, "version", "1.328.0");
+        match(release, "milestone", "m340-redstone-input-set");
         same(release, "m337.signature", m337, "expected.signature");
         same(release, "server.sha256", m337, "server.jar.sha256");
         same(release, "m338.signature", m338, "expected.signature");
         same(release, "server.sha256", m338, "server.jar.sha256");
         same(release, "m339.signature", m339, "expected.signature");
         same(release, "server.sha256", m339, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M336_SLAB_META_CRAFTS.md", "docs/M336_CYCLE.md",
-                "smokes/m336-slab-meta-crafts/MAP.md", "docs/M337_UTILITY_ITEM_CRAFTS.md", "docs/M337_CYCLE.md",
+        same(release, "m340.signature", m340, "expected.signature");
+        same(release, "server.sha256", m340, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M337_UTILITY_ITEM_CRAFTS.md", "docs/M337_CYCLE.md",
                 "smokes/m337-utility-item-crafts/MAP.md", "docs/M338_FURNACE_FUEL_SET.md", "docs/M338_CYCLE.md",
                 "smokes/m338-furnace-fuel-set/MAP.md", "docs/M339_SAPLING_GROWTH_SET.md", "docs/M339_CYCLE.md",
-                "smokes/m339-sapling-growth-set/MAP.md"))
+                "smokes/m339-sapling-growth-set/MAP.md", "docs/M340_REDSTONE_INPUT_SET.md", "docs/M340_CYCLE.md",
+                "smokes/m340-redstone-input-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.327.0 M339 Sapling growth set GO");
+        System.out.println("  release: Worldline v1.328.0 M340 Redstone input set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

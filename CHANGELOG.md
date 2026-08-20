@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.328.0 - M340 Redstone input set
+
+Status: GO for official lever latch and stone-button pulse together.
+
+- Packet15 placed lever `69` and stone button `77`, then latched `69:1->9->1` and pulsed `77:1->9->1`.
+- Both cells reloaded unpowered after a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M340 semantic SHA-256 is
+`366f2922f527ce87c4818902a75b3e646c8a6e5946e6b84838fe3c9918f0c456`.
+
 ## 1.327.0 - M339 Sapling growth set
 
 Status: GO for official oak, spruce, and birch sapling growth together.

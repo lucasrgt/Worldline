@@ -1623,3 +1623,5 @@ M337 adds no public API. Shears `359`, flint-and-steel `259`, and empty bucket `
 M338 adds no public API. Coal `263`, oak planks `5`, and lava bucket `327` share one furnace-fuel family.
 
 M339 adds no public API. Oak `6:0`, spruce `6:1`, and birch `6:2` share one sapling-growth family.
+
+M340 adds no public API. Lever `69` latch and stone button `77` pulse share one redstone-input family.

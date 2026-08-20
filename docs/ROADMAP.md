@@ -344,6 +344,7 @@ Passing an experiment does not silently promote its API.
 | v1.325.0 / M337 | Utility item crafts | GO - shears 359, flint-and-steel 259, bucket 325 |
 | v1.326.0 / M338 | Furnace fuel set | GO - coal 263, planks 5, lava bucket 327 |
 | v1.327.0 / M339 | Sapling growth set | GO - oak 6:0, spruce 6:1, birch 6:2 to logs |
+| v1.328.0 / M340 | Redstone input set | GO - lever 69:1->9->1 and button 77:1->9->1 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -355,7 +356,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.327.0 direction
+## Immediate post-v1.328.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
