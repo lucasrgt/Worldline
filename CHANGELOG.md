@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.377.0 - M389 Animal drops set
+
+Status: GO for official cow leather and chicken feather drops together.
+
+- Spawners retargeted to Cow and Chicken; Packet24 types `92` and `93` were killed with diamond sword `276`.
+- Packet21 leather `334` and feather `288` were observed.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M389 semantic SHA-256 is
+`761e3177132b22cd98c5dd6a4fa802903098e923c7e0c31115dfae512c06213b`.
+
 ## 1.376.0 - M388 Hostile drops set
 
 Status: GO for official zombie feather and skeleton arrow drops together.
