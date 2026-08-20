@@ -281,6 +281,7 @@ final class SmokeSuite {
         {"tools/smoke/LavaPlaceCycle.java", "m255-lava-place"},
         {"tools/smoke/ChestMinecartCycle.java", "m256-chest-minecart"},
         {"tools/smoke/FurnaceMinecartCycle.java", "m257-furnace-minecart"},
+        {"tools/smoke/BreadEatCycle.java", "m258-bread-eat"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

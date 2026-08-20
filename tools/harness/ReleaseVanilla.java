@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m254 = load(root, "smokes/m254-water-place/smoke.properties");
         Properties m255 = load(root, "smokes/m255-lava-place/smoke.properties");
         Properties m256 = load(root, "smokes/m256-chest-minecart/smoke.properties");
         Properties m257 = load(root, "smokes/m257-furnace-minecart/smoke.properties");
-        match(release, "version", "1.245.0");
-        match(release, "milestone", "m257-furnace-minecart");
-        same(release, "m254.signature", m254, "expected.signature");
-        same(release, "server.sha256", m254, "server.jar.sha256");
+        Properties m258 = load(root, "smokes/m258-bread-eat/smoke.properties");
+        match(release, "version", "1.246.0");
+        match(release, "milestone", "m258-bread-eat");
         same(release, "m255.signature", m255, "expected.signature");
         same(release, "server.sha256", m255, "server.jar.sha256");
         same(release, "m256.signature", m256, "expected.signature");
         same(release, "server.sha256", m256, "server.jar.sha256");
         same(release, "m257.signature", m257, "expected.signature");
         same(release, "server.sha256", m257, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M254_WATER_PLACE.md", "docs/M254_CYCLE.md",
-                "smokes/m254-water-place/MAP.md", "docs/M255_LAVA_PLACE.md", "docs/M255_CYCLE.md",
+        same(release, "m258.signature", m258, "expected.signature");
+        same(release, "server.sha256", m258, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M255_LAVA_PLACE.md", "docs/M255_CYCLE.md",
                 "smokes/m255-lava-place/MAP.md", "docs/M256_CHEST_MINECART.md", "docs/M256_CYCLE.md",
                 "smokes/m256-chest-minecart/MAP.md", "docs/M257_FURNACE_MINECART.md", "docs/M257_CYCLE.md",
-                "smokes/m257-furnace-minecart/MAP.md"))
+                "smokes/m257-furnace-minecart/MAP.md", "docs/M258_BREAD_EAT.md", "docs/M258_CYCLE.md",
+                "smokes/m258-bread-eat/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.245.0 M257 Furnace minecart GO");
+        System.out.println("  release: Worldline v1.246.0 M258 Bread eat GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

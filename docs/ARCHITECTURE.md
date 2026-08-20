@@ -1459,3 +1459,5 @@ M255 adds no public API. Lava bucket `327` places still lava `11:0` and becomes 
 M256 adds no public API. Chest-minecart item `342` on rail `66` emits Packet23 type `11`.
 
 M257 adds no public API. Furnace-minecart item `343` on rail `66` emits Packet23 type `12`.
+
+M258 adds no public API. Bread item `297` air-use heals Packet8 `15 -> 20` and consumes the stack.

@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.246.0 - M258 Bread eat
+
+Status: GO for official bread air-use heal.
+
+- Seeded bread `297` at health `15` and Packet15 air-use restored Packet8 `15 -> 20`.
+- The held stack was consumed `297:1 -> 0` and both health and inventory survived a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M258 semantic SHA-256 is
+`1f0cbe46155bbaf393891dc8f4343effa6b5f502c8efc4c8f0122c424a05da3a`.
+
 ## 1.245.0 - M257 Furnace minecart
 
 Status: GO for official furnace-minecart spawn.
