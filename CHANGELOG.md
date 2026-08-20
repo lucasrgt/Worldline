@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.332.0 - M344 Bucket fluid set
+
+Status: GO for official water and lava bucket place-plus-pickup together.
+
+- Water bucket `326` placed still water `9:0` then picked it back up; lava bucket `327` did the same for `11:0`.
+- The empty basin and both filled buckets survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M344 semantic SHA-256 is
+`fe76fdf6b8ec887d8efc4caa81ce926b3efad2a42207cbefd9b6a21f9b66b789`.
+
 ## 1.331.0 - M343 Fire family set
 
 Status: GO for official netherrack fire persist and wool consumption together.
