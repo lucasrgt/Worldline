@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.326.0 - M338 Furnace fuel set (GO)**.
+Current official milestone: **Worldline v1.327.0 - M339 Sapling growth set (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

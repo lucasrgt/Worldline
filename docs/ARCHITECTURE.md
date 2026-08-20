@@ -1621,3 +1621,5 @@ M336 adds no public API. Sandstone `44:1`, wood `44:2`, and cobble `44:3` slabs 
 M337 adds no public API. Shears `359`, flint-and-steel `259`, and empty bucket `325` share one utility-item craft family.
 
 M338 adds no public API. Coal `263`, oak planks `5`, and lava bucket `327` share one furnace-fuel family.
+
+M339 adds no public API. Oak `6:0`, spruce `6:1`, and birch `6:2` share one sapling-growth family.

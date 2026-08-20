@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.327.0 - M339 Sapling growth set
+
+Status: GO for official oak, spruce, and birch sapling growth together.
+
+- Bonemeal `351:15` grew saplings `6:0`, `6:1`, and `6:2` into log roots `17:0`, `17:1`, and `17:2`.
+- The three log cells survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M339 semantic SHA-256 is
+`cbb09ab44fa0804f8304e414f683a868c16aabac0c29c00ba78b525e6678ec5e`.
+
 ## 1.326.0 - M338 Furnace fuel set
 
 Status: GO for official coal, plank, and lava-bucket furnace fuels together.
