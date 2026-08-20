@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.283.0 - M295 Pressure plates
+
+Status: GO for official wooden and stone pressure-plate power.
+
+- Placed wooden plate `72` and stone plate `70` on adjacent raised-stone supports.
+- Standing powered each cell (`72:1`, `70:1`); stepping off depowered both.
+- Unpowered `72:0` and `70:0` survived a clean save and a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M295 semantic SHA-256 is
+`d36cbe38c632dcc4e03334db2982db51f92e78b36850dcbc098b43469ebb9815`.
+
 ## 1.282.0 - M294 Piston place
 
 Status: GO for official piston placement.

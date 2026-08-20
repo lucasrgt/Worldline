@@ -293,7 +293,8 @@ final class SmokeCatalog {
         {"tools/smoke/SpruceSaplingCycle.java", "m289-spruce-sapling"},
         {"tools/smoke/BirchSaplingCycle.java", "m290-birch-sapling"},
         {"tools/smoke/SpruceLeavesCycle.java", "m291-spruce-leaves"}, {"tools/smoke/BirchLeavesCycle.java", "m292-birch-leaves"},
-        {"tools/smoke/StickyPistonPlaceCycle.java", "m293-sticky-piston-place"}, {"tools/smoke/PistonPlaceCycle.java", "m294-piston-place"}, {"tools/smoke/LabCycle.java", "lab-cycle"}
+        {"tools/smoke/StickyPistonPlaceCycle.java", "m293-sticky-piston-place"}, {"tools/smoke/PistonPlaceCycle.java", "m294-piston-place"},
+        {"tools/smoke/PressurePlatesCycle.java", "m295-pressure-plates"}, {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
     private SmokeCatalog() {}
 }

@@ -1533,3 +1533,5 @@ M292 adds no public API. Leaves item `18` damage `2` beside oak log persist as b
 M293 adds no public API. Sticky piston item `29` places `29:1` and persists.
 
 M294 adds no public API. Piston item `33` places `33:1` and persists.
+
+M295 adds no public API. Wooden plate `72` and stone plate `70` power and unpower together.
