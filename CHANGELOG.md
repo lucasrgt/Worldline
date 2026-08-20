@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.393.0 - M405 Pig saddle set
+
+Status: GO for official pig saddle consume and Packet39 mount together.
+
+- Packet24 type `90` pig received saddle `329` via Packet7 button 0, then empty-hand mount.
+- Packet39 attach bound passenger to that pig; the saddle stack was consumed.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M405 semantic SHA-256 is
+`a27d2ce0c705f4fe5af56c8e35b8ec7c212956eaff46a764ce610d54f40c06d9`.
+
 ## 1.392.0 - M404 Remaining cart break
 
 Status: GO for official empty-cart and chest-cart Packet7 breaks together.

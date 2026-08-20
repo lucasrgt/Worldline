@@ -1753,3 +1753,5 @@ M402 adds no public API. Detector rail `28:0` occupied to `28:8` by minecart typ
 M403 adds no public API. Two Packet23 type `1` boats broken to plank `5` and stick `280` share one remaining-boat-break family.
 
 M404 adds no public API. Minecart type `10` and chest-cart type `11` Packet7 breaks share one remaining-cart-break family.
+
+M405 adds no public API. Pig type `90` saddle `329` consume plus Packet39 mount share one pig-saddle family.
