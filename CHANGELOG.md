@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.340.0 - M352 Tool durability set
+
+Status: GO for official wooden, iron, and gold pick durability together.
+
+- Packet14 broke cobble and stone with picks `270`, `257`, and `285`; remaining damage persisted after save.
+- The three remaining held stacks survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M352 semantic SHA-256 is
+`46cbf98b50d0745eafee30276fb3d3adafbbd1381f71bf7106012dbe80b75a30`.
+
 ## 1.339.0 - M351 Painting orient set
 
 Status: GO for official west-face and east-face painting spawns together.

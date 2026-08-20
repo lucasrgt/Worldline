@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.339.0 - M351 Painting orient set (GO)**.
+Current official milestone: **Worldline v1.340.0 - M352 Tool durability set (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
