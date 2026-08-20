@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.287.0 - M299 Stone tool crafts
+
+Status: GO for official stone tool-family crafts.
+
+- Workbench `58` crafted stone sword `272`, shovel `273`, pick `274`, axe `275`, and hoe `291`.
+- All five results persisted across a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M299 semantic SHA-256 is
+`c7503bc481ed407a57f6a750986b748f269a4222a4a8a2b9a3e26c5a12557c54`.
+
 ## 1.286.0 - M298 Wood tool crafts
 
 Status: GO for official wooden tool-family crafts.
