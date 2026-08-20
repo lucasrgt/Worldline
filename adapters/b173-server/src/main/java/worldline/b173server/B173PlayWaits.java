@@ -59,6 +59,11 @@ final class B173PlayWaits {
         return until(() -> inbound.objects().take(type), "expected object spawn absent before deadline");
     }
 
+    worldline.api.RemoteObjectSpawn objectFrom(int type, int thrower) throws IOException {
+        if (thrower < 1) throw new IllegalArgumentException("invalid expected object thrower");
+        return until(() -> inbound.objects().takeFrom(type, thrower), "expected thrown object absent before deadline");
+    }
+
     worldline.api.RemoteBedUse bed() throws IOException {
         return until(() -> inbound.beds().takeSleep(), "expected Packet17 sleep absent before deadline");
     }

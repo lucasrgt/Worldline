@@ -36,6 +36,15 @@ final class B173ObjectTracker {
         return null;
     }
 
+    RemoteObjectSpawn takeFrom(int type, int thrower) {
+        if (type < 1 || type > 127) throw new IllegalArgumentException("invalid expected object type");
+        if (thrower < 1) throw new IllegalArgumentException("invalid expected object thrower");
+        for (int index = 0; index < pending.size(); index++)
+            if (pending.get(index).type() == type && pending.get(index).throwerId() == thrower)
+                return pending.remove(index);
+        return null;
+    }
+
     B173VehicleAttach takeAttach(int vehicle) {
         if (vehicle < 0) throw new IllegalArgumentException("invalid expected vehicle entity");
         for (int index = 0; index < attaches.size(); index++)

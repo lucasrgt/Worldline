@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.433.0 - M445 Skeleton ranged AI set
+
+Status: GO for official skeleton Packet23 type 60 archery with skeleton thrower together.
+
+- Packet24 type `51` fired two Packet23 type `60` arrows whose thrower was that skeleton.
+- Distinct from player bow `261` and from skeleton bone `352`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M445 semantic SHA-256 is
+`59d850eaeeb297f3879633c70a546d1aa4da2de0618852cb9f3e802a8ec6533b`.
+
 ## 1.432.0 - M436 Remaining arrow life set
 
 Status: GO for official remaining bow-arrow land plus dropped-arrow collect together.

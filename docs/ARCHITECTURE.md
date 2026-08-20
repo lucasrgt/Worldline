@@ -1833,3 +1833,5 @@ M444 adds no public API. Pig pork `319` plus sheep undyed wool `35:0` death drop
 M422 adds no public API. Skeleton bone `352` plus bone-meal wheat `59:7` share one skeleton-bone family.
 
 M436 adds no public API. Bow `261` Packet23 type `60` land plus arrow `262` collect share one remaining-arrow-life family.
+
+M445 adds no public API. Skeleton type `51` Packet23 type `60` arrows with skeleton thrower share one skeleton-ranged-ai family.

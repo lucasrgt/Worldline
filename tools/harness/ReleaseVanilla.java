@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m443 = load(root, "smokes/m443-remaining-bucket-rest-set/smoke.properties");
         Properties m444 = load(root, "smokes/m444-remaining-mob-drops-rest/smoke.properties");
         Properties m422 = load(root, "smokes/m422-skeleton-bone-set/smoke.properties");
         Properties m436 = load(root, "smokes/m436-remaining-arrow-life-set/smoke.properties");
-        match(release, "version", "1.432.0");
-        match(release, "milestone", "m436-remaining-arrow-life-set");
-        same(release, "m443.signature", m443, "expected.signature");
-        same(release, "server.sha256", m443, "server.jar.sha256");
+        Properties m445 = load(root, "smokes/m445-skeleton-ranged-ai-set/smoke.properties");
+        match(release, "version", "1.433.0");
+        match(release, "milestone", "m445-skeleton-ranged-ai-set");
         same(release, "m444.signature", m444, "expected.signature");
         same(release, "server.sha256", m444, "server.jar.sha256");
         same(release, "m422.signature", m422, "expected.signature");
         same(release, "server.sha256", m422, "server.jar.sha256");
         same(release, "m436.signature", m436, "expected.signature");
         same(release, "server.sha256", m436, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M443_REMAINING_BUCKET_REST_SET.md", "docs/M443_CYCLE.md",
-                "smokes/m443-remaining-bucket-rest-set/MAP.md", "docs/M444_REMAINING_MOB_DROPS_REST.md", "docs/M444_CYCLE.md",
+        same(release, "m445.signature", m445, "expected.signature");
+        same(release, "server.sha256", m445, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M444_REMAINING_MOB_DROPS_REST.md", "docs/M444_CYCLE.md",
                 "smokes/m444-remaining-mob-drops-rest/MAP.md", "docs/M422_SKELETON_BONE_SET.md", "docs/M422_CYCLE.md",
                 "smokes/m422-skeleton-bone-set/MAP.md", "docs/M436_REMAINING_ARROW_LIFE_SET.md", "docs/M436_CYCLE.md",
-                "smokes/m436-remaining-arrow-life-set/MAP.md"))
+                "smokes/m436-remaining-arrow-life-set/MAP.md", "docs/M445_SKELETON_RANGED_AI_SET.md", "docs/M445_CYCLE.md",
+                "smokes/m445-skeleton-ranged-ai-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.432.0 M436 Remaining arrow life set GO");
+        System.out.println("  release: Worldline v1.433.0 M445 Skeleton ranged AI set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
