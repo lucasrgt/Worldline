@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.257.0 - M269 Shears leaves
+
+Status: GO for official shears-versus-bare-hand leaf harvest.
+
+- Shears item `359` on oak leaves `18:8` emitted Packet21 leaf drop `18`; bare hand did not.
+- Both sheared and bare-hand cells became air `0:0` after the official break.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M269 semantic SHA-256 is
+`ea2a38e965fa7a2b9bf0d278cfd600efa328aba31fa9c3c991c85eb408a2953e`.
+
 ## 1.256.0 - M268 Flint steel fire
 
 Status: GO for official flint-and-steel fire placement.

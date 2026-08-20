@@ -1481,3 +1481,5 @@ M266 adds no public API. Cooked fish item `350` air-use heals Packet8 `15 -> 20`
 M267 adds no public API. Milk bucket item `335` air-use becomes empty bucket `325` with no health change.
 
 M268 adds no public API. Flint-and-steel item `259` places fire `51:0` on raised stone.
+
+M269 adds no public API. Shears item `359` on oak leaves `18:8` emit Packet21 leaf drop; bare hand does not.

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.256.0 - M268 Flint steel fire (GO)**.
+Current official milestone: **Worldline v1.257.0 - M269 Shears leaves (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
