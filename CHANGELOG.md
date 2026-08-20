@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.320.0 - M332 Bow arrow set
+
+Status: GO for official bow and arrow crafts plus Packet23 type-60 air-use.
+
+- Packet102 crafted bow `261` and arrows `262` in a placed workbench `58`.
+- Packet15 air-use of the crafted bow emitted Packet23 type `60` on the existing tracker.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M332 semantic SHA-256 is
+`b745e8656e459e93ffe617759990be48c4c454450256e53f8ef1c5bf1757d215`.
+
 ## 1.319.0 - M331 Throwables set
 
 Status: GO for official snowball, egg, and fishing-hook throws together.

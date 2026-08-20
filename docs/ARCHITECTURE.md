@@ -1607,3 +1607,5 @@ M329 adds no public API. Fence `85`, ladder `65`, and bookshelf `47` share one u
 M330 adds no public API. Bed occupy `26:8→26:12` and wake standing share one sleep family.
 
 M331 adds no public API. Snowball type 61, egg type 62, and fishing hook type 90 share one throwable family.
+
+M332 adds no public API. Bow `261`, arrows `262`, and Packet23 type 60 share one bow-arrow family.
