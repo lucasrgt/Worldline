@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.228.0 - M240 Bed place (GO)**.
+Current official milestone: **Worldline v1.229.0 - M241 Iron door place (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
