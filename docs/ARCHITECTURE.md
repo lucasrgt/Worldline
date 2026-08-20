@@ -1705,3 +1705,5 @@ M378 adds no public API. Boat Packet23 type 1 plus Packet39 attach/detach share 
 M379 adds no public API. Iron door `71` halves and lever `69` power share one iron-door family.
 
 M380 adds no public API. Trapdoor `96` four wall faces share one trapdoor-toggle family.
+
+M381 adds no public API. TNT `46` flint-steel prime, Packet23 type 50, and Packet60 strength 4 share one TNT-prime family.

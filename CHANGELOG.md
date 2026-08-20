@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.369.0 - M381 Tnt prime set
+
+Status: GO for official TNT flint-steel prime plus Packet60 crater together.
+
+- Flint and steel `259` primed TNT `46`; Packet23 type `50` then Packet60 strength `4`.
+- The crater persisted after a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M381 semantic SHA-256 is
+`6cf1cfe074d14a3c856cf768c9a8b9cdc9cfa573b8ee2e901445db31692bfad5`.
+
 ## 1.368.0 - M380 Trapdoor family set
 
 Status: GO for official trapdoor four-face toggle together.
