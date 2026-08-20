@@ -454,6 +454,7 @@ Passing an experiment does not silently promote its API.
 | v1.435.0 / M453 | Player death drops | GO - void Packet8 0 plus hotbar 1+4+3 Packet21 |
 | v1.436.0 / M454 | Peaceful despawn | GO - difficulty 0 absent vs easy 50+54 persist |
 | v1.437.0 / M455 | Melee pursuit set | GO - types 54 and 51 Packet31/33/34 toward pose |
+| v1.438.0 / M448 | Creeper fuse set | GO - type 50 Packet40 state 1 then Packet60 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -465,7 +466,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.437.0 direction
+## Immediate post-v1.438.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

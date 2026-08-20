@@ -79,4 +79,6 @@ final class B173PlayWaits {
     worldline.api.RemotePaintingSpawn painting() throws IOException {
         return until(() -> inbound.paintings().take(), "expected Packet25 painting absent before deadline");
     }
+
+    Integer fuse(int entity) throws IOException { return until(() -> { int value = inbound.mobs().takeFuse(entity); return value < 0 ? null : Integer.valueOf(value); }, "expected creeper Packet40 fuse absent before deadline"); }
 }

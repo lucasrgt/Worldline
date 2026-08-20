@@ -1843,3 +1843,5 @@ M453 adds no public API. Void Packet8 `0` plus seeded hotbar Packet21 drops shar
 M454 adds no public API. Peaceful absence versus Easy persist of Packet24 `50/51/54` share one peaceful-despawn family.
 
 M455 adds no public API. Zombie type `54` and skeleton type `51` Packet31/33/34 pursuit toward pose share one melee-pursuit family.
+
+M448 adds no public API. Creeper type `50` Packet40 ignited state before Packet60 share one creeper-fuse family.

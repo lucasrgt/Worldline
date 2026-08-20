@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.438.0 - M448 Creeper fuse set
+
+Status: GO for official creeper Packet40 proximity fuse before Packet60 together.
+
+- Packet24 type `50` ignited via Packet40 state `1` while the actor stayed; Packet60 followed.
+- Distinct from M391 crater hashing, M421 gunpowder, and M456 leave-cancel.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M448 semantic SHA-256 is
+`702d4dc074d1db9a965d74f49f1318cb05a4397c343a59b8fde15a3ab8f15505`.
+
 ## 1.437.0 - M455 Melee pursuit set
 
 Status: GO for official zombie and skeleton Packet24 pursuit toward the actor pose together.
