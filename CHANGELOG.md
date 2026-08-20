@@ -4,6 +4,16 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.364.0 - M376 Remaining shovel breaks
+
+Status: GO for official clay, snow, snow-block, and soul-sand shovel harvests together.
+
+- Gold shovel `284` broke clay `82` to `337`, snow `78`/`80` to `332`, and soul sand `88` to `88`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M376 semantic SHA-256 is
+`40c64c0c07f6bc2b0dd8ed47b2526c1b5ef81a70c4b44720126cc44bc5d15c52`.
+
 ## 1.363.0 - M375 Remaining pick breaks
 
 Status: GO for official mossy cobble, gold ore, and obsidian pick harvests together.

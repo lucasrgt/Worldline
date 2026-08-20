@@ -1695,3 +1695,5 @@ M373 adds no public API. Cow milk fill `325→335` and drink `335→325` share o
 M374 adds no public API. Apple `260`, cooked pork `320`, and golden apple `322` share one remaining-food-heal family.
 
 M375 adds no public API. Mossy cobble `48`, gold ore `14`, and obsidian `49` share one remaining-pick-break family.
+
+M376 adds no public API. Clay `82`, snow `78`/`80`, and soul sand `88` share one remaining-shovel family.
