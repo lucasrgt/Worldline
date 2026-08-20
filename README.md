@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.314.0 - M326 Vehicle crafts (GO)**.
+Current official milestone: **Worldline v1.315.0 - M327 Food crafts (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

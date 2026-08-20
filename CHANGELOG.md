@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.315.0 - M327 Food crafts
+
+Status: GO for official stew, bread, cookie, and cake crafts together.
+
+- Packet102 crafted stew `282`, bread `297`, cookies `357`, and cake `354`.
+- Sugar `353` came from cane in the 2x2 grid; three empty buckets `325` remained.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M327 semantic SHA-256 is
+`feb202ff5d2172def94a39a6a9e560b5e4ecdba79681b018a8e046bb89703a54`.
+
 ## 1.314.0 - M326 Vehicle crafts
 
 Status: GO for official boat, minecart, chest-cart, and furnace-cart crafts together.

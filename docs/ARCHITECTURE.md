@@ -1597,3 +1597,5 @@ M324 adds no public API. Sand `12→20`, cobble `4→1`, and fish `349→350` sh
 M325 adds no public API. Compass `345`, clock `347`, and empty map `358` share one navigation-craft family.
 
 M326 adds no public API. Boat `333`, minecart `328`, chest minecart `342`, and furnace minecart `343` share one vehicle-craft family.
+
+M327 adds no public API. Stew `282`, bread `297`, cookies `357`, and cake `354` share one food-craft family.
