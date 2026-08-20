@@ -1493,3 +1493,5 @@ M272 adds no public API. Diamond leggings item `312` equip into armor slot 7 / P
 M273 adds no public API. Chain boots item `305` equip into armor slot 8 / Packet5 slot 1.
 
 M274 adds no public API. Removing stone under gravel `13:0` settles one cell down after official gravity.
+
+M275 adds no public API. Contact with cactus `81:0` drops Packet8 health `20 -> 19`.

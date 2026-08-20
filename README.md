@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.262.0 - M274 Falling gravel (GO)**.
+Current official milestone: **Worldline v1.263.0 - M275 Cactus damage (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

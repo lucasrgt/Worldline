@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.263.0 - M275 Cactus damage
+
+Status: GO for official cactus contact damage.
+
+- Placed cactus `81:0` on sand and walked into it so Packet8 health dropped `20 -> 19`.
+- Packet38 status 2 accompanied the one-point hurt and both sides survived a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M275 semantic SHA-256 is
+`c708ae878b6079760d5c246f952ca1789d98c31e395a568ad9c1a2d751ef6df8`.
+
 ## 1.262.0 - M274 Falling gravel
 
 Status: GO for official one-cell falling gravel.

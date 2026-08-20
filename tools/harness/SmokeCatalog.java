@@ -275,7 +275,8 @@ final class SmokeCatalog {
         {"tools/smoke/GoldChestplateCycle.java", "m271-gold-chestplate"},
         {"tools/smoke/DiamondLeggingsCycle.java", "m272-diamond-leggings"},
         {"tools/smoke/ChainBootsCycle.java", "m273-chain-boots"},
-        {"tools/smoke/FallingGravelCycle.java", "m274-falling-gravel"}, {"tools/smoke/LabCycle.java", "lab-cycle"}
+        {"tools/smoke/FallingGravelCycle.java", "m274-falling-gravel"},
+        {"tools/smoke/CactusDamageCycle.java", "m275-cactus-damage"}, {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
     private SmokeCatalog() {}
 }
