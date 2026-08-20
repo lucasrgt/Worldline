@@ -1427,3 +1427,5 @@ M239 adds no public API. Supported sand item `12` places `12:0` and persists.
 M240 adds no public API. Bed item `355` places foot `26:0` and head `26:8` from look yaw `0` and persists.
 
 M241 adds no public API. Iron door item `330` places lower `71:0` and upper `71:8` and persists.
+
+M242 adds no public API. Lever item `69` places `69:1` on an east face and persists.

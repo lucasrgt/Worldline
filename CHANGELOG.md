@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.230.0 - M242 Lever place
+
+Status: GO for official lever placement.
+
+- Placed lever item `69` on an east face as `69:1`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M242 semantic SHA-256 is
+`28f6b893342410779d684e2473574c663af5c667ff857e946aa225e71f8f69bf`.
+
 ## 1.229.0 - M241 Iron door place
 
 Status: GO for official iron-door placement.
