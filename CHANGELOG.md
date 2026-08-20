@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.227.0 - M239 Sand
+
+Status: GO for official supported-sand placement.
+
+- Placed sand item `12` on a raised stone support as `12:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M239 semantic SHA-256 is
+`bb15230ca24298e16113b08fd83f225bd6b7966fbcdd78d7378ecc59c58e1094`.
+
 ## 1.226.0 - M238 Grass
 
 Status: GO for official grass-block placement.
