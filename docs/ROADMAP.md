@@ -350,6 +350,7 @@ Passing an experiment does not silently promote its API.
 | v1.331.0 / M343 | Fire family set | GO - netherrack fire 51 persists, wool 35 consumed |
 | v1.332.0 / M344 | Bucket fluid set | GO - water 326/9 and lava 327/11 place plus pickup |
 | v1.333.0 / M345 | Ore block crafts | GO - gold 41, iron 42, diamond 57, lapis 22 |
+| v1.334.0 / M346 | Ore block uncrafts | GO - 41/42/57/22 back to 266/265/264/351:4 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -361,7 +362,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.333.0 direction
+## Immediate post-v1.334.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

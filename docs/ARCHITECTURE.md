@@ -1635,3 +1635,5 @@ M343 adds no public API. Netherrack fire `51` persist and wool `35` consume shar
 M344 adds no public API. Water bucket `326`/`9` and lava bucket `327`/`11` share one bucket-fluid family.
 
 M345 adds no public API. Gold `41`, iron `42`, diamond `57`, and lapis `22` share one ore-block craft family.
+
+M346 adds no public API. Uncrafting `41`, `42`, `57`, and `22` shares one ore-block uncraft family.

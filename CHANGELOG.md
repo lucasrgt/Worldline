@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.334.0 - M346 Ore block uncrafts
+
+Status: GO for official gold, iron, diamond, and lapis block uncrafts together.
+
+- Personal 2x2 uncrafted gold `41`, iron `42`, diamond `57`, and lapis `22` to nine-item stacks.
+- The four stacks `266x9`, `265x9`, `264x9`, and `351x9:4` survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M346 semantic SHA-256 is
+`6cb6facb7859e30e6d0834273f32ba84f01bede6c1d8d39ad7dcf6b33818f452`.
+
 ## 1.333.0 - M345 Ore block crafts
 
 Status: GO for official gold, iron, diamond, and lapis block crafts together.
