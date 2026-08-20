@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.367.0 - M379 Iron door set
+
+Status: GO for official iron-door halves plus lever power together.
+
+- Iron door `71` lower/upper went `0/8→4/12→0/8` from lever `69:1→9→1`.
+- The closed door and lever persisted after a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M379 semantic SHA-256 is
+`9d887adb7cbebcca0c805d02f84507310ea3211b6e1abb774ec7e7ae8d3e4f0c`.
+
 ## 1.366.0 - M378 Boat water set
 
 Status: GO for official boat spawn plus Packet39 ride and detach together.
