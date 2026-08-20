@@ -1683,3 +1683,5 @@ M367 adds no public API. Piston `33` extend/retract and sticky `29` pull share o
 M368 adds no public API. Yellow `35:4`, orange `35:1`, and pink `35:6` wool crafts share one remaining dye-wool family.
 
 M369 adds no public API. Cake `92` six-slice eat through air shares one full-eat family, distinct from M335's first three slices.
+
+M370 adds no public API. Cactus, log, and clay smelts share one remaining-furnace family. Smoke-local furnace clicks stay out of the public load identity.

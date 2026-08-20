@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.358.0 - M370 Remaining furnace smelts
+
+Status: GO for official cactus, log, and clay furnace smelts together.
+
+- Three idle furnaces `61:2` smelted cactus `81→351:2`, log `17→263:1`, and clay `337→336`.
+- Cook completed at burn `1401` of coal `1600`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M370 semantic SHA-256 is
+`912452d315840ced68811ccce77f3cde4f1250eac7068c5ddd9f85e22a607a2a`.
+
 ## 1.357.0 - M369 Cake full eat set
 
 Status: GO for official cake six-slice eat through air together.
