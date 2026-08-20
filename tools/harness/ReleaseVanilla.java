@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m241 = load(root, "smokes/m241-iron-door-place/smoke.properties");
         Properties m242 = load(root, "smokes/m242-lever-place/smoke.properties");
         Properties m243 = load(root, "smokes/m243-redstone-wire/smoke.properties");
         Properties m244 = load(root, "smokes/m244-cake-place/smoke.properties");
-        match(release, "version", "1.232.0");
-        match(release, "milestone", "m244-cake-place");
-        same(release, "m241.signature", m241, "expected.signature");
-        same(release, "server.sha256", m241, "server.jar.sha256");
+        Properties m245 = load(root, "smokes/m245-wall-sign/smoke.properties");
+        match(release, "version", "1.233.0");
+        match(release, "milestone", "m245-wall-sign");
         same(release, "m242.signature", m242, "expected.signature");
         same(release, "server.sha256", m242, "server.jar.sha256");
         same(release, "m243.signature", m243, "expected.signature");
         same(release, "server.sha256", m243, "server.jar.sha256");
         same(release, "m244.signature", m244, "expected.signature");
         same(release, "server.sha256", m244, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M241_IRON_DOOR_PLACE.md", "docs/M241_CYCLE.md",
-                "smokes/m241-iron-door-place/MAP.md", "docs/M242_LEVER_PLACE.md", "docs/M242_CYCLE.md",
+        same(release, "m245.signature", m245, "expected.signature");
+        same(release, "server.sha256", m245, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M242_LEVER_PLACE.md", "docs/M242_CYCLE.md",
                 "smokes/m242-lever-place/MAP.md", "docs/M243_REDSTONE_WIRE.md", "docs/M243_CYCLE.md",
                 "smokes/m243-redstone-wire/MAP.md", "docs/M244_CAKE_PLACE.md", "docs/M244_CYCLE.md",
-                "smokes/m244-cake-place/MAP.md"))
+                "smokes/m244-cake-place/MAP.md", "docs/M245_WALL_SIGN.md", "docs/M245_CYCLE.md",
+                "smokes/m245-wall-sign/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.232.0 M244 Cake place GO");
+        System.out.println("  release: Worldline v1.233.0 M245 Wall sign GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

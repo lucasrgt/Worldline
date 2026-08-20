@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.233.0 - M245 Wall sign
+
+Status: GO for official wall-sign placement and Packet130 text.
+
+- Placed sign item `323` on an east face as wall sign `68:5`.
+- Four UCS-2 lines `Wall` / `sign` / `M245` / `ok` survived a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M245 semantic SHA-256 is
+`124ca56d12f9c02d6f8463c6ad28739dcc1c7b29875b4fa356570082c5f82c06`.
+
 ## 1.232.0 - M244 Cake place
 
 Status: GO for official uneaten cake placement.
