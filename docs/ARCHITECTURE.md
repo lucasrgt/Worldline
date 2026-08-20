@@ -1611,3 +1611,5 @@ M331 adds no public API. Snowball type 61, egg type 62, and fishing hook type 90
 M332 adds no public API. Bow `261`, arrows `262`, and Packet23 type 60 share one bow-arrow family.
 
 M333 adds no public API. Dispenser `23:4` plus ejected cobble `4` and planks `5` share one dispenser family.
+
+M334 adds no public API. Gold disc `2256` and green disc `2257` share one record family.

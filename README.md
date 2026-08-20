@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.321.0 - M333 Dispenser set (GO)**.
+Current official milestone: **Worldline v1.322.0 - M334 Record set (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

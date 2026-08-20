@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.322.0 - M334 Record set
+
+Status: GO for official gold and green disc inserts together.
+
+- Packet15 placed two jukeboxes `84` and inserted discs `2256` and `2257`.
+- Packet61 effect `1005` fired for both disc ids; both cells persisted as `84:1`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M334 semantic SHA-256 is
+`b139e039c60f517453a6e8e0c3fe4f87b11f5c73faa81a77c7fceb7645428d53`.
+
 ## 1.321.0 - M333 Dispenser set
 
 Status: GO for official dispenser place, dual load, and dual eject together.
