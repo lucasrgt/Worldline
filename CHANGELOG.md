@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.418.0 - M428 Remaining door orient set
+
+Status: GO for official remaining wooden-door hinge/face pairs together.
+
+- Wooden door `324` placed remaining faces `64:0/8`, `64:1/9`, `64:2/10`, and `64:3/11`.
+- All eight cells persisted after a clean save plus fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M428 semantic SHA-256 is
+`10dad6f6b34f4140a80e7a09abeebaa5ff502bc6eee4607964a64dae72626bd2`.
+
 ## 1.417.0 - M427 Remaining piston orient set
 
 Status: GO for official remaining piston and sticky-piston place-facings together.

@@ -1803,3 +1803,5 @@ M425 adds no public API. Dispenser `23`, furnace `61`, and pumpkin `86` remainin
 M426 adds no public API. Lever `69` remaining wall/ground faces plus repeater `93/94` delay-facing share one remaining-redstone-faces family.
 
 M427 adds no public API. Piston `33` and sticky piston `29` remaining facings share one remaining-piston-orient family.
+
+M428 adds no public API. Wooden door `64` remaining hinge/face pairs share one remaining-door-orient family.
