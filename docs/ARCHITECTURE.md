@@ -1553,3 +1553,5 @@ M302 adds no public API. Gold shovel `284` harvests dirt, sand, gravel, and clay
 M303 adds no public API. Wheat, sugar cane, and cactus harvests drop together.
 
 M304 adds no public API. Hoe-till `3→60` and trample `60→3` run as one farmland family.
+
+M305 adds no public API. Bonemeal wheat plus cactus and sugar-cane height growth run as one plant family.

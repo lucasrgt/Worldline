@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m301 = load(root, "smokes/m301-axe-log-breaks/smoke.properties");
         Properties m302 = load(root, "smokes/m302-shovel-soft-breaks/smoke.properties");
         Properties m303 = load(root, "smokes/m303-crop-harvests/smoke.properties");
         Properties m304 = load(root, "smokes/m304-farmland-set/smoke.properties");
-        match(release, "version", "1.292.0");
-        match(release, "milestone", "m304-farmland-set");
-        same(release, "m301.signature", m301, "expected.signature");
-        same(release, "server.sha256", m301, "server.jar.sha256");
+        Properties m305 = load(root, "smokes/m305-plant-growth/smoke.properties");
+        match(release, "version", "1.293.0");
+        match(release, "milestone", "m305-plant-growth");
         same(release, "m302.signature", m302, "expected.signature");
         same(release, "server.sha256", m302, "server.jar.sha256");
         same(release, "m303.signature", m303, "expected.signature");
         same(release, "server.sha256", m303, "server.jar.sha256");
         same(release, "m304.signature", m304, "expected.signature");
         same(release, "server.sha256", m304, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M301_AXE_LOG_BREAKS.md", "docs/M301_CYCLE.md",
-                "smokes/m301-axe-log-breaks/MAP.md", "docs/M302_SHOVEL_SOFT_BREAKS.md", "docs/M302_CYCLE.md",
+        same(release, "m305.signature", m305, "expected.signature");
+        same(release, "server.sha256", m305, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M302_SHOVEL_SOFT_BREAKS.md", "docs/M302_CYCLE.md",
                 "smokes/m302-shovel-soft-breaks/MAP.md", "docs/M303_CROP_HARVESTS.md", "docs/M303_CYCLE.md",
                 "smokes/m303-crop-harvests/MAP.md", "docs/M304_FARMLAND_SET.md", "docs/M304_CYCLE.md",
-                "smokes/m304-farmland-set/MAP.md"))
+                "smokes/m304-farmland-set/MAP.md", "docs/M305_PLANT_GROWTH.md", "docs/M305_CYCLE.md",
+                "smokes/m305-plant-growth/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.292.0 M304 Farmland set GO");
+        System.out.println("  release: Worldline v1.293.0 M305 Plant growth GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

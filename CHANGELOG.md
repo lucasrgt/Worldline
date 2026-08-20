@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.293.0 - M305 Plant growth
+
+Status: GO for official wheat, cactus, and sugar-cane growth together.
+
+- Bonemeal `351:15` forced wheat `59:0` to mature `59:7` on farmland `60`.
+- Official random ticks grew cactus `81` and sugar cane `83` to height `>= 2`.
+- The grown family survived a clean save and a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M305 semantic SHA-256 is
+`b755666b909da0bc4583bf752a32ff032894d3959b4dd0a47c56d3e80c066721`.
+
 ## 1.292.0 - M304 Farmland set
 
 Status: GO for official hoe-till and farmland-trample together.
