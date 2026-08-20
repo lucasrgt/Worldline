@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.416.0 - M426 Remaining redstone faces
+
+Status: GO for official remaining lever wall/ground faces plus remaining repeater delay-facing family together.
+
+- Lever `69` placed remaining wall faces `69:2/3/4` plus two ground attachments.
+- Repeater `356` placed remaining facings `93:0/1/2`; east delay-2 powered to `94:5`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M426 semantic SHA-256 is
+`1bb55855bc7d7a3c3f9eef22fd7e235e02c3e5220a782fb29ed29a27bb69b44e`.
+
 ## 1.415.0 - M425 Remaining machine faces
 
 Status: GO for official remaining dispenser, furnace, and pumpkin look-yaw facings together.
