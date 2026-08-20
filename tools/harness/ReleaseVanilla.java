@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m392 = load(root, "smokes/m392-remaining-fluid-flow/smoke.properties");
         Properties m393 = load(root, "smokes/m393-stair-facing-set/smoke.properties");
         Properties m394 = load(root, "smokes/m394-remaining-slab-place/smoke.properties");
         Properties m395 = load(root, "smokes/m395-remaining-dye-mix/smoke.properties");
-        match(release, "version", "1.383.0");
-        match(release, "milestone", "m395-remaining-dye-mix");
-        same(release, "m392.signature", m392, "expected.signature");
-        same(release, "server.sha256", m392, "server.jar.sha256");
+        Properties m396 = load(root, "smokes/m396-remaining-wool-crafts/smoke.properties");
+        match(release, "version", "1.384.0");
+        match(release, "milestone", "m396-remaining-wool-crafts");
         same(release, "m393.signature", m393, "expected.signature");
         same(release, "server.sha256", m393, "server.jar.sha256");
         same(release, "m394.signature", m394, "expected.signature");
         same(release, "server.sha256", m394, "server.jar.sha256");
         same(release, "m395.signature", m395, "expected.signature");
         same(release, "server.sha256", m395, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M392_REMAINING_FLUID_FLOW.md", "docs/M392_CYCLE.md",
-                "smokes/m392-remaining-fluid-flow/MAP.md", "docs/M393_STAIR_FACING_SET.md", "docs/M393_CYCLE.md",
+        same(release, "m396.signature", m396, "expected.signature");
+        same(release, "server.sha256", m396, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M393_STAIR_FACING_SET.md", "docs/M393_CYCLE.md",
                 "smokes/m393-stair-facing-set/MAP.md", "docs/M394_REMAINING_SLAB_PLACE.md", "docs/M394_CYCLE.md",
                 "smokes/m394-remaining-slab-place/MAP.md", "docs/M395_REMAINING_DYE_MIX.md", "docs/M395_CYCLE.md",
-                "smokes/m395-remaining-dye-mix/MAP.md"))
+                "smokes/m395-remaining-dye-mix/MAP.md", "docs/M396_REMAINING_WOOL_CRAFTS.md", "docs/M396_CYCLE.md",
+                "smokes/m396-remaining-wool-crafts/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.383.0 M395 Remaining dye mix GO");
+        System.out.println("  release: Worldline v1.384.0 M396 Remaining wool crafts GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

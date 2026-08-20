@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.384.0 - M396 Remaining wool crafts
+
+Status: GO for official magenta, light-blue, and lime dyed-wool crafts together.
+
+- Personal 2x2 mixed white wool `35:0` with magenta, light blue, and lime dyes.
+- Results were wool `35:2`, `35:3`, and `35:5`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M396 semantic SHA-256 is
+`7bd1423c0f7af5c289a638d55eb9b16ec8b709217f849b00e95b0a3316990c54`.
+
 ## 1.383.0 - M395 Remaining dye mix
 
 Status: GO for official cyan, pink, and light-blue 2x2 dye mixes together.
