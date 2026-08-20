@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.411.0 - M420 Wolf tame set
+
+Status: GO for official wolf Packet24 type 95 bone-tame plus dye collar together.
+
+- Spawner retargeted to Wolf; Packet24 type `95` was tamed with bone `352` to Packet38 status `7`.
+- Packet7 dye `351:4` was used on the living tamed wolf; no Packet38 status 3 death.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M420 semantic SHA-256 is
+`8268a761729c8e58ce515e8c1abb5065fa4782f824f83d9f2e6072f6e46d1833`.
+
 ## 1.410.0 - M441 Remaining food rest set
 
 Status: GO for official remaining cookie and mushroom-stew air-eats together.

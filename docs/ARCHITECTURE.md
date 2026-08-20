@@ -1789,3 +1789,5 @@ M433 adds no public API. Isolated look-yaw chest `54` plus EW and NS pairs share
 M434 adds no public API. Sponge `19`, glass `20`, and ice `79` share one remaining-sponge-glass-ice family.
 
 M441 adds no public API. Cookie `357` plus mushroom stew `282` share one remaining-food-rest family.
+
+M420 adds no public API. Wolf type `95` bone tame plus dye collar share one wolf-tame family.

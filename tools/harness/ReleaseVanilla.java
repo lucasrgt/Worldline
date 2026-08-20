@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m413 = load(root, "smokes/m413-fire-spread-set/smoke.properties");
         Properties m433 = load(root, "smokes/m433-remaining-chest-orient-set/smoke.properties");
         Properties m434 = load(root, "smokes/m434-remaining-sponge-glass-ice/smoke.properties");
         Properties m441 = load(root, "smokes/m441-remaining-food-rest-set/smoke.properties");
-        match(release, "version", "1.410.0");
-        match(release, "milestone", "m441-remaining-food-rest-set");
-        same(release, "m413.signature", m413, "expected.signature");
-        same(release, "server.sha256", m413, "server.jar.sha256");
+        Properties m420 = load(root, "smokes/m420-wolf-tame-set/smoke.properties");
+        match(release, "version", "1.411.0");
+        match(release, "milestone", "m420-wolf-tame-set");
         same(release, "m433.signature", m433, "expected.signature");
         same(release, "server.sha256", m433, "server.jar.sha256");
         same(release, "m434.signature", m434, "expected.signature");
         same(release, "server.sha256", m434, "server.jar.sha256");
         same(release, "m441.signature", m441, "expected.signature");
         same(release, "server.sha256", m441, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M413_FIRE_SPREAD_SET.md", "docs/M413_CYCLE.md",
-                "smokes/m413-fire-spread-set/MAP.md", "docs/M433_REMAINING_CHEST_ORIENT_SET.md", "docs/M433_CYCLE.md",
+        same(release, "m420.signature", m420, "expected.signature");
+        same(release, "server.sha256", m420, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M433_REMAINING_CHEST_ORIENT_SET.md", "docs/M433_CYCLE.md",
                 "smokes/m433-remaining-chest-orient-set/MAP.md", "docs/M434_REMAINING_SPONGE_GLASS_ICE.md", "docs/M434_CYCLE.md",
                 "smokes/m434-remaining-sponge-glass-ice/MAP.md", "docs/M441_REMAINING_FOOD_REST_SET.md", "docs/M441_CYCLE.md",
-                "smokes/m441-remaining-food-rest-set/MAP.md"))
+                "smokes/m441-remaining-food-rest-set/MAP.md", "docs/M420_WOLF_TAME_SET.md", "docs/M420_CYCLE.md",
+                "smokes/m420-wolf-tame-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.410.0 M441 Remaining food rest set GO");
+        System.out.println("  release: Worldline v1.411.0 M420 Wolf tame set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
