@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m308 = load(root, "smokes/m308-fragile-set/smoke.properties");
         Properties m309 = load(root, "smokes/m309-rail-power/smoke.properties");
         Properties m310 = load(root, "smokes/m310-vehicle-rides/smoke.properties");
         Properties m311 = load(root, "smokes/m311-storage-carts/smoke.properties");
-        match(release, "version", "1.299.0");
-        match(release, "milestone", "m311-storage-carts");
-        same(release, "m308.signature", m308, "expected.signature");
-        same(release, "server.sha256", m308, "server.jar.sha256");
+        Properties m312 = load(root, "smokes/m312-torch-invert/smoke.properties");
+        match(release, "version", "1.300.0");
+        match(release, "milestone", "m312-torch-invert");
         same(release, "m309.signature", m309, "expected.signature");
         same(release, "server.sha256", m309, "server.jar.sha256");
         same(release, "m310.signature", m310, "expected.signature");
         same(release, "server.sha256", m310, "server.jar.sha256");
         same(release, "m311.signature", m311, "expected.signature");
         same(release, "server.sha256", m311, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M308_FRAGILE_SET.md", "docs/M308_CYCLE.md",
-                "smokes/m308-fragile-set/MAP.md", "docs/M309_RAIL_POWER.md", "docs/M309_CYCLE.md",
+        same(release, "m312.signature", m312, "expected.signature");
+        same(release, "server.sha256", m312, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M309_RAIL_POWER.md", "docs/M309_CYCLE.md",
                 "smokes/m309-rail-power/MAP.md", "docs/M310_VEHICLE_RIDES.md", "docs/M310_CYCLE.md",
                 "smokes/m310-vehicle-rides/MAP.md", "docs/M311_STORAGE_CARTS.md", "docs/M311_CYCLE.md",
-                "smokes/m311-storage-carts/MAP.md"))
+                "smokes/m311-storage-carts/MAP.md", "docs/M312_TORCH_INVERT.md", "docs/M312_CYCLE.md",
+                "smokes/m312-torch-invert/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.299.0 M311 Storage carts GO");
+        System.out.println("  release: Worldline v1.300.0 M312 Torch invert GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

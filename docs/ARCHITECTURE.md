@@ -1567,3 +1567,5 @@ M309 adds no public API. Detector rail `28:8` occupancy and powered rail `27:8` 
 M310 adds no public API. Boat type 1 and minecart type 10 mounts share one vehicle-ride family.
 
 M311 adds no public API. Chest-minecart window and furnace-minecart spawn share one storage-cart family. CHEST windows also accept title `Minecart`.
+
+M312 adds no public API. Redstone torch on `76` inverts to off `75` on the same cell.

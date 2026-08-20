@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.300.0 - M312 Torch invert
+
+Status: GO for official redstone-torch on and off together.
+
+- Packet15 placed live torch `76:4` on stone, then a repeater inverted the same cell to `75:4`.
+- Unlit `75:4` survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M312 semantic SHA-256 is
+`e4b4e7bf13497288e3b90b76bd07f714f976ecc54254f40ae81e8150b4924ae9`.
+
 ## 1.299.0 - M311 Storage carts
 
 Status: GO for official chest-minecart window and furnace-minecart spawn together.
