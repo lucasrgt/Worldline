@@ -1703,3 +1703,5 @@ M377 adds no public API. Powered rail `27:8` and detector rail `28:8` with minec
 M378 adds no public API. Boat Packet23 type 1 plus Packet39 attach/detach share one boat-water family. Detach uses vehicleId `-1` on the existing Packet39 tracker.
 
 M379 adds no public API. Iron door `71` halves and lever `69` power share one iron-door family.
+
+M380 adds no public API. Trapdoor `96` four wall faces share one trapdoor-toggle family.

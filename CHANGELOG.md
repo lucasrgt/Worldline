@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.368.0 - M380 Trapdoor family set
+
+Status: GO for official trapdoor four-face toggle together.
+
+- Trapdoor `96` on south/north/east/west faces toggled `1/0/3/2` to open then closed.
+- The closed four-face set persisted after a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M380 semantic SHA-256 is
+`ab78b72d72f7fa3016aff5ef1e7d1fa6d51961bb14c02d74afa5e1a5ecf036e7`.
+
 ## 1.367.0 - M379 Iron door set
 
 Status: GO for official iron-door halves plus lever power together.

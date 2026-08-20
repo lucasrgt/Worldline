@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.367.0 - M379 Iron door set (GO)**.
+Current official milestone: **Worldline v1.368.0 - M380 Trapdoor family set (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
