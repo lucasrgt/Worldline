@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.370.0 - M382 Portal obsidian set
+
+Status: GO for official 14-obsidian nether-portal frame plus interior `90` together.
+
+- Fourteen obsidian `49` cells framed a 2x3 interior that flint-steel `259` filled with portal `90:0`.
+- The frame and interior persisted in Overworld dimension `0`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M382 semantic SHA-256 is
+`6892e4aa2cd98f329d9e6c1b83cf4feed463e1ad996fe3afe61a0a36f8778f56`.
+
 ## 1.369.0 - M381 Tnt prime set
 
 Status: GO for official TNT flint-steel prime plus Packet60 crater together.

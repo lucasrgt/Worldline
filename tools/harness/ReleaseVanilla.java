@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m378 = load(root, "smokes/m378-boat-water-set/smoke.properties");
         Properties m379 = load(root, "smokes/m379-iron-door-set/smoke.properties");
         Properties m380 = load(root, "smokes/m380-trapdoor-family-set/smoke.properties");
         Properties m381 = load(root, "smokes/m381-tnt-prime-set/smoke.properties");
-        match(release, "version", "1.369.0");
-        match(release, "milestone", "m381-tnt-prime-set");
-        same(release, "m378.signature", m378, "expected.signature");
-        same(release, "server.sha256", m378, "server.jar.sha256");
+        Properties m382 = load(root, "smokes/m382-portal-obsidian-set/smoke.properties");
+        match(release, "version", "1.370.0");
+        match(release, "milestone", "m382-portal-obsidian-set");
         same(release, "m379.signature", m379, "expected.signature");
         same(release, "server.sha256", m379, "server.jar.sha256");
         same(release, "m380.signature", m380, "expected.signature");
         same(release, "server.sha256", m380, "server.jar.sha256");
         same(release, "m381.signature", m381, "expected.signature");
         same(release, "server.sha256", m381, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M378_BOAT_WATER_SET.md", "docs/M378_CYCLE.md",
-                "smokes/m378-boat-water-set/MAP.md", "docs/M379_IRON_DOOR_SET.md", "docs/M379_CYCLE.md",
+        same(release, "m382.signature", m382, "expected.signature");
+        same(release, "server.sha256", m382, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M379_IRON_DOOR_SET.md", "docs/M379_CYCLE.md",
                 "smokes/m379-iron-door-set/MAP.md", "docs/M380_TRAPDOOR_FAMILY_SET.md", "docs/M380_CYCLE.md",
                 "smokes/m380-trapdoor-family-set/MAP.md", "docs/M381_TNT_PRIME_SET.md", "docs/M381_CYCLE.md",
-                "smokes/m381-tnt-prime-set/MAP.md"))
+                "smokes/m381-tnt-prime-set/MAP.md", "docs/M382_PORTAL_OBSIDIAN_SET.md", "docs/M382_CYCLE.md",
+                "smokes/m382-portal-obsidian-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.369.0 M381 Tnt prime set GO");
+        System.out.println("  release: Worldline v1.370.0 M382 Portal obsidian set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
