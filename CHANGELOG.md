@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.389.0 - M401 Remaining redstone wire
+
+Status: GO for official redstone-wire cross, line, and elbow shapes together.
+
+- Packet15 placed unpowered dust `55:0` as a four-arm cross, an east-west line, and a south-east elbow.
+- All three centers persisted after a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M401 semantic SHA-256 is
+`b37e39c18b5b7ba396453c42ce9a726e1b0b51ab26949df34031ab9c9ddcd82e`.
+
 ## 1.388.0 - M400 Remaining torch faces
 
 Status: GO for official wall-torch faces east, west, south, and north together.

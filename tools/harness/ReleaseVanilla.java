@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m397 = load(root, "smokes/m397-dispenser-projectiles/smoke.properties");
         Properties m398 = load(root, "smokes/m398-jukebox-eject-set/smoke.properties");
         Properties m399 = load(root, "smokes/m399-wooden-button-set/smoke.properties");
         Properties m400 = load(root, "smokes/m400-remaining-torch-faces/smoke.properties");
-        match(release, "version", "1.388.0");
-        match(release, "milestone", "m400-remaining-torch-faces");
-        same(release, "m397.signature", m397, "expected.signature");
-        same(release, "server.sha256", m397, "server.jar.sha256");
+        Properties m401 = load(root, "smokes/m401-remaining-redstone-wire/smoke.properties");
+        match(release, "version", "1.389.0");
+        match(release, "milestone", "m401-remaining-redstone-wire");
         same(release, "m398.signature", m398, "expected.signature");
         same(release, "server.sha256", m398, "server.jar.sha256");
         same(release, "m399.signature", m399, "expected.signature");
         same(release, "server.sha256", m399, "server.jar.sha256");
         same(release, "m400.signature", m400, "expected.signature");
         same(release, "server.sha256", m400, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M397_DISPENSER_PROJECTILES.md", "docs/M397_CYCLE.md",
-                "smokes/m397-dispenser-projectiles/MAP.md", "docs/M398_JUKEBOX_EJECT_SET.md", "docs/M398_CYCLE.md",
+        same(release, "m401.signature", m401, "expected.signature");
+        same(release, "server.sha256", m401, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M398_JUKEBOX_EJECT_SET.md", "docs/M398_CYCLE.md",
                 "smokes/m398-jukebox-eject-set/MAP.md", "docs/M399_WOODEN_BUTTON_SET.md", "docs/M399_CYCLE.md",
                 "smokes/m399-wooden-button-set/MAP.md", "docs/M400_REMAINING_TORCH_FACES.md", "docs/M400_CYCLE.md",
-                "smokes/m400-remaining-torch-faces/MAP.md"))
+                "smokes/m400-remaining-torch-faces/MAP.md", "docs/M401_REMAINING_REDSTONE_WIRE.md", "docs/M401_CYCLE.md",
+                "smokes/m401-remaining-redstone-wire/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.388.0 M400 Remaining torch faces GO");
+        System.out.println("  release: Worldline v1.389.0 M401 Remaining redstone wire GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
