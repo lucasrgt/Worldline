@@ -54,16 +54,17 @@ final class B173ContainerWindowChannel {
     RemoteFurnaceLoad loadFurnace(int inputPersonalSlot, int fuelPersonalSlot) throws IOException {
         RemoteContainerWindow active = inbound.activeWindow(); RemoteInventoryView before = active.inventory();
         RemoteInventoryView personalBefore = inbound.inventory();
-        RemoteItemStack coal = new RemoteItemStack(263, 1, 0);
         RemoteItemStack loaded = before.slot(inputPersonalSlot - 6).empty() ? null : before.slot(inputPersonalSlot - 6).item();
+        RemoteItemStack fuelItem = before.slot(fuelPersonalSlot - 6).empty() ? null : before.slot(fuelPersonalSlot - 6).item();
         if (active.descriptor().kind() != RemoteWindowKind.FURNACE || before.size() != 39
                 || inputPersonalSlot < 9 || inputPersonalSlot > 44 || fuelPersonalSlot < 9
                 || fuelPersonalSlot > 44 || inputPersonalSlot == fuelPersonalSlot
-                || loaded == null || before.slot(fuelPersonalSlot - 6).empty()
+                || loaded == null || fuelItem == null
                 || !(loaded.equals(new RemoteItemStack(12, 1, 0)) || loaded.equals(new RemoteItemStack(15, 1, 0))
                     || loaded.equals(new RemoteItemStack(14, 1, 0)) || loaded.equals(new RemoteItemStack(319, 1, 0))
                     || loaded.equals(new RemoteItemStack(4, 1, 0)) || loaded.equals(new RemoteItemStack(349, 1, 0)))
-                || !before.slot(fuelPersonalSlot - 6).item().equals(coal)
+                || !(fuelItem.equals(new RemoteItemStack(263, 1, 0)) || fuelItem.equals(new RemoteItemStack(5, 1, 0))
+                    || fuelItem.equals(new RemoteItemStack(327, 1, 0)))
                 || !before.slot(0).empty() || !before.slot(1).empty() || !before.slot(2).empty()
                 || !inbound.cursorObserved() || inbound.cursor() != null)
             throw new IllegalStateException("invalid furnace load boundary");

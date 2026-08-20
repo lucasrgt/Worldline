@@ -19,8 +19,8 @@ final class B173FurnaceTracker {
         if (active.descriptor().kind() != RemoteWindowKind.FURNACE
                 || packetWindow != active.descriptor().windowId() || property < 0 || property > 2
                 || value < 0 || property == 0 && value > 199
-                || property == 1 && value > 1600
-                || property == 2 && value != 0 && value != 1600)
+                || property == 1 && value > 20000
+                || property == 2 && value != 0 && value != 300 && value != 1600 && value != 20000)
             throw new IOException("furnace progress drift");
         if (epoch != activeEpoch) { epoch = activeEpoch; windowId = packetWindow;
             maximumCook = 0; maximumBurn = 0; totalBurn = 0; completionBurn = 0;
@@ -43,8 +43,9 @@ final class B173FurnaceTracker {
                     || output.equals(new RemoteItemStack(266, 1, 0)) || output.equals(new RemoteItemStack(320, 1, 0))
                     || output.equals(new RemoteItemStack(1, 1, 0)) || output.equals(new RemoteItemStack(350, 1, 0)))
                 || !active.inventory().slot(0).empty() || !active.inventory().slot(1).empty()
-                || !completionReset || maximumCook != 199 || maximumBurn != 1600
-                || totalBurn != 1600 || completionBurn != 1401) return null;
+                || !completionReset || maximumCook != 199 || maximumBurn != totalBurn
+                || completionBurn != totalBurn - 199
+                || !(totalBurn == 1600 || totalBurn == 300 || totalBurn == 20000)) return null;
         return new RemoteFurnaceSmelt(active, output, maximumCook, maximumBurn, totalBurn, completionBurn);
     }
 }

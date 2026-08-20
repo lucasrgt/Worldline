@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.326.0 - M338 Furnace fuel set
+
+Status: GO for official coal, plank, and lava-bucket furnace fuels together.
+
+- Three idle furnaces `61:2` smelted cobble `4` to stone `1` with fuels `263`, `5`, and `327`.
+- Packet105 burn/progress froze as `1600/1401`, `300/101`, and `20000/19801`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M338 semantic SHA-256 is
+`d412ed91eacea33e26daaf3f37c6494ecb462ee19694093f7126187f36a2b957`.
+
 ## 1.325.0 - M337 Utility item crafts
 
 Status: GO for official shears, flint-and-steel, and empty-bucket crafts together.

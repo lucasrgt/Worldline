@@ -17,8 +17,8 @@ public final class RemoteFurnaceSmelt {
                 || !window.inventory().slot(0).empty() || !window.inventory().slot(1).empty()
                 || window.inventory().slot(2).empty()
                 || !window.inventory().slot(2).item().equals(output)
-                || maximumCook != 199 || maximumBurn != 1600 || totalBurn != 1600
-                || completionBurn != 1401)
+                || maximumCook != 199 || maximumBurn != totalBurn || completionBurn != totalBurn - 199
+                || !(totalBurn == 1600 || totalBurn == 300 || totalBurn == 20000))
             throw new IllegalArgumentException("invalid furnace smelt evidence");
         this.window = window; this.output = output; this.maximumCook = maximumCook;
         this.maximumBurn = maximumBurn; this.totalBurn = totalBurn; this.completionBurn = completionBurn;

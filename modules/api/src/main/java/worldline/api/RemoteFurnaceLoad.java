@@ -24,7 +24,8 @@ public final class RemoteFurnaceLoad {
                 || before.windowId() != after.windowId() || before.size() != 39 || after.size() != 39
                 || personalBefore.windowId() != 0 || personalAfter.windowId() != 0
                 || personalBefore.size() != 45 || personalAfter.size() != 45
-                || !fuel.equals(new RemoteItemStack(263, 1, 0))
+                || !(fuel.equals(new RemoteItemStack(263, 1, 0)) || fuel.equals(new RemoteItemStack(5, 1, 0))
+                    || fuel.equals(new RemoteItemStack(327, 1, 0)))
                 || !(input.equals(new RemoteItemStack(12, 1, 0)) || input.equals(new RemoteItemStack(15, 1, 0))
                     || input.equals(new RemoteItemStack(14, 1, 0)) || input.equals(new RemoteItemStack(319, 1, 0))
                     || input.equals(new RemoteItemStack(4, 1, 0)) || input.equals(new RemoteItemStack(349, 1, 0))))
