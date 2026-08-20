@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.421.0 - M431 Remaining bed orient set
+
+Status: GO for official remaining bed west/north/east halves together.
+
+- Bed `355` placed remaining halves `26:1/9`, `26:2/10`, and `26:3/11`.
+- All six cells persisted after a clean save plus fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M431 semantic SHA-256 is
+`8aa709e05da8be4a281e9eded3c6297e0f4236a515d73d60178570c69cf303a1`.
+
 ## 1.420.0 - M430 Remaining painting motives
 
 Status: GO for official remaining Packet25 motive-size walls together.
