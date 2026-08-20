@@ -1435,3 +1435,5 @@ M243 adds no public API. Redstone dust item `331` places unpowered wire `55:0` a
 M244 adds no public API. Cake item `354` places uneaten cake `92:0` and persists.
 
 M245 adds no public API. Sign item `323` places wall sign `68:5` with Packet130 text and persists.
+
+M246 adds no public API. Log item `17` damage `1` places spruce log `17:1` and persists.

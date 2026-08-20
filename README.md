@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.233.0 - M245 Wall sign (GO)**.
+Current official milestone: **Worldline v1.234.0 - M246 Spruce log (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

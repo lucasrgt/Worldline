@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.234.0 - M246 Spruce log
+
+Status: GO for official spruce-log placement.
+
+- Placed log item `17` damage `1` on a raised stone support as `17:1`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M246 semantic SHA-256 is
+`da7cf603b820a91005a39a8dcd6ce70f9779f145f26a8ffc835f7ad93a077693`.
+
 ## 1.233.0 - M245 Wall sign
 
 Status: GO for official wall-sign placement and Packet130 text.

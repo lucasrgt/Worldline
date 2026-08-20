@@ -269,6 +269,7 @@ final class SmokeSuite {
         {"tools/smoke/RedstoneWireCycle.java", "m243-redstone-wire"},
         {"tools/smoke/CakePlaceCycle.java", "m244-cake-place"},
         {"tools/smoke/WallSignCycle.java", "m245-wall-sign"},
+        {"tools/smoke/SpruceLogCycle.java", "m246-spruce-log"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 
