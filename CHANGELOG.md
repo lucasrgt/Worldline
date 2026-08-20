@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.446.0 - M469 Void death set
+
+Status: GO for official void walk-off Packet8 death plus Packet9 respawn together.
+
+- Packet13 walked below the kill plane with cap 9; Packet8 health `0`; Packet9 restored health `20`.
+- Distinct from M135 wait-already-under-kill, M461 fall, and M465 env death.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M469 semantic SHA-256 is
+`52332cdbcd2108c4f8baa59811bffe40d9ba676283c851371bb2bee321f7ef98`.
+
 ## 1.445.0 - M467 Difficulty damage set
 
 Status: GO for official Easy then Hard zombie melee Packet8 both `20->18` together.

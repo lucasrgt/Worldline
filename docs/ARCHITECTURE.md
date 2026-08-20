@@ -1859,3 +1859,5 @@ M460 adds no public API. Bed occupy `26:12` plus type `54` interrupt leave share
 M462 adds no public API. Player bow `261` Packet23 type `60` Packet38 hits on pig `90` and zombie `54` share one bow-mob-hit family.
 
 M467 adds no public API. Easy then Hard type `54` Packet8 `20->18` share one difficulty-damage family.
+
+M469 adds no public API. Void walk-off Packet8 `0` plus Packet9 respawn health `20` share one void-death family.
