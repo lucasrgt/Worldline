@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.378.0 - M390 Remaining spawner set
+
+Status: GO for official creeper and spider Packet24 identities together.
+
+- Spawners retargeted to Creeper and Spider; Packet24 types `50` and `52` were observed after midnight.
+- Identities stayed distinct from M141 pig and M363 zombie/skeleton.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M390 semantic SHA-256 is
+`543ebd4ab455f716f9f706ba3647dbe861dfbe4f81d65c002df093f92e401215`.
+
 ## 1.377.0 - M389 Animal drops set
 
 Status: GO for official cow leather and chicken feather drops together.

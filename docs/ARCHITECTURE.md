@@ -1723,3 +1723,5 @@ M387 adds no public API. Glowstone `89`, jack-o-lantern `91:1`, and floor torch 
 M388 adds no public API. Zombie feather `288` and skeleton arrow `262` share one hostile-drops family.
 
 M389 adds no public API. Cow leather `334` and chicken feather `288` share one animal-drops family.
+
+M390 adds no public API. Creeper type `50` and spider type `52` share one remaining-spawner identity family.
