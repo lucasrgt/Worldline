@@ -1437,3 +1437,5 @@ M244 adds no public API. Cake item `354` places uneaten cake `92:0` and persists
 M245 adds no public API. Sign item `323` places wall sign `68:5` with Packet130 text and persists.
 
 M246 adds no public API. Log item `17` damage `1` places spruce log `17:1` and persists.
+
+M247 adds no public API. Log item `17` damage `2` places birch log `17:2` and persists.

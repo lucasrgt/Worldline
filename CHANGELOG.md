@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.235.0 - M247 Birch log
+
+Status: GO for official birch-log placement.
+
+- Placed log item `17` damage `2` on a raised stone support as `17:2`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M247 semantic SHA-256 is
+`d2edaaf83b9d8b74ec8d46d00e40f224fc12335a5a7e9fd35e7744a490781eb0`.
+
 ## 1.234.0 - M246 Spruce log
 
 Status: GO for official spruce-log placement.

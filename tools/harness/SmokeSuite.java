@@ -270,6 +270,7 @@ final class SmokeSuite {
         {"tools/smoke/CakePlaceCycle.java", "m244-cake-place"},
         {"tools/smoke/WallSignCycle.java", "m245-wall-sign"},
         {"tools/smoke/SpruceLogCycle.java", "m246-spruce-log"},
+        {"tools/smoke/BirchLogCycle.java", "m247-birch-log"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 
