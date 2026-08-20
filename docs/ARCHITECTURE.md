@@ -1625,3 +1625,5 @@ M338 adds no public API. Coal `263`, oak planks `5`, and lava bucket `327` share
 M339 adds no public API. Oak `6:0`, spruce `6:1`, and birch `6:2` share one sapling-growth family.
 
 M340 adds no public API. Lever `69` latch and stone button `77` pulse share one redstone-input family.
+
+M341 adds no public API. Repeater delay bits `93:3`, `93:7`, `93:11`, and `93:15` share one diode family.

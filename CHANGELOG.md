@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.329.0 - M341 Repeater delay set
+
+Status: GO for official repeater delay bits 1 through 4 together.
+
+- Packet15 placed west-facing repeater `93:3` and tuned delay through `93:7`, `93:11`, and `93:15`.
+- The 4-tick cell `93:15` survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M341 semantic SHA-256 is
+`5dfcac91e31b99f9d578961c42075eb4456a7e3dde14bf19c6d069bf7dc49136`.
+
 ## 1.328.0 - M340 Redstone input set
 
 Status: GO for official lever latch and stone-button pulse together.
