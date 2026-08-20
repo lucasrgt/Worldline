@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.272.0 - M284 Gray wool
+
+Status: GO for official gray wool placement.
+
+- Placed wool item `35` damage `7` as gray wool `35:7` on raised stone.
+- The exact cell survived a clean save and a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M284 semantic SHA-256 is
+`73e9c154cc10de9ba90cb2af73ce28ad87ed76e593fc4961f12616d08161821c`.
+
 ## 1.271.0 - M283 Pink wool
 
 Status: GO for official pink wool placement.
