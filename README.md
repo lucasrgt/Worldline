@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.277.0 - M289 Spruce sapling (GO)**.
+Current official milestone: **Worldline v1.278.0 - M290 Birch sapling (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

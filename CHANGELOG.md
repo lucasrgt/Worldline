@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.278.0 - M290 Birch sapling
+
+Status: GO for official birch sapling placement.
+
+- Planted sapling item `6` damage `2` as birch sapling `6:2` on dirt over raised stone.
+- The exact cell survived a clean save and a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M290 semantic SHA-256 is
+`21f35395f38d2877297a2801023c0e7e0e0b5fc83a8ec278dee1ad7b7151b8a0`.
+
 ## 1.277.0 - M289 Spruce sapling
 
 Status: GO for official spruce sapling placement.
