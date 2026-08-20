@@ -288,7 +288,8 @@ final class SmokeCatalog {
         {"tools/smoke/GrayWoolCycle.java", "m284-gray-wool"},
         {"tools/smoke/LightGrayWoolCycle.java", "m285-light-gray-wool"},
         {"tools/smoke/CyanWoolCycle.java", "m286-cyan-wool"},
-        {"tools/smoke/PurpleWoolCycle.java", "m287-purple-wool"}, {"tools/smoke/LabCycle.java", "lab-cycle"}
+        {"tools/smoke/PurpleWoolCycle.java", "m287-purple-wool"},
+        {"tools/smoke/BrownWoolCycle.java", "m288-brown-wool"}, {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
     private SmokeCatalog() {}
 }

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.275.0 - M287 Purple wool (GO)**.
+Current official milestone: **Worldline v1.276.0 - M288 Brown wool (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
