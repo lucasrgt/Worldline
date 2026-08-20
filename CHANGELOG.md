@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.273.0 - M285 Light gray wool
+
+Status: GO for official light-gray wool placement.
+
+- Placed wool item `35` damage `8` as light-gray wool `35:8` on raised stone.
+- The exact cell survived a clean save and a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M285 semantic SHA-256 is
+`f98cb91704701be85feaa966d2fbe24aa8b5b4df58daeabe7fc7a799836f7ae5`.
+
 ## 1.272.0 - M284 Gray wool
 
 Status: GO for official gray wool placement.
