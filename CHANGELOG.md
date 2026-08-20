@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.324.0 - M336 Slab meta crafts
+
+Status: GO for official sandstone, wood, and cobble slab crafts together.
+
+- Packet102 crafted sandstone slab `44:1`, wood slab `44:2`, and cobble slab `44:3`.
+- The three stacks survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M336 semantic SHA-256 is
+`e75d0b2bb489e7ea157ad321c8dc141c57039e5411b10b96658868f3b231cc57`.
+
 ## 1.323.0 - M335 Cake slice set
 
 Status: GO for official cake place plus three successive slices together.

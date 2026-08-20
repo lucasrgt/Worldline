@@ -340,6 +340,7 @@ Passing an experiment does not silently promote its API.
 | v1.321.0 / M333 | Dispenser set | GO - place 23:4, load 4+5, eject Packet21 |
 | v1.322.0 / M334 | Record set | GO - jukebox 84 inserts discs 2256 and 2257 |
 | v1.323.0 / M335 | Cake slice set | GO - cake 92:0 then three bites to 92:3 |
+| v1.324.0 / M336 | Slab meta crafts | GO - sandstone 44:1, wood 44:2, cobble 44:3 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -351,7 +352,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.323.0 direction
+## Immediate post-v1.324.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
