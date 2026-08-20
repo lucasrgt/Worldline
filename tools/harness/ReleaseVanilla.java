@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m306 = load(root, "smokes/m306-closables/smoke.properties");
         Properties m307 = load(root, "smokes/m307-env-damage/smoke.properties");
         Properties m308 = load(root, "smokes/m308-fragile-set/smoke.properties");
         Properties m309 = load(root, "smokes/m309-rail-power/smoke.properties");
-        match(release, "version", "1.297.0");
-        match(release, "milestone", "m309-rail-power");
-        same(release, "m306.signature", m306, "expected.signature");
-        same(release, "server.sha256", m306, "server.jar.sha256");
+        Properties m310 = load(root, "smokes/m310-vehicle-rides/smoke.properties");
+        match(release, "version", "1.298.0");
+        match(release, "milestone", "m310-vehicle-rides");
         same(release, "m307.signature", m307, "expected.signature");
         same(release, "server.sha256", m307, "server.jar.sha256");
         same(release, "m308.signature", m308, "expected.signature");
         same(release, "server.sha256", m308, "server.jar.sha256");
         same(release, "m309.signature", m309, "expected.signature");
         same(release, "server.sha256", m309, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M306_CLOSABLES.md", "docs/M306_CYCLE.md",
-                "smokes/m306-closables/MAP.md", "docs/M307_ENV_DAMAGE.md", "docs/M307_CYCLE.md",
+        same(release, "m310.signature", m310, "expected.signature");
+        same(release, "server.sha256", m310, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M307_ENV_DAMAGE.md", "docs/M307_CYCLE.md",
                 "smokes/m307-env-damage/MAP.md", "docs/M308_FRAGILE_SET.md", "docs/M308_CYCLE.md",
                 "smokes/m308-fragile-set/MAP.md", "docs/M309_RAIL_POWER.md", "docs/M309_CYCLE.md",
-                "smokes/m309-rail-power/MAP.md"))
+                "smokes/m309-rail-power/MAP.md", "docs/M310_VEHICLE_RIDES.md", "docs/M310_CYCLE.md",
+                "smokes/m310-vehicle-rides/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.297.0 M309 Rail power GO");
+        System.out.println("  release: Worldline v1.298.0 M310 Vehicle rides GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

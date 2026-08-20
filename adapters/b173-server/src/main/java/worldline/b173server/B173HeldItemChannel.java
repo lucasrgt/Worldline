@@ -98,6 +98,7 @@ final class B173HeldItemChannel {
         RemoteInventorySlot slot = inventory.slot(36 + selectedSlot); return !slot.empty() && slot.item().equals(expected); }
     boolean selectedId(int legacyId) { RemoteInventoryView inventory = inbound.inventory();
         RemoteInventorySlot slot = inventory.slot(36 + selectedSlot); return !slot.empty() && slot.item().legacyId() == legacyId; }
+    boolean selectedEmpty() { return inbound.inventory().slot(36 + selectedSlot).empty(); }
 
     private static int face(BlockFace face) {
         switch (face) {

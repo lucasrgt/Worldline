@@ -35,7 +35,7 @@ final class B173PlayInbound {
         if (packet == 50) { cache.preChunk(input); return; }
         if (packet == 51) { cache.accept(B173ChunkCodec.read(input)); return; }
         if (packet == 52) { cache.multiBlock(input); return; }
-        if (packet == 53) { cache.singleBlock(input); return; } if(packet==23){objects.spawn(input);return;} if(packet==24){mobs.spawn(input);return;} if(packet==25){paintings.spawn(input);return;} if(packet>=30&&packet<=34){mobs.update(packet,input);return;} if (packet == 60) { if (explosion != null) throw new IOException("unconsumed explosion observation"); explosion = cache.explosion(input); return; } if(packet==17||packet==70){beds.accept(packet,input);return;} if(packet==54||packet==61){notes.accept(packet,input);return;} if(packet==130){signs.accept(input);return;}
+        if (packet == 53) { cache.singleBlock(input); return; } if(packet==23){objects.spawn(input);return;} if(packet==39){objects.attach(input);return;} if(packet==24){mobs.spawn(input);return;} if(packet==25){paintings.spawn(input);return;} if(packet>=30&&packet<=34){mobs.update(packet,input);return;} if (packet == 60) { if (explosion != null) throw new IOException("unconsumed explosion observation"); explosion = cache.explosion(input); return; } if(packet==17||packet==70){beds.accept(packet,input);return;} if(packet==54||packet==61){notes.accept(packet,input);return;} if(packet==130){signs.accept(input);return;}
         if (packet == 255) throw disconnect();
         B173InboundPacket.skip(input, packet);
     }

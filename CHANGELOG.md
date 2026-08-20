@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.298.0 - M310 Vehicle rides
+
+Status: GO for official boat and minecart mount together.
+
+- Packet23 type 1 boat and type 10 minecart were mounted with Packet39 attach.
+- Actor and observer shared both vehicle ids.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M310 semantic SHA-256 is
+`e9490bd2395a9a0e2f23738cb8956250a2a8738d5f0d1c62c27d254b43a8ff3f`.
+
 ## 1.297.0 - M309 Rail power
 
 Status: GO for official detector-rail occupancy and powered-rail torch power together.

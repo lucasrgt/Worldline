@@ -1563,3 +1563,5 @@ M307 adds no public API. Drowning, suffocation, and lava hurts share one Packet3
 M308 adds no public API. Ice break, glass break, and ice melt share one fragile family.
 
 M309 adds no public API. Detector rail `28:8` occupancy and powered rail `27:8` share one rail-power family.
+
+M310 adds no public API. Boat type 1 and minecart type 10 mounts share one vehicle-ride family.

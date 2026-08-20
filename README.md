@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.297.0 - M309 Rail power (GO)**.
+Current official milestone: **Worldline v1.298.0 - M310 Vehicle rides (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
