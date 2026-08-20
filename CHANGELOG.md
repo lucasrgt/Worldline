@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.311.0 - M323 Iron tool crafts
+
+Status: GO for official iron-tool workbench crafts together.
+
+- Packet102 crafted iron sword `267`, pickaxe `257`, shovel `256`, axe `258`, and hoe `292`.
+- The five result ids persisted after a clean save.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M323 semantic SHA-256 is
+`17587efabb76f538dcae2f11569071d321ff253c298e403c9de331483b463270`.
+
 ## 1.310.0 - M322 Diamond armor crafts
 
 Status: GO for official diamond-armor workbench crafts together.

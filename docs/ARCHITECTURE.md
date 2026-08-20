@@ -1589,3 +1589,5 @@ M320 adds no public API. Leather helmet `298`, chestplate `299`, leggings `300`,
 M321 adds no public API. Gold helmet `314`, chestplate `315`, leggings `316`, and boots `317` share one gold-armor craft family.
 
 M322 adds no public API. Diamond helmet `310`, chestplate `311`, leggings `312`, and boots `313` share one diamond-armor craft family.
+
+M323 adds no public API. Iron sword `267`, pickaxe `257`, shovel `256`, axe `258`, and hoe `292` share one iron-tool craft family.
