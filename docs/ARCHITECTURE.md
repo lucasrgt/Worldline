@@ -1521,3 +1521,5 @@ M286 adds no public API. Wool item `35` damage `9` places cyan wool `35:9` and p
 M287 adds no public API. Wool item `35` damage `10` places purple wool `35:10` and persists.
 
 M288 adds no public API. Wool item `35` damage `12` places brown wool `35:12` and persists.
+
+M289 adds no public API. Sapling item `6` damage `1` plants spruce sapling `6:1` on dirt and persists.

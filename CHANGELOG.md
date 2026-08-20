@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.277.0 - M289 Spruce sapling
+
+Status: GO for official spruce sapling placement.
+
+- Planted sapling item `6` damage `1` as spruce sapling `6:1` on dirt over raised stone.
+- The exact cell survived a clean save and a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M289 semantic SHA-256 is
+`338c07cf0cc26fad4d048f900242741d71662eac8c8f48d98d41ede8c541dc2c`.
+
 ## 1.276.0 - M288 Brown wool
 
 Status: GO for official brown wool placement.
