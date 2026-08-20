@@ -1681,3 +1681,5 @@ M366 adds no public API. Empty map `358` Packet15 air-use and persist share one 
 M367 adds no public API. Piston `33` extend/retract and sticky `29` pull share one piston-motion family.
 
 M368 adds no public API. Yellow `35:4`, orange `35:1`, and pink `35:6` wool crafts share one remaining dye-wool family.
+
+M369 adds no public API. Cake `92` six-slice eat through air shares one full-eat family, distinct from M335's first three slices.

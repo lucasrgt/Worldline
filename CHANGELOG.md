@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.357.0 - M369 Cake full eat set
+
+Status: GO for official cake six-slice eat through air together.
+
+- Cake `92` was eaten `0→1→2→3→4→5→air` (six bites).
+- The air cell persisted after a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M369 semantic SHA-256 is
+`1e7b764b96a4af45a053eec0e064137715747cb2554f80daaece626bee17a371`.
+
 ## 1.356.0 - M368 More dye wool crafts
 
 Status: GO for official yellow, orange, and pink wool crafts together.
