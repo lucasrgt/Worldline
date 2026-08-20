@@ -1593,3 +1593,5 @@ M322 adds no public API. Diamond helmet `310`, chestplate `311`, leggings `312`,
 M323 adds no public API. Iron sword `267`, pickaxe `257`, shovel `256`, axe `258`, and hoe `292` share one iron-tool craft family.
 
 M324 adds no public API. Sand `12→20`, cobble `4→1`, and fish `349→350` share one remaining-smelt family.
+
+M325 adds no public API. Compass `345`, clock `347`, and empty map `358` share one navigation-craft family.

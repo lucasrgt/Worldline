@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.313.0 - M325 Navigation crafts
+
+Status: GO for official compass, clock, and map crafts together.
+
+- Packet102 crafted compass `345`, clock `347`, and empty map `358`.
+- The three result ids survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M325 semantic SHA-256 is
+`904591e822865303c647ea818403edb8d115b37da19262cb96387da6f2e4302d`.
+
 ## 1.312.0 - M324 Furnace rest smelts
 
 Status: GO for official remaining furnace smelts together.
