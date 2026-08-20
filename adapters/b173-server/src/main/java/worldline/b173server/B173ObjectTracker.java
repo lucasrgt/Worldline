@@ -23,7 +23,7 @@ final class B173ObjectTracker {
 
     void attach(DataInputStream input) throws IOException {
         int passenger = input.readInt(), vehicle = input.readInt();
-        if (passenger < 0 || vehicle < 0) return;
+        if (passenger < 0 || vehicle < -1) return;
         if (attaches.size() == MAX) attaches.remove(0);
         try { attaches.add(new B173VehicleAttach(passenger, vehicle)); }
         catch (IllegalArgumentException error) { throw new IOException("invalid vehicle attach", error); }
@@ -40,6 +40,14 @@ final class B173ObjectTracker {
         if (vehicle < 0) throw new IllegalArgumentException("invalid expected vehicle entity");
         for (int index = 0; index < attaches.size(); index++)
             if (attaches.get(index).vehicleId() == vehicle) return attaches.remove(index);
+        return null;
+    }
+
+    B173VehicleAttach takeDetach(int passenger) {
+        if (passenger < 0) throw new IllegalArgumentException("invalid expected passenger entity");
+        for (int index = 0; index < attaches.size(); index++)
+            if (attaches.get(index).passengerId() == passenger && attaches.get(index).vehicleId() == -1)
+                return attaches.remove(index);
         return null;
     }
 }

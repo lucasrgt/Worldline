@@ -1699,3 +1699,5 @@ M375 adds no public API. Mossy cobble `48`, gold ore `14`, and obsidian `49` sha
 M376 adds no public API. Clay `82`, snow `78`/`80`, and soul sand `88` share one remaining-shovel family.
 
 M377 adds no public API. Powered rail `27:8` and detector rail `28:8` with minecart type 10 share one rail-motion family.
+
+M378 adds no public API. Boat Packet23 type 1 plus Packet39 attach/detach share one boat-water family. Detach uses vehicleId `-1` on the existing Packet39 tracker.

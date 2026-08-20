@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m374 = load(root, "smokes/m374-remaining-food-eat/smoke.properties");
         Properties m375 = load(root, "smokes/m375-remaining-pick-breaks/smoke.properties");
         Properties m376 = load(root, "smokes/m376-remaining-shovel-breaks/smoke.properties");
         Properties m377 = load(root, "smokes/m377-powered-rail-motion/smoke.properties");
-        match(release, "version", "1.365.0");
-        match(release, "milestone", "m377-powered-rail-motion");
-        same(release, "m374.signature", m374, "expected.signature");
-        same(release, "server.sha256", m374, "server.jar.sha256");
+        Properties m378 = load(root, "smokes/m378-boat-water-set/smoke.properties");
+        match(release, "version", "1.366.0");
+        match(release, "milestone", "m378-boat-water-set");
         same(release, "m375.signature", m375, "expected.signature");
         same(release, "server.sha256", m375, "server.jar.sha256");
         same(release, "m376.signature", m376, "expected.signature");
         same(release, "server.sha256", m376, "server.jar.sha256");
         same(release, "m377.signature", m377, "expected.signature");
         same(release, "server.sha256", m377, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M374_REMAINING_FOOD_EAT.md", "docs/M374_CYCLE.md",
-                "smokes/m374-remaining-food-eat/MAP.md", "docs/M375_REMAINING_PICK_BREAKS.md", "docs/M375_CYCLE.md",
+        same(release, "m378.signature", m378, "expected.signature");
+        same(release, "server.sha256", m378, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M375_REMAINING_PICK_BREAKS.md", "docs/M375_CYCLE.md",
                 "smokes/m375-remaining-pick-breaks/MAP.md", "docs/M376_REMAINING_SHOVEL_BREAKS.md", "docs/M376_CYCLE.md",
                 "smokes/m376-remaining-shovel-breaks/MAP.md", "docs/M377_POWERED_RAIL_MOTION.md", "docs/M377_CYCLE.md",
-                "smokes/m377-powered-rail-motion/MAP.md"))
+                "smokes/m377-powered-rail-motion/MAP.md", "docs/M378_BOAT_WATER_SET.md", "docs/M378_CYCLE.md",
+                "smokes/m378-boat-water-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.365.0 M377 Powered rail motion GO");
+        System.out.println("  release: Worldline v1.366.0 M378 Boat water set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.366.0 - M378 Boat water set
+
+Status: GO for official boat spawn plus Packet39 ride and detach together.
+
+- Boat `333` spawned Packet23 type `1` on still water `9`.
+- Empty-hand Packet7 mounted then detached with Packet39 attach/detach.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M378 semantic SHA-256 is
+`bdd585b5e79c816f4761039c63a02aa8e9f6164e77d7baa4fa4b3980a6a8d905`.
+
 ## 1.365.0 - M377 Powered rail motion
 
 Status: GO for official powered-rail boost plus detector occupancy together.

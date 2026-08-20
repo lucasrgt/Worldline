@@ -8,7 +8,7 @@ public final class B173VehicleAttach {
 
     public B173VehicleAttach(int passengerId, int vehicleId) {
         if (passengerId < 0) throw new IllegalArgumentException("invalid passenger entity id");
-        if (vehicleId < 0) throw new IllegalArgumentException("invalid vehicle entity id");
+        if (vehicleId < -1) throw new IllegalArgumentException("invalid vehicle entity id");
         this.passengerId = passengerId; this.vehicleId = vehicleId;
     }
 
