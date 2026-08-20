@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.397.0 - M409 Spider string set
+
+Status: GO for official spider string drop and cobweb place together.
+
+- Spawner retargeted to Spider; Packet24 type `52` was killed with diamond sword `276`.
+- Packet21 string `287` and cobweb `30:0` were observed in the same session.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M409 semantic SHA-256 is
+`625db8d839633b99daf0e73b098ad644d6f23e3d9ed4dda4f187687c1fe26fc4`.
+
 ## 1.396.0 - M408 Squid ink set
 
 Status: GO for official squid water-habitat and ink-sac drop together.

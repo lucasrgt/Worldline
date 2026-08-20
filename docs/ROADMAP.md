@@ -413,6 +413,7 @@ Passing an experiment does not silently promote its API.
 | v1.394.0 / M406 | Sheep dye set | GO - rose-red and yellow living-sheep wool |
 | v1.395.0 / M407 | Chicken egg set | GO - chicken type 93 plus egg 344 / type 62 |
 | v1.396.0 / M408 | Squid ink set | GO - squid type 94 in water plus ink sac 351:0 |
+| v1.397.0 / M409 | Spider string set | GO - spider type 52 string 287 plus cobweb 30 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -424,7 +425,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.396.0 direction
+## Immediate post-v1.397.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

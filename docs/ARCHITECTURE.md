@@ -1761,3 +1761,5 @@ M406 adds no public API. Dyed sheep wool `35:14` and `35:4` share one sheep-dye 
 M407 adds no public API. Chicken type `93` plus egg `344` / Packet23 type `62` share one chicken-egg family.
 
 M408 adds no public API. Squid type `94` in water plus ink sac `351:0` share one squid-ink family.
+
+M409 adds no public API. Spider type `52` string `287` plus cobweb `30` share one spider-web family.
