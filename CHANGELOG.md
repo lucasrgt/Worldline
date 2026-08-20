@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.402.0 - M415 Water cobble set
+
+Status: GO for official flowing-lava plus water cobble in two trenches together.
+
+- Still lava `11` flowed to `11:2` / moving `10`; water `9` hardened each flowed cell to cobble `4`.
+- Both lava sources stayed lava sources.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M415 semantic SHA-256 is
+`bf5ec9eaf7f4f9ec7cf8652c8bdef0af40a1d8fa89b618d519dc571fddc66148`.
+
 ## 1.401.0 - M414 Lava obsidian set
 
 Status: GO for official still-lava plus water obsidian in two basins together.

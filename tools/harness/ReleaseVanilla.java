@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m410 = load(root, "smokes/m410-ghast-fireball-set/smoke.properties");
         Properties m411 = load(root, "smokes/m411-zombie-pigman-set/smoke.properties");
         Properties m412 = load(root, "smokes/m412-slime-split-set/smoke.properties");
         Properties m414 = load(root, "smokes/m414-lava-obsidian-set/smoke.properties");
-        match(release, "version", "1.401.0");
-        match(release, "milestone", "m414-lava-obsidian-set");
-        same(release, "m410.signature", m410, "expected.signature");
-        same(release, "server.sha256", m410, "server.jar.sha256");
+        Properties m415 = load(root, "smokes/m415-water-cobble-set/smoke.properties");
+        match(release, "version", "1.402.0");
+        match(release, "milestone", "m415-water-cobble-set");
         same(release, "m411.signature", m411, "expected.signature");
         same(release, "server.sha256", m411, "server.jar.sha256");
         same(release, "m412.signature", m412, "expected.signature");
         same(release, "server.sha256", m412, "server.jar.sha256");
         same(release, "m414.signature", m414, "expected.signature");
         same(release, "server.sha256", m414, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M410_GHAST_FIREBALL_SET.md", "docs/M410_CYCLE.md",
-                "smokes/m410-ghast-fireball-set/MAP.md", "docs/M411_ZOMBIE_PIGMAN_SET.md", "docs/M411_CYCLE.md",
+        same(release, "m415.signature", m415, "expected.signature");
+        same(release, "server.sha256", m415, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M411_ZOMBIE_PIGMAN_SET.md", "docs/M411_CYCLE.md",
                 "smokes/m411-zombie-pigman-set/MAP.md", "docs/M412_SLIME_SPLIT_SET.md", "docs/M412_CYCLE.md",
                 "smokes/m412-slime-split-set/MAP.md", "docs/M414_LAVA_OBSIDIAN_SET.md", "docs/M414_CYCLE.md",
-                "smokes/m414-lava-obsidian-set/MAP.md"))
+                "smokes/m414-lava-obsidian-set/MAP.md", "docs/M415_WATER_COBBLE_SET.md", "docs/M415_CYCLE.md",
+                "smokes/m415-water-cobble-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.401.0 M414 Lava obsidian set GO");
+        System.out.println("  release: Worldline v1.402.0 M415 Water cobble set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
