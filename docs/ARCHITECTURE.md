@@ -1461,3 +1461,5 @@ M256 adds no public API. Chest-minecart item `342` on rail `66` emits Packet23 t
 M257 adds no public API. Furnace-minecart item `343` on rail `66` emits Packet23 type `12`.
 
 M258 adds no public API. Bread item `297` air-use heals Packet8 `15 -> 20` and consumes the stack.
+
+M259 adds no public API. Cooked pork item `320` air-use heals Packet8 `12 -> 20` and consumes the stack.

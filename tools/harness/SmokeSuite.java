@@ -282,6 +282,7 @@ final class SmokeSuite {
         {"tools/smoke/ChestMinecartCycle.java", "m256-chest-minecart"},
         {"tools/smoke/FurnaceMinecartCycle.java", "m257-furnace-minecart"},
         {"tools/smoke/BreadEatCycle.java", "m258-bread-eat"},
+        {"tools/smoke/CookedPorkEatCycle.java", "m259-cooked-pork-eat"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.246.0 - M258 Bread eat (GO)**.
+Current official milestone: **Worldline v1.247.0 - M259 Cooked pork eat (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.247.0 - M259 Cooked pork eat
+
+Status: GO for official cooked-pork air-use heal.
+
+- Seeded cooked pork `320` at health `12` and Packet15 air-use restored Packet8 `12 -> 20`.
+- The held stack was consumed `320:1:0 -> empty` and both health and inventory survived a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M259 semantic SHA-256 is
+`c287f963780070b55c9773bcc0ad5b914a8c6a7713870dd9d5533eda3d449b0e`.
+
 ## 1.246.0 - M258 Bread eat
 
 Status: GO for official bread air-use heal.
