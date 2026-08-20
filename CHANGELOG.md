@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.406.0 - M419 Remaining netherrack place
+
+Status: GO for official Nether netherrack, soul sand, and glowstone place together.
+
+- Dimension `-1` login; Packet15 placed netherrack `87`, soul sand `88`, and glowstone `89`.
+- All three cells survived a clean save plus fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M419 semantic SHA-256 is
+`c7dec53dcc70e1baa573a851f8e296853cfe16d36ddd182d1cfd5e83a8a4dea7`.
+
 ## 1.405.0 - M418 Remaining obsidian place
 
 Status: GO for official four-cell obsidian frame fragment plus pick harvest together.

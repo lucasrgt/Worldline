@@ -1779,3 +1779,5 @@ M416 adds no public API. Bookshelf `47` craft, two-cell place, and empty harvest
 M417 adds no public API. Two TNT `46` cells plus flint-and-steel Packet60 chain share one remaining-TNT family.
 
 M418 adds no public API. Four-cell obsidian `49` frame fragment plus pick harvest share one remaining-obsidian family.
+
+M419 adds no public API. Nether netherrack `87`, soul sand `88`, and glowstone `89` share one remaining-netherrack family.

@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m415 = load(root, "smokes/m415-water-cobble-set/smoke.properties");
         Properties m416 = load(root, "smokes/m416-remaining-bookshelf-place/smoke.properties");
         Properties m417 = load(root, "smokes/m417-remaining-tnt-place/smoke.properties");
         Properties m418 = load(root, "smokes/m418-remaining-obsidian-place/smoke.properties");
-        match(release, "version", "1.405.0");
-        match(release, "milestone", "m418-remaining-obsidian-place");
-        same(release, "m415.signature", m415, "expected.signature");
-        same(release, "server.sha256", m415, "server.jar.sha256");
+        Properties m419 = load(root, "smokes/m419-remaining-netherrack-place/smoke.properties");
+        match(release, "version", "1.406.0");
+        match(release, "milestone", "m419-remaining-netherrack-place");
         same(release, "m416.signature", m416, "expected.signature");
         same(release, "server.sha256", m416, "server.jar.sha256");
         same(release, "m417.signature", m417, "expected.signature");
         same(release, "server.sha256", m417, "server.jar.sha256");
         same(release, "m418.signature", m418, "expected.signature");
         same(release, "server.sha256", m418, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M415_WATER_COBBLE_SET.md", "docs/M415_CYCLE.md",
-                "smokes/m415-water-cobble-set/MAP.md", "docs/M416_REMAINING_BOOKSHELF_PLACE.md", "docs/M416_CYCLE.md",
+        same(release, "m419.signature", m419, "expected.signature");
+        same(release, "server.sha256", m419, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M416_REMAINING_BOOKSHELF_PLACE.md", "docs/M416_CYCLE.md",
                 "smokes/m416-remaining-bookshelf-place/MAP.md", "docs/M417_REMAINING_TNT_PLACE.md", "docs/M417_CYCLE.md",
                 "smokes/m417-remaining-tnt-place/MAP.md", "docs/M418_REMAINING_OBSIDIAN_PLACE.md", "docs/M418_CYCLE.md",
-                "smokes/m418-remaining-obsidian-place/MAP.md"))
+                "smokes/m418-remaining-obsidian-place/MAP.md", "docs/M419_REMAINING_NETHERRACK_PLACE.md", "docs/M419_CYCLE.md",
+                "smokes/m419-remaining-netherrack-place/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.405.0 M418 Remaining obsidian place GO");
+        System.out.println("  release: Worldline v1.406.0 M419 Remaining netherrack place GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
