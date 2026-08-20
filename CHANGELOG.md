@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.365.0 - M377 Powered rail motion
+
+Status: GO for official powered-rail boost plus detector occupancy together.
+
+- Powered rail `27` and detector rail `28` went `0→8` under minecart Packet23 type `10`.
+- Unpowered hold stayed idle; powered motion was observed with redstone torch `76:5`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M377 semantic SHA-256 is
+`c383cb26d4289064f7ced386bb9c7cfc9cdb68545275f438464e17ef5a161977`.
+
 ## 1.364.0 - M376 Remaining shovel breaks
 
 Status: GO for official clay, snow, snow-block, and soul-sand shovel harvests together.

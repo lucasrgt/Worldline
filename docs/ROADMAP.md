@@ -381,6 +381,7 @@ Passing an experiment does not silently promote its API.
 | v1.362.0 / M374 | Remaining food eat | GO - apple 260, pork 320, golden apple 322 heals |
 | v1.363.0 / M375 | Remaining pick breaks | GO - mossy 48, gold ore 14, obsidian 49 |
 | v1.364.0 / M376 | Remaining shovel breaks | GO - clay 82, snow 78/80, soul sand 88 |
+| v1.365.0 / M377 | Powered rail motion | GO - powered 27:8 and detector 28:8 with cart type 10 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -392,7 +393,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.364.0 direction
+## Immediate post-v1.365.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

@@ -1697,3 +1697,5 @@ M374 adds no public API. Apple `260`, cooked pork `320`, and golden apple `322` 
 M375 adds no public API. Mossy cobble `48`, gold ore `14`, and obsidian `49` share one remaining-pick-break family.
 
 M376 adds no public API. Clay `82`, snow `78`/`80`, and soul sand `88` share one remaining-shovel family.
+
+M377 adds no public API. Powered rail `27:8` and detector rail `28:8` with minecart type 10 share one rail-motion family.
