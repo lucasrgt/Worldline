@@ -1545,3 +1545,5 @@ M298 adds no public API. Workbench crafts the wooden tool family `268+270+271+26
 M299 adds no public API. Workbench crafts the stone tool family `272+273+274+275+291`.
 
 M300 adds no public API. Picks harvest cobble `4`, coal `263`, and diamond `264` together.
+
+M301 adds no public API. Stone axe `275` harvests oak, spruce, and birch logs together.

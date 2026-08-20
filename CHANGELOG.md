@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.289.0 - M301 Axe log breaks
+
+Status: GO for official oak, spruce, and birch log harvests.
+
+- Stone axe `275` broke oak `17:0`, spruce `17:1`, and birch `17:2`.
+- Packet21 drops matched each log species.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M301 semantic SHA-256 is
+`6e62367a3c72d64d2bda9180cb0e5b0484671ef7530e74968d511330d7a06365`.
+
 ## 1.288.0 - M300 Ore pick breaks
 
 Status: GO for official cobble, coal-ore, and diamond-ore pick harvests.

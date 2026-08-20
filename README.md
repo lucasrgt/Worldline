@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.288.0 - M300 Ore pick breaks (GO)**.
+Current official milestone: **Worldline v1.289.0 - M301 Axe log breaks (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
