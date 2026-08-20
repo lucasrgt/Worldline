@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.237.0 - M249 Yellow wool
+
+Status: GO for official yellow-wool placement.
+
+- Placed wool item `35` damage `4` on a raised stone support as `35:4`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M249 semantic SHA-256 is
+`1aa0065907c89647235eddd412bad95e322d6ecd1ecfdb97dfdd1a8a7f20e599`.
+
 ## 1.236.0 - M248 Orange wool
 
 Status: GO for official orange-wool placement.

@@ -1441,3 +1441,5 @@ M246 adds no public API. Log item `17` damage `1` places spruce log `17:1` and p
 M247 adds no public API. Log item `17` damage `2` places birch log `17:2` and persists.
 
 M248 adds no public API. Wool item `35` damage `1` places orange wool `35:1` and persists.
+
+M249 adds no public API. Wool item `35` damage `4` places yellow wool `35:4` and persists.

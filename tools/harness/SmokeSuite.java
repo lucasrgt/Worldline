@@ -272,6 +272,7 @@ final class SmokeSuite {
         {"tools/smoke/SpruceLogCycle.java", "m246-spruce-log"},
         {"tools/smoke/BirchLogCycle.java", "m247-birch-log"},
         {"tools/smoke/OrangeWoolCycle.java", "m248-orange-wool"},
+        {"tools/smoke/YellowWoolCycle.java", "m249-yellow-wool"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 
