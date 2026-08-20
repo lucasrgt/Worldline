@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.350.0 - M362 Fence collision set
+
+Status: GO for official adjacent fence place plus Packet13 collision together.
+
+- Fence item `85` placed two adjacent `85:0` cells on a raised stone fixture.
+- The same Packet13 `+1 Z` step was free in air and server-corrected into the fence line.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M362 semantic SHA-256 is
+`5784076d8eb5c6e86478f102566067459f9c73c231b5f92141b25d65c79ae290`.
+
 ## 1.349.0 - M361 Ladder climb set
 
 Status: GO for official two-cell ladder place plus Packet13 climb together.

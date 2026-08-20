@@ -366,6 +366,7 @@ Passing an experiment does not silently promote its API.
 | v1.347.0 / M359 | Bed nether explode | GO - Nether bed Packet60 strength 5, Packet17 absent |
 | v1.348.0 / M360 | Fishing catch set | GO - rod 346 Packet23 type 90 then Packet21 fish 349 |
 | v1.349.0 / M361 | Ladder climb set | GO - two east 65:5 cells plus Packet13 climb vs air |
+| v1.350.0 / M362 | Fence collision set | GO - adjacent 85:0 cells block Packet13 walk vs air |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -377,7 +378,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.349.0 direction
+## Immediate post-v1.350.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
