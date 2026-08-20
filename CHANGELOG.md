@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.399.0 - M411 Zombie pigman set
+
+Status: GO for official Nether pigman Packet24 type 57 and cooked-pork 320 drop together.
+
+- Nether login on netherrack; spawner retargeted to PigZombie with spawn-monsters.
+- Packet24 type `57` was killed with diamond sword `276`; Packet21 cooked pork `320` was observed.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M411 semantic SHA-256 is
+`c448868efb22d1c2a50bab9554f6c30de3f184d9cc2eb129103068be9868ae84`.
+
 ## 1.398.0 - M410 Ghast fireball set
 
 Status: GO for official Nether ghast Packet24 type 56 and fireball Packet23 type 63 together.
