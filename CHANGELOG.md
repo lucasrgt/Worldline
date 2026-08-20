@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.375.0 - M387 Remaining light set
+
+Status: GO for official glowstone, jack-o-lantern, and floor-torch light cells together.
+
+- Packet15 placed glowstone `89:0`, jack-o-lantern `91:1`, and floor torch `50:5`.
+- All three light cells persisted after a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M387 semantic SHA-256 is
+`c8fb22dfee19b993ff3351bf0dfcb8de29c0975c84ee50c94848cd2d0e4c6d70`.
+
 ## 1.374.0 - M386 Ice snow melt set
 
 Status: GO for official ice-to-water and snow-to-air light melt together.
