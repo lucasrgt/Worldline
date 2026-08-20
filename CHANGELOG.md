@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.297.0 - M309 Rail power
+
+Status: GO for official detector-rail occupancy and powered-rail torch power together.
+
+- Detector rail `28` occupied by a minecart became `28:8`.
+- Powered rail `27` beside redstone torch `76:5` became `27:8`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M309 semantic SHA-256 is
+`ff3995ce5426f88877abdf561aada4f7f2968dfa7fbdc44f768202ec4c14ff80`.
+
 ## 1.296.0 - M308 Fragile set
 
 Status: GO for official ice break, glass break, and ice melt together.

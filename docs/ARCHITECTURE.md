@@ -1561,3 +1561,5 @@ M306 adds no public API. Wooden door `64` and trapdoor `96` open-then-close toge
 M307 adds no public API. Drowning, suffocation, and lava hurts share one Packet38 family.
 
 M308 adds no public API. Ice break, glass break, and ice melt share one fragile family.
+
+M309 adds no public API. Detector rail `28:8` occupancy and powered rail `27:8` share one rail-power family.
