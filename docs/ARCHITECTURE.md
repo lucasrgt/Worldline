@@ -1839,3 +1839,5 @@ M445 adds no public API. Skeleton type `51` Packet23 type `60` arrows with skele
 M450 adds no public API. Nether pigman type `57` Packet7 group-aggro share one pigman-anger family.
 
 M453 adds no public API. Void Packet8 `0` plus seeded hotbar Packet21 drops share one player-death-drops family.
+
+M454 adds no public API. Peaceful absence versus Easy persist of Packet24 `50/51/54` share one peaceful-despawn family.

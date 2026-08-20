@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.436.0 - M454 Peaceful despawn set
+
+Status: GO for official Peaceful absence versus Easy persist of Packet24 hostiles together.
+
+- Easy `difficulty=1` persisted creeper type `50` and zombie type `54`.
+- Peaceful `difficulty=0` kept types `50/51/54` absent.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M454 semantic SHA-256 is
+`8a4c4acadf23008e8fed2fdbc1d9c05c903c65c527c3489dabee48e7d2183abe`.
+
 ## 1.435.0 - M453 Player death drops set
 
 Status: GO for official void death plus three seeded hotbar Packet21 drops together.
