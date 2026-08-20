@@ -1687,3 +1687,5 @@ M369 adds no public API. Cake `92` six-slice eat through air shares one full-eat
 M370 adds no public API. Cactus, log, and clay smelts share one remaining-furnace family. Smoke-local furnace clicks stay out of the public load identity.
 
 M371 adds no public API. TNT `46`, piston `33`, and sticky piston `29` share one machine-block craft family.
+
+M372 adds no public API. Painting `321`, sign `323`, and bowl `281` share one placeable-item craft family.

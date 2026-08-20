@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.360.0 - M372 Placeable item crafts
+
+Status: GO for official painting, sign, and bowl crafts together.
+
+- Personal 2x2 crafted bowls `281x4`; workbench crafted painting `321` and sign `323`.
+- The stacks survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M372 semantic SHA-256 is
+`80d1b7a10efe73807810ca2609135b07e47ba57880f35e72d1b205e27394a993`.
+
 ## 1.359.0 - M371 Machine block crafts
 
 Status: GO for official TNT, piston, and sticky-piston crafts together.

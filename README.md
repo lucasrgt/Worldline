@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.359.0 - M371 Machine block crafts (GO)**.
+Current official milestone: **Worldline v1.360.0 - M372 Placeable item crafts (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
