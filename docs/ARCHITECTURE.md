@@ -1419,3 +1419,5 @@ M235 adds no public API. Wood slab item `44` damage `2` places `44:2` and persis
 M236 adds no public API. Cobble slab item `44` damage `3` places `44:3` and persists.
 
 M237 adds no public API. Stone item `1` places `1:0` and persists.
+
+M238 adds no public API. Grass item `2` places `2:0` and persists.
