@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.285.0 - M297 Basic crafts
+
+Status: GO for official 2x2 planks, sticks, and torch crafts.
+
+- Crafted oak planks `5`, sticks `280`, and torches `50` in one personal 2x2 session.
+- The result family survived inventory persistence across a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M297 semantic SHA-256 is
+`f62ec64a6ea2c9990cdbf656cdedabe239862a866983d92adfb792d4f81d82a3`.
+
 ## 1.284.0 - M296 Furnace smelts
 
 Status: GO for official iron, gold, and pork furnace recipes.
