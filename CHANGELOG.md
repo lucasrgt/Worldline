@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.256.0 - M268 Flint steel fire
+
+Status: GO for official flint-and-steel fire placement.
+
+- Used flint-and-steel `259` on raised stone and received fire block `51:0`.
+- The exact fire cell survived a clean save and a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M268 semantic SHA-256 is
+`e73f7f6c77c41d2facb9ca438c3905559515101c6dcdbe3cfd22c4b48da0aeda`.
+
 ## 1.255.0 - M267 Milk bucket
 
 Status: GO for official milk-bucket air-use consume.

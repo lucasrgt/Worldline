@@ -291,6 +291,7 @@ final class SmokeSuite {
         {"tools/smoke/FishEatCycle.java", "m265-fish-eat"},
         {"tools/smoke/CookedFishEatCycle.java", "m266-cooked-fish-eat"},
         {"tools/smoke/MilkBucketCycle.java", "m267-milk-bucket"},
+        {"tools/smoke/FlintSteelFireCycle.java", "m268-flint-steel-fire"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

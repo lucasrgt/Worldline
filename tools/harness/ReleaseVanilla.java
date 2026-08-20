@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m264 = load(root, "smokes/m264-raw-pork-eat/smoke.properties");
         Properties m265 = load(root, "smokes/m265-fish-eat/smoke.properties");
         Properties m266 = load(root, "smokes/m266-cooked-fish-eat/smoke.properties");
         Properties m267 = load(root, "smokes/m267-milk-bucket/smoke.properties");
-        match(release, "version", "1.255.0");
-        match(release, "milestone", "m267-milk-bucket");
-        same(release, "m264.signature", m264, "expected.signature");
-        same(release, "server.sha256", m264, "server.jar.sha256");
+        Properties m268 = load(root, "smokes/m268-flint-steel-fire/smoke.properties");
+        match(release, "version", "1.256.0");
+        match(release, "milestone", "m268-flint-steel-fire");
         same(release, "m265.signature", m265, "expected.signature");
         same(release, "server.sha256", m265, "server.jar.sha256");
         same(release, "m266.signature", m266, "expected.signature");
         same(release, "server.sha256", m266, "server.jar.sha256");
         same(release, "m267.signature", m267, "expected.signature");
         same(release, "server.sha256", m267, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M264_RAW_PORK_EAT.md", "docs/M264_CYCLE.md",
-                "smokes/m264-raw-pork-eat/MAP.md", "docs/M265_FISH_EAT.md", "docs/M265_CYCLE.md",
+        same(release, "m268.signature", m268, "expected.signature");
+        same(release, "server.sha256", m268, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M265_FISH_EAT.md", "docs/M265_CYCLE.md",
                 "smokes/m265-fish-eat/MAP.md", "docs/M266_COOKED_FISH_EAT.md", "docs/M266_CYCLE.md",
                 "smokes/m266-cooked-fish-eat/MAP.md", "docs/M267_MILK_BUCKET.md", "docs/M267_CYCLE.md",
-                "smokes/m267-milk-bucket/MAP.md"))
+                "smokes/m267-milk-bucket/MAP.md", "docs/M268_FLINT_STEEL_FIRE.md", "docs/M268_CYCLE.md",
+                "smokes/m268-flint-steel-fire/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.255.0 M267 Milk bucket GO");
+        System.out.println("  release: Worldline v1.256.0 M268 Flint steel fire GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

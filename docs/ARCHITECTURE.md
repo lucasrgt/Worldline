@@ -1479,3 +1479,5 @@ M265 adds no public API. Raw fish item `349` air-use heals Packet8 `18 -> 20` an
 M266 adds no public API. Cooked fish item `350` air-use heals Packet8 `15 -> 20` and consumes the stack.
 
 M267 adds no public API. Milk bucket item `335` air-use becomes empty bucket `325` with no health change.
+
+M268 adds no public API. Flint-and-steel item `259` places fire `51:0` on raised stone.
