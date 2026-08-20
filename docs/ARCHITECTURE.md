@@ -1549,3 +1549,5 @@ M300 adds no public API. Picks harvest cobble `4`, coal `263`, and diamond `264`
 M301 adds no public API. Stone axe `275` harvests oak, spruce, and birch logs together.
 
 M302 adds no public API. Gold shovel `284` harvests dirt, sand, gravel, and clay together.
+
+M303 adds no public API. Wheat, sugar cane, and cactus harvests drop together.

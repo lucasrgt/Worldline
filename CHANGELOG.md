@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.291.0 - M303 Crop harvests
+
+Status: GO for official wheat, sugar cane, and cactus harvests.
+
+- Harvested mature wheat `59:7`, sugar cane `83`, and cactus `81` in one cycle.
+- Packet21 drops were wheat `296`, cane `338`, and cactus `81`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M303 semantic SHA-256 is
+`33bca9f328ddb3c028b792f70233157d997e260e28d47d0115069be6bcba67f0`.
+
 ## 1.290.0 - M302 Shovel soft breaks
 
 Status: GO for official dirt, sand, gravel, and clay shovel harvests.
