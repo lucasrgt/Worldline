@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.309.0 - M321 Gold armor crafts
+
+Status: GO for official gold-armor workbench crafts together.
+
+- Packet102 crafted helmet `314`, chestplate `315`, leggings `316`, and boots `317` from ingots `266`.
+- The four result ids stayed in personal storage and armor slots 5-8 stayed empty.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M321 semantic SHA-256 is
+`a44c48c91eba492305c1faa7963dd3ad1023d9a9a97bd6ccd92c2b8abcec9fbf`.
+
 ## 1.308.0 - M320 Leather armor crafts
 
 Status: GO for official leather-armor workbench crafts together.
