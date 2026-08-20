@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.434.0 - M450 Pigman anger set
+
+Status: GO for official Nether pigman Packet7 group-aggro together.
+
+- Two Packet24 type `57` identities; Packet7 sword `276` hurt one; neighbor aggroed.
+- Distinct from M411 cooked-pork drop and M437 lightning identity pair.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M450 semantic SHA-256 is
+`ae24558c960284894ed1577e583f5fbbdcfd65ebfd4ed48af6687179d2ccf098`.
+
 ## 1.433.0 - M445 Skeleton ranged AI set
 
 Status: GO for official skeleton Packet23 type 60 archery with skeleton thrower together.
