@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.299.0 - M311 Storage carts
+
+Status: GO for official chest-minecart window and furnace-minecart spawn together.
+
+- Chest minecart Packet23 type 11 opened Packet100 title `Minecart` with 27 slots.
+- Furnace minecart Packet23 type 12 accepted Packet7 interact with no window.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M311 semantic SHA-256 is
+`820eecba37b12ebcd44e719255868981552e3ef995e2ba92c4df32973218a71b`.
+
 ## 1.298.0 - M310 Vehicle rides
 
 Status: GO for official boat and minecart mount together.
