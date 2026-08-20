@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m453 = load(root, "smokes/m453-player-death-drops-set/smoke.properties");
         Properties m454 = load(root, "smokes/m454-peaceful-despawn-set/smoke.properties");
         Properties m455 = load(root, "smokes/m455-melee-pursuit-set/smoke.properties");
         Properties m448 = load(root, "smokes/m448-creeper-fuse-set/smoke.properties");
-        match(release, "version", "1.438.0");
-        match(release, "milestone", "m448-creeper-fuse-set");
-        same(release, "m453.signature", m453, "expected.signature");
-        same(release, "server.sha256", m453, "server.jar.sha256");
+        Properties m452 = load(root, "smokes/m452-knockback-cooldown-set/smoke.properties");
+        match(release, "version", "1.439.0");
+        match(release, "milestone", "m452-knockback-cooldown-set");
         same(release, "m454.signature", m454, "expected.signature");
         same(release, "server.sha256", m454, "server.jar.sha256");
         same(release, "m455.signature", m455, "expected.signature");
         same(release, "server.sha256", m455, "server.jar.sha256");
         same(release, "m448.signature", m448, "expected.signature");
         same(release, "server.sha256", m448, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M453_PLAYER_DEATH_DROPS_SET.md", "docs/M453_CYCLE.md",
-                "smokes/m453-player-death-drops-set/MAP.md", "docs/M454_PEACEFUL_DESPAWN_SET.md", "docs/M454_CYCLE.md",
+        same(release, "m452.signature", m452, "expected.signature");
+        same(release, "server.sha256", m452, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M454_PEACEFUL_DESPAWN_SET.md", "docs/M454_CYCLE.md",
                 "smokes/m454-peaceful-despawn-set/MAP.md", "docs/M455_MELEE_PURSUIT_SET.md", "docs/M455_CYCLE.md",
                 "smokes/m455-melee-pursuit-set/MAP.md", "docs/M448_CREEPER_FUSE_SET.md", "docs/M448_CYCLE.md",
-                "smokes/m448-creeper-fuse-set/MAP.md"))
+                "smokes/m448-creeper-fuse-set/MAP.md", "docs/M452_KNOCKBACK_COOLDOWN_SET.md", "docs/M452_CYCLE.md",
+                "smokes/m452-knockback-cooldown-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.438.0 M448 Creeper fuse set GO");
+        System.out.println("  release: Worldline v1.439.0 M452 Knockback cooldown set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

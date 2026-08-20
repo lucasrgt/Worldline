@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.439.0 - M452 Knockback cooldown set
+
+Status: GO for official zombie melee Packet8 knockback plus hurt-time cooldown together.
+
+- Packet24 type `54` melee dropped health `20` to `18` with a Packet13 pose away from the mob.
+- A second contact inside vanilla hurt-time did not emit another Packet8 drop.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M452 semantic SHA-256 is
+`242841cb9a28e2404bdfba3f9787b624b4d14c6fdeb9e08665bc5522d4b5f441`.
+
 ## 1.438.0 - M448 Creeper fuse set
 
 Status: GO for official creeper Packet40 proximity fuse before Packet60 together.
