@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m445 = load(root, "smokes/m445-skeleton-ranged-ai-set/smoke.properties");
         Properties m450 = load(root, "smokes/m450-pigman-anger-set/smoke.properties");
         Properties m453 = load(root, "smokes/m453-player-death-drops-set/smoke.properties");
         Properties m454 = load(root, "smokes/m454-peaceful-despawn-set/smoke.properties");
-        match(release, "version", "1.436.0");
-        match(release, "milestone", "m454-peaceful-despawn-set");
-        same(release, "m445.signature", m445, "expected.signature");
-        same(release, "server.sha256", m445, "server.jar.sha256");
+        Properties m455 = load(root, "smokes/m455-melee-pursuit-set/smoke.properties");
+        match(release, "version", "1.437.0");
+        match(release, "milestone", "m455-melee-pursuit-set");
         same(release, "m450.signature", m450, "expected.signature");
         same(release, "server.sha256", m450, "server.jar.sha256");
         same(release, "m453.signature", m453, "expected.signature");
         same(release, "server.sha256", m453, "server.jar.sha256");
         same(release, "m454.signature", m454, "expected.signature");
         same(release, "server.sha256", m454, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M445_SKELETON_RANGED_AI_SET.md", "docs/M445_CYCLE.md",
-                "smokes/m445-skeleton-ranged-ai-set/MAP.md", "docs/M450_PIGMAN_ANGER_SET.md", "docs/M450_CYCLE.md",
+        same(release, "m455.signature", m455, "expected.signature");
+        same(release, "server.sha256", m455, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M450_PIGMAN_ANGER_SET.md", "docs/M450_CYCLE.md",
                 "smokes/m450-pigman-anger-set/MAP.md", "docs/M453_PLAYER_DEATH_DROPS_SET.md", "docs/M453_CYCLE.md",
                 "smokes/m453-player-death-drops-set/MAP.md", "docs/M454_PEACEFUL_DESPAWN_SET.md", "docs/M454_CYCLE.md",
-                "smokes/m454-peaceful-despawn-set/MAP.md"))
+                "smokes/m454-peaceful-despawn-set/MAP.md", "docs/M455_MELEE_PURSUIT_SET.md", "docs/M455_CYCLE.md",
+                "smokes/m455-melee-pursuit-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.436.0 M454 Peaceful despawn set GO");
+        System.out.println("  release: Worldline v1.437.0 M455 Melee pursuit set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

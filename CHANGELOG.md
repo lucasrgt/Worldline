@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.437.0 - M455 Melee pursuit set
+
+Status: GO for official zombie and skeleton Packet24 pursuit toward the actor pose together.
+
+- Packet24 types `54` and `51` each emitted a Packet31/33/34 step toward the actor pose.
+- Distinct from identity-only hostiles, death drops, skeleton archery, and zombie door break.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M455 semantic SHA-256 is
+`36fea72b3152e1d8b6245cfd8731ba14fa83aa5818bef04bab2ab838441de935`.
+
 ## 1.436.0 - M454 Peaceful despawn set
 
 Status: GO for official Peaceful absence versus Easy persist of Packet24 hostiles together.
