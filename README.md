@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.347.0 - M359 Bed nether explode (GO)**.
+Current official milestone: **Worldline v1.348.0 - M360 Fishing catch set (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

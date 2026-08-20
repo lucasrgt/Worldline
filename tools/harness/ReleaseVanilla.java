@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m356 = load(root, "smokes/m356-jack-o-lantern-crafts/smoke.properties");
         Properties m357 = load(root, "smokes/m357-glowstone-dust-crafts/smoke.properties");
         Properties m358 = load(root, "smokes/m358-snow-craft-set/smoke.properties");
         Properties m359 = load(root, "smokes/m359-bed-nether-explode/smoke.properties");
-        match(release, "version", "1.347.0");
-        match(release, "milestone", "m359-bed-nether-explode");
-        same(release, "m356.signature", m356, "expected.signature");
-        same(release, "server.sha256", m356, "server.jar.sha256");
+        Properties m360 = load(root, "smokes/m360-fishing-catch-set/smoke.properties");
+        match(release, "version", "1.348.0");
+        match(release, "milestone", "m360-fishing-catch-set");
         same(release, "m357.signature", m357, "expected.signature");
         same(release, "server.sha256", m357, "server.jar.sha256");
         same(release, "m358.signature", m358, "expected.signature");
         same(release, "server.sha256", m358, "server.jar.sha256");
         same(release, "m359.signature", m359, "expected.signature");
         same(release, "server.sha256", m359, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M356_JACK_O_LANTERN_CRAFTS.md", "docs/M356_CYCLE.md",
-                "smokes/m356-jack-o-lantern-crafts/MAP.md", "docs/M357_GLOWSTONE_DUST_CRAFTS.md", "docs/M357_CYCLE.md",
+        same(release, "m360.signature", m360, "expected.signature");
+        same(release, "server.sha256", m360, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M357_GLOWSTONE_DUST_CRAFTS.md", "docs/M357_CYCLE.md",
                 "smokes/m357-glowstone-dust-crafts/MAP.md", "docs/M358_SNOW_CRAFT_SET.md", "docs/M358_CYCLE.md",
                 "smokes/m358-snow-craft-set/MAP.md", "docs/M359_BED_NETHER_EXPLODE.md", "docs/M359_CYCLE.md",
-                "smokes/m359-bed-nether-explode/MAP.md"))
+                "smokes/m359-bed-nether-explode/MAP.md", "docs/M360_FISHING_CATCH_SET.md", "docs/M360_CYCLE.md",
+                "smokes/m360-fishing-catch-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.347.0 M359 Bed nether explode GO");
+        System.out.println("  release: Worldline v1.348.0 M360 Fishing catch set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

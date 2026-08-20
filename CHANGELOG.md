@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.348.0 - M360 Fishing catch set
+
+Status: GO for official fishing-rod hook spawn plus raw-fish catch together.
+
+- Fishing rod `346` used in-air (Packet15 direction 255) from a raised-stone still-water dock.
+- The same session observed Packet23 type `90` then reeled Packet21 raw fish `349`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M360 semantic SHA-256 is
+`b81e3dfcba437f67fee01101898bab64442120affa5b0cdb60dc16f69a2549b0`.
+
 ## 1.347.0 - M359 Bed nether explode
 
 Status: GO for official Overworld sleep versus Nether bed explode together.

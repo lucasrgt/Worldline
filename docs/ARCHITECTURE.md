@@ -1663,3 +1663,5 @@ M357 adds no public API. Glowstone dust `348` to glowstone `89` is the 2x2 dust-
 M358 adds no public API. Snow block `80` craft and shovel harvest of `78`/`80` share one snow family.
 
 M359 adds no public API. Overworld sleep versus Nether bed explode share one bed-dimension family.
+
+M360 adds no public API. Fishing-rod Packet23 type 90 and Packet21 fish 349 share one fishing-catch family.

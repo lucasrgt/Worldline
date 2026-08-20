@@ -364,6 +364,7 @@ Passing an experiment does not silently promote its API.
 | v1.345.0 / M357 | Glowstone dust crafts | GO - four dust 348 to glowstone 89 |
 | v1.346.0 / M358 | Snow craft set | GO - craft 80 from 332 then shovel 78 and 80 |
 | v1.347.0 / M359 | Bed nether explode | GO - Nether bed Packet60 strength 5, Packet17 absent |
+| v1.348.0 / M360 | Fishing catch set | GO - rod 346 Packet23 type 90 then Packet21 fish 349 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -375,7 +376,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.347.0 direction
+## Immediate post-v1.348.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
