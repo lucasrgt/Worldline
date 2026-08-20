@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.346.0 - M358 Snow craft set
+
+Status: GO for official snow-block craft plus shovel harvest of layer and block together.
+
+- Personal 2x2 crafted snow block `80` from four snowballs `332`.
+- Gold shovel `284` broke snow layer `78` and snow block `80` to Packet21 `332`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M358 semantic SHA-256 is
+`d35de53474c363b1b580a865ea4bcce9403b8f9092e3ca5be19e9f1bf6e6d1be`.
+
 ## 1.345.0 - M357 Glowstone dust crafts
 
 Status: GO for official 2x2 glowstone-dust craft of block `89`.

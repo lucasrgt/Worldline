@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m354 = load(root, "smokes/m354-farmland-hydrate-set/smoke.properties");
         Properties m355 = load(root, "smokes/m355-note-rest-instruments/smoke.properties");
         Properties m356 = load(root, "smokes/m356-jack-o-lantern-crafts/smoke.properties");
         Properties m357 = load(root, "smokes/m357-glowstone-dust-crafts/smoke.properties");
-        match(release, "version", "1.345.0");
-        match(release, "milestone", "m357-glowstone-dust-crafts");
-        same(release, "m354.signature", m354, "expected.signature");
-        same(release, "server.sha256", m354, "server.jar.sha256");
+        Properties m358 = load(root, "smokes/m358-snow-craft-set/smoke.properties");
+        match(release, "version", "1.346.0");
+        match(release, "milestone", "m358-snow-craft-set");
         same(release, "m355.signature", m355, "expected.signature");
         same(release, "server.sha256", m355, "server.jar.sha256");
         same(release, "m356.signature", m356, "expected.signature");
         same(release, "server.sha256", m356, "server.jar.sha256");
         same(release, "m357.signature", m357, "expected.signature");
         same(release, "server.sha256", m357, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M354_FARMLAND_HYDRATE_SET.md", "docs/M354_CYCLE.md",
-                "smokes/m354-farmland-hydrate-set/MAP.md", "docs/M355_NOTE_REST_INSTRUMENTS.md", "docs/M355_CYCLE.md",
+        same(release, "m358.signature", m358, "expected.signature");
+        same(release, "server.sha256", m358, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M355_NOTE_REST_INSTRUMENTS.md", "docs/M355_CYCLE.md",
                 "smokes/m355-note-rest-instruments/MAP.md", "docs/M356_JACK_O_LANTERN_CRAFTS.md", "docs/M356_CYCLE.md",
                 "smokes/m356-jack-o-lantern-crafts/MAP.md", "docs/M357_GLOWSTONE_DUST_CRAFTS.md", "docs/M357_CYCLE.md",
-                "smokes/m357-glowstone-dust-crafts/MAP.md"))
+                "smokes/m357-glowstone-dust-crafts/MAP.md", "docs/M358_SNOW_CRAFT_SET.md", "docs/M358_CYCLE.md",
+                "smokes/m358-snow-craft-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.345.0 M357 Glowstone dust crafts GO");
+        System.out.println("  release: Worldline v1.346.0 M358 Snow craft set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

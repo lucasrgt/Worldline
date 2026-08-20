@@ -1659,3 +1659,5 @@ M355 adds no public API. Glass instrument 3 and gold instrument 0 share one rema
 M356 adds no public API. Pumpkin `86` and jack-o-lantern `91` share one lantern-craft family.
 
 M357 adds no public API. Glowstone dust `348` to glowstone `89` is the 2x2 dust-craft family.
+
+M358 adds no public API. Snow block `80` craft and shovel harvest of `78`/`80` share one snow family.

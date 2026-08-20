@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.345.0 - M357 Glowstone dust crafts (GO)**.
+Current official milestone: **Worldline v1.346.0 - M358 Snow craft set (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
