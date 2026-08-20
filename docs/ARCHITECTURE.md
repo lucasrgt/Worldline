@@ -1645,3 +1645,5 @@ M348 adds no public API. Orange `351:14`, purple `351:5`, and lime `351:10` shar
 M349 adds no public API. Two adjacent chests `54` plus the `Large chest` window share one double-chest family.
 
 M350 adds no public API. Standing sign `63` and wall sign `68` share one sign-text family.
+
+M351 adds no public API. West-face and east-face Packet25 paintings share one orientation family.

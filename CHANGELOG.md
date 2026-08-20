@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.339.0 - M351 Painting orient set
+
+Status: GO for official west-face and east-face painting spawns together.
+
+- Packet15 of painting `321` hung one Packet25 on the west face (`dir1`) and one on the east face (`dir3`).
+- Two peers observed matching identity and facing for both spawns.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M351 semantic SHA-256 is
+`8f60b715dc6a3aeab49aaae89f1f147dd7822ab37806a8da79597e86acd2e9aa`.
+
 ## 1.338.0 - M350 Sign text set
 
 Status: GO for official standing-sign and wall-sign text together.
