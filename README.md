@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.385.0 - M397 Dispenser projectiles (GO)**.
+Current official milestone: **Worldline v1.386.0 - M398 Jukebox eject set (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

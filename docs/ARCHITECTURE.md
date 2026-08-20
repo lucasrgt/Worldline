@@ -1739,3 +1739,5 @@ M395 adds no public API. Cyan, pink, and light-blue personal 2x2 mixes share one
 M396 adds no public API. Magenta, light-blue, and lime dyed wool share one remaining-wool-crafts family.
 
 M397 adds no public API. Dispenser snowball type `61` and egg type `62` share one dispenser-projectile family.
+
+M398 adds no public API. Gold disc `2256` and cat disc `2257` jukebox ejects share one jukebox-eject family.

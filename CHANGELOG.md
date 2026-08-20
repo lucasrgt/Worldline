@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.386.0 - M398 Jukebox eject set
+
+Status: GO for official gold and cat disc insert, play, and Packet21 eject together.
+
+- Packet15 inserted discs `2256` and `2257` into two jukeboxes; Packet61 `1005` played both.
+- Gold axe Packet14 broke both playing cells and Packet21 ejected each stored record.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M398 semantic SHA-256 is
+`21d9a2123e3a3041573a22722d268dec75ee1d0d27d84fe0ae6f22e187f2bd8f`.
+
 ## 1.385.0 - M397 Dispenser projectiles
 
 Status: GO for official dispenser snowball and egg Packet23 ejections together.
