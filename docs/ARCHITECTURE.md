@@ -1539,3 +1539,5 @@ M295 adds no public API. Wooden plate `72` and stone plate `70` power and unpowe
 M296 widens furnace load/smelt evidence to iron `15→265`, gold `14→266`, and pork `319→320` as well as sand glass.
 
 M297 adds no public API. Personal 2x2 crafts planks `5`, sticks `280`, and torches `50` together.
+
+M298 adds no public API. Workbench crafts the wooden tool family `268+270+271+269+290`.

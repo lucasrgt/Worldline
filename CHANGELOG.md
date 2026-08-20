@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.286.0 - M298 Wood tool crafts
+
+Status: GO for official wooden tool-family crafts.
+
+- Workbench `58` crafted wooden sword `268`, pick `270`, axe `271`, shovel `269`, and hoe `290`.
+- All five results were taken and persisted across a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M298 semantic SHA-256 is
+`2b099c580ef169af939546718df1c4ae560e5f875f92960733fbcc026a3982bf`.
+
 ## 1.285.0 - M297 Basic crafts
 
 Status: GO for official 2x2 planks, sticks, and torch crafts.
