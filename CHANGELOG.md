@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.253.0 - M265 Fish eat
+
+Status: GO for official raw-fish air-use heal.
+
+- Seeded raw fish `349` at health `18` and Packet15 air-use restored Packet8 `18 -> 20`.
+- The held stack was consumed `349:1 -> empty` and both health and inventory survived a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M265 semantic SHA-256 is
+`0c9b15289f11f60a602735efc2cf64ae7cf2e4ad6454e33fd5fdb6a44023f832`.
+
 ## 1.252.0 - M264 Raw pork eat
 
 Status: GO for official raw-porkchop air-use heal.

@@ -288,6 +288,7 @@ final class SmokeSuite {
         {"tools/smoke/CookieEatCycle.java", "m262-cookie-eat"},
         {"tools/smoke/StewEatCycle.java", "m263-stew-eat"},
         {"tools/smoke/RawPorkEatCycle.java", "m264-raw-pork-eat"},
+        {"tools/smoke/FishEatCycle.java", "m265-fish-eat"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 
