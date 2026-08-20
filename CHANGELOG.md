@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.342.0 - M354 Farmland hydrate set
+
+Status: GO for official dry and hydrated farmland together.
+
+- Wooden hoe `290` tilled dirt to farmland `60`; water-adjacent plots hydrated to `60:7` while the isolated plot stayed `60:0`.
+- Both dry and hydrated cells survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M354 semantic SHA-256 is
+`31e18ca11dc6928034468d2a503769a4559f5757e60dffc22e8bf85af35522d2`.
+
 ## 1.341.0 - M353 Sword damage set
 
 Status: GO for official wood, iron, and diamond sword pig hits together.
