@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.356.0 - M368 More dye wool crafts
+
+Status: GO for official yellow, orange, and pink wool crafts together.
+
+- White wool `35:0` plus dyes `351:11`, `351:14`, and `351:9` crafted `35:4`, `35:1`, and `35:6`.
+- The stacks survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M368 semantic SHA-256 is
+`af97665c706b12d71c1c228a931a7efec0c18fda505b259de31fdf174b8a17b9`.
+
 ## 1.355.0 - M367 Piston motion set
 
 Status: GO for official piston extend, retract, and sticky pull together.

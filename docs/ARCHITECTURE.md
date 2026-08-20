@@ -1679,3 +1679,5 @@ M365 adds no public API. Held compass `345` yaw reversal and two-cell spawn bear
 M366 adds no public API. Empty map `358` Packet15 air-use and persist share one map-fill family. The official dedicated server does not rewrite the stack.
 
 M367 adds no public API. Piston `33` extend/retract and sticky `29` pull share one piston-motion family.
+
+M368 adds no public API. Yellow `35:4`, orange `35:1`, and pink `35:6` wool crafts share one remaining dye-wool family.

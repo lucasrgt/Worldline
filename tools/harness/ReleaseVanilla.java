@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m364 = load(root, "smokes/m364-light-opacity-set/smoke.properties");
         Properties m365 = load(root, "smokes/m365-compass-point-set/smoke.properties");
         Properties m366 = load(root, "smokes/m366-map-fill-set/smoke.properties");
         Properties m367 = load(root, "smokes/m367-piston-motion-set/smoke.properties");
-        match(release, "version", "1.355.0");
-        match(release, "milestone", "m367-piston-motion-set");
-        same(release, "m364.signature", m364, "expected.signature");
-        same(release, "server.sha256", m364, "server.jar.sha256");
+        Properties m368 = load(root, "smokes/m368-more-dye-wool-crafts/smoke.properties");
+        match(release, "version", "1.356.0");
+        match(release, "milestone", "m368-more-dye-wool-crafts");
         same(release, "m365.signature", m365, "expected.signature");
         same(release, "server.sha256", m365, "server.jar.sha256");
         same(release, "m366.signature", m366, "expected.signature");
         same(release, "server.sha256", m366, "server.jar.sha256");
         same(release, "m367.signature", m367, "expected.signature");
         same(release, "server.sha256", m367, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M364_LIGHT_OPACITY_SET.md", "docs/M364_CYCLE.md",
-                "smokes/m364-light-opacity-set/MAP.md", "docs/M365_COMPASS_POINT_SET.md", "docs/M365_CYCLE.md",
+        same(release, "m368.signature", m368, "expected.signature");
+        same(release, "server.sha256", m368, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M365_COMPASS_POINT_SET.md", "docs/M365_CYCLE.md",
                 "smokes/m365-compass-point-set/MAP.md", "docs/M366_MAP_FILL_SET.md", "docs/M366_CYCLE.md",
                 "smokes/m366-map-fill-set/MAP.md", "docs/M367_PISTON_MOTION_SET.md", "docs/M367_CYCLE.md",
-                "smokes/m367-piston-motion-set/MAP.md"))
+                "smokes/m367-piston-motion-set/MAP.md", "docs/M368_MORE_DYE_WOOL_CRAFTS.md", "docs/M368_CYCLE.md",
+                "smokes/m368-more-dye-wool-crafts/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.355.0 M367 Piston motion set GO");
+        System.out.println("  release: Worldline v1.356.0 M368 More dye wool crafts GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
