@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.223.0 - M235 Wood slab
+
+Status: GO for official wood-slab placement.
+
+- Placed slab item `44` damage `2` on a raised stone support as `44:2`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M235 semantic SHA-256 is
+`db22e6770987d78c1a09404991df3d73037770d68f7fb9215a20f0e9a4f383fa`.
+
 ## 1.222.0 - M234 Sandstone slab
 
 Status: GO for official sandstone-slab placement.

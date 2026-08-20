@@ -258,6 +258,7 @@ final class SmokeSuite {
         {"tools/smoke/ChestPlaceCycle.java", "m232-chest-place"},
         {"tools/smoke/NotePlaceCycle.java", "m233-note-block-place"},
         {"tools/smoke/SandstoneSlabCycle.java", "m234-sandstone-slab"},
+        {"tools/smoke/WoodSlabCycle.java", "m235-wood-slab"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

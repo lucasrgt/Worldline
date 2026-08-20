@@ -1413,3 +1413,5 @@ M232 adds no public API. Chest item `54` places `54:0` and persists.
 M233 adds no public API. Note block item `25` places `25:0` and persists.
 
 M234 adds no public API. Sandstone slab item `44` damage `1` places `44:1` and persists.
+
+M235 adds no public API. Wood slab item `44` damage `2` places `44:2` and persists.
