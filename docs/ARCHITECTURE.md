@@ -1633,3 +1633,5 @@ M342 adds no public API. Falling sand type 70 and falling gravel type 71 share o
 M343 adds no public API. Netherrack fire `51` persist and wool `35` consume share one fire family.
 
 M344 adds no public API. Water bucket `326`/`9` and lava bucket `327`/`11` share one bucket-fluid family.
+
+M345 adds no public API. Gold `41`, iron `42`, diamond `57`, and lapis `22` share one ore-block craft family.

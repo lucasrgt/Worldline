@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.333.0 - M345 Ore block crafts
+
+Status: GO for official gold, iron, diamond, and lapis block crafts together.
+
+- Packet102 crafted gold block `41`, iron block `42`, diamond block `57`, and lapis block `22`.
+- The four stacks survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M345 semantic SHA-256 is
+`1a72ee9100a460729b226ac6ea350567f9a953cb2d8832d43545f74bdf9f0427`.
+
 ## 1.332.0 - M344 Bucket fluid set
 
 Status: GO for official water and lava bucket place-plus-pickup together.
