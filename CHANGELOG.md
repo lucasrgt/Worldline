@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.254.0 - M266 Cooked fish eat
+
+Status: GO for official cooked-fish air-use heal.
+
+- Seeded cooked fish `350` at health `15` and Packet15 air-use restored Packet8 `15 -> 20`.
+- The held stack was consumed `350:1 -> 0` and both health and inventory survived a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M266 semantic SHA-256 is
+`6a35349bc3363e2a0bdcba540cf2da951f99fef652b0ebf654ed56e15f0e168f`.
+
 ## 1.253.0 - M265 Fish eat
 
 Status: GO for official raw-fish air-use heal.

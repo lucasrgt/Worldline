@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m262 = load(root, "smokes/m262-cookie-eat/smoke.properties");
         Properties m263 = load(root, "smokes/m263-stew-eat/smoke.properties");
         Properties m264 = load(root, "smokes/m264-raw-pork-eat/smoke.properties");
         Properties m265 = load(root, "smokes/m265-fish-eat/smoke.properties");
-        match(release, "version", "1.253.0");
-        match(release, "milestone", "m265-fish-eat");
-        same(release, "m262.signature", m262, "expected.signature");
-        same(release, "server.sha256", m262, "server.jar.sha256");
+        Properties m266 = load(root, "smokes/m266-cooked-fish-eat/smoke.properties");
+        match(release, "version", "1.254.0");
+        match(release, "milestone", "m266-cooked-fish-eat");
         same(release, "m263.signature", m263, "expected.signature");
         same(release, "server.sha256", m263, "server.jar.sha256");
         same(release, "m264.signature", m264, "expected.signature");
         same(release, "server.sha256", m264, "server.jar.sha256");
         same(release, "m265.signature", m265, "expected.signature");
         same(release, "server.sha256", m265, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M262_COOKIE_EAT.md", "docs/M262_CYCLE.md",
-                "smokes/m262-cookie-eat/MAP.md", "docs/M263_STEW_EAT.md", "docs/M263_CYCLE.md",
+        same(release, "m266.signature", m266, "expected.signature");
+        same(release, "server.sha256", m266, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M263_STEW_EAT.md", "docs/M263_CYCLE.md",
                 "smokes/m263-stew-eat/MAP.md", "docs/M264_RAW_PORK_EAT.md", "docs/M264_CYCLE.md",
                 "smokes/m264-raw-pork-eat/MAP.md", "docs/M265_FISH_EAT.md", "docs/M265_CYCLE.md",
-                "smokes/m265-fish-eat/MAP.md"))
+                "smokes/m265-fish-eat/MAP.md", "docs/M266_COOKED_FISH_EAT.md", "docs/M266_CYCLE.md",
+                "smokes/m266-cooked-fish-eat/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.253.0 M265 Fish eat GO");
+        System.out.println("  release: Worldline v1.254.0 M266 Cooked fish eat GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
