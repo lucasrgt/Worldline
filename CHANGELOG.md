@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.388.0 - M400 Remaining torch faces
+
+Status: GO for official wall-torch faces east, west, south, and north together.
+
+- Packet15 placed torch `50:1`, `50:2`, `50:3`, and `50:4` on the four walls of one stone column.
+- All four cells persisted after a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M400 semantic SHA-256 is
+`ce7b2efbd3293b6dc413e9dd2c1b1c8af938af338cd70f50f3b973772d173868`.
+
 ## 1.387.0 - M399 Wooden button set
 
 Status: GO for official stone-button wall faces east, west, south, and north together.

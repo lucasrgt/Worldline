@@ -1743,3 +1743,5 @@ M397 adds no public API. Dispenser snowball type `61` and egg type `62` share on
 M398 adds no public API. Gold disc `2256` and cat disc `2257` jukebox ejects share one jukebox-eject family.
 
 M399 adds no public API. Stone button `77` east, west, south, and north wall faces share one remaining-button family. Beta 1.7.3 has no wooden button.
+
+M400 adds no public API. Wall torch `50:1` through `50:4` share one remaining-torch-faces family.
