@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.352.0 - M364 Light opacity set
+
+Status: GO for official glass, leaves, and ice sky-light nibbles together.
+
+- Packet15 placed glass `20`, oak-backed leaves `18:8`, and ice `79`.
+- Fresh-login Packet51 sky-light samples were pairwise distinct.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M364 semantic SHA-256 is
+`2012aa0391268a287bc772ea5a40036b761ed9f72b90d91f8462512dbb0e3fab`.
+
 ## 1.351.0 - M363 Hostile identity set
 
 Status: GO for official zombie and skeleton Packet24 identities together.

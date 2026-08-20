@@ -1671,3 +1671,5 @@ M361 adds no public API. Two-cell ladder `65:5` place and Packet13 climb share o
 M362 adds no public API. Adjacent fence `85:0` cells and Packet13 walk-block share one fence-collision family.
 
 M363 adds no public API. Spawner EntityId Zombie and Skeleton Packet24 types 54 and 51 share one hostile-identity family. `B173DedicatedServer.monsters` and `B173SpawnerSeed.entity` stay adapter-local.
+
+M364 adds no public API. Glass `20`, leaves `18:8`, and ice `79` share one translucent sky-light family.
