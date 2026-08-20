@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.314.0 - M326 Vehicle crafts
+
+Status: GO for official boat, minecart, chest-cart, and furnace-cart crafts together.
+
+- Packet102 crafted boat `333`, minecart `328`, chest minecart `342`, and furnace minecart `343`.
+- The four result ids survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M326 semantic SHA-256 is
+`1109c4ce19cf7f23d5156d80cef725329fc62a68c438e24d4294aa468e088bdc`.
+
 ## 1.313.0 - M325 Navigation crafts
 
 Status: GO for official compass, clock, and map crafts together.

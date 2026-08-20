@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m322 = load(root, "smokes/m322-diamond-armor-crafts/smoke.properties");
         Properties m323 = load(root, "smokes/m323-iron-tool-crafts/smoke.properties");
         Properties m324 = load(root, "smokes/m324-furnace-rest-smelts/smoke.properties");
         Properties m325 = load(root, "smokes/m325-navigation-crafts/smoke.properties");
-        match(release, "version", "1.313.0");
-        match(release, "milestone", "m325-navigation-crafts");
-        same(release, "m322.signature", m322, "expected.signature");
-        same(release, "server.sha256", m322, "server.jar.sha256");
+        Properties m326 = load(root, "smokes/m326-vehicle-crafts/smoke.properties");
+        match(release, "version", "1.314.0");
+        match(release, "milestone", "m326-vehicle-crafts");
         same(release, "m323.signature", m323, "expected.signature");
         same(release, "server.sha256", m323, "server.jar.sha256");
         same(release, "m324.signature", m324, "expected.signature");
         same(release, "server.sha256", m324, "server.jar.sha256");
         same(release, "m325.signature", m325, "expected.signature");
         same(release, "server.sha256", m325, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M322_DIAMOND_ARMOR_CRAFTS.md", "docs/M322_CYCLE.md",
-                "smokes/m322-diamond-armor-crafts/MAP.md", "docs/M323_IRON_TOOL_CRAFTS.md", "docs/M323_CYCLE.md",
+        same(release, "m326.signature", m326, "expected.signature");
+        same(release, "server.sha256", m326, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M323_IRON_TOOL_CRAFTS.md", "docs/M323_CYCLE.md",
                 "smokes/m323-iron-tool-crafts/MAP.md", "docs/M324_FURNACE_REST_SMELTS.md", "docs/M324_CYCLE.md",
                 "smokes/m324-furnace-rest-smelts/MAP.md", "docs/M325_NAVIGATION_CRAFTS.md", "docs/M325_CYCLE.md",
-                "smokes/m325-navigation-crafts/MAP.md"))
+                "smokes/m325-navigation-crafts/MAP.md", "docs/M326_VEHICLE_CRAFTS.md", "docs/M326_CYCLE.md",
+                "smokes/m326-vehicle-crafts/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.313.0 M325 Navigation crafts GO");
+        System.out.println("  release: Worldline v1.314.0 M326 Vehicle crafts GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
