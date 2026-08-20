@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.248.0 - M260 Apple eat
+
+Status: GO for official apple air-use heal.
+
+- Seeded apple `260` at health `16` and Packet15 air-use restored Packet8 `16 -> 20`.
+- The held stack was consumed `260:1:0 -> empty` and both health and inventory survived a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M260 semantic SHA-256 is
+`f5122f857247406ea443e90df7cb0b2f8b8bfd0ef8f151b677d9b3f8a4598130`.
+
 ## 1.247.0 - M259 Cooked pork eat
 
 Status: GO for official cooked-pork air-use heal.
