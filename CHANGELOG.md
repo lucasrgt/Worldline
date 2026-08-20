@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.308.0 - M320 Leather armor crafts
+
+Status: GO for official leather-armor workbench crafts together.
+
+- Packet102 crafted helmet `298`, chestplate `299`, leggings `300`, and boots `301` from leather `334`.
+- The four result ids stayed in personal storage and armor slots 5-8 stayed empty.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M320 semantic SHA-256 is
+`48274c2675afd82a6d376e7ec9ceb1e8896adc3761f59461d619a2ae378b90f4`.
+
 ## 1.307.0 - M319 Stair slab crafts
 
 Status: GO for official oak-stair, cobble-stair, and stone-slab crafts together.
