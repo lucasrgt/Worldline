@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.325.0 - M337 Utility item crafts
+
+Status: GO for official shears, flint-and-steel, and empty-bucket crafts together.
+
+- Personal 2x2 crafted shears `359` and flint-and-steel `259`; workbench crafted empty bucket `325`.
+- The three stacks survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M337 semantic SHA-256 is
+`24941b7cbf8eca87a6e5f03001a622de0dfb51a8d4e4f754906557bfa7603367`.
+
 ## 1.324.0 - M336 Slab meta crafts
 
 Status: GO for official sandstone, wood, and cobble slab crafts together.

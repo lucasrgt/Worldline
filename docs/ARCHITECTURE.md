@@ -1617,3 +1617,5 @@ M334 adds no public API. Gold disc `2256` and green disc `2257` share one record
 M335 adds no public API. Cake `92:0` through `92:3` share one cake-slice family.
 
 M336 adds no public API. Sandstone `44:1`, wood `44:2`, and cobble `44:3` slabs share one slab-craft family.
+
+M337 adds no public API. Shears `359`, flint-and-steel `259`, and empty bucket `325` share one utility-item craft family.
