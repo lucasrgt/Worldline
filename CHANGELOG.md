@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.251.0 - M263 Stew eat
+
+Status: GO for official mushroom-stew air-use heal.
+
+- Seeded mushroom stew `282` at health `12` and Packet15 air-use restored Packet8 `12 -> 20`.
+- The held stack became bowl `281:1` and both health and inventory survived a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M263 semantic SHA-256 is
+`94038e1a1f75ad42e97730c63d6089ab182511bd6f5889d8a1610d83e5471bc9`.
+
 ## 1.250.0 - M262 Cookie eat
 
 Status: GO for official cookie air-use heal.
