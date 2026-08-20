@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.429.0 - M443 Remaining bucket rest set
+
+Status: GO for official remaining empty-bucket still-source versus flowing pickup together.
+
+- Empty bucket `325` scooped still water `9:0` and still lava `11:0`; flowing `9:1` and `11:2` were rejected.
+- Filled buckets and empty source cells persisted after a clean save plus fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M443 semantic SHA-256 is
+`b556b71fd57896aa06fbb39f5088d8f96e6c8a64076014c7d7391b961c669eb7`.
+
 ## 1.428.0 - M442 Remaining record place set
 
 Status: GO for official remaining two-jukebox disc insert together.
