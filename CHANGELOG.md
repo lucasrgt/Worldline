@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.349.0 - M361 Ladder climb set
+
+Status: GO for official two-cell ladder place plus Packet13 climb together.
+
+- Ladder item `65` placed two east `65:5` cells on a raised stone column.
+- The same session Packet13-climbed two cells of height versus the air column.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M361 semantic SHA-256 is
+`113dccdda9b6bd0140c7aea5b255db993bb9063c6d64ef9370f1fb9925c26340`.
+
 ## 1.348.0 - M360 Fishing catch set
 
 Status: GO for official fishing-rod hook spawn plus raw-fish catch together.

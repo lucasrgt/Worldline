@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.348.0 - M360 Fishing catch set (GO)**.
+Current official milestone: **Worldline v1.349.0 - M361 Ladder climb set (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

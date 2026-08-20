@@ -1665,3 +1665,5 @@ M358 adds no public API. Snow block `80` craft and shovel harvest of `78`/`80` s
 M359 adds no public API. Overworld sleep versus Nether bed explode share one bed-dimension family.
 
 M360 adds no public API. Fishing-rod Packet23 type 90 and Packet21 fish 349 share one fishing-catch family.
+
+M361 adds no public API. Two-cell ladder `65:5` place and Packet13 climb share one ladder-climb family.
