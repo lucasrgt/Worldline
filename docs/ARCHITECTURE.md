@@ -1711,3 +1711,5 @@ M381 adds no public API. TNT `46` flint-steel prime, Packet23 type 50, and Packe
 M382 adds no public API. Fourteen obsidian `49` cells and six portal `90` cells share one portal-frame family. Traversal is not claimed.
 
 M383 adds no public API. Brown mushroom `39` on dirt and red mushroom `40` on netherrack share one mushroom-place family.
+
+M384 adds no public API. Cactus `81` on sand and sugar cane `83` beside water share one desert-plant growth family.

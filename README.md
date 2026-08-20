@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.371.0 - M383 Mushroom place set (GO)**.
+Current official milestone: **Worldline v1.372.0 - M384 Cactus sugar set (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

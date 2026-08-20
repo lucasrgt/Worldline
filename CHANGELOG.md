@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.372.0 - M384 Cactus sugar set
+
+Status: GO for official cactus and sugar-cane growth together.
+
+- Cactus `81` on sand grew to height at least 2; sugar cane `83` beside water grew to height at least 2.
+- Both plants persisted after a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M384 semantic SHA-256 is
+`ebe81626228e8dc034975562ddc312713b9877d4020a97cec9b6e38884191824`.
+
 ## 1.371.0 - M383 Mushroom place set
 
 Status: GO for official brown and red mushroom place together.
