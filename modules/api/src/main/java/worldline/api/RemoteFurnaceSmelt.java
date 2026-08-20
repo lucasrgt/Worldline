@@ -12,7 +12,8 @@ public final class RemoteFurnaceSmelt {
         if (window == null || window.descriptor().kind() != RemoteWindowKind.FURNACE
                 || output == null || !(output.equals(new RemoteItemStack(20, 1, 0))
                     || output.equals(new RemoteItemStack(265, 1, 0)) || output.equals(new RemoteItemStack(266, 1, 0))
-                    || output.equals(new RemoteItemStack(320, 1, 0)))
+                    || output.equals(new RemoteItemStack(320, 1, 0))
+                    || output.equals(new RemoteItemStack(1, 1, 0)) || output.equals(new RemoteItemStack(350, 1, 0)))
                 || !window.inventory().slot(0).empty() || !window.inventory().slot(1).empty()
                 || window.inventory().slot(2).empty()
                 || !window.inventory().slot(2).item().equals(output)

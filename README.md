@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.311.0 - M323 Iron tool crafts (GO)**.
+Current official milestone: **Worldline v1.312.0 - M324 Furnace rest smelts (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

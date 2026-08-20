@@ -61,7 +61,8 @@ final class B173ContainerWindowChannel {
                 || fuelPersonalSlot > 44 || inputPersonalSlot == fuelPersonalSlot
                 || loaded == null || before.slot(fuelPersonalSlot - 6).empty()
                 || !(loaded.equals(new RemoteItemStack(12, 1, 0)) || loaded.equals(new RemoteItemStack(15, 1, 0))
-                    || loaded.equals(new RemoteItemStack(14, 1, 0)) || loaded.equals(new RemoteItemStack(319, 1, 0)))
+                    || loaded.equals(new RemoteItemStack(14, 1, 0)) || loaded.equals(new RemoteItemStack(319, 1, 0))
+                    || loaded.equals(new RemoteItemStack(4, 1, 0)) || loaded.equals(new RemoteItemStack(349, 1, 0)))
                 || !before.slot(fuelPersonalSlot - 6).item().equals(coal)
                 || !before.slot(0).empty() || !before.slot(1).empty() || !before.slot(2).empty()
                 || !inbound.cursorObserved() || inbound.cursor() != null)

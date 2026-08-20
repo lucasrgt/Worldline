@@ -1591,3 +1591,5 @@ M321 adds no public API. Gold helmet `314`, chestplate `315`, leggings `316`, an
 M322 adds no public API. Diamond helmet `310`, chestplate `311`, leggings `312`, and boots `313` share one diamond-armor craft family.
 
 M323 adds no public API. Iron sword `267`, pickaxe `257`, shovel `256`, axe `258`, and hoe `292` share one iron-tool craft family.
+
+M324 adds no public API. Sand `12→20`, cobble `4→1`, and fish `349→350` share one remaining-smelt family.

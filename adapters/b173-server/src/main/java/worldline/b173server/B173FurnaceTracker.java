@@ -40,7 +40,8 @@ final class B173FurnaceTracker {
                 || epoch != windows.activeEpoch() || active.descriptor().windowId() != windowId
                 || output == null
                 || !(output.equals(new RemoteItemStack(20, 1, 0)) || output.equals(new RemoteItemStack(265, 1, 0))
-                    || output.equals(new RemoteItemStack(266, 1, 0)) || output.equals(new RemoteItemStack(320, 1, 0)))
+                    || output.equals(new RemoteItemStack(266, 1, 0)) || output.equals(new RemoteItemStack(320, 1, 0))
+                    || output.equals(new RemoteItemStack(1, 1, 0)) || output.equals(new RemoteItemStack(350, 1, 0)))
                 || !active.inventory().slot(0).empty() || !active.inventory().slot(1).empty()
                 || !completionReset || maximumCook != 199 || maximumBurn != 1600
                 || totalBurn != 1600 || completionBurn != 1401) return null;

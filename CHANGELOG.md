@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.312.0 - M324 Furnace rest smelts
+
+Status: GO for official remaining furnace smelts together.
+
+- Packet105 smelted sand `12→20`, cobble `4→1`, and fish `349→350` in idle furnaces `61:2`.
+- Cook `199`, burn `1600`, and completion `1401` matched across the family.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M324 semantic SHA-256 is
+`6c131f48c758cb5376dfd0b9504b154148f17e3295c1337c08e4c32619dc781a`.
+
 ## 1.311.0 - M323 Iron tool crafts
 
 Status: GO for official iron-tool workbench crafts together.
