@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.387.0 - M399 Wooden button set
+
+Status: GO for official stone-button wall faces east, west, south, and north together.
+
+- Packet15 placed stone button `77:1`, `77:2`, `77:3`, and `77:4` on the four walls of one stone column.
+- All four unpowered cells persisted after a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M399 semantic SHA-256 is
+`898b58fa0f849df159f7bfcfde243b0957fddcd580770518251b1721cbf21c90`.
+
 ## 1.386.0 - M398 Jukebox eject set
 
 Status: GO for official gold and cat disc insert, play, and Packet21 eject together.

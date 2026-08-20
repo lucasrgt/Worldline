@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m395 = load(root, "smokes/m395-remaining-dye-mix/smoke.properties");
         Properties m396 = load(root, "smokes/m396-remaining-wool-crafts/smoke.properties");
         Properties m397 = load(root, "smokes/m397-dispenser-projectiles/smoke.properties");
         Properties m398 = load(root, "smokes/m398-jukebox-eject-set/smoke.properties");
-        match(release, "version", "1.386.0");
-        match(release, "milestone", "m398-jukebox-eject-set");
-        same(release, "m395.signature", m395, "expected.signature");
-        same(release, "server.sha256", m395, "server.jar.sha256");
+        Properties m399 = load(root, "smokes/m399-wooden-button-set/smoke.properties");
+        match(release, "version", "1.387.0");
+        match(release, "milestone", "m399-wooden-button-set");
         same(release, "m396.signature", m396, "expected.signature");
         same(release, "server.sha256", m396, "server.jar.sha256");
         same(release, "m397.signature", m397, "expected.signature");
         same(release, "server.sha256", m397, "server.jar.sha256");
         same(release, "m398.signature", m398, "expected.signature");
         same(release, "server.sha256", m398, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M395_REMAINING_DYE_MIX.md", "docs/M395_CYCLE.md",
-                "smokes/m395-remaining-dye-mix/MAP.md", "docs/M396_REMAINING_WOOL_CRAFTS.md", "docs/M396_CYCLE.md",
+        same(release, "m399.signature", m399, "expected.signature");
+        same(release, "server.sha256", m399, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M396_REMAINING_WOOL_CRAFTS.md", "docs/M396_CYCLE.md",
                 "smokes/m396-remaining-wool-crafts/MAP.md", "docs/M397_DISPENSER_PROJECTILES.md", "docs/M397_CYCLE.md",
                 "smokes/m397-dispenser-projectiles/MAP.md", "docs/M398_JUKEBOX_EJECT_SET.md", "docs/M398_CYCLE.md",
-                "smokes/m398-jukebox-eject-set/MAP.md"))
+                "smokes/m398-jukebox-eject-set/MAP.md", "docs/M399_WOODEN_BUTTON_SET.md", "docs/M399_CYCLE.md",
+                "smokes/m399-wooden-button-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.386.0 M398 Jukebox eject set GO");
+        System.out.println("  release: Worldline v1.387.0 M399 Wooden button set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

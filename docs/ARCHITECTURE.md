@@ -1741,3 +1741,5 @@ M396 adds no public API. Magenta, light-blue, and lime dyed wool share one remai
 M397 adds no public API. Dispenser snowball type `61` and egg type `62` share one dispenser-projectile family.
 
 M398 adds no public API. Gold disc `2256` and cat disc `2257` jukebox ejects share one jukebox-eject family.
+
+M399 adds no public API. Stone button `77` east, west, south, and north wall faces share one remaining-button family. Beta 1.7.3 has no wooden button.
