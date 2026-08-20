@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.336.0 - M348 Dye mix crafts
+
+Status: GO for official orange, purple, and lime dye mixes together.
+
+- Personal 2x2 mixed rose red, yellow, lapis, cactus green, and bone meal into `351:14`, `351:5`, and `351:10`.
+- The three mixed stacks survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M348 semantic SHA-256 is
+`2c8b97b5aa9c68fef810b33465f38d10146adbfcea7c9994c7742c0ae1305b94`.
+
 ## 1.335.0 - M347 Gold diamond hoes
 
 Status: GO for official gold hoe and diamond hoe crafts together.
