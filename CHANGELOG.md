@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.239.0 - M251 Black wool
+
+Status: GO for official black-wool placement.
+
+- Placed wool item `35` damage `15` on a raised stone support as `35:15`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M251 semantic SHA-256 is
+`b046e1d6723ba4e19db7d84e49aafbd1dd701fc696e2ce2f6754ad839f4a23be`.
+
 ## 1.238.0 - M250 Red wool
 
 Status: GO for official red-wool placement.

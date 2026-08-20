@@ -1445,3 +1445,5 @@ M248 adds no public API. Wool item `35` damage `1` places orange wool `35:1` and
 M249 adds no public API. Wool item `35` damage `4` places yellow wool `35:4` and persists.
 
 M250 adds no public API. Wool item `35` damage `14` places red wool `35:14` and persists.
+
+M251 adds no public API. Wool item `35` damage `15` places black wool `35:15` and persists.
