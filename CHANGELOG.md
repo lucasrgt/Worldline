@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.353.0 - M365 Compass point set
+
+Status: GO for official held compass spawn-point needle reversal together.
+
+- Compass `345` was Packet16-held at yaw `0` and yaw `180` with opposite needles.
+- The same session stood on two spawn-bearing cells and the stack persisted.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M365 semantic SHA-256 is
+`45694ff4da19a7b3c554d405380e9535c075d7fee1f3880674813ed5cc9a8b68`.
+
 ## 1.352.0 - M364 Light opacity set
 
 Status: GO for official glass, leaves, and ice sky-light nibbles together.

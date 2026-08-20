@@ -1673,3 +1673,5 @@ M362 adds no public API. Adjacent fence `85:0` cells and Packet13 walk-block sha
 M363 adds no public API. Spawner EntityId Zombie and Skeleton Packet24 types 54 and 51 share one hostile-identity family. `B173DedicatedServer.monsters` and `B173SpawnerSeed.entity` stay adapter-local.
 
 M364 adds no public API. Glass `20`, leaves `18:8`, and ice `79` share one translucent sky-light family.
+
+M365 adds no public API. Held compass `345` yaw reversal and two-cell spawn bearing share one compass-point family.
