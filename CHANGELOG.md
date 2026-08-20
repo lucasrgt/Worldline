@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.296.0 - M308 Fragile set
+
+Status: GO for official ice break, glass break, and ice melt together.
+
+- Packet14 broke ice `79` to still water `9` and glass `20` to air with no glass drop.
+- A second ice cell melted to still water beside torch `50:5`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M308 semantic SHA-256 is
+`016e31ada167a1772c3c0ec4d610d946ddf26bc0a93c97ad494019ab72c97ce5`.
+
 ## 1.295.0 - M307 Env damage
 
 Status: GO for official drowning, suffocation, and lava hurt together.

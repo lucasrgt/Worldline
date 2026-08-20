@@ -1559,3 +1559,5 @@ M305 adds no public API. Bonemeal wheat plus cactus and sugar-cane height growth
 M306 adds no public API. Wooden door `64` and trapdoor `96` open-then-close together.
 
 M307 adds no public API. Drowning, suffocation, and lava hurts share one Packet38 family.
+
+M308 adds no public API. Ice break, glass break, and ice melt share one fragile family.
