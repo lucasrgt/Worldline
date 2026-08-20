@@ -1609,3 +1609,5 @@ M330 adds no public API. Bed occupy `26:8→26:12` and wake standing share one s
 M331 adds no public API. Snowball type 61, egg type 62, and fishing hook type 90 share one throwable family.
 
 M332 adds no public API. Bow `261`, arrows `262`, and Packet23 type 60 share one bow-arrow family.
+
+M333 adds no public API. Dispenser `23:4` plus ejected cobble `4` and planks `5` share one dispenser family.

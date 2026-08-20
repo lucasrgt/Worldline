@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m329 = load(root, "smokes/m329-utility-block-crafts/smoke.properties");
         Properties m330 = load(root, "smokes/m330-bed-sleep-set/smoke.properties");
         Properties m331 = load(root, "smokes/m331-throwables-set/smoke.properties");
         Properties m332 = load(root, "smokes/m332-bow-arrow-set/smoke.properties");
-        match(release, "version", "1.320.0");
-        match(release, "milestone", "m332-bow-arrow-set");
-        same(release, "m329.signature", m329, "expected.signature");
-        same(release, "server.sha256", m329, "server.jar.sha256");
+        Properties m333 = load(root, "smokes/m333-dispenser-set/smoke.properties");
+        match(release, "version", "1.321.0");
+        match(release, "milestone", "m333-dispenser-set");
         same(release, "m330.signature", m330, "expected.signature");
         same(release, "server.sha256", m330, "server.jar.sha256");
         same(release, "m331.signature", m331, "expected.signature");
         same(release, "server.sha256", m331, "server.jar.sha256");
         same(release, "m332.signature", m332, "expected.signature");
         same(release, "server.sha256", m332, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M329_UTILITY_BLOCK_CRAFTS.md", "docs/M329_CYCLE.md",
-                "smokes/m329-utility-block-crafts/MAP.md", "docs/M330_BED_SLEEP_SET.md", "docs/M330_CYCLE.md",
+        same(release, "m333.signature", m333, "expected.signature");
+        same(release, "server.sha256", m333, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M330_BED_SLEEP_SET.md", "docs/M330_CYCLE.md",
                 "smokes/m330-bed-sleep-set/MAP.md", "docs/M331_THROWABLES_SET.md", "docs/M331_CYCLE.md",
                 "smokes/m331-throwables-set/MAP.md", "docs/M332_BOW_ARROW_SET.md", "docs/M332_CYCLE.md",
-                "smokes/m332-bow-arrow-set/MAP.md"))
+                "smokes/m332-bow-arrow-set/MAP.md", "docs/M333_DISPENSER_SET.md", "docs/M333_CYCLE.md",
+                "smokes/m333-dispenser-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.320.0 M332 Bow arrow set GO");
+        System.out.println("  release: Worldline v1.321.0 M333 Dispenser set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

@@ -337,6 +337,7 @@ Passing an experiment does not silently promote its API.
 | v1.318.0 / M330 | Bed sleep set | GO - occupy 26:8→26:12 then wake standing |
 | v1.319.0 / M331 | Throwables set | GO - Packet23 types 61 snowball, 62 egg, 90 hook |
 | v1.320.0 / M332 | Bow arrow set | GO - crafts 261+262 then Packet23 type 60 |
+| v1.321.0 / M333 | Dispenser set | GO - place 23:4, load 4+5, eject Packet21 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -348,7 +349,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.320.0 direction
+## Immediate post-v1.321.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

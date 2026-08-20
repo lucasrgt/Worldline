@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.321.0 - M333 Dispenser set
+
+Status: GO for official dispenser place, dual load, and dual eject together.
+
+- Packet15 placed west-facing dispenser `23:4` and a side lever on raised stone.
+- Packet102 loaded cobblestone `4` and oak planks `5`; two lever pulses ejected both as Packet21.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M333 semantic SHA-256 is
+`46b62a083dad7f0e54a72e16e9b51144add22acb4cb53b75b51439b04385894e`.
+
 ## 1.320.0 - M332 Bow arrow set
 
 Status: GO for official bow and arrow crafts plus Packet23 type-60 air-use.
