@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.281.0 - M293 Sticky piston place
+
+Status: GO for official sticky piston placement.
+
+- Placed sticky piston item `29` as block `29:1` on raised stone.
+- The exact cell survived a clean save and a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M293 semantic SHA-256 is
+`bf6cf185cefc337d8be549efbcdce76d5c7cff54669d136c1002f30b7ff25c1e`.
+
 ## 1.280.0 - M292 Birch leaves
 
 Status: GO for official birch leaves placement.

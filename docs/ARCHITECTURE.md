@@ -1529,3 +1529,5 @@ M290 adds no public API. Sapling item `6` damage `2` plants birch sapling `6:2` 
 M291 adds no public API. Leaves item `18` damage `1` beside spruce log `17:1` persist as spruce leaves `18:9`.
 
 M292 adds no public API. Leaves item `18` damage `2` beside oak log persist as birch leaves `18:10`.
+
+M293 adds no public API. Sticky piston item `29` places `29:1` and persists.
