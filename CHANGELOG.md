@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.307.0 - M319 Stair slab crafts
+
+Status: GO for official oak-stair, cobble-stair, and stone-slab crafts together.
+
+- Packet102 crafted oak stairs `53`, cobble stairs `67`, and stone slab `44:0`.
+- The three stacks survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M319 semantic SHA-256 is
+`cec4e38d37d31058c744ff1e9c806d2567fcf878603f2e63cdf7347058f5d553`.
+
 ## 1.306.0 - M318 Gold diamond tool crafts
 
 Status: GO for official gold and diamond tool crafts together.

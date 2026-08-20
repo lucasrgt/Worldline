@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.306.0 - M318 Gold diamond tool crafts (GO)**.
+Current official milestone: **Worldline v1.307.0 - M319 Stair slab crafts (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

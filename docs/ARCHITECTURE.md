@@ -1581,3 +1581,5 @@ M316 adds no public API. Shears item `359` on oak leaves `18` and a living sheep
 M317 adds no public API. Cobweb `30` and soul sand `88` share one slowdown family.
 
 M318 adds no public API. Gold tools `283-286` and diamond tools `276-279` share one workbench-craft family.
+
+M319 adds no public API. Oak stairs `53`, cobble stairs `67`, and stone slab `44` share one stair-slab craft family.
