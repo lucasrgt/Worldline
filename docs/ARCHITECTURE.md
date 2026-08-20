@@ -1731,3 +1731,5 @@ M391 adds no public API. Creeper Packet60 strength `3` destroying dirt `3` and w
 M392 adds no public API. Still water `9` and still lava `11` horizontal flow share one remaining-fluid-flow family.
 
 M393 adds no public API. Oak stairs `53` and cobble stairs `67` look-yaw facings share one stair-facing family.
+
+M394 adds no public API. Sandstone, wood, cobble, and double slabs share one remaining-slab-place family.

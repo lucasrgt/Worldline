@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.382.0 - M394 Remaining slab place
+
+Status: GO for official sandstone, wood, cobble, and double slab placement together.
+
+- Packet15 placed sandstone slab `44:1`, wood slab `44:2`, cobble slab `44:3`, and double slab `43:0`.
+- All four cells persisted after a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M394 semantic SHA-256 is
+`7939076b43b10ef5972487f306388abb58dafba8b1ca28923a3fb952ef2c6a9f`.
+
 ## 1.381.0 - M393 Stair facing set
 
 Status: GO for official oak and cobble stairs look-yaw facings together.
