@@ -1449,3 +1449,5 @@ M250 adds no public API. Wool item `35` damage `14` places red wool `35:14` and 
 M251 adds no public API. Wool item `35` damage `15` places black wool `35:15` and persists.
 
 M252 adds no public API. Wool item `35` damage `11` places blue wool `35:11` and persists.
+
+M253 adds no public API. Wool item `35` damage `13` places green wool `35:13` and persists.
