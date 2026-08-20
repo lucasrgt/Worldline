@@ -294,6 +294,7 @@ final class SmokeSuite {
         {"tools/smoke/FlintSteelFireCycle.java", "m268-flint-steel-fire"},
         {"tools/smoke/ShearsLeavesCycle.java", "m269-shears-leaves"},
         {"tools/smoke/IronHelmetCycle.java", "m270-iron-helmet"},
+        {"tools/smoke/GoldChestplateCycle.java", "m271-gold-chestplate"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

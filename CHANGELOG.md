@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.259.0 - M271 Gold chestplate
+
+Status: GO for official gold-chestplate equipment.
+
+- Window-0 click moved gold chestplate `315` into armor slot 6; peer Packet5 slot 3 showed `315`.
+- The piece is distinct from leather `299` and iron `307` and survived a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M271 semantic SHA-256 is
+`c494170f3fb2b9f4b9ec515518081834f5fe6ccd52977a7bb7e82fc946101fea`.
+
 ## 1.258.0 - M270 Iron helmet
 
 Status: GO for official iron-helmet equipment.

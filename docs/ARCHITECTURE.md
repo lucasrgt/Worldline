@@ -1485,3 +1485,5 @@ M268 adds no public API. Flint-and-steel item `259` places fire `51:0` on raised
 M269 adds no public API. Shears item `359` on oak leaves `18:8` emit Packet21 leaf drop; bare hand does not.
 
 M270 adds no public API. Iron helmet item `306` equips into armor slot 5 / Packet5 slot 4.
+
+M271 adds no public API. Gold chestplate item `315` equips into armor slot 6 / Packet5 slot 3.
