@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.242.0 - M254 Water place
+
+Status: GO for official still-water placement from a water bucket.
+
+- Placed water bucket `326` into a raised stone basin as still water `9:0`.
+- The held stack became empty bucket `325` and both sides survived a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M254 semantic SHA-256 is
+`7349aeca365432ce5e3996f11aa401973978fa83d7fe895578999c7cd306cac2`.
+
 ## 1.241.0 - M253 Green wool
 
 Status: GO for official green-wool placement.

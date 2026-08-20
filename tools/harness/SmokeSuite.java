@@ -277,6 +277,7 @@ final class SmokeSuite {
         {"tools/smoke/BlackWoolCycle.java", "m251-black-wool"},
         {"tools/smoke/BlueWoolCycle.java", "m252-blue-wool"},
         {"tools/smoke/GreenWoolCycle.java", "m253-green-wool"},
+        {"tools/smoke/WaterPlaceCycle.java", "m254-water-place"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 
