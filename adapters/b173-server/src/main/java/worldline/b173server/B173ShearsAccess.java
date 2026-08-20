@@ -11,6 +11,10 @@ public final class B173ShearsAccess {
         try { client.channel().useShearsOnMob(entity); }
         catch (IOException error) { throw new IllegalStateException("shears mob use failed", error); }
     }
+    public static void dyeMob(B173WireClient client, int entity) {
+        try { client.channel().useDyeOnMob(entity); }
+        catch (IOException error) { throw new IllegalStateException("dye mob use failed", error); }
+    }
 
     public static RemoteMobDeath peekDeath(B173WireClient client, int entity) {
         return client.channel().inbound().mobs().peekDeath(entity);

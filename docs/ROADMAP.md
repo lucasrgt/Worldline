@@ -410,6 +410,7 @@ Passing an experiment does not silently promote its API.
 | v1.391.0 / M403 | Remaining boat break | GO - two boats Packet7-broken to plank 5 and stick 280 |
 | v1.392.0 / M404 | Remaining cart break | GO - type 10 drops 328 and type 11 drops 328+54 |
 | v1.393.0 / M405 | Pig saddle set | GO - pig type 90 saddle 329 consume plus Packet39 mount |
+| v1.394.0 / M406 | Sheep dye set | GO - rose-red and yellow living-sheep wool |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -421,7 +422,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.393.0 direction
+## Immediate post-v1.394.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

@@ -1755,3 +1755,5 @@ M403 adds no public API. Two Packet23 type `1` boats broken to plank `5` and sti
 M404 adds no public API. Minecart type `10` and chest-cart type `11` Packet7 breaks share one remaining-cart-break family.
 
 M405 adds no public API. Pig type `90` saddle `329` consume plus Packet39 mount share one pig-saddle family.
+
+M406 adds no public API. Dyed sheep wool `35:14` and `35:4` share one sheep-dye family.

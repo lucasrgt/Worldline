@@ -20,6 +20,8 @@ public final class B173SpawnerSeed {
 
     public static void sheep(Path serverDirectory, BlockPosition spawner) {
         rewrite(serverDirectory, spawner, "Sheep", true); }
+    public static void twoSheep(Path serverDirectory, BlockPosition spawner) {
+        rewrite(serverDirectory, spawner, "Sheep", false); rewrite(serverDirectory, spawner, "Sheep", true); }
     public static void cow(Path serverDirectory, BlockPosition spawner) {
         rewrite(serverDirectory, spawner, "Cow", true); }
     public static void chicken(Path serverDirectory, BlockPosition spawner) {

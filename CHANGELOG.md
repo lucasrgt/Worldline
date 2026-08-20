@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.394.0 - M406 Sheep dye set
+
+Status: GO for official rose-red and dandelion-yellow living-sheep dyes together.
+
+- Two type-`91` sheep were dyed with `351:1` and `351:11`, then sheared.
+- Packet21 wool `35:14` and `35:4` dropped without Packet38 status 3.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M406 semantic SHA-256 is
+`0c2857eb2e2bf4aaa39c631eced8f47d470862396ae8e7981d41c6c0a0775cb7`.
+
 ## 1.393.0 - M405 Pig saddle set
 
 Status: GO for official pig saddle consume and Packet39 mount together.
