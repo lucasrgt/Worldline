@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.288.0 - M300 Ore pick breaks
+
+Status: GO for official cobble, coal-ore, and diamond-ore pick harvests.
+
+- Iron pick `257` broke cobble `4` and coal ore `16`; diamond pick `278` broke diamond ore `56`.
+- Packet21 drops were cobble `4`, coal `263`, and diamond `264`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M300 semantic SHA-256 is
+`5fa840f6542410b38170ae4dc2fe1d2731c8d7ca7335ba9d105d3c1feed61b1a`.
+
 ## 1.287.0 - M299 Stone tool crafts
 
 Status: GO for official stone tool-family crafts.
