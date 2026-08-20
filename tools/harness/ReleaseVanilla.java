@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m338 = load(root, "smokes/m338-furnace-fuel-set/smoke.properties");
         Properties m339 = load(root, "smokes/m339-sapling-growth-set/smoke.properties");
         Properties m340 = load(root, "smokes/m340-redstone-input-set/smoke.properties");
         Properties m341 = load(root, "smokes/m341-repeater-delay-set/smoke.properties");
-        match(release, "version", "1.329.0");
-        match(release, "milestone", "m341-repeater-delay-set");
-        same(release, "m338.signature", m338, "expected.signature");
-        same(release, "server.sha256", m338, "server.jar.sha256");
+        Properties m342 = load(root, "smokes/m342-gravity-block-set/smoke.properties");
+        match(release, "version", "1.330.0");
+        match(release, "milestone", "m342-gravity-block-set");
         same(release, "m339.signature", m339, "expected.signature");
         same(release, "server.sha256", m339, "server.jar.sha256");
         same(release, "m340.signature", m340, "expected.signature");
         same(release, "server.sha256", m340, "server.jar.sha256");
         same(release, "m341.signature", m341, "expected.signature");
         same(release, "server.sha256", m341, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M338_FURNACE_FUEL_SET.md", "docs/M338_CYCLE.md",
-                "smokes/m338-furnace-fuel-set/MAP.md", "docs/M339_SAPLING_GROWTH_SET.md", "docs/M339_CYCLE.md",
+        same(release, "m342.signature", m342, "expected.signature");
+        same(release, "server.sha256", m342, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M339_SAPLING_GROWTH_SET.md", "docs/M339_CYCLE.md",
                 "smokes/m339-sapling-growth-set/MAP.md", "docs/M340_REDSTONE_INPUT_SET.md", "docs/M340_CYCLE.md",
                 "smokes/m340-redstone-input-set/MAP.md", "docs/M341_REPEATER_DELAY_SET.md", "docs/M341_CYCLE.md",
-                "smokes/m341-repeater-delay-set/MAP.md"))
+                "smokes/m341-repeater-delay-set/MAP.md", "docs/M342_GRAVITY_BLOCK_SET.md", "docs/M342_CYCLE.md",
+                "smokes/m342-gravity-block-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.329.0 M341 Repeater delay set GO");
+        System.out.println("  release: Worldline v1.330.0 M342 Gravity block set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

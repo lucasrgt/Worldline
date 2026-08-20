@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.330.0 - M342 Gravity block set
+
+Status: GO for official sand and gravel falls together.
+
+- Packet14 removed stone supports so sand `12` and gravel `13` fell as Packet23 types `70` and `71`.
+- Both one-cell settlements survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M342 semantic SHA-256 is
+`d8653266b9cdaa16b9aa3d3fc760642400d2172380078b03499aff10394c84e8`.
+
 ## 1.329.0 - M341 Repeater delay set
 
 Status: GO for official repeater delay bits 1 through 4 together.

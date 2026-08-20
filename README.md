@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.329.0 - M341 Repeater delay set (GO)**.
+Current official milestone: **Worldline v1.330.0 - M342 Gravity block set (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

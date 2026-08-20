@@ -1627,3 +1627,5 @@ M339 adds no public API. Oak `6:0`, spruce `6:1`, and birch `6:2` share one sapl
 M340 adds no public API. Lever `69` latch and stone button `77` pulse share one redstone-input family.
 
 M341 adds no public API. Repeater delay bits `93:3`, `93:7`, `93:11`, and `93:15` share one diode family.
+
+M342 adds no public API. Falling sand type 70 and falling gravel type 71 share one gravity family.
