@@ -15,7 +15,8 @@ public final class RemoteWindowDescriptor {
             throw new IllegalArgumentException("invalid remote window identity");
         if (containerSlots < 1 || containerSlots > RemoteInventoryView.MAX_SLOTS)
             throw new IllegalArgumentException("invalid container slot count");
-        if (kind == RemoteWindowKind.CHEST && (!("Chest".equals(title) || "Minecart".equals(title)) || containerSlots != 27))
+        if (kind == RemoteWindowKind.CHEST && !(("Chest".equals(title) || "Minecart".equals(title)) && containerSlots == 27
+                || "Large chest".equals(title) && containerSlots == 54))
             throw new IllegalArgumentException("invalid single-chest descriptor");
         if (kind == RemoteWindowKind.FURNACE && (!"Furnace".equals(title) || containerSlots != 3))
             throw new IllegalArgumentException("invalid furnace descriptor");

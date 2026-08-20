@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.336.0 - M348 Dye mix crafts (GO)**.
+Current official milestone: **Worldline v1.337.0 - M349 Double chest set (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

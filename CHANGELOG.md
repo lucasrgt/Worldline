@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.337.0 - M349 Double chest set
+
+Status: GO for official adjacent chests opening one large window together.
+
+- Packet15 placed two neighboring chests `54`; empty-hand Packet15 opened title `Large chest` with 54 owned slots.
+- Both chest cells and the 54-slot window survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M349 semantic SHA-256 is
+`ec079803ad133072d794b370d1dd5988e5931287cded14a33e3abd7702c0fd26`.
+
 ## 1.336.0 - M348 Dye mix crafts
 
 Status: GO for official orange, purple, and lime dye mixes together.

@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m345 = load(root, "smokes/m345-ore-block-crafts/smoke.properties");
         Properties m346 = load(root, "smokes/m346-ore-block-uncrafts/smoke.properties");
         Properties m347 = load(root, "smokes/m347-gold-diamond-hoes/smoke.properties");
         Properties m348 = load(root, "smokes/m348-dye-mix-crafts/smoke.properties");
-        match(release, "version", "1.336.0");
-        match(release, "milestone", "m348-dye-mix-crafts");
-        same(release, "m345.signature", m345, "expected.signature");
-        same(release, "server.sha256", m345, "server.jar.sha256");
+        Properties m349 = load(root, "smokes/m349-double-chest-set/smoke.properties");
+        match(release, "version", "1.337.0");
+        match(release, "milestone", "m349-double-chest-set");
         same(release, "m346.signature", m346, "expected.signature");
         same(release, "server.sha256", m346, "server.jar.sha256");
         same(release, "m347.signature", m347, "expected.signature");
         same(release, "server.sha256", m347, "server.jar.sha256");
         same(release, "m348.signature", m348, "expected.signature");
         same(release, "server.sha256", m348, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M345_ORE_BLOCK_CRAFTS.md", "docs/M345_CYCLE.md",
-                "smokes/m345-ore-block-crafts/MAP.md", "docs/M346_ORE_BLOCK_UNCRAFTS.md", "docs/M346_CYCLE.md",
+        same(release, "m349.signature", m349, "expected.signature");
+        same(release, "server.sha256", m349, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M346_ORE_BLOCK_UNCRAFTS.md", "docs/M346_CYCLE.md",
                 "smokes/m346-ore-block-uncrafts/MAP.md", "docs/M347_GOLD_DIAMOND_HOES.md", "docs/M347_CYCLE.md",
                 "smokes/m347-gold-diamond-hoes/MAP.md", "docs/M348_DYE_MIX_CRAFTS.md", "docs/M348_CYCLE.md",
-                "smokes/m348-dye-mix-crafts/MAP.md"))
+                "smokes/m348-dye-mix-crafts/MAP.md", "docs/M349_DOUBLE_CHEST_SET.md", "docs/M349_CYCLE.md",
+                "smokes/m349-double-chest-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.336.0 M348 Dye mix crafts GO");
+        System.out.println("  release: Worldline v1.337.0 M349 Double chest set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

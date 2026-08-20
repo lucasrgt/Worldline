@@ -9,6 +9,7 @@ final class RemoteWindowLayoutTest {
 
     static void run() {
         verify(RemoteWindowKind.CHEST, "Chest", 27, 27, 63);
+        verify(RemoteWindowKind.CHEST, "Large chest", 54, 54, 90);
         verify(RemoteWindowKind.FURNACE, "Furnace", 3, 3, 39);
         verify(RemoteWindowKind.WORKBENCH, "Crafting", 9, 10, 46);
         verify(RemoteWindowKind.DISPENSER, "Trap", 9, 9, 45);

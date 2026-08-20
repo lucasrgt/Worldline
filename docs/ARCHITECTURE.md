@@ -1641,3 +1641,5 @@ M346 adds no public API. Uncrafting `41`, `42`, `57`, and `22` shares one ore-bl
 M347 adds no public API. Gold hoe `294` and diamond hoe `293` share one hoe-craft family.
 
 M348 adds no public API. Orange `351:14`, purple `351:5`, and lime `351:10` share one dye-mix family.
+
+M349 adds no public API. Two adjacent chests `54` plus the `Large chest` window share one double-chest family.

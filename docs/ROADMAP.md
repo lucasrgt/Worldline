@@ -353,6 +353,7 @@ Passing an experiment does not silently promote its API.
 | v1.334.0 / M346 | Ore block uncrafts | GO - 41/42/57/22 back to 266/265/264/351:4 |
 | v1.335.0 / M347 | Gold diamond hoes | GO - gold hoe 294 and diamond hoe 293 |
 | v1.336.0 / M348 | Dye mix crafts | GO - orange 351:14, purple 351:5, lime 351:10 |
+| v1.337.0 / M349 | Double chest set | GO - adjacent 54 cells open Large chest 54 slots |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -364,7 +365,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.336.0 direction
+## Immediate post-v1.337.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
