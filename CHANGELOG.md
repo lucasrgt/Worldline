@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.392.0 - M404 Remaining cart break
+
+Status: GO for official empty-cart and chest-cart Packet7 breaks together.
+
+- Packet23 type `10` broke to Packet21 minecart `328`; type `11` broke to `328` plus chest `54`.
+- Diamond sword `276` Packet7 button `1` attacked both objects.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M404 semantic SHA-256 is
+`8a80558c9383a317d0d6a8f145c940ff21cb07ffb3649aa4c564214adde79bcf`.
+
 ## 1.391.0 - M403 Remaining boat break
 
 Status: GO for official two-boat Packet7 break wreckage together.
