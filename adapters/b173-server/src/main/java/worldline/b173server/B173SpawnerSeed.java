@@ -28,6 +28,8 @@ public final class B173SpawnerSeed {
         rewrite(serverDirectory, spawner, "Chicken", true); }
     public static void cowAndChicken(Path serverDirectory, BlockPosition spawner) {
         rewrite(serverDirectory, spawner, "Cow", false); rewrite(serverDirectory, spawner, "Chicken", true); }
+    public static void ghast(Path serverDirectory, BlockPosition spawner) {
+        rewrite(serverDirectory, spawner, "Ghast", true, "world/DIM-1/region"); }
 
     /** Replaces one saved MobSpawner EntityId Pig with a hostile vanilla name. */
     public static void entity(Path serverDirectory, BlockPosition spawner, String entityId) {
@@ -37,11 +39,13 @@ public final class B173SpawnerSeed {
     }
 
     private static void rewrite(Path serverDirectory, BlockPosition spawner, String entityId, boolean unique) {
-        if (serverDirectory == null || spawner == null || entityId == null || entityId.isEmpty())
+        rewrite(serverDirectory, spawner, entityId, unique, "world/region"); }
+    private static void rewrite(Path serverDirectory, BlockPosition spawner, String entityId, boolean unique, String regionDir) {
+        if (serverDirectory == null || spawner == null || entityId == null || entityId.isEmpty() || regionDir == null)
             throw new IllegalArgumentException("invalid spawner seed");
         Path root = serverDirectory.toAbsolutePath().normalize();
         int cx = spawner.x() >> 4, cz = spawner.z() >> 4;
-        Path region = root.resolve("world/region/r." + (cx >> 5) + "." + (cz >> 5) + ".mcr").normalize();
+        Path region = root.resolve(regionDir + "/r." + (cx >> 5) + "." + (cz >> 5) + ".mcr").normalize();
         if (!region.startsWith(root) || !Files.isRegularFile(region))
             throw new IllegalStateException("spawner region absent");
         try (RandomAccessFile file = new RandomAccessFile(region.toFile(), "rw")) {

@@ -37,6 +37,7 @@ public final class B173DedicatedServer implements PersistentMultiplayerServerRun
         this(officialJar,directory,port,seed,timeout,viewDistance,allowFlight,allowNether,false,false); }
     public static B173DedicatedServer animals(Path jar,Path directory,int port,long seed,Duration timeout,int viewDistance,boolean allowFlight){return new B173DedicatedServer(jar,directory,port,seed,timeout,viewDistance,allowFlight,false,true,false);}
     public static B173DedicatedServer monsters(Path jar,Path directory,int port,long seed,Duration timeout,int viewDistance,boolean allowFlight){return new B173DedicatedServer(jar,directory,port,seed,timeout,viewDistance,allowFlight,false,false,true);}
+    public static B173DedicatedServer netherMonsters(Path jar,Path directory,int port,long seed,Duration timeout){return new B173DedicatedServer(jar,directory,port,seed,timeout,3,true,true,false,true);}
     private B173DedicatedServer(Path officialJar, Path directory, int port, long seed,
             Duration timeout, int viewDistance, boolean allowFlight, boolean allowNether, boolean spawnAnimals, boolean spawnMonsters) {
         if (!Files.isRegularFile(officialJar)) throw new IllegalArgumentException("server JAR is absent");

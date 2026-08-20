@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m406 = load(root, "smokes/m406-sheep-dye-set/smoke.properties");
         Properties m407 = load(root, "smokes/m407-chicken-egg-set/smoke.properties");
         Properties m408 = load(root, "smokes/m408-squid-ink-set/smoke.properties");
         Properties m409 = load(root, "smokes/m409-spider-string-set/smoke.properties");
-        match(release, "version", "1.397.0");
-        match(release, "milestone", "m409-spider-string-set");
-        same(release, "m406.signature", m406, "expected.signature");
-        same(release, "server.sha256", m406, "server.jar.sha256");
+        Properties m410 = load(root, "smokes/m410-ghast-fireball-set/smoke.properties");
+        match(release, "version", "1.398.0");
+        match(release, "milestone", "m410-ghast-fireball-set");
         same(release, "m407.signature", m407, "expected.signature");
         same(release, "server.sha256", m407, "server.jar.sha256");
         same(release, "m408.signature", m408, "expected.signature");
         same(release, "server.sha256", m408, "server.jar.sha256");
         same(release, "m409.signature", m409, "expected.signature");
         same(release, "server.sha256", m409, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M406_SHEEP_DYE_SET.md", "docs/M406_CYCLE.md",
-                "smokes/m406-sheep-dye-set/MAP.md", "docs/M407_CHICKEN_EGG_SET.md", "docs/M407_CYCLE.md",
+        same(release, "m410.signature", m410, "expected.signature");
+        same(release, "server.sha256", m410, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M407_CHICKEN_EGG_SET.md", "docs/M407_CYCLE.md",
                 "smokes/m407-chicken-egg-set/MAP.md", "docs/M408_SQUID_INK_SET.md", "docs/M408_CYCLE.md",
                 "smokes/m408-squid-ink-set/MAP.md", "docs/M409_SPIDER_STRING_SET.md", "docs/M409_CYCLE.md",
-                "smokes/m409-spider-string-set/MAP.md"))
+                "smokes/m409-spider-string-set/MAP.md", "docs/M410_GHAST_FIREBALL_SET.md", "docs/M410_CYCLE.md",
+                "smokes/m410-ghast-fireball-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.397.0 M409 Spider string set GO");
+        System.out.println("  release: Worldline v1.398.0 M410 Ghast fireball set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

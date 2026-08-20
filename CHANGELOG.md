@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.398.0 - M410 Ghast fireball set
+
+Status: GO for official Nether ghast Packet24 type 56 and fireball Packet23 type 63 together.
+
+- Nether login on netherrack; spawner retargeted to Ghast with spawn-monsters.
+- Packet24 type `56` threw Packet23 type `63` whose thrower was the ghast.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M410 semantic SHA-256 is
+`4a77f0136d56574b37e6aca69072e884a92ea9240a1904aca9aaaa8170e08b76`.
+
 ## 1.397.0 - M409 Spider string set
 
 Status: GO for official spider string drop and cobweb place together.
