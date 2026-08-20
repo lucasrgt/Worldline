@@ -1525,3 +1525,5 @@ M288 adds no public API. Wool item `35` damage `12` places brown wool `35:12` an
 M289 adds no public API. Sapling item `6` damage `1` plants spruce sapling `6:1` on dirt and persists.
 
 M290 adds no public API. Sapling item `6` damage `2` plants birch sapling `6:2` on dirt and persists.
+
+M291 adds no public API. Leaves item `18` damage `1` beside spruce log `17:1` persist as spruce leaves `18:9`.

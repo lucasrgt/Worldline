@@ -291,7 +291,8 @@ final class SmokeCatalog {
         {"tools/smoke/PurpleWoolCycle.java", "m287-purple-wool"},
         {"tools/smoke/BrownWoolCycle.java", "m288-brown-wool"},
         {"tools/smoke/SpruceSaplingCycle.java", "m289-spruce-sapling"},
-        {"tools/smoke/BirchSaplingCycle.java", "m290-birch-sapling"}, {"tools/smoke/LabCycle.java", "lab-cycle"}
+        {"tools/smoke/BirchSaplingCycle.java", "m290-birch-sapling"},
+        {"tools/smoke/SpruceLeavesCycle.java", "m291-spruce-leaves"}, {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
     private SmokeCatalog() {}
 }
