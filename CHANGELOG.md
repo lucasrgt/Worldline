@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.345.0 - M357 Glowstone dust crafts
+
+Status: GO for official 2x2 glowstone-dust craft of block `89`.
+
+- Personal 2x2 crafted glowstone `89` from four dust `348`.
+- The stack survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M357 semantic SHA-256 is
+`af0a81cf89ec64afd6056fb4755ef7ed9350bac34875caa333cc150d99d7955c`.
+
 ## 1.344.0 - M356 Jack-o-lantern crafts
 
 Status: GO for official jack-o-lantern craft plus pumpkin and lantern place together.

@@ -1657,3 +1657,5 @@ M354 adds no public API. Dry farmland `60:0` and hydrated `60:7` share one moist
 M355 adds no public API. Glass instrument 3 and gold instrument 0 share one remaining note-block family.
 
 M356 adds no public API. Pumpkin `86` and jack-o-lantern `91` share one lantern-craft family.
+
+M357 adds no public API. Glowstone dust `348` to glowstone `89` is the 2x2 dust-craft family.
