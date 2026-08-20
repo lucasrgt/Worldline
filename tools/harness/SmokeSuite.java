@@ -285,6 +285,7 @@ final class SmokeSuite {
         {"tools/smoke/CookedPorkEatCycle.java", "m259-cooked-pork-eat"},
         {"tools/smoke/AppleEatCycle.java", "m260-apple-eat"},
         {"tools/smoke/GoldenAppleEatCycle.java", "m261-golden-apple-eat"},
+        {"tools/smoke/CookieEatCycle.java", "m262-cookie-eat"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

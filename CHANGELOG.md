@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.250.0 - M262 Cookie eat
+
+Status: GO for official cookie air-use heal.
+
+- Seeded cookie `357` at health `19` and Packet15 air-use restored Packet8 `19 -> 20`.
+- The held stack was consumed `357:1 -> empty` and both health and inventory survived a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M262 semantic SHA-256 is
+`2374d08bdc38c0697e31d3009c028cbb6f70fb2794e2d20606804aaa4dbfb0bc`.
+
 ## 1.249.0 - M261 Golden apple eat
 
 Status: GO for official golden-apple air-use heal.
