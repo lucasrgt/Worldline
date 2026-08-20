@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m399 = load(root, "smokes/m399-wooden-button-set/smoke.properties");
         Properties m400 = load(root, "smokes/m400-remaining-torch-faces/smoke.properties");
         Properties m401 = load(root, "smokes/m401-remaining-redstone-wire/smoke.properties");
         Properties m402 = load(root, "smokes/m402-remaining-detector-rail/smoke.properties");
-        match(release, "version", "1.390.0");
-        match(release, "milestone", "m402-remaining-detector-rail");
-        same(release, "m399.signature", m399, "expected.signature");
-        same(release, "server.sha256", m399, "server.jar.sha256");
+        Properties m403 = load(root, "smokes/m403-remaining-boat-break/smoke.properties");
+        match(release, "version", "1.391.0");
+        match(release, "milestone", "m403-remaining-boat-break");
         same(release, "m400.signature", m400, "expected.signature");
         same(release, "server.sha256", m400, "server.jar.sha256");
         same(release, "m401.signature", m401, "expected.signature");
         same(release, "server.sha256", m401, "server.jar.sha256");
         same(release, "m402.signature", m402, "expected.signature");
         same(release, "server.sha256", m402, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M399_WOODEN_BUTTON_SET.md", "docs/M399_CYCLE.md",
-                "smokes/m399-wooden-button-set/MAP.md", "docs/M400_REMAINING_TORCH_FACES.md", "docs/M400_CYCLE.md",
+        same(release, "m403.signature", m403, "expected.signature");
+        same(release, "server.sha256", m403, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M400_REMAINING_TORCH_FACES.md", "docs/M400_CYCLE.md",
                 "smokes/m400-remaining-torch-faces/MAP.md", "docs/M401_REMAINING_REDSTONE_WIRE.md", "docs/M401_CYCLE.md",
                 "smokes/m401-remaining-redstone-wire/MAP.md", "docs/M402_REMAINING_DETECTOR_RAIL.md", "docs/M402_CYCLE.md",
-                "smokes/m402-remaining-detector-rail/MAP.md"))
+                "smokes/m402-remaining-detector-rail/MAP.md", "docs/M403_REMAINING_BOAT_BREAK.md", "docs/M403_CYCLE.md",
+                "smokes/m403-remaining-boat-break/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.390.0 M402 Remaining detector rail GO");
+        System.out.println("  release: Worldline v1.391.0 M403 Remaining boat break GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

@@ -407,6 +407,7 @@ Passing an experiment does not silently promote its API.
 | v1.388.0 / M400 | Remaining torch faces | GO - wall torch 50:1 through 50:4 |
 | v1.389.0 / M401 | Remaining redstone wire | GO - dust 55 cross, line, and elbow |
 | v1.390.0 / M402 | Remaining detector rail | GO - detector 28:0 occupied to 28:8 by cart type 10 |
+| v1.391.0 / M403 | Remaining boat break | GO - two boats Packet7-broken to plank 5 and stick 280 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -418,7 +419,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.390.0 direction
+## Immediate post-v1.391.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

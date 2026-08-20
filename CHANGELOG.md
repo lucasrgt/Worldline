@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.391.0 - M403 Remaining boat break
+
+Status: GO for official two-boat Packet7 break wreckage together.
+
+- Packet15 spawned two Packet23 type `1` boats; empty-hand Packet7 button `1` broke both.
+- Packet21 plank `5` and stick `280` wreckage was shared by two peers.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M403 semantic SHA-256 is
+`34eb6766ee9194e30d2efd5712a5e932110351176e336e526d7c6f23a877dedc`.
+
 ## 1.390.0 - M402 Remaining detector rail
 
 Status: GO for official detector rail unpowered then cart-occupied together.
