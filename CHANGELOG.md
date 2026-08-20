@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.415.0 - M425 Remaining machine faces
+
+Status: GO for official remaining dispenser, furnace, and pumpkin look-yaw facings together.
+
+- Dispenser `23:2/5/4`, furnace `61:5/3/4`, and pumpkin `86:2/3/0` were placed from remaining look yaws.
+- All nine cells persisted after a clean save plus fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M425 semantic SHA-256 is
+`5f5f8026b3aef5768a963db53d9393ac9ed86b766118d805407d5cf5b11a5dbf`.
+
 ## 1.414.0 - M424 Furnace cart motion set
 
 Status: GO for official furnace-cart type 12 coal push plus detector occupancy together.

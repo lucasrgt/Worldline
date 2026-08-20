@@ -1797,3 +1797,5 @@ M421 adds no public API. Creeper gunpowder `289` plus TNT `46` craft share one c
 M423 adds no public API. Size-1 slimeball `341` plus sticky piston `29` craft share one slimeball family.
 
 M424 adds no public API. Furnace-cart type `12` coal push plus detector `28:8` share one furnace-cart-motion family.
+
+M425 adds no public API. Dispenser `23`, furnace `61`, and pumpkin `86` remaining facings share one remaining-machine-faces family.
