@@ -1495,3 +1495,5 @@ M273 adds no public API. Chain boots item `305` equip into armor slot 8 / Packet
 M274 adds no public API. Removing stone under gravel `13:0` settles one cell down after official gravity.
 
 M275 adds no public API. Contact with cactus `81:0` drops Packet8 health `20 -> 19`.
+
+M276 adds no public API. Standing in fire `51:0` on netherrack drops Packet8 health `20 -> 19`.

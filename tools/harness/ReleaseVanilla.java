@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m272 = load(root, "smokes/m272-diamond-leggings/smoke.properties");
         Properties m273 = load(root, "smokes/m273-chain-boots/smoke.properties");
         Properties m274 = load(root, "smokes/m274-falling-gravel/smoke.properties");
         Properties m275 = load(root, "smokes/m275-cactus-damage/smoke.properties");
-        match(release, "version", "1.263.0");
-        match(release, "milestone", "m275-cactus-damage");
-        same(release, "m272.signature", m272, "expected.signature");
-        same(release, "server.sha256", m272, "server.jar.sha256");
+        Properties m276 = load(root, "smokes/m276-fire-damage/smoke.properties");
+        match(release, "version", "1.264.0");
+        match(release, "milestone", "m276-fire-damage");
         same(release, "m273.signature", m273, "expected.signature");
         same(release, "server.sha256", m273, "server.jar.sha256");
         same(release, "m274.signature", m274, "expected.signature");
         same(release, "server.sha256", m274, "server.jar.sha256");
         same(release, "m275.signature", m275, "expected.signature");
         same(release, "server.sha256", m275, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M272_DIAMOND_LEGGINGS.md", "docs/M272_CYCLE.md",
-                "smokes/m272-diamond-leggings/MAP.md", "docs/M273_CHAIN_BOOTS.md", "docs/M273_CYCLE.md",
+        same(release, "m276.signature", m276, "expected.signature");
+        same(release, "server.sha256", m276, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M273_CHAIN_BOOTS.md", "docs/M273_CYCLE.md",
                 "smokes/m273-chain-boots/MAP.md", "docs/M274_FALLING_GRAVEL.md", "docs/M274_CYCLE.md",
                 "smokes/m274-falling-gravel/MAP.md", "docs/M275_CACTUS_DAMAGE.md", "docs/M275_CYCLE.md",
-                "smokes/m275-cactus-damage/MAP.md"))
+                "smokes/m275-cactus-damage/MAP.md", "docs/M276_FIRE_DAMAGE.md", "docs/M276_CYCLE.md",
+                "smokes/m276-fire-damage/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.263.0 M275 Cactus damage GO");
+        System.out.println("  release: Worldline v1.264.0 M276 Fire damage GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.264.0 - M276 Fire damage
+
+Status: GO for official netherrack-fire contact damage.
+
+- Stood in fire `51:0` on netherrack `87:0` so Packet8 health dropped `20 -> 19`.
+- The flame cell and the one-point hurt survived a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M276 semantic SHA-256 is
+`6df6fefaf368f9cde54b95ead0d046469348c56c0bc386f4306b0d0a5a14a043`.
+
 ## 1.263.0 - M275 Cactus damage
 
 Status: GO for official cactus contact damage.
