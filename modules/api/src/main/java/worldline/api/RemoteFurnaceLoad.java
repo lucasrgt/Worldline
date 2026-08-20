@@ -24,8 +24,9 @@ public final class RemoteFurnaceLoad {
                 || before.windowId() != after.windowId() || before.size() != 39 || after.size() != 39
                 || personalBefore.windowId() != 0 || personalAfter.windowId() != 0
                 || personalBefore.size() != 45 || personalAfter.size() != 45
-                || !input.equals(new RemoteItemStack(12, 1, 0))
-                || !fuel.equals(new RemoteItemStack(263, 1, 0)))
+                || !fuel.equals(new RemoteItemStack(263, 1, 0))
+                || !(input.equals(new RemoteItemStack(12, 1, 0)) || input.equals(new RemoteItemStack(15, 1, 0))
+                    || input.equals(new RemoteItemStack(14, 1, 0)) || input.equals(new RemoteItemStack(319, 1, 0))))
             throw new IllegalArgumentException("invalid furnace load identity");
         int inputCombined = inputPersonalSlot - 6, fuelCombined = fuelPersonalSlot - 6;
         if (before.slot(inputCombined).empty() || before.slot(fuelCombined).empty()

@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.284.0 - M296 Furnace smelts
+
+Status: GO for official iron, gold, and pork furnace recipes.
+
+- Three idle furnaces `61:2` smelted iron ore `15` to ingot `265`, gold ore `14` to ingot `266`, and pork `319` to cooked pork `320`.
+- Live cook/burn telemetry matched coal fuel (`199` / `1600` / `1401`).
+- Repeated the complete family in two official server JVMs.
+
+The frozen M296 semantic SHA-256 is
+`04ac7e3f754356f848410854d026b17493e75b73dc55473905ec0d45d31787c1`.
+
 ## 1.283.0 - M295 Pressure plates
 
 Status: GO for official wooden and stone pressure-plate power.

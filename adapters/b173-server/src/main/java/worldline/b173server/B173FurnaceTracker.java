@@ -35,14 +35,15 @@ final class B173FurnaceTracker {
 
     RemoteFurnaceSmelt ready(B173WindowTracker windows) {
         RemoteContainerWindow active = windows.activeWindow();
-        RemoteItemStack expected = new RemoteItemStack(20, 1, 0);
+        RemoteItemStack output = active.inventory().slot(2).empty() ? null : active.inventory().slot(2).item();
         if (active.descriptor().kind() != RemoteWindowKind.FURNACE
                 || epoch != windows.activeEpoch() || active.descriptor().windowId() != windowId
-                || active.inventory().slot(2).empty()
-                || !active.inventory().slot(2).item().equals(expected)
+                || output == null
+                || !(output.equals(new RemoteItemStack(20, 1, 0)) || output.equals(new RemoteItemStack(265, 1, 0))
+                    || output.equals(new RemoteItemStack(266, 1, 0)) || output.equals(new RemoteItemStack(320, 1, 0)))
                 || !active.inventory().slot(0).empty() || !active.inventory().slot(1).empty()
                 || !completionReset || maximumCook != 199 || maximumBurn != 1600
                 || totalBurn != 1600 || completionBurn != 1401) return null;
-        return new RemoteFurnaceSmelt(active, expected, maximumCook, maximumBurn, totalBurn, completionBurn);
+        return new RemoteFurnaceSmelt(active, output, maximumCook, maximumBurn, totalBurn, completionBurn);
     }
 }

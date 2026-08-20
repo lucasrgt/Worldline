@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m292 = load(root, "smokes/m292-birch-leaves/smoke.properties");
         Properties m293 = load(root, "smokes/m293-sticky-piston-place/smoke.properties");
         Properties m294 = load(root, "smokes/m294-piston-place/smoke.properties");
         Properties m295 = load(root, "smokes/m295-pressure-plates/smoke.properties");
-        match(release, "version", "1.283.0");
-        match(release, "milestone", "m295-pressure-plates");
-        same(release, "m292.signature", m292, "expected.signature");
-        same(release, "server.sha256", m292, "server.jar.sha256");
+        Properties m296 = load(root, "smokes/m296-furnace-smelts/smoke.properties");
+        match(release, "version", "1.284.0");
+        match(release, "milestone", "m296-furnace-smelts");
         same(release, "m293.signature", m293, "expected.signature");
         same(release, "server.sha256", m293, "server.jar.sha256");
         same(release, "m294.signature", m294, "expected.signature");
         same(release, "server.sha256", m294, "server.jar.sha256");
         same(release, "m295.signature", m295, "expected.signature");
         same(release, "server.sha256", m295, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M292_BIRCH_LEAVES.md", "docs/M292_CYCLE.md",
-                "smokes/m292-birch-leaves/MAP.md", "docs/M293_STICKY_PISTON_PLACE.md", "docs/M293_CYCLE.md",
+        same(release, "m296.signature", m296, "expected.signature");
+        same(release, "server.sha256", m296, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M293_STICKY_PISTON_PLACE.md", "docs/M293_CYCLE.md",
                 "smokes/m293-sticky-piston-place/MAP.md", "docs/M294_PISTON_PLACE.md", "docs/M294_CYCLE.md",
                 "smokes/m294-piston-place/MAP.md", "docs/M295_PRESSURE_PLATES.md", "docs/M295_CYCLE.md",
-                "smokes/m295-pressure-plates/MAP.md"))
+                "smokes/m295-pressure-plates/MAP.md", "docs/M296_FURNACE_SMELTS.md", "docs/M296_CYCLE.md",
+                "smokes/m296-furnace-smelts/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.283.0 M295 Pressure plates GO");
+        System.out.println("  release: Worldline v1.284.0 M296 Furnace smelts GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
