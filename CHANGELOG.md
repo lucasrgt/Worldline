@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.422.0 - M432 Remaining rail geometry set
+
+Status: GO for official remaining rail slope and curve metadata together.
+
+- Rail `66` placed remaining slope `66:2` plus south-east curve `66:6`.
+- Both cells persisted after a clean save plus fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M432 semantic SHA-256 is
+`3da03f5b4d6dd509fa5fc0925d5ea7422d5cd6ddb96e7acb84b5854de2ab61b1`.
+
 ## 1.421.0 - M431 Remaining bed orient set
 
 Status: GO for official remaining bed west/north/east halves together.

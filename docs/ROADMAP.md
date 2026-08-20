@@ -438,6 +438,7 @@ Passing an experiment does not silently promote its API.
 | v1.419.0 / M429 | Remaining attach faces | GO - ladder 65, trapdoor 96, wall sign 68 remaining faces |
 | v1.420.0 / M430 | Remaining painting motives | GO - Packet25 4x2 plus 4x3 plus 4x4 west-face motives |
 | v1.421.0 / M431 | Remaining bed orient | GO - bed 26 remaining west/north/east halves |
+| v1.422.0 / M432 | Remaining rail geometry | GO - rail 66 remaining slope 2 plus curve 6 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -449,7 +450,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.421.0 direction
+## Immediate post-v1.422.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

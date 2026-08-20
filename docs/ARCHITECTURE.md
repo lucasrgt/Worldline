@@ -1811,3 +1811,5 @@ M429 adds no public API. Ladder `65`, trapdoor `96`, and wall sign `68` remainin
 M430 adds no public API. Remaining Packet25 motive-size walls 4x2, 4x3, and 4x4 share one remaining-painting-motives family.
 
 M431 adds no public API. Remaining bed `26` west/north/east halves share one remaining-bed-orient family.
+
+M432 adds no public API. Remaining rail `66` slope `2` plus curve `6` share one remaining-rail-geometry family.
