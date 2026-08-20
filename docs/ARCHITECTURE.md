@@ -1517,3 +1517,5 @@ M284 adds no public API. Wool item `35` damage `7` places gray wool `35:7` and p
 M285 adds no public API. Wool item `35` damage `8` places light-gray wool `35:8` and persists.
 
 M286 adds no public API. Wool item `35` damage `9` places cyan wool `35:9` and persists.
+
+M287 adds no public API. Wool item `35` damage `10` places purple wool `35:10` and persists.

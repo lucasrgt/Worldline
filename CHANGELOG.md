@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.275.0 - M287 Purple wool
+
+Status: GO for official purple wool placement.
+
+- Placed wool item `35` damage `10` as purple wool `35:10` on raised stone.
+- The exact cell survived a clean save and a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M287 semantic SHA-256 is
+`5dc40bd722b0e06eda7a5458a94b93ca0bdccfc730d99fdbe3204f19d850a7a8`.
+
 ## 1.274.0 - M286 Cyan wool
 
 Status: GO for official cyan wool placement.
