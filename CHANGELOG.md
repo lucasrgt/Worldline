@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.271.0 - M283 Pink wool
+
+Status: GO for official pink wool placement.
+
+- Placed wool item `35` damage `6` as pink wool `35:6` on raised stone.
+- The exact cell survived a clean save and a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M283 semantic SHA-256 is
+`54b69bd3555ea1c71c7bfe4a627ef3aebad41301df717ac15f1338148b198863`.
+
 ## 1.270.0 - M282 Lime wool
 
 Status: GO for official lime wool placement.
