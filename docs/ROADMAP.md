@@ -429,6 +429,7 @@ Passing an experiment does not silently promote its API.
 | v1.410.0 / M441 | Remaining food rest | GO - cookie 357 plus mushroom stew 282 |
 | v1.411.0 / M420 | Wolf tame set | GO - wolf type 95 bone 352 tame plus dye collar |
 | v1.412.0 / M421 | Creeper gunpowder set | GO - type 50 drop 289 plus TNT 46 craft |
+| v1.413.0 / M423 | Slimeball set | GO - size-1 slimeball 341 plus sticky piston 29 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -440,7 +441,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.412.0 direction
+## Immediate post-v1.413.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

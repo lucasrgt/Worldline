@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.413.0 - M423 Slimeball set
+
+Status: GO for official size-1 slimeball drop plus sticky-piston craft together.
+
+- Packet24 type `55` size-1 death emitted Packet21 slimeball `341`.
+- Workbench `58` crafted sticky piston `29` from piston `33` plus `341`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M423 semantic SHA-256 is
+`8a525200f72521e3f129de58b27232e197c39cf2d41da689d2772e9a830ac411`.
+
 ## 1.412.0 - M421 Creeper gunpowder set
 
 Status: GO for official creeper gunpowder drop plus TNT craft together.
