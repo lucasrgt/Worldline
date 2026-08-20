@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m282 = load(root, "smokes/m282-lime-wool/smoke.properties");
         Properties m283 = load(root, "smokes/m283-pink-wool/smoke.properties");
         Properties m284 = load(root, "smokes/m284-gray-wool/smoke.properties");
         Properties m285 = load(root, "smokes/m285-light-gray-wool/smoke.properties");
-        match(release, "version", "1.273.0");
-        match(release, "milestone", "m285-light-gray-wool");
-        same(release, "m282.signature", m282, "expected.signature");
-        same(release, "server.sha256", m282, "server.jar.sha256");
+        Properties m286 = load(root, "smokes/m286-cyan-wool/smoke.properties");
+        match(release, "version", "1.274.0");
+        match(release, "milestone", "m286-cyan-wool");
         same(release, "m283.signature", m283, "expected.signature");
         same(release, "server.sha256", m283, "server.jar.sha256");
         same(release, "m284.signature", m284, "expected.signature");
         same(release, "server.sha256", m284, "server.jar.sha256");
         same(release, "m285.signature", m285, "expected.signature");
         same(release, "server.sha256", m285, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M282_LIME_WOOL.md", "docs/M282_CYCLE.md",
-                "smokes/m282-lime-wool/MAP.md", "docs/M283_PINK_WOOL.md", "docs/M283_CYCLE.md",
+        same(release, "m286.signature", m286, "expected.signature");
+        same(release, "server.sha256", m286, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M283_PINK_WOOL.md", "docs/M283_CYCLE.md",
                 "smokes/m283-pink-wool/MAP.md", "docs/M284_GRAY_WOOL.md", "docs/M284_CYCLE.md",
                 "smokes/m284-gray-wool/MAP.md", "docs/M285_LIGHT_GRAY_WOOL.md", "docs/M285_CYCLE.md",
-                "smokes/m285-light-gray-wool/MAP.md"))
+                "smokes/m285-light-gray-wool/MAP.md", "docs/M286_CYAN_WOOL.md", "docs/M286_CYCLE.md",
+                "smokes/m286-cyan-wool/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.273.0 M285 Light gray wool GO");
+        System.out.println("  release: Worldline v1.274.0 M286 Cyan wool GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
