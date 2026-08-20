@@ -375,6 +375,7 @@ Passing an experiment does not silently promote its API.
 | v1.356.0 / M368 | More dye wool crafts | GO - yellow 35:4, orange 35:1, pink 35:6 |
 | v1.357.0 / M369 | Cake full eat set | GO - cake 92 six bites 0 through air |
 | v1.358.0 / M370 | Remaining furnace smelts | GO - cactus 81, log 17, clay 337 smelts |
+| v1.359.0 / M371 | Machine block crafts | GO - TNT 46, piston 33, sticky piston 29 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -386,7 +387,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.358.0 direction
+## Immediate post-v1.359.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

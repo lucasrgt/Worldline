@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.359.0 - M371 Machine block crafts
+
+Status: GO for official TNT, piston, and sticky-piston crafts together.
+
+- Workbench Packet102 crafted TNT `46`, piston `33`, and sticky piston `29`.
+- The stacks survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M371 semantic SHA-256 is
+`51d13daf2febf456a423e84d136707a77b9117668bc3979f4b52514bdbb26c7e`.
+
 ## 1.358.0 - M370 Remaining furnace smelts
 
 Status: GO for official cactus, log, and clay furnace smelts together.

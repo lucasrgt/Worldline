@@ -1685,3 +1685,5 @@ M368 adds no public API. Yellow `35:4`, orange `35:1`, and pink `35:6` wool craf
 M369 adds no public API. Cake `92` six-slice eat through air shares one full-eat family, distinct from M335's first three slices.
 
 M370 adds no public API. Cactus, log, and clay smelts share one remaining-furnace family. Smoke-local furnace clicks stay out of the public load identity.
+
+M371 adds no public API. TNT `46`, piston `33`, and sticky piston `29` share one machine-block craft family.

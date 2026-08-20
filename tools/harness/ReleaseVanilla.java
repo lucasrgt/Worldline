@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m367 = load(root, "smokes/m367-piston-motion-set/smoke.properties");
         Properties m368 = load(root, "smokes/m368-more-dye-wool-crafts/smoke.properties");
         Properties m369 = load(root, "smokes/m369-cake-full-eat-set/smoke.properties");
         Properties m370 = load(root, "smokes/m370-remaining-furnace-smelts/smoke.properties");
-        match(release, "version", "1.358.0");
-        match(release, "milestone", "m370-remaining-furnace-smelts");
-        same(release, "m367.signature", m367, "expected.signature");
-        same(release, "server.sha256", m367, "server.jar.sha256");
+        Properties m371 = load(root, "smokes/m371-machine-block-crafts/smoke.properties");
+        match(release, "version", "1.359.0");
+        match(release, "milestone", "m371-machine-block-crafts");
         same(release, "m368.signature", m368, "expected.signature");
         same(release, "server.sha256", m368, "server.jar.sha256");
         same(release, "m369.signature", m369, "expected.signature");
         same(release, "server.sha256", m369, "server.jar.sha256");
         same(release, "m370.signature", m370, "expected.signature");
         same(release, "server.sha256", m370, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M367_PISTON_MOTION_SET.md", "docs/M367_CYCLE.md",
-                "smokes/m367-piston-motion-set/MAP.md", "docs/M368_MORE_DYE_WOOL_CRAFTS.md", "docs/M368_CYCLE.md",
+        same(release, "m371.signature", m371, "expected.signature");
+        same(release, "server.sha256", m371, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M368_MORE_DYE_WOOL_CRAFTS.md", "docs/M368_CYCLE.md",
                 "smokes/m368-more-dye-wool-crafts/MAP.md", "docs/M369_CAKE_FULL_EAT_SET.md", "docs/M369_CYCLE.md",
                 "smokes/m369-cake-full-eat-set/MAP.md", "docs/M370_REMAINING_FURNACE_SMELTS.md", "docs/M370_CYCLE.md",
-                "smokes/m370-remaining-furnace-smelts/MAP.md"))
+                "smokes/m370-remaining-furnace-smelts/MAP.md", "docs/M371_MACHINE_BLOCK_CRAFTS.md", "docs/M371_CYCLE.md",
+                "smokes/m371-machine-block-crafts/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.358.0 M370 Remaining furnace smelts GO");
+        System.out.println("  release: Worldline v1.359.0 M371 Machine block crafts GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
