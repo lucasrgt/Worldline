@@ -278,7 +278,8 @@ final class SmokeCatalog {
         {"tools/smoke/FallingGravelCycle.java", "m274-falling-gravel"},
         {"tools/smoke/CactusDamageCycle.java", "m275-cactus-damage"},
         {"tools/smoke/FireDamageCycle.java", "m276-fire-damage"},
-        {"tools/smoke/WoodenDoorOpenCycle.java", "m277-wooden-door-open"}, {"tools/smoke/LabCycle.java", "lab-cycle"}
+        {"tools/smoke/WoodenDoorOpenCycle.java", "m277-wooden-door-open"},
+        {"tools/smoke/TrapdoorToggleCycle.java", "m278-trapdoor-toggle"}, {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
     private SmokeCatalog() {}
 }

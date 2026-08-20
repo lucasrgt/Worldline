@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.266.0 - M278 Trapdoor toggle
+
+Status: GO for official trapdoor open-bit toggle.
+
+- Placed trapdoor `96:3` then empty-hand Packet15 opened it to `96:7`.
+- The open metadata survived a clean save and a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M278 semantic SHA-256 is
+`a66063d6e5ac041de1eeb23cf5a56d2fe303a9759694e0dd69ce31347ef8442a`.
+
 ## 1.265.0 - M277 Wooden door open
 
 Status: GO for official wooden-door toggle.
