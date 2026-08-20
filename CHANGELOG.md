@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.305.0 - M317 Slow blocks
+
+Status: GO for official cobweb and soul-sand slowdown together.
+
+- The same Packet13 step was slower in cobweb `30:0` and on soul sand `88:0` than in air.
+- Both cells survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M317 semantic SHA-256 is
+`bcae75456216b2655361256edd97079669619d908394782145a21a076e9e676a`.
+
 ## 1.304.0 - M316 Shears set
 
 Status: GO for official shears leaf and living-sheep wool together.
