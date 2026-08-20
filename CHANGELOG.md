@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.252.0 - M264 Raw pork eat
+
+Status: GO for official raw-porkchop air-use heal.
+
+- Seeded raw porkchop `319` at health `17` and Packet15 air-use restored Packet8 `17 -> 20`.
+- The held stack was consumed `319:1 -> 0` and both health and inventory survived a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M264 semantic SHA-256 is
+`c43583070f3c4185f97ebefa6a8f0a6ce3428f70ea6621d094546db1cbae4502`.
+
 ## 1.251.0 - M263 Stew eat
 
 Status: GO for official mushroom-stew air-use heal.

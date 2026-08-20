@@ -1471,3 +1471,5 @@ M261 adds no public API. Golden apple item `322` air-use heals Packet8 `10 -> 20
 M262 adds no public API. Cookie item `357` air-use heals Packet8 `19 -> 20` and consumes the stack.
 
 M263 adds no public API. Mushroom stew item `282` air-use heals Packet8 `12 -> 20` and leaves bowl `281`.
+
+M264 adds no public API. Raw porkchop item `319` air-use heals Packet8 `17 -> 20` and consumes the stack.
