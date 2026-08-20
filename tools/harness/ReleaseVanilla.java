@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m331 = load(root, "smokes/m331-throwables-set/smoke.properties");
         Properties m332 = load(root, "smokes/m332-bow-arrow-set/smoke.properties");
         Properties m333 = load(root, "smokes/m333-dispenser-set/smoke.properties");
         Properties m334 = load(root, "smokes/m334-record-set/smoke.properties");
-        match(release, "version", "1.322.0");
-        match(release, "milestone", "m334-record-set");
-        same(release, "m331.signature", m331, "expected.signature");
-        same(release, "server.sha256", m331, "server.jar.sha256");
+        Properties m335 = load(root, "smokes/m335-cake-slice-set/smoke.properties");
+        match(release, "version", "1.323.0");
+        match(release, "milestone", "m335-cake-slice-set");
         same(release, "m332.signature", m332, "expected.signature");
         same(release, "server.sha256", m332, "server.jar.sha256");
         same(release, "m333.signature", m333, "expected.signature");
         same(release, "server.sha256", m333, "server.jar.sha256");
         same(release, "m334.signature", m334, "expected.signature");
         same(release, "server.sha256", m334, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M331_THROWABLES_SET.md", "docs/M331_CYCLE.md",
-                "smokes/m331-throwables-set/MAP.md", "docs/M332_BOW_ARROW_SET.md", "docs/M332_CYCLE.md",
+        same(release, "m335.signature", m335, "expected.signature");
+        same(release, "server.sha256", m335, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M332_BOW_ARROW_SET.md", "docs/M332_CYCLE.md",
                 "smokes/m332-bow-arrow-set/MAP.md", "docs/M333_DISPENSER_SET.md", "docs/M333_CYCLE.md",
                 "smokes/m333-dispenser-set/MAP.md", "docs/M334_RECORD_SET.md", "docs/M334_CYCLE.md",
-                "smokes/m334-record-set/MAP.md"))
+                "smokes/m334-record-set/MAP.md", "docs/M335_CAKE_SLICE_SET.md", "docs/M335_CYCLE.md",
+                "smokes/m335-cake-slice-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.322.0 M334 Record set GO");
+        System.out.println("  release: Worldline v1.323.0 M335 Cake slice set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

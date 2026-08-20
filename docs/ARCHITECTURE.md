@@ -1613,3 +1613,5 @@ M332 adds no public API. Bow `261`, arrows `262`, and Packet23 type 60 share one
 M333 adds no public API. Dispenser `23:4` plus ejected cobble `4` and planks `5` share one dispenser family.
 
 M334 adds no public API. Gold disc `2256` and green disc `2257` share one record family.
+
+M335 adds no public API. Cake `92:0` through `92:3` share one cake-slice family.

@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.323.0 - M335 Cake slice set
+
+Status: GO for official cake place plus three successive slices together.
+
+- Packet15 placed uneaten cake `92:0`, then empty-hand bites advanced `0 -> 1 -> 2 -> 3`.
+- The bitten `92:3` cell survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M335 semantic SHA-256 is
+`3ef77cdef925e0457ef17467a33321cc83aaffe183eb51cc6fc7768273ff2f68`.
+
 ## 1.322.0 - M334 Record set
 
 Status: GO for official gold and green disc inserts together.
