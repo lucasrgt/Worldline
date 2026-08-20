@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m435 = load(root, "smokes/m435-remaining-natural-spawns/smoke.properties");
         Properties m437 = load(root, "smokes/m437-lightning-pig-set/smoke.properties");
         Properties m438 = load(root, "smokes/m438-remaining-clock-map-set/smoke.properties");
         Properties m439 = load(root, "smokes/m439-remaining-ore-place-set/smoke.properties");
-        match(release, "version", "1.426.0");
-        match(release, "milestone", "m439-remaining-ore-place-set");
-        same(release, "m435.signature", m435, "expected.signature");
-        same(release, "server.sha256", m435, "server.jar.sha256");
+        Properties m440 = load(root, "smokes/m440-remaining-dye-rest-set/smoke.properties");
+        match(release, "version", "1.427.0");
+        match(release, "milestone", "m440-remaining-dye-rest-set");
         same(release, "m437.signature", m437, "expected.signature");
         same(release, "server.sha256", m437, "server.jar.sha256");
         same(release, "m438.signature", m438, "expected.signature");
         same(release, "server.sha256", m438, "server.jar.sha256");
         same(release, "m439.signature", m439, "expected.signature");
         same(release, "server.sha256", m439, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M435_REMAINING_NATURAL_SPAWNS.md", "docs/M435_CYCLE.md",
-                "smokes/m435-remaining-natural-spawns/MAP.md", "docs/M437_LIGHTNING_PIG_SET.md", "docs/M437_CYCLE.md",
+        same(release, "m440.signature", m440, "expected.signature");
+        same(release, "server.sha256", m440, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M437_LIGHTNING_PIG_SET.md", "docs/M437_CYCLE.md",
                 "smokes/m437-lightning-pig-set/MAP.md", "docs/M438_REMAINING_CLOCK_MAP_SET.md", "docs/M438_CYCLE.md",
                 "smokes/m438-remaining-clock-map-set/MAP.md", "docs/M439_REMAINING_ORE_PLACE_SET.md", "docs/M439_CYCLE.md",
-                "smokes/m439-remaining-ore-place-set/MAP.md"))
+                "smokes/m439-remaining-ore-place-set/MAP.md", "docs/M440_REMAINING_DYE_REST_SET.md", "docs/M440_CYCLE.md",
+                "smokes/m440-remaining-dye-rest-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.426.0 M439 Remaining ore place set GO");
+        System.out.println("  release: Worldline v1.427.0 M440 Remaining dye rest set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

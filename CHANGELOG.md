@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.427.0 - M440 Remaining dye rest set
+
+Status: GO for official remaining personal 2x2 dye mixes together.
+
+- Ink plus bone meal yielded light gray `351x3:7`; gray plus bone meal yielded `351x2:7`; purple plus pink yielded magenta `351x2:13`.
+- Those stacks persisted after a clean save plus fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M440 semantic SHA-256 is
+`0334f546ce0368581cb95d0fcb41d97e63d257acb76e91c53b41c849cfac594d`.
+
 ## 1.426.0 - M439 Remaining ore place set
 
 Status: GO for official remaining coal, lapis, and unlit redstone ore place together.
