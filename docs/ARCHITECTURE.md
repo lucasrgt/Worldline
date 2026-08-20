@@ -1785,3 +1785,5 @@ M419 adds no public API. Nether netherrack `87`, soul sand `88`, and glowstone `
 M413 adds no public API. Netherrack fire `51` catching planks `5`, leaves `18`, and wool `35` share one fire-spread family.
 
 M433 adds no public API. Isolated look-yaw chest `54` plus EW and NS pairs share one remaining-chest-orient family.
+
+M434 adds no public API. Sponge `19`, glass `20`, and ice `79` share one remaining-sponge-glass-ice family.

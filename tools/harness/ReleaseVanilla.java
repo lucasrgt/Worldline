@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m418 = load(root, "smokes/m418-remaining-obsidian-place/smoke.properties");
         Properties m419 = load(root, "smokes/m419-remaining-netherrack-place/smoke.properties");
         Properties m413 = load(root, "smokes/m413-fire-spread-set/smoke.properties");
         Properties m433 = load(root, "smokes/m433-remaining-chest-orient-set/smoke.properties");
-        match(release, "version", "1.408.0");
-        match(release, "milestone", "m433-remaining-chest-orient-set");
-        same(release, "m418.signature", m418, "expected.signature");
-        same(release, "server.sha256", m418, "server.jar.sha256");
+        Properties m434 = load(root, "smokes/m434-remaining-sponge-glass-ice/smoke.properties");
+        match(release, "version", "1.409.0");
+        match(release, "milestone", "m434-remaining-sponge-glass-ice");
         same(release, "m419.signature", m419, "expected.signature");
         same(release, "server.sha256", m419, "server.jar.sha256");
         same(release, "m413.signature", m413, "expected.signature");
         same(release, "server.sha256", m413, "server.jar.sha256");
         same(release, "m433.signature", m433, "expected.signature");
         same(release, "server.sha256", m433, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M418_REMAINING_OBSIDIAN_PLACE.md", "docs/M418_CYCLE.md",
-                "smokes/m418-remaining-obsidian-place/MAP.md", "docs/M419_REMAINING_NETHERRACK_PLACE.md", "docs/M419_CYCLE.md",
+        same(release, "m434.signature", m434, "expected.signature");
+        same(release, "server.sha256", m434, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M419_REMAINING_NETHERRACK_PLACE.md", "docs/M419_CYCLE.md",
                 "smokes/m419-remaining-netherrack-place/MAP.md", "docs/M413_FIRE_SPREAD_SET.md", "docs/M413_CYCLE.md",
                 "smokes/m413-fire-spread-set/MAP.md", "docs/M433_REMAINING_CHEST_ORIENT_SET.md", "docs/M433_CYCLE.md",
-                "smokes/m433-remaining-chest-orient-set/MAP.md"))
+                "smokes/m433-remaining-chest-orient-set/MAP.md", "docs/M434_REMAINING_SPONGE_GLASS_ICE.md", "docs/M434_CYCLE.md",
+                "smokes/m434-remaining-sponge-glass-ice/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.408.0 M433 Remaining chest orient set GO");
+        System.out.println("  release: Worldline v1.409.0 M434 Remaining sponge glass ice GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

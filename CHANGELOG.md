@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.409.0 - M434 Remaining sponge glass ice
+
+Status: GO for official sponge, glass, and ice place together.
+
+- Packet15 placed sponge `19`, glass `20`, and ice `79` on a raised stone fixture.
+- Ice stayed `79` with no torch melt; all three cells persisted.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M434 semantic SHA-256 is
+`0716150d188414cd60d0bebe7aa70f27ace8a376a47f6e0a912fc026e8ab63b5`.
+
 ## 1.408.0 - M433 Remaining chest orient set
 
 Status: GO for official isolated look-yaw chests plus EW and NS adjacent pairs together.
