@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.244.0 - M256 Chest minecart
+
+Status: GO for official chest-minecart spawn.
+
+- Used chest-minecart item `342` on rail `66` and received Packet23 type `11`.
+- Two peers shared the same object identity and thrower `0`.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M256 semantic SHA-256 is
+`77d7cc9f33cf75c87ba161f4e0b38376562e8c3a4a1bed0d9a78aaca8f9d0a74`.
+
 ## 1.243.0 - M255 Lava place
 
 Status: GO for official still-lava placement from a lava bucket.
