@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.424.0 - M437 Lightning pig set
+
+Status: GO for official Overworld pig plus Nether pigman identity pair together.
+
+- Overworld Packet24 type `90` and Nether Packet24 type `57` were observed from spawners.
+- Lightning Packet71 is unclaimed; Packet23 tracker is absent.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M437 semantic SHA-256 is
+`536016d5292cf2d747ea4a029011726719795579c19e8507ec912154e9bd77db`.
+
 ## 1.423.0 - M435 Remaining natural spawns
 
 Status: GO for official remaining natural Packet24 hostile identities together.

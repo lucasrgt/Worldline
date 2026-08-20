@@ -1815,3 +1815,5 @@ M431 adds no public API. Remaining bed `26` west/north/east halves share one rem
 M432 adds no public API. Remaining rail `66` slope `2` plus curve `6` share one remaining-rail-geometry family.
 
 M435 adds no public API. Remaining natural Packet24 types among `50/51/52/54` share one remaining-natural-spawns family.
+
+M437 adds no public API. Overworld pig type `90` plus Nether pigman type `57` share one lightning-pig identity family.
