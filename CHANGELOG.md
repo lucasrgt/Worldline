@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.338.0 - M350 Sign text set
+
+Status: GO for official standing-sign and wall-sign text together.
+
+- Packet15 placed standing sign `63` and wall sign `68`; Packet130 wrote four lines on each tile.
+- Both texts survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M350 semantic SHA-256 is
+`12d6f3d9302de6833a34efdedd9599e289de1ccf722ecd4cc8e32e8fad906d79`.
+
 ## 1.337.0 - M349 Double chest set
 
 Status: GO for official adjacent chests opening one large window together.
