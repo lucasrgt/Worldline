@@ -1829,3 +1829,5 @@ M442 adds no public API. Two jukebox `84` cells plus gold/green discs share one 
 M443 adds no public API. Empty-bucket pickup of still versus flowing water and lava share one remaining-bucket-rest family.
 
 M444 adds no public API. Pig pork `319` plus sheep undyed wool `35:0` death drops share one remaining-mob-drops-rest family.
+
+M422 adds no public API. Skeleton bone `352` plus bone-meal wheat `59:7` share one skeleton-bone family.

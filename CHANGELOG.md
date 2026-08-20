@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.431.0 - M422 Skeleton bone set
+
+Status: GO for official skeleton bone drop plus bone-meal wheat together.
+
+- Packet24 type `51` was killed with diamond sword `276`; Packet21 bone `352` was observed.
+- Bone `352` milled to `351x3:15` and Packet15 matured wheat `59:0` to `59:7` before midnight.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M422 semantic SHA-256 is
+`c68f7f0903a8483cfac08ca4d91735085c70835d9f5e485f8055423a3ebc6dc4`.
+
 ## 1.430.0 - M444 Remaining mob drops rest
 
 Status: GO for official remaining pig pork plus sheep wool death drops together.
