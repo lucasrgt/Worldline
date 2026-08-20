@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.243.0 - M255 Lava place
+
+Status: GO for official still-lava placement from a lava bucket.
+
+- Placed lava bucket `327` into a raised stone basin as still lava `11:0`.
+- The held stack became empty bucket `325` and both sides survived a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M255 semantic SHA-256 is
+`62a96d88efc9d70f9cef9dc52f4555dbbaf332fb3b578a2c210abfa722ade72d`.
+
 ## 1.242.0 - M254 Water place
 
 Status: GO for official still-water placement from a water bucket.

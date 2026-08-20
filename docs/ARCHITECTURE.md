@@ -1453,3 +1453,5 @@ M252 adds no public API. Wool item `35` damage `11` places blue wool `35:11` and
 M253 adds no public API. Wool item `35` damage `13` places green wool `35:13` and persists.
 
 M254 adds no public API. Water bucket `326` places still water `9:0` and becomes empty bucket `325`.
+
+M255 adds no public API. Lava bucket `327` places still lava `11:0` and becomes empty bucket `325`.
