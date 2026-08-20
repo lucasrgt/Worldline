@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.430.0 - M444 Remaining mob drops rest
+
+Status: GO for official remaining pig pork plus sheep wool death drops together.
+
+- Packet24 type `90` dropped pork `319`; type `91` dropped undyed wool `35:0`.
+- Both remaining drops share one frozen SET distinct from M388/M389/M409/M411.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M444 semantic SHA-256 is
+`4f0cf6fc97f045251947014072b407aae095b6419fb3c3ab94c50722f7db8f66`.
+
 ## 1.429.0 - M443 Remaining bucket rest set
 
 Status: GO for official remaining empty-bucket still-source versus flowing pickup together.

@@ -1827,3 +1827,5 @@ M440 adds no public API. Remaining 2x2 dye mixes `351:7` and `351:13` share one 
 M442 adds no public API. Two jukebox `84` cells plus gold/green discs share one remaining-record-place family.
 
 M443 adds no public API. Empty-bucket pickup of still versus flowing water and lava share one remaining-bucket-rest family.
+
+M444 adds no public API. Pig pork `319` plus sheep undyed wool `35:0` death drops share one remaining-mob-drops-rest family.
