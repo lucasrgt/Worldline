@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.280.0 - M292 Birch leaves
+
+Status: GO for official birch leaves placement.
+
+- Placed leaves item `18` damage `2` beside oak log as birch leaves `18:10`.
+- The exact cell survived a clean save and a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M292 semantic SHA-256 is
+`909703a5406842a4c1becff13064c13eebc661300e0ebe15b3400c822771f912`.
+
 ## 1.279.0 - M291 Spruce leaves
 
 Status: GO for official spruce leaves placement.

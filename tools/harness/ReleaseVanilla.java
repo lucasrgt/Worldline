@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m288 = load(root, "smokes/m288-brown-wool/smoke.properties");
         Properties m289 = load(root, "smokes/m289-spruce-sapling/smoke.properties");
         Properties m290 = load(root, "smokes/m290-birch-sapling/smoke.properties");
         Properties m291 = load(root, "smokes/m291-spruce-leaves/smoke.properties");
-        match(release, "version", "1.279.0");
-        match(release, "milestone", "m291-spruce-leaves");
-        same(release, "m288.signature", m288, "expected.signature");
-        same(release, "server.sha256", m288, "server.jar.sha256");
+        Properties m292 = load(root, "smokes/m292-birch-leaves/smoke.properties");
+        match(release, "version", "1.280.0");
+        match(release, "milestone", "m292-birch-leaves");
         same(release, "m289.signature", m289, "expected.signature");
         same(release, "server.sha256", m289, "server.jar.sha256");
         same(release, "m290.signature", m290, "expected.signature");
         same(release, "server.sha256", m290, "server.jar.sha256");
         same(release, "m291.signature", m291, "expected.signature");
         same(release, "server.sha256", m291, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M288_BROWN_WOOL.md", "docs/M288_CYCLE.md",
-                "smokes/m288-brown-wool/MAP.md", "docs/M289_SPRUCE_SAPLING.md", "docs/M289_CYCLE.md",
+        same(release, "m292.signature", m292, "expected.signature");
+        same(release, "server.sha256", m292, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M289_SPRUCE_SAPLING.md", "docs/M289_CYCLE.md",
                 "smokes/m289-spruce-sapling/MAP.md", "docs/M290_BIRCH_SAPLING.md", "docs/M290_CYCLE.md",
                 "smokes/m290-birch-sapling/MAP.md", "docs/M291_SPRUCE_LEAVES.md", "docs/M291_CYCLE.md",
-                "smokes/m291-spruce-leaves/MAP.md"))
+                "smokes/m291-spruce-leaves/MAP.md", "docs/M292_BIRCH_LEAVES.md", "docs/M292_CYCLE.md",
+                "smokes/m292-birch-leaves/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.279.0 M291 Spruce leaves GO");
+        System.out.println("  release: Worldline v1.280.0 M292 Birch leaves GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
