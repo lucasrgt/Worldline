@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.389.0 - M401 Remaining redstone wire (GO)**.
+Current official milestone: **Worldline v1.390.0 - M402 Remaining detector rail (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

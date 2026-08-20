@@ -1747,3 +1747,5 @@ M399 adds no public API. Stone button `77` east, west, south, and north wall fac
 M400 adds no public API. Wall torch `50:1` through `50:4` share one remaining-torch-faces family.
 
 M401 adds no public API. Redstone wire `55` cross, line, and elbow shapes share one remaining-wire family.
+
+M402 adds no public API. Detector rail `28:0` occupied to `28:8` by minecart type `10` shares one remaining-detector family.

@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.390.0 - M402 Remaining detector rail
+
+Status: GO for official detector rail unpowered then cart-occupied together.
+
+- Packet15 placed detector `28:0`; minecart `328` spawned Packet23 type `10` and set occupancy `28:8`.
+- Occupied detector persisted after a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M402 semantic SHA-256 is
+`00ed23852b2822be0b8b8766debc5cf5049c7e54b7c106f0e7c8d6a5028b8ab3`.
+
 ## 1.389.0 - M401 Remaining redstone wire
 
 Status: GO for official redstone-wire cross, line, and elbow shapes together.
