@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.245.0 - M257 Furnace minecart
+
+Status: GO for official furnace-minecart spawn.
+
+- Used furnace-minecart item `343` on rail `66` and received Packet23 type `12`.
+- Two peers shared the same object identity and thrower `0`.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M257 semantic SHA-256 is
+`57acb0174de88e73ae6725e8a676aa2dffb0d4b73fe19cbe462be5d882a70264`.
+
 ## 1.244.0 - M256 Chest minecart
 
 Status: GO for official chest-minecart spawn.

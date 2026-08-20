@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.244.0 - M256 Chest minecart (GO)**.
+Current official milestone: **Worldline v1.245.0 - M257 Furnace minecart (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
