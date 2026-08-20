@@ -1601,3 +1601,5 @@ M326 adds no public API. Boat `333`, minecart `328`, chest minecart `342`, and f
 M327 adds no public API. Stew `282`, bread `297`, cookies `357`, and cake `354` share one food-craft family.
 
 M328 adds no public API. Bone meal `351:15`, rose red `351:1`, dandelion yellow `351:11`, and gray `351:8` share one dye-craft family.
+
+M329 adds no public API. Fence `85`, ladder `65`, and bookshelf `47` share one utility-block craft family.

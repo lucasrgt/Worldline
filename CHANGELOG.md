@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.317.0 - M329 Utility block crafts
+
+Status: GO for official fence, ladder, and bookshelf crafts together.
+
+- Packet102 crafted fence `85`, ladder `65`, and bookshelf `47`.
+- The three stacks survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M329 semantic SHA-256 is
+`b70015b8e4bea597b4b8eeba287d216244d5c1bb9f83a1d7d06120bdb8c5086f`.
+
 ## 1.316.0 - M328 Dye family crafts
 
 Status: GO for official dye-item crafts together.
