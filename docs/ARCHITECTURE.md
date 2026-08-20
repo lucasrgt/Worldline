@@ -1477,3 +1477,5 @@ M264 adds no public API. Raw porkchop item `319` air-use heals Packet8 `17 -> 20
 M265 adds no public API. Raw fish item `349` air-use heals Packet8 `18 -> 20` and consumes the stack.
 
 M266 adds no public API. Cooked fish item `350` air-use heals Packet8 `15 -> 20` and consumes the stack.
+
+M267 adds no public API. Milk bucket item `335` air-use becomes empty bucket `325` with no health change.

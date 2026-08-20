@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.255.0 - M267 Milk bucket
+
+Status: GO for official milk-bucket air-use consume.
+
+- Seeded milk bucket `335` and Packet15 air-use left empty bucket `325` with no health change.
+- The official Beta 1.7.3 milk use is a consume, not a heal; both held item and health survived a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M267 semantic SHA-256 is
+`08a4bde6b39728f2585676409fd066a93aea351c0b561981b8e29c9fc7a2cff8`.
+
 ## 1.254.0 - M266 Cooked fish eat
 
 Status: GO for official cooked-fish air-use heal.
