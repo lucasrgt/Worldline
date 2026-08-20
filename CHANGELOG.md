@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.228.0 - M240 Bed place
+
+Status: GO for official two-block bed placement.
+
+- Placed bed item `355` as foot `26:0` and head `26:8` from look yaw `0`.
+- Those cells survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M240 semantic SHA-256 is
+`366879f4dbd3ab1b199692d6094ad12c0ee76aa41469342f4ee3fba3d74ec59d`.
+
 ## 1.227.0 - M239 Sand
 
 Status: GO for official supported-sand placement.

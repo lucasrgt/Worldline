@@ -263,6 +263,7 @@ final class SmokeSuite {
         {"tools/smoke/StoneCycle.java", "m237-stone"},
         {"tools/smoke/GrassCycle.java", "m238-grass"},
         {"tools/smoke/SandCycle.java", "m239-sand"},
+        {"tools/smoke/BedPlaceCycle.java", "m240-bed-place"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
 

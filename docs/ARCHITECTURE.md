@@ -1423,3 +1423,5 @@ M237 adds no public API. Stone item `1` places `1:0` and persists.
 M238 adds no public API. Grass item `2` places `2:0` and persists.
 
 M239 adds no public API. Supported sand item `12` places `12:0` and persists.
+
+M240 adds no public API. Bed item `355` places foot `26:0` and head `26:8` from look yaw `0` and persists.
