@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.374.0 - M386 Ice snow melt set
+
+Status: GO for official ice-to-water and snow-to-air light melt together.
+
+- Floor torch `50:5` melted ice `79` to still water `9:0` and snow layer `78` to air.
+- Both outcomes persisted after a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M386 semantic SHA-256 is
+`00d10f8cca091d8efcf6f005b84e192d110161deafabfb6a71d69862a5de6b7a`.
+
 ## 1.373.0 - M385 Leaf decay set
 
 Status: GO for official oak, spruce, and birch leaf decay together.

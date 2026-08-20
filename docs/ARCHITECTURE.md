@@ -1715,3 +1715,5 @@ M383 adds no public API. Brown mushroom `39` on dirt and red mushroom `40` on ne
 M384 adds no public API. Cactus `81` on sand and sugar cane `83` beside water share one desert-plant growth family.
 
 M385 adds no public API. Oak, spruce, and birch log-backed leaves share one leaf-decay family.
+
+M386 adds no public API. Ice `79` to water `9` and snow `78` to air share one light-melt family.
