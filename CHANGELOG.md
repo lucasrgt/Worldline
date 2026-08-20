@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.258.0 - M270 Iron helmet
+
+Status: GO for official iron-helmet equipment.
+
+- Window-0 click moved iron helmet `306` into armor slot 5; peer Packet5 slot 4 showed `306`.
+- The piece is distinct from leather helmet `298` and survived a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M270 semantic SHA-256 is
+`d62f78b5a3cb690f1845fa802de6bfa0cca27bc60ed090c60f93fdc665bf4f07`.
+
 ## 1.257.0 - M269 Shears leaves
 
 Status: GO for official shears-versus-bare-hand leaf harvest.
