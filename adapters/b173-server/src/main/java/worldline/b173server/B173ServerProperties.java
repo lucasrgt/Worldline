@@ -4,11 +4,13 @@ package worldline.b173server;
 final class B173ServerProperties {
     private B173ServerProperties() {}
     static String text(long seed, int port, int viewDistance, boolean allowFlight, boolean allowNether) {
-        return text(seed,port,viewDistance,allowFlight,allowNether,false); }
+        return text(seed,port,viewDistance,allowFlight,allowNether,false,false); }
     static String text(long seed, int port, int viewDistance, boolean allowFlight, boolean allowNether, boolean spawnAnimals) {
+        return text(seed,port,viewDistance,allowFlight,allowNether,spawnAnimals,false); }
+    static String text(long seed, int port, int viewDistance, boolean allowFlight, boolean allowNether, boolean spawnAnimals, boolean spawnMonsters) {
         return "allow-nether=" + allowNether + "\nlevel-name=world\nlevel-seed=" + seed
                 + "\nmax-players=4\nonline-mode=false\nserver-ip=127.0.0.1\nserver-port=" + port
-                + "\npvp=true\nspawn-animals="+spawnAnimals+"\nspawn-monsters=false\nview-distance=" + viewDistance
+                + "\npvp=true\nspawn-animals="+spawnAnimals+"\nspawn-monsters="+spawnMonsters+"\nview-distance=" + viewDistance
                 + "\nallow-flight=" + allowFlight + "\n";
     }
 }

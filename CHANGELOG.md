@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.351.0 - M363 Hostile identity set
+
+Status: GO for official zombie and skeleton Packet24 identities together.
+
+- Two saved spawners `52` were retargeted to EntityId Zombie and Skeleton.
+- After `time set 14000` the session observed Packet24 types `54` and `51`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M363 semantic SHA-256 is
+`e6df497cd2826b04e3930ffb08caa875bba470b29a8b5bad4ce5cc75d48db14d`.
+
 ## 1.350.0 - M362 Fence collision set
 
 Status: GO for official adjacent fence place plus Packet13 collision together.

@@ -15,12 +15,23 @@ import worldline.api.BlockPosition;
 /** Rewrites one official MobSpawner EntityId after a clean save, without /summon. */
 public final class B173SpawnerSeed {
     private static final byte[] PIG = new byte[] {8, 0, 8, 'E', 'n', 't', 'i', 't', 'y', 'I', 'd', 0, 3, 'P', 'i', 'g'};
-    private static final byte[] SHEEP = new byte[] {8, 0, 8, 'E', 'n', 't', 'i', 't', 'y', 'I', 'd', 0, 5, 'S', 'h', 'e', 'e', 'p'};
 
     private B173SpawnerSeed() {}
 
     public static void sheep(Path serverDirectory, BlockPosition spawner) {
-        if (serverDirectory == null || spawner == null) throw new IllegalArgumentException("invalid spawner seed");
+        rewrite(serverDirectory, spawner, "Sheep", true);
+    }
+
+    /** Replaces one saved MobSpawner EntityId Pig with a hostile vanilla name. */
+    public static void entity(Path serverDirectory, BlockPosition spawner, String entityId) {
+        if (entityId == null || !entityId.matches("Zombie|Skeleton|Spider|Creeper"))
+            throw new IllegalArgumentException("invalid hostile EntityId");
+        rewrite(serverDirectory, spawner, entityId, false);
+    }
+
+    private static void rewrite(Path serverDirectory, BlockPosition spawner, String entityId, boolean unique) {
+        if (serverDirectory == null || spawner == null || entityId == null || entityId.isEmpty())
+            throw new IllegalArgumentException("invalid spawner seed");
         Path root = serverDirectory.toAbsolutePath().normalize();
         int cx = spawner.x() >> 4, cz = spawner.z() >> 4;
         Path region = root.resolve("world/region/r." + (cx >> 5) + "." + (cz >> 5) + ".mcr").normalize();
@@ -36,7 +47,7 @@ public final class B173SpawnerSeed {
             if (length < 2 || type < 1 || type > 2) throw new IllegalStateException("invalid spawner chunk");
             byte[] compressed = new byte[length - 1];
             file.readFully(compressed);
-            byte[] raw = inflate(compressed, type), patched = replace(raw), out = deflate(patched, type);
+            byte[] raw = inflate(compressed, type), patched = replace(raw, tag(entityId), unique), out = deflate(patched, type);
             int next = out.length + 1, need = (next + 4 + 4095) / 4096;
             if (need <= sectors) {
                 file.seek(offset); file.writeInt(next); file.writeByte(type); file.write(out);
@@ -46,17 +57,28 @@ public final class B173SpawnerSeed {
                 file.seek((long) start * 4096L); file.writeInt(next); file.writeByte(type); file.write(out);
                 file.seek(index * 4L); file.writeInt((start << 8) | need);
             }
-        } catch (IOException error) { throw new IllegalStateException("could not retarget sheep spawner", error); }
+        } catch (IOException error) { throw new IllegalStateException("could not retarget spawner", error); }
     }
 
-    private static byte[] replace(byte[] raw) {
+    private static byte[] tag(String entityId) {
+        byte[] name = new byte[] {'E', 'n', 't', 'i', 't', 'y', 'I', 'd'}, value = new byte[entityId.length()];
+        for (int i = 0; i < value.length; i++) value[i] = (byte) entityId.charAt(i);
+        byte[] out = new byte[13 + value.length];
+        out[0] = 8; out[1] = 0; out[2] = 8;
+        System.arraycopy(name, 0, out, 3, 8);
+        out[11] = 0; out[12] = (byte) value.length;
+        System.arraycopy(value, 0, out, 13, value.length);
+        return out;
+    }
+
+    private static byte[] replace(byte[] raw, byte[] nextId, boolean unique) {
         int at = indexOf(raw);
         if (at < 0) throw new IllegalStateException("MobSpawner EntityId Pig absent");
-        byte[] next = new byte[raw.length - PIG.length + SHEEP.length];
+        byte[] next = new byte[raw.length - PIG.length + nextId.length];
         System.arraycopy(raw, 0, next, 0, at);
-        System.arraycopy(SHEEP, 0, next, at, SHEEP.length);
-        System.arraycopy(raw, at + PIG.length, next, at + SHEEP.length, raw.length - at - PIG.length);
-        if (indexOf(next) >= 0) throw new IllegalStateException("duplicate MobSpawner EntityId");
+        System.arraycopy(nextId, 0, next, at, nextId.length);
+        System.arraycopy(raw, at + PIG.length, next, at + nextId.length, raw.length - at - PIG.length);
+        if (unique && indexOf(next) >= 0) throw new IllegalStateException("duplicate MobSpawner EntityId");
         return next;
     }
 
