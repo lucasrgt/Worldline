@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.269.0 - M281 Light blue wool
+
+Status: GO for official light-blue wool placement.
+
+- Placed wool item `35` damage `3` as light-blue wool `35:3` on raised stone.
+- The exact cell survived a clean save and a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M281 semantic SHA-256 is
+`49e519da435b759ce7053b4105c826cbae35a31badd8bc4f4e50d0cd48617e1f`.
+
 ## 1.268.0 - M280 Magenta wool
 
 Status: GO for official magenta wool placement.

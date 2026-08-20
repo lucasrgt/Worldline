@@ -281,7 +281,8 @@ final class SmokeCatalog {
         {"tools/smoke/WoodenDoorOpenCycle.java", "m277-wooden-door-open"},
         {"tools/smoke/TrapdoorToggleCycle.java", "m278-trapdoor-toggle"},
         {"tools/smoke/ButtonPressCycle.java", "m279-button-press"},
-        {"tools/smoke/MagentaWoolCycle.java", "m280-magenta-wool"}, {"tools/smoke/LabCycle.java", "lab-cycle"}
+        {"tools/smoke/MagentaWoolCycle.java", "m280-magenta-wool"},
+        {"tools/smoke/LightBlueWoolCycle.java", "m281-light-blue-wool"}, {"tools/smoke/LabCycle.java", "lab-cycle"}
     };
     private SmokeCatalog() {}
 }
