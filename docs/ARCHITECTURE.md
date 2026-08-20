@@ -1573,3 +1573,5 @@ M312 adds no public API. Redstone torch on `76` inverts to off `75` on the same 
 M313 adds no public API. Note block `25` plays instruments on stone, wood, and sand together.
 
 M314 adds no public API. Iron helmet `306`, chestplate `307`, leggings `308`, and boots `309` share one armor-craft family.
+
+M315 adds no public API. White wool `35:0` plus dyes `351:1`, `351:2`, and `351:4` share one dyed-wool craft family.

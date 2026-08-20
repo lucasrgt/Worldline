@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.303.0 - M315 Dye wool crafts
+
+Status: GO for official 2x2 dyed-wool crafts together.
+
+- White wool `35:0` plus dyes `351:1`, `351:2`, and `351:4` crafted `35:14`, `35:13`, and `35:11`.
+- The three colored stacks survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M315 semantic SHA-256 is
+`f9b78bfc4331c0fc5e92dd33443743a0c9b46e17815f9f89b20fd2535c2405d2`.
+
 ## 1.302.0 - M314 Armor crafts
 
 Status: GO for official iron-armor workbench crafts together.
