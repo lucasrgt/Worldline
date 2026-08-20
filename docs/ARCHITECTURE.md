@@ -1503,3 +1503,5 @@ M277 adds no public API. Empty-hand Packet15 opens wooden door halves `64:0/64:8
 M278 adds no public API. Empty-hand Packet15 toggles trapdoor `96:3` to open `96:7`.
 
 M279 adds no public API. Empty-hand Packet15 pulses stone button `77:1` to `77:9` and back.
+
+M280 adds no public API. Wool item `35` damage `2` places magenta wool `35:2` and persists.

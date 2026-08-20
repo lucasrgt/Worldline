@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.268.0 - M280 Magenta wool
+
+Status: GO for official magenta wool placement.
+
+- Placed wool item `35` damage `2` as magenta wool `35:2` on raised stone.
+- The exact cell survived a clean save and a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M280 semantic SHA-256 is
+`1c2065b1a6b6a8fdbe04e1a4ed0e9d52b6fa44e7fc16fd931de75c89e017e1fe`.
+
 ## 1.267.0 - M279 Button press
 
 Status: GO for official stone-button pulse.

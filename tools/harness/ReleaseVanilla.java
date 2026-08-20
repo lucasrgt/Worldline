@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m276 = load(root, "smokes/m276-fire-damage/smoke.properties");
         Properties m277 = load(root, "smokes/m277-wooden-door-open/smoke.properties");
         Properties m278 = load(root, "smokes/m278-trapdoor-toggle/smoke.properties");
         Properties m279 = load(root, "smokes/m279-button-press/smoke.properties");
-        match(release, "version", "1.267.0");
-        match(release, "milestone", "m279-button-press");
-        same(release, "m276.signature", m276, "expected.signature");
-        same(release, "server.sha256", m276, "server.jar.sha256");
+        Properties m280 = load(root, "smokes/m280-magenta-wool/smoke.properties");
+        match(release, "version", "1.268.0");
+        match(release, "milestone", "m280-magenta-wool");
         same(release, "m277.signature", m277, "expected.signature");
         same(release, "server.sha256", m277, "server.jar.sha256");
         same(release, "m278.signature", m278, "expected.signature");
         same(release, "server.sha256", m278, "server.jar.sha256");
         same(release, "m279.signature", m279, "expected.signature");
         same(release, "server.sha256", m279, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M276_FIRE_DAMAGE.md", "docs/M276_CYCLE.md",
-                "smokes/m276-fire-damage/MAP.md", "docs/M277_WOODEN_DOOR_OPEN.md", "docs/M277_CYCLE.md",
+        same(release, "m280.signature", m280, "expected.signature");
+        same(release, "server.sha256", m280, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M277_WOODEN_DOOR_OPEN.md", "docs/M277_CYCLE.md",
                 "smokes/m277-wooden-door-open/MAP.md", "docs/M278_TRAPDOOR_TOGGLE.md", "docs/M278_CYCLE.md",
                 "smokes/m278-trapdoor-toggle/MAP.md", "docs/M279_BUTTON_PRESS.md", "docs/M279_CYCLE.md",
-                "smokes/m279-button-press/MAP.md"))
+                "smokes/m279-button-press/MAP.md", "docs/M280_MAGENTA_WOOL.md", "docs/M280_CYCLE.md",
+                "smokes/m280-magenta-wool/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.267.0 M279 Button press GO");
+        System.out.println("  release: Worldline v1.268.0 M280 Magenta wool GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
