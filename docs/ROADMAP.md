@@ -378,6 +378,7 @@ Passing an experiment does not silently promote its API.
 | v1.359.0 / M371 | Machine block crafts | GO - TNT 46, piston 33, sticky piston 29 |
 | v1.360.0 / M372 | Placeable item crafts | GO - painting 321, sign 323, bowl 281 |
 | v1.361.0 / M373 | Milk bucket set | GO - cow fill 325 to 335 then drink back to 325 |
+| v1.362.0 / M374 | Remaining food eat | GO - apple 260, pork 320, golden apple 322 heals |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -389,7 +390,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.361.0 direction
+## Immediate post-v1.362.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

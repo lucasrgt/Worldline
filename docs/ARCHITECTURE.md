@@ -1691,3 +1691,5 @@ M371 adds no public API. TNT `46`, piston `33`, and sticky piston `29` share one
 M372 adds no public API. Painting `321`, sign `323`, and bowl `281` share one placeable-item craft family.
 
 M373 adds no public API. Cow milk fill `325→335` and drink `335→325` share one milk-bucket family. `B173SpawnerSeed.cow` and `B173BucketAccess` stay adapter-local.
+
+M374 adds no public API. Apple `260`, cooked pork `320`, and golden apple `322` share one remaining-food-heal family.

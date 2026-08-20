@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.362.0 - M374 Remaining food eat
+
+Status: GO for official apple, cooked pork, and golden apple heals together.
+
+- Apple `260` healed `16→20`, cooked pork `320` healed `12→20`, golden apple `322` healed `10→20`.
+- Each eaten stack became empty and the final inventory persisted.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M374 semantic SHA-256 is
+`8039053be1dc2477fd129e75dd6f6facd47634f0d8dc9e0be131b9750c9e2215`.
+
 ## 1.361.0 - M373 Milk bucket set
 
 Status: GO for official cow milk fill and drink together.

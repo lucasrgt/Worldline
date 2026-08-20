@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.361.0 - M373 Milk bucket set (GO)**.
+Current official milestone: **Worldline v1.362.0 - M374 Remaining food eat (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
