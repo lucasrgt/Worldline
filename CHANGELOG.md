@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.231.0 - M243 Redstone wire
+
+Status: GO for official unpowered redstone-wire placement.
+
+- Placed redstone dust item `331` on a raised stone support as `55:0`.
+- That cell survived save plus a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M243 semantic SHA-256 is
+`6df39ca0f09d2fc710e2636bbad733e4c6e4b94ce946e915ac6367443b22a45f`.
+
 ## 1.230.0 - M242 Lever place
 
 Status: GO for official lever placement.

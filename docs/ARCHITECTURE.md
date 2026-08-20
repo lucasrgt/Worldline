@@ -1429,3 +1429,5 @@ M240 adds no public API. Bed item `355` places foot `26:0` and head `26:8` from 
 M241 adds no public API. Iron door item `330` places lower `71:0` and upper `71:8` and persists.
 
 M242 adds no public API. Lever item `69` places `69:1` on an east face and persists.
+
+M243 adds no public API. Redstone dust item `331` places unpowered wire `55:0` and persists.
