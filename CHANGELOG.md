@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.262.0 - M274 Falling gravel
+
+Status: GO for official one-cell falling gravel.
+
+- Removed the stone support under gravel `13:0` and settled the official `1:0 -> 13:0` / `13:0 -> 0:0` pair.
+- Exactly two complete-chunk states differed after forty gravity ticks and a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M274 semantic SHA-256 is
+`176ae1fac3a1eb0fc755149f750defb1e9bf184c097416e0d6f216e41c7fb222`.
+
 ## 1.261.0 - M273 Chain boots
 
 Status: GO for official chain-boots equipment.

@@ -1491,3 +1491,5 @@ M271 adds no public API. Gold chestplate item `315` equips into armor slot 6 / P
 M272 adds no public API. Diamond leggings item `312` equip into armor slot 7 / Packet5 slot 2.
 
 M273 adds no public API. Chain boots item `305` equip into armor slot 8 / Packet5 slot 1.
+
+M274 adds no public API. Removing stone under gravel `13:0` settles one cell down after official gravity.
