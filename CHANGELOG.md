@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.420.0 - M430 Remaining painting motives
+
+Status: GO for official remaining Packet25 motive-size walls together.
+
+- Item `321` on 4x2, 4x3, and 4x4 west-face walls spawned three Packet25 arts.
+- Two headless peers observed the same entity identities; titles are not hashed.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M430 semantic SHA-256 is
+`1504c14913948dca32f92c0dacff830c42a51f7c402354b7a872fc92af410e09`.
+
 ## 1.419.0 - M429 Remaining attach faces
 
 Status: GO for official remaining ladder, trapdoor, and wall-sign west/south/north faces together.

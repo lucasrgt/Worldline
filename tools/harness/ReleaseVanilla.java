@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m426 = load(root, "smokes/m426-remaining-redstone-faces/smoke.properties");
         Properties m427 = load(root, "smokes/m427-remaining-piston-orient-set/smoke.properties");
         Properties m428 = load(root, "smokes/m428-remaining-door-orient-set/smoke.properties");
         Properties m429 = load(root, "smokes/m429-remaining-attach-faces/smoke.properties");
-        match(release, "version", "1.419.0");
-        match(release, "milestone", "m429-remaining-attach-faces");
-        same(release, "m426.signature", m426, "expected.signature");
-        same(release, "server.sha256", m426, "server.jar.sha256");
+        Properties m430 = load(root, "smokes/m430-remaining-painting-motives/smoke.properties");
+        match(release, "version", "1.420.0");
+        match(release, "milestone", "m430-remaining-painting-motives");
         same(release, "m427.signature", m427, "expected.signature");
         same(release, "server.sha256", m427, "server.jar.sha256");
         same(release, "m428.signature", m428, "expected.signature");
         same(release, "server.sha256", m428, "server.jar.sha256");
         same(release, "m429.signature", m429, "expected.signature");
         same(release, "server.sha256", m429, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M426_REMAINING_REDSTONE_FACES.md", "docs/M426_CYCLE.md",
-                "smokes/m426-remaining-redstone-faces/MAP.md", "docs/M427_REMAINING_PISTON_ORIENT_SET.md", "docs/M427_CYCLE.md",
+        same(release, "m430.signature", m430, "expected.signature");
+        same(release, "server.sha256", m430, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M427_REMAINING_PISTON_ORIENT_SET.md", "docs/M427_CYCLE.md",
                 "smokes/m427-remaining-piston-orient-set/MAP.md", "docs/M428_REMAINING_DOOR_ORIENT_SET.md", "docs/M428_CYCLE.md",
                 "smokes/m428-remaining-door-orient-set/MAP.md", "docs/M429_REMAINING_ATTACH_FACES.md", "docs/M429_CYCLE.md",
-                "smokes/m429-remaining-attach-faces/MAP.md"))
+                "smokes/m429-remaining-attach-faces/MAP.md", "docs/M430_REMAINING_PAINTING_MOTIVES.md", "docs/M430_CYCLE.md",
+                "smokes/m430-remaining-painting-motives/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.419.0 M429 Remaining attach faces GO");
+        System.out.println("  release: Worldline v1.420.0 M430 Remaining painting motives GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

@@ -1807,3 +1807,5 @@ M427 adds no public API. Piston `33` and sticky piston `29` remaining facings sh
 M428 adds no public API. Wooden door `64` remaining hinge/face pairs share one remaining-door-orient family.
 
 M429 adds no public API. Ladder `65`, trapdoor `96`, and wall sign `68` remaining west/south/north faces share one remaining-attach-faces family.
+
+M430 adds no public API. Remaining Packet25 motive-size walls 4x2, 4x3, and 4x4 share one remaining-painting-motives family.
