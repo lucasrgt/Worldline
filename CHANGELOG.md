@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.410.0 - M441 Remaining food rest set
+
+Status: GO for official remaining cookie and mushroom-stew air-eats together.
+
+- Cookie `357` healed 1; mushroom stew `282` healed 8 and left bowl `281`.
+- Golden apple `322` stays in M374; this rest family is cookie plus stew.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M441 semantic SHA-256 is
+`a742d0481ec2e053071b64ffb13a565582bd3dbbc76859b4d650f2a8b74ac5b7`.
+
 ## 1.409.0 - M434 Remaining sponge glass ice
 
 Status: GO for official sponge, glass, and ice place together.
