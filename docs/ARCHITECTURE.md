@@ -1551,3 +1551,5 @@ M301 adds no public API. Stone axe `275` harvests oak, spruce, and birch logs to
 M302 adds no public API. Gold shovel `284` harvests dirt, sand, gravel, and clay together.
 
 M303 adds no public API. Wheat, sugar cane, and cactus harvests drop together.
+
+M304 adds no public API. Hoe-till `3→60` and trample `60→3` run as one farmland family.

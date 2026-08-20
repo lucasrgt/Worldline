@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.292.0 - M304 Farmland set
+
+Status: GO for official hoe-till and farmland-trample together.
+
+- Wooden hoe `290` tilled dirt `3` to farmland `60`, then a jump trampling restored dirt `3`.
+- Unpowered dirt persisted across a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M304 semantic SHA-256 is
+`ce698c2302ea621590b03877774a82c7ea0a5b085bf5536d28093462ed8c121c`.
+
 ## 1.291.0 - M303 Crop harvests
 
 Status: GO for official wheat, sugar cane, and cactus harvests.

@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.291.0 - M303 Crop harvests (GO)**.
+Current official milestone: **Worldline v1.292.0 - M304 Farmland set (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
