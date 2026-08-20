@@ -1805,3 +1805,5 @@ M426 adds no public API. Lever `69` remaining wall/ground faces plus repeater `9
 M427 adds no public API. Piston `33` and sticky piston `29` remaining facings share one remaining-piston-orient family.
 
 M428 adds no public API. Wooden door `64` remaining hinge/face pairs share one remaining-door-orient family.
+
+M429 adds no public API. Ladder `65`, trapdoor `96`, and wall sign `68` remaining west/south/north faces share one remaining-attach-faces family.

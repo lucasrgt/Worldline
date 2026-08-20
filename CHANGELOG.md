@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.419.0 - M429 Remaining attach faces
+
+Status: GO for official remaining ladder, trapdoor, and wall-sign west/south/north faces together.
+
+- Ladder `65:4/3/2`, closed trapdoor `96:2/1/0`, and wall sign `68:4/3/2` were placed.
+- All nine cells persisted after a clean save plus fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M429 semantic SHA-256 is
+`d00079b30c3f58f9f2a197e5a0a27c88880e15c28c3eaf88806d4502ebc2eb2b`.
+
 ## 1.418.0 - M428 Remaining door orient set
 
 Status: GO for official remaining wooden-door hinge/face pairs together.
