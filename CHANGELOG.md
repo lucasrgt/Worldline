@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.344.0 - M356 Jack-o-lantern crafts
+
+Status: GO for official jack-o-lantern craft plus pumpkin and lantern place together.
+
+- Personal 2x2 crafted jack-o-lantern `91` from pumpkin `86` plus torch `50`.
+- Packet15 placed leftover pumpkin `86:1` and crafted lantern `91:1`; both cells survived a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M356 semantic SHA-256 is
+`b870de18f5f7c2616c607111ea332fc3f4426f8f5a3a82d713703270066ee5b1`.
+
 ## 1.343.0 - M355 Note rest instruments
 
 Status: GO for official glass and gold note-block instruments together.

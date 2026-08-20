@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.343.0 - M355 Note rest instruments (GO)**.
+Current official milestone: **Worldline v1.344.0 - M356 Jack-o-lantern crafts (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

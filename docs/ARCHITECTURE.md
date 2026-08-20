@@ -1655,3 +1655,5 @@ M353 adds no public API. Wood `268`, iron `267`, and diamond `276` sword hits sh
 M354 adds no public API. Dry farmland `60:0` and hydrated `60:7` share one moisture family.
 
 M355 adds no public API. Glass instrument 3 and gold instrument 0 share one remaining note-block family.
+
+M356 adds no public API. Pumpkin `86` and jack-o-lantern `91` share one lantern-craft family.
