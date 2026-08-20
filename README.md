@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.259.0 - M271 Gold chestplate (GO)**.
+Current official milestone: **Worldline v1.260.0 - M272 Diamond leggings (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,

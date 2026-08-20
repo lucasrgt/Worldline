@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.260.0 - M272 Diamond leggings
+
+Status: GO for official diamond-leggings equipment.
+
+- Window-0 click moved diamond leggings `312` into armor slot 7; peer Packet5 slot 2 showed `312`.
+- The piece is distinct from leather `300` and survived a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M272 semantic SHA-256 is
+`84c5aee2ec930400dffd8c3fb58277fed715027fa6a538ea53d5acc3cd24b9a0`.
+
 ## 1.259.0 - M271 Gold chestplate
 
 Status: GO for official gold-chestplate equipment.

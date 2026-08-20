@@ -1487,3 +1487,5 @@ M269 adds no public API. Shears item `359` on oak leaves `18:8` emit Packet21 le
 M270 adds no public API. Iron helmet item `306` equips into armor slot 5 / Packet5 slot 4.
 
 M271 adds no public API. Gold chestplate item `315` equips into armor slot 6 / Packet5 slot 3.
+
+M272 adds no public API. Diamond leggings item `312` equip into armor slot 7 / Packet5 slot 2.
