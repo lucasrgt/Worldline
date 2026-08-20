@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.319.0 - M331 Throwables set
+
+Status: GO for official snowball, egg, and fishing-hook throws together.
+
+- Packet15 air-use emitted Packet23 types `61`, `62`, and `90` on the existing tracker.
+- Two peers observed identical identity, type, and thrower for each spawn.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M331 semantic SHA-256 is
+`63d18b0a65f745ad18fa9a7a9e8e345e8bffe83e067224ff8687c1b03c0a7328`.
+
 ## 1.318.0 - M330 Bed sleep set
 
 Status: GO for official bed occupy and wake together.
