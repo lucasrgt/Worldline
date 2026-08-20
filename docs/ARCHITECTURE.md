@@ -1773,3 +1773,5 @@ M412 adds no public API. Slime type `55` parent death plus child type `55` share
 M414 adds no public API. Still lava `11` plus water `9` hardening two obsidian `49` share one lava-obsidian family.
 
 M415 adds no public API. Flowing lava `10` plus water `9` hardening two cobble `4` share one water-cobble family.
+
+M416 adds no public API. Bookshelf `47` craft, two-cell place, and empty harvest share one remaining-bookshelf family.

@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.403.0 - M416 Remaining bookshelf place
+
+Status: GO for official bookshelf craft, two-cell place, and empty harvest together.
+
+- Workbench `58` crafted block `47` from planks `5` plus books `340`.
+- Two `47` cells were placed; gold axe `286` harvested one to air with no Packet21 book `340`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M416 semantic SHA-256 is
+`63f78903270a88d3a7b5dafcb9aae55b9ffdacf7d785ff4b0f3d7616a975cc64`.
+
 ## 1.402.0 - M415 Water cobble set
 
 Status: GO for official flowing-lava plus water cobble in two trenches together.
