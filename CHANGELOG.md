@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.426.0 - M439 Remaining ore place set
+
+Status: GO for official remaining coal, lapis, and unlit redstone ore place together.
+
+- Packet15 placed coal ore `16:0`, lapis ore `21:0`, and unlit redstone ore `73:0`.
+- All three cells persisted after a clean save plus fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M439 semantic SHA-256 is
+`0c58ca403f7064fde875a5257d07193fe9916277c21455b47ac366ab28b828ab`.
+
 ## 1.425.0 - M438 Remaining clock map set
 
 Status: GO for official remaining clock craft plus empty-map air-use together.
