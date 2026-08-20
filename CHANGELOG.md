@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.295.0 - M307 Env damage
+
+Status: GO for official drowning, suffocation, and lava hurt together.
+
+- Packet38 status 2 recorded drowning, falling-sand suffocation, and lava contact.
+- Health `20→15` persisted across a clean save and a fresh login.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M307 semantic SHA-256 is
+`8a51289b35f57567a0dfbc0f3cf8f1d6981dac6219b52d494aac34f56713cba7`.
+
 ## 1.294.0 - M306 Closables
 
 Status: GO for official wooden-door and trapdoor close together.

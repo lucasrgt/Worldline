@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m303 = load(root, "smokes/m303-crop-harvests/smoke.properties");
         Properties m304 = load(root, "smokes/m304-farmland-set/smoke.properties");
         Properties m305 = load(root, "smokes/m305-plant-growth/smoke.properties");
         Properties m306 = load(root, "smokes/m306-closables/smoke.properties");
-        match(release, "version", "1.294.0");
-        match(release, "milestone", "m306-closables");
-        same(release, "m303.signature", m303, "expected.signature");
-        same(release, "server.sha256", m303, "server.jar.sha256");
+        Properties m307 = load(root, "smokes/m307-env-damage/smoke.properties");
+        match(release, "version", "1.295.0");
+        match(release, "milestone", "m307-env-damage");
         same(release, "m304.signature", m304, "expected.signature");
         same(release, "server.sha256", m304, "server.jar.sha256");
         same(release, "m305.signature", m305, "expected.signature");
         same(release, "server.sha256", m305, "server.jar.sha256");
         same(release, "m306.signature", m306, "expected.signature");
         same(release, "server.sha256", m306, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M303_CROP_HARVESTS.md", "docs/M303_CYCLE.md",
-                "smokes/m303-crop-harvests/MAP.md", "docs/M304_FARMLAND_SET.md", "docs/M304_CYCLE.md",
+        same(release, "m307.signature", m307, "expected.signature");
+        same(release, "server.sha256", m307, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M304_FARMLAND_SET.md", "docs/M304_CYCLE.md",
                 "smokes/m304-farmland-set/MAP.md", "docs/M305_PLANT_GROWTH.md", "docs/M305_CYCLE.md",
                 "smokes/m305-plant-growth/MAP.md", "docs/M306_CLOSABLES.md", "docs/M306_CYCLE.md",
-                "smokes/m306-closables/MAP.md"))
+                "smokes/m306-closables/MAP.md", "docs/M307_ENV_DAMAGE.md", "docs/M307_CYCLE.md",
+                "smokes/m307-env-damage/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.294.0 M306 Closables GO");
+        System.out.println("  release: Worldline v1.295.0 M307 Env damage GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

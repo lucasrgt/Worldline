@@ -1,6 +1,6 @@
 # Worldline
 
-Current official milestone: **Worldline v1.294.0 - M306 Closables (GO)**.
+Current official milestone: **Worldline v1.295.0 - M307 Env damage (GO)**.
 
 Worldline is an experimental controlled runtime for Minecraft Beta 1.7.3. Its
 first goal is deliberately small: boot the real game headlessly, load a world,
