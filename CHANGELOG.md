@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.267.0 - M279 Button press
+
+Status: GO for official stone-button pulse.
+
+- Placed east-face button `77:1` then empty-hand Packet15 pulsed it to `77:9` and back to `77:1`.
+- The released `77:1` cell survived a clean save and a fresh login.
+- Repeated the complete fixture in two official server JVMs.
+
+The frozen M279 semantic SHA-256 is
+`910692630d2dc89d5acd515f421970042c6dd218a9f6b2fbc97883e672bd3eb7`.
+
 ## 1.266.0 - M278 Trapdoor toggle
 
 Status: GO for official trapdoor open-bit toggle.

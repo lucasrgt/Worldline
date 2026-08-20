@@ -1501,3 +1501,5 @@ M276 adds no public API. Standing in fire `51:0` on netherrack drops Packet8 hea
 M277 adds no public API. Empty-hand Packet15 opens wooden door halves `64:0/64:8` to `64:4/64:12`.
 
 M278 adds no public API. Empty-hand Packet15 toggles trapdoor `96:3` to open `96:7`.
+
+M279 adds no public API. Empty-hand Packet15 pulses stone button `77:1` to `77:9` and back.
