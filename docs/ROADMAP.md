@@ -451,6 +451,7 @@ Passing an experiment does not silently promote its API.
 | v1.432.0 / M436 | Remaining arrow life | GO - bow 261 type 60 land plus arrow 262 collect |
 | v1.433.0 / M445 | Skeleton ranged AI | GO - type 51 fires two type 60 arrows |
 | v1.434.0 / M450 | Pigman anger set | GO - nether type 57 group aggro after Packet7 |
+| v1.435.0 / M453 | Player death drops | GO - void Packet8 0 plus hotbar 1+4+3 Packet21 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -462,7 +463,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.434.0 direction
+## Immediate post-v1.435.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

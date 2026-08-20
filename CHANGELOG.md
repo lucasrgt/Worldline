@@ -4,6 +4,17 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.435.0 - M453 Player death drops set
+
+Status: GO for official void death plus three seeded hotbar Packet21 drops together.
+
+- Packet8 health `20` to `0` from vanilla void; Packet21 stone `1`, cobble `4`, and dirt `3`.
+- Distinct from M50 drop-current and from mob-drop families.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M453 semantic SHA-256 is
+`6d7e55c8c86f1540d7306a507b0a07af3ef9cbe3b6f6c79cf2b87663beab7ed0`.
+
 ## 1.434.0 - M450 Pigman anger set
 
 Status: GO for official Nether pigman Packet7 group-aggro together.

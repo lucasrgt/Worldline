@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m422 = load(root, "smokes/m422-skeleton-bone-set/smoke.properties");
         Properties m436 = load(root, "smokes/m436-remaining-arrow-life-set/smoke.properties");
         Properties m445 = load(root, "smokes/m445-skeleton-ranged-ai-set/smoke.properties");
         Properties m450 = load(root, "smokes/m450-pigman-anger-set/smoke.properties");
-        match(release, "version", "1.434.0");
-        match(release, "milestone", "m450-pigman-anger-set");
-        same(release, "m422.signature", m422, "expected.signature");
-        same(release, "server.sha256", m422, "server.jar.sha256");
+        Properties m453 = load(root, "smokes/m453-player-death-drops-set/smoke.properties");
+        match(release, "version", "1.435.0");
+        match(release, "milestone", "m453-player-death-drops-set");
         same(release, "m436.signature", m436, "expected.signature");
         same(release, "server.sha256", m436, "server.jar.sha256");
         same(release, "m445.signature", m445, "expected.signature");
         same(release, "server.sha256", m445, "server.jar.sha256");
         same(release, "m450.signature", m450, "expected.signature");
         same(release, "server.sha256", m450, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M422_SKELETON_BONE_SET.md", "docs/M422_CYCLE.md",
-                "smokes/m422-skeleton-bone-set/MAP.md", "docs/M436_REMAINING_ARROW_LIFE_SET.md", "docs/M436_CYCLE.md",
+        same(release, "m453.signature", m453, "expected.signature");
+        same(release, "server.sha256", m453, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M436_REMAINING_ARROW_LIFE_SET.md", "docs/M436_CYCLE.md",
                 "smokes/m436-remaining-arrow-life-set/MAP.md", "docs/M445_SKELETON_RANGED_AI_SET.md", "docs/M445_CYCLE.md",
                 "smokes/m445-skeleton-ranged-ai-set/MAP.md", "docs/M450_PIGMAN_ANGER_SET.md", "docs/M450_CYCLE.md",
-                "smokes/m450-pigman-anger-set/MAP.md"))
+                "smokes/m450-pigman-anger-set/MAP.md", "docs/M453_PLAYER_DEATH_DROPS_SET.md", "docs/M453_CYCLE.md",
+                "smokes/m453-player-death-drops-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.434.0 M450 Pigman anger set GO");
+        System.out.println("  release: Worldline v1.435.0 M453 Player death drops set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

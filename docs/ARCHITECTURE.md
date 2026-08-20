@@ -1837,3 +1837,5 @@ M436 adds no public API. Bow `261` Packet23 type `60` land plus arrow `262` coll
 M445 adds no public API. Skeleton type `51` Packet23 type `60` arrows with skeleton thrower share one skeleton-ranged-ai family.
 
 M450 adds no public API. Nether pigman type `57` Packet7 group-aggro share one pigman-anger family.
+
+M453 adds no public API. Void Packet8 `0` plus seeded hotbar Packet21 drops share one player-death-drops family.
