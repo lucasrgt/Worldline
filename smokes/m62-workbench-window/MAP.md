@@ -12,3 +12,5 @@
 
 M62 does not claim workbench writes, recipes, result derivation, ingredient consumption,
 right/shift clicks, nonempty-grid close semantics, or forced server close handling.
+
+Frozen expected signature SHA-256: `975a1e57c412953d693d00c7a6105b5cbdfed428ab8bdc5e58a4ce04dd974fdf`

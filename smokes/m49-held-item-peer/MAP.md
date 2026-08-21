@@ -13,3 +13,5 @@ evidence.
 
 This cycle does not claim click-window mutation, equipment counts, selection
 acknowledgement to the initiating client, arbitrary containers, or tick control.
+
+Frozen expected signature SHA-256: `df1873f6f3d7c48c3b34a400cad1a86a6579378b4b25cd5c99d90dcf63453039`

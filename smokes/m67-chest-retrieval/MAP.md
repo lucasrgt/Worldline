@@ -14,3 +14,5 @@ M67 is restricted to exact stone, an empty destination, left clicks, a single
 chest, and an empty cursor. It does not claim merging, splitting, shift/right
 clicks, arbitrary items, rejected container recovery, concurrent mutation, or
 generic containers.
+
+Frozen expected signature SHA-256: `cbeb29b97d06faa167bb524366feb7b9d1a92fa03edeb432470d7f1ff0a7b469`

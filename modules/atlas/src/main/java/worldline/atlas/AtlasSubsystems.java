@@ -1,13 +1,9 @@
 package worldline.atlas;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Collections;
 import worldline.invariants.BlockConservation;
 import worldline.invariants.DurabilityConservation;
 import worldline.invariants.EntitySpawn;
@@ -20,10 +16,10 @@ public final class AtlasSubsystems {
     public static final String[] ALL = { "tick-lifecycle", "worldgen", "chunks", "lighting",
             "weather", "block-ticks", "fluids", "entities", "mob-ai", "player", "inventory",
             "crafting", "redstone", "saves", "dimensions", "protocol", "dedicated-server",
-            "rendering", "gui", "resources", "stationapi", "aero" };
+            "rendering", "gui", "resources", "mod-ecosystem", "mappings", "stationapi",
+            "aero" };
     public static final String[] DIMENSIONS = { "TESTABILITY", "CONTROL", "OBSERVABILITY",
             "ORACLE", "SEMANTIC", "REPRODUCIBILITY", "DETERMINISM" };
-    private static final Pattern MILESTONE = Pattern.compile("^m(\\d+)(?:-.*)?$");
     private static final Map<String, String> CATEGORY = categories();
     private static final Map<String, String> INVARIANT = invariants();
 
@@ -50,39 +46,6 @@ public final class AtlasSubsystems {
     public static String forInvariant(String name) {
         String mapped = INVARIANT.get(name);
         return mapped == null ? "" : mapped;
-    }
-
-    public static List<String> forExperiment(String id) {
-        List<String> found = new ArrayList<String>();
-        if ("controlled-client-tick".equals(id) || "deterministic-world-tick".equals(id)
-                || id.startsWith("symbols-map.")) {
-            found.add("tick-lifecycle");
-            return Collections.unmodifiableList(found);
-        }
-        Matcher matcher = MILESTONE.matcher(id);
-        if (!matcher.matches()) return Collections.unmodifiableList(found);
-        int milestone = Integer.parseInt(matcher.group(1));
-        addMilestone(found, milestone);
-        return Collections.unmodifiableList(found);
-    }
-
-    private static void addMilestone(List<String> found, int milestone) {
-        if (milestone == 3) found.add("player");
-        if (milestone == 4) found.add("saves");
-        if (milestone >= 5 && milestone <= 9) found.add("tick-lifecycle");
-        if (milestone == 10 || milestone == 11) {
-            found.add("rendering");
-            found.add("aero");
-        }
-        if (milestone >= 12 && milestone <= 19) found.add("aero");
-        if (milestone == 20 || milestone == 21) found.add("dedicated-server");
-        if (milestone >= 22 && milestone <= 47) found.add("protocol");
-        if (milestone >= 48 && milestone <= 67) found.add("inventory");
-        if (milestone >= 57 && milestone <= 64) found.add("crafting");
-        if (milestone >= 68) {
-            found.add("aero");
-            found.add("stationapi");
-        }
     }
 
     private static Map<String, String> categories() {

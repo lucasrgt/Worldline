@@ -27,3 +27,5 @@ latency can increase. Timing distributions are reported but not frozen because
 the desktop run is scheduling-sensitive. M14 does not approve this policy for
 shipping, prove visual equivalence, or claim that the initial backlog explains
 every historical lag spike.
+
+Frozen expected signature SHA-256: `65f43a875d18e96066441cb308fed7089bab8414b087f4398c1555211f2bae6a`

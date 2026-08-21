@@ -49,3 +49,5 @@ real entity blocks persist while rejected-placement phantom entries disappear.
 - both record windows minimize completely to one record;
 - the invariant report matches the frozen M12 SHA-256;
 - the Aero checkout remains clean and no game binary or save enters Git.
+
+Frozen expected signature SHA-256: `804915ae89a1adef9f350adc020ed8a77986b2d3d4c1d84205009a4382ed051c`

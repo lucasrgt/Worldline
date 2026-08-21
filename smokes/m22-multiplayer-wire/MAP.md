@@ -10,3 +10,5 @@ The client parses the official login response and records a nonnegative entity
 ID, but the exact ID, port, timing, seed-derived spawn, and packets after login
 remain observational. M22 does not use or emulate the official graphical
 client, move a player, or claim packet-stream determinism.
+
+Frozen expected signature SHA-256: `723f96819bd972ec5f2a4d932251840099f2d6472edf590c4386641a7d7e08f9`

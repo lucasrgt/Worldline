@@ -12,6 +12,7 @@ public final class AtlasValidatorTest {
         SemanticCatalog catalog = SemanticCatalog.standard();
         failure(() -> AtlasStatus.parse("GUESSED"));
         failure(() -> AtlasKind.parse("wiki"));
+        require(AtlasKind.MAPPING_SET.equals(AtlasKind.ofId("atlas.mapping-set.biny")));
         failure(() -> AtlasRecord.of("atlas.role.CLIENT_TICK_ROOT", AtlasKind.INVARIANT,
                 AtlasStatus.STRONG, AtlasSchema.CLIENT, AtlasSchema.SCOPE, "x", "", 0,
                 Collections.singletonList("lab-cycle"), Collections.<String>emptyList()));
@@ -44,5 +45,9 @@ public final class AtlasValidatorTest {
             return;
         }
         throw new AssertionError("expected fail-closed atlas validation");
+    }
+
+    private static void require(boolean condition) {
+        if (!condition) throw new AssertionError("requirement failed");
     }
 }

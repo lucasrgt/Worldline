@@ -8,3 +8,5 @@ after each bounded movement resolves.
 Each event must contain the identical outcome object later exposed by the
 immutable route result. The observer adds no game callback or thread. Cache
 remains coherent and official player NBT persists the final fallback pose.
+
+Frozen expected signature SHA-256: `df2973b510807bc1ebce5b49ba2921e14137bd2970fba351d61df46f44165222`

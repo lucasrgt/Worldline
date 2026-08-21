@@ -8,3 +8,5 @@ Observation occurs before the existing route control decision and does not
 change it. The batch adds no asynchronous delivery, parallelism, registry,
 retry, or adapter behavior. Cache remains coherent and official player NBT
 persists the second route's pose.
+
+Frozen expected signature SHA-256: `67a4fbc25b7288613c49431a9137a7104293d3262d7bd5898cbd0472b516287b`

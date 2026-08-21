@@ -11,3 +11,5 @@
 
 M59 does not claim chest-to-player retrieval, merges, splits, right/shift clicks,
 rejected container recovery, concurrent chest mutation, or generic containers.
+
+Frozen expected signature SHA-256: `4f1bfe9bca33138e8c833162aba2e62e1b120488dac8af034d47b60d10c73c9a`

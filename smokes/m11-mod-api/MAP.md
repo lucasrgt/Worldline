@@ -41,3 +41,5 @@ spawn types through `installMod`.
 - DisposeMarker observes onDispose after runtime close.
 - reject-schedule and reject-spawn exit cleanly with WORLDLINE_M11_REJECT.
 - Frozen evidence SHA-256 matches smoke.properties.
+
+Frozen expected signature SHA-256: `bf7f56d37682866ccbc26739474858244b2f70a84394df10f4fbf9277ff36f44`

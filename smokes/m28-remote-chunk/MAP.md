@@ -8,3 +8,5 @@ the payload, and exposes only a neutral immutable observation.
 The gate requires full `16 x 128 x 16` chunk dimensions and a positive payload
 under four million bytes. Spawn-dependent origin and compressed size remain
 observational and are not frozen.
+
+Frozen expected signature SHA-256: `45179dd32117513e55cbf0698ec09e51440b3e3007188c100bcdd234257f0be4`

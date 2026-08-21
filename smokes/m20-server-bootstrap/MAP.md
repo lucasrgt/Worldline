@@ -10,3 +10,5 @@ The JAR and generated worlds remain under ignored roots. No server class,
 resource, generated world, or decompiled source is committed. M20 proves only
 artifact identity and lifecycle control; it does not yet connect a client,
 instrument a server tick, or claim multiplayer determinism.
+
+Frozen expected signature SHA-256: `7d1edb19b978300465878cfade247ec0db7db37b9a5fbcfd9a595566bfb06b60`

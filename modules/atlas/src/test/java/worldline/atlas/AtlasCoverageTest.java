@@ -8,9 +8,9 @@ public final class AtlasCoverageTest {
 
     public static void main(String[] arguments) {
         AtlasStore store = AtlasStore.standard(Paths.get("."));
-        require(store.kind(AtlasKind.COVERAGE_UNIT).size() == 154, "unit count");
-        require("0".equals(store.get("atlas.coverage-unit.worldgen.TESTABILITY").control()),
-                "worldgen stays empty");
+        require(store.kind(AtlasKind.COVERAGE_UNIT).size() == 168, "unit count");
+        require("1".equals(store.get("atlas.coverage-unit.worldgen.TESTABILITY").control()),
+                "worldgen testability filled by explicit smoke scope");
         require(AtlasStatus.UNKNOWN.equals(
                 store.get("atlas.coverage-unit.worldgen.SEMANTIC").status()),
                 "worldgen semantic unknown");
@@ -24,6 +24,8 @@ public final class AtlasCoverageTest {
                 "aero testability filled");
         require("0".equals(store.get("atlas.coverage-unit.redstone.SEMANTIC").control()),
                 "redstone semantic empty");
+        require("1".equals(store.get("atlas.coverage-unit.mappings.SEMANTIC").control()),
+                "mapping semantics filled");
         List<AtlasRecord> gaps = AtlasGaps.list(store);
         require(!gaps.isEmpty(), "gaps exist");
         boolean worldgenGap = false;

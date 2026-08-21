@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/** Declares 22x7 coverage units with denominator 1. Numerators are evidence-backed. */
+/** Declares subsystem-by-dimension coverage units. Numerators are evidence-backed. */
 final class AtlasCoverage {
     private AtlasCoverage() {}
 
@@ -29,7 +29,11 @@ final class AtlasCoverage {
     }
 
     static boolean filled(List<AtlasRecord> existing, String subsystem, String dimension) {
-        if ("SEMANTIC".equals(dimension)) return hasKind(existing, subsystem, AtlasKind.ROLE);
+        if ("SEMANTIC".equals(dimension)) {
+            return hasKind(existing, subsystem, AtlasKind.ROLE)
+                    || hasKind(existing, subsystem, AtlasKind.MAPPING_SET)
+                    || hasKind(existing, subsystem, AtlasKind.NAMESPACE);
+        }
         if ("CONTROL".equals(dimension)) return controlled(existing, subsystem);
         if ("TESTABILITY".equals(dimension)) return hasKind(existing, subsystem, AtlasKind.EXPERIMENT);
         if ("ORACLE".equals(dimension)) return oracle(existing, subsystem);
@@ -37,7 +41,11 @@ final class AtlasCoverage {
         if ("OBSERVABILITY".equals(dimension)) {
             return hasKind(existing, subsystem, AtlasKind.ROLE)
                     || hasKind(existing, subsystem, AtlasKind.EXPERIMENT)
-                    || hasKind(existing, subsystem, AtlasKind.INVARIANT);
+                    || hasKind(existing, subsystem, AtlasKind.INVARIANT)
+                    || hasKind(existing, subsystem, AtlasKind.LOADER)
+                    || hasKind(existing, subsystem, AtlasKind.API)
+                    || hasKind(existing, subsystem, AtlasKind.MAPPING_SET)
+                    || hasKind(existing, subsystem, AtlasKind.NAMESPACE);
         }
         if ("DETERMINISM".equals(dimension)) return determinism(existing, subsystem);
         throw new IllegalArgumentException("dimension " + dimension);

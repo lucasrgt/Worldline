@@ -43,3 +43,5 @@ evaluation profile at
 `adapters/aero-model-lib/opt-in/worldline-adaptive.properties` is default-off
 and marked `lab-only-no-go`. M18 must address single-item overshoot and explain
 or eliminate final-frame divergence before any Aero integration is proposed.
+
+Frozen expected signature SHA-256: `fa008e18e53b8d63003196e91d2b554f4ce973e602a68df4c7a7dc77096f7456`

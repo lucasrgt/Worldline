@@ -34,3 +34,5 @@ module unit suite.
 - app -> core -> lib resolves to lib, core, app regardless of input order.
 - missing, version shortfall, self, and cycle cases all throw.
 - Frozen evidence SHA-256 matches smoke.properties.
+
+Frozen expected signature SHA-256: `353a640be5bf2a77cdfd921c10b0525b462839e2f2d2591afb99223360bd67e5`

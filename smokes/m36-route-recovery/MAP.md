@@ -8,3 +8,5 @@ still executes and applies another `+0.125 X` from that corrected pose.
 The ordered outcomes must be `UNCHALLENGED`, `CORRECTED`, `UNCHALLENGED` with
 exactly one correction. The original cache chunk remains loaded, and official
 player NBT after clean disconnect/save must equal the final recovered pose.
+
+Frozen expected signature SHA-256: `895c39dd8b5e5d0f18c7eac81b76c5da77df74b98ecb434aad93adf49cfbc0c8`

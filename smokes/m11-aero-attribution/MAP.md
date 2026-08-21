@@ -38,3 +38,5 @@ It does not yet reproduce the historical random spike in a saved world, prove
 cross-machine frame-time determinism, or identify a production root cause.
 The current startup also reports a caught showcase-block UV lookup before the
 StationAPI atlas is ready. M11 records that non-fatal diagnostic explicitly.
+
+Frozen expected signature SHA-256: `42e656576b70c53919761570abf016f93f76ddfbe49f3e40b79f2de0518eaecc`

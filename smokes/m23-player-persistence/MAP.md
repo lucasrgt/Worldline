@@ -9,3 +9,5 @@ The gate requires dimension 0, health 20, an empty inventory, and a finite
 position above the void. Exact spawn coordinates and entity IDs remain
 observational. The official server JAR and generated player/world data remain
 ignored.
+
+Frozen expected signature SHA-256: `cce8512d97119d2c7fd010110a1760bebe7d86bed4f3d8cc1fefe39e58fb8928`

@@ -72,6 +72,10 @@ Status: GO.
   and milestone-delta commands without making Atlas a runtime dependency.
 - Indexed semantic roles, controlled boundaries, invariants, milestone
   evidence, trace fields, ecosystem knowledge, and explicit uncertainty.
+- Replaced milestone-number inference with explicit subsystem metadata across
+  every smoke and froze legacy expected signatures in their MAP evidence.
+- Added provenance-aware loader, API, mapping-set, and namespace records for
+  the Babric/Ornithe ecosystem without vendoring third-party mappings.
 
 ## Unreleased - Worldline TestKit 0.2.1 experimental
 

@@ -16,3 +16,5 @@ M68 proves composition and runtime compatibility for a client-modified vanilla
 multiplayer world. It does not claim Aero model content on the server, pixels,
 performance, a lag spike, combat, causal attribution, or generic remote-server
 compatibility.
+
+Frozen expected signature SHA-256: `a7978b0bb7e1277d846528036ff3ded3c5541ea5b11bd0935d32580b574e969f`

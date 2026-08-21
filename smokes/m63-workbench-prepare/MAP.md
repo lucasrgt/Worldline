@@ -15,3 +15,5 @@ The byte fixture proves right-click encoding; Packet106 accepts each null return
 but does not independently reveal cursor, matrix, or SlotCrafting state. M63
 therefore treats those as ACK-correlated adapter models. M64 must confirm the
 final slabs prediction by taking output. Generic recipes/clicks remain absent.
+
+Frozen expected signature SHA-256: `9fd2fb1869b8221cc5e2c9173a548224fb65ca6c6dc9c37858eeb88cd24bf289`

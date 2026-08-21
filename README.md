@@ -72,6 +72,7 @@ behavior evidence without silently widening those early public APIs.
 | M111-M469 | Official vanilla world, block, item, entity, crafting, AI, damage, and death behavior sets | GO |
 | M469 | Current release: official void walk-off death and respawn set | GO |
 | TestKit 0.x | Experimental Java specs, isolated runner, reporters, artifacts, and CLI | EXPERIMENTAL |
+| Atlas | Generated semantic, evidence, ecosystem, and coverage knowledge store | EXPERIMENTAL |
 
 Version and frozen signatures are authoritative in
 [`release/worldline.properties`](release/worldline.properties). The promotion
@@ -506,6 +507,8 @@ classes, RetroMCP, or native libraries on their product classpaths.
 | [Vision](docs/VISION.md) | Project purpose, evidence philosophy, and determinism boundary |
 | [Architecture](docs/ARCHITECTURE.md) | Module order, dependency direction, adapters, and smokes |
 | [Roadmap](docs/ROADMAP.md) | Official milestones, promotion rule, and future direction |
+| [Atlas](docs/ATLAS.md) | Fail-closed knowledge store, evidence model, coverage, and CLI |
+| [Mappings and ecosystem](docs/ECOSYSTEM_MAPPINGS.md) | Loader/API separation, namespaces, provenance, and uncertainty |
 | [M2 runtime control](docs/M2_RUNTIME.md) | Clock, input, RNG, filesystem, network, scheduling, threads |
 | [M3 domain API](docs/M3_API.md) | Stable world, player, entity, and block contract |
 | [M4 snapshots](docs/M4_SNAPSHOT.md) | Snapshot format, restoration, and portability limits |

@@ -12,3 +12,5 @@
 
 M64 does not claim generic recipes, merges, arbitrary output sizes, shift/right
 output clicks, container items, rejected container recovery, or XP/achievements.
+
+Frozen expected signature SHA-256: `fa5b92b7450d785451e527f7ecbab2597f99e0b9977b31333541a4e0a155253b`

@@ -12,3 +12,5 @@ actor and peer hand became empty, while clean player NBT remains empty.
 This cycle does not claim item collection, destroy-entity correlation, exact
 throw trajectory determinism, arbitrary entity tracking, container actions,
 server tick control, or server-memory inspection.
+
+Frozen expected signature SHA-256: `6051025c444760d21cf5a283358b4594612188234b72c7ae363c0a50d907e92f`

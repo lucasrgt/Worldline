@@ -9,3 +9,5 @@ The gate requires no onscreen `Display`, the renderer provenance under the
 mapped client workspace, exact pixel coverage, the M10-qualified frame hash,
 and clean client/server shutdown. M10 already proves this mapped Tessellator
 path matches the official obfuscated renderer.
+
+Frozen expected signature SHA-256: `c2d85227a2cb542e0c9b21aa77dd71a0bbfaab7162a1db6c0fb0955876dbb2ce`

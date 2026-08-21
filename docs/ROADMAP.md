@@ -466,7 +466,7 @@ Passing an experiment does not silently promote its API.
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
-| Atlas | Generated knowledge store, provenance graph, coverage matrix, and query CLI | PORTING - validation required on M469 |
+| Atlas | Generated knowledge store, provenance graph, coverage matrix, and query CLI | EXPERIMENTAL - ported on M469; canonical verification passes |
 
 ## Promotion rule
 

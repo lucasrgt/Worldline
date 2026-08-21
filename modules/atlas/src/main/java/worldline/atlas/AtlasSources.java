@@ -26,6 +26,7 @@ final class AtlasSources {
             records.addAll(AtlasScenarioImport.load());
             records.addAll(AtlasFieldImport.load());
             records.addAll(AtlasHypothesisImport.load());
+            records.addAll(AtlasEcosystemImport.load());
             records.addAll(AtlasCoverage.units(records));
             return AtlasStore.of(records, catalog, root);
         } catch (IOException error) {

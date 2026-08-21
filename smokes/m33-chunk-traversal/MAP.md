@@ -14,3 +14,5 @@ Both cache topologies are rendered on the same 12x12 native grid through mapped
 Minecraft `Tessellator`, LWJGL, and an offscreen Pbuffer. A removed chunk's
 pixel must clear, an added chunk's pixel must appear, and the RGBA frame hash
 must change. Movement alone is not accepted without the lifecycle transition.
+
+Frozen expected signature SHA-256: `8f2860494fba146931fbe768d01a5c0dc063d05cc2ac01afd3fa9cce4c8b7e0d`

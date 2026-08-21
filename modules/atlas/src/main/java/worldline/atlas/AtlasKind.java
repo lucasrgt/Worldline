@@ -11,8 +11,14 @@ public final class AtlasKind {
     public static final String COVERAGE_UNIT = "coverage-unit";
     public static final String HYPOTHESIS = "hypothesis";
     public static final String FIELD = "field";
-    private static final String[] ALL = { COVERAGE_UNIT, HYPOTHESIS, EXPERIMENT, INVARIANT,
-            SUBSYSTEM, SCENARIO, BOUNDARY, FIELD, ROLE };
+    public static final String LOADER = "loader";
+    public static final String API = "api";
+    public static final String MAPPING_SET = "mapping-set";
+    public static final String NAMESPACE = "namespace";
+    public static final String ECOSYSTEM_CLAIM = "ecosystem-claim";
+    private static final String[] ALL = { ECOSYSTEM_CLAIM, COVERAGE_UNIT, MAPPING_SET,
+            HYPOTHESIS, EXPERIMENT, INVARIANT, SUBSYSTEM, NAMESPACE, SCENARIO, BOUNDARY,
+            LOADER, FIELD, ROLE, API };
 
     private AtlasKind() {}
 

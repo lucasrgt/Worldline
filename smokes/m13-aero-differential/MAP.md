@@ -30,3 +30,5 @@ M13 does not identify why vanilla/StationAPI chunk compilation is slow, prove
 the historical random spike has one cause, or approve the current governor for
 shipping. It isolates the fixture persistence split and narrows the next
 investigation to the chunk compiler and its caller retry semantics.
+
+Frozen expected signature SHA-256: `1759de8beeeef257a4027fd79f590ec7a72d364729863d1cb5fe373741399e80`

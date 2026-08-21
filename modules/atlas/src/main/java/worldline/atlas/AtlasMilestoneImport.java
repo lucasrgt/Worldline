@@ -14,9 +14,8 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** Indexes smoke.properties, MAP.md SHA-256 lines, CYCLE docs, and tracked symbols.map files. */
+/** Indexes explicitly scoped smoke evidence, CYCLE docs, and tracked symbols maps. */
 final class AtlasMilestoneImport {
-    private static final Pattern MAP_SHA = Pattern.compile("(?m)^SHA-256:\\s*`([a-fA-F0-9]{64})`");
     private static final Pattern MILESTONE = Pattern.compile("^m(\\d+)(?:-.*)?$");
 
     private AtlasMilestoneImport() {}
@@ -50,28 +49,30 @@ final class AtlasMilestoneImport {
         if (id.isEmpty()) id = folder;
         if (!folder.equals(id)) throw new IllegalArgumentException("smoke id mismatch " + folder);
         String signature = fields.getProperty("expected.signature", "").trim();
-        String mapHash = mapSha(dir.resolve("MAP.md"));
-        if (!signature.isEmpty() && !mapHash.isEmpty()
-                && !signature.equalsIgnoreCase(mapHash)) {
-            throw new IllegalArgumentException("MAP SHA-256 mismatch " + id);
+        Path map = dir.resolve("MAP.md");
+        String mapText = Files.isRegularFile(map)
+                ? new String(Files.readAllBytes(map), StandardCharsets.UTF_8) : "";
+        if (!signature.isEmpty() && !mapText.toLowerCase().contains(signature.toLowerCase())) {
+            throw new IllegalArgumentException("MAP does not freeze expected.signature " + id);
         }
         List<String> evidence = new ArrayList<String>();
         if (!signature.isEmpty()) {
             evidence.add("expected.signature=" + signature.toLowerCase());
+            evidence.add("map-signature-freeze");
         }
-        if (!mapHash.isEmpty()) evidence.add(mapHash.toLowerCase());
-        if (hasNonclaims(dir.resolve("MAP.md"))) evidence.add("map-nonclaims");
+        if (!mapText.isEmpty()) evidence.add(AtlasHashes.sha256(mapText));
+        if (hasNonclaims(mapText)) evidence.add("map-nonclaims");
         if (evidence.isEmpty()) evidence.add("smoke.properties");
         List<String> refs = new ArrayList<String>();
-        for (String subsystem : AtlasSubsystems.forExperiment(id)) {
-            refs.add("atlas.subsystem." + subsystem);
-        }
+        addSubsystems(refs, required(fields, "atlas.subsystems", id));
+        addRefs(refs, fields.getProperty("atlas.roles", ""), "atlas.role.");
+        addRefs(refs, fields.getProperty("atlas.boundaries", ""), "atlas.boundary.");
         String cycle = cyclePath(id);
         if (!cycle.isEmpty() && Files.isRegularFile(root.resolve(cycle))) {
             evidence.add(cycle.replace('\\', '/'));
         }
         return AtlasRecord.of("atlas.experiment." + id, AtlasKind.EXPERIMENT,
-                AtlasStatus.OBSERVATIONAL, AtlasSchema.CLIENT, AtlasSchema.SCOPE, id, "", 0,
+                AtlasStatus.OBSERVATIONAL, artifact(fields, id), AtlasSchema.SCOPE, id, "", 0,
                 evidence, refs);
     }
 
@@ -80,24 +81,49 @@ final class AtlasMilestoneImport {
         String hash = AtlasHashes.sha256(Files.readAllBytes(symbols));
         List<String> evidence = Collections.singletonList(hash);
         List<String> refs = new ArrayList<String>();
-        for (String subsystem : AtlasSubsystems.forExperiment("symbols-map." + folder)) {
-            refs.add("atlas.subsystem." + subsystem);
-        }
+        refs.add("atlas.subsystem.mappings");
+        refs.add("atlas.subsystem.tick-lifecycle");
         return AtlasRecord.of("atlas.experiment.symbols-map." + folder, AtlasKind.EXPERIMENT,
                 AtlasStatus.OBSERVATIONAL, AtlasSchema.CLIENT, AtlasSchema.SCOPE,
                 "smokes/" + folder + "/symbols.map", "", 0, evidence, refs);
     }
 
-    private static String mapSha(Path map) throws IOException {
-        if (!Files.isRegularFile(map)) return "";
-        String text = new String(Files.readAllBytes(map), StandardCharsets.UTF_8);
-        Matcher matcher = MAP_SHA.matcher(text);
-        return matcher.find() ? matcher.group(1) : "";
+    private static String required(Properties fields, String key, String id) {
+        String value = fields.getProperty(key, "").trim();
+        if (value.isEmpty()) throw new IllegalArgumentException("missing " + key + " " + id);
+        return value;
     }
 
-    private static boolean hasNonclaims(Path map) throws IOException {
-        if (!Files.isRegularFile(map)) return false;
-        String text = new String(Files.readAllBytes(map), StandardCharsets.UTF_8);
+    private static String artifact(Properties fields, String id) {
+        String value = required(fields, "atlas.artifact", id);
+        if ("client".equals(value)) return AtlasSchema.CLIENT;
+        if ("server".equals(value)) return AtlasSchema.SERVER;
+        if ("worldline".equals(value)) return AtlasSchema.WORLDLINE;
+        throw new IllegalArgumentException("unknown atlas.artifact " + value + " " + id);
+    }
+
+    private static void addSubsystems(List<String> refs, String value) {
+        for (String subsystem : tokens(value)) {
+            if (!AtlasSubsystems.known(subsystem)) {
+                throw new IllegalArgumentException("unknown atlas subsystem " + subsystem);
+            }
+            refs.add("atlas.subsystem." + subsystem);
+        }
+    }
+
+    private static void addRefs(List<String> refs, String value, String prefix) {
+        for (String token : tokens(value)) refs.add(prefix + token);
+    }
+
+    private static List<String> tokens(String value) {
+        List<String> tokens = new ArrayList<String>();
+        for (String token : value.trim().split("[,\\s]+")) {
+            if (!token.isEmpty()) tokens.add(token);
+        }
+        return tokens;
+    }
+
+    private static boolean hasNonclaims(String text) {
         return text.contains("Nonclaims:") || text.contains("Non-claims:")
                 || text.toLowerCase().contains("does not claim");
     }

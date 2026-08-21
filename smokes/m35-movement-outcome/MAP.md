@@ -10,3 +10,5 @@ After the rollback, the original cached chunk must remain loaded. Each client
 disconnects cleanly, the official server saves, and persisted player NBT must
 equal the small unchallenged pose. This persistence check is what qualifies
 that bounded unchallenged result as server-accepted evidence.
+
+Frozen expected signature SHA-256: `414c83fa237a0affd1c36ab171e04f07ab110487fc2ebd75698f54e55d92417a`
