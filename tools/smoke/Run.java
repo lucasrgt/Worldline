@@ -203,7 +203,7 @@ public final class Run {
         String backend = capture(root, "javap", "-classpath", paths, "-c", "-p",
                 required("control.backend"));
         if (!driver.contains("InterfaceMethod worldline/api/MinecraftRuntime.tick:()V")
-                || !backend.contains("Method net/minecraft/src/World.tick:()V")
+                || (Boolean.parseBoolean(smoke.getProperty("control.world-tick", "true")) && !backend.contains("Method net/minecraft/src/World.tick:()V"))
                 || (Boolean.parseBoolean(required("control.entity-tick")) && !backend.contains("Method net/minecraft/src/World.updateEntities:()V"))) {
             throw new IllegalStateException("compiled smoke does not preserve runtime -> backend -> World.tick path");
         }
