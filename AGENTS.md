@@ -48,6 +48,10 @@ This is the canonical local and CI gate. It owns the per-file source ceilings, m
 dependency enforcement, compilation with warnings as errors, and the complete
 test suite. Do not substitute partial commands for it.
 
+A versioned pre-push hook runs the same gate before every push. Activate it
+once per clone with `git config core.hooksPath tools/hooks`; export
+`WORLDLINE_PREPUSH_SMOKE=1` to demand the full smoke suite instead.
+
 Any task that reads, transforms, instruments, or executes Minecraft must use
 the runtime profile and may not proceed unless it passes:
 

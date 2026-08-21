@@ -32,6 +32,8 @@ public final class WorldlineCli {
                 return mod(arguments, output, error);
             if ("scenario".equals(arguments[0]) && arguments.length >= 3)
                 return ScenarioCommands.run(arguments, output, error);
+            if ("fuzz".equals(arguments[0]))
+                return FuzzCommand.run(arguments, output, error);
             if (arguments.length >= 2 && "semantics".equals(arguments[0]))
                 return SemanticsCommand.run(arguments, output, error);
             return usage(error);
@@ -97,6 +99,7 @@ public final class WorldlineCli {
         error.println("   or: worldline scenario inspect <scenario.wlscenario>");
         error.println("   or: worldline scenario validate <scenario.wlscenario>");
         error.println("   or: worldline scenario run <scenario.wlscenario> <seed> <trace.wltrace>");
+        error.println("   or: worldline fuzz <out-dir> <seed> <cases> <max-steps> [left.jar] [right.jar]");
         error.println("   or: worldline semantics show");
         error.println("   or: worldline semantics graph");
         error.println("   or: worldline semantics category <name>");

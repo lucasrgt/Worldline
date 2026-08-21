@@ -1,0 +1,32 @@
+#!/bin/sh
+# Pre-push verification gate. Runs the canonical repository gate before any
+# push. Export WORLDLINE_PREPUSH_SMOKE=1 to demand the full evidence suite.
+set -e
+
+root="$(cd "$(dirname "$0")/../.." && pwd)"
+
+while read -r _local_ref _local_sha _remote_ref _remote_sha; do
+    case "$_remote_sha" in
+        0000000000000000000000000000000000000000) continue ;;
+    esac
+    break
+done
+
+cd "$root"
+
+if command -v java >/dev/null 2>&1; then
+    JAVA=java
+elif command -v java.exe >/dev/null 2>&1; then
+    JAVA=java.exe
+else
+    echo "pre-push: java was not found on PATH" >&2
+    exit 1
+fi
+
+if [ "${WORLDLINE_PREPUSH_SMOKE:-0}" = "1" ]; then
+    echo "pre-push: running full smoke gate (this verifies every frozen signature)..."
+    exec "$JAVA" tools/harness/Verify.java --smoke
+fi
+
+echo "pre-push: running repository gate..."
+exec "$JAVA" tools/harness/Verify.java

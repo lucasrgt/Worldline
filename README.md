@@ -62,6 +62,8 @@ automatic scenario minimization.
 | M12 | One-command attested mod test runs | GO |
 | M13 | Multi-mod dependency graphs with deterministic ordering | GO |
 | M14 | Public scenario DSL with validated, runnable reproducers | GO |
+| Pre-push gate | Versioned hook running the canonical gate before every push | GO |
+| M15 | Deterministic differential fuzzer with auto-minimized findings | GO |
 
 Version and frozen signatures are authoritative in
 [`release/worldline.properties`](release/worldline.properties). The promotion
@@ -86,6 +88,15 @@ java tools/harness/Verify.java
 This command validates source ceilings and module dependencies, compiles every
 product module separately with warnings as errors, checks release metadata,
 and runs the complete unit suite. Derived files stay under `.worldline/`.
+
+A versioned pre-push hook runs this gate before every push:
+
+```text
+git config core.hooksPath tools/hooks
+```
+
+Set `WORLDLINE_PREPUSH_SMOKE=1` to demand the full `--smoke` suite before
+pushing instead of the base gate.
 
 ### 2. Prepare runtime-bound work
 
@@ -225,6 +236,17 @@ The public DSL covers `tick[:n]`, `reseed:<long>`, `tap:<key>`,
 and canonical rendering. Scenarios stay ordinary M9 artifacts, so the
 minimizer applies unchanged.
 
+### Fuzz for divergences
+
+```text
+java tools/replay/Replay.java fuzz out 17320110707 24 6 v1.jar v2.jar
+```
+
+Deterministic campaigns generate bounded DSL scenarios, execute them against
+named subjects (two mods, mod versus vanilla, or vanilla against itself), and
+automatically shrink every divergence into a minimal shareable `.wlscenario`.
+Reports are checksum-protected `WORLDLINE-FUZZ/1` artifacts.
+
 ### Testing flow
 
 ```text
@@ -361,6 +383,7 @@ java tools/replay/Replay.java scenario create <output.wlscenario> [step ...]
 java tools/replay/Replay.java scenario inspect <scenario.wlscenario>
 java tools/replay/Replay.java scenario validate <scenario.wlscenario>
 java tools/replay/Replay.java scenario run <scenario.wlscenario> <seed> <trace.wltrace>
+java tools/replay/Replay.java fuzz <out-dir> <seed> <cases> <steps> [left.jar] [right.jar]
 ```
 
 Neutral inspection and comparison commands do not require Minecraft, mapped
@@ -387,6 +410,7 @@ classes, RetroMCP, or native libraries on their product classpaths.
 | [M12 mod test run](docs/M12_MOD_RUN.md) | Attested one-command execution and result format 2 |
 | [M13 mod graph](docs/M13_MOD_GRAPH.md) | Format 2 dependencies and deterministic ordering |
 | [M14 scenario DSL](docs/M14_SCENARIO_DSL.md) | Public step grammar, validation, and execution |
+| [M15 fuzzer](docs/M15_FUZZ.md) | Deterministic differential campaigns and auto-minimized findings |
 | [GUI tree](docs/GUI_TREE.md) | Semantic inventory UI and Butter bridge |
 | [Invariants](docs/INVARIANTS.md) | Observation model and fail-closed rules |
 | [Semantics](docs/SEMANTICS.md) | Roles, mappings, manifests, confidence, and coverage |

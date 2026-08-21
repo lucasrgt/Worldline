@@ -82,6 +82,7 @@ public final class Verify {
             run(Arrays.asList("java", "tools/smoke/ModRunCycle.java", "m12-mod-run"));
             run(Arrays.asList("java", "tools/smoke/ModGraphCycle.java", "m13-mod-graph"));
             run(Arrays.asList("java", "tools/smoke/ScenarioDslCycle.java", "m14-scenario-dsl"));
+            run(Arrays.asList("java", "tools/smoke/FuzzCycle.java", "m15-fuzz"));
         }
         System.out.println("verify passed");
     }

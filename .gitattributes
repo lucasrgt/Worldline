@@ -1,2 +1,2 @@
-smokes/m7-mod-loading/descriptors/**/worldline-mod.properties text eol=lf
-smokes/m8-mod-version-diff/descriptors/**/worldline-mod.properties text eol=lf
+**/descriptors/**/worldline-mod.properties text eol=lf
+tools/hooks/pre-push text eol=lf

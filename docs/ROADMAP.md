@@ -22,6 +22,8 @@ Passing an experiment does not silently promote its API.
 | M12 | One-command attested mod test runs (`mod test run`) | GO - stable milestone |
 | M13 | Multi-mod dependency graphs with deterministic ordering | GO - stable milestone |
 | M14 | Public scenario DSL with validated, runnable reproducers | GO - stable milestone |
+| Pre-push gate | Versioned hook running the canonical gate before every push | GO - stable milestone |
+| M15 | Deterministic differential fuzzer with auto-minimized findings | GO - stable milestone |
 
 ## Promotion rule
 

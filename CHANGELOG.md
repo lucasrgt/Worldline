@@ -4,6 +4,33 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## Unreleased - Pre-push Verification Gate
+
+Status: GO.
+
+- Added a versioned `tools/hooks/pre-push` hook that runs the canonical gate
+  before every push, with `WORLDLINE_PREPUSH_SMOKE=1` demanding the full
+  evidence suite.
+- Activated per clone via `git config core.hooksPath tools/hooks`; documented
+  in the engineering guide and README.
+
+## Unreleased - M15 Differential Fuzzer
+
+Status: GO.
+
+- Added the deterministic `worldline fuzz <out-dir> <seed> <cases> <steps>
+  [left.jar] [right.jar]` campaign command over public-grammar scenarios.
+- Added `worldline.fuzz` with bounded scenario planning, named subjects,
+  pairwise divergence search, vanilla self-checks for nondeterminism, and
+  automatic minimization of every divergence into a `.wlscenario` reproducer.
+- Added the canonical checksum-protected `WORLDLINE-FUZZ/1` report with
+  embedded scenario artifacts and stable subject provenance.
+- Added adapter-side fail-closed validation for unregistered block ids in
+  scenario block writes.
+- Evidence: two-mod campaign finds and shrinks the first divergence inside the
+  budget while a vanilla-only campaign stays clean; frozen SHA-256 in
+  `smokes/m15-fuzz/smoke.properties`.
+
 ## Unreleased - M11 Mod API v2
 
 Status: GO.
