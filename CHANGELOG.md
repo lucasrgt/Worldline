@@ -4,6 +4,16 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## Unreleased - WorldlineEvidence Equatable
+
+Status: public API for kit/verb equality; not a vanilla SET GO.
+
+- `WorldlineBehavior.CREEPER_FUSE` is the public identity. Token `creeper-fuse` maps to `atlas.scenario.creeper-fuse`.
+- Development smoke ids (`m448-creeper-fuse-set`) import only as aliases; they are not the public identity.
+- `WorldlineEvidence` equality is behavior token plus semantic SHA-256. Lane `vanilla`/`mod` is provenance only.
+- `WorldlineEvidenceDiff` renders behavior/signature/signal mismatch. Ad-hoc field asserts stay out.
+- `Creeper.stayUntilExplode` is the first public verb; the creeper-fuse smoke emits `WorldlineEvidence`.
+
 ## Unreleased - HTML Evidence Pages
 
 Status: GO.
