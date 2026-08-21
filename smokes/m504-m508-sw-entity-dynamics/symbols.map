@@ -1,0 +1,12 @@
+# owner kind descriptor named client server
+net/minecraft/src/EntityGhast	c	-	net/minecraft/src/EntityGhast	bp	aw
+net/minecraft/src/EntityGhast	f	D	waypointY	c	c
+net/minecraft/src/EntitySlime	c	-	net/minecraft/src/EntitySlime	uw	nb
+net/minecraft/src/EntitySlime	m	(I)V	setSlimeSize	e	e
+net/minecraft/src/EntityBoat	c	-	net/minecraft/src/EntityBoat	fz	eb
+net/minecraft/src/EntityMinecart	c	-	net/minecraft/src/EntityMinecart	yl	pr
+net/minecraft/src/Entity	f	D	motionX	aP	aS
+net/minecraft/src/Entity	f	D	motionY	aQ	aT
+net/minecraft/src/Entity	f	Z	onGround	aX	ba
+net/minecraft/src/Entity	f	Z	isCollidedHorizontally	aY	bb
+net/minecraft/src/Entity	m	()V	onUpdate	w_	m_

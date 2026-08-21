@@ -150,7 +150,8 @@ final class SmokeCatalog {
         {"tools/smoke/Run.java", "m510-sw-redstone-wire-loop-recovery"},
         {"tools/smoke/Run.java", "m525-sw-wire-crossing-isolation"},
         {"tools/smoke/Run.java", "m517-sw-item-despawn-age"},
-        {"tools/smoke/Run.java", "m519-sw-dispenser-rng-membership"}
+        {"tools/smoke/Run.java", "m519-sw-dispenser-rng-membership"},
+        {"tools/smoke/Run.java", "m504-m508-sw-entity-dynamics"}
     };
     private SmokeCatalog() {}
 }
