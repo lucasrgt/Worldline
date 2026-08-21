@@ -24,6 +24,7 @@ Passing an experiment does not silently promote its API.
 | M14 | Public scenario DSL with validated, runnable reproducers | GO - stable milestone |
 | Pre-push gate | Versioned hook running the canonical gate before every push | GO - stable milestone |
 | M15 | Deterministic differential fuzzer with auto-minimized findings | GO - stable milestone |
+| M16 | Time-travel debug REPL with deterministic reverse jumps and watchpoints | GO - stable milestone |
 
 ## Promotion rule
 
@@ -43,3 +44,9 @@ multiple mods compose deterministically, and reproducers become shareable
 runnable artifacts. The next ecosystem steps are a published Maven/Gradle
 TestKit for external authors and promotion of the remaining experimental
 world-surface observations.
+
+The dev-tools line (M15-M16) composes those pieces into automatic loops:
+fuzzing that shrinks its own findings and deterministic time travel over any
+scenario. The next dev-tools steps are tick profiling with regression budgets
+wired to the optimization SDK and runtime coverage against the semantic
+catalog.

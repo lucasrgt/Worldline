@@ -39,8 +39,9 @@ public final class Replay {
                 && arguments[1].equals("run");
         boolean fuzz = arguments.length >= 5 && arguments.length <= 7
                 && arguments[0].equals("fuzz");
-        boolean game = replay || modRun || scenarioRun || fuzz;
-        if (!replay && !trace && !mod && !scenario && !modRun && !scenarioRun && !fuzz) {
+        boolean debug = arguments.length == 3 && arguments[0].equals("debug");
+        boolean game = replay || modRun || scenarioRun || fuzz || debug;
+        if (!replay && !trace && !mod && !scenario && !modRun && !scenarioRun && !fuzz && !debug) {
             System.err.println("usage: java tools/replay/Replay.java replay <bundle.wlrb>");
             System.err.println("   or: java tools/replay/Replay.java trace show <trace.wltrace>");
             System.err.println("   or: java tools/replay/Replay.java trace diff <left.wltrace> <right.wltrace>");
@@ -53,6 +54,7 @@ public final class Replay {
             System.err.println("   or: java tools/replay/Replay.java scenario validate <scenario>");
             System.err.println("   or: java tools/replay/Replay.java scenario run <scenario> <seed> <trace>");
             System.err.println("   or: java tools/replay/Replay.java fuzz <out-dir> <seed> <cases> <steps> [left.jar] [right.jar]");
+            System.err.println("   or: java tools/replay/Replay.java debug <scenario> <seed>");
             return 2; }
         if (game) { int inputs = new ProcessBuilder("java", "tools/harness/RuntimeCheck.java", "--required")
                 .directory(root.toFile()).inheritIO().start().waitFor(); if (inputs != 0) return inputs; }

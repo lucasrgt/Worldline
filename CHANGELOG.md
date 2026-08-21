@@ -4,6 +4,21 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## Unreleased - M16 Time-Travel Debug
+
+Status: GO.
+
+- Added `worldline debug <scenario.wlscenario> <seed>`: an interactive,
+  scriptable session over one public-grammar scenario with forward steps,
+  exact reverse jumps and absolute gotos (deterministic prefix replay),
+  recorded-observation dumps, and per-field watchpoints.
+- Added the neutral `ScenarioTimeTravel.prefix` contract implemented by the
+  b1.7.3 scenario runner; sessions emit stable `WORLDLINE_DEBUG_*` lines so
+  scripted transcripts are frozen evidence.
+- Evidence: thirteen-command scripted transcript covering triggers, stale
+  observations, clamped goto, unknown commands, and unwatch; frozen SHA-256
+  in `smokes/m16-debug/smoke.properties`.
+
 ## Unreleased - Pre-push Verification Gate
 
 Status: GO.
