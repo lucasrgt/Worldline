@@ -63,6 +63,12 @@ behavior evidence without silently widening those early public APIs.
 | Invariants | Item, block, entity, wear, health, and time rules | GO |
 | Semantics | Closed role catalog, mappings, manifests, and coverage gate | GO |
 | M10-M19 | Native rendering, Aero qualification, attribution, and bounded performance policies | GO |
+| Pre-push gate | Versioned hook running the canonical gate before every push | GO |
+| Differential fuzzer | Deterministic campaigns with auto-minimized findings | GO |
+| Time-travel debug | Scriptable REPL with exact reverse jumps and watchpoints | GO |
+| Tick profiling | Wall-clock samples with machine-relative budget gates | GO |
+| Runtime coverage | Scenario categories and roles against the semantic catalog | GO |
+| HTML evidence | Deterministic self-contained trace viewer and diff pages | GO |
 | Mod API v2 | Lifecycle hooks, domain handles, scheduling, spawn/give surface | GO |
 | Attested runs | One-command `mod test run` binding execution provenance | GO |
 | Mod graphs | Format 2 dependencies with deterministic topological ordering | GO |
@@ -97,6 +103,15 @@ java tools/harness/Verify.java
 This command validates source ceilings and module dependencies, compiles every
 product module separately with warnings as errors, checks release metadata,
 and runs the complete unit suite. Derived files stay under `.worldline/`.
+
+A versioned pre-push hook runs this gate before every push:
+
+```text
+git config core.hooksPath tools/hooks
+```
+
+Set `WORLDLINE_PREPUSH_SMOKE=1` to demand the full `--smoke` suite before
+pushing instead of the base gate.
 
 ### 2. Prepare runtime-bound work
 
@@ -347,6 +362,27 @@ and canonical rendering (`scenario validate`). Scenarios stay ordinary M9
 artifacts, so the minimizer applies unchanged; `scenario run <scenario>
 <seed> <trace>` executes one against the controlled runtime.
 
+### Fuzz for divergences
+
+```text
+java tools/replay/Replay.java fuzz out 17320110707 24 6 v1.jar v2.jar
+```
+
+Deterministic campaigns generate bounded DSL scenarios, execute them against
+named subjects (two mods, mod versus vanilla, or vanilla against itself), and
+automatically shrink every divergence into a minimal shareable `.wlscenario`.
+Reports are checksum-protected `WORLDLINE-FUZZ/1` artifacts.
+
+### Time-travel debug a scenario
+
+```text
+java tools/replay/Replay.java debug run.wlscenario 4242
+```
+
+Interactive, scriptable sessions with `step`, `back`, `goto`, `observe`, and
+`watch <field>` watchpoints. Reverse jumps replay the deterministic prefix, so
+backward state is exact; transcripts are stable `WORLDLINE_DEBUG_*` lines.
+
 ### Testing flow
 
 ```text
@@ -486,6 +522,12 @@ java tools/replay/Replay.java mod test run <mod.jar> <seed> <ticks> <result.wlmt
 java tools/replay/Replay.java scenario create <output.wlscenario> [step ...]
 java tools/replay/Replay.java scenario inspect <scenario.wlscenario>
 java tools/replay/Replay.java scenario validate <scenario.wlscenario>
+java tools/replay/Replay.java scenario run <scenario.wlscenario> <seed> <trace.wltrace>
+java tools/replay/Replay.java fuzz <out-dir> <seed> <cases> <steps> [left.jar] [right.jar]
+java tools/replay/Replay.java debug <scenario.wlscenario> <seed>
+java tools/replay/Replay.java profile <scenario.wlscenario> <seed> [budget.properties]
+java tools/replay/Replay.java coverage <scenario.wlscenario> [trace.wltrace] [min-percent]
+java tools/replay/Replay.java trace html <left.wltrace> [right.wltrace] <output.html>
 
 java tools/replay/Replay.java test
 java tools/replay/Replay.java test run <spec.jar|classes> [spec.class] [options]
@@ -514,6 +556,14 @@ classes, RetroMCP, or native libraries on their product classpaths.
 | [M7 mods](docs/M7_MODS.md) | Descriptor, compatibility, loading, and trust boundary |
 | [M8 results](docs/M8_RESULTS.md) | `.wlmtest` format, recording, and comparison |
 | [M9 minimization](docs/M9_MINIMIZATION.md) | `.wlscenario`, evaluator contract, and guarantees |
+| [M11 mod API v2](docs/M11_MOD_API.md) | Lifecycle hooks, domain handles, scheduling, spawn/give |
+| [M12 mod test run](docs/M12_MOD_RUN.md) | Attested one-command execution and result format 2 |
+| [M13 mod graph](docs/M13_MOD_GRAPH.md) | Format 2 dependencies and deterministic ordering |
+| [M14 scenario DSL](docs/M14_SCENARIO_DSL.md) | Public step grammar, validation, and execution |
+| [M15 fuzzer](docs/M15_FUZZ.md) | Deterministic differential campaigns and auto-minimized findings |
+| [M16 time-travel debug](docs/M16_TIME_TRAVEL.md) | Scriptable debug REPL with exact reverse jumps and watchpoints |
+| [M17 profiling](docs/M17_PROFILE.md) | Per-tick wall-clock samples, mod attribution, and budget gates |
+| [M18 coverage](docs/M18_COVERAGE.md) | Dynamic scenario coverage against the semantic catalog |
 | [Mod API v2](docs/MOD_API_V2.md) | Lifecycle hooks, domain handles, scheduling, spawn/give |
 | [Attested runs](docs/MOD_RUN.md) | One-command execution and result format 2 |
 | [Mod graphs](docs/MOD_GRAPH.md) | Format 2 dependencies and deterministic ordering |

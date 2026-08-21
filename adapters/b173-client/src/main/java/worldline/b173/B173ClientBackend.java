@@ -155,6 +155,9 @@ final class B173ClientBackend implements GameBackend, B173ModContext {
 
     public void at(int tick, Runnable action) { hooks.at(tick, action); }
 
+    /** Wall-clock nanoseconds spent in mod callbacks during the last tick. */
+    long lastModNanos() { return hooks.lastModNanos(); }
+
     @Override public GameWorld world() { return worldApi; }
     @Override public GamePlayer player() { return playerApi; }
     @Override public GameUi ui() { require(gui != null, "client is not booted"); return gui; }

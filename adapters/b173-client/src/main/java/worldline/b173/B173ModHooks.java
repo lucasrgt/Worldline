@@ -13,6 +13,7 @@ final class B173ModHooks {
     private final B173ClientBackend owner;
     private final List<B173Mod> mods = new ArrayList<>();
     private final Map<Integer, List<Runnable>> scheduled = new TreeMap<>();
+    private long lastModNanos;
 
     B173ModHooks(B173ClientBackend owner) { this.owner = owner; }
 
@@ -44,8 +45,12 @@ final class B173ModHooks {
     }
 
     void onTick(B173ModContext context) {
+        long start = System.nanoTime();
         for (B173Mod mod : new ArrayList<>(mods)) mod.onTick(context);
+        lastModNanos = System.nanoTime() - start;
     }
+
+    long lastModNanos() { return lastModNanos; }
 
     void dispose() {
         try {

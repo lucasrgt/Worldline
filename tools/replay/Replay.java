@@ -21,7 +21,9 @@ public final class Replay {
         boolean replay = arguments.length == 2 && arguments[0].equals("replay");
         boolean trace = (arguments.length == 3 && arguments[0].equals("trace")
                 && arguments[1].equals("show")) || (arguments.length == 4
-                && arguments[0].equals("trace") && arguments[1].equals("diff"));
+                && arguments[0].equals("trace") && arguments[1].equals("diff"))
+                || (arguments.length >= 4 && arguments.length <= 5
+                && arguments[0].equals("trace") && arguments[1].equals("html"));
         boolean mod = (arguments.length == 3 && arguments[0].equals("mod")
                 && arguments[1].equals("inspect")) || (arguments.length == 6
                 && arguments[0].equals("mod") && arguments[1].equals("test")
@@ -37,19 +39,26 @@ public final class Replay {
                 && arguments[1].equals("validate"));
         boolean scenarioRun = arguments.length == 5 && arguments[0].equals("scenario")
                 && arguments[1].equals("run");
-        boolean modRun = arguments.length == 7 && arguments[0].equals("mod")
-                && arguments[1].equals("test") && arguments[2].equals("run");
+        boolean fuzz = arguments.length >= 5 && arguments.length <= 7
+                && arguments[0].equals("fuzz");
+        boolean debug = arguments.length == 3 && arguments[0].equals("debug");
+        boolean profile = (arguments.length == 3 || arguments.length == 4)
+                && arguments[0].equals("profile");
+        boolean coverage = (arguments.length == 2 || arguments.length == 3
+                || arguments.length == 4) && arguments[0].equals("coverage");
         boolean test = arguments.length >= 1 && arguments[0].equals("test");
         boolean testRuntime = test && !Arrays.asList(arguments).contains("--no-runtime")
                 && !Arrays.asList(arguments).contains("list")
                 && !Arrays.asList(arguments).contains("inspect")
                 && !Arrays.asList(arguments).contains("--help");
-        boolean game = replay || modRun || scenarioRun || testRuntime;
-        if (!replay && !trace && !mod && !scenario && !modRun && !scenarioRun && 
- && !test) {
+        boolean game = replay || modRun || scenarioRun || fuzz || debug || profile
+                || testRuntime;
+        if (!replay && !trace && !mod && !scenario && !modRun && !scenarioRun && !fuzz
+                && !debug && !profile && !coverage && !test) {
             System.err.println("usage: java tools/replay/Replay.java replay <bundle.wlrb>");
             System.err.println("   or: java tools/replay/Replay.java trace show <trace.wltrace>");
             System.err.println("   or: java tools/replay/Replay.java trace diff <left.wltrace> <right.wltrace>");
+            System.err.println("   or: java tools/replay/Replay.java trace html <left> [right] <output.html>");
             System.err.println("   or: java tools/replay/Replay.java mod inspect <mod.jar>");
             System.err.println("   or: java tools/replay/Replay.java mod test record <mod.jar> <trace> <result>");
             System.err.println("   or: java tools/replay/Replay.java mod test diff <left> <right>");
@@ -58,6 +67,10 @@ public final class Replay {
             System.err.println("   or: java tools/replay/Replay.java scenario inspect <scenario>");
             System.err.println("   or: java tools/replay/Replay.java scenario validate <scenario>");
             System.err.println("   or: java tools/replay/Replay.java scenario run <scenario> <seed> <trace>");
+            System.err.println("   or: java tools/replay/Replay.java fuzz <out-dir> <seed> <cases> <steps> [left.jar] [right.jar]");
+            System.err.println("   or: java tools/replay/Replay.java debug <scenario> <seed>");
+            System.err.println("   or: java tools/replay/Replay.java profile <scenario> <seed> [budget.properties]");
+            System.err.println("   or: java tools/replay/Replay.java coverage <scenario> [trace] [min-percent]");
             System.err.println("   or: java tools/replay/Replay.java test [SpecClass]");
             System.err.println("   or: java tools/replay/Replay.java test run <spec.jar|classes> [SpecClass] [options]"); return 2; }
         if (game) { int inputs = new ProcessBuilder("java", "tools/harness/RuntimeCheck.java", "--required")
@@ -71,6 +84,9 @@ public final class Replay {
                 classes.resolve("trace"), classes.resolve("mods"), classes.resolve("analysis"),
                 classes.resolve("modtest")));
         paths.add(classes.resolve("minimization"));
+        paths.add(classes.resolve("fuzz"));
+        paths.add(classes.resolve("profiling"));
+        paths.add(classes.resolve("coverage"));
         if (test) paths.addAll(Arrays.asList(classes.resolve("testmodel"),
                 classes.resolve("testapi"), classes.resolve("testkit")));
         if (game) paths.addAll(Arrays.asList(classes.resolve("kernel"), client.resolve("adapter-classes"),
