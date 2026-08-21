@@ -132,7 +132,8 @@ final class SmokeCatalog {
         {"tools/smoke/SquidLandDeathSetCycle.java", "m466-squid-land-death-set"},
         {"tools/smoke/TamedWolfAssistSetCycle.java", "m468-tamed-wolf-assist-set"},
         {"tools/smoke/RainTransitionCycle.java", "m500-sw-rain-transition"},
-        {"tools/smoke/Run.java", "m502-sw-entity-collision-resolution"}
+        {"tools/smoke/Run.java", "m502-sw-entity-collision-resolution"},
+        {"tools/smoke/Run.java", "m501-sw-entity-item-grounding"}
     };
     private SmokeCatalog() {}
 }

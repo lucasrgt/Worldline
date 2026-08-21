@@ -1,0 +1,49 @@
+# owner kind descriptor named client server
+net/minecraft/src/World	c	-	net/minecraft/src/World	fd	dj
+net/minecraft/src/World	f	Ljava/util/List;	loadedEntityList	b	b
+net/minecraft/src/World	m	()V	tick	l	h
+net/minecraft/src/World	m	()V	updateEntities	g	e
+net/minecraft/src/World	m	()J	getWorldTime	t	m
+net/minecraft/src/World	m	(Lnet/minecraft/src/Entity;)Z	entityJoinedWorld	b	b
+net/minecraft/src/World	m	(II)Lnet/minecraft/src/Chunk;	getChunkFromChunkCoords	c	c
+net/minecraft/src/IBlockAccess	c	-	net/minecraft/src/IBlockAccess	xp	pb
+net/minecraft/src/IBlockAccess	m	(III)I	getBlockId	a	a
+net/minecraft/src/Block	c	-	net/minecraft/src/Block	uu	na
+net/minecraft/src/Block	f	I	blockID	bn	bn
+net/minecraft/src/Block	f	Lnet/minecraft/src/Block;	stone	u	u
+net/minecraft/src/Block	f	Lnet/minecraft/src/Block;	bedrock	A	A
+net/minecraft/src/Chunk	c	-	net/minecraft/src/Chunk	lm	hi
+net/minecraft/src/Chunk	f	Z	isTerrainPopulated	n	n
+net/minecraft/src/Chunk	f	Z	neverSave	p	p
+net/minecraft/src/Chunk	m	()V	func_353_b		b
+net/minecraft/src/WorldInfo	c	-	net/minecraft/src/WorldInfo	ei	ct
+net/minecraft/src/WorldInfo	m	(III)V	setSpawnPosition		a
+net/minecraft/src/WorldProvider	c	-	net/minecraft/src/WorldProvider	xa	os
+net/minecraft/src/EntityPlayer	c	-	net/minecraft/src/EntityPlayer	gs	em
+net/minecraft/src/ISaveHandler	c	-	net/minecraft/src/ISaveHandler	wt	om
+net/minecraft/src/ISaveHandler	m	()Lnet/minecraft/src/WorldInfo;	func_22096_c		c
+net/minecraft/src/ISaveHandler	m	()V	func_22091_b		b
+net/minecraft/src/ISaveHandler	m	(Lnet/minecraft/src/WorldProvider;)Lnet/minecraft/src/IChunkLoader;	func_22092_a		a
+net/minecraft/src/ISaveHandler	m	(Lnet/minecraft/src/WorldInfo;Ljava/util/List;)V	func_22095_a		a
+net/minecraft/src/ISaveHandler	m	(Lnet/minecraft/src/WorldInfo;)V	func_22094_a		a
+net/minecraft/src/ISaveHandler	m	()Lnet/minecraft/src/IPlayerFileData;	func_22090_d		d
+net/minecraft/src/ISaveHandler	m	()V	func_22093_e		e
+net/minecraft/src/ISaveHandler	m	(Ljava/lang/String;)Ljava/io/File;	func_28111_b		b
+net/minecraft/src/IPlayerFileData	c	-	net/minecraft/src/IPlayerFileData		fl
+net/minecraft/src/IPlayerFileData	m	(Lnet/minecraft/src/EntityPlayer;)V	writePlayerData		a
+net/minecraft/src/IPlayerFileData	m	(Lnet/minecraft/src/EntityPlayer;)V	readPlayerData		b
+net/minecraft/src/IChunkLoader	c	-	net/minecraft/src/IChunkLoader	bf	an
+net/minecraft/src/IChunkLoader	m	(Lnet/minecraft/src/World;II)Lnet/minecraft/src/Chunk;	loadChunk	a	a
+net/minecraft/src/IChunkLoader	m	(Lnet/minecraft/src/World;Lnet/minecraft/src/Chunk;)V	saveChunk	a	a
+net/minecraft/src/IChunkLoader	m	(Lnet/minecraft/src/World;Lnet/minecraft/src/Chunk;)V	saveExtraChunkData	b	b
+net/minecraft/src/IChunkLoader	m	()V	func_661_a		a
+net/minecraft/src/IChunkLoader	m	()V	saveExtraData	b	b
+net/minecraft/src/Entity	c	-	net/minecraft/src/Entity	sn	lq
+net/minecraft/src/Entity	f	D	posY	aN	aQ
+net/minecraft/src/Entity	f	D	motionX	aP	aS
+net/minecraft/src/Entity	f	D	motionY	aQ	aT
+net/minecraft/src/Entity	f	D	motionZ	aR	aU
+net/minecraft/src/Entity	f	Z	onGround	aX	ba
+net/minecraft/src/Entity	m	(DDD)V	setPosition	e	c
+net/minecraft/src/EntityItem	c	-	net/minecraft/src/EntityItem	hl	ez
+net/minecraft/src/EntityItem	f	I	age	b	b

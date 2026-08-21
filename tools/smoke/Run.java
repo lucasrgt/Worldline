@@ -204,7 +204,7 @@ public final class Run {
                 required("control.backend"));
         if (!driver.contains("InterfaceMethod worldline/api/MinecraftRuntime.tick:()V")
                 || !backend.contains("Method net/minecraft/src/World.tick:()V")
-                || (id.equals("m502-sw-entity-collision-resolution") && !backend.contains("Method net/minecraft/src/World.updateEntities:()V"))) {
+                || (Boolean.parseBoolean(required("control.entity-tick")) && !backend.contains("Method net/minecraft/src/World.updateEntities:()V"))) {
             throw new IllegalStateException("compiled smoke does not preserve runtime -> backend -> World.tick path");
         }
         System.out.println("  control path: MinecraftRuntime -> GameBackend -> World.tick verified");
