@@ -1,7 +1,8 @@
 # M451 armor reduction set
 
 M451 opens the official armor-reduction SET. The same official melee
-source — a Packet24 type-`54` zombie, never player-vs-self Packet7 —
+source — a Packet24 type-`54` zombie at explicit Normal difficulty `2`,
+provoked once per trial and never player-vs-self Packet7 —
 produces different Packet8 health deltas for unarmored versus leather
 `298-301`, iron `306-309`, and diamond `310-313`. Observed unarmored
 Packet8 is `20->18` (damage 2). Each seated full family reduces that to

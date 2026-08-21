@@ -2,7 +2,8 @@
 
 A raised `7×7` grass platform with a one-block stone rim seeds leather
 `298-301`, iron `306-309`, and diamond `310-313`. One default spawner `52`
-is retargeted to `Zombie`. Packet24 type `54` melee produces Packet8 health
+is retargeted to `Zombie`. At explicit Normal difficulty `2`, each fresh
+target is provoked once and its Packet24 type `54` melee produces Packet8 health
 drops that shrink from unarmored `20->18` (damage 2) to leather, iron, and
 diamond `20->19` (damage 1). Armor is seated through window-0 Packet102
 slots `5-8`. Golden apple `322` and cooked pork `320` restore health.

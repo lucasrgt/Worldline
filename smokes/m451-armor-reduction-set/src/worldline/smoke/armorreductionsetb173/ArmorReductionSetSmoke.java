@@ -30,7 +30,7 @@ public final class ArmorReductionSetSmoke {
         Pad pad = build(jar, workspace, port, seed, user, timeout, cx, cz);
         B173SpawnerSeed.entity(workspace, pad.spawner, "Zombie");
         Thread.sleep(1000L);
-        B173DedicatedServer server = B173DedicatedServer.monsters(jar, workspace, port, seed, timeout, 3, true);
+        B173DedicatedServer server = B173DedicatedServer.difficulty(jar, workspace, port, seed, timeout, 2);
         B173WireClient actor = new B173WireClient("127.0.0.1", port, user, timeout);
         try {
             server.boot(); actor.connect(); actor.synchronizePose();
@@ -38,7 +38,7 @@ public final class ArmorReductionSetSmoke {
                     "armor-reduction reload inventory or health drift");
             RemoteIncomingHit bare = armedHit(server, actor, pad, null, true);
             new B173ArmorReductionEquip().wear(actor, B173ArmorReductionAccess.LEATHER);
-            RemoteIncomingHit leather = armedHit(server, actor, pad, null, false);
+            RemoteIncomingHit leather = armedHit(server, actor, pad, null, true);
             actor = reseed(actor, server, workspace, user, port, timeout, pad, B173ArmorReductionAccess.IRON);
             RemoteIncomingHit iron = armedHit(server, actor, pad, B173ArmorReductionAccess.IRON, true);
             actor = reseed(actor, server, workspace, user, port, timeout, pad, B173ArmorReductionAccess.DIAMOND);
