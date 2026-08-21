@@ -1,0 +1,30 @@
+package worldline.smoke.remainingobsidianplaceb173;
+
+import java.nio.charset.StandardCharsets;import java.nio.file.*;import java.security.MessageDigest;import java.time.Duration;import worldline.api.*;import worldline.b173server.*;
+
+/** Places four unlit obsidian 49 portal-frame fragment cells and diamond-pick 278 harvests them to Packet21 49. */
+public final class RemainingObsidianPlaceSmoke{
+ private static final RemoteItemStack OBSIDIAN=new RemoteItemStack(49,1,0);
+ private static final BlockState AIR=new BlockState(0,0),OBSIDIAN_BLOCK=new BlockState(49,0);
+ private RemainingObsidianPlaceSmoke(){}
+ public static void main(String[]a)throws Exception{
+  if(a.length!=7)throw new IllegalArgumentException("usage: RemainingObsidianPlaceSmoke server.jar workspace port seed username chunkX chunkZ");
+  Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String user=a[4];int cx=Integer.parseInt(a[5]),cz=Integer.parseInt(a[6]);
+  require(seed==17320110707L&&user.equals("ObsiFrm418")&&user.length()<=16,"remaining-obsidian-place identity drift");
+  Duration timeout=Duration.ofSeconds(90);B173DedicatedServer server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true);B173WireClient actor=new B173WireClient("127.0.0.1",port,user,timeout);
+  BlockPosition top,base,east,pillar,cap,interior;int column;RemoteDroppedItem drop;
+  try{server.boot();B173PlayerSeed.writeInventory(workspace,user,4.5D,60D,4.5D,new int[]{0,1,2},new int[]{1,49,278},new int[]{32,4,1},new int[]{0,0,0});actor.connect();actor.synchronizePose();require(actor.awaitInventory().occupiedSlots()==3&&actor.dimension()==0,"remaining-obsidian-place inventory or dimension drift");RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);top=foundation(initial,cx,cz);column=0;actor.selectHeldSlot(0);
+   while(water(initial.blockAt(local(top.x(),cx),top.y()+1,local(top.z(),cz)).legacyId())){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);require(++column<=15,"water column exceeded remaining-obsidian-place fixture");}for(int lift=0;lift<8;lift++){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);column++;}
+   actor.selectHeldSlot(1);base=place(actor,top,BlockFace.EAST,49);east=place(actor,base,BlockFace.EAST,49);pillar=place(actor,base,BlockFace.UP,49);cap=place(actor,pillar,BlockFace.UP,49);interior=new BlockPosition(east.x(),pillar.y(),east.z());
+   RemoteWorldView live=actor.sustainTicks(5);require(live.blockAt(base.x(),base.y(),base.z()).equals(OBSIDIAN_BLOCK)&&live.blockAt(east.x(),east.y(),east.z()).equals(OBSIDIAN_BLOCK)&&live.blockAt(pillar.x(),pillar.y(),pillar.z()).equals(OBSIDIAN_BLOCK)&&live.blockAt(cap.x(),cap.y(),cap.z()).equals(OBSIDIAN_BLOCK)&&live.blockAt(interior.x(),interior.y(),interior.z()).equals(AIR)&&live.blockAt(interior.x(),interior.y(),interior.z()).legacyId()!=90,"live unlit obsidian frame fragment drift");
+   actor.selectHeldSlot(2);drop=harvest(actor,cap);RemoteWorldView after=actor.sustainTicks(2);require(after.blockAt(base.x(),base.y(),base.z()).equals(OBSIDIAN_BLOCK)&&after.blockAt(east.x(),east.y(),east.z()).equals(OBSIDIAN_BLOCK)&&after.blockAt(pillar.x(),pillar.y(),pillar.z()).equals(OBSIDIAN_BLOCK)&&after.blockAt(cap.x(),cap.y(),cap.z()).equals(AIR)&&after.blockAt(interior.x(),interior.y(),interior.z()).legacyId()!=90&&drop.item().legacyId()==49&&drop.item().count()==1,"unlit fragment harvest drift");
+   String evidence="column="+column+",support="+top.x()+":"+top.y()+":"+top.z()+":1:0,frame="+base.x()+":"+base.y()+":"+base.z()+"+"+east.x()+":"+east.y()+":"+east.z()+"+"+pillar.x()+":"+pillar.y()+":"+pillar.z()+"+"+cap.x()+":"+cap.y()+":"+cap.z()+",obsidian=4x49,portal=90:absent,base="+base.x()+":"+base.y()+":"+base.z()+":49:0,east="+east.x()+":"+east.y()+":"+east.z()+":49:0,pillar="+pillar.x()+":"+pillar.y()+":"+pillar.z()+":49:0,cap="+cap.x()+":"+cap.y()+":"+cap.z()+":49:0->0:0,pick=278,drops=packet21-49,clients=1,disconnect=clean";
+   String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=raised-stone+obsidian49-frame-fragment4|construction=packet15-four-obsidian49|baseline=air-interior-unlit|cause=packet14-diamondpick278|wire=packet53-air+packet21-id49|oracle=unlit-obsidian-frame-fragment+pick-harvest49|"+evidence;
+   System.out.println("WORLDLINE_M418_SET="+evidence);System.out.println("WORLDLINE_M418_TRACE="+trace);System.out.println("WORLDLINE_M418_SIGNATURE="+sha(trace));
+  }finally{actor.close();server.close();}
+ }
+ private static RemoteDroppedItem harvest(B173WireClient a,BlockPosition target)throws Exception{a.beginBreak(target);a.sustainTicks(60);a.finishBreak(target);a.awaitBlock(target,AIR);RemoteDroppedItem drop=a.peekDroppedItem(OBSIDIAN);if(drop==null)drop=a.awaitDroppedItem(OBSIDIAN);require(drop.item().equals(OBSIDIAN)&&drop.item().legacyId()==49&&drop.item().count()==1,"Packet21 49 drop absent");return drop;}
+ private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}
+ private static BlockPosition foundation(RemoteChunkSnapshot q,int cx,int cz){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(q.blockAt(x,y,z).legacyId()==3&&water(q.blockAt(x,y+1,z).legacyId()))return new BlockPosition(cx*16+x,y,cz*16+z);throw new IllegalStateException("no deterministic remaining-obsidian-place foundation");}
+ private static boolean water(int id){return id==8||id==9;}private static int local(int v,int c){return v-c*16;}private static String sha(String s)throws Exception{byte[]b=MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));StringBuilder v=new StringBuilder();for(byte x:b)v.append(String.format("%02x",x&255));return v.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+}

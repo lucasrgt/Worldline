@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "worldline-m74-content",
+  "version": "1.0.0",
+  "name": "Worldline M77 Direct Stage Timing",
+  "environment": "*",
+  "entrypoints": {
+    "stationapi:event_bus": ["worldline.m74.WorldlineCensusMod"],
+    "stationapi:event_bus_server": ["worldline.m74.WorldlineCensusServer"],
+    "stationapi:event_bus_client": ["worldline.m74.client.WorldlineCensusClient"]
+  },
+  "mixins": ["worldline-m77.mixins.json"],
+  "depends": {
+    "minecraft": "1.0.0-beta.7.3",
+    "fabricloader": ">=0.15.0",
+    "stationapi": "*"
+  },
+  "suggests": { "aero-model-lib": "*" }
+}

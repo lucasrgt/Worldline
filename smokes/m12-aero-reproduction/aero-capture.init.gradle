@@ -1,0 +1,119 @@
+gradle.projectsEvaluated {
+    if (gradle.rootProject.name != 'aero-model-lib-test') return
+    def script = gradle.startParameter.initScripts.find {
+        it.name == 'aero-capture.init.gradle'
+    }
+    if (script == null) throw new GradleException('Worldline capture script path missing')
+    def root = script.parentFile.parentFile.parentFile.canonicalFile
+    def smoke = new File(root, 'smokes/m12-aero-reproduction')
+    def project = gradle.rootProject
+    project.sourceSets.main.java.srcDir(new File(smoke, 'runtime-src'))
+    project.sourceSets.main.java.srcDir(new File(root, 'adapters/aero-model-lib/runtime-src'))
+    project.tasks.named('processResources').configure {
+        doLast {
+            copy {
+                from new File(smoke, 'runtime-resources/aerotest.mixins.json')
+                into destinationDir
+            }
+        }
+    }
+    def task = project.tasks.named('runClient').get()
+    if (task.actions.size() != 2 ||
+            !task.actions[0].getClass().name.endsWith('ClosureTaskAction')) {
+        throw new GradleException('Aero runClient action shape drifted')
+    }
+    task.actions.remove(0)
+    def run = new File(project.projectDir, 'run')
+    def ticks = (project.findProperty('worldlineTicks') ?: '240').toString()
+    def mode = (project.findProperty('worldlineMode') ?: 'dense').toString()
+    def density = (project.findProperty('worldlineDensity') ?: 'dense').toString()
+    def m17 = mode == 'm17baseline' || mode == 'm17governor' || mode == 'm17adaptive'
+    def emptyMode = mode == 'empty' || mode == 'reload' || mode == 'probe' || mode == 'bounded' ||
+        mode == 'm15baseline' || mode == 'm15contract' ||
+        mode == 'm16baseline' || mode == 'm16adaptive' || (m17 && density == 'empty')
+    def minimum = (project.findProperty('worldlineMinBEs') ?: (emptyMode ? '0' : '500')).toString()
+    def spikeMs = (project.findProperty('worldlineSpikeMs') ?: '25').toString()
+    def warmup = (project.findProperty('worldlineWarmupTicks') ?: '0').toString()
+    def logValue = (project.findProperty('worldlineLog') ?:
+        new File(run, 'worldline-aero-frames.log').absolutePath).toString()
+    def log = new File(logValue)
+    if (!log.isAbsolute()) log = new File(run, logValue)
+    def modeArgs = emptyMode && mode != 'reload' ? ['-Daero.testmod.disabled=true'] : ['-Daero.mega=true']
+    if (mode == 'budget') modeArgs.addAll([
+        '-Daero.chunkCompileBudget=true', '-Daero.chunkCompileBudget.minCellWork=0',
+        '-Daero.chunkCompileBudget.skipForced=true'])
+    if (mode == 'probe' || mode == 'bounded') modeArgs.add('-Dworldline.chunkProbe.enabled=true')
+    if (mode == 'bounded') modeArgs.addAll([
+        '-Dworldline.chunkPolicy.enabled=true', '-Dworldline.chunkPolicy.batch=2'])
+    if (mode == 'm15baseline' || mode == 'm15contract') modeArgs.addAll([
+        '-Dworldline.chunkProbe.enabled=true', '-Dworldline.chunkReadiness.enabled=true',
+        '-Dworldline.chunkGeometry.enabled=true', '-Dworldline.frameOracle.fixedDelta=true'])
+    if (mode == 'm15contract') modeArgs.addAll([
+        '-Dworldline.chunkContract.enabled=true', '-Dworldline.chunkContract.batch=2'])
+    if (mode == 'm16baseline' || mode == 'm16adaptive') modeArgs.addAll([
+        '-Dworldline.chunkProbe.enabled=true', '-Dworldline.chunkReadiness.enabled=true',
+        '-Dworldline.frameOracle.enabled=true',
+        '-Dworldline.frameOracle.tick=20', '-Dworldline.frameOracle.stableFrames=20',
+        '-Dworldline.frameOracle.maxFrames=4000'])
+    if (mode == 'm16adaptive') modeArgs.addAll([
+        '-Dworldline.chunkContract.enabled=true', '-Dworldline.chunkContract.adaptive=true',
+        '-Dworldline.chunkContract.maxBatch=' +
+            (project.findProperty('worldlineAdaptiveMax') ?: '8').toString(),
+        '-Dworldline.chunkContract.budgetUs=' +
+            (project.findProperty('worldlineBudgetUs') ?: '12000').toString()])
+    if (m17) modeArgs.addAll([
+        '-Dworldline.chunkProbe.enabled=true', '-Dworldline.chunkReadiness.enabled=true'])
+    if (mode == 'm17governor') modeArgs.addAll([
+        '-Daero.chunkCompileBudget=true', '-Daero.chunkCompileBudget.minCellWork=0',
+        '-Daero.chunkCompileBudget.skipForced=true'])
+    if (mode == 'm17adaptive') modeArgs.addAll([
+        '-Dworldline.chunkContract.enabled=true', '-Dworldline.chunkContract.adaptive=true',
+        '-Dworldline.chunkContract.maxBatch=' +
+            (project.findProperty('worldlineAdaptiveMax') ?: '8').toString(),
+        '-Dworldline.chunkContract.budgetUs=' +
+            (project.findProperty('worldlineBudgetUs') ?: '12000').toString()])
+    def m17Oracle = m17 && mode != 'm17governor' &&
+        (project.findProperty('worldlineFrameOracle') ?: 'false').toString() == 'true'
+    if (m17Oracle) modeArgs.addAll([
+        '-Dworldline.frameOracle.enabled=true',
+        '-Dworldline.frameOracle.stabilizeScene=true',
+        '-Dworldline.frameOracle.tick=' +
+            (project.findProperty('worldlineFreezeTick') ?: '60').toString(),
+        '-Dworldline.frameOracle.stableFrames=' +
+            (project.findProperty('worldlineOracleStableFrames') ?: '20').toString(),
+        '-Dworldline.frameOracle.maxFrames=' +
+            (project.findProperty('worldlineOracleMaxFrames') ?: '5000').toString()])
+    if ((mode == 'm16baseline' || mode == 'm16adaptive') &&
+            project.findProperty('worldlineFrameOutput'))
+        modeArgs.add('-Dworldline.frameOracle.output=' +
+            project.findProperty('worldlineFrameOutput').toString())
+    if (m17Oracle && project.findProperty('worldlineFrameOutput'))
+        modeArgs.add('-Dworldline.frameOracle.output=' +
+            project.findProperty('worldlineFrameOutput').toString())
+    task.jvmArgs(([
+        '-Dworldline.capture.enabled=true',
+        '-Dworldline.capture.seed=17320110707',
+        '-Dworldline.capture.ticks=' + ticks,
+        '-Dworldline.capture.minBlockEntities=' + minimum,
+        '-Dworldline.capture.minWarmupTicks=' + warmup,
+        '-Dworldline.capture.path=' +
+            (project.findProperty('worldlinePath') ?: 'stationary').toString(),
+        '-Dworldline.capture.viewDistance=' +
+            (project.findProperty('worldlineViewDistance') ?: '-1').toString(),
+        '-Dworldline.capture.saveTick=' +
+            (project.findProperty('worldlineSaveTick') ?: '-1').toString(),
+        '-Dworldline.capture.dirtyTick=' +
+            (project.findProperty('worldlineDirtyTick') ?: '-1').toString(),
+        '-Dworldline.capture.dirtyChunks=' +
+            (project.findProperty('worldlineDirtyChunks') ?: '0').toString(),
+        '-Dworldline.saveBudget.chunks=' +
+            (project.findProperty('worldlineSaveBudget') ?: '0').toString(),
+        '-Daero.benchmark.skipNonForcedSaves=' +
+            (project.findProperty('worldlineSkipSaves') ?: 'true').toString(),
+        '-Daero.spikelog=true',
+        '-Daero.spikelog.ms=' + spikeMs,
+        '-Daero.spikelog.heartbeatMs=500',
+        '-Daero.spikelog.sync=true',
+        '-Daero.spikelog.file=' + log.absolutePath,
+        '-Xms2G', '-Xmx4G'] + modeArgs) as List)
+}

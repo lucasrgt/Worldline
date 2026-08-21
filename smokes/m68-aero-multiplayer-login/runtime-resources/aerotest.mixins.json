@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "aero.modellib.test.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "MinecraftFrameSpikeMixin",
+    "WorldlineMultiplayerLoginMixin",
+    "WorldlineMultiplayerNetworkMixin",
+    "WorldlineMultiplayerFrameMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

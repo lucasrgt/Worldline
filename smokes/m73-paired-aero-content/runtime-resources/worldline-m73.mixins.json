@@ -1,0 +1,8 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "worldline.m73.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": ["WorldlinePairLoginMixin", "WorldlinePairNetworkMixin", "WorldlinePairFrameMixin"],
+  "injectors": { "defaultRequire": 1 }
+}

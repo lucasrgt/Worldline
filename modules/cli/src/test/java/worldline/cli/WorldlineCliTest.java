@@ -205,6 +205,29 @@ public final class WorldlineCliTest {
                     "CLI semantics adapter failed");
             require(WorldlineCli.run(new String[0], System.out, new PrintStream(error)) == 2,
                     "CLI usage did not fail");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"test", "--help"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("worldline test")
+                    && output.toString().contains("--reporter="), "test CLI help failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"test", "run", "--help"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && error.size() == 0 && output.toString().contains("worldline test")
+                    && output.toString().contains("--name="), "test subcommand help failed");
+            Path testArtifacts = Files.createTempDirectory("worldline-cli-testkit-");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"test", "run",
+                    ".worldline/build/test-classes", CliSpec.class.getName(), "--no-runtime",
+                    "--reporter=agent", "--artifacts=" + testArtifacts},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("WORLDLINE_TEST=PASS"),
+                    "test CLI run failed: " + error);
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"test", "list",
+                    ".worldline/build/test-classes"}, new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("worldline.cli.DiscoverySpec")
+                    && output.toString().contains("test=discovered"), "test discovery failed: " + error);
         } finally {
             if (previous == null) System.clearProperty("worldline.replay.provider");
             else System.setProperty("worldline.replay.provider", previous);
@@ -228,7 +251,6 @@ public final class WorldlineCliTest {
             return new ReplayReport(runtimeId(), 0, "tick0=ok");
         }
     }
-
     public static final class FakeModTestRunner implements ModTestRunner {
         @Override public ModTestResult run(Path modJar, long seed, int ticks) {
             try {
@@ -244,6 +266,13 @@ public final class WorldlineCliTest {
         @Override public CanonicalStateDocument run(Scenario scenario, long seed) {
             return CanonicalStateDocument.parse(
                     "v2|seed=" + seed + "|schema=x|tick0=" + scenario.size());
+        }
+    }
+
+    public static final class CliSpec extends worldline.test.WorldlineSpec {
+        @Override protected void define() {
+            worldline.test.Worldline.test("CLI spec", context ->
+                    worldline.test.Expect.expect(context.seed()).toEqual(173L));
         }
     }
 

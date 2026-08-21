@@ -1,5 +1,7 @@
 package worldline.analysis;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import worldline.trace.CanonicalStateDocument;
 
 public final class TraceAnalysisTest {
@@ -24,7 +26,29 @@ public final class TraceAnalysisTest {
         String view = TraceRenderer.render(baseline);
         require(view.contains("records=2") && view.contains("index\tlabel\tx\ty")
                 && view.contains("1\ttick1\t3\t4"), "trace view failed");
+        frameAttribution();
         System.out.println("TraceAnalysisTest passed");
+    }
+
+    private static void frameAttribution() {
+        FrameAttribution.Frame baseline = frame(16000, 0, 12, 3);
+        FrameAttribution.Result logical = FrameAttribution.compare(baseline, frame(80000, 0, 720, 3));
+        require(logical.cause() == FrameAttribution.Cause.LOGICAL_WORK
+                && logical.topCounter().equals("models.transformed") && logical.workDelta() == 708,
+                "logical work attribution failed");
+        FrameAttribution.Result runtime = FrameAttribution.compare(baseline, frame(80000, 36000, 12, 3));
+        require(runtime.cause() == FrameAttribution.Cause.RUNTIME_STALL
+                && runtime.hostPauseMicros() == 36000, "runtime attribution failed");
+        require(FrameAttribution.compare(baseline, frame(17000, 0, 720, 3)).cause()
+                == FrameAttribution.Cause.INCONCLUSIVE, "non-spike attribution failed");
+        require(FrameAttribution.compare(baseline, frame(80000, 6000, 720, 3)).cause()
+                == FrameAttribution.Cause.MIXED, "mixed attribution failed");
+    }
+
+    private static FrameAttribution.Frame frame(long micros, long pause, long models, long draws) {
+        Map<String, Long> counters = new LinkedHashMap<>();
+        counters.put("models.transformed", models); counters.put("draw.calls", draws);
+        return FrameAttribution.Frame.of(micros, pause, counters);
     }
 
     private static CanonicalStateDocument trace(String value) {

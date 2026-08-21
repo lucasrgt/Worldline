@@ -1,7 +1,7 @@
 # Worldline Vision
 
 Worldline is a programmable laboratory for Minecraft Beta 1.7.3. It executes
-the real game under external control, treats the official JAR as the behavioral
+the real game under external control, treats official client/server JARs as behavioral
 oracle, and virtualizes external boundaries only where an experiment requires
 control.
 
@@ -19,3 +19,13 @@ differential or invariant test.
 The first official result is deliberately small: Worldline v0.0.1 boots the
 real b1.7.3 client headlessly, loads a world, advances one manual client tick,
 and matches the official vanilla oracle.
+
+Worldline v0.8.0 adds a separate real graphics boundary. A mapped and official
+Minecraft renderer produce the same frozen RGBA frame through LWJGL and an
+offscreen native OpenGL context. This is infrastructure for later causal render
+experiments, not a claim of complete game-frame or cross-GPU determinism.
+
+Worldline v0.9.0 adds bounded render-work attribution and qualifies the exact
+Aero Model Lib 3.0.0 source through tests, build, consumer compilation, and a
+real StationAPI loader boot. It can distinguish expanded deterministic work
+from a runtime stall in captured frame records; real-spike capture is next.

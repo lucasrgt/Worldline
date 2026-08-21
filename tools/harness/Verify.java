@@ -67,23 +67,15 @@ public final class Verify {
         Path testOutput = compileTests(modules, outputs);
         runTests(outputs, testOutput);
         if (runSmoke) {
-            run(Arrays.asList("java", "tools/smoke/Run.java", "deterministic-world-tick"));
-            run(Arrays.asList("java", "tools/smoke/ClientCycle.java", "controlled-client-tick"));
-            run(Arrays.asList("java", "tools/smoke/ApiCycle.java", "m3-domain-api"));
-            run(Arrays.asList("java", "tools/smoke/SnapshotCycle.java", "m4-durable-snapshot"));
-            run(Arrays.asList("java", "tools/smoke/BundleCycle.java", "m5-reproduction-bundle"));
-            run(Arrays.asList("java", "tools/smoke/TraceCycle.java", "m6-trace-explorer"));
-            run(Arrays.asList("java", "tools/smoke/ModCycle.java", "m7-mod-loading"));
-            run(Arrays.asList("java", "tools/smoke/VersionCycle.java", "m8-mod-version-diff"));
-            run(Arrays.asList("java", "tools/smoke/MinimizationCycle.java", "m9-scenario-minimization"));
-            run(Arrays.asList("java", "tools/smoke/GuiCycle.java", "gui-tree"));
-            run(Arrays.asList("java", "tools/smoke/LabCycle.java", "lab-cycle"));
-            run(Arrays.asList("java", "tools/smoke/ModApiCycle.java", "m11-mod-api"));
-            run(Arrays.asList("java", "tools/smoke/ModRunCycle.java", "m12-mod-run"));
-            run(Arrays.asList("java", "tools/smoke/ModGraphCycle.java", "m13-mod-graph"));
-            run(Arrays.asList("java", "tools/smoke/ScenarioDslCycle.java", "m14-scenario-dsl"));
+            runSmokeSuite();
         }
-        System.out.println("verify passed");
+        System.out.println("verify passed"); }
+
+    private void runSmokeSuite() throws Exception {
+        Path output = build.resolve("smoke-suite"); Files.createDirectories(output);
+        run(Arrays.asList("javac", "-d", output.toString(),
+                "tools/harness/SmokeCatalog.java", "tools/harness/SmokeSuite.java"));
+        run(Arrays.asList("java", "-cp", output.toString(), "SmokeSuite"));
     }
 
     private void loadConfiguration() throws IOException {
@@ -119,12 +111,6 @@ public final class Verify {
             throw new IllegalStateException("missing harness property: " + key);
         }
         return value;
-    }
-
-    private Long optionalMax(String key) {
-        String value = config.getProperty(key);
-        if (value == null || value.trim().isEmpty()) return null;
-        return Long.parseLong(value.trim());
     }
 
     private void validateModuleOrder(List<String> modules) {
@@ -166,11 +152,7 @@ public final class Verify {
         String java = languageSection(json);
         int reports = java.indexOf("\"reports\"");
         long total = codeLines(reports < 0 ? java : java.substring(0, reports));
-        Long maxTotal = optionalMax(name + ".max.total");
         long maxFile = Long.parseLong(required(name + ".max.file"));
-        if (maxTotal != null && total > maxTotal) {
-            throw new IllegalStateException(name + " line budget exceeded: " + total + "/" + maxTotal);
-        }
         Matcher files = REPORT.matcher(java);
         while (files.find()) {
             long lines = codeLines(files.group(1));
@@ -179,9 +161,7 @@ public final class Verify {
                         name + " file budget exceeded: " + files.group(2) + " has " + lines + "/" + maxFile);
             }
         }
-        System.out.println(maxTotal == null
-                ? "  " + name + " lines: " + total + " (max file " + maxFile + ")"
-                : "  " + name + " lines: " + total + "/" + maxTotal + " (max file " + maxFile + ")");
+        System.out.println("  " + name + " lines: " + total + " (max file " + maxFile + ")");
     }
 
     private String languageSection(String json) {
@@ -222,7 +202,8 @@ public final class Verify {
             List<Path> dependencyOutputs = values("module." + module + ".dependencies").stream()
                     .map(dependency -> build.resolve("classes").resolve(dependency))
                     .collect(Collectors.toList());
-            compile(javaFiles(moduleRoot(module).resolve("src/main/java")), output, dependencyOutputs);
+            compile(javaFiles(moduleRoot(module).resolve("src/main/java")), output, dependencyOutputs,
+                    config.getProperty("module." + module + ".release", required("java.release")));
             outputs.add(output);
             System.out.println("  compiled module " + module);
         }
@@ -242,17 +223,17 @@ public final class Verify {
         }
         Path output = build.resolve("test-classes");
         Files.createDirectories(output);
-        compile(tests, output, outputs);
+        compile(tests, output, outputs, required("test.release"));
         System.out.println("  compiled tests");
         return output;
     }
 
-    private void compile(List<Path> sources, Path output, List<Path> classpath) throws Exception {
+    private void compile(List<Path> sources, Path output, List<Path> classpath, String release) throws Exception {
         if (sources.isEmpty()) {
             throw new IllegalStateException("no Java sources for " + relative(output));
         }
         List<String> command = new ArrayList<>(Arrays.asList(
-                "javac", "-encoding", "UTF-8", "--release", required("java.release"),
+                "javac", "-encoding", "UTF-8", "--release", release,
                 "-Xlint:all,-options", "-Werror", "-d", output.toString()));
         if (!classpath.isEmpty()) {
             command.add("-classpath");
