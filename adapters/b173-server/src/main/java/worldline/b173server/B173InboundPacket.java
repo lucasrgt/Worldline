@@ -45,7 +45,7 @@ final class B173InboundPacket {
             case 60: explosion(input); break;
             case 61: bytes(input, 17); break;
             case 70: bytes(input, 1); break;
-            case 71: bytes(input, 1); break;
+            case 71: bytes(input, 17); break;
             case 100: openWindow(input); break;
             case 101: bytes(input, 1); break;
             case 105: bytes(input, 5); break;

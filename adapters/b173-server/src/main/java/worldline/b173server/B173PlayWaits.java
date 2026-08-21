@@ -68,6 +68,10 @@ final class B173PlayWaits {
         return until(() -> inbound.beds().takeSleep(), "expected Packet17 sleep absent before deadline");
     }
 
+    worldline.api.RemoteRainStart rainStart() throws IOException {
+        return until(() -> inbound.weather().takeStart(), "expected rain start absent before deadline");
+    }
+
     worldline.api.RemoteNoteEvent note() throws IOException {
         return until(() -> inbound.notes().take(), "expected note event absent before deadline");
     }
