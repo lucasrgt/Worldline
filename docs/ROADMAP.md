@@ -26,6 +26,7 @@ Passing an experiment does not silently promote its API.
 | M15 | Deterministic differential fuzzer with auto-minimized findings | GO - stable milestone |
 | M16 | Time-travel debug REPL with deterministic reverse jumps and watchpoints | GO - stable milestone |
 | M17 | Per-tick profiling with machine-relative budget gates | GO - stable milestone |
+| M18 | Dynamic scenario coverage against the semantic catalog | GO - stable milestone |
 
 ## Promotion rule
 

@@ -4,6 +4,21 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## Unreleased - M18 Runtime Coverage
+
+Status: GO.
+
+- Added the neutral `coverage` module and `worldline coverage <scenario>
+  [trace] [min-percent]`: dynamic mapping of DSL steps onto the closed
+  semantic catalog's control categories plus role extraction from executed
+  trace fields through the closed `SemanticFields` alias table.
+- Added checksum-protected `WORLDLINE-COVERAGE/1` artifacts (`.wlcover`) and
+  an optional floor-percentage gate (exit 3) for scenario-corpus richness
+  checks; fully neutral, no runtime required.
+- Evidence: all five mappable verbs classified (20% of 24 categories),
+  executed-trace role extraction, artifact creation, and both threshold
+  outcomes; frozen SHA-256 in `smokes/m18-coverage/smoke.properties`.
+
 ## Unreleased - M17 Tick Profiling
 
 Status: GO.
