@@ -14,6 +14,7 @@ import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteItemStack;
 import worldline.api.ServerPlayerState;
 import worldline.b173server.B173DedicatedServer;
+import worldline.b173server.B173PlayerSeed;
 import worldline.b173server.B173WireClient;
 
 /** Proves held-slot selection through an independent peer equipment update. */
@@ -33,10 +34,10 @@ public final class HeldItemPeerSmoke {
         HeldItemMultiplayerSession observer = client(port, observerName, timeout);
         RemoteInventoryView inventory; RemoteHeldItem held; ServerPlayerState player;
         try {
-            server.boot(); server.operator(actorName); actor.connect(); actor.synchronizePose();
-            inventory = actor.awaitInventory(); require(inventory.occupiedSlots() == 0, "actor inventory was not empty");
-            actor.look(0F, 90F);
-            acquire(actor, actorName, 1, 1); acquire(actor, actorName, 3, 2); inventory = actor.inventory();
+            server.boot(); B173PlayerSeed.writeInventory(workspace, actorName, 4.5D, 60D, 4.5D,
+                    new int[] {0, 1}, new int[] {1, 3}, new int[] {1, 1}, new int[] {0, 0});
+            B173PlayerSeed.write(workspace, observerName, 4.5D, 80D, 4.5D);
+            actor.connect(); actor.synchronizePose(); inventory = actor.awaitInventory();
             require(inventory.occupiedSlots() == 2
                     && inventory.slot(36).item().equals(new RemoteItemStack(1, 1, 0))
                     && inventory.slot(37).item().equals(new RemoteItemStack(3, 1, 0)),
@@ -61,13 +62,6 @@ public final class HeldItemPeerSmoke {
         return new B173WireClient("127.0.0.1", port, name, timeout); }
     private static String slot(RemoteInventoryView inventory, int index) {
         return inventory.slot(index).empty() ? "empty" : inventory.slot(index).item().toString(); }
-    private static void acquire(HeldItemMultiplayerSession client, String username, int item, int occupied) {
-        for (int step = 0; step < 10; step++) client.moveAndObserve(0D, 5D, 0D, 3);
-        client.sendChat("/give " + username + " " + item + " 1"); client.sustainTicks(40);
-        for (int step = 0; step < 15 && client.inventory().occupiedSlots() < occupied; step++)
-            client.moveAndObserve(0D, -5D, 0D, 3);
-        client.sustainTicks(10);
-    }
     private static void requirePlayers(List<String> players, String first, String second) {
         Set<String> expected = new HashSet<>(); expected.add(first); expected.add(second);
         require(players.size() == 2 && new HashSet<>(players).equals(expected), "two-player presence drifted"); }

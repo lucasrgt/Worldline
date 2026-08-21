@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.concurrent.atomic.AtomicBoolean;
 import worldline.api.MovementOutcome;
 import worldline.api.PeerSwingSession;
 import worldline.api.PlayerPose;
@@ -48,7 +49,7 @@ public final class AeroCombatWireSmoke {
             PlayerPose victimAir = raise(victim), aligned = align(attacker, raise(attacker), victimAir);
             require(distance(victimAir, aligned) < 6D, "combat alignment drifted"); victim.sustainTicks(80); attacker.sustainTicks(2);
             System.out.println("WORLDLINE_M70_WIRE_ARMED=attacker=" + attacker.state().entityId()
-                    + ";victim=" + victim.state().entityId()); System.out.flush(); require("GO".equals(control.readLine()), "GO absent");
+                    + ";victim=" + victim.state().entityId()); System.out.flush(); awaitGo(control, attacker, victim);
             RemoteSwingRequest swing = attacker.swingHeldItem(); RemoteCombatStrike strike = attacker.attackPlayer(victimName);
             victim.sustainTicks(2); RemoteIncomingHit hit = victim.awaitIncomingHit(18); attacker.sustainTicks(2);
             require(swing.entityId() == attacker.state().entityId() && strike.targetEntityId() == victim.state().entityId()
@@ -62,6 +63,16 @@ public final class AeroCombatWireSmoke {
     }
     private static PeerSwingSession client(int port, String name, Duration timeout) {
         return new B173WireClient("127.0.0.1", port, name, timeout); }
+    private static void awaitGo(BufferedReader control, PeerSwingSession attacker, PeerSwingSession victim) throws Exception {
+        AtomicBoolean stop = new AtomicBoolean(); Throwable[] failure = new Throwable[1]; Thread heartbeat = new Thread(() -> { try {
+            while (!stop.get()) { attacker.sustainTicks(2); victim.sustainTicks(2); }
+        } catch (Throwable error) { failure[0] = error; } }, "m70-wire-heartbeat");
+        heartbeat.start(); String command;
+        try { command = control.readLine(); } finally { stop.set(true); heartbeat.join(5000L); }
+        require(!heartbeat.isAlive(), "wire heartbeat did not stop");
+        if (failure[0] != null) throw new IllegalStateException("wire heartbeat failed", failure[0]);
+        require("GO".equals(command), "GO absent");
+    }
     private static void acquire(PeerSwingSession client, String username, int item) { int occupied = client.inventory().occupiedSlots() + 1;
         for (int step = 0; step < 10; step++) client.moveAndObserve(0D, 5D, 0D, 3);
         client.sendChat("/give " + username + " " + item + " 1"); client.sustainTicks(40);

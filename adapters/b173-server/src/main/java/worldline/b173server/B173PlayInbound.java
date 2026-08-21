@@ -82,11 +82,14 @@ final class B173PlayInbound {
 
     RemoteWorldView awaitChunk(int chunkX, int chunkZ) throws IOException {
         if (cache.snapshot().containsChunk(chunkX, chunkZ)) return cache.snapshot();
-        for (int count = 0; count < 16384; count++) {
-            skip(input.readUnsignedByte());
-            if (cache.snapshot().containsChunk(chunkX, chunkZ)) return cache.snapshot();
-        }
-        throw new IOException("requested remote chunk absent from bounded inbound window");
+        Thread pulse = pulse(); long deadline = System.nanoTime() + timeoutNanos;
+        try {
+            for (int count = 0; count < 16384 && System.nanoTime() < deadline; count++) {
+                skip(input.readUnsignedByte());
+                if (cache.snapshot().containsChunk(chunkX, chunkZ)) return cache.snapshot();
+            }
+            throw new IOException("requested remote chunk absent from bounded inbound window");
+        } finally { pulse.interrupt(); }
     }
 
     RemoteWorldView awaitBlock(BlockPosition position, BlockState expected) throws IOException {
