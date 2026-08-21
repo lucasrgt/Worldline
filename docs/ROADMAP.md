@@ -527,10 +527,14 @@ lands named, numbered-free capabilities on top of the same evidence rules:
 | Attested one-command mod test runs (`mod test run`) | GO - stable milestone |
 | Multi-mod dependency graphs with deterministic ordering | GO - stable milestone |
 | Public scenario DSL with validated, runnable reproducers | GO - stable milestone |
+| Versioned pre-push verification gate | GO - stable milestone |
+| Deterministic differential fuzzer with auto-minimized findings | GO - stable milestone |
+| Time-travel debug REPL with exact reverse jumps and watchpoints | GO - stable milestone |
+| Per-tick profiling with machine-relative budget gates | GO - stable milestone |
+| Dynamic scenario coverage against the semantic catalog | GO - stable milestone |
+| Deterministic self-contained HTML trace viewer and diff pages | GO - stable milestone |
 
 Their contracts live in docs/MOD_API_V2.md, docs/MOD_RUN.md,
-docs/MOD_GRAPH.md, and docs/SCENARIO_DSL.md; smoke IDs use distinct
-`m1x-<name>` spellings so they never collide with the vanilla milestone numbering.
 docs/MOD_GRAPH.md, docs/SCENARIO_DSL.md, docs/FUZZ.md, docs/TIME_TRAVEL.md,
 docs/PROFILE.md, docs/COVERAGE.md, and docs/HTML_EVIDENCE.md; smoke IDs use
 distinct `m1x-<name>` spellings so they never collide with the vanilla

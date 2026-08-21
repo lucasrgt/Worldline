@@ -37,10 +37,20 @@ public final class WorldlineCli {
                     && "show".equals(arguments[1])) return show(arguments[2], output);
             if (arguments.length == 4 && "trace".equals(arguments[0])
                     && "diff".equals(arguments[1])) return diff(arguments[2], arguments[3], output);
+            if ("trace".equals(arguments[0]) && arguments.length >= 4)
+                return TraceHtmlCommand.run(arguments, output, error);
             if ("mod".equals(arguments[0]) && arguments.length >= 3)
                 return mod(arguments, output, error);
             if ("scenario".equals(arguments[0]) && arguments.length >= 3)
                 return ScenarioCommands.run(arguments, output, error);
+            if ("fuzz".equals(arguments[0]))
+                return FuzzCommand.run(arguments, output, error);
+            if (arguments.length == 3 && "debug".equals(arguments[0]))
+                return DebugCommand.run(arguments, output, error);
+            if ("profile".equals(arguments[0]) && arguments.length >= 3)
+                return ProfileCommand.run(arguments, output, error);
+            if ("coverage".equals(arguments[0]) && arguments.length >= 2)
+                return CoverageCommand.run(arguments, output, error);
             if (arguments.length >= 2 && "semantics".equals(arguments[0]))
                 return SemanticsCommand.run(arguments, output, error);
             return usage(error);
@@ -103,6 +113,7 @@ public final class WorldlineCli {
         error.println("usage: worldline replay <bundle.wlrb>");
         error.println("   or: worldline trace show <trace.wltrace>");
         error.println("   or: worldline trace diff <left.wltrace> <right.wltrace>");
+        error.println("   or: worldline trace html <left.wltrace> [right.wltrace] <output.html>");
         error.println("   or: worldline mod inspect <mod.jar>");
         error.println("   or: worldline mod test record <mod.jar> <trace.wltrace> <result.wlmtest>");
         error.println("   or: worldline mod test diff <left.wlmtest> <right.wlmtest>");
@@ -111,6 +122,10 @@ public final class WorldlineCli {
         error.println("   or: worldline scenario inspect <scenario.wlscenario>");
         error.println("   or: worldline scenario validate <scenario.wlscenario>");
         error.println("   or: worldline scenario run <scenario.wlscenario> <seed> <trace.wltrace>");
+        error.println("   or: worldline fuzz <out-dir> <seed> <cases> <max-steps> [left.jar] [right.jar]");
+        error.println("   or: worldline debug <scenario.wlscenario> <seed>");
+        error.println("   or: worldline profile <scenario.wlscenario> <seed> [budget.properties]");
+        error.println("   or: worldline coverage <scenario.wlscenario> [trace.wltrace] [min-percent]");
         error.println("   or: worldline semantics show");
         error.println("   or: worldline semantics graph");
         error.println("   or: worldline semantics category <name>");

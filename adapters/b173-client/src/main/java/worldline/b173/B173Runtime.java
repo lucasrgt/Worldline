@@ -132,6 +132,9 @@ public final class B173Runtime implements SnapshotMinecraftRuntime, UiMinecraftR
         for (B173Mod mod : mods) installMod(mod);
     }
 
+    /** Wall-clock nanoseconds spent in mod callbacks during the last tick. */
+    public long lastModNanos() { return backend.lastModNanos(); }
+
     @Override
     public RuntimeSnapshot snapshot() { return B173SnapshotCodec.encode(checkpoint()); }
 

@@ -4,6 +4,95 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## Unreleased - HTML Evidence Pages
+
+Status: GO.
+
+- Added `worldline trace html <left> [right] <output.html>`: deterministic
+  self-contained pages for single-trace viewing and two-trace structural
+  diffing with first-divergence highlighting and explicit verdicts.
+- Added the neutral `analysis.TraceHtml` renderer: pure function of its
+  inputs, no scripts or assets, escaped output, byte-identical re-renders so
+  page digests are freezable evidence.
+- Evidence: viewer and diff pages rendered from real controlled runs in the
+  m19 smoke; frozen SHA-256 in `smokes/m19-html/smoke.properties`.
+
+## Unreleased - Runtime Semantic Coverage
+
+Status: GO.
+
+- Added the neutral `coverage` module and `worldline coverage <scenario>
+  [trace] [min-percent]`: dynamic mapping of DSL steps onto the closed
+  semantic catalog's control categories plus role extraction from executed
+  trace fields through the closed `SemanticFields` alias table.
+- Added checksum-protected `WORLDLINE-COVERAGE/1` artifacts (`.wlcover`) and
+  an optional floor-percentage gate (exit 3) for scenario-corpus richness
+  checks; fully neutral, no runtime required.
+- Evidence: all five mappable verbs classified (20% of 24 categories),
+  executed-trace role extraction, artifact creation, and both threshold
+  outcomes; frozen SHA-256 in `smokes/m18-coverage/smoke.properties`.
+
+## Unreleased - Tick Profiling Budgets
+
+Status: GO.
+
+- Added `worldline profile <scenario> <seed> [budget.properties]`: per-
+  controlled-tick wall-clock sampling with mod-callback attribution via the
+  hook layer, deterministic nearest-rank aggregates, and canonical
+  checksum-protected `WORLDLINE-PROFILE/1` reports that pair timings with the
+  behavioral trace digest.
+- Added the strict optional-key budget gate (exit 3 with per-key violations)
+  for machine-relative regression control; timing values are never frozen
+  evidence, only structure and gate outcomes are.
+- Added the neutral `profiling` module (`ProfiledRunner`, `TickProfile`,
+  `TickProfiledRun`, `ProfileBudget`, `ProfileReport`) with full unit
+  coverage; adapter binding via `worldline.profile.provider`.
+- Evidence: structural smoke with tight-budget rejection and generous-budget
+  pass; frozen SHA-256 in `smokes/m17-profile/smoke.properties`.
+
+## Unreleased - Time-Travel Debug REPL
+
+Status: GO.
+
+- Added `worldline debug <scenario.wlscenario> <seed>`: an interactive,
+  scriptable session over one public-grammar scenario with forward steps,
+  exact reverse jumps and absolute gotos (deterministic prefix replay),
+  recorded-observation dumps, and per-field watchpoints.
+- Added the neutral `ScenarioTimeTravel.prefix` contract implemented by the
+  b1.7.3 scenario runner; sessions emit stable `WORLDLINE_DEBUG_*` lines so
+  scripted transcripts are frozen evidence.
+- Evidence: thirteen-command scripted transcript covering triggers, stale
+  observations, clamped goto, unknown commands, and unwatch; frozen SHA-256
+  in `smokes/m16-debug/smoke.properties`.
+
+## Unreleased - Pre-push Verification Gate
+
+Status: GO.
+
+- Added a versioned `tools/hooks/pre-push` hook that runs the canonical gate
+  before every push, with `WORLDLINE_PREPUSH_SMOKE=1` demanding the full
+  evidence suite.
+- Activated per clone via `git config core.hooksPath tools/hooks`; documented
+  in the engineering guide and README.
+
+## Unreleased - Differential Fuzzer
+
+Status: GO.
+
+- Added the deterministic `worldline fuzz <out-dir> <seed> <cases> <steps>
+  [left.jar] [right.jar]` campaign command over public-grammar scenarios.
+- Added `worldline.fuzz` with bounded scenario planning, named subjects,
+  pairwise divergence search, vanilla self-checks for nondeterminism, and
+  automatic minimization of every divergence into a `.wlscenario` reproducer.
+- Added the canonical checksum-protected `WORLDLINE-FUZZ/1` report with
+  embedded scenario artifacts and stable subject provenance.
+- Added adapter-side fail-closed validation for unregistered block ids in
+  scenario block writes.
+- Evidence: two-mod campaign finds and shrinks the first divergence inside the
+  budget while a vanilla-only campaign stays clean; frozen SHA-256 in
+  `smokes/m15-fuzz/smoke.properties`.
+
+## Unreleased - M11 Mod API v2
 ## Unreleased - Mod API v2
 
 Status: GO.
