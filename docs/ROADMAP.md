@@ -18,6 +18,10 @@ Passing an experiment does not silently promote its API.
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
 | M10 | Native/offscreen render E2E and Aero investigation | Not started |
+| M11 | Mod API v2: lifecycle hooks, domain handles, scheduling, spawn/give surface | GO - stable milestone |
+| M12 | One-command attested mod test runs (`mod test run`) | GO - stable milestone |
+| M13 | Multi-mod dependency graphs with deterministic ordering | GO - stable milestone |
+| M14 | Public scenario DSL with validated, runnable reproducers | GO - stable milestone |
 
 ## Promotion rule
 
@@ -30,3 +34,10 @@ release artifact.
 
 M10 should qualify native/offscreen rendering and the original Aero candidate
 without weakening the headless, provenance, or differential boundaries.
+
+The ecosystem line (M11-M14) turns the laboratory into a platform: mods gain
+the full controlled domain surface, one command attests their behavior,
+multiple mods compose deterministically, and reproducers become shareable
+runnable artifacts. The next ecosystem steps are a published Maven/Gradle
+TestKit for external authors and promotion of the remaining experimental
+world-surface observations.

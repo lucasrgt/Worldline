@@ -28,18 +28,30 @@ public final class Replay {
                 && arguments[2].equals("record")) || (arguments.length == 5
                 && arguments[0].equals("mod") && arguments[1].equals("test")
                 && arguments[2].equals("diff"));
+        boolean modRun = arguments.length == 7 && arguments[0].equals("mod")
+                && arguments[1].equals("test") && arguments[2].equals("run");
         boolean scenario = (arguments.length >= 3 && arguments[0].equals("scenario")
                 && arguments[1].equals("create")) || (arguments.length == 3
-                && arguments[0].equals("scenario") && arguments[1].equals("inspect"));
-        if (!replay && !trace && !mod && !scenario) { System.err.println("usage: java tools/replay/Replay.java replay <bundle.wlrb>");
+                && arguments[0].equals("scenario") && arguments[1].equals("inspect"))
+                || (arguments.length == 3 && arguments[0].equals("scenario")
+                && arguments[1].equals("validate"));
+        boolean scenarioRun = arguments.length == 5 && arguments[0].equals("scenario")
+                && arguments[1].equals("run");
+        boolean game = replay || modRun || scenarioRun;
+        if (!replay && !trace && !mod && !scenario && !modRun && !scenarioRun) {
+            System.err.println("usage: java tools/replay/Replay.java replay <bundle.wlrb>");
             System.err.println("   or: java tools/replay/Replay.java trace show <trace.wltrace>");
             System.err.println("   or: java tools/replay/Replay.java trace diff <left.wltrace> <right.wltrace>");
             System.err.println("   or: java tools/replay/Replay.java mod inspect <mod.jar>");
             System.err.println("   or: java tools/replay/Replay.java mod test record <mod.jar> <trace> <result>");
             System.err.println("   or: java tools/replay/Replay.java mod test diff <left> <right>");
+            System.err.println("   or: java tools/replay/Replay.java mod test run <mod.jar> <seed> <ticks> <result>");
             System.err.println("   or: java tools/replay/Replay.java scenario create <output> [step ...]");
-            System.err.println("   or: java tools/replay/Replay.java scenario inspect <scenario>"); return 2; }
-        if (replay) { int inputs = new ProcessBuilder("java", "tools/harness/RuntimeCheck.java", "--required")
+            System.err.println("   or: java tools/replay/Replay.java scenario inspect <scenario>");
+            System.err.println("   or: java tools/replay/Replay.java scenario validate <scenario>");
+            System.err.println("   or: java tools/replay/Replay.java scenario run <scenario> <seed> <trace>");
+            return 2; }
+        if (game) { int inputs = new ProcessBuilder("java", "tools/harness/RuntimeCheck.java", "--required")
                 .directory(root.toFile()).inheritIO().start().waitFor(); if (inputs != 0) return inputs; }
         Path classes = root.resolve(".worldline/build/classes");
         Path client = root.resolve(".worldline/smokes/controlled-client-tick");
@@ -50,13 +62,13 @@ public final class Replay {
                 classes.resolve("trace"), classes.resolve("mods"), classes.resolve("analysis"),
                 classes.resolve("modtest")));
         paths.add(classes.resolve("minimization"));
-        if (replay) paths.addAll(Arrays.asList(classes.resolve("kernel"), client.resolve("adapter-classes"),
+        if (game) paths.addAll(Arrays.asList(classes.resolve("kernel"), client.resolve("adapter-classes"),
                 client.resolve("instrumented-client"), client.resolve("headless-classes"),
                 workspace.resolve("minecraft/bin"), workspace.resolve("jars/minecraft.jar")));
         for (Path path : paths) if (!Files.exists(path)) throw new IllegalStateException(
                 "prepared runtime is missing " + root.relativize(path)
                         + "; run java tools/harness/Verify.java --smoke");
-        if (replay) try (Stream<Path> libraries = Files.walk(workspace.resolve("libraries"))) {
+        if (game) try (Stream<Path> libraries = Files.walk(workspace.resolve("libraries"))) {
             paths.addAll(libraries.filter(path -> path.toString().endsWith(".jar"))
                     .sorted().collect(Collectors.toList()));
         }

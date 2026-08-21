@@ -4,6 +4,75 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## Unreleased - M11 Mod API v2
+
+Status: GO.
+
+- Expanded `B173ModContext` with stable M3 `world()` and `player()` handles
+  and deterministic scheduled actions (`at(tick, action)`) drained before each
+  tick's mod callbacks.
+- Added additive lifecycle hooks to `B173Mod`: `onLoad` runs on installation
+  into a loaded world; `onDispose` runs in reverse install order at close.
+- Added a bounded semantic spawn registry (`GameWorld.spawn`), entity removal
+  (`GameWorld.remove`), container reads (`GameWorld.itemsAt`), and vanilla
+  merge semantics inventory mutation (`GamePlayer.give`) as opt-in overrides
+  over fail-closed defaults.
+- Added ordered multi-mod installation through `B173Runtime.installMods`.
+- Evidence: two-process deterministic lifecycle smoke with rejection matrix;
+  frozen SHA-256 in `smokes/m11-mod-api/smoke.properties`.
+
+## Unreleased - M12 Attested Mod Test Run
+
+Status: GO.
+
+- Added the one-command `worldline mod test run <mod.jar> <seed> <ticks>
+  <result>` flow: inspect, load, boot, install, tick, record, write.
+- Added `WORLDLINE-MOD-TEST/2` results binding `execution=controlled-runtime`,
+  `seed`, and `ticks`; v1 parsing and recording remain unchanged.
+- Added the neutral `ModTestRunner` provider contract with reflective CLI
+  binding via `worldline.modtest.provider`.
+- Evidence: end-to-end launcher smoke with byte-identical executed results,
+  EQUAL diff, and corruption rejection; frozen SHA-256 in
+  `smokes/m12-mod-run/smoke.properties`.
+
+## Unreleased - M13 Multi-Mod Graph
+
+Status: GO.
+
+- Added descriptor format 2 with an optional canonical `requires=` field of
+  `id` / `id>=x.y.z` dependency tokens; format 1 stays valid and dependency
+  free.
+- Added `ModGraph.order` with topological resolution, lexicographic
+  tie-breaking, input-order independence, and fail-closed rejection of
+  duplicates, missing dependencies, unmet minimums, self dependencies, and
+  cycles.
+- Extended `mod inspect` output with the resolved `requires=` list.
+- Evidence: neutral ordering smoke frozen in
+  `smokes/m13-mod-graph/smoke.properties`.
+
+## Unreleased - M14 Public Scenario DSL
+
+Status: GO.
+
+- Added `worldline-scenario-dsl/1`: strict grammar and canonical rendering for
+  `tick[:n]`, `reseed:<long>`, `tap:<key>`, `observe:<label>`, and
+  `block:x,y,z:id[:meta]` steps with bounded values.
+- Added the neutral `ScenarioRunner` contract and reflective CLI binding so
+  scenarios execute against the controlled runtime:
+  `worldline scenario validate|run`.
+- DSL scenarios remain ordinary M9 artifacts; minimization applies unchanged.
+- Evidence: authoring, validation, rejection, and deterministic execution
+  smoke frozen in `smokes/m14-scenario-dsl/smoke.properties`.
+
+## Unreleased - Butter HostUi screens
+
+- `B173Gui` promotes Butter screens that implement `butter.testing.HostUi`.
+- Binding is reflective so Worldline product modules still do not import Butter.
+- `B173Gui.open` displays a mapped `GuiScreen` so the laboratory can open Butter.
+- `B173Gui.putMain` seeds `mainInventory` for Butter slot observation.
+- Vanilla inventory `GameUi` behavior is unchanged. Other vanilla screens still
+  fail closed.
+
 ## Unreleased - Optimization Metadata SDK
 
 - Added dependency-free, source-retained `OptimizationRef` metadata in its own

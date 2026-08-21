@@ -13,6 +13,14 @@ public interface GamePlayer extends GameEntity {
     /** Read-only main, armor, and cursor totals. Not inventory manipulation. */
     ItemCensus items();
 
+    /**
+     * Adds {@code count} items of a legacy item id to the main inventory using
+     * vanilla stack merging. Bounded counts fail closed on overflow.
+     */
+    default void give(int itemId, int count) {
+        throw new UnsupportedOperationException("give is not supported by this runtime");
+    }
+
     default WearCensus wear() {
         return WearCensus.empty();
     }

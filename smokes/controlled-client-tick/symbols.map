@@ -44,7 +44,7 @@ net/minecraft/src/IChunkProvider	m	(ZLnet/minecraft/src/IProgressUpdate;)Z	saveC
 net/minecraft/src/Chunk	f	Z	isModified	o	o
 net/minecraft/src/Chunk	m	()V	setChunkModified	g	f
 net/minecraft/src/Chunk	m	(Z)Z	needsSaving	a	a
-net/minecraft/src/RenderGlobal	m	(Lnet/minecraft/src/EntityLiving;Z)Z	updateRenderers	a
+net/minecraft/src/RenderGlobal	m	(Lnet/minecraft/src/EntityLiving;Z)Z	updateRenderers	a	
 net/minecraft/src/Entity	f	I	entityId	aD	aG
 net/minecraft/src/Entity	f	Z	isDead	be	bh
 net/minecraft/src/Entity	f	D	posX	aM	aP

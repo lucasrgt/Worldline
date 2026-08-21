@@ -55,7 +55,9 @@ public final class ClientCycle {
         Path stubs = compile(adapterRoot.resolve("headless-src"), build.resolve("headless-classes"),
                 new ArrayList<>(), "headless boundary compilation");
         List<Path> libraries = jarFiles(workspace.resolve("libraries"));
-        List<Path> adapterDependencies = paths(stubs, mapped, product("api"), product("kernel"), product("reproduction"));
+        List<Path> adapterDependencies = paths(stubs, mapped, product("api"), product("kernel"),
+                product("reproduction"), product("trace"), product("mods"), product("modtest"),
+                product("minimization"));
         adapterDependencies.addAll(libraries);
         Path adapter = compile(adapterRoot.resolve("src/main/java"), build.resolve("adapter-classes"),
                 adapterDependencies, "reusable b1.7.3 adapter compilation");

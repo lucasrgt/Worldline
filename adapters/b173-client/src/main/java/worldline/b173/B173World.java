@@ -11,6 +11,7 @@ import net.minecraft.src.World;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.GameEntity;
+import worldline.api.GamePosition;
 import worldline.api.GameWorld;
 import worldline.api.ItemCensus;
 
@@ -80,6 +81,19 @@ final class B173World implements GameWorld {
             if (value instanceof IInventory) census = B173Items.add(census, (IInventory) value);
         }
         return census;
+    }
+
+    @Override public GameEntity spawn(String type, GamePosition position) {
+        return B173Entities.spawn(owner, world(), type, position);
+    }
+
+    @Override public boolean remove(GameEntity entity) {
+        if (entity == null) throw new NullPointerException("entity");
+        return B173Entities.remove(world(), entity);
+    }
+
+    @Override public ItemCensus itemsAt(BlockPosition position) {
+        return B173Entities.itemsAt(world(), position);
     }
 
     private static void require(BlockPosition position) {

@@ -44,4 +44,22 @@ public interface GameWorld {
     default boolean peaceful() {
         return true;
     }
+
+    /**
+     * Spawns one entity of a registered semantic type at {@code position} and
+     * returns its live handle. Unsupported types fail closed.
+     */
+    default GameEntity spawn(String type, GamePosition position) {
+        throw new UnsupportedOperationException("spawn is not supported by this runtime");
+    }
+
+    /** Removes a live entity from the world; returns false when it is already gone. */
+    default boolean remove(GameEntity entity) {
+        throw new UnsupportedOperationException("remove is not supported by this runtime");
+    }
+
+    /** Read-only item totals inside the container tile entity at {@code position}. */
+    default ItemCensus itemsAt(BlockPosition position) {
+        throw new UnsupportedOperationException("container reads are not supported by this runtime");
+    }
 }

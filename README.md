@@ -54,10 +54,14 @@ automatic scenario minimization.
 | M7 | General mod packaging, inspection, compatibility, and loading | GO |
 | M8 | Provenance-bound differential mod/version results | GO |
 | M9 | Deterministic, budgeted scenario minimization | GO |
-| GUI tree | Neutral inventory UI tree | GO |
+| GUI tree | Neutral inventory UI tree and Butter `HostUi` bridge | GO |
 | Invariants | Item, block, entity, wear, health, and time rules | GO |
 | Semantics | Closed role catalog, mappings, manifests, and coverage gate | GO |
 | M10 | Native/offscreen rendering and Aero investigation | Not started |
+| M11 | Mod API v2: lifecycle hooks, domain handles, scheduling, spawn/give | GO |
+| M12 | One-command attested mod test runs | GO |
+| M13 | Multi-mod dependency graphs with deterministic ordering | GO |
+| M14 | Public scenario DSL with validated, runnable reproducers | GO |
 
 Version and frozen signatures are authoritative in
 [`release/worldline.properties`](release/worldline.properties). The promotion
@@ -140,15 +144,22 @@ Adapter factories remain runtime-specific.
 
 Worldline can load trusted, independently packaged Java mods and compare their
 observable behavior. The package contract is stable; the external test-author
-experience is still a controlled-laboratory workflow rather than a published
-Maven/Gradle TestKit.
+experience is a controlled-laboratory workflow with a one-command attested
+run, while a published Maven/Gradle TestKit remains future work.
 
 ### Package a Worldline mod
 
-A b1.7.3 test mod implements the narrow tick entrypoint:
+A b1.7.3 test mod implements the tick entrypoint and may use lifecycle hooks,
+the M3 domain handles, scheduling, entity spawn/removal, and inventory give:
 
 ```java
 public final class GlassProbe implements B173Mod {
+    @Override
+    public void onLoad(B173ModContext context) {
+        context.world().setBlock(new BlockPosition(8, 65, 8), new BlockState(20, 0));
+        context.at(3, () -> context.setBlock(9, 65, 9, 20));
+    }
+
     @Override
     public void onTick(B173ModContext context) {
         if (context.blockAt(8, 65, 8) == 0) {
@@ -159,16 +170,22 @@ public final class GlassProbe implements B173Mod {
 ```
 
 Every JAR contains exactly one canonical descriptor at
-`META-INF/worldline-mod.properties`:
+`META-INF/worldline-mod.properties`. Format 2 adds dependency declarations:
 
 ```properties
-format=1
+format=2
 id=example.glass-probe
 version=1.0.0
 entrypoint=example.GlassProbe
 worldline.api=1
 runtime=b1.7.3
+requires=example.foundation>=1.0.0
 ```
+
+Format 1 packages (without `requires=`) stay valid and dependency free.
+Dependencies resolve deterministically: topological order, lexicographic
+tie-breaking, fail-closed rejection of missing, unmet, self, and cyclic
+requirements.
 
 Inspect the package without executing mod code or loading Minecraft:
 
@@ -176,37 +193,37 @@ Inspect the package without executing mod code or loading Minecraft:
 java tools/replay/Replay.java mod inspect path/to/mod.jar
 ```
 
-The inspector reports descriptor metadata, whole-JAR SHA-256, and exact
-runtime/API compatibility. Loading rejects incompatible runtimes, API
-versions, entrypoint types, malformed descriptors, and changed JARs.
+The inspector reports descriptor metadata, declared dependencies, whole-JAR
+SHA-256, and exact runtime/API compatibility. Loading rejects incompatible
+runtimes, API versions, entrypoint types, malformed descriptors, and changed
+JARs.
 
-### Record and compare results
+### Run, record, and compare results
 
 ```text
+java tools/replay/Replay.java mod test run mod.jar 17320110707 16 run.wlmtest
 java tools/replay/Replay.java mod test record mod.jar run.wltrace run.wlmtest
 java tools/replay/Replay.java mod test diff baseline.wlmtest candidate.wlmtest
 ```
 
-A `.wlmtest` binds the exact mod ID, version, entrypoint, artifact hash,
-runtime, Worldline API, and canonical trace. Comparison reports the earliest
-seed, schema, record, or field divergence and names a known invariant when one
-applies.
+`mod test run` executes the mod inside the controlled runtime and writes a
+format 2 `.wlmtest` attesting `execution=controlled-runtime`, the seed, and
+the tick count. `mod test record` binds a caller-supplied trace without
+attesting execution. Comparison reports the earliest seed, schema, record, or
+field divergence and names a known invariant when one applies.
 
-`mod test record` binds caller-supplied inputs; it does **not** attest that the
-trace came from executing that JAR. The M8 smoke owns the stronger execution
-boundary. A public one-command `mod test run` is not implemented yet.
-
-### Create and minimize scenarios
+### Create, validate, and run scenarios
 
 ```text
-java tools/replay/Replay.java scenario create run.wlscenario tick observe:target
-java tools/replay/Replay.java scenario inspect run.wlscenario
+java tools/replay/Replay.java scenario create run.wlscenario observe:before block:8,65,8:20 tick observe:target
+java tools/replay/Replay.java scenario validate run.wlscenario
+java tools/replay/Replay.java scenario run run.wlscenario 4242 run.wltrace
 ```
 
-The neutral minimizer works with ordered opaque steps and an adapter-owned
-evaluator. The M9 evidence adapter understands `tick`, `reseed:<long>`,
-`tap:<key>`, and `observe:<label>`; these are evidence vocabulary, not a
-universal public scenario language.
+The public DSL covers `tick[:n]`, `reseed:<long>`, `tap:<key>`,
+`observe:<label>`, and `block:x,y,z:id[:meta]` steps with strict validation
+and canonical rendering. Scenarios stay ordinary M9 artifacts, so the
+minimizer applies unchanged.
 
 ### Testing flow
 
@@ -235,8 +252,12 @@ mod source + descriptor
 
 Working examples live in
 [`smokes/m7-mod-loading`](smokes/m7-mod-loading),
-[`smokes/m8-mod-version-diff`](smokes/m8-mod-version-diff), and
-[`smokes/m9-scenario-minimization`](smokes/m9-scenario-minimization).
+[`smokes/m8-mod-version-diff`](smokes/m8-mod-version-diff),
+[`smokes/m9-scenario-minimization`](smokes/m9-scenario-minimization),
+[`smokes/m11-mod-api`](smokes/m11-mod-api),
+[`smokes/m12-mod-run`](smokes/m12-mod-run),
+[`smokes/m13-mod-graph`](smokes/m13-mod-graph), and
+[`smokes/m14-scenario-dsl`](smokes/m14-scenario-dsl).
 
 ---
 
@@ -251,6 +272,7 @@ Working examples live in
 | Boundary control | Virtual time, programmable input, RNG reseed, filesystem journal/failure injection, offline network |
 | Scheduling | Externally requested ticks and timer-thread supervision |
 | Semantic GUI | Screen, node, slot, open, close, and click through `GameUi` |
+| Butter bridge | Reflective `HostUi` binding without importing Butter into `worldline-api` |
 
 ### Reproduction and analysis
 
@@ -333,9 +355,12 @@ java tools/replay/Replay.java trace diff <left.wltrace> <right.wltrace>
 java tools/replay/Replay.java mod inspect <mod.jar>
 java tools/replay/Replay.java mod test record <mod.jar> <trace.wltrace> <result.wlmtest>
 java tools/replay/Replay.java mod test diff <left.wlmtest> <right.wlmtest>
+java tools/replay/Replay.java mod test run <mod.jar> <seed> <ticks> <result.wlmtest>
 
 java tools/replay/Replay.java scenario create <output.wlscenario> [step ...]
 java tools/replay/Replay.java scenario inspect <scenario.wlscenario>
+java tools/replay/Replay.java scenario validate <scenario.wlscenario>
+java tools/replay/Replay.java scenario run <scenario.wlscenario> <seed> <trace.wltrace>
 ```
 
 Neutral inspection and comparison commands do not require Minecraft, mapped
@@ -358,6 +383,10 @@ classes, RetroMCP, or native libraries on their product classpaths.
 | [M7 mods](docs/M7_MODS.md) | Descriptor, compatibility, loading, and trust boundary |
 | [M8 results](docs/M8_RESULTS.md) | `.wlmtest` format, recording, and comparison |
 | [M9 minimization](docs/M9_MINIMIZATION.md) | `.wlscenario`, evaluator contract, and guarantees |
+| [M11 mod API v2](docs/M11_MOD_API.md) | Lifecycle hooks, domain handles, scheduling, spawn/give |
+| [M12 mod test run](docs/M12_MOD_RUN.md) | Attested one-command execution and result format 2 |
+| [M13 mod graph](docs/M13_MOD_GRAPH.md) | Format 2 dependencies and deterministic ordering |
+| [M14 scenario DSL](docs/M14_SCENARIO_DSL.md) | Public step grammar, validation, and execution |
 | [GUI tree](docs/GUI_TREE.md) | Semantic inventory UI and Butter bridge |
 | [Invariants](docs/INVARIANTS.md) | Observation model and fail-closed rules |
 | [Semantics](docs/SEMANTICS.md) | Roles, mappings, manifests, confidence, and coverage |
@@ -383,10 +412,11 @@ Worldline currently targets:
 
 Worldline is not a general Minecraft launcher, a security sandbox, or a
 drop-in loader for legacy ModLoader/Forge mods. The current public mod boundary
-does not provide dependency resolution, multiple-mod ordering, permissions,
-hot reload, arbitrary private-state capture, or a published Maven/Gradle
-TestKit. Native/offscreen framebuffer evidence and Aero integration remain M10
-work.
+does not provide permissions, hot reload, arbitrary private-state capture,
+classloader namespacing between mods, or a published Maven/Gradle TestKit.
+Native/offscreen framebuffer evidence and Aero integration remain M10 work.
+Entity spawning uses a closed semantic registry; unregistered types fail
+closed.
 
 Never commit or distribute the official Minecraft JAR, original assets, or
 decompiled Minecraft sources. Public artifacts contain original Worldline

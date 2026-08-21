@@ -79,8 +79,9 @@ LWJGL, mappings, instrumentation, or decompiled Minecraft types.
 
 The Game UI Tree adds opt-in `UiMinecraftRuntime` and immutable
 `GameUiNode` values. `GameUi` exposes the current screen, a snapshot of semantic
-nodes, role/name lookup, inventory open/close, and slot clicks. Only the
-inventory screen is promoted; other screens fail closed.
+nodes, role/name lookup, inventory open/close, and clicks. Vanilla inventory
+is promoted; Butter screens that implement `butter.testing.HostUi` are bound
+reflectively. Other vanilla screens fail closed.
 
 M3 adds the opt-in `AutomatedMinecraftRuntime` extension and neutral
 `GameWorld`, `GamePlayer`, and `GameEntity` handles. Coordinates and block

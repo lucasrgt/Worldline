@@ -126,6 +126,12 @@ public final class B173Runtime implements SnapshotMinecraftRuntime, UiMinecraftR
         backend.install(mod);
     }
 
+    /** Installs several mods in the given deterministic order. */
+    public void installMods(List<B173Mod> mods) {
+        if (mods == null) throw new NullPointerException("mods");
+        for (B173Mod mod : mods) installMod(mod);
+    }
+
     @Override
     public RuntimeSnapshot snapshot() { return B173SnapshotCodec.encode(checkpoint()); }
 

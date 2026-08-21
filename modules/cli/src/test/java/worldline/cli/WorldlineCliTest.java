@@ -8,9 +8,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import worldline.api.RuntimeSnapshot;
+import worldline.modtest.ModTestResult;
+import worldline.modtest.ModTestRunner;
+import worldline.minimization.Scenario;
+import worldline.minimization.ScenarioRunner;
+import worldline.mods.ModArtifact;
+import worldline.mods.ModLoader;
 import worldline.reproduction.ReplayProvider;
 import worldline.reproduction.ReplayReport;
 import worldline.reproduction.ReproductionBundle;
+import worldline.trace.CanonicalStateDocument;
 
 public final class WorldlineCliTest {
     private WorldlineCliTest() {}
@@ -24,6 +31,9 @@ public final class WorldlineCliTest {
         Path leftResult = Files.createTempFile("worldline-cli-left", ".wlmtest");
         Path rightResult = Files.createTempFile("worldline-cli-right", ".wlmtest");
         Path scenario = Files.createTempFile("worldline-cli", ".wlscenario");
+        Path dslScenario = Files.createTempFile("worldline-cli-dsl", ".wlscenario");
+        Path runResult = Files.createTempFile("worldline-cli-run", ".wlmtest");
+        Path runTrace = Files.createTempFile("worldline-cli-run", ".wltrace");
         String previous = System.getProperty("worldline.replay.provider");
         try {
             ReproductionBundle value = ReproductionBundle.create("test-runtime", "1.2.3",
@@ -32,6 +42,7 @@ public final class WorldlineCliTest {
             writeMod(mod, "1.0.0", "b1.7.3");
             writeMod(secondMod, "1.1.0", "b1.7.3");
             Files.delete(leftResult); Files.delete(rightResult); Files.delete(scenario);
+            Files.delete(dslScenario); Files.delete(runResult); Files.delete(runTrace);
             System.setProperty("worldline.replay.provider", FakeProvider.class.getName());
             ByteArrayOutputStream output = new ByteArrayOutputStream(), error = new ByteArrayOutputStream();
             int status = WorldlineCli.run(new String[] {"replay", bundle.toString()},
@@ -120,6 +131,53 @@ public final class WorldlineCliTest {
             require(status == 0 && output.toString().contains("WORLDLINE_SCENARIO_INSPECT=PASS")
                     && output.toString().contains("1=tick")
                     && output.toString().contains("2=observe:target"), "CLI scenario inspection failed");
+            Files.write(dslScenario, Scenario.of(java.util.Arrays.asList("observe:before",
+                    "block:8,65,8:20", "tick:2", "reseed:101", "observe:after")).bytes());
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"scenario", "validate", dslScenario.toString()},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("WORLDLINE_SCENARIO_VALIDATE=PASS")
+                    && output.toString().contains("dsl=worldline-scenario-dsl/1")
+                    && output.toString().contains("2=TICK:tick:2"), "CLI scenario validate failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"scenario", "validate", scenario.toString()},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 1 && error.toString().contains("unknown scenario step"),
+                    "CLI accepted a step outside the DSL");
+            System.setProperty("worldline.modtest.provider", FakeModTestRunner.class.getName());
+            System.setProperty("worldline.scenario.provider", FakeScenarioRunner.class.getName());
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"mod", "test", "run", mod.toString(),
+                    "17320110707", "16", runResult.toString()}, new PrintStream(output), new PrintStream(error));
+            require(status == 0 && Files.isRegularFile(runResult)
+                    && output.toString().contains("WORLDLINE_MOD_TEST_RUN=PASS")
+                    && output.toString().contains("execution=controlled-runtime")
+                    && output.toString().contains("seed=17320110707") && output.toString().contains("ticks=16"),
+                    "CLI mod test run failed");
+            byte[] executed = Files.readAllBytes(runResult);
+            require(ModTestResult.parse(executed).executed(), "run result lost attestation");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"mod", "test", "run", mod.toString(),
+                    "17320110707", "16", runResult.toString()}, new PrintStream(output), new PrintStream(error));
+            require(status == 1 && java.util.Arrays.equals(executed, Files.readAllBytes(runResult)),
+                    "CLI overwrote an executed mod test result");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"scenario", "run", dslScenario.toString(),
+                    "4242", runTrace.toString()}, new PrintStream(output), new PrintStream(error));
+            require(status == 0 && Files.isRegularFile(runTrace)
+                    && output.toString().contains("WORLDLINE_SCENARIO_RUN=PASS")
+                    && output.toString().contains("trace.sha256="), "CLI scenario run failed");
+            require(CanonicalStateDocument.parse(new String(Files.readAllBytes(runTrace),
+                    StandardCharsets.UTF_8)).seed() == 4242L, "scenario run trace seed mismatch");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"scenario", "bogus", scenario.toString()},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 2 && error.toString().contains("usage: worldline"),
+                    "CLI accepted an unknown scenario subcommand");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"mod", "bogus", mod.toString()},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 2, "CLI accepted an unknown mod subcommand");
             output.reset(); error.reset();
             status = WorldlineCli.run(new String[] {"semantics", "show"},
                     new PrintStream(output), new PrintStream(error));
@@ -150,12 +208,16 @@ public final class WorldlineCliTest {
         } finally {
             if (previous == null) System.clearProperty("worldline.replay.provider");
             else System.setProperty("worldline.replay.provider", previous);
+            System.clearProperty("worldline.modtest.provider");
+            System.clearProperty("worldline.scenario.provider");
             Files.deleteIfExists(bundle);
             Files.deleteIfExists(left); Files.deleteIfExists(right);
             Files.deleteIfExists(mod);
             Files.deleteIfExists(secondMod); Files.deleteIfExists(leftResult);
             Files.deleteIfExists(rightResult);
             Files.deleteIfExists(scenario);
+            Files.deleteIfExists(dslScenario); Files.deleteIfExists(runResult);
+            Files.deleteIfExists(runTrace);
         }
         System.out.println("WorldlineCliTest passed");
     }
@@ -166,6 +228,25 @@ public final class WorldlineCliTest {
             return new ReplayReport(runtimeId(), 0, "tick0=ok");
         }
     }
+
+    public static final class FakeModTestRunner implements ModTestRunner {
+        @Override public ModTestResult run(Path modJar, long seed, int ticks) {
+            try {
+                ModArtifact artifact = ModLoader.inspect(modJar, "b1.7.3", "1");
+                CanonicalStateDocument trace = CanonicalStateDocument.parse(
+                        "v2|seed=" + seed + "|schema=x|tick0=" + ticks);
+                return ModTestResult.createExecuted(artifact, trace, seed, ticks);
+            } catch (Exception error) { throw new IllegalStateException(error); }
+        }
+    }
+
+    public static final class FakeScenarioRunner implements ScenarioRunner {
+        @Override public CanonicalStateDocument run(Scenario scenario, long seed) {
+            return CanonicalStateDocument.parse(
+                    "v2|seed=" + seed + "|schema=x|tick0=" + scenario.size());
+        }
+    }
+
     private static String repeat(char value, int count) {
         StringBuilder result = new StringBuilder(); while (result.length() < count) result.append(value);
         return result.toString();

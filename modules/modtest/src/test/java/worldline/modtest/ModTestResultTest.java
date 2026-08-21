@@ -38,11 +38,28 @@ public final class ModTestResultTest {
             rejects(() -> ModTestResult.parse(new byte[0]));
             rejects(() -> ModTestResult.create(
                     ModLoader.inspect(incompatibleJar, "b1.7.3", "1"), left));
+            executed(firstJar, left);
         } finally {
             Files.deleteIfExists(firstJar); Files.deleteIfExists(secondJar);
             Files.deleteIfExists(incompatibleJar);
         }
         System.out.println("ModTestResultTest passed");
+    }
+
+    private static void executed(Path modJar, CanonicalStateDocument trace) throws Exception {
+        ModArtifact artifact = ModLoader.inspect(modJar, "b1.7.3", "1");
+        ModTestResult run = ModTestResult.createExecuted(artifact, trace, -42L, 16);
+        require(run.executed() && run.seed() == -42L && run.ticks() == 16,
+                "executed metadata lost");
+        require(!ModTestResult.create(artifact, trace).executed()
+                && !run.equals(ModTestResult.create(artifact, trace)),
+                "executed and recorded results must differ");
+        ModTestResult parsed = ModTestResult.parse(run.bytes());
+        require(parsed.equals(run) && parsed.executed() && parsed.seed() == -42L
+                && parsed.ticks() == 16 && parsed.trace().signature().equals(trace.signature()),
+                "executed round trip failed");
+        rejects(() -> ModTestResult.createExecuted(artifact, trace, 1L, 0));
+        rejects(() -> ModTestResult.createExecuted(artifact, trace, 1L, ModTestResult.MAX_TICKS + 1));
     }
 
     private static CanonicalStateDocument trace(long value) {
