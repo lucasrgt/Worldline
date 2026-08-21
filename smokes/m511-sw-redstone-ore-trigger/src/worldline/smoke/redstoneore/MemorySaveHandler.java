@@ -1,0 +1,8 @@
+package worldline.smoke.redstoneore;
+import java.io.File;import java.util.List;import net.minecraft.src.*;
+/** In-memory save boundary retaining vanilla world behavior. */
+@SuppressWarnings("rawtypes") final class MemorySaveHandler implements ISaveHandler,IPlayerFileData{
+ private final WorldInfo info;private final MemoryChunkLoader chunks=new MemoryChunkLoader();
+ MemorySaveHandler(long seed,String name){info=new WorldInfo(seed,name);info.setSpawnPosition(8,64,8);}
+ public WorldInfo func_22096_c(){return info;}public void func_22091_b(){}public IChunkLoader func_22092_a(WorldProvider p){return chunks;}public void func_22095_a(WorldInfo i,List p){}public void func_22094_a(WorldInfo i){}public IPlayerFileData func_22090_d(){return this;}public void func_22093_e(){}public File func_28111_b(String n){return null;}public void writePlayerData(EntityPlayer p){}public void readPlayerData(EntityPlayer p){}
+}
