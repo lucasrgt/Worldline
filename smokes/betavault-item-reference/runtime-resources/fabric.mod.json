@@ -1,0 +1,1 @@
+{"schemaVersion":1,"id":"worldline-betavault-itemref","version":"1.0.0","name":"Worldline BetaVault Item Reference Extension","environment":"*","mixins":["worldline-betavault-itemref.mixins.json"],"entrypoints":{"stationapi:event_bus_server":["worldline.itemref.runtime.ItemReferenceServer"]},"depends":{"fabricloader":">=0.15.0","minecraft":"1.0.0-beta.7.3","stationapi":"*"}}
