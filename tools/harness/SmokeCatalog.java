@@ -121,7 +121,8 @@ final class SmokeCatalog {
         {"tools/smoke/GrassSpreadSetCycle.java", "m566-grass-spread-set"}, {"tools/smoke/TorchBurnoutSetCycle.java", "m555-torch-burnout-set"}, {"tools/smoke/BedSpawnSetCycle.java", "m567-bed-spawn-set"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}, {"tools/smoke/ModApiCycle.java", "m11-mod-api"}, {"tools/smoke/ModRunCycle.java", "m12-mod-run"}, {"tools/smoke/ModGraphCycle.java", "m13-mod-graph"},
         {"tools/smoke/ScenarioDslCycle.java", "m14-scenario-dsl"}, {"tools/smoke/CensusCycle.java", "census-cycle"}, {"tools/smoke/AtlasCycle.java", "seed-atlas"}, {"tools/smoke/UiExportCycle.java", "ui-export"},
-        {"tools/smoke/SpiderClimbSetCycle.java", "m447-spider-climb-set"}
+        {"tools/smoke/SpiderClimbSetCycle.java", "m447-spider-climb-set"},
+        {"tools/smoke/WolfAngerSetCycle.java", "m449-wolf-anger-set"}
     };
     private SmokeCatalog() {}
 }
