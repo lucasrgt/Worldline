@@ -23,11 +23,36 @@ public final class B173Gui implements GameUi {
 
     public void closeScreen() { close(); }
 
+    public void open(GuiScreen screen) {
+        if (screen == null) throw new NullPointerException("screen");
+        backend.client().displayGuiScreen(screen);
+    }
+
+    public void putMain(int index, int itemId, int count) {
+        if (index < 0 || index >= 36) throw new IllegalArgumentException("main slot");
+        if (count < 0) throw new IllegalArgumentException("count");
+        ItemStack stack = itemId < 0 || count == 0 ? null : new ItemStack(itemId, count, 0);
+        backend.client().thePlayer.inventory.mainInventory[index] = stack;
+    }
+
     @Override public String screen() {
         GuiScreen screen = current();
         if (screen == null) return "";
+        GameUi foreign = B173ForeignUi.bind(screen);
+        if (foreign != null) return foreign.screen();
         if (screen instanceof GuiInventory) return GameUiNode.INVENTORY;
         throw new IllegalStateException("unsupported screen " + screen.getClass().getSimpleName());
+    }
+
+    @Override public List<GameUiNode> nodes() {
+        GameUi foreign = B173ForeignUi.bind(current());
+        if (foreign != null) return foreign.nodes();
+        String screen = screen();
+        if (screen.isEmpty()) return Collections.emptyList();
+        List<GameUiNode> nodes = new ArrayList<GameUiNode>();
+        nodes.add(new GameUiNode(GameUiNode.SCREEN, screen, -1, -1, 0));
+        for (int index = 0; index < slotCount(); index++) nodes.add(slot(index));
+        return Collections.unmodifiableList(nodes);
     }
 
     public String screenName() {
@@ -42,15 +67,6 @@ public final class B173Gui implements GameUi {
         return this;
     }
 
-    @Override public List<GameUiNode> nodes() {
-        String screen = screen();
-        if (screen.isEmpty()) return Collections.emptyList();
-        List<GameUiNode> nodes = new ArrayList<GameUiNode>();
-        nodes.add(new GameUiNode(GameUiNode.SCREEN, screen, -1, -1, 0));
-        for (int index = 0; index < slotCount(); index++) nodes.add(slot(index));
-        return Collections.unmodifiableList(nodes);
-    }
-
     @Override public GameUiNode node(String role, String name) {
         for (GameUiNode node : nodes()) {
             if (node.role().equals(role) && node.name().equals(name)) return node;
@@ -61,6 +77,8 @@ public final class B173Gui implements GameUi {
     public int slotCount() { return container().inventorySlots.slots.size(); }
 
     @Override public GameUiNode slot(int index) {
+        GameUi foreign = B173ForeignUi.bind(current());
+        if (foreign != null) return foreign.slot(index);
         if (index < 0 || index >= slotCount()) throw new IllegalArgumentException("slot index out of range: " + index);
         Slot slot = (Slot) container().inventorySlots.slots.get(index);
         ItemStack stack = slot.getStack();
@@ -70,6 +88,8 @@ public final class B173Gui implements GameUi {
 
     @Override public void click(GameUiNode node) {
         if (node == null) throw new NullPointerException("node");
+        GameUi foreign = B173ForeignUi.bind(current());
+        if (foreign != null) { foreign.click(node); return; }
         if (!GameUiNode.SLOT.equals(node.role())) throw new IllegalArgumentException("only slots can be clicked");
         clickSlot(node.index(), 0);
     }

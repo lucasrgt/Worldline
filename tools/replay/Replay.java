@@ -27,26 +27,40 @@ public final class Replay {
                 && arguments[0].equals("mod") && arguments[1].equals("test")
                 && arguments[2].equals("record")) || (arguments.length == 5
                 && arguments[0].equals("mod") && arguments[1].equals("test")
-                && arguments[2].equals("diff"));
+                && arguments[2].equals("diff")) || (arguments.length == 7
+                && arguments[0].equals("mod") && arguments[1].equals("test")
+                && arguments[2].equals("run"));
         boolean scenario = (arguments.length >= 3 && arguments[0].equals("scenario")
                 && arguments[1].equals("create")) || (arguments.length == 3
-                && arguments[0].equals("scenario") && arguments[1].equals("inspect"));
+                && arguments[0].equals("scenario") && arguments[1].equals("inspect"))
+                || (arguments.length == 3 && arguments[0].equals("scenario")
+                && arguments[1].equals("validate"));
+        boolean scenarioRun = arguments.length == 5 && arguments[0].equals("scenario")
+                && arguments[1].equals("run");
+        boolean modRun = arguments.length == 7 && arguments[0].equals("mod")
+                && arguments[1].equals("test") && arguments[2].equals("run");
         boolean test = arguments.length >= 1 && arguments[0].equals("test");
         boolean testRuntime = test && !Arrays.asList(arguments).contains("--no-runtime")
                 && !Arrays.asList(arguments).contains("list")
                 && !Arrays.asList(arguments).contains("inspect")
                 && !Arrays.asList(arguments).contains("--help");
-        if (!replay && !trace && !mod && !scenario && !test) { System.err.println("usage: java tools/replay/Replay.java replay <bundle.wlrb>");
+        boolean game = replay || modRun || scenarioRun || testRuntime;
+        if (!replay && !trace && !mod && !scenario && !modRun && !scenarioRun && 
+ && !test) {
+            System.err.println("usage: java tools/replay/Replay.java replay <bundle.wlrb>");
             System.err.println("   or: java tools/replay/Replay.java trace show <trace.wltrace>");
             System.err.println("   or: java tools/replay/Replay.java trace diff <left.wltrace> <right.wltrace>");
             System.err.println("   or: java tools/replay/Replay.java mod inspect <mod.jar>");
             System.err.println("   or: java tools/replay/Replay.java mod test record <mod.jar> <trace> <result>");
             System.err.println("   or: java tools/replay/Replay.java mod test diff <left> <right>");
+            System.err.println("   or: java tools/replay/Replay.java mod test run <mod.jar> <seed> <ticks> <result>");
             System.err.println("   or: java tools/replay/Replay.java scenario create <output> [step ...]");
             System.err.println("   or: java tools/replay/Replay.java scenario inspect <scenario>");
+            System.err.println("   or: java tools/replay/Replay.java scenario validate <scenario>");
+            System.err.println("   or: java tools/replay/Replay.java scenario run <scenario> <seed> <trace>");
             System.err.println("   or: java tools/replay/Replay.java test [SpecClass]");
             System.err.println("   or: java tools/replay/Replay.java test run <spec.jar|classes> [SpecClass] [options]"); return 2; }
-        if (replay || testRuntime) { int inputs = new ProcessBuilder("java", "tools/harness/RuntimeCheck.java", "--required")
+        if (game) { int inputs = new ProcessBuilder("java", "tools/harness/RuntimeCheck.java", "--required")
                 .directory(root.toFile()).inheritIO().start().waitFor(); if (inputs != 0) return inputs; }
         Path classes = root.resolve(".worldline/build/classes");
         Path client = root.resolve(".worldline/smokes/controlled-client-tick");
@@ -59,13 +73,13 @@ public final class Replay {
         paths.add(classes.resolve("minimization"));
         if (test) paths.addAll(Arrays.asList(classes.resolve("testmodel"),
                 classes.resolve("testapi"), classes.resolve("testkit")));
-        if (replay || testRuntime) paths.addAll(Arrays.asList(classes.resolve("kernel"), client.resolve("adapter-classes"),
+        if (game) paths.addAll(Arrays.asList(classes.resolve("kernel"), client.resolve("adapter-classes"),
                 client.resolve("instrumented-client"), client.resolve("headless-classes"),
                 workspace.resolve("minecraft/bin"), workspace.resolve("jars/minecraft.jar")));
         for (Path path : paths) if (!Files.exists(path)) throw new IllegalStateException(
                 "prepared runtime is missing " + root.relativize(path)
-                        + "; run java tools/harness/Verify.java" + (replay || testRuntime ? " --smoke" : ""));
-        if (replay || testRuntime) try (Stream<Path> libraries = Files.walk(workspace.resolve("libraries"))) {
+                        + "; run java tools/harness/Verify.java" + (game ? " --smoke" : ""));
+        if (game) try (Stream<Path> libraries = Files.walk(workspace.resolve("libraries"))) {
             paths.addAll(libraries.filter(path -> path.toString().endsWith(".jar"))
                     .sorted().collect(Collectors.toList()));
         }

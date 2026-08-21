@@ -37,7 +37,7 @@ final class B173ClientBackend implements GameBackend, B173ModContext {
     private B173Player playerApi;
     private B173Gui gui;
     private long rngSeed;
-    private B173Mod mod;
+    private final B173ModHooks hooks = new B173ModHooks(this);
 
     B173ClientBackend(long seed, B173VirtualClock clock, B173VirtualFileSystem files,
             B173Scheduler scheduler) {
@@ -92,7 +92,8 @@ final class B173ClientBackend implements GameBackend, B173ModContext {
         scheduler.advance();
         clock.advance(50L);
         setTicksRan(ticksRan() + 1);
-        if (mod != null) mod.onTick(this);
+        hooks.beforeTick(ticksRan());
+        hooks.onTick(this);
         ((Minecraft) requireClient()).runTick();
     }
 
@@ -101,10 +102,12 @@ final class B173ClientBackend implements GameBackend, B173ModContext {
         if (client == null) return;
         client.running = false;
         threads.stop();
-        client.theWorld = null;
-        client.thePlayer = null;
-        worldApi = null; playerApi = null; gui = null; client = null;
-        B173ClockHooks.clear(clock);
+        try { hooks.dispose(); } finally {
+            client.theWorld = null;
+            client.thePlayer = null;
+            worldApi = null; playerApi = null; gui = null; client = null;
+            B173ClockHooks.clear(clock);
+        }
     }
 
     B173Observation observe() {
@@ -137,7 +140,10 @@ final class B173ClientBackend implements GameBackend, B173ModContext {
 
     B173Boundaries.Client client() { return requireClient(); }
 
-    void install(B173Mod value) { mod = value; }
+    void install(B173Mod value) {
+        require(worldApi != null, "mod install requires a loaded world");
+        hooks.install(value);
+    }
 
     public int clientTick() { return ticksRan(); }
 
@@ -146,6 +152,8 @@ final class B173ClientBackend implements GameBackend, B173ModContext {
     public boolean setBlock(int x, int y, int z, int blockId) {
         return requireClient().theWorld.setBlockWithNotify(x, y, z, blockId);
     }
+
+    public void at(int tick, Runnable action) { hooks.at(tick, action); }
 
     @Override public GameWorld world() { return worldApi; }
     @Override public GamePlayer player() { return playerApi; }

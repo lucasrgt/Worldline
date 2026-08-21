@@ -46,7 +46,7 @@ public final class TestKitContractTest {
                 new RunnerOptions().artifacts(root.resolve("interrupted")), null);
         require(interrupted.count(TestStatus.INTERRUPTED) == 1, "interruption was not preserved");
         TestRunResult timeout = new TestRunner().run(new Slow(), new RunnerOptions().provider(provider)
-                .runtimeLock(root.resolve("timeout.lock")).artifacts(root.resolve("timeout")).timeout(10), null);
+                .runtimeLock(root.resolve("timeout.lock")).artifacts(root.resolve("timeout")).timeout(250), null);
         require(timeout.count(TestStatus.FAILED) == 1 && contains(timeout.tests().get(0), "timeout-inventory.txt")
                 && trace(timeout.tests().get(0)), "timeout diagnostics missing");
         TestRunResult required = new TestRunner().run(new RuntimeRequired(),

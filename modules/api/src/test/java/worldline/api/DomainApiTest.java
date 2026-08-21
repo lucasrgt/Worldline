@@ -10,6 +10,7 @@ public final class DomainApiTest {
         uiSpecRoundTripsBuilderAndInventory();
         itemCensusIsExactAndFailClosed();
         semanticMappingIsExactAndFailClosed();
+        expandedSurfaceDefaultsFailClosed();
         serverStateIsExactAndFailClosed();
         multiplayerStateIsExactAndFailClosed();
         serverPlayerStateIsExactAndFailClosed();
@@ -385,6 +386,37 @@ public final class DomainApiTest {
                 "", "", "", "lab-cycle", 0));
     }
 
+    private static void expandedSurfaceDefaultsFailClosed() {
+        GameWorld world = new GameWorld() {
+            @Override public long time() { return 0L; }
+            @Override public BlockState block(BlockPosition position) { return new BlockState(1, 0); }
+            @Override public boolean setBlock(BlockPosition position, BlockState state) { return true; }
+            @Override public java.util.List<GameEntity> entities() { return java.util.Collections.emptyList(); }
+            @Override public ItemCensus items() { return ItemCensus.empty(); }
+            @Override public ItemCensus blocks() { return ItemCensus.empty(); }
+        };
+        GamePlayer player = new GamePlayer() {
+            @Override public int id() { return 0; }
+            @Override public String type() { return "minecraft:player"; }
+            @Override public GamePosition position() { return new GamePosition(0, 0, 0); }
+            @Override public boolean alive() { return true; }
+            @Override public void teleport(GamePosition position) { }
+            @Override public String username() { return "Worldline"; }
+            @Override public int health() { return 20; }
+            @Override public int selectedHotbarSlot() { return 0; }
+            @Override public void selectHotbarSlot(int slot) { }
+            @Override public ItemCensus items() { return ItemCensus.empty(); }
+        };
+        unsupported(() -> world.spawn("minecraft:pig", new GamePosition(0, 64, 0)));
+        unsupported(() -> world.remove(player));
+        unsupported(() -> world.itemsAt(new BlockPosition(8, 64, 8)));
+        unsupported(() -> player.give(265, 1));
+    }
+
+    private static void unsupported(Runnable action) {
+        try { action.run(); throw new AssertionError("expected unsupported failure"); }
+        catch (UnsupportedOperationException expected) { }
+    }
     private static void failure(Runnable action) {
         try { action.run(); throw new AssertionError("expected invalid value failure"); }
         catch (IllegalArgumentException expected) { }

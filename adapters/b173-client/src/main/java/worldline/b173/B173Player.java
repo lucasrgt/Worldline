@@ -1,6 +1,7 @@
 package worldline.b173;
 
 import net.minecraft.src.EntityPlayerSP;
+import net.minecraft.src.ItemStack;
 import worldline.api.GamePlayer;
 import worldline.api.ItemCensus;
 
@@ -22,6 +23,22 @@ final class B173Player extends B173Entity implements GamePlayer {
     @Override public void selectHotbarSlot(int slot) {
         if (slot < 0 || slot > 8) throw new IllegalArgumentException("hotbar slot must be 0..8");
         value().inventory.currentItem = slot;
+    }
+
+    @Override public void give(int itemId, int count) {
+        if (itemId < 0 || count < 1 || count > 64 * 36) {
+            throw new IllegalArgumentException("invalid give request");
+        }
+        int remaining = count;
+        while (remaining > 0) {
+            int chunk = Math.min(remaining, value().inventory.getInventoryStackLimit());
+            ItemStack stack = new ItemStack(itemId, chunk, 0);
+            value().inventory.addItemStackToInventory(stack);
+            int added = chunk - stack.stackSize;
+            if (added == 0) throw new IllegalStateException("inventory is full");
+            remaining -= added;
+        }
+        value().inventory.onInventoryChanged();
     }
 
     @Override public ItemCensus items() {

@@ -35,6 +35,7 @@ public final class ModLoaderTest {
             rejects(() -> parse(VALID.replace("version=1.0.0\n", "unknown=value\n")));
             rejects(() -> ModDescriptor.parse(new byte[] {(byte) 0xc3, (byte) 0x28}));
             rejects(() -> ModLoader.load(valid, "b1.8", "1", Runnable.class));
+            formatTwo();
         } finally {
             Files.deleteIfExists(valid); Files.deleteIfExists(invalid);
         }
@@ -58,6 +59,25 @@ public final class ModLoaderTest {
         try { action.run(); throw new AssertionError("invalid mod was accepted"); }
         catch (AssertionError error) { throw error; }
         catch (Exception expected) { }
+    }
+
+    private static void formatTwo() {
+        String base = "format=2\nid=worldline.probe\nversion=1.0.0\n"
+                + "entrypoint=worldline.benchmark.ProbeMod\nworldline.api=1\nruntime=b1.7.3\n";
+        ModDescriptor none = parse(base + "requires=\n");
+        require(none.requires().isEmpty(), "empty requires must stay empty");
+        ModDependency first = parse(base + "requires=worldline.lib,other.mod>=1.2.0\n").requires().get(1);
+        require(first.id().equals("other.mod") && first.minVersion().equals("1.2.0")
+                && !first.satisfiedBy("1.1.9") && first.satisfiedBy("1.2.0")
+                && first.satisfiedBy("2.0.0-beta"), "dependency bounds failed");
+        require(parse(base + "requires=worldline.lib\n").requires().get(0).minVersion() == null,
+                "bare dependency lost");
+        rejects(() -> parse(base.replace("format=2", "format=3") + "requires=\n"));
+        rejects(() -> parse(base + "requires=\nextra=x\n"));
+        rejects(() -> parse(base));
+        rejects(() -> parse(base + "requires=Worldline.Lib\n"));
+        rejects(() -> parse(base + "requires=worldline.lib>=not.a.version\n"));
+        rejects(() -> parse(base + "requires=worldline.lib,worldline.lib\n"));
     }
 
     private interface Checked { void run() throws Exception; }
