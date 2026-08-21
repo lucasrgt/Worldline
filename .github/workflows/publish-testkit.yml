@@ -29,11 +29,6 @@ jobs:
           echo "69ecddc1aab517006ecd88febf0f7faec60bf404a0dcfa32795c0209f43a069f  .worldline/dist/testkit/worldline-test-runner-0.2.0.jar" | sha256sum --check
       - name: Validate Gradle plugin
         run: gradle -p tooling/gradle-plugin --project-cache-dir .worldline/gradle-plugin/cache test validatePlugins
-      - name: Publish Gradle plugin
-        env:
-          GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}
-          GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}
-        run: gradle -p tooling/gradle-plugin --project-cache-dir .worldline/gradle-plugin/cache publishPlugins
       - name: Publish pinned release artifacts
         uses: softprops/action-gh-release@v2
         with:
@@ -41,3 +36,8 @@ jobs:
             .worldline/dist/testkit/worldline-test-api-*.jar
             .worldline/dist/testkit/worldline-test-runner-*.jar
             .worldline/dist/testkit/checksums.properties
+      - name: Publish Gradle plugin
+        env:
+          GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}
+          GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}
+        run: gradle -p tooling/gradle-plugin --project-cache-dir .worldline/gradle-plugin/cache publishPlugins
