@@ -134,7 +134,8 @@ final class SmokeCatalog {
         {"tools/smoke/RainTransitionCycle.java", "m500-sw-rain-transition"},
         {"tools/smoke/Run.java", "m502-sw-entity-collision-resolution"},
         {"tools/smoke/Run.java", "m501-sw-entity-item-grounding"},
-        {"tools/smoke/Run.java", "m503-sw-pig-wander"}
+        {"tools/smoke/Run.java", "m503-sw-pig-wander"},
+        {"tools/smoke/Run.java", "m513-sw-water-downward-flow"}
     };
     private SmokeCatalog() {}
 }
