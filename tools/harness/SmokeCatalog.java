@@ -138,7 +138,8 @@ final class SmokeCatalog {
         {"tools/smoke/Run.java", "m513-sw-water-downward-flow"},
         {"tools/smoke/Run.java", "m514-sw-lava-downward-flow"},
         {"tools/smoke/Run.java", "m515-sw-fire-support-extinguish"},
-        {"tools/smoke/HotbarEmptySelectionCycle.java", "m521-sw-hotbar-empty-selection"}
+        {"tools/smoke/HotbarEmptySelectionCycle.java", "m521-sw-hotbar-empty-selection"},
+        {"tools/smoke/Run.java", "redstone-wire-power"}, {"tools/smoke/Run.java", "redstone-repeater-delay"}, {"tools/smoke/Run.java", "redstone-repeater-delays"}, {"tools/smoke/Run.java", "redstone-lever-button"}, {"tools/smoke/Run.java", "redstone-piston-extend"}
     };
     private SmokeCatalog() {}
 }

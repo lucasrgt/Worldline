@@ -19,7 +19,7 @@ public final class SemanticRoles {
     public static final String GUI = "gui", RENDER = "render", AUDIO = "audio";
     public static final String RESOURCE = "resource", PERSISTENCE = "persistence";
     public static final String SAVE = "save", LIFECYCLE = "lifecycle";
-    public static final String LAB = "lab", DOMAIN = "domain";
+    public static final String LAB = "lab", DOMAIN = "domain", REDSTONE = "redstone";
     private static final Map<String, List<String>> REQUIRED = required();
 
     private SemanticRoles() {}
@@ -109,6 +109,13 @@ public final class SemanticRoles {
         roles.put(LAB, list("OBSERVATION", "SNAPSHOT", "CHECKPOINT", "HYPOTHESIS", "COMPARISON"));
         roles.put(DOMAIN, list("WORLD_API", "PLAYER_API", "ENTITY_API", "BLOCK_STATE", "READ_BLOCK",
                 "WRITE_BLOCK", "LIST_ENTITIES", "TELEPORT"));
+        roles.put(REDSTONE, list("REDSTONE_WIRE_TYPE", "REDSTONE_WIRE", "REDSTONE_TORCH_TYPE",
+                "REDSTONE_TORCH", "REDSTONE_REPEATER_TYPE", "REDSTONE_REPEATER_IDLE",
+                "REDSTONE_REPEATER_ACTIVE", "REDSTONE_LEVER_TYPE", "REDSTONE_LEVER",
+                "REDSTONE_BUTTON_TYPE", "REDSTONE_BUTTON", "REDSTONE_SCHEDULE",
+                "REDSTONE_PISTON_TYPE", "REDSTONE_PISTON", "REDSTONE_PISTON_HEAD",
+                "REDSTONE_PISTON_HEAD_TYPE", "REDSTONE_PISTON_MOVING_TYPE", "REDSTONE_PISTON_MOVING",
+                "BLOCK_PROVIDES_POWER", "BLOCK_POWERING_TO", "WORLD_INDIRECT_POWER"));
         return Collections.unmodifiableMap(roles);
     }
 

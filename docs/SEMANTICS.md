@@ -8,7 +8,7 @@ per 10,000.
 
 ```text
 SemanticCatalog.standard()
-  -->  24 categories, 238 required roles
+  -->  25 categories, 259 required roles
   -->  role("CLIENT_TICK_ROOT") / category("clock") / symbol(owner, name)
 AdapterManifest.loadAll(adapters, catalog)
   -->  b173-client and b173-server drivers; aero-model-lib overlay extension
@@ -51,11 +51,14 @@ official name.
 | `lifecycle` | `CLIENT_TYPE`, `CLIENT_WORLD`, `CLIENT_PLAYER`, `CLIENT_SESSION`, `RUNTIME_FACTORY`, `BOOT_HEADLESS`, `LOAD_WORLD`, `MANUAL_TICK`, `CLOSE` |
 | `lab` | `OBSERVATION`, `SNAPSHOT`, `CHECKPOINT`, `HYPOTHESIS`, `COMPARISON` |
 | `domain` | `WORLD_API`, `PLAYER_API`, `ENTITY_API`, `BLOCK_STATE`, `READ_BLOCK`, `WRITE_BLOCK`, `LIST_ENTITIES`, `TELEPORT` |
+| `redstone` | `REDSTONE_WIRE_TYPE`, `REDSTONE_WIRE`, `REDSTONE_TORCH_TYPE`, `REDSTONE_TORCH`, `REDSTONE_REPEATER_TYPE`, `REDSTONE_REPEATER_IDLE`, `REDSTONE_REPEATER_ACTIVE`, `REDSTONE_LEVER_TYPE`, `REDSTONE_LEVER`, `REDSTONE_BUTTON_TYPE`, `REDSTONE_BUTTON`, `REDSTONE_SCHEDULE`, `REDSTONE_PISTON_TYPE`, `REDSTONE_PISTON`, `REDSTONE_PISTON_HEAD`, `REDSTONE_PISTON_HEAD_TYPE`, `REDSTONE_PISTON_MOVING_TYPE`, `REDSTONE_PISTON_MOVING`, `BLOCK_PROVIDES_POWER`, `BLOCK_POWERING_TO`, `WORLD_INDIRECT_POWER` |
 
 These are the PDF control boundaries, every named leftover from the client,
-world, and M10 tessellator `symbols.map` files, adapter observation fields,
-GUI/M3 oracle aliases, and the item/recipe/domain surfaces Worldline already
-executes. There is no energy category.
+world, M10 tessellator, and redstone `symbols.map` files, adapter observation
+fields, GUI/M3 oracle aliases, and the item/recipe/domain surfaces Worldline
+already executes. There is no energy category. The redstone slice covers wire,
+torch, repeater delays 1-4, lever, button, and piston extension against the
+official server JAR; pressure plates, BUD, and repeater locking remain out.
 
 ## Stable contracts
 

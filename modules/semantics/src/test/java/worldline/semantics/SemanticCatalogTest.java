@@ -21,7 +21,7 @@ public final class SemanticCatalogTest {
         SemanticCatalog first = SemanticCatalog.standard();
         SemanticCatalog second = SemanticCatalog.standard();
         require(first.size() == SemanticRoles.roleCount(), "role count");
-        require(first.categories().size() == 24, "category count");
+        require(first.categories().size() == 25, "category count");
         require("k".equals(first.role("CLIENT_TICK_ROOT").official()), "official alias");
         require(first.role("CLIENT_CLOCK_SOURCE").official().isEmpty(), "worldline-only alias");
         require("u".equals(first.role("BLOCK_STONE").official()), "stone alias");
@@ -82,9 +82,11 @@ public final class SemanticCatalogTest {
         require("setNibble".equals(first.role("SET_NIBBLE").name()), "set nibble");
         require("slots".equals(first.role("CONTAINER_SLOT_LIST").name()), "container slots list");
         require("getStack".equals(first.role("SLOT_STACK").name()), "slot stack");
+        require("BlockRedstoneWire".equals(first.role("REDSTONE_WIRE_TYPE").name()),
+                "redstone wire type");
         require(first.sha256().equals(second.sha256())
                 && first.sha256().equals(
-                "b50402df6214dd80292640092d986e943312627437cafd5dbde8085f474bdad5"),
+                "102a18f94b36f8a1e3eda412cc028e429a2a3a1822ac5e35846b27108223c136"),
                 "catalog hash drifted to " + first.sha256());
         require(first.canonical().equals(second.canonical()), "catalog canonical drifted");
         require(first.render().contains("complete=true"), "render completeness");
@@ -136,6 +138,12 @@ public final class SemanticCatalogTest {
         cover("smokes/controlled-client-tick/symbols.map", catalog);
         cover("smokes/deterministic-world-tick/symbols.map", catalog);
         cover("smokes/m10-native-render/symbols.map", catalog);
+        cover("smokes/redstone-semantics/symbols.map", catalog);
+        cover("smokes/redstone-wire-power/symbols.map", catalog);
+        cover("smokes/redstone-repeater-delay/symbols.map", catalog);
+        cover("smokes/redstone-repeater-delays/symbols.map", catalog);
+        cover("smokes/redstone-lever-button/symbols.map", catalog);
+        cover("smokes/redstone-piston-extend/symbols.map", catalog);
     }
 
     private static void cover(String path, SemanticCatalog catalog) {

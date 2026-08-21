@@ -156,7 +156,7 @@ Adapters remain responsible for step interpretation and isolated evaluation,
 so the neutral module does not acquire game, mod, or runtime dependencies.
 
 The semantic catalog adds `worldline-semantics` above the API.
-It owns the closed 24-category role contract, static role graph, fail-closed
+It owns the closed 25-category role contract, static role graph, fail-closed
 lookup, and adapter manifests. The API owns immutable `SemanticMapping`
 values, including optional official client aliases. Category files annotate
 controlled b1.7.3 symbols already evidenced by Worldline; unknown or
@@ -229,6 +229,22 @@ sharing their Minecraft access paths.
 
 This establishes controlled vanilla `World.tick()` execution and differential
 equivalence for one narrow observed fixture.
+
+`smokes/redstone-wire-power/` reuses that in-memory world with a standing
+powered torch at `(8, 65, 8)` and one adjacent dust cell. Four ticks later
+both the mapped runtime and the official server JAR must agree on dust
+metadata and `isBlockIndirectlyGettingPowered` at the next cell.
+
+`smokes/redstone-repeater-delay/` inserts a delay-1 idle repeater between the
+torch and dust. Placement leaves the dust unpowered; six ticks later the
+repeater is the active block, `isPoweringTo` is true on the output face, and
+the official server JAR matches.
+
+`smokes/redstone-repeater-delays/` runs delay-2/3/4 on three parallel lines.
+`smokes/redstone-lever-button/` keeps a floor lever ON and pulses a side
+button for 20 ticks. `smokes/redstone-piston-extend/` steps `updateEntities`
+before `World.tick` so a torch-powered piston can finish extending. Repeater
+locking is absent in b1.7.3; plates and BUD stay outside these fixtures.
 
 `smokes/m20-server-bootstrap/` adds the dedicated-server process boundary. It
 does not reuse mapped server classes: it starts the unmodified official server
