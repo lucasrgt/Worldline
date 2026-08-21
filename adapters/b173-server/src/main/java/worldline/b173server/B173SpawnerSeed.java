@@ -37,6 +37,7 @@ public final class B173SpawnerSeed {
     public static void nether(Path serverDirectory, BlockPosition spawner, String entityId, boolean unique) { rewrite(serverDirectory, spawner, entityId, unique, "world/DIM-1/region"); }
     public static void slime(Path serverDirectory, BlockPosition spawner) { rewrite(serverDirectory, spawner, "Slime", true); }
     public static void wolf(Path serverDirectory, BlockPosition spawner) { rewrite(serverDirectory, spawner, "Wolf", true); }
+    public static void squid(Path serverDirectory, BlockPosition spawner) { rewrite(serverDirectory, spawner, "Squid", true); }
 
     /** Replaces one saved MobSpawner EntityId Pig with a hostile vanilla name. */
     public static void entity(Path serverDirectory, BlockPosition spawner, String entityId) {

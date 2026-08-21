@@ -128,7 +128,8 @@ final class SmokeCatalog {
         {"tools/smoke/FallDamageSetCycle.java", "m461-fall-damage-set"},
         {"tools/smoke/SwordHurtSetCycle.java", "m463-sword-hurt-set"},
         {"tools/smoke/ExplosionPlayerHurtSetCycle.java", "m464-explosion-player-hurt-set"},
-        {"tools/smoke/EnvDeathSetCycle.java", "m465-env-death-set"}
+        {"tools/smoke/EnvDeathSetCycle.java", "m465-env-death-set"},
+        {"tools/smoke/SquidLandDeathSetCycle.java", "m466-squid-land-death-set"}
     };
     private SmokeCatalog() {}
 }
