@@ -16,20 +16,22 @@ import java.util.stream.Stream;
 
 /** Prepares and executes a deterministic smoke against mapped vanilla classes. */
 public final class Run {
-    private static final String ID = "deterministic-world-tick";
     private static final String TRACE_PREFIX = "WORLDLINE_SMOKE_TRACE=";
     private static final String SIGNATURE_PREFIX = "WORLDLINE_SMOKE_SIGNATURE=";
 
     private final Path root = Paths.get("").toAbsolutePath().normalize();
     private final Properties smoke = new Properties();
+    private final String id;
+
+    private Run(String id) { if (!id.matches("[a-z0-9][a-z0-9-]*")) throw new IllegalArgumentException("invalid smoke id"); this.id = id; }
 
     public static void main(String[] arguments) {
-        if (!Arrays.equals(arguments, new String[] {ID})) {
-            System.err.println("usage: java tools/smoke/Run.java " + ID);
+        if (arguments.length != 1) {
+            System.err.println("usage: java tools/smoke/Run.java <smoke-id>");
             System.exit(2);
         }
         try {
-            new Run().execute();
+            new Run(arguments[0]).execute();
         } catch (Exception error) {
             System.err.println("smoke failed: " + error.getMessage());
             System.exit(1);
@@ -72,23 +74,27 @@ public final class Run {
         Path oracle = compileScenario("oracle-src", "oracle-classes",
                 classpath(productClasses("trace"), serverJar),
                 "official oracle compilation");
-        Outcome first = scenario("worldline.smoke.b173.DeterministicWorldTickSmoke",
+        Outcome first = scenario(required("worldline.main"),
                 output, productClasses("api"), productClasses("trace"), productClasses("kernel"), serverClasses, serverJar);
-        Outcome second = scenario("worldline.smoke.b173.DeterministicWorldTickSmoke",
+        Outcome second = scenario(required("worldline.main"),
                 output, productClasses("api"), productClasses("trace"), productClasses("kernel"), serverClasses, serverJar);
-        Outcome officialFirst = scenario("WorldlineOfficialOracle", oracle, productClasses("trace"), serverJar);
-        Outcome officialSecond = scenario("WorldlineOfficialOracle", oracle, productClasses("trace"), serverJar);
+        Outcome officialFirst = scenario(required("oracle.main"), oracle, productClasses("trace"), serverJar);
+        Outcome officialSecond = scenario(required("oracle.main"), oracle, productClasses("trace"), serverJar);
         requireSame(first, second, "Worldline processes");
         requireSame(officialFirst, officialSecond, "official oracle processes");
         requireSame(first, officialFirst, "Worldline and official oracle");
         String expected = required("expected.signature");
+        if (expected.equals("pending")) {
+            System.out.println(id + " diagnostic passed; qualification not attempted\n  signature: " + first.signature);
+            System.out.println("  trace: " + first.trace); return;
+        }
         if (!expected.equals(first.signature)) {
             throw new IllegalStateException(
                     "trace diverged from frozen signature: " + first.signature + " != " + expected);
         }
 
         Path evidence = writeEvidence(first);
-        System.out.println("deterministic smoke passed");
+        System.out.println(id + " smoke passed");
         System.out.println("  processes: 4 (2 Worldline, 2 official oracle)");
         System.out.println("  official oracle: MATCH");
         System.out.println("  signature: " + first.signature);
@@ -97,11 +103,11 @@ public final class Run {
     }
 
     private void loadSmoke() throws IOException {
-        Path path = root.resolve("smokes").resolve(ID).resolve("smoke.properties");
+        Path path = root.resolve("smokes").resolve(id).resolve("smoke.properties");
         try (java.io.Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             smoke.load(reader);
         }
-        if (!ID.equals(required("id"))) {
+        if (!id.equals(required("id"))) {
             throw new IllegalStateException("smoke descriptor id mismatch");
         }
     }
@@ -126,7 +132,7 @@ public final class Run {
 
     private void verifySymbolMap(Path mappingsPath) throws IOException {
         List<String> mappings = Files.readAllLines(mappingsPath, StandardCharsets.UTF_8);
-        Path symbolsPath = root.resolve("smokes").resolve(ID).resolve("symbols.map");
+        Path symbolsPath = root.resolve("smokes").resolve(id).resolve("symbols.map");
         List<String> symbols = Files.readAllLines(symbolsPath, StandardCharsets.UTF_8);
         int verified = 0;
         for (String row : symbols) {
@@ -166,9 +172,9 @@ public final class Run {
 
     private Path compileScenario(String sourceName, String outputName,
             String dependencies, String label) throws Exception {
-        Path output = root.resolve(".worldline/smokes").resolve(ID).resolve(outputName).normalize();
+        Path output = root.resolve(".worldline/smokes").resolve(id).resolve(outputName).normalize();
         recreate(output, root.resolve(".worldline").normalize());
-        List<Path> sources = javaFiles(root.resolve("smokes").resolve(ID).resolve(sourceName));
+        List<Path> sources = javaFiles(root.resolve("smokes").resolve(id).resolve(sourceName));
         List<String> command = new ArrayList<>(Arrays.asList(
                 "javac", "-encoding", "UTF-8", "--release", "8", "-Xlint:all,-options", "-Werror",
                 "-classpath", dependencies, "-d", output.toString()));
@@ -193,11 +199,12 @@ public final class Run {
         String paths = classpath(output, productClasses("api"), productClasses("trace"),
                 productClasses("kernel"), serverClasses);
         String driver = capture(root, "javap", "-classpath", paths, "-c", "-p",
-                "worldline.smoke.b173.DeterministicWorldTickSmoke");
+                required("control.driver"));
         String backend = capture(root, "javap", "-classpath", paths, "-c", "-p",
-                "worldline.smoke.b173.VanillaWorldBackend");
+                required("control.backend"));
         if (!driver.contains("InterfaceMethod worldline/api/MinecraftRuntime.tick:()V")
-                || !backend.contains("Method net/minecraft/src/World.tick:()V")) {
+                || !backend.contains("Method net/minecraft/src/World.tick:()V")
+                || (id.equals("m502-sw-entity-collision-resolution") && !backend.contains("Method net/minecraft/src/World.updateEntities:()V"))) {
             throw new IllegalStateException("compiled smoke does not preserve runtime -> backend -> World.tick path");
         }
         System.out.println("  control path: MinecraftRuntime -> GameBackend -> World.tick verified");
@@ -223,8 +230,8 @@ public final class Run {
     }
 
     private Path writeEvidence(Outcome outcome) throws IOException {
-        Path path = root.resolve(".worldline/smokes").resolve(ID).resolve("evidence.txt");
-        String evidence = "id=" + ID + "\nprocesses=4\nworldline.processes=2\nofficial.processes=2"
+        Path path = root.resolve(".worldline/smokes").resolve(id).resolve("evidence.txt");
+        String evidence = "id=" + id + "\nprocesses=4\nworldline.processes=2\nofficial.processes=2"
                 + "\nofficial.jar.sha256=" + required("server.jar.sha256") + "\nofficial.oracle=MATCH\nsignature=" + outcome.signature
                 + "\ntrace=" + outcome.trace + "\n";
         Files.write(path, evidence.getBytes(StandardCharsets.UTF_8));
