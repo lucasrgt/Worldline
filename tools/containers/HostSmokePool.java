@@ -87,9 +87,10 @@ public final class HostSmokePool {
     private void runBatch(List<Task> tasks, Config config, Profile profile, Host host, Model model, int jobs) throws Exception {
         String stamp = DateTimeFormatter.ofPattern("uuuuMMdd-HHmmss", Locale.ROOT).withZone(ZoneOffset.UTC)
                 .format(Instant.now()); Path batch = root.resolve(".worldline/host-smokes").resolve(stamp);
-        Files.createDirectories(batch); AtomicInteger active = new AtomicInteger(), peak = new AtomicInteger();
+        Files.createDirectories(batch); Path prebuilt = profile.lane.equals("windows-client-gui") ? prebuild(tasks, batch) : null;
+        AtomicInteger active = new AtomicInteger(), peak = new AtomicInteger();
         long started = System.nanoTime();
-        List<Outcome> outcomes = bounded(tasks, jobs, task -> runTask(task, config, profile, batch, active, peak));
+        List<Outcome> outcomes = bounded(tasks, jobs, task -> runTask(task, config, profile, prebuilt, batch, active, peak));
         long passed = outcomes.stream().filter(Outcome::passed).count(); Properties report = new Properties();
         report.setProperty("backend", config.backend); report.setProperty("lane", profile.lane);
         report.setProperty("tasks", Integer.toString(tasks.size()));
@@ -98,17 +99,13 @@ public final class HostSmokePool {
         report.setProperty("host.cpus", Integer.toString(host.cpus)); report.setProperty("host.memory.bytes", Long.toString(host.totalMemory));
         report.setProperty("admission.safe", Integer.toString(model.safeJobs));
         report.setProperty("elapsed.millis", Long.toString(TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - started)));
-        try (var writer = Files.newBufferedWriter(batch.resolve("batch.properties"), StandardCharsets.UTF_8)) {
-            report.store(writer, "Worldline native smoke batch");
-        }
-        System.out.println(config.backend + " smoke batch: " + passed + "/" + tasks.size() + " passed, peak=" + peak.get()
-                + ", evidence=" + batch);
-        if (passed != tasks.size()) throw new IllegalStateException("candidate failures: " + outcomes.stream()
-                .filter(outcome -> !outcome.passed).map(outcome -> outcome.id + " (" + outcome.message + ")")
-                .collect(Collectors.joining(", ")));
+        try (var writer = Files.newBufferedWriter(batch.resolve("batch.properties"), StandardCharsets.UTF_8)) { report.store(writer, "Worldline native smoke batch"); }
+        System.out.println(config.backend + " smoke batch: " + passed + "/" + tasks.size() + " passed, peak=" + peak.get() + ", evidence=" + batch);
+        if (passed != tasks.size()) throw new IllegalStateException("candidate failures: " + outcomes.stream().filter(outcome -> !outcome.passed)
+                .map(outcome -> outcome.id + " (" + outcome.message + ")").collect(Collectors.joining(", ")));
     }
 
-    private Outcome runTask(Task task, Config config, Profile profile, Path batch, AtomicInteger active, AtomicInteger peak) {
+    private Outcome runTask(Task task, Config config, Profile profile, Path prebuilt, Path batch, AtomicInteger active, AtomicInteger peak) {
         int now = active.incrementAndGet(); peak.accumulateAndGet(now, Math::max);
         Path output = batch.resolve(task.id), log = output.resolve("console.log"), tmp = output.resolve("tmp");
         Path evidence = root.resolve(".worldline/smokes").resolve(task.argument).normalize();
@@ -121,6 +118,7 @@ public final class HostSmokePool {
             builder.environment().put("TEMP", tmp.toString()); builder.environment().put("TMP", tmp.toString());
             builder.environment().put("GRADLE_USER_HOME", output.resolve("gradle").toString());
             builder.environment().put("WORLDLINE_RUNTIME_SLOT", task.id);
+            if (prebuilt != null) builder.environment().put("WORLDLINE_AERO_PREBUILT", prebuilt.toString());
             Process process = builder.start(); boolean finished = process.waitFor(task.timeoutSeconds + 15L, TimeUnit.SECONDS);
             if (!finished) killTree(process); require(finished, "timeout after " + task.timeoutSeconds + "s");
             require(process.exitValue() == 0, "exit " + process.exitValue() + "; see " + log);
@@ -134,9 +132,12 @@ public final class HostSmokePool {
         } finally { active.decrementAndGet(); }
     }
 
+    private Path prebuild(List<Task> tasks, Path batch) throws Exception { Path output = batch.resolve("aero-model-lib-3.0.0.jar"); List<String> command = new ArrayList<>(List.of(java(), "tools/containers/AeroPrebuild.java", output.toString()));
+        tasks.forEach(task -> command.add(task.argument)); Process process = new ProcessBuilder(command).directory(root.toFile()).inheritIO().start();
+        require(process.waitFor(12, TimeUnit.MINUTES) && process.exitValue() == 0, "Aero batch prebuild failed"); return output; }
+
     private void verify() throws Exception {
-        Process process = new ProcessBuilder(java(), "tools/harness/Verify.java").directory(root.toFile()).inheritIO().start();
-        require(process.waitFor(10, TimeUnit.MINUTES) && process.exitValue() == 0, "host Verify failed");
+        Process process = new ProcessBuilder(java(), "tools/harness/Verify.java").directory(root.toFile()).inheritIO().start(); require(process.waitFor(10, TimeUnit.MINUTES) && process.exitValue() == 0, "host Verify failed");
     }
 
     private void prepareBackend(String backend) throws Exception {
