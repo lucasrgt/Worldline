@@ -131,7 +131,12 @@ public final class RuntimeCheck {
         command[1] = "-C";
         command[2] = checkout.toString();
         System.arraycopy(arguments, 0, command, 3, arguments.length);
-        Process process = new ProcessBuilder(command).directory(root.toFile()).redirectErrorStream(true).start();
+        ProcessBuilder builder = new ProcessBuilder(command)
+                .directory(root.toFile())
+                .redirectErrorStream(true);
+        // Hooks export GIT_DIR for this repository; -C cannot override it.
+        builder.environment().keySet().removeIf(key -> key.startsWith("GIT_"));
+        Process process = builder.start();
         String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
         if (process.waitFor() != 0) {
             throw new IllegalStateException("git could not inspect the RetroMCP checkout\n" + output);
