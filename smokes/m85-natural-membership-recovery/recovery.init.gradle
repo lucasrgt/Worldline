@@ -1,0 +1,21 @@
+def script = gradle.startParameter.initScripts.find { it.name == 'recovery.init.gradle' }
+if (script == null) throw new GradleException('Worldline M85 script path missing')
+def root = script.parentFile.parentFile.parentFile.canonicalFile
+def aeroJar = new File(root, '.worldline/smokes/m85-natural-membership-recovery/aero-model-lib-3.0.0.jar')
+gradle.beforeProject { project -> project.pluginManager.withPlugin('fabric-loom') { if (project == project.rootProject) project.dependencies.add('modCompileOnly', project.files(aeroJar)) } }
+gradle.projectsEvaluated {
+    if (gradle.rootProject.name != 'aero-bare-stapi') return
+    if (!aeroJar.isFile()) throw new GradleException('M85 pinned Aero jar missing')
+    def project=gradle.rootProject,m74=new File(root,'smokes/m74-complete-aero-census'),m78=new File(root,'smokes/m78-paged-stage-timing'),m85=new File(root,'smokes/m85-natural-membership-recovery')
+    [m74,m78,m85].each { project.sourceSets.main.java.srcDir(new File(it,'runtime-src')) }
+    project.tasks.named('processResources').configure { doLast { [m74,m78,m85].each { source -> copy { from new File(source,'runtime-resources'); into destinationDir } } } }
+    def prop={name->project.findProperty(name).toString()},role=prop('worldlineRole'),gameDir=new File(prop('worldlineRunDir')).absoluteFile
+    project.loom.runs.named(role).configure { runDir project.relativePath(gameDir) };def task=project.tasks.named(role=='server'?'runServer':'runClient').get();gameDir.mkdirs()
+    if(role=='server'){new File(gameDir,'server.properties').text=['server-ip=127.0.0.1','server-port='+prop('worldlinePort'),'online-mode=false','level-seed=85085','view-distance=6','spawn-animals=false','spawn-monsters=false','pvp=false'].join(System.lineSeparator())+System.lineSeparator();task.standardInput=System.in
+        ['X','Y','Z'].each { axis->if(project.hasProperty('worldlinePlan'+axis))task.jvmArgs('-Dworldline.census.plan'+axis+'='+prop('worldlinePlan'+axis)) }
+    }else{def mods=new File(gameDir,'mods');mods.mkdirs();copy{from aeroJar;into mods};new File(gameDir,'options.txt').text='fpsLimit:'+prop('worldlineFpsLimit')+System.lineSeparator()
+        def census=new File(prop('worldlineArtifact')).absoluteFile,paged=new File(prop('worldlinePagedArtifact')).absoluteFile,recovery=new File(prop('worldlineRecoveryArtifact')).absoluteFile;[census,paged,recovery].each{it.parentFile.mkdirs();if(it.exists())it.delete()}
+        task.jvmArgs(['-Dworldline.census.enabled=true','-Dworldline.census.port='+prop('worldlinePort'),'-Dworldline.census.username='+prop('worldlineUsername'),'-Dworldline.census.minimumFrames='+prop('worldlineMinimumFrames'),'-Dworldline.census.minimumMillis='+prop('worldlineMinimumMillis'),'-Dworldline.census.warmupFrames='+prop('worldlineWarmupFrames'),'-Dworldline.census.warmupMillis='+prop('worldlineWarmupMillis'),'-Dworldline.census.file='+census.absolutePath,'-Dworldline.paged.file='+paged.absolutePath,'-Dworldline.recovery.file='+recovery.absolutePath,'-Dworldline.recovery.after='+prop('worldlineChangeAfter'),'-Dworldline.recovery.restoreAfter='+prop('worldlineRestoreAfter'),'-Daero.becell.pages=true','-Daero.becell.skipIndividual=true','-Daero.becell.rebuildsPerFrame='+prop('worldlineRebuildsPerFrame'),'-Daero.spikelog=false','-Daero.framePacing='+prop('worldlineAeroFramePacing'),'-Xms2G','-Xmx2G'] as List)
+    }
+    task.jvmArgs(['-Dworldline.census.mode=present','-Dworldline.census.nonce='+prop('worldlineNonce')] as List)
+}

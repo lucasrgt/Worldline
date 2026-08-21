@@ -2,6 +2,7 @@ package worldline.cli;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Arrays;
 import worldline.analysis.TraceDiff;
 import worldline.invariants.InvariantFields;
 import worldline.reproduction.ReplayProvider;
@@ -22,6 +23,14 @@ public final class WorldlineCli {
     public static int run(String[] arguments, PrintStream output, PrintStream error) {
         if (arguments == null || arguments.length == 0) return usage(error);
         try {
+            if ("init".equals(arguments[0]))
+                return WorldlineProjectInit.run(Arrays.copyOfRange(arguments, 1, arguments.length), output);
+            if ("doctor".equals(arguments[0]))
+                return WorldlineProjectDoctor.run(Arrays.copyOfRange(arguments, 1, arguments.length), output);
+            if ("migrate".equals(arguments[0]))
+                return WorldlineProjectMigrate.run(Arrays.copyOfRange(arguments, 1, arguments.length), output);
+            if ("test".equals(arguments[0]))
+                return TestCommand.run(arguments, output, error);
             if (arguments.length == 2 && "replay".equals(arguments[0]))
                 return replay(arguments[1], output);
             if (arguments.length == 3 && "trace".equals(arguments[0])
@@ -46,6 +55,8 @@ public final class WorldlineCli {
                 return SemanticsCommand.run(arguments, output, error);
             return usage(error);
         } catch (IOException | ReflectiveOperationException | RuntimeException failure) {
+            error.println("worldline command failed: " + failure.getMessage()); return 1;
+        } catch (Exception failure) {
             error.println("worldline command failed: " + failure.getMessage()); return 1;
         }
     }
@@ -96,6 +107,9 @@ public final class WorldlineCli {
     }
 
     static int usage(PrintStream error) {
+        error.println("usage: worldline init [--runtime=b1.7.3] [--loader=NAME] [--template=NAME] [--host-only]");
+        error.println("   or: worldline doctor [tests/worldline]");
+        error.println("   or: worldline migrate [--root=PATH]");
         error.println("usage: worldline replay <bundle.wlrb>");
         error.println("   or: worldline trace show <trace.wltrace>");
         error.println("   or: worldline trace diff <left.wltrace> <right.wltrace>");

@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "worldline.m74.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [],
+  "client": [
+    "WorldlineCensusLoginMixin",
+    "WorldlineCensusNetworkMixin",
+    "WorldlineCensusFrameMixin",
+    "WorldlineMeshCountersAccess",
+    "WorldlinePagedBlockEntityMixin",
+    "WorldlinePagedFrameMixin",
+    "WorldlinePagedRendererMixin",
+    "WorldlinePagedAeroMixin",
+    "WorldlineCellSizeMixin"
+  ],
+  "injectors": { "defaultRequire": 1 }
+}

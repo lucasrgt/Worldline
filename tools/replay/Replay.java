@@ -29,9 +29,9 @@ public final class Replay {
                 && arguments[0].equals("mod") && arguments[1].equals("test")
                 && arguments[2].equals("record")) || (arguments.length == 5
                 && arguments[0].equals("mod") && arguments[1].equals("test")
-                && arguments[2].equals("diff"));
-        boolean modRun = arguments.length == 7 && arguments[0].equals("mod")
-                && arguments[1].equals("test") && arguments[2].equals("run");
+                && arguments[2].equals("diff")) || (arguments.length == 7
+                && arguments[0].equals("mod") && arguments[1].equals("test")
+                && arguments[2].equals("run"));
         boolean scenario = (arguments.length >= 3 && arguments[0].equals("scenario")
                 && arguments[1].equals("create")) || (arguments.length == 3
                 && arguments[0].equals("scenario") && arguments[1].equals("inspect"))
@@ -46,13 +46,20 @@ public final class Replay {
                 && arguments[0].equals("profile");
         boolean coverage = (arguments.length == 2 || arguments.length == 3
                 || arguments.length == 4) && arguments[0].equals("coverage");
-        boolean game = replay || modRun || scenarioRun || fuzz || debug || profile;
+        boolean test = arguments.length >= 1 && arguments[0].equals("test");
+        boolean testRuntime = test && !Arrays.asList(arguments).contains("--no-runtime")
+                && !Arrays.asList(arguments).contains("list")
+                && !Arrays.asList(arguments).contains("inspect")
+                && !Arrays.asList(arguments).contains("--help");
+        boolean game = replay || modRun || scenarioRun || fuzz || debug || profile
+                || testRuntime;
         if (!replay && !trace && !mod && !scenario && !modRun && !scenarioRun && !fuzz
-                && !debug && !profile && !coverage) {
+                && !debug && !profile && !coverage && !test) {
             System.err.println("usage: java tools/replay/Replay.java replay <bundle.wlrb>");
             System.err.println("   or: java tools/replay/Replay.java trace show <trace.wltrace>");
             System.err.println("   or: java tools/replay/Replay.java trace diff <left.wltrace> <right.wltrace>");
-            System.err.println("   or: java tools/replay/Replay.java trace html <left> [right] <output.html>");            System.err.println("   or: java tools/replay/Replay.java mod inspect <mod.jar>");
+            System.err.println("   or: java tools/replay/Replay.java trace html <left> [right] <output.html>");
+            System.err.println("   or: java tools/replay/Replay.java mod inspect <mod.jar>");
             System.err.println("   or: java tools/replay/Replay.java mod test record <mod.jar> <trace> <result>");
             System.err.println("   or: java tools/replay/Replay.java mod test diff <left> <right>");
             System.err.println("   or: java tools/replay/Replay.java mod test run <mod.jar> <seed> <ticks> <result>");
@@ -64,7 +71,8 @@ public final class Replay {
             System.err.println("   or: java tools/replay/Replay.java debug <scenario> <seed>");
             System.err.println("   or: java tools/replay/Replay.java profile <scenario> <seed> [budget.properties]");
             System.err.println("   or: java tools/replay/Replay.java coverage <scenario> [trace] [min-percent]");
-            return 2; }
+            System.err.println("   or: java tools/replay/Replay.java test [SpecClass]");
+            System.err.println("   or: java tools/replay/Replay.java test run <spec.jar|classes> [SpecClass] [options]"); return 2; }
         if (game) { int inputs = new ProcessBuilder("java", "tools/harness/RuntimeCheck.java", "--required")
                 .directory(root.toFile()).inheritIO().start().waitFor(); if (inputs != 0) return inputs; }
         Path classes = root.resolve(".worldline/build/classes");
@@ -79,12 +87,14 @@ public final class Replay {
         paths.add(classes.resolve("fuzz"));
         paths.add(classes.resolve("profiling"));
         paths.add(classes.resolve("coverage"));
+        if (test) paths.addAll(Arrays.asList(classes.resolve("testmodel"),
+                classes.resolve("testapi"), classes.resolve("testkit")));
         if (game) paths.addAll(Arrays.asList(classes.resolve("kernel"), client.resolve("adapter-classes"),
                 client.resolve("instrumented-client"), client.resolve("headless-classes"),
                 workspace.resolve("minecraft/bin"), workspace.resolve("jars/minecraft.jar")));
         for (Path path : paths) if (!Files.exists(path)) throw new IllegalStateException(
                 "prepared runtime is missing " + root.relativize(path)
-                        + "; run java tools/harness/Verify.java --smoke");
+                        + "; run java tools/harness/Verify.java" + (game ? " --smoke" : ""));
         if (game) try (Stream<Path> libraries = Files.walk(workspace.resolve("libraries"))) {
             paths.addAll(libraries.filter(path -> path.toString().endsWith(".jar"))
                     .sorted().collect(Collectors.toList()));

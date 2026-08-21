@@ -1,0 +1,119 @@
+package worldline.smoke.windowlifecycle;
+
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.time.Duration;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import worldline.api.BlockFace;
+import worldline.api.BlockPosition;
+import worldline.api.BlockState;
+import worldline.api.MovementOutcome;
+import worldline.api.PersonalCraftingSession;
+import worldline.api.PlayerPose;
+import worldline.api.RemoteContainerWindow;
+import worldline.api.RemoteHeldItem;
+import worldline.api.RemoteItemStack;
+import worldline.api.RemotePersonalTransaction;
+import worldline.api.RemoteWorldView;
+import worldline.api.RemoteWindowClosure;
+import worldline.api.ServerPlayerState;
+import worldline.b173server.B173DedicatedServer;
+import worldline.b173server.B173WireClient;
+
+/** Proves explicit Packet101 close and restored personal-window transactions. */
+public final class WindowLifecycleSmoke {
+    private static final String TRACE = "v1|server=official-b1.7.3|clients=2|fixture=placed-chest54"
+            + "|open=packet15+packet100+packet104|close=packet101-tracked-id|duplicate=fail-closed"
+            + "|proof=packet102-window0-action1-accepted|post-close=packet103-window0"
+            + "|personal=packet102-actions2,3-accepted"
+            + "|peer=stone-empty-stone|persisted=1|disconnect=clean";
+    private WindowLifecycleSmoke() {}
+
+    public static void main(String[] arguments) throws Exception {
+        if (arguments.length != 6) throw new IllegalArgumentException(
+                "usage: WindowLifecycleSmoke server.jar workspace port seed actor observer");
+        Path jar = Paths.get(arguments[0]), workspace = Paths.get(arguments[1]);
+        int port = Integer.parseInt(arguments[2]); long seed = Long.parseLong(arguments[3]);
+        String actorName = arguments[4], observerName = arguments[5]; Duration timeout = Duration.ofSeconds(90);
+        B173DedicatedServer server = new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+        PersonalCraftingSession actor = client(port, actorName, timeout), observer = client(port, observerName, timeout);
+        RemoteContainerWindow window; RemoteWindowClosure closure;
+        RemotePersonalTransaction take, restore; ServerPlayerState player;
+        BlockPosition target;
+        try {
+            server.boot(); server.operator(actorName); actor.connect(); actor.synchronizePose();
+            require(actor.awaitInventory().occupiedSlots() == 0, "actor inventory was not empty");
+            actor.look(0F, 90F); PlayerPose pose = acquireChest(actor, actorName);
+            RemoteWorldView baseline = actor.awaitRemoteChunk((int) Math.floor(pose.x()) >> 4,
+                    (int) Math.floor(pose.z()) >> 4);
+            BlockPosition support = new BlockPosition((int) Math.floor(pose.x()),
+                    (int) Math.floor(pose.y()) - 1, (int) Math.floor(pose.z()));
+            target = BlockFace.UP.adjacent(support); require(baseline.blockAt(support.x(), support.y(), support.z())
+                    .legacyId() != 0 && replaceable(baseline.blockAt(target.x(), target.y(), target.z())),
+                    "chest lifecycle anchor drifted");
+            MovementOutcome clearance = actor.moveAndObserve(0D, 3D, 0D, 3);
+            require(!clearance.corrected(), "chest lifecycle clearance failed");
+            observer.connect(); observer.synchronizePose(); observer.moveAndObserve(5D, 5D, 0D, 3);
+            observer.moveAndObserve(5D, 5D, 0D, 3); requirePlayers(server.players(), actorName, observerName);
+            observer.awaitRemoteChunk(Math.floorDiv(target.x(), 16), Math.floorDiv(target.z(), 16));
+            observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 54, 0)); actor.placeHeldBlock(support, BlockFace.UP);
+            BlockState chest = actor.sustainTicks(5).blockAt(target.x(), target.y(), target.z());
+            require(chest.legacyId() == 54 && observer.sustainTicks(5).blockAt(target.x(), target.y(), target.z())
+                    .equals(chest), "placed lifecycle chest diverged");
+            window = actor.openChest(target, BlockFace.UP); require(window.inventory().size() == 63
+                    && window.inventory().occupiedSlots() == 0, "lifecycle chest open drifted");
+            closure = actor.closeWindow(); require(closure.closedWindow().equals(window)
+                    && closure.proofAction() == 1 && closure.personalBefore().equals(closure.personalAfter()),
+                    "personal-window closure proof drifted"); boolean duplicateRejected = false;
+            try { actor.closeWindow(); } catch (IllegalStateException expected) { duplicateRejected = true; }
+            require(duplicateRejected, "duplicate remote window close was accepted");
+            actor.sendChat("/give " + actorName + " 1 1"); actor.sustainTicks(40);
+            RemoteItemStack stone = new RemoteItemStack(1, 1, 0); require(actor.inventory().slot(36).item()
+                    .equals(stone), "post-close player window update absent");
+            observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 1, 0)); take = actor.clickPersonalSlot(36);
+            actor.sustainTicks(5); observer.awaitPeerHeldItem(RemoteHeldItem.empty(actorName));
+            restore = actor.clickPersonalSlot(36); actor.sustainTicks(5);
+            observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 1, 0));
+            require(take.actionId() == 2 && restore.actionId() == 3
+                    && restore.after().slot(36).item().equals(stone), "post-close personal transaction drifted");
+            actor.close(); observer.close(); awaitPlayers(server, 0); server.save(); player = server.player(actorName);
+            require(player.inventoryItems() == 1, "post-close inventory persistence drifted");
+        } finally { actor.close(); observer.close(); server.close(); }
+        System.out.println("WORLDLINE_M58_API=remote-window-close,tracked-packet101,personal-restore");
+        System.out.println("WORLDLINE_M58_WINDOW=id=" + window.descriptor().windowId() + ";proof="
+                + closure.proofAction() + ";actions=" + take.actionId() + "," + restore.actionId()
+                + ";items=" + player.inventoryItems());
+        System.out.println("WORLDLINE_M58_TRACE=" + TRACE);
+        System.out.println("WORLDLINE_M58_SIGNATURE=" + sha256(TRACE));
+    }
+
+    private static PersonalCraftingSession client(int port, String name, Duration timeout) {
+        return new B173WireClient("127.0.0.1", port, name, timeout); }
+    private static PlayerPose acquireChest(PersonalCraftingSession client, String username) {
+        for (int step = 0; step < 10; step++) client.moveAndObserve(0D, 5D, 0D, 3);
+        client.sendChat("/give " + username + " 54 1"); client.sustainTicks(40);
+        for (int step = 0; step < 100 && client.inventory().occupiedSlots() < 1; step++)
+            client.moveAndObserve(0D, -1D, 0D, 1);
+        client.sustainTicks(10); MovementOutcome settled = null;
+        for (int step = 0; step < 100; step++) { settled = client.moveAndObserve(0D, -1D, 0D, 2);
+            if (settled.corrected()) break; }
+        require(settled != null && settled.corrected(), "ground settlement correction absent"); return settled.resulting();
+    }
+    private static boolean replaceable(BlockState state) { int id = state.legacyId();
+        return id == 0 || id == 8 || id == 9 || id == 78; }
+    private static void requirePlayers(List<String> players, String first, String second) {
+        Set<String> expected = new HashSet<>(); expected.add(first); expected.add(second);
+        require(players.size() == 2 && new HashSet<>(players).equals(expected), "two-player presence drifted"); }
+    private static void awaitPlayers(B173DedicatedServer server, int count) throws InterruptedException {
+        long deadline = System.currentTimeMillis() + 5000L; while (System.currentTimeMillis() < deadline) {
+            if (server.players().size() == count) return; Thread.sleep(100L); }
+        throw new IllegalStateException("player count did not become " + count); }
+    private static String sha256(String value) throws Exception { byte[] bytes = MessageDigest.getInstance("SHA-256")
+            .digest(value.getBytes(StandardCharsets.UTF_8)); StringBuilder result = new StringBuilder();
+        for (byte item : bytes) result.append(String.format("%02x", item & 255)); return result.toString(); }
+    private static void require(boolean condition, String message) { if (!condition) throw new IllegalStateException(message); }
+}

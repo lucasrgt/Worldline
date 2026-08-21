@@ -4,17 +4,20 @@
 
 <p align="center">
   <a href="#getting-started">Getting Started</a> |
+  <a href="#worldline-testkit">TestKit</a> |
+  <a href="#extensions">Extensions</a> |
   <a href="#mod-testing">Mod Testing</a> |
   <a href="#capabilities">Capabilities</a> |
   <a href="#documentation">Documentation</a>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/milestone-v0.7.0%20M9%20GO-2EA44F?style=flat-square" alt="Worldline v0.7.0 M9 GO">
+  <img src="https://img.shields.io/badge/milestone-v1.446.0%20M469%20GO-2EA44F?style=flat-square" alt="Worldline v1.446.0 M469 GO">
   <img src="https://img.shields.io/badge/Minecraft-Beta%201.7.3-62B47A?style=flat-square" alt="Minecraft Beta 1.7.3">
   <img src="https://img.shields.io/badge/product-Java%208-5586A4?style=flat-square" alt="Java 8 product">
   <img src="https://img.shields.io/badge/harness-JDK%2021-6B5B95?style=flat-square" alt="JDK 21 harness">
   <img src="https://img.shields.io/badge/oracle-official%20JAR-CB8B2C?style=flat-square" alt="Official JAR behavioral oracle">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-4C566A?style=flat-square" alt="MIT license"></a>
 </p>
 
 Worldline executes the real Minecraft Beta 1.7.3 runtime under external
@@ -38,10 +41,12 @@ decompiled game code.
 
 ## Current status
 
-The official product line is **Worldline v0.7.0 / M9**. It includes the
-controlled runtime, stable domain automation, durable reproduction artifacts,
-trace analysis, descriptor-selected mod loading, differential mod testing, and
-automatic scenario minimization.
+The official main line is **Worldline v1.446.0 / M469**. Its stable foundation
+includes the controlled runtime, domain automation, durable reproduction
+artifacts, trace analysis, descriptor-selected mod loading, differential mod
+testing, and automatic scenario minimization. Later milestones add bounded
+native-render, Aero, dedicated-server, protocol, multiplayer, and vanilla
+behavior evidence without silently widening those early public APIs.
 
 | Stage | Contract | Status |
 | --- | --- | --- |
@@ -54,20 +59,25 @@ automatic scenario minimization.
 | M7 | General mod packaging, inspection, compatibility, and loading | GO |
 | M8 | Provenance-bound differential mod/version results | GO |
 | M9 | Deterministic, budgeted scenario minimization | GO |
-| GUI tree | Neutral inventory UI tree and Butter `HostUi` bridge | GO |
+| GUI tree | Neutral inventory UI tree | GO |
 | Invariants | Item, block, entity, wear, health, and time rules | GO |
 | Semantics | Closed role catalog, mappings, manifests, and coverage gate | GO |
-| M10 | Native/offscreen rendering and Aero investigation | Not started |
-| M11 | Mod API v2: lifecycle hooks, domain handles, scheduling, spawn/give | GO |
-| M12 | One-command attested mod test runs | GO |
-| M13 | Multi-mod dependency graphs with deterministic ordering | GO |
-| M14 | Public scenario DSL with validated, runnable reproducers | GO |
+| M10-M19 | Native rendering, Aero qualification, attribution, and bounded performance policies | GO |
 | Pre-push gate | Versioned hook running the canonical gate before every push | GO |
-| M15 | Deterministic differential fuzzer with auto-minimized findings | GO |
-| M16 | Time-travel debug REPL with deterministic reverse jumps and watchpoints | GO |
-| M17 | Per-tick profiling with machine-relative budget gates | GO |
-| M18 | Dynamic scenario coverage against the semantic catalog | GO |
+| Differential fuzzer | Deterministic campaigns with auto-minimized findings | GO |
+| Time-travel debug | Scriptable REPL with exact reverse jumps and watchpoints | GO |
+| Tick profiling | Wall-clock samples with machine-relative budget gates | GO |
+| Runtime coverage | Scenario categories and roles against the semantic catalog | GO |
 | HTML evidence | Deterministic self-contained trace viewer and diff pages | GO |
+| Mod API v2 | Lifecycle hooks, domain handles, scheduling, spawn/give surface | GO |
+| Attested runs | One-command `mod test run` binding execution provenance | GO |
+| Mod graphs | Format 2 dependencies with deterministic topological ordering | GO |
+| Scenario DSL | Public step grammar with validation and controlled execution | GO |
+| M20-M67 | Official server lifecycle, protocol-14 control, multiplayer, inventory, crafting, and combat | GO |
+| M68-M110 | Real Aero client composition, renderer census, cell pages, cache pressure, and controls | GO |
+| M111-M469 | Official vanilla world, block, item, entity, crafting, AI, damage, and death behavior sets | GO |
+| M469 | Current release: official void walk-off death and respawn set | GO |
+| TestKit 0.x | Experimental Java specs, isolated runner, reporters, artifacts, and CLI | EXPERIMENTAL |
 
 Version and frozen signatures are authoritative in
 [`release/worldline.properties`](release/worldline.properties). The promotion
@@ -83,7 +93,8 @@ Requirements:
 
 - JDK 21 for the repository harness
 - `tokei` 14 or newer for source ceilings
-- Java 8 bytecode compatibility for product modules
+- Java 8 bytecode compatibility for `api`, `testmodel`, `testapi`, adapters, and mod-facing contracts
+- Java 21 bytecode for the TestKit runner, CLI, and repository tooling
 
 ```text
 java tools/harness/Verify.java
@@ -129,8 +140,8 @@ java tools/harness/Verify.java --smoke
 ```
 
 The smoke profile builds the mapped adapters, runs the deterministic server
-and client proofs, executes independent official-JAR oracles, and verifies all
-frozen milestone signatures through M9.
+and client proofs, executes independent official-JAR oracles, and verifies the
+frozen signatures registered by the current release.
 
 ### 4. Use the neutral lifecycle
 
@@ -155,12 +166,114 @@ Adapter factories remain runtime-specific.
 
 ---
 
+## Worldline TestKit
+
+Worldline TestKit 0.x turns the controlled runtime into an external-mod test
+experience without freezing an untested 1.0 API. Specs are ordinary Java 8,
+so existing Java formatters, syntax highlighting, completion, refactoring, and
+debuggers work without a custom editor plugin:
+
+```java
+import static worldline.test.Expect.expect;
+import static worldline.test.Worldline.*;
+
+public final class GlassProbeWorldlineTest extends WorldlineSpec {
+    @Override protected void define() {
+        describe("GlassProbe", () -> {
+            test("places glass", worldline().runtime("b1.7.3").seed(173L)
+                    .mod("build/glass-probe.jar").run(context -> {
+                context.setBlock(pos(8, 65, 8), block("b1.7.3:glass"));
+                context.tick();
+                expect(context.block(pos(8, 65, 8)))
+                        .toEqual(block("b1.7.3:glass"));
+            })).tag("block").timeout(5_000);
+        });
+    }
+}
+```
+
+`test` and `it` are exact aliases; `describe` and `suite` are exact aliases.
+Hooks, table tests, `.skip()`, `.todo()`, `.only()`, explicit retries,
+snapshots, filters, watch mode, and named minimizable steps are included.
+Top-level specs are discovered automatically, while `--classpath` exposes the
+mod's separately compiled product classes without weakening source isolation.
+
+Initialize the isolated Gradle project in a mod repository:
+
+```text
+java -jar worldline-test-runner-0.2.1.jar init
+tests/worldline/gradlew.bat worldlineDoctor worldlineTest
+```
+
+The generated project pins Gradle, keeps every spec under
+`tests/worldline/src/test/java`, creates an ignored empty official-JAR drop
+zone, and emits JUnit XML plus Worldline evidence. The binary plugin is
+`io.github.lucasrgt.worldline.test`; it never changes the mod's legacy build.
+
+Useful tasks mirror the TestKit CLI:
+
+```text
+worldlineTest worldlineTestList worldlineTestWatch worldlineTestInspect
+worldlineTestUpdateSnapshots worldlineTestMinimize worldlineDoctor
+```
+
+Build deterministic ignored JARs for external projects:
+
+```text
+java tools/testkit/TestKitPackage.java
+```
+
+The runner creates a fresh runtime for every attempt and retry, holds an
+exclusive cross-process runtime lock, never executes official runtimes
+concurrently, and marks retry-only passes as `FLAKY`. Failures can emit a
+canonical trace, durable runtime snapshot, provenance-bound `.wlmtest`, named
+scenario, minimized scenario, and timeout inventory. Reporters include
+default, verbose, dot, JSON, JUnit, and agent output.
+
+Only promoted semantic mappings enter the friendly selector catalog. Unknown
+or read-only mappings fail with a stable `WLTEST` diagnostic instead of
+guessing an ID or obfuscated field.
+
+See the [Gradle adoption guide](docs/GRADLE_TESTKIT.md), the complete
+[TestKit guide](docs/TESTKIT.md), and the
+[ten-spec, 30-test example project](examples/testkit/README.md).
+
+---
+
+## Extensions
+
+A Worldline 0.x extension is an external project-owned integration layer. It
+combines ordinary Java TestKit specs, optional typed fixtures and assertions,
+an optional runtime provider, and optimization records without moving the
+mod's implementation into Worldline.
+
+Choose the smallest integration lane that fits the project:
+
+| Need | Extension surface |
+| --- | --- |
+| Test dependency-free mod logic | TestKit specs plus `--classpath` |
+| Test a descriptor-packaged `B173Mod` | TestKit specs plus `--mod` |
+| Support another controlled runtime | `TestRuntimeProvider` and a Worldline adapter |
+| Qualify performance work | Project-owned `optimizations/catalog/` records plus evidence |
+| Load legacy ModLoader, StationAPI, or Aero mods | A separately qualified loader adapter; not provided by the default provider |
+
+In 0.x, an extension is a repository convention rather than an executable
+plugin format. It must not bypass mapped-runtime ownership, register guessed
+semantic mappings, or place Minecraft classes in the neutral TestKit API.
+
+The complete [extension authoring guide](docs/EXTENSIONS.md) includes a
+recommended repository layout, compile and run flow, provider boundary,
+optimization workflow, promotion checklist, and a concrete Beta Energistics
+blueprint.
+
+---
+
 ## Mod testing
 
 Worldline can load trusted, independently packaged Java mods and compare their
-observable behavior. The package contract is stable; the external test-author
-experience is a controlled-laboratory workflow with a one-command attested
-run, while a published Maven/Gradle TestKit remains future work.
+observable behavior. The package contract is stable. TestKit 0.x is the new
+experimental external authoring layer; the lower-level commands remain useful
+for inspecting and comparing canonical artifacts directly.
 
 ### Package a Worldline mod
 
@@ -172,6 +285,7 @@ public final class GlassProbe implements B173Mod {
     @Override
     public void onLoad(B173ModContext context) {
         context.world().setBlock(new BlockPosition(8, 65, 8), new BlockState(20, 0));
+        context.player().give(265, 5);
         context.at(3, () -> context.setBlock(9, 65, 9, 20));
     }
 
@@ -209,36 +323,44 @@ java tools/replay/Replay.java mod inspect path/to/mod.jar
 ```
 
 The inspector reports descriptor metadata, declared dependencies, whole-JAR
-SHA-256, and exact runtime/API compatibility. Loading rejects incompatible
-runtimes, API versions, entrypoint types, malformed descriptors, and changed
-JARs.
+SHA-256, and exact runtime/API compatibility. Loading rejects incompatible runtimes, API
+versions, entrypoint types, malformed descriptors, and changed JARs.
 
-### Run, record, and compare results
+### Record and compare results
 
 ```text
-java tools/replay/Replay.java mod test run mod.jar 17320110707 16 run.wlmtest
 java tools/replay/Replay.java mod test record mod.jar run.wltrace run.wlmtest
 java tools/replay/Replay.java mod test diff baseline.wlmtest candidate.wlmtest
+java tools/replay/Replay.java mod test run mod.jar 17320110707 16 run.wlmtest
 ```
 
 `mod test run` executes the mod inside the controlled runtime and writes a
 format 2 `.wlmtest` attesting `execution=controlled-runtime`, the seed, and
 the tick count. `mod test record` binds a caller-supplied trace without
-attesting execution. Comparison reports the earliest seed, schema, record, or
-field divergence and names a known invariant when one applies.
+attesting execution.
 
-### Create, validate, and run scenarios
+A `.wlmtest` binds the exact mod ID, version, entrypoint, artifact hash,
+runtime, Worldline API, and canonical trace. Comparison reports the earliest
+seed, schema, record, or field divergence and names a known invariant when one
+applies.
+
+`mod test record` binds caller-supplied inputs; it does **not** attest that the
+trace came from executing that JAR. The M8 smoke owns the stronger execution
+boundary. TestKit's runtime runner owns the stronger one-command execution and
+automatically records a `.wlmtest` on failure when a mod JAR is configured.
+
+### Create and minimize scenarios
 
 ```text
-java tools/replay/Replay.java scenario create run.wlscenario observe:before block:8,65,8:20 tick observe:target
-java tools/replay/Replay.java scenario validate run.wlscenario
-java tools/replay/Replay.java scenario run run.wlscenario 4242 run.wltrace
+java tools/replay/Replay.java scenario create run.wlscenario tick observe:target
+java tools/replay/Replay.java scenario inspect run.wlscenario
 ```
 
 The public DSL covers `tick[:n]`, `reseed:<long>`, `tap:<key>`,
 `observe:<label>`, and `block:x,y,z:id[:meta]` steps with strict validation
-and canonical rendering. Scenarios stay ordinary M9 artifacts, so the
-minimizer applies unchanged.
+and canonical rendering (`scenario validate`). Scenarios stay ordinary M9
+artifacts, so the minimizer applies unchanged; `scenario run <scenario>
+<seed> <trace>` executes one against the controlled runtime.
 
 ### Fuzz for divergences
 
@@ -308,7 +430,6 @@ Working examples live in
 | Boundary control | Virtual time, programmable input, RNG reseed, filesystem journal/failure injection, offline network |
 | Scheduling | Externally requested ticks and timer-thread supervision |
 | Semantic GUI | Screen, node, slot, open, close, and click through `GameUi` |
-| Butter bridge | Reflective `HostUi` binding without importing Butter into `worldline-api` |
 
 ### Reproduction and analysis
 
@@ -365,6 +486,11 @@ worldline-api <----------- worldline-kernel ----------> b1.7.3 adapter
                                   v
                                  CLI
 
+external Java 8 spec -> testapi -> testmodel -> testkit (Java 21) -> provider SPI
+                                      |                    |
+                                      v                    v
+                              reporters/artifacts      b1.7.3 adapter
+
 official JAR oracle -------- same trace protocol -------- subject
 ```
 
@@ -402,6 +528,12 @@ java tools/replay/Replay.java debug <scenario.wlscenario> <seed>
 java tools/replay/Replay.java profile <scenario.wlscenario> <seed> [budget.properties]
 java tools/replay/Replay.java coverage <scenario.wlscenario> [trace.wltrace] [min-percent]
 java tools/replay/Replay.java trace html <left.wltrace> [right.wltrace] <output.html>
+
+java tools/replay/Replay.java test
+java tools/replay/Replay.java test run <spec.jar|classes> [spec.class] [options]
+java tools/replay/Replay.java test list <spec.jar|classes> [spec.class]
+java tools/replay/Replay.java test watch <spec.jar|classes> [spec.class] [options]
+java tools/replay/Replay.java test minimize <spec.jar|classes> [spec.class] [options]
 ```
 
 Neutral inspection and comparison commands do not require Minecraft, mapped
@@ -432,10 +564,19 @@ classes, RetroMCP, or native libraries on their product classpaths.
 | [M16 time-travel debug](docs/M16_TIME_TRAVEL.md) | Scriptable debug REPL with exact reverse jumps and watchpoints |
 | [M17 profiling](docs/M17_PROFILE.md) | Per-tick wall-clock samples, mod attribution, and budget gates |
 | [M18 coverage](docs/M18_COVERAGE.md) | Dynamic scenario coverage against the semantic catalog |
+| [Mod API v2](docs/MOD_API_V2.md) | Lifecycle hooks, domain handles, scheduling, spawn/give |
+| [Attested runs](docs/MOD_RUN.md) | One-command execution and result format 2 |
+| [Mod graphs](docs/MOD_GRAPH.md) | Format 2 dependencies and deterministic ordering |
+| [Scenario DSL](docs/SCENARIO_DSL.md) | Public step grammar, validation, and execution |
+| [M10 native render](docs/M10_RENDER.md) | Offscreen framebuffer oracle and Aero artifact boundary |
+| [M11 attribution](docs/M11_ATTRIBUTION.md) | Aero qualification and render-work attribution |
 | [GUI tree](docs/GUI_TREE.md) | Semantic inventory UI and Butter bridge |
 | [Invariants](docs/INVARIANTS.md) | Observation model and fail-closed rules |
 | [Semantics](docs/SEMANTICS.md) | Roles, mappings, manifests, confidence, and coverage |
 | [Optimization SDK](docs/OPTIMIZATION_SDK.md) | Stable optimization IDs and catalog ownership |
+| [TestKit 0.x](docs/TESTKIT.md) | Java specs, runner isolation, reporters, snapshots, artifacts, and CLI |
+| [Gradle adoption](docs/GRADLE_TESTKIT.md) | Isolated build, plugin tasks, oracle profiles, migration, IDE, and CI |
+| [Extension authoring](docs/EXTENSIONS.md) | External test layers, provider boundary, optimization evidence, and legacy-mod limits |
 | [Changelog](CHANGELOG.md) | Stable scope and release history |
 | [Engineering guide](AGENTS.md) | Behavioral constitution and canonical gates |
 
@@ -449,19 +590,21 @@ Every promoted milestone also has a `*_CYCLE.md` completion audit and a smoke
 Worldline currently targets:
 
 - Minecraft Beta 1.7.3
-- Java 8 bytecode for product modules
-- JDK 21 for the repository harness
+- Java 8 bytecode for stable APIs, TestKit authoring API, adapters, and mods
+- Java 21 bytecode for TestKit runner, CLI, tests, and repository harness
 - a hash-pinned official client JAR kept only under ignored local storage
 - a pinned RetroMCP revision for mapped adapter construction
 - trusted local Worldline mod JARs using runtime `b1.7.3` and mod API `1`
 
 Worldline is not a general Minecraft launcher, a security sandbox, or a
 drop-in loader for legacy ModLoader/Forge mods. The current public mod boundary
-does not provide permissions, hot reload, arbitrary private-state capture,
-classloader namespacing between mods, or a published Maven/Gradle TestKit.
-Native/offscreen framebuffer evidence and Aero integration remain M10 work.
-Entity spawning uses a closed semantic registry; unregistered types fail
-closed.
+provides dependency resolution and deterministic multiple-mod ordering
+through format 2 descriptors, but does not provide per-mod permissions, hot
+reload, arbitrary private-state capture, or a stable published Maven/Gradle
+TestKit 1.0. Entity spawning uses a closed semantic registry; unregistered
+types fail closed. Native rendering, Aero integration, official-server control, and the
+vanilla behavior suites are bounded evidence with milestone-specific
+non-claims; [`docs/ROADMAP.md`](docs/ROADMAP.md) is the complete ledger.
 
 Never commit or distribute the official Minecraft JAR, original assets, or
 decompiled Minecraft sources. Public artifacts contain original Worldline
@@ -515,3 +658,5 @@ public so status can be inspected rather than inferred from the development
 process.
 
 Maintainer: [lucasrgt](https://github.com/lucasrgt)
+
+Worldline is available under the [MIT License](LICENSE).

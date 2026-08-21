@@ -1,0 +1,51 @@
+def worldlineScript = gradle.startParameter.initScripts.find { it.name == 'aero-content.init.gradle' }
+if (worldlineScript == null) throw new GradleException('Worldline M72 script path missing')
+def worldlineRoot = worldlineScript.parentFile.parentFile.parentFile.canonicalFile
+def worldlineAero = new File(worldlineRoot, '.worldline/smokes/m72-aero-server-content/aero-model-lib-3.0.0.jar')
+gradle.beforeProject { project ->
+    project.pluginManager.withPlugin('fabric-loom') {
+        if (project == project.rootProject) project.dependencies.add('modCompileOnly', project.files(worldlineAero))
+    }
+}
+gradle.projectsEvaluated {
+    if (gradle.rootProject.name != 'aero-bare-stapi') return
+    def script = worldlineScript
+    def root = worldlineRoot
+    def smoke = new File(root, 'smokes/m72-aero-server-content')
+    def aeroJar = new File(root, '.worldline/smokes/m72-aero-server-content/aero-model-lib-3.0.0.jar')
+    if (!aeroJar.isFile()) throw new GradleException('Pinned Aero jar missing: ' + aeroJar)
+    def project = gradle.rootProject
+    project.sourceSets.main.java.srcDir(new File(smoke, 'runtime-src'))
+    project.tasks.named('processResources').configure {
+        doLast { copy { from new File(smoke, 'runtime-resources'); into destinationDir } }
+    }
+    def role = (project.findProperty('worldlineRole') ?: 'client').toString()
+    def gameDir = new File(project.findProperty('worldlineRunDir').toString()).absoluteFile
+    def relativeGameDir = project.relativePath(gameDir)
+    project.loom.runs.named(role).configure { runDir relativeGameDir }
+    def task = project.tasks.named(role == 'server' ? 'runServer' : 'runClient').get()
+    gameDir.mkdirs()
+    if (role == 'server') {
+        new File(gameDir, 'server.properties').text = [
+            'server-ip=127.0.0.1', 'server-port=' + project.findProperty('worldlinePort'),
+            'online-mode=false', 'level-seed=72072', 'view-distance=3',
+            'spawn-animals=false', 'spawn-monsters=false', 'pvp=false'
+        ].join(System.lineSeparator()) + System.lineSeparator()
+        task.standardInput = System.in
+        task.jvmArgs(['-Dworldline.content.nonce=' + project.findProperty('worldlineNonce')] as List)
+    }
+    if (role == 'client') {
+        def property = { name -> project.findProperty(name).toString() }
+        def log = new File(property('worldlineLog')).absoluteFile
+        log.parentFile.mkdirs(); if (log.exists()) log.delete()
+        def mods = new File(gameDir, 'mods'); mods.mkdirs()
+        copy { from aeroJar; into mods }
+        task.jvmArgs(['-Dworldline.content.enabled=true',
+            '-Dworldline.content.port=' + property('worldlinePort'),
+            '-Dworldline.content.username=' + property('worldlineUsername'),
+            '-Dworldline.content.frames=' + (project.findProperty('worldlineFrames') ?: '20'),
+            '-Daero.spikelog=true', '-Daero.spikelog.ms=1000000',
+            '-Daero.spikelog.heartbeatMs=100', '-Daero.spikelog.sync=true',
+            '-Daero.spikelog.file=' + log.absolutePath, '-Xms1G', '-Xmx2G'] as List)
+    }
+}

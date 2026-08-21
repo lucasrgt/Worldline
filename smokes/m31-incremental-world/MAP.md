@@ -1,0 +1,11 @@
+# M31 Incremental Remote World
+
+An adapter fixture applies exact native Packet53 and Packet52 byte layouts to a
+decoded chunk and verifies single and packed multi-block coordinates, legacy
+IDs, metadata, immutable replacement, and semantic change counts.
+
+Two fresh live scenarios use official view distance three, explicitly operator
+the test user, find a nearby breakable block in the server-provided snapshot,
+send native begin/finish dig intent, and wait for the official server's Packet53
+response. Only that inbound response updates the cache; sending the action
+itself is not treated as success.
