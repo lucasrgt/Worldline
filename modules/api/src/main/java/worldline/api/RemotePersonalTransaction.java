@@ -2,7 +2,7 @@ package worldline.api;
 
 import java.util.Objects;
 
-/** Immutable accepted left-click transition in the personal inventory window. */
+/** Immutable accepted take, place, or occupied-slot swap in the personal inventory window. */
 public final class RemotePersonalTransaction {
     private final int actionId, slot;
     private final RemoteItemStack predicted, cursorBefore, cursorAfter;
@@ -25,7 +25,10 @@ public final class RemotePersonalTransaction {
                 && target == null && source.equals(cursorAfter);
         boolean place = cursorBefore != null && source == null && predicted == null
                 && cursorBefore.equals(target) && cursorAfter == null;
-        if (!take && !place) throw new IllegalArgumentException("invalid personal left-click transition");
+        boolean swap = cursorBefore != null && source != null && source.equals(predicted)
+                && cursorBefore.equals(target) && source.equals(cursorAfter);
+        if (!take && !place && !swap)
+            throw new IllegalArgumentException("invalid personal left-click transition");
         this.actionId = actionId; this.slot = slot; this.predicted = predicted;
         this.before = before; this.after = after;
         this.cursorBefore = cursorBefore; this.cursorAfter = cursorAfter;

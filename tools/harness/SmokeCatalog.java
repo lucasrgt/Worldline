@@ -143,7 +143,8 @@ final class SmokeCatalog {
         {"tools/smoke/DigStatusBoundariesCycle.java", "m524-sw-dig-status-boundaries"},
         {"tools/smoke/SheepShearedPersistenceCycle.java", "m506-sw-sheep-sheared-persistence"},
         {"tools/smoke/Run.java", "m518-sw-tnt-fuse-lifecycle"},
-        {"tools/smoke/WorldTimeAdvanceCycle.java", "m523-sw-world-time-advance"}
+        {"tools/smoke/WorldTimeAdvanceCycle.java", "m523-sw-world-time-advance"},
+        {"tools/smoke/PersonalSlotSwapCycle.java", "m522-sw-personal-slot-swap"}
     };
     private SmokeCatalog() {}
 }
