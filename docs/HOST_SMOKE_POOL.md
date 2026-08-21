@@ -119,6 +119,8 @@ cycles. Start its promotion at two jobs. A pinned Aero artifact is built once
 before admission. The prebuild and every GUI milestone use separate persistent
 Gradle homes, while project worktrees, temporary paths, logs, worlds, and
 evidence directories remain isolated as well.
+GUI cycles receive a bounded cold-start allowance inside the outer Job timeout
+so Loom remapping and world generation cannot consume the behavioral window.
 Linux cgroups provide equivalent tree/resource ownership; `linux-sandbox`
 adds read-only mounts and private namespaces. Native GUI, OpenGL, RetroMCP
 mutation, Gradle worktree mutation, and client-oracle lanes retain their own
