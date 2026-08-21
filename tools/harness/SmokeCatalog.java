@@ -133,7 +133,8 @@ final class SmokeCatalog {
         {"tools/smoke/TamedWolfAssistSetCycle.java", "m468-tamed-wolf-assist-set"},
         {"tools/smoke/RainTransitionCycle.java", "m500-sw-rain-transition"},
         {"tools/smoke/Run.java", "m502-sw-entity-collision-resolution"},
-        {"tools/smoke/Run.java", "m501-sw-entity-item-grounding"}
+        {"tools/smoke/Run.java", "m501-sw-entity-item-grounding"},
+        {"tools/smoke/Run.java", "m503-sw-pig-wander"}
     };
     private SmokeCatalog() {}
 }
