@@ -160,7 +160,7 @@ public final class HostSmokePool {
             int cpuRate = Math.max(1, (int) Math.floor(10_000.0 * profile.cpuUnits / Host.measure().cpus));
             List<String> wrapped = new ArrayList<>(List.of(root.resolve(".worldline/tools/WindowsJobRunner.exe").toString(),
                     "--memory", Long.toString(profile.memoryLimitBytes), "--cpu-rate", Integer.toString(cpuRate),
-                    "--active-processes", Integer.toString(profile.processLimit), "--timeout-seconds", Integer.toString(task.timeoutSeconds),
+                    "--active-processes", Integer.toString(profile.processLimit), "--timeout-seconds", Integer.toString(task.timeoutSeconds), "--parent-pid", Long.toString(ProcessHandle.current().pid()),
                     "--cwd", root.toString(), "--log", log.toString(), "--metrics", output.resolve("metrics.properties").toString(), "--"));
             wrapped.addAll(command); return new ProcessBuilder(wrapped).redirectErrorStream(true)
                     .redirectOutput(output.resolve("launcher.log").toFile());
@@ -241,7 +241,7 @@ public final class HostSmokePool {
         Profile server = Profile.of("server-headless", config), gui = Profile.of("windows-client-gui", config);
         require(Model.of(new Host(16, 64L << 30, 48L << 30), server).safeJobs == 25, "25-job admission drift");
         require(Model.of(new Host(16, 64L << 30, 5L << 30), server).safeJobs == 2, "low-memory admission drift");
-        require(gui.maxParallelism == 3 && gui.workerBytes == 3L << 30 && gui.cpuUnits == 2.0,
+        require(gui.maxParallelism == 3 && gui.workerBytes == 3L << 30 && gui.cpuUnits == 4.0,
                 "GUI profile drift");
         for (int width : List.of(10, 25)) concurrencyTest(width);
         System.out.println("host smoke pool self-test passed");
@@ -269,7 +269,7 @@ public final class HostSmokePool {
         static Profile of(String lane, Config config) { if (lane.equals("server-headless")) return new Profile(lane,
                 config.heap, config.workerBytes, config.memoryLimitBytes, config.cpuUnits, config.processLimit,
                 config.reserveBytes, config.durationSeconds, config.maxParallelism);
-            require(lane.equals("windows-client-gui"), "unsupported lane: " + lane); return new Profile(lane, "512m", 3L << 30, 6L << 30, 2.0, 96, config.reserveBytes, 1800, 3); }
+            require(lane.equals("windows-client-gui"), "unsupported lane: " + lane); return new Profile(lane, "512m", 3L << 30, 6L << 30, 4.0, 96, config.reserveBytes, 1800, 3); }
     }
     private record Config(int parallelism, int maxParallelism, String backend, String heap, long workerBytes,
                           long memoryLimitBytes, double cpuUnits, int processLimit,

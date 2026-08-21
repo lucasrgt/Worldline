@@ -40,6 +40,7 @@ public final class WindowsJobBootstrap {
         Path log = test.resolve("console.log"), metrics = test.resolve("metrics.properties");
         Process process = new ProcessBuilder(executable.toString(), "--memory", Long.toString(96L << 20),
                 "--cpu-rate", "10000", "--active-processes", "4", "--timeout-seconds", "10",
+                "--parent-pid", Long.toString(ProcessHandle.current().pid()),
                 "--cwd", ROOT.toString(), "--log", log.toString(), "--metrics", metrics.toString(),
                 "--", "cmd.exe", "/d", "/c", "echo job-self-test").directory(ROOT.toFile()).inheritIO().start();
         require(process.waitFor(20, TimeUnit.SECONDS) && process.exitValue() == 0, "launcher probe failed");
@@ -51,6 +52,7 @@ public final class WindowsJobBootstrap {
         String marker = "worldline-job-tree-probe";
         Process timeout = new ProcessBuilder(executable.toString(), "--memory", Long.toString(256L << 20),
                 "--cpu-rate", "10000", "--active-processes", "8", "--timeout-seconds", "1",
+                "--parent-pid", Long.toString(ProcessHandle.current().pid()),
                 "--cwd", ROOT.toString(), "--log", timeoutLog.toString(), "--metrics", timeoutMetrics.toString(),
                 "--", "powershell.exe", "-NoProfile", "-Command", "$null=Start-Process powershell.exe -ArgumentList"
                         + " '-NoProfile','-Command','Start-Sleep -Seconds 30 # " + marker + "'; Start-Sleep -Seconds 30")
@@ -60,6 +62,22 @@ public final class WindowsJobBootstrap {
         require("true".equals(timed.getProperty("timed.out")), "timeout metrics drift");
         require(ProcessHandle.allProcesses().noneMatch(candidate -> candidate.info().commandLine().orElse("").contains(marker)),
                 "a timed-out descendant escaped the Job Object");
+        Path parentLog = test.resolve("parent-exit.log"), parentMetrics = test.resolve("parent-exit.properties");
+        Files.deleteIfExists(parentLog); Files.deleteIfExists(parentMetrics);
+        Process parent = new ProcessBuilder("powershell.exe", "-NoProfile", "-Command", "Start-Sleep -Seconds 30").start();
+        Process orphan = new ProcessBuilder(executable.toString(), "--memory", Long.toString(256L << 20),
+                "--cpu-rate", "10000", "--active-processes", "8", "--timeout-seconds", "30",
+                "--parent-pid", Long.toString(parent.pid()), "--cwd", ROOT.toString(), "--log", parentLog.toString(),
+                "--metrics", parentMetrics.toString(), "--", "powershell.exe", "-NoProfile", "-Command",
+                "Write-Output parent-probe-ready; Start-Sleep -Seconds 30").directory(ROOT.toFile()).inheritIO().start();
+        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(10);
+        while ((!Files.isRegularFile(parentLog) || !Files.readString(parentLog).contains("parent-probe-ready"))
+                && System.nanoTime() < deadline) Thread.sleep(50);
+        require(Files.isRegularFile(parentLog) && Files.readString(parentLog).contains("parent-probe-ready"), "parent probe did not start");
+        parent.destroyForcibly(); require(parent.waitFor(5, TimeUnit.SECONDS), "probe parent did not stop");
+        require(orphan.waitFor(15, TimeUnit.SECONDS) && orphan.exitValue() == 130, "parent exit did not close the job");
+        Properties abandoned = new Properties(); try (var reader = Files.newBufferedReader(parentMetrics)) { abandoned.load(reader); }
+        require("true".equals(abandoned.getProperty("parent.exited")), "parent exit metrics drift");
         System.out.println("windows job launcher self-test passed");
     }
 

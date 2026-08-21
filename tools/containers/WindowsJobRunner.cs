@@ -49,15 +49,16 @@ internal static class WindowsJobRunner
                     CreateSuspended | CreateNoWindow, IntPtr.Zero, options.WorkingDirectory, ref start, out process);
             Check(created, "CreateProcess"); Check(AssignProcessToJobObject(job, process.hProcess), "AssignProcessToJobObject");
             Check(ResumeThread(process.hThread) != 0xffffffff, "ResumeThread");
-            uint wait = WaitForSingleObject(process.hProcess, options.TimeoutSeconds <= 0
-                    ? Infinite : checked((uint)options.TimeoutSeconds * 1000));
-            bool timedOut = wait == WaitTimeout;
-            if (timedOut) Check(TerminateJobObject(job, 124), "TerminateJobObject");
-            else Check(wait == 0, "WaitForSingleObject");
+            uint wait; using (Process parent = Process.GetProcessById(options.ParentPid))
+                wait = WaitForMultipleObjects(2, new[] { process.hProcess, parent.Handle }, false,
+                        options.TimeoutSeconds <= 0 ? Infinite : checked((uint)options.TimeoutSeconds * 1000));
+            bool timedOut = wait == WaitTimeout, parentExited = wait == 1;
+            if (timedOut || parentExited) Check(TerminateJobObject(job, parentExited ? 130u : 124u), "TerminateJobObject");
+            else Check(wait == 0, "WaitForMultipleObjects");
             WaitForSingleObject(process.hProcess, 10000);
             uint exitCode; Check(GetExitCodeProcess(process.hProcess, out exitCode), "GetExitCodeProcess");
-            WriteMetrics(job, options, timedOut, exitCode);
-            return timedOut ? 124 : unchecked((int)exitCode);
+            WriteMetrics(job, options, timedOut, parentExited, exitCode);
+            return parentExited ? 130 : timedOut ? 124 : unchecked((int)exitCode);
         }
         finally
         {
@@ -79,7 +80,7 @@ internal static class WindowsJobRunner
         Set(job, 15, cpu);
     }
 
-    private static void WriteMetrics(IntPtr job, Options options, bool timedOut, uint exitCode)
+    private static void WriteMetrics(IntPtr job, Options options, bool timedOut, bool parentExited, uint exitCode)
     {
         JOBOBJECT_EXTENDED_LIMIT_INFORMATION limits = Query<JOBOBJECT_EXTENDED_LIMIT_INFORMATION>(job, 9);
         JOBOBJECT_BASIC_ACCOUNTING_INFORMATION accounting = Query<JOBOBJECT_BASIC_ACCOUNTING_INFORMATION>(job, 1);
@@ -88,6 +89,7 @@ internal static class WindowsJobRunner
         {
             writer.WriteLine("format=1"); writer.WriteLine("backend=windows-job");
             writer.WriteLine("timed.out=" + timedOut.ToString().ToLowerInvariant());
+            writer.WriteLine("parent.exited=" + parentExited.ToString().ToLowerInvariant());
             writer.WriteLine("exit.code=" + exitCode.ToString(CultureInfo.InvariantCulture));
             writer.WriteLine("processes.total=" + accounting.TotalProcesses.ToString(CultureInfo.InvariantCulture));
             writer.WriteLine("processes.terminated=" + accounting.TotalTerminatedProcesses.ToString(CultureInfo.InvariantCulture));
@@ -129,7 +131,7 @@ internal static class WindowsJobRunner
 
     private sealed class Options
     {
-        internal long MemoryBytes; internal int CpuRate, ActiveProcesses, TimeoutSeconds;
+        internal long MemoryBytes; internal int CpuRate, ActiveProcesses, TimeoutSeconds, ParentPid;
         internal string WorkingDirectory, Log, Metrics; internal List<string> Command;
         internal static Options Parse(string[] args)
         {
@@ -140,12 +142,13 @@ internal static class WindowsJobRunner
                 else if (key == "--cpu-rate") value.CpuRate = int.Parse(item, CultureInfo.InvariantCulture);
                 else if (key == "--active-processes") value.ActiveProcesses = int.Parse(item, CultureInfo.InvariantCulture);
                 else if (key == "--timeout-seconds") value.TimeoutSeconds = int.Parse(item, CultureInfo.InvariantCulture);
+                else if (key == "--parent-pid") value.ParentPid = int.Parse(item, CultureInfo.InvariantCulture);
                 else if (key == "--cwd") value.WorkingDirectory = item; else if (key == "--log") value.Log = item;
                 else if (key == "--metrics") value.Metrics = item; else throw new ArgumentException("unknown option " + key); }
             if (index >= args.Length || args[index++] != "--") throw new ArgumentException("missing -- command separator");
             value.Command = new List<string>(); while (index < args.Length) value.Command.Add(args[index++]);
             if (value.MemoryBytes < 64L * 1024 * 1024 || value.CpuRate < 1 || value.CpuRate > 10000
-                    || value.ActiveProcesses < 1 || value.Command.Count == 0 || String.IsNullOrEmpty(value.WorkingDirectory)
+                    || value.ActiveProcesses < 1 || value.ParentPid < 1 || value.Command.Count == 0 || String.IsNullOrEmpty(value.WorkingDirectory)
                     || String.IsNullOrEmpty(value.Log) || String.IsNullOrEmpty(value.Metrics)) throw new ArgumentException("invalid limits or paths");
             return value;
         }
@@ -170,6 +173,7 @@ internal static class WindowsJobRunner
     [DllImport("kernel32.dll")] private static extern IntPtr GetStdHandle(int handle);
     [DllImport("kernel32.dll", SetLastError = true)] private static extern uint ResumeThread(IntPtr thread);
     [DllImport("kernel32.dll", SetLastError = true)] private static extern uint WaitForSingleObject(IntPtr handle, uint milliseconds);
+    [DllImport("kernel32.dll", SetLastError = true)] private static extern uint WaitForMultipleObjects(uint count, IntPtr[] handles, bool waitAll, uint milliseconds);
     [DllImport("kernel32.dll", SetLastError = true)] private static extern bool GetExitCodeProcess(IntPtr process, out uint exitCode);
     [DllImport("kernel32.dll", SetLastError = true)] private static extern bool CloseHandle(IntPtr handle);
     [DllImport("kernel32.dll", SetLastError = true)] private static extern bool SetHandleInformation(IntPtr handle, uint mask, uint flags);

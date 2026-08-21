@@ -121,6 +121,8 @@ Gradle homes, while project worktrees, temporary paths, logs, worlds, and
 evidence directories remain isolated as well.
 GUI cycles receive a bounded cold-start allowance inside the outer Job timeout
 so Loom remapping and world generation cannot consume the behavioral window.
+Each GUI job reserves four logical CPUs; a runner also watches its coordinator
+and closes the Job Object if that parent exits, preventing orphaned runtimes.
 Linux cgroups provide equivalent tree/resource ownership; `linux-sandbox`
 adds read-only mounts and private namespaces. Native GUI, OpenGL, RetroMCP
 mutation, Gradle worktree mutation, and client-oracle lanes retain their own
