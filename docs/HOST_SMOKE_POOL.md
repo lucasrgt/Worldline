@@ -116,7 +116,7 @@ The `windows-client-gui` lane assigns each complete two-replica cycle to one
 Job Object, reserves a larger heap/memory/CPU profile, requires the Windows
 backend, rejects mixed-lane manifests, and permits at most three concurrent
 cycles. Start its promotion at two jobs. A pinned Aero artifact is built once
-before admission; GUI jobs then reuse one batch-scoped Gradle dependency cache
+before admission; GUI jobs then reuse one Runtime Fabric-owned Gradle dependency cache
 while retaining separate project worktrees, temporary paths, logs, worlds, and
 evidence directories.
 Linux cgroups provide equivalent tree/resource ownership; `linux-sandbox`

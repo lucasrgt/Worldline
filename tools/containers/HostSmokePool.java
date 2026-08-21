@@ -116,7 +116,7 @@ public final class HostSmokePool {
             ProcessBuilder builder = isolated(config, profile, task, output, log, command).directory(root.toFile());
             builder.environment().put("JAVA_TOOL_OPTIONS", "-XX:+UseSerialGC -Xms16m -Xmx" + profile.heap);
             builder.environment().put("TEMP", tmp.toString()); builder.environment().put("TMP", tmp.toString());
-            builder.environment().put("GRADLE_USER_HOME", (prebuilt == null ? output : batch).resolve("gradle").toString());
+            builder.environment().put("GRADLE_USER_HOME", (prebuilt == null ? output.resolve("gradle") : root.resolve(".worldline/runtime-fabric/gradle")).toString());
             builder.environment().put("WORLDLINE_RUNTIME_SLOT", task.id);
             if (prebuilt != null) { builder.environment().put("WORLDLINE_AERO_PREBUILT", prebuilt.toString()); builder.environment().put("WORLDLINE_RUNTIME_TIMEOUT_EXTRA", "300"); }
             Process process = builder.start(); boolean finished = process.waitFor(task.timeoutSeconds + 15L, TimeUnit.SECONDS);
@@ -133,7 +133,7 @@ public final class HostSmokePool {
     }
 
     private Path prebuild(List<Task> tasks, Path batch) throws Exception { Path output = batch.resolve("aero-model-lib-3.0.0.jar"); List<String> command = new ArrayList<>(List.of(java(), "tools/containers/AeroPrebuild.java", output.toString()));
-        tasks.forEach(task -> command.add(task.argument)); ProcessBuilder builder = new ProcessBuilder(command).directory(root.toFile()).inheritIO(); builder.environment().put("GRADLE_USER_HOME", batch.resolve("gradle").toString()); Process process = builder.start();
+        tasks.forEach(task -> command.add(task.argument)); ProcessBuilder builder = new ProcessBuilder(command).directory(root.toFile()).inheritIO(); builder.environment().put("GRADLE_USER_HOME", root.resolve(".worldline/runtime-fabric/gradle").toString()); Process process = builder.start();
         require(process.waitFor(12, TimeUnit.MINUTES) && process.exitValue() == 0, "Aero batch prebuild failed"); return output; }
 
     private void verify() throws Exception {
@@ -269,7 +269,7 @@ public final class HostSmokePool {
         static Profile of(String lane, Config config) { if (lane.equals("server-headless")) return new Profile(lane,
                 config.heap, config.workerBytes, config.memoryLimitBytes, config.cpuUnits, config.processLimit,
                 config.reserveBytes, config.durationSeconds, config.maxParallelism);
-            require(lane.equals("windows-client-gui"), "unsupported lane: " + lane); return new Profile(lane, "512m", 3L << 30, 6L << 30, 2.0, 96, config.reserveBytes, 900, 3); }
+            require(lane.equals("windows-client-gui"), "unsupported lane: " + lane); return new Profile(lane, "512m", 3L << 30, 6L << 30, 2.0, 96, config.reserveBytes, 1800, 3); }
     }
     private record Config(int parallelism, int maxParallelism, String backend, String heap, long workerBytes,
                           long memoryLimitBytes, double cpuUnits, int processLimit,
