@@ -64,6 +64,14 @@ Status: GO.
 - Evidence: authoring, validation, rejection, and deterministic execution
   smoke frozen in `smokes/m14-scenario-dsl/smoke.properties`.
 
+## Unreleased - Worldline Atlas port
+
+- Ported the generated, fail-closed Atlas knowledge layer from the M88
+  prototype onto the M469/TestKit mainline.
+- Added Atlas status, lookup, search, gaps, coverage, evidence, graph, export,
+  and milestone-delta commands without making Atlas a runtime dependency.
+- Indexed semantic roles, controlled boundaries, invariants, milestone
+  evidence, trace fields, ecosystem knowledge, and explicit uncertainty.
 
 ## Unreleased - Worldline TestKit 0.2.1 experimental
 

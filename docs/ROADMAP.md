@@ -466,6 +466,7 @@ Passing an experiment does not silently promote its API.
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
+| Atlas | Generated knowledge store, provenance graph, coverage matrix, and query CLI | PORTING - validation required on M469 |
 
 ## Promotion rule
 
@@ -535,3 +536,11 @@ docs/MOD_GRAPH.md, docs/SCENARIO_DSL.md, docs/FUZZ.md, docs/TIME_TRAVEL.md,
 docs/PROFILE.md, docs/COVERAGE.md, and docs/HTML_EVIDENCE.md; smoke IDs use
 distinct `m1x-<name>` spellings so they never collide with the vanilla
 milestone numbering.
+
+## Atlas workstream
+
+Atlas is derived from authoritative semantic catalogs, adapter manifests,
+invariants, milestone descriptors, MAP evidence, and explicit ecosystem
+records. It must classify milestones from declared metadata rather than from
+numeric ranges. Missing metadata remains UNKNOWN or fails the applicable gate;
+it is never guessed merely to fill the coverage matrix.

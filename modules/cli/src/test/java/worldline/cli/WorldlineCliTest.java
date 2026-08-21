@@ -203,6 +203,71 @@ public final class WorldlineCliTest {
                     new PrintStream(output), new PrintStream(error));
             require(status == 0 && output.toString().contains("b173-client="),
                     "CLI semantics adapter failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"atlas", "status"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("WORLDLINE_ATLAS=PASS")
+                    && output.toString().contains("role=196")
+                    && output.toString().contains("coverage_unit=154"),
+                    "CLI atlas status failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"atlas", "show",
+                    "atlas.role.CLIENT_TICK_ROOT"}, new PrintStream(output),
+                    new PrintStream(error));
+            require(status == 0 && output.toString().contains("WORLDLINE_ATLAS_SHOW=PASS")
+                    && output.toString().contains("CLIENT_TICK_ROOT"),
+                    "CLI atlas show failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"atlas", "search", "item-conservation"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("atlas.invariant.item-conservation"),
+                    "CLI atlas search failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"atlas", "coverage"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("WORLDLINE_ATLAS_COVERAGE=PASS")
+                    && output.toString().contains("worldgen"),
+                    "CLI atlas coverage failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"atlas", "gaps"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("WORLDLINE_ATLAS_GAPS=PASS"),
+                    "CLI atlas gaps failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"atlas", "evidence",
+                    "atlas.experiment.m80-natural-membership-rebuild"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("expected.signature="),
+                    "CLI atlas evidence failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"atlas", "graph",
+                    "atlas.role.CLIENT_TICK_ROOT"}, new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("WORLDLINE_ATLAS_GRAPH=PASS")
+                    && output.toString().contains("READS atlas.boundary."),
+                    "CLI atlas graph failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"atlas", "export"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("WORLDLINE_ATLAS_EXPORT=PASS")
+                    && output.toString().contains("WORLDLINE-ATLAS-STORE/1"),
+                    "CLI atlas export failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"atlas", "changed", "--since", "M70"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("WORLDLINE_ATLAS_CHANGED=PASS")
+                    && output.toString().contains("m80-natural-membership-rebuild"),
+                    "CLI atlas changed failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"atlas", "show",
+                    "atlas.hypothesis.aero-historical-spike"}, new PrintStream(output),
+                    new PrintStream(error));
+            require(status == 0 && output.toString().contains("NON_CLAIM"),
+                    "CLI atlas hypothesis failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"atlas", "show", "atlas.role.NOT_A_ROLE"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 1 && error.toString().contains("unknown atlas id"),
+                    "CLI unknown atlas id failed");
             require(WorldlineCli.run(new String[0], System.out, new PrintStream(error)) == 2,
                     "CLI usage did not fail");
             output.reset(); error.reset();

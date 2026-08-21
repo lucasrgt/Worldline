@@ -9,9 +9,11 @@ import java.util.Map;
  * fields stay empty so structural diffs do not invent a role.
  */
 public final class SemanticFields {
-    private static final Map<String, String> ALIAS = aliases();
+    private static final Map<String, String> ALIAS = table();
 
     private SemanticFields() {}
+
+    public static Map<String, String> aliases() { return ALIAS; }
 
     public static String role(String field) {
         if (field == null || field.isEmpty()) return "";
@@ -20,7 +22,7 @@ public final class SemanticFields {
         return SemanticCatalog.standard().role(role).role();
     }
 
-    private static Map<String, String> aliases() {
+    private static Map<String, String> table() {
         Map<String, String> aliases = new LinkedHashMap<String, String>();
         aliases.put("x", "ENTITY_POS_X");
         aliases.put("playerX", "ENTITY_POS_X");

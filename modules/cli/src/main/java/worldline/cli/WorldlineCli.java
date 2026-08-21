@@ -43,6 +43,8 @@ public final class WorldlineCli {
                 return ScenarioCommands.run(arguments, output, error);
             if (arguments.length >= 2 && "semantics".equals(arguments[0]))
                 return SemanticsCommand.run(arguments, output, error);
+            if (arguments.length >= 2 && "atlas".equals(arguments[0]))
+                return AtlasCommand.run(arguments, output, error);
             return usage(error);
         } catch (IOException | ReflectiveOperationException | RuntimeException failure) {
             error.println("worldline command failed: " + failure.getMessage()); return 1;
@@ -115,7 +117,16 @@ public final class WorldlineCli {
         error.println("   or: worldline semantics graph");
         error.println("   or: worldline semantics category <name>");
         error.println("   or: worldline semantics role <ROLE>");
-        error.println("   or: worldline semantics adapter [name]"); return 2;
+        error.println("   or: worldline semantics adapter [name]");
+        error.println("   or: worldline atlas status");
+        error.println("   or: worldline atlas show <id>");
+        error.println("   or: worldline atlas search <term>");
+        error.println("   or: worldline atlas gaps");
+        error.println("   or: worldline atlas coverage");
+        error.println("   or: worldline atlas evidence <id>");
+        error.println("   or: worldline atlas graph <id>");
+        error.println("   or: worldline atlas export");
+        error.println("   or: worldline atlas changed --since <Mn>"); return 2;
     }
 
     private static void explain(TraceDiff difference, PrintStream output) {

@@ -9,9 +9,11 @@ import java.util.Map;
  * Unknown or structural fields stay empty so diffs do not invent a cause.
  */
 public final class InvariantFields {
-    private static final Map<String, String> ALIAS = aliases();
+    private static final Map<String, String> ALIAS = table();
 
     private InvariantFields() {}
+
+    public static Map<String, String> aliases() { return ALIAS; }
 
     public static String rule(String field) {
         if (field == null || field.isEmpty()) return "";
@@ -19,7 +21,7 @@ public final class InvariantFields {
         return rule == null ? "" : rule;
     }
 
-    private static Map<String, String> aliases() {
+    private static Map<String, String> table() {
         Map<String, String> aliases = new LinkedHashMap<String, String>();
         aliases.put("block64", BlockConservation.NAME);
         aliases.put("block65", BlockConservation.NAME);
