@@ -16,6 +16,7 @@
   <img src="https://img.shields.io/badge/product-Java%208-5586A4?style=flat-square" alt="Java 8 product">
   <img src="https://img.shields.io/badge/harness-JDK%2021-6B5B95?style=flat-square" alt="JDK 21 harness">
   <img src="https://img.shields.io/badge/oracle-official%20JAR-CB8B2C?style=flat-square" alt="Official JAR behavioral oracle">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-4C566A?style=flat-square" alt="MIT license"></a>
 </p>
 
 Worldline executes the real Minecraft Beta 1.7.3 runtime under external
@@ -532,3 +533,5 @@ public so status can be inspected rather than inferred from the development
 process.
 
 Maintainer: [lucasrgt](https://github.com/lucasrgt)
+
+Worldline is available under the [MIT License](LICENSE).

@@ -22,6 +22,8 @@ before they are promoted.
   `run`/`list`/`inspect`/`watch`/`minimize`, and strict project configuration.
 - Added deterministic ignored API/runner packaging, the b1.7.3 provider, a
   ten-spec/30-test acceptance suite, and external Butter/AeroModelLib consumers.
+- Licensed Worldline and TestKit under the MIT License for external use and
+  redistribution.
 - This is not a promoted stable release or a change to the official M469
   behavioral evidence. TestKit remains 0.x until external-mod use validates
   the authoring surface.

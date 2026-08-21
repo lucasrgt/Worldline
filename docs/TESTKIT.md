@@ -350,6 +350,9 @@ terminals:
 The collection/execution/result/reporter split and console vocabulary were
 inspired by Vitest. Vitest is MIT licensed. Worldline's implementation is
 original Java code and does not vendor Vitest, Vite, Node.js, or copied source.
+Worldline and TestKit are distributed under the repository's
+[MIT License](../LICENSE), so external mods may use, modify, and redistribute
+the authoring and runner code subject to that license.
 See the [Vitest repository](https://github.com/vitest-dev/vitest), its
 [MIT license](https://github.com/vitest-dev/vitest/blob/main/LICENSE), and its
 [reporter documentation](https://vitest.dev/guide/reporters).
