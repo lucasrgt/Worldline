@@ -25,6 +25,17 @@ final class Checks {
         }
     }
 
+
+    static String sha256(byte[] value) {
+        try {
+            byte[] digest = java.security.MessageDigest.getInstance("SHA-256").digest(value);
+            StringBuilder result = new StringBuilder();
+            for (byte item : digest) result.append(String.format("%02x", item & 255));
+            return result.toString();
+        } catch (java.security.NoSuchAlgorithmException error) {
+            throw new IllegalStateException(error);
+        }
+    }
     static void require(boolean condition, String message) {
         if (!condition) throw new IllegalStateException(message);
     }

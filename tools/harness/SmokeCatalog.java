@@ -117,7 +117,7 @@ final class SmokeCatalog {
         {"tools/smoke/KnockbackCooldownSetCycle.java", "m452-knockback-cooldown-set"}, {"tools/smoke/SpiderLeapSetCycle.java", "m457-spider-leap-set"}, {"tools/smoke/SlimeTouchSetCycle.java", "m458-slime-touch-set"}, {"tools/smoke/GhastFireballHitSetCycle.java", "m459-ghast-fireball-hit-set"},
         {"tools/smoke/MonsterBedInterruptSetCycle.java", "m460-monster-bed-interrupt-set"}, {"tools/smoke/BowMobHitSetCycle.java", "m462-bow-mob-hit-set"}, {"tools/smoke/DifficultyDamageSetCycle.java", "m467-difficulty-damage-set"}, {"tools/smoke/VoidDeathSetCycle.java", "m469-void-death-set"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}, {"tools/smoke/ModApiCycle.java", "m11-mod-api"}, {"tools/smoke/ModRunCycle.java", "m12-mod-run"}, {"tools/smoke/ModGraphCycle.java", "m13-mod-graph"},
-        {"tools/smoke/ScenarioDslCycle.java", "m14-scenario-dsl"}
+        {"tools/smoke/ScenarioDslCycle.java", "m14-scenario-dsl"}, {"tools/smoke/CensusCycle.java", "census-cycle"}, {"tools/smoke/AtlasCycle.java", "seed-atlas"}, {"tools/smoke/UiExportCycle.java", "ui-export"}
     };
     private SmokeCatalog() {}
 }

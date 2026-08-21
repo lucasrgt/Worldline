@@ -93,6 +93,21 @@ Status: GO.
   `smokes/m15-fuzz/smoke.properties`.
 
 ## Unreleased - M11 Mod API v2
+## Unreleased - Census, Seed Atlas, and Screen Export
+
+Status: GO.
+
+- Added `worldline census <out-dir>`: canonical `WORLDLINE-CENSUS/1` dumps of
+  every registered block and item, all crafting recipes (mapped-field
+  reflection), and all furnace smelts; byte-deterministic per section.
+- Added `worldline atlas <seed> <radius-1..4> <out.html>`: boots the official
+  dedicated server under any seed, walks the player in <=4-block glides
+  across every chunk, decodes streamed chunks over the proven wire path, and
+  renders a deterministic colored terrain page with a block legend.
+- Added `worldline ui <out.html>`: exports the open inventory semantic tree
+  (role/name/index/item/count) as a self-contained page.
+- Evidence: census-cycle, seed-atlas, and ui-export smokes with frozen page/
+  section digests.
 ## Unreleased - Mod API v2
 
 Status: GO.

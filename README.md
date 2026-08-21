@@ -78,6 +78,9 @@ behavior evidence without silently widening those early public APIs.
 | M111-M469 | Official vanilla world, block, item, entity, crafting, AI, damage, and death behavior sets | GO |
 | M469 | Current release: official void walk-off death and respawn set | GO |
 | TestKit 0.x | Experimental Java specs, isolated runner, reporters, artifacts, and CLI | EXPERIMENTAL |
+| Registry census | Canonical blocks/items/recipes/smelts dumps of the controlled client | GO |
+| Seed atlas | Official-server terrain maps for any seed as deterministic pages | GO |
+| Screen export | Semantic inventory tree as a self-contained page | GO |
 
 Version and frozen signatures are authoritative in
 [`release/worldline.properties`](release/worldline.properties). The promotion
@@ -533,6 +536,9 @@ java tools/replay/Replay.java test
 java tools/replay/Replay.java test run <spec.jar|classes> [spec.class] [options]
 java tools/replay/Replay.java test list <spec.jar|classes> [spec.class]
 java tools/replay/Replay.java test watch <spec.jar|classes> [spec.class] [options]
+java tools/replay/Replay.java census <out-dir>
+java tools/replay/Replay.java atlas <seed> <radius-1..4> <output.html>
+java tools/replay/Replay.java ui <output.html>
 java tools/replay/Replay.java test minimize <spec.jar|classes> [spec.class] [options]
 ```
 
@@ -577,6 +583,9 @@ classes, RetroMCP, or native libraries on their product classpaths.
 | [TestKit 0.x](docs/TESTKIT.md) | Java specs, runner isolation, reporters, snapshots, artifacts, and CLI |
 | [Gradle adoption](docs/GRADLE_TESTKIT.md) | Isolated build, plugin tasks, oracle profiles, migration, IDE, and CI |
 | [Extension authoring](docs/EXTENSIONS.md) | External test layers, provider boundary, optimization evidence, and legacy-mod limits |
+| [Registry census](docs/CENSUS.md) | Canonical registry dumps of the controlled client |
+| [Seed atlas](docs/ATLAS.md) | Official-server terrain maps for arbitrary seeds |
+| [Screen export](docs/SCREEN_EXPORT.md) | Semantic inventory tree pages |
 | [Changelog](CHANGELOG.md) | Stable scope and release history |
 | [Engineering guide](AGENTS.md) | Behavioral constitution and canonical gates |
 

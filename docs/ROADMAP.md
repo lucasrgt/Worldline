@@ -533,9 +533,13 @@ lands named, numbered-free capabilities on top of the same evidence rules:
 | Per-tick profiling with machine-relative budget gates | GO - stable milestone |
 | Dynamic scenario coverage against the semantic catalog | GO - stable milestone |
 | Deterministic self-contained HTML trace viewer and diff pages | GO - stable milestone |
+| Registry census over the controlled client | GO - stable milestone |
+| Seed atlas through the official dedicated server | GO - stable milestone |
+| Semantic screen export pages | GO - stable milestone |
 
 Their contracts live in docs/MOD_API_V2.md, docs/MOD_RUN.md,
 docs/MOD_GRAPH.md, docs/SCENARIO_DSL.md, docs/FUZZ.md, docs/TIME_TRAVEL.md,
-docs/PROFILE.md, docs/COVERAGE.md, and docs/HTML_EVIDENCE.md; smoke IDs use
+docs/PROFILE.md, docs/COVERAGE.md, docs/HTML_EVIDENCE.md, docs/CENSUS.md,
+docs/ATLAS.md, and docs/SCREEN_EXPORT.md; smoke IDs use
 distinct `m1x-<name>` spellings so they never collide with the vanilla
 milestone numbering.

@@ -51,6 +51,12 @@ public final class WorldlineCli {
                 return ProfileCommand.run(arguments, output, error);
             if ("coverage".equals(arguments[0]) && arguments.length >= 2)
                 return CoverageCommand.run(arguments, output, error);
+            if ("census".equals(arguments[0]))
+                return CensusCommand.run(arguments, output, error);
+            if ("atlas".equals(arguments[0]))
+                return AtlasCommand.run(arguments, output, error);
+            if ("ui".equals(arguments[0]))
+                return UiCommand.run(arguments, output, error);
             if (arguments.length >= 2 && "semantics".equals(arguments[0]))
                 return SemanticsCommand.run(arguments, output, error);
             return usage(error);
@@ -126,6 +132,9 @@ public final class WorldlineCli {
         error.println("   or: worldline debug <scenario.wlscenario> <seed>");
         error.println("   or: worldline profile <scenario.wlscenario> <seed> [budget.properties]");
         error.println("   or: worldline coverage <scenario.wlscenario> [trace.wltrace] [min-percent]");
+        error.println("   or: worldline census <out-dir>");
+        error.println("   or: worldline atlas <seed> <radius-1..4> <output.html>");
+        error.println("   or: worldline ui <output.html>");
         error.println("   or: worldline semantics show");
         error.println("   or: worldline semantics graph");
         error.println("   or: worldline semantics category <name>");
