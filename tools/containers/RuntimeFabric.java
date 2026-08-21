@@ -113,7 +113,7 @@ public final class RuntimeFabric {
     private static boolean isWindows() { return System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows"); }
     private static void require(boolean value, String message) { if (!value) throw new IllegalArgumentException(message); }
 
-    private static void selfTest() {
+    private static void selfTest() throws Exception {
         Capabilities windows = new Capabilities(true, "windows", "ntfs", true, false, false, false, false, true, false);
         require(select("auto", "balanced", windows).equals("windows-job"), "Windows auto-selection drift");
         require(select("auto", "sealed", windows).equals("windows-appcontainer"), "Windows sealed fail-closed drift");
@@ -126,6 +126,12 @@ public final class RuntimeFabric {
                 "Windows Job launcher self-test failed");
         require(capture(List.of(java(), "tools/containers/OfficialRuntimeLease.java", "--self-test"), 30).passed,
                 "official runtime lease self-test failed");
+        int optimized = 0;
+        try (var paths = Files.list(ROOT.resolve("tools/smoke"))) { for (Path source : paths.filter(path -> path.toString().endsWith(".java")).toList()) {
+            String text = Files.readString(source); require(!text.contains("p.descendants().anyMatch"), "quadratic process cleanup in " + source);
+            if (text.contains("Set<Long>descendants=p.descendants()")) optimized++;
+        }}
+        require(optimized >= 36, "optimized smoke cleanup coverage drift: " + optimized);
         System.out.println("runtime fabric self-test passed");
     }
 
