@@ -124,7 +124,8 @@ final class SmokeCatalog {
         {"tools/smoke/SpiderClimbSetCycle.java", "m447-spider-climb-set"},
         {"tools/smoke/WolfAngerSetCycle.java", "m449-wolf-anger-set"},
         {"tools/smoke/ArmorReductionSetCycle.java", "m451-armor-reduction-set"},
-        {"tools/smoke/CreeperCancelSetCycle.java", "m456-creeper-cancel-set"}
+        {"tools/smoke/CreeperCancelSetCycle.java", "m456-creeper-cancel-set"},
+        {"tools/smoke/FallDamageSetCycle.java", "m461-fall-damage-set"}
     };
     private SmokeCatalog() {}
 }
