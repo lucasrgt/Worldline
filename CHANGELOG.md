@@ -38,7 +38,7 @@ Status: GO.
 - Added checksum-protected `WORLDLINE-COVERAGE/1` artifacts (`.wlcover`) and
   an optional floor-percentage gate (exit 3) for scenario-corpus richness
   checks; fully neutral, no runtime required.
-- Evidence: all five mappable verbs classified (20% of 24 categories),
+- Evidence: all five mappable verbs classified (20% of 25 categories),
   executed-trace role extraction, artifact creation, and both threshold
   outcomes; frozen SHA-256 in `smokes/m18-coverage/smoke.properties`.
 

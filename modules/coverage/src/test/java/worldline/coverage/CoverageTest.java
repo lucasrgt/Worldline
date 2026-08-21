@@ -2,6 +2,7 @@ package worldline.coverage;
 
 import java.util.Arrays;
 import worldline.minimization.Scenario;
+import worldline.semantics.SemanticRoles;
 import worldline.trace.CanonicalStateDocument;
 
 /** Proves category classification, role extraction, and report framing. */
@@ -22,8 +23,9 @@ public final class CoverageTest {
         require(coverage.categories().equals(Arrays.asList(
                 "rng", "input", "tick", "world", "lab")),
                 "canonical category order drifted: " + coverage.categories());
-        require(coverage.totalCategories() == 24
-                && coverage.percentCategories() == 20, "percent math drifted");
+        int total = SemanticRoles.categories().size();
+        require(coverage.totalCategories() == total
+                && coverage.percentCategories() == 5 * 100 / total, "percent math drifted");
         require(coverage.stepCounts().get("tick") == 1
                 && coverage.stepCounts().get("lab") == 1, "step counts drifted");
         Scenario single = Scenario.of(Arrays.asList("tick"));
@@ -53,7 +55,7 @@ public final class CoverageTest {
         require(text.startsWith("WORLDLINE-COVERAGE/1\nscenario.sha256="
                 + scenario.sha256() + "\nsteps=2\ntrace.sha256=" + trace.signature() + "\n"),
                 "report header drifted");
-        require(text.contains("categories.total=24")
+        require(text.contains("categories.total=" + SemanticRoles.categories().size())
                 && text.contains("categories.touched=tick,lab")
                 && text.contains("categories.percent=8")
                 && text.contains("steps.tick=1")

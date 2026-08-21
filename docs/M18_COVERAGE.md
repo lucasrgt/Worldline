@@ -4,7 +4,7 @@
 
 M18 closes the loop between the static semantic catalog and dynamic
 execution: any public-grammar scenario can now report which control
-categories of the closed 24-category catalog its steps engage, and which
+categories of the closed 25-category catalog its steps engage, and which
 catalog roles its executed trace fields carry. The check is fully neutral -
 no Minecraft, adapter, or runtime classes are required.
 
@@ -32,7 +32,7 @@ checksum-protected `WORLDLINE-COVERAGE/1` document (`.wlcover`, suffixed
 
 The report binds scenario provenance, touched categories in canonical
 catalog order with per-category step counts, the engaged percentage over the
-24 total categories, and observed role names. Body checksum matches the
+25 total categories, and observed role names. Body checksum matches the
 established repository format.
 
 ## Evidence

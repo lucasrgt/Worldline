@@ -480,7 +480,7 @@ Passing an experiment does not silently promote its API.
 | v1.461.0 / M567 | Bed spawn set | GO - occupy then cactus death Packet9 at bed, not world spawn |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
-| Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
+| Semantic mappings | Closed 25-category catalog, adapter manifests, and static role graph | GO - stable milestone |
 
 ## Promotion rule
 

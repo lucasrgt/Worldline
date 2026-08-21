@@ -38,7 +38,7 @@ public final class CoverageCycle {
         require(bare.code == 0 && bare.text.contains("WORLDLINE_COVERAGE=PASS"),
                 "bare coverage failed");
         require(bare.text.contains("categories=[rng, input, tick, world, lab]")
-                && bare.text.contains("percent=20/24"), "category classification drifted");
+                && bare.text.contains("percent=20/25"), "category classification drifted");
         Path trace = build.resolve("spectrum.wltrace");
         Result executed = launcher("scenario", "run", scenario.toString(), SEED,
                 trace.toString());
@@ -69,7 +69,7 @@ public final class CoverageCycle {
                 "M18 coverage evidence diverged: " + signature);
         Files.write(build.resolve("evidence.txt"), report.getBytes(StandardCharsets.UTF_8));
         System.out.println("M18 coverage cycle passed");
-        System.out.println("  verbs mapped to rng/input/tick/world/lab (5 of 24 categories)");
+        System.out.println("  verbs mapped to rng/input/tick/world/lab (5 of 25 categories)");
         System.out.println("  executed-trace role: BLOCK_ID_READ; thresholds 50 fail / 20 pass");
         System.out.println("  evidence SHA-256: " + signature);
     }

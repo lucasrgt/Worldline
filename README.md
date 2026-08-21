@@ -451,7 +451,7 @@ Working examples live in
 | --- | --- |
 | Official oracle | Independent execution against the hash-pinned Mojang artifact |
 | Invariant engine | Six fail-closed conservation and monotonicity rule families |
-| Semantic catalog | Closed 24-category role graph with mapping and adapter coverage |
+| Semantic catalog | Closed 25-category role graph with mapping and adapter coverage |
 | Optimization SDK | Source-only `OptimizationRef`, portable records, owner-controlled catalogs |
 | Release gate | Frozen signatures, legal artifact scan, dependency order, source ceilings |
 
