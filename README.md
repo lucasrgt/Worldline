@@ -158,7 +158,7 @@ debuggers work without a custom editor plugin:
 import static worldline.test.Expect.expect;
 import static worldline.test.Worldline.*;
 
-public final class GlassProbeSpec extends WorldlineSpec {
+public final class GlassProbeWorldlineTest extends WorldlineSpec {
     @Override protected void define() {
         describe("GlassProbe", () -> {
             test("places glass", worldline().runtime("b1.7.3").seed(173L)
@@ -179,17 +179,23 @@ snapshots, filters, watch mode, and named minimizable steps are included.
 Top-level specs are discovered automatically, while `--classpath` exposes the
 mod's separately compiled product classes without weakening source isolation.
 
-With a strict `worldline-test.properties` in the mod project:
+Initialize the isolated Gradle project in a mod repository:
 
 ```text
-java tools/replay/Replay.java test
-java tools/replay/Replay.java test GlassProbeSpec
+java -jar worldline-test-runner-0.2.0.jar init
+tests/worldline/gradlew.bat worldlineDoctor worldlineTest
 ```
 
-Or run one explicit source and class:
+The generated project pins Gradle, keeps every spec under
+`tests/worldline/src/test/java`, creates an ignored empty official-JAR drop
+zone, and emits JUnit XML plus Worldline evidence. The binary plugin is
+`dev.worldline.test`; it never changes the mod's legacy build.
+
+Useful tasks mirror the TestKit CLI:
 
 ```text
-java tools/replay/Replay.java test run build/test-classes --classpath=build/classes --mod=build/glass-probe.jar --reporter=verbose
+worldlineTest worldlineTestList worldlineTestWatch worldlineTestInspect
+worldlineTestUpdateSnapshots worldlineTestMinimize worldlineDoctor
 ```
 
 Build deterministic ignored JARs for external projects:
@@ -209,7 +215,8 @@ Only promoted semantic mappings enter the friendly selector catalog. Unknown
 or read-only mappings fail with a stable `WLTEST` diagnostic instead of
 guessing an ID or obfuscated field.
 
-See the complete [TestKit guide](docs/TESTKIT.md) and the
+See the [Gradle adoption guide](docs/GRADLE_TESTKIT.md), the complete
+[TestKit guide](docs/TESTKIT.md), and the
 [ten-spec, 30-test example project](examples/testkit/README.md).
 
 ---
@@ -483,6 +490,7 @@ classes, RetroMCP, or native libraries on their product classpaths.
 | [Semantics](docs/SEMANTICS.md) | Roles, mappings, manifests, confidence, and coverage |
 | [Optimization SDK](docs/OPTIMIZATION_SDK.md) | Stable optimization IDs and catalog ownership |
 | [TestKit 0.x](docs/TESTKIT.md) | Java specs, runner isolation, reporters, snapshots, artifacts, and CLI |
+| [Gradle adoption](docs/GRADLE_TESTKIT.md) | Isolated build, plugin tasks, oracle profiles, migration, IDE, and CI |
 | [Extension authoring](docs/EXTENSIONS.md) | External test layers, provider boundary, optimization evidence, and legacy-mod limits |
 | [Changelog](CHANGELOG.md) | Stable scope and release history |
 | [Engineering guide](AGENTS.md) | Behavioral constitution and canonical gates |

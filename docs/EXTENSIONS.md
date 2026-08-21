@@ -1,5 +1,10 @@
 # Worldline extension authoring
 
+> **Current layout:** new integrations use the isolated Gradle project at
+> `tests/worldline`; see the [Gradle adoption guide](GRADLE_TESTKIT.md).
+> The manual commands later in this document remain useful for provider
+> development and low-level debugging.
+
 This guide explains how an external project can add Worldline tests,
 project-specific test helpers, runtime integration, and performance evidence
 without copying its implementation into Worldline.
@@ -37,22 +42,29 @@ be proved outside Minecraft.
 ```text
 project/
 |-- src/                              product source
-|-- worldline-tests/
-|   `-- src/test/java/                Java 8 TestKit specs
+|-- tests/worldline/
+|   |-- build.gradle.kts              isolated `dev.worldline.test` build
+|   |-- worldline.toml                runtime/profile selection
+|   |-- .local/oracles/b1.7.3/        ignored official-JAR drop zone
+|   `-- src/test/java/                Java 8 `*WorldlineTest.java` specs
 |-- worldline-extension/
 |   |-- src/main/java/                typed test helpers, if needed
 |   `-- README.md                     boundary and non-claims
 |-- optimizations/
 |   |-- catalog/                      project-owned optimization records
 |   `-- evidence/                     bounded summaries or pointers
-|-- worldline-test.properties         strict runner configuration
-`-- tools/testkit/Run.java            reproducible local/CI launcher
+`-- .github/workflows/                `worldlineTest` CI invocation
 ```
 
 Generated classes, reports, snapshots, worlds, and downloaded TestKit JARs
 must stay in ignored build directories.
 
-## 1. Build the TestKit distribution
+Initialize this layout with `worldline init`; Gradle compilation, runner
+provisioning, reports, locking, and IDE import are then owned by the plugin.
+The remaining direct-runner commands are the low-level provider-development
+surface.
+
+## 1. Build a low-level TestKit distribution
 
 From a verified Worldline checkout:
 
@@ -63,8 +75,8 @@ java tools/testkit/TestKitPackage.java
 
 The ignored distribution is written to `.worldline/dist/testkit` and contains:
 
-- `worldline-test-api-0.1.0.jar` for Java 8 authoring;
-- `worldline-test-runner-0.1.0.jar` for the Java 21 CLI;
+- `worldline-test-api-0.2.0.jar` for Java 8 authoring;
+- `worldline-test-runner-0.2.0.jar` for the Java 21 CLI;
 - deterministic SHA-256 checksums and launchers.
 
 Pin the version and checksum used by the external project. Do not commit a
@@ -83,7 +95,7 @@ import static worldline.test.Worldline.test;
 import worldline.test.WorldlineSpec;
 import example.storage.StorageIndex;
 
-public final class StorageIndexSpec extends WorldlineSpec {
+public final class StorageIndexWorldlineTest extends WorldlineSpec {
     @Override protected void define() {
         test("preserves the indexed total", context -> {
             StorageIndex index = new StorageIndex();
@@ -98,8 +110,8 @@ Compile the product and spec separately. Pass product outputs to the runner
 through the bounded classpath:
 
 ```text
-javac --release 8 -classpath worldline-test-api-0.1.0.jar;build/classes -d build/worldline-tests worldline-tests/src/test/java/example/tests/StorageIndexSpec.java
-java -jar worldline-test-runner-0.1.0.jar test run build/worldline-tests --classpath=build/classes --no-runtime
+javac --release 8 -classpath worldline-test-api-0.2.0.jar;build/classes -d build/worldline-tests tests/worldline/src/test/java/example/tests/StorageIndexWorldlineTest.java
+java -jar worldline-test-runner-0.2.0.jar test run build/worldline-tests --classpath=build/classes --no-runtime
 ```
 
 Use the platform classpath separator (`;` on Windows, `:` on Linux/macOS).
@@ -114,7 +126,7 @@ classpath=build/classes
 provider=none
 reporter=default,agent
 artifacts=build/worldline-results
-snapshots=worldline-tests/src/test/snapshots
+snapshots=tests/worldline/snapshots
 runtime.lock=build/worldline-runtime.lock
 ```
 
@@ -139,7 +151,7 @@ The default provider accepts one descriptor-packaged `B173Mod` per isolated
 attempt:
 
 ```text
-java -jar worldline-test-runner-0.1.0.jar test run build/worldline-tests \
+java -jar worldline-test-runner-0.2.0.jar test run build/worldline-tests \
   --mod=build/example-mod.jar \
   --provider=worldline.b173.B173TestRuntimeProvider
 ```

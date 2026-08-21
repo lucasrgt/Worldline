@@ -41,7 +41,7 @@ import static worldline.test.Worldline.describe;
 import static worldline.test.Worldline.pos;
 import static worldline.test.Worldline.test;
 
-public final class GlassProbeSpec extends WorldlineSpec {
+public final class GlassProbeWorldlineTest extends WorldlineSpec {
     @Override
     protected void define() {
         describe("GlassProbe", () -> {
@@ -64,7 +64,22 @@ public final class GlassProbeSpec extends WorldlineSpec {
 `test` and `it` are exact aliases. `describe` and `suite` are exact aliases.
 The methods collect an immutable plan before any test executes.
 
-## Project configuration
+## Gradle project configuration
+
+The canonical external-mod layout and command surface are documented in the
+[Gradle adoption guide](GRADLE_TESTKIT.md). In short:
+
+```text
+java -jar worldline-test-runner-0.2.0.jar init
+tests/worldline/gradlew.bat worldlineDoctor worldlineTest
+```
+
+Use ordinary `*WorldlineTest.java` files in
+`tests/worldline/src/test/java`. The older direct-runner configuration below
+remains supported as a low-level compatibility surface, not the recommended
+adoption path.
+
+### Legacy direct-runner configuration
 
 Place `worldline-test.properties` in the project root:
 
@@ -91,7 +106,7 @@ over 64 MiB, and unavailable providers fail before runtime execution.
 Compile a spec against only Java 8 API modules:
 
 ```text
-javac --release 8 -Xlint:all,-options -Werror -classpath worldline-test-api-0.1.0.jar -d build/test-classes src/test/java/example/GlassProbeSpec.java
+javac --release 8 -Xlint:all,-options -Werror -classpath worldline-test-api-0.2.0.jar -d build/test-classes src/test/java/example/GlassProbeWorldlineTest.java
 ```
 
 Use `:` instead of `;` in the classpath on Linux and macOS.
@@ -100,7 +115,7 @@ After `java tools/harness/Verify.java --smoke` has prepared the local adapter:
 
 ```text
 java tools/replay/Replay.java test
-java tools/replay/Replay.java test example.GlassProbeSpec
+java tools/replay/Replay.java test example.GlassProbeWorldlineTest
 ```
 
 The explicit form does not require a project file. Omit the class to discover
@@ -113,9 +128,9 @@ java tools/replay/Replay.java test run build/test-classes --classpath=build/clas
 Collection-only commands do not execute Minecraft:
 
 ```text
-java tools/replay/Replay.java test list build/test-classes example.GlassProbeSpec
-java tools/replay/Replay.java test inspect build/test-classes example.GlassProbeSpec
-java tools/replay/Replay.java test minimize build/test-classes example.GlassProbeSpec
+java tools/replay/Replay.java test list build/test-classes example.GlassProbeWorldlineTest
+java tools/replay/Replay.java test inspect build/test-classes example.GlassProbeWorldlineTest
+java tools/replay/Replay.java test minimize build/test-classes example.GlassProbeWorldlineTest
 ```
 
 Build ignored deterministic API and runner JARs plus PowerShell/CMD launchers:

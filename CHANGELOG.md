@@ -4,7 +4,20 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
-## Unreleased - Worldline TestKit 0.1.0 experimental
+## Unreleased - Worldline TestKit 0.2.0 experimental
+
+- Added the `dev.worldline.test` binary Gradle plugin, an isolated
+  `tests/worldline` Java 8 source set, Vitest-like run/list/watch/inspect/
+  snapshot/minimize tasks, JUnit XML, conservative product discovery, and a
+  Gradle TestKit functional suite.
+- Added `worldline init`, `doctor`, and non-destructive `migrate`; pinned the
+  Gradle wrapper; created ignored official-JAR drop zones; and added strict
+  local, environment, global-profile, and shared-artifact resolution.
+- Added frozen client/server identity checks, Git-tracking rejection, explicit
+  hash-verified acquisition, offline TestKit distributions, Plugin Portal and
+  GitHub release automation, CI integration, templates, and adoption docs.
+- Migrated the BetaEnergistics, Butter, and AeroModelLib consumer suites to
+  ordinary `*WorldlineTest.java` files under their `tests/worldline` builds.
 
 - Added the Java 8 `worldline.test` authoring API with `test`/`it`,
   `describe`/`suite`, hooks, table cases, explicit modifiers, typed

@@ -1,0 +1,41 @@
+name: Publish TestKit
+on:
+  push:
+    tags:
+      - testkit-v*
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21.0.12+8'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.14.4'
+      - name: Verify and package
+        run: |
+          java tools/harness/Verify.java
+          java tools/testkit/TestKitPackage.java
+      - name: Verify frozen distribution identities
+        run: |
+          echo "811e72bb1cf49c075c8936d953aeb6abddff0fb7943bef850358051aaeaec861  .worldline/dist/testkit/worldline-test-api-0.2.0.jar" | sha256sum --check
+          echo "69ecddc1aab517006ecd88febf0f7faec60bf404a0dcfa32795c0209f43a069f  .worldline/dist/testkit/worldline-test-runner-0.2.0.jar" | sha256sum --check
+      - name: Validate Gradle plugin
+        run: gradle -p tooling/gradle-plugin --project-cache-dir .worldline/gradle-plugin/cache test validatePlugins
+      - name: Publish Gradle plugin
+        env:
+          GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}
+          GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}
+        run: gradle -p tooling/gradle-plugin --project-cache-dir .worldline/gradle-plugin/cache publishPlugins
+      - name: Publish pinned release artifacts
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            .worldline/dist/testkit/worldline-test-api-*.jar
+            .worldline/dist/testkit/worldline-test-runner-*.jar
+            .worldline/dist/testkit/checksums.properties

@@ -1,0 +1,29 @@
+name: Worldline TestKit
+on:
+  workflow_call:
+    inputs:
+      project-directory:
+        type: string
+        default: tests/worldline
+      artifact-name:
+        type: string
+        default: minecraft-b1.7.3-oracle
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: ${{ inputs.project-directory }}/.local/oracles/b1.7.3
+      - uses: ./.github/actions/worldline-test
+        with:
+          project-directory: ${{ inputs.project-directory }}
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: worldline-test-results
+          path: |
+            ${{ inputs.project-directory }}/build/worldline/results
+            ${{ inputs.project-directory }}/build/test-results/worldlineTest

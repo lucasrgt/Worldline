@@ -1,0 +1,28 @@
+name: Worldline TestKit
+description: Verify and run an isolated tests/worldline project
+inputs:
+  project-directory:
+    description: Worldline Gradle project
+    default: tests/worldline
+  tasks:
+    description: Gradle tasks to execute
+    default: worldlineDoctor worldlineTest
+runs:
+  using: composite
+  steps:
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: '21'
+    - name: Run Worldline
+      shell: pwsh
+      env:
+        WORLDLINE_PROJECT: ${{ inputs.project-directory }}
+        WORLDLINE_TASKS: ${{ inputs.tasks }}
+      run: |
+        $project = Resolve-Path -LiteralPath $env:WORLDLINE_PROJECT
+        $arguments = @('-p', $project.Path) + ($env:WORLDLINE_TASKS -split '\s+') + @('--no-daemon')
+        if ($IsWindows) { & (Join-Path $project 'gradlew.bat') @arguments }
+        else { & (Join-Path $project 'gradlew') @arguments }
+        exit $LASTEXITCODE

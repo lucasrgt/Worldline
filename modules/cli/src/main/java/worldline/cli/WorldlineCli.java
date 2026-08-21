@@ -37,6 +37,12 @@ public final class WorldlineCli {
     public static int run(String[] arguments, PrintStream output, PrintStream error) {
         if (arguments == null) return usage(error);
         try {
+            if (arguments.length >= 1 && "init".equals(arguments[0]))
+                return WorldlineProjectInit.run(Arrays.copyOfRange(arguments, 1, arguments.length), output);
+            if (arguments.length >= 1 && "doctor".equals(arguments[0]))
+                return WorldlineProjectDoctor.run(Arrays.copyOfRange(arguments, 1, arguments.length), output);
+            if (arguments.length >= 1 && "migrate".equals(arguments[0]))
+                return WorldlineProjectMigrate.run(Arrays.copyOfRange(arguments, 1, arguments.length), output);
             if (arguments.length >= 1 && "test".equals(arguments[0]))
                 return TestCommand.run(arguments, output, error);
             if (arguments.length == 2 && "replay".equals(arguments[0]))
@@ -62,6 +68,8 @@ public final class WorldlineCli {
                 return SemanticsCommand.run(arguments, output, error);
             return usage(error);
         } catch (IOException | ReflectiveOperationException | RuntimeException failure) {
+            error.println("worldline command failed: " + failure.getMessage()); return 1;
+        } catch (Exception failure) {
             error.println("worldline command failed: " + failure.getMessage()); return 1;
         }
     }
@@ -175,6 +183,9 @@ public final class WorldlineCli {
     }
 
     private static int usage(PrintStream error) {
+        error.println("usage: worldline init [--runtime=b1.7.3] [--loader=NAME] [--template=NAME] [--host-only]");
+        error.println("   or: worldline doctor [tests/worldline]");
+        error.println("   or: worldline migrate [--root=PATH]");
         error.println("usage: worldline replay <bundle.wlrb>");
         error.println("   or: worldline trace show <trace.wltrace>");
         error.println("   or: worldline trace diff <left.wltrace> <right.wltrace>");
