@@ -116,7 +116,7 @@ public final class HostSmokePool {
             ProcessBuilder builder = isolated(config, profile, task, output, log, command).directory(root.toFile());
             builder.environment().put("JAVA_TOOL_OPTIONS", "-XX:+UseSerialGC -Xms16m -Xmx" + profile.heap);
             builder.environment().put("TEMP", tmp.toString()); builder.environment().put("TMP", tmp.toString());
-            builder.environment().put("GRADLE_USER_HOME", (prebuilt == null ? output.resolve("gradle") : root.resolve(".worldline/runtime-fabric/gradle")).toString());
+            builder.environment().put("GRADLE_USER_HOME", (prebuilt == null ? output.resolve("gradle") : root.resolve(".worldline/runtime-fabric/gradle").resolve(task.id)).toString());
             builder.environment().put("WORLDLINE_RUNTIME_SLOT", task.id);
             if (prebuilt != null) { builder.environment().put("WORLDLINE_AERO_PREBUILT", prebuilt.toString()); builder.environment().put("WORLDLINE_RUNTIME_TIMEOUT_EXTRA", "300"); }
             Process process = builder.start(); boolean finished = process.waitFor(task.timeoutSeconds + 15L, TimeUnit.SECONDS);
@@ -133,7 +133,7 @@ public final class HostSmokePool {
     }
 
     private Path prebuild(List<Task> tasks, Path batch) throws Exception { Path output = batch.resolve("aero-model-lib-3.0.0.jar"); List<String> command = new ArrayList<>(List.of(java(), "tools/containers/AeroPrebuild.java", output.toString()));
-        tasks.forEach(task -> command.add(task.argument)); ProcessBuilder builder = new ProcessBuilder(command).directory(root.toFile()).inheritIO(); builder.environment().put("GRADLE_USER_HOME", root.resolve(".worldline/runtime-fabric/gradle").toString()); Process process = builder.start();
+        tasks.forEach(task -> command.add(task.argument)); ProcessBuilder builder = new ProcessBuilder(command).directory(root.toFile()).inheritIO(); builder.environment().put("GRADLE_USER_HOME", root.resolve(".worldline/runtime-fabric/gradle/aero-prebuild").toString()); Process process = builder.start();
         require(process.waitFor(12, TimeUnit.MINUTES) && process.exitValue() == 0, "Aero batch prebuild failed"); return output; }
 
     private void verify() throws Exception {
