@@ -1,2 +1,3 @@
 **/descriptors/**/worldline-mod.properties text eol=lf
 tools/hooks/pre-push text eol=lf
+tools/containers/*.sh text eol=lf

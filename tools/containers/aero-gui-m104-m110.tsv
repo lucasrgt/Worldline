@@ -1,0 +1,8 @@
+# id	lane	source	argument	timeout-seconds
+m104-paired-pages-control	windows-client-gui	tools/smoke/PairedPagesControlCycle.java	m104-paired-pages-control	1800
+m105-paired-cache-capacity	windows-client-gui	tools/smoke/PairedCacheCapacityCycle.java	m105-paired-cache-capacity	1800
+m106-paired-min-instances	windows-client-gui	tools/smoke/PairedMinimumInstancesCycle.java	m106-paired-min-instances	1800
+m107-paired-skip-individual	windows-client-gui	tools/smoke/PairedSkipIndividualCycle.java	m107-paired-skip-individual	1800
+m108-paired-cell-size	windows-client-gui	tools/smoke/PairedCellSizeCycle.java	m108-paired-cell-size	1800
+m109-cell-size-floor	windows-client-gui	tools/smoke/CellSizeFloorCycle.java	m109-cell-size-floor	1800
+m110-cell-size-ceiling	windows-client-gui	tools/smoke/CellSizeCeilingCycle.java	m110-cell-size-ceiling	1800

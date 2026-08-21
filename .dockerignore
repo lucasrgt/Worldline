@@ -1,0 +1,10 @@
+.git
+local
+.worldline/*
+!.worldline/build
+!.worldline/build/**
+*.jar
+*.class
+**/build
+**/.gradle
+**/run
