@@ -7,7 +7,7 @@ final class SmokeCatalog {
         {"tools/smoke/SnapshotCycle.java", "m4-durable-snapshot"},
         {"tools/smoke/BundleCycle.java", "m5-reproduction-bundle"},
         {"tools/smoke/TraceCycle.java", "m6-trace-explorer"},
-        {"tools/smoke/ModCycle.java", "m7-mod-loading"},
+        {"tools/smoke/ModCycle.java", "m7-mod-loading"}, {"tools/smoke/TestKitCycle.java", "testkit-cycle"},
         {"tools/smoke/VersionCycle.java", "m8-mod-version-diff"},
         {"tools/smoke/MinimizationCycle.java", "m9-scenario-minimization"},
         {"tools/smoke/NativeRenderCycle.java", "m10-native-render"},

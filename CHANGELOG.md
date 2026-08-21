@@ -4,6 +4,28 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## Unreleased - Worldline TestKit 0.1.0 experimental
+
+- Added the Java 8 `worldline.test` authoring API with `test`/`it`,
+  `describe`/`suite`, hooks, table cases, explicit modifiers, typed
+  expectations, change assertions, snapshots, named steps, and promoted
+  semantic selectors.
+- Added the physical Java 8 `testmodel` boundary, per-test
+  `worldline().runtime().seed().mod().run()` configuration, structured semantic
+  divergence, mapping access/stability metadata, and seed-bearing results.
+- Added the Java 21 isolated runner with fresh runtime sessions, visible
+  flakiness, fail-closed `.only`, filtering, explicit shuffle, timeout
+  inventories, scenario minimization, canonical failure artifacts, and an
+  exclusive cross-process official-runtime lock.
+- Added default, verbose, dot, JSON, JUnit, and agent reporters plus multi-spec
+  discovery, bounded external classpaths, distinct file/test filters,
+  `run`/`list`/`inspect`/`watch`/`minimize`, and strict project configuration.
+- Added deterministic ignored API/runner packaging, the b1.7.3 provider, a
+  ten-spec/30-test acceptance suite, and external Butter/AeroModelLib consumers.
+- This is not a promoted stable release or a change to the official M469
+  behavioral evidence. TestKit remains 0.x until external-mod use validates
+  the authoring surface.
+
 ## 1.446.0 - M469 Void death set
 
 Status: GO for official void walk-off Packet8 death plus Packet9 respawn together.

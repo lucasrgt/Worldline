@@ -53,6 +53,14 @@ ItemCensus / GameUi.nodes() -> worldline-invariants
 SemanticMapping -> worldline-semantics
 
 OptimizationRef -> worldline-optimization -> owner-controlled catalog
+
+external Java 8 spec -> worldline-testapi -> worldline-testmodel -> worldline-testkit -> provider SPI
+                                                |                |
+                                                v                v
+                                      immutable results     b173 adapter
+                                                |
+                                                v
+                                console / JSON / JUnit / agent
 ```
 
 The modules are physical source roots and are compiled separately. The API is
@@ -61,6 +69,31 @@ its classpath. Reproduction depends only on the API; CLI depends only on API
 and the stable product modules it exposes. Analysis depends only on trace.
 This makes every declared dependency direction executable rather than
 conventional.
+
+### `testmodel`, `testapi`, and `testkit`
+
+`worldline-testmodel` is the Java 8 neutral model boundary. It owns immutable
+plans, contexts, results, status values, semantic divergence data, and reporter
+events. `worldline-testapi` is the Java 8 authoring facade above it. It owns the
+typed internal Java DSL (`test`/`it`, suites, hooks, expectations), fluent
+per-test configuration, runtime-provider SPI, and the initial evidence-backed
+selector catalog. Neither contains a runner, filesystem policy, Minecraft
+classes, or mapped names.
+
+`worldline-testkit` is Java 21 tooling above the neutral artifact modules. It
+owns multi-spec discovery execution, selection, fresh-attempt isolation,
+timeout and retry policy, external snapshots, artifacts, minimization, and
+event-driven reporters. Every official runtime attempt holds a process-local
+and cross-process exclusive lease. The executor remains sequential even when
+a collected test requests concurrency; runtime concurrency fails closed.
+
+The CLI discovers top-level specs or loads an explicitly named `WorldlineSpec`
+from a bounded JAR or class directory. A separate bounded classpath exposes the
+mod's own product classes without weakening the spec code-source check. The runtime-specific
+`B173TestRuntimeProvider` stays in the mapped adapter and is discovered by
+class name. Therefore an external mod compiles only against the packaged Java
+8 authoring JAR (`api`, `testmodel`, and `testapi`), while the runner can use
+modern Java without raising the mod's bytecode level.
 
 ### `optimization`
 

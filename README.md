@@ -4,6 +4,7 @@
 
 <p align="center">
   <a href="#getting-started">Getting Started</a> |
+  <a href="#worldline-testkit">TestKit</a> |
   <a href="#mod-testing">Mod Testing</a> |
   <a href="#capabilities">Capabilities</a> |
   <a href="#documentation">Documentation</a>
@@ -64,6 +65,7 @@ behavior evidence without silently widening those early public APIs.
 | M68-M110 | Real Aero client composition, renderer census, cell pages, cache pressure, and controls | GO |
 | M111-M469 | Official vanilla world, block, item, entity, crafting, AI, damage, and death behavior sets | GO |
 | M469 | Current release: official void walk-off death and respawn set | GO |
+| TestKit 0.x | Experimental Java specs, isolated runner, reporters, artifacts, and CLI | EXPERIMENTAL |
 
 Version and frozen signatures are authoritative in
 [`release/worldline.properties`](release/worldline.properties). The promotion
@@ -79,7 +81,8 @@ Requirements:
 
 - JDK 21 for the repository harness
 - `tokei` 14 or newer for source ceilings
-- Java 8 bytecode compatibility for product modules
+- Java 8 bytecode compatibility for `api`, `testmodel`, `testapi`, adapters, and mod-facing contracts
+- Java 21 bytecode for the TestKit runner, CLI, and repository tooling
 
 ```text
 java tools/harness/Verify.java
@@ -142,12 +145,79 @@ Adapter factories remain runtime-specific.
 
 ---
 
+## Worldline TestKit
+
+Worldline TestKit 0.x turns the controlled runtime into an external-mod test
+experience without freezing an untested 1.0 API. Specs are ordinary Java 8,
+so existing Java formatters, syntax highlighting, completion, refactoring, and
+debuggers work without a custom editor plugin:
+
+```java
+import static worldline.test.Expect.expect;
+import static worldline.test.Worldline.*;
+
+public final class GlassProbeSpec extends WorldlineSpec {
+    @Override protected void define() {
+        describe("GlassProbe", () -> {
+            test("places glass", worldline().runtime("b1.7.3").seed(173L)
+                    .mod("build/glass-probe.jar").run(context -> {
+                context.setBlock(pos(8, 65, 8), block("b1.7.3:glass"));
+                context.tick();
+                expect(context.block(pos(8, 65, 8)))
+                        .toEqual(block("b1.7.3:glass"));
+            })).tag("block").timeout(5_000);
+        });
+    }
+}
+```
+
+`test` and `it` are exact aliases; `describe` and `suite` are exact aliases.
+Hooks, table tests, `.skip()`, `.todo()`, `.only()`, explicit retries,
+snapshots, filters, watch mode, and named minimizable steps are included.
+Top-level specs are discovered automatically, while `--classpath` exposes the
+mod's separately compiled product classes without weakening source isolation.
+
+With a strict `worldline-test.properties` in the mod project:
+
+```text
+java tools/replay/Replay.java test
+java tools/replay/Replay.java test GlassProbeSpec
+```
+
+Or run one explicit source and class:
+
+```text
+java tools/replay/Replay.java test run build/test-classes --classpath=build/classes --mod=build/glass-probe.jar --reporter=verbose
+```
+
+Build deterministic ignored JARs for external projects:
+
+```text
+java tools/testkit/TestKitPackage.java
+```
+
+The runner creates a fresh runtime for every attempt and retry, holds an
+exclusive cross-process runtime lock, never executes official runtimes
+concurrently, and marks retry-only passes as `FLAKY`. Failures can emit a
+canonical trace, durable runtime snapshot, provenance-bound `.wlmtest`, named
+scenario, minimized scenario, and timeout inventory. Reporters include
+default, verbose, dot, JSON, JUnit, and agent output.
+
+Only promoted semantic mappings enter the friendly selector catalog. Unknown
+or read-only mappings fail with a stable `WLTEST` diagnostic instead of
+guessing an ID or obfuscated field.
+
+See the complete [TestKit guide](docs/TESTKIT.md) and the
+[ten-spec, 30-test example project](examples/testkit/README.md).
+
+---
+
 ## Mod testing
 
 Worldline can load trusted, independently packaged Java mods and compare their
-observable behavior. The package contract is stable; the external test-author
-experience is still a controlled-laboratory workflow rather than a published
-Maven/Gradle TestKit.
+observable behavior. The package contract is stable. TestKit 0.x is the new
+experimental external authoring layer; the lower-level commands remain useful
+for inspecting and comparing canonical artifacts directly.
 
 ### Package a Worldline mod
 
@@ -200,7 +270,8 @@ applies.
 
 `mod test record` binds caller-supplied inputs; it does **not** attest that the
 trace came from executing that JAR. The M8 smoke owns the stronger execution
-boundary. A public one-command `mod test run` is not implemented yet.
+boundary. TestKit's runtime runner owns the stronger one-command execution and
+automatically records a `.wlmtest` on failure when a mod JAR is configured.
 
 ### Create and minimize scenarios
 
@@ -313,6 +384,11 @@ worldline-api <----------- worldline-kernel ----------> b1.7.3 adapter
                                   v
                                  CLI
 
+external Java 8 spec -> testapi -> testmodel -> testkit (Java 21) -> provider SPI
+                                      |                    |
+                                      v                    v
+                              reporters/artifacts      b1.7.3 adapter
+
 official JAR oracle -------- same trace protocol -------- subject
 ```
 
@@ -342,6 +418,12 @@ java tools/replay/Replay.java mod test diff <left.wlmtest> <right.wlmtest>
 
 java tools/replay/Replay.java scenario create <output.wlscenario> [step ...]
 java tools/replay/Replay.java scenario inspect <scenario.wlscenario>
+
+java tools/replay/Replay.java test
+java tools/replay/Replay.java test run <spec.jar|classes> [spec.class] [options]
+java tools/replay/Replay.java test list <spec.jar|classes> [spec.class]
+java tools/replay/Replay.java test watch <spec.jar|classes> [spec.class] [options]
+java tools/replay/Replay.java test minimize <spec.jar|classes> [spec.class] [options]
 ```
 
 Neutral inspection and comparison commands do not require Minecraft, mapped
@@ -370,6 +452,7 @@ classes, RetroMCP, or native libraries on their product classpaths.
 | [Invariants](docs/INVARIANTS.md) | Observation model and fail-closed rules |
 | [Semantics](docs/SEMANTICS.md) | Roles, mappings, manifests, confidence, and coverage |
 | [Optimization SDK](docs/OPTIMIZATION_SDK.md) | Stable optimization IDs and catalog ownership |
+| [TestKit 0.x](docs/TESTKIT.md) | Java specs, runner isolation, reporters, snapshots, artifacts, and CLI |
 | [Changelog](CHANGELOG.md) | Stable scope and release history |
 | [Engineering guide](AGENTS.md) | Behavioral constitution and canonical gates |
 
@@ -383,8 +466,8 @@ Every promoted milestone also has a `*_CYCLE.md` completion audit and a smoke
 Worldline currently targets:
 
 - Minecraft Beta 1.7.3
-- Java 8 bytecode for product modules
-- JDK 21 for the repository harness
+- Java 8 bytecode for stable APIs, TestKit authoring API, adapters, and mods
+- Java 21 bytecode for TestKit runner, CLI, tests, and repository harness
 - a hash-pinned official client JAR kept only under ignored local storage
 - a pinned RetroMCP revision for mapped adapter construction
 - trusted local Worldline mod JARs using runtime `b1.7.3` and mod API `1`
@@ -392,8 +475,8 @@ Worldline currently targets:
 Worldline is not a general Minecraft launcher, a security sandbox, or a
 drop-in loader for legacy ModLoader/Forge mods. The current public mod boundary
 does not provide dependency resolution, multiple-mod ordering, permissions,
-hot reload, arbitrary private-state capture, or a published Maven/Gradle
-TestKit. Native rendering, Aero integration, official-server control, and the
+hot reload, arbitrary private-state capture, or a stable published Maven/Gradle
+TestKit 1.0. Native rendering, Aero integration, official-server control, and the
 vanilla behavior suites are bounded evidence with milestone-specific
 non-claims; [`docs/ROADMAP.md`](docs/ROADMAP.md) is the complete ledger.
 

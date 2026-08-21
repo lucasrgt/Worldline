@@ -195,7 +195,8 @@ public final class Verify {
             List<Path> dependencyOutputs = values("module." + module + ".dependencies").stream()
                     .map(dependency -> build.resolve("classes").resolve(dependency))
                     .collect(Collectors.toList());
-            compile(javaFiles(moduleRoot(module).resolve("src/main/java")), output, dependencyOutputs);
+            compile(javaFiles(moduleRoot(module).resolve("src/main/java")), output, dependencyOutputs,
+                    config.getProperty("module." + module + ".release", required("java.release")));
             outputs.add(output);
             System.out.println("  compiled module " + module);
         }
@@ -215,17 +216,17 @@ public final class Verify {
         }
         Path output = build.resolve("test-classes");
         Files.createDirectories(output);
-        compile(tests, output, outputs);
+        compile(tests, output, outputs, required("test.release"));
         System.out.println("  compiled tests");
         return output;
     }
 
-    private void compile(List<Path> sources, Path output, List<Path> classpath) throws Exception {
+    private void compile(List<Path> sources, Path output, List<Path> classpath, String release) throws Exception {
         if (sources.isEmpty()) {
             throw new IllegalStateException("no Java sources for " + relative(output));
         }
         List<String> command = new ArrayList<>(Arrays.asList(
-                "javac", "-encoding", "UTF-8", "--release", required("java.release"),
+                "javac", "-encoding", "UTF-8", "--release", release,
                 "-Xlint:all,-options", "-Werror", "-d", output.toString()));
         if (!classpath.isEmpty()) {
             command.add("-classpath");

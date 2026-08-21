@@ -37,6 +37,8 @@ public final class WorldlineCli {
     public static int run(String[] arguments, PrintStream output, PrintStream error) {
         if (arguments == null) return usage(error);
         try {
+            if (arguments.length >= 1 && "test".equals(arguments[0]))
+                return TestCommand.run(arguments, output, error);
             if (arguments.length == 2 && "replay".equals(arguments[0]))
                 return replay(arguments[1], output);
             if (arguments.length == 3 && "trace".equals(arguments[0])
