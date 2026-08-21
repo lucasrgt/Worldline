@@ -162,6 +162,17 @@ Every `open` call must return a fresh session whose runtime implements
 `AutomatedMinecraftRuntime`. Closing the session must close the runtime,
 loader, files, and background resources together.
 
+Storage and automation providers may additionally implement neutral optional
+capabilities: `ChunkLifecycleRuntime` for explicit load/unload,
+`TileObservableRuntime` for immutable tile observations, and
+`RuntimeWorkObservable` for deterministic named work counters. Specs must
+check a capability explicitly and fail or skip clearly when it is absent.
+
+Inventory adapters can publish a fail-closed `MutationCoverage` manifest.
+Every `MutationBoundary` names a promoted mapping, evidence, and one precision
+level: exact `PUSH`, provider-local `DIRTY_NOTIFY`, or bounded `POLL`.
+`requireAll` rejects missing paths. A guessed method name is not coverage.
+
 A provider that reads, transforms, instruments, or executes Minecraft belongs
 in a Worldline adapter or in an equally strict runtime repository. It requires:
 

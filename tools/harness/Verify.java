@@ -67,9 +67,16 @@ public final class Verify {
         Path testOutput = compileTests(modules, outputs);
         runTests(outputs, testOutput);
         if (runSmoke) {
-            run(Arrays.asList("java", "tools/harness/SmokeSuite.java"));
+            runSmokeSuite();
         }
         System.out.println("verify passed"); }
+
+    private void runSmokeSuite() throws Exception {
+        Path output = build.resolve("smoke-suite"); Files.createDirectories(output);
+        run(Arrays.asList("javac", "-d", output.toString(),
+                "tools/harness/SmokeCatalog.java", "tools/harness/SmokeSuite.java"));
+        run(Arrays.asList("java", "-cp", output.toString(), "SmokeSuite"));
+    }
 
     private void loadConfiguration() throws IOException {
         Path path = root.resolve("harness.properties");
