@@ -118,7 +118,7 @@ public final class HostSmokePool {
             builder.environment().put("TEMP", tmp.toString()); builder.environment().put("TMP", tmp.toString());
             builder.environment().put("GRADLE_USER_HOME", (prebuilt == null ? output : batch).resolve("gradle").toString());
             builder.environment().put("WORLDLINE_RUNTIME_SLOT", task.id);
-            if (prebuilt != null) builder.environment().put("WORLDLINE_AERO_PREBUILT", prebuilt.toString());
+            if (prebuilt != null) { builder.environment().put("WORLDLINE_AERO_PREBUILT", prebuilt.toString()); builder.environment().put("WORLDLINE_RUNTIME_TIMEOUT_EXTRA", "300"); }
             Process process = builder.start(); boolean finished = process.waitFor(task.timeoutSeconds + 15L, TimeUnit.SECONDS);
             if (!finished) killTree(process); require(finished, "timeout after " + task.timeoutSeconds + "s");
             require(process.exitValue() == 0, "exit " + process.exitValue() + "; see " + log);
