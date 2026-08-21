@@ -84,6 +84,7 @@ public final class Verify {
             run(Arrays.asList("java", "tools/smoke/ScenarioDslCycle.java", "m14-scenario-dsl"));
             run(Arrays.asList("java", "tools/smoke/FuzzCycle.java", "m15-fuzz"));
             run(Arrays.asList("java", "tools/smoke/DebugCycle.java", "m16-debug"));
+            run(Arrays.asList("java", "tools/smoke/ProfileCycle.java", "m17-profile"));
         }
         System.out.println("verify passed");
     }

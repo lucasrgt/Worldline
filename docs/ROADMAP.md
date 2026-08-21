@@ -25,6 +25,7 @@ Passing an experiment does not silently promote its API.
 | Pre-push gate | Versioned hook running the canonical gate before every push | GO - stable milestone |
 | M15 | Deterministic differential fuzzer with auto-minimized findings | GO - stable milestone |
 | M16 | Time-travel debug REPL with deterministic reverse jumps and watchpoints | GO - stable milestone |
+| M17 | Per-tick profiling with machine-relative budget gates | GO - stable milestone |
 
 ## Promotion rule
 

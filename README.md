@@ -65,6 +65,7 @@ automatic scenario minimization.
 | Pre-push gate | Versioned hook running the canonical gate before every push | GO |
 | M15 | Deterministic differential fuzzer with auto-minimized findings | GO |
 | M16 | Time-travel debug REPL with deterministic reverse jumps and watchpoints | GO |
+| M17 | Per-tick profiling with machine-relative budget gates | GO |
 
 Version and frozen signatures are authoritative in
 [`release/worldline.properties`](release/worldline.properties). The promotion
@@ -396,6 +397,7 @@ java tools/replay/Replay.java scenario validate <scenario.wlscenario>
 java tools/replay/Replay.java scenario run <scenario.wlscenario> <seed> <trace.wltrace>
 java tools/replay/Replay.java fuzz <out-dir> <seed> <cases> <steps> [left.jar] [right.jar]
 java tools/replay/Replay.java debug <scenario.wlscenario> <seed>
+java tools/replay/Replay.java profile <scenario.wlscenario> <seed> [budget.properties]
 ```
 
 Neutral inspection and comparison commands do not require Minecraft, mapped
@@ -424,6 +426,7 @@ classes, RetroMCP, or native libraries on their product classpaths.
 | [M14 scenario DSL](docs/M14_SCENARIO_DSL.md) | Public step grammar, validation, and execution |
 | [M15 fuzzer](docs/M15_FUZZ.md) | Deterministic differential campaigns and auto-minimized findings |
 | [M16 time-travel debug](docs/M16_TIME_TRAVEL.md) | Scriptable debug REPL with exact reverse jumps and watchpoints |
+| [M17 profiling](docs/M17_PROFILE.md) | Per-tick wall-clock samples, mod attribution, and budget gates |
 | [GUI tree](docs/GUI_TREE.md) | Semantic inventory UI and Butter bridge |
 | [Invariants](docs/INVARIANTS.md) | Observation model and fail-closed rules |
 | [Semantics](docs/SEMANTICS.md) | Roles, mappings, manifests, confidence, and coverage |

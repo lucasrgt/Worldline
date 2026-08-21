@@ -4,6 +4,24 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## Unreleased - M17 Tick Profiling
+
+Status: GO.
+
+- Added `worldline profile <scenario> <seed> [budget.properties]`: per-
+  controlled-tick wall-clock sampling with mod-callback attribution via the
+  hook layer, deterministic nearest-rank aggregates, and canonical
+  checksum-protected `WORLDLINE-PROFILE/1` reports that pair timings with the
+  behavioral trace digest.
+- Added the strict optional-key budget gate (exit 3 with per-key violations)
+  for machine-relative regression control; timing values are never frozen
+  evidence, only structure and gate outcomes are.
+- Added the neutral `profiling` module (`ProfiledRunner`, `TickProfile`,
+  `TickProfiledRun`, `ProfileBudget`, `ProfileReport`) with full unit
+  coverage; adapter binding via `worldline.profile.provider`.
+- Evidence: structural smoke with tight-budget rejection and generous-budget
+  pass; frozen SHA-256 in `smokes/m17-profile/smoke.properties`.
+
 ## Unreleased - M16 Time-Travel Debug
 
 Status: GO.
