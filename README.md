@@ -67,6 +67,7 @@ automatic scenario minimization.
 | M16 | Time-travel debug REPL with deterministic reverse jumps and watchpoints | GO |
 | M17 | Per-tick profiling with machine-relative budget gates | GO |
 | M18 | Dynamic scenario coverage against the semantic catalog | GO |
+| HTML evidence | Deterministic self-contained trace viewer and diff pages | GO |
 
 Version and frozen signatures are authoritative in
 [`release/worldline.properties`](release/worldline.properties). The promotion
@@ -400,6 +401,7 @@ java tools/replay/Replay.java fuzz <out-dir> <seed> <cases> <steps> [left.jar] [
 java tools/replay/Replay.java debug <scenario.wlscenario> <seed>
 java tools/replay/Replay.java profile <scenario.wlscenario> <seed> [budget.properties]
 java tools/replay/Replay.java coverage <scenario.wlscenario> [trace.wltrace] [min-percent]
+java tools/replay/Replay.java trace html <left.wltrace> [right.wltrace] <output.html>
 ```
 
 Neutral inspection and comparison commands do not require Minecraft, mapped

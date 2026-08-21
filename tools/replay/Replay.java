@@ -21,7 +21,9 @@ public final class Replay {
         boolean replay = arguments.length == 2 && arguments[0].equals("replay");
         boolean trace = (arguments.length == 3 && arguments[0].equals("trace")
                 && arguments[1].equals("show")) || (arguments.length == 4
-                && arguments[0].equals("trace") && arguments[1].equals("diff"));
+                && arguments[0].equals("trace") && arguments[1].equals("diff"))
+                || (arguments.length >= 4 && arguments.length <= 5
+                && arguments[0].equals("trace") && arguments[1].equals("html"));
         boolean mod = (arguments.length == 3 && arguments[0].equals("mod")
                 && arguments[1].equals("inspect")) || (arguments.length == 6
                 && arguments[0].equals("mod") && arguments[1].equals("test")
@@ -50,7 +52,7 @@ public final class Replay {
             System.err.println("usage: java tools/replay/Replay.java replay <bundle.wlrb>");
             System.err.println("   or: java tools/replay/Replay.java trace show <trace.wltrace>");
             System.err.println("   or: java tools/replay/Replay.java trace diff <left.wltrace> <right.wltrace>");
-            System.err.println("   or: java tools/replay/Replay.java mod inspect <mod.jar>");
+            System.err.println("   or: java tools/replay/Replay.java trace html <left> [right] <output.html>");            System.err.println("   or: java tools/replay/Replay.java mod inspect <mod.jar>");
             System.err.println("   or: java tools/replay/Replay.java mod test record <mod.jar> <trace> <result>");
             System.err.println("   or: java tools/replay/Replay.java mod test diff <left> <right>");
             System.err.println("   or: java tools/replay/Replay.java mod test run <mod.jar> <seed> <ticks> <result>");

@@ -27,6 +27,7 @@ Passing an experiment does not silently promote its API.
 | M16 | Time-travel debug REPL with deterministic reverse jumps and watchpoints | GO - stable milestone |
 | M17 | Per-tick profiling with machine-relative budget gates | GO - stable milestone |
 | M18 | Dynamic scenario coverage against the semantic catalog | GO - stable milestone |
+| HTML evidence | Deterministic self-contained trace viewer and diff pages | GO - stable milestone |
 
 ## Promotion rule
 

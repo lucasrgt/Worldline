@@ -4,6 +4,19 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## Unreleased - HTML Evidence Pages
+
+Status: GO.
+
+- Added `worldline trace html <left> [right] <output.html>`: deterministic
+  self-contained pages for single-trace viewing and two-trace structural
+  diffing with first-divergence highlighting and explicit verdicts.
+- Added the neutral `analysis.TraceHtml` renderer: pure function of its
+  inputs, no scripts or assets, escaped output, byte-identical re-renders so
+  page digests are freezable evidence.
+- Evidence: viewer and diff pages rendered from real controlled runs in the
+  m19 smoke; frozen SHA-256 in `smokes/m19-html/smoke.properties`.
+
 ## Unreleased - M18 Runtime Coverage
 
 Status: GO.

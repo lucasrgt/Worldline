@@ -28,6 +28,8 @@ public final class WorldlineCli {
                     && "show".equals(arguments[1])) return show(arguments[2], output);
             if (arguments.length == 4 && "trace".equals(arguments[0])
                     && "diff".equals(arguments[1])) return diff(arguments[2], arguments[3], output);
+            if ("trace".equals(arguments[0]) && arguments.length >= 4)
+                return TraceHtmlCommand.run(arguments, output, error);
             if ("mod".equals(arguments[0]) && arguments.length >= 3)
                 return mod(arguments, output, error);
             if ("scenario".equals(arguments[0]) && arguments.length >= 3)
@@ -97,6 +99,7 @@ public final class WorldlineCli {
         error.println("usage: worldline replay <bundle.wlrb>");
         error.println("   or: worldline trace show <trace.wltrace>");
         error.println("   or: worldline trace diff <left.wltrace> <right.wltrace>");
+        error.println("   or: worldline trace html <left.wltrace> [right.wltrace] <output.html>");
         error.println("   or: worldline mod inspect <mod.jar>");
         error.println("   or: worldline mod test record <mod.jar> <trace.wltrace> <result.wlmtest>");
         error.println("   or: worldline mod test diff <left.wlmtest> <right.wlmtest>");
