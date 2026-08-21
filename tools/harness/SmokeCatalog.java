@@ -122,7 +122,8 @@ final class SmokeCatalog {
         {"tools/smoke/LabCycle.java", "lab-cycle"}, {"tools/smoke/ModApiCycle.java", "m11-mod-api"}, {"tools/smoke/ModRunCycle.java", "m12-mod-run"}, {"tools/smoke/ModGraphCycle.java", "m13-mod-graph"},
         {"tools/smoke/ScenarioDslCycle.java", "m14-scenario-dsl"}, {"tools/smoke/CensusCycle.java", "census-cycle"}, {"tools/smoke/AtlasCycle.java", "seed-atlas"}, {"tools/smoke/UiExportCycle.java", "ui-export"},
         {"tools/smoke/SpiderClimbSetCycle.java", "m447-spider-climb-set"},
-        {"tools/smoke/WolfAngerSetCycle.java", "m449-wolf-anger-set"}
+        {"tools/smoke/WolfAngerSetCycle.java", "m449-wolf-anger-set"},
+        {"tools/smoke/ArmorReductionSetCycle.java", "m451-armor-reduction-set"}
     };
     private SmokeCatalog() {}
 }
