@@ -137,7 +137,8 @@ final class SmokeCatalog {
         {"tools/smoke/Run.java", "m503-sw-pig-wander"},
         {"tools/smoke/Run.java", "m513-sw-water-downward-flow"},
         {"tools/smoke/Run.java", "m514-sw-lava-downward-flow"},
-        {"tools/smoke/Run.java", "m515-sw-fire-support-extinguish"}
+        {"tools/smoke/Run.java", "m515-sw-fire-support-extinguish"},
+        {"tools/smoke/HotbarEmptySelectionCycle.java", "m521-sw-hotbar-empty-selection"}
     };
     private SmokeCatalog() {}
 }
