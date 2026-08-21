@@ -7,9 +7,11 @@ import java.security.MessageDigest;
 import java.time.Duration;
 import worldline.api.BlockPosition;
 import worldline.api.PlayerPose;
+import worldline.api.RemoteChunkSnapshot;
 import worldline.api.RemoteWorldView;
 import worldline.api.SustainedRemoteWorldMultiplayerSession;
 import worldline.b173server.B173DedicatedServer;
+import worldline.b173server.B173PlayerSeed;
 import worldline.b173server.B173WireClient;
 
 /** Proves an invalid movement converges to the server pose without losing the cache. */
@@ -30,10 +32,13 @@ public final class PoseCorrectionSmoke {
         SustainedRemoteWorldMultiplayerSession client = new B173WireClient("127.0.0.1", port, username, timeout);
         PlayerPose initial, attempted, corrected; RemoteWorldView after;
         try {
-            server.boot(); client.connect(); initial = client.synchronizePose();
-            int chunkX = (int) Math.floor(initial.x()) >> 4, chunkZ = (int) Math.floor(initial.z()) >> 4;
-            client.awaitRemoteChunk(chunkX, chunkZ); RemoteWorldView before = client.sustainTicks(5);
-            BlockPosition block = solid(before, initial);
+            server.boot(); B173PlayerSeed.write(workspace, username, 4.5D, 60D, 4.5D);
+            client.connect(); initial = client.synchronizePose();
+            RemoteWorldView before = client.awaitRemoteWorld(1);
+            RemoteChunkSnapshot witness = before.chunks().get(0);
+            int chunkX = Math.floorDiv(witness.observation().x(), 16);
+            int chunkZ = Math.floorDiv(witness.observation().z(), 16);
+            BlockPosition block = solid(before);
             attempted = client.moveBy(block.x() + .5D - initial.x(), block.y() - initial.y(),
                     block.z() + .5D - initial.z()); after = client.sustainTicks(10);
             corrected = client.moveBy(0, 0, 0);
@@ -48,17 +53,15 @@ public final class PoseCorrectionSmoke {
         System.out.println("WORLDLINE_M34_SIGNATURE=" + sha256(TRACE));
     }
 
-    private static BlockPosition solid(RemoteWorldView world, PlayerPose pose) {
-        int centerX = (int) Math.floor(pose.x()), centerY = (int) Math.floor(pose.y());
-        int centerZ = (int) Math.floor(pose.z());
-        for (int y = centerY; y >= centerY - 5; y--) for (int radius = 0; radius <= 4; radius++)
-            for (int x = centerX - radius; x <= centerX + radius; x++)
-                for (int z = centerZ - radius; z <= centerZ + radius; z++) {
-                    if (!world.containsChunk(Math.floorDiv(x, 16), Math.floorDiv(z, 16))) continue;
-                    int id = world.blockAt(x, y, z).legacyId();
-                    if (id > 0 && (id < 7 || id > 11)) return new BlockPosition(x, y, z);
-                }
-        throw new IllegalStateException("nearby solid block absent");
+    private static BlockPosition solid(RemoteWorldView world) {
+        for (RemoteChunkSnapshot chunk : world.chunks()) {
+            int baseX = chunk.observation().x(), baseZ = chunk.observation().z();
+            for (int y = 127; y >= 0; y--) for (int x = 0; x < 16; x++)
+                for (int z = 0; z < 16; z++) { int id = chunk.blockAt(x, y, z).legacyId();
+                    if (id > 0 && (id < 7 || id > 11))
+                        return new BlockPosition(baseX + x, y, baseZ + z); }
+        }
+        throw new IllegalStateException("remote solid block absent");
     }
     private static String pose(PlayerPose value) { return value.x() + "," + value.y() + "," + value.z(); }
     private static String sha256(String value) throws Exception { byte[] bytes = MessageDigest.getInstance("SHA-256")
