@@ -148,7 +148,8 @@ final class SmokeCatalog {
         {"tools/smoke/Run.java", "m511-sw-redstone-ore-trigger"},
         {"tools/smoke/Run.java", "m509-sw-redstone-wire-fanout"},
         {"tools/smoke/Run.java", "m510-sw-redstone-wire-loop-recovery"},
-        {"tools/smoke/Run.java", "m525-sw-wire-crossing-isolation"}
+        {"tools/smoke/Run.java", "m525-sw-wire-crossing-isolation"},
+        {"tools/smoke/Run.java", "m517-sw-item-despawn-age"}
     };
     private SmokeCatalog() {}
 }
