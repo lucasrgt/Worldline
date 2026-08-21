@@ -116,7 +116,7 @@ public final class HostSmokePool {
             ProcessBuilder builder = isolated(config, profile, task, output, log, command).directory(root.toFile());
             builder.environment().put("JAVA_TOOL_OPTIONS", "-XX:+UseSerialGC -Xms16m -Xmx" + profile.heap);
             builder.environment().put("TEMP", tmp.toString()); builder.environment().put("TMP", tmp.toString());
-            builder.environment().put("GRADLE_USER_HOME", output.resolve("gradle").toString());
+            builder.environment().put("GRADLE_USER_HOME", (prebuilt == null ? output : batch).resolve("gradle").toString());
             builder.environment().put("WORLDLINE_RUNTIME_SLOT", task.id);
             if (prebuilt != null) builder.environment().put("WORLDLINE_AERO_PREBUILT", prebuilt.toString());
             Process process = builder.start(); boolean finished = process.waitFor(task.timeoutSeconds + 15L, TimeUnit.SECONDS);
@@ -133,7 +133,7 @@ public final class HostSmokePool {
     }
 
     private Path prebuild(List<Task> tasks, Path batch) throws Exception { Path output = batch.resolve("aero-model-lib-3.0.0.jar"); List<String> command = new ArrayList<>(List.of(java(), "tools/containers/AeroPrebuild.java", output.toString()));
-        tasks.forEach(task -> command.add(task.argument)); Process process = new ProcessBuilder(command).directory(root.toFile()).inheritIO().start();
+        tasks.forEach(task -> command.add(task.argument)); ProcessBuilder builder = new ProcessBuilder(command).directory(root.toFile()).inheritIO(); builder.environment().put("GRADLE_USER_HOME", batch.resolve("gradle").toString()); Process process = builder.start();
         require(process.waitFor(12, TimeUnit.MINUTES) && process.exitValue() == 0, "Aero batch prebuild failed"); return output; }
 
     private void verify() throws Exception {
