@@ -23,11 +23,15 @@ final class SemanticsCommand {
             return adapters(output, error);
         if (arguments.length == 3 && "adapter".equals(arguments[1]))
             return adapter(arguments[2], output, error);
+        if (arguments.length == 4 && "adapter".equals(arguments[1])
+                && "check".equals(arguments[2]))
+            return adaptersFrom(arguments[3], output, error);
         error.println("usage: worldline semantics show");
         error.println("   or: worldline semantics graph");
         error.println("   or: worldline semantics category <name>");
         error.println("   or: worldline semantics role <ROLE>");
         error.println("   or: worldline semantics adapter [name]");
+        error.println("   or: worldline semantics adapter check <repository-root>");
         return 2;
     }
 
@@ -71,7 +75,8 @@ final class SemanticsCommand {
         try {
             output.println("WORLDLINE_SEMANTICS_ADAPTER=PASS");
             for (AdapterManifest manifest : load()) {
-                output.println(manifest.adapter() + "=" + manifest.sites().size());
+                output.println(manifest.adapter() + "=" + manifest.kind()
+                        + ":" + manifest.sites().size());
             }
             return 0;
         } catch (Exception failure) {
@@ -96,8 +101,23 @@ final class SemanticsCommand {
         }
     }
 
+    private static int adaptersFrom(String directory, PrintStream output, PrintStream error) {
+        try {
+            output.println("WORLDLINE_SEMANTICS_ADAPTER=PASS");
+            for (AdapterManifest manifest : AdapterManifest.loadRepository(
+                    Paths.get(directory), SemanticCatalog.standard())) {
+                output.println(manifest.adapter() + "=" + manifest.kind()
+                        + ":" + manifest.sites().size());
+            }
+            return 0;
+        } catch (Exception failure) {
+            error.println("worldline command failed: " + failure.getMessage());
+            return 1;
+        }
+    }
+
     private static List<AdapterManifest> load() throws Exception {
-        return AdapterManifest.loadAll(Paths.get("adapters"), SemanticCatalog.standard());
+        return AdapterManifest.loadRepository(Paths.get(""), SemanticCatalog.standard());
     }
 
     private static void line(PrintStream output, SemanticMapping mapping) {

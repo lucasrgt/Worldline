@@ -65,8 +65,8 @@ public final class OptimizationCatalogCheck {
     }
 
     private Map<String, Record> loadCatalog() throws IOException {
-        Path directory = root.resolve("optimizations/catalog");
-        require(Files.isDirectory(directory), "missing optimizations/catalog");
+        Path directory = root.resolve("worldline/optimizations/catalog");
+        require(Files.isDirectory(directory), "missing worldline/optimizations/catalog");
         Map<String, Record> result = new LinkedHashMap<String, Record>();
         for (Path path : files(directory, ".properties")) {
             Properties fields = new Properties();

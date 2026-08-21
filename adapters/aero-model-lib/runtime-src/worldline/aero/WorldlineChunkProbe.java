@@ -1,4 +1,4 @@
-package aero.modellib.test.worldline;
+package worldline.aero;
 
 /** Frame-scoped counters for the M14 chunk caller experiment. */
 public final class WorldlineChunkProbe {

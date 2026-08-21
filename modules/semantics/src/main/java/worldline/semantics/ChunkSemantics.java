@@ -63,6 +63,18 @@ final class ChunkSemantics {
         mappings.add(SemanticMapping.of("chunk", "CHUNK_NEEDS_SAVING",
                 "net/minecraft/src/Chunk", "method", "needsSaving", "(Z)Z",
                 "CHUNK", "", "CHUNK", "controlled-client-tick,symbols.map", "a", 9998));
+        mappings.add(SemanticMapping.of("chunk", "NIBBLE_ARRAY",
+                "net/minecraft/src/NibbleArray", "class", "NibbleArray", "-",
+                "", "", "CHUNK", "m29-remote-chunk-snapshot,mappings.tiny", "wi", 9998));
+        mappings.add(SemanticMapping.of("chunk", "NIBBLE_DATA",
+                "net/minecraft/src/NibbleArray", "field", "data", "[B",
+                "CHUNK", "CHUNK", "CHUNK", "m29-remote-chunk-snapshot,mappings.tiny", "a", 9998));
+        mappings.add(SemanticMapping.of("chunk", "SET_NIBBLE",
+                "net/minecraft/src/NibbleArray", "method", "setNibble", "(IIII)V",
+                "CHUNK", "CHUNK", "CHUNK", "m29-remote-chunk-snapshot,mappings.tiny", "a", 9998));
+        mappings.add(SemanticMapping.of("chunk", "GET_NIBBLE",
+                "net/minecraft/src/NibbleArray", "method", "getNibble", "(III)I",
+                "CHUNK", "", "CHUNK", "m29-remote-chunk-snapshot,mappings.tiny", "a", 9998));
         return Collections.unmodifiableList(mappings);
     }
 }

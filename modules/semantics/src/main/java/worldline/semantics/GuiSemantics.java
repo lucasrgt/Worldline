@@ -53,6 +53,12 @@ final class GuiSemantics {
                         "field", "inventorySlots", "Lnet/minecraft/src/Container;", "GUI", "",
                         "GUI", "gui-tree", "j", 9990),
                 SemanticMapping.of("gui", "WINDOW_ID", "net/minecraft/src/Container", "field",
-                        "windowId", "I", "GUI", "", "GUI", "gui-tree", "f", 9990)));
+                        "windowId", "I", "GUI", "", "GUI", "gui-tree", "f", 9990),
+                SemanticMapping.of("gui", "CONTAINER_SLOT_LIST", "net/minecraft/src/Container",
+                        "field", "slots", "Ljava/util/List;", "GUI", "", "GUI",
+                        "gui-tree,mappings.tiny", "e", 9998),
+                SemanticMapping.of("gui", "SLOT_STACK", "net/minecraft/src/Slot", "method",
+                        "getStack", "()Lnet/minecraft/src/ItemStack;", "GUI", "", "GUI,ITEM",
+                        "gui-tree,mappings.tiny", "a", 9998)));
     }
 }

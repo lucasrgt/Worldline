@@ -6,6 +6,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -15,18 +16,21 @@ import java.util.regex.Pattern;
 import worldline.api.SemanticMapping;
 
 /**
- * Fail-closed adapter site list. Adapters depend on catalog roles; the catalog
- * never owns Aero or other external types.
+ * Fail-closed adapter site list. Drivers implement a game runtime. Extensions
+ * bind overlay sites to catalog roles. The catalog never owns Aero types.
  */
 public final class AdapterManifest {
     public static final String SCHEMA = "worldline.adapter.semantics.v1";
+    public static final List<String> DRIVERS = Collections.unmodifiableList(
+            Arrays.asList("b173-client", "b173-server"));
     private static final Pattern ADAPTER = Pattern.compile("[a-z][a-z0-9-]{0,63}");
     private static final Pattern SITE = Pattern.compile("worldline/[A-Za-z0-9_$./-]+#[A-Za-z0-9_$.]+");
-    private final String adapter, prefix;
+    private final String adapter, kind, prefix;
     private final List<Site> sites;
 
-    private AdapterManifest(String adapter, String prefix, List<Site> sites) {
+    private AdapterManifest(String adapter, String kind, String prefix, List<Site> sites) {
         this.adapter = adapter;
+        this.kind = kind;
         this.prefix = prefix;
         this.sites = sites;
     }
@@ -42,8 +46,15 @@ public final class AdapterManifest {
         }
         String adapter = required(fields, "adapter");
         if (!ADAPTER.matcher(adapter).matches()) throw new IllegalArgumentException("adapter");
-        String expected = path.getParent().getParent().getFileName().toString();
+        String expected = ownerDirectory(path);
         if (!adapter.equals(expected)) throw new IllegalArgumentException("adapter directory mismatch");
+        String kind = required(fields, "kind");
+        if (!kind.equals("driver") && !kind.equals("extension")) {
+            throw new IllegalArgumentException("kind");
+        }
+        if (kind.equals("driver") != DRIVERS.contains(adapter)) {
+            throw new IllegalArgumentException("adapter kind");
+        }
         String prefix = required(fields, "owner.prefix");
         rejectExternal(prefix);
         if (!prefix.startsWith("worldline/") || !prefix.endsWith("/")) {
@@ -96,31 +107,68 @@ public final class AdapterManifest {
                 throw new IllegalArgumentException("unlisted adapter symbol " + expectedSite);
             }
         }
-        return new AdapterManifest(adapter, prefix, Collections.unmodifiableList(sites));
+        return new AdapterManifest(adapter, kind, prefix, Collections.unmodifiableList(sites));
     }
 
     public static List<AdapterManifest> loadAll(Path adapters, SemanticCatalog catalog)
             throws IOException {
         if (adapters == null || catalog == null) throw new NullPointerException("adapters");
         List<AdapterManifest> manifests = new ArrayList<AdapterManifest>();
-        if (!Files.isDirectory(adapters)) return Collections.unmodifiableList(manifests);
-        try (DirectoryStream<Path> children = Files.newDirectoryStream(adapters)) {
+        collect(adapters, "semantics", catalog, manifests);
+        return finish(manifests);
+    }
+
+    public static List<AdapterManifest> loadRepository(Path root, SemanticCatalog catalog)
+            throws IOException {
+        if (root == null || catalog == null) throw new NullPointerException("adapters");
+        List<AdapterManifest> manifests = new ArrayList<AdapterManifest>();
+        collect(root.resolve("adapters"), "semantics", catalog, manifests);
+        collect(root.resolve("worldline").resolve("extensions"), null, catalog, manifests);
+        return finish(manifests);
+    }
+
+    private static void collect(Path directory, String nested, SemanticCatalog catalog,
+            List<AdapterManifest> manifests) throws IOException {
+        if (!Files.isDirectory(directory)) return;
+        try (DirectoryStream<Path> children = Files.newDirectoryStream(directory)) {
             for (Path child : children) {
-                Path manifest = child.resolve("semantics").resolve("manifest.properties");
+                if (!Files.isDirectory(child)) continue;
+                Path manifest = nested == null ? child.resolve("manifest.properties")
+                        : child.resolve(nested).resolve("manifest.properties");
                 if (Files.isRegularFile(manifest)) manifests.add(load(manifest, catalog));
             }
+        }
+    }
+
+    private static List<AdapterManifest> finish(List<AdapterManifest> manifests) {
+        Set<String> seen = new LinkedHashSet<String>();
+        for (AdapterManifest manifest : manifests) {
+            if (!seen.add(manifest.adapter)) throw new IllegalArgumentException("duplicate adapter");
         }
         Collections.sort(manifests, (left, right) -> left.adapter.compareTo(right.adapter));
         return Collections.unmodifiableList(manifests);
     }
 
+    private static String ownerDirectory(Path manifest) {
+        Path parent = manifest.getParent();
+        if (parent == null) throw new IllegalArgumentException("adapter directory mismatch");
+        if ("semantics".equals(parent.getFileName().toString())) {
+            Path owner = parent.getParent();
+            if (owner == null) throw new IllegalArgumentException("adapter directory mismatch");
+            return owner.getFileName().toString();
+        }
+        return parent.getFileName().toString();
+    }
+
     public String adapter() { return adapter; }
+    public String kind() { return kind; }
     public String ownerPrefix() { return prefix; }
     public List<Site> sites() { return sites; }
 
     public String render() {
         StringBuilder text = new StringBuilder();
         text.append("adapter=").append(adapter).append('\n');
+        text.append("kind=").append(kind).append('\n');
         text.append("sites=").append(sites.size()).append('\n');
         for (Site site : sites) {
             text.append(site.role).append('=').append(site.site);
@@ -138,7 +186,7 @@ public final class AdapterManifest {
 
     private static void rejectExternal(String owner) {
         String value = owner.replace('.', '/');
-        if (value.startsWith("aero/") || value.contains("/aero/")) {
+        if (value.startsWith("aero/") || value.contains("/aero/modellib")) {
             throw new IllegalArgumentException("catalog must not own Aero types");
         }
     }

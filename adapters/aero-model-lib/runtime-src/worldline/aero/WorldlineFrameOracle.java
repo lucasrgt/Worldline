@@ -1,4 +1,4 @@
-package aero.modellib.test.worldline;
+package worldline.aero;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

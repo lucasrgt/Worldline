@@ -15,6 +15,18 @@ gradle.projectsEvaluated {
                 from new File(smoke, 'runtime-resources/aerotest.mixins.json')
                 into destinationDir
             }
+            copy {
+                from new File(smoke, 'runtime-resources/worldline-aero.mixins.json')
+                into destinationDir
+            }
+            def fabric = new File(destinationDir, 'fabric.mod.json')
+            if (!fabric.isFile()) throw new GradleException('Aero fabric.mod.json missing')
+            def text = fabric.getText('UTF-8')
+            if (!text.contains('worldline-aero.mixins.json')) {
+                text = text.replace('"aerotest.mixins.json"',
+                    '"aerotest.mixins.json", "worldline-aero.mixins.json"')
+                fabric.write(text, 'UTF-8')
+            }
         }
     }
     def task = project.tasks.named('runClient').get()

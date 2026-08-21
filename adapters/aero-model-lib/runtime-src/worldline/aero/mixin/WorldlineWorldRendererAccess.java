@@ -1,4 +1,4 @@
-package aero.modellib.test.mixin;
+package worldline.aero.mixin;
 
 import java.util.List;
 import net.minecraft.client.render.WorldRenderer;

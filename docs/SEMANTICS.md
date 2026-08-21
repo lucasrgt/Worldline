@@ -8,10 +8,10 @@ per 10,000.
 
 ```text
 SemanticCatalog.standard()
-  -->  24 categories, 196 required roles
+  -->  24 categories, 238 required roles
   -->  role("CLIENT_TICK_ROOT") / category("clock") / symbol(owner, name)
 AdapterManifest.loadAll(adapters, catalog)
-  -->  b173-client sites bound to catalog roles
+  -->  b173-client and b173-server drivers; aero-model-lib overlay extension
 ```
 
 Unknown roles, unknown categories, duplicate roles, duplicate owner+name
@@ -32,18 +32,18 @@ official name.
 | `input` | `KEYBOARD`, `KEYBOARD_NEXT`, `KEYBOARD_PUSH`, `KEYBOARD_RESET`, `MOUSE`, `MOUSE_BUTTON`, `MOUSE_PUSH`, `MOUSE_RESET`, `MOVEMENT`, `INVENTORY_KEY`, `ESCAPE_KEY` |
 | `tick` | `CLIENT_TICK_ROOT`, `CLIENT_TICK_COUNTER`, `WORLD_TICK`, `ENTITY_UPDATE`, `CONTROLLER_TYPE`, `CONTROLLER_TICK`, `EFFECT_TICK` |
 | `filesystem` | `VIRTUAL_FILESYSTEM`, `SAVE_HANDLER`, `STAT_FILE`, `STAT_WRITER`, `FS_FAIL`, `FS_JOURNAL`, `WORLD_LOAD`, `WORLD_LOCK`, `WORLD_FILE`, `CHUNK_LOAD` |
-| `network` | `OFFLINE_SESSION`, `NETWORK_DISABLED` |
+| `network` | `OFFLINE_SESSION`, `NETWORK_DISABLED`, `PACKET10_FLYING`, `PACKET12_PLAYER_LOOK`, `PACKET13_PLAYER_LOOK_MOVE`, `PACKET_STANCE`, `PACKET3_CHAT`, `PACKET14_BLOCK_DIG`, `PACKET50_PRECHUNK`, `PACKET51_MAP_CHUNK`, `PACKET52_MULTI_BLOCK_CHANGE`, `PACKET53_BLOCK_CHANGE`, `PACKET5_PLAYER_INVENTORY`, `PACKET7_USE_ENTITY`, `PACKET8_UPDATE_HEALTH`, `PACKET15_PLACE`, `PACKET16_BLOCK_ITEM_SWITCH`, `PACKET21_PICKUP_SPAWN`, `PACKET22_COLLECT`, `PACKET29_DESTROY_ENTITY`, `PACKET38_ENTITY_STATUS`, `PACKET100_OPEN_WINDOW`, `PACKET101_CLOSE_WINDOW`, `PACKET102_WINDOW_CLICK`, `PACKET103_SET_SLOT`, `PACKET104_WINDOW_ITEMS`, `PACKET105_UPDATE_PROGRESSBAR`, `PACKET106_TRANSACTION`, `PACKET200_STATISTIC` |
 | `scheduler` | `TIMER_THREAD`, `TASK_SCHEDULER`, `SCHEDULER_ADVANCE` |
 | `world` | `WORLD_TYPE`, `LOADED_ENTITY_LIST`, `TILE_ENTITIES`, `BLOCK_ACCESS`, `BLOCK_ID_READ`, `BLOCK_READ`, `BLOCK_WRITE`, `BLOCK_NOTIFY`, `WORLD_DIFFICULTY`, `WORLD_PROVIDER` |
 | `block` | `BLOCK_TYPE`, `BLOCK_ID`, `BLOCK_STONE`, `BLOCK_BEDROCK`, `BLOCK_SAND`, `BLOCK_SAND_TYPE`, `BLOCK_SAND_FALL` |
-| `chunk` | `CHUNK_TYPE`, `CHUNK_LOOKUP`, `CHUNK_POPULATE`, `CHUNK_POPULATED`, `CHUNK_NEVER_SAVE`, `CHUNK_RELIGHT`, `CHUNK_LOADER`, `LOADER_LOAD`, `LOADER_SAVE`, `LOADER_FLUSH`, `CHUNK_PROVIDER`, `SAVE_CHUNKS`, `CHUNK_MODIFIED`, `CHUNK_MARK_MODIFIED`, `CHUNK_NEEDS_SAVING` |
+| `chunk` | `CHUNK_TYPE`, `CHUNK_LOOKUP`, `CHUNK_POPULATE`, `CHUNK_POPULATED`, `CHUNK_NEVER_SAVE`, `CHUNK_RELIGHT`, `CHUNK_LOADER`, `LOADER_LOAD`, `LOADER_SAVE`, `LOADER_FLUSH`, `CHUNK_PROVIDER`, `SAVE_CHUNKS`, `CHUNK_MODIFIED`, `CHUNK_MARK_MODIFIED`, `CHUNK_NEEDS_SAVING`, `NIBBLE_ARRAY`, `NIBBLE_DATA`, `SET_NIBBLE`, `GET_NIBBLE` |
 | `player` | `LOCAL_PLAYER`, `PLAYER_TYPE`, `LIVING_TYPE`, `PLAYER_NAME`, `PLAYER_HEALTH`, `HOTBAR_SLOT`, `PLAYER_INVENTORY`, `INVENTORY_FIELD` |
 | `entity` | `ENTITY_TYPE`, `ENTITY_ID`, `ENTITY_POS_X`, `ENTITY_POS_Y`, `ENTITY_POS_Z`, `ENTITY_DEAD`, `ENTITY_SET_POSITION`, `ENTITY_SET_LOCATION`, `ENTITY_ITEM` |
 | `inventory` | `INVENTORY_TYPE`, `PLAYER_ITEMS`, `WORLD_ITEMS`, `WORLD_BLOCKS`, `MAIN_ITEMS`, `ARMOR_ITEMS`, `CURSOR_STACK` |
 | `item` | `ITEM_STACK`, `ITEM_ID`, `STACK_SIZE`, `ITEM_TYPE`, `ITEM_LOOKUP`, `ITEM_DAMAGE`, `CONTAINER_TYPE`, `SLOT_COUNT`, `SLOT_GET`, `ENTITY_ITEM_STACK` |
 | `recipe` | `CRAFTING`, `CRAFTING_LIST`, `FURNACE`, `FURNACE_LIST`, `RECIPE_TYPE`, `RECIPE_OUTPUT`, `RECIPE_SHAPED`, `RECIPE_SHAPELESS` |
-| `gui` | `CURRENT_SCREEN`, `INVENTORY_SCREEN`, `CONTAINER_CLICK`, `HUD_TYPE`, `HUD_TICK`, `HUD_COUNTER`, `GUI_OPEN`, `GUI_CLOSE`, `GUI_SLOT`, `GUI_CLICK`, `GUI_SCREEN`, `GUI_CONTAINER`, `GUI_SLOT_TYPE`, `CONTAINER_SLOTS`, `WINDOW_ID` |
-| `render` | `DISPLAY`, `DISPLAY_CREATED`, `RENDER_ENGINE`, `RENDER_ENGINE_FIELD`, `ENTITY_RENDERER`, `ENTITY_RENDERER_FIELD`, `RENDERER_UPDATE`, `RENDERER_COUNTER`, `MOUSE_OVER`, `RENDER_GLOBAL`, `RENDER_GLOBAL_FIELD`, `CLOUD_UPDATE`, `CLOUD_OFFSET`, `EFFECT_RENDERER`, `EFFECT_UPDATE`, `HUD_FIELD`, `PLAYER_CONTROLLER_FIELD`, `COMPILE_CHUNKS` |
+| `gui` | `CURRENT_SCREEN`, `INVENTORY_SCREEN`, `CONTAINER_CLICK`, `HUD_TYPE`, `HUD_TICK`, `HUD_COUNTER`, `GUI_OPEN`, `GUI_CLOSE`, `GUI_SLOT`, `GUI_CLICK`, `GUI_SCREEN`, `GUI_CONTAINER`, `GUI_SLOT_TYPE`, `CONTAINER_SLOTS`, `WINDOW_ID`, `CONTAINER_SLOT_LIST`, `SLOT_STACK` |
+| `render` | `DISPLAY`, `DISPLAY_CREATED`, `RENDER_ENGINE`, `RENDER_ENGINE_FIELD`, `ENTITY_RENDERER`, `ENTITY_RENDERER_FIELD`, `RENDERER_UPDATE`, `RENDERER_COUNTER`, `MOUSE_OVER`, `RENDER_GLOBAL`, `RENDER_GLOBAL_FIELD`, `CLOUD_UPDATE`, `CLOUD_OFFSET`, `EFFECT_RENDERER`, `EFFECT_UPDATE`, `HUD_FIELD`, `PLAYER_CONTROLLER_FIELD`, `COMPILE_CHUNKS`, `TESSELLATOR`, `TESSELLATOR_INSTANCE`, `START_DRAWING_QUADS`, `SET_COLOR_RGBA`, `ADD_VERTEX`, `TESSELLATOR_DRAW`, `LOAD_RENDERERS`, `CAMERA_RENDER`, `CHUNK_REBUILD` |
 | `audio` | `SOUND_MANAGER`, `HEADLESS_AUDIO` |
 | `resource` | `TEXTURE_LOOKUP`, `DYNAMIC_TEXTURE` |
 | `persistence` | `WORLD_SAVE`, `CHUNK_SAVE`, `PLAYER_SAVE`, `LOAD_INFO`, `SAVE_INTERFACE`, `EXTRA_CHUNK`, `CHUNK_FLUSH`, `EXTRA_DATA`, `SPAWN_SET`, `SPAWN_POSITION`, `AUTOSAVE_PERIOD`, `NATIVE_WORLD_SAVE` |
@@ -52,10 +52,10 @@ official name.
 | `lab` | `OBSERVATION`, `SNAPSHOT`, `CHECKPOINT`, `HYPOTHESIS`, `COMPARISON` |
 | `domain` | `WORLD_API`, `PLAYER_API`, `ENTITY_API`, `BLOCK_STATE`, `READ_BLOCK`, `WRITE_BLOCK`, `LIST_ENTITIES`, `TELEPORT` |
 
-These are the PDF control boundaries, every named leftover from both
-`symbols.map` files, adapter observation fields, GUI/M3 oracle aliases, and
-the item/recipe/domain surfaces Worldline already executes. There is no
-energy category.
+These are the PDF control boundaries, every named leftover from the client,
+world, and M10 tessellator `symbols.map` files, adapter observation fields,
+GUI/M3 oracle aliases, and the item/recipe/domain surfaces Worldline already
+executes. There is no energy category.
 
 ## Stable contracts
 
@@ -70,14 +70,16 @@ energy category.
 | `SemanticCatalog.symbol` | Exact owner+name lookup; ambiguous or duplicate symbols fail closed |
 | `SemanticCatalog.canonical` / `sha256` | Stable catalog document |
 | `SemanticGraph` | Fail-closed read/write/dep edges over uppercase category tokens |
-| `AdapterManifest` | Adapter sites bound to catalog roles; Aero types fail closed |
+| `AdapterManifest` | Driver or extension sites bound to catalog roles; Aero types fail closed |
 
 The API owns `SemanticMapping`. The `semantics` module owns roles, category
 files, the catalog, and adapter manifests. Neither module contains RetroMCP,
 LWJGL, Minecraft, or Aero types. An adapter may depend on the catalog; the
 catalog never depends on an adapter. Vanilla native save/compile symbols live
-in the catalog. Worldline-owned adapter sites live under
-`adapters/<name>/semantics/manifest.properties`.
+in the catalog. Worldline-owned driver and overlay-pin sites live under
+`adapters/<name>/semantics/manifest.properties`. External mods copy
+`worldline/extensions/TEMPLATE.properties` to
+`worldline/extensions/<id>/manifest.properties`. See `docs/EXTENSION_SDK.md`.
 
 ## CLI
 
@@ -88,6 +90,9 @@ worldline semantics category item
 worldline semantics role CLIENT_WORLD
 worldline semantics adapter
 worldline semantics adapter b173-client
+worldline semantics adapter b173-server
+worldline semantics adapter aero-model-lib
+worldline semantics adapter check .
 ```
 
 ## Non-claims

@@ -1,4 +1,4 @@
-package aero.modellib.test.worldline;
+package worldline.aero;
 
 import net.minecraft.client.render.chunk.ChunkBuilder;
 

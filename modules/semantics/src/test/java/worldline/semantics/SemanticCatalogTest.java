@@ -39,10 +39,53 @@ public final class SemanticCatalogTest {
         require("saveChunks".equals(first.role("SAVE_CHUNKS").name()), "save chunks");
         require("updateRenderers".equals(first.role("COMPILE_CHUNKS").name()), "compile chunks");
         require("autosavePeriod".equals(first.role("AUTOSAVE_PERIOD").name()), "autosave period");
+        require("addVertex".equals(first.role("ADD_VERTEX").name()), "add vertex");
+        require("Packet13PlayerLookMove".equals(first.role("PACKET13_PLAYER_LOOK_MOVE").name()),
+                "packet13 type");
+        require("stance".equals(first.role("PACKET_STANCE").name()), "packet stance");
+        require("Packet50PreChunk".equals(first.role("PACKET50_PRECHUNK").name()), "packet50");
+        require("Packet51MapChunk".equals(first.role("PACKET51_MAP_CHUNK").name()), "packet51");
+        require("Packet52MultiBlockChange".equals(first.role("PACKET52_MULTI_BLOCK_CHANGE").name()),
+                "packet52");
+        require("Packet53BlockChange".equals(first.role("PACKET53_BLOCK_CHANGE").name()), "packet53");
+        require("Packet3Chat".equals(first.role("PACKET3_CHAT").name()), "packet3");
+        require("Packet14BlockDig".equals(first.role("PACKET14_BLOCK_DIG").name()), "packet14");
+        require("Packet5PlayerInventory".equals(first.role("PACKET5_PLAYER_INVENTORY").name()),
+                "packet5");
+        require("Packet7UseEntity".equals(first.role("PACKET7_USE_ENTITY").name()), "packet7");
+        require("Packet8UpdateHealth".equals(first.role("PACKET8_UPDATE_HEALTH").name()), "packet8");
+        require("Packet15Place".equals(first.role("PACKET15_PLACE").name()), "packet15");
+        require("Packet16BlockItemSwitch".equals(first.role("PACKET16_BLOCK_ITEM_SWITCH").name()),
+                "packet16");
+        require("Packet21PickupSpawn".equals(first.role("PACKET21_PICKUP_SPAWN").name()), "packet21");
+        require("Packet22Collect".equals(first.role("PACKET22_COLLECT").name()), "packet22");
+        require("Packet29DestroyEntity".equals(first.role("PACKET29_DESTROY_ENTITY").name()),
+                "packet29");
+        require("Packet38EntityStatus".equals(first.role("PACKET38_ENTITY_STATUS").name()),
+                "packet38");
+        require("Packet100OpenWindow".equals(first.role("PACKET100_OPEN_WINDOW").name()),
+                "packet100");
+        require("Packet101CloseWindow".equals(first.role("PACKET101_CLOSE_WINDOW").name()),
+                "packet101");
+        require("Packet102WindowClick".equals(first.role("PACKET102_WINDOW_CLICK").name()),
+                "packet102");
+        require("Packet103SetSlot".equals(first.role("PACKET103_SET_SLOT").name()), "packet103");
+        require("Packet104WindowItems".equals(first.role("PACKET104_WINDOW_ITEMS").name()),
+                "packet104");
+        require("Packet105UpdateProgressbar".equals(
+                first.role("PACKET105_UPDATE_PROGRESSBAR").name()), "packet105");
+        require("Packet106Transaction".equals(first.role("PACKET106_TRANSACTION").name()),
+                "packet106");
+        require("Packet200Statistic".equals(first.role("PACKET200_STATISTIC").name()), "packet200");
+        require("updateRenderer".equals(first.role("CHUNK_REBUILD").name()), "chunk rebuild");
+        require("NibbleArray".equals(first.role("NIBBLE_ARRAY").name()), "nibble array");
+        require("setNibble".equals(first.role("SET_NIBBLE").name()), "set nibble");
+        require("slots".equals(first.role("CONTAINER_SLOT_LIST").name()), "container slots list");
+        require("getStack".equals(first.role("SLOT_STACK").name()), "slot stack");
         require(first.sha256().equals(second.sha256())
                 && first.sha256().equals(
-                "b4d1f4fdf968f785cc5c94b2400d5f4ad4966f8f7b042d0fd2372d24e9dadf88"),
-                "catalog hash drifted");
+                "b50402df6214dd80292640092d986e943312627437cafd5dbde8085f474bdad5"),
+                "catalog hash drifted to " + first.sha256());
         require(first.canonical().equals(second.canonical()), "catalog canonical drifted");
         require(first.render().contains("complete=true"), "render completeness");
         require(first.role("CLIENT_TICK_ROOT").name().equals("runTick"), "tick root");
@@ -92,6 +135,7 @@ public final class SemanticCatalogTest {
         SemanticCatalog catalog = SemanticCatalog.standard();
         cover("smokes/controlled-client-tick/symbols.map", catalog);
         cover("smokes/deterministic-world-tick/symbols.map", catalog);
+        cover("smokes/m10-native-render/symbols.map", catalog);
     }
 
     private static void cover(String path, SemanticCatalog catalog) {

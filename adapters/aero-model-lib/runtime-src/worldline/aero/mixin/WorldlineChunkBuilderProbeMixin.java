@@ -1,7 +1,7 @@
-package aero.modellib.test.mixin;
+package worldline.aero.mixin;
 
-import aero.modellib.test.worldline.WorldlineChunkProbe;
-import aero.modellib.test.worldline.WorldlineChunkGeometry;
+import worldline.aero.WorldlineChunkProbe;
+import worldline.aero.WorldlineChunkGeometry;
 import net.minecraft.client.render.chunk.ChunkBuilder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

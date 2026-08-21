@@ -1,4 +1,4 @@
-package aero.modellib.test.mixin;
+package worldline.aero.mixin;
 
 import net.minecraft.client.render.chunk.ChunkBuilder;
 import org.spongepowered.asm.mixin.Mixin;

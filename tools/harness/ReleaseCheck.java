@@ -140,13 +140,13 @@ public final class ReleaseCheck {
         same(release, "m108.signature", m108, "expected.signature"); same(release, "m108.aero.revision", m108, "aero.revision"); same(release, "m109.signature", m109, "expected.signature"); same(release, "m109.aero.revision", m109, "aero.revision"); same(release, "m110.signature", m110, "expected.signature"); same(release, "m110.aero.revision", m110, "aero.revision"); same(release, "m111.signature", m111, "expected.signature"); same(release, "server.sha256", m111, "server.jar.sha256"); same(release, "m112.signature", m112, "expected.signature"); same(release, "server.sha256", m112, "server.jar.sha256"); same(release, "m113.signature", m113, "expected.signature"); same(release, "server.sha256", m113, "server.jar.sha256"); same(release, "m114.signature", m114, "expected.signature"); same(release, "server.sha256", m114, "server.jar.sha256"); same(release, "m115.signature", m115, "expected.signature"); same(release, "server.sha256", m115, "server.jar.sha256"); same(release, "m116.signature", m116, "expected.signature"); same(release, "server.sha256", m116, "server.jar.sha256"); same(release, "m117.signature", m117, "expected.signature"); same(release, "server.sha256", m117, "server.jar.sha256"); same(release, "m118.signature", m118, "expected.signature"); same(release, "server.sha256", m118, "server.jar.sha256"); same(release, "m119.signature", m119, "expected.signature"); same(release, "server.sha256", m119, "server.jar.sha256"); same(release, "m120.signature", m120, "expected.signature"); same(release, "server.sha256", m120, "server.jar.sha256"); same(release, "m121.signature", m121, "expected.signature"); same(release, "server.sha256", m121, "server.jar.sha256"); same(release, "m122.signature", m122, "expected.signature"); same(release, "server.sha256", m122, "server.jar.sha256"); same(release, "m123.signature", m123, "expected.signature"); same(release, "server.sha256", m123, "server.jar.sha256"); same(release, "m124.signature", m124, "expected.signature"); same(release, "server.sha256", m124, "server.jar.sha256"); same(release, "m125.signature", m125, "expected.signature"); same(release, "server.sha256", m125, "server.jar.sha256"); same(release, "m126.signature", m126, "expected.signature"); same(release, "server.sha256", m126, "server.jar.sha256"); same(release, "m127.signature", m127, "expected.signature"); same(release, "server.sha256", m127, "server.jar.sha256"); same(release, "m128.signature", m128, "expected.signature"); same(release, "server.sha256", m128, "server.jar.sha256"); same(release, "m129.signature", m129, "expected.signature"); same(release, "server.sha256", m129, "server.jar.sha256"); same(release, "m130.signature", m130, "expected.signature"); same(release, "server.sha256", m130, "server.jar.sha256"); same(release, "m131.signature", m131, "expected.signature"); same(release, "server.sha256", m131, "server.jar.sha256"); same(release, "gui.signature", gui, "expected.signature");
         same(release, "invariants.signature", client, "expected.state.signature");
         match(release, "semantics.signature",
-                "b4d1f4fdf968f785cc5c94b2400d5f4ad4966f8f7b042d0fd2372d24e9dadf88");
+                "b50402df6214dd80292640092d986e943312627437cafd5dbde8085f474bdad5");
         requireText("modules/api/src/main/java/worldline/api/WorldlineVersion.java",
                 "public static final String VERSION = \"" + value(release, "version") + "\";");
         requireText("docs/SEMANTICS_CYCLE.md", value(release, "semantics.signature"));
         for (String file : Arrays.asList("README.md", "CHANGELOG.md", "AGENTS.md",
                 "docs/VISION.md", "docs/ROADMAP.md", "docs/ARCHITECTURE.md",
-                "optimizations/TEMPLATE.properties",
+                "worldline/optimizations/TEMPLATE.properties",
                 "docs/FIRST_CYCLE.md", "docs/M2_RUNTIME.md", "docs/M2_CYCLE.md",
                 "docs/M3_API.md", "docs/M3_CYCLE.md",
                 "docs/M4_SNAPSHOT.md", "docs/M4_CYCLE.md", "smokes/controlled-client-tick/MAP.md",
@@ -167,8 +167,8 @@ public final class ReleaseCheck {
                 "smokes/m9-scenario-minimization/MAP.md", "docs/GUI_TREE.md", "docs/GUI_CYCLE.md",
                 "smokes/gui-tree/MAP.md", "docs/INVARIANTS.md", "docs/INVARIANTS_CYCLE.md",
                 "docs/SEMANTICS.md", "docs/SEMANTICS_CYCLE.md",
-                "docs/OPTIMIZATION_SDK.md",
-                "optimizations/catalog/README.md")) {
+                "docs/OPTIMIZATION_SDK.md", "docs/EXTENSION_SDK.md",
+                "worldline/extensions/TEMPLATE.properties", "worldline/optimizations/catalog/README.md")) {
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
         }
         for (String file : Arrays.asList("docs/M10_RENDER.md", "docs/M10_CYCLE.md",

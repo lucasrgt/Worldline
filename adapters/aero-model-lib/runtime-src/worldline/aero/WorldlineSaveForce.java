@@ -1,4 +1,4 @@
-package aero.modellib.test.worldline;
+package worldline.aero;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

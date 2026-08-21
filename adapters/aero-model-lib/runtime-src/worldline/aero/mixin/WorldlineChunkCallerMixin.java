@@ -1,9 +1,9 @@
-package aero.modellib.test.mixin;
+package worldline.aero.mixin;
 
 import aero.modellib.experimental.Aero_ChunkWorkContract;
 import aero.modellib.experimental.Aero_ChunkWorkContract.Result;
-import aero.modellib.test.worldline.WorldlineChunkProbe;
-import aero.modellib.test.worldline.WorldlineChunkWork;
+import worldline.aero.WorldlineChunkProbe;
+import worldline.aero.WorldlineChunkWork;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.entity.LivingEntity;

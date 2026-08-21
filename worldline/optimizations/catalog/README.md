@@ -9,6 +9,7 @@ An empty catalog is valid only while the repository contains no
 annotation-tracked record has no site, or a decided record has no evidence.
 
 This directory contains only records for implementations owned by Worldline.
-External projects keep their catalogs in their own repositories. Experiments
-may cite those external stable IDs in evidence without copying their records
-here. The directory is intentionally empty until Worldline owns such a change.
+External projects keep catalogs under `worldline/optimizations/catalog/` in
+their own repositories. Experiments may cite those external stable IDs in
+evidence without copying their records here. The directory is intentionally
+empty until Worldline owns such a change.

@@ -201,8 +201,15 @@ public final class WorldlineCliTest {
             output.reset(); error.reset();
             status = WorldlineCli.run(new String[] {"semantics", "adapter"},
                     new PrintStream(output), new PrintStream(error));
-            require(status == 0 && output.toString().contains("b173-client="),
+            require(status == 0 && output.toString().contains("b173-client=driver")
+                    && output.toString().contains("b173-server=driver")
+                    && output.toString().contains("aero-model-lib=extension"),
                     "CLI semantics adapter failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"semantics", "adapter", "check", "."},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("aero-model-lib=extension"),
+                    "CLI semantics adapter check failed");
             require(WorldlineCli.run(new String[0], System.out, new PrintStream(error)) == 2,
                     "CLI usage did not fail");
             output.reset(); error.reset();

@@ -1,4 +1,4 @@
-package aero.modellib.test.mixin;
+package worldline.aero.mixin;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.InteractionManager;
@@ -8,8 +8,8 @@ import net.minecraft.block.BlockWithEntity;
 import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.world.World;
 import java.util.Collections;
-import aero.modellib.test.worldline.WorldlineFrameOracle;
-import aero.modellib.test.worldline.WorldlineSaveForce;
+import worldline.aero.WorldlineFrameOracle;
+import worldline.aero.WorldlineSaveForce;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;

@@ -1,6 +1,6 @@
-package aero.modellib.test.mixin;
+package worldline.aero.mixin;
 
-import aero.modellib.test.worldline.WorldlineChunkProbe;
+import worldline.aero.WorldlineChunkProbe;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.render.WorldRenderer;

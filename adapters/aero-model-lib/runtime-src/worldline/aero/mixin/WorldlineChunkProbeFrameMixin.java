@@ -1,8 +1,8 @@
-package aero.modellib.test.mixin;
+package worldline.aero.mixin;
 
-import aero.modellib.test.worldline.WorldlineChunkProbe;
-import aero.modellib.test.worldline.WorldlineChunkReadiness;
-import aero.modellib.test.worldline.WorldlineFrameOracle;
+import worldline.aero.WorldlineChunkProbe;
+import worldline.aero.WorldlineChunkReadiness;
+import worldline.aero.WorldlineFrameOracle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.GameRenderer;
 import org.spongepowered.asm.mixin.Mixin;

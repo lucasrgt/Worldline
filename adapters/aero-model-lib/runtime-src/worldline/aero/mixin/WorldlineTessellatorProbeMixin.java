@@ -1,6 +1,6 @@
-package aero.modellib.test.mixin;
+package worldline.aero.mixin;
 
-import aero.modellib.test.worldline.WorldlineChunkGeometry;
+import worldline.aero.WorldlineChunkGeometry;
 import net.minecraft.client.render.Tessellator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

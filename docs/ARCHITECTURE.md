@@ -101,9 +101,10 @@ Owns only the source-retained `OptimizationRef` metadata annotation. It has no
 dependencies and performs no runtime work. Modules opt into this compile-time
 dependency only when they annotate an owned optimization site. A separate
 harness check validates records and references; it never enables features or
-transforms bytecode. External projects keep their records beside their own
-implementations. Worldline evidence may cite an external stable ID, but the
-Worldline catalog must not describe mod-specific algorithms or flags.
+transforms bytecode. External projects keep their records under
+`worldline/optimizations/catalog/` in their own repositories. Worldline
+evidence may cite an external stable ID, but the Worldline catalog must not
+describe mod-specific algorithms or flags.
 
 ### `api`
 
@@ -160,8 +161,10 @@ lookup, and adapter manifests. The API owns immutable `SemanticMapping`
 values, including optional official client aliases. Category files annotate
 controlled b1.7.3 symbols already evidenced by Worldline; unknown or
 duplicate symbols fail closed. Adapter manifests bind Worldline-owned sites
-to those roles. External libraries such as Aero stay out of the catalog and
-may depend on Worldline later; Worldline does not depend on them.
+to those roles. External libraries such as Aero stay out of the catalog.
+Worldline overlay sites for Aero live under `worldline/aero/` as a pinned
+extension. Worldline does not depend on Aero types. Other mods adapt through
+the extension SDK rather than new in-tree adapters.
 
 The Invariant Engine adds `worldline-invariants` above the API.
 It owns fail-closed rules and the observation loop. The API owns the immutable
@@ -587,8 +590,8 @@ does not promote a rendering API.
 
 ## Adapter direction
 
-Game-specific work will enter through new adapter modules, not through the API
-or by placing implementation in the harness:
+Game-specific runtime work will enter through driver modules, not through the
+API, the harness, or a new in-tree adapter per mod:
 
 ```text
 scenario/driver -> kernel -> backend port <- retromcp/lwjgl adapter
@@ -597,7 +600,11 @@ scenario/driver -> kernel -> backend port <- retromcp/lwjgl adapter
 ```
 
 An adapter may depend on the API, kernel, and semantic catalog. The API,
-kernel, and catalog must never depend on an adapter. The reusable client adapter is an executable proof of
+kernel, and catalog must never depend on an adapter. Runtime drivers are the
+closed `b173-client` and `b173-server` set; StationAPI is a future driver.
+Mods publish `worldline/extensions/` manifests in their own repositories. Worldline pins
+`aero-model-lib` only as an overlay for oracled smokes. See
+`docs/EXTENSION_SDK.md`. The reusable client adapter is an executable proof of
 this direction. Replay-backed checkpoints, branch comparison, semantic GUI
 control, and the narrow mod API remain adapter-side because their implementation
 necessarily knows b1.7.3.
@@ -609,8 +616,9 @@ that neutral model. The native smoke counts submitted renderer operations
 above the Pbuffer; neither the API nor kernel learns about Aero or OpenGL.
 
 M12 keeps runtime control in a smoke-only Aero integration overlay. A Gradle
-init script adds one mapped Mixin to the upstream test consumer; it controls
-seed, chunks, camera, and duration on the game thread. Raw saves and frame logs
+init script adds Worldline mixins from `worldline.aero.mixin` to the upstream
+test consumer; they control seed, chunks, camera, and duration on the game
+thread. Raw saves and frame logs
 stay derived, while the existing analysis and minimization modules consume
 only adapter-neutral frames and opaque record indices. No M12 behavior enters
 the API, kernel, or maintained product graph.
