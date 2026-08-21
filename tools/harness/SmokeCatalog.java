@@ -142,7 +142,8 @@ final class SmokeCatalog {
         {"tools/smoke/Run.java", "redstone-wire-power"}, {"tools/smoke/Run.java", "redstone-repeater-delay"}, {"tools/smoke/Run.java", "redstone-repeater-delays"}, {"tools/smoke/Run.java", "redstone-lever-button"}, {"tools/smoke/Run.java", "redstone-piston-extend"},
         {"tools/smoke/DigStatusBoundariesCycle.java", "m524-sw-dig-status-boundaries"},
         {"tools/smoke/SheepShearedPersistenceCycle.java", "m506-sw-sheep-sheared-persistence"},
-        {"tools/smoke/Run.java", "m518-sw-tnt-fuse-lifecycle"}
+        {"tools/smoke/Run.java", "m518-sw-tnt-fuse-lifecycle"},
+        {"tools/smoke/WorldTimeAdvanceCycle.java", "m523-sw-world-time-advance"}
     };
     private SmokeCatalog() {}
 }
