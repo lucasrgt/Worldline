@@ -145,7 +145,8 @@ final class SmokeCatalog {
         {"tools/smoke/Run.java", "m518-sw-tnt-fuse-lifecycle"},
         {"tools/smoke/WorldTimeAdvanceCycle.java", "m523-sw-world-time-advance"},
         {"tools/smoke/PersonalSlotSwapCycle.java", "m522-sw-personal-slot-swap"},
-        {"tools/smoke/Run.java", "m511-sw-redstone-ore-trigger"}
+        {"tools/smoke/Run.java", "m511-sw-redstone-ore-trigger"},
+        {"tools/smoke/Run.java", "m509-sw-redstone-wire-fanout"}
     };
     private SmokeCatalog() {}
 }
