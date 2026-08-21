@@ -14,7 +14,8 @@ final class WorldlinePluginFunctionalTest {
     @Test void configuresAnIsolatedConsumerBuild() throws Exception {
         Files.writeString(project.resolve("settings.gradle.kts"), "rootProject.name = \"consumer\"\n");
         Files.writeString(project.resolve("build.gradle.kts"),
-                "plugins { id(\"dev.worldline.test\") }\nworldline { noRuntime.set(true) }\n");
+                "plugins { id(\"io.github.lucasrgt.worldline.test\") }\n"
+                + "worldline { noRuntime.set(true) }\n");
         Files.createDirectories(project.resolve("src/test/java"));
         BuildResult result = GradleRunner.create().withProjectDir(project.toFile())
                 .withPluginClasspath().withArguments("tasks", "--all", "--stacktrace").build();

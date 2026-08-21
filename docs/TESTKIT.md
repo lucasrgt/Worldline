@@ -70,7 +70,7 @@ The canonical external-mod layout and command surface are documented in the
 [Gradle adoption guide](GRADLE_TESTKIT.md). In short:
 
 ```text
-java -jar worldline-test-runner-0.2.0.jar init
+java -jar worldline-test-runner-0.2.1.jar init
 tests/worldline/gradlew.bat worldlineDoctor worldlineTest
 ```
 
@@ -106,7 +106,7 @@ over 64 MiB, and unavailable providers fail before runtime execution.
 Compile a spec against only Java 8 API modules:
 
 ```text
-javac --release 8 -Xlint:all,-options -Werror -classpath worldline-test-api-0.2.0.jar -d build/test-classes src/test/java/example/GlassProbeWorldlineTest.java
+javac --release 8 -Xlint:all,-options -Werror -classpath worldline-test-api-0.2.1.jar -d build/test-classes src/test/java/example/GlassProbeWorldlineTest.java
 ```
 
 Use `:` instead of `;` in the classpath on Linux and macOS.

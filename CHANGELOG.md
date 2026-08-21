@@ -4,9 +4,13 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
-## Unreleased - Worldline TestKit 0.2.0 experimental
+## Unreleased - Worldline TestKit 0.2.1 experimental
 
-- Added the `dev.worldline.test` binary Gradle plugin, an isolated
+- Changed the public plugin namespace to the GitHub-verifiable
+  `io.github.lucasrgt.worldline.test` ID and
+  `io.github.lucasrgt.worldline` Maven group, and explicitly declared that
+  Configuration Cache is not yet supported.
+- Added the binary Gradle plugin, an isolated
   `tests/worldline` Java 8 source set, Vitest-like run/list/watch/inspect/
   snapshot/minimize tasks, JUnit XML, conservative product discovery, and a
   Gradle TestKit functional suite.

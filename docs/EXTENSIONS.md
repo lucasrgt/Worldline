@@ -43,7 +43,7 @@ be proved outside Minecraft.
 project/
 |-- src/                              product source
 |-- tests/worldline/
-|   |-- build.gradle.kts              isolated `dev.worldline.test` build
+|   |-- build.gradle.kts              isolated `io.github.lucasrgt.worldline.test` build
 |   |-- worldline.toml                runtime/profile selection
 |   |-- .local/oracles/b1.7.3/        ignored official-JAR drop zone
 |   `-- src/test/java/                Java 8 `*WorldlineTest.java` specs
@@ -75,8 +75,8 @@ java tools/testkit/TestKitPackage.java
 
 The ignored distribution is written to `.worldline/dist/testkit` and contains:
 
-- `worldline-test-api-0.2.0.jar` for Java 8 authoring;
-- `worldline-test-runner-0.2.0.jar` for the Java 21 CLI;
+- `worldline-test-api-0.2.1.jar` for Java 8 authoring;
+- `worldline-test-runner-0.2.1.jar` for the Java 21 CLI;
 - deterministic SHA-256 checksums and launchers.
 
 Pin the version and checksum used by the external project. Do not commit a
@@ -110,8 +110,8 @@ Compile the product and spec separately. Pass product outputs to the runner
 through the bounded classpath:
 
 ```text
-javac --release 8 -classpath worldline-test-api-0.2.0.jar;build/classes -d build/worldline-tests tests/worldline/src/test/java/example/tests/StorageIndexWorldlineTest.java
-java -jar worldline-test-runner-0.2.0.jar test run build/worldline-tests --classpath=build/classes --no-runtime
+javac --release 8 -classpath worldline-test-api-0.2.1.jar;build/classes -d build/worldline-tests tests/worldline/src/test/java/example/tests/StorageIndexWorldlineTest.java
+java -jar worldline-test-runner-0.2.1.jar test run build/worldline-tests --classpath=build/classes --no-runtime
 ```
 
 Use the platform classpath separator (`;` on Windows, `:` on Linux/macOS).
@@ -151,7 +151,7 @@ The default provider accepts one descriptor-packaged `B173Mod` per isolated
 attempt:
 
 ```text
-java -jar worldline-test-runner-0.2.0.jar test run build/worldline-tests \
+java -jar worldline-test-runner-0.2.1.jar test run build/worldline-tests \
   --mod=build/example-mod.jar \
   --provider=worldline.b173.B173TestRuntimeProvider
 ```

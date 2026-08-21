@@ -182,14 +182,14 @@ mod's separately compiled product classes without weakening source isolation.
 Initialize the isolated Gradle project in a mod repository:
 
 ```text
-java -jar worldline-test-runner-0.2.0.jar init
+java -jar worldline-test-runner-0.2.1.jar init
 tests/worldline/gradlew.bat worldlineDoctor worldlineTest
 ```
 
 The generated project pins Gradle, keeps every spec under
 `tests/worldline/src/test/java`, creates an ignored empty official-JAR drop
 zone, and emits JUnit XML plus Worldline evidence. The binary plugin is
-`dev.worldline.test`; it never changes the mod's legacy build.
+`io.github.lucasrgt.worldline.test`; it never changes the mod's legacy build.
 
 Useful tasks mirror the TestKit CLI:
 

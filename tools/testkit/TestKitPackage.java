@@ -16,7 +16,8 @@ import java.util.stream.Stream;
 
 /** Builds deterministic ignored TestKit 0.x authoring and runner distributions. */
 public final class TestKitPackage {
-    private static final String VERSION = "0.2.0";
+    private static final String VERSION = "0.2.1";
+    private static final String GROUP = "io.github.lucasrgt.worldline";
     private static final List<String> API = Arrays.asList("api", "testmodel", "testapi");
     private static final List<String> RUNNER = Arrays.asList("optimization", "api", "invariants",
             "semantics", "trace", "kernel", "reproduction", "mods", "analysis", "modtest",
@@ -78,7 +79,7 @@ public final class TestKitPackage {
         return value.getBytes(StandardCharsets.US_ASCII);
     }
     private static void maven(Path repository, Path jar, String artifact) throws IOException {
-        Path directory = repository.resolve("dev/worldline").resolve(artifact).resolve(VERSION);
+        Path directory = repository.resolve(GROUP.replace('.', '/')).resolve(artifact).resolve(VERSION);
         Files.createDirectories(directory);
         Files.copy(jar, directory.resolve(artifact + "-" + VERSION + ".jar"),
                 java.nio.file.StandardCopyOption.REPLACE_EXISTING);
@@ -87,7 +88,7 @@ public final class TestKitPackage {
                 + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
                 + "xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 "
                 + "https://maven.apache.org/xsd/maven-4.0.0.xsd\">\n"
-                + "  <modelVersion>4.0.0</modelVersion>\n  <groupId>dev.worldline</groupId>\n"
+                + "  <modelVersion>4.0.0</modelVersion>\n  <groupId>" + GROUP + "</groupId>\n"
                 + "  <artifactId>" + artifact + "</artifactId>\n  <version>" + VERSION + "</version>\n"
                 + "  <name>Worldline TestKit</name>\n  <licenses><license><name>MIT</name>"
                 + "<url>https://opensource.org/license/mit</url></license></licenses>\n</project>\n";

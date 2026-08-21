@@ -12,7 +12,7 @@ navigation, refactoring, breakpoints, and Gradle source-set import.
 From a Worldline 0.2 runner distribution:
 
 ```text
-java -jar worldline-test-runner-0.2.0.jar init
+java -jar worldline-test-runner-0.2.1.jar init
 cd tests/worldline
 ./gradlew worldlineDoctor
 ./gradlew worldlineTest
@@ -93,7 +93,7 @@ and SHA-256 values do, and both `doctor` and runtime gates fail on mismatch.
 An official JAR tracked by the containing Git repository is also a hard error.
 
 The plugin downloads its API and runner from the immutable
-`testkit-v0.2.0` GitHub release and verifies frozen SHA-256 values. Offline
+`testkit-v0.2.1` GitHub release and verifies frozen SHA-256 values. Offline
 builds can set `-Pworldline.distributionDir=/path/to/testkit`; both exact JARs
 must be present and valid there.
 
@@ -120,15 +120,15 @@ Initialization templates are `basic`, `storage`, `gui`, `optimization`, and
 `multiplayer`:
 
 ```text
-java -jar worldline-test-runner-0.2.0.jar init --template=storage
-java -jar worldline-test-runner-0.2.0.jar init --host-only
+java -jar worldline-test-runner-0.2.1.jar init --template=storage
+java -jar worldline-test-runner-0.2.1.jar init --host-only
 ```
 
 Migrate the earlier `worldline-tests` convention without deleting it:
 
 ```text
-java -jar worldline-test-runner-0.2.0.jar migrate
-java -jar worldline-test-runner-0.2.0.jar doctor tests/worldline
+java -jar worldline-test-runner-0.2.1.jar migrate
+java -jar worldline-test-runner-0.2.1.jar doctor tests/worldline
 ```
 
 Migration copies sources and snapshots, preserves the legacy configuration,
@@ -153,7 +153,8 @@ The task writes machine-readable JUnit XML to
 
 ## Release model
 
-The binary plugin is `dev.worldline.test`. Tag `testkit-v0.2.0` runs the
+The binary plugin is `io.github.lucasrgt.worldline.test`. Tag
+`testkit-v0.2.1` runs the
 canonical Worldline gate, Gradle TestKit functional tests, plugin validation,
 Gradle Plugin Portal publication, and a GitHub release containing hash-pinned
 API and runner JARs. Publication fails closed when release credentials are

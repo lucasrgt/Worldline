@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 final class WorldlinePluginTest {
     @Test void registersTheAdoptionSurface() {
         Project project = ProjectBuilder.builder().build();
-        project.getPluginManager().apply("dev.worldline.test");
+        project.getPluginManager().apply("io.github.lucasrgt.worldline.test");
         for (String task : new String[] {"worldlineTest", "worldlineTestList", "worldlineTestWatch",
                 "worldlineTestInspect", "worldlineTestMinimize", "worldlineTestUpdateSnapshots",
                 "worldlineDoctor", "worldlineVerifyOracle", "worldlineAcquireRuntime",
