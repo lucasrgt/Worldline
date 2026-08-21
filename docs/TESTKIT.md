@@ -6,6 +6,9 @@ failure artifacts, and Worldline's deterministic runtime and official-oracle
 rules. The `0.x` label is deliberate: real external specs may still refine the
 API before it is frozen.
 
+External projects that also need domain helpers, runtime providers, or
+performance records should follow the [extension authoring guide](EXTENSIONS.md).
+
 The tests are ordinary Java. "DSL" means a typed internal Java API; Worldline
 does not parse a custom language, run JavaScript, or introduce implicit globals.
 Consequently Java formatters, syntax highlighting, completion, navigation,

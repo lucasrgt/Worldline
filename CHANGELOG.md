@@ -24,6 +24,9 @@ before they are promoted.
   ten-spec/30-test acceptance suite, and external Butter/AeroModelLib consumers.
 - Licensed Worldline and TestKit under the MIT License for external use and
   redistribution.
+- Documented the 0.x extension model, including external project layout,
+  provider ownership, optimization evidence, legacy-loader limits, and the
+  recommended Beta Energistics integration sequence.
 - This is not a promoted stable release or a change to the official M469
   behavioral evidence. TestKit remains 0.x until external-mod use validates
   the authoring surface.

@@ -5,6 +5,7 @@
 <p align="center">
   <a href="#getting-started">Getting Started</a> |
   <a href="#worldline-testkit">TestKit</a> |
+  <a href="#extensions">Extensions</a> |
   <a href="#mod-testing">Mod Testing</a> |
   <a href="#capabilities">Capabilities</a> |
   <a href="#documentation">Documentation</a>
@@ -210,6 +211,34 @@ guessing an ID or obfuscated field.
 
 See the complete [TestKit guide](docs/TESTKIT.md) and the
 [ten-spec, 30-test example project](examples/testkit/README.md).
+
+---
+
+## Extensions
+
+A Worldline 0.x extension is an external project-owned integration layer. It
+combines ordinary Java TestKit specs, optional typed fixtures and assertions,
+an optional runtime provider, and optimization records without moving the
+mod's implementation into Worldline.
+
+Choose the smallest integration lane that fits the project:
+
+| Need | Extension surface |
+| --- | --- |
+| Test dependency-free mod logic | TestKit specs plus `--classpath` |
+| Test a descriptor-packaged `B173Mod` | TestKit specs plus `--mod` |
+| Support another controlled runtime | `TestRuntimeProvider` and a Worldline adapter |
+| Qualify performance work | Project-owned `optimizations/catalog/` records plus evidence |
+| Load legacy ModLoader, StationAPI, or Aero mods | A separately qualified loader adapter; not provided by the default provider |
+
+In 0.x, an extension is a repository convention rather than an executable
+plugin format. It must not bypass mapped-runtime ownership, register guessed
+semantic mappings, or place Minecraft classes in the neutral TestKit API.
+
+The complete [extension authoring guide](docs/EXTENSIONS.md) includes a
+recommended repository layout, compile and run flow, provider boundary,
+optimization workflow, promotion checklist, and a concrete Beta Energistics
+blueprint.
 
 ---
 
@@ -454,6 +483,7 @@ classes, RetroMCP, or native libraries on their product classpaths.
 | [Semantics](docs/SEMANTICS.md) | Roles, mappings, manifests, confidence, and coverage |
 | [Optimization SDK](docs/OPTIMIZATION_SDK.md) | Stable optimization IDs and catalog ownership |
 | [TestKit 0.x](docs/TESTKIT.md) | Java specs, runner isolation, reporters, snapshots, artifacts, and CLI |
+| [Extension authoring](docs/EXTENSIONS.md) | External test layers, provider boundary, optimization evidence, and legacy-mod limits |
 | [Changelog](CHANGELOG.md) | Stable scope and release history |
 | [Engineering guide](AGENTS.md) | Behavioral constitution and canonical gates |
 
