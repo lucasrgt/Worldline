@@ -29,9 +29,15 @@ public final class BehaviorCompletenessCheck {
     private int pendingExpected;
 
     public static void main(String[] arguments) {
-        if (arguments.length != 0) { System.err.println("usage: java tools/harness/BehaviorCompletenessCheck.java"); System.exit(2); }
+        if (arguments.length != 0) {
+            System.err.println("usage: java tools/harness/BehaviorCompletenessCheck.java");
+            System.exit(2);
+        }
         try { new BehaviorCompletenessCheck().execute(); }
-        catch (Exception error) { System.err.println("behavior completeness failed: " + error.getMessage()); System.exit(1); }
+        catch (Exception error) {
+            System.err.println("behavior completeness failed: " + error.getMessage());
+            System.exit(1);
+        }
     }
 
     private void execute() throws Exception {
@@ -137,7 +143,9 @@ public final class BehaviorCompletenessCheck {
 
     private Properties load(Path path) throws IOException {
         Properties properties = new Properties();
-        try (java.io.Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) { properties.load(reader); }
+        try (java.io.Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+            properties.load(reader);
+        }
         return properties;
     }
 

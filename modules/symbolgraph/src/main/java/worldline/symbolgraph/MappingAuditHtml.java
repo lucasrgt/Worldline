@@ -23,10 +23,11 @@ public final class MappingAuditHtml {
                 + "h1{margin-bottom:4px}.meta{color:#aab4c8;font-family:monospace}"
                 + ".filters{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}"
                 + "button{border:1px solid #5c6880;background:#1c2230;color:inherit;padding:7px 10px;cursor:pointer}"
-                + "table{border-collapse:collapse;width:100%;font-size:12px}th{position:sticky;top:0;background:#222a3a}"
+                + "table{border-collapse:collapse;width:100%;font-size:.8em}"
+                + "th{position:sticky;top:0;background:#222a3a}"
                 + "th,td{border:1px solid #394258;padding:6px;text-align:left;vertical-align:top}"
                 + "tr:target{outline:3px solid #ffd166}.CONFLICT{background:#4a2028}.CORROBORATED{background:#173c2c}"
-                + "code{white-space:pre-wrap;overflow-wrap:anywhere}.muted{color:#9ba7bc}[hidden]{display:none}</style>");
+                + "code{white-space:pre-wrap;overflow-wrap:anywhere}.muted{color:#9ba7bc}</style>");
         line(html, "</head><body><h1>Worldline Mapping Audit</h1>");
         line(html, "<p class=\"meta\">queue.sha256=" + queue.sha256() + "<br>evidence.sha256="
                 + evidence.sha256() + "<br>items=" + queue.items().size() + "</p>");

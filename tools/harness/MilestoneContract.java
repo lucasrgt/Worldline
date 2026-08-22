@@ -120,8 +120,8 @@ final class MilestoneContract {
             if (explicit == null || explicit.isBlank()) return;
             Object behavior = atlasValue(require, explicit.trim());
             require(behavior != null, "behavior Atlas has no token " + explicit.trim());
-            require(progress != null && progress.equals(behavior),
-                    "progress id does not resolve to its Atlas behavior");
+            require(progress == null || progress.equals(behavior),
+                    id + " conflicts with its explicit Atlas behavior " + explicit.trim());
             String atlas = (String) type.getMethod("atlasId").invoke(behavior);
             require(atlas.equals("atlas.scenario." + explicit.trim()), "behavior Atlas id drifted: " + atlas);
         }

@@ -23,7 +23,8 @@ public final class ForeignUiContractCheck {
         Path api = root.resolve(".worldline/build/classes/api");
         List<String> compile = new ArrayList<String>(Arrays.asList("javac", "-encoding", "UTF-8",
                 "--release", "8", "-Xlint:all,-options", "-Werror", "-classpath", api.toString(),
-                "-d", output.toString(), root.resolve("adapters/b173-client/src/main/java/worldline/b173/B173ForeignUi.java").toString()));
+                "-d", output.toString(), root.resolve(
+                        "adapters/b173-client/src/main/java/worldline/b173/B173ForeignUi.java").toString()));
         compile.addAll(javaFiles(root.resolve("adapters/b173-client/contract-src")));
         run(compile);
         run(Arrays.asList("java", "-classpath", output + System.getProperty("path.separator") + api,
