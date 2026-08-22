@@ -165,6 +165,18 @@ public final class SymbolGraphTest {
             require(report.phantom(SymbolKind.CLASS) == 0, "no phantom class");
             require(report.gapCounts().get(OfficialGapKind.CONSTRUCTOR).intValue() > 0,
                     "constructors classified");
+            require(report.gaps().size() == report.missing(SymbolKind.FIELD)
+                    + report.missing(SymbolKind.METHOD), "exact gap inventory");
+            TinyMapping nostalgia = read("tiny\t2\t0\tintermediary\tnamed\n"
+                    + "c\tfixture/Class\tFixtureClass\n");
+            SymbolGraph graph = new SymbolGraphBuilder().build(mapping, nostalgia);
+            MappingQualificationQueue queue = MappingQualificationQueue.create(graph, report, report);
+            require(!queue.items().isEmpty() && queue.render().contains("UNMAPPED_METHOD")
+                    && queue.sha256().equals(MappingQualificationQueue.create(graph, report, report).sha256()),
+                    "deterministic exact-gap queue");
+            for (int index = 1; index < queue.items().size(); index++)
+                require(queue.items().get(index - 1).priority() <= queue.items().get(index).priority(),
+                        "qualification priority order");
         } finally {
             Files.deleteIfExists(jar);
         }

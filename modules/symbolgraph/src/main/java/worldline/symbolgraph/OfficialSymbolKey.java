@@ -1,6 +1,6 @@
 package worldline.symbolgraph;
 
-final class OfficialSymbolKey implements Comparable<OfficialSymbolKey> {
+public final class OfficialSymbolKey implements Comparable<OfficialSymbolKey> {
     private final SymbolKind kind;
     private final String owner;
     private final String name;
@@ -16,11 +16,11 @@ final class OfficialSymbolKey implements Comparable<OfficialSymbolKey> {
         this.descriptor = descriptor;
     }
 
-    String canonical() { return kind.name() + "|" + owner + "|" + name + "|" + descriptor; }
-    SymbolKind kind() { return kind; }
-    String owner() { return owner; }
-    String name() { return name; }
-    String descriptor() { return descriptor; }
+    public String canonical() { return kind.name() + "|" + owner + "|" + name + "|" + descriptor; }
+    public SymbolKind kind() { return kind; }
+    public String owner() { return owner; }
+    public String name() { return name; }
+    public String descriptor() { return descriptor; }
     @Override public int compareTo(OfficialSymbolKey other) { return canonical().compareTo(other.canonical()); }
     @Override public boolean equals(Object other) {
         return other instanceof OfficialSymbolKey

@@ -2,6 +2,7 @@ package worldline.symbolgraph;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -98,16 +99,21 @@ public final class OfficialBytecodeAudit {
         public int descriptorConflictCandidates() { return descriptorCandidates.size(); }
         Set<OfficialSymbolKey> missingSymbols() { return missing; }
 
+        public Map<OfficialSymbolKey, OfficialGapKind> gaps() {
+            Set<String> missingOwners = new TreeSet<String>();
+            for (OfficialSymbolKey key : missing)
+                if (key.kind() == SymbolKind.CLASS) missingOwners.add(key.name());
+            Map<OfficialSymbolKey, OfficialGapKind> gaps =
+                    new LinkedHashMap<OfficialSymbolKey, OfficialGapKind>();
+            for (OfficialSymbolKey key : missing) gaps.put(key, classifyGap(key, missingOwners));
+            return Collections.unmodifiableMap(gaps);
+        }
+
         public Map<OfficialGapKind, Integer> gapCounts() {
             Map<OfficialGapKind, Integer> counts =
                     new java.util.EnumMap<OfficialGapKind, Integer>(OfficialGapKind.class);
             for (OfficialGapKind kind : OfficialGapKind.values()) counts.put(kind, Integer.valueOf(0));
-            Set<String> missingOwners = new TreeSet<String>();
-            for (OfficialSymbolKey key : missing) {
-                if (key.kind() == SymbolKind.CLASS) missingOwners.add(key.name());
-            }
-            for (OfficialSymbolKey key : missing) {
-                OfficialGapKind kind = classifyGap(key, missingOwners);
+            for (OfficialGapKind kind : gaps().values()) {
                 counts.put(kind, Integer.valueOf(counts.get(kind).intValue() + 1));
             }
             return Collections.unmodifiableMap(counts);

@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import worldline.symbolgraph.MappingCoverageReport;
+import worldline.symbolgraph.MappingQualificationQueue;
 
 public final class MappingCommandTest {
     private MappingCommandTest() {}
@@ -38,6 +39,12 @@ public final class MappingCommandTest {
                     .getBytes(StandardCharsets.UTF_8));
             MappingCoverageReport report = MappingCoverageReport.create(
                     official, official, intermediary, nostalgia, descriptor, retro);
+            MappingQualificationQueue queue = MappingQualificationQueue.create(
+                    official, official, intermediary, nostalgia, descriptor, retro);
+            require(!queue.items().isEmpty() && queue.render().contains("UNMAPPED_METHOD")
+                    && queue.sha256().equals(MappingQualificationQueue.create(official, official,
+                            intermediary, nostalgia, descriptor, retro).sha256()),
+                    "mapping qualification queue is incomplete or unstable");
             ByteArrayOutputStream output = new ByteArrayOutputStream(), error = new ByteArrayOutputStream();
             int status = WorldlineCli.run(new String[] {"mappings", "report", official.toString(),
                     official.toString(), intermediary.toString(), nostalgia.toString(), descriptor.toString(),
@@ -45,6 +52,14 @@ public final class MappingCommandTest {
             require(status == 0 && error.size() == 0
                     && output.toString("UTF-8").contains("WORLDLINE_MAPPINGS_REPORT=PASS"),
                     "mapping report CLI failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"mappings", "queue", official.toString(),
+                    official.toString(), intermediary.toString(), nostalgia.toString(), descriptor.toString(),
+                    retro.toString()}, new PrintStream(output), new PrintStream(error));
+            require(status == 0 && error.size() == 0
+                    && output.toString("UTF-8").contains("WORLDLINE_MAPPINGS_QUEUE=PASS")
+                    && output.toString("UTF-8").contains("queue.sha256="),
+                    "mapping qualification queue CLI failed");
             StringBuilder expected = new StringBuilder("schema=1\n");
             for (Map.Entry<String, String> metric : report.metrics().entrySet())
                 expected.append("expected.").append(metric.getKey()).append('=')
