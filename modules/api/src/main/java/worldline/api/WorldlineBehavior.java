@@ -202,6 +202,8 @@ public final class WorldlineBehavior {
             "Official furnace recipes map input items to smelted output items");
     public static final WorldlineBehavior FURNACE_FUEL_BURN = define("furnace-fuel-burn", WorldlineFamily.ITEM,
             "Coal, planks, and lava expose their distinct furnace burn durations");
+    public static final WorldlineBehavior SLIME_SPLIT = define("slime-split", WorldlineFamily.HOSTILE,
+            "Killing a larger slime emits child slime spawn objects");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = WorldlineBehaviorRegistry.freeze();
     private final String token, family, subject;
 
