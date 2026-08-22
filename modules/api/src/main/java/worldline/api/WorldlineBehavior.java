@@ -152,6 +152,8 @@ public final class WorldlineBehavior {
             "Power above TNT primes its entity and produces a strength-four explosion");
     public static final WorldlineBehavior ONE_TICK_PISTON_PULSE = define("one-tick-piston-pulse", WorldlineFamily.REDSTONE,
             "A one-tick repeater pulse makes a piston drop its pushed payload");
+    public static final WorldlineBehavior CAKE_CONSUMPTION = define("cake-consumption", WorldlineFamily.ITEM,
+            "Cake activation advances bite metadata, heals, and removes the final slice");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = index();
     private final String token, family, subject;
 
@@ -227,7 +229,7 @@ public final class WorldlineBehavior {
                 LIGHT_MELTING, HOSTILE_SPAWN_LIGHT, WOODEN_DOOR_TOGGLE, TRAPDOOR_TOGGLE,
                 PRESSURE_PLATE, REDSTONE_INPUT_STATE, REPEATER_STATE, RAIL_POWER,
                 REDSTONE_TORCH_INVERSION, DISPENSER_QUASI_CONNECTIVITY,
-                TNT_QUASI_CONNECTIVITY, ONE_TICK_PISTON_PULSE };
+                TNT_QUASI_CONNECTIVITY, ONE_TICK_PISTON_PULSE, CAKE_CONSUMPTION };
         Map<String, WorldlineBehavior> map = new LinkedHashMap<String, WorldlineBehavior>();
         for (int i = 0; i < values.length; i++) {
             if (map.put(values[i].token(), values[i]) != null)
