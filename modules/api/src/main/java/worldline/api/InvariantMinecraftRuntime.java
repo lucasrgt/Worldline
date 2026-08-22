@@ -16,6 +16,11 @@ public interface InvariantMinecraftRuntime extends AutomatedMinecraftRuntime {
         return Collections.emptyList();
     }
 
+    /** Known recipes preserving legacy damage metadata. Empty when unavailable. */
+    default List<ItemStackRecipe> stackRecipes() {
+        return Collections.emptyList();
+    }
+
     /** Known death and presence drops. Empty when the backend has none. */
     default List<CauseDrop> drops() {
         return Collections.emptyList();

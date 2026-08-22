@@ -9,6 +9,7 @@ public final class DomainApiTest {
         snapshotsAreBoundedAndImmutable();
         uiSpecRoundTripsBuilderAndInventory();
         itemCensusIsExactAndFailClosed();
+        itemStackRecipePreservesMetadata();
         semanticMappingIsExactAndFailClosed();
         expandedSurfaceDefaultsFailClosed();
         serverStateIsExactAndFailClosed();
@@ -361,6 +362,27 @@ public final class DomainApiTest {
         failure(() -> new InvariantViolation("", "detail"));
         failure(() -> new SpawnRule("", "minecraft:pig", 1));
         failure(() -> new SpawnRule("block:2", "minecraft:pig", 0));
+    }
+
+    private static void itemStackRecipePreservesMetadata() {
+        RemoteItemStack white = new RemoteItemStack(35, 1, 0);
+        RemoteItemStack red = new RemoteItemStack(351, 1, 1);
+        RemoteItemStack redWool = new RemoteItemStack(35, 1, 14);
+        ItemStackRecipe recipe = new ItemStackRecipe(
+                java.util.Arrays.asList(red, white, red),
+                java.util.Collections.singletonList(redWool));
+        equal(recipe, new ItemStackRecipe(
+                java.util.Arrays.asList(white, new RemoteItemStack(351, 2, 1)),
+                java.util.Collections.singletonList(redWool)), "metadata recipe");
+        if (!recipe.inputs().get(0).equals(white)
+                || !recipe.inputs().get(1).equals(new RemoteItemStack(351, 2, 1))
+                || !recipe.outputs().get(0).equals(redWool)) {
+            throw new AssertionError("metadata recipe canonicalization failed");
+        }
+        unsupported(() -> recipe.inputs().add(white));
+        failure(() -> new ItemStackRecipe(java.util.Collections.emptyList(), recipe.outputs()));
+        failure(() -> new ItemStackRecipe(java.util.Arrays.asList(
+                new RemoteItemStack(1, 127, 0), new RemoteItemStack(1, 1, 0)), recipe.outputs()));
     }
 
     private static void semanticMappingIsExactAndFailClosed() {
