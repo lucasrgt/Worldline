@@ -38,5 +38,5 @@ Milestone numbers remain import aliases only.
 
 The historical backlog is an explicit ratchet in
 `behavior/coverage.properties`. Backfill changes must reduce
-`legacy.expected`; it may never increase. New milestones cannot enter that
-legacy allowance.
+`pending.expected`; it may never increase. Pending means incomplete work, not
+an accepted legacy state. New milestones cannot enter that temporary backlog.

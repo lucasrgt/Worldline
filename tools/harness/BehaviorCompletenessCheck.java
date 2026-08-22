@@ -23,9 +23,9 @@ public final class BehaviorCompletenessCheck {
             "([a-z][A-Za-z0-9_.]*[A-Z][A-Za-z0-9_]*)#([a-z][A-Za-z0-9_]*)");
     private final Path root = Paths.get("").toAbsolutePath().normalize();
     private final Set<String> catalog = new HashSet<String>();
-    private final Set<String> legacyNonnumeric = new HashSet<String>();
-    private int legacyMax;
-    private int legacyExpected;
+    private final Set<String> pendingNonnumeric = new HashSet<String>();
+    private int pendingMax;
+    private int pendingExpected;
 
     public static void main(String[] arguments) {
         if (arguments.length != 0) { System.err.println("usage: java tools/harness/BehaviorCompletenessCheck.java"); System.exit(2); }
@@ -36,27 +36,27 @@ public final class BehaviorCompletenessCheck {
     private void execute() throws Exception {
         loadPolicy();
         loadCatalog();
-        int complete = 0, legacy = 0, total = 0;
+        int complete = 0, pending = 0, total = 0;
         for (Path manifest : manifests()) {
             total++;
             Properties smoke = load(manifest);
             String directory = manifest.getParent().getFileName().toString();
             String behavior = smoke.getProperty("behavior", "").trim();
-            if (behavior.isEmpty()) { requireLegacy(directory); legacy++; }
+            if (behavior.isEmpty()) { requirePending(directory); pending++; }
             else { validateContract(smoke, manifest, behavior); complete++; }
         }
-        require(legacy == legacyExpected,
-                "legacy ratchet drift: expected " + legacyExpected + " but found " + legacy);
-        System.out.println("  behavior completeness: " + complete + " complete, " + legacy
-                + " legacy, " + total + " manifests");
+        require(pending == pendingExpected,
+                "backfill ratchet drift: expected " + pendingExpected + " but found " + pending);
+        System.out.println("  behavior completeness: " + complete + " complete, " + pending
+                + " pending backfill, " + total + " manifests");
     }
 
     private void loadPolicy() throws IOException {
         Properties policy = load(root.resolve("behavior/coverage.properties"));
         require("1".equals(required(policy, "schema")), "unsupported behavior coverage schema");
-        legacyMax = Integer.parseInt(required(policy, "legacy.max.milestone"));
-        legacyExpected = Integer.parseInt(required(policy, "legacy.expected"));
-        Collections.addAll(legacyNonnumeric, required(policy, "legacy.nonnumeric").split(","));
+        pendingMax = Integer.parseInt(required(policy, "pending.max.milestone"));
+        pendingExpected = Integer.parseInt(required(policy, "pending.expected"));
+        Collections.addAll(pendingNonnumeric, required(policy, "pending.nonnumeric").split(","));
     }
 
     private void loadCatalog() throws IOException {
@@ -73,14 +73,14 @@ public final class BehaviorCompletenessCheck {
         }
     }
 
-    private void requireLegacy(String directory) {
+    private void requirePending(String directory) {
         Matcher matcher = MILESTONE.matcher(directory);
         if (matcher.matches()) {
             int number = Integer.parseInt(matcher.group(1));
-            require(number <= legacyMax, "new milestone lacks behavior contract: " + directory);
+            require(number <= pendingMax, "new milestone lacks behavior contract: " + directory);
             return;
         }
-        require(legacyNonnumeric.contains(directory), "unregistered smoke lacks behavior contract: " + directory);
+        require(pendingNonnumeric.contains(directory), "unregistered smoke lacks behavior contract: " + directory);
     }
 
     private void validateContract(Properties smoke, Path manifest, String behavior) throws IOException {
