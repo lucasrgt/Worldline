@@ -16,7 +16,8 @@ public final class B173CorrectionFixture {
         packet.writeDouble(8.5D); packet.writeFloat(135F); packet.writeFloat(-22.5F); packet.writeBoolean(true);
         ByteArrayOutputStream sink = new ByteArrayOutputStream();
         B173PlayInbound inbound = new B173PlayInbound(new DataInputStream(
-                new ByteArrayInputStream(source.toByteArray())), new DataOutputStream(sink), 1000);
+                new ByteArrayInputStream(source.toByteArray())), new DataOutputStream(sink), 1000,
+                1, "M34Fixture", 0);
         inbound.skip(13); B173PlayInbound.Correction correction = inbound.takeCorrection();
         require(correction != null && correction.pose.equals(new PlayerPose(-3.5D, 71D, 8.5D, 135F, -22.5F))
                 && Math.abs(correction.stance - 1.62D) < 0.000001D, "correction decode drift");

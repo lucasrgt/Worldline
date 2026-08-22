@@ -22,6 +22,7 @@ import worldline.api.RecoveringMovementMultiplayerSession;
 import worldline.api.RemoteWorldView;
 import worldline.api.ServerPlayerState;
 import worldline.b173server.B173DedicatedServer;
+import worldline.b173server.B173PlayerSeed;
 import worldline.b173server.B173WireClient;
 
 /** Proves a synchronous event decision stops later caller-supplied movement. */
@@ -44,7 +45,8 @@ public final class ObserverControlSmoke {
         List<MovementRouteEvent> events = new ArrayList<>(); Thread caller = Thread.currentThread();
         MovementRouteResult route; RemoteWorldView after; ServerPlayerState player; PlayerPose initial;
         try {
-            server.boot(); client.connect(); awaitPlayers(server, Collections.singletonList(username));
+            server.boot(); B173PlayerSeed.write(workspace, username, 4.5D, 60D, 4.5D);
+            client.connect(); awaitPlayers(server, Collections.singletonList(username));
             initial = client.synchronizePose(); int chunkX = floor(initial.x()) >> 4, chunkZ = floor(initial.z()) >> 4;
             client.awaitRemoteChunk(chunkX, chunkZ); RemoteWorldView before = client.sustainTicks(5);
             BlockPosition block = solid(before, initial);

@@ -109,7 +109,7 @@ public final class TorchBurnoutSetSmoke {
                     && !placed.equals(floor), "persisted recovered redstone torch drift: " + placed);
             String evidence = "column=" + column[0] + ",support=" + top.x() + ":" + top.y() + ":" + top.z()
                     + ":1:0,torch=" + torch.x() + ":" + torch.y() + ":" + torch.z()
-                    + ":76:4->75:4->76:4,burnout=75:4,recovered=76:4,window=100,toggles=8,persisted=76:4,clients=2,disconnect=clean";
+                    + ":76:4->75:4->76:4,burnout=75:4,recovered=76:4,rapidActivations=24,recoveryWait=400,persisted=76:4,clients=2,disconnect=clean";
             String trace = "v1|server=official-b1.7.3|seed=" + seed
                     + "|fixture=raised-stone+inverter+torch76-burnout|cause=packet15-item76-then-rapid-lever-toggles"
                     + "|wire=packet53-torch76:4<->torch75:4|oracle=live-on+burnout-off-unpowered+recover-on+fresh-login|"

@@ -1,0 +1,11 @@
+# owner kind descriptor named client server
+net/minecraft/src/BlockRedstoneWire	c	-	net/minecraft/src/BlockRedstoneWire	sm	lo
+net/minecraft/src/BlockRedstoneTorch	c	-	net/minecraft/src/BlockRedstoneTorch	db	by
+net/minecraft/src/BlockRedstoneRepeater	c	-	net/minecraft/src/BlockRedstoneRepeater	wo	oi
+net/minecraft/src/Block	f	Lnet/minecraft/src/Block;	redstoneWire	aw	aw
+net/minecraft/src/Block	f	Lnet/minecraft/src/Block;	torchRedstoneActive	aR	aR
+net/minecraft/src/Block	f	Lnet/minecraft/src/Block;	redstoneRepeaterIdle	bi	bi
+net/minecraft/src/Block	f	Lnet/minecraft/src/Block;	redstoneRepeaterActive	bj	bj
+net/minecraft/src/Block	m	()Z	canProvidePower	f	d
+net/minecraft/src/Block	m	(Lnet/minecraft/src/IBlockAccess;IIII)Z	isPoweringTo	c	a
+net/minecraft/src/World	m	(III)Z	isBlockIndirectlyGettingPowered	s	r

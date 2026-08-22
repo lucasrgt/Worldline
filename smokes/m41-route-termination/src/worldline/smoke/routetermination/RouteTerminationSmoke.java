@@ -23,6 +23,7 @@ import worldline.api.RecoveringMovementMultiplayerSession;
 import worldline.api.RemoteWorldView;
 import worldline.api.ServerPlayerState;
 import worldline.b173server.B173DedicatedServer;
+import worldline.b173server.B173PlayerSeed;
 import worldline.b173server.B173WireClient;
 
 /** Proves exact immutable summaries for stopped and exhausted routes. */
@@ -45,7 +46,8 @@ public final class RouteTerminationSmoke {
         List<MovementRouteEvent> stoppedEvents = new ArrayList<>(), exhaustedEvents = new ArrayList<>();
         MovementRouteExecution stopped, exhausted; RemoteWorldView after; ServerPlayerState player;
         try {
-            server.boot(); client.connect(); awaitPlayers(server, Collections.singletonList(username));
+            server.boot(); B173PlayerSeed.write(workspace, username, 4.5D, 60D, 4.5D);
+            client.connect(); awaitPlayers(server, Collections.singletonList(username));
             PlayerPose initial = client.synchronizePose(); int chunkX = floor(initial.x()) >> 4;
             int chunkZ = floor(initial.z()) >> 4; client.awaitRemoteChunk(chunkX, chunkZ);
             RemoteWorldView before = client.sustainTicks(5);

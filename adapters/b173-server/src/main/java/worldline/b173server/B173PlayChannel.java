@@ -46,7 +46,7 @@ final class B173PlayChannel {
                         "server position stance drift");
                 stanceHeight = clientY - feetY;
                 pose = new PlayerPose(x, feetY, z, yaw, pitch);
-                acknowledge(x, feetY, clientY, z, yaw, pitch);
+                writePose(false);
                 return pose;
             }
             try { inbound.skip(packet); }
@@ -66,17 +66,12 @@ final class B173PlayChannel {
     }
 
     PlayerPose moveBy(double deltaX, double deltaY, double deltaZ) throws IOException {
-        require(pose != null, "play channel is not synchronized");
-        inbound.enableImplicitChunks();
-        PlayerPose target = new PlayerPose(pose.x() + deltaX, pose.y() + deltaY,
-                pose.z() + deltaZ, pose.yaw(), pose.pitch());
-        output.writeByte(13);
-        output.writeDouble(target.x()); output.writeDouble(target.y());
-        output.writeDouble(target.y() + stanceHeight); output.writeDouble(target.z());
-        output.writeFloat(target.yaw()); output.writeFloat(target.pitch());
-        output.writeBoolean(true); output.flush();
-        pose = target; return target;
-    }
+        return move(deltaX, deltaY, deltaZ, true); }
+
+    PlayerPose move(double dx, double dy, double dz, boolean grounded) throws IOException {
+        require(pose != null, "play channel is not synchronized"); inbound.enableImplicitChunks();
+        pose = new PlayerPose(pose.x() + dx, pose.y() + dy, pose.z() + dz, pose.yaw(), pose.pitch());
+        writePose(grounded); return pose; }
 
     void sendChat(String message) throws IOException {
         require(pose != null, "play channel is not synchronized");
@@ -124,7 +119,7 @@ final class B173PlayChannel {
     void attackObservedMob() throws IOException { require(pose != null && !inbound.windowActive() && inbound.cursorObserved() && inbound.cursor() == null, "observed mob attack requires synchronized play"); require(held.selectedId(276), "observed mob attack requires selected diamond sword"); combat.attackObservedMob(); } void useShearsOnMob(int entity) throws IOException { require(pose != null && !inbound.windowActive() && inbound.cursorObserved() && inbound.cursor() == null, "shears use requires synchronized play"); require(held.selectedId(359), "shears use requires selected shears"); combat.interact(entity); } void useBucketOnMob(int entity) throws IOException { require(pose != null && !inbound.windowActive() && inbound.cursorObserved() && inbound.cursor() == null, "bucket use requires synchronized play"); require(held.selectedId(325), "bucket use requires selected empty bucket"); combat.interact(entity); } void useDyeOnMob(int entity) throws IOException { require(pose != null && !inbound.windowActive() && inbound.cursorObserved() && inbound.cursor() == null, "dye use requires synchronized play"); require(held.selectedId(351), "dye use requires selected dye"); combat.interact(entity); }
     worldline.api.RemoteMobMovement awaitObservedMobMovement() throws IOException { return inbound.awaitObservedMobMovement(); }
     worldline.api.RemoteMobDeath awaitObservedMobDeath() throws IOException { return inbound.awaitObservedMobDeath(); }
-    worldline.api.RemoteDroppedItem peekDroppedItem(worldline.api.RemoteItemStack expected) { return inbound.peekDroppedItem(expected); } void useSelectedItemInAir() throws IOException { require(pose != null && !inbound.windowActive() && inbound.cursorObserved() && inbound.cursor() == null, "air use requires synchronized personal window and empty cursor"); held.useInAir(); } worldline.api.RemoteObjectSpawn awaitObjectSpawn(int type) throws IOException { return inbound.awaitObjectSpawn(type); } worldline.api.RemoteBedUse awaitBedUse() throws IOException { return inbound.awaitBedUse(); } worldline.api.RemoteNoteEvent awaitNoteEvent() throws IOException { return inbound.awaitNoteEvent(); } worldline.api.RemoteSignText awaitSignText() throws IOException { return inbound.awaitSignText(); } worldline.api.RemotePaintingSpawn awaitPainting() throws IOException { return inbound.awaitPainting(); }
+    worldline.api.RemoteDroppedItem peekDroppedItem(worldline.api.RemoteItemStack expected) { return inbound.peekDroppedItem(expected); } void useSelectedItemInAir() throws IOException { require(pose != null && !inbound.windowActive() && inbound.cursorObserved() && inbound.cursor() == null, "air use requires synchronized personal window and empty cursor"); held.useInAir(); } worldline.api.RemoteObjectSpawn awaitObjectSpawn(int type) throws IOException { return inbound.awaitObjectSpawn(type); } worldline.api.RemoteBedUse awaitBedUse() throws IOException { return inbound.awaitBedUse(); } worldline.api.RemoteRainStart awaitRainStart() throws IOException { return inbound.awaitRainStart(); } worldline.api.RemoteNoteEvent awaitNoteEvent() throws IOException { return inbound.awaitNoteEvent(); } worldline.api.RemoteSignText awaitSignText() throws IOException { return inbound.awaitSignText(); } worldline.api.RemotePaintingSpawn awaitPainting() throws IOException { return inbound.awaitPainting(); }
 
     void selectHeldSlot(int slot) throws IOException { require(pose != null, "play channel is not synchronized");
         held.select(slot); }
@@ -144,8 +139,7 @@ final class B173PlayChannel {
         if (ticks < 1 || ticks > 1200) throw new IllegalArgumentException("invalid heartbeat tick count");
         boolean corrected = false;
         for (int tick = 1; tick <= ticks; tick++) {
-            if (tick % 20 == 0) acknowledge(pose.x(), pose.y(), pose.y() + stanceHeight,
-                    pose.z(), pose.yaw(), pose.pitch());
+            if (tick % 20 == 0) writePose(false);
             else { output.writeByte(10); output.writeBoolean(false); output.flush(); }
             Thread.sleep(50L); inbound.pumpAvailable(); corrected |= applyCorrection();
         }
@@ -154,17 +148,12 @@ final class B173PlayChannel {
 
     private boolean applyCorrection() {
         B173PlayInbound.Correction value = inbound.takeCorrection();
-        if (value == null) return false;
-        pose = value.pose; stanceHeight = value.stance; return true;
-    }
+        if (value == null) return false; pose = value.pose; stanceHeight = value.stance; return true; }
 
-    private void acknowledge(double x, double feetY, double clientY, double z,
-            float yaw, float pitch) throws IOException {
-        output.writeByte(13);
-        output.writeDouble(x); output.writeDouble(feetY); output.writeDouble(clientY);
-        output.writeDouble(z); output.writeFloat(yaw); output.writeFloat(pitch);
-        output.writeBoolean(false); output.flush();
-    }
+    private void writePose(boolean grounded) throws IOException {
+        output.writeByte(13); output.writeDouble(pose.x()); output.writeDouble(pose.y());
+        output.writeDouble(pose.y() + stanceHeight); output.writeDouble(pose.z());
+        output.writeFloat(pose.yaw()); output.writeFloat(pose.pitch()); output.writeBoolean(grounded); output.flush(); }
 
     private static void require(boolean condition, String message) { if (!condition) throw new IllegalStateException(message); }
 }

@@ -53,6 +53,7 @@ public final class SemanticCatalog {
         all.addAll(LifecycleSemantics.mappings());
         all.addAll(LabSemantics.mappings());
         all.addAll(DomainSemantics.mappings());
+        all.addAll(RedstoneSemantics.mappings());
         return of(all);
     }
 

@@ -40,7 +40,8 @@ public final class AeroCombatWindowCycle {
         try {
             wire=Captured.start(root,Arrays.asList("java","-classpath",classpath(classes),
                     "worldline.smoke.aerocombat.AeroCombatWireSmoke",official.toString(),workspace.resolve("server").toString(),
-                    Integer.toString(port),value(config,"seed"),value(config,"attacker"),value(config,"victim")));
+                    Integer.toString(port),value(config,"seed"),value(config,"attacker"),value(config,"victim"),
+                    value(config,"observer")));
             String armed=wire.awaitLine("WORLDLINE_M70_WIRE_ARMED=",90); int attacker=number(armed,"attacker"),victim=number(armed,"victim");
             Path test=checkout.resolve("stationapi/test"),log=workspace.resolve("aero.log");
             String wrapper=System.getProperty("os.name").startsWith("Windows")?"gradlew.bat":"gradlew";
@@ -127,7 +128,10 @@ public final class AeroCombatWindowCycle {
         String awaitLine(String prefix,int timeout)throws Exception{long end=System.currentTimeMillis()+timeout*1000L;synchronized(text){while(process.isAlive()
             &&System.currentTimeMillis()<end&&!text.toString().lines().anyMatch(row->row.startsWith(prefix)))text.wait(100L);}return lineValue(prefix);}
         String lineValue(String prefix){return output().lines().filter(row->row.startsWith(prefix)).findFirst().orElseThrow(
-            ()->new IllegalStateException("missing "+prefix+"\n"+output())).substring(prefix.length());}
+            ()->new IllegalStateException("missing "+prefix+"\n"+markers())).substring(prefix.length());}
+        String markers(){String value=output().lines().filter(row->row.startsWith("WORLDLINE_")||row.contains("[WorldlineCombat]"))
+                .collect(Collectors.joining("\n"));if(!value.isEmpty())return value;List<String> rows=output().lines().collect(Collectors.toList());
+            return rows.subList(Math.max(0,rows.size()-40),rows.size()).stream().collect(Collectors.joining("\n"));}
         void write(String value)throws Exception{input.write(value+"\n");input.flush();}
         void finish(int timeout)throws Exception{if(!process.waitFor(timeout,TimeUnit.SECONDS)){kill();throw new IllegalStateException("process timeout\n"+output());}
             exitCode=process.exitValue();reader.join(5000L);}

@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import worldline.api.DroppedItemMultiplayerSession;
-import worldline.api.MovementOutcome;
 import worldline.api.PlayerPose;
 import worldline.api.RemoteDroppedItem;
 import worldline.api.RemoteHeldItem;
@@ -17,6 +16,7 @@ import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteItemStack;
 import worldline.api.ServerPlayerState;
 import worldline.b173server.B173DedicatedServer;
+import worldline.b173server.B173PlayerSeed;
 import worldline.b173server.B173WireClient;
 
 /** Proves the server-authoritative item entity created by a held-item drop. */
@@ -37,9 +37,9 @@ public final class DroppedItemSpawnSmoke {
         DroppedItemMultiplayerSession observer = client(port, observerName, timeout);
         RemoteInventoryView after; RemoteHeldItem empty; RemoteDroppedItem dropped; ServerPlayerState player;
         try {
-            server.boot(); server.operator(actorName); actor.connect(); actor.synchronizePose();
-            require(actor.awaitInventory().occupiedSlots() == 0, "actor inventory was not empty");
-            actor.look(0F, 90F); PlayerPose actorPose = acquire(actor, actorName);
+            server.boot(); B173PlayerSeed.writeHolding(workspace, actorName, 4.5D, 60D, 4.5D, 1, 1, 0);
+            B173PlayerSeed.write(workspace, observerName, 4.5D, 80D, 4.5D);
+            actor.connect(); PlayerPose actorPose = actor.synchronizePose(); actor.awaitInventory();
             RemoteItemStack stone = new RemoteItemStack(1, 1, 0);
             require(actor.inventory().occupiedSlots() == 1 && actor.inventory().slot(36).item().equals(stone),
                     "held seed drifted");
@@ -62,14 +62,6 @@ public final class DroppedItemSpawnSmoke {
 
     private static DroppedItemMultiplayerSession client(int port, String name, Duration timeout) {
         return new B173WireClient("127.0.0.1", port, name, timeout); }
-    private static PlayerPose acquire(DroppedItemMultiplayerSession client, String username) {
-        MovementOutcome movement = null;
-        for (int step = 0; step < 10; step++) movement = client.moveAndObserve(0D, 5D, 0D, 3);
-        client.sendChat("/give " + username + " 1 1"); client.sustainTicks(40);
-        for (int step = 0; step < 100 && client.inventory().occupiedSlots() < 1; step++)
-            movement = client.moveAndObserve(0D, -1D, 0D, 1);
-        client.sustainTicks(10); require(movement != null, "acquisition movement absent"); return movement.resulting();
-    }
     private static void requireSpawn(RemoteDroppedItem item, PlayerPose actor) {
         double dx = item.x() - actor.x(), dy = item.y() - actor.y(), dz = item.z() - actor.z();
         double speed = item.velocityX() * item.velocityX() + item.velocityY() * item.velocityY()

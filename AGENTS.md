@@ -38,8 +38,13 @@ All repository artifacts must be written in English.
    fail closed.
 9. Maintained Worldline performance changes must have a stable optimization
    ID. Worldline-owned sites may use source-only `OptimizationRef`. External
-   projects own their optimization records; Worldline may reference their IDs
-   in evidence but must not copy project-specific implementation catalogs.
+   projects own records under `worldline/optimizations/catalog/`; Worldline
+   may reference their IDs in evidence but must not copy project-specific
+   implementation catalogs.
+10. Runtime drivers are a closed set. Mods adapt to Worldline through
+    `worldline/extensions/` manifests in their own repositories. Do not add
+    an in-tree adapter per mod. Worldline may pin one overlay extension for
+    oracled smokes. StationAPI is a future driver, not an extension.
 
 There is deliberately no repository-wide line cap. Growth must happen through
 small cohesive files and explicit modules rather than oversized source files.

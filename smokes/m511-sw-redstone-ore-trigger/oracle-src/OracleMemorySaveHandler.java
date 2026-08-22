@@ -1,0 +1,5 @@
+import java.io.File;import java.util.List;
+/** Official-name in-memory save boundary. */
+@SuppressWarnings("rawtypes") final class OracleMemorySaveHandler implements om,fl{
+ private final ct info;private final OracleMemoryChunkLoader chunks=new OracleMemoryChunkLoader();OracleMemorySaveHandler(long s,String n){info=new ct(s,n);info.a(8,64,8);}public ct c(){return info;}public void b(){}public an a(os p){return chunks;}public void a(ct i,List p){}public void a(ct i){}public fl d(){return this;}public void e(){}public File b(String n){return null;}public void a(em p){}public void b(em p){}
+}

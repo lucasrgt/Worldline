@@ -1,0 +1,9 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "worldline.itemref.runtime.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": ["ItemStackMixin", "InventoryPacketMixin", "SlotPacketMixin", "ClickPacketMixin", "InteractPacketMixin"],
+  "client": ["LoginMixin", "FrameMixin", "ClientInventoryReferenceMixin"],
+  "injectors": { "defaultRequire": 1 }
+}

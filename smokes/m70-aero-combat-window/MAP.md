@@ -3,6 +3,7 @@
 | Boundary | Exact evidence |
 | --- | --- |
 | Runtime | Real b1.7.3 Fabric/StationAPI/Aero 3 observer joins the official server used by two wire actors |
+| Fixture | Official-format player NBT places both actors and the observer near the exact level.dat spawn, with four leather pieces in the victim inventory and a diamond sword in attacker slot 36 before first login |
 | Identities | Observer Packet20 maps exact attacker and victim names to the wire login entity IDs |
 | Stimulus | Published M69 Packet18 animation 1 is sent immediately before published M66 Packet7 action 1 |
 | Observer order | Client handler TAIL sees Packet18 attacker/1 before Packet38 victim/2 after vanilla applies each state |

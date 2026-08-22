@@ -9,3 +9,8 @@ Two fresh protocol-14 clients then receive real `Packet51MapChunk` payloads
 from two unmodified official servers. The adapter requires exact zlib
 completion and the legacy four-plane size before exposing an immutable neutral
 snapshot. Origins, block census, and content hashes remain observational.
+
+The initial snapshot wait keeps the official connection alive with bounded
+flying pulses and fails closed at both a packet ceiling and the configured
+runtime deadline. This prevents packet-volume races from ending the wait before
+the official server emits its first decodable Packet51.

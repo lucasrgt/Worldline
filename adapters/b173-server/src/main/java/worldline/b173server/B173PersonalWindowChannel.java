@@ -12,7 +12,7 @@ import worldline.api.RemotePersonalTransaction;
 import worldline.api.RemoteArmorEquip;
 import worldline.api.RemoteArmorSlot;
 
-/** Exact left-click predictor for bounded personal-window take/place transitions. */
+/** Exact left-click predictor for bounded personal-window take/place/swap transitions. */
 final class B173PersonalWindowChannel {
     private final DataOutputStream output;
     private final B173PlayInbound inbound;
@@ -81,8 +81,8 @@ final class B173PersonalWindowChannel {
         if (!inbound.cursorObserved()) throw new IllegalStateException("personal cursor is not observed");
         RemoteItemStack cursor = inbound.cursor();
         RemoteItemStack source = before.slot(slot).empty() ? null : before.slot(slot).item();
-        if ((source == null) == (cursor == null))
-            throw new IllegalStateException("personal left click requires exactly one occupied side");
+        if (source == null && cursor == null)
+            throw new IllegalStateException("personal left click requires an occupied slot or cursor");
         RemoteItemStack predicted = source, nextCursor = source, nextSlot = cursor;
         if (staleEmptyPrediction && (source == null || cursor != null))
             throw new IllegalStateException("rejected-take probe requires occupied source and empty cursor");

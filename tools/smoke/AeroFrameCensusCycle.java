@@ -111,7 +111,10 @@ public final class AeroFrameCensusCycle {
     private void removeWorktree(Path checkout, Path target) { try { if (registered(checkout, target)) try { git(checkout, "worktree", "remove", "--force", target.toString()); }
         catch (Exception error) { if (registered(checkout, target)) throw error; }
         if (Files.exists(target)) { Path allowed = root.resolve(".worldline/worktrees").normalize(), exact = target.toAbsolutePath().normalize(); require(exact.startsWith(allowed) && !exact.equals(allowed), "unsafe remainder");
-            try (Stream<Path> paths = Files.walk(exact)) { for (Path path : paths.sorted(Comparator.reverseOrder()).collect(Collectors.toList())) Files.deleteIfExists(path); } } }
+            try (Stream<Path> paths = Files.walk(exact)) { for (Path path : paths.sorted(Comparator.reverseOrder()).collect(Collectors.toList())) Files.deleteIfExists(path); } }
+        Path parent = target.toAbsolutePath().normalize().getParent(), allowedParent = root.resolve(".worldline/worktrees").normalize();
+        if (parent != null && parent.startsWith(allowedParent) && !parent.equals(allowedParent) && Files.isDirectory(parent)) { boolean empty;
+            try (Stream<Path> paths = Files.list(parent)) { empty = paths.findAny().isEmpty(); } if (empty) Files.deleteIfExists(parent); } }
         catch (Exception error) { throw new IllegalStateException("M74 cleanup failed " + target, error); } }
     private boolean registered(Path checkout, Path target) throws Exception { return Arrays.stream(git(checkout, "worktree", "list", "--porcelain").split("\\R"))
             .anyMatch(row -> row.startsWith("worktree ") && Paths.get(row.substring(9)).toAbsolutePath().normalize().equals(target.toAbsolutePath().normalize())); }

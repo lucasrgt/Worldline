@@ -30,7 +30,7 @@ public final class B173PlayerSeed {
                 new int[] {count}, new int[] {damage}, 20);
     }
 
-    /** Writes exact main-inventory slots without running commands or spawning item entities. */
+    /** Writes exact main-inventory slots and optional vanilla armor slots 100-103. */
     public static void writeInventory(Path serverDirectory, String username, double x, double y, double z,
             int[] slots, int[] legacyIds, int[] counts, int[] damages) {
         writeInventory(serverDirectory, username, x, y, z, slots, legacyIds, counts, damages, 20);
@@ -52,10 +52,10 @@ public final class B173PlayerSeed {
             int[] slots, int[] legacyIds, int[] counts, int[] damages, int health) {
         if ((dimension != 0 && dimension != -1) || slots == null || legacyIds == null || counts == null
                 || damages == null || slots.length != legacyIds.length || slots.length != counts.length
-                || slots.length != damages.length || slots.length > 36 || health < 1 || health > 20)
+                || slots.length != damages.length || slots.length > 40 || health < 1 || health > 20)
             throw new IllegalArgumentException("invalid player inventory seed");
         for (int index = 0; index < slots.length; index++) {
-            if (slots[index] < 0 || slots[index] > 35 || legacyIds[index] < 1 || legacyIds[index] > 32767
+            if (!slot(slots[index]) || legacyIds[index] < 1 || legacyIds[index] > 32767
                     || counts[index] < 1 || counts[index] > 64 || damages[index] < 0 || damages[index] > 32767)
                 throw new IllegalArgumentException("invalid player inventory item");
             for (int prior = 0; prior < index; prior++) if (slots[prior] == slots[index])
@@ -104,5 +104,6 @@ public final class B173PlayerSeed {
         output.writeByte(1); output.writeUTF(name); output.writeByte(value); }
     private static void intTag(DataOutputStream output, String name, int value) throws IOException {
         output.writeByte(3); output.writeUTF(name); output.writeInt(value); }
+    private static boolean slot(int value) { return (value >= 0 && value <= 35) || (value >= 100 && value <= 103); }
     private static boolean finite(double value) { return !Double.isNaN(value) && !Double.isInfinite(value); }
 }

@@ -49,9 +49,12 @@ public final class Verify {
     private void execute() throws Exception {
         System.out.println("Worldline repository verification");
         loadConfiguration();
+        run(Arrays.asList("java", "tools/containers/RuntimeFabric.java", "--self-test"));
+        run(Arrays.asList("java", "tools/containers/HostSmokePool.java", "--self-test"));
+        run(Arrays.asList("java", "tools/containers/ContainerSmokePool.java", "--self-test"));
         run(Arrays.asList("java", "tools/harness/ReleaseCheck.java"));
-        run(Arrays.asList("java", "tools/harness/OptimizationCatalogCheckTest.java"));
-        run(Arrays.asList("java", "tools/harness/OptimizationCatalogCheck.java"));
+        run(Arrays.asList("java", "tools/harness/OptimizationCatalogCheckTest.java")); run(Arrays.asList("java", "tools/harness/OptimizationCatalogCheck.java"));
+        run(Arrays.asList("java", "tools/harness/AdapterKindCheckTest.java")); run(Arrays.asList("java", "tools/harness/AdapterKindCheck.java"));
         if (runSmoke) {
             run(Arrays.asList("java", "tools/toolchains/Bootstrap.java", "retromcp"));
         }

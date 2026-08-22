@@ -101,9 +101,10 @@ Owns only the source-retained `OptimizationRef` metadata annotation. It has no
 dependencies and performs no runtime work. Modules opt into this compile-time
 dependency only when they annotate an owned optimization site. A separate
 harness check validates records and references; it never enables features or
-transforms bytecode. External projects keep their records beside their own
-implementations. Worldline evidence may cite an external stable ID, but the
-Worldline catalog must not describe mod-specific algorithms or flags.
+transforms bytecode. External projects keep their records under
+`worldline/optimizations/catalog/` in their own repositories. Worldline
+evidence may cite an external stable ID, but the Worldline catalog must not
+describe mod-specific algorithms or flags.
 
 ### `api`
 
@@ -155,13 +156,15 @@ Adapters remain responsible for step interpretation and isolated evaluation,
 so the neutral module does not acquire game, mod, or runtime dependencies.
 
 The semantic catalog adds `worldline-semantics` above the API.
-It owns the closed 24-category role contract, static role graph, fail-closed
+It owns the closed 25-category role contract, static role graph, fail-closed
 lookup, and adapter manifests. The API owns immutable `SemanticMapping`
 values, including optional official client aliases. Category files annotate
 controlled b1.7.3 symbols already evidenced by Worldline; unknown or
 duplicate symbols fail closed. Adapter manifests bind Worldline-owned sites
-to those roles. External libraries such as Aero stay out of the catalog and
-may depend on Worldline later; Worldline does not depend on them.
+to those roles. External libraries such as Aero stay out of the catalog.
+Worldline overlay sites for Aero live under `worldline/aero/` as a pinned
+extension. Worldline does not depend on Aero types. Other mods adapt through
+the extension SDK rather than new in-tree adapters.
 
 The Invariant Engine adds `worldline-invariants` above the API.
 It owns fail-closed rules and the observation loop. The API owns the immutable
@@ -226,6 +229,22 @@ sharing their Minecraft access paths.
 
 This establishes controlled vanilla `World.tick()` execution and differential
 equivalence for one narrow observed fixture.
+
+`smokes/redstone-wire-power/` reuses that in-memory world with a standing
+powered torch at `(8, 65, 8)` and one adjacent dust cell. Four ticks later
+both the mapped runtime and the official server JAR must agree on dust
+metadata and `isBlockIndirectlyGettingPowered` at the next cell.
+
+`smokes/redstone-repeater-delay/` inserts a delay-1 idle repeater between the
+torch and dust. Placement leaves the dust unpowered; six ticks later the
+repeater is the active block, `isPoweringTo` is true on the output face, and
+the official server JAR matches.
+
+`smokes/redstone-repeater-delays/` runs delay-2/3/4 on three parallel lines.
+`smokes/redstone-lever-button/` keeps a floor lever ON and pulses a side
+button for 20 ticks. `smokes/redstone-piston-extend/` steps `updateEntities`
+before `World.tick` so a torch-powered piston can finish extending. Repeater
+locking is absent in b1.7.3; plates and BUD stay outside these fixtures.
 
 `smokes/m20-server-bootstrap/` adds the dedicated-server process boundary. It
 does not reuse mapped server classes: it starts the unmodified official server
@@ -587,8 +606,8 @@ does not promote a rendering API.
 
 ## Adapter direction
 
-Game-specific work will enter through new adapter modules, not through the API
-or by placing implementation in the harness:
+Game-specific runtime work will enter through driver modules, not through the
+API, the harness, or a new in-tree adapter per mod:
 
 ```text
 scenario/driver -> kernel -> backend port <- retromcp/lwjgl adapter
@@ -597,7 +616,11 @@ scenario/driver -> kernel -> backend port <- retromcp/lwjgl adapter
 ```
 
 An adapter may depend on the API, kernel, and semantic catalog. The API,
-kernel, and catalog must never depend on an adapter. The reusable client adapter is an executable proof of
+kernel, and catalog must never depend on an adapter. Runtime drivers are the
+closed `b173-client` and `b173-server` set; StationAPI is a future driver.
+Mods publish `worldline/extensions/` manifests in their own repositories. Worldline pins
+`aero-model-lib` only as an overlay for oracled smokes. See
+`docs/EXTENSION_SDK.md`. The reusable client adapter is an executable proof of
 this direction. Replay-backed checkpoints, branch comparison, semantic GUI
 control, and the narrow mod API remain adapter-side because their implementation
 necessarily knows b1.7.3.
@@ -609,8 +632,9 @@ that neutral model. The native smoke counts submitted renderer operations
 above the Pbuffer; neither the API nor kernel learns about Aero or OpenGL.
 
 M12 keeps runtime control in a smoke-only Aero integration overlay. A Gradle
-init script adds one mapped Mixin to the upstream test consumer; it controls
-seed, chunks, camera, and duration on the game thread. Raw saves and frame logs
+init script adds Worldline mixins from `worldline.aero.mixin` to the upstream
+test consumer; they control seed, chunks, camera, and duration on the game
+thread. Raw saves and frame logs
 stay derived, while the existing analysis and minimization modules consume
 only adapter-neutral frames and opaque record indices. No M12 behavior enters
 the API, kernel, or maintained product graph.
@@ -1906,22 +1930,30 @@ M548 adds no public API. Neighbor-update piston pulse `33:4 -> 36:4 -> 33:4` wit
 
 M550 adds no public API. Power-above dispenser `23` Packet21 cobble eject with no adjacent lever shares one dispenser-QC family.
 
-M552 adds no public API. Power-above TNT `46` Packet23 type `50` plus Packet60 crater shares one TNT-QC family.
+M552 is retracted. Its adjacent powered solid did not isolate TNT quasi-connectivity, so no TNT-QC family is published by the current release.
 
 M553 adds no public API. Piston `33` rejection of chest `54`, furnace `61`, and spawner `52` shares one piston-immovable family.
 
-M549 adds no public API. Primed sticky `29:4` plus neighbor-update `29:4 -> 29:12` pull shares one sticky-BUD family.
+M549 is retracted. A hidden fallback could place an ordinary south power source while preserving the same trace, so no sticky-BUD family is published by the current release.
 
 M559 adds no public API. Sequenced sticky `29` then piston `33` two-cell cobble travel shares one double-extender family.
 
 M560 adds no public API. Packet9 `0 -> -1` pose within 128 of Overworld `xz/8` shares one portal-scale family.
 
-M564 adds no public API. Nearby Packet24 type `50` or `54` at night plus torch-light rejection shares one spawn-light family.
+M564 is retracted. Its negative changed cover and substrate as well as light, so no causal spawn-light family is published by the current release.
 
-M557 adds no public API. One-tick repeater piston pulse that leaves a pushed block shares one one-tick-pulse family.
+M557 is retracted. The fixture did not observe the repeater or piston at tick resolution, so no one-tick-pulse family is published by the current release.
 
 M566 adds no public API. Packet53 dirt `3 -> 2` on lit samples plus covered dirt stay shares one grass-spread family.
 
-M555 adds no public API. Rapid-toggle wall torch `76:4 -> 75:4` burnout plus recover shares one torch-burnout family.
+M555 adds no public API. Its corrected scope is the directly observed rapid-activation wall-torch sequence `76:4 -> 75:4 -> 76:4`; it does not claim an observed eight-toggle threshold or 100-tick window.
 
 M567 adds no public API. Bed occupy plus cactus Packet8 `0` Packet9 at the bed shares one bed-spawn family.
+
+M556 adds no public API. Complementary wall-torch states that remain after SET and RESET are disabled share one RS-NOR latch family.
+
+M563 adds no public API. A shifted Nether return that creates a non-source 14-obsidian/6-portal Overworld frame shares one Nether-exit-create family.
+
+M569 adds no public API. Out-of-range absence followed by in-range Packet24 type `54` after a `Delay=1` rewrite shares one spawner-delay family.
+
+M562 and M568 add no family. They failed central serialized runtime qualification and remain rejected evidence.

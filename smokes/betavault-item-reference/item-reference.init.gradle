@@ -1,0 +1,40 @@
+def script = gradle.startParameter.initScripts.find { it.name == 'item-reference.init.gradle' }
+if (script == null) throw new GradleException('Worldline item-reference script path missing')
+def root = script.parentFile.parentFile.parentFile.canonicalFile
+def smoke = new File(root, 'smokes/betavault-item-reference')
+def support = new File(root, '.worldline/smokes/betavault-item-reference/support.jar')
+gradle.beforeProject { project ->
+    project.pluginManager.withPlugin('fabric-loom') {
+        if (project == project.rootProject) project.dependencies.add('implementation', project.files(support))
+    }
+}
+gradle.projectsEvaluated {
+    def project = gradle.rootProject
+    if (project.name != 'aero-bare-stapi') throw new GradleException('unexpected runtime project')
+    if (!support.isFile()) throw new GradleException('Worldline item-reference support jar absent')
+    project.sourceSets.main.java.srcDir(new File(smoke, 'runtime-src'))
+    project.tasks.named('processResources').configure {
+        doLast { copy { from new File(smoke, 'runtime-resources'); into destinationDir } }
+    }
+    def role = project.findProperty('worldlineItemRefRole').toString()
+    def game = new File(project.findProperty('worldlineItemRefRunDir').toString()).absoluteFile
+    project.loom.runs.named(role).configure { runDir project.relativePath(game) }
+    def task = project.tasks.named(role == 'server' ? 'runServer' : 'runClient').get()
+    game.mkdirs()
+    if (role == 'server') {
+        new File(game, 'server.properties').text = [
+            'server-ip=127.0.0.1', 'server-port=' + project.findProperty('worldlineItemRefPort'),
+            'online-mode=false', 'level-seed=' + project.findProperty('worldlineItemRefSeed'),
+            'view-distance=3', 'spawn-animals=false', 'spawn-monsters=false', 'pvp=false'
+        ].join(System.lineSeparator()) + System.lineSeparator()
+        task.standardInput = System.in
+        task.jvmArgs(['-Dworldline.itemref.phase=' + project.findProperty('worldlineItemRefPhase'),
+            '-Dworldline.itemref.world=' + new File(game, 'world').absolutePath] as List)
+    } else {
+        task.jvmArgs(['-Dworldline.itemref.client=true',
+            '-Dworldline.itemref.phase=' + project.findProperty('worldlineItemRefPhase'),
+            '-Dworldline.itemref.port=' + project.findProperty('worldlineItemRefPort'),
+            '-Dworldline.itemref.username=' + project.findProperty('worldlineItemRefUsername'),
+            '-Xms512M', '-Xmx1G'] as List)
+    }
+}

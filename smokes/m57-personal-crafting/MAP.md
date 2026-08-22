@@ -2,6 +2,7 @@
 
 | Boundary | Exact evidence |
 | --- | --- |
+| Fixture | Official-format player NBT places both peers near the exact level.dat spawn and one log in actor slot 36 before first login |
 | Personal layout | Window 0 has result slot 0, 2x2 matrix slots 1-4, and hotbar slot 36 |
 | Recipe | One log `17x1:0` in matrix slot 1 derives planks `5x4:0` in result slot 0 |
 | Wire | Four left/non-shift Packet102 requests are correlated with Packet106 accepted actions 1-4 |

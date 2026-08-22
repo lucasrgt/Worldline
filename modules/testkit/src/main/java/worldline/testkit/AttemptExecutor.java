@@ -46,7 +46,8 @@ final class AttemptExecutor {
             try { artifacts.write("timeout-inventory.txt", TimeoutInventory.capture()); }
             catch (Exception ignored) { /* timeout remains authoritative */ }
             TestExecutionContext context = activeContext.get();
-            if (context != null) try { context.writeTimeout(); }
+            try { if (context != null) context.writeTimeout();
+                else artifacts.write("timeout.wltrace", new byte[0]); }
             catch (Exception ignored) { /* timeout remains authoritative */ }
             executor.shutdownNow(); boolean stopped = terminated(executor);
             Throwable timeoutFailure = options.provider != null && !stopped

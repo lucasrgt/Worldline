@@ -9,9 +9,10 @@ or make a project-specific optimization part of Worldline.
 
 The repository that owns an implementation owns its optimization record.
 Worldline keeps only records for Worldline code under
-`optimizations/catalog/`. A mod keeps its records in the same path in its own
-repository. Worldline scenarios and reports may cite an external stable ID,
-but they do not copy the record or define the mod's implementation details.
+`worldline/optimizations/catalog/`. A mod keeps its records in the same path
+in its own repository. Worldline scenarios and reports may cite an external
+stable ID, but they do not copy the record or define the mod's implementation
+details.
 
 For example, a renderer library owns records about its culling, batching, and
 cache implementations. Worldline owns only the schema, validation mechanism,
@@ -33,7 +34,7 @@ one implementation site participates in independent changes.
 ## Record schema
 
 Records use UTF-8 Java properties and live under
-`optimizations/catalog/<id>.properties` in the owning repository:
+`worldline/optimizations/catalog/<id>.properties` in the owning repository:
 
 ```properties
 schema=worldline.optimization.v1
@@ -53,7 +54,7 @@ evidence=example:visibility-matrix
 Valid statuses are `active`, `candidate`, `rejected`, `retired`, and `unknown`.
 Only `active` records may default on. Every decided status requires evidence;
 `unknown` may temporarily use `evidence=none`. A ready-to-copy record is in
-`optimizations/TEMPLATE.properties`.
+`worldline/optimizations/TEMPLATE.properties`.
 
 ## Validation
 

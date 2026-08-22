@@ -1,0 +1,8 @@
+# owner kind descriptor named client server
+net/minecraft/src/TileEntityDispenser	c	-	net/minecraft/src/TileEntityDispenser	az	ak
+net/minecraft/src/TileEntityDispenser	f	Ljava/util/Random;	dispenserRandom	b	b
+net/minecraft/src/TileEntityDispenser	m	()Lnet/minecraft/src/ItemStack;	getRandomStackFromInventory	b	b
+net/minecraft/src/IInventory	m	(ILnet/minecraft/src/ItemStack;)V	setInventorySlotContents	a	a
+net/minecraft/src/IInventory	m	(I)Lnet/minecraft/src/ItemStack;	getStackInSlot	f_	d_
+net/minecraft/src/ItemStack	f	I	itemID	c	c
+net/minecraft/src/ItemStack	f	I	stackSize	a	a

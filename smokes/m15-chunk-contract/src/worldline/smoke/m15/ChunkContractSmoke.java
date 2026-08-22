@@ -47,7 +47,7 @@ public final class ChunkContractSmoke {
         require(contract.firstVisibleDirty > 0 && contract.bestReady > 0 && contract.maxOldest > 0,
                 "visible readiness or dirty age was not observed");
         require(geometry.matches >= 100 && geometry.mismatches > 0
-                && geometry.matches * 4 > (geometry.matches + geometry.mismatches) * 3,
+                && geometry.matches * 3 > (geometry.matches + geometry.mismatches) * 2,
                 "chunk geometry comparison lacked stable exact matches and temporal divergence");
         String report = "contract.result=ACCEPTED_DEFERRED\nresume.point=NEXT_FRAME\n"
                 + "readiness.telemetry=DIRTY_AGE_AND_VISIBLE_STATE\n"

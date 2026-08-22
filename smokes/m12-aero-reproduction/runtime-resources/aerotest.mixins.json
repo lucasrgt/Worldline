@@ -5,16 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "MinecraftFrameSpikeMixin",
-    "WorldSaveSpikeMixin",
-    "WorldlineCaptureMixin",
-    "WorldlineSaveBudgetMixin",
-    "WorldlineChunkBuilderAccess",
-    "WorldlineChunkBuilderProbeMixin",
-    "WorldlineChunkCallerMixin",
-    "WorldlineChunkProbeFrameMixin",
-    "WorldlineChunkProbeMixin",
-    "WorldlineTessellatorProbeMixin",
-    "WorldlineWorldRendererAccess"
+    "WorldSaveSpikeMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -26,7 +26,7 @@ public final class OptimizationCatalogCheckTest {
     private void execute() throws Exception {
         Path root = Files.createTempDirectory("worldline-optimization-check-").toAbsolutePath();
         try {
-            Path catalog = root.resolve("optimizations/catalog/sample.fast-path.properties");
+            Path catalog = root.resolve("worldline/optimizations/catalog/sample.fast-path.properties");
             Path source = root.resolve("modules/sample/src/main/java/sample/Subject.java");
             Files.createDirectories(catalog.getParent()); Files.createDirectories(source.getParent());
             Files.write(catalog, VALID.getBytes(StandardCharsets.UTF_8));

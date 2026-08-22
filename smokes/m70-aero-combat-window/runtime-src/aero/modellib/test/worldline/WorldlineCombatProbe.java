@@ -15,7 +15,8 @@ public final class WorldlineCombatProbe {
     public static synchronized void play() { if (!hello) fail("play before login"); play = true; marker("packet13"); }
     public static synchronized void chunk() { if (chunks++ == 0) marker("packet51"); }
     public static synchronized void identity(String name, int id) { if (id < 0) fail("invalid peer id");
-        if (ATTACKER.equals(name)) attackerId = bind(attackerId, id); else if (VICTIM.equals(name)) victimId = bind(victimId, id); }
+        if (ATTACKER.equals(name)) { attackerId = bind(attackerId, id); marker("attacker id=" + id); }
+        else if (VICTIM.equals(name)) { victimId = bind(victimId, id); marker("victim id=" + id); } }
     public static synchronized boolean networkReady() { return hello && play && chunks > 0 && attackerId >= 0 && victimId >= 0; }
     public static synchronized void ready() { if (ready) fail("duplicate ready"); ready = true;
         System.out.println("[WorldlineCombat] ready chunks=" + chunks + " attacker=" + attackerId + " victim=" + victimId); }

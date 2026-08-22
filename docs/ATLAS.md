@@ -21,7 +21,8 @@ produce byte-identical pages. Exit 0 on success, 1 on capture failure.
 ## Boundary
 
 `worldline.analysis.AtlasRunner` is the neutral contract;
-`B173AtlasRunner` drives `B173DedicatedServer` + `B173WireClient`
+`B173AtlasRunner` lives in the optional `src/atlas/java` source set and drives
+`B173DedicatedServer` + `B173WireClient`
 (the same wire path proven by the fixed-seed-terrain milestone), moving in
 <=4-block glides so the vanilla anti-cheat never trips, and sampling the
 top non-air block per column.

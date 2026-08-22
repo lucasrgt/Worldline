@@ -1,0 +1,12 @@
+# owner kind descriptor named client server
+net/minecraft/src/World	c	-	net/minecraft/src/World	fd	dj
+net/minecraft/src/World	f	Ljava/util/List;	loadedEntityList	b	b
+net/minecraft/src/World	m	()V	tick	l	h
+net/minecraft/src/World	m	()V	updateEntities	g	e
+net/minecraft/src/World	m	()J	getWorldTime	t	m
+net/minecraft/src/World	m	(Lnet/minecraft/src/Entity;)Z	entityJoinedWorld	b	b
+net/minecraft/src/EntityItem	c	-	net/minecraft/src/EntityItem	hl	ez
+net/minecraft/src/EntityItem	f	I	age	b	b
+net/minecraft/src/EntityItem	f	Lnet/minecraft/src/ItemStack;	item	a	a
+net/minecraft/src/Entity	f	Z	isDead	be	bh
+net/minecraft/src/Entity	m	(Lnet/minecraft/src/EntityPlayer;)V	onCollideWithPlayer	b	b

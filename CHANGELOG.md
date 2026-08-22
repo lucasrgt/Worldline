@@ -4,6 +4,71 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## 1.462.0 - Consolidated vanilla qualification
+
+Status: GO candidate after central audit correction; published history is preserved.
+
+- Retracted M549 because its hidden south-block fallback changed the cause
+  while emitting the same signature.
+- Retracted M552 because its TNT was ordinarily powered by an adjacent solid;
+  the fixture did not isolate quasi-connectivity.
+- Retracted M557 because the repeater observation was not tick-resolved and
+  therefore did not prove a one-tick pulse.
+- Retracted M564 because the lit and dark spawn fixtures changed both cover
+  and substrate, so the negative was not causal evidence for light.
+- Narrowed M555 to the behavior directly observed by its fixture: 24 rapid
+  lever activations, an unpowered `75:4` state, a 400-tick recovery wait, and
+  return to `76:4`. It no longer claims an observed eight-toggle threshold or
+  100-tick window.
+- Removed the four rejected smokes from the current smoke catalog. Their
+  original v1.452.0, v1.454.0, v1.457.0, and v1.458.0 entries and tags remain
+  below as an immutable record of what was published.
+- Rejected unpublished M562 after central runtime qualification first stalled
+  in second-frame placement and then produced an obstructed frame that could
+  not light. Rejected unpublished M568 after two clean serialized runs both
+  failed to observe the reloaded dropped-item Packet21.
+- Qualified corrected-scope M555 plus M556, M563, and M569 in direct serialized
+  official-server cycles. The final release gate also restores explicit
+  signature coverage for the qualified M500-M525 DeepSeek batch while keeping
+  M520 rejected.
+- Restored M15's original two-thirds broad geometry-agreement invariant after
+  repeated GUI qualification exposed scheduling variance at the later
+  three-quarters threshold; the 100-position floor and required nonzero
+  temporal divergence remain fail-closed.
+- Replaced M64's probabilistic `/give` drop pickup with an official-format
+  player-NBT fixture that fixes planks at personal slot 36 and the consumed
+  workbench at slot 37, preserving the frozen workbench actions and signature.
+- Replaced M56's probabilistic `/give` drop pickup with an official-format
+  player-NBT fixture that fixes stone at personal slot 36 and places both peers
+  within tracking range while preserving the rejected action, authoritative
+  resync, accepted recovery, and signature.
+- Stabilized M29's first decoded-chunk wait with the same bounded flying pulse,
+  packet ceiling, runtime deadline, and cache diagnostics used by later remote
+  world waits; the Packet51 decoder and frozen signature remain unchanged.
+- Replaced M70's probabilistic `/give` drop pickups and randomized first-login
+  placement with official-format player NBT fixtures for all three participants,
+  the victim's leather pieces, and the attacker's diamond sword; the armor equip,
+  ordered combat packets, Aero window, and frozen signature are unchanged.
+- Replaced M57's probabilistic `/give` pickup and randomized peer placement with
+  official-format player NBT for the actor's log and both peer positions; the six
+  crafting actions, authoritative audit, persistence, and frozen signature are
+  unchanged.
+
+## Unreleased - Integration Hygiene and Anti-Slop Audit
+
+Status: developer tooling; not a vanilla SET GO.
+
+- Added the `b1-7-3-anti-slop` repository skill, its evidence-backed review
+  references, and a fail-closed side-safety audit for common and server roots.
+- GUI smoke cleanup now removes an empty per-arm worktree parent after both
+  registered Aero worktrees are gone, while retaining the existing path and
+  registration safety checks.
+- Runtime Fabric self-tests require parent-cleanup coverage across all 37 GUI
+  smoke cycles.
+- The analysis-dependent seed-atlas runner now has a dedicated optional server
+  adapter source set, keeping ordinary official-server smoke compilation
+  API-only.
+
 ## Unreleased - WorldlineEvidence Equatable
 
 Status: public API for kit/verb equality; not a vanilla SET GO.
@@ -38,7 +103,7 @@ Status: GO.
 - Added checksum-protected `WORLDLINE-COVERAGE/1` artifacts (`.wlcover`) and
   an optional floor-percentage gate (exit 3) for scenario-corpus richness
   checks; fully neutral, no runtime required.
-- Evidence: all five mappable verbs classified (20% of 24 categories),
+- Evidence: all five mappable verbs classified (20% of 25 categories),
   executed-trace role extraction, artifact creation, and both threshold
   outcomes; frozen SHA-256 in `smokes/m18-coverage/smoke.properties`.
 

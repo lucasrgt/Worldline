@@ -1,0 +1,7 @@
+# owner kind descriptor named client server
+net/minecraft/src/BlockGrass	c	-	net/minecraft/src/BlockGrass	wp	oj
+net/minecraft/src/BlockStationary	c	-	net/minecraft/src/BlockStationary	nx	is
+net/minecraft/src/Block	f	[Lnet/minecraft/src/Block;	blocksList	m	m
+net/minecraft/src/Block	m	(Lnet/minecraft/src/World;IIILjava/util/Random;)V	updateTick	a	a
+net/minecraft/src/World	m	(IIII)Z	setBlockWithNotify	f	e
+net/minecraft/src/IBlockAccess	m	(III)I	getBlockId	a	a

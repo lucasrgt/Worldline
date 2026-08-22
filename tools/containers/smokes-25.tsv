@@ -1,0 +1,26 @@
+# id	lane	source	argument	timeout-seconds
+m420-wolf-tame-set	server-headless	tools/smoke/WolfTameSetCycle.java	m420-wolf-tame-set	600
+m421-creeper-gunpowder-set	server-headless	tools/smoke/CreeperGunpowderSetCycle.java	m421-creeper-gunpowder-set	600
+m422-skeleton-bone-set	server-headless	tools/smoke/SkeletonBoneSetCycle.java	m422-skeleton-bone-set	600
+m423-slimeball-set	server-headless	tools/smoke/SlimeballSetCycle.java	m423-slimeball-set	600
+m424-furnace-cart-motion-set	server-headless	tools/smoke/FurnaceCartMotionSetCycle.java	m424-furnace-cart-motion-set	600
+m425-remaining-machine-faces	server-headless	tools/smoke/RemainingMachineFacesCycle.java	m425-remaining-machine-faces	600
+m426-remaining-redstone-faces	server-headless	tools/smoke/RemainingRedstoneFacesCycle.java	m426-remaining-redstone-faces	600
+m427-remaining-piston-orient	server-headless	tools/smoke/RemainingPistonOrientSetCycle.java	m427-remaining-piston-orient-set	600
+m428-remaining-door-orient	server-headless	tools/smoke/RemainingDoorOrientSetCycle.java	m428-remaining-door-orient-set	600
+m429-remaining-attach-faces	server-headless	tools/smoke/RemainingAttachFacesCycle.java	m429-remaining-attach-faces	600
+m430-remaining-painting-motives	server-headless	tools/smoke/RemainingPaintingMotivesCycle.java	m430-remaining-painting-motives	600
+m431-remaining-bed-orient	server-headless	tools/smoke/RemainingBedOrientSetCycle.java	m431-remaining-bed-orient-set	600
+m432-remaining-rail-geometry	server-headless	tools/smoke/RemainingRailGeometrySetCycle.java	m432-remaining-rail-geometry-set	600
+m433-remaining-chest-orient	server-headless	tools/smoke/RemainingChestOrientSetCycle.java	m433-remaining-chest-orient-set	600
+m434-remaining-sponge-glass-ice	server-headless	tools/smoke/RemainingSpongeGlassIceCycle.java	m434-remaining-sponge-glass-ice	600
+m435-remaining-natural-spawns	server-headless	tools/smoke/RemainingNaturalSpawnsCycle.java	m435-remaining-natural-spawns	600
+m436-remaining-arrow-life	server-headless	tools/smoke/RemainingArrowLifeSetCycle.java	m436-remaining-arrow-life-set	600
+m437-lightning-pig-set	server-headless	tools/smoke/LightningPigSetCycle.java	m437-lightning-pig-set	600
+m438-remaining-clock-map	server-headless	tools/smoke/RemainingClockMapSetCycle.java	m438-remaining-clock-map-set	600
+m439-remaining-ore-place	server-headless	tools/smoke/RemainingOrePlaceSetCycle.java	m439-remaining-ore-place-set	600
+m440-remaining-dye-rest	server-headless	tools/smoke/RemainingDyeRestSetCycle.java	m440-remaining-dye-rest-set	600
+m441-remaining-food-rest	server-headless	tools/smoke/RemainingFoodRestSetCycle.java	m441-remaining-food-rest-set	600
+m442-remaining-record-place	server-headless	tools/smoke/RemainingRecordPlaceSetCycle.java	m442-remaining-record-place-set	600
+m443-remaining-bucket-rest	server-headless	tools/smoke/RemainingBucketRestSetCycle.java	m443-remaining-bucket-rest-set	600
+m444-remaining-mob-drops	server-headless	tools/smoke/RemainingMobDropsRestCycle.java	m444-remaining-mob-drops-rest	600

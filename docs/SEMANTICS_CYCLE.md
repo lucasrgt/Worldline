@@ -1,32 +1,33 @@
 # Worldline Semantic Catalog GO Audit
 
-Status: **GO**
+Status: **GO on the M67 line for catalog + adapter manifests**
 
-The semantic catalog does not change the public product version. Worldline
-remains v0.7.0 / M9. This audit promotes the closed 24-category catalog,
-coverage gate, static role graph, and CLI `role=` aliases to a stable
-milestone.
+The semantic catalog does not independently change the public product version.
+The M9 trace `role=` aliases stay wired; this refresh adds oracled M48-M67
+protocol-14 packet and GUI-window boundaries on top of the earlier packet,
+tessellator, nibble, and GUI-slot promotions.
 
 | Requirement | Authoritative evidence | Result |
 | --- | --- | --- |
-| Closed catalog | 24 categories and 196 required roles; unknown or duplicate symbols fail closed | PASS |
-| Adapter manifests | `b173-client` sites cover every `worldline/b173/` catalog symbol; Aero types fail closed | PASS |
-| Map coverage | Every named `symbols.map` symbol has a catalog role | PASS |
+| Closed catalog | 25 categories and 259 required roles; unknown or duplicate symbols fail closed | PASS |
+| Adapter manifests | `b173-client` and `b173-server` are drivers; `aero-model-lib` is the overlay extension pin with nine oracled `worldline/aero/` sites; extra in-tree adapters and `aero/modellib` types fail closed | PASS |
+| Map coverage | Every named `symbols.map` symbol in the client, world, and M10 tessellator maps has a catalog role | PASS |
 | Static graph | `SemanticGraph` fails closed on unknown read/write/dep tokens | PASS |
-| Neutral CLI | `semantics show\|graph\|category\|role` inspects without loading Minecraft | PASS |
-| M6 alias | Diverged `slot` prints `role=HOTBAR_SLOT` after the exact `TraceDiff` document | PASS |
-| M9 order | Minimizer tries disposable lab/noise steps first; one-minimal result is unchanged | PASS |
+| Neutral CLI | `semantics show\|graph\|category\|role\|adapter` inspects without loading Minecraft | PASS |
+| Aero types in `SemanticCatalog.standard()` | Forbidden | PASS |
 
 Frozen catalog SHA-256:
 
 ```text
-b4d1f4fdf968f785cc5c94b2400d5f4ad4966f8f7b042d0fd2372d24e9dadf88
+102a18f94b36f8a1e3eda412cc028e429a2a3a1822ac5e35846b27108223c136
 ```
 
 Canonical qualification command:
 
 ```text
-java tools/harness/Verify.java --smoke
+java tools/harness/Verify.java --runtime
 ```
 
-The contract and non-claims are in `docs/SEMANTICS.md`.
+The contract and non-claims are in `docs/SEMANTICS.md`. Domain inventories
+from the M67 mapping audit are in `docs/SEMANTICS_AUDIT.md`. Driver versus
+extension ownership is in `docs/EXTENSION_SDK.md`.

@@ -1,0 +1,17 @@
+# M511-SW behavior map
+
+- Official server class `az` is mapped `BlockRedstoneOre`; block 73 is
+  `Block.oreRedstone` and block 74 is `Block.oreRedstoneGlowing`.
+- The mapped public click method calls private trigger `g`, which emits
+  particles and replaces 73 with 74. The trigger contains no scheduled-update
+  call.
+- Only the glowing constructor enables `Block.tickOnLoad`. World random ticks
+  invoke its `updateTick`, which replaces 74 with 73.
+- The differential fixture installs an anonymous player at the target chunk so
+  the official active-chunk random-tick path runs. The same seed, chunks, click,
+  and tick loop execute against mapped classes and the unmodified obfuscated
+  server JAR.
+
+An adjacent untouched 73 block is the negative control. The smoke records the
+oracle-derived seeded reversion tick and exact IDs/metadata. It does not claim
+drops, harvest, light output, packets, persistence, or GUI behavior.

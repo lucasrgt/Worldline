@@ -3,14 +3,7 @@ package worldline.b173server;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import worldline.api.RemoteChunkSnapshot;
-import worldline.api.RemoteWorldView;
-import worldline.api.BlockPosition;
-import worldline.api.BlockState;
-import worldline.api.PlayerPose;
-import worldline.api.RemoteInventoryView;
-import worldline.api.RemoteHeldItem;
-import worldline.api.RemoteItemCollection;
+import worldline.api.*;
 
 /** Single bounded inbound pump that preserves Packet50/51 lifecycle state. */
 final class B173PlayInbound {
@@ -19,7 +12,7 @@ final class B173PlayInbound {
     private final B173RemoteWorldCache cache = new B173RemoteWorldCache();
     private final B173ItemInbound items;
     private final long timeoutNanos;
-    private Correction correction; private int dimension; private long respawnEpoch; private worldline.api.RemoteExplosion explosion; private final B173MobTracker mobs=new B173MobTracker(); private final B173ObjectTracker objects=new B173ObjectTracker(); private final B173BedTracker beds=new B173BedTracker(); private final B173NoteEvent notes=new B173NoteEvent(); private final B173SignTracker signs=new B173SignTracker(); private final B173PaintingTracker paintings=new B173PaintingTracker(); private final B173PlayWaits waits=new B173PlayWaits(this);
+    private Correction correction; private int dimension; private long respawnEpoch; private worldline.api.RemoteExplosion explosion; private final B173MobTracker mobs=new B173MobTracker(); private final B173ObjectTracker objects=new B173ObjectTracker(); private final B173BedTracker beds=new B173BedTracker(); private final B173NoteEvent notes=new B173NoteEvent(); private final B173SignTracker signs=new B173SignTracker(); private final B173PaintingTracker paintings=new B173PaintingTracker(); private final B173PlayWaits waits=new B173PlayWaits(this); private final B173WeatherTracker weather=new B173WeatherTracker();
 
     B173PlayInbound(DataInputStream input, DataOutputStream output, int timeoutMillis,
             int localEntityId, String localUsername, int dimension) throws IOException { this.input = input;
@@ -35,7 +28,7 @@ final class B173PlayInbound {
         if (packet == 50) { cache.preChunk(input); return; }
         if (packet == 51) { cache.accept(B173ChunkCodec.read(input)); return; }
         if (packet == 52) { cache.multiBlock(input); return; }
-        if (packet == 53) { cache.singleBlock(input); return; } if(packet==23){objects.spawn(input);return;} if(packet==39){objects.attach(input);return;} if(packet==24){mobs.spawn(input);return;} if(packet==25){paintings.spawn(input);return;} if(packet>=30&&packet<=34){mobs.update(packet,input);return;} if(packet==40){mobs.watcher(input);return;} if (packet == 60) { if (explosion != null) throw new IOException("unconsumed explosion observation"); explosion = cache.explosion(input); return; } if(packet==17||packet==70){beds.accept(packet,input);return;} if(packet==54||packet==61){notes.accept(packet,input);return;} if(packet==130){signs.accept(input);return;}
+        if (packet == 53) { cache.singleBlock(input); return; } if(packet==23){objects.spawn(input);return;} if(packet==39){objects.attach(input);return;} if(packet==24){mobs.spawn(input);return;} if(packet==25){paintings.spawn(input);return;} if(packet>=30&&packet<=34){mobs.update(packet,input);return;} if(packet==40){mobs.watcher(input);return;} if (packet == 60) { if (explosion != null) throw new IOException("unconsumed explosion observation"); explosion = cache.explosion(input); return; } if(packet==17){beds.accept(packet,input);return;} if(packet==70){beds.notePacket70(weather.accept(input));return;} if(packet==54||packet==61){notes.accept(packet,input);return;} if(packet==130){signs.accept(input);return;}
         if (packet == 255) throw disconnect();
         B173InboundPacket.skip(input, packet);
     }
@@ -52,41 +45,45 @@ final class B173PlayInbound {
     RemoteChunkSnapshot awaitChunk() throws IOException {
         RemoteChunkSnapshot ready = cache.firstDecoded();
         if (ready != null) return ready;
-        for (int count = 0; count < 4096; count++) {
-            int packet = input.readUnsignedByte();
-            if (packet == 51) {
-                RemoteChunkSnapshot chunk = B173ChunkCodec.read(input);
-                if (cache.accept(chunk)) return chunk;
-                continue;
+        Thread pulse = pulse(); long deadline = System.nanoTime() + timeoutNanos;
+        try { for (int count = 0; count < 16384 && System.nanoTime() < deadline; count++) {
+                int packet; try { packet = input.readUnsignedByte(); }
+                catch (IOException error) { throw new IOException("chunk stream ended with decoded="
+                        + cache.decoded() + ",tracked=" + cache.tracked(), error); }
+                if (packet == 51) { RemoteChunkSnapshot chunk = B173ChunkCodec.read(input);
+                    if (cache.accept(chunk)) return chunk; }
+                else skip(packet);
             }
-            skip(packet);
-        }
-        throw new IOException("chunk packet absent from bounded inbound window");
+            throw new IOException("chunk packet absent before bounded deadline; decoded="
+                    + cache.decoded() + ",tracked=" + cache.tracked());
+        } finally { pulse.interrupt(); }
     }
 
     RemoteWorldView awaitWorld(int minimumChunks) throws IOException {
         if (minimumChunks < 1 || minimumChunks > RemoteWorldView.MAX_CHUNKS)
             throw new IllegalArgumentException("invalid minimum remote chunk count");
         if (cache.decoded() >= minimumChunks) return cache.snapshot();
-        for (int count = 0; count < 8192; count++) {
-            int packet;
-            try { packet = input.readUnsignedByte(); }
-            catch (IOException error) { throw new IOException("remote world stream ended with decoded="
-                    + cache.decoded() + ",tracked=" + cache.tracked(), error); }
-            if (packet == 51) cache.accept(B173ChunkCodec.read(input));
-            else skip(packet);
-            if (cache.decoded() >= minimumChunks) return cache.snapshot();
-        }
-        throw new IOException("remote world minimum absent from bounded inbound window");
+        Thread pulse = pulse(); long deadline = System.nanoTime() + timeoutNanos;
+        try { for (int count = 0; count < 8192 && System.nanoTime() < deadline; count++) {
+                int packet; try { packet = input.readUnsignedByte(); }
+                catch (IOException error) { throw new IOException("remote world stream ended with decoded="
+                        + cache.decoded() + ",tracked=" + cache.tracked(), error); }
+                if (packet == 51) cache.accept(B173ChunkCodec.read(input)); else skip(packet);
+                if (cache.decoded() >= minimumChunks) return cache.snapshot(); }
+            throw new IOException("remote world minimum absent from bounded inbound window");
+        } finally { pulse.interrupt(); }
     }
 
     RemoteWorldView awaitChunk(int chunkX, int chunkZ) throws IOException {
         if (cache.snapshot().containsChunk(chunkX, chunkZ)) return cache.snapshot();
-        for (int count = 0; count < 16384; count++) {
-            skip(input.readUnsignedByte());
-            if (cache.snapshot().containsChunk(chunkX, chunkZ)) return cache.snapshot();
-        }
-        throw new IOException("requested remote chunk absent from bounded inbound window");
+        Thread pulse = pulse(); long deadline = System.nanoTime() + timeoutNanos;
+        try {
+            for (int count = 0; count < 16384 && System.nanoTime() < deadline; count++) {
+                skip(input.readUnsignedByte());
+                if (cache.snapshot().containsChunk(chunkX, chunkZ)) return cache.snapshot();
+            }
+            throw new IOException("requested remote chunk absent from bounded inbound window");
+        } finally { pulse.interrupt(); }
     }
 
     RemoteWorldView awaitBlock(BlockPosition position, BlockState expected) throws IOException {
@@ -108,7 +105,7 @@ final class B173PlayInbound {
             skip(input.readUnsignedByte());
     }
 
-    RemoteWorldView snapshot() { return cache.snapshot(); } int dimension() { return dimension; } int awaitDimension(int expected) throws IOException { if (expected != 0 && expected != -1) throw new IllegalArgumentException("invalid expected dimension"); for (int count = 0; count < 8192; count++) { if (dimension == expected) return dimension; skip(input.readUnsignedByte()); } throw new IOException("dimension absent from bounded inbound window"); } long respawnEpoch(){return respawnEpoch;} int awaitRespawn(long before,int expected)throws IOException{for(int count=0;count<8192;count++){if(respawnEpoch>before){if(dimension!=expected)throw new IOException("respawn dimension drift");return dimension;}skip(input.readUnsignedByte());}throw new IOException("respawn packet absent");} int health(){return items.health();} int awaitHealth(int expected)throws IOException{return items.awaitHealth(expected,this::pumpOne);} worldline.api.RemoteExplosion awaitExplosion()throws IOException{for(int count=0;count<8192;count++){if(explosion!=null){worldline.api.RemoteExplosion value=explosion;explosion=null;return value;}pumpOne();}throw new IOException("explosion observation absent");} worldline.api.RemoteMobSpawn awaitMobSpawn(int type)throws IOException{return waits.spawn(type);} worldline.api.RemoteMobSpawn awaitMobSpawnAny(int[] types)throws IOException{return waits.spawnAny(types);} worldline.api.RemoteMobMovement awaitMobMovement(int entity)throws IOException{return waits.movement(entity);} worldline.api.RemoteMobDeath awaitMobDeath(int entity)throws IOException{return waits.death(entity);} worldline.api.RemoteMobMovement awaitObservedMobMovement()throws IOException{return waits.observedMovement();} worldline.api.RemoteMobDeath awaitObservedMobDeath()throws IOException{return waits.observedDeath();} worldline.api.RemoteDroppedItem peekDroppedItem(worldline.api.RemoteItemStack expected){return items.peekDropped(expected);} worldline.api.RemoteObjectSpawn awaitObjectSpawn(int type)throws IOException{return waits.object(type);} worldline.api.RemoteObjectSpawn awaitThrownObject(int type,int thrower)throws IOException{return waits.objectFrom(type,thrower);} worldline.api.RemoteBedUse awaitBedUse()throws IOException{return waits.bed();} worldline.api.RemoteNoteEvent awaitNoteEvent()throws IOException{return waits.note();} worldline.api.RemoteSignText awaitSignText()throws IOException{return waits.sign();} worldline.api.RemotePaintingSpawn awaitPainting()throws IOException{return waits.painting();} int awaitCreeperFuse(int entity)throws IOException{return waits.fuse(entity).intValue();} boolean explosionQueued(){return explosion!=null;}
+    RemoteWorldView snapshot() { return cache.snapshot(); } int dimension() { return dimension; } int awaitDimension(int expected) throws IOException { if (expected != 0 && expected != -1) throw new IllegalArgumentException("invalid expected dimension"); for (int count = 0; count < 8192; count++) { if (dimension == expected) return dimension; skip(input.readUnsignedByte()); } throw new IOException("dimension absent from bounded inbound window"); } long respawnEpoch(){return respawnEpoch;} int awaitRespawn(long before,int expected)throws IOException{for(int count=0;count<8192;count++){if(respawnEpoch>before){if(dimension!=expected)throw new IOException("respawn dimension drift");return dimension;}skip(input.readUnsignedByte());}throw new IOException("respawn packet absent");} int health(){return items.health();} int awaitHealth(int expected)throws IOException{return items.awaitHealth(expected,this::pumpOne);} worldline.api.RemoteExplosion peekExplosion(){return explosion;} worldline.api.RemoteExplosion awaitExplosion()throws IOException{for(int count=0;count<8192;count++){if(explosion!=null){worldline.api.RemoteExplosion value=explosion;explosion=null;return value;}pumpOne();}throw new IOException("explosion observation absent");} worldline.api.RemoteMobSpawn awaitMobSpawn(int type)throws IOException{return waits.spawn(type);} worldline.api.RemoteMobSpawn awaitMobSpawnAny(int[] types)throws IOException{return waits.spawnAny(types);} worldline.api.RemoteMobMovement awaitMobMovement(int entity)throws IOException{return waits.movement(entity);} worldline.api.RemoteMobDeath awaitMobDeath(int entity)throws IOException{return waits.death(entity);} worldline.api.RemoteMobMovement awaitObservedMobMovement()throws IOException{return waits.observedMovement();} worldline.api.RemoteMobDeath awaitObservedMobDeath()throws IOException{return waits.observedDeath();} worldline.api.RemoteDroppedItem peekDroppedItem(worldline.api.RemoteItemStack expected){return items.peekDropped(expected);} worldline.api.RemoteObjectSpawn awaitObjectSpawn(int type)throws IOException{return waits.object(type);} worldline.api.RemoteObjectSpawn awaitThrownObject(int type,int thrower)throws IOException{return waits.objectFrom(type,thrower);} worldline.api.RemoteBedUse awaitBedUse()throws IOException{return waits.bed();} worldline.api.RemoteRainStart awaitRainStart()throws IOException{return waits.rainStart();} worldline.api.RemoteNoteEvent awaitNoteEvent()throws IOException{return waits.note();} worldline.api.RemoteSignText awaitSignText()throws IOException{return waits.sign();} worldline.api.RemotePaintingSpawn awaitPainting()throws IOException{return waits.painting();} int awaitCreeperFuse(int entity)throws IOException{return waits.fuse(entity).intValue();} boolean explosionQueued(){return explosion!=null;}
 
     RemoteInventoryView awaitInventory() throws IOException { return items.awaitInventory(this::pumpOne); }
     RemoteInventoryView inventory() { return items.inventory(); }
@@ -116,6 +113,7 @@ final class B173PlayInbound {
         return items.awaitChest(this::pumpOne); }
     worldline.api.RemoteFurnaceSmelt awaitFurnaceSmelt() throws IOException { return items.awaitFurnaceSmelt(this::pumpOne); }
     void beginWindow(worldline.api.RemoteWindowKind kind) { items.beginWindow(kind); } int activeWindowId() { return items.activeWindowId(); } worldline.api.RemoteContainerWindow activeWindow() { return items.activeWindow(); } long activeWindowEpoch() { return items.activeWindowEpoch(); } boolean windowActive() { return items.windowActive(); } void closeWindow(int id) throws IOException { items.closeWindow(id); } int combatEntityId(String name) { return items.combatEntityId(name); } void beginCombat(int target) { items.beginCombat(target); } worldline.api.RemoteCombatStrike awaitCombatStrike() throws IOException { return items.awaitCombatStrike(this::pumpOne); } worldline.api.RemoteIncomingHit awaitIncomingHit(int health) throws IOException { return items.awaitIncomingHit(health, this::pumpOne); } worldline.api.RemotePeerSwing awaitPeerSwing(String username) throws IOException { return items.awaitPeerSwing(username, this::pumpOne); }
+    B173WeatherTracker weather() { return weather; }
     boolean cursorObserved() { return items.cursorObserved(); }
     worldline.api.RemoteItemStack cursor() { return items.cursor(); }
     void beginPersonalTransaction(int action, int slot, worldline.api.RemoteItemStack predicted,

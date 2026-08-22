@@ -34,13 +34,12 @@ public final class RejectedTransactionRecoverySmoke {
         B173WireClient actor = client(port, actorName, timeout), observer = client(port, observerName, timeout);
         RemoteRejectedTransaction rejected; RemotePersonalTransaction accepted; ServerPlayerState player;
         try {
-            server.boot(); server.operator(actorName); actor.connect(); actor.synchronizePose();
-            require(actor.awaitInventory().occupiedSlots() == 0, "actor inventory was not empty");
-            actor.look(0F, 90F); acquire(actor, actorName);
-            RemoteItemStack stone = new RemoteItemStack(1, 1, 0); RemoteInventoryView initial = actor.inventory();
+            server.boot(); B173PlayerSeed.writeHolding(workspace, actorName, 4.5D, 60D, 4.5D, 1, 1, 0);
+            B173PlayerSeed.write(workspace, observerName, 4.5D, 80D, 4.5D);
+            actor.connect(); actor.synchronizePose();
+            RemoteItemStack stone = new RemoteItemStack(1, 1, 0); RemoteInventoryView initial = actor.awaitInventory();
             require(initial.occupiedSlots() == 1 && initial.slot(36).item().equals(stone), "recovery seed drifted");
-            observer.connect(); observer.synchronizePose(); observer.moveAndObserve(5D, 5D, 0D, 3);
-            observer.moveAndObserve(5D, 5D, 0D, 3);
+            observer.connect(); observer.synchronizePose();
             requirePlayers(server.players(), actorName, observerName);
             observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 1, 0));
             rejected = actor.rejectedTakeProbe(36);
@@ -71,13 +70,6 @@ public final class RejectedTransactionRecoverySmoke {
 
     private static B173WireClient client(int port, String name, Duration timeout) {
         return new B173WireClient("127.0.0.1", port, name, timeout); }
-    private static void acquire(B173WireClient client, String username) {
-        for (int step = 0; step < 10; step++) client.moveAndObserve(0D, 5D, 0D, 3);
-        client.sendChat("/give " + username + " 1 1"); client.sustainTicks(40);
-        for (int step = 0; step < 15 && client.inventory().occupiedSlots() < 1; step++)
-            client.moveAndObserve(0D, -5D, 0D, 3);
-        client.sustainTicks(10);
-    }
     private static void requirePlayers(List<String> players, String first, String second) {
         Set<String> expected = new HashSet<>(); expected.add(first); expected.add(second);
         require(players.size() == 2 && new HashSet<>(players).equals(expected), "two-player presence drifted"); }

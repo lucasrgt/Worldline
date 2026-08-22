@@ -44,7 +44,7 @@ public final class PairedAeroWindowCycle {
         Path workspace=build.resolve("pair-"+(pair+1)+"-"+(index%2+1)+"-"+mode);Files.createDirectories(workspace);int port=freePort();Captured wire=null,client=null;
         try{wire=Captured.start(root,Arrays.asList("java","-classpath",classpath(classes),"worldline.smoke.aeropair.AeroPairedWireSmoke",
                     official.toString(),workspace.resolve("server").toString(),Integer.toString(port),value(config,"seed"),value(config,"attacker"),
-                    value(config,"victim"),mode,value(config,"trigger.raw")));String armed=wire.awaitLine("WORLDLINE_M71_WIRE_ARMED=",120);
+                    value(config,"victim"),value(config,"observer"),mode,value(config,"trigger.raw")));String armed=wire.awaitLine("WORLDLINE_M71_WIRE_ARMED=",120);
             int attacker=number(armed,"attacker"),victim=number(armed,"victim");require(armed.contains("arm="+mode),"wire arm drift");
             Path test=checkout.resolve("stationapi/test"),log=workspace.resolve("aero.log");String wrapper=System.getProperty("os.name").startsWith("Windows")?"gradlew.bat":"gradlew";
             List<String> command=Arrays.asList(test.resolve(wrapper).toString(),"--no-daemon","--init-script",root.resolve(value(config,"runner")).toString(),"runClient",

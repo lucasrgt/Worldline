@@ -14,6 +14,7 @@ import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteItemStack;
 import worldline.api.ServerPlayerState;
 import worldline.b173server.B173DedicatedServer;
+import worldline.b173server.B173PlayerSeed;
 import worldline.b173server.B173WireClient;
 
 /** Proves a dropped held item through local and independent peer updates. */
@@ -34,9 +35,9 @@ public final class DropHeldItemSmoke {
         DropItemMultiplayerSession observer = client(port, observerName, timeout);
         RemoteInventoryView before, after; RemoteHeldItem empty; ServerPlayerState player;
         try {
-            server.boot(); server.operator(actorName); actor.connect(); actor.synchronizePose();
-            before = actor.awaitInventory(); require(before.occupiedSlots() == 0, "actor inventory was not empty");
-            actor.look(0F, 90F); acquire(actor, actorName); before = actor.inventory();
+            server.boot(); B173PlayerSeed.writeHolding(workspace, actorName, 4.5D, 60D, 4.5D, 1, 1, 0);
+            B173PlayerSeed.write(workspace, observerName, 4.5D, 80D, 4.5D);
+            actor.connect(); actor.synchronizePose(); before = actor.awaitInventory();
             require(before.occupiedSlots() == 1
                     && before.slot(36).item().equals(new RemoteItemStack(1, 1, 0)), "held seed drifted");
             observer.connect(); observer.synchronizePose(); requirePlayers(server.players(), actorName, observerName);
@@ -57,13 +58,6 @@ public final class DropHeldItemSmoke {
 
     private static DropItemMultiplayerSession client(int port, String name, Duration timeout) {
         return new B173WireClient("127.0.0.1", port, name, timeout); }
-    private static void acquire(DropItemMultiplayerSession client, String username) {
-        for (int step = 0; step < 10; step++) client.moveAndObserve(0D, 5D, 0D, 3);
-        client.sendChat("/give " + username + " 1 1"); client.sustainTicks(40);
-        for (int step = 0; step < 15 && client.inventory().occupiedSlots() < 1; step++)
-            client.moveAndObserve(0D, -5D, 0D, 3);
-        client.sustainTicks(10);
-    }
     private static void requirePlayers(List<String> players, String first, String second) {
         Set<String> expected = new HashSet<>(); expected.add(first); expected.add(second);
         require(players.size() == 2 && new HashSet<>(players).equals(expected), "two-player presence drifted"); }

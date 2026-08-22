@@ -16,6 +16,7 @@ import worldline.api.RemoteItemCollection;
 import worldline.api.RemoteItemStack;
 import worldline.api.ServerPlayerState;
 import worldline.b173server.B173DedicatedServer;
+import worldline.b173server.B173PlayerSeed;
 import worldline.b173server.B173WireClient;
 
 /** Proves exact dropped-item collection by a separately named protocol actor. */
@@ -37,18 +38,23 @@ public final class ItemCollectionSmoke {
         RemoteDroppedItem dropped; RemoteItemCollection collection; RemoteInventoryView restored;
         RemoteHeldItem peer; ServerPlayerState player;
         try {
-            server.boot(); server.operator(actorName); actor.connect(); actor.synchronizePose();
-            require(actor.awaitInventory().occupiedSlots() == 0, "actor inventory was not empty");
-            actor.look(0F, 90F); acquire(actor, actorName); RemoteItemStack stone = new RemoteItemStack(1, 1, 0);
+            server.boot(); B173PlayerSeed.writeHolding(workspace, actorName, 4.5D, 60D, 4.5D, 1, 1, 0);
+            B173PlayerSeed.write(workspace, observerName, 4.5D, 80D, 4.5D);
+            actor.connect(); actor.synchronizePose(); actor.awaitInventory();
+            RemoteItemStack stone = new RemoteItemStack(1, 1, 0);
             require(actor.inventory().occupiedSlots() == 1 && actor.inventory().slot(36).item().equals(stone),
                     "held seed drifted");
             observer.connect(); observer.synchronizePose(); requirePlayers(server.players(), actorName, observerName);
             observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 1, 0));
-            observer.moveAndObserve(0D, 10D, 0D, 3); actor.dropHeldItem();
+            actor.look(0F, 90F); actor.dropHeldItem();
             dropped = observer.awaitDroppedItem(stone); actor.sustainTicks(10);
             require(actor.inventory().occupiedSlots() == 0 && actor.inventory().slot(36).empty(),
                     "actor inventory did not empty after drop");
-            observer.awaitPeerHeldItem(RemoteHeldItem.empty(actorName)); actor.sustainTicks(50);
+            observer.awaitPeerHeldItem(RemoteHeldItem.empty(actorName));
+            for (int step = 0; step < 40 && actor.inventory().occupiedSlots() == 0; step++)
+                actor.moveAndObserve(0D, -.5D, 0D, 1);
+            actor.sustainTicks(10); require(actor.inventory().occupiedSlots() == 1,
+                    "actor did not descend through dropped item");
             collection = observer.awaitItemCollection(dropped, actorName);
             require(collection.collectorEntityId() == actor.state().entityId()
                     && collection.droppedItem().equals(dropped), "named collection correlation drifted");
@@ -68,13 +74,6 @@ public final class ItemCollectionSmoke {
 
     private static ItemCollectionMultiplayerSession client(int port, String name, Duration timeout) {
         return new B173WireClient("127.0.0.1", port, name, timeout); }
-    private static void acquire(ItemCollectionMultiplayerSession client, String username) {
-        for (int step = 0; step < 10; step++) client.moveAndObserve(0D, 5D, 0D, 3);
-        client.sendChat("/give " + username + " 1 1"); client.sustainTicks(40);
-        for (int step = 0; step < 100 && client.inventory().occupiedSlots() < 1; step++)
-            client.moveAndObserve(0D, -1D, 0D, 1);
-        client.sustainTicks(10);
-    }
     private static void requirePlayers(List<String> players, String first, String second) {
         Set<String> expected = new HashSet<>(); expected.add(first); expected.add(second);
         require(players.size() == 2 && new HashSet<>(players).equals(expected), "two-player presence drifted"); }
