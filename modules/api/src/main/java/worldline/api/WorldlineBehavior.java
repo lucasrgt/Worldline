@@ -42,6 +42,14 @@ public final class WorldlineBehavior {
             "Nether pigman group aggro after Packet7");
     public static final WorldlineBehavior SKELETON_RANGED_AI = define("skeleton-ranged-ai", WorldlineFamily.HOSTILE,
             "Skeleton type-60 arrows with skeleton thrower");
+    public static final WorldlineBehavior PIG_SPAWN = define("pig-spawn", WorldlineFamily.WORLD,
+            "Default spawner Packet24 pig identity and metadata");
+    public static final WorldlineBehavior PIG_AI_MOVEMENT = define("pig-ai-movement", WorldlineFamily.WORLD,
+            "Pig horizontal Packet31, Packet33, or Packet34 movement");
+    public static final WorldlineBehavior PIG_DEATH = define("pig-death", WorldlineFamily.WORLD,
+            "Pig hurt, death status, and destroy packets");
+    public static final WorldlineBehavior PIG_PORK_DROP = define("pig-pork-drop", WorldlineFamily.ITEM,
+            "Pig death Packet21 porkchop drop");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = index();
     private final String token, family, subject;
 
@@ -103,7 +111,7 @@ public final class WorldlineBehavior {
         WorldlineBehavior[] values = { CREEPER_FUSE, CREEPER_CANCEL, MELEE_PURSUIT, KNOCKBACK_COOLDOWN,
                 SPIDER_LEAP, SLIME_TOUCH, GHAST_FIREBALL_HIT, MONSTER_BED_INTERRUPT, BOW_MOB_HIT,
                 DIFFICULTY_DAMAGE, VOID_DEATH, PEACEFUL_DESPAWN, PLAYER_DEATH_DROPS, PIGMAN_ANGER,
-                SKELETON_RANGED_AI };
+                SKELETON_RANGED_AI, PIG_SPAWN, PIG_AI_MOVEMENT, PIG_DEATH, PIG_PORK_DROP };
         Map<String, WorldlineBehavior> map = new LinkedHashMap<String, WorldlineBehavior>();
         for (int i = 0; i < values.length; i++) {
             if (map.put(values[i].token(), values[i]) != null)
