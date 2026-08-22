@@ -62,6 +62,19 @@ public final class GameUiNode {
 
     public boolean focused() { return flag("focused", false); }
 
+    /** Zero-based keyboard focus order, or -1 when the node is not tabbable. */
+    public int tabIndex() {
+        String value = attributes.get("tabIndex");
+        if (value == null) return -1;
+        try {
+            int index = Integer.parseInt(value);
+            if (index < 0) throw new NumberFormatException();
+            return index;
+        } catch (NumberFormatException invalid) {
+            throw new IllegalStateException("invalid UI node tabIndex=" + value);
+        }
+    }
+
     public boolean empty() { return itemId < 0; }
 
     @Override public boolean equals(Object other) {

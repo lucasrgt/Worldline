@@ -13,11 +13,12 @@ public final class GameUiQueryTest {
 
     public static void main(String[] arguments) {
         Map<String, String> input = new LinkedHashMap<String, String>();
-        input.put("label", "Input"); input.put("text", "Iron");
+        input.put("label", "Input"); input.put("text", "Iron"); input.put("tabIndex", "0");
+        Map<String, String> output = new LinkedHashMap<String, String>(); output.put("tabIndex", "1");
         MutableUi ui = new MutableUi(Arrays.asList(
                 new GameUiNode(GameUiNode.SCREEN, "crusher", -1, -1, 0),
                 new GameUiNode(GameUiNode.SLOT, "input", 0, 265, 4, input),
-                new GameUiNode(GameUiNode.SLOT, "output", 1, -1, 0)));
+                new GameUiNode(GameUiNode.SLOT, "output", 1, -1, 0, output)));
         require(ui.getByRole(GameUiNode.SLOT).shouldHaveCount(2).count() == 2, "role locator");
         require(ui.getByName("input").single().itemId() == 265, "name locator");
         require(ui.getByLabel("Input").single().count() == 4, "label locator");
@@ -37,6 +38,7 @@ public final class GameUiQueryTest {
         require(ui.getSlot(0).bounds().equals(new GameUiBounds(10, 20, 16, 16)), "node bounds");
         require(ui.getSlot(1).shouldBeEmpty().single().empty(), "empty assertion");
         ui.getByLabel("Input").shouldHaveLabel("Input").shouldHaveText("Iron");
+        ui.getByLabel("Input").shouldHaveTabIndex(0);
         ui.getByName("missing").shouldNotExist();
         GameUiContract.validate(ui);
         failure(() -> ui.getByRole(GameUiNode.SLOT).single(), "expected one node");
@@ -58,6 +60,13 @@ public final class GameUiQueryTest {
             @Override public String screen() { return "missing-root"; }
         };
         failure(() -> GameUiContract.validate(invalid), "E2317");
+        Map<String, String> duplicateTab = new LinkedHashMap<String, String>();
+        duplicateTab.put("tabIndex", "0");
+        GameUi invalidTabOrder = new MutableUi(Arrays.asList(
+                new GameUiNode(GameUiNode.SCREEN, "crusher", -1, -1, 0),
+                new GameUiNode(GameUiNode.BUTTON, "one", -1, -1, 0, duplicateTab),
+                new GameUiNode(GameUiNode.BUTTON, "two", -1, -1, 0, duplicateTab)));
+        failure(() -> GameUiContract.validate(invalidTabOrder), "E2322");
         input.put("label", "Changed");
         require("Input".equals(ui.getSlot(0).single().label()), "node attributes were mutable");
         System.out.println("GameUiQueryTest passed");

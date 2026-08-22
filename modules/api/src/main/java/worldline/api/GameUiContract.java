@@ -35,14 +35,19 @@ public final class GameUiContract {
         if (screen.isEmpty()) {
             require(nodes.isEmpty(), "E2314 closed screen exposed nodes"); return;
         }
-        Set<String> identities = new HashSet<String>(); int roots = 0;
+        Set<String> identities = new HashSet<String>(); Set<Integer> tabIndexes = new HashSet<Integer>();
+        int roots = 0, focused = 0;
         for (GameUiNode node : nodes) {
             require(node != null, "E2315 UI tree contains null");
             require(identities.add(node.role() + "\u0000" + node.name()),
                     "E2316 duplicate UI identity " + node.role() + "/" + node.name());
             if (GameUiNode.SCREEN.equals(node.role()) && screen.equals(node.name())) roots++;
+            if (node.focused()) focused++;
+            if (node.tabIndex() >= 0) require(tabIndexes.add(Integer.valueOf(node.tabIndex())),
+                    "E2322 duplicate UI tab index " + node.tabIndex());
         }
         require(roots == 1, "E2317 current screen needs exactly one matching root");
+        require(focused <= 1, "E2323 UI tree has multiple focused nodes");
     }
 
     private static void validateLayout(GameUiLayout ui) {

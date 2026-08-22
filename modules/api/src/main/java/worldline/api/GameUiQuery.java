@@ -116,6 +116,13 @@ public final class GameUiQuery {
         return this;
     }
 
+    public GameUiQuery shouldHaveTabIndex(int expected) {
+        if (expected < 0) throw new IllegalArgumentException("expected tab index must not be negative");
+        int actual = single().tabIndex();
+        if (actual != expected) throw failure("expected tab index " + expected + " but was " + actual);
+        return this;
+    }
+
     public GameUiQuery shouldHaveLabel(String expected) {
         if (expected == null) throw new NullPointerException("expected label");
         String actual = single().label();

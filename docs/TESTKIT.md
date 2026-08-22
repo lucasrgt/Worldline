@@ -231,6 +231,11 @@ artifact, and returns an immutable ARGB `GameUiImage`. Its normal
 tolerant diagnostics are available through `GameUiImage.difference`; accepting
 a changed baseline still requires the ordinary explicit snapshot-update flag.
 
+Keyboard order is semantic evidence rather than pixel inference. Focusable
+nodes expose a unique zero-based `tabIndex`; tests assert it with
+`shouldHaveTabIndex`, press `GameUiKey.TAB`, and confirm the live destination
+with `shouldBeFocused`.
+
 The default `--template=gui` project is executable against the vanilla
 inventory adapter. Butter is optional: screens implementing its `HostUi`
 contract are bridged reflectively. Extended `HostUi` methods are negotiated as

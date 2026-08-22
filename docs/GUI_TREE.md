@@ -42,6 +42,7 @@ GameUi ui = context.ui();
 ui.getByRole("slot").shouldHaveCount(45);
 ui.getByLabel("Input").click().shouldHaveItem(265, 4);
 ui.getByText("Search").focus().type("iron").press(GameUiKey.ENTER);
+ui.getByName("search").shouldHaveTabIndex(0).press(GameUiKey.TAB);
 ui.getByName("source").dragTo(ui.getByName("target"));
 ui.getByName("panel").shouldBeWithinViewport();
 expect(context.screenshot("machine")).toMatchSnapshot("machine");
@@ -52,6 +53,11 @@ Every optional action is capability-gated. An adapter must implement
 `GameUiCapability`; inconsistent declarations fail with an `E23xx` diagnostic.
 `GameUiContract.validate` is the shared consumer gate for vanilla, Butter, and
 Aero adapters.
+
+Focusable nodes publish a zero-based `tabIndex` attribute. The shared contract
+rejects duplicate indexes and multiple simultaneously focused nodes. Specs can
+freeze the declared order with `shouldHaveTabIndex`, then press `TAB` and use
+`shouldBeFocused` to prove runtime traversal.
 
 Asynchronous UI state uses deterministic retry through game ticks rather than
 wall-clock sleeps:
