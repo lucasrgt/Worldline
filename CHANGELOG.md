@@ -223,6 +223,17 @@ Status: GO.
   behavioral evidence. TestKit remains 0.x until external-mod use validates
   the authoring surface.
 
+## 1.454.0 - M549 Sticky BUD set
+
+Status: GO for official sticky-29 primed QC plus neighbor-update extend together.
+
+- Diagonal-above lever primed sticky `29:4` without extending; a north stone update BUD-extended `29:4 -> 29:12` with head `34:12`, then unpower pulled.
+- Distinct from M547 immediate sticky QC and M548 regular-33 BUD.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M549 semantic SHA-256 is
+`d9de32a7e37b272dd97be1d211464f0bf67b7b66ba71ddedbf3742d0f345747b`.
+
 ## 1.453.0 - M553 Piston immovable set
 
 Status: GO for official piston-33 rejection of chest, furnace, and spawner together.

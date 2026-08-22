@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m548 = load(root, "smokes/m548-piston-bud-set/smoke.properties");
         Properties m550 = load(root, "smokes/m550-dispenser-qc-set/smoke.properties");
         Properties m552 = load(root, "smokes/m552-tnt-qc-set/smoke.properties");
         Properties m553 = load(root, "smokes/m553-piston-immovable-set/smoke.properties");
-        match(release, "version", "1.453.0");
-        match(release, "milestone", "m553-piston-immovable-set");
-        same(release, "m548.signature", m548, "expected.signature");
-        same(release, "server.sha256", m548, "server.jar.sha256");
+        Properties m549 = load(root, "smokes/m549-sticky-bud-set/smoke.properties");
+        match(release, "version", "1.454.0");
+        match(release, "milestone", "m549-sticky-bud-set");
         same(release, "m550.signature", m550, "expected.signature");
         same(release, "server.sha256", m550, "server.jar.sha256");
         same(release, "m552.signature", m552, "expected.signature");
         same(release, "server.sha256", m552, "server.jar.sha256");
         same(release, "m553.signature", m553, "expected.signature");
         same(release, "server.sha256", m553, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M548_PISTON_BUD_SET.md", "docs/M548_CYCLE.md",
-                "smokes/m548-piston-bud-set/MAP.md", "docs/M550_DISPENSER_QC_SET.md", "docs/M550_CYCLE.md",
+        same(release, "m549.signature", m549, "expected.signature");
+        same(release, "server.sha256", m549, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M550_DISPENSER_QC_SET.md", "docs/M550_CYCLE.md",
                 "smokes/m550-dispenser-qc-set/MAP.md", "docs/M552_TNT_QC_SET.md", "docs/M552_CYCLE.md",
                 "smokes/m552-tnt-qc-set/MAP.md", "docs/M553_PISTON_IMMOVABLE_SET.md", "docs/M553_CYCLE.md",
-                "smokes/m553-piston-immovable-set/MAP.md"))
+                "smokes/m553-piston-immovable-set/MAP.md", "docs/M549_STICKY_BUD_SET.md", "docs/M549_CYCLE.md",
+                "smokes/m549-sticky-bud-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.453.0 M553 Piston immovable set GO");
+        System.out.println("  release: Worldline v1.454.0 M549 Sticky BUD set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

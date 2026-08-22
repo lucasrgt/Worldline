@@ -470,6 +470,7 @@ Passing an experiment does not silently promote its API.
 | v1.451.0 / M550 | Dispenser QC set | GO - power-above 23 ejects Packet21 cobble, no adjacent lever |
 | v1.452.0 / M552 | TNT QC set | GO - power-above 46 Packet23 type 50 then Packet60 crater |
 | v1.453.0 / M553 | Piston immovable set | GO - 33 rejects chest 54, furnace 61, and spawner 52 |
+| v1.454.0 / M549 | Sticky BUD set | GO - primed 29:4 then neighbor update 29:4->12 plus pull |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -481,7 +482,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.453.0 direction
+## Immediate post-v1.454.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the
