@@ -223,6 +223,17 @@ Status: GO.
   behavioral evidence. TestKit remains 0.x until external-mod use validates
   the authoring surface.
 
+## 1.452.0 - M552 TNT QC set
+
+Status: GO for official TNT-46 quasi-connectivity prime plus Packet60 crater together.
+
+- Lever on the stone ABOVE TNT primed Packet23 type `50` then Packet60 strength `4`; not flint-and-steel (M381) and not adjacent dust on the TNT cell.
+- Distinct from M219 unprimed place and M137 detonate-without-prime.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M552 semantic SHA-256 is
+`a0ad8d6262175c29d1c7d1dadfcaf90f6a45d1db92c4c7dbbb63983a969b0732`.
+
 ## 1.451.0 - M550 Dispenser QC set
 
 Status: GO for official dispenser-23 quasi-connectivity cobble eject together.

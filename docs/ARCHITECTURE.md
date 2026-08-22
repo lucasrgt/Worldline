@@ -1905,3 +1905,5 @@ M547 adds no public API. Power-above sticky `29:4 -> 29:12` plus payload pull sh
 M548 adds no public API. Neighbor-update piston pulse `33:4 -> 36:4 -> 33:4` with `power=none` shares one piston-BUD family.
 
 M550 adds no public API. Power-above dispenser `23` Packet21 cobble eject with no adjacent lever shares one dispenser-QC family.
+
+M552 adds no public API. Power-above TNT `46` Packet23 type `50` plus Packet60 crater shares one TNT-QC family.
