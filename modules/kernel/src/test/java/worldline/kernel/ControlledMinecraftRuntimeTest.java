@@ -124,6 +124,7 @@ public final class ControlledMinecraftRuntimeTest {
         expectFailure(runtime::tick, "item 4 grew from 1 to 2");
         equal(6L, backend.events.stream().filter("tick"::equals).count(), "observer runs after tick");
         equal(0, runtime.recipes().size(), "default recipe book is empty");
+        equal(0, runtime.stackRecipes().size(), "default metadata recipe book is empty");
         runtime.close();
         expectFailure(() -> runtime.watch(InvariantEngine.itemConservation()), "CLOSED");
     }
