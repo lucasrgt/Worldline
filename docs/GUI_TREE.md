@@ -23,6 +23,10 @@ On Butter screens, numeric widget values (energy, tanks, progress) travel in
 semantic id, not the vanilla `"0"`..`"44"` inventory index. Unsupported vanilla screens fail closed instead of leaking class names.
 Butter screens are recognized by implementing `butter.testing.HostUi`; the
 adapter binds that contract reflectively so `worldline-api` stays Butter-free.
+An advanced Butter or Aero screen may instead implement neutral `GameUi`
+directly. The bridge then preserves its declared input, layout, and visual
+capability interfaces without adding a Worldline dependency to the vanilla
+adapter itself.
 
 `GameUiSpec` is the declared form of the same tree. `Ui.screen/row/slot`
 authors it; a builder can emit it; a live `GameUi` can match it. See

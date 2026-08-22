@@ -23,6 +23,7 @@ final class B173ForeignUi implements GameUi {
     }
 
     static GameUi bind(Object screen) {
+        if (screen instanceof GameUi) return (GameUi) screen;
         if (screen == null || HOST == null || !HOST.isInstance(screen)) return null;
         return new B173ForeignUi(screen);
     }

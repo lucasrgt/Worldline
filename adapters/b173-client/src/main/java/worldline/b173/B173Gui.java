@@ -17,9 +17,11 @@ import worldline.api.GameUiCapability;
 import worldline.api.GameUiInput;
 import worldline.api.GameUiKey;
 import worldline.api.GameUiLayout;
+import worldline.api.GameUiImage;
+import worldline.api.GameUiVisual;
 
 /** Semantic inventory tree over the controlled client screen. */
-public final class B173Gui implements GameUiInput, GameUiLayout {
+public final class B173Gui implements GameUiInput, GameUiLayout, GameUiVisual {
     private final B173ClientBackend backend;
     private final B173GuiDriver driver;
 
@@ -110,17 +112,24 @@ public final class B173Gui implements GameUiInput, GameUiLayout {
         clickSlot(node.index(), 0);
     }
 
-    @Override public void focus(GameUiNode node) { driver.focus(node); }
-    @Override public GameUiNode focused() { return driver.focused(); }
-    @Override public void type(GameUiNode node, String text) { driver.type(node, text); }
-    @Override public void press(GameUiKey key) { driver.press(key); }
-    @Override public void hover(GameUiNode node) { driver.hover(node); }
-    @Override public void click(int x, int y, int button) { driver.click(x, y, button); }
+    @Override public void focus(GameUiNode node) { GameUiInput value = foreignInput(); if (value != null) value.focus(node); else driver.focus(node); }
+    @Override public GameUiNode focused() { GameUiInput value = foreignInput(); return value == null ? driver.focused() : value.focused(); }
+    @Override public void type(GameUiNode node, String text) { GameUiInput value = foreignInput(); if (value != null) value.type(node, text); else driver.type(node, text); }
+    @Override public void press(GameUiKey key) { GameUiInput value = foreignInput(); if (value != null) value.press(key); else driver.press(key); }
+    @Override public void hover(GameUiNode node) { GameUiInput value = foreignInput(); if (value != null) value.hover(node); else driver.hover(node); }
+    @Override public void click(int x, int y, int button) { GameUiInput value = foreignInput(); if (value != null) value.click(x, y, button); else driver.click(x, y, button); }
     @Override public void drag(GameUiNode source, GameUiNode target, int button) {
-        driver.drag(source, target, button);
+        GameUiInput foreign = foreignInput();
+        if (foreign != null) foreign.drag(source, target, button); else driver.drag(source, target, button);
     }
-    @Override public GameUiBounds viewport() { return driver.viewport(); }
-    @Override public GameUiBounds bounds(GameUiNode node) { return driver.bounds(node); }
+    @Override public GameUiBounds viewport() { GameUiLayout value = foreignLayout(); return value == null ? driver.viewport() : value.viewport(); }
+    @Override public GameUiBounds bounds(GameUiNode node) { GameUiLayout value = foreignLayout(); return value == null ? driver.bounds(node) : value.bounds(node); }
+    @Override public GameUiImage screenshot() {
+        GameUi foreign = B173ForeignUi.bind(current());
+        if (!(foreign instanceof GameUiVisual)) throw new IllegalStateException(
+                "E2302 UI capability unavailable: " + GameUiCapability.SCREENSHOT);
+        return ((GameUiVisual) foreign).screenshot();
+    }
 
     public void clickSlot(int index, int button) {
         slot(index);
@@ -132,6 +141,14 @@ public final class B173Gui implements GameUiInput, GameUiLayout {
     private void tap(int key) { backend.key(key, true, (char) 0); backend.key(key, false, (char) 0); }
 
     GuiScreen current() { return backend.client().currentScreen; }
+
+    private GameUiInput foreignInput() {
+        GameUi value = B173ForeignUi.bind(current()); return value instanceof GameUiInput ? (GameUiInput) value : null;
+    }
+
+    private GameUiLayout foreignLayout() {
+        GameUi value = B173ForeignUi.bind(current()); return value instanceof GameUiLayout ? (GameUiLayout) value : null;
+    }
 
     GuiContainer container() {
         GuiScreen screen = current();
