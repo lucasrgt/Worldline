@@ -11,18 +11,26 @@ import net.minecraft.src.GuiScreen;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 import worldline.api.GameUi;
+import worldline.api.GameUiBounds;
 import worldline.api.GameUiNode;
 import worldline.api.GameUiCapability;
+import worldline.api.GameUiInput;
+import worldline.api.GameUiKey;
+import worldline.api.GameUiLayout;
 
 /** Semantic inventory tree over the controlled client screen. */
-public final class B173Gui implements GameUi {
+public final class B173Gui implements GameUiInput, GameUiLayout {
     private final B173ClientBackend backend;
+    private final B173GuiDriver driver;
 
-    B173Gui(B173ClientBackend backend) { this.backend = backend; }
+    B173Gui(B173ClientBackend backend) { this.backend = backend; driver = new B173GuiDriver(this, backend); }
 
     @Override public Set<GameUiCapability> capabilities() {
-        return Collections.unmodifiableSet(EnumSet.of(GameUiCapability.SEMANTIC_TREE,
-                GameUiCapability.INVENTORY_LIFECYCLE, GameUiCapability.NODE_CLICK));
+        GameUi foreign = B173ForeignUi.bind(current());
+        return foreign == null ? Collections.unmodifiableSet(EnumSet.of(GameUiCapability.SEMANTIC_TREE,
+                GameUiCapability.INVENTORY_LIFECYCLE, GameUiCapability.NODE_CLICK,
+                GameUiCapability.POINTER, GameUiCapability.DRAG_DROP, GameUiCapability.GEOMETRY))
+                : foreign.capabilities();
     }
 
     @Override public void openInventory() { tap(B173Keys.INVENTORY); }
@@ -102,6 +110,18 @@ public final class B173Gui implements GameUi {
         clickSlot(node.index(), 0);
     }
 
+    @Override public void focus(GameUiNode node) { driver.focus(node); }
+    @Override public GameUiNode focused() { return driver.focused(); }
+    @Override public void type(GameUiNode node, String text) { driver.type(node, text); }
+    @Override public void press(GameUiKey key) { driver.press(key); }
+    @Override public void hover(GameUiNode node) { driver.hover(node); }
+    @Override public void click(int x, int y, int button) { driver.click(x, y, button); }
+    @Override public void drag(GameUiNode source, GameUiNode target, int button) {
+        driver.drag(source, target, button);
+    }
+    @Override public GameUiBounds viewport() { return driver.viewport(); }
+    @Override public GameUiBounds bounds(GameUiNode node) { return driver.bounds(node); }
+
     public void clickSlot(int index, int button) {
         slot(index);
         GuiContainer screen = container();
@@ -111,9 +131,9 @@ public final class B173Gui implements GameUi {
 
     private void tap(int key) { backend.key(key, true, (char) 0); backend.key(key, false, (char) 0); }
 
-    private GuiScreen current() { return backend.client().currentScreen; }
+    GuiScreen current() { return backend.client().currentScreen; }
 
-    private GuiContainer container() {
+    GuiContainer container() {
         GuiScreen screen = current();
         if (!(screen instanceof GuiContainer)) throw new IllegalStateException("current screen has no inventory slots");
         return (GuiContainer) screen;
