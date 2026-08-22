@@ -72,7 +72,7 @@ public final class RoutePolicySmoke {
 
     private static BlockPosition solid(RemoteWorldView world, PlayerPose pose) {
         int cx = floor(pose.x()), cy = floor(pose.y()), cz = floor(pose.z());
-        for (int y = cy; y >= cy - 5; y--) for (int radius = 0; radius <= 4; radius++)
+        for (int y = cy; y >= 0; y--) for (int radius = 0; radius <= 4; radius++)
             for (int x = cx - radius; x <= cx + radius; x++) for (int z = cz - radius; z <= cz + radius; z++) {
                 if (!world.containsChunk(Math.floorDiv(x, 16), Math.floorDiv(z, 16))) continue;
                 int id = world.blockAt(x, y, z).legacyId();
