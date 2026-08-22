@@ -69,6 +69,12 @@ public final class WorldlineContract {
             "Decoded immutable remote chunks, lifecycle cache, updates, and terrain views");
     public static final WorldlineContract MOVEMENT_ROUTE = define("movement-route",
             "Resolved movement routes, recovery, observation, control, correlation, and batches");
+    public static final WorldlineContract INVENTORY_SESSION = define("inventory-session",
+            "Server-authoritative inventory, held item, drop, collection, and placement session");
+    public static final WorldlineContract CONTAINER_TRANSACTION = define("container-transaction",
+            "Window topology, acknowledged transactions, crafting, furnace, and storage session");
+    public static final WorldlineContract COMBAT_SESSION = define("combat-session",
+            "Peer attack, incoming health, equipment durability, and persisted damage session");
     private static final Map<String, WorldlineContract> ALL;
     static {
         register(REPRODUCTION_BUNDLE, TRACE_DIVERGENCE, MOD_LOADING,
@@ -78,7 +84,8 @@ public final class WorldlineContract {
                 CLIENT_RUNTIME_EQUIVALENCE, SERVER_RUNTIME_EQUIVALENCE, DOMAIN_API_EQUIVALENCE,
                 DURABLE_SNAPSHOT, UI_TREE_EQUIVALENCE, RUNTIME_LAB, RUNTIME_CENSUS,
                 SEED_ATLAS, UI_EXPORT, DEDICATED_SERVER_CONTROL, MULTIPLAYER_SESSION,
-                PLAYER_PERSISTENCE, PLAYER_POSE, REMOTE_WORLD_VIEW, MOVEMENT_ROUTE);
+                PLAYER_PERSISTENCE, PLAYER_POSE, REMOTE_WORLD_VIEW, MOVEMENT_ROUTE,
+                INVENTORY_SESSION, CONTAINER_TRANSACTION, COMBAT_SESSION);
         ALL = Collections.unmodifiableMap(new LinkedHashMap<String, WorldlineContract>(DEFINITIONS));
     }
     private final String token, subject;
