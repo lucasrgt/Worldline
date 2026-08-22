@@ -64,6 +64,7 @@ public final class Verify {
         enforceBudget("adapter", Collections.singletonList(root.resolve("adapters")));
         recreateBuildDirectory();
         List<Path> outputs = compileModules(modules);
+        run(Arrays.asList("java", "tools/harness/ForeignUiContractCheck.java"));
         Path testOutput = compileTests(modules, outputs);
         runTests(outputs, testOutput);
         if (runSmoke) {
