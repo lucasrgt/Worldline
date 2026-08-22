@@ -7,6 +7,10 @@ import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.GamePlayer;
 import worldline.api.GamePosition;
+import worldline.api.GameUi;
+import worldline.api.GameUiImage;
+import worldline.api.GameUiQuery;
+import worldline.api.UiMinecraftRuntime;
 
 /** Capabilities and diagnostics owned by one isolated test attempt. */
 public interface TestContext {
@@ -24,6 +28,35 @@ public interface TestContext {
         attach(name, text.getBytes(StandardCharsets.UTF_8));
     }
     default void tick() { runtime().tick(); }
+    default GameUi ui() {
+        AutomatedMinecraftRuntime value = runtime();
+        if (!(value instanceof UiMinecraftRuntime)) {
+            throw new IllegalStateException("E2301 runtime does not expose semantic UI");
+        }
+        GameUi ui = ((UiMinecraftRuntime) value).ui();
+        if (ui == null) throw new IllegalStateException("E2301 runtime returned no semantic UI");
+        return ui;
+    }
+    default GameUiImage screenshot(String name) {
+        if (name == null || name.trim().isEmpty()) throw new IllegalArgumentException("screenshot name is blank");
+        GameUiImage image = ui().screenshot();
+        attach(name.trim() + ".ppm", image.ppm());
+        return image;
+    }
+    default GameUiQuery awaitUi(GameUiQuery query, int maximumTicks) {
+        return awaitUi(query, maximumTicks, GameUiQuery::shouldExist);
+    }
+    default GameUiQuery awaitUi(GameUiQuery query, int maximumTicks, UiAssertion assertion) {
+        if (query == null || assertion == null) throw new NullPointerException("UI wait");
+        if (maximumTicks < 0) throw new IllegalArgumentException("maximum UI wait ticks must not be negative");
+        AssertionError last = null;
+        for (int elapsed = 0; elapsed <= maximumTicks; elapsed++) {
+            try { assertion.verify(query); return query; }
+            catch (AssertionError failure) { last = failure; }
+            if (elapsed < maximumTicks) tick();
+        }
+        throw new AssertionError("UI assertion did not pass within " + maximumTicks + " ticks", last);
+    }
     default void tick(int count) { runtime().tick(count); }
     default GamePlayer player() { return runtime().player(); }
     default int health() { return player().health(); }

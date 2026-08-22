@@ -9,6 +9,7 @@ import java.util.Set;
 import worldline.api.AutomatedMinecraftRuntime;
 import worldline.api.GamePosition;
 import worldline.api.GamePlayer;
+import worldline.api.GameUi;
 import worldline.api.SnapshotMinecraftRuntime;
 import worldline.minimization.Scenario;
 import worldline.test.TestContext;
@@ -72,6 +73,10 @@ final class TestExecutionContext implements TestContext {
         if (hook == null) throw new NullPointerException("hook"); dynamicFailed.add(0, hook);
     }
     @Override public void tick() { runtime().tick(); ticks++; record("tick" + ticks); }
+    @Override public GameUi ui() {
+        observe("ui.tree", "GUI_TREE");
+        return TestContext.super.ui();
+    }
     @Override public void tick(int count) {
         if (count < 0) throw new IllegalArgumentException("tick count must not be negative");
         for (int index = 0; index < count; index++) tick();
@@ -106,6 +111,7 @@ final class TestExecutionContext implements TestContext {
     void writeFailure(Throwable error) {
         String text = error.getClass().getName() + ": " + String.valueOf(error.getMessage()) + "\n";
         attach("failure.txt", text.getBytes(StandardCharsets.UTF_8));
+        GameUiFailureArtifacts.capture(runtime, artifacts);
         if (trace != null) attach("failure.wltrace", trace.value().getBytes(StandardCharsets.UTF_8));
         byte[] captured = snapshot(); if (captured != null) attach("failure.wlsnapshot", captured);
         Scenario value = scenario(); if (value != null) attach("failure.wlscenario", value.bytes());

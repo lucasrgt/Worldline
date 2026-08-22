@@ -183,6 +183,13 @@ import static worldline.test.Worldline.*;
 public final class GlassProbeWorldlineTest extends WorldlineSpec {
     @Override protected void define() {
         describe("GlassProbe", () -> {
+            beforeAll(TestDependency::start);
+            afterAll(TestDependency::stop);
+            beforeEach(context -> context.setBlock(
+                    pos(8, 64, 8), block("b1.7.3:stone")));
+            afterEach(context -> context.attach(
+                    "final-block.txt", context.block(8, 65, 8).toString()));
+
             test("places glass", worldline().runtime("b1.7.3").seed(173L)
                     .mod("build/glass-probe.jar").run(context -> {
                 context.setBlock(pos(8, 65, 8), block("b1.7.3:glass"));
@@ -192,11 +199,17 @@ public final class GlassProbeWorldlineTest extends WorldlineSpec {
             })).tag("block").timeout(5_000);
         });
     }
+
+    private static final class TestDependency {
+        static void start() { /* start a neutral suite fixture */ }
+        static void stop() { /* release it even after a failed test */ }
+    }
 }
 ```
 
 `test` and `it` are exact aliases; `describe` and `suite` are exact aliases.
-Hooks, table tests, `.skip()`, `.todo()`, `.only()`, explicit retries,
+`beforeAll`/`afterAll` own suite resources; `beforeEach`/`afterEach` run around
+each fresh runtime attempt. Hooks, table tests, `.skip()`, `.todo()`, `.only()`, explicit retries,
 snapshots, filters, watch mode, and named minimizable steps are included.
 Top-level specs are discovered automatically, while `--classpath` exposes the
 mod's separately compiled product classes without weakening source isolation.

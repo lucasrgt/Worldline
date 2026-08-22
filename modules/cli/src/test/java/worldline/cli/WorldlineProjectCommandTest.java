@@ -13,9 +13,18 @@ public final class WorldlineProjectCommandTest {
     private WorldlineProjectCommandTest() {}
     public static void main(String[] arguments) throws Exception {
         Path root = Files.createTempDirectory("worldline-project-command-");
-        try { initializesAndDiagnoses(root); migratesLegacySpecs(root); }
+        try { initializesAndDiagnoses(root); initializesGuiTemplate(root); migratesLegacySpecs(root); }
         finally { delete(root); }
         System.out.println("WorldlineProjectCommandTest passed");
+    }
+    private static void initializesGuiTemplate(Path root) throws Exception {
+        Path target = root.resolve("gui/tests/worldline");
+        int status = WorldlineCli.run(new String[] {"init", "--target=" + target,
+                "--template=gui", "--no-wrapper"}, System.out, System.err);
+        String sample = Files.readString(target.resolve("src/test/java/example/ExampleWorldlineTest.java"));
+        require(status == 0 && sample.contains("context.ui()")
+                && sample.contains("shouldHaveCount(45)") && !sample.contains(".todo()"),
+                "GUI template is not executable");
     }
     private static void initializesAndDiagnoses(Path root) throws Exception {
         Path target = root.resolve("mod/tests/worldline"); ByteArrayOutputStream bytes = new ByteArrayOutputStream();

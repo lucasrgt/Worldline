@@ -23,14 +23,80 @@ On Butter screens, numeric widget values (energy, tanks, progress) travel in
 semantic id, not the vanilla `"0"`..`"44"` inventory index. Unsupported vanilla screens fail closed instead of leaking class names.
 Butter screens are recognized by implementing `butter.testing.HostUi`; the
 adapter binds that contract reflectively so `worldline-api` stays Butter-free.
+An advanced Butter or Aero screen may instead implement neutral `GameUi`
+directly. The bridge then preserves its declared input, layout, and visual
+capability interfaces without adding a Worldline dependency to the vanilla
+adapter itself.
 
 `GameUiSpec` is the declared form of the same tree. `Ui.screen/row/slot`
 authors it; a builder can emit it; a live `GameUi` can match it. See
 `docs/GUI_SPEC.md`.
 
-## Non-claims
+## Cypress-style TestKit surface
 
-This slice does not cover every Minecraft GUI, layout/pixel geometry, text
-fields, drag/drop, item transfers, visual regression, or native rendering.
-Butter `HostUi` is consumed as a semantic tree, not as an official-JAR pixel
-oracle. Those require later contracts and their own official-JAR evidence.
+Tests obtain the current semantic UI through `TestContext.ui()`. Lazy locators
+are re-evaluated against the live tree:
+
+```java
+GameUi ui = context.ui();
+ui.getById("machine.input").shouldExist();
+ui.getByRole("slot").shouldHaveCount(45);
+ui.getByLabel("Input").click().shouldHaveItem(265, 4);
+ui.getByRole(GameUiNode.TEXT_FIELD, "search").fill("iron").press(GameUiKey.ENTER);
+ui.getByName("search").shouldHaveTabIndex(0).press(GameUiKey.TAB);
+ui.getByName("source").dragTo(ui.getByName("target"));
+ui.getByName("panel").shouldBeWithinViewport();
+expect(context.screenshot("machine")).toMatchSnapshot("machine");
+```
+
+Every optional action is capability-gated. An adapter must implement
+`GameUiInput`, `GameUiLayout`, or `GameUiVisual` and declare the corresponding
+`GameUiCapability`; inconsistent declarations fail with an `E23xx` diagnostic.
+`GameUiContract.validate` is the shared consumer gate for vanilla, Butter, and
+Aero adapters.
+
+`type` appends user input. `fill` replaces the complete text value and has the
+separate `TEXT_REPLACE` capability; adapters may not emulate it by silently
+appending. Nodes can expose `value`, `checked`, `selected`, `expanded`, and
+`readOnly` attributes, with fail-closed typed assertions. Inventory assertions
+support both exact stack counts and positive containment.
+
+`id`, `name`, `label`, and `text` are deliberately separate. `id` is the stable
+automation identity emitted by a declarative GUI or mod; `name` is the semantic
+node name; `label` associates visible copy with a control; and `text` is visible
+content. Legacy vanilla and Butter nodes that have no explicit `id` use
+`name` as their compatibility id. Explicit ids must be globally unique.
+
+Focusable nodes publish a zero-based `tabIndex` attribute. The shared contract
+rejects duplicate indexes and multiple simultaneously focused nodes. Specs can
+freeze the declared order with `shouldHaveTabIndex`, then press `TAB` and use
+`shouldBeFocused` to prove runtime traversal.
+
+Asynchronous UI state uses deterministic retry through game ticks rather than
+wall-clock sleeps:
+
+```java
+context.awaitUi(ui.getByText("Ready"), 40);
+context.awaitUi(ui.getByRole("slot"), 20, slots -> slots.shouldHaveCount(4));
+```
+
+Only `AssertionError` is retryable. Missing capabilities, inconsistent
+adapters, and runtime failures abort immediately.
+
+Failed TestKit attempts automatically preserve a canonical `failure.gui.txt`
+tree before the runtime session closes. Adapters with `SCREENSHOT` also preserve
+`failure.gui.ppm`; a capture error is recorded separately and never replaces
+the original assertion or runtime failure.
+
+| Capability | Neutral API | b1.7.3 vanilla adapter | Butter bridge | Aero consumer |
+| --- | --- | --- | --- | --- |
+| Semantic tree and locators | GO | GO | GO | available through bridge |
+| Inventory lifecycle and slot click | GO | GO | semantic click only | consumer-specific |
+| Text input, value input, focus, secondary click | GO | secondary click prepared; others screen-specific | reflective bridge prepared; pending runtime evidence | pending consumer evidence |
+| General keys, pointer coordinates, drag/drop | GO | pointer/drag prepared; pending runtime evidence | requires direct neutral capability | pending consumer evidence |
+| Bounds, viewport, clipping, overlap | GO | pending runtime evidence | pending extended host contract | pending consumer evidence |
+| ARGB capture, exact diff, snapshots | GO | pending native capture | pending native capture | pending native capture |
+
+The API being present is not evidence that an adapter supports it. Butter and
+Aero become complete only after their external consumer suites pass the shared
+contract plus serialized native runtime evidence.

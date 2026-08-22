@@ -1,0 +1,19 @@
+schema = 1
+id = "NYA-01M0MTRHGNMPMEQ4S8BT3RZXYB"
+title = "Prepare display state before all capture phases"
+lesson = "Prepare capture display state before rendering begins and throughout active capture phases, rather than only in a later freeze branch, so screens and HUD overlays cannot leak into captured frames."
+scope = ["smokes/m12-aero-reproduction/runtime-src/aero/modellib/test/mixin/WorldlineCaptureMixin.java"]
+tags = [
+    "capture",
+    "display-state",
+    "overlay",
+    "rendering",
+]
+created_at = "2026-08-22T13:32:31Z"
+
+[[occurrences]]
+occurred_at = "2026-08-16T22:12:59-03:00"
+source = "git:7dc29d0247b5d9e216073ba3ea84a363056ed29e"
+corrected_by = "git:lucas.tinoco@hotmail.com"
+recorded_by = "nya:collector"
+commit = "7dc29d0247b5"

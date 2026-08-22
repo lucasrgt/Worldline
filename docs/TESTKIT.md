@@ -196,6 +196,19 @@ collection so the plan does not retain a mutable source iterable.
   dynamically through `TestContext`.
 - cleanup hooks run even when the body or an assertion fails.
 
+These hooks are not interchangeable with project-global setup or dependency
+substitution. `beforeAll` runs once for its collected suite in one spec file;
+it does not run once across every discovered file. A future project-global
+contract must be configured once by the runner, execute before all selected
+plans, and guarantee teardown after partial collection or execution failure.
+
+Mocks and fakes must also be explicit inputs, not hidden hook side effects.
+Neutral unit tests may use ordinary Java test doubles. Behavioral tests may
+substitute a declared mod dependency only through a visible test-runtime
+configuration that records the replacement in evidence. The official
+Minecraft client/server, mappings, Butter, and Aero cannot be silently mocked
+for a test that claims oracle-backed behavior.
+
 ### Expectations
 
 The initial typed matchers include equality, inequality, booleans, null,
@@ -211,6 +224,48 @@ Snapshots are external `.wlsnap` files. A missing or changed snapshot fails by
 default. `-u` or `--update-snapshots` is required to create or update one. The
 runner never writes inline Java, release metadata, smoke evidence, or official
 oracle signatures.
+
+### Semantic GUI testing
+
+`context.ui()` exposes a Cypress-style semantic surface without browser DOM,
+JavaScript, mapped Minecraft classes, or a mandatory GUI library. Locators by
+id, role, name, label, text, and slot are lazy and fail when a single-node action
+is absent or ambiguous. Optional input, layout, and native visual operations
+are capability-gated and validated by `GameUiContract`.
+
+`getByRole(role, name)` is the concise two-token selector. `type` appends while
+`fill` replaces and therefore requires the stronger `TEXT_REPLACE` capability.
+Typed assertions cover values, checked/selected/expanded/read-only state, exact
+item stacks, and positive item containment without exposing mapped classes.
+
+Use `getById` for a stable author-supplied automation identity, `getByName` for
+the semantic node name, `getByLabel` for a control's visible label, and
+`getByText` for rendered content. Existing nodes without an explicit `id`
+remain addressable because their name is the compatibility id.
+
+`context.awaitUi(locator, maximumTicks, assertion)` retries ordinary assertion
+failures against the live tree and advances exactly one controlled game tick
+between attempts. It never uses wall-clock sleeps and never retries capability,
+adapter, or runtime failures.
+
+`context.screenshot("name")` requires `SCREENSHOT`, writes a bounded binary PPM
+artifact, and returns an immutable ARGB `GameUiImage`. Its normal
+`toMatchSnapshot` representation freezes width, height, and SHA-256. Exact and
+tolerant diagnostics are available through `GameUiImage.difference`; accepting
+a changed baseline still requires the ordinary explicit snapshot-update flag.
+
+Keyboard order is semantic evidence rather than pixel inference. Focusable
+nodes expose a unique zero-based `tabIndex`; tests assert it with
+`shouldHaveTabIndex`, press `GameUiKey.TAB`, and confirm the live destination
+with `shouldBeFocused`.
+
+The default `--template=gui` project is executable against the vanilla
+inventory adapter. Butter is optional: screens implementing its `HostUi`
+contract are bridged reflectively. Extended `HostUi` methods are negotiated as
+separate text-input, focus, value-input, and secondary-click capabilities;
+their absence never disables the basic tree. Aero and Butter native
+layout/capture capabilities remain consumer-owned and must pass their own
+locked runtime gate.
 
 ### Steps and minimization
 
@@ -285,6 +340,9 @@ Result states are `queued`, `running`, `passed`, `failed`, `skipped`, `todo`,
 them. A failure can produce:
 
 - `failure.txt` — exception type and message;
+- `failure.gui.txt` — canonical semantic screen and node tree when UI is available;
+- `failure.gui.ppm` — native ARGB frame when the adapter declares `SCREENSHOT`;
+- `failure.gui-capture.txt` — non-masking diagnostic when GUI evidence capture itself fails;
 - `failure.wltrace` — canonical deterministic observations;
 - `failure.wlsnapshot` — adapter snapshot when supported;
 - `failure.wlmtest` — exact mod provenance bound to the trace;

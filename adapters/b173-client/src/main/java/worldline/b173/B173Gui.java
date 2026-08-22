@@ -3,19 +3,38 @@ package worldline.b173;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.EnumSet;
+import java.util.Set;
 import net.minecraft.src.GuiContainer;
 import net.minecraft.src.GuiInventory;
 import net.minecraft.src.GuiScreen;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 import worldline.api.GameUi;
+import worldline.api.GameUiBounds;
 import worldline.api.GameUiNode;
+import worldline.api.GameUiCapability;
+import worldline.api.GameUiInput;
+import worldline.api.GameUiKey;
+import worldline.api.GameUiLayout;
+import worldline.api.GameUiImage;
+import worldline.api.GameUiVisual;
 
 /** Semantic inventory tree over the controlled client screen. */
-public final class B173Gui implements GameUi {
+public final class B173Gui implements GameUiInput, GameUiLayout, GameUiVisual {
     private final B173ClientBackend backend;
+    private final B173GuiDriver driver;
 
-    B173Gui(B173ClientBackend backend) { this.backend = backend; }
+    B173Gui(B173ClientBackend backend) { this.backend = backend; driver = new B173GuiDriver(this, backend); }
+
+    @Override public Set<GameUiCapability> capabilities() {
+        GameUi foreign = B173ForeignUi.bind(current());
+        return foreign == null ? Collections.unmodifiableSet(EnumSet.of(GameUiCapability.SEMANTIC_TREE,
+                GameUiCapability.INVENTORY_LIFECYCLE, GameUiCapability.NODE_CLICK,
+                GameUiCapability.SECONDARY_CLICK, GameUiCapability.POINTER,
+                GameUiCapability.DRAG_DROP, GameUiCapability.GEOMETRY))
+                : foreign.capabilities();
+    }
 
     @Override public void openInventory() { tap(B173Keys.INVENTORY); }
 
@@ -94,6 +113,28 @@ public final class B173Gui implements GameUi {
         clickSlot(node.index(), 0);
     }
 
+    @Override public void focus(GameUiNode node) { GameUiInput value = foreignInput(); if (value != null) value.focus(node); else driver.focus(node); }
+    @Override public GameUiNode focused() { GameUiInput value = foreignInput(); return value == null ? driver.focused() : value.focused(); }
+    @Override public void type(GameUiNode node, String text) { GameUiInput value = foreignInput(); if (value != null) value.type(node, text); else driver.type(node, text); }
+    @Override public void fill(GameUiNode node, String text) { GameUiInput value = foreignInput(); if (value != null) value.fill(node, text); else driver.fill(node, text); }
+    @Override public void press(GameUiKey key) { GameUiInput value = foreignInput(); if (value != null) value.press(key); else driver.press(key); }
+    @Override public void hover(GameUiNode node) { GameUiInput value = foreignInput(); if (value != null) value.hover(node); else driver.hover(node); }
+    @Override public void rightClick(GameUiNode node) { GameUiInput value = foreignInput(); if (value != null) value.rightClick(node); else driver.rightClick(node); }
+    @Override public void setValue(GameUiNode node, int number) { GameUiInput value = foreignInput(); if (value != null) value.setValue(node, number); else driver.setValue(node, number); }
+    @Override public void click(int x, int y, int button) { GameUiInput value = foreignInput(); if (value != null) value.click(x, y, button); else driver.click(x, y, button); }
+    @Override public void drag(GameUiNode source, GameUiNode target, int button) {
+        GameUiInput foreign = foreignInput();
+        if (foreign != null) foreign.drag(source, target, button); else driver.drag(source, target, button);
+    }
+    @Override public GameUiBounds viewport() { GameUiLayout value = foreignLayout(); return value == null ? driver.viewport() : value.viewport(); }
+    @Override public GameUiBounds bounds(GameUiNode node) { GameUiLayout value = foreignLayout(); return value == null ? driver.bounds(node) : value.bounds(node); }
+    @Override public GameUiImage screenshot() {
+        GameUi foreign = B173ForeignUi.bind(current());
+        if (!(foreign instanceof GameUiVisual)) throw new IllegalStateException(
+                "E2302 UI capability unavailable: " + GameUiCapability.SCREENSHOT);
+        return ((GameUiVisual) foreign).screenshot();
+    }
+
     public void clickSlot(int index, int button) {
         slot(index);
         GuiContainer screen = container();
@@ -103,9 +144,17 @@ public final class B173Gui implements GameUi {
 
     private void tap(int key) { backend.key(key, true, (char) 0); backend.key(key, false, (char) 0); }
 
-    private GuiScreen current() { return backend.client().currentScreen; }
+    GuiScreen current() { return backend.client().currentScreen; }
 
-    private GuiContainer container() {
+    private GameUiInput foreignInput() {
+        GameUi value = B173ForeignUi.bind(current()); return value instanceof GameUiInput ? (GameUiInput) value : null;
+    }
+
+    private GameUiLayout foreignLayout() {
+        GameUi value = B173ForeignUi.bind(current()); return value instanceof GameUiLayout ? (GameUiLayout) value : null;
+    }
+
+    GuiContainer container() {
         GuiScreen screen = current();
         if (!(screen instanceof GuiContainer)) throw new IllegalStateException("current screen has no inventory slots");
         return (GuiContainer) screen;
