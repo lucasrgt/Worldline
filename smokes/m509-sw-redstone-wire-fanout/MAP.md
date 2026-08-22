@@ -13,3 +13,5 @@ processes run the same setBlock-with-notify and World.tick path.
 This milestone does not claim straight-line attenuation generally, cross-chunk
 propagation, repeaters, torch inversion, consumers, persistence, or arbitrary
 circuits.
+
+Frozen expected signature SHA-256: 6aca9f501946f63db33fca4ed618e472fead629bc7a86847355bee55802f33f0

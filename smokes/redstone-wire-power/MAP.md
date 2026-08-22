@@ -58,3 +58,5 @@ the smoke and official oracle.
 Repeater delay, unpowered torch burnout, pistons, levers, buttons, pressure
 plates, BUD, quasi-connectivity, weak vs strong power, and any circuit larger
 than this torch-plus-one-dust fixture remain outside the claim.
+
+Frozen expected signature SHA-256: 9e732358c31890a2dda2c6fabf5553bcebd81a3808284cfea1bbe85aa4a71645

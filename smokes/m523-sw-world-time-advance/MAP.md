@@ -18,3 +18,5 @@ range while offline, then contrasts 80 connected
 heartbeats with an immediate reload, and records only bounded categories. It
 does not claim cross-dimension clock synchronization, weather, spawn-cycle,
 bed-skip, gamerule, or client-clock behavior.
+
+Frozen expected signature SHA-256: 583ff279e5fecfafedd95a704a77525872d14cd939775376b47a4a116d2b30f7

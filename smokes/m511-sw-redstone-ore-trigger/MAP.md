@@ -15,3 +15,5 @@
 An adjacent untouched 73 block is the negative control. The smoke records the
 oracle-derived seeded reversion tick and exact IDs/metadata. It does not claim
 drops, harvest, light output, packets, persistence, or GUI behavior.
+
+Frozen expected signature SHA-256: 419100749c15ecc53954dc181ce9bd27403242be9ab0b60dc5cd3778a2a14419

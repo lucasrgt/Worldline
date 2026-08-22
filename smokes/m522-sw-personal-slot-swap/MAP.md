@@ -13,3 +13,5 @@
 The smoke covers distinct occupied-stack exchange, same-slot take/place,
 rejection recovery, clean save, and same-player relogin. It does not claim
 merge, split, shift/right click, armor, other windows, drops, or respawn.
+
+Frozen expected signature SHA-256: e968302dd1f7e0be9f133f8956a2512b5203382b0ba53d07fbb0b1028b5586fe

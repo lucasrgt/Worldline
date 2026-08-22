@@ -50,3 +50,5 @@ The mapping namespace order is `named`, `client`, `server`.
 Delay settings 2-4, locking from the side, pistons, levers, buttons, pressure
 plates, BUD, quasi-connectivity, and any circuit larger than this
 torch-repeater-dust line remain outside the claim.
+
+Frozen expected signature SHA-256: 572bf798c9e3922b669928c273e2788199de5af2117737ef11efd7658f67bb7a
