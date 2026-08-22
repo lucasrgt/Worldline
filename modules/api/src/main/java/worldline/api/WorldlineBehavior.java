@@ -126,6 +126,12 @@ public final class WorldlineBehavior {
             "Leaves decay after their supporting logs are removed");
     public static final WorldlineBehavior GRASS_SPREAD = define("grass-spread", WorldlineFamily.ENVIRONMENT,
             "Lit exposed dirt becomes grass while covered dirt remains unchanged");
+    public static final WorldlineBehavior LIGHT_OPACITY = define("light-opacity", WorldlineFamily.ENVIRONMENT,
+            "Glass, ice, and leaves preserve their distinct skylight attenuation");
+    public static final WorldlineBehavior LIGHT_MELTING = define("light-melting", WorldlineFamily.ENVIRONMENT,
+            "Torch light melts snow to air and ice to water");
+    public static final WorldlineBehavior HOSTILE_SPAWN_LIGHT = define("hostile-spawn-light", WorldlineFamily.HOSTILE,
+            "Darkness permits hostile spawns while torch light rejects them");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = index();
     private final String token, family, subject;
 
@@ -197,7 +203,8 @@ public final class WorldlineBehavior {
                 PISTON_BUD_UPDATE, PISTON_HEAD_BREAK, FIRE_IGNITION, FIRE_PROPAGATION,
                 BUCKET_FLUID_CYCLE, FLUID_FLOW, WATER_LAVA_SOLIDIFICATION, JUKEBOX_EJECT,
                 NETHER_BED_EXPLOSION, BED_SPAWN_RESPAWN, FARMLAND_STATE, PLANT_GROWTH,
-                CROP_PLANTING, CROP_HARVEST, LEAF_DECAY, GRASS_SPREAD };
+                CROP_PLANTING, CROP_HARVEST, LEAF_DECAY, GRASS_SPREAD, LIGHT_OPACITY,
+                LIGHT_MELTING, HOSTILE_SPAWN_LIGHT };
         Map<String, WorldlineBehavior> map = new LinkedHashMap<String, WorldlineBehavior>();
         for (int i = 0; i < values.length; i++) {
             if (map.put(values[i].token(), values[i]) != null)
