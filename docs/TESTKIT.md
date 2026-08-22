@@ -212,6 +212,25 @@ default. `-u` or `--update-snapshots` is required to create or update one. The
 runner never writes inline Java, release metadata, smoke evidence, or official
 oracle signatures.
 
+### Semantic GUI testing
+
+`context.ui()` exposes a Cypress-style semantic surface without browser DOM,
+JavaScript, mapped Minecraft classes, or a mandatory GUI library. Locators by
+role, name, label, text, and slot are lazy and fail when a single-node action
+is absent or ambiguous. Optional input, layout, and native visual operations
+are capability-gated and validated by `GameUiContract`.
+
+`context.screenshot("name")` requires `SCREENSHOT`, writes a bounded binary PPM
+artifact, and returns an immutable ARGB `GameUiImage`. Its normal
+`toMatchSnapshot` representation freezes width, height, and SHA-256. Exact and
+tolerant diagnostics are available through `GameUiImage.difference`; accepting
+a changed baseline still requires the ordinary explicit snapshot-update flag.
+
+The default `--template=gui` project is executable against the vanilla
+inventory adapter. Butter is optional: screens implementing its `HostUi`
+contract are bridged reflectively. Aero and Butter native input/layout/capture
+capabilities remain consumer-owned and must pass their own locked runtime gate.
+
 ### Steps and minimization
 
 ```java

@@ -81,6 +81,7 @@ final class WorldlineProjectInit {
                 + "Optional server tests also use minecraft_server.jar. Files here are ignored and hash-verified.\n";
     }
     private static String sample(String template) {
+        if (template.equals("gui")) return guiSample();
         String planned = template.equals("basic") ? "" : "\n            test(\"" + template
                 + " contract\", worldline().runtime(\"b1.7.3\").seed(173L)"
                 + ".run(context -> {\n                // Replace with the project-owned " + template
@@ -91,6 +92,23 @@ final class WorldlineProjectInit {
                 + "    @Override protected void define() {\n        describe(\"Worldline setup\", () -> {\n"
                 + "            test(\"loads the test project\", context -> expect(173).toEqual(173));"
                 + planned + "\n        });\n    }\n}\n";
+    }
+    private static String guiSample() {
+        return "package example;\n\nimport worldline.api.GameUi;\n"
+                + "import worldline.api.GameUiCapability;\nimport worldline.api.GameUiNode;\n"
+                + "import worldline.test.WorldlineSpec;\n\nimport static worldline.test.Expect.expect;\n"
+                + "import static worldline.test.Worldline.*;\n\n"
+                + "public final class ExampleWorldlineTest extends WorldlineSpec {\n"
+                + "    @Override protected void define() {\n        describe(\"Vanilla inventory GUI\", () -> {\n"
+                + "            test(\"exposes the semantic inventory tree\", worldline().runtime(\"b1.7.3\")"
+                + ".seed(173L).run(context -> {\n                GameUi ui = context.ui();\n"
+                + "                ui.require(GameUiCapability.INVENTORY_LIFECYCLE);\n"
+                + "                ui.openInventory();\n                context.tick();\n"
+                + "                expect(ui.screen()).toEqual(GameUiNode.INVENTORY);\n"
+                + "                ui.getByRole(GameUiNode.SLOT).shouldHaveCount(45);\n"
+                + "                ui.getSlot(0).shouldBeVisible();\n"
+                + "                context.onFinished(done -> ui.close());\n            }));\n"
+                + "        });\n    }\n}\n";
     }
     private static void write(Path path, String text) throws IOException {
         Files.createDirectories(path.getParent()); Files.writeString(path, text, StandardCharsets.UTF_8);

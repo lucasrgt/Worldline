@@ -28,9 +28,35 @@ adapter binds that contract reflectively so `worldline-api` stays Butter-free.
 authors it; a builder can emit it; a live `GameUi` can match it. See
 `docs/GUI_SPEC.md`.
 
-## Non-claims
+## Cypress-style TestKit surface
 
-This slice does not cover every Minecraft GUI, layout/pixel geometry, text
-fields, drag/drop, item transfers, visual regression, or native rendering.
-Butter `HostUi` is consumed as a semantic tree, not as an official-JAR pixel
-oracle. Those require later contracts and their own official-JAR evidence.
+Tests obtain the current semantic UI through `TestContext.ui()`. Lazy locators
+are re-evaluated against the live tree:
+
+```java
+GameUi ui = context.ui();
+ui.getByRole("slot").shouldHaveCount(45);
+ui.getByLabel("Input").click().shouldHaveItem(265, 4);
+ui.getByText("Search").focus().type("iron").press(GameUiKey.ENTER);
+ui.getByName("source").dragTo(ui.getByName("target"));
+ui.getByName("panel").shouldBeWithinViewport();
+expect(context.screenshot("machine")).toMatchSnapshot("machine");
+```
+
+Every optional action is capability-gated. An adapter must implement
+`GameUiInput`, `GameUiLayout`, or `GameUiVisual` and declare the corresponding
+`GameUiCapability`; inconsistent declarations fail with an `E23xx` diagnostic.
+`GameUiContract.validate` is the shared consumer gate for vanilla, Butter, and
+Aero adapters.
+
+| Capability | Neutral API | b1.7.3 vanilla adapter | Butter bridge | Aero consumer |
+| --- | --- | --- | --- | --- |
+| Semantic tree and locators | GO | GO | GO | available through bridge |
+| Inventory lifecycle and slot click | GO | GO | semantic click only | consumer-specific |
+| Keyboard, focus, pointer, drag/drop | GO | pending runtime evidence | pending extended host contract | pending consumer evidence |
+| Bounds, viewport, clipping, overlap | GO | pending runtime evidence | pending extended host contract | pending consumer evidence |
+| ARGB capture, exact diff, snapshots | GO | pending native capture | pending native capture | pending native capture |
+
+The API being present is not evidence that an adapter supports it. Butter and
+Aero become complete only after their external consumer suites pass the shared
+contract plus serialized native runtime evidence.

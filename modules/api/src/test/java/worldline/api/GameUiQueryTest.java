@@ -34,6 +34,7 @@ public final class GameUiQueryTest {
                 && ui.dragged.index() == 1, "semantic input actions");
         require(ui.getSlot(0).bounds().equals(new GameUiBounds(10, 20, 16, 16)), "node bounds");
         require(ui.getSlot(1).shouldBeEmpty().single().empty(), "empty assertion");
+        GameUiContract.validate(ui);
         failure(() -> ui.getByRole(GameUiNode.SLOT).single(), "expected one node");
         failure(() -> ui.getByName("missing").first(), "matched no nodes");
         GameUi readOnly = new MutableUi(ui.nodes()) {
@@ -42,6 +43,10 @@ public final class GameUiQueryTest {
             }
         };
         failure(() -> readOnly.getSlot(0).click(), "E2302");
+        GameUi invalid = new MutableUi(ui.nodes()) {
+            @Override public String screen() { return "missing-root"; }
+        };
+        failure(() -> GameUiContract.validate(invalid), "E2317");
         input.put("label", "Changed");
         require("Input".equals(ui.getSlot(0).single().label()), "node attributes were mutable");
         System.out.println("GameUiQueryTest passed");
