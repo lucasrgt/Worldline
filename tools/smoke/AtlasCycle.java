@@ -78,6 +78,11 @@ public final class AtlasCycle {
             paths.filter(path -> path.toString().endsWith(".java")).sorted()
                     .forEach(path -> sources.add(path.toString()));
         }
+        try (java.util.stream.Stream<Path> paths = Files
+                .walk(root.resolve("adapters/b173-server-analysis/src/main/java"))) {
+            paths.filter(path -> path.toString().endsWith(".java")).sorted()
+                    .forEach(path -> sources.add(path.toString()));
+        }
         command.addAll(sources);
         capture(command.toArray(new String[0]));
     }
