@@ -22,7 +22,7 @@ public final class RsNorLatchSetSmoke{
    RemoteChunkSnapshot after=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);
    require(after.blockAt(local(f.body.x(),cx),f.body.y(),local(f.body.z(),cz)).equals(new BlockState(1,0))&&after.blockAt(local(f.farUp.x(),cx),f.farUp.y(),local(f.farUp.z(),cz)).equals(new BlockState(1,0)),"persisted rs-nor body drift");
    String evidence="column="+f.column+",blockA="+f.body.x()+":"+f.body.y()+":"+f.body.z()+":1:0,blockB="+f.farUp.x()+":"+f.farUp.y()+":"+f.farUp.z()+":1:0,set="+f.set.x()+":"+f.set.y()+":"+f.set.z()+":69:floor->on->off,reset="+f.reset.x()+":"+f.reset.y()+":"+f.reset.z()+":69:floor->on->off,q="+f.q.x()+":"+f.q.y()+":"+f.q.z()+":75:4->76:4->75:4,qbar="+f.qbar.x()+":"+f.qbar.y()+":"+f.qbar.z()+":76:3->75:3->76:3,stays-on=true,stays-off=true,persisted=q=75:4+qbar=76:3,clients=5,disconnect=clean";
-   String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=raised-stone+rs-nor-76:4+76:3|cause=packet15-item76-north-then-south+empty-hand-packet15-set-pulse+reset-pulse|wire=packet53-q-75:4->76:4->75:4+qbar-76:3->75:3->76:3|oracle=set-stays-on+reset-stays-off+fresh-login|"+evidence;
+   String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=raised-stone+rs-nor-76:4+76:3|cause=packet15-item76-north-then-south+set-on-then-off+reset-on-then-off|wire=packet53-q-75:4->76:4->75:4+qbar-76:3->75:3->76:3|oracle=set-stays-on+reset-stays-off+fresh-login|"+evidence;
    System.out.println("WORLDLINE_M556_SET="+evidence);System.out.println("WORLDLINE_M556_TRACE="+trace);System.out.println("WORLDLINE_M556_SIGNATURE="+sha(trace));
   }finally{actor.close();server.close();}
  }

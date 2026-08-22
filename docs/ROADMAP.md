@@ -468,15 +468,15 @@ Passing an experiment does not silently promote its API.
 | v1.449.0 / M547 | Sticky piston QC set | GO - power-above 29:4->12 then sticky pull |
 | v1.450.0 / M548 | Piston BUD set | GO - neighbor torch update 33:4->36:4->33:4 power=none |
 | v1.451.0 / M550 | Dispenser QC set | GO - power-above 23 ejects Packet21 cobble, no adjacent lever |
-| v1.452.0 / M552 | TNT QC set | GO - power-above 46 Packet23 type 50 then Packet60 crater |
+| v1.452.0 / M552 | TNT QC set | RETRACTED - adjacent-solid power did not isolate QC |
 | v1.453.0 / M553 | Piston immovable set | GO - 33 rejects chest 54, furnace 61, and spawner 52 |
-| v1.454.0 / M549 | Sticky BUD set | GO - primed 29:4 then neighbor update 29:4->12 plus pull |
+| v1.454.0 / M549 | Sticky BUD set | RETRACTED - hidden fallback changed the cause without changing evidence |
 | v1.455.0 / M559 | Double extender set | GO - sequenced 29 then 33 moves cobble two cells |
 | v1.456.0 / M560 | Portal scale set | GO - Packet9 0->-1 pose maps OW xz /8, not 1:1 |
-| v1.457.0 / M564 | Spawn light set | GO - type 50/54 at night, absent under torch light 14 |
-| v1.458.0 / M557 | One-tick pulse set | GO - 1-tick repeater piston pulse leaves pushed stone |
+| v1.457.0 / M564 | Spawn light set | RETRACTED - negative changed cover and substrate, not only light |
+| v1.458.0 / M557 | One-tick pulse set | RETRACTED - no tick-resolved one-tick observation |
 | v1.459.0 / M566 | Grass spread set | GO - Packet53 3->2 on lit dirt, covered dirt stays 3 |
-| v1.460.0 / M555 | Torch burnout set | GO - wall 76:4 burns to 75:4 then recovers |
+| v1.460.0 / M555 | Torch burnout set | CORRECTING - qualitative 76:4 -> 75:4 -> 76:4; threshold/window unclaimed |
 | v1.461.0 / M567 | Bed spawn set | GO - occupy then cactus death Packet9 at bed, not world spawn |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |

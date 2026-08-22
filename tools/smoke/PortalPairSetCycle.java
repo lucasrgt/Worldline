@@ -52,12 +52,13 @@ public final class PortalPairSetCycle {
         Outcome second = run(classes, official, build.resolve("second"));
         require(first.signal.equals(second.signal) && first.trace.equals(second.trace)
                 && first.signature.equals(second.signature), "fresh portal-pair-set results diverged");
-        require(first.signal.contains("pair=shared-exit") && first.signal.contains("scale=8")
-                && first.signal.contains("netherPortals=1") && first.signal.contains("dimensions=0->-1,0->-1")
+        require(first.signal.contains("pair=shared-exit") && first.signal.contains("sameReturnCell=1")
+                && first.signal.contains("nearNetherPortalGeometries=1")
+                && first.signal.contains("dimensions=0->-1,0->-1")
                 && first.trace.contains("one-generated-portal-shared-exit")
-                && first.trace.contains("same-nether-cell")
+                && first.trace.contains("same-return-cell")
                 && !first.trace.contains("dimensions=0->-1->0,")
-                && !first.signal.contains("netherPortals=2"),
+                && !first.signal.contains("nearNetherPortalGeometries=2"),
                 "portal-pair-set collapsed to M134 roundtrip or a second Nether exit: " + first.signal);
         String expected = value(config, "expected.signature");
         if (expected.equals("pending") || Boolean.getBoolean("worldline.m562.diagnostic")) {

@@ -1930,22 +1930,22 @@ M548 adds no public API. Neighbor-update piston pulse `33:4 -> 36:4 -> 33:4` wit
 
 M550 adds no public API. Power-above dispenser `23` Packet21 cobble eject with no adjacent lever shares one dispenser-QC family.
 
-M552 adds no public API. Power-above TNT `46` Packet23 type `50` plus Packet60 crater shares one TNT-QC family.
+M552 is retracted. Its adjacent powered solid did not isolate TNT quasi-connectivity, so no TNT-QC family is published by the current release.
 
 M553 adds no public API. Piston `33` rejection of chest `54`, furnace `61`, and spawner `52` shares one piston-immovable family.
 
-M549 adds no public API. Primed sticky `29:4` plus neighbor-update `29:4 -> 29:12` pull shares one sticky-BUD family.
+M549 is retracted. A hidden fallback could place an ordinary south power source while preserving the same trace, so no sticky-BUD family is published by the current release.
 
 M559 adds no public API. Sequenced sticky `29` then piston `33` two-cell cobble travel shares one double-extender family.
 
 M560 adds no public API. Packet9 `0 -> -1` pose within 128 of Overworld `xz/8` shares one portal-scale family.
 
-M564 adds no public API. Nearby Packet24 type `50` or `54` at night plus torch-light rejection shares one spawn-light family.
+M564 is retracted. Its negative changed cover and substrate as well as light, so no causal spawn-light family is published by the current release.
 
-M557 adds no public API. One-tick repeater piston pulse that leaves a pushed block shares one one-tick-pulse family.
+M557 is retracted. The fixture did not observe the repeater or piston at tick resolution, so no one-tick-pulse family is published by the current release.
 
 M566 adds no public API. Packet53 dirt `3 -> 2` on lit samples plus covered dirt stay shares one grass-spread family.
 
-M555 adds no public API. Rapid-toggle wall torch `76:4 -> 75:4` burnout plus recover shares one torch-burnout family.
+M555 adds no public API. Its corrected scope is the directly observed rapid-activation wall-torch sequence `76:4 -> 75:4 -> 76:4`; it does not claim an observed eight-toggle threshold or 100-tick window.
 
 M567 adds no public API. Bed occupy plus cactus Packet8 `0` Packet9 at the bed shares one bed-spawn family.

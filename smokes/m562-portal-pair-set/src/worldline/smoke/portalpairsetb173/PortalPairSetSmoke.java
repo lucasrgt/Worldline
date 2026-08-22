@@ -91,13 +91,14 @@ public final class PortalPairSetSmoke {
             PortalPairTravel.awaitPlayers(server, 0);
             server.save();
             PortalPairFrames.require(server.player(user).dimension() == -1, "pair player dimension was not persisted");
-            String evidence = "pair=shared-exit,scale=8,sameCell=1,column=" + column
-                    + ",netherPortals=1,dimensions=0->-1,0->-1,cooldown=" + cooldownTicks + ",travel=" + travelTicks;
+            String evidence = "pair=shared-exit,sameReturnCell=1,column=" + column
+                    + ",nearNetherPortalGeometries=1,dimensions=0->-1,0->-1,cooldown=" + cooldownTicks
+                    + ",travel=" + travelTicks;
             String trace = "v1|server=official-b1.7.3|seed=" + seed
-                    + "|profile=allow-nether-true|fixture=two-east-obsidian49-frames-one-8:1-cell"
+                    + "|profile=allow-nether-true|fixture=source-frame+returned-portal-neighbor-frame"
                     + "|construction=packet15-two-14x49-frames+flint259|cause=packet11-inside-portal90-twice"
                     + "|outbound=packet9-0-to-minus1-twice|nether=one-generated-portal-shared-exit"
-                    + "|oracle=same-nether-cell+one-nether-portal-not-m134-roundtrip-not-m560-scale-not-m561-search"
+                    + "|oracle=same-return-cell+same-nether-exit-not-source-second-frame-same-cell"
                     + "|observation=nether-packet51+portal14x6-once|" + evidence + "|disconnect=clean";
             System.out.println("WORLDLINE_M562_SET=" + evidence);
             System.out.println("WORLDLINE_M562_TRACE=" + trace);

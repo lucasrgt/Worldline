@@ -4,6 +4,26 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## Unreleased - M546-M570 qualification corrections
+
+Status: central audit correction; published history is preserved.
+
+- Retracted M549 because its hidden south-block fallback changed the cause
+  while emitting the same signature.
+- Retracted M552 because its TNT was ordinarily powered by an adjacent solid;
+  the fixture did not isolate quasi-connectivity.
+- Retracted M557 because the repeater observation was not tick-resolved and
+  therefore did not prove a one-tick pulse.
+- Retracted M564 because the lit and dark spawn fixtures changed both cover
+  and substrate, so the negative was not causal evidence for light.
+- Narrowed M555 to the behavior directly observed by its fixture: 24 rapid
+  lever activations, an unpowered `75:4` state, a 400-tick recovery wait, and
+  return to `76:4`. It no longer claims an observed eight-toggle threshold or
+  100-tick window.
+- Removed the four rejected smokes from the current smoke catalog. Their
+  original v1.452.0, v1.454.0, v1.457.0, and v1.458.0 entries and tags remain
+  below as an immutable record of what was published.
+
 ## Unreleased - Integration Hygiene and Anti-Slop Audit
 
 Status: developer tooling; not a vanilla SET GO.
