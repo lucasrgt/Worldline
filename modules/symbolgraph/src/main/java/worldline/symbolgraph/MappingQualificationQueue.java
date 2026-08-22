@@ -19,8 +19,8 @@ public final class MappingQualificationQueue {
         List<Item> ordered = new ArrayList<Item>(source);
         Collections.sort(ordered);
         items = Collections.unmodifiableList(ordered);
-        StringBuilder text = new StringBuilder("schema=1\nitems=").append(items.size()).append('\n');
-        text.append("priority\tgap\tidentity\tside\tkind\towner\tname\tdescriptor")
+        StringBuilder text = new StringBuilder("schema=2\nitems=").append(items.size()).append('\n');
+        text.append("item\tpriority\tgap\tidentity\tside\tkind\towner\tname\tdescriptor")
                 .append("\tnostalgia\tretroClient\tretroServer\tnextEvidence\n");
         for (Item item : items) text.append(item.render()).append('\n');
         body = text.toString();
@@ -112,6 +112,7 @@ public final class MappingQualificationQueue {
         public int priority() { return priority; }
         public String gap() { return gap; }
         public String identity() { return identity; }
+        public String id() { return digest(canonical()); }
         public String canonical() {
             return priority + "|" + gap + "|" + identity + "|" + side + "|" + kind + "|"
                     + owner + "|" + name + "|" + descriptor;
@@ -121,7 +122,7 @@ public final class MappingQualificationQueue {
             return canonical().compareTo(other.canonical());
         }
         String render() {
-            return priority + "\t" + gap + "\t" + identity + "\t" + side + "\t" + kind
+            return id() + "\t" + priority + "\t" + gap + "\t" + identity + "\t" + side + "\t" + kind
                     + "\t" + dash(owner) + "\t" + name + "\t" + dash(descriptor)
                     + "\t" + dash(nostalgia) + "\t" + dash(retroClient) + "\t"
                     + dash(retroServer) + "\t" + nextEvidence;

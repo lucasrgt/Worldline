@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import worldline.symbolgraph.MappingCoverageReport;
+import worldline.symbolgraph.MappingEvidenceReport;
 import worldline.symbolgraph.MappingQualificationQueue;
 
 public final class MappingCommandTest {
@@ -25,6 +26,7 @@ public final class MappingCommandTest {
         Path retro = root.resolve("retro.tiny");
         Path descriptor = root.resolve("retro.properties");
         Path policy = root.resolve("coverage.properties");
+        Path evidence = root.resolve("evidence.tsv");
         try {
             official(official, officialName);
             archive(intermediary, "tiny\t2\t0\tintermediary\tclientOfficial\tserverOfficial\n"
@@ -45,6 +47,16 @@ public final class MappingCommandTest {
                     && queue.sha256().equals(MappingQualificationQueue.create(official, official,
                             intermediary, nostalgia, descriptor, retro).sha256()),
                     "mapping qualification queue is incomplete or unstable");
+            String item = queue.items().get(0).id();
+            Files.write(evidence, ("schema=1\nqueue.sha256=" + queue.sha256()
+                    + "\nitem\tsource\tevidence\talias\treference\n"
+                    + item + "\tnostalgia-b173\tcross-namespace\tstableName\tfixture:named\n"
+                    + item + "\tornithe-b174\tcross-version\tstableName\tfixture:next\n")
+                    .getBytes(StandardCharsets.UTF_8));
+            MappingEvidenceReport evidenceReport = MappingEvidenceReport.create(queue, evidence);
+            require("CORROBORATED".equals(evidenceReport.status(item))
+                    && evidenceReport.render().contains("summary.conflict=0"),
+                    "mapping evidence report failed to corroborate independent aliases");
             ByteArrayOutputStream output = new ByteArrayOutputStream(), error = new ByteArrayOutputStream();
             int status = WorldlineCli.run(new String[] {"mappings", "report", official.toString(),
                     official.toString(), intermediary.toString(), nostalgia.toString(), descriptor.toString(),
@@ -60,6 +72,14 @@ public final class MappingCommandTest {
                     && output.toString("UTF-8").contains("WORLDLINE_MAPPINGS_QUEUE=PASS")
                     && output.toString("UTF-8").contains("queue.sha256="),
                     "mapping qualification queue CLI failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"mappings", "evidence", official.toString(),
+                    official.toString(), intermediary.toString(), nostalgia.toString(), descriptor.toString(),
+                    retro.toString(), evidence.toString()}, new PrintStream(output), new PrintStream(error));
+            require(status == 0 && error.size() == 0
+                    && output.toString("UTF-8").contains("WORLDLINE_MAPPINGS_EVIDENCE=PASS")
+                    && output.toString("UTF-8").contains("CORROBORATED"),
+                    "mapping evidence CLI failed");
             StringBuilder expected = new StringBuilder("schema=1\n");
             for (Map.Entry<String, String> metric : report.metrics().entrySet())
                 expected.append("expected.").append(metric.getKey()).append('=')

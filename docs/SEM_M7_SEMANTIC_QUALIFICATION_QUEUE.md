@@ -28,6 +28,7 @@ aliases only. An external-only row explicitly requires an official identity
 before alias adoption, and a name difference requires behavior or cross-version
 evidence before a name choice.
 
-The ordered queue body has a SHA-256 digest. Tests prove deterministic ordering,
+Each row also carries a SHA-256 item ID over its exact canonical identity. The
+queue schema is version 2. The ordered queue body has a SHA-256 digest. Tests prove deterministic ordering,
 complete exact official-gap enumeration, CLI routing, and a stable digest. No
 official artifact or generated queue is committed.
