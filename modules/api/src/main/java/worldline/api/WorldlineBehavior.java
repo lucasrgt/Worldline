@@ -58,6 +58,12 @@ public final class WorldlineBehavior {
             "Standing sign Packet130 text across fresh login");
     public static final WorldlineBehavior PAINTING_SPAWN = define("painting-spawn", WorldlineFamily.ITEM,
             "Painting placement Packet25 identity across peers");
+    public static final WorldlineBehavior NOTE_BLOCK_INSTRUMENT = define("note-block-instrument", WorldlineFamily.REDSTONE,
+            "Note instrument selection from the supporting block");
+    public static final WorldlineBehavior PAINTING_ORIENTATION = define("painting-orientation", WorldlineFamily.ITEM,
+            "Painting Packet25 orientation on opposite wall faces");
+    public static final WorldlineBehavior JUKEBOX_RECORD_PLAY = define("jukebox-record-play", WorldlineFamily.ITEM,
+            "Jukebox record insertion and Packet61 play event");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = index();
     private final String token, family, subject;
 
@@ -120,7 +126,8 @@ public final class WorldlineBehavior {
                 SPIDER_LEAP, SLIME_TOUCH, GHAST_FIREBALL_HIT, MONSTER_BED_INTERRUPT, BOW_MOB_HIT,
                 DIFFICULTY_DAMAGE, VOID_DEATH, PEACEFUL_DESPAWN, PLAYER_DEATH_DROPS, PIGMAN_ANGER,
                 SKELETON_RANGED_AI, PIG_SPAWN, PIG_AI_MOVEMENT, PIG_DEATH, PIG_PORK_DROP,
-                BED_SLEEP_SKIP, NOTE_BLOCK_CLICK, SIGN_TEXT_PERSISTENCE, PAINTING_SPAWN };
+                BED_SLEEP_SKIP, NOTE_BLOCK_CLICK, SIGN_TEXT_PERSISTENCE, PAINTING_SPAWN,
+                NOTE_BLOCK_INSTRUMENT, PAINTING_ORIENTATION, JUKEBOX_RECORD_PLAY };
         Map<String, WorldlineBehavior> map = new LinkedHashMap<String, WorldlineBehavior>();
         for (int i = 0; i < values.length; i++) {
             if (map.put(values[i].token(), values[i]) != null)
