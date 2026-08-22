@@ -53,6 +53,17 @@ Every optional action is capability-gated. An adapter must implement
 `GameUiContract.validate` is the shared consumer gate for vanilla, Butter, and
 Aero adapters.
 
+Asynchronous UI state uses deterministic retry through game ticks rather than
+wall-clock sleeps:
+
+```java
+context.awaitUi(ui.getByText("Ready"), 40);
+context.awaitUi(ui.getByRole("slot"), 20, slots -> slots.shouldHaveCount(4));
+```
+
+Only `AssertionError` is retryable. Missing capabilities, inconsistent
+adapters, and runtime failures abort immediately.
+
 | Capability | Neutral API | b1.7.3 vanilla adapter | Butter bridge | Aero consumer |
 | --- | --- | --- | --- | --- |
 | Semantic tree and locators | GO | GO | GO | available through bridge |

@@ -9,6 +9,7 @@ import worldline.api.GamePlayer;
 import worldline.api.GamePosition;
 import worldline.api.GameUi;
 import worldline.api.GameUiImage;
+import worldline.api.GameUiQuery;
 import worldline.api.UiMinecraftRuntime;
 
 /** Capabilities and diagnostics owned by one isolated test attempt. */
@@ -41,6 +42,20 @@ public interface TestContext {
         GameUiImage image = ui().screenshot();
         attach(name.trim() + ".ppm", image.ppm());
         return image;
+    }
+    default GameUiQuery awaitUi(GameUiQuery query, int maximumTicks) {
+        return awaitUi(query, maximumTicks, GameUiQuery::shouldExist);
+    }
+    default GameUiQuery awaitUi(GameUiQuery query, int maximumTicks, UiAssertion assertion) {
+        if (query == null || assertion == null) throw new NullPointerException("UI wait");
+        if (maximumTicks < 0) throw new IllegalArgumentException("maximum UI wait ticks must not be negative");
+        AssertionError last = null;
+        for (int elapsed = 0; elapsed <= maximumTicks; elapsed++) {
+            try { assertion.verify(query); return query; }
+            catch (AssertionError failure) { last = failure; }
+            if (elapsed < maximumTicks) tick();
+        }
+        throw new AssertionError("UI assertion did not pass within " + maximumTicks + " ticks", last);
     }
     default void tick(int count) { runtime().tick(count); }
     default GamePlayer player() { return runtime().player(); }

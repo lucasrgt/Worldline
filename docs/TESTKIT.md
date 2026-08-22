@@ -220,6 +220,11 @@ role, name, label, text, and slot are lazy and fail when a single-node action
 is absent or ambiguous. Optional input, layout, and native visual operations
 are capability-gated and validated by `GameUiContract`.
 
+`context.awaitUi(locator, maximumTicks, assertion)` retries ordinary assertion
+failures against the live tree and advances exactly one controlled game tick
+between attempts. It never uses wall-clock sleeps and never retries capability,
+adapter, or runtime failures.
+
 `context.screenshot("name")` requires `SCREENSHOT`, writes a bounded binary PPM
 artifact, and returns an immutable ARGB `GameUiImage`. Its normal
 `toMatchSnapshot` representation freezes width, height, and SHA-256. Exact and

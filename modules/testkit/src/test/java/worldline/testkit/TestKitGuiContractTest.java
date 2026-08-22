@@ -63,6 +63,7 @@ public final class TestKitGuiContractTest {
                 ui.getByRole(GameUiNode.SLOT).shouldHaveCount(2);
                 ui.getByLabel("Input").click();
                 expect(ui.getSlot(0).single().itemId()).toEqual(265);
+                context.awaitUi(ui.getByText("Ready"), 2).shouldHaveCount(1);
                 expect(context.screenshot("crusher")).toMatchSnapshot("crusher");
             }));
         }
@@ -86,7 +87,7 @@ public final class TestKitGuiContractTest {
         final Player player = new Player(); final World world = new World(); final FakeUi gui = new FakeUi();
         @Override public void bootHeadless() {}
         @Override public void loadWorld(worldline.api.WorldSource source) {}
-        @Override public void tick() {}
+        @Override public void tick() { gui.ready = true; }
         @Override public RuntimeState state() { return RuntimeState.WORLD_LOADED; }
         @Override public GameWorld world() { return world; }
         @Override public GamePlayer player() { return player; }
@@ -98,7 +99,7 @@ public final class TestKitGuiContractTest {
     }
 
     private static final class FakeUi implements GameUiVisual {
-        int clicks;
+        int clicks; boolean ready;
         @Override public Set<GameUiCapability> capabilities() {
             return Collections.unmodifiableSet(EnumSet.of(
                     GameUiCapability.SEMANTIC_TREE, GameUiCapability.NODE_CLICK,
@@ -106,9 +107,13 @@ public final class TestKitGuiContractTest {
         }
         @Override public String screen() { return "crusher"; }
         @Override public List<GameUiNode> nodes() {
-            return Arrays.asList(new GameUiNode(GameUiNode.SCREEN, "crusher", -1, -1, 0),
+            List<GameUiNode> value = new java.util.ArrayList<>(Arrays.asList(
+                    new GameUiNode(GameUiNode.SCREEN, "crusher", -1, -1, 0),
                     new GameUiNode(GameUiNode.SLOT, "Input", 0, 265, 4),
-                    new GameUiNode(GameUiNode.SLOT, "Output", 1, -1, 0));
+                    new GameUiNode(GameUiNode.SLOT, "Output", 1, -1, 0)));
+            if (ready) value.add(new GameUiNode("status", "ready", -1, -1, 0,
+                    Collections.singletonMap("text", "Ready")));
+            return value;
         }
         @Override public GameUiNode node(String role, String name) { return getByRole(role).name(name).single(); }
         @Override public GameUiNode slot(int index) { return getSlot(index).single(); }
