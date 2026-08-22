@@ -35,6 +35,7 @@ public final class RetroMcpImportMain {
         System.out.println("inventoryMissingRetroMcp=" + result.missing().size());
         System.out.println("symbols=" + result.graph().records().size());
         System.out.println("sha256=" + result.graph().sha256());
+        System.out.print(new NamespaceAudit().inspect(result.graph()).renderSummary());
         int shown = 0;
         for (String unmatched : result.unmatched()) {
             if (shown++ == 20) break;

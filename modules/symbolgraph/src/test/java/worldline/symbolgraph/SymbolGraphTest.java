@@ -13,6 +13,7 @@ public final class SymbolGraphTest {
         auditsExactIntermediaryIdentity();
         buildsDeterministicCrosswalk();
         importsRetroMcpThroughOfficialIdentity();
+        classifiesNamespaceGapsWithoutGuessing();
         verifiesExactMappingPins();
         rejectsMalformedDocuments();
         System.out.println("SymbolGraphTest passed");
@@ -116,6 +117,23 @@ public final class SymbolGraphTest {
             Files.deleteIfExists(descriptor);
             Files.deleteIfExists(directory);
         }
+    }
+
+    private static void classifiesNamespaceGapsWithoutGuessing() throws Exception {
+        TinyMapping inventory = read("tiny\t2\t0\tintermediary\tclientOfficial\tserverOfficial\n"
+                + "c\tclass_1\ta\t\n"
+                + "\tf\tI\tfield_1\tb\t\n"
+                + "\tf\tI\tfield_2\tc\t\n");
+        TinyMapping nostalgia = read("tiny\t2\t0\tintermediary\tnamed\n"
+                + "c\tclass_1\tWorld\n"
+                + "\tf\tI\tfield_1\tseed\n"
+                + "\tm\t()V\textra\thelper\n");
+        SymbolGraph graph = new SymbolGraphBuilder().build(inventory, nostalgia);
+        NamespaceAudit.Report report = new NamespaceAudit().inspect(graph);
+        require(report.findings(NamespaceIssue.WORLDLINE_MISSING).size() == 1, "external-only gap");
+        require(report.findings(NamespaceIssue.NOSTALGIA_MISSING).size() == 1, "Nostalgia gap");
+        require(report.findings(NamespaceIssue.RETROMCP_MISSING).size() == 3, "RetroMCP gaps");
+        require(report.findings(NamespaceIssue.AMBIGUOUS).isEmpty(), "no invented ambiguity");
     }
 
     private static TinyMapping read(String text) throws Exception {
