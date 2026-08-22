@@ -57,6 +57,16 @@ public final class WorldlineContract {
             "Deterministic official-server terrain pages for a seed and radius");
     public static final WorldlineContract UI_EXPORT = define("ui-export",
             "Deterministic self-contained semantic UI tree page");
+    public static final WorldlineContract DEDICATED_SERVER_CONTROL = define("dedicated-server-control",
+            "Official dedicated-server lifecycle, command, save, and shutdown control");
+    public static final WorldlineContract MULTIPLAYER_SESSION = define("multiplayer-session",
+            "Bounded protocol-14 connection, native client, and peer communication session");
+    public static final WorldlineContract PLAYER_PERSISTENCE = define("player-persistence",
+            "Server-authored player state remains observable after clean disconnect");
+    public static final WorldlineContract PLAYER_POSE = define("player-pose",
+            "Acknowledged multiplayer pose, movement, correction, and persistence boundary");
+    public static final WorldlineContract REMOTE_WORLD_VIEW = define("remote-world-view",
+            "Decoded immutable remote chunks, lifecycle cache, updates, and terrain views");
     private static final Map<String, WorldlineContract> ALL;
     static {
         register(REPRODUCTION_BUNDLE, TRACE_DIVERGENCE, MOD_LOADING,
@@ -65,7 +75,8 @@ public final class WorldlineContract {
                 SCENARIO_DEBUGGING, SCENARIO_PROFILING, SCENARIO_COVERAGE, TRACE_HTML,
                 CLIENT_RUNTIME_EQUIVALENCE, SERVER_RUNTIME_EQUIVALENCE, DOMAIN_API_EQUIVALENCE,
                 DURABLE_SNAPSHOT, UI_TREE_EQUIVALENCE, RUNTIME_LAB, RUNTIME_CENSUS,
-                SEED_ATLAS, UI_EXPORT);
+                SEED_ATLAS, UI_EXPORT, DEDICATED_SERVER_CONTROL, MULTIPLAYER_SESSION,
+                PLAYER_PERSISTENCE, PLAYER_POSE, REMOTE_WORLD_VIEW);
         ALL = Collections.unmodifiableMap(new LinkedHashMap<String, WorldlineContract>(DEFINITIONS));
     }
     private final String token, subject;

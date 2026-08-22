@@ -4,7 +4,7 @@ final class WorldlineContractTest {
     private WorldlineContractTest() {}
 
     static void run() {
-        if (WorldlineContract.all().size() != 23
+        if (WorldlineContract.all().size() != 28
                 || WorldlineContract.require("trace-divergence") != WorldlineContract.TRACE_DIVERGENCE
                 || !WorldlineContract.MOD_LOADING.subject().contains("mod loading")
                 || WorldlineContract.require("scenario-coverage") != WorldlineContract.SCENARIO_COVERAGE
