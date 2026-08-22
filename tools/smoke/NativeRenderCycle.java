@@ -103,6 +103,10 @@ public final class NativeRenderCycle {
         List<String> command = new ArrayList<>(Arrays.asList("javac", "-encoding", "UTF-8",
                 "--release", "8", "-Xlint:all,-options", "-Werror", "-classpath",
                 lwjgl.toString(), "-d", output.toString()));
+        command.add(root.resolve("adapters/b173-client/src/main/java/worldline/b173/B173NativeFrame.java")
+                .toString());
+        command.add(root.resolve("adapters/b173-client/src/main/java/worldline/b173/B173NativeRender.java")
+                .toString());
         command.add(source.resolve("worldline/smoke/m10/NativeRenderSmoke.java").toString());
         capture(command);
         System.out.println("  native render scenario compilation: passed");

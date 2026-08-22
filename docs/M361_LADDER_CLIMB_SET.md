@@ -1,17 +1,16 @@
 # M361 ladder climb set
 
-M361 opens the official ladder-climb set. Packet15 of ladder item `65`
-against a raised two-stone east face places two live `65:5` cells. The
-headless actor Packet13-climbs that column at least two cells of height
-(`climb=2000` milli-blocks) and contrasts the same ten-tick vertical
-window in the air column before those ladders exist (`air=495`). The
-frozen signal includes ladder `65` plus the climbed pose delta.
+M361 composes official ladder placement with official client physics.
+`LadderClimbSetCycle` proves two east-facing `65:5` cells are server-authored
+and survive a save plus fresh login. The controlled client cycle drives
+`B173PhysicsProbe.ladder` through the mapped
+`EntityPlayerSP.moveEntityWithHeading` root and compares the result with the
+exact official obfuscated root in two additional JVMs.
 
-This is distinct from M174 ladder place-only, which freezes east facing
-metadata and does not claim climbing physics. It does not claim waterlogged
-ladders, sneak-clip, or a Worldline movement simulation.
+No Packet13 climb is manually injected. The server scenario does not calculate
+vertical motion, and the client probe does not substitute a Worldline physics
+equation. Qualification requires both frozen traces and an exact
+mapped/official client match.
 
-Frozen semantic SHA-256:
-`113dccdda9b6bd0140c7aea5b255db993bb9063c6d64ef9370f1fb9925c26340`.
-
-Headless `B173WireClient` only. Protocol-14. No GUI. No Aero.
+The replacement server signature and shared client-physics signature remain
+pending until the exclusive official-runtime cycle completes. No GUI. No Aero.

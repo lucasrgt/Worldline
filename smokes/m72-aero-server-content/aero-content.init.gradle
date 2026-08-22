@@ -44,8 +44,8 @@ gradle.projectsEvaluated {
             '-Dworldline.content.port=' + property('worldlinePort'),
             '-Dworldline.content.username=' + property('worldlineUsername'),
             '-Dworldline.content.frames=' + (project.findProperty('worldlineFrames') ?: '20'),
-            '-Daero.spikelog=true', '-Daero.spikelog.ms=1000000',
-            '-Daero.spikelog.heartbeatMs=100', '-Daero.spikelog.sync=true',
+            '-Daero.spikelog=true', '-Daero.spikelog.ms=1',
+            '-Daero.spikelog.heartbeatMs=1', '-Daero.spikelog.sync=true',
             '-Daero.spikelog.file=' + log.absolutePath, '-Xms1G', '-Xmx2G'] as List)
     }
 }

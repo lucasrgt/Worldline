@@ -47,6 +47,8 @@ public final class WorldlineClientOracle {
         client.j = new dn(world, client.p);
         world.r.setSeed(RNG_SEED);
         require(world.a(X, 64, Z) == uu.u.bn, "oracle fixture stone missing");
+        OfficialMetadataRecipes.verify();
+        System.out.println("WORLDLINE_METADATA_RECIPES=families-8,recipes-25");
 
         CanonicalTrace trace = new CanonicalTrace(SEED);
         snapshot(trace, "loaded", client);
@@ -79,6 +81,8 @@ public final class WorldlineClientOracle {
         trace.emitTo(System.out);
         System.out.println(STATE_TRACE + states.value());
         System.out.println(STATE_SIGNATURE + states.signature());
+        System.out.println("WORLDLINE_PHYSICS_TRACE=v2|" + OfficialPhysicsProbe.trace(world, player)
+                .substring(3) + "|compass=" + OfficialCompassProbe.trace(client, world, player));
     }
 
     private static CanonicalStateTrace stateTrace() {

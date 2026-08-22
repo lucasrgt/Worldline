@@ -67,6 +67,9 @@ public final class B173Runtime implements SnapshotMinecraftRuntime, UiMinecraftR
     public List<ItemRecipe> recipes() { return B173Recipes.snapshot(); }
 
     @Override
+    public List<worldline.api.ItemStackRecipe> stackRecipes() { return B173Recipes.stackSnapshot(); }
+
+    @Override
     public List<CauseDrop> drops() { return B173Causes.withMobs(); }
 
     @Override

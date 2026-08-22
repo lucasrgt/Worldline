@@ -115,7 +115,7 @@ Passing an experiment does not silently promote its API.
 | v1.96.0 / M108 | Balanced paired cell-size control | GO - same aligned scene forms four size-two pages versus one size-eight page |
 | v1.97.0 / M109 | Cell-size lower-bound clamp control | GO - raw zero and explicit one converge on sixteen single-member direct cells |
 | v1.98.0 / M110 | Cell-size upper-bound clamp control | GO - raw thirty-three and explicit thirty-two converge on one cached page |
-| v1.99.0 / M111 | Fixed-seed absolute terrain | GO - two fresh official worlds match the complete ID volume and top-Y/ID/metadata surface of chunk `(0,0)` |
+| v1.99.0 / M111 | Fixed-seed absolute terrain | GO - two fresh official worlds match solid occupancy and the top-Y/ID/metadata surface of chunk `(0,0)` |
 | v1.100.0 / M112 | Fixed-seed light planes | GO - two fresh official worlds match all block-light and sky-light nibbles and histograms in chunk `(0,0)` |
 | v1.101.0 / M113 | Causal vanilla lighting | GO - one official glowstone placement produces an exact 68-sample block-light transition after fresh chunk reload |
 | v1.102.0 / M114 | Causal vanilla water flow | GO - one official dig opens a generated-water floor cell and settles exactly one block to water `9:8` |
@@ -492,7 +492,7 @@ release artifact.
 ## Immediate post-v1.461.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
-state of the art. M111 establishes deterministic block identity, M112 adds the
+state of the art. M111 establishes deterministic solid occupancy, M112 adds the
 initial light planes, and M113 proves the first server-authored causal light
 transition, and M114 qualifies the first scheduled water response. The active
 sequence now deepens fluid behavior and advances from M115's component state

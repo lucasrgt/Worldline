@@ -9,7 +9,7 @@ milestone.
 
 | Requirement | Authoritative evidence | Result |
 | --- | --- | --- |
-| Closed catalog | 24 categories and 196 required roles; unknown or duplicate symbols fail closed | PASS |
+| Closed catalog | 24 categories and 216 required roles; unknown or duplicate symbols fail closed | PASS |
 | Adapter manifests | `b173-client` sites cover every `worldline/b173/` catalog symbol; Aero types fail closed | PASS |
 | Map coverage | Every named `symbols.map` symbol has a catalog role | PASS |
 | Static graph | `SemanticGraph` fails closed on unknown read/write/dep tokens | PASS |
@@ -20,7 +20,7 @@ milestone.
 Frozen catalog SHA-256:
 
 ```text
-b4d1f4fdf968f785cc5c94b2400d5f4ad4966f8f7b042d0fd2372d24e9dadf88
+b2724cb651bed782950763051fcc79ad654b56409b4fbe18d5e23d4a09e25967
 ```
 
 Canonical qualification command:

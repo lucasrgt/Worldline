@@ -1,17 +1,18 @@
 # M317 qualification cycle
 
-`SlowBlocksCycle` rebuilds the raised stone cobweb and soul-sand path in
-two fresh official server JVMs. Each run places cobweb item `30` and soul
-sand item `88`, Packet13-walks into those cells, and freezes
-air-versus-cobweb and air-versus-soul-sand standing pose deltas over
-eight ticks. One official EOF is retried after a 5 second sleep.
+`SlowBlocksCycle` rebuilds the raised stone fixture in two fresh official server
+JVMs, places cobweb item `30` and soul sand item `88`, verifies live Packet53
+state, saves, and verifies both cells through a fresh client login. One official
+EOF may be retried after five seconds.
 
-The frozen semantic SHA-256 is
-`bcae75456216b2655361256edd97079669619d908394782145a21a076e9e676a`.
-
-Canonical evidence uses two official server JVMs and four client sessions.
-Headless protocol-14 only. No GUI. No Aero.
+The physics half is owned by `ClientCycle` and `B173PhysicsProbe.slowBlocks`.
+That four-process differential compares the mapped and official player movement
+roots on identical air, cobweb, and soul-sand corridors. M317 qualifies only
+after both cycles have frozen matching evidence.
 
 ```text
 java tools/smoke/SlowBlocksCycle.java m317-slow-blocks
+java tools/smoke/ClientCycle.java controlled-client-tick
 ```
+
+The replacement signatures remain pending. Headless protocol-14 only.

@@ -14,7 +14,7 @@ import worldline.b173server.B173DedicatedServer;
 import worldline.b173server.B173PlayerSeed;
 import worldline.b173server.B173WireClient;
 
-/** Observes exact generated block state at one absolute official-world chunk. */
+/** Observes generated solid occupancy and surface state at one absolute official-world chunk. */
 public final class FixedSeedTerrainSmoke {
     private FixedSeedTerrainSmoke() {}
 
@@ -35,15 +35,21 @@ public final class FixedSeedTerrainSmoke {
             RemoteWorldView world = client.awaitRemoteChunk(chunkX, chunkZ);
             chunk = world.chunkAt(chunkX, chunkZ); verify(chunk, chunkX, chunkZ);
         } finally { client.close(); server.close(); }
-        String terrain = terrainHash(chunk), metadata = metadataHash(chunk), surface = surfaceHash(chunk);
-        String trace = "v1|server=official-b1.7.3|seed=" + seed
+        String terrain = terrainHash(chunk), raw = rawHash(chunk);
+        String metadata = metadataHash(chunk), surface = surfaceHash(chunk);
+        int solid = solidCount(chunk);
+        String trace = "v2|server=official-b1.7.3|seed=" + seed
                 + "|target=absolute-chunk|origin=" + chunkX + "," + chunkZ
-                + "|blocks=32768|nonair=" + chunk.nonAirBlocks()
+                + "|blocks=32768|solid=" + solid
+                + "|solid-definition=not-air-water8+9-lava10+11"
                 + "|terrain=" + terrain + "|surface=" + surface
+                + "|raw-block-ids+nonair=diagnostic-not-frozen"
                 + "|decode=packet50+packet51-xzy|disconnect=clean";
         System.out.println("WORLDLINE_M111_TERRAIN=chunk=" + chunkX + ":" + chunkZ
-                + ",nonair=" + chunk.nonAirBlocks() + ",terrain=" + terrain
+                + ",solid=" + solid + ",terrain=" + terrain
                 + ",surface=" + surface);
+        System.out.println("WORLDLINE_M111_RAW_DIAGNOSTIC=" + raw
+                + ",nonair=" + chunk.nonAirBlocks());
         System.out.println("WORLDLINE_M111_METADATA_DIAGNOSTIC=" + metadata);
         System.out.println("WORLDLINE_M111_SPAWN_DIAGNOSTIC="
                 + pose.x() + ":" + pose.y() + ":" + pose.z());
@@ -65,9 +71,25 @@ public final class FixedSeedTerrainSmoke {
     private static String terrainHash(RemoteChunkSnapshot chunk) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         for (int x = 0; x < 16; x++) for (int z = 0; z < 16; z++)
+            for (int y = 0; y < 128; y++) digest.update((byte)
+                    (solid(chunk.blockAt(x, y, z).legacyId()) ? 1 : 0));
+        return hex(digest.digest());
+    }
+
+    private static String rawHash(RemoteChunkSnapshot chunk) throws Exception {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        for (int x = 0; x < 16; x++) for (int z = 0; z < 16; z++)
             for (int y = 0; y < 128; y++) digest.update((byte) chunk.blockAt(x, y, z).legacyId());
         return hex(digest.digest());
     }
+
+    private static int solidCount(RemoteChunkSnapshot chunk) { int result = 0;
+        for (int x = 0; x < 16; x++) for (int z = 0; z < 16; z++)
+            for (int y = 0; y < 128; y++) if (solid(chunk.blockAt(x, y, z).legacyId())) result++;
+        return result; }
+
+    private static boolean solid(int id) { return id != 0 && id != 8 && id != 9
+            && id != 10 && id != 11; }
 
     private static String metadataHash(RemoteChunkSnapshot chunk) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");

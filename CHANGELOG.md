@@ -1130,11 +1130,12 @@ The frozen M392 semantic SHA-256 is
 Status: GO for official creeper Packet60 strength 3 destroying dirt and wool together.
 
 - Spawner retargeted to Creeper; Packet24 type `50` fused by proximity and exploded at Packet60 strength `3`.
-- Dirt `3` and wool `35` crater cells were destroyed and persisted as air.
+- Packet60 listed base-layer dirt `3` and wool `35`; a fresh login retained a
+  nonempty crater without freezing exact ray-selected cells.
 - Repeated the complete family in two official server JVMs.
 
 The frozen M391 semantic SHA-256 is
-`2a74b9f63925b31966343a26c78c5b6d87dcdb84096822099fe3988f5d59b771`.
+`14ad8cdcf99568672d696cd1c79210ab82f31f2bb6bbda7f005f4c162d76f60c`.
 
 ## 1.378.0 - M390 Remaining spawner set
 
@@ -1163,11 +1164,12 @@ The frozen M389 semantic SHA-256 is
 Status: GO for official zombie feather and skeleton arrow drops together.
 
 - Spawners retargeted to Zombie and Skeleton; Packet24 types `54` and `51` were killed with diamond sword `276`.
+- Equipped leather armor `298-301` through acknowledged personal-window transactions to isolate actor survival.
 - Packet21 feather `288` and arrow `262` were observed.
 - Repeated the complete family in two official server JVMs.
 
 The frozen M388 semantic SHA-256 is
-`af71fe63de80f6405617a61a51d16c2027b51a4b9d198ef70cc5286faa026b45`.
+`2e16ed6ddaaf65b63a82ad4de3734ab19f25ce46bb46154ef8ecd10ce680415c`.
 
 ## 1.375.0 - M387 Remaining light set
 
@@ -2484,11 +2486,12 @@ The frozen M269 semantic SHA-256 is
 Status: GO for official flint-and-steel fire placement.
 
 - Used flint-and-steel `259` on raised stone and received fire block `51:0`.
-- The exact fire cell survived a clean save and a fresh login.
+- A fresh login retained the support and accepted the random-ticked fire cell
+  as either still burning or decayed to air.
 - Repeated the complete fixture in two official server JVMs.
 
 The frozen M268 semantic SHA-256 is
-`e73f7f6c77c41d2facb9ca438c3905559515101c6dcdbe3cfd22c4b48da0aeda`.
+`d9303a82df9a2cf43e607f47ba40e1b65d30f92b3e52819d1135a980a6eafafb`.
 
 ## 1.255.0 - M267 Milk bucket
 
@@ -4342,13 +4345,14 @@ Status: GO for deterministic vanilla terrain at one absolute chunk.
 
 - Generated two fresh worlds with the unmodified official Beta 1.7.3 server
   and fixed seed `17320110707`.
-- Decoded all 32,768 block IDs in absolute chunk `(0,0)` and proved identical
-  full-volume and 256-column top-Y/ID/metadata surface digests.
+- Decoded all 32,768 cells in absolute chunk `(0,0)` and proved identical
+  solid-occupancy and 256-column top-Y/ID/metadata surface digests. Raw
+  interior IDs remain diagnostic because official decorator overlap can vary.
 - Kept the version's variable player spawn, lighting, biomes, other chunks,
   alternate seeds, dimensions and persistence outside qualification.
 
 The frozen M111 semantic SHA-256 is
-`1242a03c15a6e0c36adbefb6ca2b89b166ab1b57f5fb20cf6d3f402a0bec50b1`.
+`1f477f68603f951d995e99d26d4dec79788d29a5ef1f29ecb30f5f490ccc0c2f`.
 
 ## 1.98.0 - M110 Cell Size Ceiling
 

@@ -46,6 +46,9 @@ machine-checked surface is in `symbols.map`; its causal spine is:
 The runner inspects compiled bytecode with `javap`. It fails unless the driver
 calls `MinecraftRuntime.tick(I)`, the backend calls the named
 `Minecraft.runTick()`, and the oracle calls official `Minecraft.k()`.
+The same check requires mapped and official movement plus `TextureCompassFX`
+roots. Four fresh compass texture arms cross east/west spawn positions with
+yaw `0`/`180`, then compare smoothing state and the complete pixel digest.
 Each process also reports the code source selected for `Minecraft`: the mapped
 generated `instrumented-client/` directory for the subject and the
 hash-verified official JAR for the oracle. The instrumented class differs only

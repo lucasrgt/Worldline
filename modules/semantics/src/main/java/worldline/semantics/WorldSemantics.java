@@ -50,6 +50,22 @@ final class WorldSemantics {
         mappings.add(SemanticMapping.of("world", "WORLD_PROVIDER",
                 "net/minecraft/src/WorldProvider", "class", "WorldProvider", "-",
                 "", "", "WORLD", "deterministic-world-tick,lab-cycle", "", 9920));
+        mappings.add(SemanticMapping.of("world", "WORLD_SPAWN",
+                "net/minecraft/src/World", "method", "getSpawnPoint",
+                "()Lnet/minecraft/src/ChunkCoordinates;", "WORLD", "WORLD", "WORLD",
+                "controlled-client-tick,symbols.map", "u", 9990));
+        mappings.add(SemanticMapping.of("world", "CHUNK_COORDINATES",
+                "net/minecraft/src/ChunkCoordinates", "class", "ChunkCoordinates", "-",
+                "", "", "WORLD", "controlled-client-tick,symbols.map", "", 9990));
+        mappings.add(SemanticMapping.of("world", "CHUNK_COORDINATE_X",
+                "net/minecraft/src/ChunkCoordinates", "field", "x", "I",
+                "WORLD", "WORLD", "WORLD", "controlled-client-tick,symbols.map", "a", 9990));
+        mappings.add(SemanticMapping.of("world", "CHUNK_COORDINATE_Y",
+                "net/minecraft/src/ChunkCoordinates", "field", "y", "I",
+                "WORLD", "WORLD", "WORLD", "controlled-client-tick,symbols.map", "b", 9990));
+        mappings.add(SemanticMapping.of("world", "CHUNK_COORDINATE_Z",
+                "net/minecraft/src/ChunkCoordinates", "field", "z", "I",
+                "WORLD", "WORLD", "WORLD", "controlled-client-tick,symbols.map", "c", 9990));
         return Collections.unmodifiableList(mappings);
     }
 }

@@ -11,8 +11,10 @@ Official server symbols:
 - `EntityCreeper` ignites when a player is within `3` and then calls
   `World.newExplosion(this, x, y, z, 3F)` — protocol-14 Packet60 strength
   `3`. TNT (M137) is strength `4`. Nether beds (M359) are strength `5`.
-- West dirt `3` and east wool `35` are low-resistance cells, so one blast
-  removes both as a SET of multiple destroyed blocks.
+- West dirt `3` and east wool `35` are low-resistance cells. Packet60 must list
+  at least one base-layer dirt cell and one base-layer wool cell as destroyed;
+  a fresh login must retain a nonempty crater. Exact ray-selected cells are not
+  frozen because the official explosion ray sampler is variable.
 
 This map does not claim charged creepers, gunpowder drops, exact ray counts,
 player death, TNT fuse `46`, or Nether-bed strength `5`.
@@ -20,8 +22,8 @@ player death, TNT fuse `46`, or Nether-bed strength `5`.
 Frozen trace:
 
 ```text
-v1|server=official-b1.7.3|seed=17320110707|fixture=raised-7x7-dirt+wool-pad+creeper-spawner52|cause=nbt-entityid-creeper+time-14000+proximity-fuse|wire=packet24-type50+packet60-strength3|oracle=creeper-explode-wool+dirt-set-not-tnt4-not-bed5|column=17,support=4:71:4:1:0,pad=3:71:4+5:71:4,dirt=3:0->0:0,wool=35:0->0:0,spawner=4:72:3:52:0,mob=type50,packet60=strength3,destroyed=multiple+wool+dirt,night=14000,persisted=air,clients=3,disconnect=clean
+v2|server=official-b1.7.3|seed=17320110707|fixture=raised-7x7-dirt+wool-pad+creeper-spawner52|cause=nbt-entityid-creeper+time-14000+proximity-fuse|wire=packet24-type50+packet60-strength3|oracle=creeper-explode-wool+dirt-set-not-tnt4-not-bed5|column=17,support=4:71:4:1:0,pad=3:71:4+5:71:4,destroyed-materials=dirt3+wool35,spawner=4:72:3:52:0,mob=type50,packet60=strength3,destroyed=multiple+wool+dirt,night=14000,persisted=crater,clients=3,disconnect=clean
 ```
 
 Frozen semantic SHA-256:
-`2a74b9f63925b31966343a26c78c5b6d87dcdb84096822099fe3988f5d59b771`.
+`14ad8cdcf99568672d696cd1c79210ab82f31f2bb6bbda7f005f4c162d76f60c`.

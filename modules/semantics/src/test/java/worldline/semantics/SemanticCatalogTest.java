@@ -41,7 +41,7 @@ public final class SemanticCatalogTest {
         require("autosavePeriod".equals(first.role("AUTOSAVE_PERIOD").name()), "autosave period");
         require(first.sha256().equals(second.sha256())
                 && first.sha256().equals(
-                "b4d1f4fdf968f785cc5c94b2400d5f4ad4966f8f7b042d0fd2372d24e9dadf88"),
+                "b2724cb651bed782950763051fcc79ad654b56409b4fbe18d5e23d4a09e25967"),
                 "catalog hash drifted");
         require(first.canonical().equals(second.canonical()), "catalog canonical drifted");
         require(first.render().contains("complete=true"), "render completeness");
