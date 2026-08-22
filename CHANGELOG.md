@@ -15,6 +15,9 @@ Status: developer tooling; not a vanilla SET GO.
   registration safety checks.
 - Runtime Fabric self-tests require parent-cleanup coverage across all 37 GUI
   smoke cycles.
+- The analysis-dependent seed-atlas runner now has a dedicated optional server
+  adapter source set, keeping ordinary official-server smoke compilation
+  API-only.
 
 ## Unreleased - WorldlineEvidence Equatable
 
