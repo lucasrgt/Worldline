@@ -1,0 +1,39 @@
+name: Verify
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - 'codex/**'
+
+permissions:
+  contents: read
+
+jobs:
+  repository:
+    name: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21.0.12+8'
+      - name: Install pinned source counter
+        shell: bash
+        run: cargo install tokei --version 14.0.0 --locked
+      - name: Exercise cross-platform gate lock
+        run: java tools/harness/Gate.java --self-test
+      - name: Verify repository
+        run: java tools/harness/Gate.java
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verify-report-${{ matrix.os }}
+          path: .worldline/reports
+

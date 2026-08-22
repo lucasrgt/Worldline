@@ -23,6 +23,7 @@ public final class WorldlineCliTest {
     private WorldlineCliTest() {}
 
     public static void main(String[] arguments) throws Exception {
+        String testClasses = System.getProperty("worldline.test.classes", ".worldline/build/test-classes");
         Path bundle = Files.createTempFile("worldline-cli-test", ".wlrb");
         Path left = Files.createTempFile("worldline-cli-left", ".wltrace");
         Path right = Files.createTempFile("worldline-cli-right", ".wltrace");
@@ -218,14 +219,14 @@ public final class WorldlineCliTest {
             Path testArtifacts = Files.createTempDirectory("worldline-cli-testkit-");
             output.reset(); error.reset();
             status = WorldlineCli.run(new String[] {"test", "run",
-                    ".worldline/build/test-classes", CliSpec.class.getName(), "--no-runtime",
+                    testClasses, CliSpec.class.getName(), "--no-runtime",
                     "--reporter=agent", "--artifacts=" + testArtifacts},
                     new PrintStream(output), new PrintStream(error));
             require(status == 0 && output.toString().contains("WORLDLINE_TEST=PASS"),
                     "test CLI run failed: " + error);
             output.reset(); error.reset();
             status = WorldlineCli.run(new String[] {"test", "list",
-                    ".worldline/build/test-classes"}, new PrintStream(output), new PrintStream(error));
+                    testClasses}, new PrintStream(output), new PrintStream(error));
             require(status == 0 && output.toString().contains("worldline.cli.DiscoverySpec")
                     && output.toString().contains("test=discovered"), "test discovery failed: " + error);
         } finally {

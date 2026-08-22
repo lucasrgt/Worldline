@@ -61,7 +61,7 @@ behavior evidence without silently widening those early public APIs.
 | M9 | Deterministic, budgeted scenario minimization | GO |
 | GUI tree | Neutral inventory UI tree | GO |
 | Invariants | Item, block, entity, wear, health, and time rules | GO |
-| Semantics | Closed role catalog, mappings, manifests, and coverage gate | GO |
+| Semantics | Complete-game symbol mapping target plus closed, evidence-promoted role catalog | ACTIVE |
 | M10-M19 | Native rendering, Aero qualification, attribution, and bounded performance policies | GO |
 | Pre-push gate | Versioned hook running the canonical gate before every push | GO |
 | Differential fuzzer | Deterministic campaigns with auto-minimized findings | GO |
@@ -82,9 +82,11 @@ behavior evidence without silently widening those early public APIs.
 | Seed atlas | Official-server terrain maps for any seed as deterministic pages | GO |
 | Screen export | Semantic inventory tree as a self-contained page | GO |
 
-Version and frozen signatures are authoritative in
-[`release/worldline.properties`](release/worldline.properties). The promotion
-rules and future direction are in [`docs/ROADMAP.md`](docs/ROADMAP.md).
+Release identity is authoritative in
+[`release/worldline.properties`](release/worldline.properties); frozen behavior
+signatures live with their distributed milestone manifests. The promotion rules
+and future direction are in [`docs/ROADMAP.md`](docs/ROADMAP.md), and concurrent
+work is defined in [`docs/ENGINEERING_WORKFLOW.md`](docs/ENGINEERING_WORKFLOW.md).
 
 ---
 
@@ -100,21 +102,36 @@ Requirements:
 - Java 21 bytecode for the TestKit runner, CLI, and repository tooling
 
 ```text
-java tools/harness/Verify.java
+java tools/harness/Gate.java
 ```
 
 This command validates source ceilings and module dependencies, compiles every
 product module separately with warnings as errors, checks release metadata,
 and runs the complete unit suite. Derived files stay under `.worldline/`.
 
-A versioned pre-push hook runs this gate before every push:
+A versioned pre-push hook runs this gate before ordinary coordinator pushes
+and blocks milestone/main pushes without exact orchestrator authorization:
 
 ```text
 git config core.hooksPath tools/hooks
 ```
 
-Set `WORLDLINE_PREPUSH_SMOKE=1` to demand the full `--smoke` suite before
-pushing instead of the base gate.
+While implementing a milestone, use the fast static profile. After committing
+a clean worktree, run its complete proof cycle before handing it to the
+orchestrator:
+
+```text
+java tools/harness/Gate.java --candidate m470-example
+java tools/harness/Gate.java --milestone m470-example
+```
+
+The final command validates documentation, semantic mappings, matching behavior
+Atlas/TestKit surfaces, the frozen runtime evidence, and writes a commit-bound
+qualification receipt.
+Milestone workers do not push. The orchestrator reconciles qualified worktrees,
+runs `Gate.java --orchestrator`, and may push only its exact authorized SHA.
+Set `WORLDLINE_PREPUSH_SMOKE=1` to demand the full `--smoke` suite as an
+additional orchestrator check.
 
 ### 2. Prepare runtime-bound work
 
@@ -130,7 +147,7 @@ toolchain identities:
 
 ```text
 java tools/toolchains/Bootstrap.java retromcp
-java tools/harness/Verify.java --runtime
+java tools/harness/Gate.java --runtime
 ```
 
 The JAR and generated workspace remain ignored. Worldline accepts only the
@@ -139,7 +156,7 @@ byte length and hashes frozen in the public artifact descriptor.
 ### 3. Run the complete evidence suite
 
 ```text
-java tools/harness/Verify.java --smoke
+java tools/harness/Gate.java --smoke
 ```
 
 The smoke profile builds the mapped adapters, runs the deterministic server
@@ -626,19 +643,19 @@ code, metadata, mappings, patches, transforms, and reproducible evidence only.
 ### Canonical gate
 
 ```text
-java tools/harness/Verify.java
+java tools/harness/Gate.java
 ```
 
 ### Runtime identity and mapped adapter
 
 ```text
-java tools/harness/Verify.java --runtime
+java tools/harness/Gate.java --runtime
 ```
 
 ### Complete official-oracle evidence
 
 ```text
-java tools/harness/Verify.java --smoke
+java tools/harness/Gate.java --smoke
 ```
 
 There is no total line budget. Tests are unlimited, but maintained source files

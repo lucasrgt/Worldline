@@ -1,0 +1,57 @@
+name: Private Runtime Verification
+
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: Runtime tier to execute
+        type: choice
+        options: [runtime, milestone, full-smoke]
+        default: runtime
+      milestone_id:
+        description: Milestone ID used by the isolated milestone tier
+        type: string
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: worldline-official-b173-runtime
+  cancel-in-progress: false
+
+jobs:
+  runtime:
+    runs-on: [self-hosted, worldline-runtime]
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          clean: false
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21.0.12+8'
+      - name: Install pinned source counter
+        shell: bash
+        run: cargo install tokei --version 14.0.0 --locked
+      - name: Verify runtime inputs
+        if: github.event_name == 'schedule' || inputs.profile == 'runtime'
+        run: java tools/harness/Gate.java --runtime
+      - name: Verify one milestone
+        if: inputs.profile == 'milestone'
+        shell: bash
+        env:
+          WORLDLINE_MILESTONE_ID: ${{ inputs.milestone_id }}
+        run: java tools/harness/Gate.java --milestone "$WORLDLINE_MILESTONE_ID"
+      - name: Verify full smoke suite
+        if: inputs.profile == 'full-smoke'
+        run: java tools/harness/Gate.java --smoke
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: runtime-reports
+          path: |
+            .worldline/reports
+            .worldline/smoke-logs

@@ -1,0 +1,85 @@
+name: Milestone Qualification
+
+on:
+  pull_request:
+    paths:
+      - 'smokes/**'
+      - 'tools/smoke/**'
+      - 'modules/**'
+      - 'adapters/**'
+      - 'docs/M*.md'
+  workflow_dispatch:
+    inputs:
+      milestone_id:
+        description: Exact milestone ID to qualify
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      ids: ${{ steps.ids.outputs.value }}
+      base: ${{ steps.ids.outputs.base }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - id: ids
+        name: Discover milestone-owned changes
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_ID: ${{ inputs.milestone_id }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            ids="$INPUT_ID"
+            base="$(git rev-parse HEAD^)"
+          else
+            ids="$(git diff --name-only "$PR_BASE...$PR_HEAD" |
+              sed -n 's#^smokes/\([^/]*\)/.*#\1#p' | sort -u)"
+            base="$PR_BASE"
+          fi
+          if [[ -z "$ids" ]]; then
+            echo "No milestone directory changed." >&2
+            exit 1
+          fi
+          value="$(printf '%s\n' "$ids" | jq -R -s -c 'split("\n") | map(select(length > 0))')"
+          echo "value=$value" >> "$GITHUB_OUTPUT"
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+
+  qualify:
+    needs: discover
+    strategy:
+      fail-fast: false
+      matrix:
+        milestone: ${{ fromJSON(needs.discover.outputs.ids) }}
+    runs-on: [self-hosted, worldline-runtime]
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          clean: false
+          fetch-depth: 0
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21.0.12+8'
+      - name: Install pinned source counter
+        shell: bash
+        run: cargo install tokei --version 14.0.0 --locked
+      - name: Qualify exact milestone
+        env:
+          WORLDLINE_CANDIDATE_BASE: ${{ needs.discover.outputs.base }}
+        run: java tools/harness/Gate.java --milestone "${{ matrix.milestone }}"
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: milestone-${{ matrix.milestone }}
+          path: |
+            .worldline/reports
+            .worldline/smoke-logs/${{ matrix.milestone }}.log

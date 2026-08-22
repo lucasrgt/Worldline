@@ -1,2 +1,9 @@
+* text=auto eol=lf
+*.jar binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.zip binary
 **/descriptors/**/worldline-mod.properties text eol=lf
 tools/hooks/pre-push text eol=lf

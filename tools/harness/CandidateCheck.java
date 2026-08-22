@@ -1,0 +1,250 @@
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Properties;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+/** Static, non-runtime qualification for one independently authored milestone. */
+final class CandidateCheck {
+    private final Path root = Path.of("").toAbsolutePath().normalize();
+    private final Path build;
+    private final Properties config = new Properties();
+    private final Properties descriptor = new Properties();
+    private final String id;
+
+    private CandidateCheck(String id) {
+        this.id = id;
+        this.build = root.resolve(".worldline/candidates").resolve(id);
+    }
+
+    static void execute(String id) throws Exception { new CandidateCheck(id).run(); }
+
+    private void run() throws Exception {
+        System.out.println("Worldline candidate verification: " + id);
+        load(root.resolve("harness.properties"), config);
+        SmokeDiscovery.Entry smoke = SmokeDiscovery.require(root, id);
+        validateMilestone(smoke);
+        enforceBudgets(smoke);
+        recreate(build);
+        List<String> modules = values("modules");
+        List<Path> outputs = new ModuleBuild(root, build, config, modules).compileAll();
+        compileRunner(smoke);
+        compileScenario(outputs);
+        new MilestoneContract(root, id, build).validate();
+        new TestBuild(root, build, config, modules, outputs).compileAndRun(affectedModules(modules));
+        System.out.println("candidate passed: " + id + " (static only; runtime qualification pending)");
+    }
+
+    private void validateMilestone(SmokeDiscovery.Entry smoke) throws IOException {
+        Path directory = root.resolve("smokes").resolve(id);
+        require(Files.isDirectory(directory), "missing milestone directory: smokes/" + id);
+        require(Files.isRegularFile(directory.resolve("MAP.md")), "missing milestone MAP.md");
+        Path descriptor = directory.resolve("smoke.properties");
+        require(Files.isRegularFile(descriptor), "candidate requires smoke.properties");
+        load(descriptor, this.descriptor);
+        boolean tooling = "tooling".equals(this.descriptor.getProperty("candidate.kind"));
+        if (!tooling) require(this.descriptor.getProperty("expected.signature") != null,
+                "missing expected.signature");
+        Path runner = root.resolve(smoke.runner).normalize();
+        require(Files.isRegularFile(runner), "missing runner: " + smoke.runner);
+        require(Files.readString(runner, StandardCharsets.UTF_8).contains("\"" + id + "\""),
+                "runner does not declare candidate id");
+        Path source = directory.resolve("src");
+        if (!tooling) require(Files.isDirectory(source) && !javaFiles(source).isEmpty(),
+                "candidate has no smoke sources");
+        String number = milestoneNumber(id);
+        if (number != null && !tooling) {
+            boolean document = false, cycle = false;
+            try (Stream<Path> files = Files.list(root.resolve("docs"))) {
+                for (Path file : files.collect(Collectors.toList())) {
+                    String name = file.getFileName().toString();
+                    if (name.startsWith("M" + number + "_") && name.endsWith(".md")) document = true;
+                    if (name.equals("M" + number + "_CYCLE.md")) cycle = true;
+                }
+            }
+            require(document && cycle, "candidate requires milestone and cycle documentation for M" + number);
+        }
+    }
+
+    private void enforceBudgets(SmokeDiscovery.Entry smoke) throws Exception {
+        checkTokei("runner", List.of(root.resolve(smoke.runner)), 300);
+        checkTokei("smoke", List.of(root.resolve("smokes").resolve(id)), 150);
+        checkTokei("adapter", List.of(root.resolve("adapters")), 150);
+    }
+
+    private void checkTokei(String name, List<Path> roots, int maximum) throws Exception {
+        List<String> command = new ArrayList<>(List.of("tokei"));
+        roots.forEach(path -> command.add(path.toString()));
+        command.addAll(List.of("--output", "json"));
+        String output = capture(command, root, 60);
+        java.util.regex.Matcher reports = java.util.regex.Pattern.compile(
+                "\\{\"stats\":\\{(.*?)\\},\"name\":\"([^\"]+)\"",
+                java.util.regex.Pattern.DOTALL).matcher(output.substring(output.indexOf("\"Java\":{")));
+        java.util.regex.Pattern code = java.util.regex.Pattern.compile("\"code\"\\s*:\\s*(\\d+)");
+        while (reports.find()) {
+            java.util.regex.Matcher count = code.matcher(reports.group(1));
+            if (count.find() && Integer.parseInt(count.group(1)) > maximum)
+                throw new IllegalStateException(name + " file budget exceeded: "
+                        + reports.group(2) + " has " + count.group(1) + "/" + maximum);
+        }
+    }
+
+    private void compileRunner(SmokeDiscovery.Entry smoke) throws Exception {
+        Path output = build.resolve("runner-classes"); Files.createDirectories(output);
+        run(List.of(javaTool("javac"), "-encoding", "UTF-8", "--release", "21",
+                "-Xlint:all,-options", "-Werror", "-classpath",
+                System.getenv("WORLDLINE_HARNESS_CP"), "-d", output.toString(),
+                root.resolve(smoke.runner).toString()), root, 180);
+        System.out.println("  compiled candidate runner");
+    }
+
+    private void compileScenario(List<Path> outputs) throws Exception {
+        Path source = root.resolve("smokes").resolve(id).resolve("src");
+        if (!Files.isDirectory(source)) { System.out.println("  tooling candidate has no scenario sources"); return; }
+        Path output = build.resolve("scenario-classes"); Files.createDirectories(output);
+        List<String> command = new ArrayList<>(List.of(javaTool("javac"), "-encoding", "UTF-8",
+                "--release", "8", "-Xlint:all,-options", "-Werror", "-classpath",
+                outputs.stream().map(Path::toString)
+                        .collect(Collectors.joining(System.getProperty("path.separator"))),
+                "-d", output.toString()));
+        boolean clientOnly = descriptor.getProperty("client.jar.sha256") != null
+                && descriptor.getProperty("server.jar.sha256") == null;
+        Path adapter = root.resolve(clientOnly ? "adapters/b173-client/src/main/java"
+                : "adapters/b173-server/src/main/java");
+        command.addAll(javaFiles(adapter).stream()
+                .map(Path::toString).collect(Collectors.toList()));
+        command.addAll(javaFiles(source).stream().map(Path::toString).collect(Collectors.toList()));
+        run(command, root, 240);
+        System.out.println("  compiled server adapter and candidate smoke");
+    }
+
+    private List<String> values(String key) {
+        String raw = required(key).trim();
+        if (raw.isEmpty()) return List.of();
+        return Stream.of(raw.split(",")).map(String::trim).filter(value -> !value.isEmpty())
+                .collect(Collectors.toList());
+    }
+
+    private Set<String> affectedModules(List<String> modules) throws Exception {
+        String base = System.getenv("WORLDLINE_CANDIDATE_BASE");
+        if (base == null || base.isBlank()) base = inferredBase();
+        if (base.isBlank()) return new HashSet<>(modules);
+        Set<String> changed = new HashSet<>();
+        addLines(changed, capture(List.of("git", "diff", "--name-only", base + "...HEAD"), root, 60));
+        addLines(changed, capture(List.of("git", "diff", "--name-only"), root, 60));
+        addLines(changed, capture(List.of("git", "diff", "--cached", "--name-only"), root, 60));
+        addLines(changed, capture(List.of("git", "ls-files", "--others", "--exclude-standard"), root, 60));
+        if (changed.stream().anyMatch(path -> path.equals("harness.properties")
+                || path.startsWith("tools/harness/"))) return new HashSet<>(modules);
+        Set<String> affected = new HashSet<>();
+        for (String path : changed) if (path.startsWith("modules/")) {
+            String name = path.substring(8).split("/", 2)[0];
+            if (modules.contains(name)) affected.add(name);
+        }
+        boolean grew;
+        do {
+            grew = false;
+            for (String module : modules) {
+                if (affected.contains(module)) continue;
+                Set<String> dependencies = new HashSet<>(values("module." + module + ".dependencies"));
+                String testKey = "module." + module + ".test.dependencies";
+                if (config.getProperty(testKey) != null) dependencies.addAll(values(testKey));
+                if (!java.util.Collections.disjoint(dependencies, affected)) grew |= affected.add(module);
+            }
+        } while (grew);
+        return affected;
+    }
+
+    private String inferredBase() throws Exception {
+        try {
+            return capture(List.of("git", "merge-base", "HEAD", "refs/remotes/origin/main"), root, 60).trim();
+        } catch (IllegalStateException error) {
+            return "";
+        }
+    }
+
+    private static void addLines(Set<String> target, String text) {
+        text.lines().map(String::trim).filter(value -> !value.isEmpty())
+                .map(value -> value.replace('\\', '/')).forEach(target::add);
+    }
+
+    private String required(String key) {
+        String value = config.getProperty(key);
+        if (value == null) throw new IllegalStateException("missing harness property: " + key);
+        return value;
+    }
+
+    private static List<Path> javaFiles(Path source) throws IOException {
+        try (Stream<Path> paths = Files.walk(source)) {
+            return paths.filter(path -> path.toString().endsWith(".java"))
+                    .sorted().collect(Collectors.toList());
+        }
+    }
+
+    private static String milestoneNumber(String id) {
+        if (!id.startsWith("m")) return null;
+        int end = 1; while (end < id.length() && Character.isDigit(id.charAt(end))) end++;
+        return end == 1 ? null : id.substring(1, end);
+    }
+
+    private static String capture(List<String> command, Path directory, int timeout) throws Exception {
+        Path output = Files.createTempFile("worldline-candidate-", ".log");
+        Process process = new ProcessBuilder(command).directory(directory.toFile()).redirectErrorStream(true)
+                .redirectOutput(output.toFile()).start();
+        try {
+            if (!process.waitFor(timeout, TimeUnit.SECONDS)) {
+                destroy(process); throw new IllegalStateException(command.get(0) + " timed out");
+            }
+            String text = Files.readString(output, StandardCharsets.UTF_8);
+            if (process.exitValue() != 0)
+                throw new IllegalStateException(command.get(0) + " exited " + process.exitValue() + "\n" + text);
+            return text;
+        } finally { Files.deleteIfExists(output); }
+    }
+
+    private static void run(List<String> command, Path directory, int timeout) throws Exception {
+        String output = capture(command, directory, timeout);
+        if (!output.isBlank()) System.out.print(output);
+    }
+
+    private static void destroy(Process process) {
+        process.descendants().sorted(Comparator.comparingLong(ProcessHandle::pid).reversed())
+                .forEach(ProcessHandle::destroyForcibly);
+        process.destroyForcibly();
+    }
+
+    private static void recreate(Path target) throws IOException {
+        Path allowed = Path.of("").toAbsolutePath().normalize().resolve(".worldline/candidates");
+        require(target.startsWith(allowed) && !target.equals(allowed), "unsafe candidate build path");
+        if (Files.exists(target)) try (Stream<Path> paths = Files.walk(target)) {
+            for (Path path : paths.sorted(Comparator.reverseOrder()).collect(Collectors.toList()))
+                Files.deleteIfExists(path);
+        }
+        Files.createDirectories(target);
+    }
+
+    private static void load(Path path, Properties properties) throws IOException {
+        try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+            properties.load(reader);
+        }
+    }
+
+    private static String javaTool(String name) {
+        boolean windows = System.getProperty("os.name", "").toLowerCase().contains("win");
+        return Path.of(System.getProperty("java.home"), "bin", name + (windows ? ".exe" : "")).toString();
+    }
+
+    private static void require(boolean value, String message) {
+        if (!value) throw new IllegalStateException(message);
+    }
+}

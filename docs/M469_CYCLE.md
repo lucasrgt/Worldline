@@ -8,10 +8,14 @@ health `20`. One official EOF is retried after a 5 second sleep.
 Headless `B173WireClient` is the only client. There is no GUI and no
 Aero path.
 
-Run directly with:
+TestKit parity is the semantic evidence boundary: `BehaviorExpectation`
+compares implementation evidence with this same `void-death` Atlas token,
+signal, and signature. It does not replace or re-run the official-JAR cycle.
+
+Run the complete isolated qualification with:
 
 ```text
-java tools/smoke/VoidDeathSetCycle.java m469-void-death-set
+java tools/harness/Gate.java --milestone m469-void-death-set
 ```
 
 Canonical evidence uses two official server JVMs and two client sessions.

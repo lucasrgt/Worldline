@@ -51,12 +51,13 @@ change, but silent growth is forbidden.
 Before reporting implementation work complete, run from the repository root:
 
 ```text
-java tools/harness/Verify.java
+java tools/harness/Gate.java
 ```
 
 This is the canonical local and CI gate. It owns the per-file source ceilings, module
 dependency enforcement, compilation with warnings as errors, and the complete
-test suite. Do not substitute partial commands for it.
+test suite. Legacy `Verify.java` invocations delegate to this gate automatically.
+Do not substitute partial commands for it.
 
 A versioned pre-push hook runs the same gate before every push. Activate it
 once per clone with `git config core.hooksPath tools/hooks`; export
@@ -66,11 +67,42 @@ Any task that reads, transforms, instruments, or executes Minecraft must use
 the runtime profile and may not proceed unless it passes:
 
 ```text
-java tools/harness/Verify.java --runtime
+java tools/harness/Gate.java --runtime
 ```
 
 The first deterministic vanilla smoke is the stronger executable gate:
 
 ```text
-java tools/harness/Verify.java --smoke
+java tools/harness/Gate.java --smoke
 ```
+
+## Concurrent milestone work
+
+1. Use one clean worktree and one branch per milestone. Never share a worktree
+   between agents.
+2. During implementation, run `java tools/harness/Gate.java --candidate ID`.
+   Candidate verification must not start an official runtime.
+3. Before handoff, commit a clean worktree and run
+   `java tools/harness/Gate.java --milestone ID`. This isolated final gate must
+   prove the frozen cycle, milestone and cycle documentation, semantic map,
+   applicable mappings, and matching behavior Atlas/TestKit surfaces.
+4. The milestone gate runs static work in shared parallel slots, then waits for
+   the cross-platform official-runtime lease. Never bypass or delete lock files.
+5. Repository verification is bounded by shared machine slots.
+6. Milestone workers own their milestone directory and narrowly scoped product
+   or adapter files. Global release indexes and generated catalogs are
+   integration-train outputs, not worker-owned files.
+7. Qualification receipts are bound to an exact clean commit and base. A
+   candidate pass, dirty-tree run, or stale receipt is not release evidence.
+8. Milestone workers stop after local qualification and hand off the worktree
+   path plus commit SHA. They do not push milestone branches or merge `main`.
+9. Do not invoke `tools/smoke/*.java` directly. Use `Gate.java --milestone ID` so
+   timeouts, logs, process cleanup, and the runtime lease remain enforced.
+10. The orchestrator qualifies a train with `java
+   tools/integration/IntegrationTrain.java --base SHA ID=REF...`. Use
+   `--plan-only` solely for a non-qualifying conflict audit.
+   After reconciliation, it runs `java tools/harness/Gate.java --orchestrator`.
+   Only that exact authorized SHA may be pushed. Audit worktrees with
+   `java tools/integration/WorktreeLifecycle.java audit --base REF`.
+
+The complete coordination contract is in `docs/ENGINEERING_WORKFLOW.md`.

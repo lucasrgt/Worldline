@@ -1,5 +1,31 @@
 # Semantic Mappings
 
+## Complete-game coverage objective
+
+Worldline targets the closest technically achievable mapping of the complete
+Minecraft Beta 1.7.3 client and dedicated server, with 100 percent symbol
+inventory coverage as the explicit goal. Every class, field, and method in the
+official JARs must eventually appear in a deterministic multi-namespace symbol
+graph, including side, owner, descriptor, aliases, provenance, and confidence.
+
+Complete symbol coverage and promoted semantic coverage are deliberately
+separate:
+
+- the complete symbol graph inventories the whole game, including symbols
+  whose purpose is not yet behaviorally proven;
+- the semantic catalog promotes only roles grounded in official-JAR evidence,
+  invariants, differentials, or executable smokes;
+- an external mapping name is corroborating evidence, never a replacement for
+  official bytecode identity or the official behavioral oracle.
+
+The initial full-game crosswalk pins the official client/server identities,
+the matching Ornithe intermediary graph, Nostalgia b1.7.3 named mappings, and
+the existing RetroMCP/Worldline aliases. Coverage reports must distinguish
+missing inventory, unresolved bytecode identity, namespace disagreement,
+client/server side conflict, ambiguous owner or descriptor, and mapped but
+semantically unqualified symbols. Generated coverage may not be inflated by
+inventing names or silently accepting ambiguity.
+
 The semantic catalog annotates controlled b1.7.3 symbols without
 trusting decompiled source as exact. Each entry binds a mapped or Worldline
 boundary symbol to a role, category, read/write sets, external dependency,
@@ -95,6 +121,7 @@ worldline semantics adapter b173-client
 This catalog does not rename the official JAR, prove every Minecraft field,
 run a new official-JAR differential, or treat confidence as a probability of
 correct decompilation. It catalogs the controlled boundary Worldline already
-executes. Unlisted symbols remain unknown and fail closed. Richer PDF mapping
-features (live call-graph `written_by` / `read_by`, per-symbol invariants, and
-Hypothesis Engine experiments) remain out of scope.
+executes. Unlisted semantic roles remain unknown and fail closed even when the
+underlying bytecode symbol exists in the complete inventory. Richer semantic
+features such as live call-graph `written_by` / `read_by`, per-symbol
+invariants, and Hypothesis Engine experiments remain separate promotion work.

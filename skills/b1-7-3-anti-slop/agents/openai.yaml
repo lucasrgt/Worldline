@@ -1,0 +1,4 @@
+interface:
+  display_name: "Beta 1.7.3 Anti-Slop"
+  short_description: "Audit Beta 1.7.3 and StationAPI mods"
+  default_prompt: "Use $b1-7-3-anti-slop to audit this Beta 1.7.3 mod and add fail-closed checks for concrete risks."
