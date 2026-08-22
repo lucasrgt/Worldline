@@ -163,6 +163,8 @@ public final class WorldlineBehavior {
             "Unsupported sand and gravel fall as entities into lower cells");
     public static final WorldlineBehavior TNT_PRIMING = define("tnt-priming", WorldlineFamily.REDSTONE,
             "Flint and steel primes TNT entities that explode and can chain-prime TNT");
+    public static final WorldlineBehavior VEHICLE_SPAWN = define("vehicle-spawn", WorldlineFamily.ITEM,
+            "Boat and minecart items create peer-visible typed vehicle objects");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = Collections.unmodifiableMap(
             new LinkedHashMap<String, WorldlineBehavior>(DEFINITIONS));
     private final String token, family, subject;
