@@ -165,6 +165,12 @@ public final class WorldlineBehavior {
             "Flint and steel primes TNT entities that explode and can chain-prime TNT");
     public static final WorldlineBehavior VEHICLE_SPAWN = define("vehicle-spawn", WorldlineFamily.ITEM,
             "Boat and minecart items create peer-visible typed vehicle objects");
+    public static final WorldlineBehavior PROJECTILE_SPAWN = define("projectile-spawn", WorldlineFamily.ITEM,
+            "Bow, throwable, and fishing-rod use creates typed projectile objects");
+    public static final WorldlineBehavior DISPENSER_PROJECTILE = define("dispenser-projectile", WorldlineFamily.REDSTONE,
+            "A powered dispenser launches loaded snowballs and eggs as projectiles");
+    public static final WorldlineBehavior DROPPED_ITEM_COLLECTION = define("dropped-item-collection", WorldlineFamily.ITEM,
+            "A dropped item entity is restored to player inventory after collection");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = Collections.unmodifiableMap(
             new LinkedHashMap<String, WorldlineBehavior>(DEFINITIONS));
     private final String token, family, subject;
