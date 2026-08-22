@@ -1897,3 +1897,5 @@ M467 adds no public API. Easy then Hard type `54` Packet8 `20->18` share one dif
 M469 adds no public API. Void walk-off Packet8 `0` plus Packet9 respawn health `20` share one void-death family.
 
 M554 adds no public API. Extended piston `33:12` Packet14 base break plus head-`34` leftover air share one extended-head-break family.
+
+M546 adds no public API. Power-above piston `33:4 -> 33:12` plus retract with `direct-power=false` share one piston-QC family.

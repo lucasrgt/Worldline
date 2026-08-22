@@ -223,6 +223,17 @@ Status: GO.
   behavioral evidence. TestKit remains 0.x until external-mod use validates
   the authoring surface.
 
+## 1.448.0 - M546 Piston QC set
+
+Status: GO for official piston-33 quasi-connectivity extend plus retract together.
+
+- Lever on the stone ABOVE west piston `33` QC-extended `33:4 -> 33:12` with head `34:4`; unpower retracted. Piston cell had no direct power.
+- Distinct from M367 lever-on-piston, M142-M147 1:1 arms, and M427 place-facings.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M546 semantic SHA-256 is
+`10f2cb5507e55026ceafd72d6ab2c74a3ab228aad1924965b9844d149117d989`.
+
 ## 1.447.0 - M554 Extended head break set
 
 Status: GO for official extended piston-33 base Packet14 leftover together.

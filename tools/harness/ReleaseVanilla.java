@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m462 = load(root, "smokes/m462-bow-mob-hit-set/smoke.properties");
         Properties m467 = load(root, "smokes/m467-difficulty-damage-set/smoke.properties");
         Properties m469 = load(root, "smokes/m469-void-death-set/smoke.properties");
         Properties m554 = load(root, "smokes/m554-extended-head-break-set/smoke.properties");
-        match(release, "version", "1.447.0");
-        match(release, "milestone", "m554-extended-head-break-set");
-        same(release, "m462.signature", m462, "expected.signature");
-        same(release, "server.sha256", m462, "server.jar.sha256");
+        Properties m546 = load(root, "smokes/m546-piston-qc-set/smoke.properties");
+        match(release, "version", "1.448.0");
+        match(release, "milestone", "m546-piston-qc-set");
         same(release, "m467.signature", m467, "expected.signature");
         same(release, "server.sha256", m467, "server.jar.sha256");
         same(release, "m469.signature", m469, "expected.signature");
         same(release, "server.sha256", m469, "server.jar.sha256");
         same(release, "m554.signature", m554, "expected.signature");
         same(release, "server.sha256", m554, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M462_BOW_MOB_HIT_SET.md", "docs/M462_CYCLE.md",
-                "smokes/m462-bow-mob-hit-set/MAP.md", "docs/M467_DIFFICULTY_DAMAGE_SET.md", "docs/M467_CYCLE.md",
+        same(release, "m546.signature", m546, "expected.signature");
+        same(release, "server.sha256", m546, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M467_DIFFICULTY_DAMAGE_SET.md", "docs/M467_CYCLE.md",
                 "smokes/m467-difficulty-damage-set/MAP.md", "docs/M469_VOID_DEATH_SET.md", "docs/M469_CYCLE.md",
                 "smokes/m469-void-death-set/MAP.md", "docs/M554_EXTENDED_HEAD_BREAK_SET.md", "docs/M554_CYCLE.md",
-                "smokes/m554-extended-head-break-set/MAP.md"))
+                "smokes/m554-extended-head-break-set/MAP.md", "docs/M546_PISTON_QC_SET.md", "docs/M546_CYCLE.md",
+                "smokes/m546-piston-qc-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.447.0 M554 Extended head break set GO");
+        System.out.println("  release: Worldline v1.448.0 M546 Piston QC set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {
