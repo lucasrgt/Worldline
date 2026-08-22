@@ -140,6 +140,18 @@ public final class WorldlineBehavior {
             "Player contact powers and departure releases stone and wooden plates");
     public static final WorldlineBehavior REDSTONE_INPUT_STATE = define("redstone-input-state", WorldlineFamily.REDSTONE,
             "Lever toggles and button pulses expose their powered metadata transitions");
+    public static final WorldlineBehavior REPEATER_STATE = define("repeater-state", WorldlineFamily.REDSTONE,
+            "Repeater orientation, delay, and powered-state metadata transitions");
+    public static final WorldlineBehavior RAIL_POWER = define("rail-power", WorldlineFamily.REDSTONE,
+            "Powered and detector rails expose power metadata under torch or cart input");
+    public static final WorldlineBehavior REDSTONE_TORCH_INVERSION = define("redstone-torch-inversion", WorldlineFamily.REDSTONE,
+            "Powered support extinguishes a redstone torch and recovery relights it");
+    public static final WorldlineBehavior DISPENSER_QUASI_CONNECTIVITY = define("dispenser-quasi-connectivity", WorldlineFamily.REDSTONE,
+            "Power above a dispenser triggers its loaded item without adjacent power");
+    public static final WorldlineBehavior TNT_QUASI_CONNECTIVITY = define("tnt-quasi-connectivity", WorldlineFamily.REDSTONE,
+            "Power above TNT primes its entity and produces a strength-four explosion");
+    public static final WorldlineBehavior ONE_TICK_PISTON_PULSE = define("one-tick-piston-pulse", WorldlineFamily.REDSTONE,
+            "A one-tick repeater pulse makes a piston drop its pushed payload");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = index();
     private final String token, family, subject;
 
@@ -213,7 +225,9 @@ public final class WorldlineBehavior {
                 NETHER_BED_EXPLOSION, BED_SPAWN_RESPAWN, FARMLAND_STATE, PLANT_GROWTH,
                 CROP_PLANTING, CROP_HARVEST, LEAF_DECAY, GRASS_SPREAD, LIGHT_OPACITY,
                 LIGHT_MELTING, HOSTILE_SPAWN_LIGHT, WOODEN_DOOR_TOGGLE, TRAPDOOR_TOGGLE,
-                PRESSURE_PLATE, REDSTONE_INPUT_STATE };
+                PRESSURE_PLATE, REDSTONE_INPUT_STATE, REPEATER_STATE, RAIL_POWER,
+                REDSTONE_TORCH_INVERSION, DISPENSER_QUASI_CONNECTIVITY,
+                TNT_QUASI_CONNECTIVITY, ONE_TICK_PISTON_PULSE };
         Map<String, WorldlineBehavior> map = new LinkedHashMap<String, WorldlineBehavior>();
         for (int i = 0; i < values.length; i++) {
             if (map.put(values[i].token(), values[i]) != null)
