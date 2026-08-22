@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
  */
 public final class WorldlineBehavior {
     private static final Pattern TOKEN = Pattern.compile("[a-z][a-z0-9-]{0,62}");
+    private static final Map<String, WorldlineBehavior> DEFINITIONS = new LinkedHashMap<String, WorldlineBehavior>();
     public static final WorldlineBehavior CREEPER_FUSE = define("creeper-fuse", WorldlineFamily.HOSTILE,
             "Creeper proximity fuse then Packet60");
     public static final WorldlineBehavior CREEPER_CANCEL = define("creeper-cancel", WorldlineFamily.HOSTILE,
@@ -154,7 +155,8 @@ public final class WorldlineBehavior {
             "A one-tick repeater pulse makes a piston drop its pushed payload");
     public static final WorldlineBehavior CAKE_CONSUMPTION = define("cake-consumption", WorldlineFamily.ITEM,
             "Cake activation advances bite metadata, heals, and removes the final slice");
-    private static final Map<String, WorldlineBehavior> BY_TOKEN = index();
+    private static final Map<String, WorldlineBehavior> BY_TOKEN = Collections.unmodifiableMap(
+            new LinkedHashMap<String, WorldlineBehavior>(DEFINITIONS));
     private final String token, family, subject;
 
     private WorldlineBehavior(String token, String family, String subject) {
@@ -208,33 +210,8 @@ public final class WorldlineBehavior {
     }
 
     private static WorldlineBehavior define(String token, String family, String subject) {
-        return new WorldlineBehavior(token, family, subject);
-    }
-
-    private static Map<String, WorldlineBehavior> index() {
-        WorldlineBehavior[] values = { CREEPER_FUSE, CREEPER_CANCEL, MELEE_PURSUIT, KNOCKBACK_COOLDOWN,
-                SPIDER_LEAP, SLIME_TOUCH, GHAST_FIREBALL_HIT, MONSTER_BED_INTERRUPT, BOW_MOB_HIT,
-                DIFFICULTY_DAMAGE, VOID_DEATH, PEACEFUL_DESPAWN, PLAYER_DEATH_DROPS, PIGMAN_ANGER,
-                SKELETON_RANGED_AI, PIG_SPAWN, PIG_AI_MOVEMENT, PIG_DEATH, PIG_PORK_DROP,
-                BED_SLEEP_SKIP, NOTE_BLOCK_CLICK, SIGN_TEXT_PERSISTENCE, PAINTING_SPAWN,
-                NOTE_BLOCK_INSTRUMENT, PAINTING_ORIENTATION, JUKEBOX_RECORD_PLAY, SHEARS_HARVEST,
-                SWORD_DAMAGE, MILK_BUCKET_CYCLE, DUAL_DIMENSION_SESSION, SAME_DIMENSION_RESPAWN,
-                CROSS_DIMENSION_RESPAWN, BLOCK_PLACEMENT_PERSISTENCE, FOOD_CONSUMPTION,
-                ENVIRONMENTAL_DAMAGE, FENCE_COLLISION, REDSTONE_WIRE_POWER, REDSTONE_IRON_DOOR,
-                PISTON_MOTION, PISTON_PUSH_LIMITS, PISTON_QUASI_CONNECTIVITY,
-                PISTON_BUD_UPDATE, PISTON_HEAD_BREAK, FIRE_IGNITION, FIRE_PROPAGATION,
-                BUCKET_FLUID_CYCLE, FLUID_FLOW, WATER_LAVA_SOLIDIFICATION, JUKEBOX_EJECT,
-                NETHER_BED_EXPLOSION, BED_SPAWN_RESPAWN, FARMLAND_STATE, PLANT_GROWTH,
-                CROP_PLANTING, CROP_HARVEST, LEAF_DECAY, GRASS_SPREAD, LIGHT_OPACITY,
-                LIGHT_MELTING, HOSTILE_SPAWN_LIGHT, WOODEN_DOOR_TOGGLE, TRAPDOOR_TOGGLE,
-                PRESSURE_PLATE, REDSTONE_INPUT_STATE, REPEATER_STATE, RAIL_POWER,
-                REDSTONE_TORCH_INVERSION, DISPENSER_QUASI_CONNECTIVITY,
-                TNT_QUASI_CONNECTIVITY, ONE_TICK_PISTON_PULSE, CAKE_CONSUMPTION };
-        Map<String, WorldlineBehavior> map = new LinkedHashMap<String, WorldlineBehavior>();
-        for (int i = 0; i < values.length; i++) {
-            if (map.put(values[i].token(), values[i]) != null)
-                throw new IllegalStateException("duplicate behavior " + values[i].token());
-        }
-        return Collections.unmodifiableMap(map);
+        WorldlineBehavior value = new WorldlineBehavior(token, family, subject);
+        if (DEFINITIONS.put(token, value) != null) throw new IllegalStateException("duplicate behavior " + token);
+        return value;
     }
 }
