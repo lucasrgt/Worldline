@@ -1907,3 +1907,5 @@ M548 adds no public API. Neighbor-update piston pulse `33:4 -> 36:4 -> 33:4` wit
 M550 adds no public API. Power-above dispenser `23` Packet21 cobble eject with no adjacent lever shares one dispenser-QC family.
 
 M552 adds no public API. Power-above TNT `46` Packet23 type `50` plus Packet60 crater shares one TNT-QC family.
+
+M553 adds no public API. Piston `33` rejection of chest `54`, furnace `61`, and spawner `52` shares one piston-immovable family.

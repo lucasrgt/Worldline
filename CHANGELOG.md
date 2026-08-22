@@ -223,6 +223,17 @@ Status: GO.
   behavioral evidence. TestKit remains 0.x until external-mod use validates
   the authoring surface.
 
+## 1.453.0 - M553 Piston immovable set
+
+Status: GO for official piston-33 rejection of chest, furnace, and spawner together.
+
+- West pistons stayed `33:4`; chest `54`, furnace `61`, and spawner `52` did not move; destinations stayed air.
+- Distinct from M146 obsidian-only and M147 12-block push limit.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M553 semantic SHA-256 is
+`6b35bf7c4b6f658370491bc20505538a93425b8309bc17d26f9d8b3d19ff06cf`.
+
 ## 1.452.0 - M552 TNT QC set
 
 Status: GO for official TNT-46 quasi-connectivity prime plus Packet60 crater together.
