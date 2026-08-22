@@ -12,7 +12,7 @@ import worldline.api.RemoteMobDeath;
 import worldline.api.RemoteMobMovement;
 import worldline.api.RemoteMobSpawn;
 
-/** Nether two-spawner pigman anger: Packet7 sword 276, Packet38 hurt, neighbor pursuit. */
+/** Reusable Nether pigman anger fixture and Packet7/38 pursuit boundary. */
 public final class B173PigmanAngerAccess {
     private B173PigmanAngerAccess() {}
 

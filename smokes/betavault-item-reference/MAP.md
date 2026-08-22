@@ -4,6 +4,8 @@ This is a parallel controlled-runtime extension. It does not consume a numbered
 Worldline milestone and does not change vanilla behavior when the fixture mod is
 absent.
 
+Frozen expected signature SHA-256: 471f4ef5ed8dbd3cf970672eb09c574890d1eb7af7866a65995d7426fd3b923d
+
 ## Qualified boundary
 
 - The neutral `itemref` module validates BetaVault-compatible canonical logical

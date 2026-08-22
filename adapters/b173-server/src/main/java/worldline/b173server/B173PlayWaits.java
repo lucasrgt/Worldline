@@ -37,6 +37,11 @@ final class B173PlayWaits {
                 "expected mob death absent before deadline");
     }
 
+    B173EntityVelocity velocity(int entity) throws IOException {
+        return until(() -> inbound.velocities().take(entity),
+                "expected Packet28 velocity absent before deadline");
+    }
+
     private <T> T until(java.util.concurrent.Callable<T> take, String absent) throws IOException {
         Thread pulse = inbound.pulse(); long deadline = System.nanoTime() + inbound.timeoutNanos();
         try { for (int count = 0; count < 8192 && System.nanoTime() < deadline; count++) {

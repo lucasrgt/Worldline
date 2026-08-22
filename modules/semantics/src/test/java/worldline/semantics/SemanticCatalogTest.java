@@ -86,7 +86,7 @@ public final class SemanticCatalogTest {
                 "redstone wire type");
         require(first.sha256().equals(second.sha256())
                 && first.sha256().equals(
-                "102a18f94b36f8a1e3eda412cc028e429a2a3a1822ac5e35846b27108223c136"),
+                "0a1484f9f6c8eb990289fac906c9a5741798259c34c1f528e862154f059c30e0"),
                 "catalog hash drifted to " + first.sha256());
         require(first.canonical().equals(second.canonical()), "catalog canonical drifted");
         require(first.render().contains("complete=true"), "render completeness");

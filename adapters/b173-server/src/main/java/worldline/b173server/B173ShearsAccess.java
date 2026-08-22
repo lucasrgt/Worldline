@@ -1,6 +1,8 @@
 package worldline.b173server;
 
 import java.io.IOException;
+import worldline.api.RemoteDroppedItem;
+import worldline.api.RemoteItemStack;
 import worldline.api.RemoteMobDeath;
 import worldline.api.RemoteMobMovement;
 
@@ -27,5 +29,13 @@ public final class B173ShearsAccess {
 
     public static boolean peekHurt(B173WireClient client, int entity) {
         return client.channel().inbound().mobs().peekHurt(entity);
+    }
+
+    public static RemoteDroppedItem wool(B173WireClient client) {
+        for (int color = 0; color < 16; color++) {
+            RemoteDroppedItem item = client.peekDroppedItem(new RemoteItemStack(35, 1, color));
+            if (item != null) return item;
+        }
+        return null;
     }
 }

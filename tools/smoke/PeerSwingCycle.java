@@ -26,7 +26,9 @@ public final class PeerSwingCycle {
         recreate(build); Path classes = compile(); require(capture(Arrays.asList("java", "-classpath", classpath(classes),
                 "worldline.b173server.B173SwingPacketFixture")).contains("PASS bytes=6"), "Packet18 fixture absent"); Outcome first = run(classes, official, build.resolve("first"));
         Outcome second = run(classes, official, build.resolve("second"));
-        require(first.trace.equals(second.trace) && first.signature.equals(second.signature), "fresh swing scenarios diverged");
+        require(first.trace.equals(second.trace) && first.signature.equals(second.signature)
+                && first.observation.equals(second.observation)
+                && first.observation.equals(value(config, "expected.signal")), "fresh swing scenarios diverged");
         require(first.signature.equals(value(config, "expected.signature")), "M69 signature drift: " + first.signature);
         String evidence = "id=" + ID + "\nchild.processes=4\nsmoke.jvm=2\nserver.jvm=2\nwire.sessions=4\nserver.sha256="
                 + value(artifact, "expected.sha256") + "\ntrace=" + first.trace + "\nfirst=" + first.observation

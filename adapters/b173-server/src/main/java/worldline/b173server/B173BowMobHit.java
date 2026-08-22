@@ -7,7 +7,7 @@ import worldline.api.RemoteMobMovement;
 import worldline.api.RemoteMobSpawn;
 import worldline.api.RemoteObjectSpawn;
 
-/** Aims bow 261 and air-uses until Packet23 type 60 produces Packet38 status 2 on an armed mob. */
+/** Reusable bow aim/use boundary through Packet23 type 60 and Packet38 status 2. */
 public final class B173BowMobHit {
     private B173BowMobHit() {}
 

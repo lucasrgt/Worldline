@@ -16,7 +16,7 @@ public final class PlayerDeathDropsSetSmoke{
    require(actor.awaitInventory().occupiedSlots()==3&&has(actor,36,STONE)&&has(actor,37,COBBLE)&&has(actor,38,DIRT),"player-death-drops-set inventory drift");
    for(int n=0;n<fixtureTicks&&actor.health()>0;n++)actor.sustainTicks(1);require(actor.health()<=0,"vanilla void Packet8 health 0 absent: "+actor.health());
    if(actor.health()==0)require(actor.awaitHealth(0)==0,"packet8 health 0 drift");
-   RemoteDroppedItem stone=actor.peekDroppedItem(STONE);if(stone==null)stone=actor.awaitDroppedItem(STONE);RemoteDroppedItem cobble=actor.peekDroppedItem(COBBLE);if(cobble==null)cobble=actor.awaitDroppedItem(COBBLE);RemoteDroppedItem dirt=actor.peekDroppedItem(DIRT);if(dirt==null)dirt=actor.awaitDroppedItem(DIRT);
+   RemoteDroppedItem[] drops=B173PlayerDeathDrops.await(actor,STONE,COBBLE,DIRT);RemoteDroppedItem stone=drops[0],cobble=drops[1],dirt=drops[2];
    require(stone.item().equals(STONE)&&stone.item().legacyId()==1&&cobble.item().equals(COBBLE)&&cobble.item().legacyId()==4&&dirt.item().equals(DIRT)&&dirt.item().legacyId()==3&&stone.entityId()!=cobble.entityId()&&stone.entityId()!=dirt.entityId()&&cobble.entityId()!=dirt.entityId(),"player-death Packet21 hotbar drops absent");
    actor.close();awaitPlayers(server,0);server.save();
    String evidence="health=20->0,death=seeded-below-world+vanilla-void-damage+packet8-0,hotbar=1+4+3,drops=packet21-1+packet21-4+packet21-3,clients=1,disconnect=clean";

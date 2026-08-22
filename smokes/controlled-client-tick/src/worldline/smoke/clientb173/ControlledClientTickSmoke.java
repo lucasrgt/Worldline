@@ -4,6 +4,8 @@ import java.nio.file.Paths;
 import worldline.api.WorldSource;
 import worldline.b173.B173Keys;
 import worldline.b173.B173Observation;
+import worldline.b173.B173CompassProbe;
+import worldline.b173.B173PhysicsProbe;
 import worldline.b173.B173Runtime;
 import worldline.b173.B173Runtimes;
 import worldline.invariants.InvariantEngine;
@@ -24,6 +26,8 @@ public final class ControlledClientTickSmoke {
         runtime.bootHeadless();
         try {
             runtime.loadWorld(WorldSource.at(Paths.get("memory", "worldline-client-cycle")));
+            MetadataRecipeContract.verify(runtime.stackRecipes());
+            System.out.println("WORLDLINE_METADATA_RECIPES=families-8,recipes-25");
             runtime.watch(InvariantEngine.standard(runtime));
             runtime.reseed(RNG_SEED);
             runtime.scheduler().afterTicks(2, () -> runtime.tap(B173Keys.SLOT_1 + 2));
@@ -61,6 +65,11 @@ public final class ControlledClientTickSmoke {
             require(runtime.timerThreadAlive(), "vanilla timer thread escaped supervision");
             System.out.println(STATE_TRACE + states.value());
             System.out.println(STATE_SIGNATURE + states.signature());
+            B173PhysicsProbe.SlowBlocks slow = B173PhysicsProbe.slowBlocks(runtime, 8);
+            B173PhysicsProbe.LadderClimb ladder = B173PhysicsProbe.ladder(runtime, 10);
+            System.out.println("WORLDLINE_PHYSICS_TRACE=v2|slow=" + slow.trace()
+                    + "|ladder=" + ladder.trace() + "|compass="
+                    + B173CompassProbe.trace(runtime));
             System.out.println("WORLDLINE_BOUNDARIES=clock,input,rng,scheduler,filesystem,network,threading");
         } finally {
             runtime.close();

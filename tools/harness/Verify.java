@@ -53,8 +53,11 @@ public final class Verify {
         run(Arrays.asList("java", "tools/containers/HostSmokePool.java", "--self-test"));
         run(Arrays.asList("java", "tools/containers/ContainerSmokePool.java", "--self-test"));
         run(Arrays.asList("java", "tools/harness/ReleaseCheck.java"));
-        run(Arrays.asList("java", "tools/harness/OptimizationCatalogCheckTest.java")); run(Arrays.asList("java", "tools/harness/OptimizationCatalogCheck.java"));
-        run(Arrays.asList("java", "tools/harness/AdapterKindCheckTest.java")); run(Arrays.asList("java", "tools/harness/AdapterKindCheck.java"));
+        run(Arrays.asList("java", "tools/harness/OptimizationCatalogCheckTest.java"));
+        run(Arrays.asList("java", "tools/harness/OptimizationCatalogCheck.java"));
+        run(Arrays.asList("java", "tools/harness/AdapterKindCheckTest.java"));
+        run(Arrays.asList("java", "tools/harness/AdapterKindCheck.java"));
+        run(Arrays.asList("java", "tools/harness/BehaviorCompletenessCheck.java"));
         if (runSmoke) {
             run(Arrays.asList("java", "tools/toolchains/Bootstrap.java", "retromcp"));
         }
@@ -68,6 +71,7 @@ public final class Verify {
         recreateBuildDirectory();
         List<Path> outputs = compileModules(modules);
         run(Arrays.asList("java", "tools/harness/ForeignUiContractCheck.java"));
+        compilePortableAdapters();
         Path testOutput = compileTests(modules, outputs);
         runTests(outputs, testOutput);
         if (runSmoke) {
@@ -230,6 +234,24 @@ public final class Verify {
         compile(tests, output, outputs, required("test.release"));
         System.out.println("  compiled tests");
         return output;
+    }
+
+    /** Compiles adapters that do not require pinned Minecraft classes. */
+    private void compilePortableAdapters() throws Exception {
+        Path classes = build.resolve("classes"), adapters = build.resolve("adapter-classes");
+        for (String name : Arrays.asList("b173-server", "b173-server-analysis", "aero-model-lib"))
+            Files.createDirectories(adapters.resolve(name));
+        Path server = root.resolve("adapters/b173-server/src/main/java");
+        compile(javaFiles(server), adapters.resolve("b173-server"),
+                Collections.singletonList(classes.resolve("api")), required("java.release"));
+        List<Path> atlas = new ArrayList<>(javaFiles(server));
+        atlas.addAll(javaFiles(root.resolve("adapters/b173-server/src/atlas/java")));
+        compile(atlas, adapters.resolve("b173-server-analysis"), Arrays.asList(
+                classes.resolve("api"), classes.resolve("analysis")), required("java.release"));
+        compile(javaFiles(root.resolve("adapters/aero-model-lib/src/main/java")),
+                adapters.resolve("aero-model-lib"), Arrays.asList(
+                        classes.resolve("analysis"), classes.resolve("trace")), required("java.release"));
+        System.out.println("  compiled portable adapters");
     }
 
     private void compile(List<Path> sources, Path output, List<Path> classpath, String release) throws Exception {

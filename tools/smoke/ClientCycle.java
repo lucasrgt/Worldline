@@ -19,6 +19,7 @@ public final class ClientCycle {
     private static final String TRACE = "WORLDLINE_SMOKE_TRACE=";
     private static final String SIGNATURE = "WORLDLINE_SMOKE_SIGNATURE=";
     private static final String STATE_TRACE = "WORLDLINE_STATE_TRACE=", STATE_SIGNATURE = "WORLDLINE_STATE_SIGNATURE=";
+    private static final String PHYSICS_TRACE = "WORLDLINE_PHYSICS_TRACE=";
     private final Path root = Paths.get("").toAbsolutePath().normalize();
     private final Properties config = new Properties();
 
@@ -90,6 +91,13 @@ public final class ClientCycle {
                 "trace diverged from frozen signature: " + first.signature);
         require(required("expected.state.signature").equals(first.stateSignature),
                 "state trace diverged from frozen signature: " + first.stateSignature);
+        String physicsExpected = config.getProperty("expected.physics.signature", "pending").trim();
+        if (physicsExpected.equals("pending") && !Boolean.getBoolean("worldline.client.physics.diagnostic"))
+            throw new IllegalStateException("physics signature is pending");
+        if (!physicsExpected.equals("pending")) require(physicsExpected.equals(first.physicsSignature),
+                "physics trace diverged from frozen signature: " + first.physicsSignature);
+        if (physicsExpected.equals("pending"))
+            System.out.println("  diagnostic physics signature: " + first.physicsSignature);
         Path evidence = writeEvidence(build, first);
         System.out.println("controlled client cycle passed");
         System.out.println("  processes: 4 (2 mapped client, 2 official client)");
@@ -180,12 +188,12 @@ public final class ClientCycle {
         String driver = javap(subjectPaths, "worldline.smoke.clientb173.ControlledClientTickSmoke");
         String backend = javap(subjectPaths, "worldline.b173.B173ClientBackend");
         String direct = javap(oraclePaths, "WorldlineClientOracle");
-        require(driver.contains("B173Runtime.tick:(I)V")
-                        && backend.contains("Minecraft.runTick:()V")
-                        && direct.contains("net/minecraft/client/Minecraft.k:()V"),
-                "compiled client control paths do not reach both tick roots");
-        System.out.println("  control path: tick(1) -> Minecraft.runTick / Minecraft.k verified");
-    }
+        require(driver.contains("B173Runtime.tick:(I)V") && backend.contains("Minecraft.runTick:()V")
+                        && direct.contains("net/minecraft/client/Minecraft.k:()V")
+                        && driver.contains("B173PhysicsProbe.slowBlocks") && direct.contains("OfficialPhysicsProbe.trace")
+                        && driver.contains("B173CompassProbe.trace") && direct.contains("OfficialCompassProbe.trace"),
+                "compiled client control paths do not reach tick, physics, and compass roots");
+        System.out.println("  control path: mapped/official tick, physics, and compass roots verified"); }
 
     private String javap(List<Path> paths, String type) throws Exception {
         return capture(root, "javap", "-classpath", classpath(paths), "-c", "-p", type);
@@ -197,18 +205,21 @@ public final class ClientCycle {
                 classpath(runtime), type);
         require(output.contains("WORLDLINE_CLIENT_ROOT=" + rootName), "wrong client tick root");
         require(output.contains("WORLDLINE_CLIENT_HEADLESS=true"), "headless proof is absent");
+        require(output.contains("WORLDLINE_METADATA_RECIPES=families-8,recipes-25"),
+                "metadata recipe oracle proof is absent");
         require(output.replace('\\', '/').contains(sourceMarker), "wrong Minecraft class source");
         require(!type.contains("ControlledClientTickSmoke") || output.contains(
                 "WORLDLINE_BOUNDARIES=clock,input,rng,scheduler,filesystem,network,threading"),
                 "M2 boundary proof is absent");
-        return new Outcome(line(output, TRACE), line(output, SIGNATURE),
-                line(output, STATE_TRACE), line(output, STATE_SIGNATURE));
+        return new Outcome(line(output, TRACE), line(output, SIGNATURE), line(output, STATE_TRACE),
+                line(output, STATE_SIGNATURE), line(output, PHYSICS_TRACE));
     }
 
     private void same(Outcome left, Outcome right, String label) {
         require(left.trace.equals(right.trace) && left.signature.equals(right.signature)
                         && left.stateTrace.equals(right.stateTrace)
-                        && left.stateSignature.equals(right.stateSignature),
+                        && left.stateSignature.equals(right.stateSignature)
+                        && left.physicsTrace.equals(right.physicsTrace),
                 label + " produced different canonical traces");
     }
 
@@ -220,7 +231,8 @@ public final class ClientCycle {
                 + "\ntick.root.official=net.minecraft.client.Minecraft.k"
                 + "\nofficial.oracle=MATCH\nsignature=" + outcome.signature
                 + "\ntrace=" + outcome.trace + "\nstate.signature=" + outcome.stateSignature
-                + "\nstate.trace=" + outcome.stateTrace + "\n";
+                + "\nstate.trace=" + outcome.stateTrace + "\nphysics.signature=" + outcome.physicsSignature
+                + "\nphysics.trace=" + outcome.physicsTrace + "\n";
         Files.write(evidence, value.getBytes(StandardCharsets.UTF_8));
         return evidence;
     }
@@ -237,20 +249,14 @@ public final class ClientCycle {
                 "frozen client input drift: " + path);
     }
 
-    private List<Path> javaFiles(Path source) throws IOException {
-        try (Stream<Path> paths = Files.walk(source)) {
-            return paths.filter(path -> path.toString().endsWith(".java")).sorted()
-                    .collect(Collectors.toList());
-        }
-    }
+    private List<Path> javaFiles(Path source) throws IOException { try (Stream<Path> paths = Files.walk(source)) {
+        return paths.filter(path -> path.toString().endsWith(".java")).sorted()
+                .collect(Collectors.toList()); } }
 
-    private List<Path> jarFiles(Path source) throws IOException {
-        try (Stream<Path> paths = Files.walk(source)) {
-            return paths.filter(path -> path.toString().endsWith(".jar"))
-                    .filter(path -> !path.toString().endsWith("-sources.jar")).sorted()
-                    .collect(Collectors.toList());
-        }
-    }
+    private List<Path> jarFiles(Path source) throws IOException { try (Stream<Path> paths = Files.walk(source)) {
+        return paths.filter(path -> path.toString().endsWith(".jar"))
+                .filter(path -> !path.toString().endsWith("-sources.jar")).sorted()
+                .collect(Collectors.toList()); } }
 
     private void recreate(Path target, Path safeRoot) throws IOException {
         require(target.startsWith(safeRoot) && !target.equals(safeRoot),
@@ -294,34 +300,32 @@ public final class ClientCycle {
                 .collect(Collectors.joining(System.getProperty("path.separator")));
     }
 
-    private Path local(String relative) {
-        Path local = root.resolve("local").normalize();
+    private Path local(String relative) { Path local = root.resolve("local").normalize();
         Path path = root.resolve(relative).normalize();
         require(path.startsWith(local) && !path.equals(local), "workspace must be inside local/");
-        return path;
-    }
+        return path; }
 
-    private String required(String key) {
-        String value = config.getProperty(key);
+    private String required(String key) { String value = config.getProperty(key);
         require(value != null && !value.trim().isEmpty(), "missing smoke property: " + key);
-        return value.trim();
-    }
+        return value.trim(); }
 
     private void load(Path path, Properties properties) throws IOException {
         try (java.io.Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-            properties.load(reader);
-        }
-    }
+            properties.load(reader); } }
 
     private static void require(boolean condition, String message) {
         if (!condition) throw new IllegalStateException(message);
     }
 
-    private static final class Outcome {
-        private final String trace, signature, stateTrace, stateSignature;
-        private Outcome(String trace, String signature, String stateTrace, String stateSignature) {
-            this.trace = trace; this.signature = signature;
+    private static final class Outcome { private final String trace, signature, stateTrace,
+            stateSignature, physicsTrace, physicsSignature;
+        private Outcome(String trace, String signature, String stateTrace, String stateSignature,
+                String physicsTrace) throws Exception { this.trace = trace; this.signature = signature;
             this.stateTrace = stateTrace; this.stateSignature = stateSignature;
-        }
+            this.physicsTrace = physicsTrace; physicsSignature = digest(physicsTrace); }
     }
+
+    private static String digest(String value) throws Exception { MessageDigest digest =
+            MessageDigest.getInstance("SHA-256"); digest.update(value.getBytes(StandardCharsets.UTF_8));
+        return HexFormat.of().formatHex(digest.digest()); }
 }

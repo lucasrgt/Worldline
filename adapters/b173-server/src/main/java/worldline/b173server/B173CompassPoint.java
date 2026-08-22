@@ -8,10 +8,9 @@ import java.util.zip.GZIPInputStream;
 import worldline.api.PlayerPose;
 import worldline.api.RemoteItemStack;
 
-/** Official Overworld spawn plus the vanilla compass-345 needle/bearing oracle. */
+/** Reads official Overworld spawn data and exposes a candidate compass target. */
 public final class B173CompassPoint {
     public static final RemoteItemStack COMPASS = new RemoteItemStack(345, 1, 0);
-    private static final String[] WIND = {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
     public final int x, y, z;
 
     public B173CompassPoint(int x, int y, int z) {
@@ -22,7 +21,7 @@ public final class B173CompassPoint {
         try (DataInputStream input = new DataInputStream(new GZIPInputStream(Files.newInputStream(level)))) {
             require(input.readUnsignedByte() == 10, "level.dat root is not a compound");
             input.readUTF();
-            int[] spawn = new int[] {Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
+            int[] spawn = {Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
             scan(input, spawn);
             require(spawn[0] != Integer.MIN_VALUE && spawn[1] != Integer.MIN_VALUE
                     && spawn[2] != Integer.MIN_VALUE, "level.dat is missing SpawnX/Y/Z");
@@ -36,42 +35,6 @@ public final class B173CompassPoint {
 
     public String cell(PlayerPose pose) {
         return floor(pose.x()) + ":" + floor(pose.y()) + ":" + floor(pose.z());
-    }
-
-    public int bearing(double px, double pz) {
-        int deg = (int) Math.round(Math.toDegrees(Math.atan2(x - px, -(z - pz))));
-        return ((deg % 360) + 360) % 360;
-    }
-
-    /**
-     * Instantaneous TextureCompassFX target: (yaw-90)*pi/180 - atan2(spawnZ-z, spawnX-x).
-     * Overworld only; Nether spin is not claimed.
-     */
-    public double target(double px, double pz, float yaw) {
-        double angle = ((double) (yaw - 90.0F) * Math.PI / 180.0D) - Math.atan2(z - pz, x - px);
-        if (angle > Math.PI) angle -= Math.PI * 2.0D;
-        if (angle < -Math.PI) angle += Math.PI * 2.0D;
-        if (angle > Math.PI) angle -= Math.PI * 2.0D;
-        if (angle < -Math.PI) angle += Math.PI * 2.0D;
-        return angle;
-    }
-
-    public String needle(double px, double pz, float yaw) {
-        int deg = (int) Math.round(Math.toDegrees(target(px, pz, yaw)));
-        return wind(((deg % 360) + 360) % 360);
-    }
-
-    public boolean oppositeNeedles(double px, double pz, float yaw0, float yaw1) {
-        return (index(needle(px, pz, yaw0)) + 4) % 8 == index(needle(px, pz, yaw1));
-    }
-
-    private static String wind(int deg) {
-        return WIND[((int) Math.round(deg / 45.0D) + 8) % 8];
-    }
-
-    private static int index(String name) {
-        for (int i = 0; i < WIND.length; i++) if (WIND[i].equals(name)) return i;
-        throw new IllegalStateException("unknown compass wind " + name);
     }
 
     private static void scan(DataInputStream input, int[] spawn) throws IOException {
@@ -98,7 +61,7 @@ public final class B173CompassPoint {
             case 8: input.readUTF(); return;
             case 9:
                 int child = input.readUnsignedByte(), count = input.readInt();
-                for (int index = 0; index < count; index++) skip(input, child, spawn);
+                for (int item = 0; item < count; item++) skip(input, child, spawn);
                 return;
             case 10: scan(input, spawn); return;
             case 11: drop(input, Math.multiplyExact(input.readInt(), 4)); return;

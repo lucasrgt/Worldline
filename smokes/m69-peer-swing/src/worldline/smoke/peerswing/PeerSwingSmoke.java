@@ -13,6 +13,7 @@ import worldline.api.RemoteItemStack;
 import worldline.api.RemotePeerSwing;
 import worldline.api.RemoteSwingRequest;
 import worldline.b173server.B173DedicatedServer;
+import worldline.b173server.B173PlayerSeed;
 import worldline.b173server.B173WireClient;
 
 /** Proves one named peer Packet18 animation after one isolated local request. */
@@ -31,11 +32,13 @@ public final class PeerSwingSmoke {
         PeerSwingSession observer = client(port, observerName, timeout), actor = client(port, actorName, timeout);
         ExecutorService executor = Executors.newSingleThreadExecutor(); RemoteSwingRequest request; RemotePeerSwing swing;
         try {
-            server.boot(); server.operator(actorName); observer.connect(); observer.synchronizePose();
+            server.boot(); B173PlayerSeed.writeInventory(workspace, actorName, 4.5D, 80D, 4.5D,
+                    new int[] {0}, new int[] {276}, new int[] {1}, new int[] {0});
+            observer.connect(); observer.synchronizePose();
             require(observer.awaitInventory().occupiedSlots() == 0, "observer inventory drifted");
             for (int step = 0; step < 4; step++) observer.moveAndObserve(2.5D, 5D, 0D, 3);
-            actor.connect(); actor.synchronizePose(); require(actor.awaitInventory().occupiedSlots() == 0, "actor inventory drifted");
-            actor.look(0F, 90F); acquire(actor, actorName, 276); int sword = find(actor.inventory(), new RemoteItemStack(276, 1, 0));
+            actor.connect(); actor.synchronizePose(); require(actor.awaitInventory().occupiedSlots() == 1, "actor inventory drifted");
+            actor.look(0F, 90F); int sword = find(actor.inventory(), new RemoteItemStack(276, 1, 0));
             require(sword >= 36, "diamond sword absent"); actor.selectHeldSlot(sword - 36);
             observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 276, 0));
             Future<RemotePeerSwing> pending = executor.submit(() -> observer.awaitPeerSwing(actorName));
@@ -47,18 +50,12 @@ public final class PeerSwingSmoke {
                     "actor sword persistence drifted");
         } finally { executor.shutdownNow(); actor.close(); observer.close(); server.close(); }
         System.out.println("WORLDLINE_M69_API=peer-swing,packet18,named-observation");
-        System.out.println("WORLDLINE_M69_SWING=entity=" + request.entityId() + ";animation=" + swing.animation());
+        System.out.println("WORLDLINE_M69_SWING=actor=packet18-animation1,peer=named-packet18-animation1,held=sword276:0");
         System.out.println("WORLDLINE_M69_TRACE=" + TRACE);
         System.out.println("WORLDLINE_M69_SIGNATURE=" + sha256(TRACE));
     }
     private static PeerSwingSession client(int port, String name, Duration timeout) {
         return new B173WireClient("127.0.0.1", port, name, timeout); }
-    private static void acquire(PeerSwingSession client, String username, int item) {
-        for (int step = 0; step < 10; step++) client.moveAndObserve(0D, 5D, 0D, 3);
-        client.sendChat("/give " + username + " " + item + " 1"); client.sustainTicks(40);
-        for (int step = 0; step < 15 && client.inventory().occupiedSlots() == 0; step++)
-            client.moveAndObserve(0D, -5D, 0D, 3); client.sustainTicks(10);
-    }
     private static int find(RemoteInventoryView view, RemoteItemStack expected) { for (int slot = 9; slot <= 44; slot++)
         if (!view.slot(slot).empty() && view.slot(slot).item().equals(expected)) return slot; return -1; }
     private static void awaitPlayers(B173DedicatedServer server, int count) throws InterruptedException {

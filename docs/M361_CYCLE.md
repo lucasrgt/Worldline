@@ -1,19 +1,18 @@
 # M361 qualification cycle
 
-`LadderClimbSetCycle` rebuilds the raised two-cell ladder fixture in two
-fresh official server JVMs. Each run places ladder item `65` as two east
-`65:5` cells, Packet13-climbs at least two cells of height, and contrasts
-that pose delta with the air column without ladder. One official EOF is
-retried after a 5 second sleep.
+`LadderClimbSetCycle` rebuilds the raised two-cell fixture in two fresh official
+server JVMs, places ladder item `65` as two east-facing `65:5` cells, verifies
+live Packet53 state, saves, and verifies both cells through a fresh client
+login. One official EOF may be retried after five seconds.
 
-The frozen semantic SHA-256 is
-`113dccdda9b6bd0140c7aea5b255db993bb9063c6d64ef9370f1fb9925c26340`.
-
-Run directly with:
+The physics half is owned by `ClientCycle` and `B173PhysicsProbe.ladder`. That
+four-process differential compares mapped and official player movement roots
+on identical wall-air and two-cell-ladder fixtures. M361 qualifies only after
+both cycles have frozen matching evidence.
 
 ```text
 java tools/smoke/LadderClimbSetCycle.java m361-ladder-climb-set
+java tools/smoke/ClientCycle.java controlled-client-tick
 ```
 
-Canonical evidence uses two official server JVMs and four client sessions.
-Headless protocol-14 only. No GUI. No Aero.
+The replacement signatures remain pending. Headless protocol-14 only.

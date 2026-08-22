@@ -33,7 +33,10 @@ public final class AeroServerContentCycle {
         require(first.trace.equals(second.trace) && first.signature.equals(second.signature),
                 "fresh server-content traces diverged");
         require(first.signature.equals(value("expected.signature")), "M72 signature drift: " + first.signature);
-        String evidence = "id=" + ID + "\nruns=2\nserver.jvm=2\nclient.jvm=2\ncontent="
+        String signal = "content=" + value("content.identifier") + ",identity=exact,frames="
+                + value("ready.frames") + ",runs=2";
+        require(signal.equals(value("expected.signal")), "M72 stable signal drift");
+        String evidence = "id=" + ID + "\nsignal=" + signal + "\nruns=2\nserver.jvm=2\nclient.jvm=2\ncontent="
                 + value("content.identifier") + "\naero.revision=" + value("aero.revision")
                 + "\naero.jar.sha256=" + aeroJar + "\nfirst=" + first.observation + "\nsecond="
                 + second.observation + "\ntrace=" + first.trace + "\nsignature=" + first.signature + "\n";
