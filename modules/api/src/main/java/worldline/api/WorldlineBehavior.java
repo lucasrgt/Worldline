@@ -108,6 +108,8 @@ public final class WorldlineBehavior {
             "Water and lava sources flow into server-updated neighboring cells");
     public static final WorldlineBehavior WATER_LAVA_SOLIDIFICATION = define("water-lava-solidification", WorldlineFamily.ENVIRONMENT,
             "Water contact solidifies source or flowing lava into obsidian or cobblestone");
+    public static final WorldlineBehavior JUKEBOX_EJECT = define("jukebox-eject", WorldlineFamily.ITEM,
+            "Breaking a playing jukebox ejects its inserted record as an item");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = index();
     private final String token, family, subject;
 
@@ -177,7 +179,7 @@ public final class WorldlineBehavior {
                 ENVIRONMENTAL_DAMAGE, FENCE_COLLISION, REDSTONE_WIRE_POWER, REDSTONE_IRON_DOOR,
                 PISTON_MOTION, PISTON_PUSH_LIMITS, PISTON_QUASI_CONNECTIVITY,
                 PISTON_BUD_UPDATE, PISTON_HEAD_BREAK, FIRE_IGNITION, FIRE_PROPAGATION,
-                BUCKET_FLUID_CYCLE, FLUID_FLOW, WATER_LAVA_SOLIDIFICATION };
+                BUCKET_FLUID_CYCLE, FLUID_FLOW, WATER_LAVA_SOLIDIFICATION, JUKEBOX_EJECT };
         Map<String, WorldlineBehavior> map = new LinkedHashMap<String, WorldlineBehavior>();
         for (int i = 0; i < values.length; i++) {
             if (map.put(values[i].token(), values[i]) != null)
