@@ -84,6 +84,10 @@ public final class WorldlineBehavior {
             "Server-authored health loss from hazardous block environments");
     public static final WorldlineBehavior FENCE_COLLISION = define("fence-collision", WorldlineFamily.ENVIRONMENT,
             "Server correction blocks a walk through an adjacent fence path");
+    public static final WorldlineBehavior REDSTONE_WIRE_POWER = define("redstone-wire-power", WorldlineFamily.REDSTONE,
+            "Lever power and depower propagation through redstone wire");
+    public static final WorldlineBehavior REDSTONE_IRON_DOOR = define("redstone-iron-door", WorldlineFamily.REDSTONE,
+            "Lever power and recovery toggle both iron-door cells");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = index();
     private final String token, family, subject;
 
@@ -150,7 +154,7 @@ public final class WorldlineBehavior {
                 NOTE_BLOCK_INSTRUMENT, PAINTING_ORIENTATION, JUKEBOX_RECORD_PLAY, SHEARS_HARVEST,
                 SWORD_DAMAGE, MILK_BUCKET_CYCLE, DUAL_DIMENSION_SESSION, SAME_DIMENSION_RESPAWN,
                 CROSS_DIMENSION_RESPAWN, BLOCK_PLACEMENT_PERSISTENCE, FOOD_CONSUMPTION,
-                ENVIRONMENTAL_DAMAGE, FENCE_COLLISION };
+                ENVIRONMENTAL_DAMAGE, FENCE_COLLISION, REDSTONE_WIRE_POWER, REDSTONE_IRON_DOOR };
         Map<String, WorldlineBehavior> map = new LinkedHashMap<String, WorldlineBehavior>();
         for (int i = 0; i < values.length; i++) {
             if (map.put(values[i].token(), values[i]) != null)
