@@ -1,5 +1,6 @@
 package worldline.b173;
 
+import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayerSP;
 import net.minecraft.src.World;
 
@@ -74,7 +75,8 @@ public final class B173PhysicsProbe {
         player.setLocationAndAngles(x, y, z, yaw, 0F);
         player.motionX = 0D; player.motionY = 0D; player.motionZ = 0D;
         player.onGround = true; player.isCollidedHorizontally = false;
-        player.isInWeb = false; player.fallDistance = 0F;
+        player.isInWeb = false;
+        B173Reflect.setFloat(Entity.class, "fallDistance", player, 0F);
     }
 
     private static int milli(double value) { return (int) Math.round(value * 1000D); }

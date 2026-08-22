@@ -111,21 +111,41 @@ final class CandidateCheck {
     private void compileScenario(List<Path> outputs) throws Exception {
         Path source = root.resolve("smokes").resolve(id).resolve("src");
         if (!Files.isDirectory(source)) { System.out.println("  tooling candidate has no scenario sources"); return; }
+        boolean clientOnly = "client".equals(descriptor.getProperty("side"))
+                || "client".equals(descriptor.getProperty("atlas.artifact"))
+                || descriptor.getProperty("client.jar.sha256") != null
+                        && descriptor.getProperty("server.jar.sha256") == null;
+        List<Path> dependencies = new ArrayList<>();
+        if (clientOnly) {
+            Path adapterRoot = root.resolve("adapters/b173-client");
+            Path headless = build.resolve("headless-classes");
+            Files.createDirectories(headless);
+            List<String> stubs = new ArrayList<>(List.of(javaTool("javac"), "-encoding", "UTF-8",
+                    "--release", "8", "-Xlint:all,-options", "-Werror", "-d", headless.toString()));
+            stubs.addAll(javaFiles(adapterRoot.resolve("headless-src")).stream()
+                    .map(Path::toString).collect(Collectors.toList()));
+            run(stubs, root, 180);
+            Path mapped = root.resolve("local/workspaces/b1.7.3/minecraft/bin");
+            require(Files.isRegularFile(mapped.resolve("net/minecraft/client/Minecraft.class")),
+                    "client candidate requires the prepared mapped workspace");
+            dependencies.add(headless); dependencies.add(mapped);
+            dependencies.addAll(jarFiles(root.resolve("local/workspaces/b1.7.3/libraries")));
+        }
+        dependencies.addAll(outputs);
         Path output = build.resolve("scenario-classes"); Files.createDirectories(output);
         List<String> command = new ArrayList<>(List.of(javaTool("javac"), "-encoding", "UTF-8",
                 "--release", "8", "-Xlint:all,-options", "-Werror", "-classpath",
-                outputs.stream().map(Path::toString)
+                dependencies.stream().map(Path::toString)
                         .collect(Collectors.joining(System.getProperty("path.separator"))),
                 "-d", output.toString()));
-        boolean clientOnly = descriptor.getProperty("client.jar.sha256") != null
-                && descriptor.getProperty("server.jar.sha256") == null;
         Path adapter = root.resolve(clientOnly ? "adapters/b173-client/src/main/java"
                 : "adapters/b173-server/src/main/java");
         command.addAll(javaFiles(adapter).stream()
                 .map(Path::toString).collect(Collectors.toList()));
         command.addAll(javaFiles(source).stream().map(Path::toString).collect(Collectors.toList()));
         run(command, root, 240);
-        System.out.println("  compiled server adapter and candidate smoke");
+        System.out.println("  compiled " + (clientOnly ? "client" : "server")
+                + " adapter and candidate smoke");
     }
 
     private List<String> values(String key) {
@@ -187,6 +207,13 @@ final class CandidateCheck {
     private static List<Path> javaFiles(Path source) throws IOException {
         try (Stream<Path> paths = Files.walk(source)) {
             return paths.filter(path -> path.toString().endsWith(".java"))
+                    .sorted().collect(Collectors.toList());
+        }
+    }
+
+    private static List<Path> jarFiles(Path source) throws IOException {
+        try (Stream<Path> paths = Files.walk(source)) {
+            return paths.filter(path -> path.toString().endsWith(".jar"))
                     .sorted().collect(Collectors.toList());
         }
     }

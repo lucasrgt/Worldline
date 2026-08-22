@@ -21,6 +21,11 @@ final class B173Reflect {
         catch (IllegalAccessException error) { throw new IllegalStateException(error); }
     }
 
+    static void setFloat(Class<?> owner, String name, Object target, float value) {
+        try { field(owner, name).setFloat(target, value); }
+        catch (IllegalAccessException error) { throw new IllegalStateException(error); }
+    }
+
     static Object get(Class<?> owner, String name, Object target) {
         try { return field(owner, name).get(target); }
         catch (IllegalAccessException error) { throw new IllegalStateException(error); }
