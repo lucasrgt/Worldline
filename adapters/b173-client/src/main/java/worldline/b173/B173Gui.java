@@ -3,6 +3,8 @@ package worldline.b173;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.EnumSet;
+import java.util.Set;
 import net.minecraft.src.GuiContainer;
 import net.minecraft.src.GuiInventory;
 import net.minecraft.src.GuiScreen;
@@ -10,12 +12,18 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 import worldline.api.GameUi;
 import worldline.api.GameUiNode;
+import worldline.api.GameUiCapability;
 
 /** Semantic inventory tree over the controlled client screen. */
 public final class B173Gui implements GameUi {
     private final B173ClientBackend backend;
 
     B173Gui(B173ClientBackend backend) { this.backend = backend; }
+
+    @Override public Set<GameUiCapability> capabilities() {
+        return Collections.unmodifiableSet(EnumSet.of(GameUiCapability.SEMANTIC_TREE,
+                GameUiCapability.INVENTORY_LIFECYCLE, GameUiCapability.NODE_CLICK));
+    }
 
     @Override public void openInventory() { tap(B173Keys.INVENTORY); }
 

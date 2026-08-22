@@ -7,6 +7,8 @@ import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.GamePlayer;
 import worldline.api.GamePosition;
+import worldline.api.GameUi;
+import worldline.api.UiMinecraftRuntime;
 
 /** Capabilities and diagnostics owned by one isolated test attempt. */
 public interface TestContext {
@@ -24,6 +26,15 @@ public interface TestContext {
         attach(name, text.getBytes(StandardCharsets.UTF_8));
     }
     default void tick() { runtime().tick(); }
+    default GameUi ui() {
+        AutomatedMinecraftRuntime value = runtime();
+        if (!(value instanceof UiMinecraftRuntime)) {
+            throw new IllegalStateException("E2301 runtime does not expose semantic UI");
+        }
+        GameUi ui = ((UiMinecraftRuntime) value).ui();
+        if (ui == null) throw new IllegalStateException("E2301 runtime returned no semantic UI");
+        return ui;
+    }
     default void tick(int count) { runtime().tick(count); }
     default GamePlayer player() { return runtime().player(); }
     default int health() { return player().health(); }

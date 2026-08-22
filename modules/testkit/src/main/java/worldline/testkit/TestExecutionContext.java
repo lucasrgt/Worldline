@@ -9,6 +9,7 @@ import java.util.Set;
 import worldline.api.AutomatedMinecraftRuntime;
 import worldline.api.GamePosition;
 import worldline.api.GamePlayer;
+import worldline.api.GameUi;
 import worldline.api.SnapshotMinecraftRuntime;
 import worldline.minimization.Scenario;
 import worldline.test.TestContext;
@@ -72,6 +73,10 @@ final class TestExecutionContext implements TestContext {
         if (hook == null) throw new NullPointerException("hook"); dynamicFailed.add(0, hook);
     }
     @Override public void tick() { runtime().tick(); ticks++; record("tick" + ticks); }
+    @Override public GameUi ui() {
+        observe("ui.tree", "GUI_TREE");
+        return TestContext.super.ui();
+    }
     @Override public void tick(int count) {
         if (count < 0) throw new IllegalArgumentException("tick count must not be negative");
         for (int index = 0; index < count; index++) tick();

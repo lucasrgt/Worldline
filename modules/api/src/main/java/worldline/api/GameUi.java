@@ -1,9 +1,38 @@
 package worldline.api;
 
 import java.util.List;
+import java.util.Collections;
+import java.util.Set;
 
 /** Neutral semantic tree for the current game screen. */
 public interface GameUi {
+    default Set<GameUiCapability> capabilities() {
+        return Collections.singleton(GameUiCapability.SEMANTIC_TREE);
+    }
+
+    default boolean supports(GameUiCapability capability) {
+        if (capability == null) throw new NullPointerException("capability");
+        return capabilities().contains(capability);
+    }
+
+    default void require(GameUiCapability capability) {
+        if (!supports(capability)) {
+            throw new IllegalStateException("E2302 UI capability unavailable: " + capability);
+        }
+    }
+
+    default GameUiQuery query() { return GameUiQuery.all(this); }
+
+    default GameUiQuery getByRole(String role) { return query().role(role); }
+
+    default GameUiQuery getByName(String name) { return query().name(name); }
+
+    default GameUiQuery getByLabel(String label) { return query().label(label); }
+
+    default GameUiQuery getByText(String text) { return query().text(text); }
+
+    default GameUiQuery getSlot(int index) { return query().slot(index); }
+
     String screen();
 
     List<GameUiNode> nodes();
