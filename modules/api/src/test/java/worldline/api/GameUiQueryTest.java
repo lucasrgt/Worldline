@@ -34,6 +34,8 @@ public final class GameUiQueryTest {
                 && ui.dragged.index() == 1, "semantic input actions");
         require(ui.getSlot(0).bounds().equals(new GameUiBounds(10, 20, 16, 16)), "node bounds");
         require(ui.getSlot(1).shouldBeEmpty().single().empty(), "empty assertion");
+        ui.getByLabel("Input").shouldHaveLabel("Input").shouldHaveText("Iron");
+        ui.getByName("missing").shouldNotExist();
         GameUiContract.validate(ui);
         failure(() -> ui.getByRole(GameUiNode.SLOT).single(), "expected one node");
         failure(() -> ui.getByName("missing").first(), "matched no nodes");
@@ -43,6 +45,13 @@ public final class GameUiQueryTest {
             }
         };
         failure(() -> readOnly.getSlot(0).click(), "E2302");
+        Map<String, String> disabled = new LinkedHashMap<String, String>();
+        disabled.put("enabled", "false");
+        MutableUi disabledUi = new MutableUi(Arrays.asList(
+                new GameUiNode(GameUiNode.SCREEN, "crusher", -1, -1, 0),
+                new GameUiNode(GameUiNode.BUTTON, "start", -1, -1, 0, disabled)));
+        disabledUi.getByRole(GameUiNode.BUTTON).shouldBeDisabled();
+        failure(() -> disabledUi.getByRole(GameUiNode.BUTTON).click(), "disabled node");
         GameUi invalid = new MutableUi(ui.nodes()) {
             @Override public String screen() { return "missing-root"; }
         };

@@ -77,6 +77,11 @@ public final class GameUiQuery {
         return this;
     }
 
+    public GameUiQuery shouldNotExist() {
+        if (exists()) throw failure("expected no matching nodes but found " + count());
+        return this;
+    }
+
     public GameUiQuery shouldHaveCount(int expected) {
         if (expected < 0) throw new IllegalArgumentException("expected count must not be negative");
         int actual = count();
@@ -86,7 +91,7 @@ public final class GameUiQuery {
 
     public GameUiQuery click() {
         ui.require(GameUiCapability.NODE_CLICK);
-        ui.click(single());
+        ui.click(actionable("click"));
         return this;
     }
 
@@ -97,6 +102,25 @@ public final class GameUiQuery {
 
     public GameUiQuery shouldBeEnabled() {
         if (!single().enabled()) throw failure("expected an enabled node");
+        return this;
+    }
+
+    public GameUiQuery shouldBeDisabled() {
+        if (single().enabled()) throw failure("expected a disabled node");
+        return this;
+    }
+
+    public GameUiQuery shouldHaveLabel(String expected) {
+        if (expected == null) throw new NullPointerException("expected label");
+        String actual = single().label();
+        if (!expected.equals(actual)) throw failure("expected label " + expected + " but was " + actual);
+        return this;
+    }
+
+    public GameUiQuery shouldHaveText(String expected) {
+        if (expected == null) throw new NullPointerException("expected text");
+        String actual = single().text();
+        if (!expected.equals(actual)) throw failure("expected text " + expected + " but was " + actual);
         return this;
     }
 
@@ -115,13 +139,13 @@ public final class GameUiQuery {
     }
 
     public GameUiQuery focus() {
-        input(GameUiCapability.FOCUS).focus(single());
+        input(GameUiCapability.FOCUS).focus(actionable("focus"));
         return this;
     }
 
     public GameUiQuery type(String value) {
         if (value == null) throw new NullPointerException("text");
-        input(GameUiCapability.KEYBOARD).type(single(), value);
+        input(GameUiCapability.KEYBOARD).type(actionable("type"), value);
         return this;
     }
 
@@ -130,13 +154,13 @@ public final class GameUiQuery {
     }
 
     public GameUiQuery hover() {
-        input(GameUiCapability.POINTER).hover(single());
+        input(GameUiCapability.POINTER).hover(actionable("hover"));
         return this;
     }
 
     public GameUiQuery dragTo(GameUiQuery target) {
         if (target == null) throw new NullPointerException("target");
-        input(GameUiCapability.DRAG_DROP).drag(single(), target.single(), 0);
+        input(GameUiCapability.DRAG_DROP).drag(actionable("drag"), target.actionable("drop"), 0);
         return this;
     }
 
@@ -171,6 +195,13 @@ public final class GameUiQuery {
         ui.require(capability);
         if (!(ui instanceof GameUiInput)) throw ui.capabilityContract(capability);
         return (GameUiInput) ui;
+    }
+
+    private GameUiNode actionable(String action) {
+        GameUiNode node = single();
+        if (!node.visible()) throw failure("cannot " + action + " a hidden node");
+        if (!node.enabled()) throw failure("cannot " + action + " a disabled node");
+        return node;
     }
 
     private AssertionError failure(String message) {
