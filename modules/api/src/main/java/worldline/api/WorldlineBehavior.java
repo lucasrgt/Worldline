@@ -98,6 +98,16 @@ public final class WorldlineBehavior {
             "Piston quasi-power responds to a neighboring block update");
     public static final WorldlineBehavior PISTON_HEAD_BREAK = define("piston-head-break", WorldlineFamily.REDSTONE,
             "Breaking an extended piston base removes its head and drops the base");
+    public static final WorldlineBehavior FIRE_IGNITION = define("fire-ignition", WorldlineFamily.ENVIRONMENT,
+            "Flint and steel creates a server-authored fire block");
+    public static final WorldlineBehavior FIRE_PROPAGATION = define("fire-propagation", WorldlineFamily.ENVIRONMENT,
+            "Fire persists on netherrack and consumes or spreads to flammable blocks");
+    public static final WorldlineBehavior BUCKET_FLUID_CYCLE = define("bucket-fluid-cycle", WorldlineFamily.ITEM,
+            "Water and lava bucket placement, source collection, and held-container result");
+    public static final WorldlineBehavior FLUID_FLOW = define("fluid-flow", WorldlineFamily.ENVIRONMENT,
+            "Water and lava sources flow into server-updated neighboring cells");
+    public static final WorldlineBehavior WATER_LAVA_SOLIDIFICATION = define("water-lava-solidification", WorldlineFamily.ENVIRONMENT,
+            "Water contact solidifies source or flowing lava into obsidian or cobblestone");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = index();
     private final String token, family, subject;
 
@@ -166,7 +176,8 @@ public final class WorldlineBehavior {
                 CROSS_DIMENSION_RESPAWN, BLOCK_PLACEMENT_PERSISTENCE, FOOD_CONSUMPTION,
                 ENVIRONMENTAL_DAMAGE, FENCE_COLLISION, REDSTONE_WIRE_POWER, REDSTONE_IRON_DOOR,
                 PISTON_MOTION, PISTON_PUSH_LIMITS, PISTON_QUASI_CONNECTIVITY,
-                PISTON_BUD_UPDATE, PISTON_HEAD_BREAK };
+                PISTON_BUD_UPDATE, PISTON_HEAD_BREAK, FIRE_IGNITION, FIRE_PROPAGATION,
+                BUCKET_FLUID_CYCLE, FLUID_FLOW, WATER_LAVA_SOLIDIFICATION };
         Map<String, WorldlineBehavior> map = new LinkedHashMap<String, WorldlineBehavior>();
         for (int i = 0; i < values.length; i++) {
             if (map.put(values[i].token(), values[i]) != null)
