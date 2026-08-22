@@ -112,7 +112,8 @@ final class B173ForeignUi implements GameUiInput {
         try {
             Class<?> type = value.getClass();
             Map<String, String> attributes = new LinkedHashMap<String, String>();
-            optional(type, value, "label", attributes); optional(type, value, "enabled", attributes);
+            optional(type, value, "id", attributes); optional(type, value, "label", attributes);
+            optional(type, value, "enabled", attributes);
             optional(type, value, "focused", attributes);
             return new GameUiNode(
                     (String) type.getMethod("role").invoke(value),

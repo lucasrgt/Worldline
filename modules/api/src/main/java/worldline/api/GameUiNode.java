@@ -46,6 +46,14 @@ public final class GameUiNode {
 
     public String name() { return name; }
 
+    /** Stable automation identity; legacy nodes use their semantic name. */
+    public String id() {
+        String value = attributes.get("id");
+        if (value == null) return name;
+        if (value.trim().isEmpty()) throw new IllegalStateException("invalid UI node id");
+        return value;
+    }
+
     public int index() { return index; }
 
     public int itemId() { return itemId; }

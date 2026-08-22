@@ -216,7 +216,7 @@ oracle signatures.
 
 `context.ui()` exposes a Cypress-style semantic surface without browser DOM,
 JavaScript, mapped Minecraft classes, or a mandatory GUI library. Locators by
-role, name, label, text, and slot are lazy and fail when a single-node action
+id, role, name, label, text, and slot are lazy and fail when a single-node action
 is absent or ambiguous. Optional input, layout, and native visual operations
 are capability-gated and validated by `GameUiContract`.
 
@@ -224,6 +224,11 @@ are capability-gated and validated by `GameUiContract`.
 `fill` replaces and therefore requires the stronger `TEXT_REPLACE` capability.
 Typed assertions cover values, checked/selected/expanded/read-only state, exact
 item stacks, and positive item containment without exposing mapped classes.
+
+Use `getById` for a stable author-supplied automation identity, `getByName` for
+the semantic node name, `getByLabel` for a control's visible label, and
+`getByText` for rendered content. Existing nodes without an explicit `id`
+remain addressable because their name is the compatibility id.
 
 `context.awaitUi(locator, maximumTicks, assertion)` retries ordinary assertion
 failures against the live tree and advances exactly one controlled game tick

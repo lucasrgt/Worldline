@@ -13,7 +13,8 @@ public final class GameUiQueryTest {
 
     public static void main(String[] arguments) {
         Map<String, String> input = new LinkedHashMap<String, String>();
-        input.put("label", "Input"); input.put("text", "Iron"); input.put("value", "ore");
+        input.put("id", "machine.input"); input.put("label", "Input");
+        input.put("text", "Iron"); input.put("value", "ore");
         input.put("tabIndex", "0"); input.put("selected", "true");
         Map<String, String> output = new LinkedHashMap<String, String>(); output.put("tabIndex", "1");
         MutableUi ui = new MutableUi(Arrays.asList(
@@ -22,6 +23,8 @@ public final class GameUiQueryTest {
                 new GameUiNode(GameUiNode.SLOT, "output", 1, -1, 0, output)));
         require(ui.getByRole(GameUiNode.SLOT).shouldHaveCount(2).count() == 2, "role locator");
         require(ui.getByRole(GameUiNode.SLOT, "input").single().itemId() == 265, "role/name locator");
+        require(ui.getById("machine.input").single().itemId() == 265, "explicit id locator");
+        require(ui.getById("output").single().empty(), "legacy id fallback");
         require(ui.getByLabel("Input").single().count() == 4, "label locator");
         require("Iron".equals(ui.getByText("Iron").single().text()), "text locator");
         require(ui.getSlot(1).single().empty(), "slot locator");
@@ -69,6 +72,13 @@ public final class GameUiQueryTest {
                 new GameUiNode(GameUiNode.BUTTON, "one", -1, -1, 0, duplicateTab),
                 new GameUiNode(GameUiNode.BUTTON, "two", -1, -1, 0, duplicateTab)));
         failure(() -> GameUiContract.validate(invalidTabOrder), "E2322");
+        Map<String, String> duplicateId = new LinkedHashMap<String, String>();
+        duplicateId.put("id", "action");
+        GameUi invalidIds = new MutableUi(Arrays.asList(
+                new GameUiNode(GameUiNode.SCREEN, "crusher", -1, -1, 0),
+                new GameUiNode(GameUiNode.BUTTON, "one", -1, -1, 0, duplicateId),
+                new GameUiNode(GameUiNode.BUTTON, "two", -1, -1, 0, duplicateId)));
+        failure(() -> GameUiContract.validate(invalidIds), "E2324");
         input.put("label", "Changed");
         require("Input".equals(ui.getSlot(0).single().label()), "node attributes were mutable");
         System.out.println("GameUiQueryTest passed");

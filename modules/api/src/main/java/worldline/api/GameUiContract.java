@@ -36,12 +36,15 @@ public final class GameUiContract {
         if (screen.isEmpty()) {
             require(nodes.isEmpty(), "E2314 closed screen exposed nodes"); return;
         }
-        Set<String> identities = new HashSet<String>(); Set<Integer> tabIndexes = new HashSet<Integer>();
+        Set<String> identities = new HashSet<String>(); Set<String> explicitIds = new HashSet<String>();
+        Set<Integer> tabIndexes = new HashSet<Integer>();
         int roots = 0, focused = 0;
         for (GameUiNode node : nodes) {
             require(node != null, "E2315 UI tree contains null");
             require(identities.add(node.role() + "\u0000" + node.name()),
                     "E2316 duplicate UI identity " + node.role() + "/" + node.name());
+            if (node.attribute("id") != null) require(explicitIds.add(node.id()),
+                    "E2324 duplicate explicit UI id " + node.id());
             if (GameUiNode.SCREEN.equals(node.role()) && screen.equals(node.name())) roots++;
             if (node.focused()) focused++;
             if (node.tabIndex() >= 0) require(tabIndexes.add(Integer.valueOf(node.tabIndex())),

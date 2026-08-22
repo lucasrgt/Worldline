@@ -39,6 +39,7 @@ are re-evaluated against the live tree:
 
 ```java
 GameUi ui = context.ui();
+ui.getById("machine.input").shouldExist();
 ui.getByRole("slot").shouldHaveCount(45);
 ui.getByLabel("Input").click().shouldHaveItem(265, 4);
 ui.getByRole(GameUiNode.TEXT_FIELD, "search").fill("iron").press(GameUiKey.ENTER);
@@ -59,6 +60,12 @@ separate `TEXT_REPLACE` capability; adapters may not emulate it by silently
 appending. Nodes can expose `value`, `checked`, `selected`, `expanded`, and
 `readOnly` attributes, with fail-closed typed assertions. Inventory assertions
 support both exact stack counts and positive containment.
+
+`id`, `name`, `label`, and `text` are deliberately separate. `id` is the stable
+automation identity emitted by a declarative GUI or mod; `name` is the semantic
+node name; `label` associates visible copy with a control; and `text` is visible
+content. Legacy vanilla and Butter nodes that have no explicit `id` use
+`name` as their compatibility id. Explicit ids must be globally unique.
 
 Focusable nodes publish a zero-based `tabIndex` attribute. The shared contract
 rejects duplicate indexes and multiple simultaneously focused nodes. Specs can

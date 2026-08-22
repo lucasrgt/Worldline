@@ -29,6 +29,8 @@ public interface GameUi {
 
     default GameUiQuery getByName(String name) { return query().name(name); }
 
+    default GameUiQuery getById(String id) { return query().id(id); }
+
     default GameUiQuery getByLabel(String label) { return query().label(label); }
 
     default GameUiQuery getByText(String text) { return query().text(text); }
