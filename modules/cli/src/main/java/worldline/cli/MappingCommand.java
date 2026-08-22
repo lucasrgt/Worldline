@@ -10,6 +10,7 @@ import worldline.symbolgraph.MappingAuditHtml;
 import worldline.symbolgraph.MappingCoverageGate;
 import worldline.symbolgraph.MappingCoverageReport;
 import worldline.symbolgraph.MappingEvidenceReport;
+import worldline.symbolgraph.MappingPromotionGate;
 import worldline.symbolgraph.MappingQualificationQueue;
 
 /** Stable complete-game mapping audit and exact coverage gate. */
@@ -22,8 +23,21 @@ final class MappingCommand {
         boolean queue = arguments.length == 8 && "queue".equals(arguments[1]);
         boolean evidence = arguments.length == 9 && "evidence".equals(arguments[1]);
         boolean html = arguments.length == 10 && "html".equals(arguments[1]);
+        boolean promote = arguments.length == 10 && "promote".equals(arguments[1]);
         if (!"mappings".equals(arguments[0])
-                || (!reportOnly && !gated && !queue && !evidence && !html)) return usage(error);
+                || (!reportOnly && !gated && !queue && !evidence && !html && !promote)) return usage(error);
+        if (promote) {
+            MappingCoverageReport coverage = MappingCoverageReport.create(
+                    Paths.get(arguments[2]), Paths.get(arguments[3]), Paths.get(arguments[4]),
+                    Paths.get(arguments[5]), Paths.get(arguments[6]), Paths.get(arguments[7]));
+            MappingQualificationQueue source = MappingQualificationQueue.create(
+                    Paths.get(arguments[2]), Paths.get(arguments[3]), Paths.get(arguments[4]),
+                    Paths.get(arguments[5]), Paths.get(arguments[6]), Paths.get(arguments[7]));
+            MappingEvidenceReport facts = MappingEvidenceReport.create(source, Paths.get(arguments[8]));
+            MappingPromotionGate.Result decision = MappingPromotionGate.verify(
+                    coverage, source, facts, Paths.get(arguments[9]));
+            output.println("WORLDLINE_MAPPINGS_PROMOTION=PASS"); output.print(decision.render()); return 0;
+        }
         if (html) {
             MappingQualificationQueue source = MappingQualificationQueue.create(
                     Paths.get(arguments[2]), Paths.get(arguments[3]), Paths.get(arguments[4]),
@@ -71,6 +85,8 @@ final class MappingCommand {
                 + " <nostalgia.jar> <retromcp.properties> <retromcp.tiny> <evidence.tsv>");
         error.println("   or: worldline mappings html <client.jar> <server.jar> <intermediary.jar>"
                 + " <nostalgia.jar> <retromcp.properties> <retromcp.tiny> <evidence.tsv> <output.html>");
+        error.println("   or: worldline mappings promote <client.jar> <server.jar> <intermediary.jar>"
+                + " <nostalgia.jar> <retromcp.properties> <retromcp.tiny> <evidence.tsv> <policy.properties>");
         return 2;
     }
 }

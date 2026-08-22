@@ -17,6 +17,7 @@ public final class SymbolGraphTest {
         importsRetroMcpThroughOfficialIdentity();
         classifiesNamespaceGapsWithoutGuessing();
         inventoriesOfficialClassFilesWithoutExecutingThem();
+        definesCompleteGameWithoutVacuousPasses();
         verifiesExactMappingPins();
         rejectsMalformedDocuments();
         System.out.println("SymbolGraphTest passed");
@@ -180,6 +181,34 @@ public final class SymbolGraphTest {
         } finally {
             Files.deleteIfExists(jar);
         }
+    }
+
+    private static void definesCompleteGameWithoutVacuousPasses() {
+        java.util.Map<String, String> metrics = new java.util.LinkedHashMap<String, String>();
+        metrics.put("graph.symbols", "3"); metrics.put("retro.matched", "3");
+        metrics.put("retro.unmatched", "0"); metrics.put("retro.side-name-differences", "0");
+        metrics.put("retro.missing", "0");
+        for (NamespaceIssue issue : NamespaceIssue.values())
+            metrics.put("namespace." + issue.name(), issue == NamespaceIssue.MATCH ? "3" : "0");
+        for (SymbolKind kind : SymbolKind.values()) {
+            String named = "nostalgia." + kind.name().toLowerCase();
+            metrics.put(named + ".inventory", "1"); metrics.put(named + ".named", "1");
+            metrics.put(named + ".missing", "0"); metrics.put(named + ".extra", "0");
+            for (String side : new String[] {"client", "server"}) {
+                String official = "official." + side + "." + kind.name().toLowerCase();
+                metrics.put(official + ".total", "1"); metrics.put(official + ".mapped", "1");
+                metrics.put(official + ".missing", "0"); metrics.put(official + ".phantom", "0");
+            }
+        }
+        for (String side : new String[] {"client", "server"}) {
+            metrics.put("official." + side + ".descriptor-candidates", "0");
+            for (OfficialGapKind gap : OfficialGapKind.values())
+                metrics.put("official." + side + ".gap." + gap.name(), "0");
+        }
+        require(MappingPromotionGate.complete(metrics, 0), "complete-game definition rejected full coverage");
+        require(!MappingPromotionGate.complete(metrics, 1), "non-empty queue passed complete-game definition");
+        metrics.put("official.client.method.missing", "1");
+        require(!MappingPromotionGate.complete(metrics, 0), "official gap passed complete-game definition");
     }
 
     private static byte[] readAll(java.io.InputStream input) throws Exception {

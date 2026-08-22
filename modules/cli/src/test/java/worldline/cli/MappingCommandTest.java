@@ -29,6 +29,7 @@ public final class MappingCommandTest {
         Path policy = root.resolve("coverage.properties");
         Path evidence = root.resolve("evidence.tsv");
         Path html = root.resolve("mapping-audit.html");
+        Path promotion = root.resolve("promotion.properties");
         try {
             official(official, officialName);
             archive(intermediary, "tiny\t2\t0\tintermediary\tclientOfficial\tserverOfficial\n"
@@ -50,11 +51,12 @@ public final class MappingCommandTest {
                             intermediary, nostalgia, descriptor, retro).sha256()),
                     "mapping qualification queue is incomplete or unstable");
             String item = queue.items().get(0).id();
-            Files.write(evidence, ("schema=1\nqueue.sha256=" + queue.sha256()
-                    + "\nitem\tsource\tevidence\talias\treference\n"
-                    + item + "\tnostalgia-b173\tcross-namespace\tstableName\tfixture:named\n"
-                    + item + "\tornithe-b174\tcross-version\tstableName\tfixture:next\n")
-                    .getBytes(StandardCharsets.UTF_8));
+            StringBuilder evidenceText = new StringBuilder("schema=1\nqueue.sha256=")
+                    .append(queue.sha256()).append("\nitem\tsource\tevidence\talias\treference\n");
+            for (MappingQualificationQueue.Item queued : queue.items())
+                evidenceText.append(queued.id()).append("\tfixture-named\tcross-namespace\tstableName\tfixture:named\n")
+                        .append(queued.id()).append("\tfixture-next\tcross-version\tstableName\tfixture:next\n");
+            Files.write(evidence, evidenceText.toString().getBytes(StandardCharsets.UTF_8));
             MappingEvidenceReport evidenceReport = MappingEvidenceReport.create(queue, evidence);
             require("CORROBORATED".equals(evidenceReport.status(item))
                     && evidenceReport.render().contains("summary.conflict=0"),
@@ -96,6 +98,28 @@ public final class MappingCommandTest {
                     && output.toString("UTF-8").contains("WORLDLINE_MAPPINGS_HTML=PASS")
                     && new String(Files.readAllBytes(html), StandardCharsets.UTF_8).equals(auditHtml),
                     "mapping audit HTML CLI failed");
+            Files.write(promotion, ("schema=1\nmode=batch\nexpected.coverage.sha256=" + report.sha256()
+                    + "\nexpected.queue.sha256=" + queue.sha256() + "\nexpected.evidence.sha256="
+                    + evidenceReport.sha256() + "\n").getBytes(StandardCharsets.UTF_8));
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"mappings", "promote", official.toString(),
+                    official.toString(), intermediary.toString(), nostalgia.toString(), descriptor.toString(),
+                    retro.toString(), evidence.toString(), promotion.toString()},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && error.size() == 0
+                    && output.toString("UTF-8").contains("WORLDLINE_MAPPINGS_PROMOTION=PASS")
+                    && output.toString("UTF-8").contains("complete-game=false"),
+                    "mapping batch promotion gate failed");
+            Files.write(promotion, ("schema=1\nmode=complete-game\nexpected.coverage.sha256=" + report.sha256()
+                    + "\nexpected.queue.sha256=" + queue.sha256() + "\nexpected.evidence.sha256="
+                    + evidenceReport.sha256() + "\n").getBytes(StandardCharsets.UTF_8));
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"mappings", "promote", official.toString(),
+                    official.toString(), intermediary.toString(), nostalgia.toString(), descriptor.toString(),
+                    retro.toString(), evidence.toString(), promotion.toString()},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 1 && error.toString("UTF-8").contains("definition is not satisfied"),
+                    "incomplete fixture passed complete-game promotion");
             StringBuilder expected = new StringBuilder("schema=1\n");
             for (Map.Entry<String, String> metric : report.metrics().entrySet())
                 expected.append("expected.").append(metric.getKey()).append('=')
