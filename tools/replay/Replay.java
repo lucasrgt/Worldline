@@ -103,7 +103,7 @@ public final class Replay {
                 workspace.resolve("minecraft/bin"), workspace.resolve("jars/minecraft.jar")));
         for (Path path : paths) if (!Files.exists(path)) throw new IllegalStateException(
                 "prepared runtime is missing " + root.relativize(path)
-                        + "; run java tools/harness/Verify.java" + (game ? " --smoke" : ""));
+                        + "; run java tools/harness/Gate.java" + (game ? " --smoke" : ""));
         if (game) try (Stream<Path> libraries = Files.walk(workspace.resolve("libraries"))) {
             paths.addAll(libraries.filter(path -> path.toString().endsWith(".jar"))
                     .sorted().collect(Collectors.toList()));

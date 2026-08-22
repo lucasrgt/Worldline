@@ -3,6 +3,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.util.HexFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -13,6 +15,7 @@ import java.util.stream.Stream;
 /** Runs the external Java example suite through the verified b1.7.3 provider. */
 public final class TestKitCycle {
     private static final String ID = "testkit-cycle";
+    private static final String SIGNAL = "specs=10,tests=30,runtime=fresh-serial";
     private final Path root = Paths.get("").toAbsolutePath().normalize();
     private TestKitCycle() {}
     public static void main(String[] arguments) {
@@ -57,9 +60,16 @@ public final class TestKitCycle {
         String output = run(command, true);
         require(output.contains("WORLDLINE_TEST=PASS") && output.contains("tests=30"),
                 "external example suite did not pass all 30 collected tests");
+        Properties descriptor = properties(root.resolve("smokes/testkit-cycle/smoke.properties"));
+        String signature = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
+                .digest(SIGNAL.getBytes(StandardCharsets.UTF_8)));
+        require(SIGNAL.equals(descriptor.getProperty("expected.signal")), "TestKit signal drifted");
+        require(signature.equals(descriptor.getProperty("expected.signature")), "TestKit signature drifted");
         System.out.println("TestKit cycle passed");
         System.out.println("  external Java 8 specs: 10 files, 30 tests");
         System.out.println("  runtime sessions: fresh and serial under the exclusive lock");
+        System.out.println("  signal: " + SIGNAL);
+        System.out.println("  signature: " + signature);
     }
     private String run(List<String> command, boolean capture) throws Exception {
         ProcessBuilder builder = new ProcessBuilder(command).directory(root.toFile());

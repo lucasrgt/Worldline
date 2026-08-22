@@ -21,7 +21,7 @@ jobs:
         run: cargo install tokei --version 14.0.0 --locked
       - name: Verify and package
         run: |
-          java tools/harness/Verify.java
+          java tools/harness/Gate.java
           java tools/testkit/TestKitPackage.java
       - name: Verify frozen distribution identities
         run: |

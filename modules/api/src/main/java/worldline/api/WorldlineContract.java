@@ -49,6 +49,8 @@ public final class WorldlineContract {
             "Canonical runtime snapshots restore exactly and reject drifted inputs");
     public static final WorldlineContract UI_TREE_EQUIVALENCE = define("ui-tree-equivalence",
             "Semantic UI trees match the official screen and slot topology");
+    public static final WorldlineContract UI_ACTION_EQUIVALENCE = define("ui-action-equivalence",
+            "Semantic UI geometry and pointer actions match the official client");
     public static final WorldlineContract RUNTIME_LAB = define("runtime-lab",
             "Integrated snapshot, replay, branching, UI, and mod laboratory boundary");
     public static final WorldlineContract RUNTIME_CENSUS = define("runtime-census",
@@ -91,6 +93,8 @@ public final class WorldlineContract {
             "Controlled logical item identity across copy, wire sync, save, and restart");
     public static final WorldlineContract STATE_WORLD_DIFFERENTIAL = define("state-world-differential",
             "Mapped and official state-world transitions agree for a frozen fixture");
+    public static final WorldlineContract TESTKIT_RUNTIME = define("testkit-runtime",
+            "External Java specifications execute through the isolated TestKit runtime");
     private static final Map<String, WorldlineContract> ALL;
     static {
         register(REPRODUCTION_BUNDLE, TRACE_DIVERGENCE, MOD_LOADING,
@@ -98,13 +102,14 @@ public final class WorldlineContract {
                 MOD_TEST_RUN, MOD_DEPENDENCY_GRAPH, SCENARIO_DSL, FUZZ_CAMPAIGN,
                 SCENARIO_DEBUGGING, SCENARIO_PROFILING, SCENARIO_COVERAGE, TRACE_HTML,
                 CLIENT_RUNTIME_EQUIVALENCE, SERVER_RUNTIME_EQUIVALENCE, DOMAIN_API_EQUIVALENCE,
-                DURABLE_SNAPSHOT, UI_TREE_EQUIVALENCE, RUNTIME_LAB, RUNTIME_CENSUS,
+                DURABLE_SNAPSHOT, UI_TREE_EQUIVALENCE, UI_ACTION_EQUIVALENCE,
+                RUNTIME_LAB, RUNTIME_CENSUS,
                 SEED_ATLAS, UI_EXPORT, DEDICATED_SERVER_CONTROL, MULTIPLAYER_SESSION,
                 PLAYER_PERSISTENCE, PLAYER_POSE, REMOTE_WORLD_VIEW, MOVEMENT_ROUTE,
                 INVENTORY_SESSION, CONTAINER_TRANSACTION, COMBAT_SESSION,
                 AERO_RUNTIME_SESSION, AERO_PAIRED_EXPERIMENT, AERO_FRAME_CENSUS,
                 AERO_CACHE_LIFECYCLE, AERO_DIAGNOSTIC_CAPTURE, AERO_SAVE_WINDOW,
-                LOGICAL_ITEM_REFERENCE, STATE_WORLD_DIFFERENTIAL);
+                LOGICAL_ITEM_REFERENCE, STATE_WORLD_DIFFERENTIAL, TESTKIT_RUNTIME);
         ALL = Collections.unmodifiableMap(new LinkedHashMap<String, WorldlineContract>(DEFINITIONS));
     }
     private final String token, subject;

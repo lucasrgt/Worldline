@@ -64,7 +64,7 @@ Requirements:
 - Java 8 compatibility for product and mod-facing APIs
 
 ```text
-java tools/harness/Verify.java
+java tools/harness/Gate.java
 ```
 
 The gate enforces per-file source ceilings, module dependencies, warnings as
@@ -89,7 +89,7 @@ Then bootstrap the pinned mapping workspace and validate runtime inputs:
 
 ```text
 java tools/toolchains/Bootstrap.java retromcp
-java tools/harness/Verify.java --runtime
+java tools/harness/Gate.java --runtime
 ```
 
 Runtime artifacts and generated workspaces remain ignored. Their accepted
@@ -98,7 +98,7 @@ lengths and hashes are frozen in public descriptors.
 ### 3. Run the complete evidence suite
 
 ```text
-java tools/harness/Verify.java --smoke
+java tools/harness/Gate.java --smoke
 ```
 
 This is the final promotion gate. It compiles mapped adapters, executes the
@@ -356,19 +356,19 @@ sources, credentials, worlds, and runtime output must remain outside Git.
 Before reporting a change complete:
 
 ```text
-java tools/harness/Verify.java
+java tools/harness/Gate.java
 ```
 
 Changes that inspect, transform, or execute Minecraft also require:
 
 ```text
-java tools/harness/Verify.java --runtime
+java tools/harness/Gate.java --runtime
 ```
 
 Release candidates require the integral smoke gate:
 
 ```text
-java tools/harness/Verify.java --smoke
+java tools/harness/Gate.java --smoke
 ```
 
 Keep product sources at or below 250 `tokei` code lines, harness sources at or

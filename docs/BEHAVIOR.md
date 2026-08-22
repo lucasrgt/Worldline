@@ -48,3 +48,17 @@ The historical backlog is an explicit ratchet in
 `behavior/coverage.properties`. Backfill changes must reduce
 `pending.expected`; it may never increase. Pending means incomplete work, not
 an accepted legacy state. New milestones cannot enter that temporary backlog.
+TestKit consumes the same evidence type instead of maintaining a second
+milestone catalog:
+
+```java
+expect(modEvidence).toMatchVanilla(
+        WorldlineBehavior.VOID_DEATH,
+        frozenSignal,
+        frozenSignature);
+```
+
+The assertion ignores the provenance lane (`vanilla` versus `mod`) but fails
+when the semantic behavior or frozen signature diverges. Milestone
+qualification verifies that every Atlas-backed descriptor can reach this
+TestKit surface before the official cycle runs.

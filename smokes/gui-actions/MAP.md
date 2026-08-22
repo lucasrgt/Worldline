@@ -16,9 +16,10 @@ final visible inventory contains two stone in slot 37 and one in slot 38; the
 remaining cursor item is outside this claim.
 
 Two fresh subject JVMs and two fresh official-oracle JVMs must produce the
-same trace and frozen signature. The first qualification intentionally starts
-with `expected.signature=PENDING`; the observed signature must be reviewed,
-frozen, and reproduced before this acceptance smoke can pass.
+same trace and frozen signature
+`c7ae2df472b46293178079d3dd212552d9b9c6167fd95bf716de8d53e32a9d4d`.
+The frozen semantic signal is
+`inventory=player,source36=1x4,drag=36-to-37,secondary=37-and-38,result36=empty+37=1x2+38=1x1,oracle=MATCH`.
 
 ## Exact boundary
 
