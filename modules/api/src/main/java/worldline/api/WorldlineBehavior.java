@@ -92,6 +92,12 @@ public final class WorldlineBehavior {
             "Piston extension, retraction, push, and sticky pull state transitions");
     public static final WorldlineBehavior PISTON_PUSH_LIMITS = define("piston-push-limits", WorldlineFamily.REDSTONE,
             "Piston immovable payload and maximum push-chain boundaries");
+    public static final WorldlineBehavior PISTON_QUASI_CONNECTIVITY = define("piston-quasi-connectivity", WorldlineFamily.REDSTONE,
+            "Piston activation from powered space above without direct power");
+    public static final WorldlineBehavior PISTON_BUD_UPDATE = define("piston-bud-update", WorldlineFamily.REDSTONE,
+            "Piston quasi-power responds to a neighboring block update");
+    public static final WorldlineBehavior PISTON_HEAD_BREAK = define("piston-head-break", WorldlineFamily.REDSTONE,
+            "Breaking an extended piston base removes its head and drops the base");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = index();
     private final String token, family, subject;
 
@@ -159,7 +165,8 @@ public final class WorldlineBehavior {
                 SWORD_DAMAGE, MILK_BUCKET_CYCLE, DUAL_DIMENSION_SESSION, SAME_DIMENSION_RESPAWN,
                 CROSS_DIMENSION_RESPAWN, BLOCK_PLACEMENT_PERSISTENCE, FOOD_CONSUMPTION,
                 ENVIRONMENTAL_DAMAGE, FENCE_COLLISION, REDSTONE_WIRE_POWER, REDSTONE_IRON_DOOR,
-                PISTON_MOTION, PISTON_PUSH_LIMITS };
+                PISTON_MOTION, PISTON_PUSH_LIMITS, PISTON_QUASI_CONNECTIVITY,
+                PISTON_BUD_UPDATE, PISTON_HEAD_BREAK };
         Map<String, WorldlineBehavior> map = new LinkedHashMap<String, WorldlineBehavior>();
         for (int i = 0; i < values.length; i++) {
             if (map.put(values[i].token(), values[i]) != null)
