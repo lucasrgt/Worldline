@@ -4,6 +4,8 @@ import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
 
 public final class SymbolGraphTest {
     private SymbolGraphTest() {}
@@ -14,6 +16,7 @@ public final class SymbolGraphTest {
         buildsDeterministicCrosswalk();
         importsRetroMcpThroughOfficialIdentity();
         classifiesNamespaceGapsWithoutGuessing();
+        inventoriesOfficialClassFilesWithoutExecutingThem();
         verifiesExactMappingPins();
         rejectsMalformedDocuments();
         System.out.println("SymbolGraphTest passed");
@@ -134,6 +137,45 @@ public final class SymbolGraphTest {
         require(report.findings(NamespaceIssue.NOSTALGIA_MISSING).size() == 1, "Nostalgia gap");
         require(report.findings(NamespaceIssue.RETROMCP_MISSING).size() == 3, "RetroMCP gaps");
         require(report.findings(NamespaceIssue.AMBIGUOUS).isEmpty(), "no invented ambiguity");
+    }
+
+    private static void inventoriesOfficialClassFilesWithoutExecutingThem() throws Exception {
+        String className = "worldline/symbolgraph/SymbolGraphTest";
+        byte[] bytes;
+        try (java.io.InputStream input = SymbolGraphTest.class.getResourceAsStream("SymbolGraphTest.class")) {
+            require(input != null, "test class resource");
+            bytes = readAll(input);
+        }
+        Path jar = Files.createTempFile("worldline-official-inventory-", ".jar");
+        try {
+            try (JarOutputStream output = new JarOutputStream(Files.newOutputStream(jar))) {
+                output.putNextEntry(new JarEntry(className + ".class"));
+                output.write(bytes);
+                output.closeEntry();
+            }
+            OfficialJarInventory official = OfficialJarInventory.read(jar);
+            require(official.counts().get(SymbolKind.CLASS).intValue() == 1, "official class count");
+            require(official.counts().get(SymbolKind.METHOD).intValue() > 0, "official method count");
+            TinyMapping mapping = read("tiny\t2\t0\tintermediary\tclientOfficial\tserverOfficial\n"
+                    + "c\tfixture/Class\t" + className + "\t\n");
+            OfficialBytecodeAudit.Report report = new OfficialBytecodeAudit()
+                    .compare(official, mapping, "clientOfficial");
+            require(report.missing(SymbolKind.CLASS) == 0, "mapped official class");
+            require(report.missing(SymbolKind.METHOD) > 0, "unmapped official members stay visible");
+            require(report.phantom(SymbolKind.CLASS) == 0, "no phantom class");
+            require(report.gapCounts().get(OfficialGapKind.CONSTRUCTOR).intValue() > 0,
+                    "constructors classified");
+        } finally {
+            Files.deleteIfExists(jar);
+        }
+    }
+
+    private static byte[] readAll(java.io.InputStream input) throws Exception {
+        java.io.ByteArrayOutputStream output = new java.io.ByteArrayOutputStream();
+        byte[] buffer = new byte[4096];
+        int count;
+        while ((count = input.read(buffer)) >= 0) output.write(buffer, 0, count);
+        return output.toByteArray();
     }
 
     private static TinyMapping read(String text) throws Exception {

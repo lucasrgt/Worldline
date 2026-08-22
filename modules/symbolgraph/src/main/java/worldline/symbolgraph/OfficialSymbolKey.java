@@ -17,6 +17,10 @@ final class OfficialSymbolKey implements Comparable<OfficialSymbolKey> {
     }
 
     String canonical() { return kind.name() + "|" + owner + "|" + name + "|" + descriptor; }
+    SymbolKind kind() { return kind; }
+    String owner() { return owner; }
+    String name() { return name; }
+    String descriptor() { return descriptor; }
     @Override public int compareTo(OfficialSymbolKey other) { return canonical().compareTo(other.canonical()); }
     @Override public boolean equals(Object other) {
         return other instanceof OfficialSymbolKey
