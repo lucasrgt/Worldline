@@ -4,10 +4,11 @@ final class WorldlineContractTest {
     private WorldlineContractTest() {}
 
     static void run() {
-        if (WorldlineContract.all().size() != 14
+        if (WorldlineContract.all().size() != 23
                 || WorldlineContract.require("trace-divergence") != WorldlineContract.TRACE_DIVERGENCE
                 || !WorldlineContract.MOD_LOADING.subject().contains("mod loading")
-                || WorldlineContract.require("scenario-coverage") != WorldlineContract.SCENARIO_COVERAGE)
+                || WorldlineContract.require("scenario-coverage") != WorldlineContract.SCENARIO_COVERAGE
+                || WorldlineContract.require("runtime-census") != WorldlineContract.RUNTIME_CENSUS)
             throw new AssertionError("TestKit contract catalog drifted");
         try { WorldlineContract.all().clear(); throw new AssertionError("mutable TestKit contract catalog"); }
         catch (UnsupportedOperationException expected) { }

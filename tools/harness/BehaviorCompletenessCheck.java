@@ -62,7 +62,10 @@ public final class BehaviorCompletenessCheck {
         require("1".equals(required(policy, "schema")), "unsupported behavior coverage schema");
         pendingMax = Integer.parseInt(required(policy, "pending.max.milestone"));
         pendingExpected = Integer.parseInt(required(policy, "pending.expected"));
-        Collections.addAll(pendingNonnumeric, required(policy, "pending.nonnumeric").split(","));
+        String nonnumeric = policy.getProperty("pending.nonnumeric");
+        require(nonnumeric != null, "missing pending.nonnumeric");
+        if (!nonnumeric.trim().isEmpty())
+            Collections.addAll(pendingNonnumeric, nonnumeric.trim().split(","));
     }
 
     private void loadCatalog(String file, Set<String> target) throws IOException {

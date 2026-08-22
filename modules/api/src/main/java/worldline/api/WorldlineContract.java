@@ -39,12 +39,33 @@ public final class WorldlineContract {
             "Semantic scenario category and role coverage with threshold decisions");
     public static final WorldlineContract TRACE_HTML = define("trace-html",
             "Deterministic self-contained trace and divergence evidence pages");
+    public static final WorldlineContract CLIENT_RUNTIME_EQUIVALENCE = define("client-runtime-equivalence",
+            "Mapped and official client tick traces agree under controlled inputs");
+    public static final WorldlineContract SERVER_RUNTIME_EQUIVALENCE = define("server-runtime-equivalence",
+            "Mapped and official server world tick traces agree under controlled inputs");
+    public static final WorldlineContract DOMAIN_API_EQUIVALENCE = define("domain-api-equivalence",
+            "Public world, block, entity, and player operations match the official oracle");
+    public static final WorldlineContract DURABLE_SNAPSHOT = define("durable-snapshot",
+            "Canonical runtime snapshots restore exactly and reject drifted inputs");
+    public static final WorldlineContract UI_TREE_EQUIVALENCE = define("ui-tree-equivalence",
+            "Semantic UI trees match the official screen and slot topology");
+    public static final WorldlineContract RUNTIME_LAB = define("runtime-lab",
+            "Integrated snapshot, replay, branching, UI, and mod laboratory boundary");
+    public static final WorldlineContract RUNTIME_CENSUS = define("runtime-census",
+            "Canonical registry census sections and rows from the controlled runtime");
+    public static final WorldlineContract SEED_ATLAS = define("seed-atlas",
+            "Deterministic official-server terrain pages for a seed and radius");
+    public static final WorldlineContract UI_EXPORT = define("ui-export",
+            "Deterministic self-contained semantic UI tree page");
     private static final Map<String, WorldlineContract> ALL;
     static {
         register(REPRODUCTION_BUNDLE, TRACE_DIVERGENCE, MOD_LOADING,
                 MOD_VERSION_DIFFERENCE, SCENARIO_MINIMIZATION, MOD_API_LIFECYCLE,
                 MOD_TEST_RUN, MOD_DEPENDENCY_GRAPH, SCENARIO_DSL, FUZZ_CAMPAIGN,
-                SCENARIO_DEBUGGING, SCENARIO_PROFILING, SCENARIO_COVERAGE, TRACE_HTML);
+                SCENARIO_DEBUGGING, SCENARIO_PROFILING, SCENARIO_COVERAGE, TRACE_HTML,
+                CLIENT_RUNTIME_EQUIVALENCE, SERVER_RUNTIME_EQUIVALENCE, DOMAIN_API_EQUIVALENCE,
+                DURABLE_SNAPSHOT, UI_TREE_EQUIVALENCE, RUNTIME_LAB, RUNTIME_CENSUS,
+                SEED_ATLAS, UI_EXPORT);
         ALL = Collections.unmodifiableMap(new LinkedHashMap<String, WorldlineContract>(DEFINITIONS));
     }
     private final String token, subject;
