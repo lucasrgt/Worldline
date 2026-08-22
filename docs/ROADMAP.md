@@ -477,6 +477,7 @@ Passing an experiment does not silently promote its API.
 | v1.458.0 / M557 | One-tick pulse set | GO - 1-tick repeater piston pulse leaves pushed stone |
 | v1.459.0 / M566 | Grass spread set | GO - Packet53 3->2 on lit dirt, covered dirt stays 3 |
 | v1.460.0 / M555 | Torch burnout set | GO - wall 76:4 burns to 75:4 then recovers |
+| v1.461.0 / M567 | Bed spawn set | GO - occupy then cactus death Packet9 at bed, not world spawn |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -488,7 +489,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.460.0 direction
+## Immediate post-v1.461.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

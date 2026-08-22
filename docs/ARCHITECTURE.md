@@ -1923,3 +1923,5 @@ M557 adds no public API. One-tick repeater piston pulse that leaves a pushed blo
 M566 adds no public API. Packet53 dirt `3 -> 2` on lit samples plus covered dirt stay shares one grass-spread family.
 
 M555 adds no public API. Rapid-toggle wall torch `76:4 -> 75:4` burnout plus recover shares one torch-burnout family.
+
+M567 adds no public API. Bed occupy plus cactus Packet8 `0` Packet9 at the bed shares one bed-spawn family.

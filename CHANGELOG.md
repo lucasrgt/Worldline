@@ -223,6 +223,17 @@ Status: GO.
   behavioral evidence. TestKit remains 0.x until external-mod use validates
   the authoring surface.
 
+## 1.461.0 - M567 Bed spawn set
+
+Status: GO for official bed occupy plus cactus-death Packet9 at the bed together.
+
+- Night occupy `26:8 -> 26:12` Packet17, morning leave standing, cactus Packet8 `0`, Packet9 respawn at the bed not `level.dat` world spawn.
+- Distinct from M330 occupy/wake, M135 world-spawn respawn, and M469 void death without a bed.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M567 semantic SHA-256 is
+`aaad061b562df911b0b4c29784fe2beb4b0d5f1183dae8e29603cd3c2a838aed`.
+
 ## 1.460.0 - M555 Torch burnout set
 
 Status: GO for official redstone-torch 76 burnout to 75 then recover together.
