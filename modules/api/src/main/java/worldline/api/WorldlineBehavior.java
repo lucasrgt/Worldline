@@ -204,6 +204,12 @@ public final class WorldlineBehavior {
             "Coal, planks, and lava expose their distinct furnace burn durations");
     public static final WorldlineBehavior SLIME_SPLIT = define("slime-split", WorldlineFamily.HOSTILE,
             "Killing a larger slime emits child slime spawn objects");
+    public static final WorldlineBehavior FIXED_SEED_TERRAIN = define("fixed-seed-terrain", WorldlineFamily.WORLD,
+            "A fixed seed yields an exact terrain and surface state for an absolute chunk");
+    public static final WorldlineBehavior FIXED_SEED_LIGHTING = define("fixed-seed-lighting", WorldlineFamily.ENVIRONMENT,
+            "A fixed seed yields exact block-light and sky-light planes for an absolute chunk");
+    public static final WorldlineBehavior LIGHT_PROPAGATION = define("light-propagation", WorldlineFamily.ENVIRONMENT,
+            "Adding a light source updates persisted block-light samples around it");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = WorldlineBehaviorRegistry.freeze();
     private final String token, family, subject;
 
