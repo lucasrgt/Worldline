@@ -223,6 +223,17 @@ Status: GO.
   behavioral evidence. TestKit remains 0.x until external-mod use validates
   the authoring surface.
 
+## 1.460.0 - M555 Torch burnout set
+
+Status: GO for official redstone-torch 76 burnout to 75 then recover together.
+
+- Rapid lever toggles burnt north-face `76:4` to `75:4` inside the 100-tick window; a later neighbor update recovered `76:4`.
+- Distinct from M312 single invert while powered and M182 floor `76:5`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M555 semantic SHA-256 is
+`51a58a2129fecaba1f082e28aaa285177901ece62fb08c5e70d85fbcd3535713`.
+
 ## 1.459.0 - M566 Grass spread set
 
 Status: GO for official grass-2 random-tick Packet53 onto lit dirt-3 together.
