@@ -192,6 +192,8 @@ public final class WorldlineBehavior {
             "Equipped armor occupies its personal slot and appears in the matching peer slot");
     public static final WorldlineBehavior DISPENSER_ITEM_EJECT = define("dispenser-item-eject", WorldlineFamily.REDSTONE,
             "A powered dispenser ejects ordinary inventory items as dropped entities");
+    public static final WorldlineBehavior MOB_DEATH_DROPS = define("mob-death-drops", WorldlineFamily.ITEM,
+            "Killing typed mobs emits their canonical server-authored item drops");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = WorldlineBehaviorRegistry.freeze();
     private final String token, family, subject;
 
