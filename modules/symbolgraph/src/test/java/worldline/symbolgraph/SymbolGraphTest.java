@@ -8,6 +8,7 @@ public final class SymbolGraphTest {
     public static void main(String[] arguments) throws Exception {
         parsesNamespacesAndMembers();
         auditsExactIntermediaryIdentity();
+        buildsDeterministicCrosswalk();
         rejectsMalformedDocuments();
         System.out.println("SymbolGraphTest passed");
     }
@@ -46,6 +47,28 @@ public final class SymbolGraphTest {
         failure(() -> read("tiny\t1\t0\ta\tb\n"));
         failure(() -> read("tiny\t2\t0\tintermediary\tnamed\n\tf\tI\tx\ty\n"));
         failure(() -> read("tiny\t2\t0\tintermediary\tintermediary\n"));
+    }
+
+    private static void buildsDeterministicCrosswalk() throws Exception {
+        TinyMapping inventory = read("tiny\t2\t0\tintermediary\tclientOfficial\tserverOfficial\n"
+                + "c\tclass_1\ta\tb\n"
+                + "\tf\tI\tfield_1\tc\t\n"
+                + "c\tclass_2\td\t\n");
+        TinyMapping named = read("tiny\t2\t0\tintermediary\tnamed\n"
+                + "c\tclass_1\tLevel\n"
+                + "\tf\tI\tfield_1\tseed\n"
+                + "\tm\t()V\tmethod_extra\thelper\n");
+        SymbolGraph first = new SymbolGraphBuilder().build(inventory, named);
+        SymbolGraph second = new SymbolGraphBuilder().build(inventory, named);
+        require(first.records().size() == 4, "union size");
+        require(first.sha256().equals(second.sha256()), "deterministic graph");
+        SymbolRecord shared = first.record(new SymbolKey(SymbolKind.CLASS, "", "class_1", ""));
+        require(shared.side() == SymbolSide.SHARED && "Level".equals(shared.nostalgia()), "shared alias");
+        SymbolRecord client = first.record(new SymbolKey(SymbolKind.FIELD, "class_1", "field_1", "I"));
+        require(client.side() == SymbolSide.CLIENT, "client member");
+        SymbolRecord extra = first.record(
+                new SymbolKey(SymbolKind.METHOD, "class_1", "method_extra", "()V"));
+        require(extra.side() == SymbolSide.UNRESOLVED && !extra.inventoryPresent(), "named-only member");
     }
 
     private static TinyMapping read(String text) throws Exception {
