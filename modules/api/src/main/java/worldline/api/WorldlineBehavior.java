@@ -110,6 +110,10 @@ public final class WorldlineBehavior {
             "Water contact solidifies source or flowing lava into obsidian or cobblestone");
     public static final WorldlineBehavior JUKEBOX_EJECT = define("jukebox-eject", WorldlineFamily.ITEM,
             "Breaking a playing jukebox ejects its inserted record as an item");
+    public static final WorldlineBehavior NETHER_BED_EXPLOSION = define("nether-bed-explosion", WorldlineFamily.ENVIRONMENT,
+            "Activating a bed in the Nether destroys it in a strength-five explosion");
+    public static final WorldlineBehavior BED_SPAWN_RESPAWN = define("bed-spawn-respawn", WorldlineFamily.PLAYER,
+            "Sleeping sets the subsequent same-dimension respawn at the bed");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = index();
     private final String token, family, subject;
 
@@ -179,7 +183,8 @@ public final class WorldlineBehavior {
                 ENVIRONMENTAL_DAMAGE, FENCE_COLLISION, REDSTONE_WIRE_POWER, REDSTONE_IRON_DOOR,
                 PISTON_MOTION, PISTON_PUSH_LIMITS, PISTON_QUASI_CONNECTIVITY,
                 PISTON_BUD_UPDATE, PISTON_HEAD_BREAK, FIRE_IGNITION, FIRE_PROPAGATION,
-                BUCKET_FLUID_CYCLE, FLUID_FLOW, WATER_LAVA_SOLIDIFICATION, JUKEBOX_EJECT };
+                BUCKET_FLUID_CYCLE, FLUID_FLOW, WATER_LAVA_SOLIDIFICATION, JUKEBOX_EJECT,
+                NETHER_BED_EXPLOSION, BED_SPAWN_RESPAWN };
         Map<String, WorldlineBehavior> map = new LinkedHashMap<String, WorldlineBehavior>();
         for (int i = 0; i < values.length; i++) {
             if (map.put(values[i].token(), values[i]) != null)
