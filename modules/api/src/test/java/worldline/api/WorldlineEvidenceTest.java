@@ -30,6 +30,17 @@ final class WorldlineEvidenceTest {
         if (!pin.equals(WorldlineEvidence.pin(smoke))) throw new AssertionError("smoke pin must use semantic token");
         smoke.setProperty("behavior", "creeper-fuse");
         if (!pin.equals(WorldlineEvidence.pin(smoke))) throw new AssertionError("explicit behavior pin drifted");
+        smoke.setProperty("testkit.fixture", "server-hostile-spawner");
+        smoke.setProperty("testkit.actions", "spawn-creeper,stay-in-fuse-range,advance-until-explosion");
+        smoke.setProperty("testkit.observations", "creeper-fuse-state,explosion-packet");
+        smoke.setProperty("testkit.binding", "worldline.b173server.Creeper#stayUntilExplode");
+        smoke.setProperty("testkit.evidence", "equatable");
+        WorldlineBehaviorContract contract = WorldlineBehaviorContract.from(smoke);
+        if (contract.behavior() != fuse || contract.actions().size() != 3
+                || !contract.canonical().startsWith("atlas.scenario.creeper-fuse|"))
+            throw new AssertionError("behavior contract drifted");
+        smoke.setProperty("testkit.evidence", "snapshot-only");
+        fail(() -> WorldlineBehaviorContract.from(smoke));
         fail(() -> WorldlineEvidence.pin("m448-creeper-fuse-set", SIGNAL, "pending"));
         fail(() -> WorldlineBehavior.require("m446-zombie-door-break-set"));
         fail(() -> WorldlineBehavior.require("not-a-behavior"));

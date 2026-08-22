@@ -40,6 +40,11 @@ All repository artifacts must be written in English.
    ID. Worldline-owned sites may use source-only `OptimizationRef`. External
    projects own their optimization records; Worldline may reference their IDs
    in evidence but must not copy project-specific implementation catalogs.
+10. Every new milestone must publish a stable `WorldlineBehavior` contract or
+    an explicitly reviewed structural capability. Behavioral milestones must
+    declare a reusable fixture, actions, observations, public binding, and
+    equatable evidence in `smoke.properties`. Milestone numbers are progress
+    aliases only and may not become the public TestKit identity.
 
 There is deliberately no repository-wide line cap. Growth must happen through
 small cohesive files and explicit modules rather than oversized source files.

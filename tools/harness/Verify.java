@@ -52,6 +52,7 @@ public final class Verify {
         run(Arrays.asList("java", "tools/harness/ReleaseCheck.java"));
         run(Arrays.asList("java", "tools/harness/OptimizationCatalogCheckTest.java"));
         run(Arrays.asList("java", "tools/harness/OptimizationCatalogCheck.java"));
+        run(Arrays.asList("java", "tools/harness/BehaviorCompletenessCheck.java"));
         if (runSmoke) {
             run(Arrays.asList("java", "tools/toolchains/Bootstrap.java", "retromcp"));
         }
