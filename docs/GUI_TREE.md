@@ -76,8 +76,8 @@ context.awaitUi(ui.getByRole("slot"), 20, slots -> slots.shouldHaveCount(4));
 Only `AssertionError` is retryable. Missing capabilities, inconsistent
 adapters, and runtime failures abort immediately.
 
-Failed and timed-out TestKit attempts automatically preserve a canonical
-`failure.gui.txt` tree. Adapters with `SCREENSHOT` also preserve
+Failed TestKit attempts automatically preserve a canonical `failure.gui.txt`
+tree before the runtime session closes. Adapters with `SCREENSHOT` also preserve
 `failure.gui.ppm`; a capture error is recorded separately and never replaces
 the original assertion or runtime failure.
 

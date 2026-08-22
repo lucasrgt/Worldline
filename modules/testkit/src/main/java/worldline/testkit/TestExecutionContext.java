@@ -118,7 +118,6 @@ final class TestExecutionContext implements TestContext {
     }
 
     void writeTimeout() {
-        GameUiFailureArtifacts.capture(runtime, artifacts);
         attach("timeout.wltrace", trace == null ? new byte[0]
                 : trace.value().getBytes(StandardCharsets.UTF_8));
         byte[] captured = snapshot(); if (captured != null) attach("timeout.wlsnapshot", captured);
