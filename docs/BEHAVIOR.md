@@ -36,6 +36,11 @@ to one public product or adapter source method; actions and observations must
 be unique stable tokens; and signal/signature evidence must already be frozen.
 Milestone numbers remain import aliases only.
 
+Tooling milestones use the same evidence and binding fields but declare
+`testkit.contract=<stable-token>` from `WorldlineContract` instead of a
+`behavior`. The two identities are mutually exclusive: a replay, trace,
+package, or minimization contract must not be mislabeled as vanilla behavior.
+
 The historical backlog is an explicit ratchet in
 `behavior/coverage.properties`. Backfill changes must reduce
 `pending.expected`; it may never increase. Pending means incomplete work, not

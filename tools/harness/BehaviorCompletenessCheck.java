@@ -22,7 +22,8 @@ public final class BehaviorCompletenessCheck {
     private static final Pattern BINDING = Pattern.compile(
             "([a-z][A-Za-z0-9_.]*[A-Z][A-Za-z0-9_]*)#([a-z][A-Za-z0-9_]*)");
     private final Path root = Paths.get("").toAbsolutePath().normalize();
-    private final Set<String> catalog = new HashSet<String>();
+    private final Set<String> behaviorCatalog = new HashSet<String>();
+    private final Set<String> contractCatalog = new HashSet<String>();
     private final Set<String> pendingNonnumeric = new HashSet<String>();
     private int pendingMax;
     private int pendingExpected;
@@ -35,15 +36,20 @@ public final class BehaviorCompletenessCheck {
 
     private void execute() throws Exception {
         loadPolicy();
-        loadCatalog();
+        loadCatalog("WorldlineBehavior.java", behaviorCatalog);
+        loadCatalog("WorldlineContract.java", contractCatalog);
         int complete = 0, pending = 0, total = 0;
         for (Path manifest : manifests()) {
             total++;
             Properties smoke = load(manifest);
             String directory = manifest.getParent().getFileName().toString();
             String behavior = smoke.getProperty("behavior", "").trim();
-            if (behavior.isEmpty()) { requirePending(directory); pending++; }
-            else { validateContract(smoke, manifest, behavior); complete++; }
+            String contract = smoke.getProperty("testkit.contract", "").trim();
+            require(behavior.isEmpty() || contract.isEmpty(),
+                    "manifest declares behavior and tooling contract: " + relative(manifest));
+            if (behavior.isEmpty() && contract.isEmpty()) { requirePending(directory); pending++; }
+            else { validateContract(smoke, manifest, behavior.isEmpty() ? contract : behavior,
+                    behavior.isEmpty() ? contractCatalog : behaviorCatalog); complete++; }
         }
         require(pending == pendingExpected,
                 "backfill ratchet drift: expected " + pendingExpected + " but found " + pending);
@@ -59,11 +65,11 @@ public final class BehaviorCompletenessCheck {
         Collections.addAll(pendingNonnumeric, required(policy, "pending.nonnumeric").split(","));
     }
 
-    private void loadCatalog() throws IOException {
-        Path source = root.resolve("modules/api/src/main/java/worldline/api/WorldlineBehavior.java");
+    private void loadCatalog(String file, Set<String> target) throws IOException {
+        Path source = root.resolve("modules/api/src/main/java/worldline/api").resolve(file);
         Matcher matcher = CATALOG.matcher(new String(Files.readAllBytes(source), StandardCharsets.UTF_8));
-        while (matcher.find()) require(catalog.add(matcher.group(1)), "duplicate behavior catalog token");
-        require(!catalog.isEmpty(), "empty WorldlineBehavior catalog");
+        while (matcher.find()) require(target.add(matcher.group(1)), "duplicate contract catalog token");
+        require(!target.isEmpty(), "empty contract catalog " + file);
     }
 
     private List<Path> manifests() throws IOException {
@@ -83,9 +89,10 @@ public final class BehaviorCompletenessCheck {
         require(pendingNonnumeric.contains(directory), "unregistered smoke lacks behavior contract: " + directory);
     }
 
-    private void validateContract(Properties smoke, Path manifest, String behavior) throws IOException {
-        require(TOKEN.matcher(behavior).matches() && catalog.contains(behavior),
-                "unknown behavior " + behavior + " in " + relative(manifest));
+    private void validateContract(Properties smoke, Path manifest, String identity,
+            Set<String> catalog) throws IOException {
+        require(TOKEN.matcher(identity).matches() && catalog.contains(identity),
+                "unknown TestKit contract " + identity + " in " + relative(manifest));
         token(required(smoke, "testkit.fixture"), "fixture", manifest);
         tokenList(required(smoke, "testkit.actions"), "actions", manifest);
         tokenList(required(smoke, "testkit.observations"), "observations", manifest);

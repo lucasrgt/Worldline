@@ -10,6 +10,7 @@ public final class DomainApiTest {
         uiSpecRoundTripsBuilderAndInventory();
         itemCensusIsExactAndFailClosed();
         itemStackRecipePreservesMetadata();
+        WorldlineContractTest.run();
         semanticMappingIsExactAndFailClosed();
         expandedSurfaceDefaultsFailClosed();
         serverStateIsExactAndFailClosed();
