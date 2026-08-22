@@ -4,6 +4,18 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
+## Unreleased - Integration Hygiene and Anti-Slop Audit
+
+Status: developer tooling; not a vanilla SET GO.
+
+- Added the `b1-7-3-anti-slop` repository skill, its evidence-backed review
+  references, and a fail-closed side-safety audit for common and server roots.
+- GUI smoke cleanup now removes an empty per-arm worktree parent after both
+  registered Aero worktrees are gone, while retaining the existing path and
+  registration safety checks.
+- Runtime Fabric self-tests require parent-cleanup coverage across all 37 GUI
+  smoke cycles.
+
 ## Unreleased - WorldlineEvidence Equatable
 
 Status: public API for kit/verb equality; not a vanilla SET GO.

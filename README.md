@@ -629,6 +629,20 @@ code, metadata, mappings, patches, transforms, and reproducible evidence only.
 java tools/harness/Verify.java
 ```
 
+### Beta 1.7.3 anti-slop audit
+
+The repository-local [`b1-7-3-anti-slop`](skills/b1-7-3-anti-slop/SKILL.md)
+skill documents mapping, side-boundary, Mixin, performance, storage, and
+evidence-promotion review rules. Its deterministic side-safety scanner fails
+closed on missing roots and reports stable rule IDs:
+
+```text
+python skills/b1-7-3-anti-slop/scripts/audit_side_safety.py \
+  --project . \
+  --common-root src/main/java \
+  --server-root src/server/java
+```
+
 ### Runtime identity and mapped adapter
 
 ```text

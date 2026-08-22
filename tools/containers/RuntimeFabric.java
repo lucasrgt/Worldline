@@ -126,12 +126,14 @@ public final class RuntimeFabric {
                 "Windows Job launcher self-test failed");
         require(capture(List.of(java(), "tools/containers/OfficialRuntimeLease.java", "--self-test"), 30).passed,
                 "official runtime lease self-test failed");
-        int optimized = 0;
+        int optimized = 0, parentCleanup = 0;
         try (var paths = Files.list(ROOT.resolve("tools/smoke"))) { for (Path source : paths.filter(path -> path.toString().endsWith(".java")).toList()) {
             String text = Files.readString(source); require(!text.contains("p.descendants().anyMatch"), "quadratic process cleanup in " + source);
             if (text.contains("Set<Long>descendants=p.descendants()")) optimized++;
+            if (text.contains("Files.deleteIfExists(parent)")) parentCleanup++;
         }}
         require(optimized >= 36, "optimized smoke cleanup coverage drift: " + optimized);
+        require(parentCleanup >= 37, "parent worktree cleanup coverage drift: " + parentCleanup);
         System.out.println("runtime fabric self-test passed");
     }
 
