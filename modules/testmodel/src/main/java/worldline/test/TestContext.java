@@ -8,6 +8,7 @@ import worldline.api.BlockState;
 import worldline.api.GamePlayer;
 import worldline.api.GamePosition;
 import worldline.api.GameUi;
+import worldline.api.GameUiImage;
 import worldline.api.UiMinecraftRuntime;
 
 /** Capabilities and diagnostics owned by one isolated test attempt. */
@@ -34,6 +35,12 @@ public interface TestContext {
         GameUi ui = ((UiMinecraftRuntime) value).ui();
         if (ui == null) throw new IllegalStateException("E2301 runtime returned no semantic UI");
         return ui;
+    }
+    default GameUiImage screenshot(String name) {
+        if (name == null || name.trim().isEmpty()) throw new IllegalArgumentException("screenshot name is blank");
+        GameUiImage image = ui().screenshot();
+        attach(name.trim() + ".ppm", image.ppm());
+        return image;
     }
     default void tick(int count) { runtime().tick(count); }
     default GamePlayer player() { return runtime().player(); }

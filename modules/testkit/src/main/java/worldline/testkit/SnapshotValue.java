@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import worldline.api.GameUiImage;
 
 /** Deterministic bounded snapshot rendering for stable Java values. */
 final class SnapshotValue {
@@ -24,6 +25,9 @@ final class SnapshotValue {
         }
         if (value instanceof Number || value instanceof Boolean || value instanceof Enum<?>) {
             target.append(value); return;
+        }
+        if (value instanceof GameUiImage) {
+            target.append(((GameUiImage) value).snapshotValue()); return;
         }
         Class<?> type = value.getClass();
         if (type.isArray()) {

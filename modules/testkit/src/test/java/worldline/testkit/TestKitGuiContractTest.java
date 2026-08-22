@@ -15,7 +15,9 @@ import worldline.api.GamePlayer;
 import worldline.api.GamePosition;
 import worldline.api.GameUi;
 import worldline.api.GameUiCapability;
+import worldline.api.GameUiImage;
 import worldline.api.GameUiNode;
+import worldline.api.GameUiVisual;
 import worldline.api.GameWorld;
 import worldline.api.ItemCensus;
 import worldline.api.RuntimeState;
@@ -34,19 +36,23 @@ public final class TestKitGuiContractTest {
 
     public static void main(String[] arguments) throws Exception {
         Path root = Files.createTempDirectory("worldline-test-gui-");
+        TestRunResult updated = run(root.resolve("ui"), new Provider(true), true);
         Provider ui = new Provider(true);
-        TestRunResult passed = run(root.resolve("ui"), ui);
-        require(passed.passed() && ui.runtime.gui.clicks == 1, "semantic UI test did not pass");
-        TestRunResult rejected = run(root.resolve("headless"), new Provider(false));
+        TestRunResult passed = run(root.resolve("ui"), ui, false);
+        require(updated.passed() && passed.passed() && ui.runtime.gui.clicks == 1,
+                "semantic UI test did not pass");
+        require(hasArtifact(passed, "crusher.ppm"), "visual artifact missing");
+        TestRunResult rejected = run(root.resolve("headless"), new Provider(false), false);
         require(rejected.count(TestStatus.FAILED) == 1
                 && rejected.tests().get(0).errorMessage().contains("E2301"),
                 "runtime without UI did not fail closed");
         System.out.println("TestKitGuiContractTest passed");
     }
 
-    private static TestRunResult run(Path root, Provider provider) {
+    private static TestRunResult run(Path root, Provider provider, boolean update) {
         RunnerOptions options = new RunnerOptions().provider(provider).artifacts(root.resolve("artifacts"))
-                .snapshots(root.resolve("snapshots")).runtimeLock(root.resolve("runtime.lock"));
+                .snapshots(root.resolve("snapshots")).runtimeLock(root.resolve("runtime.lock"))
+                .updateSnapshots(update);
         return new TestRunner().run(new GuiSpec(), options, null);
     }
 
@@ -57,6 +63,7 @@ public final class TestKitGuiContractTest {
                 ui.getByRole(GameUiNode.SLOT).shouldHaveCount(2);
                 ui.getByLabel("Input").click();
                 expect(ui.getSlot(0).single().itemId()).toEqual(265);
+                expect(context.screenshot("crusher")).toMatchSnapshot("crusher");
             }));
         }
     }
@@ -90,11 +97,12 @@ public final class TestKitGuiContractTest {
         @Override public GameUi ui() { return gui; }
     }
 
-    private static final class FakeUi implements GameUi {
+    private static final class FakeUi implements GameUiVisual {
         int clicks;
         @Override public Set<GameUiCapability> capabilities() {
             return Collections.unmodifiableSet(EnumSet.of(
-                    GameUiCapability.SEMANTIC_TREE, GameUiCapability.NODE_CLICK));
+                    GameUiCapability.SEMANTIC_TREE, GameUiCapability.NODE_CLICK,
+                    GameUiCapability.SCREENSHOT));
         }
         @Override public String screen() { return "crusher"; }
         @Override public List<GameUiNode> nodes() {
@@ -107,6 +115,9 @@ public final class TestKitGuiContractTest {
         @Override public void openInventory() {}
         @Override public void close() {}
         @Override public void click(GameUiNode node) { clicks++; }
+        @Override public GameUiImage screenshot() {
+            return new GameUiImage(2, 1, new int[] {0xff112233, 0xff445566});
+        }
     }
 
     private static final class World implements GameWorld {
@@ -133,5 +144,12 @@ public final class TestKitGuiContractTest {
 
     private static void require(boolean condition, String message) {
         if (!condition) throw new AssertionError(message);
+    }
+
+    private static boolean hasArtifact(TestRunResult result, String name) {
+        for (Path path : result.tests().get(0).artifacts()) {
+            if (name.equals(path.getFileName().toString())) return true;
+        }
+        return false;
     }
 }

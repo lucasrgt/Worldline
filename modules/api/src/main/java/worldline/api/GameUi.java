@@ -45,6 +45,14 @@ public interface GameUi {
         return ((GameUiLayout) this).viewport();
     }
 
+    default GameUiImage screenshot() {
+        require(GameUiCapability.SCREENSHOT);
+        if (!(this instanceof GameUiVisual)) throw capabilityContract(GameUiCapability.SCREENSHOT);
+        GameUiImage image = ((GameUiVisual) this).screenshot();
+        if (image == null) throw new IllegalStateException("E2304 UI adapter returned no screenshot");
+        return image;
+    }
+
     default IllegalStateException capabilityContract(GameUiCapability capability) {
         return new IllegalStateException("E2303 UI adapter declares " + capability
                 + " without its capability interface");
