@@ -90,12 +90,87 @@ public final class GameUiQuery {
         return this;
     }
 
+    public GameUiQuery shouldBeVisible() {
+        if (!single().visible()) throw failure("expected a visible node");
+        return this;
+    }
+
+    public GameUiQuery shouldBeEnabled() {
+        if (!single().enabled()) throw failure("expected an enabled node");
+        return this;
+    }
+
+    public GameUiQuery shouldBeEmpty() {
+        if (!single().empty()) throw failure("expected an empty node");
+        return this;
+    }
+
+    public GameUiQuery shouldHaveItem(int itemId, int count) {
+        GameUiNode node = single();
+        if (node.itemId() != itemId || node.count() != count) {
+            throw failure("expected item " + itemId + "x" + count + " but was "
+                    + node.itemId() + "x" + node.count());
+        }
+        return this;
+    }
+
+    public GameUiQuery focus() {
+        input(GameUiCapability.FOCUS).focus(single());
+        return this;
+    }
+
+    public GameUiQuery type(String value) {
+        if (value == null) throw new NullPointerException("text");
+        input(GameUiCapability.KEYBOARD).type(single(), value);
+        return this;
+    }
+
+    public GameUiQuery press(GameUiKey key) {
+        focus(); ui.press(key); return this;
+    }
+
+    public GameUiQuery hover() {
+        input(GameUiCapability.POINTER).hover(single());
+        return this;
+    }
+
+    public GameUiQuery dragTo(GameUiQuery target) {
+        if (target == null) throw new NullPointerException("target");
+        input(GameUiCapability.DRAG_DROP).drag(single(), target.single(), 0);
+        return this;
+    }
+
+    public GameUiBounds bounds() {
+        ui.require(GameUiCapability.GEOMETRY);
+        if (!(ui instanceof GameUiLayout)) throw ui.capabilityContract(GameUiCapability.GEOMETRY);
+        return ((GameUiLayout) ui).bounds(single());
+    }
+
+    public GameUiQuery shouldBeWithinViewport() {
+        GameUiBounds actual = bounds(), viewport = ui.viewport();
+        if (!viewport.contains(actual)) throw failure("is outside viewport " + viewport + ": " + actual);
+        return this;
+    }
+
+    public GameUiQuery shouldNotOverlap(GameUiQuery other) {
+        if (other == null) throw new NullPointerException("other");
+        GameUiBounds actual = bounds(), target = other.bounds();
+        if (actual.overlaps(target)) throw failure("overlaps " + other.description());
+        return this;
+    }
+
     private boolean matches(GameUiNode node) {
         return (role == null || role.equals(node.role()))
                 && (name == null || name.equals(node.name()))
                 && (label == null || label.equals(node.label()))
                 && (text == null || text.equals(node.text()))
                 && (slot == null || slot.intValue() == node.index());
+    }
+
+    private GameUiInput input(GameUiCapability capability) {
+        ui.require(capability);
+        if (!(ui instanceof GameUiInput)) throw ui.capabilityContract(capability);
+        return (GameUiInput) ui;
     }
 
     private AssertionError failure(String message) {

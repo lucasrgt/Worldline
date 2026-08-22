@@ -25,6 +25,15 @@ public final class GameUiQueryTest {
         require(ui.getSlot(1).single().empty(), "slot locator");
         ui.getByLabel("Input").click();
         require(ui.clicks == 1, "locator click");
+        ui.getByLabel("Input").focus().type("ore").press(GameUiKey.ENTER).hover()
+                .shouldBeVisible().shouldBeEnabled().shouldHaveItem(265, 4)
+                .shouldBeWithinViewport().shouldNotOverlap(ui.getSlot(1));
+        ui.getSlot(0).dragTo(ui.getSlot(1));
+        require(ui.focused.index() == 0 && "ore".equals(ui.typed)
+                && ui.pressed == GameUiKey.ENTER && ui.hovered.index() == 0
+                && ui.dragged.index() == 1, "semantic input actions");
+        require(ui.getSlot(0).bounds().equals(new GameUiBounds(10, 20, 16, 16)), "node bounds");
+        require(ui.getSlot(1).shouldBeEmpty().single().empty(), "empty assertion");
         failure(() -> ui.getByRole(GameUiNode.SLOT).single(), "expected one node");
         failure(() -> ui.getByName("missing").first(), "matched no nodes");
         GameUi readOnly = new MutableUi(ui.nodes()) {
@@ -38,13 +47,16 @@ public final class GameUiQueryTest {
         System.out.println("GameUiQueryTest passed");
     }
 
-    private static class MutableUi implements GameUi {
+    private static class MutableUi implements GameUiInput, GameUiLayout {
         private final List<GameUiNode> nodes;
         int clicks;
         MutableUi(List<GameUiNode> nodes) { this.nodes = Collections.unmodifiableList(nodes); }
         @Override public Set<GameUiCapability> capabilities() {
             return Collections.unmodifiableSet(EnumSet.of(
-                    GameUiCapability.SEMANTIC_TREE, GameUiCapability.NODE_CLICK));
+                    GameUiCapability.SEMANTIC_TREE, GameUiCapability.NODE_CLICK,
+                    GameUiCapability.KEYBOARD, GameUiCapability.POINTER,
+                    GameUiCapability.FOCUS, GameUiCapability.DRAG_DROP,
+                    GameUiCapability.GEOMETRY));
         }
         @Override public String screen() { return "crusher"; }
         @Override public List<GameUiNode> nodes() { return nodes; }
@@ -55,6 +67,20 @@ public final class GameUiQueryTest {
         @Override public void openInventory() { throw new UnsupportedOperationException(); }
         @Override public void close() { throw new UnsupportedOperationException(); }
         @Override public void click(GameUiNode node) { clicks++; }
+        @Override public void focus(GameUiNode node) { focused = node; }
+        @Override public GameUiNode focused() { return focused; }
+        @Override public void type(GameUiNode node, String text) { focused = node; typed = text; }
+        @Override public void press(GameUiKey key) { pressed = key; }
+        @Override public void hover(GameUiNode node) { hovered = node; }
+        @Override public void click(int x, int y, int button) { clicks++; }
+        @Override public void drag(GameUiNode source, GameUiNode target, int button) { dragged = target; }
+        @Override public GameUiBounds viewport() { return new GameUiBounds(0, 0, 320, 240); }
+        @Override public GameUiBounds bounds(GameUiNode node) {
+            return node.index() < 0 ? viewport() : new GameUiBounds(10 + node.index() * 20, 20, 16, 16);
+        }
+        GameUiNode focused, hovered, dragged;
+        String typed;
+        GameUiKey pressed;
     }
 
     private static void failure(Runnable action, String message) {

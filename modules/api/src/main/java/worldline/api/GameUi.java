@@ -33,6 +33,23 @@ public interface GameUi {
 
     default GameUiQuery getSlot(int index) { return query().slot(index); }
 
+    default void press(GameUiKey key) {
+        require(GameUiCapability.KEYBOARD);
+        if (!(this instanceof GameUiInput)) throw capabilityContract(GameUiCapability.KEYBOARD);
+        ((GameUiInput) this).press(key);
+    }
+
+    default GameUiBounds viewport() {
+        require(GameUiCapability.GEOMETRY);
+        if (!(this instanceof GameUiLayout)) throw capabilityContract(GameUiCapability.GEOMETRY);
+        return ((GameUiLayout) this).viewport();
+    }
+
+    default IllegalStateException capabilityContract(GameUiCapability capability) {
+        return new IllegalStateException("E2303 UI adapter declares " + capability
+                + " without its capability interface");
+    }
+
     String screen();
 
     List<GameUiNode> nodes();
