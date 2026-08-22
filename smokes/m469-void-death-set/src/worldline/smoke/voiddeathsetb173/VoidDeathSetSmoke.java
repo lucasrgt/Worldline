@@ -11,13 +11,7 @@ public final class VoidDeathSetSmoke{
   require(seed==17320110707L&&user.equals("VoidDeath469")&&user.length()<=16,"void-death-set identity drift");
   Duration timeout=Duration.ofSeconds(180);B173DedicatedServer server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true);B173WireClient actor=new B173WireClient("127.0.0.1",port,user,timeout);
   try{server.boot();B173PlayerSeed.write(workspace,user,4.5D,-8.5D,4.5D);actor.connect();PlayerPose pose=actor.synchronizePose();require(actor.awaitInventory().occupiedSlots()==0&&actor.awaitHealth(20)==20&&pose.y()<0D,"void-death-set baseline drift y="+pose.y());
-   int steps=0;require(pose.y()>-64D&&actor.health()==20,"void walk must start above the kill plane");
-   while(pose.y()>-64D){require(++steps<=16&&actor.health()>0&&pose.y()<0D,"void walk failed y="+pose.y()+" health="+actor.health());pose=actor.moveAndObserve(0D,-Math.min(9D,pose.y()+72D),0D,1).resulting();}
-   require(pose.y()<=-64D&&pose.y()<0D&&actor.health()>0,"kill plane drift y="+pose.y()+" health="+actor.health());
-   int waited=0;while(actor.health()>0){require(++waited<=400,"void Packet8 health 0 absent health="+actor.health()+" y="+pose.y());actor.sustainTicks(1);}
-   int dead=actor.health();require(dead<=0&&pose.y()<0D,"void death Packet8 drift health="+dead+" y="+pose.y());if(dead==0)require(actor.awaitHealth(0)==0,"awaitHealth(0) drift");
-   RemoteRespawn respawn=actor.respawn();require(respawn.equals(new RemoteRespawn(0,0,20))&&actor.dimension()==0&&actor.health()==20,"void-death Packet9 respawn drift");
-   actor.sustainTicks(1);PlayerPose after=actor.moveAndObserve(0D,0D,0D,1).resulting();require(after.y()>=0D,"respawn pose still in void y="+after.y());
+   B173VoidDeath.Outcome death=B173VoidDeath.walkAndRespawn(actor,pose);int steps=death.steps();require(death.deadHealth()<=0&&death.deathPose().y()<0D&&death.respawn().equals(new RemoteRespawn(0,0,20))&&death.respawnPose().y()>=0D,"void death outcome drift");
    actor.close();awaitPlayers(server,0);server.save();ServerPlayerState saved=server.player(user);require(saved.dimension()==0&&saved.health()==20,"persisted void-death respawn drift");
    String evidence="walk-off=cap9,steps="+steps+",pose-y<0,health=20->0->20,packet8=0,packet9=09:00,dimension=0,spawn-y>=0,persisted=20,clients=1,disconnect=clean";
    String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=underside-void-air-above-kill|cause=packet13-walk-down-cap9-until-pose-y<0|wire=packet8-health20->0+packet9-dimension-zero|oracle=void-walk-death-not-fall-not-env-not-m135-wait-under-kill|"+evidence;
