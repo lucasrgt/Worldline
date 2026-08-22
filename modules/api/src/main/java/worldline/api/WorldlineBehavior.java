@@ -175,6 +175,10 @@ public final class WorldlineBehavior {
             "Retargeted spawners emit the requested hostile Packet24 identities");
     public static final WorldlineBehavior NATURAL_HOSTILE_SPAWN = define("natural-hostile-spawn", WorldlineFamily.HOSTILE,
             "Night-time monster spawning emits multiple hostile identities without spawners");
+    public static final WorldlineBehavior PORTAL_ACTIVATION = define("portal-activation", WorldlineFamily.WORLD,
+            "Igniting a valid obsidian frame fills its interior with portal blocks");
+    public static final WorldlineBehavior PORTAL_COORDINATE_SCALE = define("portal-coordinate-scale", WorldlineFamily.WORLD,
+            "Overworld-to-Nether portal travel applies the quantized eight-to-one scale");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = Collections.unmodifiableMap(
             new LinkedHashMap<String, WorldlineBehavior>(DEFINITIONS));
     private final String token, family, subject;
