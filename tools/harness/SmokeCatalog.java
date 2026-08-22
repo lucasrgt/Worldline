@@ -116,7 +116,7 @@ final class SmokeCatalog {
         {"tools/smoke/PlayerDeathDropsSetCycle.java", "m453-player-death-drops-set"}, {"tools/smoke/PeacefulDespawnSetCycle.java", "m454-peaceful-despawn-set"}, {"tools/smoke/MeleePursuitSetCycle.java", "m455-melee-pursuit-set"}, {"tools/smoke/CreeperFuseSetCycle.java", "m448-creeper-fuse-set"},
         {"tools/smoke/KnockbackCooldownSetCycle.java", "m452-knockback-cooldown-set"}, {"tools/smoke/SpiderLeapSetCycle.java", "m457-spider-leap-set"}, {"tools/smoke/SlimeTouchSetCycle.java", "m458-slime-touch-set"}, {"tools/smoke/GhastFireballHitSetCycle.java", "m459-ghast-fireball-hit-set"},
         {"tools/smoke/MonsterBedInterruptSetCycle.java", "m460-monster-bed-interrupt-set"}, {"tools/smoke/BowMobHitSetCycle.java", "m462-bow-mob-hit-set"}, {"tools/smoke/DifficultyDamageSetCycle.java", "m467-difficulty-damage-set"}, {"tools/smoke/VoidDeathSetCycle.java", "m469-void-death-set"}, {"tools/smoke/ExtendedHeadBreakSetCycle.java", "m554-extended-head-break-set"}, {"tools/smoke/PistonQcSetCycle.java", "m546-piston-qc-set"}, {"tools/smoke/StickyPistonQcSetCycle.java", "m547-sticky-piston-qc-set"},
-        {"tools/smoke/PistonBudSetCycle.java", "m548-piston-bud-set"},
+        {"tools/smoke/PistonBudSetCycle.java", "m548-piston-bud-set"}, {"tools/smoke/DispenserQcSetCycle.java", "m550-dispenser-qc-set"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}, {"tools/smoke/ModApiCycle.java", "m11-mod-api"}, {"tools/smoke/ModRunCycle.java", "m12-mod-run"}, {"tools/smoke/ModGraphCycle.java", "m13-mod-graph"},
         {"tools/smoke/ScenarioDslCycle.java", "m14-scenario-dsl"}, {"tools/smoke/CensusCycle.java", "census-cycle"}, {"tools/smoke/AtlasCycle.java", "seed-atlas"}, {"tools/smoke/UiExportCycle.java", "ui-export"}
     };

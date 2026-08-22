@@ -223,6 +223,17 @@ Status: GO.
   behavioral evidence. TestKit remains 0.x until external-mod use validates
   the authoring surface.
 
+## 1.451.0 - M550 Dispenser QC set
+
+Status: GO for official dispenser-23 quasi-connectivity cobble eject together.
+
+- Floor lever on the stone ABOVE dispenser `23:4` ejected Packet21 cobble `4x1` with no adjacent side lever on the dispenser.
+- Distinct from M153/M333 adjacent-power eject. Arrows, buckets, and TNT stay unclaimed.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M550 semantic SHA-256 is
+`fbebc71b9da63b30d1c347778fb92cafea108114e52b79af79ae955487ef73db`.
+
 ## 1.450.0 - M548 Piston BUD set
 
 Status: GO for official piston-33 neighbor-update pulse with no continuous power together.
