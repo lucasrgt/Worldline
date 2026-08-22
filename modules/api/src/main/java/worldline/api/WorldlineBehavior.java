@@ -76,6 +76,8 @@ public final class WorldlineBehavior {
             "Overworld death and Packet9 respawn into the Overworld");
     public static final WorldlineBehavior CROSS_DIMENSION_RESPAWN = define("cross-dimension-respawn", WorldlineFamily.PLAYER,
             "Nether death and Packet9 respawn into the Overworld");
+    public static final WorldlineBehavior BLOCK_PLACEMENT_PERSISTENCE = define("block-placement-persistence", WorldlineFamily.WORLD,
+            "Server-authoritative held-block placement across fresh login");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = index();
     private final String token, family, subject;
 
@@ -141,7 +143,7 @@ public final class WorldlineBehavior {
                 BED_SLEEP_SKIP, NOTE_BLOCK_CLICK, SIGN_TEXT_PERSISTENCE, PAINTING_SPAWN,
                 NOTE_BLOCK_INSTRUMENT, PAINTING_ORIENTATION, JUKEBOX_RECORD_PLAY, SHEARS_HARVEST,
                 SWORD_DAMAGE, MILK_BUCKET_CYCLE, DUAL_DIMENSION_SESSION, SAME_DIMENSION_RESPAWN,
-                CROSS_DIMENSION_RESPAWN };
+                CROSS_DIMENSION_RESPAWN, BLOCK_PLACEMENT_PERSISTENCE };
         Map<String, WorldlineBehavior> map = new LinkedHashMap<String, WorldlineBehavior>();
         for (int i = 0; i < values.length; i++) {
             if (map.put(values[i].token(), values[i]) != null)
