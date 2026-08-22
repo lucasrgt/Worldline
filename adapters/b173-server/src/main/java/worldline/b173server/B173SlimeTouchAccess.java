@@ -8,7 +8,7 @@ import worldline.api.RemoteMobMovement;
 import worldline.api.RemoteMobSpawn;
 import worldline.api.RemoteWorldView;
 
-/** Packet24 type-55 take, metadata size peek, and AABB contact for Packet8. */
+/** Reusable Packet24 slime take, metadata size, and AABB-contact boundary. */
 public final class B173SlimeTouchAccess {
     public static final int TYPE = 55;
 

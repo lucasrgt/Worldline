@@ -7,7 +7,7 @@ import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteMobMovement;
 import worldline.api.RemoteMobSpawn;
 
-/** Packet24 type-52 take, cap-9 pad approach, leap-toward-actor, and Packet8 touch. */
+/** Reusable Packet24 spider take, leap-toward-actor, and Packet8 touch boundary. */
 public final class B173SpiderLeapAccess {
     public static final int TYPE = 52, GOLDEN = 322, CAP = 9;
 
