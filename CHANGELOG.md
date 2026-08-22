@@ -223,6 +223,17 @@ Status: GO.
   behavioral evidence. TestKit remains 0.x until external-mod use validates
   the authoring surface.
 
+## 1.455.0 - M559 Double extender set
+
+Status: GO for official sequenced sticky-29 then piston-33 two-cell payload travel together.
+
+- Rear sticky `29` then front `33` moved cobble two cells west (`2,65,4 -> 0,65,4`).
+- Distinct from M145 two-block payload on one piston and M147 12-block limit.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M559 semantic SHA-256 is
+`49d44fb82433fdcf9dcf8ca5201aa946b783e9d3539c9689d6a2284af36fac0f`.
+
 ## 1.454.0 - M549 Sticky BUD set
 
 Status: GO for official sticky-29 primed QC plus neighbor-update extend together.
