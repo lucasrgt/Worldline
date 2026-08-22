@@ -223,6 +223,17 @@ Status: GO.
   behavioral evidence. TestKit remains 0.x until external-mod use validates
   the authoring surface.
 
+## 1.449.0 - M547 Sticky piston QC set
+
+Status: GO for official sticky-29 quasi-connectivity extend plus pull together.
+
+- Lever on the stone ABOVE west sticky `29` QC-extended `29:4 -> 29:12` with head `34:12`, then pulled the payload.
+- Distinct from M546 regular-33 QC, M367 dual-arm motion, and M144 support-lever pull.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M547 semantic SHA-256 is
+`21af5dafa50bb529a1c0264a2be27d9b92aa0728c007fae07ecbef1547d92b1d`.
+
 ## 1.448.0 - M546 Piston QC set
 
 Status: GO for official piston-33 quasi-connectivity extend plus retract together.

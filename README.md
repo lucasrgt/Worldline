@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/milestone-v1.448.0%20M546%20GO-2EA44F?style=flat-square" alt="Worldline v1.448.0 M546 GO">
+  <img src="https://img.shields.io/badge/milestone-v1.449.0%20M547%20GO-2EA44F?style=flat-square" alt="Worldline v1.449.0 M547 GO">
   <img src="https://img.shields.io/badge/Minecraft-Beta%201.7.3-62B47A?style=flat-square" alt="Minecraft Beta 1.7.3">
   <img src="https://img.shields.io/badge/product-Java%208-5586A4?style=flat-square" alt="Java 8 product">
   <img src="https://img.shields.io/badge/harness-JDK%2021-6B5B95?style=flat-square" alt="JDK 21 harness">
@@ -41,7 +41,7 @@ decompiled game code.
 
 ## Current status
 
-The official main line is **Worldline v1.448.0 / M546**. Its stable foundation
+The official main line is **Worldline v1.449.0 / M547**. Its stable foundation
 includes the controlled runtime, domain automation, durable reproduction
 artifacts, trace analysis, descriptor-selected mod loading, differential mod
 testing, and automatic scenario minimization. Later milestones add bounded
@@ -75,8 +75,8 @@ behavior evidence without silently widening those early public APIs.
 | Scenario DSL | Public step grammar with validation and controlled execution | GO |
 | M20-M67 | Official server lifecycle, protocol-14 control, multiplayer, inventory, crafting, and combat | GO |
 | M68-M110 | Real Aero client composition, renderer census, cell pages, cache pressure, and controls | GO |
-| M111-M546 | Official vanilla world, block, item, entity, crafting, AI, damage, death, and piston QC sets | GO |
-| M546 | Current release: official piston quasi-connectivity extend and retract set | GO |
+| M111-M547 | Official vanilla world, block, item, entity, crafting, AI, damage, death, and piston QC sets | GO |
+| M547 | Current release: official sticky piston quasi-connectivity extend and pull set | GO |
 | TestKit 0.x | Experimental Java specs, isolated runner, reporters, artifacts, and CLI | EXPERIMENTAL |
 | Registry census | Canonical blocks/items/recipes/smelts dumps of the controlled client | GO |
 | Seed atlas | Official-server terrain maps for any seed as deterministic pages | GO |
