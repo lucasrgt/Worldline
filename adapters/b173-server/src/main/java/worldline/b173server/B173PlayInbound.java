@@ -136,6 +136,8 @@ final class B173PlayInbound {
         return items.awaitDroppedItem(expected, this::pumpOne); }
     RemoteItemCollection awaitItemCollection(worldline.api.RemoteDroppedItem expected, String username)
             throws IOException { return items.awaitCollection(expected, username, this::pumpOne); }
+    boolean itemDespawned(worldline.api.RemoteDroppedItem expected) { return items.despawned(expected); }
+    boolean itemCollected(worldline.api.RemoteDroppedItem expected) { return items.collected(expected); }
 
     void enableImplicitChunks() { cache.enableImplicitLoads(); }
 
