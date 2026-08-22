@@ -1901,3 +1901,5 @@ M554 adds no public API. Extended piston `33:12` Packet14 base break plus head-`
 M546 adds no public API. Power-above piston `33:4 -> 33:12` plus retract with `direct-power=false` share one piston-QC family.
 
 M547 adds no public API. Power-above sticky `29:4 -> 29:12` plus payload pull share one sticky-piston-QC family.
+
+M548 adds no public API. Neighbor-update piston pulse `33:4 -> 36:4 -> 33:4` with `power=none` shares one piston-BUD family.

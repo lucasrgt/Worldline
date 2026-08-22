@@ -223,6 +223,17 @@ Status: GO.
   behavioral evidence. TestKit remains 0.x until external-mod use validates
   the authoring surface.
 
+## 1.450.0 - M548 Piston BUD set
+
+Status: GO for official piston-33 neighbor-update pulse with no continuous power together.
+
+- Torch place on the payload was the BUD update; moving piston `36:4` then self-cleared to `33:4` with the stone left behind (`power=none`).
+- Distinct from M367 lever-power and M546 QC-held `33:12`.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M548 semantic SHA-256 is
+`64edc418a23140583ce5015dead697010582f99862cc5e19d6e8e7e53f02bcff`.
+
 ## 1.449.0 - M547 Sticky piston QC set
 
 Status: GO for official sticky-29 quasi-connectivity extend plus pull together.
