@@ -223,6 +223,17 @@ Status: GO.
   behavioral evidence. TestKit remains 0.x until external-mod use validates
   the authoring surface.
 
+## 1.458.0 - M557 One-tick pulse set
+
+Status: GO for official 1-tick repeater piston pulse that leaves a pushed block together.
+
+- Floor lever through west 1-tick repeater `93:3` pulsed piston `33`; stone remained at `2:65:4` after retract.
+- Distinct from M367 full lever hold and M144 sticky pull.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M557 semantic SHA-256 is
+`cd7816b4b28602a9d7bb4cb6e65bbfc8918216b84e075b8912af314905ec7c05`.
+
 ## 1.457.0 - M564 Spawn light set
 
 Status: GO for official hostile Packet24 at light <=7 plus torch-light rejection together.
