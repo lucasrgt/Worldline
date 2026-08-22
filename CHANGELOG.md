@@ -45,6 +45,10 @@ Status: GO candidate after central audit correction; published history is preser
 - Stabilized M29's first decoded-chunk wait with the same bounded flying pulse,
   packet ceiling, runtime deadline, and cache diagnostics used by later remote
   world waits; the Packet51 decoder and frozen signature remain unchanged.
+- Replaced M70's probabilistic `/give` drop pickups and randomized first-login
+  placement with official-format player NBT fixtures for all three participants,
+  the victim's leather pieces, and the attacker's diamond sword; the armor equip,
+  ordered combat packets, Aero window, and frozen signature are unchanged.
 
 ## Unreleased - Integration Hygiene and Anti-Slop Audit
 
