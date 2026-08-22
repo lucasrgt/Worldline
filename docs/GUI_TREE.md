@@ -68,7 +68,8 @@ adapters, and runtime failures abort immediately.
 | --- | --- | --- | --- | --- |
 | Semantic tree and locators | GO | GO | GO | available through bridge |
 | Inventory lifecycle and slot click | GO | GO | semantic click only | consumer-specific |
-| Keyboard, focus, pointer, drag/drop | GO | pending runtime evidence | pending extended host contract | pending consumer evidence |
+| Text input, value input, focus, secondary click | GO | secondary click prepared; others screen-specific | reflective bridge prepared; pending runtime evidence | pending consumer evidence |
+| General keys, pointer coordinates, drag/drop | GO | pointer/drag prepared; pending runtime evidence | requires direct neutral capability | pending consumer evidence |
 | Bounds, viewport, clipping, overlap | GO | pending runtime evidence | pending extended host contract | pending consumer evidence |
 | ARGB capture, exact diff, snapshots | GO | pending native capture | pending native capture | pending native capture |
 

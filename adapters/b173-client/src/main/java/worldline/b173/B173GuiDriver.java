@@ -19,12 +19,18 @@ final class B173GuiDriver {
 
     void focus(GameUiNode node) { throw unavailable(GameUiCapability.FOCUS); }
     GameUiNode focused() { throw unavailable(GameUiCapability.FOCUS); }
-    void type(GameUiNode node, String text) { throw unavailable(GameUiCapability.KEYBOARD); }
+    void type(GameUiNode node, String text) { throw unavailable(GameUiCapability.TEXT_INPUT); }
     void press(GameUiKey key) { throw unavailable(GameUiCapability.KEYBOARD); }
 
     void hover(GameUiNode node) {
         GameUiBounds bounds = bounds(node); pointer(bounds.centerX(), bounds.centerY(), -1, false);
     }
+
+    void rightClick(GameUiNode node) {
+        GameUiBounds bounds = bounds(node); click(bounds.centerX(), bounds.centerY(), 1);
+    }
+
+    void setValue(GameUiNode node, int value) { throw unavailable(GameUiCapability.VALUE_INPUT); }
 
     void click(int x, int y, int button) {
         button(button); pointer(x, y, button, true); pointer(x, y, button, false);

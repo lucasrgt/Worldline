@@ -60,6 +60,8 @@ public final class GameUiNode {
 
     public boolean enabled() { return flag("enabled", true); }
 
+    public boolean focused() { return flag("focused", false); }
+
     public boolean empty() { return itemId < 0; }
 
     @Override public boolean equals(Object other) {

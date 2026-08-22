@@ -29,9 +29,11 @@ public final class GameUiQueryTest {
                 .shouldBeVisible().shouldBeEnabled().shouldHaveItem(265, 4)
                 .shouldBeWithinViewport().shouldNotOverlap(ui.getSlot(1));
         ui.getSlot(0).dragTo(ui.getSlot(1));
+        ui.getSlot(0).rightClick().setValue(7);
         require(ui.focused.index() == 0 && "ore".equals(ui.typed)
                 && ui.pressed == GameUiKey.ENTER && ui.hovered.index() == 0
-                && ui.dragged.index() == 1, "semantic input actions");
+                && ui.dragged.index() == 1 && ui.secondary.index() == 0 && ui.assigned == 7,
+                "semantic input actions");
         require(ui.getSlot(0).bounds().equals(new GameUiBounds(10, 20, 16, 16)), "node bounds");
         require(ui.getSlot(1).shouldBeEmpty().single().empty(), "empty assertion");
         ui.getByLabel("Input").shouldHaveLabel("Input").shouldHaveText("Iron");
@@ -68,7 +70,9 @@ public final class GameUiQueryTest {
         @Override public Set<GameUiCapability> capabilities() {
             return Collections.unmodifiableSet(EnumSet.of(
                     GameUiCapability.SEMANTIC_TREE, GameUiCapability.NODE_CLICK,
-                    GameUiCapability.KEYBOARD, GameUiCapability.POINTER,
+                    GameUiCapability.KEYBOARD, GameUiCapability.TEXT_INPUT,
+                    GameUiCapability.VALUE_INPUT, GameUiCapability.SECONDARY_CLICK,
+                    GameUiCapability.POINTER,
                     GameUiCapability.FOCUS, GameUiCapability.DRAG_DROP,
                     GameUiCapability.GEOMETRY));
         }
@@ -86,14 +90,16 @@ public final class GameUiQueryTest {
         @Override public void type(GameUiNode node, String text) { focused = node; typed = text; }
         @Override public void press(GameUiKey key) { pressed = key; }
         @Override public void hover(GameUiNode node) { hovered = node; }
+        @Override public void rightClick(GameUiNode node) { secondary = node; }
+        @Override public void setValue(GameUiNode node, int value) { assigned = value; }
         @Override public void click(int x, int y, int button) { clicks++; }
         @Override public void drag(GameUiNode source, GameUiNode target, int button) { dragged = target; }
         @Override public GameUiBounds viewport() { return new GameUiBounds(0, 0, 320, 240); }
         @Override public GameUiBounds bounds(GameUiNode node) {
             return node.index() < 0 ? viewport() : new GameUiBounds(10 + node.index() * 20, 20, 16, 16);
         }
-        GameUiNode focused, hovered, dragged;
-        String typed;
+        GameUiNode focused, hovered, dragged, secondary;
+        String typed; int assigned;
         GameUiKey pressed;
     }
 

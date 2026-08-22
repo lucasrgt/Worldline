@@ -31,7 +31,8 @@ public final class B173Gui implements GameUiInput, GameUiLayout, GameUiVisual {
         GameUi foreign = B173ForeignUi.bind(current());
         return foreign == null ? Collections.unmodifiableSet(EnumSet.of(GameUiCapability.SEMANTIC_TREE,
                 GameUiCapability.INVENTORY_LIFECYCLE, GameUiCapability.NODE_CLICK,
-                GameUiCapability.POINTER, GameUiCapability.DRAG_DROP, GameUiCapability.GEOMETRY))
+                GameUiCapability.SECONDARY_CLICK, GameUiCapability.POINTER,
+                GameUiCapability.DRAG_DROP, GameUiCapability.GEOMETRY))
                 : foreign.capabilities();
     }
 
@@ -117,6 +118,8 @@ public final class B173Gui implements GameUiInput, GameUiLayout, GameUiVisual {
     @Override public void type(GameUiNode node, String text) { GameUiInput value = foreignInput(); if (value != null) value.type(node, text); else driver.type(node, text); }
     @Override public void press(GameUiKey key) { GameUiInput value = foreignInput(); if (value != null) value.press(key); else driver.press(key); }
     @Override public void hover(GameUiNode node) { GameUiInput value = foreignInput(); if (value != null) value.hover(node); else driver.hover(node); }
+    @Override public void rightClick(GameUiNode node) { GameUiInput value = foreignInput(); if (value != null) value.rightClick(node); else driver.rightClick(node); }
+    @Override public void setValue(GameUiNode node, int number) { GameUiInput value = foreignInput(); if (value != null) value.setValue(node, number); else driver.setValue(node, number); }
     @Override public void click(int x, int y, int button) { GameUiInput value = foreignInput(); if (value != null) value.click(x, y, button); else driver.click(x, y, button); }
     @Override public void drag(GameUiNode source, GameUiNode target, int button) {
         GameUiInput foreign = foreignInput();

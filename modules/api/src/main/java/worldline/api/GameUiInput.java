@@ -12,6 +12,10 @@ public interface GameUiInput extends GameUi {
 
     void hover(GameUiNode node);
 
+    void rightClick(GameUiNode node);
+
+    void setValue(GameUiNode node, int value);
+
     void click(int x, int y, int button);
 
     void drag(GameUiNode source, GameUiNode target, int button);

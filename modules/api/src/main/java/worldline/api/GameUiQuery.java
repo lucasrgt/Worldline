@@ -110,6 +110,12 @@ public final class GameUiQuery {
         return this;
     }
 
+    public GameUiQuery shouldBeFocused() {
+        ui.require(GameUiCapability.FOCUS);
+        if (!single().focused()) throw failure("expected a focused node");
+        return this;
+    }
+
     public GameUiQuery shouldHaveLabel(String expected) {
         if (expected == null) throw new NullPointerException("expected label");
         String actual = single().label();
@@ -145,7 +151,17 @@ public final class GameUiQuery {
 
     public GameUiQuery type(String value) {
         if (value == null) throw new NullPointerException("text");
-        input(GameUiCapability.KEYBOARD).type(actionable("type"), value);
+        input(GameUiCapability.TEXT_INPUT).type(actionable("type"), value);
+        return this;
+    }
+
+    public GameUiQuery rightClick() {
+        input(GameUiCapability.SECONDARY_CLICK).rightClick(actionable("right click"));
+        return this;
+    }
+
+    public GameUiQuery setValue(int value) {
+        input(GameUiCapability.VALUE_INPUT).setValue(actionable("set value"), value);
         return this;
     }
 

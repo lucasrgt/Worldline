@@ -233,8 +233,11 @@ a changed baseline still requires the ordinary explicit snapshot-update flag.
 
 The default `--template=gui` project is executable against the vanilla
 inventory adapter. Butter is optional: screens implementing its `HostUi`
-contract are bridged reflectively. Aero and Butter native input/layout/capture
-capabilities remain consumer-owned and must pass their own locked runtime gate.
+contract are bridged reflectively. Extended `HostUi` methods are negotiated as
+separate text-input, focus, value-input, and secondary-click capabilities;
+their absence never disables the basic tree. Aero and Butter native
+layout/capture capabilities remain consumer-owned and must pass their own
+locked runtime gate.
 
 ### Steps and minimization
 
