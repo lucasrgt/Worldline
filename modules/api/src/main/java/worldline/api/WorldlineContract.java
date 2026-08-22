@@ -67,6 +67,8 @@ public final class WorldlineContract {
             "Acknowledged multiplayer pose, movement, correction, and persistence boundary");
     public static final WorldlineContract REMOTE_WORLD_VIEW = define("remote-world-view",
             "Decoded immutable remote chunks, lifecycle cache, updates, and terrain views");
+    public static final WorldlineContract MOVEMENT_ROUTE = define("movement-route",
+            "Resolved movement routes, recovery, observation, control, correlation, and batches");
     private static final Map<String, WorldlineContract> ALL;
     static {
         register(REPRODUCTION_BUNDLE, TRACE_DIVERGENCE, MOD_LOADING,
@@ -76,7 +78,7 @@ public final class WorldlineContract {
                 CLIENT_RUNTIME_EQUIVALENCE, SERVER_RUNTIME_EQUIVALENCE, DOMAIN_API_EQUIVALENCE,
                 DURABLE_SNAPSHOT, UI_TREE_EQUIVALENCE, RUNTIME_LAB, RUNTIME_CENSUS,
                 SEED_ATLAS, UI_EXPORT, DEDICATED_SERVER_CONTROL, MULTIPLAYER_SESSION,
-                PLAYER_PERSISTENCE, PLAYER_POSE, REMOTE_WORLD_VIEW);
+                PLAYER_PERSISTENCE, PLAYER_POSE, REMOTE_WORLD_VIEW, MOVEMENT_ROUTE);
         ALL = Collections.unmodifiableMap(new LinkedHashMap<String, WorldlineContract>(DEFINITIONS));
     }
     private final String token, subject;
