@@ -22,7 +22,7 @@ public final class SymbolGraphBuilder {
             TinySymbol external = nostalgia.symbols().get(key);
             records.add(new SymbolRecord(key,
                     alias(official, client), alias(official, server), alias(external, named),
-                    official != null, external != null));
+                    "", "", official != null, external != null));
         }
         return new SymbolGraph(records);
     }

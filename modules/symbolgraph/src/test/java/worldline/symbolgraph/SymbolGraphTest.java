@@ -1,6 +1,9 @@
 package worldline.symbolgraph;
 
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public final class SymbolGraphTest {
     private SymbolGraphTest() {}
@@ -9,6 +12,8 @@ public final class SymbolGraphTest {
         parsesNamespacesAndMembers();
         auditsExactIntermediaryIdentity();
         buildsDeterministicCrosswalk();
+        importsRetroMcpThroughOfficialIdentity();
+        verifiesExactMappingPins();
         rejectsMalformedDocuments();
         System.out.println("SymbolGraphTest passed");
     }
@@ -69,6 +74,48 @@ public final class SymbolGraphTest {
         SymbolRecord extra = first.record(
                 new SymbolKey(SymbolKind.METHOD, "class_1", "method_extra", "()V"));
         require(extra.side() == SymbolSide.UNRESOLVED && !extra.inventoryPresent(), "named-only member");
+    }
+
+    private static void importsRetroMcpThroughOfficialIdentity() throws Exception {
+        TinyMapping inventory = read("tiny\t2\t0\tintermediary\tclientOfficial\tserverOfficial\n"
+                + "c\tclass_1\ta\tb\n"
+                + "\tm\t(Lclass_1;)V\tmethod_1\tc\td\n");
+        TinyMapping nostalgia = read("tiny\t2\t0\tintermediary\tnamed\n"
+                + "c\tclass_1\tLevel\n"
+                + "\tm\t(Lclass_1;)V\tmethod_1\ttick\n");
+        TinyMapping retro = read("tiny\t2\t0\tnamed\tclient\tserver\n"
+                + "c\tnet/minecraft/src/World\ta\tb\n"
+                + "\tm\t(Lnet/minecraft/src/World;)V\tupdate\tc\td\n"
+                + "\tm\t()V\tunmatched\tx\t\n");
+        SymbolGraph graph = new SymbolGraphBuilder().build(inventory, nostalgia);
+        RetroMcpImport.Result result = new RetroMcpImport().apply(graph, inventory, retro);
+        SymbolRecord method = result.graph().record(
+                new SymbolKey(SymbolKind.METHOD, "class_1", "method_1", "(Lclass_1;)V"));
+        require("update".equals(method.retroMcpClient())
+                && "update".equals(method.retroMcpServer()), "RetroMCP method alias");
+        require(result.matched() == 2, "matched class and method");
+        require(result.unmatched().size() == 1, "unmatched remains explicit");
+        require(result.nameDifferences().isEmpty(), "equal side aliases");
+        require(result.missing().isEmpty(), "inventory fully aliased");
+    }
+
+    private static void verifiesExactMappingPins() throws Exception {
+        Path directory = Files.createTempDirectory("worldline-mapping-pin-");
+        Path artifact = directory.resolve("mapping.tiny");
+        Path descriptor = directory.resolve("mapping.properties");
+        try {
+            Files.write(artifact, "abc".getBytes(StandardCharsets.UTF_8));
+            Files.write(descriptor, ("id=fixture\nexpected.bytes=3\n"
+                    + "expected.sha256=ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad\n")
+                    .getBytes(StandardCharsets.UTF_8));
+            MappingPin.load(descriptor).verify(artifact);
+            Files.write(artifact, "abd".getBytes(StandardCharsets.UTF_8));
+            failure(() -> MappingPin.load(descriptor).verify(artifact));
+        } finally {
+            Files.deleteIfExists(artifact);
+            Files.deleteIfExists(descriptor);
+            Files.deleteIfExists(directory);
+        }
     }
 
     private static TinyMapping read(String text) throws Exception {

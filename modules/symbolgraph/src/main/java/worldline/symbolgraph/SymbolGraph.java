@@ -43,16 +43,31 @@ public final class SymbolGraph {
         return Collections.unmodifiableMap(counts);
     }
 
+    SymbolGraph withRetroMcp(Map<SymbolKey, String> clientAliases,
+            Map<SymbolKey, String> serverAliases) {
+        List<SymbolRecord> enriched = new ArrayList<SymbolRecord>();
+        for (SymbolRecord record : records) {
+            String client = clientAliases.get(record.key());
+            String server = serverAliases.get(record.key());
+            enriched.add(record.withRetroMcp(client == null ? "" : client,
+                    server == null ? "" : server));
+        }
+        return new SymbolGraph(enriched);
+    }
+
     public String render() {
         StringBuilder text = new StringBuilder();
         text.append("kind\towner\tintermediary\tdescriptor\tclientOfficial\tserverOfficial")
-                .append("\tnostalgia\tside\tinInventory\tinNostalgia\n");
+                .append("\tnostalgia\tretroMcpClient\tretroMcpServer")
+                .append("\tside\tinInventory\tinNostalgia\n");
         for (SymbolRecord record : records) {
             SymbolKey key = record.key();
             text.append(key.kind().name().toLowerCase()).append('\t').append(key.owner()).append('\t')
                     .append(key.name()).append('\t').append(key.descriptor()).append('\t')
                     .append(record.clientOfficial()).append('\t').append(record.serverOfficial()).append('\t')
-                    .append(record.nostalgia()).append('\t').append(record.side().name().toLowerCase())
+                    .append(record.nostalgia()).append('\t').append(record.retroMcpClient()).append('\t')
+                    .append(record.retroMcpServer()).append('\t')
+                    .append(record.side().name().toLowerCase())
                     .append('\t').append(record.inventoryPresent()).append('\t')
                     .append(record.nostalgiaPresent()).append('\n');
         }

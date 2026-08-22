@@ -8,16 +8,21 @@ public final class SymbolRecord implements Comparable<SymbolRecord> {
     private final String clientOfficial;
     private final String serverOfficial;
     private final String nostalgia;
+    private final String retroMcpClient;
+    private final String retroMcpServer;
     private final boolean inventoryPresent;
     private final boolean nostalgiaPresent;
     private final SymbolSide side;
 
     SymbolRecord(SymbolKey key, String clientOfficial, String serverOfficial, String nostalgia,
-            boolean inventoryPresent, boolean nostalgiaPresent) {
+            String retroMcpClient, String retroMcpServer, boolean inventoryPresent,
+            boolean nostalgiaPresent) {
         this.key = Objects.requireNonNull(key, "key");
         this.clientOfficial = nonnull(clientOfficial, "clientOfficial");
         this.serverOfficial = nonnull(serverOfficial, "serverOfficial");
         this.nostalgia = nonnull(nostalgia, "nostalgia");
+        this.retroMcpClient = nonnull(retroMcpClient, "retroMcpClient");
+        this.retroMcpServer = nonnull(retroMcpServer, "retroMcpServer");
         this.inventoryPresent = inventoryPresent;
         this.nostalgiaPresent = nostalgiaPresent;
         this.side = SymbolSide.fromAliases(clientOfficial, serverOfficial);
@@ -30,13 +35,16 @@ public final class SymbolRecord implements Comparable<SymbolRecord> {
     public String clientOfficial() { return clientOfficial; }
     public String serverOfficial() { return serverOfficial; }
     public String nostalgia() { return nostalgia; }
+    public String retroMcpClient() { return retroMcpClient; }
+    public String retroMcpServer() { return retroMcpServer; }
     public boolean inventoryPresent() { return inventoryPresent; }
     public boolean nostalgiaPresent() { return nostalgiaPresent; }
     public SymbolSide side() { return side; }
 
     public String canonical() {
         return key.canonical() + "|client=" + clientOfficial + "|server=" + serverOfficial
-                + "|nostalgia=" + nostalgia + "|inventory=" + inventoryPresent
+                + "|nostalgia=" + nostalgia + "|retroClient=" + retroMcpClient
+                + "|retroServer=" + retroMcpServer + "|inventory=" + inventoryPresent
                 + "|named=" + nostalgiaPresent + "|side=" + side.name();
     }
 
@@ -45,6 +53,11 @@ public final class SymbolRecord implements Comparable<SymbolRecord> {
         return other instanceof SymbolRecord && canonical().equals(((SymbolRecord) other).canonical());
     }
     @Override public int hashCode() { return canonical().hashCode(); }
+
+    SymbolRecord withRetroMcp(String clientAlias, String serverAlias) {
+        return new SymbolRecord(key, clientOfficial, serverOfficial, nostalgia,
+                clientAlias, serverAlias, inventoryPresent, nostalgiaPresent);
+    }
 
     private static String nonnull(String value, String label) {
         if (value == null) throw new NullPointerException(label);
