@@ -13,3 +13,5 @@
 
 M57 does not claim general recipes, metadata variants, right/shift clicks, container-item remainders,
 workbench crafting, or remote container transactions.
+
+Frozen expected signature SHA-256: `a7ca218db3ec5f4fe14ee8f7ec54955d49eb343c9185c62ab6982add0a2e8c7d`

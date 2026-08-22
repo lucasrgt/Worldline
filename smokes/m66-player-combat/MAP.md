@@ -25,3 +25,5 @@ unarmored or arbitrary weapon damage, armor wear, repeated hits, hurt
 resistance, knockback, death, respawn, projectiles, mobs, health attribution,
 latency, concurrent damage attribution, reconnect/ID reuse, or reproduction of
 the Aero lag spike.
+
+Frozen expected signature SHA-256: `8d05a812d9bfa62ac53321d1cca3f96c2cf9ff76668e36cdf0605945b883022c`

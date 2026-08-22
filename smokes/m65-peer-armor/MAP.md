@@ -24,3 +24,5 @@ damage but no count; count one is established by the actor's window state.
 M65 does not claim other armor materials, damaged armor, replacement, removal,
 durability, combat, damage reduction, generic inventory clicks, shift/right
 clicks, or rejected armor transaction recovery.
+
+Frozen expected signature SHA-256: `7bf03514d4331779e14ecaf3379ecf89d3bea276115ca77e909e5a9160587fe4`

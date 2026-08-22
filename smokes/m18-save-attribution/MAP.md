@@ -37,3 +37,5 @@ The invariant conclusion is frozen by SHA-256.
 M18 completes save-path attribution on the synthetic dense fixture. It does
 not promote the adaptive scheduler, does not relax the M16 visual threshold,
 and does not declare the historical spike eliminated.
+
+Frozen expected signature SHA-256: `855ae55bc5944ae98d3fb6b66fe6840fc7561d425ce620b9ba45a55720f6c7bd`

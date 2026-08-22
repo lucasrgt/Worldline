@@ -12,3 +12,5 @@ one inventory entry.
 This cycle does not claim arbitrary entity collection, item ownership, exact
 pickup timing, container transactions, crafting, server tick control, or
 server-memory inspection.
+
+Frozen expected signature SHA-256: `905fe8b02bdc2f81e2280d4658b81440e4d975e6d52ff83a4fd573d0ad8f77af`

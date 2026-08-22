@@ -11,3 +11,5 @@ independently confirming zero persisted inventory entries.
 
 This cycle does not claim arbitrary item drops, throw trajectories, item-entity
 tracking, pickup after the official delay, click-window actions, or tick control.
+
+Frozen expected signature SHA-256: `f47c950ee765fa26735061bdf45cbbafbe66a0c8f8251dbd713bcc7c44ec4f3f`

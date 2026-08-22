@@ -22,3 +22,5 @@ M71 does not claim causality, spike attribution, a performance regression or
 improvement, statistical significance, pixel visibility, uninstrumented
 production timing, identical process state, or the historical Aero-content lag
 mechanism. Packet18 is not an ACK and Packet38 does not identify an attacker.
+
+Frozen expected signature SHA-256: `0b26d07ed6b08195a067bf8730b43f49ec596dae274c74f335f8a44576cb1d2b`

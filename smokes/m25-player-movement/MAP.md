@@ -9,3 +9,5 @@ After native packet handling, disconnect, and save, the gate requires exact
 target coordinates in each official player file. Initial world-dependent
 coordinates remain observational; the requested delta and accepted result are
 frozen.
+
+Frozen expected signature SHA-256: `fb5715319d1347b180aea28652c173a9278d67dedbd3f6e9b486fe358d31f6d6`

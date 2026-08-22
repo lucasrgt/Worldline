@@ -18,3 +18,5 @@ and Packet38 contains no attacker. Handler TAILs and subsequent frames do not
 prove pixels or visibility. No FPS, spike, performance difference, paired
 control, late health persistence, generic combat, or synchronized Aero content
 is claimed.
+
+Frozen expected signature SHA-256: `977bf908fc7edf5e0cf707f81fffaf6208183440a0f07cca81e2b9a22d03e571`

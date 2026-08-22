@@ -29,3 +29,5 @@ Timing thresholds are reported but not frozen. Exact per-chunk vertex-stream equ
 a chunk-geometry oracle, not a full framebuffer, HUD, transparency-order, or
 driver-equivalence proof. The contract remains a Worldline adapter candidate;
 M15 does not modify or release the pinned Aero checkout.
+
+Frozen expected signature SHA-256: `64f635a1ed85ce0d9d30b468937b7803a06418e783f6ae8643da69877d597ba1`

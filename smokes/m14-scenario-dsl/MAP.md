@@ -35,3 +35,5 @@ The client remains under the frozen controlled-client signatures.
 - An unknown verb fails validation with exit status 1.
 - Two `scenario run` executions produce identical traces.
 - Frozen evidence SHA-256 matches smoke.properties.
+
+Frozen expected signature SHA-256: `6a2e966f444390ef60a2b09918fa4e541378f3f09e497dc49bb39466b85e57bb`

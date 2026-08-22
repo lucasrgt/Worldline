@@ -35,3 +35,5 @@ signatures.
 - Two runs produce byte-identical results; `mod test diff` reports EQUAL.
 - A corrupted result is rejected with exit status 1.
 - Frozen evidence SHA-256 matches smoke.properties.
+
+Frozen expected signature SHA-256: `972a1c96629ebe54a54b09729cbf96798a0b7b500dc1c6546ce9742aebf4dc13`

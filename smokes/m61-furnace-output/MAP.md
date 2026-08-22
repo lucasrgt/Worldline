@@ -13,3 +13,5 @@
 
 M61 does not claim merges, larger outputs, arbitrary products, XP, achievements,
 shift/right clicks, rejection recovery, or concurrent furnace mutation.
+
+Frozen expected signature SHA-256: `3759ec0bd9b8f31341f5c783a82f30592ab69bc97a54da45bd14708f781ff51c`

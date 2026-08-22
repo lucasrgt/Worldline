@@ -13,3 +13,5 @@
 
 M60 does not claim generic smelting, alternate fuel, output collection, XP,
 container rejection recovery, merges, shift/right clicks, or progress persistence.
+
+Frozen expected signature SHA-256: `4d18743104fc8bb5efa84e46268323c5d77af8d121e315b156ea3305cf69b5de`

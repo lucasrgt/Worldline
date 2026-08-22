@@ -26,3 +26,5 @@ This capture attributes the quiet-then-boom F3 pattern and proves that an
 opt-in one-chunk non-forced cap reduces the worst save versus the live
 batch. It does not declare the historical spike on a real machine-dense
 map eliminated, and it does not enable the cap by default.
+
+Frozen expected signature SHA-256: `9ca8c14f03615b25891a8468a946bbbe7b889d8de747a8d0e03cb73665970bb1`

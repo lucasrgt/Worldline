@@ -9,3 +9,5 @@ third `+0.125 X` step is never sent.
 The original cached chunk remains loaded. Official player NBT after clean
 disconnect/save must equal the first step's pose, proving the absent third step
 did not change server state.
+
+Frozen expected signature SHA-256: `4a9a43b61c171fd05ab6156b07c963b7c1ebcdedc6ab7ea42d7a40db04cdf649`

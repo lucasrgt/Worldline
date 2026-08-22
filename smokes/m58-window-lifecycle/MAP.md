@@ -10,3 +10,5 @@
 
 M58 does not claim a Packet101 server acknowledgement, container writes, forced-close
 distance behavior, double chests, workbenches, furnaces, or generic window types.
+
+Frozen expected signature SHA-256: `d74f622bc7b86332ec099b367830281038962f547c1a3d80a293a2e56a2ceda4`

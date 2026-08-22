@@ -13,3 +13,5 @@ NBT is checked only after clean disconnect and save as independent evidence.
 
 This cycle does not claim held-slot selection, crafting/container mutation,
 arbitrary item metadata coverage, server tick control, or inventory writes.
+
+Frozen expected signature SHA-256: `a501a36c74fa73d37995c8da8050f0718539e38db187539808e6fc491ba55abb`

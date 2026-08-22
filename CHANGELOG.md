@@ -243,6 +243,18 @@ Status: GO.
 - Evidence: authoring, validation, rejection, and deterministic execution
   smoke frozen in `smokes/m14-scenario-dsl/smoke.properties`.
 
+## Unreleased - Worldline Atlas port
+
+- Ported the generated, fail-closed Atlas knowledge layer from the M88
+  prototype onto the M469/TestKit mainline.
+- Added Atlas status, lookup, search, gaps, coverage, evidence, graph, export,
+  and milestone-delta commands without making Atlas a runtime dependency.
+- Indexed semantic roles, controlled boundaries, invariants, milestone
+  evidence, trace fields, ecosystem knowledge, and explicit uncertainty.
+- Replaced milestone-number inference with explicit subsystem metadata across
+  every smoke and froze legacy expected signatures in their MAP evidence.
+- Added provenance-aware loader, API, mapping-set, and namespace records for
+  the Babric/Ornithe ecosystem without vendoring third-party mappings.
 
 ## Unreleased - Worldline TestKit 0.2.1 experimental
 

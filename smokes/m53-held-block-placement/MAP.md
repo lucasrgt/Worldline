@@ -15,3 +15,5 @@ contains zero inventory entries.
 This cycle does not claim arbitrary item use, block-break replacement, container
 activation, placement durability across restart, server tick control, or
 server-memory inspection.
+
+Frozen expected signature SHA-256: `3b27d76f04b4e55d0c3197a091a0b98b39a0f9a5fdeee3b34b92f725e91e2472`

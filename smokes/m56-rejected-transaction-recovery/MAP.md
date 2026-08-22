@@ -17,3 +17,5 @@ the transaction-recovery qualification without changing its wire path.
 
 This cycle does not expose prediction forgery, rejected chest clicks, duplicate
 ACK handling, right/shift click, crafting, or generic conflict resolution.
+
+Frozen expected signature SHA-256: `707a15cd2055ee67795cf2d074d648e4395d644024015ef7ba999fd3c000f85b`

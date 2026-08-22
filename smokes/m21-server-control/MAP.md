@@ -14,3 +14,5 @@ bounded persisted state, and clean shutdown.
 M21 does not patch the server, pause its tick thread, connect a client, or claim
 network determinism. JARs, generated worlds, properties, and logs remain under
 ignored roots.
+
+Frozen expected signature SHA-256: `87035c21599513c04b6fe5b5622232a485a7f5c5e52778ecf11428ef671b4d4f`

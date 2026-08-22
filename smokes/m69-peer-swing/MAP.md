@@ -13,3 +13,5 @@
 Packet18 has no target, damage, or health fields and is not an acknowledgment.
 M69 does not claim Packet7/38/8, attack acceptance, causal damage attribution,
 rendering, Aero timing, repeated swing behavior, or reconnect identity cleanup.
+
+Frozen expected signature SHA-256: `4362b6b5b0cffbbf3429c6cfdad25ff3e077ed5be9a3f7e2f729f3806b9b69b3`

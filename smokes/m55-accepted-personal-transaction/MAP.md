@@ -11,3 +11,5 @@ empty, stone. The final clean player NBT again contains one inventory entry.
 
 This cycle does not claim right click, shift click, merging, splitting, rejected
 transaction recovery, chest clicks, cursor persistence, crafting, or armor.
+
+Frozen expected signature SHA-256: `c9abcffdd4d7663f0ce225d94bb59f73b07c632512e751f8c403f22ed0e2320e`

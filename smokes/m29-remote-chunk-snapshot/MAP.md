@@ -14,3 +14,5 @@ The initial snapshot wait keeps the official connection alive with bounded
 flying pulses and fails closed at both a packet ceiling and the configured
 runtime deadline. This prevents packet-volume races from ending the wait before
 the official server emits its first decodable Packet51.
+
+Frozen expected signature SHA-256: `aec53757fe91829f4e425428a590b703595088ed02955b01ba41179ed4969b0b`

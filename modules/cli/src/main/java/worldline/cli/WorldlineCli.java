@@ -146,7 +146,16 @@ public final class WorldlineCli {
         error.println("   or: worldline mappings report <client.jar> <server.jar> <intermediary.jar>"
                 + " <nostalgia.jar> <retromcp.properties> <retromcp.tiny>");
         error.println("   or: worldline mappings audit <client.jar> <server.jar> <intermediary.jar>"
-                + " <nostalgia.jar> <retromcp.properties> <retromcp.tiny> <coverage.properties>"); return 2;
+                + " <nostalgia.jar> <retromcp.properties> <retromcp.tiny> <coverage.properties>");
+        error.println("   or: worldline atlas status");
+        error.println("   or: worldline atlas show <id>");
+        error.println("   or: worldline atlas search <term>");
+        error.println("   or: worldline atlas gaps");
+        error.println("   or: worldline atlas coverage");
+        error.println("   or: worldline atlas evidence <id>");
+        error.println("   or: worldline atlas graph <id>");
+        error.println("   or: worldline atlas export");
+        error.println("   or: worldline atlas changed --since <Mn>"); return 2;
     }
 
     private static void explain(TraceDiff difference, PrintStream output) {
