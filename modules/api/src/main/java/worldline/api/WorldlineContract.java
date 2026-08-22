@@ -21,10 +21,30 @@ public final class WorldlineContract {
             "Artifact-attested behavioral comparison across mod versions");
     public static final WorldlineContract SCENARIO_MINIMIZATION = define("scenario-minimization",
             "Deterministic reduction that preserves an exact divergence predicate");
+    public static final WorldlineContract MOD_API_LIFECYCLE = define("mod-api-lifecycle",
+            "Controlled mod lifecycle, domain handles, and scheduled actions");
+    public static final WorldlineContract MOD_TEST_RUN = define("mod-test-run",
+            "One-command controlled mod execution with attested durable results");
+    public static final WorldlineContract MOD_DEPENDENCY_GRAPH = define("mod-dependency-graph",
+            "Deterministic dependency ordering and fail-closed graph validation");
+    public static final WorldlineContract SCENARIO_DSL = define("scenario-dsl",
+            "Strict scenario authoring, validation, and deterministic execution grammar");
+    public static final WorldlineContract FUZZ_CAMPAIGN = define("fuzz-campaign",
+            "Seeded differential scenario generation, execution, and minimization");
+    public static final WorldlineContract SCENARIO_DEBUGGING = define("scenario-debugging",
+            "Deterministic reverse navigation and trace-field watchpoints");
+    public static final WorldlineContract SCENARIO_PROFILING = define("scenario-profiling",
+            "Tick profile aggregation and explicit performance-budget decisions");
+    public static final WorldlineContract SCENARIO_COVERAGE = define("scenario-coverage",
+            "Semantic scenario category and role coverage with threshold decisions");
+    public static final WorldlineContract TRACE_HTML = define("trace-html",
+            "Deterministic self-contained trace and divergence evidence pages");
     private static final Map<String, WorldlineContract> ALL;
     static {
         register(REPRODUCTION_BUNDLE, TRACE_DIVERGENCE, MOD_LOADING,
-                MOD_VERSION_DIFFERENCE, SCENARIO_MINIMIZATION);
+                MOD_VERSION_DIFFERENCE, SCENARIO_MINIMIZATION, MOD_API_LIFECYCLE,
+                MOD_TEST_RUN, MOD_DEPENDENCY_GRAPH, SCENARIO_DSL, FUZZ_CAMPAIGN,
+                SCENARIO_DEBUGGING, SCENARIO_PROFILING, SCENARIO_COVERAGE, TRACE_HTML);
         ALL = Collections.unmodifiableMap(new LinkedHashMap<String, WorldlineContract>(DEFINITIONS));
     }
     private final String token, subject;
