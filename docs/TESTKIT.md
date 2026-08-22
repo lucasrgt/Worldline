@@ -220,6 +220,11 @@ role, name, label, text, and slot are lazy and fail when a single-node action
 is absent or ambiguous. Optional input, layout, and native visual operations
 are capability-gated and validated by `GameUiContract`.
 
+`getByRole(role, name)` is the concise two-token selector. `type` appends while
+`fill` replaces and therefore requires the stronger `TEXT_REPLACE` capability.
+Typed assertions cover values, checked/selected/expanded/read-only state, exact
+item stacks, and positive item containment without exposing mapped classes.
+
 `context.awaitUi(locator, maximumTicks, assertion)` retries ordinary assertion
 failures against the live tree and advances exactly one controlled game tick
 between attempts. It never uses wall-clock sleeps and never retries capability,

@@ -116,6 +116,7 @@ public final class B173Gui implements GameUiInput, GameUiLayout, GameUiVisual {
     @Override public void focus(GameUiNode node) { GameUiInput value = foreignInput(); if (value != null) value.focus(node); else driver.focus(node); }
     @Override public GameUiNode focused() { GameUiInput value = foreignInput(); return value == null ? driver.focused() : value.focused(); }
     @Override public void type(GameUiNode node, String text) { GameUiInput value = foreignInput(); if (value != null) value.type(node, text); else driver.type(node, text); }
+    @Override public void fill(GameUiNode node, String text) { GameUiInput value = foreignInput(); if (value != null) value.fill(node, text); else driver.fill(node, text); }
     @Override public void press(GameUiKey key) { GameUiInput value = foreignInput(); if (value != null) value.press(key); else driver.press(key); }
     @Override public void hover(GameUiNode node) { GameUiInput value = foreignInput(); if (value != null) value.hover(node); else driver.hover(node); }
     @Override public void rightClick(GameUiNode node) { GameUiInput value = foreignInput(); if (value != null) value.rightClick(node); else driver.rightClick(node); }

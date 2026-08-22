@@ -15,6 +15,7 @@ public final class GameUiContract {
                 "E2310 semantic tree capability is required");
         requireInput(capabilities, ui, GameUiCapability.KEYBOARD);
         requireInput(capabilities, ui, GameUiCapability.TEXT_INPUT);
+        requireInput(capabilities, ui, GameUiCapability.TEXT_REPLACE);
         requireInput(capabilities, ui, GameUiCapability.VALUE_INPUT);
         requireInput(capabilities, ui, GameUiCapability.SECONDARY_CLICK);
         requireInput(capabilities, ui, GameUiCapability.POINTER);

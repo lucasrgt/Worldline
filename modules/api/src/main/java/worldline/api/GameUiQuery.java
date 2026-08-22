@@ -137,6 +137,33 @@ public final class GameUiQuery {
         return this;
     }
 
+    public GameUiQuery shouldHaveValue(String expected) {
+        if (expected == null) throw new NullPointerException("expected value");
+        String actual = single().value();
+        if (!expected.equals(actual)) throw failure("expected value " + expected + " but was " + actual);
+        return this;
+    }
+
+    public GameUiQuery shouldBeChecked() {
+        if (!single().checked()) throw failure("expected a checked node");
+        return this;
+    }
+
+    public GameUiQuery shouldBeSelected() {
+        if (!single().selected()) throw failure("expected a selected node");
+        return this;
+    }
+
+    public GameUiQuery shouldBeExpanded() {
+        if (!single().expanded()) throw failure("expected an expanded node");
+        return this;
+    }
+
+    public GameUiQuery shouldBeReadOnly() {
+        if (!single().readOnly()) throw failure("expected a read-only node");
+        return this;
+    }
+
     public GameUiQuery shouldBeEmpty() {
         if (!single().empty()) throw failure("expected an empty node");
         return this;
@@ -151,6 +178,14 @@ public final class GameUiQuery {
         return this;
     }
 
+    public GameUiQuery shouldContainItem(int itemId) {
+        GameUiNode node = single();
+        if (node.itemId() != itemId || node.count() <= 0) {
+            throw failure("expected item " + itemId + " but was " + node.itemId() + "x" + node.count());
+        }
+        return this;
+    }
+
     public GameUiQuery focus() {
         input(GameUiCapability.FOCUS).focus(actionable("focus"));
         return this;
@@ -159,6 +194,12 @@ public final class GameUiQuery {
     public GameUiQuery type(String value) {
         if (value == null) throw new NullPointerException("text");
         input(GameUiCapability.TEXT_INPUT).type(actionable("type"), value);
+        return this;
+    }
+
+    public GameUiQuery fill(String value) {
+        if (value == null) throw new NullPointerException("text");
+        input(GameUiCapability.TEXT_REPLACE).fill(actionable("fill"), value);
         return this;
     }
 

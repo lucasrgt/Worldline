@@ -20,6 +20,7 @@ final class B173GuiDriver {
     void focus(GameUiNode node) { throw unavailable(GameUiCapability.FOCUS); }
     GameUiNode focused() { throw unavailable(GameUiCapability.FOCUS); }
     void type(GameUiNode node, String text) { throw unavailable(GameUiCapability.TEXT_INPUT); }
+    void fill(GameUiNode node, String text) { throw unavailable(GameUiCapability.TEXT_REPLACE); }
     void press(GameUiKey key) { throw unavailable(GameUiCapability.KEYBOARD); }
 
     void hover(GameUiNode node) {

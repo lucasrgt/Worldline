@@ -10,6 +10,10 @@ public final class GameUiNode {
     public static final String PROGRESS = "progress", ENERGY = "energy", TANK = "tank";
     public static final String SEARCH = "search", SCROLL = "scroll";
     public static final String BUTTON = "button", TEXT_FIELD = "textbox", LABEL = "label";
+    public static final String PANEL = "panel", TEXT = "text", SLIDER = "slider";
+    public static final String TAB = "tab", TAB_LIST = "tablist", SCROLL_BAR = "scrollbar";
+    public static final String SEPARATOR = "separator", CHECKBOX = "checkbox", RADIO = "radio";
+    public static final String TOGGLE = "toggle";
     private final String role, name;
     private final int index, itemId, count;
     private final Map<String, String> attributes;
@@ -56,11 +60,21 @@ public final class GameUiNode {
 
     public String text() { return attributes.containsKey("text") ? attributes.get("text") : ""; }
 
+    public String value() { return attributes.containsKey("value") ? attributes.get("value") : ""; }
+
     public boolean visible() { return flag("visible", true); }
 
     public boolean enabled() { return flag("enabled", true); }
 
     public boolean focused() { return flag("focused", false); }
+
+    public boolean checked() { return flag("checked", false); }
+
+    public boolean selected() { return flag("selected", false); }
+
+    public boolean expanded() { return flag("expanded", false); }
+
+    public boolean readOnly() { return flag("readOnly", false); }
 
     /** Zero-based keyboard focus order, or -1 when the node is not tabbable. */
     public int tabIndex() {

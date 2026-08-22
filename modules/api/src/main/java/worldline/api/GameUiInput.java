@@ -8,6 +8,8 @@ public interface GameUiInput extends GameUi {
 
     void type(GameUiNode node, String text);
 
+    void fill(GameUiNode node, String text);
+
     void press(GameUiKey key);
 
     void hover(GameUiNode node);

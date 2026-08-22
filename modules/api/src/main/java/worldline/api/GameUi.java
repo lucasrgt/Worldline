@@ -25,6 +25,8 @@ public interface GameUi {
 
     default GameUiQuery getByRole(String role) { return query().role(role); }
 
+    default GameUiQuery getByRole(String role, String name) { return query().role(role).name(name); }
+
     default GameUiQuery getByName(String name) { return query().name(name); }
 
     default GameUiQuery getByLabel(String label) { return query().label(label); }

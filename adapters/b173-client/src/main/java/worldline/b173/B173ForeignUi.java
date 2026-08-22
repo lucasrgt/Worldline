@@ -89,6 +89,8 @@ final class B173ForeignUi implements GameUiInput {
         for (int index = 0; index < text.length(); index++) invokeChar("type", text.charAt(index));
     }
 
+    @Override public void fill(GameUiNode node, String text) { throw unavailable(GameUiCapability.TEXT_REPLACE); }
+
     @Override public void press(GameUiKey key) {
         if (key != GameUiKey.BACKSPACE) throw unavailable(GameUiCapability.KEYBOARD);
         requireForeign(GameUiCapability.TEXT_INPUT);

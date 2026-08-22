@@ -8,6 +8,7 @@ public enum GameUiCapability {
     SECONDARY_CLICK,
     KEYBOARD,
     TEXT_INPUT,
+    TEXT_REPLACE,
     VALUE_INPUT,
     POINTER,
     FOCUS,

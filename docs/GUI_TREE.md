@@ -41,7 +41,7 @@ are re-evaluated against the live tree:
 GameUi ui = context.ui();
 ui.getByRole("slot").shouldHaveCount(45);
 ui.getByLabel("Input").click().shouldHaveItem(265, 4);
-ui.getByText("Search").focus().type("iron").press(GameUiKey.ENTER);
+ui.getByRole(GameUiNode.TEXT_FIELD, "search").fill("iron").press(GameUiKey.ENTER);
 ui.getByName("search").shouldHaveTabIndex(0).press(GameUiKey.TAB);
 ui.getByName("source").dragTo(ui.getByName("target"));
 ui.getByName("panel").shouldBeWithinViewport();
@@ -53,6 +53,12 @@ Every optional action is capability-gated. An adapter must implement
 `GameUiCapability`; inconsistent declarations fail with an `E23xx` diagnostic.
 `GameUiContract.validate` is the shared consumer gate for vanilla, Butter, and
 Aero adapters.
+
+`type` appends user input. `fill` replaces the complete text value and has the
+separate `TEXT_REPLACE` capability; adapters may not emulate it by silently
+appending. Nodes can expose `value`, `checked`, `selected`, `expanded`, and
+`readOnly` attributes, with fail-closed typed assertions. Inventory assertions
+support both exact stack counts and positive containment.
 
 Focusable nodes publish a zero-based `tabIndex` attribute. The shared contract
 rejects duplicate indexes and multiple simultaneously focused nodes. Specs can
