@@ -46,6 +46,10 @@ public final class TestKitGuiContractTest {
         require(rejected.count(TestStatus.FAILED) == 1
                 && rejected.tests().get(0).errorMessage().contains("E2301"),
                 "runtime without UI did not fail closed");
+        TestRunResult failed = runFailure(root.resolve("failure"), new Provider(true));
+        require(failed.count(TestStatus.FAILED) == 1
+                && hasArtifact(failed, "failure.gui.txt") && hasArtifact(failed, "failure.gui.ppm"),
+                "automatic GUI failure evidence missing");
         System.out.println("TestKitGuiContractTest passed");
     }
 
@@ -54,6 +58,12 @@ public final class TestKitGuiContractTest {
                 .snapshots(root.resolve("snapshots")).runtimeLock(root.resolve("runtime.lock"))
                 .updateSnapshots(update);
         return new TestRunner().run(new GuiSpec(), options, null);
+    }
+
+    private static TestRunResult runFailure(Path root, Provider provider) {
+        RunnerOptions options = new RunnerOptions().provider(provider).artifacts(root.resolve("artifacts"))
+                .snapshots(root.resolve("snapshots")).runtimeLock(root.resolve("runtime.lock"));
+        return new TestRunner().run(new FailingGuiSpec(), options, null);
     }
 
     private static final class GuiSpec extends WorldlineSpec {
@@ -66,6 +76,13 @@ public final class TestKitGuiContractTest {
                 context.awaitUi(ui.getByText("Ready"), 2).shouldHaveCount(1);
                 expect(context.screenshot("crusher")).toMatchSnapshot("crusher");
             }));
+        }
+    }
+
+    private static final class FailingGuiSpec extends WorldlineSpec {
+        @Override protected void define() {
+            test("failed semantic gui", worldline().runtime("fake").run(context ->
+                    context.ui().getByName("missing").shouldExist()));
         }
     }
 

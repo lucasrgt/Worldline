@@ -322,6 +322,9 @@ Result states are `queued`, `running`, `passed`, `failed`, `skipped`, `todo`,
 them. A failure can produce:
 
 - `failure.txt` — exception type and message;
+- `failure.gui.txt` — canonical semantic screen and node tree when UI is available;
+- `failure.gui.ppm` — native ARGB frame when the adapter declares `SCREENSHOT`;
+- `failure.gui-capture.txt` — non-masking diagnostic when GUI evidence capture itself fails;
 - `failure.wltrace` — canonical deterministic observations;
 - `failure.wlsnapshot` — adapter snapshot when supported;
 - `failure.wlmtest` — exact mod provenance bound to the trace;

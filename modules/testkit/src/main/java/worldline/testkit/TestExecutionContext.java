@@ -111,12 +111,14 @@ final class TestExecutionContext implements TestContext {
     void writeFailure(Throwable error) {
         String text = error.getClass().getName() + ": " + String.valueOf(error.getMessage()) + "\n";
         attach("failure.txt", text.getBytes(StandardCharsets.UTF_8));
+        GameUiFailureArtifacts.capture(runtime, artifacts);
         if (trace != null) attach("failure.wltrace", trace.value().getBytes(StandardCharsets.UTF_8));
         byte[] captured = snapshot(); if (captured != null) attach("failure.wlsnapshot", captured);
         Scenario value = scenario(); if (value != null) attach("failure.wlscenario", value.bytes());
     }
 
     void writeTimeout() {
+        GameUiFailureArtifacts.capture(runtime, artifacts);
         attach("timeout.wltrace", trace == null ? new byte[0]
                 : trace.value().getBytes(StandardCharsets.UTF_8));
         byte[] captured = snapshot(); if (captured != null) attach("timeout.wlsnapshot", captured);
