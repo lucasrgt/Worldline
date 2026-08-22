@@ -64,6 +64,12 @@ public final class WorldlineBehavior {
             "Painting Packet25 orientation on opposite wall faces");
     public static final WorldlineBehavior JUKEBOX_RECORD_PLAY = define("jukebox-record-play", WorldlineFamily.ITEM,
             "Jukebox record insertion and Packet61 play event");
+    public static final WorldlineBehavior SHEARS_HARVEST = define("shears-harvest", WorldlineFamily.ITEM,
+            "Shears leaf harvest and nonlethal sheep wool drop");
+    public static final WorldlineBehavior SWORD_DAMAGE = define("sword-damage", WorldlineFamily.ITEM,
+            "Wood, iron, and diamond sword hit-to-death boundaries");
+    public static final WorldlineBehavior MILK_BUCKET_CYCLE = define("milk-bucket-cycle", WorldlineFamily.ITEM,
+            "Cow interaction fills and drinking empties a bucket");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = index();
     private final String token, family, subject;
 
@@ -127,7 +133,8 @@ public final class WorldlineBehavior {
                 DIFFICULTY_DAMAGE, VOID_DEATH, PEACEFUL_DESPAWN, PLAYER_DEATH_DROPS, PIGMAN_ANGER,
                 SKELETON_RANGED_AI, PIG_SPAWN, PIG_AI_MOVEMENT, PIG_DEATH, PIG_PORK_DROP,
                 BED_SLEEP_SKIP, NOTE_BLOCK_CLICK, SIGN_TEXT_PERSISTENCE, PAINTING_SPAWN,
-                NOTE_BLOCK_INSTRUMENT, PAINTING_ORIENTATION, JUKEBOX_RECORD_PLAY };
+                NOTE_BLOCK_INSTRUMENT, PAINTING_ORIENTATION, JUKEBOX_RECORD_PLAY, SHEARS_HARVEST,
+                SWORD_DAMAGE, MILK_BUCKET_CYCLE };
         Map<String, WorldlineBehavior> map = new LinkedHashMap<String, WorldlineBehavior>();
         for (int i = 0; i < values.length; i++) {
             if (map.put(values[i].token(), values[i]) != null)

@@ -4,7 +4,7 @@ import java.io.IOException;
 import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteMobDeath;
 
-/** Packet7 attack while holding wood 268, iron 267, or diamond 276, plus a non-blocking death peek. */
+/** Packet7 attack with wood, iron, or diamond swords plus a non-blocking death peek. */
 public final class B173SwordDamage {
     private B173SwordDamage() {}
 
