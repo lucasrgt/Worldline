@@ -223,6 +223,17 @@ Status: GO.
   behavioral evidence. TestKit remains 0.x until external-mod use validates
   the authoring surface.
 
+## 1.456.0 - M560 Portal scale set
+
+Status: GO for official Overworld-to-Nether 8:1 portal coordinate scale together.
+
+- Far Overworld portal `325,66,331` Packet9 `0->-1` landed within 128 of `floor(x/8),floor(z/8)=(40,41)` and farther than 128 from the source.
+- Distinct from M132 activation, M133 near-spawn traversal, M134 roundtrip, and M382 frame-ignite.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M560 semantic SHA-256 is
+`d7eb052e1bc5fe6a71f3850bd4fb75b9470be6a2767c6617fb41f7138c54c50b`.
+
 ## 1.455.0 - M559 Double extender set
 
 Status: GO for official sequenced sticky-29 then piston-33 two-cell payload travel together.

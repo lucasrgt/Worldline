@@ -1913,3 +1913,5 @@ M553 adds no public API. Piston `33` rejection of chest `54`, furnace `61`, and 
 M549 adds no public API. Primed sticky `29:4` plus neighbor-update `29:4 -> 29:12` pull shares one sticky-BUD family.
 
 M559 adds no public API. Sequenced sticky `29` then piston `33` two-cell cobble travel shares one double-extender family.
+
+M560 adds no public API. Packet9 `0 -> -1` pose within 128 of Overworld `xz/8` shares one portal-scale family.
