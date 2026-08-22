@@ -2,6 +2,7 @@
 
 | Boundary | Exact evidence |
 | --- | --- |
+| Fixture | Official player NBT fixes planks at personal36 and the consumed workbench at personal37 |
 | Epoch | M63 actions1-4 continue directly to output actions5/6 |
 | Take | Packet102 action5 predicts exact slabs44x3:2 from result slot0 |
 | Side effect | Packet200 stat16842796 increment3 precedes Packet106 true |

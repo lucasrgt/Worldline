@@ -19,6 +19,7 @@ import worldline.api.RemoteWorkbenchPreparation;
 import worldline.api.RemoteWorldView;
 import worldline.api.WorkbenchOutputSession;
 import worldline.b173server.B173DedicatedServer;
+import worldline.b173server.B173PlayerSeed;
 import worldline.b173server.B173WireClient;
 import worldline.b173server.B173WorkbenchOutputPacketFixture;
 
@@ -42,16 +43,19 @@ public final class WorkbenchOutputSmoke {
         RemoteWorkbenchOutput output; RemoteWindowClosure firstClose, secondClose; BlockPosition target;
         try {
             B173WorkbenchOutputPacketFixture.verify(); first = server(jar, workspace, port, seed, timeout);
-            first.boot(); first.operator(name); actor = client(port, name, timeout); actor.connect(); actor.synchronizePose();
-            require(actor.awaitInventory().occupiedSlots() == 0, "actor inventory was not empty");
-            actor.look(0F, 90F); PlayerPose pose = acquire(actor, name, 58, 1);
+            first.boot(); first.operator(name); B173PlayerSeed.writeInventory(workspace, name, 4.5, 100, 4.5,
+                    new int[] {0, 1}, new int[] {5, 58}, new int[] {3, 1}, new int[] {0, 0});
+            actor = client(port, name, timeout); actor.connect(); actor.synchronizePose();
+            RemoteItemStack planks = item(5, 3, 0), slabs = item(44, 3, 2);
+            require(actor.awaitInventory().occupiedSlots() == 2 && actor.inventory().slot(36).item().equals(planks)
+                    && actor.inventory().slot(37).item().equals(item(58, 1, 0)), "actor inventory seed drifted");
+            actor.look(0F, 90F); PlayerPose pose = settle(actor);
             RemoteWorldView baseline = actor.awaitRemoteChunk((int) Math.floor(pose.x()) >> 4,
                     (int) Math.floor(pose.z()) >> 4); BlockPosition support = placement(baseline, pose);
-            target = BlockFace.UP.adjacent(support); int table = find(actor.inventory(), item(58, 1, 0));
-            require(table >= 36, "workbench seed drifted"); actor.selectHeldSlot(table - 36);
+            target = BlockFace.UP.adjacent(support); actor.selectHeldSlot(1);
             actor.placeHeldBlock(support, BlockFace.UP); actor.awaitBlock(target, new BlockState(58, 0)); actor.sustainTicks(5);
-            acquire(actor, name, 5, 3); RemoteItemStack planks = item(5, 3, 0), slabs = item(44, 3, 2);
-            require(actor.inventory().slot(36).item().equals(planks), "plank seed drifted"); actor.selectHeldSlot(1);
+            require(actor.inventory().slot(36).item().equals(planks) && actor.inventory().slot(37).empty(),
+                    "placed workbench inventory drifted"); actor.selectHeldSlot(1);
             actor.openWorkbench(target, BlockFace.UP); RemoteWorkbenchPreparation prepared = actor.prepareWorkbenchSlabs(36);
             output = actor.takeWorkbenchSlabs(36); require(output.takeAction() == 5 && output.storeAction() == 6
                     && output.craftedCount() == 3 && output.before().equals(prepared.prepared())
@@ -85,11 +89,8 @@ public final class WorkbenchOutputSmoke {
         return new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true); }
     private static WorkbenchOutputSession client(int port, String name, Duration timeout) {
         return new B173WireClient("127.0.0.1", port, name, timeout); }
-    private static PlayerPose acquire(WorkbenchOutputSession client, String name, int id, int count) {
-        int occupied = client.inventory().occupiedSlots() + 1; for (int i = 0; i < 10; i++) client.moveAndObserve(0, 5, 0, 3);
-        client.sendChat("/give " + name + " " + id + " " + count); client.sustainTicks(40);
-        for (int i = 0; i < 100 && client.inventory().occupiedSlots() < occupied; i++) client.moveAndObserve(0, -1, 0, 1);
-        client.sustainTicks(10); MovementOutcome settled = null; for (int i = 0; i < 100; i++) {
+    private static PlayerPose settle(WorkbenchOutputSession client) {
+        client.sustainTicks(5); MovementOutcome settled = null; for (int i = 0; i < 100; i++) {
             settled = client.moveAndObserve(0, -1, 0, 2); if (settled.corrected()) break; }
         require(settled != null && settled.corrected(), "ground settlement absent"); return settled.resulting(); }
     private static BlockPosition placement(RemoteWorldView view, PlayerPose pose) { int x=(int)Math.floor(pose.x()),
@@ -98,8 +99,6 @@ public final class WorkbenchOutputSmoke {
             new BlockPosition(x+dx,y+dy,z+dz),t=BlockFace.UP.adjacent(s);try{BlockState b=view.blockAt(t.x(),t.y(),t.z());
             if(s.y()>=0&&t.y()<128&&view.blockAt(s.x(),s.y(),s.z()).legacyId()!=0&&replaceable(b))return s;}catch(IllegalArgumentException absent){}}
         throw new IllegalStateException("nearby workbench placement absent"); }
-    private static int find(RemoteInventoryView view, RemoteItemStack expected) { for(int s=9;s<=44;s++)
-        if(!view.slot(s).empty()&&view.slot(s).item().equals(expected))return s;return -1; }
     private static boolean emptyOwned(RemoteInventoryView view){for(int s=0;s<10;s++)if(!view.slot(s).empty())return false;return true;}
     private static boolean replaceable(BlockState state){int id=state.legacyId();return id==0||id==8||id==9||id==78;}
     private static RemoteItemStack item(int id,int count,int damage){return new RemoteItemStack(id,count,damage);}

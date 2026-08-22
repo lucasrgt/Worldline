@@ -35,6 +35,9 @@ Status: GO candidate after central audit correction; published history is preser
   repeated GUI qualification exposed scheduling variance at the later
   three-quarters threshold; the 100-position floor and required nonzero
   temporal divergence remain fail-closed.
+- Replaced M64's probabilistic `/give` drop pickup with an official-format
+  player-NBT fixture that fixes planks at personal slot 36 and the consumed
+  workbench at slot 37, preserving the frozen workbench actions and signature.
 
 ## Unreleased - Integration Hygiene and Anti-Slop Audit
 
