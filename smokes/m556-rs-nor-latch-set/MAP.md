@@ -14,7 +14,8 @@ M555 torch burnout. Headless `B173WireClient` only.
 Frozen trace:
 
 ```text
-pending final serialized qualification
+v1|server=official-b1.7.3|seed=17320110707|fixture=raised-stone+rs-nor-76:4+76:3|cause=packet15-item76-north-then-south+set-on-then-off+reset-on-then-off|wire=packet53-q-75:4->76:4->75:4+qbar-76:3->75:3->76:3|oracle=set-stays-on+reset-stays-off+fresh-login|column=17,blockA=3:72:4:1:0,blockB=7:72:4:1:0,set=10:72:4:69:floor->on->off,reset=5:72:6:69:floor->on->off,q=3:72:3:75:4->76:4->75:4,qbar=7:72:5:76:3->75:3->76:3,stays-on=true,stays-off=true,persisted=q=75:4+qbar=76:3,clients=5,disconnect=clean
 ```
 
-The semantic SHA-256 is reconfrozen only by the final serialized qualification.
+The frozen semantic SHA-256 is
+`eb3281691461d7e9823245dcc3d2c552caaa8fd1e2f82bb20ad42a82349218d3`.

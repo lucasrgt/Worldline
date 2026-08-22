@@ -1949,3 +1949,11 @@ M566 adds no public API. Packet53 dirt `3 -> 2` on lit samples plus covered dirt
 M555 adds no public API. Its corrected scope is the directly observed rapid-activation wall-torch sequence `76:4 -> 75:4 -> 76:4`; it does not claim an observed eight-toggle threshold or 100-tick window.
 
 M567 adds no public API. Bed occupy plus cactus Packet8 `0` Packet9 at the bed shares one bed-spawn family.
+
+M556 adds no public API. Complementary wall-torch states that remain after SET and RESET are disabled share one RS-NOR latch family.
+
+M563 adds no public API. A shifted Nether return that creates a non-source 14-obsidian/6-portal Overworld frame shares one Nether-exit-create family.
+
+M569 adds no public API. Out-of-range absence followed by in-range Packet24 type `54` after a `Delay=1` rewrite shares one spawner-delay family.
+
+M562 and M568 add no family. They failed central serialized runtime qualification and remain rejected evidence.

@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/milestone-v1.461.0%20M567%20GO-2EA44F?style=flat-square" alt="Worldline v1.461.0 M567 GO">
+  <img src="https://img.shields.io/badge/milestone-v1.462.0%20consolidated%20GO-2EA44F?style=flat-square" alt="Worldline v1.462.0 consolidated vanilla qualification GO">
   <img src="https://img.shields.io/badge/Minecraft-Beta%201.7.3-62B47A?style=flat-square" alt="Minecraft Beta 1.7.3">
   <img src="https://img.shields.io/badge/product-Java%208-5586A4?style=flat-square" alt="Java 8 product">
   <img src="https://img.shields.io/badge/harness-JDK%2021-6B5B95?style=flat-square" alt="JDK 21 harness">
@@ -41,7 +41,7 @@ decompiled game code.
 
 ## Current status
 
-The official main line is **Worldline v1.461.0 / M567**. Its stable foundation
+The release candidate is **Worldline v1.462.0 / consolidated vanilla qualification**. Its stable foundation
 includes the controlled runtime, domain automation, durable reproduction
 artifacts, trace analysis, descriptor-selected mod loading, differential mod
 testing, and automatic scenario minimization. Later milestones add bounded

@@ -4,9 +4,9 @@ All notable Worldline changes are recorded here. The project follows semantic
 versioning for declared stable contracts; experimental adapter APIs may change
 before they are promoted.
 
-## Unreleased - M546-M570 qualification corrections
+## 1.462.0 - Consolidated vanilla qualification
 
-Status: central audit correction; published history is preserved.
+Status: GO candidate after central audit correction; published history is preserved.
 
 - Retracted M549 because its hidden south-block fallback changed the cause
   while emitting the same signature.
@@ -23,6 +23,14 @@ Status: central audit correction; published history is preserved.
 - Removed the four rejected smokes from the current smoke catalog. Their
   original v1.452.0, v1.454.0, v1.457.0, and v1.458.0 entries and tags remain
   below as an immutable record of what was published.
+- Rejected unpublished M562 after central runtime qualification first stalled
+  in second-frame placement and then produced an obstructed frame that could
+  not light. Rejected unpublished M568 after two clean serialized runs both
+  failed to observe the reloaded dropped-item Packet21.
+- Qualified corrected-scope M555 plus M556, M563, and M569 in direct serialized
+  official-server cycles. The final release gate also restores explicit
+  signature coverage for the qualified M500-M525 DeepSeek batch while keeping
+  M520 rejected.
 
 ## Unreleased - Integration Hygiene and Anti-Slop Audit
 

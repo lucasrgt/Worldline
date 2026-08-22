@@ -478,6 +478,11 @@ Passing an experiment does not silently promote its API.
 | v1.459.0 / M566 | Grass spread set | GO - Packet53 3->2 on lit dirt, covered dirt stays 3 |
 | v1.460.0 / M555 | Torch burnout set | CORRECTING - qualitative 76:4 -> 75:4 -> 76:4; threshold/window unclaimed |
 | v1.461.0 / M567 | Bed spawn set | GO - occupy then cactus death Packet9 at bed, not world spawn |
+| v1.462.0 / M556 | RS-NOR latch set | GO - SET/RESET disabled after transition and complementary state persists |
+| v1.462.0 / M563 | Nether exit create set | GO - shifted return creates one non-source Overworld portal |
+| v1.462.0 / M569 | Spawner delay set | GO - far absence then near type 54 after Delay=1 |
+| v1.462.0 / M562 | Portal pair set | REJECTED - central frame construction stalled or produced an obstructed frame |
+| v1.462.0 / M568 | Item despawn set | REJECTED - reloaded dropped-item Packet21 absent in two serialized runs |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 25-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -489,7 +494,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.461.0 direction
+## Immediate post-v1.462.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

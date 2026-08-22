@@ -119,6 +119,7 @@ final class SmokeCatalog {
         {"tools/smoke/PistonBudSetCycle.java", "m548-piston-bud-set"}, {"tools/smoke/DispenserQcSetCycle.java", "m550-dispenser-qc-set"}, {"tools/smoke/PistonImmovableSetCycle.java", "m553-piston-immovable-set"},
         {"tools/smoke/DoubleExtenderSetCycle.java", "m559-double-extender-set"}, {"tools/smoke/PortalScaleSetCycle.java", "m560-portal-scale-set"},
         {"tools/smoke/GrassSpreadSetCycle.java", "m566-grass-spread-set"}, {"tools/smoke/TorchBurnoutSetCycle.java", "m555-torch-burnout-set"}, {"tools/smoke/BedSpawnSetCycle.java", "m567-bed-spawn-set"},
+        {"tools/smoke/RsNorLatchSetCycle.java", "m556-rs-nor-latch-set"}, {"tools/smoke/NetherExitCreateSetCycle.java", "m563-nether-exit-create-set"}, {"tools/smoke/SpawnerDelaySetCycle.java", "m569-spawner-delay-set"},
         {"tools/smoke/LabCycle.java", "lab-cycle"}, {"tools/smoke/ModApiCycle.java", "m11-mod-api"}, {"tools/smoke/ModRunCycle.java", "m12-mod-run"}, {"tools/smoke/ModGraphCycle.java", "m13-mod-graph"},
         {"tools/smoke/ScenarioDslCycle.java", "m14-scenario-dsl"}, {"tools/smoke/CensusCycle.java", "census-cycle"}, {"tools/smoke/AtlasCycle.java", "seed-atlas"}, {"tools/smoke/UiExportCycle.java", "ui-export"},
         {"tools/smoke/SpiderClimbSetCycle.java", "m447-spider-climb-set"},

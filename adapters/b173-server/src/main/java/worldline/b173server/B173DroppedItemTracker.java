@@ -54,18 +54,6 @@ final class B173DroppedItemTracker {
             if (item.item().equals(expected)) result = item; return result;
     }
 
-    boolean despawned(RemoteDroppedItem expected) {
-        if (expected == null) throw new IllegalArgumentException("null expected despawned item");
-        return expected.equals(spawned.get(expected.entityId()))
-                && destroyed.contains(expected.entityId())
-                && !collectors.containsKey(expected.entityId());
-    }
-
-    boolean collected(RemoteDroppedItem expected) {
-        if (expected == null) throw new IllegalArgumentException("null expected collected item");
-        return collectors.containsKey(expected.entityId());
-    }
-
     RemoteItemCollection collection(RemoteDroppedItem expected, String username,
             B173EntityIdentityTracker identities) {
         if (expected == null) throw new IllegalArgumentException("null expected collected item");

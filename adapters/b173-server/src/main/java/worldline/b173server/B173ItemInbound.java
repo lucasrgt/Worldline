@@ -148,8 +148,6 @@ final class B173ItemInbound {
         throw new IOException("expected peer armor absent from bounded inbound window"); }
 
     RemoteDroppedItem peekDropped(RemoteItemStack expected) { return dropped.matching(expected); }
-    boolean despawned(RemoteDroppedItem expected) { return dropped.despawned(expected); }
-    boolean collected(RemoteDroppedItem expected) { return dropped.collected(expected); }
     RemoteDroppedItem awaitDroppedItem(RemoteItemStack expected, Pump pump) throws IOException {
         RemoteDroppedItem ready = dropped.matching(expected); if (ready != null) return ready;
         for (int count = 0; count < 8192; count++) { pump.one(); ready = dropped.matching(expected);

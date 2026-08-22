@@ -14,4 +14,5 @@ and from M555 torch burnout. It does not claim wire consumers, repeater
 memory as a product, or the lighting plane. Headless `B173WireClient` only.
 No GUI. No Aero.
 
-The semantic SHA-256 is reconfrozen only by the final serialized qualification.
+The frozen semantic SHA-256 is
+`eb3281691461d7e9823245dcc3d2c552caaa8fd1e2f82bb20ad42a82349218d3`.

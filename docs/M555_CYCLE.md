@@ -10,7 +10,8 @@ measure an internal toggle threshold or burnout window. Fresh login keeps
 recovered `76:4`. One official EOF is
 retried after a 5 second sleep.
 
-The semantic SHA-256 is pending final serialized qualification.
+The frozen semantic SHA-256 is
+`18bb8e9a083d0861b2a55ef541e55b825b6495c88e02d63298e035dad62bbc00`.
 
 Run directly with:
 

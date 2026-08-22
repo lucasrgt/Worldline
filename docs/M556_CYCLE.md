@@ -11,7 +11,7 @@ names both complementary torch cells and is distinct from M312's single
 after a 5 second sleep.
 
 The frozen semantic SHA-256 is
-`7241b7297eea8617a084daaf981b2001119180794ec82ab3fbd7d664a55537ad`.
+`eb3281691461d7e9823245dcc3d2c552caaa8fd1e2f82bb20ad42a82349218d3`.
 
 Run directly with:
 

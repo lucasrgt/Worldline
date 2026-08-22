@@ -10,7 +10,8 @@ recovers to `76:4` after a 400-tick wait and later neighbor update. This
 fixture does not measure an internal eight-toggle threshold or 100-tick
 window. The recovered cell remains after a clean save plus fresh login.
 
-Semantic SHA-256: pending final serialized qualification.
+Frozen semantic SHA-256:
+`18bb8e9a083d0861b2a55ef541e55b825b6495c88e02d63298e035dad62bbc00`.
 
 This milestone is distinct from M312's single invert (`76:4 -> 75:4` while
 the support stays powered) and from M182 floor torch `76:5`. It does not
