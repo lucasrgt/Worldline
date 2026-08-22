@@ -39,9 +39,8 @@ final class B173GuiDriver {
 
     void drag(GameUiNode source, GameUiNode target, int button) {
         button(button); GameUiBounds from = bounds(source), to = bounds(target);
-        pointer(from.centerX(), from.centerY(), button, true);
-        pointer(to.centerX(), to.centerY(), -1, false);
-        pointer(to.centerX(), to.centerY(), button, false);
+        click(from.centerX(), from.centerY(), button);
+        click(to.centerX(), to.centerY(), button);
     }
 
     GameUiBounds viewport() {
