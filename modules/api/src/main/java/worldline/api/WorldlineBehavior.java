@@ -174,6 +174,10 @@ public final class WorldlineBehavior {
             "Igniting a valid obsidian frame fills its interior with portal blocks");
     public static final WorldlineBehavior PORTAL_COORDINATE_SCALE = define("portal-coordinate-scale", WorldlineFamily.WORLD,
             "Overworld-to-Nether portal travel applies the quantized eight-to-one scale");
+    public static final WorldlineBehavior CLOSABLE_BLOCK_TOGGLE = define("closable-block-toggle", WorldlineFamily.REDSTONE,
+            "Direct activation opens and closes both a wooden door and a trapdoor");
+    public static final WorldlineBehavior DOUBLE_CHEST_WINDOW = define("double-chest-window", WorldlineFamily.ITEM,
+            "Adjacent chests open one Large chest window with the combined slot topology");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = WorldlineBehaviorRegistry.freeze();
     private final String token, family, subject;
 
