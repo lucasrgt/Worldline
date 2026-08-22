@@ -171,6 +171,10 @@ public final class WorldlineBehavior {
             "A powered dispenser launches loaded snowballs and eggs as projectiles");
     public static final WorldlineBehavior DROPPED_ITEM_COLLECTION = define("dropped-item-collection", WorldlineFamily.ITEM,
             "A dropped item entity is restored to player inventory after collection");
+    public static final WorldlineBehavior HOSTILE_SPAWNER_IDENTITY = define("hostile-spawner-identity", WorldlineFamily.HOSTILE,
+            "Retargeted spawners emit the requested hostile Packet24 identities");
+    public static final WorldlineBehavior NATURAL_HOSTILE_SPAWN = define("natural-hostile-spawn", WorldlineFamily.HOSTILE,
+            "Night-time monster spawning emits multiple hostile identities without spawners");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = Collections.unmodifiableMap(
             new LinkedHashMap<String, WorldlineBehavior>(DEFINITIONS));
     private final String token, family, subject;
