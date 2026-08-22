@@ -1,18 +1,13 @@
 package worldline.api;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 /**
  * Public semantic identity of one vanilla behavior. Constants are the catalog.
  * Atlas id is {@code atlas.scenario.<token>}. Milestone numbers stay out.
  */
 public final class WorldlineBehavior {
-    private static final Pattern TOKEN = Pattern.compile("[a-z][a-z0-9-]{0,62}");
-    private static final Map<String, WorldlineBehavior> DEFINITIONS = new LinkedHashMap<String, WorldlineBehavior>();
     public static final WorldlineBehavior CREEPER_FUSE = define("creeper-fuse", WorldlineFamily.HOSTILE,
             "Creeper proximity fuse then Packet60");
     public static final WorldlineBehavior CREEPER_CANCEL = define("creeper-cancel", WorldlineFamily.HOSTILE,
@@ -179,18 +174,11 @@ public final class WorldlineBehavior {
             "Igniting a valid obsidian frame fills its interior with portal blocks");
     public static final WorldlineBehavior PORTAL_COORDINATE_SCALE = define("portal-coordinate-scale", WorldlineFamily.WORLD,
             "Overworld-to-Nether portal travel applies the quantized eight-to-one scale");
-    private static final Map<String, WorldlineBehavior> BY_TOKEN = Collections.unmodifiableMap(
-            new LinkedHashMap<String, WorldlineBehavior>(DEFINITIONS));
+    private static final Map<String, WorldlineBehavior> BY_TOKEN = WorldlineBehaviorRegistry.freeze();
     private final String token, family, subject;
 
-    private WorldlineBehavior(String token, String family, String subject) {
-        if (token == null || !TOKEN.matcher(token).matches() || looksLikeProgress(token))
-            throw new IllegalArgumentException("invalid behavior token");
-        this.token = token;
-        this.family = WorldlineFamily.parse(family);
-        if (subject == null || subject.isEmpty() || subject.indexOf('\n') >= 0 || subject.indexOf('\r') >= 0)
-            throw new IllegalArgumentException("invalid behavior subject");
-        this.subject = subject;
+    WorldlineBehavior(String token, String family, String subject) {
+        this.token = token; this.family = family; this.subject = subject;
     }
 
     public String token() { return token; }
@@ -199,24 +187,13 @@ public final class WorldlineBehavior {
     public String atlasId() { return "atlas.scenario." + token; }
 
     public static WorldlineBehavior require(String tokenOrAtlasOrProgress) {
-        if (tokenOrAtlasOrProgress == null || tokenOrAtlasOrProgress.trim().isEmpty())
-            throw new IllegalArgumentException("unknown behavior");
-        String raw = tokenOrAtlasOrProgress.trim();
-        if (raw.startsWith("atlas.scenario.")) raw = raw.substring("atlas.scenario.".length());
-        else if (looksLikeProgress(raw)) raw = tokenOfProgress(raw);
-        WorldlineBehavior value = BY_TOKEN.get(raw);
-        if (value == null) throw new IllegalArgumentException("unknown behavior " + tokenOrAtlasOrProgress);
-        return value;
+        return WorldlineBehaviorRegistry.require(BY_TOKEN, tokenOrAtlasOrProgress);
     }
 
     public static Map<String, WorldlineBehavior> all() { return BY_TOKEN; }
 
     static String tokenOfProgress(String progressId) {
-        String id = progressId.trim();
-        if (looksLikeProgress(id)) id = id.substring(id.indexOf('-') + 1);
-        if (id.endsWith("-set")) id = id.substring(0, id.length() - 4);
-        if (!TOKEN.matcher(id).matches()) throw new IllegalArgumentException("invalid progress id");
-        return id;
+        return WorldlineBehaviorRegistry.tokenOfProgress(progressId);
     }
 
     @Override public boolean equals(Object other) {
@@ -225,17 +202,7 @@ public final class WorldlineBehavior {
 
     @Override public int hashCode() { return Objects.hash(token); }
 
-    private static boolean looksLikeProgress(String raw) {
-        if (raw.length() < 4 || raw.charAt(0) != 'm') return false;
-        int dash = raw.indexOf('-');
-        if (dash < 2) return false;
-        for (int i = 1; i < dash; i++) if (raw.charAt(i) < '0' || raw.charAt(i) > '9') return false;
-        return true;
-    }
-
     private static WorldlineBehavior define(String token, String family, String subject) {
-        WorldlineBehavior value = new WorldlineBehavior(token, family, subject);
-        if (DEFINITIONS.put(token, value) != null) throw new IllegalStateException("duplicate behavior " + token);
-        return value;
+        return WorldlineBehaviorRegistry.define(token, family, subject);
     }
 }
