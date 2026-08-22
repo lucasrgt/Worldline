@@ -190,6 +190,8 @@ public final class WorldlineBehavior {
             "Empty map air use retains its server-authoritative inventory stack");
     public static final WorldlineBehavior ARMOR_EQUIPMENT = define("armor-equipment", WorldlineFamily.PLAYER,
             "Equipped armor occupies its personal slot and appears in the matching peer slot");
+    public static final WorldlineBehavior DISPENSER_ITEM_EJECT = define("dispenser-item-eject", WorldlineFamily.REDSTONE,
+            "A powered dispenser ejects ordinary inventory items as dropped entities");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = WorldlineBehaviorRegistry.freeze();
     private final String token, family, subject;
 
