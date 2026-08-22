@@ -83,6 +83,10 @@ public final class WorldlineContract {
             "Complete bounded Aero frame censuses with attested capture and stage observations");
     public static final WorldlineContract AERO_CACHE_LIFECYCLE = define("aero-cache-lifecycle",
             "Aero page-cache invalidation, membership transition, and recovery observations");
+    public static final WorldlineContract AERO_DIAGNOSTIC_CAPTURE = define("aero-diagnostic-capture",
+            "Pinned Aero reproduction, attribution, scheduler, and visual diagnostic evidence");
+    public static final WorldlineContract AERO_SAVE_WINDOW = define("aero-save-window",
+            "Aero frame windows that attribute live, skipped, and budgeted world saves");
     private static final Map<String, WorldlineContract> ALL;
     static {
         register(REPRODUCTION_BUNDLE, TRACE_DIVERGENCE, MOD_LOADING,
@@ -95,7 +99,7 @@ public final class WorldlineContract {
                 PLAYER_PERSISTENCE, PLAYER_POSE, REMOTE_WORLD_VIEW, MOVEMENT_ROUTE,
                 INVENTORY_SESSION, CONTAINER_TRANSACTION, COMBAT_SESSION,
                 AERO_RUNTIME_SESSION, AERO_PAIRED_EXPERIMENT, AERO_FRAME_CENSUS,
-                AERO_CACHE_LIFECYCLE);
+                AERO_CACHE_LIFECYCLE, AERO_DIAGNOSTIC_CAPTURE, AERO_SAVE_WINDOW);
         ALL = Collections.unmodifiableMap(new LinkedHashMap<String, WorldlineContract>(DEFINITIONS));
     }
     private final String token, subject;
