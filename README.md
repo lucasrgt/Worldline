@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/milestone-v1.446.0%20M469%20GO-2EA44F?style=flat-square" alt="Worldline v1.446.0 M469 GO">
+  <img src="https://img.shields.io/badge/milestone-v1.447.0%20M554%20GO-2EA44F?style=flat-square" alt="Worldline v1.447.0 M554 GO">
   <img src="https://img.shields.io/badge/Minecraft-Beta%201.7.3-62B47A?style=flat-square" alt="Minecraft Beta 1.7.3">
   <img src="https://img.shields.io/badge/product-Java%208-5586A4?style=flat-square" alt="Java 8 product">
   <img src="https://img.shields.io/badge/harness-JDK%2021-6B5B95?style=flat-square" alt="JDK 21 harness">
@@ -41,7 +41,7 @@ decompiled game code.
 
 ## Current status
 
-The official main line is **Worldline v1.446.0 / M469**. Its stable foundation
+The official main line is **Worldline v1.447.0 / M554**. Its stable foundation
 includes the controlled runtime, domain automation, durable reproduction
 artifacts, trace analysis, descriptor-selected mod loading, differential mod
 testing, and automatic scenario minimization. Later milestones add bounded
@@ -75,8 +75,8 @@ behavior evidence without silently widening those early public APIs.
 | Scenario DSL | Public step grammar with validation and controlled execution | GO |
 | M20-M67 | Official server lifecycle, protocol-14 control, multiplayer, inventory, crafting, and combat | GO |
 | M68-M110 | Real Aero client composition, renderer census, cell pages, cache pressure, and controls | GO |
-| M111-M469 | Official vanilla world, block, item, entity, crafting, AI, damage, and death behavior sets | GO |
-| M469 | Current release: official void walk-off death and respawn set | GO |
+| M111-M554 | Official vanilla world, block, item, entity, crafting, AI, damage, death, and piston leftover sets | GO |
+| M554 | Current release: official extended piston base-break leftover set | GO |
 | TestKit 0.x | Experimental Java specs, isolated runner, reporters, artifacts, and CLI | EXPERIMENTAL |
 | Registry census | Canonical blocks/items/recipes/smelts dumps of the controlled client | GO |
 | Seed atlas | Official-server terrain maps for any seed as deterministic pages | GO |

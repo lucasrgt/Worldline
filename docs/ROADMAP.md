@@ -463,6 +463,7 @@ Passing an experiment does not silently promote its API.
 | v1.444.0 / M462 | Bow mob hit set | GO - bow 261 type 60 Packet38 on 90 and 54 |
 | v1.445.0 / M467 | Difficulty damage | GO - type 54 Packet8 20->18 on difficulty 1 and 3 |
 | v1.446.0 / M469 | Void death set | GO - walk-off Packet8 0 plus Packet9 health 20 |
+| v1.447.0 / M554 | Extended head break set | GO - extended 33 base Packet14 leftover air plus Packet21 33 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -474,7 +475,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.446.0 direction
+## Immediate post-v1.447.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

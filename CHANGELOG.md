@@ -223,6 +223,17 @@ Status: GO.
   behavioral evidence. TestKit remains 0.x until external-mod use validates
   the authoring surface.
 
+## 1.447.0 - M554 Extended head break set
+
+Status: GO for official extended piston-33 base Packet14 leftover together.
+
+- West piston `33:4` extended to `33:12` with head `34:4`; Packet14 of pick `257` on the base left both cells air and Packet21 `33`.
+- Distinct from M367 retract-by-unpower, which keeps `33:4`. Head-first break and sticky leftover stay unclaimed.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M554 semantic SHA-256 is
+`2cc464442cf4d3f0a5f88c7cb81921c7594834d6c9114630b54798241b4c5cbf`.
+
 ## 1.446.0 - M469 Void death set
 
 Status: GO for official void walk-off Packet8 death plus Packet9 respawn together.
