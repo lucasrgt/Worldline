@@ -70,6 +70,12 @@ public final class WorldlineBehavior {
             "Wood, iron, and diamond sword hit-to-death boundaries");
     public static final WorldlineBehavior MILK_BUCKET_CYCLE = define("milk-bucket-cycle", WorldlineFamily.ITEM,
             "Cow interaction fills and drinking empties a bucket");
+    public static final WorldlineBehavior DUAL_DIMENSION_SESSION = define("dual-dimension-session", WorldlineFamily.WORLD,
+            "Simultaneous Overworld and Nether typed sessions");
+    public static final WorldlineBehavior SAME_DIMENSION_RESPAWN = define("same-dimension-respawn", WorldlineFamily.PLAYER,
+            "Overworld death and Packet9 respawn into the Overworld");
+    public static final WorldlineBehavior CROSS_DIMENSION_RESPAWN = define("cross-dimension-respawn", WorldlineFamily.PLAYER,
+            "Nether death and Packet9 respawn into the Overworld");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = index();
     private final String token, family, subject;
 
@@ -134,7 +140,8 @@ public final class WorldlineBehavior {
                 SKELETON_RANGED_AI, PIG_SPAWN, PIG_AI_MOVEMENT, PIG_DEATH, PIG_PORK_DROP,
                 BED_SLEEP_SKIP, NOTE_BLOCK_CLICK, SIGN_TEXT_PERSISTENCE, PAINTING_SPAWN,
                 NOTE_BLOCK_INSTRUMENT, PAINTING_ORIENTATION, JUKEBOX_RECORD_PLAY, SHEARS_HARVEST,
-                SWORD_DAMAGE, MILK_BUCKET_CYCLE };
+                SWORD_DAMAGE, MILK_BUCKET_CYCLE, DUAL_DIMENSION_SESSION, SAME_DIMENSION_RESPAWN,
+                CROSS_DIMENSION_RESPAWN };
         Map<String, WorldlineBehavior> map = new LinkedHashMap<String, WorldlineBehavior>();
         for (int i = 0; i < values.length; i++) {
             if (map.put(values[i].token(), values[i]) != null)
