@@ -112,6 +112,15 @@ public final class MappingQualificationQueue {
         public int priority() { return priority; }
         public String gap() { return gap; }
         public String identity() { return identity; }
+        public String side() { return side; }
+        public String kind() { return kind; }
+        public String owner() { return owner; }
+        public String name() { return name; }
+        public String descriptor() { return descriptor; }
+        public String nostalgia() { return nostalgia; }
+        public String retroClient() { return retroClient; }
+        public String retroServer() { return retroServer; }
+        public String nextEvidence() { return nextEvidence; }
         public String id() { return digest(canonical()); }
         public String canonical() {
             return priority + "|" + gap + "|" + identity + "|" + side + "|" + kind + "|"

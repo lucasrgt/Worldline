@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import worldline.symbolgraph.MappingCoverageReport;
+import worldline.symbolgraph.MappingAuditHtml;
 import worldline.symbolgraph.MappingEvidenceReport;
 import worldline.symbolgraph.MappingQualificationQueue;
 
@@ -27,6 +28,7 @@ public final class MappingCommandTest {
         Path descriptor = root.resolve("retro.properties");
         Path policy = root.resolve("coverage.properties");
         Path evidence = root.resolve("evidence.tsv");
+        Path html = root.resolve("mapping-audit.html");
         try {
             official(official, officialName);
             archive(intermediary, "tiny\t2\t0\tintermediary\tclientOfficial\tserverOfficial\n"
@@ -57,6 +59,11 @@ public final class MappingCommandTest {
             require("CORROBORATED".equals(evidenceReport.status(item))
                     && evidenceReport.render().contains("summary.conflict=0"),
                     "mapping evidence report failed to corroborate independent aliases");
+            String auditHtml = MappingAuditHtml.render(queue, evidenceReport);
+            require(auditHtml.equals(MappingAuditHtml.render(queue, evidenceReport))
+                    && auditHtml.contains("data-filter=\"CORROBORATED\"")
+                    && auditHtml.contains("id=\"item-" + item + "\""),
+                    "mapping audit HTML is incomplete or unstable");
             ByteArrayOutputStream output = new ByteArrayOutputStream(), error = new ByteArrayOutputStream();
             int status = WorldlineCli.run(new String[] {"mappings", "report", official.toString(),
                     official.toString(), intermediary.toString(), nostalgia.toString(), descriptor.toString(),
@@ -80,6 +87,15 @@ public final class MappingCommandTest {
                     && output.toString("UTF-8").contains("WORLDLINE_MAPPINGS_EVIDENCE=PASS")
                     && output.toString("UTF-8").contains("CORROBORATED"),
                     "mapping evidence CLI failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"mappings", "html", official.toString(),
+                    official.toString(), intermediary.toString(), nostalgia.toString(), descriptor.toString(),
+                    retro.toString(), evidence.toString(), html.toString()},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && error.size() == 0 && Files.isRegularFile(html)
+                    && output.toString("UTF-8").contains("WORLDLINE_MAPPINGS_HTML=PASS")
+                    && new String(Files.readAllBytes(html), StandardCharsets.UTF_8).equals(auditHtml),
+                    "mapping audit HTML CLI failed");
             StringBuilder expected = new StringBuilder("schema=1\n");
             for (Map.Entry<String, String> metric : report.metrics().entrySet())
                 expected.append("expected.").append(metric.getKey()).append('=')

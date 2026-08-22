@@ -20,11 +20,13 @@ public final class MappingEvidenceReport {
     private static final Pattern SOURCE = Pattern.compile("[a-z0-9][a-z0-9._-]{0,62}");
     private static final Pattern ALIAS = Pattern.compile("[A-Za-z0-9_$/<>.-]{1,160}");
     private static final Set<String> KINDS = kinds();
-    private final Map<String, String> statuses;
+    private final Map<String, String> statuses, sources, aliases;
     private final String body;
 
     private MappingEvidenceReport(MappingQualificationQueue queue, List<Evidence> evidence) {
         LinkedHashMap<String, String> values = new LinkedHashMap<String, String>();
+        LinkedHashMap<String, String> sourceValues = new LinkedHashMap<String, String>();
+        LinkedHashMap<String, String> aliasValues = new LinkedHashMap<String, String>();
         StringBuilder text = new StringBuilder("schema=1\nqueue.sha256=")
                 .append(queue.sha256()).append("\nevidence=").append(evidence.size())
                 .append("\nitems=").append(queue.items().size()).append('\n');
@@ -43,6 +45,7 @@ public final class MappingEvidenceReport {
             else if (sources.size() > 1 && aliases.size() == 1) { status = "CORROBORATED"; corroborated++; }
             else { status = "SUPPORTED"; supported++; }
             values.put(item.id(), status);
+            sourceValues.put(item.id(), join(sources)); aliasValues.put(item.id(), join(aliases));
             text.append(status).append('\t').append(item.id()).append('\t').append(item.gap())
                     .append('\t').append(join(sources)).append('\t').append(join(aliases)).append('\n');
         }
@@ -50,7 +53,9 @@ public final class MappingEvidenceReport {
                 .append("summary.supported=").append(supported).append('\n')
                 .append("summary.corroborated=").append(corroborated).append('\n')
                 .append("summary.conflict=").append(conflict).append('\n');
-        statuses = Collections.unmodifiableMap(values); body = text.toString();
+        statuses = Collections.unmodifiableMap(values);
+        sources = Collections.unmodifiableMap(sourceValues);
+        aliases = Collections.unmodifiableMap(aliasValues); body = text.toString();
     }
 
     public static MappingEvidenceReport create(MappingQualificationQueue queue, Path path) throws Exception {
@@ -85,6 +90,8 @@ public final class MappingEvidenceReport {
         if (value == null) throw new IllegalArgumentException("unknown evidence item " + item);
         return value;
     }
+    public String sources(String item) { status(item); return sources.get(item); }
+    public String aliases(String item) { status(item); return aliases.get(item); }
     public String sha256() { return digest(body); }
     public String render() { return body + "report.sha256=" + sha256() + "\n"; }
 

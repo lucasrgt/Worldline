@@ -1,7 +1,12 @@
 package worldline.cli;
 
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import worldline.symbolgraph.MappingAuditHtml;
 import worldline.symbolgraph.MappingCoverageGate;
 import worldline.symbolgraph.MappingCoverageReport;
 import worldline.symbolgraph.MappingEvidenceReport;
@@ -16,7 +21,21 @@ final class MappingCommand {
         boolean gated = arguments.length == 9 && "audit".equals(arguments[1]);
         boolean queue = arguments.length == 8 && "queue".equals(arguments[1]);
         boolean evidence = arguments.length == 9 && "evidence".equals(arguments[1]);
-        if (!"mappings".equals(arguments[0]) || (!reportOnly && !gated && !queue && !evidence)) return usage(error);
+        boolean html = arguments.length == 10 && "html".equals(arguments[1]);
+        if (!"mappings".equals(arguments[0])
+                || (!reportOnly && !gated && !queue && !evidence && !html)) return usage(error);
+        if (html) {
+            MappingQualificationQueue source = MappingQualificationQueue.create(
+                    Paths.get(arguments[2]), Paths.get(arguments[3]), Paths.get(arguments[4]),
+                    Paths.get(arguments[5]), Paths.get(arguments[6]), Paths.get(arguments[7]));
+            MappingEvidenceReport facts = MappingEvidenceReport.create(source, Paths.get(arguments[8]));
+            String document = MappingAuditHtml.render(source, facts); Path target = Paths.get(arguments[9]);
+            Files.write(target, document.getBytes(StandardCharsets.UTF_8),
+                    StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+            output.println("WORLDLINE_MAPPINGS_HTML=PASS");
+            output.println("queue.sha256=" + source.sha256()); output.println("output=" + target);
+            return 0;
+        }
         if (evidence) {
             MappingQualificationQueue source = MappingQualificationQueue.create(
                     Paths.get(arguments[2]), Paths.get(arguments[3]), Paths.get(arguments[4]),
@@ -50,6 +69,8 @@ final class MappingCommand {
                 + " <nostalgia.jar> <retromcp.properties> <retromcp.tiny> <coverage.properties>");
         error.println("   or: worldline mappings evidence <client.jar> <server.jar> <intermediary.jar>"
                 + " <nostalgia.jar> <retromcp.properties> <retromcp.tiny> <evidence.tsv>");
+        error.println("   or: worldline mappings html <client.jar> <server.jar> <intermediary.jar>"
+                + " <nostalgia.jar> <retromcp.properties> <retromcp.tiny> <evidence.tsv> <output.html>");
         return 2;
     }
 }
