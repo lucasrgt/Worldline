@@ -477,7 +477,7 @@ Passing an experiment does not silently promote its API.
 | v1.458.0 / M557 | One-tick pulse set | GO - 1-tick repeater piston pulse leaves pushed stone |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
-| Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
+| Semantic mappings | Complete-game client/server symbol graph plus closed, evidence-promoted semantic roles | ACTIVE - 100% symbol inventory is the target; 196 semantic roles currently promoted |
 
 ## Promotion rule
 
