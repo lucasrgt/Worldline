@@ -188,6 +188,8 @@ public final class WorldlineBehavior {
             "Dyeing a living sheep determines the wool damage emitted by shearing");
     public static final WorldlineBehavior EMPTY_MAP_RETENTION = define("empty-map-retention", WorldlineFamily.ITEM,
             "Empty map air use retains its server-authoritative inventory stack");
+    public static final WorldlineBehavior ARMOR_EQUIPMENT = define("armor-equipment", WorldlineFamily.PLAYER,
+            "Equipped armor occupies its personal slot and appears in the matching peer slot");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = WorldlineBehaviorRegistry.freeze();
     private final String token, family, subject;
 
