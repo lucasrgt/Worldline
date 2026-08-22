@@ -50,6 +50,14 @@ public final class WorldlineBehavior {
             "Pig hurt, death status, and destroy packets");
     public static final WorldlineBehavior PIG_PORK_DROP = define("pig-pork-drop", WorldlineFamily.ITEM,
             "Pig death Packet21 porkchop drop");
+    public static final WorldlineBehavior BED_SLEEP_SKIP = define("bed-sleep-skip", WorldlineFamily.PLAYER,
+            "Day refusal, night Packet17 occupancy, and SMP time skip");
+    public static final WorldlineBehavior NOTE_BLOCK_CLICK = define("note-block-click", WorldlineFamily.REDSTONE,
+            "Empty-hand note block click Packet54 or Packet61 event");
+    public static final WorldlineBehavior SIGN_TEXT_PERSISTENCE = define("sign-text-persistence", WorldlineFamily.WORLD,
+            "Standing sign Packet130 text across fresh login");
+    public static final WorldlineBehavior PAINTING_SPAWN = define("painting-spawn", WorldlineFamily.ITEM,
+            "Painting placement Packet25 identity across peers");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = index();
     private final String token, family, subject;
 
@@ -111,7 +119,8 @@ public final class WorldlineBehavior {
         WorldlineBehavior[] values = { CREEPER_FUSE, CREEPER_CANCEL, MELEE_PURSUIT, KNOCKBACK_COOLDOWN,
                 SPIDER_LEAP, SLIME_TOUCH, GHAST_FIREBALL_HIT, MONSTER_BED_INTERRUPT, BOW_MOB_HIT,
                 DIFFICULTY_DAMAGE, VOID_DEATH, PEACEFUL_DESPAWN, PLAYER_DEATH_DROPS, PIGMAN_ANGER,
-                SKELETON_RANGED_AI, PIG_SPAWN, PIG_AI_MOVEMENT, PIG_DEATH, PIG_PORK_DROP };
+                SKELETON_RANGED_AI, PIG_SPAWN, PIG_AI_MOVEMENT, PIG_DEATH, PIG_PORK_DROP,
+                BED_SLEEP_SKIP, NOTE_BLOCK_CLICK, SIGN_TEXT_PERSISTENCE, PAINTING_SPAWN };
         Map<String, WorldlineBehavior> map = new LinkedHashMap<String, WorldlineBehavior>();
         for (int i = 0; i < values.length; i++) {
             if (map.put(values[i].token(), values[i]) != null)
