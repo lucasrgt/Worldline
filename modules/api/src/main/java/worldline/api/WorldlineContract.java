@@ -75,6 +75,14 @@ public final class WorldlineContract {
             "Window topology, acknowledged transactions, crafting, furnace, and storage session");
     public static final WorldlineContract COMBAT_SESSION = define("combat-session",
             "Peer attack, incoming health, equipment durability, and persisted damage session");
+    public static final WorldlineContract AERO_RUNTIME_SESSION = define("aero-runtime-session",
+            "Pinned Aero client sessions with bounded server, event, and diagnostic evidence");
+    public static final WorldlineContract AERO_PAIRED_EXPERIMENT = define("aero-paired-experiment",
+            "Fresh-process balanced Aero experiments with explicit descriptive-only claims");
+    public static final WorldlineContract AERO_FRAME_CENSUS = define("aero-frame-census",
+            "Complete bounded Aero frame censuses with attested capture and stage observations");
+    public static final WorldlineContract AERO_CACHE_LIFECYCLE = define("aero-cache-lifecycle",
+            "Aero page-cache invalidation, membership transition, and recovery observations");
     private static final Map<String, WorldlineContract> ALL;
     static {
         register(REPRODUCTION_BUNDLE, TRACE_DIVERGENCE, MOD_LOADING,
@@ -85,7 +93,9 @@ public final class WorldlineContract {
                 DURABLE_SNAPSHOT, UI_TREE_EQUIVALENCE, RUNTIME_LAB, RUNTIME_CENSUS,
                 SEED_ATLAS, UI_EXPORT, DEDICATED_SERVER_CONTROL, MULTIPLAYER_SESSION,
                 PLAYER_PERSISTENCE, PLAYER_POSE, REMOTE_WORLD_VIEW, MOVEMENT_ROUTE,
-                INVENTORY_SESSION, CONTAINER_TRANSACTION, COMBAT_SESSION);
+                INVENTORY_SESSION, CONTAINER_TRANSACTION, COMBAT_SESSION,
+                AERO_RUNTIME_SESSION, AERO_PAIRED_EXPERIMENT, AERO_FRAME_CENSUS,
+                AERO_CACHE_LIFECYCLE);
         ALL = Collections.unmodifiableMap(new LinkedHashMap<String, WorldlineContract>(DEFINITIONS));
     }
     private final String token, subject;

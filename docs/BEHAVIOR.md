@@ -40,6 +40,9 @@ Tooling milestones use the same evidence and binding fields but declare
 `testkit.contract=<stable-token>` from `WorldlineContract` instead of a
 `behavior`. The two identities are mutually exclusive: a replay, trace,
 package, or minimization contract must not be mislabeled as vanilla behavior.
+Controlled third-party measurements are tooling contracts too. Their identity
+describes the reusable session, experiment, census, or lifecycle boundary;
+it never promotes a performance conclusion or reclassifies it as vanilla.
 
 The historical backlog is an explicit ratchet in
 `behavior/coverage.properties`. Backfill changes must reduce
