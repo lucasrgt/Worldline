@@ -8,7 +8,6 @@ import java.time.Duration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import worldline.api.PersonalCraftingSession;
 import worldline.api.RemoteHeldItem;
 import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteItemStack;
@@ -37,14 +36,16 @@ public final class PersonalCraftingSmoke {
         RemotePersonalCraft craft; RemoteRejectedTransaction audit; RemotePersonalTransaction restored;
         ServerPlayerState player;
         try {
-            server.boot(); server.operator(actorName); actor.connect(); actor.synchronizePose();
-            require(actor.awaitInventory().occupiedSlots() == 0, "actor inventory was not empty");
-            actor.look(0F, 90F); acquire(actor, actorName);
+            server.boot(); server.save(); server.operator(actorName);
+            B173LevelDatWeather.Weather world = B173LevelDatWeather.read(workspace.resolve("world/level.dat"));
+            double x = world.spawnX() + 0.5D, y = world.spawnY() + 20D, z = world.spawnZ() + 0.5D;
+            B173PlayerSeed.writeHolding(workspace, actorName, x, y, z, 17, 1, 0);
+            B173PlayerSeed.write(workspace, observerName, x + 3D, y, z);
+            actor.connect(); actor.synchronizePose(); actor.look(0F, 90F);
             RemoteItemStack log = new RemoteItemStack(17, 1, 0), planks = new RemoteItemStack(5, 4, 0);
-            RemoteInventoryView initial = actor.inventory(); require(initial.occupiedSlots() == 1
+            RemoteInventoryView initial = actor.awaitInventory(); require(initial.occupiedSlots() == 1
                     && initial.slot(36).item().equals(log) && emptyCraft(initial), "craft seed drifted");
-            observer.connect(); observer.synchronizePose(); observer.moveAndObserve(5D, 5D, 0D, 3);
-            observer.moveAndObserve(5D, 5D, 0D, 3); requirePlayers(server.players(), actorName, observerName);
+            observer.connect(); observer.synchronizePose(); requirePlayers(server.players(), actorName, observerName);
             observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 17, 0));
             craft = actor.craftPersonal2x2(36);
             require(craft.takeAction() == 1 && craft.placeAction() == 2 && craft.resultAction() == 3
@@ -81,13 +82,6 @@ public final class PersonalCraftingSmoke {
 
     private static B173WireClient client(int port, String name, Duration timeout) {
         return new B173WireClient("127.0.0.1", port, name, timeout); }
-    private static void acquire(PersonalCraftingSession client, String username) {
-        for (int step = 0; step < 10; step++) client.moveAndObserve(0D, 5D, 0D, 3);
-        client.sendChat("/give " + username + " 17 1"); client.sustainTicks(40);
-        for (int step = 0; step < 15 && client.inventory().occupiedSlots() < 1; step++)
-            client.moveAndObserve(0D, -5D, 0D, 3);
-        client.sustainTicks(10);
-    }
     private static boolean emptyCraft(RemoteInventoryView view) {
         for (int slot = 0; slot < 5; slot++) if (!view.slot(slot).empty()) return false; return true; }
     private static void requirePlayers(List<String> players, String first, String second) {

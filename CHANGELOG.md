@@ -49,6 +49,10 @@ Status: GO candidate after central audit correction; published history is preser
   placement with official-format player NBT fixtures for all three participants,
   the victim's leather pieces, and the attacker's diamond sword; the armor equip,
   ordered combat packets, Aero window, and frozen signature are unchanged.
+- Replaced M57's probabilistic `/give` pickup and randomized peer placement with
+  official-format player NBT for the actor's log and both peer positions; the six
+  crafting actions, authoritative audit, persistence, and frozen signature are
+  unchanged.
 
 ## Unreleased - Integration Hygiene and Anti-Slop Audit
 
