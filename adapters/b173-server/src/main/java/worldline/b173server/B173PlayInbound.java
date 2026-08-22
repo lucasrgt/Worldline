@@ -45,16 +45,18 @@ final class B173PlayInbound {
     RemoteChunkSnapshot awaitChunk() throws IOException {
         RemoteChunkSnapshot ready = cache.firstDecoded();
         if (ready != null) return ready;
-        for (int count = 0; count < 4096; count++) {
-            int packet = input.readUnsignedByte();
-            if (packet == 51) {
-                RemoteChunkSnapshot chunk = B173ChunkCodec.read(input);
-                if (cache.accept(chunk)) return chunk;
-                continue;
+        Thread pulse = pulse(); long deadline = System.nanoTime() + timeoutNanos;
+        try { for (int count = 0; count < 16384 && System.nanoTime() < deadline; count++) {
+                int packet; try { packet = input.readUnsignedByte(); }
+                catch (IOException error) { throw new IOException("chunk stream ended with decoded="
+                        + cache.decoded() + ",tracked=" + cache.tracked(), error); }
+                if (packet == 51) { RemoteChunkSnapshot chunk = B173ChunkCodec.read(input);
+                    if (cache.accept(chunk)) return chunk; }
+                else skip(packet);
             }
-            skip(packet);
-        }
-        throw new IOException("chunk packet absent from bounded inbound window");
+            throw new IOException("chunk packet absent before bounded deadline; decoded="
+                    + cache.decoded() + ",tracked=" + cache.tracked());
+        } finally { pulse.interrupt(); }
     }
 
     RemoteWorldView awaitWorld(int minimumChunks) throws IOException {

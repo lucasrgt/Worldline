@@ -42,6 +42,9 @@ Status: GO candidate after central audit correction; published history is preser
   player-NBT fixture that fixes stone at personal slot 36 and places both peers
   within tracking range while preserving the rejected action, authoritative
   resync, accepted recovery, and signature.
+- Stabilized M29's first decoded-chunk wait with the same bounded flying pulse,
+  packet ceiling, runtime deadline, and cache diagnostics used by later remote
+  world waits; the Packet51 decoder and frozen signature remain unchanged.
 
 ## Unreleased - Integration Hygiene and Anti-Slop Audit
 
