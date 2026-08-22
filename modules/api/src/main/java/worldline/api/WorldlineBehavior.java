@@ -182,6 +182,8 @@ public final class WorldlineBehavior {
             "A player persisted in dimension minus one logs into decoded Nether terrain");
     public static final WorldlineBehavior GHAST_FIREBALL_SPAWN = define("ghast-fireball-spawn", WorldlineFamily.HOSTILE,
             "A Ghast emits a type-63 fireball object whose thrower is the Ghast");
+    public static final WorldlineBehavior FISHING_CATCH = define("fishing-catch", WorldlineFamily.ITEM,
+            "Casting and reeling a fishing hook produces a raw-fish item entity");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = WorldlineBehaviorRegistry.freeze();
     private final String token, family, subject;
 
