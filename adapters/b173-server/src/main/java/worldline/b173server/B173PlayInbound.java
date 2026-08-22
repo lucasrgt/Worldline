@@ -61,16 +61,15 @@ final class B173PlayInbound {
         if (minimumChunks < 1 || minimumChunks > RemoteWorldView.MAX_CHUNKS)
             throw new IllegalArgumentException("invalid minimum remote chunk count");
         if (cache.decoded() >= minimumChunks) return cache.snapshot();
-        for (int count = 0; count < 8192; count++) {
-            int packet;
-            try { packet = input.readUnsignedByte(); }
-            catch (IOException error) { throw new IOException("remote world stream ended with decoded="
-                    + cache.decoded() + ",tracked=" + cache.tracked(), error); }
-            if (packet == 51) cache.accept(B173ChunkCodec.read(input));
-            else skip(packet);
-            if (cache.decoded() >= minimumChunks) return cache.snapshot();
-        }
-        throw new IOException("remote world minimum absent from bounded inbound window");
+        Thread pulse = pulse(); long deadline = System.nanoTime() + timeoutNanos;
+        try { for (int count = 0; count < 8192 && System.nanoTime() < deadline; count++) {
+                int packet; try { packet = input.readUnsignedByte(); }
+                catch (IOException error) { throw new IOException("remote world stream ended with decoded="
+                        + cache.decoded() + ",tracked=" + cache.tracked(), error); }
+                if (packet == 51) cache.accept(B173ChunkCodec.read(input)); else skip(packet);
+                if (cache.decoded() >= minimumChunks) return cache.snapshot(); }
+            throw new IOException("remote world minimum absent from bounded inbound window");
+        } finally { pulse.interrupt(); }
     }
 
     RemoteWorldView awaitChunk(int chunkX, int chunkZ) throws IOException {
