@@ -59,6 +59,8 @@ public final class WorldlineCli {
                 return UiCommand.run(arguments, output, error);
             if (arguments.length >= 2 && "semantics".equals(arguments[0]))
                 return SemanticsCommand.run(arguments, output, error);
+            if ("mappings".equals(arguments[0]))
+                return MappingCommand.run(arguments, output, error);
             return usage(error);
         } catch (IOException | ReflectiveOperationException | RuntimeException failure) {
             error.println("worldline command failed: " + failure.getMessage()); return 1;
@@ -140,7 +142,11 @@ public final class WorldlineCli {
         error.println("   or: worldline semantics category <name>");
         error.println("   or: worldline semantics role <ROLE>");
         error.println("   or: worldline semantics adapter [name]");
-        error.println("   or: worldline semantics adapter check <repository-root>"); return 2;
+        error.println("   or: worldline semantics adapter check <repository-root>");
+        error.println("   or: worldline mappings report <client.jar> <server.jar> <intermediary.jar>"
+                + " <nostalgia.jar> <retromcp.properties> <retromcp.tiny>");
+        error.println("   or: worldline mappings audit <client.jar> <server.jar> <intermediary.jar>"
+                + " <nostalgia.jar> <retromcp.properties> <retromcp.tiny> <coverage.properties>"); return 2;
     }
 
     private static void explain(TraceDiff difference, PrintStream output) {

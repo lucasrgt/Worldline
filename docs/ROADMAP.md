@@ -485,7 +485,7 @@ Passing an experiment does not silently promote its API.
 | v1.462.0 / M568 | Item despawn set | REJECTED - reloaded dropped-item Packet21 absent in two serialized runs |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
-| Semantic mappings | Closed 25-category catalog, adapter manifests, and static role graph | GO - stable milestone |
+| Semantic mappings | Complete-game client/server symbol graph plus closed, evidence-promoted semantic roles | ACTIVE - 100% symbol inventory is the target; 196 semantic roles currently promoted |
 
 ## Promotion rule
 

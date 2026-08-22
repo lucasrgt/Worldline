@@ -61,7 +61,7 @@ behavior evidence without silently widening those early public APIs.
 | M9 | Deterministic, budgeted scenario minimization | GO |
 | GUI tree | Neutral inventory UI tree | GO |
 | Invariants | Item, block, entity, wear, health, and time rules | GO |
-| Semantics | Closed role catalog, mappings, manifests, and coverage gate | GO |
+| Semantics | Complete-game symbol mapping target plus closed, evidence-promoted role catalog | ACTIVE |
 | M10-M19 | Native rendering, Aero qualification, attribution, and bounded performance policies | GO |
 | Pre-push gate | Versioned hook running the canonical gate before every push | GO |
 | Differential fuzzer | Deterministic campaigns with auto-minimized findings | GO |
