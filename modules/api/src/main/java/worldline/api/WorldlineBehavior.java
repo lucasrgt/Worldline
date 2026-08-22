@@ -114,6 +114,18 @@ public final class WorldlineBehavior {
             "Activating a bed in the Nether destroys it in a strength-five explosion");
     public static final WorldlineBehavior BED_SPAWN_RESPAWN = define("bed-spawn-respawn", WorldlineFamily.PLAYER,
             "Sleeping sets the subsequent same-dimension respawn at the bed");
+    public static final WorldlineBehavior FARMLAND_STATE = define("farmland-state", WorldlineFamily.ENVIRONMENT,
+            "Hoe tilling, trampling, and nearby-water hydration update farmland state");
+    public static final WorldlineBehavior PLANT_GROWTH = define("plant-growth", WorldlineFamily.ENVIRONMENT,
+            "Sapling, crop, cactus, and sugar-cane growth under valid conditions");
+    public static final WorldlineBehavior CROP_PLANTING = define("crop-planting", WorldlineFamily.ITEM,
+            "Seeds plant wheat on hydrated farmland");
+    public static final WorldlineBehavior CROP_HARVEST = define("crop-harvest", WorldlineFamily.ITEM,
+            "Breaking mature crops emits their server-authored item drops");
+    public static final WorldlineBehavior LEAF_DECAY = define("leaf-decay", WorldlineFamily.ENVIRONMENT,
+            "Leaves decay after their supporting logs are removed");
+    public static final WorldlineBehavior GRASS_SPREAD = define("grass-spread", WorldlineFamily.ENVIRONMENT,
+            "Lit exposed dirt becomes grass while covered dirt remains unchanged");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = index();
     private final String token, family, subject;
 
@@ -184,7 +196,8 @@ public final class WorldlineBehavior {
                 PISTON_MOTION, PISTON_PUSH_LIMITS, PISTON_QUASI_CONNECTIVITY,
                 PISTON_BUD_UPDATE, PISTON_HEAD_BREAK, FIRE_IGNITION, FIRE_PROPAGATION,
                 BUCKET_FLUID_CYCLE, FLUID_FLOW, WATER_LAVA_SOLIDIFICATION, JUKEBOX_EJECT,
-                NETHER_BED_EXPLOSION, BED_SPAWN_RESPAWN };
+                NETHER_BED_EXPLOSION, BED_SPAWN_RESPAWN, FARMLAND_STATE, PLANT_GROWTH,
+                CROP_PLANTING, CROP_HARVEST, LEAF_DECAY, GRASS_SPREAD };
         Map<String, WorldlineBehavior> map = new LinkedHashMap<String, WorldlineBehavior>();
         for (int i = 0; i < values.length; i++) {
             if (map.put(values[i].token(), values[i]) != null)
