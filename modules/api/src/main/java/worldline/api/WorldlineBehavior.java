@@ -82,6 +82,8 @@ public final class WorldlineBehavior {
             "Selected food consumption, health restoration, and container result");
     public static final WorldlineBehavior ENVIRONMENTAL_DAMAGE = define("environmental-damage", WorldlineFamily.ENVIRONMENT,
             "Server-authored health loss from hazardous block environments");
+    public static final WorldlineBehavior FENCE_COLLISION = define("fence-collision", WorldlineFamily.ENVIRONMENT,
+            "Server correction blocks a walk through an adjacent fence path");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = index();
     private final String token, family, subject;
 
@@ -148,7 +150,7 @@ public final class WorldlineBehavior {
                 NOTE_BLOCK_INSTRUMENT, PAINTING_ORIENTATION, JUKEBOX_RECORD_PLAY, SHEARS_HARVEST,
                 SWORD_DAMAGE, MILK_BUCKET_CYCLE, DUAL_DIMENSION_SESSION, SAME_DIMENSION_RESPAWN,
                 CROSS_DIMENSION_RESPAWN, BLOCK_PLACEMENT_PERSISTENCE, FOOD_CONSUMPTION,
-                ENVIRONMENTAL_DAMAGE };
+                ENVIRONMENTAL_DAMAGE, FENCE_COLLISION };
         Map<String, WorldlineBehavior> map = new LinkedHashMap<String, WorldlineBehavior>();
         for (int i = 0; i < values.length; i++) {
             if (map.put(values[i].token(), values[i]) != null)
