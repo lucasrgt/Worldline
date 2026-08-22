@@ -196,6 +196,19 @@ collection so the plan does not retain a mutable source iterable.
   dynamically through `TestContext`.
 - cleanup hooks run even when the body or an assertion fails.
 
+These hooks are not interchangeable with project-global setup or dependency
+substitution. `beforeAll` runs once for its collected suite in one spec file;
+it does not run once across every discovered file. A future project-global
+contract must be configured once by the runner, execute before all selected
+plans, and guarantee teardown after partial collection or execution failure.
+
+Mocks and fakes must also be explicit inputs, not hidden hook side effects.
+Neutral unit tests may use ordinary Java test doubles. Behavioral tests may
+substitute a declared mod dependency only through a visible test-runtime
+configuration that records the replacement in evidence. The official
+Minecraft client/server, mappings, Butter, and Aero cannot be silently mocked
+for a test that claims oracle-backed behavior.
+
 ### Expectations
 
 The initial typed matchers include equality, inequality, booleans, null,
