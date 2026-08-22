@@ -223,6 +223,17 @@ Status: GO.
   behavioral evidence. TestKit remains 0.x until external-mod use validates
   the authoring surface.
 
+## 1.459.0 - M566 Grass spread set
+
+Status: GO for official grass-2 random-tick Packet53 onto lit dirt-3 together.
+
+- Lit dirt samples adjacent to an 8-cell grass ring became `2`; stone-covered dirt stayed `3`. Exact tick and which sample converts are not hashed.
+- Distinct from M238 grass place and M223 dirt place.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M566 semantic SHA-256 is
+`b80a81abefd273cf68a6495d0a825f6556e85176324d77bc1702832ffc448174`.
+
 ## 1.458.0 - M557 One-tick pulse set
 
 Status: GO for official 1-tick repeater piston pulse that leaves a pushed block together.

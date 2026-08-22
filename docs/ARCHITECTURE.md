@@ -1919,3 +1919,5 @@ M560 adds no public API. Packet9 `0 -> -1` pose within 128 of Overworld `xz/8` s
 M564 adds no public API. Nearby Packet24 type `50` or `54` at night plus torch-light rejection shares one spawn-light family.
 
 M557 adds no public API. One-tick repeater piston pulse that leaves a pushed block shares one one-tick-pulse family.
+
+M566 adds no public API. Packet53 dirt `3 -> 2` on lit samples plus covered dirt stay shares one grass-spread family.
