@@ -132,6 +132,14 @@ public final class WorldlineBehavior {
             "Torch light melts snow to air and ice to water");
     public static final WorldlineBehavior HOSTILE_SPAWN_LIGHT = define("hostile-spawn-light", WorldlineFamily.HOSTILE,
             "Darkness permits hostile spawns while torch light rejects them");
+    public static final WorldlineBehavior WOODEN_DOOR_TOGGLE = define("wooden-door-toggle", WorldlineFamily.REDSTONE,
+            "Direct activation opens and closes both wooden-door cells");
+    public static final WorldlineBehavior TRAPDOOR_TOGGLE = define("trapdoor-toggle", WorldlineFamily.REDSTONE,
+            "Direct activation opens and closes oriented trapdoors");
+    public static final WorldlineBehavior PRESSURE_PLATE = define("pressure-plate", WorldlineFamily.REDSTONE,
+            "Player contact powers and departure releases stone and wooden plates");
+    public static final WorldlineBehavior REDSTONE_INPUT_STATE = define("redstone-input-state", WorldlineFamily.REDSTONE,
+            "Lever toggles and button pulses expose their powered metadata transitions");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = index();
     private final String token, family, subject;
 
@@ -204,7 +212,8 @@ public final class WorldlineBehavior {
                 BUCKET_FLUID_CYCLE, FLUID_FLOW, WATER_LAVA_SOLIDIFICATION, JUKEBOX_EJECT,
                 NETHER_BED_EXPLOSION, BED_SPAWN_RESPAWN, FARMLAND_STATE, PLANT_GROWTH,
                 CROP_PLANTING, CROP_HARVEST, LEAF_DECAY, GRASS_SPREAD, LIGHT_OPACITY,
-                LIGHT_MELTING, HOSTILE_SPAWN_LIGHT };
+                LIGHT_MELTING, HOSTILE_SPAWN_LIGHT, WOODEN_DOOR_TOGGLE, TRAPDOOR_TOGGLE,
+                PRESSURE_PLATE, REDSTONE_INPUT_STATE };
         Map<String, WorldlineBehavior> map = new LinkedHashMap<String, WorldlineBehavior>();
         for (int i = 0; i < values.length; i++) {
             if (map.put(values[i].token(), values[i]) != null)
