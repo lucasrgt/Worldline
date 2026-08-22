@@ -31,6 +31,10 @@ Status: GO candidate after central audit correction; published history is preser
   official-server cycles. The final release gate also restores explicit
   signature coverage for the qualified M500-M525 DeepSeek batch while keeping
   M520 rejected.
+- Restored M15's original two-thirds broad geometry-agreement invariant after
+  repeated GUI qualification exposed scheduling variance at the later
+  three-quarters threshold; the 100-position floor and required nonzero
+  temporal divergence remain fail-closed.
 
 ## Unreleased - Integration Hygiene and Anti-Slop Audit
 

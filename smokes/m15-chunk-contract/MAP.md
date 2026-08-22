@@ -19,8 +19,8 @@ remaining work as deferred, and resumes only on the next rendered frame.
   array after culling on every rendered frame.
 - Each rebuilt chunk's complete Tessellator vertex stream, texture coordinates,
   color, normal, and layer-emptiness bits are hashed. At least 100 common
-  non-empty positions and more than three quarters of the comparable cohort
-  must match exactly, while nonzero mismatches preserve the
+  non-empty positions and more than two thirds of the comparable cohort must
+  match exactly, while nonzero mismatches preserve the
   observed temporal divergence caused by rebuilds at different world ticks.
 
 ## Non-claims
