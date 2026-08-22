@@ -178,6 +178,10 @@ public final class WorldlineBehavior {
             "Direct activation opens and closes both a wooden door and a trapdoor");
     public static final WorldlineBehavior DOUBLE_CHEST_WINDOW = define("double-chest-window", WorldlineFamily.ITEM,
             "Adjacent chests open one Large chest window with the combined slot topology");
+    public static final WorldlineBehavior NETHER_LOGIN = define("nether-login", WorldlineFamily.WORLD,
+            "A player persisted in dimension minus one logs into decoded Nether terrain");
+    public static final WorldlineBehavior GHAST_FIREBALL_SPAWN = define("ghast-fireball-spawn", WorldlineFamily.HOSTILE,
+            "A Ghast emits a type-63 fireball object whose thrower is the Ghast");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = WorldlineBehaviorRegistry.freeze();
     private final String token, family, subject;
 
