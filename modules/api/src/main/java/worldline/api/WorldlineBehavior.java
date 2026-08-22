@@ -155,6 +155,14 @@ public final class WorldlineBehavior {
             "A one-tick repeater pulse makes a piston drop its pushed payload");
     public static final WorldlineBehavior CAKE_CONSUMPTION = define("cake-consumption", WorldlineFamily.ITEM,
             "Cake activation advances bite metadata, heals, and removes the final slice");
+    public static final WorldlineBehavior TOOL_BLOCK_BREAK = define("tool-block-break", WorldlineFamily.ITEM,
+            "Tool-qualified block breaking removes cells, emits drops, and consumes durability");
+    public static final WorldlineBehavior FRAGILE_BLOCK_BREAK = define("fragile-block-break", WorldlineFamily.ENVIRONMENT,
+            "Glass breaks without a drop while ice breaks or melts into water");
+    public static final WorldlineBehavior GRAVITY_BLOCK_FALL = define("gravity-block-fall", WorldlineFamily.ENVIRONMENT,
+            "Unsupported sand and gravel fall as entities into lower cells");
+    public static final WorldlineBehavior TNT_PRIMING = define("tnt-priming", WorldlineFamily.REDSTONE,
+            "Flint and steel primes TNT entities that explode and can chain-prime TNT");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = Collections.unmodifiableMap(
             new LinkedHashMap<String, WorldlineBehavior>(DEFINITIONS));
     private final String token, family, subject;
