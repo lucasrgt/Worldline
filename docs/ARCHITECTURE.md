@@ -1915,3 +1915,5 @@ M549 adds no public API. Primed sticky `29:4` plus neighbor-update `29:4 -> 29:1
 M559 adds no public API. Sequenced sticky `29` then piston `33` two-cell cobble travel shares one double-extender family.
 
 M560 adds no public API. Packet9 `0 -> -1` pose within 128 of Overworld `xz/8` shares one portal-scale family.
+
+M564 adds no public API. Nearby Packet24 type `50` or `54` at night plus torch-light rejection shares one spawn-light family.

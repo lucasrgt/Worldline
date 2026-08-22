@@ -473,6 +473,7 @@ Passing an experiment does not silently promote its API.
 | v1.454.0 / M549 | Sticky BUD set | GO - primed 29:4 then neighbor update 29:4->12 plus pull |
 | v1.455.0 / M559 | Double extender set | GO - sequenced 29 then 33 moves cobble two cells |
 | v1.456.0 / M560 | Portal scale set | GO - Packet9 0->-1 pose maps OW xz /8, not 1:1 |
+| v1.457.0 / M564 | Spawn light set | GO - type 50/54 at night, absent under torch light 14 |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
 | Semantic mappings | Closed 24-category catalog, adapter manifests, and static role graph | GO - stable milestone |
@@ -484,7 +485,7 @@ frozen evidence, source provenance, and canonical gate are all committed to the
 repository. The official Minecraft Beta 1.7.3 JAR remains local and is never a
 release artifact.
 
-## Immediate post-v1.456.0 direction
+## Immediate post-v1.457.0 direction
 
 Worldline's active roadmap is vanilla-only until its Beta 1.7.3 model reaches
 state of the art. M111 establishes deterministic block identity, M112 adds the

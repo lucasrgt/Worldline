@@ -26,27 +26,27 @@ final class ReleaseVanilla {
     private ReleaseVanilla() {}
 
     static void check(Path root, Properties release) throws Exception {
-        Properties m553 = load(root, "smokes/m553-piston-immovable-set/smoke.properties");
         Properties m549 = load(root, "smokes/m549-sticky-bud-set/smoke.properties");
         Properties m559 = load(root, "smokes/m559-double-extender-set/smoke.properties");
         Properties m560 = load(root, "smokes/m560-portal-scale-set/smoke.properties");
-        match(release, "version", "1.456.0");
-        match(release, "milestone", "m560-portal-scale-set");
-        same(release, "m553.signature", m553, "expected.signature");
-        same(release, "server.sha256", m553, "server.jar.sha256");
+        Properties m564 = load(root, "smokes/m564-spawn-light-set/smoke.properties");
+        match(release, "version", "1.457.0");
+        match(release, "milestone", "m564-spawn-light-set");
         same(release, "m549.signature", m549, "expected.signature");
         same(release, "server.sha256", m549, "server.jar.sha256");
         same(release, "m559.signature", m559, "expected.signature");
         same(release, "server.sha256", m559, "server.jar.sha256");
         same(release, "m560.signature", m560, "expected.signature");
         same(release, "server.sha256", m560, "server.jar.sha256");
-        for (String file : Arrays.asList("docs/M553_PISTON_IMMOVABLE_SET.md", "docs/M553_CYCLE.md",
-                "smokes/m553-piston-immovable-set/MAP.md", "docs/M549_STICKY_BUD_SET.md", "docs/M549_CYCLE.md",
+        same(release, "m564.signature", m564, "expected.signature");
+        same(release, "server.sha256", m564, "server.jar.sha256");
+        for (String file : Arrays.asList("docs/M549_STICKY_BUD_SET.md", "docs/M549_CYCLE.md",
                 "smokes/m549-sticky-bud-set/MAP.md", "docs/M559_DOUBLE_EXTENDER_SET.md", "docs/M559_CYCLE.md",
                 "smokes/m559-double-extender-set/MAP.md", "docs/M560_PORTAL_SCALE_SET.md", "docs/M560_CYCLE.md",
-                "smokes/m560-portal-scale-set/MAP.md"))
+                "smokes/m560-portal-scale-set/MAP.md", "docs/M564_SPAWN_LIGHT_SET.md", "docs/M564_CYCLE.md",
+                "smokes/m564-spawn-light-set/MAP.md"))
             if (!Files.isRegularFile(root.resolve(file))) throw new IllegalStateException("missing " + file);
-        System.out.println("  release: Worldline v1.456.0 M560 Portal scale set GO");
+        System.out.println("  release: Worldline v1.457.0 M564 Spawn light set GO");
     }
 
     private static Properties load(Path root, String relative) throws IOException {

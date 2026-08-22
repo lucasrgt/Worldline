@@ -223,6 +223,17 @@ Status: GO.
   behavioral evidence. TestKit remains 0.x until external-mod use validates
   the authoring surface.
 
+## 1.457.0 - M564 Spawn light set
+
+Status: GO for official hostile Packet24 at light <=7 plus torch-light rejection together.
+
+- Night `14000` creeper/zombie spawners emitted nearby type `50` or `54`; 49 floor torches `50:5` (light 14) kept those types absent.
+- Distinct from M435 identity-only, M390 remaining-spawner identity, and M141 pig spawner.
+- Repeated the complete family in two official server JVMs.
+
+The frozen M564 semantic SHA-256 is
+`45458f0fd9d3a18ec9205472afef562dea56312353613004d3fe5c1b8374d503`.
+
 ## 1.456.0 - M560 Portal scale set
 
 Status: GO for official Overworld-to-Nether 8:1 portal coordinate scale together.
