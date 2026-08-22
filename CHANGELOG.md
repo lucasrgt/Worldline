@@ -38,6 +38,10 @@ Status: GO candidate after central audit correction; published history is preser
 - Replaced M64's probabilistic `/give` drop pickup with an official-format
   player-NBT fixture that fixes planks at personal slot 36 and the consumed
   workbench at slot 37, preserving the frozen workbench actions and signature.
+- Replaced M56's probabilistic `/give` drop pickup with an official-format
+  player-NBT fixture that fixes stone at personal slot 36 and places both peers
+  within tracking range while preserving the rejected action, authoritative
+  resync, accepted recovery, and signature.
 
 ## Unreleased - Integration Hygiene and Anti-Slop Audit
 
