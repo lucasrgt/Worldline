@@ -184,6 +184,10 @@ public final class WorldlineBehavior {
             "A Ghast emits a type-63 fireball object whose thrower is the Ghast");
     public static final WorldlineBehavior FISHING_CATCH = define("fishing-catch", WorldlineFamily.ITEM,
             "Casting and reeling a fishing hook produces a raw-fish item entity");
+    public static final WorldlineBehavior SHEEP_DYE_COLOR = define("sheep-dye-color", WorldlineFamily.ITEM,
+            "Dyeing a living sheep determines the wool damage emitted by shearing");
+    public static final WorldlineBehavior EMPTY_MAP_RETENTION = define("empty-map-retention", WorldlineFamily.ITEM,
+            "Empty map air use retains its server-authoritative inventory stack");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = WorldlineBehaviorRegistry.freeze();
     private final String token, family, subject;
 
