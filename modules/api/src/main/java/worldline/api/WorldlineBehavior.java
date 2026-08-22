@@ -194,6 +194,8 @@ public final class WorldlineBehavior {
             "A powered dispenser ejects ordinary inventory items as dropped entities");
     public static final WorldlineBehavior MOB_DEATH_DROPS = define("mob-death-drops", WorldlineFamily.ITEM,
             "Killing typed mobs emits their canonical server-authored item drops");
+    public static final WorldlineBehavior VEHICLE_BREAK_DROPS = define("vehicle-break-drops", WorldlineFamily.ITEM,
+            "Attacking boats and minecarts emits their canonical wreckage items");
     private static final Map<String, WorldlineBehavior> BY_TOKEN = WorldlineBehaviorRegistry.freeze();
     private final String token, family, subject;
 
