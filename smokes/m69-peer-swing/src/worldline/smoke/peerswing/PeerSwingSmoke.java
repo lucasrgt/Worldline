@@ -35,7 +35,8 @@ public final class PeerSwingSmoke {
             server.boot(); server.save(); server.operator(actorName);
             B173LevelDatWeather.Weather world = B173LevelDatWeather.read(workspace.resolve("world/level.dat"));
             double x = world.spawnX() + 0.5D, y = world.spawnY() + 20D, z = world.spawnZ() + 0.5D;
-            B173PlayerSeed.writeHolding(workspace, actorName, x, y, z, 276, 1, 0);
+            B173PlayerSeed.writeInventory(workspace, actorName, x, y, z,
+                    new int[] {0}, new int[] {276}, new int[] {1}, new int[] {0});
             B173PlayerSeed.write(workspace, observerName, x + 3D, y, z);
             observer.connect(); observer.synchronizePose();
             require(observer.awaitInventory().occupiedSlots() == 0, "observer inventory drifted");

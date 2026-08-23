@@ -63,6 +63,7 @@ public final class WindowLifecycleSmoke {
             observer.connect(); observer.synchronizePose(); requirePlayers(server.players(), actorName, observerName);
             observer.awaitRemoteChunk(Math.floorDiv(target.x(), 16), Math.floorDiv(target.z(), 16));
             observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 54, 0)); actor.placeHeldBlock(support, BlockFace.UP);
+            actor.awaitBlock(target, new BlockState(54, 0));
             BlockState chest = actor.sustainTicks(5).blockAt(target.x(), target.y(), target.z());
             require(chest.legacyId() == 54 && observer.sustainTicks(5).blockAt(target.x(), target.y(), target.z())
                     .equals(chest), "placed lifecycle chest diverged");

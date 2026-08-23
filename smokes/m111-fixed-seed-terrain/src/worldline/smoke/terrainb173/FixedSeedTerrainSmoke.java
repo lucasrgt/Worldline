@@ -44,7 +44,7 @@ public final class FixedSeedTerrainSmoke {
                 + "|surface=" + surface + "|full-id-plane=diagnostic"
                 + "|decode=packet50+packet51-xzy|disconnect=clean";
         System.out.println("WORLDLINE_M111_TERRAIN=chunk=" + chunkX + ":" + chunkZ
-                + ",solid=" + solid + ",terrain=" + terrain
+                + ",nonair=" + chunk.nonAirBlocks() + ",solid=" + solid + ",terrain=" + terrain
                 + ",surface=" + surface);
         System.out.println("WORLDLINE_M111_RAW_DIAGNOSTIC=" + raw
                 + ",nonair=" + chunk.nonAirBlocks());
