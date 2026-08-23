@@ -42,6 +42,11 @@ public final class OptimizationCatalogCheckTest {
             Outcome unsafe = run(root); require(unsafe.code != 0
                     && unsafe.text.contains("non-active optimization defaults on sample.fast-path"),
                     "unsafe default did not fail closed: " + unsafe.text);
+            Files.write(catalog, VALID.replace("Subject#work", "Subject#absent")
+                    .getBytes(StandardCharsets.UTF_8));
+            Outcome absent = run(root); require(absent.code != 0
+                    && absent.text.contains("source member is absent sample.Subject#absent"),
+                    "absent source symbol did not fail closed: " + absent.text);
         } finally { delete(root); }
     }
 

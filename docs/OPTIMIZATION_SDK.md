@@ -67,5 +67,5 @@ java path/to/worldline/tools/harness/OptimizationCatalogCheck.java path/to/proje
 ```
 
 The checker rejects incomplete records, unsafe defaults, unknown annotation
-IDs, and annotation/symbol tracking drift. An empty catalog is valid only when
-the repository contains no `OptimizationRef` sites.
+IDs, annotation/symbol tracking drift, and symbol references that do not
+resolve to exactly one maintained Java type and method.

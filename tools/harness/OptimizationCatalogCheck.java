@@ -22,6 +22,8 @@ public final class OptimizationCatalogCheck {
             "^[\\t ]*@(?:[A-Za-z0-9_.]+\\.)?OptimizationRef[\\t ]*\\((.*?)\\)",
             Pattern.MULTILINE | Pattern.DOTALL);
     private static final Pattern STRING = Pattern.compile("\"([^\"]+)\"");
+    private static final Pattern SYMBOL = Pattern.compile(
+            "[A-Za-z_$][A-Za-z0-9_$.]*#[A-Za-z_$][A-Za-z0-9_$]*");
     private static final List<String> REQUIRED = Arrays.asList("schema", "id", "summary",
             "subsystem", "status", "default.enabled", "behavior.delta", "risks",
             "rollback", "tracking", "source.symbols", "evidence");
@@ -58,10 +60,13 @@ public final class OptimizationCatalogCheck {
                     "annotation-tracked optimization has no source reference " + record.id);
             require(!annotated || record.tracking.equals("annotation"),
                     "symbol-tracked optimization is annotated " + record.id);
+            validateSymbols(record);
         }
-        int sites = references.values().stream().mapToInt(List::size).sum();
+        int sites = references.values().stream().mapToInt(List::size).sum()
+                + catalog.values().stream().filter(record -> record.tracking.equals("symbol"))
+                        .mapToInt(record -> record.symbols.size()).sum();
         System.out.println("  optimization catalog: " + catalog.size() + " records, "
-                + sites + " annotated sites");
+                + sites + " tracked sites");
     }
 
     private Map<String, Record> loadCatalog() throws IOException {
@@ -92,10 +97,41 @@ public final class OptimizationCatalogCheck {
             String evidence = fields.getProperty("evidence").trim();
             require(status.equals("unknown") || !evidence.equals("none"),
                     "decided optimization lacks evidence " + id);
-            require(result.put(id, new Record(id, tracking)) == null,
+            List<String> symbols = symbols(fields.getProperty("source.symbols"), id);
+            require(result.put(id, new Record(id, tracking, symbols)) == null,
                     "duplicate optimization id " + id);
         }
         return result;
+    }
+
+    private List<String> symbols(String raw, String id) {
+        List<String> result = Arrays.stream(raw.split(",")).map(String::trim)
+                .filter(value -> !value.isEmpty()).distinct().collect(Collectors.toList());
+        require(!result.isEmpty(), "optimization has no source symbols " + id);
+        for (String symbol : result) require(SYMBOL.matcher(symbol).matches(),
+                "invalid source symbol " + symbol + " in " + id);
+        return result;
+    }
+
+    private void validateSymbols(Record record) throws IOException {
+        List<Path> sources = new ArrayList<Path>();
+        for (String name : Arrays.asList("modules", "adapters", "smokes", "tools")) {
+            Path directory = root.resolve(name);
+            if (Files.isDirectory(directory)) sources.addAll(files(directory, ".java"));
+        }
+        for (String declared : record.symbols) {
+            int separator = declared.indexOf('#');
+            String type = declared.substring(0, separator);
+            String member = declared.substring(separator + 1);
+            String simple = type.substring(type.lastIndexOf('.') + 1) + ".java";
+            List<Path> matches = sources.stream()
+                    .filter(path -> path.getFileName().toString().equals(simple)).toList();
+            require(matches.size() == 1, "source type does not resolve uniquely " + type
+                    + " in " + record.id);
+            String source = Files.readString(matches.get(0), StandardCharsets.UTF_8);
+            require(Pattern.compile("\\b" + Pattern.quote(member) + "\\s*\\(").matcher(source).find(),
+                    "source member is absent " + declared + " in " + record.id);
+        }
     }
 
     private Map<String, List<String>> scanReferences() throws IOException {
@@ -141,6 +177,9 @@ public final class OptimizationCatalogCheck {
     }
     private static final class Record {
         final String id, tracking;
-        Record(String id, String tracking) { this.id = id; this.tracking = tracking; }
+        final List<String> symbols;
+        Record(String id, String tracking, List<String> symbols) {
+            this.id = id; this.tracking = tracking; this.symbols = symbols;
+        }
     }
 }
