@@ -32,6 +32,7 @@ final class TestBuild {
     private final List<String> modules;
     private final Map<String, Path> production = new LinkedHashMap<>();
     private final Map<String, Path> tests = new HashMap<>();
+    private final Map<String, String> testDigests = new HashMap<>();
 
     TestBuild(Path root, Path build, Properties config, List<String> modules, List<Path> outputs) {
         this.root = root; this.build = build; this.config = config; this.modules = modules;
@@ -64,6 +65,7 @@ final class TestBuild {
                 Artifact artifact = entry.getValue().get();
                 Path output = build.resolve("test-modules").resolve(entry.getKey());
                 publish(artifact.path, output); tests.put(entry.getKey(), output);
+                testDigests.put(entry.getKey(), artifact.digest);
                 System.out.println("  " + (artifact.hit ? "cached" : "compiled")
                         + " tests " + entry.getKey());
             }
@@ -95,13 +97,13 @@ final class TestBuild {
         List<Path> classpath = classpath(module);
         String digest = digest(module, sources, classpath);
         Path directory = cache.resolve(module).resolve(digest), complete = directory.resolve(".complete");
-        if (Files.isRegularFile(complete)) return new Artifact(directory, true);
+        if (Files.isRegularFile(complete)) return new Artifact(directory, digest, true);
         Path lockPath = cache.resolve(module).resolve(digest + ".lock");
         Files.createDirectories(lockPath.getParent());
         try (FileChannel channel = FileChannel.open(lockPath, StandardOpenOption.CREATE,
                 StandardOpenOption.WRITE); FileLock lock = channel.lock()) {
             require(lock.isValid(), "invalid test cache lock: " + module);
-            if (Files.isRegularFile(complete)) return new Artifact(directory, true);
+            if (Files.isRegularFile(complete)) return new Artifact(directory, digest, true);
             Path temporary = directory.resolveSibling(digest + ".tmp-"
                     + ProcessHandle.current().pid() + "-" + System.nanoTime());
             delete(temporary); Files.createDirectories(temporary);
@@ -116,7 +118,7 @@ final class TestBuild {
                 delete(directory); move(temporary, directory);
             } finally { delete(temporary); }
         }
-        return new Artifact(directory, false);
+        return new Artifact(directory, digest, false);
     }
 
     private void runSuites(Set<String> selected) throws Exception {
@@ -125,23 +127,32 @@ final class TestBuild {
         List<String> suites = values("test.suites").stream()
                 .filter(suite -> selected.contains(owners.get(suite))).collect(Collectors.toList());
         List<Future<Result>> futures = new ArrayList<>();
+        List<String> fingerprints = new ArrayList<>();
+        TestReceiptCache receipts = new TestReceiptCache(root, cache.resolve("suite-results"));
         try {
             for (String suite : suites) {
                 String module = owners.get(suite);
                 require(module != null && tests.containsKey(module), "test suite has no owning module: " + suite);
                 List<Path> classpath = classpath(module); classpath.add(build.resolve("test-classes"));
-                futures.add(pool.submit(() -> execute(List.of(javaTool("java"), "-ea",
-                        "-Dworldline.test.classes=" + build.resolve("test-classes"), "-classpath",
-                        join(classpath), suite), timeout(), cache.resolve("runs"))));
+                String fingerprint = receipts.fingerprint(suite, testDigests.get(module));
+                fingerprints.add(fingerprint);
+                if (receipts.restore(suite, fingerprint)) futures.add(null);
+                else futures.add(pool.submit(() -> execute(List.of(javaTool("java"), "-ea",
+                            "-Dworldline.test.classes=" + build.resolve("test-classes"), "-classpath",
+                            join(classpath), suite), timeout(), cache.resolve("runs"))));
             }
             List<String> failures = new ArrayList<>();
             for (int index = 0; index < suites.size(); index++) {
-                Result result = futures.get(index).get();
+                Future<Result> future = futures.get(index);
+                if (future == null) continue;
+                Result result = future.get();
                 if (!result.output.isBlank()) System.out.print(result.output);
                 if (result.exit != 0) failures.add(suites.get(index) + " exited " + result.exit
                         + "\n" + ProcessCapture.tail(result.output, 4_000));
+                else receipts.passed(suites.get(index), fingerprints.get(index), result.output);
             }
             require(failures.isEmpty(), "test failures: " + failures);
+            receipts.finish(suites.size());
         } finally { shutdown(pool, "test runner"); }
     }
 
@@ -189,7 +200,7 @@ final class TestBuild {
         update(digest, module); update(digest, required("test.release"));
         update(digest, System.getProperty("java.version"));
         for (Path path : classpath)
-            update(digest, Files.readString(path.resolve(".worldline-module.sha256"), StandardCharsets.UTF_8).trim());
+            update(digest, Files.readString(path.resolve(".complete"), StandardCharsets.UTF_8).trim());
         for (Path source : sources) {
             update(digest, root.relativize(source).toString().replace('\\', '/'));
             digest.update(Files.readAllBytes(source));
@@ -292,8 +303,10 @@ final class TestBuild {
     }
 
     private static final class Artifact {
-        final Path path; final boolean hit;
-        Artifact(Path path, boolean hit) { this.path = path; this.hit = hit; }
+        final Path path; final String digest; final boolean hit;
+        Artifact(Path path, String digest, boolean hit) {
+            this.path = path; this.digest = digest; this.hit = hit;
+        }
     }
     private static final class Result {
         final int exit; final String output;

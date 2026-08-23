@@ -89,16 +89,22 @@ applicable Atlas entry. Also use `qualification.testkit=not-applicable` with a c
 gate verifies both Atlas resolution and the TestKit evidence-comparison implementation.
 
 The gate shares immutable module/test caches between worktrees and publishes private outputs
-under each worktree's `.worldline/`. The following environment variables are supported:
+under each worktree's `.worldline/`. Module outputs are links to the immutable cache: POSIX uses
+symbolic links and Windows uses directory junctions. Cleanup removes the link without traversing
+its target. Unit suites store input-addressed PASS proofs with hashed output evidence; unchanged
+suites restore those proofs, while missing or altered evidence executes fail-closed.
+
+The following environment variables are supported:
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
 | `WORLDLINE_CONTROL_DIR` | OS user runtime-data directory | Shared lock/cache directory |
 | `WORLDLINE_RUNTIME_LOCK` | Auto-detected legacy swarm lock | Compatibility runtime lock |
 | `WORLDLINE_VERIFY_SLOTS` | Half the CPUs, capped at 4 | Concurrent repository gates |
-| `WORLDLINE_BUILD_WORKERS` | 2 | Module DAG compilation workers |
+| `WORLDLINE_BUILD_WORKERS` | Half the CPUs, capped at 16 | Module DAG and smoke-runner compilation workers |
 | `WORLDLINE_TEST_WORKERS` | 4 | Test compilation/execution workers |
 | `WORLDLINE_TEST_TIMEOUT_SECONDS` | 180 | Per-test JVM timeout |
+| `WORLDLINE_TEST_CACHE` | `on` | Set to `off` to execute every selected unit suite |
 | `WORLDLINE_SMOKE_TIMEOUT_SECONDS` | Descriptor value or 900 | Per-smoke process timeout |
 | `WORLDLINE_SMOKE_CACHE` | `on` | Set to `off` to bypass PASS-proof reuse |
 | `WORLDLINE_GATE_WAIT_SECONDS` | 7200 | Lock acquisition timeout |

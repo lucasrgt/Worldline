@@ -52,9 +52,7 @@ final class ModuleBuild {
             for (String module : modules) {
                 Artifact artifact = futures.get(module).get();
                 Path output = build.resolve("classes").resolve(module);
-                publish(artifact.path, output);
-                Files.writeString(output.resolve(".worldline-module.sha256"),
-                        artifact.digest + "\n", StandardCharsets.UTF_8);
+                link(artifact.path, output);
                 outputs.add(output);
                 System.out.println("  " + (artifact.hit ? "cached" : "compiled") + " module " + module);
             }
@@ -130,17 +128,21 @@ final class ModuleBuild {
         }
     }
 
-    private static void publish(Path source, Path target) throws IOException {
-        delete(target); Files.createDirectories(target);
-        try (Stream<Path> paths = Files.walk(source)) {
-            for (Path path : paths.sorted().collect(Collectors.toList())) {
-                Path relative = source.relativize(path);
-                if (relative.toString().equals(".complete")) continue;
-                Path destination = target.resolve(relative);
-                if (Files.isDirectory(path)) Files.createDirectories(destination);
-                else Files.copy(path, destination, StandardCopyOption.REPLACE_EXISTING);
+    private void link(Path source, Path target) throws Exception {
+        delete(target); Files.createDirectories(target.getParent());
+        if (windows()) {
+            Process process = new ProcessBuilder("cmd.exe", "/d", "/c", "mklink", "/J",
+                    target.toString(), source.toAbsolutePath().toString()).directory(root.toFile())
+                    .redirectErrorStream(true).redirectOutput(ProcessBuilder.Redirect.DISCARD).start();
+            if (!process.waitFor(30, TimeUnit.SECONDS)) {
+                ProcessCapture.destroy(process);
+                throw new IllegalStateException("module cache junction timed out");
             }
-        }
+            if (process.exitValue() != 0)
+                throw new IllegalStateException("module cache junction exited " + process.exitValue());
+        } else Files.createSymbolicLink(target, source.toAbsolutePath());
+        if (!Files.isSameFile(source, target))
+            throw new IllegalStateException("module cache link does not resolve to immutable entry");
     }
 
     private static void run(List<String> command, int timeout, Path directory) throws Exception {
@@ -169,11 +171,7 @@ final class ModuleBuild {
     }
 
     private static void delete(Path target) throws IOException {
-        if (!Files.exists(target)) return;
-        try (Stream<Path> paths = Files.walk(target)) {
-            for (Path path : paths.sorted(Comparator.reverseOrder()).collect(Collectors.toList()))
-                Files.deleteIfExists(path);
-        }
+        SafeTreeDelete.delete(target);
     }
 
     private static void update(MessageDigest digest, String value) {
@@ -196,8 +194,12 @@ final class ModuleBuild {
     }
 
     private static String javaTool(String name) {
-        boolean windows = System.getProperty("os.name", "").toLowerCase().contains("win");
-        return Path.of(System.getProperty("java.home"), "bin", name + (windows ? ".exe" : "")).toString();
+        return Path.of(System.getProperty("java.home"), "bin",
+                name + (windows() ? ".exe" : "")).toString();
+    }
+
+    private static boolean windows() {
+        return System.getProperty("os.name", "").toLowerCase().contains("win");
     }
 
     private static final class Artifact {

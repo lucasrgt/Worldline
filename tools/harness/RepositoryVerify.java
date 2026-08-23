@@ -6,7 +6,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -131,6 +130,8 @@ final class RepositoryVerify {
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "SmokeDiscoveryCheck")));
         report.step("smoke-cache-self-test", () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "SmokeReceiptCacheTest")));
+        report.step("test-cache-self-test", () -> run(Arrays.asList(
+                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "TestReceiptCacheTest")));
         report.step("release", () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "ReleaseCheck")));
         report.step("optimization", () -> {
@@ -292,11 +293,7 @@ final class RepositoryVerify {
             if (!build.startsWith(root) || build.equals(root)) {
                 throw new IllegalStateException("refusing to delete unsafe build path: " + build);
             }
-            try (Stream<Path> paths = Files.walk(build)) {
-                for (Path path : paths.sorted(Comparator.reverseOrder()).collect(Collectors.toList())) {
-                    Files.delete(path);
-                }
-            }
+            SafeTreeDelete.delete(build);
         }
         Files.createDirectories(build);
     }
