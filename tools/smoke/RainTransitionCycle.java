@@ -84,7 +84,7 @@ public final class RainTransitionCycle {
                 return new Outcome(line(output, "WORLDLINE_M500SW_TRACE="),
                         line(output, "WORLDLINE_M500SW_SIGNATURE="),
                         line(output, "WORLDLINE_M500SW_RAIN="));
-            } catch (Exception e) { last = e; if (i == 0 && eof(e)) { Thread.sleep(5000L); continue; } throw e; }
+            } catch (Exception e) { last = e; SmokeRetryBoundary.afterEofFailure(i,1,e); throw e; }
         }
         throw last;
     }
@@ -162,14 +162,7 @@ public final class RainTransitionCycle {
                 .orElseThrow(() -> new IllegalStateException("missing " + p + "\n" + o)).substring(p.length());
     }
 
-    private static boolean eof(Exception e) {
-        for (Throwable t = e; t != null; t = t.getCause()) {
-            if (t instanceof EOFException) return true;
-            String m = t.getMessage();
-            if (m != null && m.contains("EOF")) return true;
-        }
-        return false;
-    }
+
 
     private static void require(boolean v, String m) { if (!v) throw new IllegalStateException(m); }
 

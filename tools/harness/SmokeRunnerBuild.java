@@ -104,6 +104,13 @@ final class SmokeRunnerBuild {
         if (text.contains("DataDrivenSupport")) {
             addSupport(digest, "DataDrivenSupport.java"); addSupport(digest, "SmokeSupport.java");
         }
+        if (text.contains("SmokeRetryBoundary")) {
+            addSupport(digest, "SmokeRetryBoundary.java"); addSupport(digest, "SmokeRetry.java");
+            addSupport(digest, "SmokeSupport.java");
+        }
+        if (text.contains("ExceptionalSmokeSupport")) {
+            addSupport(digest, "ExceptionalSmokeSupport.java"); addSupport(digest, "SmokeSupport.java");
+        }
         return HexFormat.of().formatHex(digest.digest());
     }
 

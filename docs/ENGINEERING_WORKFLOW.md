@@ -272,6 +272,13 @@ Any later shared-runner change invalidates all generic fingerprints. The explici
 milestone has a current freshly executed proof; it preserves the other reviewed equivalence rows
 and records hashes of the runner, plan and class-loader support boundary.
 
+Exceptional coordinators enter the same bounded EOF policy through the public
+`SmokeRetryBoundary`; the decision, backoff and telemetry remain owned by `SmokeRetry`. The
+one-time `Gate.java --migrate-eof-retries` rewrite accepts only a recognized single-retry loop,
+removes its private EOF classifier and fixed sleep, and records old/new source hashes,
+fingerprints and evidence in `smokes/eof-retry-migration.lock`. The gate rejects restored private
+helpers, fixed EOF sleeps, boundary drift or a carried proof that no longer matches its source.
+
 Pin the currently available, fingerprint-matching PASS proofs from a clean worktree explicitly,
 then review and commit the lockfile. This may checkpoint a completed prefix after a later smoke
 fails; the failing smoke is not available and cannot be pinned:
@@ -280,6 +287,10 @@ fails; the failing smoke is not available and cannot be pinned:
 java tools/harness/Gate.java --pin-smokes
 git diff -- smokes/qualification.lock
 ```
+
+When both a tracked carried proof and an intact local executed proof match the same fingerprint,
+pinning prefers the executed proof and upgrades the provenance row. It never downgrades a current
+execution to a migration or legacy declaration.
 
 A normal gate never modifies the tracked lock. Git review is the initial trust boundary; a
 protected CI deployment may additionally require signed commits or an external attestation.

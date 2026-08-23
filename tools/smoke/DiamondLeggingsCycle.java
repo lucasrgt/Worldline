@@ -63,7 +63,7 @@ public final class DiamondLeggingsCycle {
                         line(output, "WORLDLINE_M272_LEGGINGS="));
             } catch (Exception error) {
                 last = error;
-                if (attempt == 0 && eof(error)) { Thread.sleep(5000L); continue; }
+                SmokeRetryBoundary.afterEofFailure(attempt,1,error);
                 throw error;
             }
         }
@@ -125,10 +125,7 @@ public final class DiamondLeggingsCycle {
         return output.lines().filter(value -> value.startsWith(prefix)).findFirst()
                 .orElseThrow(() -> new IllegalStateException("missing " + prefix + "\n" + output)).substring(prefix.length());
     }
-    private static boolean eof(Exception error) {
-        String message = String.valueOf(error.getMessage());
-        return message.contains("EOFException") || message.contains("EOF");
-    }
+
     private static void require(boolean condition, String message) {
         if (!condition) throw new IllegalStateException(message); }
     private static final class Outcome {

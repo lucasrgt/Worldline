@@ -71,6 +71,15 @@ final class SmokeInputFingerprint {
             add(digest, root.resolve("tools/harness/DataDrivenSupport.java"));
             add(digest, root.resolve("tools/harness/SmokeSupport.java"));
         }
+        if (source.contains("SmokeRetryBoundary")) {
+            add(digest, root.resolve("tools/harness/SmokeRetryBoundary.java"));
+            add(digest, root.resolve("tools/harness/SmokeRetry.java"));
+            add(digest, root.resolve("tools/harness/SmokeSupport.java"));
+        }
+        if (source.contains("ExceptionalSmokeSupport")) {
+            add(digest, root.resolve("tools/harness/ExceptionalSmokeSupport.java"));
+            add(digest, root.resolve("tools/harness/SmokeSupport.java"));
+        }
         if (source.contains("modules/smoketest")) add(digest, root.resolve("modules/smoketest"));
         boolean dataDriven = smoke.runner.equals("tools/smoke/DataDrivenCycle.java");
         if (dataDriven) addDataDrivenInputs(digest, smoke.id);

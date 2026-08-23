@@ -91,10 +91,7 @@ public final class FurnaceFuelSetCycle {
                         line(output, "WORLDLINE_M338_FUEL="));
             } catch (Exception error) {
                 last = error;
-                if (attempt == 0 && eof(error)) {
-                    Thread.sleep(5000L);
-                    continue;
-                }
+                SmokeRetryBoundary.afterEofFailure(attempt,1,error);
                 throw error;
             }
         }
@@ -175,14 +172,7 @@ public final class FurnaceFuelSetCycle {
                 .substring(prefix.length());
     }
 
-    private static boolean eof(Exception error) {
-        for (Throwable throwable = error; throwable != null; throwable = throwable.getCause()) {
-            if (throwable instanceof EOFException) return true;
-            String message = throwable.getMessage();
-            if (message != null && message.contains("EOF")) return true;
-        }
-        return false;
-    }
+
 
     private static void require(boolean condition, String message) {
         if (!condition) throw new IllegalStateException(message);

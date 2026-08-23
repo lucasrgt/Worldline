@@ -143,11 +143,10 @@ final class SmokeReceiptCache {
 
     SmokePins.Entry availablePin(SmokeDiscovery.Entry smoke) throws Exception {
         String fingerprint = fingerprints.compute(smoke);
-        SmokePins.Entry tracked = pins.match(smoke.id, fingerprint); if (tracked != null) return tracked;
         Path proof = proof(smoke.id, fingerprint), evidence = evidence(smoke.id, fingerprint);
-        if (!validProof(smoke.id, fingerprint, proof, evidence)) return null;
-        return new SmokePins.Entry(smoke.id, fingerprint,
-                load(proof).getProperty("evidence.sha256"), "executed");
+        if (validProof(smoke.id, fingerprint, proof, evidence)) return new SmokePins.Entry(
+                smoke.id, fingerprint, load(proof).getProperty("evidence.sha256"), "executed");
+        return pins.match(smoke.id, fingerprint);
     }
 
     long historicalDuration(String id) throws Exception {
