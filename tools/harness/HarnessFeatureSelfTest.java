@@ -4,5 +4,6 @@ final class HarnessFeatureSelfTest {
     static void execute() throws Exception {
         NightlyQualityCampaign.selfTest();
         MilestoneScaffold.selfTest();
+        ChangelogCheck.selfTest();
     }
 }

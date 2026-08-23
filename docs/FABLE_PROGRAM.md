@@ -63,7 +63,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | SCALE-01 | DONE | Add `Gate --new-milestone ID` deterministic scaffolding. | The overwrite-safe generator creates a byte-deterministic descriptor, draft cycle, claim/cycle docs, and map; self-tests compile the runner and validate the complete candidate topology while runtime qualification remains fail-closed. |
 | SCALE-02 | QUEUED | Replace clone-like cycle launchers with a data-driven runner. | Ordinary milestones use one runner; exceptional scenarios remain explicit. |
 | SCALE-03 | QUEUED | Generate repeated claim/cycle/map narration from one canonical descriptor. | No claim/SHA fact is manually maintained in three places. |
-| SCALE-04 | QUEUED | Partition or generate the large changelog by release series. | Integration no longer edits one 252 KB coordinator hotspot. |
+| SCALE-04 | DONE | Partition or generate the large changelog by release series. | `CHANGELOG.md` is a bounded index; release sections live in validated coordinator-owned series files, with current-version, uniqueness, routing, and content-preservation checks. |
 | SCALE-05 | QUEUED | Generate the README status table during integration. | Manual status-table edits fail the gate. |
 | SCALE-06 | DONE | Remove `qualification.lock` merge contention. | A configured, deterministically tested three-way driver unions disjoint sorted pins and rejects conflicting edits to the same pin. |
 

@@ -75,7 +75,8 @@ public final class IntegrationTrain {
         if (reconcile) return new Candidate(id, reference, head, paths);
         require(paths.stream().anyMatch(path -> path.startsWith("smokes/" + id + "/")),
                 reference + " does not own smokes/" + id + "/");
-        for (String path : paths) require(!COORDINATOR_FILES.contains(path),
+        for (String path : paths) require(!COORDINATOR_FILES.contains(path)
+                        && !path.startsWith("changelog/"),
                 reference + " modifies coordinator-owned " + path);
         return new Candidate(id, reference, head, paths);
     }

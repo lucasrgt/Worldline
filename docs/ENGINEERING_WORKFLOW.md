@@ -12,6 +12,7 @@ then hands the exact worktree path and SHA to the orchestrator. Workers do not p
 branches and do not merge `main`. Workers must not edit the coordinator files below:
 
 - `CHANGELOG.md`;
+- `changelog/`;
 - `README.md`;
 - `docs/ROADMAP.md`;
 - `docs/ARCHITECTURE.md`;

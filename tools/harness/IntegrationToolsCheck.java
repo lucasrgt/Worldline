@@ -101,6 +101,9 @@ final class IntegrationToolsCheck {
                     "SwarmHandoff", "--self-test"), 60) == 0, "swarm handoff self-test failed");
             require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "SwarmDashboard", "--self-test"), 60) == 0, "swarm dashboard self-test failed");
+            require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
+                    "ChangelogPartition", "--self-test"), 60) == 0,
+                    "changelog partition self-test failed");
         } finally { delete(repository); }
     }
 
