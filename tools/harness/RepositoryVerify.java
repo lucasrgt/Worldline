@@ -129,6 +129,8 @@ final class RepositoryVerify {
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "SmokeDiscoveryCheck")));
         report.step("smoke-cache-self-test", () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "SmokeReceiptCacheTest")));
+        report.step("smoke-retry-self-test", () -> run(Arrays.asList(
+                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "SmokeRetryTest")));
         report.step("test-cache-self-test", () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "TestReceiptCacheTest")));
         report.step("json-parser-self-test", () -> run(Arrays.asList(

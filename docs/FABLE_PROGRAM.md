@@ -52,7 +52,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | ID | Status | Deliverable | Evidence or completion condition |
 | --- | --- | --- | --- |
 | FLAKE-01 | ACTIVE | Provide shared `awaitSlot`, `awaitBlock`, and `awaitEntity` polling contracts and migrate fixed-wait assertions. | The shared support records attempts/duration; the fixed-wait ratchet reaches zero without invalidating unrelated pins. |
-| FLAKE-02 | ACTIVE | Centralize EOF retry and publish retry telemetry. | Cycle retry policy lives in one support class and every retry is counted in evidence. |
+| FLAKE-02 | ACTIVE | Centralize EOF retry and publish retry telemetry. | `SmokeRetry` owns bounded decisions, backoff, counters, and shutdown telemetry; deterministic migration of recognized legacy loops remains. |
 | FLAKE-03 | QUEUED | Consolidate the 17 copied `WorldlinePagedAeroMixin` sources. | One shared fingerprinted source serves all consumers. |
 | FLAKE-04 | QUEUED | Replace line-pressure statement packing with a statement/debt ratchet. | Smoke policy measures executable statements/helpers and the long-line debt decreases monotonically. |
 
