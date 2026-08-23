@@ -149,7 +149,7 @@ final class B173PlayInbound {
     }
 
     Thread pulse() { return B173Pulse.start(output); }
-    B173MobTracker mobs() { return mobs; }
+    B173MobTracker mobs() { return mobs; } B173DroppedItemTracker dropped() { return items.dropped(); }
     B173ObjectTracker objects() { return objects; } B173VelocityTracker velocities() { return velocities; } B173BedTracker beds() { return beds; } B173NoteEvent notes() { return notes; } B173SignTracker signs() { return signs; } B173PaintingTracker paintings() { return paintings; }
     long timeoutNanos() { return timeoutNanos; }
     B173RemoteWorldCache cache() { return cache; }

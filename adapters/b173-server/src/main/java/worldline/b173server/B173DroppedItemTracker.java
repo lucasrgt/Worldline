@@ -54,6 +54,16 @@ final class B173DroppedItemTracker {
             if (item.item().equals(expected)) result = item; return result;
     }
 
+    boolean isDestroyed(int entityId) { return destroyed.contains(entityId); }
+    boolean isCollected(int entityId) { return collectors.containsKey(entityId); }
+
+    int liveCount(RemoteItemStack expected) {
+        if (expected == null) throw new IllegalArgumentException("null expected dropped item");
+        int count = 0; for (RemoteDroppedItem item : spawned.values())
+            if (!destroyed.contains(item.entityId()) && item.item().equals(expected)) count++;
+        return count;
+    }
+
     RemoteItemCollection collection(RemoteDroppedItem expected, String username,
             B173EntityIdentityTracker identities) {
         if (expected == null) throw new IllegalArgumentException("null expected collected item");
