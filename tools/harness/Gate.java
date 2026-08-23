@@ -260,7 +260,8 @@ public final class Gate {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         digest.update(System.getProperty("java.version").getBytes(StandardCharsets.UTF_8));
         for (Path source : sources) {
-            digest.update(root.relativize(source).toString().getBytes(StandardCharsets.UTF_8));
+            digest.update(root.relativize(source).toString().replace('\\', '/')
+                    .getBytes(StandardCharsets.UTF_8));
             digest.update(Files.readAllBytes(source));
         }
         return HexFormat.of().formatHex(digest.digest());

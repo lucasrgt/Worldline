@@ -39,7 +39,8 @@ final class ModuleBuild {
 
     List<Path> compileAll() throws Exception {
         Files.createDirectories(cache);
-        int workers = integerEnvironment("WORLDLINE_BUILD_WORKERS", 2, 1, 16);
+        int workers = integerEnvironment("WORLDLINE_BUILD_WORKERS",
+                Math.max(1, Math.min(16, Runtime.getRuntime().availableProcessors() / 2)), 1, 16);
         ExecutorService pool = Executors.newFixedThreadPool(workers);
         try {
             for (String module : modules) {

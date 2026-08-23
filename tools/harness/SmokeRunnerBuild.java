@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HexFormat;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -55,12 +54,12 @@ final class SmokeRunnerBuild {
                     "-d", quote(temporary.toString())));
             sources.forEach(path -> lines.add(quote(path.toString())));
             Files.write(arguments, lines, StandardCharsets.UTF_8);
-            Process process = new ProcessBuilder(javaTool("javac"), "@" + arguments)
-                    .directory(root.toFile()).inheritIO().start();
-            if (!process.waitFor(300, TimeUnit.SECONDS)) {
-                process.destroyForcibly(); throw new IllegalStateException("smoke runner compilation timed out");
-            }
-            if (process.exitValue() != 0) throw new IllegalStateException("smoke runner compilation failed");
+            ProcessCapture.Result result = ProcessCapture.run(root,
+                    List.of(javaTool("javac"), "@" + arguments), 300);
+            if (result.timedOut()) throw new IllegalStateException(
+                    "smoke runner compilation timed out\n" + ProcessCapture.tail(result.output(), 8_000));
+            if (result.exit() != 0) throw new IllegalStateException(
+                    "smoke runner compilation failed\n" + result.output());
             Files.delete(arguments); Files.writeString(temporary.resolve(".complete"), digest + "\n");
             delete(entry); Files.move(temporary, entry);
         }
@@ -71,7 +70,8 @@ final class SmokeRunnerBuild {
         digest.update(System.getProperty("java.version").getBytes(StandardCharsets.UTF_8));
         digest.update(Files.readAllBytes(root.resolve("tools/harness/SmokeSupport.java")));
         for (Path source : sources) {
-            digest.update(root.relativize(source).toString().getBytes(StandardCharsets.UTF_8));
+            digest.update(root.relativize(source).toString().replace('\\', '/')
+                    .getBytes(StandardCharsets.UTF_8));
             digest.update(Files.readAllBytes(source));
         }
         return HexFormat.of().formatHex(digest.digest());

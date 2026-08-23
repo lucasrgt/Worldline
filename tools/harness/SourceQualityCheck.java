@@ -29,7 +29,7 @@ final class SourceQualityCheck {
     }
 
     private void inspectRepositoryText() throws IOException {
-        try (Stream<Path> paths = Files.walk(root)) {
+        try (Stream<Path> paths = SmokeTrackedFiles.read(root).stream()) {
             for (Path path : paths.filter(Files::isRegularFile).filter(this::maintainedText).toList()) {
                 List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
                 for (int index = 0; index < lines.size(); index++) {

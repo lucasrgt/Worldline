@@ -138,7 +138,8 @@ final class TestBuild {
             for (int index = 0; index < suites.size(); index++) {
                 Result result = futures.get(index).get();
                 if (!result.output.isBlank()) System.out.print(result.output);
-                if (result.exit != 0) failures.add(suites.get(index) + " exited " + result.exit);
+                if (result.exit != 0) failures.add(suites.get(index) + " exited " + result.exit
+                        + "\n" + ProcessCapture.tail(result.output, 4_000));
             }
             require(failures.isEmpty(), "test failures: " + failures);
         } finally { shutdown(pool, "test runner"); }
@@ -202,7 +203,8 @@ final class TestBuild {
                 .redirectOutput(log.toFile()).start();
         try {
             if (!process.waitFor(timeout, TimeUnit.SECONDS)) {
-                destroy(process); return new Result(124, Files.readString(log) + "process timed out\n");
+                ProcessCapture.destroy(process);
+                return new Result(124, Files.readString(log) + "process timed out\n");
             }
             return new Result(process.exitValue(), Files.readString(log, StandardCharsets.UTF_8));
         } finally { Files.deleteIfExists(log); }
@@ -242,11 +244,6 @@ final class TestBuild {
                 else Files.copy(path, destination, StandardCopyOption.REPLACE_EXISTING);
             }
         }
-    }
-
-    private static void destroy(Process process) {
-        process.descendants().sorted(Comparator.comparingLong(ProcessHandle::pid).reversed())
-                .forEach(ProcessHandle::destroyForcibly); process.destroyForcibly();
     }
 
     private static void shutdown(ExecutorService pool, String name) throws Exception {

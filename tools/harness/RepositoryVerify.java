@@ -300,18 +300,7 @@ final class RepositoryVerify {
     }
 
     private String capture(List<String> command) throws Exception {
-        Process process;
-        try {
-            process = new ProcessBuilder(command).directory(root.toFile()).redirectErrorStream(true).start();
-        } catch (IOException error) {
-            throw new IllegalStateException("could not start " + command.get(0) + ": " + error.getMessage(), error);
-        }
-        String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-        int exit = process.waitFor();
-        if (exit != 0) {
-            throw new IllegalStateException(command.get(0) + " exited " + exit + "\n" + output);
-        }
-        return output;
+        return ProcessCapture.require(root, command, ProcessCapture.environmentTimeout());
     }
 
     private String relative(Path path) {

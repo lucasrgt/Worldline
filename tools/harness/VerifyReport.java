@@ -3,6 +3,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,9 +48,10 @@ final class VerifyReport {
                 if (index + 1 < stages.size()) json.append(','); json.append('\n');
             }
             json.append("  ],\n  \"error\": ");
-            if (error == null) json.append("null\n");
+            if (error == null) json.append("null,\n  \"stack_trace\": null\n");
             else json.append('"').append(escape(error.getMessage() == null
-                    ? error.getClass().getName() : error.getMessage())).append("\"\n");
+                    ? error.getClass().getName() : error.getMessage())).append("\",\n  \"stack_trace\": \"")
+                    .append(escape(stackTrace(error))).append("\"\n");
             json.append("}\n");
             Files.writeString(path, json.toString(), StandardCharsets.UTF_8,
                     StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
@@ -60,6 +63,10 @@ final class VerifyReport {
     }
 
     private static long elapsed(long start) { return (System.nanoTime() - start) / 1_000_000L; }
+    private static String stackTrace(Throwable error) {
+        StringWriter value = new StringWriter(); error.printStackTrace(new PrintWriter(value));
+        return value.toString();
+    }
     private static String escape(String value) {
         if (value == null) return "";
         return value.replace("\\", "\\\\").replace("\"", "\\\"")

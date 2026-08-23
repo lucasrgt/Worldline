@@ -181,7 +181,9 @@ public final class IntegrationTrain {
     private static String shortSha(String sha) { return sha.substring(0, Math.min(12, sha.length())); }
     private static String escape(String value) { return value.replace("\\", "\\\\").replace("\"", "\\\""); }
     private static void destroy(Process process) {
-        process.descendants().forEach(ProcessHandle::destroyForcibly); process.destroyForcibly();
+        process.descendants().sorted(java.util.Comparator.comparingLong(ProcessHandle::pid).reversed())
+                .forEach(ProcessHandle::destroyForcibly);
+        process.destroyForcibly();
     }
     private static void require(boolean condition, String message) {
         if (!condition) throw new IllegalStateException(message);
