@@ -1,4 +1,4 @@
-package worldline.stationapi.runtime;
+package worldline.stationapi.driver;
 
 /** Cross-mixin login and remote-chunk readiness for the M620 StationAPI driver. */
 public final class StationApiDriverProbe {

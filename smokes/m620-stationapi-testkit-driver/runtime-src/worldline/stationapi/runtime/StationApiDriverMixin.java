@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import worldline.stationapi.driver.StationApiDriverProbe;
 
 /** Gates the real StationAPI game thread at one command per completed client tick. */
 @Mixin(Minecraft.class)

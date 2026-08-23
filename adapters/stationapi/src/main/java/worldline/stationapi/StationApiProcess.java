@@ -29,6 +29,8 @@ final class StationApiProcess implements AutoCloseable {
         while (System.nanoTime() < deadline) {
             String text = text();
             if (text.contains(marker)) return;
+            if (text.contains("Stopping!") || text.contains("BUILD FAILED"))
+                throw new IllegalStateException("process failed before " + marker + "\n" + tail(text));
             if (!process.isAlive()) throw new IllegalStateException(
                     "process exited " + process.exitValue() + " before " + marker + "\n" + tail(text));
             Thread.sleep(100L);
