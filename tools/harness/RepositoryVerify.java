@@ -141,6 +141,7 @@ final class RepositoryVerify {
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "PrePushCheckTest")));
         report.step("verify-summary-self-test", () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "VerifySummaryTest")));
+        report.step("nightly-quality-self-test", NightlyQualityCampaign::selfTest);
         report.step("release", () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "ReleaseCheck")));
         report.step("optimization", () -> {
@@ -190,9 +191,7 @@ final class RepositoryVerify {
             System.out.println("  milestone Atlas + TestKit surfaces agree with descriptors");
         });
         report.step("tests", () -> new TestBuild(root, build, config, modules, outputs).compileAndRun());
-        if (runSmoke) {
-            report.step("smokes", this::runSmokeSuite);
-        }
+        if (runSmoke) report.step("smokes", this::runSmokeSuite);
     }
 
     private void runSmokeSuite() throws Exception {

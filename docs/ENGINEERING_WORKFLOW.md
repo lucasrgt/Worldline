@@ -42,6 +42,12 @@ java tools/integration/SwarmHandoff.java check
 `.worldline/reports/swarm-dashboard.html` from the worktree audit, branch triage, portable PASS
 pins, versioned handoffs, and latest Gate timing report.
 
+The scheduled private workflow runs differential fuzzing and mutation-manifest exploration only
+after the canonical Gate. `NightlyQualityCampaign` splits a hard wall-clock budget between both
+child JVMs, kills timed-out process trees, and publishes seed, volume, duration, status, and logs
+under `.worldline/reports/nightly-quality/`. The `quality` dispatch profile reproduces it manually;
+ordinary local and pull-request gates retain only deterministic short tests.
+
 ## Verification tiers
 
 | Command | Purpose | Official runtime |

@@ -13,12 +13,31 @@ public final class FuzzTest {
     private FuzzTest() {}
 
     public static void main(String[] arguments) {
+        if (arguments.length == 4 && arguments[0].equals("--explore")) {
+            explore(Long.parseLong(arguments[1]), Integer.parseInt(arguments[2]),
+                    Integer.parseInt(arguments[3]));
+            return;
+        }
+        require(arguments.length == 0, "usage: FuzzTest [--explore SEED CASES MAX_STEPS]");
         planIsDeterministicAndBounded();
         crossSubjectShrink();
         selfSubjectNondeterminism();
         cleanCampaign();
         reportIsCanonical();
         System.out.println("FuzzTest passed");
+    }
+
+    private static void explore(long seed, int cases, int steps) {
+        FuzzSubject left = subject("nightly-left", candidate -> document(candidate.size()));
+        FuzzSubject right = subject("nightly-right", candidate -> document(candidate.size()));
+        FuzzPlan plan = FuzzPlan.generate(seed, cases, steps);
+        DifferentialFuzzer.Result result = DifferentialFuzzer.fuzz(
+                Arrays.asList(left, right), plan, seed, false, 100);
+        require(result.findings().isEmpty() && result.evaluations() == cases * 2,
+                "nightly differential campaign drifted");
+        for (Scenario scenario : plan.scenarios()) ScenarioDsl.validate(scenario);
+        System.out.println("FuzzTest exploratory campaign passed: seed=" + seed
+                + ", cases=" + cases + ", steps=" + steps + ", evaluations=" + result.evaluations());
     }
 
     private static void planIsDeterministicAndBounded() {

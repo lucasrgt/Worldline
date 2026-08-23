@@ -8,7 +8,7 @@ on:
       profile:
         description: Runtime tier to execute
         type: choice
-        options: [runtime, milestone, full-smoke]
+        options: [runtime, milestone, full-smoke, quality]
         default: runtime
       milestone_id:
         description: Milestone ID used by the isolated milestone tier
@@ -39,6 +39,14 @@ jobs:
       - name: Verify runtime inputs
         if: github.event_name == 'schedule' || inputs.profile == 'runtime'
         run: java tools/harness/Gate.java --runtime
+      - name: Verify repository for quality campaign
+        if: inputs.profile == 'quality'
+        run: java tools/harness/Gate.java
+      - name: Run bounded nightly fuzz and mutation campaigns
+        if: github.event_name == 'schedule' || inputs.profile == 'quality'
+        run: >-
+          java -cp .worldline/gate/classes NightlyQualityCampaign
+          --budget-seconds 900 --seed ${{ github.run_id }}
       - name: Verify one milestone
         if: inputs.profile == 'milestone'
         shell: bash

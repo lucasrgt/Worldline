@@ -95,7 +95,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | --- | --- | --- | --- |
 | QUAL-01 | DONE | Ensure every `Remote*Test` is registered or explicitly excluded. | The gate discovers tracked API `Remote*Test` classes, requires one `run()` entry point, and one `DomainApiTest` registration. |
 | QUAL-02 | DONE | Reject orphaned `__snapshots__/*.wlsnap` files. | Every tracked snapshot requires a tracked owner sidecar bound to an existing test source and literal snapshot declaration. |
-| QUAL-03 | QUEUED | Give differential fuzzing and mutation nightly time budgets. | Fast deterministic unit checks remain local; bounded exploratory jobs publish artifacts nightly. |
+| QUAL-03 | DONE | Give differential fuzzing and mutation nightly time budgets. | Fast deterministic checks remain local; the scheduled/manual quality campaign splits a hard timeout between seeded differential and mutation-manifest exploration and publishes logs plus JSON evidence. |
 | QUAL-04 | ACTIVE | Connect frame census to scene-relative performance budgets. | Frame census/breakdown exists; machine-relative Aero scene budgets and gate enforcement remain. |
 | QUAL-05 | QUEUED | Refocus source policy on smoke maintainability. | Product ceilings remain fail-closed while the smoke statement/helper ratchet replaces counterproductive packing. |
 
