@@ -8,9 +8,9 @@ import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteMobMovement;
 import worldline.api.RemoteMobSpawn;
 
-/** Reusable Packet7 bone/dye interaction and Packet38 wolf-taming boundary. */
+/** Reusable Packet7 bone/dye/sit interaction and Packet38 wolf-taming boundary. */
 public final class B173WolfAccess {
-    public static final int TYPE = 95, BONE = 352, DYE = 351;
+    public static final int TYPE = 95, BONE = 352, DYE = 351, STICK = 280;
 
     private B173WolfAccess() {}
 
@@ -40,6 +40,41 @@ public final class B173WolfAccess {
         client.selectHeldSlot(find(client.inventory(), DYE, 4));
         B173ShearsAccess.dyeMob(client, entity); client.sustainTicks(10);
         return count(client.inventory(), DYE, 4) < before;
+    }
+
+    public static int awaitTamedSit(B173WireClient client, int entity) {
+        return until(client, inbound -> {
+            int flags = inbound.mobs().size(entity);
+            return (flags & 5) == 5 ? Integer.valueOf(flags) : null;
+        }, "wolf Packet40 tamed sitting flag absent").intValue();
+    }
+
+    public static int sit(B173WireClient client, RemoteMobSpawn spawn) {
+        return setSitting(client, spawn, true);
+    }
+
+    public static int stand(B173WireClient client, RemoteMobSpawn spawn) {
+        return setSitting(client, spawn, false);
+    }
+
+    private static int setSitting(B173WireClient client, RemoteMobSpawn spawn, boolean sitting) {
+        int entity = spawn.entityId(); double x = spawn.x(), y = spawn.y(), z = spawn.z();
+        RemoteMobMovement move = client.channel().inbound().mobs().takeMovement(entity);
+        if (move != null) { x = move.toX(); y = move.toY(); z = move.toZ(); }
+        approach(client, x, y, z);
+        until(client, inbound -> {
+            int flags = inbound.mobs().size(entity);
+            boolean seated = (flags & 1) != 0;
+            return (flags & 4) != 0 && seated != sitting ? Integer.valueOf(flags) : null;
+        }, sitting ? "wolf Packet40 standing flag absent before sit"
+                : "wolf Packet40 sitting flag absent before stand");
+        int slot = find(client.inventory(), STICK, -1);
+        if (slot < 0) throw new IllegalStateException("stick 280 absent from hotbar");
+        client.selectHeldSlot(slot); use(client, entity, STICK);
+        return until(client, inbound -> {
+            int flags = inbound.mobs().size(entity);
+            return (flags & 4) != 0 && ((flags & 1) != 0) == sitting ? Integer.valueOf(flags) : null;
+        }, sitting ? "wolf Packet40 sitting flag absent" : "wolf Packet40 standing flag absent").intValue();
     }
 
     private static void use(B173WireClient client, int entity, int item) {
