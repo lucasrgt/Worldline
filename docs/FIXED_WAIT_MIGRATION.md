@@ -21,12 +21,9 @@ to the same `session.sustainTicks(ticks)` operation and adds telemetry only. It 
 shorten a stability window or alter the official server interaction. New asynchronous
 conditions must use an `await*` contract instead of adding another temporal window.
 
-The one-shot mechanical rewrite is complete and intentionally unavailable. Classify every
-new or changed condition during review, then refresh the content-addressed attestations:
-
-```text
-java tools/harness/Gate.java --finalize-fixed-waits
-```
+The one-shot mechanical rewrite and finalizer were removed in the 2026-08-23
+compatibility-removal train. New or changed conditions are classified during review; the
+versioned attestations are immutable historical evidence rather than a mutable maintenance API.
 
 The canonical gate verifies every migrated source hash, runner/descriptor binding, current
 fingerprint, carried evidence hash, pin provenance, and the zero raw-debt ratchet.

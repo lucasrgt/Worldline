@@ -17,6 +17,6 @@ Status: **GO - real Aero scene capture and bounded spike reproduction**.
 Frozen M12 evidence SHA-256:
 `804915ae89a1adef9f350adc020ed8a77986b2d3d4c1d84205009a4382ed051c`.
 
-The canonical gate is `java tools/harness/Verify.java --smoke`. Aero source,
+The canonical gate is `java tools/harness/Gate.java --smoke`. Aero source,
 Minecraft binaries, saves, frame logs, native libraries, and generated build
 outputs remain ignored local artifacts.

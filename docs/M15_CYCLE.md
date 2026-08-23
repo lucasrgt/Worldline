@@ -20,5 +20,5 @@ Frozen M15 evidence SHA-256:
 
 The milestone is successful because it qualifies the explicit contract and
 telemetry; it does not promote the experimental policy. The canonical
-gate is `java tools/harness/Verify.java --smoke`. No local game binary, Aero
+gate is `java tools/harness/Gate.java --smoke`. No local game binary, Aero
 checkout change, save, runtime log, or generated geometry record is released.

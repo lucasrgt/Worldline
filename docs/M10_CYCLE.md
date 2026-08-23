@@ -11,7 +11,7 @@ Aero investigation status: **ARTIFACT ABSENT / RUNTIME COMPATIBILITY NOT RUN**.
 ## Canonical command
 
 ```text
-java tools/harness/Verify.java --smoke
+java tools/harness/Gate.java --smoke
 ```
 
 The native slice can also be run directly after the mapped client workspace is

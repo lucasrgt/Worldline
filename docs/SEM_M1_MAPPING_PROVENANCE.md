@@ -33,7 +33,7 @@ are never committed.
 Run the canonical gate and compare exact intermediary identities:
 
 ```text
-java tools/harness/Verify.java
+java tools/harness/Gate.java
 java -cp .worldline/build/classes/symbolgraph worldline.symbolgraph.MappingAuditMain local/mappings/calamus-intermediary-gen2-b1.7.3-v2.jar local/mappings/nostalgia-b1.7.3-build.60-v2.jar
 ```
 

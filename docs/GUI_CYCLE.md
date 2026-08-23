@@ -24,7 +24,7 @@ ab13a631ed766de32f2947fae1a6e0a86d9b6cde3cbc7e1557ff76f76ccc60cf
 Canonical qualification command:
 
 ```text
-java tools/harness/Verify.java --smoke
+java tools/harness/Gate.java --smoke
 ```
 
 The contract and non-claims are in `docs/GUI_TREE.md`. Layout declaration

@@ -30,7 +30,7 @@ exact decode/re-encode comparison. Unknown formats fail closed.
 Prepare the local controlled runtime once with:
 
 ```text
-java tools/harness/Verify.java --smoke
+java tools/harness/Gate.java --smoke
 ```
 
 Then replay a bundle from any local path:

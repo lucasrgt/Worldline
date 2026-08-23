@@ -1,4 +1,5 @@
 package worldline.smoke.lightningpigsetb173;
+import static worldline.b173server.B173FixtureSupport.*;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
@@ -146,13 +147,6 @@ public final class LightningPigSetSmoke {
       actor.close();
       server.close();
     }
-  }
-  private static String sha(String s) throws Exception {
-    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
-    StringBuilder v = new StringBuilder();
-    for (byte x : b)
-      v.append(String.format("%02x", x & 255));
-    return v.toString();
   }
   private static void require(boolean v, String m) {
     if (!v)

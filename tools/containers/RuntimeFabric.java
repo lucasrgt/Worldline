@@ -153,8 +153,11 @@ public final class RuntimeFabric {
                 "pool lease token self-test failed");
         int optimized = 0, parentCleanup = 0;
         try (var paths = Files.list(ROOT.resolve("tools/smoke"))) { for (Path source : paths.filter(path -> path.toString().endsWith(".java")).toList()) {
-            String text = Files.readString(source); require(!text.contains("p.descendants().anyMatch"), "quadratic process cleanup in " + source);
-            if (text.contains("Set<Long>descendants=p.descendants()")) optimized++;
+            String text = Files.readString(source);
+            require(!text.matches("(?s).*p[.]descendants[(][)]\\s*[.]anyMatch.*"),
+                    "quadratic process cleanup in " + source);
+            if (text.matches("(?s).*Set<Long>\\s+descendants\\s*=\\s*p[.]descendants[(][)].*"))
+                optimized++;
             if (text.contains("Files.deleteIfExists(parent)")) parentCleanup++;
         }}
         require(optimized >= 36, "optimized smoke cleanup coverage drift: " + optimized);

@@ -1,4 +1,5 @@
 package worldline.b173server;
+import static worldline.b173server.B173FixtureSupport.*;
 
 import worldline.api.BlockFace;
 import worldline.api.BlockPosition;
@@ -165,13 +166,6 @@ public final class B173ArmorReductionAccess {
     return -1;
   }
 
-  private static BlockPosition place(
-      B173WireClient actor, BlockPosition support, BlockFace face, int id) throws Exception {
-    BlockPosition target = face.adjacent(support);
-    actor.placeHeldBlock(support, face);
-    actor.awaitBlock(target, new BlockState(id, 0));
-    return target;
-  }
 
   private static void grass(B173WireClient actor, BlockPosition support, BlockFace face)
       throws Exception {
@@ -191,12 +185,6 @@ public final class B173ArmorReductionAccess {
     throw new IllegalStateException("no deterministic armor-reduction foundation");
   }
 
-  private static boolean water(int id) {
-    return id == 8 || id == 9;
-  }
-  private static int local(int v, int c) {
-    return v - c * 16;
-  }
   private static void require(boolean v, String m) {
     if (!v)
       throw new IllegalStateException(m);

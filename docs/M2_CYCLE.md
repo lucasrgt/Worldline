@@ -30,7 +30,7 @@ e8cdeba39a44b772a70c48c0acd9ae3983f3d95a8c10c545df5d66fb953db554
 Canonical qualification command:
 
 ```text
-java tools/harness/Verify.java --smoke
+java tools/harness/Gate.java --smoke
 ```
 
 The release is GO only when this command also passes the v0.0.1 server/client

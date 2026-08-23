@@ -18,6 +18,6 @@ Status: **GO - bounded Aero attribution and runtime loading qualified**.
 Frozen attribution SHA-256:
 `42e656576b70c53919761570abf016f93f76ddfbe49f3e40b79f2de0518eaecc`.
 
-The canonical gate is `java tools/harness/Verify.java --smoke`. Derived JARs,
+The canonical gate is `java tools/harness/Gate.java --smoke`. Derived JARs,
 Minecraft assets, native libraries, JFR recordings, and Aero sources remain
 under ignored local/build directories and are not release artifacts.

@@ -1,4 +1,5 @@
 package worldline.smoke.terrainregionb173;
+import static worldline.b173server.B173FixtureSupport.*;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -156,15 +157,6 @@ public final class FixedSeedRegionSmoke {
   private static void pair(MessageDigest d, BlockState a, BlockState b) {
     d.update((byte) (solid(a.legacyId()) ? 1 : 0));
     d.update((byte) (solid(b.legacyId()) ? 1 : 0));
-  }
-  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
-    long e = System.currentTimeMillis() + 5000;
-    while (System.currentTimeMillis() < e) {
-      if (s.players().size() == n)
-        return;
-      Thread.sleep(100);
-    }
-    throw new IllegalStateException("player count drift");
   }
   private static int top(RemoteChunkSnapshot q, int x, int z) {
     for (int y = 127; y >= 0; y--)

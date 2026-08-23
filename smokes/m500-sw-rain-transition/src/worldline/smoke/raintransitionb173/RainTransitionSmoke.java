@@ -1,4 +1,5 @@
 package worldline.smoke.raintransitionb173;
+import static worldline.b173server.B173FixtureSupport.*;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -98,13 +99,6 @@ public final class RainTransitionSmoke {
     System.out.println("WORLDLINE_M500SW_SIGNATURE=" + sha(trace));
   }
 
-  private static String sha(String s) throws Exception {
-    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
-    StringBuilder v = new StringBuilder();
-    for (byte x : b)
-      v.append(String.format("%02x", x & 255));
-    return v.toString();
-  }
 
   private static void awaitPlayers(B173DedicatedServer server, int expected) throws Exception {
     long deadline = System.nanoTime() + Duration.ofSeconds(5).toNanos();

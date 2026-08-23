@@ -93,7 +93,7 @@ files into its ignored `local/artifacts/` directory:
 cd ~/src/worldline
 java tools/artifacts/Acquire.java all
 java tools/toolchains/Bootstrap.java retromcp
-java tools/harness/Verify.java --runtime
+java tools/harness/Gate.java --runtime
 ```
 
 Validate both Linux isolation tiers without starting Minecraft:

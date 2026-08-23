@@ -1,5 +1,5 @@
 schema=1
 id=m398-jukebox-eject-set
-fingerprint=b16b3fc68a9628d13df7a8526d5c52e6e2cb5fe856ff88b4cf51406db0031bf1
+fingerprint=b156aeb50f80de57b63ca730f2078d08b3d5e8208e8edf5ca1cdace640e72558
 observation.sha256=21d9a2123e3a3041573a22722d268dec75ee1d0d27d84fe0ae6f22e187f2bd8f
 source=refactor-equivalent

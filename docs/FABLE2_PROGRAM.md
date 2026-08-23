@@ -43,8 +43,8 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | MIG-06 | DONE | Add a schema for every behavior map. | All 526 maps validate explicit boundary, bounded non-claims, and frozen-trace fields. |
 | MIG-07 | DONE | Version and normalize `smoke.properties`. | All 525 descriptors use schema 1, declare their era and runner, and validate behavior plus TestKit identity. |
 | MIG-08 | DONE | Burn down packed-line stock. | Mechanical, attested formatting reduces smoke and coordinator packed-line debt to zero without runtime requalification. |
-| MIG-09 | QUEUED | Consolidate repeated B173, place/persist, and Aero parsing families. | Fingerprinted shared helpers replace the audited clones without changing behavior. |
-| MIG-10 | QUEUED | Retire completed compatibility surfaces. | `Verify.java`, `SmokeLegacyImport`, and finalize-only migrators have dated removal trains and are deleted once their compatibility window closes. |
+| MIG-09 | DONE | Consolidate repeated B173, place/persist, and Aero parsing families. | One fingerprinted B173 fixture helper replaces exact clones in 354 sources, the two Aero coordinators share a strict parser, 354 pins are transported by reviewed source hashes, and the canonical Gate validates all 525 evidence envelopes. |
+| MIG-10 | DONE | Retire completed compatibility surfaces. | The dated 2026-08-23 removal train deletes `Verify.java`, the EOF/fixed-wait finalize-only migrators and their Gate routes; `SmokeLegacyImport` was already removed, while immutable locks and permanent drift checks remain. |
 
 ## Fingerprints and shared caches
 

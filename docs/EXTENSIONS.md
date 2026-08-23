@@ -69,7 +69,7 @@ surface.
 From a verified Worldline checkout:
 
 ```text
-java tools/harness/Verify.java
+java tools/harness/Gate.java
 java tools/testkit/TestKitPackage.java
 ```
 

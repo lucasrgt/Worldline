@@ -30,7 +30,7 @@ not a reproducible-build contract.
 
 ## Qualification
 
-The canonical `java tools/harness/Verify.java --smoke` gate passed first from
+The canonical `java tools/harness/Gate.java --smoke` gate passed first from
 the prepared workspace and then after the complete generated `minecraft/`
 workspace was moved aside. The cold run invoked RetroMCP decompile/recompile,
 rebuilt the client adapter and all evidence, and passed M1 through M7 plus the

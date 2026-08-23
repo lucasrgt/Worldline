@@ -1,4 +1,5 @@
 package worldline.smoke.dyemixcraftsb173;
+import static worldline.b173server.B173FixtureSupport.*;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
@@ -73,22 +74,6 @@ public final class DyeMixCraftsSmoke {
             && view.slot(40).item().equals(new RemoteItemStack(351, 2, 10))
             && view.slot(41).empty(),
         "persisted dye-mix crafts drifted");
-  }
-  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
-    long e = System.currentTimeMillis() + 5000;
-    while (System.currentTimeMillis() < e) {
-      if (s.players().size() == n)
-        return;
-      Thread.sleep(100);
-    }
-    throw new IllegalStateException("player count drift");
-  }
-  private static String sha(String s) throws Exception {
-    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
-    StringBuilder v = new StringBuilder();
-    for (byte x : b)
-      v.append(String.format("%02x", x & 255));
-    return v.toString();
   }
   private static void require(boolean v, String m) {
     if (!v)

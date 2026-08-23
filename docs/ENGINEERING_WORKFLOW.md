@@ -81,9 +81,9 @@ until the author replaces it with real evidence.
 | `java tools/harness/Gate.java --smoke` | Qualify every discovered milestone | Exclusive |
 
 Do not invoke `tools/smoke/*.java` directly. The gate owns the machine runtime lease, process
-timeout, descendant cleanup, and `.worldline/smoke-logs/` output. `Verify.java` remains a
-compatibility launcher and cannot bypass the gate. `--smoke-id` remains an alias for
-`--milestone` for old automation.
+timeout, descendant cleanup, and `.worldline/smoke-logs/` output. The compatibility launcher
+`Verify.java` was removed in the 2026-08-23 Fable 2 consolidation train; callers must enter
+`Gate.java` directly. `--smoke-id` remains an alias for `--milestone` for old automation.
 
 `timeout.seconds` is the Gate-owned outer cycle bound. A multi-arm runner uses a distinct,
 milestone-owned key such as `child.timeout.seconds` for each subprocess so a valid sequence of
@@ -285,10 +285,10 @@ and records hashes of the runner, plan and class-loader support boundary.
 
 Exceptional coordinators enter the same bounded EOF policy through the public
 `SmokeRetryBoundary`; the decision, backoff and telemetry remain owned by `SmokeRetry`. The
-one-time `Gate.java --migrate-eof-retries` rewrite accepts only a recognized single-retry loop,
-removes its private EOF classifier and fixed sleep, and records old/new source hashes,
-fingerprints and evidence in `smokes/eof-retry-migration.lock`. The gate rejects restored private
-helpers, fixed EOF sleeps, boundary drift or a carried proof that no longer matches its source.
+one-time EOF rewrite and its finalizer were removed in the 2026-08-23 compatibility-removal
+train. Their immutable `smokes/eof-retry-migration.lock` and permanent gate check remain: the
+gate rejects restored private helpers, fixed EOF sleeps, boundary drift or a carried proof that
+no longer matches its source.
 
 Pin the currently available, fingerprint-matching PASS proofs from a clean worktree explicitly,
 then review and commit the lockfile. This may checkpoint a completed prefix after a later smoke

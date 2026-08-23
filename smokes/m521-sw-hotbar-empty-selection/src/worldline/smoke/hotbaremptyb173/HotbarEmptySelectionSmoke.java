@@ -1,4 +1,5 @@
 package worldline.smoke.hotbaremptyb173;
+import static worldline.b173server.B173FixtureSupport.*;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -78,14 +79,6 @@ public final class HotbarEmptySelectionSmoke {
   }
   private static B173WireClient client(int port, String name, Duration timeout) {
     return new B173WireClient("127.0.0.1", port, name, timeout);
-  }
-  private static String sha(String value) throws Exception {
-    byte[] bytes =
-        MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8));
-    StringBuilder result = new StringBuilder();
-    for (byte item : bytes)
-      result.append(String.format("%02x", item & 255));
-    return result.toString();
   }
   private static void require(boolean condition, String message) {
     if (!condition)

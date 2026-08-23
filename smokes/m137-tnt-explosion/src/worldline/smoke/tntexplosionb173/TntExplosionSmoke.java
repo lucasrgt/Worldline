@@ -1,4 +1,5 @@
 package worldline.smoke.tntexplosionb173;
+import static worldline.b173server.B173FixtureSupport.*;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
@@ -97,13 +98,6 @@ public final class TntExplosionSmoke {
     System.out.println("WORLDLINE_M137_TRACE=" + trace);
     System.out.println("WORLDLINE_M137_SIGNATURE=" + sha(trace));
   }
-  private static BlockPosition place(
-      ExplosionSession actor, BlockPosition support, BlockFace face, int id) {
-    BlockPosition target = face.adjacent(support);
-    actor.placeHeldBlock(support, face);
-    actor.awaitBlock(target, new BlockState(id, 0));
-    return target;
-  }
   private static BlockPosition foundation(RemoteChunkSnapshot q) {
     for (int x = 4; x <= 10; x++)
       for (int z = 4; z <= 11; z++)
@@ -111,26 +105,6 @@ public final class TntExplosionSmoke {
           if (q.blockAt(x, y, z).legacyId() == 3 && water(q.blockAt(x, y + 1, z).legacyId()))
             return new BlockPosition(x, y, z);
     throw new IllegalStateException("no deterministic TNT foundation");
-  }
-  private static boolean water(int id) {
-    return id == 8 || id == 9;
-  }
-  private static void awaitPlayers(B173DedicatedServer server, int count) throws Exception {
-    long end = System.currentTimeMillis() + 5000;
-    while (System.currentTimeMillis() < end) {
-      if (server.players().size() == count)
-        return;
-      Thread.sleep(100);
-    }
-    throw new IllegalStateException("player count drift");
-  }
-  private static String sha(String value) throws Exception {
-    byte[] bytes =
-        MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8));
-    StringBuilder result = new StringBuilder();
-    for (byte item : bytes)
-      result.append(String.format("%02x", item & 255));
-    return result.toString();
   }
   private static void require(boolean value, String message) {
     if (!value)

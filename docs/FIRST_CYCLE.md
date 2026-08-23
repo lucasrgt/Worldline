@@ -33,7 +33,7 @@ not part of v0.0.1.
 The canonical command is:
 
 ```text
-java tools/harness/Verify.java --smoke
+java tools/harness/Gate.java --smoke
 ```
 
 It must finish with `verify passed` and `official client oracle: MATCH`. Exact
@@ -50,7 +50,7 @@ frozen signature against their owning descriptors. It also rejects JARs,
 class files, and decompiled Minecraft trees outside the ignored local roots.
 
 Two release-audit runs removed the complete generated `minecraft/` workspace,
-then executed `java tools/harness/Verify.java --smoke`. Both runs rebuilt the
+then executed `java tools/harness/Gate.java --smoke`. Both runs rebuilt the
 workspace with the pinned RetroMCP CLI and passed the server oracle, client
 oracle, laboratory checks, source budgets, strict compilation, and tests. The
 controlled mapped `Minecraft.class` SHA-256 remained:

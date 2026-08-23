@@ -1,4 +1,5 @@
 package worldline.smoke.axelogbreaksb173;
+import static worldline.b173server.B173FixtureSupport.*;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
@@ -131,19 +132,6 @@ public final class AxeLogBreaksSmoke {
           if (q.blockAt(x, y, z).legacyId() == 3 && water(q.blockAt(x, y + 1, z).legacyId()))
             return new BlockPosition(cx * 16 + x, y, cz * 16 + z);
     throw new IllegalStateException("no deterministic axe-log-breaks foundation");
-  }
-  private static boolean water(int id) {
-    return id == 8 || id == 9;
-  }
-  private static int local(int v, int c) {
-    return v - c * 16;
-  }
-  private static String sha(String s) throws Exception {
-    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
-    StringBuilder v = new StringBuilder();
-    for (byte x : b)
-      v.append(String.format("%02x", x & 255));
-    return v.toString();
   }
   private static void require(boolean v, String m) {
     if (!v)

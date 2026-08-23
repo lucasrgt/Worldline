@@ -34,7 +34,7 @@ cache before declaring the result one-minimal.
 
 ## Qualification
 
-The canonical `java tools/harness/Verify.java --smoke` gate passed from both
+The canonical `java tools/harness/Gate.java --smoke` gate passed from both
 the prepared workspace and a cold client reconstruction. The cold run invoked
 RetroMCP decompile/recompile, rebuilt the adapter, deterministic M8 inputs, and
 all M9 evaluations while preserving the frozen report. Rebuilt mapped

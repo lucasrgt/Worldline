@@ -1,4 +1,5 @@
 package worldline.smoke.remainingpaintingmotivesb173;
+import static worldline.b173server.B173FixtureSupport.*;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
@@ -130,13 +131,6 @@ public final class RemainingPaintingMotivesSmoke {
     }
     return cells;
   }
-  private static BlockPosition place(B173WireClient a, BlockPosition support, BlockFace face)
-      throws Exception {
-    BlockPosition target = face.adjacent(support);
-    a.placeHeldBlock(support, face);
-    a.awaitBlock(target, new BlockState(1, 0));
-    return target;
-  }
   private static BlockPosition foundation(RemoteChunkSnapshot q, int cx, int cz) {
     for (int x = 4; x <= 11; x++)
       for (int z = 4; z <= 11; z++)
@@ -163,28 +157,6 @@ public final class RemainingPaintingMotivesSmoke {
       if (n[i].equals(t))
         return new int[] {width[i], height[i]};
     throw new IllegalStateException("unknown art");
-  }
-  private static boolean water(int id) {
-    return id == 8 || id == 9;
-  }
-  private static int local(int v, int c) {
-    return v - c * 16;
-  }
-  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
-    long e = System.currentTimeMillis() + 5000;
-    while (System.currentTimeMillis() < e) {
-      if (s.players().size() == n)
-        return;
-      Thread.sleep(100);
-    }
-    throw new IllegalStateException("player count drift");
-  }
-  private static String sha(String s) throws Exception {
-    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
-    StringBuilder v = new StringBuilder();
-    for (byte x : b)
-      v.append(String.format("%02x", x & 255));
-    return v.toString();
   }
   private static void require(boolean v, String m) {
     if (!v)

@@ -77,7 +77,7 @@ final class RepositoryVerify {
         boolean smoke = Arrays.equals(arguments, new String[] {"--smoke"});
         boolean pinnedSmoke = Arrays.equals(arguments, new String[] {"--pinned-smoke"});
         if (arguments.length > 0 && !runtime && !smoke && !pinnedSmoke) {
-            System.err.println("usage: java tools/harness/Verify.java [--runtime|--smoke]");
+            System.err.println("usage: java tools/harness/Gate.java [--runtime|--smoke]");
             System.exit(2);
         }
         RepositoryVerify verify = pinnedSmoke
@@ -168,7 +168,7 @@ final class RepositoryVerify {
             DataDrivenCycleCheck.execute(root); CompositeCycleCheck.execute(root);
             TelemetryPinCheck.execute(root);
             SchemaPinCheck.execute(root); SmokeDescriptorSchemaCheck.execute(root);
-            FormattingPinCheck.execute(root);
+            FormattingPinCheck.execute(root); SharedHelperPinCheck.execute(root);
             BehaviorMapSchemaCheck.execute(root);
             RetryMigrationCheck.execute(root);
             FixedWaitMigrationCheck.execute(root); new SourceQualityCheck(root).execute();

@@ -111,7 +111,7 @@ javac --release 8 -Xlint:all,-options -Werror -classpath worldline-test-api-0.2.
 
 Use `:` instead of `;` in the classpath on Linux and macOS.
 
-After `java tools/harness/Verify.java --smoke` has prepared the local adapter:
+After `java tools/harness/Gate.java --smoke` has prepared the local adapter:
 
 ```text
 java tools/replay/Replay.java test

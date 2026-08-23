@@ -35,7 +35,7 @@ The laboratory signature is:
 The canonical command is:
 
 ```text
-java tools/harness/Verify.java --smoke
+java tools/harness/Gate.java --smoke
 ```
 
 It must pass the server oracle, four-process client oracle, two-process lab

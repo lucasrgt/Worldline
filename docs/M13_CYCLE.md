@@ -17,5 +17,5 @@ Status: **GO - persistence isolated and compile-budget hypothesis tested**.
 Frozen M13 evidence SHA-256:
 `1759de8beeeef257a4027fd79f590ec7a72d364729863d1cb5fe373741399e80`.
 
-The canonical gate is `java tools/harness/Verify.java --smoke`. No Minecraft
+The canonical gate is `java tools/harness/Gate.java --smoke`. No Minecraft
 binary, Aero checkout source, save, or raw runtime log is a release artifact.

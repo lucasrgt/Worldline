@@ -1,5 +1,5 @@
 schema=1
 id=m141-pig-spawner-observation
-fingerprint=1af5656161d9cf9a13fc36f543e839478e6fcff18ad6cdf87d84b5855f3a2090
+fingerprint=d1d9058924acea1a205515444cbfbd2f38876678bb5809aacc99fed32e503835
 observation.sha256=a148241c4e0282a64cf461ef362991e001cc17b1c7b06bd12e3f7b5b555fd522
 source=refactor-equivalent

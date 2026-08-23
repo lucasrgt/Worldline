@@ -61,12 +61,12 @@ public final class ContainerSmokePool {
 
     private String prepareImage(Options options) throws Exception {
         if (!options.skipVerify) {
-            Result verified = execute(List.of("java", "tools/harness/Verify.java"), root,
+            Result verified = execute(List.of("java", "tools/harness/Gate.java"), root,
                     Duration.ofMinutes(10), null);
-            require(verified.exit == 0, "host Verify failed\n" + verified.output);
+            require(verified.exit == 0, "host Gate failed\n" + verified.output);
         }
         require(Files.isDirectory(root.resolve(".worldline/build/classes/api")),
-                "missing prepared classes; run java tools/harness/Verify.java");
+                "missing prepared classes; run java tools/harness/Gate.java");
         if (!options.skipBuild) {
             Path log = root.resolve(".worldline/container-image-build.log");
             Result build = execute(List.of("docker", "build", "--pull=false", "--label", LABEL,

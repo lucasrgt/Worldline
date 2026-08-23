@@ -1,4 +1,5 @@
 package worldline.smoke.crosschunkwaterb173;
+import static worldline.b173server.B173FixtureSupport.*;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -146,13 +147,6 @@ public final class CrossChunkWaterSmoke {
     System.out.println("WORLDLINE_M125_TRACE=" + trace);
     System.out.println("WORLDLINE_M125_SIGNATURE=" + sha(trace));
   }
-  private static BlockPosition place(B173WireClient a, BlockPosition support, BlockFace face)
-      throws Exception {
-    BlockPosition target = face.adjacent(support);
-    a.placeHeldBlock(support, face);
-    a.awaitBlock(target, new BlockState(1, 0));
-    return target;
-  }
   private static BlockPosition foundation(RemoteChunkSnapshot q, int cx, int cz) {
     for (int z = 3; z <= 12; z++)
       for (int y = 126; y >= 1; y--)
@@ -181,18 +175,6 @@ public final class CrossChunkWaterSmoke {
             md.update(row.array());
           }
     return new StateDelta(n, hex(md.digest()));
-  }
-  private static boolean water(int id) {
-    return id == 8 || id == 9;
-  }
-  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
-    long end = System.currentTimeMillis() + 5000;
-    while (System.currentTimeMillis() < end) {
-      if (s.players().size() == n)
-        return;
-      Thread.sleep(100);
-    }
-    throw new IllegalStateException("player count drift");
   }
   private static String sha(String s) throws Exception {
     return hex(MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8)));

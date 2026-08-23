@@ -1,4 +1,5 @@
 package worldline.smoke.redstonewireoffb173;
+import static worldline.b173server.B173FixtureSupport.*;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -164,21 +165,6 @@ public final class RedstoneWireDepowerSmoke {
           }
         }
     return new StateDelta(changed, hex(digest.digest()));
-  }
-  private static boolean water(int id) {
-    return id == 8 || id == 9;
-  }
-  private static int local(int value, int chunk) {
-    return value - chunk * 16;
-  }
-  private static void awaitPlayers(B173DedicatedServer server, int count) throws Exception {
-    long end = System.currentTimeMillis() + 5000;
-    while (System.currentTimeMillis() < end) {
-      if (server.players().size() == count)
-        return;
-      Thread.sleep(100);
-    }
-    throw new IllegalStateException("player count drift");
   }
   private static String sha256(String value) throws Exception {
     return hex(MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8)));

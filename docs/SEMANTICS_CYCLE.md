@@ -25,7 +25,7 @@ Frozen catalog SHA-256:
 Canonical qualification command:
 
 ```text
-java tools/harness/Verify.java --runtime
+java tools/harness/Gate.java --runtime
 ```
 
 The contract and non-claims are in `docs/SEMANTICS.md`. Domain inventories

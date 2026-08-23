@@ -1,6 +1,5 @@
 import java.io.*;
 import java.net.ServerSocket;
-import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.security.MessageDigest;
@@ -94,7 +93,7 @@ public final class AeroMultiplayerLoginCycle {
       long parseable = 0;
       for (String row : rows.subList(baseline, rows.size()))
         if (row.startsWith("[Aero_")) {
-          parseAero(row);
+          AeroLogRow.parse(row);
           parseable++;
         }
       require(parseable > 0, "post-login Aero frame vocabulary absent");
@@ -153,42 +152,6 @@ public final class AeroMultiplayerLoginCycle {
       if (token.startsWith(name + "="))
         return Integer.parseInt(token.substring(name.length() + 1));
     throw new IllegalStateException("missing " + name + " in " + marker);
-  }
-  private void parseAero(String row) {
-    require(row.startsWith("[Aero_") && row.indexOf(']') > 6, "invalid Aero row type");
-    Map<String, String> fields = new HashMap<>();
-    for (String token : row.substring(row.indexOf(']') + 1).trim().split(" +")) {
-      int equals = token.indexOf('=');
-      if (equals > 0 && equals < token.length() - 1)
-        require(fields.put(token.substring(0, equals), token.substring(equals + 1)) == null,
-            "duplicate Aero field");
-    }
-    for (String name :
-        Arrays.asList("frameMs", "compileChunksMs", "compileChunksMaxMs", "gcTimeDeltaMs"))
-      require(decimal(fields, name).signum() >= 0, "negative Aero timing " + name);
-    for (String name : Arrays.asList("compileChunksCalls", "compileChunksSkipped",
-             "compileBudgetSkipped", "batchQueued", "cellQueued", "beViewCulled"))
-      require(whole(fields, name) >= 0, "negative Aero counter " + name);
-    require(whole(fields, "visibleChunks") > 0, "post-ready Aero row has no visible chunks");
-  }
-  private BigDecimal decimal(Map<String, String> fields, String name) {
-    try {
-      return new BigDecimal(required(fields, name));
-    } catch (NumberFormatException error) {
-      throw new IllegalStateException("invalid Aero timing " + name, error);
-    }
-  }
-  private long whole(Map<String, String> fields, String name) {
-    try {
-      return Long.parseLong(required(fields, name));
-    } catch (NumberFormatException error) {
-      throw new IllegalStateException("invalid Aero counter " + name, error);
-    }
-  }
-  private String required(Map<String, String> fields, String name) {
-    String value = fields.get(name);
-    require(value != null && !value.isEmpty(), "missing Aero field " + name);
-    return value;
   }
   private String line(String text, String prefix) {
     return text.lines()

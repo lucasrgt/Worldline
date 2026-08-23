@@ -1,4 +1,5 @@
 package worldline.b173server;
+import static worldline.b173server.B173FixtureSupport.*;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -112,14 +113,6 @@ public final class PersonalSlotSwapSmoke {
       Thread.sleep(100L);
     } while (System.nanoTime() < deadline);
     throw new IllegalStateException("server player count did not reach " + expected);
-  }
-  private static String sha(String value) throws Exception {
-    byte[] bytes =
-        MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8));
-    StringBuilder result = new StringBuilder();
-    for (byte item : bytes)
-      result.append(String.format("%02x", item & 255));
-    return result.toString();
   }
   private static void require(boolean value, String message) {
     if (!value)

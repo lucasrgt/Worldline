@@ -21,7 +21,7 @@ fc5baa700a2da8bedff3a17aff5647b17ae831acd2dbb839bb767229538c4436
 Canonical qualification command:
 
 ```text
-java tools/harness/Verify.java --smoke
+java tools/harness/Gate.java --smoke
 ```
 
 ## Cold reconstruction qualification

@@ -94,17 +94,14 @@ public final class Gate {
             case "--migrate-telemetry-pins" -> spec("TelemetryPinMigration", "--apply", 300);
             case "--migrate-repository-schemas" -> spec("RepositorySchemaMigration", "--apply", 600);
             case "--migrate-formatting-pins" -> spec("FormattingPinMigration", "--apply", 600);
-            case "--migrate-eof-retries" -> spec("RetryMigration", "--apply", 300);
-            case "--finalize-eof-retries" -> spec("RetryMigration", "--finalize", 300);
-            case "--finalize-fixed-waits" -> spec("FixedWaitMigration", "--finalize", 600);
+            case "--migrate-shared-helper-pins" -> spec("SharedHelperPinMigration", "--apply", 600);
             case "--module-cache-doctor" -> spec("ModuleCacheMaintenance", "doctor", 600);
             case "--module-cache-gc" -> spec("ModuleCacheMaintenance", "gc", 600);
             default -> null;
         };
     }
     private static String[] spec(String main, String argument, int timeout) {
-        return new String[] {main, argument, Integer.toString(timeout)};
-    }
+        return new String[] {main, argument, Integer.toString(timeout)}; }
 
     private void executePhase(String[] arguments, boolean runtime, boolean useSlot, boolean runtimeLease)
             throws Exception {
@@ -150,9 +147,7 @@ public final class Gate {
                 || Arrays.equals(arguments, new String[] {"--migrate-telemetry-pins"})
                 || Arrays.equals(arguments, new String[] {"--migrate-repository-schemas"})
                 || Arrays.equals(arguments, new String[] {"--migrate-formatting-pins"})
-                || Arrays.equals(arguments, new String[] {"--migrate-eof-retries"})
-                || Arrays.equals(arguments, new String[] {"--finalize-eof-retries"})
-                || Arrays.equals(arguments, new String[] {"--finalize-fixed-waits"})
+                || Arrays.equals(arguments, new String[] {"--migrate-shared-helper-pins"})
                 || Arrays.equals(arguments, new String[] {"--module-cache-doctor"})
                 || Arrays.equals(arguments, new String[] {"--module-cache-gc"})
                 || arguments.length == 2 && ("--new-milestone".equals(arguments[0])
@@ -166,9 +161,7 @@ public final class Gate {
                 + "--migrate-telemetry-pins|"
                 + "--migrate-repository-schemas|"
                 + "--migrate-formatting-pins|"
-                + "--migrate-eof-retries|"
-                + "--finalize-eof-retries|"
-                + "--finalize-fixed-waits|"
+                + "--migrate-shared-helper-pins|"
                 + "--module-cache-doctor|--module-cache-gc|"
                 + "--new-milestone ID|--milestone ID|"
                 + "--candidate ID|--self-test]");

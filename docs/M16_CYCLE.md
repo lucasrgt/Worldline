@@ -22,5 +22,5 @@ Frozen M16 evidence SHA-256:
 
 M17 corrected the startup overlay and reproduced visual divergence across a
 broader matrix, so the scheduler is no longer a promotion candidate. The
-canonical gate is `java tools/harness/Verify.java --smoke`. No local game
+canonical gate is `java tools/harness/Gate.java --smoke`. No local game
 binary, Aero checkout change, save, runtime log, or framebuffer is released.

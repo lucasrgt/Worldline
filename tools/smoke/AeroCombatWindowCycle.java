@@ -1,5 +1,4 @@
 import java.io.*;
-import java.math.BigDecimal;
 import java.net.ServerSocket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
@@ -112,7 +111,7 @@ public final class AeroCombatWindowCycle {
       long parsed = 0;
       for (String row : rows.subList(baseline, rows.size()))
         if (row.startsWith("[Aero_")) {
-          parseAero(row);
+          AeroLogRow.parse(row);
           parsed++;
         }
       require(parsed > 0, "parseable post-event Aero row absent");
@@ -141,42 +140,6 @@ public final class AeroCombatWindowCycle {
     command.addAll(javaFiles(smoke.resolve("src")));
     Captured.run(root, command, 60);
     return output;
-  }
-  private void parseAero(String row) {
-    Map<String, String> fields = new HashMap<>();
-    require(row.indexOf(']') > 6, "invalid Aero row");
-    for (String token : row.substring(row.indexOf(']') + 1).trim().split(" +")) {
-      int equals = token.indexOf('=');
-      if (equals > 0 && equals < token.length() - 1)
-        require(fields.put(token.substring(0, equals), token.substring(equals + 1)) == null,
-            "duplicate Aero field");
-    }
-    for (String name :
-        Arrays.asList("frameMs", "compileChunksMs", "compileChunksMaxMs", "gcTimeDeltaMs"))
-      require(decimal(fields, name).signum() >= 0, "negative Aero timing");
-    for (String name : Arrays.asList("compileChunksCalls", "compileChunksSkipped",
-             "compileBudgetSkipped", "batchQueued", "cellQueued", "beViewCulled"))
-      require(whole(fields, name) >= 0, "negative Aero counter");
-    require(whole(fields, "visibleChunks") > 0, "no visible chunks");
-  }
-  private BigDecimal decimal(Map<String, String> fields, String name) {
-    try {
-      return new BigDecimal(required(fields, name));
-    } catch (NumberFormatException error) {
-      throw new IllegalStateException("invalid " + name, error);
-    }
-  }
-  private long whole(Map<String, String> fields, String name) {
-    try {
-      return Long.parseLong(required(fields, name));
-    } catch (NumberFormatException error) {
-      throw new IllegalStateException("invalid " + name, error);
-    }
-  }
-  private String required(Map<String, String> fields, String name) {
-    String value = fields.get(name);
-    require(value != null, "missing " + name);
-    return value;
   }
   private void verifyCheckout(Path checkout) throws Exception {
     require(Files.isDirectory(checkout.resolve(".git")), "Aero checkout absent");

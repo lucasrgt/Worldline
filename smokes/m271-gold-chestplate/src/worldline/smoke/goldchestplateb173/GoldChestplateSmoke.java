@@ -1,4 +1,5 @@
 package worldline.smoke.goldchestplateb173;
+import static worldline.b173server.B173FixtureSupport.*;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -106,14 +107,6 @@ public final class GoldChestplateSmoke {
       Thread.sleep(100L);
     }
     throw new IllegalStateException("player count did not become " + count);
-  }
-  private static String sha(String value) throws Exception {
-    byte[] bytes =
-        MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8));
-    StringBuilder result = new StringBuilder();
-    for (byte item : bytes)
-      result.append(String.format("%02x", item & 255));
-    return result.toString();
   }
   private static void require(boolean condition, String message) {
     if (!condition)

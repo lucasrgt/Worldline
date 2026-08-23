@@ -1,4 +1,5 @@
 package worldline.smoke.spiderclimbsetb173;
+import static worldline.b173server.B173FixtureSupport.*;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
@@ -207,20 +208,6 @@ public final class SpiderClimbSetSmoke {
       place(a, new BlockPosition(top.x() + 3, top.y(), top.z() + z), BlockFace.UP, 85);
     }
   }
-  private static BlockPosition place(
-      B173WireClient a, BlockPosition support, BlockFace face, int id) throws Exception {
-    BlockPosition target = face.adjacent(support);
-    try {
-      a.placeHeldBlock(support, face);
-      a.awaitBlock(target, new BlockState(id, 0));
-    } catch (Exception e) {
-      throw new IllegalStateException("place " + id + " " + support.x() + "," + support.y() + ","
-              + support.z() + " " + face + " -> " + target.x() + "," + target.y() + ","
-              + target.z(),
-          e);
-    }
-    return target;
-  }
   private static void grass(B173WireClient a, BlockPosition support, BlockFace face)
       throws Exception {
     place(a, support, face, 2);
@@ -238,28 +225,6 @@ public final class SpiderClimbSetSmoke {
   }
   private static String cell(BlockPosition p, int id) {
     return p.x() + ":" + p.y() + ":" + p.z() + ":" + id + ":0";
-  }
-  private static boolean water(int id) {
-    return id == 8 || id == 9;
-  }
-  private static int local(int v, int c) {
-    return v - c * 16;
-  }
-  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
-    long e = System.currentTimeMillis() + 5000;
-    while (System.currentTimeMillis() < e) {
-      if (s.players().size() == n)
-        return;
-      Thread.sleep(100);
-    }
-    throw new IllegalStateException("player count drift");
-  }
-  private static String sha(String s) throws Exception {
-    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
-    StringBuilder v = new StringBuilder();
-    for (byte x : b)
-      v.append(String.format("%02x", x & 255));
-    return v.toString();
   }
   private static void require(boolean v, String m) {
     if (!v)

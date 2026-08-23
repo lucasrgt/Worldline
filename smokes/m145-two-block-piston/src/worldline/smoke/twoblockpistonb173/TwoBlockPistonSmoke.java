@@ -1,4 +1,5 @@
 package worldline.smoke.twoblockpistonb173;
+import static worldline.b173server.B173FixtureSupport.*;
 
 import java.nio.*;
 import java.nio.charset.*;
@@ -187,18 +188,6 @@ public final class TwoBlockPistonSmoke {
           }
         }
     return new Delta(n, hex(d.digest()), cells.toString());
-  }
-  private static boolean water(int id) {
-    return id == 8 || id == 9;
-  }
-  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
-    long e = System.currentTimeMillis() + 5000;
-    while (System.currentTimeMillis() < e) {
-      if (s.players().size() == n)
-        return;
-      Thread.sleep(100);
-    }
-    throw new IllegalStateException("player count drift");
   }
   private static String sha(String s) throws Exception {
     return hex(MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8)));

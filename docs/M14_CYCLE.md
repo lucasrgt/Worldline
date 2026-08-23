@@ -17,6 +17,6 @@ Status: **GO - initial backlog isolated and non-retry policy prototyped**.
 Frozen M14 evidence SHA-256:
 `65f43a875d18e96066441cb308fed7089bab8414b087f4398c1555211f2bae6a`.
 
-The canonical gate is `java tools/harness/Verify.java --smoke`. Raw worlds,
+The canonical gate is `java tools/harness/Gate.java --smoke`. Raw worlds,
 runtime logs, compiled mixins, the Minecraft client, and the Aero checkout are
 ignored local inputs or derived artifacts, never release contents.

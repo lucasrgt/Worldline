@@ -11,6 +11,7 @@ final class FormattingPinCheck {
     private FormattingPinCheck() { }
     static void execute(Path root) throws Exception {
         Properties manifest = manifest(root);
+        Properties shared = SharedHelperPinCheck.manifest(root);
         require("1".equals(manifest.getProperty("schema")), "invalid formatting migration schema");
         require("clang-format".equals(manifest.getProperty("formatter.name"))
                         && "22.1.0".equals(manifest.getProperty("formatter.version"))
@@ -21,9 +22,11 @@ final class FormattingPinCheck {
             require(relative.matches("(?:tools/smoke|smokes)/.+[.]java"),
                     "unsafe formatting migration path: " + relative);
             String source = Files.readString(root.resolve(relative), StandardCharsets.UTF_8);
-            require(digest(source).equals(required(manifest, stem + "current_sha256"))
-                            && digest(FormattingPinMigration.tokens(source)).equals(
-                                    required(manifest, stem + "token_sha256"))
+            boolean direct = digest(source).equals(required(manifest, stem + "current_sha256"));
+            boolean successor = SharedHelperPinCheck.transportsFile(shared, root, relative,
+                    required(manifest, stem + "current_sha256"));
+            require((direct && digest(FormattingPinMigration.tokens(source)).equals(
+                                    required(manifest, stem + "token_sha256")) || successor)
                             && hash(manifest, stem + "prior_sha256"),
                     "formatted source drift: " + relative);
         }
@@ -51,9 +54,15 @@ final class FormattingPinCheck {
     }
     static boolean carries(Properties manifest, String id, SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
-        return hash(manifest, stem + "prior_fingerprint")
+        boolean direct = hash(manifest, stem + "prior_fingerprint")
                 && current.equals(manifest.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(manifest.getProperty(stem + "evidence_sha256"));
+        try {
+            Properties shared = SharedHelperPinCheck.manifest(Path.of("").toAbsolutePath().normalize());
+            return direct || SharedHelperPinCheck.follows(shared, id,
+                    manifest.getProperty(stem + "current_fingerprint"),
+                    manifest.getProperty(stem + "evidence_sha256"), pin, current);
+        } catch (Exception error) { return false; }
     }
     static boolean follows(Properties manifest, String id, String prior, String evidence,
             SmokePins.Entry pin, String current) {
@@ -69,8 +78,12 @@ final class FormattingPinCheck {
             String stem = "file." + index + ".";
             if (!relative.equals(manifest.getProperty(stem + "path"))) continue;
             String current = Files.readString(root.resolve(relative), StandardCharsets.UTF_8);
-            return prior.equals(manifest.getProperty(stem + "prior_sha256"))
+            boolean direct = prior.equals(manifest.getProperty(stem + "prior_sha256"))
                     && digest(current).equals(manifest.getProperty(stem + "current_sha256"));
+            Properties shared = SharedHelperPinCheck.manifest(root);
+            return direct || prior.equals(manifest.getProperty(stem + "prior_sha256"))
+                    && SharedHelperPinCheck.transportsFile(shared, root, relative,
+                            manifest.getProperty(stem + "current_sha256"));
         }
         return false;
     }

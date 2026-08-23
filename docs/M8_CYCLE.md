@@ -29,7 +29,7 @@ corruption rejection.
 
 ## Qualification
 
-The canonical `java tools/harness/Verify.java --smoke` gate passed from both
+The canonical `java tools/harness/Gate.java --smoke` gate passed from both
 the prepared workspace and a cold client reconstruction. The cold run invoked
 RetroMCP decompile/recompile, rebuilt the adapter and every M8 artifact, and
 preserved the frozen evidence report. Rebuilt mapped `Minecraft.class` retained

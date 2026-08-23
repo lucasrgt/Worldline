@@ -1,4 +1,5 @@
 package worldline.smoke.pistonlimitb173;
+import static worldline.b173server.B173FixtureSupport.*;
 
 import java.nio.*;
 import java.nio.charset.*;
@@ -199,18 +200,6 @@ public final class PistonPushLimitSmoke {
         .put((byte) r.legacyId())
         .put((byte) r.metadata());
     d.update(row.array());
-  }
-  private static boolean water(int id) {
-    return id == 8 || id == 9;
-  }
-  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
-    long e = System.currentTimeMillis() + 5000;
-    while (System.currentTimeMillis() < e) {
-      if (s.players().size() == n)
-        return;
-      Thread.sleep(100);
-    }
-    throw new IllegalStateException("player count drift");
   }
   private static String hex(byte[] b) {
     StringBuilder s = new StringBuilder();

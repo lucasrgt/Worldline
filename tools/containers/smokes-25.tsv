@@ -4,8 +4,8 @@ m421-creeper-gunpowder-set	server-headless	tools/smoke/DataDrivenCycle.java	m421
 m422-skeleton-bone-set	server-headless	tools/smoke/DataDrivenCycle.java	m422-skeleton-bone-set	600
 m423-slimeball-set	server-headless	tools/smoke/DataDrivenCycle.java	m423-slimeball-set	600
 m424-furnace-cart-motion-set	server-headless	tools/smoke/DataDrivenCycle.java	m424-furnace-cart-motion-set	600
-m425-remaining-machine-faces	server-headless	tools/smoke/RemainingMachineFacesCycle.java	m425-remaining-machine-faces	600
-m426-remaining-redstone-faces	server-headless	tools/smoke/RemainingRedstoneFacesCycle.java	m426-remaining-redstone-faces	600
+m425-remaining-machine-faces	server-headless	tools/smoke/DataDrivenCycle.java	m425-remaining-machine-faces	600
+m426-remaining-redstone-faces	server-headless	tools/smoke/DataDrivenCycle.java	m426-remaining-redstone-faces	600
 m427-remaining-piston-orient	server-headless	tools/smoke/DataDrivenCycle.java	m427-remaining-piston-orient-set	600
 m428-remaining-door-orient	server-headless	tools/smoke/DataDrivenCycle.java	m428-remaining-door-orient-set	600
 m429-remaining-attach-faces	server-headless	tools/smoke/DataDrivenCycle.java	m429-remaining-attach-faces	600

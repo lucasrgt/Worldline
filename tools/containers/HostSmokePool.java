@@ -137,7 +137,7 @@ public final class HostSmokePool {
     private Path prebuild(List<Task> tasks, Path batch) throws Exception { Path output = batch.resolve("aero-model-lib-3.0.0.jar"); List<String> command = new ArrayList<>(List.of(java(), "tools/containers/AeroPrebuild.java", output.toString()));
         tasks.forEach(task -> command.add(task.argument)); ProcessBuilder builder = new ProcessBuilder(command).directory(root.toFile()).inheritIO(); builder.environment().put("GRADLE_USER_HOME", root.resolve(".worldline/runtime-fabric/gradle/aero-prebuild").toString()); Process process = builder.start(); require(process.waitFor(12, TimeUnit.MINUTES) && process.exitValue() == 0, "Aero batch prebuild failed"); return output; }
 
-    private void verify() throws Exception { Process process = new ProcessBuilder(java(), "tools/harness/Verify.java").directory(root.toFile()).inheritIO().start(); require(process.waitFor(10, TimeUnit.MINUTES) && process.exitValue() == 0, "host Verify failed"); }
+    private void verify() throws Exception { Process process = new ProcessBuilder(java(), "tools/harness/Gate.java").directory(root.toFile()).inheritIO().start(); require(process.waitFor(10, TimeUnit.MINUTES) && process.exitValue() == 0, "host Gate failed"); }
 
     private void prepareBackend(String backend) throws Exception {
         if (backend.equals("windows-job")) {

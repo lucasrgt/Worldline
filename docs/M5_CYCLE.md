@@ -21,7 +21,7 @@ Frozen bundle SHA-256:
 Canonical qualification command:
 
 ```text
-java tools/harness/Verify.java --smoke
+java tools/harness/Gate.java --smoke
 ```
 
 ## Cold reconstruction qualification

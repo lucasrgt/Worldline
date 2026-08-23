@@ -1,4 +1,5 @@
 package worldline.smoke.crosschunkrecoveryb173;
+import static worldline.b173server.B173FixtureSupport.*;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -158,15 +159,6 @@ public final class CrossChunkLightRecoverySmoke {
   }
   private static boolean replaceable(int id) {
     return id == 0 || id == 8 || id == 9 || id == 10 || id == 11 || id == 78;
-  }
-  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
-    long end = System.currentTimeMillis() + 5000;
-    while (System.currentTimeMillis() < end) {
-      if (s.players().size() == n)
-        return;
-      Thread.sleep(100);
-    }
-    throw new IllegalStateException("player count drift");
   }
   private static String sha(String s) throws Exception {
     return hex(MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8)));
