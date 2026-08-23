@@ -220,6 +220,8 @@ public final class WorldlineBehavior {
             "Untamed wolf retaliation after a player attack");
     public static final WorldlineBehavior ARMOR_REDUCTION = define("armor-reduction", WorldlineFamily.PLAYER,
             "Equipped armor reduces incoming hostile melee damage");
+    public static final WorldlineBehavior ARMOR_DURABILITY_HIT = define("armor-durability-hit",
+            WorldlineFamily.PLAYER, "Worn armor loses durability after a hostile melee hit");
     public static final WorldlineBehavior FALL_DAMAGE = define("fall-damage", WorldlineFamily.PLAYER,
             "Greater fall distance produces greater server-authored health loss");
     public static final WorldlineBehavior EXPLOSION_PLAYER_DAMAGE = define("explosion-player-damage",
