@@ -31,7 +31,7 @@ public abstract class StationApiDriverMixin {
     @Shadow public Session session;
     @Shadow public abstract void setScreen(net.minecraft.client.gui.screen.Screen screen);
     @Shadow public abstract void scheduleStop();
-    @Unique private boolean worldlineConnected, worldlineReady;
+    @Unique private boolean worldlineConnected, worldlineReady, worldlineClosing;
     @Unique private long worldlineTick;
     @Unique private Socket worldlineSocket;
     @Unique private BufferedReader worldlineInput;
@@ -40,6 +40,7 @@ public abstract class StationApiDriverMixin {
     @Inject(method = "tick()V", at = @At("HEAD"))
     private void worldlineControl(CallbackInfo callback) {
         if (!Boolean.getBoolean("worldline.stationapi.enabled")) return;
+        if (worldlineClosing) return;
         try {
             if (!worldlineConnected && world == null) {
                 connect();
@@ -55,6 +56,7 @@ public abstract class StationApiDriverMixin {
             String command = worldlineInput.readLine();
             if ("CLOSE".equals(command)) {
                 emit("CLOSED");
+                worldlineClosing = true;
                 scheduleStop();
                 return;
             }
