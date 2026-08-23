@@ -17,7 +17,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | INT-03 | DONE | Bundle and archive contained branches and remove dead worktrees. | Recovery bundles live outside the repository in `worldline-archives`; the repository has one worktree and only `main` after each completed train. |
 | INT-04 | DONE | Add repeatable branch triage with JSON output. | `WorktreeLifecycle triage` writes `.worldline/reports/branches.json`; `IntegrationTrain` invokes it after a train. |
 | INT-05 | DONE | Mark superseded M513/M514/M515/M518/M521/M524 attempts as abandoned. | Their refs/worktrees were archived during cleanup and are not resumable live branches. |
-| INT-06 | ACTIVE | Use small, frequent, exact-SHA integration trains. | Each program batch must pass Gate and the orchestrator gate, then restore the one-branch/one-worktree baseline. |
+| INT-06 | DONE | Use small, frequent, exact-SHA integration trains. | The final fixed-wait train `dfa8269884d3` passed the integration and orchestrator gates, promoted exactly that SHA, and restored the one-branch/one-worktree baseline. |
 
 ## Pipeline and official-runtime throughput
 
@@ -115,3 +115,12 @@ The Fable program may be reported complete only when every row is `DONE`, or an
 action documented. Static checks must pass on the exact clean candidate. Runtime
 proofs are restored from current fingerprints whenever possible; only changed or
 new behavioral inputs execute again.
+
+## Closeout audit
+
+The 2026-08-23 closeout records 54 `DONE` deliverables and one legitimate
+`EXTERNAL` operator choice. `RepositoryMaintenance doctor` passes and reports the
+exact optional administrator command for WIN-02 without changing Defender. The
+portable smoke plan reports 525 reusable proofs and zero missing proofs. After
+promotion and archival, the clone has one clean worktree, one local branch
+(`main`), and the fetched origin exposes no branch other than `origin/main`.
