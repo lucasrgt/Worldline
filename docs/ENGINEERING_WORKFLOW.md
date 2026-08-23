@@ -22,6 +22,11 @@ The integration coordinator updates those files once for an accepted train. Froz
 signatures live in each milestone's `smoke.properties`; the release manifest contains only
 global identity, canonical inputs, core signatures, and the currently promoted milestone.
 
+All new branches use `codex/<kind>-<id>-<slug>`, where `kind` is `milestone`, `fix`,
+`experiment`, or `train`. Milestone/fix candidates contain exactly one reviewed logical commit
+over the declared base. Reconciliation accepts only `train` branches. `experiment` branches are
+never integrable; they remain conditional work governed by NWC until resolved or archived.
+
 ## Verification tiers
 
 | Command | Purpose | Official runtime |
@@ -202,8 +207,8 @@ qualifies them again against the exact shared integration base:
 
 ```text
 java tools/integration/IntegrationTrain.java --base <base-sha> \
-  m470-example=refs/heads/codex/m470-example \
-  m471-example=refs/heads/codex/m471-example
+  m470-example=refs/heads/codex/milestone-m470-example \
+  m471-example=refs/heads/codex/milestone-m471-example
 ```
 
 The train rejects stale ancestry, coordinator-owned changes, overlapping path ownership, and
@@ -218,7 +223,7 @@ files, qualify exactly one consolidated candidate:
 
 ```text
 java tools/integration/IntegrationTrain.java --base <base-sha> \
-  --reconcile full-integration=<ref>
+  --reconcile full-integration=codex/train-full-integration
 ```
 
 Reconciliation mode runs the complete smoke gate on that clean commit before

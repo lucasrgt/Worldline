@@ -86,8 +86,8 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | SWARM-02 | QUEUED | Require NWC deferments for non-integrated experiments. | Every prototype has a verifiable cue, owner, and expiry. |
 | SWARM-03 | QUEUED | Version an auditable handoff registry. | Worktree path, clean SHA, base, receipt, and disposition survive task history. |
 | SWARM-04 | QUEUED | Generate a swarm dashboard. | One HTML report joins worktrees, triage, pins, handoffs, and timings. |
-| SWARM-05 | ACTIVE | Enforce reconciliation history policy. | Main receives one reviewable commit per logical milestone/batch, with iterative repair commits squashed before promotion. |
-| SWARM-06 | QUEUED | Enforce one branch naming scheme. | New work uses the documented `codex/<kind>-<id>-<slug>` grammar; invalid train refs fail closed. |
+| SWARM-05 | DONE | Enforce reconciliation history policy. | Integration rejects candidates with anything other than one reviewed logical commit over the declared base. |
+| SWARM-06 | DONE | Enforce one branch naming scheme. | Trains enforce `codex/<kind>-<id>-<slug>`, restrict reconcile to `train`, and reject `experiment` integration. |
 
 ## Product and test quality
 

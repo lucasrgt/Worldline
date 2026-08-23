@@ -35,25 +35,32 @@ final class IntegrationToolsCheck {
             Files.writeString(repository.resolve("README.md"), "base\n", StandardCharsets.UTF_8);
             git(repository, "add", "."); git(repository, "commit", "--quiet", "-m", "base");
             git(repository, "branch", "base");
-            candidate(repository, "one", "m1-one");
+            candidate(repository, "codex/milestone-m1-one", "m1-one");
             git(repository, "switch", "--quiet", "base");
-            candidate(repository, "two", "m2-two");
+            candidate(repository, "codex/milestone-m2-two", "m2-two");
             int valid = run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "IntegrationTrain", "--base", "base", "--plan-only",
-                    "m1-one=one", "m2-two=two"), 60);
+                    "m1-one=codex/milestone-m1-one", "m2-two=codex/milestone-m2-two"), 60);
             require(valid == 0, "valid integration train was rejected");
-            git(repository, "switch", "--quiet", "-c", "bad", "base");
+            git(repository, "switch", "--quiet", "-c", "codex/milestone-m3-bad", "base");
             Files.writeString(repository.resolve("README.md"), "bad\n", StandardCharsets.UTF_8);
             Path own = repository.resolve("smokes/m3-bad"); Files.createDirectories(own);
             Files.writeString(own.resolve("smoke.properties"), "id=m3-bad\n", StandardCharsets.UTF_8);
             git(repository, "add", "."); git(repository, "commit", "--quiet", "-m", "bad");
             int invalid = run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
-                    "IntegrationTrain", "--base", "base", "--plan-only", "m3-bad=bad"), 60);
+                    "IntegrationTrain", "--base", "base", "--plan-only",
+                    "m3-bad=codex/milestone-m3-bad"), 60);
             require(invalid != 0, "coordinator-owned file change was accepted");
+            git(repository, "branch", "codex/train-full-integration");
             int reconcile = run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "IntegrationTrain", "--base", "base", "--plan-only", "--reconcile",
-                    "full-integration=bad"), 60);
+                    "full-integration=codex/train-full-integration"), 60);
             require(reconcile == 0, "consolidated reconciliation train was rejected");
+            git(repository, "branch", "codex/experiment-m3-bad");
+            int experiment = run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
+                    "IntegrationTrain", "--base", "base", "--plan-only",
+                    "m3-bad=codex/experiment-m3-bad"), 60);
+            require(experiment != 0, "experiment branch was accepted for integration");
             int triage = run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "WorktreeLifecycle", "triage", "--base", "base"), 60);
             require(triage == 0 && Files.readString(repository.resolve(

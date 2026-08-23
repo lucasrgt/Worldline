@@ -13,6 +13,8 @@ import java.util.concurrent.TimeUnit;
 
 /** Audits isolated milestone branches before a coordinator integrates them. */
 public final class IntegrationTrain {
+    private static final java.util.regex.Pattern BRANCH = java.util.regex.Pattern.compile(
+            "codex/(milestone|fix|experiment|train)-[a-z0-9]+(?:-[a-z0-9]+)*");
     private static final Set<String> COORDINATOR_FILES = Set.of(
             "CHANGELOG.md", "README.md", "docs/ROADMAP.md", "docs/ARCHITECTURE.md",
             "release/worldline.properties",
@@ -49,9 +51,19 @@ public final class IntegrationTrain {
         String id = specification.substring(0, separator);
         String reference = specification.substring(separator + 1);
         require(id.matches("[a-z0-9]+(?:-[a-z0-9]+)*"), "invalid candidate id: " + id);
+        String branch = reference.replaceFirst("^refs/heads/", "");
+        var branchMatch = BRANCH.matcher(branch);
+        require(branchMatch.matches(), "candidate branch must match codex/<kind>-<id>-<slug>: " + reference);
+        String kind = branchMatch.group(1);
+        require(!kind.equals("experiment"), "experiment branches must be deferred, not integrated: " + reference);
+        require(reconcile == kind.equals("train"), reconcile
+                ? "reconciliation requires a codex/train-* branch"
+                : "milestone integration requires a codex/milestone-* or codex/fix-* branch");
         String head = git(root, "rev-parse", "--verify", reference + "^{commit}").trim();
         require(status(root, "merge-base", "--is-ancestor", base, head) == 0,
                 reference + " is not based on " + shortSha(base));
+        require(Integer.parseInt(git(root, "rev-list", "--count", base + ".." + head).trim()) == 1,
+                reference + " must contain exactly one reviewed logical commit over the base");
         List<String> paths = lines(git(root, "diff", "--name-only", base + "..." + head));
         require(!paths.isEmpty(), reference + " has no changes from base");
         if (reconcile) return new Candidate(id, reference, head, paths);
