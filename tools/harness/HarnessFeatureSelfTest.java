@@ -7,5 +7,6 @@ final class HarnessFeatureSelfTest {
         ChangelogCheck.selfTest();
         ReadmeStatus.selfTest();
         SmokeScheduleHistory.selfTest();
+        SmokeStatementBudgetTest.execute();
     }
 }

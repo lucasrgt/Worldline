@@ -163,8 +163,7 @@ final class RepositoryVerify {
         validateModuleOrder(modules);
         report.step("source-policy", () -> {
             enforceBudget("product", productionRoots(modules));
-            enforceBudget("harness", Collections.singletonList(root.resolve("tools")));
-            enforceBudget("smoke", Collections.singletonList(root.resolve("smokes")));
+            enforceBudget("harness", VerificationRoots.read(root));
             enforceBudget("adapter", Collections.singletonList(root.resolve("adapters")));
             new SourceQualityCheck(root).execute();
         });

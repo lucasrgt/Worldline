@@ -52,6 +52,15 @@ child JVMs, kills timed-out process trees, and publishes seed, volume, duration,
 under `.worldline/reports/nightly-quality/`. The `quality` dispatch profile reproduces it manually;
 ordinary local and pull-request gates retain only deterministic short tests.
 
+Smoke source policy counts semicolons outside comments, strings, and character literals instead
+of rewarding physical-line packing. New runners and scenarios are limited to 300 and 150
+statements respectively. `quality/smoke-statement-debt.properties` is a path-specific ratchet for
+reviewed legacy overages: an allowance can decrease but cannot grow, move to a new file, or remain
+after the source reaches its limit. Packed-line totals and maximum line density are independent
+non-growth ratchets. Reusable family helpers live under `smokes/shared/<family>` and must be
+declared through each consumer's fingerprinted `shared.inputs`; orphan helper families fail the
+gate. Product, ordinary verification, and adapter `tokei` ceilings remain unchanged.
+
 Start a milestone with `java tools/harness/Gate.java --new-milestone m<number>-<slug>`.
 The command creates a deterministic descriptor, fail-closed cycle source, claim document, cycle
 document, and semantic map without overwriting any path. The draft has a content-derived signal

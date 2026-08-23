@@ -54,7 +54,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | FLAKE-01 | ACTIVE | Provide shared `awaitSlot`, `awaitBlock`, and `awaitEntity` polling contracts and migrate fixed-wait assertions. | The shared support records attempts/duration; the fixed-wait ratchet reaches zero without invalidating unrelated pins. |
 | FLAKE-02 | ACTIVE | Centralize EOF retry and publish retry telemetry. | `SmokeRetry` owns bounded decisions, backoff, counters, and shutdown telemetry; deterministic migration of recognized legacy loops remains. |
 | FLAKE-03 | DONE | Consolidate the 17 copied `WorldlinePagedAeroMixin` sources. | Two fingerprinted shared variants preserve the base/direct distinction; the gate rejects consumer copies and routing drift. |
-| FLAKE-04 | QUEUED | Replace line-pressure statement packing with a statement/debt ratchet. | Smoke policy measures executable statements/helpers and the long-line debt decreases monotonically. |
+| FLAKE-04 | DONE | Replace line-pressure statement packing with a statement/debt ratchet. | A literal-aware statement lexer enforces 300/150 ceilings, path-specific legacy debt and non-growing packed-line density. |
 
 ## Marginal cost per milestone
 
@@ -97,7 +97,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | QUAL-02 | DONE | Reject orphaned `__snapshots__/*.wlsnap` files. | Every tracked snapshot requires a tracked owner sidecar bound to an existing test source and literal snapshot declaration. |
 | QUAL-03 | DONE | Give differential fuzzing and mutation nightly time budgets. | Fast deterministic checks remain local; the scheduled/manual quality campaign splits a hard timeout between seeded differential and mutation-manifest exploration and publishes logs plus JSON evidence. |
 | QUAL-04 | ACTIVE | Connect frame census to scene-relative performance budgets. | Frame census/breakdown exists; machine-relative Aero scene budgets and gate enforcement remain. |
-| QUAL-05 | QUEUED | Refocus source policy on smoke maintainability. | Product ceilings remain fail-closed while the smoke statement/helper ratchet replaces counterproductive packing. |
+| QUAL-05 | DONE | Refocus source policy on smoke maintainability. | Product/adapter ceilings remain fail-closed; smoke statement debt and fingerprinted shared-helper families replace counterproductive packing. |
 
 ## Windows and Git hygiene
 

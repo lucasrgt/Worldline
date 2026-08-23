@@ -19,10 +19,12 @@ All repository artifacts must be written in English.
 
 1. Each maintained product source file must remain at or below 250 `tokei`
    code lines.
-2. Each verification, replay, or smoke-tooling source file must remain at or
-   below 300 code lines.
-3. Each executable smoke scenario or oracle source file must remain at or
-   below 150 code lines.
+2. Each verification or replay source file must remain at or below 300 `tokei`
+   code lines. Smoke-tooling files are limited to 300 executable statements.
+3. Each executable smoke scenario or oracle source file is limited to 150
+   executable statements. Reviewed legacy overages live in
+   `quality/smoke-statement-debt.properties`; no new overage is permitted and
+   every recorded allowance may only decrease.
 4. Each game-specific adapter source file must remain at or below 150 code
    lines.
 5. There is no total line budget. Tests are unlimited. Product behavior may

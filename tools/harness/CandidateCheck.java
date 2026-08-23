@@ -78,8 +78,8 @@ final class CandidateCheck {
     }
 
     private void enforceBudgets(SmokeDiscovery.Entry smoke) throws Exception {
-        checkTokei("runner", List.of(root.resolve(smoke.runner)), 300);
-        checkTokei("smoke", List.of(root.resolve("smokes").resolve(id)), 150);
+        new SmokeStatementBudget(root).candidate(root.resolve(smoke.runner),
+                root.resolve("smokes").resolve(id));
         checkTokei("adapter", List.of(root.resolve("adapters")), 150);
     }
 

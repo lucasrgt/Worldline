@@ -397,10 +397,11 @@ Release candidates require the integral smoke gate:
 java tools/harness/Gate.java --smoke
 ```
 
-Keep product sources at or below 250 `tokei` code lines, harness sources at or
-below 300, smoke scenarios at or below 150, and adapters at or below 150.
-Tests are unlimited. Add cohesive files rather than hiding product behavior in
-tests, generated output, or harness code.
+Keep product sources at or below 250 `tokei` code lines, verification sources
+at or below 300, smoke runners/scenarios at or below 300/150 executable
+statements, and adapters at or below 150 code lines. Reviewed legacy smoke
+debt can only decrease. Tests are unlimited. Add cohesive files rather than
+hiding product behavior in tests, generated output, or harness code.
 
 ---
 
