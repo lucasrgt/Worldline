@@ -96,4 +96,9 @@ final class B173PlayWaits {
     }
 
     Integer fuse(int entity) throws IOException { return until(() -> { int value = inbound.mobs().takeFuse(entity); return value < 0 ? null : Integer.valueOf(value); }, "expected creeper Packet40 fuse absent before deadline"); }
+
+    Integer fire(int entity) throws IOException {
+        return until(() -> inbound.mobs().peekFire(entity) ? Integer.valueOf(entity) : null,
+                "expected undead Packet40 fire flag absent before deadline");
+    }
 }

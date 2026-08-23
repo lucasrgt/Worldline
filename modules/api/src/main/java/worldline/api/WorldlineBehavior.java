@@ -233,10 +233,8 @@ public final class WorldlineBehavior {
         this.token = token; this.family = family; this.subject = subject;
     }
 
-    public String token() { return token; }
-    public String family() { return family; }
-    public String subject() { return subject; }
-    public String atlasId() { return "atlas.scenario." + token; }
+    public String token() { return token; } public String family() { return family; }
+    public String subject() { return subject; } public String atlasId() { return "atlas.scenario." + token; }
 
     public static WorldlineBehavior require(String tokenOrAtlasOrProgress) {
         return WorldlineBehaviorRegistry.require(BY_TOKEN, tokenOrAtlasOrProgress);

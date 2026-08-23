@@ -6,6 +6,8 @@ public final class WorldlineHostileBehaviors {
             "Player Packet7 punch redirects a type-63 fireball");
     public static final WorldlineBehavior SPAWN_LIGHT_CAP = define("spawn-light-cap",
             "Hostile spawn is blocked at light >= 8 and permitted in darkness");
+    public static final WorldlineBehavior UNDEAD_SUN_BURN = define("undead-sun-burn",
+            "Zombie or skeleton burns in sunlight and not at night or under cover");
 
     private WorldlineHostileBehaviors() {}
 
