@@ -26,7 +26,11 @@ public final class SkeletonBoneSetSmoke{
  private static RemoteMobSpawn near(B173WireClient a,int type,BlockPosition p,BlockPosition top){for(int n=0;n<32;n++){RemoteMobSpawn s=a.awaitMobSpawn(type);double dx=s.x()-(top.x()+0.5D),dz=s.z()-(top.z()+0.5D);if(Math.abs(dx)<=2.5D&&Math.abs(dz)<=2.5D&&Math.abs(s.y()-p.y())<=2D)return s;}throw new IllegalStateException("arena-contained skeleton type "+type+" absent");}
  private static void go(B173WireClient a,BlockPosition p){step(a,p.x()+0.5D,p.y()+1.0D,p.z()-1.5D);}
  private static void kill(B173WireClient a,RemoteMobSpawn spawn,BlockPosition top){int entity=spawn.entityId();heal(a);chase(a,spawn.x(),spawn.z(),top);for(int hit=0;hit<4;hit++){if(B173ShearsAccess.peekDeath(a,entity)!=null)break;strike(a,entity);}for(int hit=0;hit<8&&B173ShearsAccess.peekDeath(a,entity)==null;hit++){RemoteMobMovement m=a.awaitMobMovement(entity);heal(a);chase(a,m.toX(),m.toZ(),top);strike(a,entity);}RemoteMobDeath death=a.awaitMobDeath(entity);require(death.entityId()==entity&&death.hurtObserved(),"skeleton death drift");}
- private static void chase(B173WireClient a,double x,double z,BlockPosition top){step(a,clamp(x,top.x()-2.5D,top.x()+3.5D),top.y()+1.0D,clamp(z-1.5D,top.z()-2.5D,top.z()+3.5D));}
+ private static void chase(B173WireClient a,double x,double z,BlockPosition top){
+  double boundedX=clamp(x,top.x()-2.5D,top.x()+3.5D);
+  double boundedZ=clamp(z-1.5D,top.z()-2.5D,top.z()+3.5D);
+  step(a,boundedX,top.y()+1.0D,boundedZ);
+ }
  private static void step(B173WireClient a,double x,double y,double z){for(int n=0;n<32;n++){heal(a);PlayerPose here=a.moveAndObserve(0D,0D,0D,1).resulting();double dx=x-here.x(),dz=z-here.z(),dist=Math.sqrt(dx*dx+dz*dz);if(dist<=3.5D)return;double s=Math.min(1D,9.0D/dist);a.moveAndObserve(dx*s,0D,dz*s,2);}throw new IllegalStateException("actor could not reach skeleton-bone target");}
  private static void strike(B173WireClient a,int entity){heal(a);int sword=find(a.inventory(),276);require(sword>=36,"diamond sword lost");a.selectHeldSlot(sword-36);a.attackMob(entity);a.sustainTicks(20);heal(a);}
  private static void heal(B173WireClient a){int h=a.health();if(h==0)throw new IllegalStateException("actor died during skeleton bone");if(h>=20)return;int food=find(a.inventory(),322);if(food<36)food=find(a.inventory(),320);if(food<36)return;a.selectHeldSlot(food-36);a.useSelectedItemInAir();a.sustainTicks(5);}
