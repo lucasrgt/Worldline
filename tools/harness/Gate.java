@@ -1,16 +1,13 @@
 import java.io.IOException;
 import java.io.Reader;
-import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
-import java.nio.channels.OverlappingFileLockException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.security.MessageDigest;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -25,6 +22,7 @@ import java.util.stream.Stream;
 /** Cross-platform, cross-worktree entry point for every repository gate. */
 public final class Gate {
     private static final String ACTIVE = "WORLDLINE_GATE_ACTIVE";
+    private static final String INTERNAL = "WORLDLINE_GATE_INTERNAL";
     private static final String RUNTIME_LEASE = "WORLDLINE_RUNTIME_LEASE";
     private final Path root = Paths.get("").toAbsolutePath().normalize();
     private final Path control = controlDirectory();
@@ -35,6 +33,11 @@ public final class Gate {
     public static void main(String[] arguments) {
         try {
             if (Arrays.equals(arguments, new String[] {"--self-test"})) { selfTest(); return; }
+            if (arguments.length > 0 && "--internal".equals(arguments[0])) {
+                if (!"true".equals(System.getenv(INTERNAL)))
+                    throw new IllegalStateException("internal Gate phase is not authorized");
+                new Gate().executeInside(Arrays.copyOfRange(arguments, 1, arguments.length)); return;
+            }
             if (arguments.length == 3 && "--hold".equals(arguments[0])) {
                 hold(Path.of(arguments[1]), Long.parseLong(arguments[2]));
                 return;
@@ -68,25 +71,22 @@ public final class Gate {
 
     private void executePhase(String[] arguments, boolean runtime, boolean useSlot, boolean runtimeLease)
             throws Exception {
-        Lease runtimeLock = null;
-        Lease compatibilityLock = null;
-        Lease slot = null;
-        Lease worktree = null;
-        try {
-            worktree = acquire(root.resolve(".worldline/verify.lock"), "worktree");
-            if (useSlot) slot = acquireSlot();
-            if (runtime) {
-                runtimeLock = acquire(control.resolve("official-b173.lock"), "runtime");
-                Path legacy = legacyRuntimeLock();
-                if (legacy != null && !legacy.equals(control.resolve("official-b173.lock")))
-                    compatibilityLock = acquire(legacy, "legacy-runtime");
-            }
-            Path classes = compileHarness();
-            int exit = launchVerify(classes, arguments, runtimeLease);
-            if (exit != 0) System.exit(exit);
-        } finally {
-            close(worktree); close(slot); close(compatibilityLock); close(runtimeLock);
-        }
+        int slots = useSlot ? verifySlots() : 0;
+        Path legacy = runtime ? legacyRuntimeLock() : null;
+        List<String> command = new ArrayList<>(List.of(javaTool("java"),
+                root.resolve("tools/harness/FairLeaseCommand.java").toString(), root.toString(),
+                control.toString(), Long.toString(waitMillis), Integer.toString(slots),
+                Boolean.toString(runtime), Boolean.toString(runtimeLease),
+                legacy == null ? "-" : legacy.toString()));
+        command.addAll(Arrays.asList(arguments));
+        int exit = waitFor(new ProcessBuilder(command).directory(root.toFile()).inheritIO().start(), 0);
+        if (exit != 0) System.exit(exit);
+    }
+
+    private void executeInside(String[] arguments) throws Exception {
+        Path classes = compileHarness();
+        int exit = launchVerify(classes, arguments, false);
+        if (exit != 0) System.exit(exit);
     }
 
     private boolean milestoneUsesOfficialRuntime(String id) throws IOException {
@@ -116,60 +116,12 @@ public final class Gate {
             throw new IllegalArgumentException("invalid milestone id: " + arguments[1]);
     }
 
-    private Lease acquireSlot() throws Exception {
+    private int verifySlots() {
         int configured = integerEnvironment("WORLDLINE_VERIFY_SLOTS",
                 Math.max(1, Math.min(4, Runtime.getRuntime().availableProcessors() / 2)));
         if (configured < 1 || configured > 32) throw new IllegalArgumentException(
                 "WORLDLINE_VERIFY_SLOTS must be between 1 and 32");
-        long deadline = System.currentTimeMillis() + waitMillis;
-        boolean announced = false;
-        while (System.currentTimeMillis() < deadline) {
-            for (int index = 0; index < configured; index++) {
-                Lease lease = tryAcquire(control.resolve("verify-slot-" + index + ".lock"), "slot-" + index);
-                if (lease != null) return lease;
-            }
-            if (!announced) {
-                System.out.println("  gate: waiting for one of " + configured + " verify slots");
-                announced = true;
-            }
-            Thread.sleep(200L);
-        }
-        throw new IllegalStateException("timed out waiting for a verify slot in " + control);
-    }
-
-    private Lease acquire(Path path, String kind) throws Exception {
-        long deadline = System.currentTimeMillis() + waitMillis;
-        boolean announced = false;
-        while (System.currentTimeMillis() < deadline) {
-            Lease lease = tryAcquire(path, kind);
-            if (lease != null) return lease;
-            if (!announced) {
-                System.out.println("  gate: waiting for " + kind + " lock " + path);
-                announced = true;
-            }
-            Thread.sleep(200L);
-        }
-        throw new IllegalStateException("timed out waiting for " + kind + " lock " + path);
-    }
-
-    private Lease tryAcquire(Path path, String kind) throws IOException {
-        Files.createDirectories(path.toAbsolutePath().normalize().getParent());
-        FileChannel channel = FileChannel.open(path, StandardOpenOption.CREATE,
-                StandardOpenOption.READ, StandardOpenOption.WRITE);
-        try {
-            FileLock lock = channel.tryLock();
-            if (lock == null) { channel.close(); return null; }
-            String metadata = "kind=" + kind + "\npid=" + ProcessHandle.current().pid()
-                    + "\nstarted=" + Instant.now() + "\nroot=" + root + "\n";
-            channel.truncate(0); channel.position(0);
-            channel.write(ByteBuffer.wrap(metadata.getBytes(StandardCharsets.UTF_8))); channel.force(true);
-            return new Lease(channel, lock, path);
-        } catch (OverlappingFileLockException error) {
-            channel.close(); return null;
-        } catch (IOException | RuntimeException error) {
-            try { channel.close(); } catch (IOException close) { error.addSuppressed(close); }
-            throw error;
-        }
+        return configured;
     }
 
     private Path compileHarness() throws Exception {
@@ -310,18 +262,4 @@ public final class Gate {
         Files.createDirectories(target);
     }
 
-    private static void close(Lease lease) {
-        if (lease != null) lease.close();
-    }
-
-    private static final class Lease implements AutoCloseable {
-        private final FileChannel channel; private final FileLock lock; private final Path path;
-        Lease(FileChannel channel, FileLock lock, Path path) {
-            this.channel = channel; this.lock = lock; this.path = path;
-        }
-        @Override public void close() {
-            try { lock.release(); channel.close(); }
-            catch (IOException error) { throw new IllegalStateException("could not release lock " + path, error); }
-        }
-    }
 }

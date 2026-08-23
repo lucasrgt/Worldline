@@ -49,6 +49,11 @@ affected tests use the shared verification slots and may run across many worktre
 executable cycle queues for the official-runtime lock. This keeps the scarce runtime idle only
 for real evidence execution, not for compilation.
 
+Shared verification slots and official-runtime leases use monotonic FIFO ticket directories.
+Only the oldest live ticket may attempt the corresponding file lock; tickets owned by dead local
+processes are pruned. The source-launchable lease owner holds every acquired lock while an
+internal Gate phase compiles and verifies, preserving the one-command bootstrap on every OS.
+
 ## Milestone definition of done
 
 A milestone may be pushed or offered to an integration train only after all of these are true:

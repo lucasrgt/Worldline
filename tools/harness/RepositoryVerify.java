@@ -133,6 +133,8 @@ final class RepositoryVerify {
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "TestReceiptCacheTest")));
         report.step("json-parser-self-test", () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "MiniJsonTest")));
+        report.step("fair-lock-self-test", () -> run(Arrays.asList(
+                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "FairFileLeaseTest")));
         report.step("release", () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "ReleaseCheck")));
         report.step("optimization", () -> {
