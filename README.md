@@ -193,6 +193,20 @@ screenshots, and image diffs are distinct contracts. Butter can expose its
 semantic tree through the reflection boundary; vanilla and Aero remain
 independently qualified consumers.
 
+### Visual GUI builder
+
+[`tools/gui-builder`](tools/gui-builder) is the standalone visual authoring
+surface for the same semantic GUI contract. It builds a Flutter-inspired
+widget tree, previews the vanilla-sized panel, and exports `GameUiSpec` JSON
+or `Ui.screen(...)` Java without generating containers or runtime hooks.
+
+```text
+cd tools/gui-builder
+npm install
+npm test
+npm run dev
+```
+
 ### Create a TestKit project
 
 ```text
@@ -334,7 +348,7 @@ incompatible artifacts return non-zero status instead of selecting defaults.
 | Mods and extensions | [`MOD_API_V2.md`](docs/MOD_API_V2.md), [`MOD_GRAPH.md`](docs/MOD_GRAPH.md), [`EXTENSIONS.md`](docs/EXTENSIONS.md) |
 | Semantics and complete mappings | [`SEMANTICS.md`](docs/SEMANTICS.md), [`SEMANTICS_AUDIT.md`](docs/SEMANTICS_AUDIT.md), [`ECOSYSTEM_MAPPINGS.md`](docs/ECOSYSTEM_MAPPINGS.md) |
 | Atlas knowledge and seed maps | [`ATLAS.md`](docs/ATLAS.md), [`SEED_ATLAS.md`](docs/SEED_ATLAS.md) |
-| GUI contracts | [`GUI_TREE.md`](docs/GUI_TREE.md), [`GUI_SPEC.md`](docs/GUI_SPEC.md) |
+| GUI contracts and builder | [`GUI_TREE.md`](docs/GUI_TREE.md), [`GUI_SPEC.md`](docs/GUI_SPEC.md), [`tools/gui-builder`](tools/gui-builder) |
 | Reproduction and analysis | [`SCENARIO_DSL.md`](docs/SCENARIO_DSL.md), [`M18_COVERAGE.md`](docs/M18_COVERAGE.md), [`M17_PROFILE.md`](docs/M17_PROFILE.md) |
 | Optimization evidence | [`OPTIMIZATION_SDK.md`](docs/OPTIMIZATION_SDK.md) |
 | Release history and direction | [`ROADMAP.md`](docs/ROADMAP.md), [`CHANGELOG.md`](CHANGELOG.md) |
