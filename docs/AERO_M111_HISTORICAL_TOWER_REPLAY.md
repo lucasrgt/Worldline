@@ -79,6 +79,27 @@ The first differential set is:
 Order is counterbalanced across fresh processes. No optimization treatments
 are combined in this milestone.
 
+## Implemented analysis boundary
+
+The neutral `worldline.profiling.FrameCensus` contract rejects duplicate or
+invalid metrics, width drift, sequence gaps, non-monotonic timestamps, and
+negative counters. `FrameCensusCodec` seals its versioned binary form with
+SHA-256 and rejects truncation, corruption, and trailing bytes.
+`FrameBreakdown` classifies one accepted complete frame as save, GC/runtime,
+chunk work, Aero work, display/present, mixed, or unknown.
+Classification uses the larger of an absolute duration floor and an exact
+rational share of the complete frame. Stage timings are treated as
+nonexclusive: two material buckets produce `MIXED` instead of an invalid
+additive attribution.
+
+The neutral class names the experiment-owned bucket `SUBJECT_WORK`;
+AERO-M111 binds Aero preparation, enqueue, flush, rebuild, and entity-render
+timings to that bucket before rendering the milestone's `Aero work` label.
+
+This is analysis infrastructure, not runtime evidence. AERO-M111 remains
+planned until the complete-census overlay, scene controls, restored worlds,
+counterbalanced arms, retained windows, and cleanup gates below all pass.
+
 ## Completion gates
 
 AERO-M111 is complete only when:
