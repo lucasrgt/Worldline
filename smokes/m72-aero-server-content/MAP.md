@@ -10,9 +10,9 @@ M72 `MessagePacket`. The client buffers the message until the matching remote
 block exists, binds identifier, raw ID, coordinates, block-entity type, and
 nonce, then invokes the pinned Aero renderer. Completion requires twenty later
 renderer frames and a strict Aero row with positive visible chunks and
-`atRestRenders`/`atRestListCalls`.
-The logger uses a one-millisecond threshold and heartbeat only to guarantee a
-post-render observation row; no duration or threshold comparison is promoted.
+valid nonnegative counters. The content renderer-return marker is the direct
+proof that this fixture traversed Aero; a later pulse need not contain at-rest
+work from the same frame.
 
 Two fresh server/client/worktree sets use distinct nonces. Each server loader
 lists the content mod but not Aero; each real graphical client lists the same

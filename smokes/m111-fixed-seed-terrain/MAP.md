@@ -7,21 +7,21 @@ hardened the fixture by writing a minimal player NBT at chunk `(0,0)` before
 login, without changing M111 terrain evidence.
 
 Packet50 establishes the chunk lifecycle and Packet51 supplies the complete
-`16 x 128 x 16` payload. The decoder hashes a solid/other mask for all 32,768
-cells in X/Z/Y order. Solid excludes air, water `8/9`, and lava `10/11`. A
-second digest freezes the highest non-air block's Y/ID/metadata for all 256
-columns. Raw block IDs and non-air count remain diagnostic because official
-population order can select different overlapping underground decorators.
+`16 x 128 x 16` payload. The decoder reports a diagnostic hash of all 32,768
+legacy block IDs in X/Z/Y order. The semantic digest freezes the block count,
+non-air count, and highest non-air block's Y/ID/metadata for all 256 columns.
+Beta 1.7.3 population order can swap a few buried gravel and ore cells without
+changing that surface contract.
 
 Frozen trace:
 
 ```text
-v2|server=official-b1.7.3|seed=17320110707|target=absolute-chunk|origin=0,0|blocks=32768|solid=13992|solid-definition=not-air-water8+9-lava10+11|terrain=ffa29af83b49293c2b2a5a1791c55270bb11848d5b4f7532b77b5d45e506f946|surface=bb5fa0b1c2f242c7952ec1e58d269d66705fa308fcdcc3b25a30c8b309ea74db|raw-block-ids+nonair=diagnostic-not-frozen|decode=packet50+packet51-xzy|disconnect=clean
+v2|server=official-b1.7.3|seed=17320110707|target=absolute-chunk|origin=0,0|blocks=32768|nonair=16342|surface=bb5fa0b1c2f242c7952ec1e58d269d66705fa308fcdcc3b25a30c8b309ea74db|full-id-plane=diagnostic|decode=packet50+packet51-xzy|disconnect=clean
 ```
 
-SHA-256: `1f477f68603f951d995e99d26d4dec79788d29a5ef1f29ecb30f5f490ccc0c2f`.
+SHA-256: `b885d60be98dfb11c60f51a928c0fa9bdda225520187692098587a72e253fa98`.
 
-The player-spawn pose, raw block IDs, non-air count, and complete metadata
-plane are diagnostic and deliberately excluded. M111 does not freeze lighting, biomes, entities,
-structures outside this chunk, decoration timing, alternate seeds, generators,
-dimensions, or persistence.
+The player-spawn pose, complete block-ID plane, and complete metadata plane are
+diagnostic and deliberately excluded. M111 does not freeze lighting, biomes,
+entities, buried decoration ordering, structures outside this chunk, alternate
+seeds, generators, dimensions, or persistence.

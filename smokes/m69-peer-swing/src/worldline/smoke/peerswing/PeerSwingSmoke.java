@@ -8,11 +8,11 @@ import java.time.Duration;
 import java.util.concurrent.*;
 import worldline.api.PeerSwingSession;
 import worldline.api.RemoteHeldItem;
-import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteItemStack;
 import worldline.api.RemotePeerSwing;
 import worldline.api.RemoteSwingRequest;
 import worldline.b173server.B173DedicatedServer;
+import worldline.b173server.B173LevelDatWeather;
 import worldline.b173server.B173PlayerSeed;
 import worldline.b173server.B173WireClient;
 
@@ -32,14 +32,17 @@ public final class PeerSwingSmoke {
         PeerSwingSession observer = client(port, observerName, timeout), actor = client(port, actorName, timeout);
         ExecutorService executor = Executors.newSingleThreadExecutor(); RemoteSwingRequest request; RemotePeerSwing swing;
         try {
-            server.boot(); B173PlayerSeed.writeInventory(workspace, actorName, 4.5D, 80D, 4.5D,
-                    new int[] {0}, new int[] {276}, new int[] {1}, new int[] {0});
+            server.boot(); server.save(); server.operator(actorName);
+            B173LevelDatWeather.Weather world = B173LevelDatWeather.read(workspace.resolve("world/level.dat"));
+            double x = world.spawnX() + 0.5D, y = world.spawnY() + 20D, z = world.spawnZ() + 0.5D;
+            B173PlayerSeed.writeHolding(workspace, actorName, x, y, z, 276, 1, 0);
+            B173PlayerSeed.write(workspace, observerName, x + 3D, y, z);
             observer.connect(); observer.synchronizePose();
             require(observer.awaitInventory().occupiedSlots() == 0, "observer inventory drifted");
-            for (int step = 0; step < 4; step++) observer.moveAndObserve(2.5D, 5D, 0D, 3);
-            actor.connect(); actor.synchronizePose(); require(actor.awaitInventory().occupiedSlots() == 1, "actor inventory drifted");
-            actor.look(0F, 90F); int sword = find(actor.inventory(), new RemoteItemStack(276, 1, 0));
-            require(sword >= 36, "diamond sword absent"); actor.selectHeldSlot(sword - 36);
+            actor.connect(); actor.synchronizePose(); require(actor.awaitInventory().occupiedSlots() == 1
+                    && actor.inventory().slot(36).item().equals(new RemoteItemStack(276, 1, 0)),
+                    "actor sword seed drifted");
+            actor.look(0F, 90F); actor.selectHeldSlot(0);
             observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 276, 0));
             Future<RemotePeerSwing> pending = executor.submit(() -> observer.awaitPeerSwing(actorName));
             request = actor.swingHeldItem(); swing = pending.get(20, TimeUnit.SECONDS);
@@ -56,8 +59,6 @@ public final class PeerSwingSmoke {
     }
     private static PeerSwingSession client(int port, String name, Duration timeout) {
         return new B173WireClient("127.0.0.1", port, name, timeout); }
-    private static int find(RemoteInventoryView view, RemoteItemStack expected) { for (int slot = 9; slot <= 44; slot++)
-        if (!view.slot(slot).empty() && view.slot(slot).item().equals(expected)) return slot; return -1; }
     private static void awaitPlayers(B173DedicatedServer server, int count) throws InterruptedException {
         long deadline = System.currentTimeMillis() + 5000L; while (System.currentTimeMillis() < deadline) {
             if (server.players().size() == count) return; Thread.sleep(100L); }

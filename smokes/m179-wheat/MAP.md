@@ -1,7 +1,7 @@
 # M179 behavior map
 
-A wooden hoe tills official dirt into farmland. Adjacent still water hydrates
-at least one raised plot to `60:7`. Seeds item `295` then plant wheat `59:0`
+A wooden hoe tills official dirt into farmland after adjacent still water is
+already present. At least one raised plot hydrates to `60:7`. Seeds item `295` then plant wheat `59:0`
 on those moist cells. The newly planted crop remains `59:0` after a short live
 hold and a clean save plus fresh login.
 

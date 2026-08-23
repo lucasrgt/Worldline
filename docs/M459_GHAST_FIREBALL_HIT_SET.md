@@ -7,6 +7,10 @@ hit family as one compound SET. The 8-arg Nether profile logs a dimension
 session observes Packet23 type `63` whose thrower is that ghast, then the
 live Packet60 strength `1` impact.
 
+The netherrack cavern search is restricted to frozen support chunk `2,-1`,
+eliminating loaded-chunk iteration order as a fixture choice. The selected
+support, fireball hit contract, and signature are unchanged.
+
 The frozen hit is Packet8 hurt and/or destroyed netherrack `87` or cobble
 `4` cells from that fireball. This SET does not re-qualify M410 spawn-only
 type `63`, M411 pigman pork, gunpowder, TNT, creeper, or Nether-bed blasts.

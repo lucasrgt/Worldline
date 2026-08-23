@@ -903,8 +903,9 @@ M95 adds no public API or product adapter behavior and leaves M74-M94 frozen.
 It reuses M78's exact four-page scene under a three-entry client cache, with a
 long TTL that excludes expiry. A client-only overlay records cumulative
 capacity evictions beside the existing page state and timing spans. Complete
-records require two rebuilds and two new evictions per frame, three resident
-pages, and zero direct fallback. Common/server code remains Aero-free.
+records require one to four rebuilds with an equal capacity-eviction delta,
+three resident pages, and zero direct fallback. Equal `lastUsedFrame` ties
+follow the pinned `HashMap` iteration order. Common/server code remains Aero-free.
 
 M96 adds no public API or product adapter behavior and leaves M74-M95 frozen.
 It runs the same four page keys under a two-entry cache. Because equally recent
@@ -1005,9 +1006,10 @@ Aero-free.
 M111 adds no public API or adapter mutation. It reuses the bounded protocol-14
 chunk cache against two fresh unmodified official servers and addresses
 absolute chunk `(0,0)`, separating deterministic terrain from Beta 1.7.3's
-variable initial player spawn. The semantic digest covers solid terrain
-occupancy plus a derived top-Y/ID/metadata surface profile; raw interior IDs,
-the complete metadata plane, and lighting planes remain separate boundaries. M71-M110 are frozen while the
+variable initial player spawn. The semantic digest covers the non-air count
+and derived top-Y/ID/metadata surface profile; the complete block-ID plane is
+diagnostic because buried population order can vary. Complete metadata and
+lighting planes remain separate boundaries. M71-M110 are frozen while the
 active architecture roadmap returns to vanilla systems.
 
 M112 adds no public API. It consumes the two existing Packet51 nibble planes
@@ -1538,7 +1540,8 @@ M266 adds no public API. Cooked fish item `350` air-use heals Packet8 `15 -> 20`
 
 M267 adds no public API. Milk bucket item `335` air-use becomes empty bucket `325` with no health change.
 
-M268 adds no public API. Flint-and-steel item `259` places fire `51:0` on raised stone.
+M268 adds no public API. Flint-and-steel item `259` places fire `51:0` on raised
+stone; later official random ticks may retain it or extinguish it to air.
 
 M269 adds no public API. Shears item `359` on oak leaves `18:8` emit Packet21 leaf drop; bare hand does not.
 

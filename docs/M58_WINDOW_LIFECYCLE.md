@@ -17,6 +17,11 @@ action/slot, and unchanged personal views. The active tracker is cleared only
 after that proof. Write, timeout, or acknowledgement failure leaves the
 lifecycle fail-closed rather than assuming restoration.
 
+The qualification fixture seeds chest `54` directly into official player NBT,
+settles the actor from a fixed spawn-relative pose, and chooses a nearby solid
+support with a replaceable cell. This removes item-drop pickup and vertical
+clearance randomness without changing the Packet101/window proof.
+
 ## Boundaries
 
 M58 requires an empty cursor and at least one empty personal storage slot. It

@@ -8,6 +8,9 @@ health drop. Metadata index 16 must show both size-1 and larger slimes as
 one family. Split children stay outside the hash. One official EOF is
 retried after a 5 second sleep.
 
+The initial spawner placement is a four-attempt bounded operation and accepts
+only an authoritative remote `52:0` state; an absent placement fails closed.
+
 Run directly with:
 
 ```text

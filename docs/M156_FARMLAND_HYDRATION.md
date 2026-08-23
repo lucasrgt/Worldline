@@ -10,3 +10,6 @@ neighborhood sets metadata to seven on a random tick. Four adjacent plots
 make that sparse tick observable without claiming wheat growth, bonemeal,
 trampling, hoe durability, rain, other hoe materials, farmland reverting
 under a solid roof, or a Worldline soil simulation.
+
+The fixture installs its still water before tilling, so no dry uncropped
+farmland exists during setup and random ticks cannot erase a plot prematurely.

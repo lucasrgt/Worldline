@@ -2,8 +2,10 @@
 
 Seed `17320110707` slime chunk `-2,-2` is entered below `y=16`. A default
 mob spawner `52:0` is placed in that cave and the saved MobSpawner
-`EntityId` is rewritten from `Pig` to `Slime`. Official `spawn-monsters=true`
-lets EntitySlime `getCanSpawnHere` succeed at `y<16`. Packet24 type `55`
+`EntityId` is rewritten from `Pig` to `Slime`. The placement path uses four
+bounded attempts and accepts only the authoritative remote block state, avoiding
+a one-packet placement race without changing the fixture. Official
+`spawn-monsters=true` lets EntitySlime `getCanSpawnHere` succeed at `y<16`. Packet24 type `55`
 metadata index 16 shows both size-1 and larger slimes. AABB contact with a
 larger slime emits Packet38 status 2 then Packet8. The SET is that size
 family plus contact damage, not a split and not a slimeball drop.

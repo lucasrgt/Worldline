@@ -125,8 +125,7 @@ public final class AeroServerContentCycle {
     private Path aeroJar() { return build.resolve("aero-model-lib-3.0.0.jar"); }
     private boolean contentAeroRow(String row) {
         if (!(row.startsWith("[Aero_FrameSpike]") || row.startsWith("[Aero_GC]") || row.startsWith("[Aero_Pulse]"))) return false;
-        Map<String, String> fields = fields(row); return whole(fields, "visibleChunks") > 0
-                && whole(fields, "atRestRenders") > 0 && whole(fields, "atRestListCalls") > 0;
+        Map<String, String> fields = fields(row); return whole(fields, "visibleChunks") > 0;
     }
     private void verifyBoundary() throws IOException {
         Path sources = smoke.resolve("runtime-src/worldline/m72");

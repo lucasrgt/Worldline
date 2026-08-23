@@ -1,10 +1,10 @@
 # M156 behavior map
 
-A wooden hoe tills official dirt into farmland beside pre-existing still
-water, which raises farmland metadata to the hydrated value on a random
-tick. The actor waits on a stone perch outside all four raised plots so
-entity contact cannot confound the transition. At least one plot remains
-`60:7` after a bounded live wait and a clean save plus fresh login.
+A wooden hoe tills official dirt into farmland after adjacent still water is
+already present, preventing a dry random tick from reverting the fixture.
+Water raises farmland metadata to the hydrated value on a random tick. At least
+one of four raised plots remains `60:7` after a bounded live wait and a
+clean save plus fresh login.
 
 Frozen trace:
 

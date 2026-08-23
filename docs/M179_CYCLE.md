@@ -1,7 +1,8 @@
 # M179 qualification cycle
 
 `WheatCycle` rebuilds the raised dirt and still-water fixture in two fresh
-official server JVMs. Each run hoes four dirt plots, waits for moisture,
+official server JVMs. Each run installs water before hoeing four dirt plots,
+waits for moisture,
 plants seeds `295` as wheat `59:0` on the hydrated plots, holds that crop, and
 reloads the same `59:0` cells.
 

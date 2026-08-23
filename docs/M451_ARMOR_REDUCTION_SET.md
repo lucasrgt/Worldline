@@ -2,13 +2,17 @@
 
 M451 opens the official armor-reduction SET. The same official melee
 source — a Packet24 type-`54` zombie at explicit Normal difficulty `2`,
-provoked once per trial and never player-vs-self Packet7 —
+approached without a damaging Packet7 poke —
 produces different Packet8 health deltas for unarmored versus leather
 `298-301`, iron `306-309`, and diamond `310-313`. Observed unarmored
 Packet8 is `20->18` (damage 2). Each seated full family reduces that to
 `20->19` (damage 1). Armor is equipped through personal window-0
 Packet102 slots `5-8`. Health is restored with golden apple `322` or
 cooked pork `320` between trials.
+
+The previous unused diamond sword could kill a zombie injured by an earlier
+trial after reconnect. Removing that poke keeps every reused target healthy;
+the measured Packet8 deltas and signature are unchanged.
 
 This family is distinct from armor crafts (M314/M320-M322), equip-only
 window proofs (M270-M273), and PvP Packet7 (M66). It does not claim

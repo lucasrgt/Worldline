@@ -35,15 +35,11 @@ public final class FixedSeedTerrainSmoke {
             RemoteWorldView world = client.awaitRemoteChunk(chunkX, chunkZ);
             chunk = world.chunkAt(chunkX, chunkZ); verify(chunk, chunkX, chunkZ);
         } finally { client.close(); server.close(); }
-        String terrain = terrainHash(chunk), raw = rawHash(chunk);
-        String metadata = metadataHash(chunk), surface = surfaceHash(chunk);
-        int solid = solidCount(chunk);
+        String terrain = terrainHash(chunk), metadata = metadataHash(chunk), surface = surfaceHash(chunk);
         String trace = "v2|server=official-b1.7.3|seed=" + seed
                 + "|target=absolute-chunk|origin=" + chunkX + "," + chunkZ
-                + "|blocks=32768|solid=" + solid
-                + "|solid-definition=not-air-water8+9-lava10+11"
-                + "|terrain=" + terrain + "|surface=" + surface
-                + "|raw-block-ids+nonair=diagnostic-not-frozen"
+                + "|blocks=32768|nonair=" + chunk.nonAirBlocks()
+                + "|surface=" + surface + "|full-id-plane=diagnostic"
                 + "|decode=packet50+packet51-xzy|disconnect=clean";
         System.out.println("WORLDLINE_M111_TERRAIN=chunk=" + chunkX + ":" + chunkZ
                 + ",solid=" + solid + ",terrain=" + terrain

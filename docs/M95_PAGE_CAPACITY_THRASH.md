@@ -10,16 +10,16 @@ Aero frame pacer.
 
 Every complete retained record in both fresh replicas had sixteen renderer
 calls, sixteen real enqueues, two flush calls, four page calls, three cached
-pages, zero direct fallback, and exactly two rebuilds. The cumulative
-capacity-eviction counter began at five and advanced by exactly two per record,
-ending at 11133 after 5565 samples and 11101 after 5549 samples. No flush span
-was zero.
+pages and zero direct fallback. Each record rebuilds between one and four pages,
+and its cumulative capacity-eviction delta must equal that rebuild count. The
+evidence summary reports the observed count for every rebuild mode. No flush
+span may be negative, and the aggregate populated-flush time stays positive.
 
 This qualifies a pinned replacement-policy thrash path: four requested page
-keys cannot coexist in a three-entry cache; two survive between frames and two
-are rebuilt and displaced on every retained record. Values and span summaries
-are descriptive and specific to this exact revision, scene, camera, and cache
-size.
+keys cannot coexist in a three-entry cache. Equal `lastUsedFrame` ties follow
+the pinned `HashMap` iteration order, so the set of upcoming keys that survives
+is not fixed at two. Values, rebuild-mode counts, and span summaries are
+descriptive and specific to this exact revision, scene, camera, and cache size.
 
 Nonclaims: other capacities or replacement policies, TTL expiry, generic
 content, uninstrumented or additive cost, causal attribution, regression or

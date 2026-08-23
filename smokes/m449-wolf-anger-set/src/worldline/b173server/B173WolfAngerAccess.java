@@ -7,9 +7,9 @@ import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteMobMovement;
 import worldline.api.RemoteMobSpawn;
 
-/** Smoke-local Packet7 diamond-sword attack and Packet38 tame-absent wait. */
+/** Smoke-local Packet7 nonlethal wood-sword attack and Packet38 tame-absent wait. */
 public final class B173WolfAngerAccess {
-    public static final int TYPE = 95, SWORD = 276, BONE = 352;
+    public static final int TYPE = 95, SWORD = 268, BONE = 352;
 
     private B173WolfAngerAccess() {}
 
@@ -17,12 +17,12 @@ public final class B173WolfAngerAccess {
         B173SpawnerSeed.wolf(directory, spawner);
     }
 
-    public static RemoteMobSpawn anger(B173WireClient client, BlockPosition spawner) {
+    public static RemoteMobSpawn anger(B173WireClient client, BlockPosition spawner, BlockPosition top) {
         if (count(client.inventory(), BONE) > 0)
             throw new IllegalStateException("bone 352 present; wolf-anger-set must not feed bone");
         StringBuilder why = new StringBuilder();
         for (int n = 0; n < 16; n++) {
-            RemoteMobSpawn spawn = near(client, spawner);
+            RemoteMobSpawn spawn = near(client, spawner, top);
             String result = strikeAndWait(client, spawn);
             if (result == null) return spawn;
             why.append(" n").append(n).append("=e").append(spawn.entityId()).append(':').append(result);
@@ -34,13 +34,14 @@ public final class B173WolfAngerAccess {
         return client.channel().inbound().mobs().takeTame(entity);
     }
 
-    private static RemoteMobSpawn near(B173WireClient client, BlockPosition spawner) {
+    private static RemoteMobSpawn near(B173WireClient client, BlockPosition spawner, BlockPosition top) {
         for (int n = 0; n < 32; n++) {
             RemoteMobSpawn spawn = client.awaitMobSpawn(TYPE);
             if (spawn.legacyType() != TYPE || spawn.entityId() == client.state().entityId())
                 throw new IllegalStateException("wolf Packet24 type 95 identity drift");
-            double dx = spawn.x() - (spawner.x() + 0.5D), dz = spawn.z() - (spawner.z() + 0.5D);
-            if (dx * dx + dz * dz <= 100D && Math.abs(spawn.y() - spawner.y()) <= 6D) return spawn;
+            double dx = spawn.x() - (top.x() + 0.5D), dz = spawn.z() - (top.z() + 0.5D);
+            if (Math.abs(dx) <= 2.5D && Math.abs(dz) <= 2.5D
+                    && Math.abs(spawn.y() - spawner.y()) <= 2D) return spawn;
         }
         throw new IllegalStateException("nearby wolf type 95 absent");
     }
@@ -49,13 +50,14 @@ public final class B173WolfAngerAccess {
         int entity = spawn.entityId();
         double x = spawn.x(), y = spawn.y(), z = spawn.z();
         close(client, x, y + 1.0D, z - 1.5D, 2.5D);
+        int before = client.health();
+        if (before < 1 || before > 20)
+            throw new IllegalStateException("actor health absent before wolf hostility");
         strike(client, entity);
         if (tame(client, entity) >= 0)
             throw new IllegalStateException("wolf Packet38 status 6/7 after Packet7 without bone");
         if (dead(client, entity)) return "dead-after-strike";
-        int before = client.health();
-        if (before < 1 || before > 20)
-            throw new IllegalStateException("actor health absent before wolf hostility");
+        if (client.health() < before && client.health() > 0) return null;
         for (int n = 0; n < 16; n++) {
             RemoteMobMovement move = client.channel().inbound().mobs().takeMovement(entity);
             if (move != null) { x = move.toX(); y = move.toY(); z = move.toZ(); }
@@ -72,7 +74,7 @@ public final class B173WolfAngerAccess {
 
     private static void strike(B173WireClient client, int entity) {
         int sword = find(client.inventory(), SWORD);
-        if (sword < 36) throw new IllegalStateException("diamond sword 276 absent from hotbar");
+        if (sword < 36) throw new IllegalStateException("wood sword 268 absent from hotbar");
         client.selectHeldSlot(sword - 36);
         client.attackMob(entity);
         client.sustainTicks(2);
@@ -91,6 +93,7 @@ public final class B173WolfAngerAccess {
             double s = Math.min(1D, 9.0D / dist);
             client.moveAndObserve(dx * s, dy * s, dz * s, 2);
         }
+        throw new IllegalStateException("movement cap missed arena-contained wolf");
     }
 
     private static int find(RemoteInventoryView view, int id) {

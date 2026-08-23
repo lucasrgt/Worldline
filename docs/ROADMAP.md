@@ -78,48 +78,48 @@ in [AERO_MILESTONES.md](AERO_MILESTONES.md). Existing `M10`-`M19`, `M68`, and
 | v1.55.0 / M67 | Exact single-chest retrieval and final persistence | GO - accepted actions move chest0 to personal36 and survive restart |
 | v1.56.0 / AERO-M68 (legacy M68) | Real StationAPI/Aero client login and remote render composition | GO - Packet1/13/51 readiness precedes bounded frames and Aero logs |
 | v1.57.0 / M69 | Exact held-item swing request and named Packet18 peer observation | GO - production bytes and Packet20 identity qualify animation 1 without attack claims |
-| v1.58.0 / AERO-M70 (legacy M70) | Real Aero combat-event frame/log window | GO - observer applies Packet18 before Packet38, then completes bounded frames and Aero rows |
-| v1.59.0 / AERO-M71 (legacy M71) | Balanced paired Aero control/event acquisition | GO - exact common anchor plus descriptive selected-row summaries and pair deltas |
-| v1.60.0 / AERO-M72 (legacy M72) | Server-authored StationAPI content rendered by real Aero client | GO - exact identifier/coordinates/nonce message plus renderer return and bounded frames |
-| v1.61.0 / AERO-M73 (legacy M73) | Balanced absent/present synchronized Aero-content window | GO - tracked activation, 0 vs 16 structural treatment, descriptive selected-row deltas |
-| v1.62.0 / AERO-M74 (legacy M74) | Complete bounded renderer-interval census over the paired Aero fixture | GO - primitive in-memory capture and post-seal binary artifacts |
-| v1.63.0 / AERO-M75 (legacy M75) | Mirrored 0/1/4/16 Aero-call exposure ladder over a constant scene | GO - exact per-record treatment and descriptive whole-census summaries |
-| v1.64.0 / AERO-M76 (legacy M76) | Renderer registration/body/Aero-call decomposition over a constant sixteen-entity scene | GO - exact 0/0, 16/0, and 16/16 records; mixed descriptive timing |
-| v1.65.0 / AERO-M77 (legacy M77) | Direct renderer/fallback/empty-flush timing aligned to the complete census | GO - exact 16/16/2 call spans in two fresh same-plan replicas |
-| v1.66.0 / AERO-M78 (legacy M78) | Real warmed Aero cell-page enqueue/flush timing | GO - exact 16 enqueues, four cached pages/calls, zero fallback/rebuild |
-| v1.67.0 / AERO-M79 (legacy M79) | Single explicitly armed cold page rebuild | GO - cache 4-to-0-to-4, four deleted/compiled/rebuild deltas, zero fallback |
-| v1.68.0 / AERO-M80 (legacy M80) | Server-authored natural membership rebuild | GO - exact cell removal, membership 16-to-15, one rebuild, zero fallback |
-| v1.69.0 / AERO-M81 (legacy M81) | Server-authored natural two-page rebuild wave | GO - exact two-cell removal, membership 16-to-14, two rebuilds, zero fallback |
-| v1.70.0 / AERO-M82 (legacy M82) | Natural membership-wave cardinality ladder | GO - fixed-plan 1/2/4 targets, membership 15/14/12, rebuilds 1/2/2 |
-| v1.71.0 / AERO-M83 (legacy M83) | Constant-cardinality page-topology contrast | GO - two targets in one vs two pages, membership 14, rebuilds 1 vs 2 |
-| v1.72.0 / AERO-M84 (legacy M84) | Four-page-key constant-cardinality topology contrast | GO - three targets in one vs three cached pages, membership 13, rebuilds 1 vs 3 |
-| v1.73.0 / AERO-M85 (legacy M85) | Natural membership remove/restore recovery | GO - exact cell 16-to-15-to-16, direct fallback 0-to-1-to-0, one restore rebuild |
-| v1.74.0 / AERO-M86 (legacy M86) | Repeated same-cell membership recovery | GO - two generation-bound 16-to-15-to-16 cycles with exact fallback/rebuild recovery |
-| v1.75.0 / AERO-M87 (legacy M87) | Sequential two-cell membership recovery | GO - index0 fallback recovery followed by index1 immediate-rebuild recovery |
-| v1.76.0 / AERO-M88 (legacy M88) | Reverse two-cell membership recovery | GO - index1 rebuild-first followed by index0 fallback-second under the same plan |
-| v1.77.0 / AERO-M89 (legacy M89) | Sibling-cell membership recovery | GO - index4 matches index0's two-member-page fallback and restore rebuild |
-| v1.78.0 / AERO-M90 (legacy M90) | Larger-page sibling recovery | GO - index2 matches index1's six-member-page batched rebuild route |
-| v1.79.0 / AERO-M91 (legacy M91) | Larger-page depletion recovery | GO - indices1/2 deplete six-member page to four and reverse-recover with fully batched rebuilds |
-| v1.80.0 / AERO-M92 (legacy M92) | Third-member depletion recovery | GO - indices1/2/3 deplete six-member page to three and reverse-recover with fully batched rebuilds |
-| v1.81.0 / AERO-M93 (legacy M93) | Full-page depletion recovery | GO - exact six-member page crosses batched, direct-one, empty, and reverse-recovery states |
-| v1.82.0 / AERO-M94 (legacy M94) | Default-TTL page recovery | GO - empty target cache expires 4-to-3 under default600, then direct-one/rebuild-two restores cache4 |
-| v1.83.0 / AERO-M95 (legacy M95) | Four-page capacity-three cache thrash | GO - every retained record keeps cache3 and rebuilds/evicts exactly two pages |
-| v1.84.0 / AERO-M96 (legacy M96) | Four-page capacity-two bounded thrash | GO - rebuild mode 3 or 4 with exact per-record eviction coupling |
-| v1.85.0 / AERO-M97 (legacy M97) | Four-page capacity-one thrash | GO - every retained record rebuilds and evicts all four pages |
-| v1.86.0 / AERO-M98 (legacy M98) | Configured-zero protected cache floor | GO - literal max0 retains one protected page and rebuilds/evicts four per record |
-| v1.87.0 / AERO-M99 (legacy M99) | Rebuild-budget fallback under one-entry cache pressure | GO - two pages rebuild and four remaining instances render directly per record |
-| v1.88.0 / AERO-M100 (legacy M100) | Rebuild-budget-one alternating fallback | GO - exact pageCalls2/direct4 and pageCalls1/direct10 alternation |
-| v1.89.0 / AERO-M101 (legacy M101) | Rebuild-budget-zero direct path | GO - cache stays empty and all sixteen instances render directly |
-| v1.90.0 / AERO-M102 (legacy M102) | Negative-one unlimited-rebuild sentinel | GO - all four pages rebuild with zero direct fallback |
-| v1.91.0 / AERO-M103 (legacy M103) | Explicit pages-disabled immediate direct control | GO - sixteen direct overload calls despite reset public counters |
-| v1.92.0 / AERO-M104 (legacy M104) | Balanced paired pages control | GO - same-plan enabled/disabled structural paths under one recorder schema |
-| v1.93.0 / AERO-M105 (legacy M105) | Balanced paired cache-capacity control | GO - capacity1 thrash versus negative-one stable four-page retention |
-| v1.94.0 / AERO-M106 (legacy M106) | Balanced paired minimum-instance control | GO - minimum2 four-page replay versus minimum5 mixed two-page/four-direct path |
-| v1.95.0 / AERO-M107 (legacy M107) | Balanced paired skip-individual control | GO - managed pre-dispatch queue versus manual renderer queue under the same four pages |
-| v1.96.0 / AERO-M108 (legacy M108) | Balanced paired cell-size control | GO - same aligned scene forms four size-two pages versus one size-eight page |
-| v1.97.0 / AERO-M109 (legacy M109) | Cell-size lower-bound clamp control | GO - raw zero and explicit one converge on sixteen single-member direct cells |
-| v1.98.0 / AERO-M110 (legacy M110) | Cell-size upper-bound clamp control | GO - raw thirty-three and explicit thirty-two converge on one cached page |
-| v1.99.0 / M111 | Fixed-seed absolute terrain | GO - two fresh official worlds match the complete ID volume and top-Y/ID/metadata surface of chunk `(0,0)` |
+| v1.58.0 / M70 | Real Aero combat-event frame/log window | GO - observer applies Packet18 before Packet38, then completes bounded frames and Aero rows |
+| v1.59.0 / M71 | Balanced paired Aero control/event acquisition | GO - exact common anchor plus descriptive selected-row summaries and pair deltas |
+| v1.60.0 / M72 | Server-authored StationAPI content rendered by real Aero client | GO - exact identifier/coordinates/nonce message plus renderer return and bounded frames |
+| v1.61.0 / M73 | Balanced absent/present synchronized Aero-content window | GO - tracked activation, 0 vs 16 structural treatment, descriptive selected-row deltas |
+| v1.62.0 / M74 | Complete bounded renderer-interval census over the paired Aero fixture | GO - primitive in-memory capture and post-seal binary artifacts |
+| v1.63.0 / M75 | Mirrored 0/1/4/16 Aero-call exposure ladder over a constant scene | GO - exact per-record treatment and descriptive whole-census summaries |
+| v1.64.0 / M76 | Renderer registration/body/Aero-call decomposition over a constant sixteen-entity scene | GO - exact 0/0, 16/0, and 16/16 records; mixed descriptive timing |
+| v1.65.0 / M77 | Direct renderer/fallback/empty-flush timing aligned to the complete census | GO - exact 16/16/2 call spans in two fresh same-plan replicas |
+| v1.66.0 / M78 | Real warmed Aero cell-page enqueue/flush timing | GO - exact 16 enqueues, four cached pages/calls, zero fallback/rebuild |
+| v1.67.0 / M79 | Single explicitly armed cold page rebuild | GO - cache 4-to-0-to-4, four deleted/compiled/rebuild deltas, zero fallback |
+| v1.68.0 / M80 | Server-authored natural membership rebuild | GO - exact cell removal, membership 16-to-15, one rebuild, zero fallback |
+| v1.69.0 / M81 | Server-authored natural two-page rebuild wave | GO - exact two-cell removal, membership 16-to-14, two rebuilds, zero fallback |
+| v1.70.0 / M82 | Natural membership-wave cardinality ladder | GO - fixed-plan 1/2/4 targets, membership 15/14/12, rebuilds 1/2/2 |
+| v1.71.0 / M83 | Constant-cardinality page-topology contrast | GO - two targets in one vs two pages, membership 14, rebuilds 1 vs 2 |
+| v1.72.0 / M84 | Four-page-key constant-cardinality topology contrast | GO - three targets in one vs three cached pages, membership 13, rebuilds 1 vs 3 |
+| v1.73.0 / M85 | Natural membership remove/restore recovery | GO - exact cell 16-to-15-to-16, direct fallback 0-to-1-to-0, one restore rebuild |
+| v1.74.0 / M86 | Repeated same-cell membership recovery | GO - two generation-bound 16-to-15-to-16 cycles with exact fallback/rebuild recovery |
+| v1.75.0 / M87 | Sequential two-cell membership recovery | GO - index0 fallback recovery followed by index1 immediate-rebuild recovery |
+| v1.76.0 / M88 | Reverse two-cell membership recovery | GO - index1 rebuild-first followed by index0 fallback-second under the same plan |
+| v1.77.0 / M89 | Sibling-cell membership recovery | GO - index4 matches index0's two-member-page fallback and restore rebuild |
+| v1.78.0 / M90 | Larger-page sibling recovery | GO - index2 matches index1's six-member-page batched rebuild route |
+| v1.79.0 / M91 | Larger-page depletion recovery | GO - indices1/2 deplete six-member page to four and reverse-recover with fully batched rebuilds |
+| v1.80.0 / M92 | Third-member depletion recovery | GO - indices1/2/3 deplete six-member page to three and reverse-recover with fully batched rebuilds |
+| v1.81.0 / M93 | Full-page depletion recovery | GO - exact six-member page crosses batched, direct-one, empty, and reverse-recovery states |
+| v1.82.0 / M94 | Default-TTL page recovery | GO - empty target cache expires 4-to-3 under default600, then direct-one/rebuild-two restores cache4 |
+| v1.83.0 / M95 | Four-page capacity-three cache thrash | GO - every retained record keeps cache3 and couples one-to-four rebuilds to equal evictions |
+| v1.84.0 / M96 | Four-page capacity-two bounded thrash | GO - rebuild mode 3 or 4 with exact per-record eviction coupling |
+| v1.85.0 / M97 | Four-page capacity-one thrash | GO - every retained record rebuilds and evicts all four pages |
+| v1.86.0 / M98 | Configured-zero protected cache floor | GO - literal max0 retains one protected page and rebuilds/evicts four per record |
+| v1.87.0 / M99 | Rebuild-budget fallback under one-entry cache pressure | GO - two pages rebuild and four remaining instances render directly per record |
+| v1.88.0 / M100 | Rebuild-budget-one alternating fallback | GO - exact pageCalls2/direct4 and pageCalls1/direct10 alternation |
+| v1.89.0 / M101 | Rebuild-budget-zero direct path | GO - cache stays empty and all sixteen instances render directly |
+| v1.90.0 / M102 | Negative-one unlimited-rebuild sentinel | GO - all four pages rebuild with zero direct fallback |
+| v1.91.0 / M103 | Explicit pages-disabled immediate direct control | GO - sixteen direct overload calls despite reset public counters |
+| v1.92.0 / M104 | Balanced paired pages control | GO - same-plan enabled/disabled structural paths under one recorder schema |
+| v1.93.0 / M105 | Balanced paired cache-capacity control | GO - capacity1 thrash versus negative-one stable four-page retention |
+| v1.94.0 / M106 | Balanced paired minimum-instance control | GO - minimum2 four-page replay versus minimum5 mixed two-page/four-direct path |
+| v1.95.0 / M107 | Balanced paired skip-individual control | GO - managed pre-dispatch queue versus manual renderer queue under the same four pages |
+| v1.96.0 / M108 | Balanced paired cell-size control | GO - same aligned scene forms four size-two pages versus one size-eight page |
+| v1.97.0 / M109 | Cell-size lower-bound clamp control | GO - raw zero and explicit one converge on sixteen single-member direct cells |
+| v1.98.0 / M110 | Cell-size upper-bound clamp control | GO - raw thirty-three and explicit thirty-two converge on one cached page |
+| v1.99.0 / M111 | Fixed-seed absolute terrain | GO - two fresh official worlds match non-air count and top-Y/ID/metadata surface; buried ID volume is diagnostic |
 | v1.100.0 / M112 | Fixed-seed light planes | GO - two fresh official worlds match all block-light and sky-light nibbles and histograms in chunk `(0,0)` |
 | v1.101.0 / M113 | Causal vanilla lighting | GO - one official glowstone placement produces an exact 68-sample block-light transition after fresh chunk reload |
 | v1.102.0 / M114 | Causal vanilla water flow | GO - one official dig opens a generated-water floor cell and settles exactly one block to water `9:8` |
@@ -276,7 +276,7 @@ in [AERO_MILESTONES.md](AERO_MILESTONES.md). Existing `M10`-`M19`, `M68`, and
 | v1.253.0 / M265 | Fish eat | GO - raw fish 349 heals Packet8 18 to 20 |
 | v1.254.0 / M266 | Cooked fish eat | GO - cooked fish 350 heals Packet8 15 to 20 |
 | v1.255.0 / M267 | Milk bucket | GO - milk 335 becomes empty bucket 325 with no heal |
-| v1.256.0 / M268 | Flint steel fire | GO - flint-and-steel 259 places fire 51:0 |
+| v1.256.0 / M268 | Flint steel fire | GO - flint-and-steel 259 places fire 51:0; later stone fire may remain or decay |
 | v1.257.0 / M269 | Shears leaves | GO - shears 359 drop leaf item 18; bare hand does not |
 | v1.258.0 / M270 | Iron helmet | GO - iron helmet 306 equips armor slot 5 / Packet5 4 |
 | v1.259.0 / M271 | Gold chestplate | GO - gold chestplate 315 equips armor slot 6 / Packet5 3 |

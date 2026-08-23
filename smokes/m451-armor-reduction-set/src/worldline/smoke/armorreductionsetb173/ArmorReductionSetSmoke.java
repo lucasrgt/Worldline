@@ -36,13 +36,13 @@ public final class ArmorReductionSetSmoke {
             server.boot(); actor.connect(); actor.synchronizePose();
             require(actor.awaitInventory().occupiedSlots() >= 12 && actor.awaitHealth(20) == 20,
                     "armor-reduction reload inventory or health drift");
-            RemoteIncomingHit bare = armedHit(server, actor, pad, null, true);
+            RemoteIncomingHit bare = armedHit(server, actor, pad, null);
             new B173ArmorReductionEquip().wear(actor, B173ArmorReductionAccess.LEATHER);
-            RemoteIncomingHit leather = armedHit(server, actor, pad, null, true);
+            RemoteIncomingHit leather = armedHit(server, actor, pad, null);
             actor = reseed(actor, server, workspace, user, port, timeout, pad, B173ArmorReductionAccess.IRON);
-            RemoteIncomingHit iron = armedHit(server, actor, pad, B173ArmorReductionAccess.IRON, true);
+            RemoteIncomingHit iron = armedHit(server, actor, pad, B173ArmorReductionAccess.IRON);
             actor = reseed(actor, server, workspace, user, port, timeout, pad, B173ArmorReductionAccess.DIAMOND);
-            RemoteIncomingHit diamond = armedHit(server, actor, pad, B173ArmorReductionAccess.DIAMOND, true);
+            RemoteIncomingHit diamond = armedHit(server, actor, pad, B173ArmorReductionAccess.DIAMOND);
             require(bare.damage() > leather.damage() && bare.damage() > iron.damage()
                     && leather.damage() > 0 && iron.damage() > 0 && diamond.damage() > 0,
                     "armor Packet8 deltas were not strictly reduced "
@@ -75,20 +75,19 @@ public final class ArmorReductionSetSmoke {
         try {
             server.boot();
             B173PlayerSeed.writeInventory(workspace, user, 4.5D, 60D, 4.5D,
-                    new int[] {0, 1, 2, 3, 4, 5, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20},
-                    new int[] {1, 2, 52, 322, 320, 276, 298, 299, 300, 301, 306, 307, 308, 309, 310, 311, 312, 313},
-                    new int[] {64, 48, 1, 8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                    new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
+                    new int[] {0, 1, 2, 3, 4, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20},
+                    new int[] {1, 2, 52, 322, 320, 298, 299, 300, 301, 306, 307, 308, 309, 310, 311, 312, 313},
+                    new int[] {64, 48, 1, 8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
             actor.connect(); actor.synchronizePose();
-            require(actor.awaitInventory().occupiedSlots() == 18 && actor.awaitHealth(20) == 20,
+            require(actor.awaitInventory().occupiedSlots() == 17 && actor.awaitHealth(20) == 20,
                     "armor-reduction inventory or health drift");
             Pad pad = B173ArmorReductionAccess.raise(actor, cx, cz);
             actor.close(); awaitPlayers(server, 0); server.save(); return pad;
         } finally { actor.close(); server.close(); }
     }
 
-    private static RemoteIncomingHit armedHit(B173DedicatedServer server, B173WireClient actor, Pad pad, int[] family,
-            boolean poke) {
+    private static RemoteIncomingHit armedHit(B173DedicatedServer server, B173WireClient actor, Pad pad, int[] family) {
         server.setTime(14000L);
         B173ArmorReductionAccess.go(actor, pad.spawner);
         RemoteMobSpawn zombie = B173ArmorReductionAccess.near(actor, pad.spawner);
@@ -96,7 +95,7 @@ public final class ArmorReductionSetSmoke {
         double[] at = {zombie.x(), zombie.y(), zombie.z()};
         if (family != null) new B173ArmorReductionEquip().wear(actor, family);
         B173ArmorReductionAccess.heal(actor); B173ArmorReductionAccess.settle(actor);
-        RemoteIncomingHit hit = B173ArmorReductionAccess.absorb(actor, zombie.entityId(), at, poke);
+        RemoteIncomingHit hit = B173ArmorReductionAccess.absorb(actor, zombie.entityId(), at);
         B173ArmorReductionAccess.heal(actor); B173ArmorReductionAccess.settle(actor);
         return hit;
     }
@@ -105,12 +104,12 @@ public final class ArmorReductionSetSmoke {
             int port, Duration timeout, Pad pad, int[] armor) throws Exception {
         actor.close(); awaitPlayers(server, 0);
         B173PlayerSeed.writeInventory(workspace, user, pad.top.x() + 0.5D, pad.top.y() + 1.0D, pad.top.z() + 0.5D,
-                new int[] {0, 1, 2, 3, 4, 5, 6, 7},
-                new int[] {1, 322, 320, 276, armor[0], armor[1], armor[2], armor[3]},
-                new int[] {16, 8, 8, 1, 1, 1, 1, 1}, new int[] {0, 0, 0, 0, 0, 0, 0, 0});
+                new int[] {0, 1, 2, 4, 5, 6, 7},
+                new int[] {1, 322, 320, armor[0], armor[1], armor[2], armor[3]},
+                new int[] {16, 8, 8, 1, 1, 1, 1}, new int[] {0, 0, 0, 0, 0, 0, 0});
         B173WireClient next = new B173WireClient("127.0.0.1", port, user, timeout);
         next.connect(); next.synchronizePose();
-        require(next.awaitInventory().occupiedSlots() == 8 && next.awaitHealth(20) == 20, "reseed inventory drift");
+        require(next.awaitInventory().occupiedSlots() == 7 && next.awaitHealth(20) == 20, "reseed inventory drift");
         return next;
     }
 

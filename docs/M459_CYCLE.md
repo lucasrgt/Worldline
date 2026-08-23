@@ -6,6 +6,8 @@ waits for Packet24 type `56` and Packet23 type `63`, then requires that
 fireball's Packet60 strength `1` hit: Packet8 hurt and/or a netherrack or
 cobble crater. One official EOF is retried after a 5 second sleep. Player
 moves stay at or below 9 blocks. Lava is not credited as the hit.
+The cavern scan uses only frozen support chunk `2,-1`, so both replicas choose
+the same fixture regardless of loaded-chunk iteration order.
 
 Run directly with:
 

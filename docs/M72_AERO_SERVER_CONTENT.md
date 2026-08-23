@@ -25,8 +25,9 @@ duplicate is idempotent.
 The client-only renderer refuses to qualify an unset nonce. After exact state is
 present it queues the original OBJ through the real pinned Aero at-rest renderer.
 The oracle records successful return, then requires twenty subsequent renderer
-TAIL completions and a strictly parsed Aero row with visible chunks and positive
-at-rest counters.
+TAIL completions and a strictly parsed Aero row with visible chunks. Aero pulse
+counters are cumulative-window observations and may be zero after the separate
+renderer-return marker has already proved this content path.
 
 This is not a general StationAPI synchronization API. It proves one exact
 server-authored block/entity and one explicit M72 state message reach and are
