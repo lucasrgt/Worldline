@@ -267,11 +267,7 @@ final class RepositoryVerify {
     }
 
     private String languageSection(String json) {
-        int start = json.indexOf("\"Java\":{");
-        if (start < 0) {
-            throw new IllegalStateException("tokei JSON did not contain Java");
-        }
-        return json.substring(start + 8);
+        return TokeiJson.language(json, "Java");
     }
 
     private long codeLines(String json) {

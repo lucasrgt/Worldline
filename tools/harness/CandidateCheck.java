@@ -90,7 +90,7 @@ final class CandidateCheck {
         String output = capture(command, root, 60);
         java.util.regex.Matcher reports = java.util.regex.Pattern.compile(
                 "\\{\"stats\":\\{(.*?)\\},\"name\":\"([^\"]+)\"",
-                java.util.regex.Pattern.DOTALL).matcher(output.substring(output.indexOf("\"Java\":{")));
+                java.util.regex.Pattern.DOTALL).matcher(TokeiJson.language(output, "Java"));
         java.util.regex.Pattern code = java.util.regex.Pattern.compile("\"code\"\\s*:\\s*(\\d+)");
         while (reports.find()) {
             java.util.regex.Matcher count = code.matcher(reports.group(1));
