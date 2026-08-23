@@ -120,3 +120,17 @@ v1|seed=17320110707|loaded:time=0,entities=0,column=0.1.0|tick1:time=1,entities=
 The v1 signature remains frozen. The expanded v2 signature, including the
 tick-2 scheduled input, is
 `e8cdeba39a44b772a70c48c0acd9ae3983f3d95a8c10c545df5d66fb953db554`.
+
+## Frozen physics and compass differential
+
+Every one of the two mapped and two official client processes also executes
+the actual player-movement roots for slow blocks and ladder climbing, then the
+actual `TextureCompassFX` root for four position/yaw arms. Their shared trace
+freezes eight-tick distances `air=1384`, `web=269`, `soul=767`; ten-tick
+vertical results `air=0`, `climb=1058`; and matching compass smoothing plus
+pixel digests east and west of spawn at yaw `0` and `180`.
+
+The complete physics trace is frozen by SHA-256
+`c2508b3dfff5f7852ce6b3155c5257ba781482031001cfdd38326b3363a5c014`.
+This completes the client halves of M317, M361, and M365 without substituting
+Worldline equations for vanilla execution.

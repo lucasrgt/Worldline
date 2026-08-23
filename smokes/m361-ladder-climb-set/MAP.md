@@ -13,4 +13,6 @@ oracle calls the corresponding obfuscated root with the same fixture and tick
 count. Two mapped and two official processes must produce the same trace.
 
 No Packet13 climb or Worldline vertical-motion equation is accepted as the
-physics oracle. Replacement signatures remain pending official qualification.
+physics oracle. The four-process client differential freezes `air=0` and
+`climb=1058` after ten ticks in shared physics signature
+`c2508b3dfff5f7852ce6b3155c5257ba781482031001cfdd38326b3363a5c014`.

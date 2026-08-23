@@ -11,8 +11,12 @@ on identical wall-air and two-cell-ladder fixtures. M361 qualifies only after
 both cycles have frozen matching evidence.
 
 ```text
-java tools/smoke/LadderClimbSetCycle.java m361-ladder-climb-set
-java tools/smoke/ClientCycle.java controlled-client-tick
+java tools/harness/Gate.java --milestone m361-ladder-climb-set
+java tools/harness/Gate.java --milestone controlled-client-tick
 ```
 
-The replacement signatures remain pending. Headless protocol-14 only.
+The server signature is
+`113dccdda9b6bd0140c7aea5b255db993bb9063c6d64ef9370f1fb9925c26340`.
+The shared client-physics signature is
+`c2508b3dfff5f7852ce6b3155c5257ba781482031001cfdd38326b3363a5c014`.
+Headless protocol-14 only.

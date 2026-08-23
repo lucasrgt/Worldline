@@ -7,9 +7,12 @@ The server half seeds compass item `345`, Packet16-selects it, reads
 the item plus fixture through a fresh login. Its trace claims only server spawn
 data, held-item state, positions, and persistence.
 
-The needle half requires a separate client differential through actual mapped
-and official `TextureCompassFX` execution. `B173CompassPoint` only reads spawn
-coordinates and player cells; it contains no needle formula.
+The needle half uses a separate client differential through actual mapped and
+official `TextureCompassFX` execution. Two fresh mapped and two fresh official
+processes cross east/west spawn positions with yaw `0` and `180`; smoothing
+state and the complete pixel digest agree for all four arms.
 
-Replacement signatures remain pending official qualification. Compass
-crafting, clock behavior, map use, GUI behavior, and Nether spin are excluded.
+The client half is frozen by shared physics signature
+`c2508b3dfff5f7852ce6b3155c5257ba781482031001cfdd38326b3363a5c014`.
+Compass crafting, clock behavior, map use, GUI behavior, and Nether spin are
+excluded.
