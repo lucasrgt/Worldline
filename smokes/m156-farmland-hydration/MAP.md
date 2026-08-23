@@ -1,7 +1,8 @@
 # M156 behavior map
 
-A wooden hoe tills official dirt into farmland. Adjacent still water then
-raises farmland metadata to the hydrated value on a random tick. At least
+A wooden hoe tills official dirt into farmland after adjacent still water is
+already present, preventing a dry random tick from reverting the fixture.
+Water raises farmland metadata to the hydrated value on a random tick. At least
 one of four raised plots remains `60:7` after a bounded live wait and a
 clean save plus fresh login.
 

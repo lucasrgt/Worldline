@@ -7,7 +7,8 @@ Status: **GO** for one named Packet18 peer swing observation.
 - canonical static and affected runtime gates compile the cumulative product;
 - a production-path fixture freezes the exact six-byte Packet18 message;
 - two fresh smoke JVMs create two fresh official server JVMs;
-- four wire sessions establish Packet20 identity and Packet5 sword state;
+- four spawn-relative, player-NBT-seeded wire sessions establish Packet20
+  identity and Packet5 sword state;
 - one local Packet18 animation-1 request is observed as the same named peer;
 - clean disconnect/save preserves the actor's single sword inventory entry;
 - the affected M66 combat cycle remains unchanged and passes.

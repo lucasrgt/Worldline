@@ -1,8 +1,8 @@
 # M354 qualification cycle
 
 `FarmlandHydrateSetCycle` rebuilds the raised dirt, still-water, and
-isolated dry-dirt fixture in two fresh official server JVMs. Each run hoes
-four water-adjacent plots and one isolated dry plot to farmland `60`,
+isolated dry-dirt fixture in two fresh official server JVMs. Each run plants
+the isolated dry plot, installs water, then hoes four water-adjacent plots to farmland `60`,
 waits official random ticks, and reloads dry `60:0` plus hydrated `60:7`.
 The frozen signal includes both `dry=60:0` and `hydrated=60:7`. Headless
 `B173WireClient` is the only client. There is no GUI and no Aero path.

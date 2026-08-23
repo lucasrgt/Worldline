@@ -26,6 +26,10 @@ Packet20 identity and Packet5 sword state before one request, then observe the
 same named entity and animation on the peer. The actor's sword persists as one
 inventory entry after clean disconnect and save.
 
+Both identities are seeded at fixed spawn-relative positions through official
+player NBT, with sword `276` already in actor slot 36. No dropped-item pickup or
+random first-login placement participates in the evidence.
+
 Packet18 is not an attack acknowledgment. The server authenticates the socket
 and does not rely on the claimed entity ID. M69 does not claim a target,
 Packet7/38/8, damage, health, rendering, Aero timing, repeated swings,

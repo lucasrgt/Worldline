@@ -4,7 +4,9 @@ The fixture docks the seed-water column in chunk `0,0`, builds a `7×7`
 stone floor, hollows a dry open `5×5` pen at `y<63`, and places one default
 spawner `52:0`. After a clean save the region NBT `EntityId` is rewritten
 from `Pig` to `Squid`. Packet24 type `94` must spawn on land within official
-attack range. Out-of-water death is Packet38 status `3` plus Packet29.
+attack range. A Packet7 diamond-sword `276` strike kills that dry squid;
+death while out of water is Packet38 status `3` plus Packet29. The fixture
+does not claim that land exposure itself caused damage.
 Already-received movement is followed without requiring a movement packet.
 Ink sac `351:0` is unclaimed.
 

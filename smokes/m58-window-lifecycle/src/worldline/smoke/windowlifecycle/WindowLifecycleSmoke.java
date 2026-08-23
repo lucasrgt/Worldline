@@ -22,6 +22,8 @@ import worldline.api.RemoteWorldView;
 import worldline.api.RemoteWindowClosure;
 import worldline.api.ServerPlayerState;
 import worldline.b173server.B173DedicatedServer;
+import worldline.b173server.B173LevelDatWeather;
+import worldline.b173server.B173PlayerSeed;
 import worldline.b173server.B173WireClient;
 
 /** Proves explicit Packet101 close and restored personal-window transactions. */
@@ -45,20 +47,20 @@ public final class WindowLifecycleSmoke {
         RemotePersonalTransaction take, restore; ServerPlayerState player;
         BlockPosition target;
         try {
-            server.boot(); server.operator(actorName); actor.connect(); actor.synchronizePose();
-            require(actor.awaitInventory().occupiedSlots() == 0, "actor inventory was not empty");
-            actor.look(0F, 90F); PlayerPose pose = acquireChest(actor, actorName);
+            server.boot(); server.save(); server.operator(actorName);
+            B173LevelDatWeather.Weather world = B173LevelDatWeather.read(workspace.resolve("world/level.dat"));
+            double x = world.spawnX() + 0.5D, y = world.spawnY() + 20D, z = world.spawnZ() + 0.5D;
+            B173PlayerSeed.writeHolding(workspace, actorName, x, y, z, 54, 1, 0);
+            B173PlayerSeed.write(workspace, observerName, x + 3D, y, z);
+            actor.connect(); actor.synchronizePose();
+            require(actor.awaitInventory().occupiedSlots() == 1
+                    && actor.inventory().slot(36).item().equals(new RemoteItemStack(54, 1, 0)),
+                    "actor chest seed drifted");
+            actor.look(0F, 90F); PlayerPose pose = settle(actor);
             RemoteWorldView baseline = actor.awaitRemoteChunk((int) Math.floor(pose.x()) >> 4,
                     (int) Math.floor(pose.z()) >> 4);
-            BlockPosition support = new BlockPosition((int) Math.floor(pose.x()),
-                    (int) Math.floor(pose.y()) - 1, (int) Math.floor(pose.z()));
-            target = BlockFace.UP.adjacent(support); require(baseline.blockAt(support.x(), support.y(), support.z())
-                    .legacyId() != 0 && replaceable(baseline.blockAt(target.x(), target.y(), target.z())),
-                    "chest lifecycle anchor drifted");
-            MovementOutcome clearance = actor.moveAndObserve(0D, 3D, 0D, 3);
-            require(!clearance.corrected(), "chest lifecycle clearance failed");
-            observer.connect(); observer.synchronizePose(); observer.moveAndObserve(5D, 5D, 0D, 3);
-            observer.moveAndObserve(5D, 5D, 0D, 3); requirePlayers(server.players(), actorName, observerName);
+            BlockPosition support = placement(baseline, pose); target = BlockFace.UP.adjacent(support);
+            observer.connect(); observer.synchronizePose(); requirePlayers(server.players(), actorName, observerName);
             observer.awaitRemoteChunk(Math.floorDiv(target.x(), 16), Math.floorDiv(target.z(), 16));
             observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 54, 0)); actor.placeHeldBlock(support, BlockFace.UP);
             BlockState chest = actor.sustainTicks(5).blockAt(target.x(), target.y(), target.z());
@@ -93,16 +95,20 @@ public final class WindowLifecycleSmoke {
 
     private static PersonalCraftingSession client(int port, String name, Duration timeout) {
         return new B173WireClient("127.0.0.1", port, name, timeout); }
-    private static PlayerPose acquireChest(PersonalCraftingSession client, String username) {
-        for (int step = 0; step < 10; step++) client.moveAndObserve(0D, 5D, 0D, 3);
-        client.sendChat("/give " + username + " 54 1"); client.sustainTicks(40);
-        for (int step = 0; step < 100 && client.inventory().occupiedSlots() < 1; step++)
-            client.moveAndObserve(0D, -1D, 0D, 1);
-        client.sustainTicks(10); MovementOutcome settled = null;
-        for (int step = 0; step < 100; step++) { settled = client.moveAndObserve(0D, -1D, 0D, 2);
-            if (settled.corrected()) break; }
-        require(settled != null && settled.corrected(), "ground settlement correction absent"); return settled.resulting();
-    }
+    private static PlayerPose settle(PersonalCraftingSession client) { client.sustainTicks(5);
+        MovementOutcome settled = null; for (int step = 0; step < 100; step++) {
+            settled = client.moveAndObserve(0D, -1D, 0D, 2); if (settled.corrected()) break; }
+        require(settled != null && settled.corrected(), "ground settlement correction absent");
+        return settled.resulting(); }
+    private static BlockPosition placement(RemoteWorldView view, PlayerPose pose) {
+        int x=(int)Math.floor(pose.x()),y=(int)Math.floor(pose.y()),z=(int)Math.floor(pose.z());
+        for(int r=2;r<=5;r++)for(int dx=-r;dx<=r;dx++)for(int dz=-r;dz<=r;dz++)
+            if(Math.max(Math.abs(dx),Math.abs(dz))==r)for(int dy=3;dy>=-5;dy--){BlockPosition support=
+                new BlockPosition(x+dx,y+dy,z+dz),target=BlockFace.UP.adjacent(support);try{
+                if(support.y()>=0&&target.y()<128&&view.blockAt(support.x(),support.y(),support.z()).legacyId()!=0
+                        &&replaceable(view.blockAt(target.x(),target.y(),target.z())))return support;
+            }catch(IllegalArgumentException absent){}}
+        throw new IllegalStateException("nearby chest placement absent"); }
     private static boolean replaceable(BlockState state) { int id = state.legacyId();
         return id == 0 || id == 8 || id == 9 || id == 78; }
     private static void requirePlayers(List<String> players, String first, String second) {

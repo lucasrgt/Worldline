@@ -53,6 +53,52 @@ Status: GO candidate after central audit correction; published history is preser
   official-format player NBT for the actor's log and both peer positions; the six
   crafting actions, authoritative audit, persistence, and frozen signature are
   unchanged.
+- Replaced M58 and M69's remaining `/give` pickup races with official-format
+  player NBT, fixed peer proximity, and deterministic nearby placement where
+  needed; their protocol claims and signatures remain unchanged.
+- Corrected M72's post-render Aero proof to require a valid later row with
+  visible chunks. The separate renderer-return marker proves the content path;
+  a later pulse may validly report zero at-rest work.
+- Corrected M95's cache-three contract for pinned `HashMap` tie ordering: each
+  retained record may rebuild one through four pages, and its capacity-eviction
+  delta must equal that rebuild count. Evidence now reports every mode count.
+- Narrowed M111 to the deterministic absolute-chunk contract actually shared by
+  fresh official worlds: exact non-air count and top-Y/ID/metadata surface. The
+  full block-ID plane remains diagnostic because buried gravel/ore order varies.
+- Installed still water before tilling the hydrated plots in M156, M179, and
+  M354, removing the unintended dry uncropped random-tick race without changing
+  their frozen soil/crop signatures.
+- Corrected M268 to freeze exact live fire placement while accepting only the
+  official fire-or-air outcome during the later hold and fresh login; stone-fire
+  persistence is no longer overclaimed.
+- Seeded transparent full-diamond-armor safety fixtures for M388 and M412 so
+  bounded repeated hostile/slime kills cannot terminate the actor between health
+  checks; loot, identity, death, and split evidence remain unchanged.
+- Rebuilt M391's pad as a dirt/wool checkerboard and now follows one exact
+  Packet60-destroyed cell of each material through live air and fresh-login air,
+  removing the prior side-classification race.
+- Closed M422 and M445 inside explicit 24-fence arenas and now reject spawned
+  skeletons outside those bounds. M422 movement also fails closed; M445 uses a
+  transparent full-diamond safety fixture while observing its two arrows.
+- Stabilized M458's cave spawner placement with four bounded attempts whose
+  success requires the authoritative remote `52:0` state.
+- Restricted M459's cavern scan to its frozen support chunk, removing loaded-
+  chunk iteration order from fixture selection while preserving its signature.
+- Closed M460's bed fixture with 24 fences and now accepts only an arena-contained
+  zombie for the hostile interrupt window.
+- Stabilized previously unversioned M447 with a 24-fence arena, inward climb
+  walls, contained-spawn selection, and bounded non-blocking movement polling;
+  its corrected signature is now explicit in the release catalog.
+- Corrected previously unversioned M449's impossible lethal diamond-sword anger
+  setup: a wood sword now leaves the struck wolf alive, the arena contains the
+  spawn, immediate health loss is retained, and Packet8 is no longer overclaimed
+  as identifying an individual wolf. Its corrected signature is release-tracked.
+- Removed M451's unnecessary diamond-sword provocation so reconnects cannot
+  select and kill a zombie injured by an earlier armor trial. Each family now
+  measures natural approached melee; its frozen signature is unchanged.
+- Corrected previously unversioned M466 documentation to match its implemented
+  oracle: sword-caused death while the squid is dry, not damage caused by land
+  exposure. Its already-frozen signature is now explicit in the release catalog.
 
 ## Unreleased - Integration Hygiene and Anti-Slop Audit
 
@@ -491,17 +537,21 @@ The frozen M462 semantic SHA-256 is
 Status: GO for official bed occupy plus hostile Packet24 interrupt together.
 
 - Packet15 occupied head `26:8` to `26:12` with Packet17; type `54` returned it to `26:8`.
+- A 24-fence arena and contained-spawn selection prevent the interrupting
+  zombie from leaving the raised platform.
 - Packet70 stayed `-1`; morning skip was rejected. Distinct from M330 occupy/wake.
 - Repeated the complete family in two official server JVMs.
 
 The frozen M460 semantic SHA-256 is
-`252160a06c2d628ac1441c16105e90c2c1e0047f10a300061765a01948d87c61`.
+`fa58ada55be2832285f313973cf389f37a678482be07caf247515cebc8e150af`.
 
 ## 1.442.0 - M459 Ghast fireball hit set
 
 Status: GO for official Nether ghast Packet23 type 63 fireball hit together.
 
 - Packet24 type `56` threw Packet23 type `63`; Packet60 strength `1` hit as Packet8 and/or crater.
+- Cavern selection is now restricted to frozen chunk `2,-1`, preserving the
+  same support while eliminating loaded-chunk iteration-order divergence.
 - Distinct from M410 spawn-only type `63` and M411 pigman pork.
 - Repeated the complete family in two official server JVMs.
 
@@ -513,6 +563,8 @@ The frozen M459 semantic SHA-256 is
 Status: GO for official slime Packet24 size family plus AABB Packet8 contact together.
 
 - Packet24 type `55` showed size-1 and larger metadata; walking in emitted Packet38 then Packet8.
+- Spawner placement now uses a bounded authoritative-state retry instead of a
+  single placement packet wait; the frozen slime-touch trace is unchanged.
 - Distinct from M412 parent-split children and M423 slimeball.
 - Repeated the complete family in two official server JVMs.
 
@@ -601,11 +653,13 @@ The frozen M450 semantic SHA-256 is
 Status: GO for official skeleton Packet23 type 60 archery with skeleton thrower together.
 
 - Packet24 type `51` fired two Packet23 type `60` arrows whose thrower was that skeleton.
+- A 24-fence arena and full-diamond observer safety fixture remove escape and
+  observer-death races without changing the ranged-AI claim.
 - Distinct from player bow `261` and from skeleton bone `352`.
 - Repeated the complete family in two official server JVMs.
 
 The frozen M445 semantic SHA-256 is
-`59d850eaeeb297f3879633c70a546d1aa4da2de0618852cb9f3e802a8ec6533b`.
+`c397640bf9dddee3c3b93081c4816f82f93289ba759f499d2865fad69fb5d888`.
 
 ## 1.432.0 - M436 Remaining arrow life set
 
@@ -623,11 +677,13 @@ The frozen M436 semantic SHA-256 is
 Status: GO for official skeleton bone drop plus bone-meal wheat together.
 
 - Packet24 type `51` was killed with diamond sword `276`; Packet21 bone `352` was observed.
+- A 24-fence arena and arena-contained spawn selection prevent knockback escape;
+  bounded movement now fails closed instead of waiting on a vanished target.
 - Bone `352` milled to `351x3:15` and Packet15 matured wheat `59:0` to `59:7` before midnight.
 - Repeated the complete family in two official server JVMs.
 
 The frozen M422 semantic SHA-256 is
-`c68f7f0903a8483cfac08ca4d91735085c70835d9f5e485f8055423a3ebc6dc4`.
+`131ebd45e9b81d7f65d182b85fef0d213bda1f3d8521b4e4f403d5958aa1f0c0`.
 
 ## 1.430.0 - M444 Remaining mob drops rest
 
@@ -965,10 +1021,12 @@ Status: GO for official slime Packet24 type 55 parent death plus child type-55 s
 
 - Slime-chunk `-2,-2` cave below `y=16`; spawner retargeted to Slime with spawn-monsters.
 - Packet24 type `55` parent was killed with diamond sword `276`; child type-`55` Packet24 appeared.
+- Seeded full diamond armor as a transparent fixture safety control for the
+  bounded repeated-kill loop.
 - Repeated the complete family in two official server JVMs.
 
 The frozen M412 semantic SHA-256 is
-`04232de5b9eb6e2e741dbbf008ade42638370d907b361856800b70fe8cb6e59b`.
+`c35f4196ac8b8633b7ffa097ac87eca1828f89b9ab9d2be20f0802c924191929`.
 
 ## 1.399.0 - M411 Zombie pigman set
 
@@ -1195,11 +1253,12 @@ The frozen M392 semantic SHA-256 is
 Status: GO for official creeper Packet60 strength 3 destroying dirt and wool together.
 
 - Spawner retargeted to Creeper; Packet24 type `50` fused by proximity and exploded at Packet60 strength `3`.
-- Dirt `3` and wool `35` crater cells were destroyed and persisted as air.
+- Alternated dirt `3` and wool `35` across a `7×7` checkerboard, selected one
+  Packet60-destroyed cell of each material, and persisted both exact cells as air.
 - Repeated the complete family in two official server JVMs.
 
 The frozen M391 semantic SHA-256 is
-`2a74b9f63925b31966343a26c78c5b6d87dcdb84096822099fe3988f5d59b771`.
+`389f99f5639c66342a8560c23fe7e85cbe1aafc6e71530ed05c0cc7bbdbb19c0`.
 
 ## 1.378.0 - M390 Remaining spawner set
 
@@ -1229,10 +1288,12 @@ Status: GO for official zombie feather and skeleton arrow drops together.
 
 - Spawners retargeted to Zombie and Skeleton; Packet24 types `54` and `51` were killed with diamond sword `276`.
 - Packet21 feather `288` and arrow `262` were observed.
+- Seeded full diamond armor as a transparent fixture safety control so the
+  actor survives bounded repeated hostile kills between health checks.
 - Repeated the complete family in two official server JVMs.
 
 The frozen M388 semantic SHA-256 is
-`af71fe63de80f6405617a61a51d16c2027b51a4b9d198ef70cc5286faa026b45`.
+`c8953605d41925e26176881751113247054635ee807d6cd4f5f76ca9e830cd19`.
 
 ## 1.375.0 - M387 Remaining light set
 
@@ -2549,11 +2610,13 @@ The frozen M269 semantic SHA-256 is
 Status: GO for official flint-and-steel fire placement.
 
 - Used flint-and-steel `259` on raised stone and received fire block `51:0`.
-- The exact fire cell survived a clean save and a fresh login.
+- Accepted only fire `51:0` or air `0:0` during the bounded hold and fresh
+  login because official stone fire may decay independently between reads.
+- Required the raised stone support to persist.
 - Repeated the complete fixture in two official server JVMs.
 
 The frozen M268 semantic SHA-256 is
-`e73f7f6c77c41d2facb9ca438c3905559515101c6dcdbe3cfd22c4b48da0aeda`.
+`50fbd4ba9248b6647eee949cc037cb741948628611a039361dfe320c5099dc22`.
 
 ## 1.255.0 - M267 Milk bucket
 
@@ -4407,13 +4470,15 @@ Status: GO for deterministic vanilla terrain at one absolute chunk.
 
 - Generated two fresh worlds with the unmodified official Beta 1.7.3 server
   and fixed seed `17320110707`.
-- Decoded all 32,768 block IDs in absolute chunk `(0,0)` and proved identical
-  full-volume and 256-column top-Y/ID/metadata surface digests.
+- Decoded all 32,768 block IDs in absolute chunk `(0,0)` and proved the exact
+  non-air count and 256-column top-Y/ID/metadata surface digest.
+- Retained the full block-ID plane as diagnostic because official buried
+  gravel/ore population order can vary between fresh worlds.
 - Kept the version's variable player spawn, lighting, biomes, other chunks,
   alternate seeds, dimensions and persistence outside qualification.
 
 The frozen M111 semantic SHA-256 is
-`1242a03c15a6e0c36adbefb6ca2b89b166ab1b57f5fb20cf6d3f402a0bec50b1`.
+`b885d60be98dfb11c60f51a928c0fa9bdda225520187692098587a72e253fa98`.
 
 ## 1.98.0 - M110 Cell Size Ceiling
 
@@ -4658,15 +4723,15 @@ Status: GO for the exact four-page fixture under a three-entry Aero page cache.
 
 - Froze cache capacity three, page TTL 100000, rebuild budget eight, and the
   existing fixed sixteen-cell/four-page scene.
-- Proved every retained record had cache3, pageCalls4, direct0, rebuild2, and
-  exactly two new capacity evictions.
+- Proved every retained record had cache3, pageCalls4, direct0, one-to-four
+  rebuilds, and exactly one new capacity eviction per rebuild.
 - Bound cumulative evictions and renderer/enqueue/flush spans to aligned
   56-byte records and reparsed every complete M74/M95 record in two replicas.
-- Observed 5565/5549 samples with eviction ranges 5..11133 and 5..11101;
-  timing values remain descriptive.
+- Recorded the dynamic rebuild-mode distribution caused by pinned `HashMap`
+  iteration when `lastUsedFrame` values tie; timing values remain descriptive.
 
 The frozen M95 semantic SHA-256 is
-`4792da7a14435f7c4abeb761e4b22021b7afe0dc617b33422afba4d087035fa5`.
+`fc9cc66cafdba16acc0d1d076af30aad46e335509bebcd52b5f106bd5a6f138c`.
 
 ## 1.82.0 - M94 Default-TTL Page Recovery
 

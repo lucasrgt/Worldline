@@ -7,6 +7,10 @@ observes Packet24 type `55`. Walking into a larger slime AABB emits
 Packet38 status 2 then Packet8. Metadata index 16 makes size-1 versus
 larger one family. That contact family is the SET.
 
+Spawner placement is bounded to four attempts and succeeds only after the
+authoritative remote block view reports `52:0`. This stabilizes placement
+without changing the cave, spawn, size, or contact oracle.
+
 This milestone does not claim M412 parent-split or child Packet24
 identities, M423 slimeball `341` plus sticky piston `29`, or the slime-chunk
 cave `y<=16` geometry as its own freeze. Child splits stay outside the

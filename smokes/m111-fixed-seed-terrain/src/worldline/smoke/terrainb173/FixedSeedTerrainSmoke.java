@@ -36,10 +36,10 @@ public final class FixedSeedTerrainSmoke {
             chunk = world.chunkAt(chunkX, chunkZ); verify(chunk, chunkX, chunkZ);
         } finally { client.close(); server.close(); }
         String terrain = terrainHash(chunk), metadata = metadataHash(chunk), surface = surfaceHash(chunk);
-        String trace = "v1|server=official-b1.7.3|seed=" + seed
+        String trace = "v2|server=official-b1.7.3|seed=" + seed
                 + "|target=absolute-chunk|origin=" + chunkX + "," + chunkZ
                 + "|blocks=32768|nonair=" + chunk.nonAirBlocks()
-                + "|terrain=" + terrain + "|surface=" + surface
+                + "|surface=" + surface + "|full-id-plane=diagnostic"
                 + "|decode=packet50+packet51-xzy|disconnect=clean";
         System.out.println("WORLDLINE_M111_TERRAIN=chunk=" + chunkX + ":" + chunkZ
                 + ",nonair=" + chunk.nonAirBlocks() + ",terrain=" + terrain

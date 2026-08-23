@@ -4,7 +4,7 @@
 official server JVMs. Each run retargets one saved MobSpawner `EntityId`
 to `Zombie`, runs at explicit Normal difficulty `2`, seats leather `298-301` then iron `306-309` then diamond
 `310-313` through window-0 Packet102 slots `5-8`, and records Packet8
-health drops after provoking each fresh type-`54` target. Unarmored damage is strictly
+health drops after approaching each type-`54` target without a damaging poke. Unarmored damage is strictly
 greater than leather and iron. One official EOF is retried after a 5
 second sleep. Headless `B173WireClient` is the only client. There is no
 GUI and no Aero path.

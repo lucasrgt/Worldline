@@ -8,6 +8,10 @@ holds that dry cell against random-tick reversion during the hydration
 wait. The frozen signal includes both `dry=60:0` and `hydrated=60:7`.
 Those exact states remain after a clean save plus fresh login.
 
+Setup tills and plants the isolated dry control first, then installs water
+before tilling the hydrated plots. This removes the unintended dry uncropped
+window while preserving the intended dry-versus-hydrated comparison.
+
 This is the Beta 1.7.3 farmland moisture set: water in the 9x2x9
 neighborhood writes metadata seven, while a plot outside that neighborhood
 with rain blocked stays metadata zero. It compounds hoe-till with dry and

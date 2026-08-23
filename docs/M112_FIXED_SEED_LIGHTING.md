@@ -2,8 +2,8 @@
 
 Status: GO in Worldline v1.100.0.
 
-M112 qualifies both complete vanilla light planes accompanying M111's exact
-terrain. Two fresh unmodified official Beta 1.7.3 servers generate seed
+M112 qualifies both complete vanilla light planes accompanying M111's fixed
+absolute-chunk surface contract. Two fresh unmodified official Beta 1.7.3 servers generate seed
 `17320110707`; protocol-14 clients decode all 32,768 block-light and sky-light
 nibbles in absolute chunk `(0,0)`.
 

@@ -2,6 +2,7 @@
 
 | Boundary | Exact evidence |
 | --- | --- |
+| Fixture | Official player NBT seeds sword `276` in actor slot 36 and places the observer three blocks away |
 | Identity | Packet20 binds the actor username to the peer-visible entity ID |
 | Equipment | Packet5 proves the actor holds exact diamond sword ID 276, damage 0 |
 | Encoder | Production codec emits packet18 + entity ID int + animation byte 1, six bytes total |

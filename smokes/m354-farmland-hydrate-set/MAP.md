@@ -3,6 +3,8 @@
 A wooden hoe tills official dirt into farmland `60`. Four water-adjacent
 plots hydrate to `60:7` on a random tick. One isolated dry plot under a
 rain roof stays `60:0`. Wheat `59` holds that dry cell against reversion.
+The isolated plot is tilled and planted first; water is then installed before
+the four hydrated plots are tilled.
 The frozen signal includes both `dry=60:0` and `hydrated=60:7`. Both
 states survive a clean save plus fresh login. This is distinct from M156
 hydration-only and M304 till/trample.

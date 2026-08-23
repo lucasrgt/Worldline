@@ -12,6 +12,9 @@ of farmland and writes `BlockCrops` above it at metadata zero. Four adjacent
 plots reuse the M156 moisture fixture so the sparse hydration tick is
 observable before planting.
 
+The fixture installs water before tilling the four crop plots, eliminating the
+brief dry uncropped state in which a vanilla random tick could restore dirt.
+
 The frozen semantic SHA-256 is
 `00d861629497b91621c26cc02b6ec8d56763ad9b4f365028fd10188e36694be8`.
 

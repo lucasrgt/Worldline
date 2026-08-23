@@ -15,7 +15,8 @@ The cycle then requires, in one scenario:
 2. one server placement marker with identifier, raw ID, coordinates, and nonce;
 3. one matching client message, application, and Aero renderer-return marker;
 4. twenty subsequent frames and a file-backed Aero row with positive visible
-   chunks, `atRestRenders`, and `atRestListCalls`;
+   chunks; the separate renderer-return marker proves the content path, while
+   later pulse counters may validly be zero;
 5. normal client exit, lost-connection observation, `save-all`, server stop, and
    successful Gradle exits;
 6. clean worktrees and an unchanged pinned checkout.

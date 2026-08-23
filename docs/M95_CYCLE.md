@@ -10,10 +10,11 @@ reparses every M74 census record and every aligned 56-byte M95 page record,
 requiring exact schema, identity, EOF, hashes, state, and monotonic cumulative
 evictions. Diagnostic mode cannot qualify or write release evidence.
 
-The two canonical replicas retained 5565 and 5549 complete samples. Both
-proved cache3, pageCalls4, direct0, rebuild2, and a capacity-eviction delta of
-exactly two on every sample. Clean client disconnect, server stop, disposable
-worktree cleanup, and pinned-checkout provenance are mandatory.
+Every retained sample proves cache3, pageCalls4, direct0, a rebuild count from
+one through four, and a capacity-eviction delta equal to that sample's rebuild
+count. The evidence records the dynamic distribution of all four modes. Clean
+client disconnect, server stop, disposable worktree cleanup, and pinned-checkout
+provenance are mandatory.
 
 The frozen semantic SHA-256 is
-`4792da7a14435f7c4abeb761e4b22021b7afe0dc617b33422afba4d087035fa5`.
+`fc9cc66cafdba16acc0d1d076af30aad46e335509bebcd52b5f106bd5a6f138c`.

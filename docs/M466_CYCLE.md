@@ -5,7 +5,8 @@ stone floor, and a dry open `5×5` `y<63` pen in two fresh official server JVMs.
 Each run places one default
 spawner `52`, retargets the saved MobSpawner `EntityId` to `Squid`, waits
 for Packet24 type `94` on land, and observes out-of-water Packet38 status
-`3` plus Packet29. Both server phases explicitly enable vanilla animals;
+`3` plus Packet29 after Packet7 diamond-sword `276`. This proves death while
+dry, not environmental land damage. Both server phases explicitly enable vanilla animals;
 semantic misses fail immediately, while one official EOF is retried after a
 5 second sleep. The actor reloads inside the open dry pen. It accepts only a dry squid
 within official attack range, and follows already-received movement without

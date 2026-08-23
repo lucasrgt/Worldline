@@ -99,7 +99,7 @@ Passing an experiment does not silently promote its API.
 | v1.80.0 / M92 | Third-member depletion recovery | GO - indices1/2/3 deplete six-member page to three and reverse-recover with fully batched rebuilds |
 | v1.81.0 / M93 | Full-page depletion recovery | GO - exact six-member page crosses batched, direct-one, empty, and reverse-recovery states |
 | v1.82.0 / M94 | Default-TTL page recovery | GO - empty target cache expires 4-to-3 under default600, then direct-one/rebuild-two restores cache4 |
-| v1.83.0 / M95 | Four-page capacity-three cache thrash | GO - every retained record keeps cache3 and rebuilds/evicts exactly two pages |
+| v1.83.0 / M95 | Four-page capacity-three cache thrash | GO - every retained record keeps cache3 and couples one-to-four rebuilds to equal evictions |
 | v1.84.0 / M96 | Four-page capacity-two bounded thrash | GO - rebuild mode 3 or 4 with exact per-record eviction coupling |
 | v1.85.0 / M97 | Four-page capacity-one thrash | GO - every retained record rebuilds and evicts all four pages |
 | v1.86.0 / M98 | Configured-zero protected cache floor | GO - literal max0 retains one protected page and rebuilds/evicts four per record |
@@ -115,7 +115,7 @@ Passing an experiment does not silently promote its API.
 | v1.96.0 / M108 | Balanced paired cell-size control | GO - same aligned scene forms four size-two pages versus one size-eight page |
 | v1.97.0 / M109 | Cell-size lower-bound clamp control | GO - raw zero and explicit one converge on sixteen single-member direct cells |
 | v1.98.0 / M110 | Cell-size upper-bound clamp control | GO - raw thirty-three and explicit thirty-two converge on one cached page |
-| v1.99.0 / M111 | Fixed-seed absolute terrain | GO - two fresh official worlds match the complete ID volume and top-Y/ID/metadata surface of chunk `(0,0)` |
+| v1.99.0 / M111 | Fixed-seed absolute terrain | GO - two fresh official worlds match non-air count and top-Y/ID/metadata surface; buried ID volume is diagnostic |
 | v1.100.0 / M112 | Fixed-seed light planes | GO - two fresh official worlds match all block-light and sky-light nibbles and histograms in chunk `(0,0)` |
 | v1.101.0 / M113 | Causal vanilla lighting | GO - one official glowstone placement produces an exact 68-sample block-light transition after fresh chunk reload |
 | v1.102.0 / M114 | Causal vanilla water flow | GO - one official dig opens a generated-water floor cell and settles exactly one block to water `9:8` |
@@ -272,7 +272,7 @@ Passing an experiment does not silently promote its API.
 | v1.253.0 / M265 | Fish eat | GO - raw fish 349 heals Packet8 18 to 20 |
 | v1.254.0 / M266 | Cooked fish eat | GO - cooked fish 350 heals Packet8 15 to 20 |
 | v1.255.0 / M267 | Milk bucket | GO - milk 335 becomes empty bucket 325 with no heal |
-| v1.256.0 / M268 | Flint steel fire | GO - flint-and-steel 259 places fire 51:0 |
+| v1.256.0 / M268 | Flint steel fire | GO - flint-and-steel 259 places fire 51:0; later stone fire may remain or decay |
 | v1.257.0 / M269 | Shears leaves | GO - shears 359 drop leaf item 18; bare hand does not |
 | v1.258.0 / M270 | Iron helmet | GO - iron helmet 306 equips armor slot 5 / Packet5 4 |
 | v1.259.0 / M271 | Gold chestplate | GO - gold chestplate 315 equips armor slot 6 / Packet5 3 |

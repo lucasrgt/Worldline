@@ -10,6 +10,10 @@ Official server symbols:
   netherrack `87` or cobble `4` cells are the crater. Either observation
   freezes the hit. Lava `10`/`11` is not a fireball hit.
 
+The cavern scan is restricted to the frozen support chunk `2,-1`. This makes
+the existing support coordinate independent of loaded-chunk iteration order;
+the hit trace and signature remain unchanged.
+
 This map does not re-qualify M410 spawn-only type `63`, M411 pigman pork
 `320`, TNT strength `4`, creeper strength `3`, or Nether-bed strength `5`.
 

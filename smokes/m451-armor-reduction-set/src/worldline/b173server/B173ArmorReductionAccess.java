@@ -71,11 +71,10 @@ public final class B173ArmorReductionAccess {
         throw new IllegalStateException("nearby zombie type 54 absent");
     }
 
-    public static RemoteIncomingHit absorb(B173WireClient actor, int entity, double[] at, boolean poke) {
+    public static RemoteIncomingHit absorb(B173WireClient actor, int entity, double[] at) {
         int min = 1;
         if (actor.health() < 20) heal(actor);
         approach(actor, at[0], at[1] + 1.0D, at[2] - 1.5D, 2.5D);
-        if (poke) poke(actor, entity);
         for (int attempt = 0; attempt < 8; attempt++) {
             if (actor.health() < 20) heal(actor);
             if (actor.health() != 20) continue;
@@ -93,11 +92,6 @@ public final class B173ArmorReductionAccess {
             heal(actor);
         }
         throw new IllegalStateException("zombie Packet8 melee absent health=" + actor.health());
-    }
-
-    private static void poke(B173WireClient actor, int entity) {
-        int sword = hotbar(actor, 276); require(sword >= 36, "diamond sword 276 absent");
-        actor.selectHeldSlot(sword - 36); actor.attackMob(entity); actor.sustainTicks(5);
     }
 
     public static void heal(B173WireClient actor) {
@@ -131,6 +125,7 @@ public final class B173ArmorReductionAccess {
             double scale = Math.min(1D, 9.0D / dist);
             actor.moveAndObserve(dx * scale, dy * scale, dz * scale, 2);
         }
+        throw new IllegalStateException("movement cap missed armor-reduction target");
     }
 
     private static int hotbar(B173WireClient actor, int id) {
