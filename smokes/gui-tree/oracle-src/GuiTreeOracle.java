@@ -49,11 +49,11 @@ public final class GuiTreeOracle {
     tick(client);
     require(client.r == null && !Display.isCreated(), "oracle close failed");
     record(trace, "inventory_closed", client);
-    client.a(new oo(player.i, world, 0, 64, 0));
+    client.a(new oo(player.c, world, 0, 64, 0));
     require(client.r instanceof oo && ((id) client.r).j.e.size() == 46,
         "oracle workbench tree missing");
     record(trace, "workbench", client);
-    client.a((gs) null);
+    client.a((da) null);
     require(client.r == null, "oracle workbench close failed");
     record(trace, "workbench_closed", client);
     client.J = false;
