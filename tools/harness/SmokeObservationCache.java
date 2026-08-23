@@ -32,6 +32,7 @@ final class SmokeObservationCache {
     Observation restore(SmokeDiscovery.Entry smoke, String fingerprint) throws Exception {
         Path proof = proof(smoke.id, fingerprint), evidence = evidence(smoke.id, fingerprint);
         if (!valid(smoke.id, fingerprint, proof, evidence)) return null;
+        CacheUsage.touch(proof);
         Files.createDirectories(logs);
         Files.copy(evidence, logs.resolve(smoke.id + ".log"), StandardCopyOption.REPLACE_EXISTING);
         return new Observation(Long.parseLong(load(proof).getProperty("duration.ms")));
@@ -42,7 +43,7 @@ final class SmokeObservationCache {
         Path log = logs.resolve(smoke.id + ".log");
         require(Files.isRegularFile(log), "missing runtime observation for " + smoke.id);
         Path proof = proof(smoke.id, fingerprint), evidence = evidence(smoke.id, fingerprint);
-        if (valid(smoke.id, fingerprint, proof, evidence)) return;
+        if (valid(smoke.id, fingerprint, proof, evidence)) { CacheUsage.touch(proof); return; }
         Files.createDirectories(proof.getParent()); atomicCopy(log, evidence);
         Properties values = new Properties();
         values.setProperty("schema", "1"); values.setProperty("status", "observed");
@@ -51,6 +52,7 @@ final class SmokeObservationCache {
         values.setProperty("duration.ms", Long.toString(duration));
         values.setProperty("evidence.sha256", digest(evidence));
         atomicStore(proof, values, "Worldline immutable runtime observation");
+        CacheUsage.touch(proof);
     }
 
     private static boolean valid(String id, String fingerprint, Path proof, Path evidence)

@@ -50,11 +50,11 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 
 | ID | Status | Deliverable | Completion evidence |
 | --- | --- | --- | --- |
-| CACHE-01 | QUEUED | Separate behavioral identity from execution-lane identity and promote portable pins safely. | Headless Windows/Linux differential evidence defines portable lanes; GUI/platform-sensitive proofs remain lane-bound. |
-| CACHE-02 | QUEUED | Publish the first real smoke schedule aggregate. | Nightly observations populate versioned duration/failure/retry history; `schedule.properties` no longer falls back to an empty schema. |
-| CACHE-03 | QUEUED | Add unified bounded GC for all shared caches. | Modules, tests, runners, receipts, and observations share age/usage/size policy and doctor reporting. |
-| CACHE-04 | QUEUED | Normalize portable text as Unicode NFC. | Cross-platform fingerprint tests cover canonically equivalent Unicode plus CRLF/LF paths. |
-| CACHE-05 | QUEUED | Decompose `RepositoryVerify` before further growth. | Cohesive verification stages live in bounded files and the original behavior remains fully covered. |
+| CACHE-01 | ACTIVE | Separate behavioral identity from execution-lane identity and promote portable pins safely. | The exclusive differential recorder and fail-closed seal are implemented; one clean Windows/Linux official headless comparison remains before the identity switch. |
+| CACHE-02 | DONE | Publish the first real smoke schedule aggregate. | Seven retained runtime histories populate duration/failure fields, their source hashes form a non-empty ratchet, schema-1 local observations upgrade structurally, and the Gate rejects unknown or regressed rows. |
+| CACHE-03 | DONE | Add unified bounded GC for all shared caches. | Modules, tests, runners, receipts, observations and verification caches share one 20 GiB/30-day policy, digest usage markers, locks, doctor/GC aliases and self-tests; the doctor reports 3,230 non-module entries across eight families. |
+| CACHE-04 | DONE | Normalize portable text as Unicode NFC. | Strict UTF-8 text normalizes LF and NFC while binary stays byte-exact; cross-platform tests cover CRLF and decomposed/composed Unicode, and the versioned migration transports all 525 proofs. |
+| CACHE-05 | DONE | Decompose `RepositoryVerify` before further growth. | Module configuration and source policy now live in bounded cohesive classes, `RepositoryVerify` fell below its former ceiling, and the canonical Gate covers the unchanged stage flow. |
 
 ## Product, mappings, coverage, and external TestKit
 

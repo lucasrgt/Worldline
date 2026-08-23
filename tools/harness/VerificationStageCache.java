@@ -35,11 +35,13 @@ final class VerificationStageCache {
         String fingerprint = fingerprint(stage, inputs);
         Path proof = objects.resolve(stage).resolve(fingerprint + ".properties");
         if (valid(proof, fingerprint)) {
+            CacheUsage.touch(proof);
             if (countMetrics) restoredStages++;
             System.out.println("  verification stage restored: " + stage);
             return;
         }
-        action.run(); store(proof, stage, fingerprint); if (countMetrics) executedStages++;
+        action.run(); store(proof, stage, fingerprint); CacheUsage.touch(proof);
+        if (countMetrics) executedStages++;
     }
 
     static Metrics metrics() { return new Metrics(restoredStages, executedStages); }

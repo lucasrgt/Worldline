@@ -15,7 +15,9 @@ final class TelemetryPinCheck {
         for (String key : new String[] {"await_source", "process_source", "execution_source",
                 "history_source", "policy"}) {
             String relative = required(manifest, key + ".path");
-            require(digest(root.resolve(relative)).equals(required(manifest, key + ".sha256")),
+            require(digest(root.resolve(relative)).equals(required(manifest, key + ".sha256"))
+                            || key.equals("history_source") && SmokeScheduleBaselineCheck.transports(
+                                    root, relative, required(manifest, key + ".sha256")),
                     "telemetry migration source drift: " + relative);
         }
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =

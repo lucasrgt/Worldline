@@ -7,10 +7,12 @@ final class HarnessFeatureSelfTest {
         ChangelogCheck.selfTest();
         ReadmeStatus.selfTest();
         SmokeScheduleHistory.selfTest();
+        SmokeScheduleBaselineCheck.execute(java.nio.file.Path.of("").toAbsolutePath().normalize());
         SmokeStatementBudgetTest.execute();
         AeroSceneBudgetTest.execute();
         AeroLogRowTest.execute();
         ModuleCacheMaintenance.main(new String[] {"--self-test"});
+        SharedCacheMaintenance.main(new String[] {"--self-test"});
         VerificationStageCache.selfTest();
     }
 }

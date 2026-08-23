@@ -1,5 +1,5 @@
 schema=1
 id=m424-furnace-cart-motion-set
-fingerprint=6fa66744edf4e678883358240b1adaa608139166b656c10d84c32f7ae476e810
+fingerprint=cfe9f0245570c6ce45248966c627f9a4c456f24cd2fca0cb72dc01fb2b71e190
 observation.sha256=536398b8e8c64ca3dc8e527842ae556bf4175363fc0b8e554d2ba0ec52811b1b
 source=refactor-equivalent

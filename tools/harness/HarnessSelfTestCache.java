@@ -32,6 +32,7 @@ final class HarnessSelfTestCache {
         boolean reuse = !"off".equalsIgnoreCase(
                 System.getenv().getOrDefault("WORLDLINE_SELF_TEST_CACHE", "on"));
         if (reuse && valid(proof, evidence, fingerprint)) {
+            CacheUsage.touch(proof);
             System.out.println("Gate self-test restored for harness " + fingerprint.substring(0, 12));
             return;
         }
@@ -47,6 +48,7 @@ final class HarnessSelfTestCache {
         values.setProperty("executed.at", Instant.now().toString());
         values.setProperty("evidence.sha256", digest(evidence));
         atomicStore(proof, values);
+        CacheUsage.touch(proof);
     }
 
     private String fingerprint() throws Exception {

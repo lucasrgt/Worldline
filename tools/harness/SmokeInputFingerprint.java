@@ -220,7 +220,7 @@ final class SmokeInputFingerprint {
         if (Files.isRegularFile(path)) {
             require(!path.startsWith(root) || tracked.contains(path),
                     "untracked smoke input: " + root.relativize(path));
-            digest.update(portableBytes(Files.readAllBytes(path)));
+            digest.update(PortableText.normalize(Files.readAllBytes(path)));
         } else {
             List<Path> files = tracked.stream().filter(item -> item.startsWith(path))
                     .filter(Files::isRegularFile).sorted(Comparator.comparing(
@@ -228,25 +228,10 @@ final class SmokeInputFingerprint {
             require(!files.isEmpty(), "smoke input has no tracked files: " + root.relativize(path));
             for (Path file : files) {
                 update(digest, path.relativize(file).toString().replace('\\', '/'));
-                digest.update(portableBytes(Files.readAllBytes(file)));
+                digest.update(PortableText.normalize(Files.readAllBytes(file)));
             }
         }
         String value = HexFormat.of().formatHex(digest.digest()); pathDigests.put(path, value); return value;
-    }
-
-    private static byte[] portableBytes(byte[] input) {
-        int pairs = 0;
-        for (int index = 0; index < input.length; index++) {
-            if (input[index] == 0) return input;
-            if (input[index] == '\r' && index + 1 < input.length && input[index + 1] == '\n') pairs++;
-        }
-        if (pairs == 0) return input;
-        byte[] result = new byte[input.length - pairs]; int target = 0;
-        for (int index = 0; index < input.length; index++) {
-            if (input[index] == '\r' && index + 1 < input.length && input[index + 1] == '\n') continue;
-            result[target++] = input[index];
-        }
-        return result;
     }
 
     private static List<String> list(String raw) {

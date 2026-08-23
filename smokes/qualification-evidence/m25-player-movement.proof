@@ -1,5 +1,5 @@
 schema=1
 id=m25-player-movement
-fingerprint=78dfc44ca80df55ec55499bc036cac26f5518f77a97ee7540b66f30c7a95c51b
+fingerprint=8392d796aa4b1bd45b03f9d767f7c561a7b95e79a036d9f947e9342445ea8d56
 observation.sha256=d4357599a9e5553dbd796c36afb259447a7dbeb86f262400aa08fe4d4499f06d
 source=refactor-equivalent

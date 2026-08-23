@@ -1,21 +1,16 @@
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /** Repository verification engine entered through Gate. */
 final class RepositoryVerify {
     private final Path root = Paths.get("").toAbsolutePath().normalize();
     private final Path build = root.resolve(".worldline/build");
-    private final Properties config = new Properties();
+    private final RepositoryConfiguration config = new RepositoryConfiguration(root);
     private final boolean requireLocalArtifacts;
     private final boolean runSmoke, pinnedSmoke;
     private final VerifyReport report;
@@ -42,6 +37,12 @@ final class RepositoryVerify {
             try { PooledSmokeCheck.execute(arguments[1]); }
             catch (Exception error) {
                 System.err.println("pooled smoke failed: " + error.getMessage()); System.exit(1); }
+            return;
+        }
+        if (arguments.length == 2 && "--lane-differential".equals(arguments[0])) {
+            try { LaneDifferential.execute(arguments[1]); }
+            catch (Exception error) {
+                System.err.println("lane differential failed: " + error.getMessage()); System.exit(1); }
             return;
         }
         if (Arrays.equals(arguments, new String[] {"--smoke-plan"})) {
@@ -128,7 +129,7 @@ final class RepositoryVerify {
         System.out.println("Worldline repository verification");
         VerificationStageCache stages = new VerificationStageCache(root);
         RepositoryStageInputs inputs = new RepositoryStageInputs(root);
-        report.step("configuration", this::loadConfiguration);
+        report.step("configuration", config::load);
         report.step("gate-self-test", () -> new HarnessSelfTestCache(root).execute());
         report.step("smoke-discovery", () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "SmokeDiscoveryCheck")));
@@ -159,20 +160,9 @@ final class RepositoryVerify {
             run(Arrays.asList("java", "tools/toolchains/Bootstrap.java", "retromcp"));
         }
         report.step("runtime-inputs", this::verifyRuntimeInputs);
-        List<String> modules = values("modules");
-        validateModuleOrder(modules);
-        report.step("source-policy", () -> stages.execute("source-policy", inputs.sourcePolicy(), () -> {
-            enforceBudget("product", productionRoots(modules));
-            enforceBudget("harness", VerificationRoots.read(root));
-            enforceBudget("adapter", Collections.singletonList(root.resolve("adapters")));
-            DataDrivenCycleCheck.execute(root); CompositeCycleCheck.execute(root);
-            TelemetryPinCheck.execute(root);
-            SchemaPinCheck.execute(root); SmokeDescriptorSchemaCheck.execute(root);
-            FormattingPinCheck.execute(root); SharedHelperPinCheck.execute(root);
-            BehaviorMapSchemaCheck.execute(root);
-            RetryMigrationCheck.execute(root);
-            FixedWaitMigrationCheck.execute(root); new SourceQualityCheck(root).execute();
-        }));
+        List<String> modules = config.modules();
+        report.step("source-policy", () -> stages.execute("source-policy", inputs.sourcePolicy(),
+                () -> new RepositorySourcePolicy(root, config, modules).execute()));
         report.step("runtime-fabric-self-test", () -> new RuntimeFabricCheck(root).execute());
         recreateBuildDirectory();
         report.step("integration-tools", () -> stages.execute("integration-tools", inputs.integration(), () -> {
@@ -180,9 +170,9 @@ final class RepositoryVerify {
         }));
         report.step("smoke-runners", () -> new SmokeRunnerBuild(root, build).compile());
         List<Path> outputs = report.value("modules",
-                () -> new ModuleBuild(root, build, config, modules).compileAll());
+                () -> new ModuleBuild(root, build, config.values(), modules).compileAll());
         report.step("portable-adapters", () -> stages.execute("portable-adapters", inputs.adapters(), () -> {
-            new PortableAdapterCheck(root, build, required("java.release")).execute();
+            new PortableAdapterCheck(root, build, config.required("java.release")).execute();
             run(Arrays.asList("java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"),
                     "ForeignUiContractCheck"));
         }));
@@ -196,7 +186,7 @@ final class RepositoryVerify {
             }
             System.out.println("  milestone Atlas + TestKit surfaces agree with descriptors");
         }));
-        report.step("tests", () -> new TestBuild(root, build, config, modules, outputs).compileAndRun());
+        report.step("tests", () -> new TestBuild(root, build, config.values(), modules, outputs).compileAndRun());
         if (runSmoke) report.step("smokes", this::runSmokeSuite);
     }
 
@@ -213,13 +203,6 @@ final class RepositoryVerify {
         run(command);
     }
 
-    private void loadConfiguration() throws IOException {
-        Path path = root.resolve("harness.properties");
-        try (java.io.Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-            config.load(reader);
-        }
-    }
-
     private void verifyRuntimeInputs() throws Exception {
         List<String> command = new ArrayList<>(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "RuntimeCheck"));
@@ -229,72 +212,6 @@ final class RepositoryVerify {
         run(command);
     }
 
-    private List<String> values(String key) {
-        String raw = required(key).trim();
-        if (raw.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return Arrays.stream(raw.split(","))
-                .map(String::trim)
-                .filter(value -> !value.isEmpty())
-                .collect(Collectors.toList());
-    }
-
-    private String required(String key) {
-        String value = config.getProperty(key);
-        if (value == null) {
-            throw new IllegalStateException("missing harness property: " + key);
-        }
-        return value;
-    }
-
-    private void validateModuleOrder(List<String> modules) {
-        if (modules.isEmpty()) {
-            throw new IllegalStateException("at least one module is required");
-        }
-        List<String> seen = new ArrayList<>();
-        for (String module : modules) {
-            Path main = moduleRoot(module).resolve("src/main/java");
-            if (!Files.isDirectory(main)) {
-                throw new IllegalStateException("missing production source root: " + relative(main));
-            }
-            for (String dependency : values("module." + module + ".dependencies")) {
-                if (!seen.contains(dependency)) {
-                    throw new IllegalStateException(
-                            "module " + module + " depends on undeclared, unknown, or later module " + dependency);
-                }
-            }
-            seen.add(module);
-        }
-    }
-
-    private List<Path> productionRoots(List<String> modules) {
-        return modules.stream()
-                .map(module -> moduleRoot(module).resolve("src/main/java"))
-                .collect(Collectors.toList());
-    }
-
-    private Path moduleRoot(String module) {
-        return root.resolve("modules").resolve(module);
-    }
-
-    private void enforceBudget(String name, List<Path> roots) throws Exception {
-        List<String> command = new ArrayList<>();
-        command.add("tokei");
-        roots.forEach(path -> command.add(path.toString()));
-        command.addAll(Arrays.asList("--output", "json"));
-        TokeiReport java = TokeiReport.required(capture(command), "Java");
-        long total = java.code();
-        long maxFile = Long.parseLong(required(name + ".max.file"));
-        for (TokeiReport.FileReport file : java.files()) {
-            if (file.code() > maxFile) {
-                throw new IllegalStateException(
-                        name + " file budget exceeded: " + file.name() + " has "
-                                + file.code() + "/" + maxFile);
-            }
-        }
-        System.out.println("  " + name + " lines: " + total + " (max file " + maxFile + ")");
-    }
 
     private void recreateBuildDirectory() throws IOException {
         if (Files.exists(build)) {
@@ -317,7 +234,4 @@ final class RepositoryVerify {
         return ProcessCapture.require(root, command, ProcessCapture.environmentTimeout());
     }
 
-    private String relative(Path path) {
-        return root.relativize(path).toString();
-    }
 }

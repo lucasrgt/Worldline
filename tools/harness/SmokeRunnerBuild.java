@@ -57,13 +57,13 @@ final class SmokeRunnerBuild {
         Path family = cache.resolve(runner);
         Path entry = family.resolve(digest);
         Path complete = entry.resolve(".complete");
-        if (Files.isRegularFile(complete)) return true;
+        if (Files.isRegularFile(complete)) { CacheUsage.touch(entry); return true; }
         Files.createDirectories(family);
         Path lockPath = family.resolve(digest + ".lock");
         try (FileChannel channel = FileChannel.open(lockPath, StandardOpenOption.CREATE,
                 StandardOpenOption.WRITE); FileLock lock = channel.lock()) {
             if (!lock.isValid()) throw new IllegalStateException("invalid runner cache lock: " + runner);
-            if (Files.isRegularFile(complete)) return true;
+            if (Files.isRegularFile(complete)) { CacheUsage.touch(entry); return true; }
             Path temporary = family.resolve(digest + ".tmp-" + ProcessHandle.current().pid()
                     + "-" + Thread.currentThread().threadId());
             delete(temporary);
@@ -71,6 +71,7 @@ final class SmokeRunnerBuild {
             compile(source, runner, digest, temporary);
             delete(entry);
             Files.move(temporary, entry);
+            CacheUsage.touch(entry);
             return false;
         }
     }

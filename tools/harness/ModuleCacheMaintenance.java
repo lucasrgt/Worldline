@@ -31,10 +31,11 @@ public final class ModuleCacheMaintenance {
         }
     }
 
-    private void execute(boolean delete) throws Exception {
+    void execute(boolean delete) throws Exception {
         Files.createDirectories(cache);
         Set<Path> references = references();
-        Result result = maintain(cache, references, maximumBytes(), minimumAgeMillis(),
+        CachePolicy policy = new CachePolicy(root);
+        Result result = maintain(cache, references, policy.maximumBytes(), policy.minimumAgeMillis(),
                 System.currentTimeMillis(), delete);
         System.out.println("module-cache.entries=" + result.entries + ";bytes=" + result.bytes
                 + ";referenced=" + result.referenced + ";removed=" + result.removed);
@@ -114,23 +115,7 @@ public final class ModuleCacheMaintenance {
         catch (java.nio.channels.OverlappingFileLockException ignored) { return null; }
     }
 
-    private static long maximumBytes() {
-        return environmentLong("WORLDLINE_MODULE_CACHE_MAX_GIB", 10L, 1L, 1024L) << 30;
-    }
-
-    private static long minimumAgeMillis() {
-        return TimeUnit.DAYS.toMillis(environmentLong("WORLDLINE_MODULE_CACHE_MAX_AGE_DAYS",
-                30L, 1L, 3650L));
-    }
-
-    private static long environmentLong(String name, long fallback, long minimum, long maximum) {
-        String raw = System.getenv(name); long value = fallback;
-        if (raw != null && !raw.isBlank()) try { value = Long.parseLong(raw); }
-        catch (NumberFormatException error) { throw new IllegalArgumentException(name + " must be an integer"); }
-        require(value >= minimum && value <= maximum, name + " is outside its safe range"); return value;
-    }
-
-    private static Path cacheRoot() {
+    static Path cacheRoot() {
         String control = System.getenv("WORLDLINE_GATE_CONTROL");
         if (control != null && !control.isBlank())
             return Path.of(control).toAbsolutePath().normalize().resolve("cache");

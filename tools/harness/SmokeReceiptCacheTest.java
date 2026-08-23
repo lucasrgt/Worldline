@@ -53,6 +53,14 @@ public final class SmokeReceiptCacheTest {
         write(root.resolve("smokes/m1-one/input.txt"), "one\r\n");
         require(one.equals(new SmokeInputFingerprint(root).compute(entries.get(0))),
                 "CRLF checkout invalidated a text fingerprint");
+        write(root.resolve("smokes/m1-one/input.txt"), "o\u006e\u0065\n");
+        require(one.equals(new SmokeInputFingerprint(root).compute(entries.get(0))),
+                "equivalent UTF-8 retained a distinct fingerprint");
+        write(root.resolve("smokes/m1-one/input.txt"), "on\u0065\u0301\n");
+        String decomposed = new SmokeInputFingerprint(root).compute(entries.get(0));
+        write(root.resolve("smokes/m1-one/input.txt"), "on\u00e9\n");
+        require(decomposed.equals(new SmokeInputFingerprint(root).compute(entries.get(0))),
+                "Unicode NFC checkout invalidated a text fingerprint");
         write(root.resolve("smokes/m1-one/input.txt"), "changed\n");
         SmokeInputFingerprint changed = new SmokeInputFingerprint(root);
         require(!one.equals(changed.compute(entries.get(0))), "changed smoke retained its fingerprint");

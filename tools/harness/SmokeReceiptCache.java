@@ -41,6 +41,7 @@ final class SmokeReceiptCache {
         if (!reuse) return false;
         Path proof = proof(smoke.id, fingerprint), evidence = evidence(smoke.id, fingerprint);
         if (validProof(smoke.id, fingerprint, proof, evidence)) {
+            CacheUsage.touch(proof);
             Files.createDirectories(logs); Files.copy(evidence, logs.resolve(smoke.id + ".log"),
                     StandardCopyOption.REPLACE_EXISTING);
             record(smoke.id, fingerprint, digest(proof), "reused"); return true;
@@ -65,6 +66,7 @@ final class SmokeReceiptCache {
             values.setProperty("evidence.sha256", digest(evidence));
             atomicStore(proof, values, "Worldline immutable smoke PASS proof");
         }
+        CacheUsage.touch(proof);
         record(smoke.id, fingerprint, digest(proof), "executed");
     }
 

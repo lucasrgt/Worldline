@@ -21,6 +21,7 @@ final class RuntimeFabricCheck {
     void execute() throws Exception {
         String digest = digest(); Path proof = cache().resolve(digest + ".properties");
         if (valid(proof, digest)) {
+            CacheUsage.touch(proof);
             System.out.println("  Runtime Fabric self-test restored for " + digest.substring(0, 12));
             return;
         }
@@ -30,6 +31,7 @@ final class RuntimeFabricCheck {
             for (String type : List.of("ContainerSmokePool", "HostSmokePool", "RuntimeFabric"))
                 ProcessCapture.require(root, List.of(java(), "-cp", build.toString(), type, "--self-test"), 120);
             store(proof, digest);
+            CacheUsage.touch(proof);
             System.out.println("  Runtime Fabric: container, host and backend admission self-tests passed");
         } finally { SafeTreeDelete.delete(build); }
     }

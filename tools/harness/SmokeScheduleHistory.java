@@ -96,7 +96,7 @@ final class SmokeScheduleHistory {
         if (Files.isDirectory(observations)) try (var paths = Files.list(observations)) {
             for (Path path : paths.filter(item -> item.toString().endsWith(".properties")).sorted().toList()) {
                 Properties local = load(path);
-                require("2".equals(local.getProperty("schema")),
+                require(Set.of("1", "2").contains(local.getProperty("schema")),
                         "invalid observation schema: " + path.getFileName());
                 String id = local.getProperty("id", "");
                 enforceReviewPolicy(id, local);
@@ -221,7 +221,8 @@ final class SmokeScheduleHistory {
     }
     private static String key(String id, String field) { return "smoke." + id + "." + field; }
     private static String id(String key) {
-        for (String field : FIELDS) {
+        for (String field : FIELDS.stream().sorted(java.util.Comparator
+                .comparingInt(String::length).reversed()).toList()) {
             String suffix = "." + field;
             if (key.endsWith(suffix) && key.length() > 6 + suffix.length())
                 return key.substring(6, key.length() - suffix.length());

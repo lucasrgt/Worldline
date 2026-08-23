@@ -51,7 +51,7 @@ final class TestReceiptCache {
                 && suite.equals(values.getProperty("suite"))
                 && fingerprint.equals(values.getProperty("fingerprint"))
                 && digest(evidence).equals(values.getProperty("evidence.sha256"));
-        if (valid) restored++;
+        if (valid) { restored++; CacheUsage.touch(proof); }
         return valid;
     }
 
@@ -86,6 +86,7 @@ final class TestReceiptCache {
         values.setProperty("executed.at", Instant.now().toString());
         values.setProperty("evidence.sha256", digest(evidence));
         atomicStore(proof, values);
+        CacheUsage.touch(proof);
         executed++;
     }
 

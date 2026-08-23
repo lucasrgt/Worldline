@@ -241,16 +241,18 @@ longer accepted as qualification input; a missing or corrupt envelope fails clos
 new execution evidence.
 
 The cross-worktree module cache is immutable. A compiler may publish a new digest directory but
-may never replace an existing one. Usage timestamps live beside entries so artifact bytes remain
-unchanged. Inspect or bound the shared cache without breaking active worktree junctions with:
+may never replace an existing one. All immutable cache families use the same versioned 20 GiB/
+30-day policy and digest-adjacent usage markers. Inspect or bound modules, tests, runners,
+receipts, observations and verification caches without breaking active worktree junctions with:
 
 ```text
-java tools/harness/Gate.java --module-cache-doctor
-java tools/harness/Gate.java --module-cache-gc
+java tools/harness/Gate.java --cache-doctor
+java tools/harness/Gate.java --cache-gc
 ```
 
-GC takes the same per-digest publication lock, rescans every registered worktree link, and removes
-only unreferenced entries selected by the age or size policy.
+The legacy `--module-cache-*` names are aliases for the unified commands. GC takes each digest's
+publication lock, rescans every registered module worktree link, and removes only unreferenced
+entries selected by the shared age or size policy.
 
 Repositories whose reviewed full-suite runs predate both the cache and retained reports may
 explicitly accept the frozen descriptor baseline once. This command requires a clean committed
