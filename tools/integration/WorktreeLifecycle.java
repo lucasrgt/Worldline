@@ -3,6 +3,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -33,6 +34,8 @@ public final class WorktreeLifecycle {
             triage(base);
         } else if ("archive".equals(arguments[0])) {
             archive(arguments);
+        } else if ("--self-test".equals(arguments[0])) {
+            require(arguments.length == 1, usage()); selfTestCleanup();
         } else if ("prune".equals(arguments[0])) {
             require(arguments.length == 1, usage());
             System.out.print(git(root, "worktree", "prune", "--dry-run", "--verbose"));
@@ -123,9 +126,47 @@ public final class WorktreeLifecycle {
         require(!Files.exists(bundle), "bundle already exists: " + bundle);
         git(root, "bundle", "create", bundle.toString(), worktree.branch);
         git(root, "bundle", "verify", bundle.toString());
+        Cleanup cleanup = prunePrivate(selected);
         git(root, "worktree", "remove", selected.toString());
         System.out.println("archived worktree " + selected + " to " + bundle);
         System.out.println("branch retained: " + worktree.branch);
+        System.out.println("private cleanup: files=" + cleanup.files + ", bytes=" + cleanup.bytes
+                + "; not recoverable from the tracked-source bundle");
+    }
+
+    private Cleanup prunePrivate(Path worktree) throws Exception {
+        long files = 0L, bytes = 0L;
+        for (String name : List.of(".worldline", "tmp", "output")) {
+            Path target = worktree.resolve(name).toAbsolutePath().normalize();
+            require(target.startsWith(worktree) && !target.equals(worktree), "unsafe private cleanup path");
+            if (!Files.exists(target)) continue;
+            try (var paths = Files.walk(target)) {
+                List<Path> entries = paths.sorted(Comparator.reverseOrder()).toList();
+                for (Path entry : entries) {
+                    if (Files.isRegularFile(entry)) { files++; bytes += Files.size(entry); }
+                    Files.deleteIfExists(entry);
+                }
+            }
+        }
+        return new Cleanup(files, bytes);
+    }
+
+    private void selfTestCleanup() throws Exception {
+        Path parent = root.resolve(".worldline"); Files.createDirectories(parent);
+        Path target = Files.createTempDirectory(parent, "lifecycle-cleanup-");
+        Path retained = target.resolve("retained.txt"); Files.writeString(retained, "retained");
+        try {
+            for (String name : List.of(".worldline", "tmp", "output")) {
+                Path file = target.resolve(name).resolve("private.bin");
+                Files.createDirectories(file.getParent()); Files.write(file, new byte[] {1, 2, 3});
+            }
+            Cleanup cleanup = prunePrivate(target);
+            require(cleanup.files == 3L && cleanup.bytes == 9L && Files.isRegularFile(retained),
+                    "private cleanup scope drifted");
+            System.out.println("worktree lifecycle cleanup self-test passed");
+        } finally {
+            Files.deleteIfExists(retained); Files.deleteIfExists(target);
+        }
     }
 
     private List<Worktree> discover() throws Exception {
@@ -196,4 +237,5 @@ public final class WorktreeLifecycle {
 
     private record Worktree(Path path, String head, String branch) {}
     private record State(boolean exists, boolean dirty, boolean integrated) {}
+    private record Cleanup(long files, long bytes) {}
 }

@@ -59,6 +59,9 @@ final class IntegrationToolsCheck {
             require(triage == 0 && Files.readString(repository.resolve(
                     ".worldline/reports/branches.json")).contains("\"one-unique\""),
                     "branch triage report was not generated");
+            require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
+                    "WorktreeLifecycle", "--self-test"), 60) == 0,
+                    "worktree private cleanup self-test failed");
         } finally { delete(repository); }
     }
 

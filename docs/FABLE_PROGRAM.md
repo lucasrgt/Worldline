@@ -103,10 +103,10 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 
 | ID | Status | Deliverable | Evidence or completion condition |
 | --- | --- | --- | --- |
-| WIN-01 | QUEUED | Add a safe repository maintenance setup/doctor. | It configures maintenance, commit-graph, fsmonitor when supported, and untracked cache per clone. |
-| WIN-02 | EXTERNAL | Measure and optionally configure Defender exclusions. | Repository tooling reports measured impact and prints an explicit administrator command; it never weakens security silently. |
-| WIN-03 | QUEUED | Enable and verify long-path support. | Per-repository `core.longpaths` is set; OS capability is diagnosed with an exact administrator action if absent. |
-| WIN-04 | QUEUED | Prune stale private build/output trees during lifecycle archival. | Cleanup is scoped under validated archived worktrees and reports recoverability. |
+| WIN-01 | DONE | Add a safe repository maintenance setup/doctor. | `RepositoryMaintenance setup` configures maintenance, commit-graph, fsmonitor when supported, and untracked cache per clone. |
+| WIN-02 | EXTERNAL | Measure and optionally configure Defender exclusions. | The passing doctor reports a current-path probe and exact optional administrator command; it never weakens security silently. |
+| WIN-03 | DONE | Enable and verify long-path support. | Setup enables `core.longpaths`; the doctor verifies the OS registry capability and prints the exact administrator action if absent. |
+| WIN-04 | DONE | Prune stale private build/output trees during lifecycle archival. | Archive cleanup is confined to `.worldline`, `tmp`, and `output` under the validated worktree and reports unrecoverable bytes. |
 
 ## Program exit gate
 

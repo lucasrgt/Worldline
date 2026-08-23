@@ -263,6 +263,21 @@ java tools/integration/WorktreeLifecycle.java archive \
 
 Archival refuses the current, dirty, detached, unintegrated, or unregistered worktree. It
 creates and verifies a Git bundle before removing the worktree, and retains the branch.
+After bundle verification it removes only `.worldline`, `tmp`, and `output` beneath the exact
+validated worktree, then reports the private file/byte count and that those ignored artifacts are
+not recoverable from the tracked-source bundle.
+
+Configure and audit clone-local Git performance and Windows path support with:
+
+```text
+java tools/integration/RepositoryMaintenance.java setup
+java tools/integration/RepositoryMaintenance.java doctor
+```
+
+Setup enables the untracked cache and long paths, starts fsmonitor when supported, registers Git
+maintenance, and writes a reachable changed-path commit graph. The doctor verifies those surfaces.
+On Windows it also records a bounded current-path I/O probe and prints an optional administrator
+Defender exclusion command; it never changes security policy itself.
 
 ## CI and promotion
 
