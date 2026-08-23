@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /** Computes the behavior-input identity of one smoke without binding it to a Git commit. */
 final class SmokeInputFingerprint {
@@ -29,12 +28,14 @@ final class SmokeInputFingerprint {
             "artifacts", "mappings", "patches", "tools/toolchains");
 
     private final Path root;
+    private final Set<Path> tracked;
     private final Properties modules = new Properties();
     private final Map<Path, String> pathDigests = new HashMap<>();
     private final Map<String, String> moduleDigests = new HashMap<>();
 
     SmokeInputFingerprint(Path root) throws IOException {
         this.root = root.toAbsolutePath().normalize();
+        this.tracked = SmokeTrackedFiles.read(this.root);
         try (java.io.Reader reader = Files.newBufferedReader(
                 this.root.resolve("harness.properties"), StandardCharsets.UTF_8)) {
             modules.load(reader);
@@ -43,7 +44,7 @@ final class SmokeInputFingerprint {
 
     String compute(SmokeDiscovery.Entry smoke) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        update(digest, "worldline-smoke-input-v1");
+        update(digest, "worldline-smoke-input-v2");
         update(digest, smoke.id); update(digest, smoke.runner);
         update(digest, System.getProperty("java.runtime.version", System.getProperty("java.version")));
         update(digest, System.getProperty("os.name")); update(digest, System.getProperty("os.arch"));
@@ -119,10 +120,15 @@ final class SmokeInputFingerprint {
         String cached = pathDigests.get(path); if (cached != null) return cached;
         require(Files.exists(path), "missing smoke input: " + root.relativize(path));
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        if (Files.isRegularFile(path)) digest.update(Files.readAllBytes(path));
-        else try (Stream<Path> paths = Files.walk(path)) {
-            List<Path> files = paths.filter(Files::isRegularFile).sorted(Comparator.comparing(
-                    item -> path.relativize(item).toString())).collect(Collectors.toList());
+        if (Files.isRegularFile(path)) {
+            require(!path.startsWith(root) || tracked.contains(path),
+                    "untracked smoke input: " + root.relativize(path));
+            digest.update(Files.readAllBytes(path));
+        } else {
+            List<Path> files = tracked.stream().filter(item -> item.startsWith(path))
+                    .filter(Files::isRegularFile).sorted(Comparator.comparing(
+                            item -> path.relativize(item).toString())).collect(Collectors.toList());
+            require(!files.isEmpty(), "smoke input has no tracked files: " + root.relativize(path));
             for (Path file : files) {
                 update(digest, path.relativize(file).toString().replace('\\', '/'));
                 digest.update(Files.readAllBytes(file));

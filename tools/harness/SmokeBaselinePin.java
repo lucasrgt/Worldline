@@ -25,11 +25,19 @@ final class SmokeBaselinePin {
         require("0".equals(coverage.getProperty("pending.expected")),
                 "legacy smoke baseline requires pending.expected=0");
         SmokeReceiptCache cache = new SmokeReceiptCache(root);
+        SmokePins previous = new SmokePins(root);
         List<SmokePins.Entry> pins = new ArrayList<>();
         int executed = 0, legacy = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             SmokePins.Entry pin = cache.availablePin(smoke);
             if (pin != null) { pins.add(pin); executed++; continue; }
+            SmokePins.Entry migrated = previous.legacyAlgorithm() ? previous.entry(smoke.id) : null;
+            if (migrated != null) {
+                pins.add(new SmokePins.Entry(smoke.id, cache.fingerprint(smoke),
+                        migrated.evidence(), migrated.source()));
+                if (migrated.source().equals("executed")) executed++; else legacy++;
+                continue;
+            }
             Properties descriptor = load(root.resolve("smokes").resolve(smoke.id)
                     .resolve("smoke.properties"));
             String signature = descriptor.getProperty("expected.signature", "").trim();

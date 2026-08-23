@@ -10,19 +10,32 @@ import java.util.Map;
 
 /** Reads and writes the reviewable, repository-tracked smoke qualification lock. */
 final class SmokePins {
+    private static final String ALGORITHM = "worldline-smoke-input-v2";
+    private static final String LEGACY_ALGORITHM = "worldline-smoke-input-v1";
     private static final String HEADER = "# Worldline smoke qualification lock v2\n"
-            + "schema=2\nalgorithm=worldline-smoke-input-v1\n";
+            + "schema=2\nalgorithm=" + ALGORITHM + "\n";
     private final Path path;
     private final Map<String, Entry> entries;
+    private final String algorithm;
 
     SmokePins(Path root) throws Exception {
-        this.path = root.resolve("smokes/qualification.lock"); this.entries = read(path);
+        this.path = root.resolve("smokes/qualification.lock");
+        List<String> lines = Files.isRegularFile(path)
+                ? Files.readAllLines(path, StandardCharsets.UTF_8) : List.of();
+        this.algorithm = lines.stream().filter(line -> line.startsWith("algorithm="))
+                .map(line -> line.substring(10)).findFirst().orElse(ALGORITHM);
+        require(algorithm.equals(ALGORITHM) || algorithm.equals(LEGACY_ALGORITHM),
+                "invalid smoke qualification lock algorithm");
+        this.entries = read(lines);
     }
 
     Entry match(String id, String fingerprint) {
         Entry entry = entries.get(id);
         return entry != null && entry.fingerprint.equals(fingerprint) ? entry : null;
     }
+
+    Entry entry(String id) { return entries.get(id); }
+    boolean legacyAlgorithm() { return algorithm.equals(LEGACY_ALGORITHM); }
 
     void validateCatalog(List<SmokeDiscovery.Entry> smokes) {
         java.util.Set<String> ids = smokes.stream().map(entry -> entry.id)
@@ -46,19 +59,17 @@ final class SmokePins {
         Files.writeString(path, output.toString(), StandardCharsets.UTF_8);
     }
 
-    private static Map<String, Entry> read(Path path) throws Exception {
+    private static Map<String, Entry> read(List<String> lines) throws Exception {
         Map<String, String> fingerprints = new HashMap<>(), evidence = new HashMap<>();
         Map<String, String> sources = new HashMap<>(), status = new HashMap<>();
-        if (!Files.isRegularFile(path)) return Map.of();
-        List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+        if (lines.isEmpty()) return Map.of();
         boolean legacy = lines.stream().anyMatch("schema=1"::equals);
         require(legacy || lines.stream().anyMatch("schema=2"::equals),
                 "invalid smoke qualification lock schema");
-        require(lines.stream().anyMatch("algorithm=worldline-smoke-input-v1"::equals),
-                "invalid smoke qualification lock algorithm");
         for (String line : lines) {
             if (line.isBlank() || line.startsWith("#") || line.matches("schema=[12]")
-                    || line.equals("algorithm=worldline-smoke-input-v1")) continue;
+                    || line.equals("algorithm=" + ALGORITHM)
+                    || line.equals("algorithm=" + LEGACY_ALGORITHM)) continue;
             int separator = line.indexOf('='); require(separator > 6, "invalid smoke pin row: " + line);
             String key = line.substring(0, separator), value = line.substring(separator + 1);
             require(key.startsWith("smoke."), "unknown smoke pin key: " + key);
