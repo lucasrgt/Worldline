@@ -8,7 +8,7 @@ This file is derived from `SemanticRoles`, smoke descriptors, behavior maps, and
 | Required semantic roles | 279 |
 | Smoke milestones | 570 |
 | Behavior maps including aggregates | 571 |
-| Fable 2 DONE | 35 |
-| Fable 2 ACTIVE | 4 |
+| Fable 2 DONE | 36 |
+| Fable 2 ACTIVE | 3 |
 | Fable 2 QUEUED | 6 |
 | Fable 2 EXTERNAL | 0 |
