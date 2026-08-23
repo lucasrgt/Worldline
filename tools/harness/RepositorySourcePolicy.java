@@ -21,7 +21,7 @@ final class RepositorySourcePolicy {
         SmokeDescriptorSchemaCheck.execute(root); TestKitReleasePinCheck.execute(root);
         FormattingPinCheck.execute(root);
         SharedHelperPinCheck.execute(root); UnicodePinCheck.execute(root); AdapterSplitPinCheck.execute(root);
-        ProviderDiscoveryPinCheck.execute(root);
+        ProviderDiscoveryPinCheck.execute(root); GuiWorkbenchPinCheck.execute(root);
         BehaviorMapSchemaCheck.execute(root); RetryMigrationCheck.execute(root);
         FixedWaitMigrationCheck.execute(root); new SourceQualityCheck(root).execute();
     }

@@ -1,5 +1,5 @@
 schema=1
 id=m136-nether-death-respawn
-fingerprint=022dec20d82dbd8de4d8c8ce9466dbf81bc9cbd7ff514c2c0d8e14907ef6b9a4
+fingerprint=20f4b16b81b6c5e4715e81090caa8603be41244a72fb416a7855b07c138f5179
 observation.sha256=48c243301cfa00388490bde784ac80eb7597256aa539b83f1777b841d77148a1
 source=refactor-equivalent

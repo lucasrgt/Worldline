@@ -17,11 +17,14 @@ final class SharedHelperPinCheck {
         Properties lock = manifest(root); require("1".equals(lock.getProperty("schema")),
                 "invalid shared-helper migration schema");
         int files = integer(lock, "file.count");
+        Properties gui = GuiWorkbenchPinCheck.manifest(root);
         for (int index = 0; index < files; index++) {
             String stem = "file." + index + ".", relative = required(lock, stem + "path");
             require(relative.matches("smokes/.+[.]java")
-                            && digest(root.resolve(relative)).equals(required(lock,
+                            && (digest(root.resolve(relative)).equals(required(lock,
                                     stem + "current_sha256"))
+                            || GuiWorkbenchPinCheck.transportsFile(gui, root, relative,
+                                    required(lock, stem + "current_sha256")))
                             && hash(lock, stem + "prior_sha256"),
                     "shared-helper source drift: " + relative);
         }

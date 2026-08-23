@@ -27,12 +27,21 @@ public final class GameUiSpec {
 
     /** Vanilla player inventory tree already proven by the GUI cycle. */
     public static GameUiSpec inventory() {
+        return vanillaContainer(GameUiNode.INVENTORY, 45);
+    }
+
+    /** Vanilla workbench result, 3x3 matrix, and player inventory tree. */
+    public static GameUiSpec workbench() {
+        return vanillaContainer(GameUiNode.WORKBENCH, 46);
+    }
+
+    private static GameUiSpec vanillaContainer(String screen, int slots) {
         List<GameUiNode> nodes = new ArrayList<GameUiNode>();
-        nodes.add(new GameUiNode(GameUiNode.SCREEN, GameUiNode.INVENTORY, -1, -1, 0));
-        for (int index = 0; index < 45; index++) {
+        nodes.add(new GameUiNode(GameUiNode.SCREEN, screen, -1, -1, 0));
+        for (int index = 0; index < slots; index++) {
             nodes.add(new GameUiNode(GameUiNode.SLOT, Integer.toString(index), index, -1, 0));
         }
-        return new GameUiSpec(GameUiNode.INVENTORY, nodes);
+        return new GameUiSpec(screen, nodes);
     }
 
     /**

@@ -46,8 +46,10 @@ Duplicate names become `input.1`, `input.2`. Machine specs append the same 36
 player slots the Aero container codegen emits (`player.0` .. `player.35`).
 An explicit `Part.name` overrides the default.
 
-Vanilla inventory is the other direction: `GameUiSpec.inventory()` is the tree
-already matched against the official JAR.
+Vanilla containers are the other direction: `GameUiSpec.inventory()` and
+`GameUiSpec.workbench()` are matched against the official JAR. The workbench
+contract covers its result slot, 3x3 matrix, and 36 player slots as one exact
+47-node tree.
 
 ## Intended Aero emit
 
@@ -60,9 +62,9 @@ ui.node("progress", "craft")
 ui.node("energy", "energy")
 ```
 
-A later slice can open a generated `GuiCrusher` and require
-`spec.matchesStructure(runtime.ui().nodes())`. This slice only freezes the
-shared vocabulary and the inventory proof.
+A generated `GuiCrusher` can use the same comparison. The official workbench
+cycle already requires `spec.matchesStructure(runtime.ui().nodes())`; custom
+machine runtime hookup remains a separate adapter concern.
 
 ## Non-claims
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.EnumSet;
 import java.util.Set;
 import net.minecraft.src.GuiContainer;
+import net.minecraft.src.GuiCrafting;
 import net.minecraft.src.GuiInventory;
 import net.minecraft.src.GuiScreen;
 import net.minecraft.src.ItemStack;
@@ -47,6 +48,12 @@ public final class B173Gui implements GameUiInput, GameUiLayout, GameUiVisual {
         backend.client().displayGuiScreen(screen);
     }
 
+    /** Opens the official workbench container at a neutral in-memory coordinate. */
+    public void openWorkbench() {
+        open(new GuiCrafting(backend.client().thePlayer.inventory,
+                backend.client().theWorld, 0, 64, 0));
+    }
+
     public void putMain(int index, int itemId, int count) {
         if (index < 0 || index >= 36) throw new IllegalArgumentException("main slot");
         if (count < 0) throw new IllegalArgumentException("count");
@@ -60,6 +67,7 @@ public final class B173Gui implements GameUiInput, GameUiLayout, GameUiVisual {
         GameUi foreign = B173ForeignUi.bind(screen);
         if (foreign != null) return foreign.screen();
         if (screen instanceof GuiInventory) return GameUiNode.INVENTORY;
+        if (screen instanceof GuiCrafting) return GameUiNode.WORKBENCH;
         throw new IllegalStateException("unsupported screen " + screen.getClass().getSimpleName());
     }
 

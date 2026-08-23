@@ -22,6 +22,7 @@ final class ProviderDiscoveryPinCheck {
         sources(root, lock, "modified", 9, true); sources(root, lock, "added", 12, false);
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
+        Properties gui = GuiWorkbenchPinCheck.manifest(root);
         int carried = 0, discovered = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             discovered++; String current = fingerprints.compute(smoke);
@@ -37,6 +38,14 @@ final class ProviderDiscoveryPinCheck {
                                 && stale.fingerprint().equals(lock.getProperty(stem + "prior_fingerprint"))
                                 && stale.evidence().equals(lock.getProperty(stem + "evidence_sha256")),
                         "runtime-pending provider proof drift: " + smoke.id);
+                continue;
+            }
+            if (GuiWorkbenchPinCheck.isPending(gui, smoke.id)) {
+                carried++; SmokePins.Entry stale = pins.entry(smoke.id); String stem = "smoke." + smoke.id + ".";
+                require(GuiWorkbenchPinCheck.pendingFrom(gui, smoke.id,
+                                lock.getProperty(stem + "current_fingerprint"),
+                                lock.getProperty(stem + "evidence_sha256"), stale),
+                        "successor GUI pending proof drift: " + smoke.id);
                 continue;
             }
             carried++; require(pin != null && carries(lock, smoke.id, pin, current),
@@ -64,14 +73,26 @@ final class ProviderDiscoveryPinCheck {
         return java.util.Arrays.asList(lock.getProperty("pending.smokes", "").split(",")).contains(id);
     }
     static boolean exemptsLegacy(Properties lock, String id) {
-        return isNewSmoke(lock, id) || isPending(lock, id);
+        if (isNewSmoke(lock, id) || isPending(lock, id)) return true;
+        try { return GuiWorkbenchPinCheck.isPending(GuiWorkbenchPinCheck.manifest(
+                Path.of("").toAbsolutePath().normalize()), id); }
+        catch (Exception error) { return false; }
     }
-    static int pendingCount(Properties lock) { return integer(lock, "pending.count"); }
+    static int pendingCount(Properties lock) {
+        try { return integer(lock, "pending.count") + GuiWorkbenchPinCheck.additionalPendingCount(
+                GuiWorkbenchPinCheck.manifest(Path.of("").toAbsolutePath().normalize())); }
+        catch (Exception error) { return integer(lock, "pending.count"); }
+    }
     static boolean carries(Properties lock, String id, SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
-        return hash(lock.getProperty(stem + "prior_fingerprint"))
+        boolean direct = hash(lock.getProperty(stem + "prior_fingerprint"))
                 && current.equals(lock.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"));
+        try { return direct || GuiWorkbenchPinCheck.follows(GuiWorkbenchPinCheck.manifest(
+                Path.of("").toAbsolutePath().normalize()), id,
+                lock.getProperty(stem + "current_fingerprint"),
+                lock.getProperty(stem + "evidence_sha256"), pin, current); }
+        catch (Exception error) { return false; }
     }
     static boolean follows(Properties lock, String id, String prior, String evidence,
             SmokePins.Entry pin, String current) {

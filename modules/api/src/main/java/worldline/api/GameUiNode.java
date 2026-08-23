@@ -7,6 +7,7 @@ import java.util.Map;
 /** Immutable semantic UI node. Item ID -1 means empty or not applicable. */
 public final class GameUiNode {
     public static final String SCREEN = "screen", SLOT = "slot", INVENTORY = "inventory";
+    public static final String WORKBENCH = "workbench";
     public static final String PROGRESS = "progress", ENERGY = "energy", TANK = "tank";
     public static final String SEARCH = "search", SCROLL = "scroll";
     public static final String BUTTON = "button", TEXT_FIELD = "textbox", LABEL = "label";

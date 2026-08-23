@@ -78,7 +78,7 @@ public final class GuiCycle {
     String output = capture(
         Arrays.asList("java", "-Djava.awt.headless=true", "-classpath", classpath(paths), type));
     require(output.replace('\\', '/').contains(source), "wrong Minecraft class source");
-    require(output.contains("WORLDLINE_GUI_API=screen,slot,click"), "GUI API marker missing");
+    require(output.contains("WORLDLINE_GUI_API=screen,slot,click,spec"), "GUI API marker missing");
     return new Outcome(
         line(output, "WORLDLINE_GUI_TRACE="), line(output, "WORLDLINE_GUI_SIGNATURE="));
   }

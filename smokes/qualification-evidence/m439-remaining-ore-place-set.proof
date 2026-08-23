@@ -1,5 +1,5 @@
 schema=1
 id=m439-remaining-ore-place-set
-fingerprint=581e2b279c0f8c084293efa808ff04a88071b2692e766889f43184a4f0b69240
+fingerprint=a22d49da9994ef7b1ec624b91bf18d040036a80573e6df0099753ecb5f8be57e
 observation.sha256=0c58ca403f7064fde875a5257d07193fe9916277c21455b47ac366ab28b828ab
 source=refactor-equivalent

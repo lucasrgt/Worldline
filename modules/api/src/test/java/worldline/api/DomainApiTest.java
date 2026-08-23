@@ -308,6 +308,12 @@ public final class DomainApiTest {
                 || inventory.node(GameUiNode.SLOT, "0").index() != 0) {
             throw new AssertionError("vanilla inventory spec failed");
         }
+        GameUiSpec workbench = GameUiSpec.workbench();
+        if (!GameUiNode.WORKBENCH.equals(workbench.screen()) || workbench.nodes().size() != 47
+                || !workbench.matchesStructure(workbench.nodes())
+                || workbench.node(GameUiNode.SLOT, "45").index() != 45) {
+            throw new AssertionError("vanilla workbench spec failed");
+        }
         java.util.List<GameUiSpec.Part> parts = java.util.Arrays.asList(
                 new GameUiSpec.Part("slot", null, "input"),
                 new GameUiSpec.Part("progress_arrow", null, null),

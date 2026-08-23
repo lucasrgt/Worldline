@@ -34,7 +34,7 @@ public final class GuiTreeOracle {
     client.j = new dn(world, client.p);
     world.r.setSeed(SEED);
     CanonicalStateTrace trace =
-        new CanonicalStateTrace(SEED, "screen", "nodes", "slot0", "count0", "slot44", "count44");
+        new CanonicalStateTrace(SEED, "screen", "nodes", "slot0", "count0", "slotLast", "countLast");
     record
     (trace, "closed", client);
     tap(18);
@@ -44,30 +44,37 @@ public final class GuiTreeOracle {
     require(
         screen.j.e.size() == 45 && ((gp) screen.j.e.get(0)).a() == null, "oracle slot tree failed");
     client.c.a(screen.j.f, 0, 0, false, player);
-    record
-    (trace, "opened", client);
+    record(trace, "inventory", client);
     tap(1);
     tick(client);
     require(client.r == null && !Display.isCreated(), "oracle close failed");
-    record
-    (trace, "closed2", client);
+    record(trace, "inventory_closed", client);
+    client.a(new oo(player.i, world, 0, 64, 0));
+    require(client.r instanceof oo && ((id) client.r).j.e.size() == 46,
+        "oracle workbench tree missing");
+    record(trace, "workbench", client);
+    client.a((gs) null);
+    require(client.r == null, "oracle workbench close failed");
+    record(trace, "workbench_closed", client);
     client.J = false;
     System.out.println("WORLDLINE_GUI_SOURCE="
         + net.minecraft.client.Minecraft.class.getProtectionDomain().getCodeSource().getLocation());
     System.out.println("WORLDLINE_GUI_TRACE=" + trace.value());
     System.out.println("WORLDLINE_GUI_SIGNATURE=" + trace.signature());
-    System.out.println("WORLDLINE_GUI_API=screen,slot,click");
+    System.out.println("WORLDLINE_GUI_API=screen,slot,click,spec");
   }
 
   private static void record(
       CanonicalStateTrace trace, String label, net.minecraft.client.Minecraft client) {
-    if (!(client.r instanceof ue)) {
+    if (!(client.r instanceof id)) {
       trace.record(label, 0, 0, -1, 0, -1, 0);
       return;
     }
     id screen = (id) client.r;
-    iz first = ((gp) screen.j.e.get(0)).a(), last = ((gp) screen.j.e.get(44)).a();
-    trace.record(label, 1, 1 + screen.j.e.size(), first == null ? -1 : first.c,
+    iz first = ((gp) screen.j.e.get(0)).a();
+    iz last = ((gp) screen.j.e.get(screen.j.e.size() - 1)).a();
+    trace.record(label, client.r instanceof ue ? 1 : client.r instanceof oo ? 2 : 0,
+        1 + screen.j.e.size(), first == null ? -1 : first.c,
         first == null ? 0 : first.a, last == null ? -1 : last.c, last == null ? 0 : last.a);
   }
 

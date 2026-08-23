@@ -1,5 +1,5 @@
 schema=1
 id=m56-rejected-transaction-recovery
-fingerprint=d1290254a771d188e6c17b61debe50b49d892d1c11f2c8e49ea27c40b06ecad7
+fingerprint=eaec9b2dc6d8623ffa8ec873e09feae092573dae1c62adc8c23710f8d41fe36a
 observation.sha256=96c94cacf740c4b27dbfd794017f0bde90f41267834fd4a2c4a883e39fa454e4
 source=refactor-equivalent

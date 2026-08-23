@@ -99,6 +99,7 @@ public final class Gate {
         case "--migrate-shared-helper-pins" -> m("SharedHelperPinMigration", "--apply", 600);
         case "--migrate-adapter-split-pins" -> m("AdapterSplitPinMigration", "--apply", 600);
         case "--migrate-provider-discovery-pins" -> m("ProviderDiscoveryPinMigration", "--apply", 600);
+        case "--migrate-gui-workbench-pins" -> m("GuiWorkbenchPinMigration", "--apply", 600);
         case "--seal-lane-portability" -> m("LaneDifferential", "--seal", 60);
         case "--module-cache-doctor", "--cache-doctor" -> m("SharedCacheMaintenance", "doctor", 600);
         case "--module-cache-gc", "--cache-gc" -> m("SharedCacheMaintenance", "gc", 600);
@@ -160,6 +161,7 @@ public final class Gate {
                 + "--migrate-shared-helper-pins|"
                 + "--migrate-adapter-split-pins|"
                 + "--migrate-provider-discovery-pins|"
+                + "--migrate-gui-workbench-pins|"
                 + "--seal-lane-portability|"
                 + "--module-cache-doctor|--module-cache-gc|--cache-doctor|--cache-gc|"
                 + "--new-milestone ID|--milestone ID|--lane-differential ID|"
