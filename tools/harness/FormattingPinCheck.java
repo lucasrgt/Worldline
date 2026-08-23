@@ -14,6 +14,7 @@ final class FormattingPinCheck {
         Properties shared = SharedHelperPinCheck.manifest(root);
         Properties testkit = TestKitReleasePinCheck.manifest(root);
         Properties gui = GuiWorkbenchPinCheck.manifest(root);
+        Properties train = TrainPinCheck.manifest(root);
         require("1".equals(manifest.getProperty("schema")), "invalid formatting migration schema");
         require("clang-format".equals(manifest.getProperty("formatter.name"))
                         && "22.1.0".equals(manifest.getProperty("formatter.version"))
@@ -30,6 +31,8 @@ final class FormattingPinCheck {
                     || TestKitReleasePinCheck.transportsFile(testkit, root, relative,
                             required(manifest, stem + "current_sha256"))
                     || GuiWorkbenchPinCheck.transportsFile(gui, root, relative,
+                            required(manifest, stem + "current_sha256"))
+                    || TrainPinCheck.transportsFile(train, root, relative,
                             required(manifest, stem + "current_sha256"));
             require((direct && digest(FormattingPinMigration.tokens(source)).equals(
                                     required(manifest, stem + "token_sha256")) || successor)

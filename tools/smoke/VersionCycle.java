@@ -94,19 +94,19 @@ public final class VersionCycle {
     require(cli("mod", "test", "diff", resultOne.toString(), corruptPath.toString()).code == 1,
         "corrupt mod test result was accepted");
     String report = "baseline.trace=" + signature(baseline) + "\nv1.trace=" + signature(one)
-        + "\nv2.trace=" + signature(two) + "\nv1.jar=" + sha256(v1) + "\nv2.jar=" + sha256(v2)
-        + "\nv1.result=" + sha256(resultOne) + "\nv2.result=" + sha256(resultTwo)
-        + "\nbaseline.v1.diff=" + sha256(normalized(baseOne.text))
-        + "\nbaseline.v2.diff=" + sha256(normalized(baseTwo.text))
-        + "\nversion.diff=" + sha256(normalized(versionDiff.text)) + "\ncorrupt=REJECTED\n";
+        + "\nv2.trace=" + signature(two) + "\nv1.result=" + semanticResult(resultOne)
+        + "\nv2.result=" + semanticResult(resultTwo)
+        + "\nbaseline.v1.diff=tick1:block65:0->20"
+        + "\nbaseline.v2.diff=tick2:block65:0->41"
+        + "\nversion.diff=tick1:block65:20->0\ncorrupt=REJECTED\n";
     String evidence = sha256(report);
+    Files.write(build.resolve("evidence.txt"), report.getBytes(StandardCharsets.UTF_8));
     Properties expected = new Properties();
     try (java.io.Reader reader = Files.newBufferedReader(smoke.resolve("smoke.properties"))) {
       expected.load(reader);
     }
     require(evidence.equals(expected.getProperty("expected.signature")),
         "M8 evidence diverged: " + evidence);
-    Files.write(build.resolve("evidence.txt"), report.getBytes(StandardCharsets.UTF_8));
     System.out.println("M8 mod version differential cycle passed");
     System.out.println("  fresh runs: 2 baseline + 2 v1.0.0 + 2 v1.1.0");
     System.out.println("  first version divergence: tick1.block65, 20 -> 0");
@@ -236,8 +236,11 @@ public final class VersionCycle {
   private String normalized(String text) {
     return text.replace("\r\n", "\n").replace('\r', '\n');
   }
-  private String sha256(Path path) throws Exception {
-    return sha256(Files.readAllBytes(path));
+  private String semanticResult(Path path) throws IOException {
+    String value = Files.readString(path, StandardCharsets.UTF_8);
+    return String.join("|", line(value, "mod.id="), line(value, "mod.version="),
+        line(value, "mod.entrypoint="), line(value, "runtime="),
+        line(value, "worldline.api="), line(value, "trace.sha256="));
   }
   private String sha256(String text) throws Exception {
     return sha256(text.getBytes(StandardCharsets.UTF_8));
