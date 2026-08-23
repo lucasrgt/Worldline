@@ -44,12 +44,13 @@ final class SmokeInputFingerprint {
 
     String compute(SmokeDiscovery.Entry smoke) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        update(digest, "worldline-smoke-input-v3");
+        update(digest, "worldline-smoke-input-v4");
         update(digest, smoke.id); update(digest, smoke.runner);
         update(digest, System.getProperty("java.runtime.version", System.getProperty("java.version")));
         update(digest, System.getProperty("os.name")); update(digest, System.getProperty("os.arch"));
         addProcessConfiguration(digest, source(root.resolve(smoke.runner)));
         add(digest, root.resolve("smokes").resolve(smoke.id));
+        addSharedInputs(digest, smoke.id);
         Path runner = root.resolve(smoke.runner); add(digest, runner);
         String source = source(runner);
         add(digest, root.resolve("tools/harness/SmokeProcess.java"));
@@ -62,6 +63,19 @@ final class SmokeInputFingerprint {
         if (source.contains(".worldline/build/classes") && products.isEmpty())
             throw new IllegalStateException("cannot identify product inputs for smoke " + smoke.id);
         return HexFormat.of().formatHex(digest.digest());
+    }
+
+    private void addSharedInputs(MessageDigest digest, String id) throws Exception {
+        Properties descriptor = new Properties();
+        try (java.io.Reader reader = Files.newBufferedReader(root.resolve("smokes").resolve(id)
+                .resolve("smoke.properties"), StandardCharsets.UTF_8)) { descriptor.load(reader); }
+        String raw = descriptor.getProperty("shared.inputs", "").trim();
+        if (raw.isEmpty()) return;
+        for (String value : raw.split(",")) {
+            String path = value.trim();
+            require(path.matches("smokes/shared/[a-z0-9/-]+"), "unsafe shared smoke input: " + path);
+            add(digest, root.resolve(path));
+        }
     }
 
     private void addProcessConfiguration(MessageDigest digest, String source) throws Exception {

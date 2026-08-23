@@ -10,11 +10,11 @@ import java.util.Map;
 
 /** Reads and writes the reviewable, repository-tracked smoke qualification lock. */
 final class SmokePins {
-    private static final String ALGORITHM = "worldline-smoke-input-v3";
+    private static final String ALGORITHM = "worldline-smoke-input-v4";
     private static final java.util.Set<String> LEGACY_ALGORITHMS = java.util.Set.of(
-            "worldline-smoke-input-v1", "worldline-smoke-input-v2");
-    private static final String HEADER = "# Worldline smoke qualification lock v3\n"
-            + "schema=3\nalgorithm=" + ALGORITHM + "\n";
+            "worldline-smoke-input-v1", "worldline-smoke-input-v2", "worldline-smoke-input-v3");
+    private static final String HEADER = "# Worldline smoke qualification lock v4\n"
+            + "schema=4\nalgorithm=" + ALGORITHM + "\n";
     private final Path path;
     private final Map<String, Entry> entries;
     private final String algorithm;
@@ -65,10 +65,10 @@ final class SmokePins {
         Map<String, String> sources = new HashMap<>(), status = new HashMap<>();
         if (lines.isEmpty()) return Map.of();
         boolean legacy = lines.stream().anyMatch("schema=1"::equals);
-        require(legacy || lines.stream().anyMatch(line -> line.matches("schema=[23]")),
+        require(legacy || lines.stream().anyMatch(line -> line.matches("schema=[234]")),
                 "invalid smoke qualification lock schema");
         for (String line : lines) {
-            if (line.isBlank() || line.startsWith("#") || line.matches("schema=[123]")
+            if (line.isBlank() || line.startsWith("#") || line.matches("schema=[1234]")
                     || line.equals("algorithm=" + ALGORITHM)
                     || LEGACY_ALGORITHMS.stream().anyMatch(
                             value -> line.equals("algorithm=" + value))) continue;

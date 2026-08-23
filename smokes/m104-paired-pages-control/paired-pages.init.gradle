@@ -8,8 +8,8 @@ gradle.beforeProject { project -> project.pluginManager.withPlugin('fabric-loom'
 gradle.projectsEvaluated {
     if (gradle.rootProject.name != 'aero-bare-stapi') return
     if (!aeroJar.isFile()) throw new GradleException('M104 pinned Aero jar missing')
-    def project = gradle.rootProject, m74 = new File(root, 'smokes/m74-complete-aero-census'), m104 = new File(root, 'smokes/m104-paired-pages-control')
-    project.sourceSets.main.java.srcDir(new File(m74, 'runtime-src')); project.sourceSets.main.java.srcDir(new File(m104, 'runtime-src'))
+    def project = gradle.rootProject, m74 = new File(root, 'smokes/m74-complete-aero-census'), m104 = new File(root, 'smokes/m104-paired-pages-control'), shared = new File(root, 'smokes/shared/aero-paged-direct')
+    project.sourceSets.main.java.srcDir(new File(m74, 'runtime-src')); project.sourceSets.main.java.srcDir(new File(shared, 'runtime-src')); project.sourceSets.main.java.srcDir(new File(m104, 'runtime-src'))
     project.tasks.named('processResources').configure { doLast { copy { from new File(m74, 'runtime-resources'); into destinationDir }
         copy { from new File(m104, 'runtime-resources'); into destinationDir } } }
     def prop = { name -> project.findProperty(name).toString() }

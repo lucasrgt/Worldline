@@ -23,6 +23,9 @@ final class SourceQualityCheck {
         int width = integer("line.width");
         for (String scope : SCOPES) inspect(scope, width);
         inspectFlakinessDebt();
+        try { SharedSmokeSourceCheck.execute(root); }
+        catch (IOException error) { throw error; }
+        catch (Exception error) { throw new IllegalStateException(error); }
         inspectRepositoryText();
         requireText(".editorconfig", "end_of_line = lf");
         requireText(".editorconfig", "trim_trailing_whitespace = true");

@@ -141,6 +141,11 @@ The v3 fingerprint migration changed identity only by applying that Git text nor
 one-time `--accept-legacy-smoke-baseline` transition preserves each reviewed v2 evidence hash and
 provenance while recalculating its portable v3 identity; it does not claim a new runtime execution.
 
+The v4 identity adds declared `shared.inputs` under `smokes/shared/`. Its reviewed migration moved
+17 byte-identical Aero paging mixin copies into two explicit base/direct variants. The transition
+preserves the prior evidence hashes and provenance because the compiled runtime source is unchanged;
+the gate verifies every consumer route and rejects reintroduced copies.
+
 The fingerprint includes the milestone directory, its runner, shared runner support when used,
 official-artifact descriptors, referenced adapters and toolchains, referenced product modules
 with their transitive module dependencies, the Java runtime, and the operating-system
