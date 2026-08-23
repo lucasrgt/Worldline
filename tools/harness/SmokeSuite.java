@@ -18,13 +18,12 @@ final class SmokeSuite {
 
     static void run() throws Exception {
         Path root = Path.of("").toAbsolutePath().normalize();
-        SmokeProcess process = new SmokeProcess(root);
         java.util.List<SmokeDiscovery.Entry> smokes = SmokeDiscovery.discover(root);
         SmokeReceiptCache cache = new SmokeReceiptCache(root);
         for (SmokeDiscovery.Entry smoke : smokes) {
             String fingerprint = cache.fingerprint(smoke);
             if (!cache.restore(smoke, fingerprint))
-                cache.passed(smoke, fingerprint, process.run(smoke));
+                cache.passed(smoke, fingerprint, SmokeExecution.run(root, smoke));
         }
         cache.finish(smokes.size());
     }

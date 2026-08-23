@@ -32,7 +32,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | PIPE-07 | DONE | Validate only affected milestone surfaces in candidate mode. | `CandidateCheck` validates the requested milestone contract and affected module tests; `RepositoryVerify` retains full-catalog validation for release profiles. |
 | PIPE-08 | DONE | Cache nested harness self-tests by harness digest. | Harness sources, Java, OS, and control filesystem bind a hashed PASS proof; any change reruns the lock test. |
 | PIPE-09 | DONE | Restrict source-quality traversal to tracked files. | `SourceQualityCheck` consumes the fail-closed tracked-file inventory. |
-| PIPE-10 | ACTIVE | Schedule cold smokes using reviewed duration/failure history. | `Gate --smoke-plan` orders missing proofs by cached duration; failure-frequency ranking remains. |
+| PIPE-10 | DONE | Schedule cold smokes using reviewed duration/failure history. | Executions record idempotent attempt/failure/duration observations; nightly review versions the aggregate, and cold plans order failure rate first, then average duration and stable ID. |
 
 ## Harness robustness
 

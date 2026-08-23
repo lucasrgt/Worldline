@@ -88,21 +88,31 @@ jobs:
       - name: Pin all current proofs
         if: github.event_name == 'schedule' || inputs.profile == 'full-smoke'
         run: java tools/harness/Gate.java --pin-smokes
+      - name: Update reviewed smoke scheduling history
+        if: always() && (github.event_name == 'schedule' || inputs.profile == 'full-smoke')
+        shell: pwsh
+        run: |
+          if (Test-Path '.worldline/gate/classes/SmokeScheduleHistory.class') {
+            java -cp .worldline/gate/classes SmokeScheduleHistory update
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            java -cp .worldline/gate/classes ReadmeStatus update
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
       - name: Open reviewed smoke-pin pull request
-        if: github.event_name == 'schedule'
+        if: always() && github.event_name == 'schedule'
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if (git diff --quiet -- smokes/qualification.lock) { exit 0 }
+          if (git diff --quiet -- README.md smokes/qualification.lock smokes/schedule.properties) { exit 0 }
           $branch = "automation/smoke-pins-$env:GITHUB_RUN_ID"
           git config user.name 'worldline-automation'
           git config user.email 'worldline-automation@users.noreply.github.com'
           git switch -c $branch
-          git add smokes/qualification.lock
-          git commit -m 'Update reviewed smoke qualification pins'
+          git add README.md smokes/qualification.lock smokes/schedule.properties
+          git commit -m 'Update reviewed smoke qualification and scheduling evidence'
           git push origin $branch
-          gh pr create --base main --head $branch --title 'Update reviewed smoke qualification pins' --body 'Nightly Runtime Fabric sweep completed. This PR contains only newly verified portable smoke pins.'
+          gh pr create --base main --head $branch --title 'Update reviewed smoke evidence' --body 'Nightly Runtime Fabric sweep completed. This PR contains portable smoke pins and reviewed failure/duration scheduling history only.'
       - name: Publish Gate timing summary
         if: always()
         shell: bash

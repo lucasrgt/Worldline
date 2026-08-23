@@ -6,5 +6,6 @@ final class HarnessFeatureSelfTest {
         MilestoneScaffold.selfTest();
         ChangelogCheck.selfTest();
         ReadmeStatus.selfTest();
+        SmokeScheduleHistory.selfTest();
     }
 }

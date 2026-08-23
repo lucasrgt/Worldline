@@ -55,7 +55,7 @@ final class MilestoneCheck {
         SmokeDiscovery.Entry smoke = SmokeDiscovery.require(root, id);
         SmokeReceiptCache cache = new SmokeReceiptCache(root);
         String fingerprint = cache.fingerprint(smoke);
-        long duration = new SmokeProcess(root).run(smoke);
+        long duration = SmokeExecution.run(root, smoke);
         contract.validateEvidence(log);
         cache.passed(smoke, fingerprint, duration);
         writeReceipt(state, contract);

@@ -4,13 +4,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-/** Builds a duration-ordered cold-sweep plan containing only unproved smoke inputs. */
+/** Builds a failure-then-duration ordered cold-sweep plan containing only unproved inputs. */
 final class SmokePoolPlan {
     private static final List<String> LANES = List.of(
             "server-headless", "windows-client-gui", "tooling");
@@ -31,6 +30,7 @@ final class SmokePoolPlan {
         SmokeGitState state = SmokeGitState.read(root);
         require(state.clean(), "cold-sweep planning requires a clean tracked tree");
         SmokeReceiptCache cache = new SmokeReceiptCache(root);
+        SmokeScheduleHistory history = new SmokeScheduleHistory(root);
         List<Planned> missing = new ArrayList<>(); Map<String, Integer> totals = counts();
         List<SmokeDiscovery.Entry> catalog = SmokeDiscovery.discover(root);
         int reusable = 0;
@@ -38,18 +38,23 @@ final class SmokePoolPlan {
             String lane = lane(smoke); totals.put(lane, totals.get(lane) + 1);
             String fingerprint = cache.fingerprint(smoke);
             if (cache.availablePin(smoke) != null) { reusable++; continue; }
+            long cachedDuration = cache.historicalDuration(smoke.id);
             missing.add(new Planned(smoke, lane, timeout(smoke.id),
-                    cache.historicalDuration(smoke.id), fingerprint));
+                    history.score(smoke.id, cachedDuration), fingerprint));
         }
-        missing.sort(Comparator.comparingLong(Planned::duration)
-                .thenComparing(item -> item.smoke.id));
+        history.validateCatalog(catalog);
+        missing.sort((left, right) -> {
+            int priority = SmokeScheduleHistory.compare(left.score, right.score);
+            return priority != 0 ? priority : left.smoke.id.compareTo(right.smoke.id);
+        });
         Path output = root.resolve(".worldline/runtime-plan"); Files.createDirectories(output);
         for (String lane : LANES) writeManifest(output, lane, missing);
         writeJson(output, state, catalog.size(), reusable, totals, missing);
         System.out.println("  smoke pool plan: total=" + catalog.size() + ", reusable=" + reusable
                 + ", missing=" + missing.size());
         for (Planned item : missing) System.out.println("    missing " + item.smoke.id
-                + " fingerprint=" + item.fingerprint);
+                + " failures=" + item.score.failures() + "/" + item.score.attempts()
+                + " duration-ms=" + item.score.duration() + " fingerprint=" + item.fingerprint);
         System.out.println("  plan: .worldline/runtime-plan/plan.json");
     }
 
@@ -123,5 +128,5 @@ final class SmokePoolPlan {
     }
 
     private record Planned(SmokeDiscovery.Entry smoke, String lane, int timeout,
-                           long duration, String fingerprint) {}
+                           SmokeScheduleHistory.Score score, String fingerprint) {}
 }

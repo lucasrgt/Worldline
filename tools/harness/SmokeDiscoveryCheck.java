@@ -10,6 +10,7 @@ public final class SmokeDiscoveryCheck {
         List<SmokeDiscovery.Entry> entries = SmokeDiscovery.discover(
                 Path.of("").toAbsolutePath().normalize());
         if (entries.isEmpty()) throw new IllegalStateException("no smoke milestones discovered");
+        new SmokeScheduleHistory(Path.of("").toAbsolutePath().normalize()).validateCatalog(entries);
         System.out.println("  smoke catalog: " + entries.size() + " distributed milestones verified");
     }
 }

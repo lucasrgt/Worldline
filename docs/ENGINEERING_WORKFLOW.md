@@ -85,6 +85,11 @@ affected tests use the shared verification slots and may run across many worktre
 executable cycle queues for the official-runtime lock. This keeps the scarce runtime idle only
 for real evidence execution, not for compilation.
 
+Every executed cycle records attempts, failures, and duration under the ignored report tree.
+The nightly workflow idempotently folds those observations into reviewed
+`smokes/schedule.properties`. Cold plans order higher historical failure rate first, then shorter
+average duration, then stable milestone ID.
+
 Shared verification slots and official-runtime leases use monotonic FIFO ticket directories.
 Only the oldest live ticket may attempt the corresponding file lock; tickets owned by dead local
 processes are pruned. The source-launchable lease owner holds every acquired lock while an
