@@ -41,7 +41,12 @@ final class MetadataRecipeContract {
             RemoteItemStack... inputs) {
         ItemStackRecipe expected = new ItemStackRecipe(Arrays.asList(inputs),
                 Collections.singletonList(output));
-        require(recipes.contains(expected), "metadata recipe absent: " + expected.hashCode());
+        if (recipes.contains(expected)) return;
+        StringBuilder related = new StringBuilder();
+        for (ItemStackRecipe recipe : recipes) if (recipe.outputs().get(0).legacyId() == output.legacyId())
+            related.append(recipe.inputs()).append("->").append(recipe.outputs()).append(';');
+        throw new IllegalStateException("metadata recipe absent: " + expected.inputs() + "->"
+                + expected.outputs() + ", related=" + related);
     }
     private static RemoteItemStack in(int id, int count, int damage) {
         return new RemoteItemStack(id, count, damage);
