@@ -42,7 +42,7 @@ public final class B173PhysicsProbe {
     }
 
     private static int vertical(EntityPlayerSP player, int ticks) {
-        reset(player, X + 1.15D, Y, Z + 0.5D, 90F);
+        reset(player, X + 1.45D, Y, Z + 0.5D, 90F);
         double start = player.posY;
         for (int index = 0; index < ticks; index++) player.moveEntityWithHeading(0F, 1F);
         return milli(player.posY - start);

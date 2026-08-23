@@ -30,7 +30,7 @@ final class OfficialPhysicsProbe {
     }
 
     private static int vertical(dc player, int ticks) {
-        reset(player, X + 1.15D, Y, Z + 0.5D, 90F);
+        reset(player, X + 1.45D, Y, Z + 0.5D, 90F);
         double start = player.aN;
         for (int index = 0; index < ticks; index++) player.a_(0F, 1F);
         return milli(player.aN - start);
