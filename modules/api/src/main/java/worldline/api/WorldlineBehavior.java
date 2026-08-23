@@ -26,6 +26,8 @@ public final class WorldlineBehavior {
             WorldlineFamily.PLAYER, "Bed occupy interrupted by nearby hostile");
     public static final WorldlineBehavior BOW_MOB_HIT = define("bow-mob-hit", WorldlineFamily.ITEM,
             "Player bow type-60 hits pig and zombie");
+    public static final WorldlineBehavior BOW_SHOT_DURABILITY = define("bow-shot-durability",
+            WorldlineFamily.ITEM, "Bow air-use remaining held-stack damage");
     public static final WorldlineBehavior DIFFICULTY_DAMAGE = define("difficulty-damage", WorldlineFamily.WORLD,
             "Easy then Hard zombie melee Packet8");
     public static final WorldlineBehavior VOID_DEATH = define("void-death", WorldlineFamily.ENVIRONMENT,
