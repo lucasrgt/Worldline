@@ -1,5 +1,5 @@
 schema=1
 id=m106-paired-min-instances
-fingerprint=a52ea19e38c649fb09edb69a524b5c54fcf4a5293268117cc5ad1915c4709b8c
+fingerprint=47cffa3ae45329f1452d9ada1ee87e8aea797eb9efc3c00e353dd7842cc98f09
 observation.sha256=f3b298b76961b50be8e4695957f53c7ee1e735d394d0b26886e8c5164553adae
 source=refactor-equivalent

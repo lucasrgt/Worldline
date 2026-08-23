@@ -18,10 +18,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /** Shared fail-closed primitives for source-launched smoke coordinators. */
-final class SmokeSupport {
+public final class SmokeSupport {
     private SmokeSupport() {}
 
-    static String capture(Path directory, List<String> command) throws Exception {
+    public static String capture(Path directory, List<String> command) throws Exception {
         int timeout = environmentInteger("WORLDLINE_SMOKE_CHILD_TIMEOUT_SECONDS", 300, 1, 3600);
         Path log = Files.createTempFile("worldline-smoke-child-", ".log");
         Process process = new ProcessBuilder(command).directory(directory.toFile()).redirectErrorStream(true)
@@ -38,7 +38,7 @@ final class SmokeSupport {
         } finally { Files.deleteIfExists(log); }
     }
 
-    static void recreate(Path root, Path target) throws IOException {
+    public static void recreate(Path root, Path target) throws IOException {
         Path privateRoot = root.resolve(".worldline").toAbsolutePath().normalize();
         Path normalized = target.toAbsolutePath().normalize();
         require(normalized.startsWith(privateRoot) && !normalized.equals(privateRoot),
@@ -50,7 +50,7 @@ final class SmokeSupport {
         Files.createDirectories(normalized);
     }
 
-    static void verifyArtifact(Path path, Properties artifact) throws Exception {
+    public static void verifyArtifact(Path path, Properties artifact) throws Exception {
         require(Files.isRegularFile(path), "official artifact absent: " + path);
         require(Files.size(path) == Long.parseLong(value(artifact, "expected.bytes")),
                 "official artifact size drift: " + path);
@@ -60,24 +60,24 @@ final class SmokeSupport {
                 "official artifact SHA-256 drift: " + path);
     }
 
-    static List<String> javaFiles(Path source) throws IOException {
+    public static List<String> javaFiles(Path source) throws IOException {
         try (Stream<Path> paths = Files.walk(source)) {
             return paths.filter(path -> path.toString().endsWith(".java")).sorted()
                     .map(Path::toString).collect(Collectors.toList());
         }
     }
 
-    static void load(Path path, Properties target) throws IOException {
+    public static void load(Path path, Properties target) throws IOException {
         try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) { target.load(reader); }
     }
 
-    static String value(Properties properties, String key) {
+    public static String value(Properties properties, String key) {
         String value = properties.getProperty(key);
         require(value != null && !value.trim().isEmpty(), "missing " + key);
         return value.trim();
     }
 
-    static String digest(Path path, String algorithm) throws Exception {
+    public static String digest(Path path, String algorithm) throws Exception {
         MessageDigest digest = MessageDigest.getInstance(algorithm);
         try (InputStream input = Files.newInputStream(path)) {
             byte[] buffer = new byte[8192]; int count;
@@ -86,21 +86,21 @@ final class SmokeSupport {
         return HexFormat.of().formatHex(digest.digest());
     }
 
-    static int freePort() throws IOException {
+    public static int freePort() throws IOException {
         try (ServerSocket socket = new ServerSocket(0)) { return socket.getLocalPort(); }
     }
 
-    static Path product(Path root, String module) {
+    public static Path product(Path root, String module) {
         return root.resolve(".worldline/build/classes").resolve(module);
     }
 
-    static String line(String output, String prefix) {
+    public static String line(String output, String prefix) {
         return output.lines().filter(value -> value.startsWith(prefix)).findFirst()
                 .orElseThrow(() -> new IllegalStateException("missing " + prefix + "\n" + output))
                 .substring(prefix.length());
     }
 
-    static boolean eof(Exception error) {
+    public static boolean eof(Exception error) {
         for (Throwable cause = error; cause != null; cause = cause.getCause()) {
             if (cause instanceof EOFException) return true;
             String message = cause.getMessage();
@@ -109,7 +109,7 @@ final class SmokeSupport {
         return false;
     }
 
-    static void require(boolean condition, String message) {
+    public static void require(boolean condition, String message) {
         if (!condition) throw new IllegalStateException(message);
     }
 

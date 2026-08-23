@@ -1,5 +1,5 @@
 schema=1
 id=m88-reverse-two-cell-membership-recovery
-fingerprint=7efe959d7d603518a13b88e2903cbf4eb19ec0ead6ae190b4eff6aa04efb2f8b
+fingerprint=0e1048454c57764b928b54f8c81ca7f47d80fc7ac39810900ed9398d8a896d1c
 observation.sha256=986d67c17068113e152c7cec8614bbc518629fff4c27619ec488da6c2548c079
 source=refactor-equivalent

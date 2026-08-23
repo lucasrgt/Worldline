@@ -1,5 +1,5 @@
 schema=1
 id=m67-chest-retrieval
-fingerprint=24cf6b4959d43b2ea2186c4ddefe7da8d35e762ce1bb5e13ddf93face2c37780
+fingerprint=d1e755774d3e672da3729942c7b329c70a3fca1bc94467069f5b40e42b8feb99
 observation.sha256=cbeb29b97d06faa167bb524366feb7b9d1a92fa03edeb432470d7f1ff0a7b469
 source=refactor-equivalent

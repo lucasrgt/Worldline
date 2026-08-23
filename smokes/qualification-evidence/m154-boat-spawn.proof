@@ -1,5 +1,5 @@
 schema=1
 id=m154-boat-spawn
-fingerprint=563b60a067288ae32bb1fd97ad04e1e9cce4d5d29fb1ed2554b22e9fb48a61ff
+fingerprint=d61ec50c2d5a9f93bda9fbaa16392a83539ef7d8e1a75d97d31fec0c275cb850
 observation.sha256=5da646e53a2e386476060c80fb7c8bce2d187f93133cb6adb76ac439e48439a6
 source=refactor-equivalent

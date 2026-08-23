@@ -1,5 +1,5 @@
 schema=1
 id=m333-dispenser-set
-fingerprint=85ca1d56bcf7a81dd078d73b79572bebf080cb1b12eb82c1b5d39ca26474f64d
+fingerprint=01e04b9f36bf5a8c309b37e1a6434f7799e94e618377c1f857af386bf774fb6c
 observation.sha256=46b62a083dad7f0e54a72e16e9b51144add22acb4cb53b75b51439b04385894e
 source=refactor-equivalent

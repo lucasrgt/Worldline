@@ -1,5 +1,5 @@
 schema=1
 id=m262-cookie-eat
-fingerprint=378ef18d861eed43fb0f13950e176409205999bd480958553b105452460e1603
+fingerprint=283d0aae0ef870b0cf4ab63587c38f48a9888c788a3cae734699eb441ef0b13c
 observation.sha256=2374d08bdc38c0697e31d3009c028cbb6f70fb2794e2d20606804aaa4dbfb0bc
 source=refactor-equivalent
