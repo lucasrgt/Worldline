@@ -145,8 +145,9 @@ public final class M620StationapiTestkitDriverCycle {
         List<String> command = new ArrayList<String>(Arrays.asList("javac", "-encoding", "UTF-8",
                 "--release", release, "-Xlint:all,-options", "-Werror", "-classpath", join(classpath),
                 "-d", output.toString()));
-        command.addAll(SmokeSupport.javaFiles(source));
-        SmokeSupport.require(command.size() > 12, "no Java sources under " + source);
+        List<String> sources = SmokeSupport.javaFiles(source);
+        SmokeSupport.require(!sources.isEmpty(), "no Java sources under " + source);
+        command.addAll(sources);
         SmokeSupport.capture(root, command);
     }
 
