@@ -14,7 +14,8 @@ final class WorldlineEvidenceTest {
         if (!"creeper-fuse".equals(fuse.token()) || !"atlas.scenario.creeper-fuse".equals(fuse.atlasId())
                 || fuse != WorldlineBehavior.require("m448-creeper-fuse-set")
                 || fuse != WorldlineBehavior.require("atlas.scenario.creeper-fuse")
-                || WorldlineBehavior.require("light-propagation") != WorldlineBehavior.LIGHT_PROPAGATION)
+                || WorldlineBehavior.require("light-propagation") != WorldlineBehavior.LIGHT_PROPAGATION
+                || WorldlineBehavior.require("m578-cactus-adjacent-break-set") != WorldlineBehavior.CACTUS_ADJACENT_BREAK)
             throw new AssertionError("behavior catalog must hide progress ids");
         WorldlineEvidence pin = WorldlineEvidence.pin(fuse, SIGNAL, SIG_A);
         WorldlineEvidence modSame = WorldlineEvidence.of(fuse, WorldlineEvidence.MOD, SIGNAL, SIG_A);
