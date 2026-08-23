@@ -20,3 +20,7 @@ does not claim cross-dimension clock synchronization, weather, spawn-cycle,
 bed-skip, gamerule, or client-clock behavior.
 
 Frozen expected signature SHA-256: 583ff279e5fecfafedd95a704a77525872d14cd939775376b47a4a116d2b30f7
+
+## Frozen semantic signal
+
+`persisted=signed-long,restart=preserved,profile=overworld+nether,heartbeats=80,advance=bounded,no-heartbeat=smaller,save=clean,clients=1`

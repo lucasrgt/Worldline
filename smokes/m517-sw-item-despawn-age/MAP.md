@@ -5,3 +5,7 @@ The official Beta 1.7.3 server class `ez` maps to `EntityItem`. Its `b` age fiel
 The four-process differential freezes age 5999 as live and present, age 6000 as dead and absent, a young live control, and player collection as the alternative terminal path. Packet29 removal remains the independently frozen wire observation in M52, so M517 makes no new packet-decoder claim.
 
 Frozen expected signature SHA-256: fc7a206cd1e7d5bf9efa1820b8ff8537d8d24dee666ab25f9238532bf0c4a414
+
+## Frozen semantic signal
+
+`oracle=MATCH,fixture=m517-sw-item-despawn-age,ticks=2,controlled=true`

@@ -18,3 +18,7 @@ explosion model.
 
 Frozen semantic SHA-256:
 `f6a9810837ac1a3622784617b05e6c957344be3be5493d4b261e359f18076f1d`.
+
+## Frozen semantic signal
+
+`oracle=MATCH,fixture=m518-sw-tnt-fuse-lifecycle,ticks=81,controlled=true`

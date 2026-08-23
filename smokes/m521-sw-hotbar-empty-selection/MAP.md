@@ -20,3 +20,7 @@ This milestone does not claim window clicks, drops, transfers, persistence,
 respawn selection, peer animation, or malformed packet lengths. Its frozen
 semantic signature is
 `272e63d1ae30e3865b17feceb300a7b502c6a49dc8d151edc108412e32391034`.
+
+## Frozen semantic signal
+
+`slot1=empty,packet5=-1:0,slot0=1:0,slot9=rejected,selection=slot0`

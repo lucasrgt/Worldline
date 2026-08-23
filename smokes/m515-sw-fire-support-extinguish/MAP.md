@@ -35,3 +35,7 @@ This milestone does not claim an exact fire lifetime, spread, lava ignition,
 rain behavior, fuel consumption, Nether persistence, packets, GUI behavior,
 or persistence. Its frozen trace signature is
 `4a1d5934a7e4543cf2631661ef6408677022ac1247d30f1d9b1135e4a5a0a6c7`.
+
+## Frozen semantic signal
+
+`oracle=MATCH,fixture=m515-sw-fire-support-extinguish,ticks=2,controlled=true`

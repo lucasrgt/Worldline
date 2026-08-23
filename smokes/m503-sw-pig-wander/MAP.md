@@ -44,3 +44,7 @@ This milestone does not claim breeding, panic, drops, natural spawning,
 player interaction, packets, persistence, or general behavior for other RNG
 seeds. Its frozen trace signature is
 `17747e296bd5c3d985ae22b817598da213acc55c7d078016447b2f0869ed1d28`.
+
+## Frozen semantic signal
+
+`oracle=MATCH,fixture=m503-sw-pig-wander,ticks=240,controlled=true`

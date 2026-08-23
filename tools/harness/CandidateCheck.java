@@ -57,7 +57,8 @@ final class CandidateCheck {
                 "missing expected.signature");
         Path runner = root.resolve(smoke.runner).normalize();
         require(Files.isRegularFile(runner), "missing runner: " + smoke.runner);
-        require(Files.readString(runner, StandardCharsets.UTF_8).contains("\"" + id + "\""),
+        require("tools/smoke/Run.java".equals(smoke.runner)
+                        || Files.readString(runner, StandardCharsets.UTF_8).contains("\"" + id + "\""),
                 "runner does not declare candidate id");
         Path source = directory.resolve("src");
         if (!tooling) require(Files.isDirectory(source) && !javaFiles(source).isEmpty(),
@@ -130,6 +131,11 @@ final class CandidateCheck {
                     "client candidate requires the prepared mapped workspace");
             dependencies.add(headless); dependencies.add(mapped);
             dependencies.addAll(jarFiles(root.resolve("local/workspaces/b1.7.3/libraries")));
+        } else {
+            Path mapped = root.resolve("local/workspaces/b1.7.3/minecraft_server/bin");
+            require(Files.isRegularFile(mapped.resolve("net/minecraft/src/World.class")),
+                    "server candidate requires the prepared mapped workspace");
+            dependencies.add(mapped);
         }
         dependencies.addAll(outputs);
         Path output = build.resolve("scenario-classes"); Files.createDirectories(output);

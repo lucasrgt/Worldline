@@ -37,3 +37,7 @@ This milestone does not claim horizontal spread, source regeneration, entity
 push, fluid reactions, packets, persistence, or dimension-specific behavior.
 Its frozen trace signature is
 `c8cd76aa79d46ffdecd0dbabdff860b95de7b1c6cce4783dbf4ea796a9bc41ee`.
+
+## Frozen semantic signal
+
+`oracle=MATCH,fixture=m513-sw-water-downward-flow,ticks=60,controlled=true`

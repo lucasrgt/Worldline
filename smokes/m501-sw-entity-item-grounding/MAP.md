@@ -79,3 +79,7 @@ ground contact with zero final vertical velocity, at least 2.5 blocks of
 airborne descent, and no more than 0.125 blocks of supported-control drift. The
 frozen trace signature is
 `d5e39c681248baa95e697c21d1db30d004ed3e6e090fa5dd8feb4fc0b6e34e8c`.
+
+## Frozen semantic signal
+
+`oracle=MATCH,fixture=m501-sw-entity-item-grounding,ticks=30,controlled=true`

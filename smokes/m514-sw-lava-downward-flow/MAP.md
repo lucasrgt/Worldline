@@ -37,3 +37,7 @@ This milestone does not claim ignition, horizontal flow, Nether behavior,
 source regeneration, entity effects, packets, persistence, or fluid reactions.
 Its frozen trace signature is
 `701ed9ab8e197906a0a9e3737dce82ad359f8152f4867def70e44a94144fca4c`.
+
+## Frozen semantic signal
+
+`oracle=MATCH,fixture=m514-sw-lava-downward-flow,ticks=240,controlled=true`

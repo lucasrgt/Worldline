@@ -15,3 +15,7 @@ propagation, repeaters, torch inversion, consumers, persistence, or arbitrary
 circuits.
 
 Frozen expected signature SHA-256: 6aca9f501946f63db33fca4ed618e472fead629bc7a86847355bee55802f33f0
+
+## Frozen semantic signal
+
+`oracle=MATCH,fixture=m509-sw-redstone-wire-fanout,ticks=2,controlled=true`

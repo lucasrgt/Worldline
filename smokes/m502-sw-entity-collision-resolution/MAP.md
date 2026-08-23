@@ -88,3 +88,7 @@ official-JAR oracle executions. Qualification requires:
 6. all declared mappings to resolve in the frozen mapping file; and
 7. the frozen SHA-256 trace signature
    `c3830617b51785816a20934139bfc9588dafa1412ba4c9e70e16cc7972a50dd4`.
+
+## Frozen semantic signal
+
+`oracle=MATCH,fixture=m502-sw-entity-collision-resolution,ticks=10,controlled=true`

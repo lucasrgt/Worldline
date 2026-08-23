@@ -15,3 +15,7 @@ rejection recovery, clean save, and same-player relogin. It does not claim
 merge, split, shift/right click, armor, other windows, drops, or respawn.
 
 Frozen expected signature SHA-256: e968302dd1f7e0be9f133f8956a2512b5203382b0ba53d07fbb0b1028b5586fe
+
+## Frozen semantic signal
+
+`slots=36<->37,items=stone<->dirt,actions=1+2+3,reject=4-false,resync=applied-take,restore=5-accepted,relogin=swapped,persisted=2,cursor=empty`
