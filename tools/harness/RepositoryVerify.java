@@ -141,7 +141,7 @@ final class RepositoryVerify {
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "PrePushCheckTest")));
         report.step("verify-summary-self-test", () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "VerifySummaryTest")));
-        report.step("nightly-quality-self-test", NightlyQualityCampaign::selfTest);
+        report.step("harness-feature-self-tests", HarnessFeatureSelfTest::execute);
         report.step("release", () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "ReleaseCheck")));
         report.step("optimization", () -> {

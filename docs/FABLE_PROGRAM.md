@@ -60,7 +60,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 
 | ID | Status | Deliverable | Evidence or completion condition |
 | --- | --- | --- | --- |
-| SCALE-01 | QUEUED | Add `Gate --new-milestone ID` deterministic scaffolding. | Generated descriptors, cycle, smoke, docs, map, and tests pass candidate validation without hand copying. |
+| SCALE-01 | DONE | Add `Gate --new-milestone ID` deterministic scaffolding. | The overwrite-safe generator creates a byte-deterministic descriptor, draft cycle, claim/cycle docs, and map; self-tests compile the runner and validate the complete candidate topology while runtime qualification remains fail-closed. |
 | SCALE-02 | QUEUED | Replace clone-like cycle launchers with a data-driven runner. | Ordinary milestones use one runner; exceptional scenarios remain explicit. |
 | SCALE-03 | QUEUED | Generate repeated claim/cycle/map narration from one canonical descriptor. | No claim/SHA fact is manually maintained in three places. |
 | SCALE-04 | QUEUED | Partition or generate the large changelog by release series. | Integration no longer edits one 252 KB coordinator hotspot. |

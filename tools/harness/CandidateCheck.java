@@ -88,6 +88,7 @@ final class CandidateCheck {
         roots.forEach(path -> command.add(path.toString()));
         command.addAll(List.of("--output", "json"));
         String output = capture(command, root, 60);
+        if (!output.contains("\"Java\":")) return;
         java.util.regex.Matcher reports = java.util.regex.Pattern.compile(
                 "\\{\"stats\":\\{(.*?)\\},\"name\":\"([^\"]+)\"",
                 java.util.regex.Pattern.DOTALL).matcher(TokeiJson.language(output, "Java"));

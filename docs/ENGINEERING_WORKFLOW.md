@@ -48,6 +48,12 @@ child JVMs, kills timed-out process trees, and publishes seed, volume, duration,
 under `.worldline/reports/nightly-quality/`. The `quality` dispatch profile reproduces it manually;
 ordinary local and pull-request gates retain only deterministic short tests.
 
+Start a milestone with `java tools/harness/Gate.java --new-milestone m<number>-<slug>`.
+The command creates a deterministic descriptor, fail-closed cycle source, claim document, cycle
+document, and semantic map without overwriting any path. The draft has a content-derived signal
+and SHA so `Gate --candidate ID` can validate its complete topology immediately, but its runner
+always fails runtime qualification until the author replaces it with real evidence.
+
 ## Verification tiers
 
 | Command | Purpose | Official runtime |
