@@ -57,6 +57,7 @@ public final class ChestTransferSmoke {
             observer.moveAndObserve(5D, 5D, 0D, 3); observer.moveAndObserve(5D, 5D, 0D, 3);
             requirePlayers(first.players(), actorName, observerName); observer.awaitRemoteChunk(
                     Math.floorDiv(target.x(), 16), Math.floorDiv(target.z(), 16));
+            awaitSlot(actor, 36, new RemoteItemStack(54, 1, 0)); actor.selectHeldSlot(0);
             actor.placeHeldBlock(support, BlockFace.UP); BlockState chest = actor.sustainTicks(5)
                     .blockAt(target.x(), target.y(), target.z());
             require(chest.legacyId() == 54 && observer.sustainTicks(5).blockAt(target.x(), target.y(), target.z())
@@ -64,9 +65,8 @@ public final class ChestTransferSmoke {
             actor.sendChat("/give " + actorName + " 1 1"); actor.sustainTicks(40);
             for (int step = 0; step < 10 && actor.inventory().occupiedSlots() < 1; step++)
                 actor.moveAndObserve(0D, -1D, 0D, 2);
-            actor.sustainTicks(10);
             RemoteItemStack stone = new RemoteItemStack(1, 1, 0);
-            require(actor.inventory().slot(36).item().equals(stone), "transfer stone seed drifted");
+            awaitSlot(actor, 36, stone);
             actor.selectHeldSlot(1); RemoteContainerWindow opened = actor.openChest(target, BlockFace.UP);
             require(opened.inventory().slot(54).item().equals(stone) && opened.inventory().slot(0).empty(),
                     "combined chest mapping drifted");
@@ -110,6 +110,14 @@ public final class ChestTransferSmoke {
         client.sustainTicks(10); MovementOutcome settled = null; for (int step = 0; step < 100; step++) {
             settled = client.moveAndObserve(0D, -1D, 0D, 2); if (settled.corrected()) break; }
         require(settled != null && settled.corrected(), "ground settlement correction absent"); return settled.resulting(); }
+    private static void awaitSlot(ChestTransferSession client, int slot, RemoteItemStack expected) {
+        for (int step = 0; step < 100; step++) {
+            if (!client.inventory().slot(slot).empty() && client.inventory().slot(slot).item().equals(expected)) return;
+            client.sustainTicks(1);
+        }
+        throw new IllegalStateException("slot " + slot + " did not become " + expected
+                + "; inventory=" + client.inventory());
+    }
     private static boolean replaceable(BlockState state) { int id = state.legacyId(); return id == 0 || id == 8 || id == 9 || id == 78; }
     private static void requirePlayers(List<String> players, String first, String second) { Set<String> expected = new HashSet<>();
         expected.add(first); expected.add(second); require(players.size() == 2 && new HashSet<>(players).equals(expected), "two-player presence drifted"); }
