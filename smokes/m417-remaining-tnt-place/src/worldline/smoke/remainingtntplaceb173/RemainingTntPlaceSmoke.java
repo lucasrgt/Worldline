@@ -16,18 +16,18 @@ public final class RemainingTntPlaceSmoke{
    while(water(initial.blockAt(local(top.x(),cx),top.y()+1,local(top.z(),cz)).legacyId())){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);require(++column<=15,"water column exceeded remaining-tnt-place fixture");}
    for(int lift=0;lift<6;lift++){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);column++;}
    BlockPosition far=place(actor,place(actor,top,BlockFace.EAST,1),BlockFace.EAST,1);
-   actor.selectHeldSlot(1);tnt1=place(actor,top,BlockFace.UP,46);tnt2=place(actor,far,BlockFace.UP,46);RemoteWorldView before=actor.sustainTicks(fixtureTicks);
+   actor.selectHeldSlot(1);tnt1=place(actor,top,BlockFace.UP,46);tnt2=place(actor,far,BlockFace.UP,46);RemoteWorldView before=worldline.test.WorldlineSmokeAwait.observe(actor,fixtureTicks);
    require(before.blockAt(top.x(),top.y(),top.z()).equals(new BlockState(1,0))&&before.blockAt(tnt1.x(),tnt1.y(),tnt1.z()).equals(new BlockState(46,0))&&before.blockAt(tnt2.x(),tnt2.y(),tnt2.z()).equals(new BlockState(46,0))&&tnt2.x()==tnt1.x()+2&&tnt2.y()==tnt1.y()&&tnt2.z()==tnt1.z(),"two TNT 46:0 baseline drift");
    actor.selectHeldSlot(2);actor.useHeldItemOnBlock(tnt1,BlockFace.UP);
    primed=actor.awaitObjectSpawn(50);require(primed.type()==50&&primed.entityId()!=actor.state().entityId()&&primed.throwerId()==0,"Packet23 type 50 first primed TNT drift");
-   RemoteWorldView live=actor.sustainTicks(1);int secondId=live.blockAt(tnt2.x(),tnt2.y(),tnt2.z()).legacyId();
+   RemoteWorldView live=worldline.test.WorldlineSmokeAwait.observe(actor,1);int secondId=live.blockAt(tnt2.x(),tnt2.y(),tnt2.z()).legacyId();
    require(secondId==46,"second TNT 46 cell gone before chain id="+secondId+" first="+live.blockAt(tnt1.x(),tnt1.y(),tnt1.z()).legacyId());
    actor.moveAndObserve(10D,0D,0D,4);first=actor.awaitExplosion();
    require(first.strength()==4F&&Math.abs(first.x()-(tnt1.x()+0.5D))<4D&&Math.abs(first.y()-(tnt1.y()+0.5D))<6D&&Math.abs(first.z()-(tnt1.z()+0.5D))<4D,"first Packet60 center/strength drift");
    chained=actor.awaitObjectSpawn(50);require(chained.type()==50&&chained.entityId()!=primed.entityId()&&chained.entityId()!=actor.state().entityId()&&chained.throwerId()==0,"Packet23 type 50 chained TNT drift");
    actor.awaitBlock(tnt2,new BlockState(0,0));second=actor.awaitExplosion();
    require(second.strength()==4F&&first.strength()==4F&&!second.equals(first),"second Packet60 strength/identity drift "+second.strength());
-   RemoteWorldView after=actor.sustainTicks(1);require(after.blockAt(tnt1.x(),tnt1.y(),tnt1.z()).equals(new BlockState(0,0))&&after.blockAt(tnt2.x(),tnt2.y(),tnt2.z()).equals(new BlockState(0,0)),"remaining-tnt-place chain crater drift");
+   RemoteWorldView after=worldline.test.WorldlineSmokeAwait.observe(actor,1);require(after.blockAt(tnt1.x(),tnt1.y(),tnt1.z()).equals(new BlockState(0,0))&&after.blockAt(tnt2.x(),tnt2.y(),tnt2.z()).equals(new BlockState(0,0)),"remaining-tnt-place chain crater drift");
    actor.close();awaitPlayers(server,0);server.save();reader=new B173WireClient("127.0.0.1",port,user,timeout);reader.connect();reader.synchronizePose();
    RemoteWorldView persisted=reader.awaitRemoteChunk(cx,cz);require(persisted.blockAt(tnt1.x(),tnt1.y(),tnt1.z()).equals(new BlockState(0,0))&&persisted.blockAt(tnt2.x(),tnt2.y(),tnt2.z()).equals(new BlockState(0,0)),"fresh chain crater persistence drift");
    String evidence="column="+column+",support="+top.x()+":"+top.y()+":"+top.z()+":1:0,tnt1="+tnt1.x()+":"+tnt1.y()+":"+tnt1.z()+":46:0->0:0,tnt2="+tnt2.x()+":"+tnt2.y()+":"+tnt2.z()+":46:0->0:0,flint=259,packet23=50+50,packet60=strength4,chain=true,persisted=true,clients=2,disconnect=clean";

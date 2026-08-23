@@ -10,7 +10,7 @@ public final class PistonBudSetArm{
  static PistonBudSetArm place(B173WireClient a,RemoteChunkSnapshot initial,BlockPosition support,int cx,int cz)throws Exception{
   BlockPosition piston=BlockFace.UP.adjacent(support),head=BlockFace.WEST.adjacent(piston),pushed=BlockFace.WEST.adjacent(head),torch=BlockFace.UP.adjacent(head);
   require(at(initial,piston,cx,cz).legacyId()==0&&at(initial,head,cx,cz).legacyId()==0&&at(initial,pushed,cx,cz).legacyId()==0&&at(initial,torch,cx,cz).legacyId()==0,"BUD targets were not initial air");
-  a.look(-90F,0F);a.selectHeldSlot(1);a.placeHeldBlock(support,BlockFace.UP);BlockState placed=a.sustainTicks(5).blockAt(piston.x(),piston.y(),piston.z());require(placed.equals(new BlockState(33,4)),"west piston 33 absent: "+placed+" at "+cell(piston));
+  a.look(-90F,0F);a.selectHeldSlot(1);a.placeHeldBlock(support,BlockFace.UP);BlockState placed=worldline.test.WorldlineSmokeAwait.awaitBlock(a,piston,new BlockState(33,4),5).blockAt(piston.x(),piston.y(),piston.z());
   a.selectHeldSlot(0);a.placeHeldBlock(piston,BlockFace.WEST);a.awaitBlock(head,new BlockState(1,0));
   return new PistonBudSetArm(support,piston,head,pushed,torch);
  }
@@ -18,15 +18,14 @@ public final class PistonBudSetArm{
   PlayerPose pose=a.moveAndObserve(0D,0D,0D,1).resulting();
   pose=a.moveAndObserve(piston.x()+0.5D-pose.x(),piston.y()+2D-pose.y(),piston.z()+0.5D-pose.z(),2).resulting();
   a.look(-90F,45F);a.selectHeldSlot(2);a.placeHeldBlock(head,BlockFace.UP);
-  boolean saw=false;RemoteWorldView live=null;
-  for(int i=0;i<Math.max(ticks,24);i++){live=a.sustainTicks(1);BlockState p=live.blockAt(piston.x(),piston.y(),piston.z()),h=live.blockAt(head.x(),head.y(),head.z());
-   if(p.legacyId()==36||p.equals(new BlockState(33,12))||h.legacyId()==34){saw=true;pulsePiston=p;pulseHead=h;if(p.equals(new BlockState(33,12))||h.equals(new BlockState(34,4)))break;}}
-  require(saw&&pulsePiston!=null,"neighbor torch place did not BUD-extend piston 33: "+state(live)+" pose="+pose.x()+","+pose.y()+","+pose.z());
-  for(int i=0;i<Math.max(ticks,24);i++){live=a.sustainTicks(1);if(live.blockAt(piston.x(),piston.y(),piston.z()).equals(new BlockState(33,4))&&live.blockAt(pushed.x(),pushed.y(),pushed.z()).equals(new BlockState(1,0)))break;}
+  RemoteWorldView live=worldline.test.WorldlineSmokeAwait.awaitWorld(a,v->moving(v),"BUD extension",Math.max(ticks,24));pulsePiston=live.blockAt(piston.x(),piston.y(),piston.z());pulseHead=live.blockAt(head.x(),head.y(),head.z());
+  live=worldline.test.WorldlineSmokeAwait.awaitWorld(a,v->retracted(v),"BUD retraction",Math.max(ticks,24));
   require(live.blockAt(piston.x(),piston.y(),piston.z()).equals(new BlockState(33,4))&&live.blockAt(head.x(),head.y(),head.z()).equals(new BlockState(0,0))&&live.blockAt(pushed.x(),pushed.y(),pushed.z()).equals(new BlockState(1,0))&&live.blockAt(torch.x(),torch.y(),torch.z()).equals(new BlockState(0,0)),"BUD did not pulse and retract (M546 remaining-on or no self-clear): "+state(live));
   return live;
  }
  void charged(RemoteWorldView v){require(v.blockAt(piston.x(),piston.y(),piston.z()).equals(new BlockState(33,4))&&v.blockAt(head.x(),head.y(),head.z()).equals(new BlockState(1,0))&&v.blockAt(pushed.x(),pushed.y(),pushed.z()).equals(new BlockState(0,0))&&v.blockAt(torch.x(),torch.y(),torch.z()).equals(new BlockState(0,0)),"BUD precondition drift (already moved or QC remaining-on): "+state(v));}
+ boolean moving(RemoteWorldView v){BlockState p=v.blockAt(piston.x(),piston.y(),piston.z()),h=v.blockAt(head.x(),head.y(),head.z());return p.legacyId()==36||p.equals(new BlockState(33,12))||h.legacyId()==34;}
+ boolean retracted(RemoteWorldView v){return v.blockAt(piston.x(),piston.y(),piston.z()).equals(new BlockState(33,4))&&v.blockAt(pushed.x(),pushed.y(),pushed.z()).equals(new BlockState(1,0));}
  void persist(RemoteChunkSnapshot after,int cx,int cz){require(at(after,piston,cx,cz).equals(new BlockState(33,4))&&at(after,head,cx,cz).equals(new BlockState(0,0))&&at(after,pushed,cx,cz).equals(new BlockState(1,0))&&at(after,torch,cx,cz).equals(new BlockState(0,0)),"fresh BUD pulse drift");}
  static BlockPosition raise(B173WireClient a,RemoteChunkSnapshot initial,int cx,int cz,int[] column)throws Exception{
   BlockPosition top=foundation(initial,cx,cz);column[0]=0;a.selectHeldSlot(0);

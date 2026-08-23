@@ -14,7 +14,7 @@ public final class PlayerDeathDropsSetSmoke{
   try{server.boot();B173PlayerSeed.writeInventory(workspace,user,8.5D,-80D,8.5D,new int[]{0,1,2},new int[]{1,4,3},new int[]{1,1,1},new int[]{0,0,0});actor.connect();actor.synchronizePose();
    require(actor.awaitHealth(20)==20,"player-death-drops-set baseline Packet8 health 20 absent");
    require(actor.awaitInventory().occupiedSlots()==3&&has(actor,36,STONE)&&has(actor,37,COBBLE)&&has(actor,38,DIRT),"player-death-drops-set inventory drift");
-   for(int n=0;n<fixtureTicks&&actor.health()>0;n++)actor.sustainTicks(1);require(actor.health()<=0,"vanilla void Packet8 health 0 absent: "+actor.health());
+   worldline.test.WorldlineSmokeAwait.awaitEntity(actor,actor::health,h->h<=0,"void death",fixtureTicks);require(actor.health()<=0,"vanilla void Packet8 health 0 absent: "+actor.health());
    if(actor.health()==0)require(actor.awaitHealth(0)==0,"packet8 health 0 drift");
    RemoteDroppedItem[] drops=B173PlayerDeathDrops.await(actor,STONE,COBBLE,DIRT);RemoteDroppedItem stone=drops[0],cobble=drops[1],dirt=drops[2];
    require(stone.item().equals(STONE)&&stone.item().legacyId()==1&&cobble.item().equals(COBBLE)&&cobble.item().legacyId()==4&&dirt.item().equals(DIRT)&&dirt.item().legacyId()==3&&stone.entityId()!=cobble.entityId()&&stone.entityId()!=dirt.entityId()&&cobble.entityId()!=dirt.entityId(),"player-death Packet21 hotbar drops absent");

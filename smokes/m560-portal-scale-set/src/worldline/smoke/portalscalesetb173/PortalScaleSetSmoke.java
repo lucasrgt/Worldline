@@ -49,10 +49,10 @@ public final class PortalScaleSetSmoke {
      frame.bottom.z() + 0.5D - pose.z(), 1).resulting();
    PortalScaleSetSupport.require(builder.dimension() == 0, "dimension changed before portal residence");
    PlayerPose entry = pose;
-   builder.sustainTicks(travelTicks);
+   worldline.test.WorldlineSmokeAwait.observe(builder,travelTicks);
    PortalScaleSetSupport.require(builder.awaitDimension(-1) == -1, "official Packet9 0->-1 absent");
    PlayerPose dest = builder.moveAndObserve(0D, 0D, 0D, 1).resulting();
-   RemoteWorldView world = builder.sustainTicks(20);
+   RemoteWorldView world = worldline.test.WorldlineSmokeAwait.observe(builder,20);
    int dcx = PortalScaleSetSupport.floor(dest.x()) >> 4, dcz = PortalScaleSetSupport.floor(dest.z()) >> 4;
    RemoteChunkSnapshot nether = world.chunkAt(dcx, dcz);
    evidence = PortalScaleSetScale.prove(entry, dest, frame.column, PortalScaleSetSupport.sky(nether));

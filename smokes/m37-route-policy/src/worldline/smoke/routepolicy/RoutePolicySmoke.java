@@ -45,7 +45,7 @@ public final class RoutePolicySmoke {
             server.boot(); B173PlayerSeed.write(workspace, username, 4.5D, 60D, 4.5D);
             client.connect(); awaitPlayers(server, Collections.singletonList(username));
             initial = client.synchronizePose(); int chunkX = floor(initial.x()) >> 4, chunkZ = floor(initial.z()) >> 4;
-            client.awaitRemoteChunk(chunkX, chunkZ); RemoteWorldView before = client.sustainTicks(5);
+            client.awaitRemoteChunk(chunkX, chunkZ); RemoteWorldView before = worldline.test.WorldlineSmokeAwait.observe(client,5);
             PlayerPose accepted = new PlayerPose(initial.x() + .125D, initial.y(), initial.z(),
                     initial.yaw(), initial.pitch()); BlockPosition block = solid(before, accepted);
             route = client.moveRoute(Arrays.asList(new MovementStep(.125D, 0D, 0D, 5),
@@ -58,7 +58,7 @@ public final class RoutePolicySmoke {
                     && outcomes.get(0).resulting().equals(accepted), "accepted step drifted");
             require(outcomes.get(1).corrected() && route.finalPose().equals(accepted),
                     "corrected step did not stop at accepted pose");
-            after = client.sustainTicks(1); require(after.containsChunk(chunkX, chunkZ), "stopped route lost cache");
+            after = worldline.test.WorldlineSmokeAwait.observe(client,1); require(after.containsChunk(chunkX, chunkZ), "stopped route lost cache");
             client.close(); awaitPlayers(server, Collections.emptyList()); server.save(); player = server.player(username);
             require(close(player.x(), accepted.x()) && close(player.y(), accepted.y())
                     && close(player.z(), accepted.z()), "unexecuted third step changed persisted pose");

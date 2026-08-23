@@ -10,13 +10,13 @@ public final class PistonMotionSetArm{
  static PistonMotionSetArm place(B173WireClient a,RemoteChunkSnapshot initial,BlockPosition support,int cx,int cz,int slot,int id)throws Exception{
   BlockPosition piston=BlockFace.UP.adjacent(support),head=BlockFace.WEST.adjacent(piston),pushed=BlockFace.WEST.adjacent(head),lever=BlockFace.EAST.adjacent(support);
   require(at(initial,piston,cx,cz).legacyId()==0&&at(initial,head,cx,cz).legacyId()==0&&at(initial,pushed,cx,cz).legacyId()==0&&at(initial,lever,cx,cz).legacyId()==0,"piston "+id+" targets were not initial air");
-  a.look(-90F,0F);a.selectHeldSlot(slot);a.placeHeldBlock(support,BlockFace.UP);BlockState placed=a.sustainTicks(5).blockAt(piston.x(),piston.y(),piston.z());require(placed.equals(new BlockState(id,4)),"west piston "+id+" absent: "+placed+" at "+piston.x()+":"+piston.y()+":"+piston.z());
+  a.look(-90F,0F);a.selectHeldSlot(slot);a.placeHeldBlock(support,BlockFace.UP);BlockState placed=worldline.test.WorldlineSmokeAwait.observe(a,5).blockAt(piston.x(),piston.y(),piston.z());require(placed.equals(new BlockState(id,4)),"west piston "+id+" absent: "+placed+" at "+piston.x()+":"+piston.y()+":"+piston.z());
   a.selectHeldSlot(0);a.placeHeldBlock(piston,BlockFace.WEST);a.awaitBlock(head,new BlockState(1,0));
-  a.selectHeldSlot(3);a.placeHeldBlock(support,BlockFace.EAST);require(a.sustainTicks(5).blockAt(lever.x(),lever.y(),lever.z()).equals(new BlockState(69,1)),"lever absent for piston "+id);
+  a.selectHeldSlot(3);a.placeHeldBlock(support,BlockFace.EAST);require(worldline.test.WorldlineSmokeAwait.observe(a,5).blockAt(lever.x(),lever.y(),lever.z()).equals(new BlockState(69,1)),"lever absent for piston "+id);
   return new PistonMotionSetArm(support,piston,head,pushed,lever);
  }
  RemoteWorldView pulse(B173WireClient a,int ticks,BlockState pistonWant,BlockState headWant,BlockState pushedWant,int leverMeta,String label)throws Exception{
-  a.activateBlock(lever,BlockFace.UP);RemoteWorldView live=a.sustainTicks(ticks);
+  a.activateBlock(lever,BlockFace.UP);RemoteWorldView live=worldline.test.WorldlineSmokeAwait.observe(a,ticks);
   require(live.blockAt(lever.x(),lever.y(),lever.z()).equals(new BlockState(69,leverMeta))&&live.blockAt(piston.x(),piston.y(),piston.z()).equals(pistonWant)&&live.blockAt(head.x(),head.y(),head.z()).equals(headWant)&&live.blockAt(pushed.x(),pushed.y(),pushed.z()).equals(pushedWant),label+" absent: "+live.blockAt(piston.x(),piston.y(),piston.z())+"/"+live.blockAt(head.x(),head.y(),head.z())+"/"+live.blockAt(pushed.x(),pushed.y(),pushed.z()));
   return live;
  }

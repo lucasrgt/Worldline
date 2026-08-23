@@ -16,7 +16,7 @@ public final class LeafDecaySetSmoke{
    actor.selectHeldSlot(1);oakLog=place(actor,top,BlockFace.NORTH,17,0);actor.selectHeldSlot(4);oakLeaf=place(actor,oakLog,BlockFace.UP,18,8);
    pose=go(actor,pose,top.x()+0.5D,top.y()+2.0D,top.z()+0.5D);actor.selectHeldSlot(0);sprucePad=span(actor,top,1D,0D,BlockFace.EAST,6);actor.selectHeldSlot(2);spruceLog=place(actor,sprucePad,BlockFace.EAST,17,1);actor.selectHeldSlot(5);spruceLeaf=place(actor,spruceLog,BlockFace.UP,18,9);
    pose=go(actor,pose,top.x()+0.5D,top.y()+2.0D,top.z()+0.5D);actor.selectHeldSlot(0);birchPad=span(actor,top,0D,1D,BlockFace.SOUTH,6);actor.selectHeldSlot(3);birchLog=place(actor,birchPad,BlockFace.EAST,17,2);actor.selectHeldSlot(6);birchLeaf=place(actor,birchLog,BlockFace.UP,18,10);
-   RemoteWorldView placed=actor.sustainTicks(5);require(leaf(at(placed,oakLeaf),0)&&leaf(at(placed,spruceLeaf),1)&&leaf(at(placed,birchLeaf),2),"live leaf-decay-set placement drift");
+   RemoteWorldView placed=worldline.test.WorldlineSmokeAwait.observe(actor,5);require(leaf(at(placed,oakLeaf),0)&&leaf(at(placed,spruceLeaf),1)&&leaf(at(placed,birchLeaf),2),"live leaf-decay-set placement drift");
    actor.selectHeldSlot(7);pose=go(actor,pose,oakLog.x()+0.5D,top.y()+1.0D,oakLog.z()+0.5D);harvest(actor,oakLog);actor.awaitBlock(oakLog,AIR);
    pose=go(actor,pose,spruceLog.x()+0.5D,top.y()+1.0D,spruceLog.z()+0.5D);harvest(actor,spruceLog);actor.awaitBlock(spruceLog,AIR);
    pose=go(actor,pose,birchLog.x()+0.5D,top.y()+1.0D,birchLog.z()+0.5D);harvest(actor,birchLog);actor.awaitBlock(birchLog,AIR);
@@ -26,10 +26,9 @@ public final class LeafDecaySetSmoke{
    String evidence="column="+column+",oakLog="+cell(oakLog)+":17:0->0:0,oakLeaves="+cell(oakLeaf)+":18:8->0:0,spruceLog="+cell(spruceLog)+":17:1->0:0,spruceLeaves="+cell(spruceLeaf)+":18:9->0:0,birchLog="+cell(birchLog)+":17:2->0:0,birchLeaves="+cell(birchLeaf)+":18:10->0:0,items=18:0+18:1+18:2,persisted=true,clients=2,disconnect=clean";String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=raised-stone+oak17:0+spruce17:1+birch17:2+leaves18:0+18:1+18:2|cause=packet14-remove-log-support|wire=packet53-leaves18:8+18:9+18:10->0:0|oracle=bounded-tick-oak-spruce-birch-leaf-decay+fresh-login|"+evidence;System.out.println("WORLDLINE_M385_SET="+evidence);System.out.println("WORLDLINE_M385_TRACE="+trace);System.out.println("WORLDLINE_M385_SIGNATURE="+sha(trace));
   }finally{actor.close();if(reader!=null)reader.close();server.close();}
  }
- private static void harvest(B173WireClient a,BlockPosition target){a.beginBreak(target);a.sustainTicks(20);a.finishBreak(target);}
+ private static void harvest(B173WireClient a,BlockPosition target){a.beginBreak(target);worldline.test.WorldlineSmokeAwait.observe(a,20);a.finishBreak(target);}
  private static void decay(B173WireClient a,BlockPosition oak,int oakType,BlockPosition spruce,int spruceType,BlockPosition birch,int birchType,int window,int windows)throws Exception{
-  for(int n=1;n<=windows;n++){RemoteWorldView v=a.sustainTicks(window);BlockState o=at(v,oak),s=at(v,spruce),b=at(v,birch);if(o.equals(AIR)&&s.equals(AIR)&&b.equals(AIR))return;require(leafOrAir(o,oakType)&&leafOrAir(s,spruceType)&&leafOrAir(b,birchType),"leaf-decay-set drift oak="+o+" spruce="+s+" birch="+b+" window="+n);}
-  throw new IllegalStateException("leaves did not decay within bounded wait");
+  worldline.test.WorldlineSmokeAwait.awaitWorld(a,v->at(v,oak).equals(AIR)&&at(v,spruce).equals(AIR)&&at(v,birch).equals(AIR),"oak spruce birch leaf decay",window*windows);
  }
  private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id,int meta)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,meta));return target;}
  private static BlockPosition span(B173WireClient a,BlockPosition from,double dx,double dz,BlockFace face,int n)throws Exception{BlockPosition p=from;for(int i=0;i<n;i++){p=place(a,p,face,1,0);a.moveAndObserve(dx,0D,dz,1);}return p;}

@@ -14,7 +14,7 @@ public final class RemainingPistonOrientSetArm{
  static BlockPosition stack(B173WireClient a,BlockPosition support,int n)throws Exception{a.selectHeldSlot(0);BlockPosition p=support;for(int i=0;i<n;i++)p=place(a,p,BlockFace.UP,1);return p;}
  static BlockPosition piston(B173WireClient a,BlockPosition support,int slot,int id,int meta,float yaw)throws Exception{
   BlockPosition t=BlockFace.UP.adjacent(support);a.selectHeldSlot(slot);a.look(yaw,0F);a.placeHeldBlock(support,BlockFace.UP);
-  BlockState got=a.sustainTicks(5).blockAt(t.x(),t.y(),t.z());require(got.equals(new BlockState(id,meta)),"live piston "+id+":"+meta+" facing drift: "+got+" at "+cell(t));return t;
+  BlockState got=worldline.test.WorldlineSmokeAwait.observe(a,5).blockAt(t.x(),t.y(),t.z());require(got.equals(new BlockState(id,meta)),"live piston "+id+":"+meta+" facing drift: "+got+" at "+cell(t));return t;
  }
  static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}
  static BlockPosition foundation(RemoteChunkSnapshot c,int cx,int cz){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(c.blockAt(x,y,z).legacyId()==3&&water(c.blockAt(x,y+1,z).legacyId()))return new BlockPosition(cx*16+x,y,cz*16+z);throw new IllegalStateException("no deterministic remaining-piston-orient foundation");}

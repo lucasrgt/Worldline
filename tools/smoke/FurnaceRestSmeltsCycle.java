@@ -105,7 +105,7 @@ public final class FurnaceRestSmeltsCycle {
         List<String> command = new ArrayList<>(Arrays.asList("javac", "-encoding", "UTF-8", "--release", "8",
                 "-Xlint:all,-options", "-Werror", "-d", output.toString()));
         command.addAll(javaFiles(root.resolve("modules/api/src/main/java")));
-        command.addAll(javaFiles(root.resolve("adapters/b173-server/src/main/java")));
+        command.addAll(javaFiles(root.resolve("modules/smoketest/src/main/java")));command.addAll(javaFiles(root.resolve("adapters/b173-server/src/main/java")));
         command.addAll(javaFiles(smoke.resolve("src")));
         capture(command);
         return output;

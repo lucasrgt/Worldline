@@ -37,7 +37,7 @@ public final class RemoteTerrainSmoke {
             server.boot(); server.operator(username); client.connect();
             PlayerPose pose = client.synchronizePose();
             client.awaitRemoteChunk((int) Math.floor(pose.x()) >> 4, (int) Math.floor(pose.z()) >> 4);
-            RemoteWorldView world = client.sustainTicks(ticks); chunks = world.chunks().size();
+            RemoteWorldView world = worldline.test.WorldlineSmokeAwait.observe(client,ticks); chunks = world.chunks().size();
             require(chunks >= minimumChunks, "sustained cache remained too small: " + chunks);
             target = target(world, pose); state = world.blockAt(target.x(), target.y(), target.z());
             before = RemoteTerrainFrame.render(world, target);

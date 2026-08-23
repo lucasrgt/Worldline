@@ -37,17 +37,17 @@ public final class ChunkTraversalSmoke {
             server.boot(); client.connect(); pose = client.synchronizePose();
             int startChunkX = (int) Math.floor(pose.x()) >> 4;
             client.awaitRemoteChunk(startChunkX, (int) Math.floor(pose.z()) >> 4);
-            before = client.sustainTicks(ticks); double targetX = (startChunkX + 2) * 16 + 1.5D;
+            before = worldline.test.WorldlineSmokeAwait.observe(client,ticks); double targetX = (startChunkX + 2) * 16 + 1.5D;
             steps = 0;
             for (int rise = 0; rise < 32; rise++) {
-                pose = client.moveBy(0, 0.25D, 0); client.sustainTicks(1); steps++;
+                pose = client.moveBy(0, 0.25D, 0); worldline.test.WorldlineSmokeAwait.observe(client,1); steps++;
             }
             while (pose.x() + 0.000001D < targetX) {
                 double delta = Math.min(0.25D, targetX - pose.x());
-                pose = client.moveBy(delta, 0, 0); client.sustainTicks(1);
+                pose = client.moveBy(delta, 0, 0); worldline.test.WorldlineSmokeAwait.observe(client,1);
                 if (++steps > 176) throw new IllegalStateException("boundary traversal exceeded step bound");
             }
-            after = client.sustainTicks(ticks);
+            after = worldline.test.WorldlineSmokeAwait.observe(client,ticks);
             require(((int) Math.floor(pose.x()) >> 4) == startChunkX + 2,
                     "client pose did not cross two chunk boundaries");
             Set<Long> removed = difference(before, after), added = difference(after, before);

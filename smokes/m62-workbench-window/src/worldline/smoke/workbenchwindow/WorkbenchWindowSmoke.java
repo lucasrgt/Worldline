@@ -53,7 +53,7 @@ public final class WorkbenchWindowSmoke {
             actor.selectHeldSlot(workbenchSlot - 36);
             actor.placeHeldBlock(support, BlockFace.UP); BlockState placed = actor.awaitBlock(
                     target, new BlockState(58, 0)).blockAt(target.x(), target.y(), target.z());
-            actor.sustainTicks(5); require(placed.equals(new BlockState(58, 0))
+            worldline.test.WorldlineSmokeAwait.observe(actor,5); require(placed.equals(new BlockState(58, 0))
                     && actor.inventory().occupiedSlots() == 0, "placed workbench state drifted");
             acquire(actor, actorName, 1, 1); RemoteItemStack stone = new RemoteItemStack(1, 1, 0);
             require(actor.inventory().occupiedSlots() == 1 && actor.inventory().slot(36).item().equals(stone)
@@ -85,9 +85,10 @@ public final class WorkbenchWindowSmoke {
     private static PlayerPose acquire(WorkbenchSession client, String username, int id, int count) {
         int target = client.inventory().occupiedSlots() + count;
         for (int step = 0; step < 10; step++) client.moveAndObserve(0D, 5D, 0D, 3);
-        client.sendChat("/give " + username + " " + id + " " + count); client.sustainTicks(40);
-        for (int step = 0; step < 100 && client.inventory().occupiedSlots() < target; step++)
-            client.moveAndObserve(0D, -1D, 0D, 1); client.sustainTicks(10); MovementOutcome settled = null;
+        client.sendChat("/give " + username + " " + id + " " + count);
+        worldline.test.WorldlineSmokeAwait.awaitEntity(client,()->{client.moveAndObserve(0D,-1D,0D,1);
+            return client.inventory();},inventory->inventory.occupiedSlots()>=target,"workbench grant",100);
+        worldline.test.WorldlineSmokeAwait.observe(client,10); MovementOutcome settled = null;
         for (int step = 0; step < 100; step++) { settled = client.moveAndObserve(0D, -1D, 0D, 2);
             if (settled.corrected()) break; } require(settled != null && settled.corrected(),
                 "ground settlement correction absent"); return settled.resulting();

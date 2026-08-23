@@ -166,7 +166,7 @@ final class RepositoryVerify {
             enforceBudget("harness", VerificationRoots.read(root));
             enforceBudget("adapter", Collections.singletonList(root.resolve("adapters")));
             DataDrivenCycleCheck.execute(root); RetryMigrationCheck.execute(root);
-            new SourceQualityCheck(root).execute();
+            FixedWaitMigrationCheck.execute(root); new SourceQualityCheck(root).execute();
         });
         report.step("runtime-fabric-self-test", () -> new RuntimeFabricCheck(root).execute());
         recreateBuildDirectory();

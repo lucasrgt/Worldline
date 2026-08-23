@@ -48,12 +48,12 @@ public final class RejectedTransactionRecoverySmoke {
                     && rejected.authoritative().slot(36).empty() && rejected.cursorBeforeEmpty()
                     && rejected.cursorAfter().equals(stone)
                     && actor.inventory().equals(rejected.authoritative()), "rejected recovery drifted");
-            actor.sustainTicks(5); observer.awaitPeerHeldItem(RemoteHeldItem.empty(actorName));
+            worldline.test.WorldlineSmokeAwait.observe(actor,5); observer.awaitPeerHeldItem(RemoteHeldItem.empty(actorName));
             accepted = actor.clickPersonalSlot(36);
             require(accepted.actionId() == 2 && accepted.predictedEmpty()
                     && accepted.after().slot(36).item().equals(stone) && accepted.cursorAfterEmpty(),
                     "post-recovery accepted transition drifted");
-            actor.sustainTicks(5); observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 1, 0));
+            worldline.test.WorldlineSmokeAwait.observe(actor,5); observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 1, 0));
             require(initial.slot(36).item().equals(stone) && rejected.authoritative().slot(36).empty(),
                     "recovery snapshots mutated");
             actor.close(); observer.close(); awaitPlayers(server, 0); server.save(); player = server.player(actorName);

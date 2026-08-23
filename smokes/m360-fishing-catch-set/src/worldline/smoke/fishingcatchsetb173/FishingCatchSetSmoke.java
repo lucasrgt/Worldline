@@ -12,7 +12,7 @@ public final class FishingCatchSetSmoke{
   B173DedicatedServer server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true);B173WireClient actor=new B173WireClient("127.0.0.1",port,user,timeout);BlockPosition top,pool;int column;RemoteObjectSpawn hook;RemoteDroppedItem catchDrop;
   try{server.boot();B173PlayerSeed.writeInventory(workspace,user,4.5D,60D,4.5D,new int[]{0,1,2},new int[]{1,9,346},new int[]{48,16,1},new int[]{0,0,0});actor.connect();actor.synchronizePose();require(actor.awaitInventory().occupiedSlots()==3,"fishing-catch inventory drift");RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);top=foundation(initial,cx,cz);column=0;actor.selectHeldSlot(0);
    while(fluid(initial.blockAt(local(top.x(),cx),top.y()+1,local(top.z(),cz)).legacyId())){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);require(++column<=15,"water column exceeded fishing-catch fixture");}for(int lift=0;lift<8;lift++){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);column++;}
-   pad(actor,top);actor.selectHeldSlot(1);pool=fill(actor,top);require(fluid(actor.sustainTicks(5).blockAt(pool.x(),pool.y(),pool.z()).legacyId()),"still-water fishing pool drift");
+   pad(actor,top);actor.selectHeldSlot(1);pool=fill(actor,top);require(fluid(worldline.test.WorldlineSmokeAwait.observe(actor,5).blockAt(pool.x(),pool.y(),pool.z()).legacyId()),"still-water fishing pool drift");
    actor.selectHeldSlot(2);actor.look(0F,40F);actor.useSelectedItemInAir();hook=actor.awaitObjectSpawn(90);require(hook.type()==90&&hook.entityId()!=actor.state().entityId(),"fishing-hook Packet23 type 90 absent");
    catchDrop=reel(actor,hook);require(catchDrop!=null&&catchDrop.item().legacyId()==349&&catchDrop.item().count()==1,"fishing catch Packet21 349 absent");
    actor.close();awaitPlayers(server,0);server.save();
@@ -21,7 +21,7 @@ public final class FishingCatchSetSmoke{
  }
  private static RemoteDroppedItem reel(B173WireClient a,RemoteObjectSpawn hook)throws Exception{
   require(hook!=null&&hook.type()==90,"fishing-hook identity drift");
-  for(int attempt=0;attempt<120;attempt++){a.sustainTicks(40);a.useSelectedItemInAir();a.sustainTicks(8);RemoteDroppedItem drop=a.peekDroppedItem(FISH);if(drop!=null)return drop;a.useSelectedItemInAir();RemoteObjectSpawn recast=a.awaitObjectSpawn(90);require(recast.type()==90&&recast.entityId()!=a.state().entityId(),"fishing-hook recast Packet23 type 90 absent");}
+  for(int attempt=0;attempt<120;attempt++){worldline.test.WorldlineSmokeAwait.observe(a,40);a.useSelectedItemInAir();RemoteDroppedItem drop=worldline.test.WorldlineSmokeAwait.awaitEntityOrNull(a,()->a.peekDroppedItem(FISH),value->value!=null,"fishing catch",8);if(drop!=null)return drop;a.useSelectedItemInAir();RemoteObjectSpawn recast=a.awaitObjectSpawn(90);require(recast.type()==90&&recast.entityId()!=a.state().entityId(),"fishing-hook recast Packet23 type 90 absent");}
   throw new IllegalStateException("fishing catch Packet21 349 absent after bounded recasts");
  }
  private static void pad(B173WireClient a,BlockPosition top)throws Exception{for(int dz=1;dz<=3;dz++){BlockPosition row=place(a,new BlockPosition(top.x(),top.y(),top.z()+dz-1),BlockFace.SOUTH,1);place(a,row,BlockFace.WEST,1);place(a,row,BlockFace.EAST,1);}}

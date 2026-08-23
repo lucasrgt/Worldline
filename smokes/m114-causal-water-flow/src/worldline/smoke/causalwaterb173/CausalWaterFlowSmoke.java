@@ -37,7 +37,7 @@ public final class CausalWaterFlowSmoke {
                 require(!move.corrected()||pose.y()<=target.y()+5D,"descent corrected above dig range");}
             Thread.sleep(1000L);actor.beginBreak(target);Thread.sleep(3000L);actor.finishBreak(target);
             opened=actor.awaitBlock(target,new BlockState(0,0)).blockAt(target.x(),target.y(),target.z());
-            RemoteWorldView live=actor.sustainTicks(settleTicks);settled=live.blockAt(target.x(),target.y(),target.z());
+            RemoteWorldView live=worldline.test.WorldlineSmokeAwait.observe(actor,settleTicks);settled=live.blockAt(target.x(),target.y(),target.z());
             require(water(settled.legacyId()),"generated water did not enter opened cell: "+settled);
             actor.close();awaitPlayers(server,0);server.save();reader=new B173WireClient("127.0.0.1",port,username,timeout);
             reader.connect();reader.synchronizePose();after=reader.awaitRemoteChunk(chunkX,chunkZ).chunkAt(chunkX,chunkZ);

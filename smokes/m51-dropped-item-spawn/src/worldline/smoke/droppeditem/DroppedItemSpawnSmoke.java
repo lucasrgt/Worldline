@@ -46,7 +46,8 @@ public final class DroppedItemSpawnSmoke {
             observer.connect(); observer.synchronizePose(); requirePlayers(server.players(), actorName, observerName);
             observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 1, 0)); actor.dropHeldItem();
             dropped = observer.awaitDroppedItem(stone); requireSpawn(dropped, actorPose);
-            actor.sustainTicks(10); after = actor.inventory(); require(after.occupiedSlots() == 0
+            after = worldline.test.WorldlineSmokeAwait.awaitEntity(actor, actor::inventory,
+                    view -> view.occupiedSlots() == 0, "dropped local slot", 10); require(after.occupiedSlots() == 0
                     && after.slot(36).empty(), "local dropped slot did not become empty");
             empty = observer.awaitPeerHeldItem(RemoteHeldItem.empty(actorName)); require(empty.empty(), "peer hand not empty");
             actor.close(); observer.close(); awaitPlayers(server, 0); server.save(); player = server.player(actorName);

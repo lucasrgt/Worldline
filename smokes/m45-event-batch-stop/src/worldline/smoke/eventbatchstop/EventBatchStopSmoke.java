@@ -49,7 +49,7 @@ public final class EventBatchStopSmoke {
         try {
             server.boot(); client.connect(); awaitPlayers(server, Collections.singletonList(username));
             PlayerPose initial = client.synchronizePose(); int chunkX = floor(initial.x()) >> 4;
-            int chunkZ = floor(initial.z()) >> 4; client.awaitRemoteChunk(chunkX, chunkZ); client.sustainTicks(5);
+            int chunkZ = floor(initial.z()) >> 4; client.awaitRemoteChunk(chunkX, chunkZ); worldline.test.WorldlineSmokeAwait.observe(client,5);
             CorrelatedMovementRoutePlan firstPlan = new CorrelatedMovementRoutePlan(first, Arrays.asList(
                     alternative(.125D, 0D, 0D), alternative(0D, 0D, .125D)));
             CorrelatedMovementRoutePlan secondPlan = new CorrelatedMovementRoutePlan(second,
@@ -67,7 +67,7 @@ public final class EventBatchStopSmoke {
                     && batch.finalExecution().execution().termination() == MovementRouteTermination.CONTROLLER_STOP
                     && batch.finalExecution().execution().result().outcomes().size() == 1,
                     "event stop did not exclude unsent movement");
-            after = client.sustainTicks(1); require(after.containsChunk(chunkX, chunkZ), "event-stopped batch lost cache");
+            after = worldline.test.WorldlineSmokeAwait.observe(client,1); require(after.containsChunk(chunkX, chunkZ), "event-stopped batch lost cache");
             client.close(); awaitPlayers(server, Collections.emptyList()); server.save(); player = server.player(username);
             PlayerPose finalPose = batch.finalExecution().execution().result().finalPose();
             require(close(player.x(), finalPose.x()) && close(player.y(), finalPose.y())

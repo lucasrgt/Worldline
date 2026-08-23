@@ -24,11 +24,11 @@ public final class TntExplosionSmoke {
             RemoteChunkSnapshot initial = actor.awaitRemoteChunk(0, 0).chunkAt(0, 0); top = foundation(initial); actor.selectHeldSlot(0);
             while (water(initial.blockAt(top.x(), top.y() + 1, top.z()).legacyId())) { top = place(actor, top, BlockFace.UP, 1); actor.moveAndObserve(0, 1, 0, 1); column++; require(column <= 15, "water column exceeded stack"); }
             for (int index = 0; index < 6; index++) { top = place(actor, top, BlockFace.UP, 1); actor.moveAndObserve(0, 1, 0, 1); column++; }
-            actor.selectHeldSlot(1); tnt = place(actor, top, BlockFace.UP, 46); RemoteWorldView before = actor.sustainTicks(fixtureTicks);
+            actor.selectHeldSlot(1); tnt = place(actor, top, BlockFace.UP, 46); RemoteWorldView before = worldline.test.WorldlineSmokeAwait.observe(actor,fixtureTicks);
             require(before.blockAt(top.x(), top.y(), top.z()).equals(new BlockState(1, 0)) && before.blockAt(tnt.x(), tnt.y(), tnt.z()).equals(new BlockState(46, 0)), "TNT baseline drift");
-            actor.selectHeldSlot(2); actor.useHeldItemOnBlock(tnt, BlockFace.UP); actor.moveAndObserve(10D, 0D, 0D, 4); actor.sustainTicks(fuseTicks); explosion = actor.awaitExplosion();
+            actor.selectHeldSlot(2); actor.useHeldItemOnBlock(tnt, BlockFace.UP); actor.moveAndObserve(10D, 0D, 0D, 4); worldline.test.WorldlineSmokeAwait.observe(actor,fuseTicks); explosion = actor.awaitExplosion();
             require(explosion.strength() == 4F && Math.abs(explosion.x() - (tnt.x() + 0.5D)) < 2D && Math.abs(explosion.y() - (tnt.y() + 0.5D)) < 4D && Math.abs(explosion.z() - (tnt.z() + 0.5D)) < 2D, "Packet60 center/strength drift: " + explosion.x() + ":" + explosion.y() + ":" + explosion.z() + ":" + explosion.strength());
-            RemoteWorldView after = actor.sustainTicks(1); require(explosion.destroyed().contains(top) && after.blockAt(top.x(), top.y(), top.z()).equals(new BlockState(0, 0)) && after.blockAt(tnt.x(), tnt.y(), tnt.z()).equals(new BlockState(0, 0)), "TNT destruction drift");
+            RemoteWorldView after = worldline.test.WorldlineSmokeAwait.observe(actor,1); require(explosion.destroyed().contains(top) && after.blockAt(top.x(), top.y(), top.z()).equals(new BlockState(0, 0)) && after.blockAt(tnt.x(), tnt.y(), tnt.z()).equals(new BlockState(0, 0)), "TNT destruction drift");
             actor.close(); awaitPlayers(server, 0); server.save(); reader = new B173WireClient("127.0.0.1", port, username, timeout); reader.connect(); reader.synchronizePose();
             RemoteWorldView persisted = reader.awaitRemoteChunk(0, 0); require(persisted.blockAt(top.x(), top.y(), top.z()).equals(new BlockState(0, 0)) && persisted.blockAt(tnt.x(), tnt.y(), tnt.z()).equals(new BlockState(0, 0)), "fresh explosion persistence drift");
         } finally { actor.close(); if (reader != null) reader.close(); server.close(); }

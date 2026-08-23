@@ -18,7 +18,7 @@ public final class PistonImmovableSetSmoke{
    furnace=PistonImmovableSetArm.place(actor,initial,furnaceSupport,cx,cz,1,3,61,5);
    BlockPosition spawnerSupport=PistonImmovableSetArm.padSouth(actor,furnace.support);
    spawner=PistonImmovableSetArm.place(actor,initial,spawnerSupport,cx,cz,1,4,52,5);actor.selectHeldSlot(6);
-   RemoteWorldView settled=actor.sustainTicks(fixture);
+   RemoteWorldView settled=worldline.test.WorldlineSmokeAwait.observe(actor,fixture);
    PistonImmovableSetArm.require(settled.blockAt(chest.piston.x(),chest.piston.y(),chest.piston.z()).equals(new BlockState(33,4))&&settled.blockAt(chest.payload.x(),chest.payload.y(),chest.payload.z()).equals(chest.payloadState)&&settled.blockAt(chest.destination.x(),chest.destination.y(),chest.destination.z()).equals(new BlockState(0,0)),"chest 54 precondition drift");
    PistonImmovableSetArm.require(settled.blockAt(furnace.piston.x(),furnace.piston.y(),furnace.piston.z()).equals(new BlockState(33,4))&&settled.blockAt(furnace.payload.x(),furnace.payload.y(),furnace.payload.z()).equals(furnace.payloadState)&&settled.blockAt(furnace.destination.x(),furnace.destination.y(),furnace.destination.z()).equals(new BlockState(0,0)),"furnace 61 precondition drift");
    PistonImmovableSetArm.require(settled.blockAt(spawner.piston.x(),spawner.piston.y(),spawner.piston.z()).equals(new BlockState(33,4))&&settled.blockAt(spawner.payload.x(),spawner.payload.y(),spawner.payload.z()).equals(spawner.payloadState)&&settled.blockAt(spawner.destination.x(),spawner.destination.y(),spawner.destination.z()).equals(new BlockState(0,0)),"spawner 52 precondition drift");

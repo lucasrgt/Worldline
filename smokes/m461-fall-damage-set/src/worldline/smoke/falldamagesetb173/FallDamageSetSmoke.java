@@ -21,7 +21,7 @@ public final class FallDamageSetSmoke{
    while(pose.y()>pad.y()+1.01D)pose=actor.moveAndObserve(0D,-Math.min(1.0D,pose.y()-(pad.y()+1.0D)),0D,1).resulting();
    pose=actor.moveAndObserve(tall.x()+0.5D-pose.x(),(tall.y()+1.0D)-pose.y(),tall.z()+0.5D-pose.z(),4).resulting();
    require(over(pose,tall)&&pose.y()>=tall.y()+0.9D,"short-pillar stand drift pose="+pose.x()+","+pose.y()+","+pose.z());
-   actor.selectHeldSlot(0);actor.sustainTicks(2);
+   actor.selectHeldSlot(0);worldline.test.WorldlineSmokeAwait.observe(actor,2);
    for(int n=0;n<12;n++){pose=actor.moveAndObserve(0D,1D,0D,1).resulting();tall=place(actor,tall,BlockFace.UP,1);}
    pose=walkOff(actor,pose,tall,pad);tallDrop=(int)Math.round(pose.y()-airY);require(tallDrop>=shortDrop+4&&over(pose,pad)&&actor.health()==20,"tall-fall height drift drop="+tallDrop);
    pose=land(actor,pose,airY);tallAfter=B173Fall.awaitDrop(actor,20);require(tallAfter<shortAfter,"tall-fall Packet8 drift "+tallAfter+" vs short "+shortAfter);
@@ -33,9 +33,9 @@ public final class FallDamageSetSmoke{
   }finally{actor.close();if(reader!=null)reader.close();server.close();}
  }
  private static PlayerPose walkOff(B173WireClient a,PlayerPose pose,BlockPosition top,BlockPosition pad)throws Exception{pose=a.moveAndObserve(top.x()+0.5D-pose.x(),(top.y()+1.0D)-pose.y(),top.z()+0.5D-pose.z(),20).resulting();return a.moveAndObserve(pad.x()+0.5D-pose.x(),0D,pad.z()+0.5D-pose.z(),1).resulting();}
- private static PlayerPose land(B173WireClient a,PlayerPose pose,double y)throws Exception{while(pose.y()>y+0.01D){pose=B173Fall.air(a,0D,Math.max(y-pose.y(),-0.5D),0D);Thread.sleep(50L);}a.moveBy(0D,0D,0D);a.sustainTicks(5);return pose;}
+ private static PlayerPose land(B173WireClient a,PlayerPose pose,double y)throws Exception{while(pose.y()>y+0.01D){pose=B173Fall.air(a,0D,Math.max(y-pose.y(),-0.5D),0D);Thread.sleep(50L);}a.moveBy(0D,0D,0D);worldline.test.WorldlineSmokeAwait.observe(a,5);return pose;}
  private static boolean over(PlayerPose p,BlockPosition b){return Math.abs(p.x()-(b.x()+0.5D))<0.2D&&Math.abs(p.z()-(b.z()+0.5D))<0.2D;}
- private static void heal(B173WireClient a,int expect)throws Exception{for(int n=0;n<40&&a.health()<expect;n++)a.sustainTicks(1);require(a.health()==expect,"golden apple 322 heal drift health="+a.health());}
+ private static void heal(B173WireClient a,int expect)throws Exception{worldline.test.WorldlineSmokeAwait.awaitEntity(a,a::health,h->h>=expect,"health "+expect,40);require(a.health()==expect,"golden apple 322 heal drift health="+a.health());}
  private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}
  private static BlockPosition foundation(RemoteChunkSnapshot q,int cx,int cz){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(q.blockAt(x,y,z).legacyId()==3&&water(q.blockAt(x,y+1,z).legacyId()))return new BlockPosition(cx*16+x,y,cz*16+z);throw new IllegalStateException("no deterministic fall-damage-set foundation");}
  private static boolean water(int id){return id==8||id==9;}private static int local(int v,int c){return v-c*16;}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long e=System.currentTimeMillis()+5000;while(System.currentTimeMillis()<e){if(s.players().size()==n)return;Thread.sleep(100);}throw new IllegalStateException("player count drift");}private static String sha(String s)throws Exception{byte[]b=MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));StringBuilder v=new StringBuilder();for(byte x:b)v.append(String.format("%02x",x&255));return v.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}

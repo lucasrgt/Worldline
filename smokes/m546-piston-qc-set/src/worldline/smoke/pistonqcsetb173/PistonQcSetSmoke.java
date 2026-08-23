@@ -14,7 +14,7 @@ public final class PistonQcSetSmoke{
   try{server.boot();B173PlayerSeed.writeInventory(workspace,user,4.5D,60D,4.5D,new int[]{0,1,2},new int[]{1,33,69},new int[]{32,1,1},new int[]{0,0,0});actor.connect();actor.synchronizePose();actor.look(-90F,0F);PistonQcSetArm.require(actor.awaitInventory().occupiedSlots()==3,"piston-qc inventory drift");
    RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);BlockPosition top=PistonQcSetArm.raise(actor,initial,cx,cz,column);
    arm=PistonQcSetArm.place(actor,initial,top,cx,cz);actor.selectHeldSlot(3);
-   RemoteWorldView settled=actor.sustainTicks(fixture);
+   RemoteWorldView settled=worldline.test.WorldlineSmokeAwait.observe(actor,fixture);
    PistonQcSetArm.require(settled.blockAt(arm.piston.x(),arm.piston.y(),arm.piston.z()).equals(new BlockState(33,4))&&settled.blockAt(arm.head.x(),arm.head.y(),arm.head.z()).equals(new BlockState(0,0))&&settled.blockAt(arm.above.x(),arm.above.y(),arm.above.z()).equals(new BlockState(1,0))&&settled.blockAt(arm.lever.x(),arm.lever.y(),arm.lever.z()).equals(new BlockState(69,1))&&!PistonQcSetArm.directPower(settled,arm.piston),"piston 33 QC precondition drift");
    arm.pulse(actor,signal,new BlockState(33,12),new BlockState(34,4),9,"piston 33 QC extend");
    arm.pulse(actor,signal,new BlockState(33,4),new BlockState(0,0),1,"piston 33 QC retract");

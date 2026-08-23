@@ -44,7 +44,7 @@ public final class RouteRecoverySmoke {
             server.boot(); B173PlayerSeed.write(workspace, username, 4.5D, 60D, 4.5D);
             client.connect(); awaitPlayers(server, Collections.singletonList(username));
             initial = client.synchronizePose(); int chunkX = floor(initial.x()) >> 4, chunkZ = floor(initial.z()) >> 4;
-            client.awaitRemoteChunk(chunkX, chunkZ); RemoteWorldView before = client.sustainTicks(5);
+            client.awaitRemoteChunk(chunkX, chunkZ); RemoteWorldView before = worldline.test.WorldlineSmokeAwait.observe(client,5);
             PlayerPose predicted = new PlayerPose(initial.x() + .125D, initial.y(), initial.z(),
                     initial.yaw(), initial.pitch()); BlockPosition block = solid(before, predicted);
             route = client.moveRoute(Arrays.asList(new MovementStep(.125D, 0D, 0D, 5),
@@ -60,7 +60,7 @@ public final class RouteRecoverySmoke {
             require(outcomes.get(2).disposition() == MovementDisposition.UNCHALLENGED
                     && close(route.finalPose().x(), predicted.x() + .125D), "route did not recover after correction");
             require(route.corrections() == 1, "route correction count drifted");
-            after = client.sustainTicks(1); require(after.containsChunk(chunkX, chunkZ), "route lost cached chunk");
+            after = worldline.test.WorldlineSmokeAwait.observe(client,1); require(after.containsChunk(chunkX, chunkZ), "route lost cached chunk");
             client.close(); awaitPlayers(server, Collections.emptyList()); server.save(); player = server.player(username);
             require(close(player.x(), route.finalPose().x()) && close(player.y(), route.finalPose().y())
                     && close(player.z(), route.finalPose().z()), "recovered route pose was not persisted");

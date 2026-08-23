@@ -40,7 +40,7 @@ public final class PoseCorrectionSmoke {
             int chunkZ = Math.floorDiv(witness.observation().z(), 16);
             BlockPosition block = solid(before);
             attempted = client.moveBy(block.x() + .5D - initial.x(), block.y() - initial.y(),
-                    block.z() + .5D - initial.z()); after = client.sustainTicks(10);
+                    block.z() + .5D - initial.z()); after = worldline.test.WorldlineSmokeAwait.observe(client,10);
             corrected = client.moveBy(0, 0, 0);
             require(!corrected.equals(attempted), "server did not correct invalid movement");
             require(corrected.equals(initial), "correction did not restore authoritative pose");

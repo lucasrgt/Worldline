@@ -11,13 +11,13 @@ public final class PistonQcSetArm{
   BlockPosition piston=BlockFace.UP.adjacent(support),head=BlockFace.WEST.adjacent(piston),above=BlockFace.UP.adjacent(piston),lever=BlockFace.EAST.adjacent(above);
   require(at(initial,piston,cx,cz).legacyId()==0&&at(initial,head,cx,cz).legacyId()==0&&at(initial,above,cx,cz).legacyId()==0&&at(initial,lever,cx,cz).legacyId()==0,"piston QC targets were not initial air");
   require(manhattan(piston,lever)>1,"QC lever must not be adjacent to the piston cell");
-  a.look(-90F,0F);a.selectHeldSlot(1);a.placeHeldBlock(support,BlockFace.UP);BlockState placed=a.sustainTicks(5).blockAt(piston.x(),piston.y(),piston.z());require(placed.equals(new BlockState(33,4)),"west piston 33 absent: "+placed+" at "+cell(piston));
+  a.look(-90F,0F);a.selectHeldSlot(1);a.placeHeldBlock(support,BlockFace.UP);BlockState placed=worldline.test.WorldlineSmokeAwait.awaitBlock(a,piston,new BlockState(33,4),5).blockAt(piston.x(),piston.y(),piston.z());require(placed.equals(new BlockState(33,4)),"west piston 33 absent: "+placed+" at "+cell(piston));
   a.selectHeldSlot(0);a.placeHeldBlock(piston,BlockFace.UP);a.awaitBlock(above,new BlockState(1,0));
-  a.selectHeldSlot(2);a.placeHeldBlock(above,BlockFace.EAST);require(a.sustainTicks(5).blockAt(lever.x(),lever.y(),lever.z()).equals(new BlockState(69,1)),"lever absent on the above-block");
+  a.selectHeldSlot(2);a.placeHeldBlock(above,BlockFace.EAST);require(worldline.test.WorldlineSmokeAwait.awaitBlock(a,lever,new BlockState(69,1),5).blockAt(lever.x(),lever.y(),lever.z()).equals(new BlockState(69,1)),"lever absent on the above-block");
   return new PistonQcSetArm(support,piston,head,above,lever);
  }
  RemoteWorldView pulse(B173WireClient a,int ticks,BlockState pistonWant,BlockState headWant,int leverMeta,String label)throws Exception{
-  a.activateBlock(lever,BlockFace.UP);RemoteWorldView live=a.sustainTicks(ticks);
+  a.activateBlock(lever,BlockFace.UP);RemoteWorldView live=worldline.test.WorldlineSmokeAwait.observe(a,ticks);
   require(live.blockAt(lever.x(),lever.y(),lever.z()).equals(new BlockState(69,leverMeta))&&live.blockAt(above.x(),above.y(),above.z()).equals(new BlockState(1,0))&&live.blockAt(piston.x(),piston.y(),piston.z()).equals(pistonWant)&&live.blockAt(head.x(),head.y(),head.z()).equals(headWant)&&!directPower(live,piston),label+" absent: "+live.blockAt(piston.x(),piston.y(),piston.z())+"/"+live.blockAt(head.x(),head.y(),head.z())+"/"+live.blockAt(lever.x(),lever.y(),lever.z()));
   return live;
  }

@@ -51,14 +51,12 @@ public final class ChestRetrievalSmoke {
                     .legacyId() != 0 && replaceable(baseline.blockAt(target.x(), target.y(), target.z())),
                     "chest retrieval anchor drifted");
             require(!actor.moveAndObserve(0D, 3D, 0D, 3).corrected(), "chest retrieval clearance failed");
-            actor.placeHeldBlock(support, BlockFace.UP); BlockState chest = actor.sustainTicks(5)
+            actor.placeHeldBlock(support, BlockFace.UP); BlockState chest = worldline.test.WorldlineSmokeAwait.observe(actor,5)
                     .blockAt(target.x(), target.y(), target.z()); require(chest.legacyId() == 54,
                     "retrieval chest placement drifted");
-            actor.sendChat("/give " + name + " 1 1"); actor.sustainTicks(40);
-            for (int step = 0; step < 10 && actor.inventory().occupiedSlots() < 1; step++)
-                actor.moveAndObserve(0D, -1D, 0D, 2);
-            actor.sustainTicks(10); RemoteItemStack stone = new RemoteItemStack(1, 1, 0);
-            require(actor.inventory().slot(36).item().equals(stone), "retrieval stone seed drifted");
+            actor.sendChat("/give " + name + " 1 1");
+            RemoteItemStack stone = new RemoteItemStack(1, 1, 0);
+            worldline.test.WorldlineSmokeAwait.awaitSlot(actor,actor::inventory,36,stone,40);
             actor.selectHeldSlot(1); RemoteContainerWindow opened = actor.openChest(target, BlockFace.UP);
             require(opened.inventory().slot(54).item().equals(stone) && opened.inventory().slot(0).empty(),
                     "initial chest mapping drifted");
@@ -105,10 +103,10 @@ public final class ChestRetrievalSmoke {
         return new B173WireClient("127.0.0.1", port, name, timeout); }
     private static PlayerPose acquireChest(ChestRetrievalSession client, String name) {
         for (int step = 0; step < 10; step++) client.moveAndObserve(0D, 5D, 0D, 3);
-        client.sendChat("/give " + name + " 54 1"); client.sustainTicks(40);
-        for (int step = 0; step < 100 && client.inventory().occupiedSlots() < 1; step++)
-            client.moveAndObserve(0D, -1D, 0D, 1);
-        client.sustainTicks(10); MovementOutcome settled = null; for (int step = 0; step < 100; step++) {
+        client.sendChat("/give " + name + " 54 1");
+        worldline.test.WorldlineSmokeAwait.awaitEntity(client,()->{client.moveAndObserve(0D,-1D,0D,1);
+            return client.inventory();},inventory->inventory.occupiedSlots()>=1,"retrieval chest grant",100);
+        worldline.test.WorldlineSmokeAwait.observe(client,10); MovementOutcome settled = null; for (int step = 0; step < 100; step++) {
             settled = client.moveAndObserve(0D, -1D, 0D, 2); if (settled.corrected()) break; }
         require(settled != null && settled.corrected(), "ground settlement correction absent"); return settled.resulting(); }
     private static boolean replaceable(BlockState state) { int id = state.legacyId();

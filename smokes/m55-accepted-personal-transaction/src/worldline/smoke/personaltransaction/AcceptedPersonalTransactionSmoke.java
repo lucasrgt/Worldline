@@ -52,13 +52,13 @@ public final class AcceptedPersonalTransactionSmoke {
                     && take.cursorBeforeEmpty() && take.cursorAfter().equals(stone)
                     && take.after().slot(36).empty() && actor.inventory().equals(take.after()),
                     "accepted take transition drifted");
-            actor.sustainTicks(5); observer.awaitPeerHeldItem(RemoteHeldItem.empty(actorName));
+            worldline.test.WorldlineSmokeAwait.observe(actor,5); observer.awaitPeerHeldItem(RemoteHeldItem.empty(actorName));
             place = actor.clickPersonalSlot(36);
             require(place.actionId() == 2 && place.slot() == 36 && place.predictedEmpty()
                     && place.cursorBefore().equals(stone) && place.cursorAfterEmpty()
                     && place.after().slot(36).item().equals(stone) && actor.inventory().equals(place.after()),
                     "accepted place transition drifted");
-            actor.sustainTicks(5); observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 1, 0));
+            worldline.test.WorldlineSmokeAwait.observe(actor,5); observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 1, 0));
             require(initial.slot(36).item().equals(stone) && take.after().slot(36).empty(),
                     "personal transaction snapshots mutated");
             actor.close(); observer.close(); awaitPlayers(server, 0); server.save(); player = server.player(actorName);
@@ -77,10 +77,10 @@ public final class AcceptedPersonalTransactionSmoke {
         return new B173WireClient("127.0.0.1", port, name, timeout); }
     private static void acquire(PersonalInventoryTransactionSession client, String username) {
         for (int step = 0; step < 10; step++) client.moveAndObserve(0D, 5D, 0D, 3);
-        client.sendChat("/give " + username + " 1 1"); client.sustainTicks(40);
-        for (int step = 0; step < 15 && client.inventory().occupiedSlots() < 1; step++)
-            client.moveAndObserve(0D, -5D, 0D, 3);
-        client.sustainTicks(10);
+        client.sendChat("/give " + username + " 1 1");
+        worldline.test.WorldlineSmokeAwait.awaitEntity(client,()->{client.moveAndObserve(0D,-5D,0D,3);
+            return client.inventory();},inventory->inventory.occupiedSlots()>=1,"personal grant",15);
+        worldline.test.WorldlineSmokeAwait.observe(client,10);
     }
     private static void requirePlayers(List<String> players, String first, String second) {
         Set<String> expected = new HashSet<>(); expected.add(first); expected.add(second);

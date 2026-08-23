@@ -38,7 +38,7 @@ public final class B173RemainingFurnaceSmelts {
                 && opened.inventory().slot(2).empty() && !input.equals(IRON),
                 "remaining furnace open mapping drifted");
         load(actor, inputSlot, fuelSlot, input);
-        actor.sustainTicks(5);
+        worldline.test.WorldlineSmokeAwait.observe(actor,5);
         RemoteItemStack ready = awaitOutput(actor, output);
         RemoteWindowClosure closure = actor.closeWindow();
         require(closure.closedWindow().inventory().slot(2).item().equals(output)

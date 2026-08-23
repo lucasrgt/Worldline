@@ -1,0 +1,22 @@
+schema = 1
+id = "NYA-01M0Q8DPX3AYBXGDR2G9YXBXMD"
+title = "Classify fixed tick windows before polling migration"
+lesson = "A sustainTicks call followed by an assertion is not always a race: preserve intentional tick-duration claims behind a telemetered observation-window contract, use awaitSlot/awaitBlock/awaitEntity for asynchronous conditions, require migration transforms to be idempotent, recompute qualification fingerprints for reviewed source changes, bind portable LF source hashes to prior/current proofs, update data-driven plan pins only when prior/current cycle inputs differ, and leave unrelated pins unchanged."
+scope = [
+    "modules/smoketest/**",
+    "smokes/**",
+    "tools/harness/FixedWaitMigration*.java",
+]
+tags = [
+    "flakiness",
+    "smoke",
+    "lockfile",
+]
+created_at = "2026-08-23T12:09:45Z"
+
+[[occurrences]]
+occurred_at = "2026-08-23T12:09:45Z"
+reported_by = "user:fable-report"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "1c740ed1"

@@ -81,7 +81,7 @@ public final class ChunkTraversalCycle {
         List<String> command = new ArrayList<>(Arrays.asList("javac", "-encoding", "UTF-8",
                 "--release", "8", "-Xlint:all,-options", "-Werror", "-classpath",
                 join(product("api"), mapped, lwjgl), "-d", output.toString()));
-        command.addAll(javaFiles(root.resolve("adapters/b173-server/src/main/java")));
+        command.addAll(javaFiles(root.resolve("modules/smoketest/src/main/java")));command.addAll(javaFiles(root.resolve("adapters/b173-server/src/main/java")));
         command.addAll(javaFiles(smoke.resolve("src"))); capture(command); return output;
     }
 

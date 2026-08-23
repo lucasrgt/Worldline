@@ -19,8 +19,7 @@ public final class GrassSpreadSetArm{
  static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}
  static BlockPosition foundation(RemoteChunkSnapshot c,int cx,int cz){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(c.blockAt(x,y,z).legacyId()==3&&water(c.blockAt(x,y+1,z).legacyId()))return new BlockPosition(cx*16+x,y,cz*16+z);throw new IllegalStateException("no deterministic grass-spread foundation");}
  static void waitSpread(B173WireClient a,BlockPosition[] grass,BlockPosition[] lit,BlockPosition covered,int window,int windows)throws Exception{
-  for(int n=1;n<=windows;n++){RemoteWorldView v=a.sustainTicks(window);for(BlockPosition g:grass)require(id(v,g)==2,"source grass 2 died during wait");require(id(v,covered)==3,"covered dirt 3 converted during wait");if(anyGrass(v,lit))return;for(BlockPosition p:lit)require(id(v,p)==3,"lit dirt drifted to "+id(v,p));}
-  throw new IllegalStateException("lit dirt 3 did not become grass 2 within bound");
+  RemoteWorldView spread=worldline.test.WorldlineSmokeAwait.awaitWorld(a,v->anyGrass(v,lit),"lit dirt grass spread",window*windows);for(BlockPosition g:grass)require(id(spread,g)==2,"source grass 2 died during wait");require(id(spread,covered)==3,"covered dirt 3 converted during wait");
  }
  static void persist(RemoteChunkSnapshot after,int cx,int cz,BlockPosition[] grass,BlockPosition[] lit,BlockPosition covered,BlockPosition cover){
   for(BlockPosition g:grass)require(at(after,g,cx,cz).equals(new BlockState(2,0)),"source grass persist drift");

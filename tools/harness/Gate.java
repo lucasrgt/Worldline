@@ -83,6 +83,12 @@ public final class Gate {
                     "RetryMigration", "--finalize").directory(root.toFile()).inheritIO().start(), 300);
             if (exit != 0) System.exit(exit); return;
         }
+        if (Arrays.equals(arguments, new String[] {"--finalize-fixed-waits"})) {
+            Path classes = compileHarness();
+            int exit = waitFor(new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
+                    "FixedWaitMigration", "--finalize").directory(root.toFile()).inheritIO().start(), 600);
+            if (exit != 0) System.exit(exit); return;
+        }
         Files.createDirectories(control);
         if (arguments.length == 2 && ("--milestone".equals(arguments[0])
                 || "--smoke-id".equals(arguments[0]))) {
@@ -142,6 +148,7 @@ public final class Gate {
                 || Arrays.equals(arguments, new String[] {"--refresh-data-cycle-pins"})
                 || Arrays.equals(arguments, new String[] {"--migrate-eof-retries"})
                 || Arrays.equals(arguments, new String[] {"--finalize-eof-retries"})
+                || Arrays.equals(arguments, new String[] {"--finalize-fixed-waits"})
                 || arguments.length == 2 && ("--new-milestone".equals(arguments[0])
                         || "--candidate".equals(arguments[0])
                         || "--milestone".equals(arguments[0]) || "--smoke-id".equals(arguments[0]));
@@ -151,6 +158,7 @@ public final class Gate {
                 + "--smoke-plan|--migrate-data-cycles|--refresh-data-cycle-pins|"
                 + "--migrate-eof-retries|"
                 + "--finalize-eof-retries|"
+                + "--finalize-fixed-waits|"
                 + "--new-milestone ID|--milestone ID|"
                 + "--candidate ID|--self-test]");
         if (arguments.length == 2 && !arguments[1].matches("[a-z0-9]+(?:-[a-z0-9]+)*"))

@@ -13,7 +13,7 @@ public final class GoldDiamondToolCraftsSmoke{
    RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);top=foundation(initial,cx,cz);column=0;actor.selectHeldSlot(0);
    while(water(initial.blockAt(local(top.x(),cx),top.y()+1,local(top.z(),cz)).legacyId())){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);require(++column<=15,"water column exceeded tool-craft fixture");}
    for(int lift=0;lift<8;lift++){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);column++;}
-   actor.selectHeldSlot(1);bench=BlockFace.UP.adjacent(top);actor.placeHeldBlock(top,BlockFace.UP);actor.awaitBlock(bench,new BlockState(58,0));actor.sustainTicks(5);
+   actor.selectHeldSlot(1);bench=BlockFace.UP.adjacent(top);actor.placeHeldBlock(top,BlockFace.UP);actor.awaitBlock(bench,new BlockState(58,0));worldline.test.WorldlineSmokeAwait.observe(actor,5);
    actor.selectHeldSlot(1);require(actor.inventory().slot(37).empty(),"workbench hand was not consumed");actor.openWorkbench(bench,BlockFace.UP);
    craft(actor,n,38,40,37,new int[]{2,5},new int[]{8},283);craft(actor,n,38,40,41,new int[]{1,2,3},new int[]{5,8},285);
    craft(actor,n,38,40,42,new int[]{1,2,4},new int[]{5,8},286);craft(actor,n,38,40,43,new int[]{2},new int[]{5,8},284);

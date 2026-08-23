@@ -15,14 +15,15 @@ public final class GoldenAppleEatSmoke{
    RemoteInventoryView before=actor.awaitInventory();
    require(before.occupiedSlots()==1&&before.slot(36).item().equals(new RemoteItemStack(322,1,0)),"golden apple inventory drift");
    require(actor.awaitHealth(10)==10,"seeded golden apple health drift");
-   actor.sustainTicks(1);require(actor.health()==10,"pre-eat golden apple health drift health="+actor.health());
-   actor.selectHeldSlot(0);actor.useSelectedItemInAir();actor.sustainTicks(5);
-   require(actor.health()==20,"golden apple Packet8 heal drift health="+actor.health());
-   for(int n=0;n<40&&!actor.inventory().slot(36).empty();n++)actor.sustainTicks(1);
-   require(actor.inventory().slot(36).empty()&&actor.health()==20,"golden apple stack consume drift");
+   actor.selectHeldSlot(0);actor.useSelectedItemInAir();
+   require(actor.awaitHealth(20)==20,"golden apple Packet8 heal drift health="+actor.health());
+   RemoteInventoryView consumed=worldline.test.WorldlineSmokeAwait.awaitEntity(
+    actor,actor::inventory,value->value.slot(36).empty(),"golden apple consumption",40);
+   require(consumed.slot(36).empty()&&actor.health()==20,
+    "golden apple stack consume drift");
    actor.close();awaitPlayers(server,0);server.save();
    reader=new B173WireClient("127.0.0.1",port,user,timeout);reader.connect();reader.synchronizePose();
-   RemoteInventoryView after=reader.awaitInventory();reader.sustainTicks(5);
+   RemoteInventoryView after=reader.awaitInventory();worldline.test.WorldlineSmokeAwait.observe(reader,5);
    require(reader.health()==20&&after.slot(36).empty()&&after.occupiedSlots()==0,"persisted golden apple eat drift health="+reader.health());
    String evidence="chunk="+cx+":"+cz+",health=10->20,heal=20,item=322:1:0->empty,persisted=true,clients=2,disconnect=clean";
    String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=seeded-item322+health10|cause=packet15-direction255-item322|wire=packet8-health10->20+packet103-slot36-empty|oracle=golden-apple-full-heal+stack-consume+fresh-login|"+evidence;

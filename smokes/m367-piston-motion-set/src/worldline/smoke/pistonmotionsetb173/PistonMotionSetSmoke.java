@@ -16,7 +16,7 @@ public final class PistonMotionSetSmoke{
    normal=PistonMotionSetArm.place(actor,initial,top,cx,cz,1,33);
    actor.selectHeldSlot(0);actor.moveAndObserve(2D,0D,0D,2);BlockPosition stickySupport=PistonMotionSetArm.place(actor,top,BlockFace.SOUTH,1);stickySupport=PistonMotionSetArm.place(actor,stickySupport,BlockFace.SOUTH,1);actor.moveAndObserve(0D,0D,2D,2);
    sticky=PistonMotionSetArm.place(actor,initial,stickySupport,cx,cz,2,29);actor.selectHeldSlot(4);
-   RemoteWorldView settled=actor.sustainTicks(fixture);
+   RemoteWorldView settled=worldline.test.WorldlineSmokeAwait.observe(actor,fixture);
    PistonMotionSetArm.require(settled.blockAt(normal.piston.x(),normal.piston.y(),normal.piston.z()).equals(new BlockState(33,4))&&settled.blockAt(normal.head.x(),normal.head.y(),normal.head.z()).equals(new BlockState(1,0))&&settled.blockAt(normal.pushed.x(),normal.pushed.y(),normal.pushed.z()).equals(new BlockState(0,0)),"piston 33 precondition drift");
    PistonMotionSetArm.require(settled.blockAt(sticky.piston.x(),sticky.piston.y(),sticky.piston.z()).equals(new BlockState(29,4))&&settled.blockAt(sticky.head.x(),sticky.head.y(),sticky.head.z()).equals(new BlockState(1,0))&&settled.blockAt(sticky.pushed.x(),sticky.pushed.y(),sticky.pushed.z()).equals(new BlockState(0,0)),"sticky 29 precondition drift");
    normal.pulse(actor,signal,new BlockState(33,12),new BlockState(34,4),new BlockState(1,0),9,"piston 33 extend");

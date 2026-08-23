@@ -50,7 +50,7 @@ public final class RouteTerminationSmoke {
             client.connect(); awaitPlayers(server, Collections.singletonList(username));
             PlayerPose initial = client.synchronizePose(); int chunkX = floor(initial.x()) >> 4;
             int chunkZ = floor(initial.z()) >> 4; client.awaitRemoteChunk(chunkX, chunkZ);
-            RemoteWorldView before = client.sustainTicks(5);
+            RemoteWorldView before = worldline.test.WorldlineSmokeAwait.observe(client,5);
             PlayerPose accepted = new PlayerPose(initial.x() + .125D, initial.y(), initial.z(),
                     initial.yaw(), initial.pitch()); BlockPosition block = solid(before, accepted);
             MovementAlternative safe = alternative(.125D, 0D, 0D);
@@ -73,7 +73,7 @@ public final class RouteTerminationSmoke {
             require(terminal(stopped, stoppedEvents, MovementAttemptKind.FALLBACK)
                     && terminal(exhausted, exhaustedEvents, MovementAttemptKind.PRIMARY),
                     "terminal event identity drifted");
-            after = client.sustainTicks(1); require(after.containsChunk(chunkX, chunkZ), "summarized route lost cache");
+            after = worldline.test.WorldlineSmokeAwait.observe(client,1); require(after.containsChunk(chunkX, chunkZ), "summarized route lost cache");
             client.close(); awaitPlayers(server, Collections.emptyList()); server.save(); player = server.player(username);
             PlayerPose finalPose = exhausted.result().finalPose(); require(close(player.x(), finalPose.x())
                     && close(player.y(), finalPose.y()) && close(player.z(), finalPose.z()),

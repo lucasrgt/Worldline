@@ -10,21 +10,27 @@ public final class ExtendedHeadBreakSetArm{
  static ExtendedHeadBreakSetArm place(B173WireClient a,RemoteChunkSnapshot initial,BlockPosition support,int cx,int cz)throws Exception{
   BlockPosition piston=BlockFace.UP.adjacent(support),head=BlockFace.WEST.adjacent(piston),pushed=BlockFace.WEST.adjacent(head),lever=BlockFace.EAST.adjacent(support);
   require(at(initial,piston,cx,cz).legacyId()==0&&at(initial,head,cx,cz).legacyId()==0&&at(initial,pushed,cx,cz).legacyId()==0&&at(initial,lever,cx,cz).legacyId()==0,"piston 33 targets were not initial air");
-  a.look(-90F,0F);a.selectHeldSlot(1);a.placeHeldBlock(support,BlockFace.UP);BlockState placed=a.sustainTicks(5).blockAt(piston.x(),piston.y(),piston.z());require(placed.equals(new BlockState(33,4)),"west piston 33 absent: "+placed+" at "+piston.x()+":"+piston.y()+":"+piston.z());
+  a.look(-90F,0F);a.selectHeldSlot(1);a.placeHeldBlock(support,BlockFace.UP);worldline.test.WorldlineSmokeAwait.awaitBlock(a,piston,new BlockState(33,4),5);
   a.selectHeldSlot(0);a.placeHeldBlock(piston,BlockFace.WEST);a.awaitBlock(head,new BlockState(1,0));
-  a.selectHeldSlot(2);a.placeHeldBlock(support,BlockFace.EAST);require(a.sustainTicks(5).blockAt(lever.x(),lever.y(),lever.z()).equals(new BlockState(69,1)),"lever absent for piston 33");
+  a.selectHeldSlot(2);a.placeHeldBlock(support,BlockFace.EAST);worldline.test.WorldlineSmokeAwait.awaitBlock(a,lever,new BlockState(69,1),5);
   return new ExtendedHeadBreakSetArm(support,piston,head,pushed,lever);
  }
  RemoteWorldView extend(B173WireClient a,int ticks)throws Exception{
-  a.selectHeldSlot(4);a.activateBlock(lever,BlockFace.UP);RemoteWorldView live=a.sustainTicks(ticks);
+  a.selectHeldSlot(4);a.activateBlock(lever,BlockFace.UP);
+  RemoteWorldView live=worldline.test.WorldlineSmokeAwait.awaitWorld(a,v->
+    v.blockAt(lever.x(),lever.y(),lever.z()).equals(new BlockState(69,9))
+    &&v.blockAt(piston.x(),piston.y(),piston.z()).equals(new BlockState(33,12))
+    &&v.blockAt(head.x(),head.y(),head.z()).equals(new BlockState(34,4))
+    &&v.blockAt(pushed.x(),pushed.y(),pushed.z()).equals(new BlockState(1,0)),
+    "piston 33 extension",ticks);
   require(live.blockAt(lever.x(),lever.y(),lever.z()).equals(new BlockState(69,9))&&live.blockAt(piston.x(),piston.y(),piston.z()).equals(new BlockState(33,12))&&live.blockAt(head.x(),head.y(),head.z()).equals(new BlockState(34,4))&&live.blockAt(pushed.x(),pushed.y(),pushed.z()).equals(new BlockState(1,0)),"piston 33 extend absent: "+live.blockAt(piston.x(),piston.y(),piston.z())+"/"+live.blockAt(head.x(),head.y(),head.z())+"/"+live.blockAt(pushed.x(),pushed.y(),pushed.z()));
   return live;
  }
  RemoteDroppedItem breakBase(B173WireClient a,int ticks)throws Exception{
   BlockState air=new BlockState(0,0);RemoteItemStack drop=new RemoteItemStack(33,1,0);
-  a.selectHeldSlot(3);a.beginBreak(piston);a.sustainTicks(ticks);a.finishBreak(piston);a.awaitBlock(piston,air);a.awaitBlock(head,air);
+  a.selectHeldSlot(3);a.beginBreak(piston);worldline.test.WorldlineSmokeAwait.observe(a,ticks);a.finishBreak(piston);a.awaitBlock(piston,air);a.awaitBlock(head,air);
   RemoteDroppedItem item=a.awaitDroppedItem(drop);require(item.item().equals(drop)&&item.item().legacyId()==33&&item.item().count()==1,"Packet21 piston 33 drop absent");
-  RemoteWorldView live=a.sustainTicks(5);require(live.blockAt(piston.x(),piston.y(),piston.z()).equals(air)&&live.blockAt(head.x(),head.y(),head.z()).equals(air)&&live.blockAt(pushed.x(),pushed.y(),pushed.z()).equals(new BlockState(1,0))&&live.blockAt(lever.x(),lever.y(),lever.z()).equals(new BlockState(69,9)),"extended-base leftover drift: "+live.blockAt(piston.x(),piston.y(),piston.z())+"/"+live.blockAt(head.x(),head.y(),head.z()));
+  RemoteWorldView live=worldline.test.WorldlineSmokeAwait.observe(a,5);require(live.blockAt(piston.x(),piston.y(),piston.z()).equals(air)&&live.blockAt(head.x(),head.y(),head.z()).equals(air)&&live.blockAt(pushed.x(),pushed.y(),pushed.z()).equals(new BlockState(1,0))&&live.blockAt(lever.x(),lever.y(),lever.z()).equals(new BlockState(69,9)),"extended-base leftover drift: "+live.blockAt(piston.x(),piston.y(),piston.z())+"/"+live.blockAt(head.x(),head.y(),head.z()));
   return item;
  }
  void persist(RemoteChunkSnapshot after,int cx,int cz){

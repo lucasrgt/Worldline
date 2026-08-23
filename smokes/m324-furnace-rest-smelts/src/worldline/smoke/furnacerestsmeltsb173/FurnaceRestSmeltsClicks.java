@@ -37,7 +37,7 @@ final class FurnaceRestSmeltsClicks {
                 && !load.input().equals(IRON)
                 && actor.inventory().slot(inputSlot).empty()
                 && actor.inventory().slot(fuelSlot).empty(), "accepted furnace load drifted");
-        actor.sustainTicks(5);
+        worldline.test.WorldlineSmokeAwait.observe(actor,5);
         RemoteFurnaceSmelt smelt = actor.awaitFurnaceSmelt();
         FurnaceRestSmeltsSupport.require(smelt.output().equals(output) && !smelt.output().equals(INGOT)
                 && smelt.maximumCook() == 199 && smelt.maximumBurn() == 1600

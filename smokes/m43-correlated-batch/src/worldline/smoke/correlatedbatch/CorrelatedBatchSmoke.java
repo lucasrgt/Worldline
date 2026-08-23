@@ -49,7 +49,7 @@ public final class CorrelatedBatchSmoke {
         try {
             server.boot(); client.connect(); awaitPlayers(server, Collections.singletonList(username));
             PlayerPose initial = client.synchronizePose(); int chunkX = floor(initial.x()) >> 4;
-            int chunkZ = floor(initial.z()) >> 4; client.awaitRemoteChunk(chunkX, chunkZ); client.sustainTicks(5);
+            int chunkZ = floor(initial.z()) >> 4; client.awaitRemoteChunk(chunkX, chunkZ); worldline.test.WorldlineSmokeAwait.observe(client,5);
             CorrelatedMovementRoutePlan first = new CorrelatedMovementRoutePlan(firstCorrelation,
                     Collections.singletonList(alternative(.125D, 0D, 0D)));
             CorrelatedMovementRoutePlan second = new CorrelatedMovementRoutePlan(secondCorrelation,
@@ -67,7 +67,7 @@ public final class CorrelatedBatchSmoke {
             require(batch.finalExecution().terminalEvent() == events.get(0)
                     && events.get(0).event().kind() == MovementAttemptKind.PRIMARY,
                     "batch terminal event identity drifted");
-            after = client.sustainTicks(1); require(after.containsChunk(chunkX, chunkZ), "batch lost cache");
+            after = worldline.test.WorldlineSmokeAwait.observe(client,1); require(after.containsChunk(chunkX, chunkZ), "batch lost cache");
             client.close(); awaitPlayers(server, Collections.emptyList()); server.save(); player = server.player(username);
             PlayerPose finalPose = batch.finalExecution().execution().result().finalPose();
             require(close(player.x(), finalPose.x()) && close(player.y(), finalPose.y())

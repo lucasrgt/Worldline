@@ -56,7 +56,7 @@ public final class FurnaceOutputSmoke {
                     "furnace output anchor drifted"); observer = client(port, observerName, timeout);
             observer.connect(); observer.synchronizePose(); observer.moveAndObserve(5D, 5D, 0D, 3);
             observer.moveAndObserve(5D, 5D, 0D, 3); requirePlayers(first.players(), actorName, observerName);
-            actor.placeHeldBlock(support, BlockFace.UP); BlockState idle = actor.sustainTicks(5)
+            actor.placeHeldBlock(support, BlockFace.UP); BlockState idle = worldline.test.WorldlineSmokeAwait.observe(actor,5)
                     .blockAt(target.x(), target.y(), target.z()); require(idle.legacyId() == 61,
                     "placed output furnace diverged");
             RemoteItemStack sand = new RemoteItemStack(12, 1, 0), coal = new RemoteItemStack(263, 1, 0);
@@ -67,7 +67,7 @@ public final class FurnaceOutputSmoke {
             require(opened.inventory().slot(sandSlot - 6).item().equals(sand)
                     && opened.inventory().slot(coalSlot - 6).item().equals(coal), "output furnace mapping drifted");
             actor.selectHeldSlot(sandSlot - 36); observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 12, 0));
-            actor.loadFurnace(sandSlot, coalSlot); actor.sustainTicks(5);
+            actor.loadFurnace(sandSlot, coalSlot); worldline.test.WorldlineSmokeAwait.observe(actor,5);
             observer.awaitPeerHeldItem(RemoteHeldItem.empty(actorName)); RemoteFurnaceSmelt smelt = actor.awaitFurnaceSmelt();
             require(smelt.output().equals(new RemoteItemStack(20, 1, 0)), "output smelt drifted");
             actor.selectHeldSlot(0);
@@ -76,7 +76,7 @@ public final class FurnaceOutputSmoke {
                     && extraction.before().equals(smelt.window().inventory()) && extraction.after().slot(2).empty()
                     && extraction.after().slot(30).item().equals(extraction.stack())
                     && actor.inventory().slot(36).item().equals(extraction.stack()), "furnace extraction drifted");
-            actor.sustainTicks(5); observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 20, 0));
+            worldline.test.WorldlineSmokeAwait.observe(actor,5); observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 20, 0));
             firstClose = actor.closeWindow(); require(firstClose.closedWindow().inventory().equals(extraction.after())
                     && firstClose.proofAction() == 1, "extraction close proof drifted");
             actor.close(); observer.close(); awaitPlayers(first, 0); first.save();
@@ -108,17 +108,19 @@ public final class FurnaceOutputSmoke {
         return new B173WireClient("127.0.0.1", port, name, timeout); }
     private static PlayerPose acquireFurnace(FurnaceOutputSession client, String username) {
         for (int step = 0; step < 10; step++) client.moveAndObserve(0D, 5D, 0D, 3);
-        client.sendChat("/give " + username + " 61 1"); client.sustainTicks(40);
-        for (int step = 0; step < 100 && client.inventory().occupiedSlots() < 1; step++)
-            client.moveAndObserve(0D, -1D, 0D, 1); client.sustainTicks(10); MovementOutcome settled = null;
+        client.sendChat("/give " + username + " 61 1");
+        worldline.test.WorldlineSmokeAwait.awaitEntity(client,()->{client.moveAndObserve(0D,-1D,0D,1);
+            return client.inventory();},inventory->inventory.occupiedSlots()>=1,"furnace grant",100);
+        worldline.test.WorldlineSmokeAwait.observe(client,10); MovementOutcome settled = null;
         for (int step = 0; step < 100; step++) { settled = client.moveAndObserve(0D, -1D, 0D, 2);
             if (settled.corrected()) break; } require(settled != null && settled.corrected(),
                 "ground settlement correction absent"); return settled.resulting(); }
     private static PlayerPose acquireIngredients(FurnaceOutputSession client, String username) {
         for (int step = 0; step < 10; step++) client.moveAndObserve(0D, 5D, 0D, 3);
         client.sendChat("/give " + username + " 12 1"); client.sendChat("/give " + username + " 263 1");
-        client.sustainTicks(40); for (int step = 0; step < 100 && client.inventory().occupiedSlots() < 3; step++)
-            client.moveAndObserve(0D, -1D, 0D, 1); client.sustainTicks(10); MovementOutcome settled = null;
+        worldline.test.WorldlineSmokeAwait.awaitEntity(client,()->{client.moveAndObserve(0D,-1D,0D,1);
+            return client.inventory();},inventory->inventory.occupiedSlots()>=3,"furnace ingredients",100);
+        worldline.test.WorldlineSmokeAwait.observe(client,10); MovementOutcome settled = null;
         for (int step = 0; step < 100; step++) { settled = client.moveAndObserve(0D, -1D, 0D, 2);
             if (settled.corrected()) break; } require(settled != null && settled.corrected(),
                 "ingredient ground settlement absent"); return settled.resulting(); }

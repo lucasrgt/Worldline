@@ -14,7 +14,7 @@ public final class ExtendedHeadBreakSetSmoke{
   try{server.boot();B173PlayerSeed.writeInventory(workspace,user,4.5D,60D,4.5D,new int[]{0,1,2,3},new int[]{1,33,69,257},new int[]{32,1,1,1},new int[]{0,0,0,0});actor.connect();actor.synchronizePose();actor.look(-90F,0F);ExtendedHeadBreakSetArm.require(actor.awaitInventory().occupiedSlots()==4,"extended-head-break inventory drift");
    RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);BlockPosition top=ExtendedHeadBreakSetArm.raise(actor,initial,cx,cz,column);
    arm=ExtendedHeadBreakSetArm.place(actor,initial,top,cx,cz);
-   RemoteWorldView settled=actor.sustainTicks(fixture);
+   RemoteWorldView settled=worldline.test.WorldlineSmokeAwait.observe(actor,fixture);
    ExtendedHeadBreakSetArm.require(settled.blockAt(arm.piston.x(),arm.piston.y(),arm.piston.z()).equals(new BlockState(33,4))&&settled.blockAt(arm.head.x(),arm.head.y(),arm.head.z()).equals(new BlockState(1,0))&&settled.blockAt(arm.pushed.x(),arm.pushed.y(),arm.pushed.z()).equals(new BlockState(0,0)),"piston 33 precondition drift");
    arm.extend(actor,signal);arm.breakBase(actor,signal);
    actor.close();ExtendedHeadBreakSetArm.awaitPlayers(server,0);server.save();

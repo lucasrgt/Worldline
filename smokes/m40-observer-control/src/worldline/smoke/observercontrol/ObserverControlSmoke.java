@@ -48,7 +48,7 @@ public final class ObserverControlSmoke {
             server.boot(); B173PlayerSeed.write(workspace, username, 4.5D, 60D, 4.5D);
             client.connect(); awaitPlayers(server, Collections.singletonList(username));
             initial = client.synchronizePose(); int chunkX = floor(initial.x()) >> 4, chunkZ = floor(initial.z()) >> 4;
-            client.awaitRemoteChunk(chunkX, chunkZ); RemoteWorldView before = client.sustainTicks(5);
+            client.awaitRemoteChunk(chunkX, chunkZ); RemoteWorldView before = worldline.test.WorldlineSmokeAwait.observe(client,5);
             BlockPosition block = solid(before, initial);
             MovementAlternative blocked = new MovementAlternative(new MovementStep(
                     block.x() + .5D - initial.x(), block.y() - initial.y(),
@@ -67,7 +67,7 @@ public final class ObserverControlSmoke {
                     "observer stop did not exclude later alternative");
             for (int index = 0; index < events.size(); index++) require(
                     events.get(index).outcome() == route.outcomes().get(index), "event outcome identity drifted");
-            after = client.sustainTicks(1); require(after.containsChunk(chunkX, chunkZ), "controlled route lost cache");
+            after = worldline.test.WorldlineSmokeAwait.observe(client,1); require(after.containsChunk(chunkX, chunkZ), "controlled route lost cache");
             client.close(); awaitPlayers(server, Collections.emptyList()); server.save(); player = server.player(username);
             require(close(player.x(), route.finalPose().x()) && close(player.y(), route.finalPose().y())
                     && close(player.z(), route.finalPose().z()), "controlled route pose was not persisted");

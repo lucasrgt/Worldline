@@ -46,7 +46,7 @@ public final class RouteCorrelationSmoke {
             server.boot(); client.connect(); awaitPlayers(server, Collections.singletonList(username));
             PlayerPose initial = client.synchronizePose(); int chunkX = floor(initial.x()) >> 4;
             int chunkZ = floor(initial.z()) >> 4; client.awaitRemoteChunk(chunkX, chunkZ);
-            client.sustainTicks(5); MovementAlternative safe = alternative(.125D, 0D, 0D);
+            worldline.test.WorldlineSmokeAwait.observe(client,5); MovementAlternative safe = alternative(.125D, 0D, 0D);
             MovementAlternative later = alternative(0D, 0D, .125D);
             execution = client.moveRouteWithFallbackCorrelated(
                     java.util.Arrays.asList(safe, later), correlation, event -> {
@@ -60,7 +60,7 @@ public final class RouteCorrelationSmoke {
             require(execution.terminalEvent() == terminal && terminal.event().alternativeIndex() == 0
                     && terminal.event().outcomeIndex() == 0 && terminal.event().kind() == MovementAttemptKind.PRIMARY
                     && terminal.event() == execution.execution().terminalEvent(), "correlated terminal event drifted");
-            after = client.sustainTicks(1); require(after.containsChunk(chunkX, chunkZ), "correlated route lost cache");
+            after = worldline.test.WorldlineSmokeAwait.observe(client,1); require(after.containsChunk(chunkX, chunkZ), "correlated route lost cache");
             client.close(); awaitPlayers(server, Collections.emptyList()); server.save(); player = server.player(username);
             PlayerPose finalPose = execution.execution().result().finalPose(); require(close(player.x(), finalPose.x())
                     && close(player.y(), finalPose.y()) && close(player.z(), finalPose.z()),

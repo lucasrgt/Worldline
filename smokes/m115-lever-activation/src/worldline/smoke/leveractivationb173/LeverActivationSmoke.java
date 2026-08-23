@@ -39,11 +39,11 @@ public final class LeverActivationSmoke {
             actor.moveAndObserve(0D,1D,0D,1);column++;lever=BlockFace.EAST.adjacent(stone);
             require(initial.blockAt(local(lever.x(),chunkX),lever.y(),
                     local(lever.z(),chunkZ)).legacyId()==0,"lever target was not initial air");
-            actor.selectHeldSlot(1);actor.placeHeldBlock(stone,BlockFace.EAST);RemoteWorldView placed=actor.sustainTicks(5);
+            actor.selectHeldSlot(1);actor.placeHeldBlock(stone,BlockFace.EAST);RemoteWorldView placed=worldline.test.WorldlineSmokeAwait.observe(actor,5);
             off=placed.blockAt(lever.x(),lever.y(),lever.z());require(off.legacyId()==69&&off.metadata()<8,"lever off-state drift: "+off);
-            actor.selectHeldSlot(2);beforeActivation=actor.sustainTicks(settleTicks).chunkAt(chunkX,chunkZ);
+            actor.selectHeldSlot(2);beforeActivation=worldline.test.WorldlineSmokeAwait.observe(actor,settleTicks).chunkAt(chunkX,chunkZ);
             off=beforeActivation.blockAt(local(lever.x(),chunkX),lever.y(),local(lever.z(),chunkZ));
-            actor.activateBlock(lever,BlockFace.UP);on=actor.sustainTicks(5).blockAt(lever.x(),lever.y(),lever.z());
+            actor.activateBlock(lever,BlockFace.UP);on=worldline.test.WorldlineSmokeAwait.observe(actor,5).blockAt(lever.x(),lever.y(),lever.z());
             require(on.legacyId()==69&&on.metadata()!=off.metadata(),"lever activation state absent: "+off+" -> "+on);
             actor.close();awaitPlayers(server,0);server.save();reader=new B173WireClient("127.0.0.1",port,username,timeout);
             reader.connect();reader.synchronizePose();after=reader.awaitRemoteChunk(chunkX,chunkZ).chunkAt(chunkX,chunkZ);

@@ -18,10 +18,10 @@ public final class RemainingShovelBreaksSmoke{
   }finally{actor.close();server.close();}
  }
  private static String harvest(B173WireClient a,BlockPosition support,int placeSlot,int shovelSlot,int id,RemoteItemStack expected)throws Exception{
-  RemoteDroppedItem before=a.peekDroppedItem(expected);a.selectHeldSlot(placeSlot);BlockPosition cell=place(a,support,BlockFace.UP,id);require(a.sustainTicks(5).blockAt(cell.x(),cell.y(),cell.z()).equals(new BlockState(id,0)),"live block "+id+" drift");
-  a.selectHeldSlot(shovelSlot);a.beginBreak(cell);a.sustainTicks(5);a.finishBreak(cell);a.awaitBlock(cell,AIR);RemoteDroppedItem drop=a.peekDroppedItem(expected);
-  for(int n=0;n<40&&(drop==null||(before!=null&&drop.entityId()==before.entityId()));n++){a.sustainTicks(1);drop=a.peekDroppedItem(expected);}if(drop==null)drop=a.awaitDroppedItem(expected);
-  require(drop.item().legacyId()>0&&drop.item().count()>=1&&(before==null||drop.entityId()!=before.entityId())&&a.sustainTicks(1).blockAt(cell.x(),cell.y(),cell.z()).equals(AIR),"Packet21 drop or cell "+id+"->0 absent");
+  RemoteDroppedItem before=a.peekDroppedItem(expected);a.selectHeldSlot(placeSlot);BlockPosition cell=place(a,support,BlockFace.UP,id);require(worldline.test.WorldlineSmokeAwait.observe(a,5).blockAt(cell.x(),cell.y(),cell.z()).equals(new BlockState(id,0)),"live block "+id+" drift");
+  a.selectHeldSlot(shovelSlot);a.beginBreak(cell);worldline.test.WorldlineSmokeAwait.observe(a,5);a.finishBreak(cell);a.awaitBlock(cell,AIR);RemoteDroppedItem drop=a.peekDroppedItem(expected);
+  drop=worldline.test.WorldlineSmokeAwait.awaitEntityOrNull(a,()->a.peekDroppedItem(expected),value->value!=null&&(before==null||value.entityId()!=before.entityId()),"fresh shovel drop",40);if(drop==null)drop=a.awaitDroppedItem(expected);
+  require(drop.item().legacyId()>0&&drop.item().count()>=1&&(before==null||drop.entityId()!=before.entityId())&&worldline.test.WorldlineSmokeAwait.observe(a,1).blockAt(cell.x(),cell.y(),cell.z()).equals(AIR),"Packet21 drop or cell "+id+"->0 absent");
   String name=id==82?"clay":id==78?"snow":id==80?"snowblock":"soulsand";
   return name+"="+cell.x()+":"+cell.y()+":"+cell.z()+":"+id+":0->0:0,drop=packet21-"+drop.item().legacyId()+":"+drop.item().count()+":"+drop.item().damage();
  }

@@ -23,10 +23,10 @@ public final class SnowCraftSetSmoke{
   }finally{actor.close();if(reader!=null)reader.close();server.close();}
  }
  private static String harvest(B173WireClient a,BlockPosition support,int placeSlot,int shovelSlot,int id,RemoteItemStack expected,String name)throws Exception{
-  a.selectHeldSlot(placeSlot);BlockPosition cell=place(a,support,BlockFace.UP,id);require(a.sustainTicks(5).blockAt(cell.x(),cell.y(),cell.z()).equals(new BlockState(id,0)),"live block "+id+" drift");
-  a.selectHeldSlot(shovelSlot);a.sustainTicks(2);a.beginBreak(cell);a.sustainTicks(5);a.finishBreak(cell);a.awaitBlock(cell,AIR);
+  a.selectHeldSlot(placeSlot);BlockPosition cell=place(a,support,BlockFace.UP,id);require(worldline.test.WorldlineSmokeAwait.observe(a,5).blockAt(cell.x(),cell.y(),cell.z()).equals(new BlockState(id,0)),"live block "+id+" drift");
+  a.selectHeldSlot(shovelSlot);worldline.test.WorldlineSmokeAwait.observe(a,2);a.beginBreak(cell);worldline.test.WorldlineSmokeAwait.observe(a,5);a.finishBreak(cell);a.awaitBlock(cell,AIR);
   RemoteDroppedItem drop=a.peekDroppedItem(expected);if(drop==null)drop=a.awaitDroppedItem(expected);
-  require(drop.item().legacyId()==332&&drop.item().count()>=1&&a.sustainTicks(1).blockAt(cell.x(),cell.y(),cell.z()).equals(AIR),"Packet21 332 drop or cell "+id+"->0 absent");
+  require(drop.item().legacyId()==332&&drop.item().count()>=1&&worldline.test.WorldlineSmokeAwait.observe(a,1).blockAt(cell.x(),cell.y(),cell.z()).equals(AIR),"Packet21 332 drop or cell "+id+"->0 absent");
   return name+"="+cell.x()+":"+cell.y()+":"+cell.z()+":"+id+":0->0:0,drop=packet21-332:"+drop.item().count()+":"+drop.item().damage();
  }
  private static void requireCraft(RemoteInventoryView view){require(!view.slot(37).empty()&&view.slot(37).item().equals(B173SnowCraftClick.SNOW_BLOCK)&&view.slot(37).item().legacyId()==80&&!view.slot(40).empty()&&view.slot(40).item().legacyId()==284,"snow-craft-set crafted 80 inventory drift");}

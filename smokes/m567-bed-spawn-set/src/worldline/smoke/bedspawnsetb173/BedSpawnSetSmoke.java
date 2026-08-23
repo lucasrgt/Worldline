@@ -48,14 +48,14 @@ public final class BedSpawnSetSmoke {
             actor.selectHeldSlot(1); actor.useHeldItemOnBlock(top, BlockFace.UP);
             foot = BlockFace.UP.adjacent(top); head = BlockFace.SOUTH.adjacent(foot);
             actor.awaitBlock(foot, new BlockState(26, 0)); actor.awaitBlock(head, new BlockState(26, 8));
-            actor.selectHeldSlot(4); server.setTime(18000L); actor.sustainTicks(20);
+            actor.selectHeldSlot(4); server.setTime(18000L); worldline.test.WorldlineSmokeAwait.observe(actor,20);
             actor.activateBlock(foot, BlockFace.UP); sleep = B173BedAccess.await(actor);
             BedSpawnSupport.require(sleep.entityId() == actor.state().entityId() && sleep.unused() == 0
                     && sleep.x() == head.x() && sleep.y() == head.y() && sleep.z() == head.z()
                     && sleep.sleepPacket() == 17 && sleep.bedPacket() == 70
                     && sleep.packet70() == RemoteBedUse.NO_PACKET70, "Packet17 sleep enter drift");
             actor.awaitBlock(head, new BlockState(26, 12));
-            BedSpawnSupport.require(actor.sustainTicks(240).blockAt(head.x(), head.y(), head.z())
+            BedSpawnSupport.require(worldline.test.WorldlineSmokeAwait.observe(actor,240).blockAt(head.x(), head.y(), head.z())
                     .equals(new BlockState(26, 8)), "SMP bed skip did not leave occupied head");
             wake = actor.moveAndObserve(0D, 0D, 0D, 8).resulting();
             BedSpawnSupport.require(wake.y() >= foot.y() - 0.5D && wake.y() <= foot.y() + 2.0D,

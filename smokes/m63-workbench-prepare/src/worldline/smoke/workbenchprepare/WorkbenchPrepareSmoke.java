@@ -50,7 +50,7 @@ public final class WorkbenchPrepareSmoke {
                     new RemoteItemStack(58, 1, 0)); require(workbench >= 36, "workbench seed drifted");
             actor.selectHeldSlot(workbench - 36); actor.placeHeldBlock(support, BlockFace.UP);
             require(actor.awaitBlock(target, new BlockState(58, 0)).blockAt(target.x(), target.y(), target.z())
-                    .equals(new BlockState(58, 0)), "placed workbench drifted"); actor.sustainTicks(5);
+                    .equals(new BlockState(58, 0)), "placed workbench drifted"); worldline.test.WorldlineSmokeAwait.observe(actor,5);
             acquire(actor, actorName, 5, 3); RemoteItemStack planks = new RemoteItemStack(5, 3, 0);
             require(actor.inventory().occupiedSlots() == 1 && actor.inventory().slot(36).item().equals(planks)
                     && actor.inventory().slot(37).empty(), "plank seed drifted");
@@ -82,9 +82,11 @@ public final class WorkbenchPrepareSmoke {
     private static PlayerPose acquire(WorkbenchPreparationSession client, String username, int id, int count) {
         int occupied = client.inventory().occupiedSlots() + 1;
         for (int step = 0; step < 10; step++) client.moveAndObserve(0D, 5D, 0D, 3);
-        client.sendChat("/give " + username + " " + id + " " + count); client.sustainTicks(40);
-        for (int step = 0; step < 100 && client.inventory().occupiedSlots() < occupied; step++)
-            client.moveAndObserve(0D, -1D, 0D, 1); client.sustainTicks(10); MovementOutcome settled = null;
+        client.sendChat("/give " + username + " " + id + " " + count);
+        worldline.test.WorldlineSmokeAwait.awaitEntity(client,()->{client.moveAndObserve(0D,-1D,0D,1);
+            return client.inventory();},inventory->inventory.occupiedSlots()>=occupied,
+                "workbench ingredient grant",100);
+        worldline.test.WorldlineSmokeAwait.observe(client,10); MovementOutcome settled = null;
         for (int step = 0; step < 100; step++) { settled = client.moveAndObserve(0D, -1D, 0D, 2);
             if (settled.corrected()) break; } require(settled != null && settled.corrected(),
                 "ground settlement correction absent"); return settled.resulting();

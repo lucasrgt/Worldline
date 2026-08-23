@@ -21,9 +21,9 @@ public final class NetherDeathRespawnSmoke {
             actor.connect(); actor.synchronizePose();
             require(actor.dimension() == -1 && actor.awaitInventory().occupiedSlots() == 0 && actor.awaitHealth(20) == 20, "Nether player baseline drift");
             nether = actor.awaitRemoteChunk(0, 0).chunkAt(0, 0); require(count(nether, 87) > 0 && sky(nether) == 0, "Nether source chunk drift");
-            actor.sustainTicks(fixtureTicks); require(actor.health() <= 0, "Nether void death absent: " + actor.health());
+            worldline.test.WorldlineSmokeAwait.observe(actor,fixtureTicks); require(actor.health() <= 0, "Nether void death absent: " + actor.health());
             respawn = actor.respawn(); require(respawn.equals(new RemoteRespawn(-1, 0, 0, 20)) && actor.dimension() == 0, "cross-dimension respawn drift");
-            actor.sustainTicks(1); PlayerPose pose = actor.moveAndObserve(0D, 0D, 0D, 1).resulting(); RemoteWorldView world = actor.sustainTicks(20);
+            worldline.test.WorldlineSmokeAwait.observe(actor,1); PlayerPose pose = actor.moveAndObserve(0D, 0D, 0D, 1).resulting(); RemoteWorldView world = worldline.test.WorldlineSmokeAwait.observe(actor,20);
             overworld = world.chunkAt(floor(pose.x()) >> 4, floor(pose.z()) >> 4);
             require(sky(overworld) > 0 && actor.inventory().occupiedSlots() == 0, "Overworld respawn view drift");
             for (RemoteChunkSnapshot chunk : world.chunks()) require(sky(chunk) > 0, "stale Nether chunk survived respawn");

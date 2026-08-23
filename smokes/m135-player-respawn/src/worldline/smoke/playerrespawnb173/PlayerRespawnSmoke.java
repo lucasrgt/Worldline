@@ -20,11 +20,11 @@ public final class PlayerRespawnSmoke {
             server.boot(); B173PlayerSeed.write(workspace, username, 8.5D, -80D, 8.5D);
             actor.connect(); actor.synchronizePose();
             require(actor.awaitInventory().occupiedSlots() == 0 && actor.awaitHealth(20) == 20, "player baseline drift");
-            actor.sustainTicks(fixtureTicks); require(actor.health() <= 0, "vanilla void death health absent: " + actor.health());
+            worldline.test.WorldlineSmokeAwait.observe(actor,fixtureTicks); require(actor.health() <= 0, "vanilla void death health absent: " + actor.health());
             respawn = actor.respawn();
             require(respawn.equals(new RemoteRespawn(0, 0, 20)) && actor.dimension() == 0 && actor.health() == 20, "respawn result drift");
-            actor.sustainTicks(1); afterPose = actor.moveAndObserve(0D, 0D, 0D, 1).resulting();
-            RemoteWorldView world = actor.sustainTicks(20); chunk = world.chunkAt(floor(afterPose.x()) >> 4, floor(afterPose.z()) >> 4);
+            worldline.test.WorldlineSmokeAwait.observe(actor,1); afterPose = actor.moveAndObserve(0D, 0D, 0D, 1).resulting();
+            RemoteWorldView world = worldline.test.WorldlineSmokeAwait.observe(actor,20); chunk = world.chunkAt(floor(afterPose.x()) >> 4, floor(afterPose.z()) >> 4);
             require(sky(chunk) > 0 && actor.inventory().occupiedSlots() == 0, "respawn world/inventory drift");
             actor.close(); awaitPlayers(server, 0); server.save(); ServerPlayerState saved = server.player(username);
             require(saved.dimension() == 0 && saved.health() == 20 && saved.inventoryItems() == 0, "respawn persistence drift");

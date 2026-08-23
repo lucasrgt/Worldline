@@ -64,8 +64,8 @@ public final class WindowLifecycleSmoke {
             observer.awaitRemoteChunk(Math.floorDiv(target.x(), 16), Math.floorDiv(target.z(), 16));
             observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 54, 0)); actor.placeHeldBlock(support, BlockFace.UP);
             actor.awaitBlock(target, new BlockState(54, 0));
-            BlockState chest = actor.sustainTicks(5).blockAt(target.x(), target.y(), target.z());
-            require(chest.legacyId() == 54 && observer.sustainTicks(5).blockAt(target.x(), target.y(), target.z())
+            BlockState chest = worldline.test.WorldlineSmokeAwait.observe(actor,5).blockAt(target.x(), target.y(), target.z());
+            require(chest.legacyId() == 54 && worldline.test.WorldlineSmokeAwait.observe(observer,5).blockAt(target.x(), target.y(), target.z())
                     .equals(chest), "placed lifecycle chest diverged");
             window = actor.openChest(target, BlockFace.UP); require(window.inventory().size() == 63
                     && window.inventory().occupiedSlots() == 0, "lifecycle chest open drifted");
@@ -74,12 +74,12 @@ public final class WindowLifecycleSmoke {
                     "personal-window closure proof drifted"); boolean duplicateRejected = false;
             try { actor.closeWindow(); } catch (IllegalStateException expected) { duplicateRejected = true; }
             require(duplicateRejected, "duplicate remote window close was accepted");
-            actor.sendChat("/give " + actorName + " 1 1"); actor.sustainTicks(40);
-            RemoteItemStack stone = new RemoteItemStack(1, 1, 0); require(actor.inventory().slot(36).item()
-                    .equals(stone), "post-close player window update absent");
+            actor.sendChat("/give " + actorName + " 1 1");
+            RemoteItemStack stone = new RemoteItemStack(1, 1, 0);
+            worldline.test.WorldlineSmokeAwait.awaitSlot(actor, actor::inventory, 36, stone, 40);
             observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 1, 0)); take = actor.clickPersonalSlot(36);
-            actor.sustainTicks(5); observer.awaitPeerHeldItem(RemoteHeldItem.empty(actorName));
-            restore = actor.clickPersonalSlot(36); actor.sustainTicks(5);
+            worldline.test.WorldlineSmokeAwait.observe(actor,5); observer.awaitPeerHeldItem(RemoteHeldItem.empty(actorName));
+            restore = actor.clickPersonalSlot(36); worldline.test.WorldlineSmokeAwait.observe(actor,5);
             observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 1, 0));
             require(take.actionId() == 2 && restore.actionId() == 3
                     && restore.after().slot(36).item().equals(stone), "post-close personal transaction drifted");
@@ -96,7 +96,7 @@ public final class WindowLifecycleSmoke {
 
     private static PersonalCraftingSession client(int port, String name, Duration timeout) {
         return new B173WireClient("127.0.0.1", port, name, timeout); }
-    private static PlayerPose settle(PersonalCraftingSession client) { client.sustainTicks(5);
+    private static PlayerPose settle(PersonalCraftingSession client) { worldline.test.WorldlineSmokeAwait.observe(client,5);
         MovementOutcome settled = null; for (int step = 0; step < 100; step++) {
             settled = client.moveAndObserve(0D, -1D, 0D, 2); if (settled.corrected()) break; }
         require(settled != null && settled.corrected(), "ground settlement correction absent");

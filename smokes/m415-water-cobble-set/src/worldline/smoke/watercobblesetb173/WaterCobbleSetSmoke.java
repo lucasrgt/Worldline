@@ -19,13 +19,13 @@ public final class WaterCobbleSetSmoke{
    while(pose.z()>top.z()+0.6D)pose=actor.moveAndObserve(0D,0D,-1D,1).resulting();actor.moveAndObserve(0D,-2D,0D,2);
    actor.selectHeldSlot(2);place(actor,BlockFace.DOWN.adjacent(east[1]),BlockFace.UP,3);place(actor,BlockFace.DOWN.adjacent(east[2]),BlockFace.UP,3);place(actor,BlockFace.DOWN.adjacent(south[1]),BlockFace.UP,3);place(actor,BlockFace.DOWN.adjacent(south[2]),BlockFace.UP,3);
    actor.selectHeldSlot(3);place(actor,BlockFace.DOWN.adjacent(east[0]),BlockFace.UP,11);place(actor,BlockFace.DOWN.adjacent(south[0]),BlockFace.UP,11);
-   actor.sustainTicks(fixtureTicks);
+   worldline.test.WorldlineSmokeAwait.observe(actor,fixtureTicks);
    require(open(actor,east[1]).equals(air),"east dirt-gate air absent");BlockState eastFlow=settle(actor,east[1],flowTicks);
    require(open(actor,south[1]).equals(air),"south dirt-gate air absent");BlockState southFlow=settle(actor,south[1],flowTicks);
    require(flowingLava(eastFlow)&&flowingLava(southFlow),"flowing lava 10/11-meta absent: "+eastFlow+" / "+southFlow);
    actor.selectHeldSlot(4);require(open(actor,east[2]).equals(air),"east water-pocket air absent");place(actor,BlockFace.DOWN.adjacent(east[2]),BlockFace.UP,9);require(open(actor,south[2]).equals(air),"south water-pocket air absent");place(actor,BlockFace.DOWN.adjacent(south[2]),BlockFace.UP,9);
    actor.awaitBlock(east[1],cobble);actor.awaitBlock(south[1],cobble);
-   RemoteWorldView live=actor.sustainTicks(5);BlockState eC=live.blockAt(east[1].x(),east[1].y(),east[1].z()),sC=live.blockAt(south[1].x(),south[1].y(),south[1].z()),eS=live.blockAt(east[0].x(),east[0].y(),east[0].z()),sS=live.blockAt(south[0].x(),south[0].y(),south[0].z()),eW=live.blockAt(east[2].x(),east[2].y(),east[2].z()),sW=live.blockAt(south[2].x(),south[2].y(),south[2].z());
+   RemoteWorldView live=worldline.test.WorldlineSmokeAwait.observe(actor,5);BlockState eC=live.blockAt(east[1].x(),east[1].y(),east[1].z()),sC=live.blockAt(south[1].x(),south[1].y(),south[1].z()),eS=live.blockAt(east[0].x(),east[0].y(),east[0].z()),sS=live.blockAt(south[0].x(),south[0].y(),south[0].z()),eW=live.blockAt(east[2].x(),east[2].y(),east[2].z()),sW=live.blockAt(south[2].x(),south[2].y(),south[2].z());
    require(eC.equals(cobble)&&sC.equals(cobble),"live cobble drift "+eC+" / "+sC);require(lavaSource(eS)&&lavaSource(sS),"live source drift "+eS+" / "+sS);require(water(eW.legacyId())&&water(sW.legacyId()),"live water drift "+eW+" / "+sW);require(actor.health()==20,"live health drift "+actor.health());
    actor.close();awaitPlayers(server,0);server.save();reader=new B173WireClient("127.0.0.1",port,user,timeout);reader.connect();reader.synchronizePose();RemoteChunkSnapshot after=reader.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);
    BlockState peC=after.blockAt(local(east[1].x(),cx),east[1].y(),local(east[1].z(),cz)),psC=after.blockAt(local(south[1].x(),cx),south[1].y(),local(south[1].z(),cz)),peS=after.blockAt(local(east[0].x(),cx),east[0].y(),local(east[0].z(),cz)),psS=after.blockAt(local(south[0].x(),cx),south[0].y(),local(south[0].z(),cz)),peW=after.blockAt(local(east[2].x(),cx),east[2].y(),local(east[2].z(),cz)),psW=after.blockAt(local(south[2].x(),cx),south[2].y(),local(south[2].z(),cz));
@@ -43,7 +43,7 @@ public final class WaterCobbleSetSmoke{
   return new BlockPosition[]{BlockFace.UP.adjacent(top),BlockFace.UP.adjacent(east),BlockFace.UP.adjacent(east2)};
  }
  private static BlockState open(B173WireClient a,BlockPosition target)throws Exception{a.beginBreak(target);Thread.sleep(3000L);a.finishBreak(target);return a.awaitBlock(target,new BlockState(0,0)).blockAt(target.x(),target.y(),target.z());}
- private static BlockState settle(B173WireClient a,BlockPosition cell,int budget)throws Exception{BlockState s=new BlockState(0,0);int waited=0;while(waited<budget){s=a.sustainTicks(1).blockAt(cell.x(),cell.y(),cell.z());waited++;if(flowingLava(s))return s;}return s;}
+ private static BlockState settle(B173WireClient a,BlockPosition cell,int budget)throws Exception{return worldline.test.WorldlineSmokeAwait.awaitBlockMatching(a,cell,WaterCobbleSetSmoke::flowingLava,"flowing lava",budget);}
  private static boolean flowingLava(BlockState s){return (s.legacyId()==10||s.legacyId()==11)&&s.metadata()>0&&s.metadata()<=4;}
  private static boolean lavaSource(BlockState s){return (s.legacyId()==10||s.legacyId()==11)&&s.metadata()==0;}
  private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}

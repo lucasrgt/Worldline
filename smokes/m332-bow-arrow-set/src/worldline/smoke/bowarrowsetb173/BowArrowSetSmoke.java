@@ -62,7 +62,7 @@ public final class BowArrowSetSmoke {
             bench = BlockFace.UP.adjacent(top);
             actor.placeHeldBlock(top, BlockFace.UP);
             actor.awaitBlock(bench, new BlockState(58, 0));
-            actor.sustainTicks(5);
+            worldline.test.WorldlineSmokeAwait.observe(actor,5);
             actor.selectHeldSlot(1);
             require(actor.inventory().slot(37).empty(), "workbench hand was not consumed");
             actor.openWorkbench(bench, BlockFace.UP);

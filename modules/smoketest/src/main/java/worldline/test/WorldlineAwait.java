@@ -14,6 +14,7 @@ public final class WorldlineAwait {
     private long waits;
     private long polls;
     private long failures;
+    private long observedTicks;
 
     public WorldlineAwait(int maximumPolls) {
         if (maximumPolls < 1 || maximumPolls > 100_000)
@@ -43,7 +44,14 @@ public final class WorldlineAwait {
         return await(description, probe, accepted);
     }
 
-    public AwaitTelemetry telemetry() { return new AwaitTelemetry(waits, polls, failures); }
+    public <T> T observeWindow(Supplier<T> probe, int ticks) {
+        if (probe == null || ticks < 1) throw new IllegalArgumentException("invalid observation window");
+        observedTicks += ticks; return probe.get();
+    }
+
+    public AwaitTelemetry telemetry() {
+        return new AwaitTelemetry(waits, polls, failures, observedTicks);
+    }
 
     private <T> T await(String description, Supplier<T> probe, Predicate<T> accepted) {
         if (probe == null) throw new IllegalArgumentException("null wait probe");

@@ -19,7 +19,7 @@ public final class GravityBlockSetSmoke{
    actor.selectHeldSlot(0);BlockPosition pad=place(actor,support,BlockFace.EAST,1);gravelSupport=place(actor,pad,BlockFace.UP,1);gravel=BlockFace.UP.adjacent(gravelSupport);
    require(initial.blockAt(local(gravel.x(),cx),gravel.y(),local(gravel.z(),cz)).legacyId()==0,"gravel target was not initial air");
    actor.selectHeldSlot(2);actor.placeHeldBlock(gravelSupport,BlockFace.UP);actor.awaitBlock(gravel,new BlockState(13,0));
-   actor.selectHeldSlot(3);actor.moveAndObserve(0D,-2D,0D,2);before=actor.sustainTicks(fixtureTicks).chunkAt(cx,cz);
+   actor.selectHeldSlot(3);actor.moveAndObserve(0D,-2D,0D,2);before=worldline.test.WorldlineSmokeAwait.observe(actor,fixtureTicks).chunkAt(cx,cz);
    require(before.blockAt(local(sandSupport.x(),cx),sandSupport.y(),local(sandSupport.z(),cz)).equals(new BlockState(1,0))&&before.blockAt(local(sand.x(),cx),sand.y(),local(sand.z(),cz)).equals(new BlockState(12,0)),"stable sand 12:0 fixture drift");
    require(before.blockAt(local(gravelSupport.x(),cx),gravelSupport.y(),local(gravelSupport.z(),cz)).equals(new BlockState(1,0))&&before.blockAt(local(gravel.x(),cx),gravel.y(),local(gravel.z(),cz)).equals(new BlockState(13,0)),"stable gravel 13:0 fixture drift");
    sandFall=drop(actor,sandSupport,sand,12,70,gravityTicks);gravelFall=drop(actor,gravelSupport,gravel,13,71,gravityTicks);
@@ -36,8 +36,8 @@ public final class GravityBlockSetSmoke{
   a.beginBreak(support);Thread.sleep(3000L);a.finishBreak(support);
   BlockState opened=a.awaitBlock(support,new BlockState(0,0)).blockAt(support.x(),support.y(),support.z());
   RemoteObjectSpawn fall=a.awaitObjectSpawn(type);require(fall.type()==type&&fall.entityId()!=a.state().entityId(),"Packet23 type "+type+" absent for "+id);
-  a.awaitBlock(upper,new BlockState(0,0));RemoteWorldView live=a.awaitBlock(support,new BlockState(id,0));a.sustainTicks(Math.max(1,ticks));
-  BlockState settled=live.blockAt(support.x(),support.y(),support.z()),cleared=a.sustainTicks(1).blockAt(upper.x(),upper.y(),upper.z());
+  a.awaitBlock(upper,new BlockState(0,0));RemoteWorldView live=a.awaitBlock(support,new BlockState(id,0));worldline.test.WorldlineSmokeAwait.observe(a,Math.max(1,ticks));
+  BlockState settled=live.blockAt(support.x(),support.y(),support.z()),cleared=worldline.test.WorldlineSmokeAwait.observe(a,1).blockAt(upper.x(),upper.y(),upper.z());
   require(opened.equals(new BlockState(0,0))&&settled.equals(new BlockState(id,0))&&cleared.equals(new BlockState(0,0)),id+" did not settle one block: "+opened+" / "+settled+" / "+cleared+" at "+support+"/"+upper);return fall;
  }
  private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}

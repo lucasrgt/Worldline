@@ -10,13 +10,19 @@ public final class PistonImmovableSetArm{
  static PistonImmovableSetArm place(B173WireClient a,RemoteChunkSnapshot initial,BlockPosition support,int cx,int cz,int pistonSlot,int payloadSlot,int payloadId,int leverSlot)throws Exception{
   BlockPosition piston=BlockFace.UP.adjacent(support),payload=BlockFace.WEST.adjacent(piston),destination=BlockFace.WEST.adjacent(payload),lever=BlockFace.EAST.adjacent(support);
   require(at(initial,piston,cx,cz).legacyId()==0&&at(initial,payload,cx,cz).legacyId()==0&&at(initial,destination,cx,cz).legacyId()==0&&at(initial,lever,cx,cz).legacyId()==0,"piston 33 payload "+payloadId+" targets were not initial air");
-  a.look(-90F,0F);a.selectHeldSlot(pistonSlot);a.placeHeldBlock(support,BlockFace.UP);BlockState placed=a.sustainTicks(5).blockAt(piston.x(),piston.y(),piston.z());require(placed.equals(new BlockState(33,4)),"west piston 33 absent: "+placed+" at "+piston.x()+":"+piston.y()+":"+piston.z());
-  a.selectHeldSlot(payloadSlot);a.placeHeldBlock(piston,BlockFace.WEST);BlockState payloadState=a.sustainTicks(5).blockAt(payload.x(),payload.y(),payload.z());require(payloadState.legacyId()==payloadId,"immovable payload "+payloadId+" absent: "+payloadState+" at "+payload.x()+":"+payload.y()+":"+payload.z());
-  a.selectHeldSlot(leverSlot);a.placeHeldBlock(support,BlockFace.EAST);require(a.sustainTicks(5).blockAt(lever.x(),lever.y(),lever.z()).equals(new BlockState(69,1)),"lever absent for payload "+payloadId);
+  a.look(-90F,0F);a.selectHeldSlot(pistonSlot);a.placeHeldBlock(support,BlockFace.UP);worldline.test.WorldlineSmokeAwait.awaitBlock(a,piston,new BlockState(33,4),5);
+  a.selectHeldSlot(payloadSlot);a.placeHeldBlock(piston,BlockFace.WEST);BlockState payloadState=worldline.test.WorldlineSmokeAwait.awaitBlockMatching(a,payload,s->s.legacyId()==payloadId,"immovable payload "+payloadId,5);
+  a.selectHeldSlot(leverSlot);a.placeHeldBlock(support,BlockFace.EAST);worldline.test.WorldlineSmokeAwait.awaitBlock(a,lever,new BlockState(69,1),5);
   return new PistonImmovableSetArm(support,piston,payload,destination,lever,payloadState);
  }
  RemoteWorldView pulse(B173WireClient a,int ticks)throws Exception{
-  a.activateBlock(lever,BlockFace.UP);RemoteWorldView live=a.sustainTicks(ticks);
+  a.activateBlock(lever,BlockFace.UP);
+  RemoteWorldView live=worldline.test.WorldlineSmokeAwait.awaitWorld(a,v->
+    v.blockAt(lever.x(),lever.y(),lever.z()).equals(new BlockState(69,9))
+    &&v.blockAt(piston.x(),piston.y(),piston.z()).equals(new BlockState(33,4))
+    &&v.blockAt(payload.x(),payload.y(),payload.z()).equals(payloadState)
+    &&v.blockAt(destination.x(),destination.y(),destination.z()).equals(new BlockState(0,0)),
+    "immovable "+payloadState.legacyId()+" rejection",ticks);
   BlockState pistonLive=live.blockAt(piston.x(),piston.y(),piston.z()),payloadLive=live.blockAt(payload.x(),payload.y(),payload.z()),destLive=live.blockAt(destination.x(),destination.y(),destination.z());
   require(live.blockAt(lever.x(),lever.y(),lever.z()).equals(new BlockState(69,9))&&pistonLive.equals(new BlockState(33,4))&&payloadLive.equals(payloadState)&&destLive.equals(new BlockState(0,0)),"immovable "+payloadState.legacyId()+" rejection absent: lever="+live.blockAt(lever.x(),lever.y(),lever.z())+"/"+pistonLive+"/"+payloadLive+"/"+destLive);
   return live;

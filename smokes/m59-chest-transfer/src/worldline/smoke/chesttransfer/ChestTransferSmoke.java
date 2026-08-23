@@ -60,13 +60,11 @@ public final class ChestTransferSmoke {
             requirePlayers(first.players(), actorName, observerName); observer.awaitRemoteChunk(
                     Math.floorDiv(target.x(), 16), Math.floorDiv(target.z(), 16));
             awaitSlot(waits, actor, 36, new RemoteItemStack(54, 1, 0)); actor.selectHeldSlot(0);
-            actor.placeHeldBlock(support, BlockFace.UP); BlockState chest = actor.sustainTicks(5)
+            actor.placeHeldBlock(support, BlockFace.UP); BlockState chest = worldline.test.WorldlineSmokeAwait.observe(actor,5)
                     .blockAt(target.x(), target.y(), target.z());
-            require(chest.legacyId() == 54 && observer.sustainTicks(5).blockAt(target.x(), target.y(), target.z())
+            require(chest.legacyId() == 54 && worldline.test.WorldlineSmokeAwait.observe(observer,5).blockAt(target.x(), target.y(), target.z())
                     .equals(chest), "placed transfer chest diverged");
-            actor.sendChat("/give " + actorName + " 1 1"); actor.sustainTicks(40);
-            for (int step = 0; step < 10 && actor.inventory().occupiedSlots() < 1; step++)
-                actor.moveAndObserve(0D, -1D, 0D, 2);
+            actor.sendChat("/give " + actorName + " 1 1");
             RemoteItemStack stone = new RemoteItemStack(1, 1, 0);
             awaitSlot(waits, actor, 36, stone);
             actor.selectHeldSlot(1); RemoteContainerWindow opened = actor.openChest(target, BlockFace.UP);
@@ -77,7 +75,7 @@ public final class ChestTransferSmoke {
                     && transfer.storeAction() == 2 && transfer.stack().equals(stone)
                     && transfer.after().slot(0).item().equals(stone) && actor.inventory().slot(36).empty(),
                     "accepted chest transfer drifted");
-            actor.sustainTicks(5); observer.awaitPeerHeldItem(RemoteHeldItem.empty(actorName));
+            worldline.test.WorldlineSmokeAwait.observe(actor,5); observer.awaitPeerHeldItem(RemoteHeldItem.empty(actorName));
             firstClose = actor.closeWindow(); require(firstClose.closedWindow().inventory().equals(transfer.after())
                     && firstClose.proofAction() == 1, "post-transfer close proof drifted");
             actor.close(); observer.close(); awaitPlayers(first, 0); first.save();
@@ -108,16 +106,20 @@ public final class ChestTransferSmoke {
         return new B173WireClient("127.0.0.1", port, name, timeout); }
     private static PlayerPose acquireChest(ChestTransferSession client, String username) {
         for (int step = 0; step < 10; step++) client.moveAndObserve(0D, 5D, 0D, 3);
-        client.sendChat("/give " + username + " 54 1"); client.sustainTicks(40);
-        for (int step = 0; step < 100 && client.inventory().occupiedSlots() < 1; step++) client.moveAndObserve(0D, -1D, 0D, 1);
-        client.sustainTicks(10); MovementOutcome settled = null; for (int step = 0; step < 100; step++) {
+        client.sendChat("/give " + username + " 54 1");
+        worldline.test.WorldlineSmokeAwait.awaitEntity(client,()->{client.moveAndObserve(0D,-1D,0D,1);
+            return client.inventory();},inventory->inventory.occupiedSlots()>=1,"transfer chest grant",100);
+        worldline.test.WorldlineSmokeAwait.observe(client,10); MovementOutcome settled = null; for (int step = 0; step < 100; step++) {
             settled = client.moveAndObserve(0D, -1D, 0D, 2); if (settled.corrected()) break; }
         require(settled != null && settled.corrected(), "ground settlement correction absent"); return settled.resulting(); }
     private static void awaitSlot(WorldlineAwait waits, ChestTransferSession client,
             int slot, RemoteItemStack expected) {
+        int[] passivePolls = {0};
         waits.awaitSlot(() -> { RemoteInventoryView view = client.inventory();
             if (!view.slot(slot).empty() && view.slot(slot).item().equals(expected)) return view;
-            client.sustainTicks(1); return client.inventory(); }, slot, expected);
+            if (passivePolls[0]++ < 40) worldline.test.WorldlineSmokeAwait.observe(client,1);
+            else client.moveAndObserve(0D,-1D,0D,2);
+            return client.inventory(); }, slot, expected);
     }
     private static boolean replaceable(BlockState state) { int id = state.legacyId(); return id == 0 || id == 8 || id == 9 || id == 78; }
     private static void requirePlayers(List<String> players, String first, String second) { Set<String> expected = new HashSet<>();

@@ -62,7 +62,7 @@ public final class ChestWindowSmoke {
             observer.awaitRemoteChunk(Math.floorDiv(target.x(), 16), Math.floorDiv(target.z(), 16));
             observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 54, 0));
             actor.placeHeldBlock(support, BlockFace.UP);
-            RemoteWorldView actorWorld = actor.sustainTicks(5), observerWorld = observer.sustainTicks(5);
+            RemoteWorldView actorWorld = worldline.test.WorldlineSmokeAwait.awaitWorld(actor,view->view.blockAt(target.x(),target.y(),target.z()).legacyId()==54,"actor chest placement",5), observerWorld = worldline.test.WorldlineSmokeAwait.awaitWorld(observer,view->view.blockAt(target.x(),target.y(),target.z()).legacyId()==54,"observer chest placement",5);
             chestState = actorWorld.blockAt(target.x(), target.y(), target.z());
             require(chestState.legacyId() == 54
                     && observerWorld.blockAt(target.x(), target.y(), target.z()).equals(chestState),
@@ -92,10 +92,10 @@ public final class ChestWindowSmoke {
         return new B173WireClient("127.0.0.1", port, name, timeout); }
     private static PlayerPose acquire(ChestWindowMultiplayerSession client, String username) {
         for (int step = 0; step < 10; step++) client.moveAndObserve(0D, 5D, 0D, 3);
-        client.sendChat("/give " + username + " 54 1"); client.sustainTicks(40);
-        for (int step = 0; step < 100 && client.inventory().occupiedSlots() < 1; step++)
-            client.moveAndObserve(0D, -1D, 0D, 1);
-        client.sustainTicks(10); MovementOutcome settled = null;
+        client.sendChat("/give " + username + " 54 1");
+        worldline.test.WorldlineSmokeAwait.awaitEntity(client,()->{client.moveAndObserve(0D,-1D,0D,1);
+            return client.inventory();},inventory->inventory.occupiedSlots()>=1,"chest grant",100);
+        worldline.test.WorldlineSmokeAwait.observe(client,10); MovementOutcome settled = null;
         for (int step = 0; step < 100; step++) { settled = client.moveAndObserve(0D, -1D, 0D, 2);
             if (settled.corrected()) break; }
         require(settled != null && settled.corrected(), "ground settlement correction absent");

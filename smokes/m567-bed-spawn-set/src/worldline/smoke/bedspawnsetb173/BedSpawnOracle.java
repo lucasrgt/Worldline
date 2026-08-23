@@ -36,7 +36,7 @@ final class BedSpawnOracle {
         int waited = 0;
         while (actor.health() > 0) {
             BedSpawnSupport.require(++waited <= 120, "cactus Packet8 health 0 absent health=" + actor.health());
-            actor.sustainTicks(5);
+            worldline.test.WorldlineSmokeAwait.observe(actor,5);
             pose = enter(actor, pose, cactus);
         }
         int dead = actor.health();
@@ -45,7 +45,7 @@ final class BedSpawnOracle {
         RemoteRespawn respawn = actor.respawn();
         BedSpawnSupport.require(respawn.equals(new RemoteRespawn(0, 0, 20)) && actor.dimension() == 0
                 && actor.health() == 20, "bed-spawn Packet9 respawn drift");
-        actor.sustainTicks(1);
+        worldline.test.WorldlineSmokeAwait.observe(actor,1);
         return actor.moveAndObserve(0D, 0D, 0D, 1).resulting();
     }
 

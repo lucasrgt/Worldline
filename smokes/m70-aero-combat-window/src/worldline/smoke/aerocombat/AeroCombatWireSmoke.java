@@ -56,11 +56,11 @@ public final class AeroCombatWireSmoke {
             attacker.selectHeldSlot(sword - 36); victim.awaitPeerHeldItem(new RemoteHeldItem(attackerName, 276, 0));
             for (RemoteArmorSlot slot : RemoteArmorSlot.values()) attacker.awaitPeerArmor(
                     new worldline.api.RemoteArmorPiece(victimName, slot, slot.leatherItemId(), 0));
-            require(distance(victimAir, aligned) < 6D, "combat alignment drifted"); victim.sustainTicks(80); attacker.sustainTicks(2);
+            require(distance(victimAir, aligned) < 6D, "combat alignment drifted"); worldline.test.WorldlineSmokeAwait.observe(victim,80); worldline.test.WorldlineSmokeAwait.observe(attacker,2);
             System.out.println("WORLDLINE_M70_WIRE_ARMED=attacker=" + attacker.state().entityId()
                     + ";victim=" + victim.state().entityId()); System.out.flush(); awaitGo(control, attacker, victim);
             RemoteSwingRequest swing = attacker.swingHeldItem(); RemoteCombatStrike strike = attacker.attackPlayer(victimName);
-            victim.sustainTicks(2); RemoteIncomingHit hit = victim.awaitIncomingHit(18); attacker.sustainTicks(2);
+            worldline.test.WorldlineSmokeAwait.observe(victim,2); RemoteIncomingHit hit = victim.awaitIncomingHit(18); worldline.test.WorldlineSmokeAwait.observe(attacker,2);
             require(swing.entityId() == attacker.state().entityId() && strike.targetEntityId() == victim.state().entityId()
                     && hit.healthBefore() == 20 && hit.healthAfter() == 18 && attacker.inventory().slot(sword).item().damage() == 1,
                     "wire event evidence drifted");
@@ -74,7 +74,7 @@ public final class AeroCombatWireSmoke {
         return new B173WireClient("127.0.0.1", port, name, timeout); }
     private static void awaitGo(BufferedReader control, PeerSwingSession attacker, PeerSwingSession victim) throws Exception {
         AtomicBoolean stop = new AtomicBoolean(); Throwable[] failure = new Throwable[1]; Thread heartbeat = new Thread(() -> { try {
-            while (!stop.get()) { attacker.sustainTicks(2); victim.sustainTicks(2); }
+            while (!stop.get()) { worldline.test.WorldlineSmokeAwait.observe(attacker,2); worldline.test.WorldlineSmokeAwait.observe(victim,2); }
         } catch (Throwable error) { failure[0] = error; } }, "m70-wire-heartbeat");
         heartbeat.start(); String command;
         try { command = control.readLine(); } finally { stop.set(true); heartbeat.join(5000L); }

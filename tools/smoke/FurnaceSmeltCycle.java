@@ -47,7 +47,7 @@ public final class FurnaceSmeltCycle {
         Path output = build.resolve("classes"); Files.createDirectories(output);
         List<String> command = new ArrayList<>(Arrays.asList("javac", "-encoding", "UTF-8", "--release", "8",
                 "-Xlint:all,-options", "-Werror", "-classpath", product("api").toString(), "-d", output.toString()));
-        command.addAll(javaFiles(root.resolve("adapters/b173-server/src/main/java")));
+        command.addAll(javaFiles(root.resolve("modules/smoketest/src/main/java")));command.addAll(javaFiles(root.resolve("adapters/b173-server/src/main/java")));
         command.addAll(javaFiles(smoke.resolve("src"))); capture(command); return output;
     }
     private Outcome run(Path classes, Path official, Path workspace) throws Exception {

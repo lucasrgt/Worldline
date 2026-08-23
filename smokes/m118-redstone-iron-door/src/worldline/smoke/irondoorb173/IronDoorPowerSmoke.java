@@ -40,14 +40,14 @@ public final class IronDoorPowerSmoke {
             require(initial.blockAt(local(bottom.x(),chunkX),bottom.y(),local(bottom.z(),chunkZ)).legacyId()==0
                     &&initial.blockAt(local(top.x(),chunkX),top.y(),local(top.z(),chunkZ)).legacyId()==0
                     &&initial.blockAt(local(lever.x(),chunkX),lever.y(),local(lever.z(),chunkZ)).legacyId()==0,"door targets were not initial air");
-            actor.selectHeldSlot(2);actor.useHeldItemOnBlock(stone,BlockFace.UP);RemoteWorldView doorPlaced=actor.sustainTicks(5);
+            actor.selectHeldSlot(2);actor.useHeldItemOnBlock(stone,BlockFace.UP);RemoteWorldView doorPlaced=worldline.test.WorldlineSmokeAwait.observe(actor,5);
             bottomOff=doorPlaced.blockAt(bottom.x(),bottom.y(),bottom.z());topOff=doorPlaced.blockAt(top.x(),top.y(),top.z());
             require(bottomOff.legacyId()==71&&topOff.legacyId()==71,"iron door placement absent: "+bottomOff+" / "+topOff);
-            actor.selectHeldSlot(1);actor.placeHeldBlock(stone,BlockFace.EAST);RemoteWorldView leverPlaced=actor.sustainTicks(5);
+            actor.selectHeldSlot(1);actor.placeHeldBlock(stone,BlockFace.EAST);RemoteWorldView leverPlaced=worldline.test.WorldlineSmokeAwait.observe(actor,5);
             leverOff=leverPlaced.blockAt(lever.x(),lever.y(),lever.z());require(leverOff.legacyId()==69&&leverOff.metadata()<8,"side lever drift: "+leverOff);
-            actor.selectHeldSlot(3);before=actor.sustainTicks(fixtureTicks).chunkAt(chunkX,chunkZ);leverOff=before.blockAt(local(lever.x(),chunkX),lever.y(),local(lever.z(),chunkZ));
+            actor.selectHeldSlot(3);before=worldline.test.WorldlineSmokeAwait.observe(actor,fixtureTicks).chunkAt(chunkX,chunkZ);leverOff=before.blockAt(local(lever.x(),chunkX),lever.y(),local(lever.z(),chunkZ));
             bottomOff=before.blockAt(local(bottom.x(),chunkX),bottom.y(),local(bottom.z(),chunkZ));topOff=before.blockAt(local(top.x(),chunkX),top.y(),local(top.z(),chunkZ));
-            actor.activateBlock(lever,BlockFace.UP);RemoteWorldView live=actor.sustainTicks(signalTicks);leverOn=live.blockAt(lever.x(),lever.y(),lever.z());
+            actor.activateBlock(lever,BlockFace.UP);RemoteWorldView live=worldline.test.WorldlineSmokeAwait.observe(actor,signalTicks);leverOn=live.blockAt(lever.x(),lever.y(),lever.z());
             bottomOn=live.blockAt(bottom.x(),bottom.y(),bottom.z());topOn=live.blockAt(top.x(),top.y(),top.z());
             require(leverOn.equals(new BlockState(69,9))&&bottomOff.equals(new BlockState(71,0))&&bottomOn.equals(new BlockState(71,4))
                     &&topOff.equals(new BlockState(71,8))&&topOn.equals(new BlockState(71,12)),"lever did not open exact iron door: "+leverOn+" / "+bottomOn+" / "+topOn);

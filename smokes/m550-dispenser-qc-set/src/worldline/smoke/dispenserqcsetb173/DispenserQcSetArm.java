@@ -14,19 +14,19 @@ public final class DispenserQcSetArm{
   for(int lift=0;lift<8;lift++){top=place(a,top,BlockFace.UP,1);a.moveAndObserve(0D,1D,0D,1);column[0]++;}return top;
  }
  static DispenserQcSetArm assemble(B173WireClient a,BlockPosition support)throws Exception{
-  a.selectHeldSlot(1);BlockPosition disp=place(a,support,BlockFace.UP,23);require(a.sustainTicks(5).blockAt(disp.x(),disp.y(),disp.z()).equals(new BlockState(23,4)),"west dispenser facing drift");
+  a.selectHeldSlot(1);BlockPosition disp=place(a,support,BlockFace.UP,23);worldline.test.WorldlineSmokeAwait.awaitBlock(a,disp,new BlockState(23,4),5);
   a.selectHeldSlot(1);RemoteContainerWindow opened=B173DispenserWindows.open(a,disp,BlockFace.UP);require(opened.descriptor().kind()==RemoteWindowKind.DISPENSER&&"Trap".equals(opened.descriptor().title())&&opened.inventory().size()==45&&opened.inventory().slot(0).empty()&&opened.inventory().slot(39).item().equals(COBBLE),"dispenser-qc open mapping drifted");
   RemoteDispenserLoad load=B173DispenserWindows.load(a,39,0);require(load.takeAction()==1&&load.storeAction()==2&&load.stack().equals(COBBLE)&&a.inventory().slot(39).empty(),"accepted cobble load drifted");a.closeWindow();
   a.selectHeldSlot(0);BlockPosition eastLow=place(a,support,BlockFace.EAST,1);BlockPosition eastMid=place(a,eastLow,BlockFace.UP,1);BlockPosition eastHigh=place(a,eastMid,BlockFace.UP,1);
   BlockPosition qc=place(a,eastHigh,BlockFace.WEST,1);require(qc.equals(BlockFace.UP.adjacent(disp)),"qc stone is not the block above dispenser");
   a.selectHeldSlot(2);BlockPosition lever=BlockFace.UP.adjacent(qc);a.placeHeldBlock(qc,BlockFace.UP);
-  RemoteWorldView placed=a.sustainTicks(5);BlockState leverState=placed.blockAt(lever.x(),lever.y(),lever.z());
+  RemoteWorldView placed=worldline.test.WorldlineSmokeAwait.awaitWorld(a,v->{BlockState state=v.blockAt(lever.x(),lever.y(),lever.z());return state.legacyId()==69&&(state.metadata()&8)==0;},"qc top lever",5);BlockState leverState=placed.blockAt(lever.x(),lever.y(),lever.z());
   require(leverState.legacyId()==69&&(leverState.metadata()&8)==0,"qc top lever drift");
   require(placed.blockAt(eastLow.x(),eastLow.y(),eastLow.z()).legacyId()==1&&placed.blockAt(disp.x()+1,disp.y(),disp.z()).legacyId()==1,"collapsed to M153/M333 adjacent-power lever");
   return new DispenserQcSetArm(support,disp,qc,lever,leverState.metadata(),leverState.metadata()|8);
  }
  RemoteDroppedItem pulse(B173WireClient a)throws Exception{
-  a.activateBlock(lever,BlockFace.UP);RemoteWorldView live=a.sustainTicks(10);
+  a.activateBlock(lever,BlockFace.UP);RemoteWorldView live=worldline.test.WorldlineSmokeAwait.awaitWorld(a,v->v.blockAt(lever.x(),lever.y(),lever.z()).equals(new BlockState(69,leverOn))&&v.blockAt(disp.x(),disp.y(),disp.z()).equals(new BlockState(23,4))&&v.blockAt(qc.x(),qc.y(),qc.z()).equals(new BlockState(1,0)),"qc lever pulse",10);
   require(live.blockAt(lever.x(),lever.y(),lever.z()).equals(new BlockState(69,leverOn))&&live.blockAt(disp.x(),disp.y(),disp.z()).equals(new BlockState(23,4))&&live.blockAt(qc.x(),qc.y(),qc.z()).equals(new BlockState(1,0)),"qc lever pulse drift");
   RemoteDroppedItem drop=a.awaitDroppedItem(COBBLE);require(drop.item().equals(COBBLE)&&drop.item().count()==1,"dispenser-qc Packet21 cobble 4 absent");return drop;
  }

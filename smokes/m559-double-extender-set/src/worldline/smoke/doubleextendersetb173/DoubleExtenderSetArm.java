@@ -17,19 +17,31 @@ public final class DoubleExtenderSetArm{
   require(air(initial,rear,cx,cz)&&air(initial,front0,cx,cz)&&air(initial,payload0,cx,cz)&&air(initial,payload1,cx,cz)&&air(initial,payload2,cx,cz),"double-extender cells were not initial air");
   a.look(-90F,0F);a.selectHeldSlot(0);
   place(a,support,BlockFace.WEST,1);place(a,westPad,BlockFace.WEST,1);a.moveAndObserve(-2D,0D,0D,2);
-  a.selectHeldSlot(1);a.placeHeldBlock(support,BlockFace.UP);BlockState sticky=a.sustainTicks(5).blockAt(rear.x(),rear.y(),rear.z());require(sticky.equals(new BlockState(29,4)),"west sticky 29 absent: "+sticky);
-  a.selectHeldSlot(2);a.placeHeldBlock(westPad,BlockFace.UP);BlockState piston=a.sustainTicks(5).blockAt(front0.x(),front0.y(),front0.z());require(piston.equals(new BlockState(33,4)),"west piston 33 absent: "+piston);
+  a.selectHeldSlot(1);a.placeHeldBlock(support,BlockFace.UP);worldline.test.WorldlineSmokeAwait.awaitBlock(a,rear,new BlockState(29,4),5);
+  a.selectHeldSlot(2);a.placeHeldBlock(westPad,BlockFace.UP);worldline.test.WorldlineSmokeAwait.awaitBlock(a,front0,new BlockState(33,4),5);
   a.selectHeldSlot(4);a.placeHeldBlock(front0,BlockFace.WEST);a.awaitBlock(payload0,new BlockState(4,0));
-  a.selectHeldSlot(3);a.placeHeldBlock(support,BlockFace.EAST);require(a.sustainTicks(5).blockAt(rearLever.x(),rearLever.y(),rearLever.z()).equals(new BlockState(69,1)),"rear lever absent");
-  a.placeHeldBlock(frontPad,BlockFace.SOUTH);require(a.sustainTicks(5).blockAt(frontLever.x(),frontLever.y(),frontLever.z()).equals(new BlockState(69,3)),"front lever absent");
+  a.selectHeldSlot(3);a.placeHeldBlock(support,BlockFace.EAST);worldline.test.WorldlineSmokeAwait.awaitBlock(a,rearLever,new BlockState(69,1),5);
+  a.placeHeldBlock(frontPad,BlockFace.SOUTH);worldline.test.WorldlineSmokeAwait.awaitBlock(a,frontLever,new BlockState(69,3),5);
   return new DoubleExtenderSetArm(rear,front0,payload0,payload1,payload2,rearLever,frontLever);
  }
- RemoteWorldView pulse(B173WireClient a,BlockPosition lever,int ticks,BlockState leverWant,String label,BlockPosition[] cells,BlockState[] want)throws Exception{
-  a.activateBlock(lever,BlockFace.UP);RemoteWorldView live=a.sustainTicks(ticks);
+ RemoteWorldView pulse(B173WireClient a,BlockPosition lever,int ticks,BlockState leverWant,
+   String label,BlockPosition[] cells,BlockState[] want)throws Exception{
+  a.activateBlock(lever,BlockFace.UP);
+  RemoteWorldView live=worldline.test.WorldlineSmokeAwait.awaitWorld(
+    a,v->matches(v,lever,leverWant,cells,want),label,ticks);
   require(live.blockAt(lever.x(),lever.y(),lever.z()).equals(leverWant),label+" lever drift");
   StringBuilder seen=new StringBuilder();
   for(int i=0;i<cells.length;i++){BlockState got=live.blockAt(cells[i].x(),cells[i].y(),cells[i].z());if(seen.length()>0)seen.append('/');seen.append(got.legacyId()).append(':').append(got.metadata());require(got.equals(want[i]),label+" absent: "+seen);}
   return live;
+ }
+ private static boolean matches(RemoteWorldView view,BlockPosition lever,BlockState leverWant,
+   BlockPosition[] cells,BlockState[] want){
+  if(!view.blockAt(lever.x(),lever.y(),lever.z()).equals(leverWant))return false;
+  for(int i=0;i<cells.length;i++){
+   BlockPosition cell=cells[i];
+   if(!view.blockAt(cell.x(),cell.y(),cell.z()).equals(want[i]))return false;
+  }
+  return true;
  }
  void persist(RemoteChunkSnapshot after,int cx,int cz,BlockPosition[] cells,BlockState[] want,String label){
   for(int i=0;i<cells.length;i++)require(at(after,cells[i],cx,cz).equals(want[i]),label+" "+cell(cells[i]));

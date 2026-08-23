@@ -13,6 +13,7 @@ import worldline.api.RemoteItemStack;
 import worldline.api.RemoteWorldView;
 import worldline.test.AwaitTelemetry;
 import worldline.test.WorldlineAwait;
+import worldline.test.WorldlineSmokeAwait;
 
 /** Contract tests for deterministic smoke condition polling. */
 public final class WorldlineAwaitTest {
@@ -42,6 +43,16 @@ public final class WorldlineAwaitTest {
         rejects(() -> failing.awaitEntity(() -> null, value -> false, "missing entity"));
         require(failing.telemetry().failures() == 1 && failing.telemetry().polls() == 2,
                 "failed wait telemetry absent");
+        require("stable".equals(waits.observeWindow(() -> "stable", 20)),
+                "observation window result drifted");
+        require(waits.telemetry().observedTicks() == 20
+                        && waits.telemetry().evidence().contains("observed-ticks=20"),
+                "observation duration telemetry absent");
+        String polled = WorldlineSmokeAwait.awaitEntity(session(),
+                () -> "ready", "ready"::equals, "ready entity", 3);
+        require(polled.equals("ready") && WorldlineSmokeAwait.telemetry().polls() == 1
+                        && WorldlineSmokeAwait.telemetry().observedTicks() == 1,
+                "process-scoped await telemetry absent");
         System.out.println("WorldlineAwaitTest passed");
     }
 
@@ -64,5 +75,12 @@ public final class WorldlineAwaitTest {
 
     private static void require(boolean condition, String message) {
         if (!condition) throw new AssertionError(message);
+    }
+
+    private static worldline.api.SustainedRemoteWorldMultiplayerSession session() {
+        return (worldline.api.SustainedRemoteWorldMultiplayerSession) java.lang.reflect.Proxy.newProxyInstance(
+                WorldlineAwaitTest.class.getClassLoader(),
+                new Class<?>[]{worldline.api.SustainedRemoteWorldMultiplayerSession.class},
+                (proxy, method, arguments) -> method.getName().equals("sustainTicks") ? world(0) : null);
     }
 }

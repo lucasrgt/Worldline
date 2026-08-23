@@ -15,7 +15,7 @@ final class NetherExitPortalScan {
     static PlayerPose enter(B173WireClient actor, PlayerPose pose, double x, double y, double z, int travel,
             int dimension) throws Exception {
         pose = go(actor, pose, x, y, z);
-        actor.sustainTicks(travel);
+        worldline.test.WorldlineSmokeAwait.observe(actor,travel);
         NetherExitPortalKit.require(actor.awaitDimension(dimension) == dimension,
                 "nether-exit-create Packet9 " + dimension + " absent");
         return actor.moveAndObserve(0D, 0D, 0D, 1).resulting();
@@ -26,7 +26,7 @@ final class NetherExitPortalScan {
         if (portal.maxX > portal.minX) z += 2.5D; else x += 2.5D;
         pose = actor.moveAndObserve(x - pose.x(), y - pose.y(), z - pose.z(), 5).resulting();
         NetherExitPortalKit.require(actor.dimension() == portal.stayDimension, "left portal changed dimension early");
-        actor.sustainTicks(cooldown);
+        worldline.test.WorldlineSmokeAwait.observe(actor,cooldown);
         return actor.moveAndObserve(0D, 0D, 0D, 1).resulting();
     }
 
@@ -49,7 +49,7 @@ final class NetherExitPortalScan {
             throws Exception {
         for (int n = 0; n < 80; n++) {
             pose = actor.moveAndObserve(0D, 0D, 0D, 1).resulting();
-            if (actor.sustainTicks(1).containsChunk(chunkX, chunkZ)) return pose;
+            if (worldline.test.WorldlineSmokeAwait.observe(actor,1).containsChunk(chunkX, chunkZ)) return pose;
         }
         throw new IllegalStateException("nether-exit-create far chunk absent");
     }

@@ -58,11 +58,11 @@ public final class PlayerCombatSmoke {
             for (int step = 0; step < 80; step++) { victimAir = victim.moveAndObserve(0D, 0.3D, 0D, 1).resulting();
                 attackerAir = attacker.moveAndObserve(0D, 0.3D, 0D, 1).resulting(); }
             require(distance(victimAir, attackerAir) < 6D, "combat alignment drifted");
-            strike = attacker.attackPlayer(victimName); victim.sustainTicks(2); hit = victim.awaitIncomingHit(18);
+            strike = attacker.attackPlayer(victimName); worldline.test.WorldlineSmokeAwait.observe(victim,2); hit = victim.awaitIncomingHit(18);
             require(strike.weaponId() == 276 && strike.hurtStatus() == 2 && strike.target().equals(victimName)
                     && hit.victim().equals(victimName) && hit.healthBefore() == 20 && hit.healthAfter() == 18
                     && hit.damage() == 2, "combat evidence drifted");
-            attacker.sustainTicks(2); int swordDamage = attacker.inventory().slot(swordSlot).item().damage();
+            worldline.test.WorldlineSmokeAwait.observe(attacker,2); int swordDamage = attacker.inventory().slot(swordSlot).item().damage();
             require(swordDamage == 1, "diamond sword wear drifted: " + swordDamage);
             attacker.close(); victim.close(); awaitPlayers(server, 0); server.save(); saved = server.player(victimName);
             require(saved.health() == 18, "victim health persistence drifted");

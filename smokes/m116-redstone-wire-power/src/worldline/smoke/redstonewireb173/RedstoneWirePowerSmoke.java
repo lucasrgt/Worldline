@@ -39,14 +39,14 @@ public final class RedstoneWirePowerSmoke {
             actor.moveAndObserve(0D,1D,0D,1);column++;wire=BlockFace.UP.adjacent(top);lever=BlockFace.EAST.adjacent(top);
             require(initial.blockAt(local(wire.x(),chunkX),wire.y(),local(wire.z(),chunkZ)).legacyId()==0
                     &&initial.blockAt(local(lever.x(),chunkX),lever.y(),local(lever.z(),chunkZ)).legacyId()==0,"signal targets were not initial air");
-            actor.selectHeldSlot(2);actor.useHeldItemOnBlock(top,BlockFace.UP);RemoteWorldView dust=actor.sustainTicks(5);
+            actor.selectHeldSlot(2);actor.useHeldItemOnBlock(top,BlockFace.UP);RemoteWorldView dust=worldline.test.WorldlineSmokeAwait.observe(actor,5);
             wireOff=dust.blockAt(wire.x(),wire.y(),wire.z());require(wireOff.equals(new BlockState(55,0)),"unpowered wire drift: "+wireOff);
-            actor.selectHeldSlot(1);actor.placeHeldBlock(top,BlockFace.EAST);RemoteWorldView placed=actor.sustainTicks(5);
+            actor.selectHeldSlot(1);actor.placeHeldBlock(top,BlockFace.EAST);RemoteWorldView placed=worldline.test.WorldlineSmokeAwait.observe(actor,5);
             leverOff=placed.blockAt(lever.x(),lever.y(),lever.z());require(leverOff.legacyId()==69&&leverOff.metadata()<8,"side lever drift: "+leverOff);
-            actor.selectHeldSlot(3);before=actor.sustainTicks(fixtureTicks).chunkAt(chunkX,chunkZ);
+            actor.selectHeldSlot(3);before=worldline.test.WorldlineSmokeAwait.observe(actor,fixtureTicks).chunkAt(chunkX,chunkZ);
             leverOff=before.blockAt(local(lever.x(),chunkX),lever.y(),local(lever.z(),chunkZ));
             wireOff=before.blockAt(local(wire.x(),chunkX),wire.y(),local(wire.z(),chunkZ));require(wireOff.equals(new BlockState(55,0)),"wire powered before treatment");
-            actor.activateBlock(lever,BlockFace.UP);RemoteWorldView live=actor.sustainTicks(signalTicks);
+            actor.activateBlock(lever,BlockFace.UP);RemoteWorldView live=worldline.test.WorldlineSmokeAwait.observe(actor,signalTicks);
             leverOn=live.blockAt(lever.x(),lever.y(),lever.z());wireOn=live.blockAt(wire.x(),wire.y(),wire.z());
             require(leverOn.legacyId()==69&&leverOn.metadata()!=leverOff.metadata()&&wireOn.legacyId()==55
                     &&wireOn.metadata()>0,"lever signal did not power wire: "+leverOn+" / "+wireOn);

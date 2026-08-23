@@ -51,7 +51,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 
 | ID | Status | Deliverable | Evidence or completion condition |
 | --- | --- | --- | --- |
-| FLAKE-01 | ACTIVE | Provide shared `awaitSlot`, `awaitBlock`, and `awaitEntity` polling contracts and migrate fixed-wait assertions. | The shared support records attempts/duration; the fixed-wait ratchet reaches zero without invalidating unrelated pins. |
+| FLAKE-01 | DONE | Provide shared `awaitSlot`, `awaitBlock`, and `awaitEntity` polling contracts and migrate fixed-wait assertions. | `WorldlineAwait` owns bounded condition polling and attempt/failure/tick telemetry. The 226-source migration lock classifies intentional temporal windows, binds 216 prior/current proofs, leaves 309 unrelated pins unchanged, and the raw fixed-wait ratchet is zero. |
 | FLAKE-02 | DONE | Centralize EOF retry and publish retry telemetry. | `SmokeRetry` owns bounded decisions, backoff, counters, and shutdown telemetry for the generic runner and all 33 exceptional coordinators. Both legacy EOF ratchets are zero; the migration lock binds prior/current sources, fingerprints and evidence, and M258 passed a fresh official-runtime qualification. |
 | FLAKE-03 | DONE | Consolidate the 17 copied `WorldlinePagedAeroMixin` sources. | Two fingerprinted shared variants preserve the base/direct distinction; the gate rejects consumer copies and routing drift. |
 | FLAKE-04 | DONE | Replace line-pressure statement packing with a statement/debt ratchet. | A literal-aware statement lexer enforces 300/150 ceilings, path-specific legacy debt and non-growing packed-line density. |

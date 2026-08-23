@@ -16,10 +16,10 @@ public final class FallingGravelSmoke{
    support=place(actor,support,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);column++;gravel=BlockFace.UP.adjacent(support);
    require(initial.blockAt(local(gravel.x(),cx),gravel.y(),local(gravel.z(),cz)).legacyId()==0,"gravel target was not initial air");
    actor.selectHeldSlot(1);actor.placeHeldBlock(support,BlockFace.UP);actor.awaitBlock(gravel,new BlockState(13,0));
-   actor.selectHeldSlot(2);actor.moveAndObserve(0D,-2D,0D,2);before=actor.sustainTicks(fixtureTicks).chunkAt(cx,cz);
+   actor.selectHeldSlot(2);actor.moveAndObserve(0D,-2D,0D,2);before=worldline.test.WorldlineSmokeAwait.observe(actor,fixtureTicks).chunkAt(cx,cz);
    require(before.blockAt(local(support.x(),cx),support.y(),local(support.z(),cz)).equals(new BlockState(1,0))&&before.blockAt(local(gravel.x(),cx),gravel.y(),local(gravel.z(),cz)).equals(new BlockState(13,0)),"stable gravel 13:0 fixture drift");
    actor.beginBreak(support);Thread.sleep(3000L);actor.finishBreak(support);opened=actor.awaitBlock(support,new BlockState(0,0)).blockAt(support.x(),support.y(),support.z());
-   RemoteWorldView live=actor.sustainTicks(gravityTicks);settled=live.blockAt(support.x(),support.y(),support.z());cleared=live.blockAt(gravel.x(),gravel.y(),gravel.z());
+   RemoteWorldView live=worldline.test.WorldlineSmokeAwait.observe(actor,gravityTicks);settled=live.blockAt(support.x(),support.y(),support.z());cleared=live.blockAt(gravel.x(),gravel.y(),gravel.z());
    require(opened.equals(new BlockState(0,0))&&settled.equals(new BlockState(13,0))&&cleared.equals(new BlockState(0,0)),"gravel did not settle one block: "+opened+" / "+settled+" / "+cleared);
    actor.close();awaitPlayers(server,0);server.save();reader=new B173WireClient("127.0.0.1",port,user,timeout);reader.connect();reader.synchronizePose();after=reader.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);
    require(after.blockAt(local(support.x(),cx),support.y(),local(support.z(),cz)).equals(settled)&&after.blockAt(local(gravel.x(),cx),gravel.y(),local(gravel.z(),cz)).equals(cleared),"fresh settled gravel 13:0 drift");

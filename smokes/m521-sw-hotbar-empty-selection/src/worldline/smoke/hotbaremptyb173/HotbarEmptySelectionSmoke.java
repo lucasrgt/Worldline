@@ -41,14 +41,14 @@ public final class HotbarEmptySelectionSmoke {
             actor.selectHeldSlot(0); observer.connect(); observer.synchronizePose();
             require(observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 1, 0))
                     .legacyId() == 1, "initial populated Packet5 state absent");
-            actor.selectHeldSlot(1); actor.sustainTicks(2);
+            actor.selectHeldSlot(1); worldline.test.WorldlineSmokeAwait.observe(actor,2);
             require(B173HotbarSelectionAccess.selectedEmpty(actor), "selected slot 1 was not empty");
             require(observer.awaitPeerHeldItem(RemoteHeldItem.empty(actorName)).empty(),
                     "explicit empty Packet5 absent");
-            actor.selectHeldSlot(0); actor.sustainTicks(2);
+            actor.selectHeldSlot(0); worldline.test.WorldlineSmokeAwait.observe(actor,2);
             RemoteHeldItem populated = observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 1, 0));
             require(populated.legacyId() == 1, "populated Packet5 did not return");
-            B173HotbarSelectionAccess.sendInvalidSlot(actor, 9); actor.sustainTicks(10);
+            B173HotbarSelectionAccess.sendInvalidSlot(actor, 9); worldline.test.WorldlineSmokeAwait.observe(actor,10);
             require(!B173HotbarSelectionAccess.selectedEmpty(actor)
                     && observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 1, 0)).legacyId() == 1,
                     "invalid slot 9 changed authoritative selection");

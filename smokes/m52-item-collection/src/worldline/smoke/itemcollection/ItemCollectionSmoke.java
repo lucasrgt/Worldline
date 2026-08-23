@@ -47,13 +47,15 @@ public final class ItemCollectionSmoke {
             observer.connect(); observer.synchronizePose(); requirePlayers(server.players(), actorName, observerName);
             observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 1, 0));
             actor.look(0F, 90F); actor.dropHeldItem();
-            dropped = observer.awaitDroppedItem(stone); actor.sustainTicks(10);
+            dropped = observer.awaitDroppedItem(stone); worldline.test.WorldlineSmokeAwait.awaitEntity(actor,
+                    actor::inventory, view -> view.occupiedSlots() == 0, "dropped inventory", 10);
             require(actor.inventory().occupiedSlots() == 0 && actor.inventory().slot(36).empty(),
                     "actor inventory did not empty after drop");
             observer.awaitPeerHeldItem(RemoteHeldItem.empty(actorName));
             for (int step = 0; step < 40 && actor.inventory().occupiedSlots() == 0; step++)
                 actor.moveAndObserve(0D, -.5D, 0D, 1);
-            actor.sustainTicks(10); require(actor.inventory().occupiedSlots() == 1,
+            worldline.test.WorldlineSmokeAwait.awaitEntity(actor, actor::inventory,
+                    view -> view.occupiedSlots() == 1, "collected inventory", 10); require(actor.inventory().occupiedSlots() == 1,
                     "actor did not descend through dropped item");
             collection = observer.awaitItemCollection(dropped, actorName);
             require(collection.collectorEntityId() == actor.state().entityId()

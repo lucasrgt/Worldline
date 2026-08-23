@@ -58,7 +58,8 @@ final class RetryMigrationCheck {
     }
     private static String digest(Path path) throws Exception {
         return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
-                .digest(Files.readAllBytes(path)));
+                .digest(Files.readString(path, StandardCharsets.UTF_8).replace("\r\n", "\n")
+                        .getBytes(StandardCharsets.UTF_8)));
     }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);

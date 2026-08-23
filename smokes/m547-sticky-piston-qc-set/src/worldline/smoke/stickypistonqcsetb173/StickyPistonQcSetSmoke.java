@@ -14,7 +14,7 @@ public final class StickyPistonQcSetSmoke{
   try{server.boot();B173PlayerSeed.writeInventory(workspace,user,4.5D,60D,4.5D,new int[]{0,1,2},new int[]{1,29,69},new int[]{32,1,1},new int[]{0,0,0});actor.connect();actor.synchronizePose();actor.look(-90F,0F);StickyPistonQcSetArm.require(actor.awaitInventory().occupiedSlots()==3,"sticky-qc inventory drift");
    RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);BlockPosition top=StickyPistonQcSetArm.raise(actor,initial,cx,cz,column);
    arm=StickyPistonQcSetArm.place(actor,initial,top,cx,cz);actor.selectHeldSlot(3);
-   RemoteWorldView settled=actor.sustainTicks(fixture);
+   RemoteWorldView settled=worldline.test.WorldlineSmokeAwait.observe(actor,fixture);
    StickyPistonQcSetArm.require(settled.blockAt(arm.piston.x(),arm.piston.y(),arm.piston.z()).equals(new BlockState(29,4))&&settled.blockAt(arm.head.x(),arm.head.y(),arm.head.z()).equals(new BlockState(1,0))&&settled.blockAt(arm.pushed.x(),arm.pushed.y(),arm.pushed.z()).equals(new BlockState(0,0))&&settled.blockAt(arm.qc.x(),arm.qc.y(),arm.qc.z()).equals(new BlockState(1,0))&&settled.blockAt(arm.lever.x(),arm.lever.y(),arm.lever.z()).equals(new BlockState(69,1)),"sticky 29 qc precondition drift");
    arm.pulse(actor,signal,new BlockState(29,12),new BlockState(34,12),new BlockState(1,0),9,"sticky 29 qc extend");
    arm.pulse(actor,signal,new BlockState(29,4),new BlockState(1,0),new BlockState(0,0),1,"sticky 29 qc pull");

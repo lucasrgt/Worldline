@@ -44,7 +44,7 @@ public final class BatchTerminalSmoke {
         try {
             server.boot(); client.connect(); awaitPlayers(server, Collections.singletonList(username));
             PlayerPose initial = client.synchronizePose(); int chunkX = floor(initial.x()) >> 4;
-            int chunkZ = floor(initial.z()) >> 4; client.awaitRemoteChunk(chunkX, chunkZ); client.sustainTicks(5);
+            int chunkZ = floor(initial.z()) >> 4; client.awaitRemoteChunk(chunkX, chunkZ); worldline.test.WorldlineSmokeAwait.observe(client,5);
             CorrelatedMovementRoutePlan eventPlan = new CorrelatedMovementRoutePlan(new Object(), Arrays.asList(
                     alternative(.125D, 0D, 0D), alternative(0D, 0D, .125D)));
             event = client.moveCorrelatedRouteBatchExecutionUntilEvent(
@@ -63,7 +63,7 @@ public final class BatchTerminalSmoke {
                     "after-route terminal summary drifted");
             require(terminal(exhausted, MovementRouteBatchTerminalKind.EXHAUSTED),
                     "exhausted terminal summary drifted");
-            after = client.sustainTicks(1); require(after.containsChunk(chunkX, chunkZ), "terminal batches lost cache");
+            after = worldline.test.WorldlineSmokeAwait.observe(client,1); require(after.containsChunk(chunkX, chunkZ), "terminal batches lost cache");
             client.close(); awaitPlayers(server, Collections.emptyList()); server.save(); player = server.player(username);
             PlayerPose finalPose = exhausted.result().finalExecution().execution().result().finalPose();
             require(close(player.x(), finalPose.x()) && close(player.y(), finalPose.y())

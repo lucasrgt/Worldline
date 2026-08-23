@@ -58,16 +58,16 @@ public final class PersonalCraftingSmoke {
                     && actor.inventory().equals(craft.after()), "craft result transition drifted");
             require(initial.slot(36).item().equals(log) && craft.matrix().slot(0).item().equals(planks),
                     "craft snapshots mutated");
-            actor.sustainTicks(5); observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 5, 0));
+            worldline.test.WorldlineSmokeAwait.observe(actor,5); observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 5, 0));
             audit = actor.rejectedTakeProbe(36);
             require(audit.actionId() == 5 && audit.authoritative().slot(36).empty()
                     && emptyCraft(audit.authoritative()) && audit.cursorAfter().equals(planks),
                     "authoritative crafted-state audit drifted");
-            actor.sustainTicks(5); observer.awaitPeerHeldItem(RemoteHeldItem.empty(actorName));
+            worldline.test.WorldlineSmokeAwait.observe(actor,5); observer.awaitPeerHeldItem(RemoteHeldItem.empty(actorName));
             restored = actor.clickPersonalSlot(36);
             require(restored.actionId() == 6 && restored.after().slot(36).item().equals(planks)
                     && restored.cursorAfterEmpty(), "post-audit restore drifted");
-            actor.sustainTicks(5); observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 5, 0));
+            worldline.test.WorldlineSmokeAwait.observe(actor,5); observer.awaitPeerHeldItem(new RemoteHeldItem(actorName, 5, 0));
             actor.close(); observer.close(); awaitPlayers(server, 0); server.save(); player = server.player(actorName);
             require(player.inventoryItems() == 1, "crafted inventory persistence drifted");
         } finally { actor.close(); observer.close(); server.close(); }

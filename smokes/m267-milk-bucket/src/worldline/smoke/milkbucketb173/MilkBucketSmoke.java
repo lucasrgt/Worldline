@@ -13,10 +13,12 @@ public final class MilkBucketSmoke{
    while(water(initial.blockAt(local(top.x(),cx),top.y()+1,local(top.z(),cz)).legacyId())){top=place(actor,top,BlockFace.UP,1);pose=actor.moveAndObserve(0D,1D,0D,1).resulting();require(++column<=15,"water column exceeded milk fixture");}for(int lift=0;lift<8;lift++){top=place(actor,top,BlockFace.UP,1);pose=actor.moveAndObserve(0D,1D,0D,1).resulting();column++;}
    for(BlockFace wall:new BlockFace[]{BlockFace.NORTH,BlockFace.SOUTH,BlockFace.EAST,BlockFace.WEST})place(actor,place(actor,top,wall,1),BlockFace.UP,1);while(pose.y()>top.y()+1.01D)pose=actor.moveAndObserve(0D,-1D,0D,1).resulting();
    pose=actor.moveAndObserve(0D,1D,0D,1).resulting();pose=actor.moveAndObserve(0D,0D,1D,1).resulting();
-   cell=BlockFace.UP.adjacent(top);require(actor.sustainTicks(5).blockAt(cell.x(),cell.y(),cell.z()).equals(new BlockState(0,0))&&actor.health()==20,"empty basin drift");
+   cell=BlockFace.UP.adjacent(top);require(worldline.test.WorldlineSmokeAwait.observe(actor,5).blockAt(cell.x(),cell.y(),cell.z()).equals(new BlockState(0,0))&&actor.health()==20,"empty basin drift");
    actor.selectHeldSlot(1);actor.look(180F,70F);actor.useHeldItemOnBlock(top,BlockFace.UP);actor.useSelectedItemInAir();
-   RemoteInventorySlot held=actor.inventory().slot(37);for(int n=0;n<20&&(held.empty()||!held.item().equals(empty));n++){actor.sustainTicks(1);held=actor.inventory().slot(37);}
-   require(actor.health()==20&&actor.sustainTicks(5).blockAt(cell.x(),cell.y(),cell.z()).equals(new BlockState(0,0)),"milk health or basin drift health="+actor.health());require(!held.empty()&&held.item().equals(empty),"milk empty-bucket drift held="+(held.empty()?"empty":held.item()));actor.close();awaitPlayers(server,0);server.save();
+   RemoteInventoryView consumed=worldline.test.WorldlineSmokeAwait.awaitSlot(
+    actor,actor::inventory,37,empty,20);
+   RemoteInventorySlot held=consumed.slot(37);
+   require(actor.health()==20&&worldline.test.WorldlineSmokeAwait.observe(actor,5).blockAt(cell.x(),cell.y(),cell.z()).equals(new BlockState(0,0)),"milk health or basin drift health="+actor.health());require(!held.empty()&&held.item().equals(empty),"milk empty-bucket drift held="+(held.empty()?"empty":held.item()));actor.close();awaitPlayers(server,0);server.save();
    reader=new B173WireClient("127.0.0.1",port,user,timeout);reader.connect();reader.synchronizePose();require(reader.awaitHealth(20)==20&&reader.awaitInventory().slot(37).item().equals(empty),"persisted milk bucket drift");
    String evidence="column="+column+",floor="+top.x()+":"+top.y()+":"+top.z()+":1:0,health=20->20,heal=0,held=335:1:0->325:1:0,persisted=true,clients=2,disconnect=clean";String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=raised-stone-basin+milk335|cause=packet15-dir255-item335|wire=packet103-bucket325|oracle=itembucket-milk-empty-no-heal+fresh-login|"+evidence;System.out.println("WORLDLINE_M267_MILK="+evidence);System.out.println("WORLDLINE_M267_TRACE="+trace);System.out.println("WORLDLINE_M267_SIGNATURE="+sha(trace));
   }finally{actor.close();if(reader!=null)reader.close();server.close();}

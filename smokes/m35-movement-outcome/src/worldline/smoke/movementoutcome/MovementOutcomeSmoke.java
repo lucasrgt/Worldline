@@ -40,16 +40,16 @@ public final class MovementOutcomeSmoke {
             server.boot(); B173PlayerSeed.write(workspace, username, 4.5D, 60D, 4.5D);
             client.connect(); awaitPlayers(server, Collections.singletonList(username));
             initial = client.synchronizePose(); int chunkX = floor(initial.x()) >> 4, chunkZ = floor(initial.z()) >> 4;
-            client.awaitRemoteChunk(chunkX, chunkZ); client.sustainTicks(5);
+            client.awaitRemoteChunk(chunkX, chunkZ); worldline.test.WorldlineSmokeAwait.observe(client,5);
             small = client.moveAndObserve(.125D, 0D, 0D, 5);
             require(small.disposition() == MovementDisposition.UNCHALLENGED
                     && close(small.resulting().x(), initial.x() + .125D), "small move was challenged");
-            RemoteWorldView before = client.sustainTicks(1); BlockPosition block = solid(before, small.resulting());
+            RemoteWorldView before = worldline.test.WorldlineSmokeAwait.observe(client,1); BlockPosition block = solid(before, small.resulting());
             rollback = client.moveAndObserve(block.x() + .5D - small.resulting().x(),
                     block.y() - small.resulting().y(), block.z() + .5D - small.resulting().z(), 10);
             require(rollback.corrected() && rollback.resulting().equals(small.resulting()),
                     "invalid move did not roll back to last accepted pose");
-            after = client.sustainTicks(1); require(after.containsChunk(chunkX, chunkZ), "rollback lost cached chunk");
+            after = worldline.test.WorldlineSmokeAwait.observe(client,1); require(after.containsChunk(chunkX, chunkZ), "rollback lost cached chunk");
             client.close(); awaitPlayers(server, Collections.emptyList()); server.save(); player = server.player(username);
             require(close(player.x(), small.resulting().x()) && close(player.y(), small.resulting().y())
                     && close(player.z(), small.resulting().z()), "unchallenged move was not persisted");

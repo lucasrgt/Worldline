@@ -83,8 +83,7 @@ final class RetryMigration {
             String stem = "retry." + smoke.id + ".", relative = manifest.getProperty(stem + "source");
             if (relative == null) { pins.add(requiredEntry(previous, smoke.id)); continue; }
             Path source = root.resolve(relative); String text = Files.readString(source, StandardCharsets.UTF_8);
-            String normalized = text.replaceAll("(?m)^[ \\t]+$", "");
-            normalized = normalized.replace("SmokeSupport.", "ExceptionalSmokeSupport.");
+            String normalized = normalizeSupport(text.replaceAll("(?m)^[ \\t]+$", ""));
             if (!normalized.equals(text)) {
                 Files.writeString(source, normalized, StandardCharsets.UTF_8); changed++;
             }
@@ -110,7 +109,7 @@ final class RetryMigration {
         transformed = transformed.replace("Thread.sleep(5000L);", "")
                 .replace("Thread.sleep(5000);", "");
         transformed = removeMethod(transformed, "private static boolean eof");
-        transformed = transformed.replace("SmokeSupport.", "ExceptionalSmokeSupport.");
+        transformed = normalizeSupport(transformed);
         transformed = transformed.replaceAll("(?m)^[ \\t]+$", "");
         require(!legacy(transformed) && occurrences(transformed, "SmokeRetryBoundary.afterEofFailure") == 1,
                 "unrecognized retry shape: " + relative(path)); return transformed;
@@ -122,6 +121,13 @@ final class RetryMigration {
                 "SmokeRetryBoundary.afterEofFailure(" + matcher.group(1) + ",1,"
                         + matcher.group(2) + ");")); }
         matcher.appendTail(output); return count == 0 ? source : output.toString();
+    }
+
+    private static String normalizeSupport(String source) {
+        String duplicate = "ExceptionalExceptionalSmokeSupport";
+        while (source.contains(duplicate)) source = source.replace(
+                duplicate, "ExceptionalSmokeSupport");
+        return source.replaceAll("(?<!Exceptional)SmokeSupport\\.", "ExceptionalSmokeSupport.");
     }
 
     private static String removeMethod(String source, String marker) {
@@ -153,8 +159,8 @@ final class RetryMigration {
         require(entry != null, "missing unchanged pin: " + id); return entry; }
     private static String digest(String value) throws Exception { return HexFormat.of().formatHex(
             MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8))); }
-    private static String digest(Path path) throws Exception { return HexFormat.of().formatHex(
-            MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(path))); }
+    private static String digest(Path path) throws Exception { return digest(
+            Files.readString(path, StandardCharsets.UTF_8).replace("\r\n", "\n")); }
     private static Properties load(Path path) throws Exception { Properties values = new Properties();
         try (var reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             values.load(reader); } return values; }

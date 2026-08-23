@@ -50,7 +50,7 @@ public final class NetherExitCreateSetSmoke {
             NetherExitPortalKit.require(actor.dimension() == 0, "source portal traveled during activation");
             pose = NetherExitPortalScan.enter(actor, pose, source.enterX(), source.enterY(), source.enterZ(),
                     travelTicks, -1);
-            RemoteWorldView nether = actor.sustainTicks(20);
+            RemoteWorldView nether = worldline.test.WorldlineSmokeAwait.observe(actor,20);
             Portal generated = NetherExitPortalScan.find(nether, pose, -1);
             RemoteChunkSnapshot netherChunk = nether.chunkAt(((int) Math.floor(pose.x())) >> 4,
                     ((int) Math.floor(pose.z())) >> 4);
@@ -64,7 +64,7 @@ public final class NetherExitCreateSetSmoke {
                     "far Nether relog inventory or dimension drift");
             int farCx = ((int) Math.floor(pose.x())) >> 4, farCz = ((int) Math.floor(pose.z())) >> 4;
             pose = NetherExitPortalScan.hoverUntilChunk(actor, pose, farCx, farCz);
-            RemoteWorldView farView = actor.sustainTicks(20);
+            RemoteWorldView farView = worldline.test.WorldlineSmokeAwait.observe(actor,20);
             BlockPosition land = NetherExitPortalKit.standNether(farView);
             actor = relog(actor, server, workspace, user, timeout,
                     land.x() + 0.5D, land.y() + 1D, land.z() - 1.5D, -1);
@@ -72,7 +72,7 @@ public final class NetherExitCreateSetSmoke {
             NetherExitPortalKit.require(actor.dimension() == -1 && actor.awaitInventory().occupiedSlots() == 3,
                     "nether pad relog inventory or dimension drift");
             pose = NetherExitPortalScan.hoverUntilChunk(actor, pose, land.x() >> 4, land.z() >> 4);
-            int up = actor.sustainTicks(1).blockAt(land.x(), land.y() + 1, land.z()).legacyId();
+            int up = worldline.test.WorldlineSmokeAwait.observe(actor,1).blockAt(land.x(), land.y() + 1, land.z()).legacyId();
             NetherExitPortalKit.require(up == 0, "nether pad ceiling id=" + up + " at " + land);
             Frame far = NetherExitPortalKit.east(actor, land);
             NetherExitPortalKit.light(actor, far, portalTicks);
@@ -81,7 +81,7 @@ public final class NetherExitCreateSetSmoke {
             pose = NetherExitPortalScan.enter(actor, pose, far.enterX(), far.enterY(), far.enterZ(), travelTicks, 0);
             int overCx = ((int) Math.floor(pose.x())) >> 4, overCz = ((int) Math.floor(pose.z())) >> 4;
             pose = NetherExitPortalScan.hoverUntilChunk(actor, pose, overCx, overCz);
-            RemoteWorldView returned = actor.sustainTicks(20);
+            RemoteWorldView returned = worldline.test.WorldlineSmokeAwait.observe(actor,20);
             created = NetherExitPortalScan.find(returned, pose, 0);
             RemoteChunkSnapshot over = returned.chunkAt(((int) Math.floor(pose.x())) >> 4,
                     ((int) Math.floor(pose.z())) >> 4);

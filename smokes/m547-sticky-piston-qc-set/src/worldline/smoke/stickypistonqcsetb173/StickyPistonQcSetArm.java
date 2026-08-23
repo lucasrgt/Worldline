@@ -11,14 +11,14 @@ public final class StickyPistonQcSetArm{
   BlockPosition piston=BlockFace.UP.adjacent(support),head=BlockFace.WEST.adjacent(piston),pushed=BlockFace.WEST.adjacent(head),qc=BlockFace.UP.adjacent(piston),lever=BlockFace.EAST.adjacent(qc);
   require(at(initial,piston,cx,cz).legacyId()==0&&at(initial,head,cx,cz).legacyId()==0&&at(initial,pushed,cx,cz).legacyId()==0&&at(initial,qc,cx,cz).legacyId()==0&&at(initial,lever,cx,cz).legacyId()==0,"sticky qc targets were not initial air");
   require(lever.y()==piston.y()+1&&lever.y()!=support.y(),"qc lever must power the block above, not the M144/M367 support cell");
-  a.look(-90F,0F);a.selectHeldSlot(1);a.placeHeldBlock(support,BlockFace.UP);BlockState placed=a.sustainTicks(5).blockAt(piston.x(),piston.y(),piston.z());require(placed.equals(new BlockState(29,4)),"west sticky 29 absent: "+placed+" at "+cell(piston));
+  a.look(-90F,0F);a.selectHeldSlot(1);a.placeHeldBlock(support,BlockFace.UP);BlockState placed=worldline.test.WorldlineSmokeAwait.awaitBlock(a,piston,new BlockState(29,4),5).blockAt(piston.x(),piston.y(),piston.z());require(placed.equals(new BlockState(29,4)),"west sticky 29 absent: "+placed+" at "+cell(piston));
   a.selectHeldSlot(0);a.placeHeldBlock(piston,BlockFace.WEST);a.awaitBlock(head,new BlockState(1,0));
   a.placeHeldBlock(piston,BlockFace.UP);a.awaitBlock(qc,new BlockState(1,0));
-  a.selectHeldSlot(2);a.placeHeldBlock(qc,BlockFace.EAST);require(a.sustainTicks(5).blockAt(lever.x(),lever.y(),lever.z()).equals(new BlockState(69,1)),"qc lever absent above piston");
+  a.selectHeldSlot(2);a.placeHeldBlock(qc,BlockFace.EAST);require(worldline.test.WorldlineSmokeAwait.awaitBlock(a,lever,new BlockState(69,1),5).blockAt(lever.x(),lever.y(),lever.z()).equals(new BlockState(69,1)),"qc lever absent above piston");
   return new StickyPistonQcSetArm(support,piston,head,pushed,qc,lever);
  }
  RemoteWorldView pulse(B173WireClient a,int ticks,BlockState pistonWant,BlockState headWant,BlockState pushedWant,int leverMeta,String label)throws Exception{
-  a.activateBlock(lever,BlockFace.UP);RemoteWorldView live=a.sustainTicks(ticks);
+  a.activateBlock(lever,BlockFace.UP);RemoteWorldView live=worldline.test.WorldlineSmokeAwait.observe(a,ticks);
   require(live.blockAt(qc.x(),qc.y(),qc.z()).equals(new BlockState(1,0))&&live.blockAt(lever.x(),lever.y(),lever.z()).equals(new BlockState(69,leverMeta))&&live.blockAt(piston.x(),piston.y(),piston.z()).equals(pistonWant)&&live.blockAt(head.x(),head.y(),head.z()).equals(headWant)&&live.blockAt(pushed.x(),pushed.y(),pushed.z()).equals(pushedWant),label+" absent: "+live.blockAt(piston.x(),piston.y(),piston.z())+"/"+live.blockAt(head.x(),head.y(),head.z())+"/"+live.blockAt(pushed.x(),pushed.y(),pushed.z()));
   return live;
  }

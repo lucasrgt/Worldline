@@ -75,7 +75,7 @@ public final class AeroCombatWindowCycle {
     }
     private Path compile() throws Exception { Path output=build.resolve("classes"); Files.createDirectories(output);
         List<String> command=new ArrayList<>(Arrays.asList("javac","-encoding","UTF-8","--release","8","-Xlint:all,-options","-Werror",
-                "-classpath",product("api").toString(),"-d",output.toString())); command.addAll(javaFiles(root.resolve(
+                "-classpath",product("api").toString(),"-d",output.toString())); command.addAll(javaFiles(root.resolve("modules/smoketest/src/main/java")));command.addAll(javaFiles(root.resolve(
                 "adapters/b173-server/src/main/java"))); command.addAll(javaFiles(smoke.resolve("src"))); Captured.run(root,command,60); return output; }
     private void parseAero(String row){ Map<String,String> fields=new HashMap<>(); require(row.indexOf(']')>6,"invalid Aero row");
         for(String token:row.substring(row.indexOf(']')+1).trim().split(" +")){int equals=token.indexOf('='); if(equals>0&&equals<token.length()-1)

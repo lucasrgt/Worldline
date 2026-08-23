@@ -23,13 +23,12 @@ public final class KnockbackCooldownSetSmoke{
   try{server.boot();actor.connect();pose=stand(actor,actor.synchronizePose(),top);require(actor.awaitInventory().occupiedSlots()>=1&&actor.awaitHealth(20)==20,"knockback-cooldown reload drift");
    before=actor.moveAndObserve(0D,0D,0D,1).resulting();server.setTime(14000L);zombie=actor.awaitMobSpawn(54);require(zombie.legacyType()==54&&zombie.entityId()!=actor.state().entityId()&&zombie.legacyType()!=90,"zombie Packet24 type54 identity drift");
    mobX=zombie.x();mobZ=zombie.z();RemoteMobMovement walk=actor.awaitMobMovement(zombie.entityId());mobX=walk.toX();mobZ=walk.toZ();
-   for(int n=0;n<800&&actor.health()>=20;n++)actor.sustainTicks(1);
-   int afterHealth=actor.health();require(afterHealth<20&&afterHealth>=1,"zombie melee Packet8 absent health="+afterHealth+" pose="+before.x()+","+before.y()+","+before.z()+" mob="+mobX+","+mobZ);
+   int afterHealth=worldline.test.WorldlineSmokeAwait.awaitEntity(actor,actor::health,value->value<20,"zombie melee health",800);require(afterHealth>=1,"zombie melee Packet8 absent health="+afterHealth+" pose="+before.x()+","+before.y()+","+before.z()+" mob="+mobX+","+mobZ);
    hit=actor.awaitIncomingHit(afterHealth);require(hit.healthBefore()==20&&hit.healthAfter()==afterHealth&&hit.damage()==20-afterHealth&&hit.victim().equals(user),"zombie Packet38/8 health drift");
    knockback=actor.awaitVelocity(actor.state().entityId());
    require(knockback.awayFrom(before,mobX,mobZ),"knockback Packet28 velocity was not away and upward from type54 mob: "+knockback.fixedX()+":"+knockback.fixedY()+":"+knockback.fixedZ());
    int held=actor.health();
-   for(int n=0;n<5;n++)actor.sustainTicks(1);require(actor.health()==held&&held==afterHealth,"hurt-time second Packet8 drop: "+held+"->"+actor.health());
+   for(int n=0;n<5;n++)worldline.test.WorldlineSmokeAwait.observe(actor,1);require(actor.health()==held&&held==afterHealth,"hurt-time second Packet8 drop: "+held+"->"+actor.health());
    actor.close();awaitPlayers(server,0);server.save();require(server.player(user).health()==afterHealth,"persisted knockback-cooldown health drift");
    reader=new B173WireClient("127.0.0.1",port,user,timeout);reader.connect();reader.synchronizePose();require(reader.awaitHealth(afterHealth)==afterHealth,"fresh-login knockback-cooldown health drift");
    String evidence="column="+column+",support="+top.x()+":"+top.y()+":"+top.z()+":1:0,spawner="+spawner.x()+":"+spawner.y()+":"+spawner.z()+":52:0,mob=type54,health=20->"+afterHealth+",damage="+hit.damage()+",knockback=away,cooldown=held,hurt=packet38-status2,night=14000,persisted=true,clients=2,disconnect=clean";

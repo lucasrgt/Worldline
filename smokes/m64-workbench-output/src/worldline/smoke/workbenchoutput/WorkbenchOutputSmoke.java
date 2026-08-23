@@ -53,7 +53,7 @@ public final class WorkbenchOutputSmoke {
             RemoteWorldView baseline = actor.awaitRemoteChunk((int) Math.floor(pose.x()) >> 4,
                     (int) Math.floor(pose.z()) >> 4); BlockPosition support = placement(baseline, pose);
             target = BlockFace.UP.adjacent(support); actor.selectHeldSlot(1);
-            actor.placeHeldBlock(support, BlockFace.UP); actor.awaitBlock(target, new BlockState(58, 0)); actor.sustainTicks(5);
+            actor.placeHeldBlock(support, BlockFace.UP); actor.awaitBlock(target, new BlockState(58, 0)); worldline.test.WorldlineSmokeAwait.observe(actor,5);
             require(actor.inventory().slot(36).item().equals(planks) && actor.inventory().slot(37).empty(),
                     "placed workbench inventory drifted"); actor.selectHeldSlot(1);
             actor.openWorkbench(target, BlockFace.UP); RemoteWorkbenchPreparation prepared = actor.prepareWorkbenchSlabs(36);
@@ -90,7 +90,7 @@ public final class WorkbenchOutputSmoke {
     private static WorkbenchOutputSession client(int port, String name, Duration timeout) {
         return new B173WireClient("127.0.0.1", port, name, timeout); }
     private static PlayerPose settle(WorkbenchOutputSession client) {
-        client.sustainTicks(5); MovementOutcome settled = null; for (int i = 0; i < 100; i++) {
+        worldline.test.WorldlineSmokeAwait.observe(client,5); MovementOutcome settled = null; for (int i = 0; i < 100; i++) {
             settled = client.moveAndObserve(0, -1, 0, 2); if (settled.corrected()) break; }
         require(settled != null && settled.corrected(), "ground settlement absent"); return settled.resulting(); }
     private static BlockPosition placement(RemoteWorldView view, PlayerPose pose) { int x=(int)Math.floor(pose.x()),

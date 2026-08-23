@@ -39,11 +39,11 @@ public final class FallingSandSmoke {
             actor.moveAndObserve(0D,1D,0D,1);column++;sand=BlockFace.UP.adjacent(support);
             require(initial.blockAt(local(sand.x(),chunkX),sand.y(),local(sand.z(),chunkZ)).legacyId()==0,"sand target was not initial air");
             actor.selectHeldSlot(1);actor.placeHeldBlock(support,BlockFace.UP);actor.awaitBlock(sand,new BlockState(12,0));
-            actor.selectHeldSlot(2);actor.moveAndObserve(0D,-2D,0D,2);before=actor.sustainTicks(fixtureTicks).chunkAt(chunkX,chunkZ);
+            actor.selectHeldSlot(2);actor.moveAndObserve(0D,-2D,0D,2);before=worldline.test.WorldlineSmokeAwait.observe(actor,fixtureTicks).chunkAt(chunkX,chunkZ);
             require(before.blockAt(local(support.x(),chunkX),support.y(),local(support.z(),chunkZ)).equals(new BlockState(1,0))
                     &&before.blockAt(local(sand.x(),chunkX),sand.y(),local(sand.z(),chunkZ)).equals(new BlockState(12,0)),"stable sand fixture drift");
             actor.beginBreak(support);Thread.sleep(3000L);actor.finishBreak(support);opened=actor.awaitBlock(support,new BlockState(0,0)).blockAt(support.x(),support.y(),support.z());
-            RemoteWorldView live=actor.sustainTicks(gravityTicks);settled=live.blockAt(support.x(),support.y(),support.z());cleared=live.blockAt(sand.x(),sand.y(),sand.z());
+            RemoteWorldView live=worldline.test.WorldlineSmokeAwait.observe(actor,gravityTicks);settled=live.blockAt(support.x(),support.y(),support.z());cleared=live.blockAt(sand.x(),sand.y(),sand.z());
             require(opened.equals(new BlockState(0,0))&&settled.equals(new BlockState(12,0))&&cleared.equals(new BlockState(0,0)),"sand did not settle one block: "+opened+" / "+settled+" / "+cleared);
             actor.close();awaitPlayers(server,0);server.save();reader=new B173WireClient("127.0.0.1",port,username,timeout);
             reader.connect();reader.synchronizePose();after=reader.awaitRemoteChunk(chunkX,chunkZ).chunkAt(chunkX,chunkZ);

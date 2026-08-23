@@ -49,12 +49,12 @@ public final class AeroPairedWireSmoke {
             require(sword>=36,"sword absent");attacker.selectHeldSlot(sword-36);victim.awaitPeerHeldItem(new RemoteHeldItem(attackerName,276,0));
             for(RemoteArmorSlot slot:RemoteArmorSlot.values())attacker.awaitPeerArmor(
                     new worldline.api.RemoteArmorPiece(victimName,slot,slot.leatherItemId(),0));
-            require(distance(victimAir,aligned)<6D,"combat alignment drifted");victim.sustainTicks(80);attacker.sustainTicks(2);
+            require(distance(victimAir,aligned)<6D,"combat alignment drifted");worldline.test.WorldlineSmokeAwait.observe(victim,80);worldline.test.WorldlineSmokeAwait.observe(attacker,2);
             System.out.println("WORLDLINE_M71_WIRE_ARMED=arm="+arm+";attacker="+attacker.state().entityId()
                     +";victim="+victim.state().entityId());System.out.flush();await(control,"GO",victim,attacker);
             attacker.sendChat(trigger);System.out.println("WORLDLINE_M71_WIRE_TRIGGER=arm="+arm);System.out.flush();
             if("event".equals(arm)){RemoteSwingRequest swing=attacker.swingHeldItem();RemoteCombatStrike strike=attacker.attackPlayer(victimName);
-                victim.sustainTicks(2);RemoteIncomingHit hit=victim.awaitIncomingHit(18);attacker.sustainTicks(2);
+                worldline.test.WorldlineSmokeAwait.observe(victim,2);RemoteIncomingHit hit=victim.awaitIncomingHit(18);worldline.test.WorldlineSmokeAwait.observe(attacker,2);
                 require(swing.entityId()==attacker.state().entityId()&&strike.targetEntityId()==victim.state().entityId()
                         &&hit.healthBefore()==20&&hit.healthAfter()==18&&attacker.inventory().slot(sword).item().damage()==1,
                         "event evidence drifted");System.out.println("WORLDLINE_M71_WIRE_EVENT=health=20->18;sword=0->1");
@@ -70,7 +70,7 @@ public final class AeroPairedWireSmoke {
     private static double distance(PlayerPose a,PlayerPose b){double x=a.x()-b.x(),y=a.y()-b.y(),z=a.z()-b.z();return Math.sqrt(x*x+y*y+z*z);}
     private static void await(BufferedReader control,String expected,PeerSwingSession victim,PeerSwingSession attacker)throws Exception{
         long end=System.currentTimeMillis()+180000L;while(System.currentTimeMillis()<end){if(control.ready()){
-                require(expected.equals(control.readLine()),expected+" drifted");return;}victim.sustainTicks(2);attacker.sustainTicks(2);}
+                require(expected.equals(control.readLine()),expected+" drifted");return;}worldline.test.WorldlineSmokeAwait.observe(victim,2);worldline.test.WorldlineSmokeAwait.observe(attacker,2);}
         throw new IllegalStateException(expected+" absent");}
     private static void awaitPlayers(B173DedicatedServer server,int count)throws Exception{long end=System.currentTimeMillis()+5000L;
         while(System.currentTimeMillis()<end){if(server.players().size()==count)return;Thread.sleep(100L);}throw new IllegalStateException("player count drifted");}

@@ -46,46 +46,46 @@ public final class TorchBurnoutSetSmoke {
             TorchBurnoutSetSupport.require(actor.awaitBlock(torch, on).blockAt(torch.x(), torch.y(), torch.z()).equals(on)
                     && !on.equals(floor), "live north torch 76:4 drift");
             actor.look(90F, 0F);
-            actor.sustainTicks(2);
+            worldline.test.WorldlineSmokeAwait.observe(actor,2);
             actor.selectHeldSlot(1);
             actor.useHeldItemOnBlock(top, BlockFace.UP);
             TorchBurnoutSetSupport.require(actor.awaitBlock(repeater, new BlockState(93, 3))
                     .blockAt(repeater.x(), repeater.y(), repeater.z()).equals(new BlockState(93, 3)), "west repeater drift");
             actor.selectHeldSlot(2);
             actor.placeHeldBlock(east, BlockFace.UP);
-            BlockState leverOff = actor.sustainTicks(5).blockAt(lever.x(), lever.y(), lever.z());
+            BlockState leverOff = worldline.test.WorldlineSmokeAwait.observe(actor,5).blockAt(lever.x(), lever.y(), lever.z());
             TorchBurnoutSetSupport.require(leverOff.legacyId() == 69 && (leverOff.metadata() & 8) == 0, "input lever drift");
             BlockState leverOn = new BlockState(69, leverOff.metadata() | 8);
             actor.selectHeldSlot(7);
-            actor.sustainTicks(5);
+            worldline.test.WorldlineSmokeAwait.observe(actor,5);
             actor.activateBlock(lever, BlockFace.UP);
             actor.awaitBlock(lever, leverOn);
             TorchBurnoutSetSupport.require(actor.awaitBlock(torch, off).blockAt(torch.x(), torch.y(), torch.z()).equals(off),
                     "first invert 75:4 absent");
             actor.activateBlock(lever, BlockFace.UP);
             actor.awaitBlock(lever, leverOff);
-            TorchBurnoutSetSupport.require((actor.sustainTicks(10).blockAt(lever.x(), lever.y(), lever.z()).metadata() & 8) == 0,
+            TorchBurnoutSetSupport.require((worldline.test.WorldlineSmokeAwait.observe(actor,10).blockAt(lever.x(), lever.y(), lever.z()).metadata() & 8) == 0,
                     "family lever off drift");
             RemoteWorldView family = TorchBurnoutSetSupport.pokePlace(actor, torch, cell);
             TorchBurnoutSetSupport.require(family.blockAt(torch.x(), torch.y(), torch.z()).equals(on),
                     "family return 76:4 absent: " + family.blockAt(torch.x(), torch.y(), torch.z()));
             for (int n = 0; n < 24; n++) {
                 actor.activateBlock(lever, BlockFace.UP);
-                actor.sustainTicks(3);
+                worldline.test.WorldlineSmokeAwait.observe(actor,3);
             }
-            TorchBurnoutSetSupport.require((actor.sustainTicks(4).blockAt(lever.x(), lever.y(), lever.z()).metadata() & 8) == 0,
+            TorchBurnoutSetSupport.require((worldline.test.WorldlineSmokeAwait.observe(actor,4).blockAt(lever.x(), lever.y(), lever.z()).metadata() & 8) == 0,
                     "spam lever did not end unpowered");
             actor.selectHeldSlot(4);
             BlockPosition cap = BlockFace.UP.adjacent(torch);
             actor.placeHeldBlock(torch, BlockFace.UP);
             actor.awaitBlock(cap, TorchBurnoutSetSupport.WOOL);
             actor.selectHeldSlot(7);
-            RemoteWorldView burntView = actor.sustainTicks(6);
+            RemoteWorldView burntView = worldline.test.WorldlineSmokeAwait.observe(actor,6);
             BlockState burnt = burntView.blockAt(torch.x(), torch.y(), torch.z());
             TorchBurnoutSetSupport.require((burntView.blockAt(lever.x(), lever.y(), lever.z()).metadata() & 8) == 0
                     && burnt.equals(off) && !burnt.equals(on) && !burnt.equals(floor),
                     "burnout 75:4 after wool-up poke absent: " + burnt);
-            actor.sustainTicks(400);
+            worldline.test.WorldlineSmokeAwait.observe(actor,400);
             TorchBurnoutSetSupport.pokeBreak(actor, cell);
             RemoteWorldView recoveredView = TorchBurnoutSetSupport.pokePlace(actor, torch, cell);
             if (!recoveredView.blockAt(torch.x(), torch.y(), torch.z()).equals(on))

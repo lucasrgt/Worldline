@@ -57,7 +57,7 @@ public final class B173ArmorReductionAccess {
             wall(actor, new BlockPosition(top.x() + d, top.y(), top.z() + 3));
         }
         actor.selectHeldSlot(2); BlockPosition spawner = place(actor, top, BlockFace.UP, 52);
-        actor.sustainTicks(5); return new Pad(top, spawner, column);
+        worldline.test.WorldlineSmokeAwait.observe(actor,5); return new Pad(top, spawner, column);
     }
 
     public static RemoteMobSpawn near(B173WireClient actor, BlockPosition spawner) {
@@ -83,7 +83,7 @@ public final class B173ArmorReductionAccess {
                 if (step != null) {
                     at[0] = step.toX(); at[1] = step.toY(); at[2] = step.toZ();
                     approach(actor, at[0], at[1] + 1.0D, at[2] - 1.5D, 1.2D);
-                } else actor.sustainTicks(1);
+                } else worldline.test.WorldlineSmokeAwait.observe(actor,1);
             }
             int after = actor.health();
             if (after <= 0 || after >= 20) continue;
@@ -99,12 +99,12 @@ public final class B173ArmorReductionAccess {
         for (int n = 0; n < 6 && actor.health() < 20; n++) {
             int food = hotbar(actor, 322); if (food < 36) food = hotbar(actor, 320);
             require(food >= 36, "heal food 322/320 absent");
-            actor.selectHeldSlot(food - 36); actor.useSelectedItemInAir(); actor.sustainTicks(4);
+            actor.selectHeldSlot(food - 36); actor.useSelectedItemInAir(); worldline.test.WorldlineSmokeAwait.observe(actor,4);
         }
         require(actor.awaitHealth(20) == 20, "heal failed health=" + actor.health());
     }
 
-    public static void settle(B173WireClient actor) { actor.sustainTicks(10); }
+    public static void settle(B173WireClient actor) { worldline.test.WorldlineSmokeAwait.observe(actor,10); }
 
     public static void go(B173WireClient actor, BlockPosition p) {
         approach(actor, p.x() + 0.5D, p.y() + 0.0D, p.z() - 1.5D, 0.8D);

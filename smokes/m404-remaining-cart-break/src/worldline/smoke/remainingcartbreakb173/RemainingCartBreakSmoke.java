@@ -17,7 +17,7 @@ public final class RemainingCartBreakSmoke{
    require(empty.entityId()!=actor.state().entityId()&&empty.type()==10&&empty.type()!=11&&empty.throwerId()==0&&empty.velocityX()==0&&empty.velocityY()==0&&empty.velocityZ()==0&&empty.fixedX()==rail.x()*32+16&&empty.fixedY()==rail.y()*32+27&&empty.fixedZ()==rail.z()*32+16,"empty cart packet bounds drift: type="+empty.type()+",thrower="+empty.throwerId()+",fixed="+empty.fixedX()+":"+empty.fixedY()+":"+empty.fixedZ()+",rail="+rail);
    actor.selectHeldSlot(0);east1=place(actor,top,BlockFace.EAST,1);east2=place(actor,east1,BlockFace.EAST,1);actor.selectHeldSlot(1);chestRail=place(actor,east2,BlockFace.UP,66);actor.selectHeldSlot(3);actor.useHeldItemOnBlock(chestRail,BlockFace.UP);RemoteObjectSpawn chest=actor.awaitObjectSpawn(11);
    require(chest.entityId()!=actor.state().entityId()&&chest.entityId()!=empty.entityId()&&chest.type()==11&&chest.type()!=10&&chest.type()!=12&&chest.throwerId()==0&&chest.velocityX()==0&&chest.velocityY()==0&&chest.velocityZ()==0&&chest.fixedX()==chestRail.x()*32+16&&chest.fixedY()==chestRail.y()*32+27&&chest.fixedZ()==chestRail.z()*32+16,"chest cart packet bounds drift: type="+chest.type()+",thrower="+chest.throwerId()+",fixed="+chest.fixedX()+":"+chest.fixedY()+":"+chest.fixedZ()+",rail="+chestRail);
-   actor.sustainTicks(5);RemoteDroppedItem emptyDrop=breakCart(actor,empty.entityId(),CART,-1);require(emptyDrop.item().equals(CART)&&emptyDrop.item().legacyId()==328,"type10 Packet21 328 absent");
+   worldline.test.WorldlineSmokeAwait.observe(actor,5);RemoteDroppedItem emptyDrop=breakCart(actor,empty.entityId(),CART,-1);require(emptyDrop.item().equals(CART)&&emptyDrop.item().legacyId()==328,"type10 Packet21 328 absent");
    RemoteDroppedItem chestBlock=breakCart(actor,chest.entityId(),CHEST,-1);RemoteDroppedItem chestCart=dropAfter(actor,CART,emptyDrop.entityId());
    require(chestBlock.item().equals(CHEST)&&chestBlock.item().legacyId()==54&&chestCart.item().equals(CART)&&chestCart.item().legacyId()==328&&chestCart.entityId()!=emptyDrop.entityId(),"type11 Packet21 328+54 absent");
    actor.close();awaitPlayers(server,0);server.save();
@@ -28,10 +28,10 @@ public final class RemainingCartBreakSmoke{
  }
  private static RemoteDroppedItem breakCart(B173WireClient a,int entity,RemoteItemStack item,int prior){
   int sword=find(a.inventory(),276);require(sword>=36,"diamond sword absent from hotbar");a.selectHeldSlot(sword-36);
-  RemoteDroppedItem drop=null;for(int hit=0;hit<8&&drop==null;hit++){a.attackMob(entity);a.sustainTicks(10);drop=fresh(a.peekDroppedItem(item),prior);}
+  RemoteDroppedItem drop=null;for(int hit=0;hit<8&&drop==null;hit++){a.attackMob(entity);drop=worldline.test.WorldlineSmokeAwait.awaitEntityOrNull(a,()->fresh(a.peekDroppedItem(item),prior),value->value!=null,"fresh cart drop",10);}
   require(drop!=null&&drop.item().equals(item)&&drop.item().count()==1&&drop.entityId()!=prior,"cart Packet21 drop absent id="+item.legacyId());return drop;
  }
- private static RemoteDroppedItem dropAfter(B173WireClient a,RemoteItemStack item,int prior){RemoteDroppedItem drop=null;for(int n=0;n<16&&drop==null;n++){a.sustainTicks(5);drop=fresh(a.peekDroppedItem(item),prior);}require(drop!=null&&drop.item().equals(item)&&drop.entityId()!=prior,"second Packet21 "+item.legacyId()+" absent");return drop;}
+ private static RemoteDroppedItem dropAfter(B173WireClient a,RemoteItemStack item,int prior){RemoteDroppedItem drop=worldline.test.WorldlineSmokeAwait.awaitEntity(a,()->fresh(a.peekDroppedItem(item),prior),value->value!=null,"second cart drop",80);require(drop.item().equals(item)&&drop.entityId()!=prior,"second Packet21 "+item.legacyId()+" absent");return drop;}
  private static RemoteDroppedItem fresh(RemoteDroppedItem seen,int prior){return seen!=null&&seen.entityId()!=prior?seen:null;}
  private static int find(RemoteInventoryView view,int id){for(int slot=36;slot<=44;slot++)if(!view.slot(slot).empty()&&view.slot(slot).item().legacyId()==id)return slot;return -1;}
  private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}

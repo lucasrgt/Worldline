@@ -39,14 +39,14 @@ public final class RedstoneWireDepowerSmoke {
             actor.moveAndObserve(0D,1D,0D,1);column++;wire=BlockFace.UP.adjacent(top);lever=BlockFace.EAST.adjacent(top);
             require(initial.blockAt(local(wire.x(),chunkX),wire.y(),local(wire.z(),chunkZ)).legacyId()==0
                     &&initial.blockAt(local(lever.x(),chunkX),lever.y(),local(lever.z(),chunkZ)).legacyId()==0,"signal targets were not initial air");
-            actor.selectHeldSlot(2);actor.useHeldItemOnBlock(top,BlockFace.UP);RemoteWorldView dust=actor.sustainTicks(5);
+            actor.selectHeldSlot(2);actor.useHeldItemOnBlock(top,BlockFace.UP);RemoteWorldView dust=worldline.test.WorldlineSmokeAwait.observe(actor,5);
             wireOff=dust.blockAt(wire.x(),wire.y(),wire.z());require(wireOff.equals(new BlockState(55,0)),"unpowered wire drift: "+wireOff);
-            actor.selectHeldSlot(1);actor.placeHeldBlock(top,BlockFace.EAST);RemoteWorldView placed=actor.sustainTicks(5);
+            actor.selectHeldSlot(1);actor.placeHeldBlock(top,BlockFace.EAST);RemoteWorldView placed=worldline.test.WorldlineSmokeAwait.observe(actor,5);
             leverOff=placed.blockAt(lever.x(),lever.y(),lever.z());require(leverOff.equals(new BlockState(69,1)),"side lever drift: "+leverOff);
-            actor.selectHeldSlot(3);actor.sustainTicks(fixtureTicks);actor.activateBlock(lever,BlockFace.UP);RemoteWorldView powered=actor.sustainTicks(signalTicks);
+            actor.selectHeldSlot(3);worldline.test.WorldlineSmokeAwait.observe(actor,fixtureTicks);actor.activateBlock(lever,BlockFace.UP);RemoteWorldView powered=worldline.test.WorldlineSmokeAwait.observe(actor,signalTicks);
             leverOn=powered.blockAt(lever.x(),lever.y(),lever.z());wireOn=powered.blockAt(wire.x(),wire.y(),wire.z());
             require(leverOn.equals(new BlockState(69,9))&&wireOn.equals(new BlockState(55,15)),"wire did not reach exact powered state: "+leverOn+" / "+wireOn);
-            before=actor.sustainTicks(signalTicks).chunkAt(chunkX,chunkZ);actor.activateBlock(lever,BlockFace.UP);RemoteWorldView live=actor.sustainTicks(signalTicks);
+            before=worldline.test.WorldlineSmokeAwait.observe(actor,signalTicks).chunkAt(chunkX,chunkZ);actor.activateBlock(lever,BlockFace.UP);RemoteWorldView live=worldline.test.WorldlineSmokeAwait.observe(actor,signalTicks);
             leverOff=live.blockAt(lever.x(),lever.y(),lever.z());wireOff=live.blockAt(wire.x(),wire.y(),wire.z());
             require(leverOff.equals(new BlockState(69,1))&&wireOff.equals(new BlockState(55,0)),"lever signal did not depower wire: "+leverOff+" / "+wireOff);
             actor.close();awaitPlayers(server,0);server.save();reader=new B173WireClient("127.0.0.1",port,username,timeout);

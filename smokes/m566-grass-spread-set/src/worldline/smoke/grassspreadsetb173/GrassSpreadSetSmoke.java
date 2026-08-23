@@ -20,7 +20,7 @@ public final class GrassSpreadSetSmoke{
    actor.selectHeldSlot(2);center=GrassSpreadSetArm.place(actor,top,BlockFace.UP,3);litE=GrassSpreadSetArm.place(actor,east2,BlockFace.UP,3);litW=GrassSpreadSetArm.place(actor,west2,BlockFace.UP,3);litN=GrassSpreadSetArm.place(actor,north2,BlockFace.UP,3);covered=GrassSpreadSetArm.place(actor,south2,BlockFace.UP,3);
    actor.selectHeldSlot(0);cover=GrassSpreadSetArm.place(actor,covered,BlockFace.UP,1);
    BlockPosition[] lit=new BlockPosition[]{center,litE,litW,litN};
-   RemoteWorldView placed=actor.sustainTicks(5);GrassSpreadSetArm.require(GrassSpreadSetArm.id(placed,center)==3&&GrassSpreadSetArm.id(placed,covered)==3&&GrassSpreadSetArm.id(placed,cover)==1&&GrassSpreadSetArm.id(placed,grass[0])==2,"pad cells missing before random-tick wait");
+   RemoteWorldView placed=worldline.test.WorldlineSmokeAwait.observe(actor,5);GrassSpreadSetArm.require(GrassSpreadSetArm.id(placed,center)==3&&GrassSpreadSetArm.id(placed,covered)==3&&GrassSpreadSetArm.id(placed,cover)==1&&GrassSpreadSetArm.id(placed,grass[0])==2,"pad cells missing before random-tick wait");
    GrassSpreadSetArm.waitSpread(actor,grass,lit,covered,window,windows);
    actor.close();GrassSpreadSetArm.awaitPlayers(server,0);server.save();
    reader=new B173WireClient("127.0.0.1",port,user,timeout);reader.connect();reader.synchronizePose();RemoteChunkSnapshot after=reader.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);
