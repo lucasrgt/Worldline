@@ -17,11 +17,13 @@ import worldline.api.PlayerPose;
 import worldline.api.RemoteChestTransfer;
 import worldline.api.RemoteContainerWindow;
 import worldline.api.RemoteHeldItem;
+import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteItemStack;
 import worldline.api.RemoteWindowClosure;
 import worldline.api.RemoteWorldView;
 import worldline.b173server.B173DedicatedServer;
 import worldline.b173server.B173WireClient;
+import worldline.test.WorldlineAwait;
 
 /** Proves accepted player-to-chest transfer and tile persistence across restart. */
 public final class ChestTransferSmoke {
@@ -40,7 +42,7 @@ public final class ChestTransferSmoke {
         String actorName = arguments[4], observerName = arguments[5]; Duration timeout = Duration.ofSeconds(90);
         B173DedicatedServer first = null, second = null; ChestTransferSession actor = null, observer = null, reopened = null;
         RemoteChestTransfer transfer; RemoteContainerWindow persisted; RemoteWindowClosure firstClose, secondClose;
-        BlockPosition target;
+        BlockPosition target; WorldlineAwait waits = new WorldlineAwait(100);
         try {
             first = server(jar, workspace, port, seed, timeout); first.boot(); first.operator(actorName);
             actor = client(port, actorName, timeout); actor.connect(); actor.synchronizePose();
@@ -57,7 +59,7 @@ public final class ChestTransferSmoke {
             observer.moveAndObserve(5D, 5D, 0D, 3); observer.moveAndObserve(5D, 5D, 0D, 3);
             requirePlayers(first.players(), actorName, observerName); observer.awaitRemoteChunk(
                     Math.floorDiv(target.x(), 16), Math.floorDiv(target.z(), 16));
-            awaitSlot(actor, 36, new RemoteItemStack(54, 1, 0)); actor.selectHeldSlot(0);
+            awaitSlot(waits, actor, 36, new RemoteItemStack(54, 1, 0)); actor.selectHeldSlot(0);
             actor.placeHeldBlock(support, BlockFace.UP); BlockState chest = actor.sustainTicks(5)
                     .blockAt(target.x(), target.y(), target.z());
             require(chest.legacyId() == 54 && observer.sustainTicks(5).blockAt(target.x(), target.y(), target.z())
@@ -66,7 +68,7 @@ public final class ChestTransferSmoke {
             for (int step = 0; step < 10 && actor.inventory().occupiedSlots() < 1; step++)
                 actor.moveAndObserve(0D, -1D, 0D, 2);
             RemoteItemStack stone = new RemoteItemStack(1, 1, 0);
-            awaitSlot(actor, 36, stone);
+            awaitSlot(waits, actor, 36, stone);
             actor.selectHeldSlot(1); RemoteContainerWindow opened = actor.openChest(target, BlockFace.UP);
             require(opened.inventory().slot(54).item().equals(stone) && opened.inventory().slot(0).empty(),
                     "combined chest mapping drifted");
@@ -95,6 +97,7 @@ public final class ChestTransferSmoke {
         System.out.println("WORLDLINE_M59_TRANSFER=actions=" + transfer.takeAction() + "," + transfer.storeAction()
                 + ";close=" + firstClose.proofAction() + ";reopen=" + persisted.inventory().slot(0).item()
                 + ";close2=" + secondClose.proofAction() + ";player-items=0");
+        System.out.println("WORLDLINE_M59_AWAIT=" + waits.telemetry().evidence());
         System.out.println("WORLDLINE_M59_TRACE=" + TRACE);
         System.out.println("WORLDLINE_M59_SIGNATURE=" + sha256(TRACE));
     }
@@ -110,13 +113,11 @@ public final class ChestTransferSmoke {
         client.sustainTicks(10); MovementOutcome settled = null; for (int step = 0; step < 100; step++) {
             settled = client.moveAndObserve(0D, -1D, 0D, 2); if (settled.corrected()) break; }
         require(settled != null && settled.corrected(), "ground settlement correction absent"); return settled.resulting(); }
-    private static void awaitSlot(ChestTransferSession client, int slot, RemoteItemStack expected) {
-        for (int step = 0; step < 100; step++) {
-            if (!client.inventory().slot(slot).empty() && client.inventory().slot(slot).item().equals(expected)) return;
-            client.sustainTicks(1);
-        }
-        throw new IllegalStateException("slot " + slot + " did not become " + expected
-                + "; inventory=" + client.inventory());
+    private static void awaitSlot(WorldlineAwait waits, ChestTransferSession client,
+            int slot, RemoteItemStack expected) {
+        waits.awaitSlot(() -> { RemoteInventoryView view = client.inventory();
+            if (!view.slot(slot).empty() && view.slot(slot).item().equals(expected)) return view;
+            client.sustainTicks(1); return client.inventory(); }, slot, expected);
     }
     private static boolean replaceable(BlockState state) { int id = state.legacyId(); return id == 0 || id == 8 || id == 9 || id == 78; }
     private static void requirePlayers(List<String> players, String first, String second) { Set<String> expected = new HashSet<>();

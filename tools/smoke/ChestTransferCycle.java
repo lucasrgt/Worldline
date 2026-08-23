@@ -34,7 +34,8 @@ public final class ChestTransferCycle {
         require(first.signature.equals(value(config, "expected.signature")), "M59 signature drift: " + first.signature);
         String evidence = "id=" + ID + "\nprocesses=10\nservers=4\nserver.sha256="
                 + value(artifact, "expected.sha256") + "\ntrace=" + first.trace + "\nfirst="
-                + first.observation + "\nsecond=" + second.observation + "\nsignature=" + first.signature + "\n";
+                + first.observation + "\nsecond=" + second.observation + "\nawait=" + first.await
+                + "\nsignature=" + first.signature + "\n";
         Files.write(build.resolve("evidence.txt"), evidence.getBytes(StandardCharsets.UTF_8));
         System.out.println("M59 chest transfer passed");
         System.out.println("  processes: 6 clients + 4 official servers");
@@ -46,7 +47,9 @@ public final class ChestTransferCycle {
     private Path compile() throws Exception {
         Path output = build.resolve("classes"); Files.createDirectories(output);
         List<String> command = new ArrayList<>(Arrays.asList("javac", "-encoding", "UTF-8", "--release", "8",
-                "-Xlint:all,-options", "-Werror", "-classpath", product("api").toString(), "-d", output.toString()));
+                "-Xlint:all,-options", "-Werror", "-classpath", product("api").toString(),
+                "-d", output.toString()));
+        command.addAll(javaFiles(root.resolve("modules/smoketest/src/main/java")));
         command.addAll(javaFiles(root.resolve("adapters/b173-server/src/main/java")));
         command.addAll(javaFiles(smoke.resolve("src"))); capture(command); return output;
     }
@@ -56,7 +59,7 @@ public final class ChestTransferCycle {
                 Integer.toString(freePort()), value(config, "seed"), value(config, "actor"), value(config, "observer")));
         require(output.contains("WORLDLINE_M59_API=chest-transfer,combined-personal-map,restart-reopen"), "M59 API marker absent");
         return new Outcome(line(output, "WORLDLINE_M59_TRACE="), line(output, "WORLDLINE_M59_SIGNATURE="),
-                line(output, "WORLDLINE_M59_TRANSFER="));
+                line(output, "WORLDLINE_M59_TRANSFER="), line(output, "WORLDLINE_M59_AWAIT="));
     }
     private int freePort() throws Exception { try (ServerSocket socket = new ServerSocket(0)) { return socket.getLocalPort(); } }
     private void verifyArtifact(Path path) throws Exception {
@@ -88,6 +91,7 @@ public final class ChestTransferCycle {
     private String line(String output, String prefix) { return output.lines().filter(value -> value.startsWith(prefix))
             .findFirst().orElseThrow(() -> new IllegalStateException("missing " + prefix)).substring(prefix.length()); }
     private static void require(boolean condition, String message) { if (!condition) throw new IllegalStateException(message); }
-    private static final class Outcome { final String trace, signature, observation;
-        Outcome(String trace, String signature, String observation) { this.trace = trace; this.signature = signature; this.observation = observation; } }
+    private static final class Outcome { final String trace, signature, observation, await;
+        Outcome(String trace, String signature, String observation, String await) { this.trace = trace;
+            this.signature = signature; this.observation = observation; this.await = await; } }
 }

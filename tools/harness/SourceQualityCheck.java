@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /** Enforces repository text hygiene and prevents legacy physical-line debt from growing. */
@@ -21,11 +22,37 @@ final class SourceQualityCheck {
                 StandardCharsets.UTF_8)) { policy.load(reader); }
         int width = integer("line.width");
         for (String scope : SCOPES) inspect(scope, width);
+        inspectFlakinessDebt();
         inspectRepositoryText();
         requireText(".editorconfig", "end_of_line = lf");
         requireText(".editorconfig", "trim_trailing_whitespace = true");
         requireText(".gitattributes", "* text=auto eol=lf");
         System.out.println("  source quality: whitespace clean; physical-line debt did not grow");
+    }
+
+    private void inspectFlakinessDebt() throws IOException {
+        Pattern fixedWait = Pattern.compile(
+                "sustainTicks\\([^\\)]*\\)[\\s\\S]{0,160}?require\\(");
+        int fixedWaitFiles = countFiles(root.resolve("smokes"), source -> fixedWait.matcher(source).find());
+        int eofRetryFiles = countFiles(root.resolve("tools/smoke"), source ->
+                source.contains("Thread.sleep(5000") && source.matches("(?s).*eof\\(.*"));
+        int eofHelperFiles = countFiles(root.resolve("tools/smoke"), source ->
+                source.contains("private static boolean eof"));
+        checkBaseline("smokes.fixed.tick.assertion.files", fixedWaitFiles);
+        checkBaseline("tools/smoke.eof.retry.files", eofRetryFiles);
+        checkBaseline("tools/smoke.eof.helper.files", eofHelperFiles);
+        System.out.println("  flakiness debt: fixed-wait=" + fixedWaitFiles
+                + "; EOF-retry=" + eofRetryFiles + "; EOF-helper=" + eofHelperFiles);
+    }
+
+    private int countFiles(Path directory, java.util.function.Predicate<String> predicate)
+            throws IOException {
+        int count = 0;
+        try (Stream<Path> paths = Files.walk(directory)) {
+            for (Path path : paths.filter(file -> file.toString().endsWith(".java")).toList())
+                if (predicate.test(Files.readString(path, StandardCharsets.UTF_8))) count++;
+        }
+        return count;
     }
 
     private void inspectRepositoryText() throws IOException {

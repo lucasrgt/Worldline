@@ -54,6 +54,8 @@ final class SmokeInputFingerprint {
         String source = source(runner);
         add(digest, root.resolve("tools/harness/SmokeProcess.java"));
         if (source.contains("SmokeSupport")) add(digest, root.resolve("tools/harness/SmokeSupport.java"));
+        if (source.contains("SmokeRetry")) add(digest, root.resolve("tools/harness/SmokeRetry.java"));
+        if (source.contains("modules/smoketest")) add(digest, root.resolve("modules/smoketest"));
         for (String input : REPOSITORY_INPUTS) if (source.contains(input)) add(digest, root.resolve(input));
         Set<String> products = products(source);
         for (String product : products) update(digest, "module:" + product + ":" + module(product));
