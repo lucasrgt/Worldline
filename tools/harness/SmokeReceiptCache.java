@@ -151,6 +151,23 @@ final class SmokeReceiptCache {
         return pins.verifiedMatch(smoke.id, fingerprint);
     }
 
+    SmokePins.Entry executedPin(SmokeDiscovery.Entry smoke, String fingerprint,
+            String head, String tree) throws Exception {
+        Path proof = proof(smoke.id, fingerprint), evidence = evidence(smoke.id, fingerprint);
+        if (!validProof(smoke.id, fingerprint, proof, evidence)) return null;
+        Properties attestation = load(reports.resolve(smoke.id + ".properties"));
+        if (!"passed".equals(attestation.getProperty("status"))
+                || !smoke.id.equals(attestation.getProperty("id"))
+                || !fingerprint.equals(attestation.getProperty("fingerprint"))
+                || !head.equals(attestation.getProperty("head"))
+                || !tree.equals(attestation.getProperty("tree"))
+                || !"true".equals(attestation.getProperty("clean"))
+                || !"executed".equals(attestation.getProperty("mode"))
+                || !digest(proof).equals(attestation.getProperty("proof.sha256"))) return null;
+        return new SmokePins.Entry(smoke.id, fingerprint,
+                load(proof).getProperty("evidence.sha256"), "executed");
+    }
+
     long historicalDuration(String id) throws Exception {
         Path directory = objects.resolve(id); if (!Files.isDirectory(directory)) return Long.MAX_VALUE;
         long best = Long.MAX_VALUE;

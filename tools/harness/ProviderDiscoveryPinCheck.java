@@ -43,7 +43,9 @@ final class ProviderDiscoveryPinCheck {
             }
             if (GuiWorkbenchPinCheck.isPending(gui, smoke.id)) {
                 carried++; SmokePins.Entry stale = pins.entry(smoke.id); String stem = "smoke." + smoke.id + ".";
-                require(GuiWorkbenchPinCheck.pendingFrom(gui, smoke.id,
+                boolean executed = TrainPinCheck.isExecuted(TrainPinCheck.manifest(root), smoke.id)
+                        && pin != null && "executed".equals(pin.source());
+                require(executed || GuiWorkbenchPinCheck.pendingFrom(gui, smoke.id,
                                 lock.getProperty(stem + "current_fingerprint"),
                                 lock.getProperty(stem + "evidence_sha256"), stale),
                         "successor GUI pending proof drift: " + smoke.id);
@@ -56,7 +58,8 @@ final class ProviderDiscoveryPinCheck {
                         && carried == integer(lock, "smoke.count")
                         && integer(lock, "smoke.changed") > 0,
                 "provider-discovery proof census drift");
-        System.out.println("  provider-discovery proof transport: 21 sources, 521 carried, 4 pending");
+        System.out.println("  provider-discovery proof transport: 21 sources, 521 carried, "
+                + effectivePendingCount(lock, root) + " pending");
     }
 
     static Properties manifest(Path root) throws Exception {
@@ -84,6 +87,14 @@ final class ProviderDiscoveryPinCheck {
         try { return integer(lock, "pending.count") + GuiWorkbenchPinCheck.additionalPendingCount(
                 GuiWorkbenchPinCheck.manifest(Path.of("").toAbsolutePath().normalize())); }
         catch (Exception error) { return integer(lock, "pending.count"); }
+    }
+    private static int effectivePendingCount(Properties lock, Path root) throws Exception {
+        Properties train = TrainPinCheck.manifest(root); int count = 0;
+        for (String id : lock.getProperty("pending.smokes", "").split(","))
+            if (!id.isBlank() && TrainPinCheck.isPending(train, id)) count++;
+        String additional = GuiWorkbenchPinCheck.manifest(root)
+                .getProperty("additional.pending", "");
+        return count + (!additional.isBlank() && TrainPinCheck.isPending(train, additional) ? 1 : 0);
     }
     static boolean carries(Properties lock, String id, SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";

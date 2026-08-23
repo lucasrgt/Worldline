@@ -27,7 +27,7 @@ final class TrainPinCheck {
         }
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
-        int currentCount = 0, pendingCount = 0, imported = 0;
+        int currentCount = 0, pendingCount = 0, imported = 0, executed = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             String stem = "smoke." + smoke.id + ".", current = fingerprints.compute(smoke);
             require(current.equals(required(lock, stem + "current_fingerprint")),
@@ -50,13 +50,20 @@ final class TrainPinCheck {
             if ("milestone".equals(required(lock, stem + "kind"))) {
                 imported++; receipt(lock, stem, smoke.id);
             }
+            if ("executed".equals(required(lock, stem + "kind"))) {
+                executed++; require("executed".equals(pin.source()),
+                        "executed milestone pin provenance drift: " + smoke.id);
+                receipt(lock, stem, smoke.id);
+            }
         }
         require(currentCount + pendingCount == integer(lock, "catalog.count")
                         && imported == integer(lock, "imported.count")
+                        && executed == integer(lock, "executed.count")
                         && pendingCount == integer(lock, "pending.count"),
                 "train proof census drift");
         System.out.println("  train proof transport: " + currentCount + " current, "
-                + imported + " milestone receipts, " + pendingCount + " pending");
+                + imported + " milestone receipts, " + executed + " executed receipts, "
+                + pendingCount + " pending");
     }
 
     static boolean isAdded(Properties lock, String id) {
@@ -64,6 +71,9 @@ final class TrainPinCheck {
     }
     static boolean isPending(Properties lock, String id) {
         return Arrays.asList(lock.getProperty("pending.smokes", "").split(",")).contains(id);
+    }
+    static boolean isExecuted(Properties lock, String id) {
+        return "executed".equals(lock.getProperty("smoke." + id + ".kind"));
     }
     static boolean follows(Properties lock, String id, String prior, String evidence,
             SmokePins.Entry pin, String current) {

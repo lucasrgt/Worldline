@@ -6,14 +6,14 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | --- | --- | --- |
 | `deterministic-world-tick` | CARRIED | server-runtime-equivalence |
 | `controlled-client-tick` | CARRIED | client-runtime-equivalence |
-| `testkit-cycle` | PENDING | testkit-runtime |
+| `testkit-cycle` | EXECUTED | testkit-runtime |
 | `m3-domain-api` | CARRIED | domain-api-equivalence |
 | `m4-durable-snapshot` | CARRIED | durable-snapshot |
 | `m5-reproduction-bundle` | CARRIED | reproduction-bundle |
 | `m6-trace-explorer` | CARRIED | trace-divergence |
-| `m7-mod-loading` | PENDING | mod-loading |
-| `m8-mod-version-diff` | PENDING | mod-version-difference |
-| `m9-scenario-minimization` | PENDING | scenario-minimization |
+| `m7-mod-loading` | EXECUTED | mod-loading |
+| `m8-mod-version-diff` | EXECUTED | mod-version-difference |
+| `m9-scenario-minimization` | EXECUTED | scenario-minimization |
 | `m10-native-render` | CARRIED | client-runtime-equivalence |
 | `m11-aero-attribution` | CARRIED | aero-diagnostic-capture |
 | `m11-mod-api` | CARRIED | mod-api-lifecycle |
@@ -561,11 +561,11 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m616-portal-search-radius-set` | CARRIED | portal search radius set |
 | `m617-spawn-light-cap-set` | CARRIED | spawn light cap set |
 | `m619-undead-sun-burn-set` | CARRIED | undead sun burn set |
-| `m620-stationapi-testkit-driver` | PENDING | StationAPI TestKit driver |
+| `m620-stationapi-testkit-driver` | EXECUTED | StationAPI TestKit driver |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
-| `gui-tree` | PENDING | ui-tree-equivalence |
+| `gui-tree` | EXECUTED | ui-tree-equivalence |
 | `lab-cycle` | CARRIED | runtime-lab |
 | `redstone-lever-button` | CARRIED | redstone-lever-button |
 | `redstone-piston-extend` | CARRIED | redstone-piston-extend |

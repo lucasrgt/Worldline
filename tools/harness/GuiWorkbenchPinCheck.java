@@ -32,9 +32,10 @@ final class GuiWorkbenchPinCheck {
         }
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
+        Properties train = TrainPinCheck.manifest(root);
         int catalog = 0, carried = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
-            if (TrainPinCheck.isAdded(TrainPinCheck.manifest(root), smoke.id)) continue;
+            if (TrainPinCheck.isAdded(train, smoke.id)) continue;
             catalog++; String current = fingerprints.compute(smoke); SmokePins.Entry pin =
                     pins.match(smoke.id, current);
             if (smoke.id.equals("m620-stationapi-testkit-driver")) {
@@ -52,7 +53,9 @@ final class GuiWorkbenchPinCheck {
         }
         require(catalog == 526 && carried == 520 && integer(lock, "smoke.changed") > 0,
                 "GUI workbench proof census drift");
-        System.out.println("  GUI workbench proof transport: 9 sources, 520 carried, 5 pending");
+        int pending = effectivePending(lock, train);
+        System.out.println("  GUI workbench proof transport: 9 sources, 520 carried, "
+                + pending + " pending");
     }
     static Properties manifest(Path root) throws Exception {
         Path path = root.resolve("smokes/gui-workbench.lock");
@@ -66,6 +69,12 @@ final class GuiWorkbenchPinCheck {
     }
     static int additionalPendingCount(Properties lock) {
         return lock.getProperty("additional.pending", "").isBlank() ? 0 : 1;
+    }
+    private static int effectivePending(Properties lock, Properties train) {
+        int count = 0;
+        for (String id : lock.getProperty("pending.smokes", "").split(","))
+            if (!id.isBlank() && TrainPinCheck.isPending(train, id)) count++;
+        return count;
     }
     static boolean carries(Properties lock, String id, SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";

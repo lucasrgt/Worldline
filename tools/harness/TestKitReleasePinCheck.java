@@ -34,7 +34,11 @@ final class TestKitReleasePinCheck {
                         && lock.getProperty("pending.smokes").equals(
                                 provider.getProperty("pending.smokes")),
                 "TestKit runtime-pending census drift");
-        System.out.println("  TestKit 0.3 boundary: static-ready, 4 runtime qualifications pending");
+        int pending = 0; Properties train = TrainPinCheck.manifest(root);
+        for (String id : lock.getProperty("pending.smokes", "").split(","))
+            if (!id.isBlank() && TrainPinCheck.isPending(train, id)) pending++;
+        System.out.println("  TestKit 0.3 boundary: release-ready, " + pending
+                + " runtime qualifications pending");
     }
     static Properties manifest(Path root) throws Exception {
         return load(root.resolve("smokes/testkit-release-0.3.lock"));

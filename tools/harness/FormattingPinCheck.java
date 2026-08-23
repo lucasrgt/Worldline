@@ -47,7 +47,9 @@ final class FormattingPinCheck {
             if (ProviderDiscoveryPinCheck.exemptsLegacy(provider, smoke.id)) continue;
             checked++; String current = fingerprints.compute(smoke);
             SmokePins.Entry pin = pins.match(smoke.id, current);
-            require(pin != null && carries(manifest, smoke.id, pin, current)
+            boolean executed = TrainPinCheck.isExecuted(train, smoke.id)
+                    && pin != null && "executed".equals(pin.source());
+            require(pin != null && (executed || carries(manifest, smoke.id, pin, current))
                             && hash(manifest, "smoke." + smoke.id + ".prior_fingerprint"),
                     "formatting proof drift: " + smoke.id);
         }
