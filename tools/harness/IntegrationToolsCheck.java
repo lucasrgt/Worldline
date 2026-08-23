@@ -33,6 +33,7 @@ final class IntegrationToolsCheck {
             git(repository, "config", "user.email", "worldline@example.invalid");
             git(repository, "config", "user.name", "Worldline Test");
             Files.writeString(repository.resolve("README.md"), "base\n", StandardCharsets.UTF_8);
+            Files.writeString(repository.resolve(".gitignore"), ".worldline/\n", StandardCharsets.UTF_8);
             git(repository, "add", "."); git(repository, "commit", "--quiet", "-m", "base");
             git(repository, "branch", "base");
             candidate(repository, "codex/milestone-m1-one", "m1-one");
@@ -61,6 +62,30 @@ final class IntegrationToolsCheck {
                     "IntegrationTrain", "--base", "base", "--plan-only",
                     "m3-bad=codex/experiment-m3-bad"), 60);
             require(experiment != 0, "experiment branch was accepted for integration");
+            git(repository, "switch", "--quiet", "-c", "codex/fix-m4-runtime", "base");
+            Path runtime = repository.resolve("tools/smoke/FixCycle.java");
+            Files.createDirectories(runtime.getParent()); Files.writeString(runtime, "final class FixCycle {}\n");
+            Path fix = repository.resolve("smokes/m4-runtime"); Files.createDirectories(fix);
+            Files.writeString(fix.resolve("smoke.properties"), "id=m4-runtime\n");
+            git(repository, "add", "."); git(repository, "commit", "--quiet", "-m", "Fix runtime fixture");
+            int missingScar = run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
+                    "IntegrationTrain", "--base", "base", "--plan-only",
+                    "m4-runtime=codex/fix-m4-runtime"), 60);
+            require(missingScar != 0, "runtime fix without an NYA scar was accepted");
+            Path scar = repository.resolve(".csm/nya/scars/NYA-TEST.toml");
+            Files.createDirectories(scar.getParent()); Files.writeString(scar, "schema = 1\n");
+            git(repository, "add", "."); git(repository, "commit", "--quiet", "--amend", "--no-edit");
+            int withScar = run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
+                    "IntegrationTrain", "--base", "base", "--plan-only",
+                    "m4-runtime=codex/fix-m4-runtime"), 60);
+            require(withScar == 0, "runtime fix with an NYA scar was rejected");
+            Path experimentTree = repository.getParent().resolve(repository.getFileName() + "-experiment");
+            git(repository, "worktree", "add", "--quiet", experimentTree.toString(),
+                    "codex/experiment-m3-bad");
+            int missingDeferment = run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
+                    "WorktreeLifecycle", "audit", "--base", "base"), 60);
+            require(missingDeferment != 0, "experiment without an NWC deferment was accepted");
+            git(repository, "worktree", "remove", "--force", experimentTree.toString());
             int triage = run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "WorktreeLifecycle", "triage", "--base", "base"), 60);
             require(triage == 0 && Files.readString(repository.resolve(
@@ -72,6 +97,10 @@ final class IntegrationToolsCheck {
             require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "QualificationLockMerge", "--self-test"), 60) == 0,
                     "qualification lock merge self-test failed");
+            require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
+                    "SwarmHandoff", "--self-test"), 60) == 0, "swarm handoff self-test failed");
+            require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
+                    "SwarmDashboard", "--self-test"), 60) == 0, "swarm dashboard self-test failed");
         } finally { delete(repository); }
     }
 

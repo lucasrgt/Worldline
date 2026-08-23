@@ -95,7 +95,22 @@ public final class WorktreeLifecycle {
         boolean exists = Files.isDirectory(worktree.path);
         boolean dirty = exists && !git(worktree.path, "status", "--porcelain").isBlank();
         boolean integrated = status(root, "merge-base", "--is-ancestor", worktree.head, base) == 0;
+        if (worktree.branch.startsWith("codex/experiment-")) require(
+                experimentDeferred(worktree), "experiment branch lacks a branch-bound NWC deferment: "
+                        + worktree.branch);
         return new State(exists, dirty, integrated);
+    }
+
+    private boolean experimentDeferred(Worktree worktree) throws Exception {
+        List<String> paths = git(root, "ls-tree", "-r", "--name-only", worktree.head,
+                ".csm/nwc/deferments").lines().filter(line -> line.endsWith(".toml")).toList();
+        boolean bound = paths.stream().anyMatch(path -> {
+            try { return git(root, "show", worktree.head + ":" + path).contains(worktree.branch); }
+            catch (Exception error) { throw new IllegalStateException(error); }
+        });
+        if (!bound) return false;
+        require(Files.isDirectory(worktree.path), "experiment worktree is unavailable for NWC validation");
+        return commandStatus(worktree.path, List.of("csm", "nwc", "check"), 60) == 0;
     }
 
     private void archive(String[] arguments) throws Exception {
@@ -200,11 +215,15 @@ public final class WorktreeLifecycle {
     }
 
     private static int status(Path directory, String... arguments) throws Exception {
-        Process process = command(directory, arguments).redirectErrorStream(true)
+        return commandStatus(directory, command(directory, arguments).command(), 60);
+    }
+
+    private static int commandStatus(Path directory, List<String> arguments, int seconds) throws Exception {
+        Process process = new ProcessBuilder(arguments).directory(directory.toFile()).redirectErrorStream(true)
                 .redirectOutput(ProcessBuilder.Redirect.DISCARD).start();
-        if (!process.waitFor(60, TimeUnit.SECONDS)) {
+        if (!process.waitFor(seconds, TimeUnit.SECONDS)) {
             process.destroyForcibly();
-            throw new IllegalStateException("git timed out: " + String.join(" ", arguments));
+            throw new IllegalStateException(arguments.get(0) + " timed out");
         }
         return process.exitValue();
     }

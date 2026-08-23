@@ -26,6 +26,21 @@ All new branches use `codex/<kind>-<id>-<slug>`, where `kind` is `milestone`, `f
 `experiment`, or `train`. Milestone/fix candidates contain exactly one reviewed logical commit
 over the declared base. Reconciliation accepts only `train` branches. `experiment` branches are
 never integrable; they remain conditional work governed by NWC until resolved or archived.
+`WorktreeLifecycle audit` rejects a live experiment unless its commit contains an NWC-generated,
+branch-bound deferment and `csm nwc check` validates its cue, owner, and expiry. Runtime fixture
+or flake corrections on `fix` branches must add a scoped NYA scar in the same logical commit.
+
+After qualification, record a portable handoff before the coordinator commits the train:
+
+```text
+java tools/integration/SwarmHandoff.java record --ref REF --base REF \
+  --receipt .worldline/reports/milestones/ID.json --disposition qualified
+java tools/integration/SwarmHandoff.java check
+```
+
+`java tools/integration/SwarmDashboard.java` generates
+`.worldline/reports/swarm-dashboard.html` from the worktree audit, branch triage, portable PASS
+pins, versioned handoffs, and latest Gate timing report.
 
 ## Verification tiers
 

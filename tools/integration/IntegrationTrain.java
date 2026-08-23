@@ -66,6 +66,12 @@ public final class IntegrationTrain {
                 reference + " must contain exactly one reviewed logical commit over the base");
         List<String> paths = lines(git(root, "diff", "--name-only", base + "..." + head));
         require(!paths.isEmpty(), reference + " has no changes from base");
+        String subject = git(root, "show", "-s", "--format=%s", head).toLowerCase();
+        boolean reliabilityFix = kind.equals("fix") || (branch + " " + subject)
+                .matches(".*(flake|retry|fixture|stabili[sz]|await|fixed-wait).*");
+        if (reliabilityFix && paths.stream().anyMatch(IntegrationTrain::runtimeSurface))
+            require(paths.stream().anyMatch(path -> path.matches("[.]csm/nya/scars/NYA-[A-Z0-9]+[.]toml")),
+                    reference + " corrects a runtime fixture/flake without a scoped NYA scar");
         if (reconcile) return new Candidate(id, reference, head, paths);
         require(paths.stream().anyMatch(path -> path.startsWith("smokes/" + id + "/")),
                 reference + " does not own smokes/" + id + "/");
@@ -204,8 +210,9 @@ public final class IntegrationTrain {
         boolean windows = System.getProperty("os.name", "").toLowerCase().contains("win");
         return Path.of(System.getProperty("java.home"), "bin", "java" + (windows ? ".exe" : "")).toString();
     }
-
     private static String shortSha(String sha) { return sha.substring(0, Math.min(12, sha.length())); }
+    private static boolean runtimeSurface(String path) { return path.startsWith("tools/smoke/")
+            || path.matches("smokes/[^/]+/(src|runtime-src)/.*"); }
     private static String escape(String value) { return value.replace("\\", "\\\\").replace("\"", "\\\""); }
     private static void destroy(Process process) {
         process.descendants().sorted(java.util.Comparator.comparingLong(ProcessHandle::pid).reversed())

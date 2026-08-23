@@ -82,10 +82,10 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 
 | ID | Status | Deliverable | Evidence or completion condition |
 | --- | --- | --- | --- |
-| SWARM-01 | QUEUED | Require scoped CSM memory for every flake/fixture correction. | Done checks reject a correction lacking a reusable `nya remember` scar. |
-| SWARM-02 | QUEUED | Require NWC deferments for non-integrated experiments. | Every prototype has a verifiable cue, owner, and expiry. |
-| SWARM-03 | QUEUED | Version an auditable handoff registry. | Worktree path, clean SHA, base, receipt, and disposition survive task history. |
-| SWARM-04 | QUEUED | Generate a swarm dashboard. | One HTML report joins worktrees, triage, pins, handoffs, and timings. |
+| SWARM-01 | DONE | Require scoped CSM memory for every flake/fixture correction. | Reliability-labelled runtime corrections are rejected by the train unless their diff includes a scoped NYA scar. |
+| SWARM-02 | DONE | Require NWC deferments for non-integrated experiments. | Worktree audit rejects every `codex/experiment-*` branch without a branch-bound tracked NWC deferment. |
+| SWARM-03 | DONE | Version an auditable handoff registry. | `SwarmHandoff` records and validates branch, worktree, clean SHA, base, receipt path/hash, disposition, and time. |
+| SWARM-04 | DONE | Generate a swarm dashboard. | `SwarmDashboard` joins worktree/branch reports, portable pins, versioned handoffs, and latest Gate timings in one escaped HTML report. |
 | SWARM-05 | DONE | Enforce reconciliation history policy. | Integration rejects candidates with anything other than one reviewed logical commit over the declared base. |
 | SWARM-06 | DONE | Enforce one branch naming scheme. | Trains enforce `codex/<kind>-<id>-<slug>`, restrict reconcile to `train`, and reject `experiment` integration. |
 
