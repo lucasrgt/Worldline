@@ -47,7 +47,8 @@ final class OfficialPhysicsProbe {
     private static void ladderFixture(fd world, boolean ladder) {
         for (int y = Y; y <= Y + 3; y++) {
             set(world, X, y, Z, 1, 0);
-            set(world, X + 1, y, Z, ladder && y <= Y + 1 ? 65 : 0, 5);
+            boolean placed = ladder && y <= Y + 1;
+            set(world, X + 1, y, Z, placed ? 65 : 0, placed ? 5 : 0);
         }
         set(world, X + 1, Y - 1, Z, 1, 0);
     }
