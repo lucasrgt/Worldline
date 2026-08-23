@@ -29,8 +29,8 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | PIPE-04 | DONE | Add content-addressed PASS receipts for unit-suite execution. | Suite, compiled-test digest, execution-model sources, Java runtime, assertions, and hashed evidence bind each immutable local PASS proof; absent or altered evidence executes again. |
 | PIPE-05 | DONE | Remove whole-tree publication copies on module-cache hits. | Module outputs are symbolic links on POSIX and directory junctions on Windows, verified to resolve to immutable cache entries. |
 | PIPE-06 | DONE | Size module build workers from the machine by default. | Default is half the available processors, clamped to a safe range; the environment override remains authoritative. |
-| PIPE-07 | QUEUED | Validate only affected milestone surfaces in candidate mode. | Full validation remains in release profiles. |
-| PIPE-08 | QUEUED | Cache nested harness self-tests by harness digest. | A changed harness always reruns them; an identical harness restores a receipt. |
+| PIPE-07 | DONE | Validate only affected milestone surfaces in candidate mode. | `CandidateCheck` validates the requested milestone contract and affected module tests; `RepositoryVerify` retains full-catalog validation for release profiles. |
+| PIPE-08 | DONE | Cache nested harness self-tests by harness digest. | Harness sources, Java, OS, and control filesystem bind a hashed PASS proof; any change reruns the lock test. |
 | PIPE-09 | DONE | Restrict source-quality traversal to tracked files. | `SourceQualityCheck` consumes the fail-closed tracked-file inventory. |
 | PIPE-10 | ACTIVE | Schedule cold smokes using reviewed duration/failure history. | `Gate --smoke-plan` orders missing proofs by cached duration; failure-frequency ranking remains. |
 

@@ -105,6 +105,7 @@ The following environment variables are supported:
 | `WORLDLINE_TEST_WORKERS` | 4 | Test compilation/execution workers |
 | `WORLDLINE_TEST_TIMEOUT_SECONDS` | 180 | Per-test JVM timeout |
 | `WORLDLINE_TEST_CACHE` | `on` | Set to `off` to execute every selected unit suite |
+| `WORLDLINE_SELF_TEST_CACHE` | `on` | Set to `off` to rerun the nested Gate lock self-test |
 | `WORLDLINE_SMOKE_TIMEOUT_SECONDS` | Descriptor value or 900 | Per-smoke process timeout |
 | `WORLDLINE_SMOKE_CACHE` | `on` | Set to `off` to bypass PASS-proof reuse |
 | `WORLDLINE_GATE_WAIT_SECONDS` | 7200 | Lock acquisition timeout |

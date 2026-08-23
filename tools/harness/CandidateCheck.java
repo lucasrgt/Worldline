@@ -259,10 +259,7 @@ final class CandidateCheck {
     private static void recreate(Path target) throws IOException {
         Path allowed = Path.of("").toAbsolutePath().normalize().resolve(".worldline/candidates");
         require(target.startsWith(allowed) && !target.equals(allowed), "unsafe candidate build path");
-        if (Files.exists(target)) try (Stream<Path> paths = Files.walk(target)) {
-            for (Path path : paths.sorted(Comparator.reverseOrder()).collect(Collectors.toList()))
-                Files.deleteIfExists(path);
-        }
+        SafeTreeDelete.delete(target);
         Files.createDirectories(target);
     }
 

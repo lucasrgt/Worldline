@@ -124,8 +124,7 @@ final class RepositoryVerify {
     private void execute() throws Exception {
         System.out.println("Worldline repository verification");
         report.step("configuration", this::loadConfiguration);
-        report.step("gate-self-test", () -> run(Arrays.asList(
-                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "Gate", "--self-test")));
+        report.step("gate-self-test", () -> new HarnessSelfTestCache(root).execute());
         report.step("smoke-discovery", () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "SmokeDiscoveryCheck")));
         report.step("smoke-cache-self-test", () -> run(Arrays.asList(
