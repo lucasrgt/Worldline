@@ -112,6 +112,8 @@ public final class WorldlineBehavior {
             "Sleeping sets the subsequent same-dimension respawn at the bed");
     public static final WorldlineBehavior FARMLAND_STATE = define("farmland-state", WorldlineFamily.ENVIRONMENT,
             "Hoe tilling, trampling, and nearby-water hydration update farmland state");
+    public static final WorldlineBehavior FARMLAND_TRAMPLE = define("farmland-trample", WorldlineFamily.ENVIRONMENT,
+            "Player fall or jump onto farmland converts it to dirt");
     public static final WorldlineBehavior PLANT_GROWTH = define("plant-growth", WorldlineFamily.ENVIRONMENT,
             "Sapling, crop, cactus, and sugar-cane growth under valid conditions");
     public static final WorldlineBehavior CROP_PLANTING = define("crop-planting", WorldlineFamily.ITEM,
@@ -239,9 +241,7 @@ public final class WorldlineBehavior {
         this.token = token; this.family = family; this.subject = subject;
     }
 
-    public String token() { return token; }
-    public String family() { return family; }
-    public String subject() { return subject; }
+    public String token() { return token; } public String family() { return family; } public String subject() { return subject; }
     public String atlasId() { return "atlas.scenario." + token; }
 
     public static WorldlineBehavior require(String tokenOrAtlasOrProgress) {
