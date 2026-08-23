@@ -61,7 +61,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | ID | Status | Deliverable | Completion evidence |
 | --- | --- | --- | --- |
 | COV-01 | ACTIVE | Qualify whole-game mappings in batches through SEM-M11, M12, and M13. | Cross-corroborated namespace gates now prioritize smoke-touched symbols and reconstruct exact 25%, 50%, and 100% batches over 6,475 maintained identities; the clean runtime profile must still accept the three official-input-bound policies. |
-| COV-02 | ACTIVE | Rebalance public Atlas behavior families and resolve orphans. | The former 109-placement concentration is now seven function-specific contracts with a maximum bucket of 34 and 520 portable proofs carried. M615 and M617 have Grok milestone evidence for two orphan tokens; M614 still needs its clean commit and exact milestone gate before all three are requalified. |
+| COV-02 | ACTIVE | Rebalance public Atlas behavior families and resolve orphans. | The former 109-placement concentration is now seven function-specific contracts with a maximum bucket of 34 and 520 portable proofs carried. Grok M615 and M617 cover two overlapping boundaries under different token names, while M614 is not yet committed; coordinator reconciliation must choose the canonical identities and bind their exact evidence before the orphan set is resolved. |
 | COV-03 | QUEUED | Add save/chunk-format coverage. | A deterministic save-format set establishes replay-safe chunk evidence. |
 | COV-04 | QUEUED | Add worldgen coverage. | Biomes, caves, and ore-vein generation receive official-oracle sets. |
 | COV-05 | QUEUED | Expand entity pathfinding coverage. | More than the single existing boundary covers deterministic pathfinding families. |

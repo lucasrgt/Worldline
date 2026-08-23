@@ -27,6 +27,11 @@ remain pending and M620 remains unpinned.
 
 Three previously orphaned public tokens are intentionally retained rather than
 silently deleted: `tnt-quasi-connectivity`, `one-tick-piston-pulse`, and
-`hostile-spawn-light`. The M614, M615, and M617 milestone lines are responsible
-for requalifying them. COV-02 remains active until all three exact milestone
-gates are integrated and current.
+`hostile-spawn-light`. The Grok M614, M615, and M617 lines cover semantically
+overlapping boundaries, but they do not yet requalify all three exact token
+identities: M615 currently introduces `redstone-one-tick`, M617 renames the
+hostile boundary to `spawn-light-cap`, and M614 has not produced a committed
+candidate. Coordinator reconciliation must select one canonical token for each
+boundary, bind the accepted official evidence to it, and reject duplicate
+identities. COV-02 remains active until that reconciliation is integrated and
+current.
