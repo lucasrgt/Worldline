@@ -1,5 +1,5 @@
 schema=1
 id=m318-gold-diamond-tool-crafts
-fingerprint=fb3d3779b01b278b30bd44892d409ea11265cc01e5daf81a82754639a879ea00
+fingerprint=ff3d0f874fd23a92b8dbddf7fc13a047ca961824e7bcc8b2f7665965d247ff08
 observation.sha256=ea2a3772ad997141d967212b9f93a52ec0b5f633dde29b2b0192e844a377005e
 source=refactor-equivalent

@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 public final class BehaviorCompletenessCheck {
     private static final Pattern MILESTONE = Pattern.compile("m(\\d+)-[a-z0-9-]+");
     private static final Pattern TOKEN = Pattern.compile("[a-z][a-z0-9-]{0,62}");
-    private static final Pattern CATALOG = Pattern.compile("define\\(\"([a-z][a-z0-9-]+)\"");
+    private static final Pattern CATALOG = Pattern.compile("define\\(\\s*\"([a-z][a-z0-9-]+)\"");
     private static final Pattern BINDING = Pattern.compile(
             "([a-z][A-Za-z0-9_.]*[A-Z][A-Za-z0-9_]*)#([a-z][A-Za-z0-9_]*)");
     private final Path root = Paths.get("").toAbsolutePath().normalize();
@@ -43,6 +43,7 @@ public final class BehaviorCompletenessCheck {
     private void execute() throws Exception {
         loadPolicy();
         loadCatalog("WorldlineBehavior.java", behaviorCatalog);
+        loadCatalog("WorldlinePlacementBehaviors.java", behaviorCatalog);
         loadCatalog("WorldlineContract.java", contractCatalog);
         int complete = 0, pending = 0, total = 0;
         for (Path manifest : manifests()) {

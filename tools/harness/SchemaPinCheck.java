@@ -26,11 +26,15 @@ final class SchemaPinCheck {
             boolean successor = pin != null && FormattingPinCheck.follows(formatting, smoke.id,
                     required(manifest, stem + "current_fingerprint"),
                     required(manifest, stem + "evidence_sha256"), pin, current);
+            boolean descriptor = digest(directory.resolve("smoke.properties")).equals(
+                    required(manifest, stem + "descriptor_sha256"));
+            if (!descriptor) descriptor = BehaviorFamilyPinCheck.transportsDescriptor(
+                    BehaviorFamilyPinCheck.manifest(root), root, smoke.id,
+                    required(manifest, stem + "descriptor_sha256"));
             require(hash(manifest, stem + "prior_fingerprint")
                             && (direct || successor)
                             && hash(manifest, stem + "evidence_sha256")
-                            && digest(directory.resolve("smoke.properties")).equals(
-                                    required(manifest, stem + "descriptor_sha256"))
+                            && descriptor
                             && digest(directory.resolve("MAP.md")).equals(
                                     required(manifest, stem + "map_sha256")),
                     "repository schema migration drift: " + smoke.id);

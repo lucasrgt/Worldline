@@ -230,7 +230,7 @@ public final class WorldlineBehavior {
             "Portal travel creates a missing destination frame away from the source");
     public static final WorldlineBehavior SPAWNER_DELAY = define("spawner-delay", WorldlineFamily.HOSTILE,
             "Spawner delay blocks distant activation and permits a nearby spawn");
-    private static final Map<String, WorldlineBehavior> BY_TOKEN = WorldlineBehaviorRegistry.freeze();
+    private static final Map<String, WorldlineBehavior> BY_TOKEN = WorldlinePlacementBehaviors.freeze();
     private final String token, family, subject;
 
     WorldlineBehavior(String token, String family, String subject) {
@@ -258,7 +258,7 @@ public final class WorldlineBehavior {
 
     @Override public int hashCode() { return Objects.hash(token); }
 
-    private static WorldlineBehavior define(String token, String family, String subject) {
+    static WorldlineBehavior define(String token, String family, String subject) {
         return WorldlineBehaviorRegistry.define(token, family, subject);
     }
 }

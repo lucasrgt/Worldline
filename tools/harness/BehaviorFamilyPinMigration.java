@@ -1,0 +1,127 @@
+import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HexFormat;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
+/** Carries official observations across the reviewed placement-taxonomy-only change. */
+final class BehaviorFamilyPinMigration {
+    private static final Set<String> PENDING = Set.of("gui-tree", "m7-mod-loading",
+            "m8-mod-version-diff", "m9-scenario-minimization", "testkit-cycle");
+    private static final List<String> SOURCES = List.of(
+            "modules/api/src/main/java/worldline/api/WorldlineBehavior.java",
+            "modules/api/src/main/java/worldline/api/WorldlinePlacementBehaviors.java",
+            "tools/harness/BehaviorFamilyAssignments.java",
+            "tools/harness/BehaviorFamilyRebalance.java");
+
+    public static void main(String[] arguments) {
+        try {
+            require(List.of(arguments).equals(List.of("--apply")),
+                    "usage: BehaviorFamilyPinMigration --apply");
+            apply(Path.of("").toAbsolutePath().normalize());
+        } catch (Exception error) {
+            System.err.println("behavior-family pin migration failed: " + error.getMessage());
+            System.exit(1);
+        }
+    }
+
+    private static void apply(Path root) throws Exception {
+        Path path = root.resolve("smokes/behavior-family-rebalance.lock");
+        Properties lock = new Properties(); lock.setProperty("schema", "1");
+        lock.setProperty("assignment.count", "109"); lock.setProperty("source.count", "4");
+        lock.setProperty("pending.count", Integer.toString(PENDING.size()));
+        lock.setProperty("pending.smokes", String.join(",", PENDING.stream().sorted().toList()));
+        sources(root, lock); assignments(root, lock);
+        Map<String, SmokePins.Entry> baseline = baseline(root);
+        SmokePins pins = new SmokePins(root); pins.validateEvidence();
+        SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
+        List<SmokePins.Entry> updated = new ArrayList<>(); int catalog = 0, carried = 0, changed = 0;
+        for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            catalog++; SmokePins.Entry prior = baseline.get(smoke.id);
+            if (smoke.id.equals("m620-stationapi-testkit-driver")) {
+                require(prior == null, "M620 unexpectedly has baseline proof"); continue;
+            }
+            require(prior != null, "behavior-family migration lacks baseline proof: " + smoke.id);
+            String current = fingerprints.compute(smoke), stem = "smoke." + smoke.id + ".";
+            lock.setProperty(stem + "prior_fingerprint", prior.fingerprint());
+            lock.setProperty(stem + "current_fingerprint", current);
+            lock.setProperty(stem + "evidence_sha256", prior.evidence());
+            if (PENDING.contains(smoke.id)) { updated.add(prior); continue; }
+            carried++; if (!current.equals(prior.fingerprint())) changed++;
+            updated.add(current.equals(prior.fingerprint()) ? prior : new SmokePins.Entry(
+                    smoke.id, current, prior.evidence(), "refactor-equivalent"));
+        }
+        require(catalog == 526 && carried == 520 && changed > 0,
+                "behavior-family smoke census drift");
+        lock.setProperty("catalog.count", Integer.toString(catalog));
+        lock.setProperty("smoke.count", Integer.toString(carried));
+        lock.setProperty("smoke.changed", Integer.toString(changed));
+        pins.write(updated); store(path, lock);
+        System.out.println("behavior-family proofs: " + changed + " changed, 520 carried, 5 pending");
+    }
+
+    private static void sources(Path root, Properties lock) throws Exception {
+        int index = 0;
+        for (String relative : SOURCES) {
+            String stem = "source." + index++ + "."; lock.setProperty(stem + "path", relative);
+            String prior = git(root, "show", "HEAD:" + relative);
+            lock.setProperty(stem + "prior_sha256", prior.isEmpty() ? "added" : digest(prior));
+            lock.setProperty(stem + "current_sha256", digest(Files.readString(root.resolve(relative))));
+        }
+    }
+    private static void assignments(Path root, Properties lock) throws Exception {
+        int index = 0;
+        for (Map.Entry<String, String> entry : BehaviorFamilyAssignments.values().entrySet()) {
+            String relative = "smokes/" + entry.getKey() + "/smoke.properties";
+            String stem = "assignment." + index++ + ".";
+            lock.setProperty(stem + "id", entry.getKey()); lock.setProperty(stem + "token", entry.getValue());
+            lock.setProperty(stem + "prior_sha256", digest(git(root, "show", "HEAD:" + relative)));
+            lock.setProperty(stem + "current_sha256", digest(Files.readString(root.resolve(relative))));
+        }
+    }
+    private static Map<String, SmokePins.Entry> baseline(Path root) throws Exception {
+        Properties values = new Properties();
+        try (StringReader reader = new StringReader(git(root, "show", "HEAD:smokes/qualification.lock"))) {
+            values.load(reader);
+        }
+        Map<String, SmokePins.Entry> result = new HashMap<>();
+        for (String key : values.stringPropertyNames()) {
+            if (!key.startsWith("smoke.") || !key.endsWith(".fingerprint")) continue;
+            String id = key.substring(6, key.length() - 12), stem = "smoke." + id + ".";
+            result.put(id, new SmokePins.Entry(id, values.getProperty(key),
+                    values.getProperty(stem + "observation_sha256"),
+                    values.getProperty(stem + "evidence_sha256"), values.getProperty(stem + "source")));
+        }
+        return Map.copyOf(result);
+    }
+    private static String git(Path root, String... arguments) throws Exception {
+        List<String> command = new ArrayList<>(List.of("git")); command.addAll(List.of(arguments));
+        Process process = new ProcessBuilder(command).directory(root.toFile()).start();
+        ByteArrayOutputStream output = new ByteArrayOutputStream(); process.getInputStream().transferTo(output);
+        int exit = process.waitFor();
+        if (exit != 0 && !List.of(arguments).contains("show"))
+            throw new IllegalStateException("git command failed: " + String.join(" ", command));
+        return exit == 0 ? output.toString(StandardCharsets.UTF_8) : "";
+    }
+    private static String digest(String text) throws Exception { return HexFormat.of().formatHex(
+            MessageDigest.getInstance("SHA-256").digest(text.replace("\r\n", "\n")
+                    .getBytes(StandardCharsets.UTF_8))); }
+    private static void store(Path path, Properties values) throws Exception {
+        StringBuilder output = new StringBuilder("# Worldline behavior-family rebalance proof v1\n");
+        for (String key : values.stringPropertyNames().stream().sorted(Comparator.naturalOrder()).toList())
+            output.append(key).append('=').append(values.getProperty(key)).append('\n');
+        Files.writeString(path, output.toString(), StandardCharsets.UTF_8);
+    }
+    private static void require(boolean value, String message) {
+        if (!value) throw new IllegalStateException(message);
+    }
+}
