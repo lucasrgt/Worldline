@@ -54,7 +54,8 @@ public final class GuiActionsCycle {
             properties.load(reader);
         }
         require(first.signature.equals(properties.getProperty("expected.signature")),
-                "GUI actions diverged from frozen signature: " + first.signature);
+                "GUI actions diverged from frozen signature: " + first.signature
+                        + "; trace=" + first.trace);
         Files.write(build.resolve("evidence.txt"), ("processes=4\nofficial.oracle=MATCH\ntrace="
                 + first.trace + "\nsignature=" + first.signature + "\n").getBytes(StandardCharsets.UTF_8));
         System.out.println("GUI actions cycle passed");
