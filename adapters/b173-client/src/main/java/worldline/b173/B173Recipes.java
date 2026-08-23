@@ -101,8 +101,13 @@ final class B173Recipes {
     }
 
     private static RemoteItemStack stack(ItemStack value) {
-        if (value == null || value.stackSize <= 0 || value.getItemDamage() < 0) return null;
-        return new RemoteItemStack(value.itemID, value.stackSize, value.getItemDamage());
+        if (value == null || value.stackSize <= 0) return null;
+        int damage = value.getItemDamage();
+        if (damage < 0) {
+            if (value.getHasSubtypes()) return null;
+            damage = 0;
+        }
+        return new RemoteItemStack(value.itemID, value.stackSize, damage);
     }
 
     private static void addContainers(List<RemoteItemStack> outputs, List<RemoteItemStack> inputs) {

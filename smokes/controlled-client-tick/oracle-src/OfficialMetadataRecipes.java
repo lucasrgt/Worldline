@@ -66,7 +66,11 @@ final class OfficialMetadataRecipes {
             int id = field(value.getClass(), "c").getInt(value);
             int count = field(value.getClass(), "a").getInt(value);
             int damage = ((Integer) method(value.getClass(), "i").invoke(value)).intValue();
-            if (damage < 0) return "wildcard";
+            if (damage < 0) {
+                if (((Boolean) method(value.getClass(), "e").invoke(value)).booleanValue())
+                    return "wildcard";
+                damage = 0;
+            }
             long key = ((long) id << 32) | damage;
             totals.put(key, totals.getOrDefault(key, 0) + count);
         }
