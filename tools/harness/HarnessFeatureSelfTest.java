@@ -5,5 +5,6 @@ final class HarnessFeatureSelfTest {
         NightlyQualityCampaign.selfTest();
         MilestoneScaffold.selfTest();
         ChangelogCheck.selfTest();
+        ReadmeStatus.selfTest();
     }
 }

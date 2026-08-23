@@ -46,6 +46,12 @@ not redistribute those JARs, Mojang assets, or decompiled game source.
 | Dedicated server | Official b1.7.3 server | World behavior, protocol, multiplayer, entities, blocks, saves, and dimensions |
 | External mod | Isolated TestKit runtime | Java specs, fixtures, retries, snapshots, failure evidence, and minimization |
 
+<!-- worldline-status:start -->
+| Release | Milestone | Behavior contracts | Portable smoke proofs |
+| --- | --- | --- | --- |
+| v1.462.0 GO | `m569-spawner-delay-set` | 525/525 complete | 525/525 pinned |
+<!-- worldline-status:end -->
+
 The current release is declared in
 [`release/worldline.properties`](release/worldline.properties). Milestone
 history, retractions, and active goals live in

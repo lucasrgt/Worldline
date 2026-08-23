@@ -22,6 +22,9 @@ branches and do not merge `main`. Workers must not edit the coordinator files be
 The integration coordinator updates those files once for an accepted train. Frozen behavior
 signatures live in each milestone's `smoke.properties`; the release manifest contains only
 global identity, canonical inputs, core signatures, and the currently promoted milestone.
+Before committing that train, the coordinator runs `java tools/harness/ReadmeStatus.java update`.
+The release gate regenerates the release badge and bounded status table in memory and rejects
+manual edits or stale counts.
 
 All new branches use `codex/<kind>-<id>-<slug>`, where `kind` is `milestone`, `fix`,
 `experiment`, or `train`. Milestone/fix candidates contain exactly one reviewed logical commit

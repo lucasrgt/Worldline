@@ -118,6 +118,8 @@ public final class ReleaseCheck {
         requireText("modules/api/src/main/java/worldline/api/WorldlineVersion.java",
                 "public static final String VERSION = \"" + version + "\";");
         requireText("README.md", "v" + version);
+        try { new ReadmeStatus(root).check(); }
+        catch (Exception error) { throw new IOException("README status validation failed", error); }
         try { new ChangelogCheck(root).execute(version); }
         catch (Exception error) { throw new IOException("changelog validation failed", error); }
         for (String relative : List.of("AGENTS.md", "docs/VISION.md", "docs/ROADMAP.md",
