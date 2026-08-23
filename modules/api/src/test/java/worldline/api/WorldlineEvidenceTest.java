@@ -13,13 +13,15 @@ final class WorldlineEvidenceTest {
         WorldlineBehavior fuse = WorldlineBehavior.CREEPER_FUSE;
         WorldlineBehavior cactus = WorldlineBehavior.require("m578-cactus-adjacent-break-set");
         WorldlineBehavior brake = WorldlineBehavior.require("m595-powered-rail-brake-set");
+        WorldlineBehavior sugarCane = WorldlineBehavior.require("m607-sugar-cane-dry-break-set");
         if (!"creeper-fuse".equals(fuse.token()) || !"atlas.scenario.creeper-fuse".equals(fuse.atlasId())
                 || fuse != WorldlineBehavior.require("m448-creeper-fuse-set")
                 || fuse != WorldlineBehavior.require("atlas.scenario.creeper-fuse")
                 || WorldlineBehavior.require("light-propagation") != WorldlineBehavior.LIGHT_PROPAGATION
                 || !"cactus-adjacent-break".equals(cactus.token())
                 || brake != WorldlineBehavior.require("powered-rail-brake")
-                || !"vehicle".equals(brake.family()))
+                || !"vehicle".equals(brake.family())
+                || !"sugar-cane-dry-break".equals(sugarCane.token()))
             throw new AssertionError("behavior catalog must hide progress ids");
         WorldlineEvidence pin = WorldlineEvidence.pin(fuse, SIGNAL, SIG_A);
         WorldlineEvidence modSame = WorldlineEvidence.of(fuse, WorldlineEvidence.MOD, SIGNAL, SIG_A);
