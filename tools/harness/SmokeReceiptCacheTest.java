@@ -37,10 +37,19 @@ public final class SmokeReceiptCacheTest {
         write(root.resolve("modules/api/src/main/java/example/Api.java"),
                 "package example; public final class Api {}\n");
         smoke(root, "m1-one", "OneCycle"); smoke(root, "m2-two", "TwoCycle");
+        write(root.resolve("quality/test-budget.properties"), "limit=1\n");
         git(root, "add", "."); git(root, "commit", "--quiet", "-m", "fixture");
         List<SmokeDiscovery.Entry> entries = SmokeDiscovery.discover(root);
         SmokeInputFingerprint first = new SmokeInputFingerprint(root);
         String one = first.compute(entries.get(0)), two = first.compute(entries.get(1));
+        String runtime = first.computeRuntime(entries.get(0));
+        write(root.resolve("quality/test-budget.properties"), "limit=2\n");
+        SmokeInputFingerprint policyChanged = new SmokeInputFingerprint(root);
+        require(!one.equals(policyChanged.compute(entries.get(0))),
+                "changed policy retained its qualification fingerprint");
+        require(runtime.equals(policyChanged.computeRuntime(entries.get(0))),
+                "qualification policy invalidated runtime observation");
+        write(root.resolve("quality/test-budget.properties"), "limit=1\n");
         write(root.resolve("smokes/m1-one/input.txt"), "one\r\n");
         require(one.equals(new SmokeInputFingerprint(root).compute(entries.get(0))),
                 "CRLF checkout invalidated a text fingerprint");
@@ -50,6 +59,17 @@ public final class SmokeReceiptCacheTest {
         require(two.equals(changed.compute(entries.get(1))), "unrelated smoke was invalidated");
         write(root.resolve("smokes/m1-one/input.txt"), "one\n");
         Path cacheRoot = root.resolve(".worldline/test-cache");
+        SmokeObservationCache observations = new SmokeObservationCache(root, cacheRoot);
+        Path observedLog = root.resolve(".worldline/smoke-logs/m1-one.log");
+        write(observedLog, "raw observation\n");
+        String observationFingerprint = observations.fingerprint(entries.get(0));
+        observations.observed(entries.get(0), observationFingerprint, 17L);
+        Files.delete(observedLog);
+        SmokeObservationCache.Observation observation = observations.restore(entries.get(0),
+                observationFingerprint);
+        require(observation != null && observation.duration() == 17L
+                        && Files.readString(observedLog).equals("raw observation\n"),
+                "runtime observation was not restored");
         SmokeReceiptCache writer = new SmokeReceiptCache(root, cacheRoot, true);
         for (SmokeDiscovery.Entry entry : entries) {
             Path log = root.resolve(".worldline/smoke-logs").resolve(entry.id + ".log");
@@ -76,7 +96,8 @@ public final class SmokeReceiptCacheTest {
 
     private static void smoke(Path root, String id, String runner) throws Exception {
         write(root.resolve("smokes").resolve(id).resolve("smoke.properties"),
-                "id=" + id + "\nrunner.source=tools/smoke/" + runner + ".java\n");
+                "id=" + id + "\nrunner.source=tools/smoke/" + runner
+                        + ".java\nperformance.budget=quality/test-budget.properties\n");
         write(root.resolve("smokes").resolve(id).resolve("input.txt"), id.startsWith("m1") ? "one\n" : "two\n");
         write(root.resolve("tools/smoke").resolve(runner + ".java"), "final class " + runner
                 + " { Object input() { return product(\"api\"); } Object product(String name) { return name; } }\n");

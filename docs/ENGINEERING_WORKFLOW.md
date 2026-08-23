@@ -222,6 +222,14 @@ runtime evidence. A new milestone has no proof and runs by itself; a shared adap
 change invalidates the scenarios that consume it. Malformed, missing, or altered proofs are
 cache misses and fail closed to real execution.
 
+Runtime execution and qualification policy have distinct content identities. Before invoking
+Minecraft, a milestone records its sealed log under an execution-only fingerprint containing the
+runner, executable descriptor fields, runtime assets, modules, adapters, toolchains, Java and OS.
+Expected signatures, semantic claims, Atlas/TestKit declarations, narrative documents and
+performance budgets are qualification policy. Changing only that policy restores the immutable
+runtime observation and validates it again under the new contract; it never carries forward a
+PASS result. Missing, malformed or digest-mismatched observations execute the runtime again.
+
 `SmokeLegacyImport` exists only to migrate reports created before the receipt cache was
 introduced. A passed report may migrate the complete suite. A failed report may migrate only the
 strictly completed prefix before its identified failure. Both modes require a clean worktree,

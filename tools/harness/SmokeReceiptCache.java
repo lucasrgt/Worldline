@@ -221,7 +221,7 @@ final class SmokeReceiptCache {
     } }
     private static String digest(Path path) throws Exception { return HexFormat.of().formatHex(
             MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(path))); }
-    private static Path cacheRoot(Path root) {
+    static Path cacheRoot(Path root) {
         String control = System.getenv("WORLDLINE_GATE_CONTROL");
         if (control != null && !control.isBlank()) return Path.of(control).resolve("cache");
         String os = System.getProperty("os.name", "").toLowerCase(java.util.Locale.ROOT);

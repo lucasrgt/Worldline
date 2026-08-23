@@ -17,7 +17,19 @@ final class PooledSmokeCheck {
         MilestoneContract contract = new MilestoneContract(root, id, root.resolve(".worldline/build"));
         contract.validate(); SmokeReceiptCache cache = new SmokeReceiptCache(root);
         require(cache.availablePin(smoke) == null, "pooled smoke already has a current proof: " + id);
-        String fingerprint = cache.fingerprint(smoke); long duration = SmokeExecution.run(root, smoke);
+        String fingerprint = cache.fingerprint(smoke);
+        SmokeObservationCache observations = new SmokeObservationCache(root);
+        String observationFingerprint = observations.fingerprint(smoke);
+        SmokeObservationCache.Observation restored = observations.restore(smoke,
+                observationFingerprint);
+        long duration;
+        if (restored == null) {
+            duration = SmokeExecution.run(root, smoke);
+            observations.observed(smoke, observationFingerprint, duration);
+        } else {
+            duration = restored.duration();
+            System.out.println("  runtime observation restored: " + id);
+        }
         contract.validateEvidence(root.resolve(".worldline/smoke-logs").resolve(id + ".log"));
         cache.passed(smoke, fingerprint, duration);
         System.out.println("pooled milestone passed: " + id + " fingerprint=" + fingerprint);

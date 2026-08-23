@@ -55,7 +55,18 @@ final class MilestoneCheck {
         SmokeDiscovery.Entry smoke = SmokeDiscovery.require(root, id);
         SmokeReceiptCache cache = new SmokeReceiptCache(root);
         String fingerprint = cache.fingerprint(smoke);
-        long duration = SmokeExecution.run(root, smoke);
+        SmokeObservationCache observations = new SmokeObservationCache(root);
+        String observationFingerprint = observations.fingerprint(smoke);
+        SmokeObservationCache.Observation restored = observations.restore(smoke,
+                observationFingerprint);
+        long duration;
+        if (restored == null) {
+            duration = SmokeExecution.run(root, smoke);
+            observations.observed(smoke, observationFingerprint, duration);
+        } else {
+            duration = restored.duration();
+            System.out.println("  runtime observation restored: " + id);
+        }
         contract.validateEvidence(log);
         cache.passed(smoke, fingerprint, duration);
         writeReceipt(state, contract);

@@ -43,14 +43,23 @@ final class SmokeInputFingerprint {
     }
 
     String compute(SmokeDiscovery.Entry smoke) throws Exception {
+        return compute(smoke, true);
+    }
+
+    String computeRuntime(SmokeDiscovery.Entry smoke) throws Exception {
+        return compute(smoke, false);
+    }
+
+    private String compute(SmokeDiscovery.Entry smoke, boolean qualification) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        update(digest, "worldline-smoke-input-v4");
+        update(digest, qualification ? "worldline-smoke-input-v4" : "worldline-smoke-observation-v1");
         update(digest, smoke.id); update(digest, smoke.runner);
         update(digest, System.getProperty("java.runtime.version", System.getProperty("java.version")));
         update(digest, System.getProperty("os.name")); update(digest, System.getProperty("os.arch"));
         addProcessConfiguration(digest, source(root.resolve(smoke.runner)));
-        add(digest, root.resolve("smokes").resolve(smoke.id));
-        addSharedInputs(digest, smoke.id);
+        if (qualification) add(digest, root.resolve("smokes").resolve(smoke.id));
+        else addRuntimeInputs(digest, smoke.id);
+        addSharedInputs(digest, smoke.id, qualification);
         Path runner = root.resolve(smoke.runner); add(digest, runner);
         String source = source(runner);
         add(digest, root.resolve("tools/harness/SmokeProcess.java"));
@@ -65,22 +74,49 @@ final class SmokeInputFingerprint {
         return HexFormat.of().formatHex(digest.digest());
     }
 
-    private void addSharedInputs(MessageDigest digest, String id) throws Exception {
-        Properties descriptor = new Properties();
-        try (java.io.Reader reader = Files.newBufferedReader(root.resolve("smokes").resolve(id)
-                .resolve("smoke.properties"), StandardCharsets.UTF_8)) { descriptor.load(reader); }
+    private void addRuntimeInputs(MessageDigest digest, String id) throws Exception {
+        Path directory = root.resolve("smokes").resolve(id);
+        Properties descriptor = descriptor(id);
+        for (String key : descriptor.stringPropertyNames().stream().sorted().toList())
+            if (!qualificationOnly(key)) update(digest, "descriptor:" + key + "="
+                    + descriptor.getProperty(key).trim());
+        try (var paths = Files.walk(directory)) {
+            for (Path path : paths.filter(Files::isRegularFile).sorted().toList()) {
+                String name = path.getFileName().toString();
+                if (!name.equals("smoke.properties") && !name.endsWith(".md")) add(digest, path);
+            }
+        }
+    }
+
+    private static boolean qualificationOnly(String key) {
+        return key.equals("behavior") || key.startsWith("expected.") || key.startsWith("atlas.")
+                || key.startsWith("testkit.") || key.startsWith("qualification.")
+                || key.startsWith("performance.") || key.endsWith("mapping.sha256");
+    }
+
+    private void addSharedInputs(MessageDigest digest, String id, boolean qualification)
+            throws Exception {
+        Properties descriptor = descriptor(id);
         String raw = descriptor.getProperty("shared.inputs", "").trim();
         if (!raw.isEmpty()) for (String value : raw.split(",")) {
-                String path = value.trim();
-                require(path.matches("smokes/shared/[a-z0-9/-]+"), "unsafe shared smoke input: " + path);
-                add(digest, root.resolve(path));
-            }
+            String path = value.trim();
+            require(path.matches("smokes/shared/[a-z0-9/-]+"), "unsafe shared smoke input: " + path);
+            add(digest, root.resolve(path));
+        }
+        if (!qualification) return;
         String budget = descriptor.getProperty("performance.budget", "").trim();
         if (!budget.isEmpty()) {
             require(budget.matches("quality/[a-z0-9-]+\\.properties"),
                     "unsafe smoke performance budget: " + budget);
             add(digest, root.resolve(budget));
         }
+    }
+
+    private Properties descriptor(String id) throws IOException {
+        Properties descriptor = new Properties();
+        try (java.io.Reader reader = Files.newBufferedReader(root.resolve("smokes").resolve(id)
+                .resolve("smoke.properties"), StandardCharsets.UTF_8)) { descriptor.load(reader); }
+        return descriptor;
     }
 
     private void addProcessConfiguration(MessageDigest digest, String source) throws Exception {
