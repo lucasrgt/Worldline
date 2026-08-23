@@ -25,6 +25,13 @@ fabric never silently weakens isolation.
 | `linux-sandbox` | native Linux or WSL2 ext4 | cgroup v2 plus user/PID/IPC/UTS/network namespaces | read-only root, writable `.worldline`, private loopback | sealed Linux mode |
 | `docker` | CI or either desktop | container cgroup/PID boundary | immutable image, read-only oracle, private volume/network | explicit fallback |
 
+All backends enter official execution through `Gate --milestone`. Docker
+workers receive a read-only, exact-commit capability and tracked-file manifest;
+their writable `/runtime` tmpfs is exposed to the canonical Gate through
+symlinks for harness classes, reports, logs, and receipt objects. The image is
+otherwise read-only, has no network, and receives the verified server JAR as a
+read-only bind. Direct `tools/smoke/*.java` execution is not a backend escape.
+
 The Windows runner is distributed as C# source. `WindowsJobBootstrap.java`
 compiles it into ignored `.worldline/tools` storage and tests it with a
 synthetic process. No binary is committed. The child is created suspended,
@@ -142,5 +149,8 @@ java tools/containers/RuntimeFabric.java simulate tools/containers/aero-gui-m104
 java tools/containers/RuntimeFabric.java run tools/containers/aero-gui-m104-m110.tsv --backend windows-job --jobs 2
 ```
 
-Runtime Fabric accelerates evidence; it does not relax the official JAR oracle,
-canonical verification, mapping review, or frozen-signature requirements.
+The private nightly workflow routes missing `server-headless` proofs explicitly
+through Docker and missing `windows-client-gui` proofs explicitly through the
+Windows Job Object. A missing backend is fail-closed. Runtime Fabric accelerates
+evidence; it does not relax the official JAR oracle, canonical verification,
+mapping review, or frozen-signature requirements.

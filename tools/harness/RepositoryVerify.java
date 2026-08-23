@@ -167,6 +167,7 @@ final class RepositoryVerify {
             enforceBudget("adapter", Collections.singletonList(root.resolve("adapters")));
             new SourceQualityCheck(root).execute();
         });
+        report.step("runtime-fabric-self-test", () -> new RuntimeFabricCheck(root).execute());
         recreateBuildDirectory();
         report.step("integration-tools", () -> {
             IntegrationToolsCheck.execute(root, build); OrchestratorPolicyCheck.execute();

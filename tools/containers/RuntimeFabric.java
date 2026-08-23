@@ -31,7 +31,8 @@ public final class RuntimeFabric {
                 + " jobs=" + options.jobs);
         if (backend.equals("docker")) {
             require(options.action.equals("run"), "Docker simulation is reported by 'doctor'; use its explicit capacity gate on run");
-            List<String> delegated = new ArrayList<>(List.of(java(), "tools/containers/ContainerSmokePool.java", "run",
+            List<String> delegated = new ArrayList<>(List.of(java(),
+                    "tools/containers/RuntimeFabricLauncher.java", "ContainerSmokePool", "run",
                     options.manifest.toString(), "--jobs", options.jobs));
             if (options.skipVerify) delegated.add("--skip-verify");
             List<String> command = new ArrayList<>(List.of(java(), "tools/containers/OfficialRuntimeLease.java"));
@@ -39,8 +40,9 @@ public final class RuntimeFabric {
             command.add("--"); command.addAll(delegated); run(command);
             return;
         }
-        List<String> command = new ArrayList<>(List.of(java(), "tools/containers/HostSmokePool.java",
-                options.action, options.manifest.toString(), "--jobs", options.jobs, "--backend", backend));
+        List<String> command = new ArrayList<>(List.of(java(),
+                "tools/containers/RuntimeFabricLauncher.java", "HostSmokePool", options.action,
+                options.manifest.toString(), "--jobs", options.jobs, "--backend", backend));
         if (options.config != null) { command.add("--config"); command.add(options.config.toString()); }
         if (options.lock != null) { command.add("--lock"); command.add(options.lock); }
         if (options.skipVerify) command.add("--skip-verify"); run(command);

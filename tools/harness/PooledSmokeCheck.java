@@ -14,8 +14,7 @@ final class PooledSmokeCheck {
                 && state.tree().equals(lease.getProperty("tree")),
                 "pooled worker tree differs from its lease");
         SmokeDiscovery.Entry smoke = SmokeDiscovery.require(root, id);
-        MilestoneContract contract = new MilestoneContract(root, id,
-                root.resolve(".worldline/candidates").resolve(id));
+        MilestoneContract contract = new MilestoneContract(root, id, root.resolve(".worldline/build"));
         contract.validate(); SmokeReceiptCache cache = new SmokeReceiptCache(root);
         require(cache.availablePin(smoke) == null, "pooled smoke already has a current proof: " + id);
         String fingerprint = cache.fingerprint(smoke); long duration = SmokeExecution.run(root, smoke);
@@ -34,6 +33,17 @@ final class PooledSmokeCheck {
                 file, StandardCharsets.UTF_8)) { values.load(reader); }
         require("1".equals(values.getProperty("schema")) && secret.equals(values.getProperty("secret"))
                 && root.toString().equals(values.getProperty("root")), "pool lease identity mismatch");
+        if ("docker".equals(values.getProperty("backend"))) {
+            require("1".equals(System.getenv("WORLDLINE_CONTAINER_ISOLATED"))
+                    && Files.isRegularFile(Path.of("/.dockerenv")),
+                    "Docker pool token used outside an isolated container");
+            require(requiredEnvironment("WORLDLINE_CONTAINER_IMAGE_ID").equals(
+                    values.getProperty("image.id")), "container image identity mismatch");
+            require(requiredEnvironment("WORLDLINE_CONTAINER_HEAD").equals(values.getProperty("head"))
+                    && requiredEnvironment("WORLDLINE_CONTAINER_TREE").equals(values.getProperty("tree")),
+                    "container commit identity mismatch");
+            return values;
+        }
         String parent = values.getProperty("parent.pid", ""); require(parent.matches("[0-9]+"),
                 "invalid pool parent");
         ProcessHandle owner = ProcessHandle.of(Long.parseLong(parent)).orElseThrow();

@@ -91,6 +91,12 @@ issues a short-lived capability bound to its PID, repository root, clean head, t
 path. A worker with that capability runs only the runtime phase; an unauthenticated attempt
 cannot bypass the ordinary exclusive milestone flow.
 
+Docker workers use the namespace-safe equivalent: the host freezes the clean head, tree, image
+ID, and tracked-file inventory into a read-only mount, while the container Gate runs against the
+immutable `/workspace` tree and a bounded writable tmpfs. The canonical Gate content-addresses
+Runtime Fabric compilation and admission self-tests, so unchanged backends are not repeatedly
+built. Nightly CI routes headless work to Docker and GUI work to Windows Job.
+
 The milestone gate deliberately has two phases. Static compilation, contract checks, and
 affected tests use the shared verification slots and may run across many worktrees. Only the
 executable cycle queues for the official-runtime lock. This keeps the scarce runtime idle only

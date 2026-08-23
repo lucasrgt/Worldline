@@ -8,12 +8,24 @@ import java.util.concurrent.TimeUnit;
 /** Captures the Git identity used by a smoke-suite attestation. */
 record SmokeGitState(String head, String tree, boolean clean) {
     static SmokeGitState read(Path root) throws Exception {
+        if ("1".equals(System.getenv("WORLDLINE_CONTAINER_ISOLATED"))) {
+            String head = required("WORLDLINE_CONTAINER_HEAD");
+            String tree = required("WORLDLINE_CONTAINER_TREE");
+            require(head.matches("[0-9a-f]{40,64}") && tree.matches("[0-9a-f]{40,64}"),
+                    "invalid container Git identity");
+            return new SmokeGitState(head, tree, true);
+        }
         String head = capture(root, List.of("git", "rev-parse", "HEAD")).trim();
         String tree = capture(root, List.of("git", "rev-parse", "HEAD^{tree}")).trim();
         String status = capture(root, List.of("git", "status", "--porcelain", "--untracked-files=all"));
         require(head.matches("[0-9a-f]{40,64}") && tree.matches("[0-9a-f]{40,64}"),
                 "could not bind smoke suite to Git state");
         return new SmokeGitState(head, tree, status.isBlank());
+    }
+
+    private static String required(String name) {
+        String value = System.getenv(name);
+        require(value != null && !value.isBlank(), "missing " + name); return value;
     }
 
     private static String capture(Path root, List<String> command) throws Exception {

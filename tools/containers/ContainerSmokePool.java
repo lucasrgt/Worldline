@@ -85,8 +85,10 @@ public final class ContainerSmokePool {
         String stamp = DateTimeFormatter.ofPattern("uuuuMMdd-HHmmss", Locale.ROOT).withZone(ZoneOffset.UTC)
                 .format(Instant.now());
         Path batch = root.resolve(".worldline/container-smokes").resolve(stamp); Files.createDirectories(batch);
+        ContainerPoolContext.Context context = ContainerPoolContext.create(root, batch, image);
         AtomicInteger active = new AtomicInteger(), peak = new AtomicInteger();
-        List<Outcome> outcomes = bounded(tasks, jobs, task -> runTask(task, options, jar, batch, active, peak));
+        List<Outcome> outcomes = bounded(tasks, jobs,
+                task -> runTask(task, options, jar, batch, active, peak, context, image));
         long passed = outcomes.stream().filter(Outcome::passed).count();
         Properties report = new Properties(); report.setProperty("tasks", Integer.toString(tasks.size()));
         report.setProperty("passed", Long.toString(passed)); report.setProperty("failed", Long.toString(tasks.size() - passed));
@@ -106,28 +108,24 @@ public final class ContainerSmokePool {
     }
 
     private Outcome runTask(Task task, Options options, Path jar, Path batch, AtomicInteger active,
-                            AtomicInteger peak) {
+                            AtomicInteger peak, ContainerPoolContext.Context context, String image) {
         int now = active.incrementAndGet(); peak.accumulateAndGet(now, Math::max);
         String nonce = Long.toUnsignedString(System.nanoTime(), 36);
         String container = "worldline-smoke-" + task.id + "-" + nonce;
-        String volume = container + "-data";
         Path output = batch.resolve(task.id), log = output.resolve("console.log");
-        boolean created = false, volumeCreated = false, copied = false;
+        boolean created = false;
         try {
             Files.createDirectories(output);
-            require(execute(List.of("docker", "volume", "create", "--label", LABEL, volume), root,
-                    Duration.ofSeconds(20), null).exit == 0, "could not create evidence volume");
-            volumeCreated = true;
-            List<String> command = dockerCreate(task, options, jar, container, volume);
+            List<String> command = ContainerInvocation.command(task.id, task.argument, options.memory,
+                    options.cpus, options.heap, jar, container, context, image);
             Result create = execute(command, root, Duration.ofSeconds(30), null);
             require(create.exit == 0, "docker create failed: " + create.output.trim());
             created = true;
             Result run = execute(List.of("docker", "start", "--attach", container), root,
                     Duration.ofSeconds(task.timeoutSeconds), log);
-            Result copy = execute(List.of("docker", "cp", container + ":/workspace/.worldline/smokes/.",
-                    output.toString()), root, Duration.ofMinutes(2), null);
-            require(copy.exit == 0, "evidence copy failed; volume preserved as " + volume);
-            copied = true;
+            Result copy = execute(List.of("docker", "cp", container + ":/runtime/.",
+                    output.resolve("evidence").toString()), root, Duration.ofMinutes(2), null);
+            require(copy.exit == 0, "container evidence copy failed");
             require(run.exit == 0, "exit " + run.exit + "; see " + log);
             System.out.println("PASS " + task.id);
             return new Outcome(task.id, true, "passed");
@@ -136,26 +134,10 @@ public final class ContainerSmokePool {
             return new Outcome(task.id, false, error.getMessage());
         } finally {
             if (created) quiet(List.of("docker", "rm", "--force", container));
-            if (volumeCreated && (!created || copied)) quiet(List.of("docker", "volume", "rm", volume));
             active.decrementAndGet();
         }
     }
 
-    private List<String> dockerCreate(Task task, Options options, Path jar, String container, String volume) {
-        require(!jar.toString().contains(","), "official artifact path may not contain a comma");
-        String mount = "type=bind,source=" + jar + ",target=/workspace/local/artifacts/"
-                + "minecraft-b1.7.3-server.jar,readonly";
-        return List.of("docker", "create", "--name", container, "--label", LABEL, "--label",
-                "dev.worldline.smoke=" + task.id, "--init",
-                "--network", "none", "--read-only", "--cap-drop", "ALL", "--security-opt",
-                "no-new-privileges", "--pids-limit", "160", "--memory", options.memory,
-                "--memory-swap", options.memory, "--cpus", options.cpus, "--ulimit", "nofile=1024:1024",
-                "--tmpfs", "/tmp:rw,exec,nosuid,nodev,size=64m", "--mount", mount, "--mount",
-                "type=volume,source=" + volume + ",target=/workspace/.worldline/smokes,volume-nocopy",
-                "--env", "JAVA_TOOL_OPTIONS=-XX:+UseSerialGC -Xms16m -Xmx" + options.heap
-                        + " -Djava.io.tmpdir=/tmp", "--env", "WORLDLINE_CONTAINER_ISOLATED=1",
-                IMAGE, task.source, task.argument);
-    }
 
     private DockerCapacity dockerCapacity(long perTask) throws Exception {
         Result info = execute(List.of("docker", "info", "--format", "{{.NCPU}} {{.MemTotal}}"), root,
@@ -247,10 +229,16 @@ public final class ContainerSmokePool {
                 "bundled 25-smoke manifest drift");
         Options options = Options.parse(new String[] {"run", "tools/containers/smokes-25.tsv", "--jobs", "10"});
         require(options.jobs == 10 && options.memoryBytes == 384L * 1024 * 1024, "option defaults drift");
-        List<String> command = new ContainerSmokePool().dockerCreate(tasks.getFirst(), options,
-                Path.of("C:/oracle/server.jar"), "test-container", "test-volume");
+        ContainerPoolContext.Context context = new ContainerPoolContext.Context(
+                root.resolve(".worldline/container-context"),
+                "00000000-0000-0000-0000-000000000000", "a".repeat(40), "b".repeat(40));
+        List<String> command = ContainerInvocation.command(tasks.getFirst().id, tasks.getFirst().argument,
+                options.memory, options.cpus, options.heap, Path.of("C:/oracle/server.jar"),
+                "test-container", context, "sha256:test");
         require(command.contains("none") && command.contains("--read-only") && command.contains("--cap-drop")
-                && command.stream().anyMatch(value -> value.endsWith("server.jar,readonly")), "isolation command drift");
+                && command.stream().anyMatch(value -> value.endsWith("server.jar,readonly"))
+                && command.contains("tools/harness/Gate.java") && command.contains("--milestone"),
+                "canonical container Gate or isolation command drift");
         System.out.println("container smoke pool self-test passed");
     }
 

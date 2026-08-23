@@ -62,7 +62,7 @@ jobs:
         run: |
           $manifest = '.worldline/runtime-plan/server-headless.tsv'
           if (Select-String -Path $manifest -Pattern '^[^#\s]' -Quiet) {
-            java tools/containers/RuntimeFabric.java run $manifest --jobs auto --skip-verify
+            java tools/containers/RuntimeFabric.java run $manifest --backend docker --jobs auto --skip-verify
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           }
       - name: Run missing GUI smokes in the Runtime Fabric
@@ -71,7 +71,7 @@ jobs:
         run: |
           $manifest = '.worldline/runtime-plan/windows-client-gui.tsv'
           if (Select-String -Path $manifest -Pattern '^[^#\s]' -Quiet) {
-            java tools/containers/RuntimeFabric.java run $manifest --jobs auto --skip-verify
+            java tools/containers/RuntimeFabric.java run $manifest --backend windows-job --jobs auto --skip-verify
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           }
       - name: Run missing tooling milestones

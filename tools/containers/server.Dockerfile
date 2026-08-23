@@ -10,6 +10,14 @@ RUN addgroup -S -g 10001 worldline \
 WORKDIR /workspace
 COPY --chown=worldline:worldline . /workspace
 
+RUN mkdir -p /runtime /workspace/.worldline/runtime-fabric \
+    && rm -rf /workspace/.worldline/gate /workspace/.worldline/reports \
+       /workspace/.worldline/smoke-logs /workspace/.worldline/smokes \
+    && ln -s /runtime/gate /workspace/.worldline/gate \
+    && ln -s /runtime/reports /workspace/.worldline/reports \
+    && ln -s /runtime/smoke-logs /workspace/.worldline/smoke-logs \
+    && ln -s /runtime/smokes /workspace/.worldline/smokes
+
 USER 10001:10001
 ENV HOME=/tmp/home
 ENTRYPOINT ["java"]
