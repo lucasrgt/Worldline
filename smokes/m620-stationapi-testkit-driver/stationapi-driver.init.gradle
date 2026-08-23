@@ -34,9 +34,9 @@ gradle.projectsEvaluated {
         }
     }
     def task = project.tasks.named('runClient').get()
-    if (task.actions.size() != 2 || !task.actions[0].class.name.endsWith('ClosureTaskAction'))
-        throw new GradleException('StationAPI runClient action shape drifted')
-    task.actions.remove(0)
+    if (task.class.name != 'net.fabricmc.loom.task.RunGameTask_Decorated'
+            || task.mainClass.getOrNull() != 'net.fabricmc.devlaunchinjector.Main')
+        throw new GradleException('StationAPI runClient task identity drifted')
     task.jvmArgs([
         '-Dworldline.stationapi.enabled=true',
         '-Dworldline.stationapi.controlPort=' + project.property('worldlineControlPort'),
