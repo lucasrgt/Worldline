@@ -158,6 +158,10 @@ final class RepositoryVerify {
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "AdapterKindCheck")));
         if (requireLocalArtifacts) {
             run(Arrays.asList("java", "tools/toolchains/Bootstrap.java", "retromcp"));
+            run(Arrays.asList("java", "tools/mappings/AcquireMappings.java",
+                    "mappings/b1.7.3/calamus-intermediary-gen2.properties",
+                    "mappings/b1.7.3/nostalgia.properties",
+                    "mappings/b1.7.3/feather-gen2.properties"));
         }
         report.step("runtime-inputs", this::verifyRuntimeInputs);
         List<String> modules = config.modules();
@@ -171,6 +175,8 @@ final class RepositoryVerify {
         report.step("smoke-runners", () -> new SmokeRunnerBuild(root, build).compile());
         List<Path> outputs = report.value("modules",
                 () -> new ModuleBuild(root, build, config.values(), modules).compileAll());
+        if (requireLocalArtifacts) report.step("mapping-batches",
+                () -> verifyMappingBatches(outputs, modules));
         report.step("portable-adapters", () -> stages.execute("portable-adapters", inputs.adapters(), () -> {
             new PortableAdapterCheck(root, build, config.required("java.release")).execute();
             run(Arrays.asList("java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"),
@@ -210,6 +216,22 @@ final class RepositoryVerify {
             command.add("--required");
         }
         run(command);
+    }
+
+    private void verifyMappingBatches(List<Path> outputs, List<String> modules) throws Exception {
+        Path symbols = outputs.get(modules.indexOf("symbolgraph"));
+        run(Arrays.asList("java", "-cp", symbols.toString(),
+                "worldline.symbolgraph.MappingBatchMain",
+                "local/artifacts/minecraft-b1.7.3-client.jar",
+                "local/artifacts/minecraft-b1.7.3-server.jar",
+                "local/mappings/calamus-intermediary-gen2-b1.7.3-v2.jar",
+                "local/mappings/nostalgia-b1.7.3-build.60-v2.jar",
+                "local/mappings/feather-gen2-b1.7.3-build.1-v2.jar",
+                "mappings/b1.7.3/retromcp-generated.properties",
+                "local/workspaces/b1.7.3/conf/mappings.tiny", "smokes",
+                "mappings/b1.7.3/sem-m11.properties",
+                "mappings/b1.7.3/sem-m12.properties",
+                "mappings/b1.7.3/sem-m13.properties"));
     }
 
 

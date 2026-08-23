@@ -20,6 +20,7 @@ public final class SymbolGraphTest {
         definesCompleteGameWithoutVacuousPasses();
         verifiesExactMappingPins();
         rejectsMalformedDocuments();
+        MappingBatchTest.main(new String[0]);
         System.out.println("SymbolGraphTest passed");
     }
 

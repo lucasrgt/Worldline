@@ -60,7 +60,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 
 | ID | Status | Deliverable | Completion evidence |
 | --- | --- | --- | --- |
-| COV-01 | QUEUED | Qualify whole-game mappings in batches through SEM-M11, M12, and M13. | Cross-corroborated namespace batches prioritize smoke-touched symbols and reach 25%, 50%, then 100% qualified symbols. |
+| COV-01 | ACTIVE | Qualify whole-game mappings in batches through SEM-M11, M12, and M13. | Cross-corroborated namespace gates now prioritize smoke-touched symbols and reconstruct exact 25%, 50%, and 100% batches over 6,475 maintained identities; the clean runtime profile must still accept the three official-input-bound policies. |
 | COV-02 | QUEUED | Rebalance public Atlas behavior families and resolve orphans. | The 109-placement concentration is split by function; all three retracted-orphan tokens are removed or requalified. |
 | COV-03 | QUEUED | Add save/chunk-format coverage. | A deterministic save-format set establishes replay-safe chunk evidence. |
 | COV-04 | QUEUED | Add worldgen coverage. | Biomes, caves, and ore-vein generation receive official-oracle sets. |
