@@ -224,6 +224,8 @@ public final class WorldlineBehavior {
             WorldlineFamily.PLAYER, "Worn armor loses durability after a hostile melee hit");
     public static final WorldlineBehavior FALL_DAMAGE = define("fall-damage", WorldlineFamily.PLAYER,
             "Greater fall distance produces greater server-authored health loss");
+    public static final WorldlineBehavior FALL_WATER_CANCEL = define("fall-water-cancel", WorldlineFamily.PLAYER,
+            "Damaging-height water landing emits no fall Packet8");
     public static final WorldlineBehavior EXPLOSION_PLAYER_DAMAGE = define("explosion-player-damage",
             WorldlineFamily.PLAYER, "TNT and creeper explosions damage a surviving nearby player");
     public static final WorldlineBehavior SQUID_LAND_DEATH = define("squid-land-death", WorldlineFamily.HOSTILE,
