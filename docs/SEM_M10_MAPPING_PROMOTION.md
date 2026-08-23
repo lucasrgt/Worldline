@@ -1,10 +1,12 @@
 # SEM-M10 Mapping Promotion Gates
 
-Status: implementation verified with synthetic exact-identity inputs. The real
-Beta 1.7.3 evidence checkpoint contains 65 independently corroborated items and
-is ready for one exact batch decision under the exclusive official-runtime
-lock. Complete-game promotion remains correctly unavailable while the mapping
-queue is non-empty.
+Status: the implementation and real Beta 1.7.3 batch were verified under the
+exclusive official-runtime lock on 2026-08-23. The exact checkpoint promoted
+65 independently corroborated items, retained 12,576 unqualified items, and
+had zero singly supported items or conflicts. The schema-2 decision has
+SHA-256 `36cde9c115f7db6665d1eaedc99e2c9e50ee5d54c01c6952caee3035924ff2ef`.
+Complete-game promotion remains correctly unavailable while the mapping queue
+is non-empty.
 
 SEM-M10 adds an exact, reviewed promotion boundary:
 
