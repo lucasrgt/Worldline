@@ -216,7 +216,7 @@ npm run dev
 ### Create a TestKit project
 
 ```text
-java -jar worldline-test-runner-0.2.1.jar init
+java -jar worldline-test-runner-0.3.0.jar init
 tests/worldline/gradlew.bat worldlineDoctor worldlineTest
 ```
 
@@ -228,6 +228,18 @@ Useful tasks include:
 worldlineTest worldlineTestList worldlineTestWatch worldlineTestInspect
 worldlineTestUpdateSnapshots worldlineTestMinimize worldlineDoctor
 ```
+
+Discover the stable public behavior catalog before authoring an evidence
+comparison:
+
+```text
+java -jar worldline-test-runner-0.3.0.jar behaviors list
+```
+
+`WorldlineBehavior`, `WorldlineEvidence`, and
+`expect(observed).toMatchVanilla(...)` bind a mod observation to a frozen
+vanilla pin. The complete Java 8 example is
+[`VanillaBehaviorSpec.java`](examples/testkit/src/test/java/example/VanillaBehaviorSpec.java).
 
 See [`docs/TESTKIT.md`](docs/TESTKIT.md),
 [`docs/GRADLE_TESTKIT.md`](docs/GRADLE_TESTKIT.md), and the

@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 /** Runs the external Java example suite through the verified b1.7.3 provider. */
 public final class TestKitCycle {
   private static final String ID = "testkit-cycle";
-  private static final String SIGNAL = "specs=10,tests=30,runtime=fresh-serial";
+  private static final String SIGNAL = "specs=11,tests=31,runtime=fresh-serial";
   private final Path root = Paths.get("").toAbsolutePath().normalize();
   private TestKitCycle() {
   }
@@ -64,8 +64,8 @@ public final class TestKitCycle {
         "--runtime-lock=" + build.resolve("official-runtime.lock"), "--update-snapshots",
         "--reporter=agent"));
     String output = run(command, true);
-    require(output.contains("WORLDLINE_TEST=PASS") && output.contains("tests=30"),
-        "external example suite did not pass all 30 collected tests");
+    require(output.contains("WORLDLINE_TEST=PASS") && output.contains("tests=31"),
+        "external example suite did not pass all 31 collected tests");
     Properties descriptor = properties(root.resolve("smokes/testkit-cycle/smoke.properties"));
     String signature = HexFormat.of().formatHex(
         MessageDigest.getInstance("SHA-256").digest(SIGNAL.getBytes(StandardCharsets.UTF_8)));
@@ -73,7 +73,7 @@ public final class TestKitCycle {
     require(signature.equals(descriptor.getProperty("expected.signature")),
         "TestKit signature drifted");
     System.out.println("TestKit cycle passed");
-    System.out.println("  external Java 8 specs: 10 files, 30 tests");
+    System.out.println("  external Java 8 specs: 11 files, 31 tests");
     System.out.println("  runtime sessions: fresh and serial under the exclusive lock");
     System.out.println("  signal: " + SIGNAL);
     System.out.println("  signature: " + signature);

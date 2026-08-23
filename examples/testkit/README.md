@@ -1,8 +1,9 @@
 # TestKit example
 
-Compile the ordinary Java 8 spec after the repository gate:
+Validate the checkout and compile the ordinary Java 8 specs:
 
 ```text
+java tools/harness/Gate.java
 $sources = Get-ChildItem examples/testkit/src/test/java/example -Filter *.java
 javac --release 8 -Xlint:all,-options -Werror -classpath ".worldline/build/classes/api;.worldline/build/classes/testmodel;.worldline/build/classes/testapi" -d .worldline/examples/testkit-classes $sources.FullName
 ```
@@ -12,6 +13,14 @@ use the explicit command after the runtime smoke has prepared the adapter:
 
 ```text
 java tools/replay/Replay.java test run .worldline/examples/testkit-classes --world=.worldline/worlds/testkit-example
+```
+
+`VanillaBehaviorSpec` demonstrates `WorldlineBehavior`, mod evidence, and an
+exact frozen vanilla expectation. The packaged 0.3.0 runner can list every
+public identity without starting Minecraft:
+
+```text
+java -jar worldline-test-runner-0.3.0.jar behaviors list
 ```
 
 Run once with `-u` to create the demonstration snapshot. Generated classes,

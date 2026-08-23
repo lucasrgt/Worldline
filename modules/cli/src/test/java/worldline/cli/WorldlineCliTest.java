@@ -267,6 +267,13 @@ public final class WorldlineCliTest {
                     && output.toString().contains("m80-natural-membership-rebuild"),
                     "CLI atlas changed failed");
             output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"behaviors", "list"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && error.size() == 0
+                    && output.toString().contains("WORLDLINE_BEHAVIORS=PASS")
+                    && output.toString().contains("void-death\tenvironment\tatlas.scenario.void-death"),
+                    "CLI behavior catalog failed");
+            output.reset(); error.reset();
             status = WorldlineCli.run(new String[] {"atlas", "show",
                     "atlas.hypothesis.aero-historical-spike"}, new PrintStream(output),
                     new PrintStream(error));

@@ -62,6 +62,7 @@ public final class ReleaseCheck {
         verifyCoreSignatures(release);
         verifyCurrentRelease(release, entries);
         verifyVersionedDocuments(release);
+        verifyTestKitRelease();
         verifyPublicTree();
         System.out.println("  release: Worldline v" + version + " "
                 + value(release, "milestone").toUpperCase() + " GO");
@@ -126,6 +127,25 @@ public final class ReleaseCheck {
                 "docs/ARCHITECTURE.md", "docs/FIRST_CYCLE.md", "docs/INVARIANTS.md",
                 "docs/SEMANTICS.md", "docs/OPTIMIZATION_SDK.md", "optimizations/TEMPLATE.properties",
                 "optimizations/catalog/README.md")) requireFile(root.resolve(relative));
+    }
+
+    private void verifyTestKitRelease() throws IOException {
+        Properties testkit = load(root.resolve("release/testkit.properties"), true);
+        require(testkit.stringPropertyNames().equals(Set.of("schema", "version", "status",
+                "publication", "tag", "canonical.command")), "TestKit release keys drifted");
+        match(testkit, "schema", "1"); match(testkit, "status", "release-ready");
+        match(testkit, "publication", "tag-authorized-only");
+        match(testkit, "canonical.command", "java tools/harness/Gate.java");
+        String version = value(testkit, "version");
+        match(testkit, "tag", "testkit-v" + version);
+        for (String relative : List.of("tools/testkit/TestKitPackage.java",
+                "modules/testkit/src/main/java/worldline/testkit/DefaultReporter.java",
+                "tooling/gradle-plugin/build.gradle.kts",
+                "tooling/gradle-plugin/src/main/java/dev/worldline/gradle/WorldlinePlugin.java",
+                "tooling/gradle-plugin/src/main/java/dev/worldline/gradle/WorldlineDistribution.java",
+                "modules/cli/src/main/java/worldline/cli/WorldlineProjectInit.java"))
+            requireText(relative, version);
+        requireFile(root.resolve("examples/testkit/src/test/java/example/VanillaBehaviorSpec.java"));
     }
 
     private void verifyPublicTree() throws IOException {

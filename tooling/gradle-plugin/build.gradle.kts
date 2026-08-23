@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.github.lucasrgt.worldline"
-version = "0.2.1"
+version = "0.3.0"
 
 layout.buildDirectory.set(rootProject.file("../../.worldline/gradle-plugin/build"))
 

@@ -70,7 +70,7 @@ The canonical external-mod layout and command surface are documented in the
 [Gradle adoption guide](GRADLE_TESTKIT.md). In short:
 
 ```text
-java -jar worldline-test-runner-0.2.1.jar init
+java -jar worldline-test-runner-0.3.0.jar init
 tests/worldline/gradlew.bat worldlineDoctor worldlineTest
 ```
 
@@ -106,17 +106,35 @@ over 64 MiB, and unavailable providers fail before runtime execution.
 Compile a spec against only Java 8 API modules:
 
 ```text
-javac --release 8 -Xlint:all,-options -Werror -classpath worldline-test-api-0.2.1.jar -d build/test-classes src/test/java/example/GlassProbeWorldlineTest.java
+javac --release 8 -Xlint:all,-options -Werror -classpath worldline-test-api-0.3.0.jar -d build/test-classes src/test/java/example/GlassProbeWorldlineTest.java
 ```
 
 Use `:` instead of `;` in the classpath on Linux and macOS.
 
-After `java tools/harness/Gate.java --smoke` has prepared the local adapter:
+Run the canonical repository Gate before packaging or testing a checkout:
+
+```text
+java tools/harness/Gate.java
+```
+
+Then use the packaged runner, which owns runtime validation and the exclusive
+official-runtime lease:
 
 ```text
 java tools/replay/Replay.java test
 java tools/replay/Replay.java test example.GlassProbeWorldlineTest
 ```
+
+List the public behavior identities without starting Minecraft:
+
+```text
+java -jar worldline-test-runner-0.3.0.jar behaviors list
+```
+
+The catalog supplies `WorldlineBehavior` tokens and Atlas IDs. A mod can emit
+`WorldlineEvidence` and compare it with a frozen vanilla signal/signature via
+`expect(observed).toMatchVanilla(...)`; see
+[`VanillaBehaviorSpec.java`](../examples/testkit/src/test/java/example/VanillaBehaviorSpec.java).
 
 The explicit form does not require a project file. Omit the class to discover
 all specs and pass the mod's product output separately:

@@ -20,6 +20,13 @@ public final class TestKitReleaseCheck {
                 throw new IllegalArgumentException("usage: TestKitReleaseCheck.java testkit-vX.Y.Z");
             Path root = Path.of("").toAbsolutePath().normalize();
             String version = arguments[0].substring("testkit-v".length());
+            Properties release = new Properties();
+            try (Reader reader = Files.newBufferedReader(root.resolve("release/testkit.properties"),
+                    StandardCharsets.UTF_8)) { release.load(reader); }
+            require(version.equals(release.getProperty("version"))
+                            && arguments[0].equals(release.getProperty("tag"))
+                            && "release-ready".equals(release.getProperty("status")),
+                    "tag does not match the release-ready TestKit manifest");
             Matcher source = VERSION.matcher(Files.readString(
                     root.resolve("tools/testkit/TestKitPackage.java"), StandardCharsets.UTF_8));
             require(source.find() && version.equals(source.group(1)), "tag does not match TestKit version");

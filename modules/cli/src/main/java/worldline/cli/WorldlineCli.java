@@ -61,6 +61,8 @@ public final class WorldlineCli {
                 return SemanticsCommand.run(arguments, output, error);
             if ("mappings".equals(arguments[0]))
                 return MappingCommand.run(arguments, output, error);
+            if ("behaviors".equals(arguments[0]))
+                return BehaviorsCommand.run(arguments, output, error);
             return usage(error);
         } catch (IOException | ReflectiveOperationException | RuntimeException failure) {
             error.println("worldline command failed: " + failure.getMessage()); return 1;
@@ -147,6 +149,7 @@ public final class WorldlineCli {
                 + " <nostalgia.jar> <retromcp.properties> <retromcp.tiny>");
         error.println("   or: worldline mappings audit <client.jar> <server.jar> <intermediary.jar>"
                 + " <nostalgia.jar> <retromcp.properties> <retromcp.tiny> <coverage.properties>");
+        error.println("   or: worldline behaviors list");
         error.println("   or: worldline atlas status");
         error.println("   or: worldline atlas show <id>");
         error.println("   or: worldline atlas search <term>");

@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 
 /** Builds deterministic ignored TestKit 0.x authoring and runner distributions. */
 public final class TestKitPackage {
-    private static final String VERSION = "0.2.1";
+    private static final String VERSION = "0.3.0";
     private static final String GROUP = "io.github.lucasrgt.worldline";
     private static final List<String> API = Arrays.asList("api", "testmodel", "testapi");
     private static final List<String> RUNNER = Arrays.asList("optimization", "api", "invariants",
@@ -32,7 +32,7 @@ public final class TestKitPackage {
         require(output.startsWith(root.resolve(".worldline")), "output must stay under .worldline");
         Path classes = root.resolve(".worldline/build/classes");
         for (String module : RUNNER) require(Files.isDirectory(classes.resolve(module)),
-                "missing compiled module " + module + "; run Verify first");
+                "missing compiled module " + module + "; run Gate first");
         Files.createDirectories(output);
         Path api = output.resolve("worldline-test-api-" + VERSION + ".jar");
         Path runner = output.resolve("worldline-test-runner-" + VERSION + ".jar");
