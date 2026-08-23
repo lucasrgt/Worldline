@@ -122,6 +122,8 @@ public final class WorldlineBehavior {
             "Leaves decay after their supporting logs are removed");
     public static final WorldlineBehavior GRASS_SPREAD = define("grass-spread", WorldlineFamily.ENVIRONMENT,
             "Lit exposed dirt becomes grass while covered dirt remains unchanged");
+    public static final WorldlineBehavior MUSHROOM_SPREAD = define("mushroom-spread", WorldlineFamily.ENVIRONMENT,
+            "Dark mushrooms spread onto adjacent opaque air while glass stays empty");
     public static final WorldlineBehavior LIGHT_OPACITY = define("light-opacity", WorldlineFamily.ENVIRONMENT,
             "Glass, ice, and leaves preserve their distinct skylight attenuation");
     public static final WorldlineBehavior LIGHT_MELTING = define("light-melting", WorldlineFamily.ENVIRONMENT,
@@ -248,9 +250,7 @@ public final class WorldlineBehavior {
 
     public static Map<String, WorldlineBehavior> all() { return BY_TOKEN; }
 
-    static String tokenOfProgress(String progressId) {
-        return WorldlineBehaviorRegistry.tokenOfProgress(progressId);
-    }
+    static String tokenOfProgress(String progressId) { return WorldlineBehaviorRegistry.tokenOfProgress(progressId); }
 
     @Override public boolean equals(Object other) {
         return other instanceof WorldlineBehavior && token.equals(((WorldlineBehavior) other).token);
