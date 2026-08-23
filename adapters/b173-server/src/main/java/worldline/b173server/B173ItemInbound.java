@@ -25,8 +25,9 @@ final class B173ItemInbound {
     private final B173FurnaceTracker furnace = new B173FurnaceTracker(); private final B173CombatTracker combat;
     private final DataOutputStream output; private final B173EntityEvents entities;
 
-    B173ItemInbound(int localEntityId, String localUsername, DataOutputStream output, B173MobTracker mobs) throws IOException {
-        this.output = output; identities.bind(localEntityId, localUsername); this.combat = new B173CombatTracker(identities, localEntityId, localUsername); this.entities = new B173EntityEvents(combat, dropped, mobs); }
+    B173ItemInbound(int localEntityId, String localUsername, DataOutputStream output, B173MobTracker mobs,
+            B173PaintingTracker paintings) throws IOException {
+        this.output = output; identities.bind(localEntityId, localUsername); this.combat = new B173CombatTracker(identities, localEntityId, localUsername); this.entities = new B173EntityEvents(combat, dropped, mobs, paintings); }
 
     boolean accept(int packet, DataInputStream input) throws IOException {
         if (packet == 5) equipment.equipment(input);

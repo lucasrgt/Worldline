@@ -89,5 +89,11 @@ final class B173PlayWaits {
         return until(() -> inbound.paintings().take(), "expected Packet25 painting absent before deadline");
     }
 
+    Integer destroy(int entity) throws IOException {
+        if (entity < 0) throw new IllegalArgumentException("invalid painting entity id");
+        return until(() -> inbound.paintings().takeDestroy(entity),
+                "expected Packet29 painting destroy absent before deadline");
+    }
+
     Integer fuse(int entity) throws IOException { return until(() -> { int value = inbound.mobs().takeFuse(entity); return value < 0 ? null : Integer.valueOf(value); }, "expected creeper Packet40 fuse absent before deadline"); }
 }

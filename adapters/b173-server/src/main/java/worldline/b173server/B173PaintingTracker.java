@@ -9,6 +9,7 @@ import worldline.api.RemotePaintingSpawn;
 final class B173PaintingTracker {
     private static final int MAX = 64;
     private final ArrayList<RemotePaintingSpawn> pending = new ArrayList<RemotePaintingSpawn>();
+    private final ArrayList<Integer> gone = new ArrayList<Integer>();
 
     void spawn(DataInputStream input) throws IOException {
         int entity = input.readInt();
@@ -21,5 +22,15 @@ final class B173PaintingTracker {
 
     RemotePaintingSpawn take() {
         return pending.isEmpty() ? null : pending.remove(0);
+    }
+
+    void destroy(int entity) {
+        if (entity < 0) return;
+        if (gone.size() == MAX) gone.remove(0);
+        gone.add(Integer.valueOf(entity));
+    }
+
+    Integer takeDestroy(int entity) {
+        return gone.contains(Integer.valueOf(entity)) ? Integer.valueOf(entity) : null;
     }
 }
