@@ -74,7 +74,13 @@ if [ -n "$protected_sha" ]; then
         echo "commit locally, qualify the milestone, and hand off its worktree + SHA" >&2
         exit 1
     fi
-    "$JAVA" tools/harness/PushCheck.java "$protected_sha" "$protected_ref"
+    harness_classes=".worldline/gate/classes"
+    if [ ! -f "$harness_classes/PushCheck.class" ] || [ ! -f "$harness_classes/MiniJson.class" ]; then
+        echo "pre-push blocked: compiled orchestrator harness is missing" >&2
+        echo "run java tools/harness/Gate.java --orchestrator before pushing" >&2
+        exit 1
+    fi
+    "$JAVA" -cp "$harness_classes" PushCheck "$protected_sha" "$protected_ref"
     if [ "${WORLDLINE_PREPUSH_SMOKE:-0}" = "1" ]; then
         echo "pre-push: running the requested full evidence suite..."
         "$JAVA" tools/harness/Gate.java --smoke
