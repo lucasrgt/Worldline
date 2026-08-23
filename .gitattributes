@@ -8,3 +8,4 @@
 **/descriptors/**/worldline-mod.properties text eol=lf
 tools/hooks/pre-push text eol=lf
 tools/containers/*.sh text eol=lf
+smokes/qualification.lock text eol=lf merge=worldline-smoke-lock

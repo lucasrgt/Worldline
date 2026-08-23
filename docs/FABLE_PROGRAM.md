@@ -65,7 +65,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | SCALE-03 | QUEUED | Generate repeated claim/cycle/map narration from one canonical descriptor. | No claim/SHA fact is manually maintained in three places. |
 | SCALE-04 | QUEUED | Partition or generate the large changelog by release series. | Integration no longer edits one 252 KB coordinator hotspot. |
 | SCALE-05 | QUEUED | Generate the README status table during integration. | Manual status-table edits fail the gate. |
-| SCALE-06 | QUEUED | Remove `qualification.lock` merge contention. | Ordered-union merge support or per-smoke pin files has deterministic tests. |
+| SCALE-06 | DONE | Remove `qualification.lock` merge contention. | A configured, deterministically tested three-way driver unions disjoint sorted pins and rejects conflicting edits to the same pin. |
 
 ## Continuous integration
 

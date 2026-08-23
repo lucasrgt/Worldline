@@ -25,8 +25,12 @@ public final class RepositoryMaintenance {
         require(run(root, 30, "git", "rev-parse", "--show-toplevel").passed, "not a Git repository");
         git("config", "core.untrackedCache", "true"); git("config", "core.longpaths", "true");
         Result fsmonitor = run(root, 30, "git", "fsmonitor--daemon", "start");
+        if (!fsmonitor.passed) fsmonitor = run(root, 15, "git", "fsmonitor--daemon", "status");
         if (fsmonitor.passed) git("config", "core.fsmonitor", "true");
         else System.out.println("fsmonitor.setup=unavailable; " + oneLine(fsmonitor.output));
+        git("config", "merge.worldline-smoke-lock.name", "Worldline qualification lock ordered union");
+        git("config", "merge.worldline-smoke-lock.driver",
+                "java tools/integration/QualificationLockMerge.java %O %A %B");
         git("maintenance", "start");
         git("commit-graph", "write", "--reachable", "--changed-paths");
         doctor();
@@ -35,6 +39,8 @@ public final class RepositoryMaintenance {
     private void doctor() throws Exception {
         require("true".equals(config("core.untrackedCache")), "core.untrackedCache is not true; run setup");
         require("true".equals(config("core.longpaths")), "core.longpaths is not true; run setup");
+        require(config("merge.worldline-smoke-lock.driver").contains("qualificationlockmerge.java"),
+                "qualification lock merge driver is absent; run setup");
         Result cache = run(root, 30, "git", "update-index", "--test-untracked-cache");
         require(cache.passed, "untracked cache probe failed: " + oneLine(cache.output));
         Result graph = run(root, 60, "git", "commit-graph", "verify");

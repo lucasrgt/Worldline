@@ -62,6 +62,9 @@ final class IntegrationToolsCheck {
             require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "WorktreeLifecycle", "--self-test"), 60) == 0,
                     "worktree private cleanup self-test failed");
+            require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
+                    "QualificationLockMerge", "--self-test"), 60) == 0,
+                    "qualification lock merge self-test failed");
         } finally { delete(repository); }
     }
 

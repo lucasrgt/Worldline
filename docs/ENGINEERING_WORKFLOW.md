@@ -279,6 +279,10 @@ maintenance, and writes a reachable changed-path commit graph. The doctor verifi
 On Windows it also records a bounded current-path I/O probe and prints an optional administrator
 Defender exclusion command; it never changes security policy itself.
 
+Setup also installs the repository's `worldline-smoke-lock` merge driver. The versioned
+`.gitattributes` route sends `smokes/qualification.lock` through a sorted three-way union: disjoint
+pin additions/updates merge automatically, while two different changes to the same pin fail closed.
+
 ## CI and promotion
 
 Pull requests and pushes run the repository gate on Ubuntu and Windows. Changed milestone
