@@ -111,6 +111,12 @@ A fresh clone may reuse a matching reviewed pin without downloading the heavy lo
 is deliberately outside every milestone fingerprint, so committing updated pins does not create
 a circular invalidation.
 
+Each pin records its provenance. `source=executed` means an immutable PASS proof was present when
+the pin was written. `source=legacy-frozen` is reserved for the one-time migration of the
+pre-cache baseline: it binds the current input fingerprint to the already-reviewed
+`expected.signature` in the milestone descriptor. This distinction prevents a historical freeze
+from being presented as a newly executed log.
+
 The fingerprint includes the milestone directory, its runner, shared runner support when used,
 official-artifact descriptors, referenced adapters and toolchains, referenced product modules
 with their transitive module dependencies, the Java runtime, and the operating-system
@@ -124,6 +130,19 @@ introduced. A passed report may migrate the complete suite. A failed report may 
 strictly completed prefix before its identified failure. Both modes require a clean worktree,
 fresh logs, and explicit completion rows in the report; failed, stale, or ambiguous individual
 results are rejected.
+
+Repositories whose reviewed full-suite runs predate both the cache and retained reports may
+explicitly accept the frozen descriptor baseline once. This command requires a clean committed
+tree, `pending.expected=0`, and a valid 64-hex `expected.signature` for every discovered smoke:
+
+```text
+java tools/harness/Gate.java --accept-legacy-smoke-baseline
+git diff -- smokes/qualification.lock
+```
+
+The resulting `legacy-frozen` rows are reviewable trust declarations, not reconstructed runtime
+logs. Any input change invalidates them normally, so the changed milestone executes on the next
+smoke gate and can then be repinned with `source=executed`.
 
 Pin the currently available, fingerprint-matching PASS proofs from a clean worktree explicitly,
 then review and commit the lockfile. This may checkpoint a completed prefix after a later smoke

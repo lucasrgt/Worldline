@@ -108,7 +108,8 @@ are stored as content-addressed PASS proofs. A later run reuses unchanged
 proofs, executes only new or behaviorally affected milestones, and writes an
 aggregate receipt for the current clean commit. Set `WORLDLINE_SMOKE_CACHE=off`
 to deliberately execute every scenario again. Approved fingerprints can be
-made portable between clones through the reviewed `smokes/qualification.lock`.
+made portable between clones through `smokes/qualification.lock`, which records
+whether evidence was executed or migrated from the reviewed pre-cache baseline.
 
 ### 4. Use the neutral runtime API
 

@@ -144,7 +144,8 @@ final class SmokeReceiptCache {
         SmokePins.Entry tracked = pins.match(smoke.id, fingerprint); if (tracked != null) return tracked;
         Path proof = proof(smoke.id, fingerprint), evidence = evidence(smoke.id, fingerprint);
         if (!validProof(smoke.id, fingerprint, proof, evidence)) return null;
-        return new SmokePins.Entry(smoke.id, fingerprint, load(proof).getProperty("evidence.sha256"));
+        return new SmokePins.Entry(smoke.id, fingerprint,
+                load(proof).getProperty("evidence.sha256"), "executed");
     }
 
     private String proofDigest(SmokeDiscovery.Entry smoke, String fingerprint, String mode)

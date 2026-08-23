@@ -62,9 +62,9 @@ final class RepositoryVerify {
             }
             return;
         }
-        if (Arrays.equals(arguments, new String[] {"--pin-smokes"})) {
-            SmokePin.main(arguments); return;
-        }
+        if (Arrays.equals(arguments, new String[] {"--pin-smokes"})) { SmokePin.main(arguments); return; }
+        if (Arrays.equals(arguments, new String[] {"--accept-legacy-smoke-baseline"}))
+            { SmokeBaselinePin.main(arguments); return; }
         boolean runtime = Arrays.equals(arguments, new String[] {"--runtime"});
         boolean smoke = Arrays.equals(arguments, new String[] {"--smoke"});
         if (arguments.length > 0 && !runtime && !smoke) {
