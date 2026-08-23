@@ -75,13 +75,13 @@ public final class MinimizationCycle {
     require(cli("scenario", "inspect", corruptPath.toString()).code == 1,
         "corrupt minimized scenario was accepted");
     String signature = line(first.text, "evidence.sha256=");
+    Files.write(build.resolve("evidence.txt"), first.text.getBytes(StandardCharsets.UTF_8));
     Properties expected = new Properties();
     try (java.io.Reader reader = Files.newBufferedReader(smoke.resolve("smoke.properties"))) {
       expected.load(reader);
     }
     require(signature.equals(expected.getProperty("expected.signature")),
         "M9 evidence diverged: " + signature);
-    Files.write(build.resolve("evidence.txt"), first.text.getBytes(StandardCharsets.UTF_8));
     System.out.println("M9 automatic scenario minimization cycle passed");
     System.out.println("  reduction: 9 -> 3 steps; one-minimal: verified");
     System.out.println("  exact divergence: tick1 target.block65, 20 -> 0");

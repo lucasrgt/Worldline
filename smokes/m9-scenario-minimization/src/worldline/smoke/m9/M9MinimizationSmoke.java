@@ -20,6 +20,8 @@ import worldline.minimization.Scenario;
 import worldline.minimization.ScenarioMinimizer;
 import worldline.invariants.InvariantFields;
 import worldline.semantics.SemanticSteps;
+import worldline.mods.ModArtifact;
+import worldline.mods.ModDescriptor;
 import worldline.mods.LoadedMod;
 import worldline.mods.ModLoader;
 import worldline.trace.CanonicalStateDocument;
@@ -59,14 +61,21 @@ public final class M9MinimizationSmoke {
         + "\nremoved.steps=" + result.removedSteps() + "\nevaluations=" + result.evaluations()
         + "\ncomplete=" + result.complete() + "\noriginal.sha256=" + original.sha256()
         + "\nminimized.sha256=" + result.minimized().sha256()
-        + "\nv1.artifact.sha256=" + ModLoader.inspect(v1, "b1.7.3", "1").sha256()
-        + "\nv2.artifact.sha256=" + ModLoader.inspect(v2, "b1.7.3", "1").sha256()
+        + "\nv1.artifact=" + identity(v1)
+        + "\nv2.artifact=" + identity(v2)
         + "\nfingerprint.sha256=" + sha256(target.render())
         + "\nsteps=observe:before,tick,observe:target\n"
         + "invariant=" + InvariantFields.rule("block65") + "\n";
     System.out.println("WORLDLINE_M9_MINIMIZATION=PASS");
     System.out.print(report);
     System.out.println("evidence.sha256=" + sha256(report));
+  }
+
+  private static String identity(Path jar) throws Exception {
+    ModArtifact artifact = ModLoader.inspect(jar, "b1.7.3", "1");
+    ModDescriptor descriptor = artifact.descriptor();
+    return String.join("|", descriptor.id(), descriptor.version(), descriptor.entrypoint(),
+        descriptor.runtime(), descriptor.worldlineApi());
   }
 
   private static boolean preserves(
