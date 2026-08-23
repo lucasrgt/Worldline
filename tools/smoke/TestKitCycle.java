@@ -33,11 +33,26 @@ public final class TestKitCycle {
   }
   private void execute() throws Exception {
     Path build = root.resolve(".worldline/smokes/testkit-cycle");
-    Files.createDirectories(build);
+    SmokeSupport.recreate(root, build);
     Path classes = root.resolve(".worldline/build/classes");
     Path client = root.resolve(".worldline/smokes/controlled-client-tick");
     Properties smoke = properties(root.resolve("smokes/controlled-client-tick/smoke.properties"));
     Path workspace = root.resolve(smoke.getProperty("workspace")).normalize();
+    List<Path> libraries = jarFiles(workspace.resolve("libraries"));
+    Path adapter = build.resolve("adapter-classes");
+    Files.createDirectories(adapter);
+    List<Path> adapterPath = paths(client.resolve("headless-classes"),
+        workspace.resolve("minecraft/bin"), classes.resolve("api"), classes.resolve("kernel"),
+        classes.resolve("reproduction"), classes.resolve("trace"), classes.resolve("mods"),
+        classes.resolve("modtest"), classes.resolve("minimization"), classes.resolve("fuzz"),
+        classes.resolve("profiling"), classes.resolve("analysis"), classes.resolve("testapi"));
+    adapterPath.addAll(libraries);
+    List<String> adapterCompile = new ArrayList<>(Arrays.asList("javac", "-encoding", "UTF-8",
+        "--release", "8", "-Xlint:all,-options", "-Werror", "-classpath", join(adapterPath),
+        "-d", adapter.toString()));
+    for (Path source : javaFiles(root.resolve("adapters/b173-client/src/main/java")))
+      adapterCompile.add(source.toString());
+    run(adapterCompile, false);
     Path spec = build.resolve("spec-classes");
     Files.createDirectories(spec);
     List<String> compile = new ArrayList<>(Arrays.asList("javac", "-encoding", "UTF-8", "--release",
@@ -53,10 +68,10 @@ public final class TestKitCycle {
         classes.resolve("kernel"), classes.resolve("reproduction"), classes.resolve("mods"),
         classes.resolve("analysis"), classes.resolve("modtest"), classes.resolve("minimization"),
         classes.resolve("testmodel"), classes.resolve("testapi"), classes.resolve("testkit"),
-        classes.resolve("cli"), client.resolve("adapter-classes"),
+        classes.resolve("cli"), adapter,
         client.resolve("instrumented-client"), client.resolve("headless-classes"),
         workspace.resolve("minecraft/bin"), workspace.resolve("jars/minecraft.jar"));
-    runtime.addAll(jarFiles(workspace.resolve("libraries")));
+    runtime.addAll(libraries);
     List<String> command = new ArrayList<>(Arrays.asList("java", "-classpath", join(runtime),
         "worldline.cli.WorldlineCli", "test", "run", spec.toString(),
         "--provider=worldline.b173.B173TestRuntimeProvider", "--world=" + build.resolve("world"),

@@ -19,9 +19,14 @@ final class TestKitReleasePinCheck {
                                 required(lock, "release.sha256")),
                 "invalid TestKit release boundary");
         for (String key : new String[] {"source", "descriptor", "map"}) {
-            Path path = root.resolve(required(lock, key + ".path"));
+            String relative = required(lock, key + ".path");
+            Path path = root.resolve(relative);
+            String current = required(lock, key + ".current_sha256");
+            boolean direct = digest(path).equals(current);
+            boolean successor = TrainPinCheck.transportsFile(
+                    TrainPinCheck.manifest(root), root, relative, current);
             require(hash(lock.getProperty(key + ".prior_sha256"))
-                            && digest(path).equals(required(lock, key + ".current_sha256")),
+                            && (direct || successor),
                     "TestKit release source drift: " + root.relativize(path));
         }
         Properties provider = ProviderDiscoveryPinCheck.manifest(root);
@@ -39,6 +44,14 @@ final class TestKitReleasePinCheck {
         return relative.equals(lock.getProperty("source.path"))
                 && prior.equals(lock.getProperty("source.prior_sha256"))
                 && digest(root.resolve(relative)).equals(lock.getProperty("source.current_sha256"));
+    }
+    static boolean transitionsFile(Properties lock, String relative, String prior, String current) {
+        for (String key : new String[] {"source", "descriptor", "map"}) {
+            if (relative.equals(lock.getProperty(key + ".path")))
+                return prior.equals(lock.getProperty(key + ".prior_sha256"))
+                        && current.equals(lock.getProperty(key + ".current_sha256"));
+        }
+        return false;
     }
     private static Properties load(Path path) throws Exception { Properties values = new Properties();
         try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {

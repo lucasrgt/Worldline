@@ -20,6 +20,6 @@ public final class VanillaBehaviorSpec extends WorldlineSpec {
             WorldlineEvidence observed = WorldlineEvidence.of(WorldlineBehavior.VOID_DEATH,
                     WorldlineEvidence.MOD, SIGNAL, SIGNATURE);
             expect(observed).toMatchVanilla(WorldlineBehavior.VOID_DEATH, SIGNAL, SIGNATURE);
-        }).tag("behavior", "vanilla-pin");
+        }).tag("behavior").tag("vanilla-pin");
     }
 }

@@ -82,7 +82,9 @@ final class TrainPinCheck {
                 String predecessor = lock.getProperty(stem + "prior_sha256");
                 boolean connected = prior.equals(predecessor)
                         || GuiWorkbenchPinCheck.transitionsFile(
-                                GuiWorkbenchPinCheck.manifest(root), relative, prior, predecessor);
+                                GuiWorkbenchPinCheck.manifest(root), relative, prior, predecessor)
+                        || TestKitReleasePinCheck.transitionsFile(
+                                TestKitReleasePinCheck.manifest(root), relative, prior, predecessor);
                 return connected && digest(root.resolve(relative)).equals(
                         lock.getProperty(stem + "current_sha256"));
             }
