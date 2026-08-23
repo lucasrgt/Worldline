@@ -38,6 +38,12 @@ timeout, descendant cleanup, and `.worldline/smoke-logs/` output. `Verify.java` 
 compatibility launcher and cannot bypass the gate. `--smoke-id` remains an alias for
 `--milestone` for old automation.
 
+Runtime Fabric workers also enter through the exact `Gate.java --milestone ID` command. The
+pool owner first runs the static Gate once, holds the shared official-runtime file lock, and
+issues a short-lived capability bound to its PID, repository root, clean head, tree, and lock
+path. A worker with that capability runs only the runtime phase; an unauthenticated attempt
+cannot bypass the ordinary exclusive milestone flow.
+
 The milestone gate deliberately has two phases. Static compilation, contract checks, and
 affected tests use the shared verification slots and may run across many worktrees. Only the
 executable cycle queues for the official-runtime lock. This keeps the scarce runtime idle only

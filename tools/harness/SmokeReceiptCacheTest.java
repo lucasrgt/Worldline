@@ -17,6 +17,10 @@ public final class SmokeReceiptCacheTest {
         try {
             repository = Files.createTempDirectory("worldline-smoke-cache-test-");
             execute(repository); SmokeFingerprintCheck.execute(Path.of("").toAbsolutePath().normalize());
+            boolean rejected = false;
+            try { PooledSmokeCheck.execute("m59-chest-transfer"); }
+            catch (IllegalStateException expected) { rejected = true; }
+            require(rejected, "unauthenticated pooled smoke was accepted");
             System.out.println("  smoke receipt cache self-test: passed");
         } catch (Exception error) {
             System.err.println("smoke receipt cache self-test failed: " + error.getMessage());

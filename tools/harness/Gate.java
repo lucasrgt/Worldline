@@ -34,10 +34,7 @@ public final class Gate {
 
     public static void main(String[] arguments) {
         try {
-            if (Arrays.equals(arguments, new String[] {"--self-test"})) {
-                selfTest();
-                return;
-            }
+            if (Arrays.equals(arguments, new String[] {"--self-test"})) { selfTest(); return; }
             if (arguments.length == 3 && "--hold".equals(arguments[0])) {
                 hold(Path.of(arguments[1]), Long.parseLong(arguments[2]));
                 return;
@@ -62,6 +59,9 @@ public final class Gate {
     }
 
     private void executeMilestone(String id) throws Exception {
+        if (System.getenv("WORLDLINE_RUNTIME_POOL_FILE") != null) { Path classes = compileHarness();
+            int exit = launchVerify(classes, new String[] {"--pooled-smoke", id}, true);
+            if (exit != 0) System.exit(exit); return; }
         executePhase(new String[] {"--milestone-static", id}, false, true, false);
         executePhase(new String[] {"--milestone-runtime", id}, milestoneUsesOfficialRuntime(id), false, true);
     }

@@ -56,7 +56,8 @@ public final class HostSmokePool {
             if (!options.skipVerify) verify();
             require(noForeignRuntime(), "an official runtime appeared while preparing the batch");
             prepareBackend(config.backend);
-            runBatch(tasks, config, profile, host, model, jobs);
+            String secret=java.util.UUID.randomUUID().toString();Path token=root.resolve(".worldline/runtime-fabric/pool-"+ProcessHandle.current().pid()+".properties");Process writer=new ProcessBuilder(java(),"tools/containers/PoolLeaseToken.java","create",token.toString(),secret,Long.toString(ProcessHandle.current().pid()),lockPath.toString()).directory(root.toFile()).inheritIO().start();require(writer.waitFor(60,TimeUnit.SECONDS)&&writer.exitValue()==0,"pool lease token creation failed");
+            try { runBatch(tasks, config, profile, host, model, jobs, token, secret); } finally { Files.deleteIfExists(token); }
         }
     }
 
@@ -84,13 +85,13 @@ public final class HostSmokePool {
         System.out.println("\nSimulation is an admission model, not a benchmark. Promote a width only after frozen signatures match.");
     }
 
-    private void runBatch(List<Task> tasks, Config config, Profile profile, Host host, Model model, int jobs) throws Exception {
+    private void runBatch(List<Task> tasks, Config config, Profile profile, Host host, Model model, int jobs, Path token, String secret) throws Exception {
         String stamp = DateTimeFormatter.ofPattern("uuuuMMdd-HHmmss", Locale.ROOT).withZone(ZoneOffset.UTC)
                 .format(Instant.now()); Path batch = root.resolve(".worldline/host-smokes").resolve(stamp);
         Files.createDirectories(batch); Path prebuilt = profile.lane.equals("windows-client-gui") ? prebuild(tasks, batch) : null;
         AtomicInteger active = new AtomicInteger(), peak = new AtomicInteger();
         long started = System.nanoTime();
-        List<Outcome> outcomes = bounded(tasks, jobs, task -> runTask(task, config, profile, prebuilt, batch, active, peak));
+        List<Outcome> outcomes = bounded(tasks, jobs, task -> runTask(task, config, profile, prebuilt, batch, active, peak, token, secret));
         long passed = outcomes.stream().filter(Outcome::passed).count(); Properties report = new Properties();
         report.setProperty("backend", config.backend); report.setProperty("lane", profile.lane);
         report.setProperty("tasks", Integer.toString(tasks.size()));
@@ -105,19 +106,20 @@ public final class HostSmokePool {
                 .map(outcome -> outcome.id + " (" + outcome.message + ")").collect(Collectors.joining(", ")));
     }
 
-    private Outcome runTask(Task task, Config config, Profile profile, Path prebuilt, Path batch, AtomicInteger active, AtomicInteger peak) {
+    private Outcome runTask(Task task, Config config, Profile profile, Path prebuilt, Path batch, AtomicInteger active, AtomicInteger peak, Path token, String secret) {
         int now = active.incrementAndGet(); peak.accumulateAndGet(now, Math::max);
         Path output = batch.resolve(task.id), log = output.resolve("console.log"), tmp = output.resolve("tmp");
         Path evidence = root.resolve(".worldline/smokes").resolve(task.argument).normalize();
         try {
             require(evidence.startsWith(root.resolve(".worldline/smokes")), "unsafe evidence path");
             deleteTree(evidence); Files.createDirectories(tmp);
-            List<String> command = new ArrayList<>(List.of(java(), task.source, task.argument));
+            List<String> command = new ArrayList<>(List.of(java(), "tools/harness/Gate.java", "--milestone", task.argument));
             ProcessBuilder builder = isolated(config, profile, task, output, log, command).directory(root.toFile());
             builder.environment().put("JAVA_TOOL_OPTIONS", "-XX:+UseSerialGC -Xms16m -Xmx" + profile.heap);
             builder.environment().put("TEMP", tmp.toString()); builder.environment().put("TMP", tmp.toString());
             builder.environment().put("GRADLE_USER_HOME", (prebuilt == null ? output.resolve("gradle") : root.resolve(".worldline/runtime-fabric/gradle").resolve(task.id)).toString());
             builder.environment().put("WORLDLINE_RUNTIME_SLOT", task.id);
+            builder.environment().put("WORLDLINE_RUNTIME_POOL_FILE", token.toString()); builder.environment().put("WORLDLINE_RUNTIME_POOL_TOKEN", secret);
             if (prebuilt != null) { builder.environment().put("WORLDLINE_AERO_PREBUILT", prebuilt.toString()); builder.environment().put("WORLDLINE_RUNTIME_TIMEOUT_EXTRA", "900"); }
             Process process = builder.start(); boolean finished = process.waitFor(task.timeoutSeconds + 15L, TimeUnit.SECONDS);
             if (!finished) killTree(process); require(finished, "timeout after " + task.timeoutSeconds + "s");
@@ -133,12 +135,9 @@ public final class HostSmokePool {
     }
 
     private Path prebuild(List<Task> tasks, Path batch) throws Exception { Path output = batch.resolve("aero-model-lib-3.0.0.jar"); List<String> command = new ArrayList<>(List.of(java(), "tools/containers/AeroPrebuild.java", output.toString()));
-        tasks.forEach(task -> command.add(task.argument)); ProcessBuilder builder = new ProcessBuilder(command).directory(root.toFile()).inheritIO(); builder.environment().put("GRADLE_USER_HOME", root.resolve(".worldline/runtime-fabric/gradle/aero-prebuild").toString()); Process process = builder.start();
-        require(process.waitFor(12, TimeUnit.MINUTES) && process.exitValue() == 0, "Aero batch prebuild failed"); return output; }
+        tasks.forEach(task -> command.add(task.argument)); ProcessBuilder builder = new ProcessBuilder(command).directory(root.toFile()).inheritIO(); builder.environment().put("GRADLE_USER_HOME", root.resolve(".worldline/runtime-fabric/gradle/aero-prebuild").toString()); Process process = builder.start(); require(process.waitFor(12, TimeUnit.MINUTES) && process.exitValue() == 0, "Aero batch prebuild failed"); return output; }
 
-    private void verify() throws Exception {
-        Process process = new ProcessBuilder(java(), "tools/harness/Verify.java").directory(root.toFile()).inheritIO().start(); require(process.waitFor(10, TimeUnit.MINUTES) && process.exitValue() == 0, "host Verify failed");
-    }
+    private void verify() throws Exception { Process process = new ProcessBuilder(java(), "tools/harness/Verify.java").directory(root.toFile()).inheritIO().start(); require(process.waitFor(10, TimeUnit.MINUTES) && process.exitValue() == 0, "host Verify failed"); }
 
     private void prepareBackend(String backend) throws Exception {
         if (backend.equals("windows-job")) {

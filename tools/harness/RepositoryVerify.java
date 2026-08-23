@@ -39,6 +39,12 @@ final class RepositoryVerify {
     }
 
     public static void main(String[] arguments) {
+        if (arguments.length == 2 && "--pooled-smoke".equals(arguments[0])) {
+            try { PooledSmokeCheck.execute(arguments[1]); }
+            catch (Exception error) {
+                System.err.println("pooled smoke failed: " + error.getMessage()); System.exit(1); }
+            return;
+        }
         if (Arrays.equals(arguments, new String[] {"--smoke-plan"})) {
             SmokePoolPlan.main(new String[0]); return;
         }

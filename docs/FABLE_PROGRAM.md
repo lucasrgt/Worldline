@@ -23,7 +23,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 
 | ID | Status | Deliverable | Evidence or completion condition |
 | --- | --- | --- | --- |
-| PIPE-01 | ACTIVE | Make bounded Linux-container and Windows-job runtime pools a canonical cold-sweep backend. | Runtime fabric, host/container pools, job object support, and doctors exist; Gate/CI routing and a generated complete manifest remain. |
+| PIPE-01 | ACTIVE | Make bounded Linux-container and Windows-job runtime pools a canonical cold-sweep backend. | Host workers now enter through commit-bound `Gate --milestone`; container parity and CI routing remain. |
 | PIPE-02 | DONE | Pin every accepted smoke in the portable qualification lock. | `smokes/qualification.lock` has 525 current v2 fingerprints; the final qualification restored 525 pins and executed zero smokes. |
 | PIPE-03 | QUEUED | Cache smoke-runner compilation per runner or coherent group. | Editing one cycle must not compile all coordinators. |
 | PIPE-04 | QUEUED | Add content-addressed PASS receipts for unit-suite execution. | Unchanged suites restore reviewed results while changed suites run fail-closed. |
