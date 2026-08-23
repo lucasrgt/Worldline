@@ -1,0 +1,5 @@
+schema=1
+id=m201-red-mushroom
+fingerprint=e0960074f807e1b9ed7ca52e82be33bcb002157baac8ec424dcc29c68743cb8c
+observation.sha256=26885845d6ad7c99bd324b497cb5415fe9056a79b295d940bc26da6049f0848a
+source=refactor-equivalent

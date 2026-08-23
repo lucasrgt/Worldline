@@ -1,0 +1,5 @@
+schema=1
+id=m65-peer-armor
+fingerprint=2f9d8a576b7a576b787a4a4406cec44b40de6451e8d5527edbca011f318b5898
+observation.sha256=7bf03514d4331779e14ecaf3379ecf89d3bea276115ca77e909e5a9160587fe4
+source=legacy-frozen

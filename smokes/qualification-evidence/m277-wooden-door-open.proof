@@ -1,0 +1,5 @@
+schema=1
+id=m277-wooden-door-open
+fingerprint=3c70847a80b49911a333971262c2f9f5db1f61ad2e7de56485ec9630c5b26b58
+observation.sha256=1f0b2fd8a64b2092de4a093f2d5cf0c8110b4363e2ee0199faf1ca2ae7ff2eb0
+source=refactor-equivalent

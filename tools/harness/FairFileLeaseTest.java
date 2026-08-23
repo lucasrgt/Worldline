@@ -1,5 +1,6 @@
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -28,6 +29,18 @@ public final class FairFileLeaseTest {
             while (order.size() < 2 && System.currentTimeMillis() < deadline) Thread.sleep(20L);
             require(order.equals(List.of(2, 3)), "FIFO order drifted: " + order);
             require(ticketCount(queue) == 0, "lease tickets leaked");
+            Path partial = queue.resolve("99999999999999999998-1-partial.ticket");
+            Files.writeString(partial, "pid=");
+            FairLeaseCommand.FairFileLease.removeDeadTickets(queue);
+            require(Files.exists(partial), "fresh partial ticket was deleted");
+            Files.setLastModifiedTime(partial, FileTime.fromMillis(System.currentTimeMillis() - 31_000L));
+            FairLeaseCommand.FairFileLease.removeDeadTickets(queue);
+            require(!Files.exists(partial), "abandoned partial ticket was retained");
+            Path reused = queue.resolve("99999999999999999999-1-reused.ticket");
+            Files.writeString(reused, "pid=" + ProcessHandle.current().pid()
+                    + "\nprocess-start=1\ncreated=1970-01-01T00:00:00Z\n");
+            FairLeaseCommand.FairFileLease.removeDeadTickets(queue);
+            require(!Files.exists(reused), "PID-reuse ticket was retained");
             System.out.println("  fair file lease self-test: passed");
         } catch (Exception error) {
             System.err.println("fair file lease self-test failed: " + error.getMessage());

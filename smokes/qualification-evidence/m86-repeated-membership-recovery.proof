@@ -1,0 +1,5 @@
+schema=1
+id=m86-repeated-membership-recovery
+fingerprint=139ab3d61e0c40e87332936fd12b85424d97ad07152d4c60dc6d31b00f283163
+observation.sha256=841b311c16d11cbbe669756fd0fc020c4371b650ad9c185d8ab717c7217abc44
+source=legacy-frozen

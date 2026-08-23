@@ -1,0 +1,5 @@
+schema=1
+id=m35-movement-outcome
+fingerprint=cf30b5dcac6d7a4746674c7ad5b16ed4598d6731d953dde27ba48148ddf57997
+observation.sha256=227f777cc399f7a4a9e1db4bf94a44fc7f65eca37ebd1b6d183bff16a090223f
+source=refactor-equivalent

@@ -9,5 +9,6 @@ final class HarnessFeatureSelfTest {
         SmokeScheduleHistory.selfTest();
         SmokeStatementBudgetTest.execute();
         AeroSceneBudgetTest.execute();
+        ModuleCacheMaintenance.main(new String[] {"--self-test"});
     }
 }

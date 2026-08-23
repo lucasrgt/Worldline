@@ -17,6 +17,7 @@ concurrency:
 jobs:
   repository:
     name: ${{ matrix.os }}
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:

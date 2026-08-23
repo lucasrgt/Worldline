@@ -27,10 +27,12 @@ final class TestReceiptCache {
 
     String fingerprint(String suite, String testDigest) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        update(digest, "worldline-test-receipt-v1");
+        update(digest, "worldline-test-receipt-v2");
         update(digest, suite);
         update(digest, testDigest);
         update(digest, System.getProperty("java.version"));
+        update(digest, System.getProperty("os.name"));
+        update(digest, System.getProperty("os.arch"));
         update(digest, "assertions=enabled");
         digest.update(Files.readAllBytes(root.resolve("tools/harness/TestBuild.java")));
         digest.update(Files.readAllBytes(root.resolve("tools/harness/TestReceiptCache.java")));
@@ -39,6 +41,7 @@ final class TestReceiptCache {
 
     boolean restore(String suite, String fingerprint) throws Exception {
         if (!reuse) return false;
+        if (sampledForRecheck(suite, fingerprint)) return false;
         Path proof = proof(suite, fingerprint);
         Path evidence = evidence(suite, fingerprint);
         if (!Files.isRegularFile(proof) || !Files.isRegularFile(evidence)) return false;
@@ -50,6 +53,24 @@ final class TestReceiptCache {
                 && digest(evidence).equals(values.getProperty("evidence.sha256"));
         if (valid) restored++;
         return valid;
+    }
+
+    private static boolean sampledForRecheck(String suite, String fingerprint) throws Exception {
+        int percent = environmentInteger("WORLDLINE_TEST_CACHE_RECHECK_PERCENT", 0, 0, 100);
+        if (percent == 0) return false;
+        String seed = System.getenv().getOrDefault("WORLDLINE_TEST_CACHE_RECHECK_SEED",
+                java.time.LocalDate.now(java.time.ZoneOffset.UTC).toString());
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        update(digest, seed); update(digest, suite); update(digest, fingerprint);
+        return Byte.toUnsignedInt(digest.digest()[0]) * 100 / 256 < percent;
+    }
+
+    static boolean sampledForRecheck(String seed, String suite, String fingerprint,
+            int percent) throws Exception {
+        require(percent >= 0 && percent <= 100, "invalid recheck percent");
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        update(digest, seed); update(digest, suite); update(digest, fingerprint);
+        return Byte.toUnsignedInt(digest.digest()[0]) * 100 / 256 < percent;
     }
 
     void passed(String suite, String fingerprint, String output) throws Exception {
@@ -129,5 +150,13 @@ final class TestReceiptCache {
 
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);
+    }
+    private static int environmentInteger(String name, int fallback, int minimum, int maximum) {
+        String raw = System.getenv(name); int value = fallback;
+        if (raw != null && !raw.isBlank()) try { value = Integer.parseInt(raw); }
+        catch (NumberFormatException error) { throw new IllegalArgumentException(name + " must be an integer"); }
+        require(value >= minimum && value <= maximum,
+                name + " must be between " + minimum + " and " + maximum);
+        return value;
     }
 }

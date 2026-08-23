@@ -1,0 +1,5 @@
+schema=1
+id=m219-tnt-place
+fingerprint=097aaf1c42d2766f408e79d2fb41cebf1204520952555850a5a81bbc2ef77b09
+observation.sha256=4f2b9d0bc3bbd9a35010f5efbb02cf5d5e290dcfb590633b35833a02551912f8
+source=refactor-equivalent

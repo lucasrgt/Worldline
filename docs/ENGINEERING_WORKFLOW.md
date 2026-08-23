@@ -235,11 +235,22 @@ performance budgets are qualification policy. Changing only that policy restores
 runtime observation and validates it again under the new contract; it never carries forward a
 PASS result. Missing, malformed or digest-mismatched observations execute the runtime again.
 
-`SmokeLegacyImport` exists only to migrate reports created before the receipt cache was
-introduced. A passed report may migrate the complete suite. A failed report may migrate only the
-strictly completed prefix before its identified failure. Both modes require a clean worktree,
-fresh logs, and explicit completion rows in the report; failed, stale, or ambiguous individual
-results are rejected.
+The report-era `SmokeLegacyImport` was retired after the repository migrated every reviewed pin
+to tracked, content-addressed evidence envelopes. Reports from before the receipt cache are no
+longer accepted as qualification input; a missing or corrupt envelope fails closed and requires
+new execution evidence.
+
+The cross-worktree module cache is immutable. A compiler may publish a new digest directory but
+may never replace an existing one. Usage timestamps live beside entries so artifact bytes remain
+unchanged. Inspect or bound the shared cache without breaking active worktree junctions with:
+
+```text
+java tools/harness/Gate.java --module-cache-doctor
+java tools/harness/Gate.java --module-cache-gc
+```
+
+GC takes the same per-digest publication lock, rescans every registered worktree link, and removes
+only unreferenced entries selected by the age or size policy.
 
 Repositories whose reviewed full-suite runs predate both the cache and retained reports may
 explicitly accept the frozen descriptor baseline once. This command requires a clean committed

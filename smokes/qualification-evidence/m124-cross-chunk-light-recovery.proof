@@ -1,0 +1,5 @@
+schema=1
+id=m124-cross-chunk-light-recovery
+fingerprint=a282e7aea79691f49326c82afc13906470616fc58e023da0d451adc3d2f945c8
+observation.sha256=60903e4d40e5297e01412eb69996ce5f3e2b641f1898d67f376ff357d016dbce
+source=legacy-frozen

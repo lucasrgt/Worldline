@@ -6,6 +6,7 @@ import java.nio.channels.OverlappingFileLockException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -135,9 +136,17 @@ static final class FairFileLease implements AutoCloseable {
                         String name = "%020d-%d-%s.ticket".formatted(value,
                                 ProcessHandle.current().pid(), UUID.randomUUID());
                         Path ticket = queue.resolve(name);
-                        Files.writeString(ticket, "pid=" + ProcessHandle.current().pid()
+                        Path temporary = queue.resolve(name + ".tmp-" + UUID.randomUUID());
+                        Instant started = ProcessHandle.current().info().startInstant()
+                                .orElseThrow(() -> new IllegalStateException("process start time unavailable"));
+                        Files.writeString(temporary, "pid=" + ProcessHandle.current().pid()
+                                + "\nprocess-start=" + started.toEpochMilli()
                                 + "\ncreated=" + Instant.now() + "\n", StandardCharsets.UTF_8,
                                 StandardOpenOption.CREATE_NEW);
+                        try { Files.move(temporary, ticket, StandardCopyOption.ATOMIC_MOVE); }
+                        catch (java.nio.file.AtomicMoveNotSupportedException error) {
+                            Files.move(temporary, ticket);
+                        }
                         return ticket;
                     }
                 } catch (OverlappingFileLockException error) { Thread.sleep(10L); }
@@ -163,22 +172,38 @@ static final class FairFileLease implements AutoCloseable {
         }
     }
 
-    private static void removeDeadTickets(Path queue) throws Exception {
+    static void removeDeadTickets(Path queue) throws Exception {
         try (Stream<Path> paths = Files.list(queue)) {
             for (Path ticket : paths.filter(path -> path.toString().endsWith(".ticket")).toList()) {
-                long pid = pid(ticket);
-                if (pid > 0 && ProcessHandle.of(pid).map(ProcessHandle::isAlive).orElse(false)) continue;
+                Identity identity = identity(ticket);
+                if (identity == null) {
+                    long age = System.currentTimeMillis() - Files.getLastModifiedTime(ticket).toMillis();
+                    if (age < 30_000L) continue;
+                    Files.deleteIfExists(ticket); continue;
+                }
+                ProcessHandle process = ProcessHandle.of(identity.pid).orElse(null);
+                if (process != null && process.isAlive()) {
+                    Instant started = process.info().startInstant().orElse(null);
+                    if (started == null || started.toEpochMilli() == identity.started) continue;
+                }
                 Files.deleteIfExists(ticket);
             }
         }
     }
 
-    private static long pid(Path ticket) {
-        try {
-            for (String line : Files.readAllLines(ticket, StandardCharsets.UTF_8))
-                if (line.startsWith("pid=")) return Long.parseLong(line.substring(4));
-        } catch (Exception ignored) { }
-        return -1L;
+    private static Identity identity(Path ticket) throws InterruptedException {
+        for (int attempt = 0; attempt < 3; attempt++) {
+            try {
+                long pid = -1L, started = -1L;
+                for (String line : Files.readAllLines(ticket, StandardCharsets.UTF_8)) {
+                    if (line.startsWith("pid=")) pid = Long.parseLong(line.substring(4));
+                    if (line.startsWith("process-start=")) started = Long.parseLong(line.substring(14));
+                }
+                if (pid > 0L && started > 0L) return new Identity(pid, started);
+            } catch (IOException | NumberFormatException ignored) { }
+            if (attempt < 2) Thread.sleep(20L);
+        }
+        return null;
     }
 
     private static FairFileLease tryAcquire(Path root, Path path, String kind) throws IOException {
@@ -207,5 +232,6 @@ static final class FairFileLease implements AutoCloseable {
     }
 
     boolean valid() { return lock.isValid(); }
-}
+    }
+    private record Identity(long pid, long started) { }
 }

@@ -1,0 +1,5 @@
+schema=1
+id=m261-golden-apple-eat
+fingerprint=31ac4ba39e35b5c5c8b7d2766b0b14ab2ff502526d609e266b7f33271f22b92d
+observation.sha256=888e7fe8215ede44deaf9a73fa95ecc769f61e554e9262d0781ae75eca2e9fe3
+source=refactor-equivalent

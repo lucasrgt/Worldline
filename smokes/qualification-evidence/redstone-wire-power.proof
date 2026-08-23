@@ -1,0 +1,5 @@
+schema=1
+id=redstone-wire-power
+fingerprint=d0bd3c64f6e379ccd0d3882bac1637accc102f2ed18f28434e79e79835379d43
+observation.sha256=9e732358c31890a2dda2c6fabf5553bcebd81a3808284cfea1bbe85aa4a71645
+source=legacy-frozen

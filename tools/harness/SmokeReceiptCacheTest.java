@@ -92,6 +92,14 @@ public final class SmokeReceiptCacheTest {
         clone.finish(entries.size());
         suite = Files.readString(root.resolve(".worldline/reports/smoke-suite.json"));
         require(suite.contains("\"pinned\": 2"), "suite did not aggregate tracked pins");
+        Path envelope = root.resolve("smokes/qualification-evidence/m1-one.proof");
+        Files.writeString(envelope, "corrupt\n", StandardCharsets.UTF_8);
+        SmokeReceiptCache corrupt = new SmokeReceiptCache(root, cacheRoot, true);
+        require(!corrupt.restore(entries.get(0), corrupt.fingerprint(entries.get(0))),
+                "corrupt tracked evidence envelope was accepted");
+        Files.delete(root.resolve("smokes/qualification-evidence/m2-two.proof"));
+        require(!corrupt.restore(entries.get(1), corrupt.fingerprint(entries.get(1))),
+                "missing tracked evidence envelope was accepted");
     }
 
     private static void smoke(Path root, String id, String runner) throws Exception {

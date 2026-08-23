@@ -73,13 +73,15 @@ final class ModuleBuild {
         String digest = digest(module, release, sources, dependencies);
         Path directory = cache.resolve(module).resolve(digest);
         Path complete = directory.resolve(".complete");
-        if (Files.isRegularFile(complete)) return new Artifact(directory, digest, true);
+        if (complete(complete, digest)) { touch(module, digest); return new Artifact(directory, digest, true); }
+        require(!Files.exists(directory), "corrupt immutable module cache entry " + directory);
         Path lockPath = cache.resolve(module).resolve(digest + ".lock");
         Files.createDirectories(lockPath.getParent());
         try (FileChannel channel = FileChannel.open(lockPath, StandardOpenOption.CREATE,
                 StandardOpenOption.WRITE); FileLock lock = channel.lock()) {
             if (!lock.isValid()) throw new IllegalStateException("invalid module cache lock " + module);
-            if (Files.isRegularFile(complete)) return new Artifact(directory, digest, true);
+            if (complete(complete, digest)) { touch(module, digest); return new Artifact(directory, digest, true); }
+            require(!Files.exists(directory), "corrupt immutable module cache entry " + directory);
             Path temporary = directory.resolveSibling(digest + ".tmp-"
                     + ProcessHandle.current().pid() + "-" + System.nanoTime());
             delete(temporary); Files.createDirectories(temporary);
@@ -94,7 +96,8 @@ final class ModuleBuild {
                 sources.forEach(source -> command.add(source.toString()));
                 run(command, 180, cache.resolve(module));
                 Files.writeString(temporary.resolve(".complete"), digest + "\n", StandardCharsets.UTF_8);
-                delete(directory); move(temporary, directory);
+                require(!Files.exists(directory), "module cache target appeared during publication");
+                move(temporary, directory); touch(module, digest);
             } finally { delete(temporary); }
         }
         return new Artifact(directory, digest, false);
@@ -170,8 +173,23 @@ final class ModuleBuild {
         catch (AtomicMoveNotSupportedException error) { Files.move(source, target); }
     }
 
+    private static boolean complete(Path marker, String digest) throws IOException {
+        return Files.isRegularFile(marker) && Files.readString(marker, StandardCharsets.UTF_8)
+                .trim().equals(digest);
+    }
+
+    private void touch(String module, String digest) throws IOException {
+        Files.writeString(cache.resolve(module).resolve(digest + ".used"),
+                Long.toString(System.currentTimeMillis()), StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+    }
+
     private static void delete(Path target) throws IOException {
         SafeTreeDelete.delete(target);
+    }
+
+    private static void require(boolean value, String message) {
+        if (!value) throw new IllegalStateException(message);
     }
 
     private static void update(MessageDigest digest, String value) {

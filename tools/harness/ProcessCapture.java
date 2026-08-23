@@ -42,10 +42,17 @@ final class ProcessCapture {
         } finally { Files.deleteIfExists(log); }
     }
 
-    static void destroy(Process process) {
-        process.descendants().sorted(Comparator.comparingLong(ProcessHandle::pid).reversed())
-                .forEach(ProcessHandle::destroyForcibly);
-        process.destroyForcibly();
+    static void destroy(Process process) throws InterruptedException {
+        List<ProcessHandle> descendants = process.descendants()
+                .sorted(Comparator.comparingLong(ProcessHandle::pid).reversed()).toList();
+        descendants.forEach(ProcessHandle::destroyForcibly); process.destroyForcibly();
+        if (!process.waitFor(10, TimeUnit.SECONDS))
+            throw new IllegalStateException("process did not terminate: " + process.pid());
+        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(10);
+        while (descendants.stream().anyMatch(ProcessHandle::isAlive) && System.nanoTime() < deadline)
+            Thread.sleep(20L);
+        if (descendants.stream().anyMatch(ProcessHandle::isAlive))
+            throw new IllegalStateException("process descendants did not terminate: " + process.pid());
     }
 
     static String tail(String value, int maximum) {

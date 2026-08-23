@@ -104,16 +104,12 @@ final class CandidateCheck {
         roots.forEach(path -> command.add(path.toString()));
         command.addAll(List.of("--output", "json"));
         String output = capture(command, root, 60);
-        if (!output.contains("\"Java\":")) return;
-        java.util.regex.Matcher reports = java.util.regex.Pattern.compile(
-                "\\{\"stats\":\\{(.*?)\\},\"name\":\"([^\"]+)\"",
-                java.util.regex.Pattern.DOTALL).matcher(TokeiJson.language(output, "Java"));
-        java.util.regex.Pattern code = java.util.regex.Pattern.compile("\"code\"\\s*:\\s*(\\d+)");
-        while (reports.find()) {
-            java.util.regex.Matcher count = code.matcher(reports.group(1));
-            if (count.find() && Integer.parseInt(count.group(1)) > maximum)
+        TokeiReport report = TokeiReport.find(output, "Java");
+        if (report == null) return;
+        for (TokeiReport.FileReport file : report.files()) {
+            if (file.code() > maximum)
                 throw new IllegalStateException(name + " file budget exceeded: "
-                        + reports.group(2) + " has " + count.group(1) + "/" + maximum);
+                        + file.name() + " has " + file.code() + "/" + maximum);
         }
     }
 

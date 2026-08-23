@@ -1,0 +1,5 @@
+schema=1
+id=m129-cross-chunk-iron-door-recovery
+fingerprint=a832ce1a349abec0f54e79109cd142affd765e54e65895bff977f96fad3c8d1d
+observation.sha256=5a5478fd4aea68c69ed892984bc98353e208065f354857a047bac7f38c00cfac
+source=refactor-equivalent

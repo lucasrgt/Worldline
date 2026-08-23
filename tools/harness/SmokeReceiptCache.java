@@ -45,8 +45,8 @@ final class SmokeReceiptCache {
                     StandardCopyOption.REPLACE_EXISTING);
             record(smoke.id, fingerprint, digest(proof), "reused"); return true;
         }
-        SmokePins.Entry pin = pins.match(smoke.id, fingerprint); if (pin == null) return false;
-        record(smoke.id, fingerprint, SmokePins.proof(pin), "pinned"); return true;
+        SmokePins.Entry pin = pins.verifiedMatch(smoke.id, fingerprint); if (pin == null) return false;
+        record(smoke.id, fingerprint, pins.proof(pin), "pinned"); return true;
     }
 
     void passed(SmokeDiscovery.Entry smoke, String fingerprint, long duration) throws Exception {
@@ -146,7 +146,7 @@ final class SmokeReceiptCache {
         Path proof = proof(smoke.id, fingerprint), evidence = evidence(smoke.id, fingerprint);
         if (validProof(smoke.id, fingerprint, proof, evidence)) return new SmokePins.Entry(
                 smoke.id, fingerprint, load(proof).getProperty("evidence.sha256"), "executed");
-        return pins.match(smoke.id, fingerprint);
+        return pins.verifiedMatch(smoke.id, fingerprint);
     }
 
     long historicalDuration(String id) throws Exception {
@@ -166,8 +166,9 @@ final class SmokeReceiptCache {
     private String proofDigest(SmokeDiscovery.Entry smoke, String fingerprint, String mode)
             throws Exception {
         if ("pinned".equals(mode)) {
-            SmokePins.Entry pin = pins.match(smoke.id, fingerprint);
-            require(pin != null, "missing tracked smoke pin: " + smoke.id); return SmokePins.proof(pin);
+            SmokePins.Entry pin = pins.verifiedMatch(smoke.id, fingerprint);
+            require(pin != null, "missing verified tracked smoke pin: " + smoke.id);
+            return pins.proof(pin);
         }
         Path proof = proof(smoke.id, fingerprint), evidence = evidence(smoke.id, fingerprint);
         require(validProof(smoke.id, fingerprint, proof, evidence),

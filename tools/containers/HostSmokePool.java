@@ -192,9 +192,8 @@ public final class HostSmokePool {
             require(fields[0].matches("[a-z0-9][a-z0-9-]{1,63}") && ids.add(fields[0]), "invalid or duplicate id: " + fields[0]);
             require(List.of("server-headless", "windows-client-gui").contains(fields[1]), "unsupported lane: " + fields[1]);
             require(fields[2].matches("tools/smoke/[A-Za-z0-9]+Cycle\\.java"), "unsafe source: " + fields[2]);
-            Path source = root.resolve(fields[2]).normalize(); require(Files.isRegularFile(source), "missing source: " + fields[2]);
+            SmokeManifestSource.validate(root, fields[2], fields[3]);
             require(fields[3].matches("[a-z0-9][a-z0-9-]{1,79}") && cases.add(fields[2] + fields[3]), "invalid or duplicate case");
-            require(Files.readString(source).contains("\"" + fields[3] + "\""), "argument is not declared by source: " + fields[3]);
             int timeout = Integer.parseInt(fields[4]); require(timeout >= 30 && timeout <= 3600, "unsafe timeout");
             tasks.add(new Task(fields[0], fields[1], fields[2], fields[3], timeout));
         }
@@ -223,7 +222,7 @@ public final class HostSmokePool {
     }
 
     private static void killTree(Process process) throws InterruptedException {
-        process.descendants().forEach(ProcessHandle::destroyForcibly); process.destroyForcibly(); process.waitFor();
+        ProcessTreeTermination.kill(process, "worker");
     }
     private static String java() { return Path.of(System.getProperty("java.home"), "bin", "java").toString(); }
     private static boolean isWindows() { return System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows"); }
@@ -234,6 +233,7 @@ public final class HostSmokePool {
     private static void require(boolean value, String message) { if (!value) throw new IllegalArgumentException(message); }
 
     private static void selfTest() throws Exception {
+        ProcessTreeTermination.selfTest();
         Path root = Path.of("").toAbsolutePath().normalize();
         require(parse(root.resolve("tools/containers/smokes-25.tsv"), root).size() == 25, "bundled manifest drift");
         Config config = Config.load(root, Options.parse(new String[] {"simulate", "tools/containers/smokes-25.tsv", "--jobs", "25"}));

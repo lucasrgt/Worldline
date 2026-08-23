@@ -8,17 +8,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /** Repository verification engine entered through Gate. */
 final class RepositoryVerify {
-    private static final Pattern CODE = Pattern.compile("\\\"code\\\"\\s*:\\s*(\\d+)");
-    private static final Pattern REPORT = Pattern.compile(
-            "\\{\\\"stats\\\":\\{(.*?)\\},\\\"name\\\":\\\"([^\\\"]+)\\\"", Pattern.DOTALL);
-
     private final Path root = Paths.get("").toAbsolutePath().normalize();
     private final Path build = root.resolve(".worldline/build");
     private final Properties config = new Properties();
@@ -269,32 +263,17 @@ final class RepositoryVerify {
         command.add("tokei");
         roots.forEach(path -> command.add(path.toString()));
         command.addAll(Arrays.asList("--output", "json"));
-        String json = capture(command);
-        String java = languageSection(json);
-        int reports = java.indexOf("\"reports\"");
-        long total = codeLines(reports < 0 ? java : java.substring(0, reports));
+        TokeiReport java = TokeiReport.required(capture(command), "Java");
+        long total = java.code();
         long maxFile = Long.parseLong(required(name + ".max.file"));
-        Matcher files = REPORT.matcher(java);
-        while (files.find()) {
-            long lines = codeLines(files.group(1));
-            if (lines > maxFile) {
+        for (TokeiReport.FileReport file : java.files()) {
+            if (file.code() > maxFile) {
                 throw new IllegalStateException(
-                        name + " file budget exceeded: " + files.group(2) + " has " + lines + "/" + maxFile);
+                        name + " file budget exceeded: " + file.name() + " has "
+                                + file.code() + "/" + maxFile);
             }
         }
         System.out.println("  " + name + " lines: " + total + " (max file " + maxFile + ")");
-    }
-
-    private String languageSection(String json) {
-        return TokeiJson.language(json, "Java");
-    }
-
-    private long codeLines(String json) {
-        Matcher matcher = CODE.matcher(json);
-        if (!matcher.find()) {
-            throw new IllegalStateException("tokei JSON did not contain a code count");
-        }
-        return Long.parseLong(matcher.group(1));
     }
 
     private void recreateBuildDirectory() throws IOException {

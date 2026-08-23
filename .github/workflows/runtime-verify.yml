@@ -26,6 +26,10 @@ concurrency:
 jobs:
   runtime:
     runs-on: [self-hosted, worldline-runtime]
+    timeout-minutes: 1440
+    env:
+      WORLDLINE_TEST_CACHE_RECHECK_PERCENT: '10'
+      WORLDLINE_TEST_CACHE_RECHECK_SEED: ${{ github.run_id }}
     steps:
       - uses: actions/checkout@v5
         with:

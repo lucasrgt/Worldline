@@ -21,6 +21,7 @@ permissions:
 jobs:
   discover:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     outputs:
       ids: ${{ steps.ids.outputs.value }}
       base: ${{ steps.ids.outputs.base }}
@@ -60,6 +61,7 @@ jobs:
       matrix:
         milestone: ${{ fromJSON(needs.discover.outputs.ids) }}
     runs-on: [self-hosted, worldline-runtime]
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v5
         with:

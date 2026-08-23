@@ -18,6 +18,9 @@ public final class TestReceiptCacheTest {
             require(!cache.restore("ExampleSuite", fingerprint), "altered evidence was accepted");
             String changed = cache.fingerprint("ExampleSuite", "compiled-tests-v2");
             require(!cache.restore("ExampleSuite", changed), "changed input restored stale proof");
+            require(!TestReceiptCache.sampledForRecheck("seed", "suite", fingerprint, 0)
+                            && TestReceiptCache.sampledForRecheck("seed", "suite", fingerprint, 100),
+                    "nightly recheck sampling boundaries drifted");
             System.out.println("  test suite receipt cache self-test: passed");
         } catch (Exception error) {
             System.err.println("test suite receipt cache self-test failed: " + error.getMessage());

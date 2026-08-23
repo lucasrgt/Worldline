@@ -22,7 +22,9 @@ public final class OfficialRuntimeLease {
                 require(lease != null, "another official-runtime owner holds " + lock);
                 require(noForeignRuntime(), "an official smoke, Minecraft JAR, or runClient process is already active");
                 Process process = new ProcessBuilder(options.command).directory(ROOT.toFile()).inheritIO().start();
-                require(process.waitFor(24, TimeUnit.HOURS), "delegated backend timed out");
+                if (!process.waitFor(24, TimeUnit.HOURS)) {
+                    terminate(process); throw new IllegalStateException("delegated backend timed out");
+                }
                 if (process.exitValue() != 0) System.exit(process.exitValue());
             }
         } catch (Exception error) { System.err.println("official runtime lease failed: " + error.getMessage()); System.exit(1); }
@@ -53,12 +55,34 @@ public final class OfficialRuntimeLease {
                     || line.contains("minecraft-b1.7.3-server.jar") || line.contains("minecraft-b1.7.3-client.jar");
         });
     }
+    private static void terminate(Process process) throws Exception {
+        List<ProcessHandle> descendants = process.descendants()
+                .sorted(java.util.Comparator.comparingLong(ProcessHandle::pid).reversed()).toList();
+        descendants.forEach(ProcessHandle::destroyForcibly); process.destroyForcibly();
+        require(process.waitFor(10, TimeUnit.SECONDS), "delegated backend did not terminate");
+        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(10);
+        while (descendants.stream().anyMatch(ProcessHandle::isAlive) && System.nanoTime() < deadline)
+            Thread.sleep(20L);
+        require(descendants.stream().noneMatch(ProcessHandle::isAlive),
+                "delegated backend descendants did not terminate");
+    }
     private static void selfTest() throws Exception {
         Path path = ROOT.resolve(".worldline/runtime-lease-self-test.lock"); Files.createDirectories(path.getParent());
         try (FileChannel channel = FileChannel.open(path, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
              FileLock lock = channel.tryLock()) { require(lock != null, "lease self-test failed"); }
+        Process probe = new ProcessBuilder(java(), "tools/containers/TerminationTreeProbe.java", "parent")
+                .redirectOutput(ProcessBuilder.Redirect.DISCARD)
+                .redirectError(ProcessBuilder.Redirect.DISCARD).start();
+        awaitDescendant(probe); terminate(probe);
         System.out.println("official runtime lease self-test passed");
     }
+    private static void awaitDescendant(Process process) throws Exception {
+        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(10);
+        while (process.descendants().findAny().isEmpty() && System.nanoTime() < deadline)
+            Thread.sleep(20L);
+        require(process.descendants().findAny().isPresent(), "termination probe did not create a child");
+    }
+    private static String java() { return Path.of(System.getProperty("java.home"), "bin", "java").toString(); }
     private static void require(boolean value, String message) { if (!value) throw new IllegalArgumentException(message); }
     private record Options(String lock, List<String> command) {
         static Options parse(String[] arguments) {

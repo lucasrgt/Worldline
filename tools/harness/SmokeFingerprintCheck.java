@@ -25,6 +25,7 @@ public final class SmokeFingerprintCheck {
             if (!values.add(value)) throw new IllegalStateException(
                     "smokes share an input fingerprint: " + smoke.id);
         }
+        SmokePins pins = new SmokePins(root); pins.validateCatalog(smokes); pins.validateEvidence();
         System.out.println("  smoke fingerprints: " + smokes.size() + " complete and distinct");
     }
 }

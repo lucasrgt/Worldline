@@ -89,6 +89,15 @@ public final class Gate {
                     "FixedWaitMigration", "--finalize").directory(root.toFile()).inheritIO().start(), 600);
             if (exit != 0) System.exit(exit); return;
         }
+        if (arguments.length == 1 && List.of("--module-cache-doctor", "--module-cache-gc")
+                .contains(arguments[0])) {
+            Path classes = compileHarness();
+            ProcessBuilder builder = new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
+                    "ModuleCacheMaintenance", arguments[0].endsWith("gc") ? "gc" : "doctor")
+                    .directory(root.toFile()).inheritIO();
+            builder.environment().put("WORLDLINE_GATE_CONTROL", control.toString());
+            int exit = waitFor(builder.start(), 600); if (exit != 0) System.exit(exit); return;
+        }
         Files.createDirectories(control);
         if (arguments.length == 2 && ("--milestone".equals(arguments[0])
                 || "--smoke-id".equals(arguments[0]))) {
@@ -149,6 +158,8 @@ public final class Gate {
                 || Arrays.equals(arguments, new String[] {"--migrate-eof-retries"})
                 || Arrays.equals(arguments, new String[] {"--finalize-eof-retries"})
                 || Arrays.equals(arguments, new String[] {"--finalize-fixed-waits"})
+                || Arrays.equals(arguments, new String[] {"--module-cache-doctor"})
+                || Arrays.equals(arguments, new String[] {"--module-cache-gc"})
                 || arguments.length == 2 && ("--new-milestone".equals(arguments[0])
                         || "--candidate".equals(arguments[0])
                         || "--milestone".equals(arguments[0]) || "--smoke-id".equals(arguments[0]));
@@ -159,6 +170,7 @@ public final class Gate {
                 + "--migrate-eof-retries|"
                 + "--finalize-eof-retries|"
                 + "--finalize-fixed-waits|"
+                + "--module-cache-doctor|--module-cache-gc|"
                 + "--new-milestone ID|--milestone ID|"
                 + "--candidate ID|--self-test]");
         if (arguments.length == 2 && !arguments[1].matches("[a-z0-9]+(?:-[a-z0-9]+)*"))

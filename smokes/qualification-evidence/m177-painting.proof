@@ -1,0 +1,5 @@
+schema=1
+id=m177-painting
+fingerprint=75cdfa14f43ff29e5d812c91874f2cd5ddf5e868111f4c032877ff22190039db
+observation.sha256=05ecb02dc2be9a42ab00eeae2c8c1eaf34609b0fe89c3c60aae4774b5e0e90d4
+source=refactor-equivalent

@@ -1,0 +1,5 @@
+schema=1
+id=m105-paired-cache-capacity
+fingerprint=17cb0c620ad9ddabffedd3be15f50feb0c2872893acd5b3763edba22af6946ee
+observation.sha256=35da2fabb47ef902a2cbd7b92dc976771d9a80179b76322cf1f26edade4e5898
+source=legacy-frozen

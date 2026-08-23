@@ -207,11 +207,10 @@ public final class ContainerSmokePool {
             require(ids.add(fields[0]), "duplicate task id: " + fields[0]);
             require(fields[1].equals("server-headless"), "unsupported or unsafe lane: " + fields[1]);
             require(fields[2].matches("tools/smoke/[A-Za-z0-9]+Cycle\\.java"), "unsafe source: " + fields[2]);
-            require(Files.isRegularFile(root.resolve(fields[2]).normalize()), "missing smoke source: " + fields[2]);
+            try { SmokeManifestSource.validate(root, fields[2], fields[3]); }
+            catch (Exception error) { throw new IllegalArgumentException(error.getMessage(), error); }
             require(fields[3].matches("[a-z0-9][a-z0-9-]{1,79}"), "invalid smoke argument");
             require(cases.add(fields[2] + "\t" + fields[3]), "duplicate smoke case: " + fields[3]);
-            try { require(Files.readString(root.resolve(fields[2])).contains("\"" + fields[3] + "\""),
-                    "smoke argument is not declared by source: " + fields[3]); } catch (IOException error) { throw new IllegalArgumentException(error); }
             int timeout = Integer.parseInt(fields[4]); require(timeout >= 30 && timeout <= 3600, "unsafe timeout");
             tasks.add(new Task(fields[0], fields[2], fields[3], timeout));
         }
@@ -220,9 +219,11 @@ public final class ContainerSmokePool {
 
     private static void selfTest() throws Exception {
         Path root = Path.of("").toAbsolutePath().normalize();
-        List<Task> tasks = parse(List.of("m1-test\tserver-headless\ttools/smoke/ApiCycle.java\tm3-domain-api\t60"), root);
+        List<Task> tasks = parse(List.of("m1-test\tserver-headless\ttools/smoke/DataDrivenCycle.java"
+                + "\tm420-wolf-tame-set\t60"), root);
         require(tasks.size() == 1 && tasks.getFirst().timeoutSeconds == 60, "manifest parse drift");
-        expectFailure(() -> parse(List.of("m1-test\tgui\ttools/smoke/ApiCycle.java\tm3-domain-api\t60"), root));
+        expectFailure(() -> parse(List.of("m1-test\tgui\ttools/smoke/DataDrivenCycle.java"
+                + "\tm420-wolf-tame-set\t60"), root));
         expectFailure(() -> parse(List.of("m1-test\tserver-headless\t../ApiCycle.java\tm3-domain-api\t60"), root));
         concurrencyTest(10); concurrencyTest(25);
         require(parse(Files.readAllLines(root.resolve("tools/containers/smokes-25.tsv")), root).size() == 25,

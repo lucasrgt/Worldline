@@ -1,0 +1,5 @@
+schema=1
+id=redstone-lever-button
+fingerprint=cc82155064326049c8278369bbc17a91bb57e0c672a902023e50d14c53af7be6
+observation.sha256=07928ecf62634ba9a9374083c951d736e8947b162ae45bfd6deb28416f1827f3
+source=legacy-frozen

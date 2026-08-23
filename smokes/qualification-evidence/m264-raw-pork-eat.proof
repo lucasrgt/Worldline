@@ -1,0 +1,5 @@
+schema=1
+id=m264-raw-pork-eat
+fingerprint=64d26a3748975d624da9d67ef0aa417e001054e1d84e6db8562fa526e30ed80d
+observation.sha256=c43583070f3c4185f97ebefa6a8f0a6ce3428f70ea6621d094546db1cbae4502
+source=refactor-equivalent

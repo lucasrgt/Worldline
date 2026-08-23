@@ -1,0 +1,5 @@
+schema=1
+id=m76-renderer-decomposition
+fingerprint=6615863c8f7a69de1725b468017bad874d56e36e40d1fd5ad35120d9073af910
+observation.sha256=973ae93f8127bae80ceeddc372713f5968213aa1f2fb3a8978c58af61439ac40
+source=legacy-frozen

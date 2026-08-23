@@ -1,0 +1,5 @@
+schema=1
+id=m514-sw-lava-downward-flow
+fingerprint=b5db6b5419dd47d6d1eafb33990739ed3d0b72819fc44e66414f64409fc8757f
+observation.sha256=701ed9ab8e197906a0a9e3737dce82ad359f8152f4867def70e44a94144fca4c
+source=legacy-frozen

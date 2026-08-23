@@ -1,0 +1,5 @@
+schema=1
+id=m73-paired-aero-content
+fingerprint=73e3542ea238d51afd1e4fe597206ccaba83f7d239f141ca40e27bc6e07631d7
+observation.sha256=41422dda87ca7a8ed192e8c23c9946c55518f87e123cf69d6b1662d689b3b500
+source=legacy-frozen

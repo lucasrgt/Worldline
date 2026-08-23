@@ -1,0 +1,26 @@
+schema = 1
+id = "NYA-01M0QN66R90HYV8X0WJH0V9FF9"
+title = "Never promote fingerprints without verified evidence bytes"
+lesson = "Portable qualification pins must bind a reviewed fingerprint to repository-tracked evidence bytes and verify the envelope digest before restoration; missing or corrupt evidence fails closed. Long-running coordinators must terminate descendants in reverse order and confirm death, immutable cache publishers must never replace existing digest directories, and lease tickets must bind PID plus process start time."
+scope = [
+    "smokes/qualification.lock",
+    "smokes/qualification-evidence/**",
+    "tools/harness/Smoke*.java",
+    "tools/harness/ModuleBuild.java",
+    "tools/harness/FairLeaseCommand.java",
+    "tools/containers/**",
+]
+tags = [
+    "evidence",
+    "cache",
+    "process-lifecycle",
+]
+created_at = "2026-08-23T15:52:50Z"
+
+[[occurrences]]
+occurred_at = "2026-08-23T15:52:50Z"
+source = "Fable 2 incident-prevention review"
+reported_by = "user:fable-report"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "3d30fa44"

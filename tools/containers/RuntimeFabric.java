@@ -96,15 +96,28 @@ public final class RuntimeFabric {
 
     private static void run(List<String> command) throws Exception {
         Process process = new ProcessBuilder(command).directory(ROOT.toFile()).inheritIO().start();
-        require(process.waitFor(24, TimeUnit.HOURS), "child coordinator timed out");
+        if (!process.waitFor(24, TimeUnit.HOURS)) {
+            terminate(process); throw new IllegalStateException("child coordinator timed out");
+        }
         require(process.exitValue() == 0, "child coordinator exited " + process.exitValue());
+    }
+    private static void terminate(Process process) throws Exception {
+        List<ProcessHandle> descendants = process.descendants()
+                .sorted(java.util.Comparator.comparingLong(ProcessHandle::pid).reversed()).toList();
+        descendants.forEach(ProcessHandle::destroyForcibly); process.destroyForcibly();
+        require(process.waitFor(10, TimeUnit.SECONDS), "child coordinator did not terminate");
+        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(10);
+        while (descendants.stream().anyMatch(ProcessHandle::isAlive) && System.nanoTime() < deadline)
+            Thread.sleep(20L);
+        require(descendants.stream().noneMatch(ProcessHandle::isAlive),
+                "child coordinator descendants did not terminate");
     }
     private static Result capture(List<String> command, long seconds) {
         try {
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             Process process = new ProcessBuilder(command).directory(ROOT.toFile()).redirectErrorStream(true).start();
             boolean finished = process.waitFor(seconds, TimeUnit.SECONDS);
-            if (!finished) { process.destroyForcibly(); return new Result(false, "timeout"); }
+            if (!finished) { terminate(process); return new Result(false, "timeout"); }
             process.getInputStream().transferTo(bytes);
             return new Result(process.exitValue() == 0, bytes.toString(StandardCharsets.UTF_8));
         } catch (Exception error) { return new Result(false, error.getMessage()); }
@@ -116,6 +129,14 @@ public final class RuntimeFabric {
     private static void require(boolean value, String message) { if (!value) throw new IllegalArgumentException(message); }
 
     private static void selfTest() throws Exception {
+        Process probe = new ProcessBuilder(java(), "tools/containers/TerminationTreeProbe.java", "parent")
+                .redirectOutput(ProcessBuilder.Redirect.DISCARD)
+                .redirectError(ProcessBuilder.Redirect.DISCARD).start();
+        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(10);
+        while (probe.descendants().findAny().isEmpty() && System.nanoTime() < deadline)
+            Thread.sleep(20L);
+        require(probe.descendants().findAny().isPresent(), "termination probe did not create a child");
+        terminate(probe);
         Capabilities windows = new Capabilities(true, "windows", "ntfs", true, false, false, false, false, true, false);
         require(select("auto", "balanced", windows).equals("windows-job"), "Windows auto-selection drift");
         require(select("auto", "sealed", windows).equals("windows-appcontainer"), "Windows sealed fail-closed drift");
