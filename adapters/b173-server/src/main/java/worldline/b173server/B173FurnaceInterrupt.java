@@ -9,7 +9,7 @@ import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteItemStack;
 import worldline.api.RemoteWindowKind;
 
-/** Smoke-local Packet102 take/store for furnace input and fuel slots. */
+/** Reusable Packet102 take/store contract for furnace input and fuel slots. */
 public final class B173FurnaceInterrupt {
     private static final RemoteItemStack COBBLE = new RemoteItemStack(4, 1, 0);
     private static final RemoteItemStack COAL = new RemoteItemStack(263, 1, 0);

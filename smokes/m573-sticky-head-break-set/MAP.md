@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m573-sticky-head-break-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=eb5e939b57ac0f6890a4d5bbb17ff700d690d6f8d3384748b4e3afd1ad0e0869 -->
+
 # M573 behavior map
 
 The cloned M144 west-facing sticky arm occupies one raised stone column.

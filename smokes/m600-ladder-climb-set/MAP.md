@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m600-ladder-climb-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=70add79ff9fcd22f9d99b2ade7b5e0033e213175af28ac85e8b18b07e24966e3 -->
+
 # M600 behavior map
 
 The fixture raises a two-cell stone wall and Packet15-places ladder item `65`

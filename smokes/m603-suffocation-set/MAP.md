@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m603-suffocation-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=44cc512b3c80b3718cd2020ff5c519953203cef75b1a8b455fc22ed6213beae7 -->
+
 # M603 behavior map
 
 A raised stone column hosts M307's falling-sand head bury without water or

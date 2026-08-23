@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m581-item-stack-merge-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=e4e993fb7359eaf26b59c61d904faefeef4a3fa3e5193f800d5a8538015a22fc -->
+
 # M581 behavior map
 
 Two identical stone stacks are Q-dropped from hotbar slots 0 and 1 while the

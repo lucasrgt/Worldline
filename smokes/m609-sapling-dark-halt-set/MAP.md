@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m609-sapling-dark-halt-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=84a2148a1d8deae33271631d42a13f4a1c9e2727173bbd5f428463d0747134c7 -->
+
 # M609 sapling dark halt behavior map
 
 Packet15 of dirt item `3` and oak sapling item `6` builds a raised-stone

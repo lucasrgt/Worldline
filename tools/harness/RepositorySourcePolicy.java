@@ -23,6 +23,7 @@ final class RepositorySourcePolicy {
         SharedHelperPinCheck.execute(root); UnicodePinCheck.execute(root); AdapterSplitPinCheck.execute(root);
         ProviderDiscoveryPinCheck.execute(root); GuiWorkbenchPinCheck.execute(root);
         BehaviorFamilyPinCheck.execute(root);
+        TrainPinCheck.execute(root);
         new DocumentationCatalog(root).execute();
         BehaviorMapSchemaCheck.execute(root); RetryMigrationCheck.execute(root);
         FixedWaitMigrationCheck.execute(root); new SourceQualityCheck(root).execute();

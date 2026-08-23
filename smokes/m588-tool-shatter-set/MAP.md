@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m588-tool-shatter-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=f1fe9cfe500117ca6ec28bf02fd1afd06a79fd20a1415660e79bbdcb77346a54 -->
+
 # M588 behavior map
 
 The M208 raised stone column hosts cobble `4:0` in one session. Packet14

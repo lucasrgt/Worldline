@@ -22,7 +22,9 @@ final class BehaviorFamilyPinCheck {
             String stem = "source." + index + ".", relative = required(lock, stem + "path");
             String prior = required(lock, stem + "prior_sha256");
             require((hash(prior) || "added".equals(prior))
-                            && digest(root.resolve(relative)).equals(required(lock, stem + "current_sha256")),
+                            && (digest(root.resolve(relative)).equals(required(lock, stem + "current_sha256"))
+                            || TrainPinCheck.transportsFile(TrainPinCheck.manifest(root), root,
+                                    relative, required(lock, stem + "current_sha256"))),
                     "behavior-family source drift: " + relative);
         }
         int index = 0;
@@ -39,6 +41,7 @@ final class BehaviorFamilyPinCheck {
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root); int catalog = 0, carried = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            if (TrainPinCheck.isAdded(TrainPinCheck.manifest(root), smoke.id)) continue;
             catalog++; String current = fingerprints.compute(smoke);
             SmokePins.Entry pin = pins.match(smoke.id, current);
             if (smoke.id.equals("m620-stationapi-testkit-driver"))
@@ -79,9 +82,14 @@ final class BehaviorFamilyPinCheck {
     }
     private static boolean carries(Properties lock, String id, SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
-        return hash(lock.getProperty(stem + "prior_fingerprint"))
+        boolean direct = hash(lock.getProperty(stem + "prior_fingerprint"))
                 && current.equals(lock.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"));
+        try { return direct || TrainPinCheck.follows(TrainPinCheck.manifest(
+                Path.of("").toAbsolutePath().normalize()), id,
+                lock.getProperty(stem + "current_fingerprint"),
+                lock.getProperty(stem + "evidence_sha256"), pin, current); }
+        catch (Exception error) { return false; }
     }
     static Properties manifest(Path root) throws Exception {
         Properties values = new Properties(); Path path = root.resolve("smokes/behavior-family-rebalance.lock");

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m612-piston-push-entity-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=f34c4db7ef2aa8add3324a61994478d128f556aa31a3f55a6e70bdc348377f3f -->
+
 # M612 behavior map
 
 The cloned west-facing piston family occupies one raised stone column with

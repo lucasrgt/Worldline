@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m572-detector-rail-vacate-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=fddc5e78e37e693e02add3085bf1e0c53f9d464a11c3784f5b7814b28274f5ba -->
+
 # M572 behavior map
 
 The cloned raised stone column keeps detector rail `28` on the original

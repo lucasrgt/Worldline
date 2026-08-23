@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m593-door-upper-break-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ff0b9e220d130cc2f0c5f67eabccc0b161c409c17334c027717bda1cab2aa07a -->
+
 # M593 behavior map
 
 The cloned M162 west-facing wooden door occupies one raised stone column.

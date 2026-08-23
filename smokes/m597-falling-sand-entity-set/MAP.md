@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m597-falling-sand-entity-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=cc5127dcadf21010c8d1a840f832d3e1b95b803bd2b8d74dd7a5c77984a7328b -->
+
 # M597 behavior map
 
 The official fixture stabilizes stone `1:0` at `(4,64,4)` with sand `12:0`

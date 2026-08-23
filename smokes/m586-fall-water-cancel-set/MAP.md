@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m586-fall-water-cancel-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=86e26ad940cc22ea7b653cdcde5be882da3a7d531b60f1da99787f6d9a4bd7a2 -->
+
 # M586 behavior map
 
 A raised-stone column plus east still-water 9 pool hosts one official

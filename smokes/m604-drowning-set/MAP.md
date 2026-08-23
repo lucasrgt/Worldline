@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m604-drowning-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=be6df540130ff955f1e6aa69fc938d51bcf8c9f3e219730af9ff0207ee88bc5d -->
+
 # M604 drowning set behavior map
 
 A raised stone column hosts two-deep still water `8/9` over the eye. The

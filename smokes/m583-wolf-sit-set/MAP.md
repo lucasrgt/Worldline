@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m583-wolf-sit-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=56eb02100c063bedf32f982e6d7e66bd756ad07848f21c62443cd90b26786659 -->
+
 # M583 behavior map
 
 The fixture raises an isolated `7×7` grass platform and places one default

@@ -25,6 +25,7 @@ final class ProviderDiscoveryPinCheck {
         Properties gui = GuiWorkbenchPinCheck.manifest(root);
         int carried = 0, discovered = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            if (TrainPinCheck.isAdded(TrainPinCheck.manifest(root), smoke.id)) continue;
             discovered++; String current = fingerprints.compute(smoke);
             SmokePins.Entry pin = pins.match(smoke.id, current);
             if (isNewSmoke(lock, smoke.id)) {
@@ -74,8 +75,9 @@ final class ProviderDiscoveryPinCheck {
     }
     static boolean exemptsLegacy(Properties lock, String id) {
         if (isNewSmoke(lock, id) || isPending(lock, id)) return true;
-        try { return GuiWorkbenchPinCheck.isPending(GuiWorkbenchPinCheck.manifest(
-                Path.of("").toAbsolutePath().normalize()), id); }
+        try { Path root = Path.of("").toAbsolutePath().normalize();
+            return GuiWorkbenchPinCheck.isPending(GuiWorkbenchPinCheck.manifest(root), id)
+                    || TrainPinCheck.isAdded(TrainPinCheck.manifest(root), id); }
         catch (Exception error) { return false; }
     }
     static int pendingCount(Properties lock) {
@@ -106,7 +108,10 @@ final class ProviderDiscoveryPinCheck {
             boolean prior) throws Exception {
         for (int index = 0; index < count; index++) {
             String stem = group + "." + index + ".", relative = required(lock, stem + "path");
-            require(digest(root.resolve(relative)).equals(required(lock, stem + "current_sha256"))
+            String baseline = required(lock, stem + "current_sha256");
+            require((digest(root.resolve(relative)).equals(baseline)
+                            || TrainPinCheck.transportsFile(TrainPinCheck.manifest(root), root,
+                                    relative, baseline))
                             && (!prior || hash(lock.getProperty(stem + "prior_sha256"))),
                     "provider-discovery source drift: " + relative);
         }

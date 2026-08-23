@@ -517,6 +517,49 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m566-grass-spread-set` | CARRIED | Grass spread set |
 | `m567-bed-spawn-set` | CARRIED | Bed spawn set |
 | `m569-spawner-delay-set` | CARRIED | Spawner delay set |
+| `m570-repeater-diode-set` | CARRIED | repeater diode set |
+| `m571-redstone-ore-glow-set` | CARRIED | redstone ore glow set |
+| `m572-detector-rail-vacate-set` | CARRIED | detector rail vacate set |
+| `m573-sticky-head-break-set` | CARRIED | sticky head break set |
+| `m574-mushroom-spread-set` | CARRIED | mushroom spread set |
+| `m575-grass-die-cover-set` | CARRIED | grass die cover set |
+| `m576-farmland-trample-set` | CARRIED | farmland trample set |
+| `m577-wheat-light-halt-set` | CARRIED | wheat light halt set |
+| `m578-cactus-adjacent-break-set` | CARRIED | cactus adjacent break set |
+| `m579-boat-current-push-set` | CARRIED | boat current push |
+| `m580-minecart-derail-set` | CARRIED | minecart derail set |
+| `m581-item-stack-merge-set` | CARRIED | item stack merge |
+| `m582-painting-support-break-set` | CARRIED | painting support break set |
+| `m583-wolf-sit-set` | CARRIED | wolf sit set |
+| `m585-armor-durability-hit-set` | CARRIED | armor durability hit |
+| `m586-fall-water-cancel-set` | CARRIED | fall water cancel set |
+| `m587-bow-shot-durability-set` | CARRIED | bow shot durability set |
+| `m588-tool-shatter-set` | CARRIED | tool shatter set |
+| `m590-ghast-fireball-punch-set` | CARRIED | Ghast fireball punch set |
+| `m591-furnace-smelt-interrupt-set` | CARRIED | furnace smelt interrupt set |
+| `m592-chest-break-spill-set` | CARRIED | chest break spill set |
+| `m593-door-upper-break-set` | CARRIED | door upper break set |
+| `m594-netherrack-fire-persist-set` | CARRIED | netherrack fire persist |
+| `m595-powered-rail-brake-set` | CARRIED | powered rail brake set |
+| `m596-furnace-cart-push-set` | CARRIED | furnace cart push set |
+| `m597-falling-sand-entity-set` | CARRIED | falling sand entity set |
+| `m598-gravel-fall-set` | CARRIED | gravel fall set |
+| `m599-torch-wash-set` | CARRIED | torch wash set |
+| `m600-ladder-climb-set` | CARRIED | ladder climb set |
+| `m603-suffocation-set` | CARRIED | suffocation set |
+| `m604-drowning-set` | CARRIED | drowning set |
+| `m605-lava-damage-set` | CARRIED | lava damage set |
+| `m606-fire-spread-wood-set` | CARRIED | fire spread wood set |
+| `m607-sugar-cane-dry-break-set` | CARRIED | sugar cane dry break set |
+| `m608-farmland-dry-set` | CARRIED | farmland dry set |
+| `m609-sapling-dark-halt-set` | CARRIED | sapling dark halt set |
+| `m610-ice-melt-light-set` | CARRIED | Ice melt light set |
+| `m611-double-chest-merge-set` | CARRIED | double chest merge |
+| `m612-piston-push-entity-set` | CARRIED | piston push entity set |
+| `m613-sticky-piston-bud-set` | CARRIED | sticky piston BUD set |
+| `m615-redstone-one-tick-set` | CARRIED | redstone one tick set |
+| `m616-portal-search-radius-set` | CARRIED | portal search radius set |
+| `m617-spawn-light-cap-set` | CARRIED | spawn light cap set |
 | `m620-stationapi-testkit-driver` | PENDING | StationAPI TestKit driver |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |

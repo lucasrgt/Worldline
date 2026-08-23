@@ -42,8 +42,7 @@ public final class BehaviorCompletenessCheck {
 
     private void execute() throws Exception {
         loadPolicy();
-        loadCatalog("WorldlineBehavior.java", behaviorCatalog);
-        loadCatalog("WorldlinePlacementBehaviors.java", behaviorCatalog);
+        loadBehaviorCatalog();
         loadCatalog("WorldlineContract.java", contractCatalog);
         int complete = 0, pending = 0, total = 0;
         for (Path manifest : manifests()) {
@@ -76,10 +75,26 @@ public final class BehaviorCompletenessCheck {
     }
 
     private void loadCatalog(String file, Set<String> target) throws IOException {
-        Path source = root.resolve("modules/api/src/main/java/worldline/api").resolve(file);
+        loadCatalog(root.resolve("modules/api/src/main/java/worldline/api").resolve(file), target);
+        require(!target.isEmpty(), "empty contract catalog " + file);
+    }
+
+    private void loadBehaviorCatalog() throws IOException {
+        Path directory = root.resolve("modules/api/src/main/java/worldline/api");
+        try (Stream<Path> paths = Files.list(directory)) {
+            List<Path> sources = paths.filter(path -> {
+                String name = path.getFileName().toString();
+                return name.equals("WorldlineBehavior.java")
+                        || name.matches("Worldline[A-Za-z]+Behaviors\\.java");
+            }).sorted().collect(Collectors.toList());
+            for (Path source : sources) loadCatalog(source, behaviorCatalog);
+        }
+        require(!behaviorCatalog.isEmpty(), "empty behavior catalog");
+    }
+
+    private void loadCatalog(Path source, Set<String> target) throws IOException {
         Matcher matcher = CATALOG.matcher(new String(Files.readAllBytes(source), StandardCharsets.UTF_8));
         while (matcher.find()) require(target.add(matcher.group(1)), "duplicate contract catalog token");
-        require(!target.isEmpty(), "empty contract catalog " + file);
     }
 
     private List<Path> manifests() throws IOException {

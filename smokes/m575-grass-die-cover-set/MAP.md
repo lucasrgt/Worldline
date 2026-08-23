@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m575-grass-die-cover-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=eba768ee294d89efacd60974254f64334d6ac35bdd21603215f427be90ac5735 -->
+
 # M575 behavior map
 
 Packet15 of grass item `2` builds a small raised-stone pad: an 8-cell

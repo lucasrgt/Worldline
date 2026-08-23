@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m594-netherrack-fire-persist-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=4ae2baf1dfa018b12ca7517f9660064ac936c01f90c9a76e84a3b25da95e8683 -->
+
 # M594 netherrack fire persist behavior map
 
 An isolated Overworld stone column places netherrack `87` with flint-and-steel

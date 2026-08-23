@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m571-redstone-ore-glow-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=0f6e8216f809dfc39632b18769fef8f62e2c12e4481958e5f135b515484f8098 -->
+
 # M571 behavior map
 
 Packet15 places unlit redstone ore `73:0` as an east-floor cell beside a

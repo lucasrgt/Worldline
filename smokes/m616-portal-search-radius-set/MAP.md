@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m616-portal-search-radius-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=b02e249055f3b7e33408a01b9ff5d87260c5eaf3e048ec11833a224d36a507f1 -->
+
 # M616 behavior map
 
 One official session builds the M382 `4x5` obsidian `49` frame, ignites

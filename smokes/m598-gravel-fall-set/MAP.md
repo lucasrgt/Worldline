@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m598-gravel-fall-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=18cfe17d0447d6e4b77b09df02092118df5f6b7ed58ee4697eb9882468eed37d -->
+
 # M598 behavior map
 
 The official fixture stabilizes stone `1:0` at `(4,64,4)` with gravel `13:0`

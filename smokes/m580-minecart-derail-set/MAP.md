@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m580-minecart-derail-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=9a06308be99ac4a6a13c76abece74b644f9ea0a60d00a90359bfe184f77bce87 -->
+
 # M580 behavior map
 
 One official session builds a raised north-south dead-end: a stone wall north of

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m613-sticky-piston-bud-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c7534ac9584d6c604adde51862169dee47dad42321b5b51a6a32d7d4e354d4d4 -->
+
 # M613 sticky piston BUD behavior map
 
 The cloned west-facing sticky arm occupies the raised stone column.

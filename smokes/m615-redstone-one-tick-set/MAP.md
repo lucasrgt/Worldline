@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m615-redstone-one-tick-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=21d4ac5bbdf54331350d6fd27043f140c2b7d3930a4466bb8c191d0c7fd93a8a -->
+
 # M615 redstone one-tick set behavior map
 
 A raised west-facing sticky piston `29:4` is powered from the cloned M142

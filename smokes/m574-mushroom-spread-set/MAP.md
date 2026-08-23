@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m574-mushroom-spread-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c811235b7974b4ef624d19676213d5795b8b284eb89feb64110d5dc20703b076 -->
+
 # M574 behavior map
 
 Packet15 of brown mushroom item `39` and red mushroom item `40` builds a

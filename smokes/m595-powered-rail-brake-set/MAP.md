@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m595-powered-rail-brake-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=9af61c7c0e4b8e165e1a7d94f70410c5bff7e66102a757de60a02f08077ffa38 -->
+
 # M595 powered rail brake set behavior map
 
 One official session builds a raised north-south track: a stone wall north of

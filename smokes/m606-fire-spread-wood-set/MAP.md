@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m606-fire-spread-wood-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=4b6a960897e496015d385c4ad2f648d15557860809b692c0e544595f6635f9bc -->
+
 # M606 behavior map
 
 Packet15 of flint-and-steel item `259` on netherrack `87` places fire `51`

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m617-spawn-light-cap-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=7b7f1afdfd24186f8c299874e34b09f3ab9ff8edd782a7b955a91ebd8d042d20 -->
+
 # M617 behavior map
 
 The fixture raises an isolated `7×7` grass platform and places two default

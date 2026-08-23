@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m576-farmland-trample-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=460485cad949455638ecc3bf33174cb4a4e28e8d8a0ef7c1f26a829cfdfe72ba -->
+
 # M576 farmland trample set behavior map
 
 Packet15 of wooden hoe `290` only tills dirt `3` into dry farmland `60:0`

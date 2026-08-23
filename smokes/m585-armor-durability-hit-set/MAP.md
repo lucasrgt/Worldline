@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m585-armor-durability-hit-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=a8ddc5a76726f9c1afd03c7f4dcbf222f0b8197112369ff2f8e5630a3c31b6c3 -->
+
 # M585 behavior map
 
 A raised `7x7` grass platform with a one-block stone rim seats iron

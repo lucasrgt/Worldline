@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m577-wheat-light-halt-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=4afa82e0dca6bebe303f9a381e5dbd2b69bd22f7d2f13a32082b6c262cadb425 -->
+
 # M577 wheat light halt behavior map
 
 Packet15 of wooden hoe `290` and seeds `295` builds a small raised-stone

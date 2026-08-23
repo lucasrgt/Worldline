@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m590-ghast-fireball-punch-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ccf294e6ee17b1c7670374e4d95dc9de2b663e720f0b137c14a1c6436e89bdbb -->
+
 # M590 behavior map
 
 Official server symbols:

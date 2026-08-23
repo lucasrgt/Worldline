@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m611-double-chest-merge-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=638adc227adc9c23b9840e4745a2596cd5dde899442a3510271da150d03980c9 -->
+
 # M611 behavior map
 
 The fixture raises a two-block stone pad and places one chest `54:0`. Empty-hand

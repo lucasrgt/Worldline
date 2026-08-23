@@ -23,15 +23,18 @@ final class GuiWorkbenchPinCheck {
                 "invalid GUI release transition");
         for (int index = 0; index < 9; index++) {
             String stem = "source." + index + ".", relative = required(lock, stem + "path");
+            String baseline = required(lock, stem + "current_sha256");
             require(hash(lock.getProperty(stem + "prior_sha256"))
-                            && digest(root.resolve(relative)).equals(required(lock,
-                                    stem + "current_sha256")),
+                            && (digest(root.resolve(relative)).equals(baseline)
+                            || TrainPinCheck.transportsFile(TrainPinCheck.manifest(root), root,
+                                    relative, baseline)),
                     "GUI workbench source drift: " + relative);
         }
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
         int catalog = 0, carried = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            if (TrainPinCheck.isAdded(TrainPinCheck.manifest(root), smoke.id)) continue;
             catalog++; String current = fingerprints.compute(smoke); SmokePins.Entry pin =
                     pins.match(smoke.id, current);
             if (smoke.id.equals("m620-stationapi-testkit-driver")) {

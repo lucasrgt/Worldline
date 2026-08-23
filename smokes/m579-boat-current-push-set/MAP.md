@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m579-boat-current-push-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=8f1abed600a6a2597af5298ac5a9d410beadf7afc3fdd328745db2eb2236359e -->
+
 # M579 behavior map
 
 The fixture raises an isolated stone channel, places still water `9:0` at

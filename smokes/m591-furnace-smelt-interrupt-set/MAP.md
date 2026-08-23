@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m591-furnace-smelt-interrupt-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=b201db62647312f9c38b74691f478bc5177a508b9e0894c9dfd00069df7cb689 -->
+
 # M591 furnace smelt interrupt set behavior map
 
 Packet15 places three idle furnaces `61:2` on a raised stone fixture. Each

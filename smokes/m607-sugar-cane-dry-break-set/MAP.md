@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m607-sugar-cane-dry-break-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=fc510e49797e7209a3a92a1d34c5ddd918cbfc34b4942d10af06278b6eaf57f4 -->
+
 # M607 behavior map
 
 A raised stone column receives dirt `3:0` beside still water `9:0`.

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m596-furnace-cart-push-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=85b06a12ed93aa87614723a204c8f89a318c0fdc443933ffc5860da62949a8f6 -->
+
 # M596 furnace cart push behavior map
 
 One official session builds a raised north-south track: a stone wall north of

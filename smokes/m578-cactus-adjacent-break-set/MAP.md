@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m578-cactus-adjacent-break-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=437e319b299a6629b32f3d6d89b00e7ce02d3f26fdb1300eeace32cc656301ca -->
+
 # M578 behavior map
 
 A raised stone column receives sand `12:0`. Packet15 plants cactus item

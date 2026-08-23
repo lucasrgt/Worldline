@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m570-repeater-diode-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=82681454d27796440d2c56cc8d0a67ef9f43084871bd0b155424f9b01f827c90 -->
+
 # M570-REPEATER-DIODE-SET repeater diode set behavior map
 
 The cloned M170 west-facing repeater occupies one raised stone column.

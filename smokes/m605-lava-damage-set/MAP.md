@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m605-lava-damage-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ee5b9cd5369a69732b8def74eb28c5cb2ea094f821a491fc7e3c7c5937945a99 -->
+
 # M605 lava damage set behavior map
 
 A raised stone basin receives still lava `11:0` from lava bucket `327`. The

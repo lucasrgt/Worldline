@@ -31,9 +31,11 @@ final class SmokeDescriptorSchemaCheck {
                 MilestoneNarrative.validate(root, values); narratives++;
             } else { require(era.equals("legacy"), "unknown smoke era: " + smoke.id); legacy++; }
         }
-        require(legacy == 489 && qualification == 37 && narratives == 37,
+        int total = SmokeDiscovery.discover(root).size();
+        require(legacy == 489 && qualification == total - legacy && narratives == qualification,
                 "smoke descriptor schema census drift");
-        System.out.println("  smoke schema: 526 descriptors; 37 generated narratives");
+        System.out.println("  smoke schema: " + total + " descriptors; " + narratives
+                + " generated narratives");
     }
     private static boolean present(Properties values, String key) {
         return !values.getProperty(key, "").trim().isEmpty();

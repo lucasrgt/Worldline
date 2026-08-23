@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m587-bow-shot-durability-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=caf95c2a196f0ce5fe2bf058118dda511ea834261ccf2075344d705ccb9ed5e0 -->
+
 # M587 behavior map
 
 A raised-stone column hosts seeded bow `261` plus one arrow `262`. Packet15

@@ -26,8 +26,6 @@ public final class WorldlineBehavior {
             WorldlineFamily.PLAYER, "Bed occupy interrupted by nearby hostile");
     public static final WorldlineBehavior BOW_MOB_HIT = define("bow-mob-hit", WorldlineFamily.ITEM,
             "Player bow type-60 hits pig and zombie");
-    public static final WorldlineBehavior BOW_SHOT_DURABILITY = define("bow-shot-durability",
-            WorldlineFamily.ITEM, "Bow air-use remaining held-stack damage");
     public static final WorldlineBehavior DIFFICULTY_DAMAGE = define("difficulty-damage", WorldlineFamily.WORLD,
             "Easy then Hard zombie melee Packet8");
     public static final WorldlineBehavior VOID_DEATH = define("void-death", WorldlineFamily.ENVIRONMENT,
@@ -114,8 +112,6 @@ public final class WorldlineBehavior {
             "Sleeping sets the subsequent same-dimension respawn at the bed");
     public static final WorldlineBehavior FARMLAND_STATE = define("farmland-state", WorldlineFamily.ENVIRONMENT,
             "Hoe tilling, trampling, and nearby-water hydration update farmland state");
-    public static final WorldlineBehavior FARMLAND_TRAMPLE = define("farmland-trample", WorldlineFamily.ENVIRONMENT,
-            "Player fall or jump onto farmland converts it to dirt");
     public static final WorldlineBehavior PLANT_GROWTH = define("plant-growth", WorldlineFamily.ENVIRONMENT,
             "Sapling, crop, cactus, and sugar-cane growth under valid conditions");
     public static final WorldlineBehavior CROP_PLANTING = define("crop-planting", WorldlineFamily.ITEM,
@@ -126,14 +122,10 @@ public final class WorldlineBehavior {
             "Leaves decay after their supporting logs are removed");
     public static final WorldlineBehavior GRASS_SPREAD = define("grass-spread", WorldlineFamily.ENVIRONMENT,
             "Lit exposed dirt becomes grass while covered dirt remains unchanged");
-    public static final WorldlineBehavior MUSHROOM_SPREAD = define("mushroom-spread", WorldlineFamily.ENVIRONMENT,
-            "Dark mushrooms spread onto adjacent opaque air while glass stays empty");
     public static final WorldlineBehavior LIGHT_OPACITY = define("light-opacity", WorldlineFamily.ENVIRONMENT,
             "Glass, ice, and leaves preserve their distinct skylight attenuation");
     public static final WorldlineBehavior LIGHT_MELTING = define("light-melting", WorldlineFamily.ENVIRONMENT,
             "Torch light melts snow to air and ice to water");
-    public static final WorldlineBehavior SPAWN_LIGHT_CAP = define("spawn-light-cap", WorldlineFamily.HOSTILE,
-            "Hostile spawn is blocked at light >= 8 and permitted in darkness");
     public static final WorldlineBehavior WOODEN_DOOR_TOGGLE = define("wooden-door-toggle", WorldlineFamily.REDSTONE,
             "Direct activation opens and closes both wooden-door cells");
     public static final WorldlineBehavior TRAPDOOR_TOGGLE = define("trapdoor-toggle", WorldlineFamily.REDSTONE,
@@ -152,8 +144,6 @@ public final class WorldlineBehavior {
             WorldlineFamily.REDSTONE, "Power above a dispenser triggers its loaded item without adjacent power");
     public static final WorldlineBehavior TNT_QUASI_CONNECTIVITY = define("tnt-quasi-connectivity",
             WorldlineFamily.REDSTONE, "Power above TNT primes its entity and produces a strength-four explosion");
-    public static final WorldlineBehavior ONE_TICK_PISTON_PULSE = define("one-tick-piston-pulse",
-            WorldlineFamily.REDSTONE, "A one-tick repeater pulse makes a piston drop its pushed payload");
     public static final WorldlineBehavior CAKE_CONSUMPTION = define("cake-consumption", WorldlineFamily.ITEM,
             "Cake activation advances bite metadata, heals, and removes the final slice");
     public static final WorldlineBehavior TOOL_BLOCK_BREAK = define("tool-block-break", WorldlineFamily.ITEM,
@@ -222,12 +212,8 @@ public final class WorldlineBehavior {
             "Untamed wolf retaliation after a player attack");
     public static final WorldlineBehavior ARMOR_REDUCTION = define("armor-reduction", WorldlineFamily.PLAYER,
             "Equipped armor reduces incoming hostile melee damage");
-    public static final WorldlineBehavior ARMOR_DURABILITY_HIT = define("armor-durability-hit",
-            WorldlineFamily.PLAYER, "Worn armor loses durability after a hostile melee hit");
     public static final WorldlineBehavior FALL_DAMAGE = define("fall-damage", WorldlineFamily.PLAYER,
             "Greater fall distance produces greater server-authored health loss");
-    public static final WorldlineBehavior FALL_WATER_CANCEL = define("fall-water-cancel", WorldlineFamily.PLAYER,
-            "Damaging-height water landing emits no fall Packet8");
     public static final WorldlineBehavior EXPLOSION_PLAYER_DAMAGE = define("explosion-player-damage",
             WorldlineFamily.PLAYER, "TNT and creeper explosions damage a surviving nearby player");
     public static final WorldlineBehavior SQUID_LAND_DEATH = define("squid-land-death", WorldlineFamily.HOSTILE,
@@ -240,14 +226,16 @@ public final class WorldlineBehavior {
             "Portal travel creates a missing destination frame away from the source");
     public static final WorldlineBehavior SPAWNER_DELAY = define("spawner-delay", WorldlineFamily.HOSTILE,
             "Spawner delay blocks distant activation and permits a nearby spawn");
-    private static final Map<String, WorldlineBehavior> BY_TOKEN = WorldlinePlacementBehaviors.freeze();
+    private static final Map<String, WorldlineBehavior> BY_TOKEN = WorldlineBehaviorCatalog.freeze();
     private final String token, family, subject;
 
     WorldlineBehavior(String token, String family, String subject) {
         this.token = token; this.family = family; this.subject = subject;
     }
 
-    public String token() { return token; } public String family() { return family; } public String subject() { return subject; }
+    public String token() { return token; }
+    public String family() { return family; }
+    public String subject() { return subject; }
     public String atlasId() { return "atlas.scenario." + token; }
 
     public static WorldlineBehavior require(String tokenOrAtlasOrProgress) {

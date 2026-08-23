@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m582-painting-support-break-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=10031f7cd4b860e20a01c8677180286b98d788c6ab5ce7d754879b484a81000d -->
+
 # M582 behavior map
 
 Painting item `321` hangs on the cloned M177 raised 2x2 stone wall through

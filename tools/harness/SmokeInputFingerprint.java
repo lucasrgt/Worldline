@@ -132,7 +132,8 @@ final class SmokeInputFingerprint {
     private static boolean qualificationOnly(String key) {
         return key.equals("behavior") || key.startsWith("expected.") || key.startsWith("atlas.")
                 || key.startsWith("testkit.") || key.startsWith("qualification.")
-                || key.startsWith("performance.") || key.endsWith("mapping.sha256");
+                || key.equals("cycle.migration") || key.startsWith("performance.")
+                || key.endsWith("mapping.sha256");
     }
 
     private void addSharedInputs(MessageDigest digest, String id, boolean qualification)

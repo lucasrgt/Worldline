@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m592-chest-break-spill-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=61d5e21ae388e4eae74bbff8642019d5e46c6cf82e538dc89c58f7d71562685b -->
+
 # M592 chest break spill behavior map
 
 The fixture raises isolated stone and places one official chest `54:0`.

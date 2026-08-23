@@ -1,5 +1,5 @@
 schema=1
 id=m433-remaining-chest-orient-set
-fingerprint=1d7e39ca93170b91786820636bce78be3b0040018a228f059fd2e69f9fcab9fd
+fingerprint=40ca673aaf2f11030cd9efe2f85c9d1ca8df4514aef61d7550e98bb8b59cda5f
 observation.sha256=b9750e81a03028d1bb7345d6699d951772dea723fefb2cb303312f4c43423f03
 source=refactor-equivalent

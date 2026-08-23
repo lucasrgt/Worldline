@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m608-farmland-dry-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=26798de451d0b61504e1945d3196c64186f4c482b60481d9d1b06a61303e1531 -->
+
 # M608 farmland dry set behavior map
 
 Packet15 of wooden hoe `290` only tills isolated dirt `3` into dry

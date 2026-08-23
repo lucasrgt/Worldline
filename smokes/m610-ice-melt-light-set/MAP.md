@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m610-ice-melt-light-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=63ded528e3f7faed4c46a7fcdc0d097771b808128f8d977e3034bf8b390230a0 -->
+
 # M610 behavior map
 
 The M193 raised stone column hosts ice `79` beside one floor torch `50:5`

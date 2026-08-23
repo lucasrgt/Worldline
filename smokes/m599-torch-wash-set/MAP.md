@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m599-torch-wash-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=d262e072e7c810157ca1604a9cfa36fc4eb2e926588f44cee4bf41676177f38e -->
+
 # M599 torch wash set behavior map
 
 The fixture raises an isolated 3x3 stone platform. Floor torch `50:5` is
