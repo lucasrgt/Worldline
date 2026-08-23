@@ -17,7 +17,7 @@ remaining cursor item is outside this claim.
 
 Two fresh subject JVMs and two fresh official-oracle JVMs must produce the
 same trace and frozen signature
-`c7ae2df472b46293178079d3dd212552d9b9c6167fd95bf716de8d53e32a9d4d`.
+`37ecae34e07819aeb7d5d44e8a7abe7701d473147956f00d93e9abe917b5aa9e`.
 The frozen semantic signal is
 `inventory=player,source36=1x4,drag=36-to-37,secondary=37-and-38,result36=empty+37=1x2+38=1x1,oracle=MATCH`.
 
