@@ -1,33 +1,189 @@
 package worldline.smoke.creepercancelsetb173;
 
-import java.nio.charset.StandardCharsets;import java.nio.file.*;import java.security.MessageDigest;import java.time.Duration;import worldline.api.*;import worldline.b173server.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.time.Duration;
+import worldline.api.*;
+import worldline.b173server.*;
 
 /** Spawns official creeper type 50, proves Packet40 fuse, then leaves range so Packet60 stays absent. */
-public final class CreeperCancelSetSmoke{
- private CreeperCancelSetSmoke(){}
- public static void main(String[]a)throws Exception{
-  if(a.length!=7)throw new IllegalArgumentException("usage: CreeperCancelSetSmoke server.jar workspace port seed username chunkX chunkZ");
-  Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String user=a[4];int cx=Integer.parseInt(a[5]),cz=Integer.parseInt(a[6]);
-  require(seed==17320110707L&&user.equals("CreeperOff456")&&user.length()<=16,"creeper-cancel-set identity drift");
-  Duration timeout=Duration.ofSeconds(180);B173DedicatedServer server=B173DedicatedServer.monsters(jar,workspace,port,seed,timeout,3,true);B173WireClient actor=new B173WireClient("127.0.0.1",port,user,timeout);BlockPosition top,spawner;int column;
-  try{server.boot();B173PlayerSeed.writeInventory(workspace,user,4.5D,60D,4.5D,new int[]{0,1,2},new int[]{1,2,52},new int[]{32,48,1},new int[]{0,0,0});actor.connect();actor.synchronizePose();require(actor.awaitInventory().occupiedSlots()==3,"creeper-cancel-set inventory drift");RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);top=foundation(initial,cx,cz);column=0;actor.selectHeldSlot(0);
-   while(water(initial.blockAt(local(top.x(),cx),top.y()+1,local(top.z(),cz)).legacyId())){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);require(++column<=15,"water column exceeded creeper-cancel-set fixture");}for(int lift=0;lift<8;lift++){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);column++;}
-   actor.selectHeldSlot(1);for(int r=1;r<=3;r++){for(int z=-r+1;z<r;z++){grass(actor,new BlockPosition(top.x()-r+1,top.y(),top.z()+z),BlockFace.WEST);grass(actor,new BlockPosition(top.x()+r-1,top.y(),top.z()+z),BlockFace.EAST);}for(int x=-r+1;x<r;x++){grass(actor,new BlockPosition(top.x()+x,top.y(),top.z()-r+1),BlockFace.NORTH);grass(actor,new BlockPosition(top.x()+x,top.y(),top.z()+r-1),BlockFace.SOUTH);}grass(actor,new BlockPosition(top.x()-r,top.y(),top.z()-r+1),BlockFace.NORTH);grass(actor,new BlockPosition(top.x()-r,top.y(),top.z()+r-1),BlockFace.SOUTH);grass(actor,new BlockPosition(top.x()+r,top.y(),top.z()-r+1),BlockFace.NORTH);grass(actor,new BlockPosition(top.x()+r,top.y(),top.z()+r-1),BlockFace.SOUTH);}
-   actor.selectHeldSlot(2);spawner=place(actor,top,BlockFace.UP,52);B173CreeperCancelAccess.stand(actor,top);worldline.test.WorldlineSmokeAwait.observe(actor,5);actor.close();awaitPlayers(server,0);server.save();B173PlayerSeed.writeInventory(workspace,user,top.x()+0.5D,top.y()+1.0D,top.z()+0.5D,new int[]{0},new int[]{1},new int[]{8},new int[]{0});
-  }finally{actor.close();server.close();}
-  Thread.sleep(1000L);B173SpawnerSeed.entity(workspace,spawner,"Creeper");server=B173DedicatedServer.monsters(jar,workspace,port,seed,timeout,3,true);actor=new B173WireClient("127.0.0.1",port,user,timeout);
-  try{server.boot();actor.connect();actor.synchronizePose();require(actor.awaitInventory().occupiedSlots()>=1,"creeper-cancel-set reload inventory drift");
-   B173CreeperCancelAccess.stand(actor,top);server.setTime(14000L);RemoteMobSpawn creeper=B173CreeperCancelAccess.near(actor,top);require(creeper.legacyType()==50&&creeper.entityId()!=actor.state().entityId(),"creeper Packet24 type50 identity drift");
-   require(B173CreeperCancelAccess.awaitState(actor,creeper.entityId(),B173CreeperCancelAccess.IGNITE)==1,"creeper Packet40 index 16 ignite drift creeper="+creeper.x()+","+creeper.y()+","+creeper.z()+" pad="+top.x()+","+top.y()+","+top.z());
-   B173CreeperCancelAccess.fleeWest(actor);require(B173CreeperCancelAccess.awaitState(actor,creeper.entityId(),B173CreeperCancelAccess.CANCEL)==-1,"creeper Packet40 index 16 cancel drift");
-   worldline.test.WorldlineSmokeAwait.observe(actor,B173CreeperCancelAccess.WAIT);require(B173CreeperCancelAccess.peekExplosion(actor)==null&&B173ShearsAccess.peekDeath(actor,creeper.entityId())==null,"Packet60 arrived after creeper fuse cancel");
-   require(worldline.test.WorldlineSmokeAwait.observe(actor,1).blockAt(spawner.x(),spawner.y(),spawner.z()).equals(new BlockState(52,0))&&worldline.test.WorldlineSmokeAwait.observe(actor,1).blockAt(top.x(),top.y(),top.z()).legacyId()!=0,"creeper-cancel pad cratered like M391");
-   actor.close();awaitPlayers(server,0);server.save();
-   String evidence="column="+column+",platform=7x7-48grass,spawner="+spawner.x()+":"+spawner.y()+":"+spawner.z()+":52:0,entityid=Creeper,mob=type50,night=14000,fuse=packet40-16:1,cancel=packet40-16:-1,packet60=absent,wait=45,clients=2,disconnect=clean";String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=raised-7x7-grass-platform+spawner52|cause=nbt-entityid-creeper+time-14000+approach-then-leave-cap9|wire=packet24-type50+packet40-index16-1-then--1+no-packet60|oracle=creeper-fuse-cancel-set-not-explode3-not-gunpowder289|"+evidence;System.out.println("WORLDLINE_M456_SET="+evidence);System.out.println("WORLDLINE_M456_TRACE="+trace);System.out.println("WORLDLINE_M456_SIGNATURE="+sha(trace));
-  }finally{actor.close();server.close();}
- }
- private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}
- private static void grass(B173WireClient a,BlockPosition support,BlockFace face)throws Exception{int slot=-1;for(int s=0;s<=8;s++)if(!a.inventory().slot(36+s).empty()&&a.inventory().slot(36+s).item().legacyId()==2){slot=s;break;}require(slot>=0,"grass 2 exhausted");a.selectHeldSlot(slot);place(a,support,face,2);}
- private static BlockPosition foundation(RemoteChunkSnapshot q,int cx,int cz){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(q.blockAt(x,y,z).legacyId()==3&&water(q.blockAt(x,y+1,z).legacyId()))return new BlockPosition(cx*16+x,y,cz*16+z);throw new IllegalStateException("no deterministic creeper-cancel-set foundation");}
- private static boolean water(int id){return id==8||id==9;}private static int local(int v,int c){return v-c*16;}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long e=System.currentTimeMillis()+5000;while(System.currentTimeMillis()<e){if(s.players().size()==n)return;Thread.sleep(100);}throw new IllegalStateException("player count drift");}private static String sha(String s)throws Exception{byte[]b=MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));StringBuilder v=new StringBuilder();for(byte x:b)v.append(String.format("%02x",x&255));return v.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+public final class CreeperCancelSetSmoke {
+  private CreeperCancelSetSmoke() {
+  }
+  public static void main(String[] a) throws Exception {
+    if (a.length != 7)
+      throw new IllegalArgumentException(
+          "usage: CreeperCancelSetSmoke server.jar workspace port seed username chunkX chunkZ");
+    Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
+    int port = Integer.parseInt(a[2]);
+    long seed = Long.parseLong(a[3]);
+    String user = a[4];
+    int cx = Integer.parseInt(a[5]), cz = Integer.parseInt(a[6]);
+    require(seed == 17320110707L && user.equals("CreeperOff456") && user.length() <= 16,
+        "creeper-cancel-set identity drift");
+    Duration timeout = Duration.ofSeconds(180);
+    B173DedicatedServer server =
+        B173DedicatedServer.monsters(jar, workspace, port, seed, timeout, 3, true);
+    B173WireClient actor = new B173WireClient("127.0.0.1", port, user, timeout);
+    BlockPosition top, spawner;
+    int column;
+    try {
+      server.boot();
+      B173PlayerSeed.writeInventory(workspace, user, 4.5D, 60D, 4.5D, new int[] {0, 1, 2},
+          new int[] {1, 2, 52}, new int[] {32, 48, 1}, new int[] {0, 0, 0});
+      actor.connect();
+      actor.synchronizePose();
+      require(actor.awaitInventory().occupiedSlots() == 3, "creeper-cancel-set inventory drift");
+      RemoteChunkSnapshot initial = actor.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      top = foundation(initial, cx, cz);
+      column = 0;
+      actor.selectHeldSlot(0);
+      while (
+          water(initial.blockAt(local(top.x(), cx), top.y() + 1, local(top.z(), cz)).legacyId())) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        require(++column <= 15, "water column exceeded creeper-cancel-set fixture");
+      }
+      for (int lift = 0; lift < 8; lift++) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        column++;
+      }
+      actor.selectHeldSlot(1);
+      for (int r = 1; r <= 3; r++) {
+        for (int z = -r + 1; z < r; z++) {
+          grass(actor, new BlockPosition(top.x() - r + 1, top.y(), top.z() + z), BlockFace.WEST);
+          grass(actor, new BlockPosition(top.x() + r - 1, top.y(), top.z() + z), BlockFace.EAST);
+        }
+        for (int x = -r + 1; x < r; x++) {
+          grass(actor, new BlockPosition(top.x() + x, top.y(), top.z() - r + 1), BlockFace.NORTH);
+          grass(actor, new BlockPosition(top.x() + x, top.y(), top.z() + r - 1), BlockFace.SOUTH);
+        }
+        grass(actor, new BlockPosition(top.x() - r, top.y(), top.z() - r + 1), BlockFace.NORTH);
+        grass(actor, new BlockPosition(top.x() - r, top.y(), top.z() + r - 1), BlockFace.SOUTH);
+        grass(actor, new BlockPosition(top.x() + r, top.y(), top.z() - r + 1), BlockFace.NORTH);
+        grass(actor, new BlockPosition(top.x() + r, top.y(), top.z() + r - 1), BlockFace.SOUTH);
+      }
+      actor.selectHeldSlot(2);
+      spawner = place(actor, top, BlockFace.UP, 52);
+      B173CreeperCancelAccess.stand(actor, top);
+      worldline.test.WorldlineSmokeAwait.observe(actor, 5);
+      actor.close();
+      awaitPlayers(server, 0);
+      server.save();
+      B173PlayerSeed.writeInventory(workspace, user, top.x() + 0.5D, top.y() + 1.0D, top.z() + 0.5D,
+          new int[] {0}, new int[] {1}, new int[] {8}, new int[] {0});
+    } finally {
+      actor.close();
+      server.close();
+    }
+    Thread.sleep(1000L);
+    B173SpawnerSeed.entity(workspace, spawner, "Creeper");
+    server = B173DedicatedServer.monsters(jar, workspace, port, seed, timeout, 3, true);
+    actor = new B173WireClient("127.0.0.1", port, user, timeout);
+    try {
+      server.boot();
+      actor.connect();
+      actor.synchronizePose();
+      require(
+          actor.awaitInventory().occupiedSlots() >= 1, "creeper-cancel-set reload inventory drift");
+      B173CreeperCancelAccess.stand(actor, top);
+      server.setTime(14000L);
+      RemoteMobSpawn creeper = B173CreeperCancelAccess.near(actor, top);
+      require(creeper.legacyType() == 50 && creeper.entityId() != actor.state().entityId(),
+          "creeper Packet24 type50 identity drift");
+      require(B173CreeperCancelAccess.awaitState(
+                  actor, creeper.entityId(), B173CreeperCancelAccess.IGNITE)
+              == 1,
+          "creeper Packet40 index 16 ignite drift creeper=" + creeper.x() + "," + creeper.y() + ","
+              + creeper.z() + " pad=" + top.x() + "," + top.y() + "," + top.z());
+      B173CreeperCancelAccess.fleeWest(actor);
+      require(B173CreeperCancelAccess.awaitState(
+                  actor, creeper.entityId(), B173CreeperCancelAccess.CANCEL)
+              == -1,
+          "creeper Packet40 index 16 cancel drift");
+      worldline.test.WorldlineSmokeAwait.observe(actor, B173CreeperCancelAccess.WAIT);
+      require(B173CreeperCancelAccess.peekExplosion(actor) == null
+              && B173ShearsAccess.peekDeath(actor, creeper.entityId()) == null,
+          "Packet60 arrived after creeper fuse cancel");
+      require(worldline.test.WorldlineSmokeAwait.observe(actor, 1)
+                  .blockAt(spawner.x(), spawner.y(), spawner.z())
+                  .equals(new BlockState(52, 0))
+              && worldline.test.WorldlineSmokeAwait.observe(actor, 1)
+                      .blockAt(top.x(), top.y(), top.z())
+                      .legacyId()
+                  != 0,
+          "creeper-cancel pad cratered like M391");
+      actor.close();
+      awaitPlayers(server, 0);
+      server.save();
+      String evidence = "column=" + column + ",platform=7x7-48grass,spawner=" + spawner.x() + ":"
+          + spawner.y() + ":" + spawner.z()
+          + ":52:0,entityid=Creeper,mob=type50,night=14000,fuse=packet40-16:1,cancel=packet40-16:-1,packet60=absent,wait=45,clients=2,disconnect=clean";
+      String trace = "v1|server=official-b1.7.3|seed=" + seed
+          + "|fixture=raised-7x7-grass-platform+spawner52|cause=nbt-entityid-creeper+time-14000+approach-then-leave-cap9|wire=packet24-type50+packet40-index16-1-then--1+no-packet60|oracle=creeper-fuse-cancel-set-not-explode3-not-gunpowder289|"
+          + evidence;
+      System.out.println("WORLDLINE_M456_SET=" + evidence);
+      System.out.println("WORLDLINE_M456_TRACE=" + trace);
+      System.out.println("WORLDLINE_M456_SIGNATURE=" + sha(trace));
+    } finally {
+      actor.close();
+      server.close();
+    }
+  }
+  private static BlockPosition place(
+      B173WireClient a, BlockPosition support, BlockFace face, int id) throws Exception {
+    BlockPosition target = face.adjacent(support);
+    a.placeHeldBlock(support, face);
+    a.awaitBlock(target, new BlockState(id, 0));
+    return target;
+  }
+  private static void grass(B173WireClient a, BlockPosition support, BlockFace face)
+      throws Exception {
+    int slot = -1;
+    for (int s = 0; s <= 8; s++)
+      if (!a.inventory().slot(36 + s).empty()
+          && a.inventory().slot(36 + s).item().legacyId() == 2) {
+        slot = s;
+        break;
+      }
+    require(slot >= 0, "grass 2 exhausted");
+    a.selectHeldSlot(slot);
+    place(a, support, face, 2);
+  }
+  private static BlockPosition foundation(RemoteChunkSnapshot q, int cx, int cz) {
+    for (int x = 4; x <= 11; x++)
+      for (int z = 4; z <= 11; z++)
+        for (int y = 126; y >= 1; y--)
+          if (q.blockAt(x, y, z).legacyId() == 3 && water(q.blockAt(x, y + 1, z).legacyId()))
+            return new BlockPosition(cx * 16 + x, y, cz * 16 + z);
+    throw new IllegalStateException("no deterministic creeper-cancel-set foundation");
+  }
+  private static boolean water(int id) {
+    return id == 8 || id == 9;
+  }
+  private static int local(int v, int c) {
+    return v - c * 16;
+  }
+  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
+    long e = System.currentTimeMillis() + 5000;
+    while (System.currentTimeMillis() < e) {
+      if (s.players().size() == n)
+        return;
+      Thread.sleep(100);
+    }
+    throw new IllegalStateException("player count drift");
+  }
+  private static String sha(String s) throws Exception {
+    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
+    StringBuilder v = new StringBuilder();
+    for (byte x : b)
+      v.append(String.format("%02x", x & 255));
+    return v.toString();
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
 }

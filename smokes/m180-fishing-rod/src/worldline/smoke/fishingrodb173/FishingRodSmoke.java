@@ -1,22 +1,132 @@
 package worldline.smoke.fishingrodb173;
 
-import java.nio.charset.StandardCharsets;import java.nio.file.*;import java.security.MessageDigest;import java.time.Duration;import worldline.api.*;import worldline.b173server.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.time.Duration;
+import worldline.api.*;
+import worldline.b173server.*;
 
 /** Casts official fishing rod 346 from a raised stone platform and correlates Packet23 type 90. */
-public final class FishingRodSmoke{
- private FishingRodSmoke(){}
- public static void main(String[]a)throws Exception{
-  if(a.length!=8)throw new IllegalArgumentException("usage: FishingRodSmoke server.jar workspace port seed actor observer chunkX chunkZ");
-  Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String actorName=a[4],observerName=a[5];int cx=Integer.parseInt(a[6]),cz=Integer.parseInt(a[7]);Duration timeout=Duration.ofSeconds(90);
-  B173DedicatedServer server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true);B173WireClient actor=new B173WireClient("127.0.0.1",port,actorName,timeout),observer=new B173WireClient("127.0.0.1",port,observerName,timeout);BlockPosition top;int column,thrower;
-  try{server.boot();B173PlayerSeed.writeInventory(workspace,actorName,4.5D,60D,4.5D,new int[]{0,1},new int[]{1,346},new int[]{32,1},new int[]{0,0});B173PlayerSeed.write(workspace,observerName,4.5D,80D,4.5D);actor.connect();actor.synchronizePose();require(actor.awaitInventory().occupiedSlots()==2,"fishing-rod inventory drift");RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);top=foundation(initial,cx,cz);column=0;actor.selectHeldSlot(0);
-   while(water(initial.blockAt(local(top.x(),cx),top.y()+1,local(top.z(),cz)).legacyId())){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);require(++column<=15,"water column exceeded fishing-rod fixture");}for(int lift=0;lift<8;lift++){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);column++;}
-   observer.connect();observer.synchronizePose();observer.awaitRemoteChunk(cx,cz);actor.selectHeldSlot(1);actor.look(0F,0F);actor.useSelectedItemInAir();RemoteObjectSpawn spawn=actor.awaitObjectSpawn(90),peer=observer.awaitObjectSpawn(90);
-   thrower=spawn.throwerId();require(spawn.equals(peer)&&spawn.type()==90&&spawn.entityId()!=actor.state().entityId()&&spawn.entityId()!=observer.state().entityId(),"peer fishing-hook spawn drift");require(thrower==0||thrower==actor.state().entityId(),"fishing-hook thrower drift: thrower="+thrower+",actor="+actor.state().entityId());require(Math.abs(spawn.x()-(top.x()+0.5D))<=2D&&Math.abs(spawn.z()-(top.z()+0.5D))<=2D,"fishing-hook packet pose escaped platform pose="+spawn.x()+":"+spawn.y()+":"+spawn.z()+",support="+top);actor.close();observer.close();awaitPlayers(server,0);server.save();
-   String throwerToken=thrower==0?"thrower0":"thrower=actor";String evidence="column="+column+",support="+top.x()+":"+top.y()+":"+top.z()+":1:0,hook=type90+shared-id+"+throwerToken+"+fixed"+spawn.fixedX()+":"+spawn.fixedY()+":"+spawn.fixedZ()+",clients=2,disconnect=clean";String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=raised-stone|cause=packet15-dir255-rod346|wire=packet23-type90+"+throwerToken+"|oracle=two-peer-identical-fishhook-object|"+evidence;System.out.println("WORLDLINE_M180_ROD="+evidence);System.out.println("WORLDLINE_M180_TRACE="+trace);System.out.println("WORLDLINE_M180_SIGNATURE="+sha(trace));
-  }finally{actor.close();observer.close();server.close();}
- }
- private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}
- private static BlockPosition foundation(RemoteChunkSnapshot q,int cx,int cz){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(q.blockAt(x,y,z).legacyId()==3&&water(q.blockAt(x,y+1,z).legacyId()))return new BlockPosition(cx*16+x,y,cz*16+z);throw new IllegalStateException("no deterministic fishing-rod foundation");}
- private static boolean water(int id){return id==8||id==9;}private static int local(int v,int c){return v-c*16;}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long e=System.currentTimeMillis()+5000;while(System.currentTimeMillis()<e){if(s.players().size()==n)return;Thread.sleep(100);}throw new IllegalStateException("player count drift");}private static String sha(String s)throws Exception{byte[]b=MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));StringBuilder v=new StringBuilder();for(byte x:b)v.append(String.format("%02x",x&255));return v.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+public final class FishingRodSmoke {
+  private FishingRodSmoke() {
+  }
+  public static void main(String[] a) throws Exception {
+    if (a.length != 8)
+      throw new IllegalArgumentException(
+          "usage: FishingRodSmoke server.jar workspace port seed actor observer chunkX chunkZ");
+    Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
+    int port = Integer.parseInt(a[2]);
+    long seed = Long.parseLong(a[3]);
+    String actorName = a[4], observerName = a[5];
+    int cx = Integer.parseInt(a[6]), cz = Integer.parseInt(a[7]);
+    Duration timeout = Duration.ofSeconds(90);
+    B173DedicatedServer server =
+        new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+    B173WireClient actor = new B173WireClient("127.0.0.1", port, actorName, timeout),
+                   observer = new B173WireClient("127.0.0.1", port, observerName, timeout);
+    BlockPosition top;
+    int column, thrower;
+    try {
+      server.boot();
+      B173PlayerSeed.writeInventory(workspace, actorName, 4.5D, 60D, 4.5D, new int[] {0, 1},
+          new int[] {1, 346}, new int[] {32, 1}, new int[] {0, 0});
+      B173PlayerSeed.write(workspace, observerName, 4.5D, 80D, 4.5D);
+      actor.connect();
+      actor.synchronizePose();
+      require(actor.awaitInventory().occupiedSlots() == 2, "fishing-rod inventory drift");
+      RemoteChunkSnapshot initial = actor.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      top = foundation(initial, cx, cz);
+      column = 0;
+      actor.selectHeldSlot(0);
+      while (
+          water(initial.blockAt(local(top.x(), cx), top.y() + 1, local(top.z(), cz)).legacyId())) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        require(++column <= 15, "water column exceeded fishing-rod fixture");
+      }
+      for (int lift = 0; lift < 8; lift++) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        column++;
+      }
+      observer.connect();
+      observer.synchronizePose();
+      observer.awaitRemoteChunk(cx, cz);
+      actor.selectHeldSlot(1);
+      actor.look(0F, 0F);
+      actor.useSelectedItemInAir();
+      RemoteObjectSpawn spawn = actor.awaitObjectSpawn(90), peer = observer.awaitObjectSpawn(90);
+      thrower = spawn.throwerId();
+      require(spawn.equals(peer) && spawn.type() == 90
+              && spawn.entityId() != actor.state().entityId()
+              && spawn.entityId() != observer.state().entityId(),
+          "peer fishing-hook spawn drift");
+      require(thrower == 0 || thrower == actor.state().entityId(),
+          "fishing-hook thrower drift: thrower=" + thrower + ",actor=" + actor.state().entityId());
+      require(Math.abs(spawn.x() - (top.x() + 0.5D)) <= 2D
+              && Math.abs(spawn.z() - (top.z() + 0.5D)) <= 2D,
+          "fishing-hook packet pose escaped platform pose=" + spawn.x() + ":" + spawn.y() + ":"
+              + spawn.z() + ",support=" + top);
+      actor.close();
+      observer.close();
+      awaitPlayers(server, 0);
+      server.save();
+      String throwerToken = thrower == 0 ? "thrower0" : "thrower=actor";
+      String evidence = "column=" + column + ",support=" + top.x() + ":" + top.y() + ":" + top.z()
+          + ":1:0,hook=type90+shared-id+" + throwerToken + "+fixed" + spawn.fixedX() + ":"
+          + spawn.fixedY() + ":" + spawn.fixedZ() + ",clients=2,disconnect=clean";
+      String trace = "v1|server=official-b1.7.3|seed=" + seed
+          + "|fixture=raised-stone|cause=packet15-dir255-rod346|wire=packet23-type90+"
+          + throwerToken + "|oracle=two-peer-identical-fishhook-object|" + evidence;
+      System.out.println("WORLDLINE_M180_ROD=" + evidence);
+      System.out.println("WORLDLINE_M180_TRACE=" + trace);
+      System.out.println("WORLDLINE_M180_SIGNATURE=" + sha(trace));
+    } finally {
+      actor.close();
+      observer.close();
+      server.close();
+    }
+  }
+  private static BlockPosition place(
+      B173WireClient a, BlockPosition support, BlockFace face, int id) throws Exception {
+    BlockPosition target = face.adjacent(support);
+    a.placeHeldBlock(support, face);
+    a.awaitBlock(target, new BlockState(id, 0));
+    return target;
+  }
+  private static BlockPosition foundation(RemoteChunkSnapshot q, int cx, int cz) {
+    for (int x = 4; x <= 11; x++)
+      for (int z = 4; z <= 11; z++)
+        for (int y = 126; y >= 1; y--)
+          if (q.blockAt(x, y, z).legacyId() == 3 && water(q.blockAt(x, y + 1, z).legacyId()))
+            return new BlockPosition(cx * 16 + x, y, cz * 16 + z);
+    throw new IllegalStateException("no deterministic fishing-rod foundation");
+  }
+  private static boolean water(int id) {
+    return id == 8 || id == 9;
+  }
+  private static int local(int v, int c) {
+    return v - c * 16;
+  }
+  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
+    long e = System.currentTimeMillis() + 5000;
+    while (System.currentTimeMillis() < e) {
+      if (s.players().size() == n)
+        return;
+      Thread.sleep(100);
+    }
+    throw new IllegalStateException("player count drift");
+  }
+  private static String sha(String s) throws Exception {
+    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
+    StringBuilder v = new StringBuilder();
+    for (byte x : b)
+      v.append(String.format("%02x", x & 255));
+    return v.toString();
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
 }

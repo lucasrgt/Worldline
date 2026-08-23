@@ -9,29 +9,580 @@ import java.util.stream.*;
 
 /** Runs two mirrored fresh renderer/Aero decomposition triplets. */
 public final class RendererDecompositionCycle {
-    private static final String ID="m76-renderer-decomposition";
-    private final Path root=Paths.get("").toAbsolutePath().normalize(),smoke=root.resolve("smokes").resolve(ID),build=root.resolve(".worldline/smokes").resolve(ID);private final Properties config=new Properties();
-    public static void main(String[]a){if(!Arrays.equals(a,new String[]{ID})){System.err.println("usage: java tools/smoke/RendererDecompositionCycle.java "+ID);System.exit(2);}try{new RendererDecompositionCycle().execute();}catch(Exception e){System.err.println("Renderer decomposition failed: "+e.getMessage());System.exit(1);}}
-    private void execute()throws Exception{load(smoke.resolve("smoke.properties"),config);require(value("triplets").equals("2")&&value("treatments").equals("no-dispatch,dispatch-only,aero16")&&value("warmup.frames").equals("300")&&value("warmup.millis").equals("5000")&&value("minimum.frames").equals("720")&&value("minimum.millis").equals("12000")&&value("fps.limit").equals("0")&&value("aero.frame.pacing").equals("false"),"M76 design drift");
-        Path checkout=root.resolve(value("aero.path")).normalize();verifyCheckout(checkout);verifyBoundary();recreate(build);buildAero(checkout);String[]order={"no-dispatch","dispatch-only","aero16","aero16","dispatch-only","no-dispatch"};List<Arm>arms=new ArrayList<>();Plan[]plans=new Plan[2];int start=Integer.getInteger("worldline.m76.armStart",0),limit=Integer.getInteger("worldline.m76.armLimit",order.length-start);require(start>=0&&limit>0&&start+limit<=order.length,"arm range drift");boolean diagnostic=start!=0||limit!=order.length;require(!diagnostic||Boolean.getBoolean("worldline.m76.diagnostic"),"partial M76 requires diagnostic opt-in");
-        for(int i=start;i<start+limit;i++){int triplet=i/3,nonce=7607601+triplet;verifyCheckout(checkout);Path workspace=build.resolve("triplet-"+(triplet+1)+"-"+order[i]);Arm arm;try{arm=run(checkout,workspace,order[i],triplet,nonce,plans[triplet]);}catch(IllegalStateException e){if(!preCensusTimeout(e))throw e;System.out.println("M76 retrying one pre-census readiness timeout treatment="+order[i]);arm=run(checkout,workspace.resolveSibling(workspace.getFileName()+"-retry"),order[i],triplet,nonce,plans[triplet]);}arms.add(arm);if(plans[triplet]==null)plans[triplet]=new Plan(arm.x,arm.y,arm.z);verifyCheckout(checkout);}
-        if(diagnostic){System.out.println("M76 diagnostic arm passed; qualification not attempted arms="+limit);arms.forEach(x->System.out.println("  "+x.summary()));return;}Triplet first=new Triplet(arms.subList(0,3)),second=new Triplet(arms.subList(3,6));String trace="v1|design=2-mirrored-fresh-triplets-noDispatch/dispatchOnly/aero16+aero16/dispatchOnly/noDispatch|fixture=constant16-synced+exact-plan-camera-nonce"
-            +"|treatments=renderer-map-removed-after-ready+renderer-body-noAero+renderer-body-aero16|frame-limit=vanilla-max0+aero-pacer-off-runtime-gated|baseline=setup-before-first-retained-head-to-head|window=min720intervals+12s|capture=M74-fixed-primitive+post-seal-binary"
-            +"|per-record=noDispatch:0/0+dispatchOnly:16/0+aero16:16/16|retry=one-pre-census-timeout-only|stats=descriptive-stage-deltas-dynamic|causality-attribution-regression-historical-lag=not-claimed|shutdown=clean";String signature=sha256(trace);require(signature.equals(value("expected.signature")),"M76 signature drift: "+signature);Files.writeString(build.resolve("evidence.txt"),"id="+ID+"\ntriplets=2\narms=6\nserver.jvm=6\nclient.jvm=6\nfirst="+first.summary()+"\nsecond="+second.summary()+"\ntrace="+trace+"\nsignature="+signature+"\n",StandardCharsets.UTF_8);System.out.println("M76 renderer decomposition passed");System.out.println("  triplet 1: "+first.summary());System.out.println("  triplet 2: "+second.summary());System.out.println("  signature: "+signature);}
-    private Arm run(Path checkout,Path workspace,String treatment,int triplet,int nonce,Plan plan)throws Exception{Files.createDirectories(workspace);int port=freePort(),timeout=Integer.parseInt(value("timeout.seconds"));Path base=root.resolve(".worldline/worktrees/m76-"+ProcessHandle.current().pid()+"-"+triplet+"-"+treatment+"-"+System.nanoTime()),serverTree=base.resolve("server"),clientTree=base.resolve("client");Captured server=null;
-        try{addWorktree(checkout,serverTree);addWorktree(checkout,clientTree);Path init=root.resolve(value("runner")),serverGame=workspace.resolve("server"),clientGame=workspace.resolve("client"),artifact=clientGame.resolve("census.bin");server=startServer(serverTree.resolve("stationapi/test-bare"),command(serverTree,init,"server",serverGame,port,nonce,treatment,null,plan),timeout);String client=runGradle(clientTree.resolve("stationapi/test-bare"),command(clientTree,init,"client",clientGame,port,nonce,treatment,artifact,null),timeout);Files.writeString(workspace.resolve("client-output.txt"),client);
-            require(client.contains("Loading 46 mods:")&&client.contains("- aero-model-lib 3.0.0")&&client.contains("- worldline-m74-content 1.0.0")&&client.contains("BUILD SUCCESSFUL")&&client.contains("[WorldlineCensus] packet1")&&client.contains("[WorldlineCensus] packet13"),"client boundary drift\n"+diagnostic(client));boolean removed=treatment.equals("no-dispatch");require(count(client,"[WorldlineDecomposition] treatment=")==1&&unique(client,"[WorldlineDecomposition] treatment=").equals(treatment+" rendererRemoved="+removed+" fpsLimit=0 aeroFramePacing=false")&&count(client,"[WorldlineCensus] plan-ready")==1&&count(client,"[WorldlineCensus] census-start ")==1&&count(client,"[WorldlineCensus] complete ")==1&&!client.contains("[Aero_"),"client lifecycle drift");
-            Census census=parseArtifact(artifact,treatment,nonce);String complete=unique(client,"[WorldlineCensus] complete ");require(marker(complete,"samples")==census.count&&markerLong(complete,"elapsedNs")==census.elapsed&&marker(complete,"mask")==0xffff,"completion/artifact drift");server.write("save-all\nstop\n");server.finish(45);String serverText=server.output();Files.writeString(workspace.resolve("server-output.txt"),serverText);server=null;require((serverText.contains("Loading 39 mods:")||serverText.contains("Loading 40 mods:"))&&serverText.contains("- worldline-m74-content 1.0.0")&&!serverText.contains("- aero-model-lib ")&&serverText.contains("BUILD SUCCESSFUL"),"server boundary drift\n"+diagnostic(serverText));String scene=unique(serverText,"[WorldlineCensus] scene ");require(token(scene,"mode").equals("present")&&marker(scene,"planned")==16&&marker(scene,"placed")==16&&marker(scene,"yaw")==-90&&marker(scene,"pitch")==0&&marker(scene,"nonce")==nonce,"scene drift: "+scene);int x=marker(scene,"x"),y=marker(scene,"baseY"),z=marker(scene,"baseZ"),raw=marker(scene,"raw");require((plan==null||plan.x==x&&plan.y==y&&plan.z==z)&&census.x==x&&census.y==y&&census.z==z,"triplet plan drift");require(serverText.indexOf("[WorldlineCensus] activation ")<serverText.indexOf("[WorldlineCensus] tracking-ready ")&&serverText.indexOf("[WorldlineCensus] tracking-ready ")<serverText.indexOf("[WorldlineCensus] scene ")&&serverText.contains(value("username")+" lost connection")&&serverText.contains("Stopping server"),"server lifecycle drift");verifyWorktree(serverTree);verifyWorktree(clientTree);return new Arm(treatment,nonce,x,y,z,raw,census,sha256(Files.readAllBytes(artifact)));
-        }finally{if(server!=null){try{server.write("stop\n");server.finish(20);}catch(Exception e){server.kill();}finally{Files.writeString(workspace.resolve("server-output.txt"),server.output());}}removeWorktree(checkout,clientTree);removeWorktree(checkout,serverTree);}}
-    private Census parseArtifact(Path file,String treatment,int nonce)throws Exception{byte[]bytes=Files.readAllBytes(file);try(DataInputStream in=new DataInputStream(new ByteArrayInputStream(bytes))){require(in.readInt()==0x574c3734&&in.readInt()==1&&in.readInt()==28&&in.readInt()==16&&in.readInt()==nonce,"artifact schema/arm drift");int x=in.readInt(),y=in.readInt(),z=in.readInt();require(in.readInt()==Integer.parseInt(value("minimum.frames"))&&in.readLong()==Long.parseLong(value("minimum.millis"))*1_000_000L,"artifact window drift");int count=in.readInt();long elapsed=in.readLong();require(count>=720&&count<=65536&&bytes.length==56L+count*28L,"artifact length drift");int expectedCalls=treatment.equals("no-dispatch")?0:16,expectedAero=treatment.equals("aero16")?16:0,visible=0;long sum=0,renderSum=0;long[]frames=new long[count];for(int i=0;i<count;i++){long delta=in.readLong();int renders=in.readInt(),lists=in.readInt(),chunks=in.readInt(),calls=in.readInt(),state=in.readUnsignedShort(),mask=in.readUnsignedShort();require(delta>0&&renders==expectedAero&&lists==expectedAero&&chunks>=0&&calls==expectedCalls&&state==0x1010&&mask==0xffff,"decomposition record drift "+treatment+" at "+i);frames[i]=delta;sum=Math.addExact(sum,delta);renderSum+=renders;visible=Math.max(visible,chunks);}require(in.read()==-1&&sum==elapsed&&elapsed>=12_000_000_000L&&visible>0&&renderSum==(long)expectedAero*count,"artifact aggregate drift");return new Census(x,y,z,count,elapsed,frames,renderSum);}}
-    private List<String>command(Path tree,Path init,String role,Path game,int port,int nonce,String treatment,Path artifact,Plan plan){String wrapper=System.getProperty("os.name").startsWith("Windows")?"gradlew.bat":"gradlew";List<String>r=new ArrayList<>(Arrays.asList(tree.resolve("stationapi/test-bare").resolve(wrapper).toString(),"--no-daemon","--init-script",init.toString(),role.equals("server")?"runServer":"runClient","-PworldlineRole="+role,"-PworldlineRunDir="+game,"-PworldlinePort="+port,"-PworldlineNonce="+nonce));if(plan!=null)r.addAll(Arrays.asList("-PworldlinePlanX="+plan.x,"-PworldlinePlanY="+plan.y,"-PworldlinePlanZ="+plan.z));if(artifact!=null)r.addAll(Arrays.asList("-PworldlineArtifact="+artifact,"-PworldlineUsername="+value("username"),"-PworldlineTreatment="+treatment,"-PworldlineWarmupFrames="+value("warmup.frames"),"-PworldlineWarmupMillis="+value("warmup.millis"),"-PworldlineMinimumFrames="+value("minimum.frames"),"-PworldlineMinimumMillis="+value("minimum.millis"),"-PworldlineFpsLimit="+value("fps.limit"),"-PworldlineAeroFramePacing="+value("aero.frame.pacing")));return r;}
-    private void buildAero(Path checkout)throws Exception{String prebuilt=System.getenv("WORLDLINE_AERO_PREBUILT");if(prebuilt!=null&&!prebuilt.isBlank()){Path jar=Path.of(prebuilt).toAbsolutePath().normalize();require(Files.isRegularFile(jar),"missing prebuilt Aero");Files.copy(jar,build.resolve("aero-model-lib-3.0.0.jar"),StandardCopyOption.REPLACE_EXISTING);return;}Path tree=root.resolve(".worldline/worktrees/m76-build-"+System.nanoTime());try{addWorktree(checkout,tree);Path stationapi=tree.resolve("stationapi");String wrapper=System.getProperty("os.name").startsWith("Windows")?"gradlew.bat":"gradlew",output=runGradle(stationapi,Arrays.asList(stationapi.resolve(wrapper).toString(),"--no-daemon","remapJar"),Integer.parseInt(value("timeout.seconds")));Path jar=stationapi.resolve("build/libs/aero-model-lib-3.0.0.jar");require(output.contains("BUILD SUCCESSFUL")&&Files.isRegularFile(jar),"Aero build failed");Files.copy(jar,build.resolve("aero-model-lib-3.0.0.jar"),StandardCopyOption.REPLACE_EXISTING);verifyWorktree(tree);}finally{removeWorktree(checkout,tree);}}
-    private Captured startServer(Path d,List<String>c,int t)throws Exception{Captured s=Captured.start(d,c);try{s.awaitText("Done (",Math.addExact(timeout(t),60));return s;}catch(Exception e){s.kill();throw e;}}private String runGradle(Path d,List<String>c,int t)throws Exception{return Captured.run(d,c,timeout(t));}private int timeout(int t){String extra=System.getenv("WORLDLINE_RUNTIME_TIMEOUT_EXTRA");return extra==null?t:Math.addExact(t,Integer.parseInt(extra));}private void verifyBoundary()throws IOException{for(Path base:Arrays.asList(root.resolve("smokes/m74-complete-aero-census/runtime-src/worldline/m74"),smoke.resolve("runtime-src/worldline/m74")))try(Stream<Path>p=Files.walk(base)){for(Path f:p.filter(x->x.toString().endsWith(".java")).filter(x->!x.toString().contains(File.separator+"client"+File.separator)).filter(x->!x.toString().contains(File.separator+"mixin"+File.separator)).collect(Collectors.toList())){String s=Files.readString(f);require(!s.contains("aero.modellib")&&!s.contains("net.minecraft.client")&&!s.contains("org.lwjgl"),"server closure imports client code");}}}
-    private void verifyCheckout(Path c)throws Exception{require(git(c,"remote","get-url","origin").trim().equals(value("aero.repository"))&&git(c,"rev-parse","HEAD").trim().equals(value("aero.revision"))&&git(c,"status","--porcelain","--untracked-files=all").trim().isEmpty(),"Aero checkout drift");}private void addWorktree(Path c,Path t)throws Exception{Files.createDirectories(t.getParent());git(c,"worktree","add","--detach",t.toString(),value("aero.revision"));verifyWorktree(t);}private void verifyWorktree(Path t)throws Exception{require(git(t,"rev-parse","HEAD").trim().equals(value("aero.revision"))&&git(t,"status","--porcelain","--untracked-files=all").trim().isEmpty(),"worktree drift");}
-    private void removeWorktree(Path c,Path t){try{if(registered(c,t))try{git(c,"worktree","remove","--force",t.toString());}catch(Exception e){if(registered(c,t))throw e;}if(Files.exists(t)){Path allowed=root.resolve(".worldline/worktrees").normalize(),exact=t.toAbsolutePath().normalize();require(exact.startsWith(allowed)&&!exact.equals(allowed),"unsafe remainder");try(Stream<Path>p=Files.walk(exact)){for(Path f:p.sorted(Comparator.reverseOrder()).collect(Collectors.toList()))Files.deleteIfExists(f);}}Path parent=t.toAbsolutePath().normalize().getParent(),allowedParent=root.resolve(".worldline/worktrees").normalize();if(parent!=null&&parent.startsWith(allowedParent)&&!parent.equals(allowedParent)&&Files.isDirectory(parent)){boolean empty;try(Stream<Path>p=Files.list(parent)){empty=p.findAny().isEmpty();}if(empty)Files.deleteIfExists(parent);}}catch(Exception e){throw new IllegalStateException("M76 cleanup failed "+t,e);}}private boolean registered(Path c,Path t)throws Exception{return Arrays.stream(git(c,"worktree","list","--porcelain").split("\\R")).anyMatch(x->x.startsWith("worktree ")&&Paths.get(x.substring(9)).toAbsolutePath().normalize().equals(t.toAbsolutePath().normalize()));}private String git(Path d,String...a)throws Exception{List<String>c=new ArrayList<>();c.add("git");c.add("-C");c.add(d.toString());c.addAll(Arrays.asList(a));return Captured.run(root,c,60);}
-    private boolean preCensusTimeout(IllegalStateException e){String m=e.getMessage();return m!=null&&m.startsWith("process timeout")&&m.contains("[WorldlineCensus] trigger ")&&!m.contains("[WorldlineCensus] census-start ");}private String unique(String s,String p){List<String>r=s.lines().filter(x->x.startsWith(p)).collect(Collectors.toList());require(r.size()==1,"marker drift "+p);return r.get(0).substring(p.length());}private int marker(String r,String n){return Integer.parseInt(token(r,n));}private long markerLong(String r,String n){return Long.parseLong(token(r,n));}private String token(String r,String n){for(String t:r.split(" +"))if(t.startsWith(n+"="))return t.substring(n.length()+1);throw new IllegalStateException("missing "+n);}private long count(String s,String p){return s.lines().filter(x->x.startsWith(p)).count();}
-    private int freePort()throws IOException{return SmokeSupport.freePort();}private void recreate(Path t)throws IOException{if(Files.exists(t))try(Stream<Path>p=Files.walk(t)){for(Path f:p.sorted(Comparator.reverseOrder()).collect(Collectors.toList()))Files.delete(f);}Files.createDirectories(t);}private void load(Path p,Properties v)throws IOException{try(Reader r=Files.newBufferedReader(p)){v.load(r);}}private String value(String k){String r=config.getProperty(k);require(r!=null&&!r.trim().isEmpty(),"missing "+k);return r.trim();}private String diagnostic(String s){return s.lines().filter(x->x.contains("WorldlineCensus")||x.contains("WorldlineDecomposition")||x.contains("Loading ")||x.contains("Exception")||x.contains("BUILD ")).collect(Collectors.joining("\n"));}
-    private static String sha256(String v)throws Exception{return sha256(v.getBytes(StandardCharsets.UTF_8));}private static String sha256(byte[]v)throws Exception{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(v));}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}private static long q(long[]v,double q){long[]c=v.clone();Arrays.sort(c);return c[(int)Math.ceil(c.length*q)-1];}private static final class Plan{final int x,y,z;Plan(int x,int y,int z){this.x=x;this.y=y;this.z=z;}}private static final class Census{final int x,y,z,count;final long elapsed,median,p95,p99,max,renders;Census(int x,int y,int z,int n,long e,long[]f,long r){this.x=x;this.y=y;this.z=z;count=n;elapsed=e;renders=r;median=q(f,.5);p95=q(f,.95);p99=q(f,.99);max=Arrays.stream(f).max().orElseThrow();}}
-    private static final class Arm{final String treatment,hash;final int nonce,x,y,z,raw;final Census c;Arm(String t,int n,int x,int y,int z,int r,Census c,String h){treatment=t;nonce=n;this.x=x;this.y=y;this.z=z;raw=r;this.c=c;hash=h;}String summary(){return treatment+":samples="+c.count+",intervalNs="+c.median+"/"+c.p95+"/"+c.p99+"/"+c.max+",renders="+c.renders+",artifact="+hash.substring(0,12);}}private static final class Triplet{final Map<String,Arm>by=new HashMap<>();Triplet(List<Arm>a){for(Arm x:a)require(by.put(x.treatment,x)==null,"duplicate treatment");require(by.keySet().equals(new HashSet<>(Arrays.asList("no-dispatch","dispatch-only","aero16"))),"triplet incomplete");Arm b=by.get("no-dispatch");for(Arm x:a)require(x.nonce==b.nonce&&x.x==b.x&&x.y==b.y&&x.z==b.z&&x.raw==b.raw,"triplet fixture drift");}String summary(){Arm n=by.get("no-dispatch"),d=by.get("dispatch-only"),a=by.get("aero16");return n.summary()+" | "+d.summary()+",deltaDispatchNs="+(d.c.median-n.c.median)+" | "+a.summary()+",deltaAeroNs="+(a.c.median-d.c.median);}}
-    private static final class Captured{final Process p;final String scope;final StringBuilder text=new StringBuilder();final Thread reader;int exit=-1;private Captured(Process p,Path d){this.p=p;String a=d.toAbsolutePath().normalize().toString();scope=a.contains(File.separator+".worldline"+File.separator+"worktrees"+File.separator)?a.toLowerCase(Locale.ROOT):"";reader=new Thread(()->{try(BufferedReader in=new BufferedReader(new InputStreamReader(p.getInputStream(),StandardCharsets.UTF_8))){String l;while((l=in.readLine())!=null)synchronized(text){text.append(l).append('\n');text.notifyAll();}}catch(IOException e){}});reader.setDaemon(true);reader.start();}static Captured start(Path d,List<String>c)throws IOException{return new Captured(new ProcessBuilder(c).directory(d.toFile()).redirectErrorStream(true).start(),d);}static String run(Path d,List<String>c,int t)throws Exception{Captured v=start(d,c);v.finish(t);require(v.exit==0,"process failed\n"+v.output());return v.output();}void write(String v)throws IOException{p.getOutputStream().write(v.getBytes(StandardCharsets.UTF_8));p.getOutputStream().flush();}void awaitText(String v,int t)throws Exception{long end=System.currentTimeMillis()+t*1000L;synchronized(text){while(!text.toString().contains(v)&&p.isAlive()&&System.currentTimeMillis()<end)text.wait(100);}require(output().contains(v),"missing "+v+"\n"+output());}void finish(int t)throws Exception{if(!p.waitFor(t,TimeUnit.SECONDS)){kill();throw new IllegalStateException("process timeout\n"+output());}exit=p.exitValue();reader.join(5000);require(exit==0,"process exit "+exit+"\n"+output());if(!scope.isEmpty())kill();}void kill(){long end=System.nanoTime()+TimeUnit.SECONDS.toNanos(15);try{while(System.nanoTime()<end){Set<Long>descendants=p.descendants().map(ProcessHandle::pid).collect(Collectors.toSet());List<ProcessHandle>victims=ProcessHandle.allProcesses().filter(h->descendants.contains(h.pid())||scoped(h)).collect(Collectors.toList());victims.forEach(ProcessHandle::destroyForcibly);p.destroyForcibly();if(!p.isAlive()&&victims.stream().noneMatch(ProcessHandle::isAlive))return;Thread.sleep(100);}throw new IllegalStateException("process tree kill timeout");}catch(InterruptedException e){Thread.currentThread().interrupt();throw new IllegalStateException("process kill interrupted",e);}}private boolean scoped(ProcessHandle h){return !scope.isEmpty()&&h.info().commandLine().map(x->x.toLowerCase(Locale.ROOT).contains(scope)).orElse(false);}String output(){synchronized(text){return text.toString();}}}
+  private static final String ID = "m76-renderer-decomposition";
+  private final Path root = Paths.get("").toAbsolutePath().normalize(),
+                     smoke = root.resolve("smokes").resolve(ID),
+                     build = root.resolve(".worldline/smokes").resolve(ID);
+  private final Properties config = new Properties();
+  public static void main(String[] a) {
+    if (!Arrays.equals(a, new String[] {ID})) {
+      System.err.println("usage: java tools/smoke/RendererDecompositionCycle.java " + ID);
+      System.exit(2);
+    }
+    try {
+      new RendererDecompositionCycle().execute();
+    } catch (Exception e) {
+      System.err.println("Renderer decomposition failed: " + e.getMessage());
+      System.exit(1);
+    }
+  }
+  private void execute() throws Exception {
+    load(smoke.resolve("smoke.properties"), config);
+    require(value("triplets").equals("2")
+            && value("treatments").equals("no-dispatch,dispatch-only,aero16")
+            && value("warmup.frames").equals("300") && value("warmup.millis").equals("5000")
+            && value("minimum.frames").equals("720") && value("minimum.millis").equals("12000")
+            && value("fps.limit").equals("0") && value("aero.frame.pacing").equals("false"),
+        "M76 design drift");
+    Path checkout = root.resolve(value("aero.path")).normalize();
+    verifyCheckout(checkout);
+    verifyBoundary();
+    recreate(build);
+    buildAero(checkout);
+    String[] order = {
+        "no-dispatch", "dispatch-only", "aero16", "aero16", "dispatch-only", "no-dispatch"};
+    List<Arm> arms = new ArrayList<>();
+    Plan[] plans = new Plan[2];
+    int start = Integer.getInteger("worldline.m76.armStart", 0),
+        limit = Integer.getInteger("worldline.m76.armLimit", order.length - start);
+    require(start >= 0 && limit > 0 && start + limit <= order.length, "arm range drift");
+    boolean diagnostic = start != 0 || limit != order.length;
+    require(!diagnostic || Boolean.getBoolean("worldline.m76.diagnostic"),
+        "partial M76 requires diagnostic opt-in");
+    for (int i = start; i < start + limit; i++) {
+      int triplet = i / 3, nonce = 7607601 + triplet;
+      verifyCheckout(checkout);
+      Path workspace = build.resolve("triplet-" + (triplet + 1) + "-" + order[i]);
+      Arm arm;
+      try {
+        arm = run(checkout, workspace, order[i], triplet, nonce, plans[triplet]);
+      } catch (IllegalStateException e) {
+        if (!preCensusTimeout(e))
+          throw e;
+        System.out.println("M76 retrying one pre-census readiness timeout treatment=" + order[i]);
+        arm = run(checkout, workspace.resolveSibling(workspace.getFileName() + "-retry"), order[i],
+            triplet, nonce, plans[triplet]);
+      }
+      arms.add(arm);
+      if (plans[triplet] == null)
+        plans[triplet] = new Plan(arm.x, arm.y, arm.z);
+      verifyCheckout(checkout);
+    }
+    if (diagnostic) {
+      System.out.println("M76 diagnostic arm passed; qualification not attempted arms=" + limit);
+      arms.forEach(x -> System.out.println("  " + x.summary()));
+      return;
+    }
+    Triplet first = new Triplet(arms.subList(0, 3)), second = new Triplet(arms.subList(3, 6));
+    String trace =
+        "v1|design=2-mirrored-fresh-triplets-noDispatch/dispatchOnly/aero16+aero16/dispatchOnly/noDispatch|fixture=constant16-synced+exact-plan-camera-nonce"
+        + "|treatments=renderer-map-removed-after-ready+renderer-body-noAero+renderer-body-aero16|frame-limit=vanilla-max0+aero-pacer-off-runtime-gated|baseline=setup-before-first-retained-head-to-head|window=min720intervals+12s|capture=M74-fixed-primitive+post-seal-binary"
+        + "|per-record=noDispatch:0/0+dispatchOnly:16/0+aero16:16/16|retry=one-pre-census-timeout-only|stats=descriptive-stage-deltas-dynamic|causality-attribution-regression-historical-lag=not-claimed|shutdown=clean";
+    String signature = sha256(trace);
+    require(signature.equals(value("expected.signature")), "M76 signature drift: " + signature);
+    Files.writeString(build.resolve("evidence.txt"),
+        "id=" + ID + "\ntriplets=2\narms=6\nserver.jvm=6\nclient.jvm=6\nfirst=" + first.summary()
+            + "\nsecond=" + second.summary() + "\ntrace=" + trace + "\nsignature=" + signature
+            + "\n",
+        StandardCharsets.UTF_8);
+    System.out.println("M76 renderer decomposition passed");
+    System.out.println("  triplet 1: " + first.summary());
+    System.out.println("  triplet 2: " + second.summary());
+    System.out.println("  signature: " + signature);
+  }
+  private Arm run(Path checkout, Path workspace, String treatment, int triplet, int nonce,
+      Plan plan) throws Exception {
+    Files.createDirectories(workspace);
+    int port = freePort(), timeout = Integer.parseInt(value("timeout.seconds"));
+    Path base = root.resolve(".worldline/worktrees/m76-" + ProcessHandle.current().pid() + "-"
+             + triplet + "-" + treatment + "-" + System.nanoTime()),
+         serverTree = base.resolve("server"), clientTree = base.resolve("client");
+    Captured server = null;
+    try {
+      addWorktree(checkout, serverTree);
+      addWorktree(checkout, clientTree);
+      Path init = root.resolve(value("runner")), serverGame = workspace.resolve("server"),
+           clientGame = workspace.resolve("client"), artifact = clientGame.resolve("census.bin");
+      server = startServer(serverTree.resolve("stationapi/test-bare"),
+          command(serverTree, init, "server", serverGame, port, nonce, treatment, null, plan),
+          timeout);
+      String client = runGradle(clientTree.resolve("stationapi/test-bare"),
+          command(clientTree, init, "client", clientGame, port, nonce, treatment, artifact, null),
+          timeout);
+      Files.writeString(workspace.resolve("client-output.txt"), client);
+      require(client.contains("Loading 46 mods:") && client.contains("- aero-model-lib 3.0.0")
+              && client.contains("- worldline-m74-content 1.0.0")
+              && client.contains("BUILD SUCCESSFUL") && client.contains("[WorldlineCensus] packet1")
+              && client.contains("[WorldlineCensus] packet13"),
+          "client boundary drift\n" + diagnostic(client));
+      boolean removed = treatment.equals("no-dispatch");
+      require(count(client, "[WorldlineDecomposition] treatment=") == 1
+              && unique(client, "[WorldlineDecomposition] treatment=")
+                  .equals(treatment + " rendererRemoved=" + removed
+                      + " fpsLimit=0 aeroFramePacing=false")
+              && count(client, "[WorldlineCensus] plan-ready") == 1
+              && count(client, "[WorldlineCensus] census-start ") == 1
+              && count(client, "[WorldlineCensus] complete ") == 1 && !client.contains("[Aero_"),
+          "client lifecycle drift");
+      Census census = parseArtifact(artifact, treatment, nonce);
+      String complete = unique(client, "[WorldlineCensus] complete ");
+      require(marker(complete, "samples") == census.count
+              && markerLong(complete, "elapsedNs") == census.elapsed
+              && marker(complete, "mask") == 0xffff,
+          "completion/artifact drift");
+      server.write("save-all\nstop\n");
+      server.finish(45);
+      String serverText = server.output();
+      Files.writeString(workspace.resolve("server-output.txt"), serverText);
+      server = null;
+      require((serverText.contains("Loading 39 mods:") || serverText.contains("Loading 40 mods:"))
+              && serverText.contains("- worldline-m74-content 1.0.0")
+              && !serverText.contains("- aero-model-lib ")
+              && serverText.contains("BUILD SUCCESSFUL"),
+          "server boundary drift\n" + diagnostic(serverText));
+      String scene = unique(serverText, "[WorldlineCensus] scene ");
+      require(token(scene, "mode").equals("present") && marker(scene, "planned") == 16
+              && marker(scene, "placed") == 16 && marker(scene, "yaw") == -90
+              && marker(scene, "pitch") == 0 && marker(scene, "nonce") == nonce,
+          "scene drift: " + scene);
+      int x = marker(scene, "x"), y = marker(scene, "baseY"), z = marker(scene, "baseZ"),
+          raw = marker(scene, "raw");
+      require((plan == null || plan.x == x && plan.y == y && plan.z == z) && census.x == x
+              && census.y == y && census.z == z,
+          "triplet plan drift");
+      require(serverText.indexOf("[WorldlineCensus] activation ")
+                  < serverText.indexOf("[WorldlineCensus] tracking-ready ")
+              && serverText.indexOf("[WorldlineCensus] tracking-ready ")
+                  < serverText.indexOf("[WorldlineCensus] scene ")
+              && serverText.contains(value("username") + " lost connection")
+              && serverText.contains("Stopping server"),
+          "server lifecycle drift");
+      verifyWorktree(serverTree);
+      verifyWorktree(clientTree);
+      return new Arm(treatment, nonce, x, y, z, raw, census, sha256(Files.readAllBytes(artifact)));
+    } finally {
+      if (server != null) {
+        try {
+          server.write("stop\n");
+          server.finish(20);
+        } catch (Exception e) {
+          server.kill();
+        } finally {
+          Files.writeString(workspace.resolve("server-output.txt"), server.output());
+        }
+      }
+      removeWorktree(checkout, clientTree);
+      removeWorktree(checkout, serverTree);
+    }
+  }
+  private Census parseArtifact(Path file, String treatment, int nonce) throws Exception {
+    byte[] bytes = Files.readAllBytes(file);
+    try (DataInputStream in = new DataInputStream(new ByteArrayInputStream(bytes))) {
+      require(in.readInt() == 0x574c3734 && in.readInt() == 1 && in.readInt() == 28
+              && in.readInt() == 16 && in.readInt() == nonce,
+          "artifact schema/arm drift");
+      int x = in.readInt(), y = in.readInt(), z = in.readInt();
+      require(in.readInt() == Integer.parseInt(value("minimum.frames"))
+              && in.readLong() == Long.parseLong(value("minimum.millis")) * 1_000_000L,
+          "artifact window drift");
+      int count = in.readInt();
+      long elapsed = in.readLong();
+      require(count >= 720 && count <= 65536 && bytes.length == 56L + count * 28L,
+          "artifact length drift");
+      int expectedCalls = treatment.equals("no-dispatch") ? 0 : 16,
+          expectedAero = treatment.equals("aero16") ? 16 : 0, visible = 0;
+      long sum = 0, renderSum = 0;
+      long[] frames = new long[count];
+      for (int i = 0; i < count; i++) {
+        long delta = in.readLong();
+        int renders = in.readInt(), lists = in.readInt(), chunks = in.readInt(),
+            calls = in.readInt(), state = in.readUnsignedShort(), mask = in.readUnsignedShort();
+        require(delta > 0 && renders == expectedAero && lists == expectedAero && chunks >= 0
+                && calls == expectedCalls && state == 0x1010 && mask == 0xffff,
+            "decomposition record drift " + treatment + " at " + i);
+        frames[i] = delta;
+        sum = Math.addExact(sum, delta);
+        renderSum += renders;
+        visible = Math.max(visible, chunks);
+      }
+      require(in.read() == -1 && sum == elapsed && elapsed >= 12_000_000_000L && visible > 0
+              && renderSum == (long) expectedAero * count,
+          "artifact aggregate drift");
+      return new Census(x, y, z, count, elapsed, frames, renderSum);
+    }
+  }
+  private List<String> command(Path tree, Path init, String role, Path game, int port, int nonce,
+      String treatment, Path artifact, Plan plan) {
+    String wrapper =
+        System.getProperty("os.name").startsWith("Windows") ? "gradlew.bat" : "gradlew";
+    List<String> r = new ArrayList<>(
+        Arrays.asList(tree.resolve("stationapi/test-bare").resolve(wrapper).toString(),
+            "--no-daemon", "--init-script", init.toString(),
+            role.equals("server") ? "runServer" : "runClient", "-PworldlineRole=" + role,
+            "-PworldlineRunDir=" + game, "-PworldlinePort=" + port, "-PworldlineNonce=" + nonce));
+    if (plan != null)
+      r.addAll(Arrays.asList("-PworldlinePlanX=" + plan.x, "-PworldlinePlanY=" + plan.y,
+          "-PworldlinePlanZ=" + plan.z));
+    if (artifact != null)
+      r.addAll(Arrays.asList("-PworldlineArtifact=" + artifact,
+          "-PworldlineUsername=" + value("username"), "-PworldlineTreatment=" + treatment,
+          "-PworldlineWarmupFrames=" + value("warmup.frames"),
+          "-PworldlineWarmupMillis=" + value("warmup.millis"),
+          "-PworldlineMinimumFrames=" + value("minimum.frames"),
+          "-PworldlineMinimumMillis=" + value("minimum.millis"),
+          "-PworldlineFpsLimit=" + value("fps.limit"),
+          "-PworldlineAeroFramePacing=" + value("aero.frame.pacing")));
+    return r;
+  }
+  private void buildAero(Path checkout) throws Exception {
+    String prebuilt = System.getenv("WORLDLINE_AERO_PREBUILT");
+    if (prebuilt != null && !prebuilt.isBlank()) {
+      Path jar = Path.of(prebuilt).toAbsolutePath().normalize();
+      require(Files.isRegularFile(jar), "missing prebuilt Aero");
+      Files.copy(
+          jar, build.resolve("aero-model-lib-3.0.0.jar"), StandardCopyOption.REPLACE_EXISTING);
+      return;
+    }
+    Path tree = root.resolve(".worldline/worktrees/m76-build-" + System.nanoTime());
+    try {
+      addWorktree(checkout, tree);
+      Path stationapi = tree.resolve("stationapi");
+      String wrapper =
+                 System.getProperty("os.name").startsWith("Windows") ? "gradlew.bat" : "gradlew",
+             output = runGradle(stationapi,
+                 Arrays.asList(stationapi.resolve(wrapper).toString(), "--no-daemon", "remapJar"),
+                 Integer.parseInt(value("timeout.seconds")));
+      Path jar = stationapi.resolve("build/libs/aero-model-lib-3.0.0.jar");
+      require(output.contains("BUILD SUCCESSFUL") && Files.isRegularFile(jar), "Aero build failed");
+      Files.copy(
+          jar, build.resolve("aero-model-lib-3.0.0.jar"), StandardCopyOption.REPLACE_EXISTING);
+      verifyWorktree(tree);
+    } finally {
+      removeWorktree(checkout, tree);
+    }
+  }
+  private Captured startServer(Path d, List<String> c, int t) throws Exception {
+    Captured s = Captured.start(d, c);
+    try {
+      s.awaitText("Done (", Math.addExact(timeout(t), 60));
+      return s;
+    } catch (Exception e) {
+      s.kill();
+      throw e;
+    }
+  }
+  private String runGradle(Path d, List<String> c, int t) throws Exception {
+    return Captured.run(d, c, timeout(t));
+  }
+  private int timeout(int t) {
+    String extra = System.getenv("WORLDLINE_RUNTIME_TIMEOUT_EXTRA");
+    return extra == null ? t : Math.addExact(t, Integer.parseInt(extra));
+  }
+  private void verifyBoundary() throws IOException {
+    for (Path base :
+        Arrays.asList(root.resolve("smokes/m74-complete-aero-census/runtime-src/worldline/m74"),
+            smoke.resolve("runtime-src/worldline/m74")))
+      try (Stream<Path> p = Files.walk(base)) {
+        for (Path f : p.filter(x -> x.toString().endsWith(".java"))
+                 .filter(x -> !x.toString().contains(File.separator + "client" + File.separator))
+                 .filter(x -> !x.toString().contains(File.separator + "mixin" + File.separator))
+                 .collect(Collectors.toList())) {
+          String s = Files.readString(f);
+          require(!s.contains("aero.modellib") && !s.contains("net.minecraft.client")
+                  && !s.contains("org.lwjgl"),
+              "server closure imports client code");
+        }
+      }
+  }
+  private void verifyCheckout(Path c) throws Exception {
+    require(git(c, "remote", "get-url", "origin").trim().equals(value("aero.repository"))
+            && git(c, "rev-parse", "HEAD").trim().equals(value("aero.revision"))
+            && git(c, "status", "--porcelain", "--untracked-files=all").trim().isEmpty(),
+        "Aero checkout drift");
+  }
+  private void addWorktree(Path c, Path t) throws Exception {
+    Files.createDirectories(t.getParent());
+    git(c, "worktree", "add", "--detach", t.toString(), value("aero.revision"));
+    verifyWorktree(t);
+  }
+  private void verifyWorktree(Path t) throws Exception {
+    require(git(t, "rev-parse", "HEAD").trim().equals(value("aero.revision"))
+            && git(t, "status", "--porcelain", "--untracked-files=all").trim().isEmpty(),
+        "worktree drift");
+  }
+  private void removeWorktree(Path c, Path t) {
+    try {
+      if (registered(c, t))
+        try {
+          git(c, "worktree", "remove", "--force", t.toString());
+        } catch (Exception e) {
+          if (registered(c, t))
+            throw e;
+        }
+      if (Files.exists(t)) {
+        Path allowed = root.resolve(".worldline/worktrees").normalize(),
+             exact = t.toAbsolutePath().normalize();
+        require(exact.startsWith(allowed) && !exact.equals(allowed), "unsafe remainder");
+        try (Stream<Path> p = Files.walk(exact)) {
+          for (Path f : p.sorted(Comparator.reverseOrder()).collect(Collectors.toList()))
+            Files.deleteIfExists(f);
+        }
+      }
+      Path parent = t.toAbsolutePath().normalize().getParent(),
+           allowedParent = root.resolve(".worldline/worktrees").normalize();
+      if (parent != null && parent.startsWith(allowedParent) && !parent.equals(allowedParent)
+          && Files.isDirectory(parent)) {
+        boolean empty;
+        try (Stream<Path> p = Files.list(parent)) {
+          empty = p.findAny().isEmpty();
+        }
+        if (empty)
+          Files.deleteIfExists(parent);
+      }
+    } catch (Exception e) {
+      throw new IllegalStateException("M76 cleanup failed " + t, e);
+    }
+  }
+  private boolean registered(Path c, Path t) throws Exception {
+    return Arrays.stream(git(c, "worktree", "list", "--porcelain").split("\\R"))
+        .anyMatch(x
+            -> x.startsWith("worktree ")
+                && Paths.get(x.substring(9))
+                    .toAbsolutePath()
+                    .normalize()
+                    .equals(t.toAbsolutePath().normalize()));
+  }
+  private String git(Path d, String... a) throws Exception {
+    List<String> c = new ArrayList<>();
+    c.add("git");
+    c.add("-C");
+    c.add(d.toString());
+    c.addAll(Arrays.asList(a));
+    return Captured.run(root, c, 60);
+  }
+  private boolean preCensusTimeout(IllegalStateException e) {
+    String m = e.getMessage();
+    return m != null && m.startsWith("process timeout") && m.contains("[WorldlineCensus] trigger ")
+        && !m.contains("[WorldlineCensus] census-start ");
+  }
+  private String unique(String s, String p) {
+    List<String> r = s.lines().filter(x -> x.startsWith(p)).collect(Collectors.toList());
+    require(r.size() == 1, "marker drift " + p);
+    return r.get(0).substring(p.length());
+  }
+  private int marker(String r, String n) {
+    return Integer.parseInt(token(r, n));
+  }
+  private long markerLong(String r, String n) {
+    return Long.parseLong(token(r, n));
+  }
+  private String token(String r, String n) {
+    for (String t : r.split(" +"))
+      if (t.startsWith(n + "="))
+        return t.substring(n.length() + 1);
+    throw new IllegalStateException("missing " + n);
+  }
+  private long count(String s, String p) {
+    return s.lines().filter(x -> x.startsWith(p)).count();
+  }
+  private int freePort() throws IOException {
+    return SmokeSupport.freePort();
+  }
+  private void recreate(Path t) throws IOException {
+    if (Files.exists(t))
+      try (Stream<Path> p = Files.walk(t)) {
+        for (Path f : p.sorted(Comparator.reverseOrder()).collect(Collectors.toList()))
+          Files.delete(f);
+      }
+    Files.createDirectories(t);
+  }
+  private void load(Path p, Properties v) throws IOException {
+    try (Reader r = Files.newBufferedReader(p)) {
+      v.load(r);
+    }
+  }
+  private String value(String k) {
+    String r = config.getProperty(k);
+    require(r != null && !r.trim().isEmpty(), "missing " + k);
+    return r.trim();
+  }
+  private String diagnostic(String s) {
+    return s.lines()
+        .filter(x
+            -> x.contains("WorldlineCensus") || x.contains("WorldlineDecomposition")
+                || x.contains("Loading ") || x.contains("Exception") || x.contains("BUILD "))
+        .collect(Collectors.joining("\n"));
+  }
+  private static String sha256(String v) throws Exception {
+    return sha256(v.getBytes(StandardCharsets.UTF_8));
+  }
+  private static String sha256(byte[] v) throws Exception {
+    return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(v));
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
+  private static long q(long[] v, double q) {
+    long[] c = v.clone();
+    Arrays.sort(c);
+    return c[(int) Math.ceil(c.length * q) - 1];
+  }
+  private static final class Plan {
+    final int x, y, z;
+    Plan(int x, int y, int z) {
+      this.x = x;
+      this.y = y;
+      this.z = z;
+    }
+  }
+  private static final class Census {
+    final int x, y, z, count;
+    final long elapsed, median, p95, p99, max, renders;
+    Census(int x, int y, int z, int n, long e, long[] f, long r) {
+      this.x = x;
+      this.y = y;
+      this.z = z;
+      count = n;
+      elapsed = e;
+      renders = r;
+      median = q(f, .5);
+      p95 = q(f, .95);
+      p99 = q(f, .99);
+      max = Arrays.stream(f).max().orElseThrow();
+    }
+  }
+  private static final class Arm {
+    final String treatment, hash;
+    final int nonce, x, y, z, raw;
+    final Census c;
+    Arm(String t, int n, int x, int y, int z, int r, Census c, String h) {
+      treatment = t;
+      nonce = n;
+      this.x = x;
+      this.y = y;
+      this.z = z;
+      raw = r;
+      this.c = c;
+      hash = h;
+    }
+    String summary() {
+      return treatment + ":samples=" + c.count + ",intervalNs=" + c.median + "/" + c.p95 + "/"
+          + c.p99 + "/" + c.max + ",renders=" + c.renders + ",artifact=" + hash.substring(0, 12);
+    }
+  }
+  private static final class Triplet {
+    final Map<String, Arm> by = new HashMap<>();
+    Triplet(List<Arm> a) {
+      for (Arm x : a)
+        require(by.put(x.treatment, x) == null, "duplicate treatment");
+      require(by.keySet().equals(
+                  new HashSet<>(Arrays.asList("no-dispatch", "dispatch-only", "aero16"))),
+          "triplet incomplete");
+      Arm b = by.get("no-dispatch");
+      for (Arm x : a)
+        require(x.nonce == b.nonce && x.x == b.x && x.y == b.y && x.z == b.z && x.raw == b.raw,
+            "triplet fixture drift");
+    }
+    String summary() {
+      Arm n = by.get("no-dispatch"), d = by.get("dispatch-only"), a = by.get("aero16");
+      return n.summary() + " | " + d.summary() + ",deltaDispatchNs=" + (d.c.median - n.c.median)
+          + " | " + a.summary() + ",deltaAeroNs=" + (a.c.median - d.c.median);
+    }
+  }
+  private static final class Captured {
+    final Process p;
+    final String scope;
+    final StringBuilder text = new StringBuilder();
+    final Thread reader;
+    int exit = -1;
+    private Captured(Process p, Path d) {
+      this.p = p;
+      String a = d.toAbsolutePath().normalize().toString();
+      scope =
+          a.contains(File.separator + ".worldline" + File.separator + "worktrees" + File.separator)
+          ? a.toLowerCase(Locale.ROOT)
+          : "";
+      reader = new Thread(() -> {
+        try (BufferedReader in = new BufferedReader(
+                 new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
+          String l;
+          while ((l = in.readLine()) != null)
+            synchronized (text) {
+              text.append(l).append('\n');
+              text.notifyAll();
+            }
+        } catch (IOException e) {
+        }
+      });
+      reader.setDaemon(true);
+      reader.start();
+    }
+    static Captured start(Path d, List<String> c) throws IOException {
+      return new Captured(
+          new ProcessBuilder(c).directory(d.toFile()).redirectErrorStream(true).start(), d);
+    }
+    static String run(Path d, List<String> c, int t) throws Exception {
+      Captured v = start(d, c);
+      v.finish(t);
+      require(v.exit == 0, "process failed\n" + v.output());
+      return v.output();
+    }
+    void write(String v) throws IOException {
+      p.getOutputStream().write(v.getBytes(StandardCharsets.UTF_8));
+      p.getOutputStream().flush();
+    }
+    void awaitText(String v, int t) throws Exception {
+      long end = System.currentTimeMillis() + t * 1000L;
+      synchronized (text) {
+        while (!text.toString().contains(v) && p.isAlive() && System.currentTimeMillis() < end)
+          text.wait(100);
+      }
+      require(output().contains(v), "missing " + v + "\n" + output());
+    }
+    void finish(int t) throws Exception {
+      if (!p.waitFor(t, TimeUnit.SECONDS)) {
+        kill();
+        throw new IllegalStateException("process timeout\n" + output());
+      }
+      exit = p.exitValue();
+      reader.join(5000);
+      require(exit == 0, "process exit " + exit + "\n" + output());
+      if (!scope.isEmpty())
+        kill();
+    }
+    void kill() {
+      long end = System.nanoTime() + TimeUnit.SECONDS.toNanos(15);
+      try {
+        while (System.nanoTime() < end) {
+          Set<Long> descendants =
+              p.descendants().map(ProcessHandle::pid).collect(Collectors.toSet());
+          List<ProcessHandle> victims = ProcessHandle.allProcesses()
+                                            .filter(h -> descendants.contains(h.pid()) || scoped(h))
+                                            .collect(Collectors.toList());
+          victims.forEach(ProcessHandle::destroyForcibly);
+          p.destroyForcibly();
+          if (!p.isAlive() && victims.stream().noneMatch(ProcessHandle::isAlive))
+            return;
+          Thread.sleep(100);
+        }
+        throw new IllegalStateException("process tree kill timeout");
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+        throw new IllegalStateException("process kill interrupted", e);
+      }
+    }
+    private boolean scoped(ProcessHandle h) {
+      return !scope.isEmpty()
+          && h.info()
+                 .commandLine()
+                 .map(x -> x.toLowerCase(Locale.ROOT).contains(scope))
+                 .orElse(false);
+    }
+    String output() {
+      synchronized (text) {
+        return text.toString();
+      }
+    }
+  }
 }

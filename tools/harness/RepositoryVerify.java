@@ -17,17 +17,23 @@ final class RepositoryVerify {
     private final Path build = root.resolve(".worldline/build");
     private final Properties config = new Properties();
     private final boolean requireLocalArtifacts;
-    private final boolean runSmoke;
+    private final boolean runSmoke, pinnedSmoke;
     private final VerifyReport report;
 
     private RepositoryVerify(boolean requireLocalArtifacts, boolean runSmoke) {
         this(requireLocalArtifacts, runSmoke,
-                runSmoke ? "smoke" : requireLocalArtifacts ? "runtime" : "verify");
+                runSmoke ? "smoke" : requireLocalArtifacts ? "runtime" : "verify", false);
     }
 
     private RepositoryVerify(boolean requireLocalArtifacts, boolean runSmoke, String profile) {
+        this(requireLocalArtifacts, runSmoke, profile, false);
+    }
+
+    private RepositoryVerify(boolean requireLocalArtifacts, boolean runSmoke, String profile,
+            boolean pinnedSmoke) {
         this.requireLocalArtifacts = requireLocalArtifacts;
         this.runSmoke = runSmoke;
+        this.pinnedSmoke = pinnedSmoke;
         this.report = new VerifyReport(root, profile);
     }
 
@@ -69,11 +75,14 @@ final class RepositoryVerify {
             { SmokeBaselinePin.main(arguments); return; }
         boolean runtime = Arrays.equals(arguments, new String[] {"--runtime"});
         boolean smoke = Arrays.equals(arguments, new String[] {"--smoke"});
-        if (arguments.length > 0 && !runtime && !smoke) {
+        boolean pinnedSmoke = Arrays.equals(arguments, new String[] {"--pinned-smoke"});
+        if (arguments.length > 0 && !runtime && !smoke && !pinnedSmoke) {
             System.err.println("usage: java tools/harness/Verify.java [--runtime|--smoke]");
             System.exit(2);
         }
-        RepositoryVerify verify = new RepositoryVerify(runtime || smoke, smoke);
+        RepositoryVerify verify = pinnedSmoke
+                ? new RepositoryVerify(false, true, "pinned-smoke", true)
+                : new RepositoryVerify(runtime || smoke, smoke);
         try {
             verify.execute(); System.out.println("verify passed"); verify.report.finish("passed", null);
         } catch (Exception error) {
@@ -146,7 +155,7 @@ final class RepositoryVerify {
                 "BehaviorCompletenessCheck"))));
         report.step("adapter-kinds", () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "AdapterKindCheck")));
-        if (runSmoke) {
+        if (requireLocalArtifacts) {
             run(Arrays.asList("java", "tools/toolchains/Bootstrap.java", "retromcp"));
         }
         report.step("runtime-inputs", this::verifyRuntimeInputs);
@@ -159,6 +168,7 @@ final class RepositoryVerify {
             DataDrivenCycleCheck.execute(root); CompositeCycleCheck.execute(root);
             TelemetryPinCheck.execute(root);
             SchemaPinCheck.execute(root); SmokeDescriptorSchemaCheck.execute(root);
+            FormattingPinCheck.execute(root);
             BehaviorMapSchemaCheck.execute(root);
             RetryMigrationCheck.execute(root);
             FixedWaitMigrationCheck.execute(root); new SourceQualityCheck(root).execute();
@@ -197,7 +207,10 @@ final class RepositoryVerify {
     }
 
     private void runSmokeSuite() throws Exception {
-        run(Arrays.asList("java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "SmokeSuite"));
+        List<String> command = new ArrayList<>(Arrays.asList(
+                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "SmokeSuite"));
+        if (pinnedSmoke) command.add("--pinned-only");
+        run(command);
     }
 
     private void loadConfiguration() throws IOException {

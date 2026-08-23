@@ -15,13 +15,13 @@ import worldline.itemref.runtime.ItemRefs;
 /** Controlled Packet102 suffix for transaction prediction. */
 @Mixin(ClickSlotC2SPacket.class)
 public abstract class ClickPacketMixin {
-    @Shadow private ItemStack stack;
-    @Inject(method = "write(Ljava/io/DataOutputStream;)V", at = @At("TAIL"))
-    private void writeReference(DataOutputStream output, CallbackInfo callback) throws IOException {
-        ItemRefs.write(output, stack);
-    }
-    @Inject(method = "read(Ljava/io/DataInputStream;)V", at = @At("TAIL"))
-    private void readReference(DataInputStream input, CallbackInfo callback) throws IOException {
-        ItemRefs.read(input, stack);
-    }
+  @Shadow private ItemStack stack;
+  @Inject(method = "write(Ljava/io/DataOutputStream;)V", at = @At("TAIL"))
+  private void writeReference(DataOutputStream output, CallbackInfo callback) throws IOException {
+    ItemRefs.write(output, stack);
+  }
+  @Inject(method = "read(Ljava/io/DataInputStream;)V", at = @At("TAIL"))
+  private void readReference(DataInputStream input, CallbackInfo callback) throws IOException {
+    ItemRefs.read(input, stack);
+  }
 }

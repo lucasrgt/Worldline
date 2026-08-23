@@ -1,24 +1,152 @@
 package worldline.smoke.digstatusboundariesb173;
 
-import java.nio.charset.StandardCharsets;import java.nio.file.*;import java.security.MessageDigest;import java.time.Duration;import worldline.api.*;import worldline.b173server.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.time.Duration;
+import worldline.api.*;
+import worldline.b173server.*;
 
 /** Freezes official Packet14 start/finish, ignored status 1, and finish-without-start behavior. */
 public final class DigStatusBoundariesSmoke {
- private static final BlockState AIR=new BlockState(0,0),DIRT=new BlockState(3,0);private DigStatusBoundariesSmoke(){}
- public static void main(String[]a)throws Exception{
-  if(a.length!=7)throw new IllegalArgumentException("usage: DigStatusBoundariesSmoke server.jar workspace port seed username chunkX chunkZ");
-  Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String user=a[4];int cx=Integer.parseInt(a[5]),cz=Integer.parseInt(a[6]);Duration timeout=Duration.ofSeconds(90);
-  require(seed==17320110707L&&user.equals("DigBounds524")&&user.length()<=16,"dig-status identity drift");B173DedicatedServer server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true);B173WireClient actor=new B173WireClient("127.0.0.1",port,user,timeout),reader=null;BlockPosition top=null,positive=null,ignored=null,orphan=null;int column=0;
-  try{server.boot();B173PlayerSeed.writeInventory(workspace,user,4.5D,60D,4.5D,new int[]{0,1,2},new int[]{1,3,284},new int[]{32,3,1},new int[]{0,0,0});actor.connect();actor.synchronizePose();require(actor.awaitInventory().occupiedSlots()==3,"dig-status inventory drift");RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);top=foundation(initial,cx,cz);actor.selectHeldSlot(0);
-   while(water(initial.blockAt(local(top.x(),cx),top.y()+1,local(top.z(),cz)).legacyId())){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);require(++column<=15,"water column exceeded dig fixture");}for(int lift=0;lift<8;lift++){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);column++;}
-   BlockPosition west=place(actor,top,BlockFace.WEST,1),east=place(actor,top,BlockFace.EAST,1);actor.selectHeldSlot(1);positive=place(actor,top,BlockFace.UP,3);ignored=place(actor,west,BlockFace.UP,3);orphan=place(actor,east,BlockFace.UP,3);actor.selectHeldSlot(2);
-   actor.beginBreak(positive);worldline.test.WorldlineSmokeAwait.observe(actor,5);actor.finishBreak(positive);actor.awaitBlock(positive,AIR);B173DigStatusAccess.send(actor,ignored,1);require(worldline.test.WorldlineSmokeAwait.observe(actor,20).blockAt(ignored.x(),ignored.y(),ignored.z()).equals(DIRT),"status 1 changed block");B173DigStatusAccess.send(actor,orphan,2);require(worldline.test.WorldlineSmokeAwait.observe(actor,20).blockAt(orphan.x(),orphan.y(),orphan.z()).equals(DIRT),"orphan status 2 changed block");actor.close();awaitPlayers(server,0);server.save();
-  }finally{actor.close();server.close();}
-  Thread.sleep(1000L);server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true);reader=new B173WireClient("127.0.0.1",port,user,timeout);
-  try{server.boot();reader.connect();reader.synchronizePose();RemoteWorldView after=reader.awaitRemoteChunk(cx,cz);require(after.blockAt(positive.x(),positive.y(),positive.z()).equals(AIR)&&after.blockAt(ignored.x(),ignored.y(),ignored.z()).equals(DIRT)&&after.blockAt(orphan.x(),orphan.y(),orphan.z()).equals(DIRT),"persisted dig-status states drift");
-   String evidence="column="+column+",support="+cell(top)+",positive="+cell(positive)+":3:0->0:0,status=0+2,ignored="+cell(ignored)+":3:0->3:0,status=1,orphan="+cell(orphan)+":3:0->3:0,status=2-only,tool=284,persisted=true,clients=2,disconnect=clean";String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=raised-stone+three-dirt3|cause=packet14-status0+2-versus-status1-versus-status2-only|wire=packet53-air-versus-no-change|oracle=status0-start+status2-finish+status1-ignored+status2-only-unchanged|"+evidence;System.out.println("WORLDLINE_M524_SET="+evidence);System.out.println("WORLDLINE_M524_TRACE="+trace);System.out.println("WORLDLINE_M524_SIGNATURE="+sha(trace));
-  }finally{reader.close();server.close();}
- }
- private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}private static BlockPosition foundation(RemoteChunkSnapshot q,int cx,int cz){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(q.blockAt(x,y,z).legacyId()==3&&water(q.blockAt(x,y+1,z).legacyId()))return new BlockPosition(cx*16+x,y,cz*16+z);throw new IllegalStateException("no deterministic dig-status foundation");}
- private static String cell(BlockPosition p){return p.x()+":"+p.y()+":"+p.z();}private static boolean water(int id){return id==8||id==9;}private static int local(int v,int c){return v-c*16;}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long end=System.currentTimeMillis()+5000L;while(System.currentTimeMillis()<end){if(s.players().size()==n)return;Thread.sleep(100L);}throw new IllegalStateException("player count drift");}private static String sha(String s)throws Exception{byte[]b=MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));StringBuilder v=new StringBuilder();for(byte x:b)v.append(String.format("%02x",x&255));return v.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+  private static final BlockState AIR = new BlockState(0, 0), DIRT = new BlockState(3, 0);
+  private DigStatusBoundariesSmoke() {
+  }
+  public static void main(String[] a) throws Exception {
+    if (a.length != 7)
+      throw new IllegalArgumentException(
+          "usage: DigStatusBoundariesSmoke server.jar workspace port seed username chunkX chunkZ");
+    Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
+    int port = Integer.parseInt(a[2]);
+    long seed = Long.parseLong(a[3]);
+    String user = a[4];
+    int cx = Integer.parseInt(a[5]), cz = Integer.parseInt(a[6]);
+    Duration timeout = Duration.ofSeconds(90);
+    require(seed == 17320110707L && user.equals("DigBounds524") && user.length() <= 16,
+        "dig-status identity drift");
+    B173DedicatedServer server =
+        new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+    B173WireClient actor = new B173WireClient("127.0.0.1", port, user, timeout), reader = null;
+    BlockPosition top = null, positive = null, ignored = null, orphan = null;
+    int column = 0;
+    try {
+      server.boot();
+      B173PlayerSeed.writeInventory(workspace, user, 4.5D, 60D, 4.5D, new int[] {0, 1, 2},
+          new int[] {1, 3, 284}, new int[] {32, 3, 1}, new int[] {0, 0, 0});
+      actor.connect();
+      actor.synchronizePose();
+      require(actor.awaitInventory().occupiedSlots() == 3, "dig-status inventory drift");
+      RemoteChunkSnapshot initial = actor.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      top = foundation(initial, cx, cz);
+      actor.selectHeldSlot(0);
+      while (
+          water(initial.blockAt(local(top.x(), cx), top.y() + 1, local(top.z(), cz)).legacyId())) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        require(++column <= 15, "water column exceeded dig fixture");
+      }
+      for (int lift = 0; lift < 8; lift++) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        column++;
+      }
+      BlockPosition west = place(actor, top, BlockFace.WEST, 1),
+                    east = place(actor, top, BlockFace.EAST, 1);
+      actor.selectHeldSlot(1);
+      positive = place(actor, top, BlockFace.UP, 3);
+      ignored = place(actor, west, BlockFace.UP, 3);
+      orphan = place(actor, east, BlockFace.UP, 3);
+      actor.selectHeldSlot(2);
+      actor.beginBreak(positive);
+      worldline.test.WorldlineSmokeAwait.observe(actor, 5);
+      actor.finishBreak(positive);
+      actor.awaitBlock(positive, AIR);
+      B173DigStatusAccess.send(actor, ignored, 1);
+      require(worldline.test.WorldlineSmokeAwait.observe(actor, 20)
+                  .blockAt(ignored.x(), ignored.y(), ignored.z())
+                  .equals(DIRT),
+          "status 1 changed block");
+      B173DigStatusAccess.send(actor, orphan, 2);
+      require(worldline.test.WorldlineSmokeAwait.observe(actor, 20)
+                  .blockAt(orphan.x(), orphan.y(), orphan.z())
+                  .equals(DIRT),
+          "orphan status 2 changed block");
+      actor.close();
+      awaitPlayers(server, 0);
+      server.save();
+    } finally {
+      actor.close();
+      server.close();
+    }
+    Thread.sleep(1000L);
+    server = new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+    reader = new B173WireClient("127.0.0.1", port, user, timeout);
+    try {
+      server.boot();
+      reader.connect();
+      reader.synchronizePose();
+      RemoteWorldView after = reader.awaitRemoteChunk(cx, cz);
+      require(after.blockAt(positive.x(), positive.y(), positive.z()).equals(AIR)
+              && after.blockAt(ignored.x(), ignored.y(), ignored.z()).equals(DIRT)
+              && after.blockAt(orphan.x(), orphan.y(), orphan.z()).equals(DIRT),
+          "persisted dig-status states drift");
+      String evidence = "column=" + column + ",support=" + cell(top) + ",positive=" + cell(positive)
+          + ":3:0->0:0,status=0+2,ignored=" + cell(ignored)
+          + ":3:0->3:0,status=1,orphan=" + cell(orphan)
+          + ":3:0->3:0,status=2-only,tool=284,persisted=true,clients=2,disconnect=clean";
+      String trace = "v1|server=official-b1.7.3|seed=" + seed
+          + "|fixture=raised-stone+three-dirt3|cause=packet14-status0+2-versus-status1-versus-status2-only|wire=packet53-air-versus-no-change|oracle=status0-start+status2-finish+status1-ignored+status2-only-unchanged|"
+          + evidence;
+      System.out.println("WORLDLINE_M524_SET=" + evidence);
+      System.out.println("WORLDLINE_M524_TRACE=" + trace);
+      System.out.println("WORLDLINE_M524_SIGNATURE=" + sha(trace));
+    } finally {
+      reader.close();
+      server.close();
+    }
+  }
+  private static BlockPosition place(
+      B173WireClient a, BlockPosition support, BlockFace face, int id) throws Exception {
+    BlockPosition target = face.adjacent(support);
+    a.placeHeldBlock(support, face);
+    a.awaitBlock(target, new BlockState(id, 0));
+    return target;
+  }
+  private static BlockPosition foundation(RemoteChunkSnapshot q, int cx, int cz) {
+    for (int x = 4; x <= 11; x++)
+      for (int z = 4; z <= 11; z++)
+        for (int y = 126; y >= 1; y--)
+          if (q.blockAt(x, y, z).legacyId() == 3 && water(q.blockAt(x, y + 1, z).legacyId()))
+            return new BlockPosition(cx * 16 + x, y, cz * 16 + z);
+    throw new IllegalStateException("no deterministic dig-status foundation");
+  }
+  private static String cell(BlockPosition p) {
+    return p.x() + ":" + p.y() + ":" + p.z();
+  }
+  private static boolean water(int id) {
+    return id == 8 || id == 9;
+  }
+  private static int local(int v, int c) {
+    return v - c * 16;
+  }
+  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
+    long end = System.currentTimeMillis() + 5000L;
+    while (System.currentTimeMillis() < end) {
+      if (s.players().size() == n)
+        return;
+      Thread.sleep(100L);
+    }
+    throw new IllegalStateException("player count drift");
+  }
+  private static String sha(String s) throws Exception {
+    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
+    StringBuilder v = new StringBuilder();
+    for (byte x : b)
+      v.append(String.format("%02x", x & 255));
+    return v.toString();
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
 }

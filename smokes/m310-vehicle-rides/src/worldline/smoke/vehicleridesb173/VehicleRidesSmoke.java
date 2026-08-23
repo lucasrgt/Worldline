@@ -1,25 +1,189 @@
 package worldline.smoke.vehicleridesb173;
 
-import java.nio.charset.StandardCharsets;import java.nio.file.*;import java.security.MessageDigest;import java.time.Duration;import worldline.api.*;import worldline.b173server.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.time.Duration;
+import worldline.api.*;
+import worldline.b173server.*;
 
 /** Spawns type-1 boat and type-10 minecart, then empty-hand mounts both and freezes Packet39. */
-public final class VehicleRidesSmoke{
- private VehicleRidesSmoke(){}
- public static void main(String[]a)throws Exception{
-  if(a.length!=8)throw new IllegalArgumentException("usage: VehicleRidesSmoke server.jar workspace port seed actor observer chunkX chunkZ");
-  Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String actorName=a[4],observerName=a[5];int cx=Integer.parseInt(a[6]),cz=Integer.parseInt(a[7]);Duration timeout=Duration.ofSeconds(90);
-  require(actorName.length()<=16&&observerName.length()<=16,"username exceeds 16");B173DedicatedServer server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true);B173WireClient actor=new B173WireClient("127.0.0.1",port,actorName,timeout),observer=new B173WireClient("127.0.0.1",port,observerName,timeout);BlockPosition water,top,rail;int column,fluid;
-  try{server.boot();B173PlayerSeed.writeInventory(workspace,actorName,4.5D,60D,4.5D,new int[]{0,1,2,3},new int[]{1,66,328,333},new int[]{32,1,1,1},new int[]{0,0,0,0});B173PlayerSeed.write(workspace,observerName,4.5D,60D,4.5D);actor.connect();actor.synchronizePose();require(actor.awaitInventory().occupiedSlots()==4,"vehicle inventory drift");RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);water=waterCell(initial,cx,cz);fluid=initial.blockAt(local(water.x(),cx),water.y(),local(water.z(),cz)).legacyId();top=foundation(initial,cx,cz,water);observer.connect();observer.synchronizePose();observer.awaitRemoteChunk(cx,cz);
-   actor.selectHeldSlot(3);actor.look(0F,90F);actor.useSelectedItemInAir();RemoteObjectSpawn boat=actor.awaitObjectSpawn(1),boatPeer=observer.awaitObjectSpawn(1);require(boat.equals(boatPeer)&&boat.type()==1&&boat.entityId()!=actor.state().entityId()&&boat.entityId()!=observer.state().entityId(),"peer boat spawn drift");require(Math.abs(boat.x()-4.5D)<=6D&&Math.abs(boat.z()-4.5D)<=6D,"boat packet pose escaped player water pose="+boat.x()+":"+boat.y()+":"+boat.z());worldline.test.WorldlineSmokeAwait.awaitEntity(actor,actor::inventory,v->v.slot(39).empty(),"boat consumption",20);observer.selectHeldSlot(0);B173VehicleAccess.useVehicle(observer,boat.entityId());B173VehicleAttach boatRide=B173VehicleAccess.awaitAttach(observer,boat.entityId());require(boatRide.passengerId()==observer.state().entityId()&&boatRide.vehicleId()==boat.entityId(),"boat attach identity drift");
-   actor.selectHeldSlot(0);if(top.x()!=4||top.z()!=4)actor.moveAndObserve(top.x()+0.5D-4.5D,0D,top.z()+0.5D-4.5D,4);column=0;while(water(initial.blockAt(local(top.x(),cx),top.y()+1,local(top.z(),cz)).legacyId())){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);worldline.test.WorldlineSmokeAwait.observe(observer,1);require(++column<=15,"water column exceeded vehicle ride fixture");}for(int lift=0;lift<8;lift++){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);worldline.test.WorldlineSmokeAwait.observe(observer,1);column++;}
-   actor.selectHeldSlot(0);place(actor,top,BlockFace.EAST,1);actor.selectHeldSlot(1);rail=place(actor,top,BlockFace.UP,66);actor.selectHeldSlot(2);actor.useHeldItemOnBlock(rail,BlockFace.UP);RemoteObjectSpawn cart=actor.awaitObjectSpawn(10),cartPeer=observer.awaitObjectSpawn(10);
-   require(cart.equals(cartPeer)&&cart.entityId()!=actor.state().entityId()&&cart.entityId()!=observer.state().entityId()&&cart.entityId()!=boat.entityId(),"peer minecart identity drift");require(cart.type()==10&&cart.throwerId()==0&&cart.velocityX()==0&&cart.velocityY()==0&&cart.velocityZ()==0&&cart.fixedX()==rail.x()*32+16&&cart.fixedY()==rail.y()*32+27&&cart.fixedZ()==rail.z()*32+16,"minecart packet bounds drift: type="+cart.type()+",thrower="+cart.throwerId()+",fixed="+cart.fixedX()+":"+cart.fixedY()+":"+cart.fixedZ()+",rail="+rail);
-   actor.moveAndObserve(1D,0D,0D,2);for(int step=0;step<6;step++)actor.moveAndObserve(0D,-1D,0D,5);actor.selectHeldSlot(4);actor.look(90F,20F);actor.activateBlock(rail,BlockFace.UP);B173VehicleAccess.useVehicle(actor,cart.entityId());B173VehicleAttach cartRide=B173VehicleAccess.awaitAttach(actor,cart.entityId());require(cartRide.passengerId()==actor.state().entityId()&&cartRide.vehicleId()==cart.entityId()&&cartRide.passengerId()!=observer.state().entityId(),"minecart attach identity drift");worldline.test.WorldlineSmokeAwait.observe(actor,10);worldline.test.WorldlineSmokeAwait.observe(observer,5);actor.close();observer.close();awaitPlayers(server,0);server.save();
-   String evidence="water="+water.x()+":"+water.y()+":"+water.z()+":"+fluid+":0,boat=type1+shared-id+packet23+attach,column="+column+",rail="+rail.x()+":"+rail.y()+":"+rail.z()+":66:0,cart=type10+shared-positive-id+thrower0+fixed"+cart.fixedX()+":"+cart.fixedY()+":"+cart.fixedZ()+"+attach,clients=2,disconnect=clean";String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=natural-water"+fluid+"+raised-rail66|cause=packet15-dir255-boat333+empty-hand-packet7-mount+packet15-minecart328+empty-hand-packet7-mount|wire=packet23-type1+packet23-type10+packet39-attach|oracle=two-peer-vehicle-spawns+type1-and-type10-rides|"+evidence;System.out.println("WORLDLINE_M310_RIDES="+evidence);System.out.println("WORLDLINE_M310_TRACE="+trace);System.out.println("WORLDLINE_M310_SIGNATURE="+sha(trace));
-  }finally{actor.close();observer.close();server.close();}
- }
- private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}
- private static BlockPosition waterCell(RemoteChunkSnapshot q,int cx,int cz){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(q.blockAt(x,y,z).legacyId()==3&&water(q.blockAt(x,y+1,z).legacyId())&&water(q.blockAt(x,60,z).legacyId()))return new BlockPosition(cx*16+x,60,cz*16+z);throw new IllegalStateException("no deterministic boat water cell");}
- private static BlockPosition foundation(RemoteChunkSnapshot q,int cx,int cz,BlockPosition avoid){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(q.blockAt(x,y,z).legacyId()==3&&water(q.blockAt(x,y+1,z).legacyId())){BlockPosition p=new BlockPosition(cx*16+x,y,cz*16+z);if(p.x()!=avoid.x()||p.z()!=avoid.z())return p;}throw new IllegalStateException("no deterministic minecart ride foundation");}
- private static boolean water(int id){return id==8||id==9;}private static int local(int v,int c){return v-c*16;}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long e=System.currentTimeMillis()+5000;while(System.currentTimeMillis()<e){if(s.players().size()==n)return;Thread.sleep(100);}throw new IllegalStateException("player count drift");}private static String sha(String s)throws Exception{byte[]b=MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));StringBuilder v=new StringBuilder();for(byte x:b)v.append(String.format("%02x",x&255));return v.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+public final class VehicleRidesSmoke {
+  private VehicleRidesSmoke() {
+  }
+  public static void main(String[] a) throws Exception {
+    if (a.length != 8)
+      throw new IllegalArgumentException(
+          "usage: VehicleRidesSmoke server.jar workspace port seed actor observer chunkX chunkZ");
+    Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
+    int port = Integer.parseInt(a[2]);
+    long seed = Long.parseLong(a[3]);
+    String actorName = a[4], observerName = a[5];
+    int cx = Integer.parseInt(a[6]), cz = Integer.parseInt(a[7]);
+    Duration timeout = Duration.ofSeconds(90);
+    require(actorName.length() <= 16 && observerName.length() <= 16, "username exceeds 16");
+    B173DedicatedServer server =
+        new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+    B173WireClient actor = new B173WireClient("127.0.0.1", port, actorName, timeout),
+                   observer = new B173WireClient("127.0.0.1", port, observerName, timeout);
+    BlockPosition water, top, rail;
+    int column, fluid;
+    try {
+      server.boot();
+      B173PlayerSeed.writeInventory(workspace, actorName, 4.5D, 60D, 4.5D, new int[] {0, 1, 2, 3},
+          new int[] {1, 66, 328, 333}, new int[] {32, 1, 1, 1}, new int[] {0, 0, 0, 0});
+      B173PlayerSeed.write(workspace, observerName, 4.5D, 60D, 4.5D);
+      actor.connect();
+      actor.synchronizePose();
+      require(actor.awaitInventory().occupiedSlots() == 4, "vehicle inventory drift");
+      RemoteChunkSnapshot initial = actor.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      water = waterCell(initial, cx, cz);
+      fluid = initial.blockAt(local(water.x(), cx), water.y(), local(water.z(), cz)).legacyId();
+      top = foundation(initial, cx, cz, water);
+      observer.connect();
+      observer.synchronizePose();
+      observer.awaitRemoteChunk(cx, cz);
+      actor.selectHeldSlot(3);
+      actor.look(0F, 90F);
+      actor.useSelectedItemInAir();
+      RemoteObjectSpawn boat = actor.awaitObjectSpawn(1), boatPeer = observer.awaitObjectSpawn(1);
+      require(boat.equals(boatPeer) && boat.type() == 1
+              && boat.entityId() != actor.state().entityId()
+              && boat.entityId() != observer.state().entityId(),
+          "peer boat spawn drift");
+      require(Math.abs(boat.x() - 4.5D) <= 6D && Math.abs(boat.z() - 4.5D) <= 6D,
+          "boat packet pose escaped player water pose=" + boat.x() + ":" + boat.y() + ":"
+              + boat.z());
+      worldline.test.WorldlineSmokeAwait.awaitEntity(
+          actor, actor::inventory, v -> v.slot(39).empty(), "boat consumption", 20);
+      observer.selectHeldSlot(0);
+      B173VehicleAccess.useVehicle(observer, boat.entityId());
+      B173VehicleAttach boatRide = B173VehicleAccess.awaitAttach(observer, boat.entityId());
+      require(boatRide.passengerId() == observer.state().entityId()
+              && boatRide.vehicleId() == boat.entityId(),
+          "boat attach identity drift");
+      actor.selectHeldSlot(0);
+      if (top.x() != 4 || top.z() != 4)
+        actor.moveAndObserve(top.x() + 0.5D - 4.5D, 0D, top.z() + 0.5D - 4.5D, 4);
+      column = 0;
+      while (
+          water(initial.blockAt(local(top.x(), cx), top.y() + 1, local(top.z(), cz)).legacyId())) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        worldline.test.WorldlineSmokeAwait.observe(observer, 1);
+        require(++column <= 15, "water column exceeded vehicle ride fixture");
+      }
+      for (int lift = 0; lift < 8; lift++) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        worldline.test.WorldlineSmokeAwait.observe(observer, 1);
+        column++;
+      }
+      actor.selectHeldSlot(0);
+      place(actor, top, BlockFace.EAST, 1);
+      actor.selectHeldSlot(1);
+      rail = place(actor, top, BlockFace.UP, 66);
+      actor.selectHeldSlot(2);
+      actor.useHeldItemOnBlock(rail, BlockFace.UP);
+      RemoteObjectSpawn cart = actor.awaitObjectSpawn(10), cartPeer = observer.awaitObjectSpawn(10);
+      require(cart.equals(cartPeer) && cart.entityId() != actor.state().entityId()
+              && cart.entityId() != observer.state().entityId()
+              && cart.entityId() != boat.entityId(),
+          "peer minecart identity drift");
+      require(cart.type() == 10 && cart.throwerId() == 0 && cart.velocityX() == 0
+              && cart.velocityY() == 0 && cart.velocityZ() == 0
+              && cart.fixedX() == rail.x() * 32 + 16 && cart.fixedY() == rail.y() * 32 + 27
+              && cart.fixedZ() == rail.z() * 32 + 16,
+          "minecart packet bounds drift: type=" + cart.type() + ",thrower=" + cart.throwerId()
+              + ",fixed=" + cart.fixedX() + ":" + cart.fixedY() + ":" + cart.fixedZ()
+              + ",rail=" + rail);
+      actor.moveAndObserve(1D, 0D, 0D, 2);
+      for (int step = 0; step < 6; step++)
+        actor.moveAndObserve(0D, -1D, 0D, 5);
+      actor.selectHeldSlot(4);
+      actor.look(90F, 20F);
+      actor.activateBlock(rail, BlockFace.UP);
+      B173VehicleAccess.useVehicle(actor, cart.entityId());
+      B173VehicleAttach cartRide = B173VehicleAccess.awaitAttach(actor, cart.entityId());
+      require(cartRide.passengerId() == actor.state().entityId()
+              && cartRide.vehicleId() == cart.entityId()
+              && cartRide.passengerId() != observer.state().entityId(),
+          "minecart attach identity drift");
+      worldline.test.WorldlineSmokeAwait.observe(actor, 10);
+      worldline.test.WorldlineSmokeAwait.observe(observer, 5);
+      actor.close();
+      observer.close();
+      awaitPlayers(server, 0);
+      server.save();
+      String evidence = "water=" + water.x() + ":" + water.y() + ":" + water.z() + ":" + fluid
+          + ":0,boat=type1+shared-id+packet23+attach,column=" + column + ",rail=" + rail.x() + ":"
+          + rail.y() + ":" + rail.z() + ":66:0,cart=type10+shared-positive-id+thrower0+fixed"
+          + cart.fixedX() + ":" + cart.fixedY() + ":" + cart.fixedZ()
+          + "+attach,clients=2,disconnect=clean";
+      String trace = "v1|server=official-b1.7.3|seed=" + seed + "|fixture=natural-water" + fluid
+          + "+raised-rail66|cause=packet15-dir255-boat333+empty-hand-packet7-mount+packet15-minecart328+empty-hand-packet7-mount|wire=packet23-type1+packet23-type10+packet39-attach|oracle=two-peer-vehicle-spawns+type1-and-type10-rides|"
+          + evidence;
+      System.out.println("WORLDLINE_M310_RIDES=" + evidence);
+      System.out.println("WORLDLINE_M310_TRACE=" + trace);
+      System.out.println("WORLDLINE_M310_SIGNATURE=" + sha(trace));
+    } finally {
+      actor.close();
+      observer.close();
+      server.close();
+    }
+  }
+  private static BlockPosition place(
+      B173WireClient a, BlockPosition support, BlockFace face, int id) throws Exception {
+    BlockPosition target = face.adjacent(support);
+    a.placeHeldBlock(support, face);
+    a.awaitBlock(target, new BlockState(id, 0));
+    return target;
+  }
+  private static BlockPosition waterCell(RemoteChunkSnapshot q, int cx, int cz) {
+    for (int x = 4; x <= 11; x++)
+      for (int z = 4; z <= 11; z++)
+        for (int y = 126; y >= 1; y--)
+          if (q.blockAt(x, y, z).legacyId() == 3 && water(q.blockAt(x, y + 1, z).legacyId())
+              && water(q.blockAt(x, 60, z).legacyId()))
+            return new BlockPosition(cx * 16 + x, 60, cz * 16 + z);
+    throw new IllegalStateException("no deterministic boat water cell");
+  }
+  private static BlockPosition foundation(
+      RemoteChunkSnapshot q, int cx, int cz, BlockPosition avoid) {
+    for (int x = 4; x <= 11; x++)
+      for (int z = 4; z <= 11; z++)
+        for (int y = 126; y >= 1; y--)
+          if (q.blockAt(x, y, z).legacyId() == 3 && water(q.blockAt(x, y + 1, z).legacyId())) {
+            BlockPosition p = new BlockPosition(cx * 16 + x, y, cz * 16 + z);
+            if (p.x() != avoid.x() || p.z() != avoid.z())
+              return p;
+          }
+    throw new IllegalStateException("no deterministic minecart ride foundation");
+  }
+  private static boolean water(int id) {
+    return id == 8 || id == 9;
+  }
+  private static int local(int v, int c) {
+    return v - c * 16;
+  }
+  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
+    long e = System.currentTimeMillis() + 5000;
+    while (System.currentTimeMillis() < e) {
+      if (s.players().size() == n)
+        return;
+      Thread.sleep(100);
+    }
+    throw new IllegalStateException("player count drift");
+  }
+  private static String sha(String s) throws Exception {
+    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
+    StringBuilder v = new StringBuilder();
+    for (byte x : b)
+      v.append(String.format("%02x", x & 255));
+    return v.toString();
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
 }

@@ -15,15 +15,17 @@ import worldline.itemref.runtime.ItemRefs;
 /** Appends one nullable logical reference per decoded Packet104 slot. */
 @Mixin(InventoryS2CPacket.class)
 public abstract class InventoryPacketMixin {
-    @Shadow private ItemStack[] contents;
+  @Shadow private ItemStack[] contents;
 
-    @Inject(method = "write(Ljava/io/DataOutputStream;)V", at = @At("TAIL"))
-    private void writeReferences(DataOutputStream output, CallbackInfo callback) throws IOException {
-        for (ItemStack stack : contents) ItemRefs.write(output, stack);
-    }
+  @Inject(method = "write(Ljava/io/DataOutputStream;)V", at = @At("TAIL"))
+  private void writeReferences(DataOutputStream output, CallbackInfo callback) throws IOException {
+    for (ItemStack stack : contents)
+      ItemRefs.write(output, stack);
+  }
 
-    @Inject(method = "read(Ljava/io/DataInputStream;)V", at = @At("TAIL"))
-    private void readReferences(DataInputStream input, CallbackInfo callback) throws IOException {
-        for (ItemStack stack : contents) ItemRefs.read(input, stack);
-    }
+  @Inject(method = "read(Ljava/io/DataInputStream;)V", at = @At("TAIL"))
+  private void readReferences(DataInputStream input, CallbackInfo callback) throws IOException {
+    for (ItemStack stack : contents)
+      ItemRefs.read(input, stack);
+  }
 }

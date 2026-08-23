@@ -1,25 +1,217 @@
 package worldline.smoke.horizontallavab173;
 
-import java.nio.ByteBuffer;import java.nio.charset.StandardCharsets;import java.nio.file.*;import java.security.MessageDigest;import java.time.Duration;import java.util.*;
-import worldline.api.*;import worldline.b173server.*;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.time.Duration;
+import java.util.*;
+import worldline.api.*;
+import worldline.b173server.*;
 
 /** Opens one cell in a bounded official lava trench. */
-public final class HorizontalLavaSmoke{
- private HorizontalLavaSmoke(){}
- public static void main(String[]a)throws Exception{
-  if(a.length!=9)throw new IllegalArgumentException("usage: HorizontalLavaSmoke server.jar workspace port seed username chunkX chunkZ fixtureTicks flowTicks");Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String user=a[4];int cx=Integer.parseInt(a[5]),cz=Integer.parseInt(a[6]),fixtureTicks=Integer.parseInt(a[7]),flowTicks=Integer.parseInt(a[8]);Duration timeout=Duration.ofSeconds(90);
-  B173DedicatedServer server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true);B173WireClient actor=new B173WireClient("127.0.0.1",port,user,timeout),treatment=null,reader=null;RemoteChunkSnapshot before,after;BlockPosition foundation,top,source,target;BlockState opened,settled;int column;
-  try{server.boot();B173PlayerSeed.writeInventory(workspace,user,4.5D,60D,4.5D,new int[]{0,1,2},new int[]{1,3,11},new int[]{48,1,1},new int[]{0,0,0});actor.connect();actor.synchronizePose();require(actor.awaitInventory().occupiedSlots()==3,"lava trench inventory drift");RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);foundation=foundation(initial,cx,cz);top=foundation;column=0;actor.selectHeldSlot(0);
-   while(water(initial.blockAt(local(top.x(),cx),top.y()+1,local(top.z(),cz)).legacyId())){top=place(actor,top,BlockFace.UP);actor.moveAndObserve(0D,1D,0D,1);column++;require(column<=15,"water column exceeded fixture stack");}for(int lift=0;lift<8;lift++){top=place(actor,top,BlockFace.UP);actor.moveAndObserve(0D,1D,0D,1);column++;}
-   BlockPosition west=place(actor,top,BlockFace.WEST),east=place(actor,top,BlockFace.EAST),east2=place(actor,east,BlockFace.EAST);List<BlockPosition>floor=new ArrayList<>(Arrays.asList(west,top,east,east2));for(BlockPosition p:new ArrayList<>(floor)){floor.add(place(actor,p,BlockFace.NORTH));floor.add(place(actor,p,BlockFace.SOUTH));}
-   for(BlockPosition p:floor){int dx=p.x()-top.x(),dz=p.z()-top.z();if(dx==-1||dx==2||dz==-1||dz==1)place(actor,p,BlockFace.UP);}source=BlockFace.UP.adjacent(top);target=BlockFace.UP.adjacent(east);
-   actor.selectHeldSlot(1);actor.placeHeldBlock(east,BlockFace.UP);actor.awaitBlock(target,new BlockState(3,0));actor.selectHeldSlot(2);actor.placeHeldBlock(top,BlockFace.UP);actor.awaitBlock(source,new BlockState(11,0));RemoteWorldView filled=worldline.test.WorldlineSmokeAwait.observe(actor,5);require(filled.blockAt(source.x(),source.y(),source.z()).equals(new BlockState(11,0))&&filled.blockAt(target.x(),target.y(),target.z()).equals(new BlockState(3,0)),"bounded lava baseline drift");
-   actor.selectHeldSlot(3);actor.moveAndObserve(0D,-2D,0D,2);worldline.test.WorldlineSmokeAwait.observe(actor,fixtureTicks);actor.close();awaitPlayers(server,0);server.save();treatment=new B173WireClient("127.0.0.1",port,user,timeout);treatment.connect();treatment.synchronizePose();before=treatment.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);treatment.beginBreak(target);Thread.sleep(3000L);treatment.finishBreak(target);opened=treatment.awaitBlock(target,new BlockState(0,0)).blockAt(target.x(),target.y(),target.z());settled=worldline.test.WorldlineSmokeAwait.observe(treatment,flowTicks).blockAt(target.x(),target.y(),target.z());require(opened.equals(new BlockState(0,0))&&lava(settled.legacyId()),"horizontal lava absent: "+opened+" / "+settled);
-   treatment.close();awaitPlayers(server,0);server.save();reader=new B173WireClient("127.0.0.1",port,user,timeout);reader.connect();reader.synchronizePose();after=reader.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);require(after.blockAt(local(source.x(),cx),source.y(),local(source.z(),cz)).equals(new BlockState(11,0))&&after.blockAt(local(target.x(),cx),target.y(),local(target.z(),cz)).equals(settled),"fresh horizontal lava drift");
-  }finally{actor.close();if(treatment!=null)treatment.close();if(reader!=null)reader.close();server.close();}
-  StateDelta d=delta(before,after,Arrays.asList(source,target),cx,cz);require(d.changed==1,"horizontal lava fixture delta drift: "+d);String evidence="column="+column+",source="+source.x()+":"+source.y()+":"+source.z()+":11:0,target="+target.x()+":"+target.y()+":"+target.z()+":3:0->0:0->"+settled.legacyId()+":"+settled.metadata()+",states="+d;String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=raised-stone-trench+seeded-still-lava11+dirt-gate3|settle="+fixtureTicks+"+"+flowTicks+"ticks|cause=packet14-open-horizontal-cell|confirmation=packet53-air|effect=official-scheduled-horizontal-lava|observation=live-packet53+fresh-login-packet51|oracle=two-cell-causal-scope|"+evidence+"|disconnect=clean";System.out.println("WORLDLINE_M138_LAVA="+evidence);System.out.println("WORLDLINE_M138_TRACE="+trace);System.out.println("WORLDLINE_M138_SIGNATURE="+sha(trace));
- }
- private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(1,0));return target;}private static BlockPosition foundation(RemoteChunkSnapshot q,int cx,int cz){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(q.blockAt(x,y,z).legacyId()==3&&water(q.blockAt(x,y+1,z).legacyId()))return new BlockPosition(cx*16+x,y,cz*16+z);throw new IllegalStateException("no deterministic lava foundation");}
- private static StateDelta delta(RemoteChunkSnapshot a,RemoteChunkSnapshot b,List<BlockPosition>cells,int cx,int cz)throws Exception{MessageDigest md=MessageDigest.getInstance("SHA-256");ByteBuffer row=ByteBuffer.allocate(10);int n=0;for(BlockPosition v:cells){int x=local(v.x(),cx),y=v.y(),z=local(v.z(),cz);BlockState p=a.blockAt(x,y,z),q=b.blockAt(x,y,z);if(!p.equals(q)){n++;row.clear();row.putShort((short)v.x()).putShort((short)y).putShort((short)v.z()).put((byte)p.legacyId()).put((byte)p.metadata()).put((byte)q.legacyId()).put((byte)q.metadata());md.update(row.array());}}return new StateDelta(n,hex(md.digest()));}
- private static boolean water(int id){return id==8||id==9;}private static boolean lava(int id){return id==10||id==11;}private static int local(int v,int c){return v-c*16;}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long e=System.currentTimeMillis()+5000;while(System.currentTimeMillis()<e){if(s.players().size()==n)return;Thread.sleep(100);}throw new IllegalStateException("player count drift");}private static String sha(String s)throws Exception{return hex(MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8)));}private static String hex(byte[]b){StringBuilder s=new StringBuilder();for(byte v:b)s.append(String.format("%02x",v&255));return s.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}private static final class StateDelta{final int changed;final String hash;StateDelta(int n,String h){changed=n;hash=h;}public String toString(){return changed+":"+hash;}}
+public final class HorizontalLavaSmoke {
+  private HorizontalLavaSmoke() {
+  }
+  public static void main(String[] a) throws Exception {
+    if (a.length != 9)
+      throw new IllegalArgumentException(
+          "usage: HorizontalLavaSmoke server.jar workspace port seed username chunkX chunkZ fixtureTicks flowTicks");
+    Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
+    int port = Integer.parseInt(a[2]);
+    long seed = Long.parseLong(a[3]);
+    String user = a[4];
+    int cx = Integer.parseInt(a[5]), cz = Integer.parseInt(a[6]),
+        fixtureTicks = Integer.parseInt(a[7]), flowTicks = Integer.parseInt(a[8]);
+    Duration timeout = Duration.ofSeconds(90);
+    B173DedicatedServer server =
+        new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+    B173WireClient actor = new B173WireClient("127.0.0.1", port, user, timeout), treatment = null,
+                   reader = null;
+    RemoteChunkSnapshot before, after;
+    BlockPosition foundation, top, source, target;
+    BlockState opened, settled;
+    int column;
+    try {
+      server.boot();
+      B173PlayerSeed.writeInventory(workspace, user, 4.5D, 60D, 4.5D, new int[] {0, 1, 2},
+          new int[] {1, 3, 11}, new int[] {48, 1, 1}, new int[] {0, 0, 0});
+      actor.connect();
+      actor.synchronizePose();
+      require(actor.awaitInventory().occupiedSlots() == 3, "lava trench inventory drift");
+      RemoteChunkSnapshot initial = actor.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      foundation = foundation(initial, cx, cz);
+      top = foundation;
+      column = 0;
+      actor.selectHeldSlot(0);
+      while (
+          water(initial.blockAt(local(top.x(), cx), top.y() + 1, local(top.z(), cz)).legacyId())) {
+        top = place(actor, top, BlockFace.UP);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        column++;
+        require(column <= 15, "water column exceeded fixture stack");
+      }
+      for (int lift = 0; lift < 8; lift++) {
+        top = place(actor, top, BlockFace.UP);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        column++;
+      }
+      BlockPosition west = place(actor, top, BlockFace.WEST),
+                    east = place(actor, top, BlockFace.EAST),
+                    east2 = place(actor, east, BlockFace.EAST);
+      List<BlockPosition> floor = new ArrayList<>(Arrays.asList(west, top, east, east2));
+      for (BlockPosition p : new ArrayList<>(floor)) {
+        floor.add(place(actor, p, BlockFace.NORTH));
+        floor.add(place(actor, p, BlockFace.SOUTH));
+      }
+      for (BlockPosition p : floor) {
+        int dx = p.x() - top.x(), dz = p.z() - top.z();
+        if (dx == -1 || dx == 2 || dz == -1 || dz == 1)
+          place(actor, p, BlockFace.UP);
+      }
+      source = BlockFace.UP.adjacent(top);
+      target = BlockFace.UP.adjacent(east);
+      actor.selectHeldSlot(1);
+      actor.placeHeldBlock(east, BlockFace.UP);
+      actor.awaitBlock(target, new BlockState(3, 0));
+      actor.selectHeldSlot(2);
+      actor.placeHeldBlock(top, BlockFace.UP);
+      actor.awaitBlock(source, new BlockState(11, 0));
+      RemoteWorldView filled = worldline.test.WorldlineSmokeAwait.observe(actor, 5);
+      require(filled.blockAt(source.x(), source.y(), source.z()).equals(new BlockState(11, 0))
+              && filled.blockAt(target.x(), target.y(), target.z()).equals(new BlockState(3, 0)),
+          "bounded lava baseline drift");
+      actor.selectHeldSlot(3);
+      actor.moveAndObserve(0D, -2D, 0D, 2);
+      worldline.test.WorldlineSmokeAwait.observe(actor, fixtureTicks);
+      actor.close();
+      awaitPlayers(server, 0);
+      server.save();
+      treatment = new B173WireClient("127.0.0.1", port, user, timeout);
+      treatment.connect();
+      treatment.synchronizePose();
+      before = treatment.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      treatment.beginBreak(target);
+      Thread.sleep(3000L);
+      treatment.finishBreak(target);
+      opened = treatment.awaitBlock(target, new BlockState(0, 0))
+                   .blockAt(target.x(), target.y(), target.z());
+      settled = worldline.test.WorldlineSmokeAwait.observe(treatment, flowTicks)
+                    .blockAt(target.x(), target.y(), target.z());
+      require(opened.equals(new BlockState(0, 0)) && lava(settled.legacyId()),
+          "horizontal lava absent: " + opened + " / " + settled);
+      treatment.close();
+      awaitPlayers(server, 0);
+      server.save();
+      reader = new B173WireClient("127.0.0.1", port, user, timeout);
+      reader.connect();
+      reader.synchronizePose();
+      after = reader.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      require(after.blockAt(local(source.x(), cx), source.y(), local(source.z(), cz))
+                  .equals(new BlockState(11, 0))
+              && after.blockAt(local(target.x(), cx), target.y(), local(target.z(), cz))
+                  .equals(settled),
+          "fresh horizontal lava drift");
+    } finally {
+      actor.close();
+      if (treatment != null)
+        treatment.close();
+      if (reader != null)
+        reader.close();
+      server.close();
+    }
+    StateDelta d = delta(before, after, Arrays.asList(source, target), cx, cz);
+    require(d.changed == 1, "horizontal lava fixture delta drift: " + d);
+    String evidence = "column=" + column + ",source=" + source.x() + ":" + source.y() + ":"
+        + source.z() + ":11:0,target=" + target.x() + ":" + target.y() + ":" + target.z()
+        + ":3:0->0:0->" + settled.legacyId() + ":" + settled.metadata() + ",states=" + d;
+    String trace = "v1|server=official-b1.7.3|seed=" + seed
+        + "|fixture=raised-stone-trench+seeded-still-lava11+dirt-gate3|settle=" + fixtureTicks + "+"
+        + flowTicks
+        + "ticks|cause=packet14-open-horizontal-cell|confirmation=packet53-air|effect=official-scheduled-horizontal-lava|observation=live-packet53+fresh-login-packet51|oracle=two-cell-causal-scope|"
+        + evidence + "|disconnect=clean";
+    System.out.println("WORLDLINE_M138_LAVA=" + evidence);
+    System.out.println("WORLDLINE_M138_TRACE=" + trace);
+    System.out.println("WORLDLINE_M138_SIGNATURE=" + sha(trace));
+  }
+  private static BlockPosition place(B173WireClient a, BlockPosition support, BlockFace face)
+      throws Exception {
+    BlockPosition target = face.adjacent(support);
+    a.placeHeldBlock(support, face);
+    a.awaitBlock(target, new BlockState(1, 0));
+    return target;
+  }
+  private static BlockPosition foundation(RemoteChunkSnapshot q, int cx, int cz) {
+    for (int x = 4; x <= 11; x++)
+      for (int z = 4; z <= 11; z++)
+        for (int y = 126; y >= 1; y--)
+          if (q.blockAt(x, y, z).legacyId() == 3 && water(q.blockAt(x, y + 1, z).legacyId()))
+            return new BlockPosition(cx * 16 + x, y, cz * 16 + z);
+    throw new IllegalStateException("no deterministic lava foundation");
+  }
+  private static StateDelta delta(RemoteChunkSnapshot a, RemoteChunkSnapshot b,
+      List<BlockPosition> cells, int cx, int cz) throws Exception {
+    MessageDigest md = MessageDigest.getInstance("SHA-256");
+    ByteBuffer row = ByteBuffer.allocate(10);
+    int n = 0;
+    for (BlockPosition v : cells) {
+      int x = local(v.x(), cx), y = v.y(), z = local(v.z(), cz);
+      BlockState p = a.blockAt(x, y, z), q = b.blockAt(x, y, z);
+      if (!p.equals(q)) {
+        n++;
+        row.clear();
+        row.putShort((short) v.x())
+            .putShort((short) y)
+            .putShort((short) v.z())
+            .put((byte) p.legacyId())
+            .put((byte) p.metadata())
+            .put((byte) q.legacyId())
+            .put((byte) q.metadata());
+        md.update(row.array());
+      }
+    }
+    return new StateDelta(n, hex(md.digest()));
+  }
+  private static boolean water(int id) {
+    return id == 8 || id == 9;
+  }
+  private static boolean lava(int id) {
+    return id == 10 || id == 11;
+  }
+  private static int local(int v, int c) {
+    return v - c * 16;
+  }
+  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
+    long e = System.currentTimeMillis() + 5000;
+    while (System.currentTimeMillis() < e) {
+      if (s.players().size() == n)
+        return;
+      Thread.sleep(100);
+    }
+    throw new IllegalStateException("player count drift");
+  }
+  private static String sha(String s) throws Exception {
+    return hex(MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8)));
+  }
+  private static String hex(byte[] b) {
+    StringBuilder s = new StringBuilder();
+    for (byte v : b)
+      s.append(String.format("%02x", v & 255));
+    return s.toString();
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
+  private static final class StateDelta {
+    final int changed;
+    final String hash;
+    StateDelta(int n, String h) {
+      changed = n;
+      hash = h;
+    }
+    public String toString() {
+      return changed + ":" + hash;
+    }
+  }
 }

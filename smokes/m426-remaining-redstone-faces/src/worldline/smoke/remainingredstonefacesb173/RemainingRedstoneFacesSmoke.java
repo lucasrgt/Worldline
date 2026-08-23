@@ -1,42 +1,220 @@
 package worldline.smoke.remainingredstonefacesb173;
 
-import java.nio.charset.StandardCharsets;import java.nio.file.*;import java.security.MessageDigest;import java.time.Duration;import worldline.api.*;import worldline.b173server.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.time.Duration;
+import worldline.api.*;
+import worldline.b173server.*;
 
 /** Places remaining lever 69 wall/ground faces plus remaining repeater 93/94 delay-facing family. */
-public final class RemainingRedstoneFacesSmoke{
- private RemainingRedstoneFacesSmoke(){}
- public static void main(String[]a)throws Exception{
-  if(a.length!=7)throw new IllegalArgumentException("usage: RemainingRedstoneFacesSmoke server.jar workspace port seed username chunkX chunkZ");
-  Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String user=a[4];int cx=Integer.parseInt(a[5]),cz=Integer.parseInt(a[6]);
-  require(seed==17320110707L&&user.equals("RsFaces426")&&user.length()<=16,"remaining-redstone-faces identity drift");
-  Duration timeout=Duration.ofSeconds(90);B173DedicatedServer server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true);B173WireClient actor=new B173WireClient("127.0.0.1",port,user,timeout),reader=null;
-  BlockPosition top,west,south,north,floorA,floorB,pad,torchPad,nPad,ePad,sPad,repN,repE,repS,torch;int column;
-  try{server.boot();B173PlayerSeed.writeInventory(workspace,user,4.5D,60D,4.5D,new int[]{0,1,2,3},new int[]{1,69,356,76},new int[]{48,5,3,1},new int[]{0,0,0,0});actor.connect();actor.synchronizePose();require(actor.awaitInventory().occupiedSlots()==4,"remaining-redstone-faces inventory drift");
-   RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);top=foundation(initial,cx,cz);column=0;actor.selectHeldSlot(0);
-   while(water(initial.blockAt(local(top.x(),cx),top.y()+1,local(top.z(),cz)).legacyId())){top=place(actor,top,BlockFace.UP,1,0);actor.moveAndObserve(0D,1D,0D,1);require(++column<=15,"water column exceeded remaining-redstone-faces fixture");}for(int lift=0;lift<8;lift++){top=place(actor,top,BlockFace.UP,1,0);actor.moveAndObserve(0D,1D,0D,1);column++;}
-   actor.selectHeldSlot(1);west=lever(actor,top,BlockFace.WEST,2);south=lever(actor,top,BlockFace.SOUTH,3);north=lever(actor,top,BlockFace.NORTH,4);floorA=ground(actor,top);
-   actor.selectHeldSlot(0);pad=place(actor,top,BlockFace.EAST,1,0);actor.selectHeldSlot(1);floorB=ground(actor,pad);
-   actor.selectHeldSlot(0);torchPad=place(actor,pad,BlockFace.SOUTH,1,0);nPad=place(actor,pad,BlockFace.EAST,1,0);ePad=place(actor,torchPad,BlockFace.EAST,1,0);sPad=place(actor,ePad,BlockFace.SOUTH,1,0);
-   actor.selectHeldSlot(2);repN=repeater(actor,nPad,0,180F);repE=repeater(actor,ePad,1,-90F);repS=repeater(actor,sPad,2,0F);
-   actor.selectHeldSlot(4);require(tune(actor,repE,5).equals(new BlockState(93,5)),"remaining east delay-2 drift");
-   actor.selectHeldSlot(3);torch=place(actor,torchPad,BlockFace.UP,76,5);worldline.test.WorldlineSmokeAwait.observe(actor,20);Thread.sleep(8000L);
-   actor.close();awaitPlayers(server,0);server.save();reader=new B173WireClient("127.0.0.1",port,user,timeout);reader.connect();reader.synchronizePose();RemoteChunkSnapshot after=reader.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);
-   BlockState persistedEast=after.blockAt(local(repE.x(),cx),repE.y(),local(repE.z(),cz)),persistedTorch=after.blockAt(local(torch.x(),cx),torch.y(),local(torch.z(),cz));
-   require(after.blockAt(local(west.x(),cx),west.y(),local(west.z(),cz)).equals(new BlockState(69,2))&&after.blockAt(local(south.x(),cx),south.y(),local(south.z(),cz)).equals(new BlockState(69,3))&&after.blockAt(local(north.x(),cx),north.y(),local(north.z(),cz)).equals(new BlockState(69,4))&&floor(after.blockAt(local(floorA.x(),cx),floorA.y(),local(floorA.z(),cz)))&&floor(after.blockAt(local(floorB.x(),cx),floorB.y(),local(floorB.z(),cz)))&&after.blockAt(local(repN.x(),cx),repN.y(),local(repN.z(),cz)).equals(new BlockState(93,0))&&after.blockAt(local(repS.x(),cx),repS.y(),local(repS.z(),cz)).equals(new BlockState(93,2))&&persistedEast.equals(new BlockState(94,5))&&persistedTorch.equals(new BlockState(76,5)),"persisted remaining-redstone-faces drift east="+persistedEast+" torch="+persistedTorch);
-   String evidence="column="+column+",support="+cell(top,1,0)+",west="+cell(west,69,2)+",south="+cell(south,69,3)+",north="+cell(north,69,4)+",ground="+floorCell(floorA)+"+"+floorCell(floorB)+",north93="+cell(repN,93,0)+",east93="+cell(repE,93,1)+"->5,south93="+cell(repS,93,2)+",powered="+cell(repE,94,5)+",torch="+cell(torch,76,5)+",persisted=69:2+69:3+69:4+69:floor+93:0+94:5+93:2,clients=2,disconnect=clean";
-   String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=raised-stone+lever69-west-south-north-ground+repeater93-north-east-south+torch76|cause=packet15-item69-west+south+north+up+packet15-item356-look180+-90+0+empty-hand-packet15-tune+packet15-item76|wire=packet53-lever69:2+69:3+69:4+69:floor+repeater93:0+93:1->5+93:2+94:5|oracle=remaining-wall-ground-lever-faces+remaining-delay-facing-93-94+fresh-login|"+evidence;
-   System.out.println("WORLDLINE_M426_SET="+evidence);System.out.println("WORLDLINE_M426_TRACE="+trace);System.out.println("WORLDLINE_M426_SIGNATURE="+sha(trace));
-  }finally{actor.close();if(reader!=null)reader.close();server.close();}
- }
- private static BlockPosition lever(B173WireClient a,BlockPosition support,BlockFace face,int meta)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);BlockState placed=a.awaitBlock(target,new BlockState(69,meta)).blockAt(target.x(),target.y(),target.z());require(placed.equals(new BlockState(69,meta))&&(placed.metadata()&8)==0,"lever facing drift 69:"+meta+": "+placed);return target;}
- private static BlockPosition ground(B173WireClient a,BlockPosition support)throws Exception{BlockPosition target=BlockFace.UP.adjacent(support);a.placeHeldBlock(support,BlockFace.UP);BlockState live=worldline.test.WorldlineSmokeAwait.observe(a,5).blockAt(target.x(),target.y(),target.z());require(live.legacyId()==69&&(live.metadata()==5||live.metadata()==6)&&(live.metadata()&8)==0,"ground lever facing drift: "+live);return target;}
- private static BlockPosition repeater(B173WireClient a,BlockPosition support,int meta,float yaw)throws Exception{BlockPosition target=BlockFace.UP.adjacent(support);a.look(yaw,0F);worldline.test.WorldlineSmokeAwait.observe(a,2);a.useHeldItemOnBlock(support,BlockFace.UP);BlockState live=a.awaitBlock(target,new BlockState(93,meta)).blockAt(target.x(),target.y(),target.z());require(live.equals(new BlockState(93,meta))&&delay(live)==1,"remaining repeater facing drift 93:"+meta+": "+live);return target;}
- private static BlockState tune(B173WireClient a,BlockPosition repeater,int meta)throws Exception{a.activateBlock(repeater,BlockFace.UP);BlockState live=a.awaitBlock(repeater,new BlockState(93,meta)).blockAt(repeater.x(),repeater.y(),repeater.z());require(live.equals(new BlockState(93,meta))&&delay(live)==((meta>>2)&3)+1,"Packet15 remaining delay-facing tune drift: "+live);return live;}
- private static int delay(BlockState s){require(s.legacyId()==93||s.legacyId()==94,"repeater id drift: "+s);return ((s.metadata()>>2)&3)+1;}
- private static boolean floor(BlockState s){return s.legacyId()==69&&(s.metadata()==5||s.metadata()==6)&&(s.metadata()&8)==0;}
- private static String floorCell(BlockPosition p){return p.x()+":"+p.y()+":"+p.z()+":69:floor";}
- private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id,int meta)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,meta));return target;}
- private static BlockPosition foundation(RemoteChunkSnapshot q,int cx,int cz){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(q.blockAt(x,y,z).legacyId()==3&&water(q.blockAt(x,y+1,z).legacyId()))return new BlockPosition(cx*16+x,y,cz*16+z);throw new IllegalStateException("no deterministic remaining-redstone-faces foundation");}
- private static String cell(BlockPosition p,int id,int meta){return p.x()+":"+p.y()+":"+p.z()+":"+id+":"+meta;}
- private static boolean water(int id){return id==8||id==9;}private static int local(int v,int c){return v-c*16;}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long e=System.currentTimeMillis()+5000;while(System.currentTimeMillis()<e){if(s.players().size()==n)return;Thread.sleep(100);}throw new IllegalStateException("player count drift");}private static String sha(String s)throws Exception{byte[]b=MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));StringBuilder v=new StringBuilder();for(byte x:b)v.append(String.format("%02x",x&255));return v.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+public final class RemainingRedstoneFacesSmoke {
+  private RemainingRedstoneFacesSmoke() {
+  }
+  public static void main(String[] a) throws Exception {
+    if (a.length != 7)
+      throw new IllegalArgumentException(
+          "usage: RemainingRedstoneFacesSmoke server.jar workspace port seed username chunkX chunkZ");
+    Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
+    int port = Integer.parseInt(a[2]);
+    long seed = Long.parseLong(a[3]);
+    String user = a[4];
+    int cx = Integer.parseInt(a[5]), cz = Integer.parseInt(a[6]);
+    require(seed == 17320110707L && user.equals("RsFaces426") && user.length() <= 16,
+        "remaining-redstone-faces identity drift");
+    Duration timeout = Duration.ofSeconds(90);
+    B173DedicatedServer server =
+        new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+    B173WireClient actor = new B173WireClient("127.0.0.1", port, user, timeout), reader = null;
+    BlockPosition top, west, south, north, floorA, floorB, pad, torchPad, nPad, ePad, sPad, repN,
+        repE, repS, torch;
+    int column;
+    try {
+      server.boot();
+      B173PlayerSeed.writeInventory(workspace, user, 4.5D, 60D, 4.5D, new int[] {0, 1, 2, 3},
+          new int[] {1, 69, 356, 76}, new int[] {48, 5, 3, 1}, new int[] {0, 0, 0, 0});
+      actor.connect();
+      actor.synchronizePose();
+      require(
+          actor.awaitInventory().occupiedSlots() == 4, "remaining-redstone-faces inventory drift");
+      RemoteChunkSnapshot initial = actor.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      top = foundation(initial, cx, cz);
+      column = 0;
+      actor.selectHeldSlot(0);
+      while (
+          water(initial.blockAt(local(top.x(), cx), top.y() + 1, local(top.z(), cz)).legacyId())) {
+        top = place(actor, top, BlockFace.UP, 1, 0);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        require(++column <= 15, "water column exceeded remaining-redstone-faces fixture");
+      }
+      for (int lift = 0; lift < 8; lift++) {
+        top = place(actor, top, BlockFace.UP, 1, 0);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        column++;
+      }
+      actor.selectHeldSlot(1);
+      west = lever(actor, top, BlockFace.WEST, 2);
+      south = lever(actor, top, BlockFace.SOUTH, 3);
+      north = lever(actor, top, BlockFace.NORTH, 4);
+      floorA = ground(actor, top);
+      actor.selectHeldSlot(0);
+      pad = place(actor, top, BlockFace.EAST, 1, 0);
+      actor.selectHeldSlot(1);
+      floorB = ground(actor, pad);
+      actor.selectHeldSlot(0);
+      torchPad = place(actor, pad, BlockFace.SOUTH, 1, 0);
+      nPad = place(actor, pad, BlockFace.EAST, 1, 0);
+      ePad = place(actor, torchPad, BlockFace.EAST, 1, 0);
+      sPad = place(actor, ePad, BlockFace.SOUTH, 1, 0);
+      actor.selectHeldSlot(2);
+      repN = repeater(actor, nPad, 0, 180F);
+      repE = repeater(actor, ePad, 1, -90F);
+      repS = repeater(actor, sPad, 2, 0F);
+      actor.selectHeldSlot(4);
+      require(tune(actor, repE, 5).equals(new BlockState(93, 5)), "remaining east delay-2 drift");
+      actor.selectHeldSlot(3);
+      torch = place(actor, torchPad, BlockFace.UP, 76, 5);
+      worldline.test.WorldlineSmokeAwait.observe(actor, 20);
+      Thread.sleep(8000L);
+      actor.close();
+      awaitPlayers(server, 0);
+      server.save();
+      reader = new B173WireClient("127.0.0.1", port, user, timeout);
+      reader.connect();
+      reader.synchronizePose();
+      RemoteChunkSnapshot after = reader.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      BlockState persistedEast = after.blockAt(local(repE.x(), cx), repE.y(), local(repE.z(), cz)),
+                 persistedTorch =
+                     after.blockAt(local(torch.x(), cx), torch.y(), local(torch.z(), cz));
+      require(after.blockAt(local(west.x(), cx), west.y(), local(west.z(), cz))
+                  .equals(new BlockState(69, 2))
+              && after.blockAt(local(south.x(), cx), south.y(), local(south.z(), cz))
+                  .equals(new BlockState(69, 3))
+              && after.blockAt(local(north.x(), cx), north.y(), local(north.z(), cz))
+                  .equals(new BlockState(69, 4))
+              && floor(after.blockAt(local(floorA.x(), cx), floorA.y(), local(floorA.z(), cz)))
+              && floor(after.blockAt(local(floorB.x(), cx), floorB.y(), local(floorB.z(), cz)))
+              && after.blockAt(local(repN.x(), cx), repN.y(), local(repN.z(), cz))
+                  .equals(new BlockState(93, 0))
+              && after.blockAt(local(repS.x(), cx), repS.y(), local(repS.z(), cz))
+                  .equals(new BlockState(93, 2))
+              && persistedEast.equals(new BlockState(94, 5))
+              && persistedTorch.equals(new BlockState(76, 5)),
+          "persisted remaining-redstone-faces drift east=" + persistedEast
+              + " torch=" + persistedTorch);
+      String evidence = "column=" + column + ",support=" + cell(top, 1, 0) + ",west="
+          + cell(west, 69, 2) + ",south=" + cell(south, 69, 3) + ",north=" + cell(north, 69, 4)
+          + ",ground=" + floorCell(floorA) + "+" + floorCell(floorB) + ",north93="
+          + cell(repN, 93, 0) + ",east93=" + cell(repE, 93, 1) + "->5,south93=" + cell(repS, 93, 2)
+          + ",powered=" + cell(repE, 94, 5) + ",torch=" + cell(torch, 76, 5)
+          + ",persisted=69:2+69:3+69:4+69:floor+93:0+94:5+93:2,clients=2,disconnect=clean";
+      String trace = "v1|server=official-b1.7.3|seed=" + seed
+          + "|fixture=raised-stone+lever69-west-south-north-ground+repeater93-north-east-south+torch76|cause=packet15-item69-west+south+north+up+packet15-item356-look180+-90+0+empty-hand-packet15-tune+packet15-item76|wire=packet53-lever69:2+69:3+69:4+69:floor+repeater93:0+93:1->5+93:2+94:5|oracle=remaining-wall-ground-lever-faces+remaining-delay-facing-93-94+fresh-login|"
+          + evidence;
+      System.out.println("WORLDLINE_M426_SET=" + evidence);
+      System.out.println("WORLDLINE_M426_TRACE=" + trace);
+      System.out.println("WORLDLINE_M426_SIGNATURE=" + sha(trace));
+    } finally {
+      actor.close();
+      if (reader != null)
+        reader.close();
+      server.close();
+    }
+  }
+  private static BlockPosition lever(
+      B173WireClient a, BlockPosition support, BlockFace face, int meta) throws Exception {
+    BlockPosition target = face.adjacent(support);
+    a.placeHeldBlock(support, face);
+    BlockState placed =
+        a.awaitBlock(target, new BlockState(69, meta)).blockAt(target.x(), target.y(), target.z());
+    require(placed.equals(new BlockState(69, meta)) && (placed.metadata() & 8) == 0,
+        "lever facing drift 69:" + meta + ": " + placed);
+    return target;
+  }
+  private static BlockPosition ground(B173WireClient a, BlockPosition support) throws Exception {
+    BlockPosition target = BlockFace.UP.adjacent(support);
+    a.placeHeldBlock(support, BlockFace.UP);
+    BlockState live = worldline.test.WorldlineSmokeAwait.observe(a, 5).blockAt(
+        target.x(), target.y(), target.z());
+    require(live.legacyId() == 69 && (live.metadata() == 5 || live.metadata() == 6)
+            && (live.metadata() & 8) == 0,
+        "ground lever facing drift: " + live);
+    return target;
+  }
+  private static BlockPosition repeater(
+      B173WireClient a, BlockPosition support, int meta, float yaw) throws Exception {
+    BlockPosition target = BlockFace.UP.adjacent(support);
+    a.look(yaw, 0F);
+    worldline.test.WorldlineSmokeAwait.observe(a, 2);
+    a.useHeldItemOnBlock(support, BlockFace.UP);
+    BlockState live =
+        a.awaitBlock(target, new BlockState(93, meta)).blockAt(target.x(), target.y(), target.z());
+    require(live.equals(new BlockState(93, meta)) && delay(live) == 1,
+        "remaining repeater facing drift 93:" + meta + ": " + live);
+    return target;
+  }
+  private static BlockState tune(B173WireClient a, BlockPosition repeater, int meta)
+      throws Exception {
+    a.activateBlock(repeater, BlockFace.UP);
+    BlockState live = a.awaitBlock(repeater, new BlockState(93, meta))
+                          .blockAt(repeater.x(), repeater.y(), repeater.z());
+    require(live.equals(new BlockState(93, meta)) && delay(live) == ((meta >> 2) & 3) + 1,
+        "Packet15 remaining delay-facing tune drift: " + live);
+    return live;
+  }
+  private static int delay(BlockState s) {
+    require(s.legacyId() == 93 || s.legacyId() == 94, "repeater id drift: " + s);
+    return ((s.metadata() >> 2) & 3) + 1;
+  }
+  private static boolean floor(BlockState s) {
+    return s.legacyId() == 69 && (s.metadata() == 5 || s.metadata() == 6)
+        && (s.metadata() & 8) == 0;
+  }
+  private static String floorCell(BlockPosition p) {
+    return p.x() + ":" + p.y() + ":" + p.z() + ":69:floor";
+  }
+  private static BlockPosition place(
+      B173WireClient a, BlockPosition support, BlockFace face, int id, int meta) throws Exception {
+    BlockPosition target = face.adjacent(support);
+    a.placeHeldBlock(support, face);
+    a.awaitBlock(target, new BlockState(id, meta));
+    return target;
+  }
+  private static BlockPosition foundation(RemoteChunkSnapshot q, int cx, int cz) {
+    for (int x = 4; x <= 11; x++)
+      for (int z = 4; z <= 11; z++)
+        for (int y = 126; y >= 1; y--)
+          if (q.blockAt(x, y, z).legacyId() == 3 && water(q.blockAt(x, y + 1, z).legacyId()))
+            return new BlockPosition(cx * 16 + x, y, cz * 16 + z);
+    throw new IllegalStateException("no deterministic remaining-redstone-faces foundation");
+  }
+  private static String cell(BlockPosition p, int id, int meta) {
+    return p.x() + ":" + p.y() + ":" + p.z() + ":" + id + ":" + meta;
+  }
+  private static boolean water(int id) {
+    return id == 8 || id == 9;
+  }
+  private static int local(int v, int c) {
+    return v - c * 16;
+  }
+  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
+    long e = System.currentTimeMillis() + 5000;
+    while (System.currentTimeMillis() < e) {
+      if (s.players().size() == n)
+        return;
+      Thread.sleep(100);
+    }
+    throw new IllegalStateException("player count drift");
+  }
+  private static String sha(String s) throws Exception {
+    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
+    StringBuilder v = new StringBuilder();
+    for (byte x : b)
+      v.append(String.format("%02x", x & 255));
+    return v.toString();
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
 }

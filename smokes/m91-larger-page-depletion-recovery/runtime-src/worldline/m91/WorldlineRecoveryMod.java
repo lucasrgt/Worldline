@@ -9,12 +9,27 @@ import worldline.m74.WorldlineCensusMod;
 
 /** Common server-safe registration for the exact M91 remove/restore protocol. */
 public final class WorldlineRecoveryMod {
-    public static final Identifier CHANGE = Identifier.of(WorldlineCensusMod.NAMESPACE, "recovery_change");
-    public static final Identifier RESTORE = Identifier.of(WorldlineCensusMod.NAMESPACE, "recovery_restore");
-    static { EntrypointManager.registerLookup(MethodHandles.lookup()); }
-    public WorldlineRecoveryMod() {}
-    @EventListener private static void messages(MessageListenerRegistryEvent event) {
-        event.register(CHANGE, (player, packet) -> { if (player.world.isRemote) WorldlineRecoveryState.ack(packet.ints); else WorldlineRecoveryServer.change(player, packet.ints); });
-        event.register(RESTORE, (player, packet) -> { if (!player.world.isRemote) throw new IllegalStateException("M91 restore reached server"); WorldlineRecoveryState.restore(packet.ints); });
-    }
+  public static final Identifier CHANGE =
+      Identifier.of(WorldlineCensusMod.NAMESPACE, "recovery_change");
+  public static final Identifier RESTORE =
+      Identifier.of(WorldlineCensusMod.NAMESPACE, "recovery_restore");
+  static {
+    EntrypointManager.registerLookup(MethodHandles.lookup());
+  }
+  public WorldlineRecoveryMod() {
+  }
+  @EventListener
+  private static void messages(MessageListenerRegistryEvent event) {
+    event.register(CHANGE, (player, packet) -> {
+      if (player.world.isRemote)
+        WorldlineRecoveryState.ack(packet.ints);
+      else
+        WorldlineRecoveryServer.change(player, packet.ints);
+    });
+    event.register(RESTORE, (player, packet) -> {
+      if (!player.world.isRemote)
+        throw new IllegalStateException("M91 restore reached server");
+      WorldlineRecoveryState.restore(packet.ints);
+    });
+  }
 }

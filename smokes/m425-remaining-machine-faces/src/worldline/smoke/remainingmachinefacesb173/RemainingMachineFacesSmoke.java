@@ -1,34 +1,184 @@
 package worldline.smoke.remainingmachinefacesb173;
 
-import java.nio.charset.StandardCharsets;import java.nio.file.*;import java.security.MessageDigest;import java.time.Duration;import worldline.api.*;import worldline.b173server.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.time.Duration;
+import worldline.api.*;
+import worldline.b173server.*;
 
 /** Places remaining look-yaw facings of dispenser 23, furnace 61, and pumpkin 86 as one SET. */
-public final class RemainingMachineFacesSmoke{
- private RemainingMachineFacesSmoke(){}
- public static void main(String[]a)throws Exception{
-  if(a.length!=7)throw new IllegalArgumentException("usage: RemainingMachineFacesSmoke server.jar workspace port seed username chunkX chunkZ");
-  Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String user=a[4];int cx=Integer.parseInt(a[5]),cz=Integer.parseInt(a[6]);
-  require(seed==17320110707L&&user.equals("MachFace425")&&user.length()<=16,"remaining-machine-faces identity drift");
-  Duration timeout=Duration.ofSeconds(90);B173DedicatedServer server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true);B173WireClient actor=new B173WireClient("127.0.0.1",port,user,timeout),reader=null;
-  BlockPosition top,e,ee,s,se,see,ss,sse,ssee,d0,d90,dm90,f90,f180,fm90,p0,p90,p180;int column;
-  try{server.boot();B173PlayerSeed.writeInventory(workspace,user,4.5D,60D,4.5D,new int[]{0,1,2,3},new int[]{1,23,61,86},new int[]{48,3,3,3},new int[]{0,0,0,0});actor.connect();actor.synchronizePose();require(actor.awaitInventory().occupiedSlots()==4,"remaining-machine-faces inventory drift");
-   RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);top=foundation(initial,cx,cz);column=0;actor.selectHeldSlot(0);
-   while(water(initial.blockAt(local(top.x(),cx),top.y()+1,local(top.z(),cz)).legacyId())){top=place(actor,top,BlockFace.UP,1,0);actor.moveAndObserve(0D,1D,0D,1);require(++column<=15,"water column exceeded remaining-machine-faces fixture");}for(int lift=0;lift<8;lift++){top=place(actor,top,BlockFace.UP,1,0);actor.moveAndObserve(0D,1D,0D,1);column++;}
-   e=place(actor,top,BlockFace.EAST,1,0);ee=place(actor,e,BlockFace.EAST,1,0);s=place(actor,top,BlockFace.SOUTH,1,0);se=place(actor,s,BlockFace.EAST,1,0);see=place(actor,se,BlockFace.EAST,1,0);ss=place(actor,s,BlockFace.SOUTH,1,0);sse=place(actor,ss,BlockFace.EAST,1,0);ssee=place(actor,sse,BlockFace.EAST,1,0);
-   actor.selectHeldSlot(1);d0=face(actor,top,23,2,0F);d90=face(actor,e,23,5,90F);dm90=face(actor,ee,23,4,-90F);
-   actor.selectHeldSlot(2);f90=face(actor,s,61,5,90F);f180=face(actor,se,61,3,180F);fm90=face(actor,see,61,4,-90F);
-   actor.selectHeldSlot(3);p0=face(actor,ss,86,2,0F);p90=face(actor,sse,86,3,90F);p180=face(actor,ssee,86,0,180F);
-   RemoteWorldView live=worldline.test.WorldlineSmokeAwait.observe(actor,5);require(live.blockAt(d0.x(),d0.y(),d0.z()).equals(new BlockState(23,2))&&live.blockAt(d90.x(),d90.y(),d90.z()).equals(new BlockState(23,5))&&live.blockAt(dm90.x(),dm90.y(),dm90.z()).equals(new BlockState(23,4))&&live.blockAt(f90.x(),f90.y(),f90.z()).equals(new BlockState(61,5))&&live.blockAt(f180.x(),f180.y(),f180.z()).equals(new BlockState(61,3))&&live.blockAt(fm90.x(),fm90.y(),fm90.z()).equals(new BlockState(61,4))&&live.blockAt(p0.x(),p0.y(),p0.z()).equals(new BlockState(86,2))&&live.blockAt(p90.x(),p90.y(),p90.z()).equals(new BlockState(86,3))&&live.blockAt(p180.x(),p180.y(),p180.z()).equals(new BlockState(86,0)),"live remaining-machine-faces drift");
-   actor.close();awaitPlayers(server,0);server.save();reader=new B173WireClient("127.0.0.1",port,user,timeout);reader.connect();reader.synchronizePose();RemoteChunkSnapshot after=reader.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);
-   require(after.blockAt(local(top.x(),cx),top.y(),local(top.z(),cz)).equals(new BlockState(1,0))&&after.blockAt(local(d0.x(),cx),d0.y(),local(d0.z(),cz)).equals(new BlockState(23,2))&&after.blockAt(local(d90.x(),cx),d90.y(),local(d90.z(),cz)).equals(new BlockState(23,5))&&after.blockAt(local(dm90.x(),cx),dm90.y(),local(dm90.z(),cz)).equals(new BlockState(23,4))&&after.blockAt(local(f90.x(),cx),f90.y(),local(f90.z(),cz)).equals(new BlockState(61,5))&&after.blockAt(local(f180.x(),cx),f180.y(),local(f180.z(),cz)).equals(new BlockState(61,3))&&after.blockAt(local(fm90.x(),cx),fm90.y(),local(fm90.z(),cz)).equals(new BlockState(61,4))&&after.blockAt(local(p0.x(),cx),p0.y(),local(p0.z(),cz)).equals(new BlockState(86,2))&&after.blockAt(local(p90.x(),cx),p90.y(),local(p90.z(),cz)).equals(new BlockState(86,3))&&after.blockAt(local(p180.x(),cx),p180.y(),local(p180.z(),cz)).equals(new BlockState(86,0)),"persisted remaining-machine-faces drift");
-   String evidence="column="+column+",support="+cell(top,1,0)+",disp="+cell(d0,23,2)+"+"+cell(d90,23,5)+"+"+cell(dm90,23,4)+",furnace="+cell(f90,61,5)+"+"+cell(f180,61,3)+"+"+cell(fm90,61,4)+",pumpkin="+cell(p0,86,2)+"+"+cell(p90,86,3)+"+"+cell(p180,86,0)+",look=0+90+-90+90+180+-90+0+90+180,persisted=true,clients=2,disconnect=clean";
-   String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=raised-stone+dispenser23+furnace61+pumpkin86|cause=packet15-item23+look0+look90+look-90+packet15-item61+look90+look180+look-90+packet15-item86+look0+look90+look180|wire=packet53-dispenser23:2+23:5+23:4+furnace61:5+61:3+61:4+pumpkin86:2+86:3+86:0|oracle=remaining-look-facing-metadata-set+fresh-login|"+evidence;
-   System.out.println("WORLDLINE_M425_SET="+evidence);System.out.println("WORLDLINE_M425_TRACE="+trace);System.out.println("WORLDLINE_M425_SIGNATURE="+sha(trace));
-  }finally{actor.close();if(reader!=null)reader.close();server.close();}
- }
- private static BlockPosition face(B173WireClient a,BlockPosition support,int id,int meta,float yaw)throws Exception{BlockPosition target=BlockFace.UP.adjacent(support);a.look(yaw,0F);a.placeHeldBlock(support,BlockFace.UP);a.awaitBlock(target,new BlockState(id,meta));return target;}
- private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id,int meta)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,meta));return target;}
- private static BlockPosition foundation(RemoteChunkSnapshot q,int cx,int cz){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(q.blockAt(x,y,z).legacyId()==3&&water(q.blockAt(x,y+1,z).legacyId()))return new BlockPosition(cx*16+x,y,cz*16+z);throw new IllegalStateException("no deterministic remaining-machine-faces foundation");}
- private static String cell(BlockPosition p,int id,int meta){return p.x()+":"+p.y()+":"+p.z()+":"+id+":"+meta;}
- private static boolean water(int id){return id==8||id==9;}private static int local(int v,int c){return v-c*16;}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long e=System.currentTimeMillis()+5000;while(System.currentTimeMillis()<e){if(s.players().size()==n)return;Thread.sleep(100);}throw new IllegalStateException("player count drift");}private static String sha(String s)throws Exception{byte[]b=MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));StringBuilder v=new StringBuilder();for(byte x:b)v.append(String.format("%02x",x&255));return v.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+public final class RemainingMachineFacesSmoke {
+  private RemainingMachineFacesSmoke() {
+  }
+  public static void main(String[] a) throws Exception {
+    if (a.length != 7)
+      throw new IllegalArgumentException(
+          "usage: RemainingMachineFacesSmoke server.jar workspace port seed username chunkX chunkZ");
+    Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
+    int port = Integer.parseInt(a[2]);
+    long seed = Long.parseLong(a[3]);
+    String user = a[4];
+    int cx = Integer.parseInt(a[5]), cz = Integer.parseInt(a[6]);
+    require(seed == 17320110707L && user.equals("MachFace425") && user.length() <= 16,
+        "remaining-machine-faces identity drift");
+    Duration timeout = Duration.ofSeconds(90);
+    B173DedicatedServer server =
+        new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+    B173WireClient actor = new B173WireClient("127.0.0.1", port, user, timeout), reader = null;
+    BlockPosition top, e, ee, s, se, see, ss, sse, ssee, d0, d90, dm90, f90, f180, fm90, p0, p90,
+        p180;
+    int column;
+    try {
+      server.boot();
+      B173PlayerSeed.writeInventory(workspace, user, 4.5D, 60D, 4.5D, new int[] {0, 1, 2, 3},
+          new int[] {1, 23, 61, 86}, new int[] {48, 3, 3, 3}, new int[] {0, 0, 0, 0});
+      actor.connect();
+      actor.synchronizePose();
+      require(
+          actor.awaitInventory().occupiedSlots() == 4, "remaining-machine-faces inventory drift");
+      RemoteChunkSnapshot initial = actor.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      top = foundation(initial, cx, cz);
+      column = 0;
+      actor.selectHeldSlot(0);
+      while (
+          water(initial.blockAt(local(top.x(), cx), top.y() + 1, local(top.z(), cz)).legacyId())) {
+        top = place(actor, top, BlockFace.UP, 1, 0);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        require(++column <= 15, "water column exceeded remaining-machine-faces fixture");
+      }
+      for (int lift = 0; lift < 8; lift++) {
+        top = place(actor, top, BlockFace.UP, 1, 0);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        column++;
+      }
+      e = place(actor, top, BlockFace.EAST, 1, 0);
+      ee = place(actor, e, BlockFace.EAST, 1, 0);
+      s = place(actor, top, BlockFace.SOUTH, 1, 0);
+      se = place(actor, s, BlockFace.EAST, 1, 0);
+      see = place(actor, se, BlockFace.EAST, 1, 0);
+      ss = place(actor, s, BlockFace.SOUTH, 1, 0);
+      sse = place(actor, ss, BlockFace.EAST, 1, 0);
+      ssee = place(actor, sse, BlockFace.EAST, 1, 0);
+      actor.selectHeldSlot(1);
+      d0 = face(actor, top, 23, 2, 0F);
+      d90 = face(actor, e, 23, 5, 90F);
+      dm90 = face(actor, ee, 23, 4, -90F);
+      actor.selectHeldSlot(2);
+      f90 = face(actor, s, 61, 5, 90F);
+      f180 = face(actor, se, 61, 3, 180F);
+      fm90 = face(actor, see, 61, 4, -90F);
+      actor.selectHeldSlot(3);
+      p0 = face(actor, ss, 86, 2, 0F);
+      p90 = face(actor, sse, 86, 3, 90F);
+      p180 = face(actor, ssee, 86, 0, 180F);
+      RemoteWorldView live = worldline.test.WorldlineSmokeAwait.observe(actor, 5);
+      require(live.blockAt(d0.x(), d0.y(), d0.z()).equals(new BlockState(23, 2))
+              && live.blockAt(d90.x(), d90.y(), d90.z()).equals(new BlockState(23, 5))
+              && live.blockAt(dm90.x(), dm90.y(), dm90.z()).equals(new BlockState(23, 4))
+              && live.blockAt(f90.x(), f90.y(), f90.z()).equals(new BlockState(61, 5))
+              && live.blockAt(f180.x(), f180.y(), f180.z()).equals(new BlockState(61, 3))
+              && live.blockAt(fm90.x(), fm90.y(), fm90.z()).equals(new BlockState(61, 4))
+              && live.blockAt(p0.x(), p0.y(), p0.z()).equals(new BlockState(86, 2))
+              && live.blockAt(p90.x(), p90.y(), p90.z()).equals(new BlockState(86, 3))
+              && live.blockAt(p180.x(), p180.y(), p180.z()).equals(new BlockState(86, 0)),
+          "live remaining-machine-faces drift");
+      actor.close();
+      awaitPlayers(server, 0);
+      server.save();
+      reader = new B173WireClient("127.0.0.1", port, user, timeout);
+      reader.connect();
+      reader.synchronizePose();
+      RemoteChunkSnapshot after = reader.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      require(after.blockAt(local(top.x(), cx), top.y(), local(top.z(), cz))
+                  .equals(new BlockState(1, 0))
+              && after.blockAt(local(d0.x(), cx), d0.y(), local(d0.z(), cz))
+                  .equals(new BlockState(23, 2))
+              && after.blockAt(local(d90.x(), cx), d90.y(), local(d90.z(), cz))
+                  .equals(new BlockState(23, 5))
+              && after.blockAt(local(dm90.x(), cx), dm90.y(), local(dm90.z(), cz))
+                  .equals(new BlockState(23, 4))
+              && after.blockAt(local(f90.x(), cx), f90.y(), local(f90.z(), cz))
+                  .equals(new BlockState(61, 5))
+              && after.blockAt(local(f180.x(), cx), f180.y(), local(f180.z(), cz))
+                  .equals(new BlockState(61, 3))
+              && after.blockAt(local(fm90.x(), cx), fm90.y(), local(fm90.z(), cz))
+                  .equals(new BlockState(61, 4))
+              && after.blockAt(local(p0.x(), cx), p0.y(), local(p0.z(), cz))
+                  .equals(new BlockState(86, 2))
+              && after.blockAt(local(p90.x(), cx), p90.y(), local(p90.z(), cz))
+                  .equals(new BlockState(86, 3))
+              && after.blockAt(local(p180.x(), cx), p180.y(), local(p180.z(), cz))
+                  .equals(new BlockState(86, 0)),
+          "persisted remaining-machine-faces drift");
+      String evidence = "column=" + column + ",support=" + cell(top, 1, 0)
+          + ",disp=" + cell(d0, 23, 2) + "+" + cell(d90, 23, 5) + "+" + cell(dm90, 23, 4)
+          + ",furnace=" + cell(f90, 61, 5) + "+" + cell(f180, 61, 3) + "+" + cell(fm90, 61, 4)
+          + ",pumpkin=" + cell(p0, 86, 2) + "+" + cell(p90, 86, 3) + "+" + cell(p180, 86, 0)
+          + ",look=0+90+-90+90+180+-90+0+90+180,persisted=true,clients=2,disconnect=clean";
+      String trace = "v1|server=official-b1.7.3|seed=" + seed
+          + "|fixture=raised-stone+dispenser23+furnace61+pumpkin86|cause=packet15-item23+look0+look90+look-90+packet15-item61+look90+look180+look-90+packet15-item86+look0+look90+look180|wire=packet53-dispenser23:2+23:5+23:4+furnace61:5+61:3+61:4+pumpkin86:2+86:3+86:0|oracle=remaining-look-facing-metadata-set+fresh-login|"
+          + evidence;
+      System.out.println("WORLDLINE_M425_SET=" + evidence);
+      System.out.println("WORLDLINE_M425_TRACE=" + trace);
+      System.out.println("WORLDLINE_M425_SIGNATURE=" + sha(trace));
+    } finally {
+      actor.close();
+      if (reader != null)
+        reader.close();
+      server.close();
+    }
+  }
+  private static BlockPosition face(
+      B173WireClient a, BlockPosition support, int id, int meta, float yaw) throws Exception {
+    BlockPosition target = BlockFace.UP.adjacent(support);
+    a.look(yaw, 0F);
+    a.placeHeldBlock(support, BlockFace.UP);
+    a.awaitBlock(target, new BlockState(id, meta));
+    return target;
+  }
+  private static BlockPosition place(
+      B173WireClient a, BlockPosition support, BlockFace face, int id, int meta) throws Exception {
+    BlockPosition target = face.adjacent(support);
+    a.placeHeldBlock(support, face);
+    a.awaitBlock(target, new BlockState(id, meta));
+    return target;
+  }
+  private static BlockPosition foundation(RemoteChunkSnapshot q, int cx, int cz) {
+    for (int x = 4; x <= 11; x++)
+      for (int z = 4; z <= 11; z++)
+        for (int y = 126; y >= 1; y--)
+          if (q.blockAt(x, y, z).legacyId() == 3 && water(q.blockAt(x, y + 1, z).legacyId()))
+            return new BlockPosition(cx * 16 + x, y, cz * 16 + z);
+    throw new IllegalStateException("no deterministic remaining-machine-faces foundation");
+  }
+  private static String cell(BlockPosition p, int id, int meta) {
+    return p.x() + ":" + p.y() + ":" + p.z() + ":" + id + ":" + meta;
+  }
+  private static boolean water(int id) {
+    return id == 8 || id == 9;
+  }
+  private static int local(int v, int c) {
+    return v - c * 16;
+  }
+  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
+    long e = System.currentTimeMillis() + 5000;
+    while (System.currentTimeMillis() < e) {
+      if (s.players().size() == n)
+        return;
+      Thread.sleep(100);
+    }
+    throw new IllegalStateException("player count drift");
+  }
+  private static String sha(String s) throws Exception {
+    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
+    StringBuilder v = new StringBuilder();
+    for (byte x : b)
+      v.append(String.format("%02x", x & 255));
+    return v.toString();
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
 }

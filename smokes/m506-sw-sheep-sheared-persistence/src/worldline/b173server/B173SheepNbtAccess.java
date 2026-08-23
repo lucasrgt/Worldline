@@ -1,17 +1,111 @@
 package worldline.b173server;
 
-import java.io.*;import java.nio.file.*;import java.util.zip.*;
+import java.io.*;
+import java.nio.file.*;
+import java.util.zip.*;
 
 /** Smoke-only semantic mutation of one persisted red sheep's Sheared boolean. */
 public final class B173SheepNbtAccess {
- private B173SheepNbtAccess(){}
- public static int unshearRed(Path directory,int cx,int cz){
-  if(directory==null)throw new IllegalArgumentException("null server directory");Path root=directory.toAbsolutePath().normalize(),region=root.resolve("world/region/r."+(cx>>5)+"."+(cz>>5)+".mcr").normalize();if(!region.startsWith(root)||!Files.isRegularFile(region))throw new IllegalStateException("sheep region absent");
-  try(RandomAccessFile file=new RandomAccessFile(region.toFile(),"rw")){int index=(cx&31)+(cz&31)*32;file.seek(index*4L);int loc=file.readInt(),offset=(loc>>>8)*4096,sectors=loc&255;if(offset==0||sectors<1)throw new IllegalStateException("sheep chunk absent");file.seek(offset);int length=file.readInt(),type=file.readUnsignedByte();if(length<2||type<1||type>2)throw new IllegalStateException("invalid sheep chunk");byte[]compressed=new byte[length-1];file.readFully(compressed);byte[]raw=inflate(compressed,type);B173Nbt.Compound tree;try(DataInputStream in=new DataInputStream(new ByteArrayInputStream(raw))){tree=B173Nbt.read(in);}int changed=mutate(tree);ByteArrayOutputStream bytes=new ByteArrayOutputStream();try(DataOutputStream out=new DataOutputStream(bytes)){B173Nbt.write(out,tree);}byte[]next=deflate(bytes.toByteArray(),type);write(file,index,offset,sectors,next);return changed;
-  }catch(IOException error){throw new IllegalStateException("could not mutate sheep NBT",error);}
- }
- private static int mutate(B173Nbt.Compound root){Object levelValue=root.entries.get("Level");if(!(levelValue instanceof B173Nbt.Compound))throw new IllegalStateException("chunk Level absent");Object entitiesValue=((B173Nbt.Compound)levelValue).entries.get("Entities");if(!(entitiesValue instanceof B173Nbt.ListValue))throw new IllegalStateException("chunk Entities absent");int changed=0;for(Object value:((B173Nbt.ListValue)entitiesValue).items){if(!(value instanceof B173Nbt.Compound))continue;B173Nbt.Compound entity=(B173Nbt.Compound)value;if("Sheep".equals(entity.entries.get("id"))&&Byte.valueOf((byte)14).equals(entity.entries.get("Color"))&&Byte.valueOf((byte)1).equals(entity.entries.get("Sheared"))){entity.entries.put("Sheared",Byte.valueOf((byte)0));changed++;}}if(changed!=1)throw new IllegalStateException("expected one persisted red sheared sheep, found "+changed);return changed;}
- private static void write(RandomAccessFile file,int index,int offset,int sectors,byte[]out)throws IOException{int next=out.length+1,need=(next+4+4095)/4096;if(need<=sectors){file.seek(offset);file.writeInt(next);file.writeByte(2);file.write(out);return;}int start=(int)((file.length()+4095)/4096);file.setLength((long)(start+need)*4096L);file.seek((long)start*4096L);file.writeInt(next);file.writeByte(2);file.write(out);file.seek(index*4L);file.writeInt((start<<8)|need);}
- private static byte[] inflate(byte[]data,int type)throws IOException{InputStream source=type==1?new GZIPInputStream(new ByteArrayInputStream(data)):new InflaterInputStream(new ByteArrayInputStream(data));try(InputStream in=source;ByteArrayOutputStream out=new ByteArrayOutputStream()){byte[]buffer=new byte[4096];int count;while((count=in.read(buffer))>=0)out.write(buffer,0,count);return out.toByteArray();}}
- private static byte[] deflate(byte[]raw,int type)throws IOException{ByteArrayOutputStream bytes=new ByteArrayOutputStream();OutputStream target=type==1?new GZIPOutputStream(bytes):new DeflaterOutputStream(bytes,new Deflater(Deflater.BEST_SPEED));try(OutputStream out=target){out.write(raw);}return bytes.toByteArray();}
+  private B173SheepNbtAccess() {
+  }
+  public static int unshearRed(Path directory, int cx, int cz) {
+    if (directory == null)
+      throw new IllegalArgumentException("null server directory");
+    Path root = directory.toAbsolutePath().normalize(),
+         region =
+             root.resolve("world/region/r." + (cx >> 5) + "." + (cz >> 5) + ".mcr").normalize();
+    if (!region.startsWith(root) || !Files.isRegularFile(region))
+      throw new IllegalStateException("sheep region absent");
+    try (RandomAccessFile file = new RandomAccessFile(region.toFile(), "rw")) {
+      int index = (cx & 31) + (cz & 31) * 32;
+      file.seek(index * 4L);
+      int loc = file.readInt(), offset = (loc >>> 8) * 4096, sectors = loc & 255;
+      if (offset == 0 || sectors < 1)
+        throw new IllegalStateException("sheep chunk absent");
+      file.seek(offset);
+      int length = file.readInt(), type = file.readUnsignedByte();
+      if (length < 2 || type < 1 || type > 2)
+        throw new IllegalStateException("invalid sheep chunk");
+      byte[] compressed = new byte[length - 1];
+      file.readFully(compressed);
+      byte[] raw = inflate(compressed, type);
+      B173Nbt.Compound tree;
+      try (DataInputStream in = new DataInputStream(new ByteArrayInputStream(raw))) {
+        tree = B173Nbt.read(in);
+      }
+      int changed = mutate(tree);
+      ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+      try (DataOutputStream out = new DataOutputStream(bytes)) {
+        B173Nbt.write(out, tree);
+      }
+      byte[] next = deflate(bytes.toByteArray(), type);
+      write(file, index, offset, sectors, next);
+      return changed;
+    } catch (IOException error) {
+      throw new IllegalStateException("could not mutate sheep NBT", error);
+    }
+  }
+  private static int mutate(B173Nbt.Compound root) {
+    Object levelValue = root.entries.get("Level");
+    if (!(levelValue instanceof B173Nbt.Compound))
+      throw new IllegalStateException("chunk Level absent");
+    Object entitiesValue = ((B173Nbt.Compound) levelValue).entries.get("Entities");
+    if (!(entitiesValue instanceof B173Nbt.ListValue))
+      throw new IllegalStateException("chunk Entities absent");
+    int changed = 0;
+    for (Object value : ((B173Nbt.ListValue) entitiesValue).items) {
+      if (!(value instanceof B173Nbt.Compound))
+        continue;
+      B173Nbt.Compound entity = (B173Nbt.Compound) value;
+      if ("Sheep".equals(entity.entries.get("id"))
+          && Byte.valueOf((byte) 14).equals(entity.entries.get("Color"))
+          && Byte.valueOf((byte) 1).equals(entity.entries.get("Sheared"))) {
+        entity.entries.put("Sheared", Byte.valueOf((byte) 0));
+        changed++;
+      }
+    }
+    if (changed != 1)
+      throw new IllegalStateException("expected one persisted red sheared sheep, found " + changed);
+    return changed;
+  }
+  private static void write(RandomAccessFile file, int index, int offset, int sectors, byte[] out)
+      throws IOException {
+    int next = out.length + 1, need = (next + 4 + 4095) / 4096;
+    if (need <= sectors) {
+      file.seek(offset);
+      file.writeInt(next);
+      file.writeByte(2);
+      file.write(out);
+      return;
+    }
+    int start = (int) ((file.length() + 4095) / 4096);
+    file.setLength((long) (start + need) * 4096L);
+    file.seek((long) start * 4096L);
+    file.writeInt(next);
+    file.writeByte(2);
+    file.write(out);
+    file.seek(index * 4L);
+    file.writeInt((start << 8) | need);
+  }
+  private static byte[] inflate(byte[] data, int type) throws IOException {
+    InputStream source = type == 1 ? new GZIPInputStream(new ByteArrayInputStream(data))
+                                   : new InflaterInputStream(new ByteArrayInputStream(data));
+    try (InputStream in = source; ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+      byte[] buffer = new byte[4096];
+      int count;
+      while ((count = in.read(buffer)) >= 0)
+        out.write(buffer, 0, count);
+      return out.toByteArray();
+    }
+  }
+  private static byte[] deflate(byte[] raw, int type) throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    OutputStream target = type == 1
+        ? new GZIPOutputStream(bytes)
+        : new DeflaterOutputStream(bytes, new Deflater(Deflater.BEST_SPEED));
+    try (OutputStream out = target) {
+      out.write(raw);
+    }
+    return bytes.toByteArray();
+  }
 }

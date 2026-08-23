@@ -74,7 +74,8 @@ public final class Gate {
             return;
         }
         boolean smoke = arguments.length > 0 && "--smoke".equals(arguments[0]);
-        executePhase(arguments, smoke, true, smoke);
+        boolean pinnedSmoke = arguments.length > 0 && "--pinned-smoke".equals(arguments[0]);
+        executePhase(arguments, smoke, true, smoke && !pinnedSmoke);
     }
 
     private void executeMilestone(String id) throws Exception {
@@ -92,6 +93,7 @@ public final class Gate {
             case "--migrate-composite-cycles" -> spec("CompositeCycleMigration", "--apply", 300);
             case "--migrate-telemetry-pins" -> spec("TelemetryPinMigration", "--apply", 300);
             case "--migrate-repository-schemas" -> spec("RepositorySchemaMigration", "--apply", 600);
+            case "--migrate-formatting-pins" -> spec("FormattingPinMigration", "--apply", 600);
             case "--migrate-eof-retries" -> spec("RetryMigration", "--apply", 300);
             case "--finalize-eof-retries" -> spec("RetryMigration", "--finalize", 300);
             case "--finalize-fixed-waits" -> spec("FixedWaitMigration", "--finalize", 600);
@@ -140,12 +142,14 @@ public final class Gate {
                 || Arrays.equals(arguments, new String[] {"--orchestrator"})
                 || Arrays.equals(arguments, new String[] {"--pin-smokes"})
                 || Arrays.equals(arguments, new String[] {"--smoke-plan"})
+                || Arrays.equals(arguments, new String[] {"--pinned-smoke"})
                 || Arrays.equals(arguments, new String[] {"--accept-legacy-smoke-baseline"})
                 || Arrays.equals(arguments, new String[] {"--migrate-data-cycles"})
                 || Arrays.equals(arguments, new String[] {"--refresh-data-cycle-pins"})
                 || Arrays.equals(arguments, new String[] {"--migrate-composite-cycles"})
                 || Arrays.equals(arguments, new String[] {"--migrate-telemetry-pins"})
                 || Arrays.equals(arguments, new String[] {"--migrate-repository-schemas"})
+                || Arrays.equals(arguments, new String[] {"--migrate-formatting-pins"})
                 || Arrays.equals(arguments, new String[] {"--migrate-eof-retries"})
                 || Arrays.equals(arguments, new String[] {"--finalize-eof-retries"})
                 || Arrays.equals(arguments, new String[] {"--finalize-fixed-waits"})
@@ -157,10 +161,11 @@ public final class Gate {
         if (!profile) throw new IllegalArgumentException(
                 "usage: java tools/harness/Gate.java "
                 + "[--runtime|--smoke|--pin-smokes|--accept-legacy-smoke-baseline|--orchestrator|"
-                + "--smoke-plan|--migrate-data-cycles|--refresh-data-cycle-pins|"
+                + "--smoke-plan|--pinned-smoke|--migrate-data-cycles|--refresh-data-cycle-pins|"
                 + "--migrate-composite-cycles|"
                 + "--migrate-telemetry-pins|"
                 + "--migrate-repository-schemas|"
+                + "--migrate-formatting-pins|"
                 + "--migrate-eof-retries|"
                 + "--finalize-eof-retries|"
                 + "--finalize-fixed-waits|"

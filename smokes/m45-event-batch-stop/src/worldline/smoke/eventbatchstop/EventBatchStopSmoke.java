@@ -27,79 +27,126 @@ import worldline.b173server.B173WireClient;
 
 /** Proves batch-wide stop at a synchronous movement event boundary. */
 public final class EventBatchStopSmoke {
-    private static final String TRACE = "v1|server=official-b1.7.3|event-stop=0/0:0:primary"
-            + "|route0=controller-stop-one-outcome|route0-alternative1=absent|route1=absent"
-            + "|batch=controller-stop|correlation=identity|thread=caller"
-            + "|cache=preserved|final=persisted|disconnect=clean";
-    private EventBatchStopSmoke() {}
+  private static final String TRACE = "v1|server=official-b1.7.3|event-stop=0/0:0:primary"
+      + "|route0=controller-stop-one-outcome|route0-alternative1=absent|route1=absent"
+      + "|batch=controller-stop|correlation=identity|thread=caller"
+      + "|cache=preserved|final=persisted|disconnect=clean";
+  private EventBatchStopSmoke() {
+  }
 
-    public static void main(String[] arguments) throws Exception {
-        if (arguments.length != 5) throw new IllegalArgumentException(
-                "usage: EventBatchStopSmoke server.jar workspace port seed username");
-        Path jar = Paths.get(arguments[0]), workspace = Paths.get(arguments[1]);
-        int port = Integer.parseInt(arguments[2]); long seed = Long.parseLong(arguments[3]);
-        String username = arguments[4]; Duration timeout = Duration.ofSeconds(90);
-        PersistentMultiplayerServerRuntime server =
-                new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
-        RecoveringMovementMultiplayerSession client =
-                new B173WireClient("127.0.0.1", port, username, timeout);
-        Object first = new Object(), second = new Object(); Thread caller = Thread.currentThread();
-        CorrelatedMovementRouteBatchEvent[] observed = new CorrelatedMovementRouteBatchEvent[1];
-        CorrelatedMovementRouteBatchResult batch; RemoteWorldView after; ServerPlayerState player;
-        try {
-            server.boot(); client.connect(); awaitPlayers(server, Collections.singletonList(username));
-            PlayerPose initial = client.synchronizePose(); int chunkX = floor(initial.x()) >> 4;
-            int chunkZ = floor(initial.z()) >> 4; client.awaitRemoteChunk(chunkX, chunkZ); worldline.test.WorldlineSmokeAwait.observe(client,5);
-            CorrelatedMovementRoutePlan firstPlan = new CorrelatedMovementRoutePlan(first, Arrays.asList(
-                    alternative(.125D, 0D, 0D), alternative(0D, 0D, .125D)));
-            CorrelatedMovementRoutePlan secondPlan = new CorrelatedMovementRoutePlan(second,
-                    Collections.singletonList(alternative(-.125D, 0D, 0D)));
-            batch = client.moveCorrelatedRouteBatchUntilEvent(Arrays.asList(firstPlan, secondPlan),
-                    event -> MovementRouteDirective.CONTINUE,
-                    execution -> MovementRouteDirective.CONTINUE, event -> {
-                        require(Thread.currentThread() == caller, "event batch controller changed thread");
-                        require(observed[0] == null, "movement continued after event stop");
-                        observed[0] = event; return MovementRouteDirective.STOP;
-                    });
-            require(indexed(observed[0], first), "event stop indexes or correlation drifted");
-            require(batch.executions().size() == 1
-                    && batch.termination() == MovementRouteBatchTermination.CONTROLLER_STOP
-                    && batch.finalExecution().execution().termination() == MovementRouteTermination.CONTROLLER_STOP
-                    && batch.finalExecution().execution().result().outcomes().size() == 1,
-                    "event stop did not exclude unsent movement");
-            after = worldline.test.WorldlineSmokeAwait.observe(client,1); require(after.containsChunk(chunkX, chunkZ), "event-stopped batch lost cache");
-            client.close(); awaitPlayers(server, Collections.emptyList()); server.save(); player = server.player(username);
-            PlayerPose finalPose = batch.finalExecution().execution().result().finalPose();
-            require(close(player.x(), finalPose.x()) && close(player.y(), finalPose.y())
-                    && close(player.z(), finalPose.z()), "event-stopped batch pose was not persisted");
-        } finally { client.close(); server.close(); }
-        System.out.println("WORLDLINE_M45_API=batch-event-controller,synchronous,stop,unsent-route,unsent-alternative");
-        System.out.println("WORLDLINE_M45_STOP=" + describe(observed[0]) + ";executions="
-                + batch.executions().size() + ";outcomes="
-                + batch.finalExecution().execution().result().outcomes().size());
-        System.out.println("WORLDLINE_M45_CACHE=chunks=" + after.chunks().size());
-        System.out.println("WORLDLINE_M45_PERSISTED=" + player.x() + "," + player.y() + "," + player.z());
-        System.out.println("WORLDLINE_M45_TRACE=" + TRACE);
-        System.out.println("WORLDLINE_M45_SIGNATURE=" + sha256(TRACE));
+  public static void main(String[] arguments) throws Exception {
+    if (arguments.length != 5)
+      throw new IllegalArgumentException(
+          "usage: EventBatchStopSmoke server.jar workspace port seed username");
+    Path jar = Paths.get(arguments[0]), workspace = Paths.get(arguments[1]);
+    int port = Integer.parseInt(arguments[2]);
+    long seed = Long.parseLong(arguments[3]);
+    String username = arguments[4];
+    Duration timeout = Duration.ofSeconds(90);
+    PersistentMultiplayerServerRuntime server =
+        new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+    RecoveringMovementMultiplayerSession client =
+        new B173WireClient("127.0.0.1", port, username, timeout);
+    Object first = new Object(), second = new Object();
+    Thread caller = Thread.currentThread();
+    CorrelatedMovementRouteBatchEvent[] observed = new CorrelatedMovementRouteBatchEvent[1];
+    CorrelatedMovementRouteBatchResult batch;
+    RemoteWorldView after;
+    ServerPlayerState player;
+    try {
+      server.boot();
+      client.connect();
+      awaitPlayers(server, Collections.singletonList(username));
+      PlayerPose initial = client.synchronizePose();
+      int chunkX = floor(initial.x()) >> 4;
+      int chunkZ = floor(initial.z()) >> 4;
+      client.awaitRemoteChunk(chunkX, chunkZ);
+      worldline.test.WorldlineSmokeAwait.observe(client, 5);
+      CorrelatedMovementRoutePlan firstPlan = new CorrelatedMovementRoutePlan(
+          first, Arrays.asList(alternative(.125D, 0D, 0D), alternative(0D, 0D, .125D)));
+      CorrelatedMovementRoutePlan secondPlan = new CorrelatedMovementRoutePlan(
+          second, Collections.singletonList(alternative(-.125D, 0D, 0D)));
+      batch = client.moveCorrelatedRouteBatchUntilEvent(Arrays.asList(firstPlan, secondPlan),
+          event
+          -> MovementRouteDirective.CONTINUE,
+          execution -> MovementRouteDirective.CONTINUE, event -> {
+            require(Thread.currentThread() == caller, "event batch controller changed thread");
+            require(observed[0] == null, "movement continued after event stop");
+            observed[0] = event;
+            return MovementRouteDirective.STOP;
+          });
+      require(indexed(observed[0], first), "event stop indexes or correlation drifted");
+      require(batch.executions().size() == 1
+              && batch.termination() == MovementRouteBatchTermination.CONTROLLER_STOP
+              && batch.finalExecution().execution().termination()
+                  == MovementRouteTermination.CONTROLLER_STOP
+              && batch.finalExecution().execution().result().outcomes().size() == 1,
+          "event stop did not exclude unsent movement");
+      after = worldline.test.WorldlineSmokeAwait.observe(client, 1);
+      require(after.containsChunk(chunkX, chunkZ), "event-stopped batch lost cache");
+      client.close();
+      awaitPlayers(server, Collections.emptyList());
+      server.save();
+      player = server.player(username);
+      PlayerPose finalPose = batch.finalExecution().execution().result().finalPose();
+      require(close(player.x(), finalPose.x()) && close(player.y(), finalPose.y())
+              && close(player.z(), finalPose.z()),
+          "event-stopped batch pose was not persisted");
+    } finally {
+      client.close();
+      server.close();
     }
+    System.out.println(
+        "WORLDLINE_M45_API=batch-event-controller,synchronous,stop,unsent-route,unsent-alternative");
+    System.out.println("WORLDLINE_M45_STOP=" + describe(observed[0])
+        + ";executions=" + batch.executions().size()
+        + ";outcomes=" + batch.finalExecution().execution().result().outcomes().size());
+    System.out.println("WORLDLINE_M45_CACHE=chunks=" + after.chunks().size());
+    System.out.println(
+        "WORLDLINE_M45_PERSISTED=" + player.x() + "," + player.y() + "," + player.z());
+    System.out.println("WORLDLINE_M45_TRACE=" + TRACE);
+    System.out.println("WORLDLINE_M45_SIGNATURE=" + sha256(TRACE));
+  }
 
-    private static MovementAlternative alternative(double x, double y, double z) {
-        return new MovementAlternative(new MovementStep(x, y, z, 5), new MovementStep(-x, -y, -z, 5)); }
-    private static boolean indexed(CorrelatedMovementRouteBatchEvent value, Object correlation) {
-        return value != null && value.routeIndex() == 0 && value.event().correlation() == correlation
-                && value.event().event().alternativeIndex() == 0 && value.event().event().outcomeIndex() == 0
-                && value.event().event().kind() == MovementAttemptKind.PRIMARY; }
-    private static String describe(CorrelatedMovementRouteBatchEvent event) { return event.routeIndex() + "/"
-            + event.event().event().alternativeIndex() + ":" + event.event().event().outcomeIndex()
-            + ":" + event.event().event().kind(); }
-    private static void awaitPlayers(PersistentMultiplayerServerRuntime server, List<String> expected)
-            throws InterruptedException { long deadline = System.currentTimeMillis() + 5000L;
-        while (System.currentTimeMillis() < deadline) { if (server.players().equals(expected)) return;
-            Thread.sleep(100L); } throw new IllegalStateException("player list did not become " + expected); }
-    private static int floor(double value) { return (int) Math.floor(value); }
-    private static boolean close(double a, double b) { return Math.abs(a - b) < .000001D; }
-    private static String sha256(String value) throws Exception { byte[] bytes = MessageDigest.getInstance("SHA-256")
-            .digest(value.getBytes(StandardCharsets.UTF_8)); StringBuilder result = new StringBuilder();
-        for (byte item : bytes) result.append(String.format("%02x", item & 255)); return result.toString(); }
-    private static void require(boolean condition, String message) { if (!condition) throw new IllegalStateException(message); }
+  private static MovementAlternative alternative(double x, double y, double z) {
+    return new MovementAlternative(new MovementStep(x, y, z, 5), new MovementStep(-x, -y, -z, 5));
+  }
+  private static boolean indexed(CorrelatedMovementRouteBatchEvent value, Object correlation) {
+    return value != null && value.routeIndex() == 0 && value.event().correlation() == correlation
+        && value.event().event().alternativeIndex() == 0
+        && value.event().event().outcomeIndex() == 0
+        && value.event().event().kind() == MovementAttemptKind.PRIMARY;
+  }
+  private static String describe(CorrelatedMovementRouteBatchEvent event) {
+    return event.routeIndex() + "/" + event.event().event().alternativeIndex() + ":"
+        + event.event().event().outcomeIndex() + ":" + event.event().event().kind();
+  }
+  private static void awaitPlayers(PersistentMultiplayerServerRuntime server, List<String> expected)
+      throws InterruptedException {
+    long deadline = System.currentTimeMillis() + 5000L;
+    while (System.currentTimeMillis() < deadline) {
+      if (server.players().equals(expected))
+        return;
+      Thread.sleep(100L);
+    }
+    throw new IllegalStateException("player list did not become " + expected);
+  }
+  private static int floor(double value) {
+    return (int) Math.floor(value);
+  }
+  private static boolean close(double a, double b) {
+    return Math.abs(a - b) < .000001D;
+  }
+  private static String sha256(String value) throws Exception {
+    byte[] bytes =
+        MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8));
+    StringBuilder result = new StringBuilder();
+    for (byte item : bytes)
+      result.append(String.format("%02x", item & 255));
+    return result.toString();
+  }
+  private static void require(boolean condition, String message) {
+    if (!condition)
+      throw new IllegalStateException(message);
+  }
 }

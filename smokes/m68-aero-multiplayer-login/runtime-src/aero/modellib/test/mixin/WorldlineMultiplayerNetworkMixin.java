@@ -13,16 +13,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /** Records official login, play-ready and remote chunk handler boundaries. */
 @Mixin(ClientNetworkHandler.class)
 public abstract class WorldlineMultiplayerNetworkMixin {
-    @Inject(method = "onHello", at = @At("TAIL"))
-    private void worldlineHello(LoginHelloPacket packet, CallbackInfo callback) {
-        WorldlineMultiplayerProbe.hello();
-    }
-    @Inject(method = "onPlayerMove", at = @At("TAIL"))
-    private void worldlinePlayReady(PlayerMovePacket packet, CallbackInfo callback) {
-        WorldlineMultiplayerProbe.playReady();
-    }
-    @Inject(method = "handleChunkData", at = @At("TAIL"))
-    private void worldlineChunk(ChunkDataS2CPacket packet, CallbackInfo callback) {
-        WorldlineMultiplayerProbe.chunk();
-    }
+  @Inject(method = "onHello", at = @At("TAIL"))
+  private void worldlineHello(LoginHelloPacket packet, CallbackInfo callback) {
+    WorldlineMultiplayerProbe.hello();
+  }
+  @Inject(method = "onPlayerMove", at = @At("TAIL"))
+  private void worldlinePlayReady(PlayerMovePacket packet, CallbackInfo callback) {
+    WorldlineMultiplayerProbe.playReady();
+  }
+  @Inject(method = "handleChunkData", at = @At("TAIL"))
+  private void worldlineChunk(ChunkDataS2CPacket packet, CallbackInfo callback) {
+    WorldlineMultiplayerProbe.chunk();
+  }
 }

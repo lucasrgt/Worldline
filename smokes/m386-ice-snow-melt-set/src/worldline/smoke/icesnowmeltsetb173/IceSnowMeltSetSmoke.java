@@ -1,34 +1,192 @@
 package worldline.smoke.icesnowmeltsetb173;
 
-import java.nio.charset.StandardCharsets;import java.nio.file.*;import java.security.MessageDigest;import java.time.Duration;import worldline.api.*;import worldline.b173server.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.time.Duration;
+import worldline.api.*;
+import worldline.b173server.*;
 
 /** Torch-lights ice 79 to water and snow layer 78 to air in one official session. */
-public final class IceSnowMeltSetSmoke{
- private static final BlockState AIR=new BlockState(0,0),ICE=new BlockState(79,0),SNOW=new BlockState(78,0),STONE=new BlockState(1,0),TORCH=new BlockState(50,5);
- private IceSnowMeltSetSmoke(){}
- public static void main(String[]a)throws Exception{
-  if(a.length!=9)throw new IllegalArgumentException("usage: IceSnowMeltSetSmoke server.jar workspace port seed username chunkX chunkZ windowTicks meltWindows");
-  Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String user=a[4];int cx=Integer.parseInt(a[5]),cz=Integer.parseInt(a[6]),window=Integer.parseInt(a[7]),windows=Integer.parseInt(a[8]);Duration timeout=Duration.ofMinutes(20);
-  require(seed==17320110707L&&user.equals("IceSnow386")&&user.length()<=16&&window>=1&&window<=1200&&windows>=1&&windows<=8,"ice-snow-melt-set arguments");
-  B173DedicatedServer server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true);B173WireClient actor=new B173WireClient("127.0.0.1",port,user,timeout),reader=null;BlockPosition top,west,westWall,east,eastWall,ice,snow,torch;int column;BlockState meltedIce=null,meltedSnow=null,afterIce,afterSnow,afterTorch;
-  try{server.boot();B173PlayerSeed.writeInventory(workspace,user,4.5D,60D,4.5D,new int[]{0,1,2,3},new int[]{1,79,78,50},new int[]{32,1,1,1},new int[]{0,0,0,0});actor.connect();actor.synchronizePose();require(actor.awaitInventory().occupiedSlots()==4,"ice-snow-melt-set inventory drift");RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);top=foundation(initial,cx,cz);column=0;actor.selectHeldSlot(0);
-   while(water(initial.blockAt(local(top.x(),cx),top.y()+1,local(top.z(),cz)).legacyId())){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);require(++column<=15,"water column exceeded ice-snow-melt-set fixture");}for(int lift=0;lift<8;lift++){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);column++;}
-   actor.moveAndObserve(0D,1D,0D,1);actor.moveAndObserve(0D,1D,0D,1);
-   west=place(actor,top,BlockFace.WEST,1);westWall=place(actor,west,BlockFace.UP,1);east=place(actor,top,BlockFace.EAST,1);eastWall=place(actor,east,BlockFace.UP,1);
-   actor.selectHeldSlot(1);ice=place(actor,top,BlockFace.UP,79);require(worldline.test.WorldlineSmokeAwait.observe(actor,5).blockAt(ice.x(),ice.y(),ice.z()).equals(ICE),"live ice melt-source drift");
-   actor.selectHeldSlot(2);snow=place(actor,westWall,BlockFace.UP,78);require(worldline.test.WorldlineSmokeAwait.observe(actor,5).blockAt(snow.x(),snow.y(),snow.z()).equals(SNOW),"live snow melt-source drift");
-   actor.selectHeldSlot(3);torch=BlockFace.UP.adjacent(eastWall);actor.placeHeldBlock(eastWall,BlockFace.UP);actor.awaitBlock(torch,TORCH);require(worldline.test.WorldlineSmokeAwait.observe(actor,5).blockAt(ice.x(),ice.y(),ice.z()).equals(ICE)&&worldline.test.WorldlineSmokeAwait.observe(actor,1).blockAt(snow.x(),snow.y(),snow.z()).equals(SNOW),"live ice/snow vanished before torch wait");
-   RemoteWorldView melted=worldline.test.WorldlineSmokeAwait.awaitWorld(actor,v->water(v.blockAt(ice.x(),ice.y(),ice.z()).legacyId())&&v.blockAt(snow.x(),snow.y(),snow.z()).equals(AIR),"ice and snow melt",windows*window);meltedIce=melted.blockAt(ice.x(),ice.y(),ice.z());meltedSnow=melted.blockAt(snow.x(),snow.y(),snow.z());
-   RemoteWorldView end=worldline.test.WorldlineSmokeAwait.observe(actor,20);if(meltedIce!=null)meltedIce=end.blockAt(ice.x(),ice.y(),ice.z());if(meltedSnow!=null)meltedSnow=end.blockAt(snow.x(),snow.y(),snow.z());require(end.blockAt(torch.x(),torch.y(),torch.z()).equals(TORCH),"torch extinguished during melt wait");actor.close();awaitPlayers(server,0);server.save();
-   reader=new B173WireClient("127.0.0.1",port,user,timeout);reader.connect();reader.synchronizePose();RemoteChunkSnapshot after=reader.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);afterIce=after.blockAt(local(ice.x(),cx),ice.y(),local(ice.z(),cz));afterSnow=after.blockAt(local(snow.x(),cx),snow.y(),local(snow.z(),cz));afterTorch=after.blockAt(local(torch.x(),cx),torch.y(),local(torch.z(),cz));
-   if(!water(afterIce.legacyId()))throw new IllegalStateException("BLOCKED ice did not melt cell="+afterIce+",live="+(meltedIce==null?"ice79":meltedIce)+",torch="+afterTorch);
-   if(!afterSnow.equals(AIR))throw new IllegalStateException("BLOCKED snow did not melt cell="+afterSnow+",live="+(meltedSnow==null?"snow78":meltedSnow)+",torch="+afterTorch);
-   require(after.blockAt(local(top.x(),cx),top.y(),local(top.z(),cz)).equals(STONE)&&after.blockAt(local(west.x(),cx),west.y(),local(west.z(),cz)).equals(STONE)&&after.blockAt(local(westWall.x(),cx),westWall.y(),local(westWall.z(),cz)).equals(STONE)&&after.blockAt(local(east.x(),cx),east.y(),local(east.z(),cz)).equals(STONE)&&after.blockAt(local(eastWall.x(),cx),eastWall.y(),local(eastWall.z(),cz)).equals(STONE)&&afterTorch.equals(TORCH),"persisted ice-snow-melt-set leftover drift");
-   String evidence="column="+column+",support="+cell(top,1,0)+",west="+cell(west,1,0)+",westwall="+cell(westWall,1,0)+",snow="+cell(snow,78,0)+"->"+afterSnow.legacyId()+":"+afterSnow.metadata()+",ice="+cell(ice,79,0)+"->"+afterIce.legacyId()+":"+afterIce.metadata()+",east="+cell(east,1,0)+",eastwall="+cell(eastWall,1,0)+",torch="+cell(torch,50,5)+",persisted=true,clients=2,disconnect=clean";String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=raised-stone+ice79-torch-melt+snow78-torch-melt|cause=packet15-item79+packet15-item78+packet15-item50|wire=packet53-ice79:0->water"+afterIce.legacyId()+":"+afterIce.metadata()+"+packet53-snow78:0->0:0+packet53-torch50:5|oracle=official-block-light-random-tick-melt+fresh-login|"+evidence;System.out.println("WORLDLINE_M386_SET="+evidence);System.out.println("WORLDLINE_M386_TRACE="+trace);System.out.println("WORLDLINE_M386_SIGNATURE="+sha(trace));
-  }finally{actor.close();if(reader!=null)reader.close();server.close();}
- }
- private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}
- private static BlockPosition foundation(RemoteChunkSnapshot q,int cx,int cz){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(q.blockAt(x,y,z).legacyId()==3&&water(q.blockAt(x,y+1,z).legacyId()))return new BlockPosition(cx*16+x,y,cz*16+z);throw new IllegalStateException("no deterministic ice-snow-melt-set foundation");}
- private static String cell(BlockPosition p,int id,int meta){return p.x()+":"+p.y()+":"+p.z()+":"+id+":"+meta;}
- private static boolean water(int id){return id==8||id==9;}private static int local(int v,int c){return v-c*16;}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long e=System.currentTimeMillis()+5000;while(System.currentTimeMillis()<e){if(s.players().size()==n)return;Thread.sleep(100);}throw new IllegalStateException("player count drift");}private static String sha(String s)throws Exception{byte[]b=MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));StringBuilder v=new StringBuilder();for(byte x:b)v.append(String.format("%02x",x&255));return v.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+public final class IceSnowMeltSetSmoke {
+  private static final BlockState AIR = new BlockState(0, 0), ICE = new BlockState(79, 0),
+                                  SNOW = new BlockState(78, 0), STONE = new BlockState(1, 0),
+                                  TORCH = new BlockState(50, 5);
+  private IceSnowMeltSetSmoke() {
+  }
+  public static void main(String[] a) throws Exception {
+    if (a.length != 9)
+      throw new IllegalArgumentException(
+          "usage: IceSnowMeltSetSmoke server.jar workspace port seed username chunkX chunkZ windowTicks meltWindows");
+    Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
+    int port = Integer.parseInt(a[2]);
+    long seed = Long.parseLong(a[3]);
+    String user = a[4];
+    int cx = Integer.parseInt(a[5]), cz = Integer.parseInt(a[6]), window = Integer.parseInt(a[7]),
+        windows = Integer.parseInt(a[8]);
+    Duration timeout = Duration.ofMinutes(20);
+    require(seed == 17320110707L && user.equals("IceSnow386") && user.length() <= 16 && window >= 1
+            && window <= 1200 && windows >= 1 && windows <= 8,
+        "ice-snow-melt-set arguments");
+    B173DedicatedServer server =
+        new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+    B173WireClient actor = new B173WireClient("127.0.0.1", port, user, timeout), reader = null;
+    BlockPosition top, west, westWall, east, eastWall, ice, snow, torch;
+    int column;
+    BlockState meltedIce = null, meltedSnow = null, afterIce, afterSnow, afterTorch;
+    try {
+      server.boot();
+      B173PlayerSeed.writeInventory(workspace, user, 4.5D, 60D, 4.5D, new int[] {0, 1, 2, 3},
+          new int[] {1, 79, 78, 50}, new int[] {32, 1, 1, 1}, new int[] {0, 0, 0, 0});
+      actor.connect();
+      actor.synchronizePose();
+      require(actor.awaitInventory().occupiedSlots() == 4, "ice-snow-melt-set inventory drift");
+      RemoteChunkSnapshot initial = actor.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      top = foundation(initial, cx, cz);
+      column = 0;
+      actor.selectHeldSlot(0);
+      while (
+          water(initial.blockAt(local(top.x(), cx), top.y() + 1, local(top.z(), cz)).legacyId())) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        require(++column <= 15, "water column exceeded ice-snow-melt-set fixture");
+      }
+      for (int lift = 0; lift < 8; lift++) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        column++;
+      }
+      actor.moveAndObserve(0D, 1D, 0D, 1);
+      actor.moveAndObserve(0D, 1D, 0D, 1);
+      west = place(actor, top, BlockFace.WEST, 1);
+      westWall = place(actor, west, BlockFace.UP, 1);
+      east = place(actor, top, BlockFace.EAST, 1);
+      eastWall = place(actor, east, BlockFace.UP, 1);
+      actor.selectHeldSlot(1);
+      ice = place(actor, top, BlockFace.UP, 79);
+      require(worldline.test.WorldlineSmokeAwait.observe(actor, 5)
+                  .blockAt(ice.x(), ice.y(), ice.z())
+                  .equals(ICE),
+          "live ice melt-source drift");
+      actor.selectHeldSlot(2);
+      snow = place(actor, westWall, BlockFace.UP, 78);
+      require(worldline.test.WorldlineSmokeAwait.observe(actor, 5)
+                  .blockAt(snow.x(), snow.y(), snow.z())
+                  .equals(SNOW),
+          "live snow melt-source drift");
+      actor.selectHeldSlot(3);
+      torch = BlockFace.UP.adjacent(eastWall);
+      actor.placeHeldBlock(eastWall, BlockFace.UP);
+      actor.awaitBlock(torch, TORCH);
+      require(worldline.test.WorldlineSmokeAwait.observe(actor, 5)
+                  .blockAt(ice.x(), ice.y(), ice.z())
+                  .equals(ICE)
+              && worldline.test.WorldlineSmokeAwait.observe(actor, 1)
+                  .blockAt(snow.x(), snow.y(), snow.z())
+                  .equals(SNOW),
+          "live ice/snow vanished before torch wait");
+      RemoteWorldView melted = worldline.test.WorldlineSmokeAwait.awaitWorld(actor,
+          v
+          -> water(v.blockAt(ice.x(), ice.y(), ice.z()).legacyId())
+              && v.blockAt(snow.x(), snow.y(), snow.z()).equals(AIR),
+          "ice and snow melt", windows * window);
+      meltedIce = melted.blockAt(ice.x(), ice.y(), ice.z());
+      meltedSnow = melted.blockAt(snow.x(), snow.y(), snow.z());
+      RemoteWorldView end = worldline.test.WorldlineSmokeAwait.observe(actor, 20);
+      if (meltedIce != null)
+        meltedIce = end.blockAt(ice.x(), ice.y(), ice.z());
+      if (meltedSnow != null)
+        meltedSnow = end.blockAt(snow.x(), snow.y(), snow.z());
+      require(end.blockAt(torch.x(), torch.y(), torch.z()).equals(TORCH),
+          "torch extinguished during melt wait");
+      actor.close();
+      awaitPlayers(server, 0);
+      server.save();
+      reader = new B173WireClient("127.0.0.1", port, user, timeout);
+      reader.connect();
+      reader.synchronizePose();
+      RemoteChunkSnapshot after = reader.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      afterIce = after.blockAt(local(ice.x(), cx), ice.y(), local(ice.z(), cz));
+      afterSnow = after.blockAt(local(snow.x(), cx), snow.y(), local(snow.z(), cz));
+      afterTorch = after.blockAt(local(torch.x(), cx), torch.y(), local(torch.z(), cz));
+      if (!water(afterIce.legacyId()))
+        throw new IllegalStateException("BLOCKED ice did not melt cell=" + afterIce
+            + ",live=" + (meltedIce == null ? "ice79" : meltedIce) + ",torch=" + afterTorch);
+      if (!afterSnow.equals(AIR))
+        throw new IllegalStateException("BLOCKED snow did not melt cell=" + afterSnow
+            + ",live=" + (meltedSnow == null ? "snow78" : meltedSnow) + ",torch=" + afterTorch);
+      require(after.blockAt(local(top.x(), cx), top.y(), local(top.z(), cz)).equals(STONE)
+              && after.blockAt(local(west.x(), cx), west.y(), local(west.z(), cz)).equals(STONE)
+              && after.blockAt(local(westWall.x(), cx), westWall.y(), local(westWall.z(), cz))
+                  .equals(STONE)
+              && after.blockAt(local(east.x(), cx), east.y(), local(east.z(), cz)).equals(STONE)
+              && after.blockAt(local(eastWall.x(), cx), eastWall.y(), local(eastWall.z(), cz))
+                  .equals(STONE)
+              && afterTorch.equals(TORCH),
+          "persisted ice-snow-melt-set leftover drift");
+      String evidence = "column=" + column + ",support=" + cell(top, 1, 0)
+          + ",west=" + cell(west, 1, 0) + ",westwall=" + cell(westWall, 1, 0)
+          + ",snow=" + cell(snow, 78, 0) + "->" + afterSnow.legacyId() + ":" + afterSnow.metadata()
+          + ",ice=" + cell(ice, 79, 0) + "->" + afterIce.legacyId() + ":" + afterIce.metadata()
+          + ",east=" + cell(east, 1, 0) + ",eastwall=" + cell(eastWall, 1, 0)
+          + ",torch=" + cell(torch, 50, 5) + ",persisted=true,clients=2,disconnect=clean";
+      String trace = "v1|server=official-b1.7.3|seed=" + seed
+          + "|fixture=raised-stone+ice79-torch-melt+snow78-torch-melt|cause=packet15-item79+packet15-item78+packet15-item50|wire=packet53-ice79:0->water"
+          + afterIce.legacyId() + ":" + afterIce.metadata()
+          + "+packet53-snow78:0->0:0+packet53-torch50:5|oracle=official-block-light-random-tick-melt+fresh-login|"
+          + evidence;
+      System.out.println("WORLDLINE_M386_SET=" + evidence);
+      System.out.println("WORLDLINE_M386_TRACE=" + trace);
+      System.out.println("WORLDLINE_M386_SIGNATURE=" + sha(trace));
+    } finally {
+      actor.close();
+      if (reader != null)
+        reader.close();
+      server.close();
+    }
+  }
+  private static BlockPosition place(
+      B173WireClient a, BlockPosition support, BlockFace face, int id) throws Exception {
+    BlockPosition target = face.adjacent(support);
+    a.placeHeldBlock(support, face);
+    a.awaitBlock(target, new BlockState(id, 0));
+    return target;
+  }
+  private static BlockPosition foundation(RemoteChunkSnapshot q, int cx, int cz) {
+    for (int x = 4; x <= 11; x++)
+      for (int z = 4; z <= 11; z++)
+        for (int y = 126; y >= 1; y--)
+          if (q.blockAt(x, y, z).legacyId() == 3 && water(q.blockAt(x, y + 1, z).legacyId()))
+            return new BlockPosition(cx * 16 + x, y, cz * 16 + z);
+    throw new IllegalStateException("no deterministic ice-snow-melt-set foundation");
+  }
+  private static String cell(BlockPosition p, int id, int meta) {
+    return p.x() + ":" + p.y() + ":" + p.z() + ":" + id + ":" + meta;
+  }
+  private static boolean water(int id) {
+    return id == 8 || id == 9;
+  }
+  private static int local(int v, int c) {
+    return v - c * 16;
+  }
+  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
+    long e = System.currentTimeMillis() + 5000;
+    while (System.currentTimeMillis() < e) {
+      if (s.players().size() == n)
+        return;
+      Thread.sleep(100);
+    }
+    throw new IllegalStateException("player count drift");
+  }
+  private static String sha(String s) throws Exception {
+    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
+    StringBuilder v = new StringBuilder();
+    for (byte x : b)
+      v.append(String.format("%02x", x & 255));
+    return v.toString();
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
 }

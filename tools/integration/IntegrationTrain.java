@@ -109,7 +109,7 @@ public final class IntegrationTrain {
                     + " for " + candidate.reference);
             require(git(worktree, "status", "--porcelain").isBlank(), "dirty worktree: " + worktree);
             List<String> command = reconcile
-                    ? List.of(javaTool(), "tools/harness/Gate.java", "--smoke")
+                    ? List.of(javaTool(), "tools/harness/Gate.java", "--pinned-smoke")
                     : List.of(javaTool(), "tools/harness/Gate.java", "--milestone", candidate.id);
             ProcessBuilder builder = new ProcessBuilder(command).directory(worktree.toFile()).inheritIO();
             builder.environment().put("WORLDLINE_CANDIDATE_BASE", base);

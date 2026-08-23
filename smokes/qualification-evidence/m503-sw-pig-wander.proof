@@ -1,5 +1,5 @@
 schema=1
 id=m503-sw-pig-wander
-fingerprint=26e3c1b6bea8cfb63eeb14f68386d4a8afc98f4a4c8bd44fc667107d88678122
+fingerprint=57d60fcb760ed658ce667877760f79444872e9111af92dec8e9bfbeecd59c171
 observation.sha256=17747e296bd5c3d985ae22b817598da213acc55c7d078016447b2f0869ed1d28
 source=refactor-equivalent

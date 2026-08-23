@@ -8,7 +8,12 @@ import java.lang.invoke.MethodHandles;
 
 /** Registers only the client-side real Aero renderer. */
 public final class WorldlineCensusClient {
-    static { EntrypointManager.registerLookup(MethodHandles.lookup()); }
-    @EventListener private static void renderer(BlockEntityRendererRegisterEvent event) { event.renderers.put(WorldlineCensusBlockEntity.class, new WorldlineCensusRenderer());
-        System.out.println("[WorldlineCensus] client-renderer-registered"); }
+  static {
+    EntrypointManager.registerLookup(MethodHandles.lookup());
+  }
+  @EventListener
+  private static void renderer(BlockEntityRendererRegisterEvent event) {
+    event.renderers.put(WorldlineCensusBlockEntity.class, new WorldlineCensusRenderer());
+    System.out.println("[WorldlineCensus] client-renderer-registered");
+  }
 }

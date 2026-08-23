@@ -1,5 +1,5 @@
 schema=1
 id=m78-paged-stage-timing
-fingerprint=6dd364a8e57d95fd6e4b336868a7441b33544dafda068c95d1f7cb004d628570
+fingerprint=7d57136acdf0bf48692cd9b18a9690fe4924ea67cd1ea45d3a5075c27c577453
 observation.sha256=dbb52fb098cf377aa90027c4000ab7073efa6cbe5bc4f4fa56fa2090d38ae894
 source=refactor-equivalent

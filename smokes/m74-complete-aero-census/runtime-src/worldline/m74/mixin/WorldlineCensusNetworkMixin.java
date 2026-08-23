@@ -11,6 +11,12 @@ import worldline.m74.WorldlineCensusProbe;
 /** Exact login/play readiness markers. */
 @Mixin(ClientNetworkHandler.class)
 public abstract class WorldlineCensusNetworkMixin {
-    @Inject(method = "onHello", at = @At("TAIL")) private void hello(LoginHelloPacket p, CallbackInfo c) { WorldlineCensusProbe.hello(); }
-    @Inject(method = "onPlayerMove", at = @At("TAIL")) private void play(PlayerMovePacket p, CallbackInfo c) { WorldlineCensusProbe.play(); }
+  @Inject(method = "onHello", at = @At("TAIL"))
+  private void hello(LoginHelloPacket p, CallbackInfo c) {
+    WorldlineCensusProbe.hello();
+  }
+  @Inject(method = "onPlayerMove", at = @At("TAIL"))
+  private void play(PlayerMovePacket p, CallbackInfo c) {
+    WorldlineCensusProbe.play();
+  }
 }

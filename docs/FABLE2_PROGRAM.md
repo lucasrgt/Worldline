@@ -42,7 +42,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | MIG-05 | DONE | Adopt generated narrative schema. | All 36 qualification-v1 milestones use generated combined narratives, and new scaffolds default to the same schema. |
 | MIG-06 | DONE | Add a schema for every behavior map. | All 526 maps validate explicit boundary, bounded non-claims, and frozen-trace fields. |
 | MIG-07 | DONE | Version and normalize `smoke.properties`. | All 525 descriptors use schema 1, declare their era and runner, and validate behavior plus TestKit identity. |
-| MIG-08 | QUEUED | Burn down packed-line stock. | Mechanical, attested formatting reduces smoke and coordinator packed-line debt to zero without runtime requalification. |
+| MIG-08 | DONE | Burn down packed-line stock. | Mechanical, attested formatting reduces smoke and coordinator packed-line debt to zero without runtime requalification. |
 | MIG-09 | QUEUED | Consolidate repeated B173, place/persist, and Aero parsing families. | Fingerprinted shared helpers replace the audited clones without changing behavior. |
 | MIG-10 | QUEUED | Retire completed compatibility surfaces. | `Verify.java`, `SmokeLegacyImport`, and finalize-only migrators have dated removal trains and are deleted once their compatibility window closes. |
 

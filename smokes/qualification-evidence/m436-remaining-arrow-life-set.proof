@@ -1,5 +1,5 @@
 schema=1
 id=m436-remaining-arrow-life-set
-fingerprint=dd3796caa36d00627281c1089298d6bf24fb91bd99cf9100d4e17ae1e590b519
+fingerprint=ee5b43f5fe37a6b1318461a023e85ed1a550a9494a3c93ebb8105e8bd7418fe0
 observation.sha256=9a370fd980f9abd2ed3f852ff575a9dae9c9b0f461c73fa548d131b40077011c
 source=refactor-equivalent

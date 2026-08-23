@@ -12,6 +12,9 @@ import worldline.m74.client.WorldlineDecompositionClient;
 /** Installs the treatment at HEAD without depending on M74 injector order. */
 @Mixin(GameRenderer.class)
 public abstract class WorldlineDecompositionFrameMixin {
-    @Shadow @Final private Minecraft client;
-    @Inject(method = "onFrameUpdate(F)V", at = @At("HEAD")) private void setup(float delta, CallbackInfo callback) { WorldlineDecompositionClient.setup(client); }
+  @Shadow @Final private Minecraft client;
+  @Inject(method = "onFrameUpdate(F)V", at = @At("HEAD"))
+  private void setup(float delta, CallbackInfo callback) {
+    WorldlineDecompositionClient.setup(client);
+  }
 }

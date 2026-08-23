@@ -1,22 +1,211 @@
 package worldline.smoke.treegrowthb173;
 
-import java.nio.ByteBuffer;import java.nio.charset.StandardCharsets;import java.nio.file.*;import java.security.MessageDigest;import java.time.Duration;import worldline.api.*;import worldline.b173server.*;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.time.Duration;
+import worldline.api.*;
+import worldline.b173server.*;
 
 /** Grows one official oak sapling with bonemeal in a raised dry fixture. */
-public final class BonemealTreeGrowthSmoke{
- private BonemealTreeGrowthSmoke(){}
- public static void main(String[]a)throws Exception{
-  if(a.length!=9)throw new IllegalArgumentException("usage: BonemealTreeGrowthSmoke server.jar workspace port seed username chunkX chunkZ fixtureTicks growthTicks");Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String user=a[4];int cx=Integer.parseInt(a[5]),cz=Integer.parseInt(a[6]),fixtureTicks=Integer.parseInt(a[7]),growthTicks=Integer.parseInt(a[8]);Duration timeout=Duration.ofSeconds(90);
-  B173DedicatedServer server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true);B173WireClient actor=new B173WireClient("127.0.0.1",port,user,timeout),treatment=null,reader=null;RemoteChunkSnapshot before,after;BlockPosition foundation,top,dirt,root;TreeShape fresh;int column;
-  try{server.boot();B173PlayerSeed.writeInventory(workspace,user,4.5D,60D,4.5D,new int[]{0,1,2,3},new int[]{1,3,6,351},new int[]{64,1,1,1},new int[]{0,0,0,15});actor.connect();actor.synchronizePose();require(actor.awaitInventory().occupiedSlots()==4,"tree inventory drift");RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);foundation=foundation(initial,cx,cz);top=foundation;column=0;actor.selectHeldSlot(0);
-   while(water(initial.blockAt(local(top.x(),cx),top.y()+1,local(top.z(),cz)).legacyId())){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);column++;require(column<=15,"water column exceeded fixture stack");}for(int lift=0;lift<8;lift++){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);column++;}
-   actor.selectHeldSlot(1);dirt=place(actor,top,BlockFace.UP,3);actor.selectHeldSlot(2);root=place(actor,dirt,BlockFace.UP,6);RemoteWorldView planted=worldline.test.WorldlineSmokeAwait.observe(actor,fixtureTicks);require(planted.blockAt(root.x(),root.y(),root.z()).equals(new BlockState(6,0)),"sapling baseline drift");actor.close();awaitPlayers(server,0);server.save();
-   treatment=new B173WireClient("127.0.0.1",port,user,timeout);treatment.connect();treatment.synchronizePose();before=treatment.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);require(before.blockAt(local(root.x(),cx),root.y(),local(root.z(),cz)).equals(new BlockState(6,0)),"fresh sapling baseline drift");treatment.selectHeldSlot(3);treatment.useHeldItemOnBlock(root,BlockFace.UP);treatment.awaitBlock(root,new BlockState(17,0));require(worldline.test.WorldlineSmokeAwait.observe(treatment,growthTicks).blockAt(root.x(),root.y(),root.z()).equals(new BlockState(17,0)),"live root log drift");treatment.close();awaitPlayers(server,0);server.save();
-   reader=new B173WireClient("127.0.0.1",port,user,timeout);reader.connect();reader.synchronizePose();RemoteWorldView persisted=reader.awaitRemoteChunk(cx,cz);after=persisted.chunkAt(cx,cz);fresh=shape(persisted,root);require(after.blockAt(local(root.x(),cx),root.y(),local(root.z(),cz)).equals(new BlockState(17,0))&&fresh.logs>=4&&fresh.leaves>=10,"fresh tree persistence drift: "+fresh);
-  }finally{actor.close();if(treatment!=null)treatment.close();if(reader!=null)reader.close();server.close();}
-  StateDelta d=delta(before,after,root,cx,cz);require(d.changed==1,"tree root delta drift: "+d);String evidence="column="+column+",root="+root.x()+":"+root.y()+":"+root.z()+":6:0->17:0,logs>=4,leaves>=10,persisted=true,states="+d;String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=raised-dirt+oak-sapling6|settle="+fixtureTicks+"+"+growthTicks+"ticks|cause=packet15-bonemeal351:15|effect=official-oak-generation|oracle=root-log+bounded-positive-trunk-and-canopy+fresh-login|"+evidence+"|disconnect=clean";System.out.println("WORLDLINE_M140_TREE="+evidence);System.out.println("WORLDLINE_M140_TRACE="+trace);System.out.println("WORLDLINE_M140_SIGNATURE="+sha(trace));
- }
- private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}private static BlockPosition foundation(RemoteChunkSnapshot q,int cx,int cz){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(q.blockAt(x,y,z).legacyId()==3&&water(q.blockAt(x,y+1,z).legacyId()))return new BlockPosition(cx*16+x,y,cz*16+z);throw new IllegalStateException("no deterministic tree foundation");}
- private static TreeShape shape(RemoteWorldView w,BlockPosition r){int logs=0,leaves=0;for(int x=r.x()-3;x<=r.x()+3;x++)for(int z=r.z()-3;z<=r.z()+3;z++)for(int y=r.y();y<=r.y()+8;y++){int id=w.blockAt(x,y,z).legacyId();if(id==17)logs++;else if(id==18)leaves++;}return new TreeShape(logs,leaves);}private static StateDelta delta(RemoteChunkSnapshot a,RemoteChunkSnapshot b,BlockPosition v,int cx,int cz)throws Exception{MessageDigest md=MessageDigest.getInstance("SHA-256");ByteBuffer row=ByteBuffer.allocate(10);BlockState p=a.blockAt(local(v.x(),cx),v.y(),local(v.z(),cz)),q=b.blockAt(local(v.x(),cx),v.y(),local(v.z(),cz));int n=p.equals(q)?0:1;if(n==1){row.putShort((short)v.x()).putShort((short)v.y()).putShort((short)v.z()).put((byte)p.legacyId()).put((byte)p.metadata()).put((byte)q.legacyId()).put((byte)q.metadata());md.update(row.array());}return new StateDelta(n,hex(md.digest()));}
- private static boolean water(int id){return id==8||id==9;}private static int local(int v,int c){return v-c*16;}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long e=System.currentTimeMillis()+5000;while(System.currentTimeMillis()<e){if(s.players().size()==n)return;Thread.sleep(100);}throw new IllegalStateException("player count drift");}private static String sha(String s)throws Exception{return hex(MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8)));}private static String hex(byte[]b){StringBuilder s=new StringBuilder();for(byte v:b)s.append(String.format("%02x",v&255));return s.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}private static final class TreeShape{final int logs,leaves;TreeShape(int l,int v){logs=l;leaves=v;}public String toString(){return logs+"/"+leaves;}}private static final class StateDelta{final int changed;final String hash;StateDelta(int n,String h){changed=n;hash=h;}public String toString(){return changed+":"+hash;}}
+public final class BonemealTreeGrowthSmoke {
+  private BonemealTreeGrowthSmoke() {
+  }
+  public static void main(String[] a) throws Exception {
+    if (a.length != 9)
+      throw new IllegalArgumentException(
+          "usage: BonemealTreeGrowthSmoke server.jar workspace port seed username chunkX chunkZ fixtureTicks growthTicks");
+    Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
+    int port = Integer.parseInt(a[2]);
+    long seed = Long.parseLong(a[3]);
+    String user = a[4];
+    int cx = Integer.parseInt(a[5]), cz = Integer.parseInt(a[6]),
+        fixtureTicks = Integer.parseInt(a[7]), growthTicks = Integer.parseInt(a[8]);
+    Duration timeout = Duration.ofSeconds(90);
+    B173DedicatedServer server =
+        new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+    B173WireClient actor = new B173WireClient("127.0.0.1", port, user, timeout), treatment = null,
+                   reader = null;
+    RemoteChunkSnapshot before, after;
+    BlockPosition foundation, top, dirt, root;
+    TreeShape fresh;
+    int column;
+    try {
+      server.boot();
+      B173PlayerSeed.writeInventory(workspace, user, 4.5D, 60D, 4.5D, new int[] {0, 1, 2, 3},
+          new int[] {1, 3, 6, 351}, new int[] {64, 1, 1, 1}, new int[] {0, 0, 0, 15});
+      actor.connect();
+      actor.synchronizePose();
+      require(actor.awaitInventory().occupiedSlots() == 4, "tree inventory drift");
+      RemoteChunkSnapshot initial = actor.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      foundation = foundation(initial, cx, cz);
+      top = foundation;
+      column = 0;
+      actor.selectHeldSlot(0);
+      while (
+          water(initial.blockAt(local(top.x(), cx), top.y() + 1, local(top.z(), cz)).legacyId())) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        column++;
+        require(column <= 15, "water column exceeded fixture stack");
+      }
+      for (int lift = 0; lift < 8; lift++) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        column++;
+      }
+      actor.selectHeldSlot(1);
+      dirt = place(actor, top, BlockFace.UP, 3);
+      actor.selectHeldSlot(2);
+      root = place(actor, dirt, BlockFace.UP, 6);
+      RemoteWorldView planted = worldline.test.WorldlineSmokeAwait.observe(actor, fixtureTicks);
+      require(planted.blockAt(root.x(), root.y(), root.z()).equals(new BlockState(6, 0)),
+          "sapling baseline drift");
+      actor.close();
+      awaitPlayers(server, 0);
+      server.save();
+      treatment = new B173WireClient("127.0.0.1", port, user, timeout);
+      treatment.connect();
+      treatment.synchronizePose();
+      before = treatment.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      require(before.blockAt(local(root.x(), cx), root.y(), local(root.z(), cz))
+                  .equals(new BlockState(6, 0)),
+          "fresh sapling baseline drift");
+      treatment.selectHeldSlot(3);
+      treatment.useHeldItemOnBlock(root, BlockFace.UP);
+      treatment.awaitBlock(root, new BlockState(17, 0));
+      require(worldline.test.WorldlineSmokeAwait.observe(treatment, growthTicks)
+                  .blockAt(root.x(), root.y(), root.z())
+                  .equals(new BlockState(17, 0)),
+          "live root log drift");
+      treatment.close();
+      awaitPlayers(server, 0);
+      server.save();
+      reader = new B173WireClient("127.0.0.1", port, user, timeout);
+      reader.connect();
+      reader.synchronizePose();
+      RemoteWorldView persisted = reader.awaitRemoteChunk(cx, cz);
+      after = persisted.chunkAt(cx, cz);
+      fresh = shape(persisted, root);
+      require(after.blockAt(local(root.x(), cx), root.y(), local(root.z(), cz))
+                  .equals(new BlockState(17, 0))
+              && fresh.logs >= 4 && fresh.leaves >= 10,
+          "fresh tree persistence drift: " + fresh);
+    } finally {
+      actor.close();
+      if (treatment != null)
+        treatment.close();
+      if (reader != null)
+        reader.close();
+      server.close();
+    }
+    StateDelta d = delta(before, after, root, cx, cz);
+    require(d.changed == 1, "tree root delta drift: " + d);
+    String evidence = "column=" + column + ",root=" + root.x() + ":" + root.y() + ":" + root.z()
+        + ":6:0->17:0,logs>=4,leaves>=10,persisted=true,states=" + d;
+    String trace = "v1|server=official-b1.7.3|seed=" + seed
+        + "|fixture=raised-dirt+oak-sapling6|settle=" + fixtureTicks + "+" + growthTicks
+        + "ticks|cause=packet15-bonemeal351:15|effect=official-oak-generation|oracle=root-log+bounded-positive-trunk-and-canopy+fresh-login|"
+        + evidence + "|disconnect=clean";
+    System.out.println("WORLDLINE_M140_TREE=" + evidence);
+    System.out.println("WORLDLINE_M140_TRACE=" + trace);
+    System.out.println("WORLDLINE_M140_SIGNATURE=" + sha(trace));
+  }
+  private static BlockPosition place(
+      B173WireClient a, BlockPosition support, BlockFace face, int id) throws Exception {
+    BlockPosition target = face.adjacent(support);
+    a.placeHeldBlock(support, face);
+    a.awaitBlock(target, new BlockState(id, 0));
+    return target;
+  }
+  private static BlockPosition foundation(RemoteChunkSnapshot q, int cx, int cz) {
+    for (int x = 4; x <= 11; x++)
+      for (int z = 4; z <= 11; z++)
+        for (int y = 126; y >= 1; y--)
+          if (q.blockAt(x, y, z).legacyId() == 3 && water(q.blockAt(x, y + 1, z).legacyId()))
+            return new BlockPosition(cx * 16 + x, y, cz * 16 + z);
+    throw new IllegalStateException("no deterministic tree foundation");
+  }
+  private static TreeShape shape(RemoteWorldView w, BlockPosition r) {
+    int logs = 0, leaves = 0;
+    for (int x = r.x() - 3; x <= r.x() + 3; x++)
+      for (int z = r.z() - 3; z <= r.z() + 3; z++)
+        for (int y = r.y(); y <= r.y() + 8; y++) {
+          int id = w.blockAt(x, y, z).legacyId();
+          if (id == 17)
+            logs++;
+          else if (id == 18)
+            leaves++;
+        }
+    return new TreeShape(logs, leaves);
+  }
+  private static StateDelta delta(RemoteChunkSnapshot a, RemoteChunkSnapshot b, BlockPosition v,
+      int cx, int cz) throws Exception {
+    MessageDigest md = MessageDigest.getInstance("SHA-256");
+    ByteBuffer row = ByteBuffer.allocate(10);
+    BlockState p = a.blockAt(local(v.x(), cx), v.y(), local(v.z(), cz)),
+               q = b.blockAt(local(v.x(), cx), v.y(), local(v.z(), cz));
+    int n = p.equals(q) ? 0 : 1;
+    if (n == 1) {
+      row.putShort((short) v.x())
+          .putShort((short) v.y())
+          .putShort((short) v.z())
+          .put((byte) p.legacyId())
+          .put((byte) p.metadata())
+          .put((byte) q.legacyId())
+          .put((byte) q.metadata());
+      md.update(row.array());
+    }
+    return new StateDelta(n, hex(md.digest()));
+  }
+  private static boolean water(int id) {
+    return id == 8 || id == 9;
+  }
+  private static int local(int v, int c) {
+    return v - c * 16;
+  }
+  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
+    long e = System.currentTimeMillis() + 5000;
+    while (System.currentTimeMillis() < e) {
+      if (s.players().size() == n)
+        return;
+      Thread.sleep(100);
+    }
+    throw new IllegalStateException("player count drift");
+  }
+  private static String sha(String s) throws Exception {
+    return hex(MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8)));
+  }
+  private static String hex(byte[] b) {
+    StringBuilder s = new StringBuilder();
+    for (byte v : b)
+      s.append(String.format("%02x", v & 255));
+    return s.toString();
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
+  private static final class TreeShape {
+    final int logs, leaves;
+    TreeShape(int l, int v) {
+      logs = l;
+      leaves = v;
+    }
+    public String toString() {
+      return logs + "/" + leaves;
+    }
+  }
+  private static final class StateDelta {
+    final int changed;
+    final String hash;
+    StateDelta(int n, String h) {
+      changed = n;
+      hash = h;
+    }
+    public String toString() {
+      return changed + ":" + hash;
+    }
+  }
 }

@@ -1,5 +1,5 @@
 schema=1
 id=m132-nether-portal-activation
-fingerprint=b07a45a85ff2e124fd8a3792fbf2f6606d5d085954e5ddb23e67859f2a6800f2
+fingerprint=a7ff73868d9d4186851649ecabd133a1e5f03ad92363b0f26fb55c14b117ba4c
 observation.sha256=033c56bdb9ddf8abbd27735158a33d88a6a07e85cb5294a09bde41e7015d6518
 source=refactor-equivalent

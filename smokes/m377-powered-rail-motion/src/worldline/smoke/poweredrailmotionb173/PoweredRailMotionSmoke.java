@@ -1,37 +1,201 @@
 package worldline.smoke.poweredrailmotionb173;
 
-import java.nio.charset.StandardCharsets;import java.nio.file.*;import java.security.MessageDigest;import java.time.Duration;import worldline.api.*;import worldline.b173server.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.time.Duration;
+import worldline.api.*;
+import worldline.b173server.*;
 
 /** Proves unpowered powered-rail 27 holds a cart while powered 27:8 launches it onto detector 28:8. */
-public final class PoweredRailMotionSmoke{
- private PoweredRailMotionSmoke(){}
- public static void main(String[]a)throws Exception{
-  if(a.length!=7)throw new IllegalArgumentException("usage: PoweredRailMotionSmoke server.jar workspace port seed username chunkX chunkZ");
-  Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String user=a[4];int cx=Integer.parseInt(a[5]),cz=Integer.parseInt(a[6]);
-  require(seed==17320110707L&&user.equals("RailMot377")&&user.length()<=16,"powered-rail-motion identity drift");
-  Duration timeout=Duration.ofSeconds(90);B173DedicatedServer server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true);B173WireClient actor=new B173WireClient("127.0.0.1",port,user,timeout),reader=null;
-  BlockPosition top,northPad,wall,southPad,bumperPad,bumper,eastPad,westPad,powered,detector,torch;int column;BlockState idlePowered,idleDetector,livePowered,liveDetector,placedTorch;RemoteObjectSpawn cart;
-  try{server.boot();B173PlayerSeed.writeInventory(workspace,user,4.5D,60D,4.5D,new int[]{0,1,2,3,4},new int[]{1,27,28,328,76},new int[]{32,1,1,1,1},new int[]{0,0,0,0,0});actor.connect();actor.synchronizePose();require(actor.awaitInventory().occupiedSlots()==5,"powered-rail-motion inventory drift");
-   RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);top=foundation(initial,cx,cz);column=0;actor.selectHeldSlot(0);
-   while(water(initial.blockAt(local(top.x(),cx),top.y()+1,local(top.z(),cz)).legacyId())){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);require(++column<=15,"water column exceeded powered-rail-motion fixture");}for(int lift=0;lift<8;lift++){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);column++;}
-   northPad=place(actor,top,BlockFace.NORTH,1);wall=place(actor,northPad,BlockFace.UP,1);southPad=place(actor,top,BlockFace.SOUTH,1);bumperPad=place(actor,southPad,BlockFace.SOUTH,1);bumper=place(actor,bumperPad,BlockFace.UP,1);eastPad=place(actor,top,BlockFace.EAST,1);westPad=place(actor,top,BlockFace.WEST,1);
-   actor.selectHeldSlot(1);powered=BlockFace.UP.adjacent(top);actor.placeHeldBlock(top,BlockFace.UP);idlePowered=new BlockState(27,0);actor.awaitBlock(powered,idlePowered);
-   actor.selectHeldSlot(2);detector=BlockFace.UP.adjacent(southPad);actor.placeHeldBlock(southPad,BlockFace.UP);idleDetector=new BlockState(28,0);actor.awaitBlock(detector,idleDetector);
-   require(powered.x()==detector.x()&&detector.z()==powered.z()+1&&wall.z()==powered.z()-1&&bumper.z()==detector.z()+1&&westPad.x()==top.x()-1&&(idlePowered.metadata()&8)==0&&(idleDetector.metadata()&8)==0,"unpowered north-south track drift");
-   actor.moveAndObserve(-1D,0D,0D,1);actor.selectHeldSlot(3);actor.useHeldItemOnBlock(powered,BlockFace.UP);cart=actor.awaitObjectSpawn(10);
-   require(cart.type()==10&&cart.throwerId()==0&&cart.velocityX()==0&&cart.velocityY()==0&&cart.velocityZ()==0&&cart.fixedX()==powered.x()*32+16&&cart.fixedY()==powered.y()*32+27&&cart.fixedZ()==powered.z()*32+16&&cart.fixedZ()!=detector.z()*32+16,"minecart packet23 type10 spawn bounds drift");
-   require(actor.sustainTicks(10).blockAt(detector.x(),detector.y(),detector.z()).equals(idleDetector)&&(idleDetector.metadata()&8)==0&&actor.sustainTicks(5).blockAt(powered.x(),powered.y(),powered.z()).equals(idlePowered),"unpowered powered-rail launched the cart");
-   actor.selectHeldSlot(4);torch=BlockFace.UP.adjacent(eastPad);actor.placeHeldBlock(eastPad,BlockFace.UP);placedTorch=new BlockState(76,5);actor.awaitBlock(torch,placedTorch);livePowered=new BlockState(27,8);actor.awaitBlock(powered,livePowered);liveDetector=new BlockState(28,8);actor.awaitBlock(detector,liveDetector);
-   require((livePowered.metadata()&8)!=0&&(liveDetector.metadata()&8)!=0&&!livePowered.equals(idlePowered)&&!liveDetector.equals(idleDetector)&&actor.sustainTicks(5).blockAt(detector.x(),detector.y(),detector.z()).equals(liveDetector),"powered-rail motion or detector activation drift");
-   actor.close();awaitPlayers(server,0);server.save();
-   reader=new B173WireClient("127.0.0.1",port,user,timeout);reader.connect();reader.synchronizePose();reader.awaitBlock(powered,livePowered);reader.awaitBlock(detector,liveDetector);RemoteChunkSnapshot after=reader.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);
-   require(after.blockAt(local(powered.x(),cx),powered.y(),local(powered.z(),cz)).equals(livePowered)&&(after.blockAt(local(powered.x(),cx),powered.y(),local(powered.z(),cz)).metadata()&8)!=0&&after.blockAt(local(detector.x(),cx),detector.y(),local(detector.z(),cz)).equals(liveDetector)&&(after.blockAt(local(detector.x(),cx),detector.y(),local(detector.z(),cz)).metadata()&8)!=0&&after.blockAt(local(torch.x(),cx),torch.y(),local(torch.z(),cz)).equals(placedTorch)&&after.blockAt(local(wall.x(),cx),wall.y(),local(wall.z(),cz)).equals(new BlockState(1,0))&&after.blockAt(local(bumper.x(),cx),bumper.y(),local(bumper.z(),cz)).equals(new BlockState(1,0)),"persisted powered-rail-motion drift");
-   String evidence="column="+column+",support="+top.x()+":"+top.y()+":"+top.z()+":1:0,wall="+wall.x()+":"+wall.y()+":"+wall.z()+":1:0,bumper="+bumper.x()+":"+bumper.y()+":"+bumper.z()+":1:0,rail="+powered.x()+":"+powered.y()+":"+powered.z()+":27:"+idlePowered.metadata()+"->"+livePowered.metadata()+",detector="+detector.x()+":"+detector.y()+":"+detector.z()+":28:"+idleDetector.metadata()+"->"+liveDetector.metadata()+",cart=type10+thrower0+fixed"+cart.fixedX()+":"+cart.fixedY()+":"+cart.fixedZ()+",unpowered-hold=idle,powered=1,torch="+torch.x()+":"+torch.y()+":"+torch.z()+":76:"+placedTorch.metadata()+",persisted=true,clients=2,disconnect=clean";
-   String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=raised-stone+wall+powered-rail27+detector28+bumper+torch76+minecart328|cause=packet15-item27+packet15-item28+packet15-minecart328+packet15-item76|wire=packet23-type10+thrower0+packet53-rail27:0->8+packet53-detector28:0->8+packet53-torch76:5|oracle=unpowered-hold-idle+powered-launch-onto-detector+fresh-login|"+evidence;
-   System.out.println("WORLDLINE_M377_SET="+evidence);System.out.println("WORLDLINE_M377_TRACE="+trace);System.out.println("WORLDLINE_M377_SIGNATURE="+sha(trace));
-  }finally{actor.close();if(reader!=null)reader.close();server.close();}
- }
- private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}
- private static BlockPosition foundation(RemoteChunkSnapshot q,int cx,int cz){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(q.blockAt(x,y,z).legacyId()==3&&water(q.blockAt(x,y+1,z).legacyId()))return new BlockPosition(cx*16+x,y,cz*16+z);throw new IllegalStateException("no deterministic powered-rail-motion foundation");}
- private static boolean water(int id){return id==8||id==9;}private static int local(int v,int c){return v-c*16;}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long e=System.currentTimeMillis()+5000;while(System.currentTimeMillis()<e){if(s.players().size()==n)return;Thread.sleep(100);}throw new IllegalStateException("player count drift");}private static String sha(String s)throws Exception{byte[]b=MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));StringBuilder v=new StringBuilder();for(byte x:b)v.append(String.format("%02x",x&255));return v.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+public final class PoweredRailMotionSmoke {
+  private PoweredRailMotionSmoke() {
+  }
+  public static void main(String[] a) throws Exception {
+    if (a.length != 7)
+      throw new IllegalArgumentException(
+          "usage: PoweredRailMotionSmoke server.jar workspace port seed username chunkX chunkZ");
+    Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
+    int port = Integer.parseInt(a[2]);
+    long seed = Long.parseLong(a[3]);
+    String user = a[4];
+    int cx = Integer.parseInt(a[5]), cz = Integer.parseInt(a[6]);
+    require(seed == 17320110707L && user.equals("RailMot377") && user.length() <= 16,
+        "powered-rail-motion identity drift");
+    Duration timeout = Duration.ofSeconds(90);
+    B173DedicatedServer server =
+        new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+    B173WireClient actor = new B173WireClient("127.0.0.1", port, user, timeout), reader = null;
+    BlockPosition top, northPad, wall, southPad, bumperPad, bumper, eastPad, westPad, powered,
+        detector, torch;
+    int column;
+    BlockState idlePowered, idleDetector, livePowered, liveDetector, placedTorch;
+    RemoteObjectSpawn cart;
+    try {
+      server.boot();
+      B173PlayerSeed.writeInventory(workspace, user, 4.5D, 60D, 4.5D, new int[] {0, 1, 2, 3, 4},
+          new int[] {1, 27, 28, 328, 76}, new int[] {32, 1, 1, 1, 1}, new int[] {0, 0, 0, 0, 0});
+      actor.connect();
+      actor.synchronizePose();
+      require(actor.awaitInventory().occupiedSlots() == 5, "powered-rail-motion inventory drift");
+      RemoteChunkSnapshot initial = actor.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      top = foundation(initial, cx, cz);
+      column = 0;
+      actor.selectHeldSlot(0);
+      while (
+          water(initial.blockAt(local(top.x(), cx), top.y() + 1, local(top.z(), cz)).legacyId())) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        require(++column <= 15, "water column exceeded powered-rail-motion fixture");
+      }
+      for (int lift = 0; lift < 8; lift++) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        column++;
+      }
+      northPad = place(actor, top, BlockFace.NORTH, 1);
+      wall = place(actor, northPad, BlockFace.UP, 1);
+      southPad = place(actor, top, BlockFace.SOUTH, 1);
+      bumperPad = place(actor, southPad, BlockFace.SOUTH, 1);
+      bumper = place(actor, bumperPad, BlockFace.UP, 1);
+      eastPad = place(actor, top, BlockFace.EAST, 1);
+      westPad = place(actor, top, BlockFace.WEST, 1);
+      actor.selectHeldSlot(1);
+      powered = BlockFace.UP.adjacent(top);
+      actor.placeHeldBlock(top, BlockFace.UP);
+      idlePowered = new BlockState(27, 0);
+      actor.awaitBlock(powered, idlePowered);
+      actor.selectHeldSlot(2);
+      detector = BlockFace.UP.adjacent(southPad);
+      actor.placeHeldBlock(southPad, BlockFace.UP);
+      idleDetector = new BlockState(28, 0);
+      actor.awaitBlock(detector, idleDetector);
+      require(powered.x() == detector.x() && detector.z() == powered.z() + 1
+              && wall.z() == powered.z() - 1 && bumper.z() == detector.z() + 1
+              && westPad.x() == top.x() - 1 && (idlePowered.metadata() & 8) == 0
+              && (idleDetector.metadata() & 8) == 0,
+          "unpowered north-south track drift");
+      actor.moveAndObserve(-1D, 0D, 0D, 1);
+      actor.selectHeldSlot(3);
+      actor.useHeldItemOnBlock(powered, BlockFace.UP);
+      cart = actor.awaitObjectSpawn(10);
+      require(cart.type() == 10 && cart.throwerId() == 0 && cart.velocityX() == 0
+              && cart.velocityY() == 0 && cart.velocityZ() == 0
+              && cart.fixedX() == powered.x() * 32 + 16 && cart.fixedY() == powered.y() * 32 + 27
+              && cart.fixedZ() == powered.z() * 32 + 16 && cart.fixedZ() != detector.z() * 32 + 16,
+          "minecart packet23 type10 spawn bounds drift");
+      require(actor.sustainTicks(10)
+                  .blockAt(detector.x(), detector.y(), detector.z())
+                  .equals(idleDetector)
+              && (idleDetector.metadata() & 8) == 0
+              && actor.sustainTicks(5)
+                  .blockAt(powered.x(), powered.y(), powered.z())
+                  .equals(idlePowered),
+          "unpowered powered-rail launched the cart");
+      actor.selectHeldSlot(4);
+      torch = BlockFace.UP.adjacent(eastPad);
+      actor.placeHeldBlock(eastPad, BlockFace.UP);
+      placedTorch = new BlockState(76, 5);
+      actor.awaitBlock(torch, placedTorch);
+      livePowered = new BlockState(27, 8);
+      actor.awaitBlock(powered, livePowered);
+      liveDetector = new BlockState(28, 8);
+      actor.awaitBlock(detector, liveDetector);
+      require((livePowered.metadata() & 8) != 0 && (liveDetector.metadata() & 8) != 0
+              && !livePowered.equals(idlePowered) && !liveDetector.equals(idleDetector)
+              && actor.sustainTicks(5)
+                  .blockAt(detector.x(), detector.y(), detector.z())
+                  .equals(liveDetector),
+          "powered-rail motion or detector activation drift");
+      actor.close();
+      awaitPlayers(server, 0);
+      server.save();
+      reader = new B173WireClient("127.0.0.1", port, user, timeout);
+      reader.connect();
+      reader.synchronizePose();
+      reader.awaitBlock(powered, livePowered);
+      reader.awaitBlock(detector, liveDetector);
+      RemoteChunkSnapshot after = reader.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      require(after.blockAt(local(powered.x(), cx), powered.y(), local(powered.z(), cz))
+                  .equals(livePowered)
+              && (after.blockAt(local(powered.x(), cx), powered.y(), local(powered.z(), cz))
+                         .metadata()
+                     & 8)
+                  != 0
+              && after.blockAt(local(detector.x(), cx), detector.y(), local(detector.z(), cz))
+                  .equals(liveDetector)
+              && (after.blockAt(local(detector.x(), cx), detector.y(), local(detector.z(), cz))
+                         .metadata()
+                     & 8)
+                  != 0
+              && after.blockAt(local(torch.x(), cx), torch.y(), local(torch.z(), cz))
+                  .equals(placedTorch)
+              && after.blockAt(local(wall.x(), cx), wall.y(), local(wall.z(), cz))
+                  .equals(new BlockState(1, 0))
+              && after.blockAt(local(bumper.x(), cx), bumper.y(), local(bumper.z(), cz))
+                  .equals(new BlockState(1, 0)),
+          "persisted powered-rail-motion drift");
+      String evidence = "column=" + column + ",support=" + top.x() + ":" + top.y() + ":" + top.z()
+          + ":1:0,wall=" + wall.x() + ":" + wall.y() + ":" + wall.z() + ":1:0,bumper=" + bumper.x()
+          + ":" + bumper.y() + ":" + bumper.z() + ":1:0,rail=" + powered.x() + ":" + powered.y()
+          + ":" + powered.z() + ":27:" + idlePowered.metadata() + "->" + livePowered.metadata()
+          + ",detector=" + detector.x() + ":" + detector.y() + ":" + detector.z() + ":28:"
+          + idleDetector.metadata() + "->" + liveDetector.metadata() + ",cart=type10+thrower0+fixed"
+          + cart.fixedX() + ":" + cart.fixedY() + ":" + cart.fixedZ()
+          + ",unpowered-hold=idle,powered=1,torch=" + torch.x() + ":" + torch.y() + ":" + torch.z()
+          + ":76:" + placedTorch.metadata() + ",persisted=true,clients=2,disconnect=clean";
+      String trace = "v1|server=official-b1.7.3|seed=" + seed
+          + "|fixture=raised-stone+wall+powered-rail27+detector28+bumper+torch76+minecart328|cause=packet15-item27+packet15-item28+packet15-minecart328+packet15-item76|wire=packet23-type10+thrower0+packet53-rail27:0->8+packet53-detector28:0->8+packet53-torch76:5|oracle=unpowered-hold-idle+powered-launch-onto-detector+fresh-login|"
+          + evidence;
+      System.out.println("WORLDLINE_M377_SET=" + evidence);
+      System.out.println("WORLDLINE_M377_TRACE=" + trace);
+      System.out.println("WORLDLINE_M377_SIGNATURE=" + sha(trace));
+    } finally {
+      actor.close();
+      if (reader != null)
+        reader.close();
+      server.close();
+    }
+  }
+  private static BlockPosition place(
+      B173WireClient a, BlockPosition support, BlockFace face, int id) throws Exception {
+    BlockPosition target = face.adjacent(support);
+    a.placeHeldBlock(support, face);
+    a.awaitBlock(target, new BlockState(id, 0));
+    return target;
+  }
+  private static BlockPosition foundation(RemoteChunkSnapshot q, int cx, int cz) {
+    for (int x = 4; x <= 11; x++)
+      for (int z = 4; z <= 11; z++)
+        for (int y = 126; y >= 1; y--)
+          if (q.blockAt(x, y, z).legacyId() == 3 && water(q.blockAt(x, y + 1, z).legacyId()))
+            return new BlockPosition(cx * 16 + x, y, cz * 16 + z);
+    throw new IllegalStateException("no deterministic powered-rail-motion foundation");
+  }
+  private static boolean water(int id) {
+    return id == 8 || id == 9;
+  }
+  private static int local(int v, int c) {
+    return v - c * 16;
+  }
+  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
+    long e = System.currentTimeMillis() + 5000;
+    while (System.currentTimeMillis() < e) {
+      if (s.players().size() == n)
+        return;
+      Thread.sleep(100);
+    }
+    throw new IllegalStateException("player count drift");
+  }
+  private static String sha(String s) throws Exception {
+    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
+    StringBuilder v = new StringBuilder();
+    for (byte x : b)
+      v.append(String.format("%02x", x & 255));
+    return v.toString();
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
 }

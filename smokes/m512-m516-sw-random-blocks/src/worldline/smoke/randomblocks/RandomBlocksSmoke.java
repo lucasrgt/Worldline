@@ -1,5 +1,37 @@
 package worldline.smoke.randomblocks;
-import java.nio.file.Paths;import worldline.api.MinecraftRuntime;import worldline.api.WorldSource;import worldline.kernel.ControlledMinecraftRuntime;import worldline.trace.CanonicalTrace;
+import java.nio.file.Paths;
+import worldline.api.MinecraftRuntime;
+import worldline.api.WorldSource;
+import worldline.kernel.ControlledMinecraftRuntime;
+import worldline.trace.CanonicalTrace;
 /** Composite differential for M512 grass spread and M516 lava ignition. */
-public final class RandomBlocksSmoke{private static final long SEED=51251620240821L;private RandomBlocksSmoke(){}public static void main(String[]a){CanonicalTrace t=new CanonicalTrace(SEED);run(t,"grass-open",32);run(t,"grass-roof",32);run(t,"grass-stone",32);run(t,"lava-planks",32);run(t,"lava-wool",32);run(t,"lava-stone",32);t.emitTo(System.out);}private static void run(CanonicalTrace t,String m,int ticks){RandomBlocksBackend b=new RandomBlocksBackend(SEED,m);MinecraftRuntime r=new ControlledMinecraftRuntime(b);r.bootHeadless();r.loadWorld(WorldSource.at(Paths.get("memory",m)));try{b.snapshot(t,m+"-seed");for(int n=0;n<ticks;n++)r.tick();b.assertOutcome();b.snapshot(t,m+"-final");}finally{r.close();}}
+public final class RandomBlocksSmoke {
+  private static final long SEED = 51251620240821L;
+  private RandomBlocksSmoke() {
+  }
+  public static void main(String[] a) {
+    CanonicalTrace t = new CanonicalTrace(SEED);
+    run(t, "grass-open", 32);
+    run(t, "grass-roof", 32);
+    run(t, "grass-stone", 32);
+    run(t, "lava-planks", 32);
+    run(t, "lava-wool", 32);
+    run(t, "lava-stone", 32);
+    t.emitTo(System.out);
+  }
+  private static void run(CanonicalTrace t, String m, int ticks) {
+    RandomBlocksBackend b = new RandomBlocksBackend(SEED, m);
+    MinecraftRuntime r = new ControlledMinecraftRuntime(b);
+    r.bootHeadless();
+    r.loadWorld(WorldSource.at(Paths.get("memory", m)));
+    try {
+      b.snapshot(t, m + "-seed");
+      for (int n = 0; n < ticks; n++)
+        r.tick();
+      b.assertOutcome();
+      b.snapshot(t, m + "-final");
+    } finally {
+      r.close();
+    }
+  }
 }

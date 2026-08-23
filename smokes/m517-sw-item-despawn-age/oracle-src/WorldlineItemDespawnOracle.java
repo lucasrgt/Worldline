@@ -1,6 +1,71 @@
 import worldline.trace.CanonicalTrace;
 /** Runs the same item lifetime scenarios directly against the official JAR. */
-public final class WorldlineItemDespawnOracle{
- private static final long SEED=51720240821L;private WorldlineItemDespawnOracle(){}public static void main(String[]a){CanonicalTrace t=new CanonicalTrace(SEED);expiry(t);live(t);collection(t);t.emitTo(System.out);}private static void expiry(CanonicalTrace t){dj w=world("expiry");ez i=seed(w,5998);snap(t,"expiry-seed",w,i);tick(w);state(w,i,5999,false,true);snap(t,"expiry-5999",w,i);tick(w);state(w,i,6000,true,false);snap(t,"expiry-6000",w,i);}private static void live(CanonicalTrace t){dj w=world("live");ez i=seed(w,100);tick(w);tick(w);state(w,i,102,false,true);snap(t,"live-102",w,i);}private static void collection(CanonicalTrace t){dj w=world("collection");ez i=seed(w,100);i.b(new em(w){});w.e();state(w,i,100,true,false);snap(t,"collected",w,i);}
- private static dj world(String n){dj w=new dj(new OracleMemorySaveHandler(SEED,n),n,SEED,null);for(int x=-2;x<=2;x++)for(int z=-2;z<=2;z++)w.c(x,z);return w;}private static ez seed(dj w,int a){ez i=new ez(w,8D,65.125D,8D,new fy(na.u));i.aS=0D;i.aT=0D;i.aU=0D;i.b=a;req(w.b(i),"item rejected");return i;}private static void tick(dj w){w.h();w.e();}private static void snap(CanonicalTrace t,String l,dj w,ez i){t.record(l,w.m(),w.b.size(),i.b,i.bh?1:0,w.b.contains(i)?1:0,i.a.a);}private static void state(dj w,ez i,int a,boolean d,boolean p){req(i.b==a&&i.bh==d&&w.b.contains(i)==p,"item state drift");}private static void req(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+public final class WorldlineItemDespawnOracle {
+  private static final long SEED = 51720240821L;
+  private WorldlineItemDespawnOracle() {
+  }
+  public static void main(String[] a) {
+    CanonicalTrace t = new CanonicalTrace(SEED);
+    expiry(t);
+    live(t);
+    collection(t);
+    t.emitTo(System.out);
+  }
+  private static void expiry(CanonicalTrace t) {
+    dj w = world("expiry");
+    ez i = seed(w, 5998);
+    snap(t, "expiry-seed", w, i);
+    tick(w);
+    state(w, i, 5999, false, true);
+    snap(t, "expiry-5999", w, i);
+    tick(w);
+    state(w, i, 6000, true, false);
+    snap(t, "expiry-6000", w, i);
+  }
+  private static void live(CanonicalTrace t) {
+    dj w = world("live");
+    ez i = seed(w, 100);
+    tick(w);
+    tick(w);
+    state(w, i, 102, false, true);
+    snap(t, "live-102", w, i);
+  }
+  private static void collection(CanonicalTrace t) {
+    dj w = world("collection");
+    ez i = seed(w, 100);
+    i.b(new em(w) {});
+    w.e();
+    state(w, i, 100, true, false);
+    snap(t, "collected", w, i);
+  }
+  private static dj world(String n) {
+    dj w = new dj(new OracleMemorySaveHandler(SEED, n), n, SEED, null);
+    for (int x = -2; x <= 2; x++)
+      for (int z = -2; z <= 2; z++)
+        w.c(x, z);
+    return w;
+  }
+  private static ez seed(dj w, int a) {
+    ez i = new ez(w, 8D, 65.125D, 8D, new fy(na.u));
+    i.aS = 0D;
+    i.aT = 0D;
+    i.aU = 0D;
+    i.b = a;
+    req(w.b(i), "item rejected");
+    return i;
+  }
+  private static void tick(dj w) {
+    w.h();
+    w.e();
+  }
+  private static void snap(CanonicalTrace t, String l, dj w, ez i) {
+    t.record(l, w.m(), w.b.size(), i.b, i.bh ? 1 : 0, w.b.contains(i) ? 1 : 0, i.a.a);
+  }
+  private static void state(dj w, ez i, int a, boolean d, boolean p) {
+    req(i.b == a && i.bh == d && w.b.contains(i) == p, "item state drift");
+  }
+  private static void req(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
 }

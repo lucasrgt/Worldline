@@ -1,5 +1,53 @@
-import worldline.trace.CanonicalTrace;public final class WorldlineOfficialOracle{
- private static final long SEED=51020240820L;private static final int Y=65;private static final int[][]M={{9,8},{10,8},{11,8},{11,9},{11,10},{10,10},{9,10},{9,9}},C={{10,12},{11,12},{11,13},{11,14},{10,14},{9,14},{9,13}};private WorldlineOfficialOracle(){}
- public static void main(String[]a){System.setProperty("java.awt.headless","true");dj w=new dj(new OracleMemorySaveHandler(SEED,"worldline-smoke"),"worldline-smoke",SEED,null);for(int x=-2;x<=2;x++)for(int z=-2;z<=2;z++)w.c(x,z);req(w.b(8,Y,8,na.aR.bn,5),"torch placement failed");for(int[]p:M)wire(w,p);for(int[]p:C)wire(w,p);CanonicalTrace t=new CanonicalTrace(SEED);w.h();snap(t,"source-present",w);req(w.e(8,Y,8,0),"source removal failed");w.h();snap(t,"source-removed",w);for(int[]p:M)req(w.c(p[0],Y,p[1])==0,"main loop retained power");for(int[]p:C)req(w.c(p[0],Y,p[1])==0,"control gained power");req(w.a(9,Y,12)==0,"control gap closed");t.emitTo(System.out);}
- private static void wire(dj w,int[]p){req(w.e(p[0],Y,p[1],na.aw.bn),"wire placement failed");}private static void snap(CanonicalTrace t,String l,dj w){int[]v=new int[17];v[0]=w.a(8,Y,8);for(int i=0;i<8;i++)v[i+1]=w.c(M[i][0],Y,M[i][1]);for(int i=0;i<7;i++)v[i+9]=w.c(C[i][0],Y,C[i][1]);v[16]=w.a(9,Y,12);t.record(l,w.m(),w.b.size(),v);}private static void req(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+import worldline.trace.CanonicalTrace;
+public final class WorldlineOfficialOracle {
+  private static final long SEED = 51020240820L;
+  private static final int Y = 65;
+  private static final int[][] M = {{9, 8}, {10, 8}, {11, 8}, {11, 9}, {11, 10}, {10, 10}, {9, 10},
+                                   {9, 9}},
+                               C = {{10, 12}, {11, 12}, {11, 13}, {11, 14}, {10, 14}, {9, 14},
+                                   {9, 13}};
+  private WorldlineOfficialOracle() {
+  }
+  public static void main(String[] a) {
+    System.setProperty("java.awt.headless", "true");
+    dj w =
+        new dj(new OracleMemorySaveHandler(SEED, "worldline-smoke"), "worldline-smoke", SEED, null);
+    for (int x = -2; x <= 2; x++)
+      for (int z = -2; z <= 2; z++)
+        w.c(x, z);
+    req(w.b(8, Y, 8, na.aR.bn, 5), "torch placement failed");
+    for (int[] p : M)
+      wire(w, p);
+    for (int[] p : C)
+      wire(w, p);
+    CanonicalTrace t = new CanonicalTrace(SEED);
+    w.h();
+    snap(t, "source-present", w);
+    req(w.e(8, Y, 8, 0), "source removal failed");
+    w.h();
+    snap(t, "source-removed", w);
+    for (int[] p : M)
+      req(w.c(p[0], Y, p[1]) == 0, "main loop retained power");
+    for (int[] p : C)
+      req(w.c(p[0], Y, p[1]) == 0, "control gained power");
+    req(w.a(9, Y, 12) == 0, "control gap closed");
+    t.emitTo(System.out);
+  }
+  private static void wire(dj w, int[] p) {
+    req(w.e(p[0], Y, p[1], na.aw.bn), "wire placement failed");
+  }
+  private static void snap(CanonicalTrace t, String l, dj w) {
+    int[] v = new int[17];
+    v[0] = w.a(8, Y, 8);
+    for (int i = 0; i < 8; i++)
+      v[i + 1] = w.c(M[i][0], Y, M[i][1]);
+    for (int i = 0; i < 7; i++)
+      v[i + 9] = w.c(C[i][0], Y, C[i][1]);
+    v[16] = w.a(9, Y, 12);
+    t.record(l, w.m(), w.b.size(), v);
+  }
+  private static void req(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
 }

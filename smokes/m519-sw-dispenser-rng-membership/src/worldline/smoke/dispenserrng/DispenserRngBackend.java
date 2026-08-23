@@ -1,8 +1,76 @@
 package worldline.smoke.dispenserrng;
-import java.lang.reflect.Field;import java.util.Random;import net.minecraft.src.ItemStack;import net.minecraft.src.TileEntityDispenser;import worldline.api.WorldSource;import worldline.kernel.GameBackend;import worldline.trace.CanonicalTrace;
+import java.lang.reflect.Field;
+import java.util.Random;
+import net.minecraft.src.ItemStack;
+import net.minecraft.src.TileEntityDispenser;
+import worldline.api.WorldSource;
+import worldline.kernel.GameBackend;
+import worldline.trace.CanonicalTrace;
 /** Draws only from occupied dispenser slots under a frozen Random seed. */
-final class DispenserRngBackend implements GameBackend{
- private final long seed;private TileEntityDispenser dispenser;private ItemStack draw;DispenserRngBackend(long s){seed=s;}public void bootHeadless(){}public void loadWorld(WorldSource ignored){dispenser=new TileEntityDispenser();seedRandom();}public void tick(){draw=dispenser.getRandomStackFromInventory();}public void close(){dispenser=null;draw=null;}void multi(){dispenser.setInventorySlotContents(1,new ItemStack(1,3,0));dispenser.setInventorySlotContents(4,new ItemStack(3,3,0));dispenser.setInventorySlotContents(8,new ItemStack(20,3,0));}void single(){dispenser.setInventorySlotContents(6,new ItemStack(4,2,0));}
- void snapshot(CanonicalTrace t,String l){t.record(l,0,occupied(),draw==null?0:draw.itemID,draw==null?0:draw.stackSize,count(1),count(4),count(8),count(6));}void requireMember(){int id=draw==null?0:draw.itemID;req(id==1||id==3||id==20,"draw escaped occupied membership");}void requireSingle(){req(draw!=null&&draw.itemID==4,"single-slot draw drift");}void requireEmpty(){req(draw==null&&occupied()==0,"empty dispenser drew an item");}
- private int count(int s){ItemStack i=dispenser.getStackInSlot(s);return i==null?0:i.stackSize;}private int occupied(){int n=0;for(int s=0;s<9;s++)if(dispenser.getStackInSlot(s)!=null)n++;return n;}private void seedRandom(){try{Field f=TileEntityDispenser.class.getDeclaredField("dispenserRandom");f.setAccessible(true);f.set(dispenser,new Random(seed));}catch(ReflectiveOperationException e){throw new IllegalStateException(e);}}private static void req(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+final class DispenserRngBackend implements GameBackend {
+  private final long seed;
+  private TileEntityDispenser dispenser;
+  private ItemStack draw;
+  DispenserRngBackend(long s) {
+    seed = s;
+  }
+  public void bootHeadless() {
+  }
+  public void loadWorld(WorldSource ignored) {
+    dispenser = new TileEntityDispenser();
+    seedRandom();
+  }
+  public void tick() {
+    draw = dispenser.getRandomStackFromInventory();
+  }
+  public void close() {
+    dispenser = null;
+    draw = null;
+  }
+  void multi() {
+    dispenser.setInventorySlotContents(1, new ItemStack(1, 3, 0));
+    dispenser.setInventorySlotContents(4, new ItemStack(3, 3, 0));
+    dispenser.setInventorySlotContents(8, new ItemStack(20, 3, 0));
+  }
+  void single() {
+    dispenser.setInventorySlotContents(6, new ItemStack(4, 2, 0));
+  }
+  void snapshot(CanonicalTrace t, String l) {
+    t.record(l, 0, occupied(), draw == null ? 0 : draw.itemID, draw == null ? 0 : draw.stackSize,
+        count(1), count(4), count(8), count(6));
+  }
+  void requireMember() {
+    int id = draw == null ? 0 : draw.itemID;
+    req(id == 1 || id == 3 || id == 20, "draw escaped occupied membership");
+  }
+  void requireSingle() {
+    req(draw != null && draw.itemID == 4, "single-slot draw drift");
+  }
+  void requireEmpty() {
+    req(draw == null && occupied() == 0, "empty dispenser drew an item");
+  }
+  private int count(int s) {
+    ItemStack i = dispenser.getStackInSlot(s);
+    return i == null ? 0 : i.stackSize;
+  }
+  private int occupied() {
+    int n = 0;
+    for (int s = 0; s < 9; s++)
+      if (dispenser.getStackInSlot(s) != null)
+        n++;
+    return n;
+  }
+  private void seedRandom() {
+    try {
+      Field f = TileEntityDispenser.class.getDeclaredField("dispenserRandom");
+      f.setAccessible(true);
+      f.set(dispenser, new Random(seed));
+    } catch (ReflectiveOperationException e) {
+      throw new IllegalStateException(e);
+    }
+  }
+  private static void req(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
 }

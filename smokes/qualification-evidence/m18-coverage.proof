@@ -1,5 +1,5 @@
 schema=1
 id=m18-coverage
-fingerprint=587922029daccb5eea0782f6856c9df9e684713d19aacc8843c1e28b83b4a58c
+fingerprint=2032cce597b651392332e49c83b147e9456c93abb36a0c0a77f1941b9484fbc1
 observation.sha256=15102aefa1bcf05c0a8c485d6884439156789e2887edb60d3e5e1f4173401f08
 source=refactor-equivalent

@@ -1,24 +1,139 @@
 package worldline.smoke.firefamilysetb173;
 
-import java.nio.charset.StandardCharsets;import java.nio.file.*;import java.security.MessageDigest;import java.time.Duration;import worldline.api.*;import worldline.b173server.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.time.Duration;
+import worldline.api.*;
+import worldline.b173server.*;
 
 /** Places flint-and-steel fire 51 on netherrack 87 and proves that flame persists while adjacent wool 35 is consumed. */
-public final class FireFamilySetSmoke{
- private FireFamilySetSmoke(){}
- public static void main(String[]a)throws Exception{
-  if(a.length!=7)throw new IllegalArgumentException("usage: FireFamilySetSmoke server.jar workspace port seed username chunkX chunkZ");
-  Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String user=a[4];int cx=Integer.parseInt(a[5]),cz=Integer.parseInt(a[6]);Duration timeout=Duration.ofSeconds(180);
-  require(user.length()<=16,"username exceeds 16");
-  B173DedicatedServer server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true);B173WireClient actor=new B173WireClient("127.0.0.1",port,user,timeout),reader=null;BlockPosition top,rack,flame,pedestal,wool;int column;
-  try{server.boot();B173PlayerSeed.writeInventory(workspace,user,4.5D,60D,4.5D,new int[]{0,1,2,3},new int[]{1,87,259,35},new int[]{32,1,1,1},new int[]{0,0,0,0});actor.connect();actor.synchronizePose();require(actor.awaitInventory().occupiedSlots()==4,"fire-family inventory drift");RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);top=foundation(initial,cx,cz);column=0;actor.selectHeldSlot(0);
-   while(water(initial.blockAt(local(top.x(),cx),top.y()+1,local(top.z(),cz)).legacyId())){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);require(++column<=15,"water column exceeded fire-family fixture");}for(int lift=0;lift<8;lift++){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);column++;}
-   actor.selectHeldSlot(1);rack=place(actor,top,BlockFace.UP,87);flame=BlockFace.UP.adjacent(rack);actor.selectHeldSlot(0);pedestal=place(actor,rack,BlockFace.EAST,1);actor.selectHeldSlot(3);wool=place(actor,pedestal,BlockFace.UP,35);actor.selectHeldSlot(2);actor.useHeldItemOnBlock(rack,BlockFace.UP);actor.awaitBlock(flame,new BlockState(51,0));actor.awaitBlock(wool,new BlockState(35,0));require(actor.sustainTicks(40).blockAt(flame.x(),flame.y(),flame.z()).legacyId()==51,"live netherrack fire extinguished");actor.moveAndObserve(8D,0D,0D,8);actor.sustainTicks(1200);
-   actor.close();awaitPlayers(server,0);server.save();reader=new B173WireClient("127.0.0.1",port,user,timeout);reader.connect();reader.synchronizePose();RemoteChunkSnapshot after=reader.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);int cloth=after.blockAt(local(wool.x(),cx),wool.y(),local(wool.z(),cz)).legacyId(),netherFire=after.blockAt(local(flame.x(),cx),flame.y(),local(flame.z(),cz)).legacyId();
-   require((cloth==0||cloth==51)&&netherFire==51&&after.blockAt(local(rack.x(),cx),rack.y(),local(rack.z(),cz)).equals(new BlockState(87,0)),"wool consumption or netherrack fire drift");
-   String evidence="column="+column+",support="+top.x()+":"+top.y()+":"+top.z()+":1:0,rack="+rack.x()+":"+rack.y()+":"+rack.z()+":87:0,flint=259,fire="+flame.x()+":"+flame.y()+":"+flame.z()+":51,wool="+wool.x()+":"+wool.y()+":"+wool.z()+":consumed,netherrack-persist=true,clients=2,disconnect=clean";String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=raised-netherrack87+flintsteel259+adjacent-wool35|cause=packet15-item259|wire=packet53-fire51+netherrack-persist+wool35-consumed|oracle=live-fire51+netherrack-hold+bounded-tick-wool-consumption+fresh-login|"+evidence;System.out.println("WORLDLINE_M343_SET="+evidence);System.out.println("WORLDLINE_M343_TRACE="+trace);System.out.println("WORLDLINE_M343_SIGNATURE="+sha(trace));
-  }finally{actor.close();if(reader!=null)reader.close();server.close();}
- }
- private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}
- private static BlockPosition foundation(RemoteChunkSnapshot q,int cx,int cz){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(q.blockAt(x,y,z).legacyId()==3&&water(q.blockAt(x,y+1,z).legacyId()))return new BlockPosition(cx*16+x,y,cz*16+z);throw new IllegalStateException("no deterministic fire-family foundation");}
- private static boolean water(int id){return id==8||id==9;}private static int local(int v,int c){return v-c*16;}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long e=System.currentTimeMillis()+5000;while(System.currentTimeMillis()<e){if(s.players().size()==n)return;Thread.sleep(100);}throw new IllegalStateException("player count drift");}private static String sha(String s)throws Exception{byte[]b=MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));StringBuilder v=new StringBuilder();for(byte x:b)v.append(String.format("%02x",x&255));return v.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+public final class FireFamilySetSmoke {
+  private FireFamilySetSmoke() {
+  }
+  public static void main(String[] a) throws Exception {
+    if (a.length != 7)
+      throw new IllegalArgumentException(
+          "usage: FireFamilySetSmoke server.jar workspace port seed username chunkX chunkZ");
+    Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
+    int port = Integer.parseInt(a[2]);
+    long seed = Long.parseLong(a[3]);
+    String user = a[4];
+    int cx = Integer.parseInt(a[5]), cz = Integer.parseInt(a[6]);
+    Duration timeout = Duration.ofSeconds(180);
+    require(user.length() <= 16, "username exceeds 16");
+    B173DedicatedServer server =
+        new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+    B173WireClient actor = new B173WireClient("127.0.0.1", port, user, timeout), reader = null;
+    BlockPosition top, rack, flame, pedestal, wool;
+    int column;
+    try {
+      server.boot();
+      B173PlayerSeed.writeInventory(workspace, user, 4.5D, 60D, 4.5D, new int[] {0, 1, 2, 3},
+          new int[] {1, 87, 259, 35}, new int[] {32, 1, 1, 1}, new int[] {0, 0, 0, 0});
+      actor.connect();
+      actor.synchronizePose();
+      require(actor.awaitInventory().occupiedSlots() == 4, "fire-family inventory drift");
+      RemoteChunkSnapshot initial = actor.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      top = foundation(initial, cx, cz);
+      column = 0;
+      actor.selectHeldSlot(0);
+      while (
+          water(initial.blockAt(local(top.x(), cx), top.y() + 1, local(top.z(), cz)).legacyId())) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        require(++column <= 15, "water column exceeded fire-family fixture");
+      }
+      for (int lift = 0; lift < 8; lift++) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        column++;
+      }
+      actor.selectHeldSlot(1);
+      rack = place(actor, top, BlockFace.UP, 87);
+      flame = BlockFace.UP.adjacent(rack);
+      actor.selectHeldSlot(0);
+      pedestal = place(actor, rack, BlockFace.EAST, 1);
+      actor.selectHeldSlot(3);
+      wool = place(actor, pedestal, BlockFace.UP, 35);
+      actor.selectHeldSlot(2);
+      actor.useHeldItemOnBlock(rack, BlockFace.UP);
+      actor.awaitBlock(flame, new BlockState(51, 0));
+      actor.awaitBlock(wool, new BlockState(35, 0));
+      require(actor.sustainTicks(40).blockAt(flame.x(), flame.y(), flame.z()).legacyId() == 51,
+          "live netherrack fire extinguished");
+      actor.moveAndObserve(8D, 0D, 0D, 8);
+      actor.sustainTicks(1200);
+      actor.close();
+      awaitPlayers(server, 0);
+      server.save();
+      reader = new B173WireClient("127.0.0.1", port, user, timeout);
+      reader.connect();
+      reader.synchronizePose();
+      RemoteChunkSnapshot after = reader.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      int cloth = after.blockAt(local(wool.x(), cx), wool.y(), local(wool.z(), cz)).legacyId(),
+          netherFire =
+              after.blockAt(local(flame.x(), cx), flame.y(), local(flame.z(), cz)).legacyId();
+      require((cloth == 0 || cloth == 51) && netherFire == 51
+              && after.blockAt(local(rack.x(), cx), rack.y(), local(rack.z(), cz))
+                  .equals(new BlockState(87, 0)),
+          "wool consumption or netherrack fire drift");
+      String evidence = "column=" + column + ",support=" + top.x() + ":" + top.y() + ":" + top.z()
+          + ":1:0,rack=" + rack.x() + ":" + rack.y() + ":" + rack.z() + ":87:0,flint=259,fire="
+          + flame.x() + ":" + flame.y() + ":" + flame.z() + ":51,wool=" + wool.x() + ":" + wool.y()
+          + ":" + wool.z() + ":consumed,netherrack-persist=true,clients=2,disconnect=clean";
+      String trace = "v1|server=official-b1.7.3|seed=" + seed
+          + "|fixture=raised-netherrack87+flintsteel259+adjacent-wool35|cause=packet15-item259|wire=packet53-fire51+netherrack-persist+wool35-consumed|oracle=live-fire51+netherrack-hold+bounded-tick-wool-consumption+fresh-login|"
+          + evidence;
+      System.out.println("WORLDLINE_M343_SET=" + evidence);
+      System.out.println("WORLDLINE_M343_TRACE=" + trace);
+      System.out.println("WORLDLINE_M343_SIGNATURE=" + sha(trace));
+    } finally {
+      actor.close();
+      if (reader != null)
+        reader.close();
+      server.close();
+    }
+  }
+  private static BlockPosition place(
+      B173WireClient a, BlockPosition support, BlockFace face, int id) throws Exception {
+    BlockPosition target = face.adjacent(support);
+    a.placeHeldBlock(support, face);
+    a.awaitBlock(target, new BlockState(id, 0));
+    return target;
+  }
+  private static BlockPosition foundation(RemoteChunkSnapshot q, int cx, int cz) {
+    for (int x = 4; x <= 11; x++)
+      for (int z = 4; z <= 11; z++)
+        for (int y = 126; y >= 1; y--)
+          if (q.blockAt(x, y, z).legacyId() == 3 && water(q.blockAt(x, y + 1, z).legacyId()))
+            return new BlockPosition(cx * 16 + x, y, cz * 16 + z);
+    throw new IllegalStateException("no deterministic fire-family foundation");
+  }
+  private static boolean water(int id) {
+    return id == 8 || id == 9;
+  }
+  private static int local(int v, int c) {
+    return v - c * 16;
+  }
+  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
+    long e = System.currentTimeMillis() + 5000;
+    while (System.currentTimeMillis() < e) {
+      if (s.players().size() == n)
+        return;
+      Thread.sleep(100);
+    }
+    throw new IllegalStateException("player count drift");
+  }
+  private static String sha(String s) throws Exception {
+    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
+    StringBuilder v = new StringBuilder();
+    for (byte x : b)
+      v.append(String.format("%02x", x & 255));
+    return v.toString();
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
 }

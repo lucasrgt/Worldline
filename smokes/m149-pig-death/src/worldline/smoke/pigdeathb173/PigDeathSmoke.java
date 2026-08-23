@@ -1,19 +1,161 @@
 package worldline.smoke.pigdeathb173;
 
-import java.nio.charset.StandardCharsets;import java.nio.file.*;import java.security.MessageDigest;import java.time.Duration;import worldline.api.*;import worldline.b173server.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.time.Duration;
+import worldline.api.*;
+import worldline.b173server.*;
 
 /** Correlates one official spawned pig's diamond-sword death across two peers. */
-public final class PigDeathSmoke{
- private PigDeathSmoke(){}
- public static void main(String[]a)throws Exception{
-  if(a.length!=8)throw new IllegalArgumentException("usage: PigDeathSmoke server.jar workspace port seed actor observer chunkX chunkZ");Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String actorName=a[4],observerName=a[5];int cx=Integer.parseInt(a[6]),cz=Integer.parseInt(a[7]);Duration timeout=Duration.ofSeconds(90);B173DedicatedServer server=B173DedicatedServer.animals(jar,workspace,port,seed,timeout,3,true);B173WireClient actor=new B173WireClient("127.0.0.1",port,actorName,timeout),observer=new B173WireClient("127.0.0.1",port,observerName,timeout);BlockPosition top,spawner;int column;
-  try{server.boot();B173PlayerSeed.writeInventory(workspace,actorName,4.5D,60D,4.5D,new int[]{0,1,2,3},new int[]{1,2,52,276},new int[]{32,48,1,1},new int[]{0,0,0,0});B173PlayerSeed.write(workspace,observerName,4.5D,80D,4.5D);actor.connect();actor.synchronizePose();require(actor.awaitInventory().occupiedSlots()==4,"death fixture inventory drift");RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);top=foundation(initial,cx,cz);column=0;actor.selectHeldSlot(0);while(water(initial.blockAt(local(top.x(),cx),top.y()+1,local(top.z(),cz)).legacyId())){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);require(++column<=15,"water column exceeded death fixture");}for(int lift=0;lift<8;lift++){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);column++;}
-   actor.selectHeldSlot(1);for(int r=1;r<=3;r++){for(int z=-r+1;z<r;z++){grass(actor,new BlockPosition(top.x()-r+1,top.y(),top.z()+z),BlockFace.WEST);grass(actor,new BlockPosition(top.x()+r-1,top.y(),top.z()+z),BlockFace.EAST);}for(int x=-r+1;x<r;x++){grass(actor,new BlockPosition(top.x()+x,top.y(),top.z()-r+1),BlockFace.NORTH);grass(actor,new BlockPosition(top.x()+x,top.y(),top.z()+r-1),BlockFace.SOUTH);}grass(actor,new BlockPosition(top.x()-r,top.y(),top.z()-r+1),BlockFace.NORTH);grass(actor,new BlockPosition(top.x()-r,top.y(),top.z()+r-1),BlockFace.SOUTH);grass(actor,new BlockPosition(top.x()+r,top.y(),top.z()-r+1),BlockFace.NORTH);grass(actor,new BlockPosition(top.x()+r,top.y(),top.z()+r-1),BlockFace.SOUTH);}
-   observer.connect();observer.synchronizePose();observer.awaitRemoteChunk(cx,cz);actor.selectHeldSlot(2);spawner=place(actor,top,BlockFace.UP,52);RemoteMobSpawn spawn=B173PigBehavior.spawn(actor),peerSpawn=B173PigBehavior.spawn(observer);require(spawn.equals(peerSpawn),"peer pig spawn drift");int sword=find(actor.inventory(),276);require(sword>=36,"diamond sword absent from hotbar");actor.selectHeldSlot(sword-36);B173PigBehavior.approach(actor,spawn);sword=find(actor.inventory(),276);require(sword>=36,"diamond sword lost before attack");actor.selectHeldSlot(sword-36);for(int hit=0;hit<4;hit++){actor.attackMob(spawn.entityId());worldline.test.WorldlineSmokeAwait.observe(actor,5);}RemoteMobDeath death=B173PigBehavior.death(actor,spawn.entityId()),peerDeath=B173PigBehavior.death(observer,spawn.entityId());require(death.equals(peerDeath)&&death.entityId()==spawn.entityId()&&death.deathStatus()==3&&death.hurtObserved()&&death.destroyPacket()==29,"peer pig death drift");actor.close();observer.close();awaitPlayers(server,0);server.save();
-   String evidence="column="+column+",platform=7x7-48grass,spawner=52:0,mob=type90+shared-id,death=packet7-sword276+packet38-status3+packet29+hurt2,clients=2,disconnect=clean";String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=raised-7x7-grass-platform+default-spawner52|cause=official-diamond-sword-packet7|wire=packet38-status3+packet29-destroy|oracle=two-peer-identical-mob-death|"+evidence;System.out.println("WORLDLINE_M149_DEATH="+evidence);System.out.println("WORLDLINE_M149_TRACE="+trace);System.out.println("WORLDLINE_M149_SIGNATURE="+sha(trace));
-  }finally{actor.close();observer.close();server.close();}
- }
- private static int find(RemoteInventoryView view,int id){for(int slot=36;slot<=44;slot++)if(!view.slot(slot).empty()&&view.slot(slot).item().legacyId()==id)return slot;return -1;}
- private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}private static void grass(B173WireClient a,BlockPosition support,BlockFace face)throws Exception{place(a,support,face,2);}private static BlockPosition foundation(RemoteChunkSnapshot q,int cx,int cz){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(q.blockAt(x,y,z).legacyId()==3&&water(q.blockAt(x,y+1,z).legacyId()))return new BlockPosition(cx*16+x,y,cz*16+z);throw new IllegalStateException("no deterministic mob foundation");}
- private static boolean water(int id){return id==8||id==9;}private static int local(int v,int c){return v-c*16;}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long e=System.currentTimeMillis()+5000;while(System.currentTimeMillis()<e){if(s.players().size()==n)return;Thread.sleep(100);}throw new IllegalStateException("player count drift");}private static String sha(String s)throws Exception{byte[]b=MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));StringBuilder v=new StringBuilder();for(byte x:b)v.append(String.format("%02x",x&255));return v.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+public final class PigDeathSmoke {
+  private PigDeathSmoke() {
+  }
+  public static void main(String[] a) throws Exception {
+    if (a.length != 8)
+      throw new IllegalArgumentException(
+          "usage: PigDeathSmoke server.jar workspace port seed actor observer chunkX chunkZ");
+    Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
+    int port = Integer.parseInt(a[2]);
+    long seed = Long.parseLong(a[3]);
+    String actorName = a[4], observerName = a[5];
+    int cx = Integer.parseInt(a[6]), cz = Integer.parseInt(a[7]);
+    Duration timeout = Duration.ofSeconds(90);
+    B173DedicatedServer server =
+        B173DedicatedServer.animals(jar, workspace, port, seed, timeout, 3, true);
+    B173WireClient actor = new B173WireClient("127.0.0.1", port, actorName, timeout),
+                   observer = new B173WireClient("127.0.0.1", port, observerName, timeout);
+    BlockPosition top, spawner;
+    int column;
+    try {
+      server.boot();
+      B173PlayerSeed.writeInventory(workspace, actorName, 4.5D, 60D, 4.5D, new int[] {0, 1, 2, 3},
+          new int[] {1, 2, 52, 276}, new int[] {32, 48, 1, 1}, new int[] {0, 0, 0, 0});
+      B173PlayerSeed.write(workspace, observerName, 4.5D, 80D, 4.5D);
+      actor.connect();
+      actor.synchronizePose();
+      require(actor.awaitInventory().occupiedSlots() == 4, "death fixture inventory drift");
+      RemoteChunkSnapshot initial = actor.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      top = foundation(initial, cx, cz);
+      column = 0;
+      actor.selectHeldSlot(0);
+      while (
+          water(initial.blockAt(local(top.x(), cx), top.y() + 1, local(top.z(), cz)).legacyId())) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        require(++column <= 15, "water column exceeded death fixture");
+      }
+      for (int lift = 0; lift < 8; lift++) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        column++;
+      }
+      actor.selectHeldSlot(1);
+      for (int r = 1; r <= 3; r++) {
+        for (int z = -r + 1; z < r; z++) {
+          grass(actor, new BlockPosition(top.x() - r + 1, top.y(), top.z() + z), BlockFace.WEST);
+          grass(actor, new BlockPosition(top.x() + r - 1, top.y(), top.z() + z), BlockFace.EAST);
+        }
+        for (int x = -r + 1; x < r; x++) {
+          grass(actor, new BlockPosition(top.x() + x, top.y(), top.z() - r + 1), BlockFace.NORTH);
+          grass(actor, new BlockPosition(top.x() + x, top.y(), top.z() + r - 1), BlockFace.SOUTH);
+        }
+        grass(actor, new BlockPosition(top.x() - r, top.y(), top.z() - r + 1), BlockFace.NORTH);
+        grass(actor, new BlockPosition(top.x() - r, top.y(), top.z() + r - 1), BlockFace.SOUTH);
+        grass(actor, new BlockPosition(top.x() + r, top.y(), top.z() - r + 1), BlockFace.NORTH);
+        grass(actor, new BlockPosition(top.x() + r, top.y(), top.z() + r - 1), BlockFace.SOUTH);
+      }
+      observer.connect();
+      observer.synchronizePose();
+      observer.awaitRemoteChunk(cx, cz);
+      actor.selectHeldSlot(2);
+      spawner = place(actor, top, BlockFace.UP, 52);
+      RemoteMobSpawn spawn = B173PigBehavior.spawn(actor),
+                     peerSpawn = B173PigBehavior.spawn(observer);
+      require(spawn.equals(peerSpawn), "peer pig spawn drift");
+      int sword = find(actor.inventory(), 276);
+      require(sword >= 36, "diamond sword absent from hotbar");
+      actor.selectHeldSlot(sword - 36);
+      B173PigBehavior.approach(actor, spawn);
+      sword = find(actor.inventory(), 276);
+      require(sword >= 36, "diamond sword lost before attack");
+      actor.selectHeldSlot(sword - 36);
+      for (int hit = 0; hit < 4; hit++) {
+        actor.attackMob(spawn.entityId());
+        worldline.test.WorldlineSmokeAwait.observe(actor, 5);
+      }
+      RemoteMobDeath death = B173PigBehavior.death(actor, spawn.entityId()),
+                     peerDeath = B173PigBehavior.death(observer, spawn.entityId());
+      require(death.equals(peerDeath) && death.entityId() == spawn.entityId()
+              && death.deathStatus() == 3 && death.hurtObserved() && death.destroyPacket() == 29,
+          "peer pig death drift");
+      actor.close();
+      observer.close();
+      awaitPlayers(server, 0);
+      server.save();
+      String evidence = "column=" + column
+          + ",platform=7x7-48grass,spawner=52:0,mob=type90+shared-id,death=packet7-sword276+packet38-status3+packet29+hurt2,clients=2,disconnect=clean";
+      String trace = "v1|server=official-b1.7.3|seed=" + seed
+          + "|fixture=raised-7x7-grass-platform+default-spawner52|cause=official-diamond-sword-packet7|wire=packet38-status3+packet29-destroy|oracle=two-peer-identical-mob-death|"
+          + evidence;
+      System.out.println("WORLDLINE_M149_DEATH=" + evidence);
+      System.out.println("WORLDLINE_M149_TRACE=" + trace);
+      System.out.println("WORLDLINE_M149_SIGNATURE=" + sha(trace));
+    } finally {
+      actor.close();
+      observer.close();
+      server.close();
+    }
+  }
+  private static int find(RemoteInventoryView view, int id) {
+    for (int slot = 36; slot <= 44; slot++)
+      if (!view.slot(slot).empty() && view.slot(slot).item().legacyId() == id)
+        return slot;
+    return -1;
+  }
+  private static BlockPosition place(
+      B173WireClient a, BlockPosition support, BlockFace face, int id) throws Exception {
+    BlockPosition target = face.adjacent(support);
+    a.placeHeldBlock(support, face);
+    a.awaitBlock(target, new BlockState(id, 0));
+    return target;
+  }
+  private static void grass(B173WireClient a, BlockPosition support, BlockFace face)
+      throws Exception {
+    place(a, support, face, 2);
+  }
+  private static BlockPosition foundation(RemoteChunkSnapshot q, int cx, int cz) {
+    for (int x = 4; x <= 11; x++)
+      for (int z = 4; z <= 11; z++)
+        for (int y = 126; y >= 1; y--)
+          if (q.blockAt(x, y, z).legacyId() == 3 && water(q.blockAt(x, y + 1, z).legacyId()))
+            return new BlockPosition(cx * 16 + x, y, cz * 16 + z);
+    throw new IllegalStateException("no deterministic mob foundation");
+  }
+  private static boolean water(int id) {
+    return id == 8 || id == 9;
+  }
+  private static int local(int v, int c) {
+    return v - c * 16;
+  }
+  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
+    long e = System.currentTimeMillis() + 5000;
+    while (System.currentTimeMillis() < e) {
+      if (s.players().size() == n)
+        return;
+      Thread.sleep(100);
+    }
+    throw new IllegalStateException("player count drift");
+  }
+  private static String sha(String s) throws Exception {
+    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
+    StringBuilder v = new StringBuilder();
+    for (byte x : b)
+      v.append(String.format("%02x", x & 255));
+    return v.toString();
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
 }

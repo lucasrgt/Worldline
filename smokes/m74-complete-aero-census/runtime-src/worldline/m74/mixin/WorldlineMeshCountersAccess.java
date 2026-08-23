@@ -7,5 +7,8 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 /** Test-only bridge to the pinned Aero per-frame counter reset. */
 @Mixin(Aero_MeshRenderer.class)
 public interface WorldlineMeshCountersAccess {
-    @Invoker("beginFrameCounters") static void worldline$reset() { throw new AssertionError(); }
+  @Invoker("beginFrameCounters")
+  static void worldline$reset() {
+    throw new AssertionError();
+  }
 }

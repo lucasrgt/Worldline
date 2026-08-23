@@ -12,6 +12,12 @@ import worldline.m73.probe.WorldlinePairProbe;
 /** Exact login/play markers inherited from the qualified multiplayer seam. */
 @Mixin(ClientNetworkHandler.class)
 public abstract class WorldlinePairNetworkMixin {
-    @Inject(method = "onHello", at = @At("TAIL")) private void hello(LoginHelloPacket p, CallbackInfo c) { WorldlinePairProbe.hello(); }
-    @Inject(method = "onPlayerMove", at = @At("TAIL")) private void play(PlayerMovePacket p, CallbackInfo c) { WorldlinePairProbe.play(); }
+  @Inject(method = "onHello", at = @At("TAIL"))
+  private void hello(LoginHelloPacket p, CallbackInfo c) {
+    WorldlinePairProbe.hello();
+  }
+  @Inject(method = "onPlayerMove", at = @At("TAIL"))
+  private void play(PlayerMovePacket p, CallbackInfo c) {
+    WorldlinePairProbe.play();
+  }
 }

@@ -14,17 +14,42 @@ import worldline.m74.WorldlinePagedBridge;
 
 /** Writes four generation-bound request/event identities after the bracket seals. */
 public final class WorldlineRecoveryFile {
-    private static boolean written; private WorldlineRecoveryFile() {} public static boolean written() { return written; }
-    public static void write() {
-        if (written || !WorldlinePagedBridge.sealed() || !WorldlineRecoveryEvent.valid()) throw new IllegalStateException("invalid M86 write state " + WorldlineRecoveryEvent.diagnostic());
-        Path path = Paths.get(System.getProperty("worldline.recovery.file", "")).toAbsolutePath(); try { Files.createDirectories(path.getParent());
-            try (DataOutputStream out = new DataOutputStream(Files.newOutputStream(path, StandardOpenOption.CREATE_NEW))) {
-                out.writeInt(0x574c3836); out.writeInt(1); out.writeInt(60); out.writeInt(WorldlineCensusProbe.nonce());
-                out.writeInt(WorldlineCensusSync.x()); out.writeInt(WorldlineCensusSync.y()); out.writeInt(WorldlineCensusSync.z());
-                for(int i=0;i<4;i++){out.writeInt(WorldlineRecoveryEvent.requests[i]);out.writeInt(WorldlineRecoveryEvent.events[i]);}
-            }
-            byte[] bytes = Files.readAllBytes(path); StringBuilder hash = new StringBuilder(); for (byte value : MessageDigest.getInstance("SHA-256").digest(bytes)) hash.append(String.format("%02x", value & 255));
-            written = true; System.out.println("[WorldlineRecovery] complete " + WorldlineRecoveryEvent.diagnostic() + " bytes=" + bytes.length + " sha256=" + hash);
-        } catch (IOException | NoSuchAlgorithmException exception) { throw new IllegalStateException("M86 artifact write failed", exception); }
+  private static boolean written;
+  private WorldlineRecoveryFile() {
+  }
+  public static boolean written() {
+    return written;
+  }
+  public static void write() {
+    if (written || !WorldlinePagedBridge.sealed() || !WorldlineRecoveryEvent.valid())
+      throw new IllegalStateException(
+          "invalid M86 write state " + WorldlineRecoveryEvent.diagnostic());
+    Path path = Paths.get(System.getProperty("worldline.recovery.file", "")).toAbsolutePath();
+    try {
+      Files.createDirectories(path.getParent());
+      try (DataOutputStream out =
+               new DataOutputStream(Files.newOutputStream(path, StandardOpenOption.CREATE_NEW))) {
+        out.writeInt(0x574c3836);
+        out.writeInt(1);
+        out.writeInt(60);
+        out.writeInt(WorldlineCensusProbe.nonce());
+        out.writeInt(WorldlineCensusSync.x());
+        out.writeInt(WorldlineCensusSync.y());
+        out.writeInt(WorldlineCensusSync.z());
+        for (int i = 0; i < 4; i++) {
+          out.writeInt(WorldlineRecoveryEvent.requests[i]);
+          out.writeInt(WorldlineRecoveryEvent.events[i]);
+        }
+      }
+      byte[] bytes = Files.readAllBytes(path);
+      StringBuilder hash = new StringBuilder();
+      for (byte value : MessageDigest.getInstance("SHA-256").digest(bytes))
+        hash.append(String.format("%02x", value & 255));
+      written = true;
+      System.out.println("[WorldlineRecovery] complete " + WorldlineRecoveryEvent.diagnostic()
+          + " bytes=" + bytes.length + " sha256=" + hash);
+    } catch (IOException | NoSuchAlgorithmException exception) {
+      throw new IllegalStateException("M86 artifact write failed", exception);
     }
+  }
 }

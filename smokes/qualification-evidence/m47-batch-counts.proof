@@ -1,5 +1,5 @@
 schema=1
 id=m47-batch-counts
-fingerprint=5ddb51e01040e0e53be1f516bf95a4248d5018ba8249336d44e7eaa4f44b602c
+fingerprint=86e5ac3e8339bc75f605c0093f4f909ca41f1e78f334cd841432bf573070a07e
 observation.sha256=2d85056a404be6abeec5a2fbb7957679832a4f065da59f90a39874d054fdd532
 source=refactor-equivalent

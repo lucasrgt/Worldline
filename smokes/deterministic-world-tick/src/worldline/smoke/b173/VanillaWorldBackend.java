@@ -9,77 +9,77 @@ import worldline.trace.CanonicalTrace;
 
 /** Bridges the product runtime port to the mapped vanilla world used by this smoke. */
 final class VanillaWorldBackend implements GameBackend {
-    private static final int X = 8;
-    private static final int Z = 8;
-    private static final int SAND_Y = 70;
+  private static final int X = 8;
+  private static final int Z = 8;
+  private static final int SAND_Y = 70;
 
-    private final long seed;
-    private World world;
+  private final long seed;
+  private World world;
 
-    VanillaWorldBackend(long seed) {
-        this.seed = seed;
+  VanillaWorldBackend(long seed) {
+    this.seed = seed;
+  }
+
+  @Override
+  public void bootHeadless() {
+    System.setProperty("java.awt.headless", "true");
+    BlockSand.fallInstantly = true;
+  }
+
+  @Override
+  public void loadWorld(WorldSource source) {
+    String worldName = source.path().getFileName().toString();
+    world = new World(new MemorySaveHandler(seed, worldName), worldName, seed, null);
+    for (int chunkX = -2; chunkX <= 2; chunkX++) {
+      for (int chunkZ = -2; chunkZ <= 2; chunkZ++) {
+        world.getChunkFromChunkCoords(chunkX, chunkZ);
+      }
     }
+    require(world.getBlockId(X, 64, Z) == Block.stone.blockID, "fixture stone missing");
+    require(world.getBlockId(X, SAND_Y, Z) == 0, "drop cell is not air");
+  }
 
-    @Override
-    public void bootHeadless() {
-        System.setProperty("java.awt.headless", "true");
-        BlockSand.fallInstantly = true;
-    }
+  @Override
+  public void tick() {
+    requireWorld().tick();
+  }
 
-    @Override
-    public void loadWorld(WorldSource source) {
-        String worldName = source.path().getFileName().toString();
-        world = new World(new MemorySaveHandler(seed, worldName), worldName, seed, null);
-        for (int chunkX = -2; chunkX <= 2; chunkX++) {
-            for (int chunkZ = -2; chunkZ <= 2; chunkZ++) {
-                world.getChunkFromChunkCoords(chunkX, chunkZ);
-            }
-        }
-        require(world.getBlockId(X, 64, Z) == Block.stone.blockID, "fixture stone missing");
-        require(world.getBlockId(X, SAND_Y, Z) == 0, "drop cell is not air");
-    }
+  @Override
+  public void close() {
+    world = null;
+  }
 
-    @Override
-    public void tick() {
-        requireWorld().tick();
-    }
+  void placeSand() {
+    require(requireWorld().setBlockWithNotify(X, SAND_Y, Z, Block.sand.blockID),
+        "sand placement failed");
+  }
 
-    @Override
-    public void close() {
-        world = null;
+  void snapshot(CanonicalTrace trace, String label) {
+    World current = requireWorld();
+    int[] column = new int[SAND_Y - 63];
+    for (int y = 64; y <= SAND_Y; y++) {
+      column[y - 64] = current.getBlockId(X, y, Z);
     }
+    trace.record(label, current.getWorldTime(), current.loadedEntityList.size(), column);
+  }
 
-    void placeSand() {
-        require(requireWorld().setBlockWithNotify(X, SAND_Y, Z, Block.sand.blockID),
-                "sand placement failed");
-    }
+  void assertFinalState() {
+    World current = requireWorld();
+    require(current.getBlockId(X, SAND_Y, Z) == 0, "sand remained in drop cell");
+    require(current.getBlockId(X, 65, Z) == Block.sand.blockID, "sand did not land on stone");
+    require(current.getBlockId(X, 64, Z) == Block.stone.blockID, "fixture stone changed");
+  }
 
-    void snapshot(CanonicalTrace trace, String label) {
-        World current = requireWorld();
-        int[] column = new int[SAND_Y - 63];
-        for (int y = 64; y <= SAND_Y; y++) {
-            column[y - 64] = current.getBlockId(X, y, Z);
-        }
-        trace.record(label, current.getWorldTime(), current.loadedEntityList.size(), column);
+  private World requireWorld() {
+    if (world == null) {
+      throw new IllegalStateException("vanilla world is not loaded");
     }
+    return world;
+  }
 
-    void assertFinalState() {
-        World current = requireWorld();
-        require(current.getBlockId(X, SAND_Y, Z) == 0, "sand remained in drop cell");
-        require(current.getBlockId(X, 65, Z) == Block.sand.blockID, "sand did not land on stone");
-        require(current.getBlockId(X, 64, Z) == Block.stone.blockID, "fixture stone changed");
+  private static void require(boolean condition, String message) {
+    if (!condition) {
+      throw new IllegalStateException(message);
     }
-
-    private World requireWorld() {
-        if (world == null) {
-            throw new IllegalStateException("vanilla world is not loaded");
-        }
-        return world;
-    }
-
-    private static void require(boolean condition, String message) {
-        if (!condition) {
-            throw new IllegalStateException(message);
-        }
-    }
+  }
 }

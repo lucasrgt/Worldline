@@ -23,6 +23,7 @@ final class RetryMigrationCheck {
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); Properties telemetry = TelemetryPinCheck.manifest(root);
         Properties schemas = SchemaPinCheck.manifest(root);
+        Properties formatting = FormattingPinCheck.manifest(root);
         int checked = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             String stem = "retry." + smoke.id + ".";
@@ -31,13 +32,18 @@ final class RetryMigrationCheck {
             String fingerprint = fingerprints.compute(smoke);
             SmokePins.Entry pin = pins.match(smoke.id, fingerprint);
             require(source.startsWith(root.resolve("tools/smoke")), "unsafe migrated retry source");
-            if (Files.isRegularFile(source)) require(digest(source).equals(
+            if (Files.isRegularFile(source)) require((digest(source).equals(
                             manifest.getProperty(stem + "current_source_sha256"))
+                            || FormattingPinCheck.transportsFile(formatting, root,
+                            root.relativize(source).toString().replace('\\', '/'),
+                            manifest.getProperty(stem + "current_source_sha256")))
                             && (fingerprint.equals(manifest.getProperty(stem + "current_fingerprint"))
                             || pin != null && TelemetryPinCheck.carries(
                                     telemetry, smoke.id, pin, fingerprint)
                             || pin != null && SchemaPinCheck.carries(
-                                    schemas, smoke.id, pin, fingerprint)),
+                                    schemas, smoke.id, pin, fingerprint)
+                            || pin != null && FormattingPinCheck.carries(
+                                    formatting, smoke.id, pin, fingerprint)),
                     "EOF retry migration evidence drift: " + smoke.id);
             else require(successor(dataDriven, composite, smoke.id, manifest, stem),
                     "missing migrated retry successor: " + smoke.id);
@@ -48,7 +54,8 @@ final class RetryMigrationCheck {
                             || pin.source().equals("refactor-equivalent")
                             && (pin.evidence().equals(manifest.getProperty(stem + "evidence_sha256"))
                             || TelemetryPinCheck.carries(telemetry, smoke.id, pin, fingerprint)
-                            || SchemaPinCheck.carries(schemas, smoke.id, pin, fingerprint))),
+                            || SchemaPinCheck.carries(schemas, smoke.id, pin, fingerprint)
+                            || FormattingPinCheck.carries(formatting, smoke.id, pin, fingerprint))),
                     "EOF retry migration pin drift: " + smoke.id);
         }
         require(checked == 33, "EOF retry migration census drift: " + checked);

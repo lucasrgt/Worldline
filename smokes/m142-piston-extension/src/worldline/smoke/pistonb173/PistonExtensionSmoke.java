@@ -1,35 +1,235 @@
 package worldline.smoke.pistonb173;
 
-import java.nio.*;import java.nio.charset.*;import java.nio.file.*;import java.security.*;import java.time.*;
-import worldline.api.*;import worldline.b173server.*;
+import java.nio.*;
+import java.nio.charset.*;
+import java.nio.file.*;
+import java.security.*;
+import java.time.*;
+import worldline.api.*;
+import worldline.b173server.*;
 
 /** Powers one official piston and proves one exact stone displacement. */
-public final class PistonExtensionSmoke{
- private PistonExtensionSmoke(){}
- public static void main(String[]a)throws Exception{
-  if(a.length!=9)throw new IllegalArgumentException("usage: PistonExtensionSmoke server.jar workspace port seed username chunkX chunkZ fixtureTicks signalTicks");
-  Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String username=a[4];int chunkX=Integer.parseInt(a[5]),chunkZ=Integer.parseInt(a[6]),fixtureTicks=Integer.parseInt(a[7]),signalTicks=Integer.parseInt(a[8]);Duration timeout=Duration.ofSeconds(90);
-  B173DedicatedServer server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true);B173WireClient actor=new B173WireClient("127.0.0.1",port,username,timeout),reader=null;
-  RemoteChunkSnapshot before,after;BlockPosition foundation,top,piston,head,pushed,lever;BlockState leverOff,leverOn,pistonOff,pistonOn,headBefore,headAfter,pushedBefore,pushedAfter;int column;
-  try{server.boot();B173PlayerSeed.writeInventory(workspace,username,4.5D,60D,4.5D,new int[]{0,1,2},new int[]{1,33,69},new int[]{16,1,1},new int[]{0,0,0});actor.connect();actor.synchronizePose();actor.look(-90F,0F);require(actor.awaitInventory().occupiedSlots()==3,"piston fixture inventory drift");
-   RemoteChunkSnapshot initial=actor.awaitRemoteChunk(chunkX,chunkZ).chunkAt(chunkX,chunkZ);foundation=foundation(initial,chunkX,chunkZ);top=foundation;column=0;actor.selectHeldSlot(0);
-   while(water(initial.blockAt(local(top.x(),chunkX),top.y()+1,local(top.z(),chunkZ)).legacyId())){actor.placeHeldBlock(top,BlockFace.UP);top=BlockFace.UP.adjacent(top);actor.awaitBlock(top,new BlockState(1,0));actor.moveAndObserve(0D,1D,0D,1);require(++column<=15,"water column exceeded fixture stack");}
-   actor.placeHeldBlock(top,BlockFace.UP);top=BlockFace.UP.adjacent(top);actor.awaitBlock(top,new BlockState(1,0));actor.moveAndObserve(0D,1D,2D,1);column++;piston=BlockFace.UP.adjacent(top);head=BlockFace.WEST.adjacent(piston);pushed=BlockFace.WEST.adjacent(head);lever=BlockFace.EAST.adjacent(top);
-   require(initial.blockAt(local(piston.x(),chunkX),piston.y(),local(piston.z(),chunkZ)).legacyId()==0&&initial.blockAt(local(head.x(),chunkX),head.y(),local(head.z(),chunkZ)).legacyId()==0&&initial.blockAt(local(pushed.x(),chunkX),pushed.y(),local(pushed.z(),chunkZ)).legacyId()==0&&initial.blockAt(local(lever.x(),chunkX),lever.y(),local(lever.z(),chunkZ)).legacyId()==0,"piston targets were not initial air");
-   actor.selectHeldSlot(1);actor.placeHeldBlock(top,BlockFace.UP);pistonOff=worldline.test.WorldlineSmokeAwait.observe(actor,5).blockAt(piston.x(),piston.y(),piston.z());require(pistonOff.equals(new BlockState(33,4)),"west-facing piston drift: "+pistonOff);
-   actor.selectHeldSlot(0);actor.placeHeldBlock(piston,BlockFace.WEST);require(actor.awaitBlock(head,new BlockState(1,0)).blockAt(head.x(),head.y(),head.z()).equals(new BlockState(1,0)),"push stone placement absent");
-   actor.selectHeldSlot(2);actor.placeHeldBlock(top,BlockFace.EAST);leverOff=worldline.test.WorldlineSmokeAwait.observe(actor,5).blockAt(lever.x(),lever.y(),lever.z());require(leverOff.equals(new BlockState(69,1)),"side lever drift: "+leverOff);
-   actor.selectHeldSlot(3);before=worldline.test.WorldlineSmokeAwait.observe(actor,fixtureTicks).chunkAt(chunkX,chunkZ);pistonOff=at(before,piston,chunkX,chunkZ);headBefore=at(before,head,chunkX,chunkZ);pushedBefore=at(before,pushed,chunkX,chunkZ);require(headBefore.equals(new BlockState(1,0))&&pushedBefore.equals(new BlockState(0,0)),"pre-extension cells drift");
-   actor.activateBlock(lever,BlockFace.UP);RemoteWorldView live=worldline.test.WorldlineSmokeAwait.observe(actor,signalTicks);leverOn=live.blockAt(lever.x(),lever.y(),lever.z());pistonOn=live.blockAt(piston.x(),piston.y(),piston.z());headAfter=live.blockAt(head.x(),head.y(),head.z());pushedAfter=live.blockAt(pushed.x(),pushed.y(),pushed.z());
-   require(leverOn.equals(new BlockState(69,9))&&pistonOn.equals(new BlockState(33,12))&&headAfter.equals(new BlockState(34,4))&&pushedAfter.equals(new BlockState(1,0)),"exact piston extension absent: "+leverOn+"/"+pistonOn+"/"+headAfter+"/"+pushedAfter);
-   actor.close();awaitPlayers(server,0);server.save();reader=new B173WireClient("127.0.0.1",port,username,timeout);reader.connect();reader.synchronizePose();after=reader.awaitRemoteChunk(chunkX,chunkZ).chunkAt(chunkX,chunkZ);
-   require(at(after,lever,chunkX,chunkZ).equals(leverOn)&&at(after,piston,chunkX,chunkZ).equals(pistonOn)&&at(after,head,chunkX,chunkZ).equals(headAfter)&&at(after,pushed,chunkX,chunkZ).equals(pushedAfter),"fresh piston state drift");
-  }finally{actor.close();if(reader!=null)reader.close();server.close();}
-  Delta delta=delta(before,after,top.y());require(delta.changed==4,"raised piston fixture changed unrelated states: "+delta.cells);String evidence="column="+column+",lever="+lever.x()+":"+lever.y()+":"+lever.z()+":"+leverOff.metadata()+"->"+leverOn.metadata()+",piston="+piston.x()+":"+piston.y()+":"+piston.z()+":"+pistonOff.metadata()+"->"+pistonOn.metadata()+",head="+headBefore.legacyId()+":"+headBefore.metadata()+"->"+headAfter.legacyId()+":"+headAfter.metadata()+",pushed="+pushedBefore.legacyId()+":"+pushedBefore.metadata()+"->"+pushedAfter.legacyId()+":"+pushedAfter.metadata()+",raised-states="+delta;
-  String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=stone-column+piston33-west+stone1+lever69|settle="+fixtureTicks+"+"+signalTicks+"ticks|cause=packet15-lever-activate|effect=official-piston-event+stone-displacement|observation=fresh-login-packet51|"+evidence+"|disconnect=clean";System.out.println("WORLDLINE_M142_PISTON="+evidence);System.out.println("WORLDLINE_M142_TRACE="+trace);System.out.println("WORLDLINE_M142_SIGNATURE="+sha(trace));
- }
- private static BlockPosition foundation(RemoteChunkSnapshot c,int cx,int cz){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(c.blockAt(x,y,z).legacyId()==3&&water(c.blockAt(x,y+1,z).legacyId()))return new BlockPosition(cx*16+x,y,cz*16+z);throw new IllegalStateException("no deterministic piston foundation");}
- private static BlockState at(RemoteChunkSnapshot c,BlockPosition p,int cx,int cz){return c.blockAt(local(p.x(),cx),p.y(),local(p.z(),cz));}
- private static Delta delta(RemoteChunkSnapshot a,RemoteChunkSnapshot b,int minY)throws Exception{MessageDigest d=MessageDigest.getInstance("SHA-256");ByteBuffer row=ByteBuffer.allocate(10);StringBuilder cells=new StringBuilder();int n=0;for(int x=0;x<16;x++)for(int z=0;z<16;z++)for(int y=minY;y<128;y++){BlockState q=a.blockAt(x,y,z),r=b.blockAt(x,y,z);if(!q.equals(r)){if(cells.length()>0)cells.append(';');cells.append(x).append(':').append(y).append(':').append(z).append(':').append(q).append('>').append(r);n++;row.clear();row.putShort((short)x).putShort((short)y).putShort((short)z).put((byte)q.legacyId()).put((byte)q.metadata()).put((byte)r.legacyId()).put((byte)r.metadata());d.update(row.array());}}return new Delta(n,hex(d.digest()),cells.toString());}
- private static boolean water(int id){return id==8||id==9;}private static int local(int v,int c){return v-c*16;}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long e=System.currentTimeMillis()+5000;while(System.currentTimeMillis()<e){if(s.players().size()==n)return;Thread.sleep(100);}throw new IllegalStateException("player count drift");}private static String sha(String s)throws Exception{return hex(MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8)));}private static String hex(byte[]b){StringBuilder s=new StringBuilder();for(byte v:b)s.append(String.format("%02x",v&255));return s.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}private static final class Delta{final int changed;final String hash,cells;Delta(int c,String h,String x){changed=c;hash=h;cells=x;}public String toString(){return changed+":"+hash;}}
+public final class PistonExtensionSmoke {
+  private PistonExtensionSmoke() {
+  }
+  public static void main(String[] a) throws Exception {
+    if (a.length != 9)
+      throw new IllegalArgumentException(
+          "usage: PistonExtensionSmoke server.jar workspace port seed username chunkX chunkZ fixtureTicks signalTicks");
+    Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
+    int port = Integer.parseInt(a[2]);
+    long seed = Long.parseLong(a[3]);
+    String username = a[4];
+    int chunkX = Integer.parseInt(a[5]), chunkZ = Integer.parseInt(a[6]),
+        fixtureTicks = Integer.parseInt(a[7]), signalTicks = Integer.parseInt(a[8]);
+    Duration timeout = Duration.ofSeconds(90);
+    B173DedicatedServer server =
+        new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+    B173WireClient actor = new B173WireClient("127.0.0.1", port, username, timeout), reader = null;
+    RemoteChunkSnapshot before, after;
+    BlockPosition foundation, top, piston, head, pushed, lever;
+    BlockState leverOff, leverOn, pistonOff, pistonOn, headBefore, headAfter, pushedBefore,
+        pushedAfter;
+    int column;
+    try {
+      server.boot();
+      B173PlayerSeed.writeInventory(workspace, username, 4.5D, 60D, 4.5D, new int[] {0, 1, 2},
+          new int[] {1, 33, 69}, new int[] {16, 1, 1}, new int[] {0, 0, 0});
+      actor.connect();
+      actor.synchronizePose();
+      actor.look(-90F, 0F);
+      require(actor.awaitInventory().occupiedSlots() == 3, "piston fixture inventory drift");
+      RemoteChunkSnapshot initial = actor.awaitRemoteChunk(chunkX, chunkZ).chunkAt(chunkX, chunkZ);
+      foundation = foundation(initial, chunkX, chunkZ);
+      top = foundation;
+      column = 0;
+      actor.selectHeldSlot(0);
+      while (water(initial.blockAt(local(top.x(), chunkX), top.y() + 1, local(top.z(), chunkZ))
+              .legacyId())) {
+        actor.placeHeldBlock(top, BlockFace.UP);
+        top = BlockFace.UP.adjacent(top);
+        actor.awaitBlock(top, new BlockState(1, 0));
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        require(++column <= 15, "water column exceeded fixture stack");
+      }
+      actor.placeHeldBlock(top, BlockFace.UP);
+      top = BlockFace.UP.adjacent(top);
+      actor.awaitBlock(top, new BlockState(1, 0));
+      actor.moveAndObserve(0D, 1D, 2D, 1);
+      column++;
+      piston = BlockFace.UP.adjacent(top);
+      head = BlockFace.WEST.adjacent(piston);
+      pushed = BlockFace.WEST.adjacent(head);
+      lever = BlockFace.EAST.adjacent(top);
+      require(initial.blockAt(local(piston.x(), chunkX), piston.y(), local(piston.z(), chunkZ))
+                      .legacyId()
+                  == 0
+              && initial.blockAt(local(head.x(), chunkX), head.y(), local(head.z(), chunkZ))
+                      .legacyId()
+                  == 0
+              && initial.blockAt(local(pushed.x(), chunkX), pushed.y(), local(pushed.z(), chunkZ))
+                      .legacyId()
+                  == 0
+              && initial.blockAt(local(lever.x(), chunkX), lever.y(), local(lever.z(), chunkZ))
+                      .legacyId()
+                  == 0,
+          "piston targets were not initial air");
+      actor.selectHeldSlot(1);
+      actor.placeHeldBlock(top, BlockFace.UP);
+      pistonOff = worldline.test.WorldlineSmokeAwait.observe(actor, 5).blockAt(
+          piston.x(), piston.y(), piston.z());
+      require(pistonOff.equals(new BlockState(33, 4)), "west-facing piston drift: " + pistonOff);
+      actor.selectHeldSlot(0);
+      actor.placeHeldBlock(piston, BlockFace.WEST);
+      require(actor.awaitBlock(head, new BlockState(1, 0))
+                  .blockAt(head.x(), head.y(), head.z())
+                  .equals(new BlockState(1, 0)),
+          "push stone placement absent");
+      actor.selectHeldSlot(2);
+      actor.placeHeldBlock(top, BlockFace.EAST);
+      leverOff = worldline.test.WorldlineSmokeAwait.observe(actor, 5).blockAt(
+          lever.x(), lever.y(), lever.z());
+      require(leverOff.equals(new BlockState(69, 1)), "side lever drift: " + leverOff);
+      actor.selectHeldSlot(3);
+      before =
+          worldline.test.WorldlineSmokeAwait.observe(actor, fixtureTicks).chunkAt(chunkX, chunkZ);
+      pistonOff = at(before, piston, chunkX, chunkZ);
+      headBefore = at(before, head, chunkX, chunkZ);
+      pushedBefore = at(before, pushed, chunkX, chunkZ);
+      require(headBefore.equals(new BlockState(1, 0)) && pushedBefore.equals(new BlockState(0, 0)),
+          "pre-extension cells drift");
+      actor.activateBlock(lever, BlockFace.UP);
+      RemoteWorldView live = worldline.test.WorldlineSmokeAwait.observe(actor, signalTicks);
+      leverOn = live.blockAt(lever.x(), lever.y(), lever.z());
+      pistonOn = live.blockAt(piston.x(), piston.y(), piston.z());
+      headAfter = live.blockAt(head.x(), head.y(), head.z());
+      pushedAfter = live.blockAt(pushed.x(), pushed.y(), pushed.z());
+      require(leverOn.equals(new BlockState(69, 9)) && pistonOn.equals(new BlockState(33, 12))
+              && headAfter.equals(new BlockState(34, 4))
+              && pushedAfter.equals(new BlockState(1, 0)),
+          "exact piston extension absent: " + leverOn + "/" + pistonOn + "/" + headAfter + "/"
+              + pushedAfter);
+      actor.close();
+      awaitPlayers(server, 0);
+      server.save();
+      reader = new B173WireClient("127.0.0.1", port, username, timeout);
+      reader.connect();
+      reader.synchronizePose();
+      after = reader.awaitRemoteChunk(chunkX, chunkZ).chunkAt(chunkX, chunkZ);
+      require(at(after, lever, chunkX, chunkZ).equals(leverOn)
+              && at(after, piston, chunkX, chunkZ).equals(pistonOn)
+              && at(after, head, chunkX, chunkZ).equals(headAfter)
+              && at(after, pushed, chunkX, chunkZ).equals(pushedAfter),
+          "fresh piston state drift");
+    } finally {
+      actor.close();
+      if (reader != null)
+        reader.close();
+      server.close();
+    }
+    Delta delta = delta(before, after, top.y());
+    require(delta.changed == 4, "raised piston fixture changed unrelated states: " + delta.cells);
+    String evidence = "column=" + column + ",lever=" + lever.x() + ":" + lever.y() + ":" + lever.z()
+        + ":" + leverOff.metadata() + "->" + leverOn.metadata() + ",piston=" + piston.x() + ":"
+        + piston.y() + ":" + piston.z() + ":" + pistonOff.metadata() + "->" + pistonOn.metadata()
+        + ",head=" + headBefore.legacyId() + ":" + headBefore.metadata() + "->"
+        + headAfter.legacyId() + ":" + headAfter.metadata() + ",pushed=" + pushedBefore.legacyId()
+        + ":" + pushedBefore.metadata() + "->" + pushedAfter.legacyId() + ":"
+        + pushedAfter.metadata() + ",raised-states=" + delta;
+    String trace = "v1|server=official-b1.7.3|seed=" + seed
+        + "|fixture=stone-column+piston33-west+stone1+lever69|settle=" + fixtureTicks + "+"
+        + signalTicks
+        + "ticks|cause=packet15-lever-activate|effect=official-piston-event+stone-displacement|observation=fresh-login-packet51|"
+        + evidence + "|disconnect=clean";
+    System.out.println("WORLDLINE_M142_PISTON=" + evidence);
+    System.out.println("WORLDLINE_M142_TRACE=" + trace);
+    System.out.println("WORLDLINE_M142_SIGNATURE=" + sha(trace));
+  }
+  private static BlockPosition foundation(RemoteChunkSnapshot c, int cx, int cz) {
+    for (int x = 4; x <= 11; x++)
+      for (int z = 4; z <= 11; z++)
+        for (int y = 126; y >= 1; y--)
+          if (c.blockAt(x, y, z).legacyId() == 3 && water(c.blockAt(x, y + 1, z).legacyId()))
+            return new BlockPosition(cx * 16 + x, y, cz * 16 + z);
+    throw new IllegalStateException("no deterministic piston foundation");
+  }
+  private static BlockState at(RemoteChunkSnapshot c, BlockPosition p, int cx, int cz) {
+    return c.blockAt(local(p.x(), cx), p.y(), local(p.z(), cz));
+  }
+  private static Delta delta(RemoteChunkSnapshot a, RemoteChunkSnapshot b, int minY)
+      throws Exception {
+    MessageDigest d = MessageDigest.getInstance("SHA-256");
+    ByteBuffer row = ByteBuffer.allocate(10);
+    StringBuilder cells = new StringBuilder();
+    int n = 0;
+    for (int x = 0; x < 16; x++)
+      for (int z = 0; z < 16; z++)
+        for (int y = minY; y < 128; y++) {
+          BlockState q = a.blockAt(x, y, z), r = b.blockAt(x, y, z);
+          if (!q.equals(r)) {
+            if (cells.length() > 0)
+              cells.append(';');
+            cells.append(x)
+                .append(':')
+                .append(y)
+                .append(':')
+                .append(z)
+                .append(':')
+                .append(q)
+                .append('>')
+                .append(r);
+            n++;
+            row.clear();
+            row.putShort((short) x)
+                .putShort((short) y)
+                .putShort((short) z)
+                .put((byte) q.legacyId())
+                .put((byte) q.metadata())
+                .put((byte) r.legacyId())
+                .put((byte) r.metadata());
+            d.update(row.array());
+          }
+        }
+    return new Delta(n, hex(d.digest()), cells.toString());
+  }
+  private static boolean water(int id) {
+    return id == 8 || id == 9;
+  }
+  private static int local(int v, int c) {
+    return v - c * 16;
+  }
+  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
+    long e = System.currentTimeMillis() + 5000;
+    while (System.currentTimeMillis() < e) {
+      if (s.players().size() == n)
+        return;
+      Thread.sleep(100);
+    }
+    throw new IllegalStateException("player count drift");
+  }
+  private static String sha(String s) throws Exception {
+    return hex(MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8)));
+  }
+  private static String hex(byte[] b) {
+    StringBuilder s = new StringBuilder();
+    for (byte v : b)
+      s.append(String.format("%02x", v & 255));
+    return s.toString();
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
+  private static final class Delta {
+    final int changed;
+    final String hash, cells;
+    Delta(int c, String h, String x) {
+      changed = c;
+      hash = h;
+      cells = x;
+    }
+    public String toString() {
+      return changed + ":" + hash;
+    }
+  }
 }

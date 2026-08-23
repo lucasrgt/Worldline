@@ -1,2 +1,29 @@
 package worldline.smoke.redstoneloop;
-import java.nio.file.Paths;import worldline.api.*;import worldline.kernel.ControlledMinecraftRuntime;import worldline.trace.CanonicalTrace;public final class RedstoneLoopSmoke{private static final long SEED=51020240820L;private RedstoneLoopSmoke(){}public static void main(String[]a){RedstoneLoopBackend b=new RedstoneLoopBackend(SEED);MinecraftRuntime r=new ControlledMinecraftRuntime(b);r.bootHeadless();try{r.loadWorld(WorldSource.at(Paths.get("memory","worldline-smoke")));CanonicalTrace t=new CanonicalTrace(SEED);b.power();r.tick();b.snapshot(t,"source-present");b.removeSource();r.tick();b.snapshot(t,"source-removed");b.assertFinal();t.emitTo(System.out);}finally{r.close();}}}
+import java.nio.file.Paths;
+import worldline.api.*;
+import worldline.kernel.ControlledMinecraftRuntime;
+import worldline.trace.CanonicalTrace;
+public final class RedstoneLoopSmoke {
+  private static final long SEED = 51020240820L;
+  private RedstoneLoopSmoke() {
+  }
+  public static void main(String[] a) {
+    RedstoneLoopBackend b = new RedstoneLoopBackend(SEED);
+    MinecraftRuntime r = new ControlledMinecraftRuntime(b);
+    r.bootHeadless();
+    try {
+      r.loadWorld(WorldSource.at(Paths.get("memory", "worldline-smoke")));
+      CanonicalTrace t = new CanonicalTrace(SEED);
+      b.power();
+      r.tick();
+      b.snapshot(t, "source-present");
+      b.removeSource();
+      r.tick();
+      b.snapshot(t, "source-removed");
+      b.assertFinal();
+      t.emitTo(System.out);
+    } finally {
+      r.close();
+    }
+  }
+}

@@ -1,36 +1,242 @@
 package worldline.smoke.plantgrowthb173;
 
-import java.nio.charset.StandardCharsets;import java.nio.file.*;import java.security.MessageDigest;import java.time.Duration;import worldline.api.*;import worldline.b173server.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.time.Duration;
+import worldline.api.*;
+import worldline.b173server.*;
 
 /** Bonemeal-grows wheat 59:0→59:7 and waits official cactus 81 plus sugar cane 83 to height 2. */
-public final class PlantGrowthSmoke{
- private PlantGrowthSmoke(){}
- public static void main(String[]a)throws Exception{
-  if(a.length!=9)throw new IllegalArgumentException("usage: PlantGrowthSmoke server.jar workspace port seed username chunkX chunkZ windowTicks growthWindows");
-  Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String user=a[4];int cx=Integer.parseInt(a[5]),cz=Integer.parseInt(a[6]),window=Integer.parseInt(a[7]),windows=Integer.parseInt(a[8]);Duration timeout=Duration.ofMinutes(25);
-  B173DedicatedServer server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true);B173WireClient actor=new B173WireClient("127.0.0.1",port,user,timeout),reader=null;BlockPosition top,north,south,south2,east,se,se2,west,west2,west2s2,sand1,sand2,cactus,cactus2,cactusTop,cactus2Top,dirtW,dirt1,dirt2,dirt3,water1,wheat,farm,cane,cane2,cane3,caneTop,cane2Top,cane3Top;int column,caneH,cactH;
-  try{server.boot();B173PlayerSeed.writeInventory(workspace,user,4.5D,60D,4.5D,new int[]{0,1,2,3,4,5,6,7,8},new int[]{1,3,9,290,295,351,12,81,338},new int[]{64,16,8,1,8,8,8,8,8},new int[]{0,0,0,0,0,15,0,0,0});actor.connect();actor.synchronizePose();require(actor.awaitInventory().occupiedSlots()==9,"plant inventory drift");RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);top=foundation(initial,cx,cz);column=0;actor.selectHeldSlot(0);
-   while(water(initial.blockAt(local(top.x(),cx),top.y()+1,local(top.z(),cz)).legacyId())){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);require(++column<=15,"water column exceeded plant fixture");}for(int lift=0;lift<8;lift++){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);column++;}
-   north=place(actor,top,BlockFace.NORTH,1);south=place(actor,top,BlockFace.SOUTH,1);east=place(actor,top,BlockFace.EAST,1);west=place(actor,top,BlockFace.WEST,1);west2=place(actor,west,BlockFace.WEST,1);south2=place(actor,south,BlockFace.SOUTH,1);se=place(actor,east,BlockFace.SOUTH,1);se2=place(actor,se,BlockFace.SOUTH,1);west2s2=place(actor,place(actor,west2,BlockFace.SOUTH,1),BlockFace.SOUTH,1);
-   actor.selectHeldSlot(6);sand1=place(actor,west2,BlockFace.UP,12);sand2=place(actor,west2s2,BlockFace.UP,12);actor.selectHeldSlot(7);cactus=place(actor,sand1,BlockFace.UP,81);cactus2=place(actor,sand2,BlockFace.UP,81);cactusTop=BlockFace.UP.adjacent(cactus);cactus2Top=BlockFace.UP.adjacent(cactus2);require(worldline.test.WorldlineSmokeAwait.observe(actor,5).blockAt(cactus.x(),cactus.y(),cactus.z()).legacyId()==81&&worldline.test.WorldlineSmokeAwait.observe(actor,1).blockAt(cactus2.x(),cactus2.y(),cactus2.z()).legacyId()==81,"isolated cactus popped");
-   actor.selectHeldSlot(1);dirtW=place(actor,north,BlockFace.UP,3);dirt1=place(actor,top,BlockFace.UP,3);dirt2=place(actor,south,BlockFace.UP,3);dirt3=place(actor,south2,BlockFace.UP,3);actor.selectHeldSlot(2);water1=place(actor,east,BlockFace.UP,9);place(actor,se,BlockFace.UP,9);place(actor,se2,BlockFace.UP,9);require(worldline.test.WorldlineSmokeAwait.observe(actor,5).blockAt(water1.x(),water1.y(),water1.z()).equals(new BlockState(9,0)),"still water 9 drift");
-   actor.selectHeldSlot(3);till(actor,dirtW);farm=dirtW;actor.selectHeldSlot(4);wheat=sow(actor,farm);require(worldline.test.WorldlineSmokeAwait.observe(actor,5).blockAt(wheat.x(),wheat.y(),wheat.z()).equals(new BlockState(59,0)),"planted wheat popped");actor.selectHeldSlot(5);actor.useHeldItemOnBlock(wheat,BlockFace.UP);require(age(actor,wheat,59,7,40),"bonemeal wheat age jump absent");
-   actor.selectHeldSlot(8);cane=reed(actor,dirt1);cane2=reed(actor,dirt2);cane3=reed(actor,dirt3);caneTop=BlockFace.UP.adjacent(cane);cane2Top=BlockFace.UP.adjacent(cane2);cane3Top=BlockFace.UP.adjacent(cane3);
-   RemoteWorldView grown=worldline.test.WorldlineSmokeAwait.awaitWorld(actor,v->(id(v,caneTop)==83||id(v,cane2Top)==83||id(v,cane3Top)==83)&&(id(v,cactusTop)==81||id(v,cactus2Top)==81),"cactus and sugar cane growth",windows*window);caneH=2;cactH=2;require(id(grown,cane)==83&&id(grown,cactus)==81&&grown.blockAt(wheat.x(),wheat.y(),wheat.z()).equals(new BlockState(59,7)),"live plant vanished during wait");
-   actor.close();awaitPlayers(server,0);server.save();reader=new B173WireClient("127.0.0.1",port,user,timeout);reader.connect();reader.synchronizePose();reader.awaitInventory();reader.awaitRemoteChunk(cx,cz);RemoteChunkSnapshot after=worldline.test.WorldlineSmokeAwait.observe(reader,5).chunkAt(cx,cz);
-   require(at(after,farm,cx,cz).legacyId()==60&&at(after,wheat,cx,cz).equals(new BlockState(59,7))&&at(after,cane,cx,cz).legacyId()==83&&(at(after,caneTop,cx,cz).legacyId()==83||at(after,cane2Top,cx,cz).legacyId()==83||at(after,cane3Top,cx,cz).legacyId()==83)&&at(after,cactus,cx,cz).legacyId()==81&&(at(after,cactusTop,cx,cz).legacyId()==81||at(after,cactus2Top,cx,cz).legacyId()==81)&&water(at(after,water1,cx,cz).legacyId()),"persisted plant growth drift: "+dump(after,new BlockPosition[]{farm,wheat,cane,caneTop,cane2Top,cane3Top,cactus,cactusTop,cactus2Top,water1},cx,cz));
-   String evidence="column="+column+",wheat="+cell(wheat)+":59:0->59:7,farm="+cell(farm)+":60,cane="+cell(cane)+":83,cane-height>=2,cactus="+cell(cactus)+":81,cactus-height>=2,bonemeal=351:15,plants=59+81+83,persisted=true,clients=2,disconnect=clean";String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=raised-dirt3+still-water9+sand12|cause=packet15-bonemeal351:15+item338-reed+item81-cactus|wire=packet53-crops59:7+reed83+cactus81|oracle=bonemeal-wheat-age-jump+official-random-tick-height>=2+fresh-login|"+evidence;System.out.println("WORLDLINE_M305_GROWTH="+evidence);System.out.println("WORLDLINE_M305_TRACE="+trace);System.out.println("WORLDLINE_M305_SIGNATURE="+sha(trace));
-  }finally{actor.close();if(reader!=null)reader.close();server.close();}
- }
- private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}
- private static void till(B173WireClient a,BlockPosition dirt)throws Exception{a.useHeldItemOnBlock(dirt,BlockFace.UP);a.awaitBlock(dirt,new BlockState(60,0));}
- private static BlockPosition sow(B173WireClient a,BlockPosition soil)throws Exception{BlockPosition crop=BlockFace.UP.adjacent(soil);a.useHeldItemOnBlock(soil,BlockFace.UP);a.awaitBlock(crop,new BlockState(59,0));return crop;}
- private static BlockPosition reed(B173WireClient a,BlockPosition soil)throws Exception{BlockPosition crop=BlockFace.UP.adjacent(soil);a.useHeldItemOnBlock(soil,BlockFace.UP);a.awaitBlock(crop,new BlockState(83,0));return crop;}
- private static BlockPosition foundation(RemoteChunkSnapshot q,int cx,int cz){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(q.blockAt(x,y,z).legacyId()==3&&water(q.blockAt(x,y+1,z).legacyId()))return new BlockPosition(cx*16+x,y,cz*16+z);throw new IllegalStateException("no deterministic plant foundation");}
- private static BlockState at(RemoteChunkSnapshot q,BlockPosition p,int cx,int cz){return q.blockAt(local(p.x(),cx),p.y(),local(p.z(),cz));}
- private static int id(RemoteWorldView v,BlockPosition p){return v.blockAt(p.x(),p.y(),p.z()).legacyId();}
- private static boolean age(B173WireClient a,BlockPosition p,int id,int meta,int windows)throws Exception{return worldline.test.WorldlineSmokeAwait.awaitBlockOrNull(a,p,new BlockState(id,meta),windows*5)!=null;}
- private static String cell(BlockPosition p){return p.x()+":"+p.y()+":"+p.z();}
- private static String dump(RemoteChunkSnapshot q,BlockPosition[] cells,int cx,int cz){StringBuilder s=new StringBuilder();for(BlockPosition p:cells)s.append(cell(p)).append('=').append(at(q,p,cx,cz)).append(' ');return s.toString();}
- private static boolean water(int id){return id==8||id==9;}private static int local(int v,int c){return v-c*16;}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long e=System.currentTimeMillis()+5000;while(System.currentTimeMillis()<e){if(s.players().size()==n)return;Thread.sleep(100);}throw new IllegalStateException("player count drift");}private static String sha(String s)throws Exception{byte[]b=MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));StringBuilder v=new StringBuilder();for(byte x:b)v.append(String.format("%02x",x&255));return v.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+public final class PlantGrowthSmoke {
+  private PlantGrowthSmoke() {
+  }
+  public static void main(String[] a) throws Exception {
+    if (a.length != 9)
+      throw new IllegalArgumentException(
+          "usage: PlantGrowthSmoke server.jar workspace port seed username chunkX chunkZ windowTicks growthWindows");
+    Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
+    int port = Integer.parseInt(a[2]);
+    long seed = Long.parseLong(a[3]);
+    String user = a[4];
+    int cx = Integer.parseInt(a[5]), cz = Integer.parseInt(a[6]), window = Integer.parseInt(a[7]),
+        windows = Integer.parseInt(a[8]);
+    Duration timeout = Duration.ofMinutes(25);
+    B173DedicatedServer server =
+        new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+    B173WireClient actor = new B173WireClient("127.0.0.1", port, user, timeout), reader = null;
+    BlockPosition top, north, south, south2, east, se, se2, west, west2, west2s2, sand1, sand2,
+        cactus, cactus2, cactusTop, cactus2Top, dirtW, dirt1, dirt2, dirt3, water1, wheat, farm,
+        cane, cane2, cane3, caneTop, cane2Top, cane3Top;
+    int column, caneH, cactH;
+    try {
+      server.boot();
+      B173PlayerSeed.writeInventory(workspace, user, 4.5D, 60D, 4.5D,
+          new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8}, new int[] {1, 3, 9, 290, 295, 351, 12, 81, 338},
+          new int[] {64, 16, 8, 1, 8, 8, 8, 8, 8}, new int[] {0, 0, 0, 0, 0, 15, 0, 0, 0});
+      actor.connect();
+      actor.synchronizePose();
+      require(actor.awaitInventory().occupiedSlots() == 9, "plant inventory drift");
+      RemoteChunkSnapshot initial = actor.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      top = foundation(initial, cx, cz);
+      column = 0;
+      actor.selectHeldSlot(0);
+      while (
+          water(initial.blockAt(local(top.x(), cx), top.y() + 1, local(top.z(), cz)).legacyId())) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        require(++column <= 15, "water column exceeded plant fixture");
+      }
+      for (int lift = 0; lift < 8; lift++) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        column++;
+      }
+      north = place(actor, top, BlockFace.NORTH, 1);
+      south = place(actor, top, BlockFace.SOUTH, 1);
+      east = place(actor, top, BlockFace.EAST, 1);
+      west = place(actor, top, BlockFace.WEST, 1);
+      west2 = place(actor, west, BlockFace.WEST, 1);
+      south2 = place(actor, south, BlockFace.SOUTH, 1);
+      se = place(actor, east, BlockFace.SOUTH, 1);
+      se2 = place(actor, se, BlockFace.SOUTH, 1);
+      west2s2 = place(actor, place(actor, west2, BlockFace.SOUTH, 1), BlockFace.SOUTH, 1);
+      actor.selectHeldSlot(6);
+      sand1 = place(actor, west2, BlockFace.UP, 12);
+      sand2 = place(actor, west2s2, BlockFace.UP, 12);
+      actor.selectHeldSlot(7);
+      cactus = place(actor, sand1, BlockFace.UP, 81);
+      cactus2 = place(actor, sand2, BlockFace.UP, 81);
+      cactusTop = BlockFace.UP.adjacent(cactus);
+      cactus2Top = BlockFace.UP.adjacent(cactus2);
+      require(worldline.test.WorldlineSmokeAwait.observe(actor, 5)
+                      .blockAt(cactus.x(), cactus.y(), cactus.z())
+                      .legacyId()
+                  == 81
+              && worldline.test.WorldlineSmokeAwait.observe(actor, 1)
+                      .blockAt(cactus2.x(), cactus2.y(), cactus2.z())
+                      .legacyId()
+                  == 81,
+          "isolated cactus popped");
+      actor.selectHeldSlot(1);
+      dirtW = place(actor, north, BlockFace.UP, 3);
+      dirt1 = place(actor, top, BlockFace.UP, 3);
+      dirt2 = place(actor, south, BlockFace.UP, 3);
+      dirt3 = place(actor, south2, BlockFace.UP, 3);
+      actor.selectHeldSlot(2);
+      water1 = place(actor, east, BlockFace.UP, 9);
+      place(actor, se, BlockFace.UP, 9);
+      place(actor, se2, BlockFace.UP, 9);
+      require(worldline.test.WorldlineSmokeAwait.observe(actor, 5)
+                  .blockAt(water1.x(), water1.y(), water1.z())
+                  .equals(new BlockState(9, 0)),
+          "still water 9 drift");
+      actor.selectHeldSlot(3);
+      till(actor, dirtW);
+      farm = dirtW;
+      actor.selectHeldSlot(4);
+      wheat = sow(actor, farm);
+      require(worldline.test.WorldlineSmokeAwait.observe(actor, 5)
+                  .blockAt(wheat.x(), wheat.y(), wheat.z())
+                  .equals(new BlockState(59, 0)),
+          "planted wheat popped");
+      actor.selectHeldSlot(5);
+      actor.useHeldItemOnBlock(wheat, BlockFace.UP);
+      require(age(actor, wheat, 59, 7, 40), "bonemeal wheat age jump absent");
+      actor.selectHeldSlot(8);
+      cane = reed(actor, dirt1);
+      cane2 = reed(actor, dirt2);
+      cane3 = reed(actor, dirt3);
+      caneTop = BlockFace.UP.adjacent(cane);
+      cane2Top = BlockFace.UP.adjacent(cane2);
+      cane3Top = BlockFace.UP.adjacent(cane3);
+      RemoteWorldView grown = worldline.test.WorldlineSmokeAwait.awaitWorld(actor,
+          v
+          -> (id(v, caneTop) == 83 || id(v, cane2Top) == 83 || id(v, cane3Top) == 83)
+              && (id(v, cactusTop) == 81 || id(v, cactus2Top) == 81),
+          "cactus and sugar cane growth", windows * window);
+      caneH = 2;
+      cactH = 2;
+      require(id(grown, cane) == 83 && id(grown, cactus) == 81
+              && grown.blockAt(wheat.x(), wheat.y(), wheat.z()).equals(new BlockState(59, 7)),
+          "live plant vanished during wait");
+      actor.close();
+      awaitPlayers(server, 0);
+      server.save();
+      reader = new B173WireClient("127.0.0.1", port, user, timeout);
+      reader.connect();
+      reader.synchronizePose();
+      reader.awaitInventory();
+      reader.awaitRemoteChunk(cx, cz);
+      RemoteChunkSnapshot after =
+          worldline.test.WorldlineSmokeAwait.observe(reader, 5).chunkAt(cx, cz);
+      require(at(after, farm, cx, cz).legacyId() == 60
+              && at(after, wheat, cx, cz).equals(new BlockState(59, 7))
+              && at(after, cane, cx, cz).legacyId() == 83
+              && (at(after, caneTop, cx, cz).legacyId() == 83
+                  || at(after, cane2Top, cx, cz).legacyId() == 83
+                  || at(after, cane3Top, cx, cz).legacyId() == 83)
+              && at(after, cactus, cx, cz).legacyId() == 81
+              && (at(after, cactusTop, cx, cz).legacyId() == 81
+                  || at(after, cactus2Top, cx, cz).legacyId() == 81)
+              && water(at(after, water1, cx, cz).legacyId()),
+          "persisted plant growth drift: "
+              + dump(after,
+                  new BlockPosition[] {farm, wheat, cane, caneTop, cane2Top, cane3Top, cactus,
+                      cactusTop, cactus2Top, water1},
+                  cx, cz));
+      String evidence = "column=" + column + ",wheat=" + cell(wheat) + ":59:0->59:7,farm="
+          + cell(farm) + ":60,cane=" + cell(cane) + ":83,cane-height>=2,cactus=" + cell(cactus)
+          + ":81,cactus-height>=2,bonemeal=351:15,plants=59+81+83,persisted=true,clients=2,disconnect=clean";
+      String trace = "v1|server=official-b1.7.3|seed=" + seed
+          + "|fixture=raised-dirt3+still-water9+sand12|cause=packet15-bonemeal351:15+item338-reed+item81-cactus|wire=packet53-crops59:7+reed83+cactus81|oracle=bonemeal-wheat-age-jump+official-random-tick-height>=2+fresh-login|"
+          + evidence;
+      System.out.println("WORLDLINE_M305_GROWTH=" + evidence);
+      System.out.println("WORLDLINE_M305_TRACE=" + trace);
+      System.out.println("WORLDLINE_M305_SIGNATURE=" + sha(trace));
+    } finally {
+      actor.close();
+      if (reader != null)
+        reader.close();
+      server.close();
+    }
+  }
+  private static BlockPosition place(
+      B173WireClient a, BlockPosition support, BlockFace face, int id) throws Exception {
+    BlockPosition target = face.adjacent(support);
+    a.placeHeldBlock(support, face);
+    a.awaitBlock(target, new BlockState(id, 0));
+    return target;
+  }
+  private static void till(B173WireClient a, BlockPosition dirt) throws Exception {
+    a.useHeldItemOnBlock(dirt, BlockFace.UP);
+    a.awaitBlock(dirt, new BlockState(60, 0));
+  }
+  private static BlockPosition sow(B173WireClient a, BlockPosition soil) throws Exception {
+    BlockPosition crop = BlockFace.UP.adjacent(soil);
+    a.useHeldItemOnBlock(soil, BlockFace.UP);
+    a.awaitBlock(crop, new BlockState(59, 0));
+    return crop;
+  }
+  private static BlockPosition reed(B173WireClient a, BlockPosition soil) throws Exception {
+    BlockPosition crop = BlockFace.UP.adjacent(soil);
+    a.useHeldItemOnBlock(soil, BlockFace.UP);
+    a.awaitBlock(crop, new BlockState(83, 0));
+    return crop;
+  }
+  private static BlockPosition foundation(RemoteChunkSnapshot q, int cx, int cz) {
+    for (int x = 4; x <= 11; x++)
+      for (int z = 4; z <= 11; z++)
+        for (int y = 126; y >= 1; y--)
+          if (q.blockAt(x, y, z).legacyId() == 3 && water(q.blockAt(x, y + 1, z).legacyId()))
+            return new BlockPosition(cx * 16 + x, y, cz * 16 + z);
+    throw new IllegalStateException("no deterministic plant foundation");
+  }
+  private static BlockState at(RemoteChunkSnapshot q, BlockPosition p, int cx, int cz) {
+    return q.blockAt(local(p.x(), cx), p.y(), local(p.z(), cz));
+  }
+  private static int id(RemoteWorldView v, BlockPosition p) {
+    return v.blockAt(p.x(), p.y(), p.z()).legacyId();
+  }
+  private static boolean age(B173WireClient a, BlockPosition p, int id, int meta, int windows)
+      throws Exception {
+    return worldline.test.WorldlineSmokeAwait.awaitBlockOrNull(
+               a, p, new BlockState(id, meta), windows * 5)
+        != null;
+  }
+  private static String cell(BlockPosition p) {
+    return p.x() + ":" + p.y() + ":" + p.z();
+  }
+  private static String dump(RemoteChunkSnapshot q, BlockPosition[] cells, int cx, int cz) {
+    StringBuilder s = new StringBuilder();
+    for (BlockPosition p : cells)
+      s.append(cell(p)).append('=').append(at(q, p, cx, cz)).append(' ');
+    return s.toString();
+  }
+  private static boolean water(int id) {
+    return id == 8 || id == 9;
+  }
+  private static int local(int v, int c) {
+    return v - c * 16;
+  }
+  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
+    long e = System.currentTimeMillis() + 5000;
+    while (System.currentTimeMillis() < e) {
+      if (s.players().size() == n)
+        return;
+      Thread.sleep(100);
+    }
+    throw new IllegalStateException("player count drift");
+  }
+  private static String sha(String s) throws Exception {
+    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
+    StringBuilder v = new StringBuilder();
+    for (byte x : b)
+      v.append(String.format("%02x", x & 255));
+    return v.toString();
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
 }

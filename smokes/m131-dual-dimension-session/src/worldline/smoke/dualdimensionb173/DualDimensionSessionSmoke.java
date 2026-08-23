@@ -1,15 +1,131 @@
 package worldline.smoke.dualdimensionb173;
 
-import java.nio.ByteBuffer;import java.nio.charset.StandardCharsets;import java.nio.file.*;import java.security.MessageDigest;import java.time.Duration;import java.util.*;
-import worldline.api.*;import worldline.b173server.*;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.time.Duration;
+import java.util.*;
+import worldline.api.*;
+import worldline.b173server.*;
 
 /** Qualifies simultaneous typed Overworld and Nether protocol-14 sessions. */
-public final class DualDimensionSessionSmoke{
- private DualDimensionSessionSmoke(){}
- public static void main(String[]a)throws Exception{
-  if(a.length!=6)throw new IllegalArgumentException("usage: DualDimensionSessionSmoke server.jar workspace port seed overworldUser netherUser");Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String overUser=a[4],netherUser=a[5];Duration timeout=Duration.ofSeconds(90);B173DedicatedServer server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true,true);B173WireClient over=new B173WireClient("127.0.0.1",port,overUser,timeout),nether=new B173WireClient("127.0.0.1",port,netherUser,timeout);RemoteChunkSnapshot overChunk,netherChunk;
-  try{server.boot();B173PlayerSeed.writeDimension(workspace,overUser,0.5D,64D,0.5D,0);B173PlayerSeed.writeDimension(workspace,netherUser,0.5D,64D,0.5D,-1);over.connect();over.synchronizePose();nether.connect();nether.synchronizePose();require(over.dimension()==0&&over.awaitDimension(0)==0&&nether.dimension()==-1&&nether.awaitDimension(-1)==-1,"typed login dimensions drift");overChunk=over.awaitChunkSnapshot();netherChunk=nether.awaitChunkSnapshot();List<String>players=server.players();require(players.size()==2&&players.contains(overUser)&&players.contains(netherUser),"dual-dimension player list drift: "+players);over.close();nether.close();awaitPlayers(server,0);server.save();require(server.player(overUser).dimension()==0&&server.player(netherUser).dimension()==-1,"saved dual dimensions drift");}finally{over.close();nether.close();server.close();}
-  int overSky=sky(overChunk),netherSky=sky(netherChunk),netherrack=count(netherChunk,87),bedrock=count(netherChunk,7);require(overSky>0&&netherSky==0&&count(overChunk,87)==0&&netherrack>0&&bedrock>0,"dual terrain identity drift");String terrain=structural(netherChunk);String evidence="dimensions=0:-1,players=2,overOrigin="+(overChunk.observation().x()>>4)+":"+(overChunk.observation().z()>>4)+",sky="+overSky+",netherOrigin="+(netherChunk.observation().x()>>4)+":"+(netherChunk.observation().z()>>4)+",netherSky="+netherSky+",netherrack="+netherrack+",bedrock="+bedrock+",terrain="+terrain;String trace="v1|server=official-b1.7.3|seed="+seed+"|sessions=simultaneous-overworld0+nether-1|identity=typed-packet1-dimension|packet9-fixture=0-to-minus1-cache-reset|worlds=decoded-packet51-distinct-terrain|persistence=0:-1|"+evidence+"|disconnect=clean";System.out.println("WORLDLINE_M131_DIMENSIONS="+evidence);System.out.println("WORLDLINE_M131_TRACE="+trace);System.out.println("WORLDLINE_M131_SIGNATURE="+sha(trace));
- }
- private static int sky(RemoteChunkSnapshot q){int n=0;for(int x=0;x<16;x++)for(int z=0;z<16;z++)for(int y=0;y<128;y++)if(q.skyLightAt(x,y,z)>0)n++;return n;}private static int count(RemoteChunkSnapshot q,int id){int n=0;for(int x=0;x<16;x++)for(int z=0;z<16;z++)for(int y=0;y<128;y++)if(q.blockAt(x,y,z).legacyId()==id)n++;return n;}private static String structural(RemoteChunkSnapshot q)throws Exception{MessageDigest d=MessageDigest.getInstance("SHA-256");ByteBuffer row=ByteBuffer.allocate(5);for(int x=0;x<16;x++)for(int z=0;z<16;z++)for(int y=0;y<128;y++){BlockState s=q.blockAt(x,y,z);int raw=s.legacyId(),id=raw==10||raw==11||raw==39||raw==40?0:raw;row.clear();row.put((byte)x).put((byte)y).put((byte)z).put((byte)id).put((byte)(id==0?0:s.metadata()));d.update(row.array());}return hex(d.digest());}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long end=System.currentTimeMillis()+5000;while(System.currentTimeMillis()<end){if(s.players().size()==n)return;Thread.sleep(100);}throw new IllegalStateException("player count drift");}private static String sha(String s)throws Exception{return hex(MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8)));}private static String hex(byte[]b){StringBuilder s=new StringBuilder();for(byte v:b)s.append(String.format("%02x",v&255));return s.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+public final class DualDimensionSessionSmoke {
+  private DualDimensionSessionSmoke() {
+  }
+  public static void main(String[] a) throws Exception {
+    if (a.length != 6)
+      throw new IllegalArgumentException(
+          "usage: DualDimensionSessionSmoke server.jar workspace port seed overworldUser netherUser");
+    Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
+    int port = Integer.parseInt(a[2]);
+    long seed = Long.parseLong(a[3]);
+    String overUser = a[4], netherUser = a[5];
+    Duration timeout = Duration.ofSeconds(90);
+    B173DedicatedServer server =
+        new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true, true);
+    B173WireClient over = new B173WireClient("127.0.0.1", port, overUser, timeout),
+                   nether = new B173WireClient("127.0.0.1", port, netherUser, timeout);
+    RemoteChunkSnapshot overChunk, netherChunk;
+    try {
+      server.boot();
+      B173PlayerSeed.writeDimension(workspace, overUser, 0.5D, 64D, 0.5D, 0);
+      B173PlayerSeed.writeDimension(workspace, netherUser, 0.5D, 64D, 0.5D, -1);
+      over.connect();
+      over.synchronizePose();
+      nether.connect();
+      nether.synchronizePose();
+      require(over.dimension() == 0 && over.awaitDimension(0) == 0 && nether.dimension() == -1
+              && nether.awaitDimension(-1) == -1,
+          "typed login dimensions drift");
+      overChunk = over.awaitChunkSnapshot();
+      netherChunk = nether.awaitChunkSnapshot();
+      List<String> players = server.players();
+      require(players.size() == 2 && players.contains(overUser) && players.contains(netherUser),
+          "dual-dimension player list drift: " + players);
+      over.close();
+      nether.close();
+      awaitPlayers(server, 0);
+      server.save();
+      require(
+          server.player(overUser).dimension() == 0 && server.player(netherUser).dimension() == -1,
+          "saved dual dimensions drift");
+    } finally {
+      over.close();
+      nether.close();
+      server.close();
+    }
+    int overSky = sky(overChunk), netherSky = sky(netherChunk), netherrack = count(netherChunk, 87),
+        bedrock = count(netherChunk, 7);
+    require(
+        overSky > 0 && netherSky == 0 && count(overChunk, 87) == 0 && netherrack > 0 && bedrock > 0,
+        "dual terrain identity drift");
+    String terrain = structural(netherChunk);
+    String evidence = "dimensions=0:-1,players=2,overOrigin=" + (overChunk.observation().x() >> 4)
+        + ":" + (overChunk.observation().z() >> 4) + ",sky=" + overSky
+        + ",netherOrigin=" + (netherChunk.observation().x() >> 4) + ":"
+        + (netherChunk.observation().z() >> 4) + ",netherSky=" + netherSky
+        + ",netherrack=" + netherrack + ",bedrock=" + bedrock + ",terrain=" + terrain;
+    String trace = "v1|server=official-b1.7.3|seed=" + seed
+        + "|sessions=simultaneous-overworld0+nether-1|identity=typed-packet1-dimension|packet9-fixture=0-to-minus1-cache-reset|worlds=decoded-packet51-distinct-terrain|persistence=0:-1|"
+        + evidence + "|disconnect=clean";
+    System.out.println("WORLDLINE_M131_DIMENSIONS=" + evidence);
+    System.out.println("WORLDLINE_M131_TRACE=" + trace);
+    System.out.println("WORLDLINE_M131_SIGNATURE=" + sha(trace));
+  }
+  private static int sky(RemoteChunkSnapshot q) {
+    int n = 0;
+    for (int x = 0; x < 16; x++)
+      for (int z = 0; z < 16; z++)
+        for (int y = 0; y < 128; y++)
+          if (q.skyLightAt(x, y, z) > 0)
+            n++;
+    return n;
+  }
+  private static int count(RemoteChunkSnapshot q, int id) {
+    int n = 0;
+    for (int x = 0; x < 16; x++)
+      for (int z = 0; z < 16; z++)
+        for (int y = 0; y < 128; y++)
+          if (q.blockAt(x, y, z).legacyId() == id)
+            n++;
+    return n;
+  }
+  private static String structural(RemoteChunkSnapshot q) throws Exception {
+    MessageDigest d = MessageDigest.getInstance("SHA-256");
+    ByteBuffer row = ByteBuffer.allocate(5);
+    for (int x = 0; x < 16; x++)
+      for (int z = 0; z < 16; z++)
+        for (int y = 0; y < 128; y++) {
+          BlockState s = q.blockAt(x, y, z);
+          int raw = s.legacyId(), id = raw == 10 || raw == 11 || raw == 39 || raw == 40 ? 0 : raw;
+          row.clear();
+          row.put((byte) x).put((byte) y).put((byte) z).put((byte) id).put(
+              (byte) (id == 0 ? 0 : s.metadata()));
+          d.update(row.array());
+        }
+    return hex(d.digest());
+  }
+  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
+    long end = System.currentTimeMillis() + 5000;
+    while (System.currentTimeMillis() < end) {
+      if (s.players().size() == n)
+        return;
+      Thread.sleep(100);
+    }
+    throw new IllegalStateException("player count drift");
+  }
+  private static String sha(String s) throws Exception {
+    return hex(MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8)));
+  }
+  private static String hex(byte[] b) {
+    StringBuilder s = new StringBuilder();
+    for (byte v : b)
+      s.append(String.format("%02x", v & 255));
+    return s.toString();
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
 }

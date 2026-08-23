@@ -135,6 +135,8 @@ final class SmokeStatementBudget {
     static Metrics measure(String source) {
         int statements = 0, packed = 0, maximum = 0, line = 0;
         boolean string = false, character = false, lineComment = false, blockComment = false, escaped = false;
+        boolean pendingFor = false; int parentheses = 0, forParentheses = -1;
+        StringBuilder identifier = new StringBuilder();
         for (int index = 0; index < source.length(); index++) {
             char value = source.charAt(index), next = index + 1 < source.length() ? source.charAt(index + 1) : 0;
             if (lineComment) {
@@ -157,9 +159,20 @@ final class SmokeStatementBudget {
             }
             if (value == '/' && next == '/') { lineComment = true; index++; continue; }
             if (value == '/' && next == '*') { blockComment = true; index++; continue; }
-            if (value == '"') { string = true; continue; }
-            if (value == '\'') { character = true; continue; }
-            if (value == ';') { statements++; line++; }
+            if (value == '"') { string = true; pendingFor = false; continue; }
+            if (value == '\'') { character = true; pendingFor = false; continue; }
+            if (Character.isJavaIdentifierPart(value)) { identifier.append(value); continue; }
+            if (!identifier.isEmpty()) {
+                pendingFor = identifier.toString().equals("for"); identifier.setLength(0);
+            }
+            if (value == '(') {
+                parentheses++; if (pendingFor) forParentheses = parentheses; pendingFor = false;
+            } else if (value == ')') {
+                if (parentheses == forParentheses) forParentheses = -1;
+                parentheses = Math.max(0, parentheses - 1); pendingFor = false;
+            } else if (value == ';') {
+                statements++; if (forParentheses < 0) line++; pendingFor = false;
+            } else if (!Character.isWhitespace(value)) pendingFor = false;
             if (value == '\n') { maximum = Math.max(maximum, line); if (line > 1) packed++; line = 0; }
         }
         maximum = Math.max(maximum, line); if (line > 1) packed++;

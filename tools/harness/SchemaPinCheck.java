@@ -14,21 +14,27 @@ final class SchemaPinCheck {
                         && integer(manifest, "narrative.count") == 36,
                 "repository schema migration census drift");
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
-                new SmokeInputFingerprint(root); int checked = 0;
+                new SmokeInputFingerprint(root); Properties formatting = FormattingPinCheck.manifest(root);
+        int checked = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             checked++; String stem = "smoke." + smoke.id + "."; String current = fingerprints.compute(smoke);
             Path directory = root.resolve("smokes").resolve(smoke.id);
+            SmokePins.Entry pin = pins.match(smoke.id, current);
+            boolean direct = current.equals(required(manifest, stem + "current_fingerprint"));
+            boolean successor = pin != null && FormattingPinCheck.follows(formatting, smoke.id,
+                    required(manifest, stem + "current_fingerprint"),
+                    required(manifest, stem + "evidence_sha256"), pin, current);
             require(hash(manifest, stem + "prior_fingerprint")
-                            && current.equals(required(manifest, stem + "current_fingerprint"))
+                            && (direct || successor)
                             && hash(manifest, stem + "evidence_sha256")
                             && digest(directory.resolve("smoke.properties")).equals(
                                     required(manifest, stem + "descriptor_sha256"))
                             && digest(directory.resolve("MAP.md")).equals(
                                     required(manifest, stem + "map_sha256")),
                     "repository schema migration drift: " + smoke.id);
-            SmokePins.Entry pin = pins.match(smoke.id, current);
             require(pin != null && pin.source().equals("refactor-equivalent")
-                            && pin.evidence().equals(required(manifest, stem + "evidence_sha256")),
+                            && (pin.evidence().equals(required(manifest, stem + "evidence_sha256"))
+                            || FormattingPinCheck.carries(formatting, smoke.id, pin, current)),
                     "repository schema pin drift: " + smoke.id);
         }
         require(checked == 525, "repository schema pin census drift");
@@ -47,7 +53,14 @@ final class SchemaPinCheck {
     static boolean follows(Properties manifest, String id, String prior, String evidence,
             SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
-        return carries(manifest, id, pin, current)
+        boolean direct = carries(manifest, id, pin, current);
+        boolean successor;
+        try { successor = FormattingPinCheck.follows(FormattingPinCheck.manifest(
+                Path.of("").toAbsolutePath().normalize()), id,
+                manifest.getProperty(stem + "current_fingerprint"),
+                manifest.getProperty(stem + "evidence_sha256"), pin, current); }
+        catch (Exception error) { return false; }
+        return (direct || successor)
                 && prior.equals(manifest.getProperty(stem + "prior_fingerprint"))
                 && evidence.equals(manifest.getProperty(stem + "evidence_sha256"));
     }

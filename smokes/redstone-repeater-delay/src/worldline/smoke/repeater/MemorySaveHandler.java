@@ -12,39 +12,45 @@ import net.minecraft.src.WorldProvider;
 /** Removes filesystem persistence while retaining vanilla World behavior. */
 @SuppressWarnings("rawtypes")
 final class MemorySaveHandler implements ISaveHandler, IPlayerFileData {
-    private final WorldInfo info;
-    private final MemoryChunkLoader chunks = new MemoryChunkLoader();
+  private final WorldInfo info;
+  private final MemoryChunkLoader chunks = new MemoryChunkLoader();
 
-    MemorySaveHandler(long seed, String name) {
-        info = new WorldInfo(seed, name);
-        info.setSpawnPosition(8, 64, 8);
-    }
+  MemorySaveHandler(long seed, String name) {
+    info = new WorldInfo(seed, name);
+    info.setSpawnPosition(8, 64, 8);
+  }
 
-    public WorldInfo func_22096_c() {
-        return info;
-    }
+  public WorldInfo func_22096_c() {
+    return info;
+  }
 
-    public void func_22091_b() {}
+  public void func_22091_b() {
+  }
 
-    public IChunkLoader func_22092_a(WorldProvider provider) {
-        return chunks;
-    }
+  public IChunkLoader func_22092_a(WorldProvider provider) {
+    return chunks;
+  }
 
-    public void func_22095_a(WorldInfo worldInfo, List players) {}
+  public void func_22095_a(WorldInfo worldInfo, List players) {
+  }
 
-    public void func_22094_a(WorldInfo worldInfo) {}
+  public void func_22094_a(WorldInfo worldInfo) {
+  }
 
-    public IPlayerFileData func_22090_d() {
-        return this;
-    }
+  public IPlayerFileData func_22090_d() {
+    return this;
+  }
 
-    public void func_22093_e() {}
+  public void func_22093_e() {
+  }
 
-    public File func_28111_b(String name) {
-        return null;
-    }
+  public File func_28111_b(String name) {
+    return null;
+  }
 
-    public void writePlayerData(EntityPlayer player) {}
+  public void writePlayerData(EntityPlayer player) {
+  }
 
-    public void readPlayerData(EntityPlayer player) {}
+  public void readPlayerData(EntityPlayer player) {
+  }
 }

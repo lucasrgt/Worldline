@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 final class FixedWaitMigrationCheck {
     private static final Pattern DEBT = Pattern.compile(
             "sustainTicks\\([^\\)]*\\)[\\s\\S]{0,160}?require\\(");
+    private static final Pattern AWAIT = Pattern.compile("WorldlineSmokeAwait\\s*[.]");
 
     private FixedWaitMigrationCheck() { }
 
@@ -20,6 +21,7 @@ final class FixedWaitMigrationCheck {
         Properties composite = load(root.resolve("smokes/composite-cycle-migration.lock"));
         Properties telemetry = TelemetryPinCheck.manifest(root);
         Properties schemas = SchemaPinCheck.manifest(root);
+        Properties formatting = FormattingPinCheck.manifest(root);
         require("1".equals(manifest.getProperty("schema"))
                         && integer(manifest, "source.count") == 226
                         && integer(manifest, "milestone.count") == 216
@@ -37,13 +39,16 @@ final class FixedWaitMigrationCheck {
             require(source.startsWith(root.resolve("smokes")) && Files.isRegularFile(source),
                     "missing migrated fixed-wait source: " + source);
             String text = Files.readString(source, StandardCharsets.UTF_8);
-            require(digest(source).equals(required(manifest, stem + "current_sha256"))
+            require((digest(source).equals(required(manifest, stem + "current_sha256"))
+                            || FormattingPinCheck.transportsFile(formatting, root,
+                            required(manifest, stem + "path"),
+                            required(manifest, stem + "current_sha256")))
                             && hash(manifest, stem + "prior_sha256")
                             && transition(required(manifest, stem + "path"),
                                     required(manifest, stem + "prior_sha256"),
                                     required(manifest, stem + "current_sha256")).equals(
                                             required(manifest, stem + "transition_sha256"))
-                            && text.contains("WorldlineSmokeAwait.") && !DEBT.matcher(text).find(),
+                            && AWAIT.matcher(text).find() && !DEBT.matcher(text).find(),
                     "fixed-wait source evidence drift: " + root.relativize(source));
         }
         SmokePins pins = new SmokePins(root); String pinText = Files.readString(
@@ -69,17 +74,20 @@ final class FixedWaitMigrationCheck {
                     && dataDescriptorChanged(root, smoke, manifest, stem);
             boolean schemaMigrated = pin != null && SchemaPinCheck.carries(
                     schemas, smoke.id, pin, fingerprint);
+            boolean formatted = pin != null && FormattingPinCheck.carries(
+                    formatting, smoke.id, pin, fingerprint);
             require(hash(manifest, stem + "prior_fingerprint")
                             && hash(manifest, stem + "prior_descriptor_sha256")
                             && hash(manifest, stem + "evidence_sha256")
-                            && (direct || instrumented || schemaMigrated
+                            && (direct || instrumented || schemaMigrated || formatted
                             || successor(dataDriven, composite, smoke.id, manifest, stem)),
                     "fixed-wait milestone evidence drift: " + smoke.id);
             require(pin != null && (pin.source().equals("executed")
                             || pin.source().equals("refactor-equivalent")
                             && (pin.evidence().equals(required(manifest, stem + "evidence_sha256"))
                             || TelemetryPinCheck.carries(telemetry, smoke.id, pin, fingerprint)
-                            || SchemaPinCheck.carries(schemas, smoke.id, pin, fingerprint)))
+                            || SchemaPinCheck.carries(schemas, smoke.id, pin, fingerprint)
+                            || FormattingPinCheck.carries(formatting, smoke.id, pin, fingerprint)))
                             && pinText.contains("# fixed-wait-refactor-proof="
                                     + "smokes/fixed-wait-migration.lock:milestone."
                                     + smoke.id + "\nsmoke." + smoke.id + ".fingerprint="),

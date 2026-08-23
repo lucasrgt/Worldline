@@ -1,27 +1,181 @@
 package worldline.smoke.remainingnetherrackplaceb173;
 
-import java.nio.charset.StandardCharsets;import java.nio.file.*;import java.security.MessageDigest;import java.time.Duration;import worldline.api.*;import worldline.b173server.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.time.Duration;
+import worldline.api.*;
+import worldline.b173server.*;
 
 /** Places netherrack 87, soul sand 88, and glowstone 89 in dimension -1 as one Nether terrain SET. */
-public final class RemainingNetherrackPlaceSmoke{
- private RemainingNetherrackPlaceSmoke(){}
- public static void main(String[]a)throws Exception{
-  if(a.length!=7)throw new IllegalArgumentException("usage: RemainingNetherrackPlaceSmoke server.jar workspace port seed username chunkX chunkZ");
-  Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String user=a[4];int cx=Integer.parseInt(a[5]),cz=Integer.parseInt(a[6]);Duration timeout=Duration.ofSeconds(180);
-  require(seed==17320110707L&&user.equals("NethTerr419")&&user.length()<=16,"remaining-netherrack-place identity drift");
-  B173DedicatedServer server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true,true);B173WireClient scout=new B173WireClient("127.0.0.1",port,user,timeout),actor=new B173WireClient("127.0.0.1",port,user,timeout),reader=null;
-  BlockPosition support,east,west,south,rack,soul,glow;PlayerPose pose;
-  try{server.boot();B173PlayerSeed.writeDimension(workspace,user,4.5D,64D,4.5D,-1);scout.connect();scout.synchronizePose();require(scout.dimension()==-1&&scout.awaitDimension(-1)==-1,"nether scout dimension drift");RemoteChunkSnapshot initial=scout.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);require(count(initial,87)>0&&sky(initial)==0,"nether terrain identity drift");support=foundation(initial,cx,cz);east=BlockFace.EAST.adjacent(support);west=BlockFace.WEST.adjacent(support);south=BlockFace.SOUTH.adjacent(support);scout.close();awaitPlayers(server,0);
-   B173PlayerSeed.writeInventory(workspace,user,support.x()+0.5D,support.y()+1.0D,support.z()+0.5D,-1,new int[]{0,1,2},new int[]{87,88,89},new int[]{1,1,1},new int[]{0,0,0});actor.connect();pose=actor.synchronizePose();require(actor.dimension()==-1&&actor.awaitInventory().occupiedSlots()==3,"nether terrain inventory or dimension drift");actor.awaitRemoteChunk(cx,cz);
-   actor.look(0F,0F);pose=actor.moveAndObserve(0D,0D,0D,2).resulting();require(Math.abs(pose.x()-(support.x()+0.5D))<2D&&Math.abs(pose.y()-(support.y()+1.0D))<3D&&Math.abs(pose.z()-(support.z()+0.5D))<2D,"actor missed nether terrain fixture");
-   actor.selectHeldSlot(0);rack=place(actor,east,BlockFace.UP,87);actor.selectHeldSlot(1);soul=place(actor,west,BlockFace.UP,88);actor.selectHeldSlot(2);glow=place(actor,south,BlockFace.UP,89);
-   require(actor.sustainTicks(5).blockAt(rack.x(),rack.y(),rack.z()).equals(new BlockState(87,0))&&actor.sustainTicks(1).blockAt(soul.x(),soul.y(),soul.z()).equals(new BlockState(88,0))&&actor.sustainTicks(1).blockAt(glow.x(),glow.y(),glow.z()).equals(new BlockState(89,0)),"live nether terrain place drift");
-   actor.close();awaitPlayers(server,0);server.save();reader=new B173WireClient("127.0.0.1",port,user,timeout);reader.connect();require(reader.synchronizePose()!=null&&reader.dimension()==-1,"nether reader dimension drift");RemoteChunkSnapshot persisted=reader.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);
-   require(persisted.blockAt(local(rack.x(),cx),rack.y(),local(rack.z(),cz)).equals(new BlockState(87,0))&&persisted.blockAt(local(soul.x(),cx),soul.y(),local(soul.z(),cz)).equals(new BlockState(88,0))&&persisted.blockAt(local(glow.x(),cx),glow.y(),local(glow.z(),cz)).equals(new BlockState(89,0)),"persisted nether terrain place drift");
-   String evidence="dimension=-1,support="+cell(support,87,0)+",netherrack="+cell(rack,87,0)+",soulsand="+cell(soul,88,0)+",glowstone="+cell(glow,89,0)+",persisted=true,clients=3,disconnect=clean";String trace="v1|server=official-b1.7.3|seed="+seed+"|profile=allow-nether-true|entry=prelogin-player-nbt-dimension-minus-one+item87+item88+item89|fixture=nether-netherrack87-platform+packet15-87+88+89|cause=packet15-item87+item88+item89|wire=packet53-netherrack87+soulsand88+glowstone89|oracle=nether-terrain-family-place+fresh-login|"+evidence;System.out.println("WORLDLINE_M419_SET="+evidence);System.out.println("WORLDLINE_M419_TRACE="+trace);System.out.println("WORLDLINE_M419_SIGNATURE="+sha(trace));
-  }finally{scout.close();actor.close();if(reader!=null)reader.close();server.close();}
- }
- private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}
- private static BlockPosition foundation(RemoteChunkSnapshot q,int cx,int cz){for(int x=2;x<=13;x++)for(int z=2;z<=13;z++)for(int y=125;y>=1;y--){if(q.blockAt(x,y,z).legacyId()==87&&air(q.blockAt(x,y+1,z).legacyId())&&air(q.blockAt(x,y+2,z).legacyId())&&solid(q.blockAt(x+1,y,z).legacyId())&&air(q.blockAt(x+1,y+1,z).legacyId())&&solid(q.blockAt(x-1,y,z).legacyId())&&air(q.blockAt(x-1,y+1,z).legacyId())&&solid(q.blockAt(x,y,z+1).legacyId())&&air(q.blockAt(x,y+1,z+1).legacyId()))return new BlockPosition(cx*16+x,y,cz*16+z);}throw new IllegalStateException("no deterministic nether terrain foundation");}
- private static String cell(BlockPosition p,int id,int meta){return p.x()+":"+p.y()+":"+p.z()+":"+id+":"+meta;}private static boolean air(int id){return id==0;}private static boolean solid(int id){return id==87||id==88||id==89||id==49||id==7||id==1||id==4||id==13;}private static int count(RemoteChunkSnapshot q,int id){int n=0;for(int x=0;x<16;x++)for(int z=0;z<16;z++)for(int y=0;y<128;y++)if(q.blockAt(x,y,z).legacyId()==id)n++;return n;}private static int sky(RemoteChunkSnapshot q){int n=0;for(int x=0;x<16;x++)for(int z=0;z<16;z++)for(int y=0;y<128;y++)if(q.skyLightAt(x,y,z)>0)n++;return n;}private static int local(int v,int c){return v-c*16;}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long e=System.currentTimeMillis()+5000;while(System.currentTimeMillis()<e){if(s.players().size()==n)return;Thread.sleep(100);}throw new IllegalStateException("player count drift");}private static String sha(String s)throws Exception{byte[]b=MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));StringBuilder v=new StringBuilder();for(byte x:b)v.append(String.format("%02x",x&255));return v.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+public final class RemainingNetherrackPlaceSmoke {
+  private RemainingNetherrackPlaceSmoke() {
+  }
+  public static void main(String[] a) throws Exception {
+    if (a.length != 7)
+      throw new IllegalArgumentException(
+          "usage: RemainingNetherrackPlaceSmoke server.jar workspace port seed username chunkX chunkZ");
+    Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
+    int port = Integer.parseInt(a[2]);
+    long seed = Long.parseLong(a[3]);
+    String user = a[4];
+    int cx = Integer.parseInt(a[5]), cz = Integer.parseInt(a[6]);
+    Duration timeout = Duration.ofSeconds(180);
+    require(seed == 17320110707L && user.equals("NethTerr419") && user.length() <= 16,
+        "remaining-netherrack-place identity drift");
+    B173DedicatedServer server =
+        new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true, true);
+    B173WireClient scout = new B173WireClient("127.0.0.1", port, user, timeout),
+                   actor = new B173WireClient("127.0.0.1", port, user, timeout), reader = null;
+    BlockPosition support, east, west, south, rack, soul, glow;
+    PlayerPose pose;
+    try {
+      server.boot();
+      B173PlayerSeed.writeDimension(workspace, user, 4.5D, 64D, 4.5D, -1);
+      scout.connect();
+      scout.synchronizePose();
+      require(scout.dimension() == -1 && scout.awaitDimension(-1) == -1,
+          "nether scout dimension drift");
+      RemoteChunkSnapshot initial = scout.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      require(count(initial, 87) > 0 && sky(initial) == 0, "nether terrain identity drift");
+      support = foundation(initial, cx, cz);
+      east = BlockFace.EAST.adjacent(support);
+      west = BlockFace.WEST.adjacent(support);
+      south = BlockFace.SOUTH.adjacent(support);
+      scout.close();
+      awaitPlayers(server, 0);
+      B173PlayerSeed.writeInventory(workspace, user, support.x() + 0.5D, support.y() + 1.0D,
+          support.z() + 0.5D, -1, new int[] {0, 1, 2}, new int[] {87, 88, 89}, new int[] {1, 1, 1},
+          new int[] {0, 0, 0});
+      actor.connect();
+      pose = actor.synchronizePose();
+      require(actor.dimension() == -1 && actor.awaitInventory().occupiedSlots() == 3,
+          "nether terrain inventory or dimension drift");
+      actor.awaitRemoteChunk(cx, cz);
+      actor.look(0F, 0F);
+      pose = actor.moveAndObserve(0D, 0D, 0D, 2).resulting();
+      require(Math.abs(pose.x() - (support.x() + 0.5D)) < 2D
+              && Math.abs(pose.y() - (support.y() + 1.0D)) < 3D
+              && Math.abs(pose.z() - (support.z() + 0.5D)) < 2D,
+          "actor missed nether terrain fixture");
+      actor.selectHeldSlot(0);
+      rack = place(actor, east, BlockFace.UP, 87);
+      actor.selectHeldSlot(1);
+      soul = place(actor, west, BlockFace.UP, 88);
+      actor.selectHeldSlot(2);
+      glow = place(actor, south, BlockFace.UP, 89);
+      require(
+          actor.sustainTicks(5).blockAt(rack.x(), rack.y(), rack.z()).equals(new BlockState(87, 0))
+              && actor.sustainTicks(1)
+                  .blockAt(soul.x(), soul.y(), soul.z())
+                  .equals(new BlockState(88, 0))
+              && actor.sustainTicks(1)
+                  .blockAt(glow.x(), glow.y(), glow.z())
+                  .equals(new BlockState(89, 0)),
+          "live nether terrain place drift");
+      actor.close();
+      awaitPlayers(server, 0);
+      server.save();
+      reader = new B173WireClient("127.0.0.1", port, user, timeout);
+      reader.connect();
+      require(reader.synchronizePose() != null && reader.dimension() == -1,
+          "nether reader dimension drift");
+      RemoteChunkSnapshot persisted = reader.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      require(persisted.blockAt(local(rack.x(), cx), rack.y(), local(rack.z(), cz))
+                  .equals(new BlockState(87, 0))
+              && persisted.blockAt(local(soul.x(), cx), soul.y(), local(soul.z(), cz))
+                  .equals(new BlockState(88, 0))
+              && persisted.blockAt(local(glow.x(), cx), glow.y(), local(glow.z(), cz))
+                  .equals(new BlockState(89, 0)),
+          "persisted nether terrain place drift");
+      String evidence = "dimension=-1,support=" + cell(support, 87, 0)
+          + ",netherrack=" + cell(rack, 87, 0) + ",soulsand=" + cell(soul, 88, 0)
+          + ",glowstone=" + cell(glow, 89, 0) + ",persisted=true,clients=3,disconnect=clean";
+      String trace = "v1|server=official-b1.7.3|seed=" + seed
+          + "|profile=allow-nether-true|entry=prelogin-player-nbt-dimension-minus-one+item87+item88+item89|fixture=nether-netherrack87-platform+packet15-87+88+89|cause=packet15-item87+item88+item89|wire=packet53-netherrack87+soulsand88+glowstone89|oracle=nether-terrain-family-place+fresh-login|"
+          + evidence;
+      System.out.println("WORLDLINE_M419_SET=" + evidence);
+      System.out.println("WORLDLINE_M419_TRACE=" + trace);
+      System.out.println("WORLDLINE_M419_SIGNATURE=" + sha(trace));
+    } finally {
+      scout.close();
+      actor.close();
+      if (reader != null)
+        reader.close();
+      server.close();
+    }
+  }
+  private static BlockPosition place(
+      B173WireClient a, BlockPosition support, BlockFace face, int id) throws Exception {
+    BlockPosition target = face.adjacent(support);
+    a.placeHeldBlock(support, face);
+    a.awaitBlock(target, new BlockState(id, 0));
+    return target;
+  }
+  private static BlockPosition foundation(RemoteChunkSnapshot q, int cx, int cz) {
+    for (int x = 2; x <= 13; x++)
+      for (int z = 2; z <= 13; z++)
+        for (int y = 125; y >= 1; y--) {
+          if (q.blockAt(x, y, z).legacyId() == 87 && air(q.blockAt(x, y + 1, z).legacyId())
+              && air(q.blockAt(x, y + 2, z).legacyId()) && solid(q.blockAt(x + 1, y, z).legacyId())
+              && air(q.blockAt(x + 1, y + 1, z).legacyId())
+              && solid(q.blockAt(x - 1, y, z).legacyId())
+              && air(q.blockAt(x - 1, y + 1, z).legacyId())
+              && solid(q.blockAt(x, y, z + 1).legacyId())
+              && air(q.blockAt(x, y + 1, z + 1).legacyId()))
+            return new BlockPosition(cx * 16 + x, y, cz * 16 + z);
+        }
+    throw new IllegalStateException("no deterministic nether terrain foundation");
+  }
+  private static String cell(BlockPosition p, int id, int meta) {
+    return p.x() + ":" + p.y() + ":" + p.z() + ":" + id + ":" + meta;
+  }
+  private static boolean air(int id) {
+    return id == 0;
+  }
+  private static boolean solid(int id) {
+    return id == 87 || id == 88 || id == 89 || id == 49 || id == 7 || id == 1 || id == 4
+        || id == 13;
+  }
+  private static int count(RemoteChunkSnapshot q, int id) {
+    int n = 0;
+    for (int x = 0; x < 16; x++)
+      for (int z = 0; z < 16; z++)
+        for (int y = 0; y < 128; y++)
+          if (q.blockAt(x, y, z).legacyId() == id)
+            n++;
+    return n;
+  }
+  private static int sky(RemoteChunkSnapshot q) {
+    int n = 0;
+    for (int x = 0; x < 16; x++)
+      for (int z = 0; z < 16; z++)
+        for (int y = 0; y < 128; y++)
+          if (q.skyLightAt(x, y, z) > 0)
+            n++;
+    return n;
+  }
+  private static int local(int v, int c) {
+    return v - c * 16;
+  }
+  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
+    long e = System.currentTimeMillis() + 5000;
+    while (System.currentTimeMillis() < e) {
+      if (s.players().size() == n)
+        return;
+      Thread.sleep(100);
+    }
+    throw new IllegalStateException("player count drift");
+  }
+  private static String sha(String s) throws Exception {
+    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
+    StringBuilder v = new StringBuilder();
+    for (byte x : b)
+      v.append(String.format("%02x", x & 255));
+    return v.toString();
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
 }

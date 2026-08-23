@@ -10,6 +10,12 @@ import worldline.m74.client.WorldlineCensusRenderer;
 /** Times the complete Worldline renderer invocation. */
 @Mixin(WorldlineCensusRenderer.class)
 public abstract class WorldlineStageRendererMixin {
-    @Inject(method = "render", at = @At("HEAD")) private void begin(BlockEntity be, double x, double y, double z, float tick, CallbackInfo ci) { WorldlineStageTimer.rendererBegin(); }
-    @Inject(method = "render", at = @At("RETURN")) private void end(BlockEntity be, double x, double y, double z, float tick, CallbackInfo ci) { WorldlineStageTimer.rendererEnd(); }
+  @Inject(method = "render", at = @At("HEAD"))
+  private void begin(BlockEntity be, double x, double y, double z, float tick, CallbackInfo ci) {
+    WorldlineStageTimer.rendererBegin();
+  }
+  @Inject(method = "render", at = @At("RETURN"))
+  private void end(BlockEntity be, double x, double y, double z, float tick, CallbackInfo ci) {
+    WorldlineStageTimer.rendererEnd();
+  }
 }

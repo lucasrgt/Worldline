@@ -1,26 +1,164 @@
 package worldline.smoke.lightopacitysetb173;
 
-import java.nio.charset.StandardCharsets;import java.nio.file.*;import java.security.MessageDigest;import java.time.Duration;import worldline.api.*;import worldline.b173server.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.time.Duration;
+import worldline.api.*;
+import worldline.b173server.*;
 
 /** Places glass 20, leaves 18, and ice 79 and freezes distinct Packet51 sky-light nibbles. */
-public final class LightOpacitySetSmoke{
- private LightOpacitySetSmoke(){}
- public static void main(String[]a)throws Exception{
-  if(a.length!=7)throw new IllegalArgumentException("usage: LightOpacitySetSmoke server.jar workspace port seed username chunkX chunkZ");
-  Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String user=a[4];int cx=Integer.parseInt(a[5]),cz=Integer.parseInt(a[6]);Duration timeout=Duration.ofSeconds(90);
-  B173DedicatedServer server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true);B173WireClient actor=new B173WireClient("127.0.0.1",port,user,timeout),reader=null;BlockPosition top,west,east,log,glass,ice,leaf;int column;BlockState glassBlock=new BlockState(20,0),iceBlock=new BlockState(79,0),leafBlock=new BlockState(18,8);RemoteChunkSnapshot after;int gSky,lSky,iSky,gBlk,lBlk,iBlk;
-  try{server.boot();B173PlayerSeed.writeInventory(workspace,user,4.5D,60D,4.5D,new int[]{0,1,2,3,4},new int[]{1,20,79,17,18},new int[]{32,1,1,1,1},new int[]{0,0,0,0,0});actor.connect();actor.synchronizePose();require(actor.awaitInventory().occupiedSlots()==5,"light-opacity inventory drift");RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);top=foundation(initial,cx,cz);column=0;actor.selectHeldSlot(0);
-   while(water(initial.blockAt(local(top.x(),cx),top.y()+1,local(top.z(),cz)).legacyId())){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);require(++column<=15,"water column exceeded light-opacity fixture");}for(int lift=0;lift<8;lift++){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);column++;}
-   west=place(actor,top,BlockFace.WEST,1);east=place(actor,top,BlockFace.EAST,1);actor.selectHeldSlot(3);log=place(actor,top,BlockFace.NORTH,17);
-   actor.selectHeldSlot(1);glass=place(actor,west,BlockFace.UP,20);actor.selectHeldSlot(2);ice=place(actor,east,BlockFace.UP,79);actor.selectHeldSlot(4);leaf=BlockFace.UP.adjacent(log);actor.placeHeldBlock(log,BlockFace.UP);actor.awaitBlock(leaf,leafBlock);
-   RemoteWorldView live=worldline.test.WorldlineSmokeAwait.observe(actor,40);require(live.blockAt(glass.x(),glass.y(),glass.z()).equals(glassBlock)&&live.blockAt(ice.x(),ice.y(),ice.z()).equals(iceBlock)&&live.blockAt(leaf.x(),leaf.y(),leaf.z()).equals(leafBlock),"live light-opacity placement drift");actor.close();awaitPlayers(server,0);server.save();
-   reader=new B173WireClient("127.0.0.1",port,user,timeout);reader.connect();reader.synchronizePose();after=reader.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);require(after.blockAt(local(top.x(),cx),top.y(),local(top.z(),cz)).equals(new BlockState(1,0))&&after.blockAt(local(west.x(),cx),west.y(),local(west.z(),cz)).equals(new BlockState(1,0))&&after.blockAt(local(east.x(),cx),east.y(),local(east.z(),cz)).equals(new BlockState(1,0))&&after.blockAt(local(log.x(),cx),log.y(),local(log.z(),cz)).equals(new BlockState(17,0))&&after.blockAt(local(glass.x(),cx),glass.y(),local(glass.z(),cz)).equals(glassBlock)&&after.blockAt(local(ice.x(),cx),ice.y(),local(ice.z(),cz)).equals(iceBlock)&&after.blockAt(local(leaf.x(),cx),leaf.y(),local(leaf.z(),cz)).equals(leafBlock),"persisted light-opacity block drift");
-   gSky=after.skyLightAt(local(glass.x(),cx),glass.y(),local(glass.z(),cz));lSky=after.skyLightAt(local(leaf.x(),cx),leaf.y(),local(leaf.z(),cz));iSky=after.skyLightAt(local(ice.x(),cx),ice.y(),local(ice.z(),cz));gBlk=after.blockLightAt(local(glass.x(),cx),glass.y(),local(glass.z(),cz));lBlk=after.blockLightAt(local(leaf.x(),cx),leaf.y(),local(leaf.z(),cz));iBlk=after.blockLightAt(local(ice.x(),cx),ice.y(),local(ice.z(),cz));require(gSky!=lSky&&gSky!=iSky&&lSky!=iSky,"translucent sky-light outcomes not distinct glass="+gSky+" leaves="+lSky+" ice="+iSky);
-   String evidence="column="+column+",support="+cell(top,1,0)+",west="+cell(west,1,0)+",glass="+cell(glass,20,0)+":sky"+gSky+":block"+gBlk+",east="+cell(east,1,0)+",ice="+cell(ice,79,0)+":sky"+iSky+":block"+iBlk+",log="+cell(log,17,0)+",leaves="+cell(leaf,18,8)+":sky"+lSky+":block"+lBlk+",persisted=true,clients=2,disconnect=clean";String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=raised-stone+glass20+oak17+leaves18+ice79|cause=packet15-item20+packet15-item18+packet15-item79|wire=packet53-glass20:0+packet53-leaves18:8+packet53-ice79:0|oracle=fresh-login-packet51-distinct-sky-light|"+evidence;System.out.println("WORLDLINE_M364_SET="+evidence);System.out.println("WORLDLINE_M364_TRACE="+trace);System.out.println("WORLDLINE_M364_SIGNATURE="+sha(trace));
-  }finally{actor.close();if(reader!=null)reader.close();server.close();}
- }
- private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}
- private static BlockPosition foundation(RemoteChunkSnapshot q,int cx,int cz){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(q.blockAt(x,y,z).legacyId()==3&&water(q.blockAt(x,y+1,z).legacyId()))return new BlockPosition(cx*16+x,y,cz*16+z);throw new IllegalStateException("no deterministic light-opacity foundation");}
- private static String cell(BlockPosition p,int id,int meta){return p.x()+":"+p.y()+":"+p.z()+":"+id+":"+meta;}
- private static boolean water(int id){return id==8||id==9;}private static int local(int v,int c){return v-c*16;}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long e=System.currentTimeMillis()+5000;while(System.currentTimeMillis()<e){if(s.players().size()==n)return;Thread.sleep(100);}throw new IllegalStateException("player count drift");}private static String sha(String s)throws Exception{byte[]b=MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));StringBuilder v=new StringBuilder();for(byte x:b)v.append(String.format("%02x",x&255));return v.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+public final class LightOpacitySetSmoke {
+  private LightOpacitySetSmoke() {
+  }
+  public static void main(String[] a) throws Exception {
+    if (a.length != 7)
+      throw new IllegalArgumentException(
+          "usage: LightOpacitySetSmoke server.jar workspace port seed username chunkX chunkZ");
+    Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
+    int port = Integer.parseInt(a[2]);
+    long seed = Long.parseLong(a[3]);
+    String user = a[4];
+    int cx = Integer.parseInt(a[5]), cz = Integer.parseInt(a[6]);
+    Duration timeout = Duration.ofSeconds(90);
+    B173DedicatedServer server =
+        new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+    B173WireClient actor = new B173WireClient("127.0.0.1", port, user, timeout), reader = null;
+    BlockPosition top, west, east, log, glass, ice, leaf;
+    int column;
+    BlockState glassBlock = new BlockState(20, 0), iceBlock = new BlockState(79, 0),
+               leafBlock = new BlockState(18, 8);
+    RemoteChunkSnapshot after;
+    int gSky, lSky, iSky, gBlk, lBlk, iBlk;
+    try {
+      server.boot();
+      B173PlayerSeed.writeInventory(workspace, user, 4.5D, 60D, 4.5D, new int[] {0, 1, 2, 3, 4},
+          new int[] {1, 20, 79, 17, 18}, new int[] {32, 1, 1, 1, 1}, new int[] {0, 0, 0, 0, 0});
+      actor.connect();
+      actor.synchronizePose();
+      require(actor.awaitInventory().occupiedSlots() == 5, "light-opacity inventory drift");
+      RemoteChunkSnapshot initial = actor.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      top = foundation(initial, cx, cz);
+      column = 0;
+      actor.selectHeldSlot(0);
+      while (
+          water(initial.blockAt(local(top.x(), cx), top.y() + 1, local(top.z(), cz)).legacyId())) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        require(++column <= 15, "water column exceeded light-opacity fixture");
+      }
+      for (int lift = 0; lift < 8; lift++) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        column++;
+      }
+      west = place(actor, top, BlockFace.WEST, 1);
+      east = place(actor, top, BlockFace.EAST, 1);
+      actor.selectHeldSlot(3);
+      log = place(actor, top, BlockFace.NORTH, 17);
+      actor.selectHeldSlot(1);
+      glass = place(actor, west, BlockFace.UP, 20);
+      actor.selectHeldSlot(2);
+      ice = place(actor, east, BlockFace.UP, 79);
+      actor.selectHeldSlot(4);
+      leaf = BlockFace.UP.adjacent(log);
+      actor.placeHeldBlock(log, BlockFace.UP);
+      actor.awaitBlock(leaf, leafBlock);
+      RemoteWorldView live = worldline.test.WorldlineSmokeAwait.observe(actor, 40);
+      require(live.blockAt(glass.x(), glass.y(), glass.z()).equals(glassBlock)
+              && live.blockAt(ice.x(), ice.y(), ice.z()).equals(iceBlock)
+              && live.blockAt(leaf.x(), leaf.y(), leaf.z()).equals(leafBlock),
+          "live light-opacity placement drift");
+      actor.close();
+      awaitPlayers(server, 0);
+      server.save();
+      reader = new B173WireClient("127.0.0.1", port, user, timeout);
+      reader.connect();
+      reader.synchronizePose();
+      after = reader.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      require(after.blockAt(local(top.x(), cx), top.y(), local(top.z(), cz))
+                  .equals(new BlockState(1, 0))
+              && after.blockAt(local(west.x(), cx), west.y(), local(west.z(), cz))
+                  .equals(new BlockState(1, 0))
+              && after.blockAt(local(east.x(), cx), east.y(), local(east.z(), cz))
+                  .equals(new BlockState(1, 0))
+              && after.blockAt(local(log.x(), cx), log.y(), local(log.z(), cz))
+                  .equals(new BlockState(17, 0))
+              && after.blockAt(local(glass.x(), cx), glass.y(), local(glass.z(), cz))
+                  .equals(glassBlock)
+              && after.blockAt(local(ice.x(), cx), ice.y(), local(ice.z(), cz)).equals(iceBlock)
+              && after.blockAt(local(leaf.x(), cx), leaf.y(), local(leaf.z(), cz))
+                  .equals(leafBlock),
+          "persisted light-opacity block drift");
+      gSky = after.skyLightAt(local(glass.x(), cx), glass.y(), local(glass.z(), cz));
+      lSky = after.skyLightAt(local(leaf.x(), cx), leaf.y(), local(leaf.z(), cz));
+      iSky = after.skyLightAt(local(ice.x(), cx), ice.y(), local(ice.z(), cz));
+      gBlk = after.blockLightAt(local(glass.x(), cx), glass.y(), local(glass.z(), cz));
+      lBlk = after.blockLightAt(local(leaf.x(), cx), leaf.y(), local(leaf.z(), cz));
+      iBlk = after.blockLightAt(local(ice.x(), cx), ice.y(), local(ice.z(), cz));
+      require(gSky != lSky && gSky != iSky && lSky != iSky,
+          "translucent sky-light outcomes not distinct glass=" + gSky + " leaves=" + lSky
+              + " ice=" + iSky);
+      String evidence = "column=" + column + ",support=" + cell(top, 1, 0)
+          + ",west=" + cell(west, 1, 0) + ",glass=" + cell(glass, 20, 0) + ":sky" + gSky + ":block"
+          + gBlk + ",east=" + cell(east, 1, 0) + ",ice=" + cell(ice, 79, 0) + ":sky" + iSky
+          + ":block" + iBlk + ",log=" + cell(log, 17, 0) + ",leaves=" + cell(leaf, 18, 8) + ":sky"
+          + lSky + ":block" + lBlk + ",persisted=true,clients=2,disconnect=clean";
+      String trace = "v1|server=official-b1.7.3|seed=" + seed
+          + "|fixture=raised-stone+glass20+oak17+leaves18+ice79|cause=packet15-item20+packet15-item18+packet15-item79|wire=packet53-glass20:0+packet53-leaves18:8+packet53-ice79:0|oracle=fresh-login-packet51-distinct-sky-light|"
+          + evidence;
+      System.out.println("WORLDLINE_M364_SET=" + evidence);
+      System.out.println("WORLDLINE_M364_TRACE=" + trace);
+      System.out.println("WORLDLINE_M364_SIGNATURE=" + sha(trace));
+    } finally {
+      actor.close();
+      if (reader != null)
+        reader.close();
+      server.close();
+    }
+  }
+  private static BlockPosition place(
+      B173WireClient a, BlockPosition support, BlockFace face, int id) throws Exception {
+    BlockPosition target = face.adjacent(support);
+    a.placeHeldBlock(support, face);
+    a.awaitBlock(target, new BlockState(id, 0));
+    return target;
+  }
+  private static BlockPosition foundation(RemoteChunkSnapshot q, int cx, int cz) {
+    for (int x = 4; x <= 11; x++)
+      for (int z = 4; z <= 11; z++)
+        for (int y = 126; y >= 1; y--)
+          if (q.blockAt(x, y, z).legacyId() == 3 && water(q.blockAt(x, y + 1, z).legacyId()))
+            return new BlockPosition(cx * 16 + x, y, cz * 16 + z);
+    throw new IllegalStateException("no deterministic light-opacity foundation");
+  }
+  private static String cell(BlockPosition p, int id, int meta) {
+    return p.x() + ":" + p.y() + ":" + p.z() + ":" + id + ":" + meta;
+  }
+  private static boolean water(int id) {
+    return id == 8 || id == 9;
+  }
+  private static int local(int v, int c) {
+    return v - c * 16;
+  }
+  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
+    long e = System.currentTimeMillis() + 5000;
+    while (System.currentTimeMillis() < e) {
+      if (s.players().size() == n)
+        return;
+      Thread.sleep(100);
+    }
+    throw new IllegalStateException("player count drift");
+  }
+  private static String sha(String s) throws Exception {
+    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
+    StringBuilder v = new StringBuilder();
+    for (byte x : b)
+      v.append(String.format("%02x", x & 255));
+    return v.toString();
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
 }

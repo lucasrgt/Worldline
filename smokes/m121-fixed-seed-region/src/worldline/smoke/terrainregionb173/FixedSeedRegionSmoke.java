@@ -1,18 +1,202 @@
 package worldline.smoke.terrainregionb173;
 
-import java.nio.ByteBuffer;import java.nio.charset.StandardCharsets;import java.nio.file.*;import java.security.MessageDigest;import java.time.Duration;
-import worldline.api.*;import worldline.b173server.*;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.time.Duration;
+import worldline.api.*;
+import worldline.b173server.*;
 
 /** Observes one exact 3x3 official-world region including its internal seams. */
-public final class FixedSeedRegionSmoke{
- private FixedSeedRegionSmoke(){}
- public static void main(String[]a)throws Exception{
-  if(a.length!=10)throw new IllegalArgumentException("usage: FixedSeedRegionSmoke server.jar workspace port seed username minX maxX minZ maxZ settleTicks");Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String user=a[4];int minX=Integer.parseInt(a[5]),maxX=Integer.parseInt(a[6]),minZ=Integer.parseInt(a[7]),maxZ=Integer.parseInt(a[8]),settleTicks=Integer.parseInt(a[9]);require(maxX-minX==2&&maxZ-minZ==2,"M121 requires exact 3x3 region");Duration timeout=Duration.ofSeconds(90);B173DedicatedServer server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true),reload=null;B173WireClient client=new B173WireClient("127.0.0.1",port,user,timeout),reader=null;RemoteWorldView world=null;
-  try{server.boot();B173PlayerSeed.write(workspace,user,8.5D,120D,8.5D);client.connect();client.synchronizePose();for(int x=minX;x<=maxX;x++)for(int z=minZ;z<=maxZ;z++)world=await(client,x,z);client.sustainTicks(settleTicks);client.close();awaitPlayers(server,0);server.save();server.close();B173PlayerSeed.write(workspace,user,8.5D,120D,8.5D);reload=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true);reload.boot();reader=new B173WireClient("127.0.0.1",port,user,timeout);reader.connect();reader.synchronizePose();world=reader.sustainTicks(20);for(int x=minX;x<=maxX;x++)for(int z=minZ;z<=maxZ;z++)world=await(reader,x,z);verify(world,minX,maxX,minZ,maxZ);}finally{client.close();if(reader!=null)reader.close();server.close();if(reload!=null)reload.close();}
-  Census c=census(world,minX,maxX,minZ,maxZ);String evidence="region="+minX+":"+maxX+":"+minZ+":"+maxZ+",chunks=9,blocks="+c.blocks+",columns=2304,solid="+c.solid+",surface="+c.surface+",solidSeams="+c.seams;String trace="v1|server=official-b1.7.3|seed="+seed+"|region=3x3-absolute-chunks-"+minX+":"+maxX+":"+minZ+":"+maxZ+"|settle="+settleTicks+"ticks+clean-restart+fresh-packet51|blocks="+c.blocks+"|columns=2304|solid-count="+c.solid+"|solid-definition=not-air-water8+9-lava10+11|surface="+c.surface+"|internal-solid-seams="+c.seams+"|interior-position+ids+metadata+fluid-occupancy=diagnostic-not-frozen|decode=packet50+packet51-xzy|disconnect=clean";System.out.println("WORLDLINE_M121_REGION="+evidence);System.out.println("WORLDLINE_M121_MASK="+c.occupancy);System.out.println("WORLDLINE_M121_RAW="+c.raw+",nonair="+c.nonair);System.out.println("WORLDLINE_M121_METADATA="+c.metadata);System.out.println("WORLDLINE_M121_TRACE="+trace);System.out.println("WORLDLINE_M121_SIGNATURE="+sha(trace));
- }
- private static void verify(RemoteWorldView w,int minX,int maxX,int minZ,int maxZ){require(w!=null,"region absent");for(int cx=minX;cx<=maxX;cx++)for(int cz=minZ;cz<=maxZ;cz++){RemoteChunkSnapshot q=w.chunkAt(cx,cz);RemoteChunkObservation o=q.observation();require(o.x()==cx*16&&o.y()==0&&o.z()==cz*16&&o.width()==16&&o.height()==128&&o.depth()==16&&q.blockCount()==32768&&q.nonAirBlocks()>0&&q.nonAirBlocks()<32768,"region chunk drift "+cx+","+cz);for(int x=0;x<16;x++)for(int z=0;z<16;z++)require(top(q,x,z)>=0,"empty region column");}}
- private static Census census(RemoteWorldView w,int minX,int maxX,int minZ,int maxZ)throws Exception{MessageDigest occupancy=MessageDigest.getInstance("SHA-256"),raw=MessageDigest.getInstance("SHA-256"),metadata=MessageDigest.getInstance("SHA-256"),surface=MessageDigest.getInstance("SHA-256"),seams=MessageDigest.getInstance("SHA-256");ByteBuffer row=ByteBuffer.allocate(8);int blocks=0,nonair=0,solid=0;for(int cx=minX;cx<=maxX;cx++)for(int cz=minZ;cz<=maxZ;cz++){RemoteChunkSnapshot q=w.chunkAt(cx,cz);blocks+=q.blockCount();nonair+=q.nonAirBlocks();for(int x=0;x<16;x++)for(int z=0;z<16;z++){for(int y=0;y<128;y++){BlockState s=q.blockAt(x,y,z);int value=solid(s.legacyId())?1:0;occupancy.update((byte)value);solid+=value;raw.update((byte)s.legacyId());metadata.update((byte)s.metadata());}int y=top(q,x,z);BlockState s=q.blockAt(x,y,z);row.clear();row.putInt(cx*16+x).putShort((short)(cz*16+z)).put((byte)y).put((byte)s.legacyId());surface.update(row.array());surface.update((byte)s.metadata());}}
-  for(int cx=minX;cx<maxX;cx++)for(int cz=minZ;cz<=maxZ;cz++)for(int z=0;z<16;z++)for(int y=0;y<128;y++)pair(seams,w.chunkAt(cx,cz).blockAt(15,y,z),w.chunkAt(cx+1,cz).blockAt(0,y,z));for(int cz=minZ;cz<maxZ;cz++)for(int cx=minX;cx<=maxX;cx++)for(int x=0;x<16;x++)for(int y=0;y<128;y++)pair(seams,w.chunkAt(cx,cz).blockAt(x,y,15),w.chunkAt(cx,cz+1).blockAt(x,y,0));return new Census(blocks,nonair,solid,hex(occupancy.digest()),hex(raw.digest()),hex(metadata.digest()),hex(surface.digest()),hex(seams.digest()));}
- private static RemoteWorldView await(B173WireClient c,int x,int z){try{return c.awaitRemoteChunk(x,z);}catch(RuntimeException e){throw new IllegalStateException("region chunk unavailable "+x+","+z,e);}}private static boolean solid(int id){return id!=0&&id!=8&&id!=9&&id!=10&&id!=11;}private static void pair(MessageDigest d,BlockState a,BlockState b){d.update((byte)(solid(a.legacyId())?1:0));d.update((byte)(solid(b.legacyId())?1:0));}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long e=System.currentTimeMillis()+5000;while(System.currentTimeMillis()<e){if(s.players().size()==n)return;Thread.sleep(100);}throw new IllegalStateException("player count drift");}private static int top(RemoteChunkSnapshot q,int x,int z){for(int y=127;y>=0;y--)if(q.blockAt(x,y,z).legacyId()!=0)return y;return-1;}private static String sha(String s)throws Exception{return hex(MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8)));}private static String hex(byte[]b){StringBuilder s=new StringBuilder();for(byte v:b)s.append(String.format("%02x",v&255));return s.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}private static final class Census{final int blocks,nonair,solid;final String occupancy,raw,metadata,surface,seams;Census(int b,int n,int o,String g,String r,String m,String s,String e){blocks=b;nonair=n;solid=o;occupancy=g;raw=r;metadata=m;surface=s;seams=e;}}
+public final class FixedSeedRegionSmoke {
+  private FixedSeedRegionSmoke() {
+  }
+  public static void main(String[] a) throws Exception {
+    if (a.length != 10)
+      throw new IllegalArgumentException(
+          "usage: FixedSeedRegionSmoke server.jar workspace port seed username minX maxX minZ maxZ settleTicks");
+    Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
+    int port = Integer.parseInt(a[2]);
+    long seed = Long.parseLong(a[3]);
+    String user = a[4];
+    int minX = Integer.parseInt(a[5]), maxX = Integer.parseInt(a[6]), minZ = Integer.parseInt(a[7]),
+        maxZ = Integer.parseInt(a[8]), settleTicks = Integer.parseInt(a[9]);
+    require(maxX - minX == 2 && maxZ - minZ == 2, "M121 requires exact 3x3 region");
+    Duration timeout = Duration.ofSeconds(90);
+    B173DedicatedServer server =
+                            new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true),
+                        reload = null;
+    B173WireClient client = new B173WireClient("127.0.0.1", port, user, timeout), reader = null;
+    RemoteWorldView world = null;
+    try {
+      server.boot();
+      B173PlayerSeed.write(workspace, user, 8.5D, 120D, 8.5D);
+      client.connect();
+      client.synchronizePose();
+      for (int x = minX; x <= maxX; x++)
+        for (int z = minZ; z <= maxZ; z++)
+          world = await(client, x, z);
+      client.sustainTicks(settleTicks);
+      client.close();
+      awaitPlayers(server, 0);
+      server.save();
+      server.close();
+      B173PlayerSeed.write(workspace, user, 8.5D, 120D, 8.5D);
+      reload = new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+      reload.boot();
+      reader = new B173WireClient("127.0.0.1", port, user, timeout);
+      reader.connect();
+      reader.synchronizePose();
+      world = reader.sustainTicks(20);
+      for (int x = minX; x <= maxX; x++)
+        for (int z = minZ; z <= maxZ; z++)
+          world = await(reader, x, z);
+      verify(world, minX, maxX, minZ, maxZ);
+    } finally {
+      client.close();
+      if (reader != null)
+        reader.close();
+      server.close();
+      if (reload != null)
+        reload.close();
+    }
+    Census c = census(world, minX, maxX, minZ, maxZ);
+    String evidence = "region=" + minX + ":" + maxX + ":" + minZ + ":" + maxZ
+        + ",chunks=9,blocks=" + c.blocks + ",columns=2304,solid=" + c.solid
+        + ",surface=" + c.surface + ",solidSeams=" + c.seams;
+    String trace = "v1|server=official-b1.7.3|seed=" + seed + "|region=3x3-absolute-chunks-" + minX
+        + ":" + maxX + ":" + minZ + ":" + maxZ + "|settle=" + settleTicks
+        + "ticks+clean-restart+fresh-packet51|blocks=" + c.blocks + "|columns=2304|solid-count="
+        + c.solid + "|solid-definition=not-air-water8+9-lava10+11|surface=" + c.surface
+        + "|internal-solid-seams=" + c.seams
+        + "|interior-position+ids+metadata+fluid-occupancy=diagnostic-not-frozen|decode=packet50+packet51-xzy|disconnect=clean";
+    System.out.println("WORLDLINE_M121_REGION=" + evidence);
+    System.out.println("WORLDLINE_M121_MASK=" + c.occupancy);
+    System.out.println("WORLDLINE_M121_RAW=" + c.raw + ",nonair=" + c.nonair);
+    System.out.println("WORLDLINE_M121_METADATA=" + c.metadata);
+    System.out.println("WORLDLINE_M121_TRACE=" + trace);
+    System.out.println("WORLDLINE_M121_SIGNATURE=" + sha(trace));
+  }
+  private static void verify(RemoteWorldView w, int minX, int maxX, int minZ, int maxZ) {
+    require(w != null, "region absent");
+    for (int cx = minX; cx <= maxX; cx++)
+      for (int cz = minZ; cz <= maxZ; cz++) {
+        RemoteChunkSnapshot q = w.chunkAt(cx, cz);
+        RemoteChunkObservation o = q.observation();
+        require(o.x() == cx * 16 && o.y() == 0 && o.z() == cz * 16 && o.width() == 16
+                && o.height() == 128 && o.depth() == 16 && q.blockCount() == 32768
+                && q.nonAirBlocks() > 0 && q.nonAirBlocks() < 32768,
+            "region chunk drift " + cx + "," + cz);
+        for (int x = 0; x < 16; x++)
+          for (int z = 0; z < 16; z++)
+            require(top(q, x, z) >= 0, "empty region column");
+      }
+  }
+  private static Census census(RemoteWorldView w, int minX, int maxX, int minZ, int maxZ)
+      throws Exception {
+    MessageDigest occupancy = MessageDigest.getInstance("SHA-256"),
+                  raw = MessageDigest.getInstance("SHA-256"),
+                  metadata = MessageDigest.getInstance("SHA-256"),
+                  surface = MessageDigest.getInstance("SHA-256"),
+                  seams = MessageDigest.getInstance("SHA-256");
+    ByteBuffer row = ByteBuffer.allocate(8);
+    int blocks = 0, nonair = 0, solid = 0;
+    for (int cx = minX; cx <= maxX; cx++)
+      for (int cz = minZ; cz <= maxZ; cz++) {
+        RemoteChunkSnapshot q = w.chunkAt(cx, cz);
+        blocks += q.blockCount();
+        nonair += q.nonAirBlocks();
+        for (int x = 0; x < 16; x++)
+          for (int z = 0; z < 16; z++) {
+            for (int y = 0; y < 128; y++) {
+              BlockState s = q.blockAt(x, y, z);
+              int value = solid(s.legacyId()) ? 1 : 0;
+              occupancy.update((byte) value);
+              solid += value;
+              raw.update((byte) s.legacyId());
+              metadata.update((byte) s.metadata());
+            }
+            int y = top(q, x, z);
+            BlockState s = q.blockAt(x, y, z);
+            row.clear();
+            row.putInt(cx * 16 + x)
+                .putShort((short) (cz * 16 + z))
+                .put((byte) y)
+                .put((byte) s.legacyId());
+            surface.update(row.array());
+            surface.update((byte) s.metadata());
+          }
+      }
+    for (int cx = minX; cx < maxX; cx++)
+      for (int cz = minZ; cz <= maxZ; cz++)
+        for (int z = 0; z < 16; z++)
+          for (int y = 0; y < 128; y++)
+            pair(
+                seams, w.chunkAt(cx, cz).blockAt(15, y, z), w.chunkAt(cx + 1, cz).blockAt(0, y, z));
+    for (int cz = minZ; cz < maxZ; cz++)
+      for (int cx = minX; cx <= maxX; cx++)
+        for (int x = 0; x < 16; x++)
+          for (int y = 0; y < 128; y++)
+            pair(
+                seams, w.chunkAt(cx, cz).blockAt(x, y, 15), w.chunkAt(cx, cz + 1).blockAt(x, y, 0));
+    return new Census(blocks, nonair, solid, hex(occupancy.digest()), hex(raw.digest()),
+        hex(metadata.digest()), hex(surface.digest()), hex(seams.digest()));
+  }
+  private static RemoteWorldView await(B173WireClient c, int x, int z) {
+    try {
+      return c.awaitRemoteChunk(x, z);
+    } catch (RuntimeException e) {
+      throw new IllegalStateException("region chunk unavailable " + x + "," + z, e);
+    }
+  }
+  private static boolean solid(int id) {
+    return id != 0 && id != 8 && id != 9 && id != 10 && id != 11;
+  }
+  private static void pair(MessageDigest d, BlockState a, BlockState b) {
+    d.update((byte) (solid(a.legacyId()) ? 1 : 0));
+    d.update((byte) (solid(b.legacyId()) ? 1 : 0));
+  }
+  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
+    long e = System.currentTimeMillis() + 5000;
+    while (System.currentTimeMillis() < e) {
+      if (s.players().size() == n)
+        return;
+      Thread.sleep(100);
+    }
+    throw new IllegalStateException("player count drift");
+  }
+  private static int top(RemoteChunkSnapshot q, int x, int z) {
+    for (int y = 127; y >= 0; y--)
+      if (q.blockAt(x, y, z).legacyId() != 0)
+        return y;
+    return -1;
+  }
+  private static String sha(String s) throws Exception {
+    return hex(MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8)));
+  }
+  private static String hex(byte[] b) {
+    StringBuilder s = new StringBuilder();
+    for (byte v : b)
+      s.append(String.format("%02x", v & 255));
+    return s.toString();
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
+  private static final class Census {
+    final int blocks, nonair, solid;
+    final String occupancy, raw, metadata, surface, seams;
+    Census(int b, int n, int o, String g, String r, String m, String s, String e) {
+      blocks = b;
+      nonair = n;
+      solid = o;
+      occupancy = g;
+      raw = r;
+      metadata = m;
+      surface = s;
+      seams = e;
+    }
+  }
 }

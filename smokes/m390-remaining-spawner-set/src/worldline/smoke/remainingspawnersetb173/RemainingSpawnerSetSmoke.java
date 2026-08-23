@@ -1,25 +1,164 @@
 package worldline.smoke.remainingspawnersetb173;
 
-import java.nio.charset.StandardCharsets;import java.nio.file.*;import java.security.MessageDigest;import java.time.Duration;import worldline.api.*;import worldline.b173server.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.time.Duration;
+import worldline.api.*;
+import worldline.b173server.*;
 
 /** Places two official spawners, retargets EntityId to Creeper and Spider, and observes Packet24 types 50 and 52. */
-public final class RemainingSpawnerSetSmoke{
- private RemainingSpawnerSetSmoke(){}
- public static void main(String[]a)throws Exception{
-  if(a.length!=7)throw new IllegalArgumentException("usage: RemainingSpawnerSetSmoke server.jar workspace port seed username chunkX chunkZ");
-  Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String user=a[4];int cx=Integer.parseInt(a[5]),cz=Integer.parseInt(a[6]);Duration timeout=Duration.ofSeconds(90);
-  B173DedicatedServer server=B173DedicatedServer.monsters(jar,workspace,port,seed,timeout,3,true);B173WireClient actor=new B173WireClient("127.0.0.1",port,user,timeout);BlockPosition top,first,second;int column;
-  try{server.boot();B173PlayerSeed.writeInventory(workspace,user,4.5D,60D,4.5D,new int[]{0,1,2,3},new int[]{1,2,52,52},new int[]{32,48,1,1},new int[]{0,0,0,0});actor.connect();actor.synchronizePose();require(actor.awaitInventory().occupiedSlots()==4,"remaining-spawner inventory drift");RemoteChunkSnapshot initial=actor.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);top=foundation(initial,cx,cz);column=0;actor.selectHeldSlot(0);
-   while(water(initial.blockAt(local(top.x(),cx),top.y()+1,local(top.z(),cz)).legacyId())){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);require(++column<=15,"water column exceeded remaining-spawner fixture");}for(int lift=0;lift<8;lift++){top=place(actor,top,BlockFace.UP,1);actor.moveAndObserve(0D,1D,0D,1);column++;}
-   actor.selectHeldSlot(1);for(int r=1;r<=3;r++){for(int z=-r+1;z<r;z++){grass(actor,new BlockPosition(top.x()-r+1,top.y(),top.z()+z),BlockFace.WEST);grass(actor,new BlockPosition(top.x()+r-1,top.y(),top.z()+z),BlockFace.EAST);}for(int x=-r+1;x<r;x++){grass(actor,new BlockPosition(top.x()+x,top.y(),top.z()-r+1),BlockFace.NORTH);grass(actor,new BlockPosition(top.x()+x,top.y(),top.z()+r-1),BlockFace.SOUTH);}grass(actor,new BlockPosition(top.x()-r,top.y(),top.z()-r+1),BlockFace.NORTH);grass(actor,new BlockPosition(top.x()-r,top.y(),top.z()+r-1),BlockFace.SOUTH);grass(actor,new BlockPosition(top.x()+r,top.y(),top.z()-r+1),BlockFace.NORTH);grass(actor,new BlockPosition(top.x()+r,top.y(),top.z()+r-1),BlockFace.SOUTH);}
-   actor.selectHeldSlot(2);first=place(actor,top,BlockFace.UP,52);actor.selectHeldSlot(3);second=place(actor,first,BlockFace.EAST,52);actor.sustainTicks(5);actor.close();awaitPlayers(server,0);server.save();
-  }finally{actor.close();server.close();}
-  Thread.sleep(1000L);B173SpawnerSeed.entity(workspace,first,"Creeper");B173SpawnerSeed.entity(workspace,second,"Spider");server=B173DedicatedServer.monsters(jar,workspace,port,seed,timeout,3,true);actor=new B173WireClient("127.0.0.1",port,user,timeout);
-  try{server.boot();actor.connect();actor.synchronizePose();require(actor.awaitInventory().occupiedSlots()>=1,"remaining-spawner reload inventory drift");server.setTime(14000L);RemoteMobSpawn creeper=actor.awaitMobSpawn(50),spider=actor.awaitMobSpawn(52);require(creeper.legacyType()==50&&spider.legacyType()==52&&creeper.entityId()!=actor.state().entityId()&&spider.entityId()!=actor.state().entityId()&&creeper.entityId()!=spider.entityId(),"remaining Packet24 identity drift");require(creeper.legacyType()!=90&&spider.legacyType()!=90&&creeper.legacyType()!=54&&spider.legacyType()!=51,"remaining identity collapsed to M141 pig or M363 zombie+skeleton");actor.close();awaitPlayers(server,0);server.save();
-   String evidence="column="+column+",platform=7x7-48grass,spawners="+cell(first)+"+"+cell(second)+",entityid=Creeper+Spider,mobs=type50+type52,night=14000,clients=1,disconnect=clean";String trace="v1|server=official-b1.7.3|seed="+seed+"|fixture=raised-7x7-grass-platform+two-spawner52|cause=nbt-entityid-creeper+spider+time-14000|wire=packet24-type50+packet24-type52|oracle=two-remaining-spawner-packet24-identities|"+evidence;System.out.println("WORLDLINE_M390_REMAINING="+evidence);System.out.println("WORLDLINE_M390_TRACE="+trace);System.out.println("WORLDLINE_M390_SIGNATURE="+sha(trace));
-  }finally{actor.close();server.close();}
- }
- private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}private static void grass(B173WireClient a,BlockPosition support,BlockFace face)throws Exception{place(a,support,face,2);}private static BlockPosition foundation(RemoteChunkSnapshot q,int cx,int cz){for(int x=4;x<=11;x++)for(int z=4;z<=11;z++)for(int y=126;y>=1;y--)if(q.blockAt(x,y,z).legacyId()==3&&water(q.blockAt(x,y+1,z).legacyId()))return new BlockPosition(cx*16+x,y,cz*16+z);throw new IllegalStateException("no deterministic remaining-spawner foundation");}
- private static String cell(BlockPosition p){return p.x()+":"+p.y()+":"+p.z()+":52:0";}
- private static boolean water(int id){return id==8||id==9;}private static int local(int v,int c){return v-c*16;}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long e=System.currentTimeMillis()+5000;while(System.currentTimeMillis()<e){if(s.players().size()==n)return;Thread.sleep(100);}throw new IllegalStateException("player count drift");}private static String sha(String s)throws Exception{byte[]b=MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));StringBuilder v=new StringBuilder();for(byte x:b)v.append(String.format("%02x",x&255));return v.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+public final class RemainingSpawnerSetSmoke {
+  private RemainingSpawnerSetSmoke() {
+  }
+  public static void main(String[] a) throws Exception {
+    if (a.length != 7)
+      throw new IllegalArgumentException(
+          "usage: RemainingSpawnerSetSmoke server.jar workspace port seed username chunkX chunkZ");
+    Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
+    int port = Integer.parseInt(a[2]);
+    long seed = Long.parseLong(a[3]);
+    String user = a[4];
+    int cx = Integer.parseInt(a[5]), cz = Integer.parseInt(a[6]);
+    Duration timeout = Duration.ofSeconds(90);
+    B173DedicatedServer server =
+        B173DedicatedServer.monsters(jar, workspace, port, seed, timeout, 3, true);
+    B173WireClient actor = new B173WireClient("127.0.0.1", port, user, timeout);
+    BlockPosition top, first, second;
+    int column;
+    try {
+      server.boot();
+      B173PlayerSeed.writeInventory(workspace, user, 4.5D, 60D, 4.5D, new int[] {0, 1, 2, 3},
+          new int[] {1, 2, 52, 52}, new int[] {32, 48, 1, 1}, new int[] {0, 0, 0, 0});
+      actor.connect();
+      actor.synchronizePose();
+      require(actor.awaitInventory().occupiedSlots() == 4, "remaining-spawner inventory drift");
+      RemoteChunkSnapshot initial = actor.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      top = foundation(initial, cx, cz);
+      column = 0;
+      actor.selectHeldSlot(0);
+      while (
+          water(initial.blockAt(local(top.x(), cx), top.y() + 1, local(top.z(), cz)).legacyId())) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        require(++column <= 15, "water column exceeded remaining-spawner fixture");
+      }
+      for (int lift = 0; lift < 8; lift++) {
+        top = place(actor, top, BlockFace.UP, 1);
+        actor.moveAndObserve(0D, 1D, 0D, 1);
+        column++;
+      }
+      actor.selectHeldSlot(1);
+      for (int r = 1; r <= 3; r++) {
+        for (int z = -r + 1; z < r; z++) {
+          grass(actor, new BlockPosition(top.x() - r + 1, top.y(), top.z() + z), BlockFace.WEST);
+          grass(actor, new BlockPosition(top.x() + r - 1, top.y(), top.z() + z), BlockFace.EAST);
+        }
+        for (int x = -r + 1; x < r; x++) {
+          grass(actor, new BlockPosition(top.x() + x, top.y(), top.z() - r + 1), BlockFace.NORTH);
+          grass(actor, new BlockPosition(top.x() + x, top.y(), top.z() + r - 1), BlockFace.SOUTH);
+        }
+        grass(actor, new BlockPosition(top.x() - r, top.y(), top.z() - r + 1), BlockFace.NORTH);
+        grass(actor, new BlockPosition(top.x() - r, top.y(), top.z() + r - 1), BlockFace.SOUTH);
+        grass(actor, new BlockPosition(top.x() + r, top.y(), top.z() - r + 1), BlockFace.NORTH);
+        grass(actor, new BlockPosition(top.x() + r, top.y(), top.z() + r - 1), BlockFace.SOUTH);
+      }
+      actor.selectHeldSlot(2);
+      first = place(actor, top, BlockFace.UP, 52);
+      actor.selectHeldSlot(3);
+      second = place(actor, first, BlockFace.EAST, 52);
+      actor.sustainTicks(5);
+      actor.close();
+      awaitPlayers(server, 0);
+      server.save();
+    } finally {
+      actor.close();
+      server.close();
+    }
+    Thread.sleep(1000L);
+    B173SpawnerSeed.entity(workspace, first, "Creeper");
+    B173SpawnerSeed.entity(workspace, second, "Spider");
+    server = B173DedicatedServer.monsters(jar, workspace, port, seed, timeout, 3, true);
+    actor = new B173WireClient("127.0.0.1", port, user, timeout);
+    try {
+      server.boot();
+      actor.connect();
+      actor.synchronizePose();
+      require(
+          actor.awaitInventory().occupiedSlots() >= 1, "remaining-spawner reload inventory drift");
+      server.setTime(14000L);
+      RemoteMobSpawn creeper = actor.awaitMobSpawn(50), spider = actor.awaitMobSpawn(52);
+      require(creeper.legacyType() == 50 && spider.legacyType() == 52
+              && creeper.entityId() != actor.state().entityId()
+              && spider.entityId() != actor.state().entityId()
+              && creeper.entityId() != spider.entityId(),
+          "remaining Packet24 identity drift");
+      require(creeper.legacyType() != 90 && spider.legacyType() != 90 && creeper.legacyType() != 54
+              && spider.legacyType() != 51,
+          "remaining identity collapsed to M141 pig or M363 zombie+skeleton");
+      actor.close();
+      awaitPlayers(server, 0);
+      server.save();
+      String evidence = "column=" + column + ",platform=7x7-48grass,spawners=" + cell(first) + "+"
+          + cell(second)
+          + ",entityid=Creeper+Spider,mobs=type50+type52,night=14000,clients=1,disconnect=clean";
+      String trace = "v1|server=official-b1.7.3|seed=" + seed
+          + "|fixture=raised-7x7-grass-platform+two-spawner52|cause=nbt-entityid-creeper+spider+time-14000|wire=packet24-type50+packet24-type52|oracle=two-remaining-spawner-packet24-identities|"
+          + evidence;
+      System.out.println("WORLDLINE_M390_REMAINING=" + evidence);
+      System.out.println("WORLDLINE_M390_TRACE=" + trace);
+      System.out.println("WORLDLINE_M390_SIGNATURE=" + sha(trace));
+    } finally {
+      actor.close();
+      server.close();
+    }
+  }
+  private static BlockPosition place(
+      B173WireClient a, BlockPosition support, BlockFace face, int id) throws Exception {
+    BlockPosition target = face.adjacent(support);
+    a.placeHeldBlock(support, face);
+    a.awaitBlock(target, new BlockState(id, 0));
+    return target;
+  }
+  private static void grass(B173WireClient a, BlockPosition support, BlockFace face)
+      throws Exception {
+    place(a, support, face, 2);
+  }
+  private static BlockPosition foundation(RemoteChunkSnapshot q, int cx, int cz) {
+    for (int x = 4; x <= 11; x++)
+      for (int z = 4; z <= 11; z++)
+        for (int y = 126; y >= 1; y--)
+          if (q.blockAt(x, y, z).legacyId() == 3 && water(q.blockAt(x, y + 1, z).legacyId()))
+            return new BlockPosition(cx * 16 + x, y, cz * 16 + z);
+    throw new IllegalStateException("no deterministic remaining-spawner foundation");
+  }
+  private static String cell(BlockPosition p) {
+    return p.x() + ":" + p.y() + ":" + p.z() + ":52:0";
+  }
+  private static boolean water(int id) {
+    return id == 8 || id == 9;
+  }
+  private static int local(int v, int c) {
+    return v - c * 16;
+  }
+  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
+    long e = System.currentTimeMillis() + 5000;
+    while (System.currentTimeMillis() < e) {
+      if (s.players().size() == n)
+        return;
+      Thread.sleep(100);
+    }
+    throw new IllegalStateException("player count drift");
+  }
+  private static String sha(String s) throws Exception {
+    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
+    StringBuilder v = new StringBuilder();
+    for (byte x : b)
+      v.append(String.format("%02x", x & 255));
+    return v.toString();
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
 }

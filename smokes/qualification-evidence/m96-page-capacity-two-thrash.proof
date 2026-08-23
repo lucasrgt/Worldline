@@ -1,5 +1,5 @@
 schema=1
 id=m96-page-capacity-two-thrash
-fingerprint=9c045a9054b5e0706ced4ed2ac41e6c48ee2fc4a1e1a19c9d1d8a7a6939d44ae
+fingerprint=cb25b67ff20cc194ef87476af037896e19e8b0ecc6da8c071aa7b28216d163b4
 observation.sha256=96142417765b773152dc82aba8194765319c2c7bd987d513c5b8b8fd34b89acb
 source=refactor-equivalent

@@ -1,25 +1,178 @@
 package worldline.smoke.bednetherexplodeb173;
 
-import java.nio.charset.StandardCharsets;import java.nio.file.*;import java.security.MessageDigest;import java.time.Duration;import worldline.api.*;import worldline.b173server.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.time.Duration;
+import worldline.api.*;
+import worldline.b173server.*;
 
 /** Places one official bed in the Nether and Packet15-uses it so Packet60 explodes instead of Packet17 sleep. */
-public final class BedNetherExplodeSmoke{
- private BedNetherExplodeSmoke(){}
- public static void main(String[]a)throws Exception{
-  if(a.length!=7)throw new IllegalArgumentException("usage: BedNetherExplodeSmoke server.jar workspace port seed username chunkX chunkZ");
-  Path jar=Paths.get(a[0]),workspace=Paths.get(a[1]);int port=Integer.parseInt(a[2]);long seed=Long.parseLong(a[3]);String user=a[4];int cx=Integer.parseInt(a[5]),cz=Integer.parseInt(a[6]);Duration timeout=Duration.ofSeconds(180);
-  require(user.length()<=16,"username exceeds 16");B173DedicatedServer server=new B173DedicatedServer(jar,workspace,port,seed,timeout,3,true,true);B173WireClient scout=new B173WireClient("127.0.0.1",port,user,timeout),actor=new B173WireClient("127.0.0.1",port,user,timeout),reader=null;BlockPosition top,foot,head;RemoteExplosion explosion;PlayerPose pose;
-  try{server.boot();B173PlayerSeed.writeDimension(workspace,user,4.5D,64D,4.5D,-1);scout.connect();scout.synchronizePose();require(scout.dimension()==-1&&scout.awaitDimension(-1)==-1,"nether scout dimension drift");RemoteChunkSnapshot initial=scout.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);require(count(initial,87)>0&&sky(initial)==0,"nether terrain identity drift");top=foundation(initial,cx,cz);scout.close();awaitPlayers(server,0);
-   B173PlayerSeed.writeInventory(workspace,user,top.x()+0.5D,top.y()+1.0D,top.z()+0.5D,-1,new int[]{0,1},new int[]{1,355},new int[]{32,1},new int[]{0,0});actor.connect();pose=actor.synchronizePose();require(actor.dimension()==-1&&actor.awaitInventory().occupiedSlots()==2,"nether bed inventory or dimension drift");RemoteWorldView live=actor.awaitRemoteChunk(cx,cz);
-   actor.selectHeldSlot(0);if(!solid(live.blockAt(top.x(),top.y(),top.z()+1).legacyId()))place(actor,top,BlockFace.SOUTH,1);
-   actor.look(0F,0F);pose=actor.moveAndObserve(0D,0D,0D,2).resulting();require(Math.abs(pose.x()-(top.x()+0.5D))<2D&&Math.abs(pose.y()-(top.y()+1.0D))<3D&&Math.abs(pose.z()-(top.z()+0.5D))<2D,"actor missed nether bed fixture");actor.selectHeldSlot(1);actor.useHeldItemOnBlock(top,BlockFace.UP);foot=BlockFace.UP.adjacent(top);head=BlockFace.SOUTH.adjacent(foot);actor.awaitBlock(foot,new BlockState(26,0));actor.awaitBlock(head,new BlockState(26,8));
-   actor.selectHeldSlot(2);actor.activateBlock(foot,BlockFace.UP);explosion=actor.awaitExplosion();require(explosion.strength()==5F&&Math.abs(explosion.x()-(head.x()+0.5D))<4D&&Math.abs(explosion.y()-(head.y()+0.5D))<4D&&Math.abs(explosion.z()-(head.z()+0.5D))<4D,"Packet60 nether-bed center/strength drift: "+explosion.x()+":"+explosion.y()+":"+explosion.z()+":"+explosion.strength());
-   RemoteWorldView after=worldline.test.WorldlineSmokeAwait.observe(actor,2);require(explosion.destroyed().size()>0&&(explosion.destroyed().contains(foot)||explosion.destroyed().contains(head))&&after.blockAt(foot.x(),foot.y(),foot.z()).legacyId()!=26&&after.blockAt(head.x(),head.y(),head.z()).legacyId()!=26,"nether bed Packet60 destruction drift");
-   actor.close();awaitPlayers(server,0);server.save();reader=new B173WireClient("127.0.0.1",port,user,timeout);reader.connect();require(reader.synchronizePose()!=null&&reader.dimension()==-1,"nether reader dimension drift");RemoteChunkSnapshot persisted=reader.awaitRemoteChunk(cx,cz).chunkAt(cx,cz);require(persisted.blockAt(local(foot.x(),cx),foot.y(),local(foot.z(),cz)).legacyId()!=26&&persisted.blockAt(local(head.x(),cx),head.y(),local(head.z(),cz)).legacyId()!=26,"persisted nether bed crater drift");
-   String evidence="overworld=0:sleep,nether=-1:explode,dimension=-1,support="+top.x()+":"+top.y()+":"+top.z()+",foot="+foot.x()+":"+foot.y()+":"+foot.z()+":26:0->gone,head="+head.x()+":"+head.y()+":"+head.z()+":26:8->gone,packet17=absent,packet60=strength5,destroyed=positive+bed,persisted=bed-absent,clients=3,disconnect=clean";String trace="v1|server=official-b1.7.3|seed="+seed+"|profile=allow-nether-true|entry=prelogin-player-nbt-dimension-minus-one+item355|fixture=nether-netherrack87+item355-block26|cause=packet15-item355-place+empty-hand-use|wire=packet60-strength5-flaming+packet17-absent|oracle=nether-explode-not-overworld-sleep|"+evidence;System.out.println("WORLDLINE_M359_EXPLODE="+evidence);System.out.println("WORLDLINE_M359_TRACE="+trace);System.out.println("WORLDLINE_M359_SIGNATURE="+sha(trace));
-  }finally{scout.close();actor.close();if(reader!=null)reader.close();server.close();}
- }
- private static BlockPosition place(B173WireClient a,BlockPosition support,BlockFace face,int id)throws Exception{BlockPosition target=face.adjacent(support);a.placeHeldBlock(support,face);a.awaitBlock(target,new BlockState(id,0));return target;}
- private static BlockPosition foundation(RemoteChunkSnapshot q,int cx,int cz){for(int x=1;x<=12;x++)for(int z=1;z<=12;z++)for(int y=126;y>=1;y--){if(z>=15)continue;int id=q.blockAt(x,y,z).legacyId(),up=q.blockAt(x,y+1,z).legacyId(),south=q.blockAt(x,y,z+1).legacyId(),southUp=q.blockAt(x,y+1,z+1).legacyId();if(id==87&&air(up)&&air(southUp)&&(solid(south)||air(south)))return new BlockPosition(cx*16+x,y,cz*16+z);}throw new IllegalStateException("no deterministic nether bed foundation");}
- private static boolean air(int id){return id==0;}private static boolean solid(int id){return id==87||id==88||id==49||id==7||id==1||id==4||id==13;}private static int count(RemoteChunkSnapshot q,int id){int n=0;for(int x=0;x<16;x++)for(int z=0;z<16;z++)for(int y=0;y<128;y++)if(q.blockAt(x,y,z).legacyId()==id)n++;return n;}private static int sky(RemoteChunkSnapshot q){int n=0;for(int x=0;x<16;x++)for(int z=0;z<16;z++)for(int y=0;y<128;y++)if(q.skyLightAt(x,y,z)>0)n++;return n;}private static int local(int v,int c){return v-c*16;}private static void awaitPlayers(B173DedicatedServer s,int n)throws Exception{long e=System.currentTimeMillis()+5000;while(System.currentTimeMillis()<e){if(s.players().size()==n)return;Thread.sleep(100);}throw new IllegalStateException("player count drift");}private static String sha(String s)throws Exception{byte[]b=MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));StringBuilder v=new StringBuilder();for(byte x:b)v.append(String.format("%02x",x&255));return v.toString();}private static void require(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+public final class BedNetherExplodeSmoke {
+  private BedNetherExplodeSmoke() {
+  }
+  public static void main(String[] a) throws Exception {
+    if (a.length != 7)
+      throw new IllegalArgumentException(
+          "usage: BedNetherExplodeSmoke server.jar workspace port seed username chunkX chunkZ");
+    Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
+    int port = Integer.parseInt(a[2]);
+    long seed = Long.parseLong(a[3]);
+    String user = a[4];
+    int cx = Integer.parseInt(a[5]), cz = Integer.parseInt(a[6]);
+    Duration timeout = Duration.ofSeconds(180);
+    require(user.length() <= 16, "username exceeds 16");
+    B173DedicatedServer server =
+        new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true, true);
+    B173WireClient scout = new B173WireClient("127.0.0.1", port, user, timeout),
+                   actor = new B173WireClient("127.0.0.1", port, user, timeout), reader = null;
+    BlockPosition top, foot, head;
+    RemoteExplosion explosion;
+    PlayerPose pose;
+    try {
+      server.boot();
+      B173PlayerSeed.writeDimension(workspace, user, 4.5D, 64D, 4.5D, -1);
+      scout.connect();
+      scout.synchronizePose();
+      require(scout.dimension() == -1 && scout.awaitDimension(-1) == -1,
+          "nether scout dimension drift");
+      RemoteChunkSnapshot initial = scout.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      require(count(initial, 87) > 0 && sky(initial) == 0, "nether terrain identity drift");
+      top = foundation(initial, cx, cz);
+      scout.close();
+      awaitPlayers(server, 0);
+      B173PlayerSeed.writeInventory(workspace, user, top.x() + 0.5D, top.y() + 1.0D, top.z() + 0.5D,
+          -1, new int[] {0, 1}, new int[] {1, 355}, new int[] {32, 1}, new int[] {0, 0});
+      actor.connect();
+      pose = actor.synchronizePose();
+      require(actor.dimension() == -1 && actor.awaitInventory().occupiedSlots() == 2,
+          "nether bed inventory or dimension drift");
+      RemoteWorldView live = actor.awaitRemoteChunk(cx, cz);
+      actor.selectHeldSlot(0);
+      if (!solid(live.blockAt(top.x(), top.y(), top.z() + 1).legacyId()))
+        place(actor, top, BlockFace.SOUTH, 1);
+      actor.look(0F, 0F);
+      pose = actor.moveAndObserve(0D, 0D, 0D, 2).resulting();
+      require(Math.abs(pose.x() - (top.x() + 0.5D)) < 2D
+              && Math.abs(pose.y() - (top.y() + 1.0D)) < 3D
+              && Math.abs(pose.z() - (top.z() + 0.5D)) < 2D,
+          "actor missed nether bed fixture");
+      actor.selectHeldSlot(1);
+      actor.useHeldItemOnBlock(top, BlockFace.UP);
+      foot = BlockFace.UP.adjacent(top);
+      head = BlockFace.SOUTH.adjacent(foot);
+      actor.awaitBlock(foot, new BlockState(26, 0));
+      actor.awaitBlock(head, new BlockState(26, 8));
+      actor.selectHeldSlot(2);
+      actor.activateBlock(foot, BlockFace.UP);
+      explosion = actor.awaitExplosion();
+      require(explosion.strength() == 5F && Math.abs(explosion.x() - (head.x() + 0.5D)) < 4D
+              && Math.abs(explosion.y() - (head.y() + 0.5D)) < 4D
+              && Math.abs(explosion.z() - (head.z() + 0.5D)) < 4D,
+          "Packet60 nether-bed center/strength drift: " + explosion.x() + ":" + explosion.y() + ":"
+              + explosion.z() + ":" + explosion.strength());
+      RemoteWorldView after = worldline.test.WorldlineSmokeAwait.observe(actor, 2);
+      require(explosion.destroyed().size() > 0
+              && (explosion.destroyed().contains(foot) || explosion.destroyed().contains(head))
+              && after.blockAt(foot.x(), foot.y(), foot.z()).legacyId() != 26
+              && after.blockAt(head.x(), head.y(), head.z()).legacyId() != 26,
+          "nether bed Packet60 destruction drift");
+      actor.close();
+      awaitPlayers(server, 0);
+      server.save();
+      reader = new B173WireClient("127.0.0.1", port, user, timeout);
+      reader.connect();
+      require(reader.synchronizePose() != null && reader.dimension() == -1,
+          "nether reader dimension drift");
+      RemoteChunkSnapshot persisted = reader.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
+      require(persisted.blockAt(local(foot.x(), cx), foot.y(), local(foot.z(), cz)).legacyId() != 26
+              && persisted.blockAt(local(head.x(), cx), head.y(), local(head.z(), cz)).legacyId()
+                  != 26,
+          "persisted nether bed crater drift");
+      String evidence = "overworld=0:sleep,nether=-1:explode,dimension=-1,support=" + top.x() + ":"
+          + top.y() + ":" + top.z() + ",foot=" + foot.x() + ":" + foot.y() + ":" + foot.z()
+          + ":26:0->gone,head=" + head.x() + ":" + head.y() + ":" + head.z()
+          + ":26:8->gone,packet17=absent,packet60=strength5,destroyed=positive+bed,persisted=bed-absent,clients=3,disconnect=clean";
+      String trace = "v1|server=official-b1.7.3|seed=" + seed
+          + "|profile=allow-nether-true|entry=prelogin-player-nbt-dimension-minus-one+item355|fixture=nether-netherrack87+item355-block26|cause=packet15-item355-place+empty-hand-use|wire=packet60-strength5-flaming+packet17-absent|oracle=nether-explode-not-overworld-sleep|"
+          + evidence;
+      System.out.println("WORLDLINE_M359_EXPLODE=" + evidence);
+      System.out.println("WORLDLINE_M359_TRACE=" + trace);
+      System.out.println("WORLDLINE_M359_SIGNATURE=" + sha(trace));
+    } finally {
+      scout.close();
+      actor.close();
+      if (reader != null)
+        reader.close();
+      server.close();
+    }
+  }
+  private static BlockPosition place(
+      B173WireClient a, BlockPosition support, BlockFace face, int id) throws Exception {
+    BlockPosition target = face.adjacent(support);
+    a.placeHeldBlock(support, face);
+    a.awaitBlock(target, new BlockState(id, 0));
+    return target;
+  }
+  private static BlockPosition foundation(RemoteChunkSnapshot q, int cx, int cz) {
+    for (int x = 1; x <= 12; x++)
+      for (int z = 1; z <= 12; z++)
+        for (int y = 126; y >= 1; y--) {
+          if (z >= 15)
+            continue;
+          int id = q.blockAt(x, y, z).legacyId(), up = q.blockAt(x, y + 1, z).legacyId(),
+              south = q.blockAt(x, y, z + 1).legacyId(),
+              southUp = q.blockAt(x, y + 1, z + 1).legacyId();
+          if (id == 87 && air(up) && air(southUp) && (solid(south) || air(south)))
+            return new BlockPosition(cx * 16 + x, y, cz * 16 + z);
+        }
+    throw new IllegalStateException("no deterministic nether bed foundation");
+  }
+  private static boolean air(int id) {
+    return id == 0;
+  }
+  private static boolean solid(int id) {
+    return id == 87 || id == 88 || id == 49 || id == 7 || id == 1 || id == 4 || id == 13;
+  }
+  private static int count(RemoteChunkSnapshot q, int id) {
+    int n = 0;
+    for (int x = 0; x < 16; x++)
+      for (int z = 0; z < 16; z++)
+        for (int y = 0; y < 128; y++)
+          if (q.blockAt(x, y, z).legacyId() == id)
+            n++;
+    return n;
+  }
+  private static int sky(RemoteChunkSnapshot q) {
+    int n = 0;
+    for (int x = 0; x < 16; x++)
+      for (int z = 0; z < 16; z++)
+        for (int y = 0; y < 128; y++)
+          if (q.skyLightAt(x, y, z) > 0)
+            n++;
+    return n;
+  }
+  private static int local(int v, int c) {
+    return v - c * 16;
+  }
+  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
+    long e = System.currentTimeMillis() + 5000;
+    while (System.currentTimeMillis() < e) {
+      if (s.players().size() == n)
+        return;
+      Thread.sleep(100);
+    }
+    throw new IllegalStateException("player count drift");
+  }
+  private static String sha(String s) throws Exception {
+    byte[] b = MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8));
+    StringBuilder v = new StringBuilder();
+    for (byte x : b)
+      v.append(String.format("%02x", x & 255));
+    return v.toString();
+  }
+  private static void require(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
 }

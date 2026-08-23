@@ -12,8 +12,8 @@ final class SmokeStatementBudgetTest {
                 + "char semicolon = ';';\n";
         SmokeStatementBudget.Metrics metrics = SmokeStatementBudget.measure(source);
         require(metrics.statements == 7, "statement lexer counted comments or literals");
-        require(metrics.packedLines == 2, "packed-line lexer drifted");
-        require(metrics.maximumPerLine == 3, "statement density lexer drifted");
+        require(metrics.packedLines == 1, "packed-line lexer drifted");
+        require(metrics.maximumPerLine == 2, "statement density lexer drifted");
         rejectsUnreviewedDebt();
         System.out.println("  smoke statement budget self-test: passed");
     }

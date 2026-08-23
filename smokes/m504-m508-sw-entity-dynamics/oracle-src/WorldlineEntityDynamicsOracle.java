@@ -1,9 +1,157 @@
-import java.lang.reflect.Field;import java.util.Random;import worldline.trace.CanonicalTrace;
+import java.lang.reflect.Field;
+import java.util.Random;
+import worldline.trace.CanonicalTrace;
 /** Executes the composite motion fixtures against official obfuscated classes. */
-public final class WorldlineEntityDynamicsOracle{
- private static final long SEED=50450820240821L;private WorldlineEntityDynamicsOracle(){}public static void main(String[]a){CanonicalTrace t=new CanonicalTrace(SEED);run(t,"ghast-open",12);run(t,"ghast-roof",12);run(t,"slime-open",60);run(t,"slime-roof",60);run(t,"boat-open",20);run(t,"boat-wall",20);run(t,"cart-short",30);run(t,"cart-long",30);t.emitTo(System.out);}private static void run(CanonicalTrace t,String m,int ticks){Fixture f=new Fixture(m);f.snap(t,m+"-seed");for(int n=1;n<=ticks;n++){f.e.m_();f.sample();if(n==1||n==ticks)f.snap(t,m+"-"+n);}f.check();}
- private static final class Fixture{final String mode;final dj w;final lq e;long min,max;boolean ground,air,collision;Fixture(String m){mode=m;w=new dj(new OracleMemorySaveHandler(SEED,m),m,SEED,null);w.q=2;for(int x=-3;x<=3;x++)for(int z=-3;z<=3;z++)w.c(x,z);if(m.startsWith("ghast"))e=ghast();else if(m.startsWith("slime"))e=slime();else if(m.startsWith("boat"))e=boat();else e=cart();min=max=mm(e.aQ);sample();}
-  private lq ghast(){aw g=new aw(w);g.c(8D,80D,8D);g.b=8D;g.c=88D;g.d=8D;g.a=0;seed(g);if(mode.endsWith("roof"))fill(5,11,83,83,5,11,1);return g;}private lq slime(){nb s=new nb(w);s.e(1);s.c(8D,65D,8D);s.aV=0F;seed(s);field(s,"c",0);if(mode.endsWith("roof"))fill(7,9,66,66,7,9,1);return s;}private lq boat(){eb b=new eb(w,9.2D,65D,8.5D);b.aS=0.1D;seed(b);if(mode.endsWith("wall"))fill(10,10,65,67,7,9,1);return b;}private lq cart(){int end=mode.endsWith("short")?9:30;for(int x=8;x<=end;x++)w.b(x,65,8,66,1);pr c=new pr(w,8.5D,65D,8.5D,0);c.aS=0.3D;seed(c);return c;}
-  void snap(CanonicalTrace t,String l){t.record(l,0,e.bh?0:1,(int)mm(e.aP),(int)mm(e.aQ),(int)mm(e.aR),(int)mm(e.aS),(int)mm(e.aT),e.ba?1:0,e.bb?1:0);}void sample(){min=Math.min(min,mm(e.aQ));max=Math.max(max,mm(e.aQ));ground|=e.ba;air|=!e.ba;collision|=e.bb;}void check(){if(mode.equals("ghast-open"))req(max-min>200,"ghast drift");if(mode.equals("ghast-roof"))req(max-min<200,"ghast roof");if(mode.equals("slime-open"))req(air&&ground&&max-min>100,"slime cycle");if(mode.equals("slime-roof"))req(max-min<700,"slime roof");if(mode.equals("boat-wall"))req(collision,"boat wall");if(mode.equals("boat-open"))req(!collision&&e.aP>9.3D,"boat open");if(mode.equals("cart-short"))req(Math.abs(e.aS)<0.05D,"cart brake");if(mode.equals("cart-long"))req(Math.abs(e.aS)>0.05D,"cart rail");}void fill(int xa,int xb,int ya,int yb,int za,int zb,int id){for(int x=xa;x<=xb;x++)for(int y=ya;y<=yb;y++)for(int z=za;z<=zb;z++)w.e(x,y,z,id);}}
- private static void seed(lq e){try{Field f=lq.class.getDeclaredField("bv");f.setAccessible(true);((Random)f.get(e)).setSeed(SEED);}catch(ReflectiveOperationException x){throw new IllegalStateException(x);}}private static void field(Object o,String n,int v){try{Field f=o.getClass().getDeclaredField(n);f.setAccessible(true);f.setInt(o,v);}catch(ReflectiveOperationException x){throw new IllegalStateException(x);}}private static long mm(double v){return Math.round(v*1000D);}private static void req(boolean v,String m){if(!v)throw new IllegalStateException(m);}
+public final class WorldlineEntityDynamicsOracle {
+  private static final long SEED = 50450820240821L;
+  private WorldlineEntityDynamicsOracle() {
+  }
+  public static void main(String[] a) {
+    CanonicalTrace t = new CanonicalTrace(SEED);
+    run(t, "ghast-open", 12);
+    run(t, "ghast-roof", 12);
+    run(t, "slime-open", 60);
+    run(t, "slime-roof", 60);
+    run(t, "boat-open", 20);
+    run(t, "boat-wall", 20);
+    run(t, "cart-short", 30);
+    run(t, "cart-long", 30);
+    t.emitTo(System.out);
+  }
+  private static void run(CanonicalTrace t, String m, int ticks) {
+    Fixture f = new Fixture(m);
+    f.snap(t, m + "-seed");
+    for (int n = 1; n <= ticks; n++) {
+      f.e.m_();
+      f.sample();
+      if (n == 1 || n == ticks)
+        f.snap(t, m + "-" + n);
+    }
+    f.check();
+  }
+  private static final class Fixture {
+    final String mode;
+    final dj w;
+    final lq e;
+    long min, max;
+    boolean ground, air, collision;
+    Fixture(String m) {
+      mode = m;
+      w = new dj(new OracleMemorySaveHandler(SEED, m), m, SEED, null);
+      w.q = 2;
+      for (int x = -3; x <= 3; x++)
+        for (int z = -3; z <= 3; z++)
+          w.c(x, z);
+      if (m.startsWith("ghast"))
+        e = ghast();
+      else if (m.startsWith("slime"))
+        e = slime();
+      else if (m.startsWith("boat"))
+        e = boat();
+      else
+        e = cart();
+      min = max = mm(e.aQ);
+      sample();
+    }
+    private lq ghast() {
+      aw g = new aw(w);
+      g.c(8D, 80D, 8D);
+      g.b = 8D;
+      g.c = 88D;
+      g.d = 8D;
+      g.a = 0;
+      seed(g);
+      if (mode.endsWith("roof"))
+        fill(5, 11, 83, 83, 5, 11, 1);
+      return g;
+    }
+    private lq slime() {
+      nb s = new nb(w);
+      s.e(1);
+      s.c(8D, 65D, 8D);
+      s.aV = 0F;
+      seed(s);
+      field(s, "c", 0);
+      if (mode.endsWith("roof"))
+        fill(7, 9, 66, 66, 7, 9, 1);
+      return s;
+    }
+    private lq boat() {
+      eb b = new eb(w, 9.2D, 65D, 8.5D);
+      b.aS = 0.1D;
+      seed(b);
+      if (mode.endsWith("wall"))
+        fill(10, 10, 65, 67, 7, 9, 1);
+      return b;
+    }
+    private lq cart() {
+      int end = mode.endsWith("short") ? 9 : 30;
+      for (int x = 8; x <= end; x++)
+        w.b(x, 65, 8, 66, 1);
+      pr c = new pr(w, 8.5D, 65D, 8.5D, 0);
+      c.aS = 0.3D;
+      seed(c);
+      return c;
+    }
+    void snap(CanonicalTrace t, String l) {
+      t.record(l, 0, e.bh ? 0 : 1, (int) mm(e.aP), (int) mm(e.aQ), (int) mm(e.aR), (int) mm(e.aS),
+          (int) mm(e.aT), e.ba ? 1 : 0, e.bb ? 1 : 0);
+    }
+    void sample() {
+      min = Math.min(min, mm(e.aQ));
+      max = Math.max(max, mm(e.aQ));
+      ground |= e.ba;
+      air |= !e.ba;
+      collision |= e.bb;
+    }
+    void check() {
+      if (mode.equals("ghast-open"))
+        req(max - min > 200, "ghast drift");
+      if (mode.equals("ghast-roof"))
+        req(max - min < 200, "ghast roof");
+      if (mode.equals("slime-open"))
+        req(air && ground && max - min > 100, "slime cycle");
+      if (mode.equals("slime-roof"))
+        req(max - min < 700, "slime roof");
+      if (mode.equals("boat-wall"))
+        req(collision, "boat wall");
+      if (mode.equals("boat-open"))
+        req(!collision && e.aP > 9.3D, "boat open");
+      if (mode.equals("cart-short"))
+        req(Math.abs(e.aS) < 0.05D, "cart brake");
+      if (mode.equals("cart-long"))
+        req(Math.abs(e.aS) > 0.05D, "cart rail");
+    }
+    void fill(int xa, int xb, int ya, int yb, int za, int zb, int id) {
+      for (int x = xa; x <= xb; x++)
+        for (int y = ya; y <= yb; y++)
+          for (int z = za; z <= zb; z++)
+            w.e(x, y, z, id);
+    }
+  }
+  private static void seed(lq e) {
+    try {
+      Field f = lq.class.getDeclaredField("bv");
+      f.setAccessible(true);
+      ((Random) f.get(e)).setSeed(SEED);
+    } catch (ReflectiveOperationException x) {
+      throw new IllegalStateException(x);
+    }
+  }
+  private static void field(Object o, String n, int v) {
+    try {
+      Field f = o.getClass().getDeclaredField(n);
+      f.setAccessible(true);
+      f.setInt(o, v);
+    } catch (ReflectiveOperationException x) {
+      throw new IllegalStateException(x);
+    }
+  }
+  private static long mm(double v) {
+    return Math.round(v * 1000D);
+  }
+  private static void req(boolean v, String m) {
+    if (!v)
+      throw new IllegalStateException(m);
+  }
 }
