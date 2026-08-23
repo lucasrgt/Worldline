@@ -1,7 +1,9 @@
 # SEM-M6 Mapping Coverage CLI
 
-Status: implementation verified; pinned Beta 1.7.3 report awaiting the exclusive
-official-runtime window.
+Status: pinned Beta 1.7.3 report and exact audit passed under the exclusive
+official-runtime lock on 2026-08-22. The report inventories 6,486 graph
+symbols and has SHA-256
+`2011d3df409233d0e44c779c0649be251ded37124e9de46e01b1bb223661b179`.
 
 SEM-M6 adds one stable report surface and one fail-closed audit surface:
 

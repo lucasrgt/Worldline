@@ -1,7 +1,10 @@
 # SEM-M8 Cross-Namespace Evidence
 
-Status: implementation verified with synthetic exact-identity inputs; the pinned
-Beta 1.7.3 evidence report awaits the exclusive official-runtime window.
+Status: pinned Beta 1.7.3 evidence report generated under the exclusive
+official-runtime lock on 2026-08-22. The deliberately empty evidence input
+left all 12,641 items unqualified, with zero supported, corroborated, or
+conflicting aliases. Report SHA-256:
+`ea7a89680232ec6ada804fb8f62d1f9343e5f58c5d902ab0b46dee5091036dc3`.
 
 SEM-M8 adds a fail-closed evidence surface for the SEM-M7 queue:
 

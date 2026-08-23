@@ -1,7 +1,8 @@
 # SEM-M7 Semantic Qualification Queue
 
-Status: implementation verified with synthetic exact-identity inputs; the pinned
-Beta 1.7.3 queue awaits the exclusive official-runtime window shared with SEM-M6.
+Status: pinned Beta 1.7.3 queue generated under the exclusive official-runtime
+lock on 2026-08-22. It contains 12,641 ordered items and has SHA-256
+`a8be4aed7b68a99b2b586908feb5b638b269f3bfdef9f41a9f5c82d050798d54`.
 
 SEM-M7 adds a deterministic evidence queue:
 

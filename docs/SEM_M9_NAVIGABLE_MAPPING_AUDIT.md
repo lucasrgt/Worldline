@@ -1,7 +1,9 @@
 # SEM-M9 Navigable Mapping Audit
 
-Status: implementation verified with synthetic exact-identity inputs; generation
-from the pinned Beta 1.7.3 queue awaits the exclusive official-runtime window.
+Status: the self-contained pinned Beta 1.7.3 audit was generated from the exact
+12,641-item queue and empty evidence checkpoint under the exclusive
+official-runtime lock on 2026-08-22. Its queue SHA-256 is
+`a8be4aed7b68a99b2b586908feb5b638b269f3bfdef9f41a9f5c82d050798d54`.
 
 SEM-M9 turns one exact SEM-M7 queue plus its SEM-M8 evidence into a deterministic,
 self-contained HTML audit:
