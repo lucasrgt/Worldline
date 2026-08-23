@@ -12,6 +12,8 @@ final class RetryMigrationCheck {
 
     static void execute(Path root) throws Exception {
         Properties manifest = load(root.resolve("smokes/eof-retry-migration.lock"));
+        Properties dataDriven = load(root.resolve("smokes/data-driven-migration.lock"));
+        Properties composite = load(root.resolve("smokes/composite-cycle-migration.lock"));
         require("1".equals(manifest.getProperty("schema")) && integer(manifest, "count") == 33,
                 "invalid EOF retry migration manifest");
         require(digest(root.resolve("tools/harness/SmokeRetryBoundary.java")).equals(
@@ -24,14 +26,17 @@ final class RetryMigrationCheck {
             String stem = "retry." + smoke.id + ".";
             if (manifest.getProperty(stem + "source") == null) continue;
             checked++; Path source = root.resolve(manifest.getProperty(stem + "source")).normalize();
-            require(source.startsWith(root.resolve("tools/smoke")) && Files.isRegularFile(source),
-                    "missing migrated retry source: " + smoke.id);
             String fingerprint = fingerprints.compute(smoke);
-            require(hash(manifest, stem + "prior_source_sha256")
-                            && hash(manifest, stem + "prior_fingerprint")
-                            && fingerprint.equals(manifest.getProperty(stem + "current_fingerprint"))
+            require(source.startsWith(root.resolve("tools/smoke")), "unsafe migrated retry source");
+            if (Files.isRegularFile(source)) require(fingerprint.equals(
+                            manifest.getProperty(stem + "current_fingerprint"))
                             && digest(source).equals(manifest.getProperty(stem + "current_source_sha256")),
                     "EOF retry migration evidence drift: " + smoke.id);
+            else require(successor(dataDriven, composite, smoke.id, manifest, stem),
+                    "missing migrated retry successor: " + smoke.id);
+            require(hash(manifest, stem + "prior_source_sha256")
+                            && hash(manifest, stem + "prior_fingerprint"),
+                    "EOF retry migration hashes drift: " + smoke.id);
             SmokePins.Entry pin = pins.match(smoke.id, fingerprint);
             require(pin != null && (pin.source().equals("executed")
                             || pin.source().equals("refactor-equivalent")
@@ -40,6 +45,22 @@ final class RetryMigrationCheck {
         }
         require(checked == 33, "EOF retry migration census drift: " + checked);
         System.out.println("  centralized EOF retries: " + checked + " exceptional coordinators");
+    }
+
+    private static boolean successor(Properties dataDriven, Properties composite, String id,
+            Properties retries, String retryStem) {
+        for (Properties migration : new Properties[] {dataDriven, composite}) {
+            String stem = "cycle." + id + ".";
+            if (migration.getProperty(stem + "source") == null) continue;
+            return retries.getProperty(retryStem + "source").equals(migration.getProperty(stem + "source"))
+                    && retries.getProperty(retryStem + "current_source_sha256").equals(
+                    migration.getProperty(stem + "source_sha256"))
+                    && retries.getProperty(retryStem + "current_fingerprint").equals(
+                    migration.getProperty(stem + "prior_fingerprint"))
+                    && retries.getProperty(retryStem + "evidence_sha256").equals(
+                    migration.getProperty(stem + "evidence_sha256"));
+        }
+        return false;
     }
 
     private static boolean hash(Properties values, String key) {

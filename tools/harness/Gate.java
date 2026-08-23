@@ -58,45 +58,14 @@ public final class Gate {
             if (exit != 0) System.exit(exit);
             return;
         }
-        if (Arrays.equals(arguments, new String[] {"--migrate-data-cycles"})) {
-            Path classes = compileHarness();
-            int exit = waitFor(new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
-                    "DataDrivenCycleMigration", "--apply").directory(root.toFile()).inheritIO().start(), 300);
-            if (exit != 0) System.exit(exit); return;
-        }
-        if (Arrays.equals(arguments, new String[] {"--refresh-data-cycle-pins"})) {
-            Path classes = compileHarness();
-            int exit = waitFor(new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
-                    "DataDrivenCycleMigration", "--refresh").directory(root.toFile())
-                    .inheritIO().start(), 300);
-            if (exit != 0) System.exit(exit); return;
-        }
-        if (Arrays.equals(arguments, new String[] {"--migrate-eof-retries"})) {
-            Path classes = compileHarness();
-            int exit = waitFor(new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
-                    "RetryMigration", "--apply").directory(root.toFile()).inheritIO().start(), 300);
-            if (exit != 0) System.exit(exit); return;
-        }
-        if (Arrays.equals(arguments, new String[] {"--finalize-eof-retries"})) {
-            Path classes = compileHarness();
-            int exit = waitFor(new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
-                    "RetryMigration", "--finalize").directory(root.toFile()).inheritIO().start(), 300);
-            if (exit != 0) System.exit(exit); return;
-        }
-        if (Arrays.equals(arguments, new String[] {"--finalize-fixed-waits"})) {
-            Path classes = compileHarness();
-            int exit = waitFor(new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
-                    "FixedWaitMigration", "--finalize").directory(root.toFile()).inheritIO().start(), 600);
-            if (exit != 0) System.exit(exit); return;
-        }
-        if (arguments.length == 1 && List.of("--module-cache-doctor", "--module-cache-gc")
-                .contains(arguments[0])) {
-            Path classes = compileHarness();
+        if (arguments.length == 1 && maintenance(arguments[0]) != null) {
+            String[] spec = maintenance(arguments[0]); Path classes = compileHarness();
             ProcessBuilder builder = new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
-                    "ModuleCacheMaintenance", arguments[0].endsWith("gc") ? "gc" : "doctor")
-                    .directory(root.toFile()).inheritIO();
-            builder.environment().put("WORLDLINE_GATE_CONTROL", control.toString());
-            int exit = waitFor(builder.start(), 600); if (exit != 0) System.exit(exit); return;
+                    spec[0], spec[1]).directory(root.toFile()).inheritIO();
+            if (spec[0].equals("ModuleCacheMaintenance"))
+                builder.environment().put("WORLDLINE_GATE_CONTROL", control.toString());
+            int exit = waitFor(builder.start(), Integer.parseInt(spec[2]));
+            if (exit != 0) System.exit(exit); return;
         }
         Files.createDirectories(control);
         if (arguments.length == 2 && ("--milestone".equals(arguments[0])
@@ -114,6 +83,23 @@ public final class Gate {
             if (exit != 0) System.exit(exit); return; }
         executePhase(new String[] {"--milestone-static", id}, false, true, false);
         executePhase(new String[] {"--milestone-runtime", id}, milestoneUsesOfficialRuntime(id), false, true);
+    }
+
+    private String[] maintenance(String argument) {
+        return switch (argument) {
+            case "--migrate-data-cycles" -> spec("DataDrivenCycleMigration", "--apply", 300);
+            case "--refresh-data-cycle-pins" -> spec("DataDrivenCycleMigration", "--refresh", 300);
+            case "--migrate-composite-cycles" -> spec("CompositeCycleMigration", "--apply", 300);
+            case "--migrate-eof-retries" -> spec("RetryMigration", "--apply", 300);
+            case "--finalize-eof-retries" -> spec("RetryMigration", "--finalize", 300);
+            case "--finalize-fixed-waits" -> spec("FixedWaitMigration", "--finalize", 600);
+            case "--module-cache-doctor" -> spec("ModuleCacheMaintenance", "doctor", 600);
+            case "--module-cache-gc" -> spec("ModuleCacheMaintenance", "gc", 600);
+            default -> null;
+        };
+    }
+    private static String[] spec(String main, String argument, int timeout) {
+        return new String[] {main, argument, Integer.toString(timeout)};
     }
 
     private void executePhase(String[] arguments, boolean runtime, boolean useSlot, boolean runtimeLease)
@@ -155,6 +141,7 @@ public final class Gate {
                 || Arrays.equals(arguments, new String[] {"--accept-legacy-smoke-baseline"})
                 || Arrays.equals(arguments, new String[] {"--migrate-data-cycles"})
                 || Arrays.equals(arguments, new String[] {"--refresh-data-cycle-pins"})
+                || Arrays.equals(arguments, new String[] {"--migrate-composite-cycles"})
                 || Arrays.equals(arguments, new String[] {"--migrate-eof-retries"})
                 || Arrays.equals(arguments, new String[] {"--finalize-eof-retries"})
                 || Arrays.equals(arguments, new String[] {"--finalize-fixed-waits"})
@@ -167,6 +154,7 @@ public final class Gate {
                 "usage: java tools/harness/Gate.java "
                 + "[--runtime|--smoke|--pin-smokes|--accept-legacy-smoke-baseline|--orchestrator|"
                 + "--smoke-plan|--migrate-data-cycles|--refresh-data-cycle-pins|"
+                + "--migrate-composite-cycles|"
                 + "--migrate-eof-retries|"
                 + "--finalize-eof-retries|"
                 + "--finalize-fixed-waits|"

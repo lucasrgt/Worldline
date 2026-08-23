@@ -1,5 +1,5 @@
 schema=1
 id=m523-sw-world-time-advance
-fingerprint=04ffbef1856bf8f0620594585a2e22876b74e8dd80bdfabe71b74dab4a83f8d5
+fingerprint=0244205ea14f7615e53e40b11b374b8120a0ab82193958f1baea7d5e45cc1a78
 observation.sha256=583ff279e5fecfafedd95a704a77525872d14cd939775376b47a4a116d2b30f7
-source=legacy-frozen
+source=refactor-equivalent

@@ -67,6 +67,8 @@ final class SmokeInputFingerprint {
         if (source.contains("SmokeRetry")) add(digest, root.resolve("tools/harness/SmokeRetry.java"));
         if (source.contains("DataDrivenCyclePlan"))
             add(digest, root.resolve("tools/harness/DataDrivenCyclePlan.java"));
+        if (source.contains("CompositeCyclePlan"))
+            add(digest, root.resolve("tools/harness/CompositeCyclePlan.java"));
         if (source.contains("DataDrivenSupport")) {
             add(digest, root.resolve("tools/harness/DataDrivenSupport.java"));
             add(digest, root.resolve("tools/harness/SmokeSupport.java"));
@@ -81,7 +83,8 @@ final class SmokeInputFingerprint {
             add(digest, root.resolve("tools/harness/SmokeSupport.java"));
         }
         if (source.contains("modules/smoketest")) add(digest, root.resolve("modules/smoketest"));
-        boolean dataDriven = smoke.runner.equals("tools/smoke/DataDrivenCycle.java");
+        boolean dataDriven = Set.of("tools/smoke/DataDrivenCycle.java",
+                "tools/smoke/CompositeCycle.java").contains(smoke.runner);
         if (dataDriven) addDataDrivenInputs(digest, smoke.id);
         else for (String input : REPOSITORY_INPUTS)
             if (source.contains(input)) add(digest, root.resolve(input));

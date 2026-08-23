@@ -1,5 +1,5 @@
 schema=1
 id=m131-dual-dimension-session
-fingerprint=a421d80ef3eed72b53d775a49903f788f0f8aff1582e82758ea7c75f3ebe3f6d
+fingerprint=d7aba4d40560422352f92148d6da6e8415fce5e78f8980e7f4ff2f6041ef4d56
 observation.sha256=4fbbe9be7e3cd6ab8fbfddd920b11392711702505cfd14044e93128570b457cd
-source=legacy-frozen
+source=refactor-equivalent

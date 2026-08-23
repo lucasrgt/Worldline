@@ -14,16 +14,21 @@ import java.util.regex.Pattern;
 
 /** One reviewed mechanical migration from packed ordinary cycles to declarative plans. */
 final class DataDrivenCycleMigration {
-    private static final Pattern ID = Pattern.compile("private static final String ID=\\\"([^\\\"]+)\\\"");
+    private static final Pattern ID = Pattern.compile(
+            "private\\s+static\\s+final\\s+String\\s+ID\\s*=\\s*\\\"([^\\\"]+)\\\"");
     private static final Pattern MAIN = Pattern.compile("\\\"(worldline\\.smoke\\.[^\\\"]+)\\\"");
-    private static final Pattern VALUE = Pattern.compile("value\\(config,\\\"([^\\\"]+)\\\"\\)");
-    private static final Pattern PRODUCT = Pattern.compile("product\\(\\\"([a-z0-9-]+)\\\"\\)");
+    private static final Pattern VALUE = Pattern.compile(
+            "value\\(config,\\s*\\\"([^\\\"]+)\\\"\\)");
+    private static final Pattern PRODUCT = Pattern.compile(
+            "product\\(\\s*\\\"([a-z0-9-]+)\\\"\\)");
     private static final Pattern INPUT = Pattern.compile(
-            "javaFiles\\(root\\.resolve\\(\\\"([^\\\"]+)\\\"\\)\\)");
-    private static final Pattern PREFIX = Pattern.compile("line\\(output,\\\"([^\\\"]+)\\\"\\)");
-    private static final Pattern OUTPUT = Pattern.compile("output\\.contains\\(\\\"([^\\\"]+)\\\"\\)");
+            "javaFiles\\(root\\.resolve\\(\\s*\\\"([^\\\"]+)\\\"\\)\\)");
+    private static final Pattern PREFIX = Pattern.compile(
+            "line\\(output,\\s*\\\"([^\\\"]+)\\\"\\)");
+    private static final Pattern OUTPUT = Pattern.compile(
+            "output\\.contains\\(\\s*\\\"([^\\\"]+)\\\"\\)");
     private static final Pattern CONTAINS = Pattern.compile(
-            "(!?)(?:first\\.)?(signal|trace)\\.contains\\(\\\"([^\\\"]+)\\\"\\)");
+            "(!?)(?:first\\.)?(signal|trace)\\.contains\\(\\s*\\\"([^\\\"]+)\\\"\\)");
     private final Path root;
 
     DataDrivenCycleMigration(Path root) { this.root = root.toAbsolutePath().normalize(); }
@@ -44,23 +49,30 @@ final class DataDrivenCycleMigration {
         require(cleanIndex(), "stage the migration implementation before applying the rewrite");
         SmokeInputFingerprint oldFingerprints = new SmokeInputFingerprint(root);
         SmokePins oldPins = new SmokePins(root); List<Migration> migrations = new ArrayList<>();
+        Properties manifest = load(root.resolve("smokes/data-driven-migration.lock"));
+        int priorCount = integer(manifest, "count");
         for (Path source : cycleSources()) {
             String text = Files.readString(source, StandardCharsets.UTF_8);
-            if (text.lines().count() != 10) continue;
-            Plan plan = parse(source, text); SmokeDiscovery.Entry smoke =
+            long lines = text.lines().count(); if (lines < 10 || lines > 180) continue;
+            Plan plan;
+            try { plan = parse(source, text); }
+            catch (IllegalStateException unsupported) { continue; }
+            SmokeDiscovery.Entry smoke =
                     new SmokeDiscovery.Entry(plan.id, relative(source));
             String prior = oldFingerprints.compute(smoke); SmokePins.Entry pin = oldPins.match(plan.id, prior);
             require(pin != null, "ordinary cycle lacks a current pin: " + plan.id);
             migrations.add(new Migration(source, text, plan, prior, pin));
         }
-        require(migrations.size() >= 300, "ordinary cycle census unexpectedly small");
+        require(migrations.size() >= 12,
+                "second-wave cycle census unexpectedly small: " + migrations.size());
         for (Migration migration : migrations) {
             appendPlan(migration.plan); Files.delete(migration.source);
         }
         List<SmokeDiscovery.Entry> after = SmokeDiscovery.discover(root);
         SmokeInputFingerprint newFingerprints = new SmokeInputFingerprint(root);
-        List<SmokePins.Entry> pins = new ArrayList<>(); Properties manifest = new Properties();
-        manifest.setProperty("schema", "1"); manifest.setProperty("count", Integer.toString(migrations.size()));
+        List<SmokePins.Entry> pins = new ArrayList<>();
+        manifest.setProperty("schema", "1");
+        manifest.setProperty("count", Integer.toString(priorCount + migrations.size()));
         for (SmokeDiscovery.Entry smoke : after) {
             Migration migration = migrations.stream().filter(value -> value.plan.id.equals(smoke.id))
                     .findFirst().orElse(null);
@@ -114,8 +126,8 @@ final class DataDrivenCycleMigration {
     private Plan parse(Path source, String text) {
         String id = one(ID, text, "id", source); int runStart = text.indexOf("private Outcome run");
         int compileStart = text.indexOf("private Path compile");
-        require(runStart > 0 && compileStart > runStart, "unsupported cycle sections: " + source);
-        String run = text.substring(runStart, compileStart), compile = text.substring(compileStart);
+        require(runStart > 0 && compileStart > 0, "unsupported cycle sections: " + source);
+        String run = text.substring(runStart), compile = text.substring(compileStart);
         String main = one(MAIN, run, "main", source); int mainPosition = run.indexOf(main);
         int mainEnd = run.indexOf('"', mainPosition + main.length());
         int commandStart = run.lastIndexOf("Arrays.asList(", mainPosition);
@@ -163,6 +175,10 @@ final class DataDrivenCycleMigration {
     private static SmokePins.Entry requiredEntry(SmokePins pins, String id) {
         SmokePins.Entry entry = pins.entry(id);
         require(entry != null, "missing unchanged pin: " + id); return entry; }
+    private static int integer(Properties values, String key) {
+        try { return Integer.parseInt(values.getProperty(key, "")); }
+        catch (NumberFormatException error) { throw new IllegalStateException("invalid " + key); }
+    }
     private static String requiredHash(Properties values, String key) {
         String value = values.getProperty(key, "");
         require(value.matches("[0-9a-f]{64}"), "missing " + key); return value;

@@ -35,8 +35,8 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 
 | ID | Status | Deliverable | Completion evidence |
 | --- | --- | --- | --- |
-| MIG-01 | QUEUED | Complete the second data-driven coordinator wave. | Eligible short dual-run coordinators, then eat/grass and recipe/set families, migrate with prior/current proofs until exceptional coordinators are at most 100. |
-| MIG-02 | QUEUED | Classify every remaining raw fixed-tick window. | Detection covers nested assertions and long-distance conditions; every raw `sustainTicks` is migrated or explicitly classified. |
+| MIG-01 | DONE | Complete the second data-driven coordinator wave. | 386 simple and 35 composite declarative cycles leave 83 exceptional coordinators; both migrations preserve content-addressed evidence chains. |
+| MIG-02 | DONE | Classify every remaining raw fixed-tick window. | The canonical gate validates 226 sources across 216 milestones and reports zero raw fixed-wait debt. |
 | MIG-03 | QUEUED | Publish and aggregate await telemetry. | Every smoke emits `WORLDLINE_AWAIT_TELEMETRY`; history records polls/failures and flags high-poll regressions. |
 | MIG-04 | QUEUED | Persist retry dependence and alert reviewers. | Nightly history records retry counts per smoke and fails review policy when a previously clean smoke begins relying on retry. |
 | MIG-05 | QUEUED | Adopt generated narrative schema. | All 36 eligible qualification-schema milestones use narrative schema and new scaffolds default to it. |
