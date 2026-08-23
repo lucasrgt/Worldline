@@ -54,6 +54,11 @@ final class IntegrationToolsCheck {
                     "IntegrationTrain", "--base", "base", "--plan-only", "--reconcile",
                     "full-integration=bad"), 60);
             require(reconcile == 0, "consolidated reconciliation train was rejected");
+            int triage = run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
+                    "WorktreeLifecycle", "triage", "--base", "base"), 60);
+            require(triage == 0 && Files.readString(repository.resolve(
+                    ".worldline/reports/branches.json")).contains("\"one-unique\""),
+                    "branch triage report was not generated");
         } finally { delete(repository); }
     }
 

@@ -37,6 +37,7 @@ public final class IntegrationTrain {
         verifyPairwiseMerges(candidates);
         if (!parsed.planOnly) verifyCandidates(base, candidates, parsed.reconcile);
         writeReport(base, candidates, !parsed.planOnly, parsed.reconcile);
+        triage(parsed.reconcile ? candidates.get(0).head : base);
         System.out.println("integration train passed: base=" + shortSha(base)
                 + ", candidates=" + candidates.size() + ", qualified=" + !parsed.planOnly);
     }
@@ -138,6 +139,20 @@ public final class IntegrationTrain {
         Files.createDirectories(report.getParent());
         Files.writeString(report, json, StandardCharsets.UTF_8);
         System.out.println("  report: " + root.relativize(report));
+    }
+
+    private void triage(String reference) throws Exception {
+        try {
+            Class<?> type = Class.forName("BranchTriage");
+            var method = type.getDeclaredMethod("write", Path.class, String.class);
+            method.setAccessible(true); method.invoke(null, root, reference);
+        } catch (ClassNotFoundException missing) {
+            Path source = root.resolve("tools/integration/BranchTriage.java");
+            Process process = new ProcessBuilder(javaTool(), source.toString(), "--base", reference)
+                    .directory(root.toFile()).inheritIO().start();
+            require(process.waitFor(120, TimeUnit.SECONDS) && process.exitValue() == 0,
+                    "branch triage source launcher failed");
+        }
     }
 
     private static String git(Path directory, String... arguments) throws Exception {

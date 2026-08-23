@@ -27,6 +27,10 @@ public final class WorktreeLifecycle {
             String base = arguments.length == 3 && "--base".equals(arguments[1]) ? arguments[2] : "HEAD";
             require(arguments.length == 1 || arguments.length == 3, usage());
             audit(base);
+        } else if ("triage".equals(arguments[0])) {
+            String base = arguments.length == 3 && "--base".equals(arguments[1]) ? arguments[2] : "HEAD";
+            require(arguments.length == 1 || arguments.length == 3, usage());
+            triage(base);
         } else if ("archive".equals(arguments[0])) {
             archive(arguments);
         } else if ("prune".equals(arguments[0])) {
@@ -68,6 +72,20 @@ public final class WorktreeLifecycle {
         System.out.println("worktree audit: total=" + worktrees.size() + ", dirty=" + dirty
                 + ", integrated=" + integrated + ", archive-eligible=" + removable);
         System.out.println("  report: " + root.relativize(report));
+    }
+
+    private void triage(String reference) throws Exception {
+        try {
+            Class<?> type = Class.forName("BranchTriage");
+            var method = type.getDeclaredMethod("write", Path.class, String.class);
+            method.setAccessible(true); method.invoke(null, root, reference);
+        } catch (ClassNotFoundException missing) {
+            Path source = root.resolve("tools/integration/BranchTriage.java");
+            Process process = new ProcessBuilder(javaTool(), source.toString(), "--base", reference)
+                    .directory(root.toFile()).inheritIO().start();
+            require(process.waitFor(120, TimeUnit.SECONDS) && process.exitValue() == 0,
+                    "branch triage source launcher failed");
+        }
     }
 
     private State inspect(Worktree worktree, String base) throws Exception {
@@ -157,7 +175,7 @@ public final class WorktreeLifecycle {
     }
 
     private static String usage() {
-        return "usage: java tools/integration/WorktreeLifecycle.java audit [--base REF] | prune | "
+        return "usage: java tools/integration/WorktreeLifecycle.java audit|triage [--base REF] | prune | "
                 + "archive --path PATH --bundles DIR [--base REF]";
     }
 
@@ -167,6 +185,10 @@ public final class WorktreeLifecycle {
         if (value == null || value.isBlank()) return fallback;
         try { return Integer.parseInt(value); }
         catch (NumberFormatException error) { throw new IllegalArgumentException(name + " must be an integer"); }
+    }
+    private static String javaTool() {
+        boolean windows = System.getProperty("os.name", "").toLowerCase().contains("win");
+        return Path.of(System.getProperty("java.home"), "bin", "java" + (windows ? ".exe" : "")).toString();
     }
     private static void require(boolean condition, String message) {
         if (!condition) throw new IllegalStateException(message);
