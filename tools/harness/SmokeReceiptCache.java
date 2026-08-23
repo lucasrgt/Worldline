@@ -139,18 +139,11 @@ final class SmokeReceiptCache {
         update(aggregate, smoke.id); update(aggregate, fingerprint); update(aggregate, proofDigest);
     }
 
-    SmokePins.Entry pin(SmokeDiscovery.Entry smoke) throws Exception {
-        Properties attestation = load(reports.resolve(smoke.id + ".properties"));
-        String fingerprint = fingerprints.compute(smoke), mode = attestation.getProperty("mode");
-        require(fingerprint.equals(attestation.getProperty("fingerprint")),
-                "stale smoke attestation cannot be pinned: " + smoke.id);
-        if ("pinned".equals(mode)) {
-            SmokePins.Entry existing = pins.match(smoke.id, fingerprint);
-            require(existing != null, "missing source pin: " + smoke.id); return existing;
-        }
+    SmokePins.Entry availablePin(SmokeDiscovery.Entry smoke) throws Exception {
+        String fingerprint = fingerprints.compute(smoke);
+        SmokePins.Entry tracked = pins.match(smoke.id, fingerprint); if (tracked != null) return tracked;
         Path proof = proof(smoke.id, fingerprint), evidence = evidence(smoke.id, fingerprint);
-        require(validProof(smoke.id, fingerprint, proof, evidence),
-                "missing local PASS proof: " + smoke.id);
+        if (!validProof(smoke.id, fingerprint, proof, evidence)) return null;
         return new SmokePins.Entry(smoke.id, fingerprint, load(proof).getProperty("evidence.sha256"));
     }
 

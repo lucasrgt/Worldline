@@ -16,11 +16,13 @@ final class SmokePin {
     static void execute(Path root) throws Exception {
         SmokeGitState state = SmokeGitState.read(root);
         if (!state.clean()) throw new IllegalStateException("pinning requires a clean committed worktree");
-        SmokeReceiptCache.validateSuite(root, state.head(), state.tree());
         SmokeReceiptCache cache = new SmokeReceiptCache(root);
         List<SmokePins.Entry> pins = new ArrayList<>();
-        for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) pins.add(cache.pin(smoke));
+        for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            SmokePins.Entry pin = cache.availablePin(smoke); if (pin != null) pins.add(pin);
+        }
+        if (pins.isEmpty()) throw new IllegalStateException("no current-input PASS proofs are available to pin");
         new SmokePins(root).write(pins);
-        System.out.println("  smoke qualification lock updated: " + pins.size() + " pins");
+        System.out.println("  smoke qualification lock updated: " + pins.size() + " verified pins");
     }
 }

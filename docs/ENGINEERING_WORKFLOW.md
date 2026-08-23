@@ -125,7 +125,9 @@ strictly completed prefix before its identified failure. Both modes require a cl
 fresh logs, and explicit completion rows in the report; failed, stale, or ambiguous individual
 results are rejected.
 
-Pin a completed clean suite explicitly, then review and commit the lockfile:
+Pin the currently available, fingerprint-matching PASS proofs from a clean worktree explicitly,
+then review and commit the lockfile. This may checkpoint a completed prefix after a later smoke
+fails; the failing smoke is not available and cannot be pinned:
 
 ```text
 java tools/harness/Gate.java --pin-smokes

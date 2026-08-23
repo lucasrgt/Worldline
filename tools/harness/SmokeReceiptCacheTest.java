@@ -57,7 +57,7 @@ public final class SmokeReceiptCacheTest {
         require(suite.contains("\"executed\": 0") && suite.contains("\"reused\": 2"),
                 "suite did not aggregate reused proofs");
         List<SmokePins.Entry> pins = new ArrayList<>();
-        for (SmokeDiscovery.Entry entry : entries) pins.add(reader.pin(entry));
+        for (SmokeDiscovery.Entry entry : entries) pins.add(reader.availablePin(entry));
         new SmokePins(root).write(pins); delete(cacheRoot);
         SmokeReceiptCache clone = new SmokeReceiptCache(root, cacheRoot, true);
         for (SmokeDiscovery.Entry entry : entries)
