@@ -1,7 +1,10 @@
 # SEM-M10 Mapping Promotion Gates
 
-Status: implementation verified with synthetic exact-identity inputs; the real
-Beta 1.7.3 policy and decision await the exclusive official-runtime window.
+Status: implementation verified with synthetic exact-identity inputs. The real
+Beta 1.7.3 evidence checkpoint contains 65 independently corroborated items and
+is ready for one exact batch decision under the exclusive official-runtime
+lock. Complete-game promotion remains correctly unavailable while the mapping
+queue is non-empty.
 
 SEM-M10 adds an exact, reviewed promotion boundary:
 
@@ -13,9 +16,11 @@ worldline mappings promote <client.jar> <server.jar> <intermediary.jar> \
 
 The five-property policy selects `batch` or `complete-game` mode and pins the
 exact SHA-256 digests of the SEM-M6 coverage report, SEM-M7 queue, and SEM-M8
-evidence report. Extra, missing, or drifted properties fail closed. Both modes
-reject unqualified items, singly supported aliases, and conflicts; every queued
-identity must be independently corroborated before a batch is promotable.
+evidence report. Extra, missing, or drifted properties fail closed. A `batch`
+decision promotes only independently corroborated items and records their exact
+item IDs, aliases, and sources; unqualified and singly supported items remain
+pending. Conflicts fail the whole checkpoint, and an empty batch cannot pass.
+`complete-game` additionally rejects every pending or singly supported item.
 
 `complete-game` is a stronger, non-vacuous definition. It additionally requires:
 

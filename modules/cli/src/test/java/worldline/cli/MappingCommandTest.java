@@ -53,9 +53,8 @@ public final class MappingCommandTest {
             String item = queue.items().get(0).id();
             StringBuilder evidenceText = new StringBuilder("schema=1\nqueue.sha256=")
                     .append(queue.sha256()).append("\nitem\tsource\tevidence\talias\treference\n");
-            for (MappingQualificationQueue.Item queued : queue.items())
-                evidenceText.append(queued.id()).append("\tfixture-named\tcross-namespace\tstableName\tfixture:named\n")
-                        .append(queued.id()).append("\tfixture-next\tcross-version\tstableName\tfixture:next\n");
+            evidenceText.append(item).append("\tfixture-named\tcross-namespace\tstableName\tfixture:named\n")
+                    .append(item).append("\tfixture-next\tcross-version\tstableName\tfixture:next\n");
             Files.write(evidence, evidenceText.toString().getBytes(StandardCharsets.UTF_8));
             MappingEvidenceReport evidenceReport = MappingEvidenceReport.create(queue, evidence);
             require("CORROBORATED".equals(evidenceReport.status(item))
@@ -108,7 +107,9 @@ public final class MappingCommandTest {
                     new PrintStream(output), new PrintStream(error));
             require(status == 0 && error.size() == 0
                     && output.toString("UTF-8").contains("WORLDLINE_MAPPINGS_PROMOTION=PASS")
-                    && output.toString("UTF-8").contains("complete-game=false"),
+                    && output.toString("UTF-8").contains("complete-game=false")
+                    && output.toString("UTF-8").contains("promoted=1")
+                    && output.toString("UTF-8").contains(item + "\tstableName"),
                     "mapping batch promotion gate failed");
             Files.write(promotion, ("schema=1\nmode=complete-game\nexpected.coverage.sha256=" + report.sha256()
                     + "\nexpected.queue.sha256=" + queue.sha256() + "\nexpected.evidence.sha256="
@@ -118,7 +119,7 @@ public final class MappingCommandTest {
                     official.toString(), intermediary.toString(), nostalgia.toString(), descriptor.toString(),
                     retro.toString(), evidence.toString(), promotion.toString()},
                     new PrintStream(output), new PrintStream(error));
-            require(status == 1 && error.toString("UTF-8").contains("definition is not satisfied"),
+            require(status == 1 && error.toString("UTF-8").contains("unqualified queue items"),
                     "incomplete fixture passed complete-game promotion");
             StringBuilder expected = new StringBuilder("schema=1\n");
             for (Map.Entry<String, String> metric : report.metrics().entrySet())

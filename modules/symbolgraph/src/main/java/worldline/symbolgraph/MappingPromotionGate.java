@@ -28,16 +28,19 @@ public final class MappingPromotionGate {
         pin(policy, "coverage", coverage.sha256()); pin(policy, "queue", queue.sha256());
         pin(policy, "evidence", evidence.sha256());
         LinkedHashMap<String, Integer> counts = statusCounts(queue, evidence);
-        require(counts.get("UNQUALIFIED").intValue() == 0,
-                "mapping promotion has unqualified queue items");
-        require(counts.get("SUPPORTED").intValue() == 0,
-                "mapping promotion requires independent alias corroboration");
         require(counts.get("CONFLICT").intValue() == 0,
                 "mapping promotion has conflicting aliases");
         boolean complete = complete(coverage.metrics(), queue.items().size());
-        if ("complete-game".equals(mode)) require(complete,
-                "complete-game mapping definition is not satisfied");
-        return new Result(mode, coverage.sha256(), queue.sha256(), evidence.sha256(), counts, complete);
+        if ("complete-game".equals(mode)) {
+            require(counts.get("UNQUALIFIED").intValue() == 0,
+                    "complete-game mapping promotion has unqualified queue items");
+            require(counts.get("SUPPORTED").intValue() == 0,
+                    "complete-game mapping promotion requires independent alias corroboration");
+            require(complete, "complete-game mapping definition is not satisfied");
+        } else require(counts.get("CORROBORATED").intValue() > 0,
+                "mapping batch has no independently corroborated items");
+        return new Result(mode, coverage.sha256(), queue.sha256(), evidence.sha256(),
+                counts, complete, queue, evidence);
     }
 
     static boolean complete(Map<String, String> metrics, int queueItems) {
@@ -110,14 +113,22 @@ public final class MappingPromotionGate {
     public static final class Result {
         private final String body;
         private Result(String mode, String coverage, String queue, String evidence,
-                Map<String, Integer> counts, boolean complete) {
-            StringBuilder text = new StringBuilder("schema=1\nmode=").append(mode)
+                Map<String, Integer> counts, boolean complete,
+                MappingQualificationQueue qualification, MappingEvidenceReport report) {
+            StringBuilder text = new StringBuilder("schema=2\nmode=").append(mode)
                     .append("\ncoverage.sha256=").append(coverage).append("\nqueue.sha256=")
                     .append(queue).append("\nevidence.sha256=").append(evidence).append('\n');
             for (Map.Entry<String, Integer> entry : counts.entrySet())
                 text.append("status.").append(entry.getKey().toLowerCase()).append('=')
                         .append(entry.getValue()).append('\n');
-            text.append("complete-game=").append(complete).append('\n'); body = text.toString();
+            text.append("complete-game=").append(complete).append("\npromoted=")
+                    .append(counts.get("CORROBORATED")).append('\n')
+                    .append("item\talias\tsources\n");
+            for (MappingQualificationQueue.Item item : qualification.items())
+                if ("CORROBORATED".equals(report.status(item.id())))
+                    text.append(item.id()).append('\t').append(report.aliases(item.id()))
+                            .append('\t').append(report.sources(item.id())).append('\n');
+            body = text.toString();
         }
         public String sha256() { return digest(body); }
         public String render() { return body + "decision.sha256=" + sha256() + "\n"; }
