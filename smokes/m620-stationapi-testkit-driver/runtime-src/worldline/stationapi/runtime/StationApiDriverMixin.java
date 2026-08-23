@@ -54,6 +54,7 @@ public abstract class StationApiDriverMixin {
             else emit("STATE");
             String command = worldlineInput.readLine();
             if ("CLOSE".equals(command)) {
+                emit("CLOSED");
                 scheduleStop();
                 return;
             }

@@ -49,7 +49,7 @@ public final class StationApiRuntime implements AutomatedMinecraftRuntime {
 
     @Override public synchronized void close() {
         if (state == RuntimeState.CLOSED) return; Throwable failure = null;
-        try { protocol.stop(); } catch (Throwable error) { failure = error; }
+        try { protocol.stop(session); } catch (Throwable error) { failure = error; }
         try { protocol.close(); } catch (Throwable error) {
             if (failure == null) failure = error; else failure.addSuppressed(error);
         }
