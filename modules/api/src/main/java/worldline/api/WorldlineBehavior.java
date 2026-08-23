@@ -132,8 +132,8 @@ public final class WorldlineBehavior {
             "Glass, ice, and leaves preserve their distinct skylight attenuation");
     public static final WorldlineBehavior LIGHT_MELTING = define("light-melting", WorldlineFamily.ENVIRONMENT,
             "Torch light melts snow to air and ice to water");
-    public static final WorldlineBehavior HOSTILE_SPAWN_LIGHT = define("hostile-spawn-light", WorldlineFamily.HOSTILE,
-            "Darkness permits hostile spawns while torch light rejects them");
+    public static final WorldlineBehavior SPAWN_LIGHT_CAP = define("spawn-light-cap", WorldlineFamily.HOSTILE,
+            "Hostile spawn is blocked at light >= 8 and permitted in darkness");
     public static final WorldlineBehavior WOODEN_DOOR_TOGGLE = define("wooden-door-toggle", WorldlineFamily.REDSTONE,
             "Direct activation opens and closes both wooden-door cells");
     public static final WorldlineBehavior TRAPDOOR_TOGGLE = define("trapdoor-toggle", WorldlineFamily.REDSTONE,
