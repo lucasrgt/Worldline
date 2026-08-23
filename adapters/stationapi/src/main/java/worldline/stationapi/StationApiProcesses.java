@@ -44,6 +44,7 @@ final class StationApiProcesses implements AutoCloseable {
             command.add("--init-script"); command.add(settings.initScript.toString());
             command.add("runClient");
             command.add("-PworldlineDriverRoot=" + settings.initScript.getParent());
+            command.add("-PworldlineClientJar=" + settings.clientJar);
             command.add("-PworldlineClientSha256=" + settings.clientSha256);
             command.add("-PworldlineControlPort=" + controlPort);
             command.add("-PworldlineServerPort=" + serverPort);

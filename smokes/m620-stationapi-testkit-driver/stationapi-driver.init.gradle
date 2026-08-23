@@ -5,7 +5,12 @@ gradle.projectsEvaluated {
     if (gradle.rootProject.name != 'aero-bare-stapi') return
     def project = gradle.rootProject
     def smoke = new File(project.property('worldlineDriverRoot').toString()).canonicalFile
-    def officialClient = project.configurations.minecraft.singleFile
+    def minecraft = project.configurations.minecraft.dependencies as List
+    if (minecraft.size() != 1 || minecraft[0].group != 'com.mojang'
+            || minecraft[0].name != 'minecraft' || minecraft[0].version != 'b1.7.3')
+        throw new GradleException('StationAPI Minecraft dependency drifted')
+    def officialClient = new File(project.property('worldlineClientJar').toString()).canonicalFile
+    if (!officialClient.isFile()) throw new GradleException('StationAPI official client is absent')
     def digest = java.security.MessageDigest.getInstance('SHA-256')
     officialClient.withInputStream { input ->
         byte[] buffer = new byte[8192]

@@ -64,7 +64,7 @@ public final class M620StationapiTestkitDriverCycle {
         Files.writeString(service, "worldline.stationapi.StationApiTestRuntimeProvider\n",
                 StandardCharsets.UTF_8);
         compile(specs, "8", testApi, smoke.resolve("spec-src"));
-        String output = runTestKit(checkout, server, classes, adapter, specs);
+        String output = runTestKit(checkout, server, client, classes, adapter, specs);
         verifyOutput(output);
         verifyCheckout(checkout);
         String signature = sha256(SIGNAL);
@@ -80,8 +80,8 @@ public final class M620StationapiTestkitDriverCycle {
         System.out.println("  signature: " + signature);
     }
 
-    private String runTestKit(Path checkout, Path server, Path classes, Path adapter, Path specs)
-            throws Exception {
+    private String runTestKit(Path checkout, Path server, Path client, Path classes,
+            Path adapter, Path specs) throws Exception {
         List<Path> runtime = new ArrayList<Path>();
         runtime.add(specs);
         runtime.add(adapter);
@@ -104,6 +104,7 @@ public final class M620StationapiTestkitDriverCycle {
                 "-Dworldline.stationapi.checkout=" + checkout,
                 "-Dworldline.stationapi.init=" + smoke.resolve("stationapi-driver.init.gradle"),
                 "-Dworldline.stationapi.serverJar=" + server,
+                "-Dworldline.stationapi.clientJar=" + client,
                 "-Dworldline.stationapi.clientSha256=" + SmokeSupport.value(descriptor, "client.jar.sha256"),
                 "-Dworldline.stationapi.timeoutSeconds=" + SmokeSupport.value(descriptor, "session.timeout.seconds"),
                 "-classpath", join(runtime), "worldline.cli.WorldlineCli", "test", "run",
