@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m192-soul-sand -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=4cf9190cca5bf84eabf13581b40e3e944a7c81c6c62f80bea686b7ff436ea63e -->
+
 # M192 behavior map
 
 Packet15 places soul sand item `88` on a raised stone column. The official

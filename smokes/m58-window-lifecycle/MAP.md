@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=container-transaction -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=d74f622bc7b86332ec099b367830281038962f547c1a3d80a293a2e56a2ceda4 -->
+
 # M58 Remote Window Lifecycle Map
 
 | Boundary | Exact evidence |

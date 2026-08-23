@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m137-tnt-explosion -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=bb96106b407266a1f02f9e9e8097e71f5d11de9337293e8cf063277cd00f07ed -->
+
 # M137 behavior map
 
 A dry stone column isolates TNT `46` above the generated world. Packet15 with

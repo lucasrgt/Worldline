@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m156-farmland-hydration -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=fec7ee0f7082dd84e4b7dfdfb08bfecf7258e0369cad355481d6c673a7bebb3f -->
+
 # M156 behavior map
 
 A wooden hoe tills official dirt into farmland after adjacent still water is

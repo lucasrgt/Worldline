@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m546-piston-qc-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=10f2cb5507e55026ceafd72d6ab2c74a3ab228aad1924965b9844d149117d989 -->
+
 # M546 behavior map
 
 The cloned M142 west-facing piston occupies one raised stone column.

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m121-fixed-seed-region -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c2a08f5e7e5ec2b6767afbc4b26409d586f2fd4ca296d199d823abe8b2b73d4f -->
+
 # M121 behavior map
 
 Two fresh official worlds use seed `17320110707` and load absolute chunks

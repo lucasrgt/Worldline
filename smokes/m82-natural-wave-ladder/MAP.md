@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-cache-lifecycle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=2727138a7c9b2eb9e38b7a40a9ae8518a3c3c7b0739c188d2ae152edbbb47bab -->
+
 # M82 behavior map
 
 M82 uses three fresh arms with the same exact two-page scene:

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m438-remaining-clock-map-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=9ebe2cca746ab29d741407b8788d0b10a7e942cd691b868eb0d1d2f00e83eb58 -->
+
 # M438 behavior map
 
 One official workbench epoch crafts clock `347` from four gold ingots

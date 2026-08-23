@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m401-remaining-redstone-wire -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=b37e39c18b5b7ba396453c42ce9a726e1b0b51ab26949df34031ab9c9ddcd82e -->
+
 # M401 behavior map
 
 One official session places remaining redstone-wire `55` as three connection

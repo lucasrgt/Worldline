@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=movement-route -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=f3134a8e626058fc196b5ad3787199c6e0cd7f71a25a8a5db228289b886cdf7a -->
+
 # M41 Immutable Route Termination
 
 Each fresh session executes one controller-stopped explicit-fallback route and

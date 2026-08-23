@@ -1,4 +1,12 @@
-# M523-SW qualification cycle
+# M523-SW-WORLD-TIME-ADVANCE Sw world time advance
+
+<!-- Generated from smoke.properties by MilestoneNarrative. -->
+
+## Claim
+
+This milestone freezes the behavior identified by its expected signal and semantic signature.
+
+## Qualification cycle
 
 Run only while holding the exclusive official-runtime lock:
 
@@ -15,3 +23,7 @@ signature and rerun the same cycle.
 ## Frozen evidence
 
 The expected signature is `583ff279e5fecfafedd95a704a77525872d14cd939775376b47a4a116d2b30f7`.
+
+Expected signal: `persisted=signed-long,restart=preserved,profile=overworld+nether,heartbeats=80,advance=bounded,no-heartbeat=smaller,save=clean,clients=1`.
+
+Frozen semantic SHA-256: `583ff279e5fecfafedd95a704a77525872d14cd939775376b47a4a116d2b30f7`.

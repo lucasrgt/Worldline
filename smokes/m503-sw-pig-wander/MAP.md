@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=state-world-differential -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=17747e296bd5c3d985ae22b817598da213acc55c7d078016447b2f0869ed1d28 -->
+
 # M503-SW behavior map
 
 ## Boundary

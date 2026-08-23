@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m382-portal-obsidian-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=6892e4aa2cd98f329d9e6c1b83cf4feed463e1ad996fe3afe61a0a36f8778f56 -->
+
 # M382 behavior map
 
 One official session places fourteen obsidian `49` cells as a `4x5`

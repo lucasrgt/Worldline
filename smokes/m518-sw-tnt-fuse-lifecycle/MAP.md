@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=state-world-differential -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=f6a9810837ac1a3622784617b05e6c957344be3be5493d4b261e359f18076f1d -->
+
 # M518-SW behavior map
 
 The current RetroMCP mapping identifies official server class `kg` as

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=mod-loading -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=bd13989879dba605a0cf790312c24a0f6947e87fb0b4d3ecd6f8cb265cbfb537 -->
+
 # M7 Mod Loading Evidence Map
 
 ## Claim

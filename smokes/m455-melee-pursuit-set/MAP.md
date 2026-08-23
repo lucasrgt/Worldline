@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m455-melee-pursuit-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=36fea72b3152e1d8b6245cfd8731ba14fa83aa5818bef04bab2ab838441de935 -->
+
 # M455 behavior map
 
 The fixture raises an isolated `7×7` grass platform and places two default

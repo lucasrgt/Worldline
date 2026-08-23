@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=multiplayer-session -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=a27d2ce0c705f4fe5af56c8e35b8ec7c212956eaff46a764ce610d54f40c06d9 -->
+
 # M405 behavior map
 
 The fixture raises an isolated `7×7` grass platform and places one default

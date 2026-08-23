@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m371-machine-block-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=51d13daf2febf456a423e84d136707a77b9117668bc3979f4b52514bdbb26c7e -->
+
 # M371 behavior map
 
 Packet15 places workbench item `58` on a raised stone column. Packet102 then

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m412-slime-split-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c35f4196ac8b8633b7ffa097ac87eca1828f89b9ab9d2be20f0802c924191929 -->
+
 # M412 behavior map
 
 Seed `17320110707` slime chunk `-2,-2` is entered below `y=16`. A default

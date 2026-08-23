@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=client-runtime-equivalence -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ac13115a73408c85eb80b931dc3004b4fd66b26a5512e8d4fb036eebf70ae780 -->
+
 # Controlled Client Tick Map
 
 ## Claim

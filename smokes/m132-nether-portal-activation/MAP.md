@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m132-nether-portal-activation -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=033c56bdb9ddf8abbd27735158a33d88a6a07e85cb5294a09bde41e7015d6518 -->
+
 # M132 behavior map
 
 One official protocol-14 client raises a stone column above the qualified ocean

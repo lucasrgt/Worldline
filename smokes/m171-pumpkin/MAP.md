@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m171-pumpkin -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=239e38d65add8b63f1afa9dba90e1832f5b70b91bf6b6e5fee0df381e48c12e0 -->
+
 # M171 behavior map
 
 Packet15 places pumpkin item `86` on a raised stone column. Actor look

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m334-record-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=b139e039c60f517453a6e8e0c3fe4f87b11f5c73faa81a77c7fceb7645428d53 -->
+
 # M334 behavior map
 
 Official jukebox item `84` is placed twice on a raised stone support. Gold

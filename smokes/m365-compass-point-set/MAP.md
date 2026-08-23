@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=client-runtime-equivalence -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=45694ff4da19a7b3c554d405380e9535c075d7fee1f3880674813ed5cc9a8b68 -->
+
 # M365 behavior map
 
 Frozen expected signature SHA-256: 45694ff4da19a7b3c554d405380e9535c075d7fee1f3880674813ed5cc9a8b68

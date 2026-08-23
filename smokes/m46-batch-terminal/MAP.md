@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=movement-route -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=23e11f826866e54447461ec94740a5e77d76abad7761fabcdf08d0ae5108e521 -->
+
 # M46 Exact Batch Terminal Event
 
 Two fresh sessions execute three safe batches and qualify all terminal kinds:

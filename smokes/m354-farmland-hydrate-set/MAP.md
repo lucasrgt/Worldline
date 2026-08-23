@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m354-farmland-hydrate-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=31e18ca11dc6928034468d2a503769a4559f5757e60dffc22e8bf85af35522d2 -->
+
 # M354 behavior map
 
 A wooden hoe tills official dirt into farmland `60`. Four water-adjacent

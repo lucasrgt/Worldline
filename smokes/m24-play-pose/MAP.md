@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=player-pose -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=e43923f84231be276ae24a78a94f1d50aef3d5229dc59f10bcc5fd83c7cbc0db -->
+
 # M24 Multiplayer Play Pose
 
 Two fresh protocol-14 clients consume the official server's spawn/time

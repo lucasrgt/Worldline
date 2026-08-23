@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m298-wood-tool-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=2b099c580ef169af939546718df1c4ae560e5f875f92960733fbcc026a3982bf -->
+
 # M298 behavior map
 
 Packet15 places workbench item `58` on a raised stone column. A second

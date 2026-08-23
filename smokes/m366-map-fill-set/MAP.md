@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m366-map-fill-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=048613204222ae9dce7fb157d74dc94b69573ce8faaa9dd90cff64f7aab8f31f -->
+
 # M366 behavior map
 
 Official empty map item `358` is seeded into the hotbar and used with

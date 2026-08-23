@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m196-glass -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=559e9d38c638c27b461ef834cc558063696964fbdff90e68a729877cb3daa13e -->
+
 # M196 behavior map
 
 Packet15 places glass item `20` on a raised stone column. The official

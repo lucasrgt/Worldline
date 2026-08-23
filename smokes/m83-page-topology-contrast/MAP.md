@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-cache-lifecycle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=2418e988f23571a72a07c2521eb9ee7cb9ebc8b436957a74d7cf226fe4878f10 -->
+
 # M83 behavior map
 
 Both arms use the same sixteen-member scene and remove exactly two members:

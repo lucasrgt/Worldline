@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=redstone-lever-button -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=07928ecf62634ba9a9374083c951d736e8947b162ae45bfd6deb28416f1827f3 -->
+
 # Lever and button smoke map
 
 A floor lever placed ON (metadata 13) powers adjacent dust immediately. A

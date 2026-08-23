@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m397-dispenser-projectiles -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=66d497bee36abdc673c44336dad9a75afcc08fcf7ade36676c652023100b1731 -->
+
 # M397 behavior map
 
 Packet15 places dispenser item `23` on a raised stone column as west-facing

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-cache-lifecycle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=0da3de05b8d5c493b974e04eaf1767e07f54b087f387badfdaf5dd48b6f1bb31 -->
+
 # M98 behavior map
 
 M98 configures `aero.becell.maxCachedPages=0` on the exact M74/M78 four-page

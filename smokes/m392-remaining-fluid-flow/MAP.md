@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m392-remaining-fluid-flow -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=8ec5aefbab73a3cd36a48185fa30c6266c70c3392ce80a5b319f8a6d94f2cfba -->
+
 # M392 behavior map
 
 One official session builds two raised stone trenches and seeds still water

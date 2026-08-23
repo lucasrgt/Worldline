@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m375-remaining-pick-breaks -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=22503c04e191d5edd6c2374799f5062269ff1e38d71c15709e468a2d2e787869 -->
+
 # M375 behavior map
 
 Packet15 places mossy cobble item `48` on the top face of the raised

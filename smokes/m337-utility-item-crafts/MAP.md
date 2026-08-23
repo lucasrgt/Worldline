@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m337-utility-item-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=24941b7cbf8eca87a6e5f03001a622de0dfb51a8d4e4f754906557bfa7603367 -->
+
 # M337 behavior map
 
 One official session crafts the three vanilla utility recipes that M268 and

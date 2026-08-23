@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m338-furnace-fuel-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=d412ed91eacea33e26daaf3f37c6494ecb462ee19694093f7126187f36a2b957 -->
+
 # M338 furnace fuel set map
 
 Packet15 places three idle furnaces `61:2` on a raised stone fixture. Each

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m560-portal-scale-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=d7eb052e1bc5fe6a71f3850bd4fb75b9470be6a2767c6617fb41f7138c54c50b -->
+
 # M560 behavior map
 
 One official session is written into far chunk `(20,20)` so the

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m422-skeleton-bone-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=131ebd45e9b81d7f65d182b85fef0d213bda1f3d8521b4e4f403d5958aa1f0c0 -->
+
 # M422 behavior map
 
 The fixture raises an isolated `7×7` grass platform, closes its perimeter with

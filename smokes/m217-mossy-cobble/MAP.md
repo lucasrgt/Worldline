@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m217-mossy-cobble -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=e7a7a8e7b99473c5e1e123d0d2542636867e0e5ebae855883295e487ee937a43 -->
+
 # M217 behavior map
 
 Packet15 places mossy cobblestone item `48` on a raised stone column. The official

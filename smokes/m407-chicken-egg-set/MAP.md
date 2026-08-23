@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m407-chicken-egg-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=a27d5e84d4fc5e08292a9a78c2ebccf8027e9441118ed789ef3adc30d8ff97a6 -->
+
 # M407 behavior map
 
 The fixture raises an isolated `7×7` grass platform and places one default

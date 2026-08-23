@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m402-remaining-detector-rail -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=00ed23852b2822be0b8b8766debc5cf5049c7e54b7c106f0e7c8d6a5028b8ab3 -->
+
 # M402 behavior map
 
 One official session places detector rail item `28` on a raised stone column as

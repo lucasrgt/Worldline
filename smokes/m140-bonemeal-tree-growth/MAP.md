@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m140-bonemeal-tree-growth -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=d5bca5667d5f93503d8c2226bf52d4e49d9395d51c2e2da675497b7d6a57d896 -->
+
 # M140 behavior map
 
 The fixture raises one dirt block and oak sapling `6:0` into a dry, bounded

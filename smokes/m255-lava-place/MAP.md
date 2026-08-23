@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m255-lava-place -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=62a96d88efc9d70f9cef9dc52f4555dbbaf332fb3b578a2c210abfa722ade72d -->
+
 # M255 behavior map
 
 Lava bucket `327` places confined still lava `11:0` into a raised stone

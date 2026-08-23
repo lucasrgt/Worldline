@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=multiplayer-session -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=8268a761729c8e58ce515e8c1abb5065fa4782f824f83d9f2e6072f6e46d1833 -->
+
 # M420 behavior map
 
 The fixture raises an isolated `7×7` grass platform and places one default

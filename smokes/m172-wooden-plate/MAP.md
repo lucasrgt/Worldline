@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m172-wooden-plate -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ffcac8ad53202102f7e7ff5179823d53d8ecd116c879faba5a3c1ccf9bcd94c1 -->
+
 # M172 behavior map
 
 Wooden pressure plate item `72` is placed on a raised stone support as block

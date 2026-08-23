@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m222-cobble -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=b85fbf8097da42d8a630be610e6ab4457bd0de302e1f3396daff2d3fd161ac20 -->
+
 # M222 behavior map
 
 Packet15 places cobblestone item `4` on a raised stone column. The official

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m286-cyan-wool -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=1632e3056edc9c3fa6a76285a528128698313979964d10cedb2b03544c838e61 -->
+
 # M286 behavior map
 
 Packet15 places cyan wool item `35` damage `9` on a raised stone column.

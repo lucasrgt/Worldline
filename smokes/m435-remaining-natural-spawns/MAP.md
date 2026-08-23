@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m435-remaining-natural-spawns -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=a81852d5c2fb5cff300186da2b5d585a72f06f637dffb1942c4a8f1f2284d6d3 -->
+
 # M435 behavior map
 
 The fixture climbs a dry stone column from the seed water cell so the

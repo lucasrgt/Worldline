@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m197-wool -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=b6f11e7750a8b8ece43e987d07cc4862caf7e0e44f636b6ffb32f68b0601e8f6 -->
+
 # M197 behavior map
 
 Packet15 places white wool item `35` damage `0` on a raised stone column.

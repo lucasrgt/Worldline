@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m246-spruce-log -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=da7cf603b820a91005a39a8dcd6ce70f9779f145f26a8ffc835f7ad93a077693 -->
+
 # M246 behavior map
 
 Packet15 places wood/log item `17` damage `1` on a raised stone column.

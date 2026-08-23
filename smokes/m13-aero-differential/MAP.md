@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-diagnostic-capture -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=1759de8beeeef257a4027fd79f590ec7a72d364729863d1cb5fe373741399e80 -->
+
 # M13 Aero Differential Evidence Map
 
 ## Boundary

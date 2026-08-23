@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m155-minecart-spawn -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=8bbf2ce26b50b36cdb15763b126864882c8e138b89113c1fe6dcd75988703fab -->
+
 # M155 behavior map
 
 The fixture raises an isolated stone column and places rail `66:0`. Using

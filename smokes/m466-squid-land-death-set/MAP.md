@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m466-squid-land-death-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=3c3b628471c4ee01b5da67ea523767d75fcc305a6747025b28720ca05ecab8a6 -->
+
 # M466 behavior map
 
 The fixture docks the seed-water column in chunk `0,0`, builds a `7×7`

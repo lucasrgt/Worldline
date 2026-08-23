@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=state-world-differential -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=272e63d1ae30e3865b17feceb300a7b502c6a49dc8d151edc108412e32391034 -->
+
 # M521-SW behavior map
 
 The actor starts with stone `1:1:0` in hotbar slot 0 and an empty slot 1. An

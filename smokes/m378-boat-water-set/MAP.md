@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=multiplayer-session -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=bdd585b5e79c816f4761039c63a02aa8e9f6164e77d7baa4fa4b3980a6a8d905 -->
+
 # M378 behavior map
 
 One official session places boat item `333` through Packet15 direction 255

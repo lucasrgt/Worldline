@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=multiplayer-session -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=4362b6b5b0cffbbf3429c6cfdad25ff3e077ed5be9a3f7e2f729f3806b9b69b3 -->
+
 # M69 Named Peer Swing Evidence Map
 
 | Boundary | Exact evidence |

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m165-stone-button -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=293f5014cd6d64c96de7f120544a33fdc68c2ac3843deba132c1d00ee8e00300 -->
+
 # M165 behavior map
 
 Stone button item 77 is placed on the east face of a raised stone column.

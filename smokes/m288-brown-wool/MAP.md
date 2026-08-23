@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m288-brown-wool -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=98dd28d183167f3553fde2b22ed4f84c648da9eb7ba620ff9ec066c95de722a8 -->
+
 # M288 behavior map
 
 Packet15 places brown wool item `35` damage `12` on a raised stone column.

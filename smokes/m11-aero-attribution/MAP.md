@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-diagnostic-capture -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=42e656576b70c53919761570abf016f93f76ddfbe49f3e40b79f2de0518eaecc -->
+
 # M11 Aero Attribution Evidence Map
 
 ## Purpose

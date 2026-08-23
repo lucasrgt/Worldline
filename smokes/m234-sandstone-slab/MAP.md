@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m234-sandstone-slab -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=607498ca23a0859d9a2296eba8fb8d4c4c407a3af84801eb6ccf552314e65f2a -->
+
 # M234 behavior map
 
 Packet15 places sandstone slab item `44` with damage `1` on a raised stone

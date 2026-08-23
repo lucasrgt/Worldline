@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m333-dispenser-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=46b62a083dad7f0e54a72e16e9b51144add22acb4cb53b75b51439b04385894e -->
+
 # M333 behavior map
 
 Packet15 places dispenser item `23` on a raised stone column as west-facing

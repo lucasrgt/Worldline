@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m381-tnt-prime-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=6cf1cfe074d14a3c856cf768c9a8b9cdc9cfa573b8ee2e901445db31692bfad5 -->
+
 # M381 behavior map
 
 Packet15 places TNT item `46` on a raised stone column. Packet15 of

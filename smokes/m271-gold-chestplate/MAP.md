@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m271-gold-chestplate -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c494170f3fb2b9f4b9ec515518081834f5fe6ccd52977a7bb7e82fc946101fea -->
+
 # M271 gold chestplate map
 
 ## Stable boundary

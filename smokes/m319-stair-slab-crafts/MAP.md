@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m319-stair-slab-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=cec4e38d37d31058c744ff1e9c806d2567fcf878603f2e63cdf7347058f5d553 -->
+
 # M319 behavior map
 
 One official workbench epoch crafts the three vanilla recipes that M186,

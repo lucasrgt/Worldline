@@ -1,5 +1,5 @@
 schema=1
 id=m147-piston-push-limit
-fingerprint=77fc896b66e66691526e8c4b5ec0c70bda97dd6933faed09e3bdae4593ca94f5
+fingerprint=e2278eaa9cfa46db4e9a043b6a012447146c7c1625e3e2703669a2d4c56d4a54
 observation.sha256=6fd354f14bc191c11fd670b0d58e6aa0b86072feec3bb2322261cef951ca1a54
 source=refactor-equivalent

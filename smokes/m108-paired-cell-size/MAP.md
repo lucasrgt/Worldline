@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-paired-experiment -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=7bd2dd0f5f557a19c07eaf9d79978bfbac81aee3ad313df51ac504740b7c303d -->
+
 # M108 behavior map
 
 M108 compares the exact pinned cell-size literals two and eight while retaining

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m385-leaf-decay-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=3974fe1e9ab8e39e20e8122dce05d183745ba923b5b1dd4306f63c308e0f2e1c -->
+
 # M385 behavior map
 
 The official fixture raises stone `1:0` out of water, then places oak log

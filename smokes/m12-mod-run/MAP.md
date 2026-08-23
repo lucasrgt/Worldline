@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=mod-test-run -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=972a1c96629ebe54a54b09729cbf96798a0b7b500dc1c6546ce9742aebf4dc13 -->
+
 # M12 Attested Mod Test Run Smoke Map
 
 ## Objective

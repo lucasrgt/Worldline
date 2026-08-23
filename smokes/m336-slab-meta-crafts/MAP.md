@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m336-slab-meta-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=e75d0b2bb489e7ea157ad321c8dc141c57039e5411b10b96658868f3b231cc57 -->
+
 # M336 behavior map
 
 One official workbench epoch crafts the three slab-metadata recipes that

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m341-repeater-delay-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=5dfcac91e31b99f9d578961c42075eb4456a7e3dde14bf19c6d069bf7dc49136 -->
+
 # M341 behavior map
 
 Repeater item 356 is placed on a raised west-facing stone line as unpowered

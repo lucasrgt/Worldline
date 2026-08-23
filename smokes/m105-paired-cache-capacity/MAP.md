@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-paired-experiment -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=35da2fabb47ef902a2cbd7b92dc976771d9a80179b76322cf1f26edade4e5898 -->
+
 # M105 behavior map
 
 M105 compares literal cache capacity one with literal negative-one unlimited

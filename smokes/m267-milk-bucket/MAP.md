@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m267-milk-bucket -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=08a4bde6b39728f2585676409fd066a93aea351c0b561981b8e29c9fc7a2cff8 -->
+
 # M267 behavior map
 
 Official milk bucket item `335` is used with Packet15 air-use (direction

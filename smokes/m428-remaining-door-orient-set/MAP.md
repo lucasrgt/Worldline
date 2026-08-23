@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m428-remaining-door-orient-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=10dad6f6b34f4140a80e7a09abeebaa5ff502bc6eee4607964a64dae72626bd2 -->
+
 # M428 behavior map
 
 One official session places remaining wooden-door hinge/face halves on a

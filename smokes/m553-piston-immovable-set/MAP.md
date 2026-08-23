@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m553-piston-immovable-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=6b35bf7c4b6f658370491bc20505538a93425b8309bc17d26f9d8b3d19ff06cf -->
+
 # M553 behavior map
 
 The cloned M146 west-facing piston family occupies one raised stone column.

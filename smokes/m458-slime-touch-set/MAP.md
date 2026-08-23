@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m458-slime-touch-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=84cc0baf6465c46adf5437018728a84b237f8d611fa461bcc6335932432f2d26 -->
+
 # M458 behavior map
 
 Seed `17320110707` slime chunk `-2,-2` is entered below `y=16`. A default

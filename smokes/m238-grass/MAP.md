@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m238-grass -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=3056478f663744b460245599a51d711c0d26a0d619c4595bd2def1f6cf3f99d4 -->
+
 # M238 behavior map
 
 Packet15 places grass item `2` on a raised stone column. The official

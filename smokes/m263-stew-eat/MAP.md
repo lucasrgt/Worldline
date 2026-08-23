@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m263-stew-eat -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=94038e1a1f75ad42e97730c63d6089ab182511bd6f5889d8a1610d83e5471bc9 -->
+
 # M263 behavior map
 
 Official mushroom stew item `282` is eaten with Packet15 air-use (direction

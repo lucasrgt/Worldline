@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m116-redstone-wire-power -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=973fb75a9541e4f8015d8133d7c99779e6c1ab8b6ef095120609e6a6fcab5587 -->
+
 # M116 behavior map
 
 The official player NBT contains stone 1, lever 69 and redstone dust 331. The

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m233-note-block-place -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=7b80c1a46b0ca115b927e8ef216452351d1c9bcef2ca26a49e5ab4dc6abedcc9 -->
+
 # M233 behavior map
 
 Packet15 places note block item `25` on a raised stone column. The official

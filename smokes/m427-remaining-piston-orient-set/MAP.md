@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m427-remaining-piston-orient-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=467d62056ad74b5561c6e6bf67533b1608d7fc66644062154b00b81109e8ad76 -->
+
 # M427 behavior map
 
 Packet15 of piston item `33` and sticky piston item `29` writes the

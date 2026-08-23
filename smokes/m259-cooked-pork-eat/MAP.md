@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m259-cooked-pork-eat -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c287f963780070b55c9773bcc0ad5b914a8c6a7713870dd9d5533eda3d449b0e -->
+
 # M259 behavior map
 
 Official cooked pork item `320` is seeded below full health and eaten with

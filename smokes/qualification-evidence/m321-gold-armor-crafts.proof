@@ -1,5 +1,5 @@
 schema=1
 id=m321-gold-armor-crafts
-fingerprint=b4b76c1df99e1d07ae0d6755c319baa91fad03cced4bf37c442cba5c161ed4f1
+fingerprint=568dfc9db2cb3d7ff0f63c2564208f6c4b0b53d6e3cce4192a64702f464901e8
 observation.sha256=a44c48c91eba492305c1faa7963dd3ad1023d9a9a97bd6ccd92c2b8abcec9fbf
 source=refactor-equivalent

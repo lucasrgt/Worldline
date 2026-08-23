@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m362-fence-collision-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=5784076d8eb5c6e86478f102566067459f9c73c231b5f92141b25d65c79ae290 -->
+
 # M362 behavior map
 
 Packet15 places two adjacent fence items `85` on a raised stone column.

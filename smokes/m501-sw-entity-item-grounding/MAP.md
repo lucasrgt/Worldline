@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=state-world-differential -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=d5e39c681248baa95e697c21d1db30d004ed3e6e090fa5dd8feb4fc0b6e34e8c -->
+
 # M501 Entity Item Grounding Smoke Map
 
 ## Claim

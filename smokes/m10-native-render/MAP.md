@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=client-runtime-equivalence -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=3f7da2d7ed9eeeff4c1ac7ad3767c82a5cb95b066cdb28bd3788e0cbcd3141ff -->
+
 # M10 Native Render Evidence Map
 
 Frozen expected signature SHA-256: 3f7da2d7ed9eeeff4c1ac7ad3767c82a5cb95b066cdb28bd3788e0cbcd3141ff

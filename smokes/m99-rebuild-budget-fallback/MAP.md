@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-cache-lifecycle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=bc072d0104007b86828550033fb0aa3e84c179aa5caee84dcd22552c3c9a4ce7 -->
+
 # M99 behavior map
 
 M99 keeps the exact M74/M78 sixteen-entity, four-page scene and the M97

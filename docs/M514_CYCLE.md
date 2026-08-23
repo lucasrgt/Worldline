@@ -1,4 +1,12 @@
-# M514 qualification cycle
+# M514-SW-LAVA-DOWNWARD-FLOW Sw lava downward flow
+
+<!-- Generated from smoke.properties by MilestoneNarrative. -->
+
+## Claim
+
+This milestone freezes the behavior identified by its expected signal and semantic signature.
+
+## Qualification cycle
 
 M514 compares scheduled downward lava flow in identical stone-lined columns.
 Mapped and official Beta 1.7.3 execution share the frozen world seed and must
@@ -8,3 +16,7 @@ The expected signature is
 `701ed9ab8e197906a0a9e3737dce82ad359f8152f4867def70e44a94144fca4c`.
 Qualify it with `java tools/harness/Gate.java --milestone
 m514-sw-lava-downward-flow`.
+
+Expected signal: `oracle=MATCH,fixture=m514-sw-lava-downward-flow,ticks=240,controlled=true`.
+
+Frozen semantic SHA-256: `701ed9ab8e197906a0a9e3737dce82ad359f8152f4867def70e44a94144fca4c`.

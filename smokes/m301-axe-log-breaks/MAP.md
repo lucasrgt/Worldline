@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m301-axe-log-breaks -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=6e62367a3c72d64d2bda9180cb0e5b0484671ef7530e74968d511330d7a06365 -->
+
 # M301 behavior map
 
 Packet15 places oak `17:0`, spruce `17:1`, and birch `17:2` on a raised

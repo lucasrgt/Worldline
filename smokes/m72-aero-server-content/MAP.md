@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-runtime-session -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=6dff186ed904bdce57466038dd32a9824888d6de7ddb1a20041663cb8cec0501 -->
+
 # M72 behavior map
 
 M72 qualifies one exact server-authored StationAPI content boundary. A fresh

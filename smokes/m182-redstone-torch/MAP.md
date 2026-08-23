@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m182-redstone-torch -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=3e8129618cb8674fb0d5a7580c16d55d100162fde4602e17ac89b0af9fdd5d4a -->
+
 # M182 behavior map
 
 Packet15 places redstone torch item `76` on a raised stone column. The

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=multiplayer-session -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c2d85227a2cb542e0c9b21aa77dd71a0bbfaab7162a1db6c0fb0955876dbb2ce -->
+
 # M26 Native Multiplayer Render Bridge
 
 Two fresh client processes each boot a fresh official Beta 1.7.3 server,

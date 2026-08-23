@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m136-nether-death-respawn -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=48c243301cfa00388490bde784ac80eb7597256aa539b83f1777b841d77148a1 -->
+
 # M136 behavior map
 
 One empty player is seeded in dimension `-1` at Y `-80`. Before treatment the

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m304-farmland-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ce698c2302ea621590b03877774a82c7ea0a5b085bf5536d28093462ed8c121c -->
+
 # M304 behavior map
 
 A wooden hoe tills official dirt into farmland `60:0`. The actor then

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m123-cross-chunk-lighting -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=7f93c32c82a360dcdc5c546f69838e8fcbc8a221bf8ad2961bd532876608365a -->
+
 # M123 behavior map
 
 The actor loads adjacent chunks `(0,0)` and `(1,0)`, then selects a solid

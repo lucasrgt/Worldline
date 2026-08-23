@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m221-furnace -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=88ee8a957cbe3c4c1f6f27f8b4fa73786709b04be0e37ea4c9b50e01737b965c -->
+
 # M221 behavior map
 
 Packet15 places furnace item `61` on a raised stone column. The official

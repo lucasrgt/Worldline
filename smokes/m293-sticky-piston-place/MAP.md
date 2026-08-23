@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m293-sticky-piston-place -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=bf6cf185cefc337d8be549efbcdce76d5c7cff54669d136c1002f30b7ff25c1e -->
+
 # M293 behavior map
 
 Packet15 places sticky piston item `29` on a raised stone column. The official

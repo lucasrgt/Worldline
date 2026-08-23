@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-save-window -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=855ae55bc5944ae98d3fb6b66fe6840fc7561d425ce620b9ba45a55720f6c7bd -->
+
 # M18 Save Attribution Evidence Map
 
 ## Pair

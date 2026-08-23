@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m287-purple-wool -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=5dc40bd722b0e06eda7a5458a94b93ca0bdccfc730d99fdbe3204f19d850a7a8 -->
+
 # M287 behavior map
 
 Packet15 places purple wool item `35` damage `10` on a raised stone column.

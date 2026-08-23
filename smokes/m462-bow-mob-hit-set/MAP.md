@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m462-bow-mob-hit-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=bbe6e87049578c8e26c8cca6f79ed7ac1f3c530df498b2d9da63a8f195578e22 -->
+
 # M462 behavior map
 
 A raised 7x7 grass pad with a fence `85` pen places a default pig spawner

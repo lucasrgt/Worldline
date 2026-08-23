@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m413-fire-spread-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=e8fdef86a6fe2bd49b4575a296bc67cfe62dce1f2eb89aefd7ca2e89aa70843c -->
+
 # M413 behavior map
 
 Packet15 of flint-and-steel item `259` on netherrack `87` places fire `51`

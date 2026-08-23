@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m453-player-death-drops-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=6d7e55c8c86f1540d7306a507b0a07af3ef9cbe3b6f6c79cf2b87663beab7ed0 -->
+
 # M453 behavior map
 
 One player is seeded at Y `-80` with hotbar stone `1`, cobble `4`, and dirt

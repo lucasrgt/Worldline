@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m343-fire-family-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=b04d10e87e540d454627a3960abbf311c9912ca625d00f3e71af970ea08e77f6 -->
+
 # M343 behavior map
 
 Packet15 of flint-and-steel item `259` on netherrack `87` places fire `51`

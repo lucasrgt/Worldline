@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m166-note-block -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ef6696d8923a3640502fdd0b5ff70c4945e9d080f7740b484b82d02f2e719228 -->
+
 # M166 behavior map
 
 Official note block `25` is placed on a raised stone support and clicked with

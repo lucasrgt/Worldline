@@ -57,11 +57,13 @@ final class CandidateCheck {
                 "missing expected.signature");
         Path runner = root.resolve(smoke.runner).normalize();
         require(Files.isRegularFile(runner), "missing runner: " + smoke.runner);
-        boolean dataDriven = "tools/smoke/DataDrivenCycle.java".equals(smoke.runner);
+        boolean dataDriven = "tools/smoke/DataDrivenCycle.java".equals(smoke.runner)
+                || "tools/smoke/CompositeCycle.java".equals(smoke.runner);
         require("tools/smoke/Run.java".equals(smoke.runner) || dataDriven
                         || Files.readString(runner, StandardCharsets.UTF_8).contains("\"" + id + "\""),
                 "runner does not declare candidate id");
-        if (dataDriven) DataDrivenCyclePlan.load(root, id);
+        if (smoke.runner.equals("tools/smoke/DataDrivenCycle.java")) DataDrivenCyclePlan.load(root, id);
+        if (smoke.runner.equals("tools/smoke/CompositeCycle.java")) CompositeCyclePlan.load(root, id);
         Path source = directory.resolve("src");
         boolean runtimeBuild = "runtime-build".equals(this.descriptor.getProperty("candidate.compile"));
         if (!tooling && !runtimeBuild) require(Files.isDirectory(source) && !javaFiles(source).isEmpty(),

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m444-remaining-mob-drops-rest -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=4f0cf6fc97f045251947014072b407aae095b6419fb3c3ab94c50722f7db8f66 -->
+
 # M444 behavior map
 
 The fixture raises an isolated `7×7` grass platform and places two default

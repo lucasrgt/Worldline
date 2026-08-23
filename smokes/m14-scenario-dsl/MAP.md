@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=scenario-dsl -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=6a2e966f444390ef60a2b09918fa4e541378f3f09e497dc49bb39466b85e57bb -->
+
 # M14 Scenario DSL Smoke Map
 
 ## Objective

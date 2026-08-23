@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=remote-world-view -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=7ca1a2fd0d3c4d172e3f123c1b1382a2b939c5ebe0a09e7570acf7a381399f00 -->
+
 # M32 Sustained Remote Terrain Render
 
 Two fresh official servers each receive 40 protocol-14 client ticks: 38 flying

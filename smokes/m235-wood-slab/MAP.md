@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m235-wood-slab -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=db22e6770987d78c1a09404991df3d73037770d68f7fb9215a20f0e9a4f383fa -->
+
 # M235 behavior map
 
 Packet15 places wood slab item `44` damage `2` on a raised stone column.

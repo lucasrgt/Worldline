@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m270-iron-helmet -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=d62f78b5a3cb690f1845fa802de6bfa0cca27bc60ed090c60f93fdc665bf4f07 -->
+
 # M270 iron helmet map
 
 ## Stable boundary

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m237-stone -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=a8969e296f04e9e9e445c08139a0fd689dc08bc6796515a90ad78d5b8e4f3ee9 -->
+
 # M237 behavior map
 
 Packet15 places stone item `1` on a raised stone column. The official

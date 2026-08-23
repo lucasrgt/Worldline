@@ -1,5 +1,5 @@
 schema=1
 id=ui-export
-fingerprint=9f5565327795b40b1581b89b1b3143ae39e89fe8c92c796a67449f9899cc7c6c
+fingerprint=9d7ee03a6e2340cf3ddaa86c2db6f2b37bac189d04f2028460c14028d00e1ca5
 observation.sha256=f05c1d7cfa2448a8ef2e248e13b11fd809d9844024b2e355d3d8bc7727e36e4a
 source=refactor-equivalent

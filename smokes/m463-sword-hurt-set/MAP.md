@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m463-sword-hurt-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=34f99909ebaad48c9c513f7aef51ee8586e82fb1b0db74e616104c22b7bb738c -->
+
 # M463 behavior map
 
 The fixture raises an isolated `7×7` grass platform and places two default

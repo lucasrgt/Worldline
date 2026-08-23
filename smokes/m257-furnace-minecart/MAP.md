@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m257-furnace-minecart -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=57acb0174de88e73ae6725e8a676aa2dffb0d4b73fe19cbe462be5d882a70264 -->
+
 # M257 behavior map
 
 The fixture raises an isolated stone column and places rail `66:0`. Using

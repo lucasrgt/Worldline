@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=remote-world-view -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=8f2860494fba146931fbe768d01a5c0dc063d05cc2ac01afd3fa9cce4c8b7e0d -->
+
 # M33 Chunk Traversal Lifecycle
 
 Two fresh protocol-14 clients accumulate a multi-chunk cache, rise eight blocks

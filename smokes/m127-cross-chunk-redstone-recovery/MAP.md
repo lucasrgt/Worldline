@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m127-cross-chunk-redstone-recovery -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=269f3a7043dc7c483f160233c36890ef075faf03e36300801aa5779f06b05aa2 -->
+
 # M127 behavior map
 
 M127 rebuilds M126's seam fixture and qualifies the powered state through a

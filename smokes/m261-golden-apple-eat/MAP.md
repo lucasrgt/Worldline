@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m261-golden-apple-eat -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=888e7fe8215ede44deaf9a73fa95ecc769f61e554e9262d0781ae75eca2e9fe3 -->
+
 # M261 behavior map
 
 Official golden apple item `322` is seeded in hotbar slot 0 with Health `10`.

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m218-gravel -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=3e2635199e586e6323b8da68ffe023b77a589a27d2262ed9aa0f1dc79e604e06 -->
+
 # M218 behavior map
 
 Packet15 places gravel item `13` on a raised stone column. The official

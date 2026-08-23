@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m457-spider-leap-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c1acc30fb89383a980963eda9ae54bd6fcc4a2c8eaff785ee3a10b3206e3153c -->
+
 # M457 behavior map
 
 The fixture raises an isolated `7×7` grass platform and places one default

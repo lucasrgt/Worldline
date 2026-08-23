@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-save-window -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=9ca8c14f03615b25891a8468a946bbbe7b889d8de747a8d0e03cb73665970bb1 -->
+
 # M19 Forced Autosave Evidence Map
 
 ## Force

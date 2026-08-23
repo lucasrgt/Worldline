@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m230-lapis-ore -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=f684efb5f52db98a991a7edd381072bb58cc997a3d3bfd07327725c2e5026139 -->
+
 # M230 behavior map
 
 Packet15 places lapis ore item `21` on a raised stone column. The official

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=trace-divergence -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=fc5baa700a2da8bedff3a17aff5647b17ae831acd2dbb839bb767229538c4436 -->
+
 # M6 Trace Explorer Evidence Map
 
 ## Claim

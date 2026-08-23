@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m322-diamond-armor-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=b54acc14a0bba483871701ba342becc842fe45291b56aca8212a1b71a2b5269d -->
+
 # M322 behavior map
 
 Packet15 places workbench item `58` on a raised stone column. Packet102 then

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m289-spruce-sapling -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=338c07cf0cc26fad4d048f900242741d71662eac8c8f48d98d41ede8c541dc2c -->
+
 # M289 behavior map
 
 Packet15 places sapling item `6` damage `1` on dirt `3` capping the M175

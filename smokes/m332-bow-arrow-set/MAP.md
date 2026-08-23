@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m332-bow-arrow-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=b745e8656e459e93ffe617759990be48c4c454450256e53f8ef1c5bf1757d215 -->
+
 # M332 behavior map
 
 A raised-stone workbench `58` accepts Packet102 matrix placement of sticks

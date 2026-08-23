@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m176-sign -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=02572936a90d996c81d67465e5507ff4f5ecb33262d10fd9cdb0e2cbe28489ff -->
+
 # M176 behavior map
 
 Packet15 places sign item `323` on a raised stone column as standing sign

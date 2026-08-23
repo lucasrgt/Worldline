@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m199-rose -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=d79a60342cee16cfece9348ecc6371263bd13bc5f50896d336b8fae6d9d750dd -->
+
 # M199 behavior map
 
 Packet15 places rose item `38` on dirt `3` after stone rejects the same

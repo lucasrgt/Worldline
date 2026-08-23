@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m360-fishing-catch-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=b81e3dfcba437f67fee01101898bab64442120affa5b0cdb60dc16f69a2549b0 -->
+
 # M360 behavior map
 
 The fixture clones the M180 raised stone column, then adds a still-water

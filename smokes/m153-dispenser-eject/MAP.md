@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m153-dispenser-eject -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=e9ac098cef87b90c28a3fdc264de812fb712489a228157a47e92fa23c958d3ec -->
+
 # M153 behavior map
 
 A side lever powers one official dispenser that ejects a single cobblestone.

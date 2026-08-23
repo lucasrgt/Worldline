@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=state-world-differential -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=6aca9f501946f63db33fca4ed618e472fead629bc7a86847355bee55802f33f0 -->
+
 # M509-SW behavior map
 
 The differential fixture places active redstone torch 76:5 at `(8,65,8)`, a

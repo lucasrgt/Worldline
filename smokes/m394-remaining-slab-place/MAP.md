@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m394-remaining-slab-place -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=7939076b43b10ef5972487f306388abb58dafba8b1ca28923a3fb952ef2c6a9f -->
+
 # M394 behavior map
 
 One official session places remaining single slabs `44:1`, `44:2`, and

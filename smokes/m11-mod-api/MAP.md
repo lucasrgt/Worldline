@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=mod-api-lifecycle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=bf7f56d37682866ccbc26739474858244b2f70a84394df10f4fbf9277ff36f44 -->
+
 # M11 Mod API v2 Smoke Map
 
 ## Objective

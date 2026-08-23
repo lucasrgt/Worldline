@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-cache-lifecycle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c2617f80713c9054acdf8ade17e4474a3a1ed275a2c092fc6d455363493acfcf -->
+
 # M94 behavior map
 
 M94 repeats M93's exact six-member page depletion, but does not set

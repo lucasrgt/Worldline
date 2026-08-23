@@ -1,5 +1,5 @@
 schema=1
 id=m550-dispenser-qc-set
-fingerprint=8a577773e891e3fff194fa42e0db6fc3f21bde9a42002494d3a85d6887bbce9e
+fingerprint=f067c99a76074498484b53eedf39ebb95c7617e6120f040477698fccf35ab960
 observation.sha256=fbebc71b9da63b30d1c347778fb92cafea108114e52b79af79ae955487ef73db
 source=refactor-equivalent

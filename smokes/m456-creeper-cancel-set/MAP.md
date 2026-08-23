@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m456-creeper-cancel-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=b0006bb940528fa914ae436cfe7b3ae4b73e26a997596d9275fb9c851da2e1fc -->
+
 # M456 behavior map
 
 Official server symbols:

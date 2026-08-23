@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=state-world-differential -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=583ff279e5fecfafedd95a704a77525872d14cd939775376b47a4a116d2b30f7 -->
+
 # M523-SW behavior map
 
 - `B173LevelDatTime` verifies that `Time` is NBT type 4, patches only that

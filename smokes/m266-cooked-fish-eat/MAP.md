@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m266-cooked-fish-eat -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=6a35349bc3363e2a0bdcba540cf2da951f99fef652b0ebf654ed56e15f0e168f -->
+
 # M266 behavior map
 
 Official cooked fish item `350` is eaten with Packet15 air-use (direction `255`

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=movement-route -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=df2973b510807bc1ebce5b49ba2921e14137bd2970fba351d61df46f44165222 -->
+
 # M39 Synchronous Route Observation
 
 Two fresh sessions execute the M38 safe-primary/corrected-primary/fallback

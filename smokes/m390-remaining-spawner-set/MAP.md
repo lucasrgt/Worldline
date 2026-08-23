@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m390-remaining-spawner-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=543ebd4ab455f716f9f706ba3647dbe861dfbe4f81d65c002df093f92e401215 -->
+
 # M390 behavior map
 
 The fixture raises an isolated `7×7` grass platform and places two default

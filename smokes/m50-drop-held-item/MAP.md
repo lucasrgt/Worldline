@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=inventory-session -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=f47c950ee765fa26735061bdf45cbbafbe66a0c8f8251dbd713bcc7c44ec4f3f -->
+
 # M50 Drop Held Item
 
 The actor starts with one qualified stone stack and the observer confirms that

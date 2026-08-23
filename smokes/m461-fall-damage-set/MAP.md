@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m461-fall-damage-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=15947f02196bef6a87d9ec502c93150c37c209cdfeae766857f8f345c1b76cf4 -->
+
 # M461 behavior map
 
 A raised-stone column plus east pad hosts two official ungrounded Packet13

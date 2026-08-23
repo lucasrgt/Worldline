@@ -1,5 +1,5 @@
 schema=1
 id=m337-utility-item-crafts
-fingerprint=48e1a3def1a22732929cb71db389d77943d69ee598f0e46c3b22bf5ec986718e
+fingerprint=30b5ad51eef6108bfb92c1b94d1653cc4ca0215fa01d646a60486f8c6108d931
 observation.sha256=24941b7cbf8eca87a6e5f03001a622de0dfb51a8d4e4f754906557bfa7603367
 source=refactor-equivalent

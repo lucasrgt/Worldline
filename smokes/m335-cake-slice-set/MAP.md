@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m335-cake-slice-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=3ef77cdef925e0457ef17467a33321cc83aaffe183eb51cc6fc7768273ff2f68 -->
+
 # M335 behavior map
 
 Official `BlockCake` (block 92) is placed from cake item 354 as uneaten

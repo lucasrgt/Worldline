@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m206-sponge -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=f403158d252cd74d08246cef3eee7b0ea15f96a1c88448ec6ce62d608093a441 -->
+
 # M206 behavior map
 
 Packet15 places sponge item `19` on a raised stone column. The official

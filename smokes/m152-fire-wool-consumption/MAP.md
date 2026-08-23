@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m152-fire-wool-consumption -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=76938b3c1a673ae193cb53be581ebf52977feb975f5edc7a614a544267681e46 -->
+
 # M152 behavior map
 
 Official netherrack fire consumes adjacent wool. Flint and steel Packet15 on

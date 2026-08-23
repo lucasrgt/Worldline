@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m134-nether-portal-roundtrip -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c2f903638b1e364b9781c247e61c22c77a28a036212dbe444db5c62498e2a74b -->
+
 # M134 behavior map
 
 The client performs M133's `0→-1` journey, discovers the generated Nether

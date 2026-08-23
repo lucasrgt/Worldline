@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m277-wooden-door-open -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=1f0b2fd8a64b2092de4a093f2d5cf0c8110b4363e2ee0199faf1ca2ae7ff2eb0 -->
+
 # M277 behavior map
 
 Official `BlockDoor` (block 64) is placed from wooden door item 324 onto a

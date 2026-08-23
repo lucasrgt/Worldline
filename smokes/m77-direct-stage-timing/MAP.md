@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-frame-census -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=4ac829480cfb8a9409d89c35e002246e43a0a143815303e1ac520e8990988a4c -->
+
 # M77 behavior map
 
 M77 reuses the frozen M74 synchronized sixteen-cell scene and complete census.

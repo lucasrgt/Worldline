@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m208-oak-log -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c371df4ca97d388218b9184b3b6a0ba2745803de01514b4b8562c6ca33b533d2 -->
+
 # M208 behavior map
 
 Packet15 places wood/log item `17` damage `0` on a raised stone column.

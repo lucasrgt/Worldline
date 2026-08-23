@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-frame-census -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=92c9e4e28b17dd1df6750e5aff15022619211a1e981ffb9c3ccea461a3d9da05 -->
+
 # M75 behavior map
 
 M75 reuses the frozen M74 mod, synchronized sixteen-cell scene, fixed camera,

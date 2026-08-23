@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=remote-world-view -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=45179dd32117513e55cbf0698ec09e51440b3e3007188c100bcdd234257f0be4 -->
+
 # M28 Remote Chunk Observation
 
 Two fresh protocol-14 clients synchronize with two fresh official servers and

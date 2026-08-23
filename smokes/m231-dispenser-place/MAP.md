@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m231-dispenser-place -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=0679d7a20880a59f567737898c4d0263b285b13b738810981188b7b8b8fbecf4 -->
+
 # M231 behavior map
 
 Packet15 places dispenser item `23` on a raised stone column. Actor look

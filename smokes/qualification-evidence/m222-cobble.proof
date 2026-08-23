@@ -1,5 +1,5 @@
 schema=1
 id=m222-cobble
-fingerprint=bf0935df8fd3b0fd6bafbf48f5ba6d7e45c7bbc1636c15c507f8b11a2e56c6e0
+fingerprint=0b0709c35fdf2de7eb264d79860146037cf0d39f4b9dbc09e19376cb4b7d3f26
 observation.sha256=b85fbf8097da42d8a630be610e6ab4457bd0de302e1f3396daff2d3fd161ac20
 source=refactor-equivalent

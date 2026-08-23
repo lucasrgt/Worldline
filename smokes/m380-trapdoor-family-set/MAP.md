@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m380-trapdoor-family-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ab78b72d72f7fa3016aff5ef1e7d1fa6d51961bb14c02d74afa5e1a5ecf036e7 -->
+
 # M380 behavior map
 
 One official session places trapdoor item `96` against the four side faces

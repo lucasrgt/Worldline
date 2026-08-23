@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m448-creeper-fuse-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=702d4dc074d1db9a965d74f49f1318cb05a4397c343a59b8fde15a3ab8f15505 -->
+
 # M448 behavior map
 
 Official server symbols:

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m210-oak-planks -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=00344a185d84b7fb4fd15968e5ef176dc91d8034d17cada76115ac37d3d437f1 -->
+
 # M210 behavior map
 
 Packet15 places wood planks item `5` on a raised stone column. The official

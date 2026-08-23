@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m370-remaining-furnace-smelts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=912452d315840ced68811ccce77f3cde4f1250eac7068c5ddd9f85e22a607a2a -->
+
 # M370 remaining furnace smelts map
 
 Packet15 places three idle furnaces `61:2` on a raised stone fixture. Each

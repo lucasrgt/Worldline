@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-diagnostic-capture -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=64f635a1ed85ce0d9d30b468937b7803a06418e783f6ae8643da69877d597ba1 -->
+
 # M15 Explicit Chunk-Work Contract Evidence Map
 
 ## Boundary

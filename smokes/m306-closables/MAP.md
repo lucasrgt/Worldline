@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m306-closables -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=0287dd23ec4f04c0960b98f43f8e16ff75d416ad1fb8ffb16478c579b8bc4865 -->
+
 # M306 behavior map
 
 Official wooden door item 324 is placed onto a raised stone support as

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m449-wolf-anger-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c459a0789fdb7cd773db7301dbc0e66db10b335a87a017a95d0853817a743057 -->
+
 # M449 behavior map
 
 The fixture raises an isolated `7×7` grass platform two blocks above the

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-cache-lifecycle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ab9789101de12052aa945af741a37394c4a4b06fb78fa2d3d0737120a45eb39b -->
+
 # M84 behavior map
 
 Both fresh arms use the same sixteen-member scene and remove exactly three

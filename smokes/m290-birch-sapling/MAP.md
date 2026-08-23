@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m290-birch-sapling -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=21f35395f38d2877297a2801023c0e7e0e0b5fc83a8ec278dee1ad7b7151b8a0 -->
+
 # M290 behavior map
 
 Packet15 plants sapling item `6` damage `2` on dirt `3` capping the M175

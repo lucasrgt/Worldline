@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m185-detector-rail -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=81cc57ce0d8d5c637a58696af5d3d47097bd3d14016813703c4f7718cb9505a2 -->
+
 # M185 behavior map
 
 Packet15 places detector rail item `28` on a raised stone column. The official

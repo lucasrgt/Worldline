@@ -24,6 +24,7 @@ final class CompositeCycleCheck {
                 "composite shared source attestation drift");
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); Properties telemetry = TelemetryPinCheck.manifest(root);
+        Properties schemas = SchemaPinCheck.manifest(root);
         Set<String> seen = new HashSet<>(); int generic = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             if (!smoke.runner.equals("tools/smoke/CompositeCycle.java")) continue;
@@ -41,7 +42,8 @@ final class CompositeCycleCheck {
             require(pin != null && (pin.source().equals("executed")
                             || pin.source().equals("refactor-equivalent")
                             && (pin.evidence().equals(migrations.getProperty(stem + "evidence_sha256"))
-                            || TelemetryPinCheck.carries(telemetry, smoke.id, pin, current))),
+                            || TelemetryPinCheck.carries(telemetry, smoke.id, pin, current)
+                            || SchemaPinCheck.carries(schemas, smoke.id, pin, current))),
                     "composite refactor pin drift: " + smoke.id);
         }
         require(generic == integer(migrations, "count") && generic == seen.size(),

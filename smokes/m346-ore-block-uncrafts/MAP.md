@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m346-ore-block-uncrafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=6cb6facb7859e30e6d0834273f32ba84f01bede6c1d8d39ad7dcf6b33818f452 -->
+
 # M346 ore-block uncrafts map
 
 ## Stable boundary

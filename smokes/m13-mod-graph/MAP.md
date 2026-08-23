@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=mod-dependency-graph -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=353a640be5bf2a77cdfd921c10b0525b462839e2f2d2591afb99223360bd67e5 -->
+
 # M13 Multi-Mod Graph Smoke Map
 
 ## Objective

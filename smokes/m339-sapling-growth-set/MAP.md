@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m339-sapling-growth-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=cbb09ab44fa0804f8304e414f683a868c16aabac0c29c00ba78b525e6678ec5e -->
+
 # M339 behavior map
 
 A raised dirt fixture plants oak sapling `6:0`, spruce sapling `6:1`, and

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m243-redstone-wire -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=6df39ca0f09d2fc710e2636bbad733e4c6e4b94ce946e915ac6367443b22a45f -->
+
 # M243 behavior map
 
 Packet15 places redstone dust item `331` on a raised stone column. The

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=movement-route -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=850b6e29ed5e8aab12e48625ebde6b8ce1902b581d9e07f55c8488f2d7bfd947 -->
+
 # M38 Explicit Movement Fallback
 
 Two fresh sessions execute two caller-supplied primary/fallback pairs. The

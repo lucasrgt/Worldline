@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m282-lime-wool -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=9b8eadf13d246083c150829c5914921e95f5f55d4dadc11e35ae365d392615c6 -->
+
 # M282 behavior map
 
 Packet15 places lime wool item `35` damage `5` on a raised stone column.

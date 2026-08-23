@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-cache-lifecycle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=7ebb83eada0eccda5dbb38d2610d92b60abe893d2483212710eb463e0aa285c6 -->
+
 # M103 behavior map
 
 M103 keeps the exact M74/M78 sixteen-entity scene but sets

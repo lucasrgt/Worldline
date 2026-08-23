@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m220-workbench -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=75f1f8dccff9989eba1c5ac186c1f62a8054452d6d6ebe7c59e09de2742a37ed -->
+
 # M220 behavior map
 
 Packet15 places workbench item `58` on a raised stone column. The official

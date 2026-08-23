@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m351-painting-orient-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=8f60b715dc6a3aeab49aaae89f1f147dd7822ab37806a8da79597e86acd2e9aa -->
+
 # M351 behavior map
 
 Painting item `321` is used through Packet15 on the west face of a raised

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m124-cross-chunk-light-recovery -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=60903e4d40e5297e01412eb69996ce5f3e2b641f1898d67f376ff357d016dbce -->
+
 # M124 behavior map
 
 M124 recreates M123's exact edge glowstone and captures both lit chunks through

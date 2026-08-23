@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m379-iron-door-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=9d887adb7cbebcca0c805d02f84507310ea3211b6e1abb774ec7e7ae8d3e4f0c -->
+
 # M379 behavior map
 
 Official iron door item 330 is placed onto a raised stone support as lower

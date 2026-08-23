@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m352-tool-durability-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=46cbf98b50d0745eafee30276fb3d3adafbbd1381f71bf7106012dbe80b75a30 -->
+
 # M352 behavior map
 
 The M208 raised stone column hosts cobble `4:0` and stone `1:0` in one

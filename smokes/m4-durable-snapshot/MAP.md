@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=durable-snapshot -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=a6e6589f9fdac1e40170f7a3b7fca7fc06b643b20a86249a464f9b2ab5b53bd2 -->
+
 # M4 Durable Snapshot Evidence Map
 
 ## Claim

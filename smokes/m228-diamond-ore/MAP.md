@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m228-diamond-ore -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=d8899da5d17c18d27351804645eead6a4a792f1d0497886d4bd24a15bedef72b -->
+
 # M228 behavior map
 
 Packet15 places diamond ore item `56` on a raised stone column. The official

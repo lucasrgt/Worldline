@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m189-bookshelf -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=30ee0483e42551b855a4fd5a85002dc5871168bc8f2bed26ec7dcd572b2b97a3 -->
+
 # M189 behavior map
 
 Packet15 places bookshelf item `47` on a raised stone column. The official

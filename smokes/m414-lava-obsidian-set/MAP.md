@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m414-lava-obsidian-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=856101df96a1dea04d9f18e7a1ceef3018dce576227d046030271fa67825fbff -->
+
 # M414 behavior map
 
 One official session places still lava `11:0` from lava bucket `327`

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=player-pose -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=b62641c2a99876737d070566eb1330ab14a569e7e2f7a7ea66293e1e768a302f -->
+
 # M34 Server-authoritative Pose Correction
 
 A byte fixture decodes native server Packet13 field order, normalizes stance to

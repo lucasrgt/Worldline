@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m325-navigation-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=904591e822865303c647ea818403edb8d115b37da19262cb96387da6f2e4302d -->
+
 # M325 behavior map
 
 One official workbench epoch crafts the three vanilla navigation recipes:

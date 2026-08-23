@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=server-runtime-equivalence -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=377497a2c5d84d3e10f98e14a1593d838d31373920a765f4d6360a4c1a0564f5 -->
+
 # Deterministic World Tick Smoke Map
 
 ## Claim

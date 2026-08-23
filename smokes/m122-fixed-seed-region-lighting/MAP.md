@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m122-fixed-seed-region-lighting -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=55f946b28a62caf43a7b02b027f13747f5662e315fbf0c8e70f9cca77a189192 -->
+
 # M122 behavior map
 
 M122 repeats M121's exact official-server lifecycle for chunks `(-1,-1)`

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m120-horizontal-water -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c0bbf83eadc6fd56c3697b50ed2d653aebc2fd9e132467354a9bcae89a6daa29 -->
+
 # M120 behavior map
 
 The constructor uses Packet15 to build a stone trench, place source block

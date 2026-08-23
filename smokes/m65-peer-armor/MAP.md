@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m65-peer-armor -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=7bf03514d4331779e14ecaf3379ecf89d3bea276115ca77e909e5a9160587fe4 -->
+
 # M65 peer armor map
 
 ## Stable boundary

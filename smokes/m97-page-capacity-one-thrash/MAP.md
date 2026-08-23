@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-cache-lifecycle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=93c51ccdd98d0abd4e6da174f6ea76d8ca10ddb31cfed965117945473a39c551 -->
+
 # M97 behavior map
 
 M97 reuses the exact M74/M78 sixteen-cell, four-page scene while limiting the

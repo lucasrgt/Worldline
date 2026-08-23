@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m214-diamond-block -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=8915ac3e6a21fca55c8386b8affce516f9b29aa3d4fcb00dca48fec0fb8f4eed -->
+
 # M214 behavior map
 
 Packet15 places diamond block item `57` on a raised stone column. The official

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m358-snow-craft-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=d35de53474c363b1b580a865ea4bcce9403b8f9092e3ca5be19e9f1bf6e6d1be -->
+
 # M358 behavior map
 
 One official personal 2x2 epoch crafts snow block `80` from four snowballs

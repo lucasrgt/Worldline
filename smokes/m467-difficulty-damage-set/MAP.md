@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m467-difficulty-damage-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=61e1ac15b1e84c70af6ec58f615e81db3d5a6ae0c3deaac931da803a16f459d7 -->
+
 # M467 behavior map
 
 The fixture raises an isolated `7×7` grass platform and places default

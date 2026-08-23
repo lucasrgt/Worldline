@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m314-armor-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=914b42df18b53c2afcbb40f2f5c87b8848dc19e4e816eaef927067915c98b437 -->
+
 # M314 behavior map
 
 Packet15 places workbench item `58` on a raised stone column. Packet102 then

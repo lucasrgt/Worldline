@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=state-world-differential -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=5e7146f6ad6016166d3ecbe31d2d334bbc4aedabe1131c26ab335399743a373b -->
+
 # M510-SW behavior map
 
 The positive component is an eight-dust 3x3 perimeter loop fed by one adjacent

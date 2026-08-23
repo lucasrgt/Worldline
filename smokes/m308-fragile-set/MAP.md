@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m308-fragile-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=016e31ada167a1772c3c0ec4d610d946ddf26bc0a93c97ad494019ab72c97ce5 -->
+
 # M308 behavior map
 
 The M193 raised stone column hosts three official fragile cells in one

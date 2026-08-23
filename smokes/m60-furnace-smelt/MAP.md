@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=container-transaction -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=4d18743104fc8bb5efa84e46268323c5d77af8d121e315b156ea3305cf69b5de -->
+
 # M60 Furnace Smelt Map
 
 | Boundary | Exact evidence |

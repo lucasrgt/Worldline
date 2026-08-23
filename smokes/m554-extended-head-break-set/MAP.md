@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m554-extended-head-break-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=2cc464442cf4d3f0a5f88c7cb81921c7594834d6c9114630b54798241b4c5cbf -->
+
 # M554 behavior map
 
 The cloned M367 west-facing piston arm occupies one raised stone column.

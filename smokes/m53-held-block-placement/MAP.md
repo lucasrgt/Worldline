@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=inventory-session -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=3b27d76f04b4e55d0c3197a091a0b98b39a0f9a5fdeee3b34b92f725e91e2472 -->
+
 # M53 Held Block Placement
 
 The actor acquires one qualified stone and settles downward until the server

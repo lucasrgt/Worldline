@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m294-piston-place -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=3fa31fff0d03751901d6283ff022999a5d94d205d79d1a77106294cc8b041624 -->
+
 # M294 behavior map
 
 Packet15 places piston item `33` on a raised stone column. Actor look

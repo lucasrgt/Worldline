@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m117-redstone-wire-depower -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=87c06977c34465cb580ba9a857102c62e6953ede7cfe339c2730fc9673a699fe -->
+
 # M117 behavior map
 
 The official fixture first reproduces M116: dust 331 creates wire `55:0`, and

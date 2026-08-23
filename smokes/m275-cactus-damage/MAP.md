@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m275-cactus-damage -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c708ae878b6079760d5c246f952ca1789d98c31e395a568ad9c1a2d751ef6df8 -->
+
 # M275 behavior map
 
 A raised stone column receives sand `12:0`. Packet15 then plants cactus item

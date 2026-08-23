@@ -1,5 +1,5 @@
 schema=1
 id=m16-debug
-fingerprint=a0698fd0ee0e2c4d5ee63a8b0a0e4d06f46a24dfcf8cb4b967f1d87891bf6ca4
+fingerprint=e854babefb93c75ea68fef078bb92e41e8dbd084725eb80b19038a8b48a0adcd
 observation.sha256=f258a355f469d1127d4a6fa297e9ff6ccc2ebef0f66c5bc4128a9e90c6c4719e
 source=refactor-equivalent

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m330-bed-sleep-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=1415f89a64178b9c0135d108239ba04eb9fca293f9d8ee9005347624eb6842af -->
+
 # M330 behavior map
 
 Official server symbols:

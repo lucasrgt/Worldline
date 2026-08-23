@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m202-sapling -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=7772115ec090ef211b01204fa558371ea9983994367b0ceb0899a44441bdb24d -->
+
 # M202 behavior map
 
 Packet15 places oak sapling item `6` on dirt `3` capping the M175 raised

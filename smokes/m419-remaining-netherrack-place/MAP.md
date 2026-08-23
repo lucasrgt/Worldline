@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m419-remaining-netherrack-place -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c7dec53dcc70e1baa573a851f8e296853cfe16d36ddd182d1cfd5e83a8a4dea7 -->
+
 # M419 behavior map
 
 Official server symbols:

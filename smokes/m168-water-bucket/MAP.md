@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m168-water-bucket -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=4ce39f3401e15de5c720a314091f69acf985c459785d211d52f84f4af9e47a7d -->
+
 # M168 behavior map
 
 Empty bucket `325` picks up confined still water `9:0` from a raised stone

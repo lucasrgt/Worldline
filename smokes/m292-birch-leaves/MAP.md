@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m292-birch-leaves -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=909703a5406842a4c1becff13064c13eebc661300e0ebe15b3400c822771f912 -->
+
 # M292 behavior map
 
 Packet15 places oak log item `17` on the east face of a raised stone

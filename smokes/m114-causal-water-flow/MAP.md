@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m114-causal-water-flow -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=658a1cbfc4555fb57b3cef83375f655232f18b834afe547330fd96e64c8a5e3e -->
+
 # M114 behavior map
 
 The fixed-seed server generates still water `9:0` directly above dirt `3:0`.

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=domain-api-equivalence -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=d38186377edc68f8080e568ffaba6559c4b3980fcf2a5311aac1b6ec7ebcc13c -->
+
 # M3 Domain API Differential Map
 
 ## Claim

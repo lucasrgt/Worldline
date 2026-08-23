@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m131-dual-dimension-session -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=4fbbe9be7e3cd6ab8fbfddd920b11392711702505cfd14044e93128570b457cd -->
+
 # M131 behavior map
 
 One official server hosts two simultaneous clients seeded into dimensions `0`

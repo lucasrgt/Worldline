@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m149-pig-death -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c189244beb58382402de4313f9d6be75c90f398e404a7df2ebbbdfa8b34c5048 -->
+
 # M149 behavior map
 
 One official default spawner creates a pig identity shared by two peers. The

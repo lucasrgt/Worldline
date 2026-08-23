@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m147-piston-push-limit -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=6fd354f14bc191c11fd670b0d58e6aa0b86072feec3bb2322261cef951ca1a54 -->
+
 # M147 behavior map
 
 The accepted arm places twelve alternating stone/cobblestone blocks above an

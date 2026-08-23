@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m359-bed-nether-explode -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=be77b379de881712f9089340681a1a0779977df7934e51508858f83c97a9a7a6 -->
+
 # M359 behavior map
 
 Official server symbols:

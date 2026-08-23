@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m284-gray-wool -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=73e9c154cc10de9ba90cb2af73ce28ad87ed76e593fc4961f12616d08161821c -->
+
 # M284 behavior map
 
 Packet15 places gray wool item `35` damage `7` on a raised stone column.

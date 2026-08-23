@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=movement-route -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=0256ed450183c49365c4ba2475f49203c7f5a1c180caefa5adf017cf87250237 -->
+
 # M42 Caller-Owned Route Correlation
 
 Two fresh sessions pass one opaque caller-owned object through a safe primary.

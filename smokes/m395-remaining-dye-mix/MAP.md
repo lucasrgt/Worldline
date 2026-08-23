@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m395-remaining-dye-mix -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=1ba82fec7effc4370c0a4169136f177851484511a3b86bf1d2aaf76134e1491c -->
+
 # M395 behavior map
 
 Eighteen accepted window-0 Packet102 clicks mix remaining dyes in the

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m113-causal-lighting -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c54effdf42a0dcf7c37c7417e2a35d0abfdc85297b2b47398af1d4d86632c822 -->
+
 # M113 behavior map
 
 The official server remains the only light-engine implementation. Worldline

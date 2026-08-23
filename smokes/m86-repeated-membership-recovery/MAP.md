@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-cache-lifecycle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=841b311c16d11cbbe669756fd0fc020c4371b650ad9c185d8ab717c7217abc44 -->
+
 # M86 behavior map
 
 M86 repeats the exact M85 natural membership recovery on cell index zero. Two

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=state-world-differential -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=fc7a206cd1e7d5bf9efa1820b8ff8537d8d24dee666ab25f9238532bf0c4a414 -->
+
 # M517-SW mapping
 
 The official Beta 1.7.3 server class `ez` maps to `EntityItem`. Its `b` age field is incremented by `onUpdate`; at `age >= 6000` the inherited `Entity.setEntityDead` marks the entity and `World.updateEntities` removes it.

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-cache-lifecycle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=a82e3eb16c9c12a3901e03775d53898a725914562f5bd971d7dc5d2444c75104 -->
+
 # M92 behavior map
 
 M92 extends M91 inside the exact same pinned six-member natural page. It

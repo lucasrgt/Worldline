@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m383-mushroom-place-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=3a737afbb664a8e1a32858a9e371ced9062f5a30950b631a9372829456fa9a21 -->
+
 # M383 behavior map
 
 One official session places brown mushroom item `39` on dirt inside a dark

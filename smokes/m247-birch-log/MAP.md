@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m247-birch-log -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=d2edaaf83b9d8b74ec8d46d00e40f224fc12335a5a7e9fd35e7744a490781eb0 -->
+
 # M247 behavior map
 
 Packet15 places wood/log item `17` damage `2` on a raised stone column.

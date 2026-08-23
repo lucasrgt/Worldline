@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m464-explosion-player-hurt-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=57b40f0692f328b32fc02a568a0f47854d1d21fda0e2ed383262bf03c2b8c078 -->
+
 # M464 behavior map
 
 A raised-stone pad seeds TNT `46`, flint-and-steel `259`, golden apple

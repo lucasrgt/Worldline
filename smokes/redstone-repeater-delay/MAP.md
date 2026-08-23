@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=redstone-repeater-delay -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=572bf798c9e3922b669928c273e2788199de5af2117737ef11efd7658f67bb7a -->
+
 # Redstone Repeater Delay Smoke Map
 
 ## Claim

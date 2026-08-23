@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m355-note-rest-instruments -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=0b8bfa875138db6748a105c9ca98ad10bd8f4ff277dbe49e5d1d96e5790cf868 -->
+
 # M355 behavior map
 
 Official note block `25` is placed on the remaining instrument bases M313 did

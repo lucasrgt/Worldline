@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=inventory-session -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=6051025c444760d21cf5a283358b4594612188234b72c7ae363c0a50d907e92f -->
+
 # M51 Dropped Item Spawn
 
 The actor acquires one qualified stone while isolated. After an independent

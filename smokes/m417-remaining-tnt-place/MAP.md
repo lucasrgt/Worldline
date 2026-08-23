@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m417-remaining-tnt-place -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=153e7f2258e4d355e0e2c070a630aebe6dfa4262d98a3e4aa3e99b8f99e0205d -->
+
 # M417 behavior map
 
 Packet15 places two TNT items `46` on a raised stone column, two cells apart

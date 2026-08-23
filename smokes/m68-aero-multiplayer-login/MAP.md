@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-runtime-session -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=a7978b0bb7e1277d846528036ff3ded3c5541ea5b11bd0935d32580b574e969f -->
+
 # M68 Aero Multiplayer Login Evidence Map
 
 | Boundary | Exact evidence |

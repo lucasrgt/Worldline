@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-diagnostic-capture -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=804915ae89a1adef9f350adc020ed8a77986b2d3d4c1d84205009a4382ed051c -->
+
 # M12 Aero Reproduction Evidence Map
 
 ## Purpose

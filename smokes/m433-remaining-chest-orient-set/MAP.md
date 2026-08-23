@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m433-remaining-chest-orient-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=b9750e81a03028d1bb7345d6699d951772dea723fefb2cb303312f4c43423f03 -->
+
 # M433 behavior map
 
 One official session places remaining chest `54` look-yaw facings and both

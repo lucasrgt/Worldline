@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m125-cross-chunk-water -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c876ddf9f8686e16db848fb38977ff02ea8eb97dea05e21b0837be68f83a6217 -->
+
 # M125 behavior map
 
 A stone trench spans chunks `(0,0)` and `(1,0)`. Source water `9:0` occupies

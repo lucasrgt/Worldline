@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=multiplayer-session -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=7d264e3b365a4ab223d45cd95eb17aa90683ef123af51775defc120d7635aa12 -->
+
 # M27 Two-Client Multiplayer Chat
 
 Each of two fresh scenarios boots one official server and connects two

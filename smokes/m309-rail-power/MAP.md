@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m309-rail-power -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ff3995ce5426f88877abdf561aada4f7f2968dfa7fbdc44f768202ec4c14ff80 -->
+
 # M309 behavior map
 
 Packet15 places powered-rail item `27` on a raised stone column as unpowered

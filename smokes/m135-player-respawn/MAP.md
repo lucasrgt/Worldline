@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m135-player-respawn -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=22275e37f5b927fb38ddbe53bfb3869f752fa11afe00efc1e57d41edca84f81a -->
+
 # M135 behavior map
 
 One empty player is seeded at Y `-80` in each fresh official world. Bounded

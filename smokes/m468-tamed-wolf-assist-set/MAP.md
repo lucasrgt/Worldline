@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m468-tamed-wolf-assist-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=21920ae6ac95c99bc80e2adfef34dd66a8649b88c45836f5e61119f5fee019d6 -->
+
 # M468 behavior map
 
 The fixture raises an isolated `7×7` grass platform and places two default

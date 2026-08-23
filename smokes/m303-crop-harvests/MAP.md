@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m303-crop-harvests -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=33bca9f328ddb3c028b792f70233157d997e260e28d47d0115069be6bcba67f0 -->
+
 # M303 behavior map
 
 One raised stone column carries three harvest families. Wooden hoe `290`

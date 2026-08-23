@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m118-redstone-iron-door -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=e2000f240f0dce5e5fe233611cca6053e50b31c57113fd564387a00f527d7573 -->
+
 # M118 behavior map
 
 The official player inventory contains stone 1, lever 69 and iron door item

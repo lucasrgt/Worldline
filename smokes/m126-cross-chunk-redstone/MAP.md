@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m126-cross-chunk-redstone -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=1464edc1c01b62563d3608f6b60b9ba6ee30470dbf16e2111ac2c2cd59e880e5 -->
+
 # M126 behavior map
 
 A stone column ends at global x=15. Redstone dust `55:0` sits above the final

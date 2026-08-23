@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m469-void-death-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=52332cdbcd2108c4f8baa59811bffe40d9ba676283c851371bb2bee321f7ef98 -->
+
 # M469 behavior map
 
 An empty player is written at `4.5, -8.5, 4.5` so login pose `y` is below

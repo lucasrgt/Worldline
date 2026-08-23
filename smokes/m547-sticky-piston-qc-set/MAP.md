@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m547-sticky-piston-qc-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=21af5dafa50bb529a1c0264a2be27d9b92aa0728c007fae07ecbef1547d92b1d -->
+
 # M547 behavior map
 
 The cloned M367 west-facing sticky arm occupies the raised stone column.

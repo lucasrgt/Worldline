@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=player-pose -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=fb5715319d1347b180aea28652c173a9278d67dedbd3f6e9b486fe358d31f6d6 -->
+
 # M25 Persisted Multiplayer Movement
 
 Two fresh protocol-14 clients synchronize with two fresh official servers and

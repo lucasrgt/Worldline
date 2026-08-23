@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m146-obsidian-piston-rejection -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=5deacfe1aa98b05c6667cd13215354e232659bd057f50e1340640017dface768 -->
+
 # M146 behavior map
 
 The raised west-facing normal piston `33:4` has obsidian `49:0` immediately in

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m447-spider-climb-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=dd9ff5fff66e6f0e70d4f4dd873aa178184ec6e7b407e99cc861cec68916f588 -->
+
 # M447 behavior map
 
 The fixture raises an isolated `7×7` grass platform, closes its perimeter with

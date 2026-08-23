@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m179-wheat -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=00d861629497b91621c26cc02b6ec8d56763ad9b4f365028fd10188e36694be8 -->
+
 # M179 behavior map
 
 A wooden hoe tills official dirt into farmland after adjacent still water is

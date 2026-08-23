@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=player-pose -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=414c83fa237a0affd1c36ab171e04f07ab110487fc2ebd75698f54e55d92417a -->
+
 # M35 Bounded Movement Outcome
 
 Two fresh protocol-14 clients first request a collision-safe `+0.125 X` move.

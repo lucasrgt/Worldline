@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m133-nether-portal-traversal -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=5c8ac40f2065949243c4a0e77c0ae9f5757aa4d89247915f6878de01cb72ed5d -->
+
 # M133 behavior map
 
 One dimension-`0` client constructs and activates the exact M132 portal, moves

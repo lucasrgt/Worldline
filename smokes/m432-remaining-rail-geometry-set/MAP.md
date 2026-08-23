@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m432-remaining-rail-geometry-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=3da03f5b4d6dd509fa5fc0925d5ea7422d5cd6ddb96e7acb84b5854de2ab61b1 -->
+
 # M432 behavior map
 
 Official server symbols:

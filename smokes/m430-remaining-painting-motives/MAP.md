@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m430-remaining-painting-motives -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=1504c14913948dca32f92c0dacff830c42a51f7c402354b7a872fc92af410e09 -->
+
 # M430 behavior map
 
 Painting item `321` is used through Packet15 on three remaining west-face

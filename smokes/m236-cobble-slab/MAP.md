@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m236-cobble-slab -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=0659df1d047139297efabd6988985a6f3c1bb9b16e6dfa93f6bc1387d8dbc335 -->
+
 # M236 behavior map
 
 Packet15 places cobble slab item `44` with damage `3` on a raised stone

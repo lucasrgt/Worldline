@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=dedicated-server-control -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=87035c21599513c04b6fe5b5622232a485a7f5c5e52778ecf11428ef671b4d4f -->
+
 # M21 Dedicated Server Control Boundary
 
 Two fresh Worldline controller JVMs each start one unmodified official Beta

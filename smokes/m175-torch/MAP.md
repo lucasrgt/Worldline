@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m175-torch -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=1b9a95028d397daf378283e42e4657f27df1e1e761003ef151f0fdd1790c3c3d -->
+
 # M175 behavior map
 
 Packet15 places torch item `50` on a raised stone column. The official

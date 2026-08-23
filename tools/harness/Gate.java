@@ -91,6 +91,7 @@ public final class Gate {
             case "--refresh-data-cycle-pins" -> spec("DataDrivenCycleMigration", "--refresh", 300);
             case "--migrate-composite-cycles" -> spec("CompositeCycleMigration", "--apply", 300);
             case "--migrate-telemetry-pins" -> spec("TelemetryPinMigration", "--apply", 300);
+            case "--migrate-repository-schemas" -> spec("RepositorySchemaMigration", "--apply", 600);
             case "--migrate-eof-retries" -> spec("RetryMigration", "--apply", 300);
             case "--finalize-eof-retries" -> spec("RetryMigration", "--finalize", 300);
             case "--finalize-fixed-waits" -> spec("FixedWaitMigration", "--finalize", 600);
@@ -144,6 +145,7 @@ public final class Gate {
                 || Arrays.equals(arguments, new String[] {"--refresh-data-cycle-pins"})
                 || Arrays.equals(arguments, new String[] {"--migrate-composite-cycles"})
                 || Arrays.equals(arguments, new String[] {"--migrate-telemetry-pins"})
+                || Arrays.equals(arguments, new String[] {"--migrate-repository-schemas"})
                 || Arrays.equals(arguments, new String[] {"--migrate-eof-retries"})
                 || Arrays.equals(arguments, new String[] {"--finalize-eof-retries"})
                 || Arrays.equals(arguments, new String[] {"--finalize-fixed-waits"})
@@ -158,6 +160,7 @@ public final class Gate {
                 + "--smoke-plan|--migrate-data-cycles|--refresh-data-cycle-pins|"
                 + "--migrate-composite-cycles|"
                 + "--migrate-telemetry-pins|"
+                + "--migrate-repository-schemas|"
                 + "--migrate-eof-retries|"
                 + "--finalize-eof-retries|"
                 + "--finalize-fixed-waits|"

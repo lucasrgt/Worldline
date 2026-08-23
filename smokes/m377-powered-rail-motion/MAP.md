@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m377-powered-rail-motion -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c383cb26d4289064f7ced386bb9c7cfc9cdb68545275f438464e17ef5a161977 -->
+
 # M377 behavior map
 
 One official session builds a raised north-south track: a stone wall north of

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m186-oak-stairs -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=2af3b75842248ca27774c84635352ca60069d3ae89a045bfbe93d37a926c2ccd -->
+
 # M186 behavior map
 
 Packet15 places wooden stairs item `53` on a raised stone column. Actor look

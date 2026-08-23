@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m144-sticky-piston-pull -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=a56517b95b971f64b951329f03267a3c65259a557dc00925e24e3f9235fe377a -->
+
 # M144 behavior map
 
 The M142/M143 geometry is rebuilt with sticky piston `29`. Its west-facing

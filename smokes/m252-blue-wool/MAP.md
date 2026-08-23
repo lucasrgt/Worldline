@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m252-blue-wool -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=9df82196251a63865e986ad531cff422ad86ee987524f8c25679c38143ac80a3 -->
+
 # M252 behavior map
 
 Packet15 places blue wool item `35` with damage `11` on a raised stone

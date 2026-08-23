@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-cache-lifecycle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=94b95453ff0ba5944e7592bbdd8251c064dd0d7aa966cfa2c8b343ce92267d08 -->
+
 # M79 behavior map
 
 M79 keeps the exact M78 four-page fixture warmed for 300 retained records,

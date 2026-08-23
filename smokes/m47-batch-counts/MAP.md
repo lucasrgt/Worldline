@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=movement-route -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=5937694a83f953037612da32bd49301d7413eedfe4aab84df98f341cc686bb5f -->
+
 # M47 Immutable Batch Counts
 
 Two fresh sessions exhaust two correlated plans. The first contains two safe

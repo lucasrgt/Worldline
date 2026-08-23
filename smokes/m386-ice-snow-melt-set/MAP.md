@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m386-ice-snow-melt-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=00d10f8cca091d8efcf6f005b84e192d110161deafabfb6a71d69862a5de6b7a -->
+
 # M386 behavior map
 
 The M193 raised stone column hosts ice `79` and snow layer `78` together

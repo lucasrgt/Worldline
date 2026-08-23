@@ -19,19 +19,25 @@ final class TelemetryPinCheck {
                     "telemetry migration source drift: " + relative);
         }
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
-                new SmokeInputFingerprint(root); int changed = 0;
+                new SmokeInputFingerprint(root); Properties schemas = SchemaPinCheck.manifest(root);
+        int changed = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             String stem = "smoke." + smoke.id + ".";
             if (manifest.getProperty(stem + "current_fingerprint") == null) continue;
             changed++; String current = fingerprints.compute(smoke);
+            SmokePins.Entry pin = pins.match(smoke.id, current);
+            boolean direct = current.equals(required(manifest, stem + "current_fingerprint"));
+            boolean successor = pin != null && SchemaPinCheck.follows(schemas, smoke.id,
+                    required(manifest, stem + "current_fingerprint"),
+                    required(manifest, stem + "evidence_sha256"), pin, current);
             require(hash(manifest, stem + "prior_fingerprint")
-                            && current.equals(required(manifest, stem + "current_fingerprint"))
+                            && (direct || successor)
                             && hash(manifest, stem + "evidence_sha256"),
                     "telemetry migration evidence drift: " + smoke.id);
-            SmokePins.Entry pin = pins.match(smoke.id, current);
             require(pin != null && (pin.source().equals("executed")
                             || pin.source().equals("refactor-equivalent")
-                            && pin.evidence().equals(required(manifest, stem + "evidence_sha256"))),
+                            && (pin.evidence().equals(required(manifest, stem + "evidence_sha256"))
+                            || SchemaPinCheck.carries(schemas, smoke.id, pin, current))),
                     "telemetry migration pin drift: " + smoke.id);
         }
         require(changed == integer(manifest, "count") && changed >= 100,

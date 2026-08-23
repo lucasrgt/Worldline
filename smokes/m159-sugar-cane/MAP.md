@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m159-sugar-cane -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=70a49f193de25db52e447675752317f7e567b9817943e16a27eb25a669555d8f -->
+
 # M159 behavior map
 
 Packet15 plants sugar cane item `338` on dirt beside still water `9:0`. Official

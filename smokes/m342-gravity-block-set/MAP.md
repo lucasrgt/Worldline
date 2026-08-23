@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m342-gravity-block-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=d8653266b9cdaa16b9aa3d3fc760642400d2172380078b03499aff10394c84e8 -->
+
 # M342 behavior map
 
 The official fixture stabilizes stone `1:0` at `(4,64,4)` with sand `12:0`

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=inventory-session -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=df1873f6f3d7c48c3b34a400cad1a86a6579378b4b25cd5c99d90dcf63453039 -->
+
 # M49 Held Item Peer Observation
 
 Two neutral protocol clients join each fresh official Beta 1.7.3 server. The

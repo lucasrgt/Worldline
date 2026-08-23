@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m242-lever-place -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=28f6b893342410779d684e2473574c663af5c667ff857e946aa225e71f8f69bf -->
+
 # M242 behavior map
 
 Packet15 places lever item `69` against a raised stone east face. The

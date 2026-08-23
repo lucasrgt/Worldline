@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=state-world-differential -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=bb181bdd9db372111cec4f232aad960bc58be6fc343dc384dc4ccb89dd1f32ea -->
+
 # M524-SW behavior map
 
 The official Beta 1.7.3 client emits Packet14 status `0` when block breaking

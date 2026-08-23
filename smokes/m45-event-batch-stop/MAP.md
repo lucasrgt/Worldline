@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=movement-route -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=84d799547e96d434049f4879778606a592b3159626bf9df9b7e8225aeb9ca5d6 -->
+
 # M45 Event-Boundary Batch Stop
 
 Two fresh sessions submit two correlated plans. The first plan contains two

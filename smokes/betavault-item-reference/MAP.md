@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=logical-item-reference -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=471f4ef5ed8dbd3cf970672eb09c574890d1eb7af7866a65995d7426fd3b923d -->
+
 # BetaVault Item Reference Extension Map
 
 This is a parallel controlled-runtime extension. It does not consume a numbered

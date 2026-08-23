@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m276-fire-damage -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=6df6fefaf368f9cde54b95ead0d046469348c56c0bc386f4306b0d0a5a14a043 -->
+
 # M276 behavior map
 
 Official flint and steel Packet15 ignites air above netherrack `87:0` as fire

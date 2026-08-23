@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m423-slimeball-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=8a525200f72521e3f129de58b27232e197c39cf2d41da689d2772e9a830ac411 -->
+
 # M423 behavior map
 
 Seed `17320110707` slime chunk `-2,-2` is entered below `y=16`. A default

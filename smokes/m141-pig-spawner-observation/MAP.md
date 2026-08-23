@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m141-pig-spawner-observation -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=a148241c4e0282a64cf461ef362991e001cc17b1c7b06bd12e3f7b5b555fd522 -->
+
 # M141 behavior map
 
 The fixture raises a `7×7` platform with forty-eight grass blocks around one

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m244-cake-place -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=3c7fa802b04a3eee353f1129e19f03bc24418ba2dfdab4b7598ebb480edc23fd -->
+
 # M244 behavior map
 
 Packet15 places cake item `354` on a raised stone column. The official

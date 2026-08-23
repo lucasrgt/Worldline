@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m398-jukebox-eject-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=21d9a2123e3a3041573a22722d268dec75ee1d0d27d84fe0ae6f22e187f2bd8f -->
+
 # M398 behavior map
 
 Official jukebox item `84` is placed twice on a raised stone support. Gold

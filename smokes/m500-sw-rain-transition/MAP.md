@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=state-world-differential -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=3a90b1745c24f4ba910f209f1f4939d631063e67acfcee4f610933d55b69eb7d -->
+
 # M500-SW behavior map
 
 Official server symbols:

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m440-remaining-dye-rest-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=0334f546ce0368581cb95d0fcb41d97e63d257acb76e91c53b41c849cfac594d -->
+
 # M440 behavior map
 
 Twenty accepted window-0 Packet102 clicks mix remaining dyes in the

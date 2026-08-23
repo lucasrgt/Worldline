@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m403-remaining-boat-break -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=34eb6766ee9194e30d2efd5712a5e932110351176e336e526d7c6f23a877dedc -->
+
 # M403 behavior map
 
 One official session places two boat items `333` through Packet15 direction

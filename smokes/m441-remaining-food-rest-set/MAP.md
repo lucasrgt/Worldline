@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m441-remaining-food-rest-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=a742d0481ec2e053071b64ffb13a565582bd3dbbc76859b4d650f2a8b74ac5b7 -->
+
 # M441 behavior map
 
 Official cookie `357` and mushroom stew `282` are eaten as one Packet15

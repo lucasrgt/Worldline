@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m559-double-extender-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=49d44fb82433fdcf9dcf8ca5201aa946b783e9d3539c9689d6a2284af36fac0f -->
+
 # M559 behavior map
 
 The cloned M142 west-facing piston family occupies one raised stone column.

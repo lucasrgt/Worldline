@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m52-item-collection -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=905fe8b02bdc2f81e2280d4658b81440e4d975e6d52ff83a4fd573d0ad8f77af -->
+
 # M52 Named Item Collection
 
 The observer binds the actor's Packet20 entity ID before the actor drops one

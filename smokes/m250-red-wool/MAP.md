@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m250-red-wool -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c3fcc1daa3851d1bcf11abcdee87a5fa5a626dc413d114ba6ffa58c0692ef726 -->
+
 # M250 behavior map
 
 Packet15 places red wool item `35` damage `14` on a raised stone column.

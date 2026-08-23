@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-frame-census -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=dbb52fb098cf377aa90027c4000ab7073efa6cbe5bc4f4fa56fa2090d38ae894 -->
+
 # M78 behavior map
 
 M78 reuses the frozen M74 server-authored sixteen-cell scene. A client-only

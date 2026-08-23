@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m161-snowball -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=1865bda95354d11a5a95ac4eaaf3fb8ad521e4b6195e6c651715e6955e7a149d -->
+
 # M161 behavior map
 
 Official b1.7.3 server JAR class `be` is EntitySnowball, registered as

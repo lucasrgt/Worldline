@@ -1,0 +1,75 @@
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Properties;
+
+/** Validates schema migration artifacts and content-addressed proof transport. */
+final class SchemaPinCheck {
+    private SchemaPinCheck() { }
+    static void execute(Path root) throws Exception {
+        Properties manifest = manifest(root); require("1".equals(manifest.getProperty("schema")),
+                "invalid repository schema migration");
+        require(integer(manifest, "smoke.count") == 525 && integer(manifest, "map.count") == 526
+                        && integer(manifest, "narrative.count") == 36,
+                "repository schema migration census drift");
+        SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
+                new SmokeInputFingerprint(root); int checked = 0;
+        for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            checked++; String stem = "smoke." + smoke.id + "."; String current = fingerprints.compute(smoke);
+            Path directory = root.resolve("smokes").resolve(smoke.id);
+            require(hash(manifest, stem + "prior_fingerprint")
+                            && current.equals(required(manifest, stem + "current_fingerprint"))
+                            && hash(manifest, stem + "evidence_sha256")
+                            && digest(directory.resolve("smoke.properties")).equals(
+                                    required(manifest, stem + "descriptor_sha256"))
+                            && digest(directory.resolve("MAP.md")).equals(
+                                    required(manifest, stem + "map_sha256")),
+                    "repository schema migration drift: " + smoke.id);
+            SmokePins.Entry pin = pins.match(smoke.id, current);
+            require(pin != null && pin.source().equals("refactor-equivalent")
+                            && pin.evidence().equals(required(manifest, stem + "evidence_sha256")),
+                    "repository schema pin drift: " + smoke.id);
+        }
+        require(checked == 525, "repository schema pin census drift");
+        System.out.println("  repository schema proof transport: 525 smoke inputs");
+    }
+    static Properties manifest(Path root) throws Exception {
+        Path path = root.resolve("smokes/schema-migration.lock");
+        return Files.isRegularFile(path) ? load(path) : new Properties();
+    }
+    static boolean carries(Properties manifest, String id, SmokePins.Entry pin, String current) {
+        String stem = "smoke." + id + ".";
+        return hash(manifest, stem + "prior_fingerprint")
+                && current.equals(manifest.getProperty(stem + "current_fingerprint"))
+                && pin.evidence().equals(manifest.getProperty(stem + "evidence_sha256"));
+    }
+    static boolean follows(Properties manifest, String id, String prior, String evidence,
+            SmokePins.Entry pin, String current) {
+        String stem = "smoke." + id + ".";
+        return carries(manifest, id, pin, current)
+                && prior.equals(manifest.getProperty(stem + "prior_fingerprint"))
+                && evidence.equals(manifest.getProperty(stem + "evidence_sha256"));
+    }
+    private static boolean hash(Properties values, String key) {
+        return values.getProperty(key, "").matches("[0-9a-f]{64}");
+    }
+    private static int integer(Properties values, String key) {
+        try { return Integer.parseInt(required(values, key)); }
+        catch (NumberFormatException error) { throw new IllegalStateException("invalid " + key); }
+    }
+    private static String digest(Path path) throws Exception { return java.util.HexFormat.of().formatHex(
+            java.security.MessageDigest.getInstance("SHA-256").digest(Files.readString(path,
+                    StandardCharsets.UTF_8).replace("\r\n", "\n").getBytes(StandardCharsets.UTF_8)));
+    }
+    private static Properties load(Path path) throws Exception { Properties values = new Properties();
+        try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+            values.load(reader); } return values;
+    }
+    private static String required(Properties values, String key) { String value = values.getProperty(key);
+        require(value != null && !value.isBlank(), "missing " + key); return value;
+    }
+    private static void require(boolean value, String message) {
+        if (!value) throw new IllegalStateException(message);
+    }
+}

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m373-milk-bucket-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=0def850e0165e277e1055538ab58e3a7772dcf0239f16acbc88f430b10e9a77c -->
+
 # M373 behavior map
 
 One official session raises a `7×7` grass platform, places default mob

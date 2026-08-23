@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m112-fixed-seed-lighting -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=f5180dc49e6d6117c501e903ab16b1015a071cedf027e2444168a40109dc0969 -->
+
 # M112 behavior map
 
 M112 reuses M111's seed, absolute chunk `(0,0)`, official server artifact and

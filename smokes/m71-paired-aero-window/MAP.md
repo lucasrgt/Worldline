@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-paired-experiment -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=0b26d07ed6b08195a067bf8730b43f49ec596dae274c74f335f8a44576cb1d2b -->
+
 # M71 Paired Aero Window Evidence Map
 
 | Boundary | Exact evidence |

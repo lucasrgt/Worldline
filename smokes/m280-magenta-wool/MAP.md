@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m280-magenta-wool -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=1c2065b1a6b6a8fdbe04e1a4ed0e9d52b6fa44e7fc16fd931de75c89e017e1fe -->
+
 # M280 behavior map
 
 Packet15 places magenta wool item `35` damage `2` on a raised stone

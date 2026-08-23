@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m203-snow-layer -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=23163bc78dd8ce876aff379a6292ad170fe0b74e5c26f2ee7177508222aa0178 -->
+
 # M203 behavior map
 
 Packet15 places snow layer item `78` on a raised stone column. The official

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m181-lava-bucket -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=8389064523049de74163fc5f5c48e14d5e52eb750aee3eb297010fa2e87116d4 -->
+
 # M181 behavior map
 
 Empty bucket `325` picks up confined still lava `11:0` from a raised stone

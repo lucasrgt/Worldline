@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m227-gold-ore -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=0cc34fc524f7aba7d51b5f354569bbbfa7bae8bde9995797972fac9dea8ba1fd -->
+
 # M227 behavior map
 
 Packet15 places gold ore item `14` on a raised stone column. The official

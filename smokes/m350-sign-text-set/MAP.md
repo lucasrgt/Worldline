@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m350-sign-text-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=12d6f3d9302de6833a34efdedd9599e289de1ccf722ecd4cc8e32e8fad906d79 -->
+
 # M350 behavior map
 
 Packet15 places sign item `323` on a raised stone column as standing sign

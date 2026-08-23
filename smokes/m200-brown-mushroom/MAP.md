@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m200-brown-mushroom -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=4140e189cc2fa3f53a899ffa1b8332f24d0bf2a320fc2dc5f0050e9026718c70 -->
+
 # M200 behavior map
 
 Packet15 places brown mushroom item `39` on dirt inside a dark stone pocket.

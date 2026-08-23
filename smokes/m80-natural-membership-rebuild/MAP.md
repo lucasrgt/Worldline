@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-cache-lifecycle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=3df82b51703daacc031e1f745f86fc7af6678d2da74901eb6c00183915e8a77a -->
+
 # M80 behavior map
 
 M80 keeps one synchronized sixteen-identity Aero scene warmed, then asks the

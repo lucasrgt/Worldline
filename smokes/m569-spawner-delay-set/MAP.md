@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m569-spawner-delay-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=f8a3a81f8f2295adbcd12af662bb00620eea7f2d0b09701089362e062b5d0b19 -->
+
 # M569 behavior map
 
 The fixture raises an isolated `7×7` grass platform and places one default

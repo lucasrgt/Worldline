@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m408-squid-ink-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=4f3c68e6439036720158970ea6fb62f2db5d9bb980f42850dbb0cfdf53ac0f41 -->
+
 # M408 behavior map
 
 The fixture finds the deterministic dirt-plus-water column in seed

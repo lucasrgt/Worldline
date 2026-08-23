@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m262-cookie-eat -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=2374d08bdc38c0697e31d3009c028cbb6f70fb2794e2d20606804aaa4dbfb0bc -->
+
 # M262 behavior map
 
 Official cookie item `357` is eaten with Packet15 air-use (direction `255` at

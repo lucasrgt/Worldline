@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m376-remaining-shovel-breaks -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=40c64c0c07f6bc2b0dd8ed47b2526c1b5ef81a70c4b44720126cc44bc5d15c52 -->
+
 # M376 behavior map
 
 Packet15 places clay `82`, snow `78`, snow block `80`, and soul sand `88`

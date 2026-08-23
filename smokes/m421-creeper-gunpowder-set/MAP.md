@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m421-creeper-gunpowder-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=f01c7a65ddde0ddb0cd8f27f6e1c76e896f866c0bf9cc6f8af973bd1def648dc -->
+
 # M421 behavior map
 
 The fixture raises an isolated `7×7` grass platform, Packet15-places

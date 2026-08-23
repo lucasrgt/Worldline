@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m396-remaining-wool-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=7bd1423c0f7af5c289a638d55eb9b16ec8b709217f849b00e95b0a3316990c54 -->
+
 # M396 behavior map
 
 Eighteen accepted window-0 Packet102 clicks dye white wool `35:0` with

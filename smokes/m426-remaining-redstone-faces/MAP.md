@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m426-remaining-redstone-faces -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=1bb55855bc7d7a3c3f9eef22fd7e235e02c3e5220a782fb29ed29a27bb69b44e -->
+
 # M426 behavior map
 
 Official server symbols:

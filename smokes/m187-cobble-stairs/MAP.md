@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m187-cobble-stairs -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=a569478836d30464768b7bc64d771b5cd735b7fb65e33ab5bb5a661e1f318a96 -->
+
 # M187 behavior map
 
 Packet15 places cobblestone stairs item `67` on a raised stone column.

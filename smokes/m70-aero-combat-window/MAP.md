@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-runtime-session -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=977bf908fc7edf5e0cf707f81fffaf6208183440a0f07cca81e2b9a22d03e571 -->
+
 # M70 Aero Combat Window Evidence Map
 
 | Boundary | Exact evidence |

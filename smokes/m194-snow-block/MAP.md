@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m194-snow-block -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=27b0f59762b6d741c75eb15488c5800f88feb7ca971582557e47532e6cc98a83 -->
+
 # M194 behavior map
 
 Packet15 places snow block item `80` on a raised stone column. The official

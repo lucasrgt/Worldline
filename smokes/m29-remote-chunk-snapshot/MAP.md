@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=remote-world-view -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=aec53757fe91829f4e425428a590b703595088ed02955b01ba41179ed4969b0b -->
+
 # M29 Remote Chunk Snapshot
 
 The fixture compiles the locally generated mapped vanilla `NibbleArray.java`

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m264-raw-pork-eat -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c43583070f3c4185f97ebefa6a8f0a6ce3428f70ea6621d094546db1cbae4502 -->
+
 # M264 behavior map
 
 Official raw porkchop item `319` is eaten with Packet15 air-use (direction

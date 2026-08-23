@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=state-world-differential -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=419100749c15ecc53954dc181ce9bd27403242be9ab0b60dc5cd3778a2a14419 -->
+
 # M511-SW behavior map
 
 - Official server class `az` is mapped `BlockRedstoneOre`; block 73 is

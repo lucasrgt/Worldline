@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m216-obsidian -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=37b0c135b01ef8c65cbbb0636a135f26610fb0825a3acf378e396d5150a32bce -->
+
 # M216 behavior map
 
 Packet15 places obsidian item `49` on a raised stone column. The official

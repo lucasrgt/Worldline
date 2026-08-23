@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m563-nether-exit-create-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=6a31a5c30bf7a861c626da550e1989e4d2c38f0a32cd4607e27a9093fa6a268d -->
+
 # M563 behavior map
 
 One official session builds the M382 `4x5` obsidian `49` frame, ignites

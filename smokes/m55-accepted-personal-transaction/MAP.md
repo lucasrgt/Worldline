@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=container-transaction -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c9abcffdd4d7663f0ce225d94bb59f73b07c632512e751f8c403f22ed0e2320e -->
+
 # M55 Accepted Personal Transaction
 
 The actor owns one stone in personal window 0 slot 36 with a known empty cursor.

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=reproduction-bundle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=840dca117939412dbba24594a1091c44d4b312b1e9700cec7aab7f47e0cc0181 -->
+
 # M5 Reproduction Bundle Evidence Map
 
 ## Claim

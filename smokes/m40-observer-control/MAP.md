@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=movement-route -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=6a3285b118eccd8b3f1e95ba51e7f6de46933c168b9f56f2623b11d8d266da7b -->
+
 # M40 Observer-Directed Route Control
 
 Two fresh sessions begin with a corrected primary, execute its supplied

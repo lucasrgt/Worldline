@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-paired-experiment -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=4061454ff65c9ef06366042094e79fc165c26e91d6f3af2fcd7f04638a180c0e -->
+
 # M110 behavior map
 
 M110 compares raw cell-size properties thirty-three and thirty-two while

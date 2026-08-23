@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m364-light-opacity-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=2012aa0391268a287bc772ea5a40036b761ed9f72b90d91f8462512dbb0e3fab -->
+
 # M364 behavior map
 
 The M196 raised stone column hosts three official translucent cells in

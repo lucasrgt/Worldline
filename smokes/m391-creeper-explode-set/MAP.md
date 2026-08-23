@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m391-creeper-explode-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=389f99f5639c66342a8560c23fe7e85cbe1aafc6e71530ed05c0cc7bbdbb19c0 -->
+
 # M391 behavior map
 
 Official server symbols:

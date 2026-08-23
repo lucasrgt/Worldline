@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m253-green-wool -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=dafe191ebebe5c80fb8935d352a73bebfb997614628047215ffde468c90be210 -->
+
 # M253 behavior map
 
 Packet15 places green wool item `35` damage `13` on a raised stone column.

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m368-more-dye-wool-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=af97665c706b12d71c1c228a931a7efec0c18fda505b259de31fdf174b8a17b9 -->
+
 # M368 behavior map
 
 Eighteen accepted window-0 Packet102 clicks dye white wool `35:0` with

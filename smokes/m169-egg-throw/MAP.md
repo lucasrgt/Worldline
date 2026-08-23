@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m169-egg-throw -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=928748cb1070c773bf7991f2ccaa4384b51c7910f12d20cb86102e337da19585 -->
+
 # M169 behavior map
 
 The fixture raises an isolated stone column. Using egg item `344` in-air

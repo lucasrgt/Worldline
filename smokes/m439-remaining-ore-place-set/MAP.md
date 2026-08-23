@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m439-remaining-ore-place-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=0c58ca403f7064fde875a5257d07193fe9916277c21455b47ac366ab28b828ab -->
+
 # M439 behavior map
 
 One official session Packet15-places remaining ores coal `16`, lapis `21`,

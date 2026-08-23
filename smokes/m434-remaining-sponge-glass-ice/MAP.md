@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m434-remaining-sponge-glass-ice -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=0716150d188414cd60d0bebe7aa70f27ace8a376a47f6e0a912fc026e8ab63b5 -->
+
 # M434 behavior map
 
 One official session places sponge item `19`, glass item `20`, and ice

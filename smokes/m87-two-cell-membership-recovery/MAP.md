@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-cache-lifecycle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=091dd5a68a9e7650ef91496f86cbc9dc5e82e006863d097a8e3c637402a103a4 -->
+
 # M87 behavior map
 
 M87 applies two sequential recovery cycles to distinct synchronized identities

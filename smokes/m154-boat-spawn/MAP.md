@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m154-boat-spawn -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=5da646e53a2e386476060c80fb7c8bce2d187f93133cb6adb76ac439e48439a6 -->
+
 # M154 behavior map
 
 A boat item is used in-air (Packet15 direction 255) while standing in one

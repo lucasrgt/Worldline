@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=mod-version-difference -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=aa0b9a653814de9b94b66175be673f85aaa218120728bb57c6087f921b4d28dd -->
+
 # M8 Mod Version Differential Evidence Map
 
 ## Claim

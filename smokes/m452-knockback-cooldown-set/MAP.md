@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m452-knockback-cooldown-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=096b8ab01152b6efc7574f50c63e4f48562ea96d7a3a095b2daaa2faecde5e48 -->
+
 # M452 behavior map
 
 Official server symbols:

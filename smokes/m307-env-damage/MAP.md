@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m307-env-damage -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=8a51289b35f57567a0dfbc0f3cf8f1d6981dac6219b52d494aac34f56713cba7 -->
+
 # M307 environmental damage map
 
 A raised stone column hosts M299's two-deep still-water drown, M330's

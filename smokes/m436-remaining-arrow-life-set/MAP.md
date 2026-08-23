@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m436-remaining-arrow-life-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=9a370fd980f9abd2ed3f852ff575a9dae9c9b0f461c73fa548d131b40077011c -->
+
 # M436 behavior map
 
 A raised-stone pad seeds bow `261` and two arrows `262`. Packet15 air-use

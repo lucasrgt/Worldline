@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=remote-world-view -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=efa8065f90fda3c466ccdf7c22d1b54b8a6470fbb61354176467635f3e980631 -->
+
 # M30 Remote World Cache
 
 A deterministic adapter fixture feeds native `Packet50PreChunk` fields into

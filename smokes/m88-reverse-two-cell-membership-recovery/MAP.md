@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-cache-lifecycle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=986d67c17068113e152c7cec8614bbc518629fff4c27619ec488da6c2548c079 -->
+
 # M88 behavior map
 
 M88 reverses M87's sequential recovery order in the same frozen geometry:

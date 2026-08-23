@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=state-world-differential -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=e968302dd1f7e0be9f133f8956a2512b5203382b0ba53d07fbb0b1028b5586fe -->
+
 # M522-SW behavior map
 
 - Player NBT main slots `0` and `1` map to personal-window slots `36` and `37`.

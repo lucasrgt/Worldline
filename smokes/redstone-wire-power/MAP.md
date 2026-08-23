@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=redstone-wire-power -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=9e732358c31890a2dda2c6fabf5553bcebd81a3808284cfea1bbe85aa4a71645 -->
+
 # Redstone Wire Power Smoke Map
 
 ## Claim

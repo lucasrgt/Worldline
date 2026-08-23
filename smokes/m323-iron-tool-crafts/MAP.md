@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m323-iron-tool-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=17587efabb76f538dcae2f11569071d321ff253c298e403c9de331483b463270 -->
+
 # M323 behavior map
 
 A raised-stone workbench `58` accepts Packet102 matrix placement of iron

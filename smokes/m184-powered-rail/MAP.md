@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m184-powered-rail -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=d017b9f94e15a87ad2465679091958308c683a77948158ee7b9b3fb241c56264 -->
+
 # M184 behavior map
 
 Packet15 places powered-rail item `27` on a raised stone column. The

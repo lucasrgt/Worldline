@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m367-piston-motion-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=eeb597ce51f18b3841a00e606375efae5dfb531672564e34670469f420f304a8 -->
+
 # M367 behavior map
 
 The cloned M142 west-facing piston family occupies one raised stone column.

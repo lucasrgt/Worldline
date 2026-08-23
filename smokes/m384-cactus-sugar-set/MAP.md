@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m384-cactus-sugar-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ebe81626228e8dc034975562ddc312713b9877d4020a97cec9b6e38884191824 -->
+
 # M384 behavior map
 
 A raised isolated sand pad receives cactus item `81`. Grass pads beside still

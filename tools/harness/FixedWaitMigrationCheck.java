@@ -19,6 +19,7 @@ final class FixedWaitMigrationCheck {
         Properties dataDriven = load(root.resolve("smokes/data-driven-migration.lock"));
         Properties composite = load(root.resolve("smokes/composite-cycle-migration.lock"));
         Properties telemetry = TelemetryPinCheck.manifest(root);
+        Properties schemas = SchemaPinCheck.manifest(root);
         require("1".equals(manifest.getProperty("schema"))
                         && integer(manifest, "source.count") == 226
                         && integer(manifest, "milestone.count") == 216
@@ -66,16 +67,19 @@ final class FixedWaitMigrationCheck {
                     && digest(root.resolve("smokes").resolve(smoke.id).resolve("smoke.properties"))
                     .equals(required(manifest, stem + "descriptor_sha256"))
                     && dataDescriptorChanged(root, smoke, manifest, stem);
+            boolean schemaMigrated = pin != null && SchemaPinCheck.carries(
+                    schemas, smoke.id, pin, fingerprint);
             require(hash(manifest, stem + "prior_fingerprint")
                             && hash(manifest, stem + "prior_descriptor_sha256")
                             && hash(manifest, stem + "evidence_sha256")
-                            && (direct || instrumented
+                            && (direct || instrumented || schemaMigrated
                             || successor(dataDriven, composite, smoke.id, manifest, stem)),
                     "fixed-wait milestone evidence drift: " + smoke.id);
             require(pin != null && (pin.source().equals("executed")
                             || pin.source().equals("refactor-equivalent")
                             && (pin.evidence().equals(required(manifest, stem + "evidence_sha256"))
-                            || TelemetryPinCheck.carries(telemetry, smoke.id, pin, fingerprint)))
+                            || TelemetryPinCheck.carries(telemetry, smoke.id, pin, fingerprint)
+                            || SchemaPinCheck.carries(schemas, smoke.id, pin, fingerprint)))
                             && pinText.contains("# fixed-wait-refactor-proof="
                                     + "smokes/fixed-wait-migration.lock:milestone."
                                     + smoke.id + "\nsmoke." + smoke.id + ".fingerprint="),

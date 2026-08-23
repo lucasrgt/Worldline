@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m274-falling-gravel -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=176ae1fac3a1eb0fc755149f750defb1e9bf184c097416e0d6f216e41c7fb222 -->
+
 # M274 behavior map
 
 The official fixture stabilizes stone `1:0` at `(4,64,4)` with gravel `13:0`

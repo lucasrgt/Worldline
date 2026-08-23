@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m315-dye-wool-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=f9b78bfc4331c0fc5e92dd33443743a0c9b46e17815f9f89b20fd2535c2405d2 -->
+
 # M315 behavior map
 
 Eighteen accepted window-0 Packet102 clicks dye white wool `35:0` with rose

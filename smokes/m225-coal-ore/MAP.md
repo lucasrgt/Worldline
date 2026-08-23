@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m225-coal-ore -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=2ff6ed07ba198e90c82b36fb04ced28cc6e6900e1ccca71d4ee74554803e53fd -->
+
 # M225 behavior map
 
 Packet15 places coal ore item `16` on a raised stone column. The official

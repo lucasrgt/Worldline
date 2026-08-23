@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m148-pig-ai-movement -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c265a9aa7d1e6254b11458774346f05613c82569948443803f4742740e933397 -->
+
 # M148 behavior map
 
 One official default spawner creates a pig identity shared by two peers. After

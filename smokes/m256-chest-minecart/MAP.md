@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m256-chest-minecart -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=77d7cc9f33cf75c87ba161f4e0b38376562e8c3a4a1bed0d9a78aaca8f9d0a74 -->
+
 # M256 behavior map
 
 The fixture raises an isolated stone column and places rail `66:0`. Using

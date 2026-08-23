@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m177-painting -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=05ecb02dc2be9a42ab00eeae2c8c1eaf34609b0fe89c3c60aae4774b5e0e90d4 -->
+
 # M177 behavior map
 
 Painting item `321` is used through Packet15 on the west face of a raised

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m198-dandelion -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=616709e090098e93e2e1928b9cde1a0122d5145752b870feee73266b32ce82cd -->
+
 # M198 behavior map
 
 Packet15 places yellow flower item `37` on dirt `3` capping the M175 raised

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m193-ice -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=928502e6104af660eee12a0404bcc27b28b4d98e8da3440ba59e805f615f5c2a -->
+
 # M193 behavior map
 
 Packet15 places ice item `79` on a raised stone column. The official

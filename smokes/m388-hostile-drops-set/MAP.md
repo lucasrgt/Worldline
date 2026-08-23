@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m388-hostile-drops-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c8953605d41925e26176881751113247054635ee807d6cd4f5f76ca9e830cd19 -->
+
 # M388 behavior map
 
 The fixture raises an isolated `7×7` grass platform and places two default

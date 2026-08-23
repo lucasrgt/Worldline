@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m164-pressure-plate -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ab14f3bebb0157e814af07dd4950065b472c5d5b99f25736c02b57fd08b1f754 -->
+
 # M164 behavior map
 
 Stone pressure plate item `70` is placed on a raised stone support as block

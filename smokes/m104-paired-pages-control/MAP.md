@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-paired-experiment -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=a91f910fbbf2ced951e0a009e1db64924f8b8a33f34aeca4f8b0e6b6e2bc4df8 -->
+
 # M104 behavior map
 
 M104 compares the same exact M74/M78 sixteen-entity scene with cell pages

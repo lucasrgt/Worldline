@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m204-clay -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=3b76da4b3617c14a154aaf9799e7cd86631ba7e4e9be1d8dd1baf628fb271d8c -->
+
 # M204 behavior map
 
 Packet15 places clay item `82` on a raised stone column. The official

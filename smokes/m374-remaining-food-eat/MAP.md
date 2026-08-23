@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m374-remaining-food-eat -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=8039053be1dc2477fd129e75dd6f6facd47634f0d8dc9e0be131b9750c9e2215 -->
+
 # M374 behavior map
 
 Official apple `260`, cooked pork `320`, and golden apple `322` are eaten

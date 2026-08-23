@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m191-glowstone -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=3b17d9813ae06da188a84e5b3ea33feedbc0bc0f9c537be65e90e2dbf47f2187 -->
+
 # M191 behavior map
 
 Packet15 places glowstone item `89` on a raised stone column. The official

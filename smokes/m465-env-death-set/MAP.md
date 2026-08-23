@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m465-env-death-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=5f7c771e9c67210afff3c4f9afc8af6700507b0ce7d74239763d335b27bdf1b4 -->
+
 # M465 environmental death set map
 
 A raised stone column hosts two-deep still water `8/9` over the head, falling

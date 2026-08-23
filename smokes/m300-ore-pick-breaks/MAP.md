@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m300-ore-pick-breaks -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=5fa840f6542410b38170ae4dc2fe1d2731c8d7ca7335ba9d105d3c1feed61b1a -->
+
 # M300 behavior map
 
 Packet15 places cobble item `4` on the top face of the raised stone

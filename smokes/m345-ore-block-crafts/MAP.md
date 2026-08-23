@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m345-ore-block-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=1a72ee9100a460729b226ac6ea350567f9a953cb2d8832d43545f74bdf9f0427 -->
+
 # M345 behavior map
 
 Packet15 places workbench item `58` on a raised stone column. Packet102 then

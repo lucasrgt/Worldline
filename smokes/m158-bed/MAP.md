@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m158-bed -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ab95c0893977d3774ddf9672b77063db206c52479e9645e917f6f0d42d49f2f0 -->
+
 # M158 behavior map
 
 Official server symbols:

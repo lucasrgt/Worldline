@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-paired-experiment -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=d5ba4fa589d791959dca34158989889ea9d5c29942b6bc44fca7a18bb800a69e -->
+
 # M109 behavior map
 
 M109 compares raw cell-size properties zero and one while retaining the same

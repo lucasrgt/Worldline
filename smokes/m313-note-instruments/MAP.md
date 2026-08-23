@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m313-note-instruments -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=6e171effe14c350c22319797f836fbb498aa88b559a88bef337aa634f95943b6 -->
+
 # M313 behavior map
 
 Official note block `25` is placed on three instrument bases: raised stone,

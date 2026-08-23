@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m115-lever-activation -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=497b5d743a5693c925d69d71c02528cf2d16a63ad5c477980b916a0d2b45ae34 -->
+
 # M115 behavior map
 
 The player NBT contains sixteen stone blocks and one lever in distinct hotbar

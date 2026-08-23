@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m157-bow-arrow -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=abf0244450acb0b727df9080a6ca53849fcd0ca4ce62de83a13b815d04c8f917 -->
+
 # M157 behavior map
 
 A selected bow with an inventory arrow fires through Packet15 air-use

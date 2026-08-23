@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m183-rails -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=189c56b02557d604b8886acbf0eb51505d54eab8cedbb903987462eebb7b3c46 -->
+
 # M183 behavior map
 
 Packet15 places rail item `66` on a raised stone column. Actor look Packet12

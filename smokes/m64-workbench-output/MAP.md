@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=container-transaction -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=fa5b92b7450d785451e527f7ecbab2597f99e0b9977b31333541a4e0a155253b -->
+
 # M64 Workbench Output Map
 
 | Boundary | Exact evidence |

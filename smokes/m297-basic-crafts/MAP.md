@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m297-basic-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=f62ec64a6ea2c9990cdbf656cdedabe239862a866983d92adfb792d4f81d82a3 -->
+
 # M297 basic crafts map
 
 ## Stable boundary

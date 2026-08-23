@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m272-diamond-leggings -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=84c5aee2ec930400dffd8c3fb58277fed715027fa6a538ea53d5acc3cd24b9a0 -->
+
 # M272 diamond leggings map
 
 ## Stable boundary

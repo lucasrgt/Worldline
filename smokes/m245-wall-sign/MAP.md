@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m245-wall-sign -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=124ca56d12f9c02d6f8463c6ad28739dcc1c7b29875b4fa356570082c5f82c06 -->
+
 # M245 behavior map
 
 Packet15 places sign item `323` against a raised stone east face as wall

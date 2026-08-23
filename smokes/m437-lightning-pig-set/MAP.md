@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m437-lightning-pig-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=536016d5292cf2d747ea4a029011726719795579c19e8507ec912154e9bd77db -->
+
 # M437 behavior map
 
 Official server symbols:

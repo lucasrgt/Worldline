@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m119-falling-sand -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ac00ec1900fdfc0489c6e7d4e9621c916411505d522df3c1fc9f3c53a78eb656 -->
+
 # M119 behavior map
 
 The official fixture stabilizes stone `1:0` at `(4,64,4)` with sand `12:0`

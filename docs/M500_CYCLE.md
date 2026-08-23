@@ -1,4 +1,12 @@
-# M500-SW qualification cycle
+# M500-SW-RAIN-TRANSITION Sw rain transition
+
+<!-- Generated from smoke.properties by MilestoneNarrative. -->
+
+## Claim
+
+This milestone freezes the behavior identified by its expected signal and semantic signature.
+
+## Qualification cycle
 
 `RainTransitionCycle` creates a fresh vanilla world, stops it cleanly, patches
 `level.dat` dry with a bounded `rainTime`, restarts the official server, and
@@ -22,3 +30,7 @@ The frozen semantic SHA-256 is
 Canonical evidence uses two fresh smoke JVMs, four official server JVMs (one
 world creator and one transition server per scenario), and two client sessions.
 Headless protocol-14 only. No GUI. No Aero.
+
+Expected signal: `dimension=0,live=packet70-reason1,old-snapshot=raining,canonical=dry-original-countdown,save-order=overworld-then-secondary,thundering=false,identity=seed-spawn-preserved,clients=1,disconnect=clean`.
+
+Frozen semantic SHA-256: `3a90b1745c24f4ba910f209f1f4939d631063e67acfcee4f610933d55b69eb7d`.

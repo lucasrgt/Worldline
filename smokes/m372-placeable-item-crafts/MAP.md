@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m372-placeable-item-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=80d1b7a10efe73807810ca2609135b07e47ba57880f35e72d1b205e27394a993 -->
+
 # M372 placeable item crafts map
 
 ## Stable boundary

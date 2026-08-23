@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m316-shears-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=91eec7f3061f3c9cb956cd25ebcc7ece6a66055262a45538081a8ad72d79426e -->
+
 # M316 behavior map
 
 The fixture raises an isolated `7×7` grass platform, places oak log `17`

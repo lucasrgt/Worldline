@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m142-piston-extension -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=48c199a75f4cb6d77ffd1cfec3081c5fa9880915553d5b7e913ddc7cb6a38a20 -->
+
 # M142 behavior map
 
 The fixed-seed fixture builds a ten-block stone column above generated water.

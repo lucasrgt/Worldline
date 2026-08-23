@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m229-redstone-ore -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=7d3985f4b7402dfe18498e350a010e0aa42df1a87bbb12ac06d7ff9bc4803504 -->
+
 # M229 behavior map
 
 Packet15 places redstone ore item `73` on a raised stone column. The

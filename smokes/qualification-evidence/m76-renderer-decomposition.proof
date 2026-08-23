@@ -1,5 +1,5 @@
 schema=1
 id=m76-renderer-decomposition
-fingerprint=4e980498ae567d220d35cbdc0f49e0bc6ec05ebd3a627c9c94eb00e68935f79b
+fingerprint=28b83ab84089c546724492de13dc8ebdbbf40b35088e7aed1ccfd7702a0f2e62
 observation.sha256=973ae93f8127bae80ceeddc372713f5968213aa1f2fb3a8978c58af61439ac40
 source=refactor-equivalent

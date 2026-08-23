@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=redstone-catalog -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=aggregate:redstone-runtime-oracles -->
+
 # Redstone semantics map
 
 Closed `redstone` catalog slice. Official client/server aliases come from the

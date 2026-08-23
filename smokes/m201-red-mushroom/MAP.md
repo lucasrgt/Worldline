@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m201-red-mushroom -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=26885845d6ad7c99bd324b497cb5415fe9056a79b295d940bc26da6049f0848a -->
+
 # M201 behavior map
 
 Packet15 places red mushroom item `40` on dirt inside a dark stone pocket.

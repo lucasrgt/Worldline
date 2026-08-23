@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m224-netherrack -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=790c2fc12c97371a7b0a14f5a41376c1d23f3bd1fff998120baed91087fd917b -->
+
 # M224 behavior map
 
 Packet15 places netherrack item `87` on a raised stone column. The official

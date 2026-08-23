@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=client-runtime-equivalence -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=113dccdda9b6bd0140c7aea5b255db993bb9063c6d64ef9370f1fb9925c26340 -->
+
 # M361 behavior map
 
 Frozen expected signature SHA-256: 113dccdda9b6bd0140c7aea5b255db993bb9063c6d64ef9370f1fb9925c26340

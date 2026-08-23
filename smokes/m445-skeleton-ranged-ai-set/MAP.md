@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m445-skeleton-ranged-ai-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c397640bf9dddee3c3b93081c4816f82f93289ba759f499d2865fad69fb5d888 -->
+
 # M445 behavior map
 
 The fixture raises an isolated `7×7` grass platform, closes its perimeter with

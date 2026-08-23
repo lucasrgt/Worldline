@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m416-remaining-bookshelf-place -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=63f78903270a88d3a7b5dafcb9aae55b9ffdacf7d785ff4b0f3d7616a975cc64 -->
+
 # M416 behavior map
 
 One official workbench epoch crafts bookshelf `47` twice from six oak planks

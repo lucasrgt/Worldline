@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m240-bed-place -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=366879f4dbd3ab1b199692d6094ad12c0ee76aa41469342f4ee3fba3d74ec59d -->
+
 # M240 behavior map
 
 Official `ItemBed.onItemUse` places block `26` only on face `1` (UP).

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=container-transaction -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=820eecba37b12ebcd44e719255868981552e3ef995e2ba92c4df32973218a71b -->
+
 # M311 behavior map
 
 The fixture raises an isolated stone column and places rail `66:0`. Using

@@ -39,9 +39,9 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | MIG-02 | DONE | Classify every remaining raw fixed-tick window. | The canonical gate validates 226 sources across 216 milestones and reports zero raw fixed-wait debt. |
 | MIG-03 | DONE | Publish and aggregate await telemetry. | Every executed smoke emits an aggregate `WORLDLINE_AWAIT_TELEMETRY`; schema-2 history records waits, polls, failures, observed ticks, and rejects high-poll regressions. |
 | MIG-04 | DONE | Persist retry dependence and alert reviewers. | Schema-2 nightly history records retry attempts, retries, failures, and policy calls; a previously clean smoke becoming retry-dependent fails review policy. |
-| MIG-05 | QUEUED | Adopt generated narrative schema. | All 36 eligible qualification-schema milestones use narrative schema and new scaffolds default to it. |
-| MIG-06 | QUEUED | Add a schema for every behavior map. | All MAP files validate required boundary, non-claims, and frozen-trace fields. |
-| MIG-07 | QUEUED | Version and normalize `smoke.properties`. | One schema defines canonical behavior/TestKit identity and runner declaration; all descriptors lint and migrate mechanically by era. |
+| MIG-05 | DONE | Adopt generated narrative schema. | All 36 qualification-v1 milestones use generated combined narratives, and new scaffolds default to the same schema. |
+| MIG-06 | DONE | Add a schema for every behavior map. | All 526 maps validate explicit boundary, bounded non-claims, and frozen-trace fields. |
+| MIG-07 | DONE | Version and normalize `smoke.properties`. | All 525 descriptors use schema 1, declare their era and runner, and validate behavior plus TestKit identity. |
 | MIG-08 | QUEUED | Burn down packed-line stock. | Mechanical, attested formatting reduces smoke and coordinator packed-line debt to zero without runtime requalification. |
 | MIG-09 | QUEUED | Consolidate repeated B173, place/persist, and Aero parsing families. | Fingerprinted shared helpers replace the audited clones without changing behavior. |
 | MIG-10 | QUEUED | Retire completed compatibility surfaces. | `Verify.java`, `SmokeLegacyImport`, and finalize-only migrators have dated removal trains and are deleted once their compatibility window closes. |

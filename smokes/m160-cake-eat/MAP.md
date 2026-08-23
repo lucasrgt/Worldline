@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m160-cake-eat -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ec442ce01a43be294030f3c3fb48319afc75e6eb99291a4e24cab8a54f3d8074 -->
+
 # M160 behavior map
 
 Official `BlockCake` (block 92) is placed from cake item 354 and eaten with

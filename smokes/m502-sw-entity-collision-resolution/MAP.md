@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=state-world-differential -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c3830617b51785816a20934139bfc9588dafa1412ba4c9e70e16cc7972a50dd4 -->
+
 # M502 Entity Collision Resolution Smoke Map
 
 ## Claim

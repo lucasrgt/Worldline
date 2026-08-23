@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m389-animal-drops-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=761e3177132b22cd98c5dd6a4fa802903098e923c7e0c31115dfae512c06213b -->
+
 # M389 behavior map
 
 The fixture raises an isolated `7×7` grass platform and places two default

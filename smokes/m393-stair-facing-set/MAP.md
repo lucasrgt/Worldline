@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m393-stair-facing-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=1e94922033cceeec477b29842f80b9bce86737cb240b266bad8ad4cf93cf0253 -->
+
 # M393 behavior map
 
 One official session places oak stairs `53` and cobble stairs `67` with two

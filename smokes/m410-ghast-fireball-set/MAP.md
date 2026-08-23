@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m410-ghast-fireball-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=4a77f0136d56574b37e6aca69072e884a92ea9240a1904aca9aaaa8170e08b76 -->
+
 # M410 behavior map
 
 Official server symbols:

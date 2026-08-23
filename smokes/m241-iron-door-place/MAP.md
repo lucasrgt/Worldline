@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m241-iron-door-place -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=a4f2a5f71fe45b70e843d41f32d6a4327eac0d654a488b059ca29eb2a2d261e6 -->
+
 # M241 behavior map
 
 Official iron `BlockDoor` (block 71) is placed from iron door item 330 onto a

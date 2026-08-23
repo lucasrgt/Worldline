@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m205-brick -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=e086305d19013c746cd1e24ea91a5cf8c20cb87ac8b3e0d6c79d11b224a1ac90 -->
+
 # M205 behavior map
 
 Packet15 places brick block item `45` on a raised stone column. The official

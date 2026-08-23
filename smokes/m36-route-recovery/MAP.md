@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=movement-route -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=895c39dd8b5e5d0f18c7eac81b76c5da77df74b98ecb434aad93adf49cfbc0c8 -->
+
 # M36 Route Recovery
 
 Two fresh protocol-14 sessions execute a three-step relative route. Step one is

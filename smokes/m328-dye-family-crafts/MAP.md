@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m328-dye-family-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=7ae29bcd82b147e1286ec7a3b4655087822ac5f5379f18142eab3fd163dda815 -->
+
 # M328 behavior map
 
 Eighteen accepted window-0 Packet102 clicks mill dye powders in the personal

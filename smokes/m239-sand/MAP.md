@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m239-sand -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=bb15230ca24298e16113b08fd83f225bd6b7966fbcdd78d7378ecc59c58e1094 -->
+
 # M239 behavior map
 
 Packet15 places sand item `12` on a raised stone column. The official

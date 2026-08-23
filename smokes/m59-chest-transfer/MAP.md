@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=container-transaction -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=4f1bfe9bca33138e8c833162aba2e62e1b120488dac8af034d47b60d10c73c9a -->
+
 # M59 Chest Transfer and Restart Map
 
 | Boundary | Exact evidence |

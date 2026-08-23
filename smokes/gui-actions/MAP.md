@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=ui-action-equivalence -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=37ecae34e07819aeb7d5d44e8a7abe7701d473147956f00d93e9abe917b5aa9e -->
+
 # Game UI Actions Differential Map
 
 ## Claim

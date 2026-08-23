@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m283-pink-wool -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=54b69bd3555ea1c71c7bfe4a627ef3aebad41301df717ac15f1338148b198863 -->
+
 # M283 behavior map
 
 Packet15 places pink wool item `35` damage `6` on a raised stone column.

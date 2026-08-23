@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m299-stone-tool-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c7503bc481ed407a57f6a750986b748f269a4222a4a8a2b9a3e26c5a12557c54 -->
+
 # M299 behavior map
 
 Packet15 places workbench `58` on a raised stone column. Packet102 then

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-paired-experiment -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=41422dda87ca7a8ed192e8c23c9946c55518f87e123cf69d6b1662d689b3b500 -->
+
 # M73 behavior map
 
 M73 uses one exact activation message in both arms after a fixed real-client

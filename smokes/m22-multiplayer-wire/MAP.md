@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=multiplayer-session -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=723f96819bd972ec5f2a4d932251840099f2d6472edf590c4386641a7d7e08f9 -->
+
 # M22 Multiplayer Wire Boundary
 
 Two fresh Worldline scenario JVMs each start one unmodified official Beta 1.7.3

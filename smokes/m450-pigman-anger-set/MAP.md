@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m450-pigman-anger-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ae24558c960284894ed1577e583f5fbbdcfd65ebfd4ed48af6687179d2ccf098 -->
+
 # M450 behavior map
 
 Official server symbols:

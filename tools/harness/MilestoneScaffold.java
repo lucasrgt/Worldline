@@ -102,7 +102,8 @@ final class MilestoneScaffold {
 
     private static String descriptor(String id, String number, String slug, String className,
             String signal, String signature) {
-        return "id=" + id + "\ncandidate.kind=tooling\nscaffold.status=draft\nrunner.source=tools/smoke/"
+        return "id=" + id + "\nsmoke.schema=1\nsmoke.era=qualification-v1"
+                + "\ncandidate.kind=tooling\nscaffold.status=draft\nrunner.source=tools/smoke/"
                 + className + ".java\nexpected.signal=" + signal + "\nexpected.signature=" + signature
                 + "\natlas.subsystems=unassigned\natlas.artifact=worldline\n\nqualification.schema=1"
                 + "\nqualification.proof=tooling-cycle\nqualification.docs=docs/M" + number + "_"
@@ -119,7 +120,9 @@ final class MilestoneScaffold {
                 + " deterministic cycle replaces it.\n";
     }
     private static String map(String id, String title, String signal, String trace, String signature) {
-        return "# " + id.toUpperCase() + " " + title
+        return "<!-- worldline-map-schema=1 -->\n<!-- boundary=draft -->"
+                + "\n<!-- nonclaims=bounded-to-qualified-evidence -->\n<!-- frozen-trace="
+                + signature + " -->\n\n# " + id.toUpperCase() + " " + title
                 + " behavior map\n\nNo semantic boundary is claimed by this draft.\n\n"
                 + "Draft signal: `" + signal + "`.\n\nDraft trace: `" + trace + "`.\n\nDraft SHA-256: `"
                 + signature + "`.\n";

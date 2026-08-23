@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m555-torch-burnout-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=18bb8e9a083d0861b2a55ef541e55b825b6495c88e02d63298e035dad62bbc00 -->
+
 # M555 torch burnout set behavior map
 
 Packet15 places redstone torch item `76` on the north face of an unpowered

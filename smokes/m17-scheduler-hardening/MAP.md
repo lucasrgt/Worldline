@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-diagnostic-capture -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=fa008e18e53b8d63003196e91d2b554f4ce973e602a68df4c7a7dc77096f7456 -->
+
 # M17 Scheduler Hardening Evidence Map
 
 ## Matrix

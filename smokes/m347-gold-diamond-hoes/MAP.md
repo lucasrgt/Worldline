@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m347-gold-diamond-hoes -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=db8eed6611d61cb0063b32dcf170a0fd66d46799102196c45721842544e6515b -->
+
 # M347 behavior map
 
 A raised-stone workbench `58` accepts Packet102 matrix placement of gold

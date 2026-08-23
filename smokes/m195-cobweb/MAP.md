@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m195-cobweb -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=4ebaa9934454eff6fdfeec745c7a31c093ebc734fd77ade5eac818c4c3c8531a -->
+
 # M195 behavior map
 
 Packet15 places cobweb item `30` on a raised stone column. The official

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m226-iron-ore -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=a0e1b3a34325710f72942c88c73bd15a8cad197fb7b04c8bbfc5f867b97389b7 -->
+
 # M226 behavior map
 
 Packet15 places iron ore item `15` on a raised stone column. The official

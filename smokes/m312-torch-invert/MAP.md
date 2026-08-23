@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m312-torch-invert -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=e4b4e7bf13497288e3b90b76bd07f714f976ecc54254f40ae81e8150b4924ae9 -->
+
 # M312 torch invert behavior map
 
 Packet15 places redstone torch item `76` on the north face of an unpowered

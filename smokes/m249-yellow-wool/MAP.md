@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m249-yellow-wool -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=1aa0065907c89647235eddd412bad95e322d6ecd1ecfdb97dfdd1a8a7f20e599 -->
+
 # M249 behavior map
 
 Packet15 places yellow wool item `35` damage `4` on a raised stone column.

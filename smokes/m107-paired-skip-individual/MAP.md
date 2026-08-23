@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-paired-experiment -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=913fff54f216f47e06d3886f94f4682b83c1d5bbf49648991c28926d71e8c6f3 -->
+
 # M107 behavior map
 
 M107 compares the pinned `aero.becell.skipIndividual` literals true and false

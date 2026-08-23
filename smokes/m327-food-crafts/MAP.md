@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m327-food-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=feb202ff5d2172def94a39a6a9e560b5e4ecdba79681b018a8e046bb89703a54 -->
+
 # M327 food crafts map
 
 ## Stable boundary

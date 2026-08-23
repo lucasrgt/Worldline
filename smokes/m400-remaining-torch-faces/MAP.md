@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m400-remaining-torch-faces -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ce7b2efbd3293b6dc413e9dd2c1b1c8af938af338cd70f50f3b973772d173868 -->
+
 # M400 behavior map
 
 One official session places remaining wall-torch attachments `50:1`, `50:2`,

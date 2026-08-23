@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=combat-session -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=8d05a812d9bfa62ac53321d1cca3f96c2cf9ff76668e36cdf0605945b883022c -->
+
 # M66 player combat map
 
 ## Stable boundary

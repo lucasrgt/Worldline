@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-frame-census -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=973ae93f8127bae80ceeddc372713f5968213aa1f2fb3a8978c58af61439ac40 -->
+
 # M76 behavior map
 
 M76 reuses the frozen M74 sixteen-cell synchronized fixture and binary census.

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m167-cactus -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=9a210a58a09a40ac501c31bf8262bee7846ea1240c7dc0654766374ba627ef30 -->
+
 # M167 behavior map
 
 A raised stone column receives sand `12:0`. Packet15 then plants cactus item

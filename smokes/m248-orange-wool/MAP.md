@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m248-orange-wool -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=89d3e625a2e980af7b569af8fc82e46b0e5ecff6f79e8090cabff02a38496590 -->
+
 # M248 behavior map
 
 Packet15 places orange wool item `35` damage `1` on a raised stone column.

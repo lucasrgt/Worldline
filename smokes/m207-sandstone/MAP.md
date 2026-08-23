@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m207-sandstone -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=f1168be76eb874a213a7c540fcc667aeb929883a30fe9ccb00676cf74cf65b8e -->
+
 # M207 behavior map
 
 Packet15 places sandstone item `24` on a raised stone column. The official

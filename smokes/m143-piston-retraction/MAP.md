@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m143-piston-retraction -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ed36c9824aa5c765b651fa5a53fa268e5427568f47fabaeb082ec26f7639e2e1 -->
+
 # M143 behavior map
 
 The smoke constructs the exact west-facing normal-piston fixture from M142 and

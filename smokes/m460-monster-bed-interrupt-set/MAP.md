@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m460-monster-bed-interrupt-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=fa58ada55be2832285f313973cf389f37a678482be07caf247515cebc8e150af -->
+
 # M460 behavior map
 
 Official server symbols:

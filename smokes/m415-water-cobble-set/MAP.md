@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m415-water-cobble-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=bf5ec9eaf7f4f9ec7cf8652c8bdef0af40a1d8fa89b618d519dc571fddc66148 -->
+
 # M415 behavior map
 
 One official session builds two raised stone trenches and seeds still lava

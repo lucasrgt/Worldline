@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-paired-experiment -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=f3b298b76961b50be8e4695957f53c7ee1e735d394d0b26886e8c5164553adae -->
+
 # M106 behavior map
 
 M106 compares the exact pinned minimum page population at literals two and

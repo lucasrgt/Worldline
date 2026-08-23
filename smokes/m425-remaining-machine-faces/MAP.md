@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m425-remaining-machine-faces -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=5f5f8026b3aef5768a963db53d9393ac9ed86b766118d805407d5cf5b11a5dbf -->
+
 # M425 behavior map
 
 One official session places remaining look-yaw facings of dispenser `23`,

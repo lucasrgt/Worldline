@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=container-transaction -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c3fe36b177bb6263b467d92726ec430f16fc832f012417a1d5cd20be269a038f -->
+
 # M54 Chest Window
 
 The actor acquires and places one chest through the M53 boundary. An independent

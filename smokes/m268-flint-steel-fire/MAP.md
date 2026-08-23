@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m268-flint-steel-fire -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=50fbd4ba9248b6647eee949cc037cb741948628611a039361dfe320c5099dc22 -->
+
 # M268 behavior map
 
 Packet15 of flint-and-steel item `259` on a raised stone column places fire

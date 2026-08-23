@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m291-spruce-leaves -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=665728a20dbb06b11792f4b355f3b52d189d5cf5b8c0d06099db1447b1b7f0d5 -->
+
 # M291 behavior map
 
 Packet15 places spruce log item `17` damage `1` on the east face of a

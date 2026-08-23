@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m260-apple-eat -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=f5122f857247406ea443e90df7cb0b2f8b8bfd0ef8f151b677d9b3f8a4598130 -->
+
 # M260 behavior map
 
 Official apple item 260 is seeded with health 16. Packet15 air-use

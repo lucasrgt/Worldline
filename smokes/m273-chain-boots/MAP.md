@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m273-chain-boots -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=509d729ffedcf64fb1478260c71654e80183c1936480c9db878459abe189ec16 -->
+
 # M273 chain boots map
 
 ## Stable boundary

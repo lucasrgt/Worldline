@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m349-double-chest-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ec079803ad133072d794b370d1dd5988e5931287cded14a33e3abd7702c0fd26 -->
+
 # M349 behavior map
 
 Packet15 places two adjacent chest items `54` on a raised two-block stone

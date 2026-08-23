@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m173-fence -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=87da22ea0cb364e70239d8989a677f835f86ebbe9768dee6955f04ee4be1f74e -->
+
 # M173 behavior map
 
 Packet15 places two adjacent fence items `85` on a raised stone column.

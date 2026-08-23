@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m130-nether-login -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=d04ef062cdda13bb2209d8f6651f0559495d9a9f63f946f460b0e8610c41c4a8 -->
+
 # M130 behavior map
 
 The server profile opts into the official Nether. Before first login,

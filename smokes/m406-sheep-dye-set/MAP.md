@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m406-sheep-dye-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=0c2857eb2e2bf4aaa39c631eced8f47d470862396ae8e7981d41c6c0a0775cb7 -->
+
 # M406 behavior map
 
 The fixture raises an isolated `7×7` grass platform and places two default

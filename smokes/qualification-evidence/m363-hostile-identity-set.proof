@@ -1,5 +1,5 @@
 schema=1
 id=m363-hostile-identity-set
-fingerprint=3f9d0d0cebc572b09c86fdda5f0f9f333c70b72dc9a2b0bfd49bc5f905d4fe3c
+fingerprint=a7dbb251f2b2bcad2c2acacce9a1c2831cfa3a4a2b5125c2e18cce570ffaac36
 observation.sha256=e6df497cd2826b04e3930ffb08caa875bba470b29a8b5bad4ce5cc75d48db14d
 source=refactor-equivalent

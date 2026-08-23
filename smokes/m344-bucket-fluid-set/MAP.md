@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m344-bucket-fluid-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=fe76fdf6b8ec887d8efc4caa81ce926b3efad2a42207cbefd9b6a21f9b66b789 -->
+
 # M344 behavior map
 
 One official session places still water `9:0` from water bucket `326` into

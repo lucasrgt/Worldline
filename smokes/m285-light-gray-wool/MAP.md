@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m285-light-gray-wool -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=f98cb91704701be85feaa966d2fbe24aa8b5b4df58daeabe7fc7a799836f7ae5 -->
+
 # M285 behavior map
 
 Packet15 places light-gray wool item `35` damage `8` on a raised stone

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m174-ladder -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=901e76a85d36008f4429e6863549902a4c2b49485980fbfb65a9568725bb491e -->
+
 # M174 behavior map
 
 Packet15 places ladder item `65` against a raised stone east face. The

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m278-trapdoor-toggle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=a66063d6e5ac041de1eeb23cf5a56d2fe303a9759694e0dd69ce31347ef8442a -->
+
 # M278 behavior map
 
 Trapdoor item 96 is placed against a raised stone east face as official

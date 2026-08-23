@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m567-bed-spawn-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=aaad061b562df911b0b4c29784fe2beb4b0d5f1183dae8e29603cd3c2a838aed -->
+
 # M567 behavior map
 
 Official server symbols:

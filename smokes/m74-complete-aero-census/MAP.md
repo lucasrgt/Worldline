@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-frame-census -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=2cc4533688aa06ba1d69309639c36e16688b09eb4deeeb27d044277550d2d1a7 -->
+
 # M74 behavior map
 
 M74 reuses M73's exact paired sixteen-cell plan, fixed camera, tracked readiness,

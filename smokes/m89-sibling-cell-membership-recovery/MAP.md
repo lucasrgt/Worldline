@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-cache-lifecycle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=87fa014b6cd31a48c7cffa7f839d0b407ecf823d815a80f1a578afa00828c649 -->
+
 # M89 behavior map
 
 M89 starts from the exact synchronized sixteen-identity Aero scene and fixed

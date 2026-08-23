@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=container-transaction -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=707a15cd2055ee67795cf2d074d648e4395d644024015ef7ba999fd3c000f85b -->
+
 # M56 Rejected Transaction Recovery
 
 An adapter-private qualification probe performs the normal personal-window

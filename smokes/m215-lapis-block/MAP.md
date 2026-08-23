@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m215-lapis-block -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=2eccf7bc9e04af5137d3804025114bea5686598ee5995596d8392a2a88b7fdbf -->
+
 # M215 behavior map
 
 Packet15 places lapis lazuli block item `22` on a raised stone column. The

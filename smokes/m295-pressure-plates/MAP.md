@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m295-pressure-plates -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=d36cbe38c632dcc4e03334db2982db51f92e78b36850dcbc098b43469ebb9815 -->
+
 # M295 behavior map
 
 Packet15 places wooden plate `72` and stone plate `70` on adjacent raised

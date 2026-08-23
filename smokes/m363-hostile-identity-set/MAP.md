@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m363-hostile-identity-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=e6df497cd2826b04e3930ffb08caa875bba470b29a8b5bad4ce5cc75d48db14d -->
+
 # M363 behavior map
 
 The fixture raises an isolated `7×7` grass platform and places two default

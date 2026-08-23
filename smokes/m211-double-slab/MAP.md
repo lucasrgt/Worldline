@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m211-double-slab -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=a5ad4aa55f65cbcb979ce018f5143d7d2036b7db34c77ed5f1369e2624fbf546 -->
+
 # M211 behavior map
 
 Packet15 places double stone slab item `43` on a raised stone column. The

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m356-jack-o-lantern-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=b870de18f5f7c2616c607111ea332fc3f4426f8f5a3a82d713703270066ee5b1 -->
+
 # M356 behavior map
 
 One official personal 2x2 epoch crafts jack-o-lantern `91` from pumpkin

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m219-tnt-place -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=4f2b9d0bc3bbd9a35010f5efbb02cf5d5e290dcfb590633b35833a02551912f8 -->
+
 # M219 behavior map
 
 Packet15 places TNT item `46` on a raised stone column. The official

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m550-dispenser-qc-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=fbebc71b9da63b30d1c347778fb92cafea108114e52b79af79ae955487ef73db -->
+
 # M550 behavior map
 
 Packet15 places dispenser item `23` on a raised stone column as west-facing

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m232-chest-place -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=aede6e11abbf46c3049a99931cbbaa22b00fa2ee80c21bca48aa57796ee2d1b9 -->
+
 # M232 behavior map
 
 Packet15 places chest item `54` on a raised stone column. The official

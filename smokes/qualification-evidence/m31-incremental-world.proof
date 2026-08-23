@@ -1,5 +1,5 @@
 schema=1
 id=m31-incremental-world
-fingerprint=84f4fa52acf42b0f754dc294022cc298f2d0d87b6d4c6ded6c76eabd452a8920
+fingerprint=992939552af0e42bc32e72df584179eaf3e766be5b3aaf4691c02a645b798a31
 observation.sha256=e54d2eaf01afbda1b02ec490516821c38d154afdd1b40e28a96e32a25158b2ae
 source=refactor-equivalent

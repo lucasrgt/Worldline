@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m331-throwables-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=63d18b0a65f745ad18fa9a7a9e8e345e8bffe83e067224ff8687c1b03c0a7328 -->
+
 # M331 behavior map
 
 The fixture raises an isolated stone column. One session air-uses snowball

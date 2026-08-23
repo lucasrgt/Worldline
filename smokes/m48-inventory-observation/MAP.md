@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=inventory-session -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=a501a36c74fa73d37995c8da8050f0718539e38db187539808e6fc491ba55abb -->
+
 # M48 Server Inventory Observation
 
 Two fresh unmodified Beta 1.7.3 dedicated servers send the initial 45-slot

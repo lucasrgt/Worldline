@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m139-water-lava-reaction -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=1ba936e8c311e4af488c393c17f5f68031f6fbb2c7a8b4ae2831985900fcd326 -->
+
 # M139 behavior map
 
 The fixture raises a two-cell stone basin away from generated terrain. One cell

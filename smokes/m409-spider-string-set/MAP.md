@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m409-spider-string-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=625db8d839633b99daf0e73b098ad644d6f23e3d9ed4dda4f187687c1fe26fc4 -->
+
 # M409 behavior map
 
 The fixture raises an isolated `7×7` grass platform and places one default

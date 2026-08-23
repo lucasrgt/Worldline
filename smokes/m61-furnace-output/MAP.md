@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=container-transaction -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=3759ec0bd9b8f31341f5c783a82f30592ab69bc97a54da45bd14708f781ff51c -->
+
 # M61 Furnace Output Map
 
 | Boundary | Exact evidence |

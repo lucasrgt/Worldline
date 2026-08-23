@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m180-fishing-rod -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=9eafaf3ce4f443aa63f94304c269f66ab3a4257921e9d595d17a208ef9c8554a -->
+
 # M180 behavior map
 
 The fixture raises an isolated stone column. Using fishing rod item `346`

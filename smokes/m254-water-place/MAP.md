@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m254-water-place -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=7349aeca365432ce5e3996f11aa401973978fa83d7fe895578999c7cd306cac2 -->
+
 # M254 behavior map
 
 Water bucket `326` places confined still water `9:0` into a raised stone

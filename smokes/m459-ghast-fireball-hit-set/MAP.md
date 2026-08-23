@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m459-ghast-fireball-hit-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=491a34451873fea634086ff4a8c83a68e25ff5a8ed43d75033d4ed22b63f5042 -->
+
 # M459 behavior map
 
 Official server symbols:

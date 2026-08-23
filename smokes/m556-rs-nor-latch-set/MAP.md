@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m556-rs-nor-latch-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=eb3281691461d7e9823245dcc3d2c552caaa8fd1e2f82bb20ad42a82349218d3 -->
+
 # M556 RS-NOR latch-set behavior map
 
 Two wall redstone torches form one official RS-NOR latch. Packet15 places

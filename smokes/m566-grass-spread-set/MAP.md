@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m566-grass-spread-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=b80a81abefd273cf68a6495d0a825f6556e85176324d77bc1702832ffc448174 -->
+
 # M566 behavior map
 
 Packet15 of grass item `2` and dirt item `3` builds a small raised-stone

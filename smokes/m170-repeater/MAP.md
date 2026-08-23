@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m170-repeater -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=6c15d889fbdd2c03553d0456cd4206acca9913147855898da285810b5cffe59b -->
+
 # M170 behavior map
 
 Repeater item 356 is placed on a raised west-facing stone line as unpowered

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m340-redstone-input-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=366f2922f527ce87c4818902a75b3e646c8a6e5946e6b84838fe3c9918f0c456 -->
+
 # M340 behavior map
 
 Packet15 places lever `69` on the east face of a raised stone column and

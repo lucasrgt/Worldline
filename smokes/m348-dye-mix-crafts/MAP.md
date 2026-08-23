@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m348-dye-mix-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=2c8b97b5aa9c68fef810b33465f38d10146adbfcea7c9994c7742c0ae1305b94 -->
+
 # M348 behavior map
 
 Eighteen accepted window-0 Packet102 clicks mix primary dyes in the personal

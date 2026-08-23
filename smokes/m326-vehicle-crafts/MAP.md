@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m326-vehicle-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=1109c4ce19cf7f23d5156d80cef725329fc62a68c438e24d4294aa468e088bdc -->
+
 # M326 behavior map
 
 Packet15 places workbench item `58` on a raised stone column. Packet102 then

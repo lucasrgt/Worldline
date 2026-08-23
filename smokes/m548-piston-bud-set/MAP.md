@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m548-piston-bud-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=64edc418a23140583ce5015dead697010582f99862cc5e19d6e8e7e53f02bcff -->
+
 # M548 behavior map
 
 The cloned M367 west-facing piston occupies one raised stone column.

@@ -22,6 +22,7 @@ final class RetryMigrationCheck {
                 manifest.getProperty("support_sha256")), "exceptional smoke support drift");
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); Properties telemetry = TelemetryPinCheck.manifest(root);
+        Properties schemas = SchemaPinCheck.manifest(root);
         int checked = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             String stem = "retry." + smoke.id + ".";
@@ -34,7 +35,9 @@ final class RetryMigrationCheck {
                             manifest.getProperty(stem + "current_source_sha256"))
                             && (fingerprint.equals(manifest.getProperty(stem + "current_fingerprint"))
                             || pin != null && TelemetryPinCheck.carries(
-                                    telemetry, smoke.id, pin, fingerprint)),
+                                    telemetry, smoke.id, pin, fingerprint)
+                            || pin != null && SchemaPinCheck.carries(
+                                    schemas, smoke.id, pin, fingerprint)),
                     "EOF retry migration evidence drift: " + smoke.id);
             else require(successor(dataDriven, composite, smoke.id, manifest, stem),
                     "missing migrated retry successor: " + smoke.id);
@@ -44,7 +47,8 @@ final class RetryMigrationCheck {
             require(pin != null && (pin.source().equals("executed")
                             || pin.source().equals("refactor-equivalent")
                             && (pin.evidence().equals(manifest.getProperty(stem + "evidence_sha256"))
-                            || TelemetryPinCheck.carries(telemetry, smoke.id, pin, fingerprint))),
+                            || TelemetryPinCheck.carries(telemetry, smoke.id, pin, fingerprint)
+                            || SchemaPinCheck.carries(schemas, smoke.id, pin, fingerprint))),
                     "EOF retry migration pin drift: " + smoke.id);
         }
         require(checked == 33, "EOF retry migration census drift: " + checked);

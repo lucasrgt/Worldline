@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m279-button-press -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=910692630d2dc89d5acd515f421970042c6dd218a9f6b2fbc97883e672bd3eb7 -->
+
 # M279 behavior map
 
 Stone button item 77 is placed on the east face of the M165 raised stone

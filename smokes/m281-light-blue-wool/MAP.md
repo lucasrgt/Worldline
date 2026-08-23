@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m281-light-blue-wool -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=49e519da435b759ce7053b4105c826cbae35a31badd8bc4f4e50d0cd48617e1f -->
+
 # M281 behavior map
 
 Packet15 places light-blue wool item `35` damage `3` on a raised stone

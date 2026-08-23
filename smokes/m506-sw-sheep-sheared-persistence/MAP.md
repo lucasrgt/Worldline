@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=state-world-differential -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=57aca1de84ec46a162610d18a48ba190b6128e62cc628d70e9e6ef92361790bd -->
+
 # M506-SW behavior map
 
 The official Beta 1.7.3 `EntitySheep` data watcher stores color in the low

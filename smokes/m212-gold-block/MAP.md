@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m212-gold-block -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c41efdd35e74da0cb05078664f13008bcf8d47032c07fa0360ff0f4e57b9a9ce -->
+
 # M212 behavior map
 
 Packet15 places gold block item `41` on a raised stone column. The official

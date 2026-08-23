@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m151-netherrack-fire -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=26bb6ad826b35c24a64688c8cc4ded9c503948812eb0c8b6007301c10f10f355 -->
+
 # M151 behavior map
 
 Flint and steel ignites air above official netherrack. The fire block remains

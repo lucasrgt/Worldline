@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-cache-lifecycle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=5f019eb32c7f34b31ca907e9fdbec3b827254a08cdf0cbe11a91c703644b2f7e -->
+
 # M91 behavior map
 
 M91 depletes two synchronized identities from the exact six-member natural

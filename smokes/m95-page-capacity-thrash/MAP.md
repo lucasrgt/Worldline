@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-cache-lifecycle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=fc9cc66cafdba16acc0d1d076af30aad46e335509bebcd52b5f106bd5a6f138c -->
+
 # M95 behavior map
 
 M95 reuses the frozen M74 server-authored sixteen-cell scene and M78's exact

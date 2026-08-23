@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m150-pig-pork-drop -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=90cf54607ffd52b403765121c14d821e80e9996702f158c29efe63aee15b0d33 -->
+
 # M150 behavior map
 
 One official default spawner creates a pig identity shared by two peers. After

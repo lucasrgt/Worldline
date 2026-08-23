@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m178-jukebox -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=97de107318c1552893e50f28f3483ac127f615e7ae8b5018e70e651c21886a86 -->
+
 # M178 behavior map
 
 Official jukebox item `84` is placed on a raised stone support as block `84:0`.

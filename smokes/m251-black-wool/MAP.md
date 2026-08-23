@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m251-black-wool -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=b046e1d6723ba4e19db7d84e49aafbd1dd701fc696e2ce2f6754ad839f4a23be -->
+
 # M251 behavior map
 
 Packet15 places black wool item `35` damage `15` on a raised stone column.

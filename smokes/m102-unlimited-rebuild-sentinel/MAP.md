@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-cache-lifecycle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=852d41f2d1654fd1dc83d0b746fddb4c109d370573fd67b25290361ddaefa75b -->
+
 # M102 behavior map
 
 M102 keeps the exact M74/M78 sixteen-entity, four-page scene, one-entry cache,

@@ -23,6 +23,7 @@ final class DataDrivenCycleCheck {
                 "data-driven shared source attestation drift");
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); Properties telemetry = TelemetryPinCheck.manifest(root);
+        Properties schemas = SchemaPinCheck.manifest(root);
         int generic = 0, migrated = 0;
         Set<String> seen = new HashSet<>();
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
@@ -44,7 +45,8 @@ final class DataDrivenCycleCheck {
             require(pin != null && (pin.source().equals("executed")
                             || pin.source().equals("refactor-equivalent")
                             && (pin.evidence().equals(migrations.getProperty(stem + "evidence_sha256"))
-                            || TelemetryPinCheck.carries(telemetry, smoke.id, pin, current))),
+                            || TelemetryPinCheck.carries(telemetry, smoke.id, pin, current)
+                            || SchemaPinCheck.carries(schemas, smoke.id, pin, current))),
                     "data-driven refactor pin drift: " + smoke.id);
         }
         int expected = integer(migrations, "count");

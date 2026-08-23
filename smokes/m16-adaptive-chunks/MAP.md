@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-diagnostic-capture -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=f274b0970e16939ba56b8f8796360d54c5f7981168a1e52e9d85da95585eb26b -->
+
 # M16 Adaptive Chunk Scheduler Evidence Map
 
 ## Boundary

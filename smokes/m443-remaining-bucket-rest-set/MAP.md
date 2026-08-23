@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m443-remaining-bucket-rest-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=b556b71fd57896aa06fbb39f5088d8f96e6c8a64076014c7d7391b961c669eb7 -->
+
 # M443 behavior map
 
 One official session builds two raised stone trenches and seeds still water

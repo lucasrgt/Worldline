@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m424-furnace-cart-motion-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=536398b8e8c64ca3dc8e527842ae556bf4175363fc0b8e554d2ba0ec52811b1b -->
+
 # M424 behavior map
 
 One official session builds a raised north-south track: a stone wall north of

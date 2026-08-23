@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m258-bread-eat -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=1f0cbe46155bbaf393891dc8f4343effa6b5f502c8efc4c8f0122c424a05da3a -->
+
 # M258 behavior map
 
 Official bread item `297` is eaten with Packet15 air-use (direction `255` at

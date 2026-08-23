@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=dedicated-server-control -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=7d1edb19b978300465878cfade247ec0db7db37b9a5fbcfd9a595566bfb06b60 -->
+
 # M20 Official Server Boundary
 
 The smoke starts the hash-pinned, unmodified Minecraft Beta 1.7.3 dedicated

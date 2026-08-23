@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=movement-route -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=3b09e9188cd0948cb17f11f3f203888bfd04845bf599ea20fbd004b1d1a94e44 -->
+
 # M43 Bounded Correlated Route Batch
 
 Two fresh sessions submit two correlated route plans. The first safe route

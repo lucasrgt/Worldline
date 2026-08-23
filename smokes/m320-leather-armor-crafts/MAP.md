@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m320-leather-armor-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=48274c2675afd82a6d376e7ec9ceb1e8896adc3761f59461d619a2ae378b90f4 -->
+
 # M320 behavior map
 
 Packet15 places workbench item `58` on a raised stone column. Packet102 then

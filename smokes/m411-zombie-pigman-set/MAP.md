@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m411-zombie-pigman-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c448868efb22d1c2a50bab9554f6c30de3f184d9cc2eb129103068be9868ae84 -->
+
 # M411 behavior map
 
 Official server symbols:

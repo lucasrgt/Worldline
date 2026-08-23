@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m429-remaining-attach-faces -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=d00079b30c3f58f9f2a197e5a0a27c88880e15c28c3eaf88806d4502ebc2eb2b -->
+
 # M429 behavior map
 
 One official session places remaining wall-attach facings of ladder `65`,

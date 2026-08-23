@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m318-gold-diamond-tool-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ea2a3772ad997141d967212b9f93a52ec0b5f633dde29b2b0192e844a377005e -->
+
 # M318 behavior map
 
 A raised-stone workbench `58` accepts Packet102 matrix placement of gold

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=redstone-repeater-delays -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=c1a354db7a1de143819bd96dcc890888496b992f6103e00c1ef14fecdb4d8671 -->
+
 # Repeater delay 2/3/4 smoke map
 
 Three parallel delay-2/3/4 idle repeaters face a torch at metadata 5/9/13.

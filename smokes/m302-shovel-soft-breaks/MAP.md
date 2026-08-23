@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m302-shovel-soft-breaks -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=83e1acd8df0e978483bdfe1199d46021b2f5b8a4908c646ca1045c002e7228d9 -->
+
 # M302 behavior map
 
 Packet15 places dirt `3`, sand `12`, gravel `13`, and clay `82` one at a

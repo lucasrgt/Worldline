@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m190-jack-o-lantern -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=6d925e40f9f78a804de2b69ee8eb5107d5314dedb78a27dd72a2acb8fd53f77d -->
+
 # M190 behavior map
 
 Packet15 places jack-o-lantern item `91` on a raised stone column. Actor

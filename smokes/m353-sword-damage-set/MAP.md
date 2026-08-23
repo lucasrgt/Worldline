@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m353-sword-damage-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=cfaf1e0d3a43f1bb3a09cd6dadb2462a7d953de08671761856fc1080249424e4 -->
+
 # M353 behavior map
 
 The fixture raises an isolated `7×7` grass platform, fences the perimeter

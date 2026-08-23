@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-diagnostic-capture -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=65f43a875d18e96066441cb308fed7089bab8414b087f4398c1555211f2bae6a -->
+
 # M14 Chunk Backlog Evidence Map
 
 ## Boundary

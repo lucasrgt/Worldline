@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m357-glowstone-dust-crafts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=af0a81cf89ec64afd6056fb4755ef7ed9350bac34875caa333cc150d99d7955c -->
+
 # M357 behavior map
 
 Seven accepted window-0 Packet102 clicks craft glowstone block `89` from four

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m111-fixed-seed-terrain -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=b885d60be98dfb11c60f51a928c0fa9bdda225520187692098587a72e253fa98 -->
+
 # M111 behavior map
 
 M111 loads absolute chunk `(0,0)` from two newly generated official Beta 1.7.3

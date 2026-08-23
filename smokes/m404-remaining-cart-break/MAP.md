@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m404-remaining-cart-break -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=8a80558c9383a317d0d6a8f145c940ff21cb07ffb3649aa4c564214adde79bcf -->
+
 # M404 behavior map
 
 The fixture raises an isolated stone column and places two rails `66:0`.

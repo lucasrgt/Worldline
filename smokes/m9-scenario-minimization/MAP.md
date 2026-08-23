@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=scenario-minimization -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=f713ff2457bcaf1fcaada80e0026c76d64bc69fdec713abfdcadcb7a9f0da55f -->
+
 # M9 Scenario Minimization Evidence Map
 
 ## Claim

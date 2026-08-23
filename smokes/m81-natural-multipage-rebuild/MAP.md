@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=aero-cache-lifecycle -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=f30116757d3fcf070289bdb013181744abdaf8da806426cc2efc76128484bc6d -->
+
 # M81 behavior map
 
 M81 keeps a synchronized sixteen-identity scene warm on two natural Aero page

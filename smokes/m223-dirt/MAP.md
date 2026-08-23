@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m223-dirt -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=cb51b4a07fd7c818ad09e7ea60fe06e3c01a3f3bca23a3c618cfe10d5a5cb650 -->
+
 # M223 behavior map
 
 Packet15 places dirt item `3` on a raised stone column. The official

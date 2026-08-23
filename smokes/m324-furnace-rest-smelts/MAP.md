@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m324-furnace-rest-smelts -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=6c131f48c758cb5376dfd0b9504b154148f17e3295c1337c08e4c32619dc781a -->
+
 # M324 furnace rest smelts map
 
 Packet15 places three idle furnaces `61:2` on a raised stone fixture. Each

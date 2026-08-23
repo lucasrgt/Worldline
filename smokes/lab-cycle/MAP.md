@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=runtime-lab -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=3d8f8d72d954019cc8b3c1e3b41740fa277202edeacdad53fc3720a03202967f -->
+
 # Worldline Laboratory Cycle Map
 
 ## Claim

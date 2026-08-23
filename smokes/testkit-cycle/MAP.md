@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=testkit-runtime -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=ae3c579924d95e39b28c676c6776a4a9af7303f7b8f9a771207734462bee369a -->
+
 # TestKit acceptance mapping
 
 This acceptance smoke does not introduce a new Minecraft behavioral mapping.

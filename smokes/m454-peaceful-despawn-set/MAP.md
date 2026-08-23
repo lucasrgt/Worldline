@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m454-peaceful-despawn-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=8a4c4acadf23008e8fed2fdbc1d9c05c903c65c527c3489dabee48e7d2183abe -->
+
 # M454 behavior map
 
 Official server symbols:

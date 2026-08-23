@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=movement-route -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=67a4fbc25b7288613c49431a9137a7104293d3262d7bd5898cbd0472b516287b -->
+
 # M44 Synchronous Batch Observation
 
 Two fresh sessions exhaust two one-step correlated routes. The batch observer

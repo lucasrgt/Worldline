@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=fuzz-campaign -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=2026555980e50e65986619ee44df1a420282e65fc09addcbe86ebc8398487680 -->
+
 # m15 fuzz
 
 This executable scenario is indexed by the Worldline Atlas and remains

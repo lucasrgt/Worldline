@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m213-iron-block -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=f08a9fd9455cea30e230862721b12da696334532f35e67d3bcc977f3154ca81d -->
+
 # M213 behavior map
 
 Packet15 places iron block item `42` on a raised stone column. The official

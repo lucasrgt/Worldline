@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m399-wooden-button-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=898b58fa0f849df159f7bfcfde243b0957fddcd580770518251b1721cbf21c90 -->
+
 # M399 behavior map
 
 Beta 1.7.3 has no wooden button (`143` is later). This map claims the

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m418-remaining-obsidian-place -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=7c15aa18aedb3ac5e34f9b7fbc2836311b51f88fc0737ed40298e3d3e65be80e -->
+
 # M418 behavior map
 
 Packet15 places four obsidian item `49` cells as an L-shaped portal-frame

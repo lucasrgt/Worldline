@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m431-remaining-bed-orient-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=8aa709e05da8be4a281e9eded3c6297e0f4236a515d73d60178570c69cf303a1 -->
+
 # M431 behavior map
 
 Official server symbols:

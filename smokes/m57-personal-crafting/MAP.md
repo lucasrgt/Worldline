@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=container-transaction -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=a7ca218db3ec5f4fe14ee8f7ec54955d49eb343c9185c62ab6982add0a2e8c7d -->
+
 # M57 Personal Crafting Map
 
 | Boundary | Exact evidence |

@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m305-plant-growth -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=b755666b909da0bc4583bf752a32ff032894d3959b4dd0a47c56d3e80c066721 -->
+
 # M305 behavior map
 
 A raised dirt plot is hoed and sown as wheat `59:0`. Bonemeal `351:15`
