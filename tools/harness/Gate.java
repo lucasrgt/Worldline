@@ -97,7 +97,7 @@ public final class Gate {
         case "--migrate-repository-schemas" -> m("RepositorySchemaMigration", "--apply", 600);
         case "--migrate-formatting-pins" -> m("FormattingPinMigration", "--apply", 600);
         case "--migrate-shared-helper-pins" -> m("SharedHelperPinMigration", "--apply", 600);
-        case "--migrate-unicode-pins" -> m("UnicodePinMigration", "--apply", 600);
+        case "--migrate-adapter-split-pins" -> m("AdapterSplitPinMigration", "--apply", 600);
         case "--seal-lane-portability" -> m("LaneDifferential", "--seal", 60);
         case "--module-cache-doctor", "--cache-doctor" -> m("SharedCacheMaintenance", "doctor", 600);
         case "--module-cache-gc", "--cache-gc" -> m("SharedCacheMaintenance", "gc", 600);
@@ -150,7 +150,7 @@ public final class Gate {
                 || Arrays.equals(arguments, new String[] {"--migrate-repository-schemas"})
                 || Arrays.equals(arguments, new String[] {"--migrate-formatting-pins"})
                 || Arrays.equals(arguments, new String[] {"--migrate-shared-helper-pins"})
-                || Arrays.equals(arguments, new String[] {"--migrate-unicode-pins"})
+                || Arrays.equals(arguments, new String[] {"--migrate-adapter-split-pins"})
                 || Arrays.equals(arguments, new String[] {"--seal-lane-portability"})
                 || Arrays.equals(arguments, new String[] {"--module-cache-doctor"})
                 || Arrays.equals(arguments, new String[] {"--module-cache-gc"})
@@ -169,7 +169,7 @@ public final class Gate {
                 + "--migrate-repository-schemas|"
                 + "--migrate-formatting-pins|"
                 + "--migrate-shared-helper-pins|"
-                + "--migrate-unicode-pins|"
+                + "--migrate-adapter-split-pins|"
                 + "--seal-lane-portability|"
                 + "--module-cache-doctor|--module-cache-gc|--cache-doctor|--cache-gc|"
                 + "--new-milestone ID|--milestone ID|--lane-differential ID|"

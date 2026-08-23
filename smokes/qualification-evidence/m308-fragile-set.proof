@@ -1,5 +1,5 @@
 schema=1
 id=m308-fragile-set
-fingerprint=b6fb274d6e877bd5c5729e4156d01b56ad1d50b0847295e903ad8effa0c83681
+fingerprint=85f32a9254af1dfad2332c9ebe366458a4082de9c404dfbda71d01fbf1941f45
 observation.sha256=016e31ada167a1772c3c0ec4d610d946ddf26bc0a93c97ad494019ab72c97ce5
 source=refactor-equivalent

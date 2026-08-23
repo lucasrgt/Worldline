@@ -1,5 +1,5 @@
 schema=1
 id=m411-zombie-pigman-set
-fingerprint=b234fd1cde3d82787b95c0a6bc99418ddb6dc263dbecc98b3dc8cc73a5da8155
+fingerprint=64ed7fad88d1dafc7e62b54caacd0bc8c57ec4a867509449587534fcbd12c80f
 observation.sha256=c448868efb22d1c2a50bab9554f6c30de3f184d9cc2eb129103068be9868ae84
 source=refactor-equivalent

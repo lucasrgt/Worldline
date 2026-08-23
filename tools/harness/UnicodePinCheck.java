@@ -36,9 +36,16 @@ final class UnicodePinCheck {
     }
     static boolean carries(Properties lock, String id, SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
-        return hash(lock.getProperty(stem + "prior_fingerprint"))
+        boolean direct = hash(lock.getProperty(stem + "prior_fingerprint"))
                 && current.equals(lock.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"));
+        try {
+            Properties split = AdapterSplitPinCheck.manifest(
+                    Path.of("").toAbsolutePath().normalize());
+            return direct || AdapterSplitPinCheck.follows(split, id,
+                    lock.getProperty(stem + "current_fingerprint"),
+                    lock.getProperty(stem + "evidence_sha256"), pin, current);
+        } catch (Exception error) { return false; }
     }
     static boolean follows(Properties lock, String id, String prior, String evidence,
             SmokePins.Entry pin, String current) {

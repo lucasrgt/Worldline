@@ -1,9 +1,6 @@
 package worldline.b173server;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.time.Duration;
 import worldline.api.MultiplayerConnection;
@@ -41,25 +38,17 @@ public final class B173WireClient implements ObjectObservationSession {
     public void connect() {
         require(connection == MultiplayerConnection.NEW, "session was already used");
         try {
-            socket = new Socket();
-            socket.connect(new InetSocketAddress(host, port), timeoutMillis);
-            socket.setSoTimeout(timeoutMillis);
-            DataInputStream input = new DataInputStream(socket.getInputStream());
-            DataOutputStream output = new DataOutputStream(socket.getOutputStream());
-            output.writeByte(2); B173InboundPacket.string(output, username); output.flush();
-            require(input.readUnsignedByte() == 2, "handshake response packet drift");
-            require(B173InboundPacket.string(input, 32).equals("-"), "server did not use offline handshake");
-            output.writeByte(1); output.writeInt(PROTOCOL); B173InboundPacket.string(output, username);
-            output.writeLong(0L); output.writeByte(0); output.flush();
-            int packet = input.readUnsignedByte();
-            if (packet == 255) throw new IllegalStateException("login rejected: " + B173InboundPacket.string(input, 256));
-            require(packet == 1, "login response packet drift: " + packet);
-            entityId = input.readInt();
-            B173InboundPacket.string(input, 16); input.readLong(); dimension = input.readByte(); require(dimension == 0 || dimension == -1, "server returned invalid dimension");
-            require(entityId >= 0, "server returned invalid entity id");
-            play = new B173PlayChannel(input, output, timeoutMillis, entityId, username, dimension);
+            B173WireLogin.Result result = B173WireLogin.connect(
+                    host, port, username, timeoutMillis);
+            socket = result.socket();
+            play = result.play();
+            entityId = result.entityId();
+            dimension = result.dimension();
             connection = MultiplayerConnection.CONNECTED;
-        } catch (IOException error) { closeSocket(); throw new IllegalStateException("multiplayer login failed", error); }
+        } catch (IOException error) {
+            closeSocket();
+            throw new IllegalStateException("multiplayer login failed", error);
+        }
     }
 
     @Override public MultiplayerState state() { return new MultiplayerState(connection, username, PROTOCOL, entityId); } @Override public int dimension() { return channel().dimension(); } @Override public int awaitDimension(int expected) { try { return channel().awaitDimension(expected); } catch (IOException error) { throw new IllegalStateException("dimension transition absent", error); } } @Override public int health(){return channel().health();} @Override public int awaitHealth(int expected){try{return channel().awaitHealth(expected);}catch(IOException error){throw new IllegalStateException("health observation absent",error);}} @Override public worldline.api.RemoteRespawn respawn(){try{return channel().respawn();}catch(IOException error){throw new IllegalStateException("respawn failed",error);}} @Override public worldline.api.RemoteExplosion awaitExplosion(){try{return channel().awaitExplosion();}catch(IOException error){throw new IllegalStateException("explosion observation absent",error);}}

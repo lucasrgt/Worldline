@@ -69,7 +69,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | COV-07 | QUEUED | Expand weather coverage. | Deterministic weather transitions and persistence exceed the four partial cases. |
 | COV-08 | QUEUED | Expand multiplayer edge-case coverage. | Connection, ordering, disconnect, and persistence edge sets close the identified gaps. |
 | EXT-01 | QUEUED | Release TestKit 0.3.0 with current public behavior APIs. | Docs/examples use Gate, `WorldlineBehavior`, evidence pinning, an end-to-end vanilla expectation, and `worldline behaviors list`; the artifact is published only with later authorization. |
-| EXT-02 | QUEUED | Split the three adapters currently at the file ceiling. | Dedicated-server, wire-client, and capture-mixin capabilities are decomposed below the limit before new features land. |
+| EXT-02 | DONE | Split the three adapters currently at the file ceiling. | Dedicated-server process control, protocol-14 login, and Aero capture settings/scene work are seven cohesive sources; the former ceiling files are now 100, 139, and 99 code lines, and a source-attested migration carries 438 affected fingerprints across all 525 evidence envelopes. |
 | EXT-03 | QUEUED | Connect GUI authoring to runtime structure. | A workbench screen proves `spec.matchesStructure(runtime.ui().nodes())` against the official oracle. |
 | EXT-04 | QUEUED | Reconcile optimization constitution and practice. | Existing performance work receives stable optimization records/sites, or a reviewed constitutional amendment replaces the unused rule. |
 | EXT-05 | QUEUED | Validate StationAPI as a second real driver. | A minimal StationAPI boot milestone exercises driver discovery, isolation, and TestKit behavior. |

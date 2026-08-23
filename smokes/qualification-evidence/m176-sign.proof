@@ -1,5 +1,5 @@
 schema=1
 id=m176-sign
-fingerprint=30ae099aa24e14890691b24d849b98bdd9a4cc5134e0ce62022861cb7796d8d0
+fingerprint=7c4548923fc98ab911329e429d15a7fecdedc310f5a26ac9f17d875b500afa4c
 observation.sha256=02572936a90d996c81d67465e5507ff4f5ecb33262d10fd9cdb0e2cbe28489ff
 source=refactor-equivalent

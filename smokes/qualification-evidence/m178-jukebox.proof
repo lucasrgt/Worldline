@@ -1,5 +1,5 @@
 schema=1
 id=m178-jukebox
-fingerprint=29f84cf381337bc2623acc4d5d3a9d9bc0b0cb012ee1a918b59fe9b96c4aadd4
+fingerprint=fd25bc01a3698aba1333302093c5d7fc97db759c5c97661cc00caa947dbfc76e
 observation.sha256=97de107318c1552893e50f28f3483ac127f615e7ae8b5018e70e651c21886a86
 source=refactor-equivalent

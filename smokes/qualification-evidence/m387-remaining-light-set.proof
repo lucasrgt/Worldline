@@ -1,5 +1,5 @@
 schema=1
 id=m387-remaining-light-set
-fingerprint=aae38515672abc74f6d624464462cf03c8c8b38fb2f2e39aedf18dc913f68ca7
+fingerprint=53d8c5e23f4c55356dac0d6109f173687e4759f9948bfac0abe819499b6d0b0f
 observation.sha256=c8fb22dfee19b993ff3351bf0dfcb8de29c0975c84ee50c94848cd2d0e4c6d70
 source=refactor-equivalent

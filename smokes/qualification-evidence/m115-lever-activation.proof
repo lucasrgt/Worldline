@@ -1,5 +1,5 @@
 schema=1
 id=m115-lever-activation
-fingerprint=e7c254d5dac290717eed3a5e3953155ff4e04e6fbbfd6a4065fab5a8c16d156d
+fingerprint=16a9f096e4197c8808ff07dec217c3b0fd9fd491df75786d14d8c7cafc2829b9
 observation.sha256=497b5d743a5693c925d69d71c02528cf2d16a63ad5c477980b916a0d2b45ae34
 source=refactor-equivalent

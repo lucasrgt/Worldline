@@ -1,5 +1,5 @@
 schema=1
 id=m211-double-slab
-fingerprint=89800c74ec81abdd710fdc75a0daef611e6ad32758b77016a89db315b7364f6f
+fingerprint=904817b980beb8da914b7df7e072461877de0dfba93f0d206b0840b1700f60aa
 observation.sha256=a5ad4aa55f65cbcb979ce018f5143d7d2036b7db34c77ed5f1369e2624fbf546
 source=refactor-equivalent
