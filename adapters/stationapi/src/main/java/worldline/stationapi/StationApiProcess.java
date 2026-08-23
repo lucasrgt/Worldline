@@ -50,7 +50,8 @@ final class StationApiProcess implements AutoCloseable {
     }
 
     String text() throws IOException {
-        return Files.isRegularFile(log) ? Files.readString(log, StandardCharsets.UTF_8) : "";
+        return Files.isRegularFile(log)
+                ? new String(Files.readAllBytes(log), StandardCharsets.UTF_8) : "";
     }
 
     void destroy() {
