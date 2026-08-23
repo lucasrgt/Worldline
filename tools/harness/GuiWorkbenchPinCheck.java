@@ -103,6 +103,15 @@ final class GuiWorkbenchPinCheck {
         }
         return false;
     }
+    static boolean transitionsFile(Properties lock, String relative, String prior, String current) {
+        for (int index = 0; index < integer(lock, "source.count"); index++) {
+            String stem = "source." + index + ".";
+            if (relative.equals(lock.getProperty(stem + "path")))
+                return prior.equals(lock.getProperty(stem + "prior_sha256"))
+                        && current.equals(lock.getProperty(stem + "current_sha256"));
+        }
+        return false;
+    }
     static boolean releaseTransition(Path root, String released, String candidate) throws Exception {
         Properties lock = manifest(root);
         return "runtime-pending".equals(lock.getProperty("release.status"))

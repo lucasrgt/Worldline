@@ -32,26 +32,37 @@ public final class GuiCycle {
   }
 
   private void execute() throws Exception {
-    require(
-        Files.isDirectory(client.resolve("adapter-classes")), "run ClientCycle before GuiCycle");
+    require(Files.isDirectory(client.resolve("headless-classes"))
+        && Files.isDirectory(client.resolve("instrumented-client"))
+        && Files.isDirectory(client.resolve("oracle-classes")),
+        "run ClientCycle before GuiCycle");
     recreate(build);
+    Path adapterRoot = root.resolve("adapters/b173-client");
+    List<Path> libraries = jars(root.resolve("local/workspaces/b1.7.3/libraries"));
+    List<Path> adapterPath = new ArrayList<Path>(Arrays.asList(
+        client.resolve("headless-classes"), root.resolve("local/workspaces/b1.7.3/minecraft/bin"),
+        product("api"), product("kernel"), product("reproduction"), product("trace"),
+        product("mods"), product("modtest"), product("minimization"), product("fuzz"),
+        product("profiling"), product("analysis"), product("testapi")));
+    adapterPath.addAll(libraries);
+    Path adapter = compile(adapterRoot.resolve("src/main/java"),
+        build.resolve("adapter-classes"), adapterPath);
     Path subject = compile(smoke.resolve("src"), build.resolve("classes"),
-        Arrays.asList(client.resolve("adapter-classes"), product("api"), product("trace"),
-            product("kernel")));
+        Arrays.asList(adapter, product("api"), product("trace"), product("kernel")));
     Path official = root.resolve("local/workspaces/b1.7.3/jars/minecraft.jar");
     List<Path> oraclePath = new ArrayList<Path>(Arrays.asList(client.resolve("oracle-classes"),
         client.resolve("headless-classes"), product("trace"), official));
-    oraclePath.addAll(jars(root.resolve("local/workspaces/b1.7.3/libraries")));
+    oraclePath.addAll(libraries);
     Path oracle = compile(smoke.resolve("oracle-src"), build.resolve("oracle-classes"), oraclePath);
     List<Path> subjectPath = new ArrayList<Path>(Arrays.asList(subject,
-        client.resolve("instrumented-client"), client.resolve("adapter-classes"),
+        client.resolve("instrumented-client"), adapter,
         client.resolve("headless-classes"), product("api"), product("trace"), product("kernel"),
         root.resolve("local/workspaces/b1.7.3/minecraft/bin"), official));
-    subjectPath.addAll(jars(root.resolve("local/workspaces/b1.7.3/libraries")));
+    subjectPath.addAll(libraries);
     List<Path> officialPath =
         new ArrayList<Path>(Arrays.asList(oracle, client.resolve("oracle-classes"),
             client.resolve("headless-classes"), product("trace"), official));
-    officialPath.addAll(jars(root.resolve("local/workspaces/b1.7.3/libraries")));
+    officialPath.addAll(libraries);
     Outcome first = run("worldline.smoke.gui.GuiTreeSmoke", subjectPath, "instrumented-client/");
     Outcome second = run("worldline.smoke.gui.GuiTreeSmoke", subjectPath, "instrumented-client/");
     Outcome oracleFirst = run("GuiTreeOracle", officialPath, "jars/minecraft.jar");

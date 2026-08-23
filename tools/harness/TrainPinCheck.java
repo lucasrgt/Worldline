@@ -78,10 +78,14 @@ final class TrainPinCheck {
             throws Exception {
         for (int index = 0; index < integer(lock, "source.count"); index++) {
             String stem = "source." + index + ".";
-            if (relative.equals(lock.getProperty(stem + "path")))
-                return prior.equals(lock.getProperty(stem + "prior_sha256"))
-                        && digest(root.resolve(relative)).equals(
-                                lock.getProperty(stem + "current_sha256"));
+            if (relative.equals(lock.getProperty(stem + "path"))) {
+                String predecessor = lock.getProperty(stem + "prior_sha256");
+                boolean connected = prior.equals(predecessor)
+                        || GuiWorkbenchPinCheck.transitionsFile(
+                                GuiWorkbenchPinCheck.manifest(root), relative, prior, predecessor);
+                return connected && digest(root.resolve(relative)).equals(
+                        lock.getProperty(stem + "current_sha256"));
+            }
         }
         return false;
     }
