@@ -32,7 +32,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | PIPE-07 | QUEUED | Validate only affected milestone surfaces in candidate mode. | Full validation remains in release profiles. |
 | PIPE-08 | QUEUED | Cache nested harness self-tests by harness digest. | A changed harness always reruns them; an identical harness restores a receipt. |
 | PIPE-09 | DONE | Restrict source-quality traversal to tracked files. | `SourceQualityCheck` consumes the fail-closed tracked-file inventory. |
-| PIPE-10 | QUEUED | Schedule cold smokes using reviewed duration/failure history. | Cheap and historically failing work runs first; history is stored with receipts. |
+| PIPE-10 | ACTIVE | Schedule cold smokes using reviewed duration/failure history. | `Gate --smoke-plan` orders missing proofs by cached duration; failure-frequency ranking remains. |
 
 ## Harness robustness
 

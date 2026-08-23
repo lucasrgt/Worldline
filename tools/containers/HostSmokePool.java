@@ -291,11 +291,11 @@ public final class HostSmokePool {
             require(max >= 1 && worker >= heapBytes * 2 + (64L << 20), "worker estimate must cover two heaps plus 64m");
             require(limit >= worker && processes >= 4 && processes <= 512, "unsafe worker hard limits");
             require(cpu >= 0.1 && cpu <= 4.0 && duration >= 30 && duration <= 3600, "unsafe CPU or duration config");
-            return new Config(parallelism, max, backend, heap, worker, limit, cpu, processes,
-                    size(required(values, "host.memory.reserve")), duration, lock);
+            return new Config(parallelism, max, backend, heap, worker, limit, cpu, processes, size(required(values, "host.memory.reserve")), duration, lock);
         }
-        Path lockPath(Path root) { return lock.isBlank() ? Path.of(System.getProperty("user.home"), ".worldline/official-runtime.lock")
-                : (Path.of(lock).isAbsolute() ? Path.of(lock) : root.resolve(lock)).normalize(); }
+        Path lockPath(Path root) { return lock.isBlank() ? defaultLock() : (Path.of(lock).isAbsolute() ? Path.of(lock) : root.resolve(lock)).normalize(); }
+        private static Path defaultLock() { String control = System.getenv("WORLDLINE_CONTROL_DIR"); if (control != null && !control.isBlank()) return Path.of(control).toAbsolutePath().normalize().resolve("official-b173.lock");
+            String base=isWindows()?System.getenv("LOCALAPPDATA"):System.getenv("XDG_RUNTIME_DIR");if(base==null||base.isBlank())base=System.getProperty("java.io.tmpdir");return Path.of(base).toAbsolutePath().normalize().resolve("worldline/locks/official-b173.lock"); }
         private static void load(Path path, Properties values, boolean required) throws IOException { if (!Files.isRegularFile(path)) {
                 if (required) throw new IllegalArgumentException("missing config: " + path); return; }
             try (var reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) { values.load(reader); } }

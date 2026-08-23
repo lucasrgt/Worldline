@@ -106,6 +106,8 @@ the gate recomputes each scenario's behavior-input fingerprint and reuses only a
 with the same fingerprint.
 
 The tracked `smokes/qualification.lock` is the portable layer above that machine-local cache. It
+normalizes Git text inputs to LF before hashing, so a clean CRLF checkout and a clean LF checkout
+resolve to the same behavior identity. Binary inputs remain byte-exact. It
 records the fingerprint, PASS status, and evidence hash for each explicitly pinned milestone.
 A fresh clone may reuse a matching reviewed pin without downloading the heavy log. The lockfile
 is deliberately outside every milestone fingerprint, so committing updated pins does not create
@@ -116,6 +118,10 @@ the pin was written. `source=legacy-frozen` is reserved for the one-time migrati
 pre-cache baseline: it binds the current input fingerprint to the already-reviewed
 `expected.signature` in the milestone descriptor. This distinction prevents a historical freeze
 from being presented as a newly executed log.
+
+The v3 fingerprint migration changed identity only by applying that Git text normalization. The
+one-time `--accept-legacy-smoke-baseline` transition preserves each reviewed v2 evidence hash and
+provenance while recalculating its portable v3 identity; it does not claim a new runtime execution.
 
 The fingerprint includes the milestone directory, its runner, shared runner support when used,
 official-artifact descriptors, referenced adapters and toolchains, referenced product modules

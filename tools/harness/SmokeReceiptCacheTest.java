@@ -37,6 +37,9 @@ public final class SmokeReceiptCacheTest {
         List<SmokeDiscovery.Entry> entries = SmokeDiscovery.discover(root);
         SmokeInputFingerprint first = new SmokeInputFingerprint(root);
         String one = first.compute(entries.get(0)), two = first.compute(entries.get(1));
+        write(root.resolve("smokes/m1-one/input.txt"), "one\r\n");
+        require(one.equals(new SmokeInputFingerprint(root).compute(entries.get(0))),
+                "CRLF checkout invalidated a text fingerprint");
         write(root.resolve("smokes/m1-one/input.txt"), "changed\n");
         SmokeInputFingerprint changed = new SmokeInputFingerprint(root);
         require(!one.equals(changed.compute(entries.get(0))), "changed smoke retained its fingerprint");

@@ -39,6 +39,9 @@ final class RepositoryVerify {
     }
 
     public static void main(String[] arguments) {
+        if (Arrays.equals(arguments, new String[] {"--smoke-plan"})) {
+            SmokePoolPlan.main(new String[0]); return;
+        }
         if (Arrays.equals(arguments, new String[] {"--orchestrator"})) {
             orchestrator(); return;
         }

@@ -104,13 +104,14 @@ public final class Gate {
                 || Arrays.equals(arguments, new String[] {"--smoke"})
                 || Arrays.equals(arguments, new String[] {"--orchestrator"})
                 || Arrays.equals(arguments, new String[] {"--pin-smokes"})
+                || Arrays.equals(arguments, new String[] {"--smoke-plan"})
                 || Arrays.equals(arguments, new String[] {"--accept-legacy-smoke-baseline"})
                 || arguments.length == 2 && ("--candidate".equals(arguments[0])
                         || "--milestone".equals(arguments[0]) || "--smoke-id".equals(arguments[0]));
         if (!profile) throw new IllegalArgumentException(
                 "usage: java tools/harness/Gate.java "
                 + "[--runtime|--smoke|--pin-smokes|--accept-legacy-smoke-baseline|--orchestrator|"
-                + "--milestone ID|--candidate ID|--self-test]");
+                + "--smoke-plan|--milestone ID|--candidate ID|--self-test]");
         if (arguments.length == 2 && !arguments[1].matches("[a-z0-9]+(?:-[a-z0-9]+)*"))
             throw new IllegalArgumentException("invalid milestone id: " + arguments[1]);
     }

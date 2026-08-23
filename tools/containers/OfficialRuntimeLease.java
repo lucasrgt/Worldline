@@ -33,7 +33,16 @@ public final class OfficialRuntimeLease {
         for (Path path : List.of(ROOT.resolve("tools/containers/host-pool.properties"), ROOT.resolve(".worldline/host-pool.properties")))
             if (Files.isRegularFile(path)) try (var reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) { values.load(reader); }
         String configured = values.getProperty("runtime.lock.path", "").trim();
-        return configured.isEmpty() ? Path.of(System.getProperty("user.home"), ".worldline/official-runtime.lock") : absolute(configured);
+        return configured.isEmpty() ? defaultLock() : absolute(configured);
+    }
+    private static Path defaultLock() {
+        String control = System.getenv("WORLDLINE_CONTROL_DIR");
+        if (control != null && !control.isBlank())
+            return Path.of(control).toAbsolutePath().normalize().resolve("official-b173.lock");
+        boolean windows = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows");
+        String base = windows ? System.getenv("LOCALAPPDATA") : System.getenv("XDG_RUNTIME_DIR");
+        if (base == null || base.isBlank()) base = System.getProperty("java.io.tmpdir");
+        return Path.of(base).toAbsolutePath().normalize().resolve("worldline/locks/official-b173.lock");
     }
     private static Path absolute(String value) { Path path = Path.of(value); return (path.isAbsolute() ? path : ROOT.resolve(path)).normalize(); }
     private static boolean noForeignRuntime() {

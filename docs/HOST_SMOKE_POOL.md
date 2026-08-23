@@ -67,6 +67,12 @@ host.memory.reserve=4g
 task.duration.seconds=90
 ```
 
+With no explicit override, the pool uses the exact same control-directory
+`official-b173.lock` as `Gate.java`. `WORLDLINE_CONTROL_DIR`, then the platform
+runtime directory, selects that shared location. A custom `runtime.lock.path`
+must also be exported as `WORLDLINE_RUNTIME_LOCK` for every external gate so
+all coordinators continue to serialize through one lease.
+
 The worker estimate must cover two configured heaps plus at least 64 MiB of
 native/runtime overhead. Tune estimates upward from observed peak resident
 memory; do not tune them downward merely to admit more workers.

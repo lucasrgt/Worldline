@@ -148,6 +148,20 @@ final class SmokeReceiptCache {
                 load(proof).getProperty("evidence.sha256"), "executed");
     }
 
+    long historicalDuration(String id) throws Exception {
+        Path directory = objects.resolve(id); if (!Files.isDirectory(directory)) return Long.MAX_VALUE;
+        long best = Long.MAX_VALUE;
+        try (var paths = Files.list(directory)) {
+            for (Path path : paths.filter(item -> item.toString().endsWith(".properties")).toList()) {
+                String value = load(path).getProperty("duration.ms");
+                if (value == null) continue;
+                try { best = Math.min(best, Long.parseLong(value)); }
+                catch (NumberFormatException ignored) { }
+            }
+        }
+        return best;
+    }
+
     private String proofDigest(SmokeDiscovery.Entry smoke, String fingerprint, String mode)
             throws Exception {
         if ("pinned".equals(mode)) {

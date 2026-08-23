@@ -10,10 +10,11 @@ import java.util.Map;
 
 /** Reads and writes the reviewable, repository-tracked smoke qualification lock. */
 final class SmokePins {
-    private static final String ALGORITHM = "worldline-smoke-input-v2";
-    private static final String LEGACY_ALGORITHM = "worldline-smoke-input-v1";
-    private static final String HEADER = "# Worldline smoke qualification lock v2\n"
-            + "schema=2\nalgorithm=" + ALGORITHM + "\n";
+    private static final String ALGORITHM = "worldline-smoke-input-v3";
+    private static final java.util.Set<String> LEGACY_ALGORITHMS = java.util.Set.of(
+            "worldline-smoke-input-v1", "worldline-smoke-input-v2");
+    private static final String HEADER = "# Worldline smoke qualification lock v3\n"
+            + "schema=3\nalgorithm=" + ALGORITHM + "\n";
     private final Path path;
     private final Map<String, Entry> entries;
     private final String algorithm;
@@ -24,7 +25,7 @@ final class SmokePins {
                 ? Files.readAllLines(path, StandardCharsets.UTF_8) : List.of();
         this.algorithm = lines.stream().filter(line -> line.startsWith("algorithm="))
                 .map(line -> line.substring(10)).findFirst().orElse(ALGORITHM);
-        require(algorithm.equals(ALGORITHM) || algorithm.equals(LEGACY_ALGORITHM),
+        require(algorithm.equals(ALGORITHM) || LEGACY_ALGORITHMS.contains(algorithm),
                 "invalid smoke qualification lock algorithm");
         this.entries = read(lines);
     }
@@ -35,7 +36,7 @@ final class SmokePins {
     }
 
     Entry entry(String id) { return entries.get(id); }
-    boolean legacyAlgorithm() { return algorithm.equals(LEGACY_ALGORITHM); }
+    boolean legacyAlgorithm() { return !algorithm.equals(ALGORITHM); }
 
     void validateCatalog(List<SmokeDiscovery.Entry> smokes) {
         java.util.Set<String> ids = smokes.stream().map(entry -> entry.id)
@@ -64,12 +65,13 @@ final class SmokePins {
         Map<String, String> sources = new HashMap<>(), status = new HashMap<>();
         if (lines.isEmpty()) return Map.of();
         boolean legacy = lines.stream().anyMatch("schema=1"::equals);
-        require(legacy || lines.stream().anyMatch("schema=2"::equals),
+        require(legacy || lines.stream().anyMatch(line -> line.matches("schema=[23]")),
                 "invalid smoke qualification lock schema");
         for (String line : lines) {
-            if (line.isBlank() || line.startsWith("#") || line.matches("schema=[12]")
+            if (line.isBlank() || line.startsWith("#") || line.matches("schema=[123]")
                     || line.equals("algorithm=" + ALGORITHM)
-                    || line.equals("algorithm=" + LEGACY_ALGORITHM)) continue;
+                    || LEGACY_ALGORITHMS.stream().anyMatch(
+                            value -> line.equals("algorithm=" + value))) continue;
             int separator = line.indexOf('='); require(separator > 6, "invalid smoke pin row: " + line);
             String key = line.substring(0, separator), value = line.substring(separator + 1);
             require(key.startsWith("smoke."), "unknown smoke pin key: " + key);
