@@ -105,19 +105,21 @@ final class SmokeReceiptCache {
         Path suite = root.resolve(".worldline/reports/smoke-suite.json");
         require(Files.isRegularFile(suite), "run Gate.java --smoke before orchestrator qualification");
         String json = Files.readString(suite, StandardCharsets.UTF_8);
-        require("passed".equals(field(json, "status")), "smoke suite receipt did not pass");
-        require(head.equals(field(json, "head")) && tree.equals(field(json, "tree")),
+        java.util.Map<String, Object> document = MiniJson.object(json);
+        require("passed".equals(MiniJson.string(document, "status")), "smoke suite receipt did not pass");
+        require(head.equals(MiniJson.string(document, "head"))
+                        && tree.equals(MiniJson.string(document, "tree")),
                 "smoke suite receipt belongs to another commit");
-        require(json.matches("(?s).*\\\"clean\\\"\\s*:\\s*true.*"),
-                "smoke suite receipt was produced from a dirty worktree");
+        require(MiniJson.bool(document, "clean"), "smoke suite receipt was produced from a dirty worktree");
         SmokeReceiptCache cache = new SmokeReceiptCache(root, cacheRoot(root), true);
         List<SmokeDiscovery.Entry> smokes = SmokeDiscovery.discover(root);
         cache.pins.validateCatalog(smokes);
-        require(Integer.toString(smokes.size()).equals(number(json, "count")),
+        require(smokes.size() == MiniJson.integer(document, "count"),
                 "smoke suite receipt count drifted");
         MessageDigest aggregate = MessageDigest.getInstance("SHA-256");
         for (SmokeDiscovery.Entry smoke : smokes) cache.validate(smoke, head, tree, aggregate);
-        require(HexFormat.of().formatHex(aggregate.digest()).equals(field(json, "root_sha256")),
+        require(HexFormat.of().formatHex(aggregate.digest()).equals(
+                MiniJson.string(document, "root_sha256")),
                 "smoke suite aggregate hash drifted");
         return digest(suite);
     }
@@ -219,14 +221,6 @@ final class SmokeReceiptCache {
     } }
     private static String digest(Path path) throws Exception { return HexFormat.of().formatHex(
             MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(path))); }
-    private static String field(String json, String name) { java.util.regex.Matcher matcher =
-            java.util.regex.Pattern.compile("\\\"" + java.util.regex.Pattern.quote(name)
-                    + "\\\"\\s*:\\s*\\\"([^\\\"]+)\\\"").matcher(json);
-        require(matcher.find(), "smoke suite receipt is missing " + name); return matcher.group(1); }
-    private static String number(String json, String name) { java.util.regex.Matcher matcher =
-            java.util.regex.Pattern.compile("\\\"" + java.util.regex.Pattern.quote(name)
-                    + "\\\"\\s*:\\s*(\\d+)").matcher(json);
-        require(matcher.find(), "smoke suite receipt is missing " + name); return matcher.group(1); }
     private static Path cacheRoot(Path root) {
         String control = System.getenv("WORLDLINE_GATE_CONTROL");
         if (control != null && !control.isBlank()) return Path.of(control).resolve("cache");

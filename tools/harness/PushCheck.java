@@ -3,8 +3,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.util.HexFormat;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Map;
 
 /** Fast pre-push validation of an orchestrator receipt for one exact Git SHA. */
 public final class PushCheck {
@@ -31,22 +30,17 @@ public final class PushCheck {
         require(Files.isRegularFile(plan), "qualified integration plan disappeared");
         require(Files.isRegularFile(smoke), "qualified smoke suite receipt disappeared");
         String json = Files.readString(receipt, StandardCharsets.UTF_8);
-        require("passed".equals(field(json, "status")), "orchestrator receipt did not pass");
-        require(sha.equals(field(json, "head")), "orchestrator receipt belongs to another commit");
-        require(digest(plan).equals(field(json, "integration_plan_sha256")),
+        Map<String, Object> document = MiniJson.object(json);
+        require("passed".equals(MiniJson.string(document, "status")), "orchestrator receipt did not pass");
+        require(sha.equals(MiniJson.string(document, "head")), "orchestrator receipt belongs to another commit");
+        require(digest(plan).equals(MiniJson.string(document, "integration_plan_sha256")),
                 "integration plan changed after orchestrator qualification");
-        require(digest(smoke).equals(field(json, "smoke_suite_sha256")),
+        require(digest(smoke).equals(MiniJson.string(document, "smoke_suite_sha256")),
                 "smoke suite receipt changed after orchestrator qualification");
     }
 
     private static String digest(Path path) throws Exception {
         return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(path)));
-    }
-
-    private static String field(String json, String name) {
-        Matcher matcher = Pattern.compile("\\\"" + Pattern.quote(name)
-                + "\\\"\\s*:\\s*\\\"([^\\\"]+)\\\"").matcher(json);
-        require(matcher.find(), "orchestrator receipt is missing " + name); return matcher.group(1);
     }
 
     private static String shortSha(String value) { return value.substring(0, Math.min(12, value.length())); }

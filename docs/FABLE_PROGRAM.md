@@ -41,7 +41,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | HAR-01 | DONE | Bound every repository verification subprocess. | `ProcessCapture` enforces a configurable timeout and includes the captured tail. |
 | HAR-02 | DONE | Kill descendant trees consistently. | Gate capture, smoke-runner build, test build, and integration-train teardown use recursive reverse-order termination. |
 | HAR-03 | DONE | Normalize paths in cross-platform cache digests. | Gate harness and smoke-runner digests use `/`, matching module/test behavior. |
-| HAR-04 | QUEUED | Replace regex JSON parsing in orchestrator/push checks. | Use a real minimal parser or a properties receipt format with escape tests. |
+| HAR-04 | DONE | Replace regex JSON parsing in orchestrator/push checks. | `MiniJson` strictly parses plans and current receipts; tests cover escapes, nested values, duplicate keys, malformed escapes, and trailing data. |
 | HAR-05 | DONE | Preserve exception stack traces in machine reports. | `verify.json` includes escaped `stack_trace`. |
 | HAR-06 | DONE | Attach suite log tails to timeout/failure reports. | `TestBuild` reports the bounded captured tail. |
 | HAR-07 | QUEUED | Replace lock busy-polling with a fair FIFO ticket queue. | Concurrent worktrees acquire official/static slots without starvation. |

@@ -5,18 +5,13 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.HexFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /** Binds an audited integration train and repository gate to one orchestrator-owned commit. */
 final class OrchestratorCheck {
-    private static final Pattern BASE = Pattern.compile("\\\"base\\\":\\\"([0-9a-f]{40,64})\\\"");
-    private static final Pattern HEAD = Pattern.compile("\\\"head\\\":\\\"([0-9a-f]{40,64})\\\"");
-
     private OrchestratorCheck() {}
 
     static Context preflight(Path root) throws Exception {
@@ -25,10 +20,16 @@ final class OrchestratorCheck {
         Path plan = root.resolve(".worldline/reports/integration-plan.json");
         require(Files.isRegularFile(plan), "missing qualified integration plan");
         String json = Files.readString(plan, StandardCharsets.UTF_8);
-        require(json.matches("(?s).*\\\"verified\\\"\\s*:\\s*true.*"),
-                "integration plan is not qualified");
-        String base = one(BASE, json, "integration base");
-        List<String> candidates = all(HEAD, json);
+        Map<String, Object> document = MiniJson.object(json);
+        require(MiniJson.bool(document, "verified"), "integration plan is not qualified");
+        String base = MiniJson.string(document, "base");
+        require(base.matches("[0-9a-f]{40,64}"), "invalid integration base");
+        List<String> candidates = new java.util.ArrayList<>();
+        for (Object value : MiniJson.array(document, "candidates")) {
+            String head = MiniJson.string(MiniJson.asObject(value, "candidate"), "head");
+            require(head.matches("[0-9a-f]{40,64}"), "invalid candidate head");
+            candidates.add(head);
+        }
         require(!candidates.isEmpty(), "integration plan has no candidates");
         String head = capture(root, List.of("git", "rev-parse", "HEAD")).trim();
         String tree = capture(root, List.of("git", "rev-parse", "HEAD^{tree}")).trim();
@@ -89,16 +90,6 @@ final class OrchestratorCheck {
             destroy(process); throw new IllegalStateException(command.get(0) + " timed out");
         }
         return process.exitValue();
-    }
-
-    private static String one(Pattern pattern, String text, String name) {
-        Matcher matcher = pattern.matcher(text);
-        require(matcher.find(), "missing " + name + " in integration plan"); return matcher.group(1);
-    }
-
-    private static List<String> all(Pattern pattern, String text) {
-        List<String> values = new ArrayList<>(); Matcher matcher = pattern.matcher(text);
-        while (matcher.find()) values.add(matcher.group(1)); return values;
     }
 
     private static String shortSha(String value) { return value.substring(0, Math.min(12, value.length())); }
