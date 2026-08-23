@@ -1,5 +1,5 @@
 schema=1
 id=m94-default-ttl-page-recovery
-fingerprint=02c1d6d8ce38f2c83a0f228592775702deb3776a5fbeb37dc9ec21b134371b2e
+fingerprint=a40480700a72a55d00727deb5854fb8949a84e7eb68647ab2e4d8ab304a14546
 observation.sha256=c2617f80713c9054acdf8ade17e4474a3a1ed275a2c092fc6d455363493acfcf
-source=legacy-frozen
+source=refactor-equivalent

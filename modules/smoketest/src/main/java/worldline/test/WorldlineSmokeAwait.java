@@ -1,5 +1,12 @@
 package worldline.test;
 
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import worldline.api.BlockPosition;
@@ -12,6 +19,11 @@ import worldline.api.SustainedRemoteWorldMultiplayerSession;
 /** Process-scoped wait telemetry and explicit fixed-duration observation windows. */
 public final class WorldlineSmokeAwait {
     private static long waits, polls, failures, observedTicks;
+
+    static {
+        Runtime.getRuntime().addShutdownHook(new Thread(WorldlineSmokeAwait::publish,
+                "worldline-await-telemetry"));
+    }
 
     private WorldlineSmokeAwait() { }
 
@@ -102,6 +114,23 @@ public final class WorldlineSmokeAwait {
     private static synchronized void record(AwaitTelemetry value) {
         waits += value.waits(); polls += value.polls(); failures += value.failures();
         observedTicks += value.observedTicks();
+    }
+
+    private static void publish() {
+        String evidence = telemetry().evidence();
+        System.out.println("WORLDLINE_AWAIT_TELEMETRY=" + evidence);
+        String target = System.getenv("WORLDLINE_AWAIT_TELEMETRY_FILE");
+        if (target == null || target.trim().isEmpty()) return;
+        byte[] line = (evidence + "\n").getBytes(StandardCharsets.UTF_8);
+        Path path = Paths.get(target).toAbsolutePath().normalize();
+        try (FileChannel channel = FileChannel.open(path, StandardOpenOption.CREATE,
+                StandardOpenOption.WRITE, StandardOpenOption.APPEND);
+                FileLock lock = channel.lock()) {
+            if (!lock.isValid()) throw new IllegalStateException("invalid telemetry file lock");
+            channel.write(ByteBuffer.wrap(line));
+        } catch (Exception error) {
+            System.err.println("WORLDLINE_AWAIT_TELEMETRY_ERROR=" + error.getMessage());
+        }
     }
 
     @FunctionalInterface public interface CheckedProbe<T> { T get() throws Exception; }

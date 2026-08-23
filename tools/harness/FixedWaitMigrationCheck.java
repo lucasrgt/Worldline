@@ -18,14 +18,17 @@ final class FixedWaitMigrationCheck {
         Properties manifest = load(root.resolve("smokes/fixed-wait-migration.lock"));
         Properties dataDriven = load(root.resolve("smokes/data-driven-migration.lock"));
         Properties composite = load(root.resolve("smokes/composite-cycle-migration.lock"));
+        Properties telemetry = TelemetryPinCheck.manifest(root);
         require("1".equals(manifest.getProperty("schema"))
                         && integer(manifest, "source.count") == 226
                         && integer(manifest, "milestone.count") == 216
                         && integer(manifest, "data.count") == 132
                         && integer(manifest, "exceptional.count") == 84,
                 "invalid fixed-wait migration manifest");
-        require(digest(root.resolve("modules/smoketest/src/main/java/worldline/test/WorldlineSmokeAwait.java"))
-                        .equals(manifest.getProperty("support.sha256")),
+        String support = digest(root.resolve(
+                "modules/smoketest/src/main/java/worldline/test/WorldlineSmokeAwait.java"));
+        require(support.equals(manifest.getProperty("support.sha256"))
+                        || support.equals(telemetry.getProperty("await_source.sha256")),
                 "fixed-wait support drift");
         for (int index = 0; index < 226; index++) {
             String stem = "source." + index + "."; Path source = root.resolve(required(manifest,
@@ -45,12 +48,20 @@ final class FixedWaitMigrationCheck {
         SmokePins pins = new SmokePins(root); String pinText = Files.readString(
                 root.resolve("smokes/qualification.lock"), StandardCharsets.UTF_8);
         SmokeInputFingerprint fingerprints =
-                new SmokeInputFingerprint(root); int checked = 0;
+                new SmokeInputFingerprint(root);
+        int checked = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             String stem = "milestone." + smoke.id + ".";
             if (manifest.getProperty(stem + "current_fingerprint") == null) continue;
             checked++; String fingerprint = fingerprints.compute(smoke);
+            SmokePins.Entry pin = pins.match(smoke.id, fingerprint);
             boolean direct = fingerprint.equals(required(manifest, stem + "current_fingerprint"))
+                    && digest(root.resolve(smoke.runner)).equals(required(manifest, stem + "runner_sha256"))
+                    && digest(root.resolve("smokes").resolve(smoke.id).resolve("smoke.properties"))
+                    .equals(required(manifest, stem + "descriptor_sha256"))
+                    && dataDescriptorChanged(root, smoke, manifest, stem);
+            boolean instrumented = pin != null && TelemetryPinCheck.carries(
+                    telemetry, smoke.id, pin, fingerprint)
                     && digest(root.resolve(smoke.runner)).equals(required(manifest, stem + "runner_sha256"))
                     && digest(root.resolve("smokes").resolve(smoke.id).resolve("smoke.properties"))
                     .equals(required(manifest, stem + "descriptor_sha256"))
@@ -58,12 +69,13 @@ final class FixedWaitMigrationCheck {
             require(hash(manifest, stem + "prior_fingerprint")
                             && hash(manifest, stem + "prior_descriptor_sha256")
                             && hash(manifest, stem + "evidence_sha256")
-                            && (direct || successor(dataDriven, composite, smoke.id, manifest, stem)),
+                            && (direct || instrumented
+                            || successor(dataDriven, composite, smoke.id, manifest, stem)),
                     "fixed-wait milestone evidence drift: " + smoke.id);
-            SmokePins.Entry pin = pins.match(smoke.id, fingerprint);
             require(pin != null && (pin.source().equals("executed")
                             || pin.source().equals("refactor-equivalent")
-                            && pin.evidence().equals(required(manifest, stem + "evidence_sha256")))
+                            && (pin.evidence().equals(required(manifest, stem + "evidence_sha256"))
+                            || TelemetryPinCheck.carries(telemetry, smoke.id, pin, fingerprint)))
                             && pinText.contains("# fixed-wait-refactor-proof="
                                     + "smokes/fixed-wait-migration.lock:milestone."
                                     + smoke.id + "\nsmoke." + smoke.id + ".fingerprint="),

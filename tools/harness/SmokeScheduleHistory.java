@@ -14,14 +14,18 @@ import java.util.TreeMap;
 
 /** Records local run outcomes and maintains reviewed failure/duration scheduling history. */
 final class SmokeScheduleHistory {
+    private static final List<String> FIELDS = List.of("attempts", "failures", "duration.total.ms",
+            "retry.attempts", "retries", "retry.failures", "retry.policy.calls", "await.waits",
+            "await.polls", "await.failures", "await.observed.ticks", "await.polls.maximum");
     private final Path root, tracked, observations;
-    private final Properties values;
+    private final Properties values, policy;
 
     SmokeScheduleHistory(Path root) throws Exception {
         this.root = root.toAbsolutePath().normalize();
         this.tracked = this.root.resolve("smokes/schedule.properties");
         this.observations = this.root.resolve(".worldline/reports/smoke-history");
         this.values = load(tracked);
+        this.policy = load(this.root.resolve("quality/smoke-telemetry.properties"));
         validate(values);
     }
 
@@ -49,6 +53,11 @@ final class SmokeScheduleHistory {
     }
 
     void observed(String id, boolean passed, long duration) throws Exception {
+        observed(id, passed, duration, SmokeProcess.Telemetry.EMPTY);
+    }
+
+    void observed(String id, boolean passed, long duration, SmokeProcess.Telemetry telemetry)
+            throws Exception {
         require(id.matches("[a-z0-9]+(?:-[a-z0-9]+)*") && duration >= 0L, "invalid smoke observation");
         Files.createDirectories(observations);
         Path path = observations.resolve(id + ".properties");
@@ -61,11 +70,22 @@ final class SmokeScheduleHistory {
             long failures = Math.max(number(values, key(id, "failures")), number(local, "failures"));
             long total = Math.max(number(values, key(id, "duration.total.ms")),
                     number(local, "duration.total.ms"));
-            local.setProperty("schema", "1");
+            local.setProperty("schema", "2");
             local.setProperty("id", id);
             local.setProperty("attempts", Long.toString(attempts));
             local.setProperty("failures", Long.toString(failures + (passed ? 0L : 1L)));
             local.setProperty("duration.total.ms", Long.toString(Math.addExact(total, duration)));
+            add(local, id, "retry.attempts", telemetry.attempts());
+            add(local, id, "retries", telemetry.retries());
+            add(local, id, "retry.failures", telemetry.retryFailures());
+            add(local, id, "retry.policy.calls", telemetry.policyCalls());
+            add(local, id, "await.waits", telemetry.waits());
+            add(local, id, "await.polls", telemetry.polls());
+            add(local, id, "await.failures", telemetry.awaitFailures());
+            add(local, id, "await.observed.ticks", telemetry.observedTicks());
+            local.setProperty("await.polls.maximum", Long.toString(Math.max(telemetry.polls(),
+                    Math.max(number(values, key(id, "await.polls.maximum")),
+                            number(local, "await.polls.maximum")))));
             store(path, local);
         }
     }
@@ -76,10 +96,11 @@ final class SmokeScheduleHistory {
         if (Files.isDirectory(observations)) try (var paths = Files.list(observations)) {
             for (Path path : paths.filter(item -> item.toString().endsWith(".properties")).sorted().toList()) {
                 Properties local = load(path);
-                require("1".equals(local.getProperty("schema")),
+                require("2".equals(local.getProperty("schema")),
                         "invalid observation schema: " + path.getFileName());
                 String id = local.getProperty("id", "");
-                for (String field : List.of("attempts", "failures", "duration.total.ms")) {
+                enforceReviewPolicy(id, local);
+                for (String field : FIELDS) {
                     long next = Math.max(number(merged, key(id, field)), number(local, field));
                     merged.setProperty(key(id, field), Long.toString(next));
                 }
@@ -110,7 +131,7 @@ final class SmokeScheduleHistory {
     }
 
     private static void validate(Properties values) {
-        require("1".equals(values.getProperty("schema")), "smoke schedule schema drifted");
+        require("2".equals(values.getProperty("schema")), "smoke schedule schema drifted");
         Set<String> ids = new HashSet<>();
         for (String key : values.stringPropertyNames()) if (key.startsWith("smoke.")) {
             ids.add(id(key));
@@ -120,17 +141,37 @@ final class SmokeScheduleHistory {
             long attempts = number(values, key(id, "attempts"));
             long failures = number(values, key(id, "failures"));
             require(failures <= attempts, "failure count exceeds attempts for " + id);
+            require(number(values, key(id, "retries")) <= number(values, key(id, "retry.attempts")),
+                    "retry count exceeds attempts for " + id);
         }
+    }
+
+    private void enforceReviewPolicy(String id, Properties local) {
+        long priorRetries = number(values, key(id, "retries"));
+        long retries = number(local, "retries");
+        require(priorRetries != 0L || retries == 0L,
+                "review required: previously clean smoke now retries: " + id);
+        long priorPolls = number(values, key(id, "await.polls.maximum"));
+        long polls = number(local, "await.polls.maximum");
+        long minimum = number(policy, "await.polls.regression.minimum");
+        long factor = number(policy, "await.polls.regression.factor.percent");
+        require(priorPolls == 0L || polls <= minimum || polls * 100L <= priorPolls * factor,
+                "review required: await polling regressed: " + id + " " + priorPolls + " -> " + polls);
     }
 
     static void selfTest() throws Exception {
         Path root = Files.createTempDirectory("worldline-smoke-schedule-");
         try {
             Files.createDirectories(root.resolve("smokes"));
-            Files.writeString(root.resolve("smokes/schedule.properties"), "schema=1\n");
+            Files.createDirectories(root.resolve("quality"));
+            Files.writeString(root.resolve("smokes/schedule.properties"), "schema=2\n");
+            Files.writeString(root.resolve("quality/smoke-telemetry.properties"),
+                    "await.polls.regression.minimum=50\nawait.polls.regression.factor.percent=150\n");
             SmokeScheduleHistory history = new SmokeScheduleHistory(root);
-            history.observed("m1-flaky", false, 30L);
-            history.observed("m1-flaky", true, 10L);
+            history.observed("m1-flaky", false, 30L,
+                    new SmokeProcess.Telemetry(1, 3, 0, 3, 1, 0, 0, 0));
+            history.observed("m1-flaky", true, 10L,
+                    new SmokeProcess.Telemetry(1, 2, 0, 2, 1, 0, 0, 0));
             history.observed("m2-slow", true, 100L);
             history.update();
             history.update();
@@ -139,8 +180,16 @@ final class SmokeScheduleHistory {
             Score slow = restored.score("m2-slow", Long.MAX_VALUE);
             require(flaky.attempts == 2L && flaky.failures == 1L && flaky.duration == 20L,
                     "failure history aggregation drifted");
+            require(number(restored.values, key("m1-flaky", "await.polls")) == 5L
+                            && number(restored.values, key("m1-flaky", "await.polls.maximum")) == 3L,
+                    "await history aggregation drifted");
             require(compare(flaky, slow) < 0 && compare(slow, new Score(0, 0, 5)) > 0,
                     "failure/duration priority drifted");
+            Properties retry = new Properties(); retry.setProperty("retries", "1");
+            rejects(() -> restored.enforceReviewPolicy("m1-flaky", retry));
+            restored.values.setProperty(key("m2-slow", "await.polls.maximum"), "60");
+            Properties polling = new Properties(); polling.setProperty("await.polls.maximum", "100");
+            rejects(() -> restored.enforceReviewPolicy("m2-slow", polling));
             System.out.println("smoke schedule history self-test passed");
         } finally { delete(root); }
     }
@@ -172,7 +221,7 @@ final class SmokeScheduleHistory {
     }
     private static String key(String id, String field) { return "smoke." + id + "." + field; }
     private static String id(String key) {
-        for (String field : List.of("attempts", "failures", "duration.total.ms")) {
+        for (String field : FIELDS) {
             String suffix = "." + field;
             if (key.endsWith(suffix) && key.length() > 6 + suffix.length())
                 return key.substring(6, key.length() - suffix.length());
@@ -185,10 +234,19 @@ final class SmokeScheduleHistory {
             for (Path path : paths.sorted(java.util.Comparator.reverseOrder()).toList()) Files.deleteIfExists(path);
         }
     }
+    private static void rejects(CheckedAction action) throws Exception {
+        try { action.run(); throw new AssertionError("expected telemetry review rejection"); }
+        catch (IllegalStateException expected) { }
+    }
+    private void add(Properties local, String id, String field, long delta) {
+        long prior = Math.max(number(values, key(id, field)), number(local, field));
+        local.setProperty(field, Long.toString(Math.addExact(prior, delta)));
+    }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);
     }
     record Score(long attempts, long failures, long duration) {
         double failureRate() { return attempts == 0L ? 0.0d : (double) failures / attempts; }
     }
+    @FunctionalInterface private interface CheckedAction { void run() throws Exception; }
 }

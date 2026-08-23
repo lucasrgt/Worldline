@@ -1,5 +1,5 @@
 schema=1
 id=m90-larger-page-sibling-recovery
-fingerprint=2693254c6263ed5f4d0950c3dad80e0cf090e3ad5c8f2bb7adbc538ec58c6040
+fingerprint=14b4312ff612773fe8383655e928ca59f2843ed339e2f96328c3dd2613383400
 observation.sha256=aac17bb2f371a10cf09b7350c228e000700ac36270dc6d3535e3de74a132a402
-source=legacy-frozen
+source=refactor-equivalent

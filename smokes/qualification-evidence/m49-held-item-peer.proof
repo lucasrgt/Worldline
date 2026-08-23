@@ -1,5 +1,5 @@
 schema=1
 id=m49-held-item-peer
-fingerprint=6408cd3c040ce0436fd345d26ad41de84484465f8815cf268cbaf4ca9da3e7db
+fingerprint=c14d4c1edb0e92b8938655bc070c21cb38703d5ec61d94cfda724abddd8cb14e
 observation.sha256=bc3abf1d762e3dea91f50596be010422b60035cccde930f4e2b9b77c79a948eb
 source=refactor-equivalent

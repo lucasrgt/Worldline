@@ -37,8 +37,8 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | --- | --- | --- | --- |
 | MIG-01 | DONE | Complete the second data-driven coordinator wave. | 386 simple and 35 composite declarative cycles leave 83 exceptional coordinators; both migrations preserve content-addressed evidence chains. |
 | MIG-02 | DONE | Classify every remaining raw fixed-tick window. | The canonical gate validates 226 sources across 216 milestones and reports zero raw fixed-wait debt. |
-| MIG-03 | QUEUED | Publish and aggregate await telemetry. | Every smoke emits `WORLDLINE_AWAIT_TELEMETRY`; history records polls/failures and flags high-poll regressions. |
-| MIG-04 | QUEUED | Persist retry dependence and alert reviewers. | Nightly history records retry counts per smoke and fails review policy when a previously clean smoke begins relying on retry. |
+| MIG-03 | DONE | Publish and aggregate await telemetry. | Every executed smoke emits an aggregate `WORLDLINE_AWAIT_TELEMETRY`; schema-2 history records waits, polls, failures, observed ticks, and rejects high-poll regressions. |
+| MIG-04 | DONE | Persist retry dependence and alert reviewers. | Schema-2 nightly history records retry attempts, retries, failures, and policy calls; a previously clean smoke becoming retry-dependent fails review policy. |
 | MIG-05 | QUEUED | Adopt generated narrative schema. | All 36 eligible qualification-schema milestones use narrative schema and new scaffolds default to it. |
 | MIG-06 | QUEUED | Add a schema for every behavior map. | All MAP files validate required boundary, non-claims, and frozen-trace fields. |
 | MIG-07 | QUEUED | Version and normalize `smoke.properties`. | One schema defines canonical behavior/TestKit identity and runner declaration; all descriptors lint and migrate mechanically by era. |

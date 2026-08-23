@@ -1,5 +1,5 @@
 schema=1
 id=m12-aero-reproduction
-fingerprint=0e250bd0a90a23624dc398cc404624692c79f8836b771e6d76ba6134da05af03
+fingerprint=4750c39c1215d45ecff45b65a4294e41764d4d3bc8bd6342579648ee4e30383b
 observation.sha256=658dd9c328381a4c5bdff4d989a93bc0546b3ef1907b0c62a0a58706d48d4119
-source=executed
+source=refactor-equivalent

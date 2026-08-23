@@ -1,5 +1,5 @@
 schema=1
 id=m107-paired-skip-individual
-fingerprint=9d5e0dae3caef56b24945590139e474a741812fc519bf4569159864df454553f
+fingerprint=dee8b3ca70d72af91d19c41958066c1ae31fd9bca49a7b715c4e17eef47f48d4
 observation.sha256=913fff54f216f47e06d3886f94f4682b83c1d5bbf49648991c28926d71e8c6f3
-source=legacy-frozen
+source=refactor-equivalent

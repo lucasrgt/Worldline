@@ -1,5 +1,5 @@
 schema=1
 id=m17-scheduler-hardening
-fingerprint=7635ab2a447b183fd4c8df4a89c436b0ecccddfeb768ad303a77a5b055f247b5
+fingerprint=27fbc6af3b8d45e2660b6ee75ea7f987865d720dd5ae3ff17b30078929a1b09d
 observation.sha256=29d8a4166911f459075b43b1dda292cd2fd0967c8e6f81f12c017a563dd9c5cd
-source=executed
+source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m83-page-topology-contrast
-fingerprint=bb3f18e389198a5906dd82b098410d53663552fa0e5f5f6812ab64aeb9b2cf2d
+fingerprint=3f3b9d83fd449549171157d0710699fe63c7da2d711ab100ded006df847ce99d
 observation.sha256=2418e988f23571a72a07c2521eb9ee7cb9ebc8b436957a74d7cf226fe4878f10
-source=legacy-frozen
+source=refactor-equivalent

@@ -23,7 +23,8 @@ final class CompositeCycleCheck {
                         migrations.getProperty("support_source_sha256")),
                 "composite shared source attestation drift");
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
-                new SmokeInputFingerprint(root); Set<String> seen = new HashSet<>(); int generic = 0;
+                new SmokeInputFingerprint(root); Properties telemetry = TelemetryPinCheck.manifest(root);
+        Set<String> seen = new HashSet<>(); int generic = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             if (!smoke.runner.equals("tools/smoke/CompositeCycle.java")) continue;
             generic++; seen.add(smoke.id); CompositeCyclePlan plan = CompositeCyclePlan.load(root, smoke.id);
@@ -36,10 +37,11 @@ final class CompositeCycleCheck {
                             && hash(migrations, stem + "evidence_sha256")
                             && plan.fingerprint().equals(migrations.getProperty(stem + "plan_sha256")),
                     "composite migration evidence drift: " + smoke.id);
-            SmokePins.Entry pin = pins.match(smoke.id, fingerprints.compute(smoke));
+            String current = fingerprints.compute(smoke); SmokePins.Entry pin = pins.match(smoke.id, current);
             require(pin != null && (pin.source().equals("executed")
                             || pin.source().equals("refactor-equivalent")
-                            && pin.evidence().equals(migrations.getProperty(stem + "evidence_sha256"))),
+                            && (pin.evidence().equals(migrations.getProperty(stem + "evidence_sha256"))
+                            || TelemetryPinCheck.carries(telemetry, smoke.id, pin, current))),
                     "composite refactor pin drift: " + smoke.id);
         }
         require(generic == integer(migrations, "count") && generic == seen.size(),

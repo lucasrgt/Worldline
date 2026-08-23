@@ -1,5 +1,5 @@
 schema=1
 id=m45-event-batch-stop
-fingerprint=0aac10d3c318321afd4b3a7f8b3a6b18ff9cbef93892185800bd631f5dff9e6e
+fingerprint=c163744a28df4950797bcf299d81e8e20bc74603ff0edfc96fd3a7b463a44ae7
 observation.sha256=c502df11e4cc543ac1067b32ec3d7f250dead84c7c9d58fc937161193d40a1a2
 source=refactor-equivalent

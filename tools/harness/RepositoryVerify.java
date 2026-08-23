@@ -157,6 +157,7 @@ final class RepositoryVerify {
             enforceBudget("harness", VerificationRoots.read(root));
             enforceBudget("adapter", Collections.singletonList(root.resolve("adapters")));
             DataDrivenCycleCheck.execute(root); CompositeCycleCheck.execute(root);
+            TelemetryPinCheck.execute(root);
             RetryMigrationCheck.execute(root);
             FixedWaitMigrationCheck.execute(root); new SourceQualityCheck(root).execute();
         }));

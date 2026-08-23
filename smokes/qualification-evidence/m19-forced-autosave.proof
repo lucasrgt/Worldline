@@ -1,5 +1,5 @@
 schema=1
 id=m19-forced-autosave
-fingerprint=5d54b25f650eb6bf510edb11206d596529407512cff8478abc4c01f99eae1754
+fingerprint=2e37062b65070450a0c661554f9adaf978cb0f8820a6a87a3de27d957e615496
 observation.sha256=200dbd154ea1d025df0a62bc3e65a07d515c3e1318cea82b645fb3adccb1d513
-source=executed
+source=refactor-equivalent

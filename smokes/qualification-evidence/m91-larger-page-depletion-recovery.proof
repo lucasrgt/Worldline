@@ -1,5 +1,5 @@
 schema=1
 id=m91-larger-page-depletion-recovery
-fingerprint=64da52cd9cbc703c83c759277cdd82b5fb5c561ea84798f16ab52882149af4be
+fingerprint=988b1638fa16a3738e880d81f52a6e9ad91506a5bfc36073098ba50cd83e612d
 observation.sha256=5f019eb32c7f34b31ca907e9fdbec3b827254a08cdf0cbe11a91c703644b2f7e
-source=legacy-frozen
+source=refactor-equivalent

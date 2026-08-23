@@ -1,5 +1,5 @@
 schema=1
 id=m74-complete-aero-census
-fingerprint=0cbbdf6a00bd1e0a2f99072abc70590992d8a2f660335362612e057b438dedcc
+fingerprint=6fd1b2a116062c6e24a4c9da8b4201d2ed5676913fa6090fa73a8be887a82c49
 observation.sha256=b722ef9ee2449596e9e9c1cbcf68e972f0a5a494c2745453ae291be49acd2ab4
-source=executed
+source=refactor-equivalent

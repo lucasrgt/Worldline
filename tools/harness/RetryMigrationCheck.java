@@ -21,26 +21,30 @@ final class RetryMigrationCheck {
         require(digest(root.resolve("tools/harness/ExceptionalSmokeSupport.java")).equals(
                 manifest.getProperty("support_sha256")), "exceptional smoke support drift");
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
-                new SmokeInputFingerprint(root); int checked = 0;
+                new SmokeInputFingerprint(root); Properties telemetry = TelemetryPinCheck.manifest(root);
+        int checked = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             String stem = "retry." + smoke.id + ".";
             if (manifest.getProperty(stem + "source") == null) continue;
             checked++; Path source = root.resolve(manifest.getProperty(stem + "source")).normalize();
             String fingerprint = fingerprints.compute(smoke);
+            SmokePins.Entry pin = pins.match(smoke.id, fingerprint);
             require(source.startsWith(root.resolve("tools/smoke")), "unsafe migrated retry source");
-            if (Files.isRegularFile(source)) require(fingerprint.equals(
-                            manifest.getProperty(stem + "current_fingerprint"))
-                            && digest(source).equals(manifest.getProperty(stem + "current_source_sha256")),
+            if (Files.isRegularFile(source)) require(digest(source).equals(
+                            manifest.getProperty(stem + "current_source_sha256"))
+                            && (fingerprint.equals(manifest.getProperty(stem + "current_fingerprint"))
+                            || pin != null && TelemetryPinCheck.carries(
+                                    telemetry, smoke.id, pin, fingerprint)),
                     "EOF retry migration evidence drift: " + smoke.id);
             else require(successor(dataDriven, composite, smoke.id, manifest, stem),
                     "missing migrated retry successor: " + smoke.id);
             require(hash(manifest, stem + "prior_source_sha256")
                             && hash(manifest, stem + "prior_fingerprint"),
                     "EOF retry migration hashes drift: " + smoke.id);
-            SmokePins.Entry pin = pins.match(smoke.id, fingerprint);
             require(pin != null && (pin.source().equals("executed")
                             || pin.source().equals("refactor-equivalent")
-                            && pin.evidence().equals(manifest.getProperty(stem + "evidence_sha256"))),
+                            && (pin.evidence().equals(manifest.getProperty(stem + "evidence_sha256"))
+                            || TelemetryPinCheck.carries(telemetry, smoke.id, pin, fingerprint))),
                     "EOF retry migration pin drift: " + smoke.id);
         }
         require(checked == 33, "EOF retry migration census drift: " + checked);

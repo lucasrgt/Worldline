@@ -1,5 +1,5 @@
 schema=1
 id=m18-save-attribution
-fingerprint=62c31b8e81f05c7241c2a7d30168b13317f0513cbca58a975a0787ac16401244
+fingerprint=2a8dbe21e24f31537044c99b3b15521c4a1e23fcaf6ba585a6c7e4d60803790e
 observation.sha256=03eacfa0a8655c3e9e574ada7e23e8c9306275b8d30bc42237f7c126573a963f
-source=executed
+source=refactor-equivalent

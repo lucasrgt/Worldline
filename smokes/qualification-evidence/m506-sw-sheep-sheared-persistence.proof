@@ -1,5 +1,5 @@
 schema=1
 id=m506-sw-sheep-sheared-persistence
-fingerprint=f8dbc50fe2116f117a275aed4a5a0930ccf26ca333f83d2a9ef2a4bb52bdddb8
+fingerprint=562d76f5ce7b96801975a42c237d8ffeec4a9d964e8455a471293a3c9bba46cc
 observation.sha256=57aca1de84ec46a162610d18a48ba190b6128e62cc628d70e9e6ef92361790bd
 source=refactor-equivalent

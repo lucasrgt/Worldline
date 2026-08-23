@@ -1,5 +1,5 @@
 schema=1
 id=m75-aero-density-ladder
-fingerprint=79ee8419743895c399bc6c48d3812264244b5adec50a42ff93632722463755e1
+fingerprint=caefc7872ba1afe14309d6e2f2234a1a4dfa6f2e195f717a8a572e6e58b9d61b
 observation.sha256=92c9e4e28b17dd1df6750e5aff15022619211a1e981ffb9c3ccea461a3d9da05
-source=legacy-frozen
+source=refactor-equivalent

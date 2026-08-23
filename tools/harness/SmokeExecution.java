@@ -7,13 +7,14 @@ final class SmokeExecution {
 
     static long run(Path root, SmokeDiscovery.Entry smoke) throws Exception {
         long started = System.nanoTime();
+        SmokeProcess process = new SmokeProcess(root);
         try {
-            long duration = new SmokeProcess(root).run(smoke);
-            new SmokeScheduleHistory(root).observed(smoke.id, true, duration);
+            long duration = process.run(smoke);
+            new SmokeScheduleHistory(root).observed(smoke.id, true, duration, process.telemetry());
             return duration;
         } catch (Exception error) {
             long elapsed = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - started);
-            new SmokeScheduleHistory(root).observed(smoke.id, false, elapsed);
+            new SmokeScheduleHistory(root).observed(smoke.id, false, elapsed, process.telemetry());
             throw error;
         }
     }

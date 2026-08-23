@@ -1,5 +1,5 @@
 schema=1
 id=m108-paired-cell-size
-fingerprint=4f9a9a5399a0c1acdf433193161be8af91ac59dc2903692fdd93701bc8ba0351
+fingerprint=5db2c6e661fa9137b9024b0f53ac352fa558b221d37176e4800ca3ed526c8357
 observation.sha256=7bd2dd0f5f557a19c07eaf9d79978bfbac81aee3ad313df51ac504740b7c303d
-source=legacy-frozen
+source=refactor-equivalent

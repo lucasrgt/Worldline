@@ -1,5 +1,5 @@
 schema=1
 id=m68-aero-multiplayer-login
-fingerprint=41b66c3ab656cf29fc13a7b908c03618aedee2957c2f89111596b578dcec83c6
+fingerprint=89ecd55f3f3f07cd086ec799b2e46a41b56454972d6e4dcae8109a076559f246
 observation.sha256=a7978b0bb7e1277d846528036ff3ded3c5541ea5b11bd0935d32580b574e969f
-source=legacy-frozen
+source=refactor-equivalent

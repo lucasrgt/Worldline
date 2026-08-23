@@ -1,5 +1,5 @@
 schema=1
 id=m85-natural-membership-recovery
-fingerprint=2adeec99cac36d1f97fa398e8ead6ae5e8598e77c24a19f81d21b9fe670cbe50
+fingerprint=83b2ce70474c52b5002b34aa335ee043a9763f93e6d385a4d7f396541d2a23a1
 observation.sha256=6afe38b10186f67d95eef5d1a1beca81bd168417d7d32d3579dfd654aae0445b
-source=legacy-frozen
+source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m201-red-mushroom
-fingerprint=e0960074f807e1b9ed7ca52e82be33bcb002157baac8ec424dcc29c68743cb8c
+fingerprint=0f0c347a403bc423c092d2889364845ca3f0e1d61abdd19dd75544eb59b03693
 observation.sha256=26885845d6ad7c99bd324b497cb5415fe9056a79b295d940bc26da6049f0848a
 source=refactor-equivalent

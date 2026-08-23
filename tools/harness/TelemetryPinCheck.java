@@ -1,0 +1,71 @@
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Properties;
+
+/** Validates telemetry-only proof transport and source attestations. */
+final class TelemetryPinCheck {
+    private TelemetryPinCheck() { }
+    static void execute(Path root) throws Exception {
+        Path path = root.resolve("smokes/telemetry-migration.lock");
+        if (!Files.isRegularFile(path)) return;
+        Properties manifest = load(path); require("1".equals(manifest.getProperty("schema")),
+                "invalid telemetry migration schema");
+        for (String key : new String[] {"await_source", "process_source", "execution_source",
+                "history_source", "policy"}) {
+            String relative = required(manifest, key + ".path");
+            require(digest(root.resolve(relative)).equals(required(manifest, key + ".sha256")),
+                    "telemetry migration source drift: " + relative);
+        }
+        SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
+                new SmokeInputFingerprint(root); int changed = 0;
+        for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            String stem = "smoke." + smoke.id + ".";
+            if (manifest.getProperty(stem + "current_fingerprint") == null) continue;
+            changed++; String current = fingerprints.compute(smoke);
+            require(hash(manifest, stem + "prior_fingerprint")
+                            && current.equals(required(manifest, stem + "current_fingerprint"))
+                            && hash(manifest, stem + "evidence_sha256"),
+                    "telemetry migration evidence drift: " + smoke.id);
+            SmokePins.Entry pin = pins.match(smoke.id, current);
+            require(pin != null && (pin.source().equals("executed")
+                            || pin.source().equals("refactor-equivalent")
+                            && pin.evidence().equals(required(manifest, stem + "evidence_sha256"))),
+                    "telemetry migration pin drift: " + smoke.id);
+        }
+        require(changed == integer(manifest, "count") && changed >= 100,
+                "telemetry migration census drift");
+        System.out.println("  telemetry proof transport: " + changed + " smoke inputs");
+    }
+    static Properties manifest(Path root) throws Exception {
+        Path path = root.resolve("smokes/telemetry-migration.lock");
+        return Files.isRegularFile(path) ? load(path) : new Properties();
+    }
+    static boolean carries(Properties manifest, String id, SmokePins.Entry pin, String current) {
+        String stem = "smoke." + id + ".";
+        return hash(manifest, stem + "prior_fingerprint")
+                && current.equals(manifest.getProperty(stem + "current_fingerprint"))
+                && pin.evidence().equals(manifest.getProperty(stem + "evidence_sha256"));
+    }
+    private static boolean hash(Properties values, String key) {
+        return values.getProperty(key, "").matches("[0-9a-f]{64}");
+    }
+    private static int integer(Properties values, String key) {
+        try { return Integer.parseInt(required(values, key)); }
+        catch (NumberFormatException error) { throw new IllegalStateException("invalid " + key); }
+    }
+    private static String digest(Path path) throws Exception { return java.util.HexFormat.of().formatHex(
+            java.security.MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(path)));
+    }
+    private static Properties load(Path path) throws Exception { Properties values = new Properties();
+        try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+            values.load(reader); } return values;
+    }
+    private static String required(Properties values, String key) { String value = values.getProperty(key);
+        require(value != null && !value.isBlank(), "missing " + key); return value;
+    }
+    private static void require(boolean value, String message) {
+        if (!value) throw new IllegalStateException(message);
+    }
+}

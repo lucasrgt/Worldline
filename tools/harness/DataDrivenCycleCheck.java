@@ -22,7 +22,8 @@ final class DataDrivenCycleCheck {
                         migrations.getProperty("support_source_sha256")),
                 "data-driven shared source attestation drift");
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
-                new SmokeInputFingerprint(root); int generic = 0, migrated = 0;
+                new SmokeInputFingerprint(root); Properties telemetry = TelemetryPinCheck.manifest(root);
+        int generic = 0, migrated = 0;
         Set<String> seen = new HashSet<>();
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             if (!smoke.runner.equals("tools/smoke/DataDrivenCycle.java")) continue;
@@ -39,10 +40,11 @@ final class DataDrivenCycleCheck {
                             && hash(migrations, stem + "evidence_sha256")
                             && plan.fingerprint().equals(migrations.getProperty(stem + "plan_sha256")),
                     "data-driven migration evidence drift: " + smoke.id);
-            SmokePins.Entry pin = pins.match(smoke.id, fingerprints.compute(smoke));
+            String current = fingerprints.compute(smoke); SmokePins.Entry pin = pins.match(smoke.id, current);
             require(pin != null && (pin.source().equals("executed")
                             || pin.source().equals("refactor-equivalent")
-                            && pin.evidence().equals(migrations.getProperty(stem + "evidence_sha256"))),
+                            && (pin.evidence().equals(migrations.getProperty(stem + "evidence_sha256"))
+                            || TelemetryPinCheck.carries(telemetry, smoke.id, pin, current))),
                     "data-driven refactor pin drift: " + smoke.id);
         }
         int expected = integer(migrations, "count");

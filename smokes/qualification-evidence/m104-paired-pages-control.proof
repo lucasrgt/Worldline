@@ -1,5 +1,5 @@
 schema=1
 id=m104-paired-pages-control
-fingerprint=4a9b46e9473ae3a8573ed49d09801103194994d24d06baa6fdb29389fb3abb53
+fingerprint=577f7ac43e4873e638db6ff941bf1555fffefc304fa16639d5878fcd56a74b0e
 observation.sha256=a91f910fbbf2ced951e0a009e1db64924f8b8a33f34aeca4f8b0e6b6e2bc4df8
-source=legacy-frozen
+source=refactor-equivalent
