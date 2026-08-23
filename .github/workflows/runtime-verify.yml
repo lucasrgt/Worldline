@@ -16,7 +16,8 @@ on:
         required: false
 
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
 
 concurrency:
   group: worldline-official-b173-runtime
@@ -29,13 +30,12 @@ jobs:
       - uses: actions/checkout@v5
         with:
           clean: false
+          fetch-depth: 0
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21.0.12+8'
-      - name: Install pinned source counter
-        shell: bash
-        run: cargo install tokei --version 14.0.0 --locked
+      - uses: ./.github/actions/setup-tokei
       - name: Verify runtime inputs
         if: github.event_name == 'schedule' || inputs.profile == 'runtime'
         run: java tools/harness/Gate.java --runtime
@@ -45,9 +45,65 @@ jobs:
         env:
           WORLDLINE_MILESTONE_ID: ${{ inputs.milestone_id }}
         run: java tools/harness/Gate.java --milestone "$WORLDLINE_MILESTONE_ID"
-      - name: Verify full smoke suite
-        if: inputs.profile == 'full-smoke'
-        run: java tools/harness/Gate.java --smoke
+      - name: Plan missing smoke proofs
+        if: github.event_name == 'schedule' || inputs.profile == 'full-smoke'
+        run: java tools/harness/Gate.java --smoke-plan
+      - name: Run missing server smokes in the Runtime Fabric
+        if: github.event_name == 'schedule' || inputs.profile == 'full-smoke'
+        shell: pwsh
+        run: |
+          $manifest = '.worldline/runtime-plan/server-headless.tsv'
+          if (Select-String -Path $manifest -Pattern '^[^#\s]' -Quiet) {
+            java tools/containers/RuntimeFabric.java run $manifest --jobs auto --skip-verify
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+      - name: Run missing GUI smokes in the Runtime Fabric
+        if: github.event_name == 'schedule' || inputs.profile == 'full-smoke'
+        shell: pwsh
+        run: |
+          $manifest = '.worldline/runtime-plan/windows-client-gui.tsv'
+          if (Select-String -Path $manifest -Pattern '^[^#\s]' -Quiet) {
+            java tools/containers/RuntimeFabric.java run $manifest --jobs auto --skip-verify
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+      - name: Run missing tooling milestones
+        if: github.event_name == 'schedule' || inputs.profile == 'full-smoke'
+        shell: pwsh
+        run: |
+          Get-Content '.worldline/runtime-plan/tooling.tsv' |
+            Where-Object { $_ -match '^[^#\s]' } |
+            ForEach-Object {
+              $id = ($_ -split "`t")[0]
+              java tools/harness/Gate.java --milestone $id
+              if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            }
+      - name: Pin all current proofs
+        if: github.event_name == 'schedule' || inputs.profile == 'full-smoke'
+        run: java tools/harness/Gate.java --pin-smokes
+      - name: Open reviewed smoke-pin pull request
+        if: github.event_name == 'schedule'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if (git diff --quiet -- smokes/qualification.lock) { exit 0 }
+          $branch = "automation/smoke-pins-$env:GITHUB_RUN_ID"
+          git config user.name 'worldline-automation'
+          git config user.email 'worldline-automation@users.noreply.github.com'
+          git switch -c $branch
+          git add smokes/qualification.lock
+          git commit -m 'Update reviewed smoke qualification pins'
+          git push origin $branch
+          gh pr create --base main --head $branch --title 'Update reviewed smoke qualification pins' --body 'Nightly Runtime Fabric sweep completed. This PR contains only newly verified portable smoke pins.'
+      - name: Publish Gate timing summary
+        if: always()
+        shell: bash
+        run: |
+          if [[ -f .worldline/gate/classes/VerifySummary.class ]]; then
+            java -cp .worldline/gate/classes VerifySummary >> "$GITHUB_STEP_SUMMARY"
+          else
+            printf '## Worldline Gate\n\nNo `verify.json` was produced.\n' >> "$GITHUB_STEP_SUMMARY"
+          fi
       - if: always()
         uses: actions/upload-artifact@v4
         with:

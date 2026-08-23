@@ -71,12 +71,12 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 
 | ID | Status | Deliverable | Evidence or completion condition |
 | --- | --- | --- | --- |
-| CI-01 | QUEUED | Cache or checksum-pin the `tokei` executable. | Verify jobs do not compile it on every run. |
-| CI-02 | QUEUED | Add PR concurrency cancellation. | Superseded pushes stop their old verify jobs. |
-| CI-03 | QUEUED | Persist content-addressed module/test caches in CI. | Cache keys include the required platform/toolchain identity. |
-| CI-04 | QUEUED | Publish `verify.json` timings in the job summary. | Regressions are visible without downloading artifacts. |
-| CI-05 | QUEUED | Derive TestKit artifact checksums from the release tag. | Publishing cannot retain a stale hard-coded release checksum. |
-| CI-06 | QUEUED | Run a nightly pooled sweep and open a reviewed pin-update PR. | The workflow never pushes unreviewed proofs directly to `main`. |
+| CI-01 | DONE | Cache or checksum-pin the `tokei` executable. | The shared setup action caches pinned `tokei` 14.0.0 binaries by runner OS and installs only on a cache miss. |
+| CI-02 | DONE | Add PR concurrency cancellation. | Verify concurrency cancels superseded PR runs while retaining push runs. |
+| CI-03 | DONE | Persist content-addressed module/test caches in CI. | Hosted verification restores the immutable Gate cache by runner OS and Java 21 identity. |
+| CI-04 | DONE | Publish `verify.json` timings in the job summary. | `VerifySummary` renders stage timings in every Gate workflow, including a safe missing-report result. |
+| CI-05 | DONE | Derive TestKit artifact checksums from the release tag. | `TestKitReleaseCheck` binds the tag, package version, exact artifact set, and generated SHA-256 values. |
+| CI-06 | DONE | Run a nightly pooled sweep and open a reviewed pin-update PR. | The scheduled private workflow plans missing proofs, routes them through Runtime Fabric, pins successes, and opens a lockfile-only PR. |
 
 ## Agent-swarm process
 

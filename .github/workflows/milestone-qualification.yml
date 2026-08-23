@@ -69,13 +69,20 @@ jobs:
         with:
           distribution: temurin
           java-version: '21.0.12+8'
-      - name: Install pinned source counter
-        shell: bash
-        run: cargo install tokei --version 14.0.0 --locked
+      - uses: ./.github/actions/setup-tokei
       - name: Qualify exact milestone
         env:
           WORLDLINE_CANDIDATE_BASE: ${{ needs.discover.outputs.base }}
         run: java tools/harness/Gate.java --milestone "${{ matrix.milestone }}"
+      - name: Publish Gate timing summary
+        if: always()
+        shell: bash
+        run: |
+          if [[ -f .worldline/gate/classes/VerifySummary.class ]]; then
+            java -cp .worldline/gate/classes VerifySummary >> "$GITHUB_STEP_SUMMARY"
+          else
+            printf '## Worldline Gate\n\nNo `verify.json` was produced.\n' >> "$GITHUB_STEP_SUMMARY"
+          fi
       - if: always()
         uses: actions/upload-artifact@v4
         with:

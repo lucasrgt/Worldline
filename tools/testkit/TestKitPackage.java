@@ -58,7 +58,8 @@ public final class TestKitPackage {
     private static void build(Path target, Path classes, List<String> modules, String main) throws Exception {
         Set<String> names = new LinkedHashSet<>(); List<Entry> entries = new ArrayList<>();
         for (String module : modules) try (Stream<Path> stream = Files.walk(classes.resolve(module))) {
-            for (Path path : (Iterable<Path>) stream.filter(Files::isRegularFile)::iterator) {
+            for (Path path : (Iterable<Path>) stream.filter(Files::isRegularFile)
+                    .filter(file -> !file.getFileName().toString().equals(".complete"))::iterator) {
                 String name = classes.resolve(module).relativize(path).toString().replace('\\', '/');
                 require(names.add(name), "duplicate distribution entry: " + name);
                 require(entries.size() < 20_000, "distribution contains too many entries");

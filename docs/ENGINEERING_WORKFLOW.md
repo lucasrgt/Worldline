@@ -266,6 +266,18 @@ directories additionally create a private self-hosted qualification matrix. Each
 isolated milestone gate; machine-local Gate leases coordinate Windows and Linux workers without
 holding the runtime during static work. Reports and smoke logs are uploaded even after failure.
 
+Hosted verification restores the immutable Gate cache with an OS- and Java-bound key. The shared
+setup action also restores pinned `tokei` 14.0.0 binaries instead of recompiling the source counter
+in every job. Superseded pull-request runs are cancelled; push verification is never cancelled.
+Every Gate workflow renders `verify.json` stage timings into the job summary.
+
+The scheduled private runtime workflow starts with `Gate --smoke-plan`, sends only missing
+server and GUI proofs through Runtime Fabric, qualifies tooling-only entries through their exact
+milestone gates, and then runs `Gate --pin-smokes`. If the reviewed lock changes, automation opens
+a lockfile-only pull request; it never writes proofs directly to `main`. TestKit release tags are
+validated against the package version, exact generated artifact set, and generated SHA-256 file
+before publication.
+
 The versioned pre-push hook blocks `codex/*` branches, every ref containing changed
 `smokes/<id>/` directories, and every direct `main` update unless the exact SHA has an
 orchestrator receipt. This turns milestone worker output into a local handoff by default.

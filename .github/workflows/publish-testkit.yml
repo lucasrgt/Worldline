@@ -17,16 +17,21 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.14.4'
-      - name: Install pinned source counter
-        run: cargo install tokei --version 14.0.0 --locked
+      - uses: ./.github/actions/setup-tokei
       - name: Verify and package
         run: |
           java tools/harness/Gate.java
           java tools/testkit/TestKitPackage.java
-      - name: Verify frozen distribution identities
+      - name: Bind generated checksums to release tag
+        run: java tools/testkit/TestKitReleaseCheck.java "$GITHUB_REF_NAME"
+      - name: Publish Gate timing summary
+        if: always()
         run: |
-          echo "279825b2317ccc27b6a5a19f32b65b6883beb6582d0a89bbebbeecb1f690c4c9  .worldline/dist/testkit/worldline-test-api-0.2.1.jar" | sha256sum --check
-          echo "b5b992369d2b6b1b5eb8504b34cac41eadfbded3fb3dbe97d7f19a15bc7b043b  .worldline/dist/testkit/worldline-test-runner-0.2.1.jar" | sha256sum --check
+          if [[ -f .worldline/gate/classes/VerifySummary.class ]]; then
+            java -cp .worldline/gate/classes VerifySummary >> "$GITHUB_STEP_SUMMARY"
+          else
+            printf '## Worldline Gate\n\nNo `verify.json` was produced.\n' >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Validate Gradle plugin
         run: gradle -p tooling/gradle-plugin --project-cache-dir .worldline/gradle-plugin/cache test validatePlugins
       - name: Publish pinned release artifacts
