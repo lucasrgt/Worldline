@@ -65,6 +65,12 @@ final class CandidateCheck {
                 "candidate has no smoke sources");
         String number = milestoneNumber(id);
         if (number != null && !tooling) {
+            if ("1".equals(this.descriptor.getProperty("narrative.schema"))) {
+                require(this.descriptor.getProperty("qualification.docs", "").equals(
+                        this.descriptor.getProperty("qualification.cycle", "")),
+                        "generated narrative must combine claim and cycle");
+                return;
+            }
             boolean document = false, cycle = false;
             try (Stream<Path> files = Files.list(root.resolve("docs"))) {
                 for (Path file : files.collect(Collectors.toList())) {

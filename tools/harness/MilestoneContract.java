@@ -78,6 +78,7 @@ final class MilestoneContract {
             require(Files.readString(evidence, StandardCharsets.UTF_8).contains(signature()),
                     relative(evidence) + " does not name the frozen signature");
         }
+        MilestoneNarrative.validate(root, descriptor);
         require(Files.readString(semanticMap, StandardCharsets.UTF_8).contains(value("expected.signal")),
                 relative(semanticMap) + " does not contain the frozen semantic signal");
         String behavior = descriptor.getProperty("behavior");

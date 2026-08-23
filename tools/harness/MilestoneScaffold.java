@@ -36,9 +36,10 @@ final class MilestoneScaffold {
         files.put(smoke.resolve("smoke.properties"), descriptor(id, number, slug, className,
                 signal, signature));
         files.put(smoke.resolve("MAP.md"), map(id, title, signal, trace, signature));
-        files.put(root.resolve("docs/M" + number + "_" + slug.toUpperCase().replace('-', '_') + ".md"),
-                claim(id, title, signal, signature));
-        files.put(root.resolve("docs/M" + number + "_CYCLE.md"), cycle(id, className, signal, signature));
+        Properties narrative = new Properties();
+        narrative.load(new java.io.StringReader(files.get(smoke.resolve("smoke.properties"))));
+        files.put(root.resolve(narrative.getProperty("qualification.docs")),
+                MilestoneNarrative.render(narrative));
         files.put(root.resolve("tools/smoke/" + className + ".java"), runner(id, className));
         for (Path path : files.keySet()) require(!Files.exists(path),
                 "refusing to overwrite " + root.relativize(path));
@@ -59,7 +60,7 @@ final class MilestoneScaffold {
             prepare(first); prepare(second);
             generate(first, "m900-example-contract"); generate(second, "m900-example-contract");
             List<Path> one = files(first), two = files(second);
-            require(one.size() == 5 && relative(first, one).equals(relative(second, two)),
+            require(one.size() == 4 && relative(first, one).equals(relative(second, two)),
                     "scaffold topology drifted");
             for (int index = 0; index < one.size(); index++) require(
                     Files.mismatch(one.get(index), two.get(index)) == -1L, "scaffold bytes are not deterministic");
@@ -88,6 +89,7 @@ final class MilestoneScaffold {
         require("1".equals(values.getProperty("qualification.schema"))
                 && "tooling-cycle".equals(values.getProperty("qualification.proof")),
                 "draft qualification contract drifted");
+        MilestoneNarrative.validate(root, values);
         for (String key : List.of("qualification.docs", "qualification.cycle",
                 "qualification.semantic-map", "runner.source")) {
             Path path = root.resolve(values.getProperty(key, "")).normalize();
@@ -104,23 +106,17 @@ final class MilestoneScaffold {
                 + className + ".java\nexpected.signal=" + signal + "\nexpected.signature=" + signature
                 + "\natlas.subsystems=unassigned\natlas.artifact=worldline\n\nqualification.schema=1"
                 + "\nqualification.proof=tooling-cycle\nqualification.docs=docs/M" + number + "_"
-                + slug.toUpperCase().replace('-', '_') + ".md\nqualification.cycle=docs/M" + number
-                + "_CYCLE.md\nqualification.semantic-map=smokes/" + id + "/MAP.md"
+                + slug.toUpperCase().replace('-', '_') + ".md\nqualification.cycle=docs/M" + number + "_"
+                + slug.toUpperCase().replace('-', '_') + ".md\nqualification.semantic-map=smokes/" + id + "/MAP.md"
                 + "\nqualification.atlas=not-applicable\nqualification.atlas.reason=draft publishes no behavior"
                 + "\nqualification.testkit=not-applicable"
-                + "\nqualification.testkit.reason=draft publishes no behavior\n";
-    }
-
-    private static String claim(String id, String title, String signal, String signature) {
-        return "# " + id.toUpperCase() + " " + title + "\n\nThis deterministic scaffold publishes no behavior. "
-                + "Replace the draft runner and author the claim before runtime qualification.\n\n"
-                + "Draft signal: `" + signal + "`.\n\nDraft SHA-256: `" + signature + "`.\n";
-    }
-    private static String cycle(String id, String className, String signal, String signature) {
-        return "# " + id.toUpperCase() + " qualification cycle\n\n`" + className
-                + "` is deliberately fail-closed while this milestone is a scaffold. Candidate validation may"
-                + " compile it, but runtime qualification must fail until a real deterministic cycle replaces it.\n\n"
-                + "Draft signal: `" + signal + "`.\n\nDraft SHA-256: `" + signature + "`.\n";
+                + "\nqualification.testkit.reason=draft publishes no behavior"
+                + "\nnarrative.schema=1\nnarrative.title=" + title(slug)
+                + "\nnarrative.claim=This deterministic scaffold publishes no behavior. Replace the draft runner and"
+                + " author the claim before runtime qualification."
+                + "\nnarrative.cycle=" + className + " is deliberately fail-closed while this milestone is a"
+                + " scaffold. Candidate validation may compile it, but runtime qualification must fail until a real"
+                + " deterministic cycle replaces it.\n";
     }
     private static String map(String id, String title, String signal, String trace, String signature) {
         return "# " + id.toUpperCase() + " " + title

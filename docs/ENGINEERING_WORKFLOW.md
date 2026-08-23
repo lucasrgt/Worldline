@@ -62,10 +62,12 @@ declared through each consumer's fingerprinted `shared.inputs`; orphan helper fa
 gate. Product, ordinary verification, and adapter `tokei` ceilings remain unchanged.
 
 Start a milestone with `java tools/harness/Gate.java --new-milestone m<number>-<slug>`.
-The command creates a deterministic descriptor, fail-closed cycle source, claim document, cycle
-document, and semantic map without overwriting any path. The draft has a content-derived signal
-and SHA so `Gate --candidate ID` can validate its complete topology immediately, but its runner
-always fails runtime qualification until the author replaces it with real evidence.
+The command creates a deterministic descriptor, fail-closed cycle source, combined claim/cycle
+document, and semantic map without overwriting any path. For narrative schema 1,
+`smoke.properties` is canonical: `MilestoneNarrative` renders the combined document and the gate
+rejects any manual drift. The draft has a content-derived signal and SHA so `Gate --candidate ID`
+can validate its complete topology immediately, but its runner always fails runtime qualification
+until the author replaces it with real evidence.
 
 ## Verification tiers
 
