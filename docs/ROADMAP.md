@@ -3,6 +3,10 @@
 The roadmap distinguishes completed evidence from stable public contracts.
 Passing an experiment does not silently promote its API.
 
+The generated current milestone and qualification view is
+[generated/MILESTONES.md](generated/MILESTONES.md). Historical prose below is
+retained for context; current counts and status come from generated sources.
+
 Aero-specific entries use the canonical `AERO-M<number>` namespace documented
 in [AERO_MILESTONES.md](AERO_MILESTONES.md). Existing `M10`-`M19`, `M68`, and
 `M70`-`M110` artifacts retain their legacy names as immutable aliases.
@@ -489,7 +493,7 @@ in [AERO_MILESTONES.md](AERO_MILESTONES.md). Existing `M10`-`M19`, `M68`, and
 | v1.462.0 / M568 | Item despawn set | REJECTED - reloaded dropped-item Packet21 absent in two serialized runs |
 | GUI tree | Neutral inventory Game UI tree with official-JAR match | GO - stable milestone |
 | Invariant engine | Six fail-closed rules on live `watch(standard(runtime))` | GO - stable milestone |
-| Semantic mappings | Complete-game client/server symbol graph plus closed, evidence-promoted semantic roles | ACTIVE - 100% symbol inventory is the target; 196 semantic roles currently promoted |
+| Semantic mappings | Complete-game client/server symbol graph plus closed, evidence-promoted semantic roles | ACTIVE - 100% symbol inventory remains the target; current promoted totals are generated from `SemanticRoles` |
 | Atlas | Generated knowledge store, provenance graph, coverage matrix, and query CLI | EXPERIMENTAL - ported on M469; canonical verification passes |
 
 ## Promotion rule

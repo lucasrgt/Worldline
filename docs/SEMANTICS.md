@@ -1,5 +1,8 @@
 # Semantic Mappings
 
+Current category, role, milestone, map, and program totals are generated in
+[generated/STATUS.md](generated/STATUS.md) from the authoritative source files.
+
 ## Complete-game coverage objective
 
 Worldline targets the closest technically achievable mapping of the complete
@@ -34,7 +37,7 @@ per 10,000.
 
 ```text
 SemanticCatalog.standard()
-  -->  25 categories, 265 required roles
+  -->  category and required-role totals from generated/STATUS.md
   -->  role("CLIENT_TICK_ROOT") / category("clock") / symbol(owner, name)
 AdapterManifest.loadAll(adapters, catalog)
   -->  b173-client, b173-server, and StationAPI drivers; aero-model-lib overlay extension

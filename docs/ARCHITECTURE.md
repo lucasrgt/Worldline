@@ -4,6 +4,9 @@ This document defines the smallest architecture that can grow toward a
 controlled Minecraft Beta 1.7.3 runtime without mixing the public driver,
 runtime policy, and game-specific integration.
 
+The canonical Gate, Runtime Fabric, receipt, pool, and cache flow is maintained
+separately in [VERIFICATION_ARCHITECTURE.md](VERIFICATION_ARCHITECTURE.md).
+
 ## Current slice
 
 ```text

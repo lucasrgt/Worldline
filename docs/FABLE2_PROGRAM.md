@@ -35,13 +35,13 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 
 | ID | Status | Deliverable | Completion evidence |
 | --- | --- | --- | --- |
-| MIG-01 | DONE | Complete the second data-driven coordinator wave. | 386 simple and 35 composite declarative cycles leave 83 exceptional coordinators; both migrations preserve content-addressed evidence chains. |
+| MIG-01 | DONE | Complete the second data-driven coordinator wave. | 386 simple and 35 composite declarative cycles leave 84 reviewed exceptional coordinators after the external-build M620 cycle; migrations preserve content-addressed evidence chains. |
 | MIG-02 | DONE | Classify every remaining raw fixed-tick window. | The canonical gate validates 226 sources across 216 milestones and reports zero raw fixed-wait debt. |
 | MIG-03 | DONE | Publish and aggregate await telemetry. | Every executed smoke emits an aggregate `WORLDLINE_AWAIT_TELEMETRY`; schema-2 history records waits, polls, failures, observed ticks, and rejects high-poll regressions. |
 | MIG-04 | DONE | Persist retry dependence and alert reviewers. | Schema-2 nightly history records retry attempts, retries, failures, and policy calls; a previously clean smoke becoming retry-dependent fails review policy. |
 | MIG-05 | DONE | Adopt generated narrative schema. | All 36 qualification-v1 milestones use generated combined narratives, and new scaffolds default to the same schema. |
-| MIG-06 | DONE | Add a schema for every behavior map. | All 526 maps validate explicit boundary, bounded non-claims, and frozen-trace fields. |
-| MIG-07 | DONE | Version and normalize `smoke.properties`. | All 525 descriptors use schema 1, declare their era and runner, and validate behavior plus TestKit identity. |
+| MIG-06 | DONE | Add a schema for every behavior map. | All 527 maps, including the aggregate map, validate explicit boundary, bounded non-claims, and frozen-trace fields. |
+| MIG-07 | DONE | Version and normalize `smoke.properties`. | All 526 descriptors use schema 1, declare their era and runner, and validate behavior plus TestKit identity. |
 | MIG-08 | DONE | Burn down packed-line stock. | Mechanical, attested formatting reduces smoke and coordinator packed-line debt to zero without runtime requalification. |
 | MIG-09 | DONE | Consolidate repeated B173, place/persist, and Aero parsing families. | One fingerprinted B173 fixture helper replaces exact clones in 354 sources, the two Aero coordinators share a strict parser, 354 pins are transported by reviewed source hashes, and the canonical Gate validates all 525 evidence envelopes. |
 | MIG-10 | DONE | Retire completed compatibility surfaces. | The dated 2026-08-23 removal train deletes `Verify.java`, the EOF/fixed-wait finalize-only migrators and their Gate routes; `SmokeLegacyImport` was already removed, while immutable locks and permanent drift checks remain. |
@@ -78,9 +78,9 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 
 | ID | Status | Deliverable | Completion evidence |
 | --- | --- | --- | --- |
-| DOC-01 | QUEUED | Finish repository documentation organization. | The 1,055 root documents migrate into populated feature/milestone/performance/project trees with a generated index, or the empty skeleton is removed. |
-| DOC-02 | QUEUED | Rewrite architecture verification documentation. | Architecture covers Gate, Runtime Fabric, receipts, pools, caches, and current stage flow derived from verification evidence. |
-| DOC-03 | QUEUED | Generate semantic and roadmap counts/status. | Semantic role totals and historical milestone prose derive from authoritative code/manifests and cannot drift manually. |
+| DOC-01 | DONE | Finish repository documentation organization. | `DocumentationCatalog` classifies every stable root document into project, feature, milestone, or performance sections in a generated index; stable paths avoid invalidating milestone receipts, and no empty directory skeleton is versioned. |
+| DOC-02 | DONE | Rewrite architecture verification documentation. | `VERIFICATION_ARCHITECTURE.md` derives the canonical profile/stage flow from Gate and RepositoryVerify, separates behavioral identity from lanes, and documents Runtime Fabric leases, host/container pools, evidence envelopes, immutable caches, and orchestrator authority. |
+| DOC-03 | DONE | Generate semantic and roadmap counts/status. | Generated status derives semantic totals from `SemanticRoles`, program counts from this ledger, and milestone qualification from current fingerprints plus `qualification.lock`; Gate rejects drift. |
 | DOC-04 | ACTIVE | Maintain this Fable 2 ledger and its exit gate. | Every objective-file requirement maps to one row, and each status change cites authoritative evidence. |
 
 ## Program exit gate

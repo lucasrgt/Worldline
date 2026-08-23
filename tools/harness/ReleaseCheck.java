@@ -85,7 +85,7 @@ public final class ReleaseCheck {
             requireFile(root.resolve("docs/M" + milestone.group(1) + "_CYCLE.md"));
     }
 
-    private void verifyCoreSignatures(Properties release) throws IOException {
+    private void verifyCoreSignatures(Properties release) throws Exception {
         Properties server = descriptor("deterministic-world-tick");
         Properties client = descriptor("controlled-client-tick");
         same(release, "server.signature", server, "expected.signature");
@@ -93,7 +93,11 @@ public final class ReleaseCheck {
         same(release, "client.state.signature", client, "expected.state.signature");
         same(release, "invariants.signature", client, "expected.state.signature");
         same(release, "lab.signature", descriptor("lab-cycle"), "expected.signature");
-        same(release, "gui.signature", descriptor("gui-tree"), "expected.signature");
+        String gui = value(descriptor("gui-tree"), "expected.signature");
+        require(value(release, "gui.signature").equals(gui)
+                        || GuiWorkbenchPinCheck.releaseTransition(root,
+                                value(release, "gui.signature"), gui),
+                "GUI release signature has no qualified transition");
         requireText("docs/SEMANTICS_CYCLE.md", value(release, "semantics.signature"));
         Properties profile = load(root.resolve(
                 "adapters/aero-model-lib/opt-in/worldline-adaptive.properties"), true);

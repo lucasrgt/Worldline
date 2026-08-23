@@ -17,6 +17,10 @@ final class GuiWorkbenchPinCheck {
                         && integer(lock, "smoke.count") == 520
                         && integer(lock, "catalog.count") == 526,
                 "invalid GUI workbench migration");
+        require("runtime-pending".equals(lock.getProperty("release.status"))
+                        && hash(lock.getProperty("release.prior_signature"))
+                        && hash(lock.getProperty("release.current_signature")),
+                "invalid GUI release transition");
         for (int index = 0; index < 9; index++) {
             String stem = "source." + index + ".", relative = required(lock, stem + "path");
             require(hash(lock.getProperty(stem + "prior_sha256"))
@@ -90,6 +94,12 @@ final class GuiWorkbenchPinCheck {
                         && digest(root.resolve(relative)).equals(lock.getProperty(stem + "current_sha256"));
         }
         return false;
+    }
+    static boolean releaseTransition(Path root, String released, String candidate) throws Exception {
+        Properties lock = manifest(root);
+        return "runtime-pending".equals(lock.getProperty("release.status"))
+                && released.equals(lock.getProperty("release.prior_signature"))
+                && candidate.equals(lock.getProperty("release.current_signature"));
     }
     private static String digest(Path path) throws Exception { return HexFormat.of().formatHex(
             MessageDigest.getInstance("SHA-256").digest(Files.readString(path, StandardCharsets.UTF_8)
