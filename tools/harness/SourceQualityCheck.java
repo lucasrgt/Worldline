@@ -23,7 +23,7 @@ final class SourceQualityCheck {
         int width = integer("line.width");
         for (String scope : SCOPES) inspect(scope, width);
         inspectFlakinessDebt();
-        try { SharedSmokeSourceCheck.execute(root); }
+        try { SharedSmokeSourceCheck.execute(root); TestSurfaceCheck.execute(root); }
         catch (IOException error) { throw error; }
         catch (Exception error) { throw new IllegalStateException(error); }
         inspectRepositoryText();

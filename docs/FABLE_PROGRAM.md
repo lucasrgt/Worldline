@@ -93,8 +93,8 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 
 | ID | Status | Deliverable | Evidence or completion condition |
 | --- | --- | --- | --- |
-| QUAL-01 | QUEUED | Ensure every `Remote*Test` is registered or explicitly excluded. | Gate discovery compares tracked classes with the suite registry. |
-| QUAL-02 | QUEUED | Reject orphaned `__snapshots__/*.wlsnap` files. | Every tracked snapshot resolves to an owning test. |
+| QUAL-01 | DONE | Ensure every `Remote*Test` is registered or explicitly excluded. | The gate discovers tracked API `Remote*Test` classes, requires one `run()` entry point, and one `DomainApiTest` registration. |
+| QUAL-02 | DONE | Reject orphaned `__snapshots__/*.wlsnap` files. | Every tracked snapshot requires a tracked owner sidecar bound to an existing test source and literal snapshot declaration. |
 | QUAL-03 | QUEUED | Give differential fuzzing and mutation nightly time budgets. | Fast deterministic unit checks remain local; bounded exploratory jobs publish artifacts nightly. |
 | QUAL-04 | ACTIVE | Connect frame census to scene-relative performance budgets. | Frame census/breakdown exists; machine-relative Aero scene budgets and gate enforcement remain. |
 | QUAL-05 | QUEUED | Refocus source policy on smoke maintainability. | Product ceilings remain fail-closed while the smoke statement/helper ratchet replaces counterproductive packing. |

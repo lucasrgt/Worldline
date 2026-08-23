@@ -276,6 +276,11 @@ setup action also restores pinned `tokei` 14.0.0 binaries instead of recompiling
 in every job. Superseded pull-request runs are cancelled; push verification is never cancelled.
 Every Gate workflow renders `verify.json` stage timings into the job summary.
 
+Test discovery also compares every tracked API `Remote*Test` class with `DomainApiTest`, so a
+new helper cannot compile while remaining silently unexecuted. Tracked `__snapshots__/*.wlsnap`
+files require a sibling `.owner.properties` file declaring `test.source` and `snapshot.name`; the
+source must remain tracked and contain the corresponding literal `toMatchSnapshot` declaration.
+
 The scheduled private runtime workflow starts with `Gate --smoke-plan`, sends only missing
 server and GUI proofs through Runtime Fabric, qualifies tooling-only entries through their exact
 milestone gates, and then runs `Gate --pin-smokes`. If the reviewed lock changes, automation opens
