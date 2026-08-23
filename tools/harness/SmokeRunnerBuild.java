@@ -100,6 +100,10 @@ final class SmokeRunnerBuild {
         String text = Files.readString(source, StandardCharsets.UTF_8);
         if (text.contains("SmokeSupport")) addSupport(digest, "SmokeSupport.java");
         if (text.contains("SmokeRetry")) addSupport(digest, "SmokeRetry.java");
+        if (text.contains("DataDrivenCyclePlan")) addSupport(digest, "DataDrivenCyclePlan.java");
+        if (text.contains("DataDrivenSupport")) {
+            addSupport(digest, "DataDrivenSupport.java"); addSupport(digest, "SmokeSupport.java");
+        }
         return HexFormat.of().formatHex(digest.digest());
     }
 

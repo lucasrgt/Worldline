@@ -1,7 +1,7 @@
 import java.util.concurrent.atomic.AtomicLong;
 
 /** One bounded, observable retry for the known official-runtime EOF failure mode. */
-final class SmokeRetry {
+public final class SmokeRetry {
     private static final AtomicLong ATTEMPTS = new AtomicLong();
     private static final AtomicLong RETRIES = new AtomicLong();
     private static final AtomicLong FAILURES = new AtomicLong();
@@ -15,9 +15,9 @@ final class SmokeRetry {
     private SmokeRetry() {}
 
     @FunctionalInterface
-    interface Attempt<T> { T run(int attempt) throws Exception; }
+    public interface Attempt<T> { T run(int attempt) throws Exception; }
 
-    static <T> T onceOnEof(String smokeId, Attempt<T> action) throws Exception {
+    public static <T> T onceOnEof(String smokeId, Attempt<T> action) throws Exception {
         if (smokeId == null || smokeId.isBlank() || action == null)
             throw new IllegalArgumentException("invalid smoke retry request");
         Exception last = null;

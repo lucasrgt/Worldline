@@ -36,6 +36,7 @@ final class SmokePins {
     }
 
     Entry entry(String id) { return entries.get(id); }
+    List<Entry> entries() { return List.copyOf(entries.values()); }
     boolean legacyAlgorithm() { return !algorithm.equals(ALGORITHM); }
 
     void validateCatalog(List<SmokeDiscovery.Entry> smokes) {
@@ -117,7 +118,8 @@ final class SmokePins {
         require(entry.id.matches("[a-z0-9]+(?:-[a-z0-9]+)*")
                 && entry.fingerprint.matches("[0-9a-f]{64}")
                 && entry.evidence.matches("[0-9a-f]{64}")
-                && (entry.source.equals("executed") || entry.source.equals("legacy-frozen")),
+                && (entry.source.equals("executed") || entry.source.equals("legacy-frozen")
+                        || entry.source.equals("refactor-equivalent")),
                 "invalid smoke pin: " + entry.id);
     }
 

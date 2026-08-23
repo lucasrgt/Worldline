@@ -205,6 +205,11 @@ pre-cache baseline: it binds the current input fingerprint to the already-review
 `expected.signature` in the milestone descriptor. This distinction prevents a historical freeze
 from being presented as a newly executed log.
 
+`source=refactor-equivalent` is reserved for the reviewed data-driven coordinator migration. Its
+entry is accepted only when `smokes/data-driven-migration.lock` binds the deleted coordinator's
+source hash, prior behavior fingerprint and evidence hash to the validated current plan hash.
+Changing a plan, shared runner, module, adapter or artifact invalidates the pin normally.
+
 The v3 fingerprint migration changed identity only by applying that Git text normalization. The
 one-time `--accept-legacy-smoke-baseline` transition preserves each reviewed v2 evidence hash and
 provenance while recalculating its portable v3 identity; it does not claim a new runtime execution.
@@ -248,6 +253,24 @@ git diff -- smokes/qualification.lock
 The resulting `legacy-frozen` rows are reviewable trust declarations, not reconstructed runtime
 logs. Any input change invalidates them normally, so the changed milestone executes on the next
 smoke gate and can then be repinned with `source=executed`.
+
+## Data-driven ordinary cycles
+
+Ordinary server milestones declare `cycle.schema=1` and route through
+`tools/smoke/DataDrivenCycle.java`. The plan names the official artifact, compiled source roots,
+product classpaths, scenario main class, descriptor arguments and frozen output contracts. The
+runner compiles once, executes two fresh workspaces through the shared EOF policy, compares the
+two observations and validates the exact signal and signature. Milestones with custom process
+topology, runtime builds, GUI control or other special orchestration retain explicit coordinators.
+
+The one-time mechanical rewrite is reproducible with `Gate.java --migrate-data-cycles`. It accepts
+only the frozen ten-line coordinator template with exactly one scenario main and three evidence
+prefixes, requires a current pin before deletion, writes the declarative fields, and produces the
+reviewable migration lock. The gate enforces a non-decreasing generic-milestone ratchet.
+Any later shared-runner change invalidates all generic fingerprints. The explicit
+`Gate.java --refresh-data-cycle-pins` transition is fail-closed unless at least one generic
+milestone has a current freshly executed proof; it preserves the other reviewed equivalence rows
+and records hashes of the runner, plan and class-loader support boundary.
 
 Pin the currently available, fingerprint-matching PASS proofs from a clean worktree explicitly,
 then review and commit the lockfile. This may checkpoint a completed prefix after a later smoke

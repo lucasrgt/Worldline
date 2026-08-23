@@ -52,7 +52,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | ID | Status | Deliverable | Evidence or completion condition |
 | --- | --- | --- | --- |
 | FLAKE-01 | ACTIVE | Provide shared `awaitSlot`, `awaitBlock`, and `awaitEntity` polling contracts and migrate fixed-wait assertions. | The shared support records attempts/duration; the fixed-wait ratchet reaches zero without invalidating unrelated pins. |
-| FLAKE-02 | ACTIVE | Centralize EOF retry and publish retry telemetry. | `SmokeRetry` owns bounded decisions, backoff, counters, and shutdown telemetry; deterministic migration of recognized legacy loops remains. |
+| FLAKE-02 | ACTIVE | Centralize EOF retry and publish retry telemetry. | `SmokeRetry` owns bounded decisions, backoff, counters, and shutdown telemetry. The data-driven migration removed 206 duplicate retry/helper files; 33 exceptional coordinators remain on the fail-closed ratchet. |
 | FLAKE-03 | DONE | Consolidate the 17 copied `WorldlinePagedAeroMixin` sources. | Two fingerprinted shared variants preserve the base/direct distinction; the gate rejects consumer copies and routing drift. |
 | FLAKE-04 | DONE | Replace line-pressure statement packing with a statement/debt ratchet. | A literal-aware statement lexer enforces 300/150 ceilings, path-specific legacy debt and non-growing packed-line density. |
 
@@ -61,7 +61,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | ID | Status | Deliverable | Evidence or completion condition |
 | --- | --- | --- | --- |
 | SCALE-01 | DONE | Add `Gate --new-milestone ID` deterministic scaffolding. | The overwrite-safe generator creates a byte-deterministic descriptor, draft cycle, claim/cycle docs, and map; self-tests compile the runner and validate the complete candidate topology while runtime qualification remains fail-closed. |
-| SCALE-02 | QUEUED | Replace clone-like cycle launchers with a data-driven runner. | Ordinary milestones use one runner; exceptional scenarios remain explicit. |
+| SCALE-02 | DONE | Replace clone-like cycle launchers with a data-driven runner. | 309 mechanically homogeneous official-server milestones use `DataDrivenCycle`; 196 exceptional coordinators remain explicit. The migration lock binds every deleted source hash and prior proof to its validated declarative plan and shared sources; M297 also passed a fresh representative official-runtime qualification. |
 | SCALE-03 | DONE | Generate repeated claim/cycle/map narration from one canonical descriptor. | Narrative schema 1 byte-validates one combined claim/cycle document rendered from `smoke.properties`; the semantic map remains independently authored. |
 | SCALE-04 | DONE | Partition or generate the large changelog by release series. | `CHANGELOG.md` is a bounded index; release sections live in validated coordinator-owned series files, with current-version, uniqueness, routing, and content-preservation checks. |
 | SCALE-05 | DONE | Generate the README status table during integration. | `ReadmeStatus update` derives the badge and bounded table from release, coverage, catalog, and portable-pin inputs; the release gate rejects manual edits or stale counts. |

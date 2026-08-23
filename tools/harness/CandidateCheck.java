@@ -45,7 +45,7 @@ final class CandidateCheck {
         System.out.println("candidate passed: " + id + " (static only; runtime qualification pending)");
     }
 
-    private void validateMilestone(SmokeDiscovery.Entry smoke) throws IOException {
+    private void validateMilestone(SmokeDiscovery.Entry smoke) throws Exception {
         Path directory = root.resolve("smokes").resolve(id);
         require(Files.isDirectory(directory), "missing milestone directory: smokes/" + id);
         require(Files.isRegularFile(directory.resolve("MAP.md")), "missing milestone MAP.md");
@@ -57,9 +57,11 @@ final class CandidateCheck {
                 "missing expected.signature");
         Path runner = root.resolve(smoke.runner).normalize();
         require(Files.isRegularFile(runner), "missing runner: " + smoke.runner);
-        require("tools/smoke/Run.java".equals(smoke.runner)
+        boolean dataDriven = "tools/smoke/DataDrivenCycle.java".equals(smoke.runner);
+        require("tools/smoke/Run.java".equals(smoke.runner) || dataDriven
                         || Files.readString(runner, StandardCharsets.UTF_8).contains("\"" + id + "\""),
                 "runner does not declare candidate id");
+        if (dataDriven) DataDrivenCyclePlan.load(root, id);
         Path source = directory.resolve("src");
         boolean runtimeBuild = "runtime-build".equals(this.descriptor.getProperty("candidate.compile"));
         if (!tooling && !runtimeBuild) require(Files.isDirectory(source) && !javaFiles(source).isEmpty(),

@@ -65,9 +65,18 @@ final class SmokeInputFingerprint {
         add(digest, root.resolve("tools/harness/SmokeProcess.java"));
         if (source.contains("SmokeSupport")) add(digest, root.resolve("tools/harness/SmokeSupport.java"));
         if (source.contains("SmokeRetry")) add(digest, root.resolve("tools/harness/SmokeRetry.java"));
+        if (source.contains("DataDrivenCyclePlan"))
+            add(digest, root.resolve("tools/harness/DataDrivenCyclePlan.java"));
+        if (source.contains("DataDrivenSupport")) {
+            add(digest, root.resolve("tools/harness/DataDrivenSupport.java"));
+            add(digest, root.resolve("tools/harness/SmokeSupport.java"));
+        }
         if (source.contains("modules/smoketest")) add(digest, root.resolve("modules/smoketest"));
-        for (String input : REPOSITORY_INPUTS) if (source.contains(input)) add(digest, root.resolve(input));
-        Set<String> products = products(source);
+        boolean dataDriven = smoke.runner.equals("tools/smoke/DataDrivenCycle.java");
+        if (dataDriven) addDataDrivenInputs(digest, smoke.id);
+        else for (String input : REPOSITORY_INPUTS)
+            if (source.contains(input)) add(digest, root.resolve(input));
+        Set<String> products = dataDriven ? dataDrivenProducts(smoke.id) : products(source);
         for (String product : products) update(digest, "module:" + product + ":" + module(product));
         if (source.contains(".worldline/build/classes") && products.isEmpty())
             throw new IllegalStateException("cannot identify product inputs for smoke " + smoke.id);
@@ -86,6 +95,25 @@ final class SmokeInputFingerprint {
                 if (!name.equals("smoke.properties") && !name.endsWith(".md")) add(digest, path);
             }
         }
+    }
+
+    private void addDataDrivenInputs(MessageDigest digest, String id) throws Exception {
+        Properties descriptor = descriptor(id);
+        String artifact = descriptor.getProperty("cycle.artifact", "").trim();
+        require(artifact.matches("artifacts/[a-z0-9.-]+\\.properties"),
+                "unsafe data-driven artifact: " + id);
+        add(digest, root.resolve(artifact));
+        for (String input : list(descriptor.getProperty("cycle.inputs"))) {
+            require(input.matches("(?:adapters|modules)/[a-z0-9-]+/src/main/java"),
+                    "unsafe data-driven input: " + input);
+            add(digest, root.resolve(input));
+        }
+    }
+
+    private Set<String> dataDrivenProducts(String id) throws IOException {
+        Properties descriptor = descriptor(id); Set<String> result = new HashSet<>();
+        result.addAll(list(descriptor.getProperty("cycle.compile.products")));
+        result.addAll(list(descriptor.getProperty("cycle.runtime.products"))); return result;
     }
 
     private static boolean qualificationOnly(String key) {

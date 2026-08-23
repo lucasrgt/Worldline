@@ -58,6 +58,19 @@ public final class Gate {
             if (exit != 0) System.exit(exit);
             return;
         }
+        if (Arrays.equals(arguments, new String[] {"--migrate-data-cycles"})) {
+            Path classes = compileHarness();
+            int exit = waitFor(new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
+                    "DataDrivenCycleMigration", "--apply").directory(root.toFile()).inheritIO().start(), 300);
+            if (exit != 0) System.exit(exit); return;
+        }
+        if (Arrays.equals(arguments, new String[] {"--refresh-data-cycle-pins"})) {
+            Path classes = compileHarness();
+            int exit = waitFor(new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
+                    "DataDrivenCycleMigration", "--refresh").directory(root.toFile())
+                    .inheritIO().start(), 300);
+            if (exit != 0) System.exit(exit); return;
+        }
         Files.createDirectories(control);
         if (arguments.length == 2 && ("--milestone".equals(arguments[0])
                 || "--smoke-id".equals(arguments[0]))) {
@@ -113,13 +126,17 @@ public final class Gate {
                 || Arrays.equals(arguments, new String[] {"--pin-smokes"})
                 || Arrays.equals(arguments, new String[] {"--smoke-plan"})
                 || Arrays.equals(arguments, new String[] {"--accept-legacy-smoke-baseline"})
+                || Arrays.equals(arguments, new String[] {"--migrate-data-cycles"})
+                || Arrays.equals(arguments, new String[] {"--refresh-data-cycle-pins"})
                 || arguments.length == 2 && ("--new-milestone".equals(arguments[0])
                         || "--candidate".equals(arguments[0])
                         || "--milestone".equals(arguments[0]) || "--smoke-id".equals(arguments[0]));
         if (!profile) throw new IllegalArgumentException(
                 "usage: java tools/harness/Gate.java "
                 + "[--runtime|--smoke|--pin-smokes|--accept-legacy-smoke-baseline|--orchestrator|"
-                + "--smoke-plan|--new-milestone ID|--milestone ID|--candidate ID|--self-test]");
+                + "--smoke-plan|--migrate-data-cycles|--refresh-data-cycle-pins|"
+                + "--new-milestone ID|--milestone ID|"
+                + "--candidate ID|--self-test]");
         if (arguments.length == 2 && !arguments[1].matches("[a-z0-9]+(?:-[a-z0-9]+)*"))
             throw new IllegalArgumentException("invalid milestone id: " + arguments[1]);
     }
