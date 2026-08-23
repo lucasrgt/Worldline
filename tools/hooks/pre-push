@@ -1,63 +1,9 @@
 #!/bin/sh
-# Pre-push verification gate. Runs the canonical repository gate before any
-# push. Export WORLDLINE_PREPUSH_SMOKE=1 to demand the full evidence suite.
+# Portable bootstrap; tools/harness/PrePushCheck.java owns all push policy.
 set -e
 
 root="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$root"
-
-protected_sha=""
-protected_ref=""
-
-while read -r _local_ref _local_sha _remote_ref _remote_sha; do
-    _local_ref="$(printf '%s' "$_local_ref" | tr -d '\r')"
-    _local_sha="$(printf '%s' "$_local_sha" | tr -d '\r')"
-    _remote_ref="$(printf '%s' "$_remote_ref" | tr -d '\r')"
-    _remote_sha="$(printf '%s' "$_remote_sha" | tr -d '\r')"
-    _protected=0
-    case "$_local_ref" in
-        refs/heads/codex/*) _protected=1 ;;
-    esac
-    if [ "$_remote_ref" = "refs/heads/main" ]; then
-        case "$_local_sha" in
-            0000000000000000000000000000000000000000)
-                echo "pre-push: deleting main is forbidden" >&2
-                exit 1
-                ;;
-        esac
-        _protected=1
-    fi
-    case "$_local_sha" in
-        0000000000000000000000000000000000000000) continue ;;
-    esac
-    _base="$_remote_sha"
-    case "$_base" in
-        0000000000000000000000000000000000000000)
-            _base="$(git merge-base "$_local_sha" refs/remotes/origin/main 2>/dev/null ||
-                git rev-parse "$_local_sha^" 2>/dev/null || true)"
-            ;;
-    esac
-    if [ -z "$_base" ]; then
-        echo "pre-push: could not determine the pushed revision base" >&2
-        exit 1
-    fi
-    _changed="$(git diff --name-only "$_base...$_local_sha")" || {
-        echo "pre-push: could not inspect pushed changes" >&2
-        exit 1
-    }
-    _ids="$(printf '%s\n' "$_changed" |
-        sed -n 's#^smokes/\([^/]*\)/.*#\1#p' | sort -u)"
-    [ -z "$_ids" ] || _protected=1
-    if [ "$_protected" = "1" ]; then
-        if [ -n "$protected_sha" ] && [ "$protected_sha" != "$_local_sha" ]; then
-            echo "pre-push: protected refs must share one orchestrator-qualified SHA" >&2
-            exit 1
-        fi
-        protected_sha="$_local_sha"
-        [ -n "$protected_ref" ] || protected_ref="$_remote_ref"
-        [ "$_remote_ref" != "refs/heads/main" ] || protected_ref="$_remote_ref"
-    fi
-done
 
 if command -v java >/dev/null 2>&1; then
     JAVA=java
@@ -68,30 +14,11 @@ else
     exit 1
 fi
 
-if [ -n "$protected_sha" ]; then
-    if [ "${WORLDLINE_ORCHESTRATOR_PUSH:-0}" != "1" ]; then
-        echo "pre-push blocked: milestone and main pushes belong to the orchestrator" >&2
-        echo "commit locally, qualify the milestone, and hand off its worktree + SHA" >&2
-        exit 1
-    fi
-    harness_classes=".worldline/gate/classes"
-    if [ ! -f "$harness_classes/PushCheck.class" ] || [ ! -f "$harness_classes/MiniJson.class" ]; then
-        echo "pre-push blocked: compiled orchestrator harness is missing" >&2
-        echo "run java tools/harness/Gate.java --orchestrator before pushing" >&2
-        exit 1
-    fi
-    "$JAVA" -cp "$harness_classes" PushCheck "$protected_sha" "$protected_ref"
-    if [ "${WORLDLINE_PREPUSH_SMOKE:-0}" = "1" ]; then
-        echo "pre-push: running the requested full evidence suite..."
-        "$JAVA" tools/harness/Gate.java --smoke
-    fi
-    exit 0
+classes=".worldline/gate/classes"
+if [ ! -f "$classes/PrePushCheck.class" ]; then
+    "$JAVA" tools/harness/Gate.java
+    WORLDLINE_PREPUSH_BOOTSTRAPPED=1
+    export WORLDLINE_PREPUSH_BOOTSTRAPPED
 fi
 
-if [ "${WORLDLINE_PREPUSH_SMOKE:-0}" = "1" ]; then
-    echo "pre-push: running full smoke gate (this verifies every frozen signature)..."
-    exec "$JAVA" tools/harness/Gate.java --smoke
-fi
-
-echo "pre-push: running repository gate..."
-exec "$JAVA" tools/harness/Gate.java
+exec "$JAVA" -cp "$classes" PrePushCheck

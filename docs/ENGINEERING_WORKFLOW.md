@@ -272,6 +272,11 @@ orchestrator receipt. This turns milestone worker output into a local handoff by
 Unprotected coordinator/tooling pushes keep using the repository gate;
 `WORLDLINE_PREPUSH_SMOKE=1` still requests the complete smoke sweep.
 
+`tools/hooks/pre-push` and `tools/hooks/pre-push.cmd` are thin launchers for the same
+`PrePushCheck` Java policy. Before reading Git's ref-update stream, Java compares the current
+harness-source digest with `.worldline/gate/sources.sha256`; a missing or stale compiled policy
+bootstraps the canonical Gate and restarts from the newly compiled classes.
+
 Repository policy must mirror this locally enforced rule in the hosting service: protect `main`,
 require pull requests and required checks, restrict push/merge permission to the orchestrator
 identity or team, and forbid force-push and deletion. Repository files cannot enable provider-side

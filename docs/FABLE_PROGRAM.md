@@ -45,7 +45,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | HAR-05 | DONE | Preserve exception stack traces in machine reports. | `verify.json` includes escaped `stack_trace`. |
 | HAR-06 | DONE | Attach suite log tails to timeout/failure reports. | `TestBuild` reports the bounded captured tail. |
 | HAR-07 | DONE | Replace lock busy-polling with a fair FIFO ticket queue. | Monotonic FIFO tickets order official-runtime and verify-slot acquisition; dead-process tickets are pruned and contention order is self-tested. |
-| HAR-08 | QUEUED | Provide a platform-neutral Java pre-push entry point. | Shell and Windows launchers delegate to the same Java policy. |
+| HAR-08 | DONE | Provide a platform-neutral Java pre-push entry point. | Shell and Windows launchers bootstrap `PrePushCheck`; Java owns ref classification, current-harness verification, Gate selection, and exact-SHA authorization. |
 
 ## Smoke determinism and flakiness debt
 
