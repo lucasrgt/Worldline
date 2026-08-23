@@ -26,13 +26,17 @@ public final class PushCheck {
         require(remoteRef.matches("refs/heads/[A-Za-z0-9._/-]+"), "invalid remote branch");
         Path receipt = root.resolve(".worldline/reports/orchestrator-push.json");
         Path plan = root.resolve(".worldline/reports/integration-plan.json");
+        Path smoke = root.resolve(".worldline/reports/smoke-suite.json");
         require(Files.isRegularFile(receipt), "run Gate.java --orchestrator before pushing");
         require(Files.isRegularFile(plan), "qualified integration plan disappeared");
+        require(Files.isRegularFile(smoke), "qualified smoke suite receipt disappeared");
         String json = Files.readString(receipt, StandardCharsets.UTF_8);
         require("passed".equals(field(json, "status")), "orchestrator receipt did not pass");
         require(sha.equals(field(json, "head")), "orchestrator receipt belongs to another commit");
         require(digest(plan).equals(field(json, "integration_plan_sha256")),
                 "integration plan changed after orchestrator qualification");
+        require(digest(smoke).equals(field(json, "smoke_suite_sha256")),
+                "smoke suite receipt changed after orchestrator qualification");
     }
 
     private static String digest(Path path) throws Exception {

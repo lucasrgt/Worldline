@@ -62,6 +62,9 @@ final class RepositoryVerify {
             }
             return;
         }
+        if (Arrays.equals(arguments, new String[] {"--pin-smokes"})) {
+            SmokePin.main(arguments); return;
+        }
         boolean runtime = Arrays.equals(arguments, new String[] {"--runtime"});
         boolean smoke = Arrays.equals(arguments, new String[] {"--smoke"});
         if (arguments.length > 0 && !runtime && !smoke) {
@@ -117,6 +120,8 @@ final class RepositoryVerify {
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "Gate", "--self-test")));
         report.step("smoke-discovery", () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "SmokeDiscoveryCheck")));
+        report.step("smoke-cache-self-test", () -> run(Arrays.asList(
+                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "SmokeReceiptCacheTest")));
         report.step("release", () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "ReleaseCheck")));
         report.step("optimization", () -> {

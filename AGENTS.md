@@ -85,6 +85,12 @@ The first deterministic vanilla smoke is the stronger executable gate:
 java tools/harness/Gate.java --smoke
 ```
 
+The smoke gate persists one content-addressed PASS proof after every scenario and reuses proofs
+whose behavior-input fingerprints are unchanged. It writes an aggregate receipt for the exact
+current tree. Reviewed approvals may be promoted into the portable
+`smokes/qualification.lock` only with `Gate.java --pin-smokes`. Use
+`WORLDLINE_SMOKE_CACHE=off` only when a deliberate full rerun is required.
+
 <!-- csm:instructions:start -->
 ## Codebase Semantic Memory
 

@@ -35,7 +35,8 @@ final class OrchestratorCheck {
         require(ancestor(root, base, head), "integration base is not an ancestor of orchestrator HEAD");
         for (String candidate : candidates) require(ancestor(root, candidate, head),
                 "qualified candidate is not integrated: " + shortSha(candidate));
-        return new Context(head, tree, base, digest(plan), candidates.size());
+        String smoke = SmokeReceiptCache.validateSuite(root, head, tree);
+        return new Context(head, tree, base, digest(plan), smoke, candidates.size());
     }
 
     static void qualify(Path root, Context expected) throws Exception {
@@ -49,6 +50,7 @@ final class OrchestratorCheck {
                 + Instant.now() + "\",\n  \"head\": \"" + actual.head + "\",\n  \"tree\": \""
                 + actual.tree + "\",\n  \"base\": \"" + actual.base
                 + "\",\n  \"integration_plan_sha256\": \"" + actual.planDigest
+                + "\",\n  \"smoke_suite_sha256\": \"" + actual.smokeDigest
                 + "\",\n  \"candidate_count\": " + actual.candidateCount + "\n}\n";
         Path receipt = root.resolve(".worldline/reports/orchestrator-push.json");
         Files.createDirectories(receipt.getParent());
@@ -107,5 +109,6 @@ final class OrchestratorCheck {
         if (!condition) throw new IllegalStateException(message);
     }
 
-    record Context(String head, String tree, String base, String planDigest, int candidateCount) {}
+    record Context(String head, String tree, String base, String planDigest,
+            String smokeDigest, int candidateCount) {}
 }

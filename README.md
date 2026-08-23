@@ -103,7 +103,12 @@ java tools/harness/Gate.java --smoke
 
 This is the final promotion gate. It compiles mapped adapters, executes the
 registered client and server scenarios, compares official-JAR oracles, and
-checks every frozen signature on one immutable commit.
+checks every frozen signature on one immutable commit. Successful scenarios
+are stored as content-addressed PASS proofs. A later run reuses unchanged
+proofs, executes only new or behaviorally affected milestones, and writes an
+aggregate receipt for the current clean commit. Set `WORLDLINE_SMOKE_CACHE=off`
+to deliberately execute every scenario again. Approved fingerprints can be
+made portable between clones through the reviewed `smokes/qualification.lock`.
 
 ### 4. Use the neutral runtime API
 

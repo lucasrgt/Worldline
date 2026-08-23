@@ -52,8 +52,12 @@ final class MilestoneCheck {
                 "milestone changed after static qualification; rerun --milestone " + id);
         MilestoneContract contract = new MilestoneContract(root, id, build);
         contract.validate();
-        SmokeProcess.execute(root, id);
+        SmokeDiscovery.Entry smoke = SmokeDiscovery.require(root, id);
+        SmokeReceiptCache cache = new SmokeReceiptCache(root);
+        String fingerprint = cache.fingerprint(smoke);
+        long duration = new SmokeProcess(root).run(smoke);
         contract.validateEvidence(log);
+        cache.passed(smoke, fingerprint, duration);
         writeReceipt(state, contract);
         System.out.println("milestone qualified: " + id + " @ " + shortSha(state.head));
     }
