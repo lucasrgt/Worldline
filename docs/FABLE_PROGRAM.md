@@ -25,7 +25,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | --- | --- | --- | --- |
 | PIPE-01 | ACTIVE | Make bounded Linux-container and Windows-job runtime pools a canonical cold-sweep backend. | Host workers now enter through commit-bound `Gate --milestone`; container parity and CI routing remain. |
 | PIPE-02 | DONE | Pin every accepted smoke in the portable qualification lock. | `smokes/qualification.lock` has 525 current v2 fingerprints; the final qualification restored 525 pins and executed zero smokes. |
-| PIPE-03 | QUEUED | Cache smoke-runner compilation per runner or coherent group. | Editing one cycle must not compile all coordinators. |
+| PIPE-03 | DONE | Cache smoke-runner compilation per runner or coherent group. | Each coordinator has an immutable input-addressed entry; unchanged coordinators are neither compiled nor copied into the transient build tree. |
 | PIPE-04 | QUEUED | Add content-addressed PASS receipts for unit-suite execution. | Unchanged suites restore reviewed results while changed suites run fail-closed. |
 | PIPE-05 | QUEUED | Remove whole-tree publication copies on module-cache hits. | Module consumers use immutable cache outputs directly or safe links. |
 | PIPE-06 | DONE | Size module build workers from the machine by default. | Default is half the available processors, clamped to a safe range; the environment override remains authoritative. |
