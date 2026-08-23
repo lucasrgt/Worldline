@@ -1,5 +1,5 @@
 schema=1
 id=m512-m516-sw-random-blocks
-fingerprint=49693811abc9b632dd98aa2f0dc0dbe35fd24ceb5ac64158680671cf257b1e90
+fingerprint=df91b8570f835b64a57bd2d49314c3443096c5c7e29d6328808787927e350b8f
 observation.sha256=60c5f2e1b9e9f3d743c2d19cfdefdf1829007df32559da47d52e0ba471ae5289
 source=refactor-equivalent

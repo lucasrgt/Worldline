@@ -560,6 +560,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m615-redstone-one-tick-set` | CARRIED | redstone one tick set |
 | `m616-portal-search-radius-set` | CARRIED | portal search radius set |
 | `m617-spawn-light-cap-set` | CARRIED | spawn light cap set |
+| `m619-undead-sun-burn-set` | CARRIED | undead sun burn set |
 | `m620-stationapi-testkit-driver` | PENDING | StationAPI TestKit driver |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |

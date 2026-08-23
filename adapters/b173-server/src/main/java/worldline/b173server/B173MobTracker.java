@@ -22,8 +22,14 @@ final class B173MobTracker {
     int takeFuse(int entity,int expected){if(entity<0||(expected!=1&&expected!=-1))throw new IllegalArgumentException("invalid creeper fuse wait");for(int i=0;i<fuses.size();i++)if(fuses.get(i)[0]==entity&&fuses.get(i)[1]==expected){fuses.remove(i);return expected;}return Integer.MIN_VALUE;}
     String fuseQueued(int entity){StringBuilder b=new StringBuilder();for(int i=0;i<fuses.size();i++)if(fuses.get(i)[0]==entity){if(b.length()>0)b.append(',');b.append(fuses.get(i)[1]);}return b.length()==0?"none":b.toString();}
     int size(int entity){Integer value=sizes.get(entity);return value==null?0:value.intValue();}
-    boolean peekFire(int entity){if(entity<0)throw new IllegalArgumentException("invalid expected mob entity");Integer value=flags.get(entity);return value!=null&&(value.intValue()&1)!=0;}
-    int flags(int entity){if(entity<0)throw new IllegalArgumentException("invalid expected mob entity");Integer value=flags.get(entity);return value==null?-1:value.intValue();}
+    boolean peekFire(int entity){
+        if(entity<0)throw new IllegalArgumentException("invalid expected mob entity");
+        Integer value=flags.get(entity);return value!=null&&(value.intValue()&1)!=0;
+    }
+    int flags(int entity){
+        if(entity<0)throw new IllegalArgumentException("invalid expected mob entity");
+        Integer value=flags.get(entity);return value==null?-1:value.intValue();
+    }
     int hurtCount(int entity){if(entity<0)throw new IllegalArgumentException("invalid expected mob entity");Integer n=hurts.get(entity);return n==null?0:n;}
     void destroy(int entity)throws IOException{if(!armed.contains(entity))return;gone.add(entity);complete(entity);}
     RemoteMobDeath takeDeath(int entity){if(entity<0)throw new IllegalArgumentException("invalid expected mob entity");for(int i=0;i<deaths.size();i++)if(deaths.get(i).entityId()==entity)return deaths.remove(i);return null;} RemoteMobDeath peekDeath(int entity){if(entity<0)throw new IllegalArgumentException("invalid expected mob entity");for(int i=0;i<deaths.size();i++)if(deaths.get(i).entityId()==entity)return deaths.get(i);return null;}

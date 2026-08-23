@@ -1,5 +1,5 @@
 schema=1
 id=m310-vehicle-rides
-fingerprint=1eb5aaac996d87988ff3ad82a9289be69d420b39b2e91d641fc9749d0406569b
+fingerprint=22627dab3d5dc91875a704a6edc42c244e8b5a432dead3b4a22298b986db9eaf
 observation.sha256=e9490bd2395a9a0e2f23738cb8956250a2a8738d5f0d1c62c27d254b43a8ff3f
 source=refactor-equivalent

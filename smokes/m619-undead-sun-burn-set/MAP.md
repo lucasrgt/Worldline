@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=m619-undead-sun-burn-set -->
+<!-- nonclaims=bounded-to-qualified-evidence -->
+<!-- frozen-trace=54f2215e595c43a358e5cf702f0fdd19353f28c34bdf1f5710d664454f18672f -->
+
 # M619-UNDEAD-SUN-BURN-SET undead sun burn set behavior map
 
 Two official arms share one raised `7×7` grass pad and one mob spawner

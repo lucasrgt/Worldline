@@ -1,5 +1,5 @@
 schema=1
 id=m125-cross-chunk-water
-fingerprint=e404c9b0b789e40677836027cf8a64f6f93dbcaa36833264e5994ea745241310
+fingerprint=231854d5fc8a423ac6d1f7f92d3bf19087c877e6f88ae3a02ae101e723358e36
 observation.sha256=c876ddf9f8686e16db848fb38977ff02ea8eb97dea05e21b0837be68f83a6217
 source=refactor-equivalent
