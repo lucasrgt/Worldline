@@ -70,11 +70,16 @@ final class SmokeInputFingerprint {
         try (java.io.Reader reader = Files.newBufferedReader(root.resolve("smokes").resolve(id)
                 .resolve("smoke.properties"), StandardCharsets.UTF_8)) { descriptor.load(reader); }
         String raw = descriptor.getProperty("shared.inputs", "").trim();
-        if (raw.isEmpty()) return;
-        for (String value : raw.split(",")) {
-            String path = value.trim();
-            require(path.matches("smokes/shared/[a-z0-9/-]+"), "unsafe shared smoke input: " + path);
-            add(digest, root.resolve(path));
+        if (!raw.isEmpty()) for (String value : raw.split(",")) {
+                String path = value.trim();
+                require(path.matches("smokes/shared/[a-z0-9/-]+"), "unsafe shared smoke input: " + path);
+                add(digest, root.resolve(path));
+            }
+        String budget = descriptor.getProperty("performance.budget", "").trim();
+        if (!budget.isEmpty()) {
+            require(budget.matches("quality/[a-z0-9-]+\\.properties"),
+                    "unsafe smoke performance budget: " + budget);
+            add(digest, root.resolve(budget));
         }
     }
 

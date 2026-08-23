@@ -34,6 +34,7 @@ final class MilestoneContract {
                     "expected.signal must be frozen");
         }
         validateMappingHashes();
+        AeroSceneBudget.validateDescriptor(root, descriptor);
         validateAtlas(build.resolve("classes/api"));
         validateTestKit(build.resolve("classes/api"), build.resolve("classes/testmodel"),
                 build.resolve("classes/testapi"));
@@ -41,7 +42,7 @@ final class MilestoneContract {
         System.out.println("  milestone contract: proof + docs + semantics + Atlas + TestKit validated");
     }
 
-    void validateEvidence(Path log) throws IOException {
+    void validateEvidence(Path log) throws Exception {
         require(Files.isRegularFile(log), "missing milestone runtime log: " + relative(log));
         String output = Files.readString(log, StandardCharsets.UTF_8);
         require(!output.isBlank(), "milestone runtime produced no evidence");
@@ -50,6 +51,7 @@ final class MilestoneContract {
         if (descriptor.getProperty("qualification.schema") != null)
             require(output.contains(value("expected.signal")),
                     "runtime log does not contain the frozen semantic signal");
+        AeroSceneBudget.validateEvidence(root, descriptor, output);
     }
 
     boolean officialRuntime() {

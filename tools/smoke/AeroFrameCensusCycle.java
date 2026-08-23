@@ -39,7 +39,7 @@ public final class AeroFrameCensusCycle {
         System.out.println("  signature: " + signature);
     }
     private Arm run(Path checkout, Path workspace, String mode, int pair, int nonce, Plan plan) throws Exception {
-        Files.createDirectories(workspace); int port = freePort(), timeout = Integer.parseInt(value("timeout.seconds"));
+        Files.createDirectories(workspace); int port = freePort(), timeout = Integer.parseInt(value("child.timeout.seconds"));
         Path base = root.resolve(".worldline/worktrees/m74-" + ProcessHandle.current().pid() + "-" + pair + "-" + mode + "-" + System.nanoTime());
         Path serverTree = base.resolve("server"), clientTree = base.resolve("client"); Captured server = null;
         try { addWorktree(checkout, serverTree); addWorktree(checkout, clientTree); Path init = root.resolve(value("runner"));
@@ -95,7 +95,7 @@ public final class AeroFrameCensusCycle {
     }
     private void buildAero(Path checkout) throws Exception { Path tree = root.resolve(".worldline/worktrees/m74-build-" + System.nanoTime()); try { addWorktree(checkout, tree);
         Path stationapi = tree.resolve("stationapi"); String wrapper = System.getProperty("os.name").startsWith("Windows") ? "gradlew.bat" : "gradlew";
-        String output = runGradle(stationapi, Arrays.asList(stationapi.resolve(wrapper).toString(), "--no-daemon", "remapJar"), Integer.parseInt(value("timeout.seconds")));
+        String output = runGradle(stationapi, Arrays.asList(stationapi.resolve(wrapper).toString(), "--no-daemon", "remapJar"), Integer.parseInt(value("child.timeout.seconds")));
         Path jar = stationapi.resolve("build/libs/aero-model-lib-3.0.0.jar"); require(output.contains("BUILD SUCCESSFUL") && Files.isRegularFile(jar), "Aero build failed");
         Files.copy(jar, build.resolve("aero-model-lib-3.0.0.jar"), StandardCopyOption.REPLACE_EXISTING); verifyWorktree(tree); } finally { removeWorktree(checkout, tree); } }
     private Captured startServer(Path dir, List<String> command, int timeout) throws Exception { Captured server = Captured.start(dir, command); server.awaitText("Done (", timeout); return server; }

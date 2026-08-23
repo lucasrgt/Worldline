@@ -85,6 +85,10 @@ timeout, descendant cleanup, and `.worldline/smoke-logs/` output. `Verify.java` 
 compatibility launcher and cannot bypass the gate. `--smoke-id` remains an alias for
 `--milestone` for old automation.
 
+`timeout.seconds` is the Gate-owned outer cycle bound. A multi-arm runner uses a distinct,
+milestone-owned key such as `child.timeout.seconds` for each subprocess so a valid sequence of
+bounded children is not truncated and shared supervisor inputs remain stable.
+
 Runtime Fabric workers also enter through the exact `Gate.java --milestone ID` command. The
 pool owner first runs the static Gate once, holds the shared official-runtime file lock, and
 issues a short-lived capability bound to its PID, repository root, clean head, tree, and lock
@@ -106,6 +110,12 @@ Every executed cycle records attempts, failures, and duration under the ignored 
 The nightly workflow idempotently folds those observations into reviewed
 `smokes/schedule.properties`. Cold plans order higher historical failure rate first, then shorter
 average duration, then stable milestone ID.
+
+A milestone that declares `performance.scene`, paired baseline/treatment arms, and a budget under
+`quality/` is checked after its runtime log is sealed and before its receipt is published. Aero
+complete-frame budgets compare treatment quantiles with a same-host, same-scene baseline using a
+reviewed rational multiplier plus bounded scheduling slack; absolute nanoseconds never become a
+portable behavior claim.
 
 Shared verification slots and official-runtime leases use monotonic FIFO ticket directories.
 Only the oldest live ticket may attempt the corresponding file lock; tickets owned by dead local

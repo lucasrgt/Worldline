@@ -8,5 +8,6 @@ final class HarnessFeatureSelfTest {
         ReadmeStatus.selfTest();
         SmokeScheduleHistory.selfTest();
         SmokeStatementBudgetTest.execute();
+        AeroSceneBudgetTest.execute();
     }
 }

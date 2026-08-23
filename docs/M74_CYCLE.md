@@ -23,3 +23,9 @@ counts, rejects overflow/trailing bytes, uses exact arithmetic for elapsed time,
 and enforces zero structural work in absent arms and nonzero real Aero/content
 work in present arms. The frozen semantic trace reproduces SHA-256
 `2cc4533688aa06ba1d69309639c36e16688b09eb4deeeb27d044277550d2d1a7`.
+
+Before publishing a receipt, the gate applies
+`quality/aero-scene-budgets.properties` to both paired complete-frame
+summaries. Median, p95, p99, and maximum treatment intervals are bounded by a
+reviewed baseline ratio plus absolute scheduling slack. Both arms use the same
+host and exact scene, so nanoseconds remain machine-relative evidence.

@@ -61,8 +61,16 @@ final class CandidateCheck {
                         || Files.readString(runner, StandardCharsets.UTF_8).contains("\"" + id + "\""),
                 "runner does not declare candidate id");
         Path source = directory.resolve("src");
-        if (!tooling) require(Files.isDirectory(source) && !javaFiles(source).isEmpty(),
+        boolean runtimeBuild = "runtime-build".equals(this.descriptor.getProperty("candidate.compile"));
+        if (!tooling && !runtimeBuild) require(Files.isDirectory(source) && !javaFiles(source).isEmpty(),
                 "candidate has no smoke sources");
+        if (runtimeBuild) {
+            Path runtime = directory.resolve("runtime-src");
+            require(Files.isDirectory(runtime) && !javaFiles(runtime).isEmpty(),
+                    "runtime-build candidate has no runtime-src sources");
+            require(this.descriptor.getProperty("runner", "").endsWith(".gradle"),
+                    "runtime-build candidate requires a frozen Gradle runner");
+        }
         String number = milestoneNumber(id);
         if (number != null && !tooling) {
             if ("1".equals(this.descriptor.getProperty("narrative.schema"))) {
@@ -118,7 +126,12 @@ final class CandidateCheck {
 
     private void compileScenario(List<Path> outputs) throws Exception {
         Path source = root.resolve("smokes").resolve(id).resolve("src");
-        if (!Files.isDirectory(source)) { System.out.println("  tooling candidate has no scenario sources"); return; }
+        if (!Files.isDirectory(source)) {
+            require("runtime-build".equals(descriptor.getProperty("candidate.compile"))
+                    || "tooling".equals(descriptor.getProperty("candidate.kind")),
+                    "missing candidate scenario sources");
+            System.out.println("  candidate scenario is owned by its frozen runtime build"); return;
+        }
         boolean clientOnly = "client".equals(descriptor.getProperty("side"))
                 || "client".equals(descriptor.getProperty("atlas.artifact"))
                 || descriptor.getProperty("client.jar.sha256") != null

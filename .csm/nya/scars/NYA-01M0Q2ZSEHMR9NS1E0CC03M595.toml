@@ -1,0 +1,21 @@
+schema = 1
+id = "NYA-01M0Q2ZSEHMR9NS1E0CC03M595"
+title = "Separate cycle and child-process timeouts"
+lesson = "A descriptor timeout used inside a multi-arm runner must not also bound each child process. Keep timeout.seconds as the Gate-owned outer supervisor limit and give the runner a distinct child.timeout.seconds value so cleanup remains bounded without truncating valid multi-arm qualification or changing the shared SmokeProcess fingerprint."
+scope = [
+    "tools/smoke/AeroFrameCensusCycle.java",
+    "smokes/m74-complete-aero-census/smoke.properties",
+]
+tags = [
+    "runtime",
+    "timeout",
+]
+created_at = "2026-08-23T10:34:46Z"
+
+[[occurrences]]
+occurred_at = "2026-08-23T10:34:46Z"
+source = "manual"
+reported_by = "user:lucas"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "d5a19e21"
