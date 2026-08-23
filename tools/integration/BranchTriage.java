@@ -1,10 +1,14 @@
+import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /** Classifies local branches by patch equivalence against an integration base. */
@@ -23,6 +27,7 @@ final class BranchTriage {
 
     static void write(Path root, String reference) throws Exception {
         String base = git(root, "rev-parse", "--verify", reference + "^{commit}").trim();
+        Set<String> receipts = receiptHeads(root, base);
         List<Branch> branches = new ArrayList<>();
         for (String name : git(root, "for-each-ref", "--format=%(refname:short)", "refs/heads")
                 .lines().map(String::trim).filter(value -> !value.isEmpty()).toList()) {
@@ -32,9 +37,11 @@ final class BranchTriage {
             int unique = (int) cherry.stream().filter(line -> line.startsWith("+")).count();
             int equivalent = (int) cherry.stream().filter(line -> line.startsWith("-")).count();
             boolean ancestor = status(root, "merge-base", "--is-ancestor", head, base) == 0;
-            String classification = ancestor || unique == 0 ? "contained"
+            boolean receipt = receipts.contains(head);
+            String classification = ancestor || unique == 0 || receipt ? "contained"
                     : unique == 1 ? "one-unique" : "divergent";
-            branches.add(new Branch(name, head, classification, ahead, behind, unique, equivalent, ancestor));
+            branches.add(new Branch(name, head, classification, ahead, behind,
+                    unique, equivalent, ancestor, receipt));
         }
         branches.sort(Comparator.comparing(Branch::classification).thenComparing(Branch::name));
         writeReport(root, base, branches);
@@ -57,7 +64,8 @@ final class BranchTriage {
                     .append(value.classification).append("\",\"ahead\":").append(value.ahead)
                     .append(",\"behind\":").append(value.behind).append(",\"unique_patches\":")
                     .append(value.unique).append(",\"equivalent_patches\":").append(value.equivalent)
-                    .append(",\"ancestry_contained\":").append(value.ancestor).append('}')
+                    .append(",\"ancestry_contained\":").append(value.ancestor)
+                    .append(",\"receipt_contained\":").append(value.receipt).append('}')
                     .append(index + 1 == branches.size() ? "\n" : ",\n");
         }
         json.append("  ]\n}\n");
@@ -70,6 +78,18 @@ final class BranchTriage {
 
     private static int count(Path root, String range) throws Exception {
         return Integer.parseInt(git(root, "rev-list", "--count", range).trim());
+    }
+
+    private static Set<String> receiptHeads(Path root, String base) throws Exception {
+        String object = base + ":smokes/train-reconciliation.lock";
+        if (status(root, "cat-file", "-e", object) != 0) return Set.of();
+        Properties values = new Properties(); values.load(new StringReader(git(root, "show", object)));
+        Set<String> result = new HashSet<>();
+        for (String key : values.stringPropertyNames())
+            if (key.startsWith("smoke.") && key.endsWith(".receipt.head")
+                    && "milestone".equals(values.getProperty(key.replace(".receipt.head", ".kind"))))
+                result.add(values.getProperty(key));
+        return Set.copyOf(result);
     }
 
     private static String git(Path root, String... arguments) throws Exception {
@@ -103,5 +123,5 @@ final class BranchTriage {
     }
     private static String escape(String value) { return value.replace("\\", "\\\\").replace("\"", "\\\""); }
     private record Branch(String name, String head, String classification, int ahead, int behind,
-            int unique, int equivalent, boolean ancestor) { }
+            int unique, int equivalent, boolean ancestor, boolean receipt) { }
 }

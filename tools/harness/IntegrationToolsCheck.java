@@ -86,10 +86,31 @@ final class IntegrationToolsCheck {
                     "WorktreeLifecycle", "audit", "--base", "base"), 60);
             require(missingDeferment != 0, "experiment without an NWC deferment was accepted");
             git(repository, "worktree", "remove", "--force", experimentTree.toString());
+            git(repository, "switch", "--quiet", "base");
+            candidate(repository, "codex/milestone-m5-reconciled", "m5-reconciled");
+            String reconciledHead = output(repository, "rev-parse", "HEAD").trim();
+            git(repository, "switch", "--quiet", "base");
+            Path trainLock = repository.resolve("smokes/train-reconciliation.lock");
+            Files.createDirectories(trainLock.getParent());
+            Files.writeString(trainLock, "smoke.m5-reconciled.kind=milestone\n"
+                    + "smoke.m5-reconciled.receipt.head=" + reconciledHead + "\n");
+            git(repository, "add", "."); git(repository, "commit", "--quiet", "-m", "seal train receipt");
+            Path reconciledTree = repository.getParent().resolve(repository.getFileName() + "-reconciled");
+            git(repository, "worktree", "add", "--quiet", reconciledTree.toString(),
+                    "codex/milestone-m5-reconciled");
+            int receiptAudit = run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
+                    "WorktreeLifecycle", "audit", "--base", "base"), 60);
+            require(receiptAudit == 0 && Files.readString(repository.resolve(
+                    ".worldline/reports/worktrees.json")).contains("\"head\":\"" + reconciledHead
+                    + "\",\"branch\":\"codex/milestone-m5-reconciled\",\"exists\":true,"
+                    + "\"dirty\":false,\"integrated\":true"), "train receipt did not integrate worktree");
+            git(repository, "worktree", "remove", "--force", reconciledTree.toString());
             int triage = run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "WorktreeLifecycle", "triage", "--base", "base"), 60);
             require(triage == 0 && Files.readString(repository.resolve(
-                    ".worldline/reports/branches.json")).contains("\"one-unique\""),
+                    ".worldline/reports/branches.json")).contains("\"one-unique\"")
+                    && Files.readString(repository.resolve(".worldline/reports/branches.json"))
+                            .contains("\"receipt_contained\":true"),
                     "branch triage report was not generated");
             require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "WorktreeLifecycle", "--self-test"), 60) == 0,
@@ -117,6 +138,16 @@ final class IntegrationToolsCheck {
     private static void git(Path directory, String... arguments) throws Exception {
         List<String> command = new ArrayList<>(List.of("git")); command.addAll(List.of(arguments));
         require(run(directory, command, 60) == 0, "git failed: " + String.join(" ", arguments));
+    }
+
+    private static String output(Path directory, String... arguments) throws Exception {
+        List<String> command = new ArrayList<>(List.of("git")); command.addAll(List.of(arguments));
+        Process process = new ProcessBuilder(command).directory(directory.toFile())
+                .redirectErrorStream(true).start();
+        String value = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        require(process.waitFor(60, TimeUnit.SECONDS) && process.exitValue() == 0,
+                "git failed: " + String.join(" ", arguments));
+        return value;
     }
 
     private static int run(Path directory, List<String> command, int seconds) throws Exception {

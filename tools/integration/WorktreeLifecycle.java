@@ -1,10 +1,14 @@
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.io.StringReader;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -45,10 +49,12 @@ public final class WorktreeLifecycle {
     private void audit(String reference) throws Exception {
         String base = git(root, "rev-parse", "--verify", reference + "^{commit}").trim();
         List<Worktree> worktrees = discover();
+        Set<String> receipts = receiptHeads(base);
         int workers = Math.max(1, Math.min(16, integerEnvironment("WORLDLINE_WORKTREE_WORKERS", 8)));
         ExecutorService executor = Executors.newFixedThreadPool(workers);
         List<Future<State>> futures = new ArrayList<>();
-        for (Worktree worktree : worktrees) futures.add(executor.submit(() -> inspect(worktree, base)));
+        for (Worktree worktree : worktrees)
+            futures.add(executor.submit(() -> inspect(worktree, base, receipts)));
         executor.shutdown();
         int dirty = 0, integrated = 0, removable = 0;
         StringBuilder json = new StringBuilder("{\n  \"schema\":1,\n  \"created\":\"")
@@ -91,10 +97,10 @@ public final class WorktreeLifecycle {
         }
     }
 
-    private State inspect(Worktree worktree, String base) throws Exception {
+    private State inspect(Worktree worktree, String base, Set<String> receipts) throws Exception {
         boolean exists = Files.isDirectory(worktree.path);
         boolean dirty = exists && !git(worktree.path, "status", "--porcelain").isBlank();
-        boolean integrated = status(root, "merge-base", "--is-ancestor", worktree.head, base) == 0;
+        boolean integrated = integrated(worktree.head, base, receipts);
         if (worktree.branch.startsWith("codex/experiment-")) require(
                 experimentDeferred(worktree), "experiment branch lacks a branch-bound NWC deferment: "
                         + worktree.branch);
@@ -132,7 +138,7 @@ public final class WorktreeLifecycle {
         require(Files.isDirectory(selected), "worktree is missing: " + selected);
         require(git(selected, "status", "--porcelain").isBlank(), "worktree is dirty: " + selected);
         String base = git(root, "rev-parse", "--verify", baseRef + "^{commit}").trim();
-        require(status(root, "merge-base", "--is-ancestor", worktree.head, base) == 0,
+        require(integrated(worktree.head, base, receiptHeads(base)),
                 "worktree head is not integrated into " + baseRef);
         require(!worktree.branch.isBlank(), "detached worktree cannot be bundled by branch");
         Files.createDirectories(bundles);
@@ -164,6 +170,22 @@ public final class WorktreeLifecycle {
             }
         }
         return new Cleanup(files, bytes);
+    }
+
+    private boolean integrated(String head, String base, Set<String> receipts) throws Exception {
+        return status(root, "merge-base", "--is-ancestor", head, base) == 0 || receipts.contains(head);
+    }
+
+    private Set<String> receiptHeads(String base) throws Exception {
+        String object = base + ":smokes/train-reconciliation.lock";
+        if (status(root, "cat-file", "-e", object) != 0) return Set.of();
+        Properties values = new Properties(); values.load(new StringReader(git(root, "show", object)));
+        Set<String> result = new HashSet<>();
+        for (String key : values.stringPropertyNames())
+            if (key.startsWith("smoke.") && key.endsWith(".receipt.head")
+                    && "milestone".equals(values.getProperty(key.replace(".receipt.head", ".kind"))))
+                result.add(values.getProperty(key));
+        return Set.copyOf(result);
     }
 
     private void selfTestCleanup() throws Exception {
