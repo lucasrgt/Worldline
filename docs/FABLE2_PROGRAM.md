@@ -25,11 +25,11 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 
 | ID | Status | Deliverable | Completion evidence |
 | --- | --- | --- | --- |
-| LAT-01 | QUEUED | Cache integration-tool compilation and self-tests by content digest. | A hot gate restores a platform-bound immutable receipt instead of spending the measured integration-tools stage again. |
-| LAT-02 | QUEUED | Cache all stable harness self-test families. | Smoke-cache, retry, fair-lease, pre-push, JSON, scaffold, changelog, README, schedule, statement, and frame-budget tests restore by complete input digest. |
-| LAT-03 | QUEUED | Cache whole-catalog behavior and milestone-surface validation. | Aggregate descriptor/source digests restore immutable PASS receipts; any relevant change invalidates them. |
-| LAT-04 | QUEUED | Cache source policy by tracked inventory and content. | A tracked-file manifest digest restores the source-policy result and fails closed on any inventory/content change. |
-| LAT-05 | QUEUED | Enforce and publish gate latency SLOs. | The ledger sets hot `<10s` and cold `<90s`; verify timing history and dashboard trend are versioned and regression-gated. |
+| LAT-01 | DONE | Cache integration-tool compilation and self-tests by content digest. | The 15.5-second stage restores a platform-bound `verification-stages/integration-tools` receipt on an unchanged input set. |
+| LAT-02 | DONE | Cache all stable harness self-test families. | Seven process self-tests plus scaffold/changelog/README/schedule/statement/frame/cache families restore independently and fail closed on corruption or input drift. |
+| LAT-03 | DONE | Cache whole-catalog behavior and milestone-surface validation. | Aggregate behavior/source descriptors restore both catalog stages; explicit source sets invalidate relevant changes. |
+| LAT-04 | DONE | Cache source policy by tracked inventory and content. | The policy fingerprint covers every maintained source scope, configuration, attributes, and tracked policy input. |
+| LAT-05 | DONE | Enforce and publish gate latency SLOs. | Versioned cold/hot samples are 52,000/4,718 ms; current measured runs passed at 48,584/2,625 ms against 90,000/10,000 ms SLOs. |
 
 ## Migration completion and harness consolidation
 

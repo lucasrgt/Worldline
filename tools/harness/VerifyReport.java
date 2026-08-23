@@ -11,14 +11,14 @@ import java.util.List;
 
 /** Deterministic stage timing report for repository verification. */
 final class VerifyReport {
-    private final Path path;
+    private final Path root, path;
     private final String profile;
     private final Instant started = Instant.now();
     private final long startNanos = System.nanoTime();
     private final List<Stage> stages = new ArrayList<>();
 
     VerifyReport(Path root, String profile) {
-        this.path = root.resolve(".worldline/reports/verify.json"); this.profile = profile;
+        this.root = root; this.path = root.resolve(".worldline/reports/verify.json"); this.profile = profile;
     }
 
     void step(String name, Checked action) throws Exception {
@@ -36,11 +36,14 @@ final class VerifyReport {
 
     void finish(String status, Throwable error) {
         try {
+            long totalMillis = elapsed(startNanos);
+            String latency = error == null ? GateLatencyCheck.enforce(root, totalMillis) : "failed";
             Files.createDirectories(path.getParent());
-            StringBuilder json = new StringBuilder("{\n  \"schema\": 1,\n  \"profile\": \"")
+            StringBuilder json = new StringBuilder("{\n  \"schema\": 2,\n  \"profile\": \"")
                     .append(escape(profile)).append("\",\n  \"status\": \"").append(status)
                     .append("\",\n  \"started\": \"").append(started).append("\",\n  \"elapsed_ms\": ")
-                    .append(elapsed(startNanos)).append(",\n  \"stages\": [\n");
+                    .append(totalMillis).append(",\n  \"latency_class\": \"")
+                    .append(latency).append("\",\n  \"stages\": [\n");
             for (int index = 0; index < stages.size(); index++) {
                 Stage stage = stages.get(index);
                 json.append("    {\"name\": \"").append(escape(stage.name)).append("\", \"status\": \"")

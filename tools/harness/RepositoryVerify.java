@@ -117,36 +117,33 @@ final class RepositoryVerify {
 
     private void execute() throws Exception {
         System.out.println("Worldline repository verification");
+        VerificationStageCache stages = new VerificationStageCache(root);
+        RepositoryStageInputs inputs = new RepositoryStageInputs(root);
         report.step("configuration", this::loadConfiguration);
         report.step("gate-self-test", () -> new HarnessSelfTestCache(root).execute());
         report.step("smoke-discovery", () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "SmokeDiscoveryCheck")));
-        report.step("smoke-cache-self-test", () -> run(Arrays.asList(
-                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "SmokeReceiptCacheTest")));
-        report.step("smoke-retry-self-test", () -> run(Arrays.asList(
-                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "SmokeRetryTest")));
-        report.step("test-cache-self-test", () -> run(Arrays.asList(
-                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "TestReceiptCacheTest")));
-        report.step("json-parser-self-test", () -> run(Arrays.asList(
-                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "MiniJsonTest")));
-        report.step("fair-lock-self-test", () -> run(Arrays.asList(
-                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "FairFileLeaseTest")));
-        report.step("pre-push-self-test", () -> run(Arrays.asList(
-                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "PrePushCheckTest")));
-        report.step("verify-summary-self-test", () -> run(Arrays.asList(
-                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "VerifySummaryTest")));
-        report.step("harness-feature-self-tests", HarnessFeatureSelfTest::execute);
-        report.step("release", () -> run(Arrays.asList(
-                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "ReleaseCheck")));
-        report.step("optimization", () -> {
+        cachedProcess(stages, inputs.harness(), "smoke-cache-self-test", "SmokeReceiptCacheTest");
+        cachedProcess(stages, inputs.harness(), "smoke-retry-self-test", "SmokeRetryTest");
+        cachedProcess(stages, inputs.harness(), "test-cache-self-test", "TestReceiptCacheTest");
+        cachedProcess(stages, inputs.harness(), "json-parser-self-test", "MiniJsonTest");
+        cachedProcess(stages, inputs.harness(), "fair-lock-self-test", "FairFileLeaseTest");
+        cachedProcess(stages, inputs.harness(), "pre-push-self-test", "PrePushCheckTest");
+        cachedProcess(stages, inputs.harness(), "verify-summary-self-test", "VerifySummaryTest");
+        report.step("harness-feature-self-tests", () -> stages.execute("harness-feature-self-tests",
+                inputs.harnessFeatures(), HarnessFeatureSelfTest::execute));
+        report.step("release", () -> stages.execute("release", inputs.release(), () -> run(Arrays.asList(
+                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "ReleaseCheck"))));
+        report.step("optimization", () -> stages.execute("optimization", inputs.optimization(), () -> {
             run(Arrays.asList("java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"),
                     "OptimizationCatalogCheckTest"));
             run(Arrays.asList("java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"),
                     "OptimizationCatalogCheck"));
-        });
-        report.step("behavior-contracts", () -> run(Arrays.asList(
+        }));
+        report.step("behavior-contracts", () -> stages.execute("behavior-contracts", inputs.behavior(),
+                () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"),
-                "BehaviorCompletenessCheck")));
+                "BehaviorCompletenessCheck"))));
         report.step("adapter-kinds", () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "AdapterKindCheck")));
         if (runSmoke) {
@@ -155,27 +152,27 @@ final class RepositoryVerify {
         report.step("runtime-inputs", this::verifyRuntimeInputs);
         List<String> modules = values("modules");
         validateModuleOrder(modules);
-        report.step("source-policy", () -> {
+        report.step("source-policy", () -> stages.execute("source-policy", inputs.sourcePolicy(), () -> {
             enforceBudget("product", productionRoots(modules));
             enforceBudget("harness", VerificationRoots.read(root));
             enforceBudget("adapter", Collections.singletonList(root.resolve("adapters")));
             DataDrivenCycleCheck.execute(root); RetryMigrationCheck.execute(root);
             FixedWaitMigrationCheck.execute(root); new SourceQualityCheck(root).execute();
-        });
+        }));
         report.step("runtime-fabric-self-test", () -> new RuntimeFabricCheck(root).execute());
         recreateBuildDirectory();
-        report.step("integration-tools", () -> {
+        report.step("integration-tools", () -> stages.execute("integration-tools", inputs.integration(), () -> {
             IntegrationToolsCheck.execute(root, build); OrchestratorPolicyCheck.execute();
-        });
+        }));
         report.step("smoke-runners", () -> new SmokeRunnerBuild(root, build).compile());
         List<Path> outputs = report.value("modules",
                 () -> new ModuleBuild(root, build, config, modules).compileAll());
-        report.step("portable-adapters", () -> {
+        report.step("portable-adapters", () -> stages.execute("portable-adapters", inputs.adapters(), () -> {
             new PortableAdapterCheck(root, build, required("java.release")).execute();
             run(Arrays.asList("java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"),
                     "ForeignUiContractCheck"));
-        });
-        report.step("milestone-surfaces", () -> {
+        }));
+        report.step("milestone-surfaces", () -> stages.execute("milestone-surfaces", inputs.surfaces(), () -> {
             Path api = outputs.get(modules.indexOf("api"));
             Path testmodel = outputs.get(modules.indexOf("testmodel"));
             Path testapi = outputs.get(modules.indexOf("testapi"));
@@ -184,9 +181,15 @@ final class RepositoryVerify {
                 contract.validateAtlas(api); contract.validateTestKit(api, testmodel, testapi);
             }
             System.out.println("  milestone Atlas + TestKit surfaces agree with descriptors");
-        });
+        }));
         report.step("tests", () -> new TestBuild(root, build, config, modules, outputs).compileAndRun());
         if (runSmoke) report.step("smokes", this::runSmokeSuite);
+    }
+
+    private void cachedProcess(VerificationStageCache cache, List<Path> inputs,
+            String stage, String type) throws Exception {
+        report.step(stage, () -> cache.execute(stage, inputs, () -> run(Arrays.asList(
+                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), type))));
     }
 
     private void runSmokeSuite() throws Exception {
