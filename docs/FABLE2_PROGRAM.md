@@ -72,7 +72,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | EXT-02 | DONE | Split the three adapters currently at the file ceiling. | Dedicated-server process control, protocol-14 login, and Aero capture settings/scene work are seven cohesive sources; the former ceiling files are now 100, 139, and 99 code lines, and a source-attested migration carries 438 affected fingerprints across all 525 evidence envelopes. |
 | EXT-03 | QUEUED | Connect GUI authoring to runtime structure. | A workbench screen proves `spec.matchesStructure(runtime.ui().nodes())` against the official oracle. |
 | EXT-04 | DONE | Reconcile optimization constitution and practice. | Five owned build, Gate, and Runtime Fabric optimizations now have stable records and ten symbol-tracked sites; the catalog resolves every declared type/method uniquely and rejects absent members, while external Aero algorithms remain correctly project-owned. |
-| EXT-05 | QUEUED | Validate StationAPI as a second real driver. | A minimal StationAPI boot milestone exercises driver discovery, isolation, and TestKit behavior. |
+| EXT-05 | ACTIVE | Validate StationAPI as a second real driver. | M620 implements SPI discovery plus a process-isolated provider that gates a real StationAPI client tick and runs two fresh TestKit sessions; its static candidate Gate passes, while official-runtime qualification and pinning remain. |
 
 ## Documentation and program governance
 

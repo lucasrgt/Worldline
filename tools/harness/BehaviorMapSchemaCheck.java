@@ -28,8 +28,8 @@ final class BehaviorMapSchemaCheck {
                         "aggregate map trace drift");
             }
         }
-        require(maps == 526, "behavior map schema census drift: " + maps);
-        System.out.println("  behavior map schema: 526 boundaries and frozen traces");
+        require(maps == 527, "behavior map schema census drift: " + maps);
+        System.out.println("  behavior map schema: 527 boundaries and frozen traces");
     }
     private static String field(String line, String key) {
         String prefix = "<!-- " + key + "=";

@@ -12,13 +12,15 @@ public final class AdapterManifestTest {
         SemanticCatalog catalog = SemanticCatalog.standard();
         Path root = Paths.get("adapters");
         java.util.List<AdapterManifest> manifests = AdapterManifest.loadAll(root, catalog);
-        require(manifests.size() == 3, "expected b173-client, b173-server, and aero manifests");
-        require(AdapterManifest.loadRepository(Paths.get(""), catalog).size() == 3,
+        require(manifests.size() == 4,
+                "expected b173-client, b173-server, StationAPI, and Aero manifests");
+        require(AdapterManifest.loadRepository(Paths.get(""), catalog).size() == 4,
                 "repository load");
-        AdapterManifest b173 = null, server = null, aero = null;
+        AdapterManifest b173 = null, server = null, stationapi = null, aero = null;
         for (AdapterManifest manifest : manifests) {
             if ("b173-client".equals(manifest.adapter())) b173 = manifest;
             if ("b173-server".equals(manifest.adapter())) server = manifest;
+            if ("stationapi".equals(manifest.adapter())) stationapi = manifest;
             if ("aero-model-lib".equals(manifest.adapter())) aero = manifest;
         }
         require(b173 != null && "driver".equals(b173.kind()) && b173.sites().size() >= 30,
@@ -55,6 +57,9 @@ public final class AdapterManifestTest {
         require(server.render().contains("PACKET106_TRANSACTION="), "server lists Packet106");
         require(server.render().contains("PACKET200_STATISTIC="), "server lists Packet200");
         require(server.sites().size() >= 26, "server intercept sites");
+        require(stationapi != null && "driver".equals(stationapi.kind())
+                && stationapi.ownerPrefix().equals("worldline/stationapi/")
+                && stationapi.render().contains("MANUAL_TICK="), "StationAPI driver boundary");
         require(aero != null && "extension".equals(aero.kind())
                 && aero.ownerPrefix().equals("worldline/aero/"), "aero prefix");
         require(aero.render().contains("kind=extension"), "aero render kind");

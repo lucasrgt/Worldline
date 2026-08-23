@@ -14,16 +14,19 @@ final class UnicodePinCheck {
                 "invalid Unicode normalization migration");
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root); int checked = 0;
+        Properties provider = ProviderDiscoveryPinCheck.manifest(root);
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            if (ProviderDiscoveryPinCheck.exemptsLegacy(provider, smoke.id)) continue;
             checked++; String current = fingerprints.compute(smoke);
             SmokePins.Entry pin = pins.match(smoke.id, current);
             require(pin != null && carries(lock, smoke.id, pin, current),
                     "Unicode-normalized proof drift: " + smoke.id);
         }
-        require(checked == integer(lock, "smoke.count") && checked == 525
+        require(checked == integer(lock, "smoke.count")
+                        - ProviderDiscoveryPinCheck.pendingCount(provider)
                         && integer(lock, "smoke.changed") > 0,
                 "Unicode normalization proof census drift");
-        System.out.println("  Unicode-normalized smoke proof transport: 525 inputs");
+        System.out.println("  Unicode-normalized smoke proof transport: " + checked + " inputs");
     }
     static Properties manifest(Path root) throws Exception {
         Path path = root.resolve("smokes/unicode-normalization.lock");

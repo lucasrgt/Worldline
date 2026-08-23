@@ -1,5 +1,5 @@
 schema=1
 id=m517-sw-item-despawn-age
-fingerprint=c02d2dbfea5ac0e1d4fc173f9dfdb1fb6e62cc5c9b2408fdd4234912fd14aafa
+fingerprint=79c173c4a160482c2baa2168ea628ce94ef0df6b90225eadd06a4e6ba4f0e16c
 observation.sha256=fc7a206cd1e7d5bf9efa1820b8ff8537d8d24dee666ab25f9238532bf0c4a414
 source=refactor-equivalent

@@ -35,15 +35,18 @@ final class SharedHelperPinCheck {
                 "shared fixture variant ratchet regressed");
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root); int checked = 0;
+        Properties provider = ProviderDiscoveryPinCheck.manifest(root);
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            if (ProviderDiscoveryPinCheck.exemptsLegacy(provider, smoke.id)) continue;
             checked++; String current = fingerprints.compute(smoke);
             SmokePins.Entry pin = pins.match(smoke.id, current);
             require(pin != null && carries(lock, smoke.id, pin, current),
                     "shared-helper proof drift: " + smoke.id);
         }
-        require(checked == integer(lock, "smoke.count") && checked == 525 && files == 354,
+        require(checked == integer(lock, "smoke.count")
+                        - ProviderDiscoveryPinCheck.pendingCount(provider) && files == 354,
                 "shared-helper proof census drift");
-        System.out.println("  shared-helper proof transport: 354 files, 525 smoke inputs");
+        System.out.println("  shared-helper proof transport: 354 files, " + checked + " smoke inputs");
     }
 
     static Properties manifest(Path root) throws Exception {

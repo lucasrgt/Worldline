@@ -7,10 +7,10 @@ in-tree adapter per mod.
 
 ## Ownership
 
-Worldline owns drivers. The closed driver set is `b173-client` and
-`b173-server`. StationAPI is the next driver slot: the same game on the Yarn
-and Fabric Loader classpath. It is not implemented yet and is not an
-extension.
+Worldline owns drivers. The closed driver set is `b173-client`, `b173-server`,
+and `stationapi`. StationAPI is the second TestKit runtime family: the same game
+on the Yarn and Fabric Loader classpath. Its M620 boundary is intentionally
+read-only beyond tick, time, identity, health, and pose. It is not an extension.
 
 A mod owns its extension manifest in its own repository under the Worldline
 namespace, not a generic `extensions/` folder:

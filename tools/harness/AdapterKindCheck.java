@@ -12,7 +12,7 @@ import java.util.Set;
 /** Fails closed when adapter kinds drift from the driver/extension allowlists. */
 public final class AdapterKindCheck {
     private static final Set<String> DRIVERS = new LinkedHashSet<String>(
-            Arrays.asList("b173-client", "b173-server"));
+            Arrays.asList("b173-client", "b173-server", "stationapi"));
     private final Path root;
 
     private AdapterKindCheck(Path root) {

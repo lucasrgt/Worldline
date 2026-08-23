@@ -37,7 +37,7 @@ SemanticCatalog.standard()
   -->  25 categories, 265 required roles
   -->  role("CLIENT_TICK_ROOT") / category("clock") / symbol(owner, name)
 AdapterManifest.loadAll(adapters, catalog)
-  -->  b173-client and b173-server drivers; aero-model-lib overlay extension
+  -->  b173-client, b173-server, and StationAPI drivers; aero-model-lib overlay extension
 ```
 
 Unknown roles, unknown categories, duplicate roles, duplicate owner+name
@@ -120,6 +120,7 @@ worldline semantics role CLIENT_WORLD
 worldline semantics adapter
 worldline semantics adapter b173-client
 worldline semantics adapter b173-server
+worldline semantics adapter stationapi
 worldline semantics adapter aero-model-lib
 worldline semantics adapter check .
 ```

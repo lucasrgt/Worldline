@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "worldline.stationapi.runtime",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "StationApiDriverMixin",
+    "StationApiDriverNetworkMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

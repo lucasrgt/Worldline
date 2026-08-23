@@ -204,6 +204,7 @@ public final class WorldlineCliTest {
                     new PrintStream(output), new PrintStream(error));
             require(status == 0 && output.toString().contains("b173-client=driver")
                     && output.toString().contains("b173-server=driver")
+                    && output.toString().contains("stationapi=driver")
                     && output.toString().contains("aero-model-lib=extension"),
                     "CLI semantics adapter failed");
             output.reset(); error.reset();

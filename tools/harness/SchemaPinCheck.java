@@ -15,8 +15,10 @@ final class SchemaPinCheck {
                 "repository schema migration census drift");
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); Properties formatting = FormattingPinCheck.manifest(root);
+        Properties provider = ProviderDiscoveryPinCheck.manifest(root);
         int checked = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            if (ProviderDiscoveryPinCheck.exemptsLegacy(provider, smoke.id)) continue;
             checked++; String stem = "smoke." + smoke.id + "."; String current = fingerprints.compute(smoke);
             Path directory = root.resolve("smokes").resolve(smoke.id);
             SmokePins.Entry pin = pins.match(smoke.id, current);
@@ -37,8 +39,9 @@ final class SchemaPinCheck {
                             || FormattingPinCheck.carries(formatting, smoke.id, pin, current)),
                     "repository schema pin drift: " + smoke.id);
         }
-        require(checked == 525, "repository schema pin census drift");
-        System.out.println("  repository schema proof transport: 525 smoke inputs");
+        require(checked == 525 - ProviderDiscoveryPinCheck.pendingCount(provider),
+                "repository schema pin census drift");
+        System.out.println("  repository schema proof transport: " + checked + " smoke inputs");
     }
     static Properties manifest(Path root) throws Exception {
         Path path = root.resolve("smokes/schema-migration.lock");

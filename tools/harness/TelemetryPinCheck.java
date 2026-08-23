@@ -22,10 +22,12 @@ final class TelemetryPinCheck {
         }
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); Properties schemas = SchemaPinCheck.manifest(root);
+        Properties provider = ProviderDiscoveryPinCheck.manifest(root);
         int changed = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             String stem = "smoke." + smoke.id + ".";
             if (manifest.getProperty(stem + "current_fingerprint") == null) continue;
+            if (ProviderDiscoveryPinCheck.exemptsLegacy(provider, smoke.id)) continue;
             changed++; String current = fingerprints.compute(smoke);
             SmokePins.Entry pin = pins.match(smoke.id, current);
             boolean direct = current.equals(required(manifest, stem + "current_fingerprint"));
@@ -42,7 +44,8 @@ final class TelemetryPinCheck {
                             || SchemaPinCheck.carries(schemas, smoke.id, pin, current))),
                     "telemetry migration pin drift: " + smoke.id);
         }
-        require(changed == integer(manifest, "count") && changed >= 100,
+        require(changed == integer(manifest, "count")
+                        - ProviderDiscoveryPinCheck.pendingCount(provider) && changed >= 100,
                 "telemetry migration census drift");
         System.out.println("  telemetry proof transport: " + changed + " smoke inputs");
     }

@@ -1,5 +1,5 @@
 schema=1
 id=m202-sapling
-fingerprint=074fc7f0fdc1f3757a3858a5e031e7ab637a88e4c8d2dc795a22fefaaca3a991
+fingerprint=289c33bbfef9dce04f5305a8065c1155ad156070315c17add8530ddcd5a88dd9
 observation.sha256=7772115ec090ef211b01204fa558371ea9983994367b0ceb0899a44441bdb24d
 source=refactor-equivalent

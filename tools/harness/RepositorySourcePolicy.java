@@ -18,8 +18,10 @@ final class RepositorySourcePolicy {
         budget("adapter", Collections.singletonList(root.resolve("adapters")));
         DataDrivenCycleCheck.execute(root); CompositeCycleCheck.execute(root);
         TelemetryPinCheck.execute(root); SchemaPinCheck.execute(root);
-        SmokeDescriptorSchemaCheck.execute(root); FormattingPinCheck.execute(root);
+        SmokeDescriptorSchemaCheck.execute(root); TestKitReleasePinCheck.execute(root);
+        FormattingPinCheck.execute(root);
         SharedHelperPinCheck.execute(root); UnicodePinCheck.execute(root); AdapterSplitPinCheck.execute(root);
+        ProviderDiscoveryPinCheck.execute(root);
         BehaviorMapSchemaCheck.execute(root); RetryMigrationCheck.execute(root);
         FixedWaitMigrationCheck.execute(root); new SourceQualityCheck(root).execute();
     }

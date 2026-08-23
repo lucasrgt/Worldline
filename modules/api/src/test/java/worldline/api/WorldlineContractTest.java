@@ -4,7 +4,7 @@ final class WorldlineContractTest {
     private WorldlineContractTest() {}
 
     static void run() {
-        if (WorldlineContract.all().size() != 42
+        if (WorldlineContract.all().size() != 43
                 || WorldlineContract.require("trace-divergence") != WorldlineContract.TRACE_DIVERGENCE
                 || !WorldlineContract.MOD_LOADING.subject().contains("mod loading")
                 || WorldlineContract.require("scenario-coverage") != WorldlineContract.SCENARIO_COVERAGE
@@ -17,6 +17,8 @@ final class WorldlineContractTest {
                         != WorldlineContract.LOGICAL_ITEM_REFERENCE
                 || WorldlineContract.require("state-world-differential")
                         != WorldlineContract.STATE_WORLD_DIFFERENTIAL
+                || WorldlineContract.require("stationapi-runtime-provider")
+                        != WorldlineContract.STATIONAPI_RUNTIME_PROVIDER
                 || WorldlineContract.require("testkit-runtime") != WorldlineContract.TESTKIT_RUNTIME)
             throw new AssertionError("TestKit contract catalog drifted");
         try { WorldlineContract.all().clear(); throw new AssertionError("mutable TestKit contract catalog"); }

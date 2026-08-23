@@ -10,7 +10,7 @@ tessellator, nibble, and GUI-slot promotions.
 | Requirement | Authoritative evidence | Result |
 | --- | --- | --- |
 | Closed catalog | 25 categories and 265 required roles; unknown or duplicate symbols fail closed | PASS |
-| Adapter manifests | `b173-client` and `b173-server` are drivers; `aero-model-lib` is the overlay extension pin with nine oracled `worldline/aero/` sites; extra in-tree adapters and `aero/modellib` types fail closed | PASS |
+| Adapter manifests | `b173-client`, `b173-server`, and `stationapi` are drivers; `aero-model-lib` is the overlay extension pin with nine oracled `worldline/aero/` sites; extra in-tree adapters and `aero/modellib` types fail closed | PASS |
 | Map coverage | Every named `symbols.map` symbol in the client, world, and M10 tessellator maps has a catalog role | PASS |
 | Static graph | `SemanticGraph` fails closed on unknown read/write/dep tokens | PASS |
 | Neutral CLI | `semantics show\|graph\|category\|role\|adapter` inspects without loading Minecraft | PASS |

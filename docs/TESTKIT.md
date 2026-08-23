@@ -337,7 +337,18 @@ The default b1.7.3 provider:
 5. closes the runtime and isolated mod class loader together.
 
 The provider is runtime-specific. The test API and runner discover it only
-through `TestRuntimeProvider`.
+through `TestRuntimeProvider`. A provider may be selected by its implementation
+class for compatibility or by its stable `runtimeId()` through the standard
+Java `ServiceLoader` descriptor
+`META-INF/services/worldline.test.TestRuntimeProvider`. Missing and duplicate
+runtime IDs fail before a session opens.
+
+The `stationapi-b1.7.3` adapter is the second real provider family. It runs a
+fresh official server and a fresh Fabric/StationAPI client per TestKit attempt,
+then gates the client game thread one tick at a time over a loopback control
+channel. Its M620 surface is deliberately narrow: lifecycle state, world time,
+player identity, health, selected slot, and pose. It does not claim headless
+boot, block or inventory mutation, GUI automation, or broad StationAPI parity.
 
 The targeted repository acceptance gate first proves the controlled client
 against the hash-pinned official JAR, then executes all ten Java 8 example

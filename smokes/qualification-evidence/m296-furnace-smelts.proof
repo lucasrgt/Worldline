@@ -1,5 +1,5 @@
 schema=1
 id=m296-furnace-smelts
-fingerprint=bfadcb2f2878e0763fe431a09dc88aae615988703a37a7edf6e4ed0c3b7bd49c
+fingerprint=82afeda34c1a65cf494647197504adebfcc1619597dfd49083f5b92547250b63
 observation.sha256=04ac7e3f754356f848410854d026b17493e75b73dc55473905ec0d45d31787c1
 source=refactor-equivalent

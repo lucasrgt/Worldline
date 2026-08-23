@@ -13,6 +13,7 @@ import worldline.test.TestDefinition;
 import worldline.test.TestNode;
 import worldline.test.TestPlan;
 import worldline.test.TestRuntimeProvider;
+import worldline.test.TestRuntimeProviders;
 import worldline.test.WorldlineSpec;
 import worldline.testkit.AgentReporter;
 import worldline.testkit.CompositeReporter;
@@ -110,7 +111,7 @@ final class TestCommand {
 
     private static TestRuntimeProvider provider(String name) throws ReflectiveOperationException {
         if ("none".equals(name)) return null;
-        return Class.forName(name).asSubclass(TestRuntimeProvider.class).getDeclaredConstructor().newInstance();
+        return TestRuntimeProviders.discover(name);
     }
     private static boolean command(String value) {
         return "run".equals(value) || "list".equals(value) || "inspect".equals(value)

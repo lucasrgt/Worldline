@@ -1,5 +1,5 @@
 schema=1
 id=m146-obsidian-piston-rejection
-fingerprint=830db18dae58bb9236b03c2f68cfab0c3aab5581eb6d19bfedf3819e74c2ccab
+fingerprint=e0ebdb490d80d64f5f1159915cbf06dea6abfd326b73887a99522aa887f0e1ab
 observation.sha256=5deacfe1aa98b05c6667cd13215354e232659bd057f50e1340640017dface768
 source=refactor-equivalent

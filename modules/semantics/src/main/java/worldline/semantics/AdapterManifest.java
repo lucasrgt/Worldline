@@ -22,7 +22,7 @@ import worldline.api.SemanticMapping;
 public final class AdapterManifest {
     public static final String SCHEMA = "worldline.adapter.semantics.v1";
     public static final List<String> DRIVERS = Collections.unmodifiableList(
-            Arrays.asList("b173-client", "b173-server"));
+            Arrays.asList("b173-client", "b173-server", "stationapi"));
     private static final Pattern ADAPTER = Pattern.compile("[a-z][a-z0-9-]{0,63}");
     private static final Pattern SITE = Pattern.compile("worldline/[A-Za-z0-9_$./-]+#[A-Za-z0-9_$.]+");
     private final String adapter, kind, prefix;

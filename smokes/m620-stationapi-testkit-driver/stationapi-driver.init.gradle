@@ -1,0 +1,43 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+gradle.projectsEvaluated {
+    if (gradle.rootProject.name != 'aero-bare-stapi') return
+    def project = gradle.rootProject
+    def smoke = new File(project.property('worldlineDriverRoot').toString()).canonicalFile
+    def officialClient = project.configurations.minecraft.singleFile
+    def digest = java.security.MessageDigest.getInstance('SHA-256')
+    officialClient.withInputStream { input ->
+        byte[] buffer = new byte[8192]
+        for (int count = input.read(buffer); count >= 0; count = input.read(buffer))
+            digest.update(buffer, 0, count)
+    }
+    def actualClient = digest.digest().encodeHex().toString()
+    if (actualClient != project.property('worldlineClientSha256').toString())
+        throw new GradleException('StationAPI official client SHA-256 drifted: ' + actualClient)
+    project.sourceSets.main.java.srcDir(new File(smoke, 'runtime-src'))
+    project.tasks.named('processResources').configure {
+        doLast {
+            copy {
+                from new File(smoke, 'runtime-resources/worldline-stationapi-driver.mixins.json')
+                into destinationDir
+            }
+            def manifest = new File(destinationDir, 'fabric.mod.json')
+            def json = new JsonSlurper().parse(manifest)
+            json.mixins = ['worldline-stationapi-driver.mixins.json']
+            manifest.text = JsonOutput.prettyPrint(JsonOutput.toJson(json)) + '\n'
+        }
+    }
+    def task = project.tasks.named('runClient').get()
+    if (task.actions.size() != 2 || !task.actions[0].class.name.endsWith('ClosureTaskAction'))
+        throw new GradleException('StationAPI runClient action shape drifted')
+    task.actions.remove(0)
+    task.jvmArgs([
+        '-Dworldline.stationapi.enabled=true',
+        '-Dworldline.stationapi.controlPort=' + project.property('worldlineControlPort'),
+        '-Dworldline.stationapi.serverPort=' + project.property('worldlineServerPort'),
+        '-Dworldline.stationapi.username=' + project.property('worldlineUsername'),
+        '-Dworldline.stationapi.session=' + project.property('worldlineSession'),
+        '-Xms512m', '-Xmx1G'
+    ] as List)
+}

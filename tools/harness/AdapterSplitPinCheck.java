@@ -29,16 +29,19 @@ final class AdapterSplitPinCheck {
                 "capture-scene delegation drift");
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root); int checked = 0;
+        Properties provider = ProviderDiscoveryPinCheck.manifest(root);
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            if (ProviderDiscoveryPinCheck.exemptsLegacy(provider, smoke.id)) continue;
             checked++; String current = fingerprints.compute(smoke);
             SmokePins.Entry pin = pins.match(smoke.id, current);
             require(pin != null && carries(lock, smoke.id, pin, current),
                     "adapter-split proof drift: " + smoke.id);
         }
-        require(checked == 525 && checked == integer(lock, "smoke.count")
+        require(checked == integer(lock, "smoke.count")
+                        - ProviderDiscoveryPinCheck.pendingCount(provider)
                         && integer(lock, "smoke.changed") > 0,
                 "adapter-split proof census drift");
-        System.out.println("  adapter-split proof transport: 7 sources, 525 smoke inputs");
+        System.out.println("  adapter-split proof transport: 7 sources, " + checked + " smoke inputs");
     }
 
     static Properties manifest(Path root) throws Exception {
@@ -53,9 +56,16 @@ final class AdapterSplitPinCheck {
 
     static boolean carries(Properties lock, String id, SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
-        return hash(lock.getProperty(stem + "prior_fingerprint"))
+        boolean direct = hash(lock.getProperty(stem + "prior_fingerprint"))
                 && current.equals(lock.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"));
+        try {
+            Properties provider = ProviderDiscoveryPinCheck.manifest(
+                    Path.of("").toAbsolutePath().normalize());
+            return direct || ProviderDiscoveryPinCheck.follows(provider, id,
+                    lock.getProperty(stem + "current_fingerprint"),
+                    lock.getProperty(stem + "evidence_sha256"), pin, current);
+        } catch (Exception error) { return false; }
     }
 
     static boolean follows(Properties lock, String id, String prior, String evidence,

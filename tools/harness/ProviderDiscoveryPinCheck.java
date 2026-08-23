@@ -1,0 +1,108 @@
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.util.HexFormat;
+import java.util.Properties;
+
+/** Validates provider-discovery sources and proof transport for pre-existing smokes. */
+final class ProviderDiscoveryPinCheck {
+    private ProviderDiscoveryPinCheck() { }
+
+    static void execute(Path root) throws Exception {
+        Properties lock = manifest(root);
+        require("1".equals(lock.getProperty("schema"))
+                        && integer(lock, "modified.count") == 9
+                        && integer(lock, "added.count") == 12
+                        && integer(lock, "smoke.count") == 521
+                        && integer(lock, "pending.count") == 4
+                        && integer(lock, "catalog.count") == 526,
+                "invalid provider-discovery migration");
+        sources(root, lock, "modified", 9, true); sources(root, lock, "added", 12, false);
+        SmokePins pins = new SmokePins(root); pins.validateEvidence();
+        SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
+        int carried = 0, discovered = 0;
+        for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            discovered++; String current = fingerprints.compute(smoke);
+            SmokePins.Entry pin = pins.match(smoke.id, current);
+            if (isNewSmoke(lock, smoke.id)) {
+                require(pin == null || pin.source().equals("executed"),
+                        "new provider smoke requires executed evidence");
+                continue;
+            }
+            if (isPending(lock, smoke.id)) {
+                SmokePins.Entry stale = pins.entry(smoke.id); String stem = "smoke." + smoke.id + ".";
+                require(pin != null && pin.source().equals("executed") || pin == null && stale != null
+                                && stale.fingerprint().equals(lock.getProperty(stem + "prior_fingerprint"))
+                                && stale.evidence().equals(lock.getProperty(stem + "evidence_sha256")),
+                        "runtime-pending provider proof drift: " + smoke.id);
+                continue;
+            }
+            carried++; require(pin != null && carries(lock, smoke.id, pin, current),
+                    "provider-discovery proof drift: " + smoke.id);
+        }
+        require(discovered == integer(lock, "catalog.count")
+                        && carried == integer(lock, "smoke.count")
+                        && integer(lock, "smoke.changed") > 0,
+                "provider-discovery proof census drift");
+        System.out.println("  provider-discovery proof transport: 21 sources, 521 carried, 4 pending");
+    }
+
+    static Properties manifest(Path root) throws Exception {
+        Path path = root.resolve("smokes/provider-discovery.lock");
+        if (!Files.isRegularFile(path)) return new Properties();
+        Properties values = new Properties();
+        try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+            values.load(reader); }
+        return values;
+    }
+    static boolean isNewSmoke(Properties lock, String id) {
+        return id.equals(lock.getProperty("new.smoke"));
+    }
+    static boolean isPending(Properties lock, String id) {
+        return java.util.Arrays.asList(lock.getProperty("pending.smokes", "").split(",")).contains(id);
+    }
+    static boolean exemptsLegacy(Properties lock, String id) {
+        return isNewSmoke(lock, id) || isPending(lock, id);
+    }
+    static int pendingCount(Properties lock) { return integer(lock, "pending.count"); }
+    static boolean carries(Properties lock, String id, SmokePins.Entry pin, String current) {
+        String stem = "smoke." + id + ".";
+        return hash(lock.getProperty(stem + "prior_fingerprint"))
+                && current.equals(lock.getProperty(stem + "current_fingerprint"))
+                && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"));
+    }
+    static boolean follows(Properties lock, String id, String prior, String evidence,
+            SmokePins.Entry pin, String current) {
+        String stem = "smoke." + id + ".";
+        return carries(lock, id, pin, current)
+                && prior.equals(lock.getProperty(stem + "prior_fingerprint"))
+                && evidence.equals(lock.getProperty(stem + "evidence_sha256"));
+    }
+
+    private static void sources(Path root, Properties lock, String group, int count,
+            boolean prior) throws Exception {
+        for (int index = 0; index < count; index++) {
+            String stem = group + "." + index + ".", relative = required(lock, stem + "path");
+            require(digest(root.resolve(relative)).equals(required(lock, stem + "current_sha256"))
+                            && (!prior || hash(lock.getProperty(stem + "prior_sha256"))),
+                    "provider-discovery source drift: " + relative);
+        }
+    }
+    private static String digest(Path path) throws Exception { return HexFormat.of().formatHex(
+            MessageDigest.getInstance("SHA-256").digest(Files.readString(path,
+                    StandardCharsets.UTF_8).replace("\r\n", "\n").getBytes(StandardCharsets.UTF_8))); }
+    private static boolean hash(String value) { return value != null && value.matches("[0-9a-f]{64}"); }
+    private static int integer(Properties values, String key) {
+        try { return Integer.parseInt(required(values, key)); }
+        catch (NumberFormatException error) { throw new IllegalStateException("invalid " + key); }
+    }
+    private static String required(Properties values, String key) {
+        String value = values.getProperty(key); require(value != null && !value.isBlank(),
+                "missing " + key); return value;
+    }
+    private static void require(boolean value, String message) {
+        if (!value) throw new IllegalStateException(message);
+    }
+}

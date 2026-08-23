@@ -49,7 +49,7 @@ not redistribute those JARs, Mojang assets, or decompiled game source.
 <!-- worldline-status:start -->
 | Release | Milestone | Behavior contracts | Portable smoke proofs |
 | --- | --- | --- | --- |
-| v1.462.0 GO | `m569-spawner-delay-set` | 525/525 complete | 525/525 pinned |
+| v1.462.0 GO | `m569-spawner-delay-set` | 526/526 complete | 525/526 pinned |
 <!-- worldline-status:end -->
 
 The current release is declared in
@@ -327,7 +327,7 @@ types into the neutral API. See [`docs/EXTENSIONS.md`](docs/EXTENSIONS.md) and
 | `trace` / `reproduction` | Canonical evidence formats and replay | No |
 | `semantics` / `symbolgraph` / `atlas` | Mappings, roles, provenance, and coverage | No |
 | `analysis` / `fuzz` / `profiling` | Derived diagnostics and campaigns | No |
-| `b173-client` / `b173-server` | Mapped runtime integration | Yes, isolated |
+| `b173-client` / `b173-server` / `stationapi` | Mapped runtime integration | Yes, isolated |
 | `aero-model-lib` adapter | External renderer qualification | Yes, isolated |
 
 Modules compile separately in the order declared by

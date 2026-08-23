@@ -617,7 +617,9 @@ scenario/driver -> kernel -> backend port <- retromcp/lwjgl adapter
 
 An adapter may depend on the API, kernel, and semantic catalog. The API,
 kernel, and catalog must never depend on an adapter. Runtime drivers are the
-closed `b173-client` and `b173-server` set; StationAPI is a future driver.
+closed `b173-client`, `b173-server`, and `stationapi` set. StationAPI is a
+process-isolated TestKit driver whose qualified surface grows only through
+official-runtime milestones.
 Mods publish `worldline/extensions/` manifests in their own repositories. Worldline pins
 `aero-model-lib` only as an overlay for oracled smokes. See
 `docs/EXTENSION_SDK.md`. The reusable client adapter is an executable proof of

@@ -1,0 +1,16 @@
+# Worldline TestKit 0.3 release qualification boundary v1
+schema=1
+version=0.3.0
+release.path=release/testkit.properties
+release.sha256=6cee90658fef2d5f9809aeac63e3be4a74ba0effb27de6e88edfc89ed1bd30f7
+pending.count=4
+pending.smokes=m7-mod-loading,m8-mod-version-diff,m9-scenario-minimization,testkit-cycle
+source.path=tools/smoke/TestKitCycle.java
+source.prior_sha256=addb3c7149fff71067240081e684164356962e6a9306564a7bfcf1459f74f12b
+source.current_sha256=78241be80345257dbc0a8b5ea2fe632610e95c6c7889fc2f2acc4bcf6e2c3442
+descriptor.path=smokes/testkit-cycle/smoke.properties
+descriptor.prior_sha256=52908752875589cb21e15fd8cb8eca7ea8fca11f7aae296a8c5c0f03b775e7df
+descriptor.current_sha256=75329a8b4906f358eecb1389b194298582a281bf07f19ac57f120cced3a372ed
+map.path=smokes/testkit-cycle/MAP.md
+map.prior_sha256=3a2d822340f972bab28ac44145c01a3028b8e335b742595968ed7d70c51c609c
+map.current_sha256=67683ee6d3976d2fbc1e987e3b3d158dfab3b5486643ca7f5081a95e898cdd0d
