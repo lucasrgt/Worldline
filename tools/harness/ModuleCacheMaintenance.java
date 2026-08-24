@@ -33,10 +33,10 @@ public final class ModuleCacheMaintenance {
 
     void execute(boolean delete) throws Exception {
         Files.createDirectories(cache);
-        Set<Path> references = references();
         CachePolicy policy = new CachePolicy(root);
-        Result result = maintain(cache, references, policy.maximumBytes(), policy.minimumAgeMillis(),
-                System.currentTimeMillis(), delete);
+        CacheReferences.Source references = () -> CacheReferences.snapshot(root, cache);
+        Result result = maintain(cache, references, policy.maximumBytes(),
+                policy.minimumAgeMillis(), System.currentTimeMillis(), delete);
         System.out.println("module-cache.entries=" + result.entries + ";bytes=" + result.bytes
                 + ";referenced=" + result.referenced + ";removed=" + result.removed);
         System.out.println("WORLDLINE_MODULE_CACHE_" + (delete ? "GC" : "DOCTOR") + "=PASS");
@@ -44,16 +44,25 @@ public final class ModuleCacheMaintenance {
 
     static Result maintain(Path cache, Set<Path> references, long maximum, long minimumAge,
             long now, boolean delete) throws Exception {
+        return maintain(cache, () -> references, maximum, minimumAge, now, delete);
+    }
+
+    static Result maintain(Path cache, CacheReferences.Source source, long maximum, long minimumAge,
+            long now, boolean delete) throws Exception {
+        require(maximum > 0L, "module cache maximum must be positive");
+        Set<Path> references = source.snapshot();
         List<Entry> entries = entries(cache); long total = entries.stream().mapToLong(Entry::bytes).sum();
         int referenced = 0, removed = 0;
         for (Entry entry : entries) {
-            if (references.contains(entry.path.toRealPath())) { referenced++; continue; }
-            if (!delete || now - entry.used < minimumAge && total <= maximum) continue;
+            if (CacheReferences.protects(entry.path, references)) { referenced++; continue; }
+            if (!delete || now - entry.used < minimumAge) continue;
             Path lockPath = entry.path.resolveSibling(entry.digest + ".lock");
             Files.createDirectories(lockPath.getParent());
             try (FileChannel channel = FileChannel.open(lockPath, StandardOpenOption.CREATE,
                     StandardOpenOption.WRITE); FileLock lock = tryLock(channel)) {
-                if (lock == null || references.contains(entry.path.toRealPath())) continue;
+                if (lock == null) continue;
+                Set<Path> current = source.snapshot();
+                if (CacheReferences.protects(entry.path, current)) { referenced++; continue; }
                 SafeTreeDelete.delete(entry.path); Files.deleteIfExists(entry.usedPath);
                 total -= entry.bytes; removed++;
             }
@@ -61,26 +70,16 @@ public final class ModuleCacheMaintenance {
         return new Result(entries.size(), total, referenced, removed);
     }
 
-    private Set<Path> references() throws Exception {
-        Set<Path> result = new HashSet<>();
-        String listing = ProcessCapture.require(root, List.of("git", "worktree", "list", "--porcelain"), 60);
-        for (String line : listing.lines().filter(value -> value.startsWith("worktree ")).toList()) {
-            Path classes = Path.of(line.substring(9)).resolve(".worldline/build/classes");
-            if (!Files.isDirectory(classes)) continue;
-            try (Stream<Path> paths = Files.list(classes)) {
-                for (Path path : paths.toList()) if (Files.exists(path)) result.add(path.toRealPath());
-            }
-        }
-        return Set.copyOf(result);
-    }
-
     private static List<Entry> entries(Path cache) throws Exception {
         List<Entry> result = new ArrayList<>();
         if (!Files.isDirectory(cache)) return result;
         try (Stream<Path> modules = Files.list(cache)) {
-            for (Path module : modules.filter(Files::isDirectory).toList())
+            for (Path module : modules.filter(Files::isDirectory).toList()) {
+                require(!SafeTreeDelete.linkLike(module), "module cache contains a filesystem link: " + module);
                     try (Stream<Path> paths = Files.list(module)) {
-                for (Path path : paths.filter(Files::isDirectory).toList()) {
+                        for (Path path : paths.filter(Files::isDirectory).toList()) {
+                    require(!SafeTreeDelete.linkLike(path),
+                            "module cache contains a filesystem link: " + path);
                     String digest = path.getFileName().toString();
                     if (!digest.matches("[0-9a-f]{64}")) continue;
                     Path complete = path.resolve(".complete");
@@ -93,16 +92,13 @@ public final class ModuleCacheMaintenance {
                     result.add(new Entry(path, used, digest, timestamp, size(path)));
                 }
             }
+            }
         }
         result.sort(Comparator.comparingLong(Entry::used)); return result;
     }
 
     private static long size(Path root) throws IOException {
-        try (Stream<Path> paths = Files.walk(root)) {
-            long total = 0L;
-            for (Path path : paths.filter(Files::isRegularFile).toList()) total += Files.size(path);
-            return total;
-        }
+        return SafeTreeDelete.size(root);
     }
 
     private static long parseUsed(Path path) throws IOException {
@@ -133,6 +129,13 @@ public final class ModuleCacheMaintenance {
             Result result = maintain(cache, Set.of(live.toRealPath()), 1L, 1L, 10L, true);
             require(result.removed == 1 && !Files.exists(old) && Files.isDirectory(live),
                     "module cache GC removed a referenced entry or retained an expired entry");
+            SafeTreeDelete.delete(live); Files.deleteIfExists(live.resolveSibling("b".repeat(64) + ".used"));
+            Path late = entry(cache, "api", "c".repeat(64), 1L);
+            java.util.concurrent.atomic.AtomicInteger snapshots = new java.util.concurrent.atomic.AtomicInteger();
+            Result raced = maintain(cache, () -> snapshots.getAndIncrement() == 0
+                    ? Set.of() : Set.of(late.toRealPath()), 1L, 1L, 10L, true);
+            require(raced.removed == 0 && Files.isDirectory(late) && snapshots.get() >= 2,
+                    "module cache GC did not re-snapshot live links under the entry lock");
         } finally { SafeTreeDelete.delete(root); }
         System.out.println("  module cache maintenance self-test: passed");
     }

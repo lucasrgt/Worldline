@@ -8,6 +8,7 @@ import java.util.Properties;
 final class SmokeDescriptorSchemaCheck {
     private SmokeDescriptorSchemaCheck() { }
     static void execute(Path root) throws Exception {
+        StrictProperties.selfTest();
         int legacy = 0, qualification = 0, narratives = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             Properties values = load(root.resolve("smokes").resolve(smoke.id).resolve("smoke.properties"));
@@ -43,10 +44,7 @@ final class SmokeDescriptorSchemaCheck {
     private static boolean hash(Properties values, String key) {
         return values.getProperty(key, "").matches("[0-9a-f]{64}");
     }
-    private static Properties load(Path path) throws Exception { Properties values = new Properties();
-        try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-            values.load(reader); } return values;
-    }
+    private static Properties load(Path path) throws Exception { return StrictProperties.load(path); }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);
     }

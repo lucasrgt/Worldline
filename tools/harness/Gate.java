@@ -1,11 +1,9 @@
-import java.io.IOException;
 import java.io.Reader;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -16,13 +14,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /** Cross-platform, cross-worktree entry point for every repository gate. */
 public final class Gate {
     private static final String INTERNAL = "WORLDLINE_GATE_INTERNAL";
-    private final Path root = Paths.get("").toAbsolutePath().normalize();
+    private final Path root = Path.of("").toAbsolutePath().normalize();
     private final Path control = controlDirectory();
     private final long waitMillis = waitMillis();
 
@@ -131,7 +128,7 @@ public final class Gate {
         if (exit != 0) System.exit(exit);
     }
 
-    private boolean milestoneUsesOfficialRuntime(String id) throws IOException {
+    private boolean milestoneUsesOfficialRuntime(String id) throws java.io.IOException {
         Path path = root.resolve("smokes").resolve(id).resolve("smoke.properties");
         Properties descriptor = new Properties();
         try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
@@ -190,7 +187,7 @@ public final class Gate {
         List<Path> sources;
         try (Stream<Path> stream = Files.list(sourceRoot)) {
             sources = stream.filter(path -> path.toString().endsWith(".java"))
-                    .sorted().collect(Collectors.toList());
+                    .sorted().toList();
         }
         Path output = root.resolve(".worldline/gate/classes");
         Path marker = output.getParent().resolve("sources.sha256");
@@ -317,9 +314,12 @@ public final class Gate {
         return Path.of(System.getProperty("java.home"), "bin", name + (windows ? ".exe" : "")).toString();
     }
 
-    private static void recreate(Path target) throws IOException {
-        if (Files.exists(target)) try (Stream<Path> paths = Files.walk(target)) {
-            for (Path path : paths.sorted(Comparator.reverseOrder()).collect(Collectors.toList())) Files.delete(path);
+    private static void recreate(Path target) throws Exception {
+        if (Files.exists(target, java.nio.file.LinkOption.NOFOLLOW_LINKS)) {
+            Process process = new ProcessBuilder(javaTool("java"), Path.of(
+                    "tools/harness/SafeTreeDelete.java").toAbsolutePath().toString(), target.toString(),
+                    target.getParent().getParent().toString()).inheritIO().start();
+            if (waitFor(process, 60) != 0) throw new java.io.IOException("safe Gate class cleanup failed");
         }
         Files.createDirectories(target);
     }

@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -82,12 +81,7 @@ final class SmokeDiscovery {
     }
 
     private static Properties loadIfPresent(Path path) throws IOException {
-        Properties properties = new Properties();
-        if (!Files.isRegularFile(path)) return properties;
-        try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-            properties.load(reader);
-        }
-        return properties;
+        return Files.isRegularFile(path) ? StrictProperties.load(path) : new Properties();
     }
 
     private static List<Path> javaFiles(Path root) throws IOException {

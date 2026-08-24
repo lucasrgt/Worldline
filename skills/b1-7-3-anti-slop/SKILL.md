@@ -25,7 +25,7 @@ Reject plausible-looking code when its correctness is not supported by the pinne
 5. Read [rule-catalog.md](references/rule-catalog.md). Apply implemented rules as gates and use planned rules as a review checklist only.
 6. For StationAPI or Mixins, read [stationapi-mixins.md](references/stationapi-mixins.md). Resolve targets against the exact pinned named JAR and verify descriptors in bytecode. Decompiled source is navigation evidence, never the behavioral oracle.
 7. For storage, rendering, tick, or network performance work, read [performance-storage.md](references/performance-storage.md). Prefer structural counters over machine-time thresholds.
-8. Run the narrowest relevant tests, then the repository's canonical gate. When a task reads, transforms, instruments, or executes Minecraft in Worldline, run `java tools/harness/Verify.java --runtime`; use `--smoke` for qualified vanilla behavior.
+8. Run the narrowest relevant tests, then the repository's canonical gate. When a task reads, transforms, instruments, or executes Minecraft in Worldline, run `java tools/harness/Gate.java --runtime`; use `--smoke` for qualified vanilla behavior.
 9. Report findings by rule ID, evidence, impact, and smallest safe correction. Separate confirmed violations from risks that still need runtime evidence.
 
 ## Promote Worldline Findings

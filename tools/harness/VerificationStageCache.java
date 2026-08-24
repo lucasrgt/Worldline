@@ -66,6 +66,25 @@ final class VerificationStageCache {
             new VerificationStageCache(root, root.resolve("objects"), false)
                     .execute("test", List.of(input), action);
             if (executions[0] != 3) throw new IllegalStateException("verification stage cache invalidation drift");
+            Path readme = root.resolve("README.md"); Files.writeString(readme, "status one\n");
+            Path docs = root.resolve("docs/status.md"); Files.createDirectories(docs.getParent());
+            Files.writeString(docs, "docs one\n");
+            Path qualification = root.resolve("smokes/qualification.lock");
+            Files.createDirectories(qualification.getParent()); Files.writeString(qualification, "pins one\n");
+            List<Path> policyInputs = new RepositoryStageInputs(root).sourcePolicy();
+            int[] policyExecutions = {0}; VerifyReport.Checked policy = () -> policyExecutions[0]++;
+            new VerificationStageCache(root, root.resolve("objects"), false)
+                    .execute("source-policy-test", policyInputs, policy);
+            new VerificationStageCache(root, root.resolve("objects"), false)
+                    .execute("source-policy-test", policyInputs, policy);
+            Files.writeString(readme, "status two\n");
+            new VerificationStageCache(root, root.resolve("objects"), false)
+                    .execute("source-policy-test", policyInputs, policy);
+            Files.writeString(qualification, "pins two\n");
+            new VerificationStageCache(root, root.resolve("objects"), false)
+                    .execute("source-policy-test", policyInputs, policy);
+            require(policyExecutions[0] == 3,
+                    "source-policy cache did not invalidate for README or qualification drift");
         } finally { SafeTreeDelete.delete(root); }
         System.out.println("  verification stage cache self-test: passed");
     }
@@ -93,9 +112,12 @@ final class VerificationStageCache {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         if (!Files.exists(input)) update(digest, "missing");
         else if (Files.isRegularFile(input)) digest.update(Files.readAllBytes(input));
-        else try (Stream<Path> paths = Files.walk(input)) {
-            for (Path path : paths.filter(Files::isRegularFile)
-                    .sorted(Comparator.naturalOrder()).toList()) {
+        else {
+            List<Path> paths = SafeTreeDelete.paths(input);
+            for (Path path : paths.stream().sorted(Comparator.naturalOrder()).toList()) {
+                if (SafeTreeDelete.linkLike(path))
+                    throw new java.io.IOException("verification input contains a filesystem link: " + path);
+                if (!Files.isRegularFile(path)) continue;
                 update(digest, input.relativize(path).toString().replace('\\', '/'));
                 digest.update(Files.readAllBytes(path));
             }
@@ -134,6 +156,9 @@ final class VerificationStageCache {
     }
     private static void update(MessageDigest digest, String value) {
         digest.update(value.getBytes(StandardCharsets.UTF_8)); digest.update((byte) 0);
+    }
+    private static void require(boolean value, String message) {
+        if (!value) throw new IllegalStateException(message);
     }
     record Metrics(int restored, int executed) { }
 }

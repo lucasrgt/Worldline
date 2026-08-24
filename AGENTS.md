@@ -67,8 +67,8 @@ java tools/harness/Gate.java
 
 This is the canonical local and CI gate. It owns the per-file source ceilings, module
 dependency enforcement, compilation with warnings as errors, and the complete
-test suite. Legacy `Verify.java` invocations delegate to this gate automatically.
-Do not substitute partial commands for it.
+test suite. Removed `Verify.java` entry points must not be referenced. Do not
+substitute partial commands for the canonical gate.
 
 A versioned pre-push hook runs the same gate before every push. Activate it
 once per clone with `git config core.hooksPath tools/hooks`; export

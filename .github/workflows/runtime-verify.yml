@@ -108,12 +108,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if (git diff --quiet -- README.md smokes/qualification.lock smokes/schedule.properties) { exit 0 }
+          if (git diff --quiet -- README.md smokes/qualification.lock smokes/qualification-evidence smokes/schedule.properties) { exit 0 }
           $branch = "automation/smoke-pins-$env:GITHUB_RUN_ID"
           git config user.name 'worldline-automation'
           git config user.email 'worldline-automation@users.noreply.github.com'
           git switch -c $branch
-          git add README.md smokes/qualification.lock smokes/schedule.properties
+          git add README.md smokes/qualification.lock smokes/qualification-evidence smokes/schedule.properties
           git commit -m 'Update reviewed smoke qualification and scheduling evidence'
           git push origin $branch
           gh pr create --base main --head $branch --title 'Update reviewed smoke evidence' --body 'Nightly Runtime Fabric sweep completed. This PR contains portable smoke pins and reviewed failure/duration scheduling history only.'

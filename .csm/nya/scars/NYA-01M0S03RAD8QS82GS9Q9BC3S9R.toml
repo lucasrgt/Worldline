@@ -1,0 +1,24 @@
+schema = 1
+id = "NYA-01M0S03RAD8QS82GS9Q9BC3S9R"
+title = "Re-snapshot cache links under the deletion lock"
+lesson = "Shared cache GC must preserve a minimum retention floor, fail when usage markers cannot be published, and re-snapshot live worktree link targets after acquiring each entry lock immediately before deletion."
+scope = [
+    "tools/harness/ModuleCacheMaintenance.java",
+    "tools/harness/SharedCacheMaintenance.java",
+    "tools/harness/CacheUsage.java",
+]
+tags = [
+    "cache",
+    "gc",
+    "toctou",
+    "junction",
+]
+created_at = "2026-08-24T04:22:59Z"
+
+[[occurrences]]
+occurred_at = "2026-08-24T04:22:59Z"
+source = "manual:2026-08-24-leva3-seal-review"
+reported_by = "user:fable-report"
+corrected_by = "codex:root"
+recorded_by = "nya:collector"
+commit = "44600580f"

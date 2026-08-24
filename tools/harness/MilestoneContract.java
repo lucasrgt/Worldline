@@ -188,7 +188,7 @@ final class MilestoneContract {
     private String value(String key) { return descriptor.getProperty(key, "").trim(); }
     private String relative(Path path) { return root.relativize(path).toString().replace('\\', '/'); }
     private static void load(Path path, Properties target) throws IOException {
-        try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) { target.load(reader); }
+        StrictProperties.load(path, target);
     }
     private static void require(boolean condition, String message) {
         if (!condition) throw new IllegalStateException(message);

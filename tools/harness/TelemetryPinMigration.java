@@ -44,7 +44,7 @@ final class TelemetryPinMigration {
             String current = fingerprints.compute(smoke);
             String stem = "smoke." + smoke.id + ".";
             SmokePins.Entry local = cache.availablePin(smoke);
-            if (ProviderDiscoveryPinCheck.isNewSmoke(providers, smoke.id)) {
+            if (ProviderDiscoveryPinCheck.exemptsLegacy(providers, smoke.id)) {
                 SmokePins.Entry proof = local != null ? local : prior;
                 if (proof == null) proof = headEntry(smoke.id);
                 require(proof != null, "new provider smoke lacks a prior proof: " + smoke.id);
@@ -82,10 +82,12 @@ final class TelemetryPinMigration {
             manifest.setProperty(stem + "evidence_sha256", prior.evidence());
             pins.add(new SmokePins.Entry(smoke.id, current, prior.evidence(), "refactor-equivalent"));
         }
-        require(carried >= 100 && executed >= 1,
+        require(carried >= 100 && (executed >= 1 || changed == 0),
                 "telemetry migration census drift: changed=" + changed + ";carried=" + carried
                         + ";executed=" + executed);
-        manifest.setProperty("count", Integer.toString(carried)); existing.write(pins);
+        manifest.setProperty("count", Integer.toString(
+                carried + ProviderDiscoveryPinCheck.pendingCount(providers)));
+        existing.write(pins);
         store(lock, manifest);
         System.out.println("telemetry pins migrated: " + changed + " changed, " + carried
                 + " carried, " + executed + " exact support proofs");

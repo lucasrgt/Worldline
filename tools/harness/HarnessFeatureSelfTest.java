@@ -2,6 +2,8 @@
 final class HarnessFeatureSelfTest {
     private HarnessFeatureSelfTest() { }
     static void execute() throws Exception {
+        SafeTreeDelete.selfTest();
+        CacheUsage.selfTest();
         NightlyQualityCampaign.selfTest();
         MilestoneScaffold.selfTest();
         ChangelogCheck.selfTest();

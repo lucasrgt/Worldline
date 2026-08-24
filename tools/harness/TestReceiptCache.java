@@ -90,6 +90,23 @@ final class TestReceiptCache {
         executed++;
     }
 
+    void failed(String suite, String fingerprint, int exit, String output) throws Exception {
+        Path proof = proof(suite, fingerprint), evidence = evidence(suite, fingerprint);
+        boolean removedPass = Files.isRegularFile(proof);
+        Files.deleteIfExists(proof); Files.deleteIfExists(evidence);
+        Path quarantine = quarantine(suite, fingerprint);
+        Path log = quarantine.resolveSibling(fingerprint + ".log");
+        atomicWrite(log, output);
+        Properties values = new Properties();
+        values.setProperty("schema", SCHEMA); values.setProperty("status", "failed");
+        values.setProperty("suite", suite); values.setProperty("fingerprint", fingerprint);
+        values.setProperty("exit", Integer.toString(exit));
+        values.setProperty("detected.at", Instant.now().toString());
+        values.setProperty("prior.pass.removed", Boolean.toString(removedPass));
+        values.setProperty("evidence.sha256", digest(log));
+        atomicStore(quarantine, values);
+    }
+
     void finish(int expected) {
         require(restored + executed == expected, "unit-suite receipt count drifted");
         System.out.println("  test suite cache: " + restored + " restored, " + executed + " executed");
@@ -101,6 +118,10 @@ final class TestReceiptCache {
 
     private Path evidence(String suite, String fingerprint) {
         return objects.resolve(suite).resolve(fingerprint + ".log");
+    }
+
+    Path quarantine(String suite, String fingerprint) {
+        return objects.resolve("quarantine").resolve(suite).resolve(fingerprint + ".properties");
     }
 
     private static Properties load(Path path) throws Exception {

@@ -142,8 +142,8 @@ final class RepositoryVerify {
         cachedProcess(stages, inputs.harness(), "verify-summary-self-test", "VerifySummaryTest");
         report.step("harness-feature-self-tests", () -> stages.execute("harness-feature-self-tests",
                 inputs.harnessFeatures(), HarnessFeatureSelfTest::execute));
-        report.step("release", () -> stages.execute("release", inputs.release(), () -> run(Arrays.asList(
-                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "ReleaseCheck"))));
+        report.step("release", () -> run(Arrays.asList(
+                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "ReleaseCheck")));
         report.step("optimization", () -> stages.execute("optimization", inputs.optimization(), () -> {
             run(Arrays.asList("java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"),
                     "OptimizationCatalogCheckTest"));

@@ -1,0 +1,22 @@
+schema = 1
+id = "NYA-01M0S03R4TTV8QY0XPQPKTBDJ4"
+title = "Do not cache global checks with partial inputs"
+lesson = "A verification-stage PASS may be restored only when its fingerprint covers every source the check reads; checks that scan the tracked repository globally should run unconditionally when a complete bounded input set is not available."
+scope = [
+    "tools/harness/RepositoryVerify.java",
+    "tools/harness/RepositoryStageInputs.java",
+]
+tags = [
+    "verification-cache",
+    "fail-closed",
+    "documentation",
+]
+created_at = "2026-08-24T04:22:58Z"
+
+[[occurrences]]
+occurred_at = "2026-08-24T04:22:58Z"
+source = "manual:2026-08-24-leva3-seal-review"
+reported_by = "user:fable-report"
+corrected_by = "codex:root"
+recorded_by = "nya:collector"
+commit = "44600580f"

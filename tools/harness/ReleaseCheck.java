@@ -81,8 +81,11 @@ public final class ReleaseCheck {
         compareIfPresent(descriptor, "client.jar.sha256", release, "client.sha256", entry.id);
         Path map = directory.resolve("MAP.md");
         Matcher milestone = MILESTONE.matcher(entry.id);
-        if (milestone.matches() && Files.isRegularFile(map))
-            requireFile(root.resolve("docs/M" + milestone.group(1) + "_CYCLE.md"));
+        if (milestone.matches() && Files.isRegularFile(map)) {
+            String documented = descriptor.getProperty("qualification.docs", "").trim();
+            requireFile(documented.isEmpty() ? root.resolve("docs/M" + milestone.group(1) + "_CYCLE.md")
+                    : root.resolve(documented).normalize());
+        }
     }
 
     private void verifyCoreSignatures(Properties release) throws Exception {

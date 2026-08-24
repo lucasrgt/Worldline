@@ -21,6 +21,15 @@ public final class TestReceiptCacheTest {
             require(!TestReceiptCache.sampledForRecheck("seed", "suite", fingerprint, 0)
                             && TestReceiptCache.sampledForRecheck("seed", "suite", fingerprint, 100),
                     "nightly recheck sampling boundaries drifted");
+            String flaky = cache.fingerprint("FlakySuite", "compiled-tests-v1");
+            cache.passed("FlakySuite", flaky, "initial PASS\n");
+            cache.failed("FlakySuite", flaky, 1, "sampled recheck failed\n");
+            require(!cache.restore("FlakySuite", flaky), "failed recheck retained its PASS receipt");
+            Path quarantine = cache.quarantine("FlakySuite", flaky);
+            require(Files.isRegularFile(quarantine)
+                            && Files.readString(quarantine).contains("suite=FlakySuite")
+                            && Files.readString(quarantine).contains("prior.pass.removed=true"),
+                    "failed recheck did not record suite quarantine evidence");
             System.out.println("  test suite receipt cache self-test: passed");
         } catch (Exception error) {
             System.err.println("test suite receipt cache self-test failed: " + error.getMessage());

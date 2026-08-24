@@ -24,8 +24,9 @@ public final class SharedCacheMaintenance {
     private void execute(boolean delete) throws Exception {
         CachePolicy policy = new CachePolicy(root);
         new ModuleCacheMaintenance().execute(delete);
-        Result result = maintain(cache, policy.maximumBytes(), policy.minimumAgeMillis(),
-                System.currentTimeMillis(), delete);
+        CacheReferences.Source references = () -> CacheReferences.snapshot(root, cache);
+        Result result = maintain(cache, references, policy.maximumBytes(),
+                policy.minimumAgeMillis(), System.currentTimeMillis(), delete);
         System.out.println("shared-cache.entries=" + result.entries + ";bytes=" + result.bytes
                 + ";families=" + result.families + ";removed=" + result.removed);
         System.out.println("WORLDLINE_SHARED_CACHE_" + (delete ? "GC" : "DOCTOR") + "=PASS");
@@ -33,18 +34,21 @@ public final class SharedCacheMaintenance {
 
     static Result maintain(Path cache, long maximum, long minimumAge, long now, boolean delete)
             throws Exception {
+        return maintain(cache, Set::of, maximum, minimumAge, now, delete);
+    }
+
+    static Result maintain(Path cache, CacheReferences.Source source, long maximum,
+            long minimumAge, long now, boolean delete) throws Exception {
+        require(maximum > 0L, "shared cache maximum must be positive");
         List<Entry> entries = entries(cache); long total = entries.stream().mapToLong(Entry::bytes).sum();
         int removed = 0;
         for (Entry entry : entries) {
-            if (!delete || now - entry.used < minimumAge && total <= maximum) continue;
+            if (protectedBy(entry, source.snapshot()) || !delete || now - entry.used < minimumAge) continue;
             Path lockPath = entry.parent.resolve(entry.digest + ".lock");
             try (FileChannel channel = FileChannel.open(lockPath, StandardOpenOption.CREATE,
                     StandardOpenOption.WRITE); FileLock lock = tryLock(channel)) {
-                if (lock == null) continue;
-                for (Path member : entry.members) {
-                    if (Files.isDirectory(member)) SafeTreeDelete.delete(member);
-                    else Files.deleteIfExists(member);
-                }
+                if (lock == null || protectedBy(entry, source.snapshot())) continue;
+                for (Path member : entry.members) SafeTreeDelete.delete(member);
                 Files.deleteIfExists(entry.parent.resolve(entry.digest + ".used"));
                 total -= entry.bytes; removed++;
             }
@@ -56,8 +60,8 @@ public final class SharedCacheMaintenance {
     private static List<Entry> entries(Path cache) throws Exception {
         Map<Key, List<Path>> groups = new HashMap<>();
         if (!Files.isDirectory(cache)) return List.of();
-        try (Stream<Path> paths = Files.walk(cache)) {
-            for (Path path : paths.toList()) {
+        for (Path path : SafeTreeDelete.paths(cache)) {
+                require(!SafeTreeDelete.linkLike(path), "shared cache contains a filesystem link: " + path);
                 if (path.startsWith(cache.resolve("modules"))) continue;
                 String name = path.getFileName().toString();
                 String digest = name.matches("[0-9a-f]{64}") ? name
@@ -65,7 +69,6 @@ public final class SharedCacheMaintenance {
                                 ? name.substring(0, 64) : null;
                 if (digest == null || name.endsWith(".used") || name.endsWith(".lock")) continue;
                 groups.computeIfAbsent(new Key(path.getParent(), digest), ignored -> new ArrayList<>()).add(path);
-            }
         }
         List<Entry> result = new ArrayList<>();
         for (var row : groups.entrySet()) {
@@ -85,9 +88,12 @@ public final class SharedCacheMaintenance {
         try { return Long.parseLong(Files.readString(path, StandardCharsets.UTF_8).trim()); }
         catch (NumberFormatException error) { throw new IllegalStateException("invalid cache usage " + path); }
     }
-    private static long size(Path path) throws Exception { if (Files.isRegularFile(path)) return Files.size(path);
-        try (Stream<Path> paths = Files.walk(path)) { long total = 0;
-            for (Path file : paths.filter(Files::isRegularFile).toList()) total += Files.size(file); return total; } }
+    private static long size(Path path) throws Exception { return SafeTreeDelete.size(path); }
+    private static boolean protectedBy(Entry entry, Set<Path> references) throws Exception {
+        for (Path member : entry.members)
+            if (CacheReferences.protects(member, references)) return true;
+        return false;
+    }
     private static FileLock tryLock(FileChannel channel) throws Exception {
         try { return channel.tryLock(); }
         catch (java.nio.channels.OverlappingFileLockException error) { return null; }
@@ -97,6 +103,21 @@ public final class SharedCacheMaintenance {
             Files.createDirectories(family); Files.writeString(digest, "proof");
             Result result = maintain(root, 1, 1, System.currentTimeMillis() + 10, true);
             require(result.removed == 1 && !Files.exists(digest), "shared cache GC self-test drifted");
+            Path recent = family.resolve("b".repeat(64) + ".properties"); Files.writeString(recent, "proof");
+            Files.writeString(family.resolve("b".repeat(64) + ".used"),
+                    Long.toString(System.currentTimeMillis()));
+            Result retained = maintain(root, 1, 60_000, System.currentTimeMillis(), true);
+            require(retained.removed == 0 && Files.isRegularFile(recent),
+                    "shared cache GC deleted a recently used entry above the soft ceiling");
+            SafeTreeDelete.delete(recent); Files.deleteIfExists(family.resolve("b".repeat(64) + ".used"));
+            Path linked = family.resolve("c".repeat(64)); Files.createDirectories(linked);
+            Files.writeString(linked.resolve("data"), "proof");
+            java.util.concurrent.atomic.AtomicInteger snapshots = new java.util.concurrent.atomic.AtomicInteger();
+            Result raced = maintain(root, () -> snapshots.getAndIncrement() == 0
+                    ? Set.of() : Set.of(linked.toRealPath()), 1, 1,
+                    System.currentTimeMillis() + 10, true);
+            require(raced.removed == 0 && Files.isDirectory(linked) && snapshots.get() >= 2,
+                    "shared cache GC did not re-snapshot live links under the entry lock");
         } finally { SafeTreeDelete.delete(root); }
         System.out.println("  shared cache maintenance self-test: passed");
     }

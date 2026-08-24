@@ -75,12 +75,7 @@ final class OrchestratorPolicyCheck {
     }
 
     private static void delete(Path target) throws Exception {
-        if (!Files.exists(target)) return;
-        try (Stream<Path> paths = Files.walk(target)) {
-            for (Path path : paths.sorted(Comparator.reverseOrder()).collect(Collectors.toList())) {
-                path.toFile().setWritable(true); Files.deleteIfExists(path);
-            }
-        }
+        SafeTreeDelete.delete(target);
     }
 
     private static void require(boolean condition, String message) {

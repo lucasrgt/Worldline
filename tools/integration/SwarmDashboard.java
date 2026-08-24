@@ -1,6 +1,9 @@
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,8 +82,14 @@ public final class SwarmDashboard {
             String html = render(root); require(html.contains("Portable PASS pins: 1")
                     && html.contains("not generated") && !html.contains("<script>"), "dashboard render drifted");
             System.out.println("swarm dashboard self-test passed");
-        } finally { try (var paths = Files.walk(root)) { for (Path path : paths
-                .sorted(java.util.Comparator.reverseOrder()).toList()) Files.deleteIfExists(path); } }
+        } finally { Files.walkFileTree(root, new SimpleFileVisitor<>() {
+            @Override public FileVisitResult visitFile(Path file, BasicFileAttributes attributes)
+                    throws java.io.IOException { Files.delete(file); return FileVisitResult.CONTINUE; }
+            @Override public FileVisitResult postVisitDirectory(Path directory, java.io.IOException error)
+                    throws java.io.IOException {
+                if (error != null) throw error; Files.delete(directory); return FileVisitResult.CONTINUE;
+            }
+        }); }
     }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);

@@ -147,8 +147,11 @@ final class TestBuild {
                 if (future == null) continue;
                 Result result = future.get();
                 if (!result.output.isBlank()) System.out.print(result.output);
-                if (result.exit != 0) failures.add(suites.get(index) + " exited " + result.exit
-                        + "\n" + ProcessCapture.tail(result.output, 4_000));
+                if (result.exit != 0) {
+                    receipts.failed(suites.get(index), fingerprints.get(index), result.exit, result.output);
+                    failures.add(suites.get(index) + " exited " + result.exit
+                            + "\n" + ProcessCapture.tail(result.output, 4_000));
+                }
                 else receipts.passed(suites.get(index), fingerprints.get(index), result.output);
             }
             require(failures.isEmpty(), "test failures: " + failures);
@@ -269,11 +272,7 @@ final class TestBuild {
     }
 
     private static void delete(Path target) throws IOException {
-        if (!Files.exists(target)) return;
-        try (Stream<Path> paths = Files.walk(target)) {
-            for (Path path : paths.sorted(Comparator.reverseOrder()).collect(Collectors.toList()))
-                Files.deleteIfExists(path);
-        }
+        SafeTreeDelete.delete(target);
     }
 
     private static String join(List<Path> paths) {

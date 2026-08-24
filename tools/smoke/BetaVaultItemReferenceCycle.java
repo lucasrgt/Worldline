@@ -121,15 +121,16 @@ public final class BetaVaultItemReferenceCycle {
 
   private void buildSupport(Path energy) throws Exception {
     String verified = Captured.run(
-        energy, Arrays.asList("java", "tools/harness/Verify.java", "--integration"), 120);
-    require(verified.contains("verify passed"), "BetaEnergistics integration gate failed");
+        energy, Arrays.asList("java", "tools/harness/BetaVaultIntegrationCheck.java"), 120);
+    require(verified.contains("BetaVault") && verified.contains("integration PASS"),
+        "BetaEnergistics BetaVault integration check failed");
     Path jar = build.resolve("support.jar");
     List<String> command = new ArrayList<String>();
     command.add(Paths.get(System.getProperty("java.home"), "bin", "jar").toString());
     command.addAll(Arrays.asList("--create", "--file", jar.toString()));
     Path itemref = root.resolve(".worldline/build/classes/itemref");
     require(
-        Files.isDirectory(itemref), "compiled Worldline itemref module absent; run Verify first");
+        Files.isDirectory(itemref), "compiled Worldline itemref module absent; run Gate first");
     command.addAll(Arrays.asList("-C", itemref.toString(), "."));
     Path integration = energy.resolve(".betaenergistics/build/integration");
     for (String name : Arrays.asList("betavault-core", "betavault-codec", "betavault-journal",

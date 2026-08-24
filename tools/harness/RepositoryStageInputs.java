@@ -13,7 +13,8 @@ final class RepositoryStageInputs {
     }
     List<Path> release() {
         return paths("tools/harness/ReleaseCheck.java", "release", "README.md", "changelog",
-                "docs/ROADMAP.md", "modules/api/src/main/java/worldline/api/WorldlineVersion.java");
+                "docs/ROADMAP.md", "behavior/coverage.properties", "smokes/qualification.lock",
+                "modules/api/src/main/java/worldline/api/WorldlineVersion.java");
     }
     List<Path> optimization() {
         return paths("tools/harness/OptimizationCatalogCheck.java",
@@ -26,6 +27,7 @@ final class RepositoryStageInputs {
     }
     List<Path> sourcePolicy() {
         return paths("harness.properties", "quality", ".editorconfig", ".gitattributes",
+                "README.md", "docs", "release", "changelog", "behavior/coverage.properties",
                 "modules", "tools/harness", "tools/integration", "tools/smoke", "smokes", "adapters");
     }
     List<Path> integration() {

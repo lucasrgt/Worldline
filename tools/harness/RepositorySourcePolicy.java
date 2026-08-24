@@ -16,6 +16,7 @@ final class RepositorySourcePolicy {
         budget("product", config.productionRoots(modules));
         budget("harness", VerificationRoots.read(root));
         budget("adapter", Collections.singletonList(root.resolve("adapters")));
+        FilesWalkPolicy.execute(root);
         DataDrivenCycleCheck.execute(root); CompositeCycleCheck.execute(root);
         TelemetryPinCheck.execute(root); SchemaPinCheck.execute(root);
         SmokeDescriptorSchemaCheck.execute(root); TestKitReleasePinCheck.execute(root);
@@ -26,6 +27,7 @@ final class RepositorySourcePolicy {
         BehaviorIdentityCheck.execute(root);
         TrainPinCheck.execute(root);
         new DocumentationCatalog(root).execute();
+        new ReadmeStatus(root).check();
         BehaviorMapSchemaCheck.execute(root); RetryMigrationCheck.execute(root);
         FixedWaitMigrationCheck.execute(root); new SourceQualityCheck(root).execute();
     }
