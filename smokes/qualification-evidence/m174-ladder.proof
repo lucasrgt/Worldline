@@ -1,5 +1,5 @@
 schema=1
 id=m174-ladder
-fingerprint=f7db0dae9c6d9f23880c093c5d8f26ec15b4a60e034ac048467ae052c5960f80
+fingerprint=c091a5a6cd0fd24bb56d6cfbc9ef6862158b84a8a6dd88939c48bcc784462521
 observation.sha256=901e76a85d36008f4429e6863549902a4c2b49485980fbfb65a9568725bb491e
 source=refactor-equivalent

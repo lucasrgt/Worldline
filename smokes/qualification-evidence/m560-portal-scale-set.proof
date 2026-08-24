@@ -1,5 +1,5 @@
 schema=1
 id=m560-portal-scale-set
-fingerprint=ac0ce262ac25e897d68e9d5f756c0431caef03ccdaa657b7b08a3ed65f1fa041
+fingerprint=14993a8bca23f0f2b036c969d1a957600021ea99b8f0f3b3da5277f0b84dccea
 observation.sha256=d7eb052e1bc5fe6a71f3850bd4fb75b9470be6a2767c6617fb41f7138c54c50b
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m396-remaining-wool-crafts
-fingerprint=c00a0d25461354c45b1740dbd86c8ecf57229898d0ab55dc7b3d6d7ffde48191
+fingerprint=75db03270c37de8034f841e8dc3d29755db6331e467969790ea9d6e840c884d1
 observation.sha256=7bd1423c0f7af5c289a638d55eb9b16ec8b709217f849b00e95b0a3316990c54
 source=refactor-equivalent

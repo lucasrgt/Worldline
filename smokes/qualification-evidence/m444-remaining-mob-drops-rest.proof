@@ -1,5 +1,5 @@
 schema=1
 id=m444-remaining-mob-drops-rest
-fingerprint=bc4f8d3259f4e5b5088dafd8524857a1c07d2552bf744831ccfd7ce22f4ceff0
+fingerprint=df99659b8472ab623991dda38ec6186ceb95a42d5f441fd5fdf00ba3a6b026e7
 observation.sha256=4f0cf6fc97f045251947014072b407aae095b6419fb3c3ab94c50722f7db8f66
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m143-piston-retraction
-fingerprint=d93c34720579015868ce744ec08acdef4ebf238e04027fb442f3b3a7ac92c4ad
+fingerprint=46afdbcb0ad13b8b5c027af43cebb8edd526c108365736fd70ca5c4eddcd0e3c
 observation.sha256=ed36c9824aa5c765b651fa5a53fa268e5427568f47fabaeb082ec26f7639e2e1
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m592-chest-break-spill-set
-fingerprint=3249c51937e363acd742b6978588e82e40bb54b37898b9a35af2ebc537489cc0
+fingerprint=2f68a8dec04e1e4102f21e1a675d0ce878e1f2538b1bf1a3833f3660bab434dc
 observation.sha256=76494d9a8d80b0a4a687da11757832d224cefea589b58f60d2db920dd6064100
 source=refactor-equivalent
