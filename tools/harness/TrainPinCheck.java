@@ -75,6 +75,13 @@ final class TrainPinCheck {
     static boolean isExecuted(Properties lock, String id) {
         return "executed".equals(lock.getProperty("smoke." + id + ".kind"));
     }
+    static boolean carriesCurrent(Properties lock, String id, SmokePins.Entry pin,
+            String current) {
+        String stem = "smoke." + id + ".";
+        return !isPending(lock, id) && pin != null
+                && current.equals(lock.getProperty(stem + "current_fingerprint"))
+                && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"));
+    }
     static boolean follows(Properties lock, String id, String prior, String evidence,
             SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";

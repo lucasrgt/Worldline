@@ -16,6 +16,7 @@ final class CompositeCycleCheck {
         Properties migrations = load(lock); require("1".equals(migrations.getProperty("schema")),
                 "invalid composite migration schema");
         Properties formatting = FormattingPinCheck.manifest(root);
+        Properties train = TrainPinCheck.manifest(root);
         require((digest(root.resolve("tools/smoke/CompositeCycle.java")).equals(
                         migrations.getProperty("runner_sha256"))
                         || FormattingPinCheck.transportsFile(formatting, root,
@@ -49,7 +50,8 @@ final class CompositeCycleCheck {
                             && (pin.evidence().equals(migrations.getProperty(stem + "evidence_sha256"))
                             || TelemetryPinCheck.carries(telemetry, smoke.id, pin, current)
                             || SchemaPinCheck.carries(schemas, smoke.id, pin, current)
-                            || FormattingPinCheck.carries(formatting, smoke.id, pin, current))),
+                            || FormattingPinCheck.carries(formatting, smoke.id, pin, current)
+                            || TrainPinCheck.carriesCurrent(train, smoke.id, pin, current))),
                     "composite refactor pin drift: " + smoke.id);
         }
         require(generic == integer(migrations, "count") && generic == seen.size(),

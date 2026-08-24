@@ -15,6 +15,7 @@ final class DataDrivenCycleCheck {
         Properties migrations = load(root.resolve("smokes/data-driven-migration.lock"));
         require("1".equals(migrations.getProperty("schema")), "invalid data-driven migration schema");
         Properties formatting = FormattingPinCheck.manifest(root);
+        Properties train = TrainPinCheck.manifest(root);
         require((digest(root.resolve("tools/smoke/DataDrivenCycle.java")).equals(
                         migrations.getProperty("runner_sha256"))
                         || FormattingPinCheck.transportsFile(formatting, root,
@@ -78,7 +79,8 @@ final class DataDrivenCycleCheck {
                             && (pin.evidence().equals(migrations.getProperty(stem + "evidence_sha256"))
                             || TelemetryPinCheck.carries(telemetry, smoke.id, pin, current)
                             || SchemaPinCheck.carries(schemas, smoke.id, pin, current)
-                            || FormattingPinCheck.carries(formatting, smoke.id, pin, current))),
+                            || FormattingPinCheck.carries(formatting, smoke.id, pin, current)
+                            || TrainPinCheck.carriesCurrent(train, smoke.id, pin, current))),
                     "data-driven refactor pin drift: " + smoke.id);
         }
         int expected = integer(migrations, "count");
