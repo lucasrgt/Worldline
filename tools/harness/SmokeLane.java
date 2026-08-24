@@ -22,6 +22,7 @@ final class SmokeLane {
         if ("tooling".equals(descriptor.getProperty("candidate.kind"))
                 || "tooling-cycle".equals(descriptor.getProperty("qualification.proof")))
             return TOOLING;
+        if ("client".equals(descriptor.getProperty("side"))) return GUI;
         String source = Files.readString(root.resolve(smoke.runner), StandardCharsets.UTF_8);
         boolean explicitServer = "server".equals(descriptor.getProperty("side"))
                 || descriptor.containsKey("server.jar.sha256")
