@@ -2,6 +2,7 @@ package worldline.smoke.mapdatacontentb173;
 
 import static worldline.b173server.B173FixtureSupport.awaitPlayers;
 import static worldline.b173server.B173FixtureSupport.sha;
+import static worldline.test.WorldlineSmokeAwait.observe;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -48,7 +49,7 @@ public final class MapDataContentSmoke {
       require(loader.awaitInventory().occupiedSlots() == 1, "loader inventory seed drift");
       require(loader.awaitRemoteWorld(49).loadedChunks() == 49,
           "map region load drift");
-      loader.sustainTicks(200);
+      observe(loader, 200);
       actor.connect();
       B173MapDataAccess.begin(actor);
       actor.synchronizePose();
