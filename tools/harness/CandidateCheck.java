@@ -65,15 +65,11 @@ final class CandidateCheck {
         if (smoke.runner.equals("tools/smoke/DataDrivenCycle.java")) DataDrivenCyclePlan.load(root, id);
         if (smoke.runner.equals("tools/smoke/CompositeCycle.java")) CompositeCyclePlan.load(root, id);
         Path source = directory.resolve("src");
-        boolean runtimeBuild = "runtime-build".equals(this.descriptor.getProperty("candidate.compile"));
+        boolean runtimeBuild = CandidateRuntimeBuild.owns(directory, this.descriptor);
         if (!tooling && !runtimeBuild) require(Files.isDirectory(source) && !javaFiles(source).isEmpty(),
                 "candidate has no smoke sources");
         if (runtimeBuild) {
-            Path runtime = directory.resolve("runtime-src");
-            require(Files.isDirectory(runtime) && !javaFiles(runtime).isEmpty(),
-                    "runtime-build candidate has no runtime-src sources");
-            require(this.descriptor.getProperty("runner", "").endsWith(".gradle"),
-                    "runtime-build candidate requires a frozen Gradle runner");
+            CandidateRuntimeBuild.validate(directory, this.descriptor);
         }
         String number = milestoneNumber(id);
         if (number != null && !tooling) {
@@ -127,7 +123,7 @@ final class CandidateCheck {
     private void compileScenario(List<Path> outputs) throws Exception {
         Path source = root.resolve("smokes").resolve(id).resolve("src");
         if (!Files.isDirectory(source)) {
-            require("runtime-build".equals(descriptor.getProperty("candidate.compile"))
+            require(CandidateRuntimeBuild.owns(root.resolve("smokes").resolve(id), descriptor)
                     || "tooling".equals(descriptor.getProperty("candidate.kind")),
                     "missing candidate scenario sources");
             System.out.println("  candidate scenario is owned by its frozen runtime build"); return;
