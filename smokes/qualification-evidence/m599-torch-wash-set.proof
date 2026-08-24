@@ -1,5 +1,5 @@
 schema=1
 id=m599-torch-wash-set
-fingerprint=1bcacdf0bd83cb25b7faa2018ebef5b8ca64eb578edff8fa1757fcf55883e983
+fingerprint=810eb22832f03b5ecabf85d1296fd6f06494630e7afee1da6b671750924c64c6
 observation.sha256=6e56108c8df993e292f13e9fe044484328167491338f6f592ed6a9ab4a3aee79
 source=refactor-equivalent

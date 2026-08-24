@@ -1,5 +1,5 @@
 schema=1
 id=m242-lever-place
-fingerprint=e07cbee99cc5b6a58529f8ca18f63a7776c00ce42120e5565f7d82b8bd21f854
+fingerprint=c7a77fb61979791a5834a00b017528eeca6610292e1b7839ed837683ba03e6a9
 observation.sha256=28f6b893342410779d684e2473574c663af5c667ff857e946aa225e71f8f69bf
 source=refactor-equivalent

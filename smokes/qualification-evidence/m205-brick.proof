@@ -1,5 +1,5 @@
 schema=1
 id=m205-brick
-fingerprint=4bee2e178102bfd1cd46af4f951c50c58b8ea6214a95b7899116360d3e61eadc
+fingerprint=18216d00b0940a5c8f8ffd628e4834948db41d74f10a1ca9d1cd53cab00a7c55
 observation.sha256=e086305d19013c746cd1e24ea91a5cf8c20cb87ac8b3e0d6c79d11b224a1ac90
 source=refactor-equivalent

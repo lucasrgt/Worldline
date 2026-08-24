@@ -1,5 +1,5 @@
 schema=1
 id=m429-remaining-attach-faces
-fingerprint=5ecc220f04c7c7fdadb1c523bdb75a52d7c812f5b81187aadb6b52b3d56d1dcd
+fingerprint=f457cda99392e0d6f79981eaa4a9e37746359ed36e1e1dbb4179280cd2edcb70
 observation.sha256=d00079b30c3f58f9f2a197e5a0a27c88880e15c28c3eaf88806d4502ebc2eb2b
 source=refactor-equivalent

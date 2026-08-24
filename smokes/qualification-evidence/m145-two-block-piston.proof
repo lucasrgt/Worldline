@@ -1,5 +1,5 @@
 schema=1
 id=m145-two-block-piston
-fingerprint=6f009cb9290502874b35c8f3dea7dfc4260bc85f76cf4e56676e8e95185a0085
+fingerprint=28356052a0876ddd76b2a053cfbaeb978fb31d018d55e6d1bd7bbeb62736fd16
 observation.sha256=b086d950c86277e5c21762909ed03f11e3a5bd753aa2b5b0aa898edaf9adb88f
 source=refactor-equivalent

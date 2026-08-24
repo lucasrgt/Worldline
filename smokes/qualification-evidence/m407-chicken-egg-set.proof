@@ -1,5 +1,5 @@
 schema=1
 id=m407-chicken-egg-set
-fingerprint=fb8a5611fd9c19b4a92a1d31b7f1a02ad0d4d49d5f169c2534bf618fe2e27f12
+fingerprint=635c600a0debe76801711b50c44dcc6e3c94b2c8c9a84930a3a8d56ca8e8d7a5
 observation.sha256=a27d5e84d4fc5e08292a9a78c2ebccf8027e9441118ed789ef3adc30d8ff97a6
 source=refactor-equivalent
