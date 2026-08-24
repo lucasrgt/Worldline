@@ -22,7 +22,9 @@ public final class MappingBatchGate {
                 "mapping batch policy does not enumerate every metric");
         for (Map.Entry<String, String> metric : report.metrics().entrySet()) {
             String key = "expected." + metric.getKey();
-            require(metric.getValue().equals(required(policy, key)), "mapping batch drift at " + key);
+            String expected = required(policy, key);
+            require(metric.getValue().equals(expected), "mapping batch drift at " + key
+                    + ": expected " + expected + ", actual " + metric.getValue());
         }
         require(report.sha256().equals(required(policy, "expected.report.sha256")),
                 "mapping batch report digest drift");
