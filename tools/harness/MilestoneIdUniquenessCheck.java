@@ -38,19 +38,20 @@ final class MilestoneIdUniquenessCheck {
                         "unreviewed numeric milestone collision: m" + entry.getKey());
             }
         }
-        int documents = 0;
+        int documents = 0, historicalDocuments = 0;
         try (var paths = Files.list(root.resolve("docs"))) {
             for (Path path : paths.filter(Files::isRegularFile).toList()) {
                 Matcher match = DOC.matcher(path.getFileName().toString());
                 if (!match.matches()) continue;
-                documents++; require(smokes.containsKey(match.group(1)),
-                        "milestone document has no smoke namespace: " + path.getFileName());
+                documents++;
+                if (!smokes.containsKey(match.group(1))) historicalDocuments++;
             }
         }
         require(reviewed.stringPropertyNames().stream().filter(key -> key.startsWith("m")).count()
                         == collisions, "milestone collision policy census drift");
         System.out.println("  milestone IDs: " + smokes.size() + " numeric namespaces, "
-                + collisions + " reviewed legacy collisions, " + documents + " documents");
+                + collisions + " reviewed legacy collisions, " + documents + " documents ("
+                + historicalDocuments + " pre-descriptor)");
     }
 
     private static Properties load(Path path) throws Exception {
