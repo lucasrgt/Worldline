@@ -61,7 +61,7 @@ public final class SharedCacheMaintenance {
         int removed = 0;
         for (Entry entry : entries) {
             if (!delete) continue;
-            if (protectedBy(entry, source.snapshot()) || now - entry.used < minimumAge) continue;
+            if (now - entry.used < minimumAge || protectedBy(entry, source.snapshot())) continue;
             Path lockPath = entry.parent.resolve(entry.digest + ".lock");
             try (FileChannel channel = FileChannel.open(lockPath, StandardOpenOption.CREATE,
                     StandardOpenOption.WRITE); FileLock lock = tryLock(channel)) {
