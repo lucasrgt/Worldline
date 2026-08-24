@@ -14,7 +14,7 @@ current sources are:
 - [Generated milestone catalog](generated/MILESTONES.md)
 - [Fable 2 sealed program](FABLE2_PROGRAM.md)
 - [Engineering workflow](ENGINEERING_WORKFLOW.md)
-- [Semantic mapping roadmap](SEMANTIC_MAPPING_ROADMAP.md)
+- [Complete maintained mapping batch](SEM_M13_COMPLETE_MAPPING_BATCH.md)
 - [Aero milestone namespace](AERO_MILESTONES.md)
 
 The release line through v1.462.0 and the M570-M625 evidence train are complete
@@ -29,8 +29,8 @@ The next product frontier is deliberately bounded:
    milestone-number APIs;
 2. preserve portable qualification through content-addressed pins and execute
    only changed behavioral inputs;
-3. resolve the complete-game semantic gate constitution so the dual-source
-   achievement and the remaining bytecode-only queue tell one coherent story;
+3. preserve the complete-game maintained dual-source mapping constitution while
+   the bytecode-exhaustive queue remains an optional diagnostic surface;
 4. make cache, worktree, and archival operations observable, scheduled, and
    fail-closed;
 5. publish a stable TestKit consumer contract after a clean external-clone

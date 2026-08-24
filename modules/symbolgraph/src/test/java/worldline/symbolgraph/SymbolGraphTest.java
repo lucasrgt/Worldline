@@ -17,7 +17,7 @@ public final class SymbolGraphTest {
         importsRetroMcpThroughOfficialIdentity();
         classifiesNamespaceGapsWithoutGuessing();
         inventoriesOfficialClassFilesWithoutExecutingThem();
-        definesCompleteGameWithoutVacuousPasses();
+        definesBytecodeExhaustiveAuditWithoutVacuousPasses();
         verifiesExactMappingPins();
         rejectsMalformedDocuments();
         MappingBatchTest.main(new String[0]);
@@ -184,7 +184,7 @@ public final class SymbolGraphTest {
         }
     }
 
-    private static void definesCompleteGameWithoutVacuousPasses() {
+    private static void definesBytecodeExhaustiveAuditWithoutVacuousPasses() {
         java.util.Map<String, String> metrics = new java.util.LinkedHashMap<String, String>();
         metrics.put("graph.symbols", "3"); metrics.put("retro.matched", "3");
         metrics.put("retro.unmatched", "0"); metrics.put("retro.side-name-differences", "0");
@@ -206,10 +206,13 @@ public final class SymbolGraphTest {
             for (OfficialGapKind gap : OfficialGapKind.values())
                 metrics.put("official." + side + ".gap." + gap.name(), "0");
         }
-        require(MappingPromotionGate.complete(metrics, 0), "complete-game definition rejected full coverage");
-        require(!MappingPromotionGate.complete(metrics, 1), "non-empty queue passed complete-game definition");
+        require(MappingPromotionGate.bytecodeExhaustive(metrics, 0),
+                "bytecode-exhaustive definition rejected full coverage");
+        require(!MappingPromotionGate.bytecodeExhaustive(metrics, 1),
+                "non-empty queue passed bytecode-exhaustive definition");
         metrics.put("official.client.method.missing", "1");
-        require(!MappingPromotionGate.complete(metrics, 0), "official gap passed complete-game definition");
+        require(!MappingPromotionGate.bytecodeExhaustive(metrics, 0),
+                "official gap passed bytecode-exhaustive definition");
     }
 
     private static byte[] readAll(java.io.InputStream input) throws Exception {

@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 
-/** Exact review boundary for mapping batches and complete-game promotion. */
+/** Exact review boundary for mapping batches and optional bytecode-exhaustive audits. */
 public final class MappingPromotionGate {
     private MappingPromotionGate() {}
 
@@ -24,26 +24,27 @@ public final class MappingPromotionGate {
         require("1".equals(required(policy, "schema")), "unsupported mapping promotion schema");
         require(policy.size() == 5, "mapping promotion policy must contain exactly five properties");
         String mode = required(policy, "mode");
-        require("batch".equals(mode) || "complete-game".equals(mode), "unsupported promotion mode");
+        require("batch".equals(mode) || "bytecode-exhaustive".equals(mode),
+                "unsupported promotion mode");
         pin(policy, "coverage", coverage.sha256()); pin(policy, "queue", queue.sha256());
         pin(policy, "evidence", evidence.sha256());
         LinkedHashMap<String, Integer> counts = statusCounts(queue, evidence);
         require(counts.get("CONFLICT").intValue() == 0,
                 "mapping promotion has conflicting aliases");
-        boolean complete = complete(coverage.metrics(), queue.items().size());
-        if ("complete-game".equals(mode)) {
+        boolean exhaustive = bytecodeExhaustive(coverage.metrics(), queue.items().size());
+        if ("bytecode-exhaustive".equals(mode)) {
             require(counts.get("UNQUALIFIED").intValue() == 0,
-                    "complete-game mapping promotion has unqualified queue items");
+                    "bytecode-exhaustive mapping promotion has unqualified queue items");
             require(counts.get("SUPPORTED").intValue() == 0,
-                    "complete-game mapping promotion requires independent alias corroboration");
-            require(complete, "complete-game mapping definition is not satisfied");
+                    "bytecode-exhaustive mapping promotion requires independent alias corroboration");
+            require(exhaustive, "bytecode-exhaustive mapping definition is not satisfied");
         } else require(counts.get("CORROBORATED").intValue() > 0,
                 "mapping batch has no independently corroborated items");
         return new Result(mode, coverage.sha256(), queue.sha256(), evidence.sha256(),
-                counts, complete, queue, evidence);
+                counts, exhaustive, queue, evidence);
     }
 
-    static boolean complete(Map<String, String> metrics, int queueItems) {
+    static boolean bytecodeExhaustive(Map<String, String> metrics, int queueItems) {
         if (queueItems != 0 || number(metrics, "graph.symbols") <= 0) return false;
         int symbols = number(metrics, "graph.symbols");
         if (number(metrics, "namespace.MATCH") != symbols
@@ -113,7 +114,7 @@ public final class MappingPromotionGate {
     public static final class Result {
         private final String body;
         private Result(String mode, String coverage, String queue, String evidence,
-                Map<String, Integer> counts, boolean complete,
+                Map<String, Integer> counts, boolean exhaustive,
                 MappingQualificationQueue qualification, MappingEvidenceReport report) {
             StringBuilder text = new StringBuilder("schema=2\nmode=").append(mode)
                     .append("\ncoverage.sha256=").append(coverage).append("\nqueue.sha256=")
@@ -121,7 +122,7 @@ public final class MappingPromotionGate {
             for (Map.Entry<String, Integer> entry : counts.entrySet())
                 text.append("status.").append(entry.getKey().toLowerCase()).append('=')
                         .append(entry.getValue()).append('\n');
-            text.append("complete-game=").append(complete).append("\npromoted=")
+            text.append("bytecode-exhaustive=").append(exhaustive).append("\npromoted=")
                     .append(counts.get("CORROBORATED")).append('\n')
                     .append("item\talias\tsources\n");
             for (MappingQualificationQueue.Item item : qualification.items())

@@ -46,6 +46,8 @@ public final class MappingBatchTest {
                     feather, graph, Set.of("fixture/Class"), 100);
             require("1".equals(report.metric("qualified.total")), "qualified identity count");
             require("1".equals(report.metric("excluded.total")), "orphan count");
+            require(report.excludedIds().size() == 1
+                    && report.render().contains(report.excludedIds().get(0)), "orphan identity attestation");
             require("true".equals(report.metric("complete")), "complete batch status");
             StringBuilder exact = new StringBuilder("schema=1\n");
             for (Map.Entry<String, String> metric : report.metrics().entrySet())

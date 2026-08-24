@@ -13,7 +13,7 @@ import worldline.symbolgraph.MappingEvidenceReport;
 import worldline.symbolgraph.MappingPromotionGate;
 import worldline.symbolgraph.MappingQualificationQueue;
 
-/** Stable complete-game mapping audit and exact coverage gate. */
+/** Stable mapping diagnostics and exact reviewed promotion boundaries. */
 final class MappingCommand {
     private MappingCommand() {}
 

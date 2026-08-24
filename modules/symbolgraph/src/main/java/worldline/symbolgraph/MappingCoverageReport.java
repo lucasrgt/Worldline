@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/** Deterministic complete-game namespace and official-bytecode coverage report. */
+/** Deterministic namespace and official-bytecode diagnostic report. */
 public final class MappingCoverageReport {
     private final Map<String, String> metrics;
     private final String body;

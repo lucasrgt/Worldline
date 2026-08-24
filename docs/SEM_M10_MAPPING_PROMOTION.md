@@ -5,8 +5,9 @@ exclusive official-runtime lock on 2026-08-23. The exact checkpoint promoted
 65 independently corroborated items, retained 12,576 unqualified items, and
 had zero singly supported items or conflicts. The schema-2 decision has
 SHA-256 `36cde9c115f7db6665d1eaedc99e2c9e50ee5d54c01c6952caee3035924ff2ef`.
-Complete-game promotion remains correctly unavailable while the mapping queue
-is non-empty.
+The bytecode-exhaustive diagnostic remains unavailable while the mapping queue
+is non-empty. It is not the complete-game release constitution; SEM-M13 owns
+that maintained dual-source boundary.
 
 SEM-M10 adds an exact, reviewed promotion boundary:
 
@@ -16,15 +17,15 @@ worldline mappings promote <client.jar> <server.jar> <intermediary.jar> \
   <evidence.tsv> <policy.properties>
 ```
 
-The five-property policy selects `batch` or `complete-game` mode and pins the
+The five-property policy selects `batch` or `bytecode-exhaustive` mode and pins the
 exact SHA-256 digests of the SEM-M6 coverage report, SEM-M7 queue, and SEM-M8
 evidence report. Extra, missing, or drifted properties fail closed. A `batch`
 decision promotes only independently corroborated items and records their exact
 item IDs, aliases, and sources; unqualified and singly supported items remain
 pending. Conflicts fail the whole checkpoint, and an empty batch cannot pass.
-`complete-game` additionally rejects every pending or singly supported item.
+`bytecode-exhaustive` additionally rejects every pending or singly supported item.
 
-`complete-game` is a stronger, non-vacuous definition. It additionally requires:
+`bytecode-exhaustive` is a stronger, non-vacuous diagnostic. It additionally requires:
 
 - a non-empty graph and an empty qualification queue;
 - every graph symbol to be a namespace `MATCH` and a matched RetroMCP identity;
@@ -34,6 +35,6 @@ pending. Conflicts fail the whole checkpoint, and an empty batch cannot pass.
   zero missing, phantom, descriptor-conflict, or classified gap entries.
 
 The decision records its mode, all three input digests, evidence status counts,
-the complete-game result, and its own digest. This separates an evidence-ready
-resolution batch from the much stronger claim that the whole game is mapped.
+the bytecode-exhaustive result, and its own digest. This separates an
+evidence-ready resolution batch from an intentionally stricter research audit.
 No generated official policy or decision is committed.

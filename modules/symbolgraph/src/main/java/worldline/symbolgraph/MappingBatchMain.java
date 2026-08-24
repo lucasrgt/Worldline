@@ -43,6 +43,9 @@ public final class MappingBatchMain {
             System.out.println("  SEM-M" + (index + 11) + " mapping batch: "
                     + report.metric("selected.total") + "/" + report.metric("qualified.total")
                     + " qualified; report " + report.sha256());
+            if (targets[index] == 100)
+                for (String id : report.excludedIds())
+                    System.out.println("  SEM-M13 retracted Nostalgia-only identity: " + id);
         }
     }
 }

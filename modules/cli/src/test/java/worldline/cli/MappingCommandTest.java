@@ -107,11 +107,11 @@ public final class MappingCommandTest {
                     new PrintStream(output), new PrintStream(error));
             require(status == 0 && error.size() == 0
                     && output.toString("UTF-8").contains("WORLDLINE_MAPPINGS_PROMOTION=PASS")
-                    && output.toString("UTF-8").contains("complete-game=false")
+                    && output.toString("UTF-8").contains("bytecode-exhaustive=false")
                     && output.toString("UTF-8").contains("promoted=1")
                     && output.toString("UTF-8").contains(item + "\tstableName"),
                     "mapping batch promotion gate failed");
-            Files.write(promotion, ("schema=1\nmode=complete-game\nexpected.coverage.sha256=" + report.sha256()
+            Files.write(promotion, ("schema=1\nmode=bytecode-exhaustive\nexpected.coverage.sha256=" + report.sha256()
                     + "\nexpected.queue.sha256=" + queue.sha256() + "\nexpected.evidence.sha256="
                     + evidenceReport.sha256() + "\n").getBytes(StandardCharsets.UTF_8));
             output.reset(); error.reset();
@@ -120,7 +120,7 @@ public final class MappingCommandTest {
                     retro.toString(), evidence.toString(), promotion.toString()},
                     new PrintStream(output), new PrintStream(error));
             require(status == 1 && error.toString("UTF-8").contains("unqualified queue items"),
-                    "incomplete fixture passed complete-game promotion");
+                    "incomplete fixture passed bytecode-exhaustive promotion");
             StringBuilder expected = new StringBuilder("schema=1\n");
             for (Map.Entry<String, String> metric : report.metrics().entrySet())
                 expected.append("expected.").append(metric.getKey()).append('=')

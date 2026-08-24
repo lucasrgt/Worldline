@@ -14,10 +14,14 @@ import java.util.TreeSet;
 /** Source-corroborated, cumulative qualification batch for the maintained mapping graph. */
 public final class MappingBatchReport {
     private final Map<String, String> metrics;
+    private final List<String> excludedIds;
     private final String body;
 
-    private MappingBatchReport(Map<String, String> values, String rows) {
+    private MappingBatchReport(Map<String, String> values, List<Row> excluded, String rows) {
         metrics = Collections.unmodifiableMap(new LinkedHashMap<String, String>(values));
+        List<String> ids = new ArrayList<String>();
+        for (Row row : excluded) ids.add(row.id());
+        excludedIds = Collections.unmodifiableList(ids);
         StringBuilder text = new StringBuilder("schema=1\n");
         for (Map.Entry<String, String> metric : metrics.entrySet())
             text.append(metric.getKey()).append('=').append(metric.getValue()).append('\n');
@@ -65,10 +69,11 @@ public final class MappingBatchReport {
         for (Row row : batch) rows.append(row.render("yes"));
         rows.append("excluded\tid\tkind\tidentity\ttouched\tsources\n");
         for (Row row : excluded) rows.append(row.render("no"));
-        return new MappingBatchReport(values, rows.toString());
+        return new MappingBatchReport(values, excluded, rows.toString());
     }
 
     public Map<String, String> metrics() { return metrics; }
+    public List<String> excludedIds() { return excludedIds; }
     public String metric(String key) {
         String value = metrics.get(key);
         if (value == null) throw new IllegalArgumentException("unknown mapping batch metric " + key);
@@ -116,8 +121,9 @@ public final class MappingBatchReport {
             this.sources = Collections.unmodifiableSet(new TreeSet<String>(sources));
         }
         boolean touched() { return touched; }
+        String id() { return digest(key.canonical()); }
         String render(String selected) {
-            return selected + '\t' + digest(key.canonical()) + '\t' + key.kind().name().toLowerCase()
+            return selected + '\t' + id() + '\t' + key.kind().name().toLowerCase()
                     + '\t' + key.canonical() + '\t' + touched + '\t' + String.join(",", sources) + '\n';
         }
     }
