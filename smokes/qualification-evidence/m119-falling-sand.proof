@@ -1,5 +1,5 @@
 schema=1
 id=m119-falling-sand
-fingerprint=9a19962e7020a424da6fa12dae67ded6c0a444e9bef9ce343ecd58e06b3ed4af
+fingerprint=5feae4c8de100c20c71b1420220e0fedf9ad05a9e122a6b21002091cd2bc4a71
 observation.sha256=ac00ec1900fdfc0489c6e7d4e9621c916411505d522df3c1fc9f3c53a78eb656
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m373-milk-bucket-set
-fingerprint=eddeb2c24d47e1e4f5969cca905b31f6a1f673e81b6ef48ebbf1b25298271c41
+fingerprint=d7939f1debebbefb79a3a2d3ff2e0c9e66d911cc64fd005ded4443ee9cf8e205
 observation.sha256=0def850e0165e277e1055538ab58e3a7772dcf0239f16acbc88f430b10e9a77c
 source=refactor-equivalent

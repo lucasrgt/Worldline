@@ -1,5 +1,5 @@
 schema=1
 id=m167-cactus
-fingerprint=08d949e12863991f22353fbb397b96b2a2d69ddd5b745cd5d919c50052e04ac8
+fingerprint=21e3eeb9b75ef903ecff8a53322f4caf26aad9c0ccbae2cac4995fe183701fb8
 observation.sha256=9a210a58a09a40ac501c31bf8262bee7846ea1240c7dc0654766374ba627ef30
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m340-redstone-input-set
-fingerprint=4b26e51e66ca2245b9217cc5dcffa8ded062cd13ed0ab585f698c1fd8c28aedb
+fingerprint=631326e9b8aa037f6e80ae55674670f08c78582cc22e42d30617415e29ebc16b
 observation.sha256=366f2922f527ce87c4818902a75b3e646c8a6e5946e6b84838fe3c9918f0c456
 source=refactor-equivalent
