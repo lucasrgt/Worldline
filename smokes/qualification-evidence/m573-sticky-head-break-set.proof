@@ -1,5 +1,5 @@
 schema=1
 id=m573-sticky-head-break-set
-fingerprint=b5e9e48a2b2ee36de208e04dcc17acc469afa01b38e1fe6c235090097390d678
+fingerprint=4b42d94676d2e2a787eaaf53047539a78b0e4399bdae98f1aef718a4466f317d
 observation.sha256=52a1e6b321d8af872aabfe153b3c203feb0dddbf81ed10f30ff5111ab210d245
 source=refactor-equivalent

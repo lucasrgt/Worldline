@@ -1,5 +1,5 @@
 schema=1
 id=m112-fixed-seed-lighting
-fingerprint=e4d4035d34adb9d76d0c958a1023b898c8b30f2b9109940dbc01f350271af0b0
+fingerprint=03aae230324dadf81c0876ffc9c0e84d12c4941544fec5ab4538f8ac542de2fe
 observation.sha256=f5180dc49e6d6117c501e903ab16b1015a071cedf027e2444168a40109dc0969
 source=refactor-equivalent

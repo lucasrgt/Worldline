@@ -1,5 +1,5 @@
 schema=1
 id=m6-trace-explorer
-fingerprint=23f8604e3a18eeeafe095cc1f25a7934d9d11568cb0d886382bd008850c4dfd1
+fingerprint=d25c8118aef37efb43af355f9ccc1cdcad887422c16d6f4729b319a9428b7fad
 observation.sha256=c8ef6d70b4ca74a67324ca33e8e8bb60e198b0c5662ee9d48f88f4cff133a750
 source=refactor-equivalent

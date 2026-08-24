@@ -575,6 +575,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m629-door-sound-event` | CARRIED | door sound event |
 | `m630-server-acl-matrix` | CARRIED | server acl matrix |
 | `m631-protocol14-edge-packets` | CARRIED | protocol14 edge packets |
+| `m632-map-data-content` | CARRIED | map data content |
 | `betavault-item-reference` | EXECUTED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
