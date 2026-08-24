@@ -146,7 +146,7 @@ public final class BetaVaultItemReferenceCycle {
   private Path external(String name, String pathKey, String originKey, String revisionKey)
       throws Exception {
     Path path = root.resolve(value(pathKey)).normalize();
-    require(Files.isDirectory(path.resolve(".git")), name + " absent");
+    require(Files.exists(path.resolve(".git"), LinkOption.NOFOLLOW_LINKS), name + " absent");
     if (originKey != null)
       require(git(path, "remote", "get-url", "origin").trim().equals(value(originKey)),
           name + " origin drift");
