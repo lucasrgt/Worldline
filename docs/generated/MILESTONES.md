@@ -535,6 +535,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m586-fall-water-cancel-set` | CARRIED | fall water cancel set |
 | `m587-bow-shot-durability-set` | CARRIED | bow shot durability set |
 | `m588-tool-shatter-set` | CARRIED | tool shatter set |
+| `m589-lightning-fire-set` | CARRIED | lightning fire set |
 | `m590-ghast-fireball-punch-set` | CARRIED | Ghast fireball punch set |
 | `m591-furnace-smelt-interrupt-set` | CARRIED | furnace smelt interrupt set |
 | `m592-chest-break-spill-set` | CARRIED | chest break spill set |
@@ -560,6 +561,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m615-redstone-one-tick-set` | CARRIED | redstone one tick set |
 | `m616-portal-search-radius-set` | CARRIED | portal search radius set |
 | `m617-spawn-light-cap-set` | CARRIED | spawn light cap set |
+| `m618-wolf-tame-set` | CARRIED | wolf tame set |
 | `m619-undead-sun-burn-set` | CARRIED | undead sun burn set |
 | `m620-stationapi-testkit-driver` | EXECUTED | StationAPI TestKit driver |
 | `m621-save-worldgen-set` | CARRIED | save worldgen set |
