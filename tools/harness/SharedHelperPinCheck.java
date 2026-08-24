@@ -79,10 +79,13 @@ final class SharedHelperPinCheck {
                 && current.equals(lock.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"));
         try {
-            Properties unicode = UnicodePinCheck.manifest(Path.of("").toAbsolutePath().normalize());
+            Path root = Path.of("").toAbsolutePath().normalize();
+            Properties unicode = UnicodePinCheck.manifest(root);
             return direct || UnicodePinCheck.follows(unicode, id,
                     lock.getProperty(stem + "current_fingerprint"),
-                    lock.getProperty(stem + "evidence_sha256"), pin, current);
+                    lock.getProperty(stem + "evidence_sha256"), pin, current)
+                    || TrainPinCheck.carriesCurrent(
+                            TrainPinCheck.manifest(root), id, pin, current);
         } catch (Exception error) { return false; }
     }
     static boolean follows(Properties lock, String id, String prior, String evidence,

@@ -22,6 +22,7 @@ final class TelemetryPinCheck {
         }
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); Properties schemas = SchemaPinCheck.manifest(root);
+        Properties train = TrainPinCheck.manifest(root);
         Properties provider = ProviderDiscoveryPinCheck.manifest(root);
         int changed = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
@@ -34,6 +35,7 @@ final class TelemetryPinCheck {
             boolean successor = pin != null && SchemaPinCheck.follows(schemas, smoke.id,
                     required(manifest, stem + "current_fingerprint"),
                     required(manifest, stem + "evidence_sha256"), pin, current);
+            successor |= TrainPinCheck.carriesCurrent(train, smoke.id, pin, current);
             require(hash(manifest, stem + "prior_fingerprint")
                             && (direct || successor)
                             && hash(manifest, stem + "evidence_sha256"),
@@ -41,7 +43,8 @@ final class TelemetryPinCheck {
             require(pin != null && (pin.source().equals("executed")
                             || pin.source().equals("refactor-equivalent")
                             && (pin.evidence().equals(required(manifest, stem + "evidence_sha256"))
-                            || SchemaPinCheck.carries(schemas, smoke.id, pin, current))),
+                            || SchemaPinCheck.carries(schemas, smoke.id, pin, current)
+                            || TrainPinCheck.carriesCurrent(train, smoke.id, pin, current))),
                     "telemetry migration pin drift: " + smoke.id);
         }
         require(changed == integer(manifest, "count")
@@ -58,10 +61,11 @@ final class TelemetryPinCheck {
         boolean direct = hash(manifest, stem + "prior_fingerprint")
                 && current.equals(manifest.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(manifest.getProperty(stem + "evidence_sha256"));
-        try { return direct || SchemaPinCheck.follows(SchemaPinCheck.manifest(
-                Path.of("").toAbsolutePath().normalize()), id,
+        try { Path root = Path.of("").toAbsolutePath().normalize();
+            return direct || SchemaPinCheck.follows(SchemaPinCheck.manifest(root), id,
                 manifest.getProperty(stem + "current_fingerprint"),
-                manifest.getProperty(stem + "evidence_sha256"), pin, current); }
+                manifest.getProperty(stem + "evidence_sha256"), pin, current)
+                || TrainPinCheck.carriesCurrent(TrainPinCheck.manifest(root), id, pin, current); }
         catch (Exception error) { return false; }
     }
     private static boolean hash(Properties values, String key) {

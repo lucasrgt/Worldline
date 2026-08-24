@@ -15,6 +15,7 @@ final class SchemaPinCheck {
                 "repository schema migration census drift");
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); Properties formatting = FormattingPinCheck.manifest(root);
+        Properties train = TrainPinCheck.manifest(root);
         Properties provider = ProviderDiscoveryPinCheck.manifest(root);
         int checked = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
@@ -26,6 +27,7 @@ final class SchemaPinCheck {
             boolean successor = pin != null && FormattingPinCheck.follows(formatting, smoke.id,
                     required(manifest, stem + "current_fingerprint"),
                     required(manifest, stem + "evidence_sha256"), pin, current);
+            successor |= TrainPinCheck.carriesCurrent(train, smoke.id, pin, current);
             boolean descriptor = digest(directory.resolve("smoke.properties")).equals(
                     required(manifest, stem + "descriptor_sha256"));
             if (!descriptor) descriptor = BehaviorFamilyPinCheck.transportsDescriptor(
@@ -41,7 +43,8 @@ final class SchemaPinCheck {
             require(pin != null && (pin.source().equals("executed")
                             || pin.source().equals("refactor-equivalent"))
                             && (pin.evidence().equals(required(manifest, stem + "evidence_sha256"))
-                            || FormattingPinCheck.carries(formatting, smoke.id, pin, current)),
+                            || FormattingPinCheck.carries(formatting, smoke.id, pin, current)
+                            || TrainPinCheck.carriesCurrent(train, smoke.id, pin, current)),
                     "repository schema pin drift: " + smoke.id);
         }
         require(checked == 525 - ProviderDiscoveryPinCheck.pendingCount(provider),
@@ -54,9 +57,13 @@ final class SchemaPinCheck {
     }
     static boolean carries(Properties manifest, String id, SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
-        return hash(manifest, stem + "prior_fingerprint")
+        boolean direct = hash(manifest, stem + "prior_fingerprint")
                 && current.equals(manifest.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(manifest.getProperty(stem + "evidence_sha256"));
+        try { Path root = Path.of("").toAbsolutePath().normalize();
+            return direct || TrainPinCheck.carriesCurrent(
+                    TrainPinCheck.manifest(root), id, pin, current); }
+        catch (Exception error) { return direct; }
     }
     static boolean follows(Properties manifest, String id, String prior, String evidence,
             SmokePins.Entry pin, String current) {

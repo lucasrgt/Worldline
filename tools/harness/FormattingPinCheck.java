@@ -73,10 +73,13 @@ final class FormattingPinCheck {
                 && current.equals(manifest.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(manifest.getProperty(stem + "evidence_sha256"));
         try {
-            Properties shared = SharedHelperPinCheck.manifest(Path.of("").toAbsolutePath().normalize());
+            Path root = Path.of("").toAbsolutePath().normalize();
+            Properties shared = SharedHelperPinCheck.manifest(root);
             return direct || SharedHelperPinCheck.follows(shared, id,
                     manifest.getProperty(stem + "current_fingerprint"),
-                    manifest.getProperty(stem + "evidence_sha256"), pin, current);
+                    manifest.getProperty(stem + "evidence_sha256"), pin, current)
+                    || TrainPinCheck.carriesCurrent(
+                            TrainPinCheck.manifest(root), id, pin, current);
         } catch (Exception error) { return false; }
     }
     static boolean follows(Properties manifest, String id, String prior, String evidence,
