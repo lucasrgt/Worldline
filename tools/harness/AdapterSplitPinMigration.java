@@ -85,6 +85,7 @@ final class AdapterSplitPinMigration {
         int refactors = Integer.parseInt(shared.getProperty("refresh.count", "0"));
         require(refactors >= 1 && refactors <= 16,
                 "adapter refresh requires shared-helper attestations");
+        int sourceChanges = refreshSources(root, lock);
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); Properties providers =
                 ProviderDiscoveryPinCheck.manifest(root); int carried = 0;
@@ -102,7 +103,35 @@ final class AdapterSplitPinMigration {
         require(carried == 525 - ProviderDiscoveryPinCheck.pendingCount(providers),
                 "adapter refresh census drift");
         pins.write(pins.entries()); store(path, lock);
-        System.out.println("adapter-split pins refreshed: " + carried + " carried");
+        System.out.println("adapter-split pins refreshed: " + sourceChanges
+                + " source changes, " + carried + " carried");
+    }
+
+    private static int refreshSources(Path root, Properties lock) throws Exception {
+        int changes = 0;
+        for (String group : List.of("existing", "added")) {
+            int count = Integer.parseInt(required(lock, group + ".count"));
+            for (int index = 0; index < count; index++) {
+                String stem = group + "." + index + ".";
+                String relative = required(lock, stem + "path");
+                require(git(root, "ls-files", "--error-unmatch", relative).strip().equals(relative),
+                        "adapter source is not tracked: " + relative);
+                String prior = required(lock, stem + "current_sha256");
+                String current = digest(Files.readString(root.resolve(relative)));
+                if (current.equals(prior)) continue;
+                int attestation = Integer.parseInt(
+                        lock.getProperty("refresh.source.count", "0")) + 1;
+                String record = "refresh.source." + attestation + ".";
+                lock.setProperty(record + "path", relative);
+                lock.setProperty(record + "prior_sha256", prior);
+                lock.setProperty(record + "current_sha256", current);
+                lock.setProperty("refresh.source.count", Integer.toString(attestation));
+                lock.setProperty(stem + "current_sha256", current);
+                changes++;
+            }
+        }
+        require(changes > 0, "adapter refresh has no reviewed source changes");
+        return changes;
     }
 
     private static String git(Path root, String... arguments) throws Exception {
