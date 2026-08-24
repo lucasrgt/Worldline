@@ -30,6 +30,8 @@ public final class WorldlineWorldBehaviors {
             "Burning furnaces, dropped items, and minecarts survive a server chunk unload and reload");
     public static final WorldlineBehavior PROTOCOL14_EDGE_PACKETS = define("protocol14-edge-packets",
             "Packet130 sign framing and Packet131 map data precede a silent timeout without Packet0");
+    public static final WorldlineBehavior MAP_DATA_CONTENT = define("map-data-content",
+            "A held map converges to replay-stable Packet131 colors at a fixed seed and position");
 
     private WorldlineWorldBehaviors() {}
 

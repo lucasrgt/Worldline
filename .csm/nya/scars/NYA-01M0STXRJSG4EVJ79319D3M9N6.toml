@@ -1,0 +1,19 @@
+schema = 1
+id = "NYA-01M0STXRJSG4EVJ79319D3M9N6"
+title = "Treat replayed entity spawns as idempotent only when exact"
+lesson = "A long-lived protocol-14 observer may receive the same Packet21 again for a still-live entity. Accept only an exactly equal decoded spawn, reject conflicting reuse of the ID, and preserve destroy-before-reuse and collection invariants."
+scope = ["adapters/b173-server/src/main/java/worldline/b173server/B173DroppedItemTracker.java"]
+tags = [
+    "protocol",
+    "entity-lifecycle",
+    "idempotence",
+]
+created_at = "2026-08-24T12:11:34Z"
+
+[[occurrences]]
+occurred_at = "2026-08-24T12:11:34Z"
+source = "manual:2026-08-24-m632-map-observation"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "f5204bdb0"

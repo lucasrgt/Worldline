@@ -24,14 +24,18 @@ final class B173DroppedItemTracker {
         double y = input.readInt() / 32D, z = input.readInt() / 32D;
         double velocityX = input.readByte() / 128D, velocityY = input.readByte() / 128D;
         double velocityZ = input.readByte() / 128D;
-        if (spawned.containsKey(entityId) && !destroyed.contains(entityId))
-            throw new IOException("duplicate live dropped-item entity ID");
-        if (destroyed.remove(entityId)) { spawned.remove(entityId); collectors.remove(entityId); }
-        if (spawned.size() >= MAX_ITEMS) throw new IOException("dropped-item bound exceeded");
-        try { spawned.put(entityId, new RemoteDroppedItem(entityId, new RemoteItemStack(itemId, count, damage),
-                x, y, z, velocityX, velocityY, velocityZ)); }
+        RemoteDroppedItem value;
+        try { value = new RemoteDroppedItem(entityId, new RemoteItemStack(itemId, count, damage),
+                x, y, z, velocityX, velocityY, velocityZ); }
         catch (IllegalArgumentException | NullPointerException error) {
             throw new IOException("invalid dropped-item spawn", error); }
+        if (spawned.containsKey(entityId) && !destroyed.contains(entityId)) {
+            if (spawned.get(entityId).equals(value)) return;
+            throw new IOException("conflicting live dropped-item entity ID");
+        }
+        if (destroyed.remove(entityId)) { spawned.remove(entityId); collectors.remove(entityId); }
+        if (spawned.size() >= MAX_ITEMS) throw new IOException("dropped-item bound exceeded");
+        spawned.put(entityId, value);
     }
 
     void collect(DataInputStream input, B173EntityIdentityTracker identities) throws IOException {

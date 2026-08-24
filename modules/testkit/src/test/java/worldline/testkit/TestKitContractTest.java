@@ -35,6 +35,7 @@ public final class TestKitContractTest {
         ChunkReloadFixtureTest.execute();
         DungeonGenerationFixtureTest.execute();
         Protocol14EdgeFixtureTest.execute();
+        MapDataContentFixtureTest.execute();
         Path root = Files.createTempDirectory("worldline-test-contract-"); Provider provider = new Provider();
         RunnerOptions options = new RunnerOptions().provider(provider).artifacts(root.resolve("artifacts"))
                 .snapshots(root.resolve("snapshots")).runtimeLock(root.resolve("runtime.lock"));

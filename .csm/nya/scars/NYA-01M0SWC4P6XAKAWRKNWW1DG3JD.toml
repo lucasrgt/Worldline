@@ -1,0 +1,22 @@
+schema = 1
+id = "NYA-01M0SWC4P6XAKAWRKNWW1DG3JD"
+title = "Pin fallback map spawn before content qualification"
+lesson = "A pre-seeded Beta 1.7.3 map with no map_N.dat falls back to level.dat SpawnX/Z. Fresh-world spawn search can vary even under the same level seed, so deterministic Packet131 content fixtures must stop the creator, pin SpawnX/Y/Z value-semantically, and only then create or observe the map."
+scope = [
+    "smokes/m632-map-data-content/**",
+    "adapters/b173-server/src/main/java/worldline/b173server/B173LevelDatSpawn.java",
+]
+tags = [
+    "map",
+    "protocol",
+    "deterministic-fixture",
+]
+created_at = "2026-08-24T12:36:54Z"
+
+[[occurrences]]
+occurred_at = "2026-08-24T12:36:54Z"
+source = "manual:2026-08-24-m632-spawn-center-divergence"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "d68c2e562"
