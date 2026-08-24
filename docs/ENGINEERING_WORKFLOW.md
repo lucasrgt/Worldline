@@ -260,6 +260,8 @@ result, and writes its elapsed time and cache census to
 `.worldline/reports/cache-rebuild.json`. Its reviewed bounds live in
 `quality/cache-rebuild-baseline.properties`; the nightly runtime workflow runs both the doctor
 and drill so a cache portability or reconstruction regression is detected before a release.
+The rebuild has its own token-authorized latency mode because it deliberately reconstructs
+module, test, harness, and verification caches; ordinary cold/hot Gate SLOs remain unchanged.
 The doctor reports live and historically dangling worktree links; GC fails if that dangling
 census increases, while stale missing targets remain non-protective and can heal on rebuild.
 
