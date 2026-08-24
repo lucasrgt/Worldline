@@ -1,5 +1,5 @@
 schema=1
 id=m66-player-combat
-fingerprint=1ddae5e5eb499f46430b2ab3d96a31aee9e62c339ea11f97bc734b5fda75eda1
+fingerprint=dc32fa642c7143224d98aec422515f4c031b23074098d8732764b263822a515c
 observation.sha256=8d05a812d9bfa62ac53321d1cca3f96c2cf9ff76668e36cdf0605945b883022c
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m179-wheat
-fingerprint=f680939d9c822413936de963b2835d8881b8d8f3ca34ecd22c5a50c02a5bf694
+fingerprint=65b8bcb403d058612a1d7d20074dde4ca971aecd6c938ce28fdf8e921ff80757
 observation.sha256=00d861629497b91621c26cc02b6ec8d56763ad9b4f365028fd10188e36694be8
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m11-mod-api
-fingerprint=9d1b044a9590e8313632cf1c9ea67428692c08996edd08464a878106ebd96c3a
+fingerprint=b92a7771c39b25fbb1f79c2a85854b4a608051f4c4bef64e29115c5af8ca8089
 observation.sha256=726ed3d2cb743e1af7d6b9c89a62544c84a49223eb6802e5a55b1d3d6b884545
 source=refactor-equivalent

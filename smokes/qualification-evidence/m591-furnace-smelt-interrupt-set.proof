@@ -1,5 +1,5 @@
 schema=1
 id=m591-furnace-smelt-interrupt-set
-fingerprint=8f4f6c8ced7a73fa5b1225ea6d1adda7180cdd6e0e3707fd796cf7581c62ff57
+fingerprint=63113aa51acc9f5d4a5760f37f6680c79e2986661eead8a5127868e2a6f1a04b
 observation.sha256=1ec0822c20624c4666c630e46c0f8f89b2130e52da4c4ba6c52c58ad261797ce
 source=refactor-equivalent

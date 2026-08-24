@@ -1,5 +1,5 @@
 schema=1
 id=m501-sw-entity-item-grounding
-fingerprint=859b9fd2d23b14b8b0ad6a0cf84f06f9a5b9d23378ea5b3e854c359f6b620f0d
+fingerprint=ed5e4f9766b954e6cea43109431f3e7918387422ba58d364416a2b993dbc95e1
 observation.sha256=d5e39c681248baa95e697c21d1db30d004ed3e6e090fa5dd8feb4fc0b6e34e8c
 source=refactor-equivalent

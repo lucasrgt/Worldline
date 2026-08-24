@@ -1,5 +1,5 @@
 schema=1
 id=m24-play-pose
-fingerprint=e30e4631f2bcb2cd249f9493538b65276f87e67f7f1dfbcaf0d4098e94521bd4
+fingerprint=7faa9c51fc20f6d20e7e3253b8e1600f12ef11ccc464376a913a692addac0666
 observation.sha256=945aeba121b88d41c658d64ca4b3b0ddcdec6d714347b91a51cddebb11156e16
 source=refactor-equivalent

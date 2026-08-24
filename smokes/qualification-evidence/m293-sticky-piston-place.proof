@@ -1,5 +1,5 @@
 schema=1
 id=m293-sticky-piston-place
-fingerprint=540039e29039553292be285d3430a81e78ffbaa04c9f063d92b50e8e2a34945c
+fingerprint=afd9fbfc1e31863e71e81bef5a49ef28dfcbeeb22332fa39a80b2213bb88bc4a
 observation.sha256=bf6cf185cefc337d8be549efbcdce76d5c7cff54669d136c1002f30b7ff25c1e
 source=refactor-equivalent
