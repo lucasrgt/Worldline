@@ -1,0 +1,22 @@
+schema = 1
+id = "NYA-01M0T6W6ECYZ8TG3XESYC9J5SV"
+title = "Resolve cached module links before TestKit packaging"
+lesson = "A hot Gate can expose compiled modules through platform-specific links: Java Files.walk does not descend through a Linux symbolic-link root. Release packaging must resolve each immutable module directory to its real path and fail closed unless every artifact contains classes and the runner has the expected entry point."
+scope = [
+    "tools/testkit/**",
+    ".github/workflows/publish-testkit.yml",
+]
+tags = [
+    "release",
+    "cache",
+    "symlink",
+]
+created_at = "2026-08-24T15:40:25Z"
+
+[[occurrences]]
+occurred_at = "2026-08-24T15:40:25Z"
+source = "manual:2026-08-24-empty-testkit-release-audit"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "9b5e5802a"

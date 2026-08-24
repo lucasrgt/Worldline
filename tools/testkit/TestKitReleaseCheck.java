@@ -6,6 +6,7 @@ import java.security.MessageDigest;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.Properties;
+import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,7 +40,9 @@ public final class TestKitReleaseCheck {
                 String name = artifact + "-" + version + ".jar";
                 String expected = checksums.getProperty(name, "");
                 require(expected.matches("[0-9a-f]{64}"), "missing generated checksum for " + name);
-                require(expected.equals(digest(output.resolve(name))), "artifact checksum drift: " + name);
+                Path path = output.resolve(name);
+                require(expected.equals(digest(path)), "artifact checksum drift: " + name);
+                verifyArchive(path, artifact.equals("worldline-test-runner"));
             }
             require(checksums.size() == 3, "unexpected TestKit checksum entries");
             try (var paths = Files.list(output)) {
@@ -59,6 +62,17 @@ public final class TestKitReleaseCheck {
         require(Files.isRegularFile(path), "missing release artifact: " + path.getFileName());
         return HexFormat.of().formatHex(
                 MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(path)));
+    }
+
+    private static void verifyArchive(Path path, boolean runner) throws Exception {
+        try (JarFile archive = new JarFile(path.toFile())) {
+            long classes = archive.stream().filter(entry -> !entry.isDirectory())
+                    .filter(entry -> entry.getName().endsWith(".class")).count();
+            require(classes > 0, "release artifact contains no classes: " + path.getFileName());
+            String main = archive.getManifest().getMainAttributes().getValue("Main-Class");
+            require(runner == "worldline.cli.WorldlineCli".equals(main),
+                    "release artifact entry point drift: " + path.getFileName());
+        }
     }
 
     private static void require(boolean value, String message) {

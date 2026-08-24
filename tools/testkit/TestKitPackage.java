@@ -57,15 +57,23 @@ public final class TestKitPackage {
 
     private static void build(Path target, Path classes, List<String> modules, String main) throws Exception {
         Set<String> names = new LinkedHashSet<>(); List<Entry> entries = new ArrayList<>();
-        for (String module : modules) try (Stream<Path> stream = Files.walk(classes.resolve(module))) {
-            for (Path path : (Iterable<Path>) stream.filter(Files::isRegularFile)
-                    .filter(file -> !file.getFileName().toString().equals(".complete"))::iterator) {
-                String name = classes.resolve(module).relativize(path).toString().replace('\\', '/');
-                require(names.add(name), "duplicate distribution entry: " + name);
-                require(entries.size() < 20_000, "distribution contains too many entries");
-                byte[] bytes = Files.readAllBytes(path); require(bytes.length <= 8_388_608, "entry too large: " + name);
-                entries.add(new Entry(name, bytes));
+        for (String module : modules) {
+            Path moduleRoot = classes.resolve(module).toRealPath();
+            require(Files.isRegularFile(moduleRoot.resolve(".complete")),
+                    "compiled module is not an immutable cache entry: " + module);
+            int before = entries.size();
+            try (Stream<Path> stream = Files.walk(moduleRoot)) {
+                for (Path path : (Iterable<Path>) stream.filter(Files::isRegularFile)
+                        .filter(file -> !file.getFileName().toString().equals(".complete"))::iterator) {
+                    String name = moduleRoot.relativize(path).toString().replace('\\', '/');
+                    require(names.add(name), "duplicate distribution entry: " + name);
+                    require(entries.size() < 20_000, "distribution contains too many entries");
+                    byte[] bytes = Files.readAllBytes(path);
+                    require(bytes.length <= 8_388_608, "entry too large: " + name);
+                    entries.add(new Entry(name, bytes));
+                }
             }
+            require(entries.size() > before, "compiled module contains no distribution entries: " + module);
         }
         Collections.sort(entries); Files.createDirectories(target.getParent());
         try (JarOutputStream jar = new JarOutputStream(Files.newOutputStream(target))) {
