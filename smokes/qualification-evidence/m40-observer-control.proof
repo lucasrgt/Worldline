@@ -1,5 +1,5 @@
 schema=1
 id=m40-observer-control
-fingerprint=4dd3f02acfd45ca1626f889a958a4a4dbc817eadd44e5dc0894a665af2ad3907
+fingerprint=4b7f3ec3cd36b16cac1be5789263bef5bdee7a526d89aaf544ee3dae44fd4de1
 observation.sha256=6f877e2e53a319199e2d7e4e381f8c6d500b60d2eeffc0290f741ad5c4dfc47d
 source=refactor-equivalent

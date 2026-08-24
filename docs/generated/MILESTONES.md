@@ -570,6 +570,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m624-weather-state-matrix` | CARRIED | Weather state matrix |
 | `m625-multiplayer-edge-set` | CARRIED | Multiplayer edge set |
 | `m626-dungeon-generation-census` | CARRIED | dungeon generation census |
+| `m627-chunk-unload-reload` | CARRIED | chunk unload and reload persistence |
 | `betavault-item-reference` | EXECUTED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |

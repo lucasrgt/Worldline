@@ -1,5 +1,5 @@
 schema=1
 id=m324-furnace-rest-smelts
-fingerprint=5f350e0c0619fc6d5189dc0ec4f6ada8a5f6301519162ff86f8da9cb6ce61248
+fingerprint=8fef153348e95f636ac920b2e9826018b05f83fb020ee2f20678405a68df9fe7
 observation.sha256=6c131f48c758cb5376dfd0b9504b154148f17e3295c1337c08e4c32619dc781a
 source=refactor-equivalent

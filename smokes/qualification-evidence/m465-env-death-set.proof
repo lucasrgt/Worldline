@@ -1,5 +1,5 @@
 schema=1
 id=m465-env-death-set
-fingerprint=d9d6a548d42754005474f470f393ef8d4478ad4b5e2f56ccb6f3df6e44080e09
+fingerprint=43236c73076def99536e5e5ee01a90efeacb784d4ea4698e615be5ec109dea3a
 observation.sha256=5f7c771e9c67210afff3c4f9afc8af6700507b0ce7d74239763d335b27bdf1b4
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m442-remaining-record-place-set
-fingerprint=559130fcf3d7dd450b351ef134902f25ef14db3ffa93b3e8989758b7888c2dd1
+fingerprint=2e40cffd5d51058cf33e9083a5fa8957bb039c3074a0c9c4309ac2f0a974db05
 observation.sha256=b70badf841ffc29e7c9adb0c7d29b5c2b687a43a5bcdb0e85e065170d1f7551a
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m362-fence-collision-set
-fingerprint=731c34234418787c8d3f6470f192908011a37573c990417ac79bb00210cdc736
+fingerprint=16382e9da3916beda0c8c1aee6ab756bf0d46b302b61d0e83afcfb810521ebc5
 observation.sha256=5784076d8eb5c6e86478f102566067459f9c73c231b5f92141b25d65c79ae290
 source=refactor-equivalent

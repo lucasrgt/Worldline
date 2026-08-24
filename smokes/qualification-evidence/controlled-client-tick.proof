@@ -1,5 +1,5 @@
 schema=1
 id=controlled-client-tick
-fingerprint=8969ea3456fe7aab7aa168a74cc22d615da4502517f134b42c9580353a38f7d3
+fingerprint=6ca8ea7f35cc0c26050924e4c0ca9855ae942e7190613841cc4a814cdfd705ae
 observation.sha256=ac13115a73408c85eb80b931dc3004b4fd66b26a5512e8d4fb036eebf70ae780
 source=refactor-equivalent
