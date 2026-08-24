@@ -60,11 +60,13 @@ final class AdapterSplitPinCheck {
                 && current.equals(lock.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"));
         try {
-            Properties provider = ProviderDiscoveryPinCheck.manifest(
-                    Path.of("").toAbsolutePath().normalize());
+            Path root = Path.of("").toAbsolutePath().normalize();
+            Properties provider = ProviderDiscoveryPinCheck.manifest(root);
             return direct || ProviderDiscoveryPinCheck.follows(provider, id,
                     lock.getProperty(stem + "current_fingerprint"),
-                    lock.getProperty(stem + "evidence_sha256"), pin, current);
+                    lock.getProperty(stem + "evidence_sha256"), pin, current)
+                    || TrainPinCheck.carriesCurrent(
+                            TrainPinCheck.manifest(root), id, pin, current);
         } catch (Exception error) { return false; }
     }
 

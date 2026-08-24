@@ -84,10 +84,12 @@ final class BehaviorFamilyPinCheck {
         boolean direct = hash(lock.getProperty(stem + "prior_fingerprint"))
                 && current.equals(lock.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"));
-        try { return direct || TrainPinCheck.follows(TrainPinCheck.manifest(
-                Path.of("").toAbsolutePath().normalize()), id,
+        try { Path root = Path.of("").toAbsolutePath().normalize();
+            Properties train = TrainPinCheck.manifest(root);
+            return direct || TrainPinCheck.follows(train, id,
                 lock.getProperty(stem + "current_fingerprint"),
-                lock.getProperty(stem + "evidence_sha256"), pin, current); }
+                lock.getProperty(stem + "evidence_sha256"), pin, current)
+                || TrainPinCheck.carriesCurrent(train, id, pin, current); }
         catch (Exception error) { return false; }
     }
     static Properties manifest(Path root) throws Exception {
