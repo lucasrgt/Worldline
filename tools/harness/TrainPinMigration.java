@@ -97,7 +97,7 @@ final class TrainPinMigration {
             seal(lock, stem, "milestone", receipt.fingerprint, current, receipt.evidence);
             receipt(lock, stem, receipt);
             updated.add(new SmokePins.Entry(smoke.id, current, receipt.evidence,
-                    "refactor-equivalent"));
+                    source(current, receipt.fingerprint)));
         }
         int catalog = SmokeDiscovery.discover(root).size();
         require(imported > 0 && carried > 0 && executed + pending.size() == QUALIFICATIONS.size()
@@ -249,6 +249,16 @@ final class TrainPinMigration {
         lock.setProperty(stem + "kind", kind); lock.setProperty(stem + "prior_fingerprint", prior);
         lock.setProperty(stem + "current_fingerprint", current);
         lock.setProperty(stem + "evidence_sha256", evidence);
+    }
+    static void selfTest() {
+        require("executed".equals(source("same", "same")),
+                "exact milestone execution was downgraded");
+        require("refactor-equivalent".equals(source("current", "prior")),
+                "migrated milestone execution was overstated");
+        System.out.println("  train pin provenance self-test: passed");
+    }
+    private static String source(String current, String receipt) {
+        return current.equals(receipt) ? "executed" : "refactor-equivalent";
     }
     private static Properties load(Path path) throws Exception { Properties values = new Properties();
         try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) { values.load(reader); }

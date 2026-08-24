@@ -19,5 +19,6 @@ final class HarnessFeatureSelfTest {
         CacheRebuildDrill.selfTest();
         SmokeProductRootTest.execute();
         VerificationStageCache.selfTest();
+        TrainPinMigration.selfTest();
     }
 }
