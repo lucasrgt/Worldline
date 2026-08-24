@@ -53,10 +53,14 @@ final class SmokeInputFingerprint {
 
     private String compute(SmokeDiscovery.Entry smoke, boolean qualification) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        update(digest, qualification ? "worldline-smoke-input-v4" : "worldline-smoke-observation-v1");
+        boolean portable = qualification && LaneDifferential.portableQualification(root, smoke);
+        update(digest, qualification ? portable ? "worldline-smoke-input-v5-portable"
+                : "worldline-smoke-input-v4" : "worldline-smoke-observation-v1");
         update(digest, smoke.id); update(digest, smoke.runner);
-        update(digest, System.getProperty("java.runtime.version", System.getProperty("java.version")));
-        update(digest, System.getProperty("os.name")); update(digest, System.getProperty("os.arch"));
+        if (!portable) {
+            update(digest, System.getProperty("java.runtime.version", System.getProperty("java.version")));
+            update(digest, System.getProperty("os.name")); update(digest, System.getProperty("os.arch"));
+        }
         addProcessConfiguration(digest, source(root.resolve(smoke.runner)));
         if (qualification) add(digest, root.resolve("smokes").resolve(smoke.id));
         else addRuntimeInputs(digest, smoke.id);

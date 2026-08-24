@@ -81,12 +81,10 @@ final class TrainPinMigration {
                 continue;
             }
             if (prior != null) {
-                carried++; SmokePins.Entry currentPin = pins.match(smoke.id, current);
-                String evidence = currentPin == null ? prior.evidence() : currentPin.evidence();
-                seal(lock, stem, "baseline", prior.fingerprint(), current, evidence);
-                updated.add(currentPin != null ? currentPin : new SmokePins.Entry(
-                        smoke.id, current, evidence, current.equals(prior.fingerprint())
-                        ? prior.source() : "refactor-equivalent"));
+                carried++; SmokePins.Migration migration =
+                        pins.migrate(smoke, current, prior, predecessor, stem);
+                seal(lock, stem, "baseline", migration.prior(), current, migration.entry().evidence());
+                updated.add(migration.entry());
                 continue;
             }
             imported++; Imported receipt = "milestone".equals(predecessor.getProperty(stem + "kind"))
@@ -201,8 +199,8 @@ final class TrainPinMigration {
     }
 
     private static Imported predecessor(Properties lock, SmokePins pins,
-            SmokeDiscovery.Entry smoke, String current, String stem) {
-        SmokePins.Entry pin = pins.match(smoke.id, current);
+            SmokeDiscovery.Entry smoke, String current, String stem) throws Exception {
+        SmokePins.Entry pin = pins.migrationMatch(smoke, current);
         require(pin != null && pin.evidence().equals(required(lock, stem + "evidence_sha256")),
                 "invalid predecessor milestone proof: " + smoke.id);
         return new Imported(required(lock, stem + "prior_fingerprint"), pin.evidence(),

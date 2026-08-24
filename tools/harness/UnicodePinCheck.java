@@ -54,8 +54,7 @@ final class UnicodePinCheck {
             SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
         return carries(lock, id, pin, current)
-                && prior.equals(lock.getProperty(stem + "prior_fingerprint"))
-                && evidence.equals(lock.getProperty(stem + "evidence_sha256"));
+                && TrainPinCheck.continues(lock, id, prior, evidence);
     }
     private static int integer(Properties values, String key) {
         try { return Integer.parseInt(values.getProperty(key, "")); }

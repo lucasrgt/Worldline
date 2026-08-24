@@ -84,6 +84,12 @@ final class TrainPinCheck {
                 && evidence.equals(lock.getProperty(stem + "evidence_sha256"))
                 && pin.evidence().equals(evidence);
     }
+    static boolean continues(Properties lock, String id, String prior, String evidence) {
+        String stem = "smoke." + id + ".";
+        return evidence.equals(lock.getProperty(stem + "evidence_sha256"))
+                && (prior.equals(lock.getProperty(stem + "prior_fingerprint"))
+                || prior.equals(lock.getProperty(stem + "current_fingerprint")));
+    }
     static boolean transportsFile(Properties lock, Path root, String relative, String prior)
             throws Exception {
         for (int index = 0; index < integer(lock, "source.count"); index++) {

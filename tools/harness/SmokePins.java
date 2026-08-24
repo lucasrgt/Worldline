@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /** Reads and writes the reviewable, repository-tracked smoke qualification lock. */
 final class SmokePins {
@@ -37,6 +38,21 @@ final class SmokePins {
     Entry match(String id, String fingerprint) {
         Entry entry = entries.get(id);
         return entry != null && entry.fingerprint.equals(fingerprint) ? entry : null;
+    }
+    Entry migrationMatch(SmokeDiscovery.Entry smoke, String fingerprint) throws Exception {
+        return LaneDifferential.portableQualification(path.getParent().getParent(), smoke)
+                ? entry(smoke.id) : match(smoke.id, fingerprint);
+    }
+    Migration migrate(SmokeDiscovery.Entry smoke, String fingerprint, Entry baseline,
+            Properties predecessor, String stem) {
+        Entry current = match(smoke.id, fingerprint), carried = entry(smoke.id);
+        String evidence = current != null ? current.evidence
+                : carried == null ? baseline.evidence : carried.evidence;
+        String prior = evidence.equals(predecessor.getProperty(stem + "evidence_sha256"))
+                ? predecessor.getProperty(stem + "current_fingerprint") : baseline.fingerprint;
+        Entry updated = current != null ? current : new Entry(smoke.id, fingerprint, evidence,
+                fingerprint.equals(baseline.fingerprint) ? baseline.source : "refactor-equivalent");
+        return new Migration(updated, prior);
     }
     Entry verifiedMatch(String id, String fingerprint) throws Exception {
         Entry entry = match(id, fingerprint);
@@ -169,4 +185,5 @@ final class SmokePins {
             this(id, fingerprint, evidence, "", source);
         }
     }
+    record Migration(Entry entry, String prior) { }
 }

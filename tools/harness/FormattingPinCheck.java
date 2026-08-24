@@ -83,8 +83,7 @@ final class FormattingPinCheck {
             SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
         return carries(manifest, id, pin, current)
-                && prior.equals(manifest.getProperty(stem + "prior_fingerprint"))
-                && evidence.equals(manifest.getProperty(stem + "evidence_sha256"));
+                && TrainPinCheck.continues(manifest, id, prior, evidence);
     }
     static boolean transportsFile(Properties manifest, Path root, String relative, String prior)
             throws Exception {

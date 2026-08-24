@@ -11,6 +11,8 @@ import java.util.TreeMap;
 
 /** Records and seals one Windows/Linux official headless semantic differential. */
 final class LaneDifferential {
+    private static Path cachedRoot;
+    private static Boolean cachedPortable;
     private LaneDifferential() { }
     public static void main(String[] arguments) {
         try {
@@ -86,15 +88,30 @@ final class LaneDifferential {
         store(root.resolve("smokes/lane-portability.lock"), lock);
         System.out.println("server-headless portability sealed across Windows/Linux");
     }
-    static boolean portable(Path root) {
+    static synchronized boolean portable(Path root) {
+        root = root.toAbsolutePath().normalize();
+        if (root.equals(cachedRoot) && cachedPortable != null) return cachedPortable;
+        boolean result = false;
         try { Properties lock = load(root.resolve("smokes/lane-portability.lock"));
-            return "1".equals(lock.getProperty("schema"))
+            String head = lock.getProperty("windows.head", "");
+            Process ancestor = new ProcessBuilder("git", "merge-base", "--is-ancestor", head, "HEAD")
+                    .directory(root.toFile()).redirectErrorStream(true)
+                    .redirectOutput(ProcessBuilder.Redirect.DISCARD).start();
+            result = "1".equals(lock.getProperty("schema"))
                     && "server-headless".equals(lock.getProperty("lane"))
                     && "portable".equals(lock.getProperty("status"))
+                    && head.matches("[0-9a-f]{40,64}")
+                    && head.equals(lock.getProperty("linux.head"))
+                    && lock.getProperty("windows.tree", "").equals(lock.getProperty("linux.tree"))
                     && lock.getProperty("windows.semantic.sha256", "").matches("[0-9a-f]{64}")
                     && lock.getProperty("windows.semantic.sha256").equals(
-                            lock.getProperty("linux.semantic.sha256"));
-        } catch (Exception error) { return false; }
+                            lock.getProperty("linux.semantic.sha256"))
+                    && ancestor.waitFor() == 0;
+        } catch (Exception error) { result = false; }
+        cachedRoot = root; cachedPortable = result; return result;
+    }
+    static boolean portableQualification(Path root, SmokeDiscovery.Entry smoke) throws Exception {
+        return portable(root) && "server-headless".equals(lane(root, smoke));
     }
     static void selfTest() throws Exception {
         String signature = "a".repeat(64);

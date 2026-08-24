@@ -15,7 +15,9 @@ final class SmokePinEvidence {
 
     String write(SmokePins.Entry entry) throws Exception {
         byte[] bytes = bytes(entry); Path path = path(entry.id());
-        Files.createDirectories(path.getParent()); Files.write(path, bytes);
+        Files.createDirectories(path.getParent());
+        if (!Files.isRegularFile(path) || !java.util.Arrays.equals(Files.readAllBytes(path), bytes))
+            Files.write(path, bytes);
         return digest(bytes);
     }
 

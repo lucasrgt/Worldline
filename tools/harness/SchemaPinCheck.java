@@ -67,9 +67,7 @@ final class SchemaPinCheck {
                 manifest.getProperty(stem + "current_fingerprint"),
                 manifest.getProperty(stem + "evidence_sha256"), pin, current); }
         catch (Exception error) { return false; }
-        return (direct || successor)
-                && prior.equals(manifest.getProperty(stem + "prior_fingerprint"))
-                && evidence.equals(manifest.getProperty(stem + "evidence_sha256"));
+        return (direct || successor) && TrainPinCheck.continues(manifest, id, prior, evidence);
     }
     private static boolean hash(Properties values, String key) {
         return values.getProperty(key, "").matches("[0-9a-f]{64}");
