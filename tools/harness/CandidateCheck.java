@@ -147,11 +147,6 @@ final class CandidateCheck {
                     "client candidate requires the prepared mapped workspace");
             dependencies.add(headless); dependencies.add(mapped);
             dependencies.addAll(jarFiles(root.resolve("local/workspaces/b1.7.3/libraries")));
-        } else {
-            Path mapped = root.resolve("local/workspaces/b1.7.3/minecraft_server/bin");
-            require(Files.isRegularFile(mapped.resolve("net/minecraft/src/World.class")),
-                    "server candidate requires the prepared mapped workspace");
-            dependencies.add(mapped);
         }
         dependencies.addAll(outputs);
         Path output = build.resolve("scenario-classes"); Files.createDirectories(output);
