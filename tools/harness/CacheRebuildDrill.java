@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /** Reconstructs every static Gate cache in an isolated control directory and measures it. */
@@ -31,16 +32,18 @@ public final class CacheRebuildDrill {
         Path temporary = Files.createTempDirectory("worldline-cache-rebuild-");
         Path checkout = temporary.resolve("checkout"), control = temporary.resolve("control");
         Path cache = control.resolve("cache"); boolean registered = false;
+        String token = UUID.randomUUID().toString(); Files.createDirectories(control);
+        Files.writeString(control.resolve("cache-rebuild.marker"), token, StandardCharsets.UTF_8);
         Path reports = root.resolve(".worldline/reports"); Files.createDirectories(reports);
         Path log = reports.resolve("cache-rebuild.log"); long started = System.nanoTime();
         try {
             ProcessCapture.require(root, List.of("git", "worktree", "add", "--detach",
                     checkout.toString(), "HEAD"), 120); registered = true;
             Path gate = checkout.resolve("tools/harness/Gate.java");
-            run(List.of(javaTool(), gate.toString()), checkout, control, log,
+            run(List.of(javaTool(), gate.toString()), checkout, control, token, log,
                     policy.maximumSeconds + 60, false);
             run(List.of(javaTool(), gate.toString(), "--cache-doctor"), checkout,
-                    control, log, 120, true);
+                    control, token, log, 120, true);
             long elapsed = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - started);
             long entries = cacheEntries(cache), bytes = SafeTreeDelete.size(cache);
             require(entries >= policy.minimumEntries, "cold cache entry census is incomplete");
@@ -58,13 +61,14 @@ public final class CacheRebuildDrill {
         }
     }
 
-    private void run(List<String> command, Path directory, Path control, Path log, long seconds,
-            boolean append) throws Exception {
+    private void run(List<String> command, Path directory, Path control, String token, Path log,
+            long seconds, boolean append) throws Exception {
         ProcessBuilder builder = new ProcessBuilder(command).directory(directory.toFile())
                 .redirectErrorStream(true).redirectOutput(append
                         ? ProcessBuilder.Redirect.appendTo(log.toFile())
                         : ProcessBuilder.Redirect.to(log.toFile()));
         builder.environment().put("WORLDLINE_CONTROL_DIR", control.toString());
+        builder.environment().put("WORLDLINE_CACHE_REBUILD_TOKEN", token);
         builder.environment().put("WORLDLINE_SELF_TEST_CACHE", "off");
         Process process = builder.start();
         if (!process.waitFor(seconds, TimeUnit.SECONDS)) {

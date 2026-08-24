@@ -12,19 +12,33 @@ final class GateLatencyCheck {
     static String enforce(Path root, long elapsedMillis) throws IOException {
         VerificationStageCache.Metrics metrics = VerificationStageCache.metrics();
         if (metrics.restored() + metrics.executed() == 0) return "not-applicable";
-        Properties values = new Properties();
+        Properties values = new Properties(); String rebuild = System.getenv("WORLDLINE_CACHE_REBUILD_TOKEN");
         Path policy = root.resolve("quality/gate-latency.properties");
         try (Reader reader = Files.newBufferedReader(policy, StandardCharsets.UTF_8)) {
             values.load(reader);
         }
         require("1".equals(required(values, "schema")), "unsupported gate latency schema");
-        String mode = metrics.executed() == 0 ? "hot" : "cold";
-        long limit = Long.parseLong(required(values, "slo." + mode + ".millis"));
+        String mode = rebuild == null || rebuild.isBlank()
+                ? metrics.executed() == 0 ? "hot" : "cold" : "rebuild";
+        long limit = mode.equals("rebuild") ? rebuildLimit(root, rebuild)
+                : Long.parseLong(required(values, "slo." + mode + ".millis"));
         require(elapsedMillis < limit, mode + " gate latency SLO exceeded: "
                 + elapsedMillis + "ms >= " + limit + "ms");
         validateTrend(root, values);
         System.out.println("  gate latency: " + mode + " " + elapsedMillis + "ms < " + limit + "ms");
         return mode;
+    }
+
+    private static long rebuildLimit(Path root, String token) throws IOException {
+        String control = System.getenv("WORLDLINE_CONTROL_DIR");
+        require(control != null && !control.isBlank(), "rebuild drill lacks isolated control");
+        Path marker = Path.of(control).toAbsolutePath().normalize().resolve("cache-rebuild.marker");
+        require(Files.isRegularFile(marker) && Files.readString(marker, StandardCharsets.UTF_8)
+                .trim().equals(token), "rebuild drill token is not authorized");
+        Properties policy = StrictProperties.load(root.resolve("quality/cache-rebuild-baseline.properties"));
+        String platform = System.getProperty("os.name", "").toLowerCase().contains("win")
+                ? "windows" : "linux";
+        return Long.parseLong(required(policy, "maximum.seconds." + platform)) * 1_000L;
     }
 
     private static void validateTrend(Path root, Properties values) throws IOException {
