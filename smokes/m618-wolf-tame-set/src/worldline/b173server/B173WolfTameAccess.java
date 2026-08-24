@@ -16,6 +16,7 @@ import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteMobMovement;
 import worldline.api.RemoteMobSpawn;
 import worldline.test.WorldlineSmokeAwait;
+import worldline.testkit.BoundedAttempts;
 
 /** Smoke-local bounded Packet7 tame plus Packet40/NBT owner-collar metadata. */
 public final class B173WolfTameAccess {
@@ -39,7 +40,7 @@ public final class B173WolfTameAccess {
         int slot = find(client.inventory(), BONE);
         if (slot < 0) throw new IllegalStateException("bone 352 absent from hotbar");
         client.selectHeldSlot(slot);
-        for (int attempts = 1; attempts <= maximum; attempts++) {
+        BoundedAttempts.Result<Integer> result = BoundedAttempts.until(maximum, attempts -> {
             use(client, entity);
             int status = WorldlineSmokeAwait.awaitCheckedEntity(client,
                     () -> Integer.valueOf(client.channel().inbound().mobs().takeTame(entity)),
@@ -47,14 +48,13 @@ public final class B173WolfTameAccess {
             if (status != 6 && status != 7)
                 throw new IllegalStateException("wolf Packet38 tame status drift " + status);
             awaitBones(client, maximum - attempts);
-            if (status == 6) continue;
-            int flags = WorldlineSmokeAwait.awaitCheckedEntity(client,
-                    () -> Integer.valueOf(client.channel().inbound().mobs().size(entity)),
-                    value -> (value.intValue() & 4) != 0, "wolf Packet40 tamed bit", 20).intValue();
-            if ((flags & 4) == 0) throw new IllegalStateException("wolf Packet40 tamed bit absent");
-            return attempts;
-        }
-        throw new IllegalStateException("wolf did not tame within " + maximum + " bones");
+            return Integer.valueOf(status);
+        }, status -> status.intValue() == 7);
+        int flags = WorldlineSmokeAwait.awaitCheckedEntity(client,
+                () -> Integer.valueOf(client.channel().inbound().mobs().size(entity)),
+                value -> (value.intValue() & 4) != 0, "wolf Packet40 tamed bit", 20).intValue();
+        if ((flags & 4) == 0) throw new IllegalStateException("wolf Packet40 tamed bit absent");
+        return result.attempts();
     }
 
     private static void awaitBones(B173WireClient client, int expected) {
