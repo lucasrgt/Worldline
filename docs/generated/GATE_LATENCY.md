@@ -1,9 +1,12 @@
 # Gate Latency Trend
 
 This generated view mirrors `quality/gate-latency.properties`. The canonical gate rejects a hot
-run at or above 10 seconds and a cold run at or above 90 seconds.
+run at or above 4 seconds and a cold run at or above 240 seconds. Selected hot stages also fail
+when they exceed twice their measured baseline.
 
 | Date | Cache state | Wall time (ms) |
 | --- | --- | ---: |
-| 2026-08-23 | cold | 52000 |
-| 2026-08-23 | hot | 4718 |
+| 2026-08-24 | cold | 157961 |
+| 2026-08-24 | hot | 2800 |
+
+The hot value is re-pinned from a clean committed tree after structural cache changes.

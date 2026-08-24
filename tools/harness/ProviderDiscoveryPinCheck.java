@@ -17,7 +17,8 @@ final class ProviderDiscoveryPinCheck {
                         && integer(lock, "added.count") == 12
                         && integer(lock, "smoke.count") == 521
                         && integer(lock, "pending.count") == 4
-                        && integer(lock, "catalog.count") == 526,
+                        && integer(lock, "catalog.count") == integer(lock, "smoke.count")
+                                + integer(lock, "pending.count") + 1,
                 "invalid provider-discovery migration");
         sources(root, lock, "modified", 9, true); sources(root, lock, "added", 12, false);
         SmokePins pins = new SmokePins(root); pins.validateEvidence();

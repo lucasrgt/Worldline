@@ -1,8 +1,8 @@
 # Worldline TestKit 0.3 release qualification boundary v1
 schema=1
-version=0.3.0
+version=0.3.1
 release.path=release/testkit.properties
-release.sha256=6cee90658fef2d5f9809aeac63e3be4a74ba0effb27de6e88edfc89ed1bd30f7
+release.sha256=681f137b7b16c7ecd52ce7db00123a71a8c7514121fbf8c49d1ea49ae885c993
 pending.count=4
 pending.smokes=m7-mod-loading,m8-mod-version-diff,m9-scenario-minimization,testkit-cycle
 source.path=tools/smoke/TestKitCycle.java

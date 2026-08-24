@@ -157,7 +157,9 @@ final class LaneDifferential {
     }
 
     static boolean portableQualification(Path root, SmokeDiscovery.Entry smoke) throws Exception {
-        return portable(root) && SmokeLane.SERVER.equals(SmokeLane.classify(root, smoke));
+        String lane = SmokeLane.classify(root, smoke);
+        return portable(root) && SmokeLane.SERVER.equals(lane)
+                || !SmokeLane.SERVER.equals(lane) && LaneEvidence.portable(root, smoke.id);
     }
 
     static void selfTest() throws Exception {

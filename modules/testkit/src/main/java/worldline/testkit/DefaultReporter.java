@@ -14,10 +14,10 @@ public class DefaultReporter implements TestReporter {
         this.output = output; this.unicode = unicode;
     }
     @Override public void runStarted(TestPlan plan, int selected) {
-        output.println(" WORLDLINE TEST  v0.3.0  " + selected + " selected"); output.println();
+        output.println(" WORLDLINE TEST  v0.3.1  " + selected + " selected"); output.println();
     }
     @Override public void runStarted(List<TestPlan> plans, int selected) {
-        output.println(" WORLDLINE TEST  v0.3.0  " + plans.size() + " files | "
+        output.println(" WORLDLINE TEST  v0.3.1  " + plans.size() + " files | "
                 + selected + " selected"); output.println();
     }
     @Override public void testFinished(TestResult result) {

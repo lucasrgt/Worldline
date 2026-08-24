@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 
 /** Builds deterministic ignored TestKit 0.x authoring and runner distributions. */
 public final class TestKitPackage {
-    private static final String VERSION = "0.3.0";
+    private static final String VERSION = "0.3.1";
     private static final String GROUP = "io.github.lucasrgt.worldline";
     private static final List<String> API = Arrays.asList("api", "testmodel", "testapi");
     private static final List<String> RUNNER = Arrays.asList("optimization", "api", "invariants",

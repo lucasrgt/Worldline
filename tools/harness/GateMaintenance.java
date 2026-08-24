@@ -35,6 +35,7 @@ final class GateMaintenance {
         case "--migrate-train-pins" -> command("TrainPinMigration", "--apply", 600);
         case "--refresh-documentation" -> command("DocumentationCatalog", "--write", 600);
         case "--seal-lane-portability" -> command("LaneDifferential", "--seal", 60);
+        case "--seal-client-lane-portability" -> command("LaneEvidence", "--seal", 60);
         case "--module-cache-doctor", "--cache-doctor" -> command("SharedCacheMaintenance", "doctor", 600);
         case "--module-cache-gc", "--cache-gc" -> command("SharedCacheMaintenance", "gc", 600);
         case "--cache-rebuild-drill" -> command("CacheRebuildDrill", "run", 600);

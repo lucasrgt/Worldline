@@ -64,7 +64,7 @@ final class WorldlineProjectInit {
                 + "rootProject.name = \"" + safe(name) + "-worldline-tests\"\n";
     }
     private static String build(Options options) {
-        return "plugins { id(\"io.github.lucasrgt.worldline.test\") version \"0.3.0\" }\n\n"
+        return "plugins { id(\"io.github.lucasrgt.worldline.test\") version \"0.3.1\" }\n\n"
                 + "worldline {\n    runtime.set(\"b1.7.3\")\n    oracleProfile.set(\"b173-local\")\n"
                 + "    noRuntime.set(" + options.hostOnly + ")\n}\n";
     }

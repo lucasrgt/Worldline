@@ -21,6 +21,7 @@ final class IntegrationToolsCheck {
             compile.addAll(paths.filter(path -> path.toString().endsWith(".java")).sorted()
                     .map(Path::toString).collect(Collectors.toList()));
         }
+        compile.add(root.resolve("tools/harness/SafeTreeDelete.java").toString());
         require(run(root, compile, 120) == 0, "integration tools did not compile");
         selfTest(output);
         System.out.println("  integration tools: compiled and self-tested");
@@ -115,6 +116,7 @@ final class IntegrationToolsCheck {
                             && Files.readString(repository.resolve(".worldline/reports/worktrees.json"))
                                     .contains("\"branch\":\"codex/milestone-m6-husk\",\"exists\":true,"
                                             + "\"dirty\":true,\"integrated\":true,\"husk\":true,"
+                                            + "\"retracted\":false,"
                                             + "\"milestoneDirty\":true,\"archiveEligible\":false"),
                     "husk or milestone-dirty worktree was silently archive-eligible");
             git(repository, "worktree", "remove", "--force", huskTree.toString());

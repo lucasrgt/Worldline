@@ -21,6 +21,7 @@ final class VerificationStageCache {
     private final Path root, objects;
     private final boolean countMetrics;
     private final Map<Path, String> inputDigests = new HashMap<>();
+    private Boolean cleanTree;
 
     VerificationStageCache(Path root) {
         this.root = root; this.countMetrics = true;
@@ -41,6 +42,31 @@ final class VerificationStageCache {
             return;
         }
         action.run(); store(proof, stage, fingerprint); CacheUsage.touch(proof);
+        if (countMetrics) executedStages++;
+    }
+
+    void executeDirectory(String stage, List<Path> inputs, Path output,
+            VerifyReport.Checked action) throws Exception {
+        String fingerprint = fingerprint(stage, inputs);
+        Path object = objects.resolve(stage).resolve(fingerprint);
+        Path proof = object.resolve("proof.properties"), snapshot = object.resolve("output");
+        if (valid(proof, fingerprint) && Files.isDirectory(snapshot)) {
+            restore(snapshot, output); CacheUsage.touch(proof);
+            if (countMetrics) restoredStages++;
+            System.out.println("  verification artifact restored: " + stage); return;
+        }
+        action.run(); require(Files.isDirectory(output), "stage produced no output: " + stage);
+        Path temporary = object.resolveSibling(object.getFileName() + ".tmp-"
+                + ProcessHandle.current().pid() + "-" + System.nanoTime());
+        copy(output, temporary.resolve("output"));
+        store(temporary.resolve("proof.properties"), stage, fingerprint);
+        try { Files.move(temporary, object, StandardCopyOption.ATOMIC_MOVE); }
+        catch (java.nio.file.FileAlreadyExistsException ignored) { SafeTreeDelete.delete(temporary); }
+        catch (AtomicMoveNotSupportedException error) {
+            try { Files.move(temporary, object); }
+            catch (java.nio.file.FileAlreadyExistsException ignored) { SafeTreeDelete.delete(temporary); }
+        }
+        CacheUsage.touch(object.resolve("proof.properties"));
         if (countMetrics) executedStages++;
     }
 
@@ -109,6 +135,8 @@ final class VerificationStageCache {
 
     private String inputDigest(Path input) throws Exception {
         String cached = inputDigests.get(input); if (cached != null) return cached;
+        String tracked = trackedDigest(input);
+        if (tracked != null) { inputDigests.put(input, tracked); return tracked; }
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         if (!Files.exists(input)) update(digest, "missing");
         else if (Files.isRegularFile(input)) digest.update(Files.readAllBytes(input));
@@ -124,6 +152,27 @@ final class VerificationStageCache {
         }
         String value = HexFormat.of().formatHex(digest.digest()); inputDigests.put(input, value);
         return value;
+    }
+
+    private String trackedDigest(Path input) throws Exception {
+        if (!input.startsWith(root)) return null;
+        if (cleanTree == null) {
+            String status = capture(List.of("git", "status", "--porcelain", "--untracked-files=all"));
+            cleanTree = status != null && status.isBlank();
+        }
+        if (!cleanTree) return null;
+        String relative = root.relativize(input).toString().replace('\\', '/');
+        Process process = new ProcessBuilder("git", "rev-parse", "HEAD:" + relative)
+                .directory(root.toFile()).redirectErrorStream(true).start();
+        String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8).trim();
+        return process.waitFor() == 0 && output.matches("[0-9a-f]{40,64}") ? "git:" + output : null;
+    }
+
+    private String capture(List<String> command) throws Exception {
+        Process process = new ProcessBuilder(command).directory(root.toFile())
+                .redirectErrorStream(true).start();
+        String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        return process.waitFor() == 0 ? output : null;
     }
 
     private boolean valid(Path proof, String fingerprint) {
@@ -148,6 +197,24 @@ final class VerificationStageCache {
         }
         try { Files.move(temporary, proof, StandardCopyOption.ATOMIC_MOVE); }
         catch (AtomicMoveNotSupportedException error) { Files.move(temporary, proof); }
+    }
+
+    private static void restore(Path snapshot, Path output) throws Exception {
+        if (Files.exists(output, java.nio.file.LinkOption.NOFOLLOW_LINKS)) SafeTreeDelete.delete(output);
+        copy(snapshot, output);
+    }
+
+    private static void copy(Path source, Path target) throws Exception {
+        Files.createDirectories(target);
+        for (Path path : SafeTreeDelete.paths(source)) {
+            require(!SafeTreeDelete.linkLike(path), "cached stage contains a filesystem link: " + path);
+            Path destination = target.resolve(source.relativize(path).toString());
+            if (Files.isDirectory(path)) Files.createDirectories(destination);
+            else if (Files.isRegularFile(path)) {
+                Files.createDirectories(destination.getParent());
+                Files.copy(path, destination, StandardCopyOption.REPLACE_EXISTING);
+            }
+        }
     }
 
     private String label(Path path) {

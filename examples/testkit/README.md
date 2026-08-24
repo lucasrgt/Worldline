@@ -20,11 +20,11 @@ java tools/replay/Replay.java test run .worldline/examples/testkit-classes --wor
 ```
 
 `VanillaBehaviorSpec` demonstrates `WorldlineBehavior`, mod evidence, and an
-exact frozen vanilla expectation. The packaged 0.3.0 runner can list every
+exact frozen vanilla expectation. The packaged 0.3.1 runner can list every
 public identity without starting Minecraft:
 
 ```text
-java -jar worldline-test-runner-0.3.0.jar behaviors list
+java -jar worldline-test-runner-0.3.1.jar behaviors list
 ```
 
 Run once with `-u` to create the demonstration snapshot. Generated classes,

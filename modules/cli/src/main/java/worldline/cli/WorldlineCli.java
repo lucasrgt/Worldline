@@ -29,6 +29,8 @@ public final class WorldlineCli {
                 return WorldlineProjectDoctor.run(Arrays.copyOfRange(arguments, 1, arguments.length), output);
             if ("migrate".equals(arguments[0]))
                 return WorldlineProjectMigrate.run(Arrays.copyOfRange(arguments, 1, arguments.length), output);
+            if ("verify-install".equals(arguments[0]))
+                return InstallVerifier.run(Arrays.copyOfRange(arguments, 1, arguments.length), output);
             if ("test".equals(arguments[0]))
                 return TestCommand.run(arguments, output, error);
             if (arguments.length == 2 && "replay".equals(arguments[0]))
@@ -120,6 +122,7 @@ public final class WorldlineCli {
         error.println("usage: worldline init [--runtime=b1.7.3] [--loader=NAME] [--template=NAME] [--host-only]");
         error.println("   or: worldline doctor [tests/worldline]");
         error.println("   or: worldline migrate [--root=PATH]");
+        error.println("   or: worldline verify-install [distribution-directory]");
         error.println("usage: worldline replay <bundle.wlrb>");
         error.println("   or: worldline trace show <trace.wltrace>");
         error.println("   or: worldline trace diff <left.wltrace> <right.wltrace>");

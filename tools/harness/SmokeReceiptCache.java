@@ -35,7 +35,9 @@ final class SmokeReceiptCache {
         this.logs = root.resolve(".worldline/smoke-logs");
     }
 
-    String fingerprint(SmokeDiscovery.Entry smoke) throws Exception { return fingerprints.compute(smoke); }
+    String fingerprint(SmokeDiscovery.Entry smoke) throws Exception {
+        return fingerprints.computeExecution(smoke);
+    }
 
     boolean restore(SmokeDiscovery.Entry smoke, String fingerprint) throws Exception {
         if (!reuse) return false;
@@ -129,7 +131,7 @@ final class SmokeReceiptCache {
     private void validate(SmokeDiscovery.Entry smoke, String head, String tree,
             MessageDigest aggregate) throws Exception {
         Properties attestation = load(reports.resolve(smoke.id + ".properties"));
-        String fingerprint = fingerprints.compute(smoke);
+        String fingerprint = fingerprints.computeExecution(smoke);
         require("passed".equals(attestation.getProperty("status"))
                 && smoke.id.equals(attestation.getProperty("id"))
                 && fingerprint.equals(attestation.getProperty("fingerprint"))
@@ -144,7 +146,7 @@ final class SmokeReceiptCache {
     }
 
     SmokePins.Entry availablePin(SmokeDiscovery.Entry smoke) throws Exception {
-        String fingerprint = fingerprints.compute(smoke);
+        String fingerprint = fingerprints.computeExecution(smoke);
         Path proof = proof(smoke.id, fingerprint), evidence = evidence(smoke.id, fingerprint);
         if (validProof(smoke.id, fingerprint, proof, evidence)) return new SmokePins.Entry(
                 smoke.id, fingerprint, load(proof).getProperty("evidence.sha256"), "executed");

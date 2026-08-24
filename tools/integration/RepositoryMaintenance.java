@@ -1,9 +1,6 @@
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -69,7 +66,7 @@ public final class RepositoryMaintenance {
         try {
             byte[] content = new byte[16_384];
             for (int index = 0; index < 128; index++) Files.write(probe.resolve(index + ".bin"), content);
-        } finally { deleteTree(probe); }
+        } finally { SafeTreeDelete.delete(probe); }
         long millis = Math.max(1L, (System.nanoTime() - started) / 1_000_000L);
         System.out.println("defender.current-path-probe.ms=" + millis + ";files=128;bytes=2097152");
         String escaped = root.toString().replace("'", "''");
@@ -102,16 +99,6 @@ public final class RepositoryMaintenance {
     }
 
     private static String oneLine(String value) { return value.replaceAll("\\s+", " ").trim(); }
-    private static void deleteTree(Path root) throws Exception {
-        Files.walkFileTree(root, new SimpleFileVisitor<>() {
-            @Override public FileVisitResult visitFile(Path file, BasicFileAttributes attributes)
-                    throws java.io.IOException { Files.delete(file); return FileVisitResult.CONTINUE; }
-            @Override public FileVisitResult postVisitDirectory(Path directory, java.io.IOException error)
-                    throws java.io.IOException {
-                if (error != null) throw error; Files.delete(directory); return FileVisitResult.CONTINUE;
-            }
-        });
-    }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);
     }

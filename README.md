@@ -216,7 +216,7 @@ npm run dev
 ### Create a TestKit project
 
 ```text
-java -jar worldline-test-runner-0.3.0.jar init
+java -jar worldline-test-runner-0.3.1.jar init
 tests/worldline/gradlew.bat worldlineDoctor worldlineTest
 ```
 
@@ -233,7 +233,7 @@ Discover the stable public behavior catalog before authoring an evidence
 comparison:
 
 ```text
-java -jar worldline-test-runner-0.3.0.jar behaviors list
+java -jar worldline-test-runner-0.3.1.jar behaviors list
 ```
 
 `WorldlineBehavior`, `WorldlineEvidence`, and

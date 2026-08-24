@@ -16,7 +16,9 @@ final class BehaviorFamilyPinCheck {
         Properties lock = manifest(root); Map<String, String> assignments = BehaviorFamilyAssignments.values();
         require("1".equals(lock.getProperty("schema")) && integer(lock, "assignment.count") == 109
                         && integer(lock, "source.count") == 4 && integer(lock, "smoke.count") == 520
-                        && integer(lock, "pending.count") == 5 && integer(lock, "catalog.count") == 526,
+                        && integer(lock, "pending.count") == 5
+                        && integer(lock, "catalog.count") == integer(lock, "smoke.count")
+                                + integer(lock, "pending.count") + 1,
                 "invalid behavior-family migration");
         for (int index = 0; index < 4; index++) {
             String stem = "source." + index + ".", relative = required(lock, stem + "path");
@@ -57,7 +59,9 @@ final class BehaviorFamilyPinCheck {
                         "behavior-family proof drift: " + smoke.id);
             }
         }
-        require(catalog == 526 && carried == 520 && integer(lock, "smoke.changed") > 0,
+        require(catalog == integer(lock, "catalog.count")
+                        && carried == integer(lock, "smoke.count")
+                        && integer(lock, "smoke.changed") > 0,
                 "behavior-family proof census drift");
         System.out.println("  behavior-family proof transport: 109 assignments, " + carried + " carried");
     }

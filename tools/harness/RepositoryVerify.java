@@ -131,8 +131,9 @@ final class RepositoryVerify {
         RepositoryStageInputs inputs = new RepositoryStageInputs(root);
         report.step("configuration", config::load);
         report.step("gate-self-test", () -> new HarnessSelfTestCache(root).execute());
-        report.step("smoke-discovery", () -> run(Arrays.asList(
-                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "SmokeDiscoveryCheck")));
+        report.step("smoke-discovery", () -> stages.execute("smoke-discovery",
+                inputs.smokeDiscovery(), () -> run(Arrays.asList(
+                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "SmokeDiscoveryCheck"))));
         cachedProcess(stages, inputs.harness(), "smoke-cache-self-test", "SmokeReceiptCacheTest");
         cachedProcess(stages, inputs.harness(), "smoke-retry-self-test", "SmokeRetryTest");
         cachedProcess(stages, inputs.harness(), "test-cache-self-test", "TestReceiptCacheTest");
@@ -140,10 +141,14 @@ final class RepositoryVerify {
         cachedProcess(stages, inputs.harness(), "fair-lock-self-test", "FairFileLeaseTest");
         cachedProcess(stages, inputs.harness(), "pre-push-self-test", "PrePushCheckTest");
         cachedProcess(stages, inputs.harness(), "verify-summary-self-test", "VerifySummaryTest");
-        report.step("harness-feature-self-tests", () -> stages.execute("harness-feature-self-tests",
-                inputs.harnessFeatures(), HarnessFeatureSelfTest::execute));
-        report.step("release", () -> run(Arrays.asList(
-                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "ReleaseCheck")));
+        report.step("harness-core-self-tests", () -> stages.execute("harness-core-self-tests",
+                inputs.harnessCoreFeatures(), HarnessFeatureSelfTest::core));
+        report.step("harness-smoke-self-tests", () -> stages.execute("harness-smoke-self-tests",
+                inputs.harnessSmokeFeatures(), HarnessFeatureSelfTest::smoke));
+        report.step("harness-aero-self-tests", () -> stages.execute("harness-aero-self-tests",
+                inputs.harnessAeroFeatures(), HarnessFeatureSelfTest::aero));
+        report.step("release", () -> stages.execute("release", inputs.release(), () -> run(Arrays.asList(
+                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "ReleaseCheck"))));
         report.step("optimization", () -> stages.execute("optimization", inputs.optimization(), () -> {
             run(Arrays.asList("java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"),
                     "OptimizationCatalogCheckTest"));
@@ -175,6 +180,16 @@ final class RepositoryVerify {
         report.step("smoke-runners", () -> new SmokeRunnerBuild(root, build).compile());
         List<Path> outputs = report.value("modules",
                 () -> new ModuleBuild(root, build, config.values(), modules).compileAll());
+        report.step("release-artifacts", () -> {
+            Path distribution = root.resolve(".worldline/dist/testkit");
+            stages.executeDirectory("release-artifacts", inputs.testKitArtifacts(), distribution,
+                    () -> {
+                        if (Files.exists(distribution, java.nio.file.LinkOption.NOFOLLOW_LINKS))
+                            SafeTreeDelete.delete(distribution);
+                        run(Arrays.asList("java", "tools/testkit/TestKitPackage.java"));
+                    });
+            TestKitReleasePinCheck.validateDirectory(root, distribution);
+        });
         if (requireLocalArtifacts) report.step("mapping-batches",
                 () -> verifyMappingBatches(outputs, modules));
         report.step("portable-adapters", () -> stages.execute("portable-adapters", inputs.adapters(), () -> {

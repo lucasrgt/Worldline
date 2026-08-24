@@ -1,10 +1,10 @@
-import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.util.HexFormat;
 import java.util.Properties;
+import java.util.jar.JarFile;
 
 /** Validates the static TestKit 0.3 release boundary without claiming runtime qualification. */
 final class TestKitReleasePinCheck {
@@ -12,12 +12,13 @@ final class TestKitReleasePinCheck {
     static void execute(Path root) throws Exception {
         Properties lock = manifest(root), release = load(root.resolve(required(lock, "release.path")));
         require("1".equals(lock.getProperty("schema"))
-                        && "0.3.0".equals(lock.getProperty("version"))
+                        && lock.getProperty("version", "").matches("0[.]3[.][0-9]+")
                         && lock.getProperty("version").equals(release.getProperty("version"))
                         && "release-ready".equals(release.getProperty("status"))
                         && digest(root.resolve(required(lock, "release.path"))).equals(
                                 required(lock, "release.sha256")),
                 "invalid TestKit release boundary");
+        validateArtifactLock(root, release);
         for (String key : new String[] {"source", "descriptor", "map"}) {
             String relative = required(lock, key + ".path");
             Path path = root.resolve(relative);
@@ -57,12 +58,54 @@ final class TestKitReleasePinCheck {
         }
         return false;
     }
-    private static Properties load(Path path) throws Exception { Properties values = new Properties();
-        try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-            values.load(reader); } return values; }
+    private static void validateArtifactLock(Path root, Properties release) throws Exception {
+        Properties artifacts = load(root.resolve("release/testkit-artifacts.lock"));
+        require("1".equals(artifacts.getProperty("schema"))
+                        && release.getProperty("version").equals(artifacts.getProperty("version")),
+                "invalid TestKit artifact lock");
+        int entries = 0;
+        for (String artifact : new String[] {"api", "runner"}) {
+            String prefix = "artifact." + artifact + ".";
+            int count = integer(artifacts, prefix + "entry.count"); entries += count;
+            require(integer(artifacts, prefix + "class.count") > 0
+                            && Long.parseLong(required(artifacts, prefix + "bytes")) > 0
+                            && hash(required(artifacts, prefix + "sha256")),
+                    "invalid TestKit artifact metadata: " + artifact);
+            long locked = artifacts.stringPropertyNames().stream()
+                    .filter(key -> key.startsWith(prefix + "entry.")).filter(key -> {
+                        String value = artifacts.getProperty(key); return hash(value); }).count();
+            require(locked == count, "incomplete TestKit per-entry lock: " + artifact);
+        }
+        require(artifacts.size() == entries + 12, "unexpected TestKit artifact lock fields");
+    }
+    static void validateDirectory(Path root, Path output) throws Exception {
+        Properties lock = load(root.resolve("release/testkit-artifacts.lock"));
+        for (String artifact : new String[] {"api", "runner"}) {
+            String prefix = "artifact." + artifact + ".";
+            Path jar = output.resolve(required(lock, prefix + "file"));
+            require(Files.isRegularFile(jar) && Files.size(jar) == Long.parseLong(
+                    required(lock, prefix + "bytes")), "TestKit artifact size drift: " + artifact);
+            require(binaryDigest(jar).equals(required(lock, prefix + "sha256")),
+                    "TestKit artifact hash drift: " + artifact);
+            try (JarFile archive = new JarFile(jar.toFile())) {
+                var entries = archive.stream().filter(entry -> !entry.isDirectory()).toList();
+                require(entries.size() == integer(lock, prefix + "entry.count"),
+                        "TestKit artifact entry census drift: " + artifact);
+                for (var entry : entries) try (var input = archive.getInputStream(entry)) {
+                    require(HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
+                            .digest(input.readAllBytes())).equals(required(lock,
+                                    prefix + "entry." + entry.getName())),
+                            "TestKit artifact entry drift: " + entry.getName());
+                }
+            }
+        }
+    }
+    private static Properties load(Path path) throws Exception { return StrictProperties.load(path); }
     private static String digest(Path path) throws Exception { return HexFormat.of().formatHex(
             MessageDigest.getInstance("SHA-256").digest(Files.readString(path, StandardCharsets.UTF_8)
                     .replace("\r\n", "\n").getBytes(StandardCharsets.UTF_8))); }
+    private static String binaryDigest(Path path) throws Exception { return HexFormat.of().formatHex(
+            MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(path))); }
     private static boolean hash(String value) { return value != null && value.matches("[0-9a-f]{64}"); }
     private static int integer(Properties values, String key) {
         try { return Integer.parseInt(required(values, key)); }

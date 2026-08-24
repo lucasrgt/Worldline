@@ -65,6 +65,15 @@ jobs:
             .worldline/dist/testkit/worldline-test-api-*.jar
             .worldline/dist/testkit/worldline-test-runner-*.jar
             .worldline/dist/testkit/checksums.properties
+      - name: Revalidate published release artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          destination="$RUNNER_TEMP/worldline-published-testkit"
+          mkdir -p "$destination"
+          gh release download "$GITHUB_REF_NAME" --dir "$destination" --clobber
+          java tools/testkit/TestKitReleaseCheck.java --verify-directory "$destination"
       - name: Publish Gradle plugin
         env:
           GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}

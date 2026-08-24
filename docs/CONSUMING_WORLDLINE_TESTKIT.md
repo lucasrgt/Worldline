@@ -8,23 +8,27 @@ use JDK 21, while test sources remain ordinary Java 8.
 
 | Component | Supported release | Contract |
 | --- | --- | --- |
-| Worldline TestKit | 0.3.0 | Immutable tag `testkit-v0.3.0` |
+| Worldline TestKit | 0.3.1 | Release-ready candidate; publication remains tag-authorized |
 | Worldline core | 1.463.x | Release tip M625; stable behavior identities, not milestone numbers |
 | Minecraft oracle | Beta 1.7.3 | Hash-verified official client; server only for server scenarios |
 | Spec bytecode | Java 8 | `--release 8`, warnings as errors |
-| Runner JDK | 21 | Tested with the repository-pinned CI toolchain |
-| Gradle | 8.14.4 | Wrapper generated and checksum pinned by `init` |
+| Runner JDK | 21 through 25 | JDK 21 is the floor; both endpoints run the external consumer CI |
+| Gradle | 8.14.4 | Supported floor and pinned wrapper; older Gradle releases are not claimed |
 
-The release contains `worldline-test-api-0.3.0.jar` for authoring and
-`worldline-test-runner-0.3.0.jar` for discovery and execution. Both artifacts
+The candidate contains `worldline-test-api-0.3.1.jar` for authoring and
+`worldline-test-runner-0.3.1.jar` for discovery and execution. Both artifacts
 are bound to generated SHA-256 values. Official Minecraft JARs are never
 bundled; provide legitimate copies through the ignored local oracle directory
 or a private CI artifact.
 
+The 0.3.1 TestKit runner adds `verify-install`, which prints and compares the
+installed artifact SHA-256 values with the release-hosted pins. It fails on a
+missing or altered artifact without rewriting the immutable 0.3.0 release.
+
 ## Create a project
 
 ```text
-java -jar worldline-test-runner-0.3.0.jar init
+java -jar worldline-test-runner-0.3.1.jar init
 tests/worldline/gradlew.bat worldlineDoctor worldlineTest
 ```
 
@@ -70,3 +74,8 @@ For a host-only suite, omit the oracle download and set `noRuntime.set(true)`
 in `tests/worldline/build.gradle.kts`. The complete configuration, oracle
 precedence, templates, and migration path are documented in
 [`GRADLE_TESTKIT.md`](GRADLE_TESTKIT.md).
+
+The scheduled `TestKit external consumer` workflow builds a fresh project
+outside this checkout, resolves plugin 0.3.0 only from the Gradle Plugin
+Portal, acquires the official client through its hash-frozen Mojang descriptor,
+and asserts the generated vanilla inventory expectation on JDK 21 and 25.

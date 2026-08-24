@@ -37,7 +37,10 @@ final class VerifyReport {
     void finish(String status, Throwable error) {
         try {
             long totalMillis = elapsed(startNanos);
-            String latency = error == null ? GateLatencyCheck.enforce(root, totalMillis) : "failed";
+            String latency = error == null ? GateLatencyCheck.enforce(root, totalMillis,
+                    stages.stream().filter(stage -> stage.status.equals("passed")).collect(
+                            java.util.stream.Collectors.toMap(stage -> stage.name, stage -> stage.millis,
+                                    (left, right) -> right))) : "failed";
             Files.createDirectories(path.getParent());
             StringBuilder json = new StringBuilder("{\n  \"schema\": 2,\n  \"profile\": \"")
                     .append(escape(profile)).append("\",\n  \"status\": \"").append(status)

@@ -1,32 +1,44 @@
-import java.io.Reader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
+import java.util.Map;
 
 /** Enforces versioned hot/cold gate latency SLOs and their measured trend. */
 final class GateLatencyCheck {
     private GateLatencyCheck() { }
 
-    static String enforce(Path root, long elapsedMillis) throws IOException {
+    static String enforce(Path root, long elapsedMillis, Map<String, Long> stages) throws IOException {
         VerificationStageCache.Metrics metrics = VerificationStageCache.metrics();
         if (metrics.restored() + metrics.executed() == 0) return "not-applicable";
-        Properties values = new Properties(); String rebuild = System.getenv("WORLDLINE_CACHE_REBUILD_TOKEN");
+        String rebuild = System.getenv("WORLDLINE_CACHE_REBUILD_TOKEN");
         Path policy = root.resolve("quality/gate-latency.properties");
-        try (Reader reader = Files.newBufferedReader(policy, StandardCharsets.UTF_8)) {
-            values.load(reader);
-        }
-        require("1".equals(required(values, "schema")), "unsupported gate latency schema");
+        Properties values = StrictProperties.load(policy);
+        require("2".equals(required(values, "schema")), "unsupported gate latency schema");
         String mode = rebuild == null || rebuild.isBlank()
                 ? metrics.executed() == 0 ? "hot" : "cold" : "rebuild";
         long limit = mode.equals("rebuild") ? rebuildLimit(root, rebuild)
                 : Long.parseLong(required(values, "slo." + mode + ".millis"));
         require(elapsedMillis < limit, mode + " gate latency SLO exceeded: "
                 + elapsedMillis + "ms >= " + limit + "ms");
+        if (mode.equals("hot")) validateStages(values, stages);
         validateTrend(root, values);
         System.out.println("  gate latency: " + mode + " " + elapsedMillis + "ms < " + limit + "ms");
         return mode;
+    }
+
+    private static void validateStages(Properties values, Map<String, Long> stages) {
+        int count = Integer.parseInt(required(values, "stage.count"));
+        for (int index = 1; index <= count; index++) {
+            String prefix = "stage." + index + ".";
+            String name = required(values, prefix + "name");
+            long baseline = Long.parseLong(required(values, prefix + "baseline.millis"));
+            Long actual = stages.get(name);
+            require(actual != null && actual <= baseline * 2L,
+                    "hot stage latency ratchet exceeded: " + name + "=" + actual
+                            + "ms > " + (baseline * 2L) + "ms");
+        }
     }
 
     private static long rebuildLimit(Path root, String token) throws IOException {

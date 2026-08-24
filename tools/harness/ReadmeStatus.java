@@ -1,9 +1,6 @@
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -116,25 +113,11 @@ public final class ReadmeStatus {
             try { generated.check(); } catch (IllegalStateException expected) { rejected = true; }
             require(rejected, "manual README status edit was accepted");
             System.out.println("README status self-test passed");
-        } finally { delete(root); }
-    }
-
-    private static void delete(Path root) throws Exception {
-        if (!Files.exists(root)) return;
-        Files.walkFileTree(root, new SimpleFileVisitor<>() {
-            @Override public FileVisitResult visitFile(Path file, BasicFileAttributes attributes)
-                    throws java.io.IOException { Files.delete(file); return FileVisitResult.CONTINUE; }
-            @Override public FileVisitResult postVisitDirectory(Path directory, java.io.IOException error)
-                    throws java.io.IOException {
-                if (error != null) throw error; Files.delete(directory); return FileVisitResult.CONTINUE;
-            }
-        });
+        } finally { SafeTreeDelete.delete(root); }
     }
 
     private static Properties load(Path path) throws Exception {
-        Properties values = new Properties();
-        try (var reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) { values.load(reader); }
-        return values;
+        return StrictProperties.load(path);
     }
     private static String required(Properties values, String key) {
         String value = values.getProperty(key);

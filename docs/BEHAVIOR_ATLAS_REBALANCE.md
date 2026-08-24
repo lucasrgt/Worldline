@@ -23,7 +23,7 @@ This is a semantic-taxonomy migration, not new vanilla evidence. The executable
 runner, fixture, actions, observations, frozen signal, and frozen signature are
 unchanged. Existing official observations are transported through content-
 addressed evidence envelopes. The reconciled train now has zero pending
-TestKit/GUI observations. M620 is pinned with executed provenance, and all 577
+TestKit/GUI observations. M620 is pinned with executed provenance, and all 585
 current milestones have verified evidence envelopes.
 
 The orphan reconciliation keeps one identity per proven boundary. Legacy

@@ -8,13 +8,26 @@ final class RepositoryStageInputs {
     RepositoryStageInputs(Path root) { this.root = root; }
 
     List<Path> harness() { return paths("tools/harness"); }
-    List<Path> harnessFeatures() {
-        return paths("tools/harness", "README.md", "changelog", "smokes", "quality");
-    }
+    List<Path> smokeDiscovery() { return paths("smokes", "tools/harness/SmokeDiscovery.java",
+            "tools/harness/SmokeDiscoveryCheck.java", "tools/harness/SmokeLane.java",
+            "tools/harness/StrictProperties.java"); }
+    List<Path> harnessCoreFeatures() { return paths("tools/harness", "README.md", "changelog"); }
+    List<Path> harnessSmokeFeatures() { return paths("smokes", "quality",
+            "tools/harness/SmokeScheduleHistory.java", "tools/harness/LaneDifferential.java",
+            "tools/harness/LaneMatrixContract.java", "tools/harness/SmokeScheduleBaselineCheck.java",
+            "tools/harness/SmokeStatementBudget.java", "tools/harness/SmokeProductRootTest.java"); }
+    List<Path> harnessAeroFeatures() { return paths("quality/aero-scene-budgets.properties",
+            "tools/harness/AeroSceneBudget.java", "tools/harness/AeroSceneBudgetTest.java",
+            "tools/harness/AeroLogRow.java", "tools/harness/AeroLogRowTest.java"); }
     List<Path> release() {
         return paths("tools/harness/ReleaseCheck.java", "release", "README.md", "changelog",
                 "docs/ROADMAP.md", "behavior/coverage.properties", "smokes/qualification.lock",
-                "modules/api/src/main/java/worldline/api/WorldlineVersion.java");
+                "modules/api/src/main/java/worldline/api/WorldlineVersion.java",
+                ".github/workflows/publish-testkit.yml");
+    }
+    List<Path> testKitArtifacts() {
+        return paths("tools/testkit", "release/testkit.properties",
+                "release/testkit-artifacts.lock", "harness.properties", "modules");
     }
     List<Path> optimization() {
         return paths("tools/harness/OptimizationCatalogCheck.java",
@@ -28,7 +41,8 @@ final class RepositoryStageInputs {
     List<Path> sourcePolicy() {
         return paths("harness.properties", "quality", ".editorconfig", ".gitattributes",
                 "README.md", "docs", "release", "changelog", "behavior/coverage.properties",
-                "modules", "tools/harness", "tools/integration", "tools/smoke", "smokes", "adapters");
+                "modules", "tools/harness", "tools/integration", "tools/testkit", "tools/smoke",
+                "smokes", "adapters", ".github/workflows");
     }
     List<Path> integration() {
         return paths("tools/integration", "tools/harness/IntegrationToolsCheck.java",

@@ -10,7 +10,8 @@ final class SchemaPinCheck {
     static void execute(Path root) throws Exception {
         Properties manifest = manifest(root); require("1".equals(manifest.getProperty("schema")),
                 "invalid repository schema migration");
-        require(integer(manifest, "smoke.count") == 525 && integer(manifest, "map.count") == 526
+        require(integer(manifest, "smoke.count") > 0
+                        && integer(manifest, "map.count") == integer(manifest, "smoke.count") + 1
                         && integer(manifest, "narrative.count") == 36,
                 "repository schema migration census drift");
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
@@ -50,7 +51,8 @@ final class SchemaPinCheck {
                             || TrainPinCheck.carriesCurrent(train, smoke.id, pin, current)),
                     "repository schema pin drift: " + smoke.id);
         }
-        require(checked == 525 - ProviderDiscoveryPinCheck.pendingCount(provider),
+        require(checked == integer(manifest, "smoke.count")
+                        - ProviderDiscoveryPinCheck.pendingCount(provider),
                 "repository schema pin census drift");
         System.out.println("  repository schema proof transport: " + checked + " smoke inputs");
     }

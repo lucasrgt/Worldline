@@ -69,6 +69,7 @@ final class MilestoneCheck {
         }
         contract.validateEvidence(log);
         cache.passed(smoke, fingerprint, duration);
+        LaneEvidence.record(root, smoke, state.head, state.tree, log);
         writeReceipt(state, contract);
         System.out.println("milestone qualified: " + id + " @ " + shortSha(state.head));
     }

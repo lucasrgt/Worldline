@@ -11,7 +11,7 @@ import org.gradle.api.tasks.compile.JavaCompile;
 
 /** Published binary plugin; Gradle is an adapter over the independent TestKit runner. */
 public final class WorldlinePlugin implements Plugin<Project> {
-    public static final String VERSION = "0.3.0";
+    public static final String VERSION = "0.3.1";
     @Override public void apply(Project project) {
         project.getPluginManager().apply(JavaPlugin.class);
         WorldlineExtension extension = project.getExtensions().create(

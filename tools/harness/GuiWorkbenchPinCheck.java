@@ -15,7 +15,8 @@ final class GuiWorkbenchPinCheck {
         require("1".equals(lock.getProperty("schema")) && integer(lock, "source.count") == 9
                         && integer(lock, "pending.count") == 5
                         && integer(lock, "smoke.count") == 520
-                        && integer(lock, "catalog.count") == 526,
+                        && integer(lock, "catalog.count") == integer(lock, "smoke.count")
+                                + integer(lock, "pending.count") + 1,
                 "invalid GUI workbench migration");
         require("runtime-pending".equals(lock.getProperty("release.status"))
                         && hash(lock.getProperty("release.prior_signature"))
@@ -51,7 +52,9 @@ final class GuiWorkbenchPinCheck {
                         "GUI workbench proof drift: " + smoke.id);
             }
         }
-        require(catalog == 526 && carried == 520 && integer(lock, "smoke.changed") > 0,
+        require(catalog == integer(lock, "catalog.count")
+                        && carried == integer(lock, "smoke.count")
+                        && integer(lock, "smoke.changed") > 0,
                 "GUI workbench proof census drift");
         int pending = effectivePending(lock, train);
         System.out.println("  GUI workbench proof transport: 9 sources, 520 carried, "

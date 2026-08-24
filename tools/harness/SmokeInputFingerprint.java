@@ -47,6 +47,20 @@ final class SmokeInputFingerprint {
         return compute(smoke, true);
     }
 
+    String computeExecution(SmokeDiscovery.Entry smoke) throws Exception {
+        String qualification = compute(smoke);
+        if (LaneDifferential.portableQualification(root, smoke)
+                || LaneDifferential.platform().equals("windows")) return qualification;
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        update(digest, "worldline-smoke-lane-bound-execution-v1");
+        update(digest, qualification);
+        update(digest, SmokeLane.classify(root, smoke));
+        update(digest, LaneDifferential.platform());
+        update(digest, System.getProperty("os.arch", "unknown"));
+        update(digest, Integer.toString(Runtime.version().feature()));
+        return HexFormat.of().formatHex(digest.digest());
+    }
+
     String computeRuntime(SmokeDiscovery.Entry smoke) throws Exception {
         return compute(smoke, false);
     }
@@ -159,10 +173,7 @@ final class SmokeInputFingerprint {
     }
 
     private Properties descriptor(String id) throws IOException {
-        Properties descriptor = new Properties();
-        try (java.io.Reader reader = Files.newBufferedReader(root.resolve("smokes").resolve(id)
-                .resolve("smoke.properties"), StandardCharsets.UTF_8)) { descriptor.load(reader); }
-        return descriptor;
+        return StrictProperties.load(root.resolve("smokes").resolve(id).resolve("smoke.properties"));
     }
 
     private void addProcessConfiguration(MessageDigest digest, String source) throws Exception {

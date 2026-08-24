@@ -12,7 +12,7 @@ navigation, refactoring, breakpoints, and Gradle source-set import.
 From a Worldline 0.3 runner distribution:
 
 ```text
-java -jar worldline-test-runner-0.3.0.jar init
+java -jar worldline-test-runner-0.3.1.jar init
 cd tests/worldline
 ./gradlew worldlineDoctor
 ./gradlew worldlineTest
@@ -120,15 +120,15 @@ Initialization templates are `basic`, `storage`, `gui`, `optimization`, and
 `multiplayer`:
 
 ```text
-java -jar worldline-test-runner-0.3.0.jar init --template=storage
-java -jar worldline-test-runner-0.3.0.jar init --host-only
+java -jar worldline-test-runner-0.3.1.jar init --template=storage
+java -jar worldline-test-runner-0.3.1.jar init --host-only
 ```
 
 Migrate the earlier `worldline-tests` convention without deleting it:
 
 ```text
-java -jar worldline-test-runner-0.3.0.jar migrate
-java -jar worldline-test-runner-0.3.0.jar doctor tests/worldline
+java -jar worldline-test-runner-0.3.1.jar migrate
+java -jar worldline-test-runner-0.3.1.jar doctor tests/worldline
 ```
 
 Migration copies sources and snapshots, preserves the legacy configuration,
