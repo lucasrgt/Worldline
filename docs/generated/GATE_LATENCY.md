@@ -6,7 +6,7 @@ when they exceed twice their measured baseline.
 
 | Date | Cache state | Wall time (ms) |
 | --- | --- | ---: |
-| 2026-08-24 | cold | 157961 |
-| 2026-08-24 | hot | 2800 |
+| 2026-08-24 | cold | 132624 |
+| 2026-08-24 | hot | 2176 |
 
 The hot value is re-pinned from a clean committed tree after structural cache changes.
