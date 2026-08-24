@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/release-v1.462.0%20GO-2EA44F?style=flat-square" alt="Worldline v1.462.0 GO">
+  <img src="https://img.shields.io/badge/release-v1.463.0%20GO-2EA44F?style=flat-square" alt="Worldline v1.463.0 GO">
   <img src="https://img.shields.io/badge/Minecraft-Beta%201.7.3-62B47A?style=flat-square" alt="Minecraft Beta 1.7.3">
   <img src="https://img.shields.io/badge/product-Java%208-5586A4?style=flat-square" alt="Java 8 product">
   <img src="https://img.shields.io/badge/harness-JDK%2021-6B5B95?style=flat-square" alt="JDK 21 harness">
@@ -49,7 +49,7 @@ not redistribute those JARs, Mojang assets, or decompiled game source.
 <!-- worldline-status:start -->
 | Release | Milestone | Behavior contracts | Portable smoke proofs |
 | --- | --- | --- | --- |
-| v1.462.0 GO | `m569-spawner-delay-set` | 585/585 complete | 585/585 pinned |
+| v1.463.0 GO | `m625-multiplayer-edge-set` | 585/585 complete | 585/585 pinned |
 <!-- worldline-status:end -->
 
 The current release is declared in
@@ -241,7 +241,8 @@ java -jar worldline-test-runner-0.3.0.jar behaviors list
 vanilla pin. The complete Java 8 example is
 [`VanillaBehaviorSpec.java`](examples/testkit/src/test/java/example/VanillaBehaviorSpec.java).
 
-See [`docs/TESTKIT.md`](docs/TESTKIT.md),
+See the short [`consumer guide`](docs/CONSUMING_WORLDLINE_TESTKIT.md),
+[`docs/TESTKIT.md`](docs/TESTKIT.md),
 [`docs/GRADLE_TESTKIT.md`](docs/GRADLE_TESTKIT.md), and the
 [`examples/testkit`](examples/testkit/README.md) project.
 
@@ -362,7 +363,7 @@ incompatible artifacts return non-zero status instead of selecting defaults.
 | Topic | Guide |
 | --- | --- |
 | Architecture and runtime boundaries | [`ARCHITECTURE.md`](docs/ARCHITECTURE.md), [`RUNTIME_FABRIC.md`](docs/RUNTIME_FABRIC.md) |
-| TestKit and Gradle adoption | [`TESTKIT.md`](docs/TESTKIT.md), [`GRADLE_TESTKIT.md`](docs/GRADLE_TESTKIT.md) |
+| TestKit and Gradle adoption | [`CONSUMING_WORLDLINE_TESTKIT.md`](docs/CONSUMING_WORLDLINE_TESTKIT.md), [`TESTKIT.md`](docs/TESTKIT.md), [`GRADLE_TESTKIT.md`](docs/GRADLE_TESTKIT.md) |
 | Mods and extensions | [`MOD_API_V2.md`](docs/MOD_API_V2.md), [`MOD_GRAPH.md`](docs/MOD_GRAPH.md), [`EXTENSIONS.md`](docs/EXTENSIONS.md) |
 | Semantics and complete mappings | [`SEMANTICS.md`](docs/SEMANTICS.md), [`SEMANTICS_AUDIT.md`](docs/SEMANTICS_AUDIT.md), [`ECOSYSTEM_MAPPINGS.md`](docs/ECOSYSTEM_MAPPINGS.md) |
 | Atlas knowledge and seed maps | [`ATLAS.md`](docs/ATLAS.md), [`SEED_ATLAS.md`](docs/SEED_ATLAS.md) |

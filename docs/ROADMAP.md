@@ -13,14 +13,17 @@ current sources are:
 - [Generated repository status](generated/STATUS.md)
 - [Generated milestone catalog](generated/MILESTONES.md)
 - [Fable 2 sealed program](FABLE2_PROGRAM.md)
+- [Worldline TestKit consumer guide](CONSUMING_WORLDLINE_TESTKIT.md)
 - [Engineering workflow](ENGINEERING_WORKFLOW.md)
 - [Complete maintained mapping batch](SEM_M13_COMPLETE_MAPPING_BATCH.md)
 - [Mapping constitution](MAPPING_CONSTITUTION.md)
 - [Aero milestone namespace](AERO_MILESTONES.md)
 
-The release line through v1.462.0 and the M570-M625 evidence train are complete
-repository history, not future work. Their individual contracts remain in the
-generated catalog and stable `M*_*.md` documents.
+Worldline v1.463.0 is the release train through M625. The M570-M625 contracts
+and the sealed Fable 2 program are complete repository history, not future
+work. Their individual contracts remain in the generated catalog and stable
+`M*_*.md` documents. M626-M634 are qualified post-release frontier evidence and
+do not silently move the v1.463.0 release tip.
 
 ## Active direction
 
@@ -34,8 +37,8 @@ The next product frontier is deliberately bounded:
    the bytecode-exhaustive queue remains an optional diagnostic surface;
 4. make cache, worktree, and archival operations observable, scheduled, and
    fail-closed;
-5. publish a stable TestKit consumer contract after a clean external-clone
-   validation.
+5. evolve the published TestKit consumer contract only through immutable,
+   hash-verified release tags and clean external-consumer validation.
 
 The current frontier set covers dungeon generation, chunk unload/reload
 persistence, classic minecart boosters, sound-effect packets, operator ACLs,

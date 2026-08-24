@@ -11,8 +11,8 @@ import org.gradle.api.Project;
 /** Hash-pinned TestKit release resolution with an explicit offline override. */
 final class WorldlineDistribution {
     static final String VERSION = "0.3.0";
-    static final String API_SHA256 = "811e72bb1cf49c075c8936d953aeb6abddff0fb7943bef850358051aaeaec861";
-    static final String RUNNER_SHA256 = "69ecddc1aab517006ecd88febf0f7faec60bf404a0dcfa32795c0209f43a069f";
+    static final String API_SHA256 = "121570d97ff183938aa81c028f0ae4499d67485d9ababcaa632a945ef5662df6";
+    static final String RUNNER_SHA256 = "bc2643c6fb8b31fe4f7ded8f9c057c6f79b048dd304a2f54fd2b203c5d549a37";
     private static final String RELEASE = "https://github.com/lucasrgt/Worldline/releases/download/testkit-v"
             + VERSION + "/";
     private WorldlineDistribution() {}

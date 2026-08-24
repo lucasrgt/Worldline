@@ -1,5 +1,9 @@
 # TestKit example
 
+The supported-version matrix and copy-ready CI workflow are in
+[`docs/CONSUMING_WORLDLINE_TESTKIT.md`](../../docs/CONSUMING_WORLDLINE_TESTKIT.md)
+and [`ci/worldline-test.yml`](ci/worldline-test.yml).
+
 Validate the checkout and compile the ordinary Java 8 specs:
 
 ```text
