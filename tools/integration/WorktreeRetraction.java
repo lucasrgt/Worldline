@@ -19,7 +19,7 @@ final class WorktreeRetraction {
         require(show.waitFor(60, TimeUnit.SECONDS) && show.exitValue() == 0,
                 "cannot read behavior retraction lock");
         Properties values = new Properties(); values.load(new StringReader(text));
-        java.util.regex.Matcher matcher = java.util.regex.Pattern.compile("(?i)\\bM([0-9]+)\\b")
+        java.util.regex.Matcher matcher = java.util.regex.Pattern.compile("(?i)M([0-9]+)")
                 .matcher(text);
         Set<String> result = new HashSet<>();
         while (matcher.find()) result.add("m" + matcher.group(1));
@@ -29,9 +29,8 @@ final class WorktreeRetraction {
     }
 
     static boolean matches(String branch, Path path, Set<String> ids) {
-        String value = branch + "/" + path.getFileName();
-        return ids.stream().anyMatch(id -> value.toLowerCase(Locale.ROOT)
-                .matches(".*(?:^|[-_/])" + id + "(?:[-_/].*|$)"));
+        String value = (branch + "/" + path.getFileName()).toLowerCase(Locale.ROOT);
+        return ids.stream().anyMatch(value::contains);
     }
 
     private static int status(Path root, String... arguments) throws Exception {

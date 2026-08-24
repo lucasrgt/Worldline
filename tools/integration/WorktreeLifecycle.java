@@ -167,7 +167,10 @@ public final class WorktreeLifecycle {
     }
 
     private boolean integrated(String head, String base, Set<String> receipts) throws Exception {
-        return status(root, "merge-base", "--is-ancestor", head, base) == 0 || receipts.contains(head);
+        if (status(root, "merge-base", "--is-ancestor", head, base) == 0 || receipts.contains(head))
+            return true;
+        String cherry = git(root, "cherry", base, head).trim();
+        return !cherry.isBlank() && cherry.lines().allMatch(line -> line.startsWith("- "));
     }
 
     private Set<String> receiptHeads(String base) throws Exception {
@@ -179,6 +182,7 @@ public final class WorktreeLifecycle {
             if (key.startsWith("smoke.") && key.endsWith(".receipt.head")
                     && "milestone".equals(values.getProperty(key.replace(".receipt.head", ".kind"))))
                 result.add(values.getProperty(key));
+        result.addAll(WorktreeArchiveDisposition.heads(root, base));
         return Set.copyOf(result);
     }
 
