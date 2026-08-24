@@ -1,5 +1,5 @@
 schema=1
 id=m81-natural-multipage-rebuild
-fingerprint=02af3609c38d1860146deb337f835f543bbb21fbe5b2b51b5a230dc7602f551d
+fingerprint=808e2c4eaecf2bd0fb517ee2a72d9957a862c5e80479594b57b86551ecbe6f10
 observation.sha256=f30116757d3fcf070289bdb013181744abdaf8da806426cc2efc76128484bc6d
 source=refactor-equivalent

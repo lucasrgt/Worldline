@@ -1,5 +1,5 @@
 schema=1
 id=m103-pages-disabled-immediate-direct
-fingerprint=791611edce05b35050e242633b60064693eb905ef53fea8fdc1df211d580b4ba
+fingerprint=2f7493ab00669a57def7440e9fe6200c0861716ae1ab94aadcdf1e1b2266c868
 observation.sha256=7ebb83eada0eccda5dbb38d2610d92b60abe893d2483212710eb463e0aa285c6
 source=refactor-equivalent

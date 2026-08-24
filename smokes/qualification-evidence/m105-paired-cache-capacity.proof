@@ -1,5 +1,5 @@
 schema=1
 id=m105-paired-cache-capacity
-fingerprint=7a3f8feabf08939e4d10053f4dce2e89bbc75f6b3a425a85abcf480342c2478d
+fingerprint=750a1502817daf3d1f2bfb0e005da8fd36cb4e6e0dce8dbfc29b90ccbf97d5c1
 observation.sha256=35da2fabb47ef902a2cbd7b92dc976771d9a80179b76322cf1f26edade4e5898
 source=refactor-equivalent
