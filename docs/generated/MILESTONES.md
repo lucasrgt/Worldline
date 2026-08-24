@@ -567,7 +567,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m623-lighting-engine-matrix` | CARRIED | Lighting engine matrix |
 | `m624-weather-state-matrix` | CARRIED | Weather state matrix |
 | `m625-multiplayer-edge-set` | CARRIED | Multiplayer edge set |
-| `betavault-item-reference` | CARRIED | logical-item-reference |
+| `betavault-item-reference` | EXECUTED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
 | `gui-tree` | EXECUTED | ui-tree-equivalence |

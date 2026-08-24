@@ -38,7 +38,8 @@ final class SchemaPinCheck {
                             && digest(directory.resolve("MAP.md")).equals(
                                     required(manifest, stem + "map_sha256")),
                     "repository schema migration drift: " + smoke.id);
-            require(pin != null && pin.source().equals("refactor-equivalent")
+            require(pin != null && (pin.source().equals("executed")
+                            || pin.source().equals("refactor-equivalent"))
                             && (pin.evidence().equals(required(manifest, stem + "evidence_sha256"))
                             || FormattingPinCheck.carries(formatting, smoke.id, pin, current)),
                     "repository schema pin drift: " + smoke.id);
