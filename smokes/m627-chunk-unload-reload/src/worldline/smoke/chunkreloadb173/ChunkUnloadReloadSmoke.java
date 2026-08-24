@@ -32,7 +32,8 @@ public final class ChunkUnloadReloadSmoke {
 
     public static void main(String[] arguments) throws Exception {
         if (arguments.length != 12) throw new IllegalArgumentException(
-                "usage: ChunkUnloadReloadSmoke server.jar workspace port seed actor far reader chunkX chunkZ farX farZ settleTicks");
+                "usage: ChunkUnloadReloadSmoke server.jar workspace port seed actor far reader "
+                        + "chunkX chunkZ farX farZ settleTicks");
         Path jar = Paths.get(arguments[0]);
         Path workspace = Paths.get(arguments[1]);
         int port = Integer.parseInt(arguments[2]);
