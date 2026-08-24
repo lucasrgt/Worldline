@@ -45,7 +45,7 @@ final class TrainPinMigration {
         Map<String, SmokePins.Entry> baseline = baseline(root);
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
         Properties predecessor = predecessor(root, "HEAD");
-        Properties ancestor = predecessor(root, "HEAD^");
+        TrainPinHistory history = TrainPinHistory.load(root);
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
         SmokeReceiptCache cache = new SmokeReceiptCache(root);
         List<SmokePins.Entry> updated = new ArrayList<>(); List<String> pending = new ArrayList<>();
@@ -83,7 +83,7 @@ final class TrainPinMigration {
             }
             if (prior != null) {
                 carried++; SmokePins.Migration migration =
-                        pins.migrate(smoke, current, prior, predecessor, ancestor, stem);
+                        pins.migrate(smoke, current, prior, predecessor, history, stem);
                 seal(lock, stem, "baseline", migration.prior(), current, migration.entry().evidence());
                 updated.add(migration.entry());
                 continue;
