@@ -1,6 +1,6 @@
 schema=1
 alias.count=2
-retracted.count=2
+retracted.count=3
 alias.0.legacy=one-tick-piston-pulse
 alias.0.canonical=redstone-one-tick
 alias.0.smoke=m615-redstone-one-tick-set
@@ -21,3 +21,7 @@ retracted.1.token=soul-sand-slow
 retracted.1.reason=M602 official runtime observed equal Packet13 displacement; client slowdown remains covered by M317
 retracted.1.evidence=docs/decisions/M602_SOUL_SAND_RETRACTION.md
 retracted.1.evidence_sha256=7e38a0f98eb0c4448471de8f10cfec4777f084b6613191344d58b9953d3b079c
+retracted.2.token=cobweb-slow
+retracted.2.reason=M601 was an empty reservation and duplicates the accepted M317 client slowdown differential
+retracted.2.evidence=docs/decisions/M601_COBWEB_SLOW_RETRACTION.md
+retracted.2.evidence_sha256=ff291d19fec9b02ab9c715115e40e928cc28121b971018ef5900485f0b86f0cf
