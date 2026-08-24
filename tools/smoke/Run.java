@@ -101,6 +101,7 @@ public final class Run {
 
     Path evidence = writeEvidence(first);
     System.out.println(id + " smoke passed");
+    System.out.println("  frozen signal: " + required("expected.signal"));
     System.out.println("  processes: 4 (2 Worldline, 2 official oracle)");
     System.out.println("  official oracle: MATCH");
     System.out.println("  signature: " + first.signature);
@@ -221,7 +222,14 @@ public final class Run {
   }
 
   private Path productClasses(String module) {
-    return root.resolve(".worldline/build/classes").resolve(module);
+    String override = System.getenv("WORLDLINE_PRODUCT_ROOT");
+    Path products = override == null || override.isBlank()
+        ? root.resolve(".worldline/build/classes")
+        : Paths.get(override).toAbsolutePath().normalize();
+    if (!products.startsWith(root.resolve(".worldline").normalize())) {
+      throw new IllegalStateException("smoke product root escapes .worldline");
+    }
+    return products.resolve(module);
   }
 
   private String classpath(Path... paths) {

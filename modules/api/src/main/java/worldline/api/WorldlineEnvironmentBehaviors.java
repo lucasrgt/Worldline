@@ -20,6 +20,8 @@ public final class WorldlineEnvironmentBehaviors {
             "Fire spreads onto adjacent flammable planks or wood");
     public static final WorldlineBehavior FARMLAND_DRY = define("farmland-dry",
             "Unhydrated farmland reverts to dirt after random ticks with no nearby water");
+    public static final WorldlineBehavior LIGHTNING_FIRE = define("lightning-fire",
+            "A lightning entity ignites supported air on normal difficulty while easy does not");
 
     private WorldlineEnvironmentBehaviors() {}
 
