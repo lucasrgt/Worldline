@@ -1,20 +1,6 @@
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.Path;
-import java.io.StringReader;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import java.io.*; import java.nio.charset.*; import java.nio.file.*;
+import java.nio.file.attribute.*; import java.time.*; import java.util.*;
+import java.util.concurrent.*;
 
 /** Audits worktrees and archives only clean, integrated worktrees with a verified bundle. */
 public final class WorktreeLifecycle {
@@ -58,22 +44,26 @@ public final class WorktreeLifecycle {
         for (Worktree worktree : worktrees)
             futures.add(executor.submit(() -> inspect(worktree, base, receipts)));
         executor.shutdown();
-        int dirty = 0, integrated = 0, removable = 0;
+        int dirty = 0, integrated = 0, husks = 0, milestoneDirty = 0, removable = 0;
         StringBuilder json = new StringBuilder("{\n  \"schema\":1,\n  \"created\":\"")
                 .append(Instant.now()).append("\",\n  \"base\":\"").append(base).append("\",\n  \"worktrees\":[\n");
         for (int index = 0; index < worktrees.size(); index++) {
             Worktree worktree = worktrees.get(index);
             State state = futures.get(index).get();
             boolean exists = state.exists, isDirty = state.dirty, isIntegrated = state.integrated;
-            boolean safe = exists && !isDirty && isIntegrated && !worktree.path.equals(root);
+            boolean safe = exists && !isDirty && isIntegrated && !state.husk && !worktree.path.equals(root);
             if (isDirty) dirty++;
             if (isIntegrated) integrated++;
+            if (state.husk) husks++;
+            if (state.milestoneDirty) milestoneDirty++;
             if (safe) removable++;
             json.append("    {\"path\":\"").append(escape(worktree.path.toString()))
                     .append("\",\"head\":\"").append(worktree.head).append("\",\"branch\":\"")
                     .append(escape(worktree.branch)).append("\",\"exists\":").append(exists)
                     .append(",\"dirty\":").append(isDirty).append(",\"integrated\":")
-                    .append(isIntegrated).append(",\"archiveEligible\":").append(safe).append("}")
+                    .append(isIntegrated).append(",\"husk\":").append(state.husk)
+                    .append(",\"milestoneDirty\":").append(state.milestoneDirty)
+                    .append(",\"archiveEligible\":").append(safe).append("}")
                     .append(index + 1 == worktrees.size() ? "\n" : ",\n");
         }
         json.append("  ]\n}\n");
@@ -81,7 +71,8 @@ public final class WorktreeLifecycle {
         Files.createDirectories(report.getParent());
         Files.writeString(report, json, StandardCharsets.UTF_8);
         System.out.println("worktree audit: total=" + worktrees.size() + ", dirty=" + dirty
-                + ", integrated=" + integrated + ", archive-eligible=" + removable);
+                + ", integrated=" + integrated + ", husks=" + husks + ", milestone-dirty="
+                + milestoneDirty + ", archive-eligible=" + removable);
         System.out.println("  report: " + root.relativize(report));
     }
 
@@ -101,12 +92,14 @@ public final class WorktreeLifecycle {
 
     private State inspect(Worktree worktree, String base, Set<String> receipts) throws Exception {
         boolean exists = Files.isDirectory(worktree.path);
-        boolean dirty = exists && !git(worktree.path, "status", "--porcelain").isBlank();
+        String changes = exists ? git(worktree.path, "status", "--porcelain") : "";
+        boolean dirty = !changes.isBlank();
         boolean integrated = integrated(worktree.head, base, receipts);
         if (worktree.branch.startsWith("codex/experiment-")) require(
                 experimentDeferred(worktree), "experiment branch lacks a branch-bound NWC deferment: "
                         + worktree.branch);
-        return new State(exists, dirty, integrated);
+        return new State(exists, dirty, integrated,
+                husk(worktree), milestoneDirty(changes));
     }
 
     private boolean experimentDeferred(Worktree worktree) throws Exception {
@@ -122,8 +115,9 @@ public final class WorktreeLifecycle {
     }
 
     private void archive(String[] arguments) throws Exception {
-        Path target = null, bundles = null; String baseRef = "HEAD";
+        Path target = null, bundles = null; String baseRef = "HEAD"; boolean allowHusk = false;
         for (int index = 1; index < arguments.length; index++) {
+            if ("--allow-husk".equals(arguments[index])) { allowHusk = true; continue; }
             require(index + 1 < arguments.length, usage());
             switch (arguments[index]) {
                 case "--path" -> target = Path.of(arguments[++index]).toAbsolutePath().normalize();
@@ -143,6 +137,8 @@ public final class WorktreeLifecycle {
         require(integrated(worktree.head, base, receiptHeads(base)),
                 "worktree head is not integrated into " + baseRef);
         require(!worktree.branch.isBlank(), "detached worktree cannot be bundled by branch");
+        require(allowHusk || !husk(worktree),
+                "husk requires explicit --allow-husk: " + selected);
         Files.createDirectories(bundles);
         String safeName = worktree.branch.replaceAll("[^A-Za-z0-9._-]", "-");
         Path bundle = bundles.resolve(safeName + "-" + worktree.head.substring(0, 12) + ".bundle");
@@ -207,6 +203,21 @@ public final class WorktreeLifecycle {
                     && "milestone".equals(values.getProperty(key.replace(".receipt.head", ".kind"))))
                 result.add(values.getProperty(key));
         return Set.copyOf(result);
+    }
+
+    private boolean husk(Worktree worktree) throws Exception {
+        if (worktree.branch.isBlank() || !worktree.branch.matches(".*(?:^|[-/])m[0-9]+(?:[-/].*)?"))
+            return false;
+        Set<String> heads = new HashSet<>(git(root, "reflog", "show", "--format=%H", worktree.branch)
+                .lines().filter(line -> !line.isBlank()).map(String::trim).toList());
+        return heads.size() == 1 && heads.contains(worktree.head);
+    }
+
+    private static boolean milestoneDirty(String porcelain) {
+        return porcelain.lines().map(line -> line.length() > 3 ? line.substring(3).trim() : "")
+                .map(value -> value.contains(" -> ") ? value.substring(value.indexOf(" -> ") + 4) : value)
+                .map(value -> value.replace('\\', '/')).anyMatch(value ->
+                        value.matches("(?:smokes/m[0-9]+[^/]*/.*|docs/M[0-9]+.*[.]md)"));
     }
 
     private void selfTestCleanup() throws Exception {
@@ -290,7 +301,7 @@ public final class WorktreeLifecycle {
 
     private static String usage() {
         return "usage: java tools/integration/WorktreeLifecycle.java audit|triage [--base REF] | prune | "
-                + "archive --path PATH --bundles DIR [--base REF]";
+                + "archive --path PATH --bundles DIR [--base REF] [--allow-husk]";
     }
 
     private static String escape(String value) { return value.replace("\\", "\\\\").replace("\"", "\\\""); }
@@ -309,6 +320,6 @@ public final class WorktreeLifecycle {
     }
 
     private record Worktree(Path path, String head, String branch) {}
-    private record State(boolean exists, boolean dirty, boolean integrated) {}
+    private record State(boolean exists, boolean dirty, boolean integrated, boolean husk, boolean milestoneDirty) {}
     private record Cleanup(long files, long bytes) {}
 }

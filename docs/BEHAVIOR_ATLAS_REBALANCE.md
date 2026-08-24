@@ -22,8 +22,9 @@ that the old and new descriptor hashes are preserved in
 This is a semantic-taxonomy migration, not new vanilla evidence. The executable
 runner, fixture, actions, observations, frozen signal, and frozen signature are
 unchanged. Existing official observations are transported through content-
-addressed evidence envelopes; five already-pending TestKit/GUI observations
-remain pending and M620 remains unpinned.
+addressed evidence envelopes. The reconciled train now has zero pending
+TestKit/GUI observations. M620 is pinned with executed provenance, and all 577
+current milestones have verified evidence envelopes.
 
 The orphan reconciliation keeps one identity per proven boundary. Legacy
 lookups for `one-tick-piston-pulse` and `hostile-spawn-light` resolve to the
@@ -35,5 +36,6 @@ trees, signatures, and observation hashes are sealed in
 `tnt-quasi-connectivity` is explicitly retracted and rejected. M552 did not
 isolate quasi-connectivity, and the M614 worktree has no committed candidate or
 qualification receipt. The retraction preserves that audit result without
-manufacturing evidence or deleting the independent Grok worktree. No smoke
-descriptor publishes any of the three orphan tokens.
+manufacturing evidence. The surviving M614 reservation is a clean husk; the
+archive audit found no recoverable uncommitted payload. No smoke descriptor
+publishes any of the three orphan tokens.

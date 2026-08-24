@@ -12,7 +12,7 @@ import java.util.Properties;
 /** Builds a failure-then-duration ordered cold-sweep plan containing only unproved inputs. */
 final class SmokePoolPlan {
     private static final List<String> LANES = List.of(
-            "server-headless", "windows-client-gui", "tooling");
+            SmokeLane.SERVER, SmokeLane.GUI, SmokeLane.TOOLING);
 
     public static void main(String[] arguments) {
         try {
@@ -35,7 +35,7 @@ final class SmokePoolPlan {
         List<SmokeDiscovery.Entry> catalog = SmokeDiscovery.discover(root);
         int reusable = 0;
         for (SmokeDiscovery.Entry smoke : catalog) {
-            String lane = lane(smoke); totals.put(lane, totals.get(lane) + 1);
+            String lane = SmokeLane.classify(root, smoke); totals.put(lane, totals.get(lane) + 1);
             String fingerprint = cache.fingerprint(smoke);
             if (cache.availablePin(smoke) != null) { reusable++; continue; }
             long cachedDuration = cache.historicalDuration(smoke.id);
@@ -58,15 +58,6 @@ final class SmokePoolPlan {
         System.out.println("  plan: .worldline/runtime-plan/plan.json");
     }
 
-    private String lane(SmokeDiscovery.Entry smoke) throws Exception {
-        Properties descriptor = descriptor(smoke.id);
-        if ("tooling-cycle".equals(descriptor.getProperty("qualification.proof"))) return "tooling";
-        String source = Files.readString(root.resolve(smoke.runner), StandardCharsets.UTF_8);
-        if (source.contains("minecraft-b1.7.3-client.properties")
-                || source.contains("aero-model-lib") || source.contains("runClient")
-                || source.contains("WORLDLINE_AERO")) return "windows-client-gui";
-        return "server-headless";
-    }
 
     private int timeout(String id) throws Exception {
         String value = descriptor(id).getProperty("timeout.seconds", "900").trim();

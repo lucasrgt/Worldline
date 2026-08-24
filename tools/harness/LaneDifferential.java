@@ -28,7 +28,7 @@ final class LaneDifferential {
         SmokeGitState state = SmokeGitState.read(root); require(state.clean(),
                 "lane differential requires a clean commit");
         SmokeDiscovery.Entry smoke = SmokeDiscovery.require(root, id);
-        require(lane(root, smoke).equals("server-headless"),
+        require(SmokeLane.classify(root, smoke).equals(SmokeLane.SERVER),
                 "lane differential requires a headless server smoke");
         SmokeObservationCache observations = new SmokeObservationCache(root);
         String runtimeFingerprint = observations.fingerprint(smoke);
@@ -111,7 +111,7 @@ final class LaneDifferential {
         cachedRoot = root; cachedPortable = result; return result;
     }
     static boolean portableQualification(Path root, SmokeDiscovery.Entry smoke) throws Exception {
-        return portable(root) && "server-headless".equals(lane(root, smoke));
+        return portable(root) && SmokeLane.SERVER.equals(SmokeLane.classify(root, smoke));
     }
     static void selfTest() throws Exception {
         String signature = "a".repeat(64);
@@ -138,17 +138,6 @@ final class LaneDifferential {
         Path build = root.resolve(".worldline/lane-differential/build");
         new ModuleBuild(root, build, config, modules).compileAll();
         return build.resolve("classes");
-    }
-    private static String lane(Path root, SmokeDiscovery.Entry smoke) throws Exception {
-        Properties values = load(root.resolve("smokes").resolve(smoke.id).resolve("smoke.properties"));
-        if ("tooling-cycle".equals(values.getProperty("qualification.proof"))) return "tooling";
-        if ("server".equals(values.getProperty("side"))
-                || values.containsKey("server.jar.sha256") && !values.containsKey("client.jar.sha256"))
-            return "server-headless";
-        String source = Files.readString(root.resolve(smoke.runner));
-        return source.contains("minecraft-b1.7.3-client.properties") || source.contains("aero-model-lib")
-                || source.contains("runClient") || source.contains("WORLDLINE_AERO")
-                ? "windows-client-gui" : "server-headless";
     }
     static String platform() { return System.getProperty("os.name", "").toLowerCase().contains("win")
             ? "windows" : "linux"; }

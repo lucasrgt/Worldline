@@ -20,6 +20,8 @@ final class RepositorySourcePolicy {
         DataDrivenCycleCheck.execute(root); CompositeCycleCheck.execute(root);
         TelemetryPinCheck.execute(root); SchemaPinCheck.execute(root);
         SmokeDescriptorSchemaCheck.execute(root); TestKitReleasePinCheck.execute(root);
+        MilestoneIdUniquenessCheck.execute(root);
+        SmokeLane.validate(root);
         FormattingPinCheck.execute(root);
         SharedHelperPinCheck.execute(root); UnicodePinCheck.execute(root); AdapterSplitPinCheck.execute(root);
         ProviderDiscoveryPinCheck.execute(root); GuiWorkbenchPinCheck.execute(root);

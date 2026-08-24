@@ -105,6 +105,19 @@ final class IntegrationToolsCheck {
                     + "\",\"branch\":\"codex/milestone-m5-reconciled\",\"exists\":true,"
                     + "\"dirty\":false,\"integrated\":true"), "train receipt did not integrate worktree");
             git(repository, "worktree", "remove", "--force", reconciledTree.toString());
+            git(repository, "branch", "codex/milestone-m6-husk", "base");
+            Path huskTree = repository.getParent().resolve(repository.getFileName() + "-husk");
+            git(repository, "worktree", "add", "--quiet", huskTree.toString(), "codex/milestone-m6-husk");
+            Path dirtyMilestone = huskTree.resolve("smokes/m6-husk/smoke.properties");
+            Files.createDirectories(dirtyMilestone.getParent()); Files.writeString(dirtyMilestone, "id=m6-husk\n");
+            require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
+                    "WorktreeLifecycle", "audit", "--base", "base"), 60) == 0
+                            && Files.readString(repository.resolve(".worldline/reports/worktrees.json"))
+                                    .contains("\"branch\":\"codex/milestone-m6-husk\",\"exists\":true,"
+                                            + "\"dirty\":true,\"integrated\":true,\"husk\":true,"
+                                            + "\"milestoneDirty\":true,\"archiveEligible\":false"),
+                    "husk or milestone-dirty worktree was silently archive-eligible");
+            git(repository, "worktree", "remove", "--force", huskTree.toString());
             int triage = run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "WorktreeLifecycle", "triage", "--base", "base"), 60);
             require(triage == 0 && Files.readString(repository.resolve(

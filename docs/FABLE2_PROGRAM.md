@@ -8,6 +8,15 @@ third-party action with a passing fail-closed doctor and an exact instruction.
 
 Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 
+## Sealed-count policy
+
+Counts inside completed evidence rows are historical measurements frozen at
+the Fable 2 seal on 2026-08-23; they are not silently rewritten as later trains
+add milestones. Current repository totals are authoritative only in
+`generated/STATUS.md`, `generated/MILESTONES.md`, and the generated README
+status block. Any row whose factual claim was wrong at sealing is corrected in
+place and linked to a forensic or decision record.
+
 ## Evidence integrity and incident prevention
 
 | ID | Status | Deliverable | Completion evidence |
@@ -61,7 +70,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | ID | Status | Deliverable | Completion evidence |
 | --- | --- | --- | --- |
 | COV-01 | DONE | Qualify whole-game mappings in batches through SEM-M11, M12, and M13. | The clean runtime profile reconstructed the official-input-bound 25%, 50%, and 100% policies over 6,475 maintained identities: SEM-M11 `74eda1fa0dc3fa38ef67ac8cda9039d0c87ccd4d41bab7033886a96fbaf4ef32`, SEM-M12 `95effb9dda816c2dfe4e48cccebbe26e44a2aed0d4235f4e1f1832278b1800f0`, and SEM-M13 `c8e21ca4a15ab7f4ab211b5ab6f66e191281910f896951b67b310ba15907f91e`. |
-| COV-02 | DONE | Rebalance public Atlas behavior families and resolve orphans. | The former 109-placement concentration is seven function-specific contracts with a maximum bucket of 34 and 520 portable proofs carried. A versioned decision lock maps the two legacy names to the sole M615/M617 canonical objects and binds their exact receipt heads, trees, signatures, and observations; the unproven TNT-QC identity is explicitly retracted after M552, while the independent uncommitted M614 worktree remains preserved. |
+| COV-02 | DONE | Rebalance public Atlas behavior families and resolve orphans. | The former 109-placement concentration is seven function-specific contracts with a maximum bucket of 34 and 520 portable proofs carried. A versioned decision lock maps the two legacy names to the sole M615/M617 canonical objects and binds their exact receipt heads, trees, signatures, and observations. The unproven TNT-QC identity is explicitly retracted after M552. The alleged uncommitted M614 payload was not found in the archived Git refs or non-Git artifact pack; the surviving reservation is a one-entry clean husk, and the loss is recorded in `forensics/M614_ARCHIVE_AUDIT.md`. |
 | COV-03 | DONE | Add save/chunk-format coverage. | M621's clean official-runtime receipt at `e1d4c9dab9d2aa4007ceb8c07bde87bfd2924ad0` validates nine McRegion location, timestamp, sector, zlib, and NBT-root frames, then proves stable geology across a clean save/restart. Its frozen signature is `269269a06fb4fbd3833715a554c0830bbc3bd6c70e6e2db13348ac5bde2bad10`. |
 | COV-04 | DONE | Add worldgen coverage. | The same bounded M621 3x3 official-oracle set requires multiple surface/elevation families, subsurface cave air, nonzero ore blocks, and at least three connected ore components while explicitly excluding arbitrary seeds and structure-generation claims. |
 | COV-05 | DONE | Expand entity pathfinding coverage. | M622 adds a direct official-oracle pathfinder matrix over open terrain, a forced wall-gap detour, and a sealed-target fallback. Its four-process trace is frozen at `7d60a218116c3281ab77011768f14b4237d0b92b81f3e0d99cdb6fabb085029a` and the clean milestone receipt is bound to `17d42785ef39f4744aa1e19f5a4b25e355363856`. |
