@@ -49,7 +49,7 @@ not redistribute those JARs, Mojang assets, or decompiled game source.
 <!-- worldline-status:start -->
 | Release | Milestone | Behavior contracts | Portable smoke proofs |
 | --- | --- | --- | --- |
-| v1.462.0 GO | `m569-spawner-delay-set` | 584/584 complete | 584/584 pinned |
+| v1.462.0 GO | `m569-spawner-delay-set` | 585/585 complete | 585/585 pinned |
 <!-- worldline-status:end -->
 
 The current release is declared in
