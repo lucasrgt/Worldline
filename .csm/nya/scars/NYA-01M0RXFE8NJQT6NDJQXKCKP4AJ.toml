@@ -1,0 +1,20 @@
+schema = 1
+id = "NYA-01M0RXFE8NJQT6NDJQXKCKP4AJ"
+title = "Do not traverse worktree junctions during archival"
+lesson = "Worktree archival must inspect and delete private trees with NOFOLLOW_LINKS semantics so Windows junctions under .worldline/build/classes are removed as links and never traversed into the shared immutable cache."
+scope = ["tools/integration/WorktreeLifecycle.java"]
+tags = [
+    "windows",
+    "junction",
+    "worktree-lifecycle",
+    "cache-safety",
+]
+created_at = "2026-08-24T03:36:56Z"
+
+[[occurrences]]
+occurred_at = "2026-08-24T03:36:56Z"
+source = "manual:2026-08-24-worktree-archive-cache-corruption"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "nya:collector"
+commit = "a787c79fe"

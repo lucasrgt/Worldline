@@ -1,7 +1,9 @@
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.io.StringReader;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -161,15 +163,34 @@ public final class WorktreeLifecycle {
             Path target = worktree.resolve(name).toAbsolutePath().normalize();
             require(target.startsWith(worktree) && !target.equals(worktree), "unsafe private cleanup path");
             if (!Files.exists(target)) continue;
-            try (var paths = Files.walk(target)) {
-                List<Path> entries = paths.sorted(Comparator.reverseOrder()).toList();
-                for (Path entry : entries) {
-                    if (Files.isRegularFile(entry)) { files++; bytes += Files.size(entry); }
-                    Files.deleteIfExists(entry);
-                }
+            Cleanup measured = privateSize(target); files += measured.files; bytes += measured.bytes;
+            deleteWithoutFollowingLinks(target);
+        }
+        return new Cleanup(files, bytes);
+    }
+
+    private static Cleanup privateSize(Path target) throws Exception {
+        BasicFileAttributes attributes = Files.readAttributes(target,
+                BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
+        if (attributes.isRegularFile()) return new Cleanup(1L, attributes.size());
+        if (!attributes.isDirectory() || attributes.isOther()) return new Cleanup(0L, 0L);
+        long files = 0L, bytes = 0L;
+        try (var children = Files.newDirectoryStream(target)) {
+            for (Path child : children) {
+                Cleanup measured = privateSize(child); files += measured.files; bytes += measured.bytes;
             }
         }
         return new Cleanup(files, bytes);
+    }
+
+    private static void deleteWithoutFollowingLinks(Path target) throws Exception {
+        BasicFileAttributes attributes = Files.readAttributes(target,
+                BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
+        if (attributes.isDirectory() && !attributes.isOther())
+            try (var children = Files.newDirectoryStream(target)) {
+                for (Path child : children) deleteWithoutFollowingLinks(child);
+            }
+        Files.deleteIfExists(target);
     }
 
     private boolean integrated(String head, String base, Set<String> receipts) throws Exception {
@@ -191,18 +212,29 @@ public final class WorktreeLifecycle {
     private void selfTestCleanup() throws Exception {
         Path parent = root.resolve(".worldline"); Files.createDirectories(parent);
         Path target = Files.createTempDirectory(parent, "lifecycle-cleanup-");
+        Path external = Files.createTempDirectory(parent, "lifecycle-external-");
         Path retained = target.resolve("retained.txt"); Files.writeString(retained, "retained");
         try {
             for (String name : List.of(".worldline", "tmp", "output")) {
                 Path file = target.resolve(name).resolve("private.bin");
                 Files.createDirectories(file.getParent()); Files.write(file, new byte[] {1, 2, 3});
             }
+            Path sentinel = external.resolve("sentinel"); Files.writeString(sentinel, "retained");
+            Path link = target.resolve(".worldline/cache-link");
+            if (System.getProperty("os.name").toLowerCase().contains("win")) {
+                Process junction = new ProcessBuilder("cmd.exe", "/d", "/c", "mklink", "/J",
+                        link.toString(), external.toString())
+                        .redirectOutput(ProcessBuilder.Redirect.DISCARD).start();
+                require(junction.waitFor(30, TimeUnit.SECONDS) && junction.exitValue() == 0,
+                        "lifecycle junction fixture failed");
+            } else Files.createSymbolicLink(link, external);
             Cleanup cleanup = prunePrivate(target);
-            require(cleanup.files == 3L && cleanup.bytes == 9L && Files.isRegularFile(retained),
+            require(cleanup.files == 3L && cleanup.bytes == 9L && Files.isRegularFile(retained)
+                            && Files.isRegularFile(sentinel),
                     "private cleanup scope drifted");
             System.out.println("worktree lifecycle cleanup self-test passed");
         } finally {
-            Files.deleteIfExists(retained); Files.deleteIfExists(target);
+            deleteWithoutFollowingLinks(target); deleteWithoutFollowingLinks(external);
         }
     }
 
