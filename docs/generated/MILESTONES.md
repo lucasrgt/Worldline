@@ -565,6 +565,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m621-save-worldgen-set` | CARRIED | save worldgen set |
 | `m622-pathfinding-matrix` | CARRIED | Entity pathfinding matrix |
 | `m623-lighting-engine-matrix` | CARRIED | Lighting engine matrix |
+| `m624-weather-state-matrix` | CARRIED | Weather state matrix |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
