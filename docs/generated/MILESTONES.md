@@ -563,6 +563,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m619-undead-sun-burn-set` | CARRIED | undead sun burn set |
 | `m620-stationapi-testkit-driver` | EXECUTED | StationAPI TestKit driver |
 | `m621-save-worldgen-set` | CARRIED | save worldgen set |
+| `m622-pathfinding-matrix` | CARRIED | Entity pathfinding matrix |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |

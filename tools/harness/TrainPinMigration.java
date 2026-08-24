@@ -164,9 +164,13 @@ final class TrainPinMigration {
                 "invalid milestone evidence: " + id);
         Properties source = load(worktree.resolve("smokes").resolve(id).resolve("smoke.properties"));
         Properties target = load(root.resolve("smokes").resolve(id).resolve("smoke.properties"));
-        for (String key : List.of("expected.signal", "expected.signature", "cycle.main", "runner.source"))
-            require(source.getProperty(key).equals(target.getProperty(key)),
+        String main = source.containsKey("cycle.main") ? "cycle.main" : "worldline.main";
+        for (String key : List.of("expected.signal", "expected.signature", main, "runner.source"))
+            require(java.util.Objects.equals(source.getProperty(key), target.getProperty(key)),
                     "reconciled milestone behavior drift: " + id + " " + key);
+        if (source.containsKey("oracle.main")) require(java.util.Objects.equals(
+                source.getProperty("oracle.main"), target.getProperty("oracle.main")),
+                "reconciled milestone oracle drift: " + id);
         return new Imported(attestation.getProperty("fingerprint"), evidence,
                 head, tree, base, signature);
     }

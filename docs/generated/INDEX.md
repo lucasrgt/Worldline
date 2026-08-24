@@ -1015,6 +1015,7 @@ Generated from the canonical Markdown files in `docs/`. Files remain at stable r
 - [M61_FURNACE_OUTPUT.md](../M61_FURNACE_OUTPUT.md)
 - [M620_CYCLE.md](../M620_CYCLE.md)
 - [M621_SAVE_WORLDGEN_SET.md](../M621_SAVE_WORLDGEN_SET.md)
+- [M622_CYCLE.md](../M622_CYCLE.md)
 - [M62_CYCLE.md](../M62_CYCLE.md)
 - [M62_WORKBENCH_WINDOW.md](../M62_WORKBENCH_WINDOW.md)
 - [M63_CYCLE.md](../M63_CYCLE.md)
