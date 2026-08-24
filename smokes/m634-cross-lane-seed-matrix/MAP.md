@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=cross-lane-seed-matrix -->
+<!-- nonclaims=arbitrary-seeds,distant-chunks,biome-names,structures,mutable-entities,client-rendering,particles,gui-portability,other-releases -->
+<!-- frozen-trace=e7e55219d0ff2afc770f220ab309cf77ad0b0ed92928b5dd5342ed7494e79576 -->
+
 # M634 behavior map
 
 ## Boundary
