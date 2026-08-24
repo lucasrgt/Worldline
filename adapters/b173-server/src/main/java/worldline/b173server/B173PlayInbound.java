@@ -86,6 +86,10 @@ final class B173PlayInbound {
         } finally { pulse.interrupt(); }
     }
 
+    RemoteChunkUnload awaitChunkUnload(int chunkX, int chunkZ) throws IOException {
+        return waits.chunkUnload(chunkX, chunkZ);
+    }
+
     RemoteWorldView awaitBlock(BlockPosition position, BlockState expected) throws IOException {
         if (position == null || expected == null) throw new IllegalArgumentException("null block wait");
         if (cache.matches(position, expected)) return cache.snapshot();

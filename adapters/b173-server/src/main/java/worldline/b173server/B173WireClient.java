@@ -110,6 +110,12 @@ public final class B173WireClient implements ObjectObservationSession {
         try { return play.awaitRemoteChunk(chunkX, chunkZ); } catch (IOException error) { throw new IllegalStateException("remote chunk receive failed", error); }
     }
 
+    @Override public worldline.api.RemoteChunkUnload awaitRemoteChunkUnload(int chunkX, int chunkZ) {
+        require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
+        try { return play.awaitRemoteChunkUnload(chunkX, chunkZ); }
+        catch (IOException error) { throw new IllegalStateException("remote chunk unload failed", error); }
+    }
+
     @Override public void beginBreak(BlockPosition position) {
         require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
         try { play.beginBreak(position); } catch (IOException error) { throw new IllegalStateException("begin break failed", error); }

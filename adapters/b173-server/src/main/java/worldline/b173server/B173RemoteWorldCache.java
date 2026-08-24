@@ -3,6 +3,9 @@ package worldline.b173server;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import worldline.api.RemoteChunkObservation;
@@ -11,17 +14,28 @@ import worldline.api.RemoteWorldView;
 import worldline.api.BlockState;
 import worldline.api.BlockPosition;
 import worldline.api.RemoteExplosion;
+import worldline.api.RemoteChunkUnload;
 
 /** Adapter-private Packet50 lifecycle state for a bounded decoded chunk set. */
 final class B173RemoteWorldCache {
     private final Map<Long, RemoteChunkSnapshot> chunks = new LinkedHashMap<>();
+    private final Deque<RemoteChunkUnload> unloads = new ArrayDeque<>();
     private int changes;
     private boolean implicitLoads;
 
     void preChunk(DataInputStream input) throws IOException {
         int x = input.readInt(), z = input.readInt(); boolean load = input.readBoolean();
         long key = key(x, z);
-        if (!load) { chunks.remove(key); return; }
+        if (!load) {
+            boolean tracked = chunks.containsKey(key);
+            chunks.remove(key);
+            if (tracked) {
+                if (unloads.size() >= RemoteWorldView.MAX_CHUNKS)
+                    throw new IOException("remote chunk unload queue limit exceeded");
+                unloads.addLast(new RemoteChunkUnload(x, z, chunks.size()));
+            }
+            return;
+        }
         if (!chunks.containsKey(key) && chunks.size() >= RemoteWorldView.MAX_CHUNKS)
             throw new IOException("remote chunk cache limit exceeded");
         if (!chunks.containsKey(key)) chunks.put(key, null);
@@ -42,7 +56,19 @@ final class B173RemoteWorldCache {
         chunks.put(key, snapshot); return true;
     }
 
-    void enableImplicitLoads() { implicitLoads = true; } void reset() { chunks.clear(); changes = 0; }
+    void enableImplicitLoads() { implicitLoads = true; }
+    void reset() { chunks.clear(); unloads.clear(); changes = 0; }
+
+    RemoteChunkUnload takeUnload(int chunkX, int chunkZ) {
+        for (Iterator<RemoteChunkUnload> values = unloads.iterator(); values.hasNext();) {
+            RemoteChunkUnload value = values.next();
+            if (value.chunkX() == chunkX && value.chunkZ() == chunkZ) {
+                values.remove();
+                return value;
+            }
+        }
+        return null;
+    }
 
     int decoded() {
         int count = 0;

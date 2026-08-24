@@ -37,6 +37,11 @@ final class B173PlayWaits {
                 "expected mob death absent before deadline");
     }
 
+    worldline.api.RemoteChunkUnload chunkUnload(int chunkX, int chunkZ) throws IOException {
+        return until(() -> inbound.cache().takeUnload(chunkX, chunkZ),
+                "expected Packet50 chunk unload absent before deadline");
+    }
+
     B173EntityVelocity velocity(int entity) throws IOException {
         return until(() -> inbound.velocities().take(entity),
                 "expected Packet28 velocity absent before deadline");

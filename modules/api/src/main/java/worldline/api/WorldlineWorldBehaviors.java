@@ -26,6 +26,8 @@ public final class WorldlineWorldBehaviors {
             "Portal travel links to an existing destination frame inside the search radius");
     public static final WorldlineBehavior DUNGEON_GENERATION = define("dungeon-generation",
             "Fixed-seed populated chunks contain replay-stable spawners and nonempty loot chests");
+    public static final WorldlineBehavior CHUNK_UNLOAD_RELOAD = define("chunk-unload-reload",
+            "Burning furnaces, dropped items, and minecarts survive a server chunk unload and reload");
 
     private WorldlineWorldBehaviors() {}
 

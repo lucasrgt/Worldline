@@ -7,6 +7,7 @@ import worldline.api.PlayerPose;
 import worldline.api.RemoteChunkObservation;
 import worldline.api.RemoteChunkSnapshot;
 import worldline.api.RemoteWorldView;
+import worldline.api.RemoteChunkUnload;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.MovementDisposition;
@@ -102,6 +103,11 @@ final class B173PlayChannel {
 
     RemoteWorldView awaitRemoteChunk(int chunkX, int chunkZ) throws IOException {
         require(pose != null, "play channel is not synchronized"); return inbound.awaitChunk(chunkX, chunkZ);
+    }
+
+    RemoteChunkUnload awaitRemoteChunkUnload(int chunkX, int chunkZ) throws IOException {
+        require(pose != null, "play channel is not synchronized");
+        return inbound.awaitChunkUnload(chunkX, chunkZ);
     }
 
     void beginBreak(BlockPosition position) throws IOException { require(pose != null, "play channel is not synchronized"); B173Dig.write(output, position, 0); }
