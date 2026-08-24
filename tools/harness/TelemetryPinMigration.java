@@ -2,6 +2,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HexFormat;
@@ -26,10 +27,12 @@ final class TelemetryPinMigration {
     private void apply() throws Exception {
         require(dirtyIndex(), "stage the telemetry implementation before migrating pins");
         SmokePins existing = new SmokePins(root); SmokeInputFingerprint fingerprints =
-                new SmokeInputFingerprint(root); List<SmokePins.Entry> pins = new ArrayList<>();
+                new SmokeInputFingerprint(root); SmokeReceiptCache cache =
+                new SmokeReceiptCache(root); List<SmokePins.Entry> pins = new ArrayList<>();
         Path lock = root.resolve("smokes/telemetry-migration.lock");
         Properties manifest = Files.isRegularFile(lock) ? load(lock) : new Properties();
-        int changed = 0, carried = 0;
+        Properties providers = ProviderDiscoveryPinCheck.manifest(root);
+        int changed = 0, carried = 0, executed = 0;
         manifest.setProperty("schema", "1");
         attest(manifest, "await_source", "modules/smoketest/src/main/java/worldline/test/WorldlineSmokeAwait.java");
         attest(manifest, "process_source", "tools/harness/SmokeProcess.java");
@@ -38,12 +41,40 @@ final class TelemetryPinMigration {
         attest(manifest, "policy", "quality/smoke-telemetry.properties");
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             SmokePins.Entry prior = existing.entry(smoke.id);
-            require(prior != null, "missing prior smoke proof: " + smoke.id);
             String current = fingerprints.compute(smoke);
             String stem = "smoke." + smoke.id + ".";
+            SmokePins.Entry local = cache.availablePin(smoke);
+            if (ProviderDiscoveryPinCheck.isNewSmoke(providers, smoke.id)) {
+                SmokePins.Entry proof = local != null ? local : prior;
+                if (proof == null) proof = headEntry(smoke.id);
+                require(proof != null, "new provider smoke lacks a prior proof: " + smoke.id);
+                if (!current.equals(proof.fingerprint())) proof = new SmokePins.Entry(
+                        smoke.id, current, proof.evidence(), "refactor-equivalent");
+                pins.add(proof); remove(manifest, stem); continue;
+            }
+            if (local != null && local.source().equals("executed")) {
+                pins.add(local); executed++;
+                String recorded = manifest.getProperty(stem + "current_fingerprint");
+                if (recorded != null) {
+                    carried++;
+                    if (!current.equals(recorded))
+                        manifest.setProperty(stem + "prior_fingerprint", recorded);
+                    manifest.setProperty(stem + "current_fingerprint", current);
+                    manifest.setProperty(stem + "evidence_sha256", local.evidence());
+                }
+                continue;
+            }
+            require(prior != null, "missing prior smoke proof: " + smoke.id);
             if (current.equals(prior.fingerprint())) {
                 pins.add(prior);
-                if (manifest.getProperty(stem + "current_fingerprint") != null) carried++;
+                String recorded = manifest.getProperty(stem + "current_fingerprint");
+                if (recorded != null) {
+                    carried++;
+                    if (!current.equals(recorded))
+                        manifest.setProperty(stem + "prior_fingerprint", recorded);
+                    manifest.setProperty(stem + "current_fingerprint", current);
+                    manifest.setProperty(stem + "evidence_sha256", prior.evidence());
+                }
                 continue;
             }
             changed++; carried++; manifest.setProperty(stem + "prior_fingerprint", prior.fingerprint());
@@ -51,11 +82,13 @@ final class TelemetryPinMigration {
             manifest.setProperty(stem + "evidence_sha256", prior.evidence());
             pins.add(new SmokePins.Entry(smoke.id, current, prior.evidence(), "refactor-equivalent"));
         }
-        require(changed >= 1 && carried >= 100,
-                "telemetry migration census drift: changed=" + changed + ";carried=" + carried);
+        require(carried >= 100 && executed >= 1,
+                "telemetry migration census drift: changed=" + changed + ";carried=" + carried
+                        + ";executed=" + executed);
         manifest.setProperty("count", Integer.toString(carried)); existing.write(pins);
         store(lock, manifest);
-        System.out.println("telemetry pins migrated: " + changed + " changed, " + carried + " carried");
+        System.out.println("telemetry pins migrated: " + changed + " changed, " + carried
+                + " carried, " + executed + " exact support proofs");
     }
 
     private void attest(Properties manifest, String key, String relative) throws Exception {
@@ -76,6 +109,21 @@ final class TelemetryPinMigration {
         for (String key : values.stringPropertyNames().stream().sorted(Comparator.naturalOrder()).toList())
             output.append(key).append('=').append(values.getProperty(key)).append('\n');
         Files.writeString(path, output.toString(), StandardCharsets.UTF_8);
+    }
+    private static void remove(Properties values, String stem) {
+        values.remove(stem + "prior_fingerprint");
+        values.remove(stem + "current_fingerprint");
+        values.remove(stem + "evidence_sha256");
+    }
+    private SmokePins.Entry headEntry(String id) throws Exception {
+        Process process = new ProcessBuilder("git", "show", "HEAD:smokes/qualification.lock")
+                .directory(root.toFile()).redirectErrorStream(true).start();
+        String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        require(process.waitFor() == 0, "cannot read predecessor qualification lock");
+        Properties values = new Properties(); values.load(new StringReader(output));
+        String stem = "smoke." + id + ".", fingerprint = values.getProperty(stem + "fingerprint");
+        return fingerprint == null ? null : new SmokePins.Entry(id, fingerprint,
+                values.getProperty(stem + "observation_sha256"), values.getProperty(stem + "source"));
     }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);

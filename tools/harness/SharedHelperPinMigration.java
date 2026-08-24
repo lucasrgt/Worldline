@@ -20,10 +20,16 @@ final class SharedHelperPinMigration {
     }
 
     private void apply() throws Exception {
+        Path lockPath = root.resolve("smokes/shared-helper-migration.lock");
+        if (Files.isRegularFile(lockPath)) {
+            Properties existing = load(lockPath);
+            if ("1".equals(existing.getProperty("schema"))) {
+                refresh(lockPath, existing); return;
+            }
+        }
         List<String> files = changedSmokeJava();
         require(files.size() == 354, "shared-helper source census drift: " + files.size());
         Map<String, String> priors = priorSources(files);
-        Path lockPath = root.resolve("smokes/shared-helper-migration.lock");
         Properties lock = Files.isRegularFile(lockPath) ? load(lockPath) : new Properties();
         lock.setProperty("schema", "1"); lock.setProperty("file.count", Integer.toString(files.size()));
         int variants = variantCount();
@@ -71,6 +77,41 @@ final class SharedHelperPinMigration {
         lock.setProperty("smoke.changed", Integer.toString(changed));
         existing.write(pins); store(lockPath, lock);
         System.out.println("shared-helper proofs migrated: 354 files; " + changed + " smoke inputs");
+    }
+
+    private void refresh(Path path, Properties lock) throws Exception {
+        Properties data = load(root.resolve("smokes/data-driven-migration.lock"));
+        int refactors = Integer.parseInt(data.getProperty("refresh.fixture.count", "0"));
+        require(refactors >= 1 && refactors <= 16, "shared-helper refresh census drift");
+        lock.setProperty("refresh.count", Integer.toString(refactors));
+        for (int index = 1; index <= refactors; index++) {
+            String source = "refresh.fixture." + index + ".", target = "refresh." + index + ".";
+            for (String key : List.of("id", "path", "prior_sha256", "current_sha256"))
+                lock.setProperty(target + key, required(data, source + key));
+            require(digest(Files.readString(root.resolve(required(data, source + "path")),
+                    StandardCharsets.UTF_8)).equals(required(data, source + "current_sha256")),
+                    "shared-helper refreshed source drift");
+        }
+        lock.setProperty("variant.count", Integer.toString(variantCount()));
+        SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
+                new SmokeInputFingerprint(root); Properties providers =
+                ProviderDiscoveryPinCheck.manifest(root); int carried = 0;
+        for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            if (ProviderDiscoveryPinCheck.exemptsLegacy(providers, smoke.id)) continue;
+            carried++; String current = fingerprints.compute(smoke); SmokePins.Entry pin =
+                    pins.match(smoke.id, current); require(pin != null,
+                    "shared-helper refresh lacks current proof: " + smoke.id);
+            String stem = "smoke." + smoke.id + ".";
+            String recorded = required(lock, stem + "current_fingerprint");
+            if (!current.equals(recorded)) lock.setProperty(stem + "prior_fingerprint", recorded);
+            lock.setProperty(stem + "current_fingerprint", current);
+            lock.setProperty(stem + "evidence_sha256", pin.evidence());
+        }
+        require(carried == 525 - ProviderDiscoveryPinCheck.pendingCount(providers),
+                "shared-helper refresh smoke census drift");
+        pins.write(pins.entries()); store(path, lock);
+        System.out.println("shared-helper pins refreshed: " + refactors
+                + " canonical refactors, " + carried + " carried");
     }
 
     private int variantCount() throws Exception {
@@ -152,6 +193,10 @@ final class SharedHelperPinMigration {
         for (String key : values.stringPropertyNames().stream().sorted().toList())
             output.append(key).append('=').append(values.getProperty(key)).append('\n');
         Files.writeString(path, output.toString(), StandardCharsets.UTF_8);
+    }
+    private static String required(Properties values, String key) {
+        String value = values.getProperty(key); require(value != null && !value.isBlank(),
+                "missing " + key); return value;
     }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);

@@ -29,6 +29,32 @@ final class DataDrivenCycleCheck {
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); Properties telemetry = TelemetryPinCheck.manifest(root);
         Properties schemas = SchemaPinCheck.manifest(root);
+        int fixtureRefactors = integer(migrations, "refresh.fixture.count");
+        require(fixtureRefactors >= 1 && fixtureRefactors <= 16,
+                "generic fixture-refactor census drift");
+        for (int index = 1; index <= fixtureRefactors; index++) {
+            String stem = "refresh.fixture." + index + ".";
+            String id = migrations.getProperty(stem + "id", "");
+            String relative = migrations.getProperty(stem + "path", "");
+            require(relative.startsWith("smokes/" + id + "/") && relative.endsWith(".java")
+                            && hash(migrations, stem + "prior_sha256")
+                            && digest(root.resolve(relative)).equals(
+                                    migrations.getProperty(stem + "current_sha256")),
+                    "generic fixture-refactor attestation drift");
+        }
+        int formattingRefactors = Integer.parseInt(
+                migrations.getProperty("refresh.formatting.count", "0"));
+        require(formattingRefactors <= 16, "generic formatting-refactor census drift");
+        for (int index = 1; index <= formattingRefactors; index++) {
+            String stem = "refresh.formatting." + index + ".";
+            String id = migrations.getProperty(stem + "id", "");
+            String relative = migrations.getProperty(stem + "path", "");
+            require(relative.startsWith("smokes/" + id + "/") && relative.endsWith(".java")
+                            && hash(migrations, stem + "prior_sha256")
+                            && digest(root.resolve(relative)).equals(
+                                    migrations.getProperty(stem + "current_sha256")),
+                    "generic formatting-refactor attestation drift");
+        }
         int generic = 0, migrated = 0;
         Set<String> seen = new HashSet<>();
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {

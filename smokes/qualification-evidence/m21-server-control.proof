@@ -1,5 +1,5 @@
 schema=1
 id=m21-server-control
-fingerprint=cab79cf2799f8c0a12ab5662dffb59d9ce301ae3f3b401106eca07c8c6d7eb7c
+fingerprint=9294fa92b4cb949948f0be1f9cef55c64f758a16c0670d1c7998d37928819d89
 observation.sha256=8ffb85c3c2ce868dcf4d668c3a894b79af97bba554edad1dbd2bc361f076913e
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m15-fuzz
-fingerprint=721a034441aededb02fc9a29d32fe4ceab554d17a562a243714806b4fa97a719
+fingerprint=dbd765bc47028acb0fe6172ed6ccca59a01e8841cf11cf97566ffdc57c10b085
 observation.sha256=75bf365c568a6e70c0adfd49c751669280a3b5f30cfe21331e650533468202c8
 source=refactor-equivalent

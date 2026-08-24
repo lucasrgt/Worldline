@@ -1,5 +1,5 @@
 schema=1
 id=m585-armor-durability-hit-set
-fingerprint=86596ed2ed4531bea94f5fc81092dde0f98600eaab991d981809c2c1a220f8f6
+fingerprint=728eb836734b7caf7298291f4cb243807deac7a0fffc5d1015819354092319e2
 observation.sha256=315d834f07ce96d37f932cc793860ae7bc38d72b9b6a7f0a7bed4a9e019831ee
 source=refactor-equivalent

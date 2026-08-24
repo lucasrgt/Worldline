@@ -1,5 +1,5 @@
 schema=1
 id=m109-cell-size-floor
-fingerprint=35be200478aa8229ecdf18d18c799612b5e4a7819b43f19c04ada5c6e9fc1b8d
+fingerprint=c24909b5d76d083c4a6b89eaca91879d4338b55a727692b75c5dab9ead136a52
 observation.sha256=d5ba4fa589d791959dca34158989889ea9d5c29942b6bc44fca7a18bb800a69e
 source=refactor-equivalent

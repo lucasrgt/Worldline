@@ -39,6 +39,10 @@ final class GuiWorkbenchPinMigration {
     private static void apply(Path root) throws Exception {
         Path lockPath = root.resolve("smokes/gui-workbench.lock");
         Properties lock = Files.isRegularFile(lockPath) ? load(lockPath) : new Properties();
+        if ("1".equals(lock.getProperty("schema"))
+                && SmokeDiscovery.discover(root).size() > 526) {
+            refresh(root, lockPath, lock); return;
+        }
         lock.setProperty("schema", "1");
         lock.setProperty("pending.smokes", String.join(",", PENDING.stream().sorted().toList()));
         lock.setProperty("pending.count", Integer.toString(PENDING.size()));
@@ -74,6 +78,31 @@ final class GuiWorkbenchPinMigration {
         lock.setProperty("smoke.changed", Integer.toString(changed));
         existing.write(pins); store(lockPath, lock);
         System.out.println("GUI workbench proofs: " + changed + " changed, 520 carried, 5 pending");
+    }
+    private static void refresh(Path root, Path path, Properties lock) throws Exception {
+        require(Integer.parseInt(SharedHelperPinCheck.manifest(root)
+                .getProperty("refresh.count", "0")) >= 1,
+                "GUI refresh requires shared-helper attestations");
+        Properties train = TrainPinCheck.manifest(root); SmokePins pins = new SmokePins(root);
+        SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
+        int catalog = 0, carried = 0;
+        for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            if (TrainPinCheck.isAdded(train, smoke.id)) continue;
+            catalog++;
+            if (smoke.id.equals("m620-stationapi-testkit-driver") || PENDING.contains(smoke.id))
+                continue;
+            carried++; String current = fingerprints.compute(smoke); SmokePins.Entry pin =
+                    pins.match(smoke.id, current); require(pin != null,
+                    "GUI refresh lacks current proof: " + smoke.id);
+            String stem = "smoke." + smoke.id + ".", recorded = required(lock,
+                    stem + "current_fingerprint");
+            if (!current.equals(recorded)) lock.setProperty(stem + "prior_fingerprint", recorded);
+            lock.setProperty(stem + "current_fingerprint", current);
+            lock.setProperty(stem + "evidence_sha256", pin.evidence());
+        }
+        require(catalog == 526 && carried == 520, "GUI refresh census drift");
+        pins.write(pins.entries()); store(path, lock);
+        System.out.println("GUI workbench pins refreshed: 520 carried, 5 qualified exceptions");
     }
     private static void sources(Path root, Properties lock) throws Exception {
         lock.setProperty("source.count", Integer.toString(MODIFIED.size())); int index = 0;
@@ -118,5 +147,9 @@ final class GuiWorkbenchPinMigration {
     }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);
+    }
+    private static String required(Properties values, String key) {
+        String value = values.getProperty(key); require(value != null && !value.isBlank(),
+                "missing " + key); return value;
     }
 }

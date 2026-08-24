@@ -54,6 +54,10 @@ final class ProviderDiscoveryPinMigration {
     private static void apply(Path root) throws Exception {
         Path lockPath = root.resolve("smokes/provider-discovery.lock");
         Properties lock = Files.isRegularFile(lockPath) ? load(lockPath) : new Properties();
+        if ("1".equals(lock.getProperty("schema"))
+                && SmokeDiscovery.discover(root).size() > 526) {
+            refresh(root, lockPath, lock); return;
+        }
         lock.setProperty("schema", "1"); lock.setProperty("new.smoke", NEW_SMOKE);
         sources(root, lock, "modified", MODIFIED, true);
         sources(root, lock, "added", ADDED, false);
@@ -91,6 +95,31 @@ final class ProviderDiscoveryPinMigration {
         existing.write(pins); store(lockPath, lock);
         System.out.println("provider-discovery proofs: " + changed
                 + " changed, 521 carried, 4 runtime-pending");
+    }
+
+    private static void refresh(Path root, Path path, Properties lock) throws Exception {
+        Properties shared = SharedHelperPinCheck.manifest(root);
+        require(Integer.parseInt(shared.getProperty("refresh.count", "0")) >= 1,
+                "provider refresh requires shared-helper attestations");
+        Properties train = TrainPinCheck.manifest(root); SmokePins pins = new SmokePins(root);
+        SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
+        int discovered = 0, carried = 0;
+        for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            if (TrainPinCheck.isAdded(train, smoke.id)) continue;
+            discovered++;
+            if (smoke.id.equals(NEW_SMOKE) || PENDING.contains(smoke.id)) continue;
+            carried++; String current = fingerprints.compute(smoke); SmokePins.Entry pin =
+                    pins.match(smoke.id, current); require(pin != null,
+                    "provider refresh lacks current proof: " + smoke.id);
+            String stem = "smoke." + smoke.id + ".", recorded = required(lock,
+                    stem + "current_fingerprint");
+            if (!current.equals(recorded)) lock.setProperty(stem + "prior_fingerprint", recorded);
+            lock.setProperty(stem + "current_fingerprint", current);
+            lock.setProperty(stem + "evidence_sha256", pin.evidence());
+        }
+        require(discovered == 526 && carried == 521, "provider refresh census drift");
+        pins.write(pins.entries()); store(path, lock);
+        System.out.println("provider-discovery pins refreshed: 521 carried, 4 qualified exceptions");
     }
 
     private static Map<String, SmokePins.Entry> baseline(Path root) throws Exception {
@@ -144,5 +173,9 @@ final class ProviderDiscoveryPinMigration {
     }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);
+    }
+    private static String required(Properties values, String key) {
+        String value = values.getProperty(key); require(value != null && !value.isBlank(),
+                "missing " + key); return value;
     }
 }

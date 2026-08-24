@@ -1,5 +1,6 @@
 package worldline.smoke.sheepshearedpersistenceb173;
 import static worldline.b173server.B173FixtureSupport.*;
+import static worldline.b173server.B173FixtureSupport.*;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
@@ -222,15 +223,6 @@ public final class SheepShearedPersistenceSmoke {
   }
   private static String cell(BlockPosition p) {
     return p.x() + ":" + p.y() + ":" + p.z();
-  }
-  private static void awaitPlayers(B173DedicatedServer s, int n) throws Exception {
-    long end = System.currentTimeMillis() + 5000L;
-    while (System.currentTimeMillis() < end) {
-      if (s.players().size() == n)
-        return;
-      Thread.sleep(100L);
-    }
-    throw new IllegalStateException("player count drift");
   }
   private static void require(boolean v, String m) {
     if (!v)

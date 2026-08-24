@@ -21,9 +21,7 @@ import java.util.stream.Stream;
 
 /** Cross-platform, cross-worktree entry point for every repository gate. */
 public final class Gate {
-    private static final String ACTIVE = "WORLDLINE_GATE_ACTIVE";
     private static final String INTERNAL = "WORLDLINE_GATE_INTERNAL";
-    private static final String RUNTIME_LEASE = "WORLDLINE_RUNTIME_LEASE";
     private final Path root = Paths.get("").toAbsolutePath().normalize();
     private final Path control = controlDirectory();
     private final long waitMillis = waitMillis();
@@ -93,10 +91,12 @@ public final class Gate {
         case "--migrate-data-cycles" -> m("DataDrivenCycleMigration", "--apply", 300);
         case "--refresh-data-cycle-pins" -> m("DataDrivenCycleMigration", "--refresh", 300);
         case "--migrate-composite-cycles" -> m("CompositeCycleMigration", "--apply", 300);
+        case "--refresh-composite-cycle-pins" -> m("CompositeCycleMigration", "--refresh", 300);
         case "--migrate-telemetry-pins" -> m("TelemetryPinMigration", "--apply", 300);
         case "--migrate-repository-schemas" -> m("RepositorySchemaMigration", "--apply", 600);
         case "--migrate-formatting-pins" -> m("FormattingPinMigration", "--apply", 600);
         case "--migrate-shared-helper-pins" -> m("SharedHelperPinMigration", "--apply", 600);
+        case "--migrate-unicode-pins" -> m("UnicodePinMigration", "--apply", 600);
         case "--migrate-adapter-split-pins" -> m("AdapterSplitPinMigration", "--apply", 600);
         case "--migrate-provider-discovery-pins" -> m("ProviderDiscoveryPinMigration", "--apply", 600);
         case "--migrate-gui-workbench-pins" -> m("GuiWorkbenchPinMigration", "--apply", 600);
@@ -158,10 +158,10 @@ public final class Gate {
                 "usage: java tools/harness/Gate.java "
                 + "[--runtime|--smoke|--pin-smokes|--accept-legacy-smoke-baseline|--orchestrator|"
                 + "--smoke-plan|--pinned-smoke|--migrate-data-cycles|--refresh-data-cycle-pins|"
-                + "--migrate-composite-cycles|"
+                + "--migrate-composite-cycles|--refresh-composite-cycle-pins|"
                 + "--migrate-telemetry-pins|"
                 + "--migrate-repository-schemas|"
-                + "--migrate-formatting-pins|"
+                + "--migrate-formatting-pins|--migrate-unicode-pins|"
                 + "--migrate-shared-helper-pins|"
                 + "--migrate-adapter-split-pins|"
                 + "--migrate-provider-discovery-pins|"
@@ -212,10 +212,11 @@ public final class Gate {
                 javaTool("java"), "-cp", classes.toString(), "RepositoryVerify"));
         command.addAll(Arrays.asList(arguments));
         ProcessBuilder builder = new ProcessBuilder(command).directory(root.toFile()).inheritIO();
-        builder.environment().put(ACTIVE, "true");
+        builder.environment().put("WORLDLINE_GATE_ACTIVE", "true");
         builder.environment().put("WORLDLINE_HARNESS_CP", classes.toString());
         builder.environment().put("WORLDLINE_GATE_CONTROL", control.toString());
-        if (runtime) builder.environment().put(RUNTIME_LEASE, Long.toString(ProcessHandle.current().pid()));
+        if (runtime) builder.environment().put("WORLDLINE_RUNTIME_LEASE",
+                Long.toString(ProcessHandle.current().pid()));
         return waitFor(builder.start(), 0);
     }
 

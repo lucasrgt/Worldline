@@ -44,6 +44,7 @@ final class TrainPinMigration {
         lock.setProperty("base", BASE); sources(root, lock);
         Map<String, SmokePins.Entry> baseline = baseline(root);
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
+        Properties predecessor = predecessor(root);
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
         SmokeReceiptCache cache = new SmokeReceiptCache(root);
         List<SmokePins.Entry> updated = new ArrayList<>(); List<String> pending = new ArrayList<>();
@@ -61,6 +62,17 @@ final class TrainPinMigration {
                     updated.add(new SmokePins.Entry(smoke.id, current, receipt.evidence, "executed"));
                     continue;
                 }
+                SmokePins.Entry carriedPin = pins.entry(smoke.id);
+                if (carriedPin != null && "executed".equals(
+                        predecessor.getProperty(stem + "kind"))) {
+                    executed++; seal(lock, stem, "executed",
+                            required(predecessor, stem + "current_fingerprint"), current,
+                            carriedPin.evidence());
+                    copyReceipt(predecessor, lock, stem);
+                    updated.add(new SmokePins.Entry(smoke.id, current,
+                            carriedPin.evidence(), "executed"));
+                    continue;
+                }
                 pending.add(smoke.id);
                 lock.setProperty(stem + "kind", "pending");
                 lock.setProperty(stem + "prior_fingerprint", prior == null ? "absent" : prior.fingerprint());
@@ -69,12 +81,17 @@ final class TrainPinMigration {
                 continue;
             }
             if (prior != null) {
-                carried++; seal(lock, stem, "baseline", prior.fingerprint(), current, prior.evidence());
-                updated.add(new SmokePins.Entry(smoke.id, current, prior.evidence(),
-                        current.equals(prior.fingerprint()) ? prior.source() : "refactor-equivalent"));
+                carried++; SmokePins.Entry currentPin = pins.match(smoke.id, current);
+                String evidence = currentPin == null ? prior.evidence() : currentPin.evidence();
+                seal(lock, stem, "baseline", prior.fingerprint(), current, evidence);
+                updated.add(currentPin != null ? currentPin : new SmokePins.Entry(
+                        smoke.id, current, evidence, current.equals(prior.fingerprint())
+                        ? prior.source() : "refactor-equivalent"));
                 continue;
             }
-            imported++; Imported receipt = imported(root, swarm, smoke.id);
+            imported++; Imported receipt = executed(root, cache, smoke, current);
+            if (receipt == null) receipt = historical(root, smoke);
+            if (receipt == null) receipt = imported(root, swarm, smoke.id);
             seal(lock, stem, "milestone", receipt.fingerprint, current, receipt.evidence);
             receipt(lock, stem, receipt);
             updated.add(new SmokePins.Entry(smoke.id, current, receipt.evidence,
@@ -110,6 +127,7 @@ final class TrainPinMigration {
         String base = MiniJson.string(json, "base"), signature = MiniJson.string(json, "signature");
         String evidence = MiniJson.string(json, "evidence_sha256");
         SmokePins.Entry pin = cache.executedPin(smoke, fingerprint, head, tree);
+        if (pin == null) return null;
         Properties descriptor = load(root.resolve("smokes").resolve(smoke.id).resolve("smoke.properties"));
         require("passed".equals(MiniJson.string(json, "status"))
                         && smoke.id.equals(MiniJson.string(json, "id"))
@@ -151,11 +169,41 @@ final class TrainPinMigration {
                 head, tree, base, signature);
     }
 
+    private static Imported historical(Path root, SmokeDiscovery.Entry smoke) throws Exception {
+        Path report = root.resolve(".worldline/reports/milestones").resolve(smoke.id + ".json");
+        Path attestation = root.resolve(".worldline/reports/smokes").resolve(smoke.id + ".properties");
+        Path log = root.resolve(".worldline/smoke-logs").resolve(smoke.id + ".log");
+        if (!Files.isRegularFile(report) || !Files.isRegularFile(attestation)
+                || !Files.isRegularFile(log)) return null;
+        Map<String, Object> json = MiniJson.object(Files.readString(report, StandardCharsets.UTF_8));
+        Properties proof = load(attestation); String head = MiniJson.string(json, "head");
+        String tree = MiniJson.string(json, "tree"), base = MiniJson.string(json, "base");
+        String signature = MiniJson.string(json, "signature");
+        String evidence = MiniJson.string(json, "evidence_sha256");
+        Properties descriptor = load(root.resolve("smokes").resolve(smoke.id).resolve("smoke.properties"));
+        require("passed".equals(MiniJson.string(json, "status"))
+                        && smoke.id.equals(MiniJson.string(json, "id"))
+                        && head.equals(proof.getProperty("head"))
+                        && evidence.equals(digest(Files.readAllBytes(log)))
+                        && signature.equals(descriptor.getProperty("expected.signature"))
+                        && tree.equals(capture(root, "rev-parse", head + "^{tree}").strip())
+                        && status(root, "merge-base", "--is-ancestor", base, head) == 0
+                        && status(root, "merge-base", "--is-ancestor", head, "HEAD") == 0,
+                "invalid historical milestone evidence: " + smoke.id);
+        return new Imported(proof.getProperty("fingerprint"), evidence,
+                head, tree, base, signature);
+    }
+
     private static void receipt(Properties lock, String stem, Imported receipt) {
         lock.setProperty(stem + "receipt.head", receipt.head);
         lock.setProperty(stem + "receipt.tree", receipt.tree);
         lock.setProperty(stem + "receipt.base", receipt.base);
         lock.setProperty(stem + "receipt.signature", receipt.signature);
+    }
+
+    private static void copyReceipt(Properties source, Properties target, String stem) {
+        for (String key : List.of("receipt.head", "receipt.tree", "receipt.base", "receipt.signature"))
+            target.setProperty(stem + key, required(source, stem + key));
     }
 
     private static void sources(Path root, Properties lock) throws Exception {
@@ -189,6 +237,13 @@ final class TrainPinMigration {
                     values.getProperty(stem + "evidence_sha256"), values.getProperty(stem + "source")));
         }
         return Map.copyOf(result);
+    }
+
+    private static Properties predecessor(Path root) throws Exception {
+        Properties values = new Properties();
+        try (StringReader reader = new StringReader(capture(root, "show",
+                "HEAD:smokes/train-reconciliation.lock"))) { values.load(reader); }
+        return values;
     }
 
     private static void seal(Properties lock, String stem, String kind,
@@ -229,6 +284,10 @@ final class TrainPinMigration {
     }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);
+    }
+    private static String required(Properties values, String key) {
+        String value = values.getProperty(key);
+        require(value != null && !value.isBlank(), "missing " + key); return value;
     }
     private record Imported(String fingerprint, String evidence, String head,
             String tree, String base, String signature) { }

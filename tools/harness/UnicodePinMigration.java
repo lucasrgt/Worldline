@@ -20,6 +20,11 @@ final class UnicodePinMigration {
     }
 
     private static void apply(Path root) throws Exception {
+        Path path = root.resolve("smokes/unicode-normalization.lock");
+        if (Files.isRegularFile(path)) {
+            Properties lock = load(path);
+            if ("1".equals(lock.getProperty("schema"))) { refresh(root, path, lock); return; }
+        }
         SmokePins existing = new SmokePins(root); existing.validateEvidence();
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
         List<SmokePins.Entry> pins = new ArrayList<>(); Properties lock = new Properties();
@@ -38,14 +43,46 @@ final class UnicodePinMigration {
         }
         require(pins.size() == 525 && changed > 0, "Unicode migration census drift");
         lock.setProperty("smoke.count", "525"); lock.setProperty("smoke.changed", Integer.toString(changed));
-        existing.write(pins); store(root.resolve("smokes/unicode-normalization.lock"), lock);
+        existing.write(pins); store(path, lock);
         System.out.println("Unicode-normalized proofs: " + changed + " changed, 525 carried");
+    }
+    private static void refresh(Path root, Path path, Properties lock) throws Exception {
+        Properties shared = SharedHelperPinCheck.manifest(root);
+        int refactors = Integer.parseInt(shared.getProperty("refresh.count", "0"));
+        require(refactors >= 1 && refactors <= 16,
+                "Unicode refresh requires shared-helper attestations");
+        SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
+                new SmokeInputFingerprint(root); Properties providers =
+                ProviderDiscoveryPinCheck.manifest(root); int carried = 0;
+        for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            if (ProviderDiscoveryPinCheck.exemptsLegacy(providers, smoke.id)) continue;
+            carried++; String current = fingerprints.compute(smoke); SmokePins.Entry pin =
+                    pins.match(smoke.id, current); require(pin != null,
+                    "Unicode refresh lacks current proof: " + smoke.id);
+            String stem = "smoke." + smoke.id + ".", recorded = required(lock,
+                    stem + "current_fingerprint");
+            if (!current.equals(recorded)) lock.setProperty(stem + "prior_fingerprint", recorded);
+            lock.setProperty(stem + "current_fingerprint", current);
+            lock.setProperty(stem + "evidence_sha256", pin.evidence());
+        }
+        require(carried == 525 - ProviderDiscoveryPinCheck.pendingCount(providers),
+                "Unicode refresh census drift");
+        pins.write(pins.entries()); store(path, lock);
+        System.out.println("Unicode-normalized pins refreshed: " + carried + " carried");
     }
     private static void store(Path path, Properties values) throws Exception {
         StringBuilder output = new StringBuilder("# Worldline portable UTF-8 normalization v1\n");
         for (String key : values.stringPropertyNames().stream().sorted(Comparator.naturalOrder()).toList())
             output.append(key).append('=').append(values.getProperty(key)).append('\n');
         Files.writeString(path, output.toString(), StandardCharsets.UTF_8);
+    }
+    private static Properties load(Path path) throws Exception { Properties values = new Properties();
+        try (var reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+            values.load(reader); } return values;
+    }
+    private static String required(Properties values, String key) {
+        String value = values.getProperty(key); require(value != null && !value.isBlank(),
+                "missing " + key); return value;
     }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);

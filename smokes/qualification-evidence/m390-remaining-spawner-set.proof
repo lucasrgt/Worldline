@@ -1,5 +1,5 @@
 schema=1
 id=m390-remaining-spawner-set
-fingerprint=8fcae09a24bd30702ba2118070367d463707f5803c17be81587c2f230af2881a
+fingerprint=e15fa10427bdbaabdf0ddcada3468f22ae6e35e4acb8014d09f97a7c6178800c
 observation.sha256=543ebd4ab455f716f9f706ba3647dbe861dfbe4f81d65c002df093f92e401215
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=betavault-item-reference
-fingerprint=86be037bc730ddf7f8edbc04482d0051feded19239a6a9d9e487048c90793dd3
+fingerprint=889325c990b3e457481dc0720151a97d7b6c9459545e56d591c109f0da15fd6f
 observation.sha256=471f4ef5ed8dbd3cf970672eb09c574890d1eb7af7866a65995d7426fd3b923d
 source=refactor-equivalent

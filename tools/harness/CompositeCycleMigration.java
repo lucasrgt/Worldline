@@ -30,9 +30,11 @@ final class CompositeCycleMigration {
     private CompositeCycleMigration(Path root) { this.root = root.toAbsolutePath().normalize(); }
     public static void main(String[] arguments) {
         try {
-            require(arguments.length == 1 && arguments[0].equals("--apply"),
-                    "usage: CompositeCycleMigration --apply");
-            new CompositeCycleMigration(Path.of("")).apply();
+            require(arguments.length == 1 && (arguments[0].equals("--apply")
+                    || arguments[0].equals("--refresh")),
+                    "usage: CompositeCycleMigration [--apply|--refresh]");
+            CompositeCycleMigration migration = new CompositeCycleMigration(Path.of(""));
+            if (arguments[0].equals("--apply")) migration.apply(); else migration.refresh();
         } catch (Exception error) {
             System.err.println("composite cycle migration failed: " + error.getMessage()); System.exit(1);
         }
@@ -81,6 +83,34 @@ final class CompositeCycleMigration {
         }
         oldPins.write(pins); store(root.resolve("smokes/composite-cycle-migration.lock"), manifest);
         System.out.println("composite cycle migration applied: " + migrations.size() + " runners");
+    }
+
+    private void refresh() throws Exception {
+        require(dirtyIndex(), "stage the reviewed shared-support change before refreshing composite pins");
+        Path manifestPath = root.resolve("smokes/composite-cycle-migration.lock");
+        Properties manifest = load(manifestPath); SmokePins existing = new SmokePins(root);
+        SmokeReceiptCache cache = new SmokeReceiptCache(root); List<SmokePins.Entry> pins = new ArrayList<>();
+        int composite = 0, executed = 0;
+        for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            SmokePins.Entry local = cache.availablePin(smoke);
+            if (local != null && local.source().equals("executed")) executed++;
+            if (!smoke.runner.equals("tools/smoke/CompositeCycle.java")) {
+                pins.add(requiredEntry(existing, smoke.id)); continue;
+            }
+            composite++; String stem = "cycle." + smoke.id + ".";
+            CompositeCyclePlan plan = CompositeCyclePlan.load(root, smoke.id);
+            require(plan.fingerprint().equals(manifest.getProperty(stem + "plan_sha256")),
+                    "composite plan changed outside the reviewed migration: " + smoke.id);
+            pins.add(new SmokePins.Entry(smoke.id, cache.fingerprint(smoke),
+                    requiredHash(manifest, stem + "evidence_sha256"), "refactor-equivalent"));
+        }
+        require(composite == integer(manifest, "count") && executed >= 1,
+                "composite refresh requires the exact generic support proof");
+        manifest.setProperty("runtime_support_source_sha256", digest(
+                root.resolve("tools/harness/SmokeSupport.java")));
+        existing.write(pins); store(manifestPath, manifest);
+        System.out.println("composite pins refreshed: " + composite + " plans, " + executed
+                + " exact support proofs");
     }
 
     private Plan parse(Path source, String text) {
@@ -148,6 +178,14 @@ final class CompositeCycleMigration {
     private static SmokePins.Entry requiredEntry(SmokePins pins, String id) {
         SmokePins.Entry entry = pins.entry(id); require(entry != null, "missing unchanged pin: " + id); return entry;
     }
+    private static int integer(Properties values, String key) {
+        try { return Integer.parseInt(values.getProperty(key, "")); }
+        catch (NumberFormatException error) { throw new IllegalStateException("invalid " + key); }
+    }
+    private static String requiredHash(Properties values, String key) {
+        String value = values.getProperty(key, "");
+        require(value.matches("[0-9a-f]{64}"), "missing " + key); return value;
+    }
     private static String one(Pattern pattern, String text, String label, Path source) {
         List<String> values = matches(pattern, text);
         require(values.size() == 1, "unsupported " + label + ": " + source); return values.get(0);
@@ -185,6 +223,9 @@ final class CompositeCycleMigration {
             output.append(key).append('=').append(values.getProperty(key)).append('\n');
         Files.writeString(path, output.toString(), StandardCharsets.UTF_8);
     }
+    private static Properties load(Path path) throws Exception { Properties values = new Properties();
+        try (var reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+            values.load(reader); } return values; }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);
     }

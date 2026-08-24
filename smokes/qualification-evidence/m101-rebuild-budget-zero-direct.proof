@@ -1,5 +1,5 @@
 schema=1
 id=m101-rebuild-budget-zero-direct
-fingerprint=d1c542a6650b4e89e79e049c33a9fe392190461ccc366f20389b85c2ac2d8497
+fingerprint=9bd0e7c72890bf11d2aec2e7c544255cae7ab065b2cea2e7d304b6760432214b
 observation.sha256=8e0d8ae9c249c8f2967e0ac534c0ee7b7e79ff6a04bd7b407c89dcd2f5e7b0cd
 source=refactor-equivalent

@@ -36,6 +36,13 @@ final class BehaviorFamilyPinMigration {
 
     private static void apply(Path root) throws Exception {
         Path path = root.resolve("smokes/behavior-family-rebalance.lock");
+        if (Files.isRegularFile(path)) {
+            Properties existing = load(path);
+            if ("1".equals(existing.getProperty("schema"))
+                    && SmokeDiscovery.discover(root).size() > 526) {
+                refresh(root, path, existing); return;
+            }
+        }
         Properties lock = new Properties(); lock.setProperty("schema", "1");
         lock.setProperty("assignment.count", "109"); lock.setProperty("source.count", "4");
         lock.setProperty("pending.count", Integer.toString(PENDING.size()));
@@ -67,6 +74,32 @@ final class BehaviorFamilyPinMigration {
         lock.setProperty("smoke.changed", Integer.toString(changed));
         pins.write(updated); store(path, lock);
         System.out.println("behavior-family proofs: " + changed + " changed, 520 carried, 5 pending");
+    }
+
+    private static void refresh(Path root, Path path, Properties lock) throws Exception {
+        require(Integer.parseInt(SharedHelperPinCheck.manifest(root)
+                .getProperty("refresh.count", "0")) >= 1,
+                "behavior-family refresh requires shared-helper attestations");
+        Properties train = TrainPinCheck.manifest(root); SmokePins pins = new SmokePins(root);
+        SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
+        int catalog = 0, carried = 0;
+        for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            if (TrainPinCheck.isAdded(train, smoke.id)) continue;
+            catalog++;
+            if (smoke.id.equals("m620-stationapi-testkit-driver") || PENDING.contains(smoke.id))
+                continue;
+            carried++; String current = fingerprints.compute(smoke); SmokePins.Entry pin =
+                    pins.match(smoke.id, current); require(pin != null,
+                    "behavior-family refresh lacks current proof: " + smoke.id);
+            String stem = "smoke." + smoke.id + ".", recorded = required(lock,
+                    stem + "current_fingerprint");
+            if (!current.equals(recorded)) lock.setProperty(stem + "prior_fingerprint", recorded);
+            lock.setProperty(stem + "current_fingerprint", current);
+            lock.setProperty(stem + "evidence_sha256", pin.evidence());
+        }
+        require(catalog == 526 && carried == 520, "behavior-family refresh census drift");
+        pins.write(pins.entries()); store(path, lock);
+        System.out.println("behavior-family pins refreshed: 520 carried, 5 qualified exceptions");
     }
 
     private static void sources(Path root, Properties lock) throws Exception {
@@ -120,6 +153,14 @@ final class BehaviorFamilyPinMigration {
         for (String key : values.stringPropertyNames().stream().sorted(Comparator.naturalOrder()).toList())
             output.append(key).append('=').append(values.getProperty(key)).append('\n');
         Files.writeString(path, output.toString(), StandardCharsets.UTF_8);
+    }
+    private static Properties load(Path path) throws Exception { Properties values = new Properties();
+        try (var reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+            values.load(reader); } return values;
+    }
+    private static String required(Properties values, String key) {
+        String value = values.getProperty(key); require(value != null && !value.isBlank(),
+                "missing " + key); return value;
     }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);

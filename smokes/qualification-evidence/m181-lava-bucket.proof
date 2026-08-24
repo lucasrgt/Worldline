@@ -1,5 +1,5 @@
 schema=1
 id=m181-lava-bucket
-fingerprint=672561c9fd5e83eeba64c4a4108b74d822002444a24d7c1ce564707b4aab0688
+fingerprint=b18a245a162b0806d080e8d8e41db8ff4e1edd85b34d54e9cda0d7719f9ae7d4
 observation.sha256=8389064523049de74163fc5f5c48e14d5e52eb750aee3eb297010fa2e87116d4
 source=refactor-equivalent

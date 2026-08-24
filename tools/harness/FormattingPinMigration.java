@@ -30,6 +30,13 @@ final class FormattingPinMigration {
     }
 
     private void apply() throws Exception {
+        Path manifestPath = root.resolve("smokes/formatting-migration.lock");
+        if (Files.isRegularFile(manifestPath)) {
+            Properties existing = load(manifestPath);
+            if ("1".equals(existing.getProperty("schema"))) {
+                refresh(manifestPath, existing); return;
+            }
+        }
         List<String> files = changedJava();
         require(!files.isEmpty(), "formatting migration found no changed Java files");
         Properties manifest = new Properties(); manifest.setProperty("schema", "1");
@@ -70,9 +77,35 @@ final class FormattingPinMigration {
         require(pins.size() == 525 && changed >= 1, "formatting smoke census drift");
         manifest.setProperty("smoke.count", Integer.toString(pins.size()));
         manifest.setProperty("smoke.changed", Integer.toString(changed));
-        existing.write(pins); store(root.resolve("smokes/formatting-migration.lock"), manifest);
+        existing.write(pins); store(manifestPath, manifest);
         System.out.println("formatting proofs migrated: " + files.size() + " files; "
                 + changed + " changed smoke inputs");
+    }
+
+    private void refresh(Path path, Properties manifest) throws Exception {
+        Properties data = load(root.resolve("smokes/data-driven-migration.lock"));
+        int fixtureRefactors = Integer.parseInt(data.getProperty("refresh.fixture.count", "0"));
+        require(fixtureRefactors >= 1 && fixtureRefactors <= 16,
+                "formatting refresh requires the canonical fixture-refactor attestation");
+        SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
+                new SmokeInputFingerprint(root); Properties providers =
+                ProviderDiscoveryPinCheck.manifest(root); int carried = 0;
+        for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            if (ProviderDiscoveryPinCheck.exemptsLegacy(providers, smoke.id)) continue;
+            carried++; String current = fingerprints.compute(smoke);
+            SmokePins.Entry pin = pins.match(smoke.id, current);
+            require(pin != null, "formatting refresh lacks current proof: " + smoke.id);
+            String stem = "smoke." + smoke.id + ".";
+            String recorded = manifest.getProperty(stem + "current_fingerprint");
+            require(recorded != null, "formatting refresh lacks prior row: " + smoke.id);
+            if (!current.equals(recorded)) manifest.setProperty(stem + "prior_fingerprint", recorded);
+            manifest.setProperty(stem + "current_fingerprint", current);
+            manifest.setProperty(stem + "evidence_sha256", pin.evidence());
+        }
+        require(carried == 525 - ProviderDiscoveryPinCheck.pendingCount(providers),
+                "formatting refresh census drift");
+        pins.write(pins.entries()); store(path, manifest);
+        System.out.println("formatting pins refreshed: " + carried + " carried");
     }
 
     private List<String> changedJava() throws Exception {
@@ -144,6 +177,10 @@ final class FormattingPinMigration {
         for (String key : values.stringPropertyNames().stream().sorted(Comparator.naturalOrder()).toList())
             output.append(key).append('=').append(values.getProperty(key)).append('\n');
         Files.writeString(path, output.toString(), StandardCharsets.UTF_8);
+    }
+    private static Properties load(Path path) throws Exception { Properties values = new Properties();
+        try (var reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+            values.load(reader); } return values;
     }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);

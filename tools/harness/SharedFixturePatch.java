@@ -109,9 +109,13 @@ public final class SharedFixturePatch {
                 && value.matches(".*\\{return([a-zA-Z]+==8\\|\\|[a-zA-Z]+==9|"
                 + "[a-zA-Z]+==9\\|\\|[a-zA-Z]+==8);}")) return Kind.WATER;
         if (value.startsWith("privatestaticvoidawaitPlayers(")
-                && value.contains("System.currentTimeMillis()+5000")
-                && value.contains(".players().size()==") && value.contains("Thread.sleep(100)")
-                && value.endsWith("thrownewIllegalStateException(\"playercountdrift\");}"))
+                && (value.contains("System.currentTimeMillis()+5000")
+                || value.contains("System.nanoTime()+Duration.ofSeconds(5).toNanos()"))
+                && value.contains(".players().size()==")
+                && (value.contains("Thread.sleep(100)") || value.contains("Thread.sleep(100L)"))
+                && (value.endsWith("thrownewIllegalStateException(\"playercountdrift\");}")
+                || value.matches(".*thrownewIllegalStateException\\(\"playercountdidnotreach\"\\+"
+                        + "[a-zA-Z]+\\);}")))
             return Kind.AWAIT_PLAYERS;
         if (value.startsWith("privatestaticBlockPositionplace(")
                 && value.contains(".adjacent(") && value.contains(".placeHeldBlock(")

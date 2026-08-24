@@ -100,6 +100,9 @@ final class DataDrivenCycleMigration {
         SmokePins existing = new SmokePins(root);
         SmokeReceiptCache cache = new SmokeReceiptCache(root); List<SmokePins.Entry> pins = new ArrayList<>();
         int generic = 0, executed = 0;
+        int fixtureRefactors = integer(manifest, "refresh.fixture.count"), newRefactors = 0;
+        int formattingRefactors = Integer.parseInt(
+                manifest.getProperty("refresh.formatting.count", "0"));
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             if (!smoke.runner.equals("tools/smoke/DataDrivenCycle.java")) {
                 pins.add(requiredEntry(existing, smoke.id)); continue;
@@ -110,18 +113,45 @@ final class DataDrivenCycleMigration {
             if (recordedPlan == null) {
                 require(unchangedMilestone(smoke.id),
                         "unregistered generic plan changed with the shared runner: " + smoke.id);
-                SmokePins.Entry prior = requiredEntry(existing, smoke.id);
+                SmokePins.Entry prior = cache.availablePin(smoke);
+                if (prior == null) prior = requiredEntry(existing, smoke.id);
                 manifest.setProperty(stem + "plan_sha256", plan.fingerprint());
                 manifest.setProperty(stem + "evidence_sha256", prior.evidence());
             } else require(plan.fingerprint().equals(recordedPlan),
                     "plan changed outside the reviewed migration: " + smoke.id);
             SmokePins.Entry local = cache.availablePin(smoke);
+            SmokePins.Entry existingPin = requiredEntry(existing, smoke.id);
+            String current = cache.fingerprint(smoke);
+            if (local == null && !current.equals(existingPin.fingerprint())) {
+                FixtureRefactor refactor = fixtureRefactor(smoke.id);
+                if (refactor != null) {
+                    fixtureRefactors++; newRefactors++;
+                    String key = "refresh.fixture." + fixtureRefactors + ".";
+                    manifest.setProperty(key + "id", smoke.id);
+                    manifest.setProperty(key + "path", refactor.path);
+                    manifest.setProperty(key + "prior_sha256", digest(refactor.prior));
+                    manifest.setProperty(key + "current_sha256", digest(refactor.current));
+                } else {
+                    List<SmokeSourceRefactor.Row> rows = SmokeSourceRefactor.formatting(root,
+                            smoke.id, manifest);
+                    require(!rows.isEmpty(), "generic milestone changed without proof: " + smoke.id);
+                    for (SmokeSourceRefactor.Row row : rows) {
+                        String key = "refresh.formatting." + (++formattingRefactors) + ".";
+                        manifest.setProperty(key + "id", smoke.id); manifest.setProperty(key + "path", row.path());
+                        manifest.setProperty(key + "prior_sha256", row.prior());
+                        manifest.setProperty(key + "current_sha256", row.current()); newRefactors++;
+                    }
+                }
+            }
             if (local != null && local.source().equals("executed")) { pins.add(local); executed++; }
-            else pins.add(new SmokePins.Entry(smoke.id, cache.fingerprint(smoke),
+            else if (current.equals(existingPin.fingerprint())) pins.add(existingPin);
+            else pins.add(new SmokePins.Entry(smoke.id, current,
                     requiredHash(manifest, stem + "evidence_sha256"), "refactor-equivalent"));
         }
-        require(generic >= 300 && executed >= 1,
-                "refresh requires a current executed proof for a generic milestone");
+        require(generic >= 300 && (executed >= 1 || newRefactors >= 1),
+                "refresh requires an exact proof or one canonical fixture refactor");
+        manifest.setProperty("refresh.fixture.count", Integer.toString(fixtureRefactors));
+        manifest.setProperty("refresh.formatting.count", Integer.toString(formattingRefactors));
         manifest.setProperty("runner_sha256", digest(root.resolve("tools/smoke/DataDrivenCycle.java")));
         manifest.setProperty("plan_source_sha256", digest(
                 root.resolve("tools/harness/DataDrivenCyclePlan.java")));
@@ -131,7 +161,28 @@ final class DataDrivenCycleMigration {
                 root.resolve("tools/harness/SmokeSupport.java")));
         existing.write(pins); store(manifestPath, manifest);
         System.out.println("data-driven pins refreshed: " + generic + " generic, " + executed
-                + " freshly executed");
+                + " freshly executed, " + fixtureRefactors
+                + " canonical fixture refactors, " + formattingRefactors
+                + " token-equivalent source refactors");
+    }
+
+    private FixtureRefactor fixtureRefactor(String id) throws Exception {
+        List<String> paths = capture("diff", "--name-only", "HEAD", "--", "smokes/" + id)
+                .lines().filter(value -> !value.isBlank()).toList();
+        if (paths.size() != 1 || !paths.get(0).endsWith(".java")) return null;
+        String path = paths.get(0), prior = capture("show", "HEAD:" + path);
+        String current = Files.readString(root.resolve(path), StandardCharsets.UTF_8);
+        String expected = SharedFixturePatch.rewrite(prior).replace("\r\n", "\n");
+        String normalized = current.replace("\r\n", "\n");
+        return expected.equals(normalized)
+                ? new FixtureRefactor(path, prior, current) : null;
+    }
+
+    private String capture(String... arguments) throws Exception {
+        List<String> command = new ArrayList<>(List.of("git")); command.addAll(List.of(arguments));
+        Process process = new ProcessBuilder(command).directory(root.toFile()).redirectErrorStream(true).start();
+        String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        require(process.waitFor() == 0, "git command failed: " + String.join(" ", command)); return output;
     }
 
     private boolean unchangedMilestone(String id) throws Exception {
@@ -244,6 +295,7 @@ final class DataDrivenCycleMigration {
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message); }
     private record Migration(Path source, String text, Plan plan, String priorFingerprint, SmokePins.Entry pin) { }
+    private record FixtureRefactor(String path, String prior, String current) { }
     private record Plan(String id, String main, List<String> arguments, List<String> inputs,
             List<String> compileProducts, List<String> runtimeProducts, List<String> prefixes,
             List<String> outputContains, List<String> signalContains, List<String> signalExcludes,

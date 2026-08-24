@@ -18,7 +18,9 @@ final class BehaviorMapSchemaCheck {
                         "missing behavior map schema: " + root.relativize(map));
                 require(field(lines[1], "boundary").matches("[A-Za-z0-9_.#/-]+"),
                         "invalid map boundary: " + root.relativize(map));
-                require(field(lines[2], "nonclaims").equals("bounded-to-qualified-evidence"),
+                String nonclaims = field(lines[2], "nonclaims");
+                require(nonclaims.equals("bounded-to-qualified-evidence")
+                                || nonclaims.matches("[a-z0-9]+(?:-[a-z0-9]+)*(?:,[a-z0-9]+(?:-[a-z0-9]+)*)+"),
                         "invalid map nonclaims: " + root.relativize(map));
                 String trace = field(lines[3], "frozen-trace");
                 Path descriptor = map.getParent().resolve("smoke.properties");

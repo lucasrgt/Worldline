@@ -23,6 +23,8 @@ final class SharedHelperPinCheck {
             require(relative.matches("smokes/.+[.]java")
                             && (digest(root.resolve(relative)).equals(required(lock,
                                     stem + "current_sha256"))
+                            || refreshes(lock, root, relative,
+                                    required(lock, stem + "current_sha256"))
                             || GuiWorkbenchPinCheck.transportsFile(gui, root, relative,
                                     required(lock, stem + "current_sha256")))
                             && hash(lock, stem + "prior_sha256"),
@@ -32,6 +34,16 @@ final class SharedHelperPinCheck {
             String relative = required(lock, key + ".path");
             require(digest(root.resolve(relative)).equals(required(lock, key + ".current_sha256")),
                     "shared helper drift: " + relative);
+        }
+        int refreshed = Integer.parseInt(lock.getProperty("refresh.count", "0"));
+        require(refreshed >= 1 && refreshed <= 16, "shared-helper refresh census drift");
+        for (int index = 1; index <= refreshed; index++) {
+            String stem = "refresh." + index + ".", relative = required(lock, stem + "path");
+            require(relative.startsWith("smokes/" + required(lock, stem + "id") + "/")
+                            && hash(lock, stem + "prior_sha256")
+                            && digest(root.resolve(relative)).equals(
+                                    required(lock, stem + "current_sha256")),
+                    "refreshed shared-helper source drift: " + relative);
         }
         require(canonicalClones(root) == 0, "canonical shared fixture clone ratchet regressed");
         require(variants(root) <= integer(lock, "variant.count"),
@@ -86,13 +98,35 @@ final class SharedHelperPinCheck {
         for (int index = 0; index < files; index++) {
             String stem = "file." + index + ".";
             if (!relative.equals(lock.getProperty(stem + "path"))) continue;
+            String intermediate = lock.getProperty(stem + "current_sha256");
             return prior.equals(lock.getProperty(stem + "prior_sha256"))
-                    && digest(root.resolve(relative)).equals(lock.getProperty(stem + "current_sha256"));
+                    && (digest(root.resolve(relative)).equals(intermediate)
+                    || refreshes(lock, root, relative, intermediate));
         }
         for (String key : new String[] {"combat", "login"})
             if (relative.equals(lock.getProperty(key + ".path")))
                 return prior.equals(lock.getProperty(key + ".prior_sha256"))
                         && digest(root.resolve(relative)).equals(lock.getProperty(key + ".current_sha256"));
+        int refreshed = Integer.parseInt(lock.getProperty("refresh.count", "0"));
+        for (int index = 1; index <= refreshed; index++) {
+            String stem = "refresh." + index + ".";
+            if (relative.equals(lock.getProperty(stem + "path")))
+                return prior.equals(lock.getProperty(stem + "prior_sha256"))
+                        && digest(root.resolve(relative)).equals(
+                                lock.getProperty(stem + "current_sha256"));
+        }
+        return false;
+    }
+    private static boolean refreshes(Properties lock, Path root, String relative, String prior)
+            throws Exception {
+        int count = Integer.parseInt(lock.getProperty("refresh.count", "0"));
+        for (int index = 1; index <= count; index++) {
+            String stem = "refresh." + index + ".";
+            if (relative.equals(lock.getProperty(stem + "path")))
+                return prior.equals(lock.getProperty(stem + "prior_sha256"))
+                        && digest(root.resolve(relative)).equals(
+                                lock.getProperty(stem + "current_sha256"));
+        }
         return false;
     }
     private static long canonicalClones(Path root) throws Exception {

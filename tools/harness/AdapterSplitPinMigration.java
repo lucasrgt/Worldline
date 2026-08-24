@@ -35,6 +35,10 @@ final class AdapterSplitPinMigration {
     private static void apply(Path root) throws Exception {
         Path lockPath = root.resolve("smokes/adapter-split.lock");
         Properties lock = Files.isRegularFile(lockPath) ? load(lockPath) : new Properties();
+        if ("1".equals(lock.getProperty("schema"))
+                && SmokeDiscovery.discover(root).size() > 525) {
+            refresh(root, lockPath, lock); return;
+        }
         lock.setProperty("schema", "1");
         lock.setProperty("existing.count", Integer.toString(EXISTING.size()));
         lock.setProperty("added.count", Integer.toString(ADDED.size()));
@@ -76,6 +80,31 @@ final class AdapterSplitPinMigration {
         System.out.println("adapter-split proofs: " + changed + " changed, 525 carried");
     }
 
+    private static void refresh(Path root, Path path, Properties lock) throws Exception {
+        Properties shared = SharedHelperPinCheck.manifest(root);
+        int refactors = Integer.parseInt(shared.getProperty("refresh.count", "0"));
+        require(refactors >= 1 && refactors <= 16,
+                "adapter refresh requires shared-helper attestations");
+        SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
+                new SmokeInputFingerprint(root); Properties providers =
+                ProviderDiscoveryPinCheck.manifest(root); int carried = 0;
+        for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            if (ProviderDiscoveryPinCheck.exemptsLegacy(providers, smoke.id)) continue;
+            carried++; String current = fingerprints.compute(smoke); SmokePins.Entry pin =
+                    pins.match(smoke.id, current); require(pin != null,
+                    "adapter refresh lacks current proof: " + smoke.id);
+            String stem = "smoke." + smoke.id + ".", recorded = required(lock,
+                    stem + "current_fingerprint");
+            if (!current.equals(recorded)) lock.setProperty(stem + "prior_fingerprint", recorded);
+            lock.setProperty(stem + "current_fingerprint", current);
+            lock.setProperty(stem + "evidence_sha256", pin.evidence());
+        }
+        require(carried == 525 - ProviderDiscoveryPinCheck.pendingCount(providers),
+                "adapter refresh census drift");
+        pins.write(pins.entries()); store(path, lock);
+        System.out.println("adapter-split pins refreshed: " + carried + " carried");
+    }
+
     private static String git(Path root, String... arguments) throws Exception {
         List<String> command = new ArrayList<>(List.of("git")); command.addAll(List.of(arguments));
         Process process = new ProcessBuilder(command).directory(root.toFile()).start();
@@ -107,5 +136,9 @@ final class AdapterSplitPinMigration {
 
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);
+    }
+    private static String required(Properties values, String key) {
+        String value = values.getProperty(key); require(value != null && !value.isBlank(),
+                "missing " + key); return value;
     }
 }

@@ -26,10 +26,13 @@ final class RepositorySchemaMigration {
     private void apply() throws Exception {
         require(dirtyIndex(), "stage the schema implementation before applying the rewrite");
         List<SmokeDiscovery.Entry> catalog = SmokeDiscovery.discover(root);
-        SmokePins existing = new SmokePins(root); SmokeInputFingerprint before =
-                new SmokeInputFingerprint(root); List<Row> rows = new ArrayList<>(); int narratives = 0;
         Path lock = root.resolve("smokes/schema-migration.lock");
         Properties manifest = Files.isRegularFile(lock) ? load(lock) : new Properties();
+        if ("1".equals(manifest.getProperty("schema"))) {
+            refresh(catalog, lock, manifest); return;
+        }
+        SmokePins existing = new SmokePins(root); SmokeInputFingerprint before =
+                new SmokeInputFingerprint(root); List<Row> rows = new ArrayList<>(); int narratives = 0;
         for (SmokeDiscovery.Entry smoke : catalog) {
             Path directory = root.resolve("smokes").resolve(smoke.id);
             Path descriptorPath = directory.resolve("smoke.properties");
@@ -80,6 +83,37 @@ final class RepositorySchemaMigration {
         existing.write(pins); store(lock, manifest);
         System.out.println("repository schemas migrated: " + changed
                 + " changed; 525 descriptors, 526 maps, 36 narratives");
+    }
+
+    private void refresh(List<SmokeDiscovery.Entry> catalog, Path lock,
+            Properties manifest) throws Exception {
+        SmokePins existing = new SmokePins(root); SmokeInputFingerprint fingerprints =
+                new SmokeInputFingerprint(root); SmokeReceiptCache cache = new SmokeReceiptCache(root);
+        Properties providers = ProviderDiscoveryPinCheck.manifest(root);
+        List<SmokePins.Entry> pins = new ArrayList<>(); int carried = 0, executed = 0;
+        for (SmokeDiscovery.Entry smoke : catalog) {
+            String current = fingerprints.compute(smoke); SmokePins.Entry local = cache.availablePin(smoke);
+            SmokePins.Entry prior = existing.entry(smoke.id);
+            if (local != null && local.source().equals("executed")) {
+                pins.add(local); executed++;
+            } else {
+                require(prior != null && current.equals(prior.fingerprint()),
+                        "schema refresh lacks a current proof: " + smoke.id);
+                pins.add(prior);
+            }
+            if (ProviderDiscoveryPinCheck.exemptsLegacy(providers, smoke.id)) continue;
+            carried++; String stem = "smoke." + smoke.id + ".";
+            String recorded = required(manifest, stem + "current_fingerprint", null);
+            SmokePins.Entry proof = local != null && local.source().equals("executed") ? local : prior;
+            if (!current.equals(recorded)) manifest.setProperty(stem + "prior_fingerprint", recorded);
+            manifest.setProperty(stem + "current_fingerprint", current);
+            manifest.setProperty(stem + "evidence_sha256", proof.evidence());
+        }
+        require(carried == 525 - ProviderDiscoveryPinCheck.pendingCount(providers) && executed >= 1,
+                "repository schema refresh census drift: carried=" + carried + ";executed=" + executed);
+        existing.write(pins); store(lock, manifest);
+        System.out.println("repository schema pins refreshed: " + carried
+                + " carried, " + executed + " exact support proofs");
     }
 
     private String migrateNarrative(String id, Properties descriptor, String text) throws Exception {
