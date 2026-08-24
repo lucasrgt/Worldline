@@ -1,5 +1,5 @@
 schema=1
 id=m155-minecart-spawn
-fingerprint=95dae7a46d275db0bae6dc25512331d2e54aaf4d3ce0bc49ff1f69a0a994236d
+fingerprint=759001adac79263da561d9c891de98ac01bb026686e621daf46da608facbcb40
 observation.sha256=8bbf2ce26b50b36cdb15763b126864882c8e138b89113c1fe6dcd75988703fab
 source=refactor-equivalent

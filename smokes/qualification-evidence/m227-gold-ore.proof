@@ -1,5 +1,5 @@
 schema=1
 id=m227-gold-ore
-fingerprint=c12ce1700e5b4d8ac11e44a0f365c1ab6efb56c055d128941842b24912ac7c4f
+fingerprint=4dbb5dbc5043c90185910e9da4600a69113e875493cab256cd96fd672dcca20f
 observation.sha256=0cc34fc524f7aba7d51b5f354569bbbfa7bae8bde9995797972fac9dea8ba1fd
 source=refactor-equivalent

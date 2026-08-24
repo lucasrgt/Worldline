@@ -1,5 +1,5 @@
 schema=1
 id=m270-iron-helmet
-fingerprint=70fc60b9ec1b9712c9eb1e502cb6f214d4758d16b423df898c54c128f3d6d6d1
+fingerprint=b3b36cde5b9870bbe371a7c835ed136a1fb7918c8586077c73125bec3d41224f
 observation.sha256=d62f78b5a3cb690f1845fa802de6bfa0cca27bc60ed090c60f93fdc665bf4f07
 source=refactor-equivalent

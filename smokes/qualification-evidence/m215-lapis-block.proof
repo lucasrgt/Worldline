@@ -1,5 +1,5 @@
 schema=1
 id=m215-lapis-block
-fingerprint=fd66940ab4fd7b5bb613c09e9370e026ffdf0219feba9a61bce32d731836f5bd
+fingerprint=67f5dd8671ba1c2b0e6bd0525ea5bd2510df611db4487c59db2af9fb9d605f6e
 observation.sha256=2eccf7bc9e04af5137d3804025114bea5686598ee5995596d8392a2a88b7fdbf
 source=refactor-equivalent

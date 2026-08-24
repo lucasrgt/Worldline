@@ -1,5 +1,5 @@
 schema=1
 id=m331-throwables-set
-fingerprint=74be9ba516f52069c1305dc4ca53a4754865369e8ca1ce959e11ca6d2de46e64
+fingerprint=aff7f2cf92990b0b10818abd57076b5a4feef89fa94365ada8762672e32eb48b
 observation.sha256=63d18b0a65f745ad18fa9a7a9e8e345e8bffe83e067224ff8687c1b03c0a7328
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m412-slime-split-set
-fingerprint=28bc9864734cab96d33213a2a8331b8eab9240b5988b09640dfe3d737d8f4cfb
+fingerprint=162db66ba23d992dedf1769a4facfe9c279cd7ad4ddbc186e577a7ad9c4fbe86
 observation.sha256=c35f4196ac8b8633b7ffa097ac87eca1828f89b9ab9d2be20f0802c924191929
 source=refactor-equivalent
