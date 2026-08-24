@@ -218,6 +218,8 @@ public final class WorldlineBehavior {
             "A squid stranded outside water remains killable on land");
     public static final WorldlineBehavior TAMED_WOLF_ASSIST = define("tamed-wolf-assist", WorldlineFamily.PLAYER,
             "A tamed standing wolf attacks a mob struck by its owner");
+    public static final WorldlineBehavior WOLF_TAME = define("wolf-tame", WorldlineFamily.PLAYER,
+            "Bone feeding tames a wild wolf with owner and collar metadata");
     public static final WorldlineBehavior REDSTONE_LATCH = define("redstone-latch", WorldlineFamily.REDSTONE,
             "Cross-coupled redstone torches retain set and reset states");
     public static final WorldlineBehavior PORTAL_EXIT_CREATION = define("portal-exit-creation", WorldlineFamily.WORLD,

@@ -133,6 +133,9 @@ final class CandidateCheck {
                 || descriptor.getProperty("client.jar.sha256") != null
                         && descriptor.getProperty("server.jar.sha256") == null;
         List<Path> dependencies = new ArrayList<>();
+        boolean mappedServer = !clientOnly
+                && Files.isRegularFile(root.resolve("smokes").resolve(id).resolve("symbols.map"))
+                && descriptor.getProperty("worldline.main") != null;
         if (clientOnly) {
             Path adapterRoot = root.resolve("adapters/b173-client");
             Path headless = build.resolve("headless-classes");
@@ -146,6 +149,15 @@ final class CandidateCheck {
             require(Files.isRegularFile(mapped.resolve("net/minecraft/client/Minecraft.class")),
                     "client candidate requires the prepared mapped workspace");
             dependencies.add(headless); dependencies.add(mapped);
+            dependencies.addAll(jarFiles(root.resolve("local/workspaces/b1.7.3/libraries")));
+        } else if (mappedServer) {
+            Path mapped = root.resolve("local/workspaces/b1.7.3/minecraft_server/bin");
+            if (!Files.isRegularFile(mapped.resolve("net/minecraft/src/World.class"))) {
+                System.out.println("  mapped server candidate compilation deferred until the exact "
+                        + "milestone prepares its pinned workspace");
+                return;
+            }
+            dependencies.add(mapped);
             dependencies.addAll(jarFiles(root.resolve("local/workspaces/b1.7.3/libraries")));
         }
         dependencies.addAll(outputs);
