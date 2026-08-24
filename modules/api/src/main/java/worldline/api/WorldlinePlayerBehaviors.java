@@ -10,6 +10,8 @@ public final class WorldlinePlayerBehaviors {
             "Damaging-height water landing emits no fall Packet8");
     public static final WorldlineBehavior LADDER_POSE_CLIMB = define("ladder-pose-climb",
             "Player colliding with a ladder climbs or holds versus falling in air");
+    public static final WorldlineBehavior SERVER_ACL_MATRIX = define("server-acl-matrix",
+            "Console op state controls commands while kick and ban have distinct session effects");
 
     private WorldlinePlayerBehaviors() {}
 

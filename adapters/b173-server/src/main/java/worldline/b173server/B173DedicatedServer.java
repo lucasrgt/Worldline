@@ -68,9 +68,36 @@ public final class B173DedicatedServer implements PersistentMultiplayerServerRun
     }
 
     public void operator(String username) {
-        if (username == null || !username.matches("[A-Za-z0-9_]{1,16}"))
-            throw new IllegalArgumentException("invalid operator username");
+        requireUsername(username, "operator");
         send("op " + username, "Opping " + username);
+    }
+
+    public void deoperator(String username) {
+        requireUsername(username, "deoperator");
+        send("deop " + username, "De-opping " + username);
+    }
+
+    public void kick(String username) {
+        requireUsername(username, "kick");
+        send("kick " + username, "Kicking " + username);
+    }
+
+    public void ban(String username) {
+        requireUsername(username, "ban");
+        send("ban " + username, "Banning " + username);
+    }
+
+    public void pardon(String username) {
+        requireUsername(username, "pardon");
+        send("pardon " + username, "Pardoning " + username);
+    }
+
+    public String awaitPlayerCommand(String username, String command, boolean allowed) {
+        requireUsername(username, "command actor");
+        if (command == null || !command.matches("[a-z0-9 ]{1,64}"))
+            throw new IllegalArgumentException("invalid observed player command");
+        String disposition = allowed ? " issued server command: " : " tried command: ";
+        return process.await(username + disposition + command);
     }
 
     @Override
@@ -88,8 +115,7 @@ public final class B173DedicatedServer implements PersistentMultiplayerServerRun
 
     @Override
     public ServerPlayerState player(String username) {
-        if (username == null || !username.matches("[A-Za-z0-9_]{1,16}"))
-            throw new IllegalArgumentException("invalid player username");
+        requireUsername(username, "player");
         Path path = directory.resolve("world/players").resolve(username + ".dat").normalize();
         require(path.startsWith(directory) && Files.isRegularFile(path), "persisted player is absent");
         return B173PlayerDat.read(path, username);
@@ -113,5 +139,10 @@ public final class B173DedicatedServer implements PersistentMultiplayerServerRun
 
     private static void require(boolean condition, String message) {
         if (!condition) throw new IllegalStateException(message);
+    }
+
+    private static void requireUsername(String username, String operation) {
+        if (username == null || !username.matches("[A-Za-z0-9_]{1,16}"))
+            throw new IllegalArgumentException("invalid " + operation + " username");
     }
 }

@@ -71,6 +71,10 @@ final class B173ServerProcess {
         return Collections.unmodifiableList(result);
     }
 
+    String await(String marker) {
+        return log.awaitLine(process, 0, marker, timeout);
+    }
+
     void stop() {
         write("stop");
         try {
