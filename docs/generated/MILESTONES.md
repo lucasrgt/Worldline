@@ -564,6 +564,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m620-stationapi-testkit-driver` | EXECUTED | StationAPI TestKit driver |
 | `m621-save-worldgen-set` | CARRIED | save worldgen set |
 | `m622-pathfinding-matrix` | CARRIED | Entity pathfinding matrix |
+| `m623-lighting-engine-matrix` | CARRIED | Lighting engine matrix |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
