@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=wolf-tame -->
+<!-- nonclaims=dye-collar,wolf-anger,tamed-assist,sit-state -->
+<!-- frozen-trace=548375ef25ac7b5537eed78118b10d1198ec9b2958e30fd8796f7a65c8d34af2 -->
+
 # M618 behavior map
 
 The fixture raises an isolated `7×7` grass platform and places one default
