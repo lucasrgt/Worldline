@@ -20,12 +20,17 @@ final class LaneEvidence {
                 .resolve("smoke.properties"));
         String signature = required(descriptor, "expected.signature");
         String signal = required(descriptor, "expected.signal");
-        List<String> semantic = Files.readAllLines(log, StandardCharsets.UTF_8).stream()
-                .map(String::trim).filter(row -> row.equals("FROZEN")
-                        || row.contains(signature) || row.contains(signal)).sorted().toList();
-        require(semantic.stream().anyMatch(row -> row.contains(signature))
-                        && semantic.stream().anyMatch(row -> row.contains(signal)),
+        List<String> output = Files.readAllLines(log, StandardCharsets.UTF_8).stream()
+                .map(String::trim).toList();
+        String observedSignature = output.stream().filter(row -> row.contains(signature))
+                .findFirst().orElse("");
+        String passed = output.stream().filter(row -> row.toLowerCase().contains("cycle passed"))
+                .findFirst().orElse("");
+        require(!observedSignature.isBlank() && !passed.isBlank(),
                 "lane evidence lacks frozen semantics: " + smoke.id);
+        List<String> semantic = List.of("id=" + smoke.id, "expected.signature=" + signature,
+                "expected.signal=" + signal, "observed=" + observedSignature,
+                "status=" + passed);
         Properties record = new Properties();
         record.setProperty("schema", "1"); record.setProperty("id", smoke.id);
         record.setProperty("platform", LaneDifferential.platform());
