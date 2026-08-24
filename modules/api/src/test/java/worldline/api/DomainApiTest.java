@@ -125,7 +125,9 @@ public final class DomainApiTest {
             @Override public RemoteChunkSnapshot awaitChunkSnapshot() { throw new UnsupportedOperationException(); }
             @Override public RemoteWorldView awaitRemoteWorld(int minimum) { throw new UnsupportedOperationException(); }
             @Override public RemoteWorldView awaitRemoteChunk(int x, int z) { throw new UnsupportedOperationException(); }
-            @Override public RemoteChunkUnload awaitRemoteChunkUnload(int x, int z) { throw new UnsupportedOperationException(); }
+            @Override public RemoteChunkUnload awaitRemoteChunkUnload(int x, int z) {
+                throw new UnsupportedOperationException();
+            }
             @Override public void beginBreak(BlockPosition position) { throw new UnsupportedOperationException(); }
             @Override public void finishBreak(BlockPosition position) { throw new UnsupportedOperationException(); }
             @Override public RemoteWorldView awaitBlock(BlockPosition p, BlockState s) { throw new UnsupportedOperationException(); }
