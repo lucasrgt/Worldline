@@ -1,0 +1,22 @@
+schema = 1
+id = "NYA-01M0S512RREPWYHZB8RWYW4FDY"
+title = "Bind behavior milestones to reusable public TestKit contracts"
+lesson = "A behavioral milestone must bind to a maintained public TestKit surface, not a smoke-local helper; randomized outcomes should expose a deterministic maximum-attempt contract and freeze post-event state rather than the successful draw number."
+scope = [
+    "modules/testkit/**",
+    "smokes/m618-wolf-tame-set/**",
+]
+tags = [
+    "testkit",
+    "rng",
+    "milestone-contract",
+]
+created_at = "2026-08-24T05:48:54Z"
+
+[[occurrences]]
+occurred_at = "2026-08-24T05:48:54Z"
+source = "manual:2026-08-24-m618-binding-audit"
+reported_by = "user:fable-report"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "3b9d7b637"
