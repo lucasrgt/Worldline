@@ -100,6 +100,12 @@ public final class B173DedicatedServer implements PersistentMultiplayerServerRun
         return process.await(username + disposition + command);
     }
 
+    public String awaitReadTimeout(String username) {
+        requireUsername(username, "timeout actor");
+        process.await("java.net.SocketTimeoutException: Read timed out");
+        return process.await(username + " lost connection: disconnect.genericReason");
+    }
+
     @Override
     public ServerState state() {
         Path level = directory.resolve("world/level.dat");

@@ -11,14 +11,16 @@ final class B173SignTracker {
     private static final int MAX = 64;
     private final ArrayList<RemoteSignText> pending = new ArrayList<RemoteSignText>();
 
-    void accept(DataInputStream input) throws IOException {
+    RemoteSignText accept(DataInputStream input) throws IOException {
         try {
             int x = input.readInt(), y = input.readShort(), z = input.readInt();
             String line0 = B173InboundPacket.string(input, 15);
             String line1 = B173InboundPacket.string(input, 15);
             String line2 = B173InboundPacket.string(input, 15);
             String line3 = B173InboundPacket.string(input, 15);
-            offer(new RemoteSignText(new BlockPosition(x, y, z), line0, line1, line2, line3));
+            RemoteSignText value = new RemoteSignText(
+                    new BlockPosition(x, y, z), line0, line1, line2, line3);
+            offer(value); return value;
         } catch (IllegalArgumentException error) {
             throw new IOException("invalid sign text", error);
         }

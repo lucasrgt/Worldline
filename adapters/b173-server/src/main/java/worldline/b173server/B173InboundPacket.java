@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import worldline.api.RemoteChunkObservation;
+import worldline.api.RemoteMapData;
 
 /** Bounded payload skipper for qualified protocol-14 server packets. */
 final class B173InboundPacket {
@@ -101,8 +102,12 @@ final class B173InboundPacket {
     private static void sign(DataInputStream input) throws IOException {
         bytes(input, 10); for (int index = 0; index < 4; index++) string(input, 15);
     }
-    private static void mapData(DataInputStream input) throws IOException {
-        bytes(input, 4); boundedBytes(input, input.readUnsignedByte(), 255);
+    static RemoteMapData mapData(DataInputStream input) throws IOException {
+        int itemId = input.readUnsignedShort(), mapId = input.readUnsignedShort();
+        int length = input.readUnsignedByte();
+        byte[] payload = new byte[length]; input.readFully(payload);
+        try { return new RemoteMapData(itemId, mapId, payload); }
+        catch (IllegalArgumentException error) { throw new IOException("invalid map data", error); }
     }
     private static void metadata(DataInputStream input) throws IOException {
         while (true) {
