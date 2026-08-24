@@ -81,7 +81,7 @@ Status values are `DONE`, `ACTIVE`, `QUEUED`, and `EXTERNAL`.
 | DOC-01 | DONE | Finish repository documentation organization. | `DocumentationCatalog` classifies every stable root document into project, feature, milestone, or performance sections in a generated index; stable paths avoid invalidating milestone receipts, and no empty directory skeleton is versioned. |
 | DOC-02 | DONE | Rewrite architecture verification documentation. | `VERIFICATION_ARCHITECTURE.md` derives the canonical profile/stage flow from Gate and RepositoryVerify, separates behavioral identity from lanes, and documents Runtime Fabric leases, host/container pools, evidence envelopes, immutable caches, and orchestrator authority. |
 | DOC-03 | DONE | Generate semantic and roadmap counts/status. | Generated status derives semantic totals from `SemanticRoles`, program counts from this ledger, and milestone qualification from current fingerprints plus `qualification.lock`; Gate rejects drift. |
-| DOC-04 | ACTIVE | Maintain this Fable 2 ledger and its exit gate. | Every objective-file requirement maps to one row, and each status change cites authoritative evidence. |
+| DOC-04 | DONE | Maintain this Fable 2 ledger and its exit gate. | All 45 objective rows are DONE with authoritative evidence; generated status is drift-checked, and the canonical, pinned-smoke, and orchestrator reports bind the final clean train head without reexecuting unchanged runtime milestones. |
 
 ## Program exit gate
 
