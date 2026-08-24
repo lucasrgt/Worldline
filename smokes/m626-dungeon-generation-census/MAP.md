@@ -1,6 +1,6 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=dungeon-generation -->
-<!-- nonclaims=arbitrary-seeds,mob-spawner-EntityId,loot-probabilities -->
+<!-- nonclaims=arbitrary-seeds,mob-spawner-entity-id,loot-probabilities -->
 <!-- frozen-trace=546390d97d39a29b825727f8264038033d7e8144f284200a1a8819069ebd78a8 -->
 
 # M626 dungeon generation census behavior map
