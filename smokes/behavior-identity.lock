@@ -1,6 +1,6 @@
 schema=1
 alias.count=2
-retracted.count=3
+retracted.count=4
 alias.0.legacy=one-tick-piston-pulse
 alias.0.canonical=redstone-one-tick
 alias.0.smoke=m615-redstone-one-tick-set
@@ -25,3 +25,7 @@ retracted.2.token=cobweb-slow
 retracted.2.reason=M601 was an empty reservation and duplicates the accepted M317 client slowdown differential
 retracted.2.evidence=docs/decisions/M601_COBWEB_SLOW_RETRACTION.md
 retracted.2.evidence_sha256=ff291d19fec9b02ab9c715115e40e928cc28121b971018ef5900485f0b86f0cf
+retracted.3.token=sheep-eat-grass
+retracted.3.reason=The official Beta 1.7.3 EntitySheep bytecode has no grass-eating or wool-regrowth path
+retracted.3.evidence=docs/decisions/M584_SHEEP_EAT_GRASS_RETRACTION.md
+retracted.3.evidence_sha256=c0e25ba406dd7105005e0ac6e4566801cd159b1454210d60038d4caf7ce75f69
