@@ -55,9 +55,14 @@ final class TelemetryPinCheck {
     }
     static boolean carries(Properties manifest, String id, SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
-        return hash(manifest, stem + "prior_fingerprint")
+        boolean direct = hash(manifest, stem + "prior_fingerprint")
                 && current.equals(manifest.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(manifest.getProperty(stem + "evidence_sha256"));
+        try { return direct || SchemaPinCheck.follows(SchemaPinCheck.manifest(
+                Path.of("").toAbsolutePath().normalize()), id,
+                manifest.getProperty(stem + "current_fingerprint"),
+                manifest.getProperty(stem + "evidence_sha256"), pin, current); }
+        catch (Exception error) { return false; }
     }
     private static boolean hash(Properties values, String key) {
         return values.getProperty(key, "").matches("[0-9a-f]{64}");
