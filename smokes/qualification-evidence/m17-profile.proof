@@ -1,5 +1,5 @@
 schema=1
 id=m17-profile
-fingerprint=5bd5a5a3be8805ede35d7d8fb767168eaf6f90afcdac3923dc2bc2ed64e5bd0e
+fingerprint=10b1612a09f5090f7de57846cde24afc7144cbf204d0981105780a8a5dac0bc6
 observation.sha256=48a99940b8de960ab64c9e807abbbfbbcd0b55718e799ef3391c60f54ea3ae00
 source=refactor-equivalent

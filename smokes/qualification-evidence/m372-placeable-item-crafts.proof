@@ -1,5 +1,5 @@
 schema=1
 id=m372-placeable-item-crafts
-fingerprint=021ff6a4a458f27cc4d6372cbccde2b47c484f5620ebd43363239527d4749899
+fingerprint=d08c31f3a143b9fa755a5b46468d12208eba6ff55f897b3d8e0c168d0e1a8897
 observation.sha256=80d1b7a10efe73807810ca2609135b07e47ba57880f35e72d1b205e27394a993
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m500-sw-rain-transition
-fingerprint=5ae9c120fc16588b8fbf0045a10701c421e47ef369bd84baa807f73f267dd427
+fingerprint=5c142f6652c9ef1463d6a7a31e41c3138919cf23c6d28c2c682476703e1c18b7
 observation.sha256=3a90b1745c24f4ba910f209f1f4939d631063e67acfcee4f610933d55b69eb7d
 source=refactor-equivalent
