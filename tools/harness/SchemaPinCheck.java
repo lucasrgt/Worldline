@@ -33,6 +33,9 @@ final class SchemaPinCheck {
             if (!descriptor) descriptor = BehaviorFamilyPinCheck.transportsDescriptor(
                     BehaviorFamilyPinCheck.manifest(root), root, smoke.id,
                     required(manifest, stem + "descriptor_sha256"));
+            if (!descriptor) descriptor = TrainPinCheck.transportsFile(train, root,
+                    "smokes/" + smoke.id + "/smoke.properties",
+                    required(manifest, stem + "descriptor_sha256"));
             require(hash(manifest, stem + "prior_fingerprint")
                             && (direct || successor)
                             && hash(manifest, stem + "evidence_sha256")
