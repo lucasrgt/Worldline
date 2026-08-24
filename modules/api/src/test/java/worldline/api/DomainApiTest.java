@@ -30,7 +30,7 @@ public final class DomainApiTest {
         RemoteWorkbenchOutputTest.run();
         RemoteArmorEquipmentTest.run();
         RemoteCombatTest.run();
-        RemoteRespawnTest.run(); RemoteExplosionTest.run(); RemoteMobSpawnTest.run(); RemoteMobMovementTest.run(); RemoteMobDeathTest.run(); RemoteObjectSpawnTest.run(); RemoteBedUseTest.run(); RemoteNoteEventTest.run(); RemoteSignTextTest.run(); RemotePaintingSpawnTest.run();
+        RemoteRespawnTest.run(); RemoteExplosionTest.run(); RemoteMobSpawnTest.run(); RemoteMobMovementTest.run(); RemoteMobDeathTest.run(); RemoteObjectSpawnTest.run(); RemoteBedUseTest.run(); RemoteNoteEventTest.run(); RemoteWorldEventTest.run(); RemoteSignTextTest.run(); RemotePaintingSpawnTest.run();
         RemoteChestRetrievalTest.run();
         RemoteObjectMovementTest.run();
         RemoteRainStartTest.run();

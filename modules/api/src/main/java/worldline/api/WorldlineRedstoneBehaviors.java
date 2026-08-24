@@ -16,6 +16,8 @@ public final class WorldlineRedstoneBehaviors {
             "Sticky piston QC-latched until a neighbor update extends without direct power");
     public static final WorldlineBehavior REDSTONE_ONE_TICK = define("redstone-one-tick",
             "A 1-tick pulse cuts at lever 69:9 and drops a sticky piston payload");
+    public static final WorldlineBehavior DOOR_SOUND_EVENT = define("door-sound-event",
+            "Direct wooden-door activation emits Packet61 effect 1003 to a nearby peer");
 
     private WorldlineRedstoneBehaviors() {}
 

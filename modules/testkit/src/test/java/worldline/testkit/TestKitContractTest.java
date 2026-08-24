@@ -29,6 +29,7 @@ import static worldline.test.Worldline.worldline;
 public final class TestKitContractTest {
     private TestKitContractTest() {}
     public static void main(String[] arguments) throws Exception {
+        DoorSoundFixtureTest.execute();
         MinecartBoosterFixtureTest.execute();
         ChunkReloadFixtureTest.execute();
         DungeonGenerationFixtureTest.execute();
