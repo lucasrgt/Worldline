@@ -1,8 +1,11 @@
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
 import java.util.HashMap;
+import java.util.HexFormat;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Properties;
@@ -52,6 +55,27 @@ final class TrainSourceHistory {
             target.setProperty(stem + "ancestor." + index++ + ".sha256", digest);
     }
 
+    void writeSources(Path root, Properties target, Properties predecessor, String base)
+            throws Exception {
+        java.util.List<String> paths = capture(root, "diff", "--name-only", base, "--").lines()
+                .filter(value -> !value.isBlank()
+                        && !value.equals("smokes/qualification.lock")
+                        && !value.equals("smokes/train-reconciliation.lock")
+                        && !value.startsWith("smokes/qualification-evidence/"))
+                .sorted().toList();
+        target.setProperty("source.count", Integer.toString(paths.size())); int index = 0;
+        for (String relative : paths) {
+            String stem = "source." + index++ + "."; Path current = root.resolve(relative);
+            String prior = show(root, base + ":" + relative);
+            target.setProperty(stem + "path", relative);
+            target.setProperty(stem + "prior_sha256", prior == null ? "added"
+                    : digest(prior.getBytes(StandardCharsets.UTF_8)));
+            target.setProperty(stem + "current_sha256", Files.isRegularFile(current)
+                    ? digest(Files.readAllBytes(current)) : "removed");
+            write(predecessor, target, stem, relative);
+        }
+    }
+
     static boolean connects(Properties lock, String stem, String digest) {
         int count = integer(lock.getProperty(stem + "ancestor.count", "0"));
         for (int index = 0; index < count; index++)
@@ -87,5 +111,17 @@ final class TrainSourceHistory {
         process.getInputStream().transferTo(output);
         if (process.waitFor() != 0) throw new IllegalStateException("git source history query failed");
         return output.toString(StandardCharsets.UTF_8);
+    }
+
+    private static String show(Path root, String object) throws Exception {
+        Process process = new ProcessBuilder("git", "show", object).directory(root.toFile()).start();
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        process.getInputStream().transferTo(output);
+        return process.waitFor() == 0 ? output.toString(StandardCharsets.UTF_8) : null;
+    }
+
+    private static String digest(byte[] bytes) throws Exception {
+        return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
+                .digest(PortableText.normalize(bytes)));
     }
 }

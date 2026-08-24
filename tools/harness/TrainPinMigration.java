@@ -42,7 +42,8 @@ final class TrainPinMigration {
                 "train base is not an ancestor");
         Properties lock = new Properties(); lock.setProperty("schema", "1");
         Properties predecessor = predecessor(root, "HEAD");
-        lock.setProperty("base", BASE); sources(root, lock, predecessor, TrainSourceHistory.load(root));
+        lock.setProperty("base", BASE);
+        TrainSourceHistory.load(root).writeSources(root, lock, predecessor, BASE);
         Map<String, SmokePins.Entry> baseline = baseline(root);
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
         TrainPinHistory history = TrainPinHistory.load(root);
@@ -221,26 +222,6 @@ final class TrainPinMigration {
             target.setProperty(stem + key, required(source, stem + key));
     }
 
-    private static void sources(Path root, Properties lock, Properties predecessor, TrainSourceHistory history) throws Exception {
-        List<String> paths = capture(root, "diff", "--name-only", BASE, "--").lines()
-                .filter(value -> !value.isBlank()
-                        && !value.equals("smokes/qualification.lock")
-                        && !value.equals("smokes/train-reconciliation.lock")
-                        && !value.startsWith("smokes/qualification-evidence/"))
-                .sorted().toList();
-        lock.setProperty("source.count", Integer.toString(paths.size())); int index = 0;
-        for (String relative : paths) {
-            String stem = "source." + index++ + "."; Path current = root.resolve(relative);
-            String prior = show(root, BASE + ":" + relative);
-            lock.setProperty(stem + "path", relative);
-            lock.setProperty(stem + "prior_sha256", prior == null ? "added"
-                    : sourceDigest(prior.getBytes(StandardCharsets.UTF_8)));
-            lock.setProperty(stem + "current_sha256", Files.isRegularFile(current)
-                    ? sourceDigest(Files.readAllBytes(current)) : "removed");
-            history.write(predecessor, lock, stem, relative);
-        }
-    }
-
     private static Map<String, SmokePins.Entry> baseline(Path root) throws Exception {
         Properties values = new Properties();
         try (StringReader reader = new StringReader(capture(root, "show",
@@ -272,11 +253,6 @@ final class TrainPinMigration {
     private static Properties load(Path path) throws Exception { Properties values = new Properties();
         try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) { values.load(reader); }
         return values; }
-    private static String show(Path root, String object) throws Exception {
-        Process process = new ProcessBuilder("git", "show", object).directory(root.toFile()).start();
-        ByteArrayOutputStream output = new ByteArrayOutputStream(); process.getInputStream().transferTo(output);
-        return process.waitFor() == 0 ? output.toString(StandardCharsets.UTF_8) : null;
-    }
     private static String capture(Path root, String... arguments) throws Exception {
         List<String> command = new ArrayList<>(List.of("git")); command.addAll(List.of(arguments));
         Process process = new ProcessBuilder(command).directory(root.toFile()).redirectErrorStream(true).start();
@@ -293,9 +269,6 @@ final class TrainPinMigration {
     }
     private static String digest(byte[] bytes) throws Exception { return HexFormat.of().formatHex(
             MessageDigest.getInstance("SHA-256").digest(bytes)); }
-    private static String sourceDigest(byte[] bytes) throws Exception {
-        return digest(PortableText.normalize(bytes));
-    }
     private static void store(Path path, Properties values) throws Exception {
         StringBuilder output = new StringBuilder("# Worldline integration-train proof v1\n");
         for (String key : values.stringPropertyNames().stream().sorted(Comparator.naturalOrder()).toList())
