@@ -41,10 +41,10 @@ final class TrainPinMigration {
         require(status(root, "merge-base", "--is-ancestor", BASE, "HEAD") == 0,
                 "train base is not an ancestor");
         Properties lock = new Properties(); lock.setProperty("schema", "1");
-        lock.setProperty("base", BASE); sources(root, lock);
+        Properties predecessor = predecessor(root, "HEAD");
+        lock.setProperty("base", BASE); sources(root, lock, predecessor);
         Map<String, SmokePins.Entry> baseline = baseline(root);
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
-        Properties predecessor = predecessor(root, "HEAD");
         TrainPinHistory history = TrainPinHistory.load(root);
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
         SmokeReceiptCache cache = new SmokeReceiptCache(root);
@@ -221,7 +221,7 @@ final class TrainPinMigration {
             target.setProperty(stem + key, required(source, stem + key));
     }
 
-    private static void sources(Path root, Properties lock) throws Exception {
+    private static void sources(Path root, Properties lock, Properties predecessor) throws Exception {
         List<String> paths = capture(root, "diff", "--name-only", BASE, "--").lines()
                 .filter(value -> !value.isBlank()
                         && !value.equals("smokes/qualification.lock")
@@ -237,6 +237,7 @@ final class TrainPinMigration {
                     : sourceDigest(prior.getBytes(StandardCharsets.UTF_8)));
             lock.setProperty(stem + "current_sha256", Files.isRegularFile(current)
                     ? sourceDigest(Files.readAllBytes(current)) : "removed");
+            TrainSourceHistory.write(predecessor, lock, stem, relative);
         }
     }
 
