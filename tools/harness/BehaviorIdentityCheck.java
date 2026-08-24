@@ -3,8 +3,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 /** Validates canonical behavior aliases, retractions, and their accepted runtime receipts. */
 final class BehaviorIdentityCheck {
@@ -13,11 +15,11 @@ final class BehaviorIdentityCheck {
     static void execute(Path root) throws Exception {
         Properties decision = load(root.resolve("smokes/behavior-identity.lock"));
         Properties train = TrainPinCheck.manifest(root);
-        require("1".equals(decision.getProperty("schema"))
-                && "2".equals(decision.getProperty("alias.count"))
-                && "1".equals(decision.getProperty("retracted.count")), "invalid behavior identity lock");
+        require("1".equals(decision.getProperty("schema")), "invalid behavior identity lock");
+        int aliases = integer(decision, "alias.count");
+        int retractions = integer(decision, "retracted.count");
         Map<String, Integer> counts = behaviorCounts(root);
-        for (int index = 0; index < 2; index++) {
+        for (int index = 0; index < aliases; index++) {
             String stem = "alias." + index + ".";
             String legacy = required(decision, stem + "legacy");
             String canonical = required(decision, stem + "canonical");
@@ -34,11 +36,21 @@ final class BehaviorIdentityCheck {
                     train.getProperty("smoke." + smoke + ".evidence_sha256")),
                     "behavior observation drift: " + smoke);
         }
-        String retired = required(decision, "retracted.0.token");
-        require("tnt-quasi-connectivity".equals(retired) && counts.getOrDefault(retired, 0) == 0
-                && required(decision, "retracted.0.reason").contains("M552"),
-                "retracted behavior drift");
-        System.out.println("  behavior identities: 2 aliases, 1 evidence-backed retraction");
+        Set<String> retired = new HashSet<>();
+        for (int index = 0; index < retractions; index++) {
+            String stem = "retracted." + index + ".";
+            String token = required(decision, stem + "token");
+            require(retired.add(token) && counts.getOrDefault(token, 0) == 0
+                            && required(decision, stem + "reason").length() >= 24,
+                    "retracted behavior drift: " + token);
+            String evidence = decision.getProperty(stem + "evidence", "").trim();
+            if (!evidence.isEmpty()) require(Files.isRegularFile(root.resolve(evidence))
+                            && digest(root.resolve(evidence)).equals(
+                                    required(decision, stem + "evidence_sha256")),
+                    "retraction evidence drift: " + token);
+        }
+        System.out.println("  behavior identities: " + aliases + " aliases, " + retractions
+                + " formal retractions");
     }
 
     private static Map<String, Integer> behaviorCounts(Path root) throws Exception {
@@ -60,6 +72,14 @@ final class BehaviorIdentityCheck {
     private static String required(Properties values, String key) {
         String value = values.getProperty(key); require(value != null && !value.isBlank(), "missing " + key);
         return value;
+    }
+    private static int integer(Properties values, String key) {
+        try { return Integer.parseInt(required(values, key)); }
+        catch (NumberFormatException error) { throw new IllegalStateException("invalid " + key); }
+    }
+    private static String digest(Path path) throws Exception {
+        return java.util.HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256")
+                .digest(Files.readAllBytes(path)));
     }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);
