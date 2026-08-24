@@ -186,6 +186,11 @@ public final class WorktreeLifecycle {
     }
 
     private void selfTestCleanup() throws Exception {
+        try {
+            Class<?> type = Class.forName("WorktreePrivateCleanup");
+            var method = type.getDeclaredMethod("selfTest"); method.setAccessible(true);
+            method.invoke(null); return;
+        } catch (ClassNotFoundException sourceLaunch) { }
         Process process = new ProcessBuilder(javaTool(), privateCleanupSource().toString(), "--self-test")
                 .directory(root.toFile()).inheritIO().start();
         require(process.waitFor(120, TimeUnit.SECONDS), "worktree cleanup self-test timed out");
@@ -193,6 +198,14 @@ public final class WorktreeLifecycle {
     }
 
     private Cleanup privateCleanup(Path worktree) throws Exception {
+        try {
+            Class<?> type = Class.forName("WorktreePrivateCleanup");
+            var prune = type.getDeclaredMethod("prune", Path.class); prune.setAccessible(true);
+            Object result = prune.invoke(null, worktree);
+            var files = result.getClass().getDeclaredMethod("files"); files.setAccessible(true);
+            var bytes = result.getClass().getDeclaredMethod("bytes"); bytes.setAccessible(true);
+            return new Cleanup((long) files.invoke(result), (long) bytes.invoke(result));
+        } catch (ClassNotFoundException sourceLaunch) { }
         Path log = Files.createTempFile("worldline-private-cleanup-", ".log");
         Process process = new ProcessBuilder(javaTool(), privateCleanupSource().toString(), "prune",
                 worktree.toString()).directory(root.toFile()).redirectErrorStream(true)

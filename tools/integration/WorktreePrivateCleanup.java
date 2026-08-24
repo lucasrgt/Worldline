@@ -59,7 +59,7 @@ public final class WorktreePrivateCleanup {
         return Files.readAttributes(path, BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
     }
 
-    private static void selfTest() throws Exception {
+    static void selfTest() throws Exception {
         Path parent = Files.createTempDirectory("worldline-lifecycle-test-");
         Path target = parent.resolve("worktree"), external = parent.resolve("external");
         Files.createDirectories(target); Files.createDirectories(external);
