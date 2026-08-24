@@ -1,0 +1,5 @@
+schema=1
+id=m630-server-acl-matrix
+fingerprint=e579036751851c609201e7cdcb678a69a1458dac2291d6a30f8bb068837ca433
+observation.sha256=3d0d34de643ede45801a681b32e21657620358b048123ae816a46fc569e036b8
+source=refactor-equivalent

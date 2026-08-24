@@ -573,6 +573,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m627-chunk-unload-reload` | CARRIED | chunk unload and reload persistence |
 | `m628-minecart-booster-bug` | CARRIED | minecart booster bug |
 | `m629-door-sound-event` | CARRIED | door sound event |
+| `m630-server-acl-matrix` | CARRIED | server acl matrix |
 | `betavault-item-reference` | EXECUTED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |

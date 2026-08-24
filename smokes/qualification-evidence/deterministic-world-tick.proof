@@ -1,5 +1,5 @@
 schema=1
 id=deterministic-world-tick
-fingerprint=977d9a68a00cd4387ce72d3d9b30cc37668c7aca83799ab3a40cfb66da390cc0
+fingerprint=0b8f8ff3c8795a76ce0cb74bafcf84b6a616a327cab57c0f3e7f604603a7fdd9
 observation.sha256=8968e0f3fa8b1c979bba56a0d25557beead0f26f19f14ca5bfe86e1bcf2d4933
 source=refactor-equivalent

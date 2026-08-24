@@ -1,5 +1,5 @@
 schema=1
 id=m612-piston-push-entity-set
-fingerprint=513b1718aacd253a6620888add2fef72a557eca6e4976b3c54c298452d4d4782
+fingerprint=01ef4b81d9c1d28a18889ca24d62bd660cab02aa7957548ce8d7d5d320cd3f6b
 observation.sha256=d0bc8efa2a223b0799cb3fd111420c8c4a69a03e0a246e334848d990846fab28
 source=refactor-equivalent

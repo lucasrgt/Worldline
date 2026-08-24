@@ -1,5 +1,5 @@
 schema=1
 id=m162-wooden-door
-fingerprint=46fbdd3077bdd786ad43a98756aab6fbc46d8b3d8aa067ce714614d99c571d7c
+fingerprint=6ad162c236c9b06fa4ba65d5aa5326001b6c74a6a47eb97b6d4ca47f20f6418b
 observation.sha256=d14b3dc599ec9ecd4d0f39074ae46e401c37bd078d558f4b0dd0b477a3f1bfea
 source=refactor-equivalent

@@ -1028,6 +1028,7 @@ Generated from the canonical Markdown files in `docs/`. Files remain at stable r
 - [M629_DOOR_SOUND_EVENT.md](../M629_DOOR_SOUND_EVENT.md)
 - [M62_CYCLE.md](../M62_CYCLE.md)
 - [M62_WORKBENCH_WINDOW.md](../M62_WORKBENCH_WINDOW.md)
+- [M630_SERVER_ACL_MATRIX.md](../M630_SERVER_ACL_MATRIX.md)
 - [M63_CYCLE.md](../M63_CYCLE.md)
 - [M63_WORKBENCH_PREPARATION.md](../M63_WORKBENCH_PREPARATION.md)
 - [M64_CYCLE.md](../M64_CYCLE.md)

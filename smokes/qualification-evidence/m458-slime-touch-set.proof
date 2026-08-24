@@ -1,5 +1,5 @@
 schema=1
 id=m458-slime-touch-set
-fingerprint=2555418130351b8ae9709c7745bb01011a5879c419852519aae2b9878e510d26
+fingerprint=aabb6ed0699b8ae545d7de4b7e5bf9c01a77ab971dd445743f486e8c06424ea4
 observation.sha256=84cc0baf6465c46adf5437018728a84b237f8d611fa461bcc6335932432f2d26
 source=refactor-equivalent

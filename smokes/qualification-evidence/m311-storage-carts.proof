@@ -1,5 +1,5 @@
 schema=1
 id=m311-storage-carts
-fingerprint=a498ba0e44e3df2473295b2fc75be2d0ea145bb1d34404d20d0af6d216745480
+fingerprint=5c012947cd55ff80b438e76f32a2778dcb38cb179a00205385e2c06945d46a78
 observation.sha256=820eecba37b12ebcd44e719255868981552e3ef995e2ba92c4df32973218a71b
 source=refactor-equivalent
