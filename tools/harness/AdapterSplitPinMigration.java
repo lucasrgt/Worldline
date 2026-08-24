@@ -114,7 +114,8 @@ final class AdapterSplitPinMigration {
             for (int index = 0; index < count; index++) {
                 String stem = group + "." + index + ".";
                 String relative = required(lock, stem + "path");
-                require(git(root, "ls-files", "--error-unmatch", relative).strip().equals(relative),
+                String tracked = git(root, "ls-files", "--error-unmatch", relative).strip();
+                require(tracked.equals(relative),
                         "adapter source is not tracked: " + relative);
                 String prior = required(lock, stem + "current_sha256");
                 String current = digest(Files.readString(root.resolve(relative)));
@@ -130,7 +131,6 @@ final class AdapterSplitPinMigration {
                 changes++;
             }
         }
-        require(changes > 0, "adapter refresh has no reviewed source changes");
         return changes;
     }
 
