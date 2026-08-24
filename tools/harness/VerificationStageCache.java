@@ -22,6 +22,7 @@ final class VerificationStageCache {
     private final boolean countMetrics;
     private final Map<Path, String> inputDigests = new HashMap<>();
     private Boolean cleanTree;
+    private Map<String, String> trackedObjects;
 
     VerificationStageCache(Path root) {
         this.root = root; this.countMetrics = true;
@@ -162,10 +163,21 @@ final class VerificationStageCache {
         }
         if (!cleanTree) return null;
         String relative = root.relativize(input).toString().replace('\\', '/');
-        Process process = new ProcessBuilder("git", "rev-parse", "HEAD:" + relative)
-                .directory(root.toFile()).redirectErrorStream(true).start();
-        String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8).trim();
-        return process.waitFor() == 0 && output.matches("[0-9a-f]{40,64}") ? "git:" + output : null;
+        if (trackedObjects == null) trackedObjects = trackedObjects();
+        String object = trackedObjects.get(relative);
+        return object == null ? null : "git:" + object;
+    }
+
+    private Map<String, String> trackedObjects() throws Exception {
+        String output = capture(List.of("git", "ls-tree", "-r", "-t", "--full-tree", "HEAD"));
+        require(output != null, "git tree inventory failed"); Map<String, String> result = new HashMap<>();
+        for (String line : output.lines().toList()) {
+            int tab = line.indexOf('\t'); if (tab < 0) continue;
+            String[] metadata = line.substring(0, tab).split(" ");
+            if (metadata.length == 3 && metadata[2].matches("[0-9a-f]{40,64}"))
+                result.put(line.substring(tab + 1), metadata[2]);
+        }
+        return Map.copyOf(result);
     }
 
     private String capture(List<String> command) throws Exception {
