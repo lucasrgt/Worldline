@@ -26,6 +26,7 @@ Generated from the canonical Markdown files in `docs/`. Files remain at stable r
 - [EXTENSIONS.md](../EXTENSIONS.md)
 - [EXTENSION_SDK.md](../EXTENSION_SDK.md)
 - [FIXED_WAIT_MIGRATION.md](../FIXED_WAIT_MIGRATION.md)
+- [FRONT08_BED_LIFECYCLE_COVERAGE.md](../FRONT08_BED_LIFECYCLE_COVERAGE.md)
 - [GRADLE_TESTKIT.md](../GRADLE_TESTKIT.md)
 - [GUI_CYCLE.md](../GUI_CYCLE.md)
 - [GUI_SPEC.md](../GUI_SPEC.md)
