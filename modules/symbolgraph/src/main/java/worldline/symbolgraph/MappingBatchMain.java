@@ -11,10 +11,10 @@ public final class MappingBatchMain {
     private MappingBatchMain() {}
 
     public static void main(String[] arguments) throws Exception {
-        if (arguments.length != 10) {
+        if (arguments.length != 11) {
             System.err.println("usage: MappingBatchMain <client.jar> <server.jar> <intermediary.jar>"
                     + " <nostalgia.jar> <feather.jar> <retromcp.properties> <retromcp.tiny>"
-                    + " <m11.properties> <m12.properties> <m13.properties>");
+                    + " <m11.properties> <m12.properties> <m13.properties> <retractions.properties>");
             System.exit(2);
         }
         Path client = Paths.get(arguments[0]), server = Paths.get(arguments[1]);
@@ -51,5 +51,6 @@ public final class MappingBatchMain {
                 for (String id : report.excludedIds())
                     System.out.println("  SEM-M13 retracted Nostalgia-only identity: " + id);
         }
+        MappingBatchGate.verifyRetractions(reports[2], Paths.get(arguments[10]));
     }
 }

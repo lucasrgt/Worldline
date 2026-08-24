@@ -19,6 +19,7 @@ public final class MappingBatchTest {
             Path official = root.resolve("official.jar"), inventory = root.resolve("inventory.jar");
             Path nostalgia = root.resolve("nostalgia.jar"), retro = root.resolve("retro.tiny");
             Path descriptor = root.resolve("retro.properties"), policy = root.resolve("batch.properties");
+            Path retractions = root.resolve("retractions.properties");
             official(official, officialName);
             archive(inventory, "tiny\t2\t0\tintermediary\tclientOfficial\tserverOfficial\n"
                     + "c\tfixture/Class\t" + officialName + "\t" + officialName + "\n");
@@ -51,6 +52,12 @@ public final class MappingBatchTest {
             require(exact.contains("expected.report.sha256=" + report.sha256()), "exact policy render");
             Files.write(policy, exact.getBytes(StandardCharsets.UTF_8));
             MappingBatchGate.verify(report, policy);
+            String retractionPolicy = MappingBatchGate.retractionPolicy(report);
+            require(retractionPolicy.contains(report.excludedIds().get(0)), "retraction policy render");
+            Files.write(retractions, retractionPolicy.getBytes(StandardCharsets.UTF_8));
+            MappingBatchGate.verifyRetractions(report, retractions);
+            Files.write(retractions, "schema=1\n".getBytes(StandardCharsets.UTF_8));
+            failure(() -> MappingBatchGate.verifyRetractions(report, retractions));
             Files.write(policy, "schema=1\n".getBytes(StandardCharsets.UTF_8));
             failure(() -> MappingBatchGate.verify(report, policy));
         } finally {

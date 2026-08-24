@@ -231,7 +231,8 @@ final class RepositoryVerify {
                 "local/workspaces/b1.7.3/conf/mappings.tiny",
                 "mappings/b1.7.3/sem-m11.properties",
                 "mappings/b1.7.3/sem-m12.properties",
-                "mappings/b1.7.3/sem-m13.properties"));
+                "mappings/b1.7.3/sem-m13.properties",
+                "mappings/b1.7.3/sem-m13-retractions.properties"));
     }
 
 
