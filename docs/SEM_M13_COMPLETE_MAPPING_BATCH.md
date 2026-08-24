@@ -4,6 +4,11 @@ SEM-M13 selects all 6,475 maintained Beta 1.7.3 graph identities with at least
 two independent mapping sources. Its report sets `complete=true` only when the
 cumulative selection equals the complete qualified graph.
 
+Batch membership and report order depend only on canonical graph identities.
+Smoke source, descriptor, and documentation text are deliberately absent from
+the mapping fingerprint, so later behavioral milestones cannot rewrite a
+sealed mapping proof.
+
 Eleven old Nostalgia-only entries remain explicitly reported as excluded.
 They have no Calamus official identity, no RetroMCP resolution, and are absent
 from the current Feather artifact. They are therefore retracted from the

@@ -32,6 +32,14 @@ public final class MappingBatchGate {
                 "mapping batch selected an unqualified identity");
     }
 
+    public static String policy(MappingBatchReport report) {
+        if (report == null) throw new NullPointerException("mapping batch report");
+        StringBuilder text = new StringBuilder("schema=1\n");
+        for (Map.Entry<String, String> metric : report.metrics().entrySet())
+            text.append("expected.").append(metric.getKey()).append('=').append(metric.getValue()).append('\n');
+        return text.append("expected.report.sha256=").append(report.sha256()).append('\n').toString();
+    }
+
     private static String required(Properties properties, String key) {
         String value = properties.getProperty(key);
         require(value != null && !value.trim().isEmpty(), "missing mapping batch property " + key);

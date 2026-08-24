@@ -30,17 +30,17 @@ public final class MappingBatchReport {
 
     public static MappingBatchReport create(MappingCoverageReport coverage,
             TinyMapping intermediary, TinyMapping nostalgia, TinyMapping feather,
-            SymbolGraph retroGraph, Set<String> touchedTokens, int targetPercent) {
+            SymbolGraph retroGraph, int targetPercent) {
         require(targetPercent == 25 || targetPercent == 50 || targetPercent == 100,
                 "mapping batch target must be 25, 50, or 100");
         if (coverage == null || intermediary == null || nostalgia == null || feather == null
-                || retroGraph == null || touchedTokens == null) throw new NullPointerException("mapping batch input");
+                || retroGraph == null) throw new NullPointerException("mapping batch input");
         require(intermediary.namespace("clientOfficial") >= 0, "Calamus official namespace absent");
         require(nostalgia.namespace("named") >= 0 && feather.namespace("named") >= 0,
                 "named mapping namespace absent");
         List<Row> qualified = new ArrayList<Row>(), excluded = new ArrayList<Row>();
         for (SymbolRecord record : retroGraph.records()) {
-            Row row = row(record, intermediary, nostalgia, feather, touchedTokens);
+            Row row = row(record, intermediary, nostalgia, feather);
             if (row.sources.size() >= 2) qualified.add(row);
             else {
                 require(!record.inventoryPresent(), "official mapping identity has fewer than two sources: "
@@ -48,8 +48,7 @@ public final class MappingBatchReport {
                 excluded.add(row);
             }
         }
-        Comparator<Row> order = Comparator.comparing(Row::touched).reversed()
-                .thenComparing(row -> row.key.canonical());
+        Comparator<Row> order = Comparator.comparing(row -> row.key.canonical());
         Collections.sort(qualified, order); Collections.sort(excluded, order);
         int selected = (qualified.size() * targetPercent + 99) / 100;
         List<Row> batch = qualified.subList(0, selected);
@@ -60,12 +59,10 @@ public final class MappingBatchReport {
         values.put("graph.total", Integer.toString(retroGraph.records().size()));
         values.put("qualified.total", Integer.toString(qualified.size()));
         values.put("excluded.total", Integer.toString(excluded.size()));
-        values.put("touched.total", Integer.toString(countTouched(qualified)));
         values.put("selected.total", Integer.toString(batch.size()));
-        values.put("selected.touched", Integer.toString(countTouched(batch)));
         values.put("selected.qualified", Integer.toString(batch.size()));
         values.put("complete", Boolean.toString(targetPercent == 100 && batch.size() == qualified.size()));
-        StringBuilder rows = new StringBuilder("selected\tid\tkind\tidentity\ttouched\tsources\n");
+        StringBuilder rows = new StringBuilder("selected\tid\tkind\tidentity\tsources\n");
         for (Row row : batch) rows.append(row.render("yes"));
         rows.append("excluded\tid\tkind\tidentity\ttouched\tsources\n");
         for (Row row : excluded) rows.append(row.render("no"));
@@ -83,26 +80,14 @@ public final class MappingBatchReport {
     public String render() { return body + "report.sha256=" + sha256() + "\n"; }
 
     private static Row row(SymbolRecord record, TinyMapping intermediary,
-            TinyMapping nostalgia, TinyMapping feather, Set<String> touchedTokens) {
+            TinyMapping nostalgia, TinyMapping feather) {
         TreeSet<String> sources = new TreeSet<String>(); SymbolKey key = record.key();
         if (intermediary.symbols().containsKey(key)) sources.add("calamus");
         if (nostalgia.symbols().containsKey(key)) sources.add("nostalgia");
         if (feather.symbols().containsKey(key)) sources.add("feather");
         if (!record.retroMcpClient().isEmpty() || !record.retroMcpServer().isEmpty())
             sources.add("retromcp");
-        return new Row(key, touched(key, record, touchedTokens), sources);
-    }
-
-    private static boolean touched(SymbolKey key, SymbolRecord record, Set<String> tokens) {
-        if (tokens.contains(key.name()) || tokens.contains(key.owner())) return true;
-        for (String value : new String[] {record.clientOfficial(), record.serverOfficial(),
-                record.nostalgia(), record.retroMcpClient(), record.retroMcpServer()})
-            if (!value.isEmpty() && tokens.contains(value)) return true;
-        return false;
-    }
-
-    private static int countTouched(List<Row> rows) {
-        int count = 0; for (Row row : rows) if (row.touched) count++; return count;
+        return new Row(key, sources);
     }
     private static String digest(String value) { try {
         byte[] bytes = MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8));
@@ -115,16 +100,15 @@ public final class MappingBatchReport {
     }
 
     private static final class Row {
-        private final SymbolKey key; private final boolean touched; private final Set<String> sources;
-        private Row(SymbolKey key, boolean touched, Set<String> sources) {
-            this.key = key; this.touched = touched;
+        private final SymbolKey key; private final Set<String> sources;
+        private Row(SymbolKey key, Set<String> sources) {
+            this.key = key;
             this.sources = Collections.unmodifiableSet(new TreeSet<String>(sources));
         }
-        boolean touched() { return touched; }
         String id() { return digest(key.canonical()); }
         String render(String selected) {
             return selected + '\t' + id() + '\t' + key.kind().name().toLowerCase()
-                    + '\t' + key.canonical() + '\t' + touched + '\t' + String.join(",", sources) + '\n';
+                    + '\t' + key.canonical() + '\t' + String.join(",", sources) + '\n';
         }
     }
 }

@@ -6,8 +6,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
-import java.util.Map;
-import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 
@@ -43,17 +41,15 @@ public final class MappingBatchTest {
             MappingCoverageReport coverage = MappingCoverageReport.create(
                     official, official, inventory, nostalgia, descriptor, retro);
             MappingBatchReport report = MappingBatchReport.create(coverage, intermediary, named,
-                    feather, graph, Set.of("fixture/Class"), 100);
+                    feather, graph, 100);
             require("1".equals(report.metric("qualified.total")), "qualified identity count");
             require("1".equals(report.metric("excluded.total")), "orphan count");
             require(report.excludedIds().size() == 1
                     && report.render().contains(report.excludedIds().get(0)), "orphan identity attestation");
             require("true".equals(report.metric("complete")), "complete batch status");
-            StringBuilder exact = new StringBuilder("schema=1\n");
-            for (Map.Entry<String, String> metric : report.metrics().entrySet())
-                exact.append("expected.").append(metric.getKey()).append('=').append(metric.getValue()).append('\n');
-            exact.append("expected.report.sha256=").append(report.sha256()).append('\n');
-            Files.write(policy, exact.toString().getBytes(StandardCharsets.UTF_8));
+            String exact = MappingBatchGate.policy(report);
+            require(exact.contains("expected.report.sha256=" + report.sha256()), "exact policy render");
+            Files.write(policy, exact.getBytes(StandardCharsets.UTF_8));
             MappingBatchGate.verify(report, policy);
             Files.write(policy, "schema=1\n".getBytes(StandardCharsets.UTF_8));
             failure(() -> MappingBatchGate.verify(report, policy));

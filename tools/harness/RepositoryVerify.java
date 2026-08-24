@@ -228,7 +228,7 @@ final class RepositoryVerify {
                 "local/mappings/nostalgia-b1.7.3-build.60-v2.jar",
                 "local/mappings/feather-gen2-b1.7.3-build.1-v2.jar",
                 "mappings/b1.7.3/retromcp-generated.properties",
-                "local/workspaces/b1.7.3/conf/mappings.tiny", "smokes",
+                "local/workspaces/b1.7.3/conf/mappings.tiny",
                 "mappings/b1.7.3/sem-m11.properties",
                 "mappings/b1.7.3/sem-m12.properties",
                 "mappings/b1.7.3/sem-m13.properties"));

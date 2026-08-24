@@ -5,23 +5,22 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Set;
 
 /** Runtime entry point for the cumulative SEM-M11 through SEM-M13 mapping gates. */
 public final class MappingBatchMain {
     private MappingBatchMain() {}
 
     public static void main(String[] arguments) throws Exception {
-        if (arguments.length != 11) {
+        if (arguments.length != 10) {
             System.err.println("usage: MappingBatchMain <client.jar> <server.jar> <intermediary.jar>"
                     + " <nostalgia.jar> <feather.jar> <retromcp.properties> <retromcp.tiny>"
-                    + " <touch-root> <m11.properties> <m12.properties> <m13.properties>");
+                    + " <m11.properties> <m12.properties> <m13.properties>");
             System.exit(2);
         }
         Path client = Paths.get(arguments[0]), server = Paths.get(arguments[1]);
         Path intermediaryPath = Paths.get(arguments[2]), nostalgiaPath = Paths.get(arguments[3]);
         Path featherPath = Paths.get(arguments[4]), retroPin = Paths.get(arguments[5]);
-        Path retroPath = Paths.get(arguments[6]), touchRoot = Paths.get(arguments[7]);
+        Path retroPath = Paths.get(arguments[6]);
         MappingPin.load(retroPin).verify(retroPath);
         TinyMapping intermediary = MappingArchive.read(intermediaryPath, "mappings/mappings.tiny");
         TinyMapping nostalgia = MappingArchive.read(nostalgiaPath, "mappings/mappings.tiny");
@@ -34,12 +33,17 @@ public final class MappingBatchMain {
                 intermediaryPath, nostalgiaPath, retroPin, retroPath);
         SymbolGraph base = new SymbolGraphBuilder().build(intermediary, nostalgia);
         SymbolGraph graph = new RetroMcpImport().apply(base, intermediary, retro).graph();
-        Set<String> touches = MappingTouchIndex.read(touchRoot);
         int[] targets = {25, 50, 100};
+        MappingBatchReport[] reports = new MappingBatchReport[targets.length];
         for (int index = 0; index < targets.length; index++) {
-            MappingBatchReport report = MappingBatchReport.create(
-                    coverage, intermediary, nostalgia, feather, graph, touches, targets[index]);
-            MappingBatchGate.verify(report, Paths.get(arguments[index + 8]));
+            reports[index] = MappingBatchReport.create(
+                    coverage, intermediary, nostalgia, feather, graph, targets[index]);
+            System.out.println("  SEM-M" + (index + 11) + " exact policy:\n"
+                    + MappingBatchGate.policy(reports[index]));
+        }
+        for (int index = 0; index < targets.length; index++) {
+            MappingBatchReport report = reports[index];
+            MappingBatchGate.verify(report, Paths.get(arguments[index + 7]));
             System.out.println("  SEM-M" + (index + 11) + " mapping batch: "
                     + report.metric("selected.total") + "/" + report.metric("qualified.total")
                     + " qualified; report " + report.sha256());
