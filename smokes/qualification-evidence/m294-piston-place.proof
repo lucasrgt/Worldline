@@ -1,5 +1,5 @@
 schema=1
 id=m294-piston-place
-fingerprint=e69f0a4879945f7c7df7b197ab60bb61069be3f7928ca2a221125ee806fa7e19
+fingerprint=dff081ee3cb34b34549087b90570094f4b964e82a10589df40153a11d350e35f
 observation.sha256=3fa31fff0d03751901d6283ff022999a5d94d205d79d1a77106294cc8b041624
 source=refactor-equivalent

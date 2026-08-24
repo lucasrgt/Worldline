@@ -1,5 +1,5 @@
 schema=1
 id=m393-stair-facing-set
-fingerprint=57cf45bf6cd1437bae841887db8db4ff5eac474a7bfe11f9d53227353bfe3ec5
+fingerprint=601e8e0c54bb27cdb761e2a95704a6c4a3da711a830978c55dd62cd23b199402
 observation.sha256=1e94922033cceeec477b29842f80b9bce86737cb240b266bad8ad4cf93cf0253
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m359-bed-nether-explode
-fingerprint=3f0d6c5cad98a5de6d935db4f2d2096f9721af1b94e40367b7463500cee1dbc8
+fingerprint=6248825d42bb8d3346817f7134423ac5ed8fc241bb757f5b0389d03d7f300170
 observation.sha256=be77b379de881712f9089340681a1a0779977df7934e51508858f83c97a9a7a6
 source=refactor-equivalent

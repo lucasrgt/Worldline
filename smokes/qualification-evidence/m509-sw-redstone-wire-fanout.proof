@@ -1,5 +1,5 @@
 schema=1
 id=m509-sw-redstone-wire-fanout
-fingerprint=f837c3e991c6ad5412986c1c3a0d1b3ed7223ae870e1b7d7e9a3b6dc6e9e377d
+fingerprint=6fc0c37be4e2ab1f11e474057ff7dc50e03ba481faf28d6162d86e6b9f57f59c
 observation.sha256=6aca9f501946f63db33fca4ed618e472fead629bc7a86847355bee55802f33f0
 source=refactor-equivalent

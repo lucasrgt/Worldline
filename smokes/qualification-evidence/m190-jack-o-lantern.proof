@@ -1,5 +1,5 @@
 schema=1
 id=m190-jack-o-lantern
-fingerprint=f2af6a90ade9396576e4d08e9e7eac76894049eaa60026e843d4c8146266196a
+fingerprint=0d2fb5b30b2b35d04db445a2ff3195f9b9cb44da418a9f140b8a0ab82215df4a
 observation.sha256=6d925e40f9f78a804de2b69ee8eb5107d5314dedb78a27dd72a2acb8fd53f77d
 source=refactor-equivalent

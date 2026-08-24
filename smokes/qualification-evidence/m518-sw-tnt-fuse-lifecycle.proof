@@ -1,5 +1,5 @@
 schema=1
 id=m518-sw-tnt-fuse-lifecycle
-fingerprint=824cc96cc5723fe468ad43ff20acdf54d963533488001d7648c6d4b6ba6c86ce
+fingerprint=79813e9f12bb127d96c77b991503eac60a698d2dbb0c3ba3b42802057454bd20
 observation.sha256=f6a9810837ac1a3622784617b05e6c957344be3be5493d4b261e359f18076f1d
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m54-chest-window
-fingerprint=efc7b3372553e2400979fd19369f6fc845122989820322beeb8f5fb407786400
+fingerprint=00d534fe602297fd6fd18360da256e0dacb69f962033cbb0649547c6fb55b0b0
 observation.sha256=acad62a8f2a3b5a2ab79903380d8a41890099d33a630deabc89c96b84433ebe4
 source=refactor-equivalent
