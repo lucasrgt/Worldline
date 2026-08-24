@@ -1,0 +1,18 @@
+schema = 1
+id = "NYA-01M0S34K0H1X1T5GCZSMZVBGC8"
+title = "Do not assert one draw from entity RNG"
+lesson = "A milestone must not freeze a single outcome from entity-local RNG that the harness cannot seed. Exercise a bounded sequence of actions, assert deterministic post-event state, and keep the random attempt count out of the frozen semantic signal."
+scope = ["smokes/m618-wolf-tame-set/**"]
+tags = [
+    "rng",
+    "smoke",
+]
+created_at = "2026-08-24T05:15:52Z"
+
+[[occurrences]]
+occurred_at = "2026-08-24T05:15:52Z"
+source = "manual:2026-08-24-m618-runtime-failure"
+reported_by = "user:fable-report"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "86351fcb7"
