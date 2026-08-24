@@ -53,9 +53,9 @@ final class SmokeInputFingerprint {
 
     private String compute(SmokeDiscovery.Entry smoke, boolean qualification) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        boolean portable = qualification && LaneDifferential.portableQualification(root, smoke);
-        update(digest, qualification ? portable ? "worldline-smoke-input-v5-portable"
-                : "worldline-smoke-input-v4" : "worldline-smoke-observation-v1");
+        boolean portable = qualification;
+        update(digest, portable ? "worldline-smoke-input-v5-portable"
+                : "worldline-smoke-observation-v1");
         update(digest, smoke.id); update(digest, smoke.runner);
         if (!portable) {
             update(digest, System.getProperty("java.runtime.version", System.getProperty("java.version")));

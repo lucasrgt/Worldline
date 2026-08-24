@@ -43,6 +43,21 @@ public final class SmokeReceiptCacheTest {
         SmokeInputFingerprint first = new SmokeInputFingerprint(root);
         String one = first.compute(entries.get(0)), two = first.compute(entries.get(1));
         String runtime = first.computeRuntime(entries.get(0));
+        String os = System.getProperty("os.name"), architecture = System.getProperty("os.arch");
+        String java = System.getProperty("java.runtime.version");
+        try {
+            System.setProperty("os.name", "Worldline opposite lane");
+            System.setProperty("os.arch", "portable-fixture");
+            System.setProperty("java.runtime.version", "portable-fixture");
+            SmokeInputFingerprint opposite = new SmokeInputFingerprint(root);
+            require(one.equals(opposite.compute(entries.get(0))),
+                    "qualification fingerprint was platform-bound");
+            require(!runtime.equals(opposite.computeRuntime(entries.get(0))),
+                    "runtime observation fingerprint lost its platform binding");
+        } finally {
+            restore("os.name", os); restore("os.arch", architecture);
+            restore("java.runtime.version", java);
+        }
         write(root.resolve("quality/test-budget.properties"), "limit=2\n");
         SmokeInputFingerprint policyChanged = new SmokeInputFingerprint(root);
         require(!one.equals(policyChanged.compute(entries.get(0))),
@@ -121,6 +136,10 @@ public final class SmokeReceiptCacheTest {
 
     private static void write(Path path, String value) throws Exception {
         Files.createDirectories(path.getParent()); Files.writeString(path, value, StandardCharsets.UTF_8);
+    }
+
+    private static void restore(String name, String value) {
+        if (value == null) System.clearProperty(name); else System.setProperty(name, value);
     }
 
     private static void git(Path root, String... arguments) throws Exception {
