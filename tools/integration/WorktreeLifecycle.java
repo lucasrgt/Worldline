@@ -145,48 +145,13 @@ public final class WorktreeLifecycle {
         require(!Files.exists(bundle), "bundle already exists: " + bundle);
         git(root, "bundle", "create", bundle.toString(), worktree.branch);
         git(root, "bundle", "verify", bundle.toString());
-        Cleanup cleanup = prunePrivate(selected);
+        Cleanup cleanup = privateCleanup(selected);
         git(root, "worktree", "remove", selected.toString());
+        cacheDoctor();
         System.out.println("archived worktree " + selected + " to " + bundle);
         System.out.println("branch retained: " + worktree.branch);
         System.out.println("private cleanup: files=" + cleanup.files + ", bytes=" + cleanup.bytes
                 + "; not recoverable from the tracked-source bundle");
-    }
-
-    private Cleanup prunePrivate(Path worktree) throws Exception {
-        long files = 0L, bytes = 0L;
-        for (String name : List.of(".worldline", "tmp", "output")) {
-            Path target = worktree.resolve(name).toAbsolutePath().normalize();
-            require(target.startsWith(worktree) && !target.equals(worktree), "unsafe private cleanup path");
-            if (!Files.exists(target)) continue;
-            Cleanup measured = privateSize(target); files += measured.files; bytes += measured.bytes;
-            deleteWithoutFollowingLinks(target);
-        }
-        return new Cleanup(files, bytes);
-    }
-
-    private static Cleanup privateSize(Path target) throws Exception {
-        BasicFileAttributes attributes = Files.readAttributes(target,
-                BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
-        if (attributes.isRegularFile()) return new Cleanup(1L, attributes.size());
-        if (!attributes.isDirectory() || attributes.isOther()) return new Cleanup(0L, 0L);
-        long files = 0L, bytes = 0L;
-        try (var children = Files.newDirectoryStream(target)) {
-            for (Path child : children) {
-                Cleanup measured = privateSize(child); files += measured.files; bytes += measured.bytes;
-            }
-        }
-        return new Cleanup(files, bytes);
-    }
-
-    private static void deleteWithoutFollowingLinks(Path target) throws Exception {
-        BasicFileAttributes attributes = Files.readAttributes(target,
-                BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
-        if (attributes.isDirectory() && !attributes.isOther())
-            try (var children = Files.newDirectoryStream(target)) {
-                for (Path child : children) deleteWithoutFollowingLinks(child);
-            }
-        Files.deleteIfExists(target);
     }
 
     private boolean integrated(String head, String base, Set<String> receipts) throws Exception {
@@ -221,32 +186,37 @@ public final class WorktreeLifecycle {
     }
 
     private void selfTestCleanup() throws Exception {
-        Path parent = root.resolve(".worldline"); Files.createDirectories(parent);
-        Path target = Files.createTempDirectory(parent, "lifecycle-cleanup-");
-        Path external = Files.createTempDirectory(parent, "lifecycle-external-");
-        Path retained = target.resolve("retained.txt"); Files.writeString(retained, "retained");
+        Process process = new ProcessBuilder(javaTool(), privateCleanupSource().toString(), "--self-test")
+                .directory(root.toFile()).inheritIO().start();
+        require(process.waitFor(120, TimeUnit.SECONDS), "worktree cleanup self-test timed out");
+        require(process.exitValue() == 0, "worktree cleanup self-test failed");
+    }
+
+    private Cleanup privateCleanup(Path worktree) throws Exception {
+        Path log = Files.createTempFile("worldline-private-cleanup-", ".log");
+        Process process = new ProcessBuilder(javaTool(), privateCleanupSource().toString(), "prune",
+                worktree.toString()).directory(root.toFile()).redirectErrorStream(true)
+                .redirectOutput(log.toFile()).start();
         try {
-            for (String name : List.of(".worldline", "tmp", "output")) {
-                Path file = target.resolve(name).resolve("private.bin");
-                Files.createDirectories(file.getParent()); Files.write(file, new byte[] {1, 2, 3});
-            }
-            Path sentinel = external.resolve("sentinel"); Files.writeString(sentinel, "retained");
-            Path link = target.resolve(".worldline/cache-link");
-            if (System.getProperty("os.name").toLowerCase().contains("win")) {
-                Process junction = new ProcessBuilder("cmd.exe", "/d", "/c", "mklink", "/J",
-                        link.toString(), external.toString())
-                        .redirectOutput(ProcessBuilder.Redirect.DISCARD).start();
-                require(junction.waitFor(30, TimeUnit.SECONDS) && junction.exitValue() == 0,
-                        "lifecycle junction fixture failed");
-            } else Files.createSymbolicLink(link, external);
-            Cleanup cleanup = prunePrivate(target);
-            require(cleanup.files == 3L && cleanup.bytes == 9L && Files.isRegularFile(retained)
-                            && Files.isRegularFile(sentinel),
-                    "private cleanup scope drifted");
-            System.out.println("worktree lifecycle cleanup self-test passed");
-        } finally {
-            deleteWithoutFollowingLinks(target); deleteWithoutFollowingLinks(external);
-        }
+            require(process.waitFor(120, TimeUnit.SECONDS), "worktree private cleanup timed out");
+            String output = Files.readString(log, StandardCharsets.UTF_8).trim();
+            require(process.exitValue() == 0, "worktree private cleanup failed: " + output);
+            String row = output.lines().filter(line -> line.startsWith("files=")).findFirst()
+                    .orElseThrow(() -> new IllegalStateException("missing private cleanup census"));
+            String[] values = row.replace("files=", "").replace("bytes=", "").split(";");
+            return new Cleanup(Long.parseLong(values[0]), Long.parseLong(values[1]));
+        } finally { Files.deleteIfExists(log); }
+    }
+
+    private Path privateCleanupSource() {
+        return root.resolve("tools/integration/WorktreePrivateCleanup.java");
+    }
+
+    private void cacheDoctor() throws Exception {
+        Process process = new ProcessBuilder(javaTool(), root.resolve("tools/harness/Gate.java").toString(),
+                "--cache-doctor").directory(root.toFile()).inheritIO().start();
+        require(process.waitFor(600, TimeUnit.SECONDS), "post-archive cache doctor timed out");
+        require(process.exitValue() == 0, "post-archive cache doctor failed");
     }
 
     private List<Worktree> discover() throws Exception {

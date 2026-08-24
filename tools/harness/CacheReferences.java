@@ -1,4 +1,5 @@
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.List;
@@ -9,8 +10,12 @@ final class CacheReferences {
     private CacheReferences() { }
 
     static Set<Path> snapshot(Path repository, Path cache) throws Exception {
-        if (!Files.isDirectory(cache)) return Set.of();
-        Path realCache = cache.toRealPath(); Set<Path> result = new HashSet<>();
+        return inspect(repository, cache).paths;
+    }
+
+    static Snapshot inspect(Path repository, Path cache) throws Exception {
+        if (!Files.isDirectory(cache)) return new Snapshot(Set.of(), 0);
+        Path realCache = cache.toRealPath(); Set<Path> result = new HashSet<>(); int dangling = 0;
         String listing = ProcessCapture.require(repository,
                 List.of("git", "worktree", "list", "--porcelain"), 60);
         for (String line : listing.lines().filter(value -> value.startsWith("worktree ")).toList()) {
@@ -18,11 +23,13 @@ final class CacheReferences {
             if (!Files.isDirectory(privateRoot)) continue;
             for (Path candidate : SafeTreeDelete.paths(privateRoot, 4)) {
                 if (!SafeTreeDelete.linkLike(candidate)) continue;
-                Path target = candidate.toRealPath();
+                Path target;
+                try { target = candidate.toRealPath(); }
+                catch (NoSuchFileException missing) { dangling++; continue; }
                 if (target.startsWith(realCache)) result.add(target);
             }
         }
-        return Set.copyOf(result);
+        return new Snapshot(Set.copyOf(result), dangling);
     }
 
     static boolean protects(Path entry, Set<Path> references) throws Exception {
@@ -32,4 +39,6 @@ final class CacheReferences {
 
     @FunctionalInterface
     interface Source { Set<Path> snapshot() throws Exception; }
+
+    record Snapshot(Set<Path> paths, int dangling) { }
 }

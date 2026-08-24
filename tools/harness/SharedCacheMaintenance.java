@@ -23,12 +23,29 @@ public final class SharedCacheMaintenance {
 
     private void execute(boolean delete) throws Exception {
         CachePolicy policy = new CachePolicy(root);
+        CacheReferences.Snapshot before = CacheReferences.inspect(root, cache);
         new ModuleCacheMaintenance().execute(delete);
+        CacheReferences.Snapshot initial = CacheReferences.inspect(root, cache);
+        require(!delete || initial.dangling() <= before.dangling(),
+                "module cache GC created dangling worktree links");
         CacheReferences.Source references = () -> CacheReferences.snapshot(root, cache);
         Result result = maintain(cache, references, policy.maximumBytes(),
                 policy.minimumAgeMillis(), System.currentTimeMillis(), delete);
+        System.out.println("cache-references.live=" + initial.paths().size()
+                + ";dangling=" + initial.dangling());
         System.out.println("shared-cache.entries=" + result.entries + ";bytes=" + result.bytes
                 + ";families=" + result.families + ";removed=" + result.removed);
+        if (delete) {
+            new ModuleCacheMaintenance().execute(false);
+            Result doctor = maintain(cache, references, policy.maximumBytes(),
+                    policy.minimumAgeMillis(), System.currentTimeMillis(), false);
+            CacheReferences.Snapshot after = CacheReferences.inspect(root, cache);
+            require(after.dangling() <= initial.dangling(),
+                    "shared cache GC created dangling worktree links");
+            System.out.println("post-gc-cache.entries=" + doctor.entries + ";bytes=" + doctor.bytes
+                    + ";families=" + doctor.families + ";dangling=" + after.dangling());
+            System.out.println("WORLDLINE_POST_GC_CACHE_DOCTOR=PASS");
+        }
         System.out.println("WORLDLINE_SHARED_CACHE_" + (delete ? "GC" : "DOCTOR") + "=PASS");
     }
 
@@ -43,7 +60,8 @@ public final class SharedCacheMaintenance {
         List<Entry> entries = entries(cache); long total = entries.stream().mapToLong(Entry::bytes).sum();
         int removed = 0;
         for (Entry entry : entries) {
-            if (protectedBy(entry, source.snapshot()) || !delete || now - entry.used < minimumAge) continue;
+            if (!delete) continue;
+            if (protectedBy(entry, source.snapshot()) || now - entry.used < minimumAge) continue;
             Path lockPath = entry.parent.resolve(entry.digest + ".lock");
             try (FileChannel channel = FileChannel.open(lockPath, StandardOpenOption.CREATE,
                     StandardOpenOption.WRITE); FileLock lock = tryLock(channel)) {

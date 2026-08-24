@@ -248,11 +248,20 @@ receipts, observations and verification caches without breaking active worktree 
 ```text
 java tools/harness/Gate.java --cache-doctor
 java tools/harness/Gate.java --cache-gc
+java tools/harness/Gate.java --cache-rebuild-drill
 ```
 
 The legacy `--module-cache-*` names are aliases for the unified commands. GC takes each digest's
 publication lock, rescans every registered module worktree link, and removes only unreferenced
-entries selected by the shared age or size policy.
+entries selected by the shared age or size policy. A successful GC immediately repeats the
+unified doctor, so cleanup cannot leave a corrupt cache unnoticed. The versioned cold-rebuild
+drill creates an isolated empty control directory, runs the canonical static Gate, doctors the
+result, and writes its elapsed time and cache census to
+`.worldline/reports/cache-rebuild.json`. Its reviewed bounds live in
+`quality/cache-rebuild-baseline.properties`; the nightly runtime workflow runs both the doctor
+and drill so a cache portability or reconstruction regression is detected before a release.
+The doctor reports live and historically dangling worktree links; GC fails if that dangling
+census increases, while stale missing targets remain non-protective and can heal on rebuild.
 
 Repositories whose reviewed full-suite runs predate both the cache and retained reports may
 explicitly accept the frozen descriptor baseline once. This command requires a clean committed
@@ -388,7 +397,8 @@ Archival refuses the current, dirty, detached, unintegrated, or unregistered wor
 creates and verifies a Git bundle before removing the worktree, and retains the branch.
 After bundle verification it removes only `.worldline`, `tmp`, and `output` beneath the exact
 validated worktree, then reports the private file/byte count and that those ignored artifacts are
-not recoverable from the tracked-source bundle.
+not recoverable from the tracked-source bundle. Every successful removal runs the canonical
+unified cache doctor before the archival command can report PASS.
 
 Configure and audit clone-local Git performance and Windows path support with:
 

@@ -16,6 +16,7 @@ final class HarnessFeatureSelfTest {
         AeroLogRowTest.execute();
         ModuleCacheMaintenance.main(new String[] {"--self-test"});
         SharedCacheMaintenance.main(new String[] {"--self-test"});
+        CacheRebuildDrill.selfTest();
         SmokeProductRootTest.execute();
         VerificationStageCache.selfTest();
     }

@@ -46,6 +46,12 @@ jobs:
       - name: Verify repository for quality campaign
         if: inputs.profile == 'quality'
         run: java tools/harness/Gate.java
+      - name: Doctor all shared caches
+        if: github.event_name == 'schedule' || inputs.profile == 'quality'
+        run: java tools/harness/Gate.java --cache-doctor
+      - name: Drill cold static-cache reconstruction
+        if: github.event_name == 'schedule' || inputs.profile == 'quality'
+        run: java tools/harness/Gate.java --cache-rebuild-drill
       - name: Run bounded nightly fuzz and mutation campaigns
         if: github.event_name == 'schedule' || inputs.profile == 'quality'
         run: >-

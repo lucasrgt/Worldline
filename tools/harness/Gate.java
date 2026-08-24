@@ -53,13 +53,12 @@ public final class Gate {
             if (exit != 0) System.exit(exit);
             return;
         }
-        if (arguments.length == 1 && maintenance(arguments[0]) != null) {
-            String[] spec = maintenance(arguments[0]); Path classes = compileHarness();
+        if (arguments.length == 1 && maintenance(arguments[0])) {
+            Path classes = compileHarness();
             ProcessBuilder builder = new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
-                    spec[0], spec[1]).directory(root.toFile()).inheritIO();
-            if (spec[0].equals("SharedCacheMaintenance"))
-                builder.environment().put("WORLDLINE_GATE_CONTROL", control.toString());
-            int exit = waitFor(builder.start(), Integer.parseInt(spec[2]));
+                    "GateMaintenance", arguments[0]).directory(root.toFile()).inheritIO();
+            builder.environment().put("WORLDLINE_GATE_CONTROL", control.toString());
+            int exit = waitFor(builder.start(), 600);
             if (exit != 0) System.exit(exit); return;
         }
         Files.createDirectories(control);
@@ -83,30 +82,6 @@ public final class Gate {
         executePhase(new String[] {"--milestone-static", id}, false, true, false);
         executePhase(new String[] {"--milestone-runtime", id}, milestoneUsesOfficialRuntime(id), false, true);
     }
-
-    private static String[] maintenance(String value) { return switch (value) {
-        case "--migrate-data-cycles" -> m("DataDrivenCycleMigration", "--apply", 300);
-        case "--refresh-data-cycle-pins" -> m("DataDrivenCycleMigration", "--refresh", 300);
-        case "--migrate-composite-cycles" -> m("CompositeCycleMigration", "--apply", 300);
-        case "--refresh-composite-cycle-pins" -> m("CompositeCycleMigration", "--refresh", 300);
-        case "--migrate-telemetry-pins" -> m("TelemetryPinMigration", "--apply", 300);
-        case "--migrate-repository-schemas" -> m("RepositorySchemaMigration", "--apply", 600);
-        case "--migrate-formatting-pins" -> m("FormattingPinMigration", "--apply", 600);
-        case "--migrate-shared-helper-pins" -> m("SharedHelperPinMigration", "--apply", 600);
-        case "--migrate-unicode-pins" -> m("UnicodePinMigration", "--apply", 600);
-        case "--migrate-adapter-split-pins" -> m("AdapterSplitPinMigration", "--apply", 600);
-        case "--migrate-provider-discovery-pins" -> m("ProviderDiscoveryPinMigration", "--apply", 600);
-        case "--migrate-gui-workbench-pins" -> m("GuiWorkbenchPinMigration", "--apply", 600);
-        case "--rebalance-behavior-families" -> m("BehaviorFamilyRebalance", "--apply", 600);
-        case "--migrate-behavior-family-pins" -> m("BehaviorFamilyPinMigration", "--apply", 600);
-        case "--migrate-train-pins" -> m("TrainPinMigration", "--apply", 600);
-        case "--refresh-documentation" -> m("DocumentationCatalog", "--write", 600);
-        case "--seal-lane-portability" -> m("LaneDifferential", "--seal", 60);
-        case "--module-cache-doctor", "--cache-doctor" -> m("SharedCacheMaintenance", "doctor", 600);
-        case "--module-cache-gc", "--cache-gc" -> m("SharedCacheMaintenance", "gc", 600);
-        default -> null; }; }
-    private static String[] m(String t, String a, int s) {
-        return new String[] {t, a, Integer.toString(s)}; }
 
     private void executePhase(String[] arguments, boolean runtime, boolean useSlot, boolean runtimeLease)
             throws Exception {
@@ -146,7 +121,7 @@ public final class Gate {
                 || Arrays.equals(arguments, new String[] {"--smoke-plan"})
                 || Arrays.equals(arguments, new String[] {"--pinned-smoke"})
                 || Arrays.equals(arguments, new String[] {"--accept-legacy-smoke-baseline"})
-                || arguments.length == 1 && maintenance(arguments[0]) != null
+                || arguments.length == 1 && maintenance(arguments[0])
                 || arguments.length == 2 && ("--new-milestone".equals(arguments[0])
                         || "--candidate".equals(arguments[0])
                         || "--lane-differential".equals(arguments[0])
@@ -168,10 +143,17 @@ public final class Gate {
                 + "--refresh-documentation|"
                 + "--seal-lane-portability|"
                 + "--module-cache-doctor|--module-cache-gc|--cache-doctor|--cache-gc|"
+                + "--cache-rebuild-drill|"
                 + "--new-milestone ID|--milestone ID|--lane-differential ID|"
                 + "--candidate ID|--self-test]");
         if (arguments.length == 2 && !arguments[1].matches("[a-z0-9]+(?:-[a-z0-9]+)*"))
             throw new IllegalArgumentException("invalid milestone id: " + arguments[1]);
+    }
+
+    private static boolean maintenance(String value) {
+        return value.startsWith("--migrate-") || value.startsWith("--refresh-")
+                || value.startsWith("--rebalance-") || value.startsWith("--seal-")
+                || value.startsWith("--module-cache-") || value.startsWith("--cache-");
     }
 
     private int verifySlots() {
