@@ -28,22 +28,30 @@ final class LaneDifferential {
         SmokeDiscovery.Entry smoke = SmokeDiscovery.require(root, id);
         require(lane(root, smoke).equals("server-headless"),
                 "lane differential requires a headless server smoke");
-        long duration = SmokeExecution.run(root, smoke);
+        SmokeObservationCache observations = new SmokeObservationCache(root);
+        String runtimeFingerprint = observations.fingerprint(smoke);
+        SmokeObservationCache.Observation restored = observations.restore(smoke, runtimeFingerprint);
+        long duration;
+        if (restored == null) {
+            duration = SmokeExecution.run(root, smoke, prepareProducts(root));
+            observations.observed(smoke, runtimeFingerprint, duration);
+        } else {
+            duration = restored.duration();
+            System.out.println("  lane observation restored: " + id);
+        }
         Path log = root.resolve(".worldline/smoke-logs").resolve(id + ".log");
-        List<String> semantic = Files.readAllLines(log, StandardCharsets.UTF_8).stream()
-                .filter(row -> row.startsWith("WORLDLINE_")
-                        && !row.startsWith("WORLDLINE_AWAIT_TELEMETRY=")
-                        && !row.startsWith("WORLDLINE_FLAKE_")).sorted().toList();
         Properties descriptor = load(root.resolve("smokes").resolve(id).resolve("smoke.properties"));
         String expected = descriptor.getProperty("expected.signature", "");
+        List<String> semantic = semanticRows(Files.readAllLines(log, StandardCharsets.UTF_8));
         require(expected.matches("[0-9a-f]{64}")
-                        && semantic.stream().anyMatch(row -> row.endsWith("=" + expected)),
+                        && semantic.stream().anyMatch(row -> row.endsWith("=" + expected)
+                                || row.equals("signature: " + expected)),
                 "lane differential lacks the frozen signature");
         Properties record = new Properties(); String platform = platform();
         record.setProperty("schema", "1"); record.setProperty("platform", platform);
         record.setProperty("id", id); record.setProperty("head", state.head());
         record.setProperty("tree", state.tree()); record.setProperty("duration.ms", Long.toString(duration));
-        record.setProperty("runtime.fingerprint", new SmokeInputFingerprint(root).computeRuntime(smoke));
+        record.setProperty("runtime.fingerprint", runtimeFingerprint);
         record.setProperty("semantic.sha256", digest(String.join("\n", semantic) + "\n"));
         record.setProperty("evidence.sha256", digest(Files.readAllBytes(log)));
         Path path = root.resolve(".worldline/lane-differential").resolve(platform + ".properties");
@@ -87,6 +95,32 @@ final class LaneDifferential {
                     && lock.getProperty("windows.semantic.sha256").equals(
                             lock.getProperty("linux.semantic.sha256"));
         } catch (Exception error) { return false; }
+    }
+    static void selfTest() throws Exception {
+        String signature = "a".repeat(64);
+        List<String> rows = semanticRows(List.of("milestone data-driven cycle passed",
+                "  trace: v1|stable", "  signature: " + signature, "FROZEN",
+                "WORLDLINE_AWAIT_TELEMETRY=id=x;waits=1", "WORLDLINE_DIRECT=" + signature));
+        require(rows.equals(List.of("FROZEN", "WORLDLINE_DIRECT=" + signature,
+                "signature: " + signature, "trace: v1|stable")),
+                "lane semantic normalization drifted");
+        System.out.println("  lane differential self-test: passed");
+    }
+    private static List<String> semanticRows(List<String> lines) {
+        return lines.stream().map(String::trim).filter(row -> row.equals("FROZEN")
+                || row.startsWith("trace: ") || row.startsWith("signature: ")
+                || row.startsWith("WORLDLINE_")
+                && !row.startsWith("WORLDLINE_AWAIT_TELEMETRY=")
+                && !row.startsWith("WORLDLINE_FLAKE_")).sorted().toList();
+    }
+    private static Path prepareProducts(Path root) throws Exception {
+        Properties config = load(root.resolve("harness.properties"));
+        List<String> modules = java.util.Arrays.stream(config.getProperty("modules", "").split(","))
+                .map(String::trim).filter(value -> !value.isEmpty()).toList();
+        require(!modules.isEmpty(), "lane differential has no configured modules");
+        Path build = root.resolve(".worldline/lane-differential/build");
+        new ModuleBuild(root, build, config, modules).compileAll();
+        return build.resolve("classes");
     }
     private static String lane(Path root, SmokeDiscovery.Entry smoke) throws Exception {
         Properties values = load(root.resolve("smokes").resolve(smoke.id).resolve("smoke.properties"));

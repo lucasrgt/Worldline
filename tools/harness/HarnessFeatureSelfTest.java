@@ -7,6 +7,7 @@ final class HarnessFeatureSelfTest {
         ChangelogCheck.selfTest();
         ReadmeStatus.selfTest();
         SmokeScheduleHistory.selfTest();
+        LaneDifferential.selfTest();
         SmokeScheduleBaselineCheck.execute(java.nio.file.Path.of("").toAbsolutePath().normalize());
         SmokeStatementBudgetTest.execute();
         AeroSceneBudgetTest.execute();
