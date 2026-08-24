@@ -1,5 +1,6 @@
 package worldline.itemref.runtime.mixin;
 
+import java.util.concurrent.TimeUnit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.item.ItemStack;
@@ -17,7 +18,7 @@ import worldline.itemref.runtime.ItemRefs;
 public abstract class FrameMixin {
   @Shadow private Minecraft client;
   @Unique private boolean worldline$complete;
-  @Unique private int worldline$physicalFrames;
+  @Unique private long worldline$physicalSince;
   @Unique private int worldline$totalFrames;
   @Inject(method = "onFrameUpdate(F)V", at = @At("TAIL"))
   private void frame(float delta, CallbackInfo callback) {
@@ -27,7 +28,9 @@ public abstract class FrameMixin {
     ItemStack stack = client.player.inventory.main[0];
     LogicalItemReference reference = ItemRefs.get(stack);
     if (stack != null && reference == null) {
-      if (++worldline$physicalFrames < 600)
+      if (worldline$physicalSince == 0L)
+        worldline$physicalSince = System.nanoTime();
+      if (System.nanoTime() - worldline$physicalSince < TimeUnit.SECONDS.toNanos(30L))
         return;
       worldline$complete = true;
       System.out.println("WORLDLINE_ITEMREF_CLIENT=FAIL physical-without-reference");
@@ -37,6 +40,7 @@ public abstract class FrameMixin {
     }
     if (reference == null)
       return;
+    worldline$physicalSince = 0L;
     if (worldline$totalFrames < 300)
       return;
     worldline$complete = true;
