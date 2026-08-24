@@ -33,6 +33,7 @@ Generated from the canonical Markdown files in `docs/`. Files remain at stable r
 - [INVARIANTS.md](../INVARIANTS.md)
 - [INVARIANTS_CYCLE.md](../INVARIANTS_CYCLE.md)
 - [LAB_CYCLE.md](../LAB_CYCLE.md)
+- [MAPPING_CONSTITUTION.md](../MAPPING_CONSTITUTION.md)
 - [MOD_API_V2.md](../MOD_API_V2.md)
 - [MOD_GRAPH.md](../MOD_GRAPH.md)
 - [MOD_RUN.md](../MOD_RUN.md)
