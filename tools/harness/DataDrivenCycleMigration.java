@@ -93,9 +93,11 @@ final class DataDrivenCycleMigration {
     }
 
     void refresh() throws Exception {
-        require(cleanIndex(), "stage the reviewed runner change before refreshing pins");
         Path manifestPath = root.resolve("smokes/data-driven-migration.lock");
-        Properties manifest = load(manifestPath); SmokePins existing = new SmokePins(root);
+        Properties manifest = load(manifestPath);
+        require(reviewedRefresh(manifest),
+                "stage the reviewed runner change or commit a clean shared-support change before refreshing pins");
+        SmokePins existing = new SmokePins(root);
         SmokeReceiptCache cache = new SmokeReceiptCache(root); List<SmokePins.Entry> pins = new ArrayList<>();
         int generic = 0, executed = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
@@ -125,6 +127,8 @@ final class DataDrivenCycleMigration {
                 root.resolve("tools/harness/DataDrivenCyclePlan.java")));
         manifest.setProperty("support_source_sha256", digest(
                 root.resolve("tools/harness/DataDrivenSupport.java")));
+        manifest.setProperty("runtime_support_source_sha256", digest(
+                root.resolve("tools/harness/SmokeSupport.java")));
         existing.write(pins); store(manifestPath, manifest);
         System.out.println("data-driven pins refreshed: " + generic + " generic, " + executed
                 + " freshly executed");
@@ -134,6 +138,17 @@ final class DataDrivenCycleMigration {
         Process process = new ProcessBuilder("git", "diff", "--quiet", "HEAD", "--",
                 "smokes/" + id).directory(root.toFile()).start();
         return process.waitFor() == 0;
+    }
+
+    private boolean reviewedRefresh(Properties manifest) throws Exception {
+        if (cleanIndex()) return true;
+        Process worktree = new ProcessBuilder("git", "diff", "--quiet")
+                .directory(root.toFile()).start();
+        Process index = new ProcessBuilder("git", "diff", "--cached", "--quiet")
+                .directory(root.toFile()).start();
+        String recorded = manifest.getProperty("runtime_support_source_sha256", "");
+        return worktree.waitFor() == 0 && index.waitFor() == 0
+                && !digest(root.resolve("tools/harness/SmokeSupport.java")).equals(recorded);
     }
 
     private Plan parse(Path source, String text) {

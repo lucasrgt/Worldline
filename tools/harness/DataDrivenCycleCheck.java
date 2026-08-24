@@ -22,7 +22,9 @@ final class DataDrivenCycleCheck {
                         && digest(root.resolve("tools/harness/DataDrivenCyclePlan.java")).equals(
                         migrations.getProperty("plan_source_sha256"))
                         && digest(root.resolve("tools/harness/DataDrivenSupport.java")).equals(
-                        migrations.getProperty("support_source_sha256")),
+                        migrations.getProperty("support_source_sha256"))
+                        && digest(root.resolve("tools/harness/SmokeSupport.java")).equals(
+                        migrations.getProperty("runtime_support_source_sha256")),
                 "data-driven shared source attestation drift");
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); Properties telemetry = TelemetryPinCheck.manifest(root);
