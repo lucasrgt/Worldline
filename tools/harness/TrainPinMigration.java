@@ -42,7 +42,7 @@ final class TrainPinMigration {
                 "train base is not an ancestor");
         Properties lock = new Properties(); lock.setProperty("schema", "1");
         Properties predecessor = predecessor(root, "HEAD");
-        lock.setProperty("base", BASE); sources(root, lock, predecessor);
+        lock.setProperty("base", BASE); sources(root, lock, predecessor, TrainSourceHistory.load(root));
         Map<String, SmokePins.Entry> baseline = baseline(root);
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
         TrainPinHistory history = TrainPinHistory.load(root);
@@ -221,7 +221,7 @@ final class TrainPinMigration {
             target.setProperty(stem + key, required(source, stem + key));
     }
 
-    private static void sources(Path root, Properties lock, Properties predecessor) throws Exception {
+    private static void sources(Path root, Properties lock, Properties predecessor, TrainSourceHistory history) throws Exception {
         List<String> paths = capture(root, "diff", "--name-only", BASE, "--").lines()
                 .filter(value -> !value.isBlank()
                         && !value.equals("smokes/qualification.lock")
@@ -237,7 +237,7 @@ final class TrainPinMigration {
                     : sourceDigest(prior.getBytes(StandardCharsets.UTF_8)));
             lock.setProperty(stem + "current_sha256", Files.isRegularFile(current)
                     ? sourceDigest(Files.readAllBytes(current)) : "removed");
-            TrainSourceHistory.write(predecessor, lock, stem, relative);
+            history.write(predecessor, lock, stem, relative);
         }
     }
 
