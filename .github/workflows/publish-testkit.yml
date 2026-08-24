@@ -69,4 +69,15 @@ jobs:
         env:
           GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}
           GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}
-        run: gradle -p tooling/gradle-plugin --project-cache-dir .worldline/gradle-plugin/cache publishPlugins
+        shell: bash
+        run: |
+          version="${GITHUB_REF_NAME#testkit-v}"
+          portal="https://plugins.gradle.org/plugin/io.github.lucasrgt.worldline.test/${version}"
+          status="$(curl --silent --show-error --location --output /dev/null \
+            --write-out '%{http_code}' "$portal")"
+          case "$status" in
+            200) echo "Gradle plugin ${version} is already published; preserving it." ;;
+            404) gradle -p tooling/gradle-plugin \
+              --project-cache-dir .worldline/gradle-plugin/cache publishPlugins ;;
+            *) echo "Gradle Plugin Portal returned unexpected HTTP ${status}." >&2; exit 1 ;;
+          esac
