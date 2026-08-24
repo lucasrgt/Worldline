@@ -24,6 +24,8 @@ public final class WorldlineWorldBehaviors {
             "Two adjacent chests form one Large chest Packet100 window");
     public static final WorldlineBehavior PORTAL_SEARCH_RADIUS = define("portal-search-radius",
             "Portal travel links to an existing destination frame inside the search radius");
+    public static final WorldlineBehavior DUNGEON_GENERATION = define("dungeon-generation",
+            "Fixed-seed populated chunks contain replay-stable spawners and nonempty loot chests");
 
     private WorldlineWorldBehaviors() {}
 

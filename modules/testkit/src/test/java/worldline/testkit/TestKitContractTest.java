@@ -29,6 +29,7 @@ import static worldline.test.Worldline.worldline;
 public final class TestKitContractTest {
     private TestKitContractTest() {}
     public static void main(String[] arguments) throws Exception {
+        DungeonGenerationFixtureTest.execute();
         Path root = Files.createTempDirectory("worldline-test-contract-"); Provider provider = new Provider();
         RunnerOptions options = new RunnerOptions().provider(provider).artifacts(root.resolve("artifacts"))
                 .snapshots(root.resolve("snapshots")).runtimeLock(root.resolve("runtime.lock"));

@@ -1022,6 +1022,7 @@ Generated from the canonical Markdown files in `docs/`. Files remain at stable r
 - [M623_CYCLE.md](../M623_CYCLE.md)
 - [M624_CYCLE.md](../M624_CYCLE.md)
 - [M625_CYCLE.md](../M625_CYCLE.md)
+- [M626_DUNGEON_GENERATION_CENSUS.md](../M626_DUNGEON_GENERATION_CENSUS.md)
 - [M62_CYCLE.md](../M62_CYCLE.md)
 - [M62_WORKBENCH_WINDOW.md](../M62_WORKBENCH_WINDOW.md)
 - [M63_CYCLE.md](../M63_CYCLE.md)
