@@ -433,7 +433,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m417-remaining-tnt-place` | CARRIED | m417-remaining-tnt-place |
 | `m418-remaining-obsidian-place` | CARRIED | m418-remaining-obsidian-place |
 | `m419-remaining-netherrack-place` | CARRIED | m419-remaining-netherrack-place |
-| `m420-wolf-tame-set` | CARRIED | multiplayer-session |
+| `m420-wolf-tame-set` | CARRIED | m420-wolf-tame-set |
 | `m421-creeper-gunpowder-set` | CARRIED | m421-creeper-gunpowder-set |
 | `m422-skeleton-bone-set` | CARRIED | m422-skeleton-bone-set |
 | `m423-slimeball-set` | CARRIED | m423-slimeball-set |
