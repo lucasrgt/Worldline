@@ -116,7 +116,8 @@ final class TrainPinCheck {
                 "invalid milestone receipt signature: " + id);
     }
     private static String digest(Path path) throws Exception { return HexFormat.of().formatHex(
-            MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(path))); }
+            MessageDigest.getInstance("SHA-256").digest(PortableText.normalize(
+                    Files.readAllBytes(path)))); }
     private static boolean hash(String value) { return value != null && value.matches("[0-9a-f]{64}"); }
     private static boolean commitHash(String value) {
         return value != null && value.matches("[0-9a-f]{40}|[0-9a-f]{64}");

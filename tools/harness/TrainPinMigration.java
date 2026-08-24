@@ -89,7 +89,9 @@ final class TrainPinMigration {
                         ? prior.source() : "refactor-equivalent"));
                 continue;
             }
-            imported++; Imported receipt = executed(root, cache, smoke, current);
+            imported++; Imported receipt = "milestone".equals(predecessor.getProperty(stem + "kind"))
+                    ? predecessor(predecessor, pins, smoke, current, stem)
+                    : executed(root, cache, smoke, current);
             if (receipt == null) receipt = historical(root, smoke);
             if (receipt == null) receipt = imported(root, swarm, smoke.id);
             seal(lock, stem, "milestone", receipt.fingerprint, current, receipt.evidence);
@@ -194,6 +196,16 @@ final class TrainPinMigration {
                 head, tree, base, signature);
     }
 
+    private static Imported predecessor(Properties lock, SmokePins pins,
+            SmokeDiscovery.Entry smoke, String current, String stem) {
+        SmokePins.Entry pin = pins.match(smoke.id, current);
+        require(pin != null && pin.evidence().equals(required(lock, stem + "evidence_sha256")),
+                "invalid predecessor milestone proof: " + smoke.id);
+        return new Imported(required(lock, stem + "prior_fingerprint"), pin.evidence(),
+                required(lock, stem + "receipt.head"), required(lock, stem + "receipt.tree"),
+                required(lock, stem + "receipt.base"), required(lock, stem + "receipt.signature"));
+    }
+
     private static void receipt(Properties lock, String stem, Imported receipt) {
         lock.setProperty(stem + "receipt.head", receipt.head);
         lock.setProperty(stem + "receipt.tree", receipt.tree);
@@ -218,9 +230,10 @@ final class TrainPinMigration {
             String stem = "source." + index++ + "."; Path current = root.resolve(relative);
             String prior = show(root, BASE + ":" + relative);
             lock.setProperty(stem + "path", relative);
-            lock.setProperty(stem + "prior_sha256", prior == null ? "added" : digest(prior));
+            lock.setProperty(stem + "prior_sha256", prior == null ? "added"
+                    : sourceDigest(prior.getBytes(StandardCharsets.UTF_8)));
             lock.setProperty(stem + "current_sha256", Files.isRegularFile(current)
-                    ? digest(Files.readAllBytes(current)) : "removed");
+                    ? sourceDigest(Files.readAllBytes(current)) : "removed");
         }
     }
 
@@ -276,6 +289,9 @@ final class TrainPinMigration {
     }
     private static String digest(byte[] bytes) throws Exception { return HexFormat.of().formatHex(
             MessageDigest.getInstance("SHA-256").digest(bytes)); }
+    private static String sourceDigest(byte[] bytes) throws Exception {
+        return digest(PortableText.normalize(bytes));
+    }
     private static void store(Path path, Properties values) throws Exception {
         StringBuilder output = new StringBuilder("# Worldline integration-train proof v1\n");
         for (String key : values.stringPropertyNames().stream().sorted(Comparator.naturalOrder()).toList())
