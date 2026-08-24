@@ -33,7 +33,11 @@ public final class B173WolfTameAccess {
         int entity = spawn.entityId();
         double x = spawn.x(), y = spawn.y(), z = spawn.z();
         RemoteMobMovement move = client.channel().inbound().mobs().takeMovement(entity);
-        if (move != null) { x = move.toX(); y = move.toY(); z = move.toZ(); }
+        if (move != null) {
+            x = move.toX();
+            y = move.toY();
+            z = move.toZ();
+        }
         close(client, x, y, z);
         if (count(client.inventory(), BONE) != maximum)
             throw new IllegalStateException("bone 352 count drift before bounded tame");
@@ -125,9 +129,14 @@ public final class B173WolfTameAccess {
                 throw new IllegalStateException("wolf tame requires synchronized play");
             if (slot < 0) throw new IllegalStateException("bone 352 absent from hotbar");
             synchronized (channel.output) {
-                channel.output.writeByte(16); channel.output.writeShort(slot); channel.output.flush();
-                channel.output.writeByte(7); channel.output.writeInt(local);
-                channel.output.writeInt(entity); channel.output.writeByte(0); channel.output.flush();
+                channel.output.writeByte(16);
+                channel.output.writeShort(slot);
+                channel.output.flush();
+                channel.output.writeByte(7);
+                channel.output.writeInt(local);
+                channel.output.writeInt(entity);
+                channel.output.writeByte(0);
+                channel.output.flush();
             }
         } catch (IOException error) { throw new IllegalStateException("wolf Packet7 failed", error); }
     }
