@@ -129,6 +129,8 @@ public final class BetaVaultItemReferenceCycle {
     command.add(Paths.get(System.getProperty("java.home"), "bin", "jar").toString());
     command.addAll(Arrays.asList("--create", "--file", jar.toString()));
     Path itemref = root.resolve(".worldline/build/classes/itemref");
+    if (!Files.isDirectory(itemref))
+      itemref = root.resolve(".worldline/candidates").resolve(ID).resolve("classes/itemref");
     require(
         Files.isDirectory(itemref), "compiled Worldline itemref module absent; run Gate first");
     command.addAll(Arrays.asList("-C", itemref.toString(), "."));
