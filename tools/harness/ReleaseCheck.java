@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 /** Fails closed when distributed release evidence or the public/legal boundary drifts. */
 public final class ReleaseCheck {
@@ -158,16 +157,20 @@ public final class ReleaseCheck {
 
     private void verifyPublicTree() throws IOException {
         Set<String> excluded = new HashSet<>(Set.of(".git", ".worldline", "local"));
-        try (Stream<Path> paths = Files.walk(root)) {
-            paths.filter(Files::isRegularFile).forEach(path -> {
-                Path relative = root.relativize(path);
-                if (relative.getNameCount() > 0 && excluded.contains(relative.getName(0).toString())) return;
-                String name = path.getFileName().toString().toLowerCase();
-                String normalized = relative.toString().replace('\\', '/').toLowerCase();
-                require(!name.endsWith(".jar") && !name.endsWith(".class")
-                        && !normalized.contains("minecraft/src/") && !normalized.contains("minecraft/bin/"),
-                        "prohibited public artifact: " + relative);
-            });
+        try (var children = Files.newDirectoryStream(root)) {
+            for (Path child : children) {
+                if (excluded.contains(child.getFileName().toString())) continue;
+                for (Path path : SafeTreeDelete.paths(child)) {
+                    if (!Files.isRegularFile(path)) continue;
+                    Path relative = root.relativize(path);
+                    String name = path.getFileName().toString().toLowerCase();
+                    String normalized = relative.toString().replace('\\', '/').toLowerCase();
+                    require(!name.endsWith(".jar") && !name.endsWith(".class")
+                            && !normalized.contains("minecraft/src/")
+                            && !normalized.contains("minecraft/bin/"),
+                            "prohibited public artifact: " + relative);
+                }
+            }
         }
     }
 

@@ -11,10 +11,12 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: '21.0.12+8'
+          java-version: '21.0.12'
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.14.4'
