@@ -142,8 +142,6 @@ public final class WorldlineBehavior {
             WorldlineFamily.REDSTONE, "Powered support extinguishes a redstone torch and recovery relights it");
     public static final WorldlineBehavior DISPENSER_QUASI_CONNECTIVITY = define("dispenser-quasi-connectivity",
             WorldlineFamily.REDSTONE, "Power above a dispenser triggers its loaded item without adjacent power");
-    public static final WorldlineBehavior TNT_QUASI_CONNECTIVITY = define("tnt-quasi-connectivity",
-            WorldlineFamily.REDSTONE, "Power above TNT primes its entity and produces a strength-four explosion");
     public static final WorldlineBehavior CAKE_CONSUMPTION = define("cake-consumption", WorldlineFamily.ITEM,
             "Cake activation advances bite metadata, heals, and removes the final slice");
     public static final WorldlineBehavior TOOL_BLOCK_BREAK = define("tool-block-break", WorldlineFamily.ITEM,

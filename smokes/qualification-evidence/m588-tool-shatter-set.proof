@@ -1,5 +1,5 @@
 schema=1
 id=m588-tool-shatter-set
-fingerprint=b2e231cf630e03be53a7c3dc949d693ebc2bac2f8519370538b4208b0510b90a
+fingerprint=bb831995ef72320002993f19c87b70b01802a1973a7366447c0f4181e2828afa
 observation.sha256=a53f486d4844f03eb0b23553717537c485c16cd0b0b5ce1a85223ad4c0adde4a
 source=refactor-equivalent

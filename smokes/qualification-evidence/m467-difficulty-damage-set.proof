@@ -1,5 +1,5 @@
 schema=1
 id=m467-difficulty-damage-set
-fingerprint=f1e497470ab1f7715401a4ef551eb1050100cf77f017351b7e423fc28b79ac0f
+fingerprint=8d5409e1c24fc76e91503320efdae32f2cd021db73879130f20c74ba16db35ee
 observation.sha256=61e1ac15b1e84c70af6ec58f615e81db3d5a6ae0c3deaac931da803a16f459d7
 source=refactor-equivalent

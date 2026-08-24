@@ -142,6 +142,9 @@ final class LaneDifferential {
     private static String lane(Path root, SmokeDiscovery.Entry smoke) throws Exception {
         Properties values = load(root.resolve("smokes").resolve(smoke.id).resolve("smoke.properties"));
         if ("tooling-cycle".equals(values.getProperty("qualification.proof"))) return "tooling";
+        if ("server".equals(values.getProperty("side"))
+                || values.containsKey("server.jar.sha256") && !values.containsKey("client.jar.sha256"))
+            return "server-headless";
         String source = Files.readString(root.resolve(smoke.runner));
         return source.contains("minecraft-b1.7.3-client.properties") || source.contains("aero-model-lib")
                 || source.contains("runClient") || source.contains("WORLDLINE_AERO")

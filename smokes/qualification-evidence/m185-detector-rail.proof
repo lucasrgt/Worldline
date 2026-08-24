@@ -1,5 +1,5 @@
 schema=1
 id=m185-detector-rail
-fingerprint=90ebf85b96189eebd8a2486f517d1eeff94a345d75691b2ece11869ee5b1e281
+fingerprint=479a5ceddc82209053a0989a810e148f593fd5d5b4986baa2678842773c63559
 observation.sha256=81cc57ce0d8d5c637a58696af5d3d47097bd3d14016813703c4f7718cb9505a2
 source=refactor-equivalent

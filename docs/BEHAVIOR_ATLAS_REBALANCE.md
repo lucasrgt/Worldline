@@ -25,13 +25,15 @@ unchanged. Existing official observations are transported through content-
 addressed evidence envelopes; five already-pending TestKit/GUI observations
 remain pending and M620 remains unpinned.
 
-Three previously orphaned public tokens are intentionally retained rather than
-silently deleted: `tnt-quasi-connectivity`, `one-tick-piston-pulse`, and
-`hostile-spawn-light`. The Grok M614, M615, and M617 lines cover semantically
-overlapping boundaries, but they do not yet requalify all three exact token
-identities: M615 currently introduces `redstone-one-tick`, M617 renames the
-hostile boundary to `spawn-light-cap`, and M614 has not produced a committed
-candidate. Coordinator reconciliation must select one canonical token for each
-boundary, bind the accepted official evidence to it, and reject duplicate
-identities. COV-02 remains active until that reconciliation is integrated and
-current.
+The orphan reconciliation keeps one identity per proven boundary. Legacy
+lookups for `one-tick-piston-pulse` and `hostile-spawn-light` resolve to the
+canonical `redstone-one-tick` and `spawn-light-cap` objects. They are aliases,
+not duplicate catalog entries. Their accepted M615 and M617 official receipts,
+trees, signatures, and observation hashes are sealed in
+`smokes/behavior-identity.lock` and validated against the train lock.
+
+`tnt-quasi-connectivity` is explicitly retracted and rejected. M552 did not
+isolate quasi-connectivity, and the M614 worktree has no committed candidate or
+qualification receipt. The retraction preserves that audit result without
+manufacturing evidence or deleting the independent Grok worktree. No smoke
+descriptor publishes any of the three orphan tokens.

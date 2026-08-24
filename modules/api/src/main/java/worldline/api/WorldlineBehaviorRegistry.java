@@ -3,6 +3,7 @@ package worldline.api;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /** Deterministic construction and lookup mechanics for the public behavior catalog. */
@@ -10,12 +11,23 @@ final class WorldlineBehaviorRegistry {
     private static final Pattern TOKEN = Pattern.compile("[a-z][a-z0-9-]{0,62}");
     private static final Map<String, WorldlineBehavior> DEFINITIONS =
             new LinkedHashMap<String, WorldlineBehavior>();
+    private static final Map<String, String> ALIASES = aliases();
+    private static final Set<String> RETRACTED = Collections.singleton("tnt-quasi-connectivity");
 
     private WorldlineBehaviorRegistry() {}
+
+    private static Map<String, String> aliases() {
+        Map<String, String> values = new LinkedHashMap<String, String>();
+        values.put("one-tick-piston-pulse", "redstone-one-tick");
+        values.put("hostile-spawn-light", "spawn-light-cap");
+        return Collections.unmodifiableMap(values);
+    }
 
     static WorldlineBehavior define(String token, String family, String subject) {
         if (token == null || !TOKEN.matcher(token).matches() || looksLikeProgress(token))
             throw new IllegalArgumentException("invalid behavior token");
+        if (ALIASES.containsKey(token) || RETRACTED.contains(token))
+            throw new IllegalArgumentException("non-canonical behavior token " + token);
         if (subject == null || subject.isEmpty() || subject.indexOf('\n') >= 0 || subject.indexOf('\r') >= 0)
             throw new IllegalArgumentException("invalid behavior subject");
         WorldlineBehavior value = new WorldlineBehavior(token, WorldlineFamily.parse(family), subject);
@@ -33,6 +45,8 @@ final class WorldlineBehaviorRegistry {
         String raw = tokenOrAtlasOrProgress.trim();
         if (raw.startsWith("atlas.scenario.")) raw = raw.substring("atlas.scenario.".length());
         else if (looksLikeProgress(raw)) raw = tokenOfProgress(raw);
+        if (RETRACTED.contains(raw)) throw new IllegalArgumentException("retracted behavior " + raw);
+        raw = ALIASES.getOrDefault(raw, raw);
         WorldlineBehavior value = values.get(raw);
         if (value == null) throw new IllegalArgumentException("unknown behavior " + tokenOrAtlasOrProgress);
         return value;

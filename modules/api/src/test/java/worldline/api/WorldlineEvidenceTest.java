@@ -14,6 +14,8 @@ final class WorldlineEvidenceTest {
         WorldlineBehavior cactus = WorldlineBehavior.require("m578-cactus-adjacent-break-set");
         WorldlineBehavior brake = WorldlineBehavior.require("m595-powered-rail-brake-set");
         WorldlineBehavior sugarCane = WorldlineBehavior.require("m607-sugar-cane-dry-break-set");
+        WorldlineBehavior oneTick = WorldlineBehavior.require("one-tick-piston-pulse");
+        WorldlineBehavior spawnLight = WorldlineBehavior.require("atlas.scenario.hostile-spawn-light");
         if (!"creeper-fuse".equals(fuse.token()) || !"atlas.scenario.creeper-fuse".equals(fuse.atlasId())
                 || fuse != WorldlineBehavior.require("m448-creeper-fuse-set")
                 || fuse != WorldlineBehavior.require("atlas.scenario.creeper-fuse")
@@ -21,7 +23,12 @@ final class WorldlineEvidenceTest {
                 || !"cactus-adjacent-break".equals(cactus.token())
                 || brake != WorldlineBehavior.require("powered-rail-brake")
                 || !"vehicle".equals(brake.family())
-                || !"sugar-cane-dry-break".equals(sugarCane.token()))
+                || !"sugar-cane-dry-break".equals(sugarCane.token())
+                || oneTick != WorldlineRedstoneBehaviors.REDSTONE_ONE_TICK
+                || spawnLight != WorldlineHostileBehaviors.SPAWN_LIGHT_CAP
+                || WorldlineBehavior.all().containsKey("one-tick-piston-pulse")
+                || WorldlineBehavior.all().containsKey("hostile-spawn-light")
+                || WorldlineBehavior.all().containsKey("tnt-quasi-connectivity"))
             throw new AssertionError("behavior catalog must hide progress ids");
         WorldlineEvidence pin = WorldlineEvidence.pin(fuse, SIGNAL, SIG_A);
         WorldlineEvidence modSame = WorldlineEvidence.of(fuse, WorldlineEvidence.MOD, SIGNAL, SIG_A);
@@ -51,6 +58,7 @@ final class WorldlineEvidenceTest {
         fail(() -> WorldlineBehaviorContract.from(smoke));
         fail(() -> WorldlineEvidence.pin("m448-creeper-fuse-set", SIGNAL, "pending"));
         fail(() -> WorldlineBehavior.require("m446-zombie-door-break-set"));
+        fail(() -> WorldlineBehavior.require("tnt-quasi-connectivity"));
         fail(() -> WorldlineBehavior.require("not-a-behavior"));
         fail(() -> WorldlineEvidence.pin(fuse, SIGNAL, SIG_A).compare(null));
     }
