@@ -26,3 +26,6 @@ The runtime profile acquires the pinned public artifacts, verifies the official
 client and server inputs, reconstructs all three reports, and applies the M11,
 M12, and M13 gates. Static tests separately prove deterministic selection,
 explicit orphan handling, and fail-closed policy drift.
+
+The project-wide definition and the diagnostic queue non-claim are fixed in
+[the mapping constitution](MAPPING_CONSTITUTION.md).

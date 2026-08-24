@@ -15,6 +15,7 @@ current sources are:
 - [Fable 2 sealed program](FABLE2_PROGRAM.md)
 - [Engineering workflow](ENGINEERING_WORKFLOW.md)
 - [Complete maintained mapping batch](SEM_M13_COMPLETE_MAPPING_BATCH.md)
+- [Mapping constitution](MAPPING_CONSTITUTION.md)
 - [Aero milestone namespace](AERO_MILESTONES.md)
 
 The release line through v1.462.0 and the M570-M625 evidence train are complete
