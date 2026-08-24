@@ -576,7 +576,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m630-server-acl-matrix` | CARRIED | server acl matrix |
 | `m631-protocol14-edge-packets` | CARRIED | protocol14 edge packets |
 | `m632-map-data-content` | CARRIED | map data content |
-| `m634-cross-lane-seed-matrix` | EXECUTED | cross-lane seed matrix |
+| `m634-cross-lane-seed-matrix` | CARRIED | cross-lane seed matrix |
 | `betavault-item-reference` | EXECUTED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
