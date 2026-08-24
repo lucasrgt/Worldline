@@ -13,6 +13,7 @@ final class HarnessFeatureSelfTest {
         AeroLogRowTest.execute();
         ModuleCacheMaintenance.main(new String[] {"--self-test"});
         SharedCacheMaintenance.main(new String[] {"--self-test"});
+        SmokeProductRootTest.execute();
         VerificationStageCache.selfTest();
     }
 }

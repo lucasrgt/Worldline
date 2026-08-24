@@ -6,8 +6,12 @@ final class SmokeExecution {
     private SmokeExecution() { }
 
     static long run(Path root, SmokeDiscovery.Entry smoke) throws Exception {
+        return run(root, smoke, null);
+    }
+
+    static long run(Path root, SmokeDiscovery.Entry smoke, Path productRoot) throws Exception {
         long started = System.nanoTime();
-        SmokeProcess process = new SmokeProcess(root);
+        SmokeProcess process = new SmokeProcess(root, productRoot);
         try {
             long duration = process.run(smoke);
             new SmokeScheduleHistory(root).observed(smoke.id, true, duration, process.telemetry());

@@ -61,7 +61,7 @@ final class MilestoneCheck {
                 observationFingerprint);
         long duration;
         if (restored == null) {
-            duration = SmokeExecution.run(root, smoke);
+            duration = SmokeExecution.run(root, smoke, build.resolve("classes"));
             observations.observed(smoke, observationFingerprint, duration);
         } else {
             duration = restored.duration();

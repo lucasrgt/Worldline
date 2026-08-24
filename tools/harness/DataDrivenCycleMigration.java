@@ -104,7 +104,14 @@ final class DataDrivenCycleMigration {
             }
             generic++; String stem = "cycle." + smoke.id + ".";
             DataDrivenCyclePlan plan = DataDrivenCyclePlan.load(root, smoke.id);
-            require(plan.fingerprint().equals(manifest.getProperty(stem + "plan_sha256")),
+            String recordedPlan = manifest.getProperty(stem + "plan_sha256");
+            if (recordedPlan == null) {
+                require(unchangedMilestone(smoke.id),
+                        "unregistered generic plan changed with the shared runner: " + smoke.id);
+                SmokePins.Entry prior = requiredEntry(existing, smoke.id);
+                manifest.setProperty(stem + "plan_sha256", plan.fingerprint());
+                manifest.setProperty(stem + "evidence_sha256", prior.evidence());
+            } else require(plan.fingerprint().equals(recordedPlan),
                     "plan changed outside the reviewed migration: " + smoke.id);
             SmokePins.Entry local = cache.availablePin(smoke);
             if (local != null && local.source().equals("executed")) { pins.add(local); executed++; }
@@ -121,6 +128,12 @@ final class DataDrivenCycleMigration {
         existing.write(pins); store(manifestPath, manifest);
         System.out.println("data-driven pins refreshed: " + generic + " generic, " + executed
                 + " freshly executed");
+    }
+
+    private boolean unchangedMilestone(String id) throws Exception {
+        Process process = new ProcessBuilder("git", "diff", "--quiet", "HEAD", "--",
+                "smokes/" + id).directory(root.toFile()).start();
+        return process.waitFor() == 0;
     }
 
     private Plan parse(Path source, String text) {

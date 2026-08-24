@@ -15,9 +15,11 @@ import java.util.concurrent.TimeUnit;
 /** Supervises one smoke process with a runtime lease, bounded time, logs, and tree cleanup. */
 final class SmokeProcess {
     private final Path root;
+    private final Path productRoot;
     private Telemetry telemetry = Telemetry.EMPTY;
 
-    SmokeProcess(Path root) { this.root = root; }
+    SmokeProcess(Path root) { this(root, null); }
+    SmokeProcess(Path root, Path products) { this.root = root; this.productRoot = products; }
 
     long run(SmokeDiscovery.Entry smoke) throws Exception {
         requireRuntimeLease();
@@ -34,6 +36,8 @@ final class SmokeProcess {
         ProcessBuilder builder = new ProcessBuilder(command).directory(root.toFile()).redirectErrorStream(true)
                 .redirectOutput(log.toFile());
         builder.environment().put("WORLDLINE_AWAIT_TELEMETRY_FILE", await.toString());
+        if (productRoot != null)
+            builder.environment().put("WORLDLINE_PRODUCT_ROOT", productRoot.toAbsolutePath().normalize().toString());
         Process process = builder.start();
         boolean complete;
         try { complete = process.waitFor(timeout, TimeUnit.SECONDS); }

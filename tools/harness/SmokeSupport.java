@@ -91,7 +91,19 @@ public final class SmokeSupport {
     }
 
     public static Path product(Path root, String module) {
-        return root.resolve(".worldline/build/classes").resolve(module);
+        return product(root, module, System.getenv("WORLDLINE_PRODUCT_ROOT"));
+    }
+
+    static Path product(Path root, String module, String override) {
+        require(root != null && module != null && module.matches("[a-z0-9-]+"),
+                "invalid smoke product request");
+        Path normalizedRoot = root.toAbsolutePath().normalize();
+        Path products = override == null || override.isBlank()
+                ? normalizedRoot.resolve(".worldline/build/classes")
+                : Path.of(override).toAbsolutePath().normalize();
+        require(products.startsWith(normalizedRoot.resolve(".worldline")),
+                "smoke product root escapes .worldline");
+        return products.resolve(module);
     }
 
     public static String line(String output, String prefix) {
