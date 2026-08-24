@@ -10,6 +10,8 @@ public final class WorldlineVehicleBehaviors {
             "Unpowered powered-rail stops a moving minecart");
     public static final WorldlineBehavior FURNACE_CART_PUSH = define("furnace-cart-push",
             "Fueled furnace cart consumes coal and self-propels on rail");
+    public static final WorldlineBehavior MINECART_BOOSTER = define("minecart-booster",
+            "A pushed cart transfers forward motion to a cart on a parallel rail");
 
     private WorldlineVehicleBehaviors() {}
 
