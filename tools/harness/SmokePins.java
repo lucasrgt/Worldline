@@ -44,12 +44,19 @@ final class SmokePins {
                 ? entry(smoke.id) : match(smoke.id, fingerprint);
     }
     Migration migrate(SmokeDiscovery.Entry smoke, String fingerprint, Entry baseline,
-            Properties predecessor, String stem) {
+            Properties predecessor, Properties ancestor, String stem) {
         Entry current = match(smoke.id, fingerprint), carried = entry(smoke.id);
         String evidence = current != null ? current.evidence
                 : carried == null ? baseline.evidence : carried.evidence;
         String prior = evidence.equals(predecessor.getProperty(stem + "evidence_sha256"))
                 ? predecessor.getProperty(stem + "current_fingerprint") : baseline.fingerprint;
+        if (fingerprint.equals(predecessor.getProperty(stem + "current_fingerprint"))) {
+            prior = predecessor.getProperty(stem + "prior_fingerprint", prior);
+            if (prior.equals(fingerprint)
+                    && evidence.equals(ancestor.getProperty(stem + "evidence_sha256"))
+                    && fingerprint.equals(ancestor.getProperty(stem + "current_fingerprint")))
+                prior = ancestor.getProperty(stem + "prior_fingerprint", prior);
+        }
         Entry updated = current != null ? current : new Entry(smoke.id, fingerprint, evidence,
                 fingerprint.equals(baseline.fingerprint) ? baseline.source : "refactor-equivalent");
         return new Migration(updated, prior);

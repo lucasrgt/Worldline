@@ -44,7 +44,8 @@ final class TrainPinMigration {
         lock.setProperty("base", BASE); sources(root, lock);
         Map<String, SmokePins.Entry> baseline = baseline(root);
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
-        Properties predecessor = predecessor(root);
+        Properties predecessor = predecessor(root, "HEAD");
+        Properties ancestor = predecessor(root, "HEAD^");
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
         SmokeReceiptCache cache = new SmokeReceiptCache(root);
         List<SmokePins.Entry> updated = new ArrayList<>(); List<String> pending = new ArrayList<>();
@@ -82,7 +83,7 @@ final class TrainPinMigration {
             }
             if (prior != null) {
                 carried++; SmokePins.Migration migration =
-                        pins.migrate(smoke, current, prior, predecessor, stem);
+                        pins.migrate(smoke, current, prior, predecessor, ancestor, stem);
                 seal(lock, stem, "baseline", migration.prior(), current, migration.entry().evidence());
                 updated.add(migration.entry());
                 continue;
@@ -254,10 +255,10 @@ final class TrainPinMigration {
         return Map.copyOf(result);
     }
 
-    private static Properties predecessor(Path root) throws Exception {
+    private static Properties predecessor(Path root, String revision) throws Exception {
         Properties values = new Properties();
         try (StringReader reader = new StringReader(capture(root, "show",
-                "HEAD:smokes/train-reconciliation.lock"))) { values.load(reader); }
+                revision + ":smokes/train-reconciliation.lock"))) { values.load(reader); }
         return values;
     }
 
