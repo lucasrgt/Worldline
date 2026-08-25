@@ -1,0 +1,30 @@
+schema = 1
+id = "NYA-01M0XC2P1Y3MCKVAHJEAJXX16C"
+title = "Do not infer portal cooldown from a wait-only roundtrip"
+lesson = "A portal re-entry cooldown contract must pair a bounded non-transition while the same player remains in continuous contact with the arrival portal with a positive control in which that player exits the portal collision region and re-enters. A roundtrip after an arbitrary wait proves eventual travel but does not causally prove re-entry suppression."
+scope = [
+    "smokes/*portal*/**",
+    "modules/testkit/src/main/java/worldline/testkit/Portal*Fixture.java",
+]
+tags = [
+    "portal",
+    "causality",
+    "milestone-contract",
+]
+created_at = "2026-08-25T21:09:04Z"
+
+[[occurrences]]
+occurred_at = "2026-08-25T21:09:04Z"
+source = "manual:2026-08-25-m652-official-cycle sha256=6BBDA4E99E86C1F150A900CAB403A3B70923C5F896521C468B586357B92092A6"
+reported_by = "codex:m646_retry2"
+corrected_by = "codex:m646_retry2"
+recorded_by = "codex:root"
+commit = "33dd5de59"
+
+[[occurrences]]
+occurred_at = "2026-08-25T21:36:10Z"
+source = "manual:2026-08-25-m652-causal-evidence-check fixture=PortalReentryCooldownFixture.java:15 cause=public Trial omitted same-actor collision exit and re-entry facts"
+reported_by = "codex:root"
+corrected_by = "codex:m646_retry2"
+recorded_by = "codex:root"
+commit = "33dd5de59"

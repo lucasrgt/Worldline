@@ -23,3 +23,19 @@ reported_by = "codex:m651-attempt2"
 corrected_by = "codex:m651-attempt2"
 recorded_by = "codex:m651-attempt2"
 commit = "f236a3d28"
+
+[[occurrences]]
+occurred_at = "2026-08-25T21:17:36Z"
+source = "manual:2026-08-25-m652-precommit-nya-check lines=PortalReentryWorld.java:78,126 cause=packed nested loop headers recurred despite Candidate packed-lines=0"
+reported_by = "codex:root"
+corrected_by = "codex:m646_retry2"
+recorded_by = "codex:root"
+commit = "33dd5de59"
+
+[[occurrences]]
+occurred_at = "2026-08-25T22:46:05Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/train-m652-smokes-long-files-verify.json sha256=21C710EE39D313F7EBFA29CAB471BED7D61104D5C9A37B726C590CCAA59E239F cause=PortalReentryCooldownSmoke.java:23 exceeded 120 columns"
+reported_by = "codex:root"
+corrected_by = "codex:m646_retry2"
+recorded_by = "codex:root"
+commit = "767d220ab"

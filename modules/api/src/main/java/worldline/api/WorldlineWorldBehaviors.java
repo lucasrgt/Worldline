@@ -32,6 +32,9 @@ public final class WorldlineWorldBehaviors {
             "Portal travel links to an existing destination frame inside the search radius");
     public static final WorldlineBehavior PORTAL_INVALID_FRAME = define("portal-invalid-frame",
             "Flint ignition of an upright obsidian frame missing one required top block creates no portal cells");
+    public static final WorldlineBehavior PORTAL_REENTRY_COOLDOWN = define(
+            "portal-reentry-cooldown",
+            "Arrival-side portal contact suppresses an immediate return until the player exits for a cooldown window");
     public static final WorldlineBehavior DUNGEON_GENERATION = define("dungeon-generation",
             "Fixed-seed populated chunks contain replay-stable spawners and nonempty loot chests");
     public static final WorldlineBehavior CHUNK_UNLOAD_RELOAD = define("chunk-unload-reload",

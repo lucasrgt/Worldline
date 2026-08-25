@@ -37,6 +37,7 @@ public final class TestKitContractTest {
         DungeonGenerationFixtureTest.execute();
         ChestAccessFixtureTest.execute();
         PortalInvalidFrameFixtureTest.execute();
+        PortalReentryCooldownFixtureTest.execute();
         NaturalSlimeSpawnFixtureTest.execute();
         SleepQuorumFixtureTest.execute();
         IceFormationFixtureTest.execute();

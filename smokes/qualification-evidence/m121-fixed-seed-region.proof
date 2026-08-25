@@ -1,5 +1,5 @@
 schema=1
 id=m121-fixed-seed-region
-fingerprint=2f1f142a0203e70e1d3e54a58d44dff4140905d488959ca51f4ee0f245b3dd7b
+fingerprint=db68d4974c2dfea07c69839183f34be79df744152dffffafdc54de8dd645fc54
 observation.sha256=c2a08f5e7e5ec2b6767afbc4b26409d586f2fd4ca296d199d823abe8b2b73d4f
 source=refactor-equivalent

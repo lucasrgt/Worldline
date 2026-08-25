@@ -2,13 +2,18 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 /** Validates the canonical behavior/TestKit identity and explicit runner descriptor schema. */
 final class SmokeDescriptorSchemaCheck {
+    private static final Pattern TOKEN = Pattern.compile("[a-z][a-z0-9-]{0,62}");
     private SmokeDescriptorSchemaCheck() { }
     static void execute(Path root) throws Exception {
         StrictProperties.selfTest();
+        tokenSelfTest();
         int legacy = 0, qualification = 0, narratives = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             Properties values = load(root.resolve("smokes").resolve(smoke.id).resolve("smoke.properties"));
@@ -23,6 +28,10 @@ final class SmokeDescriptorSchemaCheck {
                             && present(values, "testkit.actions") && present(values, "testkit.observations")
                             && present(values, "testkit.binding") && present(values, "testkit.evidence"),
                     "TestKit identity incomplete: " + smoke.id);
+            require(token(values.getProperty("testkit.fixture")), "invalid fixture: " + smoke.id);
+            require(tokenList(values.getProperty("testkit.actions")), "invalid actions: " + smoke.id);
+            require(tokenList(values.getProperty("testkit.observations")),
+                    "invalid observations: " + smoke.id);
             String era = values.getProperty("smoke.era", "");
             if (era.equals("qualification-v1")) {
                 qualification++; require("1".equals(values.getProperty("qualification.schema")),
@@ -43,6 +52,18 @@ final class SmokeDescriptorSchemaCheck {
     }
     private static boolean hash(Properties values, String key) {
         return values.getProperty(key, "").matches("[0-9a-f]{64}");
+    }
+    private static boolean token(String value) { return TOKEN.matcher(value).matches(); }
+    private static boolean tokenList(String value) {
+        Set<String> seen = new HashSet<String>();
+        for (String item : value.split(",", -1)) if (!token(item) || !seen.add(item)) return false;
+        return true;
+    }
+    private static void tokenSelfTest() {
+        require(token("arrival-contact") && tokenList("exit,reentry"), "token self-test failed");
+        require(!token("Uppercase") && !token(new String(new char[64]).replace('\0', 'a')),
+                "token bound self-test failed");
+        require(!tokenList("exit,exit") && !tokenList("exit,"), "token list self-test failed");
     }
     private static Properties load(Path path) throws Exception { return StrictProperties.load(path); }
     private static void require(boolean value, String message) {

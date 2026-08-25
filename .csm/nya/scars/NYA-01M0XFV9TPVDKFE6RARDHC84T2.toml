@@ -1,0 +1,24 @@
+schema = 1
+id = "NYA-01M0XFV9TPVDKFE6RARDHC84T2"
+title = "Validate TestKit tokens before runtime qualification"
+lesson = "Candidate qualification must apply the same lowercase-hyphen and 63-character TestKit token bounds as repository behavior completeness. Validate fixture, action, and observation tokens in the static descriptor schema before committing or starting official runtime; a Candidate PASS with an oversized token is not train-ready."
+scope = [
+    "smokes/*/smoke.properties",
+    "tools/harness/SmokeDescriptorSchemaCheck.java",
+    "tools/harness/BehaviorCompletenessCheck.java",
+]
+tags = [
+    "milestone",
+    "testkit",
+    "candidate-gate",
+    "descriptor-schema",
+]
+created_at = "2026-08-25T22:14:57Z"
+
+[[occurrences]]
+occurred_at = "2026-08-25T22:14:57Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/train-m652-invalid-fixture-verify.json sha256=4E6B7C1B789FC1D6B8B7025936F44C0C0702FACBF4801D665A92680B947B8160"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "4f2ab9b7c"

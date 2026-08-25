@@ -90,9 +90,14 @@ final class TrainPinMigration {
                 updated.add(migration.entry());
                 continue;
             }
-            imported++; Imported receipt = "milestone".equals(predecessor.getProperty(stem + "kind"))
-                    ? predecessor(predecessor, pins, smoke, current, stem)
-                    : executed(root, cache, smoke, current);
+            imported++; boolean predecessorMilestone =
+                    "milestone".equals(predecessor.getProperty(stem + "kind"));
+            Imported receipt = completeImported(swarm, smoke.id)
+                    ? imported(root, swarm, smoke.id) : null;
+            if (receipt == null && (!predecessorMilestone || completeExecuted(root, smoke.id)))
+                receipt = executed(root, cache, smoke, current);
+            if (receipt == null && predecessorMilestone)
+                receipt = predecessor(predecessor, pins, smoke, current, stem);
             if (receipt == null) receipt = historical(root, smoke);
             if (receipt == null) receipt = imported(root, swarm, smoke.id);
             seal(lock, stem, "milestone", receipt.fingerprint, current, receipt.evidence);
@@ -142,6 +147,18 @@ final class TrainPinMigration {
                         && status(root, "merge-base", "--is-ancestor", head, "HEAD") == 0,
                 "invalid executed milestone evidence: " + smoke.id);
         return new Imported(fingerprint, evidence, head, tree, base, signature);
+    }
+
+    private static boolean completeExecuted(Path root, String id) {
+        return Files.isRegularFile(root.resolve(".worldline/reports/milestones").resolve(id + ".json"))
+                && Files.isRegularFile(root.resolve(".worldline/reports/smokes").resolve(id + ".properties"))
+                && Files.isRegularFile(root.resolve(".worldline/smoke-logs").resolve(id + ".log"));
+    }
+
+    private static boolean completeImported(Path swarm, String id) { Path worktree = swarm.resolve(id);
+        return Files.isRegularFile(worktree.resolve(".worldline/reports/milestones").resolve(id + ".json"))
+                && Files.isRegularFile(worktree.resolve(".worldline/reports/smokes").resolve(id + ".properties"))
+                && Files.isRegularFile(worktree.resolve(".worldline/smoke-logs").resolve(id + ".log"));
     }
 
     private static Imported imported(Path root, Path swarm, String id) throws Exception {

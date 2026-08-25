@@ -20,3 +20,11 @@ reported_by = "codex:root"
 corrected_by = "codex:root"
 recorded_by = "codex:root"
 commit = "b72ec8ab9"
+
+[[occurrences]]
+occurred_at = "2026-08-25T22:24:08Z"
+source = "manual:2026-08-25-m652-final-receipt-predecessor-precedence current-head=81a59ec04451 current-fingerprint=79609763b595 predecessor-head=f28a838184f0"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "4f2ab9b7c"

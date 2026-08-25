@@ -587,7 +587,8 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m643-multiplayer-sleep-quorum` | CARRIED | multiplayer sleep quorum |
 | `m645-note-pitch-ladder` | CARRIED | note block pitch ladder |
 | `m649-chest-access-constraints` | CARRIED | chest access constraints |
-| `m651-portal-invalid-frame` | EXECUTED | portal invalid frame rejection |
+| `m651-portal-invalid-frame` | CARRIED | portal invalid frame rejection |
+| `m652-portal-reentry-cooldown` | EXECUTED | portal re-entry cooldown |
 | `m653-chunk-restart-persistence` | CARRIED | chunk restart persistence |
 | `m702-powered-rail-slope-propagation` | CARRIED | powered rail slope propagation |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
