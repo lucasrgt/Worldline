@@ -1,0 +1,20 @@
+schema = 1
+id = "NYA-01M0X1F73ZW7S1F8K1793DV52G"
+title = "Revalidate immutable module cache after a concurrent publish collision"
+lesson = "On Windows, concurrent Gates can race while publishing the same immutable module digest and one atomic directory move may fail with AccessDenied after another publisher wins. Preserve the first Gate log and digest, classify that boundary RETRYABLE, then permit one bounded rerun only after the target digest exists; a successful cache reuse proves non-recurrence, while another collision requires repairing the publisher instead of repeating indefinitely."
+scope = ["tools/harness/ModuleBuild.java"]
+tags = [
+    "cache",
+    "concurrency",
+    "windows",
+    "qualification",
+]
+created_at = "2026-08-25T18:03:41Z"
+
+[[occurrences]]
+occurred_at = "2026-08-25T18:03:41Z"
+source = "manual:2026-08-25-m646-testapi-cache-publish-collision"
+reported_by = "codex:m646_retry2"
+corrected_by = "codex:m646_retry2"
+recorded_by = "codex:m646_retry2"
+commit = "73f3e77c4"

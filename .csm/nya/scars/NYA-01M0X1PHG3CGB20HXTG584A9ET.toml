@@ -1,0 +1,21 @@
+schema = 1
+id = "NYA-01M0X1PHG3CGB20HXTG584A9ET"
+title = "Prove the redstone source transition before asserting its consumer"
+lesson = "An official redstone fixture cannot attribute a missing consumer update to edge semantics when it never observes the source control changing state. Await the lever metadata transition and use a previously oracled power topology before waiting for a torch or note event; after the bounded worker limit, an absent pre-oracle Packet53 transition makes the fixture unable to prove the contract and the milestone must be REJECTED with its runtime evidence archived."
+scope = ["smokes/m646-note-redstone-trigger/**"]
+tags = [
+    "runtime",
+    "redstone",
+    "fixture",
+    "milestone-contract",
+    "rejection",
+]
+created_at = "2026-08-25T18:07:41Z"
+
+[[occurrences]]
+occurred_at = "2026-08-25T18:07:41Z"
+source = "manual:2026-08-25-m646-attempt2-unobserved-inverter-source"
+reported_by = "codex:m646_retry2"
+corrected_by = "codex:m646_retry2"
+recorded_by = "codex:m646_retry2"
+commit = "da267faf5"
