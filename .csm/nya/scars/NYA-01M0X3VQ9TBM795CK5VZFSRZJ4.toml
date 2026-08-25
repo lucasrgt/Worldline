@@ -1,0 +1,22 @@
+schema = 1
+id = "NYA-01M0X3VQ9TBM795CK5VZFSRZJ4"
+title = "Prove pressure-plate departure before attributing held metadata"
+lesson = "A dropped-item pressure-plate differential cannot attribute a still-powered plate to item selectivity from a requested move alone. Capture the resulting pose outside the plate collision box and observe the dropped item on its cell before the duration window; if official plate metadata remains powered without an independently proven departure, the fixture has not reached a causal oracle and must be rejected after the bounded attempt limit."
+scope = [
+    "smokes/**",
+    "modules/testkit/**",
+]
+tags = [
+    "redstone",
+    "fixture",
+    "causality",
+]
+created_at = "2026-08-25T18:45:27Z"
+
+[[occurrences]]
+occurred_at = "2026-08-25T18:45:27Z"
+source = "manual:2026-08-25-m648-attempt2-stone70-remained-powered-after-unproven-departure"
+reported_by = "codex:m646_retry2"
+corrected_by = "codex:m646_retry2"
+recorded_by = "codex:m646_retry2"
+commit = "21da5ac3e"

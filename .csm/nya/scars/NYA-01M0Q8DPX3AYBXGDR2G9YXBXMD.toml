@@ -28,3 +28,11 @@ reported_by = "codex:root"
 corrected_by = "codex:root"
 recorded_by = "codex:root"
 commit = "fb66d7d2a"
+
+[[occurrences]]
+occurred_at = "2026-08-25T18:41:14Z"
+source = "manual:2026-08-25-m648-fixed-observe-before-async-pressure-plate-assertions"
+reported_by = "codex:m646_retry2"
+corrected_by = "codex:m646_retry2"
+recorded_by = "codex:m646_retry2"
+commit = "edff32783"
