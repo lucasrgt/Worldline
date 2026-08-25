@@ -1,5 +1,5 @@
 schema=1
 id=m341-repeater-delay-set
-fingerprint=b864ccd4c9dd397c6d4dfde415906c37d719b6195b0e74a078a58a17c727f2c3
+fingerprint=a8894d28010994519e195fca94e4e087f3ec76184bd9a1df9e563621ae1b0583
 observation.sha256=5dfcac91e31b99f9d578961c42075eb4456a7e3dde14bf19c6d069bf7dc49136
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m353-sword-damage-set
-fingerprint=183522df062c7b941f9562caeb2c0a3a1849c818fcb20f321afe67b2a0ea1d4e
+fingerprint=83150837f399e2a1cc249fea0964cbfe09a904f46d1788c76b889c2b9e2cd1db
 observation.sha256=cfaf1e0d3a43f1bb3a09cd6dadb2462a7d953de08671761856fc1080249424e4
 source=refactor-equivalent

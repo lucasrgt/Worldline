@@ -1,5 +1,5 @@
 schema=1
 id=m617-spawn-light-cap-set
-fingerprint=b24cb19955a6f3a0051f65ab7d5bea07e557b8e53cbfb17e56ce4f7c5b4a8a49
+fingerprint=5c0bdea8a6ba593b53684a5d9716b2b741e752594de63b79751135e4848ae1d9
 observation.sha256=59f9ec65af25957e0fef6aa3c8fea1554b5f346e8b6a7c92fa22156c907a6ec0
 source=refactor-equivalent
