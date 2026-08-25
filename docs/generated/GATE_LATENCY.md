@@ -10,4 +10,12 @@ is restored and no module, test module, test suite, or smoke runner is compiled 
 | 2026-08-24 | cold | 132624 |
 | 2026-08-24 | hot | 2176 |
 
+| Hot stage | Measured baseline (ms) |
+| --- | ---: |
+| smoke-discovery | 807 |
+| release | 10 |
+| release-artifacts | 75 |
+| modules | 900 |
+| tests | 400 |
+
 The hot value is re-pinned from a clean committed tree after structural cache changes.
