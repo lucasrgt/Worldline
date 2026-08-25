@@ -1,5 +1,5 @@
 schema=1
 id=m409-spider-string-set
-fingerprint=dbb08b18cb1f97cc59dbd3300d3b765e60b2a999c9a9400445bff3326efab1e1
+fingerprint=b9074ba89340f86b83a803d5350cc0320588a6fe0b855512ec6ca185f9041a46
 observation.sha256=625db8d839633b99daf0e73b098ad644d6f23e3d9ed4dda4f187687c1fe26fc4
 source=refactor-equivalent

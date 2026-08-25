@@ -1,5 +1,5 @@
 schema=1
 id=m137-tnt-explosion
-fingerprint=16a83708775ce7e306ba090e9b90401228e7a3a459d5710ebc085d313ff11636
+fingerprint=03cf8b23c9df3349569d8cd93a5a646750d4da01a264053fa4eb0c4602199ddf
 observation.sha256=bb96106b407266a1f02f9e9e8097e71f5d11de9337293e8cf063277cd00f07ed
 source=refactor-equivalent

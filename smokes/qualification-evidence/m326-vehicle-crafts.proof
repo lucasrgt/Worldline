@@ -1,5 +1,5 @@
 schema=1
 id=m326-vehicle-crafts
-fingerprint=c449eac79dfc99c282549aed76ea0ddd5d0b4fdae233a296ed4d9e4e2401d382
+fingerprint=ef11b29a1839d35bd15414115880790254461cfa6ea316614d949ed0a94ed5c6
 observation.sha256=1109c4ce19cf7f23d5156d80cef725329fc62a68c438e24d4294aa468e088bdc
 source=refactor-equivalent

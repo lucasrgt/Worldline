@@ -1,5 +1,5 @@
 schema=1
 id=m431-remaining-bed-orient-set
-fingerprint=d66e347f2c5209b2dcd6f8d3915f8300bbfb9d05d8645678c9d9a8fcba91b775
+fingerprint=8df4f5f9110043f550d37f6eda93e67ab83d5c9a3419e5ec0a843eb73f8f2ed2
 observation.sha256=8aa709e05da8be4a281e9eded3c6297e0f4236a515d73d60178570c69cf303a1
 source=refactor-equivalent

@@ -35,6 +35,7 @@ public final class TestKitContractTest {
         ChunkReloadFixtureTest.execute();
         ChunkRestartFixtureTest.execute();
         DungeonGenerationFixtureTest.execute();
+        ChestAccessFixtureTest.execute();
         NaturalSlimeSpawnFixtureTest.execute();
         SleepQuorumFixtureTest.execute();
         IceFormationFixtureTest.execute();

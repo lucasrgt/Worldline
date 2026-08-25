@@ -14,6 +14,9 @@ public final class WorldlineItemBehaviors {
             "Removing furnace input or fuel mid-smelt prevents a completed output");
     public static final WorldlineBehavior CHEST_BREAK_SPILL = define("chest-break-spill",
             "Breaking a loaded chest spills contents as Packet21");
+    public static final WorldlineBehavior CHEST_ACCESS_CONSTRAINTS = define(
+            "chest-access-constraints",
+            "A solid lid blocks chest access and a third chest cannot join an existing pair");
 
     private WorldlineItemBehaviors() {}
 
