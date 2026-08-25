@@ -1,5 +1,5 @@
 schema=1
 id=m245-wall-sign
-fingerprint=b17d36ed984cbc7954f22c0a794ecb07bcb6d7facc68d4e0533a14ed79ec62df
+fingerprint=ced738fc7ddcb5eb75602e7e4aa4ce023a7a8ad621a7f6fc5e687f1fafd46ecd
 observation.sha256=124ca56d12f9c02d6f8463c6ad28739dcc1c7b29875b4fa356570082c5f82c06
 source=refactor-equivalent

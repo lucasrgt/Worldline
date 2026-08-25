@@ -1,5 +1,5 @@
 schema=1
 id=m413-fire-spread-set
-fingerprint=3fb98df4d3265293e6570daf6974489f9207255bbc7391946999b5a9890ceb23
+fingerprint=3eb094ecb850c5fc3c71987cc5a41032c68984514e9357811b435c77a4115e7b
 observation.sha256=e8fdef86a6fe2bd49b4575a296bc67cfe62dce1f2eb89aefd7ca2e89aa70843c
 source=refactor-equivalent

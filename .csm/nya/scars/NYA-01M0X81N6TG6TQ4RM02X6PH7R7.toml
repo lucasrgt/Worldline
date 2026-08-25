@@ -1,0 +1,25 @@
+schema = 1
+id = "NYA-01M0X81N6TG6TQ4RM02X6PH7R7"
+title = "Regenerate milestone narratives and preserve source ratchets"
+lesson = "Milestone narrative documents are generated from smoke.properties. After changing narrative fields, run MilestoneNarrative for the milestone before Candidate Gate; hand-authored wrapping or wording can compile yet fail the exact drift check. Candidate output that reports packed smoke lines must also be corrected before commit even when the candidate tier passes: split statements across physical lines so the canonical zero-growth ratchet remains satisfied."
+scope = [
+    "smokes/*/smoke.properties",
+    "smokes/*/src/**/*.java",
+    "docs/M*_*.md",
+    "tools/harness/MilestoneNarrative.java",
+    "quality/smoke-statement-debt.properties",
+]
+tags = [
+    "milestone",
+    "narrative",
+    "generated-doc",
+]
+created_at = "2026-08-25T19:58:36Z"
+
+[[occurrences]]
+occurred_at = "2026-08-25T19:58:36Z"
+source = ".worldline/reports/swarm/candidate-m651-portal-invalid-frame-attempt2.log sha256=6F08E2E954B51C06DC0B0E9AA5911CD97A4CFF036CB380F397140FCB849ABCA7 cause=docs/M651_PORTAL_INVALID_FRAME.md drifted; train verify sha256=150D688D5F0B24065DEDD749FAFBB9100C1AF8473B10FA87E7BD06DC1863AD0F cause=smokes.packed.lines grew 2>0"
+reported_by = "codex:m651-attempt2"
+corrected_by = "codex:m651-attempt2"
+recorded_by = "codex:m651-attempt2"
+commit = "f236a3d28"

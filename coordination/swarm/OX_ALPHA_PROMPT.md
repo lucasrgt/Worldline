@@ -6,6 +6,11 @@ preflight reads `AGENTS.md` and `docs/ENGINEERING_WORKFLOW.md` completely, runs 
 runs NYA recall for the milestone, smoke tooling, and TestKit paths. Recall must succeed and show
 `NYA-01M0VSCA8F3WSMVW32R9XME7DQ`. If the recalled scope includes protocol or runtime smoke
 boundaries, it must also show `NYA-01M0WZ04QQJ4T0KDN3V9FJC5GV` before work begins.
+When a milestone changes narrative fields in `smoke.properties`, recall must also present
+`NYA-01M0X81N6TG6TQ4RM02X6PH7R7`; regenerate the canonical milestone narrative with
+`MilestoneNarrative` before Candidate Gate instead of hand-authoring the generated document.
+Treat any nonzero packed-line count reported by Candidate Gate as fail-closed even if that tier
+passes; split the statements before committing so the canonical zero-growth ratchet cannot recur.
 
 Nested task/explore/subagent delegation is forbidden because this launcher does not supervise
 nested work. Inspect the repository directly. A draft scaffold is fail-closed and is never a

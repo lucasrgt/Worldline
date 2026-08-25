@@ -1,5 +1,5 @@
 schema=1
 id=m256-chest-minecart
-fingerprint=999271965cf09c87520b05ed4a7c9d7409a695ca5e6c74735d390fbf1acd3dd6
+fingerprint=46fda482a9667e1ef405964c76acefe73c68742f33dad5f3aa68d86eb762eeb4
 observation.sha256=77d7cc9f33cf75c87ba161f4e0b38376562e8c3a4a1bed0d9a78aaca8f9d0a74
 source=refactor-equivalent

@@ -30,6 +30,8 @@ public final class WorldlineWorldBehaviors {
             "Two adjacent chests form one Large chest Packet100 window");
     public static final WorldlineBehavior PORTAL_SEARCH_RADIUS = define("portal-search-radius",
             "Portal travel links to an existing destination frame inside the search radius");
+    public static final WorldlineBehavior PORTAL_INVALID_FRAME = define("portal-invalid-frame",
+            "Flint ignition of an upright obsidian frame missing one required top block creates no portal cells");
     public static final WorldlineBehavior DUNGEON_GENERATION = define("dungeon-generation",
             "Fixed-seed populated chunks contain replay-stable spawners and nonempty loot chests");
     public static final WorldlineBehavior CHUNK_UNLOAD_RELOAD = define("chunk-unload-reload",
