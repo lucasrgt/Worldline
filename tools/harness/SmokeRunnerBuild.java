@@ -47,6 +47,7 @@ final class SmokeRunnerBuild {
             for (Future<Void> future : futures) future.get();
         }
         int cached = hits.get();
+        GateWorkMetrics.smokeRunnersCompiled(sources.size() - cached);
         System.out.println("  " + cached + " cached, " + (sources.size() - cached)
                 + " compiled smoke runners (" + workers + " workers)");
     }

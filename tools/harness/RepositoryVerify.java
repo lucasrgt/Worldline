@@ -26,6 +26,7 @@ final class RepositoryVerify {
 
     private RepositoryVerify(boolean requireLocalArtifacts, boolean runSmoke, String profile,
             boolean pinnedSmoke) {
+        GateWorkMetrics.reset();
         this.requireLocalArtifacts = requireLocalArtifacts;
         this.runSmoke = runSmoke;
         this.pinnedSmoke = pinnedSmoke;

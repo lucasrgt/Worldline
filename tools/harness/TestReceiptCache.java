@@ -88,6 +88,7 @@ final class TestReceiptCache {
         atomicStore(proof, values);
         CacheUsage.touch(proof);
         executed++;
+        GateWorkMetrics.testSuiteExecuted();
     }
 
     void failed(String suite, String fingerprint, int exit, String output) throws Exception {

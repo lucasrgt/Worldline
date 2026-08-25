@@ -51,6 +51,7 @@ final class ModuleBuild {
             List<Path> outputs = new ArrayList<>();
             for (String module : modules) {
                 Artifact artifact = futures.get(module).get();
+                if (!artifact.hit) GateWorkMetrics.moduleCompiled();
                 Path output = build.resolve("classes").resolve(module);
                 link(artifact.path, output);
                 outputs.add(output);

@@ -16,8 +16,7 @@ final class GateLatencyCheck {
         Path policy = root.resolve("quality/gate-latency.properties");
         Properties values = StrictProperties.load(policy);
         require("2".equals(required(values, "schema")), "unsupported gate latency schema");
-        String mode = rebuild == null || rebuild.isBlank()
-                ? metrics.executed() == 0 ? "hot" : "cold" : "rebuild";
+        String mode = classify(rebuild, metrics, GateWorkMetrics.metrics());
         long limit = mode.equals("rebuild") ? rebuildLimit(root, rebuild)
                 : Long.parseLong(required(values, "slo." + mode + ".millis"));
         require(elapsedMillis < limit, mode + " gate latency SLO exceeded: "
@@ -26,6 +25,32 @@ final class GateLatencyCheck {
         validateTrend(root, values);
         System.out.println("  gate latency: " + mode + " " + elapsedMillis + "ms < " + limit + "ms");
         return mode;
+    }
+
+    static void selfTest() {
+        VerificationStageCache.Metrics hotStages = new VerificationStageCache.Metrics(1, 0);
+        GateWorkMetrics.Metrics hotWork = new GateWorkMetrics.Metrics(0, 0, 0, 0);
+        require("hot".equals(classify(null, hotStages, hotWork)), "restored Gate was not hot");
+        require("cold".equals(classify(null, hotStages,
+                new GateWorkMetrics.Metrics(1, 0, 0, 0))), "module compilation was hot");
+        require("cold".equals(classify(null, hotStages,
+                new GateWorkMetrics.Metrics(0, 1, 0, 0))), "test compilation was hot");
+        require("cold".equals(classify(null, hotStages,
+                new GateWorkMetrics.Metrics(0, 0, 1, 0))), "test execution was hot");
+        require("cold".equals(classify(null, hotStages,
+                new GateWorkMetrics.Metrics(0, 0, 0, 1))), "runner compilation was hot");
+        require("cold".equals(classify(null, new VerificationStageCache.Metrics(0, 1), hotWork)),
+                "executed verification stage was hot");
+        require("rebuild".equals(classify("token", hotStages, hotWork)),
+                "authorized rebuild was not classified");
+        System.out.println("  gate latency classifier self-test: passed");
+    }
+
+    private static String classify(String rebuild, VerificationStageCache.Metrics stages,
+            GateWorkMetrics.Metrics work) {
+        if (stages.restored() + stages.executed() == 0) return "not-applicable";
+        if (rebuild != null && !rebuild.isBlank()) return "rebuild";
+        return stages.executed() == 0 && work.fullyRestored() ? "hot" : "cold";
     }
 
     private static void validateStages(Properties values, Map<String, Long> stages) {

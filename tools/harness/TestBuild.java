@@ -63,6 +63,7 @@ final class TestBuild {
             }
             for (Map.Entry<String, Future<Artifact>> entry : futures.entrySet()) {
                 Artifact artifact = entry.getValue().get();
+                if (!artifact.hit) GateWorkMetrics.testModuleCompiled();
                 Path output = build.resolve("test-modules").resolve(entry.getKey());
                 publish(artifact.path, output); tests.put(entry.getKey(), output);
                 testDigests.put(entry.getKey(), artifact.digest);

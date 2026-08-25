@@ -12,6 +12,7 @@ final class HarnessFeatureSelfTest {
         SharedCacheMaintenance.main(new String[] {"--self-test"});
         CacheRebuildDrill.selfTest();
         VerificationStageCache.selfTest();
+        GateLatencyCheck.selfTest();
         TrainPinMigration.selfTest();
     }
     static void smoke() throws Exception {
