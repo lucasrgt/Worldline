@@ -1,0 +1,19 @@
+schema = 1
+id = "NYA-01M0X0BS3T3TKNBQHP14THQ8RJ"
+title = "Reject isolated fixtures that cannot reach the official oracle"
+lesson = "When an isolated official-runtime cell exhausts the bounded Packet53 block-state wait while constructing a required fixture, the cycle has not reached its semantic oracle. After the bounded retry limit, preserve the Gate and server logs, classify the contract REJECTED for fixture instability, and never treat a candidate-only PASS as qualification."
+scope = ["smokes/m644-bed-threat-proximity/**"]
+tags = [
+    "runtime",
+    "fixture",
+    "milestone-contract",
+]
+created_at = "2026-08-25T17:44:19Z"
+
+[[occurrences]]
+occurred_at = "2026-08-25T17:44:19Z"
+source = "manual:2026-08-25-m644-attempt2-spawner-placement"
+reported_by = "codex:m644_retry2"
+corrected_by = "codex:m644_retry2"
+recorded_by = "codex:m644_retry2"
+commit = "d94aa7d44"
