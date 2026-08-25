@@ -40,13 +40,12 @@ final class OrchestratorCheck {
         return new Context(head, tree, base, digest(plan), smoke, candidates.size());
     }
 
-    static void qualify(Path root, Context expected) throws Exception {
-        qualify(root, expected, true);
-    }
-
-    static void qualify(Path root, Context expected, boolean announce) throws Exception {
+    static void validate(Path root, Context expected) throws Exception {
         Context actual = preflight(root);
         require(expected.equals(actual), "integration state changed while the orchestrator gate was running");
+    }
+
+    static void authorize(Path root, Context actual, boolean announce) throws Exception {
         String json = "{\n  \"schema\": 1,\n  \"status\": \"passed\",\n  \"qualified_at\": \""
                 + Instant.now() + "\",\n  \"head\": \"" + actual.head + "\",\n  \"tree\": \""
                 + actual.tree + "\",\n  \"base\": \"" + actual.base
@@ -59,6 +58,10 @@ final class OrchestratorCheck {
         Files.writeString(temporary, json, StandardCharsets.UTF_8);
         Files.move(temporary, receipt, StandardCopyOption.REPLACE_EXISTING);
         if (announce) System.out.println("  orchestrator push receipt: " + root.relativize(receipt));
+    }
+
+    static void revoke(Path root) throws IOException {
+        Files.deleteIfExists(root.resolve(".worldline/reports/orchestrator-push.json"));
     }
 
     static String digest(Path path) throws Exception {

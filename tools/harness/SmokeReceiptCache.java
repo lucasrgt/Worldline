@@ -125,6 +125,7 @@ final class SmokeReceiptCache {
         require(HexFormat.of().formatHex(aggregate.digest()).equals(
                 MiniJson.string(document, "root_sha256")),
                 "smoke suite aggregate hash drifted");
+        GateWorkMetrics.qualificationValidated();
         return digest(suite);
     }
 

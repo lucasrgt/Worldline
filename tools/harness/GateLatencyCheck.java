@@ -29,16 +29,18 @@ final class GateLatencyCheck {
 
     static void selfTest() {
         VerificationStageCache.Metrics hotStages = new VerificationStageCache.Metrics(1, 0);
-        GateWorkMetrics.Metrics hotWork = new GateWorkMetrics.Metrics(0, 0, 0, 0);
+        GateWorkMetrics.Metrics hotWork = new GateWorkMetrics.Metrics(0, 0, 0, 0, 0);
         require("hot".equals(classify(null, hotStages, hotWork)), "restored Gate was not hot");
         require("cold".equals(classify(null, hotStages,
-                new GateWorkMetrics.Metrics(1, 0, 0, 0))), "module compilation was hot");
+                new GateWorkMetrics.Metrics(1, 0, 0, 0, 0))), "module compilation was hot");
         require("cold".equals(classify(null, hotStages,
-                new GateWorkMetrics.Metrics(0, 1, 0, 0))), "test compilation was hot");
+                new GateWorkMetrics.Metrics(0, 1, 0, 0, 0))), "test compilation was hot");
         require("cold".equals(classify(null, hotStages,
-                new GateWorkMetrics.Metrics(0, 0, 1, 0))), "test execution was hot");
+                new GateWorkMetrics.Metrics(0, 0, 1, 0, 0))), "test execution was hot");
         require("cold".equals(classify(null, hotStages,
-                new GateWorkMetrics.Metrics(0, 0, 0, 1))), "runner compilation was hot");
+                new GateWorkMetrics.Metrics(0, 0, 0, 1, 0))), "runner compilation was hot");
+        require("cold".equals(classify(null, hotStages,
+                new GateWorkMetrics.Metrics(0, 0, 0, 0, 1))), "qualification validation was hot");
         require("cold".equals(classify(null, new VerificationStageCache.Metrics(0, 1), hotWork)),
                 "executed verification stage was hot");
         require("rebuild".equals(classify("token", hotStages, hotWork)),

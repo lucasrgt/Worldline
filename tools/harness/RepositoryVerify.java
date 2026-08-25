@@ -97,11 +97,16 @@ final class RepositoryVerify {
     private static void orchestrator() {
         RepositoryVerify verify = new RepositoryVerify(false, false, "orchestrator");
         try {
+            OrchestratorCheck.revoke(verify.root);
             OrchestratorCheck.Context context = OrchestratorCheck.preflight(verify.root);
             verify.execute();
-            verify.report.step("orchestrator-receipt", () -> OrchestratorCheck.qualify(verify.root, context));
-            System.out.println("orchestrator gate passed"); verify.report.finish("passed", null);
+            verify.report.step("orchestrator-state", () -> OrchestratorCheck.validate(verify.root, context));
+            verify.report.finish("passed", null);
+            OrchestratorCheck.authorize(verify.root, context, true);
+            System.out.println("orchestrator gate passed");
         } catch (Exception error) {
+            try { OrchestratorCheck.revoke(verify.root); }
+            catch (Exception revokeError) { error.addSuppressed(revokeError); }
             verify.report.finish("failed", error);
             System.err.println("orchestrator gate failed: " + error.getMessage()); System.exit(1);
         }

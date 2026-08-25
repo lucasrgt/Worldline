@@ -6,27 +6,32 @@ final class GateWorkMetrics {
     private static final AtomicInteger TEST_MODULES = new AtomicInteger();
     private static final AtomicInteger TEST_SUITES = new AtomicInteger();
     private static final AtomicInteger SMOKE_RUNNERS = new AtomicInteger();
+    private static final AtomicInteger QUALIFICATIONS = new AtomicInteger();
 
     private GateWorkMetrics() { }
 
     static void reset() {
         MODULES.set(0); TEST_MODULES.set(0); TEST_SUITES.set(0); SMOKE_RUNNERS.set(0);
+        QUALIFICATIONS.set(0);
     }
 
     static void moduleCompiled() { MODULES.incrementAndGet(); }
     static void testModuleCompiled() { TEST_MODULES.incrementAndGet(); }
     static void testSuiteExecuted() { TEST_SUITES.incrementAndGet(); }
     static void smokeRunnersCompiled(int count) { SMOKE_RUNNERS.addAndGet(count); }
+    static void qualificationValidated() { QUALIFICATIONS.incrementAndGet(); }
 
     static Metrics metrics() {
-        return new Metrics(MODULES.get(), TEST_MODULES.get(), TEST_SUITES.get(), SMOKE_RUNNERS.get());
+        return new Metrics(MODULES.get(), TEST_MODULES.get(), TEST_SUITES.get(),
+                SMOKE_RUNNERS.get(), QUALIFICATIONS.get());
     }
 
     record Metrics(int modulesCompiled, int testModulesCompiled,
-            int testSuitesExecuted, int smokeRunnersCompiled) {
+            int testSuitesExecuted, int smokeRunnersCompiled, int qualificationsValidated) {
         boolean fullyRestored() {
             return modulesCompiled == 0 && testModulesCompiled == 0
-                    && testSuitesExecuted == 0 && smokeRunnersCompiled == 0;
+                    && testSuitesExecuted == 0 && smokeRunnersCompiled == 0
+                    && qualificationsValidated == 0;
         }
     }
 }

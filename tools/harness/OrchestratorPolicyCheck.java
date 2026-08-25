@@ -41,7 +41,10 @@ final class OrchestratorPolicyCheck {
                     + "{\"id\":\"m1-one\",\"head\":\"" + head + "\"}]}\n", StandardCharsets.UTF_8);
             qualifySmoke(repository);
             OrchestratorCheck.Context context = OrchestratorCheck.preflight(repository);
-            OrchestratorCheck.qualify(repository, context, false);
+            OrchestratorCheck.validate(repository, context);
+            Path authorization = repository.resolve(".worldline/reports/orchestrator-push.json");
+            require(!Files.exists(authorization), "validation emitted push authorization");
+            OrchestratorCheck.authorize(repository, context, false);
             PushCheck.verify(repository, head, "refs/heads/main");
             reject(() -> PushCheck.verify(repository, base, "refs/heads/main"),
                     "receipt accepted a different commit");
