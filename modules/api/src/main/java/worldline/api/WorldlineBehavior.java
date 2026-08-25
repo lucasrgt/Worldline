@@ -48,6 +48,9 @@ public final class WorldlineBehavior {
             "Pig death Packet21 porkchop drop");
     public static final WorldlineBehavior BED_SLEEP_SKIP = define("bed-sleep-skip", WorldlineFamily.PLAYER,
             "Day refusal, night Packet17 occupancy, and SMP time skip");
+    public static final WorldlineBehavior MULTIPLAYER_SLEEP_QUORUM = define("multiplayer-sleep-quorum",
+            WorldlineFamily.PLAYER,
+            "An open multiplayer sleep quorum holds night; completing it skips morning and wakes every sleeper");
     public static final WorldlineBehavior NOTE_BLOCK_CLICK = define("note-block-click", WorldlineFamily.REDSTONE,
             "Empty-hand note block click Packet54 or Packet61 event");
     public static final WorldlineBehavior SIGN_TEXT_PERSISTENCE = define("sign-text-persistence", WorldlineFamily.WORLD,

@@ -33,8 +33,10 @@ public final class TestKitContractTest {
         DoorSoundFixtureTest.execute();
         MinecartBoosterFixtureTest.execute();
         ChunkReloadFixtureTest.execute();
+        ChunkRestartFixtureTest.execute();
         DungeonGenerationFixtureTest.execute();
         NaturalSlimeSpawnFixtureTest.execute();
+        SleepQuorumFixtureTest.execute();
         IceFormationFixtureTest.execute();
         SnowAccumulationFixtureTest.execute();
         NaturalWolfPackFixtureTest.execute();
@@ -43,6 +45,7 @@ public final class TestKitContractTest {
         BonemealWheatFixtureTest.execute();
         TntChainFixtureTest.execute();
         CreeperTntDifferentialFixtureTest.execute();
+        NotePitchFixtureTest.execute();
         Path root = Files.createTempDirectory("worldline-test-contract-"); Provider provider = new Provider();
         RunnerOptions options = new RunnerOptions().provider(provider).artifacts(root.resolve("artifacts"))
                 .snapshots(root.resolve("snapshots")).runtimeLock(root.resolve("runtime.lock"));

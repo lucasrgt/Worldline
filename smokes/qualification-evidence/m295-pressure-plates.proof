@@ -1,5 +1,5 @@
 schema=1
 id=m295-pressure-plates
-fingerprint=270231646845aa243ac493dda39cd9080c747257524716edbe763751e59a733c
+fingerprint=f6283ae1405c92ab519e13ef3870f7b55b3434f7b5a5cfc9d3f157ef8b314d2e
 observation.sha256=d36cbe38c632dcc4e03334db2982db51f92e78b36850dcbc098b43469ebb9815
 source=refactor-equivalent

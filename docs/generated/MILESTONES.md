@@ -584,6 +584,9 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m639-ice-formation` | CARRIED | Natural ice formation |
 | `m640-snow-accumulation` | CARRIED | Natural snow accumulation |
 | `m641-natural-wolf-pack` | CARRIED | natural wolf pack |
+| `m643-multiplayer-sleep-quorum` | CARRIED | multiplayer sleep quorum |
+| `m645-note-pitch-ladder` | CARRIED | note block pitch ladder |
+| `m653-chunk-restart-persistence` | CARRIED | chunk restart persistence |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |

@@ -34,6 +34,10 @@ public final class WorldlineWorldBehaviors {
             "Fixed-seed populated chunks contain replay-stable spawners and nonempty loot chests");
     public static final WorldlineBehavior CHUNK_UNLOAD_RELOAD = define("chunk-unload-reload",
             "Burning furnaces, dropped items, and minecarts survive a server chunk unload and reload");
+    public static final WorldlineBehavior CHUNK_RESTART_PERSISTENCE = define(
+            "chunk-restart-persistence",
+            "Stocked chests, dropped items, and minecarts keep their semantic state across a "
+                    + "dedicated-server stop and restart after an observed chunk unload");
     public static final WorldlineBehavior PROTOCOL14_EDGE_PACKETS = define("protocol14-edge-packets",
             "Packet130 sign framing and Packet131 map data precede a silent timeout without Packet0");
     public static final WorldlineBehavior MAP_DATA_CONTENT = define("map-data-content",

@@ -1,5 +1,5 @@
 schema=1
 id=m204-clay
-fingerprint=abc50c765d11c5568f4d1e5ef26b311c776b7077e1276dba37a3eab17b98cf24
+fingerprint=263bd74bc640c18f34b26ea203928dfb3f17a27a1635c79f87691dc8c59afddf
 observation.sha256=3b76da4b3617c14a154aaf9799e7cd86631ba7e4e9be1d8dd1baf628fb271d8c
 source=refactor-equivalent

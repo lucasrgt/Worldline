@@ -1,5 +1,5 @@
 schema=1
 id=m36-route-recovery
-fingerprint=3ab920375fa881956909d75097aae0957b4e9e37204297df463935b75b194fca
+fingerprint=94b1b3f1b011f5e8acf790aa420f6ad2d9fc7c9d4b5d1b5fa0388591195478d5
 observation.sha256=12d109fe77f26b127ae34c46aae904d3ba9d0fdec1d19f6330fcb9b1f59752dd
 source=refactor-equivalent

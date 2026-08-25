@@ -1,5 +1,5 @@
 schema=1
 id=m378-boat-water-set
-fingerprint=99e9a08ddfa54976dc29acf4e706ed5056bbd6693db16a8c24f5c4e96eef4e50
+fingerprint=0a84c369dea13472976e7231df5a6395c94a3a921b67c506ca8f46766ec8cf74
 observation.sha256=bdd585b5e79c816f4761039c63a02aa8e9f6164e77d7baa4fa4b3980a6a8d905
 source=refactor-equivalent

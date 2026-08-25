@@ -20,6 +20,8 @@ public final class WorldlineRedstoneBehaviors {
             "Direct wooden-door activation emits Packet61 effect 1003 to a nearby peer");
     public static final WorldlineBehavior TNT_CHAIN = define("tnt-chain",
             "One TNT explosion primes an adjacent TNT charge into a second strength-four explosion");
+    public static final WorldlineBehavior NOTE_BLOCK_PITCH_LADDER = define("note-pitch-ladder",
+            "Tuning clicks climb the twenty-five-pitch ladder, wrap to zero, and persist across reload");
 
     private WorldlineRedstoneBehaviors() {}
 

@@ -1,5 +1,5 @@
 schema=1
 id=m237-stone
-fingerprint=82e92361abe8e6ec0ad8317102c01173dd9c89d9daa8cc4aad64bbfa283dd9ff
+fingerprint=c9f4c89db17878fae1d621dfa47c4a887f812515ef19f3b0133c2da183090e5c
 observation.sha256=a8969e296f04e9e9e445c08139a0fd689dc08bc6796515a90ad78d5b8e4f3ee9
 source=refactor-equivalent

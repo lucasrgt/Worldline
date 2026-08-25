@@ -1,5 +1,5 @@
 schema=1
 id=m180-fishing-rod
-fingerprint=cd2cea83fd7699a1de53b25b02589c5ac611272781771a3338148c63ab3a3aec
+fingerprint=5b5d17866c1e7fbce50d388d078ae19ff769055755dd141ef7b5d4b93d852d37
 observation.sha256=9eafaf3ce4f443aa63f94304c269f66ab3a4257921e9d595d17a208ef9c8554a
 source=refactor-equivalent
