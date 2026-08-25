@@ -1,5 +1,8 @@
 package worldline.smoke.poweredrailslopepropb173;
 
+import static worldline.b173server.B173FixtureSupport.awaitPlayers;
+import static worldline.b173server.B173FixtureSupport.sha;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
@@ -42,7 +45,7 @@ public final class PoweredRailSlopePropagationSmoke {
           actor.awaitInventory().occupiedSlots() == 3, "slope propagation inventory drift");
       RemoteChunkSnapshot initial = actor.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
       PoweredRailSlopePropagationArm arm =
-          PoweredRailSlopePropagationArm.place(actor, initial, cx, cz, column);
+          PoweredRailSlopePropagationArm.build(actor, initial, cx, cz, column);
       actor.moveAndObserve(2D, 0D, 0D, 4);
       actor.selectHeldSlot(2);
       actor.placeHeldBlock(BlockFace.DOWN.adjacent(arm.torch), BlockFace.UP);
@@ -68,7 +71,7 @@ public final class PoweredRailSlopePropagationSmoke {
           "slope-boundary unpower restoration", 40);
       RemoteWorldView restored = WorldlineSmokeAwait.observe(actor, 2);
       actor.close();
-      PoweredRailSlopePropagationArm.awaitPlayers(server, 0);
+      awaitPlayers(server, 0);
       server.save();
       reader = new B173WireClient("127.0.0.1", port, user, timeout);
       reader.connect();
@@ -90,7 +93,7 @@ public final class PoweredRailSlopePropagationSmoke {
           + "|oracle=slope-boundary-power-both-directions+fresh-login|" + evidence;
       System.out.println("WORLDLINE_M702_SET=" + evidence);
       System.out.println("WORLDLINE_M702_TRACE=" + trace);
-      System.out.println("WORLDLINE_M702_SIGNATURE=" + PoweredRailSlopePropagationArm.sha(trace));
+      System.out.println("WORLDLINE_M702_SIGNATURE=" + sha(trace));
     } finally {
       actor.close();
       if (reader != null) reader.close();

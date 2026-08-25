@@ -1,13 +1,13 @@
 package worldline.smoke.poweredrailslopepropb173;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
+import static worldline.b173server.B173FixtureSupport.place;
+import static worldline.b173server.B173FixtureSupport.water;
+
 import worldline.api.BlockFace;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.RemoteChunkSnapshot;
 import worldline.api.RemoteWorldView;
-import worldline.b173server.B173DedicatedServer;
 import worldline.b173server.B173WireClient;
 
 /** Raised powered-rail run crossing one north slope: torch power must cross it both ways. */
@@ -31,7 +31,7 @@ public final class PoweredRailSlopePropagationArm {
     this.idleFar = idleFar;
   }
 
-  static PoweredRailSlopePropagationArm place(B173WireClient actor, RemoteChunkSnapshot initial,
+  static PoweredRailSlopePropagationArm build(B173WireClient actor, RemoteChunkSnapshot initial,
       int cx, int cz, int[] column) throws Exception {
     BlockPosition top = raise(actor, initial, cx, cz, column);
     BlockPosition north = place(actor, top, BlockFace.NORTH, 1);
@@ -83,22 +83,6 @@ public final class PoweredRailSlopePropagationArm {
     return position.x() + ":" + position.y() + ":" + position.z();
   }
 
-  static String sha(String value) throws Exception {
-    byte[] digest = MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8));
-    StringBuilder hex = new StringBuilder();
-    for (byte item : digest) hex.append(String.format("%02x", item & 255));
-    return hex.toString();
-  }
-
-  static void awaitPlayers(B173DedicatedServer server, int count) throws Exception {
-    long end = System.currentTimeMillis() + 5000;
-    while (System.currentTimeMillis() < end) {
-      if (server.players().size() == count) return;
-      Thread.sleep(100);
-    }
-    throw new IllegalStateException("player count drift");
-  }
-
   static void require(boolean value, String message) {
     if (!value) throw new IllegalStateException(message);
   }
@@ -139,14 +123,6 @@ public final class PoweredRailSlopePropagationArm {
     return top;
   }
 
-  private static BlockPosition place(B173WireClient actor, BlockPosition supportBlock, BlockFace face, int id)
-      throws Exception {
-    BlockPosition target = face.adjacent(supportBlock);
-    actor.placeHeldBlock(supportBlock, face);
-    actor.awaitBlock(target, new BlockState(id, 0));
-    return target;
-  }
-
   private static BlockPosition railOnFloor(B173WireClient actor, BlockPosition supportBlock) throws Exception {
     BlockPosition target = BlockFace.UP.adjacent(supportBlock);
     actor.placeHeldBlock(supportBlock, BlockFace.UP);
@@ -168,7 +144,4 @@ public final class PoweredRailSlopePropagationArm {
     return chunk.blockAt(position.x() - cx * 16, position.y(), position.z() - cz * 16);
   }
 
-  private static boolean water(int id) {
-    return id == 8 || id == 9;
-  }
 }
