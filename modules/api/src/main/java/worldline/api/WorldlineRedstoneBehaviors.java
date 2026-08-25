@@ -8,6 +8,9 @@ public final class WorldlineRedstoneBehaviors {
             "Stepping on or clicking placed redstone ore lights it then darkens");
     public static final WorldlineBehavior DETECTOR_RAIL_VACATE = define("detector-rail-vacate",
             "Occupied detector rail emits power and unpowers after the cart leaves");
+    public static final WorldlineBehavior POWERED_RAIL_SLOPE_PROPAGATION =
+            define("powered-rail-slope-propagation",
+                    "Powered-rail activation propagates across ascending and descending slope boundaries");
     public static final WorldlineBehavior STICKY_HEAD_BREAK = define("sticky-head-break",
             "Breaking an extended sticky piston head removes the leftover sticky base");
     public static final WorldlineBehavior PISTON_PUSH_ENTITY = define("piston-push-entity",
