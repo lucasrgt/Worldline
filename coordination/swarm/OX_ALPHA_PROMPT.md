@@ -4,7 +4,8 @@ The supervisor must run `SwarmLoop preflight` before the worker edits or scaffol
 The worktree must be exclusive, clean, and checked out at the exact authorized base SHA. The
 preflight reads `AGENTS.md` and `docs/ENGINEERING_WORKFLOW.md` completely, runs CSM context, and
 runs NYA recall for the milestone, smoke tooling, and TestKit paths. Recall must succeed and show
-`NYA-01M0VSCA8F3WSMVW32R9XME7DQ`.
+`NYA-01M0VSCA8F3WSMVW32R9XME7DQ`. If the recalled scope includes protocol or runtime smoke
+boundaries, it must also show `NYA-01M0WZ04QQJ4T0KDN3V9FJC5GV` before work begins.
 
 Nested task/explore/subagent delegation is forbidden because this launcher does not supervise
 nested work. Inspect the repository directly. A draft scaffold is fail-closed and is never a

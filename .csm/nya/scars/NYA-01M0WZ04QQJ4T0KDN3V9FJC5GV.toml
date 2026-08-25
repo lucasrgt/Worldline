@@ -1,0 +1,24 @@
+schema = 1
+id = "NYA-01M0WZ04QQJ4T0KDN3V9FJC5GV"
+title = "Reject pre-oracle malformed-input runtime boundaries"
+lesson = "When an official-runtime milestone ends before any semantic oracle signal with a malformed-input decoder error and the server records an immediate generic disconnect, preserve the cycle and server logs, stop after the bounded retry limit, classify the contract REJECTED, and never hand off its candidate-only commit or scaffold."
+scope = [
+    "tools/smoke/**",
+    "modules/testkit/**",
+    "adapters/b173-server/**",
+]
+tags = [
+    "runtime",
+    "protocol",
+    "milestone-contract",
+    "rejection",
+]
+created_at = "2026-08-25T17:20:29Z"
+
+[[occurrences]]
+occurred_at = "2026-08-25T17:20:29Z"
+source = "manual:2026-08-25-m642-attempt2-input-length"
+reported_by = "codex:m642_retry2"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "91713efe2"

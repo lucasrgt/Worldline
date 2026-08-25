@@ -1,0 +1,22 @@
+schema = 1
+id = "NYA-01M0WYKJ9T4DN7RVEJRNEA8ZRP"
+title = "Await initial health before entering death fixtures"
+lesson = "A synchronized protocol-14 pose does not prove that the initial Packet8 health value has been consumed. Before asserting actor.health or entering B173VoidDeath, call awaitHealth with the expected baseline and preserve the failed runtime log when this ordering is missed."
+scope = [
+    "smokes/m642-bed-respawn-fallback/**",
+    "adapters/b173-server/src/main/java/worldline/b173server/B173VoidDeath.java",
+]
+tags = [
+    "runtime",
+    "packet-order",
+    "fixture",
+]
+created_at = "2026-08-25T17:13:37Z"
+
+[[occurrences]]
+occurred_at = "2026-08-25T17:13:37Z"
+source = "manual:2026-08-25-m642-attempt2-health-baseline"
+reported_by = "codex:root"
+corrected_by = "codex:m642_retry2"
+recorded_by = "codex:m642_retry2"
+commit = "e88f9bdd9"
