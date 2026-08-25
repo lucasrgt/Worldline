@@ -20,3 +20,11 @@ reported_by = "user:fable-report"
 corrected_by = "codex:root"
 recorded_by = "codex:root"
 commit = "1c740ed1"
+
+[[occurrences]]
+occurred_at = "2026-08-25T16:36:16Z"
+source = "manual:2026-08-25-train-source-index-renumbering"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "fb66d7d2a"

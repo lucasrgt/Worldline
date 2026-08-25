@@ -1,0 +1,250 @@
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Instant;
+import java.time.Duration;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/** Produces an evidence-bound census without modifying candidate worktrees. */
+final class SwarmCensus {
+    private static final Pattern ID = Pattern.compile("m([0-9]+)-[a-z0-9-]+");
+    private static final Pattern JSON_FIELD = Pattern.compile("\"([^\"]+)\"\\s*:\\s*\"([^\"]*)\"");
+    private SwarmCensus() { }
+
+    static void audit(List<Wave> waves, Path outputValue, Path archiveValue) throws Exception {
+        Path root = Path.of("").toAbsolutePath().normalize();
+        Path output = outputValue.toAbsolutePath().normalize();
+        Path archive = archiveValue == null ? null : archiveValue.toAbsolutePath().normalize();
+        SwarmEvidenceArchive.Result bundle = archive == null ? SwarmEvidenceArchive.Result.empty()
+                : SwarmEvidenceArchive.saveRepositoryBundle(root, archive);
+        Map<String, Properties> handoffs = handoffs(root);
+        Set<String> integratedReceipts = integratedReceipts(root);
+        List<Item> items = new ArrayList<>();
+        for (Wave wave : waves) inspectWave(root, wave, handoffs, integratedReceipts,
+                archive, bundle, items);
+        items.sort(Comparator.comparingInt(Item::number));
+        Map<String, Integer> counts = new HashMap<>();
+        for (Item item : items) counts.merge(item.state, 1, Integer::sum);
+        Files.createDirectories(output.getParent());
+        Files.writeString(output, json(items, counts, waves), StandardCharsets.UTF_8);
+        System.out.println("swarm census: total=" + items.size() + ", qualified="
+                + counts.getOrDefault("QUALIFIED", 0) + ", failed-gate="
+                + counts.getOrDefault("FAILED_GATE", 0) + ", dirty-suspended="
+                + counts.getOrDefault("DIRTY_SUSPENDED", 0) + ", not-started="
+                + counts.getOrDefault("NOT_STARTED", 0));
+        System.out.println("  report: " + output);
+        if (archive != null) System.out.println("  evidence archive: " + archive);
+    }
+
+    private static void inspectWave(Path root, Wave wave, Map<String, Properties> handoffs,
+            Set<String> integratedReceipts, Path archive, SwarmEvidenceArchive.Result bundle,
+            List<Item> items) throws Exception {
+        require(Files.isDirectory(wave.path), "missing wave root: " + wave.path);
+        String base = git(root, "rev-parse", "--verify", wave.base + "^{commit}").trim();
+        try (var paths = Files.list(wave.path)) {
+            for (Path path : paths.filter(Files::isDirectory).sorted().toList()) {
+                Matcher match = ID.matcher(path.getFileName().toString());
+                if (!match.matches()) continue;
+                items.add(inspect(root, path.toAbsolutePath().normalize(), base, handoffs,
+                        integratedReceipts, archive, bundle, Integer.parseInt(match.group(1))));
+            }
+        }
+    }
+
+    private static Item inspect(Path root, Path path, String base, Map<String, Properties> handoffs,
+            Set<String> integratedReceipts, Path archive, SwarmEvidenceArchive.Result bundle,
+            int number) throws Exception {
+        String id = path.getFileName().toString();
+        String branch = git(path, "branch", "--show-current").trim();
+        String head = git(path, "rev-parse", "HEAD").trim();
+        String tree = git(path, "rev-parse", "HEAD^{tree}").trim();
+        String status = git(path, "status", "--porcelain=v1", "--untracked-files=all");
+        boolean dirty = !status.isBlank(), atBase = head.equals(base);
+        Path receipt = path.resolve(".worldline/reports/milestones/" + id + ".json");
+        Receipt proof = receipt(receipt, id, head, tree, base);
+        boolean handoff = handoff(handoffs.get(head), branch, head, base, receipt);
+        Path descriptor = path.resolve("smokes").resolve(id).resolve("smoke.properties");
+        boolean scaffold = Files.isRegularFile(descriptor)
+                && Files.readString(descriptor, StandardCharsets.UTF_8).contains("scaffold.status=");
+        int commits = atBase ? 0 : Integer.parseInt(git(path, "rev-list", "--count",
+                base + ".." + head).trim());
+        boolean qualified = proof.exact && handoff && commits == 1 && !scaffold;
+        String state = legacyState(dirty, qualified, atBase, !atBase);
+        List<Path> logs = evidenceLogs(path, id);
+        int retries = retries(logs);
+        long receiptSeconds = receiptSeconds(path, proof, head);
+        boolean integrated = integratedReceipts.contains(head) || integrated(root, head);
+        String cause = cause(state, status, logs);
+        SwarmEvidenceArchive.Result saved = archive != null
+                && (state.equals("DIRTY_SUSPENDED") || state.equals("FAILED_GATE"))
+                ? SwarmEvidenceArchive.save(archive, id, path, branch, base, head, tree, state,
+                        status, logs, receipt, bundle) : SwarmEvidenceArchive.Result.empty();
+        return new Item(number, id, path, branch, base, head, tree, state, dirty, commits,
+                scaffold, proof.present, proof.exact, handoff, integrated, retries, receiptSeconds,
+                cause, logs, saved);
+    }
+
+    static String legacyState(boolean dirty, boolean qualified, boolean atBase, boolean hasCommit) {
+        if (dirty) return "DIRTY_SUSPENDED";
+        if (qualified) return "QUALIFIED";
+        if (atBase && !hasCommit) return "NOT_STARTED";
+        return "FAILED_GATE";
+    }
+
+    private static Receipt receipt(Path path, String id, String head, String tree, String base)
+            throws IOException {
+        if (!Files.isRegularFile(path)) return new Receipt(false, false, "");
+        Map<String, String> fields = new HashMap<>();
+        Matcher matcher = JSON_FIELD.matcher(Files.readString(path, StandardCharsets.UTF_8));
+        while (matcher.find()) fields.put(matcher.group(1), matcher.group(2));
+        boolean exact = "passed".equals(fields.get("status")) && id.equals(fields.get("id"))
+                && head.equals(fields.get("head")) && tree.equals(fields.get("tree"))
+                && base.equals(fields.get("base"));
+        return new Receipt(true, exact, fields.getOrDefault("qualified_at", ""));
+    }
+
+    private static Map<String, Properties> handoffs(Path root) throws IOException {
+        Map<String, Properties> result = new HashMap<>();
+        Path directory = root.resolve("coordination/handoffs");
+        if (!Files.isDirectory(directory)) return result;
+        try (var paths = Files.list(directory)) {
+            for (Path path : paths.filter(Files::isRegularFile).toList()) {
+                Properties values = new Properties();
+                try (var input = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+                    values.load(input);
+                }
+                result.put(values.getProperty("head", ""), values);
+            }
+        }
+        return result;
+    }
+
+    private static Set<String> integratedReceipts(Path root) throws Exception {
+        String text = git(root, "show", "main:smokes/train-reconciliation.lock");
+        Properties values = new Properties(); values.load(new java.io.StringReader(text));
+        Set<String> result = new HashSet<>();
+        for (String key : values.stringPropertyNames())
+            if (key.endsWith(".receipt.head")) result.add(values.getProperty(key));
+        return Set.copyOf(result);
+    }
+
+    private static boolean handoff(Properties values, String branch, String head, String base,
+            Path receipt) throws Exception {
+        return values != null && branch.equals(values.getProperty("branch"))
+                && head.equals(values.getProperty("head")) && base.equals(values.getProperty("base"))
+                && "qualified".equals(values.getProperty("disposition"))
+                && Files.isRegularFile(receipt)
+                && SwarmEvidenceArchive.sha256(receipt).equals(values.getProperty("receipt.sha256"));
+    }
+
+    private static List<Path> evidenceLogs(Path path, String id) throws IOException {
+        List<Path> result = new ArrayList<>();
+        Path log = path.resolve(".worldline/smoke-logs").resolve(id + ".log");
+        if (Files.isRegularFile(log)) result.add(log);
+        Path report = path.resolve(".worldline/reports/milestones").resolve(id + ".json");
+        if (Files.isRegularFile(report)) result.add(report);
+        return List.copyOf(result);
+    }
+
+    private static int retries(List<Path> logs) throws IOException {
+        Pattern pattern = Pattern.compile("WORLDLINE_FLAKE_TELEMETRY=.*retries=([0-9]+)");
+        int result = 0;
+        for (Path log : logs) if (log.toString().endsWith(".log")) {
+            Matcher matcher = pattern.matcher(Files.readString(log, StandardCharsets.UTF_8));
+            while (matcher.find()) result = Math.max(result, Integer.parseInt(matcher.group(1)));
+        }
+        return result;
+    }
+
+    private static long receiptSeconds(Path path, Receipt proof, String head) throws Exception {
+        if (!proof.exact || proof.qualifiedAt.isBlank()) return -1;
+        Instant commit = OffsetDateTime.parse(git(path, "show", "-s", "--format=%cI", head).trim())
+                .toInstant();
+        return Math.max(0, Duration.between(commit, Instant.parse(proof.qualifiedAt)).toSeconds());
+    }
+
+    private static boolean integrated(Path root, String head) throws Exception {
+        String base = git(root, "rev-parse", "main^{commit}").trim();
+        if (SwarmProcess.status(root, List.of("merge-base", "--is-ancestor", head, base), 60) == 0)
+            return true;
+        String cherry = git(root, "cherry", base, head).trim();
+        return !cherry.isBlank() && cherry.lines().allMatch(line -> line.startsWith("- "));
+    }
+
+    private static String cause(String state, String status, List<Path> logs) throws IOException {
+        if (state.equals("DIRTY_SUSPENDED")) return "worker exited with uncommitted changes: "
+                + status.lines().findFirst().orElse("unknown change").trim();
+        if (!state.equals("FAILED_GATE") || logs.isEmpty()) return "none";
+        List<String> lines = Files.readAllLines(logs.get(0), StandardCharsets.UTF_8);
+        return lines.stream().filter(line -> line.contains("failed:") || line.contains("Exception")
+                || line.contains("timed out") || line.contains("artifact absent"))
+                .findFirst().orElse(lines.isEmpty() ? "gate failed without log detail" : lines.get(0)).trim();
+    }
+
+    private static String json(List<Item> items, Map<String, Integer> counts, List<Wave> waves) {
+        StringBuilder text = new StringBuilder("{\n  \"schema\":1,\n  \"created\":\"")
+                .append(Instant.now()).append("\",\n  \"waves\":").append(waves.size())
+                .append(",\n  \"summary\":{");
+        for (String state : List.of("QUALIFIED", "FAILED_GATE", "DIRTY_SUSPENDED", "NOT_STARTED"))
+            text.append("\"").append(state).append("\":")
+                    .append(counts.getOrDefault(state, 0)).append(",");
+        text.setLength(text.length() - 1); text.append("},\n  \"candidates\":[\n");
+        for (int index = 0; index < items.size(); index++) {
+            Item item = items.get(index);
+            text.append("    {\"id\":\"").append(item.id).append("\",\"state\":\"")
+                    .append(item.state).append("\",\"path\":\"").append(escape(item.path.toString()))
+                    .append("\",\"branch\":\"").append(item.branch).append("\",\"base\":\"")
+                    .append(item.base).append("\",\"head\":\"").append(item.head)
+                    .append("\",\"tree\":\"").append(item.tree).append("\",\"dirty\":")
+                    .append(item.dirty).append(",\"commits\":").append(item.commits)
+                    .append(",\"scaffold\":").append(item.scaffold).append(",\"receipt_present\":")
+                    .append(item.receiptPresent).append(",\"receipt_exact\":").append(item.receiptExact)
+                    .append(",\"handoff_exact\":").append(item.handoffExact)
+                    .append(",\"integrated\":").append(item.integrated).append(",\"retries\":")
+                    .append(item.retries).append(",\"time_to_receipt_seconds\":")
+                    .append(item.receiptSeconds).append(",\"cause\":\"")
+                    .append(escape(item.cause)).append("\",\"archive\":\"")
+                    .append(escape(item.archive.path())).append("\",\"archive_sha256\":\"")
+                    .append(item.archive.sha256()).append("\"}")
+                    .append(index + 1 == items.size() ? "\n" : ",\n");
+        }
+        return text.append("  ]\n}\n").toString();
+    }
+
+    private static String git(Path directory, String... arguments) throws Exception {
+        return SwarmProcess.output(directory, List.of(arguments), 120);
+    }
+    private static String escape(String value) {
+        return value.replace("\\", "\\\\").replace("\"", "\\\"")
+                .replace("\r", "\\r").replace("\n", "\\n");
+    }
+    private static void require(boolean condition, String message) {
+        if (!condition) throw new IllegalStateException(message);
+    }
+
+    record Wave(Path path, String base) {
+        static Wave parse(String value) {
+            int split = value.lastIndexOf('=');
+            require(split > 0 && split < value.length() - 1, "wave must be PATH=BASE");
+            return new Wave(Path.of(value.substring(0, split)).toAbsolutePath().normalize(),
+                    value.substring(split + 1));
+        }
+    }
+    private record Receipt(boolean present, boolean exact, String qualifiedAt) { }
+    private record Item(int number, String id, Path path, String branch, String base, String head,
+            String tree, String state, boolean dirty, int commits, boolean scaffold,
+            boolean receiptPresent, boolean receiptExact, boolean handoffExact, boolean integrated,
+            int retries, long receiptSeconds, String cause,
+            List<Path> logs, SwarmEvidenceArchive.Result archive) { }
+}

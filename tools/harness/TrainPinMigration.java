@@ -43,7 +43,8 @@ final class TrainPinMigration {
         Properties lock = new Properties(); lock.setProperty("schema", "1");
         Properties predecessor = predecessor(root, "HEAD");
         lock.setProperty("base", BASE);
-        TrainSourceHistory.load(root).writeSources(root, lock, predecessor, BASE);
+        TrainSourceHistory.load(root).writeSources(
+                root, lock, predecessor, predecessor(root, "HEAD^"), BASE);
         Map<String, SmokePins.Entry> baseline = baseline(root);
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
         TrainPinHistory history = TrainPinHistory.load(root);

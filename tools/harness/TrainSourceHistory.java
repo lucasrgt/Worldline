@@ -55,14 +55,16 @@ final class TrainSourceHistory {
             target.setProperty(stem + "ancestor." + index++ + ".sha256", digest);
     }
 
-    void writeSources(Path root, Properties target, Properties predecessor, String base)
+    void writeSources(Path root, Properties target, Properties predecessor,
+            Properties ordering, String base)
             throws Exception {
-        java.util.List<String> paths = capture(root, "diff", "--name-only", base, "--").lines()
+        java.util.List<String> discovered = capture(root, "diff", "--name-only", base, "--").lines()
                 .filter(value -> !value.isBlank()
                         && !value.equals("smokes/qualification.lock")
                         && !value.equals("smokes/train-reconciliation.lock")
                         && !value.startsWith("smokes/qualification-evidence/"))
                 .sorted().toList();
+        java.util.List<String> paths = stablePaths(ordering, discovered);
         target.setProperty("source.count", Integer.toString(paths.size())); int index = 0;
         for (String relative : paths) {
             String stem = "source." + index++ + "."; Path current = root.resolve(relative);
@@ -81,6 +83,26 @@ final class TrainSourceHistory {
         for (int index = 0; index < count; index++)
             if (digest.equals(lock.getProperty(stem + "ancestor." + index + ".sha256"))) return true;
         return false;
+    }
+
+    static void selfTest() {
+        Properties prior = new Properties(); prior.setProperty("source.count", "3");
+        prior.setProperty("source.0.path", "z"); prior.setProperty("source.1.path", "removed");
+        prior.setProperty("source.2.path", "a");
+        require(stablePaths(prior, java.util.List.of("a", "new", "z"))
+                .equals(java.util.List.of("z", "a", "new")), "train sources were renumbered");
+    }
+
+    private static java.util.List<String> stablePaths(
+            Properties predecessor, java.util.List<String> discovered) {
+        Set<String> remaining = new LinkedHashSet<>(discovered);
+        java.util.List<String> ordered = new java.util.ArrayList<>();
+        int count = integer(predecessor.getProperty("source.count", "0"));
+        for (int index = 0; index < count; index++) {
+            String path = predecessor.getProperty("source." + index + ".path");
+            if (remaining.remove(path)) ordered.add(path);
+        }
+        ordered.addAll(remaining); return java.util.List.copyOf(ordered);
     }
 
     private static String find(Properties values, String relative) {
@@ -123,5 +145,9 @@ final class TrainSourceHistory {
     private static String digest(byte[] bytes) throws Exception {
         return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
                 .digest(PortableText.normalize(bytes)));
+    }
+
+    private static void require(boolean value, String message) {
+        if (!value) throw new IllegalStateException(message);
     }
 }

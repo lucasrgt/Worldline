@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M0WVNTF94T6YNYNGTSABWTE9"
+title = "Classify child-process qualification in the parent Gate"
+lesson = "When RepositoryVerify launches SmokeSuite in a child JVM, increment the parent GateWorkMetrics qualification counter before crossing the process boundary. Child static metrics cannot classify the parent Gate, and a pinned qualification sweep must be cold rather than incorrectly judged against the hot no-work SLO."
+scope = [
+    "tools/harness/RepositoryVerify.java",
+    "tools/harness/GateWorkMetrics.java",
+    "tools/harness/GateLatencyCheck.java",
+]
+tags = [
+    "gate-latency",
+    "process-boundary",
+    "qualification",
+]
+created_at = "2026-08-25T16:22:26Z"
+
+[[occurrences]]
+occurred_at = "2026-08-25T16:22:25Z"
+source = "manual:2026-08-25-integration-train-hot-slo-recurrence"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "ef2fa5eaf"

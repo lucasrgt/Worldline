@@ -13,6 +13,8 @@ final class HarnessFeatureSelfTest {
         CacheRebuildDrill.selfTest();
         VerificationStageCache.selfTest();
         GateLatencyCheck.selfTest();
+        RepositoryVerify.qualificationBoundarySelfTest();
+        TrainSourceHistory.selfTest();
         TrainPinMigration.selfTest();
     }
     static void smoke() throws Exception {

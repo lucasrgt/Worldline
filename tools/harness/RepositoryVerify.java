@@ -224,11 +224,21 @@ final class RepositoryVerify {
     }
 
     private void runSmokeSuite() throws Exception {
+        qualificationBoundary();
         List<String> command = new ArrayList<>(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "SmokeSuite"));
         if (pinnedSmoke) command.add("--pinned-only");
         run(command);
     }
+
+    static void qualificationBoundarySelfTest() {
+        GateWorkMetrics.reset(); qualificationBoundary();
+        if (GateWorkMetrics.metrics().fullyRestored())
+            throw new IllegalStateException("child qualification was classified as hot");
+        GateWorkMetrics.reset();
+    }
+
+    private static void qualificationBoundary() { GateWorkMetrics.qualificationValidated(); }
 
     private void verifyRuntimeInputs() throws Exception {
         List<String> command = new ArrayList<>(Arrays.asList(

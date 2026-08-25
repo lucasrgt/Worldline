@@ -46,6 +46,31 @@ java tools/integration/SwarmHandoff.java check
 `.worldline/reports/swarm-dashboard.html` from the worktree audit, branch triage, portable PASS
 pins, versioned handoffs, and latest Gate timing report.
 
+## Recursive swarm improvement
+
+Every Ox Alpha worker starts behind the fail-closed supervisor preflight in `SwarmLoop`. The
+supervisor supplies the exact base SHA and latest census. Preflight requires an exclusive clean
+worktree at that base, reads this document and `AGENTS.md` completely, runs `csm context`, and runs
+`csm nya recall` for the milestone, `tools/smoke`, and `modules/testkit`. It emits a PASS report only
+when recall presents `NYA-01M0VSCA8F3WSMVW32R9XME7DQ`. The versioned Ox Alpha prompt forbids nested
+task, explore, or subagent delegation because the launcher does not supervise nested work.
+
+After every worker, the supervisor preserves a verified Git bundle, binary patch, untracked source,
+logs, receipts, and a SHA-256 archive before recording a final disposition. `QUALIFIED` requires a
+real public contract, no scaffold marker, one clean logical commit, an exact milestone receipt and
+portable handoff. `RETRYABLE` retains the same branch, worktree, session, evidence tail, and bounded
+attempt count. `REJECTED` retains exact oracle, fixture, or instability evidence and names an NYA
+scar. A worker without a disposition is `STRANDED` and is converted immediately to `RETRYABLE` or
+`REJECTED`; a draft scaffold is never a handoff or train candidate.
+
+The supervisor records or updates NYA exactly once for the reusable cause, runs `csm nya check`,
+updates the base prompt when a new scar applies, and verifies that the same scar did not recur before
+releasing another candidate. A new wave is blocked while the census contains dirty or failed workers,
+an unresolved retry, a rejection without a scar, a failed recall, a non-exact handoff, or a scaffold
+presented as a contract. Wave reports retain first-pass qualification rate, retries per milestone,
+failures and recurrences by scar, time to receipt, dirty/stranded counts, oracle rejections, and
+qualified/integrated contracts.
+
 The scheduled private workflow runs differential fuzzing and mutation-manifest exploration only
 after the canonical Gate. `NightlyQualityCampaign` splits a hard wall-clock budget between both
 child JVMs, kills timed-out process trees, and publishes seed, volume, duration, status, and logs
