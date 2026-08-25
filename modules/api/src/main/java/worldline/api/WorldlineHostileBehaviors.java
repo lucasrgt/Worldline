@@ -8,6 +8,11 @@ public final class WorldlineHostileBehaviors {
             "Hostile spawn is blocked at light >= 8 and permitted in darkness");
     public static final WorldlineBehavior UNDEAD_SUN_BURN = define("undead-sun-burn",
             "Zombie or skeleton burns in sunlight and not at night or under cover");
+    public static final WorldlineBehavior NATURAL_SLIME_SPAWN = define("natural-slime-spawn",
+            "A formula-selected chunk naturally spawns a slime below height sixteen without a spawner");
+    public static final WorldlineBehavior CREEPER_TNT_DIFFERENTIAL =
+            define("creeper-tnt-differential",
+                    "Creeper Packet60 strength three is one below TNT strength four");
 
     private WorldlineHostileBehaviors() {}
 

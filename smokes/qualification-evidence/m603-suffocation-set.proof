@@ -1,5 +1,5 @@
 schema=1
 id=m603-suffocation-set
-fingerprint=77848c44f5b24bb83de6adde3ac31701a21be5f99f9d72da27cb9473feaede60
+fingerprint=bb465cd8440e169bb28bcb51155f40def3802ac18cbc67722607d294dca89b37
 observation.sha256=62a130da024fdd74136f5b2133c63cff23c20e4dadec5ec16b78c02e0535f453
 source=refactor-equivalent

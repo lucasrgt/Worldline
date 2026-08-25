@@ -71,6 +71,8 @@ public final class CompositeCycle {
     command.addAll(List.of("-d", output.toString()));
     for (String input : plan.inputs)
       command.addAll(DataDrivenSupport.javaFiles(root.resolve(input)));
+    for (String source : plan.nestedSources)
+      command.addAll(DataDrivenSupport.javaFiles(root.resolve(source)));
     command.addAll(DataDrivenSupport.javaFiles(smoke.resolve("src")));
     DataDrivenSupport.capture(root, command);
     return output;

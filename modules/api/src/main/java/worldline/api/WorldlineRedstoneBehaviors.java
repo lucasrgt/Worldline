@@ -18,6 +18,8 @@ public final class WorldlineRedstoneBehaviors {
             "A 1-tick pulse cuts at lever 69:9 and drops a sticky piston payload");
     public static final WorldlineBehavior DOOR_SOUND_EVENT = define("door-sound-event",
             "Direct wooden-door activation emits Packet61 effect 1003 to a nearby peer");
+    public static final WorldlineBehavior TNT_CHAIN = define("tnt-chain",
+            "One TNT explosion primes an adjacent TNT charge into a second strength-four explosion");
 
     private WorldlineRedstoneBehaviors() {}
 

@@ -23,15 +23,20 @@ public final class SmokeSupport {
 
     public static String capture(Path directory, List<String> command) throws Exception {
         int timeout = environmentInteger("WORLDLINE_SMOKE_CHILD_TIMEOUT_SECONDS", 300, 1, 3600);
+        return capture(directory, command, timeout);
+    }
+
+    public static String capture(Path directory, List<String> command, int timeout) throws Exception {
+        require(timeout >= 1 && timeout <= 3600, "child timeout must be between 1 and 3600");
         Path log = Files.createTempFile("worldline-smoke-child-", ".log");
         Process process = new ProcessBuilder(command).directory(directory.toFile()).redirectErrorStream(true)
                 .redirectOutput(log.toFile()).start();
         try {
-            if (!process.waitFor(timeout, TimeUnit.SECONDS)) {
-                destroy(process);
-                throw new IllegalStateException(command.get(0) + " timed out after " + timeout + "s");
-            }
+            boolean finished = process.waitFor(timeout, TimeUnit.SECONDS);
+            if (!finished) destroy(process);
             String output = Files.readString(log, StandardCharsets.UTF_8);
+            if (!finished) throw new IllegalStateException(command.get(0) + " timed out after "
+                    + timeout + "s\n" + tail(output, 8_000));
             if (process.exitValue() != 0)
                 throw new IllegalStateException(command.get(0) + " failed\n" + output);
             return output;
@@ -134,9 +139,22 @@ public final class SmokeSupport {
         return value;
     }
 
-    private static void destroy(Process process) {
-        process.descendants().sorted(Comparator.comparingLong(ProcessHandle::pid).reversed())
-                .forEach(ProcessHandle::destroyForcibly);
+    private static void destroy(Process process) throws InterruptedException {
+        List<ProcessHandle> descendants = process.descendants()
+                .sorted(Comparator.comparingLong(ProcessHandle::pid).reversed()).toList();
+        descendants.forEach(ProcessHandle::destroyForcibly);
         process.destroyForcibly();
+        require(process.waitFor(10, TimeUnit.SECONDS),
+                "smoke child did not terminate: " + process.pid());
+        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(10);
+        while (descendants.stream().anyMatch(ProcessHandle::isAlive)
+                && System.nanoTime() < deadline) Thread.sleep(20L);
+        require(descendants.stream().noneMatch(ProcessHandle::isAlive),
+                "smoke descendants did not terminate: " + process.pid());
+    }
+
+    private static String tail(String value, int maximum) {
+        return value.length() <= maximum ? value
+                : "... tail ...\n" + value.substring(value.length() - maximum);
     }
 }

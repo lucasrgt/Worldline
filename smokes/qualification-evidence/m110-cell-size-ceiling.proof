@@ -1,5 +1,5 @@
 schema=1
 id=m110-cell-size-ceiling
-fingerprint=a8ebe8ebff06851ed0072e14a3d1329ed2cb3426ff8f4fc46c263ff69caafde1
+fingerprint=de837a7261b71d6543c2bbb58a2f3dd61d617d3aa052ae671e1baf4ffad2e478
 observation.sha256=4061454ff65c9ef06366042094e79fc165c26e91d6f3af2fcd7f04638a180c0e
 source=refactor-equivalent

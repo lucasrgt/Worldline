@@ -1,5 +1,5 @@
 schema=1
 id=m206-sponge
-fingerprint=9a9d2eb604e56763d9d0dd7a584804697856934aa9ddf55d48bd61c8592b3dd7
+fingerprint=ecf99a48e2923256068aba91d7e0ee5c2e03857c5390e19c36306151f298639c
 observation.sha256=f403158d252cd74d08246cef3eee7b0ea15f96a1c88448ec6ce62d608093a441
 source=refactor-equivalent

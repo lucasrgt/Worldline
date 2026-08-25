@@ -1,5 +1,5 @@
 schema=1
 id=m86-repeated-membership-recovery
-fingerprint=bfd5d9aee4832ab44f9d8fd7bf4a8596324bc940029e4d5e0edf790c6accc3cf
+fingerprint=dcbb9efb2b4be0f83bc2fb9f5eb9a97805aa036206a217d64ea21998bbac6859
 observation.sha256=841b311c16d11cbbe669756fd0fc020c4371b650ad9c185d8ab717c7217abc44
 source=refactor-equivalent

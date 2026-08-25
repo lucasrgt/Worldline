@@ -1,0 +1,24 @@
+schema = 1
+id = "NYA-01M0TXRGQFZ2T8V76BFZKBSDRA"
+title = "Wait for smoke descendants before consuming redirected logs"
+lesson = "A timed-out source-launched smoke may leave an official-server descendant holding the redirected child log on Windows. Kill and confirm the complete process tree before reading or deleting that log, preserve its diagnostic tail, and let a milestone declare child.timeout.seconds separately from the Gate-owned outer timeout."
+scope = [
+    "tools/harness/SmokeSupport.java",
+    "tools/harness/DataDrivenSupport.java",
+    "tools/smoke/DataDrivenCycle.java",
+    "smokes/m635-natural-slime-spawn/**",
+]
+tags = [
+    "runtime",
+    "process-lifecycle",
+    "windows",
+]
+created_at = "2026-08-24T22:20:22Z"
+
+[[occurrences]]
+occurred_at = "2026-08-24T22:20:22Z"
+source = "manual:2026-08-24-m635-child-timeout-log-lock"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "8308032e1"

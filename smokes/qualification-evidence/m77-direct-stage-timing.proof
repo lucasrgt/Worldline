@@ -1,5 +1,5 @@
 schema=1
 id=m77-direct-stage-timing
-fingerprint=bfa9c04b7cf0429115ad97319decfca03693fb71945d4e19845f984d014755d8
+fingerprint=cce8f477bc35d608ce5be9d315ca2a07cb2a9b7cb5a3d8e7ee331cdc5c598708
 observation.sha256=4ac829480cfb8a9409d89c35e002246e43a0a143815303e1ac520e8990988a4c
 source=refactor-equivalent

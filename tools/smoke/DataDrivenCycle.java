@@ -88,7 +88,7 @@ public final class DataDrivenCycle {
           workspace.toString(), Integer.toString(DataDrivenSupport.freePort())));
       for (String key : plan.arguments)
         command.add(value(key));
-      String output = DataDrivenSupport.capture(root, command);
+      String output = DataDrivenSupport.capture(root, command, childTimeout());
       assertContains(output, plan.outputContains, "process output");
       return new Outcome(DataDrivenSupport.line(output, plan.tracePrefix),
           DataDrivenSupport.line(output, plan.signaturePrefix),
@@ -107,6 +107,16 @@ public final class DataDrivenCycle {
 
   private String value(String key) {
     return DataDrivenSupport.value(config, key);
+  }
+  private int childTimeout() {
+    String value = config.getProperty("child.timeout.seconds", "300").trim();
+    try {
+      int result = Integer.parseInt(value);
+      require(result >= 1 && result <= 3600, "invalid child.timeout.seconds");
+      return result;
+    } catch (NumberFormatException error) {
+      throw new IllegalStateException("invalid child.timeout.seconds", error);
+    }
   }
   private static void assertContains(String value, List<String> fragments, String label) {
     for (String fragment : fragments)

@@ -41,6 +41,12 @@ public final class B173SlimeTouchAccess {
         throw new IllegalStateException("nearby Packet24 type 55 slime absent after " + seconds + "s");
     }
 
+    public static RemoteMobSpawn pollNatural(B173WireClient client) {
+        client.sustainTicks(1);
+        RemoteMobSpawn spawn = client.channel().inbound().mobs().take(TYPE);
+        return spawn != null && spawn.legacyType() == TYPE && spawn.y() < 16D ? spawn : null;
+    }
+
     public static int size(B173WireClient client, RemoteMobSpawn spawn) {
         return client.channel().inbound().mobs().size(spawn.entityId());
     }

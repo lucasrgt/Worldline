@@ -1,5 +1,5 @@
 schema=1
 id=m93-full-page-depletion-recovery
-fingerprint=4f9263d119f54664201230ebad462ae327cdde62a80c737af19e17ddcae7cde8
+fingerprint=410a94edf29b4bc45bcea07e78064d61739e9d56662f172febefdeca0e7dca16
 observation.sha256=f0f506ffa69950d8d4030819a4c6c5ca3f190edcfd3f4ba29f3a4ef4129959ad
 source=refactor-equivalent

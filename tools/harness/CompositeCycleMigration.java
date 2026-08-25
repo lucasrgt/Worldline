@@ -89,8 +89,9 @@ final class CompositeCycleMigration {
         require(dirtyIndex(), "stage the reviewed shared-support change before refreshing composite pins");
         Path manifestPath = root.resolve("smokes/composite-cycle-migration.lock");
         Properties manifest = load(manifestPath); SmokePins existing = new SmokePins(root);
+        Properties train = TrainPinCheck.manifest(root);
         SmokeReceiptCache cache = new SmokeReceiptCache(root); List<SmokePins.Entry> pins = new ArrayList<>();
-        int composite = 0, executed = 0;
+        int composite = 0, executed = 0, imported = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             SmokePins.Entry local = cache.availablePin(smoke);
             if (local != null && local.source().equals("executed")) executed++;
@@ -99,18 +100,41 @@ final class CompositeCycleMigration {
             }
             composite++; String stem = "cycle." + smoke.id + ".";
             CompositeCyclePlan plan = CompositeCyclePlan.load(root, smoke.id);
-            require(plan.fingerprint().equals(manifest.getProperty(stem + "plan_sha256")),
+            String recordedPlan = manifest.getProperty(stem + "plan_sha256");
+            if (recordedPlan == null) {
+                Properties descriptor = load(root.resolve("smokes").resolve(smoke.id)
+                        .resolve("smoke.properties"));
+                String source = required(descriptor, "cycle.legacy.source");
+                require(source.matches("tools/smoke/[A-Za-z0-9]+Cycle[.]java")
+                                && !Files.exists(root.resolve(source)),
+                        "incremental composite legacy source was not removed: " + smoke.id);
+                SmokePins.Entry prior = requiredEntry(existing, smoke.id);
+                require(TrainPinCheck.carriesCurrent(train, smoke.id, prior, prior.fingerprint()),
+                        "incremental composite lacks a current train proof: " + smoke.id);
+                manifest.setProperty(stem + "source", source);
+                manifest.setProperty(stem + "source_sha256", digest(committed(source)));
+                manifest.setProperty(stem + "prior_fingerprint", prior.fingerprint());
+                manifest.setProperty(stem + "plan_sha256", plan.fingerprint());
+                manifest.setProperty(stem + "evidence_sha256", prior.evidence());
+                imported++;
+            } else require(plan.fingerprint().equals(recordedPlan),
                     "composite plan changed outside the reviewed migration: " + smoke.id);
             pins.add(new SmokePins.Entry(smoke.id, cache.fingerprint(smoke),
                     requiredHash(manifest, stem + "evidence_sha256"), "refactor-equivalent"));
         }
-        require(composite == integer(manifest, "count") && executed >= 1,
-                "composite refresh requires the exact generic support proof");
+        require(composite == integer(manifest, "count") + imported && (executed >= 1 || imported >= 1),
+                "composite refresh requires an exact support proof or current train receipt");
+        manifest.setProperty("count", Integer.toString(composite));
+        manifest.setProperty("runner_sha256", digest(root.resolve("tools/smoke/CompositeCycle.java")));
+        manifest.setProperty("plan_source_sha256", digest(
+                root.resolve("tools/harness/CompositeCyclePlan.java")));
+        manifest.setProperty("support_source_sha256", digest(
+                root.resolve("tools/harness/DataDrivenSupport.java")));
         manifest.setProperty("runtime_support_source_sha256", digest(
                 root.resolve("tools/harness/SmokeSupport.java")));
         existing.write(pins); store(manifestPath, manifest);
         System.out.println("composite pins refreshed: " + composite + " plans, " + executed
-                + " exact support proofs");
+                + " exact support proofs, " + imported + " train-imported plans");
     }
 
     private Plan parse(Path source, String text) {
@@ -217,6 +241,13 @@ final class CompositeCycleMigration {
     private static String digest(Path path) throws Exception { return HexFormat.of().formatHex(
             MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(path)));
     }
+    private String committed(String relative) throws Exception {
+        Process process = new ProcessBuilder("git", "show", "HEAD:" + relative)
+                .directory(root.toFile()).redirectErrorStream(true).start();
+        String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        require(process.waitFor() == 0, "missing committed legacy source: " + relative);
+        return output;
+    }
     private static void store(Path path, Properties values) throws Exception {
         StringBuilder output = new StringBuilder("# Worldline composite cycle migration v1\n");
         for (String key : values.stringPropertyNames().stream().sorted(Comparator.naturalOrder()).toList())
@@ -226,6 +257,11 @@ final class CompositeCycleMigration {
     private static Properties load(Path path) throws Exception { Properties values = new Properties();
         try (var reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             values.load(reader); } return values; }
+    private static String required(Properties values, String key) {
+        String value = values.getProperty(key);
+        require(value != null && !value.isBlank(), "missing " + key);
+        return value.trim();
+    }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);
     }

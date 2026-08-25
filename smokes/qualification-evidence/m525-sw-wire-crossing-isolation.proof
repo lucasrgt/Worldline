@@ -1,5 +1,5 @@
 schema=1
 id=m525-sw-wire-crossing-isolation
-fingerprint=84de5dd46624838a6ed5aa0399ba3f1174b3054f3884c6278c143744b9ece4fd
+fingerprint=7981daec91deaceda8e1095da83a3349c9ef6a6974495ba0570f82d460a15e81
 observation.sha256=bbd05e6a5e18bbeeda9ff5bc0b8ad3fcca475ac38719e0ce2d98047f8e91f5b5
 source=refactor-equivalent

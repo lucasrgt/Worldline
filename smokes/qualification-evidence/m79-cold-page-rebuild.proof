@@ -1,5 +1,5 @@
 schema=1
 id=m79-cold-page-rebuild
-fingerprint=bd10366695ec292ba72207abbd4514520b85b64c4528215104f2e9560d0c2523
+fingerprint=586526aa80a4e95b6022d99f51d26b299d68b6f4574f66bde548a8e3b9470c1c
 observation.sha256=94b95453ff0ba5944e7592bbdd8251c064dd0d7aa966cfa2c8b343ce92267d08
 source=refactor-equivalent

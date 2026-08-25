@@ -577,6 +577,13 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m631-protocol14-edge-packets` | CARRIED | protocol14 edge packets |
 | `m632-map-data-content` | CARRIED | map data content |
 | `m634-cross-lane-seed-matrix` | CARRIED | cross-lane seed matrix |
+| `m635-natural-slime-spawn` | CARRIED | natural slime spawn |
+| `m636-bonemeal-wheat` | CARRIED | bonemeal wheat |
+| `m637-tnt-chain` | CARRIED | TNT chain reaction |
+| `m638-creeper-tnt-differential` | CARRIED | creeper versus TNT differential |
+| `m639-ice-formation` | CARRIED | Natural ice formation |
+| `m640-snow-accumulation` | CARRIED | Natural snow accumulation |
+| `m641-natural-wolf-pack` | CARRIED | natural wolf pack |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |

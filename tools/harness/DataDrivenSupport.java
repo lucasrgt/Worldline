@@ -10,6 +10,9 @@ public final class DataDrivenSupport {
     public static String capture(Path directory, List<String> command) throws Exception {
         return SmokeSupport.capture(directory, command);
     }
+    public static String capture(Path directory, List<String> command, int timeout) throws Exception {
+        return SmokeSupport.capture(directory, command, timeout);
+    }
     public static void recreate(Path root, Path target) throws IOException {
         SmokeSupport.recreate(root, target);
     }

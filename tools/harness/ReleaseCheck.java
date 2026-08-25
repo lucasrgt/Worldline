@@ -63,6 +63,7 @@ public final class ReleaseCheck {
         verifyVersionedDocuments(release);
         verifyTestKitRelease();
         ClientRenderParticleBoundary.validate(root);
+        Front2RandomBoundary.validate(root);
         verifyPublicTree();
         System.out.println("  release: Worldline v" + version + " "
                 + value(release, "milestone").toUpperCase() + " GO");

@@ -98,8 +98,9 @@ final class DataDrivenCycleMigration {
         require(reviewedRefresh(manifest),
                 "stage the reviewed runner change or commit a clean shared-support change before refreshing pins");
         SmokePins existing = new SmokePins(root);
+        Properties train = TrainPinCheck.manifest(root);
         SmokeReceiptCache cache = new SmokeReceiptCache(root); List<SmokePins.Entry> pins = new ArrayList<>();
-        int generic = 0, executed = 0;
+        int generic = 0, executed = 0, importedPlans = 0;
         int fixtureRefactors = integer(manifest, "refresh.fixture.count"), newRefactors = 0;
         int formattingRefactors = Integer.parseInt(
                 manifest.getProperty("refresh.formatting.count", "0"));
@@ -115,6 +116,12 @@ final class DataDrivenCycleMigration {
                         "unregistered generic plan changed with the shared runner: " + smoke.id);
                 SmokePins.Entry prior = cache.availablePin(smoke);
                 if (prior == null) prior = requiredEntry(existing, smoke.id);
+                if (!"executed".equals(prior.source())) {
+                    require(TrainPinCheck.carriesCurrent(train, smoke.id, prior,
+                                    cache.fingerprint(smoke)),
+                            "unregistered generic plan lacks current train proof: " + smoke.id);
+                    importedPlans++;
+                }
                 manifest.setProperty(stem + "plan_sha256", plan.fingerprint());
                 manifest.setProperty(stem + "evidence_sha256", prior.evidence());
             } else require(plan.fingerprint().equals(recordedPlan),
@@ -148,8 +155,8 @@ final class DataDrivenCycleMigration {
             else pins.add(new SmokePins.Entry(smoke.id, current,
                     requiredHash(manifest, stem + "evidence_sha256"), "refactor-equivalent"));
         }
-        require(generic >= 300 && (executed >= 1 || newRefactors >= 1),
-                "refresh requires an exact proof or one canonical fixture refactor");
+        require(generic >= 300 && (executed >= 1 || newRefactors >= 1 || importedPlans >= 1),
+                "refresh requires an exact proof, train receipt, or canonical fixture refactor");
         manifest.setProperty("refresh.fixture.count", Integer.toString(fixtureRefactors));
         manifest.setProperty("refresh.formatting.count", Integer.toString(formattingRefactors));
         manifest.setProperty("runner_sha256", digest(root.resolve("tools/smoke/DataDrivenCycle.java")));
@@ -161,7 +168,7 @@ final class DataDrivenCycleMigration {
                 root.resolve("tools/harness/SmokeSupport.java")));
         existing.write(pins); store(manifestPath, manifest);
         System.out.println("data-driven pins refreshed: " + generic + " generic, " + executed
-                + " freshly executed, " + fixtureRefactors
+                + " freshly executed, " + importedPlans + " train-imported plans, " + fixtureRefactors
                 + " canonical fixture refactors, " + formattingRefactors
                 + " token-equivalent source refactors");
     }

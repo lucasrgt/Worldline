@@ -20,6 +20,12 @@ public final class WorldlineWorldBehaviors {
             "A covered sapling stays a sapling in darkness while a lit sapling can stage");
     public static final WorldlineBehavior ICE_MELT_LIGHT = define("ice-melt-light",
             "Torch block light melts adjacent ice to water");
+    public static final WorldlineBehavior ICE_FORMATION = define("ice-formation",
+            "Cold-biome still water freezes under low block light while lit water stays liquid");
+    public static final WorldlineBehavior SNOW_ACCUMULATION = define("snow-accumulation",
+            "Cold-biome snowfall accumulates a snow layer while a dry control stays air");
+    public static final WorldlineBehavior NATURAL_WOLF_PACK = define("natural-wolf-pack",
+            "The peaceful spawner creates a distinct spatially coherent wolf pack without a spawner");
     public static final WorldlineBehavior DOUBLE_CHEST_MERGE = define("double-chest-merge",
             "Two adjacent chests form one Large chest Packet100 window");
     public static final WorldlineBehavior PORTAL_SEARCH_RADIUS = define("portal-search-radius",
@@ -32,6 +38,8 @@ public final class WorldlineWorldBehaviors {
             "Packet130 sign framing and Packet131 map data precede a silent timeout without Packet0");
     public static final WorldlineBehavior MAP_DATA_CONTENT = define("map-data-content",
             "A held map converges to replay-stable Packet131 colors at a fixed seed and position");
+    public static final WorldlineBehavior BONEMEAL_WHEAT = define("bonemeal-wheat",
+            "Beta bonemeal damage fifteen matures planted wheat from age zero to seven");
 
     private WorldlineWorldBehaviors() {}
 

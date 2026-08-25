@@ -11,7 +11,8 @@ import java.util.Properties;
 /** Validated execution plan for legacy cycles with composite observations. */
 public final class CompositeCyclePlan {
     public final String id, mainClass, artifact, tracePrefix, signaturePrefix;
-    public final List<String> signalPrefixes, arguments, inputs, compileProducts, runtimeProducts;
+    public final List<String> signalPrefixes, arguments, inputs, nestedSources;
+    public final List<String> compileProducts, runtimeProducts;
     public final List<String> outputContains, signalContains, signalExcludes;
     public final List<String> traceContains, traceExcludes;
     public final boolean compareSignal, requireExpectedSignal;
@@ -22,7 +23,8 @@ public final class CompositeCyclePlan {
         artifact = required("cycle.artifact"); tracePrefix = required("cycle.trace.prefix");
         signaturePrefix = required("cycle.signature.prefix");
         signalPrefixes = numbered("cycle.signal.prefix"); arguments = list("cycle.args");
-        inputs = list("cycle.inputs"); compileProducts = list("cycle.compile.products");
+        inputs = list("cycle.inputs"); nestedSources = list("cycle.nested.sources");
+        compileProducts = list("cycle.compile.products");
         runtimeProducts = list("cycle.runtime.products");
         outputContains = numbered("cycle.output.contains");
         signalContains = numbered("cycle.signal.contains");
@@ -62,6 +64,9 @@ public final class CompositeCyclePlan {
         require(!inputs.isEmpty() && inputs.stream().allMatch(value ->
                 value.matches("(?:adapters|modules)/[a-z0-9-]+/src/main/java")),
                 "invalid cycle inputs: " + id);
+        require(nestedSources.stream().allMatch(value -> value.matches(
+                        "smokes/m[0-9]+-[a-z0-9-]+/src/[A-Za-z0-9_./-]+[.]java")),
+                "invalid nested cycle source: " + id);
         require(!signalPrefixes.isEmpty(), "missing signal prefixes: " + id);
         List<String> prefixes = new ArrayList<>(signalPrefixes);
         prefixes.add(tracePrefix); prefixes.add(signaturePrefix);
