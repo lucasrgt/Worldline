@@ -70,6 +70,11 @@ through the launcher's `qualify` phase.
 Every launch supplies `--control-base` with the exact orchestrator SHA that authorized its checks.
 The launcher rejects an authorized milestone base or worktree HEAD that does not contain that SHA,
 so an older worktree cannot pass supervisor readiness and then execute a stale Candidate Gate.
+If controls advance after a retryable attempt, first preserve its evidence archive, move the same
+branch and worktree to the new clean base, and run `OxAlphaControlMigration`. It verifies the old
+receipt, archive hash, milestone ID, session, and ancestry, then repeats CSM context and both
+supervision and control-base recall before issuing the replacement preflight. Reapply the archived
+checkpoint only after this PASS; the milestone ID and OpenCode session remain unchanged.
 The launcher closes the child's stdin pipe immediately after creation so non-interactive OpenCode
 observes EOF and creates a session. Its self-test fails if a child can remain blocked on stdin.
 After an archived primary-provider quota failure, the supervisor may set

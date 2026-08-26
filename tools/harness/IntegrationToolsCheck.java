@@ -29,6 +29,9 @@ final class IntegrationToolsCheck {
         require(run(root, List.of(javaTool("java"), root.resolve(
                 "tools/integration/OxAlphaLauncher.java").toString(), "--self-test"), 180) == 0,
                 "Ox Alpha source launcher did not compile its closure");
+        require(run(root, List.of(javaTool("java"), root.resolve(
+                "tools/integration/OxAlphaControlMigration.java").toString(), "--self-test"), 180) == 0,
+                "Ox Alpha control migration self-test failed");
         selfTest(output);
         System.out.println("  integration tools: compiled and self-tested");
     }

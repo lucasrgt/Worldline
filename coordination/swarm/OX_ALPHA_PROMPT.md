@@ -11,6 +11,9 @@ alive without creating a session or producing an edit. The executable self-test 
 Every launch must bind `--control-base` to the exact orchestrator SHA that authorized the executable
 checks. Both the milestone base and current worktree HEAD must contain that commit; otherwise stop
 before OpenCode starts rather than mixing current readiness with an older Candidate Gate.
+When controls advance after a retryable attempt, preserve the exact archive and use
+`OxAlphaControlMigration` on the same branch, worktree, and session. Reapply the checkpoint only
+after it verifies archive SHA-256, ancestry, CSM context, and both applicable scars on the new base.
 If the primary provider reports a usage limit, classify and archive the attempt before setting
 `WORLDLINE_OX_ALPHA_FALLBACK=1`. The allowlisted free fallback may resume only the same receipt-bound
 session and dirty worktree on a later attempt; it may not open a replacement milestone or session.
