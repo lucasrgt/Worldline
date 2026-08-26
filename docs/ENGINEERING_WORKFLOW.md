@@ -49,11 +49,17 @@ pins, versioned handoffs, and latest Gate timing report.
 ## Recursive swarm improvement
 
 Every Ox Alpha worker starts behind the fail-closed supervisor preflight in `SwarmLoop`. The
-supervisor supplies the exact base SHA and latest census. Preflight requires an exclusive clean
+supervisor supplies the exact base SHA, latest census, immutable wave-closure report, and one
+`SwarmMicroWave` receipt. Preflight requires an exclusive clean
 worktree at that base, reads this document and `AGENTS.md` completely, runs `csm context`, and runs
 `csm nya recall` for the milestone, `tools/smoke`, and `modules/testkit`. It emits a PASS report only
 when recall presents `NYA-01M0VSCA8F3WSMVW32R9XME7DQ`. The versioned Ox Alpha prompt forbids nested
 task, explore, or subagent delegation because the launcher does not supervise nested work.
+Top-level OpenCode workers are supervised as a micro-wave: each owns one worktree, every ID appears
+in the receipt, and their Candidate phases may execute concurrently. `AdaptiveParallelism` starts
+at four, caps width by live CPU and free-memory capacity, grows to the measured maximum after a
+clean barrier, and falls to one after recurrence, dirty/stranded state, or systemic failure.
+Official milestone runtime remains serialized by the existing cross-platform lease.
 
 Before Candidate Gate, the supervisor runs `SwarmLoop pre-candidate` against the same authorized
 base and goal. It recalls each applicable scar separately, rejects stale generated narratives,
@@ -83,13 +89,37 @@ attempt count. `REJECTED` retains exact oracle, fixture, or instability evidence
 scar. A worker without a disposition is `STRANDED` and is converted immediately to `RETRYABLE` or
 `REJECTED`; a draft scaffold is never a handoff or train candidate.
 
-The supervisor records or updates NYA exactly once for the reusable cause, runs `csm nya check`,
-updates the base prompt when a new scar applies, and verifies that the same scar did not recur before
-releasing another candidate. A new wave is blocked while the census contains dirty or failed workers,
+At each micro-wave barrier, the supervisor aggregates equivalent causes across all completed workers,
+records or updates each NYA scar exactly once, runs `csm nya check`, updates the base prompt when a
+new scar applies, and verifies that the same scar did not recur before releasing another micro-wave.
+A new micro-wave is blocked while the census contains dirty or failed workers,
 an unresolved retry, a rejection without a scar, a failed recall, a non-exact handoff, or a scaffold
-presented as a contract. Wave reports retain first-pass qualification rate, retries per milestone,
-failures and recurrences by scar, time to receipt, dirty/stranded counts, oracle rejections, and
-qualified/integrated contracts.
+presented as a contract. `SwarmLoop close-wave` emits an immutable report bound to base, HEAD, tree,
+current and prior census hashes. It retains dispositions, first-pass rates, per-milestone corrections,
+scar recurrence, pre-Candidate/pre-runtime prevention, rejection classes, revalidation, semantic
+duplicates, receipt median/p95, safety counts, Pareto causes, deltas, and a moving window. Every
+applicable scar must map to a versioned executable check or an explicit owned exception. If rates do
+not improve, a contained executable process correction is mandatory before the report can release
+another micro-wave. A subsequent 25-candidate wave remains blocked until all 25 current contracts
+are qualified and integrated.
+
+Before opening workers, create exactly one supervised receipt whose width cannot exceed the report's
+live capacity:
+
+```text
+java tools/integration/SwarmLoop.java plan-micro-wave \
+  --census <current-census.json> --closure <wave-closure.json> --base <exact-sha> \
+  --id <candidate> [--id <candidate> ...]
+```
+
+The planner writes exactly one immutable receipt whose canonical path is derived from the closure
+SHA-256. Alternate paths and a second receipt for the same learning barrier fail closed.
+
+Each worker passes that closure and receipt to `SwarmLoop preflight`. Rejected semantic identities
+are checked both before editing and before Candidate. Revalidation is permitted only for the same ID
+after the registry carries an objective harness, fixture, or oracle change hash; a replacement ID is
+never a workaround. `NYA-01M0YZVBKBPB0SB3CJYVQSPNA9` records the M674/M660 recurrence and routes
+it to the versioned `rejected-semantic-exclusion` check.
 
 The scheduled private workflow runs differential fuzzing and mutation-manifest exploration only
 after the canonical Gate. `NightlyQualityCampaign` splits a hard wall-clock budget between both
@@ -447,14 +477,16 @@ but unchanged content-addressed PASS proofs make reattestation incremental.
 Audit registered worktrees without changing them:
 
 ```text
-java tools/integration/WorktreeLifecycle.java audit --base <integrated-ref>
+java tools/integration/WorktreeLifecycleLauncher.java audit --base <integrated-ref>
 ```
 
+The launcher compiles the exact lifecycle source closure before executing the audit. Launching
+`WorktreeLifecycle.java` directly is invalid because source-file mode omits its sibling helpers.
 The report at `.worldline/reports/worktrees.json` records existence, dirty state, ancestry,
 and archive eligibility. `prune` is dry-run only. Archival is deliberately explicit:
 
 ```text
-java tools/integration/WorktreeLifecycle.java archive \
+java tools/integration/WorktreeLifecycleLauncher.java archive \
   --path <exact-worktree-path> --bundles <archive-directory> --base <integrated-ref>
 ```
 

@@ -23,6 +23,9 @@ final class IntegrationToolsCheck {
         }
         compile.add(root.resolve("tools/harness/SafeTreeDelete.java").toString());
         require(run(root, compile, 120) == 0, "integration tools did not compile");
+        require(run(root, List.of(javaTool("java"), root.resolve(
+                "tools/integration/WorktreeLifecycleLauncher.java").toString(), "--self-test"), 180) == 0,
+                "worktree lifecycle source launcher did not compile its closure");
         selfTest(output);
         System.out.println("  integration tools: compiled and self-tested");
     }

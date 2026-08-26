@@ -22,6 +22,7 @@ final class SwarmPreCandidate {
     private static final String MINECART_REACH = "NYA-01M0YDKWFZ4H1CCXE2TXCJC31G";
     private static final String MINECART_ATTACK = "NYA-01M0YM0FGRMPQ4DABMTVS4MNAF";
     private static final String MINECART_INITIATION = "NYA-01M0YMWRZX8V20G1SN0DYGB0MD";
+    private static final String SEMANTIC_EXCLUSION = "NYA-01M0YZVBKBPB0SB3CJYVQSPNA9";
     private SwarmPreCandidate() {
     }
 
@@ -29,12 +30,13 @@ final class SwarmPreCandidate {
         require(id.matches("m[0-9]+-[a-z0-9-]+") && base.matches("[0-9a-f]{40}"),
                 "invalid pre-Candidate identity");
         Path root = Path.of("").toAbsolutePath().normalize();
+        RejectedContractCheck.requireAllowed(root, id, goal);
         Properties descriptor = new Properties();
         try (var reader = Files.newBufferedReader(root.resolve("smokes").resolve(id)
                 .resolve("smoke.properties"), StandardCharsets.UTF_8)) {
             descriptor.load(reader);
         }
-        List<String> scars = new ArrayList<>(List.of(REQUIRED, SOURCE));
+        List<String> scars = new ArrayList<>(List.of(REQUIRED, SOURCE, SEMANTIC_EXCLUSION));
         if (SwarmProcess.status(root, List.of("git", "cat-file", "-e",
                 base + ":smokes/" + id + "/smoke.properties"), 60) != 0) scars.add(LANES);
         String runner = descriptor.getProperty("runner.source", "");

@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M0Z06TZVCVMW4KR36YEE0ARY"
+title = "Exercise wave metrics against archived formatted census JSON"
+lesson = "Wave closure parsers must be tested against the exact pretty-printed reviewed cohort shape as well as compact synthetic rows. Before releasing a closure parser, feed an archived census through WaveCensus and require all 25 IDs and disposition totals; a zero-candidate parse is a process failure and cannot release workers."
+scope = [
+    "tools/integration/WaveCensus.java",
+    "tools/integration/WaveSelfImprovement.java",
+    "tools/integration/SwarmLoop.java",
+]
+tags = [
+    "wave-metrics",
+    "json",
+    "historical-fixture",
+]
+created_at = "2026-08-26T12:20:06Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T12:20:06Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/process-wave-close-pretty-json-parser-failure-f20a2c2ea/wave-close-pretty-json-parser-failure.err.log sha256=2C57253BA6A4F5F2CB18957709763DEFDE730C99C60C12F85B06E8E0BF2D7386 archive.sha256=E86BA48ABA8A3273A9EBC6EC72364959FDA56BE1FA20D7794FD7D2BE60E9E734 cause=WaveCensus candidate regex accepted synthetic bodies but returned zero rows for the archived pretty-printed cohort"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "f20a2c2ea"

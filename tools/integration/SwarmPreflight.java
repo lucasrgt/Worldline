@@ -9,10 +9,13 @@ import java.util.regex.Pattern;
 /** Proves the supervised Ox Alpha preflight before any milestone edit is allowed. */
 final class SwarmPreflight {
     static final String REQUIRED_SCAR = "NYA-01M0VSCA8F3WSMVW32R9XME7DQ";
-    private static final Pattern SUMMARY = Pattern.compile("\"(FAILED_GATE|DIRTY_SUSPENDED)\":([0-9]+)");
+    private static final String SEMANTIC_SCAR = "NYA-01M0YZVBKBPB0SB3CJYVQSPNA9";
+    private static final Pattern SUMMARY = Pattern.compile(
+            "\"(FAILED_GATE|DIRTY_SUSPENDED|RETRYABLE|STRANDED)\"\\s*:\\s*([0-9]+)");
     private SwarmPreflight() { }
 
-    static void run(String id, String baseValue, String goal, Path censusValue) throws Exception {
+    static void run(String id, String baseValue, String goal, Path censusValue, Path closureValue,
+            Path microWaveValue) throws Exception {
         require(id.matches("m[0-9]+-[a-z0-9-]+"), "invalid milestone id: " + id);
         require(baseValue.matches("[0-9a-f]{40}"), "base must be an exact commit SHA");
         Path root = Path.of("").toAbsolutePath().normalize();
@@ -26,6 +29,8 @@ final class SwarmPreflight {
         require(head.equals(base), "worker must start at the exact authorized base");
         require(git(root, "status", "--porcelain=v1", "--untracked-files=all").isBlank(),
                 "worker tree is not initially clean");
+        RejectedContractCheck.requireAllowed(root, id, goal);
+        SwarmMicroWave.verify(root, microWaveValue, closureValue, id, base);
         String worktrees = git(root, "worktree", "list", "--porcelain");
         require(worktrees.lines().filter(line -> line.equals("worktree " + slash(root.toString()))
                 || line.equals("worktree " + root)).count() == 1, "worker worktree is not exclusively registered");
@@ -42,7 +47,12 @@ final class SwarmPreflight {
                 List.of("csm", "context", "--task", goal, "--path", "."), 300);
         String recall = SwarmProcess.output(root, List.of("csm", "nya", "recall", "--task", goal,
                 "--path", "smokes/" + id, "--path", "tools/smoke", "--path", "modules/testkit"), 300);
+        String semanticRecall = SwarmProcess.output(root, List.of("csm", "nya", "recall", "--task",
+                goal + " Required applicable scar " + SEMANTIC_SCAR,
+                "--path", "coordination/swarm", "--path", "tools/integration"), 300);
         require(recall.contains(REQUIRED_SCAR), "required NYA scar was absent from recall");
+        require(semanticRecall.contains(SEMANTIC_SCAR),
+                "semantic exclusion scar was absent from recall");
         Path report = root.resolve(".worldline/reports/swarm/preflight-" + id + ".json");
         Files.createDirectories(report.getParent());
         Files.writeString(report, "{\n  \"schema\":1,\n  \"id\":\"" + id
@@ -51,8 +61,13 @@ final class SwarmPreflight {
                 + SwarmEvidenceArchive.sha256(agents) + "\",\n  \"workflow_sha256\":\""
                 + SwarmEvidenceArchive.sha256(workflow) + "\",\n  \"prompt_sha256\":\""
                 + SwarmEvidenceArchive.sha256(prompt) + "\",\n  \"census_sha256\":\""
-                + SwarmEvidenceArchive.sha256(census) + "\",\n  \"context_sha256\":\""
-                + shaText(context) + "\",\n  \"recall_sha256\":\"" + shaText(recall)
+                + SwarmEvidenceArchive.sha256(census) + "\",\n  \"closure_sha256\":\""
+                + SwarmEvidenceArchive.sha256(closureValue.toAbsolutePath().normalize())
+                + "\",\n  \"micro_wave_sha256\":\""
+                + SwarmEvidenceArchive.sha256(microWaveValue.toAbsolutePath().normalize())
+                + "\",\n  \"context_sha256\":\""
+                + shaText(context) + "\",\n  \"recall_sha256\":\""
+                + shaText(recall + semanticRecall)
                 + "\",\n  \"required_scar\":\"" + REQUIRED_SCAR
                 + "\",\n  \"nested_delegation\":\"forbidden\",\n  \"status\":\"PASS\"\n}\n",
                 StandardCharsets.UTF_8);

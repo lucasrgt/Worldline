@@ -103,6 +103,8 @@ This repository uses CSM. Run `csm context --task "<goal>" --path <path>` before
 
 1. Use one clean worktree and one branch per milestone. Never share a worktree
    between agents.
+   Candidate workers may run concurrently only when one immutable `SwarmMicroWave`
+   receipt lists every worker and its width does not exceed the adaptive host capacity.
 2. During implementation, run `java tools/harness/Gate.java --candidate ID`.
    Candidate verification must not start an official runtime.
 3. Before handoff, commit a clean worktree and run
@@ -112,6 +114,9 @@ This repository uses CSM. Run `csm context --task "<goal>" --path <path>` before
 4. The milestone gate runs static work in shared parallel slots, then waits for
    the cross-platform official-runtime lease. Never bypass or delete lock files.
 5. Repository verification is bounded by shared machine slots.
+   Candidate concurrency starts at four, may grow to the measured safe capacity after
+   a clean learning barrier, and falls to one after recurrence, dirty/stranded state,
+   or a systemic failure. Official milestone runtime remains serialized by its lease.
 6. Milestone workers own their milestone directory and narrowly scoped product
    or adapter files. Global release indexes and generated catalogs are
    integration-train outputs, not worker-owned files.
@@ -126,6 +131,6 @@ This repository uses CSM. Run `csm context --task "<goal>" --path <path>` before
    `--plan-only` solely for a non-qualifying conflict audit.
    After reconciliation, it runs `java tools/harness/Gate.java --orchestrator`.
    Only that exact authorized SHA may be pushed. Audit worktrees with
-   `java tools/integration/WorktreeLifecycle.java audit --base REF`.
+   `java tools/integration/WorktreeLifecycleLauncher.java audit --base REF`.
 
 The complete coordination contract is in `docs/ENGINEERING_WORKFLOW.md`.

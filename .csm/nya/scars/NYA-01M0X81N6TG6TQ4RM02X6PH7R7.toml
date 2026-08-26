@@ -7,6 +7,7 @@ scope = [
     "smokes/*/src/**/*.java",
     "docs/M*_*.md",
     "tools/harness/MilestoneNarrative.java",
+    "tools/integration/**",
     "quality/smoke-statement-debt.properties",
 ]
 tags = [
@@ -63,3 +64,11 @@ reported_by = "codex:m661-ox-alpha"
 corrected_by = "codex:m646_retry2"
 recorded_by = "codex:root"
 commit = "1bb7a6b52"
+
+[[occurrences]]
+occurred_at = "2026-08-26T12:36:42Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/process-wave-self-improvement-gate1-e06f06090-verify.json sha256=9292FC64B8CCE694F34E0EBDF4E514B3EC596BA2B1F7A7F5897E17C4DA776DD0 cause=WaveSelfImprovement.java:258 raised tools/integration.max.line from 116 to 119"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "e06f06090"

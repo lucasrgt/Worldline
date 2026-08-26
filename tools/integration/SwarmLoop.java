@@ -13,6 +13,8 @@ public final class SwarmLoop {
                 case "audit" -> audit(arguments);
                 case "resolve" -> resolve(arguments);
                 case "report" -> report(arguments);
+                case "close-wave" -> closeWave(arguments);
+                case "plan-micro-wave" -> planMicroWave(arguments);
                 case "preflight" -> preflight(arguments);
                 case "pre-candidate" -> preCandidate(arguments);
                 case "--self-test" -> selfTest(arguments);
@@ -61,7 +63,7 @@ public final class SwarmLoop {
 
     private static void preflight(String[] arguments) throws Exception {
         String id = "", base = "", goal = "";
-        Path census = null;
+        Path census = null, closure = null, microWave = null;
         for (int index = 1; index < arguments.length; index++) {
             require(index + 1 < arguments.length, usage());
             switch (arguments[index]) {
@@ -69,11 +71,14 @@ public final class SwarmLoop {
                 case "--base" -> base = arguments[++index];
                 case "--goal" -> goal = arguments[++index];
                 case "--census" -> census = Path.of(arguments[++index]);
+                case "--closure" -> closure = Path.of(arguments[++index]);
+                case "--micro-wave" -> microWave = Path.of(arguments[++index]);
                 default -> throw new IllegalArgumentException(usage());
             }
         }
-        require(!id.isBlank() && !base.isBlank() && !goal.isBlank() && census != null, usage());
-        SwarmPreflight.run(id, base, goal, census);
+        require(!id.isBlank() && !base.isBlank() && !goal.isBlank() && census != null
+                && closure != null && microWave != null, usage());
+        SwarmPreflight.run(id, base, goal, census, closure, microWave);
     }
 
     private static void preCandidate(String[] arguments) throws Exception {
@@ -107,6 +112,45 @@ public final class SwarmLoop {
         SwarmWaveReport.write(census, resolution, output);
     }
 
+    private static void closeWave(String[] arguments) throws Exception {
+        Path census = null, previous = null, evidence = null;
+        Path output = Path.of(".worldline/reports/swarm/wave-self-improvement.json");
+        String base = "", correction = "";
+        for (int index = 1; index < arguments.length; index++) {
+            require(index + 1 < arguments.length, usage());
+            switch (arguments[index]) {
+                case "--census" -> census = Path.of(arguments[++index]);
+                case "--previous-census" -> previous = Path.of(arguments[++index]);
+                case "--evidence-root" -> evidence = Path.of(arguments[++index]);
+                case "--base" -> base = arguments[++index];
+                case "--process-correction" -> correction = arguments[++index];
+                case "--output" -> output = Path.of(arguments[++index]);
+                default -> throw new IllegalArgumentException(usage());
+            }
+        }
+        require(census != null && evidence != null && !base.isBlank(), usage());
+        WaveSelfImprovement.close(census, previous, output, evidence, base, correction);
+    }
+
+    private static void planMicroWave(String[] arguments) throws Exception {
+        Path census = null, closure = null;
+        Path output = null;
+        String base = ""; List<String> ids = new ArrayList<>();
+        for (int index = 1; index < arguments.length; index++) {
+            require(index + 1 < arguments.length, usage());
+            switch (arguments[index]) {
+                case "--census" -> census = Path.of(arguments[++index]);
+                case "--closure" -> closure = Path.of(arguments[++index]);
+                case "--base" -> base = arguments[++index];
+                case "--id" -> ids.add(arguments[++index]);
+                case "--output" -> output = Path.of(arguments[++index]);
+                default -> throw new IllegalArgumentException(usage());
+            }
+        }
+        require(census != null && closure != null && !base.isBlank(), usage());
+        SwarmMicroWave.plan(closure, census, output, base, ids);
+    }
+
     private static void selfTest(String[] arguments) {
         require(arguments.length == 1, usage());
         require(SwarmCensus.legacyState(true, false, false, false).equals("DIRTY_SUSPENDED"),
@@ -117,6 +161,9 @@ public final class SwarmLoop {
                 "failed classification drifted");
         require(SwarmCensus.legacyState(false, false, true, false).equals("NOT_STARTED"),
                 "not-started classification drifted");
+        WaveSelfImprovement.selfTest();
+        WaveCensus.selfTest();
+        SwarmMicroWave.selfTest();
         System.out.println("swarm loop self-test passed");
     }
 
@@ -124,7 +171,11 @@ public final class SwarmLoop {
         return "usage: SwarmLoop.java audit --wave PATH=BASE... [--output PATH] [--archive DIR] | "
                 + "resolve --census PATH --scar ID [--reject ID,...] [--max-attempts N] | "
                 + "report --census PATH --resolution PATH [--output PATH] | "
-                + "preflight --id ID --base SHA --goal TEXT --census PATH | "
+                + "close-wave --census PATH [--previous-census PATH] --evidence-root DIR "
+                + "--base SHA [--process-correction SHA] [--output PATH] | "
+                + "plan-micro-wave --census PATH --closure PATH --base SHA --id ID... "
+                + "[--output CANONICAL_PATH] | preflight --id ID --base SHA --goal TEXT --census PATH "
+                + "--closure PATH --micro-wave PATH | "
                 + "pre-candidate --id ID --base SHA --goal TEXT | --self-test";
     }
 

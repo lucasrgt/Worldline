@@ -92,3 +92,11 @@ reported_by = "codex:worldline-supervisor"
 corrected_by = "codex:worldline-supervisor"
 recorded_by = "codex:worldline-supervisor"
 commit = "3770c00ef"
+
+[[occurrences]]
+occurred_at = "2026-08-26T12:00:56Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/process-worktree-lifecycle-launcher-gate1-e590803fa/verify.json sha256=701B77652BD7E9E4C10BC143B54367406561F7B9C9C3D33641C97DCEB9E2B2AC archive.sha256=6AC0F8D03AB4FB17C7B51C2496B059A9937D8B05CEA3ECAF835A47A37EF3E8E6 cause=process-control source changed before final TrainPinMigration and canonical Gate failed closed on AGENTS.md source drift"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "e590803fa"

@@ -1,0 +1,27 @@
+schema = 1
+id = "NYA-01M0YYN1QGEJ2G0DN9J8ZTBZT3"
+title = "Compile WorktreeLifecycle source closure before audit"
+lesson = "The documented worktree lifecycle entry point must not launch WorktreeLifecycle.java alone once it depends on sibling sources. Invoke the self-contained WorktreeLifecycleLauncher, which compiles the exact lifecycle source closure into an ignored build directory and only then runs the requested audit; verify the launcher in the integration-tools self-test."
+scope = [
+    "tools/integration/WorktreeLifecycle*.java",
+    "tools/integration/WorktreeRetraction.java",
+    "tools/integration/WorktreeArchiveDisposition.java",
+    "tools/harness/IntegrationToolsCheck.java",
+    "AGENTS.md",
+    "docs/ENGINEERING_WORKFLOW.md",
+    "coordination/swarm/OX_ALPHA_PROMPT.md",
+]
+tags = [
+    "worktree-lifecycle",
+    "source-closure",
+    "launcher",
+]
+created_at = "2026-08-26T11:52:55Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T11:52:55Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/process-worktree-lifecycle-source-launch-failure-91e03dfb5/worktree-lifecycle-source-launch-failure.err.log sha256=A60476F209C5E17848D9BAD3B63832622CC048AE3808C8690F746C652363C504 archive.sha256=B163CB4C3B9DE94B8DFE0EE238EE98183C1E108B450D6C9B347F18955802CE9A cause=documented source-file launch omitted WorktreeRetraction and WorktreeArchiveDisposition"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "91e03dfb5"

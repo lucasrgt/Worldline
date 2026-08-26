@@ -1,6 +1,10 @@
 # Ox Alpha supervised milestone worker contract
 
-The supervisor must run `SwarmLoop preflight` before the worker edits or scaffolds anything.
+The supervisor must run `SwarmLoop preflight` with the exact immutable wave closure and supervised
+micro-wave receipt before the worker edits or scaffolds anything. The worker ID must be listed in
+that receipt, and total top-level Candidate workers must not exceed its adaptive width.
+Only the canonical immutable receipt derived from that closure SHA-256 is valid; an alternate path or
+a second receipt for the same learning barrier must fail before any worker edits.
 The worktree must be exclusive, clean, and checked out at the exact authorized base SHA. The
 preflight reads `AGENTS.md` and `docs/ENGINEERING_WORKFLOW.md` completely, runs CSM context, and
 runs NYA recall for the milestone, smoke tooling, and TestKit paths. Recall must succeed and show
@@ -75,10 +79,26 @@ Nested task/explore/subagent delegation is forbidden because this launcher does 
 nested work. Inspect the repository directly. A draft scaffold is fail-closed and is never a
 contract, completion, handoff, or train candidate.
 
-After each worker, the supervisor must classify the outcome, preserve its exact commit, patch,
-logs, receipt, and evidence archive, then extract one reusable cause. Record or update NYA exactly
-once, run `csm nya check`, and update this base prompt when the correction creates a new applicable
-scar. Release the next candidate only after confirming that the same scar did not recur.
+After each worker, the supervisor must classify the outcome and preserve its exact commit, patch,
+logs, receipt, and evidence archive. At the micro-wave barrier, aggregate equivalent causes, record
+or update each NYA scar exactly once, run `csm nya check`, and update this base prompt when the
+correction creates a new applicable scar. Run `SwarmLoop close-wave` against the prior and current
+censuses, then open one `SwarmMicroWave` receipt. Release no worker outside that receipt and release
+no subsequent micro-wave until the same scar is proven absent. Candidate phases may run concurrently
+up to the measured receipt width; official runtime remains serialized by the canonical lease.
+Wave closure must recall `NYA-01M0Z06TZVCVMW4KR36YEE0ARY` and parse the archived pretty-printed
+25-candidate census fixture; a zero-row or partial parse blocks the micro-wave.
+Before either preflight or pre-Candidate, `RejectedContractCheck` must reject any ID or goal that is
+semantically equivalent to `coordination/swarm/rejection-registry.properties`, including the
+M674/M660 minecart-collision-transfer repetition. Only the same milestone ID may be revalidated,
+and only after an objective change SHA is recorded.
+This boundary must recall `NYA-01M0YZVBKBPB0SB3CJYVQSPNA9`; a changed milestone number never
+creates a new semantic contract or resets the archived rejection.
+Before the lifecycle audit that releases the next candidate, recall
+`NYA-01M0YYN1QGEJ2G0DN9J8ZTBZT3` and run `java
+tools/integration/WorktreeLifecycleLauncher.java audit --base <integrated-ref>`. The launcher must
+compile the exact sibling-source closure before audit; launching `WorktreeLifecycle.java` directly
+is fail-closed and cannot establish a clean cohort.
 Before train pin migration, recall `NYA-01M0SX8SQGCT8RCH6KVDZH5DZC` and
 `NYA-01M0YWM2GC786PNQD0WD1D6Z8T`; require `git status --porcelain
 --untracked-files=all` to be empty so every new source is present in the committed diff. When a clean qualified
@@ -116,6 +136,7 @@ milestone Gate success, an exact HEAD/tree/base receipt, and a portable handoff.
 exact oracle, fixture, or instability evidence and an applicable NYA scar. `RETRYABLE` resumes the
 same session and worktree under a bounded attempt count; it never opens an equivalent milestone.
 
-No new wave may start while a census contains dirty or failed workers, an unresolved disposition,
+No new micro-wave may start while a census contains dirty or failed workers, an unresolved disposition,
 a rejection without a scar, a missing recall proof, a handoff without an exact receipt, or a draft
-scaffold offered as a contract.
+scaffold offered as a contract. No subsequent 25-candidate wave may start until every contract in
+the current 25-candidate wave is qualified and integrated.

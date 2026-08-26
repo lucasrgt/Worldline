@@ -1,0 +1,24 @@
+schema = 1
+id = "NYA-01M0Z0MHVME7EH1MRXV5K1BGEJ"
+title = "Issue one canonical micro-wave lease per learning barrier"
+lesson = "A wave closure must authorize exactly one immutable Candidate micro-wave. Derive the receipt name from the closure SHA-256, require it beside the authoritative closure, reject alternate receipt paths, and reject a second plan for the same closure before any worker edits. Candidate concurrency is bounded by that single receipt; official runtime remains serialized by the lease."
+scope = [
+    "tools/integration/SwarmMicroWave.java",
+    "tools/integration/SwarmLoop.java",
+    "docs/ENGINEERING_WORKFLOW.md",
+    "coordination/swarm/OX_ALPHA_PROMPT.md",
+]
+tags = [
+    "micro-wave",
+    "parallelism",
+    "learning-barrier",
+]
+created_at = "2026-08-26T12:27:36Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T12:27:36Z"
+source = "micro-wave duplicate negative err sha256=DE09E156A7013368803D91663388F1CCDBFB41049AF64495796737993629D489; alternate-path negative err sha256=03A549CDA1CA5078D3A074283D0B50BEA8E9289962665F8C9B30E4FA45681F55; canonical positive receipt sha256=E8F6404A1ABCB8C03D5852CE4596A951E7C347B31161CFB3A8DE748D3069D6A6"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "0bb68dd24"

@@ -1,0 +1,26 @@
+schema = 1
+id = "NYA-01M0YZVBKBPB0SB3CJYVQSPNA9"
+title = "Block rejected semantic contracts across milestone IDs"
+lesson = "A rejected contract remains excluded by semantic identity, not by milestone number. Before worker preflight and again before Candidate, compare the proposed ID and goal with the evidence-bound rejection registry; reject replacement IDs such as M660 after M674. Revalidation is allowed only on the same milestone after an objective harness, fixture, or oracle change hash is recorded and historical negative plus valid positive fixtures pass."
+scope = [
+    "coordination/swarm/rejection-registry.properties",
+    "coordination/swarm/scar-checks.properties",
+    "tools/integration/RejectionRegistry.java",
+    "tools/integration/RejectedContractCheck.java",
+    "tools/integration/SwarmPreflight.java",
+    "tools/integration/SwarmPreCandidate.java",
+]
+tags = [
+    "semantic-equivalence",
+    "rejection",
+    "pre-candidate",
+]
+created_at = "2026-08-26T12:13:50Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T12:13:50Z"
+source = "M674 archive sha256=2EA379F5C1B102B15A4AE39F427DB1351BE2BEDC1BBABA5900DE3BA2BC671D8D; M660 archive sha256=9112E3559E17EFC642C614F4E4E4F28D96BA4BE7C3D74CB466A8EAAFCF161150; cause=M660 relaunched the rejected minecart-collision-transfer semantic contract after M674 and reached the same pre-oracle initiation barrier"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "e590803fa"
