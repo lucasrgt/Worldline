@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M0Y3CJH928DNFTMC3Y383Y26"
+title = "Reject held-map marker fixtures with no official marker packets"
+lesson = "A held-map player-marker contract is not proven merely because two official Beta 1.7.3 players hold the same map item and map_0.dat exists. The fixture must first observe Packet131 kind-1 marker triples on the holder connection. If a bounded official cycle produces count=0 before the rotation/removal oracle, preserve the server and cycle logs, reject the contract after the retry limit, and do not promote the static decoder or TestKit surface."
+scope = [
+    "smokes/m657-map-player-marker/**",
+    "adapters/b173-server/src/main/java/worldline/b173server/B173MapMarkerAccess.java",
+]
+tags = [
+    "map",
+    "protocol",
+    "fixture",
+    "rejection",
+]
+created_at = "2026-08-26T03:56:26Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T03:56:25Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-wave-m642-m666/m657-map-player-marker/.worldline/smoke-logs/m657-map-player-marker.log sha256=3A70499AAB599156204ED0453462C9E938315A022AC55F485893DA8656D51712 verify.sha256=69C1B73612E9390143C342456898FBF41E0CA24D13A2F4BD87365A3061603BE4 server.sha256=D98DCA4B584CA2919138958A09879A047305737D71B78F916D0012660BF7745F"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "bf426259e"
