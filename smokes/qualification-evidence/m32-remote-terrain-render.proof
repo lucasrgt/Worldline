@@ -1,5 +1,5 @@
 schema=1
 id=m32-remote-terrain-render
-fingerprint=af45674acce8fa61780da0091d31e17049e21a33ff95f4a7e33dbabe855b9b40
+fingerprint=7969e06625680b23b41edc0ff637989f3bc50a64842ef37e5b58621102a30760
 observation.sha256=8ab27db9856d254fb37722a9a184bab33b932cd8b8f3d5a9ce4858940bb4d04d
 source=refactor-equivalent

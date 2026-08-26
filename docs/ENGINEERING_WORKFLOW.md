@@ -110,6 +110,9 @@ empty client and server columns. New supervised data-driven cycles declare `expe
 SHA-256 must equal `expected.signature`, the exact trace must appear in `MAP.md`, and runtime must
 emit that bound signature. Flowing-water freeze fixtures may not notify neighbors while installing
 their moving-water control before the initial still/moving pair has been observed.
+Passive-animal spawner fixtures must declare a grass substrate in the exact trace and construct it
+through the observed placement boundary before readiness passes. Retargeting a saved spawner on a
+stone-only floor is an unreachable Packet24 oracle and may not consume the runtime lease.
 packed-control detector balances nested condition parentheses before inspecting the body, preventing
 valid braced controls from being rejected as packed source. The
 semantic-map comparison recalls `NYA-01M0YSJXNA3TK6FHQW4QJ5RJZ5`. The interlock compiles the

@@ -1,5 +1,5 @@
 schema=1
 id=m127-cross-chunk-redstone-recovery
-fingerprint=d5fc41292f155990efff1146f716828f951a1dcdc28cd168853764abf03cb0b9
+fingerprint=d1128646738afa79b659ab9470e1f788f009d42fff802afebaa668b99a9e5644
 observation.sha256=269f3a7043dc7c483f160233c36890ef075faf03e36300801aa5779f06b05aa2
 source=refactor-equivalent

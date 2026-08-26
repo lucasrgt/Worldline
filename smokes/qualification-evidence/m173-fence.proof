@@ -1,5 +1,5 @@
 schema=1
 id=m173-fence
-fingerprint=76b35d69a3d5142d675801bbb30a00b118334de5165924892e961ff3b0f21e5e
+fingerprint=cb0cb31b885be99fb63e2228e53b68e819097920a54ca1fde1d16f3a82a4319c
 observation.sha256=87da22ea0cb364e70239d8989a677f835f86ebbe9768dee6955f04ee4be1f74e
 source=refactor-equivalent

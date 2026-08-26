@@ -1,5 +1,5 @@
 schema=1
 id=m522-sw-personal-slot-swap
-fingerprint=202126b1be3d8ad6a833e2f020f838bedb2b6383fcae5b72c9b2657583f8c222
+fingerprint=17aa7818220dd861e9d828d83642624fd71c0c923d4f993639d5d5add84666a6
 observation.sha256=e968302dd1f7e0be9f133f8956a2512b5203382b0ba53d07fbb0b1028b5586fe
 source=refactor-equivalent

@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M1010FS72HJ1PYFF012YCW7D"
+title = "Prove passive-spawner substrate before runtime"
+lesson = "Retargeting a saved MobSpawner to Chicken does not make a raised stone floor spawn-capable. Before official runtime, a passive-animal spawner fixture must declare and construct the vanilla spawn prerequisites, including a grass substrate and suitable light/space, then observe the exact pre-spawn geometry. Reuse an archived qualified passive-spawner fixture or fail readiness; do not wait for Packet24 from a geometrically unreachable oracle."
+scope = [
+    "smokes/*chicken*/src/**/*.java",
+    "tools/harness/CandidatePolicyReadiness.java",
+]
+tags = [
+    "milestone",
+    "spawner",
+    "fixture",
+    "pre-runtime",
+]
+created_at = "2026-08-26T21:53:21Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T21:53:21Z"
+source = "M662 qualify-attempt5 archive sha256=EEB776E461EFBA071AF866C4C5EFCB68212A2A4CBFACA0AB767577426BD78C82 checkpoint10 archive sha256=8BA07FD05B5E44077CB39EE1746B267CF9DEF6791F3995C36C173C4C234EF293 cause=retargeted chicken spawner on raised enclosed stone fixture produced no Packet24 before deadline while qualified M407/M389 use raised 7x7 grass substrate"
+reported_by = "codex:root-supervisor"
+corrected_by = "codex:root-supervisor"
+recorded_by = "codex:root-supervisor"
+commit = "f6305e747"

@@ -103,6 +103,9 @@ six-column symbol row against the exact hashed `mappings.tiny`, and rejects any 
 trace must be present in `MAP.md`, hash to `expected.signature`, and bind the runtime signature. A
 flowing-water freeze fixture must install its moving-water control without notifying neighbors
 before it proves the initial still/moving pair.
+A passive-animal spawner fixture must recall `NYA-01M1010FS72HJ1PYFF012YCW7D`, declare its grass
+substrate in the exact trace, and construct that substrate through the observed placement helper
+before runtime. Retargeting a saved spawner alone does not establish a reachable Packet24 oracle.
 Candidate Gate fails closed when the report is missing or any file changed afterward.
 Every candidate with smoke sources must recall `NYA-01M0YH9M17ETMZA0F5X7981K4P`; textual review
 of imports or method signatures never substitutes for that exact compilation.

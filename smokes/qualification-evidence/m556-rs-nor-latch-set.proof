@@ -1,5 +1,5 @@
 schema=1
 id=m556-rs-nor-latch-set
-fingerprint=73b4392d76690fe5eeed98f8ff7ac5c3defc1f784e9647a69f3c0fe7bc09b3a1
+fingerprint=c0f31b4e8cf9d9a350170cba0fa1aac1856793d22932e877cc6a75b7bd538f00
 observation.sha256=eb3281691461d7e9823245dcc3d2c552caaa8fd1e2f82bb20ad42a82349218d3
 source=refactor-equivalent

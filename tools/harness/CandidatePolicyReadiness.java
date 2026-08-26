@@ -12,9 +12,12 @@ final class CandidatePolicyReadiness {
     static final String STATEMENTS = "NYA-01M0ZNQMM5YM02Z1FQQGB97HE1";
     static final String FLOWING_WATER = "NYA-01M0ZNQNP5W87J0NNW7219ZNFQ";
     static final String DATA_TRACE = "NYA-01M0ZNQP9E7K1X69DBZXFGB8PR";
+    static final String PASSIVE_SPAWNER = "NYA-01M1010FS72HJ1PYFF012YCW7D";
     private static final Pattern NOTIFYING_FLOWING_WATER = Pattern.compile(
             "setBlockAndMetadataWithNotify\\s*\\([^;]{0,400}Block[.]waterMoving[.]blockID",
             Pattern.DOTALL);
+    private static final String PASSIVE_GEOMETRY =
+            "B173PassiveSpawnerFixture.verifyGrassSpawnCell";
 
     private CandidatePolicyReadiness() {
     }
@@ -33,6 +36,9 @@ final class CandidatePolicyReadiness {
         if ("flowing-water-freeze".equals(descriptor.getProperty("behavior"))) {
             verifyFlowingWaterFixture(milestone);
         }
+        if ("chicken-fall-immunity".equals(descriptor.getProperty("behavior"))) {
+            verifyPassiveSpawnerFixture(milestone, descriptor);
+        }
     }
 
     static List<String> applicable(Path root, String id, Properties descriptor) {
@@ -45,6 +51,9 @@ final class CandidatePolicyReadiness {
         }
         if ("flowing-water-freeze".equals(descriptor.getProperty("behavior"))) {
             result.add(FLOWING_WATER);
+        }
+        if ("chicken-fall-immunity".equals(descriptor.getProperty("behavior"))) {
+            result.add(PASSIVE_SPAWNER);
         }
         return List.copyOf(result);
     }
@@ -62,10 +71,28 @@ final class CandidatePolicyReadiness {
         verifyTrace(descriptor, trace);
         descriptor.setProperty("expected.signature", "0".repeat(64));
         rejects(() -> verifyTrace(descriptor, trace), "drifted trace signature was accepted");
-        verifyFlowSource("setBlockAndMetadata(x, y, z, Block.waterMoving.blockID, 1);");
+        String validFlow = "setBlockAndMetadata(x, y, z, Block.waterMoving.blockID, 1);\n"
+                + "int[] state = observation();\n"
+                + "require(state[0] == Block.waterStill.blockID, \"still\");\n"
+                + "require(state[2] == Block.waterMoving.blockID, \"flowing\");\n"
+                + "ambientPass();";
+        verifyFlowSource(validFlow);
         rejects(() -> verifyFlowSource(
                 "setBlockAndMetadataWithNotify(x, y, z, Block.waterMoving.blockID, 1);"),
                 "notifying flowing-water setup was accepted");
+        rejects(() -> verifyFlowSource("ambientPass();\n" + validFlow),
+                "flowing-water observation after scheduling was accepted");
+        String validSpawner = "B173SpawnerSeed.chicken(workspace, spawner);\n"
+                + PASSIVE_GEOMETRY + "(view, support);\nawaitChicken(actor);";
+        verifyPassiveSpawnerSource("fixture=raised-grass-platform+open-sky", validSpawner);
+        rejects(() -> verifyPassiveSpawnerSource("fixture=raised-grass-platform", validSpawner),
+                "unlit passive-spawner trace was accepted");
+        rejects(() -> verifyPassiveSpawnerSource("fixture=raised-grass-platform+open-sky",
+                "B173SpawnerSeed.chicken(workspace, spawner);\nawaitChicken(actor);"),
+                "passive spawner without observed geometry was accepted");
+        rejects(() -> verifyPassiveSpawnerSource("fixture=raised-grass-platform+open-sky",
+                "awaitChicken(actor);\n" + PASSIVE_GEOMETRY + "(view, support);"),
+                "passive-spawner geometry observed after spawn wait was accepted");
     }
 
     private static void verifySymbols(Path root, Properties descriptor, Path symbols)
@@ -123,18 +150,49 @@ final class CandidatePolicyReadiness {
     }
 
     private static void verifyFlowingWaterFixture(Path milestone) throws Exception {
+        verifyFlowSource(sources(milestone));
+    }
+
+    private static void verifyFlowSource(String source) {
+        require(!NOTIFYING_FLOWING_WATER.matcher(source).find(),
+                "flowing-water fixture notifies neighbors before its initial-state proof");
+        int observation = source.indexOf("int[] state = observation()");
+        int still = source.indexOf("state[0] == Block.waterStill.blockID", observation);
+        int flowing = source.indexOf("state[2] == Block.waterMoving.blockID", observation);
+        int scheduler = source.indexOf("ambientPass()");
+        require(observation >= 0 && still > observation && flowing > observation,
+                "flowing-water fixture does not prove its initial still/moving pair");
+        require(scheduler > still && scheduler > flowing,
+                "flowing-water fixture enters ambient scheduling before its initial-state proof");
+    }
+
+    private static void verifyPassiveSpawnerFixture(Path milestone, Properties descriptor)
+            throws Exception {
+        verifyPassiveSpawnerSource(required(descriptor, "expected.trace"), sources(milestone));
+    }
+
+    private static void verifyPassiveSpawnerSource(String trace, String source) {
+        require(source.contains("B173SpawnerSeed.chicken"),
+                "chicken fall fixture does not use the reviewed chicken spawner seed");
+        require(trace.contains("grass") && trace.contains("open-sky"),
+                "passive-spawner trace does not declare grass and open-sky prerequisites");
+        int geometry = source.indexOf(PASSIVE_GEOMETRY);
+        int spawn = source.indexOf("awaitChicken");
+        if (spawn < 0) {
+            spawn = source.indexOf("awaitMobSpawn(93");
+        }
+        require(geometry >= 0 && spawn > geometry,
+                "passive-spawner geometry is not observed before the Packet24 wait");
+    }
+
+    private static String sources(Path milestone) throws Exception {
         StringBuilder source = new StringBuilder();
         for (Path file : SafeTreeDelete.paths(milestone.resolve("src")).stream()
                 .filter(Files::isRegularFile)
                 .filter(path -> path.toString().endsWith(".java")).toList()) {
             source.append(Files.readString(file, StandardCharsets.UTF_8)).append('\n');
         }
-        verifyFlowSource(source.toString());
-    }
-
-    private static void verifyFlowSource(String source) {
-        require(!NOTIFYING_FLOWING_WATER.matcher(source).find(),
-                "flowing-water fixture notifies neighbors before its initial-state proof");
+        return source.toString();
     }
 
     private static String digest(String value) throws Exception {

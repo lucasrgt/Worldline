@@ -1,5 +1,5 @@
 schema=1
 id=m460-monster-bed-interrupt-set
-fingerprint=ad8ae7efb0db5b03b2fbb1c5eb2efe0b7fd178dd08749b650122f84c4232b663
+fingerprint=859e4227027ee7051597918cc030c40bb550bac5f42ff375cea3764523f97f9a
 observation.sha256=fa58ada55be2832285f313973cf389f37a678482be07caf247515cebc8e150af
 source=refactor-equivalent

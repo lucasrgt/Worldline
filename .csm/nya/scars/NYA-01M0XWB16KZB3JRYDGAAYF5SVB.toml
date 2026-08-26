@@ -20,3 +20,11 @@ reported_by = "codex:m655-ox-alpha"
 corrected_by = "codex:m655-ox-alpha"
 recorded_by = "codex:m655-ox-alpha"
 commit = "6c123ddf3"
+
+[[occurrences]]
+occurred_at = "2026-08-26T21:45:37Z"
+source = "M665 pre-candidate attempt5 log sha256=A6AFB1519F45E0805552A0E7F44AD358B2FFEBD9718FE7E9FD4072E578E4DFAA base=f6305e7471c9cedf92b117b4907549c2d024145a cause=LeafSupportDistanceSmoke referenced worldline.test.WorldlineSmokeAwait outside the candidate compile closure"
+reported_by = "codex:root-supervisor"
+corrected_by = "opencode:glm-5.3-flash"
+recorded_by = "codex:root-supervisor"
+commit = "f6305e747"
