@@ -1,5 +1,11 @@
 # Ox Alpha supervised milestone worker contract
 
+The supervisor launches OpenCode only through `OxAlphaLauncher`. The launcher places the worker
+message before every variadic `-f` attachment, fixes the reviewed model and effort variant, denies
+nested task delegation in the executable agent permission map, and writes immutable stdout, stderr,
+session, exit, base, and HEAD evidence for every attempt. A direct or ad hoc `opencode run` command
+cannot establish a supervised worker receipt.
+
 The supervisor must run `SwarmLoop preflight` with the exact immutable wave closure and supervised
 micro-wave receipt before the worker edits or scaffolds anything. The worker ID must be listed in
 that receipt, and total top-level Candidate workers must not exceed its adaptive width.

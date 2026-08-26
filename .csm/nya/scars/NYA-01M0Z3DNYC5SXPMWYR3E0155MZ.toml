@@ -1,0 +1,24 @@
+schema = 1
+id = "NYA-01M0Z3DNYC5SXPMWYR3E0155MZ"
+title = "Place OpenCode message before variadic file attachments"
+lesson = "The installed opencode run CLI treats -f/--file as a variadic array. A supervised launcher must place the positional message before every -f attachment, validate that ordering in a self-test, inject the Ox Alpha permission profile with task denied, and preserve stdout/stderr plus exit code. Passing the message after -f makes OpenCode treat the full prompt as a file path and starts no worker."
+scope = [
+    "tools/integration/OxAlphaLauncher.java",
+    "tools/harness/IntegrationToolsCheck.java",
+    "coordination/swarm/OX_ALPHA_PROMPT.md",
+    "docs/ENGINEERING_WORKFLOW.md",
+]
+tags = [
+    "opencode",
+    "launcher",
+    "argv",
+]
+created_at = "2026-08-26T13:16:16Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T13:16:16Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/micro-wave1-opencode-variadic-file-launch-6586e7de3.zip sha256=73A925419FF511473423CE0FD1ACBA841B4E408CC55060A9EA5CF1A306C384FD cause=four clean preflighted invocations placed the positional message after variadic -f and exited before session creation"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "6586e7de3"

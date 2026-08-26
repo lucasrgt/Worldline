@@ -61,6 +61,13 @@ at four, caps width by live CPU and free-memory capacity, grows to the measured 
 clean barrier, and falls to one after recurrence, dirty/stranded state, or systemic failure.
 Official milestone runtime remains serialized by the existing cross-platform lease.
 
+After preflight, invoke the worker through `OxAlphaLauncher` in `checkpoint` phase. The launcher
+binds the approved Luna model at maximum effort, denies nested OpenCode task delegation, places the
+positional worker message before variadic prompt attachments, and preserves immutable attempt logs
+and a launch receipt. Direct `opencode run` invocations are not supervised evidence. After the
+worker stops at its checkpoint, run `SwarmLoop pre-candidate` and resume the same recorded session
+through the launcher's `qualify` phase.
+
 Before Candidate Gate, the supervisor runs `SwarmLoop pre-candidate` against the same authorized
 base and goal. It recalls each applicable scar separately, rejects stale generated narratives,
 lane-census drift, semantic maps missing the exact descriptor signal, packed control bodies, long

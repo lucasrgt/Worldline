@@ -141,6 +141,9 @@ final class IntegrationToolsCheck {
             require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "SwarmLoop", "--self-test"), 60) == 0, "swarm loop self-test failed");
             require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
+                    "OxAlphaLauncher", "--self-test"), 60) == 0,
+                    "Ox Alpha launcher self-test failed");
+            require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "SwarmDashboard", "--self-test"), 60) == 0, "swarm dashboard self-test failed");
             require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "ChangelogPartition", "--self-test"), 60) == 0,
