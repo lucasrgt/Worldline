@@ -1,0 +1,26 @@
+schema = 1
+id = "NYA-01M0Z7KK0170B2Y5NVAK3R3PFQ"
+title = "Resume quota-limited sessions through an allowlisted fallback"
+lesson = "When a reviewed OpenCode provider reaches its usage limit after a worker has produced a dirty checkpoint, classify the attempt RETRYABLE, archive the exact session, logs, patch, and untracked sources, and resume that same session through an explicitly allowlisted fallback profile. Never open a replacement milestone, silently change models, or discard the first model's work; record both models and the profile in immutable launcher receipts."
+scope = [
+    "tools/integration/OxAlphaLauncher.java",
+    "tools/integration/OxAlphaWorker.java",
+    "tools/integration/OxAlphaProfile.java",
+    "tools/harness/IntegrationToolsCheck.java",
+    "coordination/swarm/OX_ALPHA_PROMPT.md",
+    "docs/ENGINEERING_WORKFLOW.md",
+]
+tags = [
+    "opencode",
+    "quota",
+    "retry",
+]
+created_at = "2026-08-26T14:29:24Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T14:29:24Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/micro-wave-m662-m665-rate-limit-735ee4343.zip sha256=372954B6AE6F19D02C30156B0E42B4CCDFE112FB879C2C23D0C543418177EE9F patches.sha256=6C83479419B0C48BE595FB7E78174D4ADADE86110D28BC6795DBF1FE7238EF0A cause=opencode-go 5-hour usage limit exhausted after four sessions created real dirty checkpoint work"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "735ee4343"

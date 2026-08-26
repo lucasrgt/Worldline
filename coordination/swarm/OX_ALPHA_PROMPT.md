@@ -8,6 +8,9 @@ cannot establish a supervised worker receipt.
 The launcher must close the child stdin immediately after process creation. In non-interactive run
 mode, an open parent pipe prevents OpenCode from observing EOF and can leave every parallel worker
 alive without creating a session or producing an edit. The executable self-test must prove EOF.
+If the primary provider reports a usage limit, classify and archive the attempt before setting
+`WORLDLINE_OX_ALPHA_FALLBACK=1`. The allowlisted free fallback may resume only the same receipt-bound
+session and dirty worktree on a later attempt; it may not open a replacement milestone or session.
 
 The supervisor must run `SwarmLoop preflight` with the exact immutable wave closure and supervised
 micro-wave receipt before the worker edits or scaffolds anything. The worker ID must be listed in

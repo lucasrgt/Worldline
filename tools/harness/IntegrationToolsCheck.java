@@ -26,6 +26,9 @@ final class IntegrationToolsCheck {
         require(run(root, List.of(javaTool("java"), root.resolve(
                 "tools/integration/WorktreeLifecycleLauncher.java").toString(), "--self-test"), 180) == 0,
                 "worktree lifecycle source launcher did not compile its closure");
+        require(run(root, List.of(javaTool("java"), root.resolve(
+                "tools/integration/OxAlphaLauncher.java").toString(), "--self-test"), 180) == 0,
+                "Ox Alpha source launcher did not compile its closure");
         selfTest(output);
         System.out.println("  integration tools: compiled and self-tested");
     }
@@ -141,7 +144,7 @@ final class IntegrationToolsCheck {
             require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "SwarmLoop", "--self-test"), 60) == 0, "swarm loop self-test failed");
             require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
-                    "OxAlphaLauncher", "--self-test"), 60) == 0,
+                    "OxAlphaWorker", "--self-test"), 60) == 0,
                     "Ox Alpha launcher self-test failed");
             require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "SwarmDashboard", "--self-test"), 60) == 0, "swarm dashboard self-test failed");

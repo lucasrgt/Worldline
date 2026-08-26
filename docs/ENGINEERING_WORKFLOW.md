@@ -69,6 +69,9 @@ worker stops at its checkpoint, run `SwarmLoop pre-candidate` and resume the sam
 through the launcher's `qualify` phase.
 The launcher closes the child's stdin pipe immediately after creation so non-interactive OpenCode
 observes EOF and creates a session. Its self-test fails if a child can remain blocked on stdin.
+After an archived primary-provider quota failure, the supervisor may set
+`WORLDLINE_OX_ALPHA_FALLBACK=1` to resume the same receipt-bound session on the allowlisted free
+profile. The launch receipt records both the profile and model; a new session or ID fails closed.
 
 Before Candidate Gate, the supervisor runs `SwarmLoop pre-candidate` against the same authorized
 base and goal. It recalls each applicable scar separately, rejects stale generated narratives,
