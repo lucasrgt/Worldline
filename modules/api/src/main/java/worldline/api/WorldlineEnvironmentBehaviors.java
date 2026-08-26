@@ -22,6 +22,8 @@ public final class WorldlineEnvironmentBehaviors {
             "Unhydrated farmland reverts to dirt after random ticks with no nearby water");
     public static final WorldlineBehavior LIGHTNING_FIRE = define("lightning-fire",
             "A lightning entity ignites supported air on normal difficulty while easy does not");
+    public static final WorldlineBehavior SKY_BRIGHTNESS_CYCLE = define("sky-brightness-cycle",
+            "Clear Overworld time drives the canonical skylight-subtraction cycle");
 
     private WorldlineEnvironmentBehaviors() {}
 

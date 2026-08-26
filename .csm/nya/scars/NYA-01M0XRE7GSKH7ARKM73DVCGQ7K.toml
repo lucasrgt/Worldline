@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M0XRE7GSKH7ARKM73DVCGQ7K"
+title = "Update the canonical smoke lane census with each milestone"
+lesson = "Before the integration Gate, classify every newly added smoke in the canonical lane census and increment both total and exactly one lane count. Derive the expected counts from SmokeLane classification; do not wait for the repository Gate to discover a stale census, and never change unrelated lane counts."
+scope = [
+    "quality/smoke-lanes.properties",
+    "smokes/*/smoke.properties",
+    "tools/harness/SmokeLane.java",
+]
+tags = [
+    "milestone",
+    "integration-train",
+    "smoke-lane",
+]
+created_at = "2026-08-26T00:45:05Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T00:45:05Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/train-m654-gate-lane-census-failure-verify.json sha256=A32BE01BF9B0B89AAB61C26303C782E1CB1D1BF47DB5D3E5F91857A7239F68EE cause=server-headless milestone raised catalog to 600 while census remained 599"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "4cc0b8160"

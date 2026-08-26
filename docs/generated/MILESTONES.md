@@ -588,8 +588,9 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m645-note-pitch-ladder` | CARRIED | note block pitch ladder |
 | `m649-chest-access-constraints` | CARRIED | chest access constraints |
 | `m651-portal-invalid-frame` | CARRIED | portal invalid frame rejection |
-| `m652-portal-reentry-cooldown` | EXECUTED | portal re-entry cooldown |
+| `m652-portal-reentry-cooldown` | CARRIED | portal re-entry cooldown |
 | `m653-chunk-restart-persistence` | CARRIED | chunk restart persistence |
+| `m654-sky-brightness-cycle` | EXECUTED | sky brightness cycle |
 | `m702-powered-rail-slope-propagation` | CARRIED | powered rail slope propagation |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |

@@ -1,5 +1,5 @@
 schema=1
 id=m152-fire-wool-consumption
-fingerprint=9385ddcb174ccf8fc8e11a48863c03b7a80f4098a90a5582c0d95253cbe4d191
+fingerprint=f3bf69535f03049b17f08ae23e5032a41c1a02afe70e6c3e97eeaba09eb9eb42
 observation.sha256=76938b3c1a673ae193cb53be581ebf52977feb975f5edc7a614a544267681e46
 source=refactor-equivalent

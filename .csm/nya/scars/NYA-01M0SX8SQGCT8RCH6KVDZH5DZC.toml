@@ -28,3 +28,11 @@ reported_by = "codex:root"
 corrected_by = "codex:root"
 recorded_by = "codex:root"
 commit = "4f2ab9b7c"
+
+[[occurrences]]
+occurred_at = "2026-08-25T23:47:53Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/train-m654-testkit-cycle-partial-evidence-failure.txt sha256=F24F67F24033F198BCEF3DC8C8875B4F61B6B1CB2328C5F52AF56254F32B7261 cause=partial local testkit-cycle attestation blocked complete predecessor fallback"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "4cc0b8160"

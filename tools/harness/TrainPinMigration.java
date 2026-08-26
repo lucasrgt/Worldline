@@ -43,8 +43,7 @@ final class TrainPinMigration {
         Properties lock = new Properties(); lock.setProperty("schema", "1");
         Properties predecessor = predecessor(root, "HEAD");
         lock.setProperty("base", BASE);
-        TrainSourceHistory.load(root).writeSources(
-                root, lock, predecessor, predecessor(root, "HEAD^"), BASE);
+        TrainSourceHistory.load(root).writeSources(root, lock, predecessor, predecessor, BASE);
         Map<String, SmokePins.Entry> baseline = baseline(root);
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
         TrainPinHistory history = TrainPinHistory.load(root);
@@ -57,7 +56,8 @@ final class TrainPinMigration {
             SmokePins.Entry prior = baseline.get(smoke.id);
             lock.setProperty(stem + "current_fingerprint", current);
             if (QUALIFICATIONS.contains(smoke.id)) {
-                Imported receipt = executed(root, cache, smoke, current);
+                Imported receipt = completeImported(swarm, smoke.id) ? imported(root, swarm, smoke.id) : null;
+                if (receipt == null && hasExecuted(root, smoke.id)) receipt = executed(root, cache, smoke, current);
                 if (receipt != null) {
                     executed++; seal(lock, stem, "executed", receipt.fingerprint,
                             current, receipt.evidence);
@@ -94,7 +94,7 @@ final class TrainPinMigration {
                     "milestone".equals(predecessor.getProperty(stem + "kind"));
             Imported receipt = completeImported(swarm, smoke.id)
                     ? imported(root, swarm, smoke.id) : null;
-            if (receipt == null && (!predecessorMilestone || completeExecuted(root, smoke.id)))
+            if (receipt == null && (!predecessorMilestone || hasExecuted(root, smoke.id)))
                 receipt = executed(root, cache, smoke, current);
             if (receipt == null && predecessorMilestone)
                 receipt = predecessor(predecessor, pins, smoke, current, stem);
@@ -149,11 +149,10 @@ final class TrainPinMigration {
         return new Imported(fingerprint, evidence, head, tree, base, signature);
     }
 
-    private static boolean completeExecuted(Path root, String id) {
+    private static boolean hasExecuted(Path root, String id) {
         return Files.isRegularFile(root.resolve(".worldline/reports/milestones").resolve(id + ".json"))
                 && Files.isRegularFile(root.resolve(".worldline/reports/smokes").resolve(id + ".properties"))
-                && Files.isRegularFile(root.resolve(".worldline/smoke-logs").resolve(id + ".log"));
-    }
+                && Files.isRegularFile(root.resolve(".worldline/smoke-logs").resolve(id + ".log")); }
 
     private static boolean completeImported(Path swarm, String id) { Path worktree = swarm.resolve(id);
         return Files.isRegularFile(worktree.resolve(".worldline/reports/milestones").resolve(id + ".json"))

@@ -1,5 +1,5 @@
 schema=1
 id=m388-hostile-drops-set
-fingerprint=2cfb8facaa1dea604cf20a64d56fc141e5acee30f46102aa47f7df14b61b3118
+fingerprint=115eecb5d78c34e20cac86b616e501b894e2045e11d671777a04c5bc9308f457
 observation.sha256=c8953605d41925e26176881751113247054635ee807d6cd4f5f76ca9e830cd19
 source=refactor-equivalent

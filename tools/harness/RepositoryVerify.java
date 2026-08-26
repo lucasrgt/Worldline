@@ -250,6 +250,7 @@ final class RepositoryVerify {
     }
 
     private void verifyMappingBatches(List<Path> outputs, List<String> modules) throws Exception {
+        qualificationBoundary();
         Path symbols = outputs.get(modules.indexOf("symbolgraph"));
         run(Arrays.asList("java", "-cp", symbols.toString(),
                 "worldline.symbolgraph.MappingBatchMain",

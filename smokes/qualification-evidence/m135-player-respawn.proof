@@ -1,5 +1,5 @@
 schema=1
 id=m135-player-respawn
-fingerprint=54f177158378187d36f10c8e8c9182a226196d8fae4deb4c74c0e08ee166481c
+fingerprint=1be07c99252530d884344ac7c01771f1fe5617e5c18ce8bb85169665e116fe84
 observation.sha256=22275e37f5b927fb38ddbe53bfb3869f752fa11afe00efc1e57d41edca84f81a
 source=refactor-equivalent

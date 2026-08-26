@@ -1,7 +1,7 @@
 schema = 1
 id = "NYA-01M0Q8DPX3AYBXGDR2G9YXBXMD"
 title = "Classify fixed tick windows before polling migration"
-lesson = "A sustainTicks call followed by an assertion is not always a race: preserve intentional tick-duration claims behind a telemetered observation-window contract, use awaitSlot/awaitBlock/awaitEntity for asynchronous conditions, require migration transforms to be idempotent, recompute qualification fingerprints for reviewed source changes, bind portable LF source hashes to prior/current proofs, update data-driven plan pins only when prior/current cycle inputs differ, and leave unrelated pins unchanged."
+lesson = "A sustainTicks call followed by an assertion is not always a race: preserve intentional tick-duration claims behind a telemetered observation-window contract, use awaitSlot/awaitBlock/awaitEntity for asynchronous conditions, and require migration transforms to be idempotent. Leave a plan pin unchanged when its computed fingerprint is unchanged. A reviewed shared input may legitimately change multiple computed fingerprints; migrate only those entries through tracked refactor-equivalent proof envelopes that preserve the official observation hash, bind portable LF source hashes, and retain immediate-predecessor source ordering."
 scope = [
     "modules/smoketest/**",
     "smokes/**",
@@ -36,3 +36,11 @@ reported_by = "codex:m646_retry2"
 corrected_by = "codex:m646_retry2"
 recorded_by = "codex:m646_retry2"
 commit = "edff32783"
+
+[[occurrences]]
+occurred_at = "2026-08-26T00:23:45Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/train-m654-nya-unrelated-pin-ordering-failure.txt sha256=DB90CDD00DB63BFED44860515B0D27064E526396E53A364825529DD2D742025A cause=TrainPinMigration ordered sources from HEAD^ instead of the immediate predecessor lock"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "4cc0b8160"

@@ -38,6 +38,7 @@ public final class TestKitContractTest {
         ChestAccessFixtureTest.execute();
         PortalInvalidFrameFixtureTest.execute();
         PortalReentryCooldownFixtureTest.execute();
+        SkyBrightnessCycleFixtureTest.execute();
         NaturalSlimeSpawnFixtureTest.execute();
         SleepQuorumFixtureTest.execute();
         IceFormationFixtureTest.execute();

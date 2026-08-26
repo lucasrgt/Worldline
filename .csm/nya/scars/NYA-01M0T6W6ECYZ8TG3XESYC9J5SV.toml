@@ -20,3 +20,11 @@ reported_by = "codex:root"
 corrected_by = "codex:root"
 recorded_by = "codex:root"
 commit = "9b5e5802a"
+
+[[occurrences]]
+occurred_at = "2026-08-26T00:50:21Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/train-m654-gate-testkit-lock-failure-verify.json sha256=6E2B2B257E0195F68F7F93E57F8436187C815F7D8720FBFC975217EF7E8D73D9 cause=standalone package used stale module cache before canonical Gate rebuilt staged TestKit classes"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "4cc0b8160"

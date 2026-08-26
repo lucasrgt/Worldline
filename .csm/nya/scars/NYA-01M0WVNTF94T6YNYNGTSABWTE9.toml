@@ -1,7 +1,7 @@
 schema = 1
 id = "NYA-01M0WVNTF94T6YNYNGTSABWTE9"
 title = "Classify child-process qualification in the parent Gate"
-lesson = "When RepositoryVerify launches SmokeSuite in a child JVM, increment the parent GateWorkMetrics qualification counter before crossing the process boundary. Child static metrics cannot classify the parent Gate, and a pinned qualification sweep must be cold rather than incorrectly judged against the hot no-work SLO."
+lesson = "When RepositoryVerify launches SmokeSuite or runtime mapping batches in a child JVM, increment the parent GateWorkMetrics qualification counter before crossing the process boundary. Child static metrics cannot classify the parent Gate, and executed qualification work must be cold rather than incorrectly judged against the hot no-work SLO."
 scope = [
     "tools/harness/RepositoryVerify.java",
     "tools/harness/GateWorkMetrics.java",
@@ -21,3 +21,11 @@ reported_by = "codex:root"
 corrected_by = "codex:root"
 recorded_by = "codex:root"
 commit = "ef2fa5eaf"
+
+[[occurrences]]
+occurred_at = "2026-08-26T01:14:17Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/m654-sky-brightness-cycle/train-m654-runtime-hot-slo-attempt2-verify.json sha256=E8BA33BC0D5A759C462662E5AC7EABC000BC8250DC727D9D312D3B064BD7AAF3 cause=runtime mapping batches executed in child process while parent Gate work metrics remained fully restored"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "189c90b79"

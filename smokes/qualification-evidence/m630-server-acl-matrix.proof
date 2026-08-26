@@ -1,5 +1,5 @@
 schema=1
 id=m630-server-acl-matrix
-fingerprint=eb9332b17b6e179e14e1ac883fad27c104430df76a4e36a3d6eca41916d6ff9d
+fingerprint=65e4a3b323944b7397ebfd24a18f81c2e2bcf9c322a7d40b1b5c39236358b232
 observation.sha256=3d0d34de643ede45801a681b32e21657620358b048123ae816a46fc569e036b8
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m171-pumpkin
-fingerprint=319ee0f9a54f6bd69c0430b71f6748ff4e8890d99b551602f66d254795c1aaac
+fingerprint=dc8f846ea2d14a1685a1d9f51afff25d00a27cfc5464e79761e0c3b391a69447
 observation.sha256=239e38d65add8b63f1afa9dba90e1832f5b70b91bf6b6e5fee0df381e48c12e0
 source=refactor-equivalent

@@ -1,7 +1,7 @@
 schema = 1
 id = "NYA-01M0QN66R90HYV8X0WJH0V9FF9"
 title = "Never promote fingerprints without verified evidence bytes"
-lesson = "Portable qualification pins must bind a reviewed fingerprint to repository-tracked evidence bytes and verify the envelope digest before restoration; missing or corrupt evidence fails closed. Long-running coordinators must terminate descendants in reverse order and confirm death, immutable cache publishers must never replace existing digest directories, and lease tickets must bind PID plus process start time."
+lesson = "Portable qualification pins must bind a reviewed fingerprint to repository-tracked evidence bytes and verify the envelope digest before restoration; missing or corrupt evidence fails closed. When a reviewed shared input changes a computed fingerprint without changing the official observation, a refactor-equivalent migration must rewrite the tracked proof envelope and qualification lock to the same envelope digest while preserving the observation hash. Long-running coordinators must terminate descendants in reverse order and confirm death, immutable cache publishers must never replace existing digest directories, and lease tickets must bind PID plus process start time."
 scope = [
     "smokes/qualification.lock",
     "smokes/qualification-evidence/**",
@@ -24,3 +24,11 @@ reported_by = "user:fable-report"
 corrected_by = "codex:root"
 recorded_by = "codex:root"
 commit = "3d30fa44"
+
+[[occurrences]]
+occurred_at = "2026-08-26T00:33:14Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/train-m654-nya-shared-testkit-proof-envelope-failure.txt sha256=A8424CCEBCF1600614C769A0A088F478F5BACBB8226FA140FE5D84DBC3E352FE cause=NYA did not recognize tracked refactor-equivalent envelopes for shared TestKit fingerprint changes"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "4cc0b8160"

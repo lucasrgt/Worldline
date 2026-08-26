@@ -1,0 +1,24 @@
+schema = 1
+id = "NYA-01M0XM730NWRQDKFZ1VMP3732W"
+title = "Preserve empty mapping sides in smoke symbol anchors"
+lesson = "Before Candidate Gate, compare every six-column symbols.map row with the exact frozen mappings.tiny owner and method row. Client and server mapped names are independent and either side may be empty; preserve empty tab fields instead of copying the populated side. Run the symbol-anchor validation before committing or admitting official runtime."
+scope = [
+    "smokes/*/symbols.map",
+    "tools/smoke/*.java",
+    "tools/harness/CandidateCheck.java",
+]
+tags = [
+    "milestone",
+    "symbols-map",
+    "mappings",
+    "candidate-gate",
+]
+created_at = "2026-08-25T23:31:17Z"
+
+[[occurrences]]
+occurred_at = "2026-08-25T23:31:17Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/m654-sky-brightness-cycle-attempt1-retryable-c560caab/milestone-m654-sky-brightness-cycle-attempt1.log sha256=E4E015DFA3895083877426346691CDF51032B441C35F927B418127F4A3F2A8A1 attempts=0 cause=func_32005_b has empty client mapping and server b"
+reported_by = "codex:m646_retry2"
+corrected_by = "codex:root-supervisor"
+recorded_by = "codex:root"
+commit = "4cc0b8160"

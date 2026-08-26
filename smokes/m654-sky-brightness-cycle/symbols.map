@@ -1,0 +1,30 @@
+# owner kind descriptor named client server
+net/minecraft/src/World	c	-	net/minecraft/src/World	fd	dj
+net/minecraft/src/World	f	I	skylightSubtracted	f	f
+net/minecraft/src/World	m	(J)V	func_32005_b		b
+net/minecraft/src/World	m	(F)I	calculateSkylightSubtracted	a	a
+net/minecraft/src/World	m	()V	calculateInitialSkylight	k	g
+net/minecraft/src/World	m	()J	getWorldTime	t	m
+net/minecraft/src/Chunk	c	-	net/minecraft/src/Chunk	lm	hi
+net/minecraft/src/WorldInfo	c	-	net/minecraft/src/WorldInfo	ei	ct
+net/minecraft/src/WorldInfo	m	(III)V	setSpawnPosition		a
+net/minecraft/src/WorldProvider	c	-	net/minecraft/src/WorldProvider	xa	os
+net/minecraft/src/EntityPlayer	c	-	net/minecraft/src/EntityPlayer	gs	em
+net/minecraft/src/ISaveHandler	c	-	net/minecraft/src/ISaveHandler	wt	om
+net/minecraft/src/ISaveHandler	m	()Lnet/minecraft/src/WorldInfo;	func_22096_c		c
+net/minecraft/src/ISaveHandler	m	()V	func_22091_b		b
+net/minecraft/src/ISaveHandler	m	(Lnet/minecraft/src/WorldProvider;)Lnet/minecraft/src/IChunkLoader;	func_22092_a		a
+net/minecraft/src/ISaveHandler	m	(Lnet/minecraft/src/WorldInfo;Ljava/util/List;)V	func_22095_a		a
+net/minecraft/src/ISaveHandler	m	(Lnet/minecraft/src/WorldInfo;)V	func_22094_a		a
+net/minecraft/src/ISaveHandler	m	()Lnet/minecraft/src/IPlayerFileData;	func_22090_d		d
+net/minecraft/src/ISaveHandler	m	()V	func_22093_e		e
+net/minecraft/src/ISaveHandler	m	(Ljava/lang/String;)Ljava/io/File;	func_28111_b		b
+net/minecraft/src/IPlayerFileData	c	-	net/minecraft/src/IPlayerFileData		fl
+net/minecraft/src/IPlayerFileData	m	(Lnet/minecraft/src/EntityPlayer;)V	writePlayerData		a
+net/minecraft/src/IPlayerFileData	m	(Lnet/minecraft/src/EntityPlayer;)V	readPlayerData		b
+net/minecraft/src/IChunkLoader	c	-	net/minecraft/src/IChunkLoader	bf	an
+net/minecraft/src/IChunkLoader	m	(Lnet/minecraft/src/World;II)Lnet/minecraft/src/Chunk;	loadChunk	a	a
+net/minecraft/src/IChunkLoader	m	(Lnet/minecraft/src/World;Lnet/minecraft/src/Chunk;)V	saveChunk	a	a
+net/minecraft/src/IChunkLoader	m	(Lnet/minecraft/src/World;Lnet/minecraft/src/Chunk;)V	saveExtraChunkData	b	b
+net/minecraft/src/IChunkLoader	m	()V	func_661_a		a
+net/minecraft/src/IChunkLoader	m	()V	saveExtraData	b	b
