@@ -60,6 +60,9 @@ base and goal. It recalls each applicable scar separately, rejects stale generat
 lane-census drift, packed control bodies, long smoke lines, scaffold markers, and imports from a
 sibling milestone's private smoke sources, then writes a content-bound readiness report. Candidate
 Gate on a supervised milestone branch requires that PASS report and rejects any later source change.
+Packed-source prevention includes complete constructors, methods, and control bodies on one physical
+line, including empty constructors. Minecart-collision readiness additionally rejects remotely placed
+stone support geometry after the repeated pre-oracle reach failures recorded in NYA.
 
 After every worker, the supervisor preserves a verified Git bundle, binary patch, untracked source,
 logs, receipts, and a SHA-256 archive before recording a final disposition. `QUALIFIED` requires a

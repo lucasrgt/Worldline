@@ -47,3 +47,11 @@ reported_by = "codex:m655-ox-alpha"
 corrected_by = "codex:m655-ox-alpha"
 recorded_by = "codex:m655-ox-alpha"
 commit = "6c123ddf3"
+
+[[occurrences]]
+occurred_at = "2026-08-26T06:58:23Z"
+source = ".worldline/reports/swarm/csm-nya-check-m674-minecart-collision-transfer-rejected.log sha256=091FC30A8FD48D7EA5EDF10A3535BA138B0BEC34FC8D318B1DAB20BA4DFE525A cause=MinecartCollisionArm.java:17 packed constructor body escaped objective packed-control regex"
+reported_by = "codex:m646_retry2"
+corrected_by = "codex:m646_retry2"
+recorded_by = "codex:m646_retry2"
+commit = "ee26d2e43"

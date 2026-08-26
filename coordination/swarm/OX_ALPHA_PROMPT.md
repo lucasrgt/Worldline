@@ -35,6 +35,8 @@ Before a Gate path launches SmokeSuite or runtime mapping batches in a child JVM
 qualification is cold work and must never be judged against the hot no-work SLO.
 Treat any nonzero packed-line count reported by Candidate Gate as fail-closed even if that tier
 passes; split the statements before committing so the canonical zero-growth ratchet cannot recur.
+The objective interlock must also reject a constructor, method, or control body that opens and
+closes on one physical line, including an empty constructor, before Candidate Gate.
 Keep every new Java line at or below 120 columns so a candidate cannot increase the global
 `*.long.files` or `*.long.lines` ratchets after isolated qualification.
 Before Candidate Gate, the supervisor must run `SwarmLoop pre-candidate` for the exact milestone,
@@ -45,6 +47,11 @@ When milestone work adds a recursive harness or orchestration scan, recall
 For portal cooldown or portal re-entry contracts, recall must also present
 `NYA-01M0XC2P1Y3MCKVAHJEAJXX16C`; prove suppression during continuous arrival-portal contact and
 pair it with a positive exit-and-reentry control from the same player.
+For minecart-collision contracts, recall must also present
+`NYA-01M0YCEZH1G2SKW1DVB1D4K3SB` and `NYA-01M0YDKWFZ4H1CCXE2TXCJC31G`.
+Stone supports are fixture geometry, not collision evidence: preprovision them deterministically
+instead of calling `B173FixtureSupport.place(..., 1)`. Observe required rail and support states
+before extending the fixture or starting the collision oracle.
 
 Nested task/explore/subagent delegation is forbidden because this launcher does not supervise
 nested work. Inspect the repository directly. A draft scaffold is fail-closed and is never a

@@ -21,18 +21,37 @@ final class CandidateReadiness {
     private static final String TOKENS = "NYA-01M0XFV9TPVDKFE6RARDHC84T2";
     private static final String SYMBOLS = "NYA-01M0XM730NWRQDKFZ1VMP3732W";
     private static final String TRAVERSAL = "NYA-01M0XYP7T1RKYFD3SJHC4DMHZ3";
+    private static final String MINECART_BARRIER = "NYA-01M0YCEZH1G2SKW1DVB1D4K3SB";
+    private static final String MINECART_REACH = "NYA-01M0YDKWFZ4H1CCXE2TXCJC31G";
     private static final Pattern IMPORT = Pattern.compile("(?m)^\\s*import\\s+([A-Za-z0-9_$.]+);\\s*$");
     private static final Pattern PACKAGE = Pattern.compile("(?m)^\\s*package\\s+([A-Za-z0-9_$.]+);\\s*$");
     private static final Pattern INLINE_CONTROL = Pattern.compile(
             "^\\s*(?:if|for|while)\\s*\\(.*\\)\\s+[^\\s{].*$");
+    private static final Pattern INLINE_CALLABLE = Pattern.compile(
+            "^\\s*(?:(?:public|protected|private|static|final|synchronized)\\s+)*"
+                    + "(?:[A-Za-z_$][\\w$<>\\[\\].?,]*\\s+)?[A-Za-z_$][\\w$]*\\s*"
+                    + "\\([^;{}]*\\)\\s*(?:throws\\s+[^{}]+)?\\{\\s*[^{}]*\\}\\s*$");
+    private static final Pattern REMOTE_STONE = Pattern.compile(
+            "B173FixtureSupport[.]place\\([^;]*,1\\);");
 
     private CandidateReadiness() { }
 
     static void selfTest() {
-        require(INLINE_CONTROL.matcher("    if (!value) throw new IllegalStateException();").matches(),
+        require(packedExecutable("    if (!value) throw new IllegalStateException();"),
                 "packed control body was not recognized");
-        require(!INLINE_CONTROL.matcher("    if (!value) {").matches(),
+        require(packedExecutable("    private Arm(boolean axisZ) { this.axisZ = axisZ; }"),
+                "packed constructor body was not recognized");
+        require(packedExecutable("    private Smoke() { }"),
+                "packed empty constructor was not recognized");
+        require(packedExecutable("    static void run() { execute(); }"),
+                "packed method body was not recognized");
+        require(!packedExecutable("    if (!value) {"),
                 "braced control body was rejected");
+        require(!packedExecutable("    int[] values = {1, 2};"),
+                "array initializer was rejected as executable packing");
+        require(hasRemoteStonePlacement(
+                "B173FixtureSupport.place(actor, pad, cross, 1);"),
+                "remote stone support was not recognized");
         require(IMPORT.matcher("import worldline.smoke.privatecycle.Helper;").find(),
                 "private import was not recognized");
     }
@@ -96,6 +115,10 @@ final class CandidateReadiness {
         if (git(root, "diff", "--name-only", base).lines().anyMatch(path ->
                 path.startsWith("tools/harness/") || path.startsWith("tools/integration/")))
             result.add(TRAVERSAL);
+        if (id.contains("minecart-collision")) {
+            result.add(MINECART_BARRIER);
+            result.add(MINECART_REACH);
+        }
         return List.copyOf(result);
     }
 
@@ -108,8 +131,16 @@ final class CandidateReadiness {
         List<Path> sources = javaFiles(milestone.resolve("src"));
         for (Path source : sources) for (String line : Files.readAllLines(source, StandardCharsets.UTF_8)) {
             require(line.length() <= 120, "long smoke line: " + root.relativize(source));
-            require(!INLINE_CONTROL.matcher(line).matches(),
-                    "inline control body repeats packed-source scar: " + root.relativize(source));
+            require(!packedExecutable(line),
+                    "packed executable body repeats source scar: " + root.relativize(source));
+        }
+        if (id.contains("minecart-collision")) {
+            for (Path source : sources) {
+                String text = Files.readString(source, StandardCharsets.UTF_8);
+                require(!hasRemoteStonePlacement(text),
+                        "remote stone support repeats minecart fixture scars: "
+                                + root.relativize(source));
+            }
         }
         Map<String, Path> smokeTypes = smokeTypes(root.resolve("smokes"));
         for (Path source : sources) {
@@ -140,6 +171,14 @@ final class CandidateReadiness {
         if (!Files.isDirectory(root)) return List.of();
         return SafeTreeDelete.paths(root).stream().filter(Files::isRegularFile)
                 .filter(path -> path.toString().endsWith(".java")).sorted().toList();
+    }
+
+    private static boolean packedExecutable(String line) {
+        return INLINE_CONTROL.matcher(line).matches() || INLINE_CALLABLE.matcher(line).matches();
+    }
+
+    private static boolean hasRemoteStonePlacement(String source) {
+        return REMOTE_STONE.matcher(source.replaceAll("\\s+", "")).find();
     }
 
     private static Map<String, Object> preflight(Path root, String id) throws Exception {

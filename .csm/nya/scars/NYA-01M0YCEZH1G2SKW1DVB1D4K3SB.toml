@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M0YCEZH1G2SKW1DVB1D4K3SB"
+title = "Do not make minecart collision evidence depend on an unconfirmed remote barrier placement"
+lesson = "A minecart collision fixture must not treat an optional remotely placed barrier as established merely because the placement request was sent. If the barrier is not the behavior under test, use deterministic pre-provisioned geometry or remove it; if it is required, observe the exact block state before proceeding. Preserve the bounded placement timeout and never start the collision oracle after expected block state absent."
+scope = [
+    "smokes/*minecart*/**",
+    "adapters/b173-server/src/main/java/worldline/b173server/B173FixtureSupport.java",
+]
+tags = [
+    "minecart",
+    "fixture",
+    "causality",
+    "runtime",
+]
+created_at = "2026-08-26T06:35:02Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T06:35:02Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/m674-minecart-collision-transfer-d72931f35363.zip sha256=EFB1CF0CBB11BB67309F405840AA08E3994BA0B72DBEC2EC65656B7592576155 log.sha256=EEA7E534742500A57E78646BE512D3DC749075A04ECD02D66FC235F55740FE1D cause=expected block state absent before deadline at MinecartCollisionArm.barrier"
+reported_by = "codex:root"
+corrected_by = "codex:m646_retry2"
+recorded_by = "codex:root"
+commit = "f870679d9"

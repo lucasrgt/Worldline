@@ -54,6 +54,14 @@ recorded_by = "codex:root"
 commit = "0bc537d61"
 
 [[occurrences]]
+occurred_at = "2026-08-26T07:14:07Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/process-packed-constructor-precheck-gate1/verify.json sha256=AEA9A052E39696B4C630804CF759AA8CAEF5D6FFF44030975A097CB474209754 cause=readiness sources changed without a portable transition; migration also rewrote six unchanged executed prior fingerprints, restored from the immediate predecessor"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "3032211c6"
+
+[[occurrences]]
 occurred_at = "2026-08-26T03:40:42Z"
 source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/process-pre-candidate-recall-limit/nya-unchanged-pin-recurrence.txt sha256=573FAD691F56DB664612DDD0685388452F0D1C00A6095C4399A3D475983CDC04 cause=TrainPinMigration rewrote unchanged qualification prior fingerprints"
 reported_by = "codex:root"

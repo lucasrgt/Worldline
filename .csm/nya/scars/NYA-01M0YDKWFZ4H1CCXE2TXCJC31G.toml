@@ -1,0 +1,24 @@
+schema = 1
+id = "NYA-01M0YDKWFZ4H1CCXE2TXCJC31G"
+title = "Provision critical lateral minecart power supports within observed placement reach"
+lesson = "Before a remote minecart fixture relies on a lateral support to power a launch rail, place the actor within deterministic legal reach and observe the exact support and powered-rail states before extending the fixture. A bounded await correctly fails closed, but it cannot make an out-of-reach placement request causal."
+scope = [
+    "smokes/*minecart*/src/**/*.java",
+    "adapters/b173-server/src/main/java/worldline/b173server/B173FixtureSupport.java",
+]
+tags = [
+    "minecart",
+    "fixture",
+    "placement-reach",
+    "causality",
+    "runtime",
+]
+created_at = "2026-08-26T06:55:11Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T06:55:11Z"
+source = ".worldline/reports/swarm/milestone-m674-minecart-collision-transfer-attempt2.log sha256=C58A5AF646AF654DF7791BDBAB56774010C8DBB389C9B7AA85B2816E14C00D35 smoke.sha256=83912D49706FD278D0C42C02BF7B2BC96CEBB835091E8697F6CCB0597607A06B server.sha256=8A423C22EC2974E77EB063A06239628837FF332B21945FD1EB945BE0F4ADFE8D cause=expected block state absent before deadline at MinecartCollisionArm.ignite lateral torch support"
+reported_by = "codex:m646_retry2"
+corrected_by = "codex:m646_retry2"
+recorded_by = "codex:m646_retry2"
+commit = "ee26d2e43"
