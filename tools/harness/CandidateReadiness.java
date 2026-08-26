@@ -30,8 +30,6 @@ final class CandidateReadiness {
     private static final String MINECART_INITIATION = "NYA-01M0YMWRZX8V20G1SN0DYGB0MD";
     private static final Pattern IMPORT = Pattern.compile("(?m)^\\s*import\\s+([A-Za-z0-9_$.]+);\\s*$");
     private static final Pattern PACKAGE = Pattern.compile("(?m)^\\s*package\\s+([A-Za-z0-9_$.]+);\\s*$");
-    private static final Pattern INLINE_CONTROL = Pattern.compile(
-            "^\\s*(?:if|for|while)\\s*\\(.*\\)\\s+[^\\s{].*$");
     private static final Pattern INLINE_CALLABLE = Pattern.compile(
             "^\\s*(?:(?:public|protected|private|static|final|synchronized)\\s+)*"
                     + "(?:[A-Za-z_$][\\w$<>\\[\\].?,]*\\s+)?[A-Za-z_$][\\w$]*\\s*"
@@ -53,6 +51,10 @@ final class CandidateReadiness {
                 "packed method body was not recognized");
         require(!packedExecutable("    if (!value) {"),
                 "braced control body was rejected");
+        require(!packedExecutable("    if (ready(value)) {"),
+                "nested braced control body was rejected");
+        require(packedExecutable("    if (ready(value)) throw new IllegalStateException();"),
+                "nested packed control body was not recognized");
         require(!packedExecutable("    int[] values = {1, 2};"),
                 "array initializer was rejected as executable packing");
         require(hasRemoteStonePlacement(
@@ -224,7 +226,26 @@ final class CandidateReadiness {
     }
 
     private static boolean packedExecutable(String line) {
-        return INLINE_CONTROL.matcher(line).matches() || INLINE_CALLABLE.matcher(line).matches();
+        return packedControl(line) || INLINE_CALLABLE.matcher(line).matches();
+    }
+
+    private static boolean packedControl(String line) {
+        String text = line.stripLeading();
+        int open = text.indexOf('(');
+        if (open < 0 || !List.of("if", "for", "while").contains(
+                text.substring(0, open).stripTrailing())) {
+            return false;
+        }
+        int depth = 0;
+        for (int index = open; index < text.length(); index++) {
+            if (text.charAt(index) == '(') {
+                depth++;
+            } else if (text.charAt(index) == ')' && --depth == 0) {
+                String body = text.substring(index + 1).stripLeading();
+                return !body.isEmpty() && !body.startsWith("{");
+            }
+        }
+        return false;
     }
 
     private static boolean hasRemoteStonePlacement(String source) {

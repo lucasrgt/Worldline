@@ -68,6 +68,8 @@ Treat any nonzero packed-line count reported by Candidate Gate as fail-closed ev
 passes; split the statements before committing so the canonical zero-growth ratchet cannot recur.
 The objective interlock must also reject a constructor, method, or control body that opens and
 closes on one physical line, including an empty constructor, before Candidate Gate.
+It locates a control body only after the matching balanced condition parenthesis; do not rewrite a
+valid braced control merely because its condition contains nested calls.
 Before invoking that interlock, enumerate every added smoke-source line that contains a complete
 constructor, method, or control body and expand it to multiple physical lines. Zero matches is a
 mandatory worker checkpoint; an interlock failure is a `RETRYABLE` recurrence that must be

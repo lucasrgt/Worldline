@@ -1,0 +1,20 @@
+schema = 1
+id = "NYA-01M0ZGESPBCHZTNK5SV9SE3P8F"
+title = "Balance control parentheses before classifying packed bodies"
+lesson = "A packed-control readiness regex must inspect the body after the matching closing parenthesis of if, for, or while. Greedy matching against any earlier closing parenthesis falsely rejects valid braced controls containing nested calls or multiline conditions. Use a balanced-parenthesis scanner, keep callable-body detection separate, and self-test both a nested braced control that must pass and a nested inline throw that must fail."
+scope = ["tools/harness/CandidateReadiness.java"]
+tags = [
+    "readiness",
+    "source-policy",
+    "false-positive",
+    "harness",
+]
+created_at = "2026-08-26T17:04:04Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T17:04:04Z"
+source = "micro-wave readiness evidence: m662 ChickenFallImmunitySmoke.java:202; m663 SnowLayerWorld.java:101; m665 LeafSupportDistanceSmoke.java:68 were valid braced controls rejected before Candidate"
+reported_by = "codex:orchestrator"
+corrected_by = "codex:orchestrator"
+recorded_by = "codex:orchestrator"
+commit = "b9cad332a"

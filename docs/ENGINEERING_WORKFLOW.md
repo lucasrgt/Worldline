@@ -83,6 +83,8 @@ Before Candidate Gate, the supervisor runs `SwarmLoop pre-candidate` against the
 base and goal. It recalls each applicable scar separately, rejects stale generated narratives,
 lane-census drift, semantic maps missing the exact descriptor signal, packed control bodies, long
 smoke lines, scaffold markers, and imports from a sibling milestone's private smoke sources. The
+packed-control detector balances nested condition parentheses before inspecting the body, preventing
+valid braced controls from being rejected as packed source. The
 semantic-map comparison recalls `NYA-01M0YSJXNA3TK6FHQW4QJ5RJZ5`. The interlock compiles the
 runner, adapter,
 module, and smoke source closure with the Candidate compiler before it writes a content-bound
