@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M0Y8SVKQRHV9JY1DX029BN60"
+title = "Clear the selected hand before activating an interactive block"
+lesson = "An official protocol-14 fixture that loads or moves inventory items must explicitly select an empty hotbar slot and prove the held-item transition before activating a furnace or other interactive block. Otherwise the Worldline adapter correctly rejects the pre-oracle action; preserve the failed Gate evidence, classify the attempt RETRYABLE, and resume the same worktree with the empty-hand precondition."
+scope = [
+    "smokes/*/src/**/*.java",
+    "adapters/b173-server/src/main/java/worldline/b173server/B173HeldItemChannel.java",
+]
+tags = [
+    "runtime",
+    "fixture",
+    "held-item",
+    "block-activation",
+]
+created_at = "2026-08-26T05:31:04Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T05:31:04Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/m658-furnace-restart-progress-attempt1-096c9eeab.zip sha256=5442C64FDAD63161249F1A9786D46BFF1736EB0BC02AF59BEAF2BBED92BFF6FD log.sha256=0242AB781E573CE4981CC454293B05601DD18DFE9084C5126223D82EE70C29FD cause=block activation requires an empty selected hand"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "096c9eeab"

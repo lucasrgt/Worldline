@@ -21,6 +21,12 @@ frozen semantic signal and that every `atlas.subsystems` value belongs to `Atlas
 Before Candidate Gate for a data-driven cycle, recall `NYA-01M0XWB16KZB3JRYDGAAYF5SVB` and
 verify source closure from `cycle.inputs` and `cycle.compile.products`; never import a private
 helper owned by another smoke when a maintained shared protocol surface supplies the behavior.
+When a protocol fixture activates an interactive block after loading or moving inventory, recall
+`NYA-01M0Y8SVKQRHV9JY1DX029BN60`. Before Candidate Gate, enumerate every activation call and
+require an immediately preceding bounded proof that the selected hotbar slot is empty; a requested
+slot change without an authoritative observed selection is not sufficient. For furnace restart
+progress, recall `NYA-01M0Y96GN4DJTBWMYC36KDXHNA`: recovered inventory alone is a non-proof, and
+qualification requires a bounded post-restart Packet105 snapshot with nonzero cook and burn.
 Before the integration Gate, recall `NYA-01M0XRE7GSKH7ARKM73DVCGQ7K`, classify each newly added
 smoke with `SmokeLane`, and increment the canonical total plus exactly one lane count in
 `quality/smoke-lanes.properties`; leave every unrelated lane count unchanged.

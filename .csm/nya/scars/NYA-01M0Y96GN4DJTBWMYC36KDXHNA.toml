@@ -1,0 +1,24 @@
+schema = 1
+id = "NYA-01M0Y96GN4DJTBWMYC36KDXHNA"
+title = "Reject furnace restart contracts without a recovered progress snapshot"
+lesson = "Recovered furnace inventory after a clean official server restart does not prove that cook or burn progress persisted. The fixture must observe a bounded post-restart Packet105 progress snapshot with nonzero cook and burn before claiming recovery. If the inventory reopens but the progress observation remains absent after the bounded final attempt, preserve the world, Gate, cycle, and server logs, classify the contract REJECTED, and do not promote its static API or TestKit surfaces."
+scope = [
+    "smokes/m658-furnace-restart-progress/**",
+    "adapters/b173-server/src/main/java/worldline/b173server/B173FurnaceProgressAccess.java",
+]
+tags = [
+    "runtime",
+    "furnace",
+    "restart",
+    "fixture",
+    "rejection",
+]
+created_at = "2026-08-26T05:37:58Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T05:37:58Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/m658-furnace-restart-progress-attempt2-1c6ce5c03.zip sha256=A73C4CED7E3638D6992D7B1B4B3D45D2C49A6148A652D80C114377484EDFF176 log.sha256=3ECBA38927AFEB3F20E975183C9107A85C80C1D661041AEF879DFEAD82FFA5BB server.sha256=F964E21022F26ABFEB24FB7132682ED39B8AAEA18C458BC44714E5721188D300 cause=furnace progress absent: null after clean restart"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "1c6ce5c03"
