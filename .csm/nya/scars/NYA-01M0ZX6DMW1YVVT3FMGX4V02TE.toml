@@ -1,0 +1,26 @@
+schema = 1
+id = "NYA-01M0ZX6DMW1YVVT3FMGX4V02TE"
+title = "Stop workers after a terminal Gate failure"
+lesson = "When a supervised Ox Alpha worker receives a completed nonzero Candidate or Milestone Gate result, the result is terminal for that attempt. Preserve the immutable JSONL and receipt, allow only a short bounded grace period for the final RETRYABLE or REJECTED disposition, then terminate the exact OpenCode process tree. Do not let a low-cost model spend dozens of repository reads diagnosing or editing after the frozen Gate result; diagnosis and correction belong to the next supervised checkpoint in the same milestone, worktree, and session."
+scope = [
+    "tools/integration/OxAlphaWorker.java",
+    "tools/integration/OxAlphaTerminalMonitor.java",
+    "tools/integration/OxAlphaLauncher.java",
+    "coordination/swarm/OX_ALPHA_PROMPT.md",
+    "docs/ENGINEERING_WORKFLOW.md",
+]
+tags = [
+    "opencode",
+    "process-lifecycle",
+    "throughput",
+    "supervised-swarm",
+]
+created_at = "2026-08-26T20:46:41Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T20:46:41Z"
+source = "archive:C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/micro-wave-after-m662-qualify4-runtime-inventory-drift-eff06d690/m662-chicken-fall-immunity-eff06d69058c.zip sha256=A9D5CCC18EBBCB789CD135293DED84AC62277650241D762AAFAAC40AE45CFE20 launcher.receipt.sha256=C060142797CBA617DEC2DB5815E38E76CC516F938EACA9C6B288B6D75EEA0098 stdout.sha256=96E7A70F1CC2AABD58797BEC931C02D0621086D5D97669F956A01BACB77B18DE cause=43+ read-only tool calls after milestone runtime failure until exact OpenCode PID termination"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "fe115e5cc"

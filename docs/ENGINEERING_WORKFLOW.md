@@ -62,11 +62,16 @@ clean barrier, and falls to one after recurrence, dirty/stranded state, or syste
 Official milestone runtime remains serialized by the existing cross-platform lease.
 
 After preflight, invoke the worker through `OxAlphaLauncher` in `checkpoint` phase. The launcher
-binds the approved Luna model at maximum effort, denies nested OpenCode task delegation, places the
+binds one reviewed OpenCode model, denies nested OpenCode task delegation, places the
 positional worker message before variadic prompt attachments, and preserves immutable attempt logs
 and a launch receipt. Direct `opencode run` invocations are not supervised evidence. After the
 worker stops at its checkpoint, run `SwarmLoop pre-candidate` and resume the same recorded session
 through the launcher's `qualify` phase.
+The reviewed model set is exactly GLM 5.3 Flash, DeepSeek V4 Flash, and DeepSeek V4 Pro. GLM 5.3
+Flash is the default high-concurrency Ox Alpha profile. The supervisor may set
+`WORLDLINE_OX_ALPHA_MODEL=opencode-go/deepseek-v4-pro` for bounded correction work after a
+recurrence or systemic failure, while DeepSeek V4 Flash is the fast alternate. Retired and arbitrary
+model IDs fail closed before process creation.
 Every launch supplies `--control-base` with the exact orchestrator SHA that authorized its checks.
 The launcher rejects an authorized milestone base or worktree HEAD that does not contain that SHA,
 so an older worktree cannot pass supervisor readiness and then execute a stale Candidate Gate.
@@ -77,15 +82,22 @@ supervision and control-base recall before issuing the replacement preflight. Re
 checkpoint only after this PASS; the milestone ID and OpenCode session remain unchanged.
 The launcher closes the child's stdin pipe immediately after creation so non-interactive OpenCode
 observes EOF and creates a session. Its self-test fails if a child can remain blocked on stdin.
-After an archived primary-provider quota failure, the supervisor may set
+After an archived selected-provider quota failure, the supervisor may set
 `WORLDLINE_OX_ALPHA_FALLBACK=1` to resume the same receipt-bound session on the allowlisted free
 profile. The launch receipt records both the profile and model; a new session or ID fails closed.
 Fallback checkpoint resumes require a minimum 7200-second worker budget, and the source launcher
 derives a larger outer timeout from that exact requested budget. This executable interlock prevents
 large receipt-bound histories from being misclassified after the primary one-hour window.
-After an archived systemic fallback-provider error, the supervisor may select another reviewed free
-model with `WORLDLINE_OX_ALPHA_FALLBACK_MODEL`. The launcher rejects models outside its executable
+After an archived systemic fallback-provider error, the supervisor may select whichever of GLM 5.3
+Flash or DeepSeek V4 Flash differs from the primary model with
+`WORLDLINE_OX_ALPHA_FALLBACK_MODEL`. DeepSeek V4 Pro is primary escalation, not a free fallback.
+The launcher rejects models outside its executable
 allowlist and records the exact selected model while preserving the same session, worktree, and ID.
+When a completed Candidate or Milestone Gate tool result has a nonzero exit, the attempt is terminal.
+The launcher permits 30 seconds for the worker to emit its disposition, then terminates only that
+OpenCode process tree and records `supervisor_stop=terminal-gate-failure`. Repository diagnosis and
+correction occur in the next supervised attempt, preventing cheap workers from consuming unbounded
+read steps or editing after frozen Gate evidence.
 
 Before Candidate Gate, the supervisor runs `SwarmLoop pre-candidate` against the same authorized
 base and goal. It recalls each applicable scar separately, rejects stale generated narratives,

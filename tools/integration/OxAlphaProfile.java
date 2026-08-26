@@ -1,11 +1,12 @@
 /** Reviewed model profiles for supervised Ox Alpha sessions. */
 final class OxAlphaProfile {
-    static final String DEFAULT_FALLBACK_MODEL = "opencode/nemotron-3-ultra-free";
+    static final String DEFAULT_MODEL = "opencode-go/glm-5.3-flash";
+    static final String DEFAULT_FALLBACK_MODEL = "opencode-go/deepseek-v4-flash";
     static final int FALLBACK_RESUME_MIN_SECONDS = 7200;
-    private static final String PRIMARY_MODEL = "opencode-go/gpt-5.6-luna";
+    private static final java.util.Set<String> PRIMARY_MODELS = java.util.Set.of(
+            DEFAULT_MODEL, DEFAULT_FALLBACK_MODEL, "opencode-go/deepseek-v4-pro");
     private static final java.util.Set<String> FALLBACK_MODELS = java.util.Set.of(
-            DEFAULT_FALLBACK_MODEL, "opencode/mimo-v2.5-free", "opencode/hy3-free",
-            "opencode/nemotron-3.5-lightning-free");
+            DEFAULT_MODEL, DEFAULT_FALLBACK_MODEL);
 
     private OxAlphaProfile() {
     }
@@ -15,13 +16,20 @@ final class OxAlphaProfile {
     }
 
     static String model(boolean fallback) {
-        return fallback ? fallbackModel(System.getenv("WORLDLINE_OX_ALPHA_FALLBACK_MODEL"))
-                : PRIMARY_MODEL;
+        String primary = reviewedModel(System.getenv("WORLDLINE_OX_ALPHA_MODEL"),
+                DEFAULT_MODEL, PRIMARY_MODELS);
+        if (!fallback) {
+            return primary;
+        }
+        String selected = reviewedModel(System.getenv("WORLDLINE_OX_ALPHA_FALLBACK_MODEL"),
+                DEFAULT_FALLBACK_MODEL, FALLBACK_MODELS);
+        require(!selected.equals(primary), "fallback model must differ from the primary model");
+        return selected;
     }
 
-    static String fallbackModel(String requested) {
-        String selected = requested == null || requested.isBlank() ? DEFAULT_FALLBACK_MODEL : requested;
-        require(FALLBACK_MODELS.contains(selected), "fallback model is not allowlisted: " + selected);
+    static String reviewedModel(String requested, String defaultModel, java.util.Set<String> allowlist) {
+        String selected = requested == null || requested.isBlank() ? defaultModel : requested;
+        require(allowlist.contains(selected), "Ox Alpha model is not allowlisted: " + selected);
         return selected;
     }
 
@@ -39,23 +47,31 @@ final class OxAlphaProfile {
                 "short fallback resume accepted");
         require(budgetAllowed(true, "checkpoint", "session", 7200),
                 "extended fallback resume rejected");
-        require(fallbackModel(null).equals(DEFAULT_FALLBACK_MODEL),
+        require(reviewedModel(null, DEFAULT_MODEL, PRIMARY_MODELS).equals(DEFAULT_MODEL),
+                "default Ox Alpha model changed");
+        require(reviewedModel(null, DEFAULT_FALLBACK_MODEL, FALLBACK_MODELS).equals(DEFAULT_FALLBACK_MODEL),
                 "default fallback model changed");
-        require(fallbackModel("opencode/mimo-v2.5-free").equals("opencode/mimo-v2.5-free"),
-                "allowlisted fallback model was rejected");
+        require(reviewedModel("opencode-go/deepseek-v4-pro", DEFAULT_MODEL, PRIMARY_MODELS)
+                .equals("opencode-go/deepseek-v4-pro"), "reviewed pro model was rejected");
         boolean rejected = false;
         try {
-            fallbackModel("unreviewed/model");
+            reviewedModel("opencode/mimo-v2.5-free", DEFAULT_MODEL, PRIMARY_MODELS);
         } catch (IllegalStateException expected) {
             rejected = true;
         }
-        require(rejected, "unreviewed fallback model was accepted");
+        require(rejected, "retired OpenCode model was accepted");
+        rejected = false;
+        try {
+            reviewedModel("opencode-go/deepseek-v4-pro", DEFAULT_FALLBACK_MODEL, FALLBACK_MODELS);
+        } catch (IllegalStateException expected) {
+            rejected = true;
+        }
+        require(rejected, "pro model was accepted as free fallback");
     }
 
     static String config(boolean fallback) {
-        String variant = fallback ? "" : ",\"variant\":\"max\"";
         return "{\"agent\":{\"ox-alpha\":{\"description\":\"Supervised Worldline milestone worker\","
-                + "\"mode\":\"primary\",\"model\":\"" + model(fallback) + "\"" + variant
+                + "\"mode\":\"primary\",\"model\":\"" + model(fallback) + "\""
                 + ",\"maxSteps\":200,\"permission\":{\"*\":\"allow\",\"task\":\"deny\","
                 + "\"question\":\"deny\",\"external_directory\":\"deny\",\"doom_loop\":\"deny\"}}}}";
     }

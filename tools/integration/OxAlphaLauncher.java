@@ -18,6 +18,7 @@ public final class OxAlphaLauncher {
                     "-Xlint:all,-options", "-Werror", "-d", output.toString(),
                     root.resolve("tools/integration/OxAlphaProfile.java").toString(),
                     root.resolve("tools/integration/OxAlphaRequest.java").toString(),
+                    root.resolve("tools/integration/OxAlphaTerminalMonitor.java").toString(),
                     root.resolve("tools/integration/OxAlphaWorker.java").toString());
             require(run(root, compile, 120) == 0, "Ox Alpha launcher closure did not compile");
             List<String> command = new ArrayList<>(List.of(javaTool("java"), "-cp", output.toString(),

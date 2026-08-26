@@ -24,6 +24,13 @@ final class OxAlphaWorker {
                 System.out.println("stdin closed");
                 return;
             }
+            if (List.of(arguments).equals(List.of("--self-test-terminal-child"))) {
+                System.out.println("{\"type\":\"tool_use\",\"title\":\"java tools/harness/Gate.java "
+                        + "--milestone m1-contract\",\"metadata\":{\"exit\":1}}");
+                System.out.flush();
+                Thread.sleep(TimeUnit.SECONDS.toMillis(30));
+                return;
+            }
             OxAlphaRequest request = OxAlphaRequest.parse(arguments);
             int exit = launch(request);
             System.exit(exit);
@@ -55,16 +62,14 @@ final class OxAlphaWorker {
         ProcessBuilder builder = new ProcessBuilder(command).directory(root.toFile());
         String config = OxAlphaProfile.config(fallback);
         builder.environment().put("OPENCODE_CONFIG_CONTENT", config);
-        Process process = builder.redirectOutput(stdout.toFile()).redirectError(stderr.toFile()).start();
+        Process process = builder.redirectError(stderr.toFile()).start();
+        OxAlphaTerminalMonitor.Capture capture = OxAlphaTerminalMonitor.capture(process, stdout);
         closeStdin(process);
-        boolean completed = process.waitFor(request.timeoutSeconds(), TimeUnit.SECONDS);
-        if (!completed) {
-            terminate(process);
-        }
-        int exit = completed ? process.exitValue() : 124;
+        OxAlphaTerminalMonitor.Outcome outcome = OxAlphaTerminalMonitor.waitFor(
+                process, capture, request.timeoutSeconds());
         String head = git(root, "rev-parse", "HEAD").trim();
-        writeReceipt(receipt, request, started, head, stdout, stderr, exit, completed, fallback, config);
-        return exit;
+        writeReceipt(receipt, request, started, head, stdout, stderr, outcome, fallback, config);
+        return outcome.exit();
     }
 
     private static void validate(Path root, OxAlphaRequest request) throws Exception {
@@ -127,9 +132,6 @@ final class OxAlphaWorker {
         List<String> result = new ArrayList<>(List.of(opencodeTool(), "run", message,
                 "--pure", "--auto", "--agent", AGENT, "--model", OxAlphaProfile.model(fallback),
                 "--format", "json", "--title", "Worldline Ox Alpha"));
-        if (!fallback) {
-            result.addAll(List.of("--variant", "max"));
-        }
         if (session != null && !session.isBlank()) {
             result.add("--session");
             result.add(session);
@@ -160,7 +162,8 @@ final class OxAlphaWorker {
     }
 
     private static void writeReceipt(Path receipt, OxAlphaRequest request, Instant started, String head,
-            Path stdout, Path stderr, int exit, boolean completed, boolean fallback, String config)
+            Path stdout, Path stderr, OxAlphaTerminalMonitor.Outcome outcome,
+            boolean fallback, String config)
             throws Exception {
         String session = firstSession(stdout);
         String value = "{\n  \"schema\":1,\n  \"id\":\"" + request.id()
@@ -170,12 +173,14 @@ final class OxAlphaWorker {
                 + request.controlBase() + "\",\n  \"head\":\"" + head
                 + "\",\n  \"profile\":\"" + (fallback ? "fallback" : "primary")
                 + "\",\n  \"model\":\"" + OxAlphaProfile.model(fallback) + "\",\n  \"variant\":\""
-                + (fallback ? "default" : "max")
+                + "default"
                 + "\",\n  \"agent\":\"" + AGENT + "\",\n  \"nested_delegation\":\"denied\""
                 + ",\n  \"config_sha256\":\"" + sha(config) + "\",\n  \"stdout_sha256\":\""
                 + sha(stdout) + "\",\n  \"stderr_sha256\":\"" + sha(stderr) + "\",\n  \"session\":"
                 + (session == null ? "null" : "\"" + escape(session) + "\"")
-                + ",\n  \"exit\":" + exit + ",\n  \"completed\":" + completed + "\n}\n";
+                + ",\n  \"exit\":" + outcome.exit() + ",\n  \"completed\":" + outcome.completed()
+                + ",\n  \"supervisor_stop\":" + (outcome.supervisorStop() == null ? "null"
+                        : "\"" + outcome.supervisorStop() + "\"") + "\n}\n";
         Files.writeString(receipt, value, StandardCharsets.UTF_8);
     }
 
@@ -205,6 +210,9 @@ final class OxAlphaWorker {
         invalid.add(message);
         require(!messagePrecedesFiles(invalid), "variadic attachment swallowed the worker message");
         OxAlphaProfile.selfTest();
+        OxAlphaTerminalMonitor.selfTest();
+        require(command(message(checkpoint), null, false).contains(OxAlphaProfile.DEFAULT_MODEL),
+                "default Ox Alpha model is not allowlisted");
         require(command(message(checkpoint), "session", true).contains(OxAlphaProfile.DEFAULT_FALLBACK_MODEL),
                 "fallback model is not allowlisted");
         require(message(checkpoint).contains("Nested task, explore, or subagent delegation is forbidden"),
@@ -216,6 +224,19 @@ final class OxAlphaWorker {
         closeStdin(child);
         require(child.waitFor(5, TimeUnit.SECONDS), "launcher left the child stdin open");
         require(child.exitValue() == 0, "stdin closure child failed");
+        Path terminalDirectory = Files.createTempDirectory("worldline-ox-terminal-");
+        Path terminal = terminalDirectory.resolve("stdout.jsonl");
+        try {
+            Process runaway = new ProcessBuilder(javaTool(), "-cp", System.getProperty("java.class.path"),
+                    "OxAlphaWorker", "--self-test-terminal-child").start();
+            OxAlphaTerminalMonitor.Capture capture = OxAlphaTerminalMonitor.capture(runaway, terminal);
+            closeStdin(runaway);
+            OxAlphaTerminalMonitor.Outcome stopped = OxAlphaTerminalMonitor.waitFor(runaway, capture, 10, 1);
+            require(stopped.stoppedAfterTerminal(), "terminal Gate failure did not stop worker");
+        } finally {
+            Files.deleteIfExists(terminal);
+            Files.deleteIfExists(terminalDirectory);
+        }
     }
 
     private static void closeStdin(Process process) throws Exception {
@@ -227,12 +248,6 @@ final class OxAlphaWorker {
         int file = command.indexOf("-f");
         return run >= 0 && run + 1 < file && file == command.size() - 2
                 && !command.get(run + 1).startsWith("-");
-    }
-
-    private static void terminate(Process process) {
-        process.toHandle().descendants().sorted((left, right) -> Long.compare(right.pid(), left.pid()))
-                .forEach(handle -> handle.destroyForcibly());
-        process.destroyForcibly();
     }
 
     private static String opencodeTool() {

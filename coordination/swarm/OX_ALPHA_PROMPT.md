@@ -1,7 +1,7 @@
 # Ox Alpha supervised milestone worker contract
 
 The supervisor launches OpenCode only through `OxAlphaLauncher`. The launcher places the worker
-message before every variadic `-f` attachment, fixes the reviewed model and effort variant, denies
+message before every variadic `-f` attachment, fixes a reviewed model, denies
 nested task delegation in the executable agent permission map, and writes immutable stdout, stderr,
 session, exit, base, and HEAD evidence for every attempt. A direct or ad hoc `opencode run` command
 cannot establish a supervised worker receipt.
@@ -14,16 +14,25 @@ before OpenCode starts rather than mixing current readiness with an older Candid
 When controls advance after a retryable attempt, preserve the exact archive and use
 `OxAlphaControlMigration` on the same branch, worktree, and session. Reapply the checkpoint only
 after it verifies archive SHA-256, ancestry, CSM context, and both applicable scars on the new base.
-If the primary provider reports a usage limit, classify and archive the attempt before setting
-`WORLDLINE_OX_ALPHA_FALLBACK=1`. The allowlisted free fallback may resume only the same receipt-bound
+The executable model allowlist contains only `opencode-go/glm-5.3-flash`,
+`opencode-go/deepseek-v4-flash`, and `opencode-go/deepseek-v4-pro`. GLM 5.3 Flash is the default
+high-concurrency Ox Alpha worker. Select DeepSeek V4 Pro with `WORLDLINE_OX_ALPHA_MODEL` for a
+bounded repair or systemic-cause checkpoint; DeepSeek V4 Flash is the reviewed fast alternative.
+Every retired or arbitrary model fails before OpenCode starts.
+If the selected provider reports a usage limit, classify and archive the attempt before setting
+`WORLDLINE_OX_ALPHA_FALLBACK=1`. The allowlisted fallback may resume only the same receipt-bound
 session and dirty worktree on a later attempt; it may not open a replacement milestone or session.
 A fallback checkpoint resume must receive at least 7200 seconds because a large receipt-bound
 history can make correct progress beyond the primary one-hour budget. The launcher rejects a
 shorter fallback retry and extends its own outer timeout beyond the worker budget.
-If the selected free provider returns a systemic transport error, archive and classify the attempt
-before setting `WORLDLINE_OX_ALPHA_FALLBACK_MODEL` to another reviewed free model. The executable
-allowlist rejects arbitrary providers, and the same receipt-bound session, worktree, and milestone
-ID remain mandatory.
+If the selected provider returns a systemic transport error, archive and classify the attempt
+before setting `WORLDLINE_OX_ALPHA_FALLBACK_MODEL` to whichever of GLM 5.3 Flash or DeepSeek V4
+Flash differs from the primary model. The same receipt-bound session, worktree, and milestone ID
+remain mandatory.
+Candidate and Milestone Gate failures are terminal for the current launch. After a completed
+nonzero Gate result, emit the exact disposition immediately. The launcher grants a bounded
+30-second disposition period and then terminates an OpenCode process that continues exploring;
+diagnosis and correction resume only in the next supervised attempt after evidence archival.
 These worktrees run on Windows PowerShell. Use native PowerShell or portable commands; do not spend
 an inference step retrying Unix-only options such as `ls -la`, `find`, or `xargs`.
 
