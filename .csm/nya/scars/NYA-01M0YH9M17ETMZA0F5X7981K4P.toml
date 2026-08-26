@@ -29,3 +29,11 @@ reported_by = "codex:root-supervisor"
 corrected_by = "codex:root-supervisor"
 recorded_by = "codex:root"
 commit = "18d7174eb"
+
+[[occurrences]]
+occurred_at = "2026-08-26T20:14:59Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/micro-wave-after-m662-qualify3-8cf1cddca/m662-chicken-fall-immunity-8cf1cddcab13.zip sha256=C1C8606BEB470E0A38819A691804E198CF31C6026E4303185C0F7676AC7506AA cause=CandidateSourceClosure placed every module output on the data-driven javac classpath; Candidate passed an undeclared WorldlineSmokeAwait import that DataDrivenCycle rejected when compiling only cycle.compile.products"
+reported_by = "codex:root-supervisor"
+corrected_by = "codex:root-supervisor"
+recorded_by = "codex:root"
+commit = "5c055275c"

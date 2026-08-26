@@ -86,7 +86,8 @@ Before Candidate Gate, the supervisor must run `SwarmLoop pre-candidate` for the
 authorized base, and goal. Its objective readiness report must stay bound to the unchanged source
 manifest. The interlock must compile the exact runner, adapter, module, smoke, and official
 `oracle-src` source closures, including checked-exception compatibility against the verified
-official artifact, before emitting PASS.
+official artifact, before emitting PASS. A data-driven smoke may import only modules named by
+`cycle.compile.products`; repository-wide module outputs are deliberately absent from readiness.
 It also runs the Candidate smoke-statement ceiling before freezing the manifest, validates every
 six-column symbol row against the exact hashed `mappings.tiny`, and rejects any source above its
 150-statement budget. A new supervised `DataDrivenCycle` must declare `expected.trace`; that exact

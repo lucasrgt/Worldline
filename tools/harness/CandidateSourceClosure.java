@@ -31,7 +31,7 @@ final class CandidateSourceClosure {
         List<String> modules = values("modules");
         List<Path> outputs = new ModuleBuild(root, build, config, modules).compileAll();
         compileRunner(smoke);
-        compileScenario(outputs);
+        compileScenario(modules, outputs);
         compileOracle(outputs);
         System.out.println("  compiled exact pre-Candidate source closure");
     }
@@ -63,6 +63,11 @@ final class CandidateSourceClosure {
                 rejected = expected.getMessage().contains("overridden method does not throw");
             }
             require(rejected, "oracle checked-exception mismatch was not rejected");
+            List<Path> selected = selectOutputs(List.of("api", "smoketest", "testkit"),
+                    List.of(Path.of("api"), Path.of("smoketest"), Path.of("testkit")),
+                    "api,testkit");
+            require(selected.equals(List.of(Path.of("api"), Path.of("testkit"))),
+                    "data-driven compile products were not selected exactly");
         } finally {
             SafeTreeDelete.delete(test);
         }
@@ -77,7 +82,7 @@ final class CandidateSourceClosure {
                 root.resolve(smoke.runner).toString()), 180);
     }
 
-    private void compileScenario(List<Path> outputs) throws Exception {
+    private void compileScenario(List<String> modules, List<Path> outputs) throws Exception {
         Path milestone = root.resolve("smokes").resolve(id);
         Path source = milestone.resolve("src");
         if (!Files.isDirectory(source)) {
@@ -112,7 +117,8 @@ final class CandidateSourceClosure {
             dependencies.add(mapped);
             dependencies.addAll(jarFiles(root.resolve("local/workspaces/b1.7.3/libraries")));
         }
-        dependencies.addAll(outputs);
+        dependencies.addAll(selectOutputs(modules, outputs,
+                descriptor.getProperty("cycle.compile.products")));
         Path output = build.resolve("scenario-classes");
         Files.createDirectories(output);
         List<String> command = new ArrayList<>(List.of(javaTool("javac"), "-encoding", "UTF-8",
@@ -124,6 +130,20 @@ final class CandidateSourceClosure {
                 : "adapters/b173-server/src/main/java")));
         command.addAll(javaFiles(source));
         execute(command, 240);
+    }
+
+    private static List<Path> selectOutputs(List<String> modules, List<Path> outputs,
+            String declared) {
+        require(modules.size() == outputs.size(), "module output closure drifted");
+        if (declared == null) return outputs;
+        List<Path> selected = new ArrayList<>();
+        for (String product : java.util.Arrays.stream(declared.split(","))
+                .map(String::trim).filter(value -> !value.isEmpty()).toList()) {
+            int index = modules.indexOf(product);
+            require(index >= 0, "unknown cycle.compile.products module: " + product);
+            selected.add(outputs.get(index));
+        }
+        return selected;
     }
 
     private void compileOracle(List<Path> outputs) throws Exception {
