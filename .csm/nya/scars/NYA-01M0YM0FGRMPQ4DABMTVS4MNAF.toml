@@ -1,0 +1,25 @@
+schema = 1
+id = "NYA-01M0YM0FGRMPQ4DABMTVS4MNAF"
+title = "Prove attacker separation before Packet7 minecart push"
+lesson = "Before sending Packet7 to push a minecart, position and observe the attacker behind the mover with a nonzero causal separation vector in the intended travel direction. Overlap plus a look direction is not proof that the official melee impulse can launch the mover."
+scope = [
+    "smokes/m660-minecart-collision-transfer/src/**/*.java",
+    "adapters/b173-server/src/main/java/worldline/b173server/B173MinecartBooster.java",
+    "modules/testkit/src/main/java/worldline/testkit/MinecartCollisionFixture.java",
+    "coordination/swarm/OX_ALPHA_PROMPT.md",
+]
+tags = [
+    "official-runtime",
+    "minecart",
+    "packet7",
+    "causal-fixture",
+]
+created_at = "2026-08-26T08:46:55Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T08:46:55Z"
+source = ".worldline/reports/swarm/milestone-m660-minecart-collision-transfer-attempt1.log sha256=F17C8A6F7D04C61A2243509A2962EF6141A11EB1C20BA0FBCAAB7CD584FC1924; .worldline/smoke-logs/m660-minecart-collision-transfer.log sha256=45CD6EFB5E896A7FE6BCB1AFC1FCC82DB022EC79C1C646E2EFDEBA6783FC2619; .worldline/smokes/m660-minecart-collision-transfer/first/server.log sha256=99A97DC46706F104D66573DFCF7DDA3FC989DF032A6F216044368A07A6CE0AC1 cause=Packet7 was sent while the attacker overlapped the mover and no mover forward transition followed"
+reported_by = "codex:m646_retry2"
+corrected_by = "codex:m646_retry2"
+recorded_by = "codex:m646_retry2"
+commit = "7e7b38d52"

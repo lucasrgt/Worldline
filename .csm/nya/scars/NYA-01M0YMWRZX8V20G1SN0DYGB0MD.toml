@@ -1,0 +1,25 @@
+schema = 1
+id = "NYA-01M0YMWRZX8V20G1SN0DYGB0MD"
+title = "Prove mover initiation before minecart collision transfer"
+lesson = "An official Beta 1.7.3 Packet7 attack against an empty minecart is not evidence that the mover will translate. Before proposing collision-transfer evidence, independently prove a bounded mover-initiation primitive against the official oracle; reject the fixture when the prerequisite mover-forward transition is absent."
+scope = [
+    "smokes/m660-minecart-collision-transfer/**",
+    "adapters/b173-server/src/main/java/worldline/b173server/B173MinecartBooster.java",
+    "modules/testkit/src/main/java/worldline/testkit/MinecartCollisionFixture.java",
+    "coordination/swarm/OX_ALPHA_PROMPT.md",
+]
+tags = [
+    "official-runtime",
+    "minecart",
+    "prerequisite",
+    "rejection",
+]
+created_at = "2026-08-26T09:02:22Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T09:02:22Z"
+source = "failure.head=bcd8f91313026f9ac0a1904296fb47118c4314fe milestone.log.sha256=5F45089C52A354ECB1D88529D21D4061B8FCC8F9F480AABD6E71B5A64EB8B43D cycle.log.sha256=6C39E8CD95F99B25EAC81983B3E93717C392BA2039E9A383561838E98770CFE5 server.log.sha256=A8EA8A83F714F9384F99BD2D4E75F5472CF38B91EC98FD796FEF5B28469C06AE cause=attacker separation was proven but Packet7 produced no bounded mover-forward transition, so the target collision oracle was unreachable at attempt 2/2"
+reported_by = "codex:m646_retry2"
+corrected_by = "codex:m646_retry2"
+recorded_by = "codex:m646_retry2"
+commit = "bcd8f9131"

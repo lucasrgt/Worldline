@@ -52,10 +52,14 @@ For portal cooldown or portal re-entry contracts, recall must also present
 `NYA-01M0XC2P1Y3MCKVAHJEAJXX16C`; prove suppression during continuous arrival-portal contact and
 pair it with a positive exit-and-reentry control from the same player.
 For minecart-collision contracts, recall must also present
-`NYA-01M0YCEZH1G2SKW1DVB1D4K3SB` and `NYA-01M0YDKWFZ4H1CCXE2TXCJC31G`.
+`NYA-01M0YCEZH1G2SKW1DVB1D4K3SB`, `NYA-01M0YDKWFZ4H1CCXE2TXCJC31G`,
+`NYA-01M0YM0FGRMPQ4DABMTVS4MNAF`, and `NYA-01M0YMWRZX8V20G1SN0DYGB0MD`.
 Stone supports are fixture geometry, not collision evidence: preprovision them deterministically
 instead of calling `B173FixtureSupport.place(..., 1)`. Observe required rail and support states
-before extending the fixture or starting the collision oracle.
+before extending the fixture or starting the collision oracle. A Packet7 attack proven only by
+the parallel-rail booster contract is not a same-rail mover-initiation primitive. Readiness rejects
+`B173MinecartBooster.push` in minecart-collision candidates; use a separately qualified bounded
+mover-initiation mechanism before attempting collision-transfer evidence.
 
 Nested task/explore/subagent delegation is forbidden because this launcher does not supervise
 nested work. Inspect the repository directly. A draft scaffold is fail-closed and is never a

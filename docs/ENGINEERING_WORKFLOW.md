@@ -66,7 +66,9 @@ Candidates with smoke sources recall `NYA-01M0YH9M17ETMZA0F5X7981K4P`; the compi
 not textual inspection of imports or `throws` clauses, is the objective closure proof.
 Packed-source prevention includes complete constructors, methods, and control bodies on one physical
 line, including empty constructors. Minecart-collision readiness additionally rejects remotely placed
-stone support geometry after the repeated pre-oracle reach failures recorded in NYA.
+stone support geometry after the repeated pre-oracle reach failures recorded in NYA. It also rejects
+`B173MinecartBooster.push`: the qualified parallel-rail booster does not prove that Packet7 initiates
+a mover in a same-rail collision fixture, which requires a separately qualified bounded primitive.
 
 After every worker, the supervisor preserves a verified Git bundle, binary patch, untracked source,
 logs, receipts, and a SHA-256 archive before recording a final disposition. `QUALIFIED` requires a

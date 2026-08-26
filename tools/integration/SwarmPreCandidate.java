@@ -18,6 +18,8 @@ final class SwarmPreCandidate {
     private static final String TRAVERSAL = "NYA-01M0XYP7T1RKYFD3SJHC4DMHZ3";
     private static final String MINECART_BARRIER = "NYA-01M0YCEZH1G2SKW1DVB1D4K3SB";
     private static final String MINECART_REACH = "NYA-01M0YDKWFZ4H1CCXE2TXCJC31G";
+    private static final String MINECART_ATTACK = "NYA-01M0YM0FGRMPQ4DABMTVS4MNAF";
+    private static final String MINECART_INITIATION = "NYA-01M0YMWRZX8V20G1SN0DYGB0MD";
     private SwarmPreCandidate() { }
 
     static void run(String id, String base, String goal) throws Exception {
@@ -41,9 +43,12 @@ final class SwarmPreCandidate {
         if (SwarmProcess.output(root, List.of("git", "diff", "--name-only", base), 60).lines()
                 .anyMatch(path -> path.startsWith("tools/harness/")
                         || path.startsWith("tools/integration/"))) scars.add(TRAVERSAL);
-        if (id.contains("minecart-collision")) {
+        if (id.contains("minecart-collision")
+                || descriptor.getProperty("behavior", "").contains("minecart-collision")) {
             scars.add(MINECART_BARRIER);
             scars.add(MINECART_REACH);
+            scars.add(MINECART_ATTACK);
+            scars.add(MINECART_INITIATION);
         }
         StringBuilder recall = new StringBuilder();
         String recallLimit = Integer.toString(recallLimit(root));

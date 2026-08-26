@@ -24,6 +24,8 @@ final class CandidateReadiness {
     private static final String TRAVERSAL = "NYA-01M0XYP7T1RKYFD3SJHC4DMHZ3";
     private static final String MINECART_BARRIER = "NYA-01M0YCEZH1G2SKW1DVB1D4K3SB";
     private static final String MINECART_REACH = "NYA-01M0YDKWFZ4H1CCXE2TXCJC31G";
+    private static final String MINECART_ATTACK = "NYA-01M0YM0FGRMPQ4DABMTVS4MNAF";
+    private static final String MINECART_INITIATION = "NYA-01M0YMWRZX8V20G1SN0DYGB0MD";
     private static final Pattern IMPORT = Pattern.compile("(?m)^\\s*import\\s+([A-Za-z0-9_$.]+);\\s*$");
     private static final Pattern PACKAGE = Pattern.compile("(?m)^\\s*package\\s+([A-Za-z0-9_$.]+);\\s*$");
     private static final Pattern INLINE_CONTROL = Pattern.compile(
@@ -53,6 +55,12 @@ final class CandidateReadiness {
         require(hasRemoteStonePlacement(
                 "B173FixtureSupport.place(actor, pad, cross, 1);"),
                 "remote stone support was not recognized");
+        require(hasMinecartPacketAttack("B173MinecartBooster.push(actor, mover);"),
+                "minecart Packet7 attack was not recognized");
+        Properties collision = new Properties();
+        collision.setProperty("behavior", "minecart-collision-transfer");
+        require(minecartCollision("m1-renamed-contract", collision),
+                "minecart collision behavior alias was not recognized");
         require(IMPORT.matcher("import worldline.smoke.privatecycle.Helper;").find(),
                 "private import was not recognized");
     }
@@ -119,9 +127,11 @@ final class CandidateReadiness {
         if (git(root, "diff", "--name-only", base).lines().anyMatch(path ->
                 path.startsWith("tools/harness/") || path.startsWith("tools/integration/")))
             result.add(TRAVERSAL);
-        if (id.contains("minecart-collision")) {
+        if (minecartCollision(id, descriptor)) {
             result.add(MINECART_BARRIER);
             result.add(MINECART_REACH);
+            result.add(MINECART_ATTACK);
+            result.add(MINECART_INITIATION);
         }
         return List.copyOf(result);
     }
@@ -138,11 +148,14 @@ final class CandidateReadiness {
             require(!packedExecutable(line),
                     "packed executable body repeats source scar: " + root.relativize(source));
         }
-        if (id.contains("minecart-collision")) {
+        if (minecartCollision(id, descriptor)) {
             for (Path source : sources) {
                 String text = Files.readString(source, StandardCharsets.UTF_8);
                 require(!hasRemoteStonePlacement(text),
                         "remote stone support repeats minecart fixture scars: "
+                                + root.relativize(source));
+                require(!hasMinecartPacketAttack(text),
+                        "Packet7 booster attack cannot initialize same-rail collision: "
                                 + root.relativize(source));
             }
         }
@@ -183,6 +196,15 @@ final class CandidateReadiness {
 
     private static boolean hasRemoteStonePlacement(String source) {
         return REMOTE_STONE.matcher(source.replaceAll("\\s+", "")).find();
+    }
+
+    private static boolean hasMinecartPacketAttack(String source) {
+        return source.replaceAll("\\s+", "").contains("B173MinecartBooster.push(");
+    }
+
+    private static boolean minecartCollision(String id, Properties descriptor) {
+        return id.contains("minecart-collision")
+                || descriptor.getProperty("behavior", "").contains("minecart-collision");
     }
 
     private static Map<String, Object> preflight(Path root, String id) throws Exception {
