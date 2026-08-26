@@ -32,7 +32,40 @@ final class CandidateSourceClosure {
         List<Path> outputs = new ModuleBuild(root, build, config, modules).compileAll();
         compileRunner(smoke);
         compileScenario(outputs);
+        compileOracle(outputs);
         System.out.println("  compiled exact pre-Candidate source closure");
+    }
+
+    static void selfTest() throws Exception {
+        Path root = Path.of("").toAbsolutePath().normalize();
+        Path test = root.resolve(".worldline/candidate-oracle-closure-self-test");
+        SafeTreeDelete.delete(test);
+        Files.createDirectories(test);
+        try {
+            Path contract = test.resolve("Contract.java");
+            Path good = test.resolve("Good.java");
+            Path bad = test.resolve("Bad.java");
+            Files.writeString(contract, "interface Contract { void run(); }\n");
+            Files.writeString(good,
+                    "final class Good implements Contract { public void run() { } }\n");
+            Files.writeString(bad, "import java.io.IOException;\n"
+                    + "final class Bad implements Contract {\n"
+                    + "  public void run() throws IOException { }\n}\n");
+            Path classes = test.resolve("classes");
+            Files.createDirectories(classes);
+            compile(root, List.of(javaTool("javac"), "-d", classes.toString(),
+                    contract.toString(), good.toString()), 60);
+            boolean rejected = false;
+            try {
+                compile(root, List.of(javaTool("javac"), "-classpath", classes.toString(),
+                        "-d", classes.toString(), bad.toString()), 60);
+            } catch (Exception expected) {
+                rejected = expected.getMessage().contains("overridden method does not throw");
+            }
+            require(rejected, "oracle checked-exception mismatch was not rejected");
+        } finally {
+            SafeTreeDelete.delete(test);
+        }
     }
 
     private void compileRunner(SmokeDiscovery.Entry smoke) throws Exception {
@@ -93,6 +126,35 @@ final class CandidateSourceClosure {
         execute(command, 240);
     }
 
+    private void compileOracle(List<Path> outputs) throws Exception {
+        Path milestone = root.resolve("smokes").resolve(id);
+        Path source = milestone.resolve("oracle-src");
+        if (!Files.isDirectory(source)) return;
+        boolean client = descriptor.getProperty("client.jar.sha256") != null
+                && descriptor.getProperty("server.jar.sha256") == null;
+        String side = client ? "client" : "server";
+        Properties artifact = StrictProperties.load(root.resolve("artifacts")
+                .resolve("minecraft-b1.7.3-" + side + ".properties"));
+        String expected = descriptor.getProperty(side + ".jar.sha256");
+        require(expected != null && expected.equals(artifact.getProperty("expected.sha256")),
+                "candidate oracle artifact descriptor drift");
+        Path jar = root.resolve(artifact.getProperty("local.path")).normalize();
+        SmokeSupport.verifyArtifact(jar, artifact);
+        List<Path> dependencies = new ArrayList<>(outputs);
+        dependencies.add(jar);
+        if (client) dependencies.addAll(jarFiles(root.resolve("local/workspaces/b1.7.3/libraries")));
+        Path output = build.resolve("oracle-classes");
+        Files.createDirectories(output);
+        List<String> command = new ArrayList<>(List.of(javaTool("javac"), "-encoding", "UTF-8",
+                "--release", "8", "-Xlint:all,-options", "-Werror", "-classpath",
+                dependencies.stream().map(Path::toString)
+                        .collect(Collectors.joining(System.getProperty("path.separator"))),
+                "-d", output.toString()));
+        command.addAll(javaFiles(source));
+        execute(command, 240);
+        System.out.println("  compiled official " + side + " oracle source closure");
+    }
+
     private List<String> values(String key) {
         return java.util.Arrays.stream(config.getProperty(key, "").split(","))
                 .map(String::trim).filter(value -> !value.isEmpty()).toList();
@@ -117,8 +179,12 @@ final class CandidateSourceClosure {
     }
 
     private void execute(List<String> command, int timeout) throws Exception {
-        String output = ProcessCapture.require(root, command, timeout);
+        String output = compile(root, command, timeout);
         if (!output.isBlank()) System.out.print(output);
+    }
+
+    private static String compile(Path root, List<String> command, int timeout) throws Exception {
+        return ProcessCapture.require(root, command, timeout);
     }
 
     private static String javaTool(String name) {

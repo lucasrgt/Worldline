@@ -21,3 +21,11 @@ reported_by = "codex:m646_retry2"
 corrected_by = "codex:m646_retry2"
 recorded_by = "codex:m646_retry2"
 commit = "e594ae0c2"
+
+[[occurrences]]
+occurred_at = "2026-08-26T19:12:30Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/micro-wave-m662-m665-live-after-m663-attempt3/m663-snow-layer-nonstacking-f2b6db568a7f.zip sha256=6F994F9F9821C86970559803E8ECBD621F354CB3F204E8EEF8589B7507E6AFB cause=Candidate readiness compiled the mapped scenario but omitted oracle-src; Milestone javac rejected checked IOException declarations against official interface an"
+reported_by = "codex:root-supervisor"
+corrected_by = "codex:root-supervisor"
+recorded_by = "codex:root"
+commit = "18d7174eb"

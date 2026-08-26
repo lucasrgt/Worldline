@@ -101,9 +101,10 @@ their moving-water control before the initial still/moving pair has been observe
 packed-control detector balances nested condition parentheses before inspecting the body, preventing
 valid braced controls from being rejected as packed source. The
 semantic-map comparison recalls `NYA-01M0YSJXNA3TK6FHQW4QJ5RJZ5`. The interlock compiles the
-runner, adapter,
-module, and smoke source closure with the Candidate compiler before it writes a content-bound
-readiness report. Candidate Gate on a supervised milestone branch requires that PASS report and
+runner, adapter, module, smoke, and official `oracle-src` source closures before it writes a
+content-bound readiness report. Oracle compilation uses the verified official artifact without
+starting runtime, so checked-exception and obfuscated-signature mismatches cannot consume a
+Milestone attempt. Candidate Gate on a supervised milestone branch requires that PASS report and
 rejects any later source change.
 Candidates with smoke sources recall `NYA-01M0YH9M17ETMZA0F5X7981K4P`; the compilation result,
 not textual inspection of imports or `throws` clauses, is the objective closure proof.

@@ -84,8 +84,9 @@ Keep every new Java line at or below 120 columns so a candidate cannot increase 
 `*.long.files` or `*.long.lines` ratchets after isolated qualification.
 Before Candidate Gate, the supervisor must run `SwarmLoop pre-candidate` for the exact milestone,
 authorized base, and goal. Its objective readiness report must stay bound to the unchanged source
-manifest. The interlock must compile the exact runner, adapter, module, and smoke source closure
-with the Candidate compiler, including checked-exception compatibility, before emitting PASS.
+manifest. The interlock must compile the exact runner, adapter, module, smoke, and official
+`oracle-src` source closures, including checked-exception compatibility against the verified
+official artifact, before emitting PASS.
 It also runs the Candidate smoke-statement ceiling before freezing the manifest, validates every
 six-column symbol row against the exact hashed `mappings.tiny`, and rejects any source above its
 150-statement budget. A new supervised `DataDrivenCycle` must declare `expected.trace`; that exact
