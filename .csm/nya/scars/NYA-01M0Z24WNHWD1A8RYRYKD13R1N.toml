@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M0Z24WNHWD1A8RYRYKD13R1N"
+title = "Accept only verified NYA-bearing partial CSM context"
+lesson = "The supervised preflight must execute csm context, but an exit code of 1 is expected when optional WTW, RTW, or NWC stores are uninitialized. Accept that partial result only when the NYA section is present, the mandatory supervision scar is present, and the output contains a recognized optional-store initialization message; every other nonzero context result fails closed. NYA recall remains a separate mandatory exit-zero check."
+scope = [
+    "tools/integration/SwarmPreflight.java",
+    "tools/integration/SwarmProcess.java",
+    "coordination/swarm/OX_ALPHA_PROMPT.md",
+]
+tags = [
+    "csm",
+    "preflight",
+    "supervised-swarm",
+]
+created_at = "2026-08-26T12:54:00Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T12:54:00Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/micro-wave1-csm-context-partial-8a2fade43.zip sha256=3A6780B7B5D86F00555DED1B2FB9CF7E6795985EC0658027D63BC4A127147C83 context.stdout.sha256=475BBD6160B3C465FC66AF36E8A435E914124B83CC98ACD346B564084C94D2B1 context.stderr.sha256=BBC94287A224AB6CAD62F39DB6BD84C673D98C87B393DE06BE441B5291CDF5DC exit=1 cause=optional WTW RTW NWC stores uninitialized while NYA returned required scar"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "8a2fade43"

@@ -164,6 +164,7 @@ public final class SwarmLoop {
         WaveSelfImprovement.selfTest();
         WaveCensus.selfTest();
         SwarmMicroWave.selfTest();
+        SwarmPreflight.selfTest();
         System.out.println("swarm loop self-test passed");
     }
 

@@ -72,3 +72,11 @@ reported_by = "codex:worldline-supervisor"
 corrected_by = "codex:worldline-supervisor"
 recorded_by = "codex:worldline-supervisor"
 commit = "e06f06090"
+
+[[occurrences]]
+occurred_at = "2026-08-26T12:58:29Z"
+source = ".worldline/reports/swarm/csm-nya-check-context-partial-attempt1.out.log sha256=B65AF5BF69405C3940DBE2F0365287CD0CB76274C6487E9C064755BABAA50D32 cause=SwarmProcess.java compacted the nonzero-result conditional and throw before Candidate"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "8a2fade43"

@@ -12,6 +12,10 @@ final class SwarmPreflight {
     private static final String SEMANTIC_SCAR = "NYA-01M0YZVBKBPB0SB3CJYVQSPNA9";
     private static final Pattern SUMMARY = Pattern.compile(
             "\"(FAILED_GATE|DIRTY_SUSPENDED|RETRYABLE|STRANDED)\"\\s*:\\s*([0-9]+)");
+    private static final List<String> OPTIONAL_CONTEXT_ERRORS = List.of(
+            "Why This Way is not initialized; run wtw init",
+            "rtw: Right This Way is not initialized; run rtw init",
+            "Now We Can is not initialized; run nwc init");
     private SwarmPreflight() { }
 
     static void run(String id, String baseValue, String goal, Path censusValue, Path closureValue,
@@ -43,8 +47,10 @@ final class SwarmPreflight {
         require(promptText.contains(REQUIRED_SCAR)
                 && promptText.contains("Nested task/explore/subagent delegation is forbidden"),
                 "worker base prompt does not enforce the applicable scar");
-        String context = SwarmProcess.output(root,
+        SwarmProcess.Result contextResult = SwarmProcess.capture(root,
                 List.of("csm", "context", "--task", goal, "--path", "."), 300);
+        require(contextAccepted(contextResult), "csm context failed outside the optional-store allowance");
+        String context = contextResult.output();
         String recall = SwarmProcess.output(root, List.of("csm", "nya", "recall", "--task", goal,
                 "--path", "smokes/" + id, "--path", "tools/smoke", "--path", "modules/testkit"), 300);
         String semanticRecall = SwarmProcess.output(root, List.of("csm", "nya", "recall", "--task",
@@ -81,6 +87,28 @@ final class SwarmPreflight {
         int result = 0; while (matcher.find()) result += Integer.parseInt(matcher.group(2));
         return result;
     }
+    static void selfTest() {
+        require(contextAccepted(new SwarmProcess.Result(0, "complete", "")),
+                "successful CSM context was rejected");
+        String partial = "== nya ==\n" + REQUIRED_SCAR;
+        require(contextAccepted(new SwarmProcess.Result(1, partial,
+                OPTIONAL_CONTEXT_ERRORS.get(0) + "\n")), "valid partial CSM context was rejected");
+        require(!contextAccepted(new SwarmProcess.Result(1, "== nya ==",
+                OPTIONAL_CONTEXT_ERRORS.get(0))), "partial context without mandatory scar passed");
+        require(!contextAccepted(new SwarmProcess.Result(1, partial, "unknown failure\n")),
+                "unknown CSM context failure passed");
+    }
+    private static boolean contextAccepted(SwarmProcess.Result result) {
+        if (result.exitCode() == 0) {
+            return true;
+        }
+        if (result.exitCode() != 1 || !result.stdout().contains("== nya ==")
+                || !result.stdout().contains(REQUIRED_SCAR)) {
+            return false;
+        }
+        List<String> errors = result.stderr().lines().filter(line -> !line.isBlank()).toList();
+        return !errors.isEmpty() && errors.stream().allMatch(OPTIONAL_CONTEXT_ERRORS::contains);
+    }
     private static String shaText(String text) throws Exception {
         Path path = Files.createTempFile("worldline-swarm-text-", ".txt");
         try { Files.writeString(path, text, StandardCharsets.UTF_8); return SwarmEvidenceArchive.sha256(path); }
@@ -91,6 +119,8 @@ final class SwarmPreflight {
     }
     private static String slash(String value) { return value.replace('\\', '/'); }
     private static void require(boolean condition, String message) {
-        if (!condition) throw new IllegalStateException(message);
+        if (!condition) {
+            throw new IllegalStateException(message);
+        }
     }
 }
