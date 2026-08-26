@@ -80,3 +80,11 @@ reported_by = "codex:worldline-supervisor"
 corrected_by = "codex:worldline-supervisor"
 recorded_by = "codex:worldline-supervisor"
 commit = "8a2fade43"
+
+[[occurrences]]
+occurred_at = "2026-08-26T15:53:38Z"
+source = "manual:micro-wave-m662-m665 barrier; csm-check rejected packed declarations/assertions in OxAlphaWorker.java lines 13,227,228,309 before Candidate; corrected by extracting profile self-tests and restoring split physical lines"
+reported_by = "codex:orchestrator"
+corrected_by = "codex:orchestrator"
+recorded_by = "codex:orchestrator"
+commit = "6e41512d8"

@@ -12,8 +12,6 @@ import java.util.concurrent.TimeUnit;
 final class OxAlphaWorker {
     private static final String AGENT = "ox-alpha";
     private static final String PROMPT = "coordination/swarm/OX_ALPHA_PROMPT.md";
-    private OxAlphaWorker() {
-    }
 
     public static void main(String[] arguments) {
         try {
@@ -37,8 +35,10 @@ final class OxAlphaWorker {
 
     private static int launch(Request request) throws Exception {
         Path root = Path.of("").toAbsolutePath().normalize();
-        validate(root, request);
         boolean fallback = OxAlphaProfile.fallback();
+        require(OxAlphaProfile.budgetAllowed(fallback, request.phase(), request.session(),
+                request.timeoutSeconds()), "fallback checkpoint resume requires at least 7200 seconds");
+        validate(root, request);
         String message = message(request);
         List<String> command = command(message, request.session(), fallback);
         require(messagePrecedesFiles(command), "worker message must precede variadic file attachments");
@@ -219,10 +219,7 @@ final class OxAlphaWorker {
         String message = invalid.remove(2);
         invalid.add(message);
         require(!messagePrecedesFiles(invalid), "variadic attachment swallowed the worker message");
-        require(OxAlphaProfile.config(false).contains("\"task\":\"deny\""),
-                "nested task permission is not denied");
-        require(OxAlphaProfile.config(false).contains("\"question\":\"deny\""),
-                "interactive worker question is not denied");
+        OxAlphaProfile.selfTest();
         require(command(message(checkpoint), "session", true).contains(OxAlphaProfile.FALLBACK_MODEL),
                 "fallback model is not allowlisted");
         require(message(checkpoint).contains("Nested task, explore, or subagent delegation is forbidden"),

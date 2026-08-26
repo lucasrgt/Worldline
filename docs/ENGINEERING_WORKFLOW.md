@@ -72,6 +72,9 @@ observes EOF and creates a session. Its self-test fails if a child can remain bl
 After an archived primary-provider quota failure, the supervisor may set
 `WORLDLINE_OX_ALPHA_FALLBACK=1` to resume the same receipt-bound session on the allowlisted free
 profile. The launch receipt records both the profile and model; a new session or ID fails closed.
+Fallback checkpoint resumes require a minimum 7200-second worker budget, and the source launcher
+derives a larger outer timeout from that exact requested budget. This executable interlock prevents
+large receipt-bound histories from being misclassified after the primary one-hour window.
 
 Before Candidate Gate, the supervisor runs `SwarmLoop pre-candidate` against the same authorized
 base and goal. It recalls each applicable scar separately, rejects stale generated narratives,

@@ -11,6 +11,11 @@ alive without creating a session or producing an edit. The executable self-test 
 If the primary provider reports a usage limit, classify and archive the attempt before setting
 `WORLDLINE_OX_ALPHA_FALLBACK=1`. The allowlisted free fallback may resume only the same receipt-bound
 session and dirty worktree on a later attempt; it may not open a replacement milestone or session.
+A fallback checkpoint resume must receive at least 7200 seconds because a large receipt-bound
+history can make correct progress beyond the primary one-hour budget. The launcher rejects a
+shorter fallback retry and extends its own outer timeout beyond the worker budget.
+These worktrees run on Windows PowerShell. Use native PowerShell or portable commands; do not spend
+an inference step retrying Unix-only options such as `ls -la`, `find`, or `xargs`.
 
 The supervisor must run `SwarmLoop preflight` with the exact immutable wave closure and supervised
 micro-wave receipt before the worker edits or scaffolds anything. The worker ID must be listed in

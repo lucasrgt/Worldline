@@ -22,7 +22,7 @@ public final class OxAlphaLauncher {
             List<String> command = new ArrayList<>(List.of(javaTool("java"), "-cp", output.toString(),
                     "OxAlphaWorker"));
             command.addAll(List.of(arguments));
-            System.exit(run(root, command, 3700));
+            System.exit(run(root, command, launcherSeconds(arguments)));
         } catch (Exception exception) {
             System.err.println("Ox Alpha source launcher failed: " + exception.getMessage());
             System.exit(1);
@@ -34,6 +34,16 @@ public final class OxAlphaLauncher {
         process.getOutputStream().close();
         require(process.waitFor(seconds, TimeUnit.SECONDS), command.get(0) + " timed out");
         return process.exitValue();
+    }
+
+    private static int launcherSeconds(String[] arguments) {
+        int workerSeconds = 3600;
+        for (int index = 0; index + 1 < arguments.length; index += 2) {
+            if (arguments[index].equals("--timeout-seconds")) {
+                workerSeconds = Integer.parseInt(arguments[index + 1]);
+            }
+        }
+        return Math.addExact(workerSeconds, 100);
     }
 
     private static String javaTool(String name) {

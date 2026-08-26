@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M0ZC1VEPW4ECB6QW5J6FZVJC"
+title = "Budget fallback retries for large session histories"
+lesson = "A provider fallback that resumes a 300k-token-or-larger OpenCode session can make correct progress yet exceed the primary one-hour checkpoint budget. Before launch, measure or conservatively classify resumed-session history, use a bounded extended checkpoint timeout for the allowlisted fallback, require periodic JSONL progress, and never interpret timeout as contract rejection. Keep Candidate and runtime blocked until an explicit checkpoint disposition."
+scope = [
+    "tools/integration/OxAlpha*.java",
+    "coordination/swarm/OX_ALPHA_PROMPT.md",
+]
+tags = [
+    "opencode",
+    "fallback",
+    "timeout",
+    "supervision",
+]
+created_at = "2026-08-26T15:47:06Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T15:47:06Z"
+source = "archive:m662-fallback-timeout-attempt3-735ee4343.zip"
+reported_by = "codex:orchestrator"
+corrected_by = "codex:orchestrator"
+recorded_by = "codex:orchestrator"
+commit = "6e41512d8"
