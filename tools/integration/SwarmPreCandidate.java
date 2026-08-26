@@ -23,6 +23,9 @@ final class SwarmPreCandidate {
     private static final String MINECART_ATTACK = "NYA-01M0YM0FGRMPQ4DABMTVS4MNAF";
     private static final String MINECART_INITIATION = "NYA-01M0YMWRZX8V20G1SN0DYGB0MD";
     private static final String SEMANTIC_EXCLUSION = "NYA-01M0YZVBKBPB0SB3CJYVQSPNA9";
+    private static final String STATEMENTS = "NYA-01M0ZNQMM5YM02Z1FQQGB97HE1";
+    private static final String FLOWING_WATER = "NYA-01M0ZNQNP5W87J0NNW7219ZNFQ";
+    private static final String DATA_TRACE = "NYA-01M0ZNQP9E7K1X69DBZXFGB8PR";
     private SwarmPreCandidate() {
     }
 
@@ -45,6 +48,7 @@ final class SwarmPreCandidate {
         }
         if (Files.isDirectory(root.resolve("smokes").resolve(id).resolve("src"))) {
             scars.add(COMPILE);
+            scars.add(STATEMENTS);
         }
         if (SwarmProcess.output(root, List.of("git", "diff", "--name-only", base), 60).lines()
                 .anyMatch(path -> path.startsWith("modules/api/src/main/java/"))) {
@@ -59,6 +63,9 @@ final class SwarmPreCandidate {
         if (Files.isRegularFile(root.resolve("smokes").resolve(id).resolve("MAP.md"))) {
             scars.add(MAP_SIGNAL);
         }
+        if (runner.endsWith("DataDrivenCycle.java")) scars.add(DATA_TRACE);
+        if ("flowing-water-freeze".equals(descriptor.getProperty("behavior")))
+            scars.add(FLOWING_WATER);
         if (SwarmProcess.output(root, List.of("git", "diff", "--name-only", base), 60).lines()
                 .anyMatch(path -> path.startsWith("tools/harness/")
                         || path.startsWith("tools/integration/"))) scars.add(TRAVERSAL);

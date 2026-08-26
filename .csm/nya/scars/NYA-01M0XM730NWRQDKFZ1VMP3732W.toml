@@ -22,3 +22,11 @@ reported_by = "codex:m646_retry2"
 corrected_by = "codex:root-supervisor"
 recorded_by = "codex:root"
 commit = "4cc0b8160"
+
+[[occurrences]]
+occurred_at = "2026-08-26T18:36:17Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/micro-wave-m662-m665-qualify2-876b0e0c2/m663-snow-layer-nonstacking-8e07e065a13e.zip sha256=8B5C17D753E31C78E482AA09D098A76A15B9B9AE49E8615DD83A87D5F3210FE8 cause=recurrence copied server mapping b into the empty client column for setIsRaining despite recall"
+reported_by = "codex:root-supervisor"
+corrected_by = "codex:root-supervisor"
+recorded_by = "codex:root"
+commit = "876b0e0c2"

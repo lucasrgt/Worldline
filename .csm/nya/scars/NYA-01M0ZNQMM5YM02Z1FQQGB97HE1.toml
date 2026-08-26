@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M0ZNQMM5YM02Z1FQQGB97HE1"
+title = "Run smoke statement ceilings inside Candidate readiness"
+lesson = "The supervised readiness interlock must execute the same per-file smoke statement budget as Candidate Gate before freezing its manifest. A readiness PASS for a source above 150 statements creates an avoidable retry and invites unsafe post-readiness edits."
+scope = [
+    "tools/harness/CandidateReadiness.java",
+    "tools/harness/SmokeStatementBudget.java",
+    "smokes/*/src/**/*.java",
+]
+tags = [
+    "milestone",
+    "statement-budget",
+    "pre-candidate",
+]
+created_at = "2026-08-26T18:36:17Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T18:36:17Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/micro-wave-m662-m665-qualify2-876b0e0c2/m662-chicken-fall-immunity-876b0e0c2483.zip sha256=150056FA4452B49D711866CD0A2B8EB46ADB098989971B3D57F4AB928BB81953 cause=readiness passed a 194/150 smoke source before Candidate rejected it"
+reported_by = "codex:root-supervisor"
+corrected_by = "codex:root-supervisor"
+recorded_by = "codex:root"
+commit = "876b0e0c2"

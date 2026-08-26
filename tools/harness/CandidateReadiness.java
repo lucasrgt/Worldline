@@ -40,7 +40,7 @@ final class CandidateReadiness {
     private CandidateReadiness() {
     }
 
-    static void selfTest() {
+    static void selfTest() throws Exception {
         require(packedExecutable("    if (!value) throw new IllegalStateException();"),
                 "packed control body was not recognized");
         require(packedExecutable("    private Arm(boolean axisZ) { this.axisZ = axisZ; }"),
@@ -68,6 +68,7 @@ final class CandidateReadiness {
                 "minecart collision behavior alias was not recognized");
         require(IMPORT.matcher("import worldline.smoke.privatecycle.Helper;").find(),
                 "private import was not recognized");
+        CandidatePolicyReadiness.selfTest();
     }
 
     static void prepare(String id) throws Exception {
@@ -140,9 +141,9 @@ final class CandidateReadiness {
         if (descriptor.containsKey("testkit.fixture")) {
             result.add(TOKENS);
         }
-        if (Files.isRegularFile(root.resolve("smokes").resolve(id).resolve("symbols.map"))) {
+        if (Files.isRegularFile(root.resolve("smokes").resolve(id).resolve("symbols.map")))
             result.add(SYMBOLS);
-        }
+        result.addAll(CandidatePolicyReadiness.applicable(root, id, descriptor));
         if (Files.isRegularFile(root.resolve("smokes").resolve(id).resolve("MAP.md"))) {
             result.add(MAP_SIGNAL);
         }
@@ -162,6 +163,7 @@ final class CandidateReadiness {
         Path milestone = root.resolve("smokes").resolve(id);
         Properties descriptor = StrictProperties.load(milestone.resolve("smoke.properties"));
         require(!descriptor.containsKey("scaffold.status"), "scaffold is not Candidate-ready");
+        CandidatePolicyReadiness.verify(root, id, descriptor);
         MilestoneNarrative.validate(root, descriptor);
         SmokeLane.validate(root);
         String signal = descriptor.getProperty("expected.signal");

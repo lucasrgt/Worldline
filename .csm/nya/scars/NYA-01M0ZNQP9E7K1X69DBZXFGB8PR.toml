@@ -1,0 +1,25 @@
+schema = 1
+id = "NYA-01M0ZNQP9E7K1X69DBZXFGB8PR"
+title = "Bind data-driven signatures to a declared exact trace"
+lesson = "Every supervised DataDrivenCycle must declare expected.trace, require its SHA-256 to equal expected.signature, and include that exact trace in MAP.md before Candidate. Runtime still proves the emitted signature, while readiness rejects hand-calculated or stale frozen hashes without spending the official-runtime lease."
+scope = [
+    "smokes/*/smoke.properties",
+    "smokes/*/MAP.md",
+    "tools/harness/CandidatePolicyReadiness.java",
+    "tools/smoke/DataDrivenCycle.java",
+]
+tags = [
+    "milestone",
+    "data-driven",
+    "signature",
+    "pre-runtime",
+]
+created_at = "2026-08-26T18:36:19Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T18:36:19Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/micro-wave-m662-m665-qualify2-876b0e0c2/m665-leaf-support-distance-95fb3ae579c4.zip sha256=E92E363ABDC21A4AF9056B42B6711275BC71468286A2EA3B32B14CB766496F2C cause=two official runs agreed but expected.signature did not hash the exact emitted trace"
+reported_by = "codex:root-supervisor"
+corrected_by = "codex:root-supervisor"
+recorded_by = "codex:root"
+commit = "876b0e0c2"

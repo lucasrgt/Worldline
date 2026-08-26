@@ -20,3 +20,11 @@ reported_by = "codex:root"
 corrected_by = "codex:root"
 recorded_by = "codex:root"
 commit = "5d6f37b51"
+
+[[occurrences]]
+occurred_at = "2026-08-26T18:43:41Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline/.worldline/reports/verify.json sha256=3B663C3EAD802ABE8DEACDB16380B41541C3390621EC333DE27FEB12214CFE01 cause=CandidatePolicyReadiness used raw Files.walk for recursive smoke source enumeration"
+reported_by = "codex:root-supervisor"
+corrected_by = "codex:root-supervisor"
+recorded_by = "codex:root"
+commit = "fc8e1ba12"

@@ -86,6 +86,12 @@ Before Candidate Gate, the supervisor must run `SwarmLoop pre-candidate` for the
 authorized base, and goal. Its objective readiness report must stay bound to the unchanged source
 manifest. The interlock must compile the exact runner, adapter, module, and smoke source closure
 with the Candidate compiler, including checked-exception compatibility, before emitting PASS.
+It also runs the Candidate smoke-statement ceiling before freezing the manifest, validates every
+six-column symbol row against the exact hashed `mappings.tiny`, and rejects any source above its
+150-statement budget. A new supervised `DataDrivenCycle` must declare `expected.trace`; that exact
+trace must be present in `MAP.md`, hash to `expected.signature`, and bind the runtime signature. A
+flowing-water freeze fixture must install its moving-water control without notifying neighbors
+before it proves the initial still/moving pair.
 Candidate Gate fails closed when the report is missing or any file changed afterward.
 Every candidate with smoke sources must recall `NYA-01M0YH9M17ETMZA0F5X7981K4P`; textual review
 of imports or method signatures never substitutes for that exact compilation.
