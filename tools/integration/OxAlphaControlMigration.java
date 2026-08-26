@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -17,6 +18,10 @@ import java.util.zip.ZipOutputStream;
 public final class OxAlphaControlMigration {
     private static final String SUPERVISION = "NYA-01M0VSCA8F3WSMVW32R9XME7DQ";
     private static final String CONTROL_BASE = "NYA-01M0ZHW1MB9W4BX3H0AY88CVY0";
+    private static final List<String> OPTIONAL_CONTEXT_ERRORS = List.of(
+            "Why This Way is not initialized; run wtw init",
+            "rtw: Right This Way is not initialized; run rtw init",
+            "Now We Can is not initialized; run nwc init");
 
     private OxAlphaControlMigration() {
     }
@@ -54,7 +59,7 @@ public final class OxAlphaControlMigration {
                 "prior preflight is not bound to the archived base");
         Result context = capture(root, List.of("csm", "context", "--task", request.goal,
                 "--path", "."), 300);
-        require(context.exit == 0, "CSM context failed on the new control base");
+        require(contextAccepted(context), "CSM context failed on the new control base");
         String standard = output(root, List.of("csm", "nya", "recall", "--task", request.goal,
                 "--path", "smokes/" + request.id, "--path", "tools/smoke",
                 "--path", "modules/testkit"), 300);
@@ -146,6 +151,11 @@ public final class OxAlphaControlMigration {
                 rejected = true;
             }
             require(rejected, "archive hash mismatch was accepted");
+            String partial = "== nya ==\n" + SUPERVISION;
+            require(contextAccepted(new Result(1, partial, OPTIONAL_CONTEXT_ERRORS.get(0))),
+                    "verified partial CSM context was rejected");
+            require(!contextAccepted(new Result(1, partial, "unknown failure")),
+                    "unknown CSM context failure was accepted");
         } finally {
             Files.deleteIfExists(archive);
         }
@@ -178,12 +188,32 @@ public final class OxAlphaControlMigration {
     }
 
     private static Result capture(Path root, List<String> command, int seconds) throws Exception {
-        ProcessBuilder builder = new ProcessBuilder(command).directory(root.toFile())
-                .redirectErrorStream(true);
-        Process process = builder.start();
-        String stdout = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        Process process = new ProcessBuilder(command).directory(root.toFile()).start();
+        CompletableFuture<byte[]> stdout = CompletableFuture.supplyAsync(() -> bytes(process, true));
+        CompletableFuture<byte[]> stderr = CompletableFuture.supplyAsync(() -> bytes(process, false));
         require(process.waitFor(seconds, TimeUnit.SECONDS), "command timed out: " + command.get(0));
-        return new Result(process.exitValue(), stdout);
+        return new Result(process.exitValue(), new String(stdout.get(), StandardCharsets.UTF_8),
+                new String(stderr.get(), StandardCharsets.UTF_8));
+    }
+
+    private static byte[] bytes(Process process, boolean stdout) {
+        try {
+            return (stdout ? process.getInputStream() : process.getErrorStream()).readAllBytes();
+        } catch (Exception error) {
+            throw new IllegalStateException("command output could not be read", error);
+        }
+    }
+
+    private static boolean contextAccepted(Result result) {
+        if (result.exit == 0) {
+            return true;
+        }
+        if (result.exit != 1 || !result.stdout.contains("== nya ==")
+                || !result.stdout.contains(SUPERVISION)) {
+            return false;
+        }
+        List<String> errors = result.stderr.lines().filter(line -> !line.isBlank()).toList();
+        return !errors.isEmpty() && errors.stream().allMatch(OPTIONAL_CONTEXT_ERRORS::contains);
     }
 
     private static int status(Path root, List<String> command, int seconds) throws Exception {
@@ -210,7 +240,7 @@ public final class OxAlphaControlMigration {
         }
     }
 
-    private record Result(int exit, String stdout) {
+    private record Result(int exit, String stdout, String stderr) {
     }
 
     private record Request(String id, String goal, String oldBase, String newBase, String session,

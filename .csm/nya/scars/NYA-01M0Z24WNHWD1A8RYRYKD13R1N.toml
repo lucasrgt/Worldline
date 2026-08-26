@@ -21,3 +21,11 @@ reported_by = "codex:worldline-supervisor"
 corrected_by = "codex:worldline-supervisor"
 recorded_by = "codex:worldline-supervisor"
 commit = "8a2fade43"
+
+[[occurrences]]
+occurred_at = "2026-08-26T18:02:24Z"
+source = "manual:control-base-migration-m662-m665 all four helpers exited before patch restore because csm context returned 1 with only recognized uninitialized WTW RTW NWC stores while NYA returned the mandatory supervision scar"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "e92e0b264"
