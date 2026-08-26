@@ -67,6 +67,8 @@ positional worker message before variadic prompt attachments, and preserves immu
 and a launch receipt. Direct `opencode run` invocations are not supervised evidence. After the
 worker stops at its checkpoint, run `SwarmLoop pre-candidate` and resume the same recorded session
 through the launcher's `qualify` phase.
+The launcher closes the child's stdin pipe immediately after creation so non-interactive OpenCode
+observes EOF and creates a session. Its self-test fails if a child can remain blocked on stdin.
 
 Before Candidate Gate, the supervisor runs `SwarmLoop pre-candidate` against the same authorized
 base and goal. It recalls each applicable scar separately, rejects stale generated narratives,

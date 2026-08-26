@@ -30,6 +30,11 @@ public final class OxAlphaLauncher {
                 selfTest();
                 return;
             }
+            if (List.of(arguments).equals(List.of("--self-test-stdin-child"))) {
+                System.in.readAllBytes();
+                System.out.println("stdin closed");
+                return;
+            }
             Request request = parse(arguments);
             int exit = launch(request);
             System.exit(exit);
@@ -58,6 +63,7 @@ public final class OxAlphaLauncher {
         ProcessBuilder builder = new ProcessBuilder(command).directory(root.toFile());
         builder.environment().put("OPENCODE_CONFIG_CONTENT", CONFIG.replaceAll("\\s+", " "));
         Process process = builder.redirectOutput(stdout.toFile()).redirectError(stderr.toFile()).start();
+        closeStdin(process);
         boolean completed = process.waitFor(request.timeoutSeconds(), TimeUnit.SECONDS);
         if (!completed) {
             terminate(process);
@@ -192,7 +198,7 @@ public final class OxAlphaLauncher {
         return new Request(id, goal, base, phase, attempt, session, timeout);
     }
 
-    private static void selfTest() {
+    private static void selfTest() throws Exception {
         Request checkpoint = new Request("m1-contract", "Prove a real behavior",
                 "0123456789012345678901234567890123456789", "checkpoint", 1, null, 60);
         List<String> valid = command(message(checkpoint), null);
@@ -205,7 +211,16 @@ public final class OxAlphaLauncher {
         require(CONFIG.contains("\"question\":\"deny\""), "interactive worker question is not denied");
         require(message(checkpoint).contains("Nested task, explore, or subagent delegation is forbidden"),
                 "worker message omitted delegation prohibition");
+        Process child = new ProcessBuilder(javaTool(), "-cp", System.getProperty("java.class.path"),
+                "OxAlphaLauncher", "--self-test-stdin-child").start();
+        closeStdin(child);
+        require(child.waitFor(5, TimeUnit.SECONDS), "launcher left the child stdin open");
+        require(child.exitValue() == 0, "stdin closure child failed");
         System.out.println("Ox Alpha launcher self-test passed");
+    }
+
+    private static void closeStdin(Process process) throws Exception {
+        process.getOutputStream().close();
     }
 
     private static boolean messagePrecedesFiles(List<String> command) {
@@ -230,6 +245,12 @@ public final class OxAlphaLauncher {
         Path tool = Path.of(appData, "npm", "node_modules", "opencode-ai", "bin", "opencode.exe");
         require(Files.isRegularFile(tool), "OpenCode executable is unavailable: " + tool);
         return tool.toString();
+    }
+
+    private static String javaTool() {
+        boolean windows = System.getProperty("os.name", "").toLowerCase().contains("win");
+        return Path.of(System.getProperty("java.home"), "bin", "java" + (windows ? ".exe" : ""))
+                .toString();
     }
 
     private static String git(Path root, String... arguments) throws Exception {

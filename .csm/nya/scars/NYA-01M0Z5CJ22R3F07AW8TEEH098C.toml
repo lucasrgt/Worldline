@@ -1,0 +1,24 @@
+schema = 1
+id = "NYA-01M0Z5CJ22R3F07AW8TEEH098C"
+title = "Close supervised child stdin before waiting"
+lesson = "A Java ProcessBuilder gives the OpenCode child a writable stdin pipe. The supervised launcher must close process.getOutputStream immediately after start, before waitFor, because opencode run reads non-interactive stdin to EOF before creating its session. Add a self-test child mode that blocks on stdin and prove the launcher closes it; an open pipe can leave every parallel worker alive with zero session, zero output, and zero edits."
+scope = [
+    "tools/integration/OxAlphaLauncher.java",
+    "tools/harness/IntegrationToolsCheck.java",
+    "coordination/swarm/OX_ALPHA_PROMPT.md",
+    "docs/ENGINEERING_WORKFLOW.md",
+]
+tags = [
+    "opencode",
+    "process-lifecycle",
+    "parallelism",
+]
+created_at = "2026-08-26T13:50:37Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T13:50:37Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/micro-wave1-opencode-open-stdin-1eabcf1e4.zip sha256=B75344A730AD8D660E72B9CC831A3CEB47E4E4D9045B11BC5A41B378B1B78268 cause=four launchers remained alive with zero session, zero output, zero edits until exact OpenCode child termination"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "1eabcf1e4"
