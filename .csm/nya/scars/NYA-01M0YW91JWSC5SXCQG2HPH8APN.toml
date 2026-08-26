@@ -1,0 +1,28 @@
+schema = 1
+id = "NYA-01M0YW91JWSC5SXCQG2HPH8APN"
+title = "Refresh integration-owned release indexes before reconcile"
+lesson = "After adding a qualified milestone and portable pin in a train, regenerate coordinator-owned release surfaces before IntegrationTrain --reconcile: run Gate --refresh-readme-status and Gate --refresh-documentation, then require both checks to pass on the exact clean consolidated tree. Workers must not own these global indexes, and a stale generated README or documentation catalog blocks the train before runtime."
+scope = [
+    "README.md",
+    "docs/generated/*.md",
+    "tools/harness/ReadmeStatus.java",
+    "tools/harness/DocumentationCatalog.java",
+    "tools/harness/Gate.java",
+    "tools/harness/GateMaintenance.java",
+    "coordination/swarm/OX_ALPHA_PROMPT.md",
+    "docs/ENGINEERING_WORKFLOW.md",
+]
+tags = [
+    "integration-train",
+    "generated-docs",
+    "preflight",
+]
+created_at = "2026-08-26T11:11:24Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T11:11:24Z"
+source = "manual:train-m661-reconcile-attempt2"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "7f7168961"

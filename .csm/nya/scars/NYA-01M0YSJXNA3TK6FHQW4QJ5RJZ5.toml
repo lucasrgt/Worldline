@@ -1,0 +1,24 @@
+schema = 1
+id = "NYA-01M0YSJXNA3TK6FHQW4QJ5RJZ5"
+title = "Bind semantic maps to the exact descriptor signal before Candidate"
+lesson = "A semantic MAP with only a frozen trace or signature is not Candidate-ready. Before Candidate Gate, require MAP.md to contain the exact expected.signal value from the same milestone smoke.properties; the supervised readiness interlock must compare those files byte-for-byte and fail before Candidate when the literal signal is absent."
+scope = [
+    "smokes/*/MAP.md",
+    "smokes/*/smoke.properties",
+    "tools/harness/CandidateReadiness.java",
+    "tools/harness/MilestoneContract.java",
+]
+tags = [
+    "candidate-gate",
+    "semantic-map",
+    "expected-signal",
+]
+created_at = "2026-08-26T10:24:22Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T10:24:22Z"
+source = ".worldline/reports/swarm/candidate-m661-spider-daylight-aggression-attempt1.log sha256=D13E247BFDC33A74967D8A964388B3A744C35A8AC273B2C6744270210CE6F18E cause=MAP.md omitted the exact expected.signal despite trace and signature"
+reported_by = "codex:m661-ox-alpha"
+corrected_by = "codex:m646_retry2"
+recorded_by = "codex:root"
+commit = "1bb7a6b52"

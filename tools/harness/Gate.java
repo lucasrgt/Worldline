@@ -141,6 +141,8 @@ public final class Gate {
                 + "--migrate-gui-workbench-pins|"
                 + "--rebalance-behavior-families|--migrate-behavior-family-pins|"
                 + "--migrate-train-pins|"
+                + "--refresh-readme-status|"
+                + "--refresh-testkit-artifact-pins|"
                 + "--refresh-documentation|"
                 + "--seal-lane-portability|"
                 + "--module-cache-doctor|--module-cache-gc|--cache-doctor|--cache-gc|"

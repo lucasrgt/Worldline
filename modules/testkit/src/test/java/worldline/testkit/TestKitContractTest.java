@@ -27,7 +27,8 @@ import static worldline.test.Worldline.worldline;
 
 /** Contract checks for fluent configuration, diagnostics, timeout, and batch events. */
 public final class TestKitContractTest {
-    private TestKitContractTest() {}
+    private TestKitContractTest() {
+    }
     public static void main(String[] arguments) throws Exception {
         ServerAclFixtureTest.execute();
         ServerEntryPolicyFixtureTest.execute();
@@ -52,8 +53,10 @@ public final class TestKitContractTest {
         TntChainFixtureTest.execute();
         CreeperTntDifferentialFixtureTest.execute();
         PoweredCreeperFixtureTest.execute();
+        SpiderDaylightAggressionFixtureTest.execute();
         NotePitchFixtureTest.execute();
-        Path root = Files.createTempDirectory("worldline-test-contract-"); Provider provider = new Provider();
+        Path root = Files.createTempDirectory("worldline-test-contract-");
+        Provider provider = new Provider();
         RunnerOptions options = new RunnerOptions().provider(provider).artifacts(root.resolve("artifacts"))
                 .snapshots(root.resolve("snapshots")).runtimeLock(root.resolve("runtime.lock"));
         Events events = new Events();
@@ -90,12 +93,15 @@ public final class TestKitContractTest {
     private static final class Fluent extends WorldlineSpec {
         @Override protected void define() {
             test("fluent", worldline().runtime("fake").seed(991L).run(context -> {
-                expect(context.seed()).toEqual(991L); expect(context.health()).toEqual(20);
+                expect(context.seed()).toEqual(991L);
+                expect(context.health()).toEqual(20);
             }));
         }
     }
     private static final class Passing extends WorldlineSpec {
-        @Override protected void define() { test("second file", context -> expect(true).toBeTrue()); }
+        @Override protected void define() {
+            test("second file", context -> expect(true).toBeTrue());
+        }
     }
     private static final class Divergence extends WorldlineSpec {
         @Override protected void define() {
@@ -104,14 +110,24 @@ public final class TestKitContractTest {
         }
     }
     private static final class Interrupted extends WorldlineSpec {
-        @Override protected void define() { test("interrupt", context -> { throw new InterruptedException("stop"); }); }
+        @Override protected void define() {
+            test("interrupt", context -> {
+                throw new InterruptedException("stop");
+            });
+        }
     }
     private static final class Slow extends WorldlineSpec {
-        @Override protected void define() { test("timeout", context -> { context.tick(); Thread.sleep(10_000); }); }
+        @Override protected void define() {
+            test("timeout", context -> {
+                context.tick();
+                Thread.sleep(10_000);
+            });
+        }
     }
     private static final class RuntimeRequired extends WorldlineSpec {
         @Override protected void define() {
-            test("requires runtime", worldline().runtime("fake").run(context -> {}));
+            test("requires runtime", worldline().runtime("fake").run(context -> {
+            }));
         }
     }
     private static final class UnmappedWrite extends WorldlineSpec {
@@ -120,62 +136,129 @@ public final class TestKitContractTest {
         }
     }
     private static boolean contains(TestResult result, String name) {
-        for (Path path : result.artifacts()) if (path.getFileName().toString().equals(name)) return true;
+        for (Path path : result.artifacts()) {
+            if (path.getFileName().toString().equals(name)) {
+                return true;
+            }
+        }
         return false;
     }
     private static boolean trace(TestResult result) {
-        for (Path path : result.artifacts()) if (path.getFileName().toString().endsWith(".wltrace")) return true;
+        for (Path path : result.artifacts()) {
+            if (path.getFileName().toString().endsWith(".wltrace")) {
+                return true;
+            }
+        }
         return false;
     }
     private static final class Events implements TestReporter {
         int files, started;
-        @Override public void runStarted(List<TestPlan> plans, int selected) { started = selected; }
-        @Override public void fileCollected(TestPlan plan) { files++; }
+        @Override public void runStarted(List<TestPlan> plans, int selected) {
+            started = selected;
+        }
+        @Override public void fileCollected(TestPlan plan) {
+            files++;
+        }
     }
     private static final class Provider implements TestRuntimeProvider {
         final List<Long> seeds = new java.util.ArrayList<>();
         final AtomicInteger sessions = new AtomicInteger();
-        @Override public String runtimeId() { return "fake"; }
+        @Override public String runtimeId() {
+            return "fake";
+        }
         @Override public TestRuntimeSession open(TestRuntimeRequest request) {
-            seeds.add(request.seed()); sessions.incrementAndGet(); Runtime runtime = new Runtime();
+            seeds.add(request.seed());
+            sessions.incrementAndGet();
+            Runtime runtime = new Runtime();
             return new TestRuntimeSession() {
-                @Override public AutomatedMinecraftRuntime runtime() { return runtime; }
-                @Override public void close() { runtime.close(); }
+                @Override public AutomatedMinecraftRuntime runtime() {
+                    return runtime;
+                }
+                @Override public void close() {
+                    runtime.close();
+                }
             };
         }
     }
     private static final class Runtime implements AutomatedMinecraftRuntime {
-        private final Player player = new Player(); private int ticks;
-        @Override public void bootHeadless() {}
-        @Override public void loadWorld(worldline.api.WorldSource source) {}
-        @Override public void tick() { ticks++; }
-        @Override public RuntimeState state() { return RuntimeState.WORLD_LOADED; }
-        @Override public GameWorld world() { return new World(ticks); }
-        @Override public GamePlayer player() { return player; }
-        @Override public void close() {}
+        private final Player player = new Player();
+        private int ticks;
+        @Override public void bootHeadless() {
+        }
+        @Override public void loadWorld(worldline.api.WorldSource source) {
+        }
+        @Override public void tick() {
+            ticks++;
+        }
+        @Override public RuntimeState state() {
+            return RuntimeState.WORLD_LOADED;
+        }
+        @Override public GameWorld world() {
+            return new World(ticks);
+        }
+        @Override public GamePlayer player() {
+            return player;
+        }
+        @Override public void close() {
+        }
     }
     private static final class World implements GameWorld {
-        private final int ticks; World(int ticks) { this.ticks = ticks; }
-        @Override public long time() { return ticks; }
-        @Override public BlockState block(BlockPosition position) { return new BlockState(0, 0); }
-        @Override public boolean setBlock(BlockPosition position, BlockState state) { return true; }
-        @Override public List<GameEntity> entities() { return Collections.emptyList(); }
-        @Override public ItemCensus items() { return ItemCensus.empty(); }
-        @Override public ItemCensus blocks() { return ItemCensus.empty(); }
+        private final int ticks;
+        World(int ticks) {
+            this.ticks = ticks;
+        }
+        @Override public long time() {
+            return ticks;
+        }
+        @Override public BlockState block(BlockPosition position) {
+            return new BlockState(0, 0);
+        }
+        @Override public boolean setBlock(BlockPosition position, BlockState state) {
+            return true;
+        }
+        @Override public List<GameEntity> entities() {
+            return Collections.emptyList();
+        }
+        @Override public ItemCensus items() {
+            return ItemCensus.empty();
+        }
+        @Override public ItemCensus blocks() {
+            return ItemCensus.empty();
+        }
     }
     private static final class Player implements GamePlayer {
-        @Override public int id() { return 1; }
-        @Override public String type() { return "player"; }
-        @Override public GamePosition position() { return new GamePosition(0, 64, 0); }
-        @Override public boolean alive() { return true; }
-        @Override public void teleport(GamePosition position) {}
-        @Override public String username() { return "Test"; }
-        @Override public int health() { return 20; }
-        @Override public int selectedHotbarSlot() { return 0; }
-        @Override public void selectHotbarSlot(int slot) {}
-        @Override public ItemCensus items() { return ItemCensus.empty(); }
+        @Override public int id() {
+            return 1;
+        }
+        @Override public String type() {
+            return "player";
+        }
+        @Override public GamePosition position() {
+            return new GamePosition(0, 64, 0);
+        }
+        @Override public boolean alive() {
+            return true;
+        }
+        @Override public void teleport(GamePosition position) {
+        }
+        @Override public String username() {
+            return "Test";
+        }
+        @Override public int health() {
+            return 20;
+        }
+        @Override public int selectedHotbarSlot() {
+            return 0;
+        }
+        @Override public void selectHotbarSlot(int slot) {
+        }
+        @Override public ItemCensus items() {
+            return ItemCensus.empty();
+        }
     }
     private static void require(boolean condition, String message) {
-        if (!condition) throw new AssertionError(message);
+        if (!condition) {
+            throw new AssertionError(message);
+        }
     }
 }

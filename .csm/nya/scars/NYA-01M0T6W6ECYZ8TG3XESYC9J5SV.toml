@@ -28,3 +28,19 @@ reported_by = "codex:root"
 corrected_by = "codex:root"
 recorded_by = "codex:root"
 commit = "4cc0b8160"
+
+[[occurrences]]
+occurred_at = "2026-08-26T11:27:59Z"
+source = "manual:train-m661-reconcile-attempt3-testkit-artifact-drift"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "70d7b123f"
+
+[[occurrences]]
+occurred_at = "2026-08-26T11:35:21Z"
+source = "manual:train-m661-v3-candidate-cache-not-materialized"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "a74c5478b"

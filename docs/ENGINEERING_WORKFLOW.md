@@ -57,13 +57,18 @@ task, explore, or subagent delegation because the launcher does not supervise ne
 
 Before Candidate Gate, the supervisor runs `SwarmLoop pre-candidate` against the same authorized
 base and goal. It recalls each applicable scar separately, rejects stale generated narratives,
-lane-census drift, packed control bodies, long smoke lines, scaffold markers, and imports from a
-sibling milestone's private smoke sources. The interlock also compiles the exact runner, adapter,
+lane-census drift, semantic maps missing the exact descriptor signal, packed control bodies, long
+smoke lines, scaffold markers, and imports from a sibling milestone's private smoke sources. The
+semantic-map comparison recalls `NYA-01M0YSJXNA3TK6FHQW4QJ5RJZ5`. The interlock compiles the
+runner, adapter,
 module, and smoke source closure with the Candidate compiler before it writes a content-bound
 readiness report. Candidate Gate on a supervised milestone branch requires that PASS report and
 rejects any later source change.
 Candidates with smoke sources recall `NYA-01M0YH9M17ETMZA0F5X7981K4P`; the compilation result,
 not textual inspection of imports or `throws` clauses, is the objective closure proof.
+Candidates changing `modules/api` also recall `NYA-01M0YRVA4DD24Y22AHJQP2X3MF`. Exact closure
+compilation preserves the release declared for every module; the Java 8 API may not adopt a
+Java 21 language feature merely because TestKit declares release 21.
 Packed-source prevention includes complete constructors, methods, and control bodies on one physical
 line, including empty constructors. Minecart-collision readiness additionally rejects remotely placed
 stone support geometry after the repeated pre-oracle reach failures recorded in NYA. It also rejects
@@ -396,7 +401,25 @@ java tools/integration/IntegrationTrain.java --base <base-sha> \
 ```
 
 Reconciliation mode runs the complete smoke gate on that clean commit before
-writing the qualified plan; it cannot combine multiple candidates.
+writing the qualified plan; it cannot combine multiple candidates. Train pin migration preserves
+the immediate predecessor's source order. A source whose current digest did not change must retain
+the predecessor ancestor count and ordered ancestor digests exactly; only a changed source may
+advance its ancestry. The migration self-test enforces this before generated locks are committed.
+Pin migration starts only from a clean committed source tree, verified with `git status
+--porcelain --untracked-files=all`; untracked sources cannot participate in the ancestry census and
+therefore fail closed before any lock is written.
+Before invoking reconciliation, resolve both refs and require `git rev-list --count
+<base-sha>..<consolidated-ref>` to equal exactly `1`. Preserve a multi-commit staging branch and
+create a new single-commit `codex/train-*` consolidation ref instead of rewriting or deleting it.
+Before freezing the consolidated ref, update the integration-owned release surfaces with
+`java tools/harness/Gate.java --refresh-readme-status` and `java tools/harness/Gate.java
+--refresh-documentation`; both generated checks must pass before reconciliation starts. Milestone
+workers continue to leave these global indexes to the train.
+When reconciled TestKit sources change, run `java tools/harness/Gate.java
+--refresh-testkit-artifact-pins` on the exact clean committed train. That maintenance command
+compiles and materializes the module outputs, packages TestKit, and seals entry-by-entry evidence.
+Commit `release/testkit-artifacts.lock` before train pin migration; a predecessor artifact or
+unmaterialized cache link is not release evidence.
 
 After merging and reconciling the candidates in a clean committed staging worktree, create the
 push authorization:

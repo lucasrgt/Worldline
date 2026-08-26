@@ -40,6 +40,12 @@ final class TrainSourceHistory {
 
     void write(Properties predecessor, Properties target, String stem, String relative) {
         String priorStem = find(predecessor, relative);
+        if (priorStem != null && java.util.Objects.equals(
+                predecessor.getProperty(priorStem + "current_sha256"),
+                target.getProperty(stem + "current_sha256"))) {
+            copyAncestors(predecessor, target, priorStem, stem);
+            return;
+        }
         Set<String> ancestors = new LinkedHashSet<>();
         ancestors.addAll(committed.getOrDefault(relative, Set.of()));
         if (priorStem != null) {
@@ -53,6 +59,15 @@ final class TrainSourceHistory {
         int index = 0;
         for (String digest : ancestors)
             target.setProperty(stem + "ancestor." + index++ + ".sha256", digest);
+    }
+
+    private static void copyAncestors(Properties source, Properties target,
+            String sourceStem, String targetStem) {
+        int count = integer(source.getProperty(sourceStem + "ancestor.count", "0"));
+        target.setProperty(targetStem + "ancestor.count", Integer.toString(count));
+        for (int index = 0; index < count; index++)
+            target.setProperty(targetStem + "ancestor." + index + ".sha256",
+                    source.getProperty(sourceStem + "ancestor." + index + ".sha256"));
     }
 
     void writeSources(Path root, Properties target, Properties predecessor,
@@ -91,6 +106,19 @@ final class TrainSourceHistory {
         prior.setProperty("source.2.path", "a");
         require(stablePaths(prior, java.util.List.of("a", "new", "z"))
                 .equals(java.util.List.of("z", "a", "new")), "train sources were renumbered");
+        String digest = "a".repeat(64); prior = new Properties();
+        prior.setProperty("source.count", "1"); prior.setProperty("source.0.path", "same");
+        prior.setProperty("source.0.current_sha256", digest);
+        prior.setProperty("source.0.ancestor.count", "1");
+        prior.setProperty("source.0.ancestor.0.sha256", "b".repeat(64));
+        Properties target = new Properties();
+        target.setProperty("source.0.current_sha256", digest);
+        new TrainSourceHistory(Map.of("same", Set.of("c".repeat(64))))
+                .write(prior, target, "source.0.", "same");
+        require("1".equals(target.getProperty("source.0.ancestor.count"))
+                        && "b".repeat(64).equals(
+                                target.getProperty("source.0.ancestor.0.sha256")),
+                "unchanged train source ancestry advanced");
     }
 
     private static java.util.List<String> stablePaths(

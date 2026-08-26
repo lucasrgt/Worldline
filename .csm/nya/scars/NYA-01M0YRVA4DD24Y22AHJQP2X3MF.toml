@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M0YRVA4DD24Y22AHJQP2X3MF"
+title = "Honor each module Java release before Candidate"
+lesson = "Every maintained source must compile at the Java release declared for its owning module in harness.properties. modules/api defaults to release 8, so public behavior contracts there must use Java 8 classes with explicit value equality instead of records; release-21 TestKit types do not raise the API module language level. Keep the exact pre-Candidate ModuleBuild compilation fail-closed and never relax its release to accommodate an invalid source."
+scope = [
+    "modules/api/src/main/java/**/*.java",
+    "harness.properties",
+    "tools/harness/CandidateSourceClosure.java",
+]
+tags = [
+    "candidate-gate",
+    "module-release",
+    "java-8",
+]
+created_at = "2026-08-26T10:11:29Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T10:11:28Z"
+source = ".worldline/reports/swarm/pre-candidate-m661-spider-daylight-aggression-after-packed-correction.log sha256=AA68569BFAD75AAA74A37646AD7A29EC8FA9648258ACC583A88DE423F2F9E889 cause=modules/api Java record rejected by declared release 8 before Candidate"
+reported_by = "codex:m661-ox-alpha"
+corrected_by = "codex:m646_retry2"
+recorded_by = "codex:root"
+commit = "1bb7a6b52"

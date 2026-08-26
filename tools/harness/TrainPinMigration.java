@@ -38,8 +38,9 @@ final class TrainPinMigration {
 
     private static void apply(Path root, Path swarm) throws Exception {
         require(Files.isDirectory(swarm), "missing milestone worktree root");
-        require(status(root, "merge-base", "--is-ancestor", BASE, "HEAD") == 0,
-                "train base is not an ancestor");
+        require(capture(root, "status", "--porcelain", "--untracked-files=all").isBlank()
+                        && status(root, "merge-base", "--is-ancestor", BASE, "HEAD") == 0,
+                "train pin migration requires a clean committed source tree and valid base");
         Properties lock = new Properties(); lock.setProperty("schema", "1");
         Properties predecessor = predecessor(root, "HEAD");
         lock.setProperty("base", BASE);

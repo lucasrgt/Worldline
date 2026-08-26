@@ -1,5 +1,5 @@
 schema=1
 id=m416-remaining-bookshelf-place
-fingerprint=97933201530e9e5cb04d232e81bddd6edbe550421f5a6816bed6fc8656b5367e
+fingerprint=c6a927ab448fdf35e9f49fe1a81995516c8a89b853b305a0cdc29598d2da4d4a
 observation.sha256=63f78903270a88d3a7b5dafcb9aae55b9ffdacf7d785ff4b0f3d7616a975cc64
 source=refactor-equivalent

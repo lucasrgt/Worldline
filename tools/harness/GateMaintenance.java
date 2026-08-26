@@ -33,6 +33,8 @@ final class GateMaintenance {
         case "--rebalance-behavior-families" -> command("BehaviorFamilyRebalance", "--apply", 600);
         case "--migrate-behavior-family-pins" -> command("BehaviorFamilyPinMigration", "--apply", 600);
         case "--migrate-train-pins" -> command("TrainPinMigration", "--apply", 600);
+        case "--refresh-readme-status" -> command("ReadmeStatus", "update", 600);
+        case "--refresh-testkit-artifact-pins" -> command("TestKitArtifactPin", "--write", 600);
         case "--refresh-documentation" -> command("DocumentationCatalog", "--write", 600);
         case "--seal-lane-portability" -> command("LaneDifferential", "--seal", 60);
         case "--seal-client-lane-portability" -> command("LaneEvidence", "--seal", 60);

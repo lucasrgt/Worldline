@@ -55,3 +55,11 @@ reported_by = "codex:m646_retry2"
 corrected_by = "codex:m646_retry2"
 recorded_by = "codex:m646_retry2"
 commit = "ee26d2e43"
+
+[[occurrences]]
+occurred_at = "2026-08-26T09:59:04Z"
+source = ".worldline/reports/swarm/pre-candidate-m661-spider-daylight-aggression.log sha256=565030E64BCC43552A5DA173EAE82D2D505D9C812AF5D0289738FEC930CDD3C6 cause=SpiderDaylightMemorySave.java packed callable bodies recurred after recall and were blocked before Candidate"
+reported_by = "codex:m661-ox-alpha"
+corrected_by = "codex:m646_retry2"
+recorded_by = "codex:root"
+commit = "1bb7a6b52"

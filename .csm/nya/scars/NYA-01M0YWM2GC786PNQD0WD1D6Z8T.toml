@@ -1,0 +1,24 @@
+schema = 1
+id = "NYA-01M0YWM2GC786PNQD0WD1D6Z8T"
+title = "Require a clean committed tree before train pin migration"
+lesson = "TrainPinMigration derives source history from git diff against the historical base, so untracked files are invisible. Before migration, require git status --porcelain --untracked-files=all to be empty and run only on the exact committed source tree; the migration itself may then write portable pins and the reconciliation lock. Never seal source ancestry from a dirty or partially staged train."
+scope = [
+    "tools/harness/TrainPinMigration.java",
+    "tools/harness/TrainSourceHistory.java",
+    "coordination/swarm/OX_ALPHA_PROMPT.md",
+    "docs/ENGINEERING_WORKFLOW.md",
+]
+tags = [
+    "integration-train",
+    "source-history",
+    "preflight",
+]
+created_at = "2026-08-26T11:17:26Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T11:17:26Z"
+source = "manual:train-m661-pin-migration-v2-untracked-source"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "7f7168961"

@@ -1,5 +1,5 @@
 schema=1
 id=m639-ice-formation
-fingerprint=73bb8bb1c78b50f11ee715639aa2440d70248c2f47e8e3a4900ed5c1769de54b
+fingerprint=8d7cd2a2c1399ed2c482347bc46ec25c48ac886c2b07f3a737138dc0c9946a16
 observation.sha256=aa592f6a1924890f46839936c3ae1cf971c2dd068870c9fc68f368cb6b70b4e1
 source=refactor-equivalent

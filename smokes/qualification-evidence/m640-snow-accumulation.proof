@@ -1,5 +1,5 @@
 schema=1
 id=m640-snow-accumulation
-fingerprint=4c9b83693dceac0fd90d4aabae261f8fc9b326f7d9947d56ee05246010ea402c
+fingerprint=643c97ba039341173918ef2e63f298d3fd5cafc3343f48791be50c060a2cfaf3
 observation.sha256=9e523746f22ea326f75df44a94de56bb0dbf19ca150d146a6d78279061a54286
 source=refactor-equivalent

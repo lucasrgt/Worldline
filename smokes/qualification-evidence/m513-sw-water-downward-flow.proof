@@ -1,5 +1,5 @@
 schema=1
 id=m513-sw-water-downward-flow
-fingerprint=4c4de3e862648611a0eb3b2f571d652fb31d5b86db7395054872e2b7e1fe70b5
+fingerprint=5f78ae7b81b2a66441827d6b72e3d6d0321ad17fd248f77f3e87cafa9f83bdcc
 observation.sha256=c8cd76aa79d46ffdecd0dbabdff860b95de7b1c6cce4783dbf4ea796a9bc41ee
 source=refactor-equivalent

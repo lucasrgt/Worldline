@@ -1060,6 +1060,7 @@ Generated from the canonical Markdown files in `docs/`. Files remain at stable r
 - [M659_POWERED_CREEPER.md](../M659_POWERED_CREEPER.md)
 - [M65_CYCLE.md](../M65_CYCLE.md)
 - [M65_PEER_ARMOR.md](../M65_PEER_ARMOR.md)
+- [M661_SPIDER_DAYLIGHT_AGGRESSION.md](../M661_SPIDER_DAYLIGHT_AGGRESSION.md)
 - [M66_CYCLE.md](../M66_CYCLE.md)
 - [M66_PLAYER_COMBAT.md](../M66_PLAYER_COMBAT.md)
 - [M67_CHEST_RETRIEVAL.md](../M67_CHEST_RETRIEVAL.md)

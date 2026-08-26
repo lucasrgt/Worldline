@@ -36,7 +36,8 @@ public final class ReadmeStatus {
     void check() throws Exception {
         String actual = normalize(Files.readString(root.resolve("README.md"), StandardCharsets.UTF_8));
         require(actual.equals(generated(actual)),
-                "generated status or release badge drifted; run java tools/harness/ReadmeStatus.java update");
+                "generated status or release badge drifted; run java tools/harness/Gate.java "
+                        + "--refresh-readme-status");
         System.out.println("  README status: generated block verified");
     }
 

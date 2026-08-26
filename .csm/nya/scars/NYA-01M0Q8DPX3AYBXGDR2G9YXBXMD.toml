@@ -84,3 +84,11 @@ reported_by = "codex:root"
 corrected_by = "codex:root"
 recorded_by = "codex:root"
 commit = "e594ae0c2"
+
+[[occurrences]]
+occurred_at = "2026-08-26T10:42:23Z"
+source = "manual:train-m661-pin-migration-audit"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "3770c00ef"

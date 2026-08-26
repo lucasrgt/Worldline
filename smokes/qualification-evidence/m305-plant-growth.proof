@@ -1,5 +1,5 @@
 schema=1
 id=m305-plant-growth
-fingerprint=b4bd7622cedfd690774f5a81f9505f8ccac570116bf4c799fe55e3db5588ded0
+fingerprint=69abee7affa45819eb19aa45096adb445ae5fc028d9fe92c775fd3f83f30686c
 observation.sha256=b755666b909da0bc4583bf752a32ff032894d3959b4dd0a47c56d3e80c066721
 source=refactor-equivalent

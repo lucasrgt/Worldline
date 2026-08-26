@@ -15,8 +15,12 @@ public final class WorldlineHostileBehaviors {
                     "Creeper Packet60 strength three is one below TNT strength four");
     public static final WorldlineBehavior POWERED_CREEPER = define("powered-creeper",
             "Observed lightning transforms the same unpowered creeper into powered state");
+    public static final WorldlineBehavior SPIDER_DAYLIGHT_AGGRESSION =
+            define("spider-daylight-aggression",
+                    "One spider ignores the same nearby player in daylight and selects that player at night");
 
-    private WorldlineHostileBehaviors() {}
+    private WorldlineHostileBehaviors() {
+    }
 
     private static WorldlineBehavior define(String token, String subject) {
         return WorldlineBehavior.define(token, WorldlineFamily.HOSTILE, subject);

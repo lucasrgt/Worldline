@@ -13,14 +13,17 @@ final class SwarmPreCandidate {
     private static final String LANES = "NYA-01M0XRE7GSKH7ARKM73DVCGQ7K";
     private static final String CLOSURE = "NYA-01M0XWB16KZB3JRYDGAAYF5SVB";
     private static final String COMPILE = "NYA-01M0YH9M17ETMZA0F5X7981K4P";
+    private static final String API_RELEASE = "NYA-01M0YRVA4DD24Y22AHJQP2X3MF";
     private static final String TOKENS = "NYA-01M0XFV9TPVDKFE6RARDHC84T2";
     private static final String SYMBOLS = "NYA-01M0XM730NWRQDKFZ1VMP3732W";
+    private static final String MAP_SIGNAL = "NYA-01M0YSJXNA3TK6FHQW4QJ5RJZ5";
     private static final String TRAVERSAL = "NYA-01M0XYP7T1RKYFD3SJHC4DMHZ3";
     private static final String MINECART_BARRIER = "NYA-01M0YCEZH1G2SKW1DVB1D4K3SB";
     private static final String MINECART_REACH = "NYA-01M0YDKWFZ4H1CCXE2TXCJC31G";
     private static final String MINECART_ATTACK = "NYA-01M0YM0FGRMPQ4DABMTVS4MNAF";
     private static final String MINECART_INITIATION = "NYA-01M0YMWRZX8V20G1SN0DYGB0MD";
-    private SwarmPreCandidate() { }
+    private SwarmPreCandidate() {
+    }
 
     static void run(String id, String base, String goal) throws Exception {
         require(id.matches("m[0-9]+-[a-z0-9-]+") && base.matches("[0-9a-f]{40}"),
@@ -28,18 +31,32 @@ final class SwarmPreCandidate {
         Path root = Path.of("").toAbsolutePath().normalize();
         Properties descriptor = new Properties();
         try (var reader = Files.newBufferedReader(root.resolve("smokes").resolve(id)
-                .resolve("smoke.properties"), StandardCharsets.UTF_8)) { descriptor.load(reader); }
+                .resolve("smoke.properties"), StandardCharsets.UTF_8)) {
+            descriptor.load(reader);
+        }
         List<String> scars = new ArrayList<>(List.of(REQUIRED, SOURCE));
         if (SwarmProcess.status(root, List.of("git", "cat-file", "-e",
                 base + ":smokes/" + id + "/smoke.properties"), 60) != 0) scars.add(LANES);
         String runner = descriptor.getProperty("runner.source", "");
-        if (runner.endsWith("DataDrivenCycle.java") || runner.endsWith("CompositeCycle.java"))
+        if (runner.endsWith("DataDrivenCycle.java") || runner.endsWith("CompositeCycle.java")) {
             scars.add(CLOSURE);
-        if (Files.isDirectory(root.resolve("smokes").resolve(id).resolve("src")))
+        }
+        if (Files.isDirectory(root.resolve("smokes").resolve(id).resolve("src"))) {
             scars.add(COMPILE);
-        if (descriptor.containsKey("testkit.fixture")) scars.add(TOKENS);
-        if (Files.isRegularFile(root.resolve("smokes").resolve(id).resolve("symbols.map")))
+        }
+        if (SwarmProcess.output(root, List.of("git", "diff", "--name-only", base), 60).lines()
+                .anyMatch(path -> path.startsWith("modules/api/src/main/java/"))) {
+            scars.add(API_RELEASE);
+        }
+        if (descriptor.containsKey("testkit.fixture")) {
+            scars.add(TOKENS);
+        }
+        if (Files.isRegularFile(root.resolve("smokes").resolve(id).resolve("symbols.map"))) {
             scars.add(SYMBOLS);
+        }
+        if (Files.isRegularFile(root.resolve("smokes").resolve(id).resolve("MAP.md"))) {
+            scars.add(MAP_SIGNAL);
+        }
         if (SwarmProcess.output(root, List.of("git", "diff", "--name-only", base), 60).lines()
                 .anyMatch(path -> path.startsWith("tools/harness/")
                         || path.startsWith("tools/integration/"))) scars.add(TRAVERSAL);
@@ -70,17 +87,22 @@ final class SwarmPreCandidate {
     }
 
     private static String java(Path root, List<String> arguments, int seconds) throws Exception {
-        List<String> command = new ArrayList<>(List.of(javaTool())); command.addAll(arguments);
+        List<String> command = new ArrayList<>(List.of(javaTool()));
+        command.addAll(arguments);
         Path log = Files.createTempFile("worldline-swarm-readiness-", ".log");
         Process process = new ProcessBuilder(command).directory(root.toFile()).redirectErrorStream(true)
                 .redirectOutput(log.toFile()).start();
         try {
             if (!process.waitFor(seconds, TimeUnit.SECONDS)) {
-                process.destroyForcibly(); throw new IllegalStateException("candidate readiness timed out");
+                process.destroyForcibly();
+                throw new IllegalStateException("candidate readiness timed out");
             }
             String output = Files.readString(log, StandardCharsets.UTF_8);
-            require(process.exitValue() == 0, "objective readiness failed:\n" + output); return output;
-        } finally { Files.deleteIfExists(log); }
+            require(process.exitValue() == 0, "objective readiness failed:\n" + output);
+            return output;
+        } finally {
+            Files.deleteIfExists(log);
+        }
     }
     private static String javaTool() {
         boolean windows = System.getProperty("os.name", "").toLowerCase().contains("win");
@@ -93,12 +115,16 @@ final class SwarmPreCandidate {
         require(Files.isDirectory(scars), "NYA scar store is missing");
         int count = 0;
         try (var entries = Files.newDirectoryStream(scars, "*.toml")) {
-            for (Path ignored : entries) count++;
+            for (Path ignored : entries) {
+                count++;
+            }
         }
         require(count > 0, "NYA scar store is empty");
         return count;
     }
     private static void require(boolean value, String message) {
-        if (!value) throw new IllegalStateException(message);
+        if (!value) {
+            throw new IllegalStateException(message);
+        }
     }
 }

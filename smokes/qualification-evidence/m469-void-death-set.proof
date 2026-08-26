@@ -1,5 +1,5 @@
 schema=1
 id=m469-void-death-set
-fingerprint=c3e03e83d343e55e92b32b8be04fafef55984623278a9c3c5d397647ce478539
+fingerprint=481e968551cc5c087c25a41ae7565d91f7a123fe64c866390880281d769d5865
 observation.sha256=52332cdbcd2108c4f8baa59811bffe40d9ba676283c851371bb2bee321f7ef98
 source=refactor-equivalent

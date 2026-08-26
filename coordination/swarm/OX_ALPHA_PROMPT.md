@@ -18,6 +18,9 @@ with the exact frozen `mappings.tiny` owner and method row. Treat client and ser
 as independent fields, preserve an empty side as an empty tab field, and never copy the populated
 side into the empty side. The same descriptor audit must verify that `MAP.md` contains the exact
 frozen semantic signal and that every `atlas.subsystems` value belongs to `AtlasSubsystems.ALL`.
+Every milestone with `MAP.md` must recall `NYA-01M0YSJXNA3TK6FHQW4QJ5RJZ5`; the objective
+pre-Candidate interlock must compare its literal text with `expected.signal` from the same
+`smoke.properties`, even when the map already contains the frozen trace and signature.
 Before Candidate Gate for a data-driven cycle, recall `NYA-01M0XWB16KZB3JRYDGAAYF5SVB` and
 verify source closure from `cycle.inputs` and `cycle.compile.products`; never import a private
 helper owned by another smoke when a maintained shared protocol surface supplies the behavior.
@@ -37,6 +40,10 @@ Treat any nonzero packed-line count reported by Candidate Gate as fail-closed ev
 passes; split the statements before committing so the canonical zero-growth ratchet cannot recur.
 The objective interlock must also reject a constructor, method, or control body that opens and
 closes on one physical line, including an empty constructor, before Candidate Gate.
+Before invoking that interlock, enumerate every added smoke-source line that contains a complete
+constructor, method, or control body and expand it to multiple physical lines. Zero matches is a
+mandatory worker checkpoint; an interlock failure is a `RETRYABLE` recurrence that must be
+archived and appended once to `NYA-01M0X81N6TG6TQ4RM02X6PH7R7` before correction.
 Keep every new Java line at or below 120 columns so a candidate cannot increase the global
 `*.long.files` or `*.long.lines` ratchets after isolated qualification.
 Before Candidate Gate, the supervisor must run `SwarmLoop pre-candidate` for the exact milestone,
@@ -46,6 +53,9 @@ with the Candidate compiler, including checked-exception compatibility, before e
 Candidate Gate fails closed when the report is missing or any file changed afterward.
 Every candidate with smoke sources must recall `NYA-01M0YH9M17ETMZA0F5X7981K4P`; textual review
 of imports or method signatures never substitutes for that exact compilation.
+Every candidate that changes `modules/api` must recall `NYA-01M0YRVA4DD24Y22AHJQP2X3MF` and
+compile the module at the release declared in `harness.properties`. The API defaults to Java 8:
+use Java 8 value classes with explicit equality there, even when TestKit may use Java 21 records.
 When milestone work adds a recursive harness or orchestration scan, recall
 `NYA-01M0XYP7T1RKYFD3SJHC4DMHZ3` and use the reviewed no-follow traversal helper.
 For portal cooldown or portal re-entry contracts, recall must also present
@@ -69,7 +79,9 @@ After each worker, the supervisor must classify the outcome, preserve its exact 
 logs, receipt, and evidence archive, then extract one reusable cause. Record or update NYA exactly
 once, run `csm nya check`, and update this base prompt when the correction creates a new applicable
 scar. Release the next candidate only after confirming that the same scar did not recur.
-Before train pin migration, recall `NYA-01M0SX8SQGCT8RCH6KVDZH5DZC`; when a clean qualified
+Before train pin migration, recall `NYA-01M0SX8SQGCT8RCH6KVDZH5DZC` and
+`NYA-01M0YWM2GC786PNQD0WD1D6Z8T`; require `git status --porcelain
+--untracked-files=all` to be empty so every new source is present in the committed diff. When a clean qualified
 worktree supplies a complete current receipt, attestation, and log, import that exact execution
 before considering predecessor or historical evidence and preserve `source=executed`. Before
 migration, census local receipt/attestation/log tuples for every path the importer may treat as
@@ -77,12 +89,25 @@ an exact execution, not only the first reported failure. Preserve partial tuples
 archive and treat them as absent; they must not block a complete worktree import, a complete
 local execution, or complete predecessor fallback. Preserve source indexes from the immediate
 predecessor lock, never `HEAD^`, and append newly tracked paths after the stable predecessor
-order. When a reviewed shared TestKit input changes multiple fingerprints, carry unchanged
+order. For every source whose current digest equals the predecessor current digest, require its
+ancestor count and ordered ancestor digests to remain byte-for-byte unchanged; the migration
+self-test must fail before writing locks if an unchanged block advances. When a reviewed shared
+TestKit input changes multiple fingerprints, carry unchanged
 observations only through tracked `refactor-equivalent` proof envelopes.
+Before `IntegrationTrain --reconcile`, recall `NYA-01M0YVZNPXM8D1JRQ4HWDK0X0J`, resolve the
+authorized base and exact train ref, and require `git rev-list --count <base>..<ref>` to print
+exactly `1`. If it does not, preserve the existing branch and build a new `codex/train-*`
+consolidation ref; do not invoke the integration Gate or runtime on the multi-commit ref.
+Before freezing that consolidated ref, recall `NYA-01M0YW91JWSC5SXCQG2HPH8APN`, run
+`java tools/harness/Gate.java --refresh-readme-status` and `java tools/harness/Gate.java
+--refresh-documentation`, then require the generated README status and documentation catalog
+checks to pass. These global release surfaces belong to the train, never to a milestone worker.
 When reconciliation changes TestKit sources, recall `NYA-01M0T6W6ECYZ8TG3XESYC9J5SV` and
-refresh the reconciled module outputs with the applicable static Candidate Gate before packaging.
-Write `release/testkit-artifacts.lock` only from those exact refreshed artifacts, then run the
-canonical integration Gate; never pin artifacts produced from predecessor cache links.
+on the exact clean committed train run `java tools/harness/Gate.java
+--refresh-testkit-artifact-pins`. That maintenance command must compile and materialize the exact
+module outputs, resolve immutable cache links, package TestKit, and validate every JAR entry while
+writing `release/testkit-artifacts.lock`. Commit that exact lock before train pin migration and
+the canonical integration Gate; never pin artifacts produced from predecessor cache links.
 
 Only `QUALIFIED`, `RETRYABLE`, or `REJECTED` may survive supervisor classification. A worker that
 exits without a disposition is `STRANDED` and must be converted immediately. `QUALIFIED` requires

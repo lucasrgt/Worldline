@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M0YVZNPXM8D1JRQ4HWDK0X0J"
+title = "Preflight the single-commit reconciliation invariant"
+lesson = "Before invoking IntegrationTrain --reconcile, resolve the exact base and target ref and require git rev-list --count <base>..<ref> to equal 1. Preserve multi-commit staging branches, construct a new codex/train-* consolidation ref with one reviewed commit over the authorized base, and do not consume Gate or runtime until the invariant passes."
+scope = [
+    "tools/integration/IntegrationTrain.java",
+    "coordination/swarm/OX_ALPHA_PROMPT.md",
+    "docs/ENGINEERING_WORKFLOW.md",
+]
+tags = [
+    "integration-train",
+    "reconcile",
+    "preflight",
+]
+created_at = "2026-08-26T11:06:17Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T11:06:17Z"
+source = "manual:train-m661-reconcile-attempt1"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "17c406338"

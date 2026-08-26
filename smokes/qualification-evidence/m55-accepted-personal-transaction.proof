@@ -1,5 +1,5 @@
 schema=1
 id=m55-accepted-personal-transaction
-fingerprint=59707b61d8b5ae1c5cd391581c1108827e5914b533f3c69e11c5ae89d09e3f8a
+fingerprint=cd147456d97ff7c8d3663f8009f330af714d0d8ca14b6bc66cdf6d9d305416fb
 observation.sha256=2b751ab387d63b7c99308ebc3f22e8e100909b35b8f283a7c244f1b7cad7f2ef
 source=refactor-equivalent
