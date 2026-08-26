@@ -41,7 +41,11 @@ Keep every new Java line at or below 120 columns so a candidate cannot increase 
 `*.long.files` or `*.long.lines` ratchets after isolated qualification.
 Before Candidate Gate, the supervisor must run `SwarmLoop pre-candidate` for the exact milestone,
 authorized base, and goal. Its objective readiness report must stay bound to the unchanged source
-manifest; Candidate Gate fails closed when the report is missing or any file changed afterward.
+manifest. The interlock must compile the exact runner, adapter, module, and smoke source closure
+with the Candidate compiler, including checked-exception compatibility, before emitting PASS.
+Candidate Gate fails closed when the report is missing or any file changed afterward.
+Every candidate with smoke sources must recall `NYA-01M0YH9M17ETMZA0F5X7981K4P`; textual review
+of imports or method signatures never substitutes for that exact compilation.
 When milestone work adds a recursive harness or orchestration scan, recall
 `NYA-01M0XYP7T1RKYFD3SJHC4DMHZ3` and use the reviewed no-follow traversal helper.
 For portal cooldown or portal re-entry contracts, recall must also present

@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M0YH9M17ETMZA0F5X7981K4P"
+title = "Compile exact candidate source closure before Candidate"
+lesson = "Before Candidate Gate, compile the exact candidate source closure declared by cycle.inputs and cycle.compile.products with javac; every checked-exception boundary used by the smoke must compile against the maintained adapter signature."
+scope = [
+    "smokes/*/src/**/*.java",
+    "tools/harness/CandidateReadiness.java",
+    "tools/harness/CandidateSourceClosure.java",
+]
+tags = [
+    "candidate-gate",
+    "source-closure",
+    "javac",
+]
+created_at = "2026-08-26T07:59:29Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T07:59:29Z"
+source = ".worldline/reports/swarm/candidate-m660-minecart-collision-transfer-attempt1.log sha256=3DE5C6359D9583E036B0589ACE8A93294D3C78BC5E14BDAF5778C960B5839612 cause=exact candidate runner javac rejected unchecked B173FixtureSupport.sha checked exception at MinecartCollisionTransferSmoke.java:125"
+reported_by = "codex:m646_retry2"
+corrected_by = "codex:m646_retry2"
+recorded_by = "codex:m646_retry2"
+commit = "e594ae0c2"

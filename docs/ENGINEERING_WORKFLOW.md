@@ -58,8 +58,12 @@ task, explore, or subagent delegation because the launcher does not supervise ne
 Before Candidate Gate, the supervisor runs `SwarmLoop pre-candidate` against the same authorized
 base and goal. It recalls each applicable scar separately, rejects stale generated narratives,
 lane-census drift, packed control bodies, long smoke lines, scaffold markers, and imports from a
-sibling milestone's private smoke sources, then writes a content-bound readiness report. Candidate
-Gate on a supervised milestone branch requires that PASS report and rejects any later source change.
+sibling milestone's private smoke sources. The interlock also compiles the exact runner, adapter,
+module, and smoke source closure with the Candidate compiler before it writes a content-bound
+readiness report. Candidate Gate on a supervised milestone branch requires that PASS report and
+rejects any later source change.
+Candidates with smoke sources recall `NYA-01M0YH9M17ETMZA0F5X7981K4P`; the compilation result,
+not textual inspection of imports or `throws` clauses, is the objective closure proof.
 Packed-source prevention includes complete constructors, methods, and control bodies on one physical
 line, including empty constructors. Minecart-collision readiness additionally rejects remotely placed
 stone support geometry after the repeated pre-oracle reach failures recorded in NYA.

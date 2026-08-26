@@ -1,0 +1,133 @@
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.stream.Collectors;
+
+/** Compiles the exact candidate source closure before a readiness PASS can be emitted. */
+final class CandidateSourceClosure {
+    private final Path root = Path.of("").toAbsolutePath().normalize();
+    private final String id;
+    private final Path build;
+    private final Properties config;
+    private final Properties descriptor;
+
+    private CandidateSourceClosure(String id) throws Exception {
+        this.id = id;
+        this.build = root.resolve(".worldline/candidate-readiness").resolve(id);
+        this.config = StrictProperties.load(root.resolve("harness.properties"));
+        this.descriptor = StrictProperties.load(root.resolve("smokes").resolve(id)
+                .resolve("smoke.properties"));
+    }
+
+    static void compile(String id) throws Exception {
+        new CandidateSourceClosure(id).run();
+    }
+
+    private void run() throws Exception {
+        SmokeDiscovery.Entry smoke = SmokeDiscovery.require(root, id);
+        recreate();
+        List<String> modules = values("modules");
+        List<Path> outputs = new ModuleBuild(root, build, config, modules).compileAll();
+        compileRunner(smoke);
+        compileScenario(outputs);
+        System.out.println("  compiled exact pre-Candidate source closure");
+    }
+
+    private void compileRunner(SmokeDiscovery.Entry smoke) throws Exception {
+        Path output = build.resolve("runner-classes");
+        Files.createDirectories(output);
+        execute(List.of(javaTool("javac"), "-encoding", "UTF-8", "--release", "21",
+                "-Xlint:all,-options", "-Werror", "-classpath",
+                System.getenv("WORLDLINE_HARNESS_CP"), "-d", output.toString(),
+                root.resolve(smoke.runner).toString()), 180);
+    }
+
+    private void compileScenario(List<Path> outputs) throws Exception {
+        Path milestone = root.resolve("smokes").resolve(id);
+        Path source = milestone.resolve("src");
+        if (!Files.isDirectory(source)) {
+            require(CandidateRuntimeBuild.owns(milestone, descriptor)
+                    || "tooling".equals(descriptor.getProperty("candidate.kind")),
+                    "missing candidate scenario sources");
+            return;
+        }
+        boolean clientOnly = "client".equals(descriptor.getProperty("side"))
+                || "client".equals(descriptor.getProperty("atlas.artifact"))
+                || descriptor.getProperty("client.jar.sha256") != null
+                        && descriptor.getProperty("server.jar.sha256") == null;
+        List<Path> dependencies = new ArrayList<>();
+        boolean mappedServer = !clientOnly && Files.isRegularFile(milestone.resolve("symbols.map"))
+                && descriptor.getProperty("worldline.main") != null;
+        if (clientOnly) {
+            Path headless = build.resolve("headless-classes");
+            Files.createDirectories(headless);
+            List<String> stubs = new ArrayList<>(List.of(javaTool("javac"), "-encoding", "UTF-8",
+                    "--release", "8", "-Xlint:all,-options", "-Werror", "-d", headless.toString()));
+            stubs.addAll(javaFiles(root.resolve("adapters/b173-client/headless-src")));
+            execute(stubs, 180);
+            Path mapped = root.resolve("local/workspaces/b1.7.3/minecraft/bin");
+            require(Files.isRegularFile(mapped.resolve("net/minecraft/client/Minecraft.class")),
+                    "client candidate requires the prepared mapped workspace");
+            dependencies.add(headless);
+            dependencies.add(mapped);
+            dependencies.addAll(jarFiles(root.resolve("local/workspaces/b1.7.3/libraries")));
+        } else if (mappedServer) {
+            Path mapped = root.resolve("local/workspaces/b1.7.3/minecraft_server/bin");
+            if (!Files.isRegularFile(mapped.resolve("net/minecraft/src/World.class"))) return;
+            dependencies.add(mapped);
+            dependencies.addAll(jarFiles(root.resolve("local/workspaces/b1.7.3/libraries")));
+        }
+        dependencies.addAll(outputs);
+        Path output = build.resolve("scenario-classes");
+        Files.createDirectories(output);
+        List<String> command = new ArrayList<>(List.of(javaTool("javac"), "-encoding", "UTF-8",
+                "--release", "8", "-Xlint:all,-options", "-Werror", "-classpath",
+                dependencies.stream().map(Path::toString)
+                        .collect(Collectors.joining(System.getProperty("path.separator"))),
+                "-d", output.toString()));
+        command.addAll(javaFiles(root.resolve(clientOnly ? "adapters/b173-client/src/main/java"
+                : "adapters/b173-server/src/main/java")));
+        command.addAll(javaFiles(source));
+        execute(command, 240);
+    }
+
+    private List<String> values(String key) {
+        return java.util.Arrays.stream(config.getProperty(key, "").split(","))
+                .map(String::trim).filter(value -> !value.isEmpty()).toList();
+    }
+
+    private static List<String> javaFiles(Path root) throws Exception {
+        return SafeTreeDelete.paths(root).stream().filter(Files::isRegularFile)
+                .filter(path -> path.toString().endsWith(".java"))
+                .sorted().map(Path::toString).toList();
+    }
+
+    private static List<Path> jarFiles(Path root) throws Exception {
+        return SafeTreeDelete.paths(root).stream().filter(Files::isRegularFile)
+                .filter(path -> path.toString().endsWith(".jar")).sorted().toList();
+    }
+
+    private void recreate() throws Exception {
+        Path allowed = root.resolve(".worldline/candidate-readiness");
+        require(build.startsWith(allowed) && !build.equals(allowed), "unsafe readiness build path");
+        SafeTreeDelete.delete(build);
+        Files.createDirectories(build);
+    }
+
+    private void execute(List<String> command, int timeout) throws Exception {
+        String output = ProcessCapture.require(root, command, timeout);
+        if (!output.isBlank()) System.out.print(output);
+    }
+
+    private static String javaTool(String name) {
+        boolean windows = System.getProperty("os.name", "").toLowerCase().contains("win");
+        return Path.of(System.getProperty("java.home"), "bin",
+                name + (windows ? ".exe" : "")).toString();
+    }
+
+    private static void require(boolean value, String message) {
+        if (!value) throw new IllegalStateException(message);
+    }
+}

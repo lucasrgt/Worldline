@@ -12,6 +12,7 @@ final class SwarmPreCandidate {
     private static final String SOURCE = "NYA-01M0X81N6TG6TQ4RM02X6PH7R7";
     private static final String LANES = "NYA-01M0XRE7GSKH7ARKM73DVCGQ7K";
     private static final String CLOSURE = "NYA-01M0XWB16KZB3JRYDGAAYF5SVB";
+    private static final String COMPILE = "NYA-01M0YH9M17ETMZA0F5X7981K4P";
     private static final String TOKENS = "NYA-01M0XFV9TPVDKFE6RARDHC84T2";
     private static final String SYMBOLS = "NYA-01M0XM730NWRQDKFZ1VMP3732W";
     private static final String TRAVERSAL = "NYA-01M0XYP7T1RKYFD3SJHC4DMHZ3";
@@ -32,6 +33,8 @@ final class SwarmPreCandidate {
         String runner = descriptor.getProperty("runner.source", "");
         if (runner.endsWith("DataDrivenCycle.java") || runner.endsWith("CompositeCycle.java"))
             scars.add(CLOSURE);
+        if (Files.isDirectory(root.resolve("smokes").resolve(id).resolve("src")))
+            scars.add(COMPILE);
         if (descriptor.containsKey("testkit.fixture")) scars.add(TOKENS);
         if (Files.isRegularFile(root.resolve("smokes").resolve(id).resolve("symbols.map")))
             scars.add(SYMBOLS);
