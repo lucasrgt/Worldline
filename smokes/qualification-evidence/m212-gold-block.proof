@@ -1,5 +1,5 @@
 schema=1
 id=m212-gold-block
-fingerprint=ad0fe0fa28aa8aa0c307424e20fefe188a2f571750d9a02f48afb8ed70f8fd89
+fingerprint=8f01fb04122c1fcf0eaa56f96510f861138f27342f4633c483ee6bcfe792eea6
 observation.sha256=c41efdd35e74da0cb05078664f13008bcf8d47032c07fa0360ff0f4e57b9a9ce
 source=refactor-equivalent

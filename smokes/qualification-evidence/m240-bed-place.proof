@@ -1,5 +1,5 @@
 schema=1
 id=m240-bed-place
-fingerprint=ccc19fd5d6393811c327b6016252b32d4cddbaa3b20019a4007f0d8dbffb40a9
+fingerprint=ce6f535ee011685999f177c0d971e9818cc0dd09cf664bce982a2e9d61cc3f8c
 observation.sha256=366879f4dbd3ab1b199692d6094ad12c0ee76aa41469342f4ee3fba3d74ec59d
 source=refactor-equivalent

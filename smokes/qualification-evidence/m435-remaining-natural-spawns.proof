@@ -1,5 +1,5 @@
 schema=1
 id=m435-remaining-natural-spawns
-fingerprint=422f634b20acfd6fbbfaaba0730b4648929b0e2e9406ac4e0dcb320b13882e8f
+fingerprint=e7585dfb954f3af5ba4485dff6edf8653e33048d3aca04a35b686586726ddeec
 observation.sha256=a81852d5c2fb5cff300186da2b5d585a72f06f637dffb1942c4a8f1f2284d6d3
 source=refactor-equivalent

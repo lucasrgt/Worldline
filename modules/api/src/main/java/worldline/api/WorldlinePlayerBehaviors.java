@@ -12,6 +12,8 @@ public final class WorldlinePlayerBehaviors {
             "Player colliding with a ladder climbs or holds versus falling in air");
     public static final WorldlineBehavior SERVER_ACL_MATRIX = define("server-acl-matrix",
             "Console op state controls commands while kick and ban have distinct session effects");
+    public static final WorldlineBehavior SERVER_ENTRY_POLICY = define("server-entry-policy",
+            "Whitelist membership and server capacity independently control player login");
 
     private WorldlinePlayerBehaviors() {}
 

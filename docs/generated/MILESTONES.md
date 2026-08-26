@@ -591,7 +591,8 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m652-portal-reentry-cooldown` | CARRIED | portal re-entry cooldown |
 | `m653-chunk-restart-persistence` | CARRIED | chunk restart persistence |
 | `m654-sky-brightness-cycle` | CARRIED | sky brightness cycle |
-| `m655-rain-stop-event` | EXECUTED | rain stop event |
+| `m655-rain-stop-event` | CARRIED | rain stop event |
+| `m656-server-admission-matrix` | EXECUTED | server admission matrix |
 | `m702-powered-rail-slope-propagation` | CARRIED | powered rail slope propagation |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |

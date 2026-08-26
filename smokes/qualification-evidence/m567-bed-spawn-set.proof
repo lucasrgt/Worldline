@@ -1,5 +1,5 @@
 schema=1
 id=m567-bed-spawn-set
-fingerprint=a9fa00415eadafa2109fadd394d5fdf008ec3fa14b886345a754f071eab2c5bc
+fingerprint=c93107aa1107cddc08418c3ffc394530a70b10e5c427561b2d8834a419eec808
 observation.sha256=aaad061b562df911b0b4c29784fe2beb4b0d5f1183dae8e29603cd3c2a838aed
 source=refactor-equivalent
