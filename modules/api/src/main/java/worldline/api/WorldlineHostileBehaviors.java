@@ -13,6 +13,8 @@ public final class WorldlineHostileBehaviors {
     public static final WorldlineBehavior CREEPER_TNT_DIFFERENTIAL =
             define("creeper-tnt-differential",
                     "Creeper Packet60 strength three is one below TNT strength four");
+    public static final WorldlineBehavior POWERED_CREEPER = define("powered-creeper",
+            "Observed lightning transforms the same unpowered creeper into powered state");
 
     private WorldlineHostileBehaviors() {}
 

@@ -1,5 +1,5 @@
 schema=1
 id=m586-fall-water-cancel-set
-fingerprint=2af24ef9ccd07b71ba25637a1211a922082398ca88f1697a05e73f7ee2b8aaf9
+fingerprint=162fcf2fa5d84d1c968313064f7b088325183d469f94d3b76cdd073a6fcc53c4
 observation.sha256=46a18589b56dddc3100fb18b95b614e272b9c4281c22e272e60f94fe92358b89
 source=refactor-equivalent

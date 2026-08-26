@@ -1,5 +1,5 @@
 schema=1
 id=m247-birch-log
-fingerprint=f297ff522a48d1e25d8c3a86ea7faab55312674eec2bf9d5091e233220cb5ebb
+fingerprint=f9368d29d09bb843dcaa88e12300e06d340a473c173177876131141b8f4ee100
 observation.sha256=d2edaaf83b9d8b74ec8d46d00e40f224fc12335a5a7e9fd35e7744a490781eb0
 source=refactor-equivalent

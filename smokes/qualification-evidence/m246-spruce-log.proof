@@ -1,5 +1,5 @@
 schema=1
 id=m246-spruce-log
-fingerprint=16f488865dd78d192b589131b533b8a64a86b7847f40ea813dd1d1f9f61a05d9
+fingerprint=553bea1dbc6e8e553849b6942c0379353e6226ac3c68fe8b0dfc8c1b4edb5840
 observation.sha256=da7cf603b820a91005a39a8dcd6ce70f9779f145f26a8ffc835f7ad93a077693
 source=refactor-equivalent

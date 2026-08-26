@@ -51,6 +51,7 @@ public final class TestKitContractTest {
         BonemealWheatFixtureTest.execute();
         TntChainFixtureTest.execute();
         CreeperTntDifferentialFixtureTest.execute();
+        PoweredCreeperFixtureTest.execute();
         NotePitchFixtureTest.execute();
         Path root = Files.createTempDirectory("worldline-test-contract-"); Provider provider = new Provider();
         RunnerOptions options = new RunnerOptions().provider(provider).artifacts(root.resolve("artifacts"))

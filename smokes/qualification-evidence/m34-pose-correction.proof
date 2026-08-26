@@ -1,5 +1,5 @@
 schema=1
 id=m34-pose-correction
-fingerprint=027bfcc0162da765873085eedcdd2b4675bbeff5ce4e3b7d0e944bc8d82611bf
+fingerprint=44aff380392dd071e32c1c554a32f15a12e4ffed5875a825258c3a02815aa04c
 observation.sha256=7f29d1dfaedb4a49d8b69e61079610c4a9c72fbdada4f497e30f987badc70be2
 source=refactor-equivalent

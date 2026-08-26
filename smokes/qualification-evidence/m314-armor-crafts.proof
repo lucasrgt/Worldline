@@ -1,5 +1,5 @@
 schema=1
 id=m314-armor-crafts
-fingerprint=584c01308d89aa8575e5d6a3a37297917af37df41de213d8c57a36f463a4a078
+fingerprint=e8e80cb675680de7755b432fb30f3408c83398810267f1a66f1323783204ca22
 observation.sha256=914b42df18b53c2afcbb40f2f5c87b8848dc19e4e816eaef927067915c98b437
 source=refactor-equivalent

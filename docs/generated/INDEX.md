@@ -1057,6 +1057,7 @@ Generated from the canonical Markdown files in `docs/`. Files remain at stable r
 - [M654_SKY_BRIGHTNESS_CYCLE.md](../M654_SKY_BRIGHTNESS_CYCLE.md)
 - [M655_RAIN_STOP_EVENT.md](../M655_RAIN_STOP_EVENT.md)
 - [M656_SERVER_ADMISSION_MATRIX.md](../M656_SERVER_ADMISSION_MATRIX.md)
+- [M659_POWERED_CREEPER.md](../M659_POWERED_CREEPER.md)
 - [M65_CYCLE.md](../M65_CYCLE.md)
 - [M65_PEER_ARMOR.md](../M65_PEER_ARMOR.md)
 - [M66_CYCLE.md](../M66_CYCLE.md)

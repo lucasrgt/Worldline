@@ -1,5 +1,5 @@
 schema=1
 id=m571-redstone-ore-glow-set
-fingerprint=25aa9d76b99d2b9f5e6c57778fbb0a0123353167a6de8fa79103aed1277eb056
+fingerprint=dd6c17ec7a76698d9f795dce6670abc8178f875f6ec62e7dd68240a33777cff4
 observation.sha256=b10f0f01a69f80d9d727c6fae12f18d3ef6fa311488c710b8e9aae44c8045084
 source=refactor-equivalent

@@ -35,6 +35,7 @@ public final class DomainApiTest {
         RemoteObjectMovementTest.run();
         RemoteRainStartTest.run();
         RemoteRainStopTest.run();
+        PoweredCreeperEvidenceTest.run();
         RemoteDispenserLoadTest.run();
         WorldlineEvidenceTest.run();
         peerSwingValuesAreExactAndFailClosed();

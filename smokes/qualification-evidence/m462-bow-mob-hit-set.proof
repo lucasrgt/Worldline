@@ -1,5 +1,5 @@
 schema=1
 id=m462-bow-mob-hit-set
-fingerprint=83e9373d478891721112c2663afc3630bbded13659d7721f395056020e060386
+fingerprint=01dd4c9b48fd5d7cd0200309122197acda850380c6f5c3b3ec167d8afa8bb410
 observation.sha256=bbe6e87049578c8e26c8cca6f79ed7ac1f3c530df498b2d9da63a8f195578e22
 source=refactor-equivalent

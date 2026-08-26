@@ -1,5 +1,5 @@
 schema=1
 id=m579-boat-current-push-set
-fingerprint=c1205d76f096e5d3b68586469a7f2324f6d6fa80e55b99bd3a5fbc0a250d7d05
+fingerprint=e790a82c9e2b6a93d2b7818da2bd748b4d22dae0048d60cc5fd1fb549f4c1b44
 observation.sha256=bc561d7e2ee8650629007ea95e07c6379f4e2d6eb0a41226be2c1c23e0c7d2d2
 source=refactor-equivalent
