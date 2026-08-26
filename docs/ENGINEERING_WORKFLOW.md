@@ -75,6 +75,9 @@ profile. The launch receipt records both the profile and model; a new session or
 Fallback checkpoint resumes require a minimum 7200-second worker budget, and the source launcher
 derives a larger outer timeout from that exact requested budget. This executable interlock prevents
 large receipt-bound histories from being misclassified after the primary one-hour window.
+After an archived systemic fallback-provider error, the supervisor may select another reviewed free
+model with `WORLDLINE_OX_ALPHA_FALLBACK_MODEL`. The launcher rejects models outside its executable
+allowlist and records the exact selected model while preserving the same session, worktree, and ID.
 
 Before Candidate Gate, the supervisor runs `SwarmLoop pre-candidate` against the same authorized
 base and goal. It recalls each applicable scar separately, rejects stale generated narratives,

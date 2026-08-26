@@ -220,7 +220,7 @@ final class OxAlphaWorker {
         invalid.add(message);
         require(!messagePrecedesFiles(invalid), "variadic attachment swallowed the worker message");
         OxAlphaProfile.selfTest();
-        require(command(message(checkpoint), "session", true).contains(OxAlphaProfile.FALLBACK_MODEL),
+        require(command(message(checkpoint), "session", true).contains(OxAlphaProfile.DEFAULT_FALLBACK_MODEL),
                 "fallback model is not allowlisted");
         require(message(checkpoint).contains("Nested task, explore, or subagent delegation is forbidden"),
                 "worker message omitted delegation prohibition");

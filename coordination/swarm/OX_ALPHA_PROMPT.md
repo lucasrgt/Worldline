@@ -14,6 +14,10 @@ session and dirty worktree on a later attempt; it may not open a replacement mil
 A fallback checkpoint resume must receive at least 7200 seconds because a large receipt-bound
 history can make correct progress beyond the primary one-hour budget. The launcher rejects a
 shorter fallback retry and extends its own outer timeout beyond the worker budget.
+If the selected free provider returns a systemic transport error, archive and classify the attempt
+before setting `WORLDLINE_OX_ALPHA_FALLBACK_MODEL` to another reviewed free model. The executable
+allowlist rejects arbitrary providers, and the same receipt-bound session, worktree, and milestone
+ID remain mandatory.
 These worktrees run on Windows PowerShell. Use native PowerShell or portable commands; do not spend
 an inference step retrying Unix-only options such as `ls -la`, `find`, or `xargs`.
 

@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M0ZEJ76Z3QZRZZCVZSG61CAE"
+title = "Fail over supervised fallback provider errors without replacing work"
+lesson = "An allowlisted free fallback can make useful checkpoint progress and later return a non-retryable upstream 404 for every concurrent session. Classify the attempts as infrastructure RETRYABLE, archive each exact receipt/log/patch, and resume the same sessions on a different explicitly allowlisted free model. The launcher must reject arbitrary model names and record the selected model; never create replacement IDs or interpret provider transport failure as a rejected contract."
+scope = [
+    "tools/integration/OxAlpha*.java",
+    "coordination/swarm/OX_ALPHA_PROMPT.md",
+]
+tags = [
+    "opencode",
+    "fallback",
+    "provider",
+    "retry",
+]
+created_at = "2026-08-26T16:30:59Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T16:30:59Z"
+source = "archives:m662-fallback-upstream-404-attempt4-735ee4343.zip sha256=516EE33485A1679001ED5D7923712F690E5E6A38F689A7FBD0C81DB0A73D2352;m664-fallback-upstream-404-attempt4-735ee4343.zip sha256=7F7F51B74942B98BBEE26896BEC76E4EA23F936F4C08F0ED656D721471F0CE10"
+reported_by = "codex:orchestrator"
+corrected_by = "codex:orchestrator"
+recorded_by = "codex:orchestrator"
+commit = "02c46e59c"
