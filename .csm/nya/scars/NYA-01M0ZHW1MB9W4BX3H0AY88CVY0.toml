@@ -1,0 +1,25 @@
+schema = 1
+id = "NYA-01M0ZHW1MB9W4BX3H0AY88CVY0"
+title = "Bind workers to the orchestrator control base"
+lesson = "A supervisor can run current readiness against an old milestone worktree whose Candidate Gate still contains stale checks. Every Ox Alpha attempt must record an exact orchestrator control-base SHA and fail before OpenCode starts unless that SHA is an ancestor of both the authorized milestone base and worktree HEAD. When controls advance during a wave, archive the attempt and rebase the same milestone onto the new authorized base before retrying; never mix a current readiness receipt with an older Gate implementation."
+scope = [
+    "tools/integration/OxAlphaWorker.java",
+    "tools/integration/OxAlphaRequest.java",
+    "tools/integration/OxAlphaLauncher.java",
+    "coordination/swarm/OX_ALPHA_PROMPT.md",
+    "docs/ENGINEERING_WORKFLOW.md",
+]
+tags = [
+    "opencode",
+    "readiness",
+    "control-base",
+]
+created_at = "2026-08-26T17:28:47Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T17:28:47Z"
+source = "M663 qualify attempt1 receipt sha256=47569A56CED2AFCA4155BA1C82F15E70CB42517ADC5B659073997627CF8828DD; M665 qualify attempt1 receipt sha256=0371DBCEB1EBFD01ADB67211CB6050671D19451690628CCB0C74AB5D39C73DFF; cause=current supervisor parser ran against worktrees whose Candidate Gate predated control commit 778bee64a"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "778bee64a"

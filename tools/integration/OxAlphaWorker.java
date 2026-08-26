@@ -24,7 +24,7 @@ final class OxAlphaWorker {
                 System.out.println("stdin closed");
                 return;
             }
-            Request request = parse(arguments);
+            OxAlphaRequest request = OxAlphaRequest.parse(arguments);
             int exit = launch(request);
             System.exit(exit);
         } catch (Exception exception) {
@@ -33,7 +33,7 @@ final class OxAlphaWorker {
         }
     }
 
-    private static int launch(Request request) throws Exception {
+    private static int launch(OxAlphaRequest request) throws Exception {
         Path root = Path.of("").toAbsolutePath().normalize();
         boolean fallback = OxAlphaProfile.fallback();
         require(OxAlphaProfile.budgetAllowed(fallback, request.phase(), request.session(),
@@ -67,9 +67,11 @@ final class OxAlphaWorker {
         return exit;
     }
 
-    private static void validate(Path root, Request request) throws Exception {
+    private static void validate(Path root, OxAlphaRequest request) throws Exception {
         require(request.id().matches("m[0-9]+-[a-z0-9-]+"), "invalid milestone id");
         require(request.base().matches("[0-9a-f]{40}"), "base must be an exact commit SHA");
+        require(request.controlBase().matches("[0-9a-f]{40}"),
+                "control base must be an exact commit SHA");
         require(request.phase().equals("checkpoint") || request.phase().equals("qualify"),
                 "phase must be checkpoint or qualify");
         require(request.attempt() > 0 && request.timeoutSeconds() > 0, "invalid launch limits");
@@ -77,6 +79,10 @@ final class OxAlphaWorker {
         String branch = git(root, "branch", "--show-current").trim();
         require(branch.equals("codex/milestone-" + request.id()), "wrong milestone branch: " + branch);
         String head = git(root, "rev-parse", "HEAD").trim();
+        require(ancestor(root, request.controlBase(), request.base()),
+                "authorized base predates the orchestrator control base");
+        require(ancestor(root, request.controlBase(), head),
+                "worktree predates the orchestrator control base");
         require(gitStatus(root, "merge-base", "--is-ancestor", request.base(), head) == 0,
                 "authorized base is not an ancestor of HEAD");
         Path preflight = root.resolve(".worldline/reports/swarm/preflight-" + request.id() + ".json");
@@ -133,7 +139,7 @@ final class OxAlphaWorker {
         return result;
     }
 
-    private static String message(Request request) {
+    private static String message(OxAlphaRequest request) {
         String phase = request.phase().equals("checkpoint") && request.session() == null
                 ? "Implement the complete real contract, but do not run Candidate or Milestone Gate, "
                         + "commit, or hand off. "
@@ -146,20 +152,22 @@ final class OxAlphaWorker {
                         + "If it passes, make one logical commit, require a clean tree, run Milestone Gate, "
                         + "and stop with the exact handoff.";
         return "You are the supervised top-level Ox Alpha worker for " + request.id() + ". Goal: "
-                + request.goal() + ". Authorized base: " + request.base() + ". Read AGENTS.md, "
+                + request.goal() + ". Authorized base: " + request.base() + ". Control base: "
+                + request.controlBase() + ". Read AGENTS.md, "
                 + "docs/ENGINEERING_WORKFLOW.md, and the attached worker contract completely. "
                 + "Nested task, explore, or subagent delegation is forbidden. Inspect the repository directly. "
                 + phase;
     }
 
-    private static void writeReceipt(Path receipt, Request request, Instant started, String head,
+    private static void writeReceipt(Path receipt, OxAlphaRequest request, Instant started, String head,
             Path stdout, Path stderr, int exit, boolean completed, boolean fallback, String config)
             throws Exception {
         String session = firstSession(stdout);
         String value = "{\n  \"schema\":1,\n  \"id\":\"" + request.id()
                 + "\",\n  \"phase\":\"" + request.phase() + "\",\n  \"attempt\":" + request.attempt()
                 + ",\n  \"started\":\"" + started + "\",\n  \"finished\":\"" + Instant.now()
-                + "\",\n  \"base\":\"" + request.base() + "\",\n  \"head\":\"" + head
+                + "\",\n  \"base\":\"" + request.base() + "\",\n  \"control_base\":\""
+                + request.controlBase() + "\",\n  \"head\":\"" + head
                 + "\",\n  \"profile\":\"" + (fallback ? "fallback" : "primary")
                 + "\",\n  \"model\":\"" + OxAlphaProfile.model(fallback) + "\",\n  \"variant\":\""
                 + (fallback ? "default" : "max")
@@ -185,34 +193,11 @@ final class OxAlphaWorker {
         return null;
     }
 
-    private static Request parse(String[] arguments) {
-        String id = null;
-        String goal = null;
-        String base = null;
-        String phase = null;
-        String session = null;
-        int attempt = 0;
-        int timeout = 3600;
-        for (int index = 0; index < arguments.length; index += 2) {
-            require(index + 1 < arguments.length, "missing value for " + arguments[index]);
-            String value = arguments[index + 1];
-            switch (arguments[index]) {
-                case "--id" -> id = value;
-                case "--goal" -> goal = value;
-                case "--base" -> base = value;
-                case "--phase" -> phase = value;
-                case "--attempt" -> attempt = Integer.parseInt(value);
-                case "--session" -> session = value;
-                case "--timeout-seconds" -> timeout = Integer.parseInt(value);
-                default -> throw new IllegalArgumentException("unknown argument: " + arguments[index]);
-            }
-        }
-        return new Request(id, goal, base, phase, attempt, session, timeout);
-    }
-
     private static void selfTest() throws Exception {
-        Request checkpoint = new Request("m1-contract", "Prove a real behavior",
-                "0123456789012345678901234567890123456789", "checkpoint", 1, null, 60);
+        Path root = Path.of("").toAbsolutePath().normalize();
+        String head = git(root, "rev-parse", "HEAD").trim();
+        OxAlphaRequest checkpoint = new OxAlphaRequest("m1-contract", "Prove a real behavior",
+                head, head, "checkpoint", 1, null, 60);
         List<String> valid = command(message(checkpoint), null, false);
         require(messagePrecedesFiles(valid), "canonical argument order was rejected");
         List<String> invalid = new ArrayList<>(valid);
@@ -224,6 +209,8 @@ final class OxAlphaWorker {
                 "fallback model is not allowlisted");
         require(message(checkpoint).contains("Nested task, explore, or subagent delegation is forbidden"),
                 "worker message omitted delegation prohibition");
+        require(ancestor(root, head, head), "exact control base was rejected");
+        require(!ancestor(root, "0".repeat(40), head), "missing control base was accepted");
         Process child = new ProcessBuilder(javaTool(), "-cp", System.getProperty("java.class.path"),
                 "OxAlphaWorker", "--self-test-stdin-child").start();
         closeStdin(child);
@@ -283,6 +270,10 @@ final class OxAlphaWorker {
         return process.exitValue();
     }
 
+    private static boolean ancestor(Path root, String ancestor, String descendant) throws Exception {
+        return gitStatus(root, "merge-base", "--is-ancestor", ancestor, descendant) == 0;
+    }
+
     private static String sha(Path path) throws Exception {
         return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(path)));
     }
@@ -302,7 +293,4 @@ final class OxAlphaWorker {
         }
     }
 
-    private record Request(String id, String goal, String base, String phase, int attempt,
-            String session, int timeoutSeconds) {
-    }
 }

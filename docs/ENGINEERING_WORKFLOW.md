@@ -67,6 +67,9 @@ positional worker message before variadic prompt attachments, and preserves immu
 and a launch receipt. Direct `opencode run` invocations are not supervised evidence. After the
 worker stops at its checkpoint, run `SwarmLoop pre-candidate` and resume the same recorded session
 through the launcher's `qualify` phase.
+Every launch supplies `--control-base` with the exact orchestrator SHA that authorized its checks.
+The launcher rejects an authorized milestone base or worktree HEAD that does not contain that SHA,
+so an older worktree cannot pass supervisor readiness and then execute a stale Candidate Gate.
 The launcher closes the child's stdin pipe immediately after creation so non-interactive OpenCode
 observes EOF and creates a session. Its self-test fails if a child can remain blocked on stdin.
 After an archived primary-provider quota failure, the supervisor may set
