@@ -72,6 +72,12 @@ final class RepositoryVerify {
             }
             return;
         }
+        if (arguments.length == 2 && "--candidate-ready".equals(arguments[0])) {
+            try { CandidateReadiness.prepare(arguments[1]); }
+            catch (Exception error) {
+                System.err.println("candidate readiness failed: " + error.getMessage()); System.exit(1); }
+            return;
+        }
         if (Arrays.equals(arguments, new String[] {"--pin-smokes"})) { SmokePin.main(arguments); return; }
         if (Arrays.equals(arguments, new String[] {"--accept-legacy-smoke-baseline"}))
             { SmokeBaselinePin.main(arguments); return; }

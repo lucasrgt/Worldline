@@ -21,3 +21,11 @@ reported_by = "codex:root"
 corrected_by = "codex:root"
 recorded_by = "codex:root"
 commit = "4cc0b8160"
+
+[[occurrences]]
+occurred_at = "2026-08-26T02:01:34Z"
+source = ".worldline/reports/swarm/csm-nya-check-m655-attempt1-known-recurrence.log sha256:2662BFD786AC5B408912997165B49FB53C75C93036B9C0D13A804C53B5658E32 cause=M655 SERVER smoke lane census absent"
+reported_by = "codex:m655-ox-alpha"
+corrected_by = "codex:m655-ox-alpha"
+recorded_by = "codex:m655-ox-alpha"
+commit = "6c123ddf3"

@@ -24,6 +24,8 @@ public final class WorldlineEnvironmentBehaviors {
             "A lightning entity ignites supported air on normal difficulty while easy does not");
     public static final WorldlineBehavior SKY_BRIGHTNESS_CYCLE = define("sky-brightness-cycle",
             "Clear Overworld time drives the canonical skylight-subtraction cycle");
+    public static final WorldlineBehavior RAIN_STOP_EVENT = define("rain-stop-event",
+            "Raining Overworld broadcasts Packet70 reason 2 when its rain countdown ends");
 
     private WorldlineEnvironmentBehaviors() {}
 

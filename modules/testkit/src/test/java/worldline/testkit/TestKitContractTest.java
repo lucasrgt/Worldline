@@ -39,6 +39,7 @@ public final class TestKitContractTest {
         PortalInvalidFrameFixtureTest.execute();
         PortalReentryCooldownFixtureTest.execute();
         SkyBrightnessCycleFixtureTest.execute();
+        RainStopFixtureTest.execute();
         NaturalSlimeSpawnFixtureTest.execute();
         SleepQuorumFixtureTest.execute();
         IceFormationFixtureTest.execute();

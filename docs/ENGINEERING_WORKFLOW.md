@@ -55,6 +55,12 @@ worktree at that base, reads this document and `AGENTS.md` completely, runs `csm
 when recall presents `NYA-01M0VSCA8F3WSMVW32R9XME7DQ`. The versioned Ox Alpha prompt forbids nested
 task, explore, or subagent delegation because the launcher does not supervise nested work.
 
+Before Candidate Gate, the supervisor runs `SwarmLoop pre-candidate` against the same authorized
+base and goal. It recalls each applicable scar separately, rejects stale generated narratives,
+lane-census drift, packed control bodies, long smoke lines, scaffold markers, and imports from a
+sibling milestone's private smoke sources, then writes a content-bound readiness report. Candidate
+Gate on a supervised milestone branch requires that PASS report and rejects any later source change.
+
 After every worker, the supervisor preserves a verified Git bundle, binary patch, untracked source,
 logs, receipts, and a SHA-256 archive before recording a final disposition. `QUALIFIED` requires a
 real public contract, no scaffold marker, one clean logical commit, an exact milestone receipt and

@@ -1,5 +1,5 @@
 schema=1
 id=m194-snow-block
-fingerprint=13bd3b94fe11d411f0785d26825b6fc10a70d7064b86d81cf64131ea81b90873
+fingerprint=86fd2398968a36ac62bcb634b9a72346eedb798e9050fd49c302f65385ab6c03
 observation.sha256=27b0f59762b6d741c75eb15488c5800f88feb7ca971582557e47532e6cc98a83
 source=refactor-equivalent

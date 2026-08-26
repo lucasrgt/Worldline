@@ -31,6 +31,7 @@ final class CandidateCheck {
 
     private void run() throws Exception {
         System.out.println("Worldline candidate verification: " + id);
+        CandidateReadiness.requireIfSupervised(id);
         load(root.resolve("harness.properties"), config);
         SmokeDiscovery.Entry smoke = SmokeDiscovery.require(root, id);
         validateMilestone(smoke);

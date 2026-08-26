@@ -1,0 +1,22 @@
+schema = 1
+id = "NYA-01M0XYP7T1RKYFD3SJHC4DMHZ3"
+title = "Use reviewed no-follow traversal in harness controls"
+lesson = "New harness or orchestration checks that recursively enumerate repository files must use the reviewed SafeTreeDelete.paths no-follow traversal (or an existing bounded repository helper), never raw Files.walk. Run the canonical source policy before sealing the train so junction and symlink safety remains centralized."
+scope = [
+    "tools/harness/**",
+    "tools/integration/**",
+]
+tags = [
+    "harness",
+    "filesystem",
+    "source-policy",
+]
+created_at = "2026-08-26T02:34:19Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T02:34:19Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/train-m655-readiness-files-walk-failure-verify.json sha256=513465BD46243BAC3B98861F508FE992BF1259F55F9994DFB7504738C1C8CA0F"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "5d6f37b51"

@@ -16,6 +16,7 @@ final class HarnessFeatureSelfTest {
         RepositoryVerify.qualificationBoundarySelfTest();
         TrainSourceHistory.selfTest();
         TrainPinMigration.selfTest();
+        CandidateReadiness.selfTest();
     }
     static void smoke() throws Exception {
         SmokeScheduleHistory.selfTest();

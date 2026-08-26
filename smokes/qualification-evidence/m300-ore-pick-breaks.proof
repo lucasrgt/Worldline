@@ -1,5 +1,5 @@
 schema=1
 id=m300-ore-pick-breaks
-fingerprint=1d9be739a4d0967cd02fb6e382175363c791df8c5dbc4662c8f9fb0dfc8ac87f
+fingerprint=04b23fcd469a96cd40943c1f8bd5c7d99f4b772682434fb84dc3c307c1e9f579
 observation.sha256=5fa840f6542410b38170ae4dc2fe1d2731c8d7ca7335ba9d105d3c1feed61b1a
 source=refactor-equivalent

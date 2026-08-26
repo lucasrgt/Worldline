@@ -14,6 +14,7 @@ public final class SwarmLoop {
                 case "resolve" -> resolve(arguments);
                 case "report" -> report(arguments);
                 case "preflight" -> preflight(arguments);
+                case "pre-candidate" -> preCandidate(arguments);
                 case "--self-test" -> selfTest(arguments);
                 default -> throw new IllegalArgumentException(usage());
             }
@@ -75,6 +76,21 @@ public final class SwarmLoop {
         SwarmPreflight.run(id, base, goal, census);
     }
 
+    private static void preCandidate(String[] arguments) throws Exception {
+        String id = "", base = "", goal = "";
+        for (int index = 1; index < arguments.length; index++) {
+            require(index + 1 < arguments.length, usage());
+            switch (arguments[index]) {
+                case "--id" -> id = arguments[++index];
+                case "--base" -> base = arguments[++index];
+                case "--goal" -> goal = arguments[++index];
+                default -> throw new IllegalArgumentException(usage());
+            }
+        }
+        require(!id.isBlank() && !base.isBlank() && !goal.isBlank(), usage());
+        SwarmPreCandidate.run(id, base, goal);
+    }
+
     private static void report(String[] arguments) throws Exception {
         Path census = null, resolution = null;
         Path output = Path.of(".worldline/reports/swarm-wave.json");
@@ -108,7 +124,8 @@ public final class SwarmLoop {
         return "usage: SwarmLoop.java audit --wave PATH=BASE... [--output PATH] [--archive DIR] | "
                 + "resolve --census PATH --scar ID [--reject ID,...] [--max-attempts N] | "
                 + "report --census PATH --resolution PATH [--output PATH] | "
-                + "preflight --id ID --base SHA --goal TEXT --census PATH | --self-test";
+                + "preflight --id ID --base SHA --goal TEXT --census PATH | "
+                + "pre-candidate --id ID --base SHA --goal TEXT | --self-test";
     }
 
     private static void require(boolean condition, String message) {

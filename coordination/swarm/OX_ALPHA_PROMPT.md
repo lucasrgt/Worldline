@@ -18,6 +18,9 @@ with the exact frozen `mappings.tiny` owner and method row. Treat client and ser
 as independent fields, preserve an empty side as an empty tab field, and never copy the populated
 side into the empty side. The same descriptor audit must verify that `MAP.md` contains the exact
 frozen semantic signal and that every `atlas.subsystems` value belongs to `AtlasSubsystems.ALL`.
+Before Candidate Gate for a data-driven cycle, recall `NYA-01M0XWB16KZB3JRYDGAAYF5SVB` and
+verify source closure from `cycle.inputs` and `cycle.compile.products`; never import a private
+helper owned by another smoke when a maintained shared protocol surface supplies the behavior.
 Before the integration Gate, recall `NYA-01M0XRE7GSKH7ARKM73DVCGQ7K`, classify each newly added
 smoke with `SmokeLane`, and increment the canonical total plus exactly one lane count in
 `quality/smoke-lanes.properties`; leave every unrelated lane count unchanged.
@@ -28,6 +31,11 @@ Treat any nonzero packed-line count reported by Candidate Gate as fail-closed ev
 passes; split the statements before committing so the canonical zero-growth ratchet cannot recur.
 Keep every new Java line at or below 120 columns so a candidate cannot increase the global
 `*.long.files` or `*.long.lines` ratchets after isolated qualification.
+Before Candidate Gate, the supervisor must run `SwarmLoop pre-candidate` for the exact milestone,
+authorized base, and goal. Its objective readiness report must stay bound to the unchanged source
+manifest; Candidate Gate fails closed when the report is missing or any file changed afterward.
+When milestone work adds a recursive harness or orchestration scan, recall
+`NYA-01M0XYP7T1RKYFD3SJHC4DMHZ3` and use the reviewed no-follow traversal helper.
 For portal cooldown or portal re-entry contracts, recall must also present
 `NYA-01M0XC2P1Y3MCKVAHJEAJXX16C`; prove suppression during continuous arrival-portal contact and
 pair it with a positive exit-and-reentry control from the same player.

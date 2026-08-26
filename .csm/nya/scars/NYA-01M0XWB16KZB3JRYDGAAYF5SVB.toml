@@ -1,0 +1,22 @@
+schema = 1
+id = "NYA-01M0XWB16KZB3JRYDGAAYF5SVB"
+title = "Candidate imported a milestone-private smoke helper"
+lesson = "Before importing a helper from another milestone, verify that its source is in the candidate cycle inputs or move only reusable behavior into a shared adapter; milestone-private smoke sources are not compiled for sibling candidates."
+scope = [
+    "smokes/**/src/**/*.java",
+    "smokes/**/smoke.properties",
+]
+tags = [
+    "candidate-compilation",
+    "cycle-inputs",
+    "private-helper",
+]
+created_at = "2026-08-26T01:53:15Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T01:53:15Z"
+source = ".worldline/reports/swarm/candidate-m655-rain-stop-event-attempt1.log sha256:57C0C29AAF5B00B41C4B7E5472AE730BF02D87390A68A2A164C1C7BC063E6CEE"
+reported_by = "codex:m655-ox-alpha"
+corrected_by = "codex:m655-ox-alpha"
+recorded_by = "codex:m655-ox-alpha"
+commit = "6c123ddf3"

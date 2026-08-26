@@ -1,0 +1,183 @@
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HexFormat;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/** Commit-independent proof that applicable NYA lessons were checked before Candidate Gate. */
+final class CandidateReadiness {
+    private static final String REQUIRED = "NYA-01M0VSCA8F3WSMVW32R9XME7DQ";
+    private static final String SOURCE = "NYA-01M0X81N6TG6TQ4RM02X6PH7R7";
+    private static final String LANES = "NYA-01M0XRE7GSKH7ARKM73DVCGQ7K";
+    private static final String CLOSURE = "NYA-01M0XWB16KZB3JRYDGAAYF5SVB";
+    private static final String TOKENS = "NYA-01M0XFV9TPVDKFE6RARDHC84T2";
+    private static final String SYMBOLS = "NYA-01M0XM730NWRQDKFZ1VMP3732W";
+    private static final String TRAVERSAL = "NYA-01M0XYP7T1RKYFD3SJHC4DMHZ3";
+    private static final Pattern IMPORT = Pattern.compile("(?m)^\\s*import\\s+([A-Za-z0-9_$.]+);\\s*$");
+    private static final Pattern PACKAGE = Pattern.compile("(?m)^\\s*package\\s+([A-Za-z0-9_$.]+);\\s*$");
+    private static final Pattern INLINE_CONTROL = Pattern.compile(
+            "^\\s*(?:if|for|while)\\s*\\(.*\\)\\s+[^\\s{].*$");
+
+    private CandidateReadiness() { }
+
+    static void selfTest() {
+        require(INLINE_CONTROL.matcher("    if (!value) throw new IllegalStateException();").matches(),
+                "packed control body was not recognized");
+        require(!INLINE_CONTROL.matcher("    if (!value) {").matches(),
+                "braced control body was rejected");
+        require(IMPORT.matcher("import worldline.smoke.privatecycle.Helper;").find(),
+                "private import was not recognized");
+    }
+
+    static void prepare(String id) throws Exception {
+        Path root = Path.of("").toAbsolutePath().normalize();
+        String branch = git(root, "branch", "--show-current").trim();
+        require(branch.equals("codex/milestone-" + id), "readiness requires the exact worker branch");
+        Map<String, Object> preflight = preflight(root, id);
+        String base = MiniJson.string(preflight, "base");
+        require(MiniJson.string(preflight, "head").equals(base), "preflight was not frozen at base");
+        require(MiniJson.string(preflight, "status").equals("PASS"), "preflight did not pass");
+        require(gitStatus(root, "merge-base", "--is-ancestor", base, "HEAD") == 0,
+                "authorized base is not an ancestor");
+        List<String> scars = applicable(root, id, base);
+        Path recall = root.resolve(".worldline/reports/swarm/readiness-recall-" + id + ".log");
+        require(Files.isRegularFile(recall), "missing readiness recall proof");
+        String recalled = Files.readString(recall, StandardCharsets.UTF_8);
+        for (String scar : scars) require(recalled.contains(scar), "applicable scar absent: " + scar);
+        objective(root, id);
+        String manifest = manifest(root, base);
+        Path report = root.resolve(".worldline/reports/swarm/readiness-" + id + ".json");
+        Files.createDirectories(report.getParent());
+        Files.writeString(report, "{\n  \"schema\":1,\n  \"id\":\"" + id
+                + "\",\n  \"base\":\"" + base + "\",\n  \"manifest_sha256\":\"" + manifest
+                + "\",\n  \"recall_sha256\":\"" + digest(recall) + "\",\n  \"scars\":["
+                + scars.stream().map(value -> "\"" + value + "\"").collect(
+                        java.util.stream.Collectors.joining(","))
+                + "],\n  \"status\":\"PASS\"\n}\n", StandardCharsets.UTF_8);
+        System.out.println("candidate readiness PASS: " + id + " manifest=" + manifest);
+    }
+
+    static void requireIfSupervised(String id) throws Exception {
+        Path root = Path.of("").toAbsolutePath().normalize();
+        String branch = git(root, "branch", "--show-current").trim();
+        if (!branch.equals("codex/milestone-" + id)) return;
+        Path report = root.resolve(".worldline/reports/swarm/readiness-" + id + ".json");
+        require(Files.isRegularFile(report), "missing mandatory pre-Candidate readiness report");
+        Map<String, Object> values = MiniJson.object(Files.readString(report, StandardCharsets.UTF_8));
+        require(MiniJson.string(values, "id").equals(id)
+                && MiniJson.string(values, "status").equals("PASS"), "readiness report drifted");
+        String base = MiniJson.string(values, "base");
+        require(MiniJson.string(values, "manifest_sha256").equals(manifest(root, base)),
+                "candidate changed after the readiness interlock");
+        objective(root, id);
+        System.out.println("  recursive readiness interlock: PASS");
+    }
+
+    static List<String> applicable(Path root, String id, String base) throws Exception {
+        Properties descriptor = StrictProperties.load(root.resolve("smokes").resolve(id)
+                .resolve("smoke.properties"));
+        List<String> result = new ArrayList<>(List.of(REQUIRED, SOURCE));
+        if (gitStatus(root, "cat-file", "-e", base + ":smokes/" + id + "/smoke.properties") != 0)
+            result.add(LANES);
+        String runner = descriptor.getProperty("runner.source", "");
+        if (runner.endsWith("DataDrivenCycle.java") || runner.endsWith("CompositeCycle.java"))
+            result.add(CLOSURE);
+        if (descriptor.containsKey("testkit.fixture")) result.add(TOKENS);
+        if (Files.isRegularFile(root.resolve("smokes").resolve(id).resolve("symbols.map")))
+            result.add(SYMBOLS);
+        if (git(root, "diff", "--name-only", base).lines().anyMatch(path ->
+                path.startsWith("tools/harness/") || path.startsWith("tools/integration/")))
+            result.add(TRAVERSAL);
+        return List.copyOf(result);
+    }
+
+    private static void objective(Path root, String id) throws Exception {
+        Path milestone = root.resolve("smokes").resolve(id);
+        Properties descriptor = StrictProperties.load(milestone.resolve("smoke.properties"));
+        require(!descriptor.containsKey("scaffold.status"), "scaffold is not Candidate-ready");
+        MilestoneNarrative.validate(root, descriptor);
+        SmokeLane.validate(root);
+        List<Path> sources = javaFiles(milestone.resolve("src"));
+        for (Path source : sources) for (String line : Files.readAllLines(source, StandardCharsets.UTF_8)) {
+            require(line.length() <= 120, "long smoke line: " + root.relativize(source));
+            require(!INLINE_CONTROL.matcher(line).matches(),
+                    "inline control body repeats packed-source scar: " + root.relativize(source));
+        }
+        Map<String, Path> smokeTypes = smokeTypes(root.resolve("smokes"));
+        for (Path source : sources) {
+            Matcher imports = IMPORT.matcher(Files.readString(source, StandardCharsets.UTF_8));
+            while (imports.find()) {
+                Path owner = smokeTypes.get(imports.group(1));
+                if (owner == null) continue;
+                Path relative = root.relativize(owner);
+                require(relative.startsWith(Path.of("smokes", id))
+                                || relative.startsWith(Path.of("smokes", "shared")),
+                        "milestone-private smoke import is outside source closure: " + imports.group(1));
+            }
+        }
+    }
+
+    private static Map<String, Path> smokeTypes(Path root) throws Exception {
+        Map<String, Path> result = new LinkedHashMap<>();
+        for (Path source : javaFiles(root)) {
+            String text = Files.readString(source, StandardCharsets.UTF_8);
+            Matcher owner = PACKAGE.matcher(text); if (!owner.find()) continue;
+            String name = source.getFileName().toString().replaceFirst("[.]java$", "");
+            result.put(owner.group(1) + "." + name, source);
+        }
+        return result;
+    }
+
+    private static List<Path> javaFiles(Path root) throws Exception {
+        if (!Files.isDirectory(root)) return List.of();
+        return SafeTreeDelete.paths(root).stream().filter(Files::isRegularFile)
+                .filter(path -> path.toString().endsWith(".java")).sorted().toList();
+    }
+
+    private static Map<String, Object> preflight(Path root, String id) throws Exception {
+        Path path = root.resolve(".worldline/reports/swarm/preflight-" + id + ".json");
+        require(Files.isRegularFile(path), "missing mandatory supervised preflight report");
+        Map<String, Object> value = MiniJson.object(Files.readString(path, StandardCharsets.UTF_8));
+        require(MiniJson.string(value, "id").equals(id), "preflight milestone drifted"); return value;
+    }
+
+    private static String manifest(Path root, String base) throws Exception {
+        List<String> paths = new ArrayList<>(git(root, "diff", "--name-only", base).lines().toList());
+        paths.addAll(git(root, "ls-files", "--others", "--exclude-standard").lines().toList());
+        paths = paths.stream().filter(path -> !path.isBlank() && !path.startsWith(".worldline/"))
+                .distinct().sorted().toList();
+        StringBuilder value = new StringBuilder();
+        for (String item : paths) {
+            Path path = root.resolve(item); value.append(item).append('\0');
+            value.append(Files.isRegularFile(path) ? digest(path) : "DELETED").append('\n');
+        }
+        return digest(value.toString().getBytes(StandardCharsets.UTF_8));
+    }
+
+    private static String git(Path root, String... arguments) throws Exception {
+        List<String> command = new ArrayList<>(List.of("git")); command.addAll(List.of(arguments));
+        Process process = new ProcessBuilder(command).directory(root.toFile()).redirectErrorStream(true).start();
+        String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        int exit = process.waitFor(); require(exit == 0, "git failed: " + output); return output;
+    }
+    private static int gitStatus(Path root, String... arguments) throws Exception {
+        List<String> command = new ArrayList<>(List.of("git")); command.addAll(List.of(arguments));
+        Process process = new ProcessBuilder(command).directory(root.toFile())
+                .redirectErrorStream(true).redirectOutput(ProcessBuilder.Redirect.DISCARD).start();
+        process.waitFor(); return process.exitValue();
+    }
+    private static String digest(Path path) throws Exception { return digest(Files.readAllBytes(path)); }
+    private static String digest(byte[] value) throws Exception { return HexFormat.of().formatHex(
+            MessageDigest.getInstance("SHA-256").digest(value)); }
+    private static void require(boolean value, String message) {
+        if (!value) throw new IllegalStateException(message);
+    }
+}

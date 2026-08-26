@@ -1,5 +1,5 @@
 schema=1
 id=m35-movement-outcome
-fingerprint=61c2e414fdab55a1deb4fafaa334c9fd388f9e1ddf68b15ca80d6abfd82e3e60
+fingerprint=2102ac67d4ad927915f1ff857c972e70811ab40b784848a6faeb7051f22d487d
 observation.sha256=227f777cc399f7a4a9e1db4bf94a44fc7f65eca37ebd1b6d183bff16a090223f
 source=refactor-equivalent

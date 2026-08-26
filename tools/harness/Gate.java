@@ -124,6 +124,7 @@ public final class Gate {
                 || arguments.length == 1 && maintenance(arguments[0])
                 || arguments.length == 2 && ("--new-milestone".equals(arguments[0])
                         || "--candidate".equals(arguments[0])
+                        || "--candidate-ready".equals(arguments[0])
                         || "--lane-differential".equals(arguments[0])
                         || "--milestone".equals(arguments[0]) || "--smoke-id".equals(arguments[0]));
         if (!profile) throw new IllegalArgumentException(
@@ -145,7 +146,7 @@ public final class Gate {
                 + "--module-cache-doctor|--module-cache-gc|--cache-doctor|--cache-gc|"
                 + "--cache-rebuild-drill|"
                 + "--new-milestone ID|--milestone ID|--lane-differential ID|"
-                + "--candidate ID|--self-test]");
+                + "--candidate-ready ID|--candidate ID|--self-test]");
         if (arguments.length == 2 && !arguments[1].matches("[a-z0-9]+(?:-[a-z0-9]+)*"))
             throw new IllegalArgumentException("invalid milestone id: " + arguments[1]);
     }
