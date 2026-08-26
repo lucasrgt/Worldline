@@ -44,3 +44,27 @@ reported_by = "codex:root"
 corrected_by = "codex:root"
 recorded_by = "codex:root"
 commit = "4cc0b8160"
+
+[[occurrences]]
+occurred_at = "2026-08-26T03:34:56Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/process-pre-candidate-recall-limit/gate-source-pin-drift-verify.json sha256=EE8C5EF3818A83C765BE0B34AACDC762F7B98C3C675DC41626DCDC44A5C6AD67 cause=SwarmPreCandidate source changed without regenerating the portable train source transition"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "0bc537d61"
+
+[[occurrences]]
+occurred_at = "2026-08-26T03:40:42Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/process-pre-candidate-recall-limit/nya-unchanged-pin-recurrence.txt sha256=573FAD691F56DB664612DDD0685388452F0D1C00A6095C4399A3D475983CDC04 cause=TrainPinMigration rewrote unchanged qualification prior fingerprints"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "0bc537d61"
+
+[[occurrences]]
+occurred_at = "2026-08-26T03:44:07Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/process-pre-candidate-recall-limit/nya-source-predecessor-order-recurrence.txt sha256=33C32A93D2FB9E6455296EE6871EF6E46EFF080DE74CEE1CDE2F7ADB537C4832 cause=changed source predecessor digest was not ordered first"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "0bc537d61"

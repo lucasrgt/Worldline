@@ -1,0 +1,22 @@
+schema = 1
+id = "NYA-01M0Y1S1XRW69RWVK3WKEBNG6D"
+title = "Do not truncate applicable-scar recall before Candidate"
+lesson = "A supervised pre-Candidate loop must request enough NYA results to include every scar it declares applicable. The default recall limit can rank a required scar below the cutoff even when its scope matches; derive the recall limit from the complete local scar store, require each declared ID in the returned evidence, and keep Candidate blocked until the exact manifest-bound recall passes."
+scope = [
+    "tools/integration/SwarmPreCandidate.java",
+    ".csm/nya/scars/*.toml",
+]
+tags = [
+    "swarm",
+    "nya",
+    "candidate-gate",
+]
+created_at = "2026-08-26T03:28:17Z"
+
+[[occurrences]]
+occurred_at = "2026-08-26T03:28:17Z"
+source = "manual:2026-08-26-m657-pre-candidate-default-limit-omitted-NYA-01M0X81N6TG6TQ4RM02X6PH7R7 readiness-pass=C4EDFBB61D580B4D742DD087C5719A9294B2CE62342E0943321E2221F357BB7F"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "0bc537d61"

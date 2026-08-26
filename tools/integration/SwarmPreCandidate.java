@@ -37,10 +37,12 @@ final class SwarmPreCandidate {
                 .anyMatch(path -> path.startsWith("tools/harness/")
                         || path.startsWith("tools/integration/"))) scars.add(TRAVERSAL);
         StringBuilder recall = new StringBuilder();
+        String recallLimit = Integer.toString(recallLimit(root));
         for (String scar : scars) {
             String output = SwarmProcess.output(root, List.of("csm", "nya", "recall", "--task",
                     goal + " Required applicable scar " + scar, "--path", "smokes/" + id,
-                    "--path", "tools/smoke", "--path", "modules/testkit"), 300);
+                    "--path", "tools/smoke", "--path", "modules/testkit",
+                    "--limit", recallLimit), 300);
             require(output.contains(scar), "applicable scar was absent from recall: " + scar);
             recall.append("# ").append(scar).append('\n').append(output).append('\n');
         }
@@ -70,6 +72,17 @@ final class SwarmPreCandidate {
         boolean windows = System.getProperty("os.name", "").toLowerCase().contains("win");
         return Path.of(System.getProperty("java.home"), "bin", "java" + (windows ? ".exe" : ""))
                 .toString();
+    }
+
+    private static int recallLimit(Path root) throws Exception {
+        Path scars = root.resolve(".csm/nya/scars");
+        require(Files.isDirectory(scars), "NYA scar store is missing");
+        int count = 0;
+        try (var entries = Files.newDirectoryStream(scars, "*.toml")) {
+            for (Path ignored : entries) count++;
+        }
+        require(count > 0, "NYA scar store is empty");
+        return count;
     }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);
