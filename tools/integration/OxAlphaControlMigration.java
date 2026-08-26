@@ -1,4 +1,5 @@
 import java.io.InputStream;
+import java.nio.file.DirectoryStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -60,12 +61,14 @@ public final class OxAlphaControlMigration {
         Result context = capture(root, List.of("csm", "context", "--task", request.goal,
                 "--path", "."), 300);
         require(contextAccepted(context), "CSM context failed on the new control base");
+        String recallLimit = Integer.toString(recallLimit(root));
         String standard = output(root, List.of("csm", "nya", "recall", "--task", request.goal,
                 "--path", "smokes/" + request.id, "--path", "tools/smoke",
-                "--path", "modules/testkit"), 300);
+                "--path", "modules/testkit", "--limit", recallLimit), 300);
         String control = output(root, List.of("csm", "nya", "recall", "--task",
                 request.goal + " Required applicable scar " + CONTROL_BASE,
-                "--path", "tools/integration", "--path", "coordination/swarm"), 300);
+                "--path", "tools/integration", "--path", "coordination/swarm",
+                "--limit", recallLimit), 300);
         require(standard.contains(SUPERVISION), "supervision scar absent after migration");
         require(control.contains(CONTROL_BASE), "control-base scar absent after migration");
         String archiveSha = sha(request.archive);
@@ -214,6 +217,18 @@ public final class OxAlphaControlMigration {
         }
         List<String> errors = result.stderr.lines().filter(line -> !line.isBlank()).toList();
         return !errors.isEmpty() && errors.stream().allMatch(OPTIONAL_CONTEXT_ERRORS::contains);
+    }
+
+    private static int recallLimit(Path root) throws Exception {
+        Path scars = root.resolve(".csm/nya/scars");
+        int count = 0;
+        try (DirectoryStream<Path> entries = Files.newDirectoryStream(scars, "*.toml")) {
+            for (Path ignored : entries) {
+                count++;
+            }
+        }
+        require(count > 0, "NYA scar store is empty");
+        return count;
     }
 
     private static int status(Path root, List<String> command, int seconds) throws Exception {

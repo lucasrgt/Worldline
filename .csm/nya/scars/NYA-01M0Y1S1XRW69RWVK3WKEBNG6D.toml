@@ -20,3 +20,11 @@ reported_by = "codex:root"
 corrected_by = "codex:root"
 recorded_by = "codex:root"
 commit = "0bc537d61"
+
+[[occurrences]]
+occurred_at = "2026-08-26T18:10:45Z"
+source = "manual:control-base-migration-m662-m665-recall-limit all four archived migrations stopped before patch restore because control-base scar NYA-01M0ZHW1MB9W4BX3H0AY88CVY0 ranked below the default recall cutoff"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "f26ea55d3"
