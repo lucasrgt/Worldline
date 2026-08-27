@@ -35,7 +35,7 @@ public final class B173ServerCollisionProviderTest {
                 && rows.get(1).probes().get(1).expected()
                         == BlockCollisionExpectation.PASSABLE,
                 "slab collision envelope drifted");
-        require(rows.get(2).placements().get(0).expected().equals(new BlockState(53, 2))
+        require(rows.get(2).placements().get(0).expected().equals(new BlockState(53, 3))
                 && rows.get(3).placements().size() == 2
                 && rows.get(3).placementSlot().before().count() == 2
                 && rows.get(3).probes().get(1).expected()

@@ -46,10 +46,10 @@ public final class B173CollisionScenarioFactory {
     }
 
     public static BlockCollisionScenario woodStairs() {
-        return scenario("wood-stairs-step-envelope", "b1.7.3:block/053", 53, 0F,
+        return scenario("wood-stairs-step-envelope", "b1.7.3:block/053", 53, 180F,
                 Arrays.asList("directional", "special-collision"),
                 placements(new BlockCollisionPlacement(B173CollisionArena.TARGET_SUPPORT,
-                        BlockFace.UP, new BlockState(53, 2))),
+                        BlockFace.UP, new BlockState(53, 3))),
                 probes(blocked("level"), passable("half-step", 0.5D)));
     }
 
