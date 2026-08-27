@@ -95,23 +95,31 @@ final class SharedHelperPinMigration {
         lock.setProperty("variant.count", Integer.toString(variantCount()));
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); Properties providers =
-                ProviderDiscoveryPinCheck.manifest(root); int carried = 0;
+                ProviderDiscoveryPinCheck.manifest(root); int carried = 0, introduced = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             if (ProviderDiscoveryPinCheck.exemptsLegacy(providers, smoke.id)) continue;
             carried++; String current = fingerprints.compute(smoke); SmokePins.Entry pin =
                     pins.match(smoke.id, current); require(pin != null,
                     "shared-helper refresh lacks current proof: " + smoke.id);
             String stem = "smoke." + smoke.id + ".";
-            String recorded = required(lock, stem + "current_fingerprint");
-            if (!current.equals(recorded)) lock.setProperty(stem + "prior_fingerprint", recorded);
+            String recorded = lock.getProperty(stem + "current_fingerprint");
+            if (recorded == null) {
+                require("executed".equals(pin.source()),
+                        "new shared-helper row lacks exact execution: " + smoke.id);
+                lock.setProperty(stem + "introduced", "true"); introduced++;
+            } else if (!current.equals(recorded))
+                lock.setProperty(stem + "prior_fingerprint", recorded);
             lock.setProperty(stem + "current_fingerprint", current);
             lock.setProperty(stem + "evidence_sha256", pin.evidence());
         }
-        require(carried == 525 - ProviderDiscoveryPinCheck.pendingCount(providers),
+        int smokeCount = Integer.parseInt(lock.getProperty("smoke.count")) + introduced;
+        require(carried == smokeCount - ProviderDiscoveryPinCheck.pendingCount(providers),
                 "shared-helper refresh smoke census drift");
+        lock.setProperty("smoke.count", Integer.toString(smokeCount));
         pins.write(pins.entries()); store(path, lock);
         System.out.println("shared-helper pins refreshed: " + refactors
-                + " canonical refactors, " + carried + " carried");
+                + " canonical refactors, " + carried + " carried, " + introduced
+                + " introduced");
     }
 
     private int variantCount() throws Exception {
