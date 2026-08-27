@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=b173-furnace-state-domain-cycle -->
 <!-- nonclaims=smelting,container-inventory,lit-state,render -->
-<!-- frozen-trace=0000000000000000000000000000000000000000000000000000000000000000 -->
+<!-- frozen-trace=5341f48d013da9a80a8ba106219b185fd20420f0aa137fb8187f281ee1f91696 -->
 
 # Beta 1.7.3 furnace facing state domain
 
@@ -24,4 +24,4 @@ This map does not claim smelting, container inventory, the lit block id, block b
 collision, sound, or client rendering.
 
 Frozen signal:
-`provider=b1.7.3-server-state-domain,family=furnace,rows=1,passed=1,states=4,reload=FRESH_LOGINx1,evidence=0000000000000000000000000000000000000000000000000000000000000000,isolation=1-fresh-worlds`.
+`provider=b1.7.3-server-state-domain,family=furnace,rows=1,passed=1,states=4,reload=FRESH_LOGINx1,evidence=57985087435a2236a78bf10aa85aa37dc21b866de71a1084060c826bc39782be,isolation=1-fresh-worlds`.
