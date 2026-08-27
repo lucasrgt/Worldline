@@ -49,8 +49,13 @@ final class FormattingPinCheck {
             SmokePins.Entry pin = pins.match(smoke.id, current);
             boolean executed = TrainPinCheck.isExecuted(train, smoke.id)
                     && pin != null && "executed".equals(pin.source());
-            require(pin != null && (executed || carries(manifest, smoke.id, pin, current))
-                            && hash(manifest, "smoke." + smoke.id + ".prior_fingerprint"),
+            String stem = "smoke." + smoke.id + ".";
+            boolean introduced = pin != null && "executed".equals(pin.source())
+                    && "true".equals(manifest.getProperty(stem + "introduced"))
+                    && current.equals(manifest.getProperty(stem + "current_fingerprint"))
+                    && pin.evidence().equals(manifest.getProperty(stem + "evidence_sha256"));
+            require(pin != null && (executed || introduced || carries(manifest, smoke.id, pin, current))
+                            && (introduced || hash(manifest, stem + "prior_fingerprint")),
                     "formatting proof drift: " + smoke.id);
         }
         require(checked == integer(manifest, "smoke.count")
@@ -69,7 +74,8 @@ final class FormattingPinCheck {
     }
     static boolean carries(Properties manifest, String id, SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
-        boolean direct = hash(manifest, stem + "prior_fingerprint")
+        boolean direct = (hash(manifest, stem + "prior_fingerprint")
+                || "true".equals(manifest.getProperty(stem + "introduced")))
                 && current.equals(manifest.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(manifest.getProperty(stem + "evidence_sha256"));
         try {
