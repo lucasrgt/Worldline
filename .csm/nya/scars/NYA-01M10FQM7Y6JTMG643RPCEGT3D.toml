@@ -1,0 +1,32 @@
+schema = 1
+id = "NYA-01M10FQM7Y6JTMG643RPCEGT3D"
+title = "Classify worktrees from exact receipts and explicit dispositions"
+lesson = "A swarm census spanning reconciled historical bases must not compare every worktree to the current main SHA. QUALIFIED derives from the receipt's own exact base/head/tree plus handoff and integration evidence; REJECTED derives from an exact registered disposition and preserved archive. The wave base remains only the fallback for truly unstarted or unclassified worktrees."
+scope = [
+    "docs/ENGINEERING_WORKFLOW.md",
+    "tools/integration/SwarmCensus.java",
+    "tools/integration/CensusDisposition.java",
+    "tools/integration/WaveCensus.java",
+]
+tags = [
+    "census",
+    "dispositions",
+    "integration-train",
+]
+created_at = "2026-08-27T02:10:39Z"
+
+[[occurrences]]
+occurred_at = "2026-08-27T02:10:39Z"
+source = "Census m642-m666 on main 66eb4b404 classified 0 QUALIFIED and 25 FAILED_GATE although terminal truth is 14 QUALIFIED integrated and 11 REJECTED; cause=SwarmCensus forced receipt.base == current wave base for historical reconciled worktrees and ignored explicit dispositions"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "66eb4b404"
+
+[[occurrences]]
+occurred_at = "2026-08-27T02:14:56Z"
+source = "Disposition-aware census found M654 integrated receipt head=f95f41d996079c8e2a2f953bb282c2f393e2af92 base=4cc0b81605655d9c4ffba5f07897e8c1323a264a current receipt sha256=2467D9C69904AE774492953C85D384B8B9F971F9EF11645EAFE86A5AF3F5BEB0 while handoff/disposition recorded e29bbee715fe0684f0790cca65ee5e831fc9e93fa10da96dcab59a314f5e6bf9; cause=later exact Gate rewrote qualified_at after handoff"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "66eb4b404"

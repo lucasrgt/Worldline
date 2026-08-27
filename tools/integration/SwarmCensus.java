@@ -1,20 +1,9 @@
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.Instant;
-import java.time.Duration;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.nio.file.*;
+import java.time.*;
+import java.util.*;
+import java.util.regex.*;
 
 /** Produces an evidence-bound census without modifying candidate worktrees. */
 final class SwarmCensus {
@@ -29,10 +18,13 @@ final class SwarmCensus {
         SwarmEvidenceArchive.Result bundle = archive == null ? SwarmEvidenceArchive.Result.empty()
                 : SwarmEvidenceArchive.saveRepositoryBundle(root, archive);
         Map<String, Properties> handoffs = handoffs(root);
+        Map<String, CensusDisposition.Decision> dispositions = CensusDisposition.load(root);
         Set<String> integratedReceipts = integratedReceipts(root);
         List<Item> items = new ArrayList<>();
-        for (Wave wave : waves) inspectWave(root, wave, handoffs, integratedReceipts,
-                archive, bundle, items);
+        for (Wave wave : waves) {
+            inspectWave(root, wave, handoffs, dispositions, integratedReceipts,
+                    archive, bundle, items);
+        }
         items.sort(Comparator.comparingInt(Item::number));
         Map<String, Integer> counts = new HashMap<>();
         for (Item item : items) counts.merge(item.state, 1, Integer::sum);
@@ -42,14 +34,15 @@ final class SwarmCensus {
                 + counts.getOrDefault("QUALIFIED", 0) + ", failed-gate="
                 + counts.getOrDefault("FAILED_GATE", 0) + ", dirty-suspended="
                 + counts.getOrDefault("DIRTY_SUSPENDED", 0) + ", not-started="
-                + counts.getOrDefault("NOT_STARTED", 0));
+                + counts.getOrDefault("NOT_STARTED", 0) + ", rejected="
+                + counts.getOrDefault("REJECTED", 0));
         System.out.println("  report: " + output);
         if (archive != null) System.out.println("  evidence archive: " + archive);
     }
 
     private static void inspectWave(Path root, Wave wave, Map<String, Properties> handoffs,
-            Set<String> integratedReceipts, Path archive, SwarmEvidenceArchive.Result bundle,
-            List<Item> items) throws Exception {
+            Map<String, CensusDisposition.Decision> dispositions, Set<String> integratedReceipts,
+            Path archive, SwarmEvidenceArchive.Result bundle, List<Item> items) throws Exception {
         require(Files.isDirectory(wave.path), "missing wave root: " + wave.path);
         String base = git(root, "rev-parse", "--verify", wave.base + "^{commit}").trim();
         try (var paths = Files.list(wave.path)) {
@@ -57,14 +50,15 @@ final class SwarmCensus {
                 Matcher match = ID.matcher(path.getFileName().toString());
                 if (!match.matches()) continue;
                 items.add(inspect(root, path.toAbsolutePath().normalize(), base, handoffs,
-                        integratedReceipts, archive, bundle, Integer.parseInt(match.group(1))));
+                        dispositions, integratedReceipts, archive, bundle,
+                        Integer.parseInt(match.group(1))));
             }
         }
     }
 
     private static Item inspect(Path root, Path path, String base, Map<String, Properties> handoffs,
-            Set<String> integratedReceipts, Path archive, SwarmEvidenceArchive.Result bundle,
-            int number) throws Exception {
+            Map<String, CensusDisposition.Decision> dispositions, Set<String> integratedReceipts,
+            Path archive, SwarmEvidenceArchive.Result bundle, int number) throws Exception {
         String id = path.getFileName().toString();
         String branch = git(path, "branch", "--show-current").trim();
         String head = git(path, "rev-parse", "HEAD").trim();
@@ -72,25 +66,39 @@ final class SwarmCensus {
         String status = git(path, "status", "--porcelain=v1", "--untracked-files=all");
         boolean dirty = !status.isBlank(), atBase = head.equals(base);
         Path receipt = path.resolve(".worldline/reports/milestones/" + id + ".json");
-        Receipt proof = receipt(receipt, id, head, tree, base);
-        boolean handoff = handoff(handoffs.get(head), branch, head, base, receipt);
+        Receipt proof = receipt(receipt, id, head, tree);
+        boolean receiptBase = proof.exact && SwarmProcess.status(path,
+                List.of("merge-base", "--is-ancestor", proof.base, head), 60) == 0;
+        String evidenceBase = receiptBase ? proof.base : base;
+        boolean handoff = receiptBase && handoff(handoffs.get(head), branch, head,
+                evidenceBase, receipt);
         Path descriptor = path.resolve("smokes").resolve(id).resolve("smoke.properties");
         boolean scaffold = Files.isRegularFile(descriptor)
                 && Files.readString(descriptor, StandardCharsets.UTF_8).contains("scaffold.status=");
-        int commits = atBase ? 0 : Integer.parseInt(git(path, "rev-list", "--count",
-                base + ".." + head).trim());
-        boolean qualified = proof.exact && handoff && commits == 1 && !scaffold;
+        boolean integrated = integratedReceipts.contains(head) || integrated(root, head);
+        int commits = head.equals(evidenceBase) ? 0 : Integer.parseInt(git(path, "rev-list",
+                "--count", evidenceBase + ".." + head).trim());
+        boolean qualified = receiptBase && handoff && integrated && commits == 1 && !scaffold;
         String state = legacyState(dirty, qualified, atBase, !atBase);
         List<Path> logs = evidenceLogs(path, id);
         int retries = retries(logs);
         long receiptSeconds = receiptSeconds(path, proof, head);
-        boolean integrated = integratedReceipts.contains(head) || integrated(root, head);
         String cause = cause(state, status, logs);
-        SwarmEvidenceArchive.Result saved = archive != null
-                && (state.equals("DIRTY_SUSPENDED") || state.equals("FAILED_GATE"))
-                ? SwarmEvidenceArchive.save(archive, id, path, branch, base, head, tree, state,
-                        status, logs, receipt, bundle) : SwarmEvidenceArchive.Result.empty();
-        return new Item(number, id, path, branch, base, head, tree, state, dirty, commits,
+        CensusDisposition.Decision disposition = dispositions.get(id);
+        SwarmEvidenceArchive.Result saved;
+        if (disposition != null) {
+            disposition.requireExact(path, branch);
+            state = disposition.state();
+            cause = disposition.cause();
+            evidenceBase = disposition.base();
+            saved = disposition.archive();
+        } else {
+            saved = archive != null
+                    && (state.equals("DIRTY_SUSPENDED") || state.equals("FAILED_GATE"))
+                    ? SwarmEvidenceArchive.save(archive, id, path, branch, base, head, tree, state,
+                            status, logs, receipt, bundle) : SwarmEvidenceArchive.Result.empty();
+        }
+        return new Item(number, id, path, branch, evidenceBase, head, tree, state, dirty, commits,
                 scaffold, proof.present, proof.exact, handoff, integrated, retries, receiptSeconds,
                 cause, logs, saved);
     }
@@ -102,16 +110,19 @@ final class SwarmCensus {
         return "FAILED_GATE";
     }
 
-    private static Receipt receipt(Path path, String id, String head, String tree, String base)
+    private static Receipt receipt(Path path, String id, String head, String tree)
             throws IOException {
-        if (!Files.isRegularFile(path)) return new Receipt(false, false, "");
+        if (!Files.isRegularFile(path)) {
+            return new Receipt(false, false, "", "");
+        }
         Map<String, String> fields = new HashMap<>();
         Matcher matcher = JSON_FIELD.matcher(Files.readString(path, StandardCharsets.UTF_8));
         while (matcher.find()) fields.put(matcher.group(1), matcher.group(2));
         boolean exact = "passed".equals(fields.get("status")) && id.equals(fields.get("id"))
                 && head.equals(fields.get("head")) && tree.equals(fields.get("tree"))
-                && base.equals(fields.get("base"));
-        return new Receipt(true, exact, fields.getOrDefault("qualified_at", ""));
+                && fields.getOrDefault("base", "").matches("[0-9a-f]{40}");
+        return new Receipt(true, exact, fields.getOrDefault("qualified_at", ""),
+                fields.getOrDefault("base", ""));
     }
 
     private static Map<String, Properties> handoffs(Path root) throws IOException {
@@ -196,9 +207,11 @@ final class SwarmCensus {
         StringBuilder text = new StringBuilder("{\n  \"schema\":1,\n  \"created\":\"")
                 .append(Instant.now()).append("\",\n  \"waves\":").append(waves.size())
                 .append(",\n  \"summary\":{");
-        for (String state : List.of("QUALIFIED", "FAILED_GATE", "DIRTY_SUSPENDED", "NOT_STARTED"))
+        for (String state : List.of("QUALIFIED", "REJECTED", "RETRYABLE", "STRANDED",
+                "FAILED_GATE", "DIRTY_SUSPENDED", "NOT_STARTED")) {
             text.append("\"").append(state).append("\":")
                     .append(counts.getOrDefault(state, 0)).append(",");
+        }
         text.setLength(text.length() - 1); text.append("},\n  \"candidates\":[\n");
         for (int index = 0; index < items.size(); index++) {
             Item item = items.get(index);
@@ -241,7 +254,7 @@ final class SwarmCensus {
                     value.substring(split + 1));
         }
     }
-    private record Receipt(boolean present, boolean exact, String qualifiedAt) { }
+    private record Receipt(boolean present, boolean exact, String qualifiedAt, String base) { }
     private record Item(int number, String id, Path path, String branch, String base, String head,
             String tree, String state, boolean dirty, int commits, boolean scaffold,
             boolean receiptPresent, boolean receiptExact, boolean handoffExact, boolean integrated,

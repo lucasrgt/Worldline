@@ -17,6 +17,10 @@ final class BranchTriage {
 
     public static void main(String[] arguments) {
         try {
+            if (arguments.length == 1 && "--self-test".equals(arguments[0])) {
+                selfTest();
+                return;
+            }
             if (arguments.length != 2 || !"--base".equals(arguments[0]))
                 throw new IllegalArgumentException("usage: java BranchTriage.java --base REF");
             write(Path.of("").toAbsolutePath().normalize(), arguments[1]);
@@ -29,14 +33,19 @@ final class BranchTriage {
         String base = git(root, "rev-parse", "--verify", reference + "^{commit}").trim();
         Set<String> receipts = receiptHeads(root, base);
         List<Branch> branches = new ArrayList<>();
-        for (String name : git(root, "for-each-ref", "--format=%(refname:short)", "refs/heads")
-                .lines().map(String::trim).filter(value -> !value.isEmpty()).toList()) {
-            String head = git(root, "rev-parse", name + "^{commit}").trim();
-            int ahead = count(root, base + ".." + head), behind = count(root, head + ".." + base);
-            List<String> cherry = git(root, "cherry", base, head).lines().toList();
-            int unique = (int) cherry.stream().filter(line -> line.startsWith("+")).count();
-            int equivalent = (int) cherry.stream().filter(line -> line.startsWith("-")).count();
-            boolean ancestor = status(root, "merge-base", "--is-ancestor", head, base) == 0;
+        String format = "%(refname:short)%00%(objectname)%00%(ahead-behind:" + base + ")";
+        for (String line : git(root, "for-each-ref", "--format=" + format, "refs/heads")
+                .lines().filter(value -> !value.isBlank()).toList()) {
+            Ref ref = ref(line);
+            String name = ref.name;
+            String head = ref.head;
+            int ahead = ref.ahead;
+            int behind = ref.behind;
+            boolean ancestor = ahead == 0;
+            List<String> cherry = ancestor ? List.of()
+                    : git(root, "cherry", base, head).lines().toList();
+            int unique = (int) cherry.stream().filter(row -> row.startsWith("+")).count();
+            int equivalent = (int) cherry.stream().filter(row -> row.startsWith("-")).count();
             boolean receipt = receipts.contains(head);
             String classification = ancestor || unique == 0 || receipt ? "contained"
                     : unique == 1 ? "one-unique" : "divergent";
@@ -76,8 +85,28 @@ final class BranchTriage {
         System.out.println("  report: " + root.relativize(report));
     }
 
-    private static int count(Path root, String range) throws Exception {
-        return Integer.parseInt(git(root, "rev-list", "--count", range).trim());
+    private static Ref ref(String line) {
+        String[] fields = line.split(String.valueOf((char) 0), -1);
+        require(fields.length == 3, "invalid branch inventory row");
+        String[] counts = fields[2].trim().split(" +", -1);
+        require(counts.length == 2, "invalid ahead/behind row: " + fields[0]);
+        return new Ref(fields[0], fields[1], Integer.parseInt(counts[0]),
+                Integer.parseInt(counts[1]));
+    }
+
+    private static void selfTest() {
+        String separator = String.valueOf((char) 0);
+        Ref valid = ref("codex/milestone-m1-valid" + separator + "abc123" + separator + "1 2");
+        require(valid.name.equals("codex/milestone-m1-valid") && valid.head.equals("abc123")
+                && valid.ahead == 1 && valid.behind == 2, "valid branch row was rejected");
+        boolean rejected = false;
+        try {
+            ref("truncated-row");
+        } catch (IllegalStateException expected) {
+            rejected = true;
+        }
+        require(rejected, "malformed branch row was accepted");
+        System.out.println("branch triage self-test passed");
     }
 
     private static Set<String> receiptHeads(Path root, String base) throws Exception {
@@ -121,7 +150,13 @@ final class BranchTriage {
         process.descendants().sorted(Comparator.comparingLong(ProcessHandle::pid).reversed())
                 .forEach(ProcessHandle::destroyForcibly); process.destroyForcibly();
     }
+    private static void require(boolean condition, String message) {
+        if (!condition) {
+            throw new IllegalStateException(message);
+        }
+    }
     private static String escape(String value) { return value.replace("\\", "\\\\").replace("\"", "\\\""); }
+    private record Ref(String name, String head, int ahead, int behind) { }
     private record Branch(String name, String head, String classification, int ahead, int behind,
             int unique, int equivalent, boolean ancestor, boolean receipt) { }
 }

@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M10HDY3ZN63T3V754HBFDT9A"
+title = "Batch branch triage before train reconciliation"
+lesson = "Branch triage over a large local branch inventory must obtain branch names, heads, and ahead/behind counts in one for-each-ref batch, infer ancestry from ahead==0, and invoke git cherry only for non-ancestors. Do not launch four or five Git processes per branch under a fixed two-minute train timeout; prove the optimized report preserves the historical classification totals and completes within the launcher budget."
+scope = [
+    "tools/integration/BranchTriage.java",
+    "tools/integration/IntegrationTrain.java",
+    "tools/harness/IntegrationToolsCheck.java",
+]
+tags = [
+    "integration-train",
+    "branch-triage",
+    "throughput",
+]
+created_at = "2026-08-27T02:40:19Z"
+
+[[occurrences]]
+occurred_at = "2026-08-27T02:40:19Z"
+source = "IntegrationTrain --reconcile on d853e8989: canonical pinned Gate PASS, then BranchTriage source launcher exceeded 120 seconds over 274 local branches; optimized replay preserved 209 contained, 46 one-unique, 19 divergent and completed in 19.066 seconds"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "d853e8989"

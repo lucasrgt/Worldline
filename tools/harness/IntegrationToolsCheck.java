@@ -137,6 +137,9 @@ final class IntegrationToolsCheck {
                             .contains("\"receipt_contained\":true"),
                     "branch triage report was not generated");
             require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
+                    "BranchTriage", "--self-test"), 60) == 0,
+                    "branch triage row parser self-test failed");
+            require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "WorktreeLifecycle", "--self-test"), 60) == 0,
                     "worktree private cleanup self-test failed");
             require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),

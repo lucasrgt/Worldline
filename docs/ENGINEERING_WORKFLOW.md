@@ -146,6 +146,10 @@ portable handoff. `RETRYABLE` retains the same branch, worktree, session, eviden
 attempt count. `REJECTED` retains exact oracle, fixture, or instability evidence and names an NYA
 scar. A worker without a disposition is `STRANDED` and is converted immediately to `RETRYABLE` or
 `REJECTED`; a draft scaffold is never a handoff or train candidate.
+The canonical census resolves each exact qualification against the base recorded in its receipt,
+not against the latest wave control SHA. A registered rejection is terminal only when its tracked
+disposition, archived commit/tree, worktree identity, and external archive digest all validate. The
+wave base is a fallback solely for worktrees that have no exact receipt or explicit disposition.
 
 At each micro-wave barrier, the supervisor aggregates equivalent causes across all completed workers,
 records or updates each NYA scar exactly once, runs `csm nya check`, updates the base prompt when a
