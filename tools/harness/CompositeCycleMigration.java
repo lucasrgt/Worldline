@@ -86,9 +86,11 @@ final class CompositeCycleMigration {
     }
 
     private void refresh() throws Exception {
-        require(dirtyIndex(), "stage the reviewed shared-support change before refreshing composite pins");
         Path manifestPath = root.resolve("smokes/composite-cycle-migration.lock");
-        Properties manifest = load(manifestPath); SmokePins existing = new SmokePins(root);
+        Properties manifest = load(manifestPath);
+        require(reviewedRefresh(manifest),
+                "stage a reviewed change or commit the shared fingerprint change before refreshing composite pins");
+        SmokePins existing = new SmokePins(root);
         Properties train = TrainPinCheck.manifest(root);
         SmokeReceiptCache cache = new SmokeReceiptCache(root); List<SmokePins.Entry> pins = new ArrayList<>();
         int composite = 0, executed = 0, imported = 0;
@@ -132,6 +134,8 @@ final class CompositeCycleMigration {
                 root.resolve("tools/harness/DataDrivenSupport.java")));
         manifest.setProperty("runtime_support_source_sha256", digest(
                 root.resolve("tools/harness/SmokeSupport.java")));
+        manifest.setProperty("fingerprint_source_sha256", digest(
+                root.resolve("tools/harness/SmokeInputFingerprint.java")));
         existing.write(pins); store(manifestPath, manifest);
         System.out.println("composite pins refreshed: " + composite + " plans, " + executed
                 + " exact support proofs, " + imported + " train-imported plans");
@@ -198,6 +202,17 @@ final class CompositeCycleMigration {
     } }
     private boolean dirtyIndex() throws Exception { Process process = new ProcessBuilder("git", "diff", "--cached",
             "--quiet").directory(root.toFile()).start(); return process.waitFor() == 1; }
+    private boolean reviewedRefresh(Properties manifest) throws Exception {
+        if (dirtyIndex()) return true;
+        Process worktree = new ProcessBuilder("git", "diff", "--quiet")
+                .directory(root.toFile()).start();
+        Process index = new ProcessBuilder("git", "diff", "--cached", "--quiet")
+                .directory(root.toFile()).start();
+        String recorded = manifest.getProperty("fingerprint_source_sha256", "");
+        return worktree.waitFor() == 0 && index.waitFor() == 0
+                && !digest(root.resolve("tools/harness/SmokeInputFingerprint.java"))
+                        .equals(recorded);
+    }
     private String relative(Path path) { return root.relativize(path).toString().replace('\\', '/'); }
     private static SmokePins.Entry requiredEntry(SmokePins pins, String id) {
         SmokePins.Entry entry = pins.entry(id); require(entry != null, "missing unchanged pin: " + id); return entry;
