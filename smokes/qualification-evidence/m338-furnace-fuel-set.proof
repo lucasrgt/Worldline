@@ -1,5 +1,5 @@
 schema=1
 id=m338-furnace-fuel-set
-fingerprint=dc8509d4c2235144181eaebea41089754f4b91ab73627ddcb0cbe0c8bdf3a93b
+fingerprint=16a796a398b82ea9f89c49bc5b2249fbfa9798a6a20f1c7613f690f614b13d44
 observation.sha256=d412ed91eacea33e26daaf3f37c6494ecb462ee19694093f7126187f36a2b957
 source=refactor-equivalent

@@ -257,7 +257,8 @@ The rail rows cover flat, unpowered metadata-zero lifecycle only; slopes, power 
 detector activation, and minecart motion remain separate contracts.
 The pressure-plate rows cover the unpowered metadata-zero lifecycle on flat stone support;
 activation, release timing, redstone propagation, and support-loss behavior remain separate.
-The provider seeds only those two items, so external lifecycle rows are not registered in a
+For each attempt the provider seeds only that row's placement item and break tool, so external
+lifecycle rows are not registered in a
 provider-owned catalog and the matrix is not limited by hotbar capacity. Qualified paths retain
 the collected `suite > case` identity across every retry. Each
 attempt owns a new official-server workspace. The server JAR must be exactly 503100 bytes with
