@@ -1,5 +1,5 @@
 schema=1
 id=b173-wall-attachment-state-domain-cycle
-fingerprint=d43749af9c3eabcc61b6bc76690bd16bb2bb44a2f2905a25e0b240eb542c5dac
+fingerprint=68a6af2171c81197f13e8db6eddecd62a41fc3e6ab4f6a35a78969b944f6dcd8
 observation.sha256=957888ee355f144621424a1a4bad04d60b0c2beb0bde5415dbd5999ff695a701
 source=refactor-equivalent
