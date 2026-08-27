@@ -1,2 +1,3 @@
 worldline.b173server.B173ServerLifecycleTestRuntimeProvider
 worldline.b173server.B173ServerStateDomainTestRuntimeProvider
+worldline.b173server.B173ServerCollisionTestRuntimeProvider
