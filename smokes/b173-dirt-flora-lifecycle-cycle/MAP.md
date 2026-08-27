@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=b173-dirt-flora-lifecycle-cycle -->
 <!-- nonclaims=random-tick-growth,bonemeal-tree-growth,light-survival,neighbor-removal,native-render -->
-<!-- frozen-trace=0000000000000000000000000000000000000000000000000000000000000000 -->
+<!-- frozen-trace=4a17dfbc0a8cddf94aab012f6ab700de105bd37373778cd3326f7861622a9ca7 -->
 
 # Beta 1.7.3 dirt-supported flora lifecycles
 
@@ -21,4 +21,4 @@ neighbor reactions, species-specific tree generation, particles, or native rende
 remain outside because their valid lifecycle additionally requires a controlled light canopy.
 
 Frozen signal:
-`provider=b1.7.3-server-lifecycle,family=dirt-flora,rows=5,passed=5,layers=U-U-U-A+U-U-U-A+U-U-U-A+U-U-U-A+U-U-U-A,reload=FRESH_LOGINx10,evidence=0000000000000000000000000000000000000000000000000000000000000000,isolation=5-fresh-worlds`.
+`provider=b1.7.3-server-lifecycle,family=dirt-flora,rows=5,passed=5,layers=U-U-U-A+U-U-U-A+U-U-U-A+U-U-U-A+U-U-U-A,reload=FRESH_LOGINx10,evidence=2dace62920f2ad243999aabfaafbaade52d250fe31c40bdbe68186119766e875,isolation=5-fresh-worlds`.

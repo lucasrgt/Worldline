@@ -10,6 +10,6 @@ One public TestKit family executes dandelion, rose, and the oak, spruce, and bir
 
 DataDrivenCycle compiles the generalized substrate-aware lifecycle provider and five caller-owned cases, runs them in fresh official server workspaces, repeats the family, compares canonical evidence byte-for-byte, and requires clean provider-owned shutdown. The three sapling cases deliberately share one four-claim subject; case count is not presented as census-atom or milestone count.
 
-Expected signal: `provider=b1.7.3-server-lifecycle,family=dirt-flora,rows=5,passed=5,layers=U-U-U-A+U-U-U-A+U-U-U-A+U-U-U-A+U-U-U-A,reload=FRESH_LOGINx10,evidence=0000000000000000000000000000000000000000000000000000000000000000,isolation=5-fresh-worlds`.
+Expected signal: `provider=b1.7.3-server-lifecycle,family=dirt-flora,rows=5,passed=5,layers=U-U-U-A+U-U-U-A+U-U-U-A+U-U-U-A+U-U-U-A,reload=FRESH_LOGINx10,evidence=2dace62920f2ad243999aabfaafbaade52d250fe31c40bdbe68186119766e875,isolation=5-fresh-worlds`.
 
-Frozen semantic SHA-256: `0000000000000000000000000000000000000000000000000000000000000000`.
+Frozen semantic SHA-256: `4a17dfbc0a8cddf94aab012f6ab700de105bd37373778cd3326f7861622a9ca7`.
