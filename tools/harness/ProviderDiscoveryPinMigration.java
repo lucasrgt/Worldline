@@ -110,7 +110,18 @@ final class ProviderDiscoveryPinMigration {
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             if (TrainPinCheck.isAdded(train, smoke.id)) continue;
             discovered++;
-            if (smoke.id.equals(NEW_SMOKE)) continue;
+            if (smoke.id.equals(NEW_SMOKE)) {
+                String current = fingerprints.compute(smoke);
+                SmokePins.Entry matched = pins.match(smoke.id, current);
+                if (matched == null || !"executed".equals(matched.source())) {
+                    SmokePins.Entry exact = cache.availablePin(smoke);
+                    require(exact != null && "executed".equals(exact.source())
+                                    && current.equals(exact.fingerprint()),
+                            "new provider smoke lacks exact current execution: " + smoke.id);
+                    replace(nextPins, exact);
+                }
+                continue;
+            }
             if (PENDING.contains(smoke.id)) {
                 String current = fingerprints.compute(smoke);
                 SmokePins.Entry matched = pins.match(smoke.id, current);
