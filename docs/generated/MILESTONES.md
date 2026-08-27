@@ -599,8 +599,9 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m664-flowing-water-freeze` | CARRIED | Flowing-water freeze boundary |
 | `m665-leaf-support-distance` | CARRIED | leaf support distance |
 | `m702-powered-rail-slope-propagation` | CARRIED | powered rail slope propagation |
+| `b173-gold-shovel-harvest-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 gold-shovel harvest lifecycle family |
 | `b173-lifecycle-provider-cycle` | CARRIED | official Beta 1.7.3 public block lifecycle provider |
-| `b173-static-self-drop-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 static self-drop lifecycle family |
+| `b173-static-self-drop-lifecycle-cycle` | CARRIED | official Beta 1.7.3 static self-drop lifecycle family |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
