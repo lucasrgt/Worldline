@@ -43,7 +43,12 @@ public final class B173ServerLifecycleFixtures {
                 profile("b1.7.3:block/027", "rail", false),
                 profile("b1.7.3:block/028", "rail", false),
                 profile("b1.7.3:block/070", "pressure-plate", false),
-                profile("b1.7.3:block/072", "pressure-plate", false)),
+                profile("b1.7.3:block/072", "pressure-plate", false),
+                profile("b1.7.3:block/023", "empty-workstation", true),
+                profile("b1.7.3:block/025", "empty-workstation", true),
+                profile("b1.7.3:block/058", "empty-workstation", false),
+                profile("b1.7.3:block/061", "empty-workstation", true),
+                profile("b1.7.3:block/084", "empty-workstation", true)),
                 Arrays.asList(
                         template("gameplay-placement", ConformanceLayer.UNIVERSAL),
                         template("save-reload", ConformanceLayer.UNIVERSAL),
@@ -70,14 +75,24 @@ public final class B173ServerLifecycleFixtures {
                 scenario(plan, "powered-rail", "b1.7.3:block/027", 27, 27, 278, 20),
                 scenario(plan, "detector-rail", "b1.7.3:block/028", 28, 28, 278, 20),
                 scenario(plan, "stone-pressure-plate", "b1.7.3:block/070", 70, 70, 278, 20),
-                scenario(plan, "wooden-pressure-plate", "b1.7.3:block/072", 72, 72, 278, 20)));
+                scenario(plan, "wooden-pressure-plate", "b1.7.3:block/072", 72, 72, 278, 20),
+                scenario(plan, "empty-dispenser", "b1.7.3:block/023", 23, 2, 23, 278, 40),
+                scenario(plan, "note-block", "b1.7.3:block/025", 25, 0, 25, 258, 40),
+                scenario(plan, "crafting-table", "b1.7.3:block/058", 58, 0, 58, 258, 40),
+                scenario(plan, "empty-furnace", "b1.7.3:block/061", 61, 2, 61, 278, 40),
+                scenario(plan, "empty-jukebox", "b1.7.3:block/084", 84, 0, 84, 258, 60)));
     }
 
     private static BlockLifecycleScenario scenario(BlockConformancePlan plan, String id,
             String subject, int block, int drop, int tool, int breakTicks) {
+        return scenario(plan, id, subject, block, 0, drop, tool, breakTicks);
+    }
+
+    private static BlockLifecycleScenario scenario(BlockConformancePlan plan, String id,
+            String subject, int block, int metadata, int drop, int tool, int breakTicks) {
         RemoteItemStack placed = new RemoteItemStack(block, 1, 0);
         return BlockLifecycleScenario.from(id, plan, subject, B173LifecycleArena.SUPPORT,
-                B173LifecycleArena.SUPPORT_STATE, BlockFace.UP, new BlockState(block, 0),
+                B173LifecycleArena.SUPPORT_STATE, BlockFace.UP, new BlockState(block, metadata),
                 new BlockLifecycleSlot(PLACE_HOTBAR, PLACE_INVENTORY, placed, null),
                 new BlockLifecycleSlot(BREAK_HOTBAR, BREAK_INVENTORY,
                         new RemoteItemStack(tool, 1, 0), new RemoteItemStack(tool, 1, 1)),
