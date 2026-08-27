@@ -66,7 +66,11 @@ Beta sapling item variants. Its five cases close 12 distinct claims, bringing th
 verified claims (36.17%) and leaving 674 unknown. The overhead-aware shaded-mushroom lifecycle
 family then proves brown and red mushroom placement, persistence, breaking, and exact self-drops
 under a controlled stone canopy. Its two cases close eight distinct claims, bringing the census to
-390 verified claims (36.93%) and leaving 666 unknown. Existing smoke evidence is
+390 verified claims (36.93%) and leaving 666 unknown. The deterministic harvest family then proves
+grass-to-dirt, sword-broken cobweb-to-string, Beta-era empty bookshelf drops, and cake's distinct
+item-to-block placement plus empty drop. It upgrades eight older placement/reload claims to the
+public TestKit and closes eight new break/drop claims, bringing the census to 398 verified claims
+(37.69%) and leaving 658 unknown. Existing smoke evidence is
 reusable input, but it is never promoted automatically: its subject, action, context, observable,
 oracle, signature, and automation surface must be curated first.
 
@@ -114,6 +118,7 @@ light-transport subsystem to 696.
 The floor-mounted lifecycle subsystem reduces the remaining target gap to 674.
 The dirt-flora lifecycle subsystem reduces it again to 662.
 The shaded-mushroom lifecycle subsystem reduces it to 654.
+The deterministic harvest lifecycle subsystem reduces it to 646.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
