@@ -600,12 +600,13 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m665-leaf-support-distance` | CARRIED | leaf support distance |
 | `m702-powered-rail-slope-propagation` | CARRIED | powered rail slope propagation |
 | `b173-cardinal-placement-state-domain-cycle` | CARRIED | official Beta 1.7.3 cardinal placement state domains |
-| `b173-floor-mounted-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 floor-mounted block lifecycle family |
+| `b173-dirt-flora-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 dirt-supported flora lifecycle family |
+| `b173-floor-mounted-lifecycle-cycle` | CARRIED | official Beta 1.7.3 floor-mounted block lifecycle family |
 | `b173-furnace-state-domain-cycle` | CARRIED | official Beta 1.7.3 furnace facing state domain |
 | `b173-gold-shovel-harvest-lifecycle-cycle` | CARRIED | official Beta 1.7.3 gold-shovel harvest lifecycle family |
 | `b173-lifecycle-provider-cycle` | CARRIED | official Beta 1.7.3 public block lifecycle provider |
 | `b173-static-collision-envelope-cycle` | CARRIED | official Beta 1.7.3 static collision envelopes |
-| `b173-static-light-transport-cycle` | EXECUTED | official Beta 1.7.3 static light transport |
+| `b173-static-light-transport-cycle` | CARRIED | official Beta 1.7.3 static light transport |
 | `b173-static-self-drop-lifecycle-cycle` | CARRIED | official Beta 1.7.3 static self-drop lifecycle family |
 | `b173-wall-attachment-state-domain-cycle` | CARRIED | official Beta 1.7.3 wall-attachment state domains |
 | `b173-wooden-door-state-domain-cycle` | CARRIED | official Beta 1.7.3 wooden-door reachable state domain |
