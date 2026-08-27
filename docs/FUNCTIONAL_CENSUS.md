@@ -54,7 +54,10 @@ chest, pumpkins, and jack-o-lantern while reusing the furnace claim, bringing th
 wall-attachment family closes torch, ladder, and wall-sign state domains and reaches 339. The first
 public collision-envelope subsystem then compares air controls with ten gameplay trajectories over
 stone, slab, stairs, fence, and torch. Those five collision-shape claims bring the census to 344
-verified claims (32.58%) and leave 712 unknown. Existing smoke evidence is
+verified claims (32.58%) and leave 712 unknown. The public static light-transport subsystem then
+requalifies glass, leaves, and ice through the TestKit and adds torch, lit redstone torch,
+glowstone, and jack-o-lantern. Its exact skylight and block-light planes bring the census to 348
+verified claims (32.95%) and leave 708 unknown. Existing smoke evidence is
 reusable input, but it is never promoted automatically: its subject, action, context, observable,
 oracle, signature, and automation surface must be curated first.
 
@@ -97,7 +100,8 @@ The gold-shovel harvest family raises public executability rather than the verif
 the target gap correctly remained 730; the curated random-tick policy subsystem reduces it to 723.
 The public neighbor-response subsystem reduces it again to 716, and the wooden-door state-domain
 subsystem reduces it to 715. Furnace facing reduces it to 714, the cardinal-placement package to
-708, wall attachments to 705, and the static collision-envelope subsystem to 700.
+708, wall attachments to 705, the static collision-envelope subsystem to 700, and the static
+light-transport subsystem to 696.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.

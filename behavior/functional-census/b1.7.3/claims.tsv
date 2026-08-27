@@ -6,9 +6,9 @@ sand-tick-policy	ARCHETYPE	b1.7.3:block/012	tick-policy	APPLICABLE	VERIFIED	OFFI
 sand-save-reload	UNIVERSAL	b1.7.3:block/012	save-reload	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-gold-shovel-harvest-lifecycle-cycle	94ebb0d00a32aff99cfaa946a43166353fd6e8ed6bcece74bf2d865e38fa298c	PUBLIC_TESTKIT
 gravel-tick-policy	ARCHETYPE	b1.7.3:block/013	tick-policy	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m342-gravity-block-set	d8653266b9cdaa16b9aa3d3fc760642400d2172380078b03499aff10394c84e8	INTERNAL_API
 gravel-save-reload	UNIVERSAL	b1.7.3:block/013	save-reload	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-gold-shovel-harvest-lifecycle-cycle	94ebb0d00a32aff99cfaa946a43166353fd6e8ed6bcece74bf2d865e38fa298c	PUBLIC_TESTKIT
-glass-light-behavior	ARCHETYPE	b1.7.3:block/020	light-behavior	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m364-light-opacity-set	2012aa0391268a287bc772ea5a40036b761ed9f72b90d91f8462512dbb0e3fab	INTERNAL_API
-ice-light-behavior	ARCHETYPE	b1.7.3:block/079	light-behavior	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m364-light-opacity-set	2012aa0391268a287bc772ea5a40036b761ed9f72b90d91f8462512dbb0e3fab	INTERNAL_API
-leaves-light-behavior	ARCHETYPE	b1.7.3:block/018	light-behavior	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m364-light-opacity-set	2012aa0391268a287bc772ea5a40036b761ed9f72b90d91f8462512dbb0e3fab	INTERNAL_API
+glass-light-behavior	ARCHETYPE	b1.7.3:block/020	light-behavior	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-static-light-transport-cycle	ddade0dec6c4591634c260476e5a2ca0241685affa5d49fbea85b5ed5a7712c6	PUBLIC_TESTKIT
+ice-light-behavior	ARCHETYPE	b1.7.3:block/079	light-behavior	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-static-light-transport-cycle	ddade0dec6c4591634c260476e5a2ca0241685affa5d49fbea85b5ed5a7712c6	PUBLIC_TESTKIT
+leaves-light-behavior	ARCHETYPE	b1.7.3:block/018	light-behavior	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-static-light-transport-cycle	ddade0dec6c4591634c260476e5a2ca0241685affa5d49fbea85b5ed5a7712c6	PUBLIC_TESTKIT
 crops-tick-policy	ARCHETYPE	b1.7.3:block/059	tick-policy	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m305-plant-growth	b755666b909da0bc4583bf752a32ff032894d3959b4dd0a47c56d3e80c066721	INTERNAL_API
 sugar-cane-tick-policy	ARCHETYPE	b1.7.3:block/083	tick-policy	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m305-plant-growth	b755666b909da0bc4583bf752a32ff032894d3959b4dd0a47c56d3e80c066721	INTERNAL_API
 cactus-tick-policy	ARCHETYPE	b1.7.3:block/081	tick-policy	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m305-plant-growth	b755666b909da0bc4583bf752a32ff032894d3959b4dd0a47c56d3e80c066721	INTERNAL_API
@@ -248,3 +248,7 @@ stone-slab-collision-shape	ARCHETYPE	b1.7.3:block/044	collision-shape	APPLICABLE
 wood-stairs-collision-shape	ARCHETYPE	b1.7.3:block/053	collision-shape	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-static-collision-envelope-cycle	66f8fcd3fd38c91324e3a174aeeeca221d11c1c0e31211f454c16902fa9c392a	PUBLIC_TESTKIT
 fence-collision-shape	ARCHETYPE	b1.7.3:block/085	collision-shape	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-static-collision-envelope-cycle	66f8fcd3fd38c91324e3a174aeeeca221d11c1c0e31211f454c16902fa9c392a	PUBLIC_TESTKIT
 torch-collision-shape	ARCHETYPE	b1.7.3:block/050	collision-shape	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-static-collision-envelope-cycle	66f8fcd3fd38c91324e3a174aeeeca221d11c1c0e31211f454c16902fa9c392a	PUBLIC_TESTKIT
+torch-light-behavior	ARCHETYPE	b1.7.3:block/050	light-behavior	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-static-light-transport-cycle	ddade0dec6c4591634c260476e5a2ca0241685affa5d49fbea85b5ed5a7712c6	PUBLIC_TESTKIT
+redstone-torch-on-light-behavior	ARCHETYPE	b1.7.3:block/076	light-behavior	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-static-light-transport-cycle	ddade0dec6c4591634c260476e5a2ca0241685affa5d49fbea85b5ed5a7712c6	PUBLIC_TESTKIT
+glowstone-light-behavior	ARCHETYPE	b1.7.3:block/089	light-behavior	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-static-light-transport-cycle	ddade0dec6c4591634c260476e5a2ca0241685affa5d49fbea85b5ed5a7712c6	PUBLIC_TESTKIT
+jack-o-lantern-light-behavior	ARCHETYPE	b1.7.3:block/091	light-behavior	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-static-light-transport-cycle	ddade0dec6c4591634c260476e5a2ca0241685affa5d49fbea85b5ed5a7712c6	PUBLIC_TESTKIT
