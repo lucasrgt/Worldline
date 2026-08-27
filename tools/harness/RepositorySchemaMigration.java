@@ -109,10 +109,10 @@ final class RepositorySchemaMigration {
             carried++; String stem = "smoke." + smoke.id + ".";
             SmokePins.Entry proof = local != null && local.source().equals("executed") ? local : prior;
             String recorded = manifest.getProperty(stem + "current_fingerprint");
+            Path directory = root.resolve("smokes").resolve(smoke.id);
             if (recorded == null) {
                 require(local != null && local.source().equals("executed"),
                         "new schema row lacks exact execution: " + smoke.id);
-                Path directory = root.resolve("smokes").resolve(smoke.id);
                 Properties descriptor = load(directory.resolve("smoke.properties"));
                 require("1".equals(descriptor.getProperty("smoke.schema")),
                         "new schema row lacks smoke.schema=1: " + smoke.id);
@@ -120,9 +120,6 @@ final class RepositorySchemaMigration {
                                 .startsWith("<!-- worldline-map-schema=1 -->"),
                         "new schema row lacks map schema=1: " + smoke.id);
                 manifest.setProperty(stem + "introduced", "true");
-                manifest.setProperty(stem + "descriptor_sha256", digest(
-                        directory.resolve("smoke.properties")));
-                manifest.setProperty(stem + "map_sha256", digest(directory.resolve("MAP.md")));
                 introduced++;
                 if ("1".equals(descriptor.getProperty("narrative.schema"))) introducedNarratives++;
             }
@@ -130,6 +127,9 @@ final class RepositorySchemaMigration {
                 manifest.setProperty(stem + "prior_fingerprint", recorded);
             manifest.setProperty(stem + "current_fingerprint", current);
             manifest.setProperty(stem + "evidence_sha256", proof.evidence());
+            manifest.setProperty(stem + "descriptor_sha256",
+                    digest(directory.resolve("smoke.properties")));
+            manifest.setProperty(stem + "map_sha256", digest(directory.resolve("MAP.md")));
         }
         int pending = ProviderDiscoveryPinCheck.pendingCount(providers);
         int smokeCount = carried + pending;
@@ -213,8 +213,15 @@ final class RepositorySchemaMigration {
                 .directory(root.toFile()).start();
         String recorded = manifest.getProperty("fingerprint_source_sha256", "");
         return worktree.waitFor() == 0 && index.waitFor() == 0
-                && !digest(root.resolve("tools/harness/SmokeInputFingerprint.java"))
-                        .equals(recorded);
+                && (!digest(root.resolve("tools/harness/SmokeInputFingerprint.java"))
+                        .equals(recorded) || headChangesSchemaInput());
+    }
+    private boolean headChangesSchemaInput() throws Exception {
+        Process process = new ProcessBuilder("git", "diff-tree", "--no-commit-id", "--name-only",
+                "-r", "HEAD").directory(root.toFile()).start();
+        String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        return process.waitFor() == 0 && output.lines().anyMatch(path ->
+                path.matches("smokes/[^/]+/(?:smoke\\.properties|MAP\\.md)"));
     }
     private static Properties load(Path path) throws Exception { Properties values = new Properties();
         try (var reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
