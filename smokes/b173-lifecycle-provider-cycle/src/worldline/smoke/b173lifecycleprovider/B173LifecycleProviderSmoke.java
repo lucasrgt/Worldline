@@ -39,27 +39,37 @@ public final class B173LifecycleProviderSmoke {
                     .snapshots(workspace.resolve("snapshots"))
                     .runtimeLock(workspace.resolve("runtime.lock")).timeout(300_000L);
             TestRunResult run = new TestRunner().run(new LifecycleSpec(), options, null);
-            require(run.passed() && run.tests().size() == 3, failure(run));
+            require(run.passed() && run.tests().size() == 7, failure(run));
             Map<String, String> evidence = evidence(run);
             require(evidence.get("cobblestone").equals(expected(
-                    "cobblestone", "004", 4, "ARCHETYPE")), "cobblestone evidence drift");
+                    "cobblestone", "004", 4, 4, "ARCHETYPE")), "cobblestone evidence drift");
             require(evidence.get("dirt").equals(expected(
-                    "dirt", "003", 3, "ARCHETYPE")), "dirt evidence drift");
+                    "dirt", "003", 3, 3, "ARCHETYPE")), "dirt evidence drift");
             require(evidence.get("empty-chest").equals(expected(
-                    "empty-chest", "054", 54, "SINGULAR")), "empty chest evidence drift");
+                    "empty-chest", "054", 54, 54, "SINGULAR")), "empty chest evidence drift");
+            require(evidence.get("stone").equals(expected(
+                    "stone", "001", 1, 4, "ARCHETYPE")), "stone evidence drift");
+            require(evidence.get("planks").equals(expected(
+                    "planks", "005", 5, 5, "ARCHETYPE")), "planks evidence drift");
+            require(evidence.get("sandstone").equals(expected(
+                    "sandstone", "024", 24, 24, "ARCHETYPE")), "sandstone evidence drift");
+            require(evidence.get("brick").equals(expected(
+                    "brick", "045", 45, 45, "ARCHETYPE")), "brick evidence drift");
             long worlds;
             try (java.util.stream.Stream<Path> paths = Files.list(workspace.resolve("worlds"))) {
                 worlds = paths.filter(Files::isDirectory).count();
             }
-            require(worlds == 3L, "provider attempt isolation drift");
+            require(worlds == 7L, "provider attempt isolation drift");
             StringBuilder canonical = new StringBuilder();
             for (String value : evidence.values()) canonical.append(value).append("---\n");
             String evidenceHash = sha(canonical.toString());
-            String signal = "provider=b1.7.3-server-lifecycle,rows=3,passed=3,"
-                    + "layers=U-U-U-A+U-U-U-A+U-U-U-S,reload=FRESH_LOGINx6,"
-                    + "evidence=" + evidenceHash + ",isolation=3-fresh-worlds";
+            String signal = "provider=b1.7.3-server-lifecycle,rows=7,passed=7,"
+                    + "layers=U-U-U-A+U-U-U-A+U-U-U-S+U-U-U-A+U-U-U-A+U-U-U-A+U-U-U-A,"
+                    + "reload=FRESH_LOGINx14,evidence=" + evidenceHash
+                    + ",isolation=7-fresh-worlds";
             String trace = "v1|server=official-b1.7.3|seed=" + seed
-                    + "|provider=b1.7.3-server-lifecycle|rows=cobblestone+dirt+empty-chest"
+                    + "|provider=b1.7.3-server-lifecycle"
+                    + "|rows=cobblestone+dirt+empty-chest+stone+planks+sandstone+brick"
                     + "|actions=place+fresh-login+break+fresh-login"
                     + "|oracle=canonical-public-testkit-evidence|evidence=" + evidenceHash;
             System.out.println("WORLDLINE_B173_LIFECYCLE_SET=" + signal);
@@ -86,7 +96,8 @@ public final class B173LifecycleProviderSmoke {
         return values;
     }
 
-    private static String expected(String scenario, String subject, int block, String dropLayer) {
+    private static String expected(String scenario, String subject,
+            int block, int drop, String dropLayer) {
         String claim = "b1.7.3:block/" + subject + "#";
         return "schema=worldline.block-lifecycle-evidence.v1\nscenario=" + scenario
                 + "\nsubject=b1.7.3:block/" + subject
@@ -95,7 +106,7 @@ public final class B173LifecycleProviderSmoke {
                 + "\nclaim.break-transition=" + claim + "break-transition|UNIVERSAL"
                 + "\nclaim.drop-matrix=" + claim + "drop-matrix|" + dropLayer
                 + "\nsupport=4:71:4:1:0\ntarget=4:72:4\nplaced=" + block + ":0"
-                + "\ndrops=" + block + ":1:0\nreload=FRESH_LOGIN\n";
+                + "\ndrops=" + drop + ":1:0\nreload=FRESH_LOGIN\n";
     }
 
     private static String line(String text, String prefix) {

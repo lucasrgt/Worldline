@@ -19,15 +19,15 @@ final class B173LifecycleArena {
     static B173WireClient open(B173DedicatedServer server, Path workspace,
             int port, Duration timeout) throws Exception {
         B173PlayerSeed.writeInventory(workspace, USERNAME, 4.5D, 60D, 4.5D,
-                new int[] {0, 1, 2, 3, 4, 5, 6},
-                new int[] {1, 4, 3, 54, 257, 284, 286},
-                new int[] {32, 1, 1, 1, 1, 1, 1},
-                new int[] {0, 0, 0, 0, 0, 0, 0});
+                new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8},
+                new int[] {1, 4, 3, 54, 1, 5, 24, 45, 257},
+                new int[] {32, 1, 1, 1, 1, 1, 1, 1, 1},
+                new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0});
         B173WireClient client = new B173WireClient("127.0.0.1", port, USERNAME, timeout);
         try {
             client.connect();
             client.synchronizePose();
-            require(client.awaitInventory().occupiedSlots() == 7, "lifecycle inventory drift");
+            require(client.awaitInventory().occupiedSlots() == 9, "lifecycle inventory drift");
             RemoteChunkSnapshot initial = client.awaitRemoteChunk(0, 0).chunkAt(0, 0);
             BlockPosition top = foundation(initial);
             int column = 0;

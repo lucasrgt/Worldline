@@ -19,19 +19,18 @@ public final class B173ServerLifecycleProviderTest {
                 == B173ServerLifecycleTestRuntimeProvider.class,
                 "lifecycle provider service discovery drifted");
         List<BlockLifecycleScenario> rows = B173ServerLifecycleFixtures.scenarios();
-        require(rows.size() == 3 && rows.get(0).id().equals("cobblestone")
-                && rows.get(1).id().equals("dirt") && rows.get(2).id().equals("empty-chest"),
+        require(rows.size() == 7 && rows.get(0).id().equals("cobblestone")
+                && rows.get(1).id().equals("dirt") && rows.get(2).id().equals("empty-chest")
+                && rows.get(3).id().equals("stone") && rows.get(4).id().equals("planks")
+                && rows.get(5).id().equals("sandstone") && rows.get(6).id().equals("brick"),
                 "lifecycle fixture row order drifted");
         require(rows.get(0).drops().layer() == ConformanceLayer.ARCHETYPE
                 && rows.get(1).drops().layer() == ConformanceLayer.ARCHETYPE
                 && rows.get(2).drops().layer() == ConformanceLayer.SINGULAR,
                 "lifecycle three-layer routing drifted");
         require(rows.get(0).placementSlot().inventorySlot() == 37
-                && rows.get(1).placementSlot().inventorySlot() == 38
-                && rows.get(2).placementSlot().inventorySlot() == 39
-                && rows.get(0).breakSlot().inventorySlot() == 40
-                && rows.get(1).breakSlot().inventorySlot() == 41
-                && rows.get(2).breakSlot().inventorySlot() == 42,
+                && rows.get(6).placementSlot().inventorySlot() == 43
+                && rows.stream().allMatch(row -> row.breakSlot().inventorySlot() == 44),
                 "lifecycle provisioned slots drifted");
         B173ServerLifecycleTestRuntimeProvider provider =
                 new B173ServerLifecycleTestRuntimeProvider();
