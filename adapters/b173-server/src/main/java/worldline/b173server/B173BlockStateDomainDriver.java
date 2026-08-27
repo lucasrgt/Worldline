@@ -27,8 +27,8 @@ public final class B173BlockStateDomainDriver implements BlockStateDomainDriver 
     @Override public RemoteInventoryView inventory() { return session.inventory(); }
     @Override public void selectHeldSlot(int slot) { session.selectHeldSlot(slot); }
     @Override public void look(float yaw, float pitch) { session.look(yaw, pitch); }
-    @Override public void placeHeldBlock(BlockPosition support, BlockFace face) {
-        session.placeHeldBlock(support, face);
+    @Override public void useHeldItemOnBlock(BlockPosition support, BlockFace face) {
+        session.useHeldItemOnBlock(support, face);
     }
     @Override public void activateBlock(BlockPosition position, BlockFace face) {
         session.activateBlock(position, face);

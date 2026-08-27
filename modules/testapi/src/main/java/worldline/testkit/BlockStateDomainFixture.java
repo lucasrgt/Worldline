@@ -26,7 +26,7 @@ public final class BlockStateDomainFixture {
             if (step.action() == BlockStateDomainStep.Action.PLACE_HELD) {
                 driver.look(step.yaw(), step.pitch());
                 driver.sustainTicks(2);
-                driver.placeHeldBlock(step.position(), step.face());
+                driver.useHeldItemOnBlock(step.position(), step.face());
             } else {
                 verifySlot(driver.inventory(), scenario.placementSlot(), true);
                 driver.activateBlock(step.position(), step.face());

@@ -5,7 +5,7 @@ public interface BlockStateDomainDriver extends AutoCloseable {
     RemoteInventoryView inventory();
     void selectHeldSlot(int slot);
     void look(float yaw, float pitch);
-    void placeHeldBlock(BlockPosition support, BlockFace face);
+    void useHeldItemOnBlock(BlockPosition support, BlockFace face);
     void activateBlock(BlockPosition position, BlockFace face);
     RemoteWorldView awaitBlock(BlockPosition position, BlockState expected);
     RemoteWorldView sustainTicks(int ticks);

@@ -86,7 +86,7 @@ public final class BlockStateDomainFixtureTest {
         @Override public void look(float yaw, float pitch) {
             actions.add("look:" + yaw + ":" + pitch);
         }
-        @Override public void placeHeldBlock(BlockPosition support, BlockFace face) {
+        @Override public void useHeldItemOnBlock(BlockPosition support, BlockFace face) {
             require(support.equals(SUPPORT) && face == BlockFace.UP, "placement input drifted");
             consumed = true; actions.add("place");
         }
