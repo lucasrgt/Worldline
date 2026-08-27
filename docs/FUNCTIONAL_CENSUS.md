@@ -88,6 +88,8 @@ proves the removed state persisted. The b1.7.3 server adapter implements this bo
 turning direct `GameWorld.setBlock` mutation into false gameplay evidence. Historical claims remain
 `INTERNAL_API` or `SMOKE_ONLY` until an official run binds their evidence to this public fixture.
 Its current official provider package executes 16 scenario-routed rows and backs 64 public claims.
+Each row carries bounded immutable fixture options into the runtime, so adding a lifecycle subject
+does not require duplicating that subject in a provider-owned catalog.
 The mineral package reuses `ore` and `mineral-storage` archetypes while keeping obsidian's
 distinct harvest profile explicit.
 
