@@ -46,6 +46,7 @@ public final class BlockStateDomainFixture {
                 row.append(token(observation.position())).append(':')
                         .append(token(observation.state()));
             }
+            driver.sustainTicks(2);
             evidence.add(row.toString());
         }
         verifySlot(driver.inventory(), scenario.placementSlot(), true);
