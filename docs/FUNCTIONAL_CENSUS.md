@@ -23,9 +23,11 @@ official-client `census-cycle`. The first curated evidence import resolves 28 ad
 gravity, transparent-block lighting, plant growth and harvest, sponge/glass/ice placement and
 persistence, fluid flow and reaction, and furnace ticking. The first lifecycle package adds exact
 placement, break, drop, and reload claims for cobblestone, dirt, logs, and chests. Together these
-imports establish 140 verified claims (13.26%) and leave 916 unknown. Existing smoke evidence is
-reusable input, but it is never promoted automatically: its subject, action, context, observable,
-oracle, signature, and automation surface must be curated first.
+imports established 140 verified claims. A second curated placeable-block package imports 68
+placement and persistence claims across 35 additional subjects. The census now contains 208
+verified claims (19.70%) and leaves 848 unknown. Existing smoke evidence is reusable input, but it
+is never promoted automatically: its subject, action, context, observable, oracle, signature, and
+automation surface must be curated first.
 
 The behavior dimensions are registry presence, reachable state domain, gameplay placement, break
 transition, drop matrix, save/reload, collision shape, light behavior, tick policy, neighbor
@@ -52,7 +54,7 @@ census resolution = resolved claims / candidate claims
 ```
 
 The target is 98.8% functional proof, not 98.8% file or mapping coverage. With the 1,056-claim
-denominator, that requires 1,044 verified claims. After the lifecycle import, 904 additional
+denominator, that requires 1,044 verified claims. After both lifecycle imports, 836 additional
 verified claims are required. The executable check prints the exact current proof, unknown count,
 and claims remaining to the target on every canonical Gate.
 
