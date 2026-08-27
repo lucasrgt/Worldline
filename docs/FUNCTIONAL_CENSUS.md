@@ -77,7 +77,11 @@ to the public TestKit and closes four break/drop claims, bringing the census to 
 proves cactus on sand and sugar cane on dirt beside protocol-provisioned still water. It upgrades
 four harvest claims to the public TestKit and closes four placement/reload claims, bringing the
 census to 406 verified claims (38.45%) and leaving 650 unknown. Existing smoke evidence is
-reusable input, but it is never promoted automatically: its subject, action, context, observable,
+reusable input. The support-face attachment lifecycle family then proves ladder, wall sign,
+lever, and stone button through exact east-face placement, persistence, breaking, and historical
+drops. Its four cases add 16 claims, bringing the census to 422 verified claims (39.96%) and
+leaving 634 unknown. Existing smoke evidence is never promoted automatically: its subject,
+action, context, observable,
 oracle, signature, and automation surface must be curated first.
 
 The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
@@ -127,6 +131,7 @@ The shaded-mushroom lifecycle subsystem reduces it to 654.
 The deterministic harvest lifecycle subsystem reduces it to 646.
 The slab state lifecycle subsystem reduces it to 642.
 The support-dependent plant lifecycle subsystem reduces it to 638.
+The support-face attachment lifecycle subsystem reduces it to 622.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
