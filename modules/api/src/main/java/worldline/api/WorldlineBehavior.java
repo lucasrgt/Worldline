@@ -82,8 +82,7 @@ public final class WorldlineBehavior {
     public static final WorldlineBehavior BLOCK_STATE_DOMAIN_CONFORMANCE = define(
             "block-state-domain-conformance", WorldlineFamily.WORLD,
             "Public causal execution and reload proof of reachable block metadata states");
-    public static final WorldlineBehavior BLOCK_COLLISION_CONFORMANCE = define(
-            "block-collision-conformance", WorldlineFamily.ENVIRONMENT,
+    public static final WorldlineBehavior BLOCK_COLLISION_CONFORMANCE = define("block-collision-conformance", WorldlineFamily.ENVIRONMENT,
             "Public air-control and gameplay-placed block collision envelope conformance");
     public static final WorldlineBehavior FOOD_CONSUMPTION = define("food-consumption", WorldlineFamily.ITEM,
             "Selected food consumption, health restoration, and container result");
@@ -248,8 +247,7 @@ public final class WorldlineBehavior {
     public String subject() { return subject; } public String atlasId() { return "atlas.scenario." + token; }
 
     public static WorldlineBehavior require(String tokenOrAtlasOrProgress) {
-        return WorldlineBehaviorRegistry.require(BY_TOKEN, tokenOrAtlasOrProgress);
-    }
+        return WorldlineBehaviorRegistry.require(BY_TOKEN, tokenOrAtlasOrProgress); }
 
     public static Map<String, WorldlineBehavior> all() { return BY_TOKEN; }
 
@@ -262,6 +260,5 @@ public final class WorldlineBehavior {
     @Override public int hashCode() { return Objects.hash(token); }
 
     static WorldlineBehavior define(String token, String family, String subject) {
-        return WorldlineBehaviorRegistry.define(token, family, subject);
-    }
+        return WorldlineBehaviorRegistry.define(token, family, subject); }
 }
