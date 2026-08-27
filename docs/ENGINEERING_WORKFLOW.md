@@ -97,6 +97,9 @@ explicit recovery plan containing both `adopt-legacy-retry` and
 `adopt-legacy-retry`, `provision-exact-artifact`, `repair-process`, and
 `resume-same-milestone-and-worktree`; unknown or repeated steps fail closed. This validates the
 same-worktree invariant without allowing a plan to replace the milestone or worktree.
+Legacy archive manifests are parsed as literal UTF-8 `key=value` records rather than Java
+properties. This preserves Windows backslashes in sealed worktree and bundle paths; malformed or
+duplicate keys fail closed before an adoption receipt can be written.
 When a preserved checkpoint crossed an earlier control-base migration, pass its independently
 sealed `--archive-base`, `--preflight-base`, and `--receipt-base`. Each must be an exact ancestor in
 the new control base; they need not be linearly ordered because independently reconciled trains can

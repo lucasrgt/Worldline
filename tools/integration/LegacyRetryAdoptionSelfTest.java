@@ -13,6 +13,18 @@ final class LegacyRetryAdoptionSelfTest {
     }
 
     public static void main(String[] arguments) throws Exception {
+        if (arguments.length == 2) {
+            LegacyRetryAdoption.verifyArchiveWorktree(Path.of(arguments[0]), Path.of(arguments[1]));
+            System.out.println("legacy archive worktree identity self-test passed");
+            return;
+        }
+        require(arguments.length == 0, "expected zero arguments or archive and worktree paths");
+        String windowsPath = "C:\\Users\\lucas\\Documents\\ChatGPT\\worldline";
+        require(LegacyRetryAdoption.rawManifest("schema=1\nworktree=" + windowsPath + "\n")
+                .get("worktree").equals(windowsPath),
+                "archive manifest parser altered a literal Windows path");
+        expectFailure(() -> LegacyRetryAdoption.rawManifest("schema=1\nschema=2\n"),
+                "archive manifest parser accepted a duplicate key");
         Path parent = Files.createTempDirectory("worldline-legacy-adoption-");
         Path root = parent.resolve("control");
         try {
@@ -173,7 +185,7 @@ final class LegacyRetryAdoptionSelfTest {
         Path archive = parent.resolve(id + ".zip");
         try (ZipOutputStream zip = new ZipOutputStream(Files.newOutputStream(archive))) {
             entry(zip, "manifest.properties", "schema=1\nid=" + id + "\nstate=FAILED_GATE\nworktree="
-                    + slash(worktree) + "\nbranch=" + branch + "\nbase=" + base + "\nhead=" + head
+                    + worktree + "\nbranch=" + branch + "\nbase=" + base + "\nhead=" + head
                     + "\ntree=" + tree + "\n");
             entry(zip, "status.txt", "");
             entry(zip, "working-tree.patch", "");

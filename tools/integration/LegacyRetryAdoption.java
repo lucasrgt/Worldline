@@ -139,12 +139,33 @@ public final class LegacyRetryAdoption {
 
     private static ArchiveIdentity archive(Path path) throws Exception {
         try (ZipFile zip = new ZipFile(path.toFile())) {
-            Properties values = properties(zip, "manifest.properties");
+            Map<String, String> values = rawManifest(text(zip, "manifest.properties"));
             String status = text(zip, "status.txt");
             return new ArchiveIdentity(required(values, "id"), exactPath(required(values, "worktree")),
                     required(values, "branch"), required(values, "base"), required(values, "head"),
                     required(values, "tree"), required(values, "state"), status);
         }
+    }
+
+    static void verifyArchiveWorktree(Path archive, Path worktree) throws Exception {
+        require(LegacyRetryAdoption.archive(archive).worktree.equals(worktree.toAbsolutePath().normalize()),
+                "archive worktree identity drifted");
+    }
+
+    static Map<String, String> rawManifest(String text) {
+        Map<String, String> values = new HashMap<>();
+        for (String line : canonical(text).split("\n", -1)) {
+            if (line.isBlank() || line.startsWith("#") || line.startsWith("!")) {
+                continue;
+            }
+            int separator = line.indexOf('=');
+            require(separator > 0, "invalid archive manifest line");
+            String key = line.substring(0, separator).trim();
+            String value = line.substring(separator + 1).trim();
+            require(!key.isBlank() && values.putIfAbsent(key, value) == null,
+                    "duplicate archive manifest key: " + key);
+        }
+        return Map.copyOf(values);
     }
 
     private static String receipt(Request request, Properties values, Path worktree, Path archive,
@@ -199,12 +220,6 @@ public final class LegacyRetryAdoption {
         return values;
     }
 
-    private static Properties properties(ZipFile zip, String name) throws Exception {
-        Properties values = new Properties();
-        values.load(new StringReader(text(zip, name)));
-        return values;
-    }
-
     private static String text(ZipFile zip, String name) throws Exception {
         ZipEntry entry = zip.getEntry(name); require(entry != null, "archive lacks " + name);
         try (InputStream input = zip.getInputStream(entry)) {
@@ -241,6 +256,11 @@ public final class LegacyRetryAdoption {
     private static String required(Properties values, String key) {
         String value = values.getProperty(key, "").trim();
         require(!value.isBlank(), "missing " + key); return value; }
+    private static String required(Map<String, String> values, String key) {
+        String value = values.getOrDefault(key, "").trim();
+        require(!value.isBlank(), "missing " + key);
+        return value;
+    }
     private static Path exactPath(String value) { return Path.of(value).toAbsolutePath().normalize(); }
     private static String canonical(String value) { return value.replace("\r\n", "\n"); }
     private static String canonicalPathText(String value) { return canonical(value).replace("\\\\", "\\")
