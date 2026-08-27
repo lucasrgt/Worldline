@@ -33,19 +33,19 @@ final class LegacyRetryAdoptionSelfTest {
             git(root, "config", "user.email", "worldline@example.invalid");
             git(root, "config", "user.name", "Worldline Test");
             Files.writeString(root.resolve("README.md"), "base\n", StandardCharsets.UTF_8);
+            Files.writeString(root.resolve(".gitignore"), ".worldline/\n", StandardCharsets.UTF_8);
             git(root, "add", ".");
             git(root, "commit", "--quiet", "-m", "base");
             String base = git(root, "rev-parse", "HEAD").trim();
             historicalMigration(parent, base);
             Fixture resume = fixture(parent, root, base, "m1-contract");
-            Path sessionLog = parent.resolve("session.jsonl");
             String session = "ses_exact_one";
-            Files.writeString(sessionLog, "{\"sessionID\":\"" + session
-                    + "\",\"milestone\":\"" + resume.id + "\",\"directory\":\""
-                    + escape(resume.worktree.toString()) + "\"}\n", StandardCharsets.UTF_8);
+            OpenCodeSessionExport.Result exported = OpenCodeSessionExport.capture(resume.worktree,
+                    session, OpenCodeSessionExportSelfTest.childPrefix("valid", resume.worktree));
+            Path sessionLog = Path.of(exported.path());
             LegacyRetryAdoption.Request resumeRequest = new LegacyRetryAdoption.Request(resume.id,
                     "codex:test", base, "resume-session", session, sessionLog,
-                    LegacyRetryAdoption.sha(sessionLog), "", 0);
+                    exported.sha(), "", 0);
             Path receipt = LegacyRetryAdoption.adopt(root, resumeRequest);
             String receiptText = Files.readString(receipt, StandardCharsets.UTF_8);
             require(receiptText.contains("\"authorized_attempt\":2")
@@ -104,10 +104,20 @@ final class LegacyRetryAdoptionSelfTest {
                     "launcher accepted a drifted adoption receipt hash");
 
             Fixture badSession = fixture(parent, root, base, "m3-bad-session");
+            String badSessionId = "ses_bad_hash";
+            OpenCodeSessionExport.Result badExport = OpenCodeSessionExport.capture(
+                    badSession.worktree, badSessionId,
+                    OpenCodeSessionExportSelfTest.childPrefix("valid", badSession.worktree));
             expectFailure(() -> LegacyRetryAdoption.adopt(root,
                     new LegacyRetryAdoption.Request(badSession.id, "codex:test", base,
-                            "resume-session", session, sessionLog, "0".repeat(64), "", 0)),
+                            "resume-session", badSessionId, Path.of(badExport.path()),
+                            "0".repeat(64), "", 0)),
                     "session evidence hash mismatch was accepted");
+            Fixture external = fixture(parent, root, base, "m7-external-evidence");
+            expectFailure(() -> LegacyRetryAdoption.adopt(root,
+                    new LegacyRetryAdoption.Request(external.id, "codex:test", base,
+                            "resume-session", session, sessionLog, exported.sha(), "", 0)),
+                    "noncanonical session evidence path was accepted");
 
             Fixture dirty = fixture(parent, root, base, "m4-status-drift");
             Files.writeString(dirty.worktree.resolve("untracked.txt"), "drift\n", StandardCharsets.UTF_8);
@@ -225,10 +235,6 @@ final class LegacyRetryAdoptionSelfTest {
             rejected = true;
         }
         require(rejected, message);
-    }
-
-    private static String escape(String value) {
-        return value.replace("\\", "\\\\").replace("\"", "\\\"");
     }
 
     private static String slash(Path value) {

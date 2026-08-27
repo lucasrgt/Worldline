@@ -7,13 +7,10 @@ import java.security.MessageDigest;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.*;
 
 /** Adopts one legacy retry without manufacturing a historical launcher receipt. */
 public final class LegacyRetryAdoption {
-    private static final Pattern SESSION = Pattern.compile("\\\"session(?:ID)?\\\":\\\"([^\\\"]+)\\\"");
     private static final int MAX_EVIDENCE_BYTES = 64 * 1024 * 1024;
     private static final Set<String> RECOVERY_STEPS = Set.of("adopt-legacy-retry",
             "provision-exact-artifact", "repair-process", "resume-same-milestone-and-worktree");
@@ -113,16 +110,13 @@ public final class LegacyRetryAdoption {
                     "resume-session requires an exact session");
             require(request.sessionEvidence != null && Files.isRegularFile(request.sessionEvidence),
                     "resume-session evidence is missing");
+            require(request.sessionEvidence.toAbsolutePath().normalize().equals(
+                            OpenCodeSessionExport.evidencePath(worktree, request.session)),
+                    "resume-session evidence is not the canonical worktree export");
             require(sha(request.sessionEvidence).equalsIgnoreCase(request.sessionEvidenceSha),
                     "session evidence SHA-256 drifted");
             String text = evidenceText(request.sessionEvidence);
-            Set<String> sessions = new HashSet<>();
-            Matcher matcher = SESSION.matcher(text);
-            while (matcher.find()) sessions.add(matcher.group(1));
-            require(sessions.equals(Set.of(request.session)), "session evidence identity drifted");
-            String normalized = canonicalPathText(text);
-            require(normalized.contains(request.id) && normalized.contains(slash(worktree.toString())),
-                    "session evidence is not bound to the exact milestone worktree");
+            OpenCodeSessionExport.validateEvidence(text, request.session, worktree);
             return new SessionEvidence(request.session, request.sessionEvidence.toString(),
                     request.sessionEvidenceSha.toLowerCase(), 0, 0, "");
         }
@@ -194,23 +188,8 @@ public final class LegacyRetryAdoption {
     }
 
     private static String evidenceText(Path path) throws Exception {
-        if (!path.toString().toLowerCase().endsWith(".zip")) {
-            require(Files.size(path) <= MAX_EVIDENCE_BYTES, "session evidence is too large");
-            return Files.readString(path, StandardCharsets.UTF_8);
-        }
-        StringBuilder result = new StringBuilder();
-        try (ZipFile zip = new ZipFile(path.toFile())) {
-            for (ZipEntry entry : zip.stream().filter(value -> !value.isDirectory()).toList()) {
-                String name = entry.getName().toLowerCase();
-                if (!(name.endsWith(".json") || name.endsWith(".jsonl") || name.endsWith(".log"))) continue;
-                require(entry.getSize() >= 0 && result.length() + entry.getSize() <= MAX_EVIDENCE_BYTES,
-                        "session evidence archive is too large");
-                try (InputStream input = zip.getInputStream(entry)) {
-                    result.append(new String(input.readAllBytes(), StandardCharsets.UTF_8));
-                }
-            }
-        }
-        return result.toString();
+        require(Files.size(path) <= MAX_EVIDENCE_BYTES, "session evidence is too large");
+        return Files.readString(path, StandardCharsets.UTF_8);
     }
 
     private static Properties properties(Path path) throws Exception {
@@ -263,9 +242,6 @@ public final class LegacyRetryAdoption {
     }
     private static Path exactPath(String value) { return Path.of(value).toAbsolutePath().normalize(); }
     private static String canonical(String value) { return value.replace("\r\n", "\n"); }
-    private static String canonicalPathText(String value) { return canonical(value).replace("\\\\", "\\")
-            .replace('\\', '/'); }
-    private static String slash(String value) { return value.replace('\\', '/'); }
     private static String escape(String value) { return value.replace("\\", "\\\\").replace("\"", "\\\""); }
     private static String nullable(String value) { return value == null ? "null" : "\"" + escape(value) + "\""; }
     private static void require(boolean condition, String message) {

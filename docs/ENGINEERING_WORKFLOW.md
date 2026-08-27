@@ -100,6 +100,15 @@ same-worktree invariant without allowing a plan to replace the milestone or work
 Legacy archive manifests are parsed as literal UTF-8 `key=value` records rather than Java
 properties. This preserves Windows backslashes in sealed worktree and bundle paths; malformed or
 duplicate keys fail closed before an adoption receipt can be written.
+For a recovered session that lacks an immutable export file, run
+`LegacyRetryControlLauncher export` before adoption. It compiles the exact strict-JSON closure,
+invokes `opencode export <session> --pure` directly with regular-file process redirection, keeps
+stderr separate, bounds the process and output, validates the exact session and real worktree, and
+atomically publishes the private JSON at its canonical worktree path. Then run
+`LegacyRetryControlLauncher adopt --mode resume-session` with that path and SHA-256. Adoption
+reparses the same strict `info.id` and `info.directory`, requires the canonical evidence path, and
+binds milestone, session, worktree, and evidence hash in its receipt. A sanitized export is
+insufficient because OpenCode redacts the required worktree identity.
 When a preserved checkpoint crossed an earlier control-base migration, pass its independently
 sealed `--archive-base`, `--preflight-base`, and `--receipt-base`. Each must be an exact ancestor in
 the new control base; they need not be linearly ordered because independently reconciled trains can
