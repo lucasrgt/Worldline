@@ -272,7 +272,7 @@ options rather than guessing a fixture. Empty chest does not claim loaded-contai
 Provider discovery chooses the runtime implementation; scenario selection remains per attempt.
 
 For incremental coverage, `B173LifecycleScenarioFactory` builds caller-owned rows and
-`B173LifecycleFamilyCycle` qualifies a coherent list under its own stable family signature. The
+`BlockLifecycleFamilyCycle` qualifies a coherent list under its own stable family signature. The
 first independent family covers sponge, white wool, TNT, fence, and netherrack. Adding another
 family does not modify the frozen 26-row aggregate or rewrite its 104 claim signatures.
 Family rows carry an exact post-break tool stack, including valid no-damage outcomes such as

@@ -110,7 +110,7 @@ unsupported-block removal remain separate from these lifecycle claims.
 The empty-workstation package covers empty dispenser, note block, crafting table, idle furnace,
 and empty jukebox. It preserves directional placement metadata for dispenser and furnace while
 excluding GUI sessions, inventories, recipes, note tuning, dispensing, smelting, and records.
-New packages no longer append to that aggregate signature. `B173LifecycleFamilyCycle` executes
+New packages no longer append to that aggregate signature. `BlockLifecycleFamilyCycle` executes
 caller-owned lists through the same provider and signs each coherent family independently. The
 first such package adds five rows and 20 public claims without changing any of the earlier 104
 claim signatures. It models the exact undamaged-shears result for placed white wool while the

@@ -1,19 +1,19 @@
-package worldline.b173server;
+package worldline.testkit;
 
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
+import worldline.api.BlockPosition;
+import worldline.api.BlockState;
 import worldline.api.RemoteItemStack;
-import worldline.testkit.BlockLifecycleScenario;
 
 /** Canonical row oracle shared by independently signed lifecycle families. */
-final class B173LifecycleFamilyEvidence {
-    private B173LifecycleFamilyEvidence() { }
+final class BlockLifecycleFamilyEvidence {
+    private BlockLifecycleFamilyEvidence() { }
 
     static void verify(List<BlockLifecycleScenario> rows, Map<String, String> evidence) {
-        for (BlockLifecycleScenario row : rows) if (!expected(row).equals(evidence.get(row.id()))) {
+        for (BlockLifecycleScenario row : rows) if (!expected(row).equals(evidence.get(row.id())))
             throw new IllegalStateException(row.id() + " evidence drift");
-        }
     }
 
     static String layers(List<BlockLifecycleScenario> rows) {
@@ -39,14 +39,18 @@ final class B173LifecycleFamilyEvidence {
             drops.append(item.legacyId()).append(':').append(item.count())
                     .append(':').append(item.damage());
         }
+        BlockPosition support = row.support(), target = row.target();
+        BlockState supportState = row.supportState();
         return "schema=worldline.block-lifecycle-evidence.v1\nscenario=" + row.id()
                 + "\nsubject=" + row.subject()
                 + "\nclaim.gameplay-placement=" + claim + "gameplay-placement|"
                 + row.placement().layer() + "\nclaim.save-reload=" + claim + "save-reload|"
                 + row.persistence().layer() + "\nclaim.break-transition=" + claim
                 + "break-transition|" + row.transition().layer() + "\nclaim.drop-matrix="
-                + claim + "drop-matrix|" + row.drops().layer()
-                + "\nsupport=4:71:4:1:0\ntarget=4:72:4\nplaced="
+                + claim + "drop-matrix|" + row.drops().layer() + "\nsupport="
+                + support.x() + ":" + support.y() + ":" + support.z() + ":"
+                + supportState.legacyId() + ":" + supportState.metadata() + "\ntarget="
+                + target.x() + ":" + target.y() + ":" + target.z() + "\nplaced="
                 + row.placedState().legacyId() + ":" + row.placedState().metadata()
                 + "\ndrops=" + drops + "\nreload=FRESH_LOGIN\n";
     }

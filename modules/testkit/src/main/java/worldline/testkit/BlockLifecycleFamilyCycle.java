@@ -1,4 +1,4 @@
-package worldline.b173server;
+package worldline.testkit;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -8,19 +8,15 @@ import java.security.MessageDigest;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import worldline.test.TestRuntimeProvider;
 import worldline.test.WorldlineSpec;
-import worldline.testkit.BlockLifecyclePlan;
-import worldline.testkit.BlockLifecycleScenario;
-import worldline.testkit.RunnerOptions;
-import worldline.testkit.TestResult;
-import worldline.testkit.TestRunResult;
-import worldline.testkit.TestRunner;
 
-/** Executes and signs one caller-owned lifecycle family against isolated official servers. */
-public final class B173LifecycleFamilyCycle {
-    private B173LifecycleFamilyCycle() { }
+/** Executes and signs one caller-owned lifecycle family through a selected runtime provider. */
+public final class BlockLifecycleFamilyCycle {
+    private BlockLifecycleFamilyCycle() { }
 
-    public static void run(String[] arguments, String family,
+    public static void run(String[] arguments, String family, long expectedSeed,
+            String serverProperty, TestRuntimeProvider provider,
             List<BlockLifecycleScenario> rows) throws Exception {
         if (arguments.length != 4) throw new IllegalArgumentException(
                 "usage: lifecycle family server.jar workspace port seed");
@@ -28,22 +24,23 @@ public final class B173LifecycleFamilyCycle {
         Path workspace = Paths.get(arguments[1]).toAbsolutePath().normalize();
         Integer.parseInt(arguments[2]);
         long seed = Long.parseLong(arguments[3]);
-        if (seed != B173LifecycleArena.SEED) throw new IllegalStateException("lifecycle seed drift");
+        if (seed != expectedSeed) throw new IllegalStateException("lifecycle seed drift");
         if (!family.matches("[a-z0-9-]+") || rows.isEmpty())
             throw new IllegalArgumentException("invalid lifecycle family");
-        String property = B173ServerLifecycleSettings.SERVER_PROPERTY;
-        String prior = System.getProperty(property);
+        if (serverProperty == null || serverProperty.trim().isEmpty() || provider == null)
+            throw new IllegalArgumentException("invalid lifecycle runtime binding");
+        String prior = System.getProperty(serverProperty);
         try {
-            System.setProperty(property, server.toString());
-            RunnerOptions options = new RunnerOptions()
-                    .provider(new B173ServerLifecycleTestRuntimeProvider()).seed(seed)
+            System.setProperty(serverProperty, server.toString());
+            RunnerOptions options = new RunnerOptions().provider(provider).seed(seed)
                     .world(workspace.resolve("worlds")).artifacts(workspace.resolve("results"))
                     .snapshots(workspace.resolve("snapshots"))
                     .runtimeLock(workspace.resolve("runtime.lock")).timeout(300_000L);
-            TestRunResult run = new TestRunner().run(new FamilySpec(family, rows), options, null);
+            TestRunResult run = new TestRunner().run(new FamilySpec(family, provider.runtimeId(), rows),
+                    options, null);
             require(run.passed() && run.tests().size() == rows.size(), failure(run));
             Map<String, String> evidence = evidence(run);
-            B173LifecycleFamilyEvidence.verify(rows, evidence);
+            BlockLifecycleFamilyEvidence.verify(rows, evidence);
             long worlds;
             try (java.util.stream.Stream<Path> paths = Files.list(workspace.resolve("worlds"))) {
                 worlds = paths.filter(Files::isDirectory).count();
@@ -52,21 +49,22 @@ public final class B173LifecycleFamilyCycle {
             StringBuilder canonical = new StringBuilder();
             for (String value : evidence.values()) canonical.append(value).append("---\n");
             String evidenceHash = sha(canonical.toString());
-            String signal = "provider=b1.7.3-server-lifecycle,family=" + family + ",rows="
+            String signal = "provider=" + provider.runtimeId() + ",family=" + family + ",rows="
                     + rows.size() + ",passed=" + rows.size() + ",layers="
-                    + B173LifecycleFamilyEvidence.layers(rows) + ",reload=FRESH_LOGINx"
+                    + BlockLifecycleFamilyEvidence.layers(rows) + ",reload=FRESH_LOGINx"
                     + (rows.size() * 2) + ",evidence=" + evidenceHash + ",isolation="
                     + rows.size() + "-fresh-worlds";
-            String trace = "v1|server=official-b1.7.3|seed=" + seed
-                    + "|provider=b1.7.3-server-lifecycle|family=" + family + "|rows="
-                    + B173LifecycleFamilyEvidence.rowIds(rows)
+            String trace = "v1|server=official-b1.7.3|seed=" + seed + "|provider="
+                    + provider.runtimeId() + "|family=" + family + "|rows="
+                    + BlockLifecycleFamilyEvidence.rowIds(rows)
                     + "|actions=place+fresh-login+break+fresh-login"
                     + "|oracle=canonical-public-testkit-evidence|evidence=" + evidenceHash;
             System.out.println("WORLDLINE_B173_LIFECYCLE_FAMILY_SET=" + signal);
             System.out.println("WORLDLINE_B173_LIFECYCLE_FAMILY_TRACE=" + trace);
             System.out.println("WORLDLINE_B173_LIFECYCLE_FAMILY_SIGNATURE=" + sha(trace));
         } finally {
-            if (prior == null) System.clearProperty(property); else System.setProperty(property, prior);
+            if (prior == null) System.clearProperty(serverProperty);
+            else System.setProperty(serverProperty, prior);
         }
     }
 
@@ -111,13 +109,12 @@ public final class B173LifecycleFamilyCycle {
     }
 
     private static final class FamilySpec extends WorldlineSpec {
-        private final String family; private final List<BlockLifecycleScenario> rows;
-        FamilySpec(String family, List<BlockLifecycleScenario> rows) {
-            this.family = family; this.rows = rows;
+        private final String family, runtime; private final List<BlockLifecycleScenario> rows;
+        FamilySpec(String family, String runtime, List<BlockLifecycleScenario> rows) {
+            this.family = family; this.runtime = runtime; this.rows = rows;
         }
         @Override protected void define() {
-            new BlockLifecyclePlan(B173ServerLifecycleTestRuntimeProvider.RUNTIME_ID, rows)
-                    .register("official " + family + " lifecycle");
+            new BlockLifecyclePlan(runtime, rows).register("official " + family + " lifecycle");
         }
     }
 }
