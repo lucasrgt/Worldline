@@ -1,5 +1,5 @@
 schema=1
 id=m8-mod-version-diff
-fingerprint=bbb9ccde57f68f5fb6e30d29237a3ce9086b624635f7abd9a7ab6edb531c6d61
+fingerprint=0d2a87fdc017b626747836e0fb1cba9043f04a75c11d59889441534ec4eb0fea
 observation.sha256=aa0b9a653814de9b94b66175be673f85aaa218120728bb57c6087f921b4d28dd
-source=executed
+source=refactor-equivalent
