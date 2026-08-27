@@ -38,6 +38,17 @@ final class SharedHelperPinCheck {
             require(digest(root.resolve(relative)).equals(required(lock, key + ".current_sha256")),
                     "shared helper drift: " + relative);
         }
+        if (lock.getProperty("aero_parser.prior_sha256") != null) {
+            String id = required(lock, "aero_parser.anchor");
+            SmokeDiscovery.Entry smoke = SmokeDiscovery.require(root, id);
+            SmokePins anchorPins = new SmokePins(root); SmokePins.Entry anchor = anchorPins.match(
+                    id, new SmokeInputFingerprint(root).compute(smoke));
+            require(hash(lock, "aero_parser.prior_sha256") && anchor != null
+                            && anchor.source().equals("executed")
+                            && anchor.evidence().equals(required(lock,
+                                    "aero_parser.evidence_sha256")),
+                    "shared Aero parser repair proof drift");
+        }
         int refreshed = Integer.parseInt(lock.getProperty("refresh.count", "0"));
         require(refreshed >= 1 && refreshed <= 16, "shared-helper refresh census drift");
         for (int index = 1; index <= refreshed; index++) {
