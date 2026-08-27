@@ -39,12 +39,14 @@ public final class B173ServerLifecycleProviderTest {
                 && rows.get(25).id().equals("empty-jukebox"),
                 "lifecycle fixture row order drifted");
         descriptorMatchesRows(rows.size());
-        BlockLifecycleScenario external = B173LifecycleScenarioFactory.selfDrop(
-                "external-sponge", "b1.7.3:block/019", "sponge", true,
-                19, 0, 278, 30);
+        BlockLifecycleScenario external = B173LifecycleScenarioFactory.harvest(
+                "external-clay", "b1.7.3:block/082", "clay", false, 82, 0, 284, 1, 5,
+                new worldline.api.RemoteItemStack(337, 1, 0),
+                new worldline.api.RemoteItemStack(337, 1, 0));
         require(external.placement().layer() == ConformanceLayer.UNIVERSAL
-                        && external.drops().layer() == ConformanceLayer.SINGULAR
-                        && external.placedState().equals(new worldline.api.BlockState(19, 0))
+                        && external.drops().layer() == ConformanceLayer.ARCHETYPE
+                        && external.placedState().equals(new worldline.api.BlockState(82, 0))
+                        && external.expectedDrops().size() == 2
                         && external.placementSlot().inventorySlot() == 37
                         && external.breakSlot().inventorySlot() == 38,
                 "external lifecycle scenario factory drifted");
