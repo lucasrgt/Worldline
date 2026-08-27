@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=b173-cardinal-placement-state-domain-cycle -->
 <!-- nonclaims=activation,inventory-content,double-chest,lit-state,render -->
-<!-- frozen-trace=5f20914362da8cf0e3dc3329db1c33e6e71ded929f856d0cccc95309f15231e8 -->
+<!-- frozen-trace=18c857af84d266673bc58ece3599a982b66377ed7ddfba1e1b1a8f6450d86262 -->
 
 # Beta 1.7.3 cardinal placement state domains
 
@@ -19,4 +19,4 @@ It does not claim block activation, container contents, double-chest composition
 transition, breaking, collision, sound, or client rendering.
 
 Frozen signal:
-`provider=b1.7.3-server-state-domain,family=cardinal-placement,rows=7,passed=7,states=25,reload=FRESH_LOGINx7,evidence=efe1ac0094922b19455c887529776eba0bdee0cae93733ce196d02e8d953b994,isolation=7-fresh-worlds`.
+`provider=b1.7.3-server-state-domain,family=cardinal-placement,rows=7,passed=7,states=25,reload=FRESH_LOGINx7,evidence=ff591847c4096f8d79da49f196e4a482d3046e5a6fae82fad545e88bdf7952cb,isolation=7-fresh-worlds`.

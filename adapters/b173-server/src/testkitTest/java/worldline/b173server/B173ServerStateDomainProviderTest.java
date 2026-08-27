@@ -59,13 +59,20 @@ public final class B173ServerStateDomainProviderTest {
                 "cardinal placement family membership drifted");
         int states = 0;
         for (BlockStateDomainScenario scenario : cardinal) {
-            require(scenario.claim().layer() == ConformanceLayer.SINGULAR
-                    && scenario.steps().size() == 4 && scenario.finalStates().size() == 4
+            require(scenario.steps().size() == 4 && scenario.finalStates().size() == 4
                     && scenario.placementSlot().before().count() == 4,
                     "cardinal state-domain row drifted: " + scenario.id());
             states += scenario.domain().size();
         }
         require(states == 25, "cardinal placement state count drifted");
+        require(cardinal.get(0).claim().layer() == ConformanceLayer.SINGULAR
+                && cardinal.get(1).claim().layer() == ConformanceLayer.ARCHETYPE
+                && cardinal.get(2).claim().layer() == ConformanceLayer.SINGULAR
+                && cardinal.get(3).claim().layer() == ConformanceLayer.SINGULAR
+                && cardinal.get(4).claim().layer() == ConformanceLayer.ARCHETYPE
+                && cardinal.get(5).claim().layer() == ConformanceLayer.ARCHETYPE
+                && cardinal.get(6).claim().layer() == ConformanceLayer.ARCHETYPE,
+                "cardinal placement conformance routing drifted");
         require(B173StateDomainScenarioFactory.chestPlacementMetadata().domain().equals(
                 java.util.Collections.singletonList(new BlockState(54, 0))),
                 "chest yaw-invariant server metadata drifted");

@@ -64,7 +64,7 @@ public final class B173StateDomainScenarioFactory {
 
     public static BlockStateDomainScenario furnaceFacing() {
         return horizontalPlacement("furnace-facing-metadata", "b1.7.3:block/061", 61,
-                Arrays.asList("furnace", "directional", "stateful-metadata"),
+                Arrays.asList("furnace", "directional", "stateful-metadata"), true,
                 new int[] {2, 5, 3, 4});
     }
 
@@ -76,45 +76,45 @@ public final class B173StateDomainScenarioFactory {
 
     public static BlockStateDomainScenario dispenserFacing() {
         return horizontalPlacement("dispenser-facing-metadata", "b1.7.3:block/023", 23,
-                Arrays.asList("dispenser", "directional", "tile-entity"),
+                Arrays.asList("dispenser", "directional", "tile-entity"), true,
                 new int[] {2, 5, 3, 4});
     }
 
     public static BlockStateDomainScenario woodStairsFacing() {
         return horizontalPlacement("wood-stairs-facing-metadata", "b1.7.3:block/053", 53,
-                Arrays.asList("stairs", "directional"), new int[] {2, 1, 3, 0});
+                Arrays.asList("stairs", "directional"), false, new int[] {2, 1, 3, 0});
     }
 
     public static BlockStateDomainScenario chestPlacementMetadata() {
         return horizontalPlacement("chest-yaw-invariant-metadata", "b1.7.3:block/054", 54,
-                Arrays.asList("chest", "container", "directional", "tile-entity"),
+                Arrays.asList("chest", "container", "directional", "tile-entity"), true,
                 new int[] {0, 0, 0, 0});
     }
 
     public static BlockStateDomainScenario cobblestoneStairsFacing() {
         return horizontalPlacement("cobblestone-stairs-facing-metadata",
                 "b1.7.3:block/067", 67, Arrays.asList("stairs", "directional"),
-                new int[] {2, 1, 3, 0});
+                false, new int[] {2, 1, 3, 0});
     }
 
     public static BlockStateDomainScenario pumpkinFacing() {
         return horizontalPlacement("pumpkin-facing-metadata", "b1.7.3:block/086", 86,
-                Arrays.asList("pumpkin", "directional"), new int[] {2, 3, 0, 1});
+                Arrays.asList("pumpkin", "directional"), false, new int[] {2, 3, 0, 1});
     }
 
     public static BlockStateDomainScenario jackOLanternFacing() {
         return horizontalPlacement("jack-o-lantern-facing-metadata", "b1.7.3:block/091", 91,
-                Arrays.asList("pumpkin", "directional", "luminous"),
+                Arrays.asList("pumpkin", "directional", "luminous"), false,
                 new int[] {2, 3, 0, 1});
     }
 
     private static BlockStateDomainScenario horizontalPlacement(String id, String subject,
-            int blockId, List<String> archetypes, int[] metadata) {
+            int blockId, List<String> archetypes, boolean singular, int[] metadata) {
         if (metadata.length != 4) {
             throw new IllegalArgumentException("horizontal metadata matrix must contain four yaws");
         }
         BlockConformancePlan plan = new BlockConformancePlan(Collections.singletonList(
-                new BlockConformanceProfile(subject, archetypes, true,
+                new BlockConformanceProfile(subject, archetypes, singular,
                         Collections.<String, ConformanceLayer>emptyMap())),
                 Collections.singletonList(new BlockConformanceTemplate(
                         "state-domain", ConformanceLayer.ARCHETYPE)));
