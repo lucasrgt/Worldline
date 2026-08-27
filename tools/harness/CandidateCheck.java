@@ -168,10 +168,17 @@ final class CandidateCheck {
                 dependencies.stream().map(Path::toString)
                         .collect(Collectors.joining(System.getProperty("path.separator"))),
                 "-d", output.toString()));
-        Path adapter = root.resolve(clientOnly ? "adapters/b173-client/src/main/java"
-                : "adapters/b173-server/src/main/java");
-        command.addAll(javaFiles(adapter).stream()
-                .map(Path::toString).collect(Collectors.toList()));
+        String configured = descriptor.getProperty("cycle.inputs", "").trim();
+        List<String> inputs = configured.isEmpty()
+                ? List.of(clientOnly ? "adapters/b173-client/src/main/java"
+                        : "adapters/b173-server/src/main/java")
+                : Stream.of(configured.split(",")).map(String::trim).toList();
+        for (String input : inputs) {
+            require(input.matches("(?:adapters|modules)/[a-z0-9-]+/src/(?:main|testkit)/java"),
+                    "unsafe candidate cycle input: " + input);
+            command.addAll(javaFiles(root.resolve(input)).stream()
+                    .map(Path::toString).collect(Collectors.toList()));
+        }
         command.addAll(javaFiles(source).stream().map(Path::toString).collect(Collectors.toList()));
         run(command, root, 240);
         System.out.println("  compiled " + (clientOnly ? "client" : "server")

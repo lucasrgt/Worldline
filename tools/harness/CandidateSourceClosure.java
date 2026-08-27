@@ -126,8 +126,16 @@ final class CandidateSourceClosure {
                 dependencies.stream().map(Path::toString)
                         .collect(Collectors.joining(System.getProperty("path.separator"))),
                 "-d", output.toString()));
-        command.addAll(javaFiles(root.resolve(clientOnly ? "adapters/b173-client/src/main/java"
-                : "adapters/b173-server/src/main/java")));
+        String configured = descriptor.getProperty("cycle.inputs", "").trim();
+        List<String> inputs = configured.isEmpty()
+                ? List.of(clientOnly ? "adapters/b173-client/src/main/java"
+                        : "adapters/b173-server/src/main/java")
+                : java.util.Arrays.stream(configured.split(",")).map(String::trim).toList();
+        for (String input : inputs) {
+            require(input.matches("(?:adapters|modules)/[a-z0-9-]+/src/(?:main|testkit)/java"),
+                    "unsafe candidate cycle input: " + input);
+            command.addAll(javaFiles(root.resolve(input)));
+        }
         command.addAll(javaFiles(source));
         execute(command, 240);
     }
