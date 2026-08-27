@@ -21,6 +21,9 @@ final class HarnessFeatureSelfTest {
     }
     static void smoke() throws Exception {
         SmokeScheduleHistory.selfTest();
+        SmokeSuiteScheduler.selfTest();
+        JavaTokenText.selfTest();
+        WorldTemplate.selfTest();
         LaneDifferential.selfTest();
         SmokeScheduleBaselineCheck.execute(java.nio.file.Path.of("").toAbsolutePath().normalize());
         SmokeStatementBudgetTest.execute();

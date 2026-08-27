@@ -50,7 +50,8 @@ public final class QualificationLockMerge {
         String[] lines = normalized.split("\n");
         require(lines.length >= 3 && lines[0].startsWith("# Worldline smoke qualification lock v")
                 && lines[1].matches("schema=[0-9]+")
-                && lines[2].matches("algorithm=worldline-smoke-input-v[0-9]+"), "invalid lock header");
+                && lines[2].matches("algorithm=worldline-smoke-input-v[0-9]+(?:-[a-z]+)?"),
+                "invalid lock header");
         String header = lines[0] + "\n" + lines[1] + "\n" + lines[2] + "\n";
         Map<String, ArrayList<String>> rows = new TreeMap<>();
         for (int index = 3; index < lines.length; index++) {
@@ -63,12 +64,15 @@ public final class QualificationLockMerge {
         }
         Map<String, String> entries = new TreeMap<>();
         for (Map.Entry<String, ArrayList<String>> row : rows.entrySet()) {
-            ArrayList<String> values = row.getValue(); require(values.size() == 4,
-                    "incomplete pin: " + row.getKey());
-            require(values.get(0).endsWith(".fingerprint=" + value(values.get(0)))
-                    && values.get(1).contains(".evidence_sha256=")
-                    && values.get(2).contains(".source=")
-                    && values.get(3).endsWith(".status=passed"), "pin field order drift: " + row.getKey());
+            ArrayList<String> values = row.getValue();
+            require(values.size() == 4 || values.size() == 5, "incomplete pin: " + row.getKey());
+            boolean sealed = values.size() == 5;
+            require(values.get(0).contains(".fingerprint=")
+                    && (!sealed || values.get(1).contains(".observation_sha256="))
+                    && values.get(sealed ? 2 : 1).contains(".evidence_sha256=")
+                    && values.get(sealed ? 3 : 2).contains(".source=")
+                    && values.get(sealed ? 4 : 3).endsWith(".status=passed"),
+                    "pin field order drift: " + row.getKey());
             entries.put(row.getKey(), String.join("\n", values) + "\n");
         }
         return new Lock(header, entries);
@@ -92,12 +96,29 @@ public final class QualificationLockMerge {
         try { merge(base, left, parse(header + pin("m1-one", "f") + pin("m2-two", "b"))); }
         catch (IllegalStateException expected) { rejected = true; }
         require(rejected, "same-pin conflict was accepted");
+        String sealedHeader = "# Worldline smoke qualification lock v5\nschema=5\n"
+                + "algorithm=worldline-smoke-input-v6-tokens\n";
+        Lock sealedBase = parse(sealedHeader + sealedPin("m1-one", "a") + sealedPin("m2-two", "b"));
+        Lock sealedLeft = parse(sealedHeader + sealedPin("m1-one", "c") + sealedPin("m2-two", "b"));
+        Lock sealedRight = parse(sealedHeader + sealedPin("m1-one", "a") + sealedPin("m2-two", "b")
+                + sealedPin("m3-three", "e"));
+        require(merge(sealedBase, sealedLeft, sealedRight).render().equals(sealedHeader
+                + sealedPin("m1-one", "c") + sealedPin("m2-two", "b") + sealedPin("m3-three", "e")),
+                "sealed ordered union drifted");
         System.out.println("qualification lock merge self-test passed");
     }
 
     private static String pin(String id, String seed) {
         String hash = seed.repeat(64);
         return "smoke." + id + ".fingerprint=" + hash + "\nsmoke." + id
+                + ".evidence_sha256=" + hash + "\nsmoke." + id
+                + ".source=executed\nsmoke." + id + ".status=passed\n";
+    }
+
+    private static String sealedPin(String id, String seed) {
+        String hash = seed.repeat(64);
+        return "smoke." + id + ".fingerprint=" + hash + "\nsmoke." + id
+                + ".observation_sha256=" + hash + "\nsmoke." + id
                 + ".evidence_sha256=" + hash + "\nsmoke." + id
                 + ".source=executed\nsmoke." + id + ".status=passed\n";
     }
