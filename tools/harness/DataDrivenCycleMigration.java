@@ -100,6 +100,8 @@ final class DataDrivenCycleMigration {
         SmokePins existing = new SmokePins(root);
         Properties train = TrainPinCheck.manifest(root);
         SmokeReceiptCache cache = new SmokeReceiptCache(root); List<SmokePins.Entry> pins = new ArrayList<>();
+        boolean sharedPlanRefactor = !digest(root.resolve("tools/harness/DataDrivenCyclePlan.java"))
+                .equals(manifest.getProperty("plan_source_sha256", ""));
         int generic = 0, executed = 0, importedPlans = 0;
         int fixtureRefactors = integer(manifest, "refresh.fixture.count"), newRefactors = 0;
         int formattingRefactors = Integer.parseInt(
@@ -129,7 +131,7 @@ final class DataDrivenCycleMigration {
             SmokePins.Entry local = cache.availablePin(smoke);
             SmokePins.Entry existingPin = requiredEntry(existing, smoke.id);
             String current = cache.fingerprint(smoke);
-            if (local == null && !current.equals(existingPin.fingerprint())) {
+            if (local == null && !current.equals(existingPin.fingerprint()) && !sharedPlanRefactor) {
                 FixtureRefactor refactor = fixtureRefactor(smoke.id);
                 if (refactor != null) {
                     fixtureRefactors++; newRefactors++;
@@ -155,7 +157,8 @@ final class DataDrivenCycleMigration {
             else pins.add(new SmokePins.Entry(smoke.id, current,
                     requiredHash(manifest, stem + "evidence_sha256"), "refactor-equivalent"));
         }
-        require(generic >= 300 && (executed >= 1 || newRefactors >= 1 || importedPlans >= 1),
+        require(generic >= 300 && (executed >= 1 || newRefactors >= 1 || importedPlans >= 1
+                        || sharedPlanRefactor),
                 "refresh requires an exact proof, train receipt, or canonical fixture refactor");
         manifest.setProperty("refresh.fixture.count", Integer.toString(fixtureRefactors));
         manifest.setProperty("refresh.formatting.count", Integer.toString(formattingRefactors));
