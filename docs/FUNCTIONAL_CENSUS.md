@@ -31,7 +31,9 @@ pistons, dispenser, note block, bed, doors, and jukebox. The census then contain
 claims. The expanded public solid-lifecycle matrix adds exact break and drop claims for stone,
 planks, sandstone, and brick. The scenario-selected mineral lifecycle matrix then adds 12 exact
 claims across iron ore, diamond ore, and lapis, gold, iron, and diamond storage blocks. The census
-now contains 275 verified claims (26.04%) and leaves 781 unknown. Existing smoke evidence is
+then contained 275 verified claims. The public rail lifecycle family closes placement, reload,
+break, and drop for rail, powered rail, and detector rail. The census now contains 287 verified
+claims (27.18%) and leaves 769 unknown. Existing smoke evidence is
 reusable input, but it is never promoted automatically: its subject, action, context, observable,
 oracle, signature, and automation surface must be curated first.
 
@@ -68,7 +70,8 @@ census resolution = resolved claims / candidate claims
 The target is 98.8% functional proof, not 98.8% file or mapping coverage. With the 1,056-claim
 denominator, that requires 1,044 verified claims. After the earlier lifecycle imports, 789
 additional verified claims were required; the solid and mineral public matrices reduce that gap to
-769. The executable check prints the exact current proof, unknown count, and claims remaining to
+769, and the rail lifecycle family reduces it to 757. The executable check prints the exact current
+proof, unknown count, and claims remaining to
 the target on every canonical Gate.
 
 ## Three conformance layers
@@ -87,11 +90,12 @@ login, an exact break and tool effect, normalized zero/one/multiple drops, and a
 proves the removed state persisted. The b1.7.3 server adapter implements this boundary without
 turning direct `GameWorld.setBlock` mutation into false gameplay evidence. Historical claims remain
 `INTERNAL_API` or `SMOKE_ONLY` until an official run binds their evidence to this public fixture.
-Its current official provider package executes 16 scenario-routed rows and backs 64 public claims.
+Its current official provider package executes 19 scenario-routed rows and backs 76 public claims.
 Each row carries bounded immutable fixture options into the runtime, so adding a lifecycle subject
 does not require duplicating that subject in a provider-owned catalog.
 The mineral package reuses `ore` and `mineral-storage` archetypes while keeping obsidian's
-distinct harvest profile explicit.
+distinct harvest profile explicit. The rail package reuses one `rail` archetype across the three
+flat, unpowered metadata-zero lifecycle rows; slopes, activation, and motion remain separate claims.
 
 The data under `behavior/functional-census/b1.7.3/` is the versioned routing source. The Gate rejects
 a missing registry subject, unprofiled block, duplicate claim, unsupported status, unqualified
