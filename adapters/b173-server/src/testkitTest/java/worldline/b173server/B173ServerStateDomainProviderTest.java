@@ -84,6 +84,18 @@ public final class B173ServerStateDomainProviderTest {
                 java.util.Arrays.asList(new BlockState(86, 2), new BlockState(86, 3),
                         new BlockState(86, 0), new BlockState(86, 1))),
                 "pumpkin facing domain drifted");
+        java.util.List<BlockStateDomainScenario> attachments =
+                B173AttachmentStateDomainScenarioFactory.wallAttachmentFamily();
+        require(attachments.size() == 3 && attachments.stream().allMatch(scenario ->
+                scenario.claim().layer() == ConformanceLayer.ARCHETYPE),
+                "wall-attachment family routing drifted");
+        require(attachments.get(0).domain().size() == 5
+                && attachments.get(0).placementSlot().before().count() == 5
+                && attachments.get(1).domain().equals(java.util.Arrays.asList(
+                        new BlockState(65, 5), new BlockState(65, 4),
+                        new BlockState(65, 3), new BlockState(65, 2)))
+                && attachments.get(2).placementSlot().before().legacyId() == 323,
+                "wall-attachment metadata rows drifted");
         Map<String, String> options = new LinkedHashMap<String, String>();
         options.put(BlockStateDomainPlan.PLACEMENT_SLOT_OPTION, "1:37:324:4:0");
         B173StateDomainLoadout loadout = B173StateDomainLoadout.from(new TestRuntimeRequest(

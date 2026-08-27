@@ -138,4 +138,5 @@ public final class B173StateDomainScenarioFactory {
                 new BlockLifecycleSlot(HOTBAR, INVENTORY,
                         new RemoteItemStack(blockId, 4, 0), null), domain, steps, 40);
     }
+
 }
