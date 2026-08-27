@@ -88,6 +88,8 @@ proves the removed state persisted. The b1.7.3 server adapter implements this bo
 turning direct `GameWorld.setBlock` mutation into false gameplay evidence. Historical claims remain
 `INTERNAL_API` or `SMOKE_ONLY` until an official run binds their evidence to this public fixture.
 Its current official provider package executes 16 scenario-routed rows and backs 64 public claims.
+The mineral package reuses `ore` and `mineral-storage` archetypes while keeping obsidian's
+distinct harvest profile explicit.
 
 The data under `behavior/functional-census/b1.7.3/` is the versioned routing source. The Gate rejects
 a missing registry subject, unprofiled block, duplicate claim, unsupported status, unqualified
