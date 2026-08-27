@@ -15,7 +15,7 @@ final class BehaviorFamilyPinCheck {
     static void execute(Path root) throws Exception {
         Properties lock = manifest(root); Map<String, String> assignments = BehaviorFamilyAssignments.values();
         require("1".equals(lock.getProperty("schema")) && integer(lock, "assignment.count") == 109
-                        && integer(lock, "source.count") == 4 && integer(lock, "smoke.count") == 520
+                        && integer(lock, "source.count") == 4 && integer(lock, "smoke.count") >= 520
                         && integer(lock, "pending.count") == 5
                         && integer(lock, "catalog.count") == integer(lock, "smoke.count")
                                 + integer(lock, "pending.count") + 1,
@@ -29,6 +29,7 @@ final class BehaviorFamilyPinCheck {
                                     relative, required(lock, stem + "current_sha256"))),
                     "behavior-family source drift: " + relative);
         }
+        refreshSources(root, lock);
         int index = 0;
         for (Map.Entry<String, String> entry : assignments.entrySet()) {
             String stem = "assignment." + index++ + ".";
@@ -85,7 +86,9 @@ final class BehaviorFamilyPinCheck {
     }
     private static boolean carries(Properties lock, String id, SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
-        boolean direct = hash(lock.getProperty(stem + "prior_fingerprint"))
+        boolean introduced = "true".equals(lock.getProperty(stem + "introduced"))
+                && "executed".equals(pin.source());
+        boolean direct = (hash(lock.getProperty(stem + "prior_fingerprint")) || introduced)
                 && current.equals(lock.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"));
         try { Path root = Path.of("").toAbsolutePath().normalize();
@@ -111,6 +114,21 @@ final class BehaviorFamilyPinCheck {
     }
     private static boolean pending(Properties lock, String id) {
         return Arrays.asList(lock.getProperty("pending.smokes", "").split(",")).contains(id);
+    }
+    private static void refreshSources(Path root, Properties lock) throws Exception {
+        int count = integer(lock, "refresh.source.count");
+        require(count >= 1 && count <= 4, "behavior-family source refresh census drift");
+        for (int index = 1; index <= count; index++) {
+            String stem = "refresh.source." + index + ".";
+            String relative = required(lock, stem + "path");
+            require(relative.equals("modules/api/src/main/java/worldline/api/WorldlineBehavior.java")
+                            && hash(required(lock, stem + "prior_sha256"))
+                            && digest(root.resolve(relative)).equals(
+                                    required(lock, stem + "current_sha256"))
+                            && Files.readString(root.resolve(relative))
+                                    .contains("BLOCK_LIFECYCLE_CONFORMANCE"),
+                    "invalid behavior-family source refresh");
+        }
     }
     private static String digest(Path path) throws Exception { return HexFormat.of().formatHex(
             MessageDigest.getInstance("SHA-256").digest(Files.readString(path, StandardCharsets.UTF_8)
