@@ -38,7 +38,10 @@ public final class B173ServerLifecycleFixtures {
                 profile("b1.7.3:block/042", "mineral-storage", false),
                 profile("b1.7.3:block/056", "ore", false),
                 profile("b1.7.3:block/057", "mineral-storage", false),
-                profile("b1.7.3:block/049", "obsidian", false)),
+                profile("b1.7.3:block/049", "obsidian", false),
+                profile("b1.7.3:block/066", "rail", false),
+                profile("b1.7.3:block/027", "rail", false),
+                profile("b1.7.3:block/028", "rail", false)),
                 Arrays.asList(
                         template("gameplay-placement", ConformanceLayer.UNIVERSAL),
                         template("save-reload", ConformanceLayer.UNIVERSAL),
@@ -60,7 +63,10 @@ public final class B173ServerLifecycleFixtures {
                 scenario(plan, "iron-block", "b1.7.3:block/042", 42, 42, 278, 20),
                 scenario(plan, "diamond-ore", "b1.7.3:block/056", 56, 264, 278, 20),
                 scenario(plan, "diamond-block", "b1.7.3:block/057", 57, 57, 278, 20),
-                scenario(plan, "obsidian", "b1.7.3:block/049", 49, 49, 278, 60)));
+                scenario(plan, "obsidian", "b1.7.3:block/049", 49, 49, 278, 60),
+                scenario(plan, "rail", "b1.7.3:block/066", 66, 66, 278, 20),
+                scenario(plan, "powered-rail", "b1.7.3:block/027", 27, 27, 278, 20),
+                scenario(plan, "detector-rail", "b1.7.3:block/028", 28, 28, 278, 20)));
     }
 
     private static BlockLifecycleScenario scenario(BlockConformancePlan plan, String id,

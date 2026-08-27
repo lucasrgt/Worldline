@@ -21,12 +21,15 @@ public final class B173ServerLifecycleProviderTest {
                 == B173ServerLifecycleTestRuntimeProvider.class,
                 "lifecycle provider service discovery drifted");
         List<BlockLifecycleScenario> rows = B173ServerLifecycleFixtures.scenarios();
-        require(rows.size() == 16 && rows.get(0).id().equals("cobblestone")
+        require(rows.size() == 19 && rows.get(0).id().equals("cobblestone")
                 && rows.get(1).id().equals("dirt") && rows.get(2).id().equals("empty-chest")
                 && rows.get(3).id().equals("stone") && rows.get(4).id().equals("planks")
                 && rows.get(5).id().equals("sandstone") && rows.get(6).id().equals("brick")
                 && rows.get(7).id().equals("gold-ore")
-                && rows.get(15).id().equals("obsidian"),
+                && rows.get(15).id().equals("obsidian")
+                && rows.get(16).id().equals("rail")
+                && rows.get(17).id().equals("powered-rail")
+                && rows.get(18).id().equals("detector-rail"),
                 "lifecycle fixture row order drifted");
         require(rows.get(0).drops().layer() == ConformanceLayer.ARCHETYPE
                 && rows.get(1).drops().layer() == ConformanceLayer.ARCHETYPE
@@ -37,7 +40,8 @@ public final class B173ServerLifecycleProviderTest {
                         && row.breakSlot().hotbarSlot() == 2
                         && row.breakSlot().inventorySlot() == 38)
                 && rows.get(0).breakSlot().before().legacyId() == 257
-                && rows.get(7).breakSlot().before().legacyId() == 278,
+                && rows.get(7).breakSlot().before().legacyId() == 278
+                && rows.get(18).breakSlot().before().legacyId() == 278,
                 "lifecycle provisioned slots drifted");
         Map<String, String> fixture = new LinkedHashMap<String, String>();
         fixture.put(worldline.testkit.BlockLifecyclePlan.PLACEMENT_SLOT_OPTION, "1:37:57:1:0");
