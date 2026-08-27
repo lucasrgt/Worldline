@@ -103,12 +103,24 @@ final class ProviderDiscoveryPinMigration {
                 "provider refresh requires shared-helper attestations");
         int sourceChanges = refreshSources(root, lock);
         Properties train = TrainPinCheck.manifest(root); SmokePins pins = new SmokePins(root);
+        SmokeReceiptCache cache = new SmokeReceiptCache(root);
+        List<SmokePins.Entry> nextPins = new ArrayList<>(pins.entries());
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
         int discovered = 0, carried = 0, introduced = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             if (TrainPinCheck.isAdded(train, smoke.id)) continue;
             discovered++;
-            if (smoke.id.equals(NEW_SMOKE) || PENDING.contains(smoke.id)) continue;
+            if (smoke.id.equals(NEW_SMOKE)) continue;
+            if (PENDING.contains(smoke.id)) {
+                if (!TrainPinCheck.isPending(train, smoke.id)) {
+                    SmokePins.Entry exact = cache.availablePin(smoke);
+                    require(exact != null && "executed".equals(exact.source())
+                                    && fingerprints.compute(smoke).equals(exact.fingerprint()),
+                            "resolved provider pending smoke lacks exact current execution: " + smoke.id);
+                    replace(nextPins, exact);
+                }
+                continue;
+            }
             carried++; String current = fingerprints.compute(smoke); SmokePins.Entry pin =
                     pins.match(smoke.id, current); require(pin != null,
                     "provider refresh lacks current proof: " + smoke.id);
@@ -128,12 +140,13 @@ final class ProviderDiscoveryPinMigration {
         require(discovered == catalog && carried == smokeCount, "provider refresh census drift");
         lock.setProperty("catalog.count", Integer.toString(catalog));
         lock.setProperty("smoke.count", Integer.toString(smokeCount));
-        pins.write(pins.entries()); store(path, lock);
+        pins.write(nextPins); store(path, lock);
         System.out.println("provider-discovery pins refreshed: " + smokeCount + " carried, "
                 + introduced + " introduced, " + sourceChanges + " source changes");
     }
 
     private static int refreshSources(Path root, Properties lock) throws Exception {
+        int priorChanges = Integer.parseInt(lock.getProperty("refresh.source.count", "0"));
         int changes = 0; Properties train = TrainPinCheck.manifest(root);
         for (String group : List.of("modified", "added")) {
             int count = Integer.parseInt(required(lock, group + ".count"));
@@ -146,15 +159,21 @@ final class ProviderDiscoveryPinMigration {
                 require(TrainPinCheck.transportsFile(train, root, relative, prior)
                                 || fingerprintExtension(root, relative),
                         "provider source change lacks reviewed transport: " + relative);
-                String refresh = "refresh.source." + (++changes) + ".";
+                String refresh = "refresh.source." + (priorChanges + ++changes) + ".";
                 lock.setProperty(refresh + "path", relative);
                 lock.setProperty(refresh + "prior_sha256", prior);
                 lock.setProperty(refresh + "current_sha256", current);
                 lock.setProperty(stem + "current_sha256", current);
             }
         }
-        lock.setProperty("refresh.source.count", Integer.toString(changes));
+        lock.setProperty("refresh.source.count", Integer.toString(priorChanges + changes));
         return changes;
+    }
+
+    private static void replace(List<SmokePins.Entry> pins, SmokePins.Entry exact) {
+        for (int index = 0; index < pins.size(); index++)
+            if (pins.get(index).id().equals(exact.id())) { pins.set(index, exact); return; }
+        pins.add(exact);
     }
 
     private static boolean fingerprintExtension(Path root, String relative) throws Exception {
