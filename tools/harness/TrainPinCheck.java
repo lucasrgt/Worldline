@@ -109,6 +109,8 @@ final class TrainPinCheck {
                                 GuiWorkbenchPinCheck.manifest(root), relative, prior, predecessor)
                         || TestKitReleasePinCheck.transitionsFile(
                                 TestKitReleasePinCheck.manifest(root), relative, prior, predecessor);
+                connected = connected || SharedHelperPinCheck.transitionsFile(
+                        SharedHelperPinCheck.manifest(root), relative, prior, predecessor);
                 return connected && digest(root.resolve(relative)).equals(
                         lock.getProperty(stem + "current_sha256"));
             }

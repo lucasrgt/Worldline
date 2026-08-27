@@ -18,6 +18,7 @@ final class SharedHelperPinCheck {
                 "invalid shared-helper migration schema");
         int files = integer(lock, "file.count");
         Properties gui = GuiWorkbenchPinCheck.manifest(root);
+        Properties train = TrainPinCheck.manifest(root);
         for (int index = 0; index < files; index++) {
             String stem = "file." + index + ".", relative = required(lock, stem + "path");
             require(relative.matches("smokes/.+[.]java")
@@ -26,6 +27,8 @@ final class SharedHelperPinCheck {
                             || refreshes(lock, root, relative,
                                     required(lock, stem + "current_sha256"))
                             || GuiWorkbenchPinCheck.transportsFile(gui, root, relative,
+                                    required(lock, stem + "current_sha256"))
+                            || TrainPinCheck.transportsFile(train, root, relative,
                                     required(lock, stem + "current_sha256")))
                             && hash(lock, stem + "prior_sha256"),
                     "shared-helper source drift: " + relative);
@@ -94,6 +97,16 @@ final class SharedHelperPinCheck {
         return carries(lock, id, pin, current)
                 && TrainPinCheck.continues(lock, id, prior, evidence);
     }
+    static boolean transitionsFile(Properties lock, String relative, String prior, String current) {
+        int files = integer(lock, "file.count");
+        for (int index = 0; index < files; index++) {
+            String stem = "file." + index + ".";
+            if (relative.equals(lock.getProperty(stem + "path")))
+                return prior.equals(lock.getProperty(stem + "prior_sha256"))
+                        && current.equals(lock.getProperty(stem + "current_sha256"));
+        }
+        return false;
+    }
     static boolean transportsFile(Properties lock, Path root, String relative, String prior)
             throws Exception {
         int files = integer(lock, "file.count");
@@ -103,7 +116,9 @@ final class SharedHelperPinCheck {
             String intermediate = lock.getProperty(stem + "current_sha256");
             return prior.equals(lock.getProperty(stem + "prior_sha256"))
                     && (digest(root.resolve(relative)).equals(intermediate)
-                    || refreshes(lock, root, relative, intermediate));
+                    || refreshes(lock, root, relative, intermediate)
+                    || TrainPinCheck.transportsFile(
+                            TrainPinCheck.manifest(root), root, relative, intermediate));
         }
         for (String key : new String[] {"combat", "login"})
             if (relative.equals(lock.getProperty(key + ".path")))

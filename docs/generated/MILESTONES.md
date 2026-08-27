@@ -315,7 +315,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m299-stone-tool-crafts` | CARRIED | m299-stone-tool-crafts |
 | `m300-ore-pick-breaks` | CARRIED | m300-ore-pick-breaks |
 | `m301-axe-log-breaks` | CARRIED | m301-axe-log-breaks |
-| `m302-shovel-soft-breaks` | CARRIED | m302-shovel-soft-breaks |
+| `m302-shovel-soft-breaks` | EXECUTED | m302-shovel-soft-breaks |
 | `m303-crop-harvests` | CARRIED | m303-crop-harvests |
 | `m304-farmland-set` | CARRIED | m304-farmland-set |
 | `m305-plant-growth` | CARRIED | m305-plant-growth |
@@ -389,7 +389,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m373-milk-bucket-set` | CARRIED | m373-milk-bucket-set |
 | `m374-remaining-food-eat` | CARRIED | m374-remaining-food-eat |
 | `m375-remaining-pick-breaks` | CARRIED | m375-remaining-pick-breaks |
-| `m376-remaining-shovel-breaks` | CARRIED | m376-remaining-shovel-breaks |
+| `m376-remaining-shovel-breaks` | EXECUTED | m376-remaining-shovel-breaks |
 | `m377-powered-rail-motion` | CARRIED | m377-powered-rail-motion |
 | `m378-boat-water-set` | CARRIED | multiplayer-session |
 | `m379-iron-door-set` | CARRIED | m379-iron-door-set |
