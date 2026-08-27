@@ -33,11 +33,13 @@ public final class BlockStateDomainFixture {
             }
             StringBuilder row = new StringBuilder(step.id()).append('|')
                     .append(step.action()).append('|');
-            RemoteWorldView observed = null;
+            BlockStateObservation sentinel = step.observations().get(
+                    step.observations().size() - 1);
+            RemoteWorldView observed = await(driver, sentinel.position(), sentinel.state(), step.id());
             for (int index = 0; index < step.observations().size(); index++) {
                 BlockStateObservation observation = step.observations().get(index);
                 if (!matches(observed, observation.position(), observation.state())) {
-                    observed = driver.awaitBlock(observation.position(), observation.state());
+                    observed = await(driver, observation.position(), observation.state(), step.id());
                 }
                 verifyBlock(observed, observation.position(), observation.state(), step.id());
                 if (index > 0) row.append(',');
@@ -49,14 +51,29 @@ public final class BlockStateDomainFixture {
         verifySlot(driver.inventory(), scenario.placementSlot(), true);
         driver.saveAndReload();
         ReloadBoundary boundary = driver.reloadBoundary();
-        RemoteWorldView reloaded = null;
-        for (Map.Entry<BlockPosition, BlockState> state : scenario.finalStates().entrySet()) {
+        Map<BlockPosition, BlockState> finalStates = scenario.finalStates();
+        Map.Entry<BlockPosition, BlockState> reloadSentinel = null;
+        for (Map.Entry<BlockPosition, BlockState> state : finalStates.entrySet()) {
+            reloadSentinel = state;
+        }
+        RemoteWorldView reloaded = await(driver, reloadSentinel.getKey(),
+                reloadSentinel.getValue(), "reload");
+        for (Map.Entry<BlockPosition, BlockState> state : finalStates.entrySet()) {
             if (!matches(reloaded, state.getKey(), state.getValue())) {
-                reloaded = driver.awaitBlock(state.getKey(), state.getValue());
+                reloaded = await(driver, state.getKey(), state.getValue(), "reload");
             }
             verifyBlock(reloaded, state.getKey(), state.getValue(), "reload");
         }
         return new BlockStateDomainEvidence(scenario, evidence, boundary);
+    }
+
+    private static RemoteWorldView await(BlockStateDomainDriver driver, BlockPosition position,
+            BlockState state, String phase) {
+        try { return driver.awaitBlock(position, state); }
+        catch (RuntimeException error) {
+            throw new IllegalStateException("state-domain " + phase + " awaits "
+                    + token(position) + ":" + token(state), error);
+        }
     }
 
     private static void verifyBlock(RemoteWorldView world, BlockPosition position,

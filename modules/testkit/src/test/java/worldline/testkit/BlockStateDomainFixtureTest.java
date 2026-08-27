@@ -50,8 +50,9 @@ public final class BlockStateDomainFixtureTest {
                 + "step.2=open|ACTIVATE|4:65:4:64:4,4:66:4:64:8\n"
                 + "reload=FRESH_LOGIN\n"), "canonical state-domain evidence drifted");
         require(driver.actions.equals(List.of("inventory", "select:1", "look:-90.0:0.0",
-                "ticks:2", "place", "await:0", "await:8", "inventory", "activate",
-                "await:4", "await:8", "inventory", "reload", "await:4", "await:8")),
+                "ticks:2", "place", "await:8", "await:0", "await:8", "inventory", "activate",
+                "await:8", "await:4", "await:8", "inventory", "reload", "await:8",
+                "await:4", "await:8")),
                 "state-domain action order drifted: " + driver.actions);
         rejects(() -> new BlockStateDomainScenario("bad", scenario.claim(),
                 scenario.placementSlot(), List.of(new BlockState(64, 0)), scenario.steps(), 1));
