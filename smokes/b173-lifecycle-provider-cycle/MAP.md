@@ -1,6 +1,6 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=official-b173-public-block-lifecycle-provider -->
-<!-- nonclaims=loaded-container-spill,wrong-tool-matrix,rendering,chunk-unload,process-restart -->
+<!-- nonclaims=loaded-container-spill,wrong-tool-matrix,pressure-activation-release,rendering,chunk-unload,process-restart -->
 <!-- frozen-trace=c48f1902ca6b9643a7897209a938362dfd7997c8f797abf47239b061b9a5cb23 -->
 
 # Official block lifecycle provider mapping
