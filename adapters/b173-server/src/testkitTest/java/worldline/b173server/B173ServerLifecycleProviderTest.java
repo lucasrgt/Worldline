@@ -31,6 +31,7 @@ public final class B173ServerLifecycleProviderTest {
                 && rows.get(17).id().equals("powered-rail")
                 && rows.get(18).id().equals("detector-rail"),
                 "lifecycle fixture row order drifted");
+        descriptorMatchesRows(rows.size());
         require(rows.get(0).drops().layer() == ConformanceLayer.ARCHETYPE
                 && rows.get(1).drops().layer() == ConformanceLayer.ARCHETYPE
                 && rows.get(2).drops().layer() == ConformanceLayer.SINGULAR,
@@ -91,6 +92,20 @@ public final class B173ServerLifecycleProviderTest {
                 "unexpected lifecycle rejection: " + error.getMessage()); }
         catch (IllegalStateException error) { require(error.getMessage().contains(fragment),
                 "unexpected lifecycle rejection: " + error.getMessage()); }
+    }
+
+    private static void descriptorMatchesRows(int rows) throws Exception {
+        List<String> lines = Files.readAllLines(Paths.get("smokes",
+                "b173-lifecycle-provider-cycle", "smoke.properties"));
+        String prefix = "expected.signal=";
+        String signal = lines.stream().filter(line -> line.startsWith(prefix)).findFirst()
+                .orElseThrow(() -> new AssertionError("lifecycle expected signal is absent"))
+                .substring(prefix.length());
+        String layers = signal.substring(signal.indexOf("layers=") + 7,
+                signal.indexOf(",reload="));
+        require(signal.contains("rows=" + rows + ",passed=" + rows + ",")
+                        && layers.split("[+]", -1).length == rows,
+                "lifecycle expected row/layer cardinality drift");
     }
 
     private static void require(boolean condition, String message) {
