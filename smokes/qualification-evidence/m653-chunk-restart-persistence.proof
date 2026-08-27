@@ -1,5 +1,5 @@
 schema=1
 id=m653-chunk-restart-persistence
-fingerprint=aa6ba6c46439006e8e973de42cc261e1f6e71acff3e2c95f13f2856e85729582
+fingerprint=823f1c239731aa0cedc6ca2b16da08637c9b1da5507412af855efcfc4c2c1b8f
 observation.sha256=21dafc7d84060520da99ad07ba3194868bd30b7539dfbe66c8b4ac8274f09a15
 source=refactor-equivalent
