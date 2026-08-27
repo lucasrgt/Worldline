@@ -38,6 +38,8 @@ final class PortableAdapterCheck {
                 testkitTest, testkitClasspath);
         run("worldline.b173server.B173ServerLifecycleProviderTest", testkitTest,
                 testkitClasspath);
+        run("worldline.b173server.B173ServerStateDomainProviderTest", testkitTest,
+                testkitClasspath);
         List<Path> atlas = new ArrayList<>(javaFiles(server));
         atlas.addAll(javaFiles(root.resolve("adapters/b173-server/src/atlas/java")));
         compile(atlas, adapters.resolve("b173-server-analysis"),

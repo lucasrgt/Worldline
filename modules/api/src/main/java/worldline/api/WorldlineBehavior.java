@@ -80,6 +80,9 @@ public final class WorldlineBehavior {
     public static final WorldlineBehavior BLOCK_LIFECYCLE_CONFORMANCE = define(
             "block-lifecycle-conformance", WorldlineFamily.WORLD,
             "Public placement, reload, tool-qualified break, and exact drop conformance");
+    public static final WorldlineBehavior BLOCK_STATE_DOMAIN_CONFORMANCE = define(
+            "block-state-domain-conformance", WorldlineFamily.WORLD,
+            "Public causal execution and reload proof of reachable block metadata states");
     public static final WorldlineBehavior FOOD_CONSUMPTION = define("food-consumption", WorldlineFamily.ITEM,
             "Selected food consumption, health restoration, and container result");
     public static final WorldlineBehavior ENVIRONMENTAL_DAMAGE = define("environmental-damage",
