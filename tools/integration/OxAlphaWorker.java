@@ -67,8 +67,10 @@ final class OxAlphaWorker {
         closeStdin(process);
         OxAlphaTerminalMonitor.Outcome outcome = OxAlphaTerminalMonitor.waitFor(
                 process, capture, request.timeoutSeconds());
+        Instant finished = Instant.now();
         String head = git(root, "rev-parse", "HEAD").trim();
-        writeReceipt(receipt, request, started, head, stdout, stderr, outcome, fallback, config);
+        writeReceipt(receipt, request, started, finished, head, stdout, stderr,
+                outcome, fallback, config);
         return outcome.exit();
     }
 
@@ -161,14 +163,16 @@ final class OxAlphaWorker {
                 + phase;
     }
 
-    private static void writeReceipt(Path receipt, OxAlphaRequest request, Instant started, String head,
+    private static void writeReceipt(Path receipt, OxAlphaRequest request, Instant started,
+            Instant finished, String head,
             Path stdout, Path stderr, OxAlphaTerminalMonitor.Outcome outcome,
             boolean fallback, String config)
             throws Exception {
-        String session = firstSession(stdout);
+        String session = OxAlphaTelemetry.firstSession(stdout);
+        OxAlphaTelemetry.Result telemetry = OxAlphaTelemetry.read(stdout);
         String value = "{\n  \"schema\":1,\n  \"id\":\"" + request.id()
                 + "\",\n  \"phase\":\"" + request.phase() + "\",\n  \"attempt\":" + request.attempt()
-                + ",\n  \"started\":\"" + started + "\",\n  \"finished\":\"" + Instant.now()
+                + ",\n  \"started\":\"" + started + "\",\n  \"finished\":\"" + finished
                 + "\",\n  \"base\":\"" + request.base() + "\",\n  \"control_base\":\""
                 + request.controlBase() + "\",\n  \"head\":\"" + head
                 + "\",\n  \"profile\":\"" + (fallback ? "fallback" : "primary")
@@ -179,23 +183,10 @@ final class OxAlphaWorker {
                 + sha(stdout) + "\",\n  \"stderr_sha256\":\"" + sha(stderr) + "\",\n  \"session\":"
                 + (session == null ? "null" : "\"" + escape(session) + "\"")
                 + ",\n  \"exit\":" + outcome.exit() + ",\n  \"completed\":" + outcome.completed()
+                + OxAlphaTelemetry.receiptFields(telemetry, started, finished)
                 + ",\n  \"supervisor_stop\":" + (outcome.supervisorStop() == null ? "null"
                         : "\"" + outcome.supervisorStop() + "\"") + "\n}\n";
         Files.writeString(receipt, value, StandardCharsets.UTF_8);
-    }
-
-    private static String firstSession(Path stdout) throws Exception {
-        for (String line : Files.readAllLines(stdout, StandardCharsets.UTF_8)) {
-            int key = line.indexOf("\"sessionID\":\"");
-            if (key >= 0) {
-                int start = key + 13;
-                int end = line.indexOf('"', start);
-                if (end > start) {
-                    return line.substring(start, end);
-                }
-            }
-        }
-        return null;
     }
 
     private static void selfTest() throws Exception {
@@ -210,6 +201,7 @@ final class OxAlphaWorker {
         invalid.add(message);
         require(!messagePrecedesFiles(invalid), "variadic attachment swallowed the worker message");
         OxAlphaProfile.selfTest();
+        OxAlphaTelemetry.selfTest();
         OxAlphaTerminalMonitor.selfTest();
         require(command(message(checkpoint), null, false).contains(OxAlphaProfile.DEFAULT_MODEL),
                 "default Ox Alpha model is not allowlisted");

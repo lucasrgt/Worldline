@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M1089X7RSADHV584DB1QA7PF"
+title = "Chicken fall fixture could not prove a completed damaging-height fall"
+lesson = "Do not relaunch chicken fall-immunity contracts unless an objective harness, fixture, or oracle change proves a stable completed fall after support removal; downward motion alone is insufficient."
+scope = [
+    "smokes/m662-chicken-fall-immunity/**",
+    "tools/smoke/**",
+    "modules/testkit/**",
+]
+tags = [
+    "milestone-rejection",
+    "fixture-oracle-insufficient",
+    "chicken-fall",
+]
+created_at = "2026-08-27T00:00:50Z"
+
+[[occurrences]]
+occurred_at = "2026-08-27T00:00:50Z"
+source = "manual:worldline-m662-final-official-gate"
+reported_by = "codex:worldline-orchestrator"
+corrected_by = "codex:worldline-orchestrator"
+recorded_by = "codex:worldline-orchestrator"
+commit = "a60df6033"

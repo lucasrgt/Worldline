@@ -49,6 +49,12 @@ final class RepositoryVerify {
         if (Arrays.equals(arguments, new String[] {"--smoke-plan"})) {
             SmokePoolPlan.main(new String[0]); return;
         }
+        if (Arrays.equals(arguments, new String[] {"--train-readiness"})) {
+            try { TrainCoordinatorReadiness.execute(Path.of("").toAbsolutePath().normalize()); }
+            catch (Exception error) {
+                System.err.println("train readiness failed: " + error.getMessage()); System.exit(1); }
+            return;
+        }
         if (Arrays.equals(arguments, new String[] {"--orchestrator"})) {
             orchestrator(); return;
         }

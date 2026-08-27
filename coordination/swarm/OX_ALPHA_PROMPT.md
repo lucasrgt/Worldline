@@ -181,14 +181,16 @@ module outputs, resolve immutable cache links, package TestKit, and validate eve
 writing `release/testkit-artifacts.lock`. Commit that exact lock before train pin migration and
 the canonical integration Gate; never pin artifacts produced from predecessor cache links.
 
-Only `QUALIFIED`, `RETRYABLE`, or `REJECTED` may survive supervisor classification. A worker that
+Only `QUALIFIED`, `RETRYABLE`, or `REJECTED` may survive supervisor classification. Every immutable
+launcher receipt records supervisor-measured wall time, OpenCode steps, tool calls, token classes,
+and cost; model yield is never inferred from worker prose. A worker that
 exits without a disposition is `STRANDED` and must be converted immediately. `QUALIFIED` requires
 a real public contract, no `scaffold.status`, one logical commit, a clean tree, candidate and
 milestone Gate success, an exact HEAD/tree/base receipt, and a portable handoff. `REJECTED` requires
 exact oracle, fixture, or instability evidence and an applicable NYA scar. `RETRYABLE` resumes the
 same session and worktree under a bounded attempt count; it never opens an equivalent milestone.
 
-No new micro-wave may start while a census contains dirty or failed workers, an unresolved disposition,
+No new micro-wave may start while a census contains dirty or failed workers, an unowned disposition,
 a rejection without a scar, a missing recall proof, a handoff without an exact receipt, or a draft
 scaffold offered as a contract. No subsequent 25-candidate wave may start until every contract in
-the current 25-candidate wave is qualified and integrated.
+the current 25-candidate wave is qualified and integrated or explicitly rejected with a scar and archive.

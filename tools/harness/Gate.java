@@ -70,6 +70,9 @@ public final class Gate {
         if (arguments.length == 2 && "--lane-differential".equals(arguments[0])) {
             executePhase(arguments, true, false, true); return;
         }
+        if (Arrays.equals(arguments, new String[] {"--train-readiness"})) {
+            executePhase(arguments, false, true, false); return;
+        }
         boolean smoke = arguments.length > 0 && "--smoke".equals(arguments[0]);
         boolean pinnedSmoke = arguments.length > 0 && "--pinned-smoke".equals(arguments[0]);
         executePhase(arguments, smoke, true, smoke && !pinnedSmoke);
@@ -120,6 +123,7 @@ public final class Gate {
                 || Arrays.equals(arguments, new String[] {"--pin-smokes"})
                 || Arrays.equals(arguments, new String[] {"--smoke-plan"})
                 || Arrays.equals(arguments, new String[] {"--pinned-smoke"})
+                || Arrays.equals(arguments, new String[] {"--train-readiness"})
                 || Arrays.equals(arguments, new String[] {"--accept-legacy-smoke-baseline"})
                 || arguments.length == 1 && maintenance(arguments[0])
                 || arguments.length == 2 && ("--new-milestone".equals(arguments[0])
@@ -130,7 +134,7 @@ public final class Gate {
         if (!profile) throw new IllegalArgumentException(
                 "usage: java tools/harness/Gate.java "
                 + "[--runtime|--smoke|--pin-smokes|--accept-legacy-smoke-baseline|--orchestrator|"
-                + "--smoke-plan|--pinned-smoke|--migrate-data-cycles|--refresh-data-cycle-pins|"
+                + "--smoke-plan|--pinned-smoke|--train-readiness|--migrate-data-cycles|--refresh-data-cycle-pins|"
                 + "--migrate-composite-cycles|--refresh-composite-cycle-pins|"
                 + "--migrate-telemetry-pins|"
                 + "--migrate-repository-schemas|"

@@ -146,15 +146,18 @@ At each micro-wave barrier, the supervisor aggregates equivalent causes across a
 records or updates each NYA scar exactly once, runs `csm nya check`, updates the base prompt when a
 new scar applies, and verifies that the same scar did not recur before releasing another micro-wave.
 A new micro-wave is blocked while the census contains dirty or failed workers,
-an unresolved retry, a rejection without a scar, a failed recall, a non-exact handoff, or a scaffold
+an unowned retry, a rejection without a scar, a failed recall, a non-exact handoff, or a scaffold
 presented as a contract. `SwarmLoop close-wave` emits an immutable report bound to base, HEAD, tree,
 current and prior census hashes. It retains dispositions, first-pass rates, per-milestone corrections,
 scar recurrence, pre-Candidate/pre-runtime prevention, rejection classes, revalidation, semantic
 duplicates, receipt median/p95, safety counts, Pareto causes, deltas, and a moving window. Every
 applicable scar must map to a versioned executable check or an explicit owned exception. If rates do
 not improve, a contained executable process correction is mandatory before the report can release
-another micro-wave. A subsequent 25-candidate wave remains blocked until all 25 current contracts
-are qualified and integrated.
+another micro-wave. An archived `RETRYABLE` may enter the lateral queue only when its exact session,
+owner, archive SHA, attempt and remaining attempt limit are present; it reduces adaptive width to one
+but does not stop unrelated pristine candidates in the same cohort. A subsequent 25-candidate wave
+remains blocked until all 25 current contracts are terminally qualified and integrated or explicitly
+rejected with a registered scar and archive.
 
 Before opening workers, create exactly one supervised receipt whose width cannot exceed the report's
 live capacity:
@@ -499,6 +502,11 @@ therefore fail closed before any lock is written.
 Before invoking reconciliation, resolve both refs and require `git rev-list --count
 <base-sha>..<consolidated-ref>` to equal exactly `1`. Preserve a multi-commit staging branch and
 create a new single-commit `codex/train-*` consolidation ref instead of rewriting or deleting it.
+Run `IntegrationTrain --ready-only` before both the milestone plan and reconciliation. Its ordinary
+readiness phase requires one clean registered worktree, a direct single-parent commit over the
+base, no untracked files, and exactly one receipt-bound qualified handoff. Reconciliation readiness
+also runs `Gate --train-readiness`, which checks the generated README and documentation catalogs
+without starting official runtime. Any failure blocks creation or reuse of a train attempt.
 Before freezing the consolidated ref, update the integration-owned release surfaces with
 `java tools/harness/Gate.java --refresh-readme-status` and `java tools/harness/Gate.java
 --refresh-documentation`; both generated checks must pass before reconciliation starts. Milestone

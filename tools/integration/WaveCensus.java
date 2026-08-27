@@ -39,6 +39,10 @@ final class WaveCensus {
         List<Row> rows = parse(pretty.append("  ]\n}\n").toString());
         require(rows.size() == 25 && "NOT_STARTED".equals(rows.get(24).state()),
                 "pretty-printed 25-candidate census parsing drifted");
+        Row owned = new Row("m26-fixture", ",\"state\":\"RETRYABLE\",\"archive_sha256\":\""
+                + "a".repeat(64) + "\",\"session\":\"ses_1\",\"owner\":\"orchestrator\","
+                + "\"attempt\":1,\"max_attempts\":2");
+        require(owned.ownedRetryable(), "owned RETRYABLE side queue entry was blocked");
     }
 
     static String string(String body, String name, String fallback) {
@@ -83,6 +87,18 @@ final class WaveCensus {
         boolean processed() { return !"NOT_STARTED".equals(state()); }
         boolean qualified() { return "QUALIFIED".equals(state()); }
         boolean rejected() { return "REJECTED".equals(state()); }
+        boolean retryable() { return "RETRYABLE".equals(state()); }
+        boolean ownedRetryable() {
+            if (!retryable()) return false;
+            String archive = string(body, "archive_sha256",
+                    string(body, "retry_archive_sha256", ""));
+            String session = string(body, "session", string(body, "retry_session", ""));
+            String owner = string(body, "owner", string(body, "retry_owner", ""));
+            int attempt = integer(body, "attempt", integer(body, "retry_attempt", 0));
+            int maximum = integer(body, "max_attempts", integer(body, "retry_max_attempts", 0));
+            return archive.matches("[0-9a-fA-F]{64}") && !session.isBlank() && !owner.isBlank()
+                    && attempt > 0 && attempt < maximum;
+        }
         boolean firstPass() { return bool(body, "first_pass", false); }
         boolean recurrence() {
             return bool(body, "recurrence", false)

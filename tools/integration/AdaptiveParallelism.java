@@ -25,7 +25,7 @@ final class AdaptiveParallelism {
         int cpu = Math.max(1, processors / cpuUnits);
         int memory = Math.max(1, (int) (Math.max(0L, free - reserve) / worker));
         int capacity = Math.max(1, Math.min(maximum, Math.min(cpu, memory)));
-        int width = systemic && !correction ? 1 : correction ? Math.min(start, capacity)
+        int width = systemic ? 1 : correction ? Math.min(start, capacity)
                 : cleanDelta >= 2 ? capacity : Math.min(start, capacity);
         require(width >= 1 && width <= capacity && maximum <= 25,
                 "adaptive Candidate width escaped capacity");

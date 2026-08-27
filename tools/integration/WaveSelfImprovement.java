@@ -8,7 +8,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /** Closes a wave with comparable metrics, causal controls, and an adaptive release decision. */
@@ -36,12 +35,12 @@ final class WaveSelfImprovement {
         Metrics prior = previous == null ? Metrics.empty() : Metrics.of(previous.rows(), rejections);
         boolean improved = previous == null || now.firstPassProcessedRate() > prior.firstPassProcessedRate()
                 || now.recurrenceRate() < prior.recurrenceRate();
-        boolean release = now.blockers == 0 && now.falsePromotions == 0 && now.inexactQualified == 0
+        boolean release = now.hardBlockers == 0 && now.unownedRetryable == 0
+                && now.falsePromotions == 0 && now.inexactQualified == 0
                 && now.rejected == now.registeredRejected && (improved || correction);
         AdaptiveParallelism.Decision parallelism = AdaptiveParallelism.decide(root, correction,
                 now.newSystemic(prior), now.cleanDelta(prior));
-        boolean nextWave = release && now.total == 25 && now.qualified == 25
-                && now.integrated == 25;
+        boolean nextWave = release && now.total == 25 && now.terminal == 25;
         Path output = outputValue.toAbsolutePath().normalize();
         require(!Files.exists(output), "immutable wave closure already exists: " + output);
         Files.createDirectories(output.getParent());
@@ -50,7 +49,7 @@ final class WaveSelfImprovement {
         Files.writeString(output, json, StandardCharsets.UTF_8);
         System.out.println("wave self-improvement: processed=" + now.processed + ", qualified="
                 + now.qualified + ", rejected=" + now.rejected + ", recurrence="
-                + rate(now.recurrenceRate()) + ", next-candidate=" + release
+                + WaveReportFormat.rate(now.recurrenceRate()) + ", next-candidate=" + release
                 + ", next-wave=" + nextWave + ", parallelism=" + parallelism.width());
         System.out.println("  report: " + output);
     }
@@ -85,12 +84,12 @@ final class WaveSelfImprovement {
                 .append(previous == null ? "" : SwarmEvidenceArchive.sha256(previous.path()))
                 .append("\",\n  \"dispositions\":").append(now.dispositionsJson()).append(',')
                 .append("\n  \"first_pass\":{\"count\":").append(now.firstPass)
-                .append(",\"processed_rate\":").append(rate(now.firstPassProcessedRate()))
-                .append(",\"qualified_rate\":").append(rate(now.firstPassQualifiedRate()))
+                .append(",\"processed_rate\":").append(WaveReportFormat.rate(now.firstPassProcessedRate()))
+                .append(",\"qualified_rate\":").append(WaveReportFormat.rate(now.firstPassQualifiedRate()))
                 .append(",\"unknown\":").append(now.firstPassUnknown).append("},")
                 .append("\n  \"known_scar\":{\"recurrences\":").append(now.recurrences)
                 .append(",\"assessed\":").append(now.recurrenceAssessed)
-                .append(",\"rate\":").append(rate(now.recurrenceRate())).append("},")
+                .append(",\"rate\":").append(WaveReportFormat.rate(now.recurrenceRate())).append("},")
                 .append("\n  \"prevention\":{\"pre_candidate_milestones\":")
                 .append(now.preCandidateMilestones).append(",\"pre_candidate_events\":")
                 .append(now.preCandidateEvents).append(",\"pre_runtime_milestones\":")
@@ -98,31 +97,38 @@ final class WaveSelfImprovement {
                 .append("\n  \"rejections\":").append(now.rejectionsJson()).append(',')
                 .append("\n  \"recovery\":{\"revalidation_attempted\":")
                 .append(now.revalidationAttempted).append(",\"revalidated\":")
-                .append(now.revalidated).append(",\"rate\":").append(rate(now.recoveryRate()))
+                .append(now.revalidated).append(",\"rate\":").append(WaveReportFormat.rate(now.recoveryRate()))
                 .append(",\"correctly_anticipated\":").append(now.correctlyAnticipated)
                 .append(",\"historical_equivalent_relaunches\":")
                 .append(now.historicalEquivalentRelaunches)
                 .append(",\"equivalent_blocked_by_new_check\":")
                 .append(now.equivalentBlockedByCheck).append("},")
+                .append("\n  \"cohort\":{\"total\":").append(now.total)
+                .append(",\"terminal\":").append(now.terminal)
+                .append(",\"qualified_integrated\":").append(now.integrated)
+                .append(",\"rejected_registered\":").append(now.registeredRejected)
+                .append("},")
                 .append("\n  \"receipt_time_seconds\":{\"count\":").append(now.receiptCount)
-                .append(",\"median\":").append(decimal(now.medianReceipt))
-                .append(",\"p95\":").append(decimal(now.p95Receipt)).append("},")
+                .append(",\"median\":").append(WaveReportFormat.decimal(now.medianReceipt))
+                .append(",\"p95\":").append(WaveReportFormat.decimal(now.p95Receipt)).append("},")
                 .append("\n  \"safety\":{\"dirty\":").append(now.dirty)
                 .append(",\"stranded\":").append(now.stranded)
+                .append(",\"retryable\":").append(now.retryable).append(",\"owned_retryable\":")
+                .append(now.ownedRetryable).append(",\"unowned_retryable\":").append(now.unownedRetryable)
                 .append(",\"inexact_qualified_receipts\":").append(now.inexactQualified)
                 .append(",\"false_promotions\":").append(now.falsePromotions).append("},")
                 .append("\n  \"delta\":{\"qualified\":").append(now.qualified - prior.qualified)
                 .append(",\"first_pass_processed_rate\":")
-                .append(rate(now.firstPassProcessedRate() - prior.firstPassProcessedRate()))
+                .append(WaveReportFormat.rate(now.firstPassProcessedRate() - prior.firstPassProcessedRate()))
                 .append(",\"recurrence_rate\":")
-                .append(rate(now.recurrenceRate() - prior.recurrenceRate()))
+                .append(WaveReportFormat.rate(now.recurrenceRate() - prior.recurrenceRate()))
                 .append(",\"median_receipt_seconds\":")
-                .append(decimal(now.medianReceipt - prior.medianReceipt)).append("},")
+                .append(WaveReportFormat.decimal(now.medianReceipt - prior.medianReceipt)).append("},")
                 .append("\n  \"moving_window\":{\"waves\":")
                 .append(previous == null ? 1 : 2).append(",\"first_pass_processed_rate\":")
-                .append(rate((now.firstPassProcessedRate() + prior.firstPassProcessedRate())
+                .append(WaveReportFormat.rate((now.firstPassProcessedRate() + prior.firstPassProcessedRate())
                         / (previous == null ? 1 : 2))).append(",\"recurrence_rate\":")
-                .append(rate((now.recurrenceRate() + prior.recurrenceRate())
+                .append(WaveReportFormat.rate((now.recurrenceRate() + prior.recurrenceRate())
                         / (previous == null ? 1 : 2))).append("},")
                 .append("\n  \"pareto\":").append(now.paretoJson()).append(',')
                 .append("\n  \"milestones\":").append(now.milestonesJson()).append(',')
@@ -156,7 +162,7 @@ final class WaveSelfImprovement {
             text.append("{\"scar\":\"").append(entry.getKey()).append("\",\"check_id\":\"")
                     .append(control.id()).append("\",\"version\":").append(control.version())
                     .append(",\"type\":\"").append(control.type()).append("\",\"evidence\":\"")
-                    .append(escape(control.evidence())).append("\"}");
+                    .append(WaveReportFormat.escape(control.evidence())).append("\"}");
         });
         return text.append(']').toString();
     }
@@ -180,13 +186,6 @@ final class WaveSelfImprovement {
     private static String git(Path root, String... arguments) throws Exception {
         return SwarmProcess.output(root, List.of(arguments), 120);
     }
-    private static String rate(double value) { return String.format(Locale.ROOT, "%.6f", value); }
-    private static String decimal(double value) {
-        return value < 0 ? "-1" : String.format(Locale.ROOT, "%.3f", value);
-    }
-    private static String escape(String value) {
-        return value.replace("\\", "\\\\").replace("\"", "\\\"");
-    }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);
     }
@@ -195,9 +194,10 @@ final class WaveSelfImprovement {
         final List<WaveCensus.Row> rows;
         final Map<String, Integer> dispositions = new LinkedHashMap<>(), rejectionClasses = new HashMap<>();
         final Map<String, Integer> scars = new HashMap<>();
-        int total, processed, qualified, rejected, integrated, firstPass, firstPassUnknown;
+        int total, processed, terminal, qualified, rejected, integrated, firstPass, firstPassUnknown;
         int recurrences, recurrenceAssessed, preCandidateMilestones, preCandidateEvents;
-        int preRuntimeMilestones, dirty, stranded, blockers, inexactQualified, falsePromotions;
+        int preRuntimeMilestones, dirty, stranded, hardBlockers, retryable, ownedRetryable;
+        int unownedRetryable, inexactQualified, falsePromotions;
         int registeredRejected, revalidationAttempted, revalidated, correctlyAnticipated, receiptCount;
         int registryEntries, historicalEquivalentRelaunches, equivalentBlockedByCheck;
         double medianReceipt = -1, p95Receipt = -1;
@@ -216,9 +216,15 @@ final class WaveSelfImprovement {
             for (WaveCensus.Row row : rows) {
                 value.dispositions.merge(row.state(), 1, Integer::sum);
                 if (row.processed()) value.processed++;
+                if (row.retryable()) {
+                    value.retryable++;
+                    if (row.ownedRetryable()) value.ownedRetryable++;
+                    else value.unownedRetryable++;
+                }
                 if (row.qualified()) {
                     value.qualified++; if (row.integrated()) value.integrated++;
                     if (!row.receiptExact()) value.inexactQualified++;
+                    if (row.integrated() && row.receiptExact()) value.terminal++;
                 }
                 if (row.firstPass()) value.firstPass++;
                 else if (row.qualified() && !WaveCensus.has(row.body(), "first_pass")) value.firstPassUnknown++;
@@ -235,14 +241,15 @@ final class WaveSelfImprovement {
                     if (entry != null) {
                         value.registeredRejected++; value.rejectionClasses.merge(entry.classification(), 1,
                                 Integer::sum); value.scars.merge(entry.scar(), 1, Integer::sum);
+                        value.terminal++;
                         if (entry.revalidationApproved()) value.revalidationAttempted++;
                     }
                 }
             }
             value.dirty = value.dispositions.getOrDefault("DIRTY_SUSPENDED", 0);
             value.stranded = value.dispositions.getOrDefault("STRANDED", 0);
-            value.blockers = value.dirty + value.stranded + value.dispositions.getOrDefault("FAILED_GATE", 0)
-                    + value.dispositions.getOrDefault("RETRYABLE", 0);
+            value.hardBlockers = value.dirty + value.stranded
+                    + value.dispositions.getOrDefault("FAILED_GATE", 0);
             Collections.sort(times); value.receiptCount = times.size();
             if (!times.isEmpty()) {
                 int middle = times.size() / 2;
@@ -260,7 +267,7 @@ final class WaveSelfImprovement {
         }
         int cleanDelta(Metrics prior) { return processed - prior.processed - (recurrences - prior.recurrences); }
         boolean newSystemic(Metrics prior) {
-            return blockers > 0 || recurrences > prior.recurrences
+            return hardBlockers > 0 || unownedRetryable > 0 || retryable > prior.retryable
                     || rejectionClasses.getOrDefault("harness-process-defect", 0)
                     > prior.rejectionClasses.getOrDefault("harness-process-defect", 0);
         }

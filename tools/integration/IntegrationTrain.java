@@ -37,6 +37,11 @@ public final class IntegrationTrain {
             candidates.add(inspect(base, specification, parsed.reconcile));
         if (!parsed.reconcile) verifyOwnership(candidates);
         verifyPairwiseMerges(candidates);
+        if (parsed.readyOnly || !parsed.planOnly) verifyReadiness(base, candidates, parsed.reconcile);
+        if (parsed.readyOnly) {
+            System.out.println("integration train readiness passed: candidates=" + candidates.size());
+            return;
+        }
         if (!parsed.planOnly) verifyCandidates(base, candidates, parsed.reconcile);
         writeReport(base, candidates, !parsed.planOnly, parsed.reconcile);
         triage(parsed.reconcile ? candidates.get(0).head : base);
@@ -72,13 +77,30 @@ public final class IntegrationTrain {
         if (reliabilityFix && paths.stream().anyMatch(IntegrationTrain::runtimeSurface))
             require(paths.stream().anyMatch(path -> path.matches("[.]csm/nya/scars/NYA-[A-Z0-9]+[.]toml")),
                     reference + " corrects a runtime fixture/flake without a scoped NYA scar");
-        if (reconcile) return new Candidate(id, reference, head, paths);
+        String tree = git(root, "show", "-s", "--format=%T", head).trim();
+        if (reconcile) return new Candidate(id, reference, head, tree, paths);
         require(paths.stream().anyMatch(path -> path.startsWith("smokes/" + id + "/")),
                 reference + " does not own smokes/" + id + "/");
         for (String path : paths) require(!COORDINATOR_FILES.contains(path)
                         && !path.startsWith("changelog/"),
                 reference + " modifies coordinator-owned " + path);
-        return new Candidate(id, reference, head, paths);
+        return new Candidate(id, reference, head, tree, paths);
+    }
+
+    private void verifyReadiness(String base, List<Candidate> candidates, boolean reconcile)
+            throws Exception {
+        Map<String, Path> worktrees = worktrees();
+        for (Candidate candidate : candidates) {
+            Path worktree = worktrees.get(candidate.head);
+            require(worktree != null, "no registered worktree at " + shortSha(candidate.head));
+            List<String> command = List.of(javaTool(), root.resolve(
+                    "tools/integration/IntegrationTrainReadiness.java").toString(), base,
+                    candidate.id, candidate.reference, candidate.head, candidate.tree,
+                    worktree.toString(), Boolean.toString(reconcile));
+            Process process = new ProcessBuilder(command).directory(root.toFile()).inheritIO().start();
+            require(process.waitFor(10, TimeUnit.MINUTES) && process.exitValue() == 0,
+                    "train readiness failed for " + candidate.reference);
+        }
     }
 
     private static void verifyOwnership(List<Candidate> candidates) {
@@ -224,12 +246,12 @@ public final class IntegrationTrain {
         if (!condition) throw new IllegalStateException(message);
     }
 
-    private record Candidate(String id, String reference, String head, List<String> paths) {}
+    private record Candidate(String id, String reference, String head, String tree, List<String> paths) {}
 
-    private record Arguments(String base, boolean planOnly, boolean reconcile,
+    private record Arguments(String base, boolean planOnly, boolean readyOnly, boolean reconcile,
             List<String> candidates) {
         static Arguments parse(String[] arguments) {
-            String base = "HEAD"; boolean planOnly = false, reconcile = false;
+            String base = "HEAD"; boolean planOnly = false, readyOnly = false, reconcile = false;
             List<String> candidates = new ArrayList<>();
             for (int index = 0; index < arguments.length; index++) {
                 if ("--base".equals(arguments[index]) && index + 1 < arguments.length) base = arguments[++index];
@@ -237,15 +259,17 @@ public final class IntegrationTrain {
                     // Compatibility: qualification is now the default.
                 }
                 else if ("--plan-only".equals(arguments[index])) planOnly = true;
+                else if ("--ready-only".equals(arguments[index])) readyOnly = true;
                 else if ("--reconcile".equals(arguments[index])) reconcile = true;
                 else candidates.add(arguments[index]);
             }
             require(!candidates.isEmpty(),
                     "usage: java tools/integration/IntegrationTrain.java "
-                    + "[--base REF] [--plan-only] [--reconcile] ID=REF...");
+                    + "[--base REF] [--plan-only|--ready-only] [--reconcile] ID=REF...");
+            require(!planOnly || !readyOnly, "--plan-only and --ready-only are mutually exclusive");
             require(!reconcile || candidates.size() == 1,
                     "--reconcile requires exactly one consolidated candidate");
-            return new Arguments(base, planOnly, reconcile, candidates);
+            return new Arguments(base, planOnly, readyOnly, reconcile, candidates);
         }
     }
 }
