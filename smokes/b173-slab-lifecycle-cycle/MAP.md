@@ -12,7 +12,8 @@ login before official Packet14 harvesting removes it and emits its exact histori
 
 The four single-slab cases deliberately share one census subject and its four claims. Their purpose
 is to prove the complete reachable item-metadata family rather than inflate the milestone count.
-The double slab is a separate registered subject and must disassemble to two stone slab items.
+The double slab is a separate registered subject and must disassemble to two distinct dropped-item
+entities, each carrying one stone slab, rather than one count-two stack.
 
 This map does not claim combining two slabs, upper-half placement, collision, recipes, silk touch,
 particles, or native rendering.

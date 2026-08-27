@@ -32,6 +32,7 @@ public final class B173SlabLifecycleSmoke {
     private static BlockLifecycleScenario doubleSlab() {
         return B173LifecycleScenarioFactory.harvestOnSupport("double-stone-slab",
                 "b1.7.3:block/043", "stateful-slab", false, 43, 0, 0, STONE,
-                278, 1, 20, new RemoteItemStack(44, 2, 0));
+                278, 1, 20, new RemoteItemStack(44, 1, 0),
+                new RemoteItemStack(44, 1, 0));
     }
 }
