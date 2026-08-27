@@ -41,12 +41,15 @@ final class SharedHelperPinCheck {
         if (lock.getProperty("aero_parser.prior_sha256") != null) {
             String id = required(lock, "aero_parser.anchor");
             SmokeDiscovery.Entry smoke = SmokeDiscovery.require(root, id);
-            SmokePins anchorPins = new SmokePins(root); SmokePins.Entry anchor = anchorPins.match(
-                    id, new SmokeInputFingerprint(root).compute(smoke));
-            require(hash(lock, "aero_parser.prior_sha256") && anchor != null
-                            && anchor.source().equals("executed")
-                            && anchor.evidence().equals(required(lock,
-                                    "aero_parser.evidence_sha256")),
+            String current = new SmokeInputFingerprint(root).compute(smoke);
+            SmokePins anchorPins = new SmokePins(root);
+            SmokePins.Entry anchor = anchorPins.match(id, current);
+            String evidence = required(lock, "aero_parser.evidence_sha256");
+            boolean exact = anchor != null && anchor.source().equals("executed")
+                    && anchor.evidence().equals(evidence);
+            boolean successor = anchor != null && anchor.evidence().equals(evidence)
+                    && TrainPinCheck.carriesCurrent(train, id, anchor, current);
+            require(hash(lock, "aero_parser.prior_sha256") && (exact || successor),
                     "shared Aero parser repair proof drift");
         }
         int refreshed = Integer.parseInt(lock.getProperty("refresh.count", "0"));
