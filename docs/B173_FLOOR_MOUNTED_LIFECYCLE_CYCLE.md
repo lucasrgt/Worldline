@@ -12,4 +12,4 @@ DataDrivenCycle compiles the reusable lifecycle-family harness and six caller-ow
 
 Expected signal: `provider=b1.7.3-server-lifecycle,family=floor-mounted,rows=6,passed=6,layers=U-U-U-A+U-U-U-A+U-U-U-A+U-U-U-A+U-U-U-A+U-U-U-A,reload=FRESH_LOGINx12,evidence=efdca2010d1db626b244db57d49ed29e4e0e044139281364bf1921e5f608f118,isolation=6-fresh-worlds`.
 
-Frozen semantic SHA-256: `845c8dd109cbdb9218c9687c6cceb3a80ec44d141b19cd98f2d8e0c4034b4121`.
+Frozen semantic SHA-256: `c94855576d5a08840f09ede8ce23593d29ac76868f88c97018dd615f0d80d8b0`.

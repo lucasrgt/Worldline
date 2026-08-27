@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=b173-floor-mounted-lifecycle-cycle -->
 <!-- nonclaims=orientation-domain,redstone-activation,support-removal,light-propagation,native-render -->
-<!-- frozen-trace=845c8dd109cbdb9218c9687c6cceb3a80ec44d141b19cd98f2d8e0c4034b4121 -->
+<!-- frozen-trace=c94855576d5a08840f09ede8ce23593d29ac76868f88c97018dd615f0d80d8b0 -->
 
 # Beta 1.7.3 floor-mounted block lifecycles
 
