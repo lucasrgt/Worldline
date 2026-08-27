@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 /** Supervises applicable-scar recall and the objective readiness interlock before Candidate Gate. */
 final class SwarmPreCandidate {
@@ -33,6 +34,12 @@ final class SwarmPreCandidate {
         require(id.matches("m[0-9]+-[a-z0-9-]+") && base.matches("[0-9a-f]{40}"),
                 "invalid pre-Candidate identity");
         Path root = Path.of("").toAbsolutePath().normalize();
+        Path preflightPath = root.resolve(".worldline/reports/swarm/preflight-" + id + ".json");
+        require(Files.isRegularFile(preflightPath), "missing supervised preflight");
+        String preflight = Files.readString(preflightPath, StandardCharsets.UTF_8);
+        require(field(preflight, "id", id) && field(preflight, "base", base)
+                && field(preflight, "head", base) && field(preflight, "status", "PASS"),
+                "pre-Candidate base differs from the supervised preflight");
         RejectedContractCheck.requireAllowed(root, id, goal);
         Properties descriptor = new Properties();
         try (var reader = Files.newBufferedReader(root.resolve("smokes").resolve(id)
@@ -130,6 +137,17 @@ final class SwarmPreCandidate {
         }
         require(count > 0, "NYA scar store is empty");
         return count;
+    }
+    static void selfTest() {
+        String base = "a".repeat(40);
+        String exact = "{\"id\":\"m1-contract\",\"base\":\"" + base
+                + "\",\"head\":\"" + base + "\",\"status\":\"PASS\"}";
+        require(field(exact, "base", base) && !field(exact, "base", "b".repeat(40)),
+                "pre-Candidate exact-base matcher drifted");
+    }
+    private static boolean field(String json, String name, String value) {
+        return Pattern.compile("\\\"" + Pattern.quote(name) + "\\\"\\s*:\\s*\\\""
+                + Pattern.quote(value) + "\\\"").matcher(json).find();
     }
     private static void require(boolean value, String message) {
         if (!value) {

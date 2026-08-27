@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M10BA6CC2HS5ZY30G89NPKVP"
+title = "Bind pre-Candidate readiness to its supervised preflight base"
+lesson = "SwarmLoop pre-candidate must reject before recall when its requested base differs from the exact PASS preflight base and head. CandidateReadiness derives its manifest base from that preflight, so accepting a newer CLI base while reading an older preflight can emit apparently fresh readiness with stale authority."
+scope = [
+    "tools/integration/SwarmPreCandidate.java",
+    "tools/integration/SwarmLoop.java",
+    "docs/ENGINEERING_WORKFLOW.md",
+]
+tags = [
+    "opencode",
+    "readiness",
+    "control-base",
+]
+created_at = "2026-08-27T00:53:25Z"
+
+[[occurrences]]
+occurred_at = "2026-08-27T00:53:25Z"
+source = "M664 and M665 at HEAD f3b7533ccd379d62340987b9b7ffc24152c5a946 accepted pre-candidate --base f3b7533c but emitted readiness.base=a60df6033619f0dd5e22c793967de28999276afd; M664 frozen manifest=52292776d941666d241e032c3ac47d6bafd3ffe150790779d6b006f1efdd10be current/f3=ff6ede; M665 frozen manifest=4bd15f7e339b3b4baee019c4af1dd51282b6486519f2624a3f945d6d639ed545 current/f3=8adfcc"
+reported_by = "codex:m664_m665_readiness_audit"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "f3b7533cc"

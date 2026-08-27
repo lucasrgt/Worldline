@@ -1,0 +1,22 @@
+schema = 1
+id = "NYA-01M10B475C26QWT6GEP9Y4T11K"
+title = "Preserve distinct control-migration history bases"
+lesson = "A preserved worker checkpoint may have an archive and preflight bound to one authorized base while its last completed supervised receipt is bound to a later control base. Validate and seal archive_base, preflight_base, and receipt_base independently, require their exact ancestry into the new control base, and never collapse them into one old-base value or fabricate replacement evidence."
+scope = [
+    "tools/integration/OxAlphaControlMigration.java",
+    "docs/ENGINEERING_WORKFLOW.md",
+]
+tags = [
+    "opencode",
+    "control-base",
+    "evidence",
+]
+created_at = "2026-08-27T00:50:09Z"
+
+[[occurrences]]
+occurred_at = "2026-08-27T00:50:09Z"
+source = "M664 and M665 qualify attempt2 receipts base=876b0e0c24832086f01aa88951ef109408a4be3b; preflight/archive base=a60df6033619f0dd5e22c793967de28999276afd; migration target=f3b7533ccd379d62340987b9b7ffc24152c5a946; M664 archive sha256=4b57d157d0c7d742b6c2b2351f5fe3b3efcc3c9fc9c1209f2a0f4573e5c8a523; M665 archive sha256=49b0ac2cd1373992ab3b3f197d9c46f774620339761af0aca09c12e72f4bc906"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "f3b7533cc"

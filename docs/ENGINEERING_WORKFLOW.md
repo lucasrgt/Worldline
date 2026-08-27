@@ -80,6 +80,9 @@ branch and worktree to the new clean base, and run `OxAlphaControlMigration`. It
 receipt, archive hash, milestone ID, session, and ancestry, then repeats CSM context and both
 supervision and control-base recall before issuing the replacement preflight. Reapply the archived
 checkpoint only after this PASS; the milestone ID and OpenCode session remain unchanged.
+When a preserved checkpoint crossed an earlier control-base migration, pass its independently
+sealed `--archive-base`, `--preflight-base`, and `--receipt-base`. Each must be an exact ancestor in
+the archived progression; collapsing different historical identities into one SHA fails closed.
 The launcher closes the child's stdin pipe immediately after creation so non-interactive OpenCode
 observes EOF and creates a session. Its self-test fails if a child can remain blocked on stdin.
 After an archived selected-provider quota failure, the supervisor may set
@@ -100,7 +103,8 @@ correction occur in the next supervised attempt, preventing cheap workers from c
 read steps or editing after frozen Gate evidence.
 
 Before Candidate Gate, the supervisor runs `SwarmLoop pre-candidate` against the same authorized
-base and goal. It recalls each applicable scar separately, rejects stale generated narratives,
+base and goal. The command rejects a CLI base that differs from the exact PASS preflight base/head
+before recall or readiness can run. It recalls each applicable scar separately, rejects stale generated narratives,
 lane-census drift, semantic maps missing the exact descriptor signal, packed control bodies, long
 smoke lines, scaffold markers, and imports from a sibling milestone's private smoke sources. The
 same readiness phase executes the Candidate smoke-statement ceiling before freezing its manifest;
