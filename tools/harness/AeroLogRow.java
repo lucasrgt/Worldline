@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 /** Strict parser for the common non-negative Aero frame vocabulary. */
-final class AeroLogRow {
+public final class AeroLogRow {
     private static final List<String> TIMINGS = List.of(
             "frameMs", "compileChunksMs", "compileChunksMaxMs", "gcTimeDeltaMs");
     private static final List<String> COUNTERS = List.of("compileChunksCalls",
@@ -14,7 +14,7 @@ final class AeroLogRow {
 
     private AeroLogRow(Map<String, String> fields) { this.fields = fields; }
 
-    static AeroLogRow parse(String row) {
+    public static AeroLogRow parse(String row) {
         require(row.startsWith("[Aero_") && row.indexOf(']') > 6, "invalid Aero row type");
         Map<String, String> fields = new HashMap<>();
         for (String token : row.substring(row.indexOf(']') + 1).trim().split(" +")) {
@@ -26,7 +26,7 @@ final class AeroLogRow {
         AeroLogRow parsed = new AeroLogRow(Map.copyOf(fields)); parsed.validate(); return parsed;
     }
 
-    long whole(String name) {
+    public long whole(String name) {
         try { return Long.parseLong(required(name)); }
         catch (NumberFormatException error) {
             throw new IllegalStateException("invalid Aero counter " + name, error);
