@@ -44,7 +44,9 @@ family then upgrades 24 already-verified sand, gravel, snow-layer, snow-block, c
 claims from internal automation to `PUBLIC_TESTKIT`, including exact one-versus-four entity drop
 multiplicity. A curated public random-tick policy subsystem adds seven new claims for grass,
 saplings, leaves, fire, farmland, redstone ore, and ice. The census now contains 321 verified
-claims (30.40%) and leaves 735 unknown. Existing smoke evidence is
+claims. A causally isolated neighbor-response subsystem adds seven more for falling sand and gravel,
+powered rail, torch, wooden door, cactus, and sugar cane. The census now contains 328 verified
+claims (31.06%) and leaves 728 unknown. Existing smoke evidence is
 reusable input, but it is never promoted automatically: its subject, action, context, observable,
 oracle, signature, and automation surface must be curated first.
 
@@ -85,6 +87,7 @@ additional verified claims were required; the solid and mineral public matrices 
 the empty-workstation family reduces it to 740, and the static self-drop family reduces it to 730.
 The gold-shovel harvest family raises public executability rather than the verified numerator, so
 the target gap correctly remained 730; the curated random-tick policy subsystem reduces it to 723.
+The public neighbor-response subsystem reduces it again to 716.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
