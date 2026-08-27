@@ -44,7 +44,7 @@ public final class B173StateDomainScenarioFactory {
             steps.add(BlockStateDomainStep.place("place-face-" + direction, support, BlockFace.UP,
                     yaw[direction], 0F, Arrays.asList(
                             new BlockStateObservation(lower, new BlockState(64, direction)),
-                            new BlockStateObservation(upper, new BlockState(64, direction + 12)))));
+                            new BlockStateObservation(upper, new BlockState(64, direction + 8)))));
         }
         for (int direction = 0; direction < 4; direction++) {
             BlockPosition lower = BlockFace.UP.adjacent(
@@ -53,7 +53,7 @@ public final class B173StateDomainScenarioFactory {
             steps.add(BlockStateDomainStep.activate("open-face-" + direction, lower, BlockFace.UP,
                     Arrays.asList(
                             new BlockStateObservation(lower, new BlockState(64, direction + 4)),
-                            new BlockStateObservation(upper, new BlockState(64, direction + 8)))));
+                            new BlockStateObservation(upper, new BlockState(64, direction + 12)))));
         }
         return new BlockStateDomainScenario("wooden-door-complete-metadata",
                 plan.caseFor(subject, "state-domain"),

@@ -37,6 +37,9 @@ public final class B173ServerStateDomainProviderTest {
                 && door.finalStates().values().contains(new BlockState(64, 12))
                 && door.finalStates().values().contains(new BlockState(64, 15)),
                 "door final open-state grid drifted");
+        require(door.steps().get(0).observations().get(1).state().equals(new BlockState(64, 8))
+                && door.steps().get(4).observations().get(1).state().equals(new BlockState(64, 12)),
+                "door upper-half closed/open bit routing drifted");
         Map<String, String> options = new LinkedHashMap<String, String>();
         options.put(BlockStateDomainPlan.PLACEMENT_SLOT_OPTION, "1:37:324:4:0");
         B173StateDomainLoadout loadout = B173StateDomainLoadout.from(new TestRuntimeRequest(
