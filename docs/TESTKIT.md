@@ -279,6 +279,8 @@ Family rows carry an exact post-break tool stack, including valid no-damage outc
 shears used to break placed white wool.
 The scenario factory ships with the provider extension; the family executor ships with the
 runner, so the provider never depends on runner implementation classes.
+Runner compatibility is requalified through `testkit-cycle`, the M7-M9 mod/testing chain, and the
+M620 StationAPI driver before the provider-discovery transport is released.
 
 ### Hooks
 
