@@ -83,8 +83,8 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m67-chest-retrieval` | CARRIED | container-transaction |
 | `m68-aero-multiplayer-login` | CARRIED | aero-runtime-session |
 | `m69-peer-swing` | CARRIED | multiplayer-session |
-| `m70-aero-combat-window` | PENDING | aero-runtime-session |
-| `m71-paired-aero-window` | PENDING | aero-paired-experiment |
+| `m70-aero-combat-window` | CARRIED | aero-runtime-session |
+| `m71-paired-aero-window` | CARRIED | aero-paired-experiment |
 | `m72-aero-server-content` | CARRIED | aero-runtime-session |
 | `m73-paired-aero-content` | CARRIED | aero-paired-experiment |
 | `m74-complete-aero-census` | CARRIED | aero-frame-census |
@@ -160,7 +160,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m144-sticky-piston-pull` | CARRIED | m144-sticky-piston-pull |
 | `m145-two-block-piston` | CARRIED | m145-two-block-piston |
 | `m146-obsidian-piston-rejection` | CARRIED | m146-obsidian-piston-rejection |
-| `m147-piston-push-limit` | PENDING | m147-piston-push-limit |
+| `m147-piston-push-limit` | CARRIED | m147-piston-push-limit |
 | `m148-pig-ai-movement` | CARRIED | m148-pig-ai-movement |
 | `m149-pig-death` | CARRIED | m149-pig-death |
 | `m150-pig-pork-drop` | CARRIED | m150-pig-pork-drop |
@@ -337,7 +337,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m321-gold-armor-crafts` | CARRIED | m321-gold-armor-crafts |
 | `m322-diamond-armor-crafts` | CARRIED | m322-diamond-armor-crafts |
 | `m323-iron-tool-crafts` | CARRIED | m323-iron-tool-crafts |
-| `m324-furnace-rest-smelts` | PENDING | m324-furnace-rest-smelts |
+| `m324-furnace-rest-smelts` | CARRIED | m324-furnace-rest-smelts |
 | `m325-navigation-crafts` | CARRIED | m325-navigation-crafts |
 | `m326-vehicle-crafts` | CARRIED | m326-vehicle-crafts |
 | `m327-food-crafts` | CARRIED | m327-food-crafts |
@@ -351,7 +351,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m335-cake-slice-set` | CARRIED | m335-cake-slice-set |
 | `m336-slab-meta-crafts` | CARRIED | m336-slab-meta-crafts |
 | `m337-utility-item-crafts` | CARRIED | m337-utility-item-crafts |
-| `m338-furnace-fuel-set` | PENDING | m338-furnace-fuel-set |
+| `m338-furnace-fuel-set` | CARRIED | m338-furnace-fuel-set |
 | `m339-sapling-growth-set` | CARRIED | m339-sapling-growth-set |
 | `m340-redstone-input-set` | CARRIED | m340-redstone-input-set |
 | `m341-repeater-delay-set` | CARRIED | m341-repeater-delay-set |
@@ -383,7 +383,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m367-piston-motion-set` | CARRIED | m367-piston-motion-set |
 | `m368-more-dye-wool-crafts` | CARRIED | m368-more-dye-wool-crafts |
 | `m369-cake-full-eat-set` | CARRIED | m369-cake-full-eat-set |
-| `m370-remaining-furnace-smelts` | PENDING | m370-remaining-furnace-smelts |
+| `m370-remaining-furnace-smelts` | CARRIED | m370-remaining-furnace-smelts |
 | `m371-machine-block-crafts` | CARRIED | m371-machine-block-crafts |
 | `m372-placeable-item-crafts` | CARRIED | m372-placeable-item-crafts |
 | `m373-milk-bucket-set` | CARRIED | m373-milk-bucket-set |
@@ -513,7 +513,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m556-rs-nor-latch-set` | CARRIED | Rs nor latch set |
 | `m559-double-extender-set` | CARRIED | Double extender set |
 | `m560-portal-scale-set` | CARRIED | Portal scale set |
-| `m563-nether-exit-create-set` | PENDING | Nether exit create set |
+| `m563-nether-exit-create-set` | CARRIED | Nether exit create set |
 | `m566-grass-spread-set` | CARRIED | Grass spread set |
 | `m567-bed-spawn-set` | CARRIED | Bed spawn set |
 | `m569-spawner-delay-set` | CARRIED | Spawner delay set |
@@ -599,7 +599,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m664-flowing-water-freeze` | CARRIED | Flowing-water freeze boundary |
 | `m665-leaf-support-distance` | CARRIED | leaf support distance |
 | `m702-powered-rail-slope-propagation` | CARRIED | powered rail slope propagation |
-| `b173-lifecycle-provider-cycle` | PENDING | official Beta 1.7.3 public block lifecycle provider |
+| `b173-lifecycle-provider-cycle` | EXECUTED | official Beta 1.7.3 public block lifecycle provider |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
@@ -610,5 +610,5 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `redstone-repeater-delay` | CARRIED | redstone-repeater-delay |
 | `redstone-repeater-delays` | CARRIED | redstone-repeater-delays |
 | `redstone-wire-power` | CARRIED | redstone-wire-power |
-| `seed-atlas` | PENDING | seed-atlas |
+| `seed-atlas` | CARRIED | seed-atlas |
 | `ui-export` | CARRIED | ui-export |
