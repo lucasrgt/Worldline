@@ -68,6 +68,44 @@ final class SupportFaceTestKitPinCheck {
                 + " carried proofs, " + anchors + " exact anchors");
     }
 
+    static boolean transportsFile(Path root, String relative, String priorSha256) {
+        try {
+            Properties lock = NeighborTestKitPinMigration.load(
+                    root.resolve("smokes/support-face-testkit-migration.lock"));
+            int files = integer(lock, "file.count");
+            for (int index = 0; index < files; index++) {
+                String stem = "file." + index + ".";
+                if (!relative.equals(lock.getProperty(stem + "path"))) continue;
+                return priorSha256.equals(lock.getProperty(stem + "prior_sha256"))
+                        && SupportFaceTestKitPinMigration.digest(
+                                Files.readAllBytes(root.resolve(relative)))
+                                .equals(lock.getProperty(stem + "current_sha256"));
+            }
+            return false;
+        } catch (Exception error) {
+            return false;
+        }
+    }
+
+    static boolean transportsSmoke(Path root, String id, String priorFingerprint,
+            String evidenceSha256, String currentFingerprint) {
+        try {
+            Properties lock = NeighborTestKitPinMigration.load(
+                    root.resolve("smokes/support-face-testkit-migration.lock"));
+            int carried = integer(lock, "carried.count");
+            for (int index = 0; index < carried; index++) {
+                String stem = "smoke." + index + ".";
+                if (!id.equals(lock.getProperty(stem + "id"))) continue;
+                return priorFingerprint.equals(lock.getProperty(stem + "prior_fingerprint"))
+                        && evidenceSha256.equals(lock.getProperty(stem + "evidence_sha256"))
+                        && currentFingerprint.equals(lock.getProperty(stem + "current_fingerprint"));
+            }
+            return false;
+        } catch (Exception error) {
+            return false;
+        }
+    }
+
     private static void verifyFile(Path root, Properties lock, int index) throws Exception {
         String stem = "file." + index + ".", relative = required(lock, stem + "path");
         require(relative.equals(SupportFaceTestKitPinMigration.FILES.get(index)),

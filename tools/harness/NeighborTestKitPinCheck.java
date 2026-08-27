@@ -23,6 +23,7 @@ final class NeighborTestKitPinCheck {
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); List<SmokeDiscovery.Entry> catalog =
                 SmokeDiscovery.discover(root);
+        Properties train = TrainPinCheck.manifest(root);
         int anchors = integer(lock, "anchor.count");
         NeighborTestKitPinMigration.require(anchors == NeighborTestKitPinMigration.ANCHORS.size(),
                 "neighbor TestKit anchor census drift");
@@ -30,9 +31,17 @@ final class NeighborTestKitPinCheck {
             String stem = "anchor." + index + ".", id = required(lock, stem + "id");
             SmokeDiscovery.Entry smoke = requireSmoke(catalog, id); String current = fingerprints.compute(smoke);
             SmokePins.Entry pin = pins.match(id, current);
-            NeighborTestKitPinMigration.require(pin != null && pin.source().equals("executed")
-                    && current.equals(required(lock, stem + "fingerprint"))
-                    && pin.evidence().equals(required(lock, stem + "evidence_sha256")),
+            String prior = required(lock, stem + "fingerprint");
+            String evidence = required(lock, stem + "evidence_sha256");
+            boolean direct = pin != null && pin.source().equals("executed")
+                    && current.equals(prior) && pin.evidence().equals(evidence);
+            boolean successor = pin != null && pin.source().equals("refactor-equivalent")
+                    && pin.evidence().equals(evidence)
+                    && SupportFaceTestKitPinCheck.transportsSmoke(
+                            root, id, prior, evidence, current);
+            successor |= pin != null && TrainPinCheck.carriesCurrent(
+                    train, id, pin, current);
+            NeighborTestKitPinMigration.require(direct || successor,
                     "neighbor TestKit exact anchor drift: " + id);
         }
         int carried = integer(lock, "carried.count");
@@ -41,9 +50,12 @@ final class NeighborTestKitPinCheck {
             String stem = "smoke." + index + ".", id = required(lock, stem + "id");
             SmokeDiscovery.Entry smoke = requireSmoke(catalog, id); String current = fingerprints.compute(smoke);
             SmokePins.Entry pin = pins.match(id, current);
-            NeighborTestKitPinMigration.require(pin != null
-                    && current.equals(required(lock, stem + "current_fingerprint"))
-                    && pin.evidence().equals(required(lock, stem + "evidence_sha256"))
+            String prior = required(lock, stem + "current_fingerprint");
+            String evidence = required(lock, stem + "evidence_sha256");
+            NeighborTestKitPinMigration.require(pin != null && pin.evidence().equals(evidence)
+                    && (current.equals(prior) || SupportFaceTestKitPinCheck.transportsSmoke(
+                            root, id, prior, evidence, current)
+                            || TrainPinCheck.carriesCurrent(train, id, pin, current))
                     && required(lock, stem + "prior_fingerprint").matches("[0-9a-f]{64}"),
                     "neighbor TestKit carried proof drift: " + id);
         }
@@ -56,8 +68,10 @@ final class NeighborTestKitPinCheck {
         NeighborTestKitPinMigration.require(relative.equals(NeighborTestKitPinMigration.FILES.get(index)),
                 "neighbor TestKit source order drift");
         byte[] current = Files.readAllBytes(root.resolve(relative));
+        String expectedCurrent = required(lock, stem + "current_sha256");
         NeighborTestKitPinMigration.require(NeighborTestKitPinMigration.digest(current)
-                .equals(required(lock, stem + "current_sha256")),
+                .equals(expectedCurrent)
+                || SupportFaceTestKitPinCheck.transportsFile(root, relative, expectedCurrent),
                 "neighbor TestKit current source drift: " + relative);
         byte[] prior = gitShow(root, NeighborTestKitPinMigration.BASE + ":" + relative);
         String expected = required(lock, stem + "prior_sha256");
