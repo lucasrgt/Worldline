@@ -1,6 +1,6 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=b173-wooden-door-state-domain-cycle -->
-<!-- nonclaims=iron-door-redstone-destruction-collision-render -->
+<!-- nonclaims=iron-door,redstone-destruction,collision,render -->
 <!-- frozen-trace=5763b0a43e148f0c572b7e5db300482d939add4eb9be8135829e775651e5edbc -->
 
 # Beta 1.7.3 wooden-door state domain
