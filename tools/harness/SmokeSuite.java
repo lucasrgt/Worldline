@@ -87,9 +87,12 @@ final class SmokeSuite {
                 try {
                     durations.put(smoke.id, futures.get(index).get());
                 } catch (ExecutionException error) {
-                    if (failure == null) failure = new IllegalStateException(
-                            "pooled smoke failed: " + smoke.id, error.getCause());
-                    pool.shutdownNow();
+                    if (failure == null) {
+                        failure = new IllegalStateException(
+                                "pooled smoke failed: " + smoke.id, error.getCause());
+                        for (int rest = futures.size() - 1; rest > index; rest--)
+                            futures.get(rest).cancel(true);
+                    }
                 } catch (CancellationException error) {
                     if (failure == null) failure = new IllegalStateException(
                             "pooled smoke was cancelled: " + smoke.id);

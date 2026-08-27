@@ -1,0 +1,4 @@
+smokes/qualification-evidence/m9-scenario-minimization.proof:3 [NYA-01M0Q8DPX3AYBXGDR2G9YXBXMD] The executed proof fingerprint is directly rewritten while its official observation hash remains unchanged; the diff supplies no tracked refactor-equivalent proof envelope required for migrating a changed computed fingerprint.
+  +fingerprint=31b869f7d9bd1bdca9dd608e3a53be89cda5b1faf3aba6601ecedfc5535e2cad
+tools/harness/SmokeSuite.java:91 [NYA-01M0QN66R90HYV8X0WJH0V9FF9] The pooled coordinator initiates blanket shutdown rather than terminating its running descendants in reverse order; awaiting executor termination later confirms only the worker pool has stopped, not each spawned descendant as required by the scar.
+                      pool.shutdownNow();
