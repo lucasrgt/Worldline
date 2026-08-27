@@ -8,7 +8,6 @@ import java.util.HexFormat;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -95,7 +94,7 @@ final class DataDrivenCycleMigration {
     void refresh() throws Exception {
         Path manifestPath = root.resolve("smokes/data-driven-migration.lock");
         Properties manifest = load(manifestPath);
-        require(reviewedRefresh(manifest),
+        require(DataDrivenRefreshEvidence.reviewed(root, manifest),
                 "stage the reviewed runner change or commit a clean shared-support change before refreshing pins");
         SmokePins existing = new SmokePins(root);
         Properties train = TrainPinCheck.manifest(root);
@@ -116,7 +115,7 @@ final class DataDrivenCycleMigration {
             String recordedPlan = manifest.getProperty(stem + "plan_sha256");
             SmokePins.Entry newPlanPin = null;
             if (recordedPlan == null) {
-                require(unchangedMilestone(smoke.id),
+                require(DataDrivenRefreshEvidence.unchangedMilestone(root, smoke.id),
                         "unregistered generic plan changed with the shared runner: " + smoke.id);
                 SmokePins.Entry prior = cache.availablePin(smoke);
                 boolean milestoneProof = false;
@@ -147,14 +146,15 @@ final class DataDrivenCycleMigration {
                 continue;
             }
             if (local == null && !current.equals(existingPin.fingerprint()) && !sharedPlanRefactor) {
-                FixtureRefactor refactor = fixtureRefactor(smoke.id);
+                DataDrivenRefreshEvidence.FixtureRefactor refactor =
+                        DataDrivenRefreshEvidence.fixture(root, smoke.id);
                 if (refactor != null) {
                     fixtureRefactors++; newRefactors++;
                     String key = "refresh.fixture." + fixtureRefactors + ".";
                     manifest.setProperty(key + "id", smoke.id);
-                    manifest.setProperty(key + "path", refactor.path);
-                    manifest.setProperty(key + "prior_sha256", digest(refactor.prior));
-                    manifest.setProperty(key + "current_sha256", digest(refactor.current));
+                    manifest.setProperty(key + "path", refactor.path());
+                    manifest.setProperty(key + "prior_sha256", digest(refactor.prior()));
+                    manifest.setProperty(key + "current_sha256", digest(refactor.current()));
                 } else {
                     List<SmokeSourceRefactor.Row> rows = SmokeSourceRefactor.formatting(root,
                             smoke.id, manifest);
@@ -189,45 +189,6 @@ final class DataDrivenCycleMigration {
                 + " freshly executed, " + importedPlans + " train-imported plans, " + fixtureRefactors
                 + " canonical fixture refactors, " + formattingRefactors
                 + " token-equivalent source refactors");
-    }
-
-    private FixtureRefactor fixtureRefactor(String id) throws Exception {
-        List<String> paths = capture("diff", "--name-only", "HEAD", "--", "smokes/" + id)
-                .lines().filter(value -> !value.isBlank()).toList();
-        if (paths.size() != 1 || !paths.get(0).endsWith(".java")) return null;
-        String path = paths.get(0), prior = capture("show", "HEAD:" + path);
-        String current = Files.readString(root.resolve(path), StandardCharsets.UTF_8);
-        String expected = SharedFixturePatch.rewrite(prior).replace("\r\n", "\n");
-        String normalized = current.replace("\r\n", "\n");
-        return expected.equals(normalized)
-                ? new FixtureRefactor(path, prior, current) : null;
-    }
-
-    private String capture(String... arguments) throws Exception {
-        List<String> command = new ArrayList<>(List.of("git")); command.addAll(List.of(arguments));
-        Process process = new ProcessBuilder(command).directory(root.toFile()).redirectErrorStream(true).start();
-        String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-        require(process.waitFor() == 0, "git command failed: " + String.join(" ", command)); return output;
-    }
-
-    private boolean unchangedMilestone(String id) throws Exception {
-        Process process = new ProcessBuilder("git", "diff", "--quiet", "HEAD", "--",
-                "smokes/" + id).directory(root.toFile()).start();
-        return process.waitFor() == 0;
-    }
-
-    private boolean reviewedRefresh(Properties manifest) throws Exception {
-        if (cleanIndex()) return true;
-        Process worktree = new ProcessBuilder("git", "diff", "--quiet")
-                .directory(root.toFile()).start();
-        Process index = new ProcessBuilder("git", "diff", "--cached", "--quiet")
-                .directory(root.toFile()).start();
-        String recorded = manifest.getProperty("runtime_support_source_sha256", "");
-        String recordedPlan = manifest.getProperty("plan_source_sha256", "");
-        return worktree.waitFor() == 0 && index.waitFor() == 0
-                && (!digest(root.resolve("tools/harness/SmokeSupport.java")).equals(recorded)
-                || !digest(root.resolve("tools/harness/DataDrivenCyclePlan.java"))
-                        .equals(recordedPlan));
     }
 
     private Plan parse(Path source, String text) {
@@ -323,7 +284,6 @@ final class DataDrivenCycleMigration {
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message); }
     private record Migration(Path source, String text, Plan plan, String priorFingerprint, SmokePins.Entry pin) { }
-    private record FixtureRefactor(String path, String prior, String current) { }
     private record Plan(String id, String main, List<String> arguments, List<String> inputs,
             List<String> compileProducts, List<String> runtimeProducts, List<String> prefixes,
             List<String> outputContains, List<String> signalContains, List<String> signalExcludes,
