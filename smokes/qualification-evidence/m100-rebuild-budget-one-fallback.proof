@@ -1,5 +1,5 @@
 schema=1
 id=m100-rebuild-budget-one-fallback
-fingerprint=8ebbaf0477b705ed0e69e458cf366f1c2bfb21b077b9c218b51bc39b9df13d41
+fingerprint=0d8d0e1165ac575451e245858bd98e6ed9e8705afe42546f662a5c1ca765dda7
 observation.sha256=322cccb6a7643bf79357d81d1c8b3ecf2bc0c7bcad170993ebbb01fc7fa8d76b
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m80-natural-membership-rebuild
-fingerprint=3c8779ebe1075329cb6786a86d51f6ae678172cac75847adab0e4fa7919b6900
+fingerprint=c62999fd131defd6c370b37bd8a02096abfaa6038cee60e97fe37f2c70c0e79b
 observation.sha256=3df82b51703daacc031e1f745f86fc7af6678d2da74901eb6c00183915e8a77a
 source=refactor-equivalent
