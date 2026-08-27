@@ -255,7 +255,9 @@ that row and seeds only its placement item and suitable tool; the matrix is not 
 capacity. Each attempt owns a new official-server workspace. The server JAR must be exactly 503100 bytes with
 SHA-256 `033a127e4a25a60b038f15369c89305a3d53752242a1cff11ae964954e79ba4d`.
 The provider rejects mod paths and other seeds rather than pretending its
-fixed arena is general. Empty chest does not claim loaded-container spill.
+fixed arena is general. Direct provider callers may omit `testPath`, but scenario-routed providers
+fail closed unless the runner supplies a known qualified path. Empty chest does not claim
+loaded-container spill.
 
 ### Hooks
 
