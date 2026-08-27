@@ -1,5 +1,5 @@
 schema=1
 id=m450-pigman-anger-set
-fingerprint=10f38389614b2044b428e02155a3c5e51781a95777e5017a94f84a452ebf58d0
+fingerprint=480da663bad8acc19c07352fa3df8b2fc5dc0fcb3e49cc4d71e6fcc403121a2b
 observation.sha256=ae24558c960284894ed1577e583f5fbbdcfd65ebfd4ed48af6687179d2ccf098
 source=refactor-equivalent

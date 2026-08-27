@@ -1,5 +1,5 @@
 schema=1
 id=m578-cactus-adjacent-break-set
-fingerprint=bf142f2b1c8de7e4f5f8930f43d383bb615668d0d9fbcb2280775dd203edf7ae
+fingerprint=da08ed93e8fdea49419becd23f80e2b77b440acaa2480795167d2c20054cbfe0
 observation.sha256=365c30a9a73a90ab5fe68d855a8ef1ccf09168e8b7e1a92aa320492303343573
 source=refactor-equivalent

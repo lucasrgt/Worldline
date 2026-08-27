@@ -1,5 +1,5 @@
 schema=1
 id=m123-cross-chunk-lighting
-fingerprint=f42a871c6cc71c637685bb3415a28a2790cce769c1f6f738af80ce86b6c7d0a6
+fingerprint=39b4977065215e47ddcef9a340babd6f5b548262964c3f4c4ce040764803461e
 observation.sha256=7f93c32c82a360dcdc5c546f69838e8fcbc8a221bf8ad2961bd532876608365a
 source=refactor-equivalent

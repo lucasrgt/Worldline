@@ -1,5 +1,5 @@
 schema=1
 id=m139-water-lava-reaction
-fingerprint=ac8348f23a0ad5b6d7a18e547891146fea83acc376e302ff3596a6f3808cbd8b
+fingerprint=ee805366fa9e5437b37da17604f88a959e076b71e6711bbc0d98d059655a383e
 observation.sha256=1ba936e8c311e4af488c393c17f5f68031f6fbb2c7a8b4ae2831985900fcd326
 source=refactor-equivalent
