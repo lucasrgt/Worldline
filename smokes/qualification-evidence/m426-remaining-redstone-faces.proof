@@ -1,5 +1,5 @@
 schema=1
 id=m426-remaining-redstone-faces
-fingerprint=9fff3c90f516c68f6fdece10029aa69d0295cf9a3b70285adb18fd338cbd5d7f
+fingerprint=25cd3f55f55402f32f340e66118a043685da486638a20fc9152d77dbe21c1971
 observation.sha256=1bb55855bc7d7a3c3f9eef22fd7e235e02c3e5220a782fb29ed29a27bb69b44e
 source=refactor-equivalent

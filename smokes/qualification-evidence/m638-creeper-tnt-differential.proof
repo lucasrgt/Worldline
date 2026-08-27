@@ -1,5 +1,5 @@
 schema=1
 id=m638-creeper-tnt-differential
-fingerprint=ce52f8d9dc76ceb8fc2f6e213a9429a20d30a337cddd137396b8408fb3489c9f
+fingerprint=b068adbef064f97f5a1960547d5d74f95d7adbc174e3a7081557c7cbacdd9e73
 observation.sha256=d55adcac65152410ae183cc7fefa9e79c8bd0a14881103c977973608e26e59bc
 source=refactor-equivalent

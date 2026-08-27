@@ -1,5 +1,5 @@
 schema=1
 id=m46-batch-terminal
-fingerprint=02287f718db1715afe9dc59c48c8d904ebd7e18ad7dc9f3d0c972ef46c6faa8a
+fingerprint=dbb5c65a493767d626b7b0a1f3c472f145bb8009d578c2b819f59db0cb1f904c
 observation.sha256=62f0a6850720c149b9722541c174e9175c33ff1ef113ed1e5962a552ec2bff50
 source=refactor-equivalent

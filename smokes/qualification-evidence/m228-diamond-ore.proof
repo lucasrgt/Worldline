@@ -1,5 +1,5 @@
 schema=1
 id=m228-diamond-ore
-fingerprint=f0ba7bc2678300017349abc84c69167a1016333163870fb70b2b74ae8e68c8b6
+fingerprint=dd7588bea4ee26df9d940d6791ab5e10b7b03805dc1176a4390788d98f00c7df
 observation.sha256=d8899da5d17c18d27351804645eead6a4a792f1d0497886d4bd24a15bedef72b
 source=refactor-equivalent

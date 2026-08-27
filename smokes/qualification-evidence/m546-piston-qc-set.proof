@@ -1,5 +1,5 @@
 schema=1
 id=m546-piston-qc-set
-fingerprint=a8fc49b95feea1bf210ba36355a125d3b0c082be13a360899f5a684b923334da
+fingerprint=69c84ed16d104130d30e3d240e9c0e7aae90a164bb51093f45681a6c28fe5db1
 observation.sha256=10f2cb5507e55026ceafd72d6ab2c74a3ab228aad1924965b9844d149117d989
 source=refactor-equivalent

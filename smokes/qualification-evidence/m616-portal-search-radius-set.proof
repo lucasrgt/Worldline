@@ -1,5 +1,5 @@
 schema=1
 id=m616-portal-search-radius-set
-fingerprint=00682c2d704b797724d0cced61d6236f60f909ac066097e157149f22ddf930aa
+fingerprint=65628aa854052b594f5a031ab6f5e686ee58ba1e482237b2e3c056c2e85beb9e
 observation.sha256=95daef9744bab07db85c0aaf054938cf0d14d9ed821a4dab258b0d6b51ab0d3d
 source=refactor-equivalent

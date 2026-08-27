@@ -1,5 +1,5 @@
 schema=1
 id=m511-sw-redstone-ore-trigger
-fingerprint=48bbb453121f46dcf10dc0583ab44e3b8a8610156afcbfba698ad780713d2cae
+fingerprint=8bed3857077b5f5f7f676bb81bde9657f37bfe99362e8299c4d4fd4badfc6803
 observation.sha256=419100749c15ecc53954dc181ce9bd27403242be9ab0b60dc5cd3778a2a14419
 source=refactor-equivalent

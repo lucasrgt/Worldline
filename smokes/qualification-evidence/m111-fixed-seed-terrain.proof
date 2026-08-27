@@ -1,5 +1,5 @@
 schema=1
 id=m111-fixed-seed-terrain
-fingerprint=b545c305bbaa6ee3ec6f52f7cd0f63543f9b1881c3ec0e526928254ac4c89a6c
+fingerprint=66b308d37ee22e13ae8e32f05078c20727a722cc45705cf0194cd685d04917cf
 observation.sha256=b885d60be98dfb11c60f51a928c0fa9bdda225520187692098587a72e253fa98
 source=refactor-equivalent
