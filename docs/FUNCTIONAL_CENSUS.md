@@ -73,7 +73,10 @@ public TestKit and closes eight new break/drop claims, bringing the census to 39
 (37.69%) and leaving 658 unknown. The slab state lifecycle family then executes all four
 single-slab metadata variants plus the double stone slab. It upgrades four placement/reload claims
 to the public TestKit and closes four break/drop claims, bringing the census to 402 verified claims
-(38.07%) and leaving 654 unknown. Existing smoke evidence is
+(38.07%) and leaving 654 unknown. The neighbor-aware support-dependent plant lifecycle family then
+proves cactus on sand and sugar cane on dirt beside protocol-provisioned still water. It upgrades
+four harvest claims to the public TestKit and closes four placement/reload claims, bringing the
+census to 406 verified claims (38.45%) and leaving 650 unknown. Existing smoke evidence is
 reusable input, but it is never promoted automatically: its subject, action, context, observable,
 oracle, signature, and automation surface must be curated first.
 
@@ -123,6 +126,7 @@ The dirt-flora lifecycle subsystem reduces it again to 662.
 The shaded-mushroom lifecycle subsystem reduces it to 654.
 The deterministic harvest lifecycle subsystem reduces it to 646.
 The slab state lifecycle subsystem reduces it to 642.
+The support-dependent plant lifecycle subsystem reduces it to 638.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
@@ -146,6 +150,10 @@ turning direct `GameWorld.setBlock` mutation into false gameplay evidence. Histo
 Its frozen aggregate provider package executes 26 scenario-routed rows and backs 104 public claims.
 Each row carries bounded immutable fixture options into the runtime, so adding a lifecycle subject
 does not require duplicating that subject in a provider-owned catalog.
+Neighbor-aware rows additionally declare one orthogonal gameplay-provisioned adjacent cell by face,
+state, and inventory slot. The provider builds that precondition through protocol actions, while
+the public fixture verifies it before placement and after both reloads; rows without a neighbor
+retain byte-identical evidence.
 The mineral package reuses `ore` and `mineral-storage` archetypes while keeping obsidian's
 distinct harvest profile explicit. The rail package reuses one `rail` archetype across the three
 flat, unpowered metadata-zero lifecycle rows; slopes, activation, and motion remain separate claims.
