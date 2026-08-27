@@ -205,8 +205,11 @@ final class DataDrivenCycleMigration {
         Process index = new ProcessBuilder("git", "diff", "--cached", "--quiet")
                 .directory(root.toFile()).start();
         String recorded = manifest.getProperty("runtime_support_source_sha256", "");
+        String recordedPlan = manifest.getProperty("plan_source_sha256", "");
         return worktree.waitFor() == 0 && index.waitFor() == 0
-                && !digest(root.resolve("tools/harness/SmokeSupport.java")).equals(recorded);
+                && (!digest(root.resolve("tools/harness/SmokeSupport.java")).equals(recorded)
+                || !digest(root.resolve("tools/harness/DataDrivenCyclePlan.java"))
+                        .equals(recordedPlan));
     }
 
     private Plan parse(Path source, String text) {
