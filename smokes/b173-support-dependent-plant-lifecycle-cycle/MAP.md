@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=b173-support-dependent-plant-lifecycle-cycle -->
 <!-- nonclaims=random-tick-growth,neighbor-invalidation,collision-damage,native-render -->
-<!-- frozen-trace=0000000000000000000000000000000000000000000000000000000000000000 -->
+<!-- frozen-trace=1eb01d29fa7d0e44a0e533f2c5ecd839bb5bc9534df1f05fb88adbe23d0bb1d5 -->
 
 # Beta 1.7.3 support-dependent plant lifecycles
 
@@ -21,4 +21,4 @@ damage, stacked-plant harvest propagation, recipes, particles, or native renderi
 families retain their independent proofs.
 
 Discovery signal:
-`provider=b1.7.3-server-lifecycle,family=support-dependent-plants,rows=2,passed=2,layers=U-U-U-A+U-U-U-A,reload=FRESH_LOGINx4,evidence=0000000000000000000000000000000000000000000000000000000000000000,isolation=2-fresh-worlds`.
+`provider=b1.7.3-server-lifecycle,family=support-dependent-plants,rows=2,passed=2,layers=U-U-U-A+U-U-U-A,reload=FRESH_LOGINx4,evidence=8195254d1e2ba875de99423ec35b90958d583bdd97e4f20ed477b0c7b004831e,isolation=2-fresh-worlds`.
