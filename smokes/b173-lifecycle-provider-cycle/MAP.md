@@ -18,3 +18,6 @@ The empty-chest row does not reproduce the loaded chest spill from M592. The cyc
 wrong-tool rejection, randomized drop distributions, GUI behavior, rendering, chunk unload,
 process restart, and mod loading. `breakTicks` and `observationTicks` are bounded windows, not
 hardness or latency claims.
+
+Frozen signal:
+`provider=b1.7.3-server-lifecycle,rows=3,passed=3,layers=U-U-U-A+U-U-U-A+U-U-U-S,reload=FRESH_LOGINx6,evidence=891bfe5f4d0aae1a4fa53b93bdee0d20c3b5e7c4bf85431b27b671895bdd069d,isolation=3-fresh-worlds`.
