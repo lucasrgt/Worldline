@@ -67,6 +67,15 @@ final class B173LifecycleSupportTest {
                                 new worldline.api.BlockPosition(5, 71, 4))
                         && cane.placementSlot().before().legacyId() == 338,
                 "neighbor-aware lifecycle scenario drifted");
+        BlockLifecycleScenario attached = B173LifecycleScenarioFactory.harvestOnFace(
+                "wall-sign", "b1.7.3:block/068", "support-face-attachment", false,
+                68, 323, 0, 5, new BlockState(1, 0), BlockFace.EAST,
+                280, 0, 1, new RemoteItemStack(323, 1, 0));
+        require(attached.face() == BlockFace.EAST
+                        && attached.target().equals(new worldline.api.BlockPosition(5, 71, 4))
+                        && attached.placementSlot().before().legacyId() == 323
+                        && attached.placedState().equals(new BlockState(68, 5)),
+                "support-face lifecycle scenario drifted");
         Map<String, String> hydratedFixture = new LinkedHashMap<String, String>(fixture);
         hydratedFixture.put(BlockLifecyclePlan.OVERHEAD_STATE_OPTION, "none");
         hydratedFixture.put(BlockLifecyclePlan.NEIGHBOR_STATE_OPTION, "9:0");

@@ -42,7 +42,8 @@ public final class B173LifecycleScenarioFactory {
             BlockState supportState, int tool, int toolAfterDamage, int breakTicks,
             RemoteItemStack... expectedDrops) {
         return harvestInEnvironment(id, subject, archetype, singular, block, placementDamage,
-                block, metadata, supportState, null, null, tool, toolAfterDamage, breakTicks,
+                block, metadata, supportState, null, null, BlockFace.UP,
+                tool, toolAfterDamage, breakTicks,
                 expectedDrops);
     }
 
@@ -52,7 +53,8 @@ public final class B173LifecycleScenarioFactory {
             int breakTicks, RemoteItemStack... expectedDrops) {
         if (overheadState == null) throw new NullPointerException("overheadState");
         return harvestInEnvironment(id, subject, archetype, singular, block, placementDamage,
-                block, metadata, supportState, overheadState, null, tool, toolAfterDamage,
+                block, metadata, supportState, overheadState, null, BlockFace.UP,
+                tool, toolAfterDamage,
                 breakTicks, expectedDrops);
     }
 
@@ -61,7 +63,8 @@ public final class B173LifecycleScenarioFactory {
             int placementDamage, int metadata, BlockState supportState, int tool,
             int toolAfterDamage, int breakTicks, RemoteItemStack... expectedDrops) {
         return harvestInEnvironment(id, subject, archetype, singular, block, placementDamage,
-                placementItem, metadata, supportState, null, null, tool, toolAfterDamage,
+                placementItem, metadata, supportState, null, null, BlockFace.UP,
+                tool, toolAfterDamage,
                 breakTicks, expectedDrops);
     }
 
@@ -72,14 +75,26 @@ public final class B173LifecycleScenarioFactory {
             RemoteItemStack... expectedDrops) {
         if (neighbor == null) throw new NullPointerException("neighbor");
         return harvestInEnvironment(id, subject, archetype, singular, block, placementDamage,
-                placementItem, metadata, supportState, null, neighbor, tool,
+                placementItem, metadata, supportState, null, neighbor, BlockFace.UP, tool,
+                toolAfterDamage, breakTicks, expectedDrops);
+    }
+
+    public static BlockLifecycleScenario harvestOnFace(String id, String subject,
+            String archetype, boolean singular, int block, int placementItem,
+            int placementDamage, int metadata, BlockState supportState, BlockFace face,
+            int tool, int toolAfterDamage, int breakTicks,
+            RemoteItemStack... expectedDrops) {
+        if (face == null) throw new NullPointerException("face");
+        return harvestInEnvironment(id, subject, archetype, singular, block, placementDamage,
+                placementItem, metadata, supportState, null, null, face, tool,
                 toolAfterDamage, breakTicks, expectedDrops);
     }
 
     private static BlockLifecycleScenario harvestInEnvironment(String id, String subject,
             String archetype, boolean singular, int block, int placementDamage,
             int placementItem, int metadata, BlockState supportState, BlockState overheadState,
-            BlockLifecycleNeighbor neighbor, int tool, int toolAfterDamage, int breakTicks,
+            BlockLifecycleNeighbor neighbor, BlockFace face, int tool, int toolAfterDamage,
+            int breakTicks,
             RemoteItemStack... expectedDrops) {
         if (expectedDrops == null) throw new NullPointerException("expectedDrops");
         BlockConformanceProfile profile = new BlockConformanceProfile(subject,
@@ -97,12 +112,12 @@ public final class B173LifecycleScenarioFactory {
                 new RemoteItemStack(tool, 1, 0),
                 new RemoteItemStack(tool, 1, toolAfterDamage));
         if (neighbor == null) return BlockLifecycleScenario.from(id, plan, subject,
-                B173LifecycleArena.SUPPORT, supportState, overheadState, BlockFace.UP,
+                B173LifecycleArena.SUPPORT, supportState, overheadState, face,
                 new BlockState(block, metadata), placementSlot, breakSlot,
                 Arrays.asList(expectedDrops), breakTicks, 40);
         return BlockLifecycleScenario.fromWithNeighbor(id, plan, subject,
                 B173LifecycleArena.SUPPORT, supportState, overheadState, neighbor,
-                BlockFace.UP, new BlockState(block, metadata), placementSlot, breakSlot,
+                face, new BlockState(block, metadata), placementSlot, breakSlot,
                 Arrays.asList(expectedDrops), breakTicks, 40);
     }
 }
