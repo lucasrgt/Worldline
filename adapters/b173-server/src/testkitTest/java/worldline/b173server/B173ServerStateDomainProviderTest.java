@@ -10,7 +10,7 @@ import worldline.testkit.BlockStateDomainPlan;
 import worldline.testkit.BlockStateDomainScenario;
 import worldline.testkit.ConformanceLayer;
 
-/** Static checks for the public state-domain provider and official door row. */
+/** Static checks for the public state-domain provider and official scenario rows. */
 public final class B173ServerStateDomainProviderTest {
     private B173ServerStateDomainProviderTest() { }
 
@@ -52,6 +52,31 @@ public final class B173ServerStateDomainProviderTest {
             require(furnace.domain().contains(new BlockState(61, metadata)),
                     "furnace facing absent from public domain: " + metadata);
         }
+        java.util.List<BlockStateDomainScenario> cardinal =
+                B173StateDomainScenarioFactory.cardinalPlacementFamily();
+        require(cardinal.size() == 7 && cardinal.get(0).subject().endsWith("/023")
+                && cardinal.get(6).subject().endsWith("/091"),
+                "cardinal placement family membership drifted");
+        int states = 0;
+        for (BlockStateDomainScenario scenario : cardinal) {
+            require(scenario.claim().layer() == ConformanceLayer.SINGULAR
+                    && scenario.steps().size() == 4 && scenario.finalStates().size() == 4
+                    && scenario.placementSlot().before().count() == 4,
+                    "cardinal state-domain row drifted: " + scenario.id());
+            states += scenario.domain().size();
+        }
+        require(states == 25, "cardinal placement state count drifted");
+        require(B173StateDomainScenarioFactory.chestPlacementMetadata().domain().equals(
+                java.util.Collections.singletonList(new BlockState(54, 0))),
+                "chest yaw-invariant server metadata drifted");
+        require(B173StateDomainScenarioFactory.woodStairsFacing().domain().equals(
+                java.util.Arrays.asList(new BlockState(53, 2), new BlockState(53, 1),
+                        new BlockState(53, 3), new BlockState(53, 0))),
+                "wood-stairs facing domain drifted");
+        require(B173StateDomainScenarioFactory.pumpkinFacing().domain().equals(
+                java.util.Arrays.asList(new BlockState(86, 2), new BlockState(86, 3),
+                        new BlockState(86, 0), new BlockState(86, 1))),
+                "pumpkin facing domain drifted");
         Map<String, String> options = new LinkedHashMap<String, String>();
         options.put(BlockStateDomainPlan.PLACEMENT_SLOT_OPTION, "1:37:324:4:0");
         B173StateDomainLoadout loadout = B173StateDomainLoadout.from(new TestRuntimeRequest(

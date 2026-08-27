@@ -3,6 +3,7 @@ package worldline.b173server;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import worldline.api.BlockFace;
 import worldline.api.BlockPosition;
@@ -62,29 +63,79 @@ public final class B173StateDomainScenarioFactory {
     }
 
     public static BlockStateDomainScenario furnaceFacing() {
-        String subject = "b1.7.3:block/061";
+        return horizontalPlacement("furnace-facing-metadata", "b1.7.3:block/061", 61,
+                Arrays.asList("furnace", "directional", "stateful-metadata"),
+                new int[] {2, 5, 3, 4});
+    }
+
+    public static List<BlockStateDomainScenario> cardinalPlacementFamily() {
+        return Collections.unmodifiableList(Arrays.asList(
+                dispenserFacing(), woodStairsFacing(), chestPlacementMetadata(), furnaceFacing(),
+                cobblestoneStairsFacing(), pumpkinFacing(), jackOLanternFacing()));
+    }
+
+    public static BlockStateDomainScenario dispenserFacing() {
+        return horizontalPlacement("dispenser-facing-metadata", "b1.7.3:block/023", 23,
+                Arrays.asList("dispenser", "directional", "tile-entity"),
+                new int[] {2, 5, 3, 4});
+    }
+
+    public static BlockStateDomainScenario woodStairsFacing() {
+        return horizontalPlacement("wood-stairs-facing-metadata", "b1.7.3:block/053", 53,
+                Arrays.asList("stairs", "directional"), new int[] {2, 1, 3, 0});
+    }
+
+    public static BlockStateDomainScenario chestPlacementMetadata() {
+        return horizontalPlacement("chest-yaw-invariant-metadata", "b1.7.3:block/054", 54,
+                Arrays.asList("chest", "container", "directional", "tile-entity"),
+                new int[] {0, 0, 0, 0});
+    }
+
+    public static BlockStateDomainScenario cobblestoneStairsFacing() {
+        return horizontalPlacement("cobblestone-stairs-facing-metadata",
+                "b1.7.3:block/067", 67, Arrays.asList("stairs", "directional"),
+                new int[] {2, 1, 3, 0});
+    }
+
+    public static BlockStateDomainScenario pumpkinFacing() {
+        return horizontalPlacement("pumpkin-facing-metadata", "b1.7.3:block/086", 86,
+                Arrays.asList("pumpkin", "directional"), new int[] {2, 3, 0, 1});
+    }
+
+    public static BlockStateDomainScenario jackOLanternFacing() {
+        return horizontalPlacement("jack-o-lantern-facing-metadata", "b1.7.3:block/091", 91,
+                Arrays.asList("pumpkin", "directional", "luminous"),
+                new int[] {2, 3, 0, 1});
+    }
+
+    private static BlockStateDomainScenario horizontalPlacement(String id, String subject,
+            int blockId, List<String> archetypes, int[] metadata) {
+        if (metadata.length != 4) {
+            throw new IllegalArgumentException("horizontal metadata matrix must contain four yaws");
+        }
         BlockConformancePlan plan = new BlockConformancePlan(Collections.singletonList(
-                new BlockConformanceProfile(subject, Arrays.asList(
-                        "furnace", "directional", "stateful-metadata"), true,
+                new BlockConformanceProfile(subject, archetypes, true,
                         Collections.<String, ConformanceLayer>emptyMap())),
                 Collections.singletonList(new BlockConformanceTemplate(
                         "state-domain", ConformanceLayer.ARCHETYPE)));
-        List<BlockState> domain = Arrays.asList(new BlockState(61, 2), new BlockState(61, 3),
-                new BlockState(61, 4), new BlockState(61, 5));
+        LinkedHashSet<BlockState> distinct = new LinkedHashSet<BlockState>();
+        for (int value : metadata) {
+            distinct.add(new BlockState(blockId, value));
+        }
+        List<BlockState> domain = new ArrayList<BlockState>(distinct);
         List<BlockStateDomainStep> steps = new ArrayList<BlockStateDomainStep>();
         float[] yaw = {0F, 90F, 180F, -90F};
-        int[] metadata = {2, 5, 3, 4};
         String[] names = {"0", "90", "180", "neg90"};
         for (int index = 0; index < yaw.length; index++) {
             BlockPosition support = B173StateDomainArena.SUPPORTS.get(index);
             steps.add(BlockStateDomainStep.place("place-yaw-" + names[index], support,
                     BlockFace.UP, yaw[index], 0F, Collections.singletonList(
                             new BlockStateObservation(BlockFace.UP.adjacent(support),
-                                    new BlockState(61, metadata[index])))));
+                                    new BlockState(blockId, metadata[index])))));
         }
-        return new BlockStateDomainScenario("furnace-facing-metadata",
+        return new BlockStateDomainScenario(id,
                 plan.caseFor(subject, "state-domain"),
                 new BlockLifecycleSlot(HOTBAR, INVENTORY,
-                        new RemoteItemStack(61, 4, 0), null), domain, steps, 40);
+                        new RemoteItemStack(blockId, 4, 0), null), domain, steps, 40);
     }
 }
