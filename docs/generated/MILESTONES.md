@@ -508,7 +508,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m548-piston-bud-set` | CARRIED | Piston bud set |
 | `m550-dispenser-qc-set` | CARRIED | Dispenser qc set |
 | `m553-piston-immovable-set` | CARRIED | Piston immovable set |
-| `m554-extended-head-break-set` | CARRIED | Extended head break set |
+| `m554-extended-head-break-set` | EXECUTED | Extended head break set |
 | `m555-torch-burnout-set` | CARRIED | Torch burnout set |
 | `m556-rs-nor-latch-set` | CARRIED | Rs nor latch set |
 | `m559-double-extender-set` | CARRIED | Double extender set |
@@ -520,7 +520,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m570-repeater-diode-set` | CARRIED | repeater diode set |
 | `m571-redstone-ore-glow-set` | CARRIED | redstone ore glow set |
 | `m572-detector-rail-vacate-set` | CARRIED | detector rail vacate set |
-| `m573-sticky-head-break-set` | CARRIED | sticky head break set |
+| `m573-sticky-head-break-set` | EXECUTED | sticky head break set |
 | `m574-mushroom-spread-set` | CARRIED | mushroom spread set |
 | `m575-grass-die-cover-set` | CARRIED | grass die cover set |
 | `m576-farmland-trample-set` | CARRIED | farmland trample set |
@@ -539,7 +539,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m590-ghast-fireball-punch-set` | CARRIED | Ghast fireball punch set |
 | `m591-furnace-smelt-interrupt-set` | CARRIED | furnace smelt interrupt set |
 | `m592-chest-break-spill-set` | CARRIED | chest break spill set |
-| `m593-door-upper-break-set` | CARRIED | door upper break set |
+| `m593-door-upper-break-set` | EXECUTED | door upper break set |
 | `m594-netherrack-fire-persist-set` | CARRIED | netherrack fire persist |
 | `m595-powered-rail-brake-set` | CARRIED | powered rail brake set |
 | `m596-furnace-cart-push-set` | CARRIED | furnace cart push set |

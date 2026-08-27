@@ -26,9 +26,17 @@ placement, break, drop, and reload claims for cobblestone, dirt, logs, and chest
 imports established 140 verified claims. A second curated placeable-block package imports 68
 placement and persistence claims across 35 additional subjects. The census now contains 208
 verified claims. A tool-qualified break/drop package adds 24 exact claims across 12 subjects. The
-census now contains 232 verified claims (21.97%) and leaves 824 unknown. Existing smoke evidence
-is reusable input, but it is never promoted automatically: its subject, action, context,
-observable, oracle, signature, and automation surface must be curated first.
+census then contained 232 verified claims. A singular-lifecycle package adds 23 exact claims for
+pistons, dispenser, note block, bed, doors, and jukebox. The census now contains 255 verified
+claims (24.15%) and leaves 801 unknown. Existing smoke evidence is reusable input, but it is never
+promoted automatically: its subject, action, context, observable, oracle, signature, and
+automation surface must be curated first.
+
+The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
+extended base; sticky-piston evidence breaks an extended head; wooden-door evidence breaks the
+upper half of one closed orientation. Occupied-jukebox evidence proves persisted removal and
+record spill, but does not assert a jukebox-item drop. These claims do not imply exhaustive
+orientation, tool, open-state, container-content, power, or motion matrices.
 
 The behavior dimensions are registry presence, reachable state domain, gameplay placement, break
 transition, drop matrix, save/reload, collision shape, light behavior, tick policy, neighbor
@@ -55,7 +63,7 @@ census resolution = resolved claims / candidate claims
 ```
 
 The target is 98.8% functional proof, not 98.8% file or mapping coverage. With the 1,056-claim
-denominator, that requires 1,044 verified claims. After the three lifecycle imports, 812 additional
+denominator, that requires 1,044 verified claims. After the four lifecycle imports, 789 additional
 verified claims are required. The executable check prints the exact current proof, unknown count,
 and claims remaining to the target on every canonical Gate.
 
