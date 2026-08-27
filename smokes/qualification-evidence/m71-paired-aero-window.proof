@@ -1,5 +1,5 @@
 schema=1
 id=m71-paired-aero-window
-fingerprint=ebc2421845093f5472f4bce2d19c214e31f1dd1cf25a739732c106a343494ec0
+fingerprint=dc09b17ca24e574749300120a89c36b4936654dd69868b86af4633cb0510b64d
 observation.sha256=0b26d07ed6b08195a067bf8730b43f49ec596dae274c74f335f8a44576cb1d2b
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m600-ladder-climb-set
-fingerprint=845761233085bb99a8aa8879467541ec38f9fbd741a1bae612ca1ba9c63e4ac3
+fingerprint=31fcabd57277ebd30f72f3551b00c96493035fc10516b7df103b09201df19cea
 observation.sha256=9a315df466053f7290dd78557cd934894dcbbb4379d1e377701b658ad9a74547
 source=refactor-equivalent

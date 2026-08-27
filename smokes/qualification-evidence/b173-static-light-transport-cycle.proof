@@ -1,5 +1,5 @@
 schema=1
 id=b173-static-light-transport-cycle
-fingerprint=4032d1cb49551084dc6967f0ebe33c8aa1105d46918f6a7d89939f1533db66b2
+fingerprint=5fb937a7acd155ddbdc306dc305f218433b4fe923cf8592fb68911ae1ef02516
 observation.sha256=c433d069661b3fc516fbf0b7884b8a89e975378c393424a4905d70ef74db9e2e
 source=refactor-equivalent

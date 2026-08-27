@@ -1,5 +1,5 @@
 schema=1
 id=m280-magenta-wool
-fingerprint=010d08b00fd7634ce88e1fb15b03cb1fead04a7095c210337cca4a130523cf22
+fingerprint=1f246b203abb4943231589f11ed95bdae2e0ed24d4d1cae19c19f0401b21bdec
 observation.sha256=1c2065b1a6b6a8fdbe04e1a4ed0e9d52b6fa44e7fc16fd931de75c89e017e1fe
 source=refactor-equivalent
