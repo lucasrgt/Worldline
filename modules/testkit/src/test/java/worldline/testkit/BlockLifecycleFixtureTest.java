@@ -1,8 +1,12 @@
 package worldline.testkit;
 
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import worldline.api.AutomatedMinecraftRuntime;
 import worldline.api.BlockFace;
 import worldline.api.BlockLifecycleDriver;
 import worldline.api.BlockPosition;
@@ -14,17 +18,31 @@ import worldline.api.RemoteInventorySlot;
 import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteItemStack;
 import worldline.api.RemoteWorldView;
+import worldline.test.SuiteDefinition;
+import worldline.test.TestCase;
+import worldline.test.TestContext;
+import worldline.test.TestDefinition;
+import worldline.test.TestHook;
+import worldline.test.TestPlan;
+import worldline.test.WorldlineSpec;
 
 /** Proves exact lifecycle action order, drop normalization, and three-layer routing. */
 public final class BlockLifecycleFixtureTest {
     private static final RemoteItemStack BLOCK = new RemoteItemStack(4, 1, 0);
     private static final RemoteItemStack TOOL = new RemoteItemStack(257, 1, 0);
     private static final RemoteItemStack WORN_TOOL = new RemoteItemStack(257, 1, 1);
+    private static final BlockPosition SUPPORT = new BlockPosition(4, 64, 4);
+    private static final BlockState SUPPORT_STATE = new BlockState(1, 0);
 
     private BlockLifecycleFixtureTest() {
     }
 
-    static void execute() {
+    public static void main(String[] arguments) throws Exception {
+        execute();
+        System.out.println("BlockLifecycleFixtureTest passed");
+    }
+
+    static void execute() throws Exception {
         List<BlockConformanceCase> cases = cases();
         require(claim(cases, "b1.7.3:block/004", "drop-matrix").layer()
                 == ConformanceLayer.ARCHETYPE, "archetype lifecycle route drifted");
@@ -41,10 +59,35 @@ public final class BlockLifecycleFixtureTest {
                 && evidence.dropLayer() == ConformanceLayer.ARCHETYPE
                 && evidence.boundary() == BlockLifecycleDriver.ReloadBoundary.FRESH_LOGIN,
                 "lifecycle evidence route drifted");
-        require(first.actions.equals(List.of("await:0", "inventory", "select:0", "place",
+        require(evidence.canonical().equals("schema=worldline.block-lifecycle-evidence.v1\n"
+                + "scenario=cobblestone\nsubject=b1.7.3:block/004\n"
+                + "claim.gameplay-placement=b1.7.3:block/004#gameplay-placement|UNIVERSAL\n"
+                + "claim.save-reload=b1.7.3:block/004#save-reload|UNIVERSAL\n"
+                + "claim.break-transition=b1.7.3:block/004#break-transition|UNIVERSAL\n"
+                + "claim.drop-matrix=b1.7.3:block/004#drop-matrix|ARCHETYPE\n"
+                + "support=4:64:4:1:0\ntarget=4:65:4\nplaced=4:0\n"
+                + "drops=4:1:0\nreload=FRESH_LOGIN\n"),
+                "canonical lifecycle evidence drifted");
+        require(first.actions.equals(List.of("await-support:1", "await:0", "inventory", "select:0", "place",
                 "await:4", "inventory", "reload", "await:4", "inventory", "select:1",
                 "drops", "begin", "ticks:2", "finish", "await:0", "ticks:3", "drops",
                 "inventory", "reload", "await:0")), "lifecycle action order drifted");
+
+        BlockLifecyclePlan executable = new BlockLifecyclePlan("fake-lifecycle", List.of(cobble));
+        TestPlan collected = new PlanSpec(executable).collect();
+        SuiteDefinition suite = (SuiteDefinition) collected.root().children().get(0);
+        TestDefinition definition = (TestDefinition) suite.children().get(0);
+        require(definition.name().equals("cobblestone")
+                && definition.tags().equals(List.of("block-lifecycle")),
+                "lifecycle DSL registration drifted");
+        TestCase test = (TestCase) definition.body();
+        require(test.runtimeId().equals("fake-lifecycle"), "lifecycle runtime route drifted");
+        PlanContext context = new PlanContext(new FakeDriver(List.of(BLOCK), 80));
+        test.run(context);
+        require(context.attachment.equals(evidence.canonical()),
+                "lifecycle DSL did not attach canonical evidence");
+        rejects(() -> new BlockLifecyclePlan("fake", List.of(cobble, cobble)));
+        rejects(() -> new BlockLifecyclePlan("invalid runtime", List.of(cobble)));
 
         BlockLifecycleScenario noDrop = scenario(cases, List.of());
         require(BlockLifecycleFixture.execute(noDrop, new FakeDriver(List.of(), 90))
@@ -61,15 +104,24 @@ public final class BlockLifecycleFixtureTest {
                 new BlockPosition(4, 64, 4), BlockFace.UP, new BlockState(4, 0),
                 new BlockLifecycleSlot(0, 36, BLOCK, null),
                 new BlockLifecycleSlot(1, 37, TOOL, WORN_TOOL), List.of(BLOCK), 2, 3));
+        rejects(() -> new BlockLifecyclePlan("fake", List.of(new BlockLifecycleScenario(
+                claim(cases, "b1.7.3:block/004", "gameplay-placement"),
+                claim(cases, "b1.7.3:block/004", "save-reload"),
+                claim(cases, "b1.7.3:block/004", "break-transition"),
+                claim(cases, "b1.7.3:block/004", "drop-matrix"), SUPPORT,
+                BlockFace.UP, new BlockState(4, 0),
+                new BlockLifecycleSlot(0, 36, BLOCK, null),
+                new BlockLifecycleSlot(1, 37, TOOL, WORN_TOOL), List.of(BLOCK), 2, 3))));
     }
 
     private static BlockLifecycleScenario scenario(List<BlockConformanceCase> cases,
             List<RemoteItemStack> drops) {
         String subject = "b1.7.3:block/004";
-        return new BlockLifecycleScenario(claim(cases, subject, "gameplay-placement"),
+        return new BlockLifecycleScenario("cobblestone",
+                claim(cases, subject, "gameplay-placement"),
                 claim(cases, subject, "save-reload"),
                 claim(cases, subject, "break-transition"),
-                claim(cases, subject, "drop-matrix"), new BlockPosition(4, 64, 4),
+                claim(cases, subject, "drop-matrix"), SUPPORT, SUPPORT_STATE,
                 BlockFace.UP, new BlockState(4, 0),
                 new BlockLifecycleSlot(0, 36, BLOCK, null),
                 new BlockLifecycleSlot(1, 37, TOOL, WORN_TOOL), drops, 2, 3);
@@ -142,6 +194,11 @@ public final class BlockLifecycleFixtureTest {
             state = new BlockState(0, 0); toolWorn = true; finished = true; actions.add("finish");
         }
         @Override public RemoteWorldView awaitBlock(BlockPosition position, BlockState expected) {
+            if (position.equals(SUPPORT)) {
+                actions.add("await-support:" + expected.legacyId());
+                require(expected.equals(SUPPORT_STATE), "fake support expectation");
+                return view(position, SUPPORT_STATE);
+            }
             actions.add("await:" + expected.legacyId());
             require(state.equals(expected), "fake block expectation");
             return view(position, state);
@@ -165,6 +222,34 @@ public final class BlockLifecycleFixtureTest {
             require(reloads > 0, "fake reload absent"); return ReloadBoundary.FRESH_LOGIN;
         }
         @Override public void close() { }
+    }
+
+    private static final class PlanSpec extends WorldlineSpec {
+        private final BlockLifecyclePlan plan;
+        PlanSpec(BlockLifecyclePlan plan) { this.plan = plan; }
+        @Override protected void define() { plan.register("block lifecycle"); }
+    }
+
+    private static final class PlanContext implements TestContext {
+        private final BlockLifecycleDriver driver;
+        String attachment;
+        PlanContext(BlockLifecycleDriver driver) { this.driver = driver; }
+        @Override public long seed() { return 1L; }
+        @Override public int attempt() { return 1; }
+        @Override public AutomatedMinecraftRuntime runtime() { return null; }
+        @Override public <T> T capability(Class<T> type) { return type.cast(driver); }
+        @Override public Path artifactDirectory() { return Paths.get("."); }
+        @Override public void attach(String name, byte[] bytes) {
+            require(name.equals(BlockLifecyclePlan.EVIDENCE_ARTIFACT),
+                    "lifecycle artifact name drifted");
+            attachment = new String(bytes, StandardCharsets.UTF_8);
+        }
+        @Override public void skip(String reason) { throw new AssertionError(reason); }
+        @Override public void step(String name, TestContext.TestAction action) throws Exception {
+            action.run(this);
+        }
+        @Override public void onFinished(TestHook hook) { }
+        @Override public void onFailed(TestHook hook) { }
     }
 
     private static RemoteWorldView view(BlockPosition position, BlockState state) {

@@ -3,7 +3,7 @@ package worldline.testkit;
 import java.util.Objects;
 import worldline.api.RemoteItemStack;
 
-/** Expected server-authoritative inventory change for one selected hotbar action. */
+/** Public expected inventory change for one server-authoritative hotbar action. */
 public final class BlockLifecycleSlot {
     private final int hotbarSlot, inventorySlot;
     private final RemoteItemStack before, after;

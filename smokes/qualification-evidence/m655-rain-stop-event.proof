@@ -1,5 +1,5 @@
 schema=1
 id=m655-rain-stop-event
-fingerprint=24495a97e620ee45f44a4bd57c2eae3aabb4c780ac3c4eda49f1a6596aee9108
+fingerprint=8a2aafc6feb6ad064c12e8f982de79f048089b3d3b0fee50474a40c73efbcea4
 observation.sha256=98f8d2a90aec4539ac5226886550aa3864b01df8f8b4edbe3584abb8016a6a18
 source=refactor-equivalent

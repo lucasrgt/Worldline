@@ -1,5 +1,7 @@
 package worldline.testkit;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -7,7 +9,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-/** Data-only routing profile for one versioned block-registry subject. */
+/** Public data-only routing profile for one versioned block-registry subject. */
 public final class BlockConformanceProfile {
     private final String subject;
     private final List<String> archetypes;
@@ -30,7 +32,7 @@ public final class BlockConformanceProfile {
             }
         }
         this.subject = subject;
-        this.archetypes = List.copyOf(unique);
+        this.archetypes = Collections.unmodifiableList(new ArrayList<String>(unique));
         this.singular = singular;
         this.overrides = copyOverrides(overrides);
     }
@@ -61,7 +63,7 @@ public final class BlockConformanceProfile {
     private static Map<String, ConformanceLayer> copyOverrides(
             Map<String, ConformanceLayer> source) {
         if (source == null || source.isEmpty()) {
-            return Map.of();
+            return Collections.emptyMap();
         }
         Map<String, ConformanceLayer> result = new LinkedHashMap<>();
         source.forEach((key, value) -> {
@@ -72,6 +74,6 @@ public final class BlockConformanceProfile {
                 throw new IllegalArgumentException("override");
             }
         });
-        return Map.copyOf(result);
+        return Collections.unmodifiableMap(result);
     }
 }

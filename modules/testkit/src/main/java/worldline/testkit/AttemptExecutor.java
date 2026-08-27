@@ -106,7 +106,7 @@ final class AttemptExecutor {
                             new TestRuntimeRequest(settings.seed, settings.world, settings.mod));
                 }
                 context = new TestExecutionContext(settings.seed, number,
-                        session == null ? null : session.runtime(), artifacts, allowed);
+                        session, artifacts, allowed);
                 activeContext.set(context);
                 SnapshotStore store = new SnapshotStore(options.snapshots,
                         allowed == null && options.updateSnapshots);

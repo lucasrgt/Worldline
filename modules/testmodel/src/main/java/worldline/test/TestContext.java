@@ -17,6 +17,14 @@ public interface TestContext {
     long seed();
     int attempt();
     AutomatedMinecraftRuntime runtime();
+    default <T> T capability(Class<T> type) {
+        if (type == null) throw new NullPointerException("type");
+        AutomatedMinecraftRuntime value = runtime();
+        if (!type.isInstance(value)) {
+            throw new IllegalStateException("test runtime does not expose capability " + type.getName());
+        }
+        return type.cast(value);
+    }
     Path artifactDirectory();
     void attach(String name, byte[] bytes);
     void skip(String reason);

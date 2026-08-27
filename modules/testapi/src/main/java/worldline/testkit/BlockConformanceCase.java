@@ -2,7 +2,7 @@ package worldline.testkit;
 
 import java.util.Objects;
 
-/** One generated execution case; its identity is a claim, never a milestone number. */
+/** One public generated execution case; its identity is a claim, never a milestone number. */
 public final class BlockConformanceCase {
     private final String claimId;
     private final BlockConformanceProfile profile;

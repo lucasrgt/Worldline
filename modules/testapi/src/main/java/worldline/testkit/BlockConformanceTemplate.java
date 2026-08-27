@@ -2,7 +2,7 @@ package worldline.testkit;
 
 import java.util.Objects;
 
-/** One reusable behavior dimension expanded over every registered block profile. */
+/** One public reusable behavior dimension expanded over every registered block profile. */
 public final class BlockConformanceTemplate {
     private final String id;
     private final ConformanceLayer defaultLayer;

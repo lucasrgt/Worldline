@@ -1,6 +1,7 @@
 package worldline.testkit;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -14,7 +15,7 @@ import worldline.api.RemoteInventoryView;
 import worldline.api.RemoteItemStack;
 import worldline.api.RemoteWorldView;
 
-/** Executes a complete server-authoritative block lifecycle and returns stable evidence. */
+/** Public execution of a complete server-authoritative block lifecycle. */
 public final class BlockLifecycleFixture {
     private static final BlockState AIR = new BlockState(0, 0);
     private static final Comparator<RemoteItemStack> STACK_ORDER = Comparator
@@ -29,6 +30,10 @@ public final class BlockLifecycleFixture {
             BlockLifecycleDriver driver) {
         if (scenario == null || driver == null) throw new NullPointerException("block lifecycle");
         BlockPosition target = scenario.target();
+        if (scenario.supportState() != null) {
+            verifyBlock(driver.awaitBlock(scenario.support(), scenario.supportState()),
+                    scenario.support(), scenario.supportState(), "placement support");
+        }
         verifyBlock(driver.awaitBlock(target, AIR), target, AIR, "placement baseline");
         verifySlot(driver.inventory(), scenario.placementSlot(), false);
         driver.selectHeldSlot(scenario.placementSlot().hotbarSlot());
@@ -97,7 +102,7 @@ public final class BlockLifecycleFixture {
             if (!prior.contains(drop.entityId())) result.add(drop.item());
         }
         result.sort(STACK_ORDER);
-        return List.copyOf(result);
+        return Collections.unmodifiableList(result);
     }
 
     private static List<RemoteItemStack> sorted(List<RemoteItemStack> values) {

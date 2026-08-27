@@ -1,11 +1,12 @@
 package worldline.testkit;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/** Expands profiles and dimensions into universal, archetype, and singular cases. */
+/** Public expansion of profiles and dimensions into three-layer conformance cases. */
 public final class BlockConformancePlan {
     private final List<BlockConformanceCase> cases;
 
@@ -32,10 +33,20 @@ public final class BlockConformancePlan {
                 expanded.add(new BlockConformanceCase(profile, template, profile.layer(template)));
             }
         }
-        this.cases = List.copyOf(expanded);
+        this.cases = Collections.unmodifiableList(expanded);
     }
 
     public List<BlockConformanceCase> cases() {
         return cases;
+    }
+
+    public BlockConformanceCase caseFor(String subject, String template) {
+        if (subject == null || template == null) throw new NullPointerException("claim key");
+        for (BlockConformanceCase value : cases) {
+            if (value.profile().subject().equals(subject)
+                    && value.template().id().equals(template)) return value;
+        }
+        throw new IllegalArgumentException("conformance claim is absent: "
+                + subject + "#" + template);
     }
 }

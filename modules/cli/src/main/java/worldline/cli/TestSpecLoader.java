@@ -44,6 +44,8 @@ final class TestSpecLoader implements Closeable {
         loader = new URLClassLoader(urls.toArray(new URL[0]), WorldlineSpec.class.getClassLoader());
     }
 
+    ClassLoader classLoader() { return loader; }
+
     WorldlineSpec load(String name) throws ReflectiveOperationException {
         require(name != null && name.matches(
                 "[A-Za-z_$][A-Za-z0-9_$]*(?:\\.[A-Za-z_$][A-Za-z0-9_$]*)*"),

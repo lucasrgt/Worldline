@@ -205,6 +205,37 @@ each(Arrays.asList("a", "b", "c"))
 `%#` is the zero-based row and `%s` is the value. Values are copied during
 collection so the plan does not retain a mutable source iterable.
 
+### Block lifecycle matrices
+
+`worldline.testkit.BlockConformancePlan` and `BlockLifecyclePlan` are part of
+the Java 8 authoring JAR. They let an external mod describe a block matrix as
+data while the runner registers one isolated test per scenario:
+
+```java
+BlockConformancePlan claims = new BlockConformancePlan(profiles, templates);
+BlockLifecycleScenario cobblestone = BlockLifecycleScenario.from(
+        "cobblestone-pickaxe", claims, "b1.7.3:block/004",
+        support, supportState, BlockFace.UP, placedState,
+        placementSlot, pickaxeSlot, expectedDrops, 8, 4);
+
+new BlockLifecyclePlan("b1.7.3-server-lifecycle",
+        Arrays.asList(cobblestone)).register("block lifecycle");
+```
+
+Every executable row binds `gameplay-placement`, `save-reload`,
+`break-transition`, and `drop-matrix` claims. It requires an observed support
+state, verifies placement and inventory change, reconnects through the
+provider's declared reload boundary, breaks with the selected tool, compares
+only newly observed drops, reconnects again, and verifies that removal
+persisted. The result is attached as canonical
+`block-lifecycle.properties` evidence.
+
+The selected runtime provider must expose a
+`worldline.api.BlockLifecycleDriver` through
+`TestRuntimeSession.capability(Class)`. Unsupported capabilities fail closed;
+a provider does not need to pretend that a protocol-only session is an
+`AutomatedMinecraftRuntime`.
+
 ### Hooks
 
 - `beforeAll` and `afterAll` are neutral preparation hooks. They receive no
@@ -341,7 +372,9 @@ through `TestRuntimeProvider`. A provider may be selected by its implementation
 class for compatibility or by its stable `runtimeId()` through the standard
 Java `ServiceLoader` descriptor
 `META-INF/services/worldline.test.TestRuntimeProvider`. Missing and duplicate
-runtime IDs fail before a session opens.
+runtime IDs fail before a session opens. Provider extension JARs may be passed
+through `--classpath`; discovery and spec loading share that bounded class
+loader for the duration of the run.
 
 The `stationapi-b1.7.3` adapter is the second real provider family. It runs a
 fresh official server and a fresh Fabric/StationAPI client per TestKit attempt,
