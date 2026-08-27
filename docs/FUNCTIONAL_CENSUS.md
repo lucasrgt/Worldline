@@ -29,9 +29,11 @@ verified claims. A tool-qualified break/drop package adds 24 exact claims across
 census then contained 232 verified claims. A singular-lifecycle package adds 23 exact claims for
 pistons, dispenser, note block, bed, doors, and jukebox. The census then contained 255 verified
 claims. The expanded public solid-lifecycle matrix adds exact break and drop claims for stone,
-planks, sandstone, and brick. The census now contains 263 verified claims (24.91%) and leaves 793
-unknown. Existing smoke evidence is reusable input, but it is never promoted automatically: its
-subject, action, context, observable, oracle, signature, and automation surface must be curated first.
+planks, sandstone, and brick. The scenario-selected mineral lifecycle matrix then adds 12 exact
+claims across iron ore, diamond ore, and lapis, gold, iron, and diamond storage blocks. The census
+now contains 275 verified claims (26.04%) and leaves 781 unknown. Existing smoke evidence is
+reusable input, but it is never promoted automatically: its subject, action, context, observable,
+oracle, signature, and automation surface must be curated first.
 
 The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
 extended base; sticky-piston evidence breaks an extended head; wooden-door evidence breaks the
@@ -64,10 +66,10 @@ census resolution = resolved claims / candidate claims
 ```
 
 The target is 98.8% functional proof, not 98.8% file or mapping coverage. With the 1,056-claim
-denominator, that requires 1,044 verified claims. After the four lifecycle imports, 789 additional
-verified claims were required; the expanded public solid matrix reduces that gap to 781. The
-executable check prints the exact current proof, unknown count, and claims remaining to the target
-on every canonical Gate.
+denominator, that requires 1,044 verified claims. After the earlier lifecycle imports, 789
+additional verified claims were required; the solid and mineral public matrices reduce that gap to
+769. The executable check prints the exact current proof, unknown count, and claims remaining to
+the target on every canonical Gate.
 
 ## Three conformance layers
 

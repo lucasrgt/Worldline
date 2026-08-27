@@ -248,9 +248,11 @@ java -Dworldline.b173.lifecycle.serverJar=/path/to/b1.7.3-server.jar \
   --provider=b1.7.3-server-lifecycle --seed=17320110707
 ```
 
-`B173ServerLifecycleFixtures.scenarios()` returns seven currently provisioned
-rows: cobblestone, dirt, empty chest, stone, planks, sandstone, and brick. Each attempt owns a new
-official-server workspace. The server JAR must be exactly 503100 bytes with
+`B173ServerLifecycleFixtures.scenarios()` returns sixteen currently provisioned rows:
+cobblestone, dirt, empty chest, stone, planks, sandstone, brick, four ores, four mineral-storage
+blocks, and obsidian. The runner supplies the qualified test path to the provider, which selects
+that row and seeds only its placement item and suitable tool; the matrix is not limited by hotbar
+capacity. Each attempt owns a new official-server workspace. The server JAR must be exactly 503100 bytes with
 SHA-256 `033a127e4a25a60b038f15369c89305a3d53752242a1cff11ae964954e79ba4d`.
 The provider rejects mod paths and other seeds rather than pretending its
 fixed arena is general. Empty chest does not claim loaded-container spill.
