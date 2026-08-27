@@ -150,6 +150,10 @@ The canonical census resolves each exact qualification against the base recorded
 not against the latest wave control SHA. A registered rejection is terminal only when its tracked
 disposition, archived commit/tree, worktree identity, and external archive digest all validate. The
 wave base is a fallback solely for worktrees that have no exact receipt or explicit disposition.
+Comparable telemetry may be carried from an archived baseline census only when both the milestone ID
+and exact HEAD match. A changed or missing HEAD makes first-pass and recurrence unknown; an exact
+tracked disposition may override matching baseline fields, and the new census records the baseline
+SHA-256 so metric continuity is independently auditable.
 
 At each micro-wave barrier, the supervisor aggregates equivalent causes across all completed workers,
 records or updates each NYA scar exactly once, runs `csm nya check`, updates the base prompt when a

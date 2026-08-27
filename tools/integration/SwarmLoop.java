@@ -29,6 +29,7 @@ public final class SwarmLoop {
     private static void audit(String[] arguments) throws Exception {
         Path output = Path.of(".worldline/reports/swarm-census.json");
         Path archive = null;
+        Path baseline = null;
         List<SwarmCensus.Wave> waves = new ArrayList<>();
         for (int index = 1; index < arguments.length; index++) {
             require(index + 1 < arguments.length, usage());
@@ -36,11 +37,12 @@ public final class SwarmLoop {
                 case "--wave" -> waves.add(SwarmCensus.Wave.parse(arguments[++index]));
                 case "--output" -> output = Path.of(arguments[++index]);
                 case "--archive" -> archive = Path.of(arguments[++index]);
+                case "--baseline-census" -> baseline = Path.of(arguments[++index]);
                 default -> throw new IllegalArgumentException(usage());
             }
         }
         require(!waves.isEmpty(), "audit requires at least one --wave PATH=BASE");
-        SwarmCensus.audit(waves, output, archive);
+        SwarmCensus.audit(waves, output, archive, baseline);
     }
 
     private static void resolve(String[] arguments) throws Exception {
@@ -163,6 +165,7 @@ public final class SwarmLoop {
                 "not-started classification drifted");
         WaveSelfImprovement.selfTest();
         WaveCensus.selfTest();
+        CensusMetrics.selfTest();
         SwarmMicroWave.selfTest();
         SwarmPreflight.selfTest();
         SwarmPreCandidate.selfTest();
@@ -170,7 +173,8 @@ public final class SwarmLoop {
     }
 
     private static String usage() {
-        return "usage: SwarmLoop.java audit --wave PATH=BASE... [--output PATH] [--archive DIR] | "
+        return "usage: SwarmLoop.java audit --wave PATH=BASE... [--output PATH] [--archive DIR] "
+                + "[--baseline-census PATH] | "
                 + "resolve --census PATH --scar ID [--reject ID,...] [--max-attempts N] | "
                 + "report --census PATH --resolution PATH [--output PATH] | "
                 + "close-wave --census PATH [--previous-census PATH] --evidence-root DIR "

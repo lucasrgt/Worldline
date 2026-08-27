@@ -1,0 +1,25 @@
+schema = 1
+id = "NYA-01M10JEJNYYT189Q3KZKAWK1TD"
+title = "Bind carried wave telemetry to the exact milestone head"
+lesson = "A disposition-aware census must not discard audited first-pass, recurrence, attempt, prevention, or receipt-time telemetry from an earlier immutable census, and it must not carry those metrics by milestone ID alone. Accept a baseline only as an explicit input, bind every carried row to exact id+head, prefer exact tracked disposition fields, emit the baseline SHA-256, and leave metrics unknown when head continuity cannot be proven."
+scope = [
+    "tools/integration/SwarmCensus.java",
+    "tools/integration/CensusMetrics.java",
+    "tools/integration/CensusJson.java",
+    "tools/integration/SwarmLoop.java",
+    "docs/ENGINEERING_WORKFLOW.md",
+]
+tags = [
+    "wave-metrics",
+    "census",
+    "evidence-continuity",
+]
+created_at = "2026-08-27T02:58:09Z"
+
+[[occurrences]]
+occurred_at = "2026-08-27T02:58:09Z"
+source = "Final disposition-aware census on 4cefe8237 correctly classified 14 QUALIFIED and 11 REJECTED but omitted historical first_pass/recurrence fields and recomputed M654 time_to_receipt as 548 seconds instead of the archived audited 15.344 seconds; archived baseline sha256=190b894a213620e547e5283dc8461852cbb24a90c31fdca063902b344f2f4f93"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "4cefe8237"
