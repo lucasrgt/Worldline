@@ -24,6 +24,7 @@ final class GateMaintenance {
         case "--refresh-composite-cycle-pins" -> command("CompositeCycleMigration", "--refresh", 300);
         case "--migrate-telemetry-pins" -> command("TelemetryPinMigration", "--apply", 300);
         case "--migrate-repository-schemas" -> command("RepositorySchemaMigration", "--apply", 600);
+        case "--migrate-neighbor-testkit-pins" -> command("NeighborTestKitPinMigration", "--apply", 600);
         case "--migrate-formatting-pins" -> command("FormattingPinMigration", "--apply", 600);
         case "--migrate-shared-helper-pins" -> command("SharedHelperPinMigration", "--apply", 600);
         case "--migrate-unicode-pins" -> command("UnicodePinMigration", "--apply", 600);

@@ -19,6 +19,7 @@ final class RepositorySourcePolicy {
         FilesWalkPolicy.execute(root);
         DataDrivenCycleCheck.execute(root); CompositeCycleCheck.execute(root);
         TelemetryPinCheck.execute(root); SchemaPinCheck.execute(root);
+        NeighborTestKitPinCheck.execute(root);
         SmokeDescriptorSchemaCheck.execute(root); TestKitReleasePinCheck.execute(root);
         MilestoneIdUniquenessCheck.execute(root);
         SmokeLane.validate(root);
