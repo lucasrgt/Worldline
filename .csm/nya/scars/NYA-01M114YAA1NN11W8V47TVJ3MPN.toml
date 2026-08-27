@@ -1,0 +1,26 @@
+schema = 1
+id = "NYA-01M114YAA1NN11W8V47TVJ3MPN"
+title = "Compile control migration source closure before launch"
+lesson = "A documented Java source-file migration command stops being self-contained when typed validation adds sibling dependencies. Invoke control migration only through LegacyRetryControlLauncher migrate, compile the exact strict JSON, ancestry, adoption, and migration closure with warnings as errors, and self-test the migration route before changing a retryable worktree. Never bypass the canonical launcher with an ad hoc classpath."
+scope = [
+    "tools/integration/LegacyRetryControlLauncher.java",
+    "tools/integration/OxAlphaControlMigration.java",
+    "tools/integration/OxAlphaAdoptionReceipt.java",
+    "tools/harness/IntegrationToolsCheck.java",
+    "coordination/swarm/OX_ALPHA_PROMPT.md",
+    "docs/ENGINEERING_WORKFLOW.md",
+]
+tags = [
+    "control-migration",
+    "source-closure",
+    "launcher",
+]
+created_at = "2026-08-27T08:21:19Z"
+
+[[occurrences]]
+occurred_at = "2026-08-27T08:21:19Z"
+source = "M686 control migration at promoted base 04cbbbc9c: documented java tools/integration/OxAlphaControlMigration.java failed before preflight because javac could not resolve OxAlphaAdoptionReceipt at lines 145; milestone branch remained clean and no worker launched"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "04cbbbc9c"

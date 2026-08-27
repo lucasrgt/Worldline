@@ -22,7 +22,8 @@ public final class LegacyRetryControlLauncher {
     }
 
     private static int execute(String[] arguments) throws Exception {
-        require(arguments.length > 0, "missing export, adopt, rollover, or --self-test command");
+        require(arguments.length > 0,
+                "missing export, adopt, migrate, rollover, or --self-test command");
         Path root = Path.of("").toAbsolutePath().normalize();
         Path output = root.resolve(".worldline/build/legacy-retry-control");
         Files.createDirectories(output);
@@ -39,6 +40,7 @@ public final class LegacyRetryControlLauncher {
                 root.resolve("tools/integration/OxAlphaRolloverLaunch.java"),
                 root.resolve("tools/integration/OxAlphaRequest.java"),
                 root.resolve("tools/integration/OxAlphaLegacyAdoption.java"),
+                root.resolve("tools/integration/OxAlphaControlMigration.java"),
                 root.resolve("tools/integration/OxAlphaInfrastructureRollover.java"));
         List<String> compile = new ArrayList<>(List.of(javaTool("javac"), "-encoding", "UTF-8",
                 "--release", "21", "-Xlint:all,-options", "-Werror", "-d", output.toString()));
@@ -48,18 +50,25 @@ public final class LegacyRetryControlLauncher {
         }
         require(run(root, compile, 120) == 0, "legacy retry source closure did not compile");
         if ("--self-test".equals(arguments[0])) {
+            require(target("migrate").equals("OxAlphaControlMigration"),
+                    "control migration launcher route drifted");
             return 0;
         }
-        String target = switch (arguments[0]) {
-            case "export" -> "OpenCodeSessionExport";
-            case "adopt" -> "LegacyRetryAdoption";
-            case "rollover" -> "OxAlphaInfrastructureRollover";
-            default -> throw new IllegalArgumentException("unknown legacy retry command");
-        };
+        String target = target(arguments[0]);
         List<String> command = new ArrayList<>(List.of(javaTool("java"), "-cp", output.toString(),
                 target));
         command.addAll(List.of(arguments).subList(1, arguments.length));
-        return run(root, command, 180);
+        return run(root, command, 300);
+    }
+
+    private static String target(String operation) {
+        return switch (operation) {
+            case "export" -> "OpenCodeSessionExport";
+            case "adopt" -> "LegacyRetryAdoption";
+            case "migrate" -> "OxAlphaControlMigration";
+            case "rollover" -> "OxAlphaInfrastructureRollover";
+            default -> throw new IllegalArgumentException("unknown legacy retry command");
+        };
     }
 
     private static int run(Path root, List<String> command, int seconds) throws Exception {

@@ -76,7 +76,8 @@ Every launch supplies `--control-base` with the exact orchestrator SHA that auth
 The launcher rejects an authorized milestone base or worktree HEAD that does not contain that SHA,
 so an older worktree cannot pass supervisor readiness and then execute a stale Candidate Gate.
 If controls advance after a retryable attempt, first preserve its evidence archive, move the same
-branch and worktree to the new clean base, and run `OxAlphaControlMigration`. It verifies the old
+branch and worktree to the new clean base, and run `LegacyRetryControlLauncher migrate`. The source
+launcher compiles the complete migration dependency closure before the migration verifies the old
 receipt, archive hash, milestone ID, session, and ancestry, then repeats CSM context and both
 supervision and control-base recall before issuing the replacement preflight. Reapply the archived
 checkpoint only after this PASS; the milestone ID and OpenCode session remain unchanged.
@@ -88,7 +89,7 @@ session identity, milestone ID, and exact worktree path. If no historical OpenCo
 the explicit `process-recovery` mode records that fact instead of inventing a session and authorizes
 one new checkpoint session with a maximum 3600-second budget. Both modes bind an owner, attempt 2 of
 2, and the new control base. Pass the adoption receipt and its SHA-256 to
-`OxAlphaControlMigration` and the attempt-2 `OxAlphaLauncher`; neither tool treats it as a historical
+`LegacyRetryControlLauncher migrate` and the attempt-2 `OxAlphaLauncher`; neither tool treats it as a historical
 launcher receipt. Legacy adoption may omit historical preflight and receipt bases, which remain
 required for ordinary control migration.
 The adoption receipt's immutable `new_control_base` is its original authorization anchor. A later

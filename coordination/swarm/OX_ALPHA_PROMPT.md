@@ -12,7 +12,8 @@ Every launch must bind `--control-base` to the exact orchestrator SHA that autho
 checks. Both the milestone base and current worktree HEAD must contain that commit; otherwise stop
 before OpenCode starts rather than mixing current readiness with an older Candidate Gate.
 When controls advance after a retryable attempt, preserve the exact archive and use
-`OxAlphaControlMigration` on the same branch, worktree, and session. Reapply the checkpoint only
+`LegacyRetryControlLauncher migrate` on the same branch, worktree, and session. The source launcher
+must compile the complete migration dependency closure before execution. Reapply the checkpoint only
 after it verifies archive SHA-256, ancestry, CSM context, and both applicable scars on the new base.
 For a legacy attempt without a supervised launcher receipt, the supervisor must first run
 `LegacyRetryControlLauncher adopt` against the unchanged historical worktree. A recovered session
