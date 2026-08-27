@@ -54,10 +54,10 @@ public final class OxAlphaControlMigration {
         require(head.equals(request.newBase), "migration requires a clean worktree at the new base");
         require(git(root, "status", "--porcelain=v1", "--untracked-files=all").isBlank(),
                 "migration worktree is dirty");
-        require(ancestor(root, request.archiveBase, request.receiptBase),
-                "prior receipt does not contain the archived base");
-        require(ancestor(root, request.preflightBase, request.receiptBase),
-                "prior receipt does not contain the preflight base");
+        require(ancestor(root, request.archiveBase, request.newBase),
+                "new base does not contain the archived base");
+        require(ancestor(root, request.preflightBase, request.newBase),
+                "new base does not contain the preflight base");
         require(ancestor(root, request.receiptBase, request.newBase),
                 "new base does not contain the prior receipt base");
         validateArchive(request);

@@ -20,3 +20,11 @@ reported_by = "codex:worldline-supervisor"
 corrected_by = "codex:worldline-supervisor"
 recorded_by = "codex:worldline-supervisor"
 commit = "f3b7533cc"
+
+[[occurrences]]
+occurred_at = "2026-08-27T01:08:57Z"
+source = "M664 and M665 control migration on 881d1cbd257cc791e6d70cc80a9038c95e4ee607 rejected with 'prior receipt does not contain the archived base'; merge-base proofs: a60df6033->881d1cbd2 PASS, 876b0e0c->881d1cbd2 PASS, a60df6033->876b0e0c FAIL; cause=historical bases are sibling ancestors created by independent reconciled trains"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "881d1cbd2"

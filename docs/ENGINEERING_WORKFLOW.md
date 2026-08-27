@@ -82,7 +82,8 @@ supervision and control-base recall before issuing the replacement preflight. Re
 checkpoint only after this PASS; the milestone ID and OpenCode session remain unchanged.
 When a preserved checkpoint crossed an earlier control-base migration, pass its independently
 sealed `--archive-base`, `--preflight-base`, and `--receipt-base`. Each must be an exact ancestor in
-the archived progression; collapsing different historical identities into one SHA fails closed.
+the new control base; they need not be linearly ordered because independently reconciled trains can
+make them sibling ancestors. Collapsing different historical identities into one SHA fails closed.
 The launcher closes the child's stdin pipe immediately after creation so non-interactive OpenCode
 observes EOF and creates a session. Its self-test fails if a child can remain blocked on stdin.
 After an archived selected-provider quota failure, the supervisor may set
