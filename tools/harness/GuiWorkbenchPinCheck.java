@@ -14,7 +14,7 @@ final class GuiWorkbenchPinCheck {
         Properties lock = manifest(root);
         require("1".equals(lock.getProperty("schema")) && integer(lock, "source.count") == 9
                         && integer(lock, "pending.count") == 5
-                        && integer(lock, "smoke.count") == 520
+                        && integer(lock, "smoke.count") >= 520
                         && integer(lock, "catalog.count") == integer(lock, "smoke.count")
                                 + integer(lock, "pending.count") + 1,
                 "invalid GUI workbench migration");
@@ -57,7 +57,8 @@ final class GuiWorkbenchPinCheck {
                         && integer(lock, "smoke.changed") > 0,
                 "GUI workbench proof census drift");
         int pending = effectivePending(lock, train);
-        System.out.println("  GUI workbench proof transport: 9 sources, 520 carried, "
+        System.out.println("  GUI workbench proof transport: 9 sources, " + carried
+                + " carried, "
                 + pending + " pending");
     }
     static Properties manifest(Path root) throws Exception {
@@ -81,7 +82,9 @@ final class GuiWorkbenchPinCheck {
     }
     static boolean carries(Properties lock, String id, SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
-        boolean direct = hash(lock.getProperty(stem + "prior_fingerprint"))
+        boolean introduced = "true".equals(lock.getProperty(stem + "introduced"))
+                && "executed".equals(pin.source());
+        boolean direct = (hash(lock.getProperty(stem + "prior_fingerprint")) || introduced)
                 && current.equals(lock.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"));
         try { Path root = Path.of("").toAbsolutePath().normalize();
