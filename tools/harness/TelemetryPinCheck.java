@@ -13,7 +13,7 @@ final class TelemetryPinCheck {
         Properties manifest = load(path); require("1".equals(manifest.getProperty("schema")),
                 "invalid telemetry migration schema");
         for (String key : new String[] {"await_source", "process_source", "execution_source",
-                "history_source", "policy"}) {
+                "history_source", "fingerprint_source", "policy"}) {
             String relative = required(manifest, key + ".path");
             require(digest(root.resolve(relative)).equals(required(manifest, key + ".sha256"))
                             || key.equals("history_source") && SmokeScheduleBaselineCheck.transports(
