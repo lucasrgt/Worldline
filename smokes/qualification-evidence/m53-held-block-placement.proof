@@ -1,5 +1,5 @@
 schema=1
 id=m53-held-block-placement
-fingerprint=a3175effb9cfa9190da4c12faee3ff4e8a9f86c021db79f32c369bd3ba552fcf
+fingerprint=a631ec3f71da017497a67f21240dedeada680c13980c748b77b3544fc2db3b5c
 observation.sha256=fe924518d13e732d188000d9954e7d3d54185a2ad863a1faceabfeb059aa81a5
 source=refactor-equivalent
