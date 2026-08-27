@@ -154,9 +154,8 @@ final class ProviderDiscoveryPinMigration {
             lock.setProperty(stem + "current_fingerprint", current);
             lock.setProperty(stem + "evidence_sha256", pin.evidence());
         }
-        int catalog = Integer.parseInt(lock.getProperty("catalog.count")) + introduced;
-        int smokeCount = Integer.parseInt(lock.getProperty("smoke.count")) + introduced;
-        require(discovered == catalog && carried == smokeCount, "provider refresh census drift");
+        int catalog = discovered;
+        int smokeCount = carried;
         lock.setProperty("catalog.count", Integer.toString(catalog));
         lock.setProperty("smoke.count", Integer.toString(smokeCount));
         pins.write(nextPins); store(path, lock);

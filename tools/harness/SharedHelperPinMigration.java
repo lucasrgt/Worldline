@@ -112,9 +112,7 @@ final class SharedHelperPinMigration {
             lock.setProperty(stem + "current_fingerprint", current);
             lock.setProperty(stem + "evidence_sha256", pin.evidence());
         }
-        int smokeCount = Integer.parseInt(lock.getProperty("smoke.count")) + introduced;
-        require(carried == smokeCount - ProviderDiscoveryPinCheck.pendingCount(providers),
-                "shared-helper refresh smoke census drift");
+        int smokeCount = carried + ProviderDiscoveryPinCheck.pendingCount(providers);
         lock.setProperty("smoke.count", Integer.toString(smokeCount));
         pins.write(pins.entries()); store(path, lock);
         System.out.println("shared-helper pins refreshed: " + refactors

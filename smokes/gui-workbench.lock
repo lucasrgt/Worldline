@@ -1,6 +1,6 @@
 # Worldline workbench GUI proof boundary v1
 additional.pending=gui-tree
-catalog.count=528
+catalog.count=527
 pending.count=5
 pending.smokes=gui-tree,m7-mod-loading,m8-mod-version-diff,m9-scenario-minimization,testkit-cycle
 release.current_signature=87256440f1db54387671e3ad0c47a464afbe991d1933d339f37afce460e11b00
@@ -25,7 +25,7 @@ smoke.changed=457
 smoke.controlled-client-tick.current_fingerprint=c0031897f4cd51029956794b2a8e582aac2d40dc3eec866a5ecee0d63ecf4bd4
 smoke.controlled-client-tick.evidence_sha256=ac13115a73408c85eb80b931dc3004b4fd66b26a5512e8d4fb036eebf70ae780
 smoke.controlled-client-tick.prior_fingerprint=80191f0d00d3a069e0ae2a9a9861e355581293a69a0bbcccfb6dbbbd3f78a7c0
-smoke.count=522
+smoke.count=521
 smoke.deterministic-world-tick.current_fingerprint=c4b56fe5a9ee4ff1f4f7e4668d42d9621c0dcd89f80f84379d893be6e8ce0775
 smoke.deterministic-world-tick.evidence_sha256=8968e0f3fa8b1c979bba56a0d25557beead0f26f19f14ca5bfe86e1bcf2d4933
 smoke.deterministic-world-tick.prior_fingerprint=cbc443e7ed155e82e06c2c90f6e6c32a436126e8800d51a28ad494b7393ebb64

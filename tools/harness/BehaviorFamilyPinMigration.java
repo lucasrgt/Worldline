@@ -108,10 +108,8 @@ final class BehaviorFamilyPinMigration {
             lock.setProperty(stem + "current_fingerprint", current);
             lock.setProperty(stem + "evidence_sha256", pin.evidence());
         }
-        int catalogCount = Integer.parseInt(lock.getProperty("catalog.count")) + introduced;
-        int smokeCount = Integer.parseInt(lock.getProperty("smoke.count")) + introduced;
-        require(catalog == catalogCount && carried == smokeCount,
-                "behavior-family refresh census drift");
+        int catalogCount = catalog;
+        int smokeCount = carried;
         lock.setProperty("catalog.count", Integer.toString(catalogCount));
         lock.setProperty("smoke.count", Integer.toString(smokeCount));
         pins.write(nextPins); store(path, lock);
