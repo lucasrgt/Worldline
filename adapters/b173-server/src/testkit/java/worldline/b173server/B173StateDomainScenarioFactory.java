@@ -32,7 +32,7 @@ public final class B173StateDomainScenarioFactory {
                 Collections.singletonList(new BlockConformanceTemplate(
                         "state-domain", ConformanceLayer.ARCHETYPE)));
         List<BlockState> domain = new ArrayList<BlockState>();
-        for (int metadata = 0; metadata <= 11; metadata++) {
+        for (int metadata = 0; metadata <= 15; metadata++) {
             domain.add(new BlockState(64, metadata));
         }
         List<BlockStateDomainStep> steps = new ArrayList<BlockStateDomainStep>();
@@ -44,7 +44,7 @@ public final class B173StateDomainScenarioFactory {
             steps.add(BlockStateDomainStep.place("place-face-" + direction, support, BlockFace.UP,
                     yaw[direction], 0F, Arrays.asList(
                             new BlockStateObservation(lower, new BlockState(64, direction)),
-                            new BlockStateObservation(upper, new BlockState(64, direction + 8)))));
+                            new BlockStateObservation(upper, new BlockState(64, direction + 12)))));
         }
         for (int direction = 0; direction < 4; direction++) {
             BlockPosition lower = BlockFace.UP.adjacent(

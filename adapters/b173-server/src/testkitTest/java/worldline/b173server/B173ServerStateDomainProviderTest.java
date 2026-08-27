@@ -22,20 +22,20 @@ public final class B173ServerStateDomainProviderTest {
         BlockStateDomainScenario door = B173StateDomainScenarioFactory.woodenDoor();
         require(door.id().equals("wooden-door-complete-metadata")
                 && door.claim().layer() == ConformanceLayer.SINGULAR
-                && door.domain().size() == 12 && door.steps().size() == 8
+                && door.domain().size() == 16 && door.steps().size() == 8
                 && door.placementSlot().before().legacyId() == 324
                 && door.placementSlot().before().count() == 4
                 && door.placementSlot().after() == null,
                 "wooden-door state-domain row drifted");
-        for (int metadata = 0; metadata <= 11; metadata++) {
+        for (int metadata = 0; metadata <= 15; metadata++) {
             require(door.domain().contains(new BlockState(64, metadata)),
                     "door metadata absent from public domain: " + metadata);
         }
         require(door.finalStates().size() == 8
                 && door.finalStates().values().contains(new BlockState(64, 4))
                 && door.finalStates().values().contains(new BlockState(64, 7))
-                && door.finalStates().values().contains(new BlockState(64, 8))
-                && door.finalStates().values().contains(new BlockState(64, 11)),
+                && door.finalStates().values().contains(new BlockState(64, 12))
+                && door.finalStates().values().contains(new BlockState(64, 15)),
                 "door final open-state grid drifted");
         Map<String, String> options = new LinkedHashMap<String, String>();
         options.put(BlockStateDomainPlan.PLACEMENT_SLOT_OPTION, "1:37:324:4:0");
