@@ -42,6 +42,13 @@ final class B173LifecycleSupportTest {
         require(shaded.overheadState().equals(new BlockState(1, 0))
                         && shaded.overhead().equals(new worldline.api.BlockPosition(4, 73, 4)),
                 "overhead lifecycle scenario drifted");
+        BlockLifecycleScenario cake = B173LifecycleScenarioFactory.harvestFromItem(
+                "cake", "b1.7.3:block/092", "cake", true, 92, 354, 0, 0,
+                new BlockState(1, 0), 280, 0, 1);
+        require(cake.placementSlot().before().legacyId() == 354
+                        && cake.placedState().legacyId() == 92
+                        && cake.expectedDrops().isEmpty(),
+                "distinct placement item lifecycle scenario drifted");
     }
 
     private static void require(boolean condition, String message) {
