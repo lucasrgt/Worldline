@@ -1,5 +1,5 @@
 schema=1
 id=m199-rose
-fingerprint=d523ac0786b05bfe50eb526b69ce541a0e57c2c88a98dd413839363247ed2542
+fingerprint=edb5b8e6200c7a0cb217912729fbb12d150b8ebb610fcabfc9fc2894408341ab
 observation.sha256=d79a60342cee16cfece9348ecc6371263bd13bc5f50896d336b8fae6d9d750dd
 source=refactor-equivalent

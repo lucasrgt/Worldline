@@ -1,5 +1,5 @@
 schema=1
 id=m464-explosion-player-hurt-set
-fingerprint=07788e61568d30e6b32f83f85c1bccda2acc86465e44cae917f7d5321bc2447e
+fingerprint=ad841e6fbbc37eb53a86ec6275bd0cf102fdd5100e040a93dfd7c8d03b33ede8
 observation.sha256=57b40f0692f328b32fc02a568a0f47854d1d21fda0e2ed383262bf03c2b8c078
 source=refactor-equivalent

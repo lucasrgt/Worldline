@@ -1,5 +1,5 @@
 schema=1
 id=m627-chunk-unload-reload
-fingerprint=2cbcb41d2ea51afda310d9b542bbda92790e974cfd0f3932bae614fb7b0ba5c7
+fingerprint=fc8814b8005caaa937afca27c0002d8892b41c72a8d77d2e2d9b4d1a7bbb35fc
 observation.sha256=f785ba7052d58933013ee82cd556c8f22f8fe31a154a9f33473907b58af86c73
 source=refactor-equivalent

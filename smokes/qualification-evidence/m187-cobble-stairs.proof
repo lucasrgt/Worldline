@@ -1,5 +1,5 @@
 schema=1
 id=m187-cobble-stairs
-fingerprint=515385bd459ef27e7ed1bdffc382c63de0a99e58c563901982884472c2625d03
+fingerprint=3ab42e86a6e63fe9cbb564c6377c922e7179d456766e2da9a703a4ee2de2da16
 observation.sha256=a569478836d30464768b7bc64d771b5cd735b7fb65e33ab5bb5a661e1f318a96
 source=refactor-equivalent
