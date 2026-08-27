@@ -63,7 +63,10 @@ stairs, pumpkin, jack-o'-lantern, torch, and lit redstone torch. It requalifies 
 claims and adds 22 claims, bringing the census to 370 verified claims (35.04%) and leaving 686
 unknown. The substrate-aware dirt-flora lifecycle family then proves dandelion, rose, and all three
 Beta sapling item variants. Its five cases close 12 distinct claims, bringing the census to 382
-verified claims (36.17%) and leaving 674 unknown. Existing smoke evidence is
+verified claims (36.17%) and leaving 674 unknown. The overhead-aware shaded-mushroom lifecycle
+family then proves brown and red mushroom placement, persistence, breaking, and exact self-drops
+under a controlled stone canopy. Its two cases close eight distinct claims, bringing the census to
+390 verified claims (36.93%) and leaving 666 unknown. Existing smoke evidence is
 reusable input, but it is never promoted automatically: its subject, action, context, observable,
 oracle, signature, and automation surface must be curated first.
 
@@ -110,6 +113,7 @@ subsystem reduces it to 715. Furnace facing reduces it to 714, the cardinal-plac
 light-transport subsystem to 696.
 The floor-mounted lifecycle subsystem reduces the remaining target gap to 674.
 The dirt-flora lifecycle subsystem reduces it again to 662.
+The shaded-mushroom lifecycle subsystem reduces it to 654.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
