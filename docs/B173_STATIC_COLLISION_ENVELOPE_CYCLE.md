@@ -10,6 +10,6 @@ One public TestKit family compares air controls with gameplay-placed stone, slab
 
 DataDrivenCycle compiles the reusable collision TestKit contract, official-server provider, and five caller-owned rows. Every row owns a fresh world, requires exact item consumption, records server corrections and displacement, re-centers after every probe, and proves its placed geometry across a fresh login.
 
-Expected signal: `provider=b1.7.3-server-collision,family=static-envelope,rows=5,passed=5,probes=10,reload=FRESH_LOGINx5,evidence=0000000000000000000000000000000000000000000000000000000000000000,isolation=5-fresh-worlds`.
+Expected signal: `provider=b1.7.3-server-collision,family=static-envelope,rows=5,passed=5,probes=10,reload=FRESH_LOGINx5,evidence=1217fa92a0118efeef73a2a2b5735e223e844a854ff54b76d7276c9246654edc,isolation=5-fresh-worlds`.
 
-Frozen semantic SHA-256: `0000000000000000000000000000000000000000000000000000000000000000`.
+Frozen semantic SHA-256: `66f8fcd3fd38c91324e3a174aeeeca221d11c1c0e31211f454c16902fa9c392a`.

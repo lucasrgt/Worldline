@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=b173-static-collision-envelope-cycle -->
 <!-- nonclaims=dynamic-neighbor-shapes,entity-pathfinding,selection-raytrace,native-render -->
-<!-- frozen-trace=0000000000000000000000000000000000000000000000000000000000000000 -->
+<!-- frozen-trace=66f8fcd3fd38c91324e3a174aeeeca221d11c1c0e31211f454c16902fa9c392a -->
 
 # Beta 1.7.3 static collision envelopes
 
@@ -20,4 +20,4 @@ This map does not claim dynamic neighbor-dependent shape closure, mob pathfindin
 selection ray tracing, or native rendering.
 
 Frozen signal:
-`provider=b1.7.3-server-collision,family=static-envelope,rows=5,passed=5,probes=10,reload=FRESH_LOGINx5,evidence=0000000000000000000000000000000000000000000000000000000000000000,isolation=5-fresh-worlds`.
+`provider=b1.7.3-server-collision,family=static-envelope,rows=5,passed=5,probes=10,reload=FRESH_LOGINx5,evidence=1217fa92a0118efeef73a2a2b5735e223e844a854ff54b76d7276c9246654edc,isolation=5-fresh-worlds`.
