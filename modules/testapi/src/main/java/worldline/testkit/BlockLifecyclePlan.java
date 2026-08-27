@@ -11,16 +11,26 @@ import worldline.test.Worldline;
 /** Registers validated lifecycle data rows as executable Worldline tests. */
 public final class BlockLifecyclePlan {
     public static final String EVIDENCE_ARTIFACT = "block-lifecycle.properties";
+    public static final long DEFAULT_TIMEOUT_MILLIS = 180_000L;
 
     private final String runtimeId;
     private final List<BlockLifecycleScenario> scenarios;
+    private final long timeoutMillis;
 
     public BlockLifecyclePlan(String runtimeId, List<BlockLifecycleScenario> scenarios) {
+        this(runtimeId, scenarios, DEFAULT_TIMEOUT_MILLIS);
+    }
+
+    public BlockLifecyclePlan(String runtimeId, List<BlockLifecycleScenario> scenarios,
+            long timeoutMillis) {
         if (runtimeId == null || !runtimeId.matches("[A-Za-z0-9._-]{1,64}")) {
             throw new IllegalArgumentException("invalid lifecycle runtime");
         }
         if (scenarios == null || scenarios.isEmpty()) {
             throw new IllegalArgumentException("lifecycle scenarios are empty");
+        }
+        if (timeoutMillis < 1L || timeoutMillis > 3_600_000L) {
+            throw new IllegalArgumentException("invalid lifecycle timeout");
         }
         List<BlockLifecycleScenario> copy = new ArrayList<BlockLifecycleScenario>(scenarios);
         Set<String> ids = new HashSet<String>();
@@ -37,10 +47,12 @@ public final class BlockLifecyclePlan {
         }
         this.runtimeId = runtimeId;
         this.scenarios = Collections.unmodifiableList(copy);
+        this.timeoutMillis = timeoutMillis;
     }
 
     public String runtimeId() { return runtimeId; }
     public List<BlockLifecycleScenario> scenarios() { return scenarios; }
+    public long timeoutMillis() { return timeoutMillis; }
 
     /** Must be called while a {@link worldline.test.WorldlineSpec} is being defined. */
     public void register(String suite) {
@@ -54,6 +66,6 @@ public final class BlockLifecyclePlan {
             BlockLifecycleDriver driver = context.capability(BlockLifecycleDriver.class);
             BlockLifecycleEvidence evidence = BlockLifecycleFixture.execute(scenario, driver);
             context.attach(EVIDENCE_ARTIFACT, evidence.canonical());
-        })).tag("block-lifecycle");
+        })).timeout(timeoutMillis).tag("block-lifecycle");
     }
 }

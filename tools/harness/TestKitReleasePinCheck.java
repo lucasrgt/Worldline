@@ -64,7 +64,7 @@ final class TestKitReleasePinCheck {
                         && release.getProperty("version").equals(artifacts.getProperty("version")),
                 "invalid TestKit artifact lock");
         int entries = 0;
-        for (String artifact : new String[] {"api", "runner"}) {
+        for (String artifact : new String[] {"api", "runner", "provider"}) {
             String prefix = "artifact." + artifact + ".";
             int count = integer(artifacts, prefix + "entry.count"); entries += count;
             require(integer(artifacts, prefix + "class.count") > 0
@@ -76,11 +76,11 @@ final class TestKitReleasePinCheck {
                         String value = artifacts.getProperty(key); return hash(value); }).count();
             require(locked == count, "incomplete TestKit per-entry lock: " + artifact);
         }
-        require(artifacts.size() == entries + 12, "unexpected TestKit artifact lock fields");
+        require(artifacts.size() == entries + 17, "unexpected TestKit artifact lock fields");
     }
     static void validateDirectory(Path root, Path output) throws Exception {
         Properties lock = load(root.resolve("release/testkit-artifacts.lock"));
-        for (String artifact : new String[] {"api", "runner"}) {
+        for (String artifact : new String[] {"api", "runner", "provider"}) {
             String prefix = "artifact." + artifact + ".";
             Path jar = output.resolve(required(lock, prefix + "file"));
             require(Files.isRegularFile(jar) && Files.size(jar) == Long.parseLong(

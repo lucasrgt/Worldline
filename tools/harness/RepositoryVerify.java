@@ -200,6 +200,12 @@ final class RepositoryVerify {
         report.step("smoke-runners", () -> new SmokeRunnerBuild(root, build).compile());
         List<Path> outputs = report.value("modules",
                 () -> new ModuleBuild(root, build, config.values(), modules).compileAll());
+        report.step("portable-adapters", () -> stages.executeDirectory("portable-adapters",
+                inputs.adapters(), build.resolve("adapter-classes"), () -> {
+                    new PortableAdapterCheck(root, build, config.required("java.release")).execute();
+                    run(Arrays.asList("java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"),
+                            "ForeignUiContractCheck"));
+                }));
         report.step("release-artifacts", () -> {
             Path distribution = root.resolve(".worldline/dist/testkit");
             stages.executeDirectory("release-artifacts", inputs.testKitArtifacts(), distribution,
@@ -212,11 +218,6 @@ final class RepositoryVerify {
         });
         if (requireLocalArtifacts) report.step("mapping-batches",
                 () -> verifyMappingBatches(outputs, modules));
-        report.step("portable-adapters", () -> stages.execute("portable-adapters", inputs.adapters(), () -> {
-            new PortableAdapterCheck(root, build, config.required("java.release")).execute();
-            run(Arrays.asList("java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"),
-                    "ForeignUiContractCheck"));
-        }));
         report.step("milestone-surfaces", () -> stages.execute("milestone-surfaces", inputs.surfaces(), () -> {
             Path api = outputs.get(modules.indexOf("api"));
             Path testmodel = outputs.get(modules.indexOf("testmodel"));

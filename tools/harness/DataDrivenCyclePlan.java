@@ -59,7 +59,7 @@ public final class DataDrivenCyclePlan {
         require(!arguments.isEmpty() && arguments.stream().allMatch(DataDrivenCyclePlan::propertyName),
                 "invalid cycle arguments: " + id);
         require(!inputs.isEmpty() && inputs.stream().allMatch(value ->
-                value.matches("(?:adapters|modules)/[a-z0-9-]+/src/main/java")),
+                value.matches("(?:adapters|modules)/[a-z0-9-]+/src/(?:main|testkit)/java")),
                 "invalid cycle inputs: " + id);
         require(compileProducts.stream().allMatch(DataDrivenCyclePlan::moduleName)
                         && runtimeProducts.stream().allMatch(DataDrivenCyclePlan::moduleName),

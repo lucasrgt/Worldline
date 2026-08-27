@@ -64,6 +64,7 @@ jobs:
           files: |
             .worldline/dist/testkit/worldline-test-api-*.jar
             .worldline/dist/testkit/worldline-test-runner-*.jar
+            .worldline/dist/testkit/worldline-test-provider-b173-server-lifecycle-*.jar
             .worldline/dist/testkit/checksums.properties
       - name: Revalidate published release artifacts
         env:

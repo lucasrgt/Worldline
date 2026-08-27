@@ -40,7 +40,7 @@ public final class BlockLifecycleFixture {
         driver.placeHeldBlock(scenario.support(), scenario.face());
         verifyBlock(driver.awaitBlock(target, scenario.placedState()),
                 target, scenario.placedState(), "placement");
-        verifySlot(driver.inventory(), scenario.placementSlot(), true);
+        awaitSlot(driver, scenario.placementSlot(), true, scenario.observationTicks());
 
         driver.saveAndReload();
         BlockLifecycleDriver.ReloadBoundary boundary = driver.reloadBoundary();
@@ -58,7 +58,7 @@ public final class BlockLifecycleFixture {
         List<RemoteItemStack> drops = newDrops(driver.droppedItems(), priorDrops);
         require(drops.equals(sorted(scenario.expectedDrops())),
                 "drop matrix drifted: expected=" + scenario.expectedDrops() + ",actual=" + drops);
-        verifySlot(driver.inventory(), scenario.breakSlot(), true);
+        awaitSlot(driver, scenario.breakSlot(), true, scenario.observationTicks());
 
         driver.saveAndReload();
         require(driver.reloadBoundary() == boundary, "reload boundary changed within lifecycle");
@@ -77,10 +77,27 @@ public final class BlockLifecycleFixture {
         if (inventory == null || expected.inventorySlot() >= inventory.size()) {
             throw new IllegalStateException("lifecycle inventory slot is absent");
         }
-        RemoteInventorySlot observed = inventory.slot(expected.inventorySlot());
-        RemoteItemStack stack = after ? expected.after() : expected.before();
-        require(stack == null ? observed.empty() : !observed.empty() && observed.item().equals(stack),
+        require(slotMatches(inventory.slot(expected.inventorySlot()), expected, after),
                 "lifecycle inventory effect drifted at slot " + expected.inventorySlot());
+    }
+
+    private static void awaitSlot(BlockLifecycleDriver driver, BlockLifecycleSlot expected,
+            boolean after, int ticks) {
+        for (int elapsed = 0; elapsed <= ticks; elapsed++) {
+            RemoteInventoryView inventory = driver.inventory();
+            if (inventory != null && expected.inventorySlot() < inventory.size()
+                    && slotMatches(inventory.slot(expected.inventorySlot()), expected, after)) return;
+            if (elapsed < ticks) driver.sustainTicks(1);
+        }
+        throw new IllegalStateException("lifecycle inventory effect did not settle at slot "
+                + expected.inventorySlot() + " within " + ticks + " ticks");
+    }
+
+    private static boolean slotMatches(RemoteInventorySlot observed,
+            BlockLifecycleSlot expected, boolean after) {
+        RemoteItemStack stack = after ? expected.after() : expected.before();
+        return stack == null ? observed.empty()
+                : !observed.empty() && observed.item().equals(stack);
     }
 
     private static Set<Integer> ids(List<RemoteDroppedItem> drops) {

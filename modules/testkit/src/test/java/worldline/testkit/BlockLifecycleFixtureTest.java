@@ -78,7 +78,8 @@ public final class BlockLifecycleFixtureTest {
         SuiteDefinition suite = (SuiteDefinition) collected.root().children().get(0);
         TestDefinition definition = (TestDefinition) suite.children().get(0);
         require(definition.name().equals("cobblestone")
-                && definition.tags().equals(List.of("block-lifecycle")),
+                && definition.tags().equals(List.of("block-lifecycle"))
+                && definition.timeoutMillis() == BlockLifecyclePlan.DEFAULT_TIMEOUT_MILLIS,
                 "lifecycle DSL registration drifted");
         TestCase test = (TestCase) definition.body();
         require(test.runtimeId().equals("fake-lifecycle"), "lifecycle runtime route drifted");
@@ -88,6 +89,7 @@ public final class BlockLifecycleFixtureTest {
                 "lifecycle DSL did not attach canonical evidence");
         rejects(() -> new BlockLifecyclePlan("fake", List.of(cobble, cobble)));
         rejects(() -> new BlockLifecyclePlan("invalid runtime", List.of(cobble)));
+        rejects(() -> new BlockLifecyclePlan("fake", List.of(cobble), 0L));
 
         BlockLifecycleScenario noDrop = scenario(cases, List.of());
         require(BlockLifecycleFixture.execute(noDrop, new FakeDriver(List.of(), 90))

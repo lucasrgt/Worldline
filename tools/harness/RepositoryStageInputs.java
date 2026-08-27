@@ -27,7 +27,8 @@ final class RepositoryStageInputs {
     }
     List<Path> testKitArtifacts() {
         return paths("tools/testkit", "release/testkit.properties",
-                "release/testkit-artifacts.lock", "harness.properties", "modules");
+                "release/testkit-artifacts.lock", "harness.properties", "modules",
+                "adapters/b173-server");
     }
     List<Path> optimization() {
         return paths("tools/harness/OptimizationCatalogCheck.java",
@@ -51,6 +52,7 @@ final class RepositoryStageInputs {
     }
     List<Path> adapters() {
         return paths("adapters", "modules/api", "modules/analysis", "modules/trace",
+                "modules/testmodel", "modules/testapi",
                 "tools/harness/PortableAdapterCheck.java", "tools/harness/ForeignUiContractCheck.java");
     }
     List<Path> surfaces() {
