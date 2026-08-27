@@ -82,8 +82,8 @@ public final class WorldlineBehavior {
     public static final WorldlineBehavior BLOCK_STATE_DOMAIN_CONFORMANCE = define(
             "block-state-domain-conformance", WorldlineFamily.WORLD,
             "Public causal execution and reload proof of reachable block metadata states");
-    public static final WorldlineBehavior BLOCK_COLLISION_CONFORMANCE = define("block-collision-conformance", WorldlineFamily.ENVIRONMENT,
-            "Public air-control and gameplay-placed block collision envelope conformance");
+    public static final WorldlineBehavior BLOCK_COLLISION_CONFORMANCE = define("block-collision-conformance",
+            WorldlineFamily.ENVIRONMENT, "Public air-control and gameplay-placed block collision envelope conformance");
     public static final WorldlineBehavior FOOD_CONSUMPTION = define("food-consumption", WorldlineFamily.ITEM,
             "Selected food consumption, health restoration, and container result");
     public static final WorldlineBehavior ENVIRONMENTAL_DAMAGE = define("environmental-damage",
@@ -240,8 +240,7 @@ public final class WorldlineBehavior {
     private final String token, family, subject;
 
     WorldlineBehavior(String token, String family, String subject) {
-        this.token = token; this.family = family; this.subject = subject;
-    }
+        this.token = token; this.family = family; this.subject = subject; }
 
     public String token() { return token; } public String family() { return family; }
     public String subject() { return subject; } public String atlasId() { return "atlas.scenario." + token; }
