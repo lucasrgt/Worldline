@@ -21,6 +21,7 @@ final class ProviderDiscoveryPinCheck {
                                 + integer(lock, "pending.count") + 1,
                 "invalid provider-discovery migration");
         sources(root, lock, "modified", 9, true); sources(root, lock, "added", 12, false);
+        refreshSources(root, lock);
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
         Properties gui = GuiWorkbenchPinCheck.manifest(root);
@@ -129,6 +130,25 @@ final class ProviderDiscoveryPinCheck {
                                     relative, baseline))
                             && (!prior || hash(lock.getProperty(stem + "prior_sha256"))),
                     "provider-discovery source drift: " + relative);
+        }
+    }
+    private static void refreshSources(Path root, Properties lock) throws Exception {
+        Properties train = TrainPinCheck.manifest(root);
+        int count = integer(lock, "refresh.source.count");
+        require(count >= 1 && count <= 16, "provider source refresh census drift");
+        for (int index = 1; index <= count; index++) {
+            String stem = "refresh.source." + index + ".";
+            String relative = required(lock, stem + "path");
+            String prior = required(lock, stem + "prior_sha256");
+            String current = required(lock, stem + "current_sha256");
+            boolean fingerprint = relative.equals("tools/harness/SmokeInputFingerprint.java")
+                    && Files.readString(root.resolve(relative)).contains("src/(?:main|testkit)/java")
+                    && Files.readString(root.resolve("tools/harness/DataDrivenCyclePlan.java"))
+                            .contains("src/(?:main|testkit)/java");
+            require(hash(prior) && digest(root.resolve(relative)).equals(current)
+                            && (fingerprint
+                            || TrainPinCheck.transportsFile(train, root, relative, prior)),
+                    "invalid provider source refresh: " + relative);
         }
     }
     private static String digest(Path path) throws Exception { return HexFormat.of().formatHex(

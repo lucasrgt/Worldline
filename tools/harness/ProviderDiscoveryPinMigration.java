@@ -134,7 +134,7 @@ final class ProviderDiscoveryPinMigration {
     }
 
     private static int refreshSources(Path root, Properties lock) throws Exception {
-        int changes = 0;
+        int changes = 0; Properties train = TrainPinCheck.manifest(root);
         for (String group : List.of("modified", "added")) {
             int count = Integer.parseInt(required(lock, group + ".count"));
             for (int index = 0; index < count; index++) {
@@ -142,8 +142,12 @@ final class ProviderDiscoveryPinMigration {
                 String current = digest(Files.readString(root.resolve(required(lock, stem + "path"))));
                 String prior = required(lock, stem + "current_sha256");
                 if (current.equals(prior)) continue;
+                String relative = required(lock, stem + "path");
+                require(TrainPinCheck.transportsFile(train, root, relative, prior)
+                                || fingerprintExtension(root, relative),
+                        "provider source change lacks reviewed transport: " + relative);
                 String refresh = "refresh.source." + (++changes) + ".";
-                lock.setProperty(refresh + "path", required(lock, stem + "path"));
+                lock.setProperty(refresh + "path", relative);
                 lock.setProperty(refresh + "prior_sha256", prior);
                 lock.setProperty(refresh + "current_sha256", current);
                 lock.setProperty(stem + "current_sha256", current);
@@ -151,6 +155,15 @@ final class ProviderDiscoveryPinMigration {
         }
         lock.setProperty("refresh.source.count", Integer.toString(changes));
         return changes;
+    }
+
+    private static boolean fingerprintExtension(Path root, String relative) throws Exception {
+        if (!relative.equals("tools/harness/SmokeInputFingerprint.java")) return false;
+        String fingerprint = Files.readString(root.resolve(relative), StandardCharsets.UTF_8);
+        String plan = Files.readString(root.resolve("tools/harness/DataDrivenCyclePlan.java"),
+                StandardCharsets.UTF_8);
+        String boundary = "src/(?:main|testkit)/java";
+        return fingerprint.contains(boundary) && plan.contains(boundary);
     }
 
     private static Map<String, SmokePins.Entry> baseline(Path root) throws Exception {
