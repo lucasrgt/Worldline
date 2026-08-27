@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=b173-wooden-door-state-domain-cycle -->
 <!-- nonclaims=iron-door-redstone-destruction-collision-render -->
-<!-- frozen-trace=0000000000000000000000000000000000000000000000000000000000000000 -->
+<!-- frozen-trace=5763b0a43e148f0c572b7e5db300482d939add4eb9be8135829e775651e5edbc -->
 
 # Beta 1.7.3 wooden-door state domain
 
@@ -26,4 +26,4 @@ This map does not claim iron doors, redstone-driven activation, support destruct
 sound, client rendering, or states created by direct world mutation.
 
 Frozen signal:
-`provider=b1.7.3-server-state-domain,family=wooden-door,rows=1,passed=1,states=16,reload=FRESH_LOGINx1,evidence=0000000000000000000000000000000000000000000000000000000000000000,isolation=1-fresh-worlds`.
+`provider=b1.7.3-server-state-domain,family=wooden-door,rows=1,passed=1,states=16,reload=FRESH_LOGINx1,evidence=9d4fe0b3288e28dc61f4e3d96396442b507f01491334ac8622f12a4ef9c33c2c,isolation=1-fresh-worlds`.
