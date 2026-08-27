@@ -1,5 +1,5 @@
 schema=1
 id=m346-ore-block-uncrafts
-fingerprint=6cc0cd0d6398e6bbdf2677f1940f3294cd71e9ef81c47ca92296233f4dc05885
+fingerprint=efc796d77d358e4603e3a1b446250f3c1569a5ac467f851e69347e869c0a9a63
 observation.sha256=6cb6facb7859e30e6d0834273f32ba84f01bede6c1d8d39ad7dcf6b33818f452
 source=refactor-equivalent

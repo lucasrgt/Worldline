@@ -1,5 +1,5 @@
 schema=1
 id=m663-snow-layer-nonstacking
-fingerprint=f3dbcd9967aac673bd9a0ccac652d83990ef054719031ad8f8b1ae3d21604e3c
+fingerprint=5e4c9d62c0a8f68b15d923da947d77db2fa943e72095c2f0810c7df8f02bf39e
 observation.sha256=7e7c213f78ee894f6c6ae1c897b537bf7dd8cff9a9bf9bb0ddd6aa731253cdaf
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m453-player-death-drops-set
-fingerprint=fcb8c0f57d9df6ce1e62fdba4cbb3cbef2f4ac5d89d170ec06aeca2062569118
+fingerprint=a8cd1fc2624d80d04e46e58f49465419f34db8be25de3382b260e273b9f43e3d
 observation.sha256=6d7e55c8c86f1540d7306a507b0a07af3ef9cbe3b6f6c79cf2b87663beab7ed0
 source=refactor-equivalent

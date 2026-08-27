@@ -1,5 +1,5 @@
 schema=1
 id=m330-bed-sleep-set
-fingerprint=ad6c9a7b7e96432ba21a58dc21191285111ee103ddae64aff8d3b37dafb11e1e
+fingerprint=49c02ecd73a2aeb0535ddd06704be1ac0cc08c1f027a32dfe0fdaab6b3b20253
 observation.sha256=1415f89a64178b9c0135d108239ba04eb9fca293f9d8ee9005347624eb6842af
 source=refactor-equivalent

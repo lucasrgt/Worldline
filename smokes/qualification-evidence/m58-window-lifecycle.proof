@@ -1,5 +1,5 @@
 schema=1
 id=m58-window-lifecycle
-fingerprint=32103424156985d8a65acf81734ccfb784b40fb204576db20754f52f2f3db123
+fingerprint=8eef2cd1059dcb66f80f5d12c45b2a005e1653d67b69a904eb746183ddabb652
 observation.sha256=f48eac93f7def31cba294141b84fb791e24392fcf431873bdaacff25f62f0329
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m502-sw-entity-collision-resolution
-fingerprint=bb6b3571c60cfe8d561120953ef79db223bc47a038b454c983058f67c57d7b6a
+fingerprint=f95a2e9e3ae89a896a720587109a3631b289f6919dbb5406237af623ef8a9e71
 observation.sha256=c3830617b51785816a20934139bfc9588dafa1412ba4c9e70e16cc7972a50dd4
 source=refactor-equivalent

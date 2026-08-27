@@ -1,5 +1,5 @@
 schema=1
 id=m144-sticky-piston-pull
-fingerprint=e67115ed8e4abcbe1a36d0589dccfa41ace15be73c7d7c55cc7ebde32606da51
+fingerprint=5035afc048276e0dfc59f2aefee11229b8a8d66c191db488b925d06fc53ed8ce
 observation.sha256=a56517b95b971f64b951329f03267a3c65259a557dc00925e24e3f9235fe377a
 source=refactor-equivalent
