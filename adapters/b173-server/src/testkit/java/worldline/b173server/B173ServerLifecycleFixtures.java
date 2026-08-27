@@ -41,7 +41,9 @@ public final class B173ServerLifecycleFixtures {
                 profile("b1.7.3:block/049", "obsidian", false),
                 profile("b1.7.3:block/066", "rail", false),
                 profile("b1.7.3:block/027", "rail", false),
-                profile("b1.7.3:block/028", "rail", false)),
+                profile("b1.7.3:block/028", "rail", false),
+                profile("b1.7.3:block/070", "pressure-plate", false),
+                profile("b1.7.3:block/072", "pressure-plate", false)),
                 Arrays.asList(
                         template("gameplay-placement", ConformanceLayer.UNIVERSAL),
                         template("save-reload", ConformanceLayer.UNIVERSAL),
@@ -66,7 +68,9 @@ public final class B173ServerLifecycleFixtures {
                 scenario(plan, "obsidian", "b1.7.3:block/049", 49, 49, 278, 60),
                 scenario(plan, "rail", "b1.7.3:block/066", 66, 66, 278, 20),
                 scenario(plan, "powered-rail", "b1.7.3:block/027", 27, 27, 278, 20),
-                scenario(plan, "detector-rail", "b1.7.3:block/028", 28, 28, 278, 20)));
+                scenario(plan, "detector-rail", "b1.7.3:block/028", 28, 28, 278, 20),
+                scenario(plan, "stone-pressure-plate", "b1.7.3:block/070", 70, 70, 278, 20),
+                scenario(plan, "wooden-pressure-plate", "b1.7.3:block/072", 72, 72, 278, 20)));
     }
 
     private static BlockLifecycleScenario scenario(BlockConformancePlan plan, String id,

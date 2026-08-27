@@ -21,7 +21,7 @@ public final class B173ServerLifecycleProviderTest {
                 == B173ServerLifecycleTestRuntimeProvider.class,
                 "lifecycle provider service discovery drifted");
         List<BlockLifecycleScenario> rows = B173ServerLifecycleFixtures.scenarios();
-        require(rows.size() == 19 && rows.get(0).id().equals("cobblestone")
+        require(rows.size() == 21 && rows.get(0).id().equals("cobblestone")
                 && rows.get(1).id().equals("dirt") && rows.get(2).id().equals("empty-chest")
                 && rows.get(3).id().equals("stone") && rows.get(4).id().equals("planks")
                 && rows.get(5).id().equals("sandstone") && rows.get(6).id().equals("brick")
@@ -29,7 +29,9 @@ public final class B173ServerLifecycleProviderTest {
                 && rows.get(15).id().equals("obsidian")
                 && rows.get(16).id().equals("rail")
                 && rows.get(17).id().equals("powered-rail")
-                && rows.get(18).id().equals("detector-rail"),
+                && rows.get(18).id().equals("detector-rail")
+                && rows.get(19).id().equals("stone-pressure-plate")
+                && rows.get(20).id().equals("wooden-pressure-plate"),
                 "lifecycle fixture row order drifted");
         descriptorMatchesRows(rows.size());
         require(rows.get(0).drops().layer() == ConformanceLayer.ARCHETYPE
@@ -42,7 +44,8 @@ public final class B173ServerLifecycleProviderTest {
                         && row.breakSlot().inventorySlot() == 38)
                 && rows.get(0).breakSlot().before().legacyId() == 257
                 && rows.get(7).breakSlot().before().legacyId() == 278
-                && rows.get(18).breakSlot().before().legacyId() == 278,
+                && rows.get(18).breakSlot().before().legacyId() == 278
+                && rows.get(20).breakSlot().before().legacyId() == 278,
                 "lifecycle provisioned slots drifted");
         Map<String, String> fixture = new LinkedHashMap<String, String>();
         fixture.put(worldline.testkit.BlockLifecyclePlan.PLACEMENT_SLOT_OPTION, "1:37:57:1:0");
