@@ -40,6 +40,24 @@ public final class B173LifecycleScenarioFactory {
             String archetype, boolean singular, int block, int placementDamage, int metadata,
             BlockState supportState, int tool, int toolAfterDamage, int breakTicks,
             RemoteItemStack... expectedDrops) {
+        return harvestInEnvironment(id, subject, archetype, singular, block, placementDamage,
+                metadata, supportState, null, tool, toolAfterDamage, breakTicks, expectedDrops);
+    }
+
+    public static BlockLifecycleScenario harvestUnderOverhead(String id, String subject,
+            String archetype, boolean singular, int block, int placementDamage, int metadata,
+            BlockState supportState, BlockState overheadState, int tool, int toolAfterDamage,
+            int breakTicks, RemoteItemStack... expectedDrops) {
+        if (overheadState == null) throw new NullPointerException("overheadState");
+        return harvestInEnvironment(id, subject, archetype, singular, block, placementDamage,
+                metadata, supportState, overheadState, tool, toolAfterDamage,
+                breakTicks, expectedDrops);
+    }
+
+    private static BlockLifecycleScenario harvestInEnvironment(String id, String subject,
+            String archetype, boolean singular, int block, int placementDamage, int metadata,
+            BlockState supportState, BlockState overheadState, int tool, int toolAfterDamage,
+            int breakTicks, RemoteItemStack... expectedDrops) {
         if (expectedDrops == null) throw new NullPointerException("expectedDrops");
         BlockConformanceProfile profile = new BlockConformanceProfile(subject,
                 Collections.singletonList(archetype), singular,
@@ -52,7 +70,7 @@ public final class B173LifecycleScenarioFactory {
                         new BlockConformanceTemplate("drop-matrix", ConformanceLayer.ARCHETYPE)));
         RemoteItemStack placed = new RemoteItemStack(block, 1, placementDamage);
         return BlockLifecycleScenario.from(id, plan, subject, B173LifecycleArena.SUPPORT,
-                supportState, BlockFace.UP, new BlockState(block, metadata),
+                supportState, overheadState, BlockFace.UP, new BlockState(block, metadata),
                 new BlockLifecycleSlot(1, 37, placed, null),
                 new BlockLifecycleSlot(2, 38, new RemoteItemStack(tool, 1, 0),
                         new RemoteItemStack(tool, 1, toolAfterDamage)),

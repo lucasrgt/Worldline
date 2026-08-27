@@ -52,13 +52,35 @@ final class B173LifecycleArena {
             require(column == 17 && top.equals(SUPPORT), "lifecycle support coordinate drift");
             client.awaitBlock(SUPPORT, new BlockState(loadout.support.legacyId(),
                     loadout.support.damage()));
-            client.awaitBlock(BlockFace.UP.adjacent(SUPPORT), new BlockState(0, 0));
+            BlockPosition target = BlockFace.UP.adjacent(SUPPORT);
+            client.awaitBlock(target, new BlockState(0, 0));
+            if (loadout.overhead != null) shade(client, loadout, target);
             return client;
         } catch (Exception failure) {
             try { client.close(); }
             catch (RuntimeException close) { failure.addSuppressed(close); }
             throw failure;
         }
+    }
+
+    private static void shade(B173WireClient client, B173LifecycleLoadout loadout,
+            BlockPosition target) throws Exception {
+        require(loadout.overhead.equals(SUPPORT_STATE),
+                "official lifecycle provider only provisions stone overhead");
+        client.selectHeldSlot(0);
+        BlockPosition east = B173FixtureSupport.place(client, SUPPORT, BlockFace.EAST, 1);
+        BlockPosition west = B173FixtureSupport.place(client, SUPPORT, BlockFace.WEST, 1);
+        BlockPosition north = B173FixtureSupport.place(client, SUPPORT, BlockFace.NORTH, 1);
+        BlockPosition south = B173FixtureSupport.place(client, SUPPORT, BlockFace.SOUTH, 1);
+        BlockPosition wall = B173FixtureSupport.place(client, east, BlockFace.UP, 1);
+        B173FixtureSupport.place(client, west, BlockFace.UP, 1);
+        B173FixtureSupport.place(client, north, BlockFace.UP, 1);
+        B173FixtureSupport.place(client, south, BlockFace.UP, 1);
+        BlockPosition overhead = B173FixtureSupport.place(client,
+                B173FixtureSupport.place(client, wall, BlockFace.UP, 1), BlockFace.WEST, 1);
+        require(overhead.equals(BlockFace.UP.adjacent(target)),
+                "lifecycle overhead coordinate drift");
+        client.awaitBlock(target, new BlockState(0, 0));
     }
 
     private static void seed(Path workspace, B173LifecycleLoadout loadout,

@@ -18,11 +18,13 @@ final class B173LifecycleSupportTest {
         fixture.put(BlockLifecyclePlan.PLACEMENT_SLOT_OPTION, "1:37:57:1:0");
         fixture.put(BlockLifecyclePlan.BREAK_SLOT_OPTION, "2:38:278:1:0");
         fixture.put(BlockLifecyclePlan.SUPPORT_STATE_OPTION, "3:0");
+        fixture.put(BlockLifecyclePlan.OVERHEAD_STATE_OPTION, "1:0");
         B173LifecycleLoadout loadout = B173LifecycleLoadout.from(new TestRuntimeRequest(
                 B173ServerLifecycleFixtures.SEED, Paths.get("."), null,
                 "official block lifecycle > arbitrary-external-row", fixture));
         require(loadout.placement.legacyId() == 57 && loadout.tool.legacyId() == 278
-                        && loadout.support.legacyId() == 3 && loadout.supportHotbar == 3,
+                        && loadout.support.legacyId() == 3 && loadout.supportHotbar == 3
+                        && loadout.overhead.equals(new BlockState(1, 0)),
                 "runtime lifecycle options did not select their loadout");
         BlockLifecycleScenario variant = B173LifecycleScenarioFactory.harvestOnSupport(
                 "spruce-sapling", "b1.7.3:block/006", "vegetation", false,
@@ -33,6 +35,13 @@ final class B173LifecycleSupportTest {
                         && variant.supportState().equals(new BlockState(3, 0))
                         && variant.expectedDrops().get(0).damage() == 1,
                 "supported variant lifecycle scenario drifted");
+        BlockLifecycleScenario shaded = B173LifecycleScenarioFactory.harvestUnderOverhead(
+                "brown-mushroom", "b1.7.3:block/039", "vegetation", false,
+                39, 0, 0, new BlockState(3, 0), new BlockState(1, 0),
+                280, 0, 1, new RemoteItemStack(39, 1, 0));
+        require(shaded.overheadState().equals(new BlockState(1, 0))
+                        && shaded.overhead().equals(new worldline.api.BlockPosition(4, 73, 4)),
+                "overhead lifecycle scenario drifted");
     }
 
     private static void require(boolean condition, String message) {

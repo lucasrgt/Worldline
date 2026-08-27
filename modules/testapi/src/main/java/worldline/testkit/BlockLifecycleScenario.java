@@ -14,7 +14,7 @@ public final class BlockLifecycleScenario {
     private final String id;
     private final BlockConformanceCase placement, persistence, transition, drops;
     private final BlockPosition support;
-    private final BlockState supportState;
+    private final BlockState supportState, overheadState;
     private final BlockFace face;
     private final BlockState placedState;
     private final BlockLifecycleSlot placementSlot, breakSlot;
@@ -28,7 +28,7 @@ public final class BlockLifecycleScenario {
             BlockLifecycleSlot breakSlot, List<RemoteItemStack> expectedDrops,
             int breakTicks, int observationTicks) {
         this(defaultId(placement), placement, persistence, transition, drops, support, null,
-                face, placedState, placementSlot, breakSlot, expectedDrops,
+                null, face, placedState, placementSlot, breakSlot, expectedDrops,
                 breakTicks, observationTicks);
     }
 
@@ -38,6 +38,17 @@ public final class BlockLifecycleScenario {
             BlockFace face, BlockState placedState, BlockLifecycleSlot placementSlot,
             BlockLifecycleSlot breakSlot, List<RemoteItemStack> expectedDrops,
             int breakTicks, int observationTicks) {
+        this(id, placement, persistence, transition, drops, support, supportState, null,
+                face, placedState, placementSlot, breakSlot, expectedDrops,
+                breakTicks, observationTicks);
+    }
+
+    public BlockLifecycleScenario(String id, BlockConformanceCase placement,
+            BlockConformanceCase persistence, BlockConformanceCase transition,
+            BlockConformanceCase drops, BlockPosition support, BlockState supportState,
+            BlockState overheadState, BlockFace face, BlockState placedState,
+            BlockLifecycleSlot placementSlot, BlockLifecycleSlot breakSlot,
+            List<RemoteItemStack> expectedDrops, int breakTicks, int observationTicks) {
         require(placement, "gameplay-placement");
         require(persistence, "save-reload");
         require(transition, "break-transition");
@@ -61,6 +72,7 @@ public final class BlockLifecycleScenario {
         this.drops = drops;
         this.support = Objects.requireNonNull(support, "support");
         this.supportState = supportState;
+        this.overheadState = overheadState;
         this.face = Objects.requireNonNull(face, "face");
         this.placedState = Objects.requireNonNull(placedState, "placedState");
         if (placedState.legacyId() == 0) throw new IllegalArgumentException("placed state is air");
@@ -80,13 +92,23 @@ public final class BlockLifecycleScenario {
             BlockState placedState, BlockLifecycleSlot placementSlot,
             BlockLifecycleSlot breakSlot, List<RemoteItemStack> expectedDrops,
             int breakTicks, int observationTicks) {
+        return from(id, plan, subject, support, supportState, null, face, placedState,
+                placementSlot, breakSlot, expectedDrops, breakTicks, observationTicks);
+    }
+
+    public static BlockLifecycleScenario from(String id, BlockConformancePlan plan,
+            String subject, BlockPosition support, BlockState supportState,
+            BlockState overheadState, BlockFace face, BlockState placedState,
+            BlockLifecycleSlot placementSlot, BlockLifecycleSlot breakSlot,
+            List<RemoteItemStack> expectedDrops, int breakTicks, int observationTicks) {
         if (plan == null) throw new NullPointerException("plan");
         return new BlockLifecycleScenario(id,
                 plan.caseFor(subject, "gameplay-placement"),
                 plan.caseFor(subject, "save-reload"),
                 plan.caseFor(subject, "break-transition"),
-                plan.caseFor(subject, "drop-matrix"), support, supportState, face, placedState,
-                placementSlot, breakSlot, expectedDrops, breakTicks, observationTicks);
+                plan.caseFor(subject, "drop-matrix"), support, supportState, overheadState,
+                face, placedState, placementSlot, breakSlot, expectedDrops,
+                breakTicks, observationTicks);
     }
 
     public String id() { return id; }
@@ -98,6 +120,8 @@ public final class BlockLifecycleScenario {
     public BlockPosition support() { return support; }
     public BlockState supportState() { return supportState; }
     public BlockPosition target() { return face.adjacent(support); }
+    public BlockPosition overhead() { return BlockFace.UP.adjacent(target()); }
+    public BlockState overheadState() { return overheadState; }
     public BlockFace face() { return face; }
     public BlockState placedState() { return placedState; }
     public BlockLifecycleSlot placementSlot() { return placementSlot; }

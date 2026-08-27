@@ -1,6 +1,7 @@
 package worldline.b173server;
 
 import worldline.api.RemoteItemStack;
+import worldline.api.BlockState;
 import worldline.test.TestRuntimeRequest;
 import worldline.testkit.BlockLifecyclePlan;
 
@@ -8,12 +9,15 @@ import worldline.testkit.BlockLifecyclePlan;
 final class B173LifecycleLoadout {
     final int placementHotbar, breakHotbar, supportHotbar;
     final RemoteItemStack placement, tool, support;
+    final BlockState overhead;
 
     private B173LifecycleLoadout(int placementHotbar, RemoteItemStack placement,
-            int breakHotbar, RemoteItemStack tool, int supportHotbar, RemoteItemStack support) {
+            int breakHotbar, RemoteItemStack tool, int supportHotbar, RemoteItemStack support,
+            BlockState overhead) {
         this.placementHotbar = placementHotbar; this.placement = placement;
         this.breakHotbar = breakHotbar; this.tool = tool;
         this.supportHotbar = supportHotbar; this.support = support;
+        this.overhead = overhead;
     }
 
     static B173LifecycleLoadout from(TestRuntimeRequest request) {
@@ -24,13 +28,23 @@ final class B173LifecycleLoadout {
         Slot tool = parse(request.runtimeOption(BlockLifecyclePlan.BREAK_SLOT_OPTION), "break");
         RemoteItemStack support = support(request.runtimeOption(
                 BlockLifecyclePlan.SUPPORT_STATE_OPTION));
+        BlockState overhead = optionalState(request.runtimeOption(
+                BlockLifecyclePlan.OVERHEAD_STATE_OPTION));
         if (placement.hotbar == tool.hotbar || placement.hotbar == 0 || tool.hotbar == 0) {
             throw new IllegalArgumentException("lifecycle provisioned slots overlap");
         }
         int supportHotbar = support.legacyId() == 1 && support.damage() == 0
                 ? 0 : available(placement.hotbar, tool.hotbar);
         return new B173LifecycleLoadout(placement.hotbar, placement.item,
-                tool.hotbar, tool.item, supportHotbar, support);
+                tool.hotbar, tool.item, supportHotbar, support, overhead);
+    }
+
+    private static BlockState optionalState(String value) {
+        if (value == null) throw new IllegalArgumentException(
+                "lifecycle provider lacks overhead state option");
+        if (value.equals("none")) return null;
+        RemoteItemStack parsed = support(value);
+        return new BlockState(parsed.legacyId(), parsed.damage());
     }
 
     private static RemoteItemStack support(String value) {

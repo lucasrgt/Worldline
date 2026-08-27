@@ -34,6 +34,7 @@ public final class BlockLifecycleFixture {
             verifyBlock(driver.awaitBlock(scenario.support(), scenario.supportState()),
                     scenario.support(), scenario.supportState(), "placement support");
         }
+        verifyOverhead(scenario, driver, "placement");
         verifyBlock(driver.awaitBlock(target, AIR), target, AIR, "placement baseline");
         verifySlot(driver.inventory(), scenario.placementSlot(), false);
         driver.selectHeldSlot(scenario.placementSlot().hotbarSlot());
@@ -46,6 +47,7 @@ public final class BlockLifecycleFixture {
         BlockLifecycleDriver.ReloadBoundary boundary = driver.reloadBoundary();
         verifyBlock(driver.awaitBlock(target, scenario.placedState()),
                 target, scenario.placedState(), "placed-state reload");
+        verifyOverhead(scenario, driver, "placed-state reload");
 
         verifySlot(driver.inventory(), scenario.breakSlot(), false);
         driver.selectHeldSlot(scenario.breakSlot().hotbarSlot());
@@ -63,7 +65,15 @@ public final class BlockLifecycleFixture {
         driver.saveAndReload();
         require(driver.reloadBoundary() == boundary, "reload boundary changed within lifecycle");
         verifyBlock(driver.awaitBlock(target, AIR), target, AIR, "removed-state reload");
+        verifyOverhead(scenario, driver, "removed-state reload");
         return new BlockLifecycleEvidence(scenario, drops, boundary);
+    }
+
+    private static void verifyOverhead(BlockLifecycleScenario scenario,
+            BlockLifecycleDriver driver, String phase) {
+        if (scenario.overheadState() != null) verifyBlock(
+                driver.awaitBlock(scenario.overhead(), scenario.overheadState()),
+                scenario.overhead(), scenario.overheadState(), phase + " overhead");
     }
 
     private static void verifyBlock(RemoteWorldView world, BlockPosition position,

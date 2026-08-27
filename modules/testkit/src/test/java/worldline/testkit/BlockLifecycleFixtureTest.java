@@ -84,11 +84,26 @@ public final class BlockLifecycleFixtureTest {
         TestCase test = (TestCase) definition.body();
         require(test.runtimeId().equals("fake-lifecycle"), "lifecycle runtime route drifted");
         require(test.runtimeOptions().get(BlockLifecyclePlan.SUPPORT_STATE_OPTION).equals("1:0")
+                        && test.runtimeOptions().get(BlockLifecyclePlan.OVERHEAD_STATE_OPTION)
+                                .equals("none")
                         && test.runtimeOptions().get(BlockLifecyclePlan.PLACEMENT_SLOT_OPTION)
                                 .equals("0:36:4:1:0")
                         && test.runtimeOptions().get(BlockLifecyclePlan.BREAK_SLOT_OPTION)
                                 .equals("1:37:257:1:0"),
                 "lifecycle runtime fixture options drifted");
+        BlockLifecycleScenario shaded = shadedScenario(cases, List.of(BLOCK));
+        FakeDriver shadedDriver = new FakeDriver(List.of(BLOCK), 75);
+        String shadedEvidence = BlockLifecycleFixture.execute(shaded, shadedDriver).canonical();
+        require(shadedEvidence.contains("overhead=4:66:4:1:0\n")
+                        && shadedDriver.actions.stream()
+                                .filter(action -> action.equals("await-overhead:1")).count() == 3,
+                "lifecycle overhead precondition was not preserved across reloads");
+        TestPlan shadedPlan = new PlanSpec(new BlockLifecyclePlan(
+                "fake-lifecycle", List.of(shaded))).collect();
+        TestCase shadedTest = (TestCase) ((TestDefinition) ((SuiteDefinition)
+                shadedPlan.root().children().get(0)).children().get(0)).body();
+        require(shadedTest.runtimeOptions().get(BlockLifecyclePlan.OVERHEAD_STATE_OPTION)
+                        .equals("1:0"), "lifecycle overhead runtime option drifted");
         PlanContext context = new PlanContext(new FakeDriver(List.of(BLOCK), 80));
         test.run(context);
         require(context.attachment.equals(evidence.canonical()),
@@ -133,6 +148,15 @@ public final class BlockLifecycleFixtureTest {
                 BlockFace.UP, new BlockState(4, 0),
                 new BlockLifecycleSlot(0, 36, BLOCK, null),
                 new BlockLifecycleSlot(1, 37, TOOL, WORN_TOOL), drops, 2, 3);
+    }
+
+    private static BlockLifecycleScenario shadedScenario(List<BlockConformanceCase> cases,
+            List<RemoteItemStack> drops) {
+        BlockLifecycleScenario row = scenario(cases, drops);
+        return new BlockLifecycleScenario(row.id(), row.placement(), row.persistence(),
+                row.transition(), row.drops(), row.support(), row.supportState(),
+                new BlockState(1, 0), row.face(), row.placedState(), row.placementSlot(),
+                row.breakSlot(), drops, row.breakTicks(), row.observationTicks());
     }
 
     private static List<BlockConformanceCase> cases() {
@@ -206,6 +230,11 @@ public final class BlockLifecycleFixtureTest {
                 actions.add("await-support:" + expected.legacyId());
                 require(expected.equals(SUPPORT_STATE), "fake support expectation");
                 return view(position, SUPPORT_STATE);
+            }
+            if (position.equals(new BlockPosition(4, 66, 4))) {
+                actions.add("await-overhead:" + expected.legacyId());
+                require(expected.equals(new BlockState(1, 0)), "fake overhead expectation");
+                return view(position, expected);
             }
             actions.add("await:" + expected.legacyId());
             require(state.equals(expected), "fake block expectation");

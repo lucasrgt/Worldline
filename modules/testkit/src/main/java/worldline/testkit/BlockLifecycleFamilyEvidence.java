@@ -41,6 +41,9 @@ final class BlockLifecycleFamilyEvidence {
         }
         BlockPosition support = row.support(), target = row.target();
         BlockState supportState = row.supportState();
+        String overhead = row.overheadState() == null ? "" : "\noverhead="
+                + row.overhead().x() + ":" + row.overhead().y() + ":" + row.overhead().z()
+                + ":" + row.overheadState().legacyId() + ":" + row.overheadState().metadata();
         return "schema=worldline.block-lifecycle-evidence.v1\nscenario=" + row.id()
                 + "\nsubject=" + row.subject()
                 + "\nclaim.gameplay-placement=" + claim + "gameplay-placement|"
@@ -49,7 +52,7 @@ final class BlockLifecycleFamilyEvidence {
                 + "break-transition|" + row.transition().layer() + "\nclaim.drop-matrix="
                 + claim + "drop-matrix|" + row.drops().layer() + "\nsupport="
                 + support.x() + ":" + support.y() + ":" + support.z() + ":"
-                + supportState.legacyId() + ":" + supportState.metadata() + "\ntarget="
+                + supportState.legacyId() + ":" + supportState.metadata() + overhead + "\ntarget="
                 + target.x() + ":" + target.y() + ":" + target.z() + "\nplaced="
                 + row.placedState().legacyId() + ":" + row.placedState().metadata()
                 + "\ndrops=" + drops + "\nreload=FRESH_LOGIN\n";
