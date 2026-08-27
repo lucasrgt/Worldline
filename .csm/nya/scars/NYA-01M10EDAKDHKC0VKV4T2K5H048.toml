@@ -1,0 +1,26 @@
+schema = 1
+id = "NYA-01M10EDAKDHKC0VKV4T2K5H048"
+title = "Keep one canonical owner for equivalent active contracts"
+lesson = "Semantic equivalence must block duplicate milestone IDs even when the canonical contract is RETRYABLE rather than REJECTED. Record the duplicate as a pre-dispatch harness/process rejection with preserved archive evidence, point duplicate.of to the canonical milestone, allow only that canonical ID to resume, and reject every equivalent replacement before launching OpenCode."
+scope = [
+    "coordination/swarm/active-contracts.properties",
+    "coordination/swarm/rejection-registry.properties",
+    "coordination/swarm/dispositions/m666-infinite-water-source.properties",
+    "tools/integration/RejectionRegistry.java",
+    "tools/integration/RejectedContractCheck.java",
+    "tools/integration/ActiveContractRegistry.java",
+]
+tags = [
+    "semantic-equivalence",
+    "retryable",
+    "pre-dispatch",
+]
+created_at = "2026-08-27T01:47:33Z"
+
+[[occurrences]]
+occurred_at = "2026-08-27T01:47:33Z"
+source = "M666 pristine archive sha256=B283BDD602F2C34774068F033D8A485554614CD8608BB9D78F4A8DD84E5F399B; M753 RETRYABLE archive sha256=4b0bda0ce4e116cc02759c1cf9dcf907294fa6eb86b0f1e41af4f0f1b9dd1c7a; equivalent traces=two lateral water sources regenerate the removed center source; M666 worker launches=0"
+reported_by = "codex:m666_preflight_audit"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "554a7475f"

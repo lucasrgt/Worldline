@@ -9,6 +9,7 @@ public final class RejectedContractCheck {
         try {
             if (List.of(arguments).equals(List.of("--self-test"))) {
                 RejectionRegistry.selfTest();
+                ActiveContractRegistry.selfTest();
                 System.out.println("rejected contract check self-test passed");
                 return;
             }
@@ -20,6 +21,8 @@ public final class RejectedContractCheck {
             Path root = Path.of("").toAbsolutePath().normalize();
             List<RejectionRegistry.Entry> entries = RejectionRegistry.load(root, evidence);
             ScarControlRegistry.load(root, entries);
+            ActiveContractRegistry.requireAllowed(ActiveContractRegistry.load(root),
+                    arguments[1], arguments[3]);
             RejectionRegistry.requireAllowed(entries, arguments[1], arguments[3]);
             System.out.println("rejected contract check passed: " + arguments[1]);
         } catch (Exception error) {
@@ -31,6 +34,7 @@ public final class RejectedContractCheck {
     static void requireAllowed(Path root, String id, String goal) throws Exception {
         List<RejectionRegistry.Entry> entries = RejectionRegistry.load(root, null);
         ScarControlRegistry.load(root, entries);
+        ActiveContractRegistry.requireAllowed(ActiveContractRegistry.load(root), id, goal);
         RejectionRegistry.requireAllowed(entries, id, goal);
     }
 

@@ -69,7 +69,8 @@ final class RejectionRegistry {
 
     static void requireAllowed(List<Entry> entries, String id, String goal) {
         String semantic = semantic(id), normalizedGoal = normalize(goal);
-        List<Entry> blocked = entries.stream().filter(entry -> entry.matches(semantic, normalizedGoal))
+        List<Entry> blocked = entries.stream().filter(entry -> entry.blocks(id, semantic,
+                normalizedGoal))
                 .toList();
         if (blocked.isEmpty()) return;
         Entry exact = blocked.stream().filter(entry -> entry.id.equals(id)).findFirst().orElse(null);
@@ -95,6 +96,19 @@ final class RejectionRegistry {
                 rejected.classification, rejected.scar, rejected.archive, rejected.archiveSha,
                 true, "1".repeat(64), "2".repeat(64), "3".repeat(64), "");
         requireAllowed(List.of(reopened), rejected.id, "same milestone objective revalidation");
+        Entry duplicate = new Entry("m666-infinite-water-source", "infinite-water-source",
+                Set.of("water-source-regeneration"), "harness-process-defect", "NYA-OWNER",
+                "duplicate.zip", "4".repeat(64), false, "", "", "",
+                "m753-water-source-regeneration");
+        requireAllowed(List.of(duplicate), "m753-water-source-regeneration",
+                "water source regeneration");
+        boolean duplicateBlocked = false;
+        try {
+            requireAllowed(List.of(duplicate), duplicate.id, "infinite water source");
+        } catch (IllegalStateException expected) {
+            duplicateBlocked = true;
+        }
+        require(duplicateBlocked, "duplicate rejection did not block its exact ID");
     }
 
     private static Properties properties(Path path) throws Exception {
@@ -130,6 +144,12 @@ final class RejectionRegistry {
         boolean matches(String candidate, String goal) {
             return semantic.equals(candidate) || goal.contains(semantic)
                     || aliases.stream().anyMatch(alias -> candidate.equals(alias) || goal.contains(alias));
+        }
+        boolean blocks(String candidateId, String candidate, String goal) {
+            if (!duplicateOf.isBlank()) {
+                return id.equals(candidateId);
+            }
+            return matches(candidate, goal);
         }
     }
 }
