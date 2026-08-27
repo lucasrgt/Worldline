@@ -86,6 +86,12 @@ public final class BlockLifecycleFixtureTest {
         require(test.runtimeOptions().get(BlockLifecyclePlan.SUPPORT_STATE_OPTION).equals("1:0")
                         && test.runtimeOptions().get(BlockLifecyclePlan.OVERHEAD_STATE_OPTION)
                                 .equals("none")
+                        && test.runtimeOptions().get(BlockLifecyclePlan.NEIGHBOR_STATE_OPTION)
+                                .equals("none")
+                        && test.runtimeOptions().get(BlockLifecyclePlan.NEIGHBOR_FACE_OPTION)
+                                .equals("none")
+                        && test.runtimeOptions().get(BlockLifecyclePlan.NEIGHBOR_SLOT_OPTION)
+                                .equals("none")
                         && test.runtimeOptions().get(BlockLifecyclePlan.PLACEMENT_SLOT_OPTION)
                                 .equals("0:36:4:1:0")
                         && test.runtimeOptions().get(BlockLifecyclePlan.BREAK_SLOT_OPTION)
@@ -104,6 +110,24 @@ public final class BlockLifecycleFixtureTest {
                 shadedPlan.root().children().get(0)).children().get(0)).body();
         require(shadedTest.runtimeOptions().get(BlockLifecyclePlan.OVERHEAD_STATE_OPTION)
                         .equals("1:0"), "lifecycle overhead runtime option drifted");
+        BlockLifecycleScenario hydrated = neighborScenario(cases, List.of(BLOCK));
+        FakeDriver hydratedDriver = new FakeDriver(List.of(BLOCK), 78);
+        String hydratedEvidence = BlockLifecycleFixture.execute(hydrated, hydratedDriver).canonical();
+        require(hydratedEvidence.contains("neighbor=5:64:4:9:0\n")
+                        && hydratedDriver.actions.stream()
+                                .filter(action -> action.equals("await-neighbor:9")).count() == 3,
+                "lifecycle neighbor precondition was not preserved across reloads");
+        TestPlan hydratedPlan = new PlanSpec(new BlockLifecyclePlan(
+                "fake-lifecycle", List.of(hydrated))).collect();
+        TestCase hydratedTest = (TestCase) ((TestDefinition) ((SuiteDefinition)
+                hydratedPlan.root().children().get(0)).children().get(0)).body();
+        require(hydratedTest.runtimeOptions().get(BlockLifecyclePlan.NEIGHBOR_STATE_OPTION)
+                        .equals("9:0")
+                        && hydratedTest.runtimeOptions().get(BlockLifecyclePlan.NEIGHBOR_FACE_OPTION)
+                                .equals("EAST")
+                        && hydratedTest.runtimeOptions().get(BlockLifecyclePlan.NEIGHBOR_SLOT_OPTION)
+                                .equals("4:40:326:1:0"),
+                "lifecycle neighbor runtime options drifted");
         PlanContext context = new PlanContext(new FakeDriver(List.of(BLOCK), 80));
         test.run(context);
         require(context.attachment.equals(evidence.canonical()),
@@ -157,6 +181,19 @@ public final class BlockLifecycleFixtureTest {
                 row.transition(), row.drops(), row.support(), row.supportState(),
                 new BlockState(1, 0), row.face(), row.placedState(), row.placementSlot(),
                 row.breakSlot(), drops, row.breakTicks(), row.observationTicks());
+    }
+
+    private static BlockLifecycleScenario neighborScenario(List<BlockConformanceCase> cases,
+            List<RemoteItemStack> drops) {
+        BlockLifecycleScenario row = scenario(cases, drops);
+        BlockLifecycleNeighbor neighbor = new BlockLifecycleNeighbor(BlockFace.EAST,
+                new BlockState(9, 0), new BlockLifecycleSlot(4, 40,
+                        new RemoteItemStack(326, 1, 0),
+                        new RemoteItemStack(325, 1, 0)));
+        return new BlockLifecycleScenario(row.id(), row.placement(), row.persistence(),
+                row.transition(), row.drops(), row.support(), row.supportState(), null,
+                neighbor, row.face(), row.placedState(), row.placementSlot(), row.breakSlot(),
+                drops, row.breakTicks(), row.observationTicks());
     }
 
     private static List<BlockConformanceCase> cases() {
@@ -234,6 +271,11 @@ public final class BlockLifecycleFixtureTest {
             if (position.equals(new BlockPosition(4, 66, 4))) {
                 actions.add("await-overhead:" + expected.legacyId());
                 require(expected.equals(new BlockState(1, 0)), "fake overhead expectation");
+                return view(position, expected);
+            }
+            if (position.equals(new BlockPosition(5, 64, 4))) {
+                actions.add("await-neighbor:" + expected.legacyId());
+                require(expected.equals(new BlockState(9, 0)), "fake neighbor expectation");
                 return view(position, expected);
             }
             actions.add("await:" + expected.legacyId());

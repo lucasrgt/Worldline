@@ -15,6 +15,7 @@ public final class BlockLifecycleScenario {
     private final BlockConformanceCase placement, persistence, transition, drops;
     private final BlockPosition support;
     private final BlockState supportState, overheadState;
+    private final BlockLifecycleNeighbor neighbor;
     private final BlockFace face;
     private final BlockState placedState;
     private final BlockLifecycleSlot placementSlot, breakSlot;
@@ -28,7 +29,7 @@ public final class BlockLifecycleScenario {
             BlockLifecycleSlot breakSlot, List<RemoteItemStack> expectedDrops,
             int breakTicks, int observationTicks) {
         this(defaultId(placement), placement, persistence, transition, drops, support, null,
-                null, face, placedState, placementSlot, breakSlot, expectedDrops,
+                null, null, face, placedState, placementSlot, breakSlot, expectedDrops,
                 breakTicks, observationTicks);
     }
 
@@ -39,7 +40,7 @@ public final class BlockLifecycleScenario {
             BlockLifecycleSlot breakSlot, List<RemoteItemStack> expectedDrops,
             int breakTicks, int observationTicks) {
         this(id, placement, persistence, transition, drops, support, supportState, null,
-                face, placedState, placementSlot, breakSlot, expectedDrops,
+                null, face, placedState, placementSlot, breakSlot, expectedDrops,
                 breakTicks, observationTicks);
     }
 
@@ -49,6 +50,18 @@ public final class BlockLifecycleScenario {
             BlockState overheadState, BlockFace face, BlockState placedState,
             BlockLifecycleSlot placementSlot, BlockLifecycleSlot breakSlot,
             List<RemoteItemStack> expectedDrops, int breakTicks, int observationTicks) {
+        this(id, placement, persistence, transition, drops, support, supportState,
+                overheadState, null, face, placedState, placementSlot, breakSlot,
+                expectedDrops, breakTicks, observationTicks);
+    }
+
+    public BlockLifecycleScenario(String id, BlockConformanceCase placement,
+            BlockConformanceCase persistence, BlockConformanceCase transition,
+            BlockConformanceCase drops, BlockPosition support, BlockState supportState,
+            BlockState overheadState, BlockLifecycleNeighbor neighbor, BlockFace face,
+            BlockState placedState, BlockLifecycleSlot placementSlot,
+            BlockLifecycleSlot breakSlot, List<RemoteItemStack> expectedDrops,
+            int breakTicks, int observationTicks) {
         require(placement, "gameplay-placement");
         require(persistence, "save-reload");
         require(transition, "break-transition");
@@ -73,6 +86,7 @@ public final class BlockLifecycleScenario {
         this.support = Objects.requireNonNull(support, "support");
         this.supportState = supportState;
         this.overheadState = overheadState;
+        this.neighbor = neighbor;
         this.face = Objects.requireNonNull(face, "face");
         this.placedState = Objects.requireNonNull(placedState, "placedState");
         if (placedState.legacyId() == 0) throw new IllegalArgumentException("placed state is air");
@@ -85,6 +99,9 @@ public final class BlockLifecycleScenario {
                 new ArrayList<RemoteItemStack>(expectedDrops));
         this.breakTicks = breakTicks;
         this.observationTicks = observationTicks;
+        if (neighbor != null && neighbor.position(support).equals(target())) {
+            throw new IllegalArgumentException("neighbor overlaps lifecycle target");
+        }
     }
 
     public static BlockLifecycleScenario from(String id, BlockConformancePlan plan,
@@ -107,8 +124,24 @@ public final class BlockLifecycleScenario {
                 plan.caseFor(subject, "save-reload"),
                 plan.caseFor(subject, "break-transition"),
                 plan.caseFor(subject, "drop-matrix"), support, supportState, overheadState,
-                face, placedState, placementSlot, breakSlot, expectedDrops,
+                null, face, placedState, placementSlot, breakSlot, expectedDrops,
                 breakTicks, observationTicks);
+    }
+
+    public static BlockLifecycleScenario fromWithNeighbor(String id, BlockConformancePlan plan,
+            String subject, BlockPosition support, BlockState supportState,
+            BlockState overheadState, BlockLifecycleNeighbor neighbor, BlockFace face,
+            BlockState placedState, BlockLifecycleSlot placementSlot,
+            BlockLifecycleSlot breakSlot, List<RemoteItemStack> expectedDrops,
+            int breakTicks, int observationTicks) {
+        if (plan == null) throw new NullPointerException("plan");
+        return new BlockLifecycleScenario(id,
+                plan.caseFor(subject, "gameplay-placement"),
+                plan.caseFor(subject, "save-reload"),
+                plan.caseFor(subject, "break-transition"),
+                plan.caseFor(subject, "drop-matrix"), support, supportState, overheadState,
+                Objects.requireNonNull(neighbor, "neighbor"), face, placedState,
+                placementSlot, breakSlot, expectedDrops, breakTicks, observationTicks);
     }
 
     public String id() { return id; }
@@ -122,6 +155,10 @@ public final class BlockLifecycleScenario {
     public BlockPosition target() { return face.adjacent(support); }
     public BlockPosition overhead() { return BlockFace.UP.adjacent(target()); }
     public BlockState overheadState() { return overheadState; }
+    public BlockLifecycleNeighbor neighbor() { return neighbor; }
+    public BlockPosition neighborPosition() {
+        return neighbor == null ? null : neighbor.position(support);
+    }
     public BlockFace face() { return face; }
     public BlockState placedState() { return placedState; }
     public BlockLifecycleSlot placementSlot() { return placementSlot; }

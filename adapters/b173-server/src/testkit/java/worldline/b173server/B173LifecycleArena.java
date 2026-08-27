@@ -26,7 +26,8 @@ final class B173LifecycleArena {
         try {
             client.connect();
             client.synchronizePose();
-            int occupied = loadout.supportHotbar == 0 ? 3 : 4;
+            int occupied = (loadout.supportHotbar == 0 ? 3 : 4)
+                    + (loadout.neighborItem == null ? 0 : 1);
             require(client.awaitInventory().occupiedSlots() == occupied,
                     "lifecycle inventory drift");
             RemoteChunkSnapshot initial = client.awaitRemoteChunk(0, 0).chunkAt(0, 0);
@@ -54,6 +55,7 @@ final class B173LifecycleArena {
                     loadout.support.damage()));
             BlockPosition target = BlockFace.UP.adjacent(SUPPORT);
             client.awaitBlock(target, new BlockState(0, 0));
+            if (loadout.neighborItem != null) provisionNeighbor(client, loadout, target);
             if (loadout.overhead != null) shade(client, loadout, target);
             return client;
         } catch (Exception failure) {
@@ -61,6 +63,15 @@ final class B173LifecycleArena {
             catch (RuntimeException close) { failure.addSuppressed(close); }
             throw failure;
         }
+    }
+
+    private static void provisionNeighbor(B173WireClient client,
+            B173LifecycleLoadout loadout, BlockPosition target) throws Exception {
+        BlockPosition neighbor = loadout.neighborFace.adjacent(SUPPORT);
+        require(!neighbor.equals(target), "lifecycle neighbor overlaps target");
+        client.selectHeldSlot(loadout.neighborHotbar);
+        client.useHeldItemOnBlock(SUPPORT, loadout.neighborFace);
+        client.awaitBlock(neighbor, loadout.neighborState);
     }
 
     private static void shade(B173WireClient client, B173LifecycleLoadout loadout,
@@ -85,21 +96,30 @@ final class B173LifecycleArena {
 
     private static void seed(Path workspace, B173LifecycleLoadout loadout,
             RemoteItemStack placed, RemoteItemStack tool) throws Exception {
-        if (loadout.supportHotbar == 0) {
-            B173PlayerSeed.writeInventory(workspace, USERNAME, 4.5D, 60D, 4.5D,
-                    new int[] {0, loadout.placementHotbar, loadout.breakHotbar},
-                    new int[] {1, placed.legacyId(), tool.legacyId()},
-                    new int[] {32, placed.count(), tool.count()},
-                    new int[] {0, placed.damage(), tool.damage()});
-            return;
-        }
+        int size = 3 + (loadout.supportHotbar == 0 ? 0 : 1)
+                + (loadout.neighborItem == null ? 0 : 1);
+        int[] slots = new int[size], ids = new int[size], counts = new int[size],
+                damages = new int[size];
+        int index = 0;
+        index = add(slots, ids, counts, damages, index, 0, new RemoteItemStack(1, 32, 0));
+        index = add(slots, ids, counts, damages, index, loadout.placementHotbar, placed);
+        index = add(slots, ids, counts, damages, index, loadout.breakHotbar, tool);
+        if (loadout.supportHotbar != 0) index = add(slots, ids, counts, damages, index,
+                loadout.supportHotbar, loadout.support);
+        if (loadout.neighborItem != null) index = add(slots, ids, counts, damages, index,
+                loadout.neighborHotbar, loadout.neighborItem);
+        require(index == size, "lifecycle seed size drift");
         B173PlayerSeed.writeInventory(workspace, USERNAME, 4.5D, 60D, 4.5D,
-                new int[] {0, loadout.placementHotbar, loadout.breakHotbar,
-                        loadout.supportHotbar},
-                new int[] {1, placed.legacyId(), tool.legacyId(),
-                        loadout.support.legacyId()},
-                new int[] {32, placed.count(), tool.count(), loadout.support.count()},
-                new int[] {0, placed.damage(), tool.damage(), loadout.support.damage()});
+                slots, ids, counts, damages);
+    }
+
+    private static int add(int[] slots, int[] ids, int[] counts, int[] damages,
+            int index, int slot, RemoteItemStack item) {
+        slots[index] = slot;
+        ids[index] = item.legacyId();
+        counts[index] = item.count();
+        damages[index] = item.damage();
+        return index + 1;
     }
 
     private static BlockPosition foundation(RemoteChunkSnapshot chunk) {

@@ -9,6 +9,7 @@ import worldline.testkit.BlockConformancePlan;
 import worldline.testkit.BlockConformanceProfile;
 import worldline.testkit.BlockConformanceTemplate;
 import worldline.testkit.BlockLifecycleScenario;
+import worldline.testkit.BlockLifecycleNeighbor;
 import worldline.testkit.BlockLifecycleSlot;
 import worldline.testkit.ConformanceLayer;
 
@@ -41,7 +42,7 @@ public final class B173LifecycleScenarioFactory {
             BlockState supportState, int tool, int toolAfterDamage, int breakTicks,
             RemoteItemStack... expectedDrops) {
         return harvestInEnvironment(id, subject, archetype, singular, block, placementDamage,
-                block, metadata, supportState, null, tool, toolAfterDamage, breakTicks,
+                block, metadata, supportState, null, null, tool, toolAfterDamage, breakTicks,
                 expectedDrops);
     }
 
@@ -51,7 +52,7 @@ public final class B173LifecycleScenarioFactory {
             int breakTicks, RemoteItemStack... expectedDrops) {
         if (overheadState == null) throw new NullPointerException("overheadState");
         return harvestInEnvironment(id, subject, archetype, singular, block, placementDamage,
-                block, metadata, supportState, overheadState, tool, toolAfterDamage,
+                block, metadata, supportState, overheadState, null, tool, toolAfterDamage,
                 breakTicks, expectedDrops);
     }
 
@@ -60,14 +61,26 @@ public final class B173LifecycleScenarioFactory {
             int placementDamage, int metadata, BlockState supportState, int tool,
             int toolAfterDamage, int breakTicks, RemoteItemStack... expectedDrops) {
         return harvestInEnvironment(id, subject, archetype, singular, block, placementDamage,
-                placementItem, metadata, supportState, null, tool, toolAfterDamage,
+                placementItem, metadata, supportState, null, null, tool, toolAfterDamage,
                 breakTicks, expectedDrops);
+    }
+
+    public static BlockLifecycleScenario harvestBesideNeighbor(String id, String subject,
+            String archetype, boolean singular, int block, int placementItem,
+            int placementDamage, int metadata, BlockState supportState,
+            BlockLifecycleNeighbor neighbor, int tool, int toolAfterDamage, int breakTicks,
+            RemoteItemStack... expectedDrops) {
+        if (neighbor == null) throw new NullPointerException("neighbor");
+        return harvestInEnvironment(id, subject, archetype, singular, block, placementDamage,
+                placementItem, metadata, supportState, null, neighbor, tool,
+                toolAfterDamage, breakTicks, expectedDrops);
     }
 
     private static BlockLifecycleScenario harvestInEnvironment(String id, String subject,
             String archetype, boolean singular, int block, int placementDamage,
             int placementItem, int metadata, BlockState supportState, BlockState overheadState,
-            int tool, int toolAfterDamage, int breakTicks, RemoteItemStack... expectedDrops) {
+            BlockLifecycleNeighbor neighbor, int tool, int toolAfterDamage, int breakTicks,
+            RemoteItemStack... expectedDrops) {
         if (expectedDrops == null) throw new NullPointerException("expectedDrops");
         BlockConformanceProfile profile = new BlockConformanceProfile(subject,
                 Collections.singletonList(archetype), singular,
@@ -79,11 +92,17 @@ public final class B173LifecycleScenarioFactory {
                         new BlockConformanceTemplate("break-transition", ConformanceLayer.UNIVERSAL),
                         new BlockConformanceTemplate("drop-matrix", ConformanceLayer.ARCHETYPE)));
         RemoteItemStack placed = new RemoteItemStack(placementItem, 1, placementDamage);
-        return BlockLifecycleScenario.from(id, plan, subject, B173LifecycleArena.SUPPORT,
-                supportState, overheadState, BlockFace.UP, new BlockState(block, metadata),
-                new BlockLifecycleSlot(1, 37, placed, null),
-                new BlockLifecycleSlot(2, 38, new RemoteItemStack(tool, 1, 0),
-                        new RemoteItemStack(tool, 1, toolAfterDamage)),
+        BlockLifecycleSlot placementSlot = new BlockLifecycleSlot(1, 37, placed, null);
+        BlockLifecycleSlot breakSlot = new BlockLifecycleSlot(2, 38,
+                new RemoteItemStack(tool, 1, 0),
+                new RemoteItemStack(tool, 1, toolAfterDamage));
+        if (neighbor == null) return BlockLifecycleScenario.from(id, plan, subject,
+                B173LifecycleArena.SUPPORT, supportState, overheadState, BlockFace.UP,
+                new BlockState(block, metadata), placementSlot, breakSlot,
+                Arrays.asList(expectedDrops), breakTicks, 40);
+        return BlockLifecycleScenario.fromWithNeighbor(id, plan, subject,
+                B173LifecycleArena.SUPPORT, supportState, overheadState, neighbor,
+                BlockFace.UP, new BlockState(block, metadata), placementSlot, breakSlot,
                 Arrays.asList(expectedDrops), breakTicks, 40);
     }
 }

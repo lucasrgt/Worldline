@@ -1,23 +1,29 @@
 package worldline.b173server;
 
 import worldline.api.RemoteItemStack;
+import worldline.api.BlockFace;
 import worldline.api.BlockState;
 import worldline.test.TestRuntimeRequest;
 import worldline.testkit.BlockLifecyclePlan;
 
 /** Validated neutral lifecycle slot options translated to an official player loadout. */
 final class B173LifecycleLoadout {
-    final int placementHotbar, breakHotbar, supportHotbar;
-    final RemoteItemStack placement, tool, support;
+    final int placementHotbar, breakHotbar, supportHotbar, neighborHotbar;
+    final RemoteItemStack placement, tool, support, neighborItem;
     final BlockState overhead;
+    final BlockFace neighborFace;
+    final BlockState neighborState;
 
     private B173LifecycleLoadout(int placementHotbar, RemoteItemStack placement,
             int breakHotbar, RemoteItemStack tool, int supportHotbar, RemoteItemStack support,
-            BlockState overhead) {
+            BlockState overhead, int neighborHotbar, RemoteItemStack neighborItem,
+            BlockFace neighborFace, BlockState neighborState) {
         this.placementHotbar = placementHotbar; this.placement = placement;
         this.breakHotbar = breakHotbar; this.tool = tool;
         this.supportHotbar = supportHotbar; this.support = support;
         this.overhead = overhead;
+        this.neighborHotbar = neighborHotbar; this.neighborItem = neighborItem;
+        this.neighborFace = neighborFace; this.neighborState = neighborState;
     }
 
     static B173LifecycleLoadout from(TestRuntimeRequest request) {
@@ -30,13 +36,41 @@ final class B173LifecycleLoadout {
                 BlockLifecyclePlan.SUPPORT_STATE_OPTION));
         BlockState overhead = optionalState(request.runtimeOption(
                 BlockLifecyclePlan.OVERHEAD_STATE_OPTION));
+        Neighbor neighbor = neighbor(request);
         if (placement.hotbar == tool.hotbar || placement.hotbar == 0 || tool.hotbar == 0) {
             throw new IllegalArgumentException("lifecycle provisioned slots overlap");
         }
+        if (neighbor != null && (neighbor.slot.hotbar == 0
+                || neighbor.slot.hotbar == placement.hotbar
+                || neighbor.slot.hotbar == tool.hotbar)) {
+            throw new IllegalArgumentException("lifecycle neighbor slot overlaps");
+        }
         int supportHotbar = support.legacyId() == 1 && support.damage() == 0
-                ? 0 : available(placement.hotbar, tool.hotbar);
+                ? 0 : available(placement.hotbar, tool.hotbar,
+                        neighbor == null ? -1 : neighbor.slot.hotbar);
         return new B173LifecycleLoadout(placement.hotbar, placement.item,
-                tool.hotbar, tool.item, supportHotbar, support, overhead);
+                tool.hotbar, tool.item, supportHotbar, support, overhead,
+                neighbor == null ? -1 : neighbor.slot.hotbar,
+                neighbor == null ? null : neighbor.slot.item,
+                neighbor == null ? null : neighbor.face,
+                neighbor == null ? null : neighbor.state);
+    }
+
+    private static Neighbor neighbor(TestRuntimeRequest request) {
+        String stateValue = request.runtimeOption(BlockLifecyclePlan.NEIGHBOR_STATE_OPTION);
+        String faceValue = request.runtimeOption(BlockLifecyclePlan.NEIGHBOR_FACE_OPTION);
+        String slotValue = request.runtimeOption(BlockLifecyclePlan.NEIGHBOR_SLOT_OPTION);
+        if ("none".equals(stateValue) && "none".equals(faceValue)
+                && "none".equals(slotValue)) return null;
+        if (stateValue == null || faceValue == null || slotValue == null
+                || "none".equals(stateValue) || "none".equals(faceValue)
+                || "none".equals(slotValue)) throw invalid("neighbor");
+        try {
+            RemoteItemStack state = support(stateValue);
+            return new Neighbor(BlockFace.valueOf(faceValue),
+                    new BlockState(state.legacyId(), state.damage()),
+                    parse(slotValue, "neighbor"));
+        } catch (IllegalArgumentException error) { throw invalid("neighbor"); }
     }
 
     private static BlockState optionalState(String value) {
@@ -59,9 +93,9 @@ final class B173LifecycleLoadout {
         } catch (NumberFormatException error) { throw invalid("support"); }
     }
 
-    private static int available(int placement, int tool) {
+    private static int available(int placement, int tool, int neighbor) {
         for (int hotbar = 3; hotbar <= 8; hotbar++) {
-            if (hotbar != placement && hotbar != tool) return hotbar;
+            if (hotbar != placement && hotbar != tool && hotbar != neighbor) return hotbar;
         }
         throw new IllegalArgumentException("lifecycle has no support hotbar slot");
     }
@@ -90,5 +124,12 @@ final class B173LifecycleLoadout {
     private static final class Slot {
         final int hotbar; final RemoteItemStack item;
         Slot(int hotbar, RemoteItemStack item) { this.hotbar = hotbar; this.item = item; }
+    }
+
+    private static final class Neighbor {
+        final BlockFace face; final BlockState state; final Slot slot;
+        Neighbor(BlockFace face, BlockState state, Slot slot) {
+            this.face = face; this.state = state; this.slot = slot;
+        }
     }
 }

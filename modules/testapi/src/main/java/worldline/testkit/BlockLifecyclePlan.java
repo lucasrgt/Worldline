@@ -17,6 +17,9 @@ public final class BlockLifecyclePlan {
     public static final String BREAK_SLOT_OPTION = "block-lifecycle.break-slot";
     public static final String SUPPORT_STATE_OPTION = "block-lifecycle.support-state";
     public static final String OVERHEAD_STATE_OPTION = "block-lifecycle.overhead-state";
+    public static final String NEIGHBOR_STATE_OPTION = "block-lifecycle.neighbor-state";
+    public static final String NEIGHBOR_FACE_OPTION = "block-lifecycle.neighbor-face";
+    public static final String NEIGHBOR_SLOT_OPTION = "block-lifecycle.neighbor-slot";
 
     private final String runtimeId;
     private final List<BlockLifecycleScenario> scenarios;
@@ -71,7 +74,13 @@ public final class BlockLifecyclePlan {
                 .runtimeOption(PLACEMENT_SLOT_OPTION, slot(scenario.placementSlot()))
                 .runtimeOption(BREAK_SLOT_OPTION, slot(scenario.breakSlot()))
                 .runtimeOption(SUPPORT_STATE_OPTION, state(scenario.supportState()))
-                .runtimeOption(OVERHEAD_STATE_OPTION, optionalState(scenario.overheadState()));
+                .runtimeOption(OVERHEAD_STATE_OPTION, optionalState(scenario.overheadState()))
+                .runtimeOption(NEIGHBOR_STATE_OPTION, scenario.neighbor() == null ? "none"
+                        : state(scenario.neighbor().state()))
+                .runtimeOption(NEIGHBOR_FACE_OPTION, scenario.neighbor() == null ? "none"
+                        : scenario.neighbor().face().name())
+                .runtimeOption(NEIGHBOR_SLOT_OPTION, scenario.neighbor() == null ? "none"
+                        : slot(scenario.neighbor().placementSlot()));
         Worldline.test(scenario.id(), runtime.run(context -> {
             BlockLifecycleDriver driver = context.capability(BlockLifecycleDriver.class);
             BlockLifecycleEvidence evidence = BlockLifecycleFixture.execute(scenario, driver);

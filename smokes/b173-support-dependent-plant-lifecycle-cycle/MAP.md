@@ -1,0 +1,23 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=b173-support-dependent-plant-lifecycle-cycle -->
+<!-- nonclaims=random-tick-growth,neighbor-invalidation,collision-damage,native-render -->
+<!-- frozen-trace=0000000000000000000000000000000000000000000000000000000000000000 -->
+
+# Beta 1.7.3 support-dependent plant lifecycles
+
+Two public TestKit rows execute complete isolated lifecycles for cactus and sugar cane. Cactus item
+`81` is planted on gameplay-provisioned sand `12:0`. Sugar-cane item `338` is planted as block
+`83:0` on dirt `3:0` beside still water `9:0`; that water is itself provisioned through water
+bucket item `326` against the support's east face rather than direct world mutation.
+
+Each row proves the substrate and optional lateral neighbor, placement consumption, exact placed
+state, fresh-login persistence, break to air, one exact historical self-item drop, unchanged tool,
+and removed-state persistence after a second fresh login. The water neighbor must remain `9:0`
+through both reloads.
+
+This map does not claim random-tick height growth, dry/adjacent-solid invalidation, cactus collision
+damage, stacked-plant harvest propagation, recipes, particles, or native rendering. Those behavior
+families retain their independent proofs.
+
+Discovery signal:
+`provider=b1.7.3-server-lifecycle,family=support-dependent-plants,rows=2,passed=2,layers=U-U-U-A+U-U-U-A,reload=FRESH_LOGINx4,evidence=0000000000000000000000000000000000000000000000000000000000000000,isolation=2-fresh-worlds`.

@@ -14,8 +14,8 @@ public final class BlockLifecycleEvidence {
     private final String scenarioId, subject;
     private final String placementClaim, persistenceClaim, transitionClaim, dropClaim;
     private final ConformanceLayer placementLayer, persistenceLayer, transitionLayer, dropLayer;
-    private final BlockPosition support, position, overhead;
-    private final BlockState supportState, state, overheadState;
+    private final BlockPosition support, position, overhead, neighbor;
+    private final BlockState supportState, state, overheadState, neighborState;
     private final List<RemoteItemStack> drops;
     private final ReloadBoundary boundary;
 
@@ -37,6 +37,8 @@ public final class BlockLifecycleEvidence {
         state = scenario.placedState();
         overhead = scenario.overhead();
         overheadState = scenario.overheadState();
+        neighbor = scenario.neighborPosition();
+        neighborState = scenario.neighbor() == null ? null : scenario.neighbor().state();
         this.drops = Collections.unmodifiableList(new ArrayList<RemoteItemStack>(drops));
         this.boundary = Objects.requireNonNull(boundary, "boundary");
     }
@@ -57,6 +59,8 @@ public final class BlockLifecycleEvidence {
     public BlockState state() { return state; }
     public BlockPosition overhead() { return overhead; }
     public BlockState overheadState() { return overheadState; }
+    public BlockPosition neighbor() { return neighbor; }
+    public BlockState neighborState() { return neighborState; }
     public List<RemoteItemStack> drops() { return drops; }
     public ReloadBoundary boundary() { return boundary; }
 
@@ -73,6 +77,8 @@ public final class BlockLifecycleEvidence {
                 .append(state(supportState)).append('\n');
         if (overheadState != null) value.append("overhead=").append(position(overhead))
                 .append(':').append(state(overheadState)).append('\n');
+        if (neighborState != null) value.append("neighbor=").append(position(neighbor))
+                .append(':').append(state(neighborState)).append('\n');
         value.append("target=").append(position(position)).append('\n');
         value.append("placed=").append(state(state)).append('\n');
         value.append("drops=");
@@ -99,6 +105,8 @@ public final class BlockLifecycleEvidence {
                 && support.equals(value.support) && Objects.equals(supportState, value.supportState)
                 && overhead.equals(value.overhead)
                 && Objects.equals(overheadState, value.overheadState)
+                && Objects.equals(neighbor, value.neighbor)
+                && Objects.equals(neighborState, value.neighborState)
                 && position.equals(value.position) && state.equals(value.state)
                 && drops.equals(value.drops) && boundary == value.boundary;
     }
@@ -106,7 +114,8 @@ public final class BlockLifecycleEvidence {
     @Override public int hashCode() {
         return Objects.hash(scenarioId, subject, placementClaim, persistenceClaim, transitionClaim, dropClaim,
                 placementLayer, persistenceLayer, transitionLayer, dropLayer,
-                support, supportState, overhead, overheadState, position, state, drops, boundary);
+                support, supportState, overhead, overheadState, neighbor, neighborState,
+                position, state, drops, boundary);
     }
 
     private static void claim(StringBuilder value, String template, String claim,
