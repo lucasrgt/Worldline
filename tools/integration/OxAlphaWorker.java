@@ -16,19 +16,10 @@ final class OxAlphaWorker {
     public static void main(String[] arguments) {
         try {
             if (List.of(arguments).equals(List.of("--self-test"))) {
-                selfTest();
+                OxAlphaWorkerSelfTest.execute();
                 return;
             }
-            if (List.of(arguments).equals(List.of("--self-test-stdin-child"))) {
-                System.in.readAllBytes();
-                System.out.println("stdin closed");
-                return;
-            }
-            if (List.of(arguments).equals(List.of("--self-test-terminal-child"))) {
-                System.out.println("{\"type\":\"tool_use\",\"title\":\"java tools/harness/Gate.java "
-                        + "--milestone m1-contract\",\"metadata\":{\"exit\":1}}");
-                System.out.flush();
-                Thread.sleep(TimeUnit.SECONDS.toMillis(30));
+            if (OxAlphaProcessFixture.run(arguments)) {
                 return;
             }
             OxAlphaRequest request = OxAlphaRequest.parse(arguments);
@@ -43,6 +34,7 @@ final class OxAlphaWorker {
     private static int launch(OxAlphaRequest request) throws Exception {
         Path root = Path.of("").toAbsolutePath().normalize();
         boolean fallback = OxAlphaProfile.fallback();
+        String selectedModel = OxAlphaProfile.model(fallback);
         require(OxAlphaProfile.budgetAllowed(fallback, request.phase(), request.session(),
                 request.timeoutSeconds()), "fallback checkpoint resume requires at least 7200 seconds");
         validate(root, request);
@@ -62,15 +54,28 @@ final class OxAlphaWorker {
         ProcessBuilder builder = new ProcessBuilder(command).directory(root.toFile());
         String config = OxAlphaProfile.config(fallback);
         builder.environment().put("OPENCODE_CONFIG_CONTENT", config);
-        Process process = builder.redirectError(stderr.toFile()).start();
-        OxAlphaTerminalMonitor.Capture capture = OxAlphaTerminalMonitor.capture(process, stdout);
-        closeStdin(process);
-        OxAlphaTerminalMonitor.Outcome outcome = OxAlphaTerminalMonitor.waitFor(
-                process, capture, request.timeoutSeconds());
+        Process process = builder.start();
+        OxAlphaTerminalMonitor.Capture capture = null;
+        OxAlphaProviderCapture errors = null;
+        OxAlphaTerminalMonitor.Outcome outcome;
+        try {
+            errors = OxAlphaProviderCapture.start(process, stderr, selectedModel);
+            capture = OxAlphaTerminalMonitor.capture(process, stdout);
+            closeStdin(process);
+            outcome = OxAlphaTerminalMonitor.waitFor(
+                    process, capture, errors, request.timeoutSeconds());
+        } catch (Exception failure) {
+            try {
+                OxAlphaTerminalMonitor.abort(process, capture, errors);
+            } catch (Exception cleanup) {
+                failure.addSuppressed(cleanup);
+            }
+            throw failure;
+        }
         Instant finished = Instant.now();
         String head = git(root, "rev-parse", "HEAD").trim();
         writeReceipt(receipt, request, started, finished, head, stdout, stderr,
-                outcome, fallback, config);
+                outcome, fallback, selectedModel, config);
         return outcome.exit();
     }
 
@@ -136,8 +141,9 @@ final class OxAlphaWorker {
         }
     }
 
-    private static List<String> command(String message, String session, boolean fallback) {
-        List<String> result = new ArrayList<>(List.of(opencodeTool(), "run", message,
+    static List<String> command(String message, String session, boolean fallback) {
+        List<String> result = new ArrayList<>(List.of(opencodeTool(), "--print-logs",
+                "--log-level", "INFO", "run", message,
                 "--pure", "--auto", "--agent", AGENT, "--model", OxAlphaProfile.model(fallback),
                 "--format", "json", "--title", "Worldline Ox Alpha"));
         if (session != null && !session.isBlank()) {
@@ -149,7 +155,7 @@ final class OxAlphaWorker {
         return result;
     }
 
-    private static String message(OxAlphaRequest request) {
+    static String message(OxAlphaRequest request) {
         String phase = request.adoptionReceipt() != null && request.session() == null
                 ? "Start the single bounded process-recovery session authorized by the adoption receipt. "
                         + "Do not claim a historical session. Do not run Candidate or Milestone Gate, commit, "
@@ -176,9 +182,11 @@ final class OxAlphaWorker {
     private static void writeReceipt(Path receipt, OxAlphaRequest request, Instant started,
             Instant finished, String head,
             Path stdout, Path stderr, OxAlphaTerminalMonitor.Outcome outcome,
-            boolean fallback, String config)
+            boolean fallback, String selectedModel, String config)
             throws Exception {
-        String session = OxAlphaTelemetry.firstSession(stdout);
+        String session = OxAlphaProviderFailure.resolveSession(
+                OxAlphaTelemetry.sessions(stdout), request.session(), stderr, selectedModel);
+        requireProviderSession(outcome, session);
         OxAlphaTelemetry.Result telemetry = OxAlphaTelemetry.read(stdout);
         String value = "{\n  \"schema\":1,\n  \"id\":\"" + request.id()
                 + "\",\n  \"phase\":\"" + request.phase() + "\",\n  \"attempt\":" + request.attempt()
@@ -186,7 +194,7 @@ final class OxAlphaWorker {
                 + "\",\n  \"base\":\"" + request.base() + "\",\n  \"control_base\":\""
                 + request.controlBase() + "\",\n  \"head\":\"" + head
                 + "\",\n  \"profile\":\"" + (fallback ? "fallback" : "primary")
-                + "\",\n  \"model\":\"" + OxAlphaProfile.model(fallback) + "\",\n  \"variant\":\""
+                + "\",\n  \"model\":\"" + selectedModel + "\",\n  \"variant\":\""
                 + "default"
                 + "\",\n  \"agent\":\"" + AGENT + "\",\n  \"nested_delegation\":\"denied\""
                 + ",\n  \"config_sha256\":\"" + sha(config) + "\",\n  \"stdout_sha256\":\""
@@ -201,53 +209,16 @@ final class OxAlphaWorker {
         Files.writeString(receipt, value, StandardCharsets.UTF_8);
     }
 
-    private static void selfTest() throws Exception {
-        Path root = Path.of("").toAbsolutePath().normalize();
-        String head = git(root, "rev-parse", "HEAD").trim();
-        OxAlphaRequest checkpoint = new OxAlphaRequest("m1-contract", "Prove a real behavior",
-                head, head, "checkpoint", 1, null, 60, null, null);
-        List<String> valid = command(message(checkpoint), null, false);
-        require(messagePrecedesFiles(valid), "canonical argument order was rejected");
-        List<String> invalid = new ArrayList<>(valid);
-        String message = invalid.remove(2);
-        invalid.add(message);
-        require(!messagePrecedesFiles(invalid), "variadic attachment swallowed the worker message");
-        OxAlphaProfile.selfTest();
-        OxAlphaTelemetry.selfTest();
-        OxAlphaTerminalMonitor.selfTest();
-        require(command(message(checkpoint), null, false).contains(OxAlphaProfile.DEFAULT_MODEL),
-                "default Ox Alpha model is not allowlisted");
-        require(command(message(checkpoint), "session", true).contains(OxAlphaProfile.DEFAULT_FALLBACK_MODEL),
-                "fallback model is not allowlisted");
-        require(message(checkpoint).contains("Nested task, explore, or subagent delegation is forbidden"),
-                "worker message omitted delegation prohibition");
-        require(ancestor(root, head, head), "exact control base was rejected");
-        require(!ancestor(root, "0".repeat(40), head), "missing control base was accepted");
-        Process child = new ProcessBuilder(javaTool(), "-cp", System.getProperty("java.class.path"),
-                "OxAlphaWorker", "--self-test-stdin-child").start();
-        closeStdin(child);
-        require(child.waitFor(5, TimeUnit.SECONDS), "launcher left the child stdin open");
-        require(child.exitValue() == 0, "stdin closure child failed");
-        Path terminalDirectory = Files.createTempDirectory("worldline-ox-terminal-");
-        Path terminal = terminalDirectory.resolve("stdout.jsonl");
-        try {
-            Process runaway = new ProcessBuilder(javaTool(), "-cp", System.getProperty("java.class.path"),
-                    "OxAlphaWorker", "--self-test-terminal-child").start();
-            OxAlphaTerminalMonitor.Capture capture = OxAlphaTerminalMonitor.capture(runaway, terminal);
-            closeStdin(runaway);
-            OxAlphaTerminalMonitor.Outcome stopped = OxAlphaTerminalMonitor.waitFor(runaway, capture, 10, 1);
-            require(stopped.stoppedAfterTerminal(), "terminal Gate failure did not stop worker");
-        } finally {
-            Files.deleteIfExists(terminal);
-            Files.deleteIfExists(terminalDirectory);
-        }
-    }
-
-    private static void closeStdin(Process process) throws Exception {
+    static void closeStdin(Process process) throws Exception {
         process.getOutputStream().close();
     }
 
-    private static boolean messagePrecedesFiles(List<String> command) {
+    static void requireProviderSession(OxAlphaTerminalMonitor.Outcome outcome, String session) {
+        require(!outcome.stoppedAfterProviderFailure() || session != null,
+                "classified provider failure did not expose one exact OpenCode session");
+    }
+
+    static boolean messagePrecedesFiles(List<String> command) {
         int run = command.indexOf("run");
         int file = command.indexOf("-f");
         return run >= 0 && run + 1 < file && file == command.size() - 2
@@ -265,7 +236,7 @@ final class OxAlphaWorker {
         return tool.toString();
     }
 
-    private static String javaTool() {
+    static String javaTool() {
         boolean windows = System.getProperty("os.name", "").toLowerCase().contains("win");
         return Path.of(System.getProperty("java.home"), "bin", "java" + (windows ? ".exe" : ""))
                 .toString();
@@ -289,7 +260,7 @@ final class OxAlphaWorker {
         return process.exitValue();
     }
 
-    private static boolean ancestor(Path root, String ancestor, String descendant) throws Exception {
+    static boolean ancestor(Path root, String ancestor, String descendant) throws Exception {
         return gitStatus(root, "merge-base", "--is-ancestor", ancestor, descendant) == 0;
     }
 

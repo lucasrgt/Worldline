@@ -115,6 +115,12 @@ the new control base; they need not be linearly ordered because independently re
 make them sibling ancestors. Collapsing different historical identities into one SHA fails closed.
 The launcher closes the child's stdin pipe immediately after creation so non-interactive OpenCode
 observes EOF and creates a session. Its self-test fails if a child can remain blocked on stdin.
+The launcher also enables OpenCode INFO logs on its private stderr file. A provider `stream error`
+  is terminal infrastructure evidence: the supervisor stops the root immediately, repeatedly drains
+  every observed descendant, and fails closed if a retained PID remains alive,
+classifies quota separately from other transport failures, and binds the session recovered from the
+log or the already validated resume request. A provider failure may not wait for the worker timeout
+or produce a receipt with a known supplied session recorded as null.
 After an archived selected-provider quota failure, the supervisor may set
 `WORLDLINE_OX_ALPHA_FALLBACK=1` to resume the same receipt-bound session on the allowlisted free
 profile. The launch receipt records both the profile and model; a new session or ID fails closed.

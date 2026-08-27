@@ -24,3 +24,11 @@ reported_by = "codex:worldline-supervisor"
 corrected_by = "codex:worldline-supervisor"
 recorded_by = "codex:worldline-supervisor"
 commit = "735ee4343"
+
+[[occurrences]]
+occurred_at = "2026-08-27T06:01:15Z"
+source = "M686 checkpoint attempt2 receipt sha256=E3034660EC5AA701D557167D2D9523258424E0D4BAC13D721050A63A5ECA7819 session-export sha256=53AFBEA13F83B615A1EFC157170AAACBE597FD39F9B7FFE48774B399CDC66B6C model=opencode-go/glm-5.3-flash; M691 checkpoint attempt2 receipt sha256=E3302E8D2762DE511E47189E97077178EB9C707882E7E370587F9A01CD5FF71E model=opencode-go/deepseek-v4-flash; both OpenCode 1.18.23 runs logged AI_APICallError Monthly usage limit reached before any JSONL event, stayed alive, and recorded zero steps/tokens/tool calls until exact supervised termination"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "aea5a21e4"

@@ -30,6 +30,8 @@ record OxAlphaRequest(String id, String goal, String base, String controlBase, S
             }
         }
         require(controlBase != null, "--control-base is required");
+        require(session == null || OxAlphaProviderFailure.validSession(session),
+                "--session must be an exact OpenCode session ID");
         require((adoptionReceipt == null) == (adoptionSha == null),
                 "legacy adoption receipt and SHA-256 must be supplied together");
         return new OxAlphaRequest(id, goal, base, controlBase, phase, attempt, session, timeout,

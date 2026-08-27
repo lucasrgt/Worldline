@@ -29,6 +29,10 @@ Every retired or arbitrary model fails before OpenCode starts.
 If the selected provider reports a usage limit, classify and archive the attempt before setting
 `WORLDLINE_OX_ALPHA_FALLBACK=1`. The allowlisted fallback may resume only the same receipt-bound
 session and dirty worktree on a later attempt; it may not open a replacement milestone or session.
+  The launcher enables private INFO logs, terminates the root, and drains every observed descendant
+  on a provider stream error. Its receipt must preserve the supplied or uniquely logged session and classify
+`provider-usage-limit` separately from `provider-stream-error`; a zero-event provider failure must
+not consume the full worker timeout or be mistaken for contract work.
 A fallback checkpoint resume must receive at least 7200 seconds because a large receipt-bound
 history can make correct progress beyond the primary one-hour budget. The launcher rejects a
 shorter fallback retry and extends its own outer timeout beyond the worker budget.

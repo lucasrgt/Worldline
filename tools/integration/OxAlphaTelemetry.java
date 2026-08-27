@@ -1,6 +1,8 @@
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,15 +26,18 @@ final class OxAlphaTelemetry {
         return new Result(steps, tools, input, output, reasoning, cacheRead, cacheWrite, peak, cost);
     }
 
-    static String firstSession(Path jsonl) throws Exception {
+    static Set<String> sessions(Path jsonl) throws Exception {
+        Set<String> sessions = new LinkedHashSet<>();
         for (String line : Files.readAllLines(jsonl, StandardCharsets.UTF_8)) {
             int key = line.indexOf("\"sessionID\":\"");
             if (key >= 0) {
                 int start = key + 13, end = line.indexOf('"', start);
-                if (end > start) return line.substring(start, end);
+                if (end > start) {
+                    sessions.add(line.substring(start, end));
+                }
             }
         }
-        return null;
+        return sessions;
     }
 
     static String receiptFields(Result value, java.time.Instant started, java.time.Instant finished) {
@@ -61,6 +66,10 @@ final class OxAlphaTelemetry {
                     && result.cacheReadTokens == 4 && result.cacheWriteTokens == 1
                     && result.contextPeakTokens == 20 && result.cost == 0.25,
                     "OpenCode telemetry parsing drifted");
+            Files.writeString(file, "{\"sessionID\":\"ses_one\"}\n"
+                    + "{\"sessionID\":\"ses_two\"}\n", StandardCharsets.UTF_8);
+            require(sessions(file).equals(Set.of("ses_one", "ses_two")),
+                    "OpenCode stdout session census drifted");
         } finally { Files.deleteIfExists(file); }
     }
 
