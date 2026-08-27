@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=b173-shaded-mushroom-lifecycle-cycle -->
 <!-- nonclaims=random-tick-spread,light-threshold,support-removal,giant-mushroom-growth,native-render -->
-<!-- frozen-trace=0000000000000000000000000000000000000000000000000000000000000000 -->
+<!-- frozen-trace=506ea16115921ea6af166666c10fd7c7b86acfee823cf6f67c04865b4b319765 -->
 
 # Beta 1.7.3 shaded mushroom lifecycles
 
@@ -20,5 +20,5 @@ This map does not claim random-tick spread, the survival or placement light thre
 reaction after substrate or overhead removal, giant mushroom generation, particles, or native
 rendering.
 
-Discovery signal:
-`provider=b1.7.3-server-lifecycle,family=shaded-mushrooms,rows=2,passed=2,layers=U-U-U-A+U-U-U-A,reload=FRESH_LOGINx4,evidence=0000000000000000000000000000000000000000000000000000000000000000,isolation=2-fresh-worlds`.
+Frozen signal:
+`provider=b1.7.3-server-lifecycle,family=shaded-mushrooms,rows=2,passed=2,layers=U-U-U-A+U-U-U-A,reload=FRESH_LOGINx4,evidence=8b7cd13436032ec680a1d515735d0feda8c45bb05022f02ac22905258bd1c3f2,isolation=2-fresh-worlds`.

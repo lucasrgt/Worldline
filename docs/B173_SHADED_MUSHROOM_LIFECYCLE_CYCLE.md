@@ -10,6 +10,6 @@ One public TestKit family executes brown and red mushroom lifecycles against the
 
 DataDrivenCycle compiles the overhead-aware lifecycle provider and two caller-owned cases, runs them in fresh official server workspaces, repeats the family, compares canonical evidence byte-for-byte, and requires clean provider-owned shutdown. The package is one light-sensitive vegetation mini-subsystem, not eight atom-sized milestones.
 
-Expected signal: `provider=b1.7.3-server-lifecycle,family=shaded-mushrooms,rows=2,passed=2,layers=U-U-U-A+U-U-U-A,reload=FRESH_LOGINx4,evidence=0000000000000000000000000000000000000000000000000000000000000000,isolation=2-fresh-worlds`.
+Expected signal: `provider=b1.7.3-server-lifecycle,family=shaded-mushrooms,rows=2,passed=2,layers=U-U-U-A+U-U-U-A,reload=FRESH_LOGINx4,evidence=8b7cd13436032ec680a1d515735d0feda8c45bb05022f02ac22905258bd1c3f2,isolation=2-fresh-worlds`.
 
-Frozen semantic SHA-256: `0000000000000000000000000000000000000000000000000000000000000000`.
+Frozen semantic SHA-256: `506ea16115921ea6af166666c10fd7c7b86acfee823cf6f67c04865b4b319765`.
