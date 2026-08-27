@@ -9,6 +9,7 @@ public interface BlockLightDriver extends AutoCloseable {
     void look(float yaw, float pitch);
     void useHeldItemOnBlock(BlockPosition support, BlockFace face);
     RemoteWorldView awaitBlock(BlockPosition position, BlockState expected);
+    RemoteWorldView sustainTicks(int ticks);
     RemoteWorldView observe();
     void saveAndReload();
     ReloadBoundary reloadBoundary();

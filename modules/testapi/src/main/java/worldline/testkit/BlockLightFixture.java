@@ -27,6 +27,7 @@ public final class BlockLightFixture {
             verifyBlock(driver.awaitBlock(placement.position(), placement.expected()), placement);
             placements.add(token(placement.position()) + ':' + token(placement.expected()));
         }
+        driver.sustainTicks(2);
         verifySlot(driver.inventory(), scenario.placementSlot(), true);
         driver.saveAndReload(); ReloadBoundary boundary = driver.reloadBoundary();
         for (BlockLightPlacement placement : scenario.placements()) {

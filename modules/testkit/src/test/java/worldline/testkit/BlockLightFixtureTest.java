@@ -97,6 +97,10 @@ public final class BlockLightFixtureTest {
             require(consumed && position.equals(SOURCE), "unexpected light block wait");
             actions.add(reloaded ? "await-reload" : "await-live"); return view(true);
         }
+        @Override public RemoteWorldView sustainTicks(int ticks) {
+            require(ticks == 2, "light inventory barrier drifted");
+            actions.add("ticks:" + ticks); return view(true);
+        }
         @Override public RemoteWorldView observe() {
             actions.add(reloaded ? "observe-treatment" : "observe-control"); return view(reloaded);
         }

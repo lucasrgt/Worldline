@@ -33,6 +33,7 @@ public final class B173BlockLightDriver implements BlockLightDriver {
     @Override public RemoteWorldView awaitBlock(BlockPosition position, BlockState expected) {
         return session.awaitBlock(position, expected);
     }
+    @Override public RemoteWorldView sustainTicks(int ticks) { return session.sustainTicks(ticks); }
     @Override public RemoteWorldView observe() { return session.sustainTicks(1); }
 
     @Override public void saveAndReload() {
