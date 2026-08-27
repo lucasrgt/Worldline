@@ -24,6 +24,14 @@ public final class B173LifecycleScenarioFactory {
     public static BlockLifecycleScenario selfDrop(String id, String subject, String archetype,
             boolean singular, int block, int metadata, int tool, int toolAfterDamage,
             int breakTicks) {
+        return harvest(id, subject, archetype, singular, block, metadata, tool,
+                toolAfterDamage, breakTicks, new RemoteItemStack(block, 1, 0));
+    }
+
+    public static BlockLifecycleScenario harvest(String id, String subject, String archetype,
+            boolean singular, int block, int metadata, int tool, int toolAfterDamage,
+            int breakTicks, RemoteItemStack... expectedDrops) {
+        if (expectedDrops == null) throw new NullPointerException("expectedDrops");
         BlockConformanceProfile profile = new BlockConformanceProfile(subject,
                 Collections.singletonList(archetype), singular,
                 Collections.<String, ConformanceLayer>emptyMap());
@@ -39,6 +47,6 @@ public final class B173LifecycleScenarioFactory {
                 new BlockLifecycleSlot(1, 37, placed, null),
                 new BlockLifecycleSlot(2, 38, new RemoteItemStack(tool, 1, 0),
                         new RemoteItemStack(tool, 1, toolAfterDamage)),
-                Collections.singletonList(new RemoteItemStack(block, 1, 0)), breakTicks, 40);
+                Arrays.asList(expectedDrops), breakTicks, 40);
     }
 }
