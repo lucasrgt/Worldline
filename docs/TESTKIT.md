@@ -271,6 +271,11 @@ The provider rejects mod paths, other seeds, missing test identity, and absent o
 options rather than guessing a fixture. Empty chest does not claim loaded-container spill.
 Provider discovery chooses the runtime implementation; scenario selection remains per attempt.
 
+For incremental coverage, `B173LifecycleScenarioFactory` builds caller-owned rows and
+`B173LifecycleFamilyCycle` qualifies a coherent list under its own stable family signature. The
+first independent family covers sponge, white wool, TNT, fence, and netherrack. Adding another
+family does not modify the frozen 26-row aggregate or rewrite its 104 claim signatures.
+
 ### Hooks
 
 - `beforeAll` and `afterAll` are neutral preparation hooks. They receive no
