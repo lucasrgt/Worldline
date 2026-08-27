@@ -77,6 +77,9 @@ public final class WorldlineBehavior {
             WorldlineFamily.PLAYER, "Nether death and Packet9 respawn into the Overworld");
     public static final WorldlineBehavior BLOCK_PLACEMENT_PERSISTENCE = define("block-placement-persistence",
             WorldlineFamily.WORLD, "Server-authoritative held-block placement across fresh login");
+    public static final WorldlineBehavior BLOCK_LIFECYCLE_CONFORMANCE = define(
+            "block-lifecycle-conformance", WorldlineFamily.WORLD,
+            "Public placement, reload, tool-qualified break, and exact drop conformance");
     public static final WorldlineBehavior FOOD_CONSUMPTION = define("food-consumption", WorldlineFamily.ITEM,
             "Selected food consumption, health restoration, and container result");
     public static final WorldlineBehavior ENVIRONMENTAL_DAMAGE = define("environmental-damage",
