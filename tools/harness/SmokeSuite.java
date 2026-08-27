@@ -95,6 +95,10 @@ final class SmokeSuite {
                             "pooled smoke was cancelled: " + smoke.id);
                 }
             }
+            pool.shutdownNow();
+            if (!pool.awaitTermination(5, java.util.concurrent.TimeUnit.MINUTES)
+                    && failure == null) failure = new IllegalStateException(
+                    "pooled smoke workers did not terminate");
             if (failure != null) throw failure;
         } finally {
             pool.shutdownNow();
