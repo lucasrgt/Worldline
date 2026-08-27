@@ -39,7 +39,10 @@ placement/reload evidence to the public surface and closes nine missing break/dr
 dispenser, note block, crafting table, furnace, and jukebox. The census then contained 304 verified
 claims. The first independently signed lifecycle family upgrades placement/reload and
 closes break/drop for sponge, white wool, TNT, fence, and netherrack. The census now contains 314
-verified claims (29.73%) and leaves 742 unknown. Existing smoke evidence is
+verified claims (29.73%) and leaves 742 unknown. The independently signed gold-shovel harvest
+family then upgrades 24 already-verified sand, gravel, snow-layer, snow-block, clay, and soul-sand
+claims from internal automation to `PUBLIC_TESTKIT`, including exact one-versus-four entity drop
+multiplicity. Existing smoke evidence is
 reusable input, but it is never promoted automatically: its subject, action, context, observable,
 oracle, signature, and automation surface must be curated first.
 
@@ -78,6 +81,8 @@ denominator, that requires 1,044 verified claims. After the earlier lifecycle im
 additional verified claims were required; the solid and mineral public matrices reduce that gap to
 769, the rail lifecycle family reduces it to 757, the pressure-plate family reduces it to 749, and
 the empty-workstation family reduces it to 740, and the static self-drop family reduces it to 730.
+The gold-shovel harvest family raises public executability rather than the verified numerator, so
+the target gap correctly remains 730.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
