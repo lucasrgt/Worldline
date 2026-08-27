@@ -10,6 +10,9 @@ final class SchemaPinCheck {
     static void execute(Path root) throws Exception {
         Properties manifest = manifest(root); require("1".equals(manifest.getProperty("schema")),
                 "invalid repository schema migration");
+        require(digest(root.resolve("tools/harness/SmokeInputFingerprint.java")).equals(
+                        required(manifest, "fingerprint_source_sha256")),
+                "repository schema fingerprint source drift");
         require(integer(manifest, "smoke.count") > 0
                         && integer(manifest, "map.count") == integer(manifest, "smoke.count") + 1
                         && integer(manifest, "narrative.count") == 36,

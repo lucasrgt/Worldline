@@ -24,10 +24,11 @@ final class RepositorySchemaMigration {
     }
 
     private void apply() throws Exception {
-        require(dirtyIndex(), "stage the schema implementation before applying the rewrite");
-        List<SmokeDiscovery.Entry> catalog = SmokeDiscovery.discover(root);
         Path lock = root.resolve("smokes/schema-migration.lock");
         Properties manifest = Files.isRegularFile(lock) ? load(lock) : new Properties();
+        require(reviewed(manifest),
+                "stage a reviewed schema change or commit the shared fingerprint change before refreshing pins");
+        List<SmokeDiscovery.Entry> catalog = SmokeDiscovery.discover(root);
         if ("1".equals(manifest.getProperty("schema"))) {
             refresh(catalog, lock, manifest); return;
         }
@@ -80,6 +81,8 @@ final class RepositorySchemaMigration {
             manifest.setProperty(stem + "map_sha256", digest(row.map));
         }
         require(changed >= 1, "repository schema migration made no changes");
+        manifest.setProperty("fingerprint_source_sha256", digest(
+                root.resolve("tools/harness/SmokeInputFingerprint.java")));
         existing.write(pins); store(lock, manifest);
         System.out.println("repository schemas migrated: " + changed
                 + " changed; 525 descriptors, 526 maps, 36 narratives");
@@ -111,6 +114,8 @@ final class RepositorySchemaMigration {
         }
         require(carried == 525 - ProviderDiscoveryPinCheck.pendingCount(providers) && executed >= 1,
                 "repository schema refresh census drift: carried=" + carried + ";executed=" + executed);
+        manifest.setProperty("fingerprint_source_sha256", digest(
+                root.resolve("tools/harness/SmokeInputFingerprint.java")));
         existing.write(pins); store(lock, manifest);
         System.out.println("repository schema pins refreshed: " + carried
                 + " carried, " + executed + " exact support proofs");
@@ -169,6 +174,18 @@ final class RepositorySchemaMigration {
     }
     private boolean dirtyIndex() throws Exception { Process process = new ProcessBuilder("git", "diff",
             "--cached", "--quiet").directory(root.toFile()).start(); return process.waitFor() == 1; }
+    private boolean reviewed(Properties manifest) throws Exception {
+        if (dirtyIndex()) return true;
+        if (!"1".equals(manifest.getProperty("schema"))) return false;
+        Process worktree = new ProcessBuilder("git", "diff", "--quiet")
+                .directory(root.toFile()).start();
+        Process index = new ProcessBuilder("git", "diff", "--cached", "--quiet")
+                .directory(root.toFile()).start();
+        String recorded = manifest.getProperty("fingerprint_source_sha256", "");
+        return worktree.waitFor() == 0 && index.waitFor() == 0
+                && !digest(root.resolve("tools/harness/SmokeInputFingerprint.java"))
+                        .equals(recorded);
+    }
     private static Properties load(Path path) throws Exception { Properties values = new Properties();
         try (var reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             values.load(reader); } return values;
