@@ -13,6 +13,9 @@ public interface BlockLifecycleDriver extends AutoCloseable {
     RemoteInventoryView inventory();
     void selectHeldSlot(int slot);
     void placeHeldBlock(BlockPosition support, BlockFace face);
+    default void useHeldPlacementItem(BlockPosition support, BlockFace face) {
+        placeHeldBlock(support, face);
+    }
     void beginBreak(BlockPosition position);
     void finishBreak(BlockPosition position);
     RemoteWorldView awaitBlock(BlockPosition position, BlockState expected);

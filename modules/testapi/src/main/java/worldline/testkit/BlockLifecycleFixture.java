@@ -38,7 +38,7 @@ public final class BlockLifecycleFixture {
         verifyBlock(driver.awaitBlock(target, AIR), target, AIR, "placement baseline");
         verifySlot(driver.inventory(), scenario.placementSlot(), false);
         driver.selectHeldSlot(scenario.placementSlot().hotbarSlot());
-        driver.placeHeldBlock(scenario.support(), scenario.face());
+        driver.useHeldPlacementItem(scenario.support(), scenario.face());
         verifyBlock(driver.awaitBlock(target, scenario.placedState()),
                 target, scenario.placedState(), "placement");
         awaitSlot(driver, scenario.placementSlot(), true, scenario.observationTicks());

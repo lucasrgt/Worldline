@@ -30,6 +30,9 @@ public final class B173BlockLifecycleDriver implements BlockLifecycleDriver {
     @Override public void placeHeldBlock(BlockPosition support, BlockFace face) {
         session.placeHeldBlock(support, face);
     }
+    @Override public void useHeldPlacementItem(BlockPosition support, BlockFace face) {
+        session.useHeldItemOnBlock(support, face);
+    }
     @Override public void beginBreak(BlockPosition position) { session.beginBreak(position); }
     @Override public void finishBreak(BlockPosition position) { session.finishBreak(position); }
     @Override public RemoteWorldView awaitBlock(BlockPosition position, BlockState expected) {
