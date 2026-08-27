@@ -147,7 +147,7 @@ final class RejectionRegistry {
         }
         boolean blocks(String candidateId, String candidate, String goal) {
             if (!duplicateOf.isBlank()) {
-                return id.equals(candidateId);
+                return !duplicateOf.equals(candidateId) && matches(candidate, goal);
             }
             return matches(candidate, goal);
         }

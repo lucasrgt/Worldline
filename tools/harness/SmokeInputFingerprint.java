@@ -31,7 +31,7 @@ final class SmokeInputFingerprint {
     private final Path root;
     private final Set<Path> tracked;
     private final Properties modules = new Properties();
-    private final Map<Path, String> pathDigests = new HashMap<>();
+    private final Map<String, String> pathDigests = new HashMap<>();
     private final Map<String, String> moduleDigests = new HashMap<>();
 
     SmokeInputFingerprint(Path root) throws IOException {
@@ -69,46 +69,50 @@ final class SmokeInputFingerprint {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         boolean portable = qualification;
         update(digest, portable ? "worldline-smoke-input-v6-tokens"
-                : "worldline-smoke-observation-v2-tokens");
+                : "worldline-smoke-observation-v1");
         update(digest, smoke.id); update(digest, smoke.runner);
         if (!portable) {
             update(digest, System.getProperty("java.runtime.version", System.getProperty("java.version")));
             update(digest, System.getProperty("os.name")); update(digest, System.getProperty("os.arch"));
         }
         addProcessConfiguration(digest, source(root.resolve(smoke.runner)));
-        if (qualification) add(digest, root.resolve("smokes").resolve(smoke.id));
+        if (qualification) add(digest, root.resolve("smokes").resolve(smoke.id), qualification);
         else addRuntimeInputs(digest, smoke.id);
         addSharedInputs(digest, smoke.id, qualification);
-        Path runner = root.resolve(smoke.runner); add(digest, runner);
+        Path runner = root.resolve(smoke.runner); add(digest, runner, qualification);
         String source = source(runner);
-        add(digest, root.resolve("tools/harness/SmokeProcess.java"));
-        if (source.contains("SmokeSupport")) add(digest, root.resolve("tools/harness/SmokeSupport.java"));
-        if (source.contains("SmokeRetry")) add(digest, root.resolve("tools/harness/SmokeRetry.java"));
+        add(digest, root.resolve("tools/harness/SmokeProcess.java"), qualification);
+        if (source.contains("SmokeSupport"))
+            add(digest, root.resolve("tools/harness/SmokeSupport.java"), qualification);
+        if (source.contains("SmokeRetry"))
+            add(digest, root.resolve("tools/harness/SmokeRetry.java"), qualification);
         if (source.contains("DataDrivenCyclePlan"))
-            add(digest, root.resolve("tools/harness/DataDrivenCyclePlan.java"));
+            add(digest, root.resolve("tools/harness/DataDrivenCyclePlan.java"), qualification);
         if (source.contains("CompositeCyclePlan"))
-            add(digest, root.resolve("tools/harness/CompositeCyclePlan.java"));
+            add(digest, root.resolve("tools/harness/CompositeCyclePlan.java"), qualification);
         if (source.contains("DataDrivenSupport")) {
-            add(digest, root.resolve("tools/harness/DataDrivenSupport.java"));
-            add(digest, root.resolve("tools/harness/SmokeSupport.java"));
+            add(digest, root.resolve("tools/harness/DataDrivenSupport.java"), qualification);
+            add(digest, root.resolve("tools/harness/SmokeSupport.java"), qualification);
         }
         if (source.contains("SmokeRetryBoundary")) {
-            add(digest, root.resolve("tools/harness/SmokeRetryBoundary.java"));
-            add(digest, root.resolve("tools/harness/SmokeRetry.java"));
-            add(digest, root.resolve("tools/harness/SmokeSupport.java"));
+            add(digest, root.resolve("tools/harness/SmokeRetryBoundary.java"), qualification);
+            add(digest, root.resolve("tools/harness/SmokeRetry.java"), qualification);
+            add(digest, root.resolve("tools/harness/SmokeSupport.java"), qualification);
         }
         if (source.contains("ExceptionalSmokeSupport")) {
-            add(digest, root.resolve("tools/harness/ExceptionalSmokeSupport.java"));
-            add(digest, root.resolve("tools/harness/SmokeSupport.java"));
+            add(digest, root.resolve("tools/harness/ExceptionalSmokeSupport.java"), qualification);
+            add(digest, root.resolve("tools/harness/SmokeSupport.java"), qualification);
         }
-        if (source.contains("modules/smoketest")) add(digest, root.resolve("modules/smoketest"));
+        if (source.contains("modules/smoketest"))
+            add(digest, root.resolve("modules/smoketest"), qualification);
         boolean dataDriven = Set.of("tools/smoke/DataDrivenCycle.java",
                 "tools/smoke/CompositeCycle.java").contains(smoke.runner);
-        if (dataDriven) addDataDrivenInputs(digest, smoke.id);
+        if (dataDriven) addDataDrivenInputs(digest, smoke.id, qualification);
         else for (String input : REPOSITORY_INPUTS)
-            if (source.contains(input)) add(digest, root.resolve(input));
+            if (source.contains(input)) add(digest, root.resolve(input), qualification);
         Set<String> products = dataDriven ? dataDrivenProducts(smoke.id) : products(source);
-        for (String product : products) update(digest, "module:" + product + ":" + module(product));
+        for (String product : products)
+            update(digest, "module:" + product + ":" + module(product, qualification));
         if (source.contains(".worldline/build/classes") && products.isEmpty())
             throw new IllegalStateException("cannot identify product inputs for smoke " + smoke.id);
         return HexFormat.of().formatHex(digest.digest());
@@ -123,21 +127,23 @@ final class SmokeInputFingerprint {
         try (var paths = Files.walk(directory)) {
             for (Path path : paths.filter(Files::isRegularFile).sorted().toList()) {
                 String name = path.getFileName().toString();
-                if (!name.equals("smoke.properties") && !name.endsWith(".md")) add(digest, path);
+                if (!name.equals("smoke.properties") && !name.endsWith(".md"))
+                    add(digest, path, false);
             }
         }
     }
 
-    private void addDataDrivenInputs(MessageDigest digest, String id) throws Exception {
+    private void addDataDrivenInputs(MessageDigest digest, String id, boolean tokens)
+            throws Exception {
         Properties descriptor = descriptor(id);
         String artifact = descriptor.getProperty("cycle.artifact", "").trim();
         require(artifact.matches("artifacts/[a-z0-9.-]+\\.properties"),
                 "unsafe data-driven artifact: " + id);
-        add(digest, root.resolve(artifact));
+        add(digest, root.resolve(artifact), tokens);
         for (String input : list(descriptor.getProperty("cycle.inputs"))) {
             require(input.matches("(?:adapters|modules)/[a-z0-9-]+/src/(?:main|testkit)/java"),
                     "unsafe data-driven input: " + input);
-            add(digest, root.resolve(input));
+            add(digest, root.resolve(input), tokens);
         }
     }
 
@@ -161,14 +167,14 @@ final class SmokeInputFingerprint {
         if (!raw.isEmpty()) for (String value : raw.split(",")) {
             String path = value.trim();
             require(path.matches("smokes/shared/[a-z0-9/-]+"), "unsafe shared smoke input: " + path);
-            add(digest, root.resolve(path));
+            add(digest, root.resolve(path), qualification);
         }
         if (!qualification) return;
         String budget = descriptor.getProperty("performance.budget", "").trim();
         if (!budget.isEmpty()) {
             require(budget.matches("quality/[a-z0-9-]+\\.properties"),
                     "unsafe smoke performance budget: " + budget);
-            add(digest, root.resolve(budget));
+            add(digest, root.resolve(budget), qualification);
         }
     }
 
@@ -189,7 +195,7 @@ final class SmokeInputFingerprint {
             if (name.equals("WORLDLINE_AERO_PREBUILT") && !value.isBlank()) {
                 Path file = Path.of(value).toAbsolutePath().normalize();
                 require(Files.isRegularFile(file), "missing smoke environment input: " + file);
-                update(digest, pathDigest(file));
+                update(digest, pathDigest(file, false));
             }
         }
     }
@@ -209,8 +215,9 @@ final class SmokeInputFingerprint {
         return result;
     }
 
-    private String module(String name) throws Exception {
-        String cached = moduleDigests.get(name); if (cached != null) return cached;
+    private String module(String name, boolean tokens) throws Exception {
+        String key = (tokens ? "tokens:" : "bytes:") + name;
+        String cached = moduleDigests.get(key); if (cached != null) return cached;
         require(modules.getProperty("module." + name + ".dependencies") != null,
                 "unknown smoke product module: " + name);
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -218,26 +225,27 @@ final class SmokeInputFingerprint {
         update(digest, modules.getProperty("module." + name + ".release",
                 modules.getProperty("java.release", "")));
         for (String dependency : list(modules.getProperty("module." + name + ".dependencies")))
-            update(digest, dependency + ":" + module(dependency));
-        add(digest, root.resolve("modules").resolve(name).resolve("src/main/java"));
-        String value = HexFormat.of().formatHex(digest.digest()); moduleDigests.put(name, value); return value;
+            update(digest, dependency + ":" + module(dependency, tokens));
+        add(digest, root.resolve("modules").resolve(name).resolve("src/main/java"), tokens);
+        String value = HexFormat.of().formatHex(digest.digest()); moduleDigests.put(key, value); return value;
     }
 
-    private void add(MessageDigest digest, Path path) throws Exception {
+    private void add(MessageDigest digest, Path path, boolean tokens) throws Exception {
         path = path.toAbsolutePath().normalize();
         require(path.startsWith(root), "smoke fingerprint escaped repository: " + path);
         update(digest, root.relativize(path).toString().replace('\\', '/'));
-        update(digest, pathDigest(path));
+        update(digest, pathDigest(path, tokens));
     }
 
-    private String pathDigest(Path path) throws Exception {
-        String cached = pathDigests.get(path); if (cached != null) return cached;
+    private String pathDigest(Path path, boolean tokens) throws Exception {
+        String key = (tokens ? "tokens:" : "bytes:") + path;
+        String cached = pathDigests.get(key); if (cached != null) return cached;
         require(Files.exists(path), "missing smoke input: " + root.relativize(path));
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         if (Files.isRegularFile(path)) {
             require(!path.startsWith(root) || tracked.contains(path),
                     "untracked smoke input: " + root.relativize(path));
-            digest.update(canonical(path, Files.readAllBytes(path)));
+            digest.update(canonical(path, Files.readAllBytes(path), tokens));
         } else {
             List<Path> files = tracked.stream().filter(item -> item.startsWith(path))
                     .filter(Files::isRegularFile).sorted(Comparator.comparing(
@@ -245,16 +253,19 @@ final class SmokeInputFingerprint {
             require(!files.isEmpty(), "smoke input has no tracked files: " + root.relativize(path));
             for (Path file : files) {
                 update(digest, path.relativize(file).toString().replace('\\', '/'));
-                digest.update(canonical(file, Files.readAllBytes(file)));
+                digest.update(canonical(file, Files.readAllBytes(file), tokens));
             }
         }
-        String value = HexFormat.of().formatHex(digest.digest()); pathDigests.put(path, value); return value;
+        String value = HexFormat.of().formatHex(digest.digest()); pathDigests.put(key, value); return value;
     }
 
-    /** Java sources hash as token streams; every other input stays portable byte-exact. */
-    private static byte[] canonical(Path path, byte[] bytes) {
+    /**
+     * Qualification hashes Java sources as token streams; observation identities and every
+     * non-Java input stay portable byte-exact so recorded observation hashes are preserved.
+     */
+    private static byte[] canonical(Path path, byte[] bytes, boolean tokens) {
         byte[] portable = PortableText.normalize(bytes);
-        return path.getFileName().toString().endsWith(".java")
+        return tokens && path.getFileName().toString().endsWith(".java")
                 ? JavaTokenText.canonical(portable) : portable;
     }
 

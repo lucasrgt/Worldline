@@ -43,6 +43,14 @@ final class WaveCensus {
                 + "a".repeat(64) + "\",\"session\":\"ses_1\",\"owner\":\"orchestrator\","
                 + "\"attempt\":1,\"max_attempts\":2");
         require(owned.ownedRetryable(), "owned RETRYABLE side queue entry was blocked");
+        require(!new Row("m27-fixture", ",\"state\":\"RETRYABLE\",\"archive_sha256\":\""
+                + "a".repeat(64) + "\",\"owner\":\"orchestrator\",\"attempt\":1,"
+                + "\"max_attempts\":2").ownedRetryable(),
+                "RETRYABLE without an exact session was accepted");
+        require(!new Row("m28-fixture", ",\"state\":\"RETRYABLE\",\"archive_sha256\":\""
+                + "a".repeat(64) + "\",\"session\":\"ses_1\",\"owner\":\"orchestrator\","
+                + "\"attempt\":2,\"max_attempts\":2").ownedRetryable(),
+                "RETRYABLE with an exhausted attempt budget was accepted");
     }
 
     static String string(String body, String name, String fallback) {
@@ -112,12 +120,18 @@ final class WaveCensus {
             return Math.max(candidates, integer(body, "worker_corrections", 0))
                     + Math.max(0, integer(body, "runtime_retries", integer(body, "retries", 0)));
         }
-        int candidateAttempts() { return integer(body, "candidate_attempts", 1); }
-        int officialAttempts() { return integer(body, "official_attempts", qualified() ? 1 : 0); }
+        int candidateAttempts() {
+            return integer(body, "candidate_attempts", -1);
+        }
+        int officialAttempts() {
+            return integer(body, "official_attempts", -1);
+        }
         boolean integrated() { return bool(body, "integrated", false); }
         boolean receiptExact() { return bool(body, "receipt_exact", qualified()); }
         double receiptSeconds() { return decimal(body, "time_to_receipt_seconds", -1); }
-        int preCandidatePreventions() { return integer(body, "prevented_same_scar_failures", 0); }
+        int preCandidatePreventions() {
+            return integer(body, "prevented_same_scar_failures", -1);
+        }
         boolean objectiveInterlock() { return has(body, "prevention_interlock"); }
         List<String> recurrenceScars() { return strings(body, "recurrence_scars"); }
     }

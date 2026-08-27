@@ -27,19 +27,39 @@ Every launch must bind `--control-base` to the exact orchestrator SHA that autho
 checks. Both the milestone base and current worktree HEAD must contain that commit; otherwise stop
 before OpenCode starts rather than mixing current readiness with an older Candidate Gate.
 When controls advance after a retryable attempt, preserve the exact archive and use
-`OxAlphaControlMigration` on the same branch, worktree, and session. Reapply the checkpoint only
+`LegacyRetryControlLauncher migrate` on the same branch, worktree, and session. The source launcher
+must compile the complete migration dependency closure before execution. Reapply the checkpoint only
 after it verifies archive SHA-256, ancestry, CSM context, and both applicable scars on the new base.
+For a legacy attempt without a supervised launcher receipt, the supervisor must first run
+`LegacyRetryControlLauncher adopt` against the unchanged historical worktree. A recovered session
+requires a canonical `LegacyRetryControlLauncher export` JSON whose strict session and worktree
+identity are SHA-bound into the adoption receipt. If no such
+session exists, `process-recovery` records the absence and authorizes exactly one bounded attempt-2
+checkpoint session; never fabricate an attempt-1 launcher receipt or session. The adoption receipt
+and SHA-256 remain mandatory through control migration and the attempt-2 launcher boundary.
+If controls advance again, preserve that receipt unchanged: its original control base must be an
+ancestor of the new control, and the replacement preflight must bind the exact descendant SHA.
 The executable model allowlist contains only `opencode-go/glm-5.3-flash`,
 `opencode-go/deepseek-v4-flash`, and `opencode-go/deepseek-v4-pro`. GLM 5.3 Flash is the default
 high-concurrency Ox Alpha worker. Select DeepSeek V4 Pro with `WORLDLINE_OX_ALPHA_MODEL` for a
 bounded repair or systemic-cause checkpoint; DeepSeek V4 Flash is the reviewed fast alternative.
 Every retired or arbitrary model fails before OpenCode starts.
-If the selected provider reports a usage limit, classify and archive the attempt before setting
+If the selected provider reports a usage limit, classify and archive the launch before setting
 `WORLDLINE_OX_ALPHA_FALLBACK=1`. The allowlisted fallback may resume only the same receipt-bound
-session and dirty worktree on a later attempt; it may not open a replacement milestone or session.
-A fallback checkpoint resume must receive at least 7200 seconds because a large receipt-bound
-history can make correct progress beyond the primary one-hour budget. The launcher rejects a
-shorter fallback retry and extends its own outer timeout beyond the worker budget.
+session and worktree; it may not open a replacement milestone or session. When a legacy launcher
+recorded zero events and a null session, seal the exact provider occurrence with
+`LegacyRetryControlLauncher rollover`. The supervisor must supply the SHA-256 of the canonical
+OpenCode provider log snapshot used for that seal. Only the canonical hashed rollover receipt may
+authorize launch 3 while the contract remains on attempt 2; a fourth launch or an occurrence after
+any contract event fails closed. An immutable launch claim permits one process-start recovery and
+otherwise converts every post-reservation infrastructure failure into a terminal RETRYABLE receipt.
+  The launcher enables private INFO logs, terminates the root, and drains every observed descendant
+  on a provider stream error. Its receipt must preserve the supplied or uniquely logged session and classify
+`provider-usage-limit` separately from `provider-stream-error`; a zero-event provider failure must
+not consume the full worker timeout or be mistaken for contract work.
+A fallback checkpoint resume must receive exactly 7200 seconds because a large receipt-bound
+history can make correct progress beyond the primary one-hour budget. The launcher rejects any
+different fallback budget and extends its own outer timeout beyond the worker budget.
 If the selected provider returns a systemic transport error, archive and classify the attempt
 before setting `WORLDLINE_OX_ALPHA_FALLBACK_MODEL` to whichever of GLM 5.3 Flash or DeepSeek V4
 Flash differs from the primary model. The same receipt-bound session, worktree, and milestone ID
@@ -62,8 +82,9 @@ runs NYA recall for the milestone, smoke tooling, and TestKit paths. Recall must
 `NYA-01M0VSCA8F3WSMVW32R9XME7DQ`. If the recalled scope includes protocol or runtime smoke
 boundaries, it must also show `NYA-01M0WZ04QQJ4T0KDN3V9FJC5GV` before work begins.
 `csm context` may return one only when its stderr contains exclusively the recognized uninitialized
-optional WTW/RTW/NWC stores and its NYA output contains the mandatory supervision scar. NYA recall
-still must return zero; any other context or recall failure blocks the worker.
+optional WTW/RTW/NWC stores and its stdout contains a NYA section. The separate NYA recall must
+return zero and present the mandatory supervision scar; any other context or recall failure blocks
+the worker.
 When a milestone changes narrative fields in `smoke.properties`, recall must also present
 `NYA-01M0X81N6TG6TQ4RM02X6PH7R7`; regenerate the canonical milestone narrative with
 `MilestoneNarrative` before Candidate Gate instead of hand-authoring the generated document.

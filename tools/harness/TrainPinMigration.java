@@ -60,9 +60,10 @@ final class TrainPinMigration extends TrainPinSupport {
                 SmokePins.Entry carriedPin = pins.entry(smoke.id);
                 if (carriedPin != null && "executed".equals(
                         predecessor.getProperty(stem + "kind"))) {
-                    executed++; qualificationExecuted++; seal(lock, stem, "executed",
-                            required(predecessor, stem + "current_fingerprint"), current,
-                            carriedPin.evidence());
+                    executed++; qualificationExecuted++;
+                    String sealed = required(predecessor, stem + "current_fingerprint");
+                    seal(lock, stem, "executed", current.equals(sealed) ? required(predecessor,
+                            stem + "prior_fingerprint") : sealed, current, carriedPin.evidence());
                     copyReceipt(predecessor, lock, stem);
                     updated.add(new SmokePins.Entry(smoke.id, current,
                             carriedPin.evidence(), "executed"));

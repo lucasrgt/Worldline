@@ -28,3 +28,11 @@ reported_by = "codex:worldline-supervisor"
 corrected_by = "codex:worldline-supervisor"
 recorded_by = "codex:worldline-supervisor"
 commit = "881d1cbd2"
+
+[[occurrences]]
+occurred_at = "2026-08-27T06:49:00Z"
+source = "M686 adoption sha256=e732a9c7699f709e7d39d90ca50d01982907fa9b1ea333c162e0e643c502228c and M691 adoption sha256=2bbae312a3821fda951ce25979fb581dad1e78f340e03b7f70f83c7cc38fd567 are immutably bound to control eaad588755c96d2ac7b6ea7b4728597f4dacc31b; migration target 938becf44512413966de8c59ac804a64608dcd74 contains eaad5887 but exact-equality validation prevents both same-ID worktrees from adopting the promoted control"
+reported_by = "codex:orchestrator"
+corrected_by = "codex:orchestrator"
+recorded_by = "codex:orchestrator"
+commit = "938becf44"

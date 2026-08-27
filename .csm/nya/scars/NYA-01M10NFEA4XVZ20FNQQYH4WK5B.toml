@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M10NFEA4XVZ20FNQQYH4WK5B"
+title = "Reject duplicate milestones whose canonical contract already qualified"
+lesson = "Before retrying a failed milestone, compare its public contract, fixture, actions, and observations with integrated milestones. If an integrated milestone already proves the same semantic contract, preserve the failed artifact and register the later ID as REJECTED duplicate-of the canonical milestone; never spend another attempt or offer it to a train."
+scope = [
+    "coordination/swarm/rejection-registry.properties",
+    "coordination/swarm/dispositions/*.properties",
+    "tools/integration/RejectedContractCheck.java",
+]
+tags = [
+    "semantic-equivalence",
+    "duplicate-milestone",
+    "pre-dispatch",
+]
+created_at = "2026-08-27T03:51:03Z"
+
+[[occurrences]]
+occurred_at = "2026-08-27T03:51:03Z"
+source = "M677 archive sha256=646bec0addfec6f504556974c9e472091bce4acafdd95c955f3cf42a8722b8dd; failure=empty frame baseline after 200 polls; canonical integrated contract=M651 portal-invalid-frame"
+reported_by = "codex:m644_retry2"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "191f5771a"

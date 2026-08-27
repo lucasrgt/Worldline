@@ -22,6 +22,7 @@ final class IntegrationToolsCheck {
                     .map(Path::toString).collect(Collectors.toList()));
         }
         compile.add(root.resolve("tools/harness/SafeTreeDelete.java").toString());
+        compile.add(root.resolve("tools/harness/MiniJson.java").toString());
         require(run(root, compile, 120) == 0, "integration tools did not compile");
         require(run(root, List.of(javaTool("java"), root.resolve(
                 "tools/integration/WorktreeLifecycleLauncher.java").toString(), "--self-test"), 180) == 0,
@@ -30,8 +31,9 @@ final class IntegrationToolsCheck {
                 "tools/integration/OxAlphaLauncher.java").toString(), "--self-test"), 180) == 0,
                 "Ox Alpha source launcher did not compile its closure");
         require(run(root, List.of(javaTool("java"), root.resolve(
-                "tools/integration/OxAlphaControlMigration.java").toString(), "--self-test"), 180) == 0,
-                "Ox Alpha control migration self-test failed");
+                "tools/integration/LegacyRetryControlLauncher.java").toString(),
+                "--self-test"), 180) == 0,
+                "legacy retry control source launcher did not compile its closure");
         selfTest(output);
         System.out.println("  integration tools: compiled and self-tested");
     }
@@ -152,6 +154,15 @@ final class IntegrationToolsCheck {
             require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "OxAlphaWorker", "--self-test"), 60) == 0,
                     "Ox Alpha launcher self-test failed");
+            require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
+                    "LegacyRetryAdoptionSelfTest"), 60) == 0,
+                    "legacy retry adoption self-test failed");
+            require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
+                    "OxAlphaInfrastructureRolloverSelfTest"), 60) == 0,
+                    "Ox Alpha infrastructure rollover self-test failed");
+            require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
+                    "OpenCodeSessionExportSelfTest"), 60) == 0,
+                    "OpenCode session export self-test failed");
             require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "SwarmDashboard", "--self-test"), 60) == 0, "swarm dashboard self-test failed");
             require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),

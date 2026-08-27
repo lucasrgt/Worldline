@@ -1,0 +1,24 @@
+schema = 1
+id = "NYA-01M10R5FADWQ3B5YM40RRXHGZV"
+title = "Enumerate unowned retries as STRANDED instead of aborting the census"
+lesson = "An exact census must validate every explicit RETRYABLE archive yet still emit all worktrees requiring supervision. When owner, session, or attempt budget is missing, preserve the declared RETRYABLE identity but classify the effective row STRANDED with the exact defect list. Wave release remains blocked, while the supervisor receives a complete machine-readable adoption queue instead of only the first exception."
+scope = [
+    "tools/integration/CensusDisposition.java",
+    "tools/integration/CensusJson.java",
+    "tools/integration/SwarmCensus.java",
+    "docs/ENGINEERING_WORKFLOW.md",
+]
+tags = [
+    "census",
+    "stranded",
+    "legacy-retry",
+]
+created_at = "2026-08-27T04:38:02Z"
+
+[[occurrences]]
+occurred_at = "2026-08-27T04:38:02Z"
+source = "M667-M691 stranded-aware census sha256=2e5db6c55e20bb23d2093279a51d2a956f7a6acf68bd95e1019c8ba129fda9cf; summary=4 REJECTED,2 STRANDED,19 NOT_STARTED; previous census aborted at missing RETRYABLE session M686"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "a38c1fefb"

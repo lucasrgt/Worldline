@@ -96,10 +96,23 @@ final class SmokeProcess {
                 "smokes must run through java tools/harness/Gate.java --smoke[-id ID]");
     }
 
-    private static void destroy(Process process) {
-        process.descendants().sorted(Comparator.comparingLong(ProcessHandle::pid).reversed())
-                .forEach(ProcessHandle::destroyForcibly);
+    /** Terminates the smoke process tree in reverse spawn order and confirms every death. */
+    private static void destroy(Process process) throws Exception {
+        List<ProcessHandle> descendants = process.descendants()
+                .sorted(Comparator.comparingLong(ProcessHandle::pid).reversed()).toList();
+        descendants.forEach(ProcessHandle::destroyForcibly);
         process.destroyForcibly();
+        for (ProcessHandle descendant : descendants) confirm(descendant);
+        if (!process.waitFor(30, TimeUnit.SECONDS)) throw new IllegalStateException(
+                "smoke process did not terminate: pid=" + process.pid());
+    }
+
+    private static void confirm(ProcessHandle descendant) throws Exception {
+        try { descendant.onExit().get(30, TimeUnit.SECONDS); }
+        catch (java.util.concurrent.TimeoutException error) {
+            throw new IllegalStateException(
+                    "smoke descendant did not terminate: pid=" + descendant.pid());
+        }
     }
 
     private static String javaTool() {

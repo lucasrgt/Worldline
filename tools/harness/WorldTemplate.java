@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Stream;
 
 /** Provisions reviewed, content-addressed world templates into smoke workspaces. */
 final class WorldTemplate {
@@ -67,12 +66,9 @@ final class WorldTemplate {
     static String digest(Path world) throws Exception {
         require(Files.isDirectory(world), "missing world template content: " + world);
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        List<Path> files;
-        try (Stream<Path> paths = Files.walk(world)) {
-            files = paths.filter(Files::isRegularFile)
-                    .sorted(Comparator.comparing(path -> world.relativize(path).toString()
-                            .replace('\\', '/'))).toList();
-        }
+        List<Path> files = SafeTreeDelete.paths(world).stream().filter(Files::isRegularFile)
+                .sorted(Comparator.comparing(path -> world.relativize(path).toString()
+                        .replace('\\', '/'))).toList();
         require(!files.isEmpty(), "empty world template content: " + world);
         for (Path file : files) {
             String relative = world.relativize(file).toString().replace('\\', '/');
@@ -86,14 +82,13 @@ final class WorldTemplate {
     }
 
     private static void copy(Path source, Path target) throws Exception {
-        try (Stream<Path> paths = Files.walk(source)) {
-            for (Path path : paths.sorted().toList()) {
-                Path destination = target.resolve(source.relativize(path).toString());
-                if (Files.isDirectory(path)) Files.createDirectories(destination);
-                else {
-                    Files.createDirectories(destination.getParent());
-                    Files.copy(path, destination);
-                }
+        for (Path path : SafeTreeDelete.paths(source).stream().sorted().toList()) {
+            require(!SafeTreeDelete.linkLike(path), "world template link rejected: " + path);
+            Path destination = target.resolve(source.relativize(path).toString());
+            if (Files.isDirectory(path)) Files.createDirectories(destination);
+            else {
+                Files.createDirectories(destination.getParent());
+                Files.copy(path, destination);
             }
         }
     }

@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M10R5D7CBBZYA5JBWCFWGHX9"
+title = "Accept explicit same-worktree recovery actions during legacy adoption"
+lesson = "Legacy retry adoption must validate the invariant rather than one historical action literal. Accept either resume-same-session-and-worktree or an explicit semicolon-delimited plan containing adopt-legacy-retry and resume-same-milestone-and-worktree; reject every action that could replace the milestone or worktree. Prove both accepted forms in self-tests before adopting live evidence."
+scope = [
+    "tools/integration/LegacyRetryAdoption.java",
+    "tools/integration/LegacyRetryAdoptionSelfTest.java",
+    "docs/ENGINEERING_WORKFLOW.md",
+]
+tags = [
+    "legacy-retry",
+    "process-recovery",
+    "worktree-identity",
+]
+created_at = "2026-08-27T04:38:00Z"
+
+[[occurrences]]
+occurred_at = "2026-08-27T04:38:00Z"
+source = "Live M686 adoption on a38c1fefb failed before mutation: legacy disposition does not retain the same worktree; disposition action=adopt-legacy-retry;provision-exact-artifact;resume-same-milestone-and-worktree"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "a38c1fefb"

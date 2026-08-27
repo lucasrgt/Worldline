@@ -11,7 +11,8 @@ final class SwarmCensus {
     private static final Pattern JSON_FIELD = Pattern.compile("\"([^\"]+)\"\\s*:\\s*\"([^\"]*)\"");
     private SwarmCensus() { }
 
-    static void audit(List<Wave> waves, Path outputValue, Path archiveValue) throws Exception {
+    static void audit(List<Wave> waves, Path outputValue, Path archiveValue, Path baselineValue)
+            throws Exception {
         Path root = Path.of("").toAbsolutePath().normalize();
         Path output = outputValue.toAbsolutePath().normalize();
         Path archive = archiveValue == null ? null : archiveValue.toAbsolutePath().normalize();
@@ -19,17 +20,21 @@ final class SwarmCensus {
                 : SwarmEvidenceArchive.saveRepositoryBundle(root, archive);
         Map<String, Properties> handoffs = handoffs(root);
         Map<String, CensusDisposition.Decision> dispositions = CensusDisposition.load(root);
+        CensusMetrics metrics = CensusMetrics.load(root, baselineValue);
         Set<String> integratedReceipts = integratedReceipts(root);
         List<Item> items = new ArrayList<>();
         for (Wave wave : waves) {
-            inspectWave(root, wave, handoffs, dispositions, integratedReceipts,
+            inspectWave(root, wave, handoffs, dispositions, metrics, integratedReceipts,
                     archive, bundle, items);
         }
         items.sort(Comparator.comparingInt(Item::number));
         Map<String, Integer> counts = new HashMap<>();
-        for (Item item : items) counts.merge(item.state, 1, Integer::sum);
+        for (Item item : items) {
+            counts.merge(item.state, 1, Integer::sum);
+        }
         Files.createDirectories(output.getParent());
-        Files.writeString(output, json(items, counts, waves), StandardCharsets.UTF_8);
+        Files.writeString(output, CensusJson.json(items, counts, waves, metrics.baselineSha()),
+                StandardCharsets.UTF_8);
         System.out.println("swarm census: total=" + items.size() + ", qualified="
                 + counts.getOrDefault("QUALIFIED", 0) + ", failed-gate="
                 + counts.getOrDefault("FAILED_GATE", 0) + ", dirty-suspended="
@@ -41,8 +46,9 @@ final class SwarmCensus {
     }
 
     private static void inspectWave(Path root, Wave wave, Map<String, Properties> handoffs,
-            Map<String, CensusDisposition.Decision> dispositions, Set<String> integratedReceipts,
-            Path archive, SwarmEvidenceArchive.Result bundle, List<Item> items) throws Exception {
+            Map<String, CensusDisposition.Decision> dispositions, CensusMetrics metrics,
+            Set<String> integratedReceipts, Path archive, SwarmEvidenceArchive.Result bundle,
+            List<Item> items) throws Exception {
         require(Files.isDirectory(wave.path), "missing wave root: " + wave.path);
         String base = git(root, "rev-parse", "--verify", wave.base + "^{commit}").trim();
         try (var paths = Files.list(wave.path)) {
@@ -50,15 +56,16 @@ final class SwarmCensus {
                 Matcher match = ID.matcher(path.getFileName().toString());
                 if (!match.matches()) continue;
                 items.add(inspect(root, path.toAbsolutePath().normalize(), base, handoffs,
-                        dispositions, integratedReceipts, archive, bundle,
+                        dispositions, metrics, integratedReceipts, archive, bundle,
                         Integer.parseInt(match.group(1))));
             }
         }
     }
 
     private static Item inspect(Path root, Path path, String base, Map<String, Properties> handoffs,
-            Map<String, CensusDisposition.Decision> dispositions, Set<String> integratedReceipts,
-            Path archive, SwarmEvidenceArchive.Result bundle, int number) throws Exception {
+            Map<String, CensusDisposition.Decision> dispositions, CensusMetrics metrics,
+            Set<String> integratedReceipts, Path archive, SwarmEvidenceArchive.Result bundle,
+            int number) throws Exception {
         String id = path.getFileName().toString();
         String branch = git(path, "branch", "--show-current").trim();
         String head = git(path, "rev-parse", "HEAD").trim();
@@ -75,14 +82,14 @@ final class SwarmCensus {
         Path descriptor = path.resolve("smokes").resolve(id).resolve("smoke.properties");
         boolean scaffold = Files.isRegularFile(descriptor)
                 && Files.readString(descriptor, StandardCharsets.UTF_8).contains("scaffold.status=");
-        boolean integrated = integratedReceipts.contains(head) || integrated(root, head);
+        boolean integrated = integratedCandidate(atBase, integratedReceipts.contains(head),
+                integrated(root, head));
         int commits = head.equals(evidenceBase) ? 0 : Integer.parseInt(git(path, "rev-list",
                 "--count", evidenceBase + ".." + head).trim());
         boolean qualified = receiptBase && handoff && integrated && commits == 1 && !scaffold;
         String state = legacyState(dirty, qualified, atBase, !atBase);
         List<Path> logs = evidenceLogs(path, id);
         int retries = retries(logs);
-        long receiptSeconds = receiptSeconds(path, proof, head);
         String cause = cause(state, status, logs);
         CensusDisposition.Decision disposition = dispositions.get(id);
         SwarmEvidenceArchive.Result saved;
@@ -91,6 +98,14 @@ final class SwarmCensus {
             state = disposition.state();
             cause = disposition.cause();
             evidenceBase = disposition.base();
+            head = disposition.head();
+            tree = disposition.tree();
+            commits = Integer.parseInt(git(path, "rev-list", "--count",
+                    evidenceBase + ".." + head).trim());
+            if ("RETRYABLE".equals(disposition.declaredState())
+                    || "REJECTED".equals(disposition.declaredState())) {
+                integrated = false;
+            }
             saved = disposition.archive();
         } else {
             saved = archive != null
@@ -98,9 +113,10 @@ final class SwarmCensus {
                     ? SwarmEvidenceArchive.save(archive, id, path, branch, base, head, tree, state,
                             status, logs, receipt, bundle) : SwarmEvidenceArchive.Result.empty();
         }
+        CensusMetrics.Entry metric = metrics.entry(id, head);
         return new Item(number, id, path, branch, evidenceBase, head, tree, state, dirty, commits,
-                scaffold, proof.present, proof.exact, handoff, integrated, retries, receiptSeconds,
-                cause, logs, saved);
+                scaffold, proof.present, proof.exact, handoff, integrated, retries, cause, logs,
+                saved, metric, disposition);
     }
 
     static String legacyState(boolean dirty, boolean qualified, boolean atBase, boolean hasCommit) {
@@ -142,7 +158,7 @@ final class SwarmCensus {
     }
 
     private static Set<String> integratedReceipts(Path root) throws Exception {
-        String text = git(root, "show", "main:smokes/train-reconciliation.lock");
+        String text = git(root, "show", "HEAD:smokes/train-reconciliation.lock");
         Properties values = new Properties(); values.load(new java.io.StringReader(text));
         Set<String> result = new HashSet<>();
         for (String key : values.stringPropertyNames())
@@ -178,19 +194,16 @@ final class SwarmCensus {
         return result;
     }
 
-    private static long receiptSeconds(Path path, Receipt proof, String head) throws Exception {
-        if (!proof.exact || proof.qualifiedAt.isBlank()) return -1;
-        Instant commit = OffsetDateTime.parse(git(path, "show", "-s", "--format=%cI", head).trim())
-                .toInstant();
-        return Math.max(0, Duration.between(commit, Instant.parse(proof.qualifiedAt)).toSeconds());
-    }
-
     private static boolean integrated(Path root, String head) throws Exception {
-        String base = git(root, "rev-parse", "main^{commit}").trim();
+        String base = git(root, "rev-parse", "HEAD^{commit}").trim();
         if (SwarmProcess.status(root, List.of("merge-base", "--is-ancestor", head, base), 60) == 0)
             return true;
         String cherry = git(root, "cherry", base, head).trim();
         return !cherry.isBlank() && cherry.lines().allMatch(line -> line.startsWith("- "));
+    }
+
+    static boolean integratedCandidate(boolean atWaveBase, boolean receipt, boolean ancestry) {
+        return !atWaveBase && (receipt || ancestry);
     }
 
     private static String cause(String state, String status, List<Path> logs) throws IOException {
@@ -203,44 +216,8 @@ final class SwarmCensus {
                 .findFirst().orElse(lines.isEmpty() ? "gate failed without log detail" : lines.get(0)).trim();
     }
 
-    private static String json(List<Item> items, Map<String, Integer> counts, List<Wave> waves) {
-        StringBuilder text = new StringBuilder("{\n  \"schema\":1,\n  \"created\":\"")
-                .append(Instant.now()).append("\",\n  \"waves\":").append(waves.size())
-                .append(",\n  \"summary\":{");
-        for (String state : List.of("QUALIFIED", "REJECTED", "RETRYABLE", "STRANDED",
-                "FAILED_GATE", "DIRTY_SUSPENDED", "NOT_STARTED")) {
-            text.append("\"").append(state).append("\":")
-                    .append(counts.getOrDefault(state, 0)).append(",");
-        }
-        text.setLength(text.length() - 1); text.append("},\n  \"candidates\":[\n");
-        for (int index = 0; index < items.size(); index++) {
-            Item item = items.get(index);
-            text.append("    {\"id\":\"").append(item.id).append("\",\"state\":\"")
-                    .append(item.state).append("\",\"path\":\"").append(escape(item.path.toString()))
-                    .append("\",\"branch\":\"").append(item.branch).append("\",\"base\":\"")
-                    .append(item.base).append("\",\"head\":\"").append(item.head)
-                    .append("\",\"tree\":\"").append(item.tree).append("\",\"dirty\":")
-                    .append(item.dirty).append(",\"commits\":").append(item.commits)
-                    .append(",\"scaffold\":").append(item.scaffold).append(",\"receipt_present\":")
-                    .append(item.receiptPresent).append(",\"receipt_exact\":").append(item.receiptExact)
-                    .append(",\"handoff_exact\":").append(item.handoffExact)
-                    .append(",\"integrated\":").append(item.integrated).append(",\"retries\":")
-                    .append(item.retries).append(",\"time_to_receipt_seconds\":")
-                    .append(item.receiptSeconds).append(",\"cause\":\"")
-                    .append(escape(item.cause)).append("\",\"archive\":\"")
-                    .append(escape(item.archive.path())).append("\",\"archive_sha256\":\"")
-                    .append(item.archive.sha256()).append("\"}")
-                    .append(index + 1 == items.size() ? "\n" : ",\n");
-        }
-        return text.append("  ]\n}\n").toString();
-    }
-
     private static String git(Path directory, String... arguments) throws Exception {
         return SwarmProcess.output(directory, List.of(arguments), 120);
-    }
-    private static String escape(String value) {
-        return value.replace("\\", "\\\\").replace("\"", "\\\"")
-                .replace("\r", "\\r").replace("\n", "\\n");
     }
     private static void require(boolean condition, String message) {
         if (!condition) throw new IllegalStateException(message);
@@ -255,9 +232,9 @@ final class SwarmCensus {
         }
     }
     private record Receipt(boolean present, boolean exact, String qualifiedAt, String base) { }
-    private record Item(int number, String id, Path path, String branch, String base, String head,
+    record Item(int number, String id, Path path, String branch, String base, String head,
             String tree, String state, boolean dirty, int commits, boolean scaffold,
             boolean receiptPresent, boolean receiptExact, boolean handoffExact, boolean integrated,
-            int retries, long receiptSeconds, String cause,
-            List<Path> logs, SwarmEvidenceArchive.Result archive) { }
+            int retries, String cause, List<Path> logs, SwarmEvidenceArchive.Result archive,
+            CensusMetrics.Entry metrics, CensusDisposition.Decision disposition) { }
 }

@@ -21,3 +21,11 @@ reported_by = "codex:orchestrator"
 corrected_by = "codex:orchestrator"
 recorded_by = "codex:orchestrator"
 commit = "6e41512d8"
+
+[[occurrences]]
+occurred_at = "2026-08-27T07:50:19Z"
+source = "csm nya check found process-recovery launch 3 with a recovered session bypassed adoption-level timeout validation in OxAlphaLegacyAdoption.java; corrected by requiring the original recovery budget to remain bounded, exact 7200-second fallback recovery, both rollover receipt/hash, and a 7201-second negative self-test"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "938becf44"

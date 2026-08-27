@@ -43,7 +43,7 @@ final class WaveSelfImprovement {
                 && now.rejected == now.registeredRejected && utility.substantial()
                 && (improved || correction);
         AdaptiveParallelism.Decision parallelism = AdaptiveParallelism.decide(root, correction,
-                now.newSystemic(prior), now.cleanDelta(prior));
+                WaveMetricPolicy.newSystemic(now, prior), now.cleanDelta(prior));
         boolean nextWave = release && now.total == 25 && now.terminal == 25;
         Path output = outputValue.toAbsolutePath().normalize();
         require(!Files.exists(output), "immutable wave closure already exists: " + output);
@@ -55,9 +55,8 @@ final class WaveSelfImprovement {
         System.out.println("wave self-improvement: processed=" + now.processed + ", qualified="
                 + now.qualified + ", rejected=" + now.rejected + ", recurrence="
                 + WaveReportFormat.rate(now.recurrenceRate()) + ", next-candidate=" + release
-                + utility.summary() + ", next-wave=" + nextWave
-                + ", parallelism=" + parallelism.width());
-        System.out.println("  report: " + output);
+                + utility.summary() + ", next-wave=" + nextWave + ", parallelism="
+                + parallelism.width() + "\n  report: " + output);
     }
 
     static void selfTest() {
@@ -72,16 +71,14 @@ final class WaveSelfImprovement {
         require(metrics.processed == 2 && metrics.firstPass == 1
                 && metrics.medianReceipt == 20 && metrics.p95Receipt == 30,
                 "wave metric calculation drifted");
-        RejectionRegistry.selfTest();
-        AdaptiveParallelism.selfTest();
-        WaveUtility.selfTest();
+        RejectionRegistry.selfTest(); AdaptiveParallelism.selfTest();
+        WaveUtility.selfTest(); WaveMetricSelfTest.selfTest();
     }
 
     private static String json(Path root, WaveCensus.Snapshot current, WaveCensus.Snapshot previous,
             Metrics now, Metrics prior, WaveUtility utility, WaveUtility priorUtility,
-            Map<String, ScarControlRegistry.Control> controls,
-            String head, String tree, String base, String correctionSha, boolean correction,
-            boolean improved, boolean release, boolean nextWave,
+            Map<String, ScarControlRegistry.Control> controls, String head, String tree, String base,
+            String correctionSha, boolean correction, boolean improved, boolean release, boolean nextWave,
             AdaptiveParallelism.Decision parallelism) throws Exception {
         StringBuilder text = new StringBuilder("{\n  \"schema\":2,\n  \"created\":\"")
                 .append(Instant.now()).append("\",\n  \"base\":\"").append(base)
@@ -196,16 +193,15 @@ final class WaveSelfImprovement {
         if (!value) throw new IllegalStateException(message);
     }
 
-    private static final class Metrics {
+    static final class Metrics {
         final List<WaveCensus.Row> rows;
         final Map<String, Integer> dispositions = new LinkedHashMap<>(), rejectionClasses = new HashMap<>();
         final Map<String, Integer> scars = new HashMap<>();
-        int total, processed, terminal, qualified, rejected, integrated, firstPass, firstPassUnknown;
-        int recurrences, recurrenceAssessed, preCandidateMilestones, preCandidateEvents;
-        int preRuntimeMilestones, dirty, stranded, hardBlockers, retryable, ownedRetryable;
-        int unownedRetryable, inexactQualified, falsePromotions;
-        int registeredRejected, revalidationAttempted, revalidated, correctlyAnticipated, receiptCount;
-        int registryEntries, historicalEquivalentRelaunches, equivalentBlockedByCheck;
+        int total, processed, terminal, qualified, rejected, integrated, firstPass, firstPassUnknown, recurrences;
+        int recurrenceAssessed, preCandidateMilestones, preCandidateEvents, preRuntimeMilestones, dirty;
+        int stranded, hardBlockers, retryable, ownedRetryable, unownedRetryable, inexactQualified;
+        int falsePromotions, registeredRejected, revalidationAttempted, revalidated, correctlyAnticipated,
+                receiptCount, registryEntries, historicalEquivalentRelaunches, equivalentBlockedByCheck;
         double medianReceipt = -1, p95Receipt = -1;
 
         private Metrics(List<WaveCensus.Row> rows) { this.rows = rows; }
@@ -213,9 +209,6 @@ final class WaveSelfImprovement {
         static Metrics of(List<WaveCensus.Row> rows, List<RejectionRegistry.Entry> registry) {
             Metrics value = new Metrics(rows); value.total = rows.size();
             value.registryEntries = registry.size();
-            value.historicalEquivalentRelaunches = (int) registry.stream()
-                    .filter(entry -> !entry.duplicateOf().isBlank()).count();
-            value.equivalentBlockedByCheck = value.historicalEquivalentRelaunches;
             Map<String, RejectionRegistry.Entry> rejectedById = new HashMap<>();
             registry.forEach(entry -> rejectedById.put(entry.id(), entry));
             List<Double> times = new ArrayList<>();
@@ -237,8 +230,11 @@ final class WaveSelfImprovement {
                 if (row.recurrenceAssessed()) value.recurrenceAssessed++;
                 if (row.recurrence()) value.recurrences++;
                 if (row.candidateAttempts() > 1 || row.objectiveInterlock()) value.preCandidateMilestones++;
-                value.preCandidateEvents += row.preCandidatePreventions();
-                if (row.candidateAttempts() > 1 && row.officialAttempts() <= 1) value.preRuntimeMilestones++;
+                value.preCandidateEvents += Math.max(0, row.preCandidatePreventions());
+                if (row.candidateAttempts() > 1 && row.officialAttempts() >= 0
+                        && row.officialAttempts() <= 1) {
+                    value.preRuntimeMilestones++;
+                }
                 if (row.receiptSeconds() >= 0) times.add(row.receiptSeconds());
                 if (row.integrated() && (!row.qualified() || !row.receiptExact())) value.falsePromotions++;
                 row.recurrenceScars().forEach(scar -> value.scars.merge(scar, 1, Integer::sum));
@@ -248,6 +244,14 @@ final class WaveSelfImprovement {
                         value.registeredRejected++; value.rejectionClasses.merge(entry.classification(), 1,
                                 Integer::sum); value.scars.merge(entry.scar(), 1, Integer::sum);
                         value.terminal++;
+                        if (!entry.duplicateOf().isBlank()) {
+                            if (row.objectiveInterlock()) {
+                                value.correctlyAnticipated++;
+                                value.equivalentBlockedByCheck++;
+                            } else {
+                                value.historicalEquivalentRelaunches++;
+                            }
+                        }
                         if (entry.revalidationApproved()) value.revalidationAttempted++;
                     }
                 }
@@ -272,11 +276,6 @@ final class WaveSelfImprovement {
             return revalidationAttempted == 0 ? 0 : (double) revalidated / revalidationAttempted;
         }
         int cleanDelta(Metrics prior) { return processed - prior.processed - (recurrences - prior.recurrences); }
-        boolean newSystemic(Metrics prior) {
-            return hardBlockers > 0 || unownedRetryable > 0 || retryable > prior.retryable
-                    || rejectionClasses.getOrDefault("harness-process-defect", 0)
-                    > prior.rejectionClasses.getOrDefault("harness-process-defect", 0);
-        }
         String dispositionsJson() { return mapJson(dispositions); }
         String rejectionsJson() { return mapJson(rejectionClasses); }
         String paretoJson() {

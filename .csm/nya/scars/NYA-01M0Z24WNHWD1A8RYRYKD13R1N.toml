@@ -1,10 +1,12 @@
 schema = 1
 id = "NYA-01M0Z24WNHWD1A8RYRYKD13R1N"
 title = "Accept only verified NYA-bearing partial CSM context"
-lesson = "The supervised preflight must execute csm context, but an exit code of 1 is expected when optional WTW, RTW, or NWC stores are uninitialized. Accept that partial result only when the NYA section is present, the mandatory supervision scar is present, and the output contains a recognized optional-store initialization message; every other nonzero context result fails closed. NYA recall remains a separate mandatory exit-zero check."
+lesson = "The supervised preflight must execute csm context, but an exit code of 1 is expected when optional WTW, RTW, or NWC stores are uninitialized. Accept that partial result only when the NYA section is present and stderr contains exclusively recognized optional-store initialization messages; every other nonzero context result fails closed. The separate exit-zero NYA recall, not context ranking, must present every mandatory scar before work starts."
 scope = [
     "tools/integration/SwarmPreflight.java",
     "tools/integration/SwarmProcess.java",
+    "tools/integration/OxAlphaControlMigration.java",
+    "tools/integration/LegacyRetryAdoptionSelfTest.java",
     "coordination/swarm/OX_ALPHA_PROMPT.md",
 ]
 tags = [
@@ -29,3 +31,11 @@ reported_by = "codex:worldline-supervisor"
 corrected_by = "codex:worldline-supervisor"
 recorded_by = "codex:worldline-supervisor"
 commit = "e92e0b264"
+
+[[occurrences]]
+occurred_at = "2026-08-27T08:36:29Z"
+source = "M691 control migration on da073e479: exact-goal csm context returned exit 1 with only recognized uninitialized WTW RTW NWC messages and a valid NYA section, but the supervision scar was not among the five ranked context results; the separate recall had not run, so the migration correctly launched no worker but conflated context ranking with mandatory recall"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "da073e479"

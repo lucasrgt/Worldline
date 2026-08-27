@@ -29,6 +29,7 @@ public final class SwarmLoop {
     private static void audit(String[] arguments) throws Exception {
         Path output = Path.of(".worldline/reports/swarm-census.json");
         Path archive = null;
+        Path baseline = null;
         List<SwarmCensus.Wave> waves = new ArrayList<>();
         for (int index = 1; index < arguments.length; index++) {
             require(index + 1 < arguments.length, usage());
@@ -36,11 +37,12 @@ public final class SwarmLoop {
                 case "--wave" -> waves.add(SwarmCensus.Wave.parse(arguments[++index]));
                 case "--output" -> output = Path.of(arguments[++index]);
                 case "--archive" -> archive = Path.of(arguments[++index]);
+                case "--baseline-census" -> baseline = Path.of(arguments[++index]);
                 default -> throw new IllegalArgumentException(usage());
             }
         }
         require(!waves.isEmpty(), "audit requires at least one --wave PATH=BASE");
-        SwarmCensus.audit(waves, output, archive);
+        SwarmCensus.audit(waves, output, archive, baseline);
     }
 
     private static void resolve(String[] arguments) throws Exception {
@@ -152,6 +154,13 @@ public final class SwarmLoop {
     }
 
     private static void selfTest(String[] arguments) {
+        try {
+            CensusDisposition.selfTest();
+        } catch (Exception error) {
+            throw new IllegalStateException("census disposition self-test failed: "
+                    + error.getMessage(), error);
+        }
+        CensusJson.selfTest();
         require(arguments.length == 1, usage());
         require(SwarmCensus.legacyState(true, false, false, false).equals("DIRTY_SUSPENDED"),
                 "dirty classification drifted");
@@ -161,8 +170,15 @@ public final class SwarmLoop {
                 "failed classification drifted");
         require(SwarmCensus.legacyState(false, false, true, false).equals("NOT_STARTED"),
                 "not-started classification drifted");
+        require(!SwarmCensus.integratedCandidate(true, true, true),
+                "wave-base worktree was falsely classified as integrated");
+        require(SwarmCensus.integratedCandidate(false, true, false),
+                "exact train receipt was not accepted as integration evidence");
+        require(SwarmCensus.integratedCandidate(false, false, true),
+                "authorized-head ancestry was not accepted as integration evidence");
         WaveSelfImprovement.selfTest();
         WaveCensus.selfTest();
+        CensusMetrics.selfTest();
         SwarmMicroWave.selfTest();
         SwarmPreflight.selfTest();
         SwarmPreCandidate.selfTest();
@@ -175,7 +191,8 @@ public final class SwarmLoop {
     }
 
     private static String usage() {
-        return "usage: SwarmLoop.java audit --wave PATH=BASE... [--output PATH] [--archive DIR] | "
+        return "usage: SwarmLoop.java audit --wave PATH=BASE... [--output PATH] [--archive DIR] "
+                + "[--baseline-census PATH] | "
                 + "resolve --census PATH --scar ID [--reject ID,...] [--max-attempts N] | "
                 + "report --census PATH --resolution PATH [--output PATH] | "
                 + "close-wave --census PATH [--previous-census PATH] --evidence-root DIR "

@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M10SDCXKJZXP8SV7JFGMZQTG"
+title = "Preserve literal Windows paths in legacy archive manifests"
+lesson = "Legacy retry archives record exact worktree identity as UTF-8 key=value text and historical Windows manifests contain unescaped backslashes. Parse that manifest literally, reject malformed or duplicate keys, and prove a Windows-path fixture before live adoption; java.util.Properties must not consume path separators."
+scope = [
+    "tools/integration/LegacyRetryAdoption.java",
+    "tools/integration/LegacyRetryAdoptionSelfTest.java",
+    "docs/ENGINEERING_WORKFLOW.md",
+]
+tags = [
+    "legacy-retry",
+    "windows",
+    "archive-identity",
+]
+created_at = "2026-08-27T04:59:50Z"
+
+[[occurrences]]
+occurred_at = "2026-08-27T04:59:50Z"
+source = '''Live M686 adoption on control 30c62c802 failed before mutation with 'legacy archive identity drifted'; archive sha256=907d33f58cc4e30afe776465142f350f5f13da29a02b0c063067e82744b43cec; manifest worktree=C:\Users\lucas\Documents\ChatGPT\worldline-wave-m667-m691\m686-cactus-height-cap; cause=Properties.load consumed unescaped Windows backslashes'''
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "30c62c802"

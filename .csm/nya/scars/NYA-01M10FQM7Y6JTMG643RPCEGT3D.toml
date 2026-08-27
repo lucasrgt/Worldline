@@ -30,3 +30,11 @@ reported_by = "codex:worldline-supervisor"
 corrected_by = "codex:worldline-supervisor"
 recorded_by = "codex:worldline-supervisor"
 commit = "66eb4b404"
+
+[[occurrences]]
+occurred_at = "2026-08-27T09:04:10Z"
+source = "C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260827/m667-m691-blocked-60fe8fbb8/m667-m691-closure-blocked-1b00596c.json sha256=182568BDB60EC7DDB459052DBB735FD788F29FC7E9A4094C170DEC4BAC22840E census.sha256=1B00596CE24DE8CD9DE1D13B2121A4708C269594AD0EF55403F050E53E44B33F cause=19 NOT_STARTED worktrees at the shared wave base were falsely counted as integrated/false-promoted because SwarmCensus resolved ancestry and train receipts through the clone's mutable main ref; scar-check count also omitted registered controls 46 and 47"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "60fe8fbb8"

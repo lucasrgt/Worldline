@@ -97,20 +97,71 @@ Every launch supplies `--control-base` with the exact orchestrator SHA that auth
 The launcher rejects an authorized milestone base or worktree HEAD that does not contain that SHA,
 so an older worktree cannot pass supervisor readiness and then execute a stale Candidate Gate.
 If controls advance after a retryable attempt, first preserve its evidence archive, move the same
-branch and worktree to the new clean base, and run `OxAlphaControlMigration`. It verifies the old
+branch and worktree to the new clean base, and run `LegacyRetryControlLauncher migrate`. The source
+launcher compiles the complete migration dependency closure before the migration verifies the old
 receipt, archive hash, milestone ID, session, and ancestry, then repeats CSM context and both
 supervision and control-base recall before issuing the replacement preflight. Reapply the archived
 checkpoint only after this PASS; the milestone ID and OpenCode session remain unchanged.
+Legacy attempts created before supervised launcher receipts require an immutable
+`LegacyRetryAdoption` receipt before the worktree moves. The adoption command validates the exact
+tracked RETRYABLE disposition, archive digest and manifest, live branch, HEAD, tree, and archived
+status. A recovered session is accepted only when a SHA-bound preserved log contains the sole
+session identity, milestone ID, and exact worktree path. If no historical OpenCode session exists,
+the explicit `process-recovery` mode records that fact instead of inventing a session and authorizes
+one new checkpoint session with a maximum 3600-second budget. Both modes bind an owner, attempt 2 of
+2, and the new control base. Pass the adoption receipt and its SHA-256 to
+`LegacyRetryControlLauncher migrate` and the attempt-2 `OxAlphaLauncher`; neither tool treats it as a historical
+launcher receipt. Legacy adoption may omit historical preflight and receipt bases, which remain
+required for ordinary control migration.
+The adoption receipt's immutable `new_control_base` is its original authorization anchor. A later
+control migration may reuse that exact receipt only when its SHA-256 still matches and the anchor is
+an ancestor of the new control base; an unrelated or missing control commit fails closed. The new
+preflight then binds the descendant control without rewriting or replacing the adoption evidence.
+The adoption validator accepts the historical `resume-same-session-and-worktree` action or an
+explicit recovery plan containing both `adopt-legacy-retry` and
+`resume-same-milestone-and-worktree`. Recovery plans use the closed step vocabulary
+`adopt-legacy-retry`, `provision-exact-artifact`, `repair-process`, and
+`resume-same-milestone-and-worktree`; unknown or repeated steps fail closed. This validates the
+same-worktree invariant without allowing a plan to replace the milestone or worktree.
+Legacy archive manifests are parsed as literal UTF-8 `key=value` records rather than Java
+properties. This preserves Windows backslashes in sealed worktree and bundle paths; malformed or
+duplicate keys fail closed before an adoption receipt can be written.
+For a recovered session that lacks an immutable export file, run
+`LegacyRetryControlLauncher export` before adoption. It compiles the exact strict-JSON closure,
+invokes `opencode export <session> --pure` directly with regular-file process redirection, keeps
+stderr separate, bounds the process and output, validates the exact session and real worktree, and
+atomically publishes the private JSON at its canonical worktree path. Then run
+`LegacyRetryControlLauncher adopt --mode resume-session` with that path and SHA-256. Adoption
+reparses the same strict `info.id` and `info.directory`, requires the canonical evidence path, and
+binds milestone, session, worktree, and evidence hash in its receipt. A sanitized export is
+insufficient because OpenCode redacts the required worktree identity.
 When a preserved checkpoint crossed an earlier control-base migration, pass its independently
 sealed `--archive-base`, `--preflight-base`, and `--receipt-base`. Each must be an exact ancestor in
 the new control base; they need not be linearly ordered because independently reconciled trains can
 make them sibling ancestors. Collapsing different historical identities into one SHA fails closed.
 The launcher closes the child's stdin pipe immediately after creation so non-interactive OpenCode
 observes EOF and creates a session. Its self-test fails if a child can remain blocked on stdin.
+The launcher also enables OpenCode INFO logs on its private stderr file. A provider `stream error`
+  is terminal infrastructure evidence: the supervisor stops the root immediately, repeatedly drains
+  every observed descendant, and fails closed if a retained PID remains alive,
+classifies quota separately from other transport failures, and binds the session recovered from the
+log or the already validated resume request. A provider failure may not wait for the worker timeout
+or produce a receipt with a known supplied session recorded as null.
 After an archived selected-provider quota failure, the supervisor may set
 `WORLDLINE_OX_ALPHA_FALLBACK=1` to resume the same receipt-bound session on the allowlisted free
 profile. The launch receipt records both the profile and model; a new session or ID fails closed.
-Fallback checkpoint resumes require a minimum 7200-second worker budget, and the source launcher
+For a legacy launch that emitted no JSONL or stderr and incorrectly receipted a null session,
+`LegacyRetryControlLauncher rollover` compiles the exact source closure and then uses
+`OxAlphaInfrastructureRollover` to seal the exact prior receipt, canonical session export, adoption
+receipt, and matching provider-log occurrence. The contract stays on attempt 2 while the physical
+launch advances once to launch 3 and uses a collision-free evidence stem. Any contract event,
+different session/model/worktree, unrelated control, mutated hash, or fourth launch fails closed.
+The supervisor supplies the SHA-256 of the canonical OpenCode provider log, and the rollover seals
+one bounded snapshot plus its exact excerpt before launch. A single-writer seal claim prevents
+competing receipts. A separate immutable launch claim permits exactly one recovery from process
+start failure; any later process-start failure or post-start capture/receipt failure emits terminal
+RETRYABLE infrastructure evidence instead of leaving an ownerless claim.
+Fallback checkpoint resumes require exactly a 7200-second worker budget, and the source launcher
 derives a larger outer timeout from that exact requested budget. This executable interlock prevents
 large receipt-bound histories from being misclassified after the primary one-hour window.
 After an archived systemic fallback-provider error, the supervisor may select whichever of GLM 5.3
@@ -151,6 +202,10 @@ Candidate Gate on a supervised milestone branch requires that PASS report and
 rejects any later source change.
 Candidates with smoke sources recall `NYA-01M0YH9M17ETMZA0F5X7981K4P`; the compilation result,
 not textual inspection of imports or `throws` clauses, is the objective closure proof.
+Every data-driven `cycle.artifact` is resolved during this closure, and its exact byte length,
+SHA-1, and SHA-256 are verified before Candidate. A missing or drifted official artifact is a
+provisioning failure, not a behavioral attempt; an equivalent milestone remains blocked while the
+original RETRYABLE contract owns the semantic identity.
 Candidates changing `modules/api` also recall `NYA-01M0YRVA4DD24Y22AHJQP2X3MF`. Exact closure
 compilation preserves the release declared for every module; the Java 8 API may not adopt a
 Java 21 language feature merely because TestKit declares release 21.
@@ -167,10 +222,24 @@ portable handoff. `RETRYABLE` retains the same branch, worktree, session, eviden
 attempt count. `REJECTED` retains exact oracle, fixture, or instability evidence and names an NYA
 scar. A worker without a disposition is `STRANDED` and is converted immediately to `RETRYABLE` or
 `REJECTED`; a draft scaffold is never a handoff or train candidate.
+A mechanically exact PASS receipt may still be superseded by a fail-closed semantic review. The
+receipt and handoff remain preserved, but the explicit REJECTED disposition and semantic exclusion
+prevent integration. Exhausted runtime history is authoritative over stale disposition counters.
 The canonical census resolves each exact qualification against the base recorded in its receipt,
 not against the latest wave control SHA. A registered rejection is terminal only when its tracked
 disposition, archived commit/tree, worktree identity, and external archive digest all validate. The
 wave base is a fallback solely for worktrees that have no exact receipt or explicit disposition.
+Integration evidence is resolved against the audit worktree's exact authorized `HEAD`, never the
+clone's mutable `main` branch. A worktree still exactly at its wave base is not an integrated
+candidate even when that shared base is an ancestor of the authorized train.
+An explicit RETRYABLE whose archive is exact but whose owner, session, or remaining attempt budget
+is incomplete is emitted as STRANDED rather than aborting the census. Its JSON retains
+`disposition_state=RETRYABLE` and the exact missing controls, giving the supervisor a complete
+adoption queue while keeping every wave-release gate closed.
+Comparable telemetry may be carried from an archived baseline census only when both the milestone ID
+and exact HEAD match. A changed or missing HEAD makes first-pass and recurrence unknown; an exact
+tracked disposition may override matching baseline fields, and the new census records the baseline
+SHA-256 so metric continuity is independently auditable.
 
 At each micro-wave barrier, the supervisor aggregates equivalent causes across all completed workers,
 records or updates each NYA scar exactly once, runs `csm nya check`, updates the base prompt when a
@@ -209,8 +278,8 @@ it to the versioned `rejected-semantic-exclusion` check.
 
 The preflight distinguishes optional CSM store initialization from recall failure. A `csm context`
 exit code of one is accepted only when stderr consists exclusively of the known uninitialized
-WTW/RTW/NWC messages and the NYA section contains the mandatory supervision scar. `csm nya recall`
-must still exit zero and present every required scar.
+WTW/RTW/NWC messages and stdout contains a NYA section. The separate `csm nya recall` must exit zero
+and present every required scar; context ranking cannot substitute for or block that exact recall.
 
 The scheduled private workflow runs differential fuzzing and mutation-manifest exploration only
 after the canonical Gate. `NightlyQualityCampaign` splits a hard wall-clock budget between both

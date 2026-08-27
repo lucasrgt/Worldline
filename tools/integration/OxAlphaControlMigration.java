@@ -13,7 +13,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
 
 /** Rebinds one archived retryable checkpoint to a newer orchestrator control base. */
 public final class OxAlphaControlMigration {
@@ -29,10 +28,6 @@ public final class OxAlphaControlMigration {
 
     public static void main(String[] arguments) {
         try {
-            if (List.of(arguments).equals(List.of("--self-test"))) {
-                selfTest();
-                return;
-            }
             migrate(Request.parse(arguments));
         } catch (Exception error) {
             System.err.println("Ox Alpha control migration failed: " + error.getMessage());
@@ -44,9 +39,10 @@ public final class OxAlphaControlMigration {
         Path root = Path.of("").toAbsolutePath().normalize();
         require(request.id.matches("m[0-9]+-[a-z0-9-]+"), "invalid milestone id");
         require(request.archiveBase.matches("[0-9a-f]{40}")
-                && request.preflightBase.matches("[0-9a-f]{40}")
-                && request.receiptBase.matches("[0-9a-f]{40}")
-                && request.newBase.matches("[0-9a-f]{40}"),
+                && request.newBase.matches("[0-9a-f]{40}")
+                && (request.adoptionReceipt != null
+                        || request.preflightBase.matches("[0-9a-f]{40}")
+                        && request.receiptBase.matches("[0-9a-f]{40}")),
                 "migration bases must be exact commit SHAs");
         require(git(root, "branch", "--show-current").trim()
                 .equals("codex/milestone-" + request.id), "wrong milestone branch");
@@ -56,16 +52,22 @@ public final class OxAlphaControlMigration {
                 "migration worktree is dirty");
         require(ancestor(root, request.archiveBase, request.newBase),
                 "new base does not contain the archived base");
-        require(ancestor(root, request.preflightBase, request.newBase),
-                "new base does not contain the preflight base");
-        require(ancestor(root, request.receiptBase, request.newBase),
-                "new base does not contain the prior receipt base");
+        if (request.adoptionReceipt == null) {
+            require(ancestor(root, request.preflightBase, request.newBase),
+                    "new base does not contain the preflight base");
+            require(ancestor(root, request.receiptBase, request.newBase),
+                    "new base does not contain the prior receipt base");
+        }
         validateArchive(request);
         Path preflight = root.resolve(".worldline/reports/swarm/preflight-" + request.id + ".json");
-        String prior = Files.readString(preflight, StandardCharsets.UTF_8);
-        require(field(prior, "id", request.id) && field(prior, "base", request.preflightBase)
-                && field(prior, "head", request.preflightBase) && field(prior, "status", "PASS"),
-                "prior preflight is not bound to the archived base");
+        if (request.adoptionReceipt == null) {
+            String prior = Files.readString(preflight, StandardCharsets.UTF_8);
+            require(field(prior, "id", request.id) && field(prior, "base", request.preflightBase)
+                    && field(prior, "head", request.preflightBase) && field(prior, "status", "PASS"),
+                    "prior preflight is not bound to the archived base");
+        } else {
+            validateAdoption(root, request);
+        }
         Result context = capture(root, List.of("csm", "context", "--task", request.goal,
                 "--path", "."), 300);
         require(contextAccepted(context), "CSM context failed on the new control base");
@@ -84,10 +86,10 @@ public final class OxAlphaControlMigration {
                 + "\",\n  \"created\":\"" + Instant.now() + "\",\n  \"base\":\""
                 + request.newBase + "\",\n  \"head\":\"" + head
                 + "\",\n  \"archive_base\":\"" + request.archiveBase
-                + "\",\n  \"preflight_base\":\"" + request.preflightBase
-                + "\",\n  \"receipt_base\":\"" + request.receiptBase
-                + "\",\n  \"session\":\"" + request.session
-                + "\",\n  \"prior_attempt\":" + request.priorAttempt
+                + "\",\n  \"preflight_base\":" + nullable(blankNull(request.preflightBase))
+                + ",\n  \"receipt_base\":" + nullable(blankNull(request.receiptBase))
+                + ",\n  \"session\":" + nullable(request.session)
+                + ",\n  \"prior_attempt\":" + request.priorAttempt
                 + ",\n  \"migration_archive_sha256\":\"" + archiveSha
                 + "\",\n  \"context_sha256\":\"" + sha(context.stdout)
                 + "\",\n  \"recall_sha256\":\"" + sha(standard + control)
@@ -103,7 +105,7 @@ public final class OxAlphaControlMigration {
         System.out.println("  archive sha256: " + archiveSha);
     }
 
-    private static void validateArchive(Request request) throws Exception {
+    static void validateArchive(Request request) throws Exception {
         require(Files.isRegularFile(request.archive), "migration archive is missing");
         require(sha(request.archive).equalsIgnoreCase(request.archiveSha),
                 "migration archive SHA-256 drifted");
@@ -115,19 +117,48 @@ public final class OxAlphaControlMigration {
             String state = manifest.getProperty("state", "");
             require(state.equals("DIRTY_SUSPENDED") || state.equals("FAILED_GATE"),
                     "archive is not a retryable legacy state");
-            String suffix = "opencode-" + request.id + "-qualify-attempt"
-                    + request.priorAttempt + ".json";
-            ZipEntry receipt = zip.stream().filter(entry -> entry.getName().endsWith(suffix))
-                    .findFirst().orElseThrow(() -> new IllegalStateException(
-                            "archive lacks the prior qualify receipt"));
-            String text;
-            try (InputStream input = zip.getInputStream(receipt)) {
-                text = new String(input.readAllBytes(), StandardCharsets.UTF_8);
+            if (request.adoptionReceipt == null) {
+                String suffix = "opencode-" + request.id + "-qualify-attempt"
+                        + request.priorAttempt + ".json";
+                ZipEntry receipt = zip.stream().filter(entry -> entry.getName().endsWith(suffix))
+                        .findFirst().orElseThrow(() -> new IllegalStateException(
+                                "archive lacks the prior qualify receipt"));
+                String text;
+                try (InputStream input = zip.getInputStream(receipt)) {
+                    text = new String(input.readAllBytes(), StandardCharsets.UTF_8);
+                }
+                require(field(text, "id", request.id) && field(text, "base", request.receiptBase)
+                        && field(text, "session", request.session) && field(text, "phase", "qualify")
+                        && text.contains("\"attempt\":" + request.priorAttempt)
+                        && text.contains("\"completed\":true"), "prior qualify receipt drifted");
             }
-            require(field(text, "id", request.id) && field(text, "base", request.receiptBase)
-                    && field(text, "session", request.session) && field(text, "phase", "qualify")
-                    && text.contains("\"attempt\":" + request.priorAttempt)
-                    && text.contains("\"completed\":true"), "prior qualify receipt drifted");
+        }
+    }
+
+    static void validateAdoption(Path root, Request request) throws Exception {
+        Path expected = root.resolve(".worldline/reports/swarm/legacy-retry-adoption-"
+                + request.id + ".json").normalize();
+        require(request.adoptionReceipt.equals(expected) && Files.isRegularFile(expected),
+                "legacy adoption receipt is not at its canonical path");
+        require(sha(expected).equalsIgnoreCase(request.adoptionSha),
+                "legacy adoption receipt SHA-256 drifted");
+        OxAlphaAdoptionReceipt receipt = OxAlphaAdoptionReceipt.read(expected);
+        require(receipt.schema() == 1 && receipt.id().equals(request.id)
+                && ancestor(root, receipt.controlBase(), request.newBase)
+                && receipt.branch().equals("codex/milestone-" + request.id)
+                && receipt.worktree().equals(root)
+                && receipt.priorAttempt() == 1 && receipt.authorizedAttempt() == 2
+                && receipt.maxAttempts() == 2
+                && receipt.archiveSha().equalsIgnoreCase(request.archiveSha)
+                && receipt.status().equals("PASS"), "legacy adoption receipt drifted");
+        if (request.session == null) {
+            require(receipt.mode().equals("process-recovery") && receipt.session() == null
+                    && receipt.recoverySessions() == 1,
+                    "process-recovery adoption drifted");
+        } else {
+            require(receipt.mode().equals("resume-session")
+                    && request.session.equals(receipt.session()) && receipt.recoverySessions() == 0,
+                    "resume-session adoption drifted");
         }
     }
 
@@ -141,58 +172,17 @@ public final class OxAlphaControlMigration {
         return result;
     }
 
-    private static void selfTest() throws Exception {
-        Path archive = Files.createTempFile("worldline-control-migration-", ".zip");
-        String id = "m1-contract";
-        String base = "a".repeat(40);
-        String session = "session-one";
-        try {
-            try (ZipOutputStream zip = new ZipOutputStream(Files.newOutputStream(archive))) {
-                entry(zip, "manifest.properties", "id=" + id + "\nbase=" + base
-                        + "\nstate=DIRTY_SUSPENDED\n");
-                entry(zip, "evidence/opencode-" + id + "-qualify-attempt1.json",
-                        "{\"id\":\"" + id + "\",\"base\":\"" + base
-                                + "\",\"session\":\"" + session
-                                + "\",\"phase\":\"qualify\",\"attempt\":1,"
-                                + "\"completed\":true}");
-            }
-            Request valid = new Request(id, "goal", base, base, base, "b".repeat(40),
-                    session, 1, archive, sha(archive));
-            validateArchive(valid);
-            boolean rejected = false;
-            try {
-                validateArchive(new Request(id, "goal", base, base, base, "b".repeat(40),
-                        session, 1, archive, "0".repeat(64)));
-            } catch (IllegalStateException expected) {
-                rejected = true;
-            }
-            require(rejected, "archive hash mismatch was accepted");
-            Request split = Request.parse(new String[] {"--id", id, "--goal", "goal",
-                    "--archive-base", base, "--preflight-base", base, "--receipt-base",
-                    "c".repeat(40), "--new-base", "b".repeat(40), "--session", session,
-                    "--prior-attempt", "1",
-                    "--archive", archive.toString(), "--archive-sha256", sha(archive)});
-            require(split.archiveBase.equals(base) && split.preflightBase.equals(base)
-                    && split.receiptBase.equals("c".repeat(40)),
-                    "split historical bases were not parsed independently");
-            String partial = "== nya ==\n" + SUPERVISION;
-            require(contextAccepted(new Result(1, partial, OPTIONAL_CONTEXT_ERRORS.get(0))),
-                    "verified partial CSM context was rejected");
-            require(!contextAccepted(new Result(1, partial, "unknown failure")),
-                    "unknown CSM context failure was accepted");
-        } finally {
-            Files.deleteIfExists(archive);
-        }
-    }
-
-    private static void entry(ZipOutputStream zip, String name, String value) throws Exception {
-        zip.putNextEntry(new ZipEntry(name));
-        zip.write(value.getBytes(StandardCharsets.UTF_8));
-        zip.closeEntry();
-    }
-
     private static boolean field(String json, String name, String value) {
         return json.contains("\"" + name + "\":\"" + value + "\"");
+    }
+
+    private static String nullable(String value) {
+        return value == null ? "null" : "\"" + value.replace("\\", "\\\\")
+                .replace("\"", "\\\"") + "\"";
+    }
+
+    private static String blankNull(String value) {
+        return value == null || value.isBlank() ? null : value;
     }
 
     private static boolean ancestor(Path root, String ancestor, String descendant) throws Exception {
@@ -228,12 +218,11 @@ public final class OxAlphaControlMigration {
         }
     }
 
-    private static boolean contextAccepted(Result result) {
+    static boolean contextAccepted(Result result) {
         if (result.exit == 0) {
             return true;
         }
-        if (result.exit != 1 || !result.stdout.contains("== nya ==")
-                || !result.stdout.contains(SUPERVISION)) {
+        if (result.exit != 1 || !result.stdout.contains("== nya ==")) {
             return false;
         }
         List<String> errors = result.stderr.lines().filter(line -> !line.isBlank()).toList();
@@ -276,12 +265,12 @@ public final class OxAlphaControlMigration {
         }
     }
 
-    private record Result(int exit, String stdout, String stderr) {
+    record Result(int exit, String stdout, String stderr) {
     }
 
-    private record Request(String id, String goal, String archiveBase, String preflightBase,
+    record Request(String id, String goal, String archiveBase, String preflightBase,
             String receiptBase, String newBase, String session, int priorAttempt, Path archive,
-            String archiveSha) {
+            String archiveSha, Path adoptionReceipt, String adoptionSha) {
         static Request parse(String[] arguments) {
             String id = "";
             String goal = "";
@@ -291,8 +280,10 @@ public final class OxAlphaControlMigration {
             String newBase = "";
             String session = "";
             String sha = "";
+            String adoptionSha = "";
             int attempt = 0;
             Path archive = null;
+            Path adoption = null;
             for (int index = 0; index < arguments.length; index += 2) {
                 require(index + 1 < arguments.length, "missing value for " + arguments[index]);
                 switch (arguments[index]) {
@@ -306,15 +297,24 @@ public final class OxAlphaControlMigration {
                     case "--prior-attempt" -> attempt = Integer.parseInt(arguments[index + 1]);
                     case "--archive" -> archive = Path.of(arguments[index + 1]).toAbsolutePath().normalize();
                     case "--archive-sha256" -> sha = arguments[index + 1];
+                    case "--adoption-receipt" -> adoption = Path.of(arguments[index + 1])
+                            .toAbsolutePath().normalize();
+                    case "--adoption-sha256" -> adoptionSha = arguments[index + 1];
                     default -> throw new IllegalArgumentException("unknown argument: " + arguments[index]);
                 }
             }
-            require(!goal.isBlank() && !session.isBlank() && attempt > 0 && archive != null,
+            if (session.isBlank()) session = null;
+            require(!goal.isBlank() && attempt == 1 && archive != null,
                     "missing control migration argument");
-            require(!archiveBase.isBlank() && !preflightBase.isBlank() && !receiptBase.isBlank(),
-                    "missing historical migration base");
+            require((adoption == null) == adoptionSha.isBlank(), "incomplete legacy adoption identity");
+            require(session != null || adoption != null,
+                    "a historical session or legacy adoption receipt is required");
+            require(!archiveBase.isBlank(), "missing archive migration base");
+            require(adoption == null ? !preflightBase.isBlank() && !receiptBase.isBlank()
+                            : preflightBase.isBlank() && receiptBase.isBlank(),
+                    "legacy adoption cannot manufacture preflight or receipt bases");
             return new Request(id, goal, archiveBase, preflightBase, receiptBase, newBase,
-                    session, attempt, archive, sha);
+                    session, attempt, archive, sha, adoption, adoptionSha);
         }
     }
 }

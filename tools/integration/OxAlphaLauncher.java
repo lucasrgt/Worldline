@@ -20,9 +20,24 @@ public final class OxAlphaLauncher {
                     root.resolve("tools/integration/MilestoneObjective.java").toString(),
                     root.resolve("tools/integration/SwarmProcess.java").toString(),
                     root.resolve("tools/integration/OxAlphaRequest.java").toString(),
+                    root.resolve("tools/integration/GitAncestry.java").toString(),
+                    root.resolve("tools/integration/OxAlphaAdoptionReceipt.java").toString(),
+                    root.resolve("tools/harness/MiniJson.java").toString(),
+                    root.resolve("tools/integration/OpenCodeSessionExport.java").toString(),
+                    root.resolve("tools/integration/OxAlphaProviderOccurrence.java").toString(),
+                    root.resolve("tools/integration/OxAlphaRolloverReceipt.java").toString(),
+                    root.resolve("tools/integration/OxAlphaRolloverLaunch.java").toString(),
+                    root.resolve("tools/integration/OxAlphaInfrastructureRollover.java").toString(),
+                    root.resolve("tools/integration/OxAlphaLegacyAdoption.java").toString(),
                     root.resolve("tools/integration/OxAlphaTelemetry.java").toString(),
+                    root.resolve("tools/integration/OxAlphaProviderFailure.java").toString(),
+                    root.resolve("tools/integration/OxAlphaProviderLogMonitor.java").toString(),
+                    root.resolve("tools/integration/OxAlphaProviderCapture.java").toString(),
                     root.resolve("tools/integration/OxAlphaTerminalMonitor.java").toString(),
-                    root.resolve("tools/integration/OxAlphaWorker.java").toString());
+                    root.resolve("tools/integration/OxAlphaProcessFixture.java").toString(),
+                    root.resolve("tools/integration/OxAlphaWorkerSelfTest.java").toString(),
+                    root.resolve("tools/integration/OxAlphaWorker.java").toString(),
+                    root.resolve("tools/integration/OxAlphaLauncher.java").toString());
             require(run(root, compile, 120) == 0, "Ox Alpha launcher closure did not compile");
             List<String> command = new ArrayList<>(List.of(javaTool("java"), "-cp", output.toString(),
                     "OxAlphaWorker"));
@@ -34,11 +49,40 @@ public final class OxAlphaLauncher {
         }
     }
 
-    private static int run(Path root, List<String> command, int seconds) throws Exception {
+    static int run(Path root, List<String> command, int seconds) throws Exception {
         Process process = new ProcessBuilder(command).directory(root.toFile()).inheritIO().start();
-        process.getOutputStream().close();
-        require(process.waitFor(seconds, TimeUnit.SECONDS), command.get(0) + " timed out");
-        return process.exitValue();
+        try {
+            process.getOutputStream().close();
+            if (!process.waitFor(seconds, TimeUnit.SECONDS)) {
+                stop(process);
+                throw new IllegalStateException(command.get(0) + " timed out");
+            }
+            return process.exitValue();
+        } catch (Exception failure) {
+            if (process.isAlive()) {
+                stop(process);
+            }
+            throw failure;
+        }
+    }
+
+    private static void stop(Process process) throws Exception {
+        List<ProcessHandle> observed = new ArrayList<>();
+        process.toHandle().descendants().forEach(observed::add);
+        process.destroyForcibly();
+        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(10);
+        while (System.nanoTime() < deadline) {
+            List<ProcessHandle> additions = new ArrayList<>();
+            observed.forEach(handle -> handle.descendants().forEach(additions::add));
+            additions.stream().filter(handle -> !observed.contains(handle)).forEach(observed::add);
+            observed.stream().filter(ProcessHandle::isAlive).forEach(ProcessHandle::destroyForcibly);
+            if (!process.isAlive() && observed.stream().noneMatch(ProcessHandle::isAlive)) {
+                return;
+            }
+            Thread.sleep(50);
+        }
+        require(!process.isAlive() && observed.stream().noneMatch(ProcessHandle::isAlive),
+                "source launcher process and observed descendants did not stop");
     }
 
     private static int launcherSeconds(String[] arguments) {

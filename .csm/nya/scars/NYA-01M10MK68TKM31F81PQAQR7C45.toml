@@ -1,0 +1,30 @@
+schema = 1
+id = "NYA-01M10MK68TKM31F81PQAQR7C45"
+title = "Preserve and retry isolated near-bound cold Gate latency"
+lesson = "When every canonical verification stage passes but the measured cold Gate exceeds its existing 240-second SLO by a small isolated margin, preserve the exact verify report and SHA, classify the attempt as RETRYABLE process/host latency, and rerun the same logical tree after cache stabilization. Do not weaken the latency SLO or misclassify the implementation; recurrence across bounded retries requires an objective scheduling or Gate performance correction before promotion."
+scope = [
+    "tools/harness/GateLatencyCheck.java",
+    "docs/ENGINEERING_WORKFLOW.md",
+]
+tags = [
+    "gate-latency",
+    "retryable",
+    "evidence",
+]
+created_at = "2026-08-27T03:35:37Z"
+
+[[occurrences]]
+occurred_at = "2026-08-27T03:35:37Z"
+source = "Gate on cecf2a5d2: all verification stages PASS; cold latency 242790ms >= 240000ms; preserved C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260826/process-census-metric-continuity-gate-latency-cecf2a5d2-verify.json sha256=7C4B33CD986F9B28E16B5CD170A680BE3367B10C9D4ABECF296CDDCA8DA5352B"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "cecf2a5d2"
+
+[[occurrences]]
+occurred_at = "2026-08-27T08:11:51Z"
+source = "IntegrationTrain reconcile attempt 1 on c977f930b: every verification stage PASS; pinned-smoke cold latency 241869ms >= 240000ms; verify archive C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/train-provider-rollover-control-attempt1-c977f930b-verify.json sha256=C9CD0E28A75C3837775EACE6A9C60012D2743EA15420F765441C9F02DC57802F"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "c977f930b"
