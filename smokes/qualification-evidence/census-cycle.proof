@@ -1,5 +1,5 @@
 schema=1
 id=census-cycle
-fingerprint=7acae8d8ab8407dc787067c5de9671e98dcc9b5804899596a74eb5dd26dbfe13
+fingerprint=e8563c5bae1764f80fb133ce2f6c4ea34565592bd4e91ae6879280fd53419122
 observation.sha256=23bff719c5b5c7b5fc67f274f49cf1093128641067da9d68384fee9db340ad82
 source=refactor-equivalent

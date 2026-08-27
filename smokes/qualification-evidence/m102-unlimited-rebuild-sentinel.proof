@@ -1,5 +1,5 @@
 schema=1
 id=m102-unlimited-rebuild-sentinel
-fingerprint=f7f47d43e23f6f8c379a86c6f480f5841a11f7d3acff0941d6971a8f6a595e66
+fingerprint=1abd576acd603e5e2015227ae34cee0ed47e2ddbe072903cb33b281204cd7d28
 observation.sha256=852d41f2d1654fd1dc83d0b746fddb4c109d370573fd67b25290361ddaefa75b
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m364-light-opacity-set
-fingerprint=78de65dca3aeddd9b7fd8017c17daddf89615bedfc9b954491142259c8ceb960
+fingerprint=a2fae8e7546547667adc6cbcf3b53c2c8d187693839350cc778b89b5f7573806
 observation.sha256=2012aa0391268a287bc772ea5a40036b761ed9f72b90d91f8462512dbb0e3fab
 source=refactor-equivalent

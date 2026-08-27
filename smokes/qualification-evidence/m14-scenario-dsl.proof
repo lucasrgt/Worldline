@@ -1,5 +1,5 @@
 schema=1
 id=m14-scenario-dsl
-fingerprint=b4e545c2a7c8e4d9090ee184b8aa2602ecee93870f7c8c466275d1060420e96a
+fingerprint=82e9a3d2a0fbf0efbe8d94f0ce2ba6e0eb99b5a8e96dacffbca628bf0d20cfb2
 observation.sha256=cd005f3ae12c05eef67fa1441b4c6670601a4822dea37ef76044072c9f94b62b
 source=refactor-equivalent

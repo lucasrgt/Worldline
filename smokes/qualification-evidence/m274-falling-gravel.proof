@@ -1,5 +1,5 @@
 schema=1
 id=m274-falling-gravel
-fingerprint=ed823a8b282bda88ae037156ca2404533fed2281b6fc87150a0be0a902e349ee
+fingerprint=d4a253f7cbf35bd25db1331ffe06c4c45cd13506640710d0f8a202c7aea48451
 observation.sha256=176ae1fac3a1eb0fc755149f750defb1e9bf184c097416e0d6f216e41c7fb222
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m232-chest-place
-fingerprint=3844b9c3568b4e38f9ff6b5dcd8005c9f2a15bc009383cb204213c10ff1ffc52
+fingerprint=e3ad9598e94c0e1cef8f228e6c8287a2afb84467f11e97d8b5fc3c24d3166efe
 observation.sha256=aede6e11abbf46c3049a99931cbbaa22b00fa2ee80c21bca48aa57796ee2d1b9
 source=refactor-equivalent

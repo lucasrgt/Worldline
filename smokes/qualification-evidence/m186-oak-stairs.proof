@@ -1,5 +1,5 @@
 schema=1
 id=m186-oak-stairs
-fingerprint=6876a1162ed2c880e61ec424a4fd0a2e507af1d6ff65a994819a3569a6dc653f
+fingerprint=b902f34e7507da04a29637a8167744da3482e9465d68cbb226af251988a1bfdb
 observation.sha256=2af3b75842248ca27774c84635352ca60069d3ae89a045bfbe93d37a926c2ccd
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m5-reproduction-bundle
-fingerprint=b13d9810108182715a54fdedb031d3ddb762078e731116f5c7244f9aef868082
+fingerprint=fc67a274d4cf7628daba0200d2f2693cc884e2b502137bf6d989342b4babb1b3
 observation.sha256=f728a78b3d712a4eefb090eefea968685188f066e9016ab42249020c9d354e23
 source=refactor-equivalent
