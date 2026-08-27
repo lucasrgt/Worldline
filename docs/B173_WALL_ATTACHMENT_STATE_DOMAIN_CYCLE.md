@@ -10,6 +10,6 @@ One public TestKit family exercises the complete placement metadata domains of t
 
 DataDrivenCycle compiles the reusable state-domain TestKit contract, official-server provider, and three caller-owned attachment rows. Every row runs in a fresh isolated world and requires exact item consumption, complete declared state closure, a fresh-login boundary, and provider-owned shutdown.
 
-Expected signal: `provider=b1.7.3-server-state-domain,family=wall-attachment,rows=3,passed=3,states=13,reload=FRESH_LOGINx3,evidence=3374ce92b504c7287ff648f62a5b2fa6d0b20f85869578a6e3fd1807b7c688fa,isolation=3-fresh-worlds`.
+Expected signal: `provider=b1.7.3-server-state-domain,family=wall-attachment,rows=3,passed=3,states=13,reload=FRESH_LOGINx3,evidence=510f1332238056df7cbf74ded0428cb9789961d82a54bf069b8c1fe9ea7c61c5,isolation=3-fresh-worlds`.
 
-Frozen semantic SHA-256: `678f9ba8811950597452d5249f27ad36e5684e77d1544e47e1efc1801162be1e`.
+Frozen semantic SHA-256: `3bb3be6ba44a1870233a2bc6f381bd7c7c16c2ac557cbcd0984d53497380ccbc`.

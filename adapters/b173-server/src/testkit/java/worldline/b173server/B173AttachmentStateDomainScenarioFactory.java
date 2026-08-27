@@ -64,8 +64,8 @@ public final class B173AttachmentStateDomainScenarioFactory {
                         "state-domain", ConformanceLayer.ARCHETYPE)));
         List<BlockState> domain = new ArrayList<BlockState>();
         List<BlockStateDomainStep> steps = new ArrayList<BlockStateDomainStep>();
-        BlockPosition support = B173StateDomainArena.SUPPORTS.get(0);
         for (int index = 0; index < faces.length; index++) {
+            BlockPosition support = support(faces[index]);
             BlockState state = new BlockState(blockId, metadata[index]);
             domain.add(state);
             steps.add(BlockStateDomainStep.place("place-face-"
@@ -76,5 +76,18 @@ public final class B173AttachmentStateDomainScenarioFactory {
         return new BlockStateDomainScenario(id, plan.caseFor(subject, "state-domain"),
                 new BlockLifecycleSlot(HOTBAR, INVENTORY,
                         new RemoteItemStack(itemId, faces.length, 0), null), domain, steps, 40);
+    }
+
+    private static BlockPosition support(BlockFace face) {
+        if (face == BlockFace.EAST) {
+            return B173StateDomainArena.SUPPORTS.get(1);
+        }
+        if (face == BlockFace.SOUTH) {
+            return B173StateDomainArena.SUPPORTS.get(2);
+        }
+        if (face == BlockFace.UP) {
+            return B173StateDomainArena.SUPPORTS.get(3);
+        }
+        return B173StateDomainArena.SUPPORTS.get(0);
     }
 }
