@@ -118,25 +118,36 @@ final class BehaviorFamilyPinMigration {
     }
 
     private static int refreshSources(Path root, Properties lock) throws Exception {
-        Properties train = TrainPinCheck.manifest(root); int changes = 0;
+        Properties train = TrainPinCheck.manifest(root);
+        int count = Integer.parseInt(lock.getProperty("refresh.source.count", "0"));
+        int changed = 0;
         for (int index = 0; index < Integer.parseInt(required(lock, "source.count")); index++) {
             String stem = "source." + index + ".", relative = required(lock, stem + "path");
             String prior = required(lock, stem + "current_sha256");
             String current = digest(Files.readString(root.resolve(relative)));
-            if (current.equals(prior)
-                    || TrainPinCheck.transportsFile(train, root, relative, prior)) continue;
-            require(relative.equals("modules/api/src/main/java/worldline/api/WorldlineBehavior.java")
+            if (current.equals(prior)) continue;
+            boolean transported = TrainPinCheck.transportsFile(train, root, relative, prior);
+            require(transported || relative.equals(
+                            "modules/api/src/main/java/worldline/api/WorldlineBehavior.java")
                             && Files.readString(root.resolve(relative))
                                     .contains("BLOCK_LIFECYCLE_CONFORMANCE"),
                     "behavior-family source change lacks reviewed transport: " + relative);
-            String refresh = "refresh.source." + (++changes) + ".";
+            int existing = refreshSource(lock, count, relative);
+            String refresh = "refresh.source." + (existing == 0 ? ++count : existing) + ".";
             lock.setProperty(refresh + "path", relative);
-            lock.setProperty(refresh + "prior_sha256", prior);
+            if (existing == 0) lock.setProperty(refresh + "prior_sha256", prior);
             lock.setProperty(refresh + "current_sha256", current);
             lock.setProperty(stem + "current_sha256", current);
+            changed++;
         }
-        lock.setProperty("refresh.source.count", Integer.toString(changes));
-        return changes;
+        lock.setProperty("refresh.source.count", Integer.toString(count));
+        return changed;
+    }
+
+    private static int refreshSource(Properties lock, int count, String relative) {
+        for (int index = 1; index <= count; index++)
+            if (relative.equals(lock.getProperty("refresh.source." + index + ".path"))) return index;
+        return 0;
     }
 
     private static void importExact(SmokeReceiptCache cache, SmokeDiscovery.Entry smoke,

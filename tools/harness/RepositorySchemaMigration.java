@@ -114,6 +114,11 @@ final class RepositorySchemaMigration {
                         "new schema row lacks exact execution: " + smoke.id);
                 Path directory = root.resolve("smokes").resolve(smoke.id);
                 Properties descriptor = load(directory.resolve("smoke.properties"));
+                require("1".equals(descriptor.getProperty("smoke.schema")),
+                        "new schema row lacks smoke.schema=1: " + smoke.id);
+                require(Files.readString(directory.resolve("MAP.md"), StandardCharsets.UTF_8)
+                                .startsWith("<!-- worldline-map-schema=1 -->"),
+                        "new schema row lacks map schema=1: " + smoke.id);
                 manifest.setProperty(stem + "introduced", "true");
                 manifest.setProperty(stem + "descriptor_sha256", digest(
                         directory.resolve("smoke.properties")));

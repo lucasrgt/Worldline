@@ -165,7 +165,7 @@ final class ProviderDiscoveryPinMigration {
 
     private static int refreshSources(Path root, Properties lock) throws Exception {
         int priorChanges = Integer.parseInt(lock.getProperty("refresh.source.count", "0"));
-        int changes = 0; Properties train = TrainPinCheck.manifest(root);
+        int changes = 0, appended = 0; Properties train = TrainPinCheck.manifest(root);
         for (String group : List.of("modified", "added")) {
             int count = Integer.parseInt(required(lock, group + ".count"));
             for (int index = 0; index < count; index++) {
@@ -177,15 +177,28 @@ final class ProviderDiscoveryPinMigration {
                 require(TrainPinCheck.transportsFile(train, root, relative, prior)
                                 || fingerprintExtension(root, relative),
                         "provider source change lacks reviewed transport: " + relative);
-                String refresh = "refresh.source." + (priorChanges + ++changes) + ".";
+                int existing = refreshSource(lock, priorChanges, relative);
+                String refresh = "refresh.source." + (existing == 0
+                        ? priorChanges + ++appended : existing) + ".";
+                if (existing != 0) {
+                    require(prior.equals(required(lock, refresh + "current_sha256")),
+                            "provider source history is not contiguous: " + relative);
+                }
+                changes++;
                 lock.setProperty(refresh + "path", relative);
-                lock.setProperty(refresh + "prior_sha256", prior);
+                if (existing == 0) lock.setProperty(refresh + "prior_sha256", prior);
                 lock.setProperty(refresh + "current_sha256", current);
                 lock.setProperty(stem + "current_sha256", current);
             }
         }
-        lock.setProperty("refresh.source.count", Integer.toString(priorChanges + changes));
+        lock.setProperty("refresh.source.count", Integer.toString(priorChanges + appended));
         return changes;
+    }
+
+    private static int refreshSource(Properties lock, int count, String relative) {
+        for (int index = 1; index <= count; index++)
+            if (relative.equals(lock.getProperty("refresh.source." + index + ".path"))) return index;
+        return 0;
     }
 
     private static void replace(List<SmokePins.Entry> pins, SmokePins.Entry exact) {
