@@ -277,6 +277,8 @@ first independent family covers sponge, white wool, TNT, fence, and netherrack. 
 family does not modify the frozen 26-row aggregate or rewrite its 104 claim signatures.
 Family rows carry an exact post-break tool stack, including valid no-damage outcomes such as
 shears used to break placed white wool.
+The scenario factory ships with the provider extension; the family executor ships with the
+runner, so the provider never depends on runner implementation classes.
 
 ### Hooks
 

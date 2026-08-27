@@ -1,5 +1,5 @@
 schema=1
 id=m563-nether-exit-create-set
-fingerprint=8860ef9a8c0e365f4e4d83ee321d52b68227573faa099ab632cea9ebdb95f783
+fingerprint=ff5ed1bdbeaf5eee75d2885f0a92bb7243aa3e5ad61d8c89af8c60af22ecde9f
 observation.sha256=6a31a5c30bf7a861c626da550e1989e4d2c38f0a32cd4607e27a9093fa6a268d
 source=refactor-equivalent
