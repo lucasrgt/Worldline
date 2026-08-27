@@ -15,7 +15,7 @@ final class SchemaPinCheck {
                 "repository schema fingerprint source drift");
         require(integer(manifest, "smoke.count") > 0
                         && integer(manifest, "map.count") == integer(manifest, "smoke.count") + 1
-                        && integer(manifest, "narrative.count") == 36,
+                        && integer(manifest, "narrative.count") >= 36,
                 "repository schema migration census drift");
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); Properties formatting = FormattingPinCheck.manifest(root);
@@ -40,7 +40,8 @@ final class SchemaPinCheck {
             if (!descriptor) descriptor = TrainPinCheck.transportsFile(train, root,
                     "smokes/" + smoke.id + "/smoke.properties",
                     required(manifest, stem + "descriptor_sha256"));
-            require(hash(manifest, stem + "prior_fingerprint")
+            require((hash(manifest, stem + "prior_fingerprint")
+                            || "true".equals(manifest.getProperty(stem + "introduced")))
                             && (direct || successor)
                             && hash(manifest, stem + "evidence_sha256")
                             && descriptor
@@ -65,7 +66,8 @@ final class SchemaPinCheck {
     }
     static boolean carries(Properties manifest, String id, SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
-        boolean direct = hash(manifest, stem + "prior_fingerprint")
+        boolean direct = (hash(manifest, stem + "prior_fingerprint")
+                || "true".equals(manifest.getProperty(stem + "introduced")))
                 && current.equals(manifest.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(manifest.getProperty(stem + "evidence_sha256"));
         try { Path root = Path.of("").toAbsolutePath().normalize();

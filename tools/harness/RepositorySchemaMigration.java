@@ -93,7 +93,8 @@ final class RepositorySchemaMigration {
         SmokePins existing = new SmokePins(root); SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); SmokeReceiptCache cache = new SmokeReceiptCache(root);
         Properties providers = ProviderDiscoveryPinCheck.manifest(root);
-        List<SmokePins.Entry> pins = new ArrayList<>(); int carried = 0, executed = 0;
+        List<SmokePins.Entry> pins = new ArrayList<>();
+        int carried = 0, executed = 0, introduced = 0, introducedNarratives = 0;
         for (SmokeDiscovery.Entry smoke : catalog) {
             String current = fingerprints.compute(smoke); SmokePins.Entry local = cache.availablePin(smoke);
             SmokePins.Entry prior = existing.entry(smoke.id);
@@ -106,19 +107,39 @@ final class RepositorySchemaMigration {
             }
             if (ProviderDiscoveryPinCheck.exemptsLegacy(providers, smoke.id)) continue;
             carried++; String stem = "smoke." + smoke.id + ".";
-            String recorded = required(manifest, stem + "current_fingerprint", null);
             SmokePins.Entry proof = local != null && local.source().equals("executed") ? local : prior;
-            if (!current.equals(recorded)) manifest.setProperty(stem + "prior_fingerprint", recorded);
+            String recorded = manifest.getProperty(stem + "current_fingerprint");
+            if (recorded == null) {
+                require(local != null && local.source().equals("executed"),
+                        "new schema row lacks exact execution: " + smoke.id);
+                Path directory = root.resolve("smokes").resolve(smoke.id);
+                Properties descriptor = load(directory.resolve("smoke.properties"));
+                manifest.setProperty(stem + "introduced", "true");
+                manifest.setProperty(stem + "descriptor_sha256", digest(
+                        directory.resolve("smoke.properties")));
+                manifest.setProperty(stem + "map_sha256", digest(directory.resolve("MAP.md")));
+                introduced++;
+                if ("1".equals(descriptor.getProperty("narrative.schema"))) introducedNarratives++;
+            }
+            if (recorded != null && !current.equals(recorded))
+                manifest.setProperty(stem + "prior_fingerprint", recorded);
             manifest.setProperty(stem + "current_fingerprint", current);
             manifest.setProperty(stem + "evidence_sha256", proof.evidence());
         }
-        require(carried == 525 - ProviderDiscoveryPinCheck.pendingCount(providers) && executed >= 1,
+        int smokeCount = integer(manifest, "smoke.count") + introduced;
+        require(carried == smokeCount - ProviderDiscoveryPinCheck.pendingCount(providers)
+                        && executed >= 1,
                 "repository schema refresh census drift: carried=" + carried + ";executed=" + executed);
+        manifest.setProperty("smoke.count", Integer.toString(smokeCount));
+        manifest.setProperty("map.count", Integer.toString(integer(manifest, "map.count") + introduced));
+        manifest.setProperty("narrative.count", Integer.toString(
+                integer(manifest, "narrative.count") + introducedNarratives));
         manifest.setProperty("fingerprint_source_sha256", digest(
                 root.resolve("tools/harness/SmokeInputFingerprint.java")));
         existing.write(pins); store(lock, manifest);
         System.out.println("repository schema pins refreshed: " + carried
-                + " carried, " + executed + " exact support proofs");
+                + " carried, " + introduced + " introduced, " + executed
+                + " exact support proofs");
     }
 
     private String migrateNarrative(String id, Properties descriptor, String text) throws Exception {
@@ -171,6 +192,10 @@ final class RepositorySchemaMigration {
     private static String required(Properties values, String key, String fallback) {
         String value = values.getProperty(key, fallback); require(value != null && !value.isBlank(),
                 "missing " + key + " for " + values.getProperty("id")); return value.trim();
+    }
+    private static int integer(Properties values, String key) {
+        try { return Integer.parseInt(required(values, key, null)); }
+        catch (NumberFormatException error) { throw new IllegalStateException("invalid " + key); }
     }
     private boolean dirtyIndex() throws Exception { Process process = new ProcessBuilder("git", "diff",
             "--cached", "--quiet").directory(root.toFile()).start(); return process.waitFor() == 1; }
