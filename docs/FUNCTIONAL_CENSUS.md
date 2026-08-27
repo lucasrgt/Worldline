@@ -61,7 +61,9 @@ verified claims (32.95%) and leave 708 unknown. The public floor-mounted lifecyc
 proves placement, persistence, breaking, and historical harvest drops for wood and cobblestone
 stairs, pumpkin, jack-o'-lantern, torch, and lit redstone torch. It requalifies two existing jack
 claims and adds 22 claims, bringing the census to 370 verified claims (35.04%) and leaving 686
-unknown. Existing smoke evidence is
+unknown. The substrate-aware dirt-flora lifecycle family then proves dandelion, rose, and all three
+Beta sapling item variants. Its five cases close 12 distinct claims, bringing the census to 382
+verified claims (36.17%) and leaving 674 unknown. Existing smoke evidence is
 reusable input, but it is never promoted automatically: its subject, action, context, observable,
 oracle, signature, and automation surface must be curated first.
 
@@ -107,6 +109,7 @@ subsystem reduces it to 715. Furnace facing reduces it to 714, the cardinal-plac
 708, wall attachments to 705, the static collision-envelope subsystem to 700, and the static
 light-transport subsystem to 696.
 The floor-mounted lifecycle subsystem reduces the remaining target gap to 674.
+The dirt-flora lifecycle subsystem reduces it again to 662.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
