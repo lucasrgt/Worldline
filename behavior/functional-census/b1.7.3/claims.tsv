@@ -233,3 +233,4 @@ wooden-door-neighbor-response	SINGULAR	b1.7.3:block/064	neighbor-response	APPLIC
 cactus-neighbor-response	ARCHETYPE	b1.7.3:block/081	neighbor-response	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m578-cactus-adjacent-break-set	437e319b299a6629b32f3d6d89b00e7ce02d3f26fdb1300eeace32cc656301ca	PUBLIC_TESTKIT
 sugar-cane-neighbor-response	ARCHETYPE	b1.7.3:block/083	neighbor-response	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m607-sugar-cane-dry-break-set	fc510e49797e7209a3a92a1d34c5ddd918cbfc34b4942d10af06278b6eaf57f4	PUBLIC_TESTKIT
 wooden-door-state-domain	SINGULAR	b1.7.3:block/064	state-domain	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-wooden-door-state-domain-cycle	5763b0a43e148f0c572b7e5db300482d939add4eb9be8135829e775651e5edbc	PUBLIC_TESTKIT
+furnace-state-domain	SINGULAR	b1.7.3:block/061	state-domain	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-furnace-state-domain-cycle	5341f48d013da9a80a8ba106219b185fd20420f0aa137fb8187f281ee1f91696	PUBLIC_TESTKIT
