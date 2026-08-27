@@ -214,7 +214,14 @@ final class RepositorySchemaMigration {
         String recorded = manifest.getProperty("fingerprint_source_sha256", "");
         return worktree.waitFor() == 0 && index.waitFor() == 0
                 && (!digest(root.resolve("tools/harness/SmokeInputFingerprint.java"))
-                        .equals(recorded) || headChangesSchemaInput());
+                        .equals(recorded) || headChangesSchemaInput() || censusDrift(manifest));
+    }
+    private boolean censusDrift(Properties manifest) throws Exception {
+        Properties providers = ProviderDiscoveryPinCheck.manifest(root); int carried = 0;
+        for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root))
+            if (!ProviderDiscoveryPinCheck.exemptsLegacy(providers, smoke.id)) carried++;
+        return carried + ProviderDiscoveryPinCheck.pendingCount(providers)
+                != integer(manifest, "smoke.count");
     }
     private boolean headChangesSchemaInput() throws Exception {
         Process process = new ProcessBuilder("git", "diff-tree", "--no-commit-id", "--name-only",
