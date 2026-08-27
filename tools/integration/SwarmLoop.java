@@ -170,6 +170,12 @@ public final class SwarmLoop {
                 "failed classification drifted");
         require(SwarmCensus.legacyState(false, false, true, false).equals("NOT_STARTED"),
                 "not-started classification drifted");
+        require(!SwarmCensus.integratedCandidate(true, true, true),
+                "wave-base worktree was falsely classified as integrated");
+        require(SwarmCensus.integratedCandidate(false, true, false),
+                "exact train receipt was not accepted as integration evidence");
+        require(SwarmCensus.integratedCandidate(false, false, true),
+                "authorized-head ancestry was not accepted as integration evidence");
         WaveSelfImprovement.selfTest();
         WaveCensus.selfTest();
         CensusMetrics.selfTest();

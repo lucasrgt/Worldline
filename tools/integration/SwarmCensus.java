@@ -82,7 +82,8 @@ final class SwarmCensus {
         Path descriptor = path.resolve("smokes").resolve(id).resolve("smoke.properties");
         boolean scaffold = Files.isRegularFile(descriptor)
                 && Files.readString(descriptor, StandardCharsets.UTF_8).contains("scaffold.status=");
-        boolean integrated = integratedReceipts.contains(head) || integrated(root, head);
+        boolean integrated = integratedCandidate(atBase, integratedReceipts.contains(head),
+                integrated(root, head));
         int commits = head.equals(evidenceBase) ? 0 : Integer.parseInt(git(path, "rev-list",
                 "--count", evidenceBase + ".." + head).trim());
         boolean qualified = receiptBase && handoff && integrated && commits == 1 && !scaffold;
@@ -101,7 +102,8 @@ final class SwarmCensus {
             tree = disposition.tree();
             commits = Integer.parseInt(git(path, "rev-list", "--count",
                     evidenceBase + ".." + head).trim());
-            if ("REJECTED".equals(disposition.state())) {
+            if ("RETRYABLE".equals(disposition.declaredState())
+                    || "REJECTED".equals(disposition.declaredState())) {
                 integrated = false;
             }
             saved = disposition.archive();
@@ -156,7 +158,7 @@ final class SwarmCensus {
     }
 
     private static Set<String> integratedReceipts(Path root) throws Exception {
-        String text = git(root, "show", "main:smokes/train-reconciliation.lock");
+        String text = git(root, "show", "HEAD:smokes/train-reconciliation.lock");
         Properties values = new Properties(); values.load(new java.io.StringReader(text));
         Set<String> result = new HashSet<>();
         for (String key : values.stringPropertyNames())
@@ -193,11 +195,15 @@ final class SwarmCensus {
     }
 
     private static boolean integrated(Path root, String head) throws Exception {
-        String base = git(root, "rev-parse", "main^{commit}").trim();
+        String base = git(root, "rev-parse", "HEAD^{commit}").trim();
         if (SwarmProcess.status(root, List.of("merge-base", "--is-ancestor", head, base), 60) == 0)
             return true;
         String cherry = git(root, "cherry", base, head).trim();
         return !cherry.isBlank() && cherry.lines().allMatch(line -> line.startsWith("- "));
+    }
+
+    static boolean integratedCandidate(boolean atWaveBase, boolean receipt, boolean ancestry) {
+        return !atWaveBase && (receipt || ancestry);
     }
 
     private static String cause(String state, String status, List<Path> logs) throws IOException {

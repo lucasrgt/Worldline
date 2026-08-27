@@ -208,6 +208,9 @@ The canonical census resolves each exact qualification against the base recorded
 not against the latest wave control SHA. A registered rejection is terminal only when its tracked
 disposition, archived commit/tree, worktree identity, and external archive digest all validate. The
 wave base is a fallback solely for worktrees that have no exact receipt or explicit disposition.
+Integration evidence is resolved against the audit worktree's exact authorized `HEAD`, never the
+clone's mutable `main` branch. A worktree still exactly at its wave base is not an integrated
+candidate even when that shared base is an ancestor of the authorized train.
 An explicit RETRYABLE whose archive is exact but whose owner, session, or remaining attempt budget
 is incomplete is emitted as STRANDED rather than aborting the census. Its JSON retains
 `disposition_state=RETRYABLE` and the exact missing controls, giving the supervisor a complete
