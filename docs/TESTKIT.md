@@ -259,6 +259,7 @@ The provider rejects mod paths and other seeds rather than pretending its
 fixed arena is general. Direct provider callers may omit `testPath`, but scenario-routed providers
 fail closed unless the runner supplies a known qualified path. Empty chest does not claim
 loaded-container spill.
+Provider discovery chooses the runtime implementation; scenario selection remains per attempt.
 
 ### Hooks
 
