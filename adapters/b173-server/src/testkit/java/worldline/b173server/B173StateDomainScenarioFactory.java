@@ -60,4 +60,31 @@ public final class B173StateDomainScenarioFactory {
                 new BlockLifecycleSlot(HOTBAR, INVENTORY,
                         new RemoteItemStack(324, 4, 0), null), domain, steps, 40);
     }
+
+    public static BlockStateDomainScenario furnaceFacing() {
+        String subject = "b1.7.3:block/061";
+        BlockConformancePlan plan = new BlockConformancePlan(Collections.singletonList(
+                new BlockConformanceProfile(subject, Arrays.asList(
+                        "furnace", "directional", "stateful-metadata"), true,
+                        Collections.<String, ConformanceLayer>emptyMap())),
+                Collections.singletonList(new BlockConformanceTemplate(
+                        "state-domain", ConformanceLayer.ARCHETYPE)));
+        List<BlockState> domain = Arrays.asList(new BlockState(61, 2), new BlockState(61, 3),
+                new BlockState(61, 4), new BlockState(61, 5));
+        List<BlockStateDomainStep> steps = new ArrayList<BlockStateDomainStep>();
+        float[] yaw = {0F, 90F, 180F, -90F};
+        int[] metadata = {2, 5, 3, 4};
+        String[] names = {"0", "90", "180", "neg90"};
+        for (int index = 0; index < yaw.length; index++) {
+            BlockPosition support = B173StateDomainArena.SUPPORTS.get(index);
+            steps.add(BlockStateDomainStep.place("place-yaw-" + names[index], support,
+                    BlockFace.UP, yaw[index], 0F, Collections.singletonList(
+                            new BlockStateObservation(BlockFace.UP.adjacent(support),
+                                    new BlockState(61, metadata[index])))));
+        }
+        return new BlockStateDomainScenario("furnace-facing-metadata",
+                plan.caseFor(subject, "state-domain"),
+                new BlockLifecycleSlot(HOTBAR, INVENTORY,
+                        new RemoteItemStack(61, 4, 0), null), domain, steps, 40);
+    }
 }

@@ -54,7 +54,7 @@ public final class BlockStateDomainFamilyCycle {
                     + ",isolation=" + rows.size() + "-fresh-worlds";
             String trace = "v1|server=official-b1.7.3|seed=" + seed + "|provider="
                     + provider.runtimeId() + "|family=" + family + "|rows=" + ids(rows)
-                    + "|actions=look+place+activate+fresh-login"
+                    + "|actions=" + actions(rows)
                     + "|oracle=canonical-public-state-domain-evidence|evidence=" + evidenceHash;
             System.out.println("WORLDLINE_B173_STATE_DOMAIN_SET=" + signal);
             System.out.println("WORLDLINE_B173_STATE_DOMAIN_TRACE=" + trace);
@@ -100,6 +100,14 @@ public final class BlockStateDomainFamilyCycle {
             if (value.length() > 0) value.append(','); value.append(row.id());
         }
         return value.toString();
+    }
+
+    private static String actions(List<BlockStateDomainScenario> rows) {
+        boolean activates = false;
+        for (BlockStateDomainScenario row : rows) for (BlockStateDomainStep step : row.steps()) {
+            if (step.action() == BlockStateDomainStep.Action.ACTIVATE) activates = true;
+        }
+        return activates ? "look+place+activate+fresh-login" : "look+place+fresh-login";
     }
 
     private static String failure(TestRunResult run) {

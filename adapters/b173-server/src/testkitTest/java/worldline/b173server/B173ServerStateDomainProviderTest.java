@@ -40,6 +40,18 @@ public final class B173ServerStateDomainProviderTest {
         require(door.steps().get(0).observations().get(1).state().equals(new BlockState(64, 8))
                 && door.steps().get(4).observations().get(1).state().equals(new BlockState(64, 12)),
                 "door upper-half closed/open bit routing drifted");
+        BlockStateDomainScenario furnace = B173StateDomainScenarioFactory.furnaceFacing();
+        require(furnace.id().equals("furnace-facing-metadata")
+                && furnace.claim().layer() == ConformanceLayer.SINGULAR
+                && furnace.domain().size() == 4 && furnace.steps().size() == 4
+                && furnace.placementSlot().before().equals(
+                        new worldline.api.RemoteItemStack(61, 4, 0))
+                && furnace.finalStates().size() == 4,
+                "furnace state-domain row drifted");
+        for (int metadata = 2; metadata <= 5; metadata++) {
+            require(furnace.domain().contains(new BlockState(61, metadata)),
+                    "furnace facing absent from public domain: " + metadata);
+        }
         Map<String, String> options = new LinkedHashMap<String, String>();
         options.put(BlockStateDomainPlan.PLACEMENT_SLOT_OPTION, "1:37:324:4:0");
         B173StateDomainLoadout loadout = B173StateDomainLoadout.from(new TestRuntimeRequest(
@@ -48,6 +60,12 @@ public final class B173ServerStateDomainProviderTest {
         require(loadout.hotbar == 1 && loadout.item.equals(
                 new worldline.api.RemoteItemStack(324, 4, 0)),
                 "state-domain runtime option did not select its loadout");
+        options.put(BlockStateDomainPlan.PLACEMENT_SLOT_OPTION, "1:37:61:4:0");
+        loadout = B173StateDomainLoadout.from(new TestRuntimeRequest(
+                B173StateDomainScenarioFactory.SEED, Paths.get("."), null,
+                "official state domain > furnace", options));
+        require(loadout.item.equals(new worldline.api.RemoteItemStack(61, 4, 0)),
+                "state-domain runtime option did not accept furnace loadout");
         rejects(() -> B173StateDomainLoadout.from(new TestRuntimeRequest(
                 B173StateDomainScenarioFactory.SEED, Paths.get("."), null,
                 "missing", java.util.Collections.<String, String>emptyMap())), "placement slot");
