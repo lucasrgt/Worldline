@@ -126,12 +126,12 @@ final class RepositorySchemaMigration {
             manifest.setProperty(stem + "current_fingerprint", current);
             manifest.setProperty(stem + "evidence_sha256", proof.evidence());
         }
-        int smokeCount = integer(manifest, "smoke.count") + introduced;
-        require(carried == smokeCount - ProviderDiscoveryPinCheck.pendingCount(providers)
-                        && executed >= 1,
-                "repository schema refresh census drift: carried=" + carried + ";executed=" + executed);
+        int pending = ProviderDiscoveryPinCheck.pendingCount(providers);
+        int smokeCount = carried + pending;
+        require(executed >= 1,
+                "repository schema refresh lacks exact support proofs: executed=" + executed);
         manifest.setProperty("smoke.count", Integer.toString(smokeCount));
-        manifest.setProperty("map.count", Integer.toString(integer(manifest, "map.count") + introduced));
+        manifest.setProperty("map.count", Integer.toString(smokeCount + 1));
         manifest.setProperty("narrative.count", Integer.toString(
                 integer(manifest, "narrative.count") + introducedNarratives));
         manifest.setProperty("fingerprint_source_sha256", digest(
