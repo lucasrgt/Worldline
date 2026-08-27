@@ -1,5 +1,5 @@
 schema=1
 id=m370-remaining-furnace-smelts
-fingerprint=d623eb930f7ae6c3362a7187e46893a7193cdf900e12fe7818fc2f63130ee635
+fingerprint=3cf6fdc70ecbce9d40b383646441c1ee04b46200ab28acc32565236092a9e7eb
 observation.sha256=912452d315840ced68811ccce77f3cde4f1250eac7068c5ddd9f85e22a607a2a
 source=refactor-equivalent
