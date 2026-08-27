@@ -87,6 +87,7 @@ login, an exact break and tool effect, normalized zero/one/multiple drops, and a
 proves the removed state persisted. The b1.7.3 server adapter implements this boundary without
 turning direct `GameWorld.setBlock` mutation into false gameplay evidence. Historical claims remain
 `INTERNAL_API` or `SMOKE_ONLY` until an official run binds their evidence to this public fixture.
+Its current official provider package executes 16 scenario-routed rows and backs 64 public claims.
 
 The data under `behavior/functional-census/b1.7.3/` is the versioned routing source. The Gate rejects
 a missing registry subject, unprofiled block, duplicate claim, unsupported status, unqualified
