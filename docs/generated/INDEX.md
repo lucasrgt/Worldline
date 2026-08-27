@@ -18,6 +18,7 @@ Generated from the canonical Markdown files in `docs/`. Files remain at stable r
 
 - [AERO_MILESTONES.md](../AERO_MILESTONES.md)
 - [ATLAS.md](../ATLAS.md)
+- [B173_LIFECYCLE_PROVIDER_CYCLE.md](../B173_LIFECYCLE_PROVIDER_CYCLE.md)
 - [BEHAVIOR.md](../BEHAVIOR.md)
 - [BEHAVIOR_ATLAS_REBALANCE.md](../BEHAVIOR_ATLAS_REBALANCE.md)
 - [BEHAVIOR_BACKFILL_AUDIT.md](../BEHAVIOR_BACKFILL_AUDIT.md)
