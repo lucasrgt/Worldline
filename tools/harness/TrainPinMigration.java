@@ -51,7 +51,7 @@ final class TrainPinMigration {
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
         SmokeReceiptCache cache = new SmokeReceiptCache(root);
         List<SmokePins.Entry> updated = new ArrayList<>(); List<String> pending = new ArrayList<>();
-        int imported = 0, carried = 0, executed = 0;
+        int imported = 0, carried = 0, executed = 0, qualificationExecuted = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             String current = fingerprints.compute(smoke), stem = "smoke." + smoke.id + ".";
             SmokePins.Entry prior = baseline.get(smoke.id);
@@ -60,7 +60,7 @@ final class TrainPinMigration {
                 Imported receipt = completeImported(swarm, smoke.id) ? imported(root, swarm, smoke.id) : null;
                 if (receipt == null && hasExecuted(root, smoke.id)) receipt = executed(root, cache, smoke, current);
                 if (receipt != null) {
-                    executed++; seal(lock, stem, "executed", receipt.fingerprint,
+                    executed++; qualificationExecuted++; seal(lock, stem, "executed", receipt.fingerprint,
                             current, receipt.evidence);
                     receipt(lock, stem, receipt);
                     updated.add(new SmokePins.Entry(smoke.id, current, receipt.evidence, "executed"));
@@ -69,7 +69,7 @@ final class TrainPinMigration {
                 SmokePins.Entry carriedPin = pins.entry(smoke.id);
                 if (carriedPin != null && "executed".equals(
                         predecessor.getProperty(stem + "kind"))) {
-                    executed++; seal(lock, stem, "executed",
+                    executed++; qualificationExecuted++; seal(lock, stem, "executed",
                             required(predecessor, stem + "current_fingerprint"), current,
                             carriedPin.evidence());
                     copyReceipt(predecessor, lock, stem);
@@ -91,6 +91,15 @@ final class TrainPinMigration {
                 updated.add(migration.entry());
                 continue;
             }
+            SmokePins.Entry currentPin = pins.match(smoke.id, current);
+            if (currentPin != null && "executed".equals(currentPin.source())
+                    && hasExecuted(root, smoke.id)) {
+                Imported receipt = executed(root, cache, smoke, current);
+                require(receipt != null, "exact new milestone receipt drift: " + smoke.id);
+                executed++; seal(lock, stem, "executed", receipt.fingerprint,
+                        current, receipt.evidence);
+                receipt(lock, stem, receipt); updated.add(currentPin); continue;
+            }
             imported++; boolean predecessorMilestone =
                     "milestone".equals(predecessor.getProperty(stem + "kind"));
             Imported receipt = completeImported(swarm, smoke.id)
@@ -107,7 +116,8 @@ final class TrainPinMigration {
                     source(current, receipt.fingerprint)));
         }
         int catalog = SmokeDiscovery.discover(root).size();
-        require(imported > 0 && carried > 0 && executed + pending.size() == QUALIFICATIONS.size()
+        require(imported > 0 && carried > 0
+                        && qualificationExecuted + pending.size() == QUALIFICATIONS.size()
                         && updated.size() == catalog - pending.stream()
                                 .filter(id -> baseline.get(id) == null).count(),
                 "train proof census drift");
