@@ -91,6 +91,10 @@ one new checkpoint session with a maximum 3600-second budget. Both modes bind an
 `OxAlphaControlMigration` and the attempt-2 `OxAlphaLauncher`; neither tool treats it as a historical
 launcher receipt. Legacy adoption may omit historical preflight and receipt bases, which remain
 required for ordinary control migration.
+The adoption receipt's immutable `new_control_base` is its original authorization anchor. A later
+control migration may reuse that exact receipt only when its SHA-256 still matches and the anchor is
+an ancestor of the new control base; an unrelated or missing control commit fails closed. The new
+preflight then binds the descendant control without rewriting or replacing the adoption evidence.
 The adoption validator accepts the historical `resume-same-session-and-worktree` action or an
 explicit recovery plan containing both `adopt-legacy-retry` and
 `resume-same-milestone-and-worktree`. Recovery plans use the closed step vocabulary
@@ -124,7 +128,18 @@ or produce a receipt with a known supplied session recorded as null.
 After an archived selected-provider quota failure, the supervisor may set
 `WORLDLINE_OX_ALPHA_FALLBACK=1` to resume the same receipt-bound session on the allowlisted free
 profile. The launch receipt records both the profile and model; a new session or ID fails closed.
-Fallback checkpoint resumes require a minimum 7200-second worker budget, and the source launcher
+For a legacy launch that emitted no JSONL or stderr and incorrectly receipted a null session,
+`LegacyRetryControlLauncher rollover` compiles the exact source closure and then uses
+`OxAlphaInfrastructureRollover` to seal the exact prior receipt, canonical session export, adoption
+receipt, and matching provider-log occurrence. The contract stays on attempt 2 while the physical
+launch advances once to launch 3 and uses a collision-free evidence stem. Any contract event,
+different session/model/worktree, unrelated control, mutated hash, or fourth launch fails closed.
+The supervisor supplies the SHA-256 of the canonical OpenCode provider log, and the rollover seals
+one bounded snapshot plus its exact excerpt before launch. A single-writer seal claim prevents
+competing receipts. A separate immutable launch claim permits exactly one recovery from process
+start failure; any later process-start failure or post-start capture/receipt failure emits terminal
+RETRYABLE infrastructure evidence instead of leaving an ownerless claim.
+Fallback checkpoint resumes require exactly a 7200-second worker budget, and the source launcher
 derives a larger outer timeout from that exact requested budget. This executable interlock prevents
 large receipt-bound histories from being misclassified after the primary one-hour window.
 After an archived systemic fallback-provider error, the supervisor may select whichever of GLM 5.3

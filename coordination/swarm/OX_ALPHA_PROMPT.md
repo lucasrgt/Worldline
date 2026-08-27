@@ -21,21 +21,29 @@ identity are SHA-bound into the adoption receipt. If no such
 session exists, `process-recovery` records the absence and authorizes exactly one bounded attempt-2
 checkpoint session; never fabricate an attempt-1 launcher receipt or session. The adoption receipt
 and SHA-256 remain mandatory through control migration and the attempt-2 launcher boundary.
+If controls advance again, preserve that receipt unchanged: its original control base must be an
+ancestor of the new control, and the replacement preflight must bind the exact descendant SHA.
 The executable model allowlist contains only `opencode-go/glm-5.3-flash`,
 `opencode-go/deepseek-v4-flash`, and `opencode-go/deepseek-v4-pro`. GLM 5.3 Flash is the default
 high-concurrency Ox Alpha worker. Select DeepSeek V4 Pro with `WORLDLINE_OX_ALPHA_MODEL` for a
 bounded repair or systemic-cause checkpoint; DeepSeek V4 Flash is the reviewed fast alternative.
 Every retired or arbitrary model fails before OpenCode starts.
-If the selected provider reports a usage limit, classify and archive the attempt before setting
+If the selected provider reports a usage limit, classify and archive the launch before setting
 `WORLDLINE_OX_ALPHA_FALLBACK=1`. The allowlisted fallback may resume only the same receipt-bound
-session and dirty worktree on a later attempt; it may not open a replacement milestone or session.
+session and worktree; it may not open a replacement milestone or session. When a legacy launcher
+recorded zero events and a null session, seal the exact provider occurrence with
+`LegacyRetryControlLauncher rollover`. The supervisor must supply the SHA-256 of the canonical
+OpenCode provider log snapshot used for that seal. Only the canonical hashed rollover receipt may
+authorize launch 3 while the contract remains on attempt 2; a fourth launch or an occurrence after
+any contract event fails closed. An immutable launch claim permits one process-start recovery and
+otherwise converts every post-reservation infrastructure failure into a terminal RETRYABLE receipt.
   The launcher enables private INFO logs, terminates the root, and drains every observed descendant
   on a provider stream error. Its receipt must preserve the supplied or uniquely logged session and classify
 `provider-usage-limit` separately from `provider-stream-error`; a zero-event provider failure must
 not consume the full worker timeout or be mistaken for contract work.
-A fallback checkpoint resume must receive at least 7200 seconds because a large receipt-bound
-history can make correct progress beyond the primary one-hour budget. The launcher rejects a
-shorter fallback retry and extends its own outer timeout beyond the worker budget.
+A fallback checkpoint resume must receive exactly 7200 seconds because a large receipt-bound
+history can make correct progress beyond the primary one-hour budget. The launcher rejects any
+different fallback budget and extends its own outer timeout beyond the worker budget.
 If the selected provider returns a systemic transport error, archive and classify the attempt
 before setting `WORLDLINE_OX_ALPHA_FALLBACK_MODEL` to whichever of GLM 5.3 Flash or DeepSeek V4
 Flash differs from the primary model. The same receipt-bound session, worktree, and milestone ID

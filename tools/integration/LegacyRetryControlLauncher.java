@@ -22,13 +22,24 @@ public final class LegacyRetryControlLauncher {
     }
 
     private static int execute(String[] arguments) throws Exception {
-        require(arguments.length > 0, "missing export, adopt, or --self-test command");
+        require(arguments.length > 0, "missing export, adopt, rollover, or --self-test command");
         Path root = Path.of("").toAbsolutePath().normalize();
         Path output = root.resolve(".worldline/build/legacy-retry-control");
         Files.createDirectories(output);
         List<Path> sources = List.of(root.resolve("tools/harness/MiniJson.java"),
                 root.resolve("tools/integration/OpenCodeSessionExport.java"),
-                root.resolve("tools/integration/LegacyRetryAdoption.java"));
+                root.resolve("tools/integration/LegacyRetryAdoption.java"),
+                root.resolve("tools/integration/GitAncestry.java"),
+                root.resolve("tools/integration/OxAlphaAdoptionReceipt.java"),
+                root.resolve("tools/integration/OxAlphaProfile.java"),
+                root.resolve("tools/integration/OxAlphaProviderLogMonitor.java"),
+                root.resolve("tools/integration/OxAlphaProviderFailure.java"),
+                root.resolve("tools/integration/OxAlphaProviderOccurrence.java"),
+                root.resolve("tools/integration/OxAlphaRolloverReceipt.java"),
+                root.resolve("tools/integration/OxAlphaRolloverLaunch.java"),
+                root.resolve("tools/integration/OxAlphaRequest.java"),
+                root.resolve("tools/integration/OxAlphaLegacyAdoption.java"),
+                root.resolve("tools/integration/OxAlphaInfrastructureRollover.java"));
         List<String> compile = new ArrayList<>(List.of(javaTool("javac"), "-encoding", "UTF-8",
                 "--release", "21", "-Xlint:all,-options", "-Werror", "-d", output.toString()));
         for (Path source : sources) {
@@ -42,6 +53,7 @@ public final class LegacyRetryControlLauncher {
         String target = switch (arguments[0]) {
             case "export" -> "OpenCodeSessionExport";
             case "adopt" -> "LegacyRetryAdoption";
+            case "rollover" -> "OxAlphaInfrastructureRollover";
             default -> throw new IllegalArgumentException("unknown legacy retry command");
         };
         List<String> command = new ArrayList<>(List.of(javaTool("java"), "-cp", output.toString(),

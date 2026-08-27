@@ -96,3 +96,11 @@ reported_by = "codex:orchestrator"
 corrected_by = "codex:orchestrator"
 recorded_by = "codex:orchestrator"
 commit = "aea5a21e4"
+
+[[occurrences]]
+occurred_at = "2026-08-27T07:30:57Z"
+source = "csm nya check 2026-08-27 blocked eight packed Java control lines in OxAlphaProviderOccurrence, OxAlphaRolloverReceipt, OxAlphaInfrastructureRollover, and OxAlphaInfrastructureRolloverSelfTest before commit; all statements split before Gate/train"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "938becf44"

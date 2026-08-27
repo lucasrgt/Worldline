@@ -33,9 +33,17 @@ final class OxAlphaProfile {
         return selected;
     }
 
+    static boolean allowedModel(String model) {
+        return PRIMARY_MODELS.contains(model);
+    }
+
+    static boolean allowedFallbackModel(String model) {
+        return FALLBACK_MODELS.contains(model);
+    }
+
     static boolean budgetAllowed(boolean fallback, String phase, String session, int seconds) {
         return !fallback || !phase.equals("checkpoint") || session == null
-                || seconds >= FALLBACK_RESUME_MIN_SECONDS;
+                || seconds == FALLBACK_RESUME_MIN_SECONDS;
     }
 
     static void selfTest() {
@@ -47,6 +55,8 @@ final class OxAlphaProfile {
                 "short fallback resume accepted");
         require(budgetAllowed(true, "checkpoint", "session", 7200),
                 "extended fallback resume rejected");
+        require(!budgetAllowed(true, "checkpoint", "session", 7201),
+                "unbounded fallback resume accepted");
         require(reviewedModel(null, DEFAULT_MODEL, PRIMARY_MODELS).equals(DEFAULT_MODEL),
                 "default Ox Alpha model changed");
         require(reviewedModel(null, DEFAULT_FALLBACK_MODEL, FALLBACK_MODELS).equals(DEFAULT_FALLBACK_MODEL),

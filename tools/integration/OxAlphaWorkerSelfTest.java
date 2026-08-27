@@ -28,6 +28,7 @@ final class OxAlphaWorkerSelfTest {
         require(!OxAlphaWorker.messagePrecedesFiles(invalid),
                 "variadic attachment swallowed the worker message");
         requireMalformedSessionRejected();
+        requireRolloverArgumentsBound();
         OxAlphaProfile.selfTest();
         OxAlphaTelemetry.selfTest();
         OxAlphaProviderFailure.selfTest();
@@ -61,6 +62,24 @@ final class OxAlphaWorkerSelfTest {
             rejected = true;
         }
         require(rejected, "malformed session reached the OpenCode process boundary");
+    }
+
+    private static void requireRolloverArgumentsBound() {
+        String sha = "0".repeat(40);
+        OxAlphaRequest parsed = OxAlphaRequest.parse(new String[] {"--control-base", sha,
+                "--attempt", "2", "--launch", "3", "--session", "ses_rollover",
+                "--rollover-receipt", "receipt.json", "--rollover-sha256", "1".repeat(64)});
+        require(parsed.attempt() == 2 && parsed.launch() == 3
+                && parsed.evidenceStem().endsWith("-attempt2-launch3"),
+                "rollover launch ordinal was not parsed independently");
+        boolean rejected = false;
+        try {
+            OxAlphaRequest.parse(new String[] {"--control-base", sha,
+                    "--rollover-receipt", "receipt.json"});
+        } catch (IllegalArgumentException expected) {
+            rejected = true;
+        }
+        require(rejected, "unhashed rollover receipt was accepted");
     }
 
     private static void stdinTest() throws Exception {

@@ -80,6 +80,32 @@ final class LegacyRetryAdoptionSelfTest {
                     LegacyRetryAdoption.sha(recoveryReceipt));
             OxAlphaControlMigration.validateArchive(migration);
             OxAlphaControlMigration.validateAdoption(recovery.worktree, migration);
+            Files.writeString(root.resolve("control-generation.txt"), "next\n",
+                    StandardCharsets.UTF_8);
+            git(root, "add", "control-generation.txt");
+            git(root, "commit", "--quiet", "-m", "next control");
+            String nextControl = git(root, "rev-parse", "HEAD").trim();
+            OxAlphaControlMigration.Request remigration = new OxAlphaControlMigration.Request(
+                    recovery.id, "goal", base, "", "", nextControl, null, 1,
+                    recovery.archive, LegacyRetryAdoption.sha(recovery.archive), recoveryReceipt,
+                    LegacyRetryAdoption.sha(recoveryReceipt));
+            OxAlphaControlMigration.validateAdoption(recovery.worktree, remigration);
+            OxAlphaLegacyAdoption.validate(recovery.worktree, new OxAlphaRequest(recovery.id,
+                    "goal", nextControl, nextControl, "checkpoint", 2, null, 900,
+                    recoveryReceipt.toString(), LegacyRetryAdoption.sha(recoveryReceipt)));
+            String unrelated = git(root, "commit-tree", base + "^{tree}", "-m",
+                    "unrelated control").trim();
+            expectFailure(() -> OxAlphaControlMigration.validateAdoption(recovery.worktree,
+                    new OxAlphaControlMigration.Request(recovery.id, "goal", base, "", "",
+                            unrelated, null, 1, recovery.archive,
+                            LegacyRetryAdoption.sha(recovery.archive), recoveryReceipt,
+                            LegacyRetryAdoption.sha(recoveryReceipt))),
+                    "adoption receipt authorized an unrelated control base");
+            expectFailure(() -> OxAlphaLegacyAdoption.validate(recovery.worktree,
+                    new OxAlphaRequest(recovery.id, "goal", unrelated, unrelated,
+                            "checkpoint", 2, null, 900, recoveryReceipt.toString(),
+                            LegacyRetryAdoption.sha(recoveryReceipt))),
+                    "launcher adoption authorized an unrelated control base");
             OxAlphaControlMigration.Request parsedAdoption = OxAlphaControlMigration.Request.parse(
                     new String[] {"--id", recovery.id, "--goal", "goal", "--archive-base", base,
                             "--new-base", base, "--prior-attempt", "1", "--archive",
@@ -93,6 +119,28 @@ final class LegacyRetryAdoptionSelfTest {
             OxAlphaLegacyAdoption.validate(recovery.worktree, new OxAlphaRequest(recovery.id,
                     "goal", base, base, "checkpoint", 2, null, 900,
                     recoveryReceipt.toString(), LegacyRetryAdoption.sha(recoveryReceipt)));
+            String decoy = recoveryText.replace("\"id\":\"" + recovery.id + "\"",
+                    "\"id\":\"m999-wrong\",\"decoy\":\"id=" + recovery.id
+                            + ";authorized_attempt=2;status=PASS\"");
+            Files.writeString(recoveryReceipt, decoy, StandardCharsets.UTF_8);
+            String decoySha = LegacyRetryAdoption.sha(recoveryReceipt);
+            expectFailure(() -> OxAlphaLegacyAdoption.validate(recovery.worktree,
+                    new OxAlphaRequest(recovery.id, "goal", base, base, "checkpoint", 2,
+                            null, 900, recoveryReceipt.toString(), decoySha)),
+                    "launcher accepted adoption fields hidden in a decoy string");
+            expectFailure(() -> OxAlphaControlMigration.validateAdoption(recovery.worktree,
+                    new OxAlphaControlMigration.Request(recovery.id, "goal", base, "", "",
+                            base, null, 1, recovery.archive,
+                            LegacyRetryAdoption.sha(recovery.archive), recoveryReceipt, decoySha)),
+                    "migration accepted adoption fields hidden in a decoy string");
+            Files.writeString(recoveryReceipt, recoveryText + "{}", StandardCharsets.UTF_8);
+            expectFailure(() -> OxAlphaAdoptionReceipt.read(recoveryReceipt),
+                    "adoption receipt accepted trailing JSON data");
+            Files.writeString(recoveryReceipt, recoveryText.replaceFirst("\\{",
+                    "{\\\"id\\\":\\\"duplicate\\\","), StandardCharsets.UTF_8);
+            expectFailure(() -> OxAlphaAdoptionReceipt.read(recoveryReceipt),
+                    "adoption receipt accepted a duplicate key");
+            Files.writeString(recoveryReceipt, recoveryText, StandardCharsets.UTF_8);
             expectFailure(() -> OxAlphaControlMigration.validateAdoption(recovery.worktree,
                     new OxAlphaControlMigration.Request(recovery.id, "goal", base, "", "",
                             base, null, 1, recovery.archive, LegacyRetryAdoption.sha(recovery.archive),
@@ -231,7 +279,7 @@ final class LegacyRetryAdoptionSelfTest {
         boolean rejected = false;
         try {
             action.run();
-        } catch (IllegalStateException expected) {
+        } catch (RuntimeException expected) {
             rejected = true;
         }
         require(rejected, message);
@@ -242,7 +290,9 @@ final class LegacyRetryAdoptionSelfTest {
     }
 
     private static void require(boolean condition, String message) {
-        if (!condition) throw new IllegalStateException(message);
+        if (!condition) {
+            throw new IllegalStateException(message);
+        }
     }
 
     private record Fixture(String id, Path worktree, Path archive) { }

@@ -3,8 +3,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.util.HexFormat;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /** Verifies a legacy adoption receipt at the Ox Alpha process boundary. */
 final class OxAlphaLegacyAdoption {
@@ -21,40 +19,38 @@ final class OxAlphaLegacyAdoption {
                 "legacy adoption receipt is not at its canonical path");
         require(sha(expected).equalsIgnoreCase(request.adoptionSha()),
                 "legacy adoption receipt SHA-256 drifted");
-        String text = Files.readString(expected, StandardCharsets.UTF_8);
-        require(field(text, "id", request.id())
-                && field(text, "new_control_base", request.controlBase())
-                && field(text, "branch", "codex/milestone-" + request.id())
-                && field(text, "worktree", root.toString())
-                && text.contains("\"prior_attempt\":1")
-                && text.contains("\"authorized_attempt\":2")
-                && text.contains("\"max_attempts\":2") && field(text, "status", "PASS"),
+        OxAlphaAdoptionReceipt receipt = OxAlphaAdoptionReceipt.read(expected);
+        require(receipt.schema() == 1 && receipt.id().equals(request.id())
+                && GitAncestry.contains(root, receipt.controlBase(), request.controlBase())
+                && receipt.branch().equals("codex/milestone-" + request.id())
+                && receipt.worktree().equals(root)
+                && receipt.priorAttempt() == 1 && receipt.authorizedAttempt() == 2
+                && receipt.maxAttempts() == 2 && receipt.status().equals("PASS"),
                 "legacy adoption receipt drifted");
         if (request.session() == null) {
-            require(field(text, "mode", "process-recovery") && text.contains("\"session\":null")
-                    && text.contains("\"recovery_sessions_allowed\":1"),
+            require(receipt.mode().equals("process-recovery") && receipt.session() == null
+                    && receipt.recoverySessions() == 1,
                     "process-recovery adoption drifted");
-            int limit = integer(text, "recovery_timeout_seconds");
+            int limit = receipt.recoveryTimeout();
             require(request.timeoutSeconds() > 0 && request.timeoutSeconds() <= limit && limit <= 3600,
                     "process-recovery session exceeds its adoption budget");
         } else {
-            require(field(text, "mode", "resume-session")
-                    && field(text, "session", request.session())
-                    && text.contains("\"recovery_sessions_allowed\":0"),
+            boolean resumed = receipt.mode().equals("resume-session")
+                    && request.session().equals(receipt.session())
+                    && receipt.recoverySessions() == 0;
+            boolean recovered = request.rolloverReceipt() != null
+                    && request.rolloverSha() != null
+                    && receipt.mode().equals("process-recovery") && receipt.session() == null
+                    && receipt.recoverySessions() == 1;
+            require(resumed || recovered,
                     "resume-session adoption drifted");
+            if (recovered) {
+                require(receipt.recoveryTimeout() > 0 && receipt.recoveryTimeout() <= 3600,
+                        "process-recovery adoption budget drifted");
+                require(request.timeoutSeconds() == 7200,
+                        "rollover fallback recovery requires exactly 7200 seconds");
+            }
         }
-    }
-
-    private static boolean field(String json, String name, String value) {
-        String escaped = value.replace("\\", "\\\\").replace("\"", "\\\"");
-        return json.contains("\"" + name + "\":\"" + escaped + "\"");
-    }
-
-    private static int integer(String json, String name) {
-        Matcher matcher = Pattern.compile("\\\"" + Pattern.quote(name) + "\\\":([0-9]+)")
-                .matcher(json);
-        require(matcher.find(), "legacy adoption receipt lacks " + name);
-        return Integer.parseInt(matcher.group(1));
     }
 
     private static String sha(Path path) throws Exception {

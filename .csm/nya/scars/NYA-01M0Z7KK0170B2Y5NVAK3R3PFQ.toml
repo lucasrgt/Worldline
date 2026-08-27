@@ -1,11 +1,17 @@
 schema = 1
 id = "NYA-01M0Z7KK0170B2Y5NVAK3R3PFQ"
 title = "Resume quota-limited sessions through an allowlisted fallback"
-lesson = "When a reviewed OpenCode provider reaches its usage limit after a worker has produced a dirty checkpoint, classify the attempt RETRYABLE, archive the exact session, logs, patch, and untracked sources, and resume that same session through an explicitly allowlisted fallback profile. Never open a replacement milestone, silently change models, or discard the first model's work; record both models and the profile in immutable launcher receipts."
+lesson = "When a reviewed OpenCode provider reaches its usage limit, classify and archive the physical launch while preserving the same milestone, worktree, session, and bounded contract attempt. A legacy zero-event launch may advance once through a separately receipted launch ordinal only after its prior receipt, session export, adoption, provider occurrence, base, head, tree, and hashes are sealed and validated; any contract event or fourth launch fails closed. Never open a replacement milestone, silently change models, or discard existing work."
 scope = [
     "tools/integration/OxAlphaLauncher.java",
     "tools/integration/OxAlphaWorker.java",
     "tools/integration/OxAlphaProfile.java",
+    "tools/integration/OxAlphaInfrastructureRollover.java",
+    "tools/integration/OxAlphaInfrastructureRolloverSelfTest.java",
+    "tools/integration/OxAlphaProviderOccurrence.java",
+    "tools/integration/OxAlphaRolloverReceipt.java",
+    "tools/integration/OxAlphaRolloverLaunch.java",
+    "tools/integration/OxAlphaAdoptionReceipt.java",
     "tools/harness/IntegrationToolsCheck.java",
     "coordination/swarm/OX_ALPHA_PROMPT.md",
     "docs/ENGINEERING_WORKFLOW.md",

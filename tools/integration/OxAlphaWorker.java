@@ -36,25 +36,27 @@ final class OxAlphaWorker {
         boolean fallback = OxAlphaProfile.fallback();
         String selectedModel = OxAlphaProfile.model(fallback);
         require(OxAlphaProfile.budgetAllowed(fallback, request.phase(), request.session(),
-                request.timeoutSeconds()), "fallback checkpoint resume requires at least 7200 seconds");
-        validate(root, request);
+                request.timeoutSeconds()), "fallback checkpoint resume requires exactly 7200 seconds");
+        validate(root, request, fallback, selectedModel);
         String message = message(request);
         List<String> command = command(message, request.session(), fallback);
         require(messagePrecedesFiles(command), "worker message must precede variadic file attachments");
         Path reports = root.resolve(".worldline/reports/swarm");
         Files.createDirectories(reports);
-        String stem = "opencode-" + request.id() + "-" + request.phase()
-                + "-attempt" + request.attempt();
+        String stem = request.evidenceStem();
         Path stdout = reports.resolve(stem + ".jsonl");
         Path stderr = reports.resolve(stem + ".stderr.log");
         Path receipt = reports.resolve(stem + ".json");
         require(!Files.exists(stdout) && !Files.exists(stderr) && !Files.exists(receipt),
                 "immutable launch evidence already exists: " + stem);
+        if (request.rolloverReceipt() != null) {
+            OxAlphaRolloverLaunch.reserve(root, request);
+        }
         Instant started = Instant.now();
         ProcessBuilder builder = new ProcessBuilder(command).directory(root.toFile());
         String config = OxAlphaProfile.config(fallback);
         builder.environment().put("OPENCODE_CONFIG_CONTENT", config);
-        Process process = builder.start();
+        Process process = OxAlphaRolloverLaunch.start(root, request, builder);
         OxAlphaTerminalMonitor.Capture capture = null;
         OxAlphaProviderCapture errors = null;
         OxAlphaTerminalMonitor.Outcome outcome;
@@ -70,23 +72,35 @@ final class OxAlphaWorker {
             } catch (Exception cleanup) {
                 failure.addSuppressed(cleanup);
             }
+            OxAlphaRolloverLaunch.recordTerminal(root, request, "capture", failure);
             throw failure;
         }
         Instant finished = Instant.now();
         String head = git(root, "rev-parse", "HEAD").trim();
-        writeReceipt(receipt, request, started, finished, head, stdout, stderr,
-                outcome, fallback, selectedModel, config);
+        try {
+            writeReceipt(receipt, request, started, finished, head, stdout, stderr,
+                    outcome, fallback, selectedModel, config);
+        } catch (Exception failure) {
+            OxAlphaRolloverLaunch.recordTerminal(root, request, "receipt", failure);
+            throw failure;
+        }
         return outcome.exit();
     }
 
-    private static void validate(Path root, OxAlphaRequest request) throws Exception {
+    private static void validate(Path root, OxAlphaRequest request, boolean fallback,
+            String selectedModel) throws Exception {
         require(request.id().matches("m[0-9]+-[a-z0-9-]+"), "invalid milestone id");
         require(request.base().matches("[0-9a-f]{40}"), "base must be an exact commit SHA");
         require(request.controlBase().matches("[0-9a-f]{40}"),
                 "control base must be an exact commit SHA");
         require(request.phase().equals("checkpoint") || request.phase().equals("qualify"),
                 "phase must be checkpoint or qualify");
-        require(request.attempt() > 0 && request.timeoutSeconds() > 0, "invalid launch limits");
+        require(request.attempt() > 0 && request.launch() > 0 && request.timeoutSeconds() > 0,
+                "invalid launch limits");
+        require(request.rolloverReceipt() != null || request.launch() == request.attempt(),
+                "launch ordinal differs without an infrastructure rollover");
+        require(request.rolloverReceipt() == null || request.adoptionReceipt() != null,
+                "infrastructure rollover requires the legacy adoption receipt");
         require(!request.goal().isBlank(), "goal is required");
         String branch = git(root, "branch", "--show-current").trim();
         require(branch.equals("codex/milestone-" + request.id()), "wrong milestone branch: " + branch);
@@ -95,7 +109,7 @@ final class OxAlphaWorker {
                 "authorized base predates the orchestrator control base");
         require(ancestor(root, request.controlBase(), head),
                 "worktree predates the orchestrator control base");
-        require(gitStatus(root, "merge-base", "--is-ancestor", request.base(), head) == 0,
+        require(ancestor(root, request.base(), head),
                 "authorized base is not an ancestor of HEAD");
         Path preflight = root.resolve(".worldline/reports/swarm/preflight-" + request.id() + ".json");
         requireBoundPass(preflight, request.id(), request.base(), true);
@@ -104,6 +118,9 @@ final class OxAlphaWorker {
         if (request.phase().equals("checkpoint")) {
             require(head.equals(request.base()), "checkpoint must start at the exact base");
             if (request.adoptionReceipt() != null) {
+                if (request.rolloverReceipt() != null) {
+                    OxAlphaInfrastructureRollover.validate(root, request, fallback, selectedModel);
+                }
                 OxAlphaLegacyAdoption.validate(root, request);
                 require(git(root, "status", "--porcelain=v1", "--untracked-files=all").isBlank(),
                         "legacy retry must start from the clean migrated base");
@@ -119,6 +136,8 @@ final class OxAlphaWorker {
         } else {
             require(request.adoptionReceipt() == null,
                     "legacy adoption receipt is only valid for checkpoint attempt 2");
+            require(request.rolloverReceipt() == null,
+                    "infrastructure rollover receipt is only valid for checkpoint attempt 2");
             Path readiness = root.resolve(".worldline/reports/swarm/readiness-" + request.id() + ".json");
             requireBoundPass(readiness, request.id(), request.base(), false);
             require(request.session() != null && !request.session().isBlank(),
@@ -156,7 +175,11 @@ final class OxAlphaWorker {
     }
 
     static String message(OxAlphaRequest request) {
-        String phase = request.adoptionReceipt() != null && request.session() == null
+        String phase = request.rolloverReceipt() != null
+                ? "Resume the exact session after the sealed zero-event provider failure. The worktree "
+                        + "is intentionally clean. Preserve the same contract attempt, do not run Candidate "
+                        + "or Milestone Gate, commit, or hand off, and stop with an exact checkpoint disposition."
+                : request.adoptionReceipt() != null && request.session() == null
                 ? "Start the single bounded process-recovery session authorized by the adoption receipt. "
                         + "Do not claim a historical session. Do not run Candidate or Milestone Gate, commit, "
                         + "or hand off. Stop with an exact checkpoint disposition."
@@ -190,6 +213,7 @@ final class OxAlphaWorker {
         OxAlphaTelemetry.Result telemetry = OxAlphaTelemetry.read(stdout);
         String value = "{\n  \"schema\":1,\n  \"id\":\"" + request.id()
                 + "\",\n  \"phase\":\"" + request.phase() + "\",\n  \"attempt\":" + request.attempt()
+                + ",\n  \"launch\":" + request.launch()
                 + ",\n  \"started\":\"" + started + "\",\n  \"finished\":\"" + finished
                 + "\",\n  \"base\":\"" + request.base() + "\",\n  \"control_base\":\""
                 + request.controlBase() + "\",\n  \"head\":\"" + head
@@ -202,6 +226,12 @@ final class OxAlphaWorker {
                 + (session == null ? "null" : "\"" + escape(session) + "\"")
                 + ",\n  \"legacy_adoption_sha256\":"
                 + (request.adoptionSha() == null ? "null" : "\"" + request.adoptionSha() + "\"")
+                + ",\n  \"infrastructure_rollover_sha256\":"
+                + (request.rolloverSha() == null ? "null" : "\"" + request.rolloverSha() + "\"")
+                + ",\n  \"infrastructure_rollover_claim_sha256\":"
+                + (request.rolloverSha() == null ? "null" : "\""
+                        + OxAlphaRolloverLaunch.claimSha(
+                                Path.of("").toAbsolutePath().normalize(), request) + "\"")
                 + ",\n  \"exit\":" + outcome.exit() + ",\n  \"completed\":" + outcome.completed()
                 + OxAlphaTelemetry.receiptFields(telemetry, started, finished)
                 + ",\n  \"supervisor_stop\":" + (outcome.supervisorStop() == null ? "null"
@@ -252,16 +282,8 @@ final class OxAlphaWorker {
         return output;
     }
 
-    private static int gitStatus(Path root, String... arguments) throws Exception {
-        List<String> command = new ArrayList<>(List.of("git"));
-        command.addAll(List.of(arguments));
-        Process process = new ProcessBuilder(command).directory(root.toFile()).redirectErrorStream(true).start();
-        require(process.waitFor(120, TimeUnit.SECONDS), "git timed out");
-        return process.exitValue();
-    }
-
     static boolean ancestor(Path root, String ancestor, String descendant) throws Exception {
-        return gitStatus(root, "merge-base", "--is-ancestor", ancestor, descendant) == 0;
+        return GitAncestry.contains(root, ancestor, descendant);
     }
 
     private static String sha(Path path) throws Exception {

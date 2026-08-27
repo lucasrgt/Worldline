@@ -142,20 +142,22 @@ public final class OxAlphaControlMigration {
                 "legacy adoption receipt is not at its canonical path");
         require(sha(expected).equalsIgnoreCase(request.adoptionSha),
                 "legacy adoption receipt SHA-256 drifted");
-        String text = Files.readString(expected, StandardCharsets.UTF_8);
-        require(field(text, "id", request.id) && field(text, "new_control_base", request.newBase)
-                && text.contains("\"prior_attempt\":1")
-                && text.contains("\"authorized_attempt\":2")
-                && text.contains("\"max_attempts\":2")
-                && field(text, "archive_sha256", request.archiveSha)
-                && field(text, "status", "PASS"), "legacy adoption receipt drifted");
+        OxAlphaAdoptionReceipt receipt = OxAlphaAdoptionReceipt.read(expected);
+        require(receipt.schema() == 1 && receipt.id().equals(request.id)
+                && ancestor(root, receipt.controlBase(), request.newBase)
+                && receipt.branch().equals("codex/milestone-" + request.id)
+                && receipt.worktree().equals(root)
+                && receipt.priorAttempt() == 1 && receipt.authorizedAttempt() == 2
+                && receipt.maxAttempts() == 2
+                && receipt.archiveSha().equalsIgnoreCase(request.archiveSha)
+                && receipt.status().equals("PASS"), "legacy adoption receipt drifted");
         if (request.session == null) {
-            require(field(text, "mode", "process-recovery") && text.contains("\"session\":null")
-                    && text.contains("\"recovery_sessions_allowed\":1"),
+            require(receipt.mode().equals("process-recovery") && receipt.session() == null
+                    && receipt.recoverySessions() == 1,
                     "process-recovery adoption drifted");
         } else {
-            require(field(text, "mode", "resume-session") && field(text, "session", request.session)
-                    && text.contains("\"recovery_sessions_allowed\":0"),
+            require(receipt.mode().equals("resume-session")
+                    && request.session.equals(receipt.session()) && receipt.recoverySessions() == 0,
                     "resume-session adoption drifted");
         }
     }

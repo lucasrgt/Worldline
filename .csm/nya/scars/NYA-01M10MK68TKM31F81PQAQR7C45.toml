@@ -20,3 +20,11 @@ reported_by = "codex:worldline-supervisor"
 corrected_by = "codex:worldline-supervisor"
 recorded_by = "codex:worldline-supervisor"
 commit = "cecf2a5d2"
+
+[[occurrences]]
+occurred_at = "2026-08-27T08:11:51Z"
+source = "IntegrationTrain reconcile attempt 1 on c977f930b: every verification stage PASS; pinned-smoke cold latency 241869ms >= 240000ms; verify archive C:/Users/lucas/Documents/ChatGPT/worldline-swarm-archive-20260825/train-provider-rollover-control-attempt1-c977f930b-verify.json sha256=C9CD0E28A75C3837775EACE6A9C60012D2743EA15420F765441C9F02DC57802F"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "c977f930b"

@@ -158,6 +158,9 @@ final class IntegrationToolsCheck {
                     "LegacyRetryAdoptionSelfTest"), 60) == 0,
                     "legacy retry adoption self-test failed");
             require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
+                    "OxAlphaInfrastructureRolloverSelfTest"), 60) == 0,
+                    "Ox Alpha infrastructure rollover self-test failed");
+            require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "OpenCodeSessionExportSelfTest"), 60) == 0,
                     "OpenCode session export self-test failed");
             require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
