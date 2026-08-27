@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M10NV9ZFWZA2DH8P8APK371Q"
+title = "Verify declared cycle artifacts before Candidate"
+lesson = "Every data-driven cycle.artifact must resolve to a tracked descriptor whose local binary exists and matches the exact length, SHA-1, and SHA-256 before Candidate starts. Missing provisioning is a harness/process RETRYABLE with zero semantic runtime attempts; reserve the original milestone as semantic owner and block equivalent IDs until the same worktree is provisioned and revalidated."
+scope = [
+    "tools/harness/CandidateSourceClosure.java",
+    "coordination/swarm/active-contracts.properties",
+    "coordination/swarm/dispositions/*.properties",
+]
+tags = [
+    "artifact-provisioning",
+    "pre-candidate",
+    "active-contract",
+]
+created_at = "2026-08-27T03:57:32Z"
+
+[[occurrences]]
+occurred_at = "2026-08-27T03:57:31Z"
+source = "M686 archive sha256=907d33f58cc4e30afe776465142f350f5f13da29a02b0c063067e82744b43cec; failure=official minecraft-b1.7.3-server.jar absent before semantic runtime; equivalent M737 provisioned"
+reported_by = "codex:m664_m665_readiness_audit"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "191f5771a"

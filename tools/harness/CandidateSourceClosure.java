@@ -1,8 +1,10 @@
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /** Compiles the exact candidate source closure before a readiness PASS can be emitted. */
@@ -27,6 +29,7 @@ final class CandidateSourceClosure {
 
     private void run() throws Exception {
         SmokeDiscovery.Entry smoke = SmokeDiscovery.require(root, id);
+        verifyCycleArtifact(root, descriptor, SmokeTrackedFiles.read(root));
         recreate();
         List<String> modules = values("modules");
         List<Path> outputs = new ModuleBuild(root, build, config, modules).compileAll();
@@ -68,9 +71,57 @@ final class CandidateSourceClosure {
                     "api,testkit");
             require(selected.equals(List.of(Path.of("api"), Path.of("testkit"))),
                     "data-driven compile products were not selected exactly");
+            artifactSelfTest(test);
         } finally {
             SafeTreeDelete.delete(test);
         }
+    }
+
+    private static void artifactSelfTest(Path test) throws Exception {
+        Path artifacts = test.resolve("artifacts");
+        Files.createDirectories(artifacts);
+        Path artifact = artifacts.resolve("server.jar");
+        Files.writeString(artifact, "synthetic official artifact", StandardCharsets.UTF_8);
+        Path descriptor = artifacts.resolve("test.properties");
+        Files.writeString(descriptor, "local.path=artifacts/server.jar\nexpected.bytes="
+                + Files.size(artifact) + "\nexpected.sha1=" + SmokeSupport.digest(artifact, "SHA-1")
+                + "\nexpected.sha256=" + SmokeSupport.digest(artifact, "SHA-256") + "\n",
+                StandardCharsets.UTF_8);
+        Properties smoke = new Properties();
+        smoke.setProperty("cycle.artifact", "artifacts/test.properties");
+        verifyCycleArtifact(test, smoke, Set.of(descriptor));
+        boolean untrackedRejected = false;
+        try {
+            verifyCycleArtifact(test, smoke, Set.of());
+        } catch (IllegalStateException expected) {
+            untrackedRejected = expected.getMessage().contains("descriptor is not tracked");
+        }
+        require(untrackedRejected, "untracked cycle artifact descriptor passed readiness");
+        Files.delete(artifact);
+        boolean missingRejected = false;
+        try {
+            verifyCycleArtifact(test, smoke, Set.of(descriptor));
+        } catch (IllegalStateException expected) {
+            missingRejected = expected.getMessage().contains("official artifact absent");
+        }
+        require(missingRejected, "missing cycle artifact passed readiness");
+    }
+
+    private static void verifyCycleArtifact(Path root, Properties descriptor, Set<Path> tracked)
+            throws Exception {
+        String reference = descriptor.getProperty("cycle.artifact", "").trim();
+        if (reference.isEmpty()) return;
+        require(reference.matches("artifacts/[a-z0-9.-]+\\.properties"),
+                "unsafe cycle artifact descriptor");
+        Path artifactDescriptor = root.resolve(reference).normalize();
+        require(artifactDescriptor.startsWith(root) && Files.isRegularFile(artifactDescriptor),
+                "missing cycle artifact descriptor: " + reference);
+        require(tracked.contains(artifactDescriptor.toAbsolutePath().normalize()),
+                "cycle artifact descriptor is not tracked: " + reference);
+        Properties artifact = StrictProperties.load(artifactDescriptor);
+        Path binary = root.resolve(SmokeSupport.value(artifact, "local.path")).normalize();
+        require(binary.startsWith(root) && !binary.equals(root), "unsafe cycle artifact path");
+        SmokeSupport.verifyArtifact(binary, artifact);
     }
 
     private void compileRunner(SmokeDiscovery.Entry smoke) throws Exception {

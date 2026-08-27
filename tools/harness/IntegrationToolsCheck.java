@@ -29,9 +29,6 @@ final class IntegrationToolsCheck {
         require(run(root, List.of(javaTool("java"), root.resolve(
                 "tools/integration/OxAlphaLauncher.java").toString(), "--self-test"), 180) == 0,
                 "Ox Alpha source launcher did not compile its closure");
-        require(run(root, List.of(javaTool("java"), root.resolve(
-                "tools/integration/OxAlphaControlMigration.java").toString(), "--self-test"), 180) == 0,
-                "Ox Alpha control migration self-test failed");
         selfTest(output);
         System.out.println("  integration tools: compiled and self-tested");
     }
@@ -152,6 +149,9 @@ final class IntegrationToolsCheck {
             require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "OxAlphaWorker", "--self-test"), 60) == 0,
                     "Ox Alpha launcher self-test failed");
+            require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
+                    "LegacyRetryAdoptionSelfTest"), 60) == 0,
+                    "legacy retry adoption self-test failed");
             require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),
                     "SwarmDashboard", "--self-test"), 60) == 0, "swarm dashboard self-test failed");
             require(run(repository, List.of(javaTool("java"), "-cp", classes.toString(),

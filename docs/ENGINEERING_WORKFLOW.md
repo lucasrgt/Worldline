@@ -80,6 +80,17 @@ branch and worktree to the new clean base, and run `OxAlphaControlMigration`. It
 receipt, archive hash, milestone ID, session, and ancestry, then repeats CSM context and both
 supervision and control-base recall before issuing the replacement preflight. Reapply the archived
 checkpoint only after this PASS; the milestone ID and OpenCode session remain unchanged.
+Legacy attempts created before supervised launcher receipts require an immutable
+`LegacyRetryAdoption` receipt before the worktree moves. The adoption command validates the exact
+tracked RETRYABLE disposition, archive digest and manifest, live branch, HEAD, tree, and archived
+status. A recovered session is accepted only when a SHA-bound preserved log contains the sole
+session identity, milestone ID, and exact worktree path. If no historical OpenCode session exists,
+the explicit `process-recovery` mode records that fact instead of inventing a session and authorizes
+one new checkpoint session with a maximum 3600-second budget. Both modes bind an owner, attempt 2 of
+2, and the new control base. Pass the adoption receipt and its SHA-256 to
+`OxAlphaControlMigration` and the attempt-2 `OxAlphaLauncher`; neither tool treats it as a historical
+launcher receipt. Legacy adoption may omit historical preflight and receipt bases, which remain
+required for ordinary control migration.
 When a preserved checkpoint crossed an earlier control-base migration, pass its independently
 sealed `--archive-base`, `--preflight-base`, and `--receipt-base`. Each must be an exact ancestor in
 the new control base; they need not be linearly ordered because independently reconciled trains can
@@ -130,6 +141,10 @@ Candidate Gate on a supervised milestone branch requires that PASS report and
 rejects any later source change.
 Candidates with smoke sources recall `NYA-01M0YH9M17ETMZA0F5X7981K4P`; the compilation result,
 not textual inspection of imports or `throws` clauses, is the objective closure proof.
+Every data-driven `cycle.artifact` is resolved during this closure, and its exact byte length,
+SHA-1, and SHA-256 are verified before Candidate. A missing or drifted official artifact is a
+provisioning failure, not a behavioral attempt; an equivalent milestone remains blocked while the
+original RETRYABLE contract owns the semantic identity.
 Candidates changing `modules/api` also recall `NYA-01M0YRVA4DD24Y22AHJQP2X3MF`. Exact closure
 compilation preserves the release declared for every module; the Java 8 API may not adopt a
 Java 21 language feature merely because TestKit declares release 21.
@@ -146,6 +161,9 @@ portable handoff. `RETRYABLE` retains the same branch, worktree, session, eviden
 attempt count. `REJECTED` retains exact oracle, fixture, or instability evidence and names an NYA
 scar. A worker without a disposition is `STRANDED` and is converted immediately to `RETRYABLE` or
 `REJECTED`; a draft scaffold is never a handoff or train candidate.
+A mechanically exact PASS receipt may still be superseded by a fail-closed semantic review. The
+receipt and handoff remain preserved, but the explicit REJECTED disposition and semantic exclusion
+prevent integration. Exhausted runtime history is authoritative over stale disposition counters.
 The canonical census resolves each exact qualification against the base recorded in its receipt,
 not against the latest wave control SHA. A registered rejection is terminal only when its tracked
 disposition, archived commit/tree, worktree identity, and external archive digest all validate. The

@@ -154,6 +154,13 @@ public final class SwarmLoop {
     }
 
     private static void selfTest(String[] arguments) {
+        try {
+            CensusDisposition.selfTest();
+        } catch (Exception error) {
+            throw new IllegalStateException("census disposition self-test failed: "
+                    + error.getMessage(), error);
+        }
+        CensusJson.selfTest();
         require(arguments.length == 1, usage());
         require(SwarmCensus.legacyState(true, false, false, false).equals("DIRTY_SUSPENDED"),
                 "dirty classification drifted");

@@ -43,6 +43,14 @@ final class WaveCensus {
                 + "a".repeat(64) + "\",\"session\":\"ses_1\",\"owner\":\"orchestrator\","
                 + "\"attempt\":1,\"max_attempts\":2");
         require(owned.ownedRetryable(), "owned RETRYABLE side queue entry was blocked");
+        require(!new Row("m27-fixture", ",\"state\":\"RETRYABLE\",\"archive_sha256\":\""
+                + "a".repeat(64) + "\",\"owner\":\"orchestrator\",\"attempt\":1,"
+                + "\"max_attempts\":2").ownedRetryable(),
+                "RETRYABLE without an exact session was accepted");
+        require(!new Row("m28-fixture", ",\"state\":\"RETRYABLE\",\"archive_sha256\":\""
+                + "a".repeat(64) + "\",\"session\":\"ses_1\",\"owner\":\"orchestrator\","
+                + "\"attempt\":2,\"max_attempts\":2").ownedRetryable(),
+                "RETRYABLE with an exhausted attempt budget was accepted");
     }
 
     static String string(String body, String name, String fallback) {

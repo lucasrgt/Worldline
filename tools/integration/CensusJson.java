@@ -39,9 +39,34 @@ final class CensusJson {
                 .append(item.handoffExact()).append(",\"integrated\":").append(item.integrated())
                 .append(",\"retries\":").append(item.retries());
         metrics(text, item.metrics());
+        disposition(text, item.disposition());
         text.append(",\"cause\":\"").append(escape(item.cause())).append("\",\"archive\":\"")
                 .append(escape(item.archive().path())).append("\",\"archive_sha256\":\"")
                 .append(item.archive().sha256()).append("\"}");
+    }
+
+    private static void disposition(StringBuilder text, CensusDisposition.Decision decision) {
+        if (decision == null || !"RETRYABLE".equals(decision.state())) {
+            return;
+        }
+        text.append(",\"owner\":\"").append(escape(decision.owner()))
+                .append("\",\"session\":\"").append(escape(decision.session()))
+                .append("\",\"attempt\":").append(decision.attempt())
+                .append(",\"max_attempts\":").append(decision.maximum());
+    }
+
+    static void selfTest() {
+        CensusDisposition.Decision retry = new CensusDisposition.Decision("m1-retry", "RETRYABLE",
+                "codex/milestone-m1-retry", java.nio.file.Path.of("retry"), "1".repeat(40),
+                "2".repeat(40), "3".repeat(40), "self-test", "worldline-orchestrator",
+                "ses_exact", 1, 2, SwarmEvidenceArchive.Result.empty());
+        StringBuilder text = new StringBuilder();
+        disposition(text, retry);
+        String value = text.toString();
+        require(value.contains("\"owner\":\"worldline-orchestrator\"")
+                && value.contains("\"session\":\"ses_exact\"")
+                && value.contains("\"attempt\":1,\"max_attempts\":2"),
+                "RETRYABLE ownership fields were omitted from census JSON");
     }
 
     private static void metrics(StringBuilder text, CensusMetrics.Entry metrics) {
@@ -80,5 +105,10 @@ final class CensusJson {
     private static String escape(String value) {
         return value.replace("\\", "\\\\").replace("\"", "\\\"")
                 .replace("\r", "\\r").replace("\n", "\\n");
+    }
+    private static void require(boolean value, String message) {
+        if (!value) {
+            throw new IllegalStateException(message);
+        }
     }
 }

@@ -114,7 +114,7 @@ final class SwarmCensus {
         CensusMetrics.Entry metric = metrics.entry(id, head);
         return new Item(number, id, path, branch, evidenceBase, head, tree, state, dirty, commits,
                 scaffold, proof.present, proof.exact, handoff, integrated, retries, cause, logs,
-                saved, metric);
+                saved, metric, disposition);
     }
 
     static String legacyState(boolean dirty, boolean qualified, boolean atBase, boolean hasCommit) {
@@ -230,5 +230,5 @@ final class SwarmCensus {
             String tree, String state, boolean dirty, int commits, boolean scaffold,
             boolean receiptPresent, boolean receiptExact, boolean handoffExact, boolean integrated,
             int retries, String cause, List<Path> logs, SwarmEvidenceArchive.Result archive,
-            CensusMetrics.Entry metrics) { }
+            CensusMetrics.Entry metrics, CensusDisposition.Decision disposition) { }
 }

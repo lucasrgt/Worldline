@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M10NFRP6G5GH5A7FVEWS7W7C"
+title = "Reject fail-open normalization of explicitly rejected evidence"
+lesson = "A structural admission or policy fixture must never normalize evidence explicitly marked rejected into ALLOWED merely because its explanatory reason is null. Readiness or semantic review must fail closed, preserve the exact receipt as mechanically valid but semantically superseded, and exclude the contract until an objective official-oracle binding and positive/negative proof exist."
+scope = [
+    "coordination/swarm/rejection-registry.properties",
+    "coordination/swarm/dispositions/*.properties",
+    "tools/integration/RejectedContractCheck.java",
+]
+tags = [
+    "fail-closed",
+    "semantic-review",
+    "server-admission",
+]
+created_at = "2026-08-27T03:51:13Z"
+
+[[occurrences]]
+occurred_at = "2026-08-27T03:51:13Z"
+source = "M681 preserved archive sha256=2ffd5d182396839678a239ecf6c974799b3093ce65cfc1d5aa7688a576cb6c8d; LoginEvidence.rejected(player,null) classified ALLOWED; wave disposition=rejected-semantic-fail-open-null-rejection-evidence"
+reported_by = "codex:m644_retry2"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "191f5771a"

@@ -98,7 +98,11 @@ final class OxAlphaWorker {
         require(Files.isRegularFile(prompt), "missing Ox Alpha prompt");
         if (request.phase().equals("checkpoint")) {
             require(head.equals(request.base()), "checkpoint must start at the exact base");
-            if (request.session() == null) {
+            if (request.adoptionReceipt() != null) {
+                OxAlphaLegacyAdoption.validate(root, request);
+                require(git(root, "status", "--porcelain=v1", "--untracked-files=all").isBlank(),
+                        "legacy retry must start from the clean migrated base");
+            } else if (request.session() == null) {
                 require(git(root, "status", "--porcelain=v1", "--untracked-files=all").isBlank(),
                         "initial checkpoint must start with a clean tree");
             } else {
@@ -108,6 +112,8 @@ final class OxAlphaWorker {
                 requireBoundSession(prior, request.session());
             }
         } else {
+            require(request.adoptionReceipt() == null,
+                    "legacy adoption receipt is only valid for checkpoint attempt 2");
             Path readiness = root.resolve(".worldline/reports/swarm/readiness-" + request.id() + ".json");
             requireBoundPass(readiness, request.id(), request.base(), false);
             require(request.session() != null && !request.session().isBlank(),
@@ -144,7 +150,11 @@ final class OxAlphaWorker {
     }
 
     private static String message(OxAlphaRequest request) {
-        String phase = request.phase().equals("checkpoint") && request.session() == null
+        String phase = request.adoptionReceipt() != null && request.session() == null
+                ? "Start the single bounded process-recovery session authorized by the adoption receipt. "
+                        + "Do not claim a historical session. Do not run Candidate or Milestone Gate, commit, "
+                        + "or hand off. Stop with an exact checkpoint disposition."
+                : request.phase().equals("checkpoint") && request.session() == null
                 ? "Implement the complete real contract, but do not run Candidate or Milestone Gate, "
                         + "commit, or hand off. "
                         + "Stop with CHECKPOINT_READY, RETRYABLE_PROPOSED, or REJECTED_PROPOSED."
@@ -182,6 +192,8 @@ final class OxAlphaWorker {
                 + ",\n  \"config_sha256\":\"" + sha(config) + "\",\n  \"stdout_sha256\":\""
                 + sha(stdout) + "\",\n  \"stderr_sha256\":\"" + sha(stderr) + "\",\n  \"session\":"
                 + (session == null ? "null" : "\"" + escape(session) + "\"")
+                + ",\n  \"legacy_adoption_sha256\":"
+                + (request.adoptionSha() == null ? "null" : "\"" + request.adoptionSha() + "\"")
                 + ",\n  \"exit\":" + outcome.exit() + ",\n  \"completed\":" + outcome.completed()
                 + OxAlphaTelemetry.receiptFields(telemetry, started, finished)
                 + ",\n  \"supervisor_stop\":" + (outcome.supervisorStop() == null ? "null"
@@ -193,7 +205,7 @@ final class OxAlphaWorker {
         Path root = Path.of("").toAbsolutePath().normalize();
         String head = git(root, "rev-parse", "HEAD").trim();
         OxAlphaRequest checkpoint = new OxAlphaRequest("m1-contract", "Prove a real behavior",
-                head, head, "checkpoint", 1, null, 60);
+                head, head, "checkpoint", 1, null, 60, null, null);
         List<String> valid = command(message(checkpoint), null, false);
         require(messagePrecedesFiles(valid), "canonical argument order was rejected");
         List<String> invalid = new ArrayList<>(valid);

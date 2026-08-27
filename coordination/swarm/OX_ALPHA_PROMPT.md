@@ -14,6 +14,12 @@ before OpenCode starts rather than mixing current readiness with an older Candid
 When controls advance after a retryable attempt, preserve the exact archive and use
 `OxAlphaControlMigration` on the same branch, worktree, and session. Reapply the checkpoint only
 after it verifies archive SHA-256, ancestry, CSM context, and both applicable scars on the new base.
+For a legacy attempt without a supervised launcher receipt, the supervisor must first run
+`LegacyRetryAdoption` against the unchanged historical worktree. A recovered session requires a
+SHA-bound preserved log proving the sole session ID, exact milestone, and exact worktree. If no such
+session exists, `process-recovery` records the absence and authorizes exactly one bounded attempt-2
+checkpoint session; never fabricate an attempt-1 launcher receipt or session. The adoption receipt
+and SHA-256 remain mandatory through control migration and the attempt-2 launcher boundary.
 The executable model allowlist contains only `opencode-go/glm-5.3-flash`,
 `opencode-go/deepseek-v4-flash`, and `opencode-go/deepseek-v4-pro`. GLM 5.3 Flash is the default
 high-concurrency Ox Alpha worker. Select DeepSeek V4 Pro with `WORLDLINE_OX_ALPHA_MODEL` for a
