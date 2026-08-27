@@ -16,6 +16,8 @@ import worldline.testkit.ConformanceLayer;
 /** The exact official b1.7.3 lifecycle rows currently provisioned by the provider. */
 public final class B173ServerLifecycleFixtures {
     public static final long SEED = B173LifecycleArena.SEED;
+    private static final int PLACE_HOTBAR = 1, PLACE_INVENTORY = 37;
+    private static final int BREAK_HOTBAR = 2, BREAK_INVENTORY = 38;
 
     private B173ServerLifecycleFixtures() { }
 
@@ -27,31 +29,64 @@ public final class B173ServerLifecycleFixtures {
                 profile("b1.7.3:block/001", "simple-solid", false),
                 profile("b1.7.3:block/005", "simple-solid", false),
                 profile("b1.7.3:block/024", "simple-solid", false),
-                profile("b1.7.3:block/045", "simple-solid", false)),
+                profile("b1.7.3:block/045", "simple-solid", false),
+                profile("b1.7.3:block/014", "ore", false),
+                profile("b1.7.3:block/015", "ore", false),
+                profile("b1.7.3:block/016", "ore", false),
+                profile("b1.7.3:block/022", "mineral-storage", false),
+                profile("b1.7.3:block/041", "mineral-storage", false),
+                profile("b1.7.3:block/042", "mineral-storage", false),
+                profile("b1.7.3:block/056", "ore", false),
+                profile("b1.7.3:block/057", "mineral-storage", false),
+                profile("b1.7.3:block/049", "obsidian", false)),
                 Arrays.asList(
                         template("gameplay-placement", ConformanceLayer.UNIVERSAL),
                         template("save-reload", ConformanceLayer.UNIVERSAL),
                         template("break-transition", ConformanceLayer.UNIVERSAL),
                         template("drop-matrix", ConformanceLayer.ARCHETYPE)));
         return Collections.unmodifiableList(Arrays.asList(
-                scenario(plan, "cobblestone", "b1.7.3:block/004", 4, 4, 1, 37, 15),
-                scenario(plan, "dirt", "b1.7.3:block/003", 3, 3, 2, 38, 5),
-                scenario(plan, "empty-chest", "b1.7.3:block/054", 54, 54, 3, 39, 80),
-                scenario(plan, "stone", "b1.7.3:block/001", 1, 4, 4, 40, 15),
-                scenario(plan, "planks", "b1.7.3:block/005", 5, 5, 5, 41, 80),
-                scenario(plan, "sandstone", "b1.7.3:block/024", 24, 24, 6, 42, 15),
-                scenario(plan, "brick", "b1.7.3:block/045", 45, 45, 7, 43, 15)));
+                scenario(plan, "cobblestone", "b1.7.3:block/004", 4, 4, 257, 15),
+                scenario(plan, "dirt", "b1.7.3:block/003", 3, 3, 257, 5),
+                scenario(plan, "empty-chest", "b1.7.3:block/054", 54, 54, 257, 80),
+                scenario(plan, "stone", "b1.7.3:block/001", 1, 4, 257, 15),
+                scenario(plan, "planks", "b1.7.3:block/005", 5, 5, 257, 80),
+                scenario(plan, "sandstone", "b1.7.3:block/024", 24, 24, 257, 15),
+                scenario(plan, "brick", "b1.7.3:block/045", 45, 45, 257, 15),
+                scenario(plan, "gold-ore", "b1.7.3:block/014", 14, 14, 278, 20),
+                scenario(plan, "iron-ore", "b1.7.3:block/015", 15, 15, 278, 20),
+                scenario(plan, "coal-ore", "b1.7.3:block/016", 16, 263, 278, 20),
+                scenario(plan, "lapis-block", "b1.7.3:block/022", 22, 22, 278, 20),
+                scenario(plan, "gold-block", "b1.7.3:block/041", 41, 41, 278, 20),
+                scenario(plan, "iron-block", "b1.7.3:block/042", 42, 42, 278, 20),
+                scenario(plan, "diamond-ore", "b1.7.3:block/056", 56, 264, 278, 20),
+                scenario(plan, "diamond-block", "b1.7.3:block/057", 57, 57, 278, 20),
+                scenario(plan, "obsidian", "b1.7.3:block/049", 49, 49, 278, 60)));
+    }
+
+    public static BlockLifecycleScenario forTestPath(String testPath) {
+        if (testPath == null) throw new IllegalArgumentException(
+                "lifecycle provider requires a TestKit test path");
+        BlockLifecycleScenario match = null;
+        for (BlockLifecycleScenario scenario : scenarios()) {
+            if (testPath.equals(scenario.id()) || testPath.endsWith(" > " + scenario.id())) {
+                if (match != null) throw new IllegalArgumentException(
+                        "ambiguous lifecycle TestKit path: " + testPath);
+                match = scenario;
+            }
+        }
+        if (match == null) throw new IllegalArgumentException(
+                "unknown lifecycle TestKit path: " + testPath);
+        return match;
     }
 
     private static BlockLifecycleScenario scenario(BlockConformancePlan plan, String id,
-            String subject, int block, int drop, int blockHotbar, int blockInventory,
-            int breakTicks) {
+            String subject, int block, int drop, int tool, int breakTicks) {
         RemoteItemStack placed = new RemoteItemStack(block, 1, 0);
         return BlockLifecycleScenario.from(id, plan, subject, B173LifecycleArena.SUPPORT,
                 B173LifecycleArena.SUPPORT_STATE, BlockFace.UP, new BlockState(block, 0),
-                new BlockLifecycleSlot(blockHotbar, blockInventory, placed, null),
-                new BlockLifecycleSlot(8, 44,
-                        new RemoteItemStack(257, 1, 0), new RemoteItemStack(257, 1, 1)),
+                new BlockLifecycleSlot(PLACE_HOTBAR, PLACE_INVENTORY, placed, null),
+                new BlockLifecycleSlot(BREAK_HOTBAR, BREAK_INVENTORY,
+                        new RemoteItemStack(tool, 1, 0), new RemoteItemStack(tool, 1, 1)),
                 Collections.singletonList(new RemoteItemStack(drop, 1, 0)), breakTicks, 40);
     }
 

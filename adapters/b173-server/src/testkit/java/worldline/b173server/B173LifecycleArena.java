@@ -5,7 +5,9 @@ import java.time.Duration;
 import worldline.api.BlockFace;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
+import worldline.api.RemoteItemStack;
 import worldline.api.RemoteChunkSnapshot;
+import worldline.testkit.BlockLifecycleScenario;
 
 /** Builds the fixed public lifecycle arena through official protocol-14 actions. */
 final class B173LifecycleArena {
@@ -17,17 +19,20 @@ final class B173LifecycleArena {
     private B173LifecycleArena() { }
 
     static B173WireClient open(B173DedicatedServer server, Path workspace,
-            int port, Duration timeout) throws Exception {
+            int port, Duration timeout, BlockLifecycleScenario scenario) throws Exception {
+        RemoteItemStack placed = scenario.placementSlot().before();
+        RemoteItemStack tool = scenario.breakSlot().before();
         B173PlayerSeed.writeInventory(workspace, USERNAME, 4.5D, 60D, 4.5D,
-                new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8},
-                new int[] {1, 4, 3, 54, 1, 5, 24, 45, 257},
-                new int[] {32, 1, 1, 1, 1, 1, 1, 1, 1},
-                new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0});
+                new int[] {0, scenario.placementSlot().hotbarSlot(),
+                        scenario.breakSlot().hotbarSlot()},
+                new int[] {1, placed.legacyId(), tool.legacyId()},
+                new int[] {32, placed.count(), tool.count()},
+                new int[] {0, placed.damage(), tool.damage()});
         B173WireClient client = new B173WireClient("127.0.0.1", port, USERNAME, timeout);
         try {
             client.connect();
             client.synchronizePose();
-            require(client.awaitInventory().occupiedSlots() == 9, "lifecycle inventory drift");
+            require(client.awaitInventory().occupiedSlots() == 3, "lifecycle inventory drift");
             RemoteChunkSnapshot initial = client.awaitRemoteChunk(0, 0).chunkAt(0, 0);
             BlockPosition top = foundation(initial);
             int column = 0;

@@ -3,6 +3,7 @@ package worldline.testkit;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -42,6 +43,9 @@ public final class TestRunnerTest {
                 "skip and todo states");
         require(provider.opened.get() == provider.closed.get() && provider.opened.get() >= 4,
                 "fresh sessions were not closed");
+        require(provider.paths.contains("passes") && provider.paths.contains("flaky is visible")
+                && provider.paths.contains("fails with scenario"),
+                "provider did not receive qualified test paths");
         require(!result.tests().get(2).artifacts().isEmpty(), "failure artifacts absent");
         require(reporter.started == 3 && reporter.finished == 5, "reporter lifecycle");
         require(sample.allHooks.get() == 11, "beforeAll/afterAll lifecycle");
@@ -108,8 +112,10 @@ public final class TestRunnerTest {
     }
     private static final class FakeProvider implements TestRuntimeProvider {
         final AtomicInteger opened = new AtomicInteger(), closed = new AtomicInteger();
+        final List<String> paths = Collections.synchronizedList(new ArrayList<String>());
         @Override public String runtimeId() { return "fake"; }
         @Override public TestRuntimeSession open(TestRuntimeRequest request) {
+            paths.add(request.testPath());
             opened.incrementAndGet(); FakeRuntime runtime = new FakeRuntime();
             return new TestRuntimeSession() {
                 @Override public AutomatedMinecraftRuntime runtime() { return runtime; }
