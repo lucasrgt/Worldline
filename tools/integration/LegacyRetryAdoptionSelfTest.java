@@ -45,6 +45,14 @@ final class LegacyRetryAdoptionSelfTest {
                     receipt.toString(), LegacyRetryAdoption.sha(receipt)));
 
             Fixture recovery = fixture(parent, root, base, "m2-recovery");
+            Path recoveryDisposition = root.resolve("coordination/swarm/dispositions/"
+                    + recovery.id + ".properties");
+            Files.writeString(recoveryDisposition,
+                    Files.readString(recoveryDisposition, StandardCharsets.UTF_8).replace(
+                            "next.action=resume-same-session-and-worktree",
+                            "next.action=adopt-legacy-retry;repair-process;"
+                                    + "resume-same-milestone-and-worktree"),
+                    StandardCharsets.UTF_8);
             LegacyRetryAdoption.Request recoveryRequest = new LegacyRetryAdoption.Request(recovery.id,
                     "codex:test", base, "process-recovery", null, null, "",
                     "No historical OpenCode session exists in the preserved evidence", 900);
@@ -101,6 +109,20 @@ final class LegacyRetryAdoptionSelfTest {
                     new LegacyRetryAdoption.Request(unbounded.id, "codex:test", base,
                             "process-recovery", null, null, "", "No session", 3601)),
                     "unbounded process recovery was accepted");
+
+            Fixture replacement = fixture(parent, root, base, "m6-replacement");
+            Path replacementDisposition = root.resolve("coordination/swarm/dispositions/"
+                    + replacement.id + ".properties");
+            Files.writeString(replacementDisposition,
+                    Files.readString(replacementDisposition, StandardCharsets.UTF_8).replace(
+                            "next.action=resume-same-session-and-worktree",
+                            "next.action=adopt-legacy-retry;replace-milestone;"
+                                    + "resume-same-milestone-and-worktree"),
+                    StandardCharsets.UTF_8);
+            expectFailure(() -> LegacyRetryAdoption.adopt(root,
+                    new LegacyRetryAdoption.Request(replacement.id, "codex:test", base,
+                            "process-recovery", null, null, "", "No session", 900)),
+                    "recovery action allowed a milestone-replacement step");
         } finally {
             SafeTreeDelete.delete(parent);
         }

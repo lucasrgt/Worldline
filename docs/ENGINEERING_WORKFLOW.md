@@ -91,6 +91,12 @@ one new checkpoint session with a maximum 3600-second budget. Both modes bind an
 `OxAlphaControlMigration` and the attempt-2 `OxAlphaLauncher`; neither tool treats it as a historical
 launcher receipt. Legacy adoption may omit historical preflight and receipt bases, which remain
 required for ordinary control migration.
+The adoption validator accepts the historical `resume-same-session-and-worktree` action or an
+explicit recovery plan containing both `adopt-legacy-retry` and
+`resume-same-milestone-and-worktree`. Recovery plans use the closed step vocabulary
+`adopt-legacy-retry`, `provision-exact-artifact`, `repair-process`, and
+`resume-same-milestone-and-worktree`; unknown or repeated steps fail closed. This validates the
+same-worktree invariant without allowing a plan to replace the milestone or worktree.
 When a preserved checkpoint crossed an earlier control-base migration, pass its independently
 sealed `--archive-base`, `--preflight-base`, and `--receipt-base`. Each must be an exact ancestor in
 the new control base; they need not be linearly ordered because independently reconciled trains can
@@ -168,6 +174,10 @@ The canonical census resolves each exact qualification against the base recorded
 not against the latest wave control SHA. A registered rejection is terminal only when its tracked
 disposition, archived commit/tree, worktree identity, and external archive digest all validate. The
 wave base is a fallback solely for worktrees that have no exact receipt or explicit disposition.
+An explicit RETRYABLE whose archive is exact but whose owner, session, or remaining attempt budget
+is incomplete is emitted as STRANDED rather than aborting the census. Its JSON retains
+`disposition_state=RETRYABLE` and the exact missing controls, giving the supervisor a complete
+adoption queue while keeping every wave-release gate closed.
 Comparable telemetry may be carried from an archived baseline census only when both the milestone ID
 and exact HEAD match. A changed or missing HEAD makes first-pass and recurrence unknown; an exact
 tracked disposition may override matching baseline fields, and the new census records the baseline

@@ -46,18 +46,22 @@ final class CensusJson {
     }
 
     private static void disposition(StringBuilder text, CensusDisposition.Decision decision) {
-        if (decision == null || !"RETRYABLE".equals(decision.state())) {
+        if (decision == null || !"RETRYABLE".equals(decision.declaredState())) {
             return;
         }
-        text.append(",\"owner\":\"").append(escape(decision.owner()))
+        text.append(",\"disposition_state\":\"").append(escape(decision.declaredState()))
+                .append("\",\"disposition_effective_state\":\"")
+                .append(escape(decision.state())).append("\",\"owner\":\"")
+                .append(escape(decision.owner()))
                 .append("\",\"session\":\"").append(escape(decision.session()))
                 .append("\",\"attempt\":").append(decision.attempt())
-                .append(",\"max_attempts\":").append(decision.maximum());
+                .append(",\"max_attempts\":").append(decision.maximum())
+                .append(",\"owned_retryable\":").append(decision.ownedRetryable());
     }
 
     static void selfTest() {
         CensusDisposition.Decision retry = new CensusDisposition.Decision("m1-retry", "RETRYABLE",
-                "codex/milestone-m1-retry", java.nio.file.Path.of("retry"), "1".repeat(40),
+                "RETRYABLE", "codex/milestone-m1-retry", java.nio.file.Path.of("retry"), "1".repeat(40),
                 "2".repeat(40), "3".repeat(40), "self-test", "worldline-orchestrator",
                 "ses_exact", 1, 2, SwarmEvidenceArchive.Result.empty());
         StringBuilder text = new StringBuilder();
@@ -65,8 +69,22 @@ final class CensusJson {
         String value = text.toString();
         require(value.contains("\"owner\":\"worldline-orchestrator\"")
                 && value.contains("\"session\":\"ses_exact\"")
-                && value.contains("\"attempt\":1,\"max_attempts\":2"),
+                && value.contains("\"attempt\":1,\"max_attempts\":2")
+                && value.contains("\"owned_retryable\":true"),
                 "RETRYABLE ownership fields were omitted from census JSON");
+        CensusDisposition.Decision stranded = new CensusDisposition.Decision("m2-stranded",
+                "RETRYABLE", "STRANDED", "codex/milestone-m2-stranded",
+                java.nio.file.Path.of("stranded"), "1".repeat(40), "2".repeat(40),
+                "3".repeat(40), "missing session", "worldline-orchestrator", "", 1, 2,
+                SwarmEvidenceArchive.Result.empty());
+        text.setLength(0);
+        disposition(text, stranded);
+        value = text.toString();
+        require(value.contains("\"disposition_state\":\"RETRYABLE\"")
+                && value.contains("\"disposition_effective_state\":\"STRANDED\"")
+                && value.contains("\"session\":\"\"")
+                && value.contains("\"owned_retryable\":false"),
+                "STRANDED retry identity was omitted from census JSON");
     }
 
     private static void metrics(StringBuilder text, CensusMetrics.Entry metrics) {

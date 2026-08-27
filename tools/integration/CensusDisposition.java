@@ -63,14 +63,27 @@ final class CensusDisposition {
         int maximum = integer(values, "max.attempts", id);
         String owner = values.getProperty("owner", "").trim();
         String session = values.getProperty("session", "").trim();
+        String effective = state;
+        String cause = required(values, "cause");
         if ("RETRYABLE".equals(state)) {
-            require(!owner.isBlank(), "missing RETRYABLE owner: " + id);
-            require(!session.isBlank(), "missing RETRYABLE session: " + id);
-            require(attempt > 0 && attempt < maximum,
-                    "RETRYABLE attempt budget exhausted or invalid: " + id);
+            List<String> defects = new java.util.ArrayList<>();
+            if (owner.isBlank()) {
+                defects.add("owner");
+            }
+            if (session.isBlank()) {
+                defects.add("session");
+            }
+            if (attempt <= 0 || attempt >= maximum) {
+                defects.add("attempt-budget");
+            }
+            if (!defects.isEmpty()) {
+                effective = "STRANDED";
+                cause += "; unowned RETRYABLE requires supervisor adoption: "
+                        + String.join(",", defects);
+            }
         }
-        return new Decision(id, state, required(values, "branch"), worktree, base, head, tree,
-                required(values, "cause"), owner, session, attempt, maximum,
+        return new Decision(id, state, effective, required(values, "branch"), worktree, base,
+                head, tree, cause, owner, session, attempt, maximum,
                 new SwarmEvidenceArchive.Result(archive.toString(), archiveSha));
     }
 
@@ -94,11 +107,17 @@ final class CensusDisposition {
         Files.writeString(retry, fixture("m1-retry", "RETRYABLE", archive, sha)
                 + "owner=worldline-orchestrator\nattempt=1\nmax.attempts=2\n",
                 StandardCharsets.UTF_8);
-        expectFailure(root, "missing RETRYABLE session");
+        Decision stranded = loadExplicit(root).get("m1-retry");
+        require("STRANDED".equals(stranded.state())
+                        && stranded.cause().contains("session"),
+                "RETRYABLE without a session was not surfaced as STRANDED");
         Files.writeString(retry, fixture("m1-retry", "RETRYABLE", archive, sha)
                 + "owner=worldline-orchestrator\nsession=ses_exact\nattempt=2\nmax.attempts=2\n",
                 StandardCharsets.UTF_8);
-        expectFailure(root, "RETRYABLE attempt budget exhausted or invalid");
+        Decision exhausted = loadExplicit(root).get("m1-retry");
+        require("STRANDED".equals(exhausted.state())
+                        && exhausted.cause().contains("attempt-budget"),
+                "exhausted RETRYABLE was not surfaced as STRANDED");
         Files.writeString(retry, fixture("m1-retry", "RETRYABLE", archive, "0".repeat(64))
                 + "owner=worldline-orchestrator\nsession=ses_exact\nattempt=1\nmax.attempts=2\n",
                 StandardCharsets.UTF_8);
@@ -173,9 +192,12 @@ final class CensusDisposition {
         }
     }
 
-    record Decision(String id, String state, String branch, Path worktree, String base, String head,
-            String tree, String cause, String owner, String session, int attempt, int maximum,
-            SwarmEvidenceArchive.Result archive) {
+    record Decision(String id, String declaredState, String state, String branch, Path worktree,
+            String base, String head, String tree, String cause, String owner, String session,
+            int attempt, int maximum, SwarmEvidenceArchive.Result archive) {
+        boolean ownedRetryable() {
+            return "RETRYABLE".equals(declaredState) && "RETRYABLE".equals(state);
+        }
         void requireExact(Path actualWorktree, String actualBranch) throws Exception {
             require(worktree.equals(actualWorktree) && branch.equals(actualBranch),
                     "disposition worktree identity drift: " + actualWorktree.getFileName());

@@ -15,6 +15,8 @@ import java.util.zip.*;
 public final class LegacyRetryAdoption {
     private static final Pattern SESSION = Pattern.compile("\\\"session(?:ID)?\\\":\\\"([^\\\"]+)\\\"");
     private static final int MAX_EVIDENCE_BYTES = 64 * 1024 * 1024;
+    private static final Set<String> RECOVERY_STEPS = Set.of("adopt-legacy-retry",
+            "provision-exact-artifact", "repair-process", "resume-same-milestone-and-worktree");
 
     private LegacyRetryAdoption() {
     }
@@ -87,10 +89,22 @@ public final class LegacyRetryAdoption {
         require("1".equals(required(values, "attempt"))
                 && "2".equals(required(values, "max.attempts")),
                 "legacy adoption only authorizes attempt 2 of 2");
-        require("resume-same-session-and-worktree".equals(required(values, "next.action")),
+        require(retainsWorktree(required(values, "next.action")),
                 "legacy disposition does not retain the same worktree");
         require(required(values, "branch").equals("codex/milestone-" + request.id),
                 "legacy branch identity drifted");
+    }
+
+    private static boolean retainsWorktree(String action) {
+        if ("resume-same-session-and-worktree".equals(action)) {
+            return true;
+        }
+        List<String> ordered = List.of(action.split(";", -1));
+        Set<String> steps = new HashSet<>(ordered);
+        return !steps.contains("") && steps.size() == ordered.size()
+                && RECOVERY_STEPS.containsAll(steps)
+                && steps.contains("adopt-legacy-retry")
+                && steps.contains("resume-same-milestone-and-worktree");
     }
 
     private static SessionEvidence validateMode(Request request, Path worktree) throws Exception {
