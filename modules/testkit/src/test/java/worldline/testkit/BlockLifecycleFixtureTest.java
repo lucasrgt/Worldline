@@ -126,7 +126,7 @@ public final class BlockLifecycleFixtureTest {
                         && hydratedTest.runtimeOptions().get(BlockLifecyclePlan.NEIGHBOR_FACE_OPTION)
                                 .equals("EAST")
                         && hydratedTest.runtimeOptions().get(BlockLifecyclePlan.NEIGHBOR_SLOT_OPTION)
-                                .equals("4:40:326:1:0"),
+                                .equals("4:40:9:1:0"),
                 "lifecycle neighbor runtime options drifted");
         PlanContext context = new PlanContext(new FakeDriver(List.of(BLOCK), 80));
         test.run(context);
@@ -188,8 +188,7 @@ public final class BlockLifecycleFixtureTest {
         BlockLifecycleScenario row = scenario(cases, drops);
         BlockLifecycleNeighbor neighbor = new BlockLifecycleNeighbor(BlockFace.EAST,
                 new BlockState(9, 0), new BlockLifecycleSlot(4, 40,
-                        new RemoteItemStack(326, 1, 0),
-                        new RemoteItemStack(325, 1, 0)));
+                        new RemoteItemStack(9, 1, 0), null));
         return new BlockLifecycleScenario(row.id(), row.placement(), row.persistence(),
                 row.transition(), row.drops(), row.support(), row.supportState(), null,
                 neighbor, row.face(), row.placedState(), row.placementSlot(), row.breakSlot(),

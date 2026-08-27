@@ -32,8 +32,7 @@ public final class B173SupportDependentPlantLifecycleSmoke {
     private static BlockLifecycleScenario sugarCane() {
         BlockLifecycleNeighbor water = new BlockLifecycleNeighbor(BlockFace.EAST,
                 new BlockState(9, 0), new BlockLifecycleSlot(4, 40,
-                        new RemoteItemStack(326, 1, 0),
-                        new RemoteItemStack(325, 1, 0)));
+                        new RemoteItemStack(9, 1, 0), null));
         return B173LifecycleScenarioFactory.harvestBesideNeighbor("sugar-cane",
                 "b1.7.3:block/083", "support-dependent-plant", false,
                 83, 338, 0, 0, new BlockState(3, 0), water,

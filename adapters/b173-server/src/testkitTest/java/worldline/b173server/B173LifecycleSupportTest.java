@@ -57,8 +57,7 @@ final class B173LifecycleSupportTest {
                 "distinct placement item lifecycle scenario drifted");
         BlockLifecycleNeighbor water = new BlockLifecycleNeighbor(BlockFace.EAST,
                 new BlockState(9, 0), new BlockLifecycleSlot(4, 40,
-                        new RemoteItemStack(326, 1, 0),
-                        new RemoteItemStack(325, 1, 0)));
+                        new RemoteItemStack(9, 1, 0), null));
         BlockLifecycleScenario cane = B173LifecycleScenarioFactory.harvestBesideNeighbor(
                 "sugar-cane", "b1.7.3:block/083", "vegetation", false,
                 83, 338, 0, 0, new BlockState(3, 0), water,
@@ -72,12 +71,12 @@ final class B173LifecycleSupportTest {
         hydratedFixture.put(BlockLifecyclePlan.OVERHEAD_STATE_OPTION, "none");
         hydratedFixture.put(BlockLifecyclePlan.NEIGHBOR_STATE_OPTION, "9:0");
         hydratedFixture.put(BlockLifecyclePlan.NEIGHBOR_FACE_OPTION, "EAST");
-        hydratedFixture.put(BlockLifecyclePlan.NEIGHBOR_SLOT_OPTION, "4:40:326:1:0");
+        hydratedFixture.put(BlockLifecyclePlan.NEIGHBOR_SLOT_OPTION, "4:40:9:1:0");
         B173LifecycleLoadout hydratedLoadout = B173LifecycleLoadout.from(
                 new TestRuntimeRequest(B173ServerLifecycleFixtures.SEED, Paths.get("."), null,
                         "official block lifecycle > hydrated-row", hydratedFixture));
         require(hydratedLoadout.neighborHotbar == 4
-                        && hydratedLoadout.neighborItem.legacyId() == 326
+                        && hydratedLoadout.neighborItem.legacyId() == 9
                         && hydratedLoadout.neighborFace == BlockFace.EAST
                         && hydratedLoadout.neighborState.equals(new BlockState(9, 0)),
                 "neighbor lifecycle options did not select their loadout");

@@ -4,7 +4,7 @@
 
 ## Claim
 
-One public TestKit family executes cactus on sand and sugar cane on dirt beside gameplay-provisioned still water against the unmodified official Beta 1.7.3 server. Two isolated rows prove environmental preconditions, item consumption, placed state, two fresh-login boundaries, break to air, exact self-item drops, and unchanged zero-hardness tools.
+One public TestKit family executes cactus on sand and sugar cane on dirt beside protocol-provisioned still water against the unmodified official Beta 1.7.3 server. Two isolated rows prove environmental preconditions, item consumption, placed state, two fresh-login boundaries, break to air, exact self-item drops, and unchanged zero-hardness tools.
 
 ## Qualification cycle
 

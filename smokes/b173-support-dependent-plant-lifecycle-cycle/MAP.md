@@ -7,8 +7,9 @@
 
 Two public TestKit rows execute complete isolated lifecycles for cactus and sugar cane. Cactus item
 `81` is planted on gameplay-provisioned sand `12:0`. Sugar-cane item `338` is planted as block
-`83:0` on dirt `3:0` beside still water `9:0`; that water is itself provisioned through water
-bucket item `326` against the support's east face rather than direct world mutation.
+`83:0` on dirt `3:0` beside still water `9:0`; that water is itself provisioned through the
+official Packet15 block-placement path from a lab-seeded water item `9`, rather than direct world
+mutation. The lab item is only environmental setup and is not reported as survival-obtainable.
 
 Each row proves the substrate and optional lateral neighbor, placement consumption, exact placed
 state, fresh-login persistence, break to air, one exact historical self-item drop, unchanged tool,
