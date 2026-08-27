@@ -48,7 +48,13 @@ claims. A causally isolated neighbor-response subsystem adds seven more for fall
 powered rail, torch, wooden door, cactus, and sugar cane. The census now contains 328 verified
 claims. The first public state-domain subsystem then proves all sixteen reachable wooden-door
 metadata values through placement, activation, and fresh-login persistence. The census now contains
-329 verified claims (31.16%) and leaves 727 unknown. Existing smoke evidence is
+329 verified claims. A singular furnace-facing row raises that total to 330. The cardinal-placement
+family executes seven rows together and closes six previously unknown claims for dispenser, stairs,
+chest, pumpkins, and jack-o-lantern while reusing the furnace claim, bringing the total to 336. The
+wall-attachment family closes torch, ladder, and wall-sign state domains and reaches 339. The first
+public collision-envelope subsystem then compares air controls with ten gameplay trajectories over
+stone, slab, stairs, fence, and torch. Those five collision-shape claims bring the census to 344
+verified claims (32.58%) and leave 712 unknown. Existing smoke evidence is
 reusable input, but it is never promoted automatically: its subject, action, context, observable,
 oracle, signature, and automation surface must be curated first.
 
@@ -90,7 +96,8 @@ the empty-workstation family reduces it to 740, and the static self-drop family 
 The gold-shovel harvest family raises public executability rather than the verified numerator, so
 the target gap correctly remained 730; the curated random-tick policy subsystem reduces it to 723.
 The public neighbor-response subsystem reduces it again to 716, and the wooden-door state-domain
-subsystem reduces it to 715.
+subsystem reduces it to 715. Furnace facing reduces it to 714, the cardinal-placement package to
+708, wall attachments to 705, and the static collision-envelope subsystem to 700.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
