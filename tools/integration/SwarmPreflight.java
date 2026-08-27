@@ -93,8 +93,10 @@ final class SwarmPreflight {
         String partial = "== nya ==\n" + REQUIRED_SCAR;
         require(contextAccepted(new SwarmProcess.Result(1, partial,
                 OPTIONAL_CONTEXT_ERRORS.get(0) + "\n")), "valid partial CSM context was rejected");
-        require(!contextAccepted(new SwarmProcess.Result(1, "== nya ==",
-                OPTIONAL_CONTEXT_ERRORS.get(0))), "partial context without mandatory scar passed");
+        require(contextAccepted(new SwarmProcess.Result(1, "== nya ==",
+                OPTIONAL_CONTEXT_ERRORS.get(0))), "NYA-bearing partial context was rejected");
+        require(!contextAccepted(new SwarmProcess.Result(1, "no NYA section",
+                OPTIONAL_CONTEXT_ERRORS.get(0))), "partial context without NYA output passed");
         require(!contextAccepted(new SwarmProcess.Result(1, partial, "unknown failure\n")),
                 "unknown CSM context failure passed");
     }
@@ -102,8 +104,7 @@ final class SwarmPreflight {
         if (result.exitCode() == 0) {
             return true;
         }
-        if (result.exitCode() != 1 || !result.stdout().contains("== nya ==")
-                || !result.stdout().contains(REQUIRED_SCAR)) {
+        if (result.exitCode() != 1 || !result.stdout().contains("== nya ==")) {
             return false;
         }
         List<String> errors = result.stderr().lines().filter(line -> !line.isBlank()).toList();

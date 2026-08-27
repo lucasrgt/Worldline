@@ -67,8 +67,9 @@ runs NYA recall for the milestone, smoke tooling, and TestKit paths. Recall must
 `NYA-01M0VSCA8F3WSMVW32R9XME7DQ`. If the recalled scope includes protocol or runtime smoke
 boundaries, it must also show `NYA-01M0WZ04QQJ4T0KDN3V9FJC5GV` before work begins.
 `csm context` may return one only when its stderr contains exclusively the recognized uninitialized
-optional WTW/RTW/NWC stores and its NYA output contains the mandatory supervision scar. NYA recall
-still must return zero; any other context or recall failure blocks the worker.
+optional WTW/RTW/NWC stores and its stdout contains a NYA section. The separate NYA recall must
+return zero and present the mandatory supervision scar; any other context or recall failure blocks
+the worker.
 When a milestone changes narrative fields in `smoke.properties`, recall must also present
 `NYA-01M0X81N6TG6TQ4RM02X6PH7R7`; regenerate the canonical milestone narrative with
 `MilestoneNarrative` before Candidate Gate instead of hand-authoring the generated document.

@@ -229,6 +229,12 @@ final class LegacyRetryAdoptionSelfTest {
         require(OxAlphaControlMigration.contextAccepted(new OxAlphaControlMigration.Result(1,
                         partial, "Why This Way is not initialized; run wtw init\n")),
                 "verified partial CSM context was rejected");
+        require(OxAlphaControlMigration.contextAccepted(new OxAlphaControlMigration.Result(1,
+                        "== nya ==\n", "Why This Way is not initialized; run wtw init\n")),
+                "NYA-bearing context without a ranked supervision scar was rejected");
+        require(!OxAlphaControlMigration.contextAccepted(new OxAlphaControlMigration.Result(1,
+                        "no NYA section\n", "Why This Way is not initialized; run wtw init\n")),
+                "partial context without NYA output was accepted");
         require(!OxAlphaControlMigration.contextAccepted(new OxAlphaControlMigration.Result(1,
                         partial, "unknown failure\n")), "unknown CSM context failure was accepted");
     }

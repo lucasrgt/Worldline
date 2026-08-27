@@ -254,8 +254,8 @@ it to the versioned `rejected-semantic-exclusion` check.
 
 The preflight distinguishes optional CSM store initialization from recall failure. A `csm context`
 exit code of one is accepted only when stderr consists exclusively of the known uninitialized
-WTW/RTW/NWC messages and the NYA section contains the mandatory supervision scar. `csm nya recall`
-must still exit zero and present every required scar.
+WTW/RTW/NWC messages and stdout contains a NYA section. The separate `csm nya recall` must exit zero
+and present every required scar; context ranking cannot substitute for or block that exact recall.
 
 The scheduled private workflow runs differential fuzzing and mutation-manifest exploration only
 after the canonical Gate. `NightlyQualityCampaign` splits a hard wall-clock budget between both

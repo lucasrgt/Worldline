@@ -222,8 +222,7 @@ public final class OxAlphaControlMigration {
         if (result.exit == 0) {
             return true;
         }
-        if (result.exit != 1 || !result.stdout.contains("== nya ==")
-                || !result.stdout.contains(SUPERVISION)) {
+        if (result.exit != 1 || !result.stdout.contains("== nya ==")) {
             return false;
         }
         List<String> errors = result.stderr.lines().filter(line -> !line.isBlank()).toList();
