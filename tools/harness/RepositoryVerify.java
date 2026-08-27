@@ -173,10 +173,12 @@ final class RepositoryVerify {
             run(Arrays.asList("java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"),
                     "OptimizationCatalogCheck"));
         }));
-        report.step("behavior-contracts", () -> stages.execute("behavior-contracts", inputs.behavior(),
-                () -> run(Arrays.asList(
-                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"),
-                "BehaviorCompletenessCheck"))));
+        report.step("behavior-contracts", () -> stages.execute("behavior-contracts", inputs.behavior(), () -> {
+            run(Arrays.asList("java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"),
+                    "BehaviorCompletenessCheck"));
+            run(Arrays.asList("java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"),
+                    "FunctionalCensusCheck"));
+        }));
         report.step("adapter-kinds", () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "AdapterKindCheck")));
         if (requireLocalArtifacts) {

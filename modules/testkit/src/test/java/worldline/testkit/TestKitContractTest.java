@@ -30,6 +30,7 @@ public final class TestKitContractTest {
     private TestKitContractTest() {
     }
     public static void main(String[] arguments) throws Exception {
+        BlockConformancePlanTest.execute();
         ServerAclFixtureTest.execute();
         ServerEntryPolicyFixtureTest.execute();
         DoorSoundFixtureTest.execute();

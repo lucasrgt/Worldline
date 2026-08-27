@@ -17,6 +17,8 @@ public final class OxAlphaLauncher {
             List<String> compile = List.of(javaTool("javac"), "-encoding", "UTF-8", "--release", "21",
                     "-Xlint:all,-options", "-Werror", "-d", output.toString(),
                     root.resolve("tools/integration/OxAlphaProfile.java").toString(),
+                    root.resolve("tools/integration/MilestoneObjective.java").toString(),
+                    root.resolve("tools/integration/SwarmProcess.java").toString(),
                     root.resolve("tools/integration/OxAlphaRequest.java").toString(),
                     root.resolve("tools/integration/OxAlphaTelemetry.java").toString(),
                     root.resolve("tools/integration/OxAlphaTerminalMonitor.java").toString(),

@@ -33,24 +33,30 @@ final class WaveSelfImprovement {
         RejectionRegistry.selfTest();
         Metrics now = Metrics.of(current.rows(), rejections);
         Metrics prior = previous == null ? Metrics.empty() : Metrics.of(previous.rows(), rejections);
+        WaveUtility utility = WaveUtility.of(root, current.rows());
+        WaveUtility priorUtility = WaveUtility.previous(root, previous);
         boolean improved = previous == null || now.firstPassProcessedRate() > prior.firstPassProcessedRate()
-                || now.recurrenceRate() < prior.recurrenceRate();
+                || now.recurrenceRate() < prior.recurrenceRate()
+                || utility.improves(priorUtility);
         boolean release = now.hardBlockers == 0 && now.unownedRetryable == 0
                 && now.falsePromotions == 0 && now.inexactQualified == 0
-                && now.rejected == now.registeredRejected && (improved || correction);
+                && now.rejected == now.registeredRejected && utility.substantial()
+                && (improved || correction);
         AdaptiveParallelism.Decision parallelism = AdaptiveParallelism.decide(root, correction,
                 now.newSystemic(prior), now.cleanDelta(prior));
         boolean nextWave = release && now.total == 25 && now.terminal == 25;
         Path output = outputValue.toAbsolutePath().normalize();
         require(!Files.exists(output), "immutable wave closure already exists: " + output);
         Files.createDirectories(output.getParent());
-        String json = json(root, current, previous, now, prior, controls, head, tree, base,
-                correctionValue, correction, improved, release, nextWave, parallelism);
+        String json = json(root, current, previous, now, prior, utility, priorUtility,
+                controls, head, tree, base, correctionValue, correction, improved,
+                release, nextWave, parallelism);
         Files.writeString(output, json, StandardCharsets.UTF_8);
         System.out.println("wave self-improvement: processed=" + now.processed + ", qualified="
                 + now.qualified + ", rejected=" + now.rejected + ", recurrence="
                 + WaveReportFormat.rate(now.recurrenceRate()) + ", next-candidate=" + release
-                + ", next-wave=" + nextWave + ", parallelism=" + parallelism.width());
+                + utility.summary() + ", next-wave=" + nextWave
+                + ", parallelism=" + parallelism.width());
         System.out.println("  report: " + output);
     }
 
@@ -68,10 +74,12 @@ final class WaveSelfImprovement {
                 "wave metric calculation drifted");
         RejectionRegistry.selfTest();
         AdaptiveParallelism.selfTest();
+        WaveUtility.selfTest();
     }
 
     private static String json(Path root, WaveCensus.Snapshot current, WaveCensus.Snapshot previous,
-            Metrics now, Metrics prior, Map<String, ScarControlRegistry.Control> controls,
+            Metrics now, Metrics prior, WaveUtility utility, WaveUtility priorUtility,
+            Map<String, ScarControlRegistry.Control> controls,
             String head, String tree, String base, String correctionSha, boolean correction,
             boolean improved, boolean release, boolean nextWave,
             AdaptiveParallelism.Decision parallelism) throws Exception {
@@ -99,15 +107,12 @@ final class WaveSelfImprovement {
                 .append(now.revalidationAttempted).append(",\"revalidated\":")
                 .append(now.revalidated).append(",\"rate\":").append(WaveReportFormat.rate(now.recoveryRate()))
                 .append(",\"correctly_anticipated\":").append(now.correctlyAnticipated)
-                .append(",\"historical_equivalent_relaunches\":")
-                .append(now.historicalEquivalentRelaunches)
-                .append(",\"equivalent_blocked_by_new_check\":")
-                .append(now.equivalentBlockedByCheck).append("},")
+                .append(",\"historical_equivalent_relaunches\":").append(now.historicalEquivalentRelaunches)
+                .append(",\"equivalent_blocked_by_new_check\":").append(now.equivalentBlockedByCheck).append("},")
                 .append("\n  \"cohort\":{\"total\":").append(now.total)
                 .append(",\"terminal\":").append(now.terminal)
                 .append(",\"qualified_integrated\":").append(now.integrated)
-                .append(",\"rejected_registered\":").append(now.registeredRejected)
-                .append("},")
+                .append(",\"rejected_registered\":").append(now.registeredRejected).append("},")
                 .append("\n  \"receipt_time_seconds\":{\"count\":").append(now.receiptCount)
                 .append(",\"median\":").append(WaveReportFormat.decimal(now.medianReceipt))
                 .append(",\"p95\":").append(WaveReportFormat.decimal(now.p95Receipt)).append("},")
@@ -130,6 +135,7 @@ final class WaveSelfImprovement {
                         / (previous == null ? 1 : 2))).append(",\"recurrence_rate\":")
                 .append(WaveReportFormat.rate((now.recurrenceRate() + prior.recurrenceRate())
                         / (previous == null ? 1 : 2))).append("},")
+                .append(utility.report(priorUtility))
                 .append("\n  \"pareto\":").append(now.paretoJson()).append(',')
                 .append("\n  \"milestones\":").append(now.milestonesJson()).append(',')
                 .append("\n  \"scar_controls\":").append(controlsJson(controls)).append(',')

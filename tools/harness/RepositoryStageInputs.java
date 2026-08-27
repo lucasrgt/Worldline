@@ -35,8 +35,8 @@ final class RepositoryStageInputs {
                 "optimization", "docs");
     }
     List<Path> behavior() {
-        return paths("tools/harness/BehaviorCompletenessCheck.java", "behavior", "smokes",
-                "modules", "adapters");
+        return paths("tools/harness/BehaviorCompletenessCheck.java",
+                "tools/harness/FunctionalCensusCheck.java", "behavior", "smokes", "modules", "adapters");
     }
     List<Path> sourcePolicy() {
         return paths("harness.properties", "quality", ".editorconfig", ".gitattributes",

@@ -33,6 +33,7 @@ final class SwarmPreflight {
         require(head.equals(base), "worker must start at the exact authorized base");
         require(git(root, "status", "--porcelain=v1", "--untracked-files=all").isBlank(),
                 "worker tree is not initially clean");
+        MilestoneObjective objective = MilestoneObjective.load(root, id, goal, base);
         RejectedContractCheck.requireAllowed(root, id, goal);
         SwarmMicroWave.verify(root, microWaveValue, closureValue, id, base);
         String worktrees = git(root, "worktree", "list", "--porcelain");
@@ -45,7 +46,8 @@ final class SwarmPreflight {
         Path prompt = root.resolve("coordination/swarm/OX_ALPHA_PROMPT.md");
         String promptText = Files.readString(prompt, StandardCharsets.UTF_8);
         require(promptText.contains(REQUIRED_SCAR)
-                && promptText.contains("Nested task/explore/subagent delegation is forbidden"),
+                && promptText.contains("Nested task/explore/subagent delegation is forbidden")
+                && promptText.contains("A milestone is one coherent mini-subsystem"),
                 "worker base prompt does not enforce the applicable scar");
         SwarmProcess.Result contextResult = SwarmProcess.capture(root,
                 List.of("csm", "context", "--task", goal, "--path", "."), 300);
@@ -71,6 +73,10 @@ final class SwarmPreflight {
                 + SwarmEvidenceArchive.sha256(closureValue.toAbsolutePath().normalize())
                 + "\",\n  \"micro_wave_sha256\":\""
                 + SwarmEvidenceArchive.sha256(microWaveValue.toAbsolutePath().normalize())
+                + "\",\n  \"objective_sha256\":\""
+                + SwarmEvidenceArchive.sha256(objective.path())
+                + "\",\n  \"goal_sha256\":\""
+                + shaText(goal)
                 + "\",\n  \"context_sha256\":\""
                 + shaText(context) + "\",\n  \"recall_sha256\":\""
                 + shaText(recall + semanticRecall)

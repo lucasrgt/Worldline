@@ -166,6 +166,11 @@ public final class SwarmLoop {
         SwarmMicroWave.selfTest();
         SwarmPreflight.selfTest();
         SwarmPreCandidate.selfTest();
+        try {
+            MilestoneObjective.selfTest();
+        } catch (Exception error) {
+            throw new IllegalStateException("milestone objective self-test failed", error);
+        }
         System.out.println("swarm loop self-test passed");
     }
 

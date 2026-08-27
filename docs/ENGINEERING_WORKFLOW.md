@@ -48,6 +48,27 @@ pins, versioned handoffs, and latest Gate timing report.
 
 ## Recursive swarm improvement
 
+### Substantial milestone objective
+
+Before a candidate can enter a micro-wave, the authorized base contains
+`coordination/swarm/objectives/<id>.properties`. This reviewed file separates three units that the
+old numeric frontier conflated: a milestone is a coherent capability package, an atom is one
+functional claim, and a case is one parametrized execution of that claim. Behavior packages bind
+at least three related atoms, the Functional Census claims they advance, three acceptance criteria,
+and their public TestKit fixture/actions/observations/binding. They also select the applicable
+universal, archetype, and singular conformance layers. Structural capabilities name at least three
+real consumers; performance packages name at least three representative scenes.
+
+`SwarmMicroWave` rejects candidates without this objective before opening a worker. Preflight binds
+the objective digest to its receipt, and pre-Candidate readiness requires the implemented
+`smoke.properties` `milestone.*` declarations and public TestKit surface to equal the reviewed
+objective. A new milestone number, a single drop, one limit, or one metadata transition cannot
+stand in for a capability package. Wave value is assessed by accepted atoms, census delta, public
+surface, and regression evidence; raw milestone count is not a progress metric. Wave closure
+publishes qualified capability packages, distinct behavior atoms, distinct Functional Census
+claims, and per-package ratios. A wave with scoped qualified work cannot release if it averages
+fewer than three atoms or three census claims per package.
+
 Every Ox Alpha worker starts behind the fail-closed supervisor preflight in `SwarmLoop`. The
 supervisor supplies the exact base SHA, latest census, immutable wave-closure report, and one
 `SwarmMicroWave` receipt. Preflight requires an exclusive clean

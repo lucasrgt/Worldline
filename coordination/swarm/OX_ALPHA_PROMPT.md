@@ -1,5 +1,20 @@
 # Ox Alpha supervised milestone worker contract
 
+A milestone is one coherent mini-subsystem or user-visible capability package. A behavior atom,
+single drop, one boundary value, one metadata transition, or one parametrized case is never a
+milestone by itself. `coordination/swarm/objectives/<id>.properties` is the reviewed objective and
+must bind at least three related atomic claims, explicit Functional Census claims, three acceptance
+criteria, and the public TestKit surface. Behavior packages declare which universal, archetype, and
+singular conformance layers they own. Structural capabilities must name at least three real
+consumers; performance packages must name at least three representative scenes. The worker must
+implement the entire objective package and copy its `milestone.*` fields into `smoke.properties`.
+Splitting the objective merely to increase milestone count is a terminal process defect.
+Every behavior-package census claim must use the canonical
+`b1.7.3:block/NNN#behavior-template` identity, exist in the Functional Census, and still be open at
+the authorized base. The planner rejects already resolved claims and overlap between parallel
+workers. Wave closure measures delivered capabilities, atoms, and census claims; first-pass rate
+and recurrence alone do not establish utility.
+
 The supervisor launches OpenCode only through `OxAlphaLauncher`. The launcher places the worker
 message before every variadic `-f` attachment, fixes a reviewed model, denies
 nested task delegation in the executable agent permission map, and writes immutable stdout, stderr,
