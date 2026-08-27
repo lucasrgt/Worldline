@@ -99,6 +99,8 @@ mod's own product classes without weakening the spec code-source check. The runt
 class name. Therefore an external mod compiles only against the packaged Java
 8 authoring JAR (`api`, `testmodel`, and `testapi`), while the runner can use
 modern Java without raising the mod's bytecode level.
+The optional official-server lifecycle provider likewise keeps vanilla NBT loadout selection,
+protocol actions, and server ownership inside `adapters/b173-server`.
 
 ### `optimization`
 
