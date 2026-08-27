@@ -7,7 +7,9 @@
 
 Five public TestKit rows compare identical Packet13 trajectories before and after official
 gameplay placement. Stone, stone slab, wooden stairs, adjacent fence, and standing torch cover
-full-cube, half-step, directional-step, raised-fence, and no-collision envelopes. Each trajectory
+full-cube, half-step, directional-step, raised-fence, and no-collision envelopes. The stair row
+uses metadata `2`, whose official north half is low, and keeps the player's width wholly inside
+that half with a `+0.6 Z`, `+0.5 Y` treatment. Each trajectory
 returns to the same origin before the next probe, and every treatment geometry survives a clean
 save plus fresh login.
 
