@@ -10,11 +10,12 @@ placement. Glass, leaves, and ice distinguish skylight transparency and attenuat
 glowstone, lit redstone torch, and jack-o-lantern distinguish source emission levels and
 one-step-per-cell horizontal block-light decay.
 
-Each row owns a fresh world, begins with the same three open-air cells, proves exact inventory
-consumption and placed state, saves, disconnects cleanly, then reconnects before reading a full
-Packet51 block-light and sky-light plane. The package therefore joins seven Functional Census
-atoms into one reusable light-transport mini-subsystem rather than counting one milestone per
-block or sample.
+Each row owns a fresh world, begins with the same three open-air cells and nearby log stabilizer,
+proves exact inventory consumption and placed state, saves, disconnects cleanly, then reconnects
+before reading a full Packet51 block-light and sky-light plane. The stabilizer keeps the leaf row
+outside native decay without touching a measured cell. The package therefore joins seven
+Functional Census atoms into one reusable light-transport mini-subsystem rather than counting
+one milestone per block or sample.
 
 This map does not claim random-tick melting, redstone-driven source transitions, the global
 time-of-day brightness curve, renderer shading, or modded light engines.

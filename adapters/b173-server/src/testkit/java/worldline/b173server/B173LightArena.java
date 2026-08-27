@@ -27,12 +27,12 @@ final class B173LightArena {
             B173LightLoadout loadout) throws Exception {
         RemoteItemStack item = loadout.item;
         B173PlayerSeed.writeInventory(workspace, USERNAME, 4.5D, 60D, 4.5D,
-                new int[] {0, loadout.hotbar}, new int[] {1, item.legacyId()},
-                new int[] {48, item.count()}, new int[] {0, item.damage()});
+                new int[] {0, loadout.hotbar, 2}, new int[] {1, item.legacyId(), 17},
+                new int[] {48, item.count(), 1}, new int[] {0, item.damage(), 0});
         B173WireClient client = new B173WireClient("127.0.0.1", port, USERNAME, timeout);
         try {
             client.connect(); PlayerPose pose = client.synchronizePose();
-            require(client.awaitInventory().occupiedSlots() == 2, "light inventory drift");
+            require(client.awaitInventory().occupiedSlots() == 3, "light inventory drift");
             RemoteChunkSnapshot initial = client.awaitRemoteChunk(0, 0).chunkAt(0, 0);
             BlockPosition top = foundation(initial); int column = 0; client.selectHeldSlot(0);
             while (B173FixtureSupport.water(
@@ -45,7 +45,10 @@ final class B173LightArena {
                 top = B173FixtureSupport.place(client, top, BlockFace.UP, 1);
                 pose = client.moveAndObserve(0D, 1D, 0D, 1).resulting(); column++;
             }
-            BlockPosition north = B173FixtureSupport.place(client, top, BlockFace.NORTH, 1);
+            // A nearby gameplay-placed log keeps the leaf row out of native decay.
+            client.selectHeldSlot(2);
+            BlockPosition north = B173FixtureSupport.place(client, top, BlockFace.NORTH, 17);
+            client.selectHeldSlot(0);
             BlockPosition near = B173FixtureSupport.place(client, top, BlockFace.EAST, 1);
             BlockPosition far = B173FixtureSupport.place(client, near, BlockFace.EAST, 1);
             require(column == 17 && top.equals(SOURCE_SUPPORT) && near.equals(NEAR_SUPPORT)
