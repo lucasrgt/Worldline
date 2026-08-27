@@ -8,12 +8,13 @@
 Six public TestKit rows exercise blocks whose gameplay lifecycle begins by placing them on top of
 a solid floor. Wood and cobblestone stairs, pumpkin, jack-o'-lantern, torch, and lit redstone torch
 each prove the exact default-yaw state, placement-item consumption, persistence across a fresh
-login, break to air, exact item drop, break-tool state, and removed-state persistence after a
+login, break to air, exact historical harvest drop, break-tool state, and removed-state persistence after a
 second fresh login.
 
 Every row owns a fresh official world and uses the same raised stone fixture. Directional solid
-blocks use their effective harvest tool, while the zero-hardness attachments use a non-damageable
-stick so the tool-state oracle remains explicit. The package joins 24 lifecycle atoms into one
+blocks use their effective harvest tool; notably, Beta 1.7.3 wood stairs yield one plank and
+cobblestone stairs yield one cobblestone rather than themselves. The zero-hardness attachments use
+a non-damageable stick so the tool-state oracle remains explicit. The package joins 24 lifecycle atoms into one
 floor-mounted lifecycle mini-subsystem rather than counting one milestone per block or phase.
 
 This map does not claim the complete orientation domains, redstone activation or burnout,

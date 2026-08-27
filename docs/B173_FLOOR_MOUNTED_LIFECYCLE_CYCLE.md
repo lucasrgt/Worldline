@@ -4,7 +4,7 @@
 
 ## Claim
 
-One public TestKit family executes wood and cobblestone stairs, pumpkin, jack-o-lantern, torch, and lit redstone torch against the unmodified official Beta 1.7.3 server. Six isolated rows prove exact floor-placement metadata, two fresh-login boundaries, break to air, one exact self drop, and exact post-break tool state.
+One public TestKit family executes wood and cobblestone stairs, pumpkin, jack-o-lantern, torch, and lit redstone torch against the unmodified official Beta 1.7.3 server. Six isolated rows prove exact floor-placement metadata, two fresh-login boundaries, break to air, the exact historical harvest drop, and exact post-break tool state.
 
 ## Qualification cycle
 
