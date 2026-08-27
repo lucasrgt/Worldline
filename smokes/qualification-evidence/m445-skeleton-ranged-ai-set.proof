@@ -1,5 +1,5 @@
 schema=1
 id=m445-skeleton-ranged-ai-set
-fingerprint=10e2660505d4a7f2642a239db3412e1b09ea6988a4b45a48fe452ed4ce9aa1e8
+fingerprint=9e90dea79807e6989f25b58ca88a69c6db09967a93a4c68baedce896bca373d6
 observation.sha256=c397640bf9dddee3c3b93081c4816f82f93289ba759f499d2865fad69fb5d888
 source=refactor-equivalent

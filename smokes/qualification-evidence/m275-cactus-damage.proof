@@ -1,5 +1,5 @@
 schema=1
 id=m275-cactus-damage
-fingerprint=182eef43b10439b4d5ed08c57f968526501da802ec478b3c2dfe0c583093c6df
+fingerprint=a0056d4d8e6dbcff5181fc44620471c307d1e7bb448155946e53255c6681ab48
 observation.sha256=c708ae878b6079760d5c246f952ca1789d98c31e395a568ad9c1a2d751ef6df8
 source=refactor-equivalent
