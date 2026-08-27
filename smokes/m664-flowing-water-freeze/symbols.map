@@ -1,0 +1,32 @@
+# owner kind descriptor named client server
+net/minecraft/src/World	c	-	net/minecraft/src/World	fd	dj
+net/minecraft/src/World	f	Ljava/util/List;	playerEntities	d	d
+net/minecraft/src/World	f	Ljava/util/Random;	rand	r	r
+net/minecraft/src/World	m	(II)Lnet/minecraft/src/Chunk;	getChunkFromChunkCoords	c	c
+net/minecraft/src/World	m	(Lnet/minecraft/src/EnumSkyBlock;III)I	getSavedLightValue	a	a
+net/minecraft/src/World	m	(IIIII)Z	setBlockAndMetadata	a	a
+net/minecraft/src/World	m	()Lnet/minecraft/src/WorldChunkManager;	getWorldChunkManager		a
+net/minecraft/src/WorldInfo	c	-	net/minecraft/src/WorldInfo	ei	ct
+net/minecraft/src/Chunk	c	-	net/minecraft/src/Chunk	lm	hi
+net/minecraft/src/Chunk	f	Z	isTerrainPopulated	n	n
+net/minecraft/src/Chunk	f	Z	neverSave	p	p
+net/minecraft/src/Chunk	m	()V	func_353_b		b
+net/minecraft/src/Block	c	-	net/minecraft/src/Block	uu	na
+net/minecraft/src/Block	f	I	blockID	bn	bn
+net/minecraft/src/Block	f	Lnet/minecraft/src/Block;	bedrock	A	A
+net/minecraft/src/Block	f	Lnet/minecraft/src/Block;	stone	u	u
+net/minecraft/src/Block	f	Lnet/minecraft/src/Block;	waterMoving	B	B
+net/minecraft/src/Block	f	Lnet/minecraft/src/Block;	waterStill	C	C
+net/minecraft/src/Block	f	Lnet/minecraft/src/Block;	ice	aU	aU
+net/minecraft/src/EnumSkyBlock	c	-	net/minecraft/src/EnumSkyBlock	eb	co
+net/minecraft/src/EnumSkyBlock	f	Lnet/minecraft/src/EnumSkyBlock;	Block	b	b
+net/minecraft/src/WorldChunkManager	c	-	net/minecraft/src/WorldChunkManager	xv	ph
+net/minecraft/src/WorldChunkManager	m	(II)Lnet/minecraft/src/BiomeGenBase;	getBiomeGenAt	a	a
+net/minecraft/src/BiomeGenBase	c	-	net/minecraft/src/BiomeGenBase	kd	gs
+net/minecraft/src/BiomeGenBase	m	()Z	getEnableSnow	c	c
+net/minecraft/src/EntityPlayer	c	-	net/minecraft/src/EntityPlayer	gs	em
+net/minecraft/src/Entity	m	(DDDFF)V	setLocationAndAngles	c	c
+net/minecraft/src/ISaveHandler	c	-	net/minecraft/src/ISaveHandler	wt	om
+net/minecraft/src/IPlayerFileData	c	-	net/minecraft/src/IPlayerFileData		fl
+net/minecraft/src/IChunkLoader	c	-	net/minecraft/src/IChunkLoader	bf	an
+net/minecraft/src/WorldProvider	c	-	net/minecraft/src/WorldProvider	xa	os

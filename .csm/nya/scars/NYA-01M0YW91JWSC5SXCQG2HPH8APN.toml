@@ -26,3 +26,11 @@ reported_by = "codex:worldline-supervisor"
 corrected_by = "codex:worldline-supervisor"
 recorded_by = "codex:worldline-supervisor"
 commit = "7f7168961"
+
+[[occurrences]]
+occurred_at = "2026-08-27T01:35:28Z"
+source = "Train M663-M665 ready-only on b1cc333152e1da0655edb22a2c23ad0baaaae3e1 failed before runtime: generated status or release badge drifted after final TestKit and train-pin migrations; cause=README/documentation refresh was executed before, not after, the final generated proof surfaces"
+reported_by = "codex:worldline-supervisor"
+corrected_by = "codex:worldline-supervisor"
+recorded_by = "codex:worldline-supervisor"
+commit = "b1cc33315"

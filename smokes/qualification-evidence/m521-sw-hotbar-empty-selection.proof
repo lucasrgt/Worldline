@@ -1,5 +1,5 @@
 schema=1
 id=m521-sw-hotbar-empty-selection
-fingerprint=c6e0f5c989d22ef50b476e47fc0bd62b4f710b2bafc230c7eeec2d30a24c5728
+fingerprint=473e44de22322452927e6cff0d4072e83e2d010c6aa524ccaef392ee121301e3
 observation.sha256=272e63d1ae30e3865b17feceb300a7b502c6a49dc8d151edc108412e32391034
 source=refactor-equivalent

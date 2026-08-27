@@ -594,7 +594,10 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m655-rain-stop-event` | CARRIED | rain stop event |
 | `m656-server-admission-matrix` | CARRIED | server admission matrix |
 | `m659-powered-creeper` | CARRIED | powered creeper |
-| `m661-spider-daylight-aggression` | EXECUTED | spider daylight aggression |
+| `m661-spider-daylight-aggression` | CARRIED | spider daylight aggression |
+| `m663-snow-layer-nonstacking` | CARRIED | snow layer nonstacking |
+| `m664-flowing-water-freeze` | CARRIED | Flowing-water freeze boundary |
+| `m665-leaf-support-distance` | CARRIED | leaf support distance |
 | `m702-powered-rail-slope-propagation` | CARRIED | powered rail slope propagation |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |

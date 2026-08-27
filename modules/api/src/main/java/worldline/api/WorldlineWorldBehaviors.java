@@ -22,8 +22,12 @@ public final class WorldlineWorldBehaviors {
             "Torch block light melts adjacent ice to water");
     public static final WorldlineBehavior ICE_FORMATION = define("ice-formation",
             "Cold-biome still water freezes under low block light while lit water stays liquid");
+    public static final WorldlineBehavior FLOWING_WATER_FREEZE = define("flowing-water-freeze",
+            "Cold-biome still water freezes while adjacent flowing water remains flowing");
     public static final WorldlineBehavior SNOW_ACCUMULATION = define("snow-accumulation",
             "Cold-biome snowfall accumulates a snow layer while a dry control stays air");
+    public static final WorldlineBehavior SNOW_LAYER_NONSTACKING = define("snow-layer-nonstacking",
+            "Continued cold-biome snowfall leaves the same snow layer unstacked");
     public static final WorldlineBehavior NATURAL_WOLF_PACK = define("natural-wolf-pack",
             "The peaceful spawner creates a distinct spatially coherent wolf pack without a spawner");
     public static final WorldlineBehavior DOUBLE_CHEST_MERGE = define("double-chest-merge",

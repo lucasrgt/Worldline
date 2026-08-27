@@ -45,7 +45,9 @@ public final class TestKitContractTest {
         NaturalSlimeSpawnFixtureTest.execute();
         SleepQuorumFixtureTest.execute();
         IceFormationFixtureTest.execute();
+        FlowingWaterFreezeFixtureTest.execute();
         SnowAccumulationFixtureTest.execute();
+        SnowLayerNonstackingFixtureTest.execute();
         NaturalWolfPackFixtureTest.execute();
         Protocol14EdgeFixtureTest.execute();
         MapDataContentFixtureTest.execute();

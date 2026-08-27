@@ -1,5 +1,5 @@
 schema=1
 id=m615-redstone-one-tick-set
-fingerprint=35317baa0737b370f2df8bec3d8e99d695ec90711a044bf295ccd79b0ff94849
+fingerprint=1f24bc291341c4c5983965bfda0962adfa8ffcdef563727fdfb9341b0bb8c61c
 observation.sha256=e579bd2af89c962018145a72b877f11d9435178df3c7548f85fa306e74ab3be8
 source=refactor-equivalent

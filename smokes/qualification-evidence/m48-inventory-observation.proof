@@ -1,5 +1,5 @@
 schema=1
 id=m48-inventory-observation
-fingerprint=a3d8fa00e52dc82b43fb7c310a587084d2f7eb1f64350fc30f74e297c64f2286
+fingerprint=6265a1fb67e256e411c82c17efe1b459e2cc8dbdd774825ad58d3430d1d6519b
 observation.sha256=94634f580b14f6723202670c77c53038be71bec8a81018f28c50b0122c3495ae
 source=refactor-equivalent

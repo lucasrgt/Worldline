@@ -1,5 +1,5 @@
 schema=1
 id=lab-cycle
-fingerprint=4d3191107a393484292cb7f7209d8646793139f8f5726a54e0f2e1e7035c3d25
+fingerprint=bbcec8e54610c5fca1ce4a372ecf82f6464a1563eac58463568e5cc07d776904
 observation.sha256=3d8f8d72d954019cc8b3c1e3b41740fa277202edeacdad53fc3720a03202967f
 source=refactor-equivalent
