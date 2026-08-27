@@ -50,7 +50,8 @@ public final class B173CollisionScenarioFactory {
                 Arrays.asList("directional", "special-collision"),
                 placements(new BlockCollisionPlacement(B173CollisionArena.TARGET_SUPPORT,
                         BlockFace.UP, new BlockState(53, 3))),
-                probes(blocked("level"), passable("half-step", 0.5D)));
+                probes(blocked("level"), new BlockCollisionProbe("low-half-step",
+                        0D, 0.5D, 0.6D, 10, BlockCollisionExpectation.PASSABLE)));
     }
 
     public static BlockCollisionScenario fence() {
