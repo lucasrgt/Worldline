@@ -1,5 +1,5 @@
 schema=1
 id=m9-scenario-minimization
-fingerprint=b12ac4df1d8ac9c94d0d868499627e719c318b7c9882631adf2db3289a467371
+fingerprint=16b90317d014971eb87b036dbb05b1e278c01f02889bc5bbd16f975220ff94ea
 observation.sha256=ca19efbefcebbbec7d392e56dc554eb4ef2a047c4cd32bbe6b8aa81ab3bf83b7
-source=executed
+source=refactor-equivalent

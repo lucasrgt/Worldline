@@ -93,10 +93,10 @@ final class GuiWorkbenchPinMigration {
             catalog++;
             String current = fingerprints.compute(smoke);
             if (smoke.id.equals("m620-stationapi-testkit-driver")) {
-                importExact(cache, smoke, current, pins, nextPins); continue;
+                importExact(cache, smoke, current, pins, nextPins, train); continue;
             }
             if (PENDING.contains(smoke.id)) {
-                importExact(cache, smoke, current, pins, nextPins);
+                importExact(cache, smoke, current, pins, nextPins, train);
                 continue;
             }
             carried++; SmokePins.Entry pin =
@@ -122,9 +122,10 @@ final class GuiWorkbenchPinMigration {
                 + introduced + " introduced, 5 qualified exceptions");
     }
     private static void importExact(SmokeReceiptCache cache, SmokeDiscovery.Entry smoke,
-            String current, SmokePins pins, List<SmokePins.Entry> next) throws Exception {
+            String current, SmokePins pins, List<SmokePins.Entry> next, Properties train) throws Exception {
         SmokePins.Entry matched = pins.match(smoke.id, current);
-        if (matched != null && "executed".equals(matched.source())) return;
+        if (matched != null && ("executed".equals(matched.source())
+                || TrainPinCheck.isExecuted(train, smoke.id))) return;
         SmokePins.Entry exact = cache.availablePin(smoke);
         require(exact != null && "executed".equals(exact.source())
                         && current.equals(exact.fingerprint()),

@@ -1,5 +1,5 @@
 schema=1
 id=m417-remaining-tnt-place
-fingerprint=0256d0b97c23c6ea2384d8ddc4af0ff8e3196342abdfa31ca57137b4f90f867e
+fingerprint=c6d17d65dde697a9f9b0310390e423256eebe20a9b8deb159a11126eea264697
 observation.sha256=153e7f2258e4d355e0e2c070a630aebe6dfa4262d98a3e4aa3e99b8f99e0205d
 source=refactor-equivalent

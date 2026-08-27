@@ -113,7 +113,8 @@ final class ProviderDiscoveryPinMigration {
             if (smoke.id.equals(NEW_SMOKE)) {
                 String current = fingerprints.compute(smoke);
                 SmokePins.Entry matched = pins.match(smoke.id, current);
-                if (matched == null || !"executed".equals(matched.source())) {
+                if (matched == null || !("executed".equals(matched.source())
+                        || TrainPinCheck.isExecuted(train, smoke.id))) {
                     SmokePins.Entry exact = cache.availablePin(smoke);
                     require(exact != null && "executed".equals(exact.source())
                                     && current.equals(exact.fingerprint()),
@@ -127,7 +128,8 @@ final class ProviderDiscoveryPinMigration {
                 SmokePins.Entry matched = pins.match(smoke.id, current);
                 SmokePins.Entry stored = pins.entry(smoke.id);
                 String stem = "smoke." + smoke.id + ".";
-                boolean valid = matched != null && "executed".equals(matched.source())
+                boolean valid = matched != null && ("executed".equals(matched.source())
+                        || TrainPinCheck.isExecuted(train, smoke.id))
                         || matched == null && stored != null
                         && stored.fingerprint().equals(lock.getProperty(stem + "prior_fingerprint"))
                         && stored.evidence().equals(lock.getProperty(stem + "evidence_sha256"));

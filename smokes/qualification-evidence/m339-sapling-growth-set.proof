@@ -1,5 +1,5 @@
 schema=1
 id=m339-sapling-growth-set
-fingerprint=94c7147c94931f7b648d94507c4dc24d3ba07d8953cb7c4f3048299e0cd35603
+fingerprint=dda1d6d294db0b1a40186e5127eb3c07daefc35a246d78b3437e49dea51f2045
 observation.sha256=cbb09ab44fa0804f8304e414f683a868c16aabac0c29c00ba78b525e6678ec5e
 source=refactor-equivalent

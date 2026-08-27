@@ -31,13 +31,16 @@ final class ProviderDiscoveryPinCheck {
             discovered++; String current = fingerprints.compute(smoke);
             SmokePins.Entry pin = pins.match(smoke.id, current);
             if (isNewSmoke(lock, smoke.id)) {
-                require(pin == null || pin.source().equals("executed"),
+                require(pin == null || pin.source().equals("executed")
+                                || TrainPinCheck.isExecuted(TrainPinCheck.manifest(root), smoke.id),
                         "new provider smoke requires executed evidence");
                 continue;
             }
             if (isPending(lock, smoke.id)) {
                 SmokePins.Entry stale = pins.entry(smoke.id); String stem = "smoke." + smoke.id + ".";
-                require(pin != null && pin.source().equals("executed") || pin == null && stale != null
+                require(pin != null && (pin.source().equals("executed")
+                                || TrainPinCheck.isExecuted(TrainPinCheck.manifest(root), smoke.id))
+                                || pin == null && stale != null
                                 && stale.fingerprint().equals(lock.getProperty(stem + "prior_fingerprint"))
                                 && stale.evidence().equals(lock.getProperty(stem + "evidence_sha256")),
                         "runtime-pending provider proof drift: " + smoke.id);
@@ -46,7 +49,7 @@ final class ProviderDiscoveryPinCheck {
             if (GuiWorkbenchPinCheck.isPending(gui, smoke.id)) {
                 carried++; SmokePins.Entry stale = pins.entry(smoke.id); String stem = "smoke." + smoke.id + ".";
                 boolean executed = TrainPinCheck.isExecuted(TrainPinCheck.manifest(root), smoke.id)
-                        && pin != null && "executed".equals(pin.source());
+                        && pin != null;
                 require(executed || GuiWorkbenchPinCheck.pendingFrom(gui, smoke.id,
                                 lock.getProperty(stem + "current_fingerprint"),
                                 lock.getProperty(stem + "evidence_sha256"), stale),

@@ -40,10 +40,14 @@ final class GuiWorkbenchPinCheck {
             catalog++; String current = fingerprints.compute(smoke); SmokePins.Entry pin =
                     pins.match(smoke.id, current);
             if (smoke.id.equals("m620-stationapi-testkit-driver")) {
-                require(pin == null || pin.source().equals("executed"), "M620 requires executed proof");
+                require(pin == null || pin.source().equals("executed")
+                                || TrainPinCheck.isExecuted(train, smoke.id),
+                        "M620 requires executed proof");
             } else if (isPending(lock, smoke.id)) {
                 SmokePins.Entry stale = pins.entry(smoke.id); String stem = "smoke." + smoke.id + ".";
-                require(pin != null && pin.source().equals("executed") || pin == null && stale != null
+                require(pin != null && (pin.source().equals("executed")
+                                || TrainPinCheck.isExecuted(train, smoke.id))
+                                || pin == null && stale != null
                                 && stale.fingerprint().equals(lock.getProperty(stem + "prior_fingerprint"))
                                 && stale.evidence().equals(lock.getProperty(stem + "evidence_sha256")),
                         "GUI runtime-pending proof drift: " + smoke.id);

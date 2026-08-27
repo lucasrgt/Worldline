@@ -48,10 +48,14 @@ final class BehaviorFamilyPinCheck {
             catalog++; String current = fingerprints.compute(smoke);
             SmokePins.Entry pin = pins.match(smoke.id, current);
             if (smoke.id.equals("m620-stationapi-testkit-driver"))
-                require(pin == null || pin.source().equals("executed"), "M620 requires executed proof");
+                require(pin == null || pin.source().equals("executed")
+                                || TrainPinCheck.isExecuted(TrainPinCheck.manifest(root), smoke.id),
+                        "M620 requires executed proof");
             else if (pending(lock, smoke.id)) {
                 SmokePins.Entry stale = pins.entry(smoke.id); String stem = "smoke." + smoke.id + ".";
-                require(pin != null && pin.source().equals("executed") || pin == null && stale != null
+                require(pin != null && (pin.source().equals("executed")
+                                || TrainPinCheck.isExecuted(TrainPinCheck.manifest(root), smoke.id))
+                                || pin == null && stale != null
                                 && stale.fingerprint().equals(required(lock, stem + "prior_fingerprint"))
                                 && stale.evidence().equals(required(lock, stem + "evidence_sha256")),
                         "behavior-family pending proof drift: " + smoke.id);

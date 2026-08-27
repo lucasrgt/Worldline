@@ -17,10 +17,13 @@ final class DataDrivenRefreshEvidence {
         boolean indexClean = git(root, "diff", "--cached", "--quiet") == 0;
         String recordedRuntime = manifest.getProperty("runtime_support_source_sha256", "");
         String recordedPlan = manifest.getProperty("plan_source_sha256", "");
+        String recordedProcess = manifest.getProperty("process_source_sha256", "");
         return worktreeClean && indexClean
                 && (!digest(root.resolve("tools/harness/SmokeSupport.java")).equals(recordedRuntime)
                 || !digest(root.resolve("tools/harness/DataDrivenCyclePlan.java"))
-                        .equals(recordedPlan));
+                        .equals(recordedPlan)
+                || !digest(root.resolve("tools/harness/SmokeProcess.java"))
+                        .equals(recordedProcess));
     }
 
     static boolean unchangedMilestone(Path root, String id) throws Exception {

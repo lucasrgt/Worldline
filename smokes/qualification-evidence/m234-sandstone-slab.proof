@@ -1,5 +1,5 @@
 schema=1
 id=m234-sandstone-slab
-fingerprint=00dcacda256cb522b66d7c2d462de3f6d3f5062bc9fdc933921dac126ebf2f64
+fingerprint=d0ad7ce29cc44967414cce03e11ef2cb18a9173e7a80c13d102e12fadcb629e8
 observation.sha256=607498ca23a0859d9a2296eba8fb8d4c4c407a3af84801eb6ccf552314e65f2a
 source=refactor-equivalent
