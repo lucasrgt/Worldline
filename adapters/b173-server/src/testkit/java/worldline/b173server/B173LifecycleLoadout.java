@@ -6,13 +6,14 @@ import worldline.testkit.BlockLifecyclePlan;
 
 /** Validated neutral lifecycle slot options translated to an official player loadout. */
 final class B173LifecycleLoadout {
-    final int placementHotbar, breakHotbar;
-    final RemoteItemStack placement, tool;
+    final int placementHotbar, breakHotbar, supportHotbar;
+    final RemoteItemStack placement, tool, support;
 
     private B173LifecycleLoadout(int placementHotbar, RemoteItemStack placement,
-            int breakHotbar, RemoteItemStack tool) {
+            int breakHotbar, RemoteItemStack tool, int supportHotbar, RemoteItemStack support) {
         this.placementHotbar = placementHotbar; this.placement = placement;
         this.breakHotbar = breakHotbar; this.tool = tool;
+        this.supportHotbar = supportHotbar; this.support = support;
     }
 
     static B173LifecycleLoadout from(TestRuntimeRequest request) {
@@ -21,10 +22,34 @@ final class B173LifecycleLoadout {
         Slot placement = parse(request.runtimeOption(BlockLifecyclePlan.PLACEMENT_SLOT_OPTION),
                 "placement");
         Slot tool = parse(request.runtimeOption(BlockLifecyclePlan.BREAK_SLOT_OPTION), "break");
-        if (placement.hotbar == tool.hotbar) throw new IllegalArgumentException(
-                "lifecycle placement and break slots overlap");
+        RemoteItemStack support = support(request.runtimeOption(
+                BlockLifecyclePlan.SUPPORT_STATE_OPTION));
+        if (placement.hotbar == tool.hotbar || placement.hotbar == 0 || tool.hotbar == 0) {
+            throw new IllegalArgumentException("lifecycle provisioned slots overlap");
+        }
+        int supportHotbar = support.legacyId() == 1 && support.damage() == 0
+                ? 0 : available(placement.hotbar, tool.hotbar);
         return new B173LifecycleLoadout(placement.hotbar, placement.item,
-                tool.hotbar, tool.item);
+                tool.hotbar, tool.item, supportHotbar, support);
+    }
+
+    private static RemoteItemStack support(String value) {
+        if (value == null) throw new IllegalArgumentException(
+                "lifecycle provider lacks support state option");
+        String[] fields = value.split(":", -1);
+        try {
+            if (fields.length != 2) throw invalid("support");
+            int id = Integer.parseInt(fields[0]), metadata = Integer.parseInt(fields[1]);
+            if (id < 1 || id > 255 || metadata < 0 || metadata > 15) throw invalid("support");
+            return new RemoteItemStack(id, 1, metadata);
+        } catch (NumberFormatException error) { throw invalid("support"); }
+    }
+
+    private static int available(int placement, int tool) {
+        for (int hotbar = 3; hotbar <= 8; hotbar++) {
+            if (hotbar != placement && hotbar != tool) return hotbar;
+        }
+        throw new IllegalArgumentException("lifecycle has no support hotbar slot");
     }
 
     private static Slot parse(String value, String role) {

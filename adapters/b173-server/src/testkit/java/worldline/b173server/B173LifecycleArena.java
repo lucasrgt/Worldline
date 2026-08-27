@@ -21,16 +21,14 @@ final class B173LifecycleArena {
             int port, Duration timeout, B173LifecycleLoadout loadout) throws Exception {
         RemoteItemStack placed = loadout.placement;
         RemoteItemStack tool = loadout.tool;
-        B173PlayerSeed.writeInventory(workspace, USERNAME, 4.5D, 60D, 4.5D,
-                new int[] {0, loadout.placementHotbar, loadout.breakHotbar},
-                new int[] {1, placed.legacyId(), tool.legacyId()},
-                new int[] {32, placed.count(), tool.count()},
-                new int[] {0, placed.damage(), tool.damage()});
+        seed(workspace, loadout, placed, tool);
         B173WireClient client = new B173WireClient("127.0.0.1", port, USERNAME, timeout);
         try {
             client.connect();
             client.synchronizePose();
-            require(client.awaitInventory().occupiedSlots() == 3, "lifecycle inventory drift");
+            int occupied = loadout.supportHotbar == 0 ? 3 : 4;
+            require(client.awaitInventory().occupiedSlots() == occupied,
+                    "lifecycle inventory drift");
             RemoteChunkSnapshot initial = client.awaitRemoteChunk(0, 0).chunkAt(0, 0);
             BlockPosition top = foundation(initial);
             int column = 0;
@@ -41,13 +39,19 @@ final class B173LifecycleArena {
                 client.moveAndObserve(0D, 1D, 0D, 1);
                 require(++column <= 15, "lifecycle water column exceeded fixture");
             }
-            for (int lift = 0; lift < 8; lift++) {
+            for (int lift = 0; lift < 7; lift++) {
                 top = B173FixtureSupport.place(client, top, BlockFace.UP, 1);
                 client.moveAndObserve(0D, 1D, 0D, 1);
                 column++;
             }
+            client.selectHeldSlot(loadout.supportHotbar);
+            top = B173FixtureSupport.place(client, top, BlockFace.UP,
+                    loadout.support.legacyId());
+            client.moveAndObserve(0D, 1D, 0D, 1);
+            column++;
             require(column == 17 && top.equals(SUPPORT), "lifecycle support coordinate drift");
-            client.awaitBlock(SUPPORT, SUPPORT_STATE);
+            client.awaitBlock(SUPPORT, new BlockState(loadout.support.legacyId(),
+                    loadout.support.damage()));
             client.awaitBlock(BlockFace.UP.adjacent(SUPPORT), new BlockState(0, 0));
             return client;
         } catch (Exception failure) {
@@ -55,6 +59,25 @@ final class B173LifecycleArena {
             catch (RuntimeException close) { failure.addSuppressed(close); }
             throw failure;
         }
+    }
+
+    private static void seed(Path workspace, B173LifecycleLoadout loadout,
+            RemoteItemStack placed, RemoteItemStack tool) throws Exception {
+        if (loadout.supportHotbar == 0) {
+            B173PlayerSeed.writeInventory(workspace, USERNAME, 4.5D, 60D, 4.5D,
+                    new int[] {0, loadout.placementHotbar, loadout.breakHotbar},
+                    new int[] {1, placed.legacyId(), tool.legacyId()},
+                    new int[] {32, placed.count(), tool.count()},
+                    new int[] {0, placed.damage(), tool.damage()});
+            return;
+        }
+        B173PlayerSeed.writeInventory(workspace, USERNAME, 4.5D, 60D, 4.5D,
+                new int[] {0, loadout.placementHotbar, loadout.breakHotbar,
+                        loadout.supportHotbar},
+                new int[] {1, placed.legacyId(), tool.legacyId(),
+                        loadout.support.legacyId()},
+                new int[] {32, placed.count(), tool.count(), loadout.support.count()},
+                new int[] {0, placed.damage(), tool.damage(), loadout.support.damage()});
     }
 
     private static BlockPosition foundation(RemoteChunkSnapshot chunk) {

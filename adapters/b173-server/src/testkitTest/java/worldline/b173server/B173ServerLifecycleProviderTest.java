@@ -3,9 +3,7 @@ package worldline.b173server;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import worldline.test.TestRuntimeProviders;
 import worldline.test.TestRuntimeRequest;
 import worldline.testkit.BlockLifecycleScenario;
@@ -68,14 +66,7 @@ public final class B173ServerLifecycleProviderTest {
                 && rows.get(24).placedState().metadata() == 2
                 && rows.get(25).breakSlot().before().legacyId() == 258,
                 "lifecycle provisioned slots drifted");
-        Map<String, String> fixture = new LinkedHashMap<String, String>();
-        fixture.put(worldline.testkit.BlockLifecyclePlan.PLACEMENT_SLOT_OPTION, "1:37:57:1:0");
-        fixture.put(worldline.testkit.BlockLifecyclePlan.BREAK_SLOT_OPTION, "2:38:278:1:0");
-        B173LifecycleLoadout loadout = B173LifecycleLoadout.from(new TestRuntimeRequest(
-                B173ServerLifecycleFixtures.SEED, Paths.get("."), null,
-                "official block lifecycle > arbitrary-external-row", fixture));
-        require(loadout.placement.legacyId() == 57 && loadout.tool.legacyId() == 278,
-                "runtime lifecycle options did not select their loadout");
+        B173LifecycleSupportTest.verify();
         rejects(new Checked() { @Override public void run() {
             B173LifecycleLoadout.from(new TestRuntimeRequest(B173ServerLifecycleFixtures.SEED,
                     Paths.get("."), null, "external", java.util.Collections.<String, String>emptyMap()));

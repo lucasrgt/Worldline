@@ -83,6 +83,12 @@ public final class BlockLifecycleFixtureTest {
                 "lifecycle DSL registration drifted");
         TestCase test = (TestCase) definition.body();
         require(test.runtimeId().equals("fake-lifecycle"), "lifecycle runtime route drifted");
+        require(test.runtimeOptions().get(BlockLifecyclePlan.SUPPORT_STATE_OPTION).equals("1:0")
+                        && test.runtimeOptions().get(BlockLifecyclePlan.PLACEMENT_SLOT_OPTION)
+                                .equals("0:36:4:1:0")
+                        && test.runtimeOptions().get(BlockLifecyclePlan.BREAK_SLOT_OPTION)
+                                .equals("1:37:257:1:0"),
+                "lifecycle runtime fixture options drifted");
         PlanContext context = new PlanContext(new FakeDriver(List.of(BLOCK), 80));
         test.run(context);
         require(context.attachment.equals(evidence.canonical()),
