@@ -1,5 +1,5 @@
 schema=1
 id=m389-animal-drops-set
-fingerprint=047bfb077fd991295c15991e5555888c8d6868b964e94b84e2bac053c22cbf35
+fingerprint=e7322190e2cfb2ac62a385e39ae481cddcd4c921e6d1eff61f73c806c8af20db
 observation.sha256=761e3177132b22cd98c5dd6a4fa802903098e923c7e0c31115dfae512c06213b
 source=refactor-equivalent

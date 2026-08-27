@@ -21,10 +21,11 @@ The first census family expands 96 registered b1.7.3 blocks over 11 behavior dim
 1,056 candidate claims. The registry-presence template is backed for all 96 subjects by the
 official-client `census-cycle`. The first curated evidence import resolves 28 additional claims for
 gravity, transparent-block lighting, plant growth and harvest, sponge/glass/ice placement and
-persistence, fluid flow and reaction, and furnace ticking. This establishes 124 verified claims
-(11.74%) and leaves 932 unknown. Existing smoke evidence is reusable input, but it is never promoted
-automatically: its subject, action, context, observable, oracle, signature, and automation surface
-must be curated first.
+persistence, fluid flow and reaction, and furnace ticking. The first lifecycle package adds exact
+placement, break, drop, and reload claims for cobblestone, dirt, logs, and chests. Together these
+imports establish 140 verified claims (13.26%) and leave 916 unknown. Existing smoke evidence is
+reusable input, but it is never promoted automatically: its subject, action, context, observable,
+oracle, signature, and automation surface must be curated first.
 
 The behavior dimensions are registry presence, reachable state domain, gameplay placement, break
 transition, drop matrix, save/reload, collision shape, light behavior, tick policy, neighbor
@@ -51,7 +52,7 @@ census resolution = resolved claims / candidate claims
 ```
 
 The target is 98.8% functional proof, not 98.8% file or mapping coverage. With the 1,056-claim
-denominator, that requires 1,044 verified claims. After the first curated import, 920 additional
+denominator, that requires 1,044 verified claims. After the lifecycle import, 904 additional
 verified claims are required. The executable check prints the exact current proof, unknown count,
 and claims remaining to the target on every canonical Gate.
 
@@ -64,6 +65,13 @@ The public `BlockConformancePlan` expands versioned block profiles and templates
    redstone, directional, transparent, luminous, or stateful metadata.
 3. Singular cases handle mechanics such as piston, bed, portal, furnace, chest, dispenser,
    jukebox, note block, TNT, sponge, fire, spawner, and cake.
+
+`BlockLifecycleFixture` executes four routed claims as one capability. Through the orthogonal
+`BlockLifecycleDriver`, it requires a gameplay placement and inventory effect, a save plus fresh
+login, an exact break and tool effect, normalized zero/one/multiple drops, and a second reload that
+proves the removed state persisted. The b1.7.3 server adapter implements this boundary without
+turning direct `GameWorld.setBlock` mutation into false gameplay evidence. Historical claims remain
+`INTERNAL_API` or `SMOKE_ONLY` until an official run binds their evidence to this public fixture.
 
 The data under `behavior/functional-census/b1.7.3/` is the versioned routing source. The Gate rejects
 a missing registry subject, unprofiled block, duplicate claim, unsupported status, unqualified

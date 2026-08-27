@@ -1,5 +1,5 @@
 schema=1
 id=m39-route-observation
-fingerprint=45682d759610d1a0109185124cc847e99c0f6d56f9f0193c9dea2dea7653dbb4
+fingerprint=cad8baa0916ecde3ac831744b2ec6054b3bb50de55b993345f256fa6f2c86f57
 observation.sha256=cc3b978b245c04abc01d4594934db50bdbddb6166dd71cd57abd711d3a5cb9f0
 source=refactor-equivalent

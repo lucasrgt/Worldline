@@ -1,5 +1,5 @@
 schema=1
 id=m425-remaining-machine-faces
-fingerprint=4496f7401cb30b6976e4a3fe9fc3b2ded6e489cdffda7e152876e8e3a4fa61df
+fingerprint=4ad0032d7152548bb477db33ea52b3c9029a474255176d9c4b723e02be8ceb40
 observation.sha256=5f5f8026b3aef5768a963db53d9393ac9ed86b766118d805407d5cf5b11a5dbf
 source=refactor-equivalent

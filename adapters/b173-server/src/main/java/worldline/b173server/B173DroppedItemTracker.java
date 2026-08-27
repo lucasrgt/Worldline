@@ -2,6 +2,8 @@ package worldline.b173server;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -60,6 +62,10 @@ final class B173DroppedItemTracker {
 
     boolean isDestroyed(int entityId) { return destroyed.contains(entityId); }
     boolean isCollected(int entityId) { return collectors.containsKey(entityId); }
+
+    java.util.List<RemoteDroppedItem> snapshot() {
+        return Collections.unmodifiableList(new ArrayList<>(spawned.values()));
+    }
 
     int liveCount(RemoteItemStack expected) {
         if (expected == null) throw new IllegalArgumentException("null expected dropped item");
