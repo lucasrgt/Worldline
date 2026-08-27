@@ -14,6 +14,8 @@ The cycle runs cobblestone, dirt, and empty chest. For each row it proves the su
 air target, one-item placement consumption, placed state, fresh-login persistence, tool damage
 `0 -> 1`, break to air, normalized exact drop, and post-break fresh-login persistence. It then
 repeats the complete three-server run and requires identical canonical artifacts and signature.
+The frozen official-cycle signature is
+`a2541a94cd70363267c953f38abf479551440ddab60bc3e3b33c90cdec828046`.
 
 This is deliberately the first bounded public matrix. The provider does not receive the current
 scenario in `TestRuntimeRequest`, so its arena provisions all supported rows in advance. Expanding
