@@ -63,22 +63,6 @@ public final class B173ServerLifecycleFixtures {
                 scenario(plan, "obsidian", "b1.7.3:block/049", 49, 49, 278, 60)));
     }
 
-    public static BlockLifecycleScenario forTestPath(String testPath) {
-        if (testPath == null) throw new IllegalArgumentException(
-                "lifecycle provider requires a TestKit test path");
-        BlockLifecycleScenario match = null;
-        for (BlockLifecycleScenario scenario : scenarios()) {
-            if (testPath.equals(scenario.id()) || testPath.endsWith(" > " + scenario.id())) {
-                if (match != null) throw new IllegalArgumentException(
-                        "ambiguous lifecycle TestKit path: " + testPath);
-                match = scenario;
-            }
-        }
-        if (match == null) throw new IllegalArgumentException(
-                "unknown lifecycle TestKit path: " + testPath);
-        return match;
-    }
-
     private static BlockLifecycleScenario scenario(BlockConformancePlan plan, String id,
             String subject, int block, int drop, int tool, int breakTicks) {
         RemoteItemStack placed = new RemoteItemStack(block, 1, 0);

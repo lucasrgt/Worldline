@@ -251,14 +251,14 @@ java -Dworldline.b173.lifecycle.serverJar=/path/to/b1.7.3-server.jar \
 `B173ServerLifecycleFixtures.scenarios()` returns sixteen currently provisioned rows:
 cobblestone, dirt, empty chest, stone, planks, sandstone, brick, four ores, four mineral-storage
 blocks, and obsidian. The runner supplies the qualified test path to the provider, which selects
-that row and seeds only its placement item and suitable tool; the matrix is not limited by hotbar
-capacity. Qualified paths retain the collected `suite > case` identity across every retry. Each
+the test identity, plus immutable placement/break slot options emitted by `BlockLifecyclePlan`.
+The provider seeds only those two items, so external lifecycle rows are not registered in a
+provider-owned catalog and the matrix is not limited by hotbar capacity. Qualified paths retain
+the collected `suite > case` identity across every retry. Each
 attempt owns a new official-server workspace. The server JAR must be exactly 503100 bytes with
 SHA-256 `033a127e4a25a60b038f15369c89305a3d53752242a1cff11ae964954e79ba4d`.
-The provider rejects mod paths and other seeds rather than pretending its
-fixed arena is general. Direct provider callers may omit `testPath`, but scenario-routed providers
-fail closed unless the runner supplies a known qualified path. Empty chest does not claim
-loaded-container spill.
+The provider rejects mod paths, other seeds, missing test identity, and absent or malformed slot
+options rather than guessing a fixture. Empty chest does not claim loaded-container spill.
 Provider discovery chooses the runtime implementation; scenario selection remains per attempt.
 
 ### Hooks

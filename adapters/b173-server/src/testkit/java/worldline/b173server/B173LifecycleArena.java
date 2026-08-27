@@ -7,7 +7,6 @@ import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.RemoteItemStack;
 import worldline.api.RemoteChunkSnapshot;
-import worldline.testkit.BlockLifecycleScenario;
 
 /** Builds the fixed public lifecycle arena through official protocol-14 actions. */
 final class B173LifecycleArena {
@@ -19,12 +18,11 @@ final class B173LifecycleArena {
     private B173LifecycleArena() { }
 
     static B173WireClient open(B173DedicatedServer server, Path workspace,
-            int port, Duration timeout, BlockLifecycleScenario scenario) throws Exception {
-        RemoteItemStack placed = scenario.placementSlot().before();
-        RemoteItemStack tool = scenario.breakSlot().before();
+            int port, Duration timeout, B173LifecycleLoadout loadout) throws Exception {
+        RemoteItemStack placed = loadout.placement;
+        RemoteItemStack tool = loadout.tool;
         B173PlayerSeed.writeInventory(workspace, USERNAME, 4.5D, 60D, 4.5D,
-                new int[] {0, scenario.placementSlot().hotbarSlot(),
-                        scenario.breakSlot().hotbarSlot()},
+                new int[] {0, loadout.placementHotbar, loadout.breakHotbar},
                 new int[] {1, placed.legacyId(), tool.legacyId()},
                 new int[] {32, placed.count(), tool.count()},
                 new int[] {0, placed.damage(), tool.damage()});

@@ -104,7 +104,7 @@ final class AttemptExecutor {
                     lease = RuntimeLease.acquire(options.runtimeLock);
                     session = options.provider.open(
                             new TestRuntimeRequest(settings.seed, settings.world,
-                                    settings.mod, test.path));
+                                    settings.mod, test.path, settings.runtimeOptions));
                 }
                 context = new TestExecutionContext(settings.seed, number,
                         session, artifacts, allowed);

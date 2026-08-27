@@ -3,7 +3,9 @@ package worldline.b173server;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import worldline.test.TestRuntimeProviders;
 import worldline.test.TestRuntimeRequest;
 import worldline.testkit.BlockLifecycleScenario;
@@ -37,12 +39,18 @@ public final class B173ServerLifecycleProviderTest {
                 && rows.get(0).breakSlot().before().legacyId() == 257
                 && rows.get(7).breakSlot().before().legacyId() == 278,
                 "lifecycle provisioned slots drifted");
-        require(B173ServerLifecycleFixtures.forTestPath(
-                        "official block lifecycle > diamond-block").id().equals("diamond-block"),
-                "qualified lifecycle path did not select its scenario");
+        Map<String, String> fixture = new LinkedHashMap<String, String>();
+        fixture.put(worldline.testkit.BlockLifecyclePlan.PLACEMENT_SLOT_OPTION, "1:37:57:1:0");
+        fixture.put(worldline.testkit.BlockLifecyclePlan.BREAK_SLOT_OPTION, "2:38:278:1:0");
+        B173LifecycleLoadout loadout = B173LifecycleLoadout.from(new TestRuntimeRequest(
+                B173ServerLifecycleFixtures.SEED, Paths.get("."), null,
+                "official block lifecycle > arbitrary-external-row", fixture));
+        require(loadout.placement.legacyId() == 57 && loadout.tool.legacyId() == 278,
+                "runtime lifecycle options did not select their loadout");
         rejects(new Checked() { @Override public void run() {
-            B173ServerLifecycleFixtures.forTestPath("official block lifecycle > absent");
-        }}, "unknown lifecycle");
+            B173LifecycleLoadout.from(new TestRuntimeRequest(B173ServerLifecycleFixtures.SEED,
+                    Paths.get("."), null, "external", java.util.Collections.<String, String>emptyMap()));
+        }}, "lacks placement");
         B173ServerLifecycleTestRuntimeProvider provider =
                 new B173ServerLifecycleTestRuntimeProvider();
         rejects(new Checked() { @Override public void run() throws Exception {

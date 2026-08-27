@@ -7,11 +7,14 @@ import java.util.List;
 import java.util.Set;
 import worldline.api.BlockLifecycleDriver;
 import worldline.test.Worldline;
+import worldline.test.TestCaseBuilder;
 
 /** Registers validated lifecycle data rows as executable Worldline tests. */
 public final class BlockLifecyclePlan {
     public static final String EVIDENCE_ARTIFACT = "block-lifecycle.properties";
     public static final long DEFAULT_TIMEOUT_MILLIS = 180_000L;
+    public static final String PLACEMENT_SLOT_OPTION = "block-lifecycle.placement-slot";
+    public static final String BREAK_SLOT_OPTION = "block-lifecycle.break-slot";
 
     private final String runtimeId;
     private final List<BlockLifecycleScenario> scenarios;
@@ -62,10 +65,19 @@ public final class BlockLifecyclePlan {
     }
 
     private void register(BlockLifecycleScenario scenario) {
-        Worldline.test(scenario.id(), Worldline.worldline().runtime(runtimeId).run(context -> {
+        TestCaseBuilder runtime = Worldline.worldline().runtime(runtimeId)
+                .runtimeOption(PLACEMENT_SLOT_OPTION, slot(scenario.placementSlot()))
+                .runtimeOption(BREAK_SLOT_OPTION, slot(scenario.breakSlot()));
+        Worldline.test(scenario.id(), runtime.run(context -> {
             BlockLifecycleDriver driver = context.capability(BlockLifecycleDriver.class);
             BlockLifecycleEvidence evidence = BlockLifecycleFixture.execute(scenario, driver);
             context.attach(EVIDENCE_ARTIFACT, evidence.canonical());
         })).timeout(timeoutMillis).tag("block-lifecycle");
+    }
+
+    private static String slot(BlockLifecycleSlot slot) {
+        worldline.api.RemoteItemStack item = slot.before();
+        return slot.hotbarSlot() + ":" + slot.inventorySlot() + ":" + item.legacyId()
+                + ":" + item.count() + ":" + item.damage();
     }
 }

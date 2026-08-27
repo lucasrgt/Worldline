@@ -170,10 +170,11 @@ public interface TestRuntimeProvider {
 }
 ```
 
-`TestRuntimeRequest` carries the seed, world path, optional mod path, and the runner's qualified
-test path. Providers that provision scenario-specific fixtures can route on `testPath()` while
-preserving the three-argument request constructor for direct callers. The path is test identity,
-not a filesystem path; providers should treat unrelated suite text as opaque.
+`TestRuntimeRequest` carries the seed, world path, optional mod path, the runner's qualified test
+path, and an immutable bounded map populated by `TestCaseBuilder.runtimeOption`. Providers can
+read one option with `runtimeOption(key)` while the legacy constructors remain available to direct
+callers. Options are provider input, not evidence; providers must validate their own vocabulary
+and fail closed. The test path is identity, not a filesystem path.
 
 Every `open` call must return a fresh session whose runtime implements
 `AutomatedMinecraftRuntime`. Closing the session must close the runtime,

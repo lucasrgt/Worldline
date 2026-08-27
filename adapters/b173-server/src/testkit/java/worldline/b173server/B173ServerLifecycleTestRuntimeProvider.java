@@ -24,8 +24,7 @@ public final class B173ServerLifecycleTestRuntimeProvider implements TestRuntime
             throw new IllegalArgumentException("lifecycle provider requires seed "
                     + B173LifecycleArena.SEED);
         }
-        worldline.testkit.BlockLifecycleScenario scenario =
-                B173ServerLifecycleFixtures.forTestPath(request.testPath());
+        B173LifecycleLoadout loadout = B173LifecycleLoadout.from(request);
         B173ServerLifecycleSettings settings = B173ServerLifecycleSettings.load();
         Path base = request.worldPath().toAbsolutePath().normalize();
         Files.createDirectories(base);
@@ -36,7 +35,7 @@ public final class B173ServerLifecycleTestRuntimeProvider implements TestRuntime
         B173WireClient client = null;
         try {
             server.boot();
-            client = B173LifecycleArena.open(server, workspace, port, settings.timeout, scenario);
+            client = B173LifecycleArena.open(server, workspace, port, settings.timeout, loadout);
             final int reconnectPort = port;
             Supplier<B173WireClient> sessions = new Supplier<B173WireClient>() {
                 @Override public B173WireClient get() {

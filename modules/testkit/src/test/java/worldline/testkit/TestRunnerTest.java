@@ -25,6 +25,7 @@ import static worldline.test.Worldline.it;
 import static worldline.test.Worldline.afterAll;
 import static worldline.test.Worldline.beforeAll;
 import static worldline.test.Worldline.test;
+import static worldline.test.Worldline.worldline;
 
 /** Isolation, retry visibility, states, artifacts, and fail-closed selection tests. */
 public final class TestRunnerTest {
@@ -46,6 +47,8 @@ public final class TestRunnerTest {
         require(provider.paths.contains("passes") && provider.paths.contains("flaky is visible")
                 && provider.paths.contains("fails with scenario"),
                 "provider did not receive qualified test paths");
+        require(provider.options.contains("fixture=stone"),
+                "provider did not receive immutable runtime options");
         require(!result.tests().get(2).artifacts().isEmpty(), "failure artifacts absent");
         require(reporter.started == 3 && reporter.finished == 5, "reporter lifecycle");
         require(sample.allHooks.get() == 11, "beforeAll/afterAll lifecycle");
@@ -62,7 +65,8 @@ public final class TestRunnerTest {
         private final AtomicInteger allHooks = new AtomicInteger();
         @Override protected void define() {
             beforeAll(() -> allHooks.incrementAndGet()); afterAll(() -> allHooks.addAndGet(10));
-            test("passes", context -> { context.tick(); expect(context.seed()).toEqual(173L); });
+            test("passes", worldline().runtime("fake").runtimeOption("fixture", "stone")
+                    .run(context -> { context.tick(); expect(context.seed()).toEqual(173L); }));
             it("flaky is visible", context -> {
                 if (flaky.getAndIncrement() == 0) throw new AssertionError("first attempt");
             }).retry(1);
@@ -113,9 +117,11 @@ public final class TestRunnerTest {
     private static final class FakeProvider implements TestRuntimeProvider {
         final AtomicInteger opened = new AtomicInteger(), closed = new AtomicInteger();
         final List<String> paths = Collections.synchronizedList(new ArrayList<String>());
+        final List<String> options = Collections.synchronizedList(new ArrayList<String>());
         @Override public String runtimeId() { return "fake"; }
         @Override public TestRuntimeSession open(TestRuntimeRequest request) {
             paths.add(request.testPath());
+            options.add("fixture=" + request.runtimeOption("fixture"));
             opened.incrementAndGet(); FakeRuntime runtime = new FakeRuntime();
             return new TestRuntimeSession() {
                 @Override public AutomatedMinecraftRuntime runtime() { return runtime; }

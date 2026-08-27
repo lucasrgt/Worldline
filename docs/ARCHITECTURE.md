@@ -89,8 +89,9 @@ timeout and retry policy, external snapshots, artifacts, minimization, and
 event-driven reporters. Every official runtime attempt holds a process-local
 and cross-process exclusive lease. The executor remains sequential even when
 a collected test requests concurrency; runtime concurrency fails closed.
-The immutable runtime request also carries the collected test's qualified path, allowing an
-adapter to provision one scenario-specific fixture without leaking suite state into the session.
+The immutable runtime request carries the collected test's qualified path and bounded per-test
+runtime options. This lets an adapter provision one scenario-specific fixture without leaking
+suite state or a provider-owned scenario catalog into the session.
 
 The CLI discovers top-level specs or loads an explicitly named `WorldlineSpec`
 from a bounded JAR or class directory. A separate bounded classpath exposes the
