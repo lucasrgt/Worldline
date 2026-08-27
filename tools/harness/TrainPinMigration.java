@@ -1,21 +1,16 @@
-import java.io.ByteArrayOutputStream;
-import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
 /** Imports isolated milestone receipts and seals one content-addressed train. */
-final class TrainPinMigration {
+final class TrainPinMigration extends TrainPinSupport {
     private static final String BASE = "fd1e11d7c5e878d06137170e51b46aa9a5352569";
     private static final Set<String> QUALIFICATIONS = Set.of("gui-tree", "m7-mod-loading",
             "m8-mod-version-diff", "m9-scenario-minimization", "m620-stationapi-testkit-driver", "testkit-cycle");
@@ -116,9 +111,12 @@ final class TrainPinMigration {
                         && updated.size() == catalog - pending.stream()
                                 .filter(id -> baseline.get(id) == null).count(),
                 "train proof census drift");
-        lock.setProperty("catalog.count", Integer.toString(catalog)); lock.setProperty("pin.count", Integer.toString(updated.size()));
-        lock.setProperty("carried.count", Integer.toString(carried)); lock.setProperty("imported.count", Integer.toString(imported));
-        lock.setProperty("executed.count", Integer.toString(executed)); lock.setProperty("pending.count", Integer.toString(pending.size()));
+        lock.setProperty("catalog.count", Integer.toString(catalog));
+        lock.setProperty("pin.count", Integer.toString(updated.size()));
+        lock.setProperty("carried.count", Integer.toString(carried));
+        lock.setProperty("imported.count", Integer.toString(imported));
+        lock.setProperty("executed.count", Integer.toString(executed));
+        lock.setProperty("pending.count", Integer.toString(pending.size()));
         lock.setProperty("pending.smokes", String.join(",", pending.stream().sorted().toList()));
         pins.write(updated); store(root.resolve("smokes/train-reconciliation.lock"), lock);
         System.out.println("train proofs: " + carried + " carried, " + imported
@@ -279,37 +277,6 @@ final class TrainPinMigration {
     }
     private static String source(String current, String receipt) {
         return current.equals(receipt) ? "executed" : "refactor-equivalent"; }
-    private static Properties load(Path path) throws Exception { Properties values = new Properties();
-        try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) { values.load(reader); }
-        return values; }
-    private static String capture(Path root, String... arguments) throws Exception {
-        List<String> command = new ArrayList<>(List.of("git")); command.addAll(List.of(arguments));
-        Process process = new ProcessBuilder(command).directory(root.toFile()).redirectErrorStream(true).start();
-        ByteArrayOutputStream output = new ByteArrayOutputStream(); process.getInputStream().transferTo(output);
-        require(process.waitFor() == 0, "git command failed: " + String.join(" ", command));
-        return output.toString(StandardCharsets.UTF_8);
-    }
-    private static int status(Path root, String... arguments) throws Exception {
-        List<String> command = new ArrayList<>(List.of("git")); command.addAll(List.of(arguments));
-        return new ProcessBuilder(command).directory(root.toFile()).start().waitFor();
-    }
-    private static String digest(String text) throws Exception {
-        return digest(text.replace("\r\n", "\n").getBytes(StandardCharsets.UTF_8));
-    }
-    private static String digest(byte[] bytes) throws Exception { return HexFormat.of().formatHex(
-            MessageDigest.getInstance("SHA-256").digest(bytes)); }
-    private static void store(Path path, Properties values) throws Exception {
-        StringBuilder output = new StringBuilder("# Worldline integration-train proof v1\n");
-        for (String key : values.stringPropertyNames().stream().sorted(Comparator.naturalOrder()).toList())
-            output.append(key).append('=').append(values.getProperty(key)).append('\n');
-        Files.writeString(path, output.toString(), StandardCharsets.UTF_8);
-    }
-    private static void require(boolean value, String message) {
-        if (!value) throw new IllegalStateException(message); }
-    private static String required(Properties values, String key) {
-        String value = values.getProperty(key);
-        require(value != null && !value.isBlank(), "missing " + key); return value;
-    }
     private record Imported(String fingerprint, String evidence, String head,
             String tree, String base, String signature) { }
 }
