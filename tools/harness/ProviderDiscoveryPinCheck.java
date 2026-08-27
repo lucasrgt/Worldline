@@ -15,7 +15,7 @@ final class ProviderDiscoveryPinCheck {
         require("1".equals(lock.getProperty("schema"))
                         && integer(lock, "modified.count") == 9
                         && integer(lock, "added.count") == 12
-                        && integer(lock, "smoke.count") == 521
+                        && integer(lock, "smoke.count") >= 521
                         && integer(lock, "pending.count") == 4
                         && integer(lock, "catalog.count") == integer(lock, "smoke.count")
                                 + integer(lock, "pending.count") + 1,
@@ -59,7 +59,8 @@ final class ProviderDiscoveryPinCheck {
                         && carried == integer(lock, "smoke.count")
                         && integer(lock, "smoke.changed") > 0,
                 "provider-discovery proof census drift");
-        System.out.println("  provider-discovery proof transport: 21 sources, 521 carried, "
+        System.out.println("  provider-discovery proof transport: 21 sources, " + carried
+                + " carried, "
                 + effectivePendingCount(lock, root) + " pending");
     }
 
@@ -99,7 +100,9 @@ final class ProviderDiscoveryPinCheck {
     }
     static boolean carries(Properties lock, String id, SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
-        boolean direct = hash(lock.getProperty(stem + "prior_fingerprint"))
+        boolean introduced = "true".equals(lock.getProperty(stem + "introduced"))
+                && "executed".equals(pin.source());
+        boolean direct = (hash(lock.getProperty(stem + "prior_fingerprint")) || introduced)
                 && current.equals(lock.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"));
         try { Path root = Path.of("").toAbsolutePath().normalize();

@@ -101,9 +101,10 @@ final class ProviderDiscoveryPinMigration {
         Properties shared = SharedHelperPinCheck.manifest(root);
         require(Integer.parseInt(shared.getProperty("refresh.count", "0")) >= 1,
                 "provider refresh requires shared-helper attestations");
+        int sourceChanges = refreshSources(root, lock);
         Properties train = TrainPinCheck.manifest(root); SmokePins pins = new SmokePins(root);
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
-        int discovered = 0, carried = 0;
+        int discovered = 0, carried = 0, introduced = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             if (TrainPinCheck.isAdded(train, smoke.id)) continue;
             discovered++;
@@ -111,15 +112,45 @@ final class ProviderDiscoveryPinMigration {
             carried++; String current = fingerprints.compute(smoke); SmokePins.Entry pin =
                     pins.match(smoke.id, current); require(pin != null,
                     "provider refresh lacks current proof: " + smoke.id);
-            String stem = "smoke." + smoke.id + ".", recorded = required(lock,
-                    stem + "current_fingerprint");
-            if (!current.equals(recorded)) lock.setProperty(stem + "prior_fingerprint", recorded);
+            String stem = "smoke." + smoke.id + ".";
+            String recorded = lock.getProperty(stem + "current_fingerprint");
+            if (recorded == null) {
+                require("executed".equals(pin.source()),
+                        "new provider row lacks exact execution: " + smoke.id);
+                lock.setProperty(stem + "introduced", "true"); introduced++;
+            } else if (!current.equals(recorded))
+                lock.setProperty(stem + "prior_fingerprint", recorded);
             lock.setProperty(stem + "current_fingerprint", current);
             lock.setProperty(stem + "evidence_sha256", pin.evidence());
         }
-        require(discovered == 526 && carried == 521, "provider refresh census drift");
+        int catalog = Integer.parseInt(lock.getProperty("catalog.count")) + introduced;
+        int smokeCount = Integer.parseInt(lock.getProperty("smoke.count")) + introduced;
+        require(discovered == catalog && carried == smokeCount, "provider refresh census drift");
+        lock.setProperty("catalog.count", Integer.toString(catalog));
+        lock.setProperty("smoke.count", Integer.toString(smokeCount));
         pins.write(pins.entries()); store(path, lock);
-        System.out.println("provider-discovery pins refreshed: 521 carried, 4 qualified exceptions");
+        System.out.println("provider-discovery pins refreshed: " + smokeCount + " carried, "
+                + introduced + " introduced, " + sourceChanges + " source changes");
+    }
+
+    private static int refreshSources(Path root, Properties lock) throws Exception {
+        int changes = 0;
+        for (String group : List.of("modified", "added")) {
+            int count = Integer.parseInt(required(lock, group + ".count"));
+            for (int index = 0; index < count; index++) {
+                String stem = group + "." + index + ".";
+                String current = digest(Files.readString(root.resolve(required(lock, stem + "path"))));
+                String prior = required(lock, stem + "current_sha256");
+                if (current.equals(prior)) continue;
+                String refresh = "refresh.source." + (++changes) + ".";
+                lock.setProperty(refresh + "path", required(lock, stem + "path"));
+                lock.setProperty(refresh + "prior_sha256", prior);
+                lock.setProperty(refresh + "current_sha256", current);
+                lock.setProperty(stem + "current_sha256", current);
+            }
+        }
+        lock.setProperty("refresh.source.count", Integer.toString(changes));
+        return changes;
     }
 
     private static Map<String, SmokePins.Entry> baseline(Path root) throws Exception {
