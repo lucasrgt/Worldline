@@ -4,7 +4,7 @@
 
 ## Claim
 
-One independently signed public TestKit family executes sponge, white wool, TNT, fence, and netherrack against the unmodified official Beta 1.7.3 server. Each metadata-zero row proves placement, two fresh-login persistence boundaries, break to air, one exact self drop, and tool durability. Sponge and TNT keep singular drop routing; wool, fence, and netherrack route through archetypes.
+One independently signed public TestKit family executes sponge, white wool, TNT, fence, and netherrack against the unmodified official Beta 1.7.3 server. Each metadata-zero row proves placement, two fresh-login persistence boundaries, break to air, one exact self drop, and exact post-break tool state. The shears remain undamaged for placed wool; the other tools gain one damage. Sponge and TNT keep singular drop routing; wool, fence, and netherrack route through archetypes.
 
 ## Qualification cycle
 

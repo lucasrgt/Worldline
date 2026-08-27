@@ -18,6 +18,12 @@ public final class B173LifecycleScenarioFactory {
 
     public static BlockLifecycleScenario selfDrop(String id, String subject, String archetype,
             boolean singular, int block, int metadata, int tool, int breakTicks) {
+        return selfDrop(id, subject, archetype, singular, block, metadata, tool, 1, breakTicks);
+    }
+
+    public static BlockLifecycleScenario selfDrop(String id, String subject, String archetype,
+            boolean singular, int block, int metadata, int tool, int toolAfterDamage,
+            int breakTicks) {
         BlockConformanceProfile profile = new BlockConformanceProfile(subject,
                 Collections.singletonList(archetype), singular,
                 Collections.<String, ConformanceLayer>emptyMap());
@@ -32,7 +38,7 @@ public final class B173LifecycleScenarioFactory {
                 B173LifecycleArena.SUPPORT_STATE, BlockFace.UP, new BlockState(block, metadata),
                 new BlockLifecycleSlot(1, 37, placed, null),
                 new BlockLifecycleSlot(2, 38, new RemoteItemStack(tool, 1, 0),
-                        new RemoteItemStack(tool, 1, 1)),
+                        new RemoteItemStack(tool, 1, toolAfterDamage)),
                 Collections.singletonList(new RemoteItemStack(block, 1, 0)), breakTicks, 40);
     }
 }

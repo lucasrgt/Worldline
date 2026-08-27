@@ -10,6 +10,8 @@ harness. Sponge (`block/019`) and TNT (`block/046`) retain `SINGULAR` drop routi
 other behaviors are subject-specific. White wool (`block/035`), fence (`block/085`), and
 netherrack (`block/087`) route exact one-item self drops through `ARCHETYPE`. Placement,
 fresh-login persistence, break-to-air, and the second fresh-login boundary are `UNIVERSAL`.
+The exact tool-state oracle retains undamaged shears after the placed-wool break and requires one
+damage on the selected pickaxe or axe for the other four rows.
 
 The family does not claim sponge water absorption, dyed wool variants, TNT ignition/explosion,
 fence collision/connectivity, or netherrack fire persistence. It also excludes wrong-tool
