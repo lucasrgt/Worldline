@@ -2,4 +2,4 @@ schema=1
 id=m9-scenario-minimization
 fingerprint=16b90317d014971eb87b036dbb05b1e278c01f02889bc5bbd16f975220ff94ea
 observation.sha256=ca19efbefcebbbec7d392e56dc554eb4ef2a047c4cd32bbe6b8aa81ab3bf83b7
-source=refactor-equivalent
+source=executed
