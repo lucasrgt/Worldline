@@ -248,12 +248,15 @@ java -Dworldline.b173.lifecycle.serverJar=/path/to/b1.7.3-server.jar \
   --provider=b1.7.3-server-lifecycle --seed=17320110707
 ```
 
-`B173ServerLifecycleFixtures.scenarios()` returns nineteen currently provisioned rows:
+`B173ServerLifecycleFixtures.scenarios()` returns twenty-one currently provisioned rows:
 cobblestone, dirt, empty chest, stone, planks, sandstone, brick, four ores, four mineral-storage
-blocks, obsidian, rail, powered rail, and detector rail. The runner supplies the qualified test path to the provider, which selects
+blocks, obsidian, rail, powered rail, detector rail, stone pressure plate, and wooden pressure
+plate. The runner supplies the qualified test path to the provider, which selects
 the test identity, plus immutable placement/break slot options emitted by `BlockLifecyclePlan`.
 The rail rows cover flat, unpowered metadata-zero lifecycle only; slopes, power propagation,
 detector activation, and minecart motion remain separate contracts.
+The pressure-plate rows cover the unpowered metadata-zero lifecycle on flat stone support;
+activation, release timing, redstone propagation, and support-loss behavior remain separate.
 The provider seeds only those two items, so external lifecycle rows are not registered in a
 provider-owned catalog and the matrix is not limited by hotbar capacity. Qualified paths retain
 the collected `suite > case` identity across every retry. Each
