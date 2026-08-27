@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=b173-slab-lifecycle-cycle -->
 <!-- nonclaims=slab-combination,upper-half-placement,collision,native-render -->
-<!-- frozen-trace=0000000000000000000000000000000000000000000000000000000000000000 -->
+<!-- frozen-trace=62cff6dd83cf8f4a465c699fe79b75925d3cf26450ce6cafd6b6dc7228865674 -->
 
 # Beta 1.7.3 slab state lifecycles
 
@@ -19,4 +19,4 @@ This map does not claim combining two slabs, upper-half placement, collision, re
 particles, or native rendering.
 
 Discovery signal:
-`provider=b1.7.3-server-lifecycle,family=slab-state,rows=5,passed=5,layers=U-U-U-A+U-U-U-A+U-U-U-A+U-U-U-A+U-U-U-A,reload=FRESH_LOGINx10,evidence=0000000000000000000000000000000000000000000000000000000000000000,isolation=5-fresh-worlds`.
+`provider=b1.7.3-server-lifecycle,family=slab-state,rows=5,passed=5,layers=U-U-U-A+U-U-U-A+U-U-U-A+U-U-U-A+U-U-U-A,reload=FRESH_LOGINx10,evidence=2cf5cffcedc9cf3c585c6184e7af894eb0d1459ed0b3ff7b7aafc7737ef3a6d2,isolation=5-fresh-worlds`.
