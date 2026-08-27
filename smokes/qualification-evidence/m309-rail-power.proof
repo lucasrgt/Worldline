@@ -1,5 +1,5 @@
 schema=1
 id=m309-rail-power
-fingerprint=fe73c79d93f088901a469518b99fce10f9dcf44f442945fdd9f22c5c59c55c99
+fingerprint=abee8d0cd9db1819b6a1a8b4baec1a1499386246c1c9dd1567af5531e09570eb
 observation.sha256=ff3995ce5426f88877abdf561aada4f7f2968dfa7fbdc44f768202ec4c14ff80
 source=refactor-equivalent

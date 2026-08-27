@@ -1,5 +1,5 @@
 schema=1
 id=m20-server-bootstrap
-fingerprint=30bd81f6bbce8918a8090978ccc8fca94d37f9f9a97b34295e5af4999930c055
+fingerprint=0bafdfc185d8093743b55597db8b267138443f56ea1b3b7e4e5362e7e6b9fb89
 observation.sha256=d7068ceef13c43a7c33e09abf6ee67e9c39de5f347e4b3ed01831ec1dd0305a3
 source=refactor-equivalent

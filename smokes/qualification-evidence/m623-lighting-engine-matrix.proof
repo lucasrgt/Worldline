@@ -1,5 +1,5 @@
 schema=1
 id=m623-lighting-engine-matrix
-fingerprint=844d64127427978f71eb17c15c8a7dd0edf215dbb10624436b3e15fd259fb56a
+fingerprint=8c6f5b901ce0d5615588d5dd01d5772a7a0565ca01a209406ed3bb7f4d57f2eb
 observation.sha256=dead89e4597020620d63ada58c3a32cd52a2502722d613a3bb17d97d952b5166
 source=refactor-equivalent

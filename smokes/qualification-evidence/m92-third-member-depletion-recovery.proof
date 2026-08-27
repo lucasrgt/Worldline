@@ -1,5 +1,5 @@
 schema=1
 id=m92-third-member-depletion-recovery
-fingerprint=0f62dcced56866f94e86b5635a9a1963ef52572ed16fa3c8500c2d48c83dad60
+fingerprint=21072e764e50ccca09ae0e2432a95a8d865d55624eff82c65a533f86e0ea6611
 observation.sha256=a82e3eb16c9c12a3901e03775d53898a725914562f5bd971d7dc5d2444c75104
 source=refactor-equivalent
