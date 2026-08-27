@@ -1,5 +1,5 @@
 schema=1
 id=m637-tnt-chain
-fingerprint=32d616c768d1fe9adceb15a187b1a65f9646c87539b1a77aacfc11148864c3a2
+fingerprint=afa34d07b9be65799429a2b2a05ff3004c653419e5bb228bebb0c7254f6cffb4
 observation.sha256=36da1bbf241f079894b7ec438a25d1a1a09082caa59bac68c0a59fd94f01d327
 source=refactor-equivalent
