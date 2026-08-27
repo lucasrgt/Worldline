@@ -44,8 +44,7 @@ public final class WorldlineBehavior {
             "Pig horizontal Packet31, Packet33, or Packet34 movement");
     public static final WorldlineBehavior PIG_DEATH = define("pig-death", WorldlineFamily.WORLD,
             "Pig hurt, death status, and destroy packets");
-    public static final WorldlineBehavior PIG_PORK_DROP = define("pig-pork-drop", WorldlineFamily.ITEM,
-            "Pig death Packet21 porkchop drop");
+    public static final WorldlineBehavior PIG_PORK_DROP = define("pig-pork-drop", WorldlineFamily.ITEM, "Pork drop");
     public static final WorldlineBehavior BED_SLEEP_SKIP = define("bed-sleep-skip", WorldlineFamily.PLAYER,
             "Day refusal, night Packet17 occupancy, and SMP time skip");
     public static final WorldlineBehavior MULTIPLAYER_SLEEP_QUORUM = define("multiplayer-sleep-quorum",
@@ -80,7 +79,8 @@ public final class WorldlineBehavior {
     public static final WorldlineBehavior BLOCK_LIFECYCLE_CONFORMANCE = define(
             "block-lifecycle-conformance", WorldlineFamily.WORLD,
             "Public placement, reload, tool-qualified break, and exact drop conformance");
-    public static final WorldlineBehavior BLOCK_STATE_DOMAIN_CONFORMANCE = define("block-state-domain-conformance", WorldlineFamily.WORLD,
+    public static final WorldlineBehavior BLOCK_STATE_DOMAIN_CONFORMANCE = define(
+            "block-state-domain-conformance", WorldlineFamily.WORLD,
             "Public causal execution and reload proof of reachable block metadata states");
     public static final WorldlineBehavior FOOD_CONSUMPTION = define("food-consumption", WorldlineFamily.ITEM,
             "Selected food consumption, health restoration, and container result");
