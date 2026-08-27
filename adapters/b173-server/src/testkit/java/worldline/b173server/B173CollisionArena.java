@@ -49,7 +49,7 @@ final class B173CollisionArena {
                     && east.equals(EAST_SUPPORT), "collision arena geometry drift");
             pose = client.moveAndObserve((north.x() + 0.5D) - pose.x(),
                     (north.y() + 1D) - pose.y(), (north.z() + 0.5D) - pose.z(), 4).resulting();
-            RemoteWorldView world = worldline.test.WorldlineSmokeAwait.observe(client, 1);
+            RemoteWorldView world = client.sustainTicks(1);
             require(world.blockAt(4, 72, 4).equals(new BlockState(0, 0))
                     && world.blockAt(5, 72, 4).equals(new BlockState(0, 0)),
                     "collision treatment path is not air");
