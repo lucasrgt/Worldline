@@ -112,10 +112,18 @@ final class ProviderDiscoveryPinMigration {
             discovered++;
             if (smoke.id.equals(NEW_SMOKE)) continue;
             if (PENDING.contains(smoke.id)) {
-                if (!TrainPinCheck.isPending(train, smoke.id)) {
+                String current = fingerprints.compute(smoke);
+                SmokePins.Entry matched = pins.match(smoke.id, current);
+                SmokePins.Entry stored = pins.entry(smoke.id);
+                String stem = "smoke." + smoke.id + ".";
+                boolean valid = matched != null && "executed".equals(matched.source())
+                        || matched == null && stored != null
+                        && stored.fingerprint().equals(lock.getProperty(stem + "prior_fingerprint"))
+                        && stored.evidence().equals(lock.getProperty(stem + "evidence_sha256"));
+                if (!valid && !TrainPinCheck.isPending(train, smoke.id)) {
                     SmokePins.Entry exact = cache.availablePin(smoke);
                     require(exact != null && "executed".equals(exact.source())
-                                    && fingerprints.compute(smoke).equals(exact.fingerprint()),
+                                    && current.equals(exact.fingerprint()),
                             "resolved provider pending smoke lacks exact current execution: " + smoke.id);
                     replace(nextPins, exact);
                 }
