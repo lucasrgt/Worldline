@@ -33,10 +33,13 @@ public final class BlockStateDomainFixture {
             }
             StringBuilder row = new StringBuilder(step.id()).append('|')
                     .append(step.action()).append('|');
+            RemoteWorldView observed = null;
             for (int index = 0; index < step.observations().size(); index++) {
                 BlockStateObservation observation = step.observations().get(index);
-                verifyBlock(driver.awaitBlock(observation.position(), observation.state()),
-                        observation.position(), observation.state(), step.id());
+                if (!matches(observed, observation.position(), observation.state())) {
+                    observed = driver.awaitBlock(observation.position(), observation.state());
+                }
+                verifyBlock(observed, observation.position(), observation.state(), step.id());
                 if (index > 0) row.append(',');
                 row.append(token(observation.position())).append(':')
                         .append(token(observation.state()));
@@ -46,17 +49,27 @@ public final class BlockStateDomainFixture {
         verifySlot(driver.inventory(), scenario.placementSlot(), true);
         driver.saveAndReload();
         ReloadBoundary boundary = driver.reloadBoundary();
+        RemoteWorldView reloaded = null;
         for (Map.Entry<BlockPosition, BlockState> state : scenario.finalStates().entrySet()) {
-            verifyBlock(driver.awaitBlock(state.getKey(), state.getValue()),
-                    state.getKey(), state.getValue(), "reload");
+            if (!matches(reloaded, state.getKey(), state.getValue())) {
+                reloaded = driver.awaitBlock(state.getKey(), state.getValue());
+            }
+            verifyBlock(reloaded, state.getKey(), state.getValue(), "reload");
         }
         return new BlockStateDomainEvidence(scenario, evidence, boundary);
     }
 
     private static void verifyBlock(RemoteWorldView world, BlockPosition position,
             BlockState expected, String phase) {
-        require(world != null && world.blockAt(position.x(), position.y(), position.z())
-                .equals(expected), phase + " state-domain block drifted");
+        require(matches(world, position, expected), phase + " state-domain block drifted");
+    }
+
+    private static boolean matches(RemoteWorldView world, BlockPosition position,
+            BlockState expected) {
+        if (world == null) return false;
+        try {
+            return world.blockAt(position.x(), position.y(), position.z()).equals(expected);
+        } catch (IllegalArgumentException absentChunk) { return false; }
     }
 
     private static void verifySlot(RemoteInventoryView inventory,
