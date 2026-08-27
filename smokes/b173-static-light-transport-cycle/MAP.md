@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=b173-static-light-transport-cycle -->
 <!-- nonclaims=random-tick-melting,dynamic-redstone-state,global-sky-brightness,native-render -->
-<!-- frozen-trace=0000000000000000000000000000000000000000000000000000000000000000 -->
+<!-- frozen-trace=ddade0dec6c4591634c260476e5a2ca0241685affa5d49fbea85b5ed5a7712c6 -->
 
 # Beta 1.7.3 static light transport
 
@@ -20,4 +20,4 @@ This map does not claim random-tick melting, redstone-driven source transitions,
 time-of-day brightness curve, renderer shading, or modded light engines.
 
 Frozen signal:
-`provider=b1.7.3-server-light,family=static-transport,rows=7,passed=7,probes=15,reload=FRESH_LOGINx7,evidence=0000000000000000000000000000000000000000000000000000000000000000,isolation=7-fresh-worlds`.
+`provider=b1.7.3-server-light,family=static-transport,rows=7,passed=7,probes=15,reload=FRESH_LOGINx7,evidence=eaa8a83ff7582430369b4c3e664982c73053e6945d5eb9bb0014487eeefe38a7,isolation=7-fresh-worlds`.
