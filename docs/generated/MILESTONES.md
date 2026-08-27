@@ -607,6 +607,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-gold-shovel-harvest-lifecycle-cycle` | CARRIED | official Beta 1.7.3 gold-shovel harvest lifecycle family |
 | `b173-lifecycle-provider-cycle` | CARRIED | official Beta 1.7.3 public block lifecycle provider |
 | `b173-shaded-mushroom-lifecycle-cycle` | CARRIED | official Beta 1.7.3 shaded mushroom lifecycle family |
+| `b173-slab-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 slab state and disassembly lifecycle family |
 | `b173-static-collision-envelope-cycle` | CARRIED | official Beta 1.7.3 static collision envelopes |
 | `b173-static-light-transport-cycle` | CARRIED | official Beta 1.7.3 static light transport |
 | `b173-static-self-drop-lifecycle-cycle` | CARRIED | official Beta 1.7.3 static self-drop lifecycle family |
