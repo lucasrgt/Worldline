@@ -27,7 +27,7 @@ public final class B173DeterministicHarvestLifecycleSmoke {
     }
 
     private static BlockLifecycleScenario cobweb() {
-        return row("cobweb", "030", "transparent-solid", false, 30, 30, 276, 1, 20,
+        return row("cobweb", "030", "transparent-solid", false, 30, 30, 276, 2, 20,
                 new RemoteItemStack(287, 1, 0));
     }
 
