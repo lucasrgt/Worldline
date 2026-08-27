@@ -221,7 +221,9 @@ final class RepositorySchemaMigration {
                 "-r", "HEAD").directory(root.toFile()).start();
         String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
         return process.waitFor() == 0 && output.lines().anyMatch(path ->
-                path.matches("smokes/[^/]+/(?:smoke\\.properties|MAP\\.md)"));
+                path.matches("smokes/[^/]+/(?:smoke\\.properties|MAP\\.md)")
+                || path.equals("smokes/qualification.lock")
+                || path.matches("smokes/qualification-evidence/[^/]+\\.proof"));
     }
     private static Properties load(Path path) throws Exception { Properties values = new Properties();
         try (var reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
