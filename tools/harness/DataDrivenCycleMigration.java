@@ -111,14 +111,22 @@ final class DataDrivenCycleMigration {
                 pins.add(requiredEntry(existing, smoke.id)); continue;
             }
             generic++; String stem = "cycle." + smoke.id + ".";
+            String current = cache.fingerprint(smoke);
             DataDrivenCyclePlan plan = DataDrivenCyclePlan.load(root, smoke.id);
             String recordedPlan = manifest.getProperty(stem + "plan_sha256");
+            SmokePins.Entry newPlanPin = null;
             if (recordedPlan == null) {
                 require(unchangedMilestone(smoke.id),
                         "unregistered generic plan changed with the shared runner: " + smoke.id);
                 SmokePins.Entry prior = cache.availablePin(smoke);
+                boolean milestoneProof = false;
+                if (prior == null && sharedPlanRefactor) {
+                    prior = DataDrivenPlanReceipt.pin(root, smoke, current);
+                    milestoneProof = true;
+                }
                 if (prior == null) prior = requiredEntry(existing, smoke.id);
-                if (!"executed".equals(prior.source())) {
+                newPlanPin = prior;
+                if (!"executed".equals(prior.source()) && !milestoneProof) {
                     require(TrainPinCheck.carriesCurrent(train, smoke.id, prior,
                                     cache.fingerprint(smoke)),
                             "unregistered generic plan lacks current train proof: " + smoke.id);
@@ -129,8 +137,15 @@ final class DataDrivenCycleMigration {
             } else require(plan.fingerprint().equals(recordedPlan),
                     "plan changed outside the reviewed migration: " + smoke.id);
             SmokePins.Entry local = cache.availablePin(smoke);
-            SmokePins.Entry existingPin = requiredEntry(existing, smoke.id);
-            String current = cache.fingerprint(smoke);
+            SmokePins.Entry existingPin = existing.entry(smoke.id);
+            if (existingPin == null) {
+                require(newPlanPin != null, "new generic plan lacks exact execution: " + smoke.id);
+                pins.add(new SmokePins.Entry(smoke.id, current, newPlanPin.evidence(),
+                        current.equals(newPlanPin.fingerprint()) ? newPlanPin.source()
+                                : "refactor-equivalent"));
+                executed++;
+                continue;
+            }
             if (local == null && !current.equals(existingPin.fingerprint()) && !sharedPlanRefactor) {
                 FixtureRefactor refactor = fixtureRefactor(smoke.id);
                 if (refactor != null) {
