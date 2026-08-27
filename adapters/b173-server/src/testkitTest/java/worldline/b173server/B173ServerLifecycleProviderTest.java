@@ -39,6 +39,16 @@ public final class B173ServerLifecycleProviderTest {
                 && rows.get(25).id().equals("empty-jukebox"),
                 "lifecycle fixture row order drifted");
         descriptorMatchesRows(rows.size());
+        BlockLifecycleScenario external = B173LifecycleScenarioFactory.selfDrop(
+                "external-sponge", "b1.7.3:block/019", "sponge", true,
+                19, 0, 278, 30);
+        require(external.placement().layer() == ConformanceLayer.UNIVERSAL
+                        && external.drops().layer() == ConformanceLayer.SINGULAR
+                        && external.placedState().equals(new worldline.api.BlockState(19, 0))
+                        && external.placementSlot().inventorySlot() == 37
+                        && external.breakSlot().inventorySlot() == 38,
+                "external lifecycle scenario factory drifted");
+        familyDescriptorMatchesRows(5);
         require(rows.get(0).drops().layer() == ConformanceLayer.ARCHETYPE
                 && rows.get(1).drops().layer() == ConformanceLayer.ARCHETYPE
                 && rows.get(2).drops().layer() == ConformanceLayer.SINGULAR,
@@ -118,6 +128,20 @@ public final class B173ServerLifecycleProviderTest {
         require(signal.contains("rows=" + rows + ",passed=" + rows + ",")
                         && layers.split("[+]", -1).length == rows,
                 "lifecycle expected row/layer cardinality drift");
+    }
+
+    private static void familyDescriptorMatchesRows(int rows) throws Exception {
+        List<String> lines = Files.readAllLines(Paths.get("smokes",
+                "b173-static-self-drop-lifecycle-cycle", "smoke.properties"));
+        String prefix = "expected.signal=";
+        String signal = lines.stream().filter(line -> line.startsWith(prefix)).findFirst()
+                .orElseThrow(() -> new AssertionError("family expected signal is absent"))
+                .substring(prefix.length());
+        String layers = signal.substring(signal.indexOf("layers=") + 7,
+                signal.indexOf(",reload="));
+        require(signal.contains("family=static-self-drop,rows=" + rows + ",passed=" + rows)
+                        && layers.split("[+]", -1).length == rows,
+                "family expected row/layer cardinality drift");
     }
 
     private static void require(boolean condition, String message) {
