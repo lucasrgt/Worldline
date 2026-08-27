@@ -1,6 +1,11 @@
 # Worldline smoke qualification lock v5
 schema=5
 algorithm=worldline-smoke-input-v6-tokens
+smoke.b173-furnace-state-domain-cycle.fingerprint=d9eeb389615ce246bb8b76a656afc787d75aaa479517a80ac4f1514368827f45
+smoke.b173-furnace-state-domain-cycle.observation_sha256=8e3a8a8bff0ef466b29c364aa18182af2fa0b7633e13765b2f3120fc716b4537
+smoke.b173-furnace-state-domain-cycle.evidence_sha256=f0946bf6560455f2cf77d766edf429962d51a853357ce92ef86be025fa2737af
+smoke.b173-furnace-state-domain-cycle.source=executed
+smoke.b173-furnace-state-domain-cycle.status=passed
 smoke.b173-gold-shovel-harvest-lifecycle-cycle.fingerprint=1ecf86413b14f332c679d78fa8fc3c3f4d4e18fbb6c9ec56b427bf3d25acbd3a
 smoke.b173-gold-shovel-harvest-lifecycle-cycle.observation_sha256=1d3e0c69501dc30043c2468865be8f5c7078bcdf07beb32b94c5f0e51242ccf3
 smoke.b173-gold-shovel-harvest-lifecycle-cycle.evidence_sha256=0dfa407de66ba85633f282af017043ddc39c158523609b7dd74338201b8e2bf1
