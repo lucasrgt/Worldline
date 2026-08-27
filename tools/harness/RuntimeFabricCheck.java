@@ -28,7 +28,8 @@ final class RuntimeFabricCheck {
         Path build = Files.createTempDirectory(root.resolve(".worldline"), "runtime-fabric-check-");
         try {
             compile(build);
-            for (String type : List.of("ContainerSmokePool", "HostSmokePool", "RuntimeFabric"))
+            for (String type : List.of("ContainerSmokePool", "HostSmokePool", "RuntimeFabric",
+                    "TimeDilation"))
                 ProcessCapture.require(root, List.of(java(), "-cp", build.toString(), type, "--self-test"), 120);
             store(proof, digest);
             CacheUsage.touch(proof);

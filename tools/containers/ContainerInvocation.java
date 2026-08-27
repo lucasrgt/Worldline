@@ -1,4 +1,5 @@
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 /** Builds the immutable Docker invocation for one canonical Gate worker. */
@@ -7,14 +8,16 @@ final class ContainerInvocation {
     private ContainerInvocation() { }
 
     static List<String> command(String id, String milestone, String memory, String cpus, String heap,
-            Path jar, String container, ContainerPoolContext.Context context, String image) {
+            Path jar, String container, ContainerPoolContext.Context context, String image,
+            TimeDilation.Dilation dilation) {
         require(!jar.toString().contains(",") && !context.directory().toString().contains(","),
                 "Docker bind paths may not contain a comma");
         String oracle = "type=bind,source=" + jar + ",target=/workspace/local/artifacts/"
                 + "minecraft-b1.7.3-server.jar,readonly";
         String lease = "type=bind,source=" + context.directory()
                 + ",target=/workspace/.worldline/runtime-fabric,readonly";
-        return List.of("docker", "create", "--name", container, "--label", LABEL, "--label",
+        List<String> command = new ArrayList<>(List.of("docker", "create", "--name", container,
+                "--label", LABEL, "--label",
                 "dev.worldline.smoke=" + id, "--init", "--network", "none", "--read-only",
                 "--cap-drop", "ALL", "--security-opt", "no-new-privileges", "--pids-limit", "160",
                 "--memory", memory, "--memory-swap", memory, "--cpus", cpus,
@@ -30,8 +33,10 @@ final class ContainerInvocation {
                 "--env", "WORLDLINE_CONTAINER_IMAGE_ID=" + image,
                 "--env", "WORLDLINE_TRACKED_FILES=/workspace/.worldline/runtime-fabric/tracked-files",
                 "--env", "WORLDLINE_GATE_CONTROL=/runtime/control", "--env",
-                "WORLDLINE_CONTROL_DIR=/runtime/locks", image,
-                "tools/harness/Gate.java", "--milestone", milestone);
+                "WORLDLINE_CONTROL_DIR=/runtime/locks"));
+        command.addAll(dilation.arguments());
+        command.addAll(List.of(image, "tools/harness/Gate.java", "--milestone", milestone));
+        return List.copyOf(command);
     }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalArgumentException(message);

@@ -68,8 +68,8 @@ final class SmokeInputFingerprint {
     private String compute(SmokeDiscovery.Entry smoke, boolean qualification) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         boolean portable = qualification;
-        update(digest, portable ? "worldline-smoke-input-v5-portable"
-                : "worldline-smoke-observation-v1");
+        update(digest, portable ? "worldline-smoke-input-v6-tokens"
+                : "worldline-smoke-observation-v2-tokens");
         update(digest, smoke.id); update(digest, smoke.runner);
         if (!portable) {
             update(digest, System.getProperty("java.runtime.version", System.getProperty("java.version")));
@@ -237,7 +237,7 @@ final class SmokeInputFingerprint {
         if (Files.isRegularFile(path)) {
             require(!path.startsWith(root) || tracked.contains(path),
                     "untracked smoke input: " + root.relativize(path));
-            digest.update(PortableText.normalize(Files.readAllBytes(path)));
+            digest.update(canonical(path, Files.readAllBytes(path)));
         } else {
             List<Path> files = tracked.stream().filter(item -> item.startsWith(path))
                     .filter(Files::isRegularFile).sorted(Comparator.comparing(
@@ -245,10 +245,17 @@ final class SmokeInputFingerprint {
             require(!files.isEmpty(), "smoke input has no tracked files: " + root.relativize(path));
             for (Path file : files) {
                 update(digest, path.relativize(file).toString().replace('\\', '/'));
-                digest.update(PortableText.normalize(Files.readAllBytes(file)));
+                digest.update(canonical(file, Files.readAllBytes(file)));
             }
         }
         String value = HexFormat.of().formatHex(digest.digest()); pathDigests.put(path, value); return value;
+    }
+
+    /** Java sources hash as token streams; every other input stays portable byte-exact. */
+    private static byte[] canonical(Path path, byte[] bytes) {
+        byte[] portable = PortableText.normalize(bytes);
+        return path.getFileName().toString().endsWith(".java")
+                ? JavaTokenText.canonical(portable) : portable;
     }
 
     private static List<String> list(String raw) {

@@ -117,7 +117,7 @@ public final class ContainerSmokePool {
         try {
             Files.createDirectories(output);
             List<String> command = ContainerInvocation.command(task.id, task.argument, options.memory,
-                    options.cpus, options.heap, jar, container, context, image);
+                    options.cpus, options.heap, jar, container, context, image, TimeDilation.load(root));
             Result create = execute(command, root, Duration.ofSeconds(30), null);
             require(create.exit == 0, "docker create failed: " + create.output.trim());
             created = true;
@@ -235,11 +235,14 @@ public final class ContainerSmokePool {
                 "00000000-0000-0000-0000-000000000000", "a".repeat(40), "b".repeat(40));
         List<String> command = ContainerInvocation.command(tasks.getFirst().id, tasks.getFirst().argument,
                 options.memory, options.cpus, options.heap, Path.of("C:/oracle/server.jar"),
-                "test-container", context, "sha256:test");
+                "test-container", context, "sha256:test", TimeDilation.Dilation.DISABLED);
         require(command.contains("none") && command.contains("--read-only") && command.contains("--cap-drop")
                 && command.stream().anyMatch(value -> value.endsWith("server.jar,readonly"))
                 && command.contains("tools/harness/Gate.java") && command.contains("--milestone"),
                 "canonical container Gate or isolation command drift");
+        require(command.stream().noneMatch(value -> value.startsWith("LD_PRELOAD")
+                        || value.startsWith("FAKETIME")),
+                "disabled time dilation leaked into the container invocation");
         System.out.println("container smoke pool self-test passed");
     }
 

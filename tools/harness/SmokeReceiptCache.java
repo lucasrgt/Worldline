@@ -39,6 +39,13 @@ final class SmokeReceiptCache {
         return fingerprints.computeExecution(smoke);
     }
 
+    boolean restorable(SmokeDiscovery.Entry smoke, String fingerprint) throws Exception {
+        if (!reuse) return false;
+        if (validProof(smoke.id, fingerprint, proof(smoke.id, fingerprint),
+                evidence(smoke.id, fingerprint))) return true;
+        return pins.verifiedMatch(smoke.id, fingerprint) != null;
+    }
+
     boolean restore(SmokeDiscovery.Entry smoke, String fingerprint) throws Exception {
         if (!reuse) return false;
         Path proof = proof(smoke.id, fingerprint), evidence = evidence(smoke.id, fingerprint);

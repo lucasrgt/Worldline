@@ -11,10 +11,10 @@ import java.util.Properties;
 
 /** Reads and writes the reviewable, repository-tracked smoke qualification lock. */
 final class SmokePins {
-    private static final String ALGORITHM = "worldline-smoke-input-v5-portable";
+    private static final String ALGORITHM = "worldline-smoke-input-v6-tokens";
     private static final java.util.Set<String> LEGACY_ALGORITHMS = java.util.Set.of(
             "worldline-smoke-input-v1", "worldline-smoke-input-v2", "worldline-smoke-input-v3",
-            "worldline-smoke-input-v4");
+            "worldline-smoke-input-v4", "worldline-smoke-input-v5-portable");
     private static final String HEADER = "# Worldline smoke qualification lock v5\n"
             + "schema=5\nalgorithm=" + ALGORITHM + "\n";
     private final Path path;
