@@ -12,4 +12,4 @@ Run executes two mapped and two official fresh processes. Each process installs 
 
 Expected signal: `oracle=MATCH,fixture=b173-flowing-fluid-lifecycle-cycle,ticks=240,controlled=true`.
 
-Frozen semantic SHA-256: `0000000000000000000000000000000000000000000000000000000000000000`.
+Frozen semantic SHA-256: `f21fb7eb6a04dcf14e8fa7195c4e66f478e83c93f8d59548abe36a59a62b9de9`.

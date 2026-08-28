@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=flowing-fluid-lifecycle -->
 <!-- nonclaims=gameplay-placement,break-transition,drop-matrix,native-render,nether-lava-odd-metadata -->
-<!-- frozen-trace=0000000000000000000000000000000000000000000000000000000000000000 -->
+<!-- frozen-trace=f21fb7eb6a04dcf14e8fa7195c4e66f478e83c93f8d59548abe36a59a62b9de9 -->
 
 # Beta 1.7.3 flowing-fluid lifecycle map
 
@@ -35,7 +35,7 @@ This package does not claim direct item placement of moving blocks, break or dro
 client rendering, fluid reactions, source regeneration, entity current effects, or the odd lava
 metadata reachable under Nether cadence.
 
-Frozen semantic signature: pending official qualification.
+Frozen semantic signature: `f21fb7eb6a04dcf14e8fa7195c4e66f478e83c93f8d59548abe36a59a62b9de9`.
 
 Frozen semantic signal:
 `oracle=MATCH,fixture=b173-flowing-fluid-lifecycle-cycle,ticks=240,controlled=true`.
