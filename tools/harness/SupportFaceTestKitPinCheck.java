@@ -72,12 +72,13 @@ final class SupportFaceTestKitPinCheck {
             String current = fingerprints.compute(smoke(catalog, id));
             SmokePins.Entry pin = pins.match(id, current);
             String priorCurrent = required(lock, stem + "fingerprint");
+            String evidence = required(lock, stem + "evidence_sha256");
             boolean direct = current.equals(priorCurrent) && pin != null
                     && pin.source().equals("executed");
             boolean successor = BoundedDropTestKitPinCheck.transportsSmoke(root, id,
-                    priorCurrent, required(lock, stem + "evidence_sha256"), current);
+                    priorCurrent, evidence, current);
             boolean transported = pin != null && (direct || successor)
-                    && pin.evidence().equals(required(lock, stem + "evidence_sha256"));
+                    && pin.evidence().equals(evidence);
             boolean exactSuccessor = pin != null
                     && TrainPinCheck.carriesCurrent(train, id, pin, current);
             boolean dataDrivenSuccessor = pin != null && pin.evidence().equals(evidence)
