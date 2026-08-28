@@ -54,6 +54,7 @@ public final class B173CakeServingScenario implements CakeServingScenario {
         List<Integer> skyLight = new ArrayList<Integer>();
         client.selectHeldSlot(1); client.useHeldItemOnBlock(
                 B173CakeServingArena.SUPPORT, BlockFace.UP);
+        client.selectHeldSlot(3);
         for (int metadata = 0; metadata <= 5; metadata++) {
             BlockState expected = new BlockState(92, metadata);
             verify(client.awaitBlock(B173CakeServingArena.TARGET, expected), expected,
@@ -71,6 +72,7 @@ public final class B173CakeServingScenario implements CakeServingScenario {
                 verify(client.awaitBlock(B173CakeServingArena.TARGET, expected), expected,
                         "idle cake");
                 sessions.reload(expectedHealth); client = sessions.client();
+                client.selectHeldSlot(3);
                 verify(client.awaitBlock(B173CakeServingArena.TARGET, expected), expected,
                         "reloaded partial cake");
             }
