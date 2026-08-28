@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=b173-tile-utility-physical-envelope-cycle -->
 <!-- nonclaims=occupied-jukebox-state-domain,tile-payloads,container-contents,activation,redstone,tick-policy,neighbor-response,native-render -->
-<!-- frozen-trace=73f4aeecdae622592f04014a1c46ba53b2b0102c0906ffa64e9993c4f2ae737e -->
+<!-- frozen-trace=bf3ac2405d31b6022ee1be59ed397d11b661a060ae91e363532abebb0c8bfb61 -->
 
 # Beta 1.7.3 tile-utility physical envelopes
 
@@ -17,7 +17,7 @@ loadout/action not represented by this state-domain package. Tile payloads, cont
 activation, redstone, ticking, neighbor response, and native rendering also remain outside scope.
 
 Frozen aggregate signal:
-`family=tile-utility-physical-envelope,subjects=6,claims=17,layers=3,reload=FRESH_LOGINx17,state=bec6f572d5a4fd675124b1c87f11cc7817d191771259a9b4d091ba86f99658a5,collision=a832a0a31f55d5436ae99a788818f54dacfbca31b7e4f91ecc469eaee609b16c,light=b14477783b41d8f59c51015536779a1bffc64710717771bb8890aecde19de64ca`.
+`family=tile-utility-physical-envelope,subjects=6,claims=17,layers=3,reload=FRESH_LOGINx17,state=bec6f572d5a4fd675124b1c87f11cc7817d191771259a9b4d091ba86f99658a5,collision=a832a0a31f55d5436ae99a788818f54dacfbca31b7e4f91ecc469eaee609b16c,light=b14477783b41d8f59c51015536779a1bffc64710717771bb890aecde19de64ca`.
 
 Qualified semantic signature:
-`73f4aeecdae622592f04014a1c46ba53b2b0102c0906ffa64e9993c4f2ae737e`.
+`bf3ac2405d31b6022ee1be59ed397d11b661a060ae91e363532abebb0c8bfb61`.
