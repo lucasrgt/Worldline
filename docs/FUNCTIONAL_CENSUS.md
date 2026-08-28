@@ -122,6 +122,13 @@ Beta 1.7.3 drop behavior. Its three cases close 10 new claims and upgrade two cr
 from internal automation to the public TestKit, bringing the census to 548 verified claims (51.89%)
 and leaving 508 unresolved. Both official passes are bound by semantic signature
 `dfbb3c9f3a5a4916dbb4ea35228ef40089e85003cf9287241276b8d4398601c9`.
+The remaining opaque-cube physical-envelope family then routes white wool, double stone slab,
+supported sand, and supported gravel through the public state-domain, collision, and light
+families. Its 12 claims bring the census to 560 verified claims (53.03%) and leave 496 unresolved;
+gravity fall remains separately scoped for sand and gravel. Two official passes completed with
+zero retries and failures, producing evidence hash
+`756a5c89ff5e56a51521ebd7d7a639f97f30ae97c1ee02e90a7dd865f555311c`, bound by aggregate
+signature `c56ec6bbc4c1db434a1183756273cd95d814d8ebaa229e277ae25b442f644b51`.
 
 The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
 extended base; sticky-piston evidence breaks an extended head; wooden-door evidence breaks the
@@ -178,6 +185,7 @@ The inert-solid physical-envelope subsystem reduces it to 551.
 The inert-solid bounded-stability subsystem reduces it to 521.
 The terrain-crafted solid bounded-stability family reduces it to 506.
 The ground-cover lifecycle subsystem reduces it to 496.
+The remaining opaque-cube physical-envelope family reduces it to 484.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
