@@ -87,13 +87,13 @@ final class FormattingPinCheck {
         try {
             Path root = Path.of("").toAbsolutePath().normalize();
             Properties shared = SharedHelperPinCheck.manifest(root);
-            return direct || SharedHelperPinCheck.follows(shared, id,
-                    manifest.getProperty(stem + "current_fingerprint"),
-                    manifest.getProperty(stem + "evidence_sha256"), pin, current)
-                    || DataDrivenCycleCheck.carriesPlan(root, id, pin)
+            return direct || DataDrivenCycleCheck.carriesPlan(root, id, pin)
                     || CompositeCycleCheck.carriesPlan(root, id, pin)
                     || SchemaPinCheck.carries(SchemaPinCheck.manifest(root), id, pin, current)
                     || NeighborTestKitPinCheck.reexecuted(pin)
+                    || SharedHelperPinCheck.follows(shared, id,
+                            manifest.getProperty(stem + "current_fingerprint"),
+                            manifest.getProperty(stem + "evidence_sha256"), pin, current)
                     || TrainPinCheck.carriesCurrent(
                             TrainPinCheck.manifest(root), id, pin, current);
         } catch (Exception error) { return false; }

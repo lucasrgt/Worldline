@@ -118,6 +118,7 @@ final class SharedHelperPinCheck {
     }
     static boolean follows(Properties lock, String id, String prior, String evidence,
             SmokePins.Entry pin, String current) {
+        if (prior == null || evidence == null) return false;
         String stem = "smoke." + id + ".";
         return carries(lock, id, pin, current)
                 && TrainPinCheck.continues(lock, id, prior, evidence);
