@@ -5,8 +5,9 @@ net/minecraft/src/World	m	(IIIII)Z	setBlockAndMetadata	a	a
 net/minecraft/src/World	m	(IIII)Z	setBlockWithNotify	f	e
 net/minecraft/src/World	m	(IIIII)V	scheduleUpdateTick		c
 net/minecraft/src/World	m	()V	tick	l	h
-net/minecraft/src/World	m	(III)I	getBlockId	a	a
-net/minecraft/src/World	m	(III)I	getBlockMetadata	e	c
+net/minecraft/src/IBlockAccess	c	-	net/minecraft/src/IBlockAccess	xp	pb
+net/minecraft/src/IBlockAccess	m	(III)I	getBlockId	a	a
+net/minecraft/src/IBlockAccess	m	(III)I	getBlockMetadata	e	c
 net/minecraft/src/World	m	(Lnet/minecraft/src/EnumSkyBlock;III)I	getSavedLightValue	a	a
 net/minecraft/src/World	m	()Z	func_6156_d		f
 net/minecraft/src/World	m	(ZLnet/minecraft/src/IProgressUpdate;)V	saveWorld	a	a
