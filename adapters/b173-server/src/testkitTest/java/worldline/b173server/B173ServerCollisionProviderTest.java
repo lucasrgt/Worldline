@@ -56,6 +56,13 @@ public final class B173ServerCollisionProviderTest {
                 && special.get(2).supportState().equals(new BlockState(12, 0))
                 && special.get(3).probes().get(2).deltaY() == 0.9375D,
                 "special-collision envelope rows drifted");
+        List<BlockCollisionScenario> utilities =
+                B173TileUtilityPhysicalScenarioFactory.collisions();
+        require(utilities.size() == 6 && utilities.stream().allMatch(row ->
+                row.claim().layer() == ConformanceLayer.SINGULAR && row.probes().size() == 3)
+                && utilities.get(0).placements().get(0).expected().equals(new BlockState(23, 2))
+                && utilities.get(5).subject().endsWith("/084"),
+                "tile-utility collision rows drifted");
         Map<String, String> options = new LinkedHashMap<String, String>();
         options.put(BlockCollisionPlan.PLACEMENT_SLOT_OPTION, "1:37:85:2:0");
         B173CollisionLoadout loadout = B173CollisionLoadout.from(new TestRuntimeRequest(

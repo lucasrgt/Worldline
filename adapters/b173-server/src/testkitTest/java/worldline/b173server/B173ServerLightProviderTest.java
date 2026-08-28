@@ -45,6 +45,12 @@ public final class B173ServerLightProviderTest {
                 && special.get(2).supportState().equals(new BlockState(12, 0))
                 && special.get(3).probes().get(0).treatment().skyLight() == 0,
                 "special-collision light rows drifted");
+        List<BlockLightScenario> utilities = B173TileUtilityPhysicalScenarioFactory.lights();
+        require(utilities.size() == 6 && utilities.stream().allMatch(row ->
+                row.claim().layer() == ConformanceLayer.SINGULAR
+                && row.probes().get(0).treatment().blockLight() == 0
+                && row.probes().get(0).treatment().skyLight() == 0),
+                "tile-utility light rows drifted");
         Map<String, String> options = new LinkedHashMap<String, String>();
         options.put(BlockLightPlan.PLACEMENT_SLOT_OPTION, "1:37:89:1:0");
         B173LightLoadout loadout = B173LightLoadout.from(new TestRuntimeRequest(

@@ -20,6 +20,9 @@ Status: GO.
 - Repository-schema, neighbor, support-face, bounded-drop, and downstream TestKit migrations are
   regenerated as ordered proof transitions; unchanged pins retain their immediate predecessor
   identity.
+- Added a singular tile-utility physical-envelope package for dispenser, note block, mob spawner,
+  chest, furnace, and jukebox. It coordinates five state rows and six collision/light rows while
+  explicitly withholding occupied-jukebox metadata until a record-action loadout is proved.
 
 ## Unreleased - Ground-Cover Lifecycle Family
 

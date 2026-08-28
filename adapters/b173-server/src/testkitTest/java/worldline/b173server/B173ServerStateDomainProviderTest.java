@@ -9,7 +9,6 @@ import worldline.test.TestRuntimeRequest;
 import worldline.testkit.BlockStateDomainPlan;
 import worldline.testkit.BlockStateDomainScenario;
 import worldline.testkit.ConformanceLayer;
-
 /** Static checks for the public state-domain provider and official scenario rows. */
 public final class B173ServerStateDomainProviderTest {
     private B173ServerStateDomainProviderTest() { }
@@ -102,6 +101,13 @@ public final class B173ServerStateDomainProviderTest {
                 && special.get(0).domain().size() == 1
                 && special.get(2).supportState().equals(new BlockState(12, 0)),
                 "special-collision state-domain rows drifted");
+        java.util.List<BlockStateDomainScenario> utilities = B173TileUtilityPhysicalScenarioFactory
+                .stateDomains();
+        require(utilities.size() == 5 && utilities.stream().allMatch(row -> row.claim().layer()
+                == ConformanceLayer.SINGULAR)
+                && utilities.get(1).domain().equals(java.util.List.of(new BlockState(25, 0)))
+                && utilities.get(2).domain().equals(java.util.List.of(new BlockState(52, 0))),
+                "tile-utility state-domain rows drifted");
         Map<String, String> options = new LinkedHashMap<String, String>();
         options.put(BlockStateDomainPlan.PLACEMENT_SLOT_OPTION, "1:37:324:4:0");
         B173StateDomainLoadout loadout = B173StateDomainLoadout.from(new TestRuntimeRequest(
