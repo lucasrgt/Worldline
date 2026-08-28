@@ -1,5 +1,5 @@
 schema=1
 id=b173-source-fluid-dynamics-cycle
-fingerprint=9324648534720ebacd721f1d6b7a74dfff6b009c0a4b4a63806a6194ac853109
+fingerprint=89467f9ef72861ab654e9ff2ba89cc22f9c8f942a7826d4a49bc00910ab7b13d
 observation.sha256=582feb4cc513f0ea0e5515ac3c12d0ce77d9280fa2e3c689cf35e6e30d986771
-source=executed
+source=refactor-equivalent

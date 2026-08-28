@@ -1,5 +1,5 @@
 schema=1
 id=b173-wooden-door-state-domain-cycle
-fingerprint=a0f0b3e9253ce9b4027876fbba05f8452a4e99b56bfc5238709ef1f7a4b24e15
+fingerprint=44754b983ed2ec7dcf21bd59453bbdb9ddad8886eb41db3d3a9751b1e194e263
 observation.sha256=bede36ebdaa6340f6af9a1fbb30352806d622d4ffc12cd127dac0c0abddd0168
 source=refactor-equivalent
