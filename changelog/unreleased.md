@@ -15,6 +15,8 @@ Status: GO.
   claims to the 98.8% target.
 - Shared physical-placement support changes are carried through reviewed refactor-equivalent
   proof migrations only when their tracked official observation hashes remain unchanged.
+- Composite and telemetry pin migrations retain their prior official evidence envelopes while
+  binding the new shared TestKit fingerprint; exact wave receipts remain `executed`.
 
 ## Unreleased - Ground-Cover Lifecycle Family
 

@@ -1,5 +1,5 @@
 schema=1
 id=b173-support-dependent-plant-lifecycle-cycle
-fingerprint=cc33dbe6713ae7a4bc0c5bd97be7cf348f65085b609c233049e3d073eacf0116
+fingerprint=8ac467f4acf30ff9d8363af64b9cdbe9f7de7c83fadf4f955245915cad004c56
 observation.sha256=5b3c9e79bc0488d70434bebc9c087424db4e4e5d1ccbc9e3a7ba212bb0b1cc41
 source=refactor-equivalent
