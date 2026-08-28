@@ -15,7 +15,7 @@ import worldline.test.WorldlineSpec;
 public final class BlockLightFamilyCycle {
     private BlockLightFamilyCycle() { }
 
-    public static void run(String[] arguments, String family, long expectedSeed,
+    public static String run(String[] arguments, String family, long expectedSeed,
             String serverProperty, TestRuntimeProvider provider,
             List<BlockLightScenario> rows) throws Exception {
         if (arguments.length != 4) throw new IllegalArgumentException(
@@ -55,9 +55,11 @@ public final class BlockLightFamilyCycle {
                     + provider.runtimeId() + "|family=" + family + "|rows=" + ids(rows)
                     + "|actions=sample-air+gameplay-place+fresh-login+sample-light-planes"
                     + "|oracle=canonical-public-light-evidence|evidence=" + evidenceHash;
+            String signature = sha(trace);
             System.out.println("WORLDLINE_B173_LIGHT_SET=" + signal);
             System.out.println("WORLDLINE_B173_LIGHT_TRACE=" + trace);
-            System.out.println("WORLDLINE_B173_LIGHT_SIGNATURE=" + sha(trace));
+            System.out.println("WORLDLINE_B173_LIGHT_SIGNATURE=" + signature);
+            return signature;
         } finally {
             if (prior == null) System.clearProperty(serverProperty);
             else System.setProperty(serverProperty, prior);

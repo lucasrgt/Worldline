@@ -33,10 +33,13 @@ public final class B173TileUtilityPhysicalEnvelopeSmoke {
                 B173TileUtilityPhysicalScenarioFactory.SEED, SERVER_PROPERTY,
                 new B173ServerCollisionTestRuntimeProvider(),
                 B173TileUtilityPhysicalScenarioFactory.collisions());
-        BlockLightFamilyCycle.run(scoped(arguments, "light-behavior"), FAMILY,
+        String observedLight = BlockLightFamilyCycle.run(scoped(arguments, "light-behavior"), FAMILY,
                 B173TileUtilityPhysicalScenarioFactory.SEED, SERVER_PROPERTY,
                 new B173ServerLightTestRuntimeProvider(),
                 B173TileUtilityPhysicalScenarioFactory.lights());
+        if (!LIGHT.equals(observedLight)) throw new IllegalStateException(
+                "tile-utility light signature drift: expected=" + LIGHT
+                + " observed=" + observedLight);
         String signal = "family=tile-utility-physical-envelope,subjects=6,claims=17,layers=3"
                 + ",reload=FRESH_LOGINx17,state=" + STATE + ",collision=" + COLLISION
                 + ",light=" + LIGHT;
