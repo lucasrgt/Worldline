@@ -7,11 +7,12 @@
 
 Three public TestKit rows execute complete isolated lifecycles for oak, spruce, and birch leaves
 obtained and harvested with historical shears. Carried variants `18:0`, `18:1`, and `18:2` pass
-through the Beta ItemBlock placement path as persistent states `18:8`, `18:9`, and `18:10`.
+through the Beta ItemBlock placement path as states `18:8`, `18:9`, and `18:10` beside log `17:0`.
+The log prevents unsupported-decay random ticks from contaminating the manual lifecycle boundary.
 Shearing each placed state returns one matching original item variant. All rows use shears `359`.
 
 Each row proves placement consumption, exact placed state, fresh-login persistence, break to air,
-one exact drop, one point of shear durability, stable support, and removed-state persistence after
+one exact drop, one point of shear durability, stable natural support, and removed-state persistence after
 a second fresh login.
 
 The package joins twelve lifecycle atoms into one metadata-sensitive leaf mini-subsystem. Existing

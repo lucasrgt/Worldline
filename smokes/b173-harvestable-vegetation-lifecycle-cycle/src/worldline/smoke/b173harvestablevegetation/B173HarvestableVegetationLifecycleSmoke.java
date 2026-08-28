@@ -24,7 +24,7 @@ public final class B173HarvestableVegetationLifecycleSmoke {
     private static BlockLifecycleScenario leaves(String scenario, int variant) {
         return B173LifecycleScenarioFactory.harvestOnSupport(scenario,
                 "b1.7.3:block/018", "shear-harvested-vegetation", false,
-                18, variant, variant | 8, new BlockState(1, 0), 359, 1, 5,
+                18, variant, variant | 8, new BlockState(17, 0), 359, 1, 5,
                 new RemoteItemStack(18, 1, variant));
     }
 }
