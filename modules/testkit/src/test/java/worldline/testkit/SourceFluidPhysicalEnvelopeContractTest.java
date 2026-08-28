@@ -17,6 +17,10 @@ public final class SourceFluidPhysicalEnvelopeContractTest {
     private SourceFluidPhysicalEnvelopeContractTest() { }
 
     public static void main(String[] arguments) {
+        execute();
+    }
+
+    static void execute() {
         BlockConformancePlan plan = plan();
         require(plan.cases().size() == 6 && plan.cases().stream().allMatch(
                 value -> value.layer() == ConformanceLayer.ARCHETYPE),
