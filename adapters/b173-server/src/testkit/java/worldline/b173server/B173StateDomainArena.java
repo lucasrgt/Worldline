@@ -24,15 +24,13 @@ final class B173StateDomainArena {
 
     static B173WireClient open(B173DedicatedServer server, Path workspace, int port,
             Duration timeout, B173StateDomainLoadout loadout) throws Exception {
-        RemoteItemStack item = loadout.item;
-        B173PlayerSeed.writeInventory(workspace, USERNAME, 4.5D, 60D, 4.5D,
-                new int[] {0, loadout.hotbar}, new int[] {1, item.legacyId()},
-                new int[] {48, item.count()}, new int[] {0, item.damage()});
+        seed(workspace, loadout);
         B173WireClient client = new B173WireClient("127.0.0.1", port, USERNAME, timeout);
         try {
             client.connect();
             client.synchronizePose();
-            require(client.awaitInventory().occupiedSlots() == 2,
+            int occupied = loadout.support.hotbar == 0 ? 2 : 3;
+            require(client.awaitInventory().occupiedSlots() == occupied,
                     "state-domain inventory drift");
             RemoteChunkSnapshot initial = client.awaitRemoteChunk(0, 0).chunkAt(0, 0);
             BlockPosition top = foundation(initial);
@@ -59,15 +57,46 @@ final class B173StateDomainArena {
                     client, southMiddle, BlockFace.EAST, 1);
             require(column == 17 && Arrays.asList(top, northEast, southWest, southEast)
                     .equals(SUPPORTS), "state-domain support grid drift");
+            overlay(client, loadout);
             for (BlockPosition support : SUPPORTS) {
                 client.awaitBlock(support, SUPPORT_STATE);
-                client.awaitBlock(BlockFace.UP.adjacent(support), new BlockState(0, 0));
+                BlockState above = loadout.support.hotbar == 0
+                        ? new BlockState(0, 0) : loadout.support.state;
+                client.awaitBlock(BlockFace.UP.adjacent(support), above);
             }
             return client;
         } catch (Exception failure) {
             try { client.close(); } catch (RuntimeException close) { failure.addSuppressed(close); }
             throw failure;
         }
+    }
+
+    private static void seed(Path workspace, B173StateDomainLoadout loadout) {
+        RemoteItemStack item = loadout.item;
+        if (loadout.support.hotbar == 0) {
+            B173PlayerSeed.writeInventory(workspace, USERNAME, 4.5D, 60D, 4.5D,
+                    new int[] {0, loadout.hotbar}, new int[] {1, item.legacyId()},
+                    new int[] {48, item.count()}, new int[] {0, item.damage()});
+            return;
+        }
+        RemoteItemStack support = loadout.support.item;
+        B173PlayerSeed.writeInventory(workspace, USERNAME, 4.5D, 60D, 4.5D,
+                new int[] {0, loadout.hotbar, loadout.support.hotbar},
+                new int[] {1, item.legacyId(), support.legacyId()},
+                new int[] {48, item.count(), support.count()},
+                new int[] {0, item.damage(), support.damage()});
+    }
+
+    private static void overlay(B173WireClient client, B173StateDomainLoadout loadout)
+            throws Exception {
+        if (loadout.support.hotbar == 0) {
+            return;
+        }
+        client.selectHeldSlot(loadout.support.hotbar);
+        for (BlockPosition pad : SUPPORTS) {
+            B173FixtureSupport.place(client, pad, BlockFace.UP, loadout.support.state);
+        }
+        client.selectHeldSlot(0);
     }
 
     private static BlockPosition foundation(RemoteChunkSnapshot chunk) {

@@ -46,6 +46,16 @@ public final class B173ServerCollisionProviderTest {
                 && rows.get(4).probes().get(0).expected()
                         == BlockCollisionExpectation.PASSABLE,
                 "no-collision attachment envelope drifted");
+        List<BlockCollisionScenario> special =
+                B173SpecialCollisionPhysicalScenarioFactory.collisions();
+        require(special.size() == 4
+                && special.get(0).probes().get(0).expected()
+                        == BlockCollisionExpectation.PASSABLE
+                && special.get(1).probes().get(0).expected()
+                        == BlockCollisionExpectation.PASSABLE
+                && special.get(2).supportState().equals(new BlockState(12, 0))
+                && special.get(3).probes().get(2).deltaY() == 0.9375D,
+                "special-collision envelope rows drifted");
         Map<String, String> options = new LinkedHashMap<String, String>();
         options.put(BlockCollisionPlan.PLACEMENT_SLOT_OPTION, "1:37:85:2:0");
         B173CollisionLoadout loadout = B173CollisionLoadout.from(new TestRuntimeRequest(

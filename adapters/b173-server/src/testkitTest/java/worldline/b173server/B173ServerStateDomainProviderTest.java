@@ -96,6 +96,12 @@ public final class B173ServerStateDomainProviderTest {
                         new BlockState(65, 3), new BlockState(65, 2)))
                 && attachments.get(2).placementSlot().before().legacyId() == 323,
                 "wall-attachment metadata rows drifted");
+        java.util.List<BlockStateDomainScenario> special =
+                B173SpecialCollisionPhysicalScenarioFactory.stateDomains();
+        require(special.size() == 4
+                && special.get(0).domain().size() == 1
+                && special.get(2).supportState().equals(new BlockState(12, 0)),
+                "special-collision state-domain rows drifted");
         Map<String, String> options = new LinkedHashMap<String, String>();
         options.put(BlockStateDomainPlan.PLACEMENT_SLOT_OPTION, "1:37:324:4:0");
         B173StateDomainLoadout loadout = B173StateDomainLoadout.from(new TestRuntimeRequest(

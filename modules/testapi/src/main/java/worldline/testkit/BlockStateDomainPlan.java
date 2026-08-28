@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import worldline.api.BlockState;
 import worldline.api.BlockStateDomainDriver;
 import worldline.api.RemoteItemStack;
 import worldline.test.TestCaseBuilder;
@@ -14,6 +15,7 @@ import worldline.test.Worldline;
 public final class BlockStateDomainPlan {
     public static final String EVIDENCE_ARTIFACT = "block-state-domain.properties";
     public static final String PLACEMENT_SLOT_OPTION = "block-state-domain.placement-slot";
+    public static final String SUPPORT_STATE_OPTION = "block-state-domain.support-state";
     public static final long DEFAULT_TIMEOUT_MILLIS = 180_000L;
 
     private final String runtimeId;
@@ -60,7 +62,8 @@ public final class BlockStateDomainPlan {
 
     private void register(BlockStateDomainScenario scenario) {
         TestCaseBuilder runtime = Worldline.worldline().runtime(runtimeId)
-                .runtimeOption(PLACEMENT_SLOT_OPTION, slot(scenario.placementSlot()));
+                .runtimeOption(PLACEMENT_SLOT_OPTION, slot(scenario.placementSlot()))
+                .runtimeOption(SUPPORT_STATE_OPTION, state(scenario.supportState()));
         Worldline.test(scenario.id(), runtime.run(context -> {
             BlockStateDomainDriver driver = context.capability(BlockStateDomainDriver.class);
             BlockStateDomainEvidence evidence = BlockStateDomainFixture.execute(scenario, driver);
@@ -72,5 +75,9 @@ public final class BlockStateDomainPlan {
         RemoteItemStack item = slot.before();
         return slot.hotbarSlot() + ":" + slot.inventorySlot() + ":" + item.legacyId()
                 + ":" + item.count() + ":" + item.damage();
+    }
+
+    private static String state(BlockState value) {
+        return value.legacyId() + ":" + value.metadata();
     }
 }

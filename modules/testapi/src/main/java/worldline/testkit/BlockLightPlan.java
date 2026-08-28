@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import worldline.api.BlockLightDriver;
+import worldline.api.BlockState;
 import worldline.api.RemoteItemStack;
 import worldline.test.TestCaseBuilder;
 import worldline.test.Worldline;
@@ -14,6 +15,7 @@ import worldline.test.Worldline;
 public final class BlockLightPlan {
     public static final String EVIDENCE_ARTIFACT = "block-light.properties";
     public static final String PLACEMENT_SLOT_OPTION = "block-light.placement-slot";
+    public static final String SUPPORT_STATE_OPTION = "block-light.support-state";
     public static final long DEFAULT_TIMEOUT_MILLIS = 180_000L;
 
     private final String runtimeId;
@@ -56,7 +58,8 @@ public final class BlockLightPlan {
 
     private void register(BlockLightScenario scenario) {
         TestCaseBuilder runtime = Worldline.worldline().runtime(runtimeId)
-                .runtimeOption(PLACEMENT_SLOT_OPTION, slot(scenario.placementSlot()));
+                .runtimeOption(PLACEMENT_SLOT_OPTION, slot(scenario.placementSlot()))
+                .runtimeOption(SUPPORT_STATE_OPTION, state(scenario.supportState()));
         Worldline.test(scenario.id(), runtime.run(context -> {
             BlockLightDriver driver = context.capability(BlockLightDriver.class);
             BlockLightEvidence evidence = BlockLightFixture.execute(scenario, driver);
@@ -68,5 +71,9 @@ public final class BlockLightPlan {
         RemoteItemStack item = slot.before();
         return slot.hotbarSlot() + ":" + slot.inventorySlot() + ":" + item.legacyId()
                 + ":" + item.count() + ":" + item.damage();
+    }
+
+    private static String state(BlockState value) {
+        return value.legacyId() + ":" + value.metadata();
     }
 }

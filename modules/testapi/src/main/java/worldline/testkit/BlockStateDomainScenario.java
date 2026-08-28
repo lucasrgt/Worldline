@@ -12,16 +12,25 @@ import worldline.api.BlockState;
 
 /** Public data row for one causally exercised reachable metadata domain. */
 public final class BlockStateDomainScenario {
+    private static final BlockState DEFAULT_SUPPORT = new BlockState(1, 0);
     private final String id;
     private final BlockConformanceCase claim;
     private final BlockLifecycleSlot placementSlot;
     private final List<BlockState> domain;
     private final List<BlockStateDomainStep> steps;
     private final int observationTicks;
+    private final BlockState supportState;
 
     public BlockStateDomainScenario(String id, BlockConformanceCase claim,
             BlockLifecycleSlot placementSlot, List<BlockState> domain,
             List<BlockStateDomainStep> steps, int observationTicks) {
+        this(id, claim, placementSlot, domain, steps, observationTicks, DEFAULT_SUPPORT);
+    }
+
+    public BlockStateDomainScenario(String id, BlockConformanceCase claim,
+            BlockLifecycleSlot placementSlot, List<BlockState> domain,
+            List<BlockStateDomainStep> steps, int observationTicks,
+            BlockState supportState) {
         if (id == null || !id.matches("[a-z0-9][a-z0-9._-]{0,127}")) {
             throw new IllegalArgumentException("invalid state-domain scenario id");
         }
@@ -50,12 +59,16 @@ public final class BlockStateDomainScenario {
         }
         if (!exercised.equals(distinct)) throw new IllegalArgumentException(
                 "declared state domain differs from exercised states");
+        if (supportState == null || supportState.legacyId() == 0) {
+            throw new IllegalArgumentException("invalid state-domain support state");
+        }
         this.id = id;
         this.claim = claim;
         this.placementSlot = java.util.Objects.requireNonNull(placementSlot, "placementSlot");
         this.domain = Collections.unmodifiableList(domainCopy);
         this.steps = Collections.unmodifiableList(new ArrayList<BlockStateDomainStep>(steps));
         this.observationTicks = observationTicks;
+        this.supportState = supportState;
     }
 
     public String id() { return id; }
@@ -65,6 +78,7 @@ public final class BlockStateDomainScenario {
     public List<BlockState> domain() { return domain; }
     public List<BlockStateDomainStep> steps() { return steps; }
     public int observationTicks() { return observationTicks; }
+    public BlockState supportState() { return supportState; }
 
     public Map<BlockPosition, BlockState> finalStates() {
         Map<BlockPosition, BlockState> result = new LinkedHashMap<BlockPosition, BlockState>();

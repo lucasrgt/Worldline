@@ -5,19 +5,29 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import worldline.api.BlockState;
 
 /** Public data row for one causally exercised static light-transport profile. */
 public final class BlockLightScenario {
+    private static final BlockState DEFAULT_SUPPORT = new BlockState(1, 0);
     private final String id;
     private final BlockConformanceCase claim;
     private final BlockLifecycleSlot placementSlot;
     private final float yaw, pitch;
     private final List<BlockLightPlacement> placements;
     private final List<BlockLightProbe> probes;
+    private final BlockState supportState;
 
     public BlockLightScenario(String id, BlockConformanceCase claim,
             BlockLifecycleSlot placementSlot, float yaw, float pitch,
             List<BlockLightPlacement> placements, List<BlockLightProbe> probes) {
+        this(id, claim, placementSlot, yaw, pitch, placements, probes, DEFAULT_SUPPORT);
+    }
+
+    public BlockLightScenario(String id, BlockConformanceCase claim,
+            BlockLifecycleSlot placementSlot, float yaw, float pitch,
+            List<BlockLightPlacement> placements, List<BlockLightProbe> probes,
+            BlockState supportState) {
         if (id == null || !id.matches("[a-z0-9][a-z0-9._-]{0,127}")) {
             throw new IllegalArgumentException("invalid light scenario id");
         }
@@ -39,11 +49,15 @@ public final class BlockLightScenario {
         for (BlockLightProbe probe : probes) if (!ids.add(probe.id())) {
             throw new IllegalArgumentException("duplicate light probe: " + probe.id());
         }
+        if (supportState == null || supportState.legacyId() == 0) {
+            throw new IllegalArgumentException("invalid light support state");
+        }
         this.id = id; this.claim = claim;
         this.placementSlot = java.util.Objects.requireNonNull(placementSlot, "placementSlot");
         this.yaw = yaw; this.pitch = pitch;
         this.placements = Collections.unmodifiableList(new ArrayList<BlockLightPlacement>(placements));
         this.probes = Collections.unmodifiableList(new ArrayList<BlockLightProbe>(probes));
+        this.supportState = supportState;
     }
 
     public String id() { return id; }
@@ -54,4 +68,5 @@ public final class BlockLightScenario {
     public float pitch() { return pitch; }
     public List<BlockLightPlacement> placements() { return placements; }
     public List<BlockLightProbe> probes() { return probes; }
+    public BlockState supportState() { return supportState; }
 }

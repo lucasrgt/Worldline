@@ -22,14 +22,13 @@ final class B173CollisionArena {
 
     static Start open(B173DedicatedServer server, Path workspace, int port, Duration timeout,
             B173CollisionLoadout loadout) throws Exception {
-        RemoteItemStack item = loadout.item;
-        B173PlayerSeed.writeInventory(workspace, USERNAME, 4.5D, 60D, 4.5D,
-                new int[] {0, loadout.hotbar}, new int[] {1, item.legacyId()},
-                new int[] {48, item.count()}, new int[] {0, item.damage()});
+        seed(workspace, loadout);
         B173WireClient client = new B173WireClient("127.0.0.1", port, USERNAME, timeout);
         try {
             client.connect(); PlayerPose pose = client.synchronizePose();
-            require(client.awaitInventory().occupiedSlots() == 2, "collision inventory drift");
+            int occupied = loadout.support.hotbar == 0 ? 2 : 3;
+            require(client.awaitInventory().occupiedSlots() == occupied,
+                    "collision inventory drift");
             RemoteChunkSnapshot initial = client.awaitRemoteChunk(0, 0).chunkAt(0, 0);
             BlockPosition top = foundation(initial); int column = 0;
             client.selectHeldSlot(0);
@@ -39,10 +38,8 @@ final class B173CollisionArena {
                 pose = client.moveAndObserve(0D, 1D, 0D, 1).resulting();
                 require(++column <= 15, "collision water column exceeded fixture");
             }
-            for (int lift = 0; lift < 8; lift++) {
-                top = B173FixtureSupport.place(client, top, BlockFace.UP, 1);
-                pose = client.moveAndObserve(0D, 1D, 0D, 1).resulting(); column++;
-            }
+            Raised raised = raiseTarget(client, loadout, top, pose, column);
+            top = raised.top; pose = raised.pose; column = raised.column;
             BlockPosition north = B173FixtureSupport.place(client, top, BlockFace.NORTH, 1);
             BlockPosition east = B173FixtureSupport.place(client, top, BlockFace.EAST, 1);
             require(column == 17 && top.equals(TARGET_SUPPORT) && north.equals(ORIGIN_SUPPORT)
@@ -57,6 +54,51 @@ final class B173CollisionArena {
         } catch (Exception failure) {
             try { client.close(); } catch (RuntimeException close) { failure.addSuppressed(close); }
             throw failure;
+        }
+    }
+
+    private static void seed(Path workspace, B173CollisionLoadout loadout) {
+        RemoteItemStack item = loadout.item;
+        if (loadout.support.hotbar == 0) {
+            B173PlayerSeed.writeInventory(workspace, USERNAME, 4.5D, 60D, 4.5D,
+                    new int[] {0, loadout.hotbar}, new int[] {1, item.legacyId()},
+                    new int[] {48, item.count()}, new int[] {0, item.damage()});
+            return;
+        }
+        RemoteItemStack support = loadout.support.item;
+        B173PlayerSeed.writeInventory(workspace, USERNAME, 4.5D, 60D, 4.5D,
+                new int[] {0, loadout.hotbar, loadout.support.hotbar},
+                new int[] {1, item.legacyId(), support.legacyId()},
+                new int[] {48, item.count(), support.count()},
+                new int[] {0, item.damage(), support.damage()});
+    }
+
+    private static Raised raiseTarget(B173WireClient client, B173CollisionLoadout loadout,
+            BlockPosition top, PlayerPose pose, int column) throws Exception {
+        int lifts = loadout.support.hotbar == 0 ? 8 : 7;
+        for (int lift = 0; lift < lifts; lift++) {
+            top = B173FixtureSupport.place(client, top, BlockFace.UP, 1);
+            pose = client.moveAndObserve(0D, 1D, 0D, 1).resulting();
+            column++;
+        }
+        if (loadout.support.hotbar != 0) {
+            client.selectHeldSlot(loadout.support.hotbar);
+            top = B173FixtureSupport.place(client, top, BlockFace.UP, loadout.support.state);
+            pose = client.moveAndObserve(0D, 1D, 0D, 1).resulting();
+            column++;
+            client.selectHeldSlot(0);
+        }
+        return new Raised(top, pose, column);
+    }
+
+    private static final class Raised {
+        final BlockPosition top;
+        final PlayerPose pose;
+        final int column;
+        Raised(BlockPosition top, PlayerPose pose, int column) {
+            this.top = top;
+            this.pose = pose;
+            this.column = column;
         }
     }
 

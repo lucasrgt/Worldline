@@ -39,6 +39,12 @@ public final class B173ServerLightProviderTest {
         require(rows.get(4).probes().get(0).treatment().skyLight()
                 == BlockLightExpectation.ANY_LIGHT,
                 "opaque source sky plane should be out of contract");
+        List<BlockLightScenario> special = B173SpecialCollisionPhysicalScenarioFactory.lights();
+        require(special.size() == 4
+                && special.get(0).probes().get(0).treatment().skyLight() == 14
+                && special.get(2).supportState().equals(new BlockState(12, 0))
+                && special.get(3).probes().get(0).treatment().skyLight() == 0,
+                "special-collision light rows drifted");
         Map<String, String> options = new LinkedHashMap<String, String>();
         options.put(BlockLightPlan.PLACEMENT_SLOT_OPTION, "1:37:89:1:0");
         B173LightLoadout loadout = B173LightLoadout.from(new TestRuntimeRequest(

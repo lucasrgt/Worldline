@@ -73,10 +73,17 @@ public final class BlockCollisionFixture {
 
     private static void reset(BlockCollisionDriver driver, PlayerPose origin, PlayerPose current,
             int ticks, String probe) {
-        double dx = origin.x() - current.x(), dy = origin.y() - current.y();
-        double dz = origin.z() - current.z();
-        MovementOutcome reset = driver.moveAndObserve(dx, dy, dz, ticks);
-        PlayerPose result = reset.resulting();
+        PlayerPose result = current;
+        for (int attempt = 0; attempt < 8; attempt++) {
+            double dx = origin.x() - result.x();
+            double dy = origin.y() - result.y();
+            double dz = origin.z() - result.z();
+            result = driver.moveAndObserve(dx, dy, dz, ticks).resulting();
+            if (close(result.x(), origin.x()) && close(result.y(), origin.y())
+                    && close(result.z(), origin.z())) {
+                return;
+            }
+        }
         require(close(result.x(), origin.x()) && close(result.y(), origin.y())
                 && close(result.z(), origin.z()), probe + " did not reset to collision origin");
     }

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import worldline.api.BlockCollisionDriver;
+import worldline.api.BlockState;
 import worldline.api.RemoteItemStack;
 import worldline.test.TestCaseBuilder;
 import worldline.test.Worldline;
@@ -14,6 +15,7 @@ import worldline.test.Worldline;
 public final class BlockCollisionPlan {
     public static final String EVIDENCE_ARTIFACT = "block-collision.properties";
     public static final String PLACEMENT_SLOT_OPTION = "block-collision.placement-slot";
+    public static final String SUPPORT_STATE_OPTION = "block-collision.support-state";
     public static final long DEFAULT_TIMEOUT_MILLIS = 180_000L;
 
     private final String runtimeId;
@@ -59,7 +61,8 @@ public final class BlockCollisionPlan {
 
     private void register(BlockCollisionScenario scenario) {
         TestCaseBuilder runtime = Worldline.worldline().runtime(runtimeId)
-                .runtimeOption(PLACEMENT_SLOT_OPTION, slot(scenario.placementSlot()));
+                .runtimeOption(PLACEMENT_SLOT_OPTION, slot(scenario.placementSlot()))
+                .runtimeOption(SUPPORT_STATE_OPTION, state(scenario.supportState()));
         Worldline.test(scenario.id(), runtime.run(context -> {
             BlockCollisionDriver driver = context.capability(BlockCollisionDriver.class);
             BlockCollisionEvidence evidence = BlockCollisionFixture.execute(scenario, driver);
@@ -71,5 +74,9 @@ public final class BlockCollisionPlan {
         RemoteItemStack item = slot.before();
         return slot.hotbarSlot() + ":" + slot.inventorySlot() + ":" + item.legacyId()
                 + ":" + item.count() + ":" + item.damage();
+    }
+
+    private static String state(BlockState value) {
+        return value.legacyId() + ":" + value.metadata();
     }
 }
