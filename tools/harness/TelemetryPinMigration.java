@@ -114,7 +114,22 @@ final class TelemetryPinMigration {
         boolean clean = worktree.waitFor() == 0 && index.waitFor() == 0;
         return clean && (!digest(root.resolve("tools/harness/SmokeInputFingerprint.java"))
                         .equals(recorded)
-                || !committedTree("modules/testkit/src/main/java").equals(recordedTestKit));
+                || !committedTree("modules/testkit/src/main/java").equals(recordedTestKit)
+                || censusDrift(manifest));
+    }
+    private boolean censusDrift(Properties manifest) throws Exception {
+        Properties providers = ProviderDiscoveryPinCheck.manifest(root);
+        int tracked = 0;
+        for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            String stem = "smoke." + smoke.id + ".current_fingerprint";
+            if (manifest.getProperty(stem) != null
+                    && !ProviderDiscoveryPinCheck.exemptsLegacy(providers, smoke.id)) tracked++;
+        }
+        int sealed;
+        try { sealed = Integer.parseInt(manifest.getProperty("count", ""))
+                - ProviderDiscoveryPinCheck.pendingCount(providers); }
+        catch (NumberFormatException error) { return true; }
+        return tracked != sealed;
     }
     private String committedTree(String relative) throws Exception {
         Process process = new ProcessBuilder("git", "rev-parse", "HEAD:" + relative)
