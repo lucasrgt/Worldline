@@ -16,7 +16,7 @@ public final class B173MultiDropMineralLifecycleSmoke {
         BlockLifecycleFamilyCycle.run(arguments, "multi-drop-minerals",
                 17_320_110_707L, "worldline.b173.lifecycle.serverJar",
                 new B173ServerLifecycleTestRuntimeProvider(), Arrays.asList(
-                mineral("lapis-ore", "021", 21, drops(351, 4, 4)),
+                mineral("lapis-ore", "021", 21, drops(351, 4, 8)),
                 mineral("redstone-ore", "073", 73, drops(331, 0, 4)),
                 mineral("glowstone", "089", 89, drops(348, 0, 2))));
     }
