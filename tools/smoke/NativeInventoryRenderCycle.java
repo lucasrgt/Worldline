@@ -65,7 +65,8 @@ public final class NativeInventoryRenderCycle {
         require(mappedFirst.signature.equals(value("expected.signature")),
                 "render family diverged from frozen signature: " + mappedFirst.signature);
         Path evidence = writeEvidence(build, mappedFirst);
-        int subjects = subjectCount(smoke); String renderTypes = renderTypes(smoke);
+        int subjects = subjectCount(smoke);
+        String renderTypes = renderTypes(smoke);
         String family = value("behavior");
         String signal = "family=" + family + ",subjects=" + subjects + ",claims=" + subjects
                 + ",render-types=" + renderTypes.split(",").length + ","
