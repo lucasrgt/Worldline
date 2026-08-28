@@ -26,7 +26,7 @@ import worldline.testkit.BlockStateDomainStep;
 import worldline.testkit.BlockStateObservation;
 import worldline.testkit.ConformanceLayer;
 
-/** Public singular rows for six opaque tile-backed utility blocks. */
+/** Public singular rows for six tile-backed utilities with per-subject light envelopes. */
 public final class B173TileUtilityPhysicalScenarioFactory {
     public static final long SEED = 17_320_110_707L;
     private static final int HOTBAR = 1, INVENTORY = 37;
@@ -87,7 +87,7 @@ public final class B173TileUtilityPhysicalScenarioFactory {
                         B173LightArena.SOURCE_SUPPORT, BlockFace.UP, subject.state())),
                 Collections.singletonList(new BlockLightProbe("source", B173LightArena.SOURCE,
                         new BlockLightExpectation(AIR, 0, 15),
-                        new BlockLightExpectation(subject.state(), 0, 0))));
+                        new BlockLightExpectation(subject.state(), 0, subject.sourceSkyLight))));
     }
 
     private static BlockCollisionProbe probe(String id, double rise,

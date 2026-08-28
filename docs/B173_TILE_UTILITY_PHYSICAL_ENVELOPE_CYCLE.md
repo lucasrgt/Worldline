@@ -4,7 +4,7 @@
 
 ## Claim
 
-One singular mini-subsystem exercises six opaque tile-backed utility blocks through the public state-domain, collision, and light TestKit families. Seventeen executable claims share one official qualification while occupied-jukebox metadata remains explicitly outside the state-domain claim.
+One singular mini-subsystem exercises six tile-backed utility blocks through the public state-domain, collision, and light TestKit families. Per-subject light expectations distinguish five opaque utilities from the skylight-transparent mob spawner. Seventeen executable claims share one official qualification while occupied-jukebox metadata remains explicitly outside the state-domain claim.
 
 ## Qualification cycle
 

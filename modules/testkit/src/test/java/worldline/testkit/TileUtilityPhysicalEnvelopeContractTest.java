@@ -12,6 +12,7 @@ import worldline.api.RemoteItemStack;
 public final class TileUtilityPhysicalEnvelopeContractTest {
     private static final BlockPosition SUPPORT = new BlockPosition(4, 71, 4);
     private static final BlockState NOTE = new BlockState(25, 0);
+    private static final BlockState SPAWNER = new BlockState(52, 0);
     private static final int[] SUBJECTS = {23, 25, 52, 54, 61, 84};
 
     private TileUtilityPhysicalEnvelopeContractTest() { }
@@ -54,6 +55,17 @@ public final class TileUtilityPhysicalEnvelopeContractTest {
         require(light.claim().layer() == ConformanceLayer.SINGULAR
                 && light.probes().get(0).treatment().skyLight() == 0,
                 "tile opaque light contract drifted");
+
+        BlockLightScenario transparentLight = new BlockLightScenario(
+                "mob-spawner-tile-utility-physical-envelope",
+                plan.caseFor("b1.7.3:block/052", "light-behavior"), slot(52, 1), 0F, 0F,
+                List.of(new BlockLightPlacement(SUPPORT, BlockFace.UP, SPAWNER)),
+                List.of(new BlockLightProbe("source", BlockFace.UP.adjacent(SUPPORT),
+                        new BlockLightExpectation(new BlockState(0, 0), 0, 15),
+                        new BlockLightExpectation(SPAWNER, 0, 15))));
+        require(transparentLight.claim().layer() == ConformanceLayer.SINGULAR
+                && transparentLight.probes().get(0).treatment().skyLight() == 15,
+                "tile transparent-light exception contract drifted");
         System.out.println("TileUtilityPhysicalEnvelopeContractTest passed");
     }
 

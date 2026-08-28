@@ -7,9 +7,10 @@
 
 One catalog covers dispenser, note block, mob spawner, chest, furnace, and jukebox. Five state
 rows exercise the complete placement-reachable metadata contract available to this package;
-six collision rows prove full-cube trajectories and six light rows compare air with exact opaque
-source-cell skylight. Every row uses gameplay placement, canonical public evidence, and a fresh
-login boundary against the unmodified official server.
+six collision rows prove full-cube trajectories and six light rows compare air with exact
+per-subject source-cell skylight. The catalog distinguishes five opaque utilities from the
+skylight-transparent mob spawner. Every row uses gameplay placement, canonical public evidence,
+and a fresh login boundary against the unmodified official server.
 
 The occupied jukebox metadata state is deliberately not claimed: reaching it requires a record
 loadout/action not represented by this state-domain package. Tile payloads, container contents,
