@@ -66,6 +66,7 @@ public final class TileUtilityPhysicalEnvelopeContractTest {
         require(transparentLight.claim().layer() == ConformanceLayer.SINGULAR
                 && transparentLight.probes().get(0).treatment().skyLight() == 15,
                 "tile transparent-light exception contract drifted");
+        SourceFluidPhysicalEnvelopeContractTest.execute();
         System.out.println("TileUtilityPhysicalEnvelopeContractTest passed");
     }
 
