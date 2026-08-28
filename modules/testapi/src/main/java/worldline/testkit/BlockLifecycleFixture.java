@@ -22,7 +22,6 @@ public final class BlockLifecycleFixture {
             .comparingInt(RemoteItemStack::legacyId)
             .thenComparingInt(RemoteItemStack::damage)
             .thenComparingInt(RemoteItemStack::count);
-
     private BlockLifecycleFixture() {
     }
 
@@ -60,8 +59,9 @@ public final class BlockLifecycleFixture {
         verifyBlock(driver.awaitBlock(target, AIR), target, AIR, "break transition");
         driver.sustainTicks(scenario.observationTicks());
         List<RemoteItemStack> drops = newDrops(driver.droppedItems(), priorDrops);
-        require(drops.equals(sorted(scenario.expectedDrops())),
-                "drop matrix drifted: expected=" + scenario.expectedDrops() + ",actual=" + drops);
+        require(scenario.dropMatrix().accepts(drops),
+                "drop matrix drifted: expected=" + scenario.dropMatrix().description()
+                        + ",actual=" + drops);
         awaitSlot(driver, scenario.breakSlot(), true, scenario.observationTicks());
 
         driver.saveAndReload();
@@ -140,12 +140,6 @@ public final class BlockLifecycleFixture {
         }
         result.sort(STACK_ORDER);
         return Collections.unmodifiableList(result);
-    }
-
-    private static List<RemoteItemStack> sorted(List<RemoteItemStack> values) {
-        List<RemoteItemStack> result = new ArrayList<>(values);
-        result.sort(STACK_ORDER);
-        return result;
     }
 
     private static void require(boolean value, String message) {

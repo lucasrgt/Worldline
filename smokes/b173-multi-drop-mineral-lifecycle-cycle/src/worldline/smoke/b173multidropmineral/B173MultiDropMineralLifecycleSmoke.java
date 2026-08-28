@@ -16,21 +16,16 @@ public final class B173MultiDropMineralLifecycleSmoke {
         BlockLifecycleFamilyCycle.run(arguments, "multi-drop-minerals",
                 17_320_110_707L, "worldline.b173.lifecycle.serverJar",
                 new B173ServerLifecycleTestRuntimeProvider(), Arrays.asList(
-                mineral("lapis-ore", "021", 21, drops(351, 4, 8)),
-                mineral("redstone-ore", "073", 73, drops(331, 0, 4)),
-                mineral("glowstone", "089", 89, drops(348, 0, 2))));
+                mineral("lapis-ore", "021", 21, 351, 4, 4, 8),
+                mineral("redstone-ore", "073", 73, 331, 0, 4, 5),
+                mineral("glowstone", "089", 89, 348, 0, 2, 4)));
     }
 
     private static BlockLifecycleScenario mineral(String id, String legacy,
-            int block, RemoteItemStack[] drops) {
-        return B173LifecycleScenarioFactory.harvestOnSupport(id,
+            int block, int drop, int damage, int minimum, int maximum) {
+        return B173LifecycleScenarioFactory.harvestRepeatedDropOnSupport(id,
                 "b1.7.3:block/" + legacy, "multi-drop-mineral", false,
-                block, 0, 0, new BlockState(1, 0), 278, 1, 20, drops);
-    }
-
-    private static RemoteItemStack[] drops(int item, int damage, int count) {
-        RemoteItemStack[] result = new RemoteItemStack[count];
-        Arrays.fill(result, new RemoteItemStack(item, 1, damage));
-        return result;
+                block, 0, 0, new BlockState(1, 0), 278, 1, 20,
+                new RemoteItemStack(drop, 1, damage), minimum, maximum);
     }
 }

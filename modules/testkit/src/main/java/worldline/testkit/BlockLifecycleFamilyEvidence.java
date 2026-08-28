@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.StringJoiner;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
-import worldline.api.RemoteItemStack;
 
 /** Canonical row oracle shared by independently signed lifecycle families. */
 final class BlockLifecycleFamilyEvidence {
@@ -33,12 +32,7 @@ final class BlockLifecycleFamilyEvidence {
 
     private static String expected(BlockLifecycleScenario row) {
         String claim = row.subject() + "#";
-        StringBuilder drops = new StringBuilder();
-        for (RemoteItemStack item : row.expectedDrops()) {
-            if (drops.length() > 0) drops.append(',');
-            drops.append(item.legacyId()).append(':').append(item.count())
-                    .append(':').append(item.damage());
-        }
+        String drops = row.dropMatrix().canonical();
         BlockPosition support = row.support(), target = row.target();
         BlockState supportState = row.supportState();
         String overhead = row.overheadState() == null ? "" : "\noverhead="

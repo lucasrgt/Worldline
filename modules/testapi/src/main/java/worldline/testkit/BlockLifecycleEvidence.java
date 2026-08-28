@@ -17,6 +17,7 @@ public final class BlockLifecycleEvidence {
     private final BlockPosition support, position, overhead, neighbor;
     private final BlockState supportState, state, overheadState, neighborState;
     private final List<RemoteItemStack> drops;
+    private final String canonicalDrops;
     private final ReloadBoundary boundary;
 
     BlockLifecycleEvidence(BlockLifecycleScenario scenario, List<RemoteItemStack> drops,
@@ -40,6 +41,8 @@ public final class BlockLifecycleEvidence {
         neighbor = scenario.neighborPosition();
         neighborState = scenario.neighbor() == null ? null : scenario.neighbor().state();
         this.drops = Collections.unmodifiableList(new ArrayList<RemoteItemStack>(drops));
+        canonicalDrops = scenario.dropMatrix().exact()
+                ? items(drops) : scenario.dropMatrix().canonical();
         this.boundary = Objects.requireNonNull(boundary, "boundary");
     }
 
@@ -81,13 +84,7 @@ public final class BlockLifecycleEvidence {
                 .append(':').append(state(neighborState)).append('\n');
         value.append("target=").append(position(position)).append('\n');
         value.append("placed=").append(state(state)).append('\n');
-        value.append("drops=");
-        for (int index = 0; index < drops.size(); index++) {
-            if (index > 0) value.append(',');
-            RemoteItemStack item = drops.get(index);
-            value.append(item.legacyId()).append(':').append(item.count())
-                    .append(':').append(item.damage());
-        }
+        value.append("drops=").append(canonicalDrops);
         return value.append("\nreload=").append(boundary).append('\n').toString();
     }
 
@@ -108,14 +105,15 @@ public final class BlockLifecycleEvidence {
                 && Objects.equals(neighbor, value.neighbor)
                 && Objects.equals(neighborState, value.neighborState)
                 && position.equals(value.position) && state.equals(value.state)
-                && drops.equals(value.drops) && boundary == value.boundary;
+                && drops.equals(value.drops) && canonicalDrops.equals(value.canonicalDrops)
+                && boundary == value.boundary;
     }
 
     @Override public int hashCode() {
         return Objects.hash(scenarioId, subject, placementClaim, persistenceClaim, transitionClaim, dropClaim,
                 placementLayer, persistenceLayer, transitionLayer, dropLayer,
                 support, supportState, overhead, overheadState, neighbor, neighborState,
-                position, state, drops, boundary);
+                position, state, drops, canonicalDrops, boundary);
     }
 
     private static void claim(StringBuilder value, String template, String claim,
@@ -130,5 +128,15 @@ public final class BlockLifecycleEvidence {
 
     private static String state(BlockState value) {
         return value == null ? "unverified" : value.legacyId() + ":" + value.metadata();
+    }
+
+    private static String items(List<RemoteItemStack> drops) {
+        StringBuilder value = new StringBuilder();
+        for (RemoteItemStack item : drops) {
+            if (value.length() > 0) value.append(',');
+            value.append(item.legacyId()).append(':').append(item.count())
+                    .append(':').append(item.damage());
+        }
+        return value.toString();
     }
 }

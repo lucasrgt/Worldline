@@ -1,7 +1,5 @@
 package worldline.testkit;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import worldline.api.BlockFace;
@@ -19,7 +17,7 @@ public final class BlockLifecycleScenario {
     private final BlockFace face;
     private final BlockState placedState;
     private final BlockLifecycleSlot placementSlot, breakSlot;
-    private final List<RemoteItemStack> expectedDrops;
+    private final BlockLifecycleDropMatrix dropMatrix;
     private final int breakTicks, observationTicks;
 
     public BlockLifecycleScenario(BlockConformanceCase placement,
@@ -62,6 +60,18 @@ public final class BlockLifecycleScenario {
             BlockState placedState, BlockLifecycleSlot placementSlot,
             BlockLifecycleSlot breakSlot, List<RemoteItemStack> expectedDrops,
             int breakTicks, int observationTicks) {
+        this(id, placement, persistence, transition, drops, support, supportState,
+                overheadState, neighbor, face, placedState, placementSlot, breakSlot,
+                BlockLifecycleDropMatrix.exact(expectedDrops), breakTicks, observationTicks);
+    }
+
+    public BlockLifecycleScenario(String id, BlockConformanceCase placement,
+            BlockConformanceCase persistence, BlockConformanceCase transition,
+            BlockConformanceCase drops, BlockPosition support, BlockState supportState,
+            BlockState overheadState, BlockLifecycleNeighbor neighbor, BlockFace face,
+            BlockState placedState, BlockLifecycleSlot placementSlot,
+            BlockLifecycleSlot breakSlot, BlockLifecycleDropMatrix dropMatrix,
+            int breakTicks, int observationTicks) {
         require(placement, "gameplay-placement");
         require(persistence, "save-reload");
         require(transition, "break-transition");
@@ -92,11 +102,7 @@ public final class BlockLifecycleScenario {
         if (placedState.legacyId() == 0) throw new IllegalArgumentException("placed state is air");
         this.placementSlot = Objects.requireNonNull(placementSlot, "placementSlot");
         this.breakSlot = Objects.requireNonNull(breakSlot, "breakSlot");
-        if (expectedDrops == null || expectedDrops.stream().anyMatch(Objects::isNull)) {
-            throw new IllegalArgumentException("invalid expected drops");
-        }
-        this.expectedDrops = Collections.unmodifiableList(
-                new ArrayList<RemoteItemStack>(expectedDrops));
+        this.dropMatrix = Objects.requireNonNull(dropMatrix, "dropMatrix");
         this.breakTicks = breakTicks;
         this.observationTicks = observationTicks;
         if (neighbor != null && neighbor.position(support).equals(target())) {
@@ -111,6 +117,21 @@ public final class BlockLifecycleScenario {
             int breakTicks, int observationTicks) {
         return from(id, plan, subject, support, supportState, null, face, placedState,
                 placementSlot, breakSlot, expectedDrops, breakTicks, observationTicks);
+    }
+
+    public static BlockLifecycleScenario from(String id, BlockConformancePlan plan,
+            String subject, BlockPosition support, BlockState supportState, BlockFace face,
+            BlockState placedState, BlockLifecycleSlot placementSlot,
+            BlockLifecycleSlot breakSlot, BlockLifecycleDropMatrix dropMatrix,
+            int breakTicks, int observationTicks) {
+        if (plan == null) throw new NullPointerException("plan");
+        return new BlockLifecycleScenario(id,
+                plan.caseFor(subject, "gameplay-placement"),
+                plan.caseFor(subject, "save-reload"),
+                plan.caseFor(subject, "break-transition"),
+                plan.caseFor(subject, "drop-matrix"), support, supportState, null,
+                null, face, placedState, placementSlot, breakSlot, dropMatrix,
+                breakTicks, observationTicks);
     }
 
     public static BlockLifecycleScenario from(String id, BlockConformancePlan plan,
@@ -163,7 +184,8 @@ public final class BlockLifecycleScenario {
     public BlockState placedState() { return placedState; }
     public BlockLifecycleSlot placementSlot() { return placementSlot; }
     public BlockLifecycleSlot breakSlot() { return breakSlot; }
-    public List<RemoteItemStack> expectedDrops() { return expectedDrops; }
+    public List<RemoteItemStack> expectedDrops() { return dropMatrix.exactDrops(); }
+    public BlockLifecycleDropMatrix dropMatrix() { return dropMatrix; }
     public int breakTicks() { return breakTicks; }
     public int observationTicks() { return observationTicks; }
 

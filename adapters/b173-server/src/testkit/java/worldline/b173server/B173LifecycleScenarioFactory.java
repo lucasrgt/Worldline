@@ -11,6 +11,7 @@ import worldline.testkit.BlockConformanceTemplate;
 import worldline.testkit.BlockLifecycleScenario;
 import worldline.testkit.BlockLifecycleNeighbor;
 import worldline.testkit.BlockLifecycleSlot;
+import worldline.testkit.BlockLifecycleDropMatrix;
 import worldline.testkit.ConformanceLayer;
 
 /** Builds external official-server lifecycle rows without a provider-owned catalog. */
@@ -45,6 +46,16 @@ public final class B173LifecycleScenarioFactory {
                 block, metadata, supportState, null, null, BlockFace.UP,
                 tool, toolAfterDamage, breakTicks,
                 expectedDrops);
+    }
+
+    public static BlockLifecycleScenario harvestRepeatedDropOnSupport(String id, String subject,
+            String archetype, boolean singular, int block, int placementDamage, int metadata,
+            BlockState supportState, int tool, int toolAfterDamage, int breakTicks,
+            RemoteItemStack drop, int minimumEntities, int maximumEntities) {
+        return harvestInEnvironment(id, subject, archetype, singular, block, placementDamage,
+                block, metadata, supportState, null, null, BlockFace.UP, tool,
+                toolAfterDamage, breakTicks,
+                BlockLifecycleDropMatrix.repeated(drop, minimumEntities, maximumEntities));
     }
 
     public static BlockLifecycleScenario harvestUnderOverhead(String id, String subject,
@@ -97,6 +108,17 @@ public final class B173LifecycleScenarioFactory {
             int breakTicks,
             RemoteItemStack... expectedDrops) {
         if (expectedDrops == null) throw new NullPointerException("expectedDrops");
+        return harvestInEnvironment(id, subject, archetype, singular, block, placementDamage,
+                placementItem, metadata, supportState, overheadState, neighbor, face, tool,
+                toolAfterDamage, breakTicks,
+                BlockLifecycleDropMatrix.exact(Arrays.asList(expectedDrops)));
+    }
+
+    private static BlockLifecycleScenario harvestInEnvironment(String id, String subject,
+            String archetype, boolean singular, int block, int placementDamage,
+            int placementItem, int metadata, BlockState supportState, BlockState overheadState,
+            BlockLifecycleNeighbor neighbor, BlockFace face, int tool, int toolAfterDamage,
+            int breakTicks, BlockLifecycleDropMatrix dropMatrix) {
         BlockConformanceProfile profile = new BlockConformanceProfile(subject,
                 Collections.singletonList(archetype), singular,
                 Collections.<String, ConformanceLayer>emptyMap());
@@ -111,13 +133,12 @@ public final class B173LifecycleScenarioFactory {
         BlockLifecycleSlot breakSlot = new BlockLifecycleSlot(2, 38,
                 new RemoteItemStack(tool, 1, 0),
                 new RemoteItemStack(tool, 1, toolAfterDamage));
-        if (neighbor == null) return BlockLifecycleScenario.from(id, plan, subject,
-                B173LifecycleArena.SUPPORT, supportState, overheadState, face,
-                new BlockState(block, metadata), placementSlot, breakSlot,
-                Arrays.asList(expectedDrops), breakTicks, 40);
-        return BlockLifecycleScenario.fromWithNeighbor(id, plan, subject,
-                B173LifecycleArena.SUPPORT, supportState, overheadState, neighbor,
-                face, new BlockState(block, metadata), placementSlot, breakSlot,
-                Arrays.asList(expectedDrops), breakTicks, 40);
+        return new BlockLifecycleScenario(id,
+                plan.caseFor(subject, "gameplay-placement"),
+                plan.caseFor(subject, "save-reload"),
+                plan.caseFor(subject, "break-transition"),
+                plan.caseFor(subject, "drop-matrix"), B173LifecycleArena.SUPPORT,
+                supportState, overheadState, neighbor, face, new BlockState(block, metadata),
+                placementSlot, breakSlot, dropMatrix, breakTicks, 40);
     }
 }

@@ -11,8 +11,9 @@ redstone ore `73:0` emits dust `331:0`, and glowstone `89:0` emits dust `348:0` 
 diamond pickaxe `278`.
 
 Each row proves placement-item consumption, exact block state, fresh-login persistence, break to
-air, every distinct dropped-item entity and its metadata, one point of pickaxe durability, and
-removed-state persistence after a second fresh login.
+air, every dropped entity's exact item and metadata within the historical bounds (lapis 4..8,
+redstone 4..5, glowstone 2..4), one point of pickaxe durability, and removed-state persistence
+after a second fresh login.
 
 The package joins twelve lifecycle atoms into one multi-drop mineral mini-subsystem. Existing
 placement/reload evidence means six distinct census claims are expected to become newly verified.
