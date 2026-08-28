@@ -29,7 +29,7 @@ final class BoundedDropTestKitPinCheck {
         Properties train = TrainPinCheck.manifest(root);
         for (int index = 0; index < files; index++) verifyFile(root, lock, train, index);
 
-        SmokePins pins = new SmokePins(root);
+        SmokePins pins = new SmokePins(root); pins.validateEvidence();
         require(pins.entries().size() >= BoundedDropTestKitPinMigration.BASE_PINS + 1,
                 "bounded-drop sealed pin census regressed");
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
@@ -49,7 +49,11 @@ final class BoundedDropTestKitPinCheck {
                             && required(lock, stem + "prior_fingerprint").matches("[0-9a-f]{64}");
             boolean exactSuccessor = pin != null
                     && TrainPinCheck.carriesCurrent(train, id, pin, current);
-            require(transported || exactSuccessor,
+            boolean dataDrivenSuccessor = pin != null
+                    && pin.evidence().equals(required(lock, stem + "evidence_sha256"))
+                    && DataDrivenCycleCheck.carriesPlan(root, id, pin);
+            boolean executedSuccessor = NeighborTestKitPinCheck.reexecuted(pin);
+            require(transported || exactSuccessor || dataDrivenSuccessor || executedSuccessor,
                     "bounded-drop carried proof drift: " + id);
         }
         String id = required(lock, "anchor.id");
@@ -62,7 +66,10 @@ final class BoundedDropTestKitPinCheck {
                 && current.equals(prior) && pin.evidence().equals(evidence);
         boolean exactSuccessor = pin != null && pin.evidence().equals(evidence)
                 && TrainPinCheck.carriesCurrent(train, id, pin, current);
-        require(direct || exactSuccessor,
+        boolean dataDrivenSuccessor = pin != null && pin.evidence().equals(evidence)
+                && DataDrivenCycleCheck.carriesPlan(root, id, pin);
+        boolean executedSuccessor = NeighborTestKitPinCheck.reexecuted(pin);
+        require(direct || exactSuccessor || dataDrivenSuccessor || executedSuccessor,
                 "bounded-drop exact anchor drift");
         System.out.println("  bounded-drop TestKit migration: " + carried
                 + " carried proofs, 1 exact anchor");
