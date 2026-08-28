@@ -7,23 +7,27 @@ import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-/** Qualifies 63 native 3D inventory block renders across mapped and official clients. */
-public final class M703Native3dInventoryRenderCycle {
-    private static final String ID = "m703-native-3d-inventory-render";
+/** Qualifies one declarative native inventory-render family across mapped and official clients. */
+public final class NativeInventoryRenderCycle {
     private final Path root = Paths.get("").toAbsolutePath().normalize();
     private final Properties config = new Properties();
+    private final String id;
+
+    private NativeInventoryRenderCycle(String id) { this.id = id; }
 
     public static void main(String[] arguments) {
-        if (!Arrays.equals(arguments, new String[] {ID})) {
-            System.err.println("usage: M703Native3dInventoryRenderCycle " + ID);
+        if (arguments.length != 1 || !arguments[0].matches("[a-z0-9]+(?:-[a-z0-9]+)*")) {
+            System.err.println("usage: NativeInventoryRenderCycle ID");
             System.exit(2);
         }
-        try { new M703Native3dInventoryRenderCycle().execute(); }
+        try { new NativeInventoryRenderCycle(arguments[0]).execute(); }
         catch (Exception error) {
             System.err.println("native 3D inventory render cycle failed: " + error.getMessage());
             System.exit(1);
@@ -31,9 +35,9 @@ public final class M703Native3dInventoryRenderCycle {
     }
 
     private void execute() throws Exception {
-        Path smoke = root.resolve("smokes").resolve(ID);
+        Path smoke = root.resolve("smokes").resolve(id);
         load(smoke.resolve("smoke.properties"));
-        require(ID.equals(value("id")), "smoke descriptor id mismatch");
+        require(id.equals(value("id")), "smoke descriptor id mismatch");
         require(System.getProperty("os.name").startsWith("Windows"), "Windows is required");
         Path workspace = local(value("workspace"));
         Path mapped = workspace.resolve("minecraft/bin");
@@ -48,7 +52,7 @@ public final class M703Native3dInventoryRenderCycle {
         require(Files.isRegularFile(mapped.resolve("net/minecraft/src/RenderBlocks.class")),
                 "mapped RenderBlocks.class is absent; run the client smoke first");
 
-        Path build = root.resolve(".worldline/smokes").resolve(ID);
+        Path build = root.resolve(".worldline/smokes").resolve(id);
         Files.createDirectories(build);
         compile(smoke.resolve("src"), build.resolve("classes"), lwjgl);
         Result mappedFirst = run(build, mapped, official, lwjgl, natives, smoke, "mapped", "first");
@@ -61,16 +65,20 @@ public final class M703Native3dInventoryRenderCycle {
         require(mappedFirst.signature.equals(value("expected.signature")),
                 "render family diverged from frozen signature: " + mappedFirst.signature);
         Path evidence = writeEvidence(build, mappedFirst);
-        String signal = "family=native-3d-inventory-render,subjects=63,claims=63,render-types=5,"
+        int subjects = subjectCount(smoke); String renderTypes = renderTypes(smoke);
+        String family = value("behavior");
+        String signal = "family=" + family + ",subjects=" + subjects + ",claims=" + subjects
+                + ",render-types=" + renderTypes.split(",").length + ","
                 + "processes=4,oracle=mapped-official-native-rgba";
-        String trace = "v1|client=official-b1.7.3|family=native-3d-inventory-render|subjects=63"
-                + "|render-types=0,10,11,13,16|evidence=" + mappedFirst.signature
+        String trace = "v1|client=official-b1.7.3|family=" + family + "|subjects=" + subjects
+                + "|render-types=" + renderTypes + "|evidence=" + mappedFirst.signature
                 + "|oracle=mapped-official-native-rgba";
         require(signal.equals(value("expected.signal")), "native render signal drifted");
         require(trace.equals(value("expected.trace")), "native render trace drifted");
-        System.out.println("WORLDLINE_M703_SET=" + signal);
-        System.out.println("WORLDLINE_M703_TRACE=" + trace);
-        System.out.println("WORLDLINE_M703_SIGNATURE=" + mappedFirst.signature);
+        String prefix = value("cycle.output.prefix");
+        System.out.println(prefix + "SET=" + signal);
+        System.out.println(prefix + "TRACE=" + trace);
+        System.out.println(prefix + "SIGNATURE=" + mappedFirst.signature);
         System.out.println("  processes: 4 (2 mapped, 2 official); evidence: "
                 + root.relativize(evidence));
     }
@@ -82,18 +90,20 @@ public final class M703Native3dInventoryRenderCycle {
         List<String> command = new ArrayList<>(Arrays.asList("java", "-Djava.awt.headless=true",
                 "-Dorg.lwjgl.librarypath=" + natives.toAbsolutePath(), "-classpath",
                 build.resolve("classes") + separator + mapped + separator + official + separator + lwjgl,
-                "worldline.smoke.m703native3d.B173Native3dInventoryRenderSmoke", role,
+                value("cycle.smoke.main"), role,
                 value(role + ".renderer.class"), value(role + ".block.class"),
                 value(role + ".blocks.field"), value(role + ".render.method"),
                 value(role + ".render-type.method"), value(role + ".render-3d.method"),
                 official.toString(), smoke.resolve("subjects.tsv").toString(), evidence.toString()));
         String output = capture(command);
-        require(output.contains("WORLDLINE_M703_ROLE=" + role), "native render role is absent");
-        require(output.contains("WORLDLINE_M703_SUBJECTS=63"), "native render census is absent");
-        String provenance = line(output, "WORLDLINE_M703_PROVENANCE=").replace('\\', '/');
+        String prefix = value("cycle.output.prefix");
+        require(output.contains(prefix + "ROLE=" + role), "native render role is absent");
+        require(output.contains(prefix + "SUBJECTS=" + subjectCount(smoke)),
+                "native render census is absent");
+        String provenance = line(output, prefix + "PROVENANCE=").replace('\\', '/');
         require(provenance.contains(role.equals("mapped") ? "minecraft/bin/" : "jars/minecraft.jar"),
                 "wrong " + role + " renderer provenance: " + provenance);
-        return new Result(line(output, "WORLDLINE_M703_SIGNATURE="),
+        return new Result(line(output, prefix + "SIGNATURE="),
                 Files.readString(evidence, StandardCharsets.UTF_8));
     }
 
@@ -113,14 +123,13 @@ public final class M703Native3dInventoryRenderCycle {
                 "adapters/b173-client/src/main/java/worldline/b173/B173BlockInventoryRender.java")) {
             command.add(root.resolve(relative).toString());
         }
-        command.add(source.resolve(
-                "worldline/smoke/m703native3d/B173Native3dInventoryRenderSmoke.java").toString());
+        command.add(source.resolve(value("cycle.smoke.source")).toString());
         capture(command);
     }
 
     private Path writeEvidence(Path build, Result result) throws IOException {
         Path evidence = build.resolve("evidence.txt");
-        String header = "id=" + ID + "\nprocesses=4\ncontext=Pbuffer\ndisplay.created=false\n"
+        String header = "id=" + id + "\nprocesses=4\ncontext=Pbuffer\ndisplay.created=false\n"
                 + "oracle=mapped-official-native-rgba\nsignature=" + result.signature + "\n";
         Files.writeString(evidence, header + result.evidence, StandardCharsets.UTF_8);
         return evidence;
@@ -139,6 +148,22 @@ public final class M703Native3dInventoryRenderCycle {
     private void verifyHash(Path path, String expected) throws Exception {
         require(Files.isRegularFile(path), "missing native input: " + path);
         require(hash(Files.readAllBytes(path)).equals(expected), "native input drift: " + path);
+    }
+
+    private int subjectCount(Path smoke) throws IOException {
+        return Math.toIntExact(Files.readAllLines(smoke.resolve("subjects.tsv"),
+                StandardCharsets.UTF_8).stream().skip(1).filter(row -> !row.isBlank()).count());
+    }
+
+    private String renderTypes(Path smoke) throws IOException {
+        Set<Integer> types = new LinkedHashSet<>();
+        for (String row : Files.readAllLines(smoke.resolve("subjects.tsv"), StandardCharsets.UTF_8)
+                .stream().skip(1).filter(value -> !value.isBlank()).toList()) {
+            String[] cells = row.split("\\t", -1);
+            require(cells.length == 5, "invalid native render subject row");
+            types.add(Integer.parseInt(cells[4]));
+        }
+        return String.join(",", types.stream().sorted().map(String::valueOf).toList());
     }
 
     private String capture(List<String> command) throws Exception {

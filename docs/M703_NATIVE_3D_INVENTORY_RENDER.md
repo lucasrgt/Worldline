@@ -8,7 +8,7 @@ M703 opens the native-render Functional Census dimension for the 63 registered b
 
 ## Qualification cycle
 
-M703Native3dInventoryRenderCycle loads the hash-pinned official terrain atlas and executes four fresh Pbuffer processes: mapped A and B, then official A and B. Each process renders all 63 declarative rows through the native RenderBlocks inventory method, reads 96x96 RGBA pixels, and emits canonical public TestKit evidence. Qualification requires repeat equality, mapped-official equality, exact class provenance, five accepted 3D render types, and the frozen family signature.
+NativeInventoryRenderCycle loads the hash-pinned official terrain atlas and executes four fresh Pbuffer processes: mapped A and B, then official A and B. Each process renders all 63 declarative rows through the native RenderBlocks inventory method, reads 96x96 RGBA pixels, and emits canonical public TestKit evidence. Qualification requires repeat equality, mapped-official equality, exact class provenance, five accepted 3D render types, and the frozen family signature.
 
 Expected signal: `family=native-3d-inventory-render,subjects=63,claims=63,render-types=5,processes=4,oracle=mapped-official-native-rgba`.
 

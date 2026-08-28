@@ -59,7 +59,8 @@ final class CandidateCheck {
         Path runner = root.resolve(smoke.runner).normalize();
         require(Files.isRegularFile(runner), "missing runner: " + smoke.runner);
         boolean dataDriven = "tools/smoke/DataDrivenCycle.java".equals(smoke.runner)
-                || "tools/smoke/CompositeCycle.java".equals(smoke.runner);
+                || "tools/smoke/CompositeCycle.java".equals(smoke.runner)
+                || "tools/smoke/NativeInventoryRenderCycle.java".equals(smoke.runner);
         require("tools/smoke/Run.java".equals(smoke.runner) || dataDriven
                         || Files.readString(runner, StandardCharsets.UTF_8).contains("\"" + id + "\""),
                 "runner does not declare candidate id");

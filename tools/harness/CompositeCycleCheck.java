@@ -60,7 +60,8 @@ final class CompositeCycleCheck {
         int exceptional;
         try (var paths = Files.list(root.resolve("tools/smoke"))) {
             exceptional = (int) paths.filter(path -> path.getFileName().toString().endsWith("Cycle.java"))
-                    .filter(path -> !Set.of("DataDrivenCycle.java", "CompositeCycle.java")
+                    .filter(path -> !Set.of("DataDrivenCycle.java", "CompositeCycle.java",
+                            "NativeInventoryRenderCycle.java")
                             .contains(path.getFileName().toString())).count();
         }
         require(exceptional <= integer(policy, "maximum.exceptional.coordinators"),
