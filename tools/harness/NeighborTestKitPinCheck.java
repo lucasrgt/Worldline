@@ -20,9 +20,9 @@ final class NeighborTestKitPinCheck {
         NeighborTestKitPinMigration.require(files == NeighborTestKitPinMigration.FILES.size(),
                 "neighbor TestKit source census drift");
         for (int index = 0; index < files; index++) verifyFile(root, lock, index);
-        SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
-                new SmokeInputFingerprint(root); List<SmokeDiscovery.Entry> catalog =
-                SmokeDiscovery.discover(root);
+        SmokePins pins = new SmokePins(root); pins.validateEvidence();
+        SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
+        List<SmokeDiscovery.Entry> catalog = SmokeDiscovery.discover(root);
         Properties train = TrainPinCheck.manifest(root);
         int anchors = integer(lock, "anchor.count");
         NeighborTestKitPinMigration.require(anchors == NeighborTestKitPinMigration.ANCHORS.size(),
@@ -61,8 +61,9 @@ final class NeighborTestKitPinCheck {
                     && SchemaPinCheck.carries(SchemaPinCheck.manifest(root), id, pin, current);
             boolean dataDrivenSuccessor = pin != null && pin.evidence().equals(evidence)
                     && DataDrivenCycleCheck.carriesPlan(root, id, pin);
+            boolean executedSuccessor = reexecuted(pin);
             NeighborTestKitPinMigration.require((transported || exactSuccessor || schemaSuccessor
-                            || dataDrivenSuccessor)
+                            || dataDrivenSuccessor || executedSuccessor)
                     && required(lock, stem + "prior_fingerprint").matches("[0-9a-f]{64}"),
                     "neighbor TestKit carried proof drift: " + id);
         }
@@ -95,6 +96,20 @@ final class NeighborTestKitPinCheck {
     private static SmokeDiscovery.Entry requireSmoke(List<SmokeDiscovery.Entry> catalog, String id) {
         return catalog.stream().filter(row -> row.id.equals(id)).findFirst()
                 .orElseThrow(() -> new IllegalStateException("missing neighbor TestKit smoke: " + id));
+    }
+    static boolean reexecuted(SmokePins.Entry pin) {
+        return pin != null && pin.source().equals("executed");
+    }
+    static void selfTest() {
+        String hash = "0".repeat(64);
+        NeighborTestKitPinMigration.require(reexecuted(new SmokePins.Entry(
+                        "fresh", hash, hash, hash, "executed")),
+                "current executed proof was not accepted as a successor");
+        NeighborTestKitPinMigration.require(!reexecuted(new SmokePins.Entry(
+                        "carried", hash, hash, hash, "refactor-equivalent")),
+                "refactor-equivalent proof bypassed migration transport");
+        NeighborTestKitPinMigration.require(!reexecuted(null),
+                "missing proof was accepted as a successor");
     }
     private static int integer(Properties values, String key) {
         try { return Integer.parseInt(required(values, key)); }
