@@ -1,5 +1,14 @@
 # Worldline changelog — Unreleased
 
+## Unreleased - Ground-Cover Lifecycle Family
+
+Status: GO.
+
+- Public `BlockLifecycleFamilyCycle` family `ground-cover` proves tall-grass on dirt, dead-bush
+  on sand, and age-zero wheat from seeds on protocol-provisioned farmland.
+- Official Beta 1.7.3 drop identity is bounded: seeds `295` 0..1 from tall grass, sticks `280`
+  0..2 from dead bush, and seeds `295` 0..3 from age-zero wheat. Farmland is admin setup only.
+
 ## Unreleased - Integration Hygiene and Anti-Slop Audit
 
 Status: developer tooling; not a vanilla SET GO.
