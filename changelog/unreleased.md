@@ -17,8 +17,9 @@ Status: GO.
   proof migrations only when their tracked official observation hashes remain unchanged.
 - Composite and telemetry pin migrations retain their prior official evidence envelopes while
   binding the new shared TestKit fingerprint; exact wave receipts remain `executed`.
-- Repository-schema and downstream TestKit migrations are regenerated as ordered proof
-  transitions; unchanged pins retain their immediate predecessor identity.
+- Repository-schema, neighbor, support-face, bounded-drop, and downstream TestKit migrations are
+  regenerated as ordered proof transitions; unchanged pins retain their immediate predecessor
+  identity.
 
 ## Unreleased - Ground-Cover Lifecycle Family
 
