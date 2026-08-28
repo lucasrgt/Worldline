@@ -617,7 +617,8 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-remaining-opaque-cube-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 remaining opaque-cube physical envelopes |
 | `b173-shaded-mushroom-lifecycle-cycle` | CARRIED | official Beta 1.7.3 shaded mushroom lifecycle family |
 | `b173-slab-lifecycle-cycle` | CARRIED | official Beta 1.7.3 slab state and disassembly lifecycle family |
-| `b173-source-fluid-physical-envelope-cycle` | EXECUTED | official Beta 1.7.3 source-fluid physical envelopes |
+| `b173-source-fluid-dynamics-cycle` | EXECUTED | official Beta 1.7.3 source-fluid gated dynamics |
+| `b173-source-fluid-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 source-fluid physical envelopes |
 | `b173-special-collision-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 special-collision physical envelopes |
 | `b173-static-collision-envelope-cycle` | CARRIED | official Beta 1.7.3 static collision envelopes |
 | `b173-static-light-transport-cycle` | CARRIED | official Beta 1.7.3 static light transport |
