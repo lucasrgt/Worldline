@@ -129,6 +129,12 @@ gravity fall remains separately scoped for sand and gravel. Two official passes 
 zero retries and failures, producing evidence hash
 `756a5c89ff5e56a51521ebd7d7a639f97f30ae97c1ee02e90a7dd865f555311c`, bound by aggregate
 signature `c56ec6bbc4c1db434a1183756273cd95d814d8ebaa229e277ae25b442f644b51`.
+The common-cube physical-envelope family then applies the same public three-family contract to
+dirt, wood planks, sandstone, bookshelf, and crafting table. Its 15 state-domain, collision, and
+light claims bring the census to 575 verified claims (54.45%) and leave 481 unresolved. The
+exact-head milestone receipt binds evidence hash
+`abbd841c92c372c50f28a54a5306912fc2de35a425f953fdb04c35685d60fe60` to aggregate signature
+`5a78cbbc3567edacd492dbc1a8bfad10459b99fce8ed5118af838b9818a08258`.
 
 The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
 extended base; sticky-piston evidence breaks an extended head; wooden-door evidence breaks the
@@ -186,6 +192,7 @@ The inert-solid bounded-stability subsystem reduces it to 521.
 The terrain-crafted solid bounded-stability family reduces it to 506.
 The ground-cover lifecycle subsystem reduces it to 496.
 The remaining opaque-cube physical-envelope family reduces it to 484.
+The common-cube physical-envelope family reduces it to 469.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
