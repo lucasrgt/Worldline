@@ -141,6 +141,16 @@ source-cell light transport. Its 12 claims bring the census to 587 verified clai
 leave 469 unresolved. Both official passes completed with zero retries and failures, producing
 evidence hash `db635b24cae8191d5fa03fb0d3d03f7e2ed3c85822919da4d50df49b919d66f2`, bound by aggregate
 signature `af7d27ecf0fe74412eb4107a31313459adc913fcedf1c63506f6df5db1b0fd2b`.
+The tile-utility physical-envelope family then routes dispenser, note block, mob spawner, chest,
+furnace, and jukebox through the same public state-domain, collision, and light contracts. Five
+state rows, six full-cube collision rows, and six source-light rows produce 17 executable claims;
+14 were previously unknown, while the dispenser, chest, and furnace state domains are consolidated
+under the aggregate proof. The official oracle distinguishes the skylight-transparent mob spawner
+from the five opaque utilities instead of forcing one family-wide assumption. The census now
+contains 601 verified claims (56.91%) and leaves 455 unresolved. Both official passes completed
+with zero retries and failures, producing evidence hash
+`f0bc374eae0ef1554a5d82117e01d91cddf94bc9c7e702a786fb2dd29cf8bb0f`, bound by aggregate
+signature `bf3ac2405d31b6022ee1be59ed397d11b661a060ae91e363532abebb0c8bfb61`.
 
 The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
 extended base; sticky-piston evidence breaks an extended head; wooden-door evidence breaks the
@@ -200,6 +210,7 @@ The ground-cover lifecycle subsystem reduces it to 496.
 The remaining opaque-cube physical-envelope family reduces it to 484.
 The common-cube physical-envelope family reduces it to 469.
 The special-collision physical-envelope family reduces it to 457.
+The tile-utility physical-envelope family reduces it to 443.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
