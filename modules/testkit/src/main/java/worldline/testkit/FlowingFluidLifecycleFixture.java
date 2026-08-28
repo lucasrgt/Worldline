@@ -40,7 +40,10 @@ public final class FlowingFluidLifecycleFixture {
         require(row.passable(), role + " collision envelope drifted");
         require(row.opacity() == opacity && row.emission() == emission
                 && row.blockLight() == blockLight && row.skyLight() == skyLight,
-                role + " light transport drifted");
+                role + " light transport drifted: expected opacity/emission/block/sky="
+                        + opacity + "/" + emission + "/" + blockLight + "/" + skyLight
+                        + " but observed " + row.opacity() + "/" + row.emission() + "/"
+                        + row.blockLight() + "/" + row.skyLight());
         BlockState expected = new BlockState(movingId, savedMetadata);
         require(row.saved().equals(expected) && row.reloaded().equals(expected),
                 role + " flowing-state persistence drifted");
