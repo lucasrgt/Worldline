@@ -47,15 +47,16 @@ final class FormattingPinCheck {
             if (ProviderDiscoveryPinCheck.exemptsLegacy(provider, smoke.id)) continue;
             checked++; String current = fingerprints.compute(smoke);
             SmokePins.Entry pin = pins.match(smoke.id, current);
+            String stem = "smoke." + smoke.id + ".";
             boolean executed = TrainPinCheck.isExecuted(train, smoke.id)
                     && pin != null && "executed".equals(pin.source());
-            String stem = "smoke." + smoke.id + ".";
+            boolean introducedEntry = "true".equals(manifest.getProperty(stem + "introduced"));
             boolean introduced = pin != null && "executed".equals(pin.source())
-                    && "true".equals(manifest.getProperty(stem + "introduced"))
+                    && introducedEntry
                     && current.equals(manifest.getProperty(stem + "current_fingerprint"))
                     && pin.evidence().equals(manifest.getProperty(stem + "evidence_sha256"));
             require(pin != null && (executed || introduced || carries(manifest, smoke.id, pin, current))
-                            && (introduced || hash(manifest, stem + "prior_fingerprint")),
+                            && (introducedEntry || hash(manifest, stem + "prior_fingerprint")),
                     "formatting proof drift: " + smoke.id);
         }
         require(checked == integer(manifest, "smoke.count")
