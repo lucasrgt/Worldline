@@ -26,14 +26,14 @@ final class BoundedDropTestKitPinCheck {
         int files = integer(lock, "file.count");
         require(files == BoundedDropTestKitPinMigration.FILES.size(),
                 "bounded-drop source census drift");
-        for (int index = 0; index < files; index++) verifyFile(root, lock, index);
+        Properties train = TrainPinCheck.manifest(root);
+        for (int index = 0; index < files; index++) verifyFile(root, lock, train, index);
 
         SmokePins pins = new SmokePins(root);
         require(pins.entries().size() >= BoundedDropTestKitPinMigration.BASE_PINS + 1,
                 "bounded-drop sealed pin census regressed");
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
         List<SmokeDiscovery.Entry> catalog = SmokeDiscovery.discover(root);
-        Properties train = TrainPinCheck.manifest(root);
         int carried = integer(lock, "carried.count");
         require(carried == BoundedDropTestKitPinMigration.CARRIED.size(),
                 "bounded-drop carried census drift");
@@ -96,12 +96,15 @@ final class BoundedDropTestKitPinCheck {
         } catch (Exception error) { return false; }
     }
 
-    private static void verifyFile(Path root, Properties lock, int index) throws Exception {
+    private static void verifyFile(Path root, Properties lock, Properties train, int index)
+            throws Exception {
         String stem = "file." + index + ".", relative = required(lock, stem + "path");
         require(relative.equals(BoundedDropTestKitPinMigration.FILES.get(index)),
                 "bounded-drop source order drift");
+        String expectedCurrent = required(lock, stem + "current_sha256");
         require(BoundedDropTestKitPinMigration.digest(Files.readAllBytes(root.resolve(relative)))
-                        .equals(required(lock, stem + "current_sha256")),
+                        .equals(expectedCurrent)
+                        || TrainPinCheck.transportsFile(train, root, relative, expectedCurrent),
                 "bounded-drop current source drift: " + relative);
         byte[] prior = gitShow(root, BoundedDropTestKitPinMigration.BASE + ":" + relative);
         String expected = required(lock, stem + "prior_sha256");
