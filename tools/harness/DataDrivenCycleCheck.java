@@ -91,6 +91,23 @@ final class DataDrivenCycleCheck {
                 + " source-refactor attestations");
     }
 
+    static boolean carriesPlan(Path root, String id, SmokePins.Entry pin) {
+        try {
+            if (pin == null || !pin.source().equals("refactor-equivalent")) return false;
+            Properties migrations = load(root.resolve("smokes/data-driven-migration.lock"));
+            Properties descriptor = load(root.resolve("smokes").resolve(id)
+                    .resolve("smoke.properties"));
+            String stem = "cycle." + id + ".";
+            return descriptor.getProperty("runner.source", "")
+                            .equals("tools/smoke/DataDrivenCycle.java")
+                    && descriptor.getProperty("cycle.migration", "").equals("legacy-v1")
+                    && hash(migrations, stem + "evidence_sha256")
+                    && pin.evidence().equals(migrations.getProperty(stem + "evidence_sha256"))
+                    && DataDrivenCyclePlan.load(root, id).fingerprint()
+                            .equals(migrations.getProperty(stem + "plan_sha256"));
+        } catch (Exception error) { return false; }
+    }
+
     private static boolean hash(Properties values, String key) {
         return values.getProperty(key, "").matches("[0-9a-f]{64}");
     }
