@@ -105,8 +105,10 @@ public final class B173ServerStateDomainProviderTest {
                 .stateDomains();
         require(utilities.size() == 5 && utilities.stream().allMatch(row -> row.claim().layer()
                 == ConformanceLayer.SINGULAR)
-                && utilities.get(1).domain().equals(java.util.List.of(new BlockState(25, 0)))
-                && utilities.get(2).domain().equals(java.util.List.of(new BlockState(52, 0))),
+                && utilities.get(1).domain().equals(
+                        java.util.Collections.singletonList(new BlockState(25, 0)))
+                && utilities.get(2).domain().equals(
+                        java.util.Collections.singletonList(new BlockState(52, 0))),
                 "tile-utility state-domain rows drifted");
         Map<String, String> options = new LinkedHashMap<String, String>();
         options.put(BlockStateDomainPlan.PLACEMENT_SLOT_OPTION, "1:37:324:4:0");
