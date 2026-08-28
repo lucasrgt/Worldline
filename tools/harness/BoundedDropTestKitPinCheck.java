@@ -52,8 +52,12 @@ final class BoundedDropTestKitPinCheck {
             boolean dataDrivenSuccessor = pin != null
                     && pin.evidence().equals(required(lock, stem + "evidence_sha256"))
                     && DataDrivenCycleCheck.carriesPlan(root, id, pin);
+            boolean schemaSuccessor = pin != null
+                    && pin.evidence().equals(required(lock, stem + "evidence_sha256"))
+                    && SchemaPinCheck.carries(SchemaPinCheck.manifest(root), id, pin, current);
             boolean executedSuccessor = NeighborTestKitPinCheck.reexecuted(pin);
-            require(transported || exactSuccessor || dataDrivenSuccessor || executedSuccessor,
+            require(transported || exactSuccessor || dataDrivenSuccessor || schemaSuccessor
+                            || executedSuccessor,
                     "bounded-drop carried proof drift: " + id);
         }
         String id = required(lock, "anchor.id");
@@ -68,8 +72,11 @@ final class BoundedDropTestKitPinCheck {
                 && TrainPinCheck.carriesCurrent(train, id, pin, current);
         boolean dataDrivenSuccessor = pin != null && pin.evidence().equals(evidence)
                 && DataDrivenCycleCheck.carriesPlan(root, id, pin);
+        boolean schemaSuccessor = pin != null && pin.evidence().equals(evidence)
+                && SchemaPinCheck.carries(SchemaPinCheck.manifest(root), id, pin, current);
         boolean executedSuccessor = NeighborTestKitPinCheck.reexecuted(pin);
-        require(direct || exactSuccessor || dataDrivenSuccessor || executedSuccessor,
+        require(direct || exactSuccessor || dataDrivenSuccessor || schemaSuccessor
+                        || executedSuccessor,
                 "bounded-drop exact anchor drift");
         System.out.println("  bounded-drop TestKit migration: " + carried
                 + " carried proofs, 1 exact anchor");
