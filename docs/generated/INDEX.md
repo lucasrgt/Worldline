@@ -1104,6 +1104,7 @@ Generated from the canonical Markdown files in `docs/`. Files remain at stable r
 - [M6_CYCLE.md](../M6_CYCLE.md)
 - [M6_TRACE.md](../M6_TRACE.md)
 - [M702_POWERED_RAIL_SLOPE_PROPAGATION.md](../M702_POWERED_RAIL_SLOPE_PROPAGATION.md)
+- [M703_NATIVE_3D_INVENTORY_RENDER.md](../M703_NATIVE_3D_INVENTORY_RENDER.md)
 - [M70_AERO_COMBAT_WINDOW.md](../M70_AERO_COMBAT_WINDOW.md)
 - [M70_CYCLE.md](../M70_CYCLE.md)
 - [M71_CYCLE.md](../M71_CYCLE.md)
