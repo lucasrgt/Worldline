@@ -39,17 +39,17 @@ public final class SourceFluidPhysicalEnvelopeContractTest {
         require(collision.probes().get(0).expected() == BlockCollisionExpectation.PASSABLE,
                 "source-fluid passable collision contract drifted");
 
-        BlockLightScenario waterLight = light(plan, WATER, 0);
-        BlockLightScenario lavaLight = light(plan, LAVA, 15);
+        BlockLightScenario waterLight = light(plan, WATER, 0, 12);
+        BlockLightScenario lavaLight = light(plan, LAVA, 15, 0);
         require(waterLight.probes().get(0).treatment().skyLight() == 12
                 && lavaLight.probes().get(0).treatment().blockLight() == 15
-                && lavaLight.probes().get(0).treatment().skyLight() == 12,
+                && lavaLight.probes().get(0).treatment().skyLight() == 0,
                 "source-fluid light transport contract drifted");
         System.out.println("SourceFluidPhysicalEnvelopeContractTest passed");
     }
 
     private static BlockLightScenario light(BlockConformancePlan plan, BlockState state,
-            int blockLight) {
+            int blockLight, int skyLight) {
         String subject = String.format("b1.7.3:block/%03d", state.legacyId());
         return new BlockLightScenario(state.legacyId() == 9
                 ? "still-water-source-fluid-physical-envelope"
@@ -58,7 +58,7 @@ public final class SourceFluidPhysicalEnvelopeContractTest {
                 List.of(new BlockLightPlacement(SUPPORT, BlockFace.UP, state)),
                 List.of(new BlockLightProbe("source", SOURCE,
                         new BlockLightExpectation(new BlockState(0, 0), 0, 15),
-                        new BlockLightExpectation(state, blockLight, 12))));
+                        new BlockLightExpectation(state, blockLight, skyLight))));
     }
 
     private static BlockConformancePlan plan() {

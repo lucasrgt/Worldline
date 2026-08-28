@@ -33,7 +33,7 @@ public final class B173SourceFluidPhysicalScenarioFactory {
     private static final BlockState AIR = new BlockState(0, 0);
     private static final List<Subject> SUBJECTS = Collections.unmodifiableList(Arrays.asList(
             new Subject(9, "still-water", 0, 12, "fluid", "tick-driven"),
-            new Subject(11, "still-lava", 15, 12, "fluid", "luminous", "tick-driven")));
+            new Subject(11, "still-lava", 15, 0, "fluid", "luminous", "tick-driven")));
 
     private B173SourceFluidPhysicalScenarioFactory() { }
 

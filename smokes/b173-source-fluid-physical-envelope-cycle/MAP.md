@@ -8,7 +8,7 @@
 One catalog covers the placed still-water and still-lava source states. Two state-domain rows
 prove the singleton source metadata reached by gameplay placement, two collision rows compare
 air controls with passable level, half-step, and full-step trajectories, and two light rows
-observe source-cell emission and skylight attenuation. Every row uses canonical public evidence,
+observe per-fluid source-cell emission and skylight attenuation. Every row uses canonical public evidence,
 an isolated official-server world, and a fresh-login persistence boundary.
 
 Flowing metadata, scheduled propagation, neighbor reactions, breaking, drops, the independent

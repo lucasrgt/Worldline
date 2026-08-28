@@ -4,7 +4,7 @@
 
 ## Claim
 
-One archetype mini-subsystem exercises still water and still lava through the public state-domain, collision, and light TestKit families. Six executable claims distinguish passable fluid cells, shared skylight attenuation, and lava emission while preserving both source states across fresh logins.
+One archetype mini-subsystem exercises still water and still lava through the public state-domain, collision, and light TestKit families. Six executable claims distinguish passable fluid cells, per-fluid skylight attenuation, and lava emission while preserving both source states across fresh logins.
 
 ## Qualification cycle
 
