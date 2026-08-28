@@ -82,6 +82,9 @@ public final class WorldlineBehavior {
     public static final WorldlineBehavior BLOCK_STATE_DOMAIN_CONFORMANCE = define(
             "block-state-domain-conformance", WorldlineFamily.WORLD,
             "Public causal execution and reload proof of reachable block metadata states");
+    public static final WorldlineBehavior BLOCK_STABILITY_CONFORMANCE = define(
+            "block-stability-conformance", WorldlineFamily.WORLD,
+            "Public bounded tick and direct-neighbor-removal stability conformance");
     public static final WorldlineBehavior BLOCK_COLLISION_CONFORMANCE = define("block-collision-conformance",
             WorldlineFamily.ENVIRONMENT, "Public air-control and gameplay-placed block collision envelope conformance");
     public static final WorldlineBehavior FOOD_CONSUMPTION = define("food-consumption", WorldlineFamily.ITEM,
