@@ -159,6 +159,8 @@ water skylight attenuation, and lava's luminous zero-skylight envelope while pre
 sources across fresh logins. The census now contains 670 verified claims (63.45%) and leaves 386
 unresolved. Both official passes completed with zero retries and failures, bound by aggregate
 signature `26284ff2a2903c093b4b65f1b625a1d369693393a7ee368cffa09e87e9bc94ba`.
+Gameplay placement and fresh-login persistence are supporting observations in all six rows, but
+remain separate census templates until a package binds those claims explicitly.
 
 The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
 extended base; sticky-piston evidence breaks an extended head; wooden-door evidence breaks the
