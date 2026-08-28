@@ -159,11 +159,18 @@ water skylight attenuation, and lava's luminous zero-skylight envelope while pre
 sources across fresh logins. The census now contains 670 verified claims (63.45%) and leaves 386
 unresolved. Both official passes completed with zero retries and failures, bound by aggregate
 signature `26284ff2a2903c093b4b65f1b625a1d369693393a7ee368cffa09e87e9bc94ba`.
-Gameplay placement and fresh-login persistence are supporting observations in all six rows, but
-remain separate census templates until a package binds those claims explicitly.
-Both subjects remain on the reusable `ARCHETYPE` layer declared by the versioned fluid profiles.
-The package therefore raises the verified numerator by six, not by counting supporting actions twice.
-Fluid break and drop behavior remains unresolved by this physical-envelope package.
+The source-fluid gated-dynamics subsystem then explicitly binds gameplay placement, clean-save
+persistence, scheduled propagation, and neighbor-gated release for both source subjects. It exposes
+eight public TestKit contracts; five were previously unknown, while the three existing tick/neighbor
+claims are upgraded from `SMOKE_ONLY` to `PUBLIC_TESTKIT`. A player places each source inside a
+gameplay-built stone channel, observes the closed gate, breaks it, waits for the official horizontal
+flow state, and reconnects through a fresh login. The census therefore reaches 675 verified claims
+(63.92%) and leaves 381 unresolved. Two official passes completed with zero retries and failures,
+producing evidence hash `582feb4cc513f0ea0e5515ac3c12d0ce77d9280fa2e3c689cf35e6e30d986771`,
+bound by aggregate signature
+`47035bfa79e8d45c1c620377e0f7ff9429a8d0b7c131c3d0ef9052de5b902b1b`.
+Flowing registry IDs, arbitrary metadata domains, fluid breaking and drops remain unresolved by
+these two source-fluid packages.
 
 The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
 extended base; sticky-piston evidence breaks an extended head; wooden-door evidence breaks the
@@ -226,6 +233,8 @@ The special-collision physical-envelope family reduces it to 457.
 The tile-utility physical-envelope family reduces it to 443.
 The native 3D inventory-render subsystem reduces it to 380.
 The source-fluid physical-envelope subsystem reduces it to 374.
+The source-fluid gated-dynamics subsystem reduces it to 369 while upgrading three older internal
+claims to the public TestKit surface.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
