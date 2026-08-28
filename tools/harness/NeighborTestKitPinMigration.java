@@ -82,7 +82,8 @@ final class NeighborTestKitPinMigration {
             pins.add(new SmokePins.Entry(smoke.id, current, prior.evidence(), "refactor-equivalent"));
         }
         int historical = carried;
-        if (carried == 0) historical = preserveHistoricalCarries(previous, lock);
+        if (carried == 0) historical = preserveHistoricalCarries(
+                previous, lock, catalog, fingerprints, existing);
         require(historical == 41, "neighbor TestKit carried smoke census drift: " + carried);
         lock.setProperty("carried.count", Integer.toString(historical));
         existing.write(pins); store(migration, lock);
@@ -91,7 +92,9 @@ final class NeighborTestKitPinMigration {
                 + ANCHORS.size() + " exact anchors");
     }
 
-    private int preserveHistoricalCarries(Properties previous, Properties lock) {
+    private int preserveHistoricalCarries(Properties previous, Properties lock,
+            List<SmokeDiscovery.Entry> catalog, SmokeInputFingerprint fingerprints,
+            SmokePins existing) throws Exception {
         require("1".equals(previous.getProperty("schema")),
                 "neighbor TestKit historical migration is absent");
         int count;
@@ -102,6 +105,18 @@ final class NeighborTestKitPinMigration {
         require(count == 41, "neighbor TestKit historical census drift: " + count);
         for (String key : previous.stringPropertyNames()) if (key.startsWith("smoke.")) {
             lock.setProperty(key, previous.getProperty(key));
+        }
+        for (int index = 0; index < count; index++) {
+            String stem = "smoke." + index + ".";
+            String id = previous.getProperty(stem + "id", "");
+            SmokeDiscovery.Entry smoke = catalog.stream().filter(row -> row.id.equals(id))
+                    .findFirst().orElseThrow(() -> new IllegalStateException(
+                            "missing historical neighbor smoke " + id));
+            String current = fingerprints.compute(smoke);
+            SmokePins.Entry pin = existing.match(id, current);
+            require(pin != null, "historical neighbor smoke lacks current proof: " + id);
+            lock.setProperty(stem + "current_fingerprint", current);
+            lock.setProperty(stem + "evidence_sha256", pin.evidence());
         }
         return count;
     }
