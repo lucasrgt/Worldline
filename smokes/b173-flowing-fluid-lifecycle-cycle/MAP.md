@@ -17,6 +17,9 @@ The water cascade covers metadata `0..15`. The Overworld lava cascade covers the
 `0,2,4,6,8,10,12,14`; its census state-domain claim remains partial because the Nether-only odd
 levels belong to the independently owned Nether flow-rate contract. Both moving blocks expose a
 passable collision envelope and their native opacity, emission, block-light, and skylight values.
+The qualified source cell records water as opacity/emission/block-light/skylight `3/0/0/12` and
+lava as `255/15/15/0`; the opaque lava-table value is a Beta 1.7.3 runtime observation rather than
+a value inferred from later Minecraft versions.
 The first generated horizontal cells are saved while still moving and recovered through a fresh
 `World` over the same native chunk-loader boundary.
 
