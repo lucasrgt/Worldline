@@ -80,7 +80,11 @@ census to 406 verified claims (38.45%) and leaving 650 unknown. Existing smoke e
 reusable input. The support-face attachment lifecycle family then proves ladder, wall sign,
 lever, and stone button through exact east-face placement, persistence, breaking, and historical
 drops. Its four cases add 16 claims, bringing the census to 422 verified claims (39.96%) and
-leaving 634 unknown. Existing smoke evidence is never promoted automatically: its subject,
+leaving 634 unknown. The shear-harvested leaf-variant lifecycle family then proves log-supported
+oak, spruce, and birch metadata through placement, two fresh-login boundaries, and exact
+variant-preserving shear drops. Existing leaf break/drop claims mean its three cases close two new
+claims, bringing the census to 424 verified claims (40.15%) and leaving 632 unknown. Existing smoke
+evidence is never promoted automatically: its subject,
 action, context, observable,
 oracle, signature, and automation surface must be curated first.
 
@@ -132,6 +136,7 @@ The deterministic harvest lifecycle subsystem reduces it to 646.
 The slab state lifecycle subsystem reduces it to 642.
 The support-dependent plant lifecycle subsystem reduces it to 638.
 The support-face attachment lifecycle subsystem reduces it to 622.
+The shear-harvested leaf-variant lifecycle subsystem reduces it to 620.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.

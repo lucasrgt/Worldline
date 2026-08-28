@@ -30,8 +30,8 @@ final class SupportFaceTestKitPinCheck {
         for (int index = 0; index < files; index++) verifyFile(root, lock, index);
 
         SmokePins pins = new SmokePins(root);
-        require(pins.entries().size() == SupportFaceTestKitPinMigration.BASE_PINS + 1,
-                "support-face sealed pin census drift");
+        require(pins.entries().size() >= SupportFaceTestKitPinMigration.BASE_PINS + 1,
+                "support-face sealed pin census regressed");
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
         List<SmokeDiscovery.Entry> catalog = SmokeDiscovery.discover(root);
         int carried = integer(lock, "carried.count");
