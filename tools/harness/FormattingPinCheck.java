@@ -86,6 +86,7 @@ final class FormattingPinCheck {
                     manifest.getProperty(stem + "evidence_sha256"), pin, current)
                     || DataDrivenCycleCheck.carriesPlan(root, id, pin)
                     || CompositeCycleCheck.carriesPlan(root, id, pin)
+                    || SchemaPinCheck.carries(SchemaPinCheck.manifest(root), id, pin, current)
                     || NeighborTestKitPinCheck.reexecuted(pin)
                     || TrainPinCheck.carriesCurrent(
                             TrainPinCheck.manifest(root), id, pin, current);
