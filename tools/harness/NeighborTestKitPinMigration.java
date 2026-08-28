@@ -45,6 +45,8 @@ final class NeighborTestKitPinMigration {
         require(clean(), "neighbor TestKit migration requires a clean committed tree");
         require(status("merge-base", "--is-ancestor", INTRODUCTION, "HEAD") == 0,
                 "neighbor TestKit introduction is not an ancestor of HEAD");
+        Path migration = root.resolve("smokes/neighbor-testkit-migration.lock");
+        Properties previous = Files.isRegularFile(migration) ? load(migration) : new Properties();
         SmokePins existing = new SmokePins(root);
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
         List<SmokeDiscovery.Entry> catalog = SmokeDiscovery.discover(root);
@@ -79,11 +81,29 @@ final class NeighborTestKitPinMigration {
             lock.setProperty(stem + "evidence_sha256", prior.evidence());
             pins.add(new SmokePins.Entry(smoke.id, current, prior.evidence(), "refactor-equivalent"));
         }
-        require(carried == 41, "neighbor TestKit carried smoke census drift: " + carried);
-        lock.setProperty("carried.count", Integer.toString(carried));
-        existing.write(pins); store(root.resolve("smokes/neighbor-testkit-migration.lock"), lock);
+        int historical = carried;
+        if (carried == 0) historical = preserveHistoricalCarries(previous, lock);
+        require(historical == 41, "neighbor TestKit carried smoke census drift: " + carried);
+        lock.setProperty("carried.count", Integer.toString(historical));
+        existing.write(pins); store(migration, lock);
         System.out.println("neighbor-aware TestKit proofs migrated: " + carried
-                + " carried, " + ANCHORS.size() + " exact anchors");
+                + " newly carried, " + historical + " historical, "
+                + ANCHORS.size() + " exact anchors");
+    }
+
+    private int preserveHistoricalCarries(Properties previous, Properties lock) {
+        require("1".equals(previous.getProperty("schema")),
+                "neighbor TestKit historical migration is absent");
+        int count;
+        try { count = Integer.parseInt(previous.getProperty("carried.count", "")); }
+        catch (NumberFormatException error) {
+            throw new IllegalStateException("invalid neighbor TestKit historical census");
+        }
+        require(count == 41, "neighbor TestKit historical census drift: " + count);
+        for (String key : previous.stringPropertyNames()) if (key.startsWith("smoke.")) {
+            lock.setProperty(key, previous.getProperty(key));
+        }
+        return count;
     }
 
     private void attest(Properties lock, int index, String relative) throws Exception {
