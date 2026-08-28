@@ -25,6 +25,22 @@ final class BoundedDropTestKitPinMigration {
             "modules/testkit/src/test/java/worldline/testkit/BlockLifecycleDropMatrixTest.java",
             "modules/testkit/src/test/java/worldline/testkit/TestKitContractTest.java");
     static final List<String> CARRIED = List.of(
+            "controlled-client-tick", "testkit-cycle", "m7-mod-loading",
+            "m8-mod-version-diff", "m9-scenario-minimization",
+            "m70-aero-combat-window", "m71-paired-aero-window",
+            "m147-piston-push-limit", "m324-furnace-rest-smelts",
+            "m338-furnace-fuel-set", "m370-remaining-furnace-smelts",
+            "m563-nether-exit-create-set", "m618-wolf-tame-set",
+            "m620-stationapi-testkit-driver", "m626-dungeon-generation-census",
+            "m627-chunk-unload-reload", "m628-minecart-booster-bug",
+            "m629-door-sound-event", "m630-server-acl-matrix",
+            "m631-protocol14-edge-packets", "m632-map-data-content",
+            "m635-natural-slime-spawn", "m636-bonemeal-wheat", "m637-tnt-chain",
+            "m638-creeper-tnt-differential", "m643-multiplayer-sleep-quorum",
+            "m645-note-pitch-ladder", "m649-chest-access-constraints",
+            "m651-portal-invalid-frame", "m652-portal-reentry-cooldown",
+            "m653-chunk-restart-persistence", "m655-rain-stop-event",
+            "m656-server-admission-matrix",
             "b173-cardinal-placement-state-domain-cycle",
             "b173-deterministic-harvest-lifecycle-cycle",
             "b173-dirt-flora-lifecycle-cycle",
@@ -43,23 +59,7 @@ final class BoundedDropTestKitPinMigration {
             "b173-support-face-attachment-lifecycle-cycle",
             "b173-wall-attachment-state-domain-cycle",
             "b173-wooden-door-state-domain-cycle",
-            "controlled-client-tick", "gui-tree", "m147-piston-push-limit",
-            "m324-furnace-rest-smelts", "m338-furnace-fuel-set",
-            "m370-remaining-furnace-smelts", "m563-nether-exit-create-set",
-            "m618-wolf-tame-set", "m620-stationapi-testkit-driver",
-            "m626-dungeon-generation-census", "m627-chunk-unload-reload",
-            "m628-minecart-booster-bug", "m629-door-sound-event",
-            "m630-server-acl-matrix", "m631-protocol14-edge-packets",
-            "m632-map-data-content", "m635-natural-slime-spawn",
-            "m636-bonemeal-wheat", "m637-tnt-chain",
-            "m638-creeper-tnt-differential", "m643-multiplayer-sleep-quorum",
-            "m645-note-pitch-ladder", "m649-chest-access-constraints",
-            "m651-portal-invalid-frame", "m652-portal-reentry-cooldown",
-            "m653-chunk-restart-persistence", "m655-rain-stop-event",
-            "m656-server-admission-matrix", "m7-mod-loading",
-            "m70-aero-combat-window", "m71-paired-aero-window",
-            "m8-mod-version-diff", "m9-scenario-minimization", "seed-atlas",
-            "testkit-cycle");
+            "gui-tree", "seed-atlas");
     private final Path root = Path.of("").toAbsolutePath().normalize();
 
     public static void main(String[] arguments) {
