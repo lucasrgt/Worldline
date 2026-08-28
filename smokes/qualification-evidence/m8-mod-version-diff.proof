@@ -2,4 +2,4 @@ schema=1
 id=m8-mod-version-diff
 fingerprint=e5cc93a9bbfc06f560ac0da662b7b19fb4da4e6cb39bd93f1f642e3020cb3181
 observation.sha256=1d0ede0d87654e3d10c9329156660ba3de2c3db6f22bfe138b65df734bea1528
-source=refactor-equivalent
+source=executed
