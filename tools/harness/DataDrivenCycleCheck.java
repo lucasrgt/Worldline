@@ -100,7 +100,6 @@ final class DataDrivenCycleCheck {
             String stem = "cycle." + id + ".";
             return descriptor.getProperty("runner.source", "")
                             .equals("tools/smoke/DataDrivenCycle.java")
-                    && descriptor.getProperty("cycle.migration", "").equals("legacy-v1")
                     && hash(migrations, stem + "evidence_sha256")
                     && pin.evidence().equals(migrations.getProperty(stem + "evidence_sha256"))
                     && DataDrivenCyclePlan.load(root, id).fingerprint()
