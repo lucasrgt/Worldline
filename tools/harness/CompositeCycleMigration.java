@@ -136,6 +136,8 @@ final class CompositeCycleMigration {
                 root.resolve("tools/harness/SmokeSupport.java")));
         manifest.setProperty("fingerprint_source_sha256", digest(
                 root.resolve("tools/harness/SmokeInputFingerprint.java")));
+        manifest.setProperty("testkit_source_tree", committedTree(
+                "modules/testkit/src/main/java"));
         existing.write(pins); store(manifestPath, manifest);
         System.out.println("composite pins refreshed: " + composite + " plans, " + executed
                 + " exact support proofs, " + imported + " train-imported plans");
@@ -209,9 +211,11 @@ final class CompositeCycleMigration {
         Process index = new ProcessBuilder("git", "diff", "--cached", "--quiet")
                 .directory(root.toFile()).start();
         String recorded = manifest.getProperty("fingerprint_source_sha256", "");
-        return worktree.waitFor() == 0 && index.waitFor() == 0
-                && !digest(root.resolve("tools/harness/SmokeInputFingerprint.java"))
-                        .equals(recorded);
+        String recordedTestKit = manifest.getProperty("testkit_source_tree", "");
+        boolean clean = worktree.waitFor() == 0 && index.waitFor() == 0;
+        return clean && (!digest(root.resolve("tools/harness/SmokeInputFingerprint.java"))
+                        .equals(recorded)
+                || !committedTree("modules/testkit/src/main/java").equals(recordedTestKit));
     }
     private String relative(Path path) { return root.relativize(path).toString().replace('\\', '/'); }
     private static SmokePins.Entry requiredEntry(SmokePins pins, String id) {
@@ -262,6 +266,13 @@ final class CompositeCycleMigration {
         String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
         require(process.waitFor() == 0, "missing committed legacy source: " + relative);
         return output;
+    }
+    private String committedTree(String relative) throws Exception {
+        Process process = new ProcessBuilder("git", "rev-parse", "HEAD:" + relative)
+                .directory(root.toFile()).redirectErrorStream(true).start();
+        String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        require(process.waitFor() == 0, "missing committed source tree: " + relative);
+        return output.strip();
     }
     private static void store(Path path, Properties values) throws Exception {
         StringBuilder output = new StringBuilder("# Worldline composite cycle migration v1\n");
