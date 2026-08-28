@@ -8,28 +8,23 @@ import worldline.b173server.B173ServerLifecycleTestRuntimeProvider;
 import worldline.testkit.BlockLifecycleFamilyCycle;
 import worldline.testkit.BlockLifecycleScenario;
 
-/** Shear-obtained leaf and tall-grass lifecycle family. */
+/** Shear-obtained leaf-variant lifecycle family. */
 public final class B173HarvestableVegetationLifecycleSmoke {
     private B173HarvestableVegetationLifecycleSmoke() { }
 
     public static void main(String[] arguments) throws Exception {
-        BlockLifecycleFamilyCycle.run(arguments, "shear-harvested-foliage",
+        BlockLifecycleFamilyCycle.run(arguments, "shear-harvested-leaf-variants",
                 17_320_110_707L, "worldline.b173.lifecycle.serverJar",
                 new B173ServerLifecycleTestRuntimeProvider(), Arrays.asList(
-                leaves(), tallGrass()));
+                leaves("oak-leaves", 0),
+                leaves("spruce-leaves", 1),
+                leaves("birch-leaves", 2)));
     }
 
-    private static BlockLifecycleScenario leaves() {
-        return B173LifecycleScenarioFactory.harvestOnSupport("leaves",
+    private static BlockLifecycleScenario leaves(String scenario, int variant) {
+        return B173LifecycleScenarioFactory.harvestOnSupport(scenario,
                 "b1.7.3:block/018", "shear-harvested-vegetation", false,
-                18, 0, 8, new BlockState(1, 0), 359, 1, 5,
-                new RemoteItemStack(18, 1, 0));
-    }
-
-    private static BlockLifecycleScenario tallGrass() {
-        return B173LifecycleScenarioFactory.harvestOnSupport("tall-grass",
-                "b1.7.3:block/031", "shear-harvested-vegetation", false,
-                31, 1, 0, new BlockState(3, 0), 359, 1, 1,
-                new RemoteItemStack(31, 1, 0));
+                18, variant, variant | 8, new BlockState(1, 0), 359, 1, 5,
+                new RemoteItemStack(18, 1, variant));
     }
 }
