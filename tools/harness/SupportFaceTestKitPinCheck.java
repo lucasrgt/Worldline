@@ -80,7 +80,10 @@ final class SupportFaceTestKitPinCheck {
                     && pin.evidence().equals(required(lock, stem + "evidence_sha256"));
             boolean exactSuccessor = pin != null
                     && TrainPinCheck.carriesCurrent(train, id, pin, current);
-            require(transported || exactSuccessor,
+            boolean dataDrivenSuccessor = pin != null && pin.evidence().equals(evidence)
+                    && DataDrivenCycleCheck.carriesPlan(root, id, pin);
+            boolean executedSuccessor = NeighborTestKitPinCheck.reexecuted(pin);
+            require(transported || exactSuccessor || dataDrivenSuccessor || executedSuccessor,
                     "support-face exact anchor drift: " + id);
         }
         System.out.println("  support-face TestKit migration: " + carried
