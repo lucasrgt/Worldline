@@ -84,7 +84,11 @@ leaving 634 unknown. The shear-harvested leaf-variant lifecycle family then prov
 oak, spruce, and birch metadata through placement, two fresh-login boundaries, and exact
 variant-preserving shear drops. Existing leaf break/drop claims mean its three cases close two new
 claims, bringing the census to 424 verified claims (40.15%) and leaving 632 unknown. Existing smoke
-evidence is never promoted automatically: its subject,
+evidence is never promoted automatically. The redstone-device lifecycle family then proves
+unpowered wire, an unpowered repeater, and a closed east-face trapdoor through item-to-block
+placement, exact initial metadata, two fresh-login boundaries, break to air, and exact historical
+drops. Its three cases add 12 claims, bringing the census to 436 verified claims (41.29%) and
+leaving 620 unknown. Existing evidence is promoted only after its subject,
 action, context, observable,
 oracle, signature, and automation surface must be curated first.
 
@@ -137,6 +141,7 @@ The slab state lifecycle subsystem reduces it to 642.
 The support-dependent plant lifecycle subsystem reduces it to 638.
 The support-face attachment lifecycle subsystem reduces it to 622.
 The shear-harvested leaf-variant lifecycle subsystem reduces it to 620.
+The redstone-device lifecycle subsystem reduces it to 608.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
