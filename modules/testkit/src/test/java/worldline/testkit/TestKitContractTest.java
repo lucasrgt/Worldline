@@ -50,6 +50,7 @@ public final class TestKitContractTest {
         SleepQuorumFixtureTest.execute();
         IceFormationFixtureTest.execute();
         FlowingWaterFreezeFixtureTest.execute();
+        FlowingFluidLifecycleFixtureTest.execute();
         SnowAccumulationFixtureTest.execute();
         SnowLayerNonstackingFixtureTest.execute();
         NaturalWolfPackFixtureTest.execute();

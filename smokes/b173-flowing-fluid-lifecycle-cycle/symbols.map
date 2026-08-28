@@ -1,0 +1,58 @@
+# owner kind descriptor named client server
+net/minecraft/src/World c - net/minecraft/src/World fd dj
+net/minecraft/src/World m (II)Lnet/minecraft/src/Chunk; getChunkFromChunkCoords c c
+net/minecraft/src/World m (IIIII)Z setBlockAndMetadata a a
+net/minecraft/src/World m (IIII)Z setBlockWithNotify f e
+net/minecraft/src/World m (IIIII)V scheduleUpdateTick  c
+net/minecraft/src/World m ()V tick l h
+net/minecraft/src/World m (III)I getBlockId a a
+net/minecraft/src/World m (III)I getBlockMetadata e c
+net/minecraft/src/World m (Lnet/minecraft/src/EnumSkyBlock;III)I getSavedLightValue a a
+net/minecraft/src/World m ()Z func_6156_d  f
+net/minecraft/src/World m (ZLnet/minecraft/src/IProgressUpdate;)V saveWorld a a
+net/minecraft/src/Block c - net/minecraft/src/Block uu na
+net/minecraft/src/Block f [Lnet/minecraft/src/Block; blocksList m m
+net/minecraft/src/Block f [I lightOpacity q q
+net/minecraft/src/Block f [I lightValue s s
+net/minecraft/src/Block f I blockID bn bn
+net/minecraft/src/Block f Lnet/minecraft/src/Block; stone u u
+net/minecraft/src/Block f Lnet/minecraft/src/Block; bedrock A A
+net/minecraft/src/Block f Lnet/minecraft/src/Block; waterMoving B B
+net/minecraft/src/Block f Lnet/minecraft/src/Block; waterStill C C
+net/minecraft/src/Block f Lnet/minecraft/src/Block; lavaMoving D D
+net/minecraft/src/Block f Lnet/minecraft/src/Block; lavaStill E E
+net/minecraft/src/Block m (Lnet/minecraft/src/World;III)Lnet/minecraft/src/AxisAlignedBB; getCollisionBoundingBoxFromPool e e
+net/minecraft/src/Chunk c - net/minecraft/src/Chunk lm hi
+net/minecraft/src/Chunk f Z isTerrainPopulated n n
+net/minecraft/src/Chunk f Z neverSave p p
+net/minecraft/src/Chunk f I xPosition j j
+net/minecraft/src/Chunk f I zPosition k k
+net/minecraft/src/Chunk m ()V func_353_b  b
+net/minecraft/src/Chunk m (III)I getBlockID a a
+net/minecraft/src/Chunk m (III)I getBlockMetadata b b
+net/minecraft/src/Chunk m (IIIII)Z setBlockIDWithMetadata a a
+net/minecraft/src/EnumSkyBlock c - net/minecraft/src/EnumSkyBlock eb co
+net/minecraft/src/EnumSkyBlock f Lnet/minecraft/src/EnumSkyBlock; Sky a a
+net/minecraft/src/EnumSkyBlock f Lnet/minecraft/src/EnumSkyBlock; Block b b
+net/minecraft/src/WorldInfo c - net/minecraft/src/WorldInfo ei ct
+net/minecraft/src/WorldInfo m (III)V setSpawnPosition  a
+net/minecraft/src/WorldProvider c - net/minecraft/src/WorldProvider xa os
+net/minecraft/src/EntityPlayer c - net/minecraft/src/EntityPlayer gs em
+net/minecraft/src/ISaveHandler c - net/minecraft/src/ISaveHandler wt om
+net/minecraft/src/ISaveHandler m ()Lnet/minecraft/src/WorldInfo; func_22096_c  c
+net/minecraft/src/ISaveHandler m ()V func_22091_b  b
+net/minecraft/src/ISaveHandler m (Lnet/minecraft/src/WorldProvider;)Lnet/minecraft/src/IChunkLoader; func_22092_a  a
+net/minecraft/src/ISaveHandler m (Lnet/minecraft/src/WorldInfo;Ljava/util/List;)V func_22095_a  a
+net/minecraft/src/ISaveHandler m (Lnet/minecraft/src/WorldInfo;)V func_22094_a  a
+net/minecraft/src/ISaveHandler m ()Lnet/minecraft/src/IPlayerFileData; func_22090_d  d
+net/minecraft/src/ISaveHandler m ()V func_22093_e  e
+net/minecraft/src/ISaveHandler m (Ljava/lang/String;)Ljava/io/File; func_28111_b  b
+net/minecraft/src/IPlayerFileData c - net/minecraft/src/IPlayerFileData  fl
+net/minecraft/src/IPlayerFileData m (Lnet/minecraft/src/EntityPlayer;)V writePlayerData  a
+net/minecraft/src/IPlayerFileData m (Lnet/minecraft/src/EntityPlayer;)V readPlayerData  b
+net/minecraft/src/IChunkLoader c - net/minecraft/src/IChunkLoader bf an
+net/minecraft/src/IChunkLoader m (Lnet/minecraft/src/World;II)Lnet/minecraft/src/Chunk; loadChunk a a
+net/minecraft/src/IChunkLoader m (Lnet/minecraft/src/World;Lnet/minecraft/src/Chunk;)V saveChunk a a
+net/minecraft/src/IChunkLoader m (Lnet/minecraft/src/World;Lnet/minecraft/src/Chunk;)V saveExtraChunkData b b
+net/minecraft/src/IChunkLoader m ()V func_661_a  a
+net/minecraft/src/IChunkLoader m ()V saveExtraData b b
