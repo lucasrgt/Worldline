@@ -2,4 +2,4 @@ schema=1
 id=b173-support-dependent-plant-lifecycle-cycle
 fingerprint=a294655e4c8dff76bc93da77299270c4c8168ddbc20ea6bad0a69274c03cffa8
 observation.sha256=5b3c9e79bc0488d70434bebc9c087424db4e4e5d1ccbc9e3a7ba212bb0b1cc41
-source=refactor-equivalent
+source=executed
