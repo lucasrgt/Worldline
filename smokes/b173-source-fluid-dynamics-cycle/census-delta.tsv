@@ -1,0 +1,9 @@
+claim_id	layer	subject_id	template_id	applicability	status	oracle	evidence_id	signature	automation_surface
+still-water-gameplay-placement	UNIVERSAL	b1.7.3:block/009	gameplay-placement	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-source-fluid-dynamics-cycle	47035bfa79e8d45c1c620377e0f7ff9429a8d0b7c131c3d0ef9052de5b902b1b	PUBLIC_TESTKIT
+still-water-save-reload	UNIVERSAL	b1.7.3:block/009	save-reload	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-source-fluid-dynamics-cycle	47035bfa79e8d45c1c620377e0f7ff9429a8d0b7c131c3d0ef9052de5b902b1b	PUBLIC_TESTKIT
+still-water-tick-policy	ARCHETYPE	b1.7.3:block/009	tick-policy	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-source-fluid-dynamics-cycle	47035bfa79e8d45c1c620377e0f7ff9429a8d0b7c131c3d0ef9052de5b902b1b	PUBLIC_TESTKIT
+still-water-neighbor-response	ARCHETYPE	b1.7.3:block/009	neighbor-response	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-source-fluid-dynamics-cycle	47035bfa79e8d45c1c620377e0f7ff9429a8d0b7c131c3d0ef9052de5b902b1b	PUBLIC_TESTKIT
+still-lava-gameplay-placement	UNIVERSAL	b1.7.3:block/011	gameplay-placement	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-source-fluid-dynamics-cycle	47035bfa79e8d45c1c620377e0f7ff9429a8d0b7c131c3d0ef9052de5b902b1b	PUBLIC_TESTKIT
+still-lava-save-reload	UNIVERSAL	b1.7.3:block/011	save-reload	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-source-fluid-dynamics-cycle	47035bfa79e8d45c1c620377e0f7ff9429a8d0b7c131c3d0ef9052de5b902b1b	PUBLIC_TESTKIT
+still-lava-tick-policy	ARCHETYPE	b1.7.3:block/011	tick-policy	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-source-fluid-dynamics-cycle	47035bfa79e8d45c1c620377e0f7ff9429a8d0b7c131c3d0ef9052de5b902b1b	PUBLIC_TESTKIT
+still-lava-neighbor-response	ARCHETYPE	b1.7.3:block/011	neighbor-response	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-source-fluid-dynamics-cycle	47035bfa79e8d45c1c620377e0f7ff9429a8d0b7c131c3d0ef9052de5b902b1b	PUBLIC_TESTKIT

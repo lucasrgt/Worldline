@@ -67,6 +67,7 @@ public final class TileUtilityPhysicalEnvelopeContractTest {
                 && transparentLight.probes().get(0).treatment().skyLight() == 15,
                 "tile transparent-light exception contract drifted");
         SourceFluidPhysicalEnvelopeContractTest.execute();
+        FluidDynamicsContractTest.execute();
         System.out.println("TileUtilityPhysicalEnvelopeContractTest passed");
     }
 
