@@ -116,6 +116,12 @@ explicitly partial snow-block policy.
 Both official passes produced evidence hash
 `700cebd5652c67a0242324fa6a15d4871223ca48e0293229735ec7377844b60f`, bound by
 semantic signature `96b4832d7aad487642ff290b7858f4385b0b54b76755a9878c49bda4182ef467`.
+The public ground-cover lifecycle subsystem then proves tall grass, dead bush, and crops through
+gameplay placement, a fresh-login save/reload boundary, break-to-air transition, and their exact
+Beta 1.7.3 drop behavior. Its three cases close 10 new claims and upgrade two crop-harvest claims
+from internal automation to the public TestKit, bringing the census to 548 verified claims (51.89%)
+and leaving 508 unresolved. Both official passes are bound by semantic signature
+`dfbb3c9f3a5a4916dbb4ea35228ef40089e85003cf9287241276b8d4398601c9`.
 
 The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
 extended base; sticky-piston evidence breaks an extended head; wooden-door evidence breaks the
@@ -171,6 +177,7 @@ The multi-drop mineral lifecycle subsystem reduces it to 602.
 The inert-solid physical-envelope subsystem reduces it to 551.
 The inert-solid bounded-stability subsystem reduces it to 521.
 The terrain-crafted solid bounded-stability family reduces it to 506.
+The ground-cover lifecycle subsystem reduces it to 496.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
