@@ -84,6 +84,9 @@ public final class WorldlineBehavior {
             "Public causal execution and reload proof of reachable block metadata states");
     public static final WorldlineBehavior BLOCK_COLLISION_CONFORMANCE = define("block-collision-conformance",
             WorldlineFamily.ENVIRONMENT, "Public air-control and gameplay-placed block collision envelope conformance");
+    public static final WorldlineBehavior NATIVE_3D_INVENTORY_RENDER = define(
+            "native-3d-inventory-render", WorldlineFamily.WORLD,
+            "Official client textured 3D inventory rendering for canonical block states");
     public static final WorldlineBehavior FOOD_CONSUMPTION = define("food-consumption", WorldlineFamily.ITEM,
             "Selected food consumption, health restoration, and container result");
     public static final WorldlineBehavior ENVIRONMENTAL_DAMAGE = define("environmental-damage",

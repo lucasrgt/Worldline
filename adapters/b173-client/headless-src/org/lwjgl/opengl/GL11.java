@@ -20,6 +20,14 @@ public final class GL11 {
     public static final int GL_PROJECTION = 5889;
     public static final int GL_MODELVIEW = 5888;
     public static final int GL_COLOR_BUFFER_BIT = 16384;
+    public static final int GL_DEPTH_BUFFER_BIT = 256;
+    public static final int GL_TEXTURE_MIN_FILTER = 10241;
+    public static final int GL_TEXTURE_MAG_FILTER = 10240;
+    public static final int GL_TEXTURE_WRAP_S = 10242;
+    public static final int GL_TEXTURE_WRAP_T = 10243;
+    public static final int GL_NEAREST = 9728;
+    public static final int GL_CLAMP = 10496;
+    public static final int GL_RGBA8 = 32856;
 
     private GL11() {}
 
@@ -31,6 +39,7 @@ public final class GL11 {
     public static int glGetError() { return GL_NO_ERROR; }
     public static String glGetString(int name) { return "headless"; }
     public static void glViewport(int x, int y, int width, int height) {}
+    public static void glEnable(int capability) {}
     public static void glDisable(int capability) {}
     public static void glMatrixMode(int mode) {}
     public static void glLoadIdentity() {}
@@ -38,9 +47,16 @@ public final class GL11 {
             double top, double near, double far) {}
     public static void glClearColor(float red, float green, float blue, float alpha) {}
     public static void glClear(int mask) {}
+    public static void glColor4f(float red, float green, float blue, float alpha) {}
+    public static void glRotatef(float angle, float x, float y, float z) {}
+    public static void glTexParameteri(int target, int name, int value) {}
+    public static void glTexImage2D(int target, int level, int internalFormat,
+            int width, int height, int border, int format, int type, ByteBuffer pixels) {}
 
     public static void glGenTextures(IntBuffer textures) {
         while (textures.hasRemaining()) textures.put(0);
         textures.flip();
     }
+
+    public static void glDeleteTextures(IntBuffer textures) {}
 }
