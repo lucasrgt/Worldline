@@ -1,5 +1,5 @@
 schema=1
 id=m51-dropped-item-spawn
-fingerprint=df4a9740dae2377c2619930c1ee24b25a0f91351c4e20fc11474dce77a897fa6
+fingerprint=ef7a64bc3514913ef73d5707042c3ed30ac8e678715b4f3995c1a8a68f09212b
 observation.sha256=5f2583a386ec5ab2c61ba3c796a1242472c417f65575ea992d32ed5275398248
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m461-fall-damage-set
-fingerprint=e8d6d55a3601be72cbf173f41cb6060ac1a0e3c09811c978191f7cde306b0ff0
+fingerprint=6d0a9a88278e56d492165956c3574f74900c8eb31d99d56cb57af8421cbc2713
 observation.sha256=15947f02196bef6a87d9ec502c93150c37c209cdfeae766857f8f345c1b76cf4
 source=refactor-equivalent

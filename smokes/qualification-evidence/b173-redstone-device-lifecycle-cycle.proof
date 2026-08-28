@@ -1,5 +1,5 @@
 schema=1
 id=b173-redstone-device-lifecycle-cycle
-fingerprint=f816d7dc6cecdca7ff003c805fd4472955a06c26485ee1cc7cd61992a64e4348
+fingerprint=4609e35e50fd8c44d8d50e1f4c9605ef4c306e5ca80b64c4daecb24c3a1e8d56
 observation.sha256=1b477556b45524c83262ddde703eee4c7f10ea50b8569aa719127b73a491669b
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m596-furnace-cart-push-set
-fingerprint=0601908aeaa3ae494bd389ec2d7de259827084e118c1080c4cbd4c63d45d6546
+fingerprint=63c3d80169a1058bb8e2e4f94bef59b3c21f47d512f34f9573611267cd6d4dc6
 observation.sha256=8a77b612ecb2e87e22e11b5ae2a71d7761e0827fcf23906c99e55aa37b837d31
 source=refactor-equivalent
