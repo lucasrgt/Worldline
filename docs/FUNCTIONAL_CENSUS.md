@@ -135,6 +135,12 @@ light claims bring the census to 575 verified claims (54.45%) and leave 481 unre
 exact-head milestone receipt binds evidence hash
 `abbd841c92c372c50f28a54a5306912fc2de35a425f953fdb04c35685d60fe60` to aggregate signature
 `5a78cbbc3567edacd492dbc1a8bfad10459b99fce8ed5118af838b9818a08258`.
+The special-collision physical-envelope family then proves cobweb, snow layer, cactus, and soul
+sand through legal placement, fresh-login persistence, their non-full-cube collision classes, and
+source-cell light transport. Its 12 claims bring the census to 587 verified claims (55.59%) and
+leave 469 unresolved. Both official passes completed with zero retries and failures, producing
+evidence hash `db635b24cae8191d5fa03fb0d3d03f7e2ed3c85822919da4d50df49b919d66f2`, bound by aggregate
+signature `af7d27ecf0fe74412eb4107a31313459adc913fcedf1c63506f6df5db1b0fd2b`.
 
 The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
 extended base; sticky-piston evidence breaks an extended head; wooden-door evidence breaks the
@@ -193,6 +199,7 @@ The terrain-crafted solid bounded-stability family reduces it to 506.
 The ground-cover lifecycle subsystem reduces it to 496.
 The remaining opaque-cube physical-envelope family reduces it to 484.
 The common-cube physical-envelope family reduces it to 469.
+The special-collision physical-envelope family reduces it to 457.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
