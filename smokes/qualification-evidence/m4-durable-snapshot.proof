@@ -1,5 +1,5 @@
 schema=1
 id=m4-durable-snapshot
-fingerprint=6ba6453d807b33d901946992317d7b230367c35165f1e457b11f901b607fb658
+fingerprint=8f066568486bd74dff1e33c38f8845fea4607eb9913e94e7caa0319d5370e5e9
 observation.sha256=1f016ef1d1ed6b2f562212643f35236be90007094316a8ae95dab9d2efcd81a0
 source=refactor-equivalent

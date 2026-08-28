@@ -1,5 +1,5 @@
 schema=1
 id=m158-bed
-fingerprint=2bea9d390d6fd9d31bb9978e7a0f2fc349f6b2c8095f6dddd52480920bed35d2
+fingerprint=326cc27185a3ca80b5aa60ddf843700ef6404828e6bd31c5d75ad7d16da95349
 observation.sha256=ab95c0893977d3774ddf9672b77063db206c52479e9645e917f6f0d42d49f2f0
 source=refactor-equivalent

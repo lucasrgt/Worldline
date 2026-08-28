@@ -1,5 +1,5 @@
 schema=1
 id=redstone-lever-button
-fingerprint=ec9eedc42030b5885404fe1ea5b27871e188b419e5ac965af65887c34bcf57f8
+fingerprint=58b06467064d544e6bf077b2933234825731310c5375cb3e69b8df4a9720590a
 observation.sha256=07928ecf62634ba9a9374083c951d736e8947b162ae45bfd6deb28416f1827f3
 source=refactor-equivalent
