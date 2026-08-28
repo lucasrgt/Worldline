@@ -56,6 +56,7 @@ public final class TestKitContractTest {
         Protocol14EdgeFixtureTest.execute();
         MapDataContentFixtureTest.execute();
         BonemealWheatFixtureTest.execute();
+        RemainingOpaqueCubePhysicalEnvelopeFixtureTest.execute();
         TntChainFixtureTest.execute();
         CreeperTntDifferentialFixtureTest.execute();
         PoweredCreeperFixtureTest.execute();
