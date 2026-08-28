@@ -241,13 +241,13 @@ public final class WorldlineBehavior {
     private static final Map<String, WorldlineBehavior> BY_TOKEN = WorldlineBehaviorCatalog.freeze();
     private final String token, family, subject;
 
-    WorldlineBehavior(String token, String family, String subject) {
-        this.token = token; this.family = family; this.subject = subject; }
+    WorldlineBehavior(String t, String f, String s) { token = t; family = f; subject = s; }
 
     public String token() { return token; } public String family() { return family; }
     public String subject() { return subject; } public String atlasId() { return "atlas.scenario." + token; }
 
-    public static WorldlineBehavior require(String tokenOrAtlasOrProgress) { return WorldlineBehaviorRegistry.require(BY_TOKEN, tokenOrAtlasOrProgress); }
+    public static WorldlineBehavior require(String tokenOrAtlasOrProgress) {
+        return WorldlineBehaviorRegistry.require(BY_TOKEN, tokenOrAtlasOrProgress); }
 
     public static Map<String, WorldlineBehavior> all() { return BY_TOKEN; }
 
