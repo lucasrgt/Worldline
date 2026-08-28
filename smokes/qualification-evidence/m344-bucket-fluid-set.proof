@@ -1,5 +1,5 @@
 schema=1
 id=m344-bucket-fluid-set
-fingerprint=46d33ac39492d2f00072d4ca607ddb6ccc2ae7f75b77c3fc630448d9b73c72a7
+fingerprint=a0502be68125c0f141001f06b78948eb9329040452dae27ba0424322b25fd9ce
 observation.sha256=fe76fdf6b8ec887d8efc4caa81ce926b3efad2a42207cbefd9b6a21f9b66b789
 source=refactor-equivalent

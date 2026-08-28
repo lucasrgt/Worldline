@@ -1,5 +1,5 @@
 schema=1
 id=m207-sandstone
-fingerprint=5585347df8c6e10b14b614f665562a0a5d8d6d949e6f25cd1c6433399eb36798
+fingerprint=48e32fcf96a4898009f3f7ad6fe1d6e86416b9492726847438fe9cddb882d1f0
 observation.sha256=f1168be76eb874a213a7c540fcc667aeb929883a30fe9ccb00676cf74cf65b8e
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=gui-actions
-fingerprint=79753511aeb8fa77b9b813c05fc25733adf91389464e4894d8011494b5bf5970
+fingerprint=bb7dbef6607030fa9ee6154b9f3ac8ca343cfc2f84ad388fb74495dce3af66dc
 observation.sha256=37ecae34e07819aeb7d5d44e8a7abe7701d473147956f00d93e9abe917b5aa9e
 source=refactor-equivalent

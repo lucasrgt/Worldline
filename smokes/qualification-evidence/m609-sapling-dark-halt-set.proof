@@ -1,5 +1,5 @@
 schema=1
 id=m609-sapling-dark-halt-set
-fingerprint=7912b74285a8c0cdace9376d012c8af228d86bbe17b43d2d331d89e860048722
+fingerprint=9b03da2903463cb774e2661306123fa52da51eab7a8985a49e6b0653d6421f45
 observation.sha256=30902743279290aa3e3850ab5ae4da81948694786cc81f99a1f5fd1a3de20c42
 source=refactor-equivalent

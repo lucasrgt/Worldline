@@ -1,5 +1,5 @@
 schema=1
 id=m325-navigation-crafts
-fingerprint=0d9d4a870c4263765c12f571b60ad61053623e4d775c95b3e4cbff6d4fbe2a65
+fingerprint=bf8545b4d21ba9f577d430ab6485b7967bc44500f087aa24dee6274c5f1908b0
 observation.sha256=904591e822865303c647ea818403edb8d115b37da19262cb96387da6f2e4302d
 source=refactor-equivalent

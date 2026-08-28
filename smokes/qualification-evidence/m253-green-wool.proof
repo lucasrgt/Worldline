@@ -1,5 +1,5 @@
 schema=1
 id=m253-green-wool
-fingerprint=58007c2e0c68a57bd2cd3f7e020b6dfcbaef0b4d33468cdc646d4bd8cfe9b8d7
+fingerprint=60ef3fd2b59d00882cac7904c8fa1f2bdc7e65a749c2b16a86f13db939d76dfe
 observation.sha256=dafe191ebebe5c80fb8935d352a73bebfb997614628047215ffde468c90be210
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m260-apple-eat
-fingerprint=4245c6aa2ee631ea4915aca7be56bf5668c0bdaac9e67de1b3792f542d3130fa
+fingerprint=fcedc16a9ae7ff6d4f4fea33d7219ca666f54ad8fd4a9b918503ec4a27c368bf
 observation.sha256=f5122f857247406ea443e90df7cb0b2f8b8bfd0ef8f151b677d9b3f8a4598130
 source=refactor-equivalent
