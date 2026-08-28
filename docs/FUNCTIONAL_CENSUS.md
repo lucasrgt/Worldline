@@ -184,6 +184,16 @@ because Nether-only odd levels are outside this Overworld fixture. The census th
 691 verified claims (65.44%) and leaves 365 unresolved, including that explicit partial claim.
 Both mapped passes and both official-oracle passes match frozen signature
 `f21fb7eb6a04dcf14e8fa7195c4e66f478e83c93f8d59548abe36a59a62b9de9`.
+The sign subsystem lifecycle then treats standing and wall signs as one coherent capability rather
+than independent block milestones. It proves every standing-sign rotation, gameplay placement,
+break and exact sign-item drop, fresh-login persistence, passable collision, inert light and tick
+policies, and support-removal response. The wall-sign row reuses its already-qualified lifecycle
+evidence and closes the four remaining collision, light, tick, and neighbor claims. These 13
+public TestKit claims bring the census to 704 verified claims (66.67%), leave 352 unresolved, and
+reduce the target gap to 340. Two fresh official-server replicas completed with zero retries and
+failures, producing evidence hash
+`9e2f1dfce178bfdb3bb2e8bd2d38f0e0448288cedfa2c04601ce6455f8e817e8`, bound by semantic
+signature `1a6ccdee8901506c433e50ef0b630fadb7f65ba0e3704686cbd19a85cb0e27a9`.
 
 The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
 extended base; sticky-piston evidence breaks an extended head; wooden-door evidence breaks the
@@ -250,6 +260,8 @@ The source-fluid gated-dynamics subsystem reduces it to 369 while upgrading thre
 claims to the public TestKit surface.
 The cake-serving lifecycle reduces it to 364, and the moving-fluid lifecycle reduces it to 353
 while retaining the Overworld-only lava state domain as PARTIAL.
+The sign subsystem lifecycle reduces the remaining target gap to 340 while keeping both native
+sign-render claims explicitly unresolved.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
