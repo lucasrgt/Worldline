@@ -107,7 +107,7 @@ public final class B173InertSolidPhysicalScenarioFactory {
 
     private static BlockConformanceCase claim(Solid solid, String template) {
         BlockConformancePlan plan = new BlockConformancePlan(Collections.singletonList(
-                new BlockConformanceProfile(solid.subject(), ARCHETYPES, false,
+                new BlockConformanceProfile(solid.subject(), ARCHETYPES, solid.id == 19,
                         Collections.<String, ConformanceLayer>emptyMap())),
                 Collections.singletonList(new BlockConformanceTemplate(
                         template, ConformanceLayer.ARCHETYPE)));

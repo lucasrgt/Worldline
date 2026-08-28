@@ -16,11 +16,11 @@ public final class B173InertSolidPhysicalEnvelopeSmoke {
     private static final String FAMILY = "inert-solid-envelope";
     private static final String SERVER_PROPERTY = "worldline.b173.lifecycle.serverJar";
     private static final String STATE =
-            "bbd71065fea417376213f2789efb8d4a1454dc12516e4e15f34293d26e7fcafd";
+            "59bbacb0e907dd06fcf3f8b51ffe204f6b8daf5a29627d4de292b3d4d413932f";
     private static final String COLLISION =
-            "86e624e3de6aae05f18e4abbbe6495888b832add499c926193e14fe5b7b0c6d8";
+            "d922a045a0b4e376716b9cf6f5c0897c72b751b3c24a12d206c77de3b8659c4d";
     private static final String LIGHT =
-            "3897805c57dd4919cb25b8c46d17cdeff2fdaf180e21a43e986241307b6651f4";
+            "eb712a7a3fc12f3a84d0d1d4a106175bed3b49a0e3d36c0ba114834436852c36";
 
     private B173InertSolidPhysicalEnvelopeSmoke() { }
 
