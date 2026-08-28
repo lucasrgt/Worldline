@@ -1,5 +1,5 @@
 schema=1
 id=m7-mod-loading
-fingerprint=91b97d38d46a6acaca597a07070dd43ef59878f226cd02da774a34718f561319
+fingerprint=640ab9303fe1574461c035222abcbf65b54748e1d58a0d7ac4fc68a200d46b83
 observation.sha256=12d57c564ace260c74b6c87152a505afb7ce6963f1c5012026abcfca230630bf
-source=executed
+source=refactor-equivalent

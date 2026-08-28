@@ -11,6 +11,7 @@ Status: GO.
   transport, 240-tick stability, support invalidation, and final persisted air.
 - Added 13 verified Functional Census claims, raising coverage to 704 of 1,056 claims (66.67%)
   and reducing the remaining distance to the 98.8% target to 340 claims.
+- Data-driven cycle plans now reject duplicate output assertions before runtime qualification.
 
 ## Unreleased - Functional Census Physical Envelopes
 
