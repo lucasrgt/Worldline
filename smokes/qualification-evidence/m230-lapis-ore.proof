@@ -1,5 +1,5 @@
 schema=1
 id=m230-lapis-ore
-fingerprint=e3669f35fa29b61fb1b72bb3585f6e64d8655f15e1b94d6a89574b30083c8ac1
+fingerprint=83c4d8e49f7a73f940ff8f9caa6763401d6dc48c60b19fe6abdb4225d7b6e3d2
 observation.sha256=f684efb5f52db98a991a7edd381072bb58cc997a3d3bfd07327725c2e5026139
 source=refactor-equivalent

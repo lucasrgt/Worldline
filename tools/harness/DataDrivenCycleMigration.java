@@ -122,11 +122,15 @@ final class DataDrivenCycleMigration {
                         "unregistered generic plan changed with the shared runner: " + smoke.id);
                 SmokePins.Entry prior = cache.availablePin(smoke);
                 boolean milestoneProof = false;
-                if (prior == null && sharedPlanRefactor) {
+                if (prior == null && sharedPlanRefactor
+                        && DataDrivenPlanReceipt.available(root, smoke.id)) {
                     prior = DataDrivenPlanReceipt.pin(root, smoke, current);
                     milestoneProof = true;
                 }
-                if (prior == null) prior = requiredEntry(existing, smoke.id);
+                if (prior == null) {
+                    prior = requiredEntry(existing, smoke.id);
+                    milestoneProof = sharedPlanRefactor;
+                }
                 newPlanPin = prior;
                 if (!"executed".equals(prior.source()) && !milestoneProof && !sharedProcessRefactor) {
                     require(TrainPinCheck.carriesCurrent(train, smoke.id, prior,

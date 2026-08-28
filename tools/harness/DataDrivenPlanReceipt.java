@@ -9,14 +9,22 @@ import java.util.Properties;
 final class DataDrivenPlanReceipt {
     private DataDrivenPlanReceipt() { }
 
+    static boolean available(Path root, String id) {
+        return Files.isRegularFile(root.resolve(".worldline/reports/milestones")
+                        .resolve(id + ".json"))
+                && Files.isRegularFile(root.resolve(".worldline/reports/smokes")
+                        .resolve(id + ".properties"))
+                && Files.isRegularFile(root.resolve(".worldline/smoke-logs")
+                        .resolve(id + ".log"));
+    }
+
     static SmokePins.Entry pin(Path root, SmokeDiscovery.Entry smoke, String current)
             throws Exception {
         Path report = root.resolve(".worldline/reports/milestones").resolve(smoke.id + ".json");
         Path attestation = root.resolve(".worldline/reports/smokes")
                 .resolve(smoke.id + ".properties");
         Path log = root.resolve(".worldline/smoke-logs").resolve(smoke.id + ".log");
-        require(Files.isRegularFile(report) && Files.isRegularFile(attestation)
-                        && Files.isRegularFile(log), "new generic plan lacks complete evidence");
+        require(available(root, smoke.id), "new generic plan lacks complete evidence: " + smoke.id);
         Map<String, Object> receipt = MiniJson.object(Files.readString(report));
         Properties proof = StrictProperties.load(attestation);
         Properties descriptor = StrictProperties.load(root.resolve("smokes").resolve(smoke.id)

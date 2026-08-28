@@ -1,5 +1,5 @@
 schema=1
 id=m652-portal-reentry-cooldown
-fingerprint=1fe14eb83eb24166513d003cf36d785a0d13df416966a2ab28a11cf7b5ae7525
+fingerprint=b91d5ccc68bda2a07b3fecc11a6f72a0bc09f2acb2de99054ac5d1ff583dad1e
 observation.sha256=55463c81d0a2a2213e14c490773fc934e2f1d69bcce5f01270cbfa90d23ac475
 source=refactor-equivalent

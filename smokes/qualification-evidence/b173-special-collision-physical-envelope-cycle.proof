@@ -1,5 +1,5 @@
 schema=1
 id=b173-special-collision-physical-envelope-cycle
-fingerprint=26e83894940e888f24b0fedb872fb0ceea4592217e85b540c95f16ae9772e6f1
+fingerprint=cdda3784ae18b3e886a59bf661b4fc76bc04e3b500949170a007f127414943ad
 observation.sha256=db635b24cae8191d5fa03fb0d3d03f7e2ed3c85822919da4d50df49b919d66f2
-source=executed
+source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m182-redstone-torch
-fingerprint=577821086e8742af0e587e1af20a8f97f99203175a23014fa76aee9b7def9507
+fingerprint=c46001aa1aa0f17007eee7eef6ad0dd834a5c0c56a4732ffd25f4c4fe7eb1884
 observation.sha256=3e8129618cb8674fb0d5a7580c16d55d100162fde4602e17ac89b0af9fdd5d4a
 source=refactor-equivalent

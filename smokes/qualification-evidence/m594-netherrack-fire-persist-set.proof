@@ -1,5 +1,5 @@
 schema=1
 id=m594-netherrack-fire-persist-set
-fingerprint=bd9d81c5cca87274ae9ebf0d2006dc6672317a349d722ba8480cdfd80ef12296
+fingerprint=29ad2d7ac689581422618ef8e457d4a55bd19d24cc22d61e32bb9b5997904a09
 observation.sha256=f9134a36db021ec77693240c7fd6aa8cc0b1e6e6e18ec708338fd15414164285
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m23-player-persistence
-fingerprint=9f299b3c63b6f3ef0b905648451a6431db5bd42031f4d0cfa5c7b52583deef0f
+fingerprint=ccdf816c8d2adcb06f42a658d0c8dc1e80c9cc9eb0670617cdc2dfde5b7f605a
 observation.sha256=83c7d5cb472b243d455cabaedc7ab2d0a7e9c8e52d7168ed2bffdb0db9451761
 source=refactor-equivalent

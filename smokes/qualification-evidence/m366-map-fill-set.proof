@@ -1,5 +1,5 @@
 schema=1
 id=m366-map-fill-set
-fingerprint=dcd330079977a66f864e62eb80e29108c3d737bd6f7e12ce19b79f6fe87204f4
+fingerprint=1c718f35da26b37f4359cfe19af3e553995d7d2be164dc3acd7533af1ef2f8af
 observation.sha256=048613204222ae9dce7fb157d74dc94b69573ce8faaa9dd90cff64f7aab8f31f
 source=refactor-equivalent
