@@ -1,5 +1,5 @@
 <!-- worldline-map-schema=1 -->
-<!-- boundary=b173-floor-flora-physical-envelope-cycle -->
+<!-- boundary=b173-remaining-opaque-cube-physical-envelope-cycle -->
 <!-- nonclaims=other-wool-colors,other-slab-metadata,gravity-fall,tick-policy,neighbor-response,native-render,flowers,a1-common-cubes,occupied-inert-solids -->
 <!-- frozen-trace=c56ec6bbc4c1db434a1183756273cd95d814d8ebaa229e277ae25b442f644b51 -->
 
