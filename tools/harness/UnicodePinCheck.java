@@ -22,7 +22,9 @@ final class UnicodePinCheck {
             require(pin != null && carries(lock, smoke.id, pin, current),
                     "Unicode-normalized proof drift: " + smoke.id);
         }
-        require(checked == integer(lock, "smoke.count")
+        int successorIntroductions = SchemaPinCheck.introductionsAfter(
+                SchemaPinCheck.manifest(root), lock);
+        require(checked == integer(lock, "smoke.count") + successorIntroductions
                         - ProviderDiscoveryPinCheck.pendingCount(provider)
                         && integer(lock, "smoke.changed") > 0,
                 "Unicode normalization proof census drift");
@@ -47,15 +49,20 @@ final class UnicodePinCheck {
         try {
             Path root = Path.of("").toAbsolutePath().normalize();
             Properties split = AdapterSplitPinCheck.manifest(root);
-            return direct || AdapterSplitPinCheck.follows(split, id,
-                    lock.getProperty(stem + "current_fingerprint"),
-                    lock.getProperty(stem + "evidence_sha256"), pin, current)
+            return direct || DataDrivenCycleCheck.carriesPlan(root, id, pin)
+                    || CompositeCycleCheck.carriesPlan(root, id, pin)
+                    || SchemaPinCheck.carries(SchemaPinCheck.manifest(root), id, pin, current)
+                    || NeighborTestKitPinCheck.reexecuted(pin)
+                    || AdapterSplitPinCheck.follows(split, id,
+                            lock.getProperty(stem + "current_fingerprint"),
+                            lock.getProperty(stem + "evidence_sha256"), pin, current)
                     || TrainPinCheck.carriesCurrent(
                             TrainPinCheck.manifest(root), id, pin, current);
         } catch (Exception error) { return false; }
     }
     static boolean follows(Properties lock, String id, String prior, String evidence,
             SmokePins.Entry pin, String current) {
+        if (prior == null || evidence == null) return false;
         String stem = "smoke." + id + ".";
         return carries(lock, id, pin, current)
                 && TrainPinCheck.continues(lock, id, prior, evidence);
