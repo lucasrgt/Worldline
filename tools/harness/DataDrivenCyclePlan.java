@@ -66,6 +66,11 @@ public final class DataDrivenCyclePlan {
                 "invalid cycle products: " + id);
         for (String prefix : List.of(tracePrefix, signaturePrefix, signalPrefix))
             require(prefix.matches("WORLDLINE_[A-Z0-9_]+="), "invalid output prefix: " + id);
+        for (List<String> fragments : List.of(outputContains, signalContains,
+                signalExcludes, traceContains, traceExcludes)) {
+            require(fragments.stream().distinct().count() == fragments.size(),
+                    "duplicate cycle assertion: " + id);
+        }
         for (String fragment : outputContains) if (fragment.contains("_SIGNATURE="))
             require(fragment.matches("WORLDLINE_[A-Z0-9_]+_SIGNATURE=[0-9a-f]{64}"),
                     "invalid frozen component signature: " + id);

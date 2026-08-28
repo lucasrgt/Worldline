@@ -1,5 +1,5 @@
 schema=1
 id=m428-remaining-door-orient-set
-fingerprint=b8ee21dc6fdd910b0ea485bcb4ee830e3789da37647c4c06fb56cd96c17d73f5
+fingerprint=09bd20f233e769c353ea69866405e7c046daafcc1d2f4c02c92e950c9a57fe24
 observation.sha256=10dad6f6b34f4140a80e7a09abeebaa5ff502bc6eee4607964a64dae72626bd2
 source=refactor-equivalent

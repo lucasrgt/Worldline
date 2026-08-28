@@ -1,5 +1,5 @@
 schema=1
 id=b173-remaining-opaque-cube-physical-envelope-cycle
-fingerprint=19a8f89ba108a13bc4e41fc256e75577d3f8cc6b1dca269de3287064b1f50c3b
+fingerprint=ffd4e57a31bb7b37d2f2c5afeeec18f67877d922378e9bbc748741217ae7f402
 observation.sha256=756a5c89ff5e56a51521ebd7d7a639f97f30ae97c1ee02e90a7dd865f555311c
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m547-sticky-piston-qc-set
-fingerprint=abffd80db0f30695e8b8d21adb3a49d2beaf421268ca630cf0c1c817ec9f620b
+fingerprint=b5d66c20d6ea663355991495c3fcc5f599dd140246a1ea4f81f414f447be123a
 observation.sha256=21af5dafa50bb529a1c0264a2be27d9b92aa0728c007fae07ecbef1547d92b1d
 source=refactor-equivalent

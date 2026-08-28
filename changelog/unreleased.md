@@ -1,5 +1,17 @@
 # Worldline changelog — Unreleased
 
+## Unreleased - Beta 1.7.3 Sign Subsystem
+
+Status: GO.
+
+- Added a public `SignSubsystemFixture` covering standing sign `63` and wall sign `68` as one
+  coherent lifecycle instead of atomizing their behavior into small milestone counts.
+- Official server evidence proves all sixteen standing rotations, gameplay item consumption,
+  direct break and sign-item drop, paired Packet130 text persistence, passable collision, light
+  transport, 240-tick stability, support invalidation, and final persisted air.
+- Added 13 verified Functional Census claims, raising coverage to 704 of 1,056 claims (66.67%)
+  and reducing the remaining distance to the 98.8% target to 340 claims.
+
 ## Unreleased - Functional Census Physical Envelopes
 
 Status: GO.

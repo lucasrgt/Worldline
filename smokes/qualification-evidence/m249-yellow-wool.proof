@@ -1,5 +1,5 @@
 schema=1
 id=m249-yellow-wool
-fingerprint=1e9dc3d7d8a37fe027a43aaa69d44271b7469ad0d85e78ac5ee3def370c86412
+fingerprint=b39fd1f47bd00a26aad5103e63ea1c3571020e00cb3121cf32bd5290db78441a
 observation.sha256=1aa0065907c89647235eddd412bad95e322d6ecd1ecfdb97dfdd1a8a7f20e599
 source=refactor-equivalent
