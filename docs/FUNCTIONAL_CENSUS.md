@@ -88,9 +88,12 @@ evidence is never promoted automatically. The redstone-device lifecycle family t
 unpowered wire, an unpowered repeater, and a closed east-face trapdoor through item-to-block
 placement, exact initial metadata, two fresh-login boundaries, break to air, and exact historical
 drops. Its three cases add 12 claims, bringing the census to 436 verified claims (41.29%) and
-leaving 620 unknown. Existing evidence is promoted only after its subject,
-action, context, observable,
-oracle, signature, and automation surface must be curated first.
+leaving 620 unknown. The multi-drop mineral lifecycle family then proves lapis ore, redstone ore,
+and glowstone through persisted placement, pickaxe break to air, exact drop identity and metadata,
+and their historical random entity-count bounds. Existing placement/reload evidence means its
+three cases close six new claims, bringing the census to 442 verified claims (41.86%) and leaving
+614 unknown. Existing evidence is promoted only after its subject, action, context, observable,
+oracle, signature, and automation surface are curated.
 
 The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
 extended base; sticky-piston evidence breaks an extended head; wooden-door evidence breaks the
@@ -142,6 +145,7 @@ The support-dependent plant lifecycle subsystem reduces it to 638.
 The support-face attachment lifecycle subsystem reduces it to 622.
 The shear-harvested leaf-variant lifecycle subsystem reduces it to 620.
 The redstone-device lifecycle subsystem reduces it to 608.
+The multi-drop mineral lifecycle subsystem reduces it to 602.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
