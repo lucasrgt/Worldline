@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=b173-harvestable-vegetation-lifecycle-cycle -->
 <!-- nonclaims=natural-growth,decay,tall-grass-harvest,crop-support-transition,native-render -->
-<!-- frozen-trace=0000000000000000000000000000000000000000000000000000000000000000 -->
+<!-- frozen-trace=6cfb1937ecae506dcdc8fe4c312221eaa996775f3115f688654848173f5b7cb3 -->
 
 # Beta 1.7.3 shear-harvested leaf-variant lifecycles
 
@@ -21,4 +21,4 @@ It does not claim natural growth, leaf decay, tall-grass harvest, crop support t
 geometry, or native rendering.
 
 Frozen signal:
-`provider=b1.7.3-server-lifecycle,family=shear-harvested-leaf-variants,rows=3,passed=3,layers=U-U-U-A+U-U-U-A+U-U-U-A,reload=FRESH_LOGINx6,evidence=0000000000000000000000000000000000000000000000000000000000000000,isolation=3-fresh-worlds`.
+`provider=b1.7.3-server-lifecycle,family=shear-harvested-leaf-variants,rows=3,passed=3,layers=U-U-U-A+U-U-U-A+U-U-U-A,reload=FRESH_LOGINx6,evidence=f706b904d93de11c41446993d25fba1e657e58d28ed7f27d6d86ed31341d3375,isolation=3-fresh-worlds`.
