@@ -1,6 +1,6 @@
 # Worldline workbench GUI proof boundary v1
 additional.pending=gui-tree
-catalog.count=528
+catalog.count=529
 pending.count=5
 pending.smokes=gui-tree,m7-mod-loading,m8-mod-version-diff,m9-scenario-minimization,testkit-cycle
 release.current_signature=87256440f1db54387671e3ad0c47a464afbe991d1933d339f37afce460e11b00
@@ -33,6 +33,9 @@ smoke.b173-lifecycle-provider-cycle.current_fingerprint=147e7c86e2ab7eb58eca2220
 smoke.b173-lifecycle-provider-cycle.evidence_sha256=9c8cb552fdffd3a3e2048696c42b3f25dd58ac57227aa361575c5241b83d30bc
 smoke.b173-lifecycle-provider-cycle.introduced=true
 smoke.b173-lifecycle-provider-cycle.prior_fingerprint=09a28afe7dfdda2ca1207fa32da0199768319115a3155acbb6550579ef88cc72
+smoke.b173-redstone-device-lifecycle-cycle.current_fingerprint=0d35b56217d087e2076a5952d9862ea9b39f905ae202b389a4fdf98fc84ca6f8
+smoke.b173-redstone-device-lifecycle-cycle.evidence_sha256=1b477556b45524c83262ddde703eee4c7f10ea50b8569aa719127b73a491669b
+smoke.b173-redstone-device-lifecycle-cycle.introduced=true
 smoke.b173-shaded-mushroom-lifecycle-cycle.current_fingerprint=8698c908e330993fae514438f27743a10056d8707b636737df8ca73ed217fda4
 smoke.b173-shaded-mushroom-lifecycle-cycle.evidence_sha256=accfc90cf5f4ca3fe1679dadf8d4b284825eab857e76c03a0621549ac3c3bc27
 smoke.b173-shaded-mushroom-lifecycle-cycle.introduced=true
@@ -73,7 +76,7 @@ smoke.changed=457
 smoke.controlled-client-tick.current_fingerprint=edec6ecad9842a53331a409842048e664d0f0cae141686efb83696950de8fb23
 smoke.controlled-client-tick.evidence_sha256=4c5cdf0609348d36a151fc55cc7eb05dcd3ae9243feb2bb7949de6753b84029d
 smoke.controlled-client-tick.prior_fingerprint=aa9e200f4ff9d2c7aba0da96d4487d95bf0451ea0797ca4719b2c813c578e69c
-smoke.count=522
+smoke.count=523
 smoke.deterministic-world-tick.current_fingerprint=ab461c56a2da2d30cf7dcdc4a461ce051a051c762acce0147ec31e6d3b5f8e22
 smoke.deterministic-world-tick.evidence_sha256=8968e0f3fa8b1c979bba56a0d25557beead0f26f19f14ca5bfe86e1bcf2d4933
 smoke.deterministic-world-tick.prior_fingerprint=b85255ac65f53ab21b996e7e0c7214eda855d485209b5c0bedaa0082d824580a
