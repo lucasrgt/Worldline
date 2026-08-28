@@ -84,6 +84,9 @@ final class FormattingPinCheck {
             return direct || SharedHelperPinCheck.follows(shared, id,
                     manifest.getProperty(stem + "current_fingerprint"),
                     manifest.getProperty(stem + "evidence_sha256"), pin, current)
+                    || DataDrivenCycleCheck.carriesPlan(root, id, pin)
+                    || CompositeCycleCheck.carriesPlan(root, id, pin)
+                    || NeighborTestKitPinCheck.reexecuted(pin)
                     || TrainPinCheck.carriesCurrent(
                             TrainPinCheck.manifest(root), id, pin, current);
         } catch (Exception error) { return false; }
