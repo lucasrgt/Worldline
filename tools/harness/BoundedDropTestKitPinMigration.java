@@ -77,6 +77,13 @@ final class BoundedDropTestKitPinMigration {
         require(clean(), "bounded-drop TestKit migration requires a clean committed tree");
         require(status("merge-base", "--is-ancestor", INTRODUCTION, "HEAD") == 0,
                 "bounded-drop TestKit introduction is not an ancestor of HEAD");
+        Path migration = root.resolve("smokes/bounded-drop-testkit-migration.lock");
+        Properties previous = Files.isRegularFile(migration)
+                ? NeighborTestKitPinMigration.load(migration) : new Properties();
+        require("1".equals(previous.getProperty("schema")),
+                "bounded-drop historical migration is absent");
+        require(Integer.toString(CARRIED.size()).equals(previous.getProperty("carried.count")),
+                "bounded-drop historical carried census drift");
         List<SmokeDiscovery.Entry> catalog = SmokeDiscovery.discover(root);
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
         SmokePins currentPins = new SmokePins(root);
@@ -87,10 +94,6 @@ final class BoundedDropTestKitPinMigration {
 
         byte[] baselineBytes = committed(BASE, "smokes/qualification.lock");
         require(baselineBytes != null, "missing bounded-drop baseline qualification lock");
-        Files.write(root.resolve("smokes/qualification.lock"), baselineBytes);
-        SmokePins baseline = new SmokePins(root);
-        require(baseline.entries().size() == BASE_PINS, "bounded-drop baseline pin census drift");
-        List<SmokePins.Entry> pins = new ArrayList<>();
         Properties lock = new Properties();
         lock.setProperty("schema", "1"); lock.setProperty("introduction.commit", INTRODUCTION);
         lock.setProperty("base.commit", BASE);
@@ -98,38 +101,30 @@ final class BoundedDropTestKitPinMigration {
         lock.setProperty("base.qualification_sha256", digest(baselineBytes));
         for (int index = 0; index < FILES.size(); index++) attest(lock, index, FILES.get(index));
         lock.setProperty("file.count", Integer.toString(FILES.size()));
-        int carried = 0;
-        for (SmokeDiscovery.Entry item : catalog) {
-            if (item.id.equals(NEW_ID)) { pins.add(exact); continue; }
-            SmokePins.Entry prior = baseline.entry(item.id);
-            require(prior != null, "bounded-drop baseline lacks smoke proof: " + item.id);
+        for (int index = 0; index < CARRIED.size(); index++) {
+            String id = CARRIED.get(index), stem = "smoke." + index + ".";
+            require(id.equals(previous.getProperty(stem + "id")),
+                    "bounded-drop historical carried order drift: " + id);
+            SmokeDiscovery.Entry item = smoke(catalog, id);
             String fingerprint = fingerprints.compute(item);
-            if (!CARRIED.contains(item.id)) {
-                require(fingerprint.equals(prior.fingerprint()),
-                        "unreviewed bounded-drop fingerprint drift: " + item.id);
-                pins.add(prior); continue;
-            }
-            require(!fingerprint.equals(prior.fingerprint()),
-                    "bounded-drop carried fingerprint did not change: " + item.id);
-            String stem = "smoke." + carried++ + ".";
-            lock.setProperty(stem + "id", item.id);
-            lock.setProperty(stem + "prior_fingerprint", prior.fingerprint());
+            SmokePins.Entry pin = currentPins.match(id, fingerprint);
+            require(pin != null, "bounded-drop carried smoke lacks current proof: " + id);
+            String prior = previous.getProperty(stem + "prior_fingerprint", "");
+            require(prior.matches("[0-9a-f]{64}"),
+                    "bounded-drop carried smoke lacks historical proof: " + id);
+            lock.setProperty(stem + "id", id);
+            lock.setProperty(stem + "prior_fingerprint", prior);
             lock.setProperty(stem + "current_fingerprint", fingerprint);
-            lock.setProperty(stem + "evidence_sha256", prior.evidence());
-            pins.add(new SmokePins.Entry(item.id, fingerprint,
-                    prior.evidence(), "refactor-equivalent"));
+            lock.setProperty(stem + "evidence_sha256", pin.evidence());
         }
-        require(carried == CARRIED.size(), "bounded-drop carried smoke census drift: " + carried);
-        lock.setProperty("carried.count", Integer.toString(carried));
-        baseline.write(pins);
-        SmokePins sealed = new SmokePins(root);
-        require(sealed.entries().size() == BASE_PINS + 1, "bounded-drop sealed pin census drift");
+        lock.setProperty("carried.count", Integer.toString(CARRIED.size()));
         lock.setProperty("anchor.id", NEW_ID);
         lock.setProperty("anchor.fingerprint", fingerprints.compute(added));
         lock.setProperty("anchor.evidence_sha256", exact.evidence());
-        store(root.resolve("smokes/bounded-drop-testkit-migration.lock"), lock);
-        System.out.println("bounded-drop TestKit proofs migrated: " + carried
-                + " carried, 1 exact anchor, " + pins.size() + " total");
+        store(migration, lock);
+        System.out.println("bounded-drop TestKit proofs refreshed: " + CARRIED.size()
+                + " historical carries, 1 exact anchor, "
+                + currentPins.entries().size() + " total pins preserved");
     }
 
     private void attest(Properties lock, int index, String relative) throws Exception {
