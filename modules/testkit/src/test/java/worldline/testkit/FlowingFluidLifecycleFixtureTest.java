@@ -40,7 +40,7 @@ public final class FlowingFluidLifecycleFixtureTest {
 
     private static FlowingFluidObservation lava() {
         return new FlowingFluidObservation(10, Arrays.asList(0, 2, 4, 6, 8, 10, 12, 14),
-                30, state(11, 0), state(10, 0), true, 0, 15, 15, 0,
+                30, state(11, 0), state(10, 0), true, 255, 15, 15, 0,
                 state(10, 2), state(10, 2));
     }
 

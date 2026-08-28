@@ -20,7 +20,8 @@ public final class FlowingFluidLifecycleFixture {
         FlowingFluidLifecycleObservation observed = scenario.observe();
         if (observed == null) throw new IllegalStateException("flowing-fluid observation is absent");
         verify(observed.water(), 8, 9, WATER_DOMAIN, 5, 1, 3, 0, 0, 12, "water");
-        verify(observed.lava(), 10, 11, OVERWORLD_LAVA_DOMAIN, 30, 2, 0, 15, 15, 0, "lava");
+        verify(observed.lava(), 10, 11, OVERWORLD_LAVA_DOMAIN,
+                30, 2, 255, 15, 15, 0, "lava");
         require(observed.boundary() == ReloadBoundary.CHUNK_RELOAD,
                 "flowing-fluid reload boundary drifted");
         require(WorldlineBehavior.require("fluid-flow") == WorldlineBehavior.FLUID_FLOW,
