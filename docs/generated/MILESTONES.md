@@ -605,6 +605,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-floor-mounted-lifecycle-cycle` | CARRIED | official Beta 1.7.3 floor-mounted block lifecycle family |
 | `b173-furnace-state-domain-cycle` | CARRIED | official Beta 1.7.3 furnace facing state domain |
 | `b173-gold-shovel-harvest-lifecycle-cycle` | CARRIED | official Beta 1.7.3 gold-shovel harvest lifecycle family |
+| `b173-harvestable-vegetation-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 shear-harvested leaf-variant lifecycle family |
 | `b173-lifecycle-provider-cycle` | CARRIED | official Beta 1.7.3 public block lifecycle provider |
 | `b173-shaded-mushroom-lifecycle-cycle` | CARRIED | official Beta 1.7.3 shaded mushroom lifecycle family |
 | `b173-slab-lifecycle-cycle` | CARRIED | official Beta 1.7.3 slab state and disassembly lifecycle family |
