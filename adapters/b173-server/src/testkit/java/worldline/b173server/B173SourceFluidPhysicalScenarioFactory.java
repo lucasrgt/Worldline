@@ -28,7 +28,7 @@ import worldline.testkit.ConformanceLayer;
 
 /** Public archetype rows for the still-water and still-lava physical envelopes. */
 public final class B173SourceFluidPhysicalScenarioFactory {
-    public static final long SEED = 17_320_110_811L;
+    public static final long SEED = 17_320_110_707L;
     private static final int HOTBAR = 1, INVENTORY = 37;
     private static final BlockState AIR = new BlockState(0, 0);
     private static final List<Subject> SUBJECTS = Collections.unmodifiableList(Arrays.asList(

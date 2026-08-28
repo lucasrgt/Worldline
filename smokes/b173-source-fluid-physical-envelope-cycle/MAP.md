@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=b173-source-fluid-physical-envelope-cycle -->
 <!-- nonclaims=flowing-fluids,tick-policy,neighbor-response,break-transition,drop-matrix,gameplay-placement,save-reload,native-render -->
-<!-- frozen-trace=48eb0a9e9fecfdd2c099ceea8f5668a0ebd2550946cb1a5cb9193816d183c3d3 -->
+<!-- frozen-trace=e98412dd0167d6dd82ecebbbab9eea06f2e64517a2f673c317ef1319d0a27511 -->
 
 # Beta 1.7.3 source-fluid physical envelopes
 
@@ -18,4 +18,4 @@ Frozen aggregate signal:
 `family=source-fluid-physical-envelope,subjects=2,claims=6,layers=3,reload=FRESH_LOGINx6,state=0000000000000000000000000000000000000000000000000000000000000000,collision=0000000000000000000000000000000000000000000000000000000000000000,light=0000000000000000000000000000000000000000000000000000000000000000`.
 
 Qualified semantic signature:
-`48eb0a9e9fecfdd2c099ceea8f5668a0ebd2550946cb1a5cb9193816d183c3d3`.
+`e98412dd0167d6dd82ecebbbab9eea06f2e64517a2f673c317ef1319d0a27511`.

@@ -40,7 +40,7 @@ public final class B173SourceFluidPhysicalEnvelopeSmoke {
         String signal = "family=source-fluid-physical-envelope,subjects=2,claims=6,layers=3"
                 + ",reload=FRESH_LOGINx6,state=" + STATE + ",collision=" + COLLISION
                 + ",light=" + LIGHT;
-        String trace = "v1|server=official-b1.7.3|seed=17320110811|family="
+        String trace = "v1|server=official-b1.7.3|seed=17320110707|family="
                 + "source-fluid-physical-envelope|subjects=2|claims=6|layers="
                 + "state-domain,collision-shape,light-behavior|state=" + STATE
                 + "|collision=" + COLLISION + "|light=" + LIGHT
