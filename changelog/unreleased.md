@@ -1,5 +1,19 @@
 # Worldline changelog — Unreleased
 
+## Unreleased - Functional Census Physical Envelopes
+
+Status: GO.
+
+- Added public, data-driven physical-envelope families for remaining opaque cubes, common cubes,
+  and special-collision blocks. The official Beta 1.7.3 cycles jointly prove state domain,
+  collision, light behavior, and fresh-login persistence without per-block milestone inflation.
+- Corrected the remaining opaque-cube milestone identity so its objective, smoke, documentation,
+  semantic map, and evidence rows describe the capability actually executed.
+- Kept snow-block tick policy partial: the bounded dark-survival fixture does not prove the
+  independently causal high-light random-tick melt boundary.
+- The audited Functional Census now contains 587 of 1,056 verified claims (55.59%), leaving 457
+  claims to the 98.8% target.
+
 ## Unreleased - Ground-Cover Lifecycle Family
 
 Status: GO.
