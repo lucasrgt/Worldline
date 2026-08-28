@@ -75,7 +75,7 @@ public final class Run {
         "smoke compilation");
     verifyControlPath(output, serverClasses);
     Path oracle = compileScenario("oracle-src", "oracle-classes",
-        classpath(productClasses("trace"), contractClasses(), serverJar),
+        classpath(productClasses("api"), productClasses("trace"), contractClasses(), serverJar),
         "official oracle compilation");
     Outcome first = scenario(required("worldline.main"), output, productClasses("api"),
         productClasses("trace"), productClasses("kernel"), contractClasses(),
@@ -84,10 +84,10 @@ public final class Run {
         productClasses("trace"), productClasses("kernel"), contractClasses(),
         serverClasses, serverJar);
     Outcome officialFirst =
-        scenario(required("oracle.main"), oracle, productClasses("trace"),
+        scenario(required("oracle.main"), oracle, productClasses("api"), productClasses("trace"),
             contractClasses(), serverJar);
     Outcome officialSecond =
-        scenario(required("oracle.main"), oracle, productClasses("trace"),
+        scenario(required("oracle.main"), oracle, productClasses("api"), productClasses("trace"),
             contractClasses(), serverJar);
     requireSame(first, second, "Worldline processes");
     requireSame(officialFirst, officialSecond, "official oracle processes");
