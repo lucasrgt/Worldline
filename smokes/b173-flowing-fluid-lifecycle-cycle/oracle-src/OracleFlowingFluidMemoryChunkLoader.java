@@ -55,7 +55,7 @@ final class OracleFlowingFluidMemoryChunkLoader implements an {
         for (int y = 0; y < HEIGHT; y++) {
           int value = metadata[index(x, y, z)] & 15;
           if (value != 0)
-            chunk.a(x, y, z, chunk.a(x, y, z), value);
+            chunk.b(x, y, z, value);
         }
   }
 

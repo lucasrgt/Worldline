@@ -69,8 +69,7 @@ final class FlowingFluidMemoryChunkLoader implements IChunkLoader {
                 for (int y = 0; y < HEIGHT; y++) {
                     int value = metadata[index(x, y, z)] & 15;
                     if (value != 0) {
-                        chunk.setBlockIDWithMetadata(
-                                x, y, z, chunk.getBlockID(x, y, z), value);
+                        chunk.setBlockMetadata(x, y, z, value);
                     }
                 }
             }

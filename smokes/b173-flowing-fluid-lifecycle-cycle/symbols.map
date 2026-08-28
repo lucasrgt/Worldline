@@ -31,6 +31,7 @@ net/minecraft/src/Chunk	f	I	zPosition	k	k
 net/minecraft/src/Chunk	m	()V	func_353_b		b
 net/minecraft/src/Chunk	m	(III)I	getBlockID	a	a
 net/minecraft/src/Chunk	m	(III)I	getBlockMetadata	b	b
+net/minecraft/src/Chunk	m	(IIII)V	setBlockMetadata	b	b
 net/minecraft/src/Chunk	m	(IIIII)Z	setBlockIDWithMetadata	a	a
 net/minecraft/src/EnumSkyBlock	c	-	net/minecraft/src/EnumSkyBlock	eb	co
 net/minecraft/src/EnumSkyBlock	f	Lnet/minecraft/src/EnumSkyBlock;	Sky	a	a
