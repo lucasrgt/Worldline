@@ -58,7 +58,8 @@ final class SupportFaceTestKitPinCheck {
             boolean dataDrivenSuccessor = pin != null
                     && pin.evidence().equals(required(lock, stem + "evidence_sha256"))
                     && DataDrivenCycleCheck.carriesPlan(root, id, pin);
-            require(transported || exactSuccessor || dataDrivenSuccessor,
+            boolean executedSuccessor = NeighborTestKitPinCheck.reexecuted(pin);
+            require(transported || exactSuccessor || dataDrivenSuccessor || executedSuccessor,
                     "support-face carried proof drift: " + id);
         }
         int anchors = integer(lock, "anchor.count");
