@@ -2,4 +2,4 @@ schema=1
 id=m620-stationapi-testkit-driver
 fingerprint=3bdf01c00f248830b978a6360ce17dda0f8e31d29e1cb1a47e5a052dd70ee905
 observation.sha256=f5277f10eb0529194acadc2b3f63fe2f033adc2856c2676b8e9bbc0b3ba5f579
-source=refactor-equivalent
+source=executed
