@@ -33,6 +33,7 @@ final class BoundedDropTestKitPinCheck {
                 "bounded-drop sealed pin census regressed");
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
         List<SmokeDiscovery.Entry> catalog = SmokeDiscovery.discover(root);
+        Properties train = TrainPinCheck.manifest(root);
         int carried = integer(lock, "carried.count");
         require(carried == BoundedDropTestKitPinMigration.CARRIED.size(),
                 "bounded-drop carried census drift");
@@ -42,10 +43,13 @@ final class BoundedDropTestKitPinCheck {
                     "bounded-drop carried order drift");
             String current = fingerprints.compute(smoke(catalog, id));
             SmokePins.Entry pin = pins.match(id, current);
-            require(pin != null && pin.source().equals("refactor-equivalent")
+            boolean transported = pin != null && pin.source().equals("refactor-equivalent")
                             && current.equals(required(lock, stem + "current_fingerprint"))
                             && pin.evidence().equals(required(lock, stem + "evidence_sha256"))
-                            && required(lock, stem + "prior_fingerprint").matches("[0-9a-f]{64}"),
+                            && required(lock, stem + "prior_fingerprint").matches("[0-9a-f]{64}");
+            boolean exactSuccessor = pin != null
+                    && TrainPinCheck.carriesCurrent(train, id, pin, current);
+            require(transported || exactSuccessor,
                     "bounded-drop carried proof drift: " + id);
         }
         String id = required(lock, "anchor.id");

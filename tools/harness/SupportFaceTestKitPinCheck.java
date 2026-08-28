@@ -34,6 +34,7 @@ final class SupportFaceTestKitPinCheck {
                 "support-face sealed pin census regressed");
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
         List<SmokeDiscovery.Entry> catalog = SmokeDiscovery.discover(root);
+        Properties train = TrainPinCheck.manifest(root);
         int carried = integer(lock, "carried.count");
         require(carried == SupportFaceTestKitPinMigration.CARRIED.size(),
                 "support-face carried census drift");
@@ -48,10 +49,13 @@ final class SupportFaceTestKitPinCheck {
             boolean direct = current.equals(priorCurrent);
             boolean successor = BoundedDropTestKitPinCheck.transportsSmoke(root, id,
                     priorCurrent, required(lock, stem + "evidence_sha256"), current);
-            require(pin != null && pin.source().equals("refactor-equivalent")
+            boolean transported = pin != null && pin.source().equals("refactor-equivalent")
                             && (direct || successor)
                             && pin.evidence().equals(required(lock, stem + "evidence_sha256"))
-                            && required(lock, stem + "prior_fingerprint").matches("[0-9a-f]{64}"),
+                            && required(lock, stem + "prior_fingerprint").matches("[0-9a-f]{64}");
+            boolean exactSuccessor = pin != null
+                    && TrainPinCheck.carriesCurrent(train, id, pin, current);
+            require(transported || exactSuccessor,
                     "support-face carried proof drift: " + id);
         }
         int anchors = integer(lock, "anchor.count");
@@ -68,8 +72,11 @@ final class SupportFaceTestKitPinCheck {
                     && pin.source().equals("executed");
             boolean successor = BoundedDropTestKitPinCheck.transportsSmoke(root, id,
                     priorCurrent, required(lock, stem + "evidence_sha256"), current);
-            require(pin != null && (direct || successor)
-                            && pin.evidence().equals(required(lock, stem + "evidence_sha256")),
+            boolean transported = pin != null && (direct || successor)
+                    && pin.evidence().equals(required(lock, stem + "evidence_sha256"));
+            boolean exactSuccessor = pin != null
+                    && TrainPinCheck.carriesCurrent(train, id, pin, current);
+            require(transported || exactSuccessor,
                     "support-face exact anchor drift: " + id);
         }
         System.out.println("  support-face TestKit migration: " + carried

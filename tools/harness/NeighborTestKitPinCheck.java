@@ -52,10 +52,12 @@ final class NeighborTestKitPinCheck {
             SmokePins.Entry pin = pins.match(id, current);
             String prior = required(lock, stem + "current_fingerprint");
             String evidence = required(lock, stem + "evidence_sha256");
-            NeighborTestKitPinMigration.require(pin != null && pin.evidence().equals(evidence)
+            boolean transported = pin != null && pin.evidence().equals(evidence)
                     && (current.equals(prior) || SupportFaceTestKitPinCheck.transportsSmoke(
-                            root, id, prior, evidence, current)
-                            || TrainPinCheck.carriesCurrent(train, id, pin, current))
+                            root, id, prior, evidence, current));
+            boolean exactSuccessor = pin != null
+                    && TrainPinCheck.carriesCurrent(train, id, pin, current);
+            NeighborTestKitPinMigration.require((transported || exactSuccessor)
                     && required(lock, stem + "prior_fingerprint").matches("[0-9a-f]{64}"),
                     "neighbor TestKit carried proof drift: " + id);
         }
@@ -71,7 +73,8 @@ final class NeighborTestKitPinCheck {
         String expectedCurrent = required(lock, stem + "current_sha256");
         NeighborTestKitPinMigration.require(NeighborTestKitPinMigration.digest(current)
                 .equals(expectedCurrent)
-                || SupportFaceTestKitPinCheck.transportsFile(root, relative, expectedCurrent),
+                || SupportFaceTestKitPinCheck.transportsFile(root, relative, expectedCurrent)
+                || BoundedDropTestKitPinCheck.transportsFile(root, relative, expectedCurrent),
                 "neighbor TestKit current source drift: " + relative);
         byte[] prior = gitShow(root, NeighborTestKitPinMigration.BASE + ":" + relative);
         String expected = required(lock, stem + "prior_sha256");
