@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=b173-redstone-device-lifecycle-cycle -->
 <!-- nonclaims=power-transition,orientation-domain,activation,neighbor-propagation,support-removal,native-render -->
-<!-- frozen-trace=0000000000000000000000000000000000000000000000000000000000000000 -->
+<!-- frozen-trace=cb9b74b892cc7525575fc94a634a74abcc876eca1a46f46a07058310a214bd84 -->
 
 # Beta 1.7.3 redstone device lifecycles
 
@@ -19,4 +19,4 @@ wire power, repeater power or delay transitions, full orientation domains, trapd
 neighbor propagation, support-removal reactions, collision geometry, or native rendering.
 
 Frozen signal:
-`provider=b1.7.3-server-lifecycle,family=redstone-devices,rows=3,passed=3,layers=U-U-U-A+U-U-U-A+U-U-U-A,reload=FRESH_LOGINx6,evidence=0000000000000000000000000000000000000000000000000000000000000000,isolation=3-fresh-worlds`.
+`provider=b1.7.3-server-lifecycle,family=redstone-devices,rows=3,passed=3,layers=U-U-U-A+U-U-U-A+U-U-U-A,reload=FRESH_LOGINx6,evidence=084f4d5e7e7e77a6b2049194376c17d9b9f1cea333ebe38deae4282b4f0a278f,isolation=3-fresh-worlds`.
