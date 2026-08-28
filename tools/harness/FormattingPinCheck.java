@@ -43,6 +43,7 @@ final class FormattingPinCheck {
         SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); int checked = 0;
         Properties provider = ProviderDiscoveryPinCheck.manifest(root);
+        Properties schemas = SchemaPinCheck.manifest(root);
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             if (ProviderDiscoveryPinCheck.exemptsLegacy(provider, smoke.id)) continue;
             checked++; String current = fingerprints.compute(smoke);
@@ -55,8 +56,11 @@ final class FormattingPinCheck {
                     && introducedEntry
                     && current.equals(manifest.getProperty(stem + "current_fingerprint"))
                     && pin.evidence().equals(manifest.getProperty(stem + "evidence_sha256"));
+            boolean schemaIntroduced = pin != null && SchemaPinCheck.introduced(schemas, smoke.id)
+                    && SchemaPinCheck.carries(schemas, smoke.id, pin, current);
             require(pin != null && (executed || introduced || carries(manifest, smoke.id, pin, current))
-                            && (introducedEntry || hash(manifest, stem + "prior_fingerprint")),
+                            && (introducedEntry || hash(manifest, stem + "prior_fingerprint")
+                            || schemaIntroduced),
                     "formatting proof drift: " + smoke.id);
         }
         require(checked == integer(manifest, "smoke.count")

@@ -75,6 +75,9 @@ final class SchemaPinCheck {
                     TrainPinCheck.manifest(root), id, pin, current); }
         catch (Exception error) { return direct; }
     }
+    static boolean introduced(Properties manifest, String id) {
+        return "true".equals(manifest.getProperty("smoke." + id + ".introduced"));
+    }
     static boolean follows(Properties manifest, String id, String prior, String evidence,
             SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
