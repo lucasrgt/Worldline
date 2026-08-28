@@ -48,8 +48,11 @@ public final class B173ServerLightProviderTest {
         List<BlockLightScenario> utilities = B173TileUtilityPhysicalScenarioFactory.lights();
         require(utilities.size() == 6 && utilities.stream().allMatch(row ->
                 row.claim().layer() == ConformanceLayer.SINGULAR
-                && row.probes().get(0).treatment().blockLight() == 0
-                && row.probes().get(0).treatment().skyLight() == 0),
+                && row.probes().get(0).treatment().blockLight() == 0)
+                && utilities.get(2).subject().endsWith("/052")
+                && utilities.get(2).probes().get(0).treatment().skyLight() == 15
+                && utilities.stream().filter(row -> !row.subject().endsWith("/052"))
+                        .allMatch(row -> row.probes().get(0).treatment().skyLight() == 0),
                 "tile-utility light rows drifted");
         Map<String, String> options = new LinkedHashMap<String, String>();
         options.put(BlockLightPlan.PLACEMENT_SLOT_OPTION, "1:37:89:1:0");
