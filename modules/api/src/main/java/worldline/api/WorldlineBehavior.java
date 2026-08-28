@@ -54,6 +54,8 @@ public final class WorldlineBehavior {
             "Empty-hand note block click Packet54 or Packet61 event");
     public static final WorldlineBehavior SIGN_TEXT_PERSISTENCE = define("sign-text-persistence", WorldlineFamily.WORLD,
             "Standing sign Packet130 text across fresh login");
+    public static final WorldlineBehavior SIGN_SUBSYSTEM = define("sign-subsystem", WorldlineFamily.WORLD,
+            "Standing and wall sign placement, text, physical envelope, support, and persistence lifecycle");
     public static final WorldlineBehavior PAINTING_SPAWN = define("painting-spawn", WorldlineFamily.ITEM,
             "Painting placement Packet25 identity across peers");
     public static final WorldlineBehavior NOTE_BLOCK_INSTRUMENT = define("note-block-instrument",

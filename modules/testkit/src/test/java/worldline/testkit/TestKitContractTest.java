@@ -51,6 +51,7 @@ public final class TestKitContractTest {
         IceFormationFixtureTest.execute();
         FlowingWaterFreezeFixtureTest.execute();
         FlowingFluidLifecycleFixtureTest.execute();
+        SignSubsystemFixtureTest.execute();
         SnowAccumulationFixtureTest.execute();
         SnowLayerNonstackingFixtureTest.execute();
         NaturalWolfPackFixtureTest.execute();
