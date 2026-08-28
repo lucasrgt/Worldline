@@ -1,6 +1,11 @@
 # Worldline smoke qualification lock v5
 schema=5
 algorithm=worldline-smoke-input-v6-tokens
+smoke.b173-cake-serving-lifecycle-cycle.fingerprint=2866c609680f4c4bed607fa814188eac56de8ea61f861e06cad8037ef06303fc
+smoke.b173-cake-serving-lifecycle-cycle.observation_sha256=b979f2b0ca7ee80a137540257d0c4a0f2d29e1daf0dae7cbd908c04e5f8cb7b1
+smoke.b173-cake-serving-lifecycle-cycle.evidence_sha256=1de0e704e7ea06134bedfbbae29b29987c91294a764ea6ea5c3d1e189b8004dd
+smoke.b173-cake-serving-lifecycle-cycle.source=executed
+smoke.b173-cake-serving-lifecycle-cycle.status=passed
 smoke.b173-cardinal-placement-state-domain-cycle.fingerprint=cfebc4d2e9636ea7ae10d3100ed2bdf6f7bbdc3974dab9f73e9a722a534e793e
 smoke.b173-cardinal-placement-state-domain-cycle.observation_sha256=05a42d02220e492c816e51c0348fda817ae4bb609a583ba7a23cfe1145fb3665
 smoke.b173-cardinal-placement-state-domain-cycle.evidence_sha256=42ba6fbcb3ed025cf214783f4e2328649526c4301d0d3e0651dcc8458746b10f
