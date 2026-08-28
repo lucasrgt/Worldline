@@ -161,6 +161,7 @@ unresolved. Both official passes completed with zero retries and failures, bound
 signature `26284ff2a2903c093b4b65f1b625a1d369693393a7ee368cffa09e87e9bc94ba`.
 Gameplay placement and fresh-login persistence are supporting observations in all six rows, but
 remain separate census templates until a package binds those claims explicitly.
+Both subjects remain on the reusable `ARCHETYPE` layer declared by the versioned fluid profiles.
 
 The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
 extended base; sticky-piston evidence breaks an extended head; wooden-door evidence breaks the
