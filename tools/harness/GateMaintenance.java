@@ -26,6 +26,7 @@ final class GateMaintenance {
         case "--migrate-repository-schemas" -> command("RepositorySchemaMigration", "--apply", 600);
         case "--migrate-neighbor-testkit-pins" -> command("NeighborTestKitPinMigration", "--apply", 600);
         case "--migrate-support-face-testkit-pins" -> command("SupportFaceTestKitPinMigration", "--apply", 600);
+        case "--migrate-bounded-drop-testkit-pins" -> command("BoundedDropTestKitPinMigration", "--apply", 600);
         case "--migrate-formatting-pins" -> command("FormattingPinMigration", "--apply", 600);
         case "--migrate-shared-helper-pins" -> command("SharedHelperPinMigration", "--apply", 600);
         case "--migrate-unicode-pins" -> command("UnicodePinMigration", "--apply", 600);

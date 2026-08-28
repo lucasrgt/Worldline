@@ -21,6 +21,7 @@ final class RepositorySourcePolicy {
         TelemetryPinCheck.execute(root); SchemaPinCheck.execute(root);
         NeighborTestKitPinCheck.execute(root);
         SupportFaceTestKitPinCheck.execute(root);
+        BoundedDropTestKitPinCheck.execute(root);
         SmokeDescriptorSchemaCheck.execute(root); TestKitReleasePinCheck.execute(root);
         MilestoneIdUniquenessCheck.execute(root);
         SmokeLane.validate(root);

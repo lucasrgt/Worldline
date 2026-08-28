@@ -139,6 +139,7 @@ public final class Gate {
                 + "--migrate-telemetry-pins|"
                 + "--migrate-repository-schemas|"
                 + "--migrate-neighbor-testkit-pins|"
+                + "--migrate-bounded-drop-testkit-pins|"
                 + "--migrate-formatting-pins|--migrate-unicode-pins|"
                 + "--migrate-shared-helper-pins|"
                 + "--migrate-adapter-split-pins|"

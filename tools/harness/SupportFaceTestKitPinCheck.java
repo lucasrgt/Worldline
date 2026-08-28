@@ -44,8 +44,12 @@ final class SupportFaceTestKitPinCheck {
                     "support-face carried order drift");
             String current = fingerprints.compute(smoke(catalog, id));
             SmokePins.Entry pin = pins.match(id, current);
+            String priorCurrent = required(lock, stem + "current_fingerprint");
+            boolean direct = current.equals(priorCurrent);
+            boolean successor = BoundedDropTestKitPinCheck.transportsSmoke(root, id,
+                    priorCurrent, required(lock, stem + "evidence_sha256"), current);
             require(pin != null && pin.source().equals("refactor-equivalent")
-                            && current.equals(required(lock, stem + "current_fingerprint"))
+                            && (direct || successor)
                             && pin.evidence().equals(required(lock, stem + "evidence_sha256"))
                             && required(lock, stem + "prior_fingerprint").matches("[0-9a-f]{64}"),
                     "support-face carried proof drift: " + id);
@@ -59,8 +63,12 @@ final class SupportFaceTestKitPinCheck {
                     "support-face anchor order drift");
             String current = fingerprints.compute(smoke(catalog, id));
             SmokePins.Entry pin = pins.match(id, current);
-            require(pin != null && pin.source().equals("executed")
-                            && current.equals(required(lock, stem + "fingerprint"))
+            String priorCurrent = required(lock, stem + "fingerprint");
+            boolean direct = current.equals(priorCurrent) && pin != null
+                    && pin.source().equals("executed");
+            boolean successor = BoundedDropTestKitPinCheck.transportsSmoke(root, id,
+                    priorCurrent, required(lock, stem + "evidence_sha256"), current);
+            require(pin != null && (direct || successor)
                             && pin.evidence().equals(required(lock, stem + "evidence_sha256")),
                     "support-face exact anchor drift: " + id);
         }
@@ -76,10 +84,12 @@ final class SupportFaceTestKitPinCheck {
             for (int index = 0; index < files; index++) {
                 String stem = "file." + index + ".";
                 if (!relative.equals(lock.getProperty(stem + "path"))) continue;
+                String introduced = lock.getProperty(stem + "current_sha256");
                 return priorSha256.equals(lock.getProperty(stem + "prior_sha256"))
-                        && SupportFaceTestKitPinMigration.digest(
-                                Files.readAllBytes(root.resolve(relative)))
-                                .equals(lock.getProperty(stem + "current_sha256"));
+                        && (SupportFaceTestKitPinMigration.digest(
+                                Files.readAllBytes(root.resolve(relative))).equals(introduced)
+                        || BoundedDropTestKitPinCheck.transportsFile(
+                                root, relative, introduced));
             }
             return false;
         } catch (Exception error) {
@@ -96,9 +106,12 @@ final class SupportFaceTestKitPinCheck {
             for (int index = 0; index < carried; index++) {
                 String stem = "smoke." + index + ".";
                 if (!id.equals(lock.getProperty(stem + "id"))) continue;
+                String introduced = lock.getProperty(stem + "current_fingerprint");
                 return priorFingerprint.equals(lock.getProperty(stem + "prior_fingerprint"))
                         && evidenceSha256.equals(lock.getProperty(stem + "evidence_sha256"))
-                        && currentFingerprint.equals(lock.getProperty(stem + "current_fingerprint"));
+                        && (currentFingerprint.equals(introduced)
+                        || BoundedDropTestKitPinCheck.transportsSmoke(root, id, introduced,
+                                evidenceSha256, currentFingerprint));
             }
             return false;
         } catch (Exception error) {
@@ -110,8 +123,10 @@ final class SupportFaceTestKitPinCheck {
         String stem = "file." + index + ".", relative = required(lock, stem + "path");
         require(relative.equals(SupportFaceTestKitPinMigration.FILES.get(index)),
                 "support-face source order drift");
+        String current = required(lock, stem + "current_sha256");
         require(SupportFaceTestKitPinMigration.digest(Files.readAllBytes(root.resolve(relative)))
-                        .equals(required(lock, stem + "current_sha256")),
+                        .equals(current)
+                        || BoundedDropTestKitPinCheck.transportsFile(root, relative, current),
                 "support-face current source drift: " + relative);
         byte[] prior = gitShow(root, SupportFaceTestKitPinMigration.BASE + ":" + relative);
         String expected = required(lock, stem + "prior_sha256");
