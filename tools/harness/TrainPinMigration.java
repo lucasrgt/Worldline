@@ -91,13 +91,13 @@ final class TrainPinMigration extends TrainPinSupport {
                         current, receipt.evidence);
                 receipt(lock, stem, receipt); updated.add(currentPin); continue;
             }
-            imported++; boolean predecessorMilestone =
-                    "milestone".equals(predecessor.getProperty(stem + "kind"));
+            imported++; boolean predecessorProof =
+                    predecessorProof(predecessor.getProperty(stem + "kind"));
             Imported receipt = completeImported(swarm, smoke.id)
                     ? imported(root, swarm, smoke.id) : null;
-            if (receipt == null && (!predecessorMilestone || hasExecuted(root, smoke.id)))
+            if (receipt == null && (!predecessorProof || hasExecuted(root, smoke.id)))
                 receipt = executed(root, cache, smoke, current);
-            if (receipt == null && predecessorMilestone)
+            if (receipt == null && predecessorProof)
                 receipt = predecessor(predecessor, pins, smoke, current, stem);
             if (receipt == null) receipt = historical(root, smoke);
             if (receipt == null) receipt = imported(root, swarm, smoke.id);
@@ -274,7 +274,13 @@ final class TrainPinMigration extends TrainPinSupport {
                 "exact milestone execution was downgraded");
         require("refactor-equivalent".equals(source("current", "prior")),
                 "migrated milestone execution was overstated");
+        require(predecessorProof("milestone") && predecessorProof("executed")
+                        && !predecessorProof("baseline") && !predecessorProof(null),
+                "predecessor proof kinds drifted");
         System.out.println("  train pin provenance self-test: passed");
+    }
+    private static boolean predecessorProof(String kind) {
+        return "milestone".equals(kind) || "executed".equals(kind);
     }
     private static String source(String current, String receipt) {
         return current.equals(receipt) ? "executed" : "refactor-equivalent"; }
