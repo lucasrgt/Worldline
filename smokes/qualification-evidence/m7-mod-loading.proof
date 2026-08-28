@@ -2,4 +2,4 @@ schema=1
 id=m7-mod-loading
 fingerprint=01b34c482e5ca4655f2821c464f9064cbdb7e59cf7dbf19db725d1b181f1c879
 observation.sha256=12d57c564ace260c74b6c87152a505afb7ce6963f1c5012026abcfca230630bf
-source=refactor-equivalent
+source=executed
