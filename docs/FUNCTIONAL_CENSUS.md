@@ -163,6 +163,7 @@ Gameplay placement and fresh-login persistence are supporting observations in al
 remain separate census templates until a package binds those claims explicitly.
 Both subjects remain on the reusable `ARCHETYPE` layer declared by the versioned fluid profiles.
 The package therefore raises the verified numerator by six, not by counting supporting actions twice.
+Fluid break and drop behavior remains unresolved by this physical-envelope package.
 
 The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
 extended base; sticky-piston evidence breaks an extended head; wooden-door evidence breaks the
