@@ -29,7 +29,7 @@ final class SupportFaceTestKitPinCheck {
                 "support-face source census drift");
         for (int index = 0; index < files; index++) verifyFile(root, lock, index);
 
-        SmokePins pins = new SmokePins(root);
+        SmokePins pins = new SmokePins(root); pins.validateEvidence();
         require(pins.entries().size() >= SupportFaceTestKitPinMigration.BASE_PINS + 1,
                 "support-face sealed pin census regressed");
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
@@ -55,7 +55,10 @@ final class SupportFaceTestKitPinCheck {
                             && required(lock, stem + "prior_fingerprint").matches("[0-9a-f]{64}");
             boolean exactSuccessor = pin != null
                     && TrainPinCheck.carriesCurrent(train, id, pin, current);
-            require(transported || exactSuccessor,
+            boolean dataDrivenSuccessor = pin != null
+                    && pin.evidence().equals(required(lock, stem + "evidence_sha256"))
+                    && DataDrivenCycleCheck.carriesPlan(root, id, pin);
+            require(transported || exactSuccessor || dataDrivenSuccessor,
                     "support-face carried proof drift: " + id);
         }
         int anchors = integer(lock, "anchor.count");
