@@ -78,7 +78,7 @@ b1.7.3:block/076	false	redstone-component,support-dependent,luminous,stateful-me
 b1.7.3:block/077	false	redstone-component,support-dependent,directional,stateful-metadata
 b1.7.3:block/078	false	support-dependent,stateful-metadata,special-collision
 b1.7.3:block/079	false	transparent-solid,fluid-reactive,tick-driven
-b1.7.3:block/080	false	simple-solid
+b1.7.3:block/080	false	simple-solid,random-tick
 b1.7.3:block/081	false	vegetation,random-tick,special-collision
 b1.7.3:block/082	false	simple-solid
 b1.7.3:block/083	false	vegetation,random-tick,support-dependent

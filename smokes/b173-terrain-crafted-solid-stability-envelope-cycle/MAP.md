@@ -1,6 +1,6 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=b173-terrain-crafted-solid-stability-envelope-cycle -->
-<!-- nonclaims=occupied-mineral-stability,grass-redstone-ore-random-tick,soul-sand,sponge,wool-colors-other-than-0,snow-layer-melt,gravity,native-render,state-collision-light -->
+<!-- nonclaims=occupied-mineral-stability,grass-redstone-ore-random-tick,soul-sand,sponge,wool-colors-other-than-0,snow-block-high-light-melt,snow-layer-melt,gravity,native-render,state-collision-light -->
 <!-- frozen-trace=96b4832d7aad487642ff290b7858f4385b0b54b76755a9878c49bda4182ef467 -->
 
 # Beta 1.7.3 terrain-crafted solid bounded stability envelope
@@ -14,12 +14,14 @@ clean save plus fresh login.
 
 The tick window is an intentional bounded observation contract, not an asynchronous sleep. The
 overhead transition is causal: the official server removes an adjacent block and emits its native
-neighbor notification before the target is checked. Together the rows close sixteen Functional
-Census atoms inside one coherent stability mini-subsystem.
+neighbor notification before the target is checked. Together the rows execute sixteen Functional
+Census observations inside one coherent stability mini-subsystem. Fifteen claims are verified.
+Snow block's dark bounded survival is only partial tick-policy evidence because this fixture does
+not exercise its scheduled high-light melt branch; its neighbor-response claim remains verified.
 
 Occupied cobblestone, ores, mineral blocks, bricks, mossy cobblestone, obsidian, clay, and
 netherrack remain outside this family. Grass and redstone-ore random ticks, soul-sand, sponge,
-wool colors other than metadata zero, snow-layer melt, gravity, native rendering, and the
+wool colors other than metadata zero, snow-block high-light melt, snow-layer melt, gravity, native rendering, and the
 state, collision, and light envelopes are owned by other packages. This map does not claim
 arbitrary neighbor identities, longer time windows, or unbounded invariance.
 

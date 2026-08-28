@@ -4,7 +4,7 @@
 
 ## Claim
 
-One data-driven mini-subsystem exercises eight remaining inert solids through a maintained public stability TestKit family on the unmodified official Beta 1.7.3 server. Each row proves bounded tick stability and causal response to direct stone-overhead removal as two Functional Census claims rather than separate micro-milestones.
+One data-driven mini-subsystem exercises eight terrain and crafted solids through a maintained public stability TestKit family on the unmodified official Beta 1.7.3 server. Seven inert rows close bounded tick stability and causal response to direct stone-overhead removal; the snow-block row closes neighbor response while retaining its unexercised high-light random-tick melt branch as PARTIAL.
 
 ## Qualification cycle
 

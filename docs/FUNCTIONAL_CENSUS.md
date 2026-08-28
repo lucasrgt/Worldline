@@ -110,7 +110,9 @@ signature `8a27c057ab869e83f082eee44bde16d433f7720b9069d9b4adcf5f121b1a3429`.
 The terrain-crafted solid bounded-stability family then applies the same public
 stability fixture to stone, dirt, wood planks, sandstone, white wool, bookshelf,
 crafting table, and snow block. Its sixteen tick-policy and neighbor-response
-claims bring the census to 539 verified claims (51.04%) and leave 517 unknown.
+observations produce 15 verified claims plus one partial snow-block tick-policy claim, bringing
+the census to 538 verified claims (50.95%) and leaving 518 unresolved claims, including that
+explicitly partial snow-block policy.
 Both official passes produced evidence hash
 `700cebd5652c67a0242324fa6a15d4871223ca48e0293229735ec7377844b60f`, bound by
 semantic signature `96b4832d7aad487642ff290b7858f4385b0b54b76755a9878c49bda4182ef467`.
@@ -168,7 +170,7 @@ The redstone-device lifecycle subsystem reduces it to 608.
 The multi-drop mineral lifecycle subsystem reduces it to 602.
 The inert-solid physical-envelope subsystem reduces it to 551.
 The inert-solid bounded-stability subsystem reduces it to 521.
-The terrain-crafted solid bounded-stability family reduces it to 505.
+The terrain-crafted solid bounded-stability family reduces it to 506.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
