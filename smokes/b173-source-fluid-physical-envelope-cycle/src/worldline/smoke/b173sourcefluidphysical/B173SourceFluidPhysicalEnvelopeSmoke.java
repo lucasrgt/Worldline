@@ -20,7 +20,7 @@ public final class B173SourceFluidPhysicalEnvelopeSmoke {
     private static final String COLLISION =
             "5bfdc6f75f2127693a48c4abac6de2bb01e6f5f0319a72bb50483f92b80c836a";
     private static final String LIGHT =
-            "44259d22f8e2b8f911728d94dae3b3f96309ab502a597086aea3590292aaef76";
+            "9e214579b8c6e76a9f8837552821f7d80999785be2167e66086f80cbba5579f0";
 
     private B173SourceFluidPhysicalEnvelopeSmoke() { }
 
