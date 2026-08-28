@@ -57,7 +57,9 @@ final class NeighborTestKitPinCheck {
                             root, id, prior, evidence, current));
             boolean exactSuccessor = pin != null
                     && TrainPinCheck.carriesCurrent(train, id, pin, current);
-            NeighborTestKitPinMigration.require((transported || exactSuccessor)
+            boolean schemaSuccessor = pin != null && pin.evidence().equals(evidence)
+                    && SchemaPinCheck.carries(SchemaPinCheck.manifest(root), id, pin, current);
+            NeighborTestKitPinMigration.require((transported || exactSuccessor || schemaSuccessor)
                     && required(lock, stem + "prior_fingerprint").matches("[0-9a-f]{64}"),
                     "neighbor TestKit carried proof drift: " + id);
         }
