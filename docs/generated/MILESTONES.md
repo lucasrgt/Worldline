@@ -5,7 +5,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | Milestone | Qualification | Contract |
 | --- | --- | --- |
 | `deterministic-world-tick` | CARRIED | server-runtime-equivalence |
-| `controlled-client-tick` | CARRIED | client-runtime-equivalence |
+| `controlled-client-tick` | EXECUTED | client-runtime-equivalence |
 | `testkit-cycle` | EXECUTED | testkit-runtime |
 | `m3-domain-api` | CARRIED | domain-api-equivalence |
 | `m4-durable-snapshot` | CARRIED | durable-snapshot |
@@ -612,16 +612,17 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-inert-solid-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 inert-solid physical envelopes |
 | `b173-inert-solid-stability-envelope-cycle` | CARRIED | official Beta 1.7.3 inert-solid bounded stability envelope |
 | `b173-lifecycle-provider-cycle` | CARRIED | official Beta 1.7.3 public block lifecycle provider |
-| `b173-multi-drop-mineral-lifecycle-cycle` | CARRIED | official Beta 1.7.3 multi-drop mineral lifecycle family |
+| `b173-multi-drop-mineral-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 multi-drop mineral lifecycle family |
 | `b173-redstone-device-lifecycle-cycle` | CARRIED | official Beta 1.7.3 redstone device lifecycle family |
 | `b173-remaining-opaque-cube-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 remaining opaque-cube physical envelopes |
 | `b173-shaded-mushroom-lifecycle-cycle` | CARRIED | official Beta 1.7.3 shaded mushroom lifecycle family |
 | `b173-slab-lifecycle-cycle` | CARRIED | official Beta 1.7.3 slab state and disassembly lifecycle family |
+| `b173-source-fluid-physical-envelope-cycle` | EXECUTED | official Beta 1.7.3 source-fluid physical envelopes |
 | `b173-special-collision-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 special-collision physical envelopes |
 | `b173-static-collision-envelope-cycle` | CARRIED | official Beta 1.7.3 static collision envelopes |
 | `b173-static-light-transport-cycle` | CARRIED | official Beta 1.7.3 static light transport |
 | `b173-static-self-drop-lifecycle-cycle` | CARRIED | official Beta 1.7.3 static self-drop lifecycle family |
-| `b173-support-dependent-plant-lifecycle-cycle` | CARRIED | official Beta 1.7.3 support-dependent plant lifecycle family |
+| `b173-support-dependent-plant-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 support-dependent plant lifecycle family |
 | `b173-support-face-attachment-lifecycle-cycle` | CARRIED | official Beta 1.7.3 support-face attachment lifecycle family |
 | `b173-terrain-crafted-solid-stability-envelope-cycle` | CARRIED | official Beta 1.7.3 terrain-crafted solid bounded stability envelope |
 | `b173-tile-utility-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 tile-utility physical envelopes |
