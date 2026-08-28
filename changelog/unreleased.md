@@ -13,6 +13,8 @@ Status: GO.
   independently causal high-light random-tick melt boundary.
 - The audited Functional Census now contains 587 of 1,056 verified claims (55.59%), leaving 457
   claims to the 98.8% target.
+- Shared physical-placement support changes are carried through reviewed refactor-equivalent
+  proof migrations only when their tracked official observation hashes remain unchanged.
 
 ## Unreleased - Ground-Cover Lifecycle Family
 
