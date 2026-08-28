@@ -1,6 +1,11 @@
 # Worldline smoke qualification lock v5
 schema=5
 algorithm=worldline-smoke-input-v6-tokens
+smoke.b173-flowing-fluid-lifecycle-cycle.fingerprint=3492c42a8c72c023cc8a21e37c615ccc2527fd5977bc97e5232cdc884ffa9d50
+smoke.b173-flowing-fluid-lifecycle-cycle.observation_sha256=ac8ae5f4384b9fe01bd20d787937cddaec3c91d0782cc6112ddfabed36646dec
+smoke.b173-flowing-fluid-lifecycle-cycle.evidence_sha256=75678936cc8f80d4582e03bcb4976b29dd7ffcc364ae03c3884c05bff50de635
+smoke.b173-flowing-fluid-lifecycle-cycle.source=executed
+smoke.b173-flowing-fluid-lifecycle-cycle.status=passed
 smoke.betavault-item-reference.fingerprint=194a918e51651cbe2a4c8937f55e5f07330ba1cdc5d4f669030a8fdd4d3bffe4
 smoke.betavault-item-reference.observation_sha256=424e7234c31248c2e3cb70370f10b0bb5475d7e11f70c7ec18e3fc0778ffc20a
 smoke.betavault-item-reference.evidence_sha256=440c21f7aaeae78cf0771594589cf05299f4af1aa6509511fe8599cd5306f709
