@@ -99,7 +99,14 @@ the physical matrix while retaining its canonical singular conformance route. Th
 family signatures are bound by aggregate signature
 `cd3c74df9d01d3c692ee28e3be7b9e6edd180e9c3506fbafa88ba3c6f66308d7`. Existing evidence is
 promoted only after its subject, action, context, observable, oracle, signature, and automation
-surface are curated.
+surface are curated. The inert-solid bounded-stability subsystem then gameplay-places fifteen
+non-singular simple solids beneath a direct stone overhead, observes each across 200 official
+server ticks, removes that causal neighbor through normal pickaxe breaking, observes 40 further
+ticks, and crosses a fresh-login persistence boundary. Its tick-policy and neighbor-response
+matrix closes 30 claims, bringing the census to 523 verified claims (49.53%) and leaving 533
+unknown. Both official passes produced evidence hash
+`0904de8c7af8b9e69589c0223045ebb241845669a90130a3d05825c0f9aefea3`, bound by semantic
+signature `8a27c057ab869e83f082eee44bde16d433f7720b9069d9b4adcf5f121b1a3429`.
 
 The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
 extended base; sticky-piston evidence breaks an extended head; wooden-door evidence breaks the
@@ -153,6 +160,7 @@ The shear-harvested leaf-variant lifecycle subsystem reduces it to 620.
 The redstone-device lifecycle subsystem reduces it to 608.
 The multi-drop mineral lifecycle subsystem reduces it to 602.
 The inert-solid physical-envelope subsystem reduces it to 551.
+The inert-solid bounded-stability subsystem reduces it to 521.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
