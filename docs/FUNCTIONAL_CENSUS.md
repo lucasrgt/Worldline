@@ -171,6 +171,19 @@ bound by aggregate signature
 `47035bfa79e8d45c1c620377e0f7ff9429a8d0b7c131c3d0ef9052de5b902b1b`.
 Flowing registry IDs, arbitrary metadata domains, fluid breaking and drops remain unresolved by
 these two source-fluid packages.
+The singular cake-serving lifecycle then proves its reachable serving metadata, shrinking
+collision envelope, inert light and tick policy, and consumption-driven neighbor behavior. Its
+five official-server claims bring the census to 680 verified claims (64.39%) and leave 376
+unresolved.
+The moving-fluid lifecycle subsystem next executes flowing water and flowing lava through one
+public TestKit fixture backed by the mapped server and the official oracle. It proves water's full
+metadata domain, the Overworld lava even-metadata domain, exact flow cadence, still-to-moving
+neighbor recomputation, passable collision, native opacity/emission/light transport, and exact
+moving-state chunk reloads. Eleven claims are verified; flowing lava state-domain remains PARTIAL
+because Nether-only odd levels are outside this Overworld fixture. The census therefore reaches
+691 verified claims (65.44%) and leaves 365 unresolved, including that explicit partial claim.
+Both mapped passes and both official-oracle passes match frozen signature
+`f21fb7eb6a04dcf14e8fa7195c4e66f478e83c93f8d59548abe36a59a62b9de9`.
 
 The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
 extended base; sticky-piston evidence breaks an extended head; wooden-door evidence breaks the
@@ -235,6 +248,8 @@ The native 3D inventory-render subsystem reduces it to 380.
 The source-fluid physical-envelope subsystem reduces it to 374.
 The source-fluid gated-dynamics subsystem reduces it to 369 while upgrading three older internal
 claims to the public TestKit surface.
+The cake-serving lifecycle reduces it to 364, and the moving-fluid lifecycle reduces it to 353
+while retaining the Overworld-only lava state domain as PARTIAL.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.

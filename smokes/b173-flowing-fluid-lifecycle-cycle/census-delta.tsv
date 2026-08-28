@@ -1,0 +1,13 @@
+claim_id	layer	subject_id	template_id	applicability	status	oracle	evidence_id	signature	automation_surface
+flowing-water-state-domain	ARCHETYPE	b1.7.3:block/008	state-domain	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-flowing-fluid-lifecycle-cycle	f21fb7eb6a04dcf14e8fa7195c4e66f478e83c93f8d59548abe36a59a62b9de9	PUBLIC_TESTKIT
+flowing-water-save-reload	UNIVERSAL	b1.7.3:block/008	save-reload	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-flowing-fluid-lifecycle-cycle	f21fb7eb6a04dcf14e8fa7195c4e66f478e83c93f8d59548abe36a59a62b9de9	PUBLIC_TESTKIT
+flowing-water-collision-shape	ARCHETYPE	b1.7.3:block/008	collision-shape	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-flowing-fluid-lifecycle-cycle	f21fb7eb6a04dcf14e8fa7195c4e66f478e83c93f8d59548abe36a59a62b9de9	PUBLIC_TESTKIT
+flowing-water-light-behavior	ARCHETYPE	b1.7.3:block/008	light-behavior	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-flowing-fluid-lifecycle-cycle	f21fb7eb6a04dcf14e8fa7195c4e66f478e83c93f8d59548abe36a59a62b9de9	PUBLIC_TESTKIT
+flowing-water-tick-policy	ARCHETYPE	b1.7.3:block/008	tick-policy	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-flowing-fluid-lifecycle-cycle	f21fb7eb6a04dcf14e8fa7195c4e66f478e83c93f8d59548abe36a59a62b9de9	PUBLIC_TESTKIT
+flowing-water-neighbor-response	ARCHETYPE	b1.7.3:block/008	neighbor-response	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-flowing-fluid-lifecycle-cycle	f21fb7eb6a04dcf14e8fa7195c4e66f478e83c93f8d59548abe36a59a62b9de9	PUBLIC_TESTKIT
+flowing-lava-state-domain	ARCHETYPE	b1.7.3:block/010	state-domain	APPLICABLE	PARTIAL	OFFICIAL_SERVER	b173-flowing-fluid-lifecycle-cycle	f21fb7eb6a04dcf14e8fa7195c4e66f478e83c93f8d59548abe36a59a62b9de9	PUBLIC_TESTKIT
+flowing-lava-save-reload	UNIVERSAL	b1.7.3:block/010	save-reload	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-flowing-fluid-lifecycle-cycle	f21fb7eb6a04dcf14e8fa7195c4e66f478e83c93f8d59548abe36a59a62b9de9	PUBLIC_TESTKIT
+flowing-lava-collision-shape	ARCHETYPE	b1.7.3:block/010	collision-shape	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-flowing-fluid-lifecycle-cycle	f21fb7eb6a04dcf14e8fa7195c4e66f478e83c93f8d59548abe36a59a62b9de9	PUBLIC_TESTKIT
+flowing-lava-light-behavior	ARCHETYPE	b1.7.3:block/010	light-behavior	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-flowing-fluid-lifecycle-cycle	f21fb7eb6a04dcf14e8fa7195c4e66f478e83c93f8d59548abe36a59a62b9de9	PUBLIC_TESTKIT
+flowing-lava-tick-policy	ARCHETYPE	b1.7.3:block/010	tick-policy	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-flowing-fluid-lifecycle-cycle	f21fb7eb6a04dcf14e8fa7195c4e66f478e83c93f8d59548abe36a59a62b9de9	PUBLIC_TESTKIT
+flowing-lava-neighbor-response	ARCHETYPE	b1.7.3:block/010	neighbor-response	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-flowing-fluid-lifecycle-cycle	f21fb7eb6a04dcf14e8fa7195c4e66f478e83c93f8d59548abe36a59a62b9de9	PUBLIC_TESTKIT
