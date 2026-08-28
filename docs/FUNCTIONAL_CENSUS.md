@@ -95,8 +95,10 @@ three cases close six new claims, bringing the census to 442 verified claims (41
 614 unknown. The inert-solid physical-envelope subsystem then routes 17 metadata-zero opaque full
 cubes through the public state-domain, collision, and light families as one aggregate proof. Its
 51 claims bring the census to 493 verified claims (46.69%) and leave 563 unknown; sponge shares
-the physical matrix while retaining its canonical singular conformance route. Existing evidence
-is promoted only after its subject, action, context, observable, oracle, signature, and automation
+the physical matrix while retaining its canonical singular conformance route. The three public
+family signatures are bound by aggregate signature
+`cd3c74df9d01d3c692ee28e3be7b9e6edd180e9c3506fbafa88ba3c6f66308d7`. Existing evidence is
+promoted only after its subject, action, context, observable, oracle, signature, and automation
 surface are curated.
 
 The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
