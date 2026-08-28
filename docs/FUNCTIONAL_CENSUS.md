@@ -92,8 +92,12 @@ leaving 620 unknown. The multi-drop mineral lifecycle family then proves lapis o
 and glowstone through persisted placement, pickaxe break to air, exact drop identity and metadata,
 and their historical random entity-count bounds. Existing placement/reload evidence means its
 three cases close six new claims, bringing the census to 442 verified claims (41.86%) and leaving
-614 unknown. Existing evidence is promoted only after its subject, action, context, observable,
-oracle, signature, and automation surface are curated.
+614 unknown. The inert-solid physical-envelope subsystem then routes 17 metadata-zero opaque full
+cubes through the public state-domain, collision, and light families as one aggregate proof. Its
+51 claims bring the census to 493 verified claims (46.69%) and leave 563 unknown; sponge shares
+the physical matrix while retaining its canonical singular conformance route. Existing evidence
+is promoted only after its subject, action, context, observable, oracle, signature, and automation
+surface are curated.
 
 The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
 extended base; sticky-piston evidence breaks an extended head; wooden-door evidence breaks the
@@ -146,6 +150,7 @@ The support-face attachment lifecycle subsystem reduces it to 622.
 The shear-harvested leaf-variant lifecycle subsystem reduces it to 620.
 The redstone-device lifecycle subsystem reduces it to 608.
 The multi-drop mineral lifecycle subsystem reduces it to 602.
+The inert-solid physical-envelope subsystem reduces it to 551.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.

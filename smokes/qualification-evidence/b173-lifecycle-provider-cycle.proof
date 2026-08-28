@@ -1,5 +1,5 @@
 schema=1
 id=b173-lifecycle-provider-cycle
-fingerprint=caa27258b7589a24beeafa1324e07282bff0a87cc0c6874bd46e6c7adb292400
+fingerprint=b599ae4fe95c28da2f0cf412835d85677c4f7be9f84aa52bc84b27d57e31499e
 observation.sha256=9c8cb552fdffd3a3e2048696c42b3f25dd58ac57227aa361575c5241b83d30bc
 source=refactor-equivalent
