@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=native-3d-inventory-render -->
 <!-- nonclaims=world-rendering,2d-item-icons,fluids,fire,rails,doors,signs,ladders,redstone-wire,repeaters,beds,piston-heads,moving-pistons,crossed-plants,torches,metadata-other-than-zero -->
-<!-- frozen-trace=0000000000000000000000000000000000000000000000000000000000000000 -->
+<!-- frozen-trace=97c8282dedc4688bf612040cf5db8b7d8999e969190ddad09d42b0856fa56b05 -->
 
 # M703 native 3D inventory render behavior map
 
@@ -51,4 +51,4 @@ The descriptor names exactly 63 `native-render` cells. No claim is made for the
 special routes or for metadata variants not rendered by this canonical inventory
 contract.
 
-Frozen family SHA-256: `0000000000000000000000000000000000000000000000000000000000000000`.
+Frozen family SHA-256: `97c8282dedc4688bf612040cf5db8b7d8999e969190ddad09d42b0856fa56b05`.

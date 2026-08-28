@@ -12,4 +12,4 @@ M703Native3dInventoryRenderCycle loads the hash-pinned official terrain atlas an
 
 Expected signal: `family=native-3d-inventory-render,subjects=63,claims=63,render-types=5,processes=4,oracle=mapped-official-native-rgba`.
 
-Frozen semantic SHA-256: `0000000000000000000000000000000000000000000000000000000000000000`.
+Frozen semantic SHA-256: `97c8282dedc4688bf612040cf5db8b7d8999e969190ddad09d42b0856fa56b05`.
