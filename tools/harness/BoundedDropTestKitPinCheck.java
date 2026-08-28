@@ -56,9 +56,13 @@ final class BoundedDropTestKitPinCheck {
         require(id.equals(BoundedDropTestKitPinMigration.NEW_ID), "bounded-drop anchor drift");
         String current = fingerprints.compute(smoke(catalog, id));
         SmokePins.Entry pin = pins.match(id, current);
-        require(pin != null && pin.source().equals("executed")
-                        && current.equals(required(lock, "anchor.fingerprint"))
-                        && pin.evidence().equals(required(lock, "anchor.evidence_sha256")),
+        String prior = required(lock, "anchor.fingerprint");
+        String evidence = required(lock, "anchor.evidence_sha256");
+        boolean direct = pin != null && pin.source().equals("executed")
+                && current.equals(prior) && pin.evidence().equals(evidence);
+        boolean exactSuccessor = pin != null && pin.evidence().equals(evidence)
+                && TrainPinCheck.carriesCurrent(train, id, pin, current);
+        require(direct || exactSuccessor,
                 "bounded-drop exact anchor drift");
         System.out.println("  bounded-drop TestKit migration: " + carried
                 + " carried proofs, 1 exact anchor");
