@@ -56,6 +56,8 @@ public final class WorldlineWorldBehaviors {
     public static final WorldlineBehavior BLOCK_STABILITY_CONFORMANCE = define(
             "block-stability-conformance",
             "Public bounded tick and direct-neighbor-removal stability conformance");
+    public static final WorldlineBehavior SIGN_SUBSYSTEM = define("sign-subsystem",
+            "Standing and wall sign placement, text, physical envelope, support, and persistence lifecycle");
 
     private WorldlineWorldBehaviors() {}
 

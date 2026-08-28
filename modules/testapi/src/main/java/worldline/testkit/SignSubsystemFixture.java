@@ -7,6 +7,7 @@ import worldline.api.BlockState;
 import worldline.api.MovementDisposition;
 import worldline.api.RemoteItemStack;
 import worldline.api.WorldlineBehavior;
+import worldline.api.WorldlineWorldBehaviors;
 
 /** Validates the complete server-visible standing-sign and wall-sign subsystem. */
 public final class SignSubsystemFixture {
@@ -52,7 +53,7 @@ public final class SignSubsystemFixture {
                 "sign final persisted air drifted");
         require(observed.boundary() == ReloadBoundary.FRESH_LOGIN && observed.reloads() == 2,
                 "sign fresh-login boundary drifted");
-        require(WorldlineBehavior.require("sign-subsystem") == WorldlineBehavior.SIGN_SUBSYSTEM,
+        require(WorldlineBehavior.require("sign-subsystem") == WorldlineWorldBehaviors.SIGN_SUBSYSTEM,
                 "sign-subsystem behavior registration drifted");
         return new SignSubsystemEvidence(observed);
     }
