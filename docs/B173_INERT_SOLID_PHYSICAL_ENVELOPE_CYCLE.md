@@ -10,6 +10,6 @@ One data-driven mini-subsystem exercises seventeen metadata-zero opaque full cub
 
 DataDrivenCycle compiles one caller-owned solid catalog and runs three maintained public TestKit families. Each dimension owns seventeen fresh worlds, exact inventory consumption, canonical evidence, and a fresh-login persistence boundary; collision uses fifty-one bounded trajectories and light samples exact source skylight.
 
-Expected signal: `provider=b1.7.3-server-state-domain,family=inert-solid-envelope,rows=17,passed=17,states=17,reload=FRESH_LOGINx17,evidence=0000000000000000000000000000000000000000000000000000000000000000,isolation=17-fresh-worlds`.
+Expected signal: `provider=b1.7.3-server-state-domain,family=inert-solid-envelope,rows=17,passed=17,states=17,reload=FRESH_LOGINx17,evidence=be70e5b7d5ae11ca1a0b784a0cc236905c68881bb5820ab974ca6ee84637d509,isolation=17-fresh-worlds`.
 
-Frozen semantic SHA-256: `0000000000000000000000000000000000000000000000000000000000000000`.
+Frozen semantic SHA-256: `bbd71065fea417376213f2789efb8d4a1454dc12516e4e15f34293d26e7fcafd`.
