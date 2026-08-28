@@ -62,6 +62,7 @@ public final class TestKitContractTest {
         PoweredCreeperFixtureTest.execute();
         SpiderDaylightAggressionFixtureTest.execute();
         NotePitchFixtureTest.execute();
+        CakeServingFixtureTest.execute();
         Path root = Files.createTempDirectory("worldline-test-contract-");
         Provider provider = new Provider();
         RunnerOptions options = new RunnerOptions().provider(provider).artifacts(root.resolve("artifacts"))
