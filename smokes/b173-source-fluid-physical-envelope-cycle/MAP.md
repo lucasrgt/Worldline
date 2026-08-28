@@ -10,6 +10,8 @@ prove the singleton source metadata reached by gameplay placement, two collision
 air controls with passable level, half-step, and full-step trajectories, and two light rows
 observe per-fluid source-cell emission and skylight attenuation. Every row uses canonical public evidence,
 an isolated official-server world, and a fresh-login persistence boundary.
+The frozen light envelope records water as block light 0/skylight 12 and lava as block light
+15/skylight 0; this distinction comes from the official server rather than a shared fluid default.
 
 Flowing metadata, scheduled propagation, neighbor reactions, breaking, drops, the independent
 gameplay-placement and save-reload census templates, and native rendering remain outside scope.
