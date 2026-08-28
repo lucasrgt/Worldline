@@ -16,11 +16,11 @@ public final class B173TileUtilityPhysicalEnvelopeSmoke {
     private static final String FAMILY = "tile-utility-envelope";
     private static final String SERVER_PROPERTY = "worldline.b173.lifecycle.serverJar";
     private static final String STATE =
-            "0000000000000000000000000000000000000000000000000000000000000000";
+            "bec6f572d5a4fd675124b1c87f11cc7817d191771259a9b4d091ba86f99658a5";
     private static final String COLLISION =
-            "0000000000000000000000000000000000000000000000000000000000000000";
+            "a832a0a31f55d5436ae99a788818f54dacfbca31b7e4f91ecc469eaee609b16c";
     private static final String LIGHT =
-            "0000000000000000000000000000000000000000000000000000000000000000";
+            "db7fba86f5f68d58271e380c4fd4a7d78026aadf9fcb3cba1b7e23d3302965b7";
 
     private B173TileUtilityPhysicalEnvelopeSmoke() { }
 
