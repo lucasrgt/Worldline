@@ -33,6 +33,7 @@ public final class TestKitContractTest {
         BlockConformancePlanTest.execute();
         BlockLifecycleDropMatrixTest.execute();
         BlockLifecycleFixtureTest.execute();
+        BlockSupportLossFixtureTest.execute();
         TerrainCraftedSolidStabilityFixtureTest.execute();
         ServerAclFixtureTest.execute();
         ServerEntryPolicyFixtureTest.execute();
