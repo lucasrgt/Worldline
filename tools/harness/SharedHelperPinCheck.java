@@ -49,6 +49,9 @@ final class SharedHelperPinCheck {
                     && anchor.evidence().equals(evidence);
             boolean successor = anchor != null && anchor.evidence().equals(evidence)
                     && TrainPinCheck.carriesCurrent(train, id, anchor, current);
+            successor |= anchor != null && anchor.evidence().equals(evidence)
+                    && SchemaPinCheck.carries(SchemaPinCheck.manifest(root),
+                            id, anchor, current);
             require(hash(lock, "aero_parser.prior_sha256") && (exact || successor),
                     "shared Aero parser repair proof drift");
         }
@@ -75,7 +78,9 @@ final class SharedHelperPinCheck {
             require(pin != null && carries(lock, smoke.id, pin, current),
                     "shared-helper proof drift: " + smoke.id);
         }
-        require(checked == integer(lock, "smoke.count")
+        int successorIntroductions = SchemaPinCheck.introductionsAfter(
+                SchemaPinCheck.manifest(root), lock);
+        require(checked == integer(lock, "smoke.count") + successorIntroductions
                         - ProviderDiscoveryPinCheck.pendingCount(provider) && files == 354,
                 "shared-helper proof census drift");
         System.out.println("  shared-helper proof transport: 354 files, " + checked + " smoke inputs");
@@ -103,6 +108,10 @@ final class SharedHelperPinCheck {
             return direct || UnicodePinCheck.follows(unicode, id,
                     lock.getProperty(stem + "current_fingerprint"),
                     lock.getProperty(stem + "evidence_sha256"), pin, current)
+                    || DataDrivenCycleCheck.carriesPlan(root, id, pin)
+                    || CompositeCycleCheck.carriesPlan(root, id, pin)
+                    || SchemaPinCheck.carries(SchemaPinCheck.manifest(root), id, pin, current)
+                    || NeighborTestKitPinCheck.reexecuted(pin)
                     || TrainPinCheck.carriesCurrent(
                             TrainPinCheck.manifest(root), id, pin, current);
         } catch (Exception error) { return false; }
