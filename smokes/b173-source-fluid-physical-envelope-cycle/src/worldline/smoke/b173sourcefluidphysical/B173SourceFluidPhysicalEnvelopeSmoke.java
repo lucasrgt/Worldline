@@ -16,11 +16,11 @@ public final class B173SourceFluidPhysicalEnvelopeSmoke {
     private static final String FAMILY = "source-fluid-envelope";
     private static final String SERVER_PROPERTY = "worldline.b173.lifecycle.serverJar";
     private static final String STATE =
-            "0000000000000000000000000000000000000000000000000000000000000000";
+            "08a39f4392d26e7a98085d1752edbd345eb3c44437148113275bbb9ba4646a46";
     private static final String COLLISION =
-            "0000000000000000000000000000000000000000000000000000000000000000";
+            "5bfdc6f75f2127693a48c4abac6de2bb01e6f5f0319a72bb50483f92b80c836a";
     private static final String LIGHT =
-            "0000000000000000000000000000000000000000000000000000000000000000";
+            "44259d22f8e2b8f911728d94dae3b3f96309ab502a597086aea3590292aaef76";
 
     private B173SourceFluidPhysicalEnvelopeSmoke() { }
 
