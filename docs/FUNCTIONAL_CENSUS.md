@@ -151,6 +151,14 @@ contains 601 verified claims (56.91%) and leaves 455 unresolved. Both official p
 with zero retries and failures, producing evidence hash
 `f0bc374eae0ef1554a5d82117e01d91cddf94bc9c7e702a786fb2dd29cf8bb0f`, bound by aggregate
 signature `bf3ac2405d31b6022ee1be59ed397d11b661a060ae91e363532abebb0c8bfb61`.
+The native 3D inventory-render subsystem then proves 63 remaining official-client render claims,
+bringing the census to 664 verified claims (62.88%) and leaving 392 unresolved. The source-fluid
+physical-envelope subsystem next routes still water and still lava through the public state-domain,
+collision, and light families. Its six official-server claims distinguish passable source cells,
+water skylight attenuation, and lava's luminous zero-skylight envelope while preserving both
+sources across fresh logins. The census now contains 670 verified claims (63.45%) and leaves 386
+unresolved. Both official passes completed with zero retries and failures, bound by aggregate
+signature `26284ff2a2903c093b4b65f1b625a1d369693393a7ee368cffa09e87e9bc94ba`.
 
 The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
 extended base; sticky-piston evidence breaks an extended head; wooden-door evidence breaks the
@@ -211,6 +219,8 @@ The remaining opaque-cube physical-envelope family reduces it to 484.
 The common-cube physical-envelope family reduces it to 469.
 The special-collision physical-envelope family reduces it to 457.
 The tile-utility physical-envelope family reduces it to 443.
+The native 3D inventory-render subsystem reduces it to 380.
+The source-fluid physical-envelope subsystem reduces it to 374.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
