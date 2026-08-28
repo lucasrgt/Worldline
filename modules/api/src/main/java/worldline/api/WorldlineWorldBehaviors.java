@@ -53,6 +53,9 @@ public final class WorldlineWorldBehaviors {
             "A held map converges to replay-stable Packet131 colors at a fixed seed and position");
     public static final WorldlineBehavior BONEMEAL_WHEAT = define("bonemeal-wheat",
             "Beta bonemeal damage fifteen matures planted wheat from age zero to seven");
+    public static final WorldlineBehavior BLOCK_STABILITY_CONFORMANCE = define(
+            "block-stability-conformance",
+            "Public bounded tick and direct-neighbor-removal stability conformance");
 
     private WorldlineWorldBehaviors() {}
 
