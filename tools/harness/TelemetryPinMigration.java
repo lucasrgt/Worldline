@@ -41,6 +41,8 @@ final class TelemetryPinMigration {
         attest(manifest, "history_source", "tools/harness/SmokeScheduleHistory.java");
         attest(manifest, "fingerprint_source", "tools/harness/SmokeInputFingerprint.java");
         attest(manifest, "policy", "quality/smoke-telemetry.properties");
+        manifest.setProperty("testkit_source_tree", committedTree(
+                "modules/testkit/src/main/java"));
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             SmokePins.Entry prior = existing.entry(smoke.id);
             String current = fingerprints.compute(smoke);
@@ -108,9 +110,18 @@ final class TelemetryPinMigration {
         Process index = new ProcessBuilder("git", "diff", "--cached", "--quiet")
                 .directory(root.toFile()).start();
         String recorded = manifest.getProperty("fingerprint_source.sha256", "");
-        return worktree.waitFor() == 0 && index.waitFor() == 0
-                && !digest(root.resolve("tools/harness/SmokeInputFingerprint.java"))
-                        .equals(recorded);
+        String recordedTestKit = manifest.getProperty("testkit_source_tree", "");
+        boolean clean = worktree.waitFor() == 0 && index.waitFor() == 0;
+        return clean && (!digest(root.resolve("tools/harness/SmokeInputFingerprint.java"))
+                        .equals(recorded)
+                || !committedTree("modules/testkit/src/main/java").equals(recordedTestKit));
+    }
+    private String committedTree(String relative) throws Exception {
+        Process process = new ProcessBuilder("git", "rev-parse", "HEAD:" + relative)
+                .directory(root.toFile()).redirectErrorStream(true).start();
+        String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        require(process.waitFor() == 0, "missing committed source tree: " + relative);
+        return output.strip();
     }
     private static String digest(Path path) throws Exception { return HexFormat.of().formatHex(
             MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(path)));
