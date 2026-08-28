@@ -78,6 +78,24 @@ final class SchemaPinCheck {
     static boolean introduced(Properties manifest, String id) {
         return "true".equals(manifest.getProperty("smoke." + id + ".introduced"));
     }
+    static int introductionsAfter(Properties successor, Properties predecessor) {
+        return (int) successor.stringPropertyNames().stream()
+                .filter(key -> key.startsWith("smoke.") && key.endsWith(".introduced"))
+                .filter(key -> "true".equals(successor.getProperty(key)))
+                .map(key -> key.substring(6, key.length() - 11))
+                .filter(id -> predecessor.getProperty(
+                        "smoke." + id + ".current_fingerprint") == null)
+                .count();
+    }
+    static void selfTest() {
+        Properties prior = new Properties(), successor = new Properties();
+        prior.setProperty("smoke.old.current_fingerprint", "old");
+        successor.setProperty("smoke.old.introduced", "true");
+        successor.setProperty("smoke.new.introduced", "true");
+        successor.setProperty("smoke.carried.introduced", "false");
+        require(introductionsAfter(successor, prior) == 1,
+                "schema successor introduction census drift");
+    }
     static boolean follows(Properties manifest, String id, String prior, String evidence,
             SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";

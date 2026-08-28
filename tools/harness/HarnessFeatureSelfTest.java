@@ -19,6 +19,7 @@ final class HarnessFeatureSelfTest {
         CandidateReadiness.selfTest();
         CandidateSourceClosure.selfTest();
         NeighborTestKitPinCheck.selfTest();
+        SchemaPinCheck.selfTest();
     }
     static void smoke() throws Exception {
         SmokeScheduleHistory.selfTest();

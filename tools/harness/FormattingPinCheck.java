@@ -63,7 +63,8 @@ final class FormattingPinCheck {
                             || schemaIntroduced),
                     "formatting proof drift: " + smoke.id);
         }
-        require(checked == integer(manifest, "smoke.count")
+        int successorIntroductions = SchemaPinCheck.introductionsAfter(schemas, manifest);
+        require(checked == integer(manifest, "smoke.count") + successorIntroductions
                         - ProviderDiscoveryPinCheck.pendingCount(provider),
                 "formatting proof census drift");
         System.out.println("  formatting proof transport: " + files + " files, " + checked
