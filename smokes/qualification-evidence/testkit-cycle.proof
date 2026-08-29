@@ -2,4 +2,4 @@ schema=1
 id=testkit-cycle
 fingerprint=822e72fcf2f661db83c43864eb69d8ada19d5b6ae0b5e49582f73d108a7bd0a5
 observation.sha256=377855595afd60b4c57b3edfc21091766543771f831eaeea01f05d5c5d6390f2
-source=refactor-equivalent
+source=executed
