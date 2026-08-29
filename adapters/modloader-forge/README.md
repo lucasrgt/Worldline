@@ -25,6 +25,10 @@ Mods register only owned `mod.*` metrics through `ClientProfiler` before the
 first captured frame. The canonical portability check compiles this complete
 runtime closure with `javac --release 8`.
 
+`loader.id` is descriptive metadata only: captures remain comparable across
+loaders because metric identities, units, aggregation, and WLPR encoding are
+owned by the shared profiling module.
+
 This source boundary is structurally maintained. A dedicated official
 ModLoader/Forge runtime qualification is still required before Worldline may
 claim loader boot or performance equivalence; StationAPI qualification does not
