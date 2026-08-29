@@ -2,6 +2,8 @@ package worldline.api;
 
 /** Qualified world-state boundaries kept outside the primary compatibility catalog. */
 public final class WorldlineWorldBehaviors {
+    public static final WorldlineBehavior FURNACE_SUBSYSTEM = define("furnace-subsystem",
+            "Idle and active furnace domains, smelting, persistence, lifecycle, and physics");
     public static final WorldlineBehavior WHEAT_LIGHT_HALT = define("wheat-light-halt",
             "Wheat on farmland does not increment age in darkness while a lit crop can age");
     public static final WorldlineBehavior CACTUS_ADJACENT_BREAK = define("cactus-adjacent-break",
