@@ -608,6 +608,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-floor-mounted-lifecycle-cycle` | CARRIED | official Beta 1.7.3 floor-mounted block lifecycle family |
 | `b173-flowing-fluid-lifecycle-cycle` | CARRIED | official Beta 1.7.3 flowing-fluid lifecycle |
 | `b173-furnace-state-domain-cycle` | CARRIED | official Beta 1.7.3 furnace facing state domain |
+| `b173-furnace-subsystem-conformance-cycle` | EXECUTED | official Beta 1.7.3 furnace subsystem conformance |
 | `b173-gold-shovel-harvest-lifecycle-cycle` | CARRIED | official Beta 1.7.3 gold-shovel harvest lifecycle family |
 | `b173-ground-cover-lifecycle-cycle` | CARRIED | official Beta 1.7.3 ground-cover plant lifecycle family |
 | `b173-ground-flora-conformance-cycle` | CARRIED | official Beta 1.7.3 ground-flora conformance subsystem |
@@ -621,7 +622,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-native-tile-entity-render-cycle` | EXECUTED | official Beta 1.7.3 native tile-entity render family |
 | `b173-piston-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 piston subsystem conformance |
 | `b173-redstone-device-lifecycle-cycle` | CARRIED | official Beta 1.7.3 redstone device lifecycle family |
-| `b173-redstone-torch-subsystem-conformance-cycle` | EXECUTED | official Beta 1.7.3 redstone torch subsystem conformance |
+| `b173-redstone-torch-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 redstone torch subsystem conformance |
 | `b173-remaining-opaque-cube-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 remaining opaque-cube physical envelopes |
 | `b173-repeater-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 repeater subsystem conformance |
 | `b173-shaded-mushroom-lifecycle-cycle` | CARRIED | official Beta 1.7.3 shaded mushroom lifecycle family |
