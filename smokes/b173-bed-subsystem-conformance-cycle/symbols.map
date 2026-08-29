@@ -1,0 +1,18 @@
+# owner	kind	descriptor	named	client	server
+net/minecraft/src/World	c	-	net/minecraft/src/World	fd	dj
+net/minecraft/src/Block	c	-	net/minecraft/src/Block	uu	na
+net/minecraft/src/BlockBed	c	-	net/minecraft/src/BlockBed	ve	nj
+net/minecraft/src/Item	c	-	net/minecraft/src/Item	gm	ej
+net/minecraft/src/ItemBlock	c	-	net/minecraft/src/ItemBlock	ck	bk
+net/minecraft/src/ItemStack	c	-	net/minecraft/src/ItemStack	iz	fy
+net/minecraft/src/EntityPlayer	c	-	net/minecraft/src/EntityPlayer	gs	em
+net/minecraft/src/EntityItem	c	-	net/minecraft/src/EntityItem	hl	ez
+net/minecraft/src/AxisAlignedBB	c	-	net/minecraft/src/AxisAlignedBB	eq	cz
+net/minecraft/src/Chunk	c	-	net/minecraft/src/Chunk	lm	hi
+net/minecraft/src/ChunkLoader	c	-	net/minecraft/src/ChunkLoader	to	mg
+net/minecraft/src/NBTTagCompound	c	-	net/minecraft/src/NBTTagCompound	nu	iq
+net/minecraft/src/WorldInfo	c	-	net/minecraft/src/WorldInfo	ei	ct
+net/minecraft/src/WorldProvider	c	-	net/minecraft/src/WorldProvider	xa	os
+net/minecraft/src/ISaveHandler	c	-	net/minecraft/src/ISaveHandler	wt	om
+net/minecraft/src/IPlayerFileData	c	-	net/minecraft/src/IPlayerFileData		fl
+net/minecraft/src/IChunkLoader	c	-	net/minecraft/src/IChunkLoader	bf	an

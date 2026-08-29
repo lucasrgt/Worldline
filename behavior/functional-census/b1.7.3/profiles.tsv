@@ -24,7 +24,7 @@ b1.7.3:block/022	false	simple-solid
 b1.7.3:block/023	true	dispenser,container,directional,tile-entity
 b1.7.3:block/024	false	simple-solid
 b1.7.3:block/025	true	note-block,tile-entity,redstone-component
-b1.7.3:block/026	true	bed,multi-block,directional,stateful-metadata
+b1.7.3:block/026	true	bed,directional,multi-block,special-collision,stateful-metadata,support-dependent
 b1.7.3:block/027	false	rail,redstone-component,stateful-metadata
 b1.7.3:block/028	false	rail,redstone-component,stateful-metadata
 b1.7.3:block/029	true	piston,redstone-component,directional,stateful-metadata

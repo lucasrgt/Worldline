@@ -64,6 +64,7 @@ public final class TestKitContractTest {
         LockedChestSubsystemFixtureTest.execute();
         FireSubsystemFixtureTest.execute();
         FarmlandSubsystemFixtureTest.execute();
+        BedSubsystemFixtureTest.execute();
         SnowAccumulationFixtureTest.execute();
         SnowLayerNonstackingFixtureTest.execute();
         NaturalWolfPackFixtureTest.execute();
