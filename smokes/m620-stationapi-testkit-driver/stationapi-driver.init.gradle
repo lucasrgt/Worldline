@@ -56,7 +56,6 @@ gradle.projectsEvaluated {
         '-Dworldline.stationapi.username=' + project.property('worldlineUsername'),
         '-Dworldline.stationapi.session=' + project.property('worldlineSession'),
         '-Dworldline.profiler.enabled=true',
-        '-Dworldline.profiler.autoStart=false',
         '-Dworldline.profiler.capacity=2048',
         '-Dworldline.profiler.scenario=m620-testkit-driver',
         '-Dworldline.profiler.output=' + profilerOutput,
