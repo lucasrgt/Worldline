@@ -50,6 +50,7 @@ public final class GL11 {
     public static void glColor4f(float red, float green, float blue, float alpha) {}
     public static void glRotatef(float angle, float x, float y, float z) {}
     public static void glTranslatef(float x, float y, float z) {}
+    public static void glDepthMask(boolean enabled) {}
     public static void glTexParameteri(int target, int name, int value) {}
     public static void glTexImage2D(int target, int level, int internalFormat,
             int width, int height, int border, int format, int type, ByteBuffer pixels) {}

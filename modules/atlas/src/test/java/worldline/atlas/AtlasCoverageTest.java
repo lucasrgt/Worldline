@@ -8,7 +8,7 @@ public final class AtlasCoverageTest {
 
     public static void main(String[] arguments) {
         AtlasStore store = AtlasStore.standard(Paths.get("."));
-        require(store.kind(AtlasKind.COVERAGE_UNIT).size() == 168, "unit count");
+        require(store.kind(AtlasKind.COVERAGE_UNIT).size() == 175, "unit count");
         require("1".equals(store.get("atlas.coverage-unit.worldgen.TESTABILITY").control()),
                 "worldgen testability filled by explicit smoke scope");
         require(AtlasStatus.UNKNOWN.equals(

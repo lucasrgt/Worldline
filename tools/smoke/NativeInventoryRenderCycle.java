@@ -49,6 +49,7 @@ public final class NativeInventoryRenderCycle {
         verifyHash(lwjgl, value("lwjgl.jar.sha256"));
         verifyHash(natives.resolve("lwjgl64.dll"), value("lwjgl64.dll.sha256"));
         verifyTerrain(official, value("terrain.png.sha256"));
+        if (tileRender()) verifyAsset(official, "item/sign.png", value("sign.png.sha256"));
         require(Files.isRegularFile(mapped.resolve("net/minecraft/src/RenderBlocks.class")),
                 "mapped RenderBlocks.class is absent; run the client smoke first");
 
@@ -95,6 +96,7 @@ public final class NativeInventoryRenderCycle {
                 build.resolve("classes") + separator + clientPath + separator + lwjgl,
                 value("cycle.smoke.main"), role));
         if (worldRender()) addWorldMapping(command, role);
+        else if (tileRender()) addTileMapping(command, role);
         else command.addAll(List.of(value(role + ".renderer.class"),
                 value(role + ".block.class"), value(role + ".blocks.field"),
                 value(role + ".render.method"), value(role + ".render-type.method"),
@@ -118,7 +120,21 @@ public final class NativeInventoryRenderCycle {
         List<String> command = new ArrayList<>(Arrays.asList("javac", "-encoding", "UTF-8",
                 "--release", "8", "-Xlint:all,-options", "-Werror", "-classpath",
                 lwjgl.toString(), "-d", output.toString()));
-        List<String> inputs = world ? List.of(
+        List<String> inputs = tileRender() ? List.of(
+                "modules/testapi/src/main/java/worldline/testkit/NativeTileEntityRenderSubject.java",
+                "modules/testapi/src/main/java/worldline/testkit/NativeTileEntityRenderObservation.java",
+                "modules/testapi/src/main/java/worldline/testkit/NativeTileEntityRenderPlan.java",
+                "modules/testkit/src/main/java/worldline/testkit/NativeTileEntityRenderEvidence.java",
+                "modules/testkit/src/main/java/worldline/testkit/NativeTileEntityRenderFixture.java",
+                "adapters/b173-client/src/main/java/worldline/b173/B173WorldBlockAccess.java",
+                "adapters/b173-client/src/main/java/worldline/b173/B173TerrainTexture.java",
+                "adapters/b173-client/src/main/java/worldline/b173/B173TileEntityFrame.java",
+                "adapters/b173-client/src/main/java/worldline/b173/B173ChunkProviderAccess.java",
+                "adapters/b173-client/src/main/java/worldline/b173/B173ReflectionObjects.java",
+                "adapters/b173-client/src/main/java/worldline/b173/B173HeadlessClientResources.java",
+                "adapters/b173-client/src/main/java/worldline/b173/B173TileWorld.java",
+                "adapters/b173-client/src/main/java/worldline/b173/B173TileEntityRuntime.java",
+                "adapters/b173-client/src/main/java/worldline/b173/B173TileEntityRender.java") : world ? List.of(
                 "modules/testapi/src/main/java/worldline/testkit/NativeBlockRenderSubject.java",
                 "modules/testapi/src/main/java/worldline/testkit/NativeWorldBlockRenderSubject.java",
                 "modules/testapi/src/main/java/worldline/testkit/NativeWorldBlockRenderObservation.java",
@@ -153,8 +169,32 @@ public final class NativeInventoryRenderCycle {
         }
     }
 
+    private void addTileMapping(List<String> command, String role) {
+        for (String suffix : List.of("sign.renderer.class", "piston.renderer.class",
+                "sign.entity.class", "piston.entity.class", "tile.entity.class",
+                "special.renderer.class", "dispatcher.class", "render.engine.class",
+                "font.renderer.class", "game.settings.class", "texture.pack.list.class",
+                "texture.pack.default.class", "world.class", "chunk.class",
+                "chunk.provider.class", "render.blocks.class", "block.class", "access.class",
+                "blocks.field", "material.field", "material.class", "air.field",
+                "block-id.method", "metadata.method", "sign.render.method",
+                "piston.render.method", "set-dispatch.method", "dispatcher.instance.field",
+                "dispatcher.engine.field", "dispatcher.font.field",
+                "texture-pack.selected.field", "render-engine.texture-map.field",
+                "font-width.field", "font-buffer.field", "font-texture.field",
+                "font-lists.field", "tile-world.field", "tile-x.field", "tile-y.field",
+                "tile-z.field", "world-provider.field", "chunk-metadata.method",
+                "piston-render-blocks.field", "render-type.method")) {
+            command.add(value(role + '.' + suffix));
+        }
+    }
+
     private boolean worldRender() {
         return "native-special-world-render".equals(config.getProperty("behavior"));
+    }
+
+    private boolean tileRender() {
+        return "native-tile-entity-render".equals(config.getProperty("behavior"));
     }
 
     private Path writeEvidence(Path build, Result result) throws IOException {
@@ -166,11 +206,16 @@ public final class NativeInventoryRenderCycle {
     }
 
     private void verifyTerrain(Path jarPath, String expected) throws Exception {
+        verifyAsset(jarPath, "terrain.png", expected);
+    }
+
+    private void verifyAsset(Path jarPath, String asset, String expected) throws Exception {
         try (JarFile jar = new JarFile(jarPath.toFile())) {
-            JarEntry entry = jar.getJarEntry("terrain.png");
-            require(entry != null, "official terrain atlas is absent");
+            JarEntry entry = jar.getJarEntry(asset);
+            require(entry != null, "official client asset is absent: " + asset);
             try (InputStream input = jar.getInputStream(entry)) {
-                require(hash(input.readAllBytes()).equals(expected), "official terrain atlas drift");
+                require(hash(input.readAllBytes()).equals(expected),
+                        "official client asset drift: " + asset);
             }
         }
     }

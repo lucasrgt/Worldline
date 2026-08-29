@@ -14,8 +14,9 @@ import worldline.invariants.TimeMonotonic;
 /** Declared vanilla subsystems and coverage dimensions. Denominators live on units. */
 public final class AtlasSubsystems {
     public static final String[] ALL = { "tick-lifecycle", "worldgen", "chunks", "lighting",
-            "weather", "block-ticks", "fluids", "entities", "mob-ai", "player", "inventory",
-            "crafting", "redstone", "saves", "dimensions", "protocol", "dedicated-server",
+            "weather", "block-ticks", "fluids", "entities", "tile-entities", "mob-ai",
+            "player", "inventory", "crafting", "redstone", "saves", "dimensions", "protocol",
+            "dedicated-server",
             "rendering", "gui", "resources", "mod-ecosystem", "mappings", "stationapi",
             "aero" };
     public static final String[] DIMENSIONS = { "TESTABILITY", "CONTROL", "OBSERVABILITY",
@@ -58,6 +59,7 @@ public final class AtlasSubsystems {
         mapped.put("lifecycle", "tick-lifecycle");
         mapped.put("chunk", "chunks");
         mapped.put("entity", "entities");
+        mapped.put("tile-entity", "tile-entities");
         mapped.put("player", "player");
         mapped.put("inventory", "inventory");
         mapped.put("item", "inventory");

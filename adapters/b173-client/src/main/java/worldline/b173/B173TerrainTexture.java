@@ -16,14 +16,18 @@ final class B173TerrainTexture {
     private B173TerrainTexture() { }
 
     static int load(Path clientJar) throws Exception {
+        return load(clientJar, "terrain.png", 256, 256);
+    }
+
+    static int load(Path clientJar, String asset, int width, int height) throws Exception {
         BufferedImage image;
         try (JarFile jar = new JarFile(clientJar.toFile())) {
-            JarEntry entry = jar.getJarEntry("terrain.png");
-            if (entry == null) throw new IllegalStateException("official terrain atlas is absent");
+            JarEntry entry = jar.getJarEntry(asset);
+            if (entry == null) throw new IllegalStateException("official texture is absent: " + asset);
             try (InputStream input = jar.getInputStream(entry)) { image = ImageIO.read(input); }
         }
-        if (image == null || image.getWidth() != 256 || image.getHeight() != 256) {
-            throw new IllegalStateException("official terrain atlas dimensions drifted");
+        if (image == null || image.getWidth() != width || image.getHeight() != height) {
+            throw new IllegalStateException("official texture dimensions drifted: " + asset);
         }
         ByteBuffer pixels = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * 4);
         for (int y = image.getHeight() - 1; y >= 0; y--) for (int x = 0; x < image.getWidth(); x++) {
