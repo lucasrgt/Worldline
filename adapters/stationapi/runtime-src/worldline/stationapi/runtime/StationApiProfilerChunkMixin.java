@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import worldline.profiling.WorldlineProfilerMetrics;
-import worldline.stationapi.profiler.StationApiProfilerRuntime;
+import worldline.profiling.ClientProfilerRuntime;
 
 /** Measures each concrete vanilla chunk display-list rebuild. */
 @Mixin(ChunkBuilder.class)
@@ -16,13 +16,13 @@ public abstract class StationApiProfilerChunkMixin {
 
     @Inject(method = "rebuild()V", at = @At("HEAD"))
     private void worldlineRebuildBegin(CallbackInfo callback) {
-        worldlineRebuildStart = StationApiProfilerRuntime.timer();
-        StationApiProfilerRuntime.count("chunk.rebuild.calls");
+        worldlineRebuildStart = ClientProfilerRuntime.timer();
+        ClientProfilerRuntime.count("chunk.rebuild.calls");
     }
 
     @Inject(method = "rebuild()V", at = @At("RETURN"))
     private void worldlineRebuildEnd(CallbackInfo callback) {
-        StationApiProfilerRuntime.elapsed(WorldlineProfilerMetrics.CHUNK_REBUILD,
+        ClientProfilerRuntime.elapsed(WorldlineProfilerMetrics.CHUNK_REBUILD,
                 worldlineRebuildStart);
     }
 }

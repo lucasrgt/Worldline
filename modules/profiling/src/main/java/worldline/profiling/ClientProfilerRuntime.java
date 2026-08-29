@@ -1,23 +1,17 @@
-package worldline.stationapi.profiler;
+package worldline.profiling;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import worldline.profiling.JvmProfilerSampler;
-import worldline.profiling.ProfilerArtifacts;
-import worldline.profiling.ProfilerMetric;
-import worldline.profiling.ProfilerRegistry;
-import worldline.profiling.ProfilerRun;
-import worldline.profiling.ProfilerSession;
-import worldline.profiling.WorldlineProfilerMetrics;
 
-/** Owns one bounded, allocation-free-on-frame-path StationAPI capture. */
-public final class StationApiProfilerRuntime {
+/** Owns one bounded, allocation-free-on-frame-path client capture. */
+public final class ClientProfilerRuntime {
     private static final boolean ENABLED = Boolean.getBoolean("worldline.profiler.enabled");
-    private static final List<StationApiProfiler.Metric> EXTENSIONS = new ArrayList<>();
+    private static final List<ClientProfiler.Metric> EXTENSIONS = new ArrayList<ClientProfiler.Metric>();
     private static ProfilerSession session;
     private static ProfilerRegistry registry;
     private static boolean initialized, open, sealed;
@@ -27,22 +21,33 @@ public final class StationApiProfilerRuntime {
     private static long sequence, frameStarted, startedEpoch;
     private static long pendingTick, pendingTickMax, pendingTickCalls, pendingDisplay;
     private static ProfilerRegistry.Handle tick, tickMax, tickCalls, display, camera;
+    private static String driverId, loaderId;
 
-    private StationApiProfilerRuntime() {}
+    private ClientProfilerRuntime() {}
 
-    static synchronized StationApiProfiler.Metric register(ProfilerMetric metric) {
+    static synchronized ClientProfiler.Metric register(ProfilerMetric metric) {
         if (metric == null || !metric.extensionOwned())
-            throw new IllegalArgumentException("StationAPI profiler extensions require mod ownership");
+            throw new IllegalArgumentException("client profiler extensions require mod ownership");
         if (initialized) throw new IllegalStateException("profiler schema is already closed");
-        for (StationApiProfiler.Metric present : EXTENSIONS)
+        for (ClientProfiler.Metric present : EXTENSIONS)
             if (present.name().equals(metric.name()))
                 throw new IllegalArgumentException("duplicate profiler extension: " + metric.name());
-        StationApiProfiler.Metric token = new StationApiProfiler.Metric(metric);
+        ClientProfiler.Metric token = new ClientProfiler.Metric(metric);
         EXTENSIONS.add(token); return token;
+    }
+
+    public static synchronized void configure(String driver, String loader) {
+        requireId(driver, "driver"); requireId(loader, "loader");
+        if (driverId != null && (!driverId.equals(driver) || !loaderId.equals(loader)))
+            throw new IllegalStateException("client profiler driver is already configured");
+        if (initialized && driverId == null)
+            throw new IllegalStateException("client profiler initialized without a driver");
+        driverId = driver; loaderId = loader;
     }
 
     public static void beginFrame() {
         if (!ENABLED || !armed || sealed) return;
+        if (driverId == null) throw new IllegalStateException("client profiler driver is not configured");
         initialize();
         if (frames >= capacity) { finish("capacity"); return; }
         frameStarted = System.nanoTime();
@@ -78,10 +83,10 @@ public final class StationApiProfilerRuntime {
     public static void gauge(String name, long value) {
         if (open) session.maximum(registry.require(name), value);
     }
-    static void add(StationApiProfiler.Metric metric, long value) {
+    static void add(ClientProfiler.Metric metric, long value) {
         if (open) session.add(metric.handle, value);
     }
-    static void maximum(StationApiProfiler.Metric metric, long value) {
+    static void maximum(ClientProfiler.Metric metric, long value) {
         if (open) session.maximum(metric.handle, value);
     }
 
@@ -89,12 +94,12 @@ public final class StationApiProfilerRuntime {
         if (!ENABLED || sealed || !initialized || frames == 0 || open) return;
         try {
             Map<String, String> tags = new LinkedHashMap<>();
-            tags.put("runtime.version", "b1.7.3"); tags.put("driver.id", "stationapi");
-            tags.put("loader.id", "babric"); tags.put("capture.reason", reason);
+            tags.put("runtime.version", "b1.7.3"); tags.put("driver.id", driverId);
+            tags.put("loader.id", loaderId); tags.put("capture.reason", reason);
             tags.put("scenario.id", System.getProperty("worldline.profiler.scenario", "unspecified"));
             ProfilerRun run = session.seal(mode(), startedEpoch, System.currentTimeMillis(), tags);
             Path output = Paths.get(System.getProperty("worldline.profiler.output",
-                    ".worldline/profiler/stationapi.wlpr"));
+                    ".worldline/profiler/" + driverId + ".wlpr"));
             ProfilerArtifacts.write(output, run); sealed = true;
             System.out.println("WORLDLINE_PROFILER_ARTIFACT=" + output.toAbsolutePath().normalize()
                     + " frames=" + frames + " metrics=" + registry.schema().size());
@@ -110,9 +115,9 @@ public final class StationApiProfilerRuntime {
                 WorldlineProfilerMetrics.DISPLAY_PRESENT, WorldlineProfilerMetrics.CHUNK_COMPILE,
                 WorldlineProfilerMetrics.CHUNK_REBUILD, "chunk.rebuild.calls", "chunk.backlog.count");
         JvmProfilerSampler.registerCapabilities(builder);
-        for (StationApiProfiler.Metric extension : EXTENSIONS) builder.extension(extension.definition);
+        for (ClientProfiler.Metric extension : EXTENSIONS) builder.extension(extension.definition);
         registry = builder.build();
-        for (StationApiProfiler.Metric extension : EXTENSIONS)
+        for (ClientProfiler.Metric extension : EXTENSIONS)
             extension.handle = registry.require(extension.name());
         tick = registry.require(WorldlineProfilerMetrics.CLIENT_TICK);
         tickMax = registry.require(WorldlineProfilerMetrics.CLIENT_TICK_MAX);
@@ -126,8 +131,14 @@ public final class StationApiProfilerRuntime {
     }
 
     private static ProfilerRun.Mode mode() {
-        String value = System.getProperty("worldline.profiler.mode", "mixed").toUpperCase();
+        String value = System.getProperty("worldline.profiler.mode", "mixed")
+                .toUpperCase(Locale.ROOT);
         try { return ProfilerRun.Mode.valueOf(value); }
         catch (IllegalArgumentException invalid) { return ProfilerRun.Mode.MIXED; }
+    }
+
+    private static void requireId(String value, String kind) {
+        if (value == null || !value.matches("[a-z][a-z0-9-]{0,63}"))
+            throw new IllegalArgumentException("invalid profiler " + kind + " id: " + value);
     }
 }

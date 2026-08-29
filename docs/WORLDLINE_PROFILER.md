@@ -110,10 +110,25 @@ only after their world-readiness oracle, excluding startup and login noise.
 Beta 1.7.3 performs tick and `Display.update` before the renderer frame root, so
 those durations are accumulated and attributed to the following frame. Mods may
 register an owned `mod.*` metric through
-`worldline.stationapi.profiler.StationApiProfiler.register(...)`
+`worldline.profiling.ClientProfiler.register(...)`
 before the first frame, then publish through its stable token while
-`StationApiProfiler.active()` is true. Schema registration closes permanently
+`ClientProfiler.active()` is true. Schema registration closes permanently
 when capture begins.
+
+## ModLoader and Forge runtime binding
+
+The Java 8-compatible `ClientProfilerRuntime` is shared by StationAPI,
+ModLoader, and Forge;
+there is no second metric implementation or artifact dialect. Legacy clients use
+the source-injection hooks under `adapters/modloader-forge` because their
+RetroMCP pipeline has no Mixin runtime. The six mapped boundaries mirror the
+StationAPI capabilities: frame, tick, display present, world render, chunk
+compile, and chunk rebuild. `worldline.profiler.loader` distinguishes
+`modloader` from `forge` in sealed tags.
+
+The hook boundary and Java 8 closure are maintained structurally. Official
+ModLoader/Forge boot remains a separate qualification requirement and is not
+inferred from the StationAPI runtime receipt.
 
 ## Capture modes and qualification
 

@@ -24,7 +24,8 @@ final class SmokeInputFingerprint {
     private static final Pattern RESOLVE = Pattern.compile("\\.resolve\\(\\\"([a-z0-9-]+)\\\"\\)");
     private static final Pattern ENVIRONMENT = Pattern.compile("System\\.getenv\\(\\\"([A-Z0-9_]+)\\\"\\)");
     private static final List<String> REPOSITORY_INPUTS = List.of(
-            "adapters/b173-client", "adapters/b173-server", "adapters/stationapi",
+            "adapters/b173-client", "adapters/b173-server", "adapters/modloader-forge",
+            "adapters/stationapi",
             "adapters/aero-model-lib",
             "artifacts", "mappings", "patches", "tools/toolchains");
 

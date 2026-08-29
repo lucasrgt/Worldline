@@ -19,6 +19,7 @@ public final class WorldlineProfilerTest {
         causalAttribution();
         budgetsComparisonsAndExports();
         atomicArtifactPersistence();
+        loaderNeutralClientRuntime();
         System.out.println("WorldlineProfilerTest passed");
     }
 
@@ -207,6 +208,34 @@ public final class WorldlineProfilerTest {
                     "atomic profiler artifact persistence drifted");
             java.nio.file.Files.write(artifact, new byte[] {1, 2, 3});
             rejectsChecked(() -> ProfilerArtifacts.read(artifact));
+        } finally {
+            java.nio.file.Files.deleteIfExists(artifact);
+            java.nio.file.Files.deleteIfExists(directory);
+        }
+    }
+
+    private static void loaderNeutralClientRuntime() throws Exception {
+        java.nio.file.Path directory = java.nio.file.Files.createTempDirectory("worldline-client");
+        java.nio.file.Path artifact = directory.resolve("legacy.wlpr");
+        try {
+            System.setProperty("worldline.profiler.enabled", "true");
+            System.setProperty("worldline.profiler.output", artifact.toString());
+            System.setProperty("worldline.profiler.scenario", "client-runtime-test");
+            ClientProfiler.Metric metric = ClientProfiler.register(
+                    WorldlineProfilerMetrics.extensionCounter(
+                            "mod.example.client.count", "example-mod"));
+            ClientProfilerRuntime.configure("modloader-forge", "forge");
+            ClientProfilerRuntime.tick(7L); ClientProfilerRuntime.display(3L);
+            ClientProfilerRuntime.beginFrame();
+            require(ClientProfiler.active(), "client profiler frame did not open");
+            ClientProfiler.add(metric, 2L); ClientProfilerRuntime.endFrame();
+            ClientProfilerRuntime.finish("test-close");
+            ProfilerRun run = ProfilerArtifacts.read(artifact);
+            require("modloader-forge".equals(run.tag("driver.id"))
+                    && "forge".equals(run.tag("loader.id"))
+                    && run.census().value(0, metric.name()) == 2L
+                    && run.census().value(0, WorldlineProfilerMetrics.CLIENT_TICK) == 7L,
+                    "loader-neutral client runtime drifted");
         } finally {
             java.nio.file.Files.deleteIfExists(artifact);
             java.nio.file.Files.deleteIfExists(directory);

@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import worldline.stationapi.profiler.StationApiProfilerRuntime;
+import worldline.profiling.ClientProfilerRuntime;
 import worldline.profiling.WorldlineProfilerMetrics;
 
 /** Defines the renderer update as the complete client-frame capture boundary. */
@@ -16,22 +16,23 @@ public abstract class StationApiProfilerFrameMixin {
 
     @Inject(method = "onFrameUpdate(F)V", at = @At("HEAD"))
     private void worldlineFrameBegin(float tickDelta, CallbackInfo callback) {
-        StationApiProfilerRuntime.beginFrame();
+        ClientProfilerRuntime.configure("stationapi", "babric");
+        ClientProfilerRuntime.beginFrame();
     }
 
     @Inject(method = "onFrameUpdate(F)V", at = @At("RETURN"))
     private void worldlineFrameEnd(float tickDelta, CallbackInfo callback) {
-        StationApiProfilerRuntime.endFrame();
+        ClientProfilerRuntime.endFrame();
     }
 
     @Inject(method = "renderWorld(FI)V", at = @At("HEAD"))
     private void worldlineWorldBegin(float tickDelta, int eye, CallbackInfo callback) {
-        worldlineWorldStart = StationApiProfilerRuntime.timer();
+        worldlineWorldStart = ClientProfilerRuntime.timer();
     }
 
     @Inject(method = "renderWorld(FI)V", at = @At("RETURN"))
     private void worldlineWorldEnd(float tickDelta, int eye, CallbackInfo callback) {
-        StationApiProfilerRuntime.elapsed(WorldlineProfilerMetrics.RENDER_WORLD,
+        ClientProfilerRuntime.elapsed(WorldlineProfilerMetrics.RENDER_WORLD,
                 worldlineWorldStart);
     }
 }

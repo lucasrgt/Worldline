@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import worldline.stationapi.driver.StationApiDriverProbe;
-import worldline.stationapi.profiler.StationApiProfilerRuntime;
+import worldline.profiling.ClientProfilerRuntime;
 
 /** Gates the real StationAPI game thread at one command per completed client tick. */
 @Mixin(Minecraft.class)
@@ -50,14 +50,14 @@ public abstract class StationApiDriverMixin {
             if (!ready()) return;
             if (!worldlineReady) {
                 open();
-                StationApiProfilerRuntime.startCapture();
+                ClientProfilerRuntime.startCapture();
                 emit("READY");
                 worldlineReady = true;
             }
             else emit("STATE");
             String command = worldlineInput.readLine();
             if ("CLOSE".equals(command)) {
-                StationApiProfilerRuntime.finish("controlled-close");
+                ClientProfilerRuntime.finish("controlled-close");
                 emit("CLOSED");
                 worldlineClosing = true;
                 scheduleStop();

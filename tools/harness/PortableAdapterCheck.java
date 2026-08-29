@@ -11,6 +11,11 @@ import java.util.stream.Stream;
 
 /** Compiles portable adapters without loading mapped Minecraft classes. */
 final class PortableAdapterCheck {
+    private static final List<String> LEGACY_PROFILER_TYPES = List.of(
+            "ClientProfiler", "ClientProfilerRuntime", "FrameCensus", "FrameCensusCodec",
+            "JvmProfilerSampler", "ProfilerArtifacts", "ProfilerMetric", "ProfilerRecorder",
+            "ProfilerRegistry", "ProfilerRun", "ProfilerRunCodec", "ProfilerSchema",
+            "ProfilerSession", "WorldlineProfilerMetrics");
     private final Path root, build;
     private final String release;
 
@@ -30,14 +35,24 @@ final class PortableAdapterCheck {
         compile(javaFiles(root.resolve("adapters/aero-model-lib/src/main/java")),
                 adapters.resolve("aero-model-lib"),
                 List.of(classes.resolve("analysis"), classes.resolve("trace")));
+        List<Path> legacy = new ArrayList<>();
+        Path profiler = root.resolve("modules/profiling/src/main/java/worldline/profiling");
+        for (String type : LEGACY_PROFILER_TYPES) legacy.add(profiler.resolve(type + ".java"));
+        legacy.addAll(javaFiles(root.resolve("adapters/modloader-forge/runtime-src")));
+        compile(legacy, adapters.resolve("modloader-forge-java8"), List.of(), "8");
         System.out.println("  portable adapters: compiled");
     }
 
     private void compile(List<Path> sources, Path output, List<Path> classpath) throws Exception {
+        compile(sources, output, classpath, release);
+    }
+
+    private void compile(List<Path> sources, Path output, List<Path> classpath,
+            String targetRelease) throws Exception {
         if (sources.isEmpty()) throw new IllegalStateException("no adapter sources for " + output);
         Files.createDirectories(output);
         List<String> command = new ArrayList<>(Arrays.asList(javaTool("javac"), "-encoding", "UTF-8",
-                "--release", release, "-Xlint:all,-options", "-Werror", "-d", output.toString(),
+                "--release", targetRelease, "-Xlint:all,-options", "-Werror", "-d", output.toString(),
                 "-classpath", classpath.stream().map(Path::toString)
                         .collect(Collectors.joining(System.getProperty("path.separator")))));
         sources.forEach(path -> command.add(path.toString()));

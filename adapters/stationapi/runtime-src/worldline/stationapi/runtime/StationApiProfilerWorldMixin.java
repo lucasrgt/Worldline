@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import worldline.profiling.WorldlineProfilerMetrics;
-import worldline.stationapi.profiler.StationApiProfilerRuntime;
+import worldline.profiling.ClientProfilerRuntime;
 
 /** Measures vanilla chunk-compile work and its observed queue depth. */
 @Mixin(WorldRenderer.class)
@@ -22,15 +22,15 @@ public abstract class StationApiProfilerWorldMixin {
     @Inject(method = "compileChunks(Lnet/minecraft/entity/LivingEntity;Z)Z", at = @At("HEAD"))
     private void worldlineCompileBegin(LivingEntity entity, boolean forced,
             CallbackInfoReturnable<Boolean> callback) {
-        worldlineCompileStart = StationApiProfilerRuntime.timer();
-        if (StationApiProfilerRuntime.frameOpen())
-            StationApiProfilerRuntime.gauge("chunk.backlog.count", dirtyChunks.size());
+        worldlineCompileStart = ClientProfilerRuntime.timer();
+        if (ClientProfilerRuntime.frameOpen())
+            ClientProfilerRuntime.gauge("chunk.backlog.count", dirtyChunks.size());
     }
 
     @Inject(method = "compileChunks(Lnet/minecraft/entity/LivingEntity;Z)Z", at = @At("RETURN"))
     private void worldlineCompileEnd(LivingEntity entity, boolean forced,
             CallbackInfoReturnable<Boolean> callback) {
-        StationApiProfilerRuntime.elapsed(WorldlineProfilerMetrics.CHUNK_COMPILE,
+        ClientProfilerRuntime.elapsed(WorldlineProfilerMetrics.CHUNK_COMPILE,
                 worldlineCompileStart);
     }
 }
