@@ -606,6 +606,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-common-cube-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 common-cube physical envelopes |
 | `b173-deterministic-harvest-lifecycle-cycle` | CARRIED | official Beta 1.7.3 deterministic non-self-drop harvest lifecycle family |
 | `b173-dirt-flora-lifecycle-cycle` | CARRIED | official Beta 1.7.3 dirt-supported flora lifecycle family |
+| `b173-fire-subsystem-conformance-cycle` | EXECUTED | official Beta 1.7.3 fire subsystem conformance |
 | `b173-floor-mounted-lifecycle-cycle` | CARRIED | official Beta 1.7.3 floor-mounted block lifecycle family |
 | `b173-flowing-fluid-lifecycle-cycle` | CARRIED | official Beta 1.7.3 flowing-fluid lifecycle |
 | `b173-furnace-state-domain-cycle` | CARRIED | official Beta 1.7.3 furnace facing state domain |
@@ -617,7 +618,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-inert-solid-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 inert-solid physical envelopes |
 | `b173-inert-solid-stability-envelope-cycle` | CARRIED | official Beta 1.7.3 inert-solid bounded stability envelope |
 | `b173-lifecycle-provider-cycle` | CARRIED | official Beta 1.7.3 public block lifecycle provider |
-| `b173-locked-chest-subsystem-conformance-cycle` | EXECUTED | official Beta 1.7.3 locked-chest subsystem conformance |
+| `b173-locked-chest-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 locked-chest subsystem conformance |
 | `b173-multi-drop-mineral-lifecycle-cycle` | CARRIED | official Beta 1.7.3 multi-drop mineral lifecycle family |
 | `b173-mushroom-random-tick-conformance-cycle` | CARRIED | official Beta 1.7.3 mushroom random-tick conformance subsystem |
 | `b173-native-special-world-render-cycle` | EXECUTED | official Beta 1.7.3 native special world block-render family |
