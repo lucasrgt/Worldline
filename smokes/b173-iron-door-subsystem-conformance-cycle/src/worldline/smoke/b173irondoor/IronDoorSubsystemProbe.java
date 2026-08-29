@@ -26,22 +26,37 @@ final class IronDoorSubsystemProbe {
             int pairLower, int pairUpper, int orphanLower, int orphanLowerDropId,
             int orphanLowerDropCount, int orphanUpper, int orphanUpperDropDelta,
             int supportLower, int supportUpper, int supportDropId, int supportDropCount) {
-        this.lowerMask = lowerMask; this.upperMask = upperMask;
-        this.strengthClass = strengthClass; this.lowerBefore = lowerBefore;
-        this.lowerAfter = lowerAfter; this.lowerDropId = lowerDropId;
-        this.lowerDropCount = lowerDropCount; this.upperBefore = upperBefore;
-        this.upperAfter = upperAfter; this.upperDropDelta = upperDropDelta;
-        this.closedCollision = closedCollision; this.openCollision = openCollision;
-        this.opaque = opaque; this.cube = cube; this.lightCode = lightCode;
-        this.tickMask = tickMask; this.tickLowerBefore = tickLowerBefore;
-        this.tickLowerAfter = tickLowerAfter; this.tickUpperBefore = tickUpperBefore;
-        this.tickUpperAfter = tickUpperAfter; this.pairLower = pairLower;
-        this.pairUpper = pairUpper; this.orphanLower = orphanLower;
+        this.lowerMask = lowerMask;
+        this.upperMask = upperMask;
+        this.strengthClass = strengthClass;
+        this.lowerBefore = lowerBefore;
+        this.lowerAfter = lowerAfter;
+        this.lowerDropId = lowerDropId;
+        this.lowerDropCount = lowerDropCount;
+        this.upperBefore = upperBefore;
+        this.upperAfter = upperAfter;
+        this.upperDropDelta = upperDropDelta;
+        this.closedCollision = closedCollision;
+        this.openCollision = openCollision;
+        this.opaque = opaque;
+        this.cube = cube;
+        this.lightCode = lightCode;
+        this.tickMask = tickMask;
+        this.tickLowerBefore = tickLowerBefore;
+        this.tickLowerAfter = tickLowerAfter;
+        this.tickUpperBefore = tickUpperBefore;
+        this.tickUpperAfter = tickUpperAfter;
+        this.pairLower = pairLower;
+        this.pairUpper = pairUpper;
+        this.orphanLower = orphanLower;
         this.orphanLowerDropId = orphanLowerDropId;
-        this.orphanLowerDropCount = orphanLowerDropCount; this.orphanUpper = orphanUpper;
+        this.orphanLowerDropCount = orphanLowerDropCount;
+        this.orphanUpper = orphanUpper;
         this.orphanUpperDropDelta = orphanUpperDropDelta;
-        this.supportLower = supportLower; this.supportUpper = supportUpper;
-        this.supportDropId = supportDropId; this.supportDropCount = supportDropCount;
+        this.supportLower = supportLower;
+        this.supportUpper = supportUpper;
+        this.supportDropId = supportDropId;
+        this.supportDropCount = supportDropCount;
     }
     static IronDoorSubsystemProbe execute(World world) {
         int lowerMask = 0, upperMask = 0;
@@ -82,7 +97,8 @@ final class IronDoorSubsystemProbe {
         Block.doorSteel.updateTick(world, 20, 80, 20, new Random(17320110771L));
         Block.doorSteel.updateTick(world, 20, 81, 20, new Random(17320110771L));
 
-        placePair(world, 32, 0); Block.doorSteel.onNeighborBlockChange(world, 32, 80, 20, 1);
+        placePair(world, 32, 0);
+        Block.doorSteel.onNeighborBlockChange(world, 32, 80, 20, 1);
         int pairLower = state(world, 32, 80, 20), pairUpper = state(world, 32, 81, 20);
         require(world.setBlockWithNotify(36, 79, 20, 1)
                 && world.setBlockAndMetadataWithNotify(36, 80, 20, 71, 0),
@@ -95,7 +111,8 @@ final class IronDoorSubsystemProbe {
         int orphanUpperEntities = world.loadedEntityList.size();
         Block.doorSteel.onNeighborBlockChange(world, 40, 81, 20, 1);
         int orphanUpperDelta = world.loadedEntityList.size() - orphanUpperEntities;
-        placePair(world, 44, 0); int supportEntities = world.loadedEntityList.size();
+        placePair(world, 44, 0);
+        int supportEntities = world.loadedEntityList.size();
         require(world.setBlock(44, 79, 20, 0), "support removal failed");
         Block.doorSteel.onNeighborBlockChange(world, 44, 80, 20, 1);
         EntityItem supportDrop = lastDrop(world, supportEntities);
@@ -111,7 +128,8 @@ final class IronDoorSubsystemProbe {
                 id(orphanLowerDrop), count(orphanLowerDrop), state(world, 40, 81, 20),
                 orphanUpperDelta, state(world, 44, 80, 20), state(world, 44, 81, 20),
                 id(supportDrop), count(supportDrop));
-        result.validate(); return result;
+        result.validate();
+        return result;
     }
     String domains() { return "71=lower:0..7,upper:8..15,open-bit=4"; }
     String lifecycle() { return "break=lower+upper->air,drops=lower:330x1+upper:none,strength=finite"; }

@@ -18,22 +18,37 @@ final class OracleIronDoorProbe {
             int pairLower, int pairUpper, int orphanLower, int orphanLowerDropId,
             int orphanLowerDropCount, int orphanUpper, int orphanUpperDropDelta,
             int supportLower, int supportUpper, int supportDropId, int supportDropCount) {
-        this.lowerMask = lowerMask; this.upperMask = upperMask;
-        this.strengthClass = strengthClass; this.lowerBefore = lowerBefore;
-        this.lowerAfter = lowerAfter; this.lowerDropId = lowerDropId;
-        this.lowerDropCount = lowerDropCount; this.upperBefore = upperBefore;
-        this.upperAfter = upperAfter; this.upperDropDelta = upperDropDelta;
-        this.closedCollision = closedCollision; this.openCollision = openCollision;
-        this.opaque = opaque; this.cube = cube; this.lightCode = lightCode;
-        this.tickMask = tickMask; this.tickLowerBefore = tickLowerBefore;
-        this.tickLowerAfter = tickLowerAfter; this.tickUpperBefore = tickUpperBefore;
-        this.tickUpperAfter = tickUpperAfter; this.pairLower = pairLower;
-        this.pairUpper = pairUpper; this.orphanLower = orphanLower;
+        this.lowerMask = lowerMask;
+        this.upperMask = upperMask;
+        this.strengthClass = strengthClass;
+        this.lowerBefore = lowerBefore;
+        this.lowerAfter = lowerAfter;
+        this.lowerDropId = lowerDropId;
+        this.lowerDropCount = lowerDropCount;
+        this.upperBefore = upperBefore;
+        this.upperAfter = upperAfter;
+        this.upperDropDelta = upperDropDelta;
+        this.closedCollision = closedCollision;
+        this.openCollision = openCollision;
+        this.opaque = opaque;
+        this.cube = cube;
+        this.lightCode = lightCode;
+        this.tickMask = tickMask;
+        this.tickLowerBefore = tickLowerBefore;
+        this.tickLowerAfter = tickLowerAfter;
+        this.tickUpperBefore = tickUpperBefore;
+        this.tickUpperAfter = tickUpperAfter;
+        this.pairLower = pairLower;
+        this.pairUpper = pairUpper;
+        this.orphanLower = orphanLower;
         this.orphanLowerDropId = orphanLowerDropId;
-        this.orphanLowerDropCount = orphanLowerDropCount; this.orphanUpper = orphanUpper;
+        this.orphanLowerDropCount = orphanLowerDropCount;
+        this.orphanUpper = orphanUpper;
         this.orphanUpperDropDelta = orphanUpperDropDelta;
-        this.supportLower = supportLower; this.supportUpper = supportUpper;
-        this.supportDropId = supportDropId; this.supportDropCount = supportDropCount;
+        this.supportLower = supportLower;
+        this.supportUpper = supportUpper;
+        this.supportDropId = supportDropId;
+        this.supportDropCount = supportDropCount;
     }
     static OracleIronDoorProbe execute(dj world) {
         int lowerMask = 0, upperMask = 0;
@@ -72,16 +87,20 @@ final class OracleIronDoorProbe {
         na.aM.a(world, 20, 80, 20, new Random(17320110771L));
         na.aM.a(world, 20, 81, 20, new Random(17320110771L));
 
-        placePair(world, 32, 0); na.aM.b(world, 32, 80, 20, 1);
+        placePair(world, 32, 0);
+        na.aM.b(world, 32, 80, 20, 1);
         int pairLower = state(world, 32, 80, 20), pairUpper = state(world, 32, 81, 20);
         require(world.e(36, 79, 20, 1) && world.b(36, 80, 20, 71, 0),
                 "orphan lower fixture failed");
-        int orphanLowerEntities = world.b.size(); na.aM.b(world, 36, 80, 20, 1);
+        int orphanLowerEntities = world.b.size();
+        na.aM.b(world, 36, 80, 20, 1);
         ez orphanLowerDrop = lastDrop(world, orphanLowerEntities);
         require(world.b(40, 81, 20, 71, 8), "orphan upper fixture failed");
-        int orphanUpperEntities = world.b.size(); na.aM.b(world, 40, 81, 20, 1);
+        int orphanUpperEntities = world.b.size();
+        na.aM.b(world, 40, 81, 20, 1);
         int orphanUpperDelta = world.b.size() - orphanUpperEntities;
-        placePair(world, 44, 0); int supportEntities = world.b.size();
+        placePair(world, 44, 0);
+        int supportEntities = world.b.size();
         require(world.b(44, 79, 20, 0), "support removal failed");
         na.aM.b(world, 44, 80, 20, 1);
         ez supportDrop = lastDrop(world, supportEntities);
@@ -96,7 +115,8 @@ final class OracleIronDoorProbe {
                 count(orphanLowerDrop), state(world, 40, 81, 20), orphanUpperDelta,
                 state(world, 44, 80, 20), state(world, 44, 81, 20), id(supportDrop),
                 count(supportDrop));
-        result.validate(); return result;
+        result.validate();
+        return result;
     }
     String domains() { return "71=lower:0..7,upper:8..15,open-bit=4"; }
     String lifecycle() { return "break=lower+upper->air,drops=lower:330x1+upper:none,strength=finite"; }
