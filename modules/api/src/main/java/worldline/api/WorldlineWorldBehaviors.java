@@ -53,6 +53,9 @@ public final class WorldlineWorldBehaviors {
     public static final WorldlineBehavior FIRE_SUBSYSTEM = define(
             "fire-subsystem",
             "Fire age domain, placement, empty harvest, persistence, physics, and support loss");
+    public static final WorldlineBehavior FARMLAND_SUBSYSTEM = define(
+            "farmland-subsystem",
+            "Farmland moisture, placement, dirt harvest, persistence, physics, and cover response");
     public static final WorldlineBehavior DUNGEON_GENERATION = define("dungeon-generation",
             "Fixed-seed populated chunks contain replay-stable spawners and nonempty loot chests");
     public static final WorldlineBehavior CHUNK_UNLOAD_RELOAD = define("chunk-unload-reload",

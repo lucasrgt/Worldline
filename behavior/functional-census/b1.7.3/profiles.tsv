@@ -58,7 +58,7 @@ b1.7.3:block/056	false	simple-solid
 b1.7.3:block/057	false	simple-solid
 b1.7.3:block/058	false	interactive,simple-solid
 b1.7.3:block/059	false	crop,random-tick,stateful-metadata
-b1.7.3:block/060	false	farmland,tick-driven,stateful-metadata
+b1.7.3:block/060	false	farmland,random-tick,special-collision,stateful-metadata,tick-driven
 b1.7.3:block/061	true	furnace,container,directional,tile-entity,stateful-metadata
 b1.7.3:block/062	true	furnace,container,directional,tile-entity,luminous
 b1.7.3:block/063	false	sign,support-dependent,directional,tile-entity
