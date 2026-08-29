@@ -70,6 +70,7 @@ public final class TestKitContractTest {
         RedstoneInputControlsSubsystemFixtureTest.execute();
         RailNetworkSubsystemFixtureTest.execute();
         BuiltEnvironmentMaterialsFixtureTest.execute();
+        VegetationEcologyFixtureTest.execute();
         SnowAccumulationFixtureTest.execute();
         SnowLayerNonstackingFixtureTest.execute();
         NaturalWolfPackFixtureTest.execute();

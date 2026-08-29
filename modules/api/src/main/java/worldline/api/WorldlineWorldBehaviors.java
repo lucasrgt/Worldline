@@ -74,6 +74,9 @@ public final class WorldlineWorldBehaviors {
     public static final WorldlineBehavior BUILT_ENVIRONMENT_MATERIALS_SUBSYSTEM = define(
             "built-environment-materials-subsystem",
             "Construction blocks across metadata, geometry, light, ticking, and structural response");
+    public static final WorldlineBehavior VEGETATION_ECOLOGY_SUBSYSTEM = define(
+            "vegetation-ecology-subsystem",
+            "Grass, saplings, leaves, ground vegetation, crops, and cane across native ecology boundaries");
     public static final WorldlineBehavior DUNGEON_GENERATION = define("dungeon-generation",
             "Fixed-seed populated chunks contain replay-stable spawners and nonempty loot chests");
     public static final WorldlineBehavior CHUNK_UNLOAD_RELOAD = define("chunk-unload-reload",

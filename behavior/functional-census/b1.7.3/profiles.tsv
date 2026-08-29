@@ -1,10 +1,10 @@
 subject_id	singular	archetypes
 b1.7.3:block/001	false	built-environment,construction-material,simple-solid
-b1.7.3:block/002	false	simple-solid,random-tick
+b1.7.3:block/002	false	simple-solid,random-tick,ecology-soil,vegetation-support
 b1.7.3:block/003	false	simple-solid
 b1.7.3:block/004	false	simple-solid
 b1.7.3:block/005	false	simple-solid
-b1.7.3:block/006	false	vegetation,random-tick,stateful-metadata
+b1.7.3:block/006	false	vegetation,random-tick,stateful-metadata,ecology-growth,support-dependent
 b1.7.3:block/007	false	simple-solid
 b1.7.3:block/008	false	fluid,tick-driven
 b1.7.3:block/009	false	fluid,tick-driven
@@ -16,7 +16,7 @@ b1.7.3:block/014	false	simple-solid
 b1.7.3:block/015	false	simple-solid
 b1.7.3:block/016	false	simple-solid
 b1.7.3:block/017	false	built-environment,construction-material,directional,simple-solid,stateful-metadata
-b1.7.3:block/018	false	vegetation,transparent-solid,random-tick
+b1.7.3:block/018	false	vegetation,transparent-solid,random-tick,ecology-canopy,decay-state
 b1.7.3:block/019	true	sponge,fluid-reactive
 b1.7.3:block/020	false	built-environment,construction-material,transparent-solid
 b1.7.3:block/021	false	simple-solid
@@ -29,7 +29,7 @@ b1.7.3:block/027	false	power-propagation,rail,rail-network,redstone-component,st
 b1.7.3:block/028	false	entity-triggered,rail,rail-network,redstone-component,stateful-metadata,timed-pulse
 b1.7.3:block/029	true	piston,redstone-component,directional,stateful-metadata
 b1.7.3:block/030	false	built-environment,special-collision,transparent-solid
-b1.7.3:block/031	false	vegetation,support-dependent,stateful-metadata
+b1.7.3:block/031	false	vegetation,support-dependent,stateful-metadata,ecology-ground-cover
 b1.7.3:block/032	false	vegetation,support-dependent
 b1.7.3:block/033	true	piston,redstone-component,directional,stateful-metadata
 b1.7.3:block/034	true	piston,directional,stateful-metadata
@@ -57,7 +57,7 @@ b1.7.3:block/055	false	redstone-component,stateful-metadata,support-dependent
 b1.7.3:block/056	false	simple-solid
 b1.7.3:block/057	false	simple-solid
 b1.7.3:block/058	false	interactive,simple-solid
-b1.7.3:block/059	false	crop,random-tick,stateful-metadata
+b1.7.3:block/059	false	crop,random-tick,stateful-metadata,ecology-growth,support-dependent
 b1.7.3:block/060	false	farmland,random-tick,special-collision,stateful-metadata,tick-driven
 b1.7.3:block/061	true	furnace,container,directional,tile-entity,stateful-metadata
 b1.7.3:block/062	true	furnace,container,directional,tile-entity,luminous
@@ -81,7 +81,7 @@ b1.7.3:block/079	false	transparent-solid,fluid-reactive,tick-driven
 b1.7.3:block/080	false	simple-solid,random-tick
 b1.7.3:block/081	false	vegetation,random-tick,special-collision
 b1.7.3:block/082	false	simple-solid
-b1.7.3:block/083	false	vegetation,random-tick,support-dependent
+b1.7.3:block/083	false	vegetation,random-tick,support-dependent,ecology-growth,water-adjacent
 b1.7.3:block/084	true	jukebox,tile-entity,stateful-metadata
 b1.7.3:block/085	false	built-environment,construction-material,special-collision
 b1.7.3:block/086	false	built-environment,directional,simple-solid,stateful-metadata

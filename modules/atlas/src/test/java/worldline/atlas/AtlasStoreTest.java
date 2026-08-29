@@ -60,7 +60,7 @@ public final class AtlasStoreTest {
         require(AtlasStatus.VERIFIED.equals(stoneRegistry.status()), "wildcard census expansion");
         require(AtlasCertainty.VERIFIED.equals(AtlasCertainty.of(stoneRegistry)),
                 "verified certainty");
-        AtlasRecord unknown = first.get("atlas.claim.block-002.state-domain");
+        AtlasRecord unknown = first.get("atlas.claim.block-008.break-transition");
         require(AtlasStatus.UNKNOWN.equals(unknown.status()), "implicit census unknown");
         require(!AtlasIndex.search(first, "chunk", 20).isEmpty(), "semantic chunk index");
         String context = AtlasContextQuery.json("chunk", AtlasContext.build(first, "chunk", 20, 1));
