@@ -1,4 +1,4 @@
-package worldline.stationapi.runtime;
+package worldline.stationapi.profiler;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,7 +15,7 @@ import worldline.profiling.ProfilerSession;
 import worldline.profiling.WorldlineProfilerMetrics;
 
 /** Owns one bounded, allocation-free-on-frame-path StationAPI capture. */
-final class StationApiProfilerRuntime {
+public final class StationApiProfilerRuntime {
     private static final boolean ENABLED = Boolean.getBoolean("worldline.profiler.enabled");
     private static final List<StationApiProfiler.Metric> EXTENSIONS = new ArrayList<>();
     private static ProfilerSession session;
@@ -41,7 +41,7 @@ final class StationApiProfilerRuntime {
         EXTENSIONS.add(token); return token;
     }
 
-    static void beginFrame() {
+    public static void beginFrame() {
         if (!ENABLED || !armed || sealed) return;
         initialize();
         if (frames >= capacity) { finish("capacity"); return; }
@@ -52,30 +52,30 @@ final class StationApiProfilerRuntime {
         pendingTick = pendingTickMax = pendingTickCalls = pendingDisplay = 0L;
     }
 
-    static void endFrame() {
+    public static void endFrame() {
         if (!open) return;
         long now = System.nanoTime(); session.set(camera, now - frameStarted);
         session.endFrame(now); open = false; frames++;
         if (frames >= capacity) finish("capacity");
     }
 
-    static boolean frameOpen() { return open; }
-    static void startCapture() { if (ENABLED && !sealed) armed = true; }
-    static long timer() { return ENABLED && armed && !sealed ? System.nanoTime() : 0L; }
-    static void tick(long elapsed) {
+    public static boolean frameOpen() { return open; }
+    public static void startCapture() { if (ENABLED && !sealed) armed = true; }
+    public static long timer() { return ENABLED && armed && !sealed ? System.nanoTime() : 0L; }
+    public static void tick(long elapsed) {
         if (!ENABLED || !armed || sealed || elapsed < 0L) return;
         pendingTick = Math.addExact(pendingTick, elapsed);
         pendingTickMax = Math.max(pendingTickMax, elapsed); pendingTickCalls++;
     }
-    static void display(long elapsed) {
+    public static void display(long elapsed) {
         if (ENABLED && armed && !sealed && elapsed >= 0L)
             pendingDisplay = Math.addExact(pendingDisplay, elapsed);
     }
-    static void elapsed(String name, long start) {
+    public static void elapsed(String name, long start) {
         if (open && start != 0L) session.addElapsed(registry.require(name), start, System.nanoTime());
     }
-    static void count(String name) { if (open) session.add(registry.require(name), 1L); }
-    static void gauge(String name, long value) {
+    public static void count(String name) { if (open) session.add(registry.require(name), 1L); }
+    public static void gauge(String name, long value) {
         if (open) session.maximum(registry.require(name), value);
     }
     static void add(StationApiProfiler.Metric metric, long value) {
@@ -85,7 +85,7 @@ final class StationApiProfilerRuntime {
         if (open) session.maximum(metric.handle, value);
     }
 
-    static void finish(String reason) {
+    public static void finish(String reason) {
         if (!ENABLED || sealed || !initialized || frames == 0 || open) return;
         try {
             Map<String, String> tags = new LinkedHashMap<>();

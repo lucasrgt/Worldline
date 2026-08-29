@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import worldline.stationapi.profiler.StationApiProfilerRuntime;
 import worldline.profiling.WorldlineProfilerMetrics;
 
 /** Defines the renderer update as the complete client-frame capture boundary. */

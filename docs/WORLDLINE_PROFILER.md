@@ -109,7 +109,8 @@ only after their world-readiness oracle, excluding startup and login noise.
 
 Beta 1.7.3 performs tick and `Display.update` before the renderer frame root, so
 those durations are accumulated and attributed to the following frame. Mods may
-register an owned `mod.*` metric through `StationApiProfiler.register(...)`
+register an owned `mod.*` metric through
+`worldline.stationapi.profiler.StationApiProfiler.register(...)`
 before the first frame, then publish through its stable token while
 `StationApiProfiler.active()` is true. Schema registration closes permanently
 when capture begins.

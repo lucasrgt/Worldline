@@ -1,4 +1,4 @@
-package worldline.stationapi.runtime;
+package worldline.stationapi.profiler;
 
 import worldline.profiling.ProfilerMetric;
 import worldline.profiling.ProfilerRegistry;
