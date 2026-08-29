@@ -1,5 +1,5 @@
 schema=1
 id=m357-glowstone-dust-crafts
-fingerprint=8d03e8c99ea26a6dcdc79bf9786be6a6ba882eb69f751f9e3ee1a0a27770d03f
+fingerprint=43e8604fdf10c0a5616ae785ed5de52f3b05376d36492da4d26f6063bdb3f31d
 observation.sha256=af0a81cf89ec64afd6056fb4755ef7ed9350bac34875caa333cc150d99d7955c
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m569-spawner-delay-set
-fingerprint=6243e34da45e7925244b8f832847eb57d27b2c2365849855fa5b590a1e8d57e4
+fingerprint=cae7429b8ef381270dd9cbac5887e30db9bcb6852cb7d2c61c555bd7cf232540
 observation.sha256=f8a3a81f8f2295adbcd12af662bb00620eea7f2d0b09701089362e062b5d0b19
 source=refactor-equivalent

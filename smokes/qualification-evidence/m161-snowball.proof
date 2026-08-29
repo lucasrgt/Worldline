@@ -1,5 +1,5 @@
 schema=1
 id=m161-snowball
-fingerprint=327208c2026e8b7cac0910338dba464473867dafd590ab5a861209073341d273
+fingerprint=0ac9c794cb800423d903bce2c64e5d9dc08bee2c39546388c982c62be9afda9c
 observation.sha256=1865bda95354d11a5a95ac4eaaf3fb8ad521e4b6195e6c651715e6955e7a149d
 source=refactor-equivalent

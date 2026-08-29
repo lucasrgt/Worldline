@@ -1,5 +1,5 @@
 schema=1
 id=m236-cobble-slab
-fingerprint=74ef0e028a7aa28552d10e09b8a6dbe7b0a4d6de5440bfb8e666b844732c5b5e
+fingerprint=a45d8585895fdf35ed0f6be8891600b340d894c358c49fada87c5fb8f3600fb5
 observation.sha256=0659df1d047139297efabd6988985a6f3c1bb9b16e6dfa93f6bc1387d8dbc335
 source=refactor-equivalent

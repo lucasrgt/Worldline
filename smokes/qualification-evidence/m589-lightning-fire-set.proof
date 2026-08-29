@@ -1,5 +1,5 @@
 schema=1
 id=m589-lightning-fire-set
-fingerprint=574e6484d8f3047d9db04298d2c88c1f7ab5eb30197a7f227b383b1a7dfb3c12
+fingerprint=1b2d8c9b6f8fb6a47686e5aecaa797cec1e7c4f213622ca6ec604547a569c182
 observation.sha256=7d058161530552053c2d354475a227dc52901a412fe11fc05e1e42a827e9db14
 source=refactor-equivalent

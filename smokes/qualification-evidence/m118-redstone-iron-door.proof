@@ -1,5 +1,5 @@
 schema=1
 id=m118-redstone-iron-door
-fingerprint=fbc215a1c7bf1d5e363de724630b0be5e52d1ed490eda9c217a6ee10c05791a7
+fingerprint=90d4aa553f05492791ca6a9f695c0d3d11daddc4c83b6231861f2c799fc900f3
 observation.sha256=e2000f240f0dce5e5fe233611cca6053e50b31c57113fd564387a00f527d7573
 source=refactor-equivalent

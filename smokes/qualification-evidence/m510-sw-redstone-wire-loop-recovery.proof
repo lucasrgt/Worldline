@@ -1,5 +1,5 @@
 schema=1
 id=m510-sw-redstone-wire-loop-recovery
-fingerprint=f966322222a015993e36a951560cea982aa7997f92d79abacdf56155cbf00e30
+fingerprint=fcc3cd8510d0b291b945302db495435445d885855baf42caf0726295caeedb69
 observation.sha256=5e7146f6ad6016166d3ecbe31d2d334bbc4aedabe1131c26ab335399743a373b
 source=refactor-equivalent

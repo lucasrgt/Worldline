@@ -1,5 +1,5 @@
 schema=1
 id=m437-lightning-pig-set
-fingerprint=2464afd8a38430aa397e1af17523b051347098cdf963fa229ac18643cf91ef9a
+fingerprint=c4c1bbf0c4c74746c313c0c21af4bcc70083cfa01913b5be94657e8617f09da2
 observation.sha256=536016d5292cf2d747ea4a029011726719795579c19e8507ec912154e9bd77db
 source=refactor-equivalent

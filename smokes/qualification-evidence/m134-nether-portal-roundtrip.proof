@@ -1,5 +1,5 @@
 schema=1
 id=m134-nether-portal-roundtrip
-fingerprint=2b6a0de2becaa8a86fe9c656ead2e34bed5e92a8090a4f3d73671d3a1c678718
+fingerprint=0f3cac243660026d888c76ae76f0dca4182013431f588b48d677ecd4031347ce
 observation.sha256=c2f903638b1e364b9781c247e61c22c77a28a036212dbe444db5c62498e2a74b
 source=refactor-equivalent
