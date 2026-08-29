@@ -1,5 +1,5 @@
 schema=1
 id=m157-bow-arrow
-fingerprint=2b66d9379cc554a0184ed2cd22373d53a54e1dee979a9ea1d1214ce2a0db62ac
+fingerprint=bc2c490127d12b83250f0d0a143897279ce3d811fc2a91949568738a25d36caa
 observation.sha256=abf0244450acb0b727df9080a6ca53849fcd0ca4ce62de83a13b815d04c8f917
 source=refactor-equivalent

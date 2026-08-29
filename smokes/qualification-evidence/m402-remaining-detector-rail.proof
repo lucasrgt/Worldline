@@ -1,5 +1,5 @@
 schema=1
 id=m402-remaining-detector-rail
-fingerprint=13c9927a01212e3d99fd3859e036c91e01fb386e9c91d2d3c5c8b9deb65b7c82
+fingerprint=c6e8aef3d262dd80122d6c674e0e6126a5a74b14ef95b49b325a2858b0fc291d
 observation.sha256=00ed23852b2822be0b8b8766debc5cf5049c7e54b7c106f0e7c8d6a5028b8ab3
 source=refactor-equivalent

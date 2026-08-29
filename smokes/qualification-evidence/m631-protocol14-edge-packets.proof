@@ -1,5 +1,5 @@
 schema=1
 id=m631-protocol14-edge-packets
-fingerprint=53ae3cff0b8cff0a13e8e7dcd94724a2ba537214015aa180da6df25dd7fc8781
+fingerprint=5bf605154bd5f53f4fffefe1c8e2d6eeedeea9fe4c7e5cb0a055732bd706ff0e
 observation.sha256=d039ddfd6bc234225ec24c5433a77a99d176fef96bb5adbb99ca56f2d762ad39
 source=refactor-equivalent

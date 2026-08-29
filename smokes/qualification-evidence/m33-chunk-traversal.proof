@@ -1,5 +1,5 @@
 schema=1
 id=m33-chunk-traversal
-fingerprint=addfed7da86bf8f434b350bd1a7cdada267552868b869b5026311e553fc25f00
+fingerprint=79bcef779234ee5741e59393d7aa60a29834f44245572741cbaca654b76e1717
 observation.sha256=624cda99acab6aae4cc4f1ae466f7ab7c74f2c2ad82ba7dd39d5c7d364b70dd9
 source=refactor-equivalent

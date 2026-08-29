@@ -1,5 +1,5 @@
 schema=1
 id=b173-support-face-attachment-lifecycle-cycle
-fingerprint=f47ca8c75c68c20d468989793c7cd4820f4b06cc5e6344859cbf10e7532adbcf
+fingerprint=f629d142ea5710051bc010646cf0d32b9e7bd7167573eccd51c436d584e078ea
 observation.sha256=61202750cc672b41f06bbc76e818a8cfbe893927a5bc401769353703499cbe1e
 source=refactor-equivalent

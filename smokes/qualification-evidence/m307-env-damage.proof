@@ -1,5 +1,5 @@
 schema=1
 id=m307-env-damage
-fingerprint=938198f6a8ef435a7d9b9b553f25ebe1ae42c26e7f224e9689552f6a45007b97
+fingerprint=1445dde2c5f5e26556ddf5c6124f773f3d541593c809e3373051f70b20be2933
 observation.sha256=8a51289b35f57567a0dfbc0f3cf8f1d6981dac6219b52d494aac34f56713cba7
 source=refactor-equivalent
