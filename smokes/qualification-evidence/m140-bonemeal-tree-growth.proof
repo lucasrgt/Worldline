@@ -1,5 +1,5 @@
 schema=1
 id=m140-bonemeal-tree-growth
-fingerprint=14963bd746ca2f2f69213a5c32008f3edd1eedc97b8a4f4c43bd05a5e9fa1f7f
+fingerprint=dc2480b3f41ea7b5c8ba8207778f8507569628fe1e033e7d02d861b7c6a266ba
 observation.sha256=d5bca5667d5f93503d8c2226bf52d4e49d9395d51c2e2da675497b7d6a57d896
 source=refactor-equivalent

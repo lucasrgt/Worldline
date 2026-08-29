@@ -1,5 +1,5 @@
 schema=1
 id=b173-cardinal-placement-state-domain-cycle
-fingerprint=5a159873bdda6d1447b7dccc9376d73fe781b1f478ebabb94250d5efe67b1513
+fingerprint=4670c23239f24029c83b20faa18d1591b8c58a30d08d08df4683fdc82ce5ac26
 observation.sha256=05a42d02220e492c816e51c0348fda817ae4bb609a583ba7a23cfe1145fb3665
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m404-remaining-cart-break
-fingerprint=1eb0bc9ac03c1aca301e74891a0644a58408071d19fee0cb5097afde024f77ec
+fingerprint=5fc48e72c960df05c0f9bbb2f665fb08e6edaea811ddd03821dd7d7bd6e6481f
 observation.sha256=8a80558c9383a317d0d6a8f145c940ff21cb07ffb3649aa4c564214adde79bcf
 source=refactor-equivalent

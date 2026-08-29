@@ -1,5 +1,5 @@
 schema=1
 id=m702-powered-rail-slope-propagation
-fingerprint=9ef0db39a0283648d73343467ba8ddca31f6b2c7164e07fa72f28ba7e0cfda6d
+fingerprint=313806ea2947337333dff86eba04ae78b030a59b80eef1e515492b9ce7247b0b
 observation.sha256=ce311416d7824f794e2d62b8f29f2d10f9da4765fbb72b6418125f72aa66a970
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m451-armor-reduction-set
-fingerprint=26b01697bed71ecf81faa7fa25c3ce37fe5c37940947c6da0612d4acd4bfa117
+fingerprint=c5c5cb45c784991ee73ac65495508833a95dd7e35817cef6207812877df8fe10
 observation.sha256=b04b51a3cb23c8254f44a5a8fddd04c0066bb3be81e60bd7b8ffde3ae89b0897
 source=refactor-equivalent

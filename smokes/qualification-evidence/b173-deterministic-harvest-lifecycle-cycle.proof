@@ -1,5 +1,5 @@
 schema=1
 id=b173-deterministic-harvest-lifecycle-cycle
-fingerprint=8cdd7115e5583092f7b9d0556b2c196b9da38ee1dd387b3fe20110603fe71da6
+fingerprint=0bff616cc5b51ab89ee7ecafcbab3cadaaa1d66cf32484699204c884b7483201
 observation.sha256=edd804e3285258b5f908c9efb00aec3b289c9c0854580bfa6383e4dfdd1f2ff1
 source=refactor-equivalent
