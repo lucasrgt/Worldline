@@ -629,8 +629,9 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-native-tile-entity-render-cycle` | EXECUTED | official Beta 1.7.3 native tile-entity render family |
 | `b173-piston-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 piston subsystem conformance |
 | `b173-portal-block-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 portal block subsystem conformance |
+| `b173-rail-network-subsystem-conformance-cycle` | EXECUTED | official Beta 1.7.3 rail-network subsystem conformance |
 | `b173-redstone-device-lifecycle-cycle` | CARRIED | official Beta 1.7.3 redstone device lifecycle family |
-| `b173-redstone-input-controls-subsystem-conformance-cycle` | EXECUTED | official Beta 1.7.3 redstone input-control subsystem conformance |
+| `b173-redstone-input-controls-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 redstone input-control subsystem conformance |
 | `b173-redstone-ore-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 redstone ore subsystem conformance |
 | `b173-redstone-torch-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 redstone torch subsystem conformance |
 | `b173-remaining-opaque-cube-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 remaining opaque-cube physical envelopes |
