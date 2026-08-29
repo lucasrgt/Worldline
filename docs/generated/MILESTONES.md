@@ -622,7 +622,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-iron-door-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 iron-door subsystem conformance |
 | `b173-lifecycle-provider-cycle` | CARRIED | official Beta 1.7.3 public block lifecycle provider |
 | `b173-locked-chest-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 locked-chest subsystem conformance |
-| `b173-mob-spawner-subsystem-conformance-cycle` | EXECUTED | official Beta 1.7.3 mob-spawner subsystem conformance |
+| `b173-mob-spawner-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 mob-spawner subsystem conformance |
 | `b173-multi-drop-mineral-lifecycle-cycle` | CARRIED | official Beta 1.7.3 multi-drop mineral lifecycle family |
 | `b173-mushroom-random-tick-conformance-cycle` | CARRIED | official Beta 1.7.3 mushroom random-tick conformance subsystem |
 | `b173-native-special-world-render-cycle` | EXECUTED | official Beta 1.7.3 native special world block-render family |
@@ -630,6 +630,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-piston-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 piston subsystem conformance |
 | `b173-portal-block-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 portal block subsystem conformance |
 | `b173-redstone-device-lifecycle-cycle` | CARRIED | official Beta 1.7.3 redstone device lifecycle family |
+| `b173-redstone-input-controls-subsystem-conformance-cycle` | EXECUTED | official Beta 1.7.3 redstone input-control subsystem conformance |
 | `b173-redstone-ore-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 redstone ore subsystem conformance |
 | `b173-redstone-torch-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 redstone torch subsystem conformance |
 | `b173-remaining-opaque-cube-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 remaining opaque-cube physical envelopes |
