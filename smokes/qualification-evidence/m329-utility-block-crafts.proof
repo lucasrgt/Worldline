@@ -1,5 +1,5 @@
 schema=1
 id=m329-utility-block-crafts
-fingerprint=4598ddd789d4c646767a6a8e945b80562335ad94863de2ab10c38a349a9ef9c8
+fingerprint=4ea18b11cf82a84ccf5766eb8d8ad9a66641c348f1847dee5a60f042ecdadf0b
 observation.sha256=b70015b8e4bea597b4b8eeba287d216244d5c1bb9f83a1d7d06120bdb8c5086f
 source=refactor-equivalent

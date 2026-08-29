@@ -1,5 +1,5 @@
 schema=1
 id=m265-fish-eat
-fingerprint=1ce98747480eb7d387836ff4fda3aa40a4a8591688a870e9b69bc1c9ac49a646
+fingerprint=9fa3d669397bed6008dae4266bb646ae0296091f79bfb5efb43122cf5670f278
 observation.sha256=0c9b15289f11f60a602735efc2cf64ae7cf2e4ad6454e33fd5fdb6a44023f832
 source=refactor-equivalent

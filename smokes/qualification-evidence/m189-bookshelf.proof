@@ -1,5 +1,5 @@
 schema=1
 id=m189-bookshelf
-fingerprint=0ac8186e37db3c0bfb7dfcb7ddcc90e08ebad10ccd68554a7f3a7017c810e28c
+fingerprint=01b32aa488592bb024531693c863f4d32699e6d8c22403a9da52c1579356680a
 observation.sha256=30ee0483e42551b855a4fd5a85002dc5871168bc8f2bed26ec7dcd572b2b97a3
 source=refactor-equivalent
