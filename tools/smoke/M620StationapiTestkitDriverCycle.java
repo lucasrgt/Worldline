@@ -126,8 +126,6 @@ public final class M620StationapiTestkitDriverCycle {
         }
         SmokeSupport.require(count(output, "WORLDLINE_STATIONAPI_SESSION_CLOSE=CLOSED") == 2,
                 "StationAPI sessions were not both closed");
-        SmokeSupport.require(count(output, "WORLDLINE_PROFILER_ARTIFACT=") == 2,
-                "StationAPI profiler artifacts were not both sealed");
     }
 
     private void verifyProfilerArtifacts() throws Exception {
@@ -135,6 +133,11 @@ public final class M620StationapiTestkitDriverCycle {
             Path artifact = build.resolve("profiler-" + id + ".wlpr");
             SmokeSupport.require(Files.isRegularFile(artifact) && Files.size(artifact) > 64L,
                     "missing StationAPI profiler artifact: " + artifact);
+            String inspection = SmokeSupport.capture(root, Arrays.asList(javaTool(),
+                    root.resolve("tools/replay/Replay.java").toString(), "profiler", "inspect",
+                    artifact.toString()));
+            SmokeSupport.require(inspection.contains("WORLDLINE_PROFILER_INSPECT=PASS"),
+                    "invalid StationAPI profiler artifact: " + artifact);
         }
     }
 
