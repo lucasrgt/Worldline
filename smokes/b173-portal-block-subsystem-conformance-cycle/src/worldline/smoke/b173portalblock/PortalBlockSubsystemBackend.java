@@ -24,7 +24,10 @@ final class PortalBlockSubsystemBackend implements GameBackend, PortalBlockSubsy
             for (int chunkZ = -4; chunkZ <= 4; chunkZ++)
                 world.getChunkFromChunkCoords(chunkX, chunkZ);
     }
-    @Override public void tick() { world.updateEntities(); world.tick(); }
+    @Override public void tick() {
+        world.updateEntities();
+        world.tick();
+    }
     @Override public void close() { world = null; }
     @Override public PortalBlockSubsystemObservation observe() {
         if (world == null) throw new IllegalStateException("portal block world is not loaded");
