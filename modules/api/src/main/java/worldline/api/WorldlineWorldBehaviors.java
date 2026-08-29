@@ -62,6 +62,9 @@ public final class WorldlineWorldBehaviors {
     public static final WorldlineBehavior IRON_DOOR_SUBSYSTEM = define(
             "iron-door-subsystem",
             "Iron door two-cell metadata, lifecycle, physics, ticks, and structural cleanup");
+    public static final WorldlineBehavior MOB_SPAWNER_SUBSYSTEM = define(
+            "mob-spawner-subsystem",
+            "Mob-spawner registry, item placement, lifecycle, persistence, activation, and stability");
     public static final WorldlineBehavior DUNGEON_GENERATION = define("dungeon-generation",
             "Fixed-seed populated chunks contain replay-stable spawners and nonempty loot chests");
     public static final WorldlineBehavior CHUNK_UNLOAD_RELOAD = define("chunk-unload-reload",
