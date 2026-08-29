@@ -56,6 +56,7 @@ public final class TestKitContractTest {
         SignSubsystemFixtureTest.execute();
         PistonSubsystemFixtureTest.execute();
         RepeaterSubsystemFixtureTest.execute();
+        RedstoneTorchSubsystemFixtureTest.execute();
         SnowAccumulationFixtureTest.execute();
         SnowLayerNonstackingFixtureTest.execute();
         NaturalWolfPackFixtureTest.execute();

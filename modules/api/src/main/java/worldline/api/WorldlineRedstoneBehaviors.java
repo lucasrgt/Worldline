@@ -21,6 +21,9 @@ public final class WorldlineRedstoneBehaviors {
             "Four-block piston state, lifecycle, persistence, physics, and neighbor conformance");
     public static final WorldlineBehavior REPEATER_SUBSYSTEM = define("repeater-subsystem",
             "Two-state repeater domain, lifecycle, timing, physics, and neighbor conformance");
+    public static final WorldlineBehavior REDSTONE_TORCH_SUBSYSTEM = define(
+            "redstone-torch-subsystem",
+            "Two-state redstone torch faces, lifecycle, inversion, burnout, and physics");
     public static final WorldlineBehavior REDSTONE_ONE_TICK = define("redstone-one-tick",
             "A 1-tick pulse cuts at lever 69:9 and drops a sticky piston payload");
     public static final WorldlineBehavior DOOR_SOUND_EVENT = define("door-sound-event",
