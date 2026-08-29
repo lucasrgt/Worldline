@@ -22,7 +22,8 @@ Launch with `-Dworldline.profiler.enabled=true` and an absolute
 `-Dworldline.profiler.output=...wlpr`. Set
 `-Dworldline.profiler.loader=forge` for Forge; the default is `modloader`.
 Mods register only owned `mod.*` metrics through `ClientProfiler` before the
-first captured frame.
+first captured frame. The canonical portability check compiles this complete
+runtime closure with `javac --release 8`.
 
 This source boundary is structurally maintained. A dedicated official
 ModLoader/Forge runtime qualification is still required before Worldline may
