@@ -23,7 +23,14 @@ gradle.projectsEvaluated {
     def worldline = smoke.parentFile.parentFile
     project.sourceSets.main.java.srcDir(new File(smoke, 'runtime-src'))
     project.sourceSets.main.java.srcDir(new File(worldline, 'adapters/stationapi/runtime-src'))
-    project.sourceSets.main.java.srcDir(new File(worldline, 'modules/profiling/src/main/java'))
+    def profilerRoot = new File(worldline, 'modules/profiling/src/main/java/worldline/profiling')
+    def profilerTypes = ['FrameCensus', 'JvmProfilerSampler', 'ProfilerArtifacts',
+        'ProfilerMetric', 'ProfilerRecorder', 'ProfilerRegistry', 'ProfilerRun',
+        'ProfilerRunCodec', 'ProfilerSchema', 'ProfilerSession', 'WorldlineProfilerMetrics']
+    def profilerSources = profilerTypes.collect { new File(profilerRoot, it + '.java') }
+    if (!profilerSources.every { it.isFile() })
+        throw new GradleException('Worldline profiler runtime closure is incomplete')
+    project.tasks.named('compileJava').configure { source(profilerSources) }
     project.tasks.named('processResources').configure {
         doLast {
             copy {
