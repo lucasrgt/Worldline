@@ -57,6 +57,7 @@ public final class TestKitContractTest {
         PistonSubsystemFixtureTest.execute();
         RepeaterSubsystemFixtureTest.execute();
         RedstoneTorchSubsystemFixtureTest.execute();
+        RedstoneOreSubsystemFixtureTest.execute();
         FurnaceSubsystemFixtureTest.execute();
         SnowAccumulationFixtureTest.execute();
         SnowLayerNonstackingFixtureTest.execute();
