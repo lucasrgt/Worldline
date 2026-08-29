@@ -93,5 +93,5 @@ b1.7.3:block/091	false	luminous,directional,simple-solid
 b1.7.3:block/092	true	cake,stateful-metadata,special-collision
 b1.7.3:block/093	false	redstone-component,directional,stateful-metadata,support-dependent
 b1.7.3:block/094	false	redstone-component,directional,stateful-metadata,support-dependent
-b1.7.3:block/095	true	locked-chest,container,tile-entity
+b1.7.3:block/095	true	locked-chest,luminous,random-tick,simple-solid
 b1.7.3:block/096	false	redstone-component,directional,stateful-metadata,special-collision
