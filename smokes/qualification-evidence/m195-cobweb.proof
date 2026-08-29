@@ -1,5 +1,5 @@
 schema=1
 id=m195-cobweb
-fingerprint=cbf4b796c18b51f9a6fd6c9c1161302de5ebd8aad82d61a88925ffe337059b03
+fingerprint=ce3badb2991dd83cc992f34589a4b0a2b8b6bf85fcf1edbdc535da1a1cea8688
 observation.sha256=4ebaa9934454eff6fdfeec745c7a31c093ebc734fd77ade5eac818c4c3c8531a
 source=refactor-equivalent

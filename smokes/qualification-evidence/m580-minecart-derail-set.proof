@@ -1,5 +1,5 @@
 schema=1
 id=m580-minecart-derail-set
-fingerprint=5cdf7d789c8c94bfad691d471f84986c17ae8056d3bfc2fee2380daf0cee7d05
+fingerprint=42f4fc4eb724f05dc5c8048df454420a4fe18ad591b9c6b2e8017103ee16f6fe
 observation.sha256=f6ca95b0cb70b238b9c52786fa33aca250907f93c06283c26c3674c2261bbfc2
 source=refactor-equivalent

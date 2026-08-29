@@ -1,5 +1,5 @@
 schema=1
 id=m3-domain-api
-fingerprint=05b6c0ce1e10adffec9f89b482b3069cd3de76a50fbb554bb43748a679f49fc6
+fingerprint=58ad5da7f6fdab8e28f74cae47a54b40010e5f219b5395f22a2e7e6b5de77220
 observation.sha256=86a15a69fbff8c19961601b563de07a0798f596d834f32124514147892093aed
 source=refactor-equivalent

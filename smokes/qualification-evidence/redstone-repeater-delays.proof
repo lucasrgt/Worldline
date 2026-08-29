@@ -1,5 +1,5 @@
 schema=1
 id=redstone-repeater-delays
-fingerprint=010f4f7da1411ba3ac54ae3ad98c527ef51d26e197ba7043749caaf9fc6586aa
+fingerprint=7cd359113ea729f1aa49ee926bc2b57791d5bc38aba86c4e4c553a9892b9085a
 observation.sha256=c1a354db7a1de143819bd96dcc890888496b992f6103e00c1ef14fecdb4d8671
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=b173-piston-subsystem-conformance-cycle
-fingerprint=d50ff121a694fe4c4840e6e973adaad67c37e22693a4a3e66b3f3e931f94dedb
+fingerprint=39d1e6447fb925d9f6f871ac62604fe2ff3fb2cbffe79f3874bed8b922bbb64e
 observation.sha256=47fc3a5f9d69b82859ba8f7feebaafe97237eba442bffea8a00c391bbbb78a8b
 source=refactor-equivalent

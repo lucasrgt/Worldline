@@ -1,5 +1,5 @@
 schema=1
 id=m159-sugar-cane
-fingerprint=722f28cb6996e7d02fe68b85769c1c9d2188ba803d9625b2542c67c866d2e9c2
+fingerprint=b55832dbcc7e72dcdf57283c97a39e269b30ff6fa6bed214f980d40e440f29b2
 observation.sha256=70a49f193de25db52e447675752317f7e567b9817943e16a27eb25a669555d8f
 source=refactor-equivalent

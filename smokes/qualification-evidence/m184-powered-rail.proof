@@ -1,5 +1,5 @@
 schema=1
 id=m184-powered-rail
-fingerprint=7b7892ceba78ca8e9bcd4a488aba12221058f2ba88a6ef97138b73f9dc2852e7
+fingerprint=f4dd898f8f5e99b818815104a7356dbb31cd12afec5c855da140fdac7c81f184
 observation.sha256=d017b9f94e15a87ad2465679091958308c683a77948158ee7b9b3fb241c56264
 source=refactor-equivalent

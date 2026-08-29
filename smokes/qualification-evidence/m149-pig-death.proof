@@ -1,5 +1,5 @@
 schema=1
 id=m149-pig-death
-fingerprint=818c6f2fd92f325b152ba492c5f1d1098b3826a5cc5769349546deefa73ff2e4
+fingerprint=51b24fe71c35fd33c9b8502d9e7c12d6368ccafcbe99aedfb549c12bb8d18d73
 observation.sha256=c189244beb58382402de4313f9d6be75c90f398e404a7df2ebbbdfa8b34c5048
 source=refactor-equivalent
