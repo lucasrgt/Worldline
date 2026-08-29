@@ -1,5 +1,5 @@
 schema=1
 id=m170-repeater
-fingerprint=e3421b6a71b56fbf8cd5e53142da1387b69272546460b931df3f3a3bc3db8f94
+fingerprint=11f1e9ba95e006119e1c469b13ce0cec3e498d7978e870349507b7ee94f17129
 observation.sha256=6c15d889fbdd2c03553d0456cd4206acca9913147855898da285810b5cffe59b
 source=refactor-equivalent

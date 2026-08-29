@@ -1,5 +1,5 @@
 schema=1
 id=m626-dungeon-generation-census
-fingerprint=b2ef66f8d54c1be1ab311ea8ff5f04ef08772035753b7f546d82d4dbef884c80
+fingerprint=095e8325f19abfe6a4e932e019e0d7cd7fe6136259c48f644eb048de923cfe2a
 observation.sha256=b649f7e5a7b8d81bc959572f41ec30da91ed6c31980b9e1addcba8bdd64f3afd
 source=refactor-equivalent

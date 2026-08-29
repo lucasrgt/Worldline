@@ -1,5 +1,5 @@
 schema=1
 id=m22-multiplayer-wire
-fingerprint=1b8faa6f28be6d14c6467e04b5dce14d01a5885da1b1470e5f2e35dfe60f4802
+fingerprint=af41245f36d1e573a3e7b03a3934105be906cdbb130f31975a00166f5fcb983c
 observation.sha256=bc05cdaf1fccbd833e4ff833eccb4ae5c3e3ab926710bfbbef56c82a0c33a993
 source=refactor-equivalent

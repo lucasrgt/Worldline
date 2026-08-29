@@ -1,5 +1,5 @@
 schema=1
 id=m625-multiplayer-edge-set
-fingerprint=581dc92c433f37ae192619641ef0da975e040062752dbddb789a4f754f2f9f92
+fingerprint=b1a65f021a62bc7f04bd0f10de544fef6cf8493be417886dc76793b90992ef67
 observation.sha256=c2a9b601faac0cc3635e67f27f044327b3a90a8a0af709489405e2f9dcecb63a
 source=refactor-equivalent

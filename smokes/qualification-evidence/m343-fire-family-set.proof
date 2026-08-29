@@ -1,5 +1,5 @@
 schema=1
 id=m343-fire-family-set
-fingerprint=71d3ad73af1ee705908ed1777b808603204f82422206c5d8fd779ef222b16f36
+fingerprint=70e8ef17bd6d5c60003e0ff1ff6edac11822b428e7990bab99dede4b66a51fbc
 observation.sha256=b04d10e87e540d454627a3960abbf311c9912ca625d00f3e71af970ea08e77f6
 source=refactor-equivalent

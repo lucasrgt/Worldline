@@ -1,5 +1,5 @@
 schema=1
 id=m554-extended-head-break-set
-fingerprint=b452615fdecaefa6cbccd94f09cf986f20ed818c0b47a107dc5892c12b5ea41d
+fingerprint=786eda24c0d0fcf748e49bde8e562fa5385dc3dadc27aab1f5dd92577be4a1e4
 observation.sha256=2cc464442cf4d3f0a5f88c7cb81921c7594834d6c9114630b54798241b4c5cbf
 source=refactor-equivalent

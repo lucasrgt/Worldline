@@ -1,5 +1,5 @@
 schema=1
 id=m432-remaining-rail-geometry-set
-fingerprint=2012706be91bcbaec472a38c827af89cb536a3f10724a508ee68023c9527795f
+fingerprint=288fdda8ab823aab0a6d1e4e5302dc366f323f1cae3b504e36dbbdc489bb8a5c
 observation.sha256=3da03f5b4d6dd509fa5fc0925d5ea7422d5cd6ddb96e7acb84b5854de2ab61b1
 source=refactor-equivalent
