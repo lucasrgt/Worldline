@@ -602,6 +602,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m703-native-3d-inventory-render` | EXECUTED | official Beta 1.7.3 native 3D inventory render family |
 | `b173-bed-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 bed subsystem conformance |
 | `b173-bedrock-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 bedrock subsystem conformance |
+| `b173-built-environment-materials-subsystem-conformance-cycle` | EXECUTED | official Beta 1.7.3 built-environment material subsystem conformance |
 | `b173-cake-serving-lifecycle-cycle` | CARRIED | official Beta 1.7.3 cake serving lifecycle |
 | `b173-cardinal-placement-state-domain-cycle` | CARRIED | official Beta 1.7.3 cardinal placement state domains |
 | `b173-common-cube-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 common-cube physical envelopes |
@@ -629,7 +630,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-native-tile-entity-render-cycle` | EXECUTED | official Beta 1.7.3 native tile-entity render family |
 | `b173-piston-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 piston subsystem conformance |
 | `b173-portal-block-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 portal block subsystem conformance |
-| `b173-rail-network-subsystem-conformance-cycle` | EXECUTED | official Beta 1.7.3 rail-network subsystem conformance |
+| `b173-rail-network-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 rail-network subsystem conformance |
 | `b173-redstone-device-lifecycle-cycle` | CARRIED | official Beta 1.7.3 redstone device lifecycle family |
 | `b173-redstone-input-controls-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 redstone input-control subsystem conformance |
 | `b173-redstone-ore-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 redstone ore subsystem conformance |
