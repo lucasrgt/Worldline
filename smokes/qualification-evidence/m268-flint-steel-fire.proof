@@ -1,5 +1,5 @@
 schema=1
 id=m268-flint-steel-fire
-fingerprint=530fa801ec29651b5b568adce35f298435c57d4be632b418695772c17686ee5d
+fingerprint=045f3e31994c0ae2f7b1008fd159e0b6bb511d0d1f062ae9d2a0ae8c9925ef2f
 observation.sha256=50fbd4ba9248b6647eee949cc037cb741948628611a039361dfe320c5099dc22
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m459-ghast-fireball-hit-set
-fingerprint=41f1c8cbf530aafdfcb55d8f6a9014c84802bd2d3a0002a93566be3740c91c5a
+fingerprint=ed5370ba57971c77c9aa7b087cb0993218a5492923087293e672aa891769fc61
 observation.sha256=491a34451873fea634086ff4a8c83a68e25ff5a8ed43d75033d4ed22b63f5042
 source=refactor-equivalent

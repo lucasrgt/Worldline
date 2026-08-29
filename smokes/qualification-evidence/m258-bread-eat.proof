@@ -1,5 +1,5 @@
 schema=1
 id=m258-bread-eat
-fingerprint=b09bb2bec670fa297b7d2002f9a1a01b4c983e2800fce5901710769f0d816d83
+fingerprint=becd124fd51e2b1e58345356264c55f0dfd3669f5b43410e99b2505c53dceb04
 observation.sha256=b4e1346292ee27173d9e13cfaed5e36aa2537f60b753b61943bc54e377934b7d
 source=refactor-equivalent

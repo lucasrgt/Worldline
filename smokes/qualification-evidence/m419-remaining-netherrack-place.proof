@@ -1,5 +1,5 @@
 schema=1
 id=m419-remaining-netherrack-place
-fingerprint=016f1c20680db5e67e3b1e727c32444d781dabb272f004126686f74ecfe1bc80
+fingerprint=b5b0f5bac59623f548048d0c31bfbb0e1d0d5c7994d89d5fd7a834b65d64303d
 observation.sha256=c7dec53dcc70e1baa573a851f8e296853cfe16d36ddd182d1cfd5e83a8a4dea7
 source=refactor-equivalent

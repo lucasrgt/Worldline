@@ -1,5 +1,5 @@
 schema=1
 id=m632-map-data-content
-fingerprint=9070b4266f288891d84825c15bb49e91829286c6d7b15092a079e20e8ccabaa8
+fingerprint=200e0b0c7c5fb6635fc8e45f388bde7c7af1229d69d01dac1ae53964f8715e12
 observation.sha256=97209f62fe943bffa3b1df289e97ba6f2efe8a31ec0c7ed4e3d815c405c4056c
 source=refactor-equivalent

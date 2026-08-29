@@ -1,5 +1,5 @@
 schema=1
 id=m28-remote-chunk
-fingerprint=f1cbd9219c06771d0e286497c316f78bb863358ebc99a9dc0bf0e093b6124e17
+fingerprint=a64a00eb8f04fa662b8f308f0f5ba0cd2b5a9adab4cca2b9e9f9d53c9f176f17
 observation.sha256=48c870f9feb71ceff258111e91ea2d115bc01862f0c1e417df4d6e55668ddd84
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m414-lava-obsidian-set
-fingerprint=102415cb70c66a999a70d13ce09afa3c306c863a8aa9e625a6a3d39e7bebf8ab
+fingerprint=e356be35dec1f3831488755ed79446fbec1eda45fcba110d550101a75992963e
 observation.sha256=856101df96a1dea04d9f18e7a1ceef3018dce576227d046030271fa67825fbff
 source=refactor-equivalent

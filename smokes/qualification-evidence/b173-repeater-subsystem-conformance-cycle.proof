@@ -1,5 +1,5 @@
 schema=1
 id=b173-repeater-subsystem-conformance-cycle
-fingerprint=228b2ebf079b38724aacc56456ee6bdbde2d4ee59071e20eac31fe6196f6cead
+fingerprint=d77f32c2345c28c2ec6d24bb23b196332aa28fc51555fd98298b9dacecf4a468
 observation.sha256=2e3088ab913090cbe9d3f96e7a145a3b25260721621588b964b3dbc924e40f6d
 source=refactor-equivalent

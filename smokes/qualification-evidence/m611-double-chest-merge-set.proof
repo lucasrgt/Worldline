@@ -1,5 +1,5 @@
 schema=1
 id=m611-double-chest-merge-set
-fingerprint=65e4629b83357516b2c97ab83875e9e0557ec96231d7c1bbf027b11ea446f40d
+fingerprint=b61df6c7916699ce468d7b6c252372258bf0677cfbc912166331bc79dee71bd0
 observation.sha256=53f7e05b9e2c9e8739262eefaa4c3c303c425824081c545d05a686c3ea7d8ef4
 source=refactor-equivalent

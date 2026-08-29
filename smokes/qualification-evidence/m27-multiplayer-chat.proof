@@ -1,5 +1,5 @@
 schema=1
 id=m27-multiplayer-chat
-fingerprint=caa20d085e3ea55d5c85a2938c192c1aa83d19abd5c9f94f118c8591ca9aed56
+fingerprint=46d5d10c4df0656b61bde318fa1aae69d380c06eb8c47cc1a3f4efd33dc19428
 observation.sha256=a8248c2f8c32194764b56b3376122d0a57638d566709dd0bc688929799d183d7
 source=refactor-equivalent
