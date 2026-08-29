@@ -1,5 +1,5 @@
 schema=1
 id=m628-minecart-booster-bug
-fingerprint=19e4c340165ea01f3e731a67416824989b1ad15ea4d6871e83960542ef98c663
+fingerprint=23fd8dec21f8cacc9739fe26aa9635be9d07ffe9548051343eb905e0ed15d75c
 observation.sha256=021644d481982ecb346469dec2c4f9653325be7c95f3601ed83fd0daf11d9e50
 source=refactor-equivalent

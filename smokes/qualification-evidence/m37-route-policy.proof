@@ -1,5 +1,5 @@
 schema=1
 id=m37-route-policy
-fingerprint=70a3241f4fa3444b324add2e71a4f06db41d2c2d28eb5378c704f4535b235148
+fingerprint=2b9bf7f4551b7f32b17f93b56a23d494df2818c21d9a76c511c5c67d4adb22ac
 observation.sha256=1898d71f8eb0252bf30e1472180376fefed1868135d99405cd17139772419773
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m452-knockback-cooldown-set
-fingerprint=5e3738589defc1f0c38760470f68f0a4e4d4c23b2445bc036d26525022050138
+fingerprint=2b77951f2f64bfcc640aaef37a6c054181f42f78fd1008a3230395821dd34332
 observation.sha256=096b8ab01152b6efc7574f50c63e4f48562ea96d7a3a095b2daaa2faecde5e48
 source=refactor-equivalent

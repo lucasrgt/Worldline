@@ -1,5 +1,5 @@
 schema=1
 id=b173-slab-lifecycle-cycle
-fingerprint=9afa9e13f79afd8b3e0ca7f49ca48f80e91476ba0ee619e1e7afc1ecde75e649
+fingerprint=b95dccfc9231be7eb7591c1ffc94d04771d55c5997af0d8867b83b576a325a09
 observation.sha256=512d9362c8416f85f5a11baea171c36a0bfa6869161189fdb07405ed7c0a92d0
 source=refactor-equivalent

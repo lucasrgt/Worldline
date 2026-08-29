@@ -1,5 +1,5 @@
 schema=1
 id=m223-dirt
-fingerprint=460803abf03c1b171ff528c350888ec332ec1bb9dbc5bbfcf1ca6e58a3e6cf2f
+fingerprint=3d3756b4dabdc5bf712f9076f44e1a32dd2f59ef8f6c688c637132cc4dc24160
 observation.sha256=cb51b4a07fd7c818ad09e7ea60fe06e3c01a3f3bca23a3c618cfe10d5a5cb650
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m208-oak-log
-fingerprint=a5908f75e384c778849f4a1051a2a48f2843eab4c4227e1a919d6110645f4fba
+fingerprint=0c61bfaa3402419a3f344d27199f2a7e0e73e45dd45f87ac6aaa43dcc589c824
 observation.sha256=c371df4ca97d388218b9184b3b6a0ba2745803de01514b4b8562c6ca33b533d2
 source=refactor-equivalent
