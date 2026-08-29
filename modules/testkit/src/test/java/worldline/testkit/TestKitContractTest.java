@@ -68,6 +68,7 @@ public final class TestKitContractTest {
         IronDoorSubsystemFixtureTest.execute();
         MobSpawnerSubsystemFixtureTest.execute();
         RedstoneInputControlsSubsystemFixtureTest.execute();
+        RailNetworkSubsystemFixtureTest.execute();
         SnowAccumulationFixtureTest.execute();
         SnowLayerNonstackingFixtureTest.execute();
         NaturalWolfPackFixtureTest.execute();
