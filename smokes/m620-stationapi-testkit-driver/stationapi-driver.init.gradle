@@ -24,7 +24,7 @@ gradle.projectsEvaluated {
     project.sourceSets.main.java.srcDir(new File(smoke, 'runtime-src'))
     project.sourceSets.main.java.srcDir(new File(worldline, 'adapters/stationapi/runtime-src'))
     def profilerRoot = new File(worldline, 'modules/profiling/src/main/java/worldline/profiling')
-    def profilerTypes = ['FrameCensus', 'JvmProfilerSampler', 'ProfilerArtifacts',
+    def profilerTypes = ['FrameCensus', 'FrameCensusCodec', 'JvmProfilerSampler', 'ProfilerArtifacts',
         'ProfilerMetric', 'ProfilerRecorder', 'ProfilerRegistry', 'ProfilerRun',
         'ProfilerRunCodec', 'ProfilerSchema', 'ProfilerSession', 'WorldlineProfilerMetrics']
     def profilerSources = profilerTypes.collect { new File(profilerRoot, it + '.java') }
