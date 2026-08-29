@@ -1,0 +1,20 @@
+schema = 1
+id = "01m16yekxhqm89zdcqnvgaqyce"
+title = "Worldline extension manifest"
+intent = "Adapt an external mod to Worldline without an in-tree per-mod adapter"
+guidance = "The mod repository owns worldline/extensions/<id>/manifest.properties following the TEMPLATE schema, binding mod sites to Worldline catalog roles. Worldline pins at most one overlay extension for oracled smokes via adapter.extensions in harness.properties; keep overlay mixins and vanilla intercepts on the Worldline side."
+scopes = [
+    "harness.properties",
+    "worldline/extensions/**",
+]
+tags = [
+    "adapter",
+    "extension",
+]
+references = [
+    "adapters/aero-model-lib/semantics/manifest.properties",
+    "worldline/extensions/TEMPLATE.properties",
+]
+recorded_at = "2026-08-29T14:23:19.985362800Z"
+recorded_by = "cursor-fable"
+recorded_commit = "38965bbedbf498429e286486d87299a2c76a6bc4"

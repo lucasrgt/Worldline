@@ -40,6 +40,8 @@ public final class LegacyRetryControlLauncher {
                 root.resolve("tools/integration/OxAlphaRolloverLaunch.java"),
                 root.resolve("tools/integration/OxAlphaRequest.java"),
                 root.resolve("tools/integration/OxAlphaLegacyAdoption.java"),
+                root.resolve("tools/integration/SwarmProcess.java"),
+                root.resolve("tools/integration/CsmContextPolicy.java"),
                 root.resolve("tools/integration/OxAlphaControlMigration.java"),
                 root.resolve("tools/integration/OxAlphaInfrastructureRollover.java"));
         List<String> compile = new ArrayList<>(List.of(javaTool("javac"), "-encoding", "UTF-8",

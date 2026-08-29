@@ -1,0 +1,21 @@
+schema = 1
+id = "NYA-01M16Z7FHWN54QHPXX8ME40RYY"
+title = "Empty probe directories broke milestone ID uniqueness"
+lesson = "Interrupted scaffold or narrative probes leave empty untracked smokes/<id> directories that MilestoneIdUniquenessCheck counted as milestone namespaces, failing the gate with a phantom collision. A directory without any file is not a namespace: skip genuinely empty directories in the uniqueness census and delete such orphans instead of adding collision allowances."
+scope = [
+    "tools/harness/MilestoneIdUniquenessCheck.java",
+    "smokes/**",
+]
+tags = [
+    "gate",
+    "milestone",
+]
+created_at = "2026-08-29T14:36:54Z"
+
+[[occurrences]]
+occurred_at = "2026-08-29T14:36:54Z"
+source = "manual:gate run on 38965bbed failed with unreviewed numeric milestone collision m626 caused by empty untracked smokes/m626-aero-historical-tower-replay left at 2026-08-28T18:02 by an interrupted probe; two more empty orphans m990-scaffold-probe and m999-narrative-probe were removed"
+reported_by = "cursor:fable"
+corrected_by = "cursor:fable"
+recorded_by = "cursor:fable"
+commit = "38965bbed"

@@ -255,10 +255,13 @@ after the registry carries an objective harness, fixture, or oracle change hash;
 never a workaround. `NYA-01M0YZVBKBPB0SB3CJYVQSPNA9` records the M674/M660 recurrence and routes
 it to the versioned `rejected-semantic-exclusion` check.
 
-The preflight distinguishes optional CSM store initialization from recall failure. A `csm context`
-exit code of one is accepted only when stderr consists exclusively of the known uninitialized
-WTW/RTW/NWC messages and stdout contains a NYA section. The separate `csm nya recall` must exit zero
-and present every required scar; context ranking cannot substitute for or block that exact recall.
+The preflight bootstraps the durable WTW/RTW/NWC stores with their idempotent `csm <tool> init`
+commands and then requires `csm context` to exit zero while printing all four tool sections; no
+partial-context allowance remains. The separate `csm nya recall` must exit zero and present every
+required scar, and `csm rtw guide` must present at least one applicable way for the milestone
+paths; context ranking cannot substitute for or block that exact recall. Independently, the
+repository gate fails closed through `CsmSuiteCheck` when the tracked NYA scar or RTW way corpus
+is missing or empty.
 
 The scheduled private workflow runs differential fuzzing and mutation-manifest exploration only
 after the canonical Gate. `NightlyQualityCampaign` splits a hard wall-clock budget between both

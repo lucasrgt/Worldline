@@ -1,0 +1,14 @@
+schema = 1
+id = "01m16ye4jepwbac7ekfk1vzd9p"
+title = "Optimization site annotation"
+intent = "Mark a maintained Worldline source site owned by a catalog optimization"
+guidance = "Annotate the maintained site with worldline.optimization.OptimizationRef carrying the stable optimization ID from worldline/optimizations/catalog. OptimizationCatalogCheck cross-validates annotations against records; source-only references keep product bytecode clean."
+scopes = [
+    "modules/**",
+    "tools/**",
+]
+tags = ["optimization"]
+references = ["modules/optimization/src/main/java/worldline/optimization/OptimizationRef.java"]
+recorded_at = "2026-08-29T14:23:04.270439200Z"
+recorded_by = "cursor-fable"
+recorded_commit = "38965bbedbf498429e286486d87299a2c76a6bc4"

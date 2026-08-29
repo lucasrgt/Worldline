@@ -1,0 +1,11 @@
+schema = 1
+id = "01m16y971qsfq5redq98keeh88"
+title = "Optimization catalog record"
+intent = "Add or change a maintained Worldline performance optimization with a stable optimization ID"
+guidance = "Copy worldline/optimizations/TEMPLATE.properties to worldline/optimizations/catalog/<id>.properties. Keep status honest: candidate records ship default.enabled=false until qualified evidence exists. Annotate maintained sites with OptimizationRef or list source.symbols. Update worldline/optimizations/catalog/README.md counts in the same change."
+scopes = ["worldline/optimizations/**"]
+tags = ["optimization"]
+references = ["worldline/optimizations/catalog/worldline.harness.parallel-smoke-suite.properties"]
+recorded_at = "2026-08-29T14:20:22.967524800Z"
+recorded_by = "cursor-fable"
+recorded_commit = "38965bbedbf498429e286486d87299a2c76a6bc4"

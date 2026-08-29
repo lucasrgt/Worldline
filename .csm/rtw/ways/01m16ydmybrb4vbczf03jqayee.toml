@@ -1,0 +1,17 @@
+schema = 1
+id = "01m16ydmybrb4vbczf03jqayee"
+title = "Adapter semantics manifest"
+intent = "Bind a runtime driver or extension to Worldline catalog roles"
+guidance = "Each adapter owns adapters/<id>/semantics/manifest.properties with schema=worldline.adapter.semantics.v1, kind=driver or extension, owner.prefix, and numbered site/role/subject rows. Drivers are a closed set declared in harness.properties adapter.drivers; extensions are pinned via adapter.extensions. AdapterKindCheck enforces the split."
+scopes = ["adapters/**"]
+tags = [
+    "adapter",
+    "manifest",
+]
+references = [
+    "adapters/aero-model-lib/semantics/manifest.properties",
+    "adapters/stationapi/semantics/manifest.properties",
+]
+recorded_at = "2026-08-29T14:22:48.267165900Z"
+recorded_by = "cursor-fable"
+recorded_commit = "38965bbedbf498429e286486d87299a2c76a6bc4"

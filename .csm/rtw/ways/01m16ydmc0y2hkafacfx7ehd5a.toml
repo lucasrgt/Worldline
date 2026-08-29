@@ -1,0 +1,14 @@
+schema = 1
+id = "01m16ydmc0y2hkafacfx7ehd5a"
+title = "Behavioral smoke fixture declaration"
+intent = "Declare a new milestone smoke with its TestKit contract surface"
+guidance = "Create smokes/<id>/smoke.properties declaring id, candidate.kind, expected.signature or expected.signal, atlas.subsystems, and the five TestKit fields: contract, fixture, actions, observations, binding, evidence=equatable. Gate --milestone validates Atlas and TestKit surfaces against this file. Never invoke tools/smoke/*.java directly."
+scopes = ["smokes/**"]
+tags = [
+    "milestone",
+    "smoke",
+]
+references = ["smokes/ui-export/smoke.properties"]
+recorded_at = "2026-08-29T14:22:47.680414100Z"
+recorded_by = "cursor-fable"
+recorded_commit = "38965bbedbf498429e286486d87299a2c76a6bc4"
