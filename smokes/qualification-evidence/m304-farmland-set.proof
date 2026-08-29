@@ -1,5 +1,5 @@
 schema=1
 id=m304-farmland-set
-fingerprint=040cb1aba5be2a0b936ec89d440073f5134dd3c0d628f74622bbf45a896f958f
+fingerprint=a2facd81c4d4c4deb7ee2b375dcee3cb3136564722f9e74282194332c612694a
 observation.sha256=ce698c2302ea621590b03877774a82c7ea0a5b085bf5536d28093462ed8c121c
 source=refactor-equivalent

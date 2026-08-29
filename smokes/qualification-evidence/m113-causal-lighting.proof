@@ -1,5 +1,5 @@
 schema=1
 id=m113-causal-lighting
-fingerprint=8ee5c101b3cc1d5751d459fd4ae2c825f200ba3bfdf462e651d9662e330fe462
+fingerprint=0875e82f690a4bfbad614738525c2b1f7f9dc86e085e035d48c79586363034cd
 observation.sha256=c54effdf42a0dcf7c37c7417e2a35d0abfdc85297b2b47398af1d4d86632c822
 source=refactor-equivalent

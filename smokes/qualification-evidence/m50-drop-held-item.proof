@@ -1,5 +1,5 @@
 schema=1
 id=m50-drop-held-item
-fingerprint=34d6482eb01b44695664cf7ace9e7d5222fc8a9e0da27470b3f38f1c854f6a5f
+fingerprint=e30ee19c796c4cae2b3f2ec96615e466bacb299e9f930012d09964baf0dbcf1e
 observation.sha256=d481c7ffff96c1d9407666ff5c47f98ff85556bfa50e5501856f8e2bbf3c2629
 source=refactor-equivalent
