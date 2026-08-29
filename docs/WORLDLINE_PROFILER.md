@@ -136,6 +136,9 @@ inferred from the StationAPI runtime receipt.
 | ModLoader | RetroMCP source hooks | Java 8 compile plus loader-neutral artifact test |
 | Forge | RetroMCP source hooks | Java 8 compile plus loader-neutral artifact test |
 
+All three bindings expose the same owned `mod.*` extension API and emit the
+same WLPR schema; loader identity is metadata, not a fork of the profiler.
+
 ## Capture modes and qualification
 
 - `STEADY` is valid only when configured activity counters remain zero.

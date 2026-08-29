@@ -1,5 +1,5 @@
 schema=1
 id=testkit-cycle
-fingerprint=a3e5b9332f88c2565b76320c8a5df871bea675a51974a78264485c12695fd81c
+fingerprint=822e72fcf2f661db83c43864eb69d8ada19d5b6ae0b5e49582f73d108a7bd0a5
 observation.sha256=377855595afd60b4c57b3edfc21091766543771f831eaeea01f05d5c5d6390f2
-source=executed
+source=refactor-equivalent
