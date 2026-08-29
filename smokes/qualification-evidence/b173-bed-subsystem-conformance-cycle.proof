@@ -1,5 +1,5 @@
 schema=1
 id=b173-bed-subsystem-conformance-cycle
-fingerprint=5540dc503febda13ab3b9308fddcc0bd483124bebfe40db46a4bfa5068814880
+fingerprint=d7e6f8a6d61fa22a446cfc9a9937256bc4e69e692c504c007dc967b8789dc61f
 observation.sha256=2c141749ab20b704600ef76a1ae2935e59e02bf4db348fdb2d979b22762b5440
 source=refactor-equivalent

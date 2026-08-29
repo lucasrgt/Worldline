@@ -1,5 +1,5 @@
 schema=1
 id=m276-fire-damage
-fingerprint=b9d0a93db37ea178143d7fbcfed47ffbc3e9db9d2d346da04813073d79ed62f7
+fingerprint=16d79f38bc3e1eacaa2425a5ab473a34bc7fc86d779e66800542b6eda85dd4ef
 observation.sha256=6df6fefaf368f9cde54b95ead0d046469348c56c0bc386f4306b0d0a5a14a043
 source=refactor-equivalent

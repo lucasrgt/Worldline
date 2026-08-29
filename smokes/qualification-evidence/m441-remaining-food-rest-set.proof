@@ -1,5 +1,5 @@
 schema=1
 id=m441-remaining-food-rest-set
-fingerprint=e28829c5ea9d9dfeddb252dda0dc5eda3fa4f0c0e394c069a2e6944e16ca2270
+fingerprint=b66b146a52f8883e2b066b78727a0078076ca0f5cf856655581aff9d64e696b5
 observation.sha256=a742d0481ec2e053071b64ffb13a565582bd3dbbc76859b4d650f2a8b74ac5b7
 source=refactor-equivalent

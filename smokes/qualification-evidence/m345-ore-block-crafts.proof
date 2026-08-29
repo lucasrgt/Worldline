@@ -1,5 +1,5 @@
 schema=1
 id=m345-ore-block-crafts
-fingerprint=992d2d8f85632713e020bdbe3d1b27bdf3e60a2b19d3dedb115cbf02e89554b2
+fingerprint=56d13aa55dbda263062f7333dc8a114e3c86e6b2bf3a805526c35d46ede0b563
 observation.sha256=1a72ee9100a460729b226ac6ea350567f9a953cb2d8832d43545f74bdf9f0427
 source=refactor-equivalent

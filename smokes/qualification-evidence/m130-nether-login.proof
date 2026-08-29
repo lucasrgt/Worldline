@@ -1,5 +1,5 @@
 schema=1
 id=m130-nether-login
-fingerprint=13091ed6957f34c0353e66ccc38bd0ecd136742778549dda9701d0a03ce8ec70
+fingerprint=c9e8f1b9ccae6c82684563ac1c6fccb5b2f5a5c823dbae910ae72668220958ac
 observation.sha256=d04ef062cdda13bb2209d8f6651f0559495d9a9f63f946f460b0e8610c41c4a8
 source=refactor-equivalent

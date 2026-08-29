@@ -1,5 +1,5 @@
 schema=1
 id=m400-remaining-torch-faces
-fingerprint=da3108b1be1dc9132a2c2f6798fcfbfe9b170669b4419472fb57572005f683f4
+fingerprint=f9fb27497b2ee8aaf68bda1231f444ca1f27c35fc1b7b76ee70d3b980efe90b1
 observation.sha256=ce7b2efbd3293b6dc413e9dd2c1b1c8af938af338cd70f50f3b973772d173868
 source=refactor-equivalent

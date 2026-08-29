@@ -1,5 +1,5 @@
 schema=1
 id=m273-chain-boots
-fingerprint=c7d0f256e4d257857813555e364bb311e561ea23828d6e942016736533ded64c
+fingerprint=4f1f00bb5d33b00e994b1c0be58cceee06c18216226b6c80e6fc67865c7e955e
 observation.sha256=509d729ffedcf64fb1478260c71654e80183c1936480c9db878459abe189ec16
 source=refactor-equivalent
