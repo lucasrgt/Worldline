@@ -22,6 +22,7 @@ public final class NativeBlockRenderFixtureTest {
         reject(() -> NativeBlockRenderFixture.verify(plan, List.of(
                 observation(stairs, 1536, "b".repeat(64), 12),
                 observation(cube, 2048, "a".repeat(64), 6))));
+        NativeWorldBlockRenderFixtureTest.main(arguments);
         System.out.println("NativeBlockRenderFixtureTest passed");
     }
 
