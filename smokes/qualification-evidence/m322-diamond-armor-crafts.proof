@@ -1,5 +1,5 @@
 schema=1
 id=m322-diamond-armor-crafts
-fingerprint=dc0e86b465b8f1d43f9e207f5d178136f126894b32cce7696f471d5fb944cc3f
+fingerprint=bce52ad707a984b06e0ac7ec635fbb046dc432c5be70bb426276d1bc6dd6c5c9
 observation.sha256=b54acc14a0bba483871701ba342becc842fe45291b56aca8212a1b71a2b5269d
 source=refactor-equivalent

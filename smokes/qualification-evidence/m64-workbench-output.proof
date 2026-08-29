@@ -1,5 +1,5 @@
 schema=1
 id=m64-workbench-output
-fingerprint=7bfeecf23af25b7e66de9344ab3c6d6959c59b90a682b35bc31ae4d35e0f23c0
+fingerprint=6aa23edfe6004ce7908e6fddacd3f9e4a01927b5c92395133c4337ef71a26b02
 observation.sha256=fa5b92b7450d785451e527f7ecbab2597f99e0b9977b31333541a4e0a155253b
 source=refactor-equivalent

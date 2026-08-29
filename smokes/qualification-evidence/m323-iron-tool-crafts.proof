@@ -1,5 +1,5 @@
 schema=1
 id=m323-iron-tool-crafts
-fingerprint=3946bc4cff3d7b3fe503bf97719e48343a157d81bfef027405c9e9b0757fce9c
+fingerprint=bbd942469b0e419a2a1ef951aeeee94faf56169ff6122bdc7c442239b389bce3
 observation.sha256=17587efabb76f538dcae2f11569071d321ff253c298e403c9de331483b463270
 source=refactor-equivalent

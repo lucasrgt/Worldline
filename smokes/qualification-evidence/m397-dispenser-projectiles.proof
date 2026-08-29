@@ -1,5 +1,5 @@
 schema=1
 id=m397-dispenser-projectiles
-fingerprint=be1da53ebe584c55e1608208918c9a97f5a0906d4a8b288543a09b6b5062a8a7
+fingerprint=b30cca521cc0ec25cc142e4d5d6828e4253e99cedbc85b996e2da9f6a4eb404f
 observation.sha256=66d497bee36abdc673c44336dad9a75afcc08fcf7ade36676c652023100b1731
 source=refactor-equivalent
