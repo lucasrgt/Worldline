@@ -1,5 +1,5 @@
 schema=1
 id=m427-remaining-piston-orient-set
-fingerprint=7acbde92284ed2833e6cdb4b10a07f815309cb2b7c504629fc1280c83706ce1e
+fingerprint=746195d8b3ce58f0c497e47f4c371dd9122d4aee253f71d696b624efe4b9f0ce
 observation.sha256=467d62056ad74b5561c6e6bf67533b1608d7fc66644062154b00b81109e8ad76
 source=refactor-equivalent

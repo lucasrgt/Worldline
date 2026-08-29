@@ -1,5 +1,5 @@
 schema=1
 id=m148-pig-ai-movement
-fingerprint=f8300e841292adcc534fee84cdb44ff6918275b3d41c5fc92f58804341856e9e
+fingerprint=e8d9c65764f3c9ce8786a6f0d76650e83e0f89d21fa3ab398ceda335f721dbec
 observation.sha256=c265a9aa7d1e6254b11458774346f05613c82569948443803f4742740e933397
 source=refactor-equivalent

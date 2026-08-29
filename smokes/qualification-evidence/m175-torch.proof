@@ -1,5 +1,5 @@
 schema=1
 id=m175-torch
-fingerprint=90960490103124b3e9b12ab07789e4af9608f086d45746987e4acc8fe135afd2
+fingerprint=1c6ffdef6b36214c22af20fd3f6b0f1c0f96f4fc615b17697c13631529ad359c
 observation.sha256=1b9a95028d397daf378283e42e4657f27df1e1e761003ef151f0fdd1790c3c3d
 source=refactor-equivalent

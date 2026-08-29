@@ -1,5 +1,5 @@
 schema=1
 id=m225-coal-ore
-fingerprint=4ccd082a44fb0d6eded16b4170fbc521f3ee65cd6ec17f80d2d4ce06aa05cc18
+fingerprint=cbf9c33ccf1f4b42c6cb71c5be1f9964008f80def913d4db1b10676ce42a056b
 observation.sha256=2ff6ed07ba198e90c82b36fb04ced28cc6e6900e1ccca71d4ee74554803e53fd
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m128-cross-chunk-iron-door
-fingerprint=a764b11d14164b2123adb9de78a8a4554aca6195c63bf34859dd36ca5006c0b8
+fingerprint=b3730f69614f8ec758b15df342acc1f83e0471026e04cd0938f92616ac88c3ca
 observation.sha256=96c3cc2f75a5a3864e6be8991639b6e92c5d89a71ec0a88eb788dfca0c05a3c4
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m30-remote-world-cache
-fingerprint=81e9ff9ebc73485e8cebb98351ea3ee6fc4d4f202e66d51ba0c95ecc957a4d2c
+fingerprint=b728cc85dba66322c77bda16d58e7a00932aa8dcfb1523c14580cf68f6c28775
 observation.sha256=c860f794caddb3a82e300412b155e0c8f4a083dade80456d15c2ae50a2cedb14
 source=refactor-equivalent

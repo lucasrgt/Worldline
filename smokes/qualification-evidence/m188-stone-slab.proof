@@ -1,5 +1,5 @@
 schema=1
 id=m188-stone-slab
-fingerprint=79cd411e331b3894da2cb4cde71dbd17cf12f5bda5c23a2dd6200f2225fc7966
+fingerprint=dd64a40deb1ff88dbb0bf50384825d348829a2d77e0e2c37f3bd475b7605bc01
 observation.sha256=58238d33d76d1cd336bbd528ecfe662b6e821d1118c643e6c3023f1b18c800f1
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m581-item-stack-merge-set
-fingerprint=74d4f4f7be212b04a284c778f0663c1cbe6f1424e9d6b8e239a49d4d636446e8
+fingerprint=83103a6461c5e54dadbc04d6f104982cb4fac220bc770caeeb25a988f047cdef
 observation.sha256=e5ffae46d9d670a03384b94fce17db3dbd4b68b80ad19d7198f50cd2fe220b72
 source=refactor-equivalent

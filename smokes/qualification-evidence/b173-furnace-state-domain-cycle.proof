@@ -1,5 +1,5 @@
 schema=1
 id=b173-furnace-state-domain-cycle
-fingerprint=648e9130baee5a1922da83b76e76d1a6fa4444b41f02c0ef6e62775767c8acce
+fingerprint=055ded80cf6838239b9ca24e6531bff86876b70e84dccfd185874e6a8b851bb8
 observation.sha256=8e3a8a8bff0ef466b29c364aa18182af2fa0b7633e13765b2f3120fc716b4537
 source=refactor-equivalent

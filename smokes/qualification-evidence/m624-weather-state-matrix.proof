@@ -1,5 +1,5 @@
 schema=1
 id=m624-weather-state-matrix
-fingerprint=4a42388c8bd49de80591465baf8fd1309b2313c258bccae4788a1dcc0bf8a694
+fingerprint=4b992d64d65b909879d242187defae684aeb03e27d566d46402e896bd83afa88
 observation.sha256=51a9fc9a3f73ef5464bebfbc7810a9801b222687adf355ba9b7789bcb63cc146
 source=refactor-equivalent
