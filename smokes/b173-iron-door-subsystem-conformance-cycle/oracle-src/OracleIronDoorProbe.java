@@ -102,7 +102,10 @@ final class OracleIronDoorProbe {
     String lifecycle() { return "break=lower+upper->air,drops=lower:330x1+upper:none,strength=finite"; }
     String physics() { return "collision=closed-x-3/16+open-z-3/16,opaque=F,cube=F,light=0:0"; }
     String timing() { return "scheduled=F,callback-stable=71:0+71:8"; }
-    String neighbors() { return "paired=stable,orphan-lower=air+330x1,orphan-upper=air+none,support-loss=both-air+330x1"; }
+    String neighbors() {
+        return "paired=stable,orphan-lower=air+330x1,orphan-upper=air+none,"
+                + "support-loss=both-air+330x1";
+    }
     private void validate() {
         require(lowerMask == 255 && upperMask == 65280, "iron-door metadata domain drifted");
         require(strengthClass == 1 && lowerBefore == 7100 && lowerAfter == 0
