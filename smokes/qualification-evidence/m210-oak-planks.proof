@@ -1,5 +1,5 @@
 schema=1
 id=m210-oak-planks
-fingerprint=723e231f9b994a53a68301e2f7c78eb03edad8e50e22adf2e3107be0c5cc963b
+fingerprint=79cf9b355f87bb1cc8ff8650f17f3eb04fbfd1bdc2e19bfab4fead242fd94659
 observation.sha256=00344a185d84b7fb4fd15968e5ef176dc91d8034d17cada76115ac37d3d437f1
 source=refactor-equivalent

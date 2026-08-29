@@ -1,5 +1,5 @@
 schema=1
 id=m124-cross-chunk-light-recovery
-fingerprint=76ce893ce6d2249b08324a8008c1295cb25b0ee17f09c82d6a702d075da1c74c
+fingerprint=58c8dad7de0dd5d2ac70706a28b56462f07531d4fc9612eed2fd90c6685c8900
 observation.sha256=60903e4d40e5297e01412eb69996ce5f3e2b641f1898d67f376ff357d016dbce
 source=refactor-equivalent

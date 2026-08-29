@@ -1,5 +1,5 @@
 schema=1
 id=m365-compass-point-set
-fingerprint=41798116cbfd0cd29d5274e33f7af86420e221069fffa2ed90c70f40638b9164
+fingerprint=8d2004ff48037d09b329fa6b997e57fc69e202b1ae6a3ce145b2ab3038340814
 observation.sha256=45694ff4da19a7b3c554d405380e9535c075d7fee1f3880674813ed5cc9a8b68
 source=refactor-equivalent
