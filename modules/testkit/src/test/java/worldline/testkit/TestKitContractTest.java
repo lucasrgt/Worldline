@@ -69,6 +69,7 @@ public final class TestKitContractTest {
         MobSpawnerSubsystemFixtureTest.execute();
         RedstoneInputControlsSubsystemFixtureTest.execute();
         RailNetworkSubsystemFixtureTest.execute();
+        BuiltEnvironmentMaterialsFixtureTest.execute();
         SnowAccumulationFixtureTest.execute();
         SnowLayerNonstackingFixtureTest.execute();
         NaturalWolfPackFixtureTest.execute();
