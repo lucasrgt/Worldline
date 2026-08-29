@@ -600,6 +600,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m665-leaf-support-distance` | CARRIED | leaf support distance |
 | `m702-powered-rail-slope-propagation` | CARRIED | powered rail slope propagation |
 | `m703-native-3d-inventory-render` | EXECUTED | official Beta 1.7.3 native 3D inventory render family |
+| `b173-bed-subsystem-conformance-cycle` | EXECUTED | official Beta 1.7.3 bed subsystem conformance |
 | `b173-bedrock-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 bedrock subsystem conformance |
 | `b173-cake-serving-lifecycle-cycle` | CARRIED | official Beta 1.7.3 cake serving lifecycle |
 | `b173-cardinal-placement-state-domain-cycle` | CARRIED | official Beta 1.7.3 cardinal placement state domains |
