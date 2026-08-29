@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public final class M620StationapiTestkitDriverCycle {
     private static final String ID = "m620-stationapi-testkit-driver";
     private static final String SIGNAL = "provider=stationapi-b1.7.3,discovery=spi,sessions=2,"
-            + "testkit=2-pass,ticks=2,isolation=fresh-client+server";
+            + "testkit=2-pass,ticks=2,isolation=fresh-client+server,profiler=2-sealed-wlpr";
     private final Path root = Paths.get("").toAbsolutePath().normalize();
     private final Path smoke = root.resolve("smokes").resolve(ID);
     private final Path build = root.resolve(".worldline/smokes").resolve(ID);
@@ -66,6 +66,7 @@ public final class M620StationapiTestkitDriverCycle {
         compile(specs, "8", testApi, smoke.resolve("spec-src"));
         String output = runTestKit(checkout, server, client, classes, adapter, specs);
         verifyOutput(output);
+        verifyProfilerArtifacts();
         verifyCheckout(checkout);
         String signature = sha256(SIGNAL);
         SmokeSupport.require(SIGNAL.equals(SmokeSupport.value(descriptor, "expected.signal")),
@@ -125,6 +126,16 @@ public final class M620StationapiTestkitDriverCycle {
         }
         SmokeSupport.require(count(output, "WORLDLINE_STATIONAPI_SESSION_CLOSE=CLOSED") == 2,
                 "StationAPI sessions were not both closed");
+        SmokeSupport.require(count(output, "WORLDLINE_PROFILER_ARTIFACT=") == 2,
+                "StationAPI profiler artifacts were not both sealed");
+    }
+
+    private void verifyProfilerArtifacts() throws Exception {
+        for (String id : Arrays.asList("s01", "s02")) {
+            Path artifact = build.resolve("profiler-" + id + ".wlpr");
+            SmokeSupport.require(Files.isRegularFile(artifact) && Files.size(artifact) > 64L,
+                    "missing StationAPI profiler artifact: " + artifact);
+        }
     }
 
     private void verifyCheckout(Path checkout) throws Exception {

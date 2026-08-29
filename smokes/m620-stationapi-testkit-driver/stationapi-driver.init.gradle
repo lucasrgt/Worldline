@@ -20,7 +20,10 @@ gradle.projectsEvaluated {
     def actualClient = digest.digest().encodeHex().toString()
     if (actualClient != project.property('worldlineClientSha256').toString())
         throw new GradleException('StationAPI official client SHA-256 drifted: ' + actualClient)
+    def worldline = smoke.parentFile.parentFile
     project.sourceSets.main.java.srcDir(new File(smoke, 'runtime-src'))
+    project.sourceSets.main.java.srcDir(new File(worldline, 'adapters/stationapi/runtime-src'))
+    project.sourceSets.main.java.srcDir(new File(worldline, 'modules/profiling/src/main/java'))
     project.tasks.named('processResources').configure {
         doLast {
             copy {
@@ -37,12 +40,19 @@ gradle.projectsEvaluated {
     if (task.class.name != 'net.fabricmc.loom.task.RunGameTask_Decorated'
             || task.mainClass.getOrNull() != 'net.fabricmc.devlaunchinjector.Main')
         throw new GradleException('StationAPI runClient task identity drifted')
+    def profilerOutput = new File(worldline, '.worldline/smokes/m620-stationapi-testkit-driver/'
+            + 'profiler-' + project.property('worldlineSession') + '.wlpr')
     task.jvmArgs([
         '-Dworldline.stationapi.enabled=true',
         '-Dworldline.stationapi.controlPort=' + project.property('worldlineControlPort'),
         '-Dworldline.stationapi.serverPort=' + project.property('worldlineServerPort'),
         '-Dworldline.stationapi.username=' + project.property('worldlineUsername'),
         '-Dworldline.stationapi.session=' + project.property('worldlineSession'),
+        '-Dworldline.profiler.enabled=true',
+        '-Dworldline.profiler.autoStart=false',
+        '-Dworldline.profiler.capacity=2048',
+        '-Dworldline.profiler.scenario=m620-testkit-driver',
+        '-Dworldline.profiler.output=' + profilerOutput,
         '-Xms512m', '-Xmx1G'
     ] as List)
 }

@@ -97,6 +97,23 @@ The driver owns lifecycle, time source, frame identity, capacity, and artifact
 sealing. The extension only contributes measurements. This keeps multiple mods
 composable and prevents one extension from impersonating a vanilla signal.
 
+## StationAPI runtime binding
+
+The StationAPI driver is the first production runtime binding. Enable it with
+`-Dworldline.profiler.enabled=true`, choose a bounded row capacity with
+`worldline.profiler.capacity`, and set `worldline.profiler.output` to a `.wlpr`
+target. It records renderer frames, client ticks, display present, world render,
+chunk compilation/rebuilds and queue depth, plus available JVM signals.
+Automated drivers may set `worldline.profiler.autoStart=false` and arm capture
+only after their world-readiness oracle, excluding startup and login noise.
+
+Beta 1.7.3 performs tick and `Display.update` before the renderer frame root, so
+those durations are accumulated and attributed to the following frame. Mods may
+register an owned `mod.*` metric through `StationApiProfiler.register(...)`
+before the first frame, then publish through its stable token while
+`StationApiProfiler.active()` is true. Schema registration closes permanently
+when capture begins.
+
 ## Capture modes and qualification
 
 - `STEADY` is valid only when configured activity counters remain zero.

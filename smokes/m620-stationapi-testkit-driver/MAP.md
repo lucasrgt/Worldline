@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=stationapi-testkit-runtime-driver -->
 <!-- nonclaims=bounded-to-qualified-evidence -->
-<!-- frozen-trace=f7abd9d8fa0febff1a719e5a26cac9e1cb208539803ff8d025bb86466c3cb547 -->
+<!-- frozen-trace=482edeab1cf5f710c35a8abeda74e53d4cefc541d848fa6d9318a5500d275956 -->
 
 # M620 StationAPI TestKit driver behavior map
 
@@ -18,6 +18,11 @@ state record before blocking again. The adapter exposes lifecycle state, world
 time, player identity, health, selected slot, and finite pose. Every unqualified
 write and broader domain operation fails closed.
 
+The Worldline-owned profiler overlay opens at the mapped renderer frame root and
+measures tick, display present, world render, chunk compile/rebuild, queue depth,
+and available JVM signals. Closing the control session must seal one nonempty,
+checksummed WLPR artifact for each fresh client process.
+
 The official client artifact resolved by the pinned StationAPI Gradle project
 must have SHA-256
 `af1fa04b8006d3ef78c7e24f8de4aa56f439a74d7f314827529062d5bab6db4c`.
@@ -30,14 +35,14 @@ equivalence.
 Frozen signal:
 
 ```text
-provider=stationapi-b1.7.3,discovery=spi,sessions=2,testkit=2-pass,ticks=2,isolation=fresh-client+server
+provider=stationapi-b1.7.3,discovery=spi,sessions=2,testkit=2-pass,ticks=2,isolation=fresh-client+server,profiler=2-sealed-wlpr
 ```
 
 Frozen trace:
 
 ```text
-v1|provider=stationapi-b1.7.3|discovery=java-spi|sessions=2-fresh|processes=official-server+fabric-stationapi-client-per-test|readiness=login+pose+chunk|control=one-command-one-tick|surface=lifecycle+time+identity+health+slot+pose|shutdown=clean|broader-behavior=not-claimed
+v1|provider=stationapi-b1.7.3|discovery=java-spi|sessions=2-fresh|processes=official-server+fabric-stationapi-client-per-test|readiness=login+pose+chunk|control=one-command-one-tick|surface=lifecycle+time+identity+health+slot+pose|profiler=two-sealed-wlpr|shutdown=clean|broader-behavior=not-claimed
 ```
 
 Frozen semantic SHA-256:
-`f7abd9d8fa0febff1a719e5a26cac9e1cb208539803ff8d025bb86466c3cb547`.
+`482edeab1cf5f710c35a8abeda74e53d4cefc541d848fa6d9318a5500d275956`.

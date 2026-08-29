@@ -49,12 +49,14 @@ public abstract class StationApiDriverMixin {
             if (!ready()) return;
             if (!worldlineReady) {
                 open();
+                StationApiProfilerRuntime.startCapture();
                 emit("READY");
                 worldlineReady = true;
             }
             else emit("STATE");
             String command = worldlineInput.readLine();
             if ("CLOSE".equals(command)) {
+                StationApiProfilerRuntime.finish("controlled-close");
                 emit("CLOSED");
                 worldlineClosing = true;
                 scheduleStop();
