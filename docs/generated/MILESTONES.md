@@ -610,12 +610,13 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-furnace-state-domain-cycle` | CARRIED | official Beta 1.7.3 furnace facing state domain |
 | `b173-gold-shovel-harvest-lifecycle-cycle` | CARRIED | official Beta 1.7.3 gold-shovel harvest lifecycle family |
 | `b173-ground-cover-lifecycle-cycle` | CARRIED | official Beta 1.7.3 ground-cover plant lifecycle family |
-| `b173-ground-flora-conformance-cycle` | EXECUTED | official Beta 1.7.3 ground-flora conformance subsystem |
+| `b173-ground-flora-conformance-cycle` | CARRIED | official Beta 1.7.3 ground-flora conformance subsystem |
 | `b173-harvestable-vegetation-lifecycle-cycle` | CARRIED | official Beta 1.7.3 shear-harvested leaf-variant lifecycle family |
 | `b173-inert-solid-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 inert-solid physical envelopes |
 | `b173-inert-solid-stability-envelope-cycle` | CARRIED | official Beta 1.7.3 inert-solid bounded stability envelope |
 | `b173-lifecycle-provider-cycle` | CARRIED | official Beta 1.7.3 public block lifecycle provider |
 | `b173-multi-drop-mineral-lifecycle-cycle` | CARRIED | official Beta 1.7.3 multi-drop mineral lifecycle family |
+| `b173-mushroom-random-tick-conformance-cycle` | EXECUTED | official Beta 1.7.3 mushroom random-tick conformance subsystem |
 | `b173-redstone-device-lifecycle-cycle` | CARRIED | official Beta 1.7.3 redstone device lifecycle family |
 | `b173-remaining-opaque-cube-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 remaining opaque-cube physical envelopes |
 | `b173-shaded-mushroom-lifecycle-cycle` | CARRIED | official Beta 1.7.3 shaded mushroom lifecycle family |
