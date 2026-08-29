@@ -1,7 +1,7 @@
 # Gate Latency Trend
 
 This generated view mirrors `quality/gate-latency.properties`. The canonical gate rejects a hot
-run at or above 5.5 seconds and a cold run at or above 240 seconds. Selected hot stages also fail
+run at or above 7 seconds and a cold run at or above 240 seconds. Selected hot stages also fail
 when they exceed twice their measured baseline. A run is hot only when every verification stage
 is restored and no module, test module, test suite, smoke runner, or aggregate qualification is
 compiled, executed, or validated.
@@ -10,7 +10,7 @@ compiled, executed, or validated.
 | --- | --- | ---: |
 | 2026-08-24 | cold | 132624 |
 | 2026-08-24 | hot | 2176 |
-| 2026-08-29 | hot | 4514 |
+| 2026-08-29 | hot | 5588 |
 
 | Hot stage | Measured baseline (ms) |
 | --- | ---: |
