@@ -1,5 +1,5 @@
 schema=1
 id=m278-trapdoor-toggle
-fingerprint=984f7ba13f37fe48d173755cbddfe2363bdc399226de02025bbf527d26ccd654
+fingerprint=e87b6e32a5cf64b70e3ac816d56efc4fb17bd2aabc7a5f7b8ca99fd03863fe8b
 observation.sha256=a66063d6e5ac041de1eeb23cf5a56d2fe303a9759694e0dd69ce31347ef8442a
 source=refactor-equivalent

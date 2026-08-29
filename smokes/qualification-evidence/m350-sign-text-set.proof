@@ -1,5 +1,5 @@
 schema=1
 id=m350-sign-text-set
-fingerprint=4c2386381582b556d949de889c5d4a32c18b2df3c2ae07ec1ed69fa8873a5ddf
+fingerprint=28fd011fa298e32464b0b594863c2c68e64ffd2c96b61cc1340c51362b65ca2d
 observation.sha256=12d6f3d9302de6833a34efdedd9599e289de1ccf722ecd4cc8e32e8fad906d79
 source=refactor-equivalent

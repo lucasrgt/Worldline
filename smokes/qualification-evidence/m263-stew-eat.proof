@@ -1,5 +1,5 @@
 schema=1
 id=m263-stew-eat
-fingerprint=df21c9ffb0cc5539852f3460026e24628fde9cb29bdd2a4790ffc81843268ba5
+fingerprint=c3c3cfed34b85495b9ef37f4887f90525913461b0ae33397751367e3ce5ef6e7
 observation.sha256=94038e1a1f75ad42e97730c63d6089ab182511bd6f5889d8a1610d83e5471bc9
 source=refactor-equivalent

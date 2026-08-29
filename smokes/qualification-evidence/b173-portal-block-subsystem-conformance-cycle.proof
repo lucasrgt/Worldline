@@ -1,5 +1,5 @@
 schema=1
 id=b173-portal-block-subsystem-conformance-cycle
-fingerprint=5258e5bb53081e4fed3e8a43feba5739f195bef9e72879c3e44987da49a4647b
+fingerprint=feae3c3bd46eb6e8cdbb5b645476b5af56f7fe90731f46fba4504617f9ac1d8c
 observation.sha256=8e8f2fdfe83fffc121f3ba1138dd244344abd5b9b7fd5064f22dd72216f75d20
 source=refactor-equivalent

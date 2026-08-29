@@ -1,5 +1,5 @@
 schema=1
 id=m381-tnt-prime-set
-fingerprint=2cdf696eb81e75f8701497b247990f158db5a861a7754ba4b85cf0563eb808fd
+fingerprint=7280cf2bd8130bff9d4c3805ae9cf85bfad0b30949f75403269b995b7c843ce9
 observation.sha256=6cf1cfe074d14a3c856cf768c9a8b9cdc9cfa573b8ee2e901445db31692bfad5
 source=refactor-equivalent

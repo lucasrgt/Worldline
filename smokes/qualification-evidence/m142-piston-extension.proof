@@ -1,5 +1,5 @@
 schema=1
 id=m142-piston-extension
-fingerprint=b044e11130b1b5f96eafece8b2233d7c9fe786a99daf7aff31fa1f18fc3ff304
+fingerprint=0f55fffe37203a2af2f639bee5750a38cc33c2f0e060a468b68cffdc5228805a
 observation.sha256=48c199a75f4cb6d77ffd1cfec3081c5fa9880915553d5b7e913ddc7cb6a38a20
 source=refactor-equivalent

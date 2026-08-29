@@ -1,5 +1,5 @@
 schema=1
 id=m664-flowing-water-freeze
-fingerprint=60510643e94388ec400ad5f30935cdf1a20273cfadabbf19e2a302d912ef8428
+fingerprint=e3b40ecd04d77c802929d4aacb2a2976af41939ea2d0a550e59510ffda2c37aa
 observation.sha256=4afe1dba6e24995deddc7a16bf9762d696b633e3d15620e53e2119d3a5d83cd8
 source=refactor-equivalent
