@@ -193,7 +193,7 @@ final class RepositoryVerify {
         report.step("source-policy", () -> stages.execute("source-policy", inputs.sourcePolicy(),
                 () -> new RepositorySourcePolicy(root, config, modules).execute()));
         report.step("runtime-fabric-self-test", () -> new RuntimeFabricCheck(root).execute());
-        recreateBuildDirectory();
+        prepareBuildDirectory();
         report.step("integration-tools", () -> stages.execute("integration-tools", inputs.integration(), () -> {
             IntegrationToolsCheck.execute(root, build); OrchestratorPolicyCheck.execute();
         }));
@@ -210,16 +210,17 @@ final class RepositoryVerify {
             Path distribution = root.resolve(".worldline/dist/testkit");
             stages.executeDirectory("release-artifacts", inputs.testKitArtifacts(), distribution,
                     () -> {
-                        if (Files.exists(distribution, java.nio.file.LinkOption.NOFOLLOW_LINKS))
-                            SafeTreeDelete.delete(distribution);
-                        run(Arrays.asList("java", "tools/testkit/TestKitPackage.java"));
-                    });
-            TestKitReleasePinCheck.validateDirectory(root, distribution);
+                    if (Files.exists(distribution, java.nio.file.LinkOption.NOFOLLOW_LINKS))
+                        SafeTreeDelete.delete(distribution);
+                    run(Arrays.asList("java", "tools/testkit/TestKitPackage.java"));
+                    TestKitReleasePinCheck.validateDirectory(root, distribution);
+                });
         });
         if (requireLocalArtifacts) report.step("mapping-batches",
                 () -> verifyMappingBatches(outputs, modules));
-        report.step("atlas-synchronization",
-                () -> MilestoneContract.validateAllCompiledAtlas(root, build));
+        report.step("atlas-synchronization", () -> stages.execute("atlas-synchronization",
+                inputs.atlasSynchronization(),
+                () -> MilestoneContract.validateAllCompiledAtlas(root, build)));
         report.step("milestone-surfaces", () -> stages.execute("milestone-surfaces", inputs.surfaces(), () -> {
             Path api = outputs.get(modules.indexOf("api"));
             Path testmodel = outputs.get(modules.indexOf("testmodel"));
@@ -231,7 +232,8 @@ final class RepositoryVerify {
             }
             System.out.println("  milestone Atlas + TestKit surfaces agree with descriptors");
         }));
-        report.step("tests", () -> new TestBuild(root, build, config.values(), modules, outputs).compileAndRun());
+        report.step("tests", () -> stages.execute("tests", inputs.tests(),
+                () -> new TestBuild(root, build, config.values(), modules, outputs).compileAndRun()));
         if (runSmoke) report.step("smokes", this::runSmokeSuite);
     }
 
@@ -286,14 +288,15 @@ final class RepositoryVerify {
     }
 
 
-    private void recreateBuildDirectory() throws IOException {
-        if (Files.exists(build)) {
-            if (!build.startsWith(root) || build.equals(root)) {
-                throw new IllegalStateException("refusing to delete unsafe build path: " + build);
-            }
-            SafeTreeDelete.delete(build);
-        }
+    private void prepareBuildDirectory() throws IOException {
+        if (!build.startsWith(root) || build.equals(root))
+            throw new IllegalStateException("unsafe build path: " + build);
         Files.createDirectories(build);
+        List<String> reusable = List.of("classes", "adapter-classes");
+        try (var children = Files.list(build)) {
+            for (Path child : children.toList())
+                if (!reusable.contains(child.getFileName().toString())) SafeTreeDelete.delete(child);
+        }
     }
 
     private void run(List<String> command) throws Exception {

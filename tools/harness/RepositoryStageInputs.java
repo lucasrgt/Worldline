@@ -28,7 +28,8 @@ final class RepositoryStageInputs {
     List<Path> testKitArtifacts() {
         return paths("tools/testkit", "release/testkit.properties",
                 "release/testkit-artifacts.lock", "harness.properties", "modules",
-                "adapters/b173-server");
+                "adapters/b173-server", "tools/harness/TestKitReleasePinCheck.java",
+                "tools/harness/RepositoryVerify.java");
     }
     List<Path> optimization() {
         return paths("tools/harness/OptimizationCatalogCheck.java",
@@ -54,6 +55,14 @@ final class RepositoryStageInputs {
         return paths("adapters", "modules/api", "modules/analysis", "modules/trace",
                 "modules/testmodel", "modules/testapi",
                 "tools/harness/PortableAdapterCheck.java", "tools/harness/ForeignUiContractCheck.java");
+    }
+    List<Path> atlasSynchronization() {
+        return paths("smokes", "behavior", "adapters", "modules/api", "modules/invariants",
+                "modules/semantics", "modules/trace", "modules/minimization", "modules/atlas",
+                "tools/harness/MilestoneContract.java");
+    }
+    List<Path> tests() {
+        return paths("modules", "harness.properties", "tools/harness");
     }
     List<Path> surfaces() {
         return paths("smokes", "behavior", "modules/api", "modules/testmodel", "modules/testapi",

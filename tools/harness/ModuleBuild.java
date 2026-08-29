@@ -133,6 +133,8 @@ final class ModuleBuild {
     }
 
     private void link(Path source, Path target) throws Exception {
+        if (Files.exists(target, java.nio.file.LinkOption.NOFOLLOW_LINKS)
+                && Files.isSameFile(source, target)) return;
         delete(target); Files.createDirectories(target.getParent());
         if (windows()) {
             Process process = new ProcessBuilder("cmd.exe", "/d", "/c", "mklink", "/J",
