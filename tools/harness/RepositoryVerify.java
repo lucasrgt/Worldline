@@ -218,13 +218,16 @@ final class RepositoryVerify {
         });
         if (requireLocalArtifacts) report.step("mapping-batches",
                 () -> verifyMappingBatches(outputs, modules));
+        report.step("atlas-synchronization",
+                () -> MilestoneContract.validateAllCompiledAtlas(root, build));
         report.step("milestone-surfaces", () -> stages.execute("milestone-surfaces", inputs.surfaces(), () -> {
             Path api = outputs.get(modules.indexOf("api"));
             Path testmodel = outputs.get(modules.indexOf("testmodel"));
             Path testapi = outputs.get(modules.indexOf("testapi"));
             for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
                 MilestoneContract contract = new MilestoneContract(root, smoke.id, build);
-                contract.validateAtlas(api); contract.validateTestKit(api, testmodel, testapi);
+                contract.validateAtlas(api);
+                contract.validateTestKit(api, testmodel, testapi);
             }
             System.out.println("  milestone Atlas + TestKit surfaces agree with descriptors");
         }));

@@ -39,6 +39,7 @@ configuration
   -> smoke-runner compilation
   -> module DAG compilation
   -> portable adapter contracts
+  -> unconditional compiled Atlas/Behavior/Census synchronization
   -> Atlas/TestKit milestone surfaces
   -> complete module test suite
   -> smoke suite, only for the smoke profile
@@ -128,4 +129,3 @@ ID, and commit. `IntegrationTrain` reconciles those commits onto an explicit
 base and records conflicts. The orchestrator gate then binds authorization to
 one clean train SHA. A candidate pass, dirty-tree run, direct smoke invocation,
 or receipt from another input identity is never release evidence.
-

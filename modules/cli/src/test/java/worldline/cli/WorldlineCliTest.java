@@ -233,6 +233,21 @@ public final class WorldlineCliTest {
             require(status == 0 && output.toString().contains("atlas.invariant.item-conservation"),
                     "CLI atlas search failed");
             output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"atlas", "index", "chunk"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("WORLDLINE_ATLAS_INDEX=PASS")
+                    && output.toString().contains("score=")
+                    && output.toString().contains("atlas."),
+                    "CLI atlas index failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"atlas", "context", "chunk",
+                    "--format=json", "--budget=20", "--depth=1"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("WORLDLINE_ATLAS_CONTEXT=PASS")
+                    && output.toString().contains("WORLDLINE-ATLAS-CONTEXT/1")
+                    && output.toString().contains("\"certainty\""),
+                    "CLI atlas context failed");
+            output.reset(); error.reset();
             status = WorldlineCli.run(new String[] {"atlas", "coverage"},
                     new PrintStream(output), new PrintStream(error));
             require(status == 0 && output.toString().contains("WORLDLINE_ATLAS_COVERAGE=PASS")

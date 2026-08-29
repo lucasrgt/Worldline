@@ -304,7 +304,7 @@ types into the neutral API. See [`docs/EXTENSIONS.md`](docs/EXTENSIONS.md) and
 - Complete client/server bytecode inventory as the mapping target
 - Cross-namespace graph for official, intermediary, Nostalgia, and RetroMCP
 - Evidence-promoted semantic roles with adapter manifests and coverage gates
-- Generated Atlas knowledge store with provenance, gaps, graph, and matrix
+- Generated Atlas knowledge store with Behavior/Census provenance, ranked agent context, gaps, graph, and matrix
 - Seed terrain atlas through the official dedicated-server wire path
 
 ### Ecosystem boundaries
@@ -347,6 +347,8 @@ worldline trace diff <left.wltrace> <right.wltrace>
 worldline fuzz <out-dir> <seed> <cases> <max-steps> [left.jar] [right.jar]
 worldline atlas status
 worldline atlas show <id>
+worldline atlas index <query>
+worldline atlas context <query> --format=json
 worldline atlas coverage
 worldline atlas <seed> <radius-1..4> <output.html>
 worldline mappings report <runtime and mapping inputs>

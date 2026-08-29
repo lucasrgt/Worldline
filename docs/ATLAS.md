@@ -2,20 +2,22 @@
 
 Atlas is the generated, fail-closed knowledge store for Minecraft Beta 1.7.3.
 It is not a wiki, not a runtime dependency, and not a second source of truth.
-Authoritative Worldline artifacts produce it: the semantic catalog, adapter
-manifests, invariants, explicitly scoped smoke properties, frozen MAP
-signatures, CYCLE docs, tracked `symbols.map` files, and provenance-bound
-ecosystem records.
+Authoritative Worldline artifacts produce it: the semantic catalog, public
+`WorldlineBehavior` catalog, complete Functional Census, milestone Census
+deltas, adapter manifests, invariants, explicitly scoped smoke properties,
+qualification receipts, frozen MAP signatures, CYCLE docs, tracked
+`symbols.map` files, and provenance-bound ecosystem records.
 
 ```text
-SemanticCatalog / AdapterManifest / InvariantEngine
-smokes/*/smoke.properties + MAP.md + docs/M*_CYCLE.md
+SemanticCatalog / WorldlineBehavior / Functional Census
+AdapterManifest / InvariantEngine / qualification receipts
+smokes/*/smoke.properties + census-delta.tsv + MAP.md
         |
         v
 AtlasStore (WORLDLINE-ATLAS/1)
         |
         v
-worldline atlas status|show|search|gaps|coverage|evidence
+worldline atlas index|context|show|gaps|coverage|evidence
 ```
 
 ## Principles
@@ -27,6 +29,8 @@ worldline atlas status|show|search|gaps|coverage|evidence
   scope, missing MAP signature freezes, and coverage units without a
   denominator fail validation without launching Minecraft.
 - Explicit uncertainty. `UNKNOWN` and `OBSERVATIONAL` are legitimate.
+- Agent-ready. Ranked context preserves the exact status while deriving only
+  `VERIFIED`, `INFERRED`, or `UNKNOWN` certainty.
 - Frozen target. Every record is scoped to `b1.7.3`.
 - No false precision. Coverage is a 24-by-7 matrix of declared units with
   denominator `1`. There is no single Worldline percentage.
@@ -37,12 +41,13 @@ Each record is `WORLDLINE-ATLAS/1` with a stable `atlas.<kind>.<token>` ID,
 kind, status, artifact, scope, subject, optional boundary control class,
 coverage denominator, evidence tokens, refs, and SHA-256.
 
-Kinds: `role`, `boundary`, `invariant`, `experiment`, `scenario`,
+Kinds: `role`, `boundary`, `invariant`, `experiment`, `scenario`, `claim`,
 `subsystem`, `coverage-unit`, `hypothesis`, `field`, `loader`, `api`,
 `mapping-set`, `namespace`, `ecosystem-claim`.
 
-Statuses: `VERIFIED`, `STRONG`, `EXPERIMENTAL`, `OBSERVATIONAL`, `REJECTED`,
-`UNKNOWN`, `NATIVE_NONDETERMINISTIC`.
+Statuses: `VERIFIED`, `STRONG`, `EXPERIMENTAL`, `OBSERVATIONAL`, `PARTIAL`,
+`REJECTED`, `RETRACTED`, `NOT_APPLICABLE`, `UNKNOWN`,
+`NATIVE_NONDETERMINISTIC`.
 
 Catalog roles import as `STRONG` when `SemanticMapping.known()` is true. They
 are never auto-promoted to `VERIFIED`. The six conservation rules import as
@@ -50,6 +55,12 @@ are never auto-promoted to `VERIFIED`. The six conservation rules import as
 `atlas.subsystems` and `atlas.artifact=client|server|worldline` in
 `smoke.properties`. Optional `atlas.roles` and `atlas.boundaries` add exact
 semantic references. Atlas never infers meaning from a milestone number.
+
+Every public behavior materializes as its declared `atlas.scenario.<token>`.
+The finite 96-by-11 Functional Census materializes as 1,056
+`atlas.claim.block-NNN.<template>` records, including implicit unknown cells.
+Canonical claims and milestone deltas contribute provenance to the same record;
+later proof does not erase earlier evidence.
 
 Closed hypotheses map negative knowledge: rejected schedulers, open hitch
 causality, out-of-version mechanics, and in-version clusters with no GO.
@@ -75,6 +86,8 @@ are `UNKNOWN` and appear in `worldline atlas gaps`.
 worldline atlas status
 worldline atlas show <id>
 worldline atlas search <term>
+worldline atlas index <query>
+worldline atlas context <query> [--format=json] [--budget=N] [--depth=N]
 worldline atlas gaps
 worldline atlas coverage
 worldline atlas evidence <id>
@@ -87,6 +100,21 @@ worldline atlas changed --since <Mn>
 record refs, and hypothesis controls. `atlas export` is the stable
 `WORLDLINE-ATLAS-STORE/1` document for Workbench consumers. `atlas changed`
 is CLI-only; it is not a Verify gate and does not fail M89.
+
+`atlas index` ranks exact IDs, subjects, evidence, refs, normalized terms, and
+a small versioned synonym set. `atlas context` adds bounded graph neighbors and
+renders either human-readable text or `WORLDLINE-ATLAS-CONTEXT/1` JSON. Ranking,
+tie-breaking, depth, and budgets are deterministic; no network or embedding
+service is required.
+
+## Gate synchronization
+
+Candidate verification loads the compiled `AtlasStore` and requires the
+milestone's public behavior, experiment ref, signature, and every Census-delta
+claim to agree. Repository verification performs the same check once over the
+entire smoke catalog. A descriptor string without a real Atlas record, a delta
+without its claim, a stale signature, or a missing provenance edge fails before
+qualification or release.
 
 ## Legal
 

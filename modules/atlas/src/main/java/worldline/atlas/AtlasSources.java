@@ -24,6 +24,8 @@ final class AtlasSources {
             records.addAll(AtlasInvariantImport.load());
             records.addAll(AtlasMilestoneImport.load(root));
             records.addAll(AtlasScenarioImport.load());
+            records.addAll(AtlasBehaviorImport.load(root));
+            records.addAll(AtlasFunctionalCensusImport.load(root));
             records.addAll(AtlasFieldImport.load());
             records.addAll(AtlasHypothesisImport.load());
             records.addAll(AtlasEcosystemImport.load());

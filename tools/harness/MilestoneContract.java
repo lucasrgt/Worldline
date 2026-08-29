@@ -36,6 +36,7 @@ final class MilestoneContract {
         validateMappingHashes();
         AeroSceneBudget.validateDescriptor(root, descriptor);
         validateAtlas(build.resolve("classes/api"));
+        validateCompiledAtlas();
         validateTestKit(build.resolve("classes/api"), build.resolve("classes/testmodel"),
                 build.resolve("classes/testapi"));
         if (strict) validateQualification();
@@ -127,6 +128,43 @@ final class MilestoneContract {
                     id + " conflicts with its explicit Atlas behavior " + explicit.trim());
             String atlas = (String) type.getMethod("atlasId").invoke(behavior);
             require(atlas.equals("atlas.scenario." + explicit.trim()), "behavior Atlas id drifted: " + atlas);
+        }
+    }
+
+    void validateCompiledAtlas() throws Exception {
+        String[] modules = {"api", "invariants", "semantics", "trace", "minimization", "atlas"};
+        List<URL> urls = new ArrayList<>();
+        for (String module : modules) {
+            Path output = build.resolve("classes").resolve(module);
+            require(Files.isDirectory(output), "candidate " + module + " output is missing");
+            urls.add(output.toUri().toURL());
+        }
+        try (URLClassLoader loader = new URLClassLoader(urls.toArray(URL[]::new), null)) {
+            Class<?> sync = Class.forName("worldline.atlas.AtlasSynchronization", true, loader);
+            Method validate = sync.getMethod("validate", Path.class, String.class);
+            try { validate.invoke(null, root, id); }
+            catch (InvocationTargetException error) {
+                Throwable cause = error.getCause();
+                if (cause instanceof Exception) throw (Exception) cause;
+                throw error;
+            }
+        }
+    }
+
+    static void validateAllCompiledAtlas(Path root, Path build) throws Exception {
+        String[] modules = {"api", "invariants", "semantics", "trace", "minimization", "atlas"};
+        List<URL> urls = new ArrayList<>();
+        for (String module : modules) urls.add(build.resolve("classes").resolve(module)
+                .toUri().toURL());
+        try (URLClassLoader loader = new URLClassLoader(urls.toArray(URL[]::new), null)) {
+            Class<?> sync = Class.forName("worldline.atlas.AtlasSynchronization", true, loader);
+            Method validate = sync.getMethod("validateAll", Path.class);
+            try { validate.invoke(null, root); }
+            catch (InvocationTargetException error) {
+                Throwable cause = error.getCause();
+                if (cause instanceof Exception) throw (Exception) cause;
+                throw error;
+            }
         }
     }
 

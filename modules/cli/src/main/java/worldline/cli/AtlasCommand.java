@@ -7,12 +7,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.List;
 import java.util.Properties;
 import worldline.analysis.AtlasRequest;
 import worldline.analysis.AtlasRunner;
 import worldline.atlas.AtlasDelta;
 import worldline.atlas.AtlasGaps;
 import worldline.atlas.AtlasGraph;
+import worldline.atlas.AtlasContext;
+import worldline.atlas.AtlasContextQuery;
+import worldline.atlas.AtlasHit;
+import worldline.atlas.AtlasIndex;
 import worldline.atlas.AtlasQuery;
 import worldline.atlas.AtlasRecord;
 import worldline.atlas.AtlasStore;
@@ -29,6 +34,10 @@ final class AtlasCommand {
             return show(arguments[2], output, error);
         if (arguments.length == 3 && "search".equals(arguments[1]))
             return search(arguments[2], output, error);
+        if (arguments.length == 3 && "index".equals(arguments[1]))
+            return index(arguments[2], output, error);
+        if (arguments.length >= 3 && "context".equals(arguments[1]))
+            return context(arguments, output, error);
         if (arguments.length == 2 && "gaps".equals(arguments[1])) return gaps(output, error);
         if (arguments.length == 2 && "coverage".equals(arguments[1]))
             return coverage(output, error);
@@ -42,6 +51,8 @@ final class AtlasCommand {
         error.println("usage: worldline atlas status");
         error.println("   or: worldline atlas show <id>");
         error.println("   or: worldline atlas search <term>");
+        error.println("   or: worldline atlas index <query>");
+        error.println("   or: worldline atlas context <query> [--format=json] [--budget=N] [--depth=N]");
         error.println("   or: worldline atlas gaps");
         error.println("   or: worldline atlas coverage");
         error.println("   or: worldline atlas evidence <id>");
@@ -109,6 +120,43 @@ final class AtlasCommand {
             return 0;
         } catch (RuntimeException failure) {
             return fail(error, failure);
+        }
+    }
+
+    private static int index(String query, PrintStream output, PrintStream error) {
+        try {
+            output.print("WORLDLINE_ATLAS_INDEX=PASS\n");
+            output.print(AtlasContextQuery.index(AtlasIndex.search(load(), query, 50)));
+            return 0;
+        } catch (RuntimeException failure) {
+            return fail(error, failure);
+        }
+    }
+
+    private static int context(String[] arguments, PrintStream output, PrintStream error) {
+        try {
+            int budget = 64, depth = 1; boolean json = false;
+            for (int index = 3; index < arguments.length; index++) {
+                String option = arguments[index];
+                if ("--json".equals(option) || "--format=json".equals(option)) json = true;
+                else if (option.startsWith("--budget=")) budget = number(option, "--budget=");
+                else if (option.startsWith("--depth=")) depth = number(option, "--depth=");
+                else throw new IllegalArgumentException("unknown atlas context option " + option);
+            }
+            List<AtlasHit> hits = AtlasContext.build(load(), arguments[2], budget, depth);
+            output.print("WORLDLINE_ATLAS_CONTEXT=PASS\n");
+            output.print(json ? AtlasContextQuery.json(arguments[2], hits)
+                    : AtlasContextQuery.text(arguments[2], hits));
+            return 0;
+        } catch (RuntimeException failure) {
+            return fail(error, failure);
+        }
+    }
+
+    private static int number(String option, String prefix) {
+        try { return Integer.parseInt(option.substring(prefix.length())); }
+        catch (NumberFormatException failure) {
+            throw new IllegalArgumentException("invalid " + prefix.substring(2, prefix.length() - 1));
         }
     }
 

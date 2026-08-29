@@ -3,6 +3,7 @@ package worldline.atlas;
 import java.nio.file.Paths;
 import worldline.semantics.SemanticCatalog;
 import worldline.semantics.SemanticRoles;
+import worldline.api.WorldlineBehavior;
 
 public final class AtlasStoreTest {
     private AtlasStoreTest() {}
@@ -16,7 +17,9 @@ public final class AtlasStoreTest {
         require(first.kind(AtlasKind.SUBSYSTEM).size() == 24, "subsystems");
         require(first.kind(AtlasKind.COVERAGE_UNIT).size() == 168, "coverage units");
         require(first.kind(AtlasKind.BOUNDARY).size() >= 24, "boundary baseline");
-        require(first.kind(AtlasKind.SCENARIO).size() == 1, "scenario format");
+        require(first.kind(AtlasKind.SCENARIO).size() == WorldlineBehavior.all().size() + 1,
+                "behavior scenarios");
+        require(first.kind(AtlasKind.CLAIM).size() == 1056, "functional census denominator");
         require(first.kind(AtlasKind.EXPERIMENT).size() >= 90, "experiments");
         require(first.kind(AtlasKind.HYPOTHESIS).size() >= 40, "hypotheses");
         require(first.kind(AtlasKind.FIELD).size() >= 20, "trace fields");
@@ -51,6 +54,22 @@ public final class AtlasStoreTest {
         require(AtlasSchema.SERVER.equals(first.get("atlas.experiment.m469-void-death-set")
                 .artifact()), "m469 server artifact");
         require(first.sha256().equals(second.sha256()), "store hash drifted");
+        require(first.get(WorldlineBehavior.FLUID_FLOW.atlasId()).refs().contains(
+                "atlas.experiment.b173-source-fluid-dynamics-cycle"), "behavior proof ref");
+        AtlasRecord stoneRegistry = first.get("atlas.claim.block-001.registry-presence");
+        require(AtlasStatus.VERIFIED.equals(stoneRegistry.status()), "wildcard census expansion");
+        require(AtlasCertainty.VERIFIED.equals(AtlasCertainty.of(stoneRegistry)),
+                "verified certainty");
+        AtlasRecord unknown = first.get("atlas.claim.block-001.state-domain");
+        require(AtlasStatus.UNKNOWN.equals(unknown.status()), "implicit census unknown");
+        require(!AtlasIndex.search(first, "chunk", 20).isEmpty(), "semantic chunk index");
+        String context = AtlasContextQuery.json("chunk", AtlasContext.build(first, "chunk", 20, 1));
+        require(context.contains("WORLDLINE-ATLAS-CONTEXT/1")
+                && context.contains("certainty") && context.contains("GRAPH_DEPTH_1"),
+                "agent context json");
+        require(AtlasGaps.list(first).contains(unknown), "unknown Census claim gap");
+        try { AtlasSynchronization.validateAll(Paths.get(".")); }
+        catch (java.io.IOException error) { throw new AssertionError(error); }
         require(first.get("atlas.role.CLIENT_TICK_ROOT").canonical()
                 .equals(AtlasRecord.parse(tick.canonical()).canonical()), "record round-trip");
         require(SemanticCatalog.standard().role("CLIENT_TICK_ROOT").known(), "catalog known");
