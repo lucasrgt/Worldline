@@ -37,6 +37,11 @@ the common contract.
 Start with host logic. Add an official runtime only for behavior that cannot
 be proved outside Minecraft.
 
+The maintained `modloader-forge` profiler installer supplies measurement hooks
+only. It does not load a legacy mod into TestKit, so projects still need the
+generic provider qualification described below before claiming behavioral
+runtime coverage.
+
 ## Recommended external repository layout
 
 ```text

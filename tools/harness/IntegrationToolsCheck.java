@@ -34,6 +34,9 @@ final class IntegrationToolsCheck {
                 "tools/integration/LegacyRetryControlLauncher.java").toString(),
                 "--self-test"), 180) == 0,
                 "legacy retry control source launcher did not compile its closure");
+        require(run(root, List.of(javaTool("java"), root.resolve(
+                "tools/integration/LegacyProfilerInstallerLauncher.java").toString(),
+                "--self-test"), 180) == 0, "legacy profiler installer self-test failed");
         selfTest(output);
         System.out.println("  integration tools: compiled and self-tested");
     }

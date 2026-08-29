@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -6,16 +7,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /** Compiles portable adapters without loading mapped Minecraft classes. */
 final class PortableAdapterCheck {
-    private static final List<String> LEGACY_PROFILER_TYPES = List.of(
-            "ClientProfiler", "ClientProfilerRuntime", "FrameCensus", "FrameCensusCodec",
-            "JvmProfilerSampler", "ProfilerArtifacts", "ProfilerMetric", "ProfilerRecorder",
-            "ProfilerRegistry", "ProfilerRun", "ProfilerRunCodec", "ProfilerSchema",
-            "ProfilerSession", "WorldlineProfilerMetrics");
     private final Path root, build;
     private final String release;
 
@@ -35,11 +32,7 @@ final class PortableAdapterCheck {
         compile(javaFiles(root.resolve("adapters/aero-model-lib/src/main/java")),
                 adapters.resolve("aero-model-lib"),
                 List.of(classes.resolve("analysis"), classes.resolve("trace")));
-        List<Path> legacy = new ArrayList<>();
-        Path profiler = root.resolve("modules/profiling/src/main/java/worldline/profiling");
-        for (String type : LEGACY_PROFILER_TYPES) legacy.add(profiler.resolve(type + ".java"));
-        legacy.addAll(javaFiles(root.resolve("adapters/modloader-forge/runtime-src")));
-        compile(legacy, adapters.resolve("modloader-forge-java8"), List.of(), "8");
+        compile(legacySources(), adapters.resolve("modloader-forge-java8"), List.of(), "8");
         System.out.println("  portable adapters: compiled");
     }
 
@@ -69,8 +62,33 @@ final class PortableAdapterCheck {
         }
     }
 
+    private List<Path> legacySources() throws Exception {
+        Path manifest = root.resolve("adapters/modloader-forge/runtime-sources.properties");
+        Properties values = new Properties();
+        try (Reader reader = Files.newBufferedReader(manifest, StandardCharsets.UTF_8)) {
+            values.load(reader);
+        }
+        require("worldline.legacy-profiler-sources.v1".equals(values.getProperty("schema")),
+                "legacy profiler source manifest schema drifted");
+        int count = Integer.parseInt(values.getProperty("count", "0"));
+        List<Path> sources = new ArrayList<>();
+        for (int index = 1; index <= count; index++) {
+            Path source = root.resolve(values.getProperty("source." + index, "")).normalize();
+            require(source.startsWith(root) && Files.isRegularFile(source),
+                    "missing legacy profiler source " + source);
+            sources.add(source);
+        }
+        require(count == 15 && sources.stream().distinct().count() == count,
+                "legacy profiler source manifest census drifted");
+        return sources;
+    }
+
     private static String javaTool(String name) {
         boolean windows = System.getProperty("os.name", "").toLowerCase(Locale.ROOT).contains("win");
         return Path.of(System.getProperty("java.home"), "bin", name + (windows ? ".exe" : "")).toString();
+    }
+
+    private static void require(boolean value, String message) {
+        if (!value) throw new IllegalStateException(message);
     }
 }

@@ -130,6 +130,12 @@ The hook boundary and Java 8 closure are maintained structurally. Official
 ModLoader/Forge boot remains a separate qualification requirement and is not
 inferred from the StationAPI runtime receipt.
 
+`LegacyProfilerInstallerLauncher` performs a dry-run `--check` or an idempotent
+`--install` against mapped RetroMCP sources. It installs the manifest-pinned
+runtime closure, exact exception-safe wrappers, a loader-bound receipt, and a
+local backup. Unknown, partial, or subsequently modified source state fails
+closed.
+
 | Client ecosystem | Binding | Current proof |
 | --- | --- | --- |
 | StationAPI/Babric | Mixin driver | official b1.7.3 two-session runtime receipt |

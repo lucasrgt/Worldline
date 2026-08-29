@@ -5,9 +5,17 @@ names, WLPR codec, budgets, and `mod.*` extension API as the StationAPI driver. 
 difference is limited to interception: Beta 1.7.3 ModLoader and Forge projects
 source-inject dependencies into RetroMCP and have no Mixin runtime.
 
-Add the profiling module sources and `runtime-src` to the client source tree,
-preserving their packages. Instrument these mapped vanilla boundaries with a
-`try/finally` pair so every begin has exactly one end:
+Run the fail-closed installer from the Worldline repository:
+
+```text
+java tools/integration/LegacyProfilerInstallerLauncher.java --check C:\path\to\retromcp modloader
+java tools/integration/LegacyProfilerInstallerLauncher.java --install C:\path\to\retromcp modloader
+```
+
+Use `forge` as the last argument for a Forge workspace. The installer detects
+`minecraft/src` or `src`, copies the exact Java 8 runtime manifest, creates a
+local `.worldline-profiler/backup-v1`, and wraps these mapped vanilla boundaries
+with `try/finally` so every begin has exactly one end:
 
 | Mapped boundary | Hook pair |
 | --- | --- |
@@ -24,6 +32,10 @@ Launch with `-Dworldline.profiler.enabled=true` and an absolute
 Mods register only owned `mod.*` metrics through `ClientProfiler` before the
 first captured frame. The canonical portability check compiles this complete
 runtime closure with `javac --release 8`.
+
+Repeated installation is a verified no-op. Partial instrumentation, modified
+installed sources, a conflicting runtime file, a mismatched loader receipt, or
+an unrecognized decompile fails before another source is changed.
 
 `loader.id` is descriptive metadata only: captures remain comparable across
 loaders because metric identities, units, aggregation, and WLPR encoding are
