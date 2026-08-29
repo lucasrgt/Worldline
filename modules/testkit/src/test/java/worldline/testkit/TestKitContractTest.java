@@ -67,6 +67,7 @@ public final class TestKitContractTest {
         BedSubsystemFixtureTest.execute();
         IronDoorSubsystemFixtureTest.execute();
         MobSpawnerSubsystemFixtureTest.execute();
+        RedstoneInputControlsSubsystemFixtureTest.execute();
         SnowAccumulationFixtureTest.execute();
         SnowLayerNonstackingFixtureTest.execute();
         NaturalWolfPackFixtureTest.execute();
