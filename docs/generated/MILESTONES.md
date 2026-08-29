@@ -622,6 +622,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-iron-door-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 iron-door subsystem conformance |
 | `b173-lifecycle-provider-cycle` | CARRIED | official Beta 1.7.3 public block lifecycle provider |
 | `b173-locked-chest-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 locked-chest subsystem conformance |
+| `b173-mob-spawner-subsystem-conformance-cycle` | EXECUTED | official Beta 1.7.3 mob-spawner subsystem conformance |
 | `b173-multi-drop-mineral-lifecycle-cycle` | CARRIED | official Beta 1.7.3 multi-drop mineral lifecycle family |
 | `b173-mushroom-random-tick-conformance-cycle` | CARRIED | official Beta 1.7.3 mushroom random-tick conformance subsystem |
 | `b173-native-special-world-render-cycle` | EXECUTED | official Beta 1.7.3 native special world block-render family |
