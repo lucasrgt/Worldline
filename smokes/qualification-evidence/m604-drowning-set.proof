@@ -1,5 +1,5 @@
 schema=1
 id=m604-drowning-set
-fingerprint=4410f06f10844a8dd0292597033ca92b91a19d0bc45004e86f9bd2ec2f42bf5b
+fingerprint=bcbd284c839b1cdfe0a0bbf07f91482a3c3430a27a835587baabbc85bdc3860a
 observation.sha256=0309d1d8b1cd629dcda75d2090cb55bbb17fbfb7c894b5679d41c463dfec56d7
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m394-remaining-slab-place
-fingerprint=6589a434fcb9756fbf6fa4245898e0b5148ff48243a1d808a869906c228d6b9b
+fingerprint=b6eea5bd6ac093fbe95843b21e9e3edfec137a9252ee60e994eb85864b9e1ad1
 observation.sha256=7939076b43b10ef5972487f306388abb58dafba8b1ca28923a3fb952ef2c6a9f
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m514-sw-lava-downward-flow
-fingerprint=2222b53eac141772185abccf428f81359afa38774d4ed079902b9dd0e64484b5
+fingerprint=d5c268923fa23c1148ccfb4a46aafa5eccad13be96af68c4d0532c355c4c59ed
 observation.sha256=701ed9ab8e197906a0a9e3737dce82ad359f8152f4867def70e44a94144fca4c
 source=refactor-equivalent

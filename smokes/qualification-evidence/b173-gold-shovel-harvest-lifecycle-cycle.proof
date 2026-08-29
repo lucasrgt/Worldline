@@ -1,5 +1,5 @@
 schema=1
 id=b173-gold-shovel-harvest-lifecycle-cycle
-fingerprint=023f941dbaca252bebe2aae5f043b3c0eb6bdb372ed77860042bd034662eed5e
+fingerprint=08d40a1e355a4a1d96656696b05aaef73dcbcdac7a635299e893860c02d6e36e
 observation.sha256=1d3e0c69501dc30043c2468865be8f5c7078bcdf07beb32b94c5f0e51242ccf3
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m328-dye-family-crafts
-fingerprint=3830e7b8c8e005600078df947a4f999f30a1acad37ad0ed8a4d5f3f5262a15c2
+fingerprint=80c141eefcc660430275a14a201660c38c4a50b1d3bc073aa2fb1d6ef3060d46
 observation.sha256=7ae29bcd82b147e1286ec7a3b4655087822ac5f5379f18142eab3fd163dda815
 source=refactor-equivalent
