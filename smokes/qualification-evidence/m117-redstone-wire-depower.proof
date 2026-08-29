@@ -1,5 +1,5 @@
 schema=1
 id=m117-redstone-wire-depower
-fingerprint=9ec385ff9fc70d64cb9403d7ad443580bc8c287d4d684cf0a871753c320fcbfb
+fingerprint=67c7473f5645de95d85853e0995a927d8107962b7d7d136f55e957127cdff508
 observation.sha256=87c06977c34465cb580ba9a857102c62e6953ede7cfe339c2730fc9673a699fe
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m524-sw-dig-status-boundaries
-fingerprint=121a0d695f077d016a503219f55cbe96da652c199356a0812f5c90fdf0296480
+fingerprint=c10824f7fea5968a1a06327c53c268426862aaefe583c15393a5d4008e2508c8
 observation.sha256=bb181bdd9db372111cec4f232aad960bc58be6fc343dc384dc4ccb89dd1f32ea
 source=refactor-equivalent

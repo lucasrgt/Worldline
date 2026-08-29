@@ -1,5 +1,5 @@
 schema=1
 id=m334-record-set
-fingerprint=05d86f79a9c0ce6cffcae709fa25aa0b2fc14989833779ca9cc0b78e91bbf48e
+fingerprint=3072cc2ef4f018d125bde6f3f6c689d62d84e0ae44a96cc18bf5f9658004144c
 observation.sha256=b139e039c60f517453a6e8e0c3fe4f87b11f5c73faa81a77c7fceb7645428d53
 source=refactor-equivalent

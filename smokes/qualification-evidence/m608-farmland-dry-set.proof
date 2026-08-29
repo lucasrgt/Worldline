@@ -1,5 +1,5 @@
 schema=1
 id=m608-farmland-dry-set
-fingerprint=d0e413e1f102ed6a7e0d0b150ebf54fc1de35cff8fb574bf0c8c2fb7ae3cc653
+fingerprint=b78e5f7e06d409fd0ed1948eda19be68a79a14011325f2d09b69fc9766fada62
 observation.sha256=500e884b0c4924953192a7084d7c951d24c3ce6a6417360c5ddb77721e6ec7fc
 source=refactor-equivalent
