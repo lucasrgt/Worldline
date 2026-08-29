@@ -17,6 +17,8 @@ public final class WorldlineRedstoneBehaviors {
             "Piston extension displaces a player or dropped item entity");
     public static final WorldlineBehavior STICKY_PISTON_BUD = define("sticky-piston-bud",
             "Sticky piston QC-latched until a neighbor update extends without direct power");
+    public static final WorldlineBehavior PISTON_SUBSYSTEM = define("piston-subsystem",
+            "Four-block piston state, lifecycle, persistence, physics, and neighbor conformance");
     public static final WorldlineBehavior REDSTONE_ONE_TICK = define("redstone-one-tick",
             "A 1-tick pulse cuts at lever 69:9 and drops a sticky piston payload");
     public static final WorldlineBehavior DOOR_SOUND_EVENT = define("door-sound-event",
