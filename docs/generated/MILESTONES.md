@@ -600,7 +600,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m665-leaf-support-distance` | CARRIED | leaf support distance |
 | `m702-powered-rail-slope-propagation` | CARRIED | powered rail slope propagation |
 | `m703-native-3d-inventory-render` | EXECUTED | official Beta 1.7.3 native 3D inventory render family |
-| `b173-bed-subsystem-conformance-cycle` | EXECUTED | official Beta 1.7.3 bed subsystem conformance |
+| `b173-bed-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 bed subsystem conformance |
 | `b173-bedrock-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 bedrock subsystem conformance |
 | `b173-cake-serving-lifecycle-cycle` | CARRIED | official Beta 1.7.3 cake serving lifecycle |
 | `b173-cardinal-placement-state-domain-cycle` | CARRIED | official Beta 1.7.3 cardinal placement state domains |
@@ -619,6 +619,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-harvestable-vegetation-lifecycle-cycle` | CARRIED | official Beta 1.7.3 shear-harvested leaf-variant lifecycle family |
 | `b173-inert-solid-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 inert-solid physical envelopes |
 | `b173-inert-solid-stability-envelope-cycle` | CARRIED | official Beta 1.7.3 inert-solid bounded stability envelope |
+| `b173-iron-door-subsystem-conformance-cycle` | EXECUTED | official Beta 1.7.3 iron-door subsystem conformance |
 | `b173-lifecycle-provider-cycle` | CARRIED | official Beta 1.7.3 public block lifecycle provider |
 | `b173-locked-chest-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 locked-chest subsystem conformance |
 | `b173-multi-drop-mineral-lifecycle-cycle` | CARRIED | official Beta 1.7.3 multi-drop mineral lifecycle family |
