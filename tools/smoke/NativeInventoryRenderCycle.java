@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-/** Qualifies one declarative native block-render family across mapped and official clients. */
+/** Qualifies one declarative RenderBlocks or tile-entity family across both client lanes. */
 public final class NativeInventoryRenderCycle {
     private final Path root = Paths.get("").toAbsolutePath().normalize();
     private final Properties config = new Properties();
