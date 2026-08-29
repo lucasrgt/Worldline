@@ -602,7 +602,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m703-native-3d-inventory-render` | EXECUTED | official Beta 1.7.3 native 3D inventory render family |
 | `b173-bed-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 bed subsystem conformance |
 | `b173-bedrock-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 bedrock subsystem conformance |
-| `b173-built-environment-materials-subsystem-conformance-cycle` | EXECUTED | official Beta 1.7.3 built-environment material subsystem conformance |
+| `b173-built-environment-materials-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 built-environment material subsystem conformance |
 | `b173-cake-serving-lifecycle-cycle` | CARRIED | official Beta 1.7.3 cake serving lifecycle |
 | `b173-cardinal-placement-state-domain-cycle` | CARRIED | official Beta 1.7.3 cardinal placement state domains |
 | `b173-common-cube-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 common-cube physical envelopes |
@@ -650,6 +650,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-support-face-attachment-lifecycle-cycle` | CARRIED | official Beta 1.7.3 support-face attachment lifecycle family |
 | `b173-terrain-crafted-solid-stability-envelope-cycle` | CARRIED | official Beta 1.7.3 terrain-crafted solid bounded stability envelope |
 | `b173-tile-utility-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 tile-utility physical envelopes |
+| `b173-vegetation-ecology-subsystem-conformance-cycle` | EXECUTED | official Beta 1.7.3 vegetation ecology subsystem conformance |
 | `b173-wall-attachment-state-domain-cycle` | CARRIED | official Beta 1.7.3 wall-attachment state domains |
 | `b173-wooden-door-state-domain-cycle` | CARRIED | official Beta 1.7.3 wooden-door reachable state domain |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
