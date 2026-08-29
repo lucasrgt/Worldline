@@ -8,6 +8,7 @@ final class WorldlineBehaviorCatalog {
 
     static Map<String, WorldlineBehavior> freeze() {
         if (WorldlinePlacementBehaviors.DECORATIVE == null
+                || WorldlineRenderBehaviors.SPECIAL_WORLD_BLOCKS == null
                 || WorldlineRedstoneBehaviors.REPEATER_DIODE == null
                 || WorldlineEnvironmentBehaviors.MUSHROOM_SPREAD == null
                 || WorldlineWorldBehaviors.WHEAT_LIGHT_HALT == null

@@ -1,0 +1,17 @@
+# owner kind descriptor named official
+net/minecraft/src/RenderBlocks	c		net/minecraft/src/RenderBlocks	cv
+net/minecraft/src/RenderBlocks	m	(Lnet/minecraft/src/Block;III)Z	renderBlockByRenderType	b
+net/minecraft/src/RenderBlocks	m	(I)Z	renderItemIn3d	a
+net/minecraft/src/Block	c		net/minecraft/src/Block	uu
+net/minecraft/src/Block	f	[Lnet/minecraft/src/Block;	blocksList	m
+net/minecraft/src/Block	f	Lnet/minecraft/src/Material;	blockMaterial	bA
+net/minecraft/src/Block	m	()I	getRenderType	b
+net/minecraft/src/IBlockAccess	c		net/minecraft/src/IBlockAccess	xp
+net/minecraft/src/IBlockAccess	m	(III)I	getBlockId	a
+net/minecraft/src/IBlockAccess	m	(III)I	getBlockMetadata	e
+net/minecraft/src/Material	c		net/minecraft/src/Material	ln
+net/minecraft/src/Material	f	Lnet/minecraft/src/Material;	air	a
+net/minecraft/src/Tessellator	c		net/minecraft/src/Tessellator	nw
+net/minecraft/src/Tessellator	f	Lnet/minecraft/src/Tessellator;	instance	a
+net/minecraft/src/Tessellator	m	()V	startDrawingQuads	b
+net/minecraft/src/Tessellator	m	()V	draw	a
