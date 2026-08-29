@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-/** Qualifies one declarative native inventory-render family across mapped and official clients. */
+/** Qualifies one declarative native block-render family across mapped and official clients. */
 public final class NativeInventoryRenderCycle {
     private final Path root = Paths.get("").toAbsolutePath().normalize();
     private final Properties config = new Properties();
@@ -29,7 +29,7 @@ public final class NativeInventoryRenderCycle {
         }
         try { new NativeInventoryRenderCycle(arguments[0]).execute(); }
         catch (Exception error) {
-            System.err.println("native 3D inventory render cycle failed: " + error.getMessage());
+            System.err.println("native block-render cycle failed: " + error.getMessage());
             System.exit(1);
         }
     }
@@ -54,7 +54,7 @@ public final class NativeInventoryRenderCycle {
 
         Path build = root.resolve(".worldline/smokes").resolve(id);
         Files.createDirectories(build);
-        compile(smoke.resolve("src"), build.resolve("classes"), lwjgl);
+        compile(smoke.resolve("src"), build.resolve("classes"), lwjgl, worldRender());
         Result mappedFirst = run(build, mapped, official, lwjgl, natives, smoke, "mapped", "first");
         Result mappedSecond = run(build, mapped, official, lwjgl, natives, smoke, "mapped", "second");
         Result officialFirst = run(build, mapped, official, lwjgl, natives, smoke, "official", "first");
@@ -88,14 +88,19 @@ public final class NativeInventoryRenderCycle {
             Path smoke, String role, String attempt) throws Exception {
         String separator = System.getProperty("path.separator");
         Path evidence = build.resolve(role + '-' + attempt + ".properties");
+        String clientPath = role.equals("mapped")
+                ? mapped + separator + official : official.toString();
         List<String> command = new ArrayList<>(Arrays.asList("java", "-Djava.awt.headless=true",
                 "-Dorg.lwjgl.librarypath=" + natives.toAbsolutePath(), "-classpath",
-                build.resolve("classes") + separator + mapped + separator + official + separator + lwjgl,
-                value("cycle.smoke.main"), role,
-                value(role + ".renderer.class"), value(role + ".block.class"),
-                value(role + ".blocks.field"), value(role + ".render.method"),
-                value(role + ".render-type.method"), value(role + ".render-3d.method"),
-                official.toString(), smoke.resolve("subjects.tsv").toString(), evidence.toString()));
+                build.resolve("classes") + separator + clientPath + separator + lwjgl,
+                value("cycle.smoke.main"), role));
+        if (worldRender()) addWorldMapping(command, role);
+        else command.addAll(List.of(value(role + ".renderer.class"),
+                value(role + ".block.class"), value(role + ".blocks.field"),
+                value(role + ".render.method"), value(role + ".render-type.method"),
+                value(role + ".render-3d.method")));
+        command.addAll(List.of(official.toString(), smoke.resolve("subjects.tsv").toString(),
+                evidence.toString()));
         String output = capture(command);
         String prefix = value("cycle.output.prefix");
         require(output.contains(prefix + "ROLE=" + role), "native render role is absent");
@@ -108,12 +113,22 @@ public final class NativeInventoryRenderCycle {
                 Files.readString(evidence, StandardCharsets.UTF_8));
     }
 
-    private void compile(Path source, Path output, Path lwjgl) throws Exception {
+    private void compile(Path source, Path output, Path lwjgl, boolean world) throws Exception {
         Files.createDirectories(output);
         List<String> command = new ArrayList<>(Arrays.asList("javac", "-encoding", "UTF-8",
                 "--release", "8", "-Xlint:all,-options", "-Werror", "-classpath",
                 lwjgl.toString(), "-d", output.toString()));
-        for (String relative : List.of(
+        List<String> inputs = world ? List.of(
+                "modules/testapi/src/main/java/worldline/testkit/NativeBlockRenderSubject.java",
+                "modules/testapi/src/main/java/worldline/testkit/NativeWorldBlockRenderSubject.java",
+                "modules/testapi/src/main/java/worldline/testkit/NativeWorldBlockRenderObservation.java",
+                "modules/testapi/src/main/java/worldline/testkit/NativeWorldBlockRenderPlan.java",
+                "modules/testkit/src/main/java/worldline/testkit/NativeWorldBlockRenderEvidence.java",
+                "modules/testkit/src/main/java/worldline/testkit/NativeWorldBlockRenderFixture.java",
+                "adapters/b173-client/src/main/java/worldline/b173/B173WorldBlockAccess.java",
+                "adapters/b173-client/src/main/java/worldline/b173/B173WorldBlockFrame.java",
+                "adapters/b173-client/src/main/java/worldline/b173/B173TerrainTexture.java",
+                "adapters/b173-client/src/main/java/worldline/b173/B173SpecialWorldRender.java") : List.of(
                 "modules/testapi/src/main/java/worldline/testkit/NativeBlockRenderSubject.java",
                 "modules/testapi/src/main/java/worldline/testkit/NativeBlockRenderObservation.java",
                 "modules/testapi/src/main/java/worldline/testkit/NativeBlockRenderPlan.java",
@@ -121,11 +136,25 @@ public final class NativeInventoryRenderCycle {
                 "modules/testkit/src/main/java/worldline/testkit/NativeBlockRenderFixture.java",
                 "adapters/b173-client/src/main/java/worldline/b173/B173BlockInventoryFrame.java",
                 "adapters/b173-client/src/main/java/worldline/b173/B173TerrainTexture.java",
-                "adapters/b173-client/src/main/java/worldline/b173/B173BlockInventoryRender.java")) {
+                "adapters/b173-client/src/main/java/worldline/b173/B173BlockInventoryRender.java");
+        for (String relative : inputs) {
             command.add(root.resolve(relative).toString());
         }
         command.add(source.resolve(value("cycle.smoke.source")).toString());
         capture(command);
+    }
+
+    private void addWorldMapping(List<String> command, String role) {
+        for (String suffix : List.of("renderer.class", "block.class", "access.class",
+                "blocks.field", "render.method", "render-type.method", "material.field",
+                "material.class", "air.field", "block-id.method", "metadata.method",
+                "tessellator.class", "tessellator.instance", "start.method", "draw.method")) {
+            command.add(value(role + '.' + suffix));
+        }
+    }
+
+    private boolean worldRender() {
+        return "native-special-world-render".equals(config.getProperty("behavior"));
     }
 
     private Path writeEvidence(Path build, Result result) throws IOException {
