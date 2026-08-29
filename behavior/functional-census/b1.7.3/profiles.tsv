@@ -69,7 +69,7 @@ b1.7.3:block/067	false	directional,special-collision
 b1.7.3:block/068	false	sign,support-dependent,directional,tile-entity
 b1.7.3:block/069	false	redstone-component,support-dependent,directional,stateful-metadata
 b1.7.3:block/070	false	redstone-component,support-dependent,stateful-metadata
-b1.7.3:block/071	true	door,multi-block,directional,redstone-component,stateful-metadata
+b1.7.3:block/071	true	directional,door,multi-block,redstone-component,special-collision,stateful-metadata,support-dependent
 b1.7.3:block/072	false	redstone-component,support-dependent,stateful-metadata
 b1.7.3:block/073	false	redstone-component,stateful-metadata,simple-solid
 b1.7.3:block/074	false	redstone-component,stateful-metadata,luminous
