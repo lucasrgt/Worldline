@@ -1,5 +1,5 @@
 schema=1
 id=redstone-piston-extend
-fingerprint=9c70103002edd9ffa0e4fa060d2b0d2c1069fe045ed0469d629ad22e86e7e4bc
+fingerprint=354315cff398142c2fcbc5b1d09b43f330e5a2e037505ddf74f70f7f999dea6d
 observation.sha256=b0b808a6538d69a14208d5a2d18fe38ab5784856f1d0b01b3b541b9a3943eadb
 source=refactor-equivalent

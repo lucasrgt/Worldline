@@ -1,5 +1,5 @@
 schema=1
 id=m183-rails
-fingerprint=be209dd9296fdab7fc71374fe7115578b90b66fc4cfc5bbd2de140079c5051f3
+fingerprint=5a1a6fea38addf0fdab6e1bf9b170fcdea8173e1a92819d20ec48bd9dbe00686
 observation.sha256=189c56b02557d604b8886acbf0eb51505d54eab8cedbb903987462eebb7b3c46
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m243-redstone-wire
-fingerprint=f948e443bf21e6db9a347c55cfefed27eb759618559298be11f03267ec36dfd3
+fingerprint=3188a372f7161b42fcd6d02e361e1184ed9da92da65286726858667b9734e1ef
 observation.sha256=6df39ca0f09d2fc710e2636bbad733e4c6e4b94ce946e915ac6367443b22a45f
 source=refactor-equivalent
