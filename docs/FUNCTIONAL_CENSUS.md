@@ -201,6 +201,13 @@ its complete reachable domain. These 19 public TestKit claims bring the census t
 claims (68.47%), leave 333 unresolved, and reduce the target gap to 321. Fifteen fresh official
 worlds per replica completed across two full executions with zero retries and failures, bound by
 semantic signature `30842230f6bf54ee567f079462ebc2833718be060a57571b4f22aa14c7026420`.
+The mushroom random-tick conformance subsystem closes state, passable collision, controlled light,
+native same-species spread, and support-loss neighbor behavior for brown and red mushrooms. Its
+bounded evidence excludes the winning random window and target coordinate while preserving the
+causal transition. These 10 public TestKit claims bring the census to 733 verified claims (69.41%),
+leave 323 unresolved, and reduce the target gap to 311. Two complete replicas across four fresh
+official worlds matched signature
+`75e80ab5791750c693ca0225abff54a60d6724fc0cc4d1982ed5477f4180c37d` with zero retries or failures.
 
 The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
 extended base; sticky-piston evidence breaks an extended head; wooden-door evidence breaks the
@@ -271,6 +278,8 @@ The sign subsystem lifecycle reduces the remaining target gap to 340 while keepi
 sign-render claims explicitly unresolved.
 The ground-flora conformance subsystem reduces it to 321 while keeping tall-grass state domain and
 all four native-render claims explicitly unresolved.
+The mushroom random-tick conformance subsystem reduces it to 311 while keeping native mushroom
+rendering and giant-mushroom growth outside its claims.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
