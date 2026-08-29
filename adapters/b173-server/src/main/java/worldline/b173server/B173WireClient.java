@@ -129,7 +129,8 @@ public final class B173WireClient implements ObjectObservationSession {
     @Override public RemoteWorldView awaitBlock(BlockPosition position, BlockState expected) {
         require(connection == MultiplayerConnection.CONNECTED, "session is not connected");
         try { return play.awaitBlock(position, expected); } catch (IOException error) {
-            throw new IllegalStateException("expected block receive failed", error); }
+            throw new IllegalStateException("expected block receive failed at " + position
+                    + " for " + expected, error); }
     }
 
     @Override public RemoteWorldView sustainTicks(int ticks) {
