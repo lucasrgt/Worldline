@@ -130,6 +130,12 @@ The hook boundary and Java 8 closure are maintained structurally. Official
 ModLoader/Forge boot remains a separate qualification requirement and is not
 inferred from the StationAPI runtime receipt.
 
+| Client ecosystem | Binding | Current proof |
+| --- | --- | --- |
+| StationAPI/Babric | Mixin driver | official b1.7.3 two-session runtime receipt |
+| ModLoader | RetroMCP source hooks | Java 8 compile plus loader-neutral artifact test |
+| Forge | RetroMCP source hooks | Java 8 compile plus loader-neutral artifact test |
+
 ## Capture modes and qualification
 
 - `STEADY` is valid only when configured activity counters remain zero.
