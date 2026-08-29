@@ -1,5 +1,5 @@
 schema=1
 id=m656-server-admission-matrix
-fingerprint=ed4a083875696eb36605defb5a04ee45c64b54f7794373e2fe9ddaeea9baa501
+fingerprint=5cdb5125048e07f961863e3fcfabc7445fe429356f58942416f30ffffdbc0510
 observation.sha256=2bbec92d6c1a41e803419be88e1395b7d5343e70dc1412e12602fb0c4030e6fa
 source=refactor-equivalent

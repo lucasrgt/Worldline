@@ -1,5 +1,5 @@
 schema=1
 id=m138-horizontal-lava
-fingerprint=bdff0fe7f5bccae392813819e7486d9af198b7d60d8b395e6f56b7d9dfc95d7a
+fingerprint=a928195cde3f4c25ae28700a182a3a5b4ed5d06a93ab73fed446342234efadca
 observation.sha256=f1d5832ac76c05b0cc786b294c8f29126f9d0a668c6326ca2ecae17b2824a760
 source=refactor-equivalent

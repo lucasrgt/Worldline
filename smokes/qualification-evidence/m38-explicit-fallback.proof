@@ -1,5 +1,5 @@
 schema=1
 id=m38-explicit-fallback
-fingerprint=bc73b75103ec76764c5768b31d86f5da3d21948bf1eec98ecc78dab9f1458e7d
+fingerprint=e6af1c8f1dd0a06e2c7d34de43a1d247bf92cbe755051aabfdf9ae4e1bab8f51
 observation.sha256=8c7718793c579823c40b0c399f56b87fbe4668adf8daeeceb0203e969e15c646
 source=refactor-equivalent

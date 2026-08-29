@@ -1,5 +1,5 @@
 schema=1
 id=m654-sky-brightness-cycle
-fingerprint=77983b6b669d8ba958e0fd2178f4ada762f12a654469753a1a58e2f9a21a910b
+fingerprint=2bda7bbab57cc753011184aef822b2659633b9ec571322b7ea0936093a3dfa7d
 observation.sha256=e5b6b6e704daa5e44897dae41fedc812a3803626ad4a28560b1398432459dcc4
 source=refactor-equivalent

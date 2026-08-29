@@ -1,5 +1,5 @@
 schema=1
 id=m548-piston-bud-set
-fingerprint=bc3f836505a2b5084b296fa25bd612a4f3477107e4dcf7a13fd4f244091cc119
+fingerprint=f19e03d3591a984b6f3418f7c6b930f261faa32539c93e2a7745f05bbedf97cf
 observation.sha256=64edc418a23140583ce5015dead697010582f99862cc5e19d6e8e7e53f02bcff
 source=refactor-equivalent

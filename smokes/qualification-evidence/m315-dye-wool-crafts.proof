@@ -1,5 +1,5 @@
 schema=1
 id=m315-dye-wool-crafts
-fingerprint=c35a800980795a7fb9d7b915c1975b5b459c2126c2cb7c08cef3d0f5528fffe2
+fingerprint=31e5cb208ee0feef8cd73ab9aa35fca5e9262f9a04b5a17a0840dbdb7165a176
 observation.sha256=f9b78bfc4331c0fc5e92dd33443743a0c9b46e17815f9f89b20fd2535c2405d2
 source=refactor-equivalent

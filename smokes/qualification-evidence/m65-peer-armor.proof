@@ -1,5 +1,5 @@
 schema=1
 id=m65-peer-armor
-fingerprint=235d47bc7ed2fcfc5abf82f3790cece721183d0aab9a5c7b748fee885b4beea5
+fingerprint=bd486d1be53ea226f30327d1f2d8f1247578558463b7abc42d00db8a73973be4
 observation.sha256=7bf03514d4331779e14ecaf3379ecf89d3bea276115ca77e909e5a9160587fe4
 source=refactor-equivalent

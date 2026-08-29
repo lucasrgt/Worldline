@@ -1,5 +1,5 @@
 schema=1
 id=m120-horizontal-water
-fingerprint=fe958d8e12db0b11ecac9768db3f02c570b8b83c974a8b04c32bc3209f62f77d
+fingerprint=45e03805f7a739b6871a415bea64d1b717bc66ada3d271c7e8d7dfee0d4fa26d
 observation.sha256=c0bbf83eadc6fd56c3697b50ed2d653aebc2fd9e132467354a9bcae89a6daa29
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m301-axe-log-breaks
-fingerprint=51ebb5b48f765e246341b59c91cecb99d608224d5718587a6a557ccefb4e5e9f
+fingerprint=e579b2aeaa69eb7725cd8d75fc372f74b1659ae23b42d16cb9ac935251c9d18f
 observation.sha256=6e62367a3c72d64d2bda9180cb0e5b0484671ef7530e74968d511330d7a06365
 source=refactor-equivalent
