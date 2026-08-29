@@ -46,6 +46,7 @@ public final class Replay {
         boolean debug = arguments.length == 3 && arguments[0].equals("debug");
         boolean profile = (arguments.length == 3 || arguments.length == 4)
                 && arguments[0].equals("profile");
+        boolean profiler = arguments.length >= 2 && arguments[0].equals("profiler");
         boolean coverage = (arguments.length == 2 || arguments.length == 3
                 || arguments.length == 4) && arguments[0].equals("coverage");
         boolean census = arguments.length == 2 && arguments[0].equals("census");
@@ -59,7 +60,7 @@ public final class Replay {
         boolean game = replay || modRun || scenarioRun || fuzz || debug || profile
                 || census || atlas || ui || testRuntime;
         if (!replay && !trace && !mod && !scenario && !modRun && !scenarioRun && !fuzz
-                && !debug && !profile && !coverage && !census && !atlas && !ui && !test) {
+                && !debug && !profile && !profiler && !coverage && !census && !atlas && !ui && !test) {
             System.err.println("usage: java tools/replay/Replay.java replay <bundle.wlrb>");
             System.err.println("   or: java tools/replay/Replay.java trace show <trace.wltrace>");
             System.err.println("   or: java tools/replay/Replay.java trace diff <left.wltrace> <right.wltrace>");
@@ -75,6 +76,7 @@ public final class Replay {
             System.err.println("   or: java tools/replay/Replay.java fuzz <out-dir> <seed> <cases> <steps> [left.jar] [right.jar]");
             System.err.println("   or: java tools/replay/Replay.java debug <scenario> <seed>");
             System.err.println("   or: java tools/replay/Replay.java profile <scenario> <seed> [budget.properties]");
+            System.err.println("   or: java tools/replay/Replay.java profiler <self-check|inspect|export|compare> ...");
             System.err.println("   or: java tools/replay/Replay.java coverage <scenario> [trace] [min-percent]");
             System.err.println("   or: java tools/replay/Replay.java census <out-dir>");
             System.err.println("   or: java tools/replay/Replay.java atlas <seed> <radius-1..4> <output.html>");

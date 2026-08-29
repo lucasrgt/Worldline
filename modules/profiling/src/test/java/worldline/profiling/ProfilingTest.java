@@ -16,6 +16,7 @@ public final class ProfilingTest {
         completeFrameCensus();
         budgetGating();
         reportFraming();
+        WorldlineProfilerTest.main(arguments);
         System.out.println("ProfilingTest passed");
     }
 

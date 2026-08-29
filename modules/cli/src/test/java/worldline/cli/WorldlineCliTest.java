@@ -23,6 +23,7 @@ public final class WorldlineCliTest {
     private WorldlineCliTest() {}
 
     public static void main(String[] arguments) throws Exception {
+        ProfilerCommandTest.main(arguments);
         String testClasses = System.getProperty("worldline.test.classes", ".worldline/build/test-classes");
         Path bundle = Files.createTempFile("worldline-cli-test", ".wlrb");
         Path left = Files.createTempFile("worldline-cli-left", ".wltrace");

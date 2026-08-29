@@ -5,7 +5,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | Milestone | Qualification | Contract |
 | --- | --- | --- |
 | `deterministic-world-tick` | CARRIED | server-runtime-equivalence |
-| `controlled-client-tick` | CARRIED | client-runtime-equivalence |
+| `controlled-client-tick` | EXECUTED | client-runtime-equivalence |
 | `testkit-cycle` | EXECUTED | testkit-runtime |
 | `m3-domain-api` | CARRIED | domain-api-equivalence |
 | `m4-durable-snapshot` | CARRIED | durable-snapshot |

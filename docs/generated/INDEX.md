@@ -68,6 +68,7 @@ Generated from the canonical Markdown files in `docs/`. Files remain at stable r
 - [SEM_M9_NAVIGABLE_MAPPING_AUDIT.md](../SEM_M9_NAVIGABLE_MAPPING_AUDIT.md)
 - [TESTKIT.md](../TESTKIT.md)
 - [TIME_DILATION.md](../TIME_DILATION.md)
+- [WORLDLINE_PROFILER.md](../WORLDLINE_PROFILER.md)
 
 ## Milestones
 
