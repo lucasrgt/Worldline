@@ -619,6 +619,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-mushroom-random-tick-conformance-cycle` | CARRIED | official Beta 1.7.3 mushroom random-tick conformance subsystem |
 | `b173-native-special-world-render-cycle` | EXECUTED | official Beta 1.7.3 native special world block-render family |
 | `b173-native-tile-entity-render-cycle` | EXECUTED | official Beta 1.7.3 native tile-entity render family |
+| `b173-piston-subsystem-conformance-cycle` | EXECUTED | official Beta 1.7.3 piston subsystem conformance |
 | `b173-redstone-device-lifecycle-cycle` | CARRIED | official Beta 1.7.3 redstone device lifecycle family |
 | `b173-remaining-opaque-cube-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 remaining opaque-cube physical envelopes |
 | `b173-shaded-mushroom-lifecycle-cycle` | CARRIED | official Beta 1.7.3 shaded mushroom lifecycle family |
