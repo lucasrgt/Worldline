@@ -32,4 +32,5 @@ owned by the shared profiling module.
 This source boundary is structurally maintained. A dedicated official
 ModLoader/Forge runtime qualification is still required before Worldline may
 claim loader boot or performance equivalence; StationAPI qualification does not
-transport across loaders.
+transport across loaders. That future receipt must name the concrete loader and
+exact game/mod build rather than promoting this compile proof by inference.
