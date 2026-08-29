@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=b173-vegetation-ecology-subsystem-conformance-cycle -->
+<!-- nonclaims=random-tick,tree-generation,leaf-decay-completion,leaf-drops,crop-harvest,sugar-cane-growth,native-render,gameplay-placement,break-transition,save-reload -->
+<!-- frozen-trace=ba9cade29f551f43834d9727c839183fe61dd288fef93e0ef1b4b5caab1f7913 -->
+
 # Beta 1.7.3 vegetation ecology subsystem conformance
 
 This milestone binds six native ecology subjects to one reusable public TestKit fixture. It closes
