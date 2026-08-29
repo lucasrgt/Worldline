@@ -1,5 +1,5 @@
 schema=1
 id=m380-trapdoor-family-set
-fingerprint=da629f8ceb4a28c85f103ac7d09a81b29b32e1d2f4bc6b2ccd03399e304c168e
+fingerprint=16f258b17508b6913ab00cd5032a2a3bdc7ec0c7f284ebf625cd8d55c04bdc14
 observation.sha256=ab78b72d72f7fa3016aff5ef1e7d1fa6d51961bb14c02d74afa5e1a5ecf036e7
 source=refactor-equivalent

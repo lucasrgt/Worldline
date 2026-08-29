@@ -1,5 +1,5 @@
 schema=1
 id=b173-flowing-fluid-lifecycle-cycle
-fingerprint=31604ed00eab5d5321ce97c124fd3ac6f0f3452f4234088bddf4176243fecf26
+fingerprint=f88937f895d1684deba2d60d004af3a15ed3bb5b912d3d49b88a422b787da3bf
 observation.sha256=ac8ae5f4384b9fe01bd20d787937cddaec3c91d0782cc6112ddfabed36646dec
 source=refactor-equivalent

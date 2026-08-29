@@ -1,5 +1,5 @@
 schema=1
 id=b173-fire-subsystem-conformance-cycle
-fingerprint=a1d998f81e4fb2794c07013ee6b5bb04029dd2bd1dd031c6ab4a5e4799569f82
+fingerprint=82939384f5a3b5c0cacc1b8084c07e8b9246f8fcad5ac48925f29842ecd72e8f
 observation.sha256=891cfb6d79087960c7f8d6975b12506b66c4d4c5261bf2596ef9a287ceac6dc4
 source=refactor-equivalent
