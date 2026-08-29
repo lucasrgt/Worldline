@@ -1,5 +1,5 @@
 schema=1
 id=m298-wood-tool-crafts
-fingerprint=4487770cd9eb895346c46295204947786df92f8ad8bb59c3bbc16b8e59ea7563
+fingerprint=dabcff1b344fb57108f5f534e6f59ef8b9262d519db9e1930bcd8361c4ec4630
 observation.sha256=2b099c580ef169af939546718df1c4ae560e5f875f92960733fbcc026a3982bf
 source=refactor-equivalent

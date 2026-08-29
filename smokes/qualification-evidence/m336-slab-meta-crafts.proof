@@ -1,5 +1,5 @@
 schema=1
 id=m336-slab-meta-crafts
-fingerprint=33a603bb9edd8fdf21a51d08ceac8bc8b63edc28a54e288c03cfa7d2b4cad237
+fingerprint=6433abe9afd0ddf5301d25f43d43f1160a544f1bf38e9a9e510996dd1e8db33b
 observation.sha256=e75d0b2bb489e7ea157ad321c8dc141c57039e5411b10b96658868f3b231cc57
 source=refactor-equivalent

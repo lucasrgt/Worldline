@@ -1,5 +1,5 @@
 schema=1
 id=m377-powered-rail-motion
-fingerprint=1dd06865893dcdb965bad539858165017e573811393c7e1a3c280f06bc4299fd
+fingerprint=0fe8f7e3e62dd923e4a551da94cb19655d0ac46516b07a9344f3561147f63a78
 observation.sha256=c383cb26d4289064f7ced386bb9c7cfc9cdb68545275f438464e17ef5a161977
 source=refactor-equivalent

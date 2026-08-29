@@ -1,5 +1,5 @@
 schema=1
 id=m224-netherrack
-fingerprint=8d9af24c4be89b15c01d355441f2f4df3222fd5597f4298c6c9417b5e2c37c1e
+fingerprint=ee4420ab75de8710b39fff9b0885fa32af43fcaecd97d764589ae8433f1dc29e
 observation.sha256=790c2fc12c97371a7b0a14f5a41376c1d23f3bd1fff998120baed91087fd917b
 source=refactor-equivalent
