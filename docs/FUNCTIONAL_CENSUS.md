@@ -194,6 +194,13 @@ reduce the target gap to 340. Two fresh official-server replicas completed with 
 failures, producing evidence hash
 `9e2f1dfce178bfdb3bb2e8bd2d38f0e0448288cedfa2c04601ce6455f8e817e8`, bound by semantic
 signature `1a6ccdee8901506c433e50ef0b630fadb7f65ba0e3704686cbd19a85cb0e27a9`.
+The ground-flora conformance subsystem then closes reachable state-domain claims for dandelion,
+rose, and dead bush plus collision, light, tick, and support-loss neighbor behavior for all three
+and tall grass. Tall-grass state domain remains explicitly unresolved because metadata zero is not
+its complete reachable domain. These 19 public TestKit claims bring the census to 723 verified
+claims (68.47%), leave 333 unresolved, and reduce the target gap to 321. Fifteen fresh official
+worlds per replica completed across two full executions with zero retries and failures, bound by
+semantic signature `30842230f6bf54ee567f079462ebc2833718be060a57571b4f22aa14c7026420`.
 
 The singular package remains scoped to its tested cells. Regular-piston evidence breaks an
 extended base; sticky-piston evidence breaks an extended head; wooden-door evidence breaks the
@@ -262,6 +269,8 @@ The cake-serving lifecycle reduces it to 364, and the moving-fluid lifecycle red
 while retaining the Overworld-only lava state domain as PARTIAL.
 The sign subsystem lifecycle reduces the remaining target gap to 340 while keeping both native
 sign-render claims explicitly unresolved.
+The ground-flora conformance subsystem reduces it to 321 while keeping tall-grass state domain and
+all four native-render claims explicitly unresolved.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
