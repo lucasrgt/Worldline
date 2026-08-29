@@ -49,7 +49,7 @@ b1.7.3:block/047	false	simple-solid
 b1.7.3:block/048	false	simple-solid
 b1.7.3:block/049	false	simple-solid
 b1.7.3:block/050	false	support-dependent,luminous,directional
-b1.7.3:block/051	true	fire,luminous,tick-driven
+b1.7.3:block/051	true	fire,luminous,random-tick,special-collision,support-dependent,tick-driven
 b1.7.3:block/052	true	mob-spawner,tile-entity
 b1.7.3:block/053	false	directional,special-collision
 b1.7.3:block/054	true	chest,container,multi-block,directional,tile-entity

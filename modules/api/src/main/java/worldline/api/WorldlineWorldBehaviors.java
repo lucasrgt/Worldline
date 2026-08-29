@@ -50,6 +50,9 @@ public final class WorldlineWorldBehaviors {
     public static final WorldlineBehavior LOCKED_CHEST_SUBSYSTEM = define(
             "locked-chest-subsystem",
             "Locked chest placement, instant harvest, persistence, physics, and timed removal");
+    public static final WorldlineBehavior FIRE_SUBSYSTEM = define(
+            "fire-subsystem",
+            "Fire age domain, placement, empty harvest, persistence, physics, and support loss");
     public static final WorldlineBehavior DUNGEON_GENERATION = define("dungeon-generation",
             "Fixed-seed populated chunks contain replay-stable spawners and nonempty loot chests");
     public static final WorldlineBehavior CHUNK_UNLOAD_RELOAD = define("chunk-unload-reload",
