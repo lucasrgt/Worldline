@@ -606,7 +606,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-common-cube-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 common-cube physical envelopes |
 | `b173-deterministic-harvest-lifecycle-cycle` | CARRIED | official Beta 1.7.3 deterministic non-self-drop harvest lifecycle family |
 | `b173-dirt-flora-lifecycle-cycle` | CARRIED | official Beta 1.7.3 dirt-supported flora lifecycle family |
-| `b173-farmland-subsystem-conformance-cycle` | EXECUTED | official Beta 1.7.3 farmland subsystem conformance |
+| `b173-farmland-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 farmland subsystem conformance |
 | `b173-fire-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 fire subsystem conformance |
 | `b173-floor-mounted-lifecycle-cycle` | CARRIED | official Beta 1.7.3 floor-mounted block lifecycle family |
 | `b173-flowing-fluid-lifecycle-cycle` | CARRIED | official Beta 1.7.3 flowing-fluid lifecycle |
