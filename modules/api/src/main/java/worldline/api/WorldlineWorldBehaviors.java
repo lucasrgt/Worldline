@@ -41,6 +41,9 @@ public final class WorldlineWorldBehaviors {
     public static final WorldlineBehavior PORTAL_REENTRY_COOLDOWN = define(
             "portal-reentry-cooldown",
             "Arrival-side portal contact suppresses an immediate return until the player exits for a cooldown window");
+    public static final WorldlineBehavior PORTAL_BLOCK_SUBSYSTEM = define(
+            "portal-block-subsystem",
+            "Portal frame materialization, lifecycle, persistence, physics, ticks, and collapse");
     public static final WorldlineBehavior DUNGEON_GENERATION = define("dungeon-generation",
             "Fixed-seed populated chunks contain replay-stable spawners and nonempty loot chests");
     public static final WorldlineBehavior CHUNK_UNLOAD_RELOAD = define("chunk-unload-reload",

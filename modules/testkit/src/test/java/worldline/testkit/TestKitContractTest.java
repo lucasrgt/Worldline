@@ -59,6 +59,7 @@ public final class TestKitContractTest {
         RedstoneTorchSubsystemFixtureTest.execute();
         RedstoneOreSubsystemFixtureTest.execute();
         FurnaceSubsystemFixtureTest.execute();
+        PortalBlockSubsystemFixtureTest.execute();
         SnowAccumulationFixtureTest.execute();
         SnowLayerNonstackingFixtureTest.execute();
         NaturalWolfPackFixtureTest.execute();
