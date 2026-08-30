@@ -87,7 +87,7 @@ public final class AtlasStoreTest {
         String tags = AtlasQuery.tags(first);
         require(tags.contains("tag=category-claim")
                 && tags.contains("tag=surface-public-testkit\trecords=1056")
-                && tags.contains("tag=surface-internal-api\trecords=6")
+                && !tags.contains("tag=surface-internal-api")
                 && !tags.contains("tag=surface-smoke-only"), "tag index");
         try {
             String documentation = new String(Files.readAllBytes(Paths.get("docs", "ATLAS.md")),
