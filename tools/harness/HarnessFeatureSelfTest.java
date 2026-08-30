@@ -26,6 +26,7 @@ final class HarnessFeatureSelfTest {
         ProviderDiscoveryTrainSuccessor.selfTest();
         MilestoneCatalogTrainSuccessor.selfTest();
         EntityLifecycleArtifactTrainSuccessor.selfTest();
+        BoundedEntityArchetypeSuccessor.selfTest();
         CandidateReadiness.selfTest();
         CandidateSourceClosure.selfTest();
         NeighborTestKitPinCheck.selfTest();
