@@ -564,7 +564,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m618-wolf-tame-set` | CARRIED | wolf tame set |
 | `m619-undead-sun-burn-set` | CARRIED | undead sun burn set |
 | `m620-stationapi-testkit-driver` | EXECUTED | StationAPI TestKit driver |
-| `m621-save-worldgen-set` | EXECUTED | save worldgen set |
+| `m621-save-worldgen-set` | CARRIED | save worldgen set |
 | `m622-pathfinding-matrix` | CARRIED | Entity pathfinding matrix |
 | `m623-lighting-engine-matrix` | CARRIED | Lighting engine matrix |
 | `m624-weather-state-matrix` | CARRIED | Weather state matrix |
