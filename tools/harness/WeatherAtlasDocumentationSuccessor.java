@@ -31,6 +31,7 @@ final class WeatherAtlasDocumentationSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "weather Atlas documentation successor allowlist drifted");
+        MobAiAtlasTrainSourceSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
