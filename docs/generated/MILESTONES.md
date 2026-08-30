@@ -602,6 +602,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m767-modloader-forge-testkit-provider` | EXECUTED | ModLoader and Forge TestKit providers |
 | `m768-aero-historical-tower-replay` | CARRIED | Aero historical tower hitch replay |
 | `m769-aero-unified-runtime-timeline` | EXECUTED | Aero unified runtime timeline |
+| `m770-aero-gpu-present-attribution` | EXECUTED | Aero GPU and present attribution |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
