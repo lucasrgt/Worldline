@@ -178,7 +178,8 @@ final class M773Workspace {
     }
     private static String git(Path checkout, String... args) throws Exception {
         ArrayList<String> command = new ArrayList<>();
-        command.add("git"); command.addAll(List.of(args));
+        command.add("git");
+        command.addAll(List.of(args));
         return SmokeSupport.capture(checkout, command, 60);
     }
 }
@@ -191,11 +192,13 @@ final class M773Artifact {
 
     private M773Artifact(String arm, Properties p, long[] walls) {
         this.arm = arm;
-        frames = integer(p, "frames"); rebuilds = integer(p, "total.rebuilds");
+        frames = integer(p, "frames");
+        rebuilds = integer(p, "total.rebuilds");
         visible = integer(p, "visible.rebuilds");
         maxBuilds = integer(p, "max.rebuilds.frame");
         hiddenFrame = integer(p, "hidden.target.frame");
-        maxBacklog = integer(p, "max.backlog"); finalBacklog = integer(p, "final.backlog");
+        maxBacklog = integer(p, "max.backlog");
+        finalBacklog = integer(p, "final.backlog");
         maximumRebuildNanos = Long.parseLong(required(p, "max.rebuild.nanos.frame"));
         this.walls = walls;
     }
@@ -273,9 +276,12 @@ final class M773GateBinding {
         }
     }
     private static Object frame(Method of, long[] durations) throws Exception {
-        long[][] rows = new long[durations.length][3]; long time = 1L;
+        long[][] rows = new long[durations.length][3];
+        long time = 1L;
         for (int i = 0; i < rows.length; i++) {
-            rows[i][0] = i; rows[i][1] = time; rows[i][2] = durations[i];
+            rows[i][0] = i;
+            rows[i][1] = time;
+            rows[i][2] = durations[i];
             time = Math.addExact(time, Math.max(1L, durations[i]));
         }
         return of.invoke(null, new String[] {"frame.wall.nanos"}, rows);
