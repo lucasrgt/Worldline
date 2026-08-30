@@ -148,6 +148,16 @@ public final class AtlasCoverageTest {
         require("INTERCEPTED".equals(stationapi.control())
                 && stationapi.refs().contains("atlas.subsystem.stationapi"),
                 "StationAPI boundary classification");
+        require("1".equals(store.get("atlas.coverage-unit.aero.SEMANTIC").control()),
+                "Aero overlay semantics filled");
+        require("1".equals(store.get("atlas.coverage-unit.aero.CONTROL").control()),
+                "Aero overlay boundary controlled");
+        require("1".equals(store.get("atlas.coverage-unit.aero.DETERMINISM").control()),
+                "Aero overlay evidence deterministic");
+        AtlasRecord aero = store.get("atlas.boundary.AERO");
+        require("INTERCEPTED".equals(aero.control())
+                && aero.refs().contains("atlas.subsystem.aero"),
+                "Aero boundary classification");
         List<AtlasRecord> gaps = AtlasGaps.list(store);
         require(!gaps.isEmpty(), "gaps exist");
         boolean worldgenCoverageGap = false;

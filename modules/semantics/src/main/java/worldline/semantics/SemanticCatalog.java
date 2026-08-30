@@ -38,6 +38,7 @@ public final class SemanticCatalog {
         all.addAll(DedicatedServerSemantics.mappings());
         all.addAll(MappingSemantics.mappings());
         all.addAll(StationApiSemantics.mappings());
+        all.addAll(AeroSemantics.mappings());
         all.addAll(SchedulerSemantics.mappings());
         all.addAll(WorldSemantics.mappings());
         all.addAll(WorldgenSemantics.mappings());

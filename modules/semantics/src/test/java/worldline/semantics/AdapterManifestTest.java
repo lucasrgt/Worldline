@@ -64,12 +64,14 @@ public final class AdapterManifestTest {
         require(aero != null && "extension".equals(aero.kind())
                 && aero.ownerPrefix().equals("worldline/aero/"), "aero prefix");
         require(aero.render().contains("kind=extension"), "aero render kind");
-        require(aero.render().contains("SAVE_CHUNKS="), "aero lists SAVE_CHUNKS");
-        require(aero.render().contains("COMPILE_CHUNKS="), "aero lists COMPILE_CHUNKS");
-        require(aero.render().contains("LOAD_RENDERERS="), "aero lists LOAD_RENDERERS");
-        require(aero.render().contains("CAMERA_RENDER="), "aero lists CAMERA_RENDER");
-        require(aero.render().contains("ADD_VERTEX="), "aero lists ADD_VERTEX");
-        require(aero.render().contains("CHUNK_REBUILD="), "aero lists CHUNK_REBUILD");
+        require(aero.render().contains("AERO_SAVE_BATCH_INTERCEPT="), "aero save intercept");
+        require(aero.render().contains("AERO_COMPILE_BEGIN_INTERCEPT="), "aero compile intercept");
+        require(aero.render().contains("AERO_RELOAD_INTERCEPT="), "aero reload intercept");
+        require(aero.render().contains("AERO_FRAME_BEGIN_INTERCEPT="), "aero frame intercept");
+        require(aero.render().contains("AERO_VERTEX_INTERCEPT="), "aero vertex intercept");
+        require(aero.render().contains("AERO_REBUILD_INTERCEPT="), "aero rebuild intercept");
+        require(aero.render().contains("subjectRole=SAVE_CHUNKS"),
+                "aero subject role relation");
         require(!aero.render().contains("SORT_RENDERERS="), "aero omits SORT_RENDERERS");
         require(!aero.render().contains("MARK_BLOCKS_FOR_UPDATE="), "aero omits mark-blocks");
         require(!aero.render().contains("AMBIENT_DARKNESS="), "aero omits ambient");

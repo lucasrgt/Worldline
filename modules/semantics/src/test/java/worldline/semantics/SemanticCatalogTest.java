@@ -21,7 +21,7 @@ public final class SemanticCatalogTest {
         SemanticCatalog first = SemanticCatalog.standard();
         SemanticCatalog second = SemanticCatalog.standard();
         require(first.size() == SemanticRoles.roleCount(), "role count");
-        require(first.categories().size() == 36, "category count");
+        require(first.categories().size() == 37, "category count");
         require("k".equals(first.role("CLIENT_TICK_ROOT").official()), "official alias");
         require(first.role("CLIENT_CLOCK_SOURCE").official().isEmpty(), "worldline-only alias");
         require("u".equals(first.role("BLOCK_STONE").official()), "stone alias");
@@ -110,9 +110,11 @@ public final class SemanticCatalogTest {
                 "mapping qualification gate");
         require("open".equals(first.role("STATIONAPI_PROVIDER_OPEN").name()),
                 "StationAPI provider open boundary");
+        require("worldlineRebuilt".equals(first.role("AERO_REBUILD_INTERCEPT").name()),
+                "Aero rebuild intercept");
         require(first.sha256().equals(second.sha256())
                 && first.sha256().equals(
-                "1161cf6ee49ef3bf3402ff0ff52320e411b28644a2e11f60881d8c33fe884d44"),
+                "ac9a00ab12442cde4e104064983742b244007dde80805ed678db4efce8d77fc3"),
                 "catalog hash drifted to " + first.sha256());
         require(first.canonical().equals(second.canonical()), "catalog canonical drifted");
         require(first.render().contains("complete=true"), "render completeness");
