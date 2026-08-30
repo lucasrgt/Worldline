@@ -31,6 +31,7 @@ final class FluidAtlasDocumentationSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "fluid Atlas documentation successor allowlist drifted");
+        LightingAtlasTrainSourceSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {

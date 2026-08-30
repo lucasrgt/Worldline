@@ -138,7 +138,8 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
                 || TileEntityAtlasTrainSourceSuccessor.carries(relative, prior, current)
                 || TileEntityAtlasDocumentationSuccessor.carries(relative, prior, current)
                 || FluidAtlasTrainSourceSuccessor.carries(relative, prior, current)
-                || FluidAtlasDocumentationSuccessor.carries(relative, prior, current);
+                || FluidAtlasDocumentationSuccessor.carries(relative, prior, current)
+                || LightingAtlasTrainSourceSuccessor.carries(relative, prior, current);
     }
 
     private static boolean reviewed(String relative, String prior, String current,
