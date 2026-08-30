@@ -58,6 +58,7 @@ final class MappingAtlasSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "mapping Atlas successor allowlist drifted");
+        MappingReleaseSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
