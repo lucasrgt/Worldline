@@ -90,6 +90,11 @@ already executes. There is no energy category. The redstone slice covers wire,
 torch, repeater delays 1-4, lever, button, and piston extension against the
 official server JAR; pressure plates, BUD, and repeater locking remain out.
 
+The `block-tick` category binds the public `BlockTickPolicyFixture` pipeline
+(mechanism, scenario, normalized observation, validation, and equatable evidence)
+to `atlas.boundary.BLOCK_TICK`. This is a controlled Worldline TestKit boundary;
+it does not claim that the native vanilla scheduler itself is virtualized.
+
 ## Stable contracts
 
 | Type | Behavior |
