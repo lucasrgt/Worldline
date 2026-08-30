@@ -2,4 +2,4 @@ schema=1
 id=b173-multi-drop-mineral-lifecycle-cycle
 fingerprint=a5a29960962a049f3285a5de50460897fb16ae6f5975a4f786993a81a93c85e1
 observation.sha256=da65787af8aaa0b8b777cec7b93bfa0aaeab5293a8b9cc87fa97ca8763825057
-source=executed
+source=refactor-equivalent
