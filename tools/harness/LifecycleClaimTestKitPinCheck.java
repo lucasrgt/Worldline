@@ -44,9 +44,18 @@ final class LifecycleClaimTestKitPinCheck {
             String current = fingerprints.compute(smoke);
             SmokePins.Entry pin = pins.match(id, current);
             String source = required(lock, stem + "source");
-            require(pin != null && current.equals(required(lock, stem + "current_fingerprint"))
+            boolean direct = pin != null
+                    && current.equals(required(lock, stem + "current_fingerprint"))
                             && pin.evidence().equals(required(lock, stem + "evidence_sha256"))
-                            && source.equals(pin.source())
+                    && source.equals(pin.source());
+            boolean successor = pin != null && source.equals("refactor-equivalent")
+                    && pin.source().equals("executed")
+                    && current.equals(required(lock, stem + "current_fingerprint"))
+                    && pin.evidence().equals(required(lock, stem + "evidence_sha256"))
+                    && TrainPinCheck.isExecuted(TrainPinCheck.manifest(root), id)
+                    && TrainPinCheck.carriesCurrent(
+                            TrainPinCheck.manifest(root), id, pin, current);
+            require((direct || successor)
                             && required(lock, stem + "prior_fingerprint").matches("[0-9a-f]{64}"),
                     "lifecycle-claim transported proof drift: " + id);
             if (source.equals("executed")) exact++;
@@ -79,9 +88,17 @@ final class LifecycleClaimTestKitPinCheck {
             for (int index = 0; index < integer(lock, "carried.count"); index++) {
                 String stem = "smoke." + index + ".";
                 if (!id.equals(lock.getProperty(stem + "id"))) continue;
-                return current.equals(lock.getProperty(stem + "current_fingerprint"))
+                boolean direct = current.equals(lock.getProperty(stem + "current_fingerprint"))
                         && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"))
                         && pin.source().equals(lock.getProperty(stem + "source"));
+                boolean successor = "refactor-equivalent".equals(lock.getProperty(stem + "source"))
+                        && "executed".equals(pin.source())
+                        && current.equals(lock.getProperty(stem + "current_fingerprint"))
+                        && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"));
+                return direct || successor && TrainPinCheck.isExecuted(
+                        TrainPinCheck.manifest(root), id)
+                        && TrainPinCheck.carriesCurrent(
+                                TrainPinCheck.manifest(root), id, pin, current);
             }
             return false;
         } catch (Exception error) { return false; }
