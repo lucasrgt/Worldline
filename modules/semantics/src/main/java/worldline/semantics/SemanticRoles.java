@@ -13,6 +13,7 @@ import java.util.Map;
 public final class SemanticRoles {
     public static final String CLOCK = "clock", RNG = "rng", INPUT = "input", TICK = "tick";
     public static final String FILESYSTEM = "filesystem", NETWORK = "network";
+    public static final String DEDICATED_SERVER = "dedicated-server";
     public static final String SCHEDULER = "scheduler", WORLD = "world", WORLDGEN = "worldgen";
     public static final String BLOCK = "block";
     public static final String CHUNK = "chunk", PLAYER = "player", ENTITY = "entity";
@@ -68,6 +69,9 @@ public final class SemanticRoles {
                 "PACKET102_WINDOW_CLICK", "PACKET103_SET_SLOT", "PACKET104_WINDOW_ITEMS",
                 "PACKET105_UPDATE_PROGRESSBAR", "PACKET106_TRANSACTION",
                 "PACKET200_STATISTIC"));
+        roles.put(DEDICATED_SERVER, list("DEDICATED_SERVER_BOOT_API",
+                "DEDICATED_SERVER_STATE_API", "DEDICATED_SERVER_ENTRY_POLICY_TESTKIT",
+                "DEDICATED_SERVER_ENTRY_COMPARE_TESTKIT"));
         roles.put(SCHEDULER, list("TIMER_THREAD", "TASK_SCHEDULER", "SCHEDULER_ADVANCE"));
         roles.put(WORLD, list("WORLD_TYPE", "LOADED_ENTITY_LIST", "TILE_ENTITIES", "BLOCK_ACCESS",
                 "BLOCK_ID_READ", "BLOCK_READ", "BLOCK_WRITE", "BLOCK_NOTIFY", "WORLD_DIFFICULTY",

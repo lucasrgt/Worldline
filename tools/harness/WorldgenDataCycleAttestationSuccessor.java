@@ -33,6 +33,7 @@ final class WorldgenDataCycleAttestationSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "worldgen data-cycle successor allowlist drifted");
+        DedicatedServerAtlasTrainSourceSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {

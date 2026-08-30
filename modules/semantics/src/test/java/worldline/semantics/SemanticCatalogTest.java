@@ -21,7 +21,7 @@ public final class SemanticCatalogTest {
         SemanticCatalog first = SemanticCatalog.standard();
         SemanticCatalog second = SemanticCatalog.standard();
         require(first.size() == SemanticRoles.roleCount(), "role count");
-        require(first.categories().size() == 33, "category count");
+        require(first.categories().size() == 34, "category count");
         require("k".equals(first.role("CLIENT_TICK_ROOT").official()), "official alias");
         require(first.role("CLIENT_CLOCK_SOURCE").official().isEmpty(), "worldline-only alias");
         require("u".equals(first.role("BLOCK_STONE").official()), "stone alias");
@@ -104,9 +104,11 @@ public final class SemanticCatalogTest {
                 "dimension portal re-entry TestKit fixture");
         require("observe".equals(first.role("WORLDGEN_TERRAIN_CENSUS_TESTKIT").name()),
                 "worldgen terrain TestKit fixture");
+        require("boot".equals(first.role("DEDICATED_SERVER_BOOT_API").name()),
+                "dedicated server boot API");
         require(first.sha256().equals(second.sha256())
                 && first.sha256().equals(
-                "42eae17833663481e912978259737630030a578f927a33c405e8b55ca05e17b1"),
+                "6c09f0ce49124b01a7d61caf62b364c35aa22b6491045bb0bf1b2f62cf76076b"),
                 "catalog hash drifted to " + first.sha256());
         require(first.canonical().equals(second.canonical()), "catalog canonical drifted");
         require(first.render().contains("complete=true"), "render completeness");

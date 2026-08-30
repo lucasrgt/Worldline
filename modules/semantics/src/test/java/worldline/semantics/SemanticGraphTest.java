@@ -17,6 +17,7 @@ public final class SemanticGraphTest {
         require(first.tokens().contains("MOB_AI"), "mob AI category token");
         require(first.tokens().contains("DIMENSION"), "dimension category token");
         require(first.tokens().contains("WORLDGEN"), "worldgen category token");
+        require(first.tokens().contains("DEDICATED_SERVER"), "dedicated server category token");
         require(first.tokens().contains("TILE_ENTITY"), "tile entity category token");
         require(!first.readers("BLOCK_TICK").isEmpty(), "block tick readers");
         require(!first.readers("REDSTONE").isEmpty(), "redstone readers");
@@ -28,6 +29,8 @@ public final class SemanticGraphTest {
         require(!first.readers("MOB_AI").isEmpty(), "mob AI TestKit readers");
         require(!first.readers("DIMENSION").isEmpty(), "dimension TestKit readers");
         require(!first.readers("WORLDGEN").isEmpty(), "worldgen TestKit readers");
+        require(!first.readers("DEDICATED_SERVER").isEmpty(),
+                "dedicated server TestKit readers");
         require(!first.readers("TILE_ENTITY").isEmpty(), "tile entity TestKit readers");
         require(!first.readers("CLOCK").isEmpty(), "clock readers");
         require(!first.writers("WORLD").isEmpty(), "world writers");

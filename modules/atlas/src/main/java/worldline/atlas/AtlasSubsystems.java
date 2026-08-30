@@ -112,6 +112,8 @@ public final class AtlasSubsystems {
         mapped.put("persistence", "saves");
         mapped.put("filesystem", "saves");
         mapped.put("network", "protocol");
+        mapped.put("dedicated-server", "dedicated-server");
+        mapped.put("dedicated_server", "dedicated-server");
         mapped.put("render", "rendering");
         mapped.put("gui", "gui");
         mapped.put("resource", "resources");

@@ -85,6 +85,17 @@ public final class AtlasCoverageTest {
         require("CONTROLLED".equals(dimension.control())
                 && dimension.refs().contains("atlas.subsystem.dimensions"),
                 "dimension boundary classification");
+        require("1".equals(store.get("atlas.coverage-unit.dedicated-server.SEMANTIC").control()),
+                "dedicated server semantics filled");
+        require("1".equals(store.get("atlas.coverage-unit.dedicated-server.CONTROL").control()),
+                "dedicated server public boundary controlled");
+        require("1".equals(store.get(
+                "atlas.coverage-unit.dedicated-server.DETERMINISM").control()),
+                "dedicated server normalized evidence deterministic");
+        AtlasRecord dedicatedServer = store.get("atlas.boundary.DEDICATED_SERVER");
+        require("CONTROLLED".equals(dedicatedServer.control())
+                && dedicatedServer.refs().contains("atlas.subsystem.dedicated-server"),
+                "dedicated server boundary classification");
         require("1".equals(store.get("atlas.coverage-unit.inventory.ORACLE").control()),
                 "inventory oracle filled");
         require("1".equals(store.get("atlas.coverage-unit.crafting.CONTROL").control()),
