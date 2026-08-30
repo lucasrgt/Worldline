@@ -1,5 +1,5 @@
 schema=1
 id=m649-chest-access-constraints
-fingerprint=de06f1d2c9add222dda97a68a27f2394eecb6b21bb906db4ac083d953afba302
+fingerprint=5d91729da10c5a5f614b390017537e0889d9b7fa416abe3dd22c96ceb5991b56
 observation.sha256=e0c55c8c718af34e0b0d7282512420e078984b0d3917c8dc45f541e9af238471
 source=refactor-equivalent

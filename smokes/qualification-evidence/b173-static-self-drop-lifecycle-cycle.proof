@@ -1,5 +1,5 @@
 schema=1
 id=b173-static-self-drop-lifecycle-cycle
-fingerprint=9dc81e54b9314c07a368fc9e34d986c43aab144ed269e89c8dc3830cc48caf45
+fingerprint=57f432c3e70c949e12a0eef70e16f87e2b71ee38cd60639a0e61481fbcee6029
 observation.sha256=41ca1113d3cf1523abef07a42f6fc07d7f2b52da7b818a2202694973f02d393f
 source=refactor-equivalent
