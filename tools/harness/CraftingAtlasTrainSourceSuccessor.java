@@ -55,6 +55,7 @@ final class CraftingAtlasTrainSourceSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "crafting Atlas train successor allowlist drifted");
+        CraftingAtlasDocumentationSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
