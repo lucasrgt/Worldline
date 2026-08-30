@@ -98,6 +98,7 @@ public final class AtlasSubsystems {
         mapped.put("inventory", "inventory");
         mapped.put("item", "inventory");
         mapped.put("recipe", "crafting");
+        mapped.put("redstone", "redstone");
         mapped.put("save", "saves");
         mapped.put("persistence", "saves");
         mapped.put("filesystem", "saves");

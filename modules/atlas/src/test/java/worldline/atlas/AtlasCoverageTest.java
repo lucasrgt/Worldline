@@ -32,8 +32,16 @@ public final class AtlasCoverageTest {
                 "inventory oracle filled");
         require("1".equals(store.get("atlas.coverage-unit.aero.TESTABILITY").control()),
                 "aero testability filled");
-        require("0".equals(store.get("atlas.coverage-unit.redstone.SEMANTIC").control()),
-                "redstone semantic empty");
+        require("1".equals(store.get("atlas.coverage-unit.redstone.SEMANTIC").control()),
+                "redstone public TestKit semantics filled");
+        require("1".equals(store.get("atlas.coverage-unit.redstone.CONTROL").control()),
+                "redstone TestKit boundary controlled");
+        require("1".equals(store.get("atlas.coverage-unit.redstone.DETERMINISM").control()),
+                "redstone evidence normalization deterministic");
+        AtlasRecord redstone = store.get("atlas.boundary.REDSTONE");
+        require("CONTROLLED".equals(redstone.control())
+                && redstone.refs().contains("atlas.subsystem.redstone"),
+                "redstone boundary classification");
         require("1".equals(store.get("atlas.coverage-unit.mappings.SEMANTIC").control()),
                 "mapping semantics filled");
         List<AtlasRecord> gaps = AtlasGaps.list(store);

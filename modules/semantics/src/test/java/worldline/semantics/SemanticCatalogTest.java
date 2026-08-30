@@ -86,9 +86,11 @@ public final class SemanticCatalogTest {
                 "redstone wire type");
         require("execute".equals(first.role("BLOCK_TICK_POLICY_FIXTURE").name()),
                 "block tick fixture");
+        require("execute".equals(first.role("REDSTONE_PISTON_TESTKIT").name()),
+                "redstone TestKit fixture");
         require(first.sha256().equals(second.sha256())
                 && first.sha256().equals(
-                "3ddc9fd5844f11f16b2fca78801172662611dd880e102ea15ee8d510338b7fb5"),
+                "d07ee9d73b0a6b7e15f788b4393159129680b8a62dbc20d2e1090875dc5237de"),
                 "catalog hash drifted to " + first.sha256());
         require(first.canonical().equals(second.canonical()), "catalog canonical drifted");
         require(first.render().contains("complete=true"), "render completeness");
