@@ -605,7 +605,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m770-aero-gpu-present-attribution` | EXECUTED | Aero GPU and present attribution |
 | `m771-aero-counterbalanced-hitch-rate` | EXECUTED | Aero counterbalanced hitch-rate gate |
 | `m772-aero-incremental-autosave-drain` | EXECUTED | Aero incremental autosave drain |
-| `m773-aero-chunk-work-scheduler` | EXECUTED | Aero visible age and debt-aware chunk-work scheduler |
+| `m773-aero-chunk-work-scheduler` | CARRIED | Aero visible age and debt-aware chunk-work scheduler |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
