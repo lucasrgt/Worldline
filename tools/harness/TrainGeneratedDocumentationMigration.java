@@ -176,7 +176,8 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
                 || BoundedEntityArchetypeSuccessor.carries(relative, prior, current)
                 || ObjectMaterializationMatrixSuccessor.carries(relative, prior, current)
                 || PaintingLifecycleSubsystemSuccessor.carries(relative, prior, current)
-                || PaintingAdapterSplitSuccessor.carries(relative, prior, current);
+                || PaintingAdapterSplitSuccessor.carries(relative, prior, current)
+                || SlimeLifecycleSubsystemSuccessor.carries(relative, prior, current);
     }
 
     private static boolean reviewed(String relative, String prior, String current,

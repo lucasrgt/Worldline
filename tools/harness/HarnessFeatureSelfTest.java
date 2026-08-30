@@ -30,6 +30,7 @@ final class HarnessFeatureSelfTest {
         ObjectMaterializationMatrixSuccessor.selfTest();
         PaintingLifecycleSubsystemSuccessor.selfTest();
         PaintingAdapterSplitSuccessor.selfTest();
+        SlimeLifecycleSubsystemSuccessor.selfTest();
         CandidateReadiness.selfTest();
         CandidateSourceClosure.selfTest();
         NeighborTestKitPinCheck.selfTest();
