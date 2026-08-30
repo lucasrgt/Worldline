@@ -28,6 +28,7 @@ final class DimensionAtlasFormattingSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "dimension Atlas formatting successor allowlist drifted");
+        DimensionArtifactSuccessor.selfTest();
     }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);
