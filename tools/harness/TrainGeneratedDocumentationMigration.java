@@ -142,7 +142,8 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
                 || LightingAtlasTrainSourceSuccessor.carries(relative, prior, current)
                 || LightingAtlasDocumentationSuccessor.carries(relative, prior, current)
                 || LightingCoverageTrainSourceSuccessor.carries(relative, prior, current)
-                || WeatherAtlasTrainSourceSuccessor.carries(relative, prior, current);
+                || WeatherAtlasTrainSourceSuccessor.carries(relative, prior, current)
+                || WeatherAtlasDocumentationSuccessor.carries(relative, prior, current);
     }
 
     private static boolean reviewed(String relative, String prior, String current,

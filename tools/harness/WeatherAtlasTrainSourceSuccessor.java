@@ -73,6 +73,7 @@ final class WeatherAtlasTrainSourceSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "weather Atlas train successor allowlist drifted");
+        WeatherAtlasDocumentationSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
