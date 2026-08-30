@@ -60,14 +60,16 @@ public final class AtlasStoreTest {
         require(AtlasStatus.VERIFIED.equals(stoneRegistry.status()), "wildcard census expansion");
         require(AtlasCertainty.VERIFIED.equals(AtlasCertainty.of(stoneRegistry)),
                 "verified certainty");
-        AtlasRecord unknown = first.get("atlas.claim.block-054.tick-policy");
-        require(AtlasStatus.UNKNOWN.equals(unknown.status()), "implicit census unknown");
+        AtlasRecord completed = first.get("atlas.claim.block-054.tick-policy");
+        require(AtlasStatus.VERIFIED.equals(completed.status()), "final census claim verified");
         require(!AtlasIndex.search(first, "chunk", 20).isEmpty(), "semantic chunk index");
         String context = AtlasContextQuery.json("chunk", AtlasContext.build(first, "chunk", 20, 1));
         require(context.contains("WORLDLINE-ATLAS-CONTEXT/1")
                 && context.contains("certainty") && context.contains("GRAPH_DEPTH_1"),
                 "agent context json");
-        require(AtlasGaps.list(first).contains(unknown), "unknown Census claim gap");
+        require(AtlasGaps.list(first).stream().noneMatch(
+                record -> record.id().startsWith("atlas.claim.")),
+                "Functional Census still contains a gap");
         try { AtlasSynchronization.validateAll(Paths.get(".")); }
         catch (java.io.IOException error) { throw new AssertionError(error); }
         require(first.get("atlas.role.CLIENT_TICK_ROOT").canonical()
