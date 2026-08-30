@@ -31,6 +31,7 @@ final class MobAiBehaviorManifestSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "mob-AI behavior manifest successor allowlist drifted");
+        MobAiBehaviorCatalogPlacementSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
