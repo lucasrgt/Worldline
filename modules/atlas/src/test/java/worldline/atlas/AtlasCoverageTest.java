@@ -58,6 +58,16 @@ public final class AtlasCoverageTest {
         require("CONTROLLED".equals(weather.control())
                 && weather.refs().contains("atlas.subsystem.weather"),
                 "weather boundary classification");
+        require("1".equals(store.get("atlas.coverage-unit.mob-ai.SEMANTIC").control()),
+                "mob AI TestKit semantics filled");
+        require("1".equals(store.get("atlas.coverage-unit.mob-ai.CONTROL").control()),
+                "mob AI TestKit boundary controlled");
+        require("1".equals(store.get("atlas.coverage-unit.mob-ai.DETERMINISM").control()),
+                "mob AI public evidence deterministic");
+        AtlasRecord mobAi = store.get("atlas.boundary.MOB_AI");
+        require("CONTROLLED".equals(mobAi.control())
+                && mobAi.refs().contains("atlas.subsystem.mob-ai"),
+                "mob AI boundary classification");
         require("1".equals(store.get("atlas.coverage-unit.inventory.ORACLE").control()),
                 "inventory oracle filled");
         require("1".equals(store.get("atlas.coverage-unit.crafting.CONTROL").control()),

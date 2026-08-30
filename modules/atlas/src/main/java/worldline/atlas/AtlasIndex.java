@@ -95,6 +95,9 @@ public final class AtlasIndex {
             Collections.addAll(terms, "state", "placement", "break");
         } else if ("save".equals(token) || "persistence".equals(token)) {
             Collections.addAll(terms, "reload", "region", "chunk");
+        } else if ("mob".equals(token) || "ai".equals(token)
+                || "pathfinding".equals(token)) {
+            Collections.addAll(terms, "entity", "route", "path", "hostile", "target");
         }
     }
 }

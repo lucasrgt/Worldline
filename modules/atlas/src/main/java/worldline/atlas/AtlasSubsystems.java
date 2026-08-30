@@ -94,6 +94,8 @@ public final class AtlasSubsystems {
         mapped.put("fluid", "fluids");
         mapped.put("light", "lighting");
         mapped.put("weather", "weather");
+        mapped.put("mob-ai", "mob-ai");
+        mapped.put("mob_ai", "mob-ai");
         mapped.put("chunk", "chunks");
         mapped.put("entity", "entities");
         mapped.put("tile-entity", "tile-entities");

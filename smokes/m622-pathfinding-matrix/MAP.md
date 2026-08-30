@@ -1,5 +1,5 @@
 <!-- worldline-map-schema=1 -->
-<!-- boundary=state-world-differential -->
+<!-- boundary=public-testkit-pathfinding-matrix -->
 <!-- nonclaims=arbitrary-entities,arbitrary-targets,ai-target-selection,movement-execution -->
 <!-- frozen-trace=7d60a218116c3281ab77011768f14b4237d0b92b81f3e0d99cdb6fabb085029a -->
 
@@ -13,9 +13,12 @@ fixtures. The open fixture has no obstruction. The detour fixture places a
 two-block-high wall across the direct route with one bounded gap. The sealed
 fixture encloses the target inside a two-block-high stone ring.
 
-Every returned path node is serialized in milliblocks. The open route must
-reach the target without leaving its lane, the detour must reach the target
-through the wall gap, and the sealed route must terminate outside the ring.
+Every returned path node is captured as an immutable public `PathfindingNode`
+in milliblocks and grouped by `PathfindingMatrixObservation`. The reusable
+`PathfindingMatrixFixture` requires the open route to reach the target without
+leaving its lane, the detour to reach the target through the wall gap, and the
+sealed route to terminate outside the ring. It publishes equatable,
+schema-versioned `PathfindingMatrixEvidence` for downstream mod tests.
 
 ## Mapping anchors
 
@@ -34,11 +37,17 @@ official oracle uses only obfuscated symbols and compiles directly against the
 hash-verified official server JAR. They share only `CanonicalTrace`, the seed,
 and literal fixture geometry.
 
+The public TestKit contract owns invariant interpretation; the mapped backend
+only collects vanilla route nodes. The official oracle remains independent of
+the TestKit and preserves the frozen differential trace.
+
 ## Pass condition
 
 Two fresh mapped processes and two fresh official-oracle processes must be
 deterministic within each pair and byte-identical across the mapping boundary.
-Each case must satisfy its route invariant and remain within 64 nodes.
+The public fixture must accept all three mapped observations, emit stable
+canonical evidence, and reject invariant drift. Each route remains bounded to
+64 nodes.
 
 This milestone does not claim arbitrary entity dimensions, target selection,
 movement execution, attack AI, doors, water, lava, ladders, or terrain outside

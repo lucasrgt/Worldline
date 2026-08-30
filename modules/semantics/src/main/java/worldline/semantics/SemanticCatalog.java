@@ -42,6 +42,7 @@ public final class SemanticCatalog {
         all.addAll(FluidSemantics.mappings());
         all.addAll(LightSemantics.mappings());
         all.addAll(WeatherSemantics.mappings());
+        all.addAll(MobAiSemantics.mappings());
         all.addAll(TileEntitySemantics.mappings());
         all.addAll(PlayerSemantics.mappings());
         all.addAll(EntitySemantics.mappings());

@@ -87,6 +87,7 @@ public final class TestKitContractTest {
         CreeperTntDifferentialFixtureTest.execute();
         PoweredCreeperFixtureTest.execute();
         SpiderDaylightAggressionFixtureTest.execute();
+        PathfindingMatrixFixtureTest.execute();
         NotePitchFixtureTest.execute();
         CakeServingFixtureTest.execute();
         Path root = Files.createTempDirectory("worldline-test-contract-");
