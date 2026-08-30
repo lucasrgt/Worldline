@@ -31,6 +31,8 @@ final class TrainPinCheck {
         int currentCount = 0, pendingCount = 0, imported = 0, executed = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             String stem = "smoke." + smoke.id + ".", current = fingerprints.compute(smoke);
+            require(required(lock, stem + "introduced").matches("true|false"),
+                    "invalid train introduction identity: " + smoke.id);
             SmokePins.Entry pin = pins.match(smoke.id, current);
             boolean successor = SchemaPinCheck.carries(
                     SchemaPinCheck.manifest(root), smoke.id, pin, current);
@@ -70,7 +72,7 @@ final class TrainPinCheck {
     }
 
     static boolean isAdded(Properties lock, String id) {
-        return "milestone".equals(lock.getProperty("smoke." + id + ".kind"));
+        return "true".equals(lock.getProperty("smoke." + id + ".introduced"));
     }
     static boolean isPending(Properties lock, String id) {
         return Arrays.asList(lock.getProperty("pending.smokes", "").split(",")).contains(id);

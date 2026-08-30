@@ -47,6 +47,7 @@ final class TrainPinMigration extends TrainPinSupport {
             String current = fingerprints.compute(smoke), stem = "smoke." + smoke.id + ".";
             SmokePins.Entry prior = baseline.get(smoke.id);
             lock.setProperty(stem + "current_fingerprint", current);
+            lock.setProperty(stem + "introduced", Boolean.toString(prior == null));
             if (QUALIFICATIONS.contains(smoke.id)) {
                 Imported receipt = completeImported(swarm, smoke.id) ? imported(root, swarm, smoke.id) : null;
                 if (receipt == null && hasExecuted(root, smoke.id)) receipt = executed(root, cache, smoke, current);
@@ -277,6 +278,12 @@ final class TrainPinMigration extends TrainPinSupport {
         require(predecessorProof("milestone") && predecessorProof("executed")
                         && !predecessorProof("baseline") && !predecessorProof(null),
                 "predecessor proof kinds drifted");
+        Properties introduced = new Properties();
+        introduced.setProperty("smoke.new.introduced", "true");
+        introduced.setProperty("smoke.old.introduced", "false");
+        require(TrainPinCheck.isAdded(introduced, "new")
+                        && !TrainPinCheck.isAdded(introduced, "old"),
+                "train introduction identity drifted");
         System.out.println("  train pin provenance self-test: passed");
     }
     private static boolean predecessorProof(String kind) {
