@@ -36,6 +36,7 @@ final class WorldgenAtlasDocumentationSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "worldgen documentation successor allowlist drifted");
+        WorldgenArtifactSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
