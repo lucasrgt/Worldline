@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=m342-gravity-block-set -->
 <!-- nonclaims=bounded-to-qualified-evidence -->
-<!-- frozen-trace=d8653266b9cdaa16b9aa3d3fc760642400d2172380078b03499aff10394c84e8 -->
+<!-- frozen-trace=959924fb1c3833226b9a7c0ffeebe212f9be0621ba06ca2f083e08492c72d066 -->
 
 # M342 behavior map
 
@@ -21,10 +21,10 @@ This is distinct from M119 sand-only and M274 gravel-only.
 Frozen trace:
 
 ```text
-v1|server=official-b1.7.3|seed=17320110707|fixture=stone-column+supported-sand12+supported-gravel13|settle=40+40ticks|cause=packet14-remove-support|confirmation=packet53-air|effect=official-falling-sand-and-gravel-settle|observation=packet23-type70+packet23-type71+live-packet53+fresh-login-packet51|column=10,sand=4:64:4:1:0->12:0,sandUpper=4:65:4:12:0->0:0,gravel=5:64:4:1:0->13:0,gravelUpper=5:65:4:13:0->0:0,packet23=70+71,persisted=true,clients=2,disconnect=clean
+v1|server=official-b1.7.3|seed=17320110707|fixture=stone-column+supported-sand12+supported-gravel13|settle=40+40ticks|cause=packet14-remove-support|confirmation=packet53-air|effect=official-falling-sand-and-gravel-settle|observation=packet23-type70+packet23-type71+live-packet53+fresh-login-packet51|column=10,sand=4:64:4:1:0->12:0,sandUpper=4:65:4:12:0->0:0,gravel=5:64:4:1:0->13:0,gravelUpper=5:65:4:13:0->0:0,packet23=70+71,persisted=true,testkit=44b010b23a142fbeed82b33da73594298f9c4b25645463060e7219c943828877,clients=2,disconnect=clean
 ```
 
-SHA-256: `d8653266b9cdaa16b9aa3d3fc760642400d2172380078b03499aff10394c84e8`.
+SHA-256: `959924fb1c3833226b9a7c0ffeebe212f9be0621ba06ca2f083e08492c72d066`.
 
 Packet14 is request evidence; Packet53 air is the support-removal
 boundary. Packet23 type 70/71 plus the settled live state and reload
