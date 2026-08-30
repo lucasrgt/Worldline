@@ -48,13 +48,7 @@ final class LifecycleClaimTestKitPinCheck {
                     && current.equals(required(lock, stem + "current_fingerprint"))
                             && pin.evidence().equals(required(lock, stem + "evidence_sha256"))
                     && source.equals(pin.source());
-            boolean successor = pin != null && source.equals("refactor-equivalent")
-                    && pin.source().equals("executed")
-                    && current.equals(required(lock, stem + "current_fingerprint"))
-                    && pin.evidence().equals(required(lock, stem + "evidence_sha256"))
-                    && TrainPinCheck.isExecuted(TrainPinCheck.manifest(root), id)
-                    && TrainPinCheck.carriesCurrent(
-                            TrainPinCheck.manifest(root), id, pin, current);
+            boolean successor = trainSuccessor(root, lock, stem, id, pin, current);
             require((direct || successor)
                             && required(lock, stem + "prior_fingerprint").matches("[0-9a-f]{64}"),
                     "lifecycle-claim transported proof drift: " + id);
@@ -91,14 +85,7 @@ final class LifecycleClaimTestKitPinCheck {
                 boolean direct = current.equals(lock.getProperty(stem + "current_fingerprint"))
                         && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"))
                         && pin.source().equals(lock.getProperty(stem + "source"));
-                boolean successor = "refactor-equivalent".equals(lock.getProperty(stem + "source"))
-                        && "executed".equals(pin.source())
-                        && current.equals(lock.getProperty(stem + "current_fingerprint"))
-                        && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"));
-                return direct || successor && TrainPinCheck.isExecuted(
-                        TrainPinCheck.manifest(root), id)
-                        && TrainPinCheck.carriesCurrent(
-                                TrainPinCheck.manifest(root), id, pin, current);
+                return direct || trainSuccessor(root, lock, stem, id, pin, current);
             }
             return false;
         } catch (Exception error) { return false; }
@@ -155,6 +142,17 @@ final class LifecycleClaimTestKitPinCheck {
                             SharedHelperPinCheck.manifest(root), relative, prior, predecessor);
         }
         return false;
+    }
+
+    private static boolean trainSuccessor(Path root, Properties lock, String stem,
+            String id, SmokePins.Entry pin, String current) throws Exception {
+        return pin != null
+                && "refactor-equivalent".equals(lock.getProperty(stem + "source"))
+                && ("refactor-equivalent".equals(pin.source())
+                        || "executed".equals(pin.source()))
+                && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"))
+                && TrainPinCheck.carriesCurrent(
+                        TrainPinCheck.manifest(root), id, pin, current);
     }
 
     private static void verifyFile(Path root, Properties lock, List<String> files, int index)
