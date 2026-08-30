@@ -101,6 +101,8 @@ final class ProviderDiscoveryPinMigration {
         Properties shared = SharedHelperPinCheck.manifest(root);
         require(Integer.parseInt(shared.getProperty("refresh.count", "0")) >= 1,
                 "provider refresh requires shared-helper attestations");
+        sources(root, lock, "modified", MODIFIED, false);
+        sources(root, lock, "added", ADDED, false);
         Properties train = TrainPinCheck.manifest(root); SmokePins pins = new SmokePins(root);
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
         int discovered = 0, carried = 0;
