@@ -70,6 +70,7 @@ final class LightingAtlasTrainSourceSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "lighting Atlas train successor allowlist drifted");
+        LightingAtlasDocumentationSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
