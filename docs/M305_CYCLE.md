@@ -7,12 +7,12 @@ cane `83` both reach height `>= 2`, and reloads the same cells. One official
 EOF is retried after a 5 second sleep.
 
 The frozen semantic SHA-256 is
-`b755666b909da0bc4583bf752a32ff032894d3959b4dd0a47c56d3e80c066721`.
+`cad16d48f0b3fac39820f9055cb39978c6307c7f7be9af052d3247f9728f25bd`.
 
 Run directly with:
 
 ```text
-java tools/smoke/PlantGrowthCycle.java m305-plant-growth
+java tools/harness/Gate.java --milestone m305-plant-growth
 ```
 
 Canonical evidence uses two official server JVMs and four client sessions.
