@@ -105,7 +105,11 @@ final class AdapterSplitPinMigration {
             lock.setProperty(stem + "current_fingerprint", current);
             lock.setProperty(stem + "evidence_sha256", pin.evidence());
         }
-        int smokeCount = carried + ProviderDiscoveryPinCheck.pendingCount(providers);
+        Properties schemas = SchemaPinCheck.manifest(root);
+        int successorIntroductions = SchemaPinCheck.introductionsAfter(schemas, lock);
+        int smokeCount = carried + ProviderDiscoveryPinCheck.pendingCount(providers)
+                - successorIntroductions;
+        require(smokeCount >= 0, "adapter successor introduction census drift");
         lock.setProperty("smoke.count", Integer.toString(smokeCount));
         pins.write(pins.entries()); store(path, lock);
         System.out.println("adapter-split pins refreshed: " + sourceChanges
