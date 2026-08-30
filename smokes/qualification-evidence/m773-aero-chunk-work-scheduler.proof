@@ -1,5 +1,5 @@
 schema=1
 id=m773-aero-chunk-work-scheduler
-fingerprint=e52c19e4abf5eb2ad0b8e825d84352ca7c47aa528255bbe0111cec8d433c2d11
+fingerprint=9a152c8b256fd23ceff78d72a6b0a145a42183ccbeb0d48ff9b732dc83100c21
 observation.sha256=0d4d945a55fb71c0339ce03e2c97e34f1668f6cf1177bac3ad88d994a991479a
-source=executed
+source=refactor-equivalent
