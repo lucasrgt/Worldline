@@ -1,5 +1,5 @@
 schema=1
 id=b173-cake-serving-lifecycle-cycle
-fingerprint=2ba74f5ead75d4db83aa4e62497c05afcc8a043502ddfa468f2279e24617f0b4
+fingerprint=cc94a729e18491745e6708965dac6dc77bdaddcacfc15c21b925faec808c0a52
 observation.sha256=b979f2b0ca7ee80a137540257d0c4a0f2d29e1daf0dae7cbd908c04e5f8cb7b1
 source=refactor-equivalent

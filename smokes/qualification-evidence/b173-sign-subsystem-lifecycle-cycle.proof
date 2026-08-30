@@ -1,5 +1,5 @@
 schema=1
 id=b173-sign-subsystem-lifecycle-cycle
-fingerprint=f11faf208515fd7781448a31a76c80056cae4c49aeca4773fa50f1daa7a77b9f
+fingerprint=a50ba55056bc51858ae25766351dd1fa5ce484f4e94d35acc3857ee77fd3525e
 observation.sha256=88895aeb913fac28ec77777016cb37e085ca55a62f23fe9c3ec42c3499433604
 source=refactor-equivalent
