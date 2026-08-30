@@ -87,15 +87,19 @@ final class ModuleBuild {
                     + ProcessHandle.current().pid() + "-" + System.nanoTime());
             delete(temporary); Files.createDirectories(temporary);
             try {
-                List<String> command = new ArrayList<>(List.of(javaTool("javac"), "-encoding", "UTF-8",
-                        "--release", release, "-Xlint:all,-options", "-Werror", "-d", temporary.toString()));
+                List<String> arguments = new ArrayList<>(List.of("-encoding", "UTF-8",
+                        "--release", release, "-Xlint:all,-options", "-Werror",
+                        "-d", quote(temporary.toString())));
                 if (!dependencies.isEmpty()) {
-                    command.add("-classpath");
-                    command.add(dependencies.stream().map(value -> value.path.toString())
-                            .collect(Collectors.joining(System.getProperty("path.separator"))));
+                    arguments.add("-classpath");
+                    arguments.add(quote(dependencies.stream().map(value -> value.path.toString())
+                            .collect(Collectors.joining(System.getProperty("path.separator")))));
                 }
-                sources.forEach(source -> command.add(source.toString()));
-                run(command, 180, cache.resolve(module));
+                sources.forEach(source -> arguments.add(quote(source.toString())));
+                Path argumentFile = temporary.resolve("javac.args");
+                Files.write(argumentFile, arguments, StandardCharsets.UTF_8);
+                run(List.of(javaTool("javac"), "@" + argumentFile), 180, cache.resolve(module));
+                Files.delete(argumentFile);
                 Files.writeString(temporary.resolve(".complete"), digest + "\n", StandardCharsets.UTF_8);
                 require(!Files.exists(directory), "module cache target appeared during publication");
                 move(temporary, directory); touch(module, digest);
@@ -197,6 +201,10 @@ final class ModuleBuild {
 
     private static void update(MessageDigest digest, String value) {
         digest.update(value.getBytes(StandardCharsets.UTF_8)); digest.update((byte) 0);
+    }
+
+    private static String quote(String value) {
+        return "\"" + value.replace("\\", "/") + "\"";
     }
 
     private static String required(Properties properties, String key) {
