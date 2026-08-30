@@ -31,6 +31,7 @@ final class MappingDocumentationSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "mapping documentation successor allowlist drifted");
+        StationApiAtlasSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
