@@ -32,6 +32,7 @@ final class RepositorySourcePolicy {
             NeighborTestKitPinCheck.execute(root);
             SupportFaceTestKitPinCheck.execute(root);
             BoundedDropTestKitPinCheck.execute(root);
+            LifecycleClaimTestKitPinCheck.execute(root);
             TestKitReleasePinCheck.execute(root);
             },
             () -> {

@@ -59,7 +59,10 @@ final class SupportFaceTestKitPinCheck {
                     && pin.evidence().equals(required(lock, stem + "evidence_sha256"))
                     && DataDrivenCycleCheck.carriesPlan(root, id, pin);
             boolean executedSuccessor = NeighborTestKitPinCheck.reexecuted(pin);
-            require(transported || exactSuccessor || dataDrivenSuccessor || executedSuccessor,
+            boolean lifecycleSuccessor = LifecycleClaimTestKitPinCheck.carries(
+                    root, id, pin, current);
+            require(transported || exactSuccessor || dataDrivenSuccessor || executedSuccessor
+                            || lifecycleSuccessor,
                     "support-face carried proof drift: " + id);
         }
         int anchors = integer(lock, "anchor.count");
@@ -84,7 +87,10 @@ final class SupportFaceTestKitPinCheck {
             boolean dataDrivenSuccessor = pin != null && pin.evidence().equals(evidence)
                     && DataDrivenCycleCheck.carriesPlan(root, id, pin);
             boolean executedSuccessor = NeighborTestKitPinCheck.reexecuted(pin);
-            require(transported || exactSuccessor || dataDrivenSuccessor || executedSuccessor,
+            boolean lifecycleSuccessor = LifecycleClaimTestKitPinCheck.carries(
+                    root, id, pin, current);
+            require(transported || exactSuccessor || dataDrivenSuccessor || executedSuccessor
+                            || lifecycleSuccessor,
                     "support-face exact anchor drift: " + id);
         }
         System.out.println("  support-face TestKit migration: " + carried
@@ -141,7 +147,8 @@ final class SupportFaceTestKitPinCheck {
         String current = required(lock, stem + "current_sha256");
         require(SupportFaceTestKitPinMigration.digest(Files.readAllBytes(root.resolve(relative)))
                         .equals(current)
-                        || BoundedDropTestKitPinCheck.transportsFile(root, relative, current),
+                        || BoundedDropTestKitPinCheck.transportsFile(root, relative, current)
+                        || LifecycleClaimTestKitPinCheck.transportsFile(root, relative, current),
                 "support-face current source drift: " + relative);
         byte[] prior = gitShow(root, SupportFaceTestKitPinMigration.BASE + ":" + relative);
         String expected = required(lock, stem + "prior_sha256");

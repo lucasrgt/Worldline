@@ -71,7 +71,10 @@ final class DataDrivenCycleCheck {
             require(hash(migrations, stem + "source_sha256")
                             && hash(migrations, stem + "prior_fingerprint")
                             && hash(migrations, stem + "evidence_sha256")
-                            && plan.fingerprint().equals(migrations.getProperty(stem + "plan_sha256")),
+                            && (plan.fingerprint().equals(migrations.getProperty(stem + "plan_sha256"))
+                            || LifecycleClaimTestKitPinCheck.transportsPlan(root, smoke.id,
+                                    migrations.getProperty(stem + "plan_sha256"),
+                                    plan.fingerprint())),
                     "data-driven migration evidence drift: " + smoke.id);
             String current = fingerprints.compute(smoke); SmokePins.Entry pin = pins.match(smoke.id, current);
             require(pin != null && (pin.source().equals("executed")
@@ -80,7 +83,9 @@ final class DataDrivenCycleCheck {
                             || TelemetryPinCheck.carries(telemetry, smoke.id, pin, current)
                             || SchemaPinCheck.carries(schemas, smoke.id, pin, current)
                             || FormattingPinCheck.carries(formatting, smoke.id, pin, current)
-                            || TrainPinCheck.carriesCurrent(train, smoke.id, pin, current))),
+                            || TrainPinCheck.carriesCurrent(train, smoke.id, pin, current)
+                            || LifecycleClaimTestKitPinCheck.carries(
+                                    root, smoke.id, pin, current))),
                     "data-driven refactor pin drift: " + smoke.id);
         }
         int expected = integer(migrations, "count");

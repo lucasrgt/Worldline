@@ -41,6 +41,7 @@ final class NeighborTestKitPinCheck {
                             root, id, prior, evidence, current);
             successor |= pin != null && TrainPinCheck.carriesCurrent(
                     train, id, pin, current);
+            successor |= LifecycleClaimTestKitPinCheck.carries(root, id, pin, current);
             NeighborTestKitPinMigration.require(direct || successor,
                     "neighbor TestKit exact anchor drift: " + id);
         }
@@ -62,8 +63,10 @@ final class NeighborTestKitPinCheck {
             boolean dataDrivenSuccessor = pin != null && pin.evidence().equals(evidence)
                     && DataDrivenCycleCheck.carriesPlan(root, id, pin);
             boolean executedSuccessor = reexecuted(pin);
+            boolean lifecycleSuccessor = LifecycleClaimTestKitPinCheck.carries(
+                    root, id, pin, current);
             NeighborTestKitPinMigration.require((transported || exactSuccessor || schemaSuccessor
-                            || dataDrivenSuccessor || executedSuccessor)
+                            || dataDrivenSuccessor || executedSuccessor || lifecycleSuccessor)
                     && required(lock, stem + "prior_fingerprint").matches("[0-9a-f]{64}"),
                     "neighbor TestKit carried proof drift: " + id);
         }
@@ -80,7 +83,8 @@ final class NeighborTestKitPinCheck {
         NeighborTestKitPinMigration.require(NeighborTestKitPinMigration.digest(current)
                 .equals(expectedCurrent)
                 || SupportFaceTestKitPinCheck.transportsFile(root, relative, expectedCurrent)
-                || BoundedDropTestKitPinCheck.transportsFile(root, relative, expectedCurrent),
+                || BoundedDropTestKitPinCheck.transportsFile(root, relative, expectedCurrent)
+                || LifecycleClaimTestKitPinCheck.transportsFile(root, relative, expectedCurrent),
                 "neighbor TestKit current source drift: " + relative);
         byte[] prior = gitShow(root, NeighborTestKitPinMigration.BASE + ":" + relative);
         String expected = required(lock, stem + "prior_sha256");

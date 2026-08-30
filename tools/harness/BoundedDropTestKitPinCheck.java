@@ -59,8 +59,10 @@ final class BoundedDropTestKitPinCheck {
                     && pin.evidence().equals(required(lock, stem + "evidence_sha256"))
                     && CompositeCycleCheck.carriesPlan(root, id, pin);
             boolean executedSuccessor = NeighborTestKitPinCheck.reexecuted(pin);
+            boolean lifecycleSuccessor = LifecycleClaimTestKitPinCheck.carries(
+                    root, id, pin, current);
             require(transported || exactSuccessor || dataDrivenSuccessor || schemaSuccessor
-                            || compositeSuccessor || executedSuccessor,
+                            || compositeSuccessor || executedSuccessor || lifecycleSuccessor,
                     "bounded-drop carried proof drift: " + id);
         }
         String id = required(lock, "anchor.id");
@@ -80,8 +82,10 @@ final class BoundedDropTestKitPinCheck {
         boolean compositeSuccessor = pin != null && pin.evidence().equals(evidence)
                 && CompositeCycleCheck.carriesPlan(root, id, pin);
         boolean executedSuccessor = NeighborTestKitPinCheck.reexecuted(pin);
+        boolean lifecycleSuccessor = LifecycleClaimTestKitPinCheck.carries(
+                root, id, pin, current);
         require(direct || exactSuccessor || dataDrivenSuccessor || schemaSuccessor
-                        || compositeSuccessor || executedSuccessor,
+                        || compositeSuccessor || executedSuccessor || lifecycleSuccessor,
                 "bounded-drop exact anchor drift");
         System.out.println("  bounded-drop TestKit migration: " + carried
                 + " carried proofs, 1 exact anchor");
@@ -127,7 +131,9 @@ final class BoundedDropTestKitPinCheck {
         String expectedCurrent = required(lock, stem + "current_sha256");
         require(BoundedDropTestKitPinMigration.digest(Files.readAllBytes(root.resolve(relative)))
                         .equals(expectedCurrent)
-                        || TrainPinCheck.transportsFile(train, root, relative, expectedCurrent),
+                        || TrainPinCheck.transportsFile(train, root, relative, expectedCurrent)
+                        || LifecycleClaimTestKitPinCheck.transportsFile(
+                                root, relative, expectedCurrent),
                 "bounded-drop current source drift: " + relative);
         byte[] prior = gitShow(root, BoundedDropTestKitPinMigration.BASE + ":" + relative);
         String expected = required(lock, stem + "prior_sha256");
