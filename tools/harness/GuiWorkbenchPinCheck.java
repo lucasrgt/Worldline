@@ -28,7 +28,8 @@ final class GuiWorkbenchPinCheck {
             require(hash(lock.getProperty(stem + "prior_sha256"))
                             && (digest(root.resolve(relative)).equals(baseline)
                             || TrainPinCheck.transportsFile(TrainPinCheck.manifest(root), root,
-                                    relative, baseline)),
+                                    relative, baseline)
+                            || SchemaPinCheck.transportsFile(root, relative, baseline)),
                     "GUI workbench source drift: " + relative);
         }
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
@@ -95,7 +96,8 @@ final class GuiWorkbenchPinCheck {
             return direct || BehaviorFamilyPinCheck.follows(BehaviorFamilyPinCheck.manifest(root), id,
                 lock.getProperty(stem + "current_fingerprint"),
                 lock.getProperty(stem + "evidence_sha256"), pin, current)
-                || TrainPinCheck.carriesCurrent(TrainPinCheck.manifest(root), id, pin, current); }
+                || TrainPinCheck.carriesCurrent(TrainPinCheck.manifest(root), id, pin, current)
+                || SchemaPinCheck.carries(SchemaPinCheck.manifest(root), id, pin, current); }
         catch (Exception error) { return false; }
     }
     static boolean follows(Properties lock, String id, String prior, String evidence,
@@ -118,7 +120,10 @@ final class GuiWorkbenchPinCheck {
             String stem = "source." + index + ".";
             if (relative.equals(lock.getProperty(stem + "path")))
                 return prior.equals(lock.getProperty(stem + "prior_sha256"))
-                        && digest(root.resolve(relative)).equals(lock.getProperty(stem + "current_sha256"));
+                        && (digest(root.resolve(relative)).equals(
+                                lock.getProperty(stem + "current_sha256"))
+                        || SchemaPinCheck.transportsFile(root, relative,
+                                lock.getProperty(stem + "current_sha256")));
         }
         return false;
     }
