@@ -232,11 +232,12 @@ Automation surface is tracked separately as `PUBLIC_TESTKIT`, `INTERNAL_API`, `S
 `NONE`. This prevents an internal smoke from being reported as a public Cypress-like TestKit
 capability.
 
-Two percentages must remain distinct:
+Three percentages must remain distinct:
 
 ```text
 functional proof = VERIFIED / candidate claims
 census resolution = resolved claims / candidate claims
+public TestKit coverage = VERIFIED with PUBLIC_TESTKIT / candidate claims
 ```
 
 The target is 98.8% functional proof, not 98.8% file or mapping coverage. With the 1,056-claim
@@ -284,6 +285,13 @@ The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
 
+The completed proof matrix is 1,056/1,056 verified. Public executability remains
+an independent ratchet: the universal block-registry fixture expands the
+official-client census into 96 deterministic `registry-presence` cases, raising
+the public TestKit surface to 1,012/1,056 claims (95.83%). Reaching the same
+98.8% target for reusable automation requires 32 more curated claim promotions;
+an internal or smoke-only proof does not count toward that target.
+
 ## Three conformance layers
 
 The public `BlockConformancePlan` expands versioned block profiles and templates deterministically:
@@ -293,6 +301,12 @@ The public `BlockConformancePlan` expands versioned block profiles and templates
    redstone, directional, transparent, luminous, or stateful metadata.
 3. Singular cases handle mechanics such as piston, bed, portal, furnace, chest, dispenser,
    jukebox, note block, TNT, sponge, fire, spawner, and cake.
+
+`BlockRegistryFixture` owns the universal base layer. It matches a deterministic
+native registry census against the complete versioned plan, rejects missing,
+duplicate, extra, or nondeterministic subjects, and emits one canonical public
+claim per registered block. `BlockRegistryCensusScenario` adapts the neutral
+runtime census without exposing mapped Minecraft classes to the fixture.
 
 `BlockLifecycleFixture` executes four routed claims as one capability. Through the orthogonal
 `BlockLifecycleDriver`, it requires a gameplay placement and inventory effect, a save plus fresh

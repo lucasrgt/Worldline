@@ -63,7 +63,7 @@ public final class AtlasIndex {
 
     private static boolean facetQuery(String query) {
         for (String prefix : new String[] {"domain-", "subsystem-", "category-", "status-",
-                "certainty-", "artifact-", "layer-"}) {
+                "certainty-", "artifact-", "layer-", "surface-"}) {
             if (query.startsWith(prefix) && query.length() > prefix.length()) return true;
         }
         return false;

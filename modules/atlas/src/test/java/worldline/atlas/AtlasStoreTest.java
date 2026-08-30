@@ -76,12 +76,17 @@ public final class AtlasStoreTest {
                 "agent context json");
         requireFacet(first, "domain-world");
         requireFacet(first, "layer-universal");
+        requireFacet(first, "surface-public-testkit");
+        require(AtlasIndex.search(first, "surface-public-testkit", 1000).size() == 1000,
+                "public TestKit facet should reach the bounded query limit");
         AtlasTaxonomy.validate(first);
         String taxonomy = AtlasQuery.taxonomy(first);
         require(taxonomy.contains("WORLDLINE-ATLAS-TAXONOMY/1")
                 && taxonomy.contains("domain=world")
                 && taxonomy.contains("subsystem=tile-entities"), "taxonomy index");
-        require(AtlasQuery.tags(first).contains("tag=category-claim"), "tag index");
+        String tags = AtlasQuery.tags(first);
+        require(tags.contains("tag=category-claim")
+                && tags.contains("tag=surface-public-testkit\trecords=1012"), "tag index");
         try {
             String documentation = new String(Files.readAllBytes(Paths.get("docs", "ATLAS.md")),
                     StandardCharsets.UTF_8);

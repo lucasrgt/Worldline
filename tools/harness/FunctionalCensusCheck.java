@@ -75,12 +75,19 @@ public final class FunctionalCensusCheck {
         double proof = percent(result.verified, candidates);
         double target = Double.parseDouble(required(schema, "target.proof.percent"));
         int targetClaims = (int) Math.ceil(candidates * target / 100.0);
+        double publicCoverage = percent(result.publicTestkit, candidates);
+        double publicTarget = Double.parseDouble(required(schema, "target.public-testkit.percent"));
+        int publicTargetClaims = (int) Math.ceil(candidates * publicTarget / 100.0);
         System.out.println("  functional census: " + subjects.rows.size() + " subjects x "
                 + templates.rows.size() + " templates = " + candidates + " candidate claims");
         System.out.println("    verified=" + result.verified + ", resolved=" + result.resolved
                 + ", unknown=" + unknown + ", singular-subjects=" + singularSubjects.size());
         System.out.println("    proof=" + decimal(proof) + "%, target=" + decimal(target)
                 + "%, verified-claims-to-target=" + Math.max(0, targetClaims - result.verified));
+        System.out.println("    public-testkit=" + result.publicTestkit + "/" + candidates
+                + ", coverage=" + decimal(publicCoverage) + "%, target="
+                + decimal(publicTarget) + "%, claims-to-target="
+                + Math.max(0, publicTargetClaims - result.publicTestkit));
     }
 
     private Map<String, Row> subjectsById(Table subjects) {
@@ -139,7 +146,7 @@ public final class FunctionalCensusCheck {
     private Result validateClaims(Table claims, Table exceptions, Map<String, Row> subjects,
             Map<String, Row> templates, Set<String> singularSubjects) throws Exception {
         Set<String> claimed = new HashSet<>();
-        int verified = 0, resolved = 0;
+        int verified = 0, resolved = 0, publicTestkit = 0;
         for (Row row : claims.rows) {
             token(row.get("claim_id"), "claim id");
             require(LAYERS.contains(row.get("layer")), "invalid claim layer");
@@ -160,6 +167,10 @@ public final class FunctionalCensusCheck {
                         "claim layer differs from conformance route: " + subject + "#" + template);
                 require(claimed.add(subject + "#" + template), "duplicate functional claim");
                 if (row.get("status").equals("VERIFIED")) verified++;
+                if (row.get("status").equals("VERIFIED")
+                        && row.get("automation_surface").equals("PUBLIC_TESTKIT")) {
+                    publicTestkit++;
+                }
                 if (Set.of("VERIFIED", "NATIVE_NONDETERMINISTIC", "NOT_APPLICABLE", "RETRACTED")
                         .contains(row.get("status"))) resolved++;
             }
@@ -176,7 +187,8 @@ public final class FunctionalCensusCheck {
             require(claimed.add(key), "claim and exception overlap: " + key);
             resolved++;
         }
-        return new Result(resolved, verified);
+        require(publicTestkit <= verified, "public TestKit claims exceed verified claims");
+        return new Result(resolved, verified, publicTestkit);
     }
 
     private void validateEvidence(Row row) throws Exception {
@@ -221,7 +233,7 @@ public final class FunctionalCensusCheck {
         return String.format(Locale.ROOT, "%.2f", value);
     }
 
-    private record Result(int resolved, int verified) {
+    private record Result(int resolved, int verified, int publicTestkit) {
     }
 
     private record Row(Map<String, String> values) {

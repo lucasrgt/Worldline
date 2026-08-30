@@ -8,7 +8,16 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 import worldline.analysis.CensusRunner;
+import worldline.testkit.BlockConformancePlan;
+import worldline.testkit.BlockConformanceProfile;
+import worldline.testkit.BlockConformanceTemplate;
+import worldline.testkit.BlockRegistryCensusScenario;
+import worldline.testkit.BlockRegistryEvidence;
+import worldline.testkit.BlockRegistryFixture;
+import worldline.testkit.ConformanceLayer;
 
 /** Captures the controlled b1.7.3 registry census into canonical files. */
 final class CensusCommand {
@@ -33,6 +42,31 @@ final class CensusCommand {
             output.println(section + ".sha256=" + Checks.sha256(bytes));
             output.println(section + ".file=" + file);
         }
+        BlockRegistryEvidence registry = BlockRegistryFixture.execute(registryPlan(),
+                new BlockRegistryCensusScenario(runner, "b1.7.3"));
+        Path registryFile = outDir.resolve("registry.wlevidence");
+        byte[] registryBytes = registry.canonical().getBytes(StandardCharsets.UTF_8);
+        Files.write(registryFile, registryBytes, StandardOpenOption.CREATE_NEW,
+                StandardOpenOption.WRITE);
+        output.println("registry.sha256=" + Checks.sha256(registryBytes));
+        output.println("registry.file=" + registryFile);
         return 0;
+    }
+
+    private static BlockConformancePlan registryPlan() throws IOException {
+        Path subjects = Paths.get("behavior", "functional-census", "b1.7.3", "subjects.tsv");
+        List<String> lines = Files.readAllLines(subjects, StandardCharsets.UTF_8);
+        Checks.require(!lines.isEmpty() && lines.get(0).startsWith("subject_id\t"),
+                "invalid Functional Census subjects");
+        List<BlockConformanceProfile> profiles = new ArrayList<BlockConformanceProfile>();
+        for (int line = 1; line < lines.size(); line++) {
+            if (lines.get(line).trim().isEmpty() || lines.get(line).startsWith("#")) continue;
+            String subject = lines.get(line).split("\\t", -1)[0];
+            profiles.add(new BlockConformanceProfile(subject,
+                    Collections.singletonList("registry"), false,
+                    Collections.<String, ConformanceLayer>emptyMap()));
+        }
+        return new BlockConformancePlan(profiles, Collections.singletonList(
+                new BlockConformanceTemplate("registry-presence", ConformanceLayer.UNIVERSAL)));
     }
 }

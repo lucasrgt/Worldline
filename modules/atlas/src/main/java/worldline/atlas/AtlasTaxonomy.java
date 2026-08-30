@@ -49,6 +49,10 @@ public final class AtlasTaxonomy {
         tags.add("artifact-" + artifact(record.artifact()));
         String layer = control(record.control(), "layer");
         if (!layer.isEmpty()) tags.add("layer-" + layer.toLowerCase(Locale.US));
+        String surface = control(record.control(), "automation");
+        if (!surface.isEmpty()) {
+            tags.add("surface-" + surface.toLowerCase(Locale.US).replace('_', '-'));
+        }
         return Collections.unmodifiableList(new ArrayList<String>(tags));
     }
 

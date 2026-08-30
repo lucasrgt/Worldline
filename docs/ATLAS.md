@@ -123,7 +123,8 @@ is CLI-only; it is not a Verify gate and does not fail M89.
 
 `atlas index` ranks exact IDs, subjects, evidence, refs, normalized terms,
 derived facets, and a small versioned synonym set. Queries such as `chunk`,
-`domain-world`, `category-claim`, and `layer-universal` are therefore stable
+`domain-world`, `category-claim`, `layer-universal`, and
+`surface-public-testkit` are therefore stable
 agent entry points. A query composed of one complete facet token is an exact
 filter; ordinary language remains ranked semantic search. `atlas context` adds bounded graph neighbors and renders
 domains, subsystems, tags, evidence, and refs as human-readable text or
@@ -131,6 +132,12 @@ domains, subsystems, tags, evidence, and refs as human-readable text or
 record totals; `atlas tags` renders the complete deterministic facet index.
 Ranking, tie-breaking, depth, and budgets are deterministic; no network or
 embedding service is required.
+
+Functional Census claims also expose their automation surface. The
+`surface-public-testkit`, `surface-internal-api`, and `surface-smoke-only`
+facets distinguish reusable public fixtures from knowledge that still needs
+promotion, so the Atlas can drive the next high-value subsystem instead of a
+raw milestone count.
 
 ## Gate synchronization
 

@@ -56,7 +56,7 @@ final class AtlasFunctionalCensusImport {
         String layer = layer(template, profile);
         String control = "layer=" + layer + ";applicability="
                 + (exception ? "NOT_APPLICABLE" : source == null ? "UNKNOWN"
-                        : source.get("applicability"));
+                        : source.get("applicability")) + ";automation=" + automation(source);
         String block = subjectId.substring(subjectId.lastIndexOf('/') + 1);
         String id = "atlas.claim.block-" + block + "." + templateId;
         String description = subject.get("name") + " " + template.get("observable");
@@ -133,6 +133,11 @@ final class AtlasFunctionalCensusImport {
         if ("OFFICIAL_CLIENT".equals(source.get("oracle"))) return AtlasSchema.CLIENT;
         if ("OFFICIAL_SERVER".equals(source.get("oracle"))) return AtlasSchema.SERVER;
         return AtlasSchema.WORLDLINE;
+    }
+
+    private static String automation(Row source) {
+        if (source == null || source.get("automation_surface").isEmpty()) return "NONE";
+        return source.get("automation_surface");
     }
 
     private static String subsystem(String template) {

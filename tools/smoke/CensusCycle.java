@@ -69,6 +69,14 @@ public final class CensusCycle {
       }
     }
     require(ironFound, "iron smelt row missing");
+    Path registryA = build.resolve("first").resolve("registry.wlevidence");
+    Path registryB = build.resolve("second").resolve("registry.wlevidence");
+    require(Arrays.equals(Files.readAllBytes(registryA), Files.readAllBytes(registryB)),
+        "public registry evidence is not deterministic");
+    String registry = new String(Files.readAllBytes(registryA), StandardCharsets.UTF_8);
+    require(registry.startsWith("schema=worldline.block-registry-evidence.v1\nclaims=96\n")
+            && occurrences(registry, "#registry-presence|UNIVERSAL") == 96,
+        "public registry evidence does not cover all universal claims");
     String report = "blocks=" + blocks + "\nitems=" + items + "\nrecipes=" + recipes
         + "\nsmelts=" + smelts + "\nsections.deterministic=true\niron.smelt=present"
         + "\nglass.row=present\ndigests.sha256=" + sectionDigests() + "\n";
@@ -101,6 +109,15 @@ public final class CensusCycle {
   private String bodySha(String text) throws Exception {
     int cut = text.lastIndexOf("sha256=");
     return sha256(text.substring(0, cut).getBytes(StandardCharsets.UTF_8));
+  }
+
+  private int occurrences(String text, String marker) {
+    int count = 0, start = 0;
+    while ((start = text.indexOf(marker, start)) >= 0) {
+      count++;
+      start += marker.length();
+    }
+    return count;
   }
 
   private Result launcher(String... arguments) throws Exception {
