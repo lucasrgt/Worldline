@@ -223,9 +223,23 @@ EntityLifecycleEvidence evidence = EntityLifecycleFixture.execute(
 The caller prepares causal runtime preconditions such as position, selected weapon, and spawned
 fixture. The TestKit then requires a positive Packet24 identity of the expected type, an
 entity-consistent movement transition when selected, Packet38 death status 3 plus Packet29
-removal, and an exact distinct Packet21 drop when selected. Drop cannot be claimed without death.
+removal, and a matching distinct Packet21 drop when selected. Drop cannot be claimed without death.
 Canonical evidence deliberately normalizes fresh entity IDs and poses, which makes equivalent
 runs equatable without weakening the asserted semantics.
+
+Probabilistic historical drops use the bounded overload. Each unsuccessful attempt still requires
+an expected Packet24 spawn followed by the caller's causal kill, Packet38 death status 3, and
+Packet29 removal before the fixture materializes another entity. The drop expectation can accept a
+count interval, while canonical evidence records the declared bound rather than the random winning
+attempt:
+
+```java
+EntityLifecycleEvidence squid = EntityLifecycleFixture.execute(
+        plan, "b1.7.3:entity/094", 94,
+        new EntityDropExpectation(351, 1, 3, 0), 8,
+        new LinkedHashSet<String>(Arrays.asList("spawn-materialization",
+                "damage-death", "drop-matrix")), scenario);
+```
 
 ### Block lifecycle matrices
 

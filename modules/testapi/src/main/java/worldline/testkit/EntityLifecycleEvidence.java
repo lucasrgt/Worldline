@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import worldline.api.RemoteDroppedItem;
-import worldline.api.RemoteItemStack;
 import worldline.api.RemoteMobDeath;
 import worldline.api.RemoteMobMovement;
 import worldline.api.RemoteMobSpawn;
@@ -16,11 +15,13 @@ public final class EntityLifecycleEvidence {
     private final RemoteMobMovement movement;
     private final RemoteMobDeath death;
     private final RemoteDroppedItem drop;
-    private final RemoteItemStack expectedDrop;
+    private final EntityDropExpectation expectedDrop;
+    private final int attempts;
+    private final int maximumAttempts;
 
     EntityLifecycleEvidence(List<EntityConformanceCase> claims, RemoteMobSpawn spawn,
             RemoteMobMovement movement, RemoteMobDeath death, RemoteDroppedItem drop,
-            RemoteItemStack expectedDrop) {
+            EntityDropExpectation expectedDrop, int attempts, int maximumAttempts) {
         this.claims = Collections.unmodifiableList(
                 new ArrayList<EntityConformanceCase>(claims));
         this.spawn = spawn;
@@ -28,6 +29,8 @@ public final class EntityLifecycleEvidence {
         this.death = death;
         this.drop = drop;
         this.expectedDrop = expectedDrop;
+        this.attempts = attempts;
+        this.maximumAttempts = maximumAttempts;
     }
 
     public List<EntityConformanceCase> claims() { return claims; }
@@ -35,9 +38,11 @@ public final class EntityLifecycleEvidence {
     public RemoteMobMovement movement() { return movement; }
     public RemoteMobDeath death() { return death; }
     public RemoteDroppedItem drop() { return drop; }
+    public int attempts() { return attempts; }
+    public int maximumAttempts() { return maximumAttempts; }
 
     public String canonical() {
-        StringBuilder value = new StringBuilder("schema=worldline.entity-lifecycle-evidence.v1\n");
+        StringBuilder value = new StringBuilder("schema=worldline.entity-lifecycle-evidence.v2\n");
         value.append("claims=").append(claims.size()).append('\n');
         for (int index = 0; index < claims.size(); index++) {
             EntityConformanceCase claim = claims.get(index);
@@ -51,8 +56,10 @@ public final class EntityLifecycleEvidence {
                 .append(",destroy:").append(death.destroyPacket())
                 .append(",hurt:").append(death.hurtObserved()).append('\n');
         if (drop != null) value.append("drop=item:").append(expectedDrop.legacyId())
-                .append(",count:").append(expectedDrop.count())
+                .append(",count:").append(expectedDrop.minimumCount()).append('-')
+                .append(expectedDrop.maximumCount())
                 .append(",damage:").append(expectedDrop.damage()).append('\n');
+        value.append("attempts=bounded,max:").append(maximumAttempts).append('\n');
         return value.toString();
     }
 

@@ -15,6 +15,11 @@ import worldline.api.RemoteMobSpawn;
 /** Proves executable, normalized lifecycle evidence and the protocol-session adapter. */
 public final class EntityLifecycleFixtureTest {
     private static final RemoteItemStack PORK = new RemoteItemStack(319, 1, 0);
+    private static final String[] ARCHETYPE_SUBJECTS = {
+        "b1.7.3:entity/051", "b1.7.3:entity/052", "b1.7.3:entity/057",
+        "b1.7.3:entity/091", "b1.7.3:entity/094"
+    };
+    private static final int[] ARCHETYPE_TYPES = {51, 52, 57, 91, 94};
 
     private EntityLifecycleFixtureTest() { }
 
@@ -44,11 +49,56 @@ public final class EntityLifecycleFixtureTest {
         require(creeper.claims().get(1).layer() == ConformanceLayer.SINGULAR
                 && creeper.claims().get(2).layer() == ConformanceLayer.SINGULAR,
                 "singular lifecycle routing drifted");
+        boundedArchetypes(plan);
         adapterExecutes(plan);
         reject(() -> EntityLifecycleFixture.execute(plan, "b1.7.3:entity/090", 90,
                 PORK, set("drop-matrix"), new FixedScenario(1, 90, PORK)));
         reject(() -> EntityLifecycleFixture.execute(plan, "b1.7.3:entity/090", 90,
                 PORK, all(), new FixedScenario(1, 91, PORK)));
+        reject(() -> EntityLifecycleFixture.execute(plan, "b1.7.3:entity/051", 51,
+                new EntityDropExpectation(352, 1, 1, 0), 2,
+                set("spawn-materialization"), new FixedScenario(1, 51, PORK)));
+        reject(() -> EntityLifecycleFixture.execute(plan, "b1.7.3:entity/051", 51,
+                new EntityDropExpectation(352, 1, 1, 0), 2,
+                set("spawn-materialization", "damage-death", "drop-matrix"),
+                new RetryScenario(10, 51, new RemoteItemStack(352, 1, 0), 3)));
+        reject(() -> EntityLifecycleFixture.execute(plan, "b1.7.3:entity/051", 51,
+                new EntityDropExpectation(352, 1, 1, 0), 1,
+                set("spawn-materialization", "damage-death", "drop-matrix"),
+                new FixedScenario(1, 51, PORK)));
+        reject(() -> new EntityDropExpectation(351, 3, 1, 0));
+    }
+
+    private static void boundedArchetypes(EntityConformancePlan plan) {
+        EntityDropExpectation[] drops = {
+            new EntityDropExpectation(352, 1, 1, 0),
+            new EntityDropExpectation(287, 1, 1, 0),
+            new EntityDropExpectation(320, 1, 1, 0),
+            new EntityDropExpectation(35, 1, 1, 0),
+            new EntityDropExpectation(351, 1, 3, 0)
+        };
+        Set<String> lethal = set("spawn-materialization", "damage-death", "drop-matrix");
+        for (int index = 0; index < ARCHETYPE_SUBJECTS.length; index++) {
+            RemoteItemStack accepted = drops[index].candidates().get(
+                    drops[index].candidates().size() - 1);
+            EntityLifecycleEvidence evidence = EntityLifecycleFixture.execute(plan,
+                    ARCHETYPE_SUBJECTS[index], ARCHETYPE_TYPES[index], drops[index], 8, lethal,
+                    new RetryScenario(100 + index * 10, ARCHETYPE_TYPES[index], accepted, 3));
+            require(evidence.attempts() == 3 && evidence.maximumAttempts() == 8
+                    && evidence.claims().size() == 3
+                    && evidence.claims().get(0).layer() == ConformanceLayer.UNIVERSAL
+                    && evidence.claims().get(1).layer() == ConformanceLayer.ARCHETYPE
+                    && drops[index].matches(evidence.drop()),
+                    "bounded archetype lifecycle drifted: " + ARCHETYPE_SUBJECTS[index]);
+        }
+        EntityDropExpectation bone = drops[0];
+        EntityLifecycleEvidence first = EntityLifecycleFixture.execute(plan,
+                ARCHETYPE_SUBJECTS[0], 51, bone, 8, lethal,
+                new RetryScenario(900, 51, bone.candidates().get(0), 1));
+        EntityLifecycleEvidence third = EntityLifecycleFixture.execute(plan,
+                ARCHETYPE_SUBJECTS[0], 51, bone, 8, lethal,
+                new RetryScenario(950, 51, bone.candidates().get(0), 3));
+        require(first.equals(third), "bounded randomness leaked into semantic evidence");
     }
 
     private static void adapterExecutes(EntityConformancePlan plan) {
@@ -112,6 +162,27 @@ public final class EntityLifecycleFixtureTest {
         }
         @Override public RemoteDroppedItem awaitDrop(RemoteItemStack expected) {
             return drop(entity + 1, item);
+        }
+    }
+
+    private static final class RetryScenario implements EntityLifecycleScenario {
+        private final int base, type, successAttempt;
+        private final RemoteItemStack item;
+        private int kills, current;
+        RetryScenario(int base, int type, RemoteItemStack item, int successAttempt) {
+            this.base = base; this.type = type; this.item = item;
+            this.successAttempt = successAttempt;
+        }
+        @Override public RemoteMobSpawn materialize(int expected) {
+            current = base + kills;
+            return spawn(current, type);
+        }
+        @Override public RemoteMobMovement awaitMovement(int id) { return movement(current); }
+        @Override public void kill(int id) { kills++; }
+        @Override public RemoteMobDeath awaitDeath(int id) { return death(current); }
+        @Override public RemoteDroppedItem awaitDrop(RemoteItemStack expected) {
+            return kills >= successAttempt && expected.equals(item)
+                    ? drop(current + 1000, item) : null;
         }
     }
 

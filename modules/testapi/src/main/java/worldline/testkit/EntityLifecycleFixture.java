@@ -21,8 +21,19 @@ public final class EntityLifecycleFixture {
     public static EntityLifecycleEvidence execute(EntityConformancePlan plan, String subject,
             int legacyType, RemoteItemStack expectedDrop, Set<String> dimensions,
             EntityLifecycleScenario scenario) {
+        EntityDropExpectation expectation = expectedDrop == null ? null
+                : EntityDropExpectation.exact(expectedDrop);
+        return execute(plan, subject, legacyType, expectation, 1, dimensions, scenario);
+    }
+
+    public static EntityLifecycleEvidence execute(EntityConformancePlan plan, String subject,
+            int legacyType, EntityDropExpectation expectedDrop, int maximumAttempts,
+            Set<String> dimensions, EntityLifecycleScenario scenario) {
         if (plan == null || scenario == null) throw new NullPointerException("entity lifecycle");
         if (legacyType < 1 || legacyType > 127) throw new IllegalArgumentException("legacy type");
+        if (maximumAttempts < 1 || maximumAttempts > 64) {
+            throw new IllegalArgumentException("maximum attempts");
+        }
         Set<String> selected = selected(dimensions);
         if (selected.contains("drop-matrix") && !selected.contains("damage-death")) {
             throw new IllegalArgumentException("drop requires death");
@@ -30,7 +41,22 @@ public final class EntityLifecycleFixture {
         if (selected.contains("drop-matrix") && expectedDrop == null) {
             throw new IllegalArgumentException("drop expectation");
         }
+        if (!selected.contains("drop-matrix") && maximumAttempts != 1) {
+            throw new IllegalArgumentException("bounded attempts require drop");
+        }
         List<EntityConformanceCase> claims = claims(plan, subject, selected);
+        for (int attempt = 1; attempt <= maximumAttempts; attempt++) {
+            EntityLifecycleEvidence evidence = attempt(claims, legacyType, expectedDrop,
+                    attempt, maximumAttempts, selected, scenario);
+            if (evidence != null) return evidence;
+        }
+        throw new IllegalStateException("entity drop absent after bounded attempts: "
+                + maximumAttempts);
+    }
+
+    private static EntityLifecycleEvidence attempt(List<EntityConformanceCase> claims,
+            int legacyType, EntityDropExpectation expectedDrop, int attempt,
+            int maximumAttempts, Set<String> selected, EntityLifecycleScenario scenario) {
         RemoteMobSpawn spawn = scenario.materialize(legacyType);
         require(spawn != null && spawn.legacyType() == legacyType && spawn.entityId() > 0,
                 "entity materialization identity drifted");
@@ -50,11 +76,22 @@ public final class EntityLifecycleFixture {
         }
         RemoteDroppedItem drop = null;
         if (selected.contains("drop-matrix")) {
-            drop = scenario.awaitDrop(expectedDrop);
-            require(drop != null && drop.entityId() != spawn.entityId()
-                    && expectedDrop.equals(drop.item()), "entity drop boundary drifted");
+            drop = awaitDrop(expectedDrop, scenario);
+            if (drop == null) return null;
+            require(drop.entityId() != spawn.entityId() && expectedDrop.matches(drop),
+                    "entity drop boundary drifted");
         }
-        return new EntityLifecycleEvidence(claims, spawn, movement, death, drop, expectedDrop);
+        return new EntityLifecycleEvidence(claims, spawn, movement, death, drop, expectedDrop,
+                attempt, maximumAttempts);
+    }
+
+    private static RemoteDroppedItem awaitDrop(EntityDropExpectation expected,
+            EntityLifecycleScenario scenario) {
+        for (RemoteItemStack candidate : expected.candidates()) {
+            RemoteDroppedItem drop = scenario.awaitDrop(candidate);
+            if (drop != null) return drop;
+        }
+        return null;
     }
 
     private static Set<String> selected(Set<String> source) {

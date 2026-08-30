@@ -32,7 +32,12 @@ public final class EntityConformancePlanTest {
     static EntityConformancePlan lifecyclePlan() {
         return new EntityConformancePlan(Arrays.asList(
                 profile("b1.7.3:entity/090", false, "animal"),
-                profile("b1.7.3:entity/050", true, "explosive")), templates());
+                profile("b1.7.3:entity/050", true, "explosive"),
+                profile("b1.7.3:entity/051", false, "hostile"),
+                profile("b1.7.3:entity/052", false, "hostile"),
+                profile("b1.7.3:entity/057", false, "hostile"),
+                profile("b1.7.3:entity/091", false, "animal"),
+                profile("b1.7.3:entity/094", false, "aquatic")), templates());
     }
 
     private static EntityConformanceProfile profile(String subject, boolean singular,

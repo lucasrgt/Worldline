@@ -234,10 +234,12 @@ The dimensions are registry presence, spawn materialization, save/reload, moveme
 collision shape, damage/death, drop matrix, interaction state, environment response, tick
 lifecycle, and native rendering. Profiles route these through universal, archetype, and singular
 cases. Fifty-three cells are bound to existing qualified official-runtime evidence for projectiles,
-paintings, TNT, falling sand, vehicles, hostile and passive mobs. Seven of those proofs now have a
-strict public binding ledger: pig materialization, movement, death and pork drop use the universal
-plus archetype routes, while creeper materialization, death and gunpowder drop exercise universal
-plus singular routes through `EntityLifecycleFixture`. The other 46 remain `SMOKE_ONLY`; the
+paintings, TNT, falling sand, vehicles, hostile and passive mobs. Twenty-two of those proofs now
+have a strict public binding ledger. Pig materialization, movement, death and pork drop use the
+universal plus archetype routes, while creeper materialization, death and gunpowder drop exercise
+universal plus singular routes. Skeleton, spider, pig-zombie, sheep, and squid each execute bounded
+materialization, causal death, and historical drop expectations through the universal plus
+archetype routes. The other 31 remain `SMOKE_ONLY`; the
 remaining 211 cells are explicit `UNKNOWN` Atlas claims.
 
 ## Status and automation
@@ -314,8 +316,8 @@ reconciliation, the block public TestKit surface now covers 1,056/1,056 claims
 (100%), completing that family's automation-surface target. The final six tick-policy claims bind sand and
 gravel scheduling, natural wheat, cactus, and sugar-cane growth, and furnace tile ticks to official
 public fixtures. Across both current families the honest aggregate is 1,109/1,320 verified
-(84.02%) and 1,063/1,320 public TestKit claims (80.53%). The entity family contributes seven public
-claims, 46 smoke-only claims, and all 211 unknown cells.
+(84.02%) and 1,078/1,320 public TestKit claims (81.67%). The entity family contributes 22 public
+claims, 31 smoke-only claims, and all 211 unknown cells.
 
 ## Three conformance layers
 
@@ -330,9 +332,12 @@ deterministically through the same routing rules:
 
 `EntityLifecycleFixture` is the first executable entity mini-subsystem. A driver-neutral
 `EntityLifecycleScenario` performs materialization, optional movement, causal kill/death, and
-optional exact drop observation. `MobObservationEntityScenario` connects that fixture to the
+optional bounded drop observation. `EntityDropExpectation` expresses an exact stack or a legal
+count interval, and the fixture can repeat the entire spawn/kill/death attempt up to a declared
+limit instead of polling an unrelated drop. `MobObservationEntityScenario` connects that fixture to the
 public protocol-14 `MobObservationSession`. Evidence normalizes fresh entity IDs and coordinates
-while retaining wire family, type, death status, hurt observation, and exact expected item stack,
+while retaining wire family, type, death status, hurt observation, item identity, metadata, accepted
+count range, and attempt bound,
 so equivalent official runs remain comparable. Drop claims require death, all selected operations
 must resolve to declared plan cases, and a missing or mismatched runtime observation fails closed.
 The entity binding ledger links each promoted claim to this fixture and to its original qualified
