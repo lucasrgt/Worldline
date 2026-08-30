@@ -31,6 +31,7 @@ final class DedicatedServerAtlasDocumentationSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "dedicated server documentation successor allowlist drifted");
+        DedicatedServerArtifactSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
