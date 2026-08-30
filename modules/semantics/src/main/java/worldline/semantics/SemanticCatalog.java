@@ -38,6 +38,7 @@ public final class SemanticCatalog {
         all.addAll(SchedulerSemantics.mappings());
         all.addAll(WorldSemantics.mappings());
         all.addAll(BlockSemantics.mappings());
+        all.addAll(BlockTickSemantics.mappings());
         all.addAll(PlayerSemantics.mappings());
         all.addAll(EntitySemantics.mappings());
         all.addAll(ChunkSemantics.mappings());

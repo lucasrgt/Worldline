@@ -18,6 +18,16 @@ public final class AtlasCoverageTest {
                 "tick semantic filled");
         require("1".equals(store.get("atlas.coverage-unit.tick-lifecycle.CONTROL").control()),
                 "tick control filled");
+        require("1".equals(store.get("atlas.coverage-unit.block-ticks.SEMANTIC").control()),
+                "block tick semantic filled");
+        require("1".equals(store.get("atlas.coverage-unit.block-ticks.CONTROL").control()),
+                "block tick TestKit boundary controlled");
+        require("1".equals(store.get("atlas.coverage-unit.block-ticks.DETERMINISM").control()),
+                "block tick evidence normalization deterministic");
+        AtlasRecord blockTick = store.get("atlas.boundary.BLOCK_TICK");
+        require("CONTROLLED".equals(blockTick.control())
+                && blockTick.refs().contains("atlas.subsystem.block-ticks"),
+                "block tick boundary classification");
         require("1".equals(store.get("atlas.coverage-unit.inventory.ORACLE").control()),
                 "inventory oracle filled");
         require("1".equals(store.get("atlas.coverage-unit.aero.TESTABILITY").control()),

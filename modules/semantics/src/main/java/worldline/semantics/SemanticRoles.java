@@ -20,6 +20,7 @@ public final class SemanticRoles {
     public static final String RESOURCE = "resource", PERSISTENCE = "persistence";
     public static final String SAVE = "save", LIFECYCLE = "lifecycle";
     public static final String LAB = "lab", DOMAIN = "domain", REDSTONE = "redstone";
+    public static final String BLOCK_TICK = "block-tick";
     private static final Map<String, List<String>> REQUIRED = required();
 
     private SemanticRoles() {}
@@ -70,6 +71,9 @@ public final class SemanticRoles {
                 "CHUNK_COORDINATE_Y", "CHUNK_COORDINATE_Z"));
         roles.put(BLOCK, list("BLOCK_TYPE", "BLOCK_ID", "BLOCK_STONE", "BLOCK_BEDROCK", "BLOCK_SAND",
                 "BLOCK_SAND_TYPE", "BLOCK_SAND_FALL"));
+        roles.put(BLOCK_TICK, list("BLOCK_TICK_POLICY_MECHANISM", "BLOCK_TICK_POLICY_SCENARIO",
+                "BLOCK_TICK_POLICY_OBSERVATION", "BLOCK_TICK_POLICY_FIXTURE",
+                "BLOCK_TICK_POLICY_EVIDENCE"));
         roles.put(CHUNK, list("CHUNK_TYPE", "CHUNK_LOOKUP", "CHUNK_POPULATE", "CHUNK_POPULATED",
                 "CHUNK_NEVER_SAVE", "CHUNK_RELIGHT", "CHUNK_LOADER", "LOADER_LOAD", "LOADER_SAVE",
                 "LOADER_FLUSH", "CHUNK_PROVIDER", "SAVE_CHUNKS", "CHUNK_MODIFIED",

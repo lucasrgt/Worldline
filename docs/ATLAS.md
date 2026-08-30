@@ -94,6 +94,11 @@ REPRODUCIBILITY, DETERMINISM.
 A cell is `1/1` only when an importer linked qualifying evidence. Empty cells
 are `UNKNOWN` and appear in `worldline atlas gaps`.
 
+The `block-ticks` subsystem binds the public `BlockTickPolicyFixture` pipeline
+(mechanism, scenario, normalized observation, validation, and equatable evidence)
+to `atlas.boundary.BLOCK_TICK`. This is a controlled Worldline TestKit boundary;
+it does not claim that the native vanilla scheduler itself is virtualized.
+
 ## CLI
 
 ```text

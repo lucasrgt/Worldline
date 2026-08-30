@@ -10,6 +10,8 @@ public final class SemanticGraphTest {
         require(first.tokens().size() == SemanticRoles.categories().size(), "token count");
         require(first.tokens().contains("CLOCK"), "clock token");
         require(first.tokens().contains("SAVE"), "save token");
+        require(first.tokens().contains("BLOCK_TICK"), "hyphenated category token");
+        require(!first.readers("BLOCK_TICK").isEmpty(), "block tick readers");
         require(!first.readers("CLOCK").isEmpty(), "clock readers");
         require(!first.writers("WORLD").isEmpty(), "world writers");
         require(first.render().contains("complete=true"), "graph completeness");

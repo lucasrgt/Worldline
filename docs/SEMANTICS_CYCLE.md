@@ -9,7 +9,7 @@ tessellator, nibble, and GUI-slot promotions.
 
 | Requirement | Authoritative evidence | Result |
 | --- | --- | --- |
-| Closed catalog | 25 categories and 265 required roles; unknown or duplicate symbols fail closed | PASS |
+| Closed catalog | 26 categories and 284 required roles; unknown or duplicate symbols fail closed | PASS |
 | Adapter manifests | `b173-client`, `b173-server`, and `stationapi` are drivers; `aero-model-lib` is the overlay extension pin with nine oracled `worldline/aero/` sites; extra in-tree adapters and `aero/modellib` types fail closed | PASS |
 | Map coverage | Every named `symbols.map` symbol in the client, world, and M10 tessellator maps has a catalog role | PASS |
 | Static graph | `SemanticGraph` fails closed on unknown read/write/dep tokens | PASS |
@@ -19,7 +19,7 @@ tessellator, nibble, and GUI-slot promotions.
 Frozen catalog SHA-256:
 
 ```text
-0a1484f9f6c8eb990289fac906c9a5741798259c34c1f528e862154f059c30e0
+3ddc9fd5844f11f16b2fca78801172662611dd880e102ea15ee8d510338b7fb5
 ```
 
 Canonical qualification command:
