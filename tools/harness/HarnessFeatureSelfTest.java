@@ -22,6 +22,7 @@ final class HarnessFeatureSelfTest {
         TestKitArtifactTrainSourceSuccessor.selfTest();
         RedstoneAtlasTrainSourceSuccessor.selfTest();
         EntityCensusAtlasSuccessor.selfTest();
+        EntityLifecycleTestKitSuccessor.selfTest();
         CandidateReadiness.selfTest();
         CandidateSourceClosure.selfTest();
         NeighborTestKitPinCheck.selfTest();
