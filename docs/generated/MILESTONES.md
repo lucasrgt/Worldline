@@ -11,9 +11,9 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m4-durable-snapshot` | CARRIED | durable-snapshot |
 | `m5-reproduction-bundle` | CARRIED | reproduction-bundle |
 | `m6-trace-explorer` | CARRIED | trace-divergence |
-| `m7-mod-loading` | CARRIED | mod-loading |
-| `m8-mod-version-diff` | CARRIED | mod-version-difference |
-| `m9-scenario-minimization` | CARRIED | scenario-minimization |
+| `m7-mod-loading` | EXECUTED | mod-loading |
+| `m8-mod-version-diff` | EXECUTED | mod-version-difference |
+| `m9-scenario-minimization` | EXECUTED | scenario-minimization |
 | `m10-native-render` | CARRIED | client-runtime-equivalence |
 | `m11-aero-attribution` | CARRIED | aero-diagnostic-capture |
 | `m11-mod-api` | CARRIED | mod-api-lifecycle |
@@ -563,7 +563,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m617-spawn-light-cap-set` | CARRIED | spawn light cap set |
 | `m618-wolf-tame-set` | CARRIED | wolf tame set |
 | `m619-undead-sun-burn-set` | CARRIED | undead sun burn set |
-| `m620-stationapi-testkit-driver` | CARRIED | StationAPI TestKit driver |
+| `m620-stationapi-testkit-driver` | EXECUTED | StationAPI TestKit driver |
 | `m621-save-worldgen-set` | CARRIED | save worldgen set |
 | `m622-pathfinding-matrix` | CARRIED | Entity pathfinding matrix |
 | `m623-lighting-engine-matrix` | CARRIED | Lighting engine matrix |
@@ -659,7 +659,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
-| `gui-tree` | CARRIED | ui-tree-equivalence |
+| `gui-tree` | EXECUTED | ui-tree-equivalence |
 | `lab-cycle` | CARRIED | runtime-lab |
 | `redstone-lever-button` | CARRIED | redstone-lever-button |
 | `redstone-piston-extend` | CARRIED | redstone-piston-extend |
