@@ -16,7 +16,7 @@ final class MilestoneObjective {
     private static final Pattern BINDING = Pattern.compile(
             "[a-z][A-Za-z0-9_.]*[A-Z][A-Za-z0-9_]*#[a-z][A-Za-z0-9_]*");
     private static final Pattern CENSUS_CLAIM = Pattern.compile(
-            "b1\\.7\\.3:block/[0-9]{3}#[a-z][a-z0-9-]{0,62}");
+            "b1\\.7\\.3:(block|entity)/[0-9]{3}#[a-z][a-z0-9-]{0,62}");
     private static final Set<String> KINDS = Set.of(
             "behavior-package", "structural-capability", "performance-package");
     private static final Set<String> LAYERS = Set.of("universal", "archetype", "singular");
@@ -157,13 +157,24 @@ final class MilestoneObjective {
 
     private void validateCensusClaims(Path root, String revision) throws Exception {
         if (!"behavior-package".equals(required("kind"))) return;
-        String directory = "behavior/functional-census/b1.7.3/";
-        Set<String> subjects = column(root, revision, directory + "subjects.tsv", 0);
-        Set<String> templates = column(root, revision, directory + "templates.tsv", 0);
-        Set<String> resolved = resolvedClaims(root, revision, directory, subjects);
+        String base = "behavior/functional-census/";
+        List<String> families = lines(root, revision, base + "families.tsv");
+        java.util.Map<String, Set<String>> templatesBySubject = new java.util.HashMap<>();
+        Set<String> resolved = new HashSet<>();
+        for (int line = 1; line < families.size(); line++) {
+            if (families.get(line).isBlank() || families.get(line).startsWith("#")) continue;
+            String[] fields = families.get(line).split("\\t", -1);
+            require(fields.length == 7, "invalid Functional Census family manifest");
+            String directory = base + fields[1] + "/";
+            Set<String> subjects = column(root, revision, directory + "subjects.tsv", 0);
+            Set<String> templates = column(root, revision, directory + "templates.tsv", 0);
+            for (String subject : subjects) templatesBySubject.put(subject, templates);
+            resolved.addAll(resolvedClaims(root, revision, directory, subjects));
+        }
         for (String claim : claims()) {
             String[] parts = claim.split("#", -1);
-            require(parts.length == 2 && subjects.contains(parts[0]) && templates.contains(parts[1]),
+            Set<String> templates = parts.length == 2 ? templatesBySubject.get(parts[0]) : null;
+            require(templates != null && templates.contains(parts[1]),
                     "objective references an unknown Functional Census claim: " + claim);
             require(!resolved.contains(claim), "objective references an already resolved claim: " + claim);
         }
@@ -260,6 +271,8 @@ final class MilestoneObjective {
     }
 
     static void selfTest() throws Exception {
+        require(CENSUS_CLAIM.matcher("b1.7.3:entity/090#movement-policy").matches(),
+                "entity Functional Census claims are not routable");
         String text = "schema=1\nid=m1-block-conformance\nkind=behavior-package\n"
                 + "capability=block-conformance\n"
                 + "outcome=Deliver reusable block conformance across the vanilla registry.\n"

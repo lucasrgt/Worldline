@@ -11,20 +11,28 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Expands the finite Functional Census into one Atlas claim per subject/template cell. */
+/** Expands every finite Functional Census family into one Atlas claim per matrix cell. */
 final class AtlasFunctionalCensusImport {
-    private static final String BASE = "behavior/functional-census/b1.7.3/";
+    private static final String BASE = "behavior/functional-census/";
 
     private AtlasFunctionalCensusImport() {}
 
     static List<AtlasRecord> load(Path root) throws IOException {
-        List<Row> subjects = table(root.resolve(BASE + "subjects.tsv"));
-        List<Row> templates = table(root.resolve(BASE + "templates.tsv"));
-        Map<String, Row> profiles = index(table(root.resolve(BASE + "profiles.tsv")), "subject_id");
-        Map<String, Row> claims = expandClaims(table(root.resolve(BASE + "claims.tsv")), subjects);
+        List<AtlasRecord> result = new ArrayList<AtlasRecord>();
+        for (Row family : table(root.resolve(BASE + "families.tsv"))) {
+            result.addAll(loadFamily(root, root.resolve(BASE + family.get("data_path"))));
+        }
+        return Collections.unmodifiableList(result);
+    }
+
+    private static List<AtlasRecord> loadFamily(Path root, Path base) throws IOException {
+        List<Row> subjects = table(base.resolve("subjects.tsv"));
+        List<Row> templates = table(base.resolve("templates.tsv"));
+        Map<String, Row> profiles = index(table(base.resolve("profiles.tsv")), "subject_id");
+        Map<String, Row> claims = expandClaims(table(base.resolve("claims.tsv")), subjects);
         Map<String, List<Row>> provenance = provenance(claims);
         applyDeltas(root, claims, provenance);
-        Map<String, Row> exceptions = indexPair(table(root.resolve(BASE + "exceptions.tsv")));
+        Map<String, Row> exceptions = indexPair(table(base.resolve("exceptions.tsv")));
         List<AtlasRecord> result = new ArrayList<AtlasRecord>();
         for (Row subject : subjects) for (Row template : templates) {
             String key = key(subject.get("subject_id"), template.get("template_id"));
@@ -52,13 +60,14 @@ final class AtlasFunctionalCensusImport {
             add(evidence, "claim=", proof.get("claim_id"));
             add(evidence, "justification=", safe(proof.get("justification")));
         }
-        refs.add("atlas.subsystem." + subsystem(templateId));
+        String kind = subjectId.substring(subjectId.indexOf(':') + 1, subjectId.indexOf('/'));
+        refs.add("atlas.subsystem." + subsystem(kind, templateId));
         String layer = layer(template, profile);
         String control = "layer=" + layer + ";applicability="
                 + (exception ? "NOT_APPLICABLE" : source == null ? "UNKNOWN"
                         : source.get("applicability")) + ";automation=" + automation(source);
-        String block = subjectId.substring(subjectId.lastIndexOf('/') + 1);
-        String id = "atlas.claim.block-" + block + "." + templateId;
+        String legacyId = subjectId.substring(subjectId.lastIndexOf('/') + 1);
+        String id = "atlas.claim." + kind + "-" + legacyId + "." + templateId;
         String description = subject.get("name") + " " + template.get("observable");
         return AtlasRecord.of(id, AtlasKind.CLAIM, status, artifact(source), AtlasSchema.SCOPE,
                 description, control, 0, evidence, refs);
@@ -140,11 +149,14 @@ final class AtlasFunctionalCensusImport {
         return source.get("automation_surface");
     }
 
-    private static String subsystem(String template) {
+    private static String subsystem(String kind, String template) {
         if (template.contains("light")) return "lighting";
-        if (template.contains("collision")) return "player";
+        if (template.contains("collision")) return kind.equals("entity") ? "entities" : "player";
         if (template.contains("render")) return "rendering";
         if (template.contains("save")) return "saves";
+        if (kind.equals("entity") && template.contains("movement")) return "mob-ai";
+        if (kind.equals("entity") && template.contains("tick")) return "tick-lifecycle";
+        if (kind.equals("entity") && !template.contains("registry")) return "entities";
         if (template.contains("tick") || template.contains("neighbor")) return "block-ticks";
         if (template.contains("registry")) return "mappings";
         return "inventory";

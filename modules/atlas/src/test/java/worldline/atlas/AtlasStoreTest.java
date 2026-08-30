@@ -24,7 +24,7 @@ public final class AtlasStoreTest {
         require(first.kind(AtlasKind.BOUNDARY).size() >= 24, "boundary baseline");
         require(first.kind(AtlasKind.SCENARIO).size() == WorldlineBehavior.all().size() + 1,
                 "behavior scenarios");
-        require(first.kind(AtlasKind.CLAIM).size() == 1056, "functional census denominator");
+        require(first.kind(AtlasKind.CLAIM).size() == 1320, "functional census denominator");
         require(first.kind(AtlasKind.EXPERIMENT).size() >= 90, "experiments");
         require(first.kind(AtlasKind.HYPOTHESIS).size() >= 40, "hypotheses");
         require(first.kind(AtlasKind.FIELD).size() >= 20, "trace fields");
@@ -67,6 +67,13 @@ public final class AtlasStoreTest {
                 "verified certainty");
         AtlasRecord completed = first.get("atlas.claim.block-054.tick-policy");
         require(AtlasStatus.VERIFIED.equals(completed.status()), "final census claim verified");
+        AtlasRecord pigSpawn = first.get("atlas.claim.entity-090.spawn-materialization");
+        require(AtlasStatus.VERIFIED.equals(pigSpawn.status())
+                && pigSpawn.refs().contains("atlas.subsystem.entities")
+                && pigSpawn.control().contains("automation=SMOKE_ONLY"),
+                "entity census proof was not imported honestly");
+        require(AtlasStatus.UNKNOWN.equals(first.get("atlas.claim.entity-092.drop-matrix").status()),
+                "implicit entity census gap was not materialized");
         require(!AtlasIndex.search(first, "chunk", 20).isEmpty(), "semantic chunk index");
         String context = AtlasContextQuery.json(first, "chunk",
                 AtlasContext.build(first, "chunk", 20, 1));
@@ -88,7 +95,7 @@ public final class AtlasStoreTest {
         require(tags.contains("tag=category-claim")
                 && tags.contains("tag=surface-public-testkit\trecords=1056")
                 && !tags.contains("tag=surface-internal-api")
-                && !tags.contains("tag=surface-smoke-only"), "tag index");
+                && tags.contains("tag=surface-smoke-only\trecords=53"), "tag index");
         try {
             String documentation = new String(Files.readAllBytes(Paths.get("docs", "ATLAS.md")),
                     StandardCharsets.UTF_8);
@@ -97,8 +104,11 @@ public final class AtlasStoreTest {
             throw new AssertionError(error);
         }
         require(AtlasGaps.list(first).stream().noneMatch(
-                record -> record.id().startsWith("atlas.claim.")),
-                "Functional Census still contains a gap");
+                record -> record.id().startsWith("atlas.claim.block-")),
+                "completed block Census regressed");
+        require(AtlasGaps.list(first).stream().anyMatch(
+                record -> record.id().startsWith("atlas.claim.entity-")),
+                "entity Census gaps were hidden");
         try { AtlasSynchronization.validateAll(Paths.get(".")); }
         catch (java.io.IOException error) { throw new AssertionError(error); }
         require(first.get("atlas.role.CLIENT_TICK_ROOT").canonical()

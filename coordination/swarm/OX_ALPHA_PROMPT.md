@@ -10,10 +10,12 @@ consumers; performance packages must name at least three representative scenes. 
 implement the entire objective package and copy its `milestone.*` fields into `smoke.properties`.
 Splitting the objective merely to increase milestone count is a terminal process defect.
 Every behavior-package census claim must use the canonical
-`b1.7.3:block/NNN#behavior-template` identity, exist in the Functional Census, and still be open at
-the authorized base. The planner rejects already resolved claims and overlap between parallel
-workers. Wave closure measures delivered capabilities, atoms, and census claims; first-pass rate
-and recurrence alone do not establish utility.
+`b1.7.3:<family>/NNN#behavior-template` identity from
+`behavior/functional-census/families.tsv`, exist in that family's matrix, and still be open at the
+authorized base. Current gameplay families are `block` and `entity`; a worker must not substitute
+a block template for an entity template with a similar name. The planner rejects already resolved
+claims and overlap between parallel workers. Wave closure measures delivered capabilities, atoms,
+and census claims; first-pass rate and recurrence alone do not establish utility.
 
 The supervisor launches OpenCode only through `OxAlphaLauncher`. The launcher places the worker
 message before every variadic `-f` attachment, fixes a reviewed model, denies

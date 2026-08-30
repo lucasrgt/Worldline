@@ -66,8 +66,11 @@ public final class AtlasSynchronization {
             if (lines.get(line).trim().isEmpty() || lines.get(line).startsWith("#")) continue;
             String[] values = lines.get(line).split("\t", -1);
             require(values.length == header.length, "census delta width " + milestone);
-            String block = values[subject].substring(values[subject].lastIndexOf('/') + 1);
-            AtlasRecord record = store.get("atlas.claim.block-" + block + "." + values[template]);
+            String subjectId = values[subject];
+            String kind = subjectId.substring(subjectId.indexOf(':') + 1, subjectId.indexOf('/'));
+            String legacyId = subjectId.substring(subjectId.lastIndexOf('/') + 1);
+            AtlasRecord record = store.get("atlas.claim." + kind + "-" + legacyId
+                    + "." + values[template]);
             require(statusAgrees(values[status], record.status()),
                     "Atlas claim status drift " + record.id());
             require(record.evidence().contains("expected.signature=" + values[signature]),

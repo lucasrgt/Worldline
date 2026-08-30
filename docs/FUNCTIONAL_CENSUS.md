@@ -1,9 +1,9 @@
 # Functional Gameplay Census
 
 The registry census answers which b1.7.3 objects exist. The Functional Gameplay Census answers
-which finite behavior claims Worldline can execute and prove for those objects. It is the progress
-denominator for gameplay coverage; smoke count, milestone number, mapping identity coverage, and
-Atlas matrix occupancy are not substitutes for it.
+which finite behavior claims Worldline can execute and prove for those objects. It is a manifest
+of finite families, not a block-only percentage. Smoke count, milestone number, mapping identity
+coverage, and Atlas matrix occupancy are not substitutes for its gameplay denominator.
 
 ## Units
 
@@ -221,6 +221,23 @@ response, and native rendering. Profiles route the matrix through overlapping ar
 whose mechanics cannot be described safely by their archetypes route archetype cases to the
 singular layer. Per-template overrides remain available for mixed subjects.
 
+## Persistent entity denominator
+
+The second family expands all 24 entries in the official Beta 1.7.3 persistent entity registry
+over 11 behavior dimensions, producing 264 candidate claims. The roster includes registered base
+types, projectiles, hanging objects, primed and falling objects, vehicles, hostile mobs, passive
+animals, squid, and wolf. Runtime-only objects absent from `EntityList` (for example eggs,
+fireballs, fish hooks, and lightning) are deliberately outside this registry family and require
+their own future denominator instead of being smuggled into its percentage.
+
+The dimensions are registry presence, spawn materialization, save/reload, movement policy,
+collision shape, damage/death, drop matrix, interaction state, environment response, tick
+lifecycle, and native rendering. Profiles route these through universal, archetype, and singular
+cases. Fifty-three cells are initially bound to existing qualified official-runtime evidence for
+projectiles, paintings, TNT, falling sand, vehicles, hostile and passive mobs. Those proofs remain
+`SMOKE_ONLY`: historical execution is knowledge, but it is not falsely labeled as a reusable
+public TestKit fixture. The remaining 211 cells are explicit `UNKNOWN` Atlas claims.
+
 ## Status and automation
 
 Functional status is one of `VERIFIED`, `PARTIAL`, `UNKNOWN`, `NATIVE_NONDETERMINISTIC`,
@@ -240,8 +257,8 @@ census resolution = resolved claims / candidate claims
 public TestKit coverage = VERIFIED with PUBLIC_TESTKIT / candidate claims
 ```
 
-The target is 98.8% functional proof, not 98.8% file or mapping coverage. With the 1,056-claim
-denominator, that requires 1,044 verified claims. After the earlier lifecycle imports, 789
+The target is 98.8% functional proof, not 98.8% file or mapping coverage. The historical block
+target used the 1,056-claim block denominator and required 1,044 verified claims. After the earlier lifecycle imports, 789
 additional verified claims were required; the solid and mineral public matrices reduce that gap to
 769, the rail lifecycle family reduces it to 757, the pressure-plate family reduces it to 749, and
 the empty-workstation family reduces it to 740, and the static self-drop family reduces it to 730.
@@ -285,20 +302,24 @@ The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
 
-The completed proof matrix is 1,056/1,056 verified. Public executability remains
+The completed block proof matrix is 1,056/1,056 verified. Public executability remains
 an independent ratchet. The universal block-registry fixture expands the
 official-client census into 96 deterministic `registry-presence` cases. The
 public placement/persistence and break/drop fixtures then project legacy runtime
 observations into typed, equatable evidence for simple, oriented, multiblock,
 variant, and coupled-transition cases. Together with the modern lifecycle proof
-reconciliation, the public TestKit surface now covers 1,056/1,056 claims
-(100%), completing the automation-surface target. The final six tick-policy claims bind sand and
+reconciliation, the block public TestKit surface now covers 1,056/1,056 claims
+(100%), completing that family's automation-surface target. The final six tick-policy claims bind sand and
 gravel scheduling, natural wheat, cactus, and sugar-cane growth, and furnace tile ticks to official
-public fixtures; there are no internal or smoke-only Census claims.
+public fixtures. Across both current families the honest aggregate is 1,109/1,320 verified
+(84.02%) and 1,056/1,320 public TestKit claims (80.00%). The entity family accounts for all 53
+smoke-only claims and all 211 unknown cells.
 
 ## Three conformance layers
 
-The public `BlockConformancePlan` expands versioned block profiles and templates deterministically:
+The public `BlockConformancePlan` expands block profiles and templates deterministically. Entity
+profiles use the same checked routing model in the family manifest; their public fixture surface
+remains intentionally open rather than being declared before an executable provider exists:
 
 1. Universal cases apply the same law across the registry where the template is universal.
 2. Archetype cases reuse behavior by traits such as solid, gravity, fluid, vegetation, rail,
@@ -340,6 +361,7 @@ first such package adds five rows and 20 public claims without changing any of t
 claim signatures. It models the exact undamaged-shears result for placed white wool while the
 other four selected tools gain one damage.
 
-The data under `behavior/functional-census/b1.7.3/` is the versioned routing source. The Gate rejects
-a missing registry subject, unprofiled block, duplicate claim, unsupported status, unqualified
-verified signature, unsupported exception, or denominator drift.
+`behavior/functional-census/families.tsv` is the closed family manifest. Each listed data directory
+owns the same subjects, profiles, templates, claims, and exceptions contract. The Gate rejects a
+missing registry subject, unprofiled object, duplicate claim, unsupported status, unqualified
+verified signature, unsupported exception, family-path escape, or denominator drift.

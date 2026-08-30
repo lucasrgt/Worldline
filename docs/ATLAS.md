@@ -57,8 +57,11 @@ are never auto-promoted to `VERIFIED`. The six conservation rules import as
 semantic references. Atlas never infers meaning from a milestone number.
 
 Every public behavior materializes as its declared `atlas.scenario.<token>`.
-The finite 96-by-11 Functional Census materializes as 1,056
-`atlas.claim.block-NNN.<template>` records, including implicit unknown cells.
+The Functional Census currently materializes 1,320 finite cells: the completed
+96-by-11 block family contributes 1,056 `atlas.claim.block-NNN.<template>`
+records and the 24-by-11 persistent-entity family contributes 264
+`atlas.claim.entity-NNN.<template>` records. Implicit unknown cells are records,
+not omissions.
 Canonical claims and milestone deltas contribute provenance to the same record;
 later proof does not erase earlier evidence.
 
@@ -139,10 +142,12 @@ Functional Census claims also expose their automation surface. The
 `surface-public-testkit`, `surface-internal-api`, and `surface-smoke-only`
 facets distinguish reusable public fixtures from knowledge that still needs
 promotion, so the Atlas can drive the next high-value subsystem instead of a
-raw milestone count. The current index exposes all 1,056 claims through the public TestKit,
-with no internal or smoke-only claims; the surface
-facets evolve directly from the canonical Functional Census rather than from a
-hand-maintained secondary inventory.
+raw milestone count. The completed block family exposes all 1,056 claims through
+the public TestKit. The entity family begins with 53 qualified historical proofs
+on the `surface-smoke-only` facet and 211 explicit unknown cells; none are
+silently promoted to a public fixture. These facets evolve directly from the
+canonical Functional Census rather than from a hand-maintained secondary
+inventory.
 
 ## Gate synchronization
 
