@@ -1,5 +1,5 @@
 schema=1
 id=m768-aero-historical-tower-replay
-fingerprint=6a0998a8a003f9ce62e77aca09f5a2342fdaa289d3cf1d58c88b01e3dc7266b9
+fingerprint=7f49a71e8c28b1da27b5c9573e3a9db6a8fc80017087dfe2ba459be1e8e9da4a
 observation.sha256=07659818b057d84b82515b74506995b97ff0c2d33b94ac2fc972a2615acae6dd
-source=executed
+source=refactor-equivalent
