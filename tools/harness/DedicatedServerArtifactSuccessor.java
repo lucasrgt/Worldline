@@ -31,6 +31,7 @@ final class DedicatedServerArtifactSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "dedicated server artifact successor allowlist drifted");
+        MappingAtlasSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
