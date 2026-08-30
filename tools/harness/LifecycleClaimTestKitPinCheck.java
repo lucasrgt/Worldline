@@ -119,6 +119,8 @@ final class LifecycleClaimTestKitPinCheck {
     private static boolean connectsFile(Path root, String relative,
             String prior, String introduced) throws Exception {
         if (prior.equals(introduced)) return true;
+        if (SharedHelperPinCheck.transitionsFile(SharedHelperPinCheck.manifest(root),
+                relative, prior, introduced)) return true;
         Properties train = TrainPinCheck.manifest(root);
         int count = Integer.parseInt(train.getProperty("source.count", "0"));
         for (int index = 0; index < count; index++) {
