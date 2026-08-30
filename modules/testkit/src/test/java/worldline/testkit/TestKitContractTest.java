@@ -45,6 +45,7 @@ public final class TestKitContractTest {
         ChunkReloadFixtureTest.execute();
         ChunkRestartFixtureTest.execute();
         DungeonGenerationFixtureTest.execute();
+        TerrainGenerationFixtureTest.execute();
         ChestAccessFixtureTest.execute();
         PortalInvalidFrameFixtureTest.execute();
         PortalReentryCooldownFixtureTest.execute();

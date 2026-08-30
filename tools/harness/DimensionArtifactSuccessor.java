@@ -27,6 +27,7 @@ final class DimensionArtifactSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "dimension artifact successor allowlist drifted");
+        WorldgenAtlasTrainSourceSuccessor.selfTest();
     }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);

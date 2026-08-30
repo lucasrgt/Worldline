@@ -13,7 +13,8 @@ import java.util.Map;
 public final class SemanticRoles {
     public static final String CLOCK = "clock", RNG = "rng", INPUT = "input", TICK = "tick";
     public static final String FILESYSTEM = "filesystem", NETWORK = "network";
-    public static final String SCHEDULER = "scheduler", WORLD = "world", BLOCK = "block";
+    public static final String SCHEDULER = "scheduler", WORLD = "world", WORLDGEN = "worldgen";
+    public static final String BLOCK = "block";
     public static final String CHUNK = "chunk", PLAYER = "player", ENTITY = "entity";
     public static final String INVENTORY = "inventory", ITEM = "item", RECIPE = "recipe";
     public static final String GUI = "gui", RENDER = "render", AUDIO = "audio";
@@ -72,6 +73,10 @@ public final class SemanticRoles {
                 "BLOCK_ID_READ", "BLOCK_READ", "BLOCK_WRITE", "BLOCK_NOTIFY", "WORLD_DIFFICULTY",
                 "WORLD_PROVIDER", "WORLD_SPAWN", "CHUNK_COORDINATES", "CHUNK_COORDINATE_X",
                 "CHUNK_COORDINATE_Y", "CHUNK_COORDINATE_Z"));
+        roles.put(WORLDGEN, list("WORLDGEN_TERRAIN_CENSUS_TESTKIT",
+                "WORLDGEN_TERRAIN_REPLAY_EVIDENCE",
+                "WORLDGEN_TERRAIN_CANONICAL_EVIDENCE",
+                "WORLDGEN_DUNGEON_CENSUS_TESTKIT"));
         roles.put(BLOCK, list("BLOCK_TYPE", "BLOCK_ID", "BLOCK_STONE", "BLOCK_BEDROCK", "BLOCK_SAND",
                 "BLOCK_SAND_TYPE", "BLOCK_SAND_FALL"));
         roles.put(BLOCK_TICK, list("BLOCK_TICK_POLICY_MECHANISM", "BLOCK_TICK_POLICY_SCENARIO",

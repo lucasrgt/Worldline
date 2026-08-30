@@ -11,9 +11,16 @@ public final class AtlasCoverageTest {
         require(store.kind(AtlasKind.COVERAGE_UNIT).size() == 175, "unit count");
         require("1".equals(store.get("atlas.coverage-unit.worldgen.TESTABILITY").control()),
                 "worldgen testability filled by explicit smoke scope");
-        require(AtlasStatus.UNKNOWN.equals(
-                store.get("atlas.coverage-unit.worldgen.SEMANTIC").status()),
-                "worldgen semantic unknown");
+        require("1".equals(store.get("atlas.coverage-unit.worldgen.SEMANTIC").control()),
+                "worldgen TestKit semantics filled");
+        require("1".equals(store.get("atlas.coverage-unit.worldgen.CONTROL").control()),
+                "worldgen public boundary controlled");
+        require("1".equals(store.get("atlas.coverage-unit.worldgen.DETERMINISM").control()),
+                "worldgen normalized evidence deterministic");
+        AtlasRecord worldgen = store.get("atlas.boundary.WORLDGEN");
+        require("CONTROLLED".equals(worldgen.control())
+                && worldgen.refs().contains("atlas.subsystem.worldgen"),
+                "worldgen boundary classification");
         require("1".equals(store.get("atlas.coverage-unit.tick-lifecycle.SEMANTIC").control()),
                 "tick semantic filled");
         require("1".equals(store.get("atlas.coverage-unit.tick-lifecycle.CONTROL").control()),
@@ -114,11 +121,13 @@ public final class AtlasCoverageTest {
                 "mapping semantics filled");
         List<AtlasRecord> gaps = AtlasGaps.list(store);
         require(!gaps.isEmpty(), "gaps exist");
-        boolean worldgenGap = false;
+        boolean worldgenCoverageGap = false;
         for (AtlasRecord gap : gaps) {
-            if (gap.id().contains("worldgen")) worldgenGap = true;
+            if (gap.id().startsWith("atlas.coverage-unit.worldgen.")) {
+                worldgenCoverageGap = true;
+            }
         }
-        require(worldgenGap, "worldgen queued");
+        require(!worldgenCoverageGap, "worldgen coverage still queued");
         String matrix = AtlasQuery.coverage(store);
         require(matrix.contains("0/1") && matrix.contains("1/1")
                 && matrix.contains("source=declared-coverage-unit"), "coverage matrix");
