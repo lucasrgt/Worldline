@@ -1,5 +1,5 @@
 schema=1
 id=m217-mossy-cobble
-fingerprint=a38fa8896442faec72d8135d38cac8b4577cfad2badab5883d0895e15fafcf75
+fingerprint=1beb4115b211974a3045a87941ffc56afb130d43d1c4080a16378655d092bd4a
 observation.sha256=f7e9bd107de07d0a203185e9df894f69e993edae0ec34d295a1533438866f159
-source=executed
+source=refactor-equivalent
