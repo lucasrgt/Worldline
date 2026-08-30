@@ -108,7 +108,7 @@ final class ProviderDiscoveryPinMigration {
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
         int discovered = 0, carried = 0, introduced = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
-            if (TrainPinCheck.isAdded(train, smoke.id)) continue;
+            if (TrainPinCheck.isAdded(train, smoke.id) && !smoke.id.equals(NEW_SMOKE)) continue;
             discovered++;
             if (smoke.id.equals(NEW_SMOKE)) {
                 String current = fingerprints.compute(smoke);

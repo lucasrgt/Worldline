@@ -37,7 +37,8 @@ final class GuiWorkbenchPinCheck {
         Properties train = TrainPinCheck.manifest(root);
         int catalog = 0, carried = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
-            if (TrainPinCheck.isAdded(train, smoke.id)) continue;
+            if (TrainPinCheck.isAdded(train, smoke.id)
+                    && !smoke.id.equals("m620-stationapi-testkit-driver")) continue;
             catalog++; String current = fingerprints.compute(smoke); SmokePins.Entry pin =
                     pins.match(smoke.id, current);
             if (smoke.id.equals("m620-stationapi-testkit-driver")) {

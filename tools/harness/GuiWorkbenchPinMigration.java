@@ -89,7 +89,8 @@ final class GuiWorkbenchPinMigration {
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
         int catalog = 0, carried = 0, introduced = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
-            if (TrainPinCheck.isAdded(train, smoke.id)) continue;
+            if (TrainPinCheck.isAdded(train, smoke.id)
+                    && !smoke.id.equals("m620-stationapi-testkit-driver")) continue;
             catalog++;
             String current = fingerprints.compute(smoke);
             if (smoke.id.equals("m620-stationapi-testkit-driver")) {

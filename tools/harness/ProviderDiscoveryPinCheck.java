@@ -27,7 +27,8 @@ final class ProviderDiscoveryPinCheck {
         Properties gui = GuiWorkbenchPinCheck.manifest(root);
         int carried = 0, discovered = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
-            if (TrainPinCheck.isAdded(TrainPinCheck.manifest(root), smoke.id)) continue;
+            if (TrainPinCheck.isAdded(TrainPinCheck.manifest(root), smoke.id)
+                    && !isNewSmoke(lock, smoke.id)) continue;
             discovered++; String current = fingerprints.compute(smoke);
             SmokePins.Entry pin = pins.match(smoke.id, current);
             if (isNewSmoke(lock, smoke.id)) {

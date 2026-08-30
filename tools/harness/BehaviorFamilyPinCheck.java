@@ -49,7 +49,8 @@ final class BehaviorFamilyPinCheck {
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root); int catalog = 0, carried = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
-            if (TrainPinCheck.isAdded(TrainPinCheck.manifest(root), smoke.id)) continue;
+            if (TrainPinCheck.isAdded(TrainPinCheck.manifest(root), smoke.id)
+                    && !smoke.id.equals("m620-stationapi-testkit-driver")) continue;
             catalog++; String current = fingerprints.compute(smoke);
             SmokePins.Entry pin = pins.match(smoke.id, current);
             if (smoke.id.equals("m620-stationapi-testkit-driver"))
