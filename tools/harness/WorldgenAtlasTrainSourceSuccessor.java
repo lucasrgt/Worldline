@@ -61,6 +61,7 @@ final class WorldgenAtlasTrainSourceSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "worldgen Atlas successor allowlist drifted");
+        WorldgenAtlasDocumentationSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
