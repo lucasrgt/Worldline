@@ -45,8 +45,7 @@ public final class FunctionalCensusCheck {
         Properties schema = properties(base.resolve("schema.properties"));
         require("2".equals(required(schema, "schema")), "unsupported functional census schema");
         String version = required(schema, "version");
-        Set<String> bindingFamilies = tokens(required(schema,
-                "public.binding.manifest.families"));
+        Set<String> bindingFamilies = FunctionalCensusBindings.requiredFamilies(schema);
         Table families = Table.read(base.resolve("families.tsv"), "family_id", "data_path",
                 "subject_kind", "subjects_expected", "templates_expected",
                 "candidate_claims_expected", "verified_claims_minimum");
@@ -90,8 +89,9 @@ public final class FunctionalCensusCheck {
         Map<String, Row> subjectById = subjects(subjects, version, kind);
         Map<String, Row> templateById = templates(templates);
         Set<String> singular = profiles(profiles, subjectById);
-        Map<String, Row> bindings = bindingsRequired
-                ? bindings(data.resolve("testkit-bindings.tsv"), subjectById, templateById)
+        Map<String, String> bindings = bindingsRequired
+                ? FunctionalCensusBindings.load(root, data.resolve("testkit-bindings.tsv"),
+                        subjectById.keySet(), templateById.keySet())
                 : Map.of();
         Result result = claims(claims, exceptions, subjectById, templateById, singular,
                 bindings, bindingsRequired);
@@ -163,7 +163,7 @@ public final class FunctionalCensusCheck {
     }
 
     private Result claims(Table claims, Table exceptions, Map<String, Row> subjects,
-            Map<String, Row> templates, Set<String> singular, Map<String, Row> bindings,
+            Map<String, Row> templates, Set<String> singular, Map<String, String> bindings,
             boolean bindingsRequired) throws Exception {
         Set<String> claimed = new HashSet<>();
         Set<String> publicClaims = new HashSet<>();
@@ -192,9 +192,9 @@ public final class FunctionalCensusCheck {
                     String key = subject + "#" + template;
                     publicClaims.add(key);
                     if (bindingsRequired) {
-                        Row binding = bindings.get(key);
+                        String binding = bindings.get(key);
                         require(binding != null, "public entity claim lacks TestKit binding: " + key);
-                        require(binding.get("evidence_id").equals(row.get("evidence_id")),
+                        require(binding.equals(row.get("evidence_id")),
                                 "TestKit binding evidence differs: " + key);
                     }
                 }
@@ -218,31 +218,6 @@ public final class FunctionalCensusCheck {
                 "entity TestKit binding ledger differs from public claims");
         require(publicTestkit <= verified, "public TestKit claims exceed verified claims");
         return new Result(resolved, verified, publicTestkit);
-    }
-
-    private Map<String, Row> bindings(Path path, Map<String, Row> subjects,
-            Map<String, Row> templates) throws Exception {
-        Table table = Table.read(path, "subject_id", "template_id", "fixture", "binding",
-                "evidence_id");
-        Map<String, Row> result = new LinkedHashMap<>();
-        Pattern bindingPattern = Pattern.compile(
-                "(worldline\\.[A-Za-z][A-Za-z0-9.]+)#[a-z][A-Za-z0-9]*");
-        for (Row row : table.rows) {
-            String subject = row.get("subject_id"), template = row.get("template_id");
-            String key = subject + "#" + template;
-            require(subjects.containsKey(subject) && templates.containsKey(template)
-                    && result.put(key, row) == null, "invalid or duplicate TestKit binding: " + key);
-            require(TOKEN.matcher(row.get("fixture")).matches()
-                    && TOKEN.matcher(row.get("evidence_id")).matches(),
-                    "invalid TestKit binding metadata: " + key);
-            java.util.regex.Matcher matcher = bindingPattern.matcher(row.get("binding"));
-            require(matcher.matches(), "invalid public TestKit binding: " + key);
-            Path source = root.resolve("modules/testapi/src/main/java")
-                    .resolve(matcher.group(1).replace('.', '/') + ".java");
-            require(Files.isRegularFile(source), "public TestKit binding source is absent: " + key);
-        }
-        require(!result.isEmpty(), "required TestKit binding ledger is empty");
-        return Map.copyOf(result);
     }
 
     private void evidence(Row row) throws Exception {
@@ -295,14 +270,6 @@ public final class FunctionalCensusCheck {
     }
     private static void token(String value, String label) {
         require(TOKEN.matcher(value).matches(), "invalid " + label + ": " + value);
-    }
-    private static Set<String> tokens(String value) {
-        Set<String> result = new HashSet<>();
-        for (String item : value.split(",", -1)) {
-            require(TOKEN.matcher(item).matches() && result.add(item),
-                    "invalid family token: " + item);
-        }
-        return Set.copyOf(result);
     }
     private static double percent(int numerator, int denominator) {
         return denominator == 0 ? 0 : numerator * 100.0 / denominator;
