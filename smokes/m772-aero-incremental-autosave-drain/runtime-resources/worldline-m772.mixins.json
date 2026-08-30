@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "worldline.m772.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [],
+  "client": [
+    "AutosaveChunkCacheMixin",
+    "AutosaveFrameMixin",
+    "AutosaveMinecraftMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

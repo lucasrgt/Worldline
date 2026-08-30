@@ -1,0 +1,74 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+def script = gradle.startParameter.initScripts.find { it.name == 'autosave.init.gradle' }
+if (script == null) throw new GradleException('Worldline M772 script path missing')
+def root = script.parentFile.parentFile.parentFile.canonicalFile
+def requestedJar = gradle.startParameter.projectProperties.get('worldlineAeroJar')
+if (requestedJar != null) {
+    def aeroJar = new File(requestedJar).canonicalFile
+    if (!aeroJar.isFile()) throw new GradleException('Worldline M772 Aero JAR missing')
+    def expectedTestDir = new File(aeroJar.parentFile.parentFile.parentFile, 'test').canonicalFile
+    gradle.beforeProject { candidate ->
+        if (candidate.projectDir.canonicalFile != expectedTestDir) return
+        candidate.configurations.whenObjectAdded { configuration ->
+            if (configuration.name != 'modImplementation') return
+            configuration.withDependencies { dependencies ->
+                def aeroDependencies = dependencies.findAll {
+                    it.group == 'dev.aerocoding' && it.name == 'aero-model-lib'
+                }
+                if (aeroDependencies.size() != 1)
+                    throw new GradleException('Worldline M772 Aero dependency boundary drift')
+                dependencies.removeAll(aeroDependencies)
+                dependencies.add(candidate.dependencies.create(candidate.files(aeroJar)))
+            }
+        }
+    }
+}
+
+gradle.projectsEvaluated {
+    if (gradle.rootProject.name != 'aero-model-lib-test') return
+    def project = gradle.rootProject
+    def smoke = new File(root, 'smokes/m772-aero-incremental-autosave-drain')
+    def prop = { name -> project.findProperty(name).toString() }
+    project.sourceSets.main.java.srcDir(new File(smoke, 'runtime-src'))
+    project.tasks.named('processResources').configure {
+        outputs.upToDateWhen { false }
+        doLast {
+            copy { from new File(smoke, 'runtime-resources'); into destinationDir }
+            def fabric = new File(destinationDir, 'fabric.mod.json')
+            if (!fabric.isFile()) throw new GradleException('Aero fabric.mod.json missing')
+            def json = new JsonSlurper().parse(fabric)
+            def mixins = (json.mixins ?: []) as List
+            if (!mixins.contains('worldline-m772.mixins.json'))
+                mixins.add('worldline-m772.mixins.json')
+            json.mixins = mixins
+            fabric.text = JsonOutput.prettyPrint(JsonOutput.toJson(json)) + '\n'
+        }
+    }
+    def task = project.tasks.named('runClient').get()
+    if (task.actions.size() != 2 ||
+            !task.actions[0].getClass().name.endsWith('ClosureTaskAction'))
+        throw new GradleException('Aero runClient action shape drifted')
+    task.actions.remove(0)
+    def game = new File(prop('worldlineRunDir')).absoluteFile
+    project.loom.runs.named('client').configure { runDir project.relativePath(game) }
+    game.mkdirs()
+    new File(game, 'options.txt').text = 'fpsLimit:0' + System.lineSeparator()
+    def arm = prop('worldlineArm')
+    def incremental = arm.contains('candidate')
+    task.jvmArgs([
+        '-Dworldline.m772.enabled=true', '-Dworldline.m772.mode=' + prop('worldlineMode'),
+        '-Dworldline.m772.arm=' + arm,
+        '-Dworldline.m772.metrics=' + new File(prop('worldlineMetrics')).absolutePath,
+        '-Dworldline.m772.frames=' + new File(prop('worldlineFrames')).absolutePath,
+        '-Daero.incrementalAutosave=' + incremental,
+        '-Daero.incrementalAutosave.chunkBudget=1',
+        '-Daero.ultra=true', '-Daero.ultra.autoStart=false',
+        '-Daero.ultra.spacingChunks=1', '-Daero.ultra.layers=1',
+        '-Daero.ultra.solidFloors=true', '-Daero.ultra.phaseSpread=true',
+        '-Daero.ultra.journey=false', '-Daero.ultra.worldMode=steady',
+        '-Daero.benchmark.skipNonForcedSaves=false', '-Daero.spikelog=false',
+        '-Daero.test.events.sideEffects=false', '-Xms2G', '-Xmx4G'
+    ] as List)
+}
