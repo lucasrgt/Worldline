@@ -55,11 +55,13 @@ The causal-performance wave began at `AERO-M111`:
   debt-aware one-rebuild-per-frame scheduler against four counterbalanced
   pairs, bounded hidden-work starvation, complete backlog drainage, and a
   no-regression hitch-rate gate.
-- `AERO-M117` is current: real-consumer Aero CPU-path adoption and
-  differential.
-- `AERO-M118`: page rebuild, invalidation, allocation, and cache A/B matrix.
+- `AERO-M117` (`M774`) is complete: the AeroModelLib Java 8 product is now a
+  real external Worldline TestKit consumer, with two repeatable runs proving
+  morph-array parity plus bounded, visible-first, debt-fair chunk scheduling.
+- `AERO-M118` is current: page rebuild, invalidation, allocation, and cache
+  A/B matrix.
 - `AERO-M119`: GL state, geometry, display-list, and LOD A/B matrix.
 - `AERO-M120`: long-soak, reload, world-transition, leak, and promotion gate.
 
-Entries after `AERO-M117` remain planned milestones, not completed evidence or
+Entries after `AERO-M118` remain planned milestones, not completed evidence or
 performance claims.
