@@ -180,6 +180,14 @@ public final class WorldlineCliTest {
                     new PrintStream(output), new PrintStream(error));
             require(status == 2, "CLI accepted an unknown mod subcommand");
             output.reset(); error.reset();
+            status = WorldlineCli.run(new String[0], new PrintStream(output), new PrintStream(error));
+            String usage = error.toString();
+            require(status == 2 && usage.contains("worldline atlas index <query>")
+                    && usage.contains("worldline atlas context <query>")
+                    && usage.contains("worldline atlas taxonomy")
+                    && usage.contains("worldline atlas tags"),
+                    "CLI help omitted the Atlas knowledge surface");
+            output.reset(); error.reset();
             status = WorldlineCli.run(new String[] {"semantics", "show"},
                     new PrintStream(output), new PrintStream(error));
             require(status == 0 && output.toString().contains("WORLDLINE_SEMANTICS=PASS")
