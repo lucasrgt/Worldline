@@ -106,13 +106,35 @@ final class LifecycleClaimTestKitPinCheck {
             for (int index = 0; index < integer(lock, "file.count"); index++) {
                 String stem = "file." + index + ".";
                 if (!relative.equals(lock.getProperty(stem + "path"))) continue;
-                return prior.equals(lock.getProperty(stem + "prior_sha256"))
+                String introduced = lock.getProperty(stem + "prior_sha256");
+                return connectsFile(root, relative, prior, introduced)
                         && LifecycleClaimTestKitPinMigration.digest(
                                 Files.readAllBytes(root.resolve(relative)))
                                 .equals(lock.getProperty(stem + "current_sha256"));
             }
             return false;
         } catch (Exception error) { return false; }
+    }
+
+    private static boolean connectsFile(Path root, String relative,
+            String prior, String introduced) throws Exception {
+        if (prior.equals(introduced)) return true;
+        Properties train = TrainPinCheck.manifest(root);
+        int count = Integer.parseInt(train.getProperty("source.count", "0"));
+        for (int index = 0; index < count; index++) {
+            String stem = "source." + index + ".";
+            if (!relative.equals(train.getProperty(stem + "path"))
+                    || !introduced.equals(train.getProperty(stem + "current_sha256"))) continue;
+            String predecessor = train.getProperty(stem + "prior_sha256");
+            return prior.equals(predecessor) || TrainSourceHistory.connects(train, stem, prior)
+                    || GuiWorkbenchPinCheck.transitionsFile(
+                            GuiWorkbenchPinCheck.manifest(root), relative, prior, predecessor)
+                    || TestKitReleasePinCheck.transitionsFile(
+                            TestKitReleasePinCheck.manifest(root), relative, prior, predecessor)
+                    || SharedHelperPinCheck.transitionsFile(
+                            SharedHelperPinCheck.manifest(root), relative, prior, predecessor);
+        }
+        return false;
     }
 
     private static void verifyFile(Path root, Properties lock, List<String> files, int index)

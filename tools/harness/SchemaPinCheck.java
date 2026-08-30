@@ -32,12 +32,16 @@ final class SchemaPinCheck {
                     required(manifest, stem + "current_fingerprint"),
                     required(manifest, stem + "evidence_sha256"), pin, current);
             successor |= TrainPinCheck.carriesCurrent(train, smoke.id, pin, current);
+            successor |= LifecycleClaimTestKitPinCheck.carries(root, smoke.id, pin, current);
             boolean descriptor = digest(directory.resolve("smoke.properties")).equals(
                     required(manifest, stem + "descriptor_sha256"));
             if (!descriptor) descriptor = BehaviorFamilyPinCheck.transportsDescriptor(
                     BehaviorFamilyPinCheck.manifest(root), root, smoke.id,
                     required(manifest, stem + "descriptor_sha256"));
             if (!descriptor) descriptor = TrainPinCheck.transportsFile(train, root,
+                    "smokes/" + smoke.id + "/smoke.properties",
+                    required(manifest, stem + "descriptor_sha256"));
+            if (!descriptor) descriptor = LifecycleClaimTestKitPinCheck.transportsFile(root,
                     "smokes/" + smoke.id + "/smoke.properties",
                     required(manifest, stem + "descriptor_sha256"));
             require((hash(manifest, stem + "prior_fingerprint")
@@ -52,7 +56,9 @@ final class SchemaPinCheck {
                             || pin.source().equals("refactor-equivalent"))
                             && (pin.evidence().equals(required(manifest, stem + "evidence_sha256"))
                             || FormattingPinCheck.carries(formatting, smoke.id, pin, current)
-                            || TrainPinCheck.carriesCurrent(train, smoke.id, pin, current)),
+                            || TrainPinCheck.carriesCurrent(train, smoke.id, pin, current)
+                            || LifecycleClaimTestKitPinCheck.carries(
+                                    root, smoke.id, pin, current)),
                     "repository schema pin drift: " + smoke.id);
         }
         require(checked == integer(manifest, "smoke.count")
@@ -72,7 +78,8 @@ final class SchemaPinCheck {
                 && pin.evidence().equals(manifest.getProperty(stem + "evidence_sha256"));
         try { Path root = Path.of("").toAbsolutePath().normalize();
             return direct || TrainPinCheck.carriesCurrent(
-                    TrainPinCheck.manifest(root), id, pin, current); }
+                    TrainPinCheck.manifest(root), id, pin, current)
+                    || LifecycleClaimTestKitPinCheck.carries(root, id, pin, current); }
         catch (Exception error) { return direct; }
     }
     static boolean introduced(Properties manifest, String id) {
