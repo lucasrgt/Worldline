@@ -31,6 +31,7 @@ final class TileEntityAtlasDocumentationSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "tile entity Atlas documentation successor allowlist drifted");
+        FluidAtlasTrainSourceSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
