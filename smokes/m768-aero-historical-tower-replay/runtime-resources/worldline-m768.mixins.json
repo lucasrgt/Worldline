@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "worldline.m768.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [],
+  "client": [
+    "HistoricalMinecraftMixin",
+    "HistoricalFrameMixin",
+    "HistoricalChunkCacheMixin",
+    "HistoricalWorldRendererMixin",
+    "HistoricalAeroTimingMixin"
+  ],
+  "injectors": { "defaultRequire": 1 }
+}
