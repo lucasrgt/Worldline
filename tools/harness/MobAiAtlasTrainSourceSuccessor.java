@@ -85,6 +85,7 @@ final class MobAiAtlasTrainSourceSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "mob-AI Atlas train successor allowlist drifted");
+        MobAiAtlasDocumentationSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
