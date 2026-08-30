@@ -13,6 +13,8 @@ public final class TimelineState {
     public static final boolean ENABLED = Boolean.getBoolean("worldline.m769.enabled");
     private static final boolean PREPARE = Boolean.getBoolean("worldline.m769.prepare");
     private static final int TICKS = Integer.getInteger("worldline.m769.ticks", 3600);
+    private static final long MINIMUM_MILLIS = Long.getLong(
+            "worldline.m769.minimumMillis", 180_000L);
     private static final int DRAIN_FRAMES = 20;
     private static final int LOAD_TIMEOUT_TICKS = 1200;
     private static final int BASE_Y = 63;
@@ -20,6 +22,7 @@ public final class TimelineState {
     private static int warmup;
     private static int stable;
     private static int retained;
+    private static long retainedStartNanos;
 
     private TimelineState() {}
 
@@ -76,6 +79,7 @@ public final class TimelineState {
         }
         TimelineJfrCapture.start();
         ClientProfilerRuntime.startCapture();
+        retainedStartNanos = System.nanoTime();
         stage = 2;
         System.out.println("[WorldlineM769] retained-start machines=576");
     }
@@ -83,10 +87,12 @@ public final class TimelineState {
     private static void retain(Minecraft game) {
         place(game.player, retained);
         retained++;
-        if (retained < TICKS) return;
+        long elapsedNanos = System.nanoTime() - retainedStartNanos;
+        if (retained < TICKS || elapsedNanos < MINIMUM_MILLIS * 1_000_000L) return;
         ClientProfilerRuntime.finish("retained-complete");
         TimelineJfrCapture.finish();
-        System.out.println("[WorldlineM769] retained-complete ticks=" + retained);
+        System.out.println("[WorldlineM769] retained-complete ticks=" + retained
+                + " millis=" + elapsedNanos / 1_000_000L);
         stage = 4;
         game.scheduleStop();
     }
