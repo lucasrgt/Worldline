@@ -92,7 +92,9 @@ Dimensions: TESTABILITY, CONTROL, OBSERVABILITY, ORACLE, SEMANTIC,
 REPRODUCIBILITY, DETERMINISM.
 
 A cell is `1/1` only when an importer linked qualifying evidence. Empty cells
-are `UNKNOWN` and appear in `worldline atlas gaps`.
+are `UNKNOWN` and appear in `worldline atlas gaps`. The current finite matrix
+is 175/175 declared units; this is completeness of the evidence-backed
+taxonomy, not a claim that the simulation's state space is finite or exhausted.
 
 ## CLI
 

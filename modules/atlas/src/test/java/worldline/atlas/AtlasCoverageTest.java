@@ -158,17 +158,28 @@ public final class AtlasCoverageTest {
         require("INTERCEPTED".equals(aero.control())
                 && aero.refs().contains("atlas.subsystem.aero"),
                 "Aero boundary classification");
+        require("1".equals(store.get(
+                "atlas.coverage-unit.mod-ecosystem.SEMANTIC").control()),
+                "mod ecosystem semantics filled");
+        require("1".equals(store.get(
+                "atlas.coverage-unit.mod-ecosystem.CONTROL").control()),
+                "mod ecosystem boundary controlled");
+        require("1".equals(store.get(
+                "atlas.coverage-unit.mod-ecosystem.DETERMINISM").control()),
+                "mod ecosystem evidence deterministic");
+        AtlasRecord modEcosystem = store.get("atlas.boundary.MOD_ECOSYSTEM");
+        require("CONTROLLED".equals(modEcosystem.control())
+                && modEcosystem.refs().contains("atlas.subsystem.mod-ecosystem"),
+                "mod ecosystem boundary classification");
         List<AtlasRecord> gaps = AtlasGaps.list(store);
         require(!gaps.isEmpty(), "gaps exist");
-        boolean worldgenCoverageGap = false;
+        boolean coverageGap = false;
         for (AtlasRecord gap : gaps) {
-            if (gap.id().startsWith("atlas.coverage-unit.worldgen.")) {
-                worldgenCoverageGap = true;
-            }
+            if (gap.id().startsWith("atlas.coverage-unit.")) coverageGap = true;
         }
-        require(!worldgenCoverageGap, "worldgen coverage still queued");
+        require(!coverageGap, "declared coverage matrix is incomplete");
         String matrix = AtlasQuery.coverage(store);
-        require(matrix.contains("0/1") && matrix.contains("1/1")
+        require(!matrix.contains("0/1") && matrix.contains("1/1")
                 && matrix.contains("source=declared-coverage-unit"), "coverage matrix");
         System.out.println("AtlasCoverageTest passed");
     }

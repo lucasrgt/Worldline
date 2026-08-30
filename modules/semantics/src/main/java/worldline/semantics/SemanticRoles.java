@@ -17,6 +17,7 @@ public final class SemanticRoles {
     public static final String MAPPINGS = "mappings";
     public static final String STATIONAPI = "stationapi";
     public static final String AERO = "aero";
+    public static final String MOD_ECOSYSTEM = "mod-ecosystem";
     public static final String SCHEDULER = "scheduler", WORLD = "world", WORLDGEN = "worldgen";
     public static final String BLOCK = "block";
     public static final String CHUNK = "chunk", PLAYER = "player", ENTITY = "entity";
@@ -87,6 +88,11 @@ public final class SemanticRoles {
                 "AERO_CAPTURE_INTERCEPT", "AERO_SAVE_FORCE",
                 "AERO_RELOAD_INTERCEPT", "AERO_FRAME_BEGIN_INTERCEPT",
                 "AERO_VERTEX_INTERCEPT", "AERO_REBUILD_INTERCEPT"));
+        roles.put(MOD_ECOSYSTEM, list("MOD_DESCRIPTOR_READ",
+                "MOD_ARTIFACT_INSPECT", "MOD_ENTRYPOINT_LOAD",
+                "MOD_DEPENDENCY_ORDER", "MOD_TEST_RUN",
+                "MOD_TEST_RESULT_RECORD", "MOD_TEST_RESULT_PARSE",
+                "MOD_TEST_RESULT_COMPARE"));
         roles.put(SCHEDULER, list("TIMER_THREAD", "TASK_SCHEDULER", "SCHEDULER_ADVANCE"));
         roles.put(WORLD, list("WORLD_TYPE", "LOADED_ENTITY_LIST", "TILE_ENTITIES", "BLOCK_ACCESS",
                 "BLOCK_ID_READ", "BLOCK_READ", "BLOCK_WRITE", "BLOCK_NOTIFY", "WORLD_DIFFICULTY",

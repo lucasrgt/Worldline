@@ -117,6 +117,8 @@ public final class AtlasSubsystems {
         mapped.put("mappings", "mappings");
         mapped.put("stationapi", "stationapi");
         mapped.put("aero", "aero");
+        mapped.put("mod-ecosystem", "mod-ecosystem");
+        mapped.put("mod_ecosystem", "mod-ecosystem");
         mapped.put("render", "rendering");
         mapped.put("gui", "gui");
         mapped.put("resource", "resources");

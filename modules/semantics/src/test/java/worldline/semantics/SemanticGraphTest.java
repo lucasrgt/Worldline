@@ -21,6 +21,7 @@ public final class SemanticGraphTest {
         require(first.tokens().contains("MAPPINGS"), "mappings category token");
         require(first.tokens().contains("STATIONAPI"), "StationAPI category token");
         require(first.tokens().contains("AERO"), "Aero category token");
+        require(first.tokens().contains("MOD_ECOSYSTEM"), "mod ecosystem category token");
         require(first.tokens().contains("TILE_ENTITY"), "tile entity category token");
         require(!first.readers("BLOCK_TICK").isEmpty(), "block tick readers");
         require(!first.readers("REDSTONE").isEmpty(), "redstone readers");
@@ -40,6 +41,8 @@ public final class SemanticGraphTest {
         require(!first.writers("STATIONAPI").isEmpty(), "StationAPI driver writers");
         require(!first.readers("AERO").isEmpty(), "Aero overlay readers");
         require(!first.writers("AERO").isEmpty(), "Aero overlay writers");
+        require(!first.readers("MOD_ECOSYSTEM").isEmpty(), "mod ecosystem readers");
+        require(!first.writers("MOD_ECOSYSTEM").isEmpty(), "mod ecosystem writers");
         require(!first.readers("TILE_ENTITY").isEmpty(), "tile entity TestKit readers");
         require(!first.readers("CLOCK").isEmpty(), "clock readers");
         require(!first.writers("WORLD").isEmpty(), "world writers");
