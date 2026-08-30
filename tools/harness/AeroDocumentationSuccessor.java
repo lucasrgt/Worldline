@@ -31,6 +31,7 @@ final class AeroDocumentationSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "Aero documentation successor allowlist drifted");
+        ModEcosystemAtlasSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {

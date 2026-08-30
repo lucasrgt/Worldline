@@ -165,7 +165,8 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
                 || StationApiAtlasSuccessor.carries(relative, prior, current)
                 || StationApiDocumentationSuccessor.carries(relative, prior, current)
                 || AeroAtlasSuccessor.carries(relative, prior, current)
-                || AeroDocumentationSuccessor.carries(relative, prior, current);
+                || AeroDocumentationSuccessor.carries(relative, prior, current)
+                || ModEcosystemAtlasSuccessor.carries(relative, prior, current);
     }
 
     private static boolean reviewed(String relative, String prior, String current,
