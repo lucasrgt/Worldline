@@ -1,5 +1,5 @@
 schema=1
 id=m621-save-worldgen-set
-fingerprint=5b0a24ceb505f587e727662e9d734d2fddde9c7503e78e8465b3caf08aca6ae6
+fingerprint=ae6ef314eb43b708ada147b8509b5874fcc607bba5e89614f69dfa21e87c644d
 observation.sha256=42276d4df6205c5c14fea7194aef0464bb1b834a6b86425b7628d37548c839d4
-source=executed
+source=refactor-equivalent
