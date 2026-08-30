@@ -13,8 +13,8 @@ public final class AtlasStoreTest {
         require(first.kind(AtlasKind.ROLE).size() == SemanticRoles.roleCount(), "role count");
         require(first.kind(AtlasKind.ROLE).size() >= 196, "catalog baseline");
         require(first.kind(AtlasKind.INVARIANT).size() == 6, "invariants");
-        require(first.kind(AtlasKind.SUBSYSTEM).size() == 24, "subsystems");
-        require(first.kind(AtlasKind.COVERAGE_UNIT).size() == 168, "coverage units");
+        require(first.kind(AtlasKind.SUBSYSTEM).size() == 25, "subsystems");
+        require(first.kind(AtlasKind.COVERAGE_UNIT).size() == 175, "coverage units");
         require(first.kind(AtlasKind.BOUNDARY).size() >= 24, "boundary baseline");
         require(first.kind(AtlasKind.SCENARIO).size() == 1, "scenario format");
         require(first.kind(AtlasKind.EXPERIMENT).size() >= 90, "experiments");

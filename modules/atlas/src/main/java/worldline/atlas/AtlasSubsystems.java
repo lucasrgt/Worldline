@@ -16,7 +16,7 @@ public final class AtlasSubsystems {
     public static final String[] ALL = { "tick-lifecycle", "worldgen", "chunks", "lighting",
             "weather", "block-ticks", "fluids", "entities", "mob-ai", "player", "inventory",
             "crafting", "redstone", "saves", "dimensions", "protocol", "dedicated-server",
-            "rendering", "gui", "resources", "mod-ecosystem", "mappings", "stationapi",
+            "profiling", "rendering", "gui", "resources", "mod-ecosystem", "mappings", "stationapi",
             "aero" };
     public static final String[] DIMENSIONS = { "TESTABILITY", "CONTROL", "OBSERVABILITY",
             "ORACLE", "SEMANTIC", "REPRODUCIBILITY", "DETERMINISM" };
@@ -66,6 +66,10 @@ public final class AtlasSubsystems {
         mapped.put("persistence", "saves");
         mapped.put("filesystem", "saves");
         mapped.put("network", "protocol");
+        mapped.put("profiling", "profiling");
+        mapped.put("profiler", "profiling");
+        mapped.put("telemetry", "profiling");
+        mapped.put("metrics", "profiling");
         mapped.put("render", "rendering");
         mapped.put("gui", "gui");
         mapped.put("resource", "resources");
