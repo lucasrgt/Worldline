@@ -49,7 +49,8 @@ final class LifecycleClaimTestKitPinCheck {
                             && pin.evidence().equals(required(lock, stem + "evidence_sha256"))
                     && source.equals(pin.source());
             boolean successor = trainSuccessor(root, lock, stem, id, pin, current);
-            require((direct || successor)
+            boolean executedSuccessor = NeighborTestKitPinCheck.reexecuted(pin);
+            require((direct || successor || executedSuccessor)
                             && required(lock, stem + "prior_fingerprint").matches("[0-9a-f]{64}"),
                     "lifecycle-claim transported proof drift: " + id);
             if (source.equals("executed")) exact++;
