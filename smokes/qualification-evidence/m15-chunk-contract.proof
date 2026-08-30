@@ -1,5 +1,5 @@
 schema=1
 id=m15-chunk-contract
-fingerprint=33ddfcfcb618d57e9c9960c64e04bbdcb3d7cdc8b704e8b43f61e989c1a961d3
+fingerprint=a81ee72235800d2ae525d29becc36ba0cbe5634a84cc0682644bf5d0e0bb0c96
 observation.sha256=d2fa9915152f14246f0b766b062623a03f67a8dfde437124d4071c8fc01f7942
 source=refactor-equivalent

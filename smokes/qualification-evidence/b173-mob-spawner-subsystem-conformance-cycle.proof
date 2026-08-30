@@ -1,5 +1,5 @@
 schema=1
 id=b173-mob-spawner-subsystem-conformance-cycle
-fingerprint=0e3a8143da9c7df784bbace54d4e89128148e147e1b5648ce6a2f6d3dd0ec0ed
+fingerprint=b91c6fbf48a881b2a1ea88219907b26e14fdca8c00a7a63de4c16f8c3c87f0b8
 observation.sha256=acb0d8ef355be99db4e5bac230387f11557adfa9cd08d87c3b51f78623213e8c
 source=refactor-equivalent

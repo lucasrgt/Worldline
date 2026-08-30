@@ -1,5 +1,5 @@
 schema=1
 id=b173-redstone-signal-consumers-subsystem-conformance-cycle
-fingerprint=e298e863204862005233b02628ccbbf6bc25e10607a76d6a9434ae4aea5e8323
+fingerprint=7d14c4ce14992b79f2ca9d3438bffbe8aa9c8534d153900eceb3a4443f98e9ae
 observation.sha256=2b37c3d3b7f90e64c005c7eb170e553985dfa426f9ad967c0ff391234cc5d2aa
 source=refactor-equivalent

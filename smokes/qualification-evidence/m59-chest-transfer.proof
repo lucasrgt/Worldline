@@ -1,5 +1,5 @@
 schema=1
 id=m59-chest-transfer
-fingerprint=805edbef34d750ef281e693b69fe2b3214bf5c2878445f9858807f0c8db7fabe
+fingerprint=a834c5370fffed9572279613186e43fa064870500439d0f6e736ca9c97dd7f6e
 observation.sha256=87a3f1aa9b2f56ed7edbac1d062e2d7250e29a82cfd7e5acea78906cafbc1494
 source=refactor-equivalent

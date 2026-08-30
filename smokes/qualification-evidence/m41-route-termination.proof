@@ -1,5 +1,5 @@
 schema=1
 id=m41-route-termination
-fingerprint=b2611af86efed3aa519fa701f02083aaf470d93d5da0314341da14f56e70ddde
+fingerprint=e121a67a6f2b12aed6ec50bd818d31c1cea91402fccb82d1849c78333458f9d1
 observation.sha256=dc2caf96f41a6f9a4d17cf4772fe46fbb6706c5d2a793a4371ba9c46becedff5
 source=refactor-equivalent

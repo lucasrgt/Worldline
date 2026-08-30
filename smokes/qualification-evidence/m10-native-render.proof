@@ -1,5 +1,5 @@
 schema=1
 id=m10-native-render
-fingerprint=9b9502de78506fed0fdec30ee331610f635f3791ad1d9ec21ca170175f62617d
+fingerprint=85b8ee70577d240b9f857ecc3b3a7a931322d459e675e05a4fafe691b501425f
 observation.sha256=e3107c7a41c137b6ae1a335849c43cab851ebeaf7372f4ab354d0ac2a0ad4d42
 source=refactor-equivalent
