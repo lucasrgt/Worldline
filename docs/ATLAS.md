@@ -120,7 +120,8 @@ is CLI-only; it is not a Verify gate and does not fail M89.
 `atlas index` ranks exact IDs, subjects, evidence, refs, normalized terms,
 derived facets, and a small versioned synonym set. Queries such as `chunk`,
 `domain-world`, `category-claim`, and `layer-universal` are therefore stable
-agent entry points. `atlas context` adds bounded graph neighbors and renders
+agent entry points. A query composed of one complete facet token is an exact
+filter; ordinary language remains ranked semantic search. `atlas context` adds bounded graph neighbors and renders
 domains, subsystems, tags, evidence, and refs as human-readable text or
 `WORLDLINE-ATLAS-CONTEXT/1` JSON. `atlas taxonomy` renders the hierarchy and
 record totals; `atlas tags` renders the complete deterministic facet index.

@@ -38,14 +38,17 @@ public final class AtlasIndex {
 
     private static int score(AtlasStore store, AtlasRecord record, String query,
             Set<String> terms) {
-        String phrase = query.toLowerCase(Locale.US);
+        String phrase = query.toLowerCase(Locale.US).trim();
+        String facet = phrase.startsWith("tag:") ? phrase.substring(4) : phrase;
         String id = record.id().toLowerCase(Locale.US);
         String subject = record.subject().toLowerCase(Locale.US);
+        List<String> tags = AtlasTaxonomy.tags(store, record);
+        if (facetQuery(facet) && !tags.contains(facet)) return 0;
         int score = 0;
         if (id.equals(phrase) || AtlasKind.token(record.id()).equals(phrase)) score += 200;
         if (id.contains(phrase)) score += 90;
         if (subject.contains(phrase)) score += 75;
-        List<String> tags = AtlasTaxonomy.tags(store, record);
+        if (tags.contains(facet)) score += 160;
         for (String term : terms) {
             if (term.isEmpty()) continue;
             if (id.contains(term)) score += 28;
@@ -56,6 +59,14 @@ public final class AtlasIndex {
         }
         if (score > 0 && AtlasStatus.VERIFIED.equals(record.status())) score += 5;
         return score;
+    }
+
+    private static boolean facetQuery(String query) {
+        for (String prefix : new String[] {"domain-", "subsystem-", "category-", "status-",
+                "certainty-", "artifact-", "layer-"}) {
+            if (query.startsWith(prefix) && query.length() > prefix.length()) return true;
+        }
+        return false;
     }
 
     private static boolean contains(List<String> values, String term) {

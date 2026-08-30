@@ -74,8 +74,8 @@ public final class AtlasStoreTest {
                 && context.contains("certainty") && context.contains("GRAPH_DEPTH_1")
                 && context.contains("\"domains\"") && context.contains("subsystem-chunks"),
                 "agent context json");
-        require(!AtlasIndex.search(first, "domain-world", 20).isEmpty(), "domain facet index");
-        require(!AtlasIndex.search(first, "layer-universal", 20).isEmpty(), "layer facet index");
+        requireFacet(first, "domain-world");
+        requireFacet(first, "layer-universal");
         AtlasTaxonomy.validate(first);
         String taxonomy = AtlasQuery.taxonomy(first);
         require(taxonomy.contains("WORLDLINE-ATLAS-TAXONOMY/1")
@@ -105,5 +105,14 @@ public final class AtlasStoreTest {
 
     private static void require(boolean condition, String message) {
         if (!condition) throw new AssertionError(message);
+    }
+
+    private static void requireFacet(AtlasStore store, String facet) {
+        java.util.List<AtlasHit> hits = AtlasIndex.search(store, facet, 1000);
+        require(!hits.isEmpty(), facet + " index");
+        for (AtlasHit hit : hits) {
+            require(AtlasTaxonomy.tags(store, hit.record()).contains(facet),
+                    facet + " leaked another facet");
+        }
     }
 }
