@@ -28,6 +28,16 @@ public final class AtlasCoverageTest {
         require("CONTROLLED".equals(blockTick.control())
                 && blockTick.refs().contains("atlas.subsystem.block-ticks"),
                 "block tick boundary classification");
+        require("1".equals(store.get("atlas.coverage-unit.fluids.SEMANTIC").control()),
+                "fluid TestKit semantics filled");
+        require("1".equals(store.get("atlas.coverage-unit.fluids.CONTROL").control()),
+                "fluid TestKit boundary controlled");
+        require("1".equals(store.get("atlas.coverage-unit.fluids.DETERMINISM").control()),
+                "fluid public evidence deterministic");
+        AtlasRecord fluid = store.get("atlas.boundary.FLUID");
+        require("CONTROLLED".equals(fluid.control())
+                && fluid.refs().contains("atlas.subsystem.fluids"),
+                "fluid boundary classification");
         require("1".equals(store.get("atlas.coverage-unit.inventory.ORACLE").control()),
                 "inventory oracle filled");
         require("1".equals(store.get("atlas.coverage-unit.crafting.CONTROL").control()),

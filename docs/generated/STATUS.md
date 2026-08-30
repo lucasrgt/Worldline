@@ -4,8 +4,8 @@ This file is derived from `SemanticRoles`, smoke descriptors, behavior maps, and
 
 | Measure | Value |
 | --- | ---: |
-| Semantic categories | 27 |
-| Required semantic roles | 300 |
+| Semantic categories | 28 |
+| Required semantic roles | 304 |
 | Smoke milestones | 664 |
 | Behavior maps including aggregates | 665 |
 | Fable 2 DONE | 45 |

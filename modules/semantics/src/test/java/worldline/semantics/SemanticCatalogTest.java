@@ -21,7 +21,7 @@ public final class SemanticCatalogTest {
         SemanticCatalog first = SemanticCatalog.standard();
         SemanticCatalog second = SemanticCatalog.standard();
         require(first.size() == SemanticRoles.roleCount(), "role count");
-        require(first.categories().size() == 27, "category count");
+        require(first.categories().size() == 28, "category count");
         require("k".equals(first.role("CLIENT_TICK_ROOT").official()), "official alias");
         require(first.role("CLIENT_CLOCK_SOURCE").official().isEmpty(), "worldline-only alias");
         require("u".equals(first.role("BLOCK_STONE").official()), "stone alias");
@@ -92,9 +92,11 @@ public final class SemanticCatalogTest {
                 "crafting personal TestKit contract");
         require("execute".equals(first.role("TILE_ENTITY_SIGN_TESTKIT").name()),
                 "tile entity sign TestKit fixture");
+        require("execute".equals(first.role("FLUID_SOURCE_DYNAMICS_TESTKIT").name()),
+                "source fluid dynamics TestKit fixture");
         require(first.sha256().equals(second.sha256())
                 && first.sha256().equals(
-                "d5f9c1497442d0f8126d9b34843d69a8f92363d5f1823cb0502374f83b17a88d"),
+                "0af093cf23900247603ea883d8bacb25b1d77b84f6beca97dff4364b87bbbf9d"),
                 "catalog hash drifted to " + first.sha256());
         require(first.canonical().equals(second.canonical()), "catalog canonical drifted");
         require(first.render().contains("complete=true"), "render completeness");

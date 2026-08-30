@@ -5,15 +5,15 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | Milestone | Qualification | Contract |
 | --- | --- | --- |
 | `deterministic-world-tick` | CARRIED | server-runtime-equivalence |
-| `controlled-client-tick` | CARRIED | client-runtime-equivalence |
-| `testkit-cycle` | EXECUTED | testkit-runtime |
+| `controlled-client-tick` | PENDING | client-runtime-equivalence |
+| `testkit-cycle` | PENDING | testkit-runtime |
 | `m3-domain-api` | CARRIED | domain-api-equivalence |
 | `m4-durable-snapshot` | CARRIED | durable-snapshot |
 | `m5-reproduction-bundle` | CARRIED | reproduction-bundle |
 | `m6-trace-explorer` | CARRIED | trace-divergence |
-| `m7-mod-loading` | EXECUTED | mod-loading |
-| `m8-mod-version-diff` | EXECUTED | mod-version-difference |
-| `m9-scenario-minimization` | EXECUTED | scenario-minimization |
+| `m7-mod-loading` | PENDING | mod-loading |
+| `m8-mod-version-diff` | PENDING | mod-version-difference |
+| `m9-scenario-minimization` | PENDING | scenario-minimization |
 | `m10-native-render` | CARRIED | client-runtime-equivalence |
 | `m11-aero-attribution` | CARRIED | aero-diagnostic-capture |
 | `m11-mod-api` | CARRIED | mod-api-lifecycle |
@@ -563,7 +563,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m617-spawn-light-cap-set` | CARRIED | spawn light cap set |
 | `m618-wolf-tame-set` | CARRIED | wolf tame set |
 | `m619-undead-sun-burn-set` | CARRIED | undead sun burn set |
-| `m620-stationapi-testkit-driver` | EXECUTED | StationAPI TestKit driver |
+| `m620-stationapi-testkit-driver` | PENDING | StationAPI TestKit driver |
 | `m621-save-worldgen-set` | CARRIED | save worldgen set |
 | `m622-pathfinding-matrix` | CARRIED | Entity pathfinding matrix |
 | `m623-lighting-engine-matrix` | CARRIED | Lighting engine matrix |
@@ -611,8 +611,8 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-farmland-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 farmland subsystem conformance |
 | `b173-fire-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 fire subsystem conformance |
 | `b173-floor-mounted-lifecycle-cycle` | CARRIED | official Beta 1.7.3 floor-mounted block lifecycle family |
-| `b173-flowing-fluid-lifecycle-cycle` | CARRIED | official Beta 1.7.3 flowing-fluid lifecycle |
-| `b173-fluid-frozen-matter-lifecycle-conformance-cycle` | CARRIED | official Beta 1.7.3 fluid and frozen-matter lifecycle conformance |
+| `b173-flowing-fluid-lifecycle-cycle` | PENDING | official Beta 1.7.3 flowing-fluid lifecycle |
+| `b173-fluid-frozen-matter-lifecycle-conformance-cycle` | PENDING | official Beta 1.7.3 fluid and frozen-matter lifecycle conformance |
 | `b173-furnace-state-domain-cycle` | CARRIED | official Beta 1.7.3 furnace facing state domain |
 | `b173-furnace-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 furnace subsystem conformance |
 | `b173-gold-shovel-harvest-lifecycle-cycle` | CARRIED | official Beta 1.7.3 gold-shovel harvest lifecycle family |
@@ -643,8 +643,8 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-shaded-mushroom-lifecycle-cycle` | CARRIED | official Beta 1.7.3 shaded mushroom lifecycle family |
 | `b173-sign-subsystem-lifecycle-cycle` | CARRIED | official Beta 1.7.3 sign subsystem lifecycle |
 | `b173-slab-lifecycle-cycle` | CARRIED | official Beta 1.7.3 slab state and disassembly lifecycle family |
-| `b173-source-fluid-dynamics-cycle` | CARRIED | official Beta 1.7.3 source-fluid gated dynamics |
-| `b173-source-fluid-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 source-fluid physical envelopes |
+| `b173-source-fluid-dynamics-cycle` | PENDING | official Beta 1.7.3 source-fluid gated dynamics |
+| `b173-source-fluid-physical-envelope-cycle` | PENDING | official Beta 1.7.3 source-fluid physical envelopes |
 | `b173-special-collision-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 special-collision physical envelopes |
 | `b173-static-collision-envelope-cycle` | CARRIED | official Beta 1.7.3 static collision envelopes |
 | `b173-static-light-transport-cycle` | CARRIED | official Beta 1.7.3 static light transport |
@@ -659,7 +659,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
-| `gui-tree` | EXECUTED | ui-tree-equivalence |
+| `gui-tree` | PENDING | ui-tree-equivalence |
 | `lab-cycle` | CARRIED | runtime-lab |
 | `redstone-lever-button` | CARRIED | redstone-lever-button |
 | `redstone-piston-extend` | CARRIED | redstone-piston-extend |

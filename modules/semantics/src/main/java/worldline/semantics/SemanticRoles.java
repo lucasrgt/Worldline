@@ -20,7 +20,8 @@ public final class SemanticRoles {
     public static final String RESOURCE = "resource", PERSISTENCE = "persistence";
     public static final String SAVE = "save", LIFECYCLE = "lifecycle";
     public static final String LAB = "lab", DOMAIN = "domain", REDSTONE = "redstone";
-    public static final String BLOCK_TICK = "block-tick", TILE_ENTITY = "tile-entity";
+    public static final String BLOCK_TICK = "block-tick", FLUID = "fluid";
+    public static final String TILE_ENTITY = "tile-entity";
     private static final Map<String, List<String>> REQUIRED = required();
 
     private SemanticRoles() {}
@@ -74,6 +75,9 @@ public final class SemanticRoles {
         roles.put(BLOCK_TICK, list("BLOCK_TICK_POLICY_MECHANISM", "BLOCK_TICK_POLICY_SCENARIO",
                 "BLOCK_TICK_POLICY_OBSERVATION", "BLOCK_TICK_POLICY_FIXTURE",
                 "BLOCK_TICK_POLICY_EVIDENCE"));
+        roles.put(FLUID, list("FLUID_FLOWING_LIFECYCLE_TESTKIT",
+                "FLUID_FROZEN_MATTER_TESTKIT", "FLUID_SOURCE_DYNAMICS_TESTKIT",
+                "FLUID_SOURCE_PHYSICAL_ENVELOPE_TESTKIT"));
         roles.put(TILE_ENTITY, list("TILE_ENTITY_FURNACE_TESTKIT",
                 "TILE_ENTITY_MOB_SPAWNER_TESTKIT", "TILE_ENTITY_PISTON_TESTKIT",
                 "TILE_ENTITY_SIGN_TESTKIT"));
