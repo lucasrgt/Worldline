@@ -3,7 +3,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -12,8 +11,8 @@ final class CandidateRuntimeBuild {
     private CandidateRuntimeBuild() {}
 
     static boolean owns(Path directory, Properties descriptor) {
-        return Set.of("runtime-build", "external-runtime-build").contains(
-                        descriptor.getProperty("candidate.compile"))
+        String compile = descriptor.getProperty("candidate.compile");
+        return ("runtime-build".equals(compile) || "external-runtime-build".equals(compile))
                 || !Files.isDirectory(directory.resolve("src"))
                         && Files.isDirectory(directory.resolve("runtime-src"));
     }
@@ -57,6 +56,8 @@ final class CandidateRuntimeBuild {
             Files.writeString(source.resolve("Probe.java"), "final class Probe {}\n");
             Files.writeString(builder, "final class Builder {}\n");
             Properties values = new Properties();
+            require(!owns(root.resolve("smokes/tooling"), values),
+                    "tooling candidate without compile ownership was not null-safe");
             values.setProperty("candidate.compile", "external-runtime-build");
             values.setProperty("candidate.runtime.source", "adapters/example/runtime-src");
             values.setProperty("candidate.runtime.builder", "tools/integration/Builder.java");
