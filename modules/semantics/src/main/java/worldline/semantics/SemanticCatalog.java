@@ -36,6 +36,7 @@ public final class SemanticCatalog {
         all.addAll(FilesystemSemantics.mappings());
         all.addAll(NetworkSemantics.mappings());
         all.addAll(DedicatedServerSemantics.mappings());
+        all.addAll(MappingSemantics.mappings());
         all.addAll(SchedulerSemantics.mappings());
         all.addAll(WorldSemantics.mappings());
         all.addAll(WorldgenSemantics.mappings());

@@ -130,6 +130,14 @@ public final class AtlasCoverageTest {
                 "redstone boundary classification");
         require("1".equals(store.get("atlas.coverage-unit.mappings.SEMANTIC").control()),
                 "mapping semantics filled");
+        require("1".equals(store.get("atlas.coverage-unit.mappings.CONTROL").control()),
+                "mapping audit boundary controlled");
+        require("1".equals(store.get("atlas.coverage-unit.mappings.DETERMINISM").control()),
+                "mapping evidence derivation deterministic");
+        AtlasRecord mappings = store.get("atlas.boundary.MAPPINGS");
+        require("CONTROLLED".equals(mappings.control())
+                && mappings.refs().contains("atlas.subsystem.mappings"),
+                "mapping boundary classification");
         List<AtlasRecord> gaps = AtlasGaps.list(store);
         require(!gaps.isEmpty(), "gaps exist");
         boolean worldgenCoverageGap = false;
