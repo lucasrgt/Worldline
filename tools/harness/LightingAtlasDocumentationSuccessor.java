@@ -31,6 +31,7 @@ final class LightingAtlasDocumentationSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "lighting Atlas documentation successor allowlist drifted");
+        LightingCoverageTrainSourceSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
