@@ -113,7 +113,8 @@ final class ProviderDiscoveryPinCheck {
             return direct || GuiWorkbenchPinCheck.follows(GuiWorkbenchPinCheck.manifest(root), id,
                 lock.getProperty(stem + "current_fingerprint"),
                 lock.getProperty(stem + "evidence_sha256"), pin, current)
-                || TrainPinCheck.carriesCurrent(TrainPinCheck.manifest(root), id, pin, current); }
+                || TrainPinCheck.carriesCurrent(TrainPinCheck.manifest(root), id, pin, current)
+                || SchemaPinCheck.carries(SchemaPinCheck.manifest(root), id, pin, current); }
         catch (Exception error) { return false; }
     }
     static boolean follows(Properties lock, String id, String prior, String evidence,
@@ -131,7 +132,8 @@ final class ProviderDiscoveryPinCheck {
             String baseline = required(lock, stem + "current_sha256");
             require((digest(root.resolve(relative)).equals(baseline)
                             || TrainPinCheck.transportsFile(TrainPinCheck.manifest(root), root,
-                                    relative, baseline))
+                                    relative, baseline)
+                            || SchemaPinCheck.transportsFile(root, relative, baseline))
                             && (!prior || hash(lock.getProperty(stem + "prior_sha256"))),
                     "provider-discovery source drift: " + relative);
         }
@@ -149,9 +151,11 @@ final class ProviderDiscoveryPinCheck {
                     && Files.readString(root.resolve(relative)).contains("src/(?:main|testkit)/java")
                     && Files.readString(root.resolve("tools/harness/DataDrivenCyclePlan.java"))
                             .contains("src/(?:main|testkit)/java");
-            require(hash(prior) && digest(root.resolve(relative)).equals(current)
+            boolean successor = SchemaPinCheck.transportsFile(root, relative, current);
+            require(hash(prior) && (digest(root.resolve(relative)).equals(current)
                             && (fingerprint
-                            || TrainPinCheck.transportsFile(train, root, relative, prior)),
+                            || TrainPinCheck.transportsFile(train, root, relative, prior))
+                            || successor),
                     "invalid provider source refresh: " + relative);
         }
     }
