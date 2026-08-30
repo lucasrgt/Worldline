@@ -291,9 +291,10 @@ official-client census into 96 deterministic `registry-presence` cases. The
 public placement/persistence and break/drop fixtures then project legacy runtime
 observations into typed, equatable evidence for simple, oriented, multiblock,
 variant, and coupled-transition cases. Together with the modern lifecycle proof
-reconciliation, this raises the public TestKit surface to 1,050/1,056 claims
-(99.43%), above the 98.8% target. The six remaining internal claims are the
-coherent random-tick-policy subsystem; there are no smoke-only Census claims.
+reconciliation, the public TestKit surface now covers 1,056/1,056 claims
+(100%), completing the automation-surface target. The final six tick-policy claims bind sand and
+gravel scheduling, natural wheat, cactus, and sugar-cane growth, and furnace tile ticks to official
+public fixtures; there are no internal or smoke-only Census claims.
 
 ## Three conformance layers
 
@@ -316,7 +317,7 @@ runtime census without exposing mapped Minecraft classes to the fixture.
 login, an exact break and tool effect, normalized zero/one/multiple drops, and a second reload that
 proves the removed state persisted. The b1.7.3 server adapter implements this boundary without
 turning direct `GameWorld.setBlock` mutation into false gameplay evidence. Historical claims remain
-`INTERNAL_API` or `SMOKE_ONLY` until an official run binds their evidence to this public fixture.
+bound to official runs through the public fixture; no claim remains `INTERNAL_API` or `SMOKE_ONLY`.
 Its frozen aggregate provider package executes 26 scenario-routed rows and backs 104 public claims.
 Each row carries bounded immutable fixture options into the runtime, so adding a lifecycle subject
 does not require duplicating that subject in a provider-owned catalog.

@@ -137,8 +137,8 @@ Functional Census claims also expose their automation surface. The
 `surface-public-testkit`, `surface-internal-api`, and `surface-smoke-only`
 facets distinguish reusable public fixtures from knowledge that still needs
 promotion, so the Atlas can drive the next high-value subsystem instead of a
-raw milestone count. The current index exposes 1,050 public TestKit claims and
-six internal random-tick-policy claims, with no smoke-only claims; the surface
+raw milestone count. The current index exposes all 1,056 claims through the public TestKit,
+with no internal or smoke-only claims; the surface
 facets evolve directly from the canonical Functional Census rather than from a
 hand-maintained secondary inventory.
 
