@@ -32,6 +32,7 @@ final class HarnessFeatureSelfTest {
         PaintingAdapterSplitSuccessor.selfTest();
         SlimeLifecycleSubsystemSuccessor.selfTest();
         EntityDynamicsMatrixSuccessor.selfTest();
+        SheepLifecycleSubsystemSuccessor.selfTest();
         CandidateReadiness.selfTest();
         CandidateSourceClosure.selfTest();
         NeighborTestKitPinCheck.selfTest();
