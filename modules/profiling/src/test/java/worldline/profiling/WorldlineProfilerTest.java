@@ -226,6 +226,7 @@ public final class WorldlineProfilerTest {
                             "mod.example.client.count", "example-mod"));
             ClientProfilerRuntime.configure("modloader-forge", "forge");
             ClientProfilerRuntime.tick(7L); ClientProfilerRuntime.display(3L);
+            ClientProfilerRuntime.gpuWait(11L);
             ClientProfilerRuntime.beginFrame();
             require(ClientProfiler.active(), "client profiler frame did not open");
             ClientProfiler.add(metric, 2L); ClientProfilerRuntime.endFrame();
@@ -234,7 +235,8 @@ public final class WorldlineProfilerTest {
             require("modloader-forge".equals(run.tag("driver.id"))
                     && "forge".equals(run.tag("loader.id"))
                     && run.census().value(0, metric.name()) == 2L
-                    && run.census().value(0, WorldlineProfilerMetrics.CLIENT_TICK) == 7L,
+                    && run.census().value(0, WorldlineProfilerMetrics.CLIENT_TICK) == 7L
+                    && run.census().value(0, WorldlineProfilerMetrics.GPU_WAIT) == 11L,
                     "loader-neutral client runtime drifted");
         } finally {
             java.nio.file.Files.deleteIfExists(artifact);

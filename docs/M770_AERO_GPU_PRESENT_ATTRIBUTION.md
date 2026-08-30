@@ -1,15 +1,15 @@
-# M770-AERO-GPU-PRESENT-ATTRIBUTION aero gpu present attribution
+# M770-AERO-GPU-PRESENT-ATTRIBUTION Aero GPU and present attribution
 
 <!-- Generated from smoke.properties by MilestoneNarrative. -->
 
 ## Claim
 
-This deterministic scaffold publishes no behavior. Replace the draft runner and author the claim before runtime qualification.
+Three fresh real StationAPI clients replay one restored 576-machine Aero tower and separate nonblocking GPU timer-query work, forced GPU-driver drain, Display.update, and VSync present wait without treating CPU submission time as GPU time.
 
 ## Qualification cycle
 
-M770AeroGpuPresentAttributionCycle is deliberately fail-closed while this milestone is a scaffold. Candidate validation may compile it, but runtime qualification must fail until a real deterministic cycle replaces it.
+M770 prepares one tower and runs query-async-off, finish-off, and finish-vsync arms for at least one retained minute each; it seals complete WLPR censuses and frame-keyed GPU query maps, verifies query coverage, and proves where finish and present waits are observed.
 
-Expected signal: `id=m770-aero-gpu-present-attribution,state=draft,claim=unassigned`.
+Expected signal: `scene=solid-576,arms=query-async+finish-off+finish-vsync,gpu=timer-query,display=isolated`.
 
-Frozen semantic SHA-256: `4370d1e00f47ac5744b52b2c147b0e04199238c4f5e0a17ba44d7eb104ef4c68`.
+Frozen semantic SHA-256: `3fab7170a84da1b7d26206d9eb489ff4d7a2b38247f9ad0d4097760b722e0c11`.

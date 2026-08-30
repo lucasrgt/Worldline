@@ -1,0 +1,91 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+def script = gradle.startParameter.initScripts.find { it.name == 'present.init.gradle' }
+if (script == null) throw new GradleException('Worldline M770 script path missing')
+def root = script.parentFile.parentFile.parentFile.canonicalFile
+def requestedJar = gradle.startParameter.projectProperties.get('worldlineAeroJar')
+if (requestedJar != null) {
+    def aeroJar = new File(requestedJar).canonicalFile
+    if (!aeroJar.isFile()) throw new GradleException('Worldline M770 Aero JAR missing')
+    def expectedTestDir = new File(aeroJar.parentFile.parentFile.parentFile, 'test').canonicalFile
+    gradle.beforeProject { candidate ->
+        if (candidate.projectDir.canonicalFile != expectedTestDir) return
+        candidate.configurations.whenObjectAdded { configuration ->
+            if (configuration.name != 'modImplementation') return
+            configuration.withDependencies { dependencies ->
+                def aeroDependencies = dependencies.findAll {
+                    it.group == 'dev.aerocoding' && it.name == 'aero-model-lib'
+                }
+                if (aeroDependencies.size() != 1)
+                    throw new GradleException('Worldline M770 Aero dependency boundary drift')
+                dependencies.removeAll(aeroDependencies)
+                dependencies.add(candidate.dependencies.create(candidate.files(aeroJar)))
+            }
+        }
+    }
+}
+
+gradle.projectsEvaluated {
+    if (gradle.rootProject.name != 'aero-model-lib-test') return
+    def project = gradle.rootProject
+    def smoke = new File(root, 'smokes/m770-aero-gpu-present-attribution')
+    def prop = { name -> project.findProperty(name).toString() }
+    project.sourceSets.main.java.srcDir(new File(smoke, 'runtime-src'))
+    project.dependencies.add('compileOnly', project.files(
+        new File(project.findProperty('worldlineAeroClasses').toString())))
+    def profilerRoot = new File(root, 'modules/profiling/src/main/java/worldline/profiling')
+    def profilerTypes = ['ClientProfiler', 'ClientProfilerRuntime', 'FrameCensus',
+        'FrameCensusCodec', 'JvmProfilerSampler', 'ProfilerArtifacts', 'ProfilerMetric',
+        'ProfilerRecorder', 'ProfilerRegistry', 'ProfilerRun', 'ProfilerRunCodec',
+        'ProfilerSchema', 'ProfilerSession', 'WorldlineProfilerMetrics']
+    def profilerSources = profilerTypes.collect { new File(profilerRoot, it + '.java') }
+    if (!profilerSources.every { it.isFile() })
+        throw new GradleException('Worldline M770 profiler closure is incomplete')
+    project.tasks.named('compileJava').configure { source(profilerSources) }
+    project.tasks.named('processResources').configure {
+        outputs.upToDateWhen { false }
+        doLast {
+            copy { from new File(smoke, 'runtime-resources'); into destinationDir }
+            def fabric = new File(destinationDir, 'fabric.mod.json')
+            if (!fabric.isFile()) throw new GradleException('Aero fabric.mod.json missing')
+            def json = new JsonSlurper().parse(fabric)
+            def mixins = (json.mixins ?: []) as List
+            if (!mixins.contains('worldline-m770.mixins.json'))
+                mixins.add('worldline-m770.mixins.json')
+            json.mixins = mixins
+            fabric.text = JsonOutput.prettyPrint(JsonOutput.toJson(json)) + '\n'
+        }
+    }
+    def task = project.tasks.named('runClient').get()
+    if (task.actions.size() != 2 ||
+            !task.actions[0].getClass().name.endsWith('ClosureTaskAction'))
+        throw new GradleException('Aero runClient action shape drifted')
+    task.actions.remove(0)
+    def game = new File(prop('worldlineRunDir')).absoluteFile
+    project.loom.runs.named('client').configure { runDir project.relativePath(game) }
+    game.mkdirs()
+    new File(game, 'options.txt').text = 'fpsLimit:0' + System.lineSeparator()
+    task.jvmArgs([
+        '-Dworldline.m770.enabled=true',
+        '-Dworldline.m770.prepare=' + prop('worldlinePrepare'),
+        '-Dworldline.m770.arm=' + prop('worldlineArm'),
+        '-Dworldline.m770.ticks=' + prop('worldlineTicks'),
+        '-Dworldline.m770.minimumMillis=' + prop('worldlineMinimumMillis'),
+        '-Dworldline.m770.queryRing=' + prop('worldlineQueryRing'),
+        '-Dworldline.m770.queryOutput=' + new File(prop('worldlineQuery')).absolutePath,
+        '-Dworldline.profiler.enabled=true',
+        '-Dworldline.profiler.autoStart=false',
+        '-Dworldline.profiler.capacity=' + prop('worldlineProfilerCapacity'),
+        '-Dworldline.profiler.mode=mixed',
+        '-Dworldline.profiler.scenario=m770-aero-gpu-present-attribution-' + prop('worldlineArm'),
+        '-Dworldline.profiler.output=' + new File(prop('worldlineProfiler')).absolutePath,
+        '-Daero.mega=true', '-Daero.mega.solidTerrain=true',
+        '-Daero.mega.sideEffects=false', '-Daero.mega.phaseSpread=true',
+        '-Daero.spikelog=true', '-Daero.spikelog.ms=10000',
+        '-Daero.spikelog.heartbeatMs=0', '-Daero.spikelog.flushMs=10000',
+        '-Daero.spikelog.file=', '-Daero.framePacing=false',
+        '-Daero.benchmark.skipNonForcedSaves=false',
+        '-Xms2G', '-Xmx4G'
+    ] as List)
+}
