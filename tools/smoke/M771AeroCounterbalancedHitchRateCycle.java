@@ -44,17 +44,20 @@ public final class M771AeroCounterbalancedHitchRateCycle {
         try { new M771AeroCounterbalancedHitchRateCycle().execute(); }
         catch (Exception error) {
             System.err.println("M771 counterbalanced hitch-rate failed: " + error.getMessage());
-            error.printStackTrace(System.err); System.exit(1);
+            error.printStackTrace(System.err);
+            System.exit(1);
         }
     }
 
     private void execute() throws Exception {
         SmokeSupport.load(smoke.resolve("smoke.properties"), config);
-        verifyDesign(); Path profiling = product("profiling");
+        verifyDesign();
+        Path profiling = product("profiling");
         SmokeSupport.require(Files.isDirectory(profiling), "M771 profiling product absent");
         Path checkout = root.resolve(SmokeSupport.value(config, "aero.path")).normalize();
         M771Workspace.verifyCheckout(checkout, config);
-        SmokeSupport.recreate(root, build); buildAero(checkout);
+        SmokeSupport.recreate(root, build);
+        buildAero(checkout);
         Path template = build.resolve("template");
         runClient(checkout, template, true, "prepare", template.resolve("unused.wlpr"));
         Path sourceWorld = template.resolve("saves/WorldlineAero");
@@ -69,7 +72,8 @@ public final class M771AeroCounterbalancedHitchRateCycle {
             M771Arm reference = null, candidate = null;
             for (String treatment : order) {
                 String arm = "pair" + (index + 1) + "-" + treatment;
-                Path game = build.resolve(arm); Files.createDirectories(game.resolve("saves"));
+                Path game = build.resolve(arm);
+                Files.createDirectories(game.resolve("saves"));
                 M771Workspace.copyTree(sourceWorld, game.resolve("saves/WorldlineAero"));
                 Path profiler = game.resolve("hitch.wlpr");
                 String output = runClient(checkout, game, false, arm, profiler);
@@ -105,7 +109,8 @@ public final class M771AeroCounterbalancedHitchRateCycle {
 
     private String runClient(Path checkout, Path game, boolean prepare, String arm,
             Path profiler) throws Exception {
-        Files.createDirectories(game); Path project = checkout.resolve("stationapi/test");
+        Files.createDirectories(game);
+        Path project = checkout.resolve("stationapi/test");
         String wrapper = System.getProperty("os.name").startsWith("Windows")
                 ? "gradlew.bat" : "gradlew";
         List<String> command = List.of(project.resolve(wrapper).toString(), "--no-daemon",
@@ -198,8 +203,10 @@ final class M771Workspace {
     }
 
     private static String git(Path checkout, String... arguments) throws Exception {
-        ArrayList<String> command = new ArrayList<>(); command.add("git");
-        command.addAll(List.of(arguments)); return SmokeSupport.capture(checkout, command, 60);
+        ArrayList<String> command = new ArrayList<>();
+        command.add("git");
+        command.addAll(List.of(arguments));
+        return SmokeSupport.capture(checkout, command, 60);
     }
 }
 
@@ -219,9 +226,15 @@ final class M771Artifact {
 
     private M771Artifact(String arm, long start, long end, String[] names, long[][] rows,
             long hitches, long p99, long maximum, String sha256) {
-        this.arm = arm; this.startEpochMillis = start; this.endEpochMillis = end;
-        this.names = names; this.rows = rows; this.hitches = hitches;
-        this.p99 = p99; this.maximum = maximum; this.sha256 = sha256;
+        this.arm = arm;
+        this.startEpochMillis = start;
+        this.endEpochMillis = end;
+        this.names = names;
+        this.rows = rows;
+        this.hitches = hitches;
+        this.p99 = p99;
+        this.maximum = maximum;
+        this.sha256 = sha256;
     }
 
     static M771Arm read(String arm, Path path, long minimumMillis, long threshold)
@@ -230,15 +243,21 @@ final class M771Artifact {
         DataInputStream input = verified(artifact, "WLPR envelope");
         require(input.readInt() == RUN_MAGIC && input.readInt() == 1,
                 "M771 WLPR envelope header drift");
-        input.readUnsignedByte(); long start = input.readLong(), end = input.readLong();
+        input.readUnsignedByte();
+        long start = input.readLong(), end = input.readLong();
         int metrics = input.readUnsignedShort();
         require(metrics > 0 && metrics <= 256, "M771 WLPR metric count drift");
         String[] names = new String[metrics];
         for (int index = 0; index < metrics; index++) {
-            names[index] = text(input); text(input); input.skipNBytes(3);
+            names[index] = text(input);
+            text(input);
+            input.skipNBytes(3);
         }
         int tags = input.readUnsignedByte();
-        for (int index = 0; index < tags; index++) { text(input); text(input); }
+        for (int index = 0; index < tags; index++) {
+            text(input);
+            text(input);
+        }
         int length = input.readInt();
         require(length > 0 && length == input.available(), "M771 WLPR census length drift");
         long[][] rows = census(names, input.readNBytes(length));
@@ -248,11 +267,14 @@ final class M771Artifact {
                 "M771 profiler schema drift");
         require(rows.length >= 3_000, "M771 frame census too small: " + arm);
         require(end - start >= minimumMillis, "M771 retained window too short: " + arm);
-        long[] walls = new long[rows.length]; long hitches = 0L;
+        long[] walls = new long[rows.length];
+        long hitches = 0L;
         for (int row = 0; row < rows.length; row++) {
-            walls[row] = rows[row][frame + 2]; if (walls[row] >= threshold) hitches++;
+            walls[row] = rows[row][frame + 2];
+            if (walls[row] >= threshold) hitches++;
         }
-        Arrays.sort(walls); int p99 = Math.max(1, (int) ((99L * walls.length + 99L) / 100L));
+        Arrays.sort(walls);
+        int p99 = Math.max(1, (int) ((99L * walls.length + 99L) / 100L));
         String digest = java.util.HexFormat.of().formatHex(java.security.MessageDigest
                 .getInstance("SHA-256").digest(artifact));
         M771Artifact value = new M771Artifact(arm, start, end, names, rows, hitches,
@@ -277,7 +299,8 @@ final class M771Artifact {
         require(frames > 0 && frames <= 2_000_000, "M771 WLPR frame count drift");
         require((long) frames * (metrics + 2L) * Long.BYTES == input.available(),
                 "M771 WLPR census body length drift");
-        long[][] rows = new long[frames][metrics + 2]; long prior = -1L;
+        long[][] rows = new long[frames][metrics + 2];
+        long prior = -1L;
         for (int frame = 0; frame < frames; frame++) {
             for (int column = 0; column < metrics + 2; column++) {
                 rows[frame][column] = input.readLong();
@@ -301,7 +324,8 @@ final class M771Artifact {
     }
 
     private static String text(DataInputStream input) throws Exception {
-        int length = input.readUnsignedShort(); require(length <= 4096, "M771 text drift");
+        int length = input.readUnsignedShort();
+        require(length <= 4096, "M771 text drift");
         return new String(input.readNBytes(length), StandardCharsets.UTF_8);
     }
 
@@ -332,8 +356,10 @@ final class M771Pair {
     final M771Arm reference;
     final M771Arm candidate;
     M771Pair(int index, boolean referenceFirst, M771Arm reference, M771Arm candidate) {
-        this.index = index; this.referenceFirst = referenceFirst;
-        this.reference = reference; this.candidate = candidate;
+        this.index = index;
+        this.referenceFirst = referenceFirst;
+        this.reference = reference;
+        this.candidate = candidate;
     }
     String summary() {
         return "pair" + index + ":order=" + (referenceFirst ? "AB" : "BA") + ","
@@ -391,10 +417,17 @@ final class M771GateResult {
     final boolean passes;
     M771GateResult(long baseline, long candidate, long aggregate, long median, long lower,
             long upper, long p99, int positive, int negative, String verdict, boolean passes) {
-        this.baseline = baseline; this.candidate = candidate; this.aggregate = aggregate;
-        this.median = median; this.lower = lower; this.upper = upper; this.p99 = p99;
-        this.positive = positive; this.negative = negative;
-        this.verdict = verdict; this.passes = passes;
+        this.baseline = baseline;
+        this.candidate = candidate;
+        this.aggregate = aggregate;
+        this.median = median;
+        this.lower = lower;
+        this.upper = upper;
+        this.p99 = p99;
+        this.positive = positive;
+        this.negative = negative;
+        this.verdict = verdict;
+        this.passes = passes;
     }
     String summary() {
         return "gate:baseline.ppm=" + baseline + ",candidate.ppm=" + candidate
