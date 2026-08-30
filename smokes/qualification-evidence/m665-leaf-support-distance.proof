@@ -1,5 +1,5 @@
 schema=1
 id=m665-leaf-support-distance
-fingerprint=85ba298c82020c767385c58414d6b56d8dadb470b3a4cbcbd25276bf10270b64
+fingerprint=dbdec28ac9de8e467ae0b8a72eece13a7fc0cc8574ec5e2b9f73c442d13dbc6d
 observation.sha256=4f1e8aef463860f60df269e3ba1a8c0f790a47bd61267f748a09d0213d0a8422
 source=refactor-equivalent

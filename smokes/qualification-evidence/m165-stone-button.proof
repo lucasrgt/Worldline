@@ -1,5 +1,5 @@
 schema=1
 id=m165-stone-button
-fingerprint=f117d12d6efc0bb891b4da1b6f6ca5f563d1b8cf817b97710dac79e7c13bba2f
+fingerprint=b0ee873fc182e9d1ec3ee5da23363bfa76ae1ce76ae0a130df60a4e372c1aec3
 observation.sha256=293f5014cd6d64c96de7f120544a33fdc68c2ac3843deba132c1d00ee8e00300
 source=refactor-equivalent

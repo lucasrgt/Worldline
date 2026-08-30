@@ -1,5 +1,5 @@
 schema=1
 id=m371-machine-block-crafts
-fingerprint=441e0c0b6153b6dc4ee2c65258db3398680673d9d2530f0496ea08917da23316
+fingerprint=88530fd101b0977c6bbc8ed241d90b90677243196ba311d9429bbf415bff28e2
 observation.sha256=51d13daf2febf456a423e84d136707a77b9117668bc3979f4b52514bdbb26c7e
 source=refactor-equivalent

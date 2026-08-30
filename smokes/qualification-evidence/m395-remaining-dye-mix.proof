@@ -1,5 +1,5 @@
 schema=1
 id=m395-remaining-dye-mix
-fingerprint=6a84b2172abd9afb7fab0f516bbd606617f46e8ad560ddb4f6387ea9abfe33bf
+fingerprint=165f2e1bd045506b5628bb30d0f35b1bfb38317617cd5de1ebdbff23600bfccc
 observation.sha256=1ba82fec7effc4370c0a4169136f177851484511a3b86bf1d2aaf76134e1491c
 source=refactor-equivalent
