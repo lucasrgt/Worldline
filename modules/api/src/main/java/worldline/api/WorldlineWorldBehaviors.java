@@ -80,6 +80,9 @@ public final class WorldlineWorldBehaviors {
     public static final WorldlineBehavior REDSTONE_SIGNAL_CONSUMERS_SUBSYSTEM = define(
             "redstone-signal-consumers-subsystem",
             "Dispenser, note block, TNT, torch, wire, and jukebox signal-consumer boundaries");
+    public static final WorldlineBehavior FLUID_FROZEN_MATTER_SUBSYSTEM = define(
+            "fluid-frozen-matter-subsystem",
+            "Water, lava, sponge, snow, and ice lifecycle and phase boundaries");
     public static final WorldlineBehavior DUNGEON_GENERATION = define("dungeon-generation",
             "Fixed-seed populated chunks contain replay-stable spawners and nonempty loot chests");
     public static final WorldlineBehavior CHUNK_UNLOAD_RELOAD = define("chunk-unload-reload",

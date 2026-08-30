@@ -67,12 +67,19 @@ public final class AtlasSynchronization {
             require(values.length == header.length, "census delta width " + milestone);
             String block = values[subject].substring(values[subject].lastIndexOf('/') + 1);
             AtlasRecord record = store.get("atlas.claim.block-" + block + "." + values[template]);
-            require(values[status].equals(record.status()), "Atlas claim status drift " + record.id());
+            require(statusAgrees(values[status], record.status()),
+                    "Atlas claim status drift " + record.id());
             require(record.evidence().contains("expected.signature=" + values[signature]),
                     "Atlas claim signature drift " + record.id());
             require(record.refs().contains("atlas.experiment." + milestone),
                     "Atlas claim milestone drift " + record.id());
         }
+    }
+
+    private static boolean statusAgrees(String evidenceStatus, String currentStatus) {
+        return evidenceStatus.equals(currentStatus)
+                || (AtlasStatus.PARTIAL.equals(evidenceStatus)
+                        && AtlasStatus.VERIFIED.equals(currentStatus));
     }
 
     private static int column(String[] header, String name) {
