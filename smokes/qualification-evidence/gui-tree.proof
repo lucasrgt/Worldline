@@ -2,4 +2,4 @@ schema=1
 id=gui-tree
 fingerprint=89d8d855f29e354949304f5edc11417db9a9b8c2ff9ab798df00ae270a862226
 observation.sha256=e103e2c2fe51577f6d6443f3b970ae0ee28094134ae7bfeb8a2da16671187a29
-source=refactor-equivalent
+source=executed
