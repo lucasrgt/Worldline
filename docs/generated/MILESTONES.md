@@ -221,7 +221,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m205-brick` | CARRIED | m205-brick |
 | `m206-sponge` | CARRIED | m206-sponge |
 | `m207-sandstone` | CARRIED | m207-sandstone |
-| `m208-oak-log` | CARRIED | m208-oak-log |
+| `m208-oak-log` | PENDING | m208-oak-log |
 | `m209-leaves` | CARRIED | m209-leaves |
 | `m210-oak-planks` | CARRIED | m210-oak-planks |
 | `m211-double-slab` | CARRIED | m211-double-slab |
@@ -230,7 +230,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m214-diamond-block` | CARRIED | m214-diamond-block |
 | `m215-lapis-block` | CARRIED | m215-lapis-block |
 | `m216-obsidian` | CARRIED | m216-obsidian |
-| `m217-mossy-cobble` | CARRIED | m217-mossy-cobble |
+| `m217-mossy-cobble` | PENDING | m217-mossy-cobble |
 | `m218-gravel` | CARRIED | m218-gravel |
 | `m219-tnt-place` | CARRIED | m219-tnt-place |
 | `m220-workbench` | CARRIED | m220-workbench |
@@ -254,7 +254,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m238-grass` | CARRIED | m238-grass |
 | `m239-sand` | CARRIED | m239-sand |
 | `m240-bed-place` | CARRIED | m240-bed-place |
-| `m241-iron-door-place` | CARRIED | m241-iron-door-place |
+| `m241-iron-door-place` | PENDING | m241-iron-door-place |
 | `m242-lever-place` | CARRIED | m242-lever-place |
 | `m243-redstone-wire` | CARRIED | m243-redstone-wire |
 | `m244-cake-place` | CARRIED | m244-cake-place |
@@ -314,14 +314,14 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m298-wood-tool-crafts` | CARRIED | m298-wood-tool-crafts |
 | `m299-stone-tool-crafts` | CARRIED | m299-stone-tool-crafts |
 | `m300-ore-pick-breaks` | CARRIED | m300-ore-pick-breaks |
-| `m301-axe-log-breaks` | CARRIED | m301-axe-log-breaks |
+| `m301-axe-log-breaks` | PENDING | m301-axe-log-breaks |
 | `m302-shovel-soft-breaks` | CARRIED | m302-shovel-soft-breaks |
 | `m303-crop-harvests` | CARRIED | m303-crop-harvests |
 | `m304-farmland-set` | CARRIED | m304-farmland-set |
 | `m305-plant-growth` | CARRIED | m305-plant-growth |
 | `m306-closables` | CARRIED | m306-closables |
 | `m307-env-damage` | CARRIED | m307-env-damage |
-| `m308-fragile-set` | CARRIED | m308-fragile-set |
+| `m308-fragile-set` | PENDING | m308-fragile-set |
 | `m309-rail-power` | CARRIED | m309-rail-power |
 | `m310-vehicle-rides` | CARRIED | multiplayer-session |
 | `m311-storage-carts` | CARRIED | container-transaction |
@@ -388,7 +388,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m372-placeable-item-crafts` | CARRIED | m372-placeable-item-crafts |
 | `m373-milk-bucket-set` | CARRIED | m373-milk-bucket-set |
 | `m374-remaining-food-eat` | CARRIED | m374-remaining-food-eat |
-| `m375-remaining-pick-breaks` | CARRIED | m375-remaining-pick-breaks |
+| `m375-remaining-pick-breaks` | PENDING | m375-remaining-pick-breaks |
 | `m376-remaining-shovel-breaks` | CARRIED | m376-remaining-shovel-breaks |
 | `m377-powered-rail-motion` | CARRIED | m377-powered-rail-motion |
 | `m378-boat-water-set` | CARRIED | multiplayer-session |
@@ -440,14 +440,14 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m424-furnace-cart-motion-set` | CARRIED | m424-furnace-cart-motion-set |
 | `m425-remaining-machine-faces` | CARRIED | m425-remaining-machine-faces |
 | `m426-remaining-redstone-faces` | CARRIED | m426-remaining-redstone-faces |
-| `m427-remaining-piston-orient-set` | CARRIED | m427-remaining-piston-orient-set |
-| `m428-remaining-door-orient-set` | CARRIED | m428-remaining-door-orient-set |
+| `m427-remaining-piston-orient-set` | PENDING | m427-remaining-piston-orient-set |
+| `m428-remaining-door-orient-set` | PENDING | m428-remaining-door-orient-set |
 | `m429-remaining-attach-faces` | CARRIED | m429-remaining-attach-faces |
 | `m430-remaining-painting-motives` | CARRIED | m430-remaining-painting-motives |
-| `m431-remaining-bed-orient-set` | CARRIED | m431-remaining-bed-orient-set |
+| `m431-remaining-bed-orient-set` | PENDING | m431-remaining-bed-orient-set |
 | `m432-remaining-rail-geometry-set` | CARRIED | m432-remaining-rail-geometry-set |
 | `m433-remaining-chest-orient-set` | CARRIED | m433-remaining-chest-orient-set |
-| `m434-remaining-sponge-glass-ice` | CARRIED | m434-remaining-sponge-glass-ice |
+| `m434-remaining-sponge-glass-ice` | PENDING | m434-remaining-sponge-glass-ice |
 | `m435-remaining-natural-spawns` | CARRIED | m435-remaining-natural-spawns |
 | `m436-remaining-arrow-life-set` | CARRIED | m436-remaining-arrow-life-set |
 | `m437-lightning-pig-set` | CARRIED | m437-lightning-pig-set |
@@ -508,7 +508,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m548-piston-bud-set` | CARRIED | Piston bud set |
 | `m550-dispenser-qc-set` | CARRIED | Dispenser qc set |
 | `m553-piston-immovable-set` | CARRIED | Piston immovable set |
-| `m554-extended-head-break-set` | CARRIED | Extended head break set |
+| `m554-extended-head-break-set` | PENDING | Extended head break set |
 | `m555-torch-burnout-set` | CARRIED | Torch burnout set |
 | `m556-rs-nor-latch-set` | CARRIED | Rs nor latch set |
 | `m559-double-extender-set` | CARRIED | Double extender set |
@@ -520,7 +520,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m570-repeater-diode-set` | CARRIED | repeater diode set |
 | `m571-redstone-ore-glow-set` | CARRIED | redstone ore glow set |
 | `m572-detector-rail-vacate-set` | CARRIED | detector rail vacate set |
-| `m573-sticky-head-break-set` | CARRIED | sticky head break set |
+| `m573-sticky-head-break-set` | PENDING | sticky head break set |
 | `m574-mushroom-spread-set` | CARRIED | mushroom spread set |
 | `m575-grass-die-cover-set` | CARRIED | grass die cover set |
 | `m576-farmland-trample-set` | CARRIED | farmland trample set |
@@ -539,7 +539,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m590-ghast-fireball-punch-set` | CARRIED | Ghast fireball punch set |
 | `m591-furnace-smelt-interrupt-set` | CARRIED | furnace smelt interrupt set |
 | `m592-chest-break-spill-set` | CARRIED | chest break spill set |
-| `m593-door-upper-break-set` | CARRIED | door upper break set |
+| `m593-door-upper-break-set` | PENDING | door upper break set |
 | `m594-netherrack-fire-persist-set` | CARRIED | netherrack fire persist |
 | `m595-powered-rail-brake-set` | CARRIED | powered rail brake set |
 | `m596-furnace-cart-push-set` | CARRIED | furnace cart push set |

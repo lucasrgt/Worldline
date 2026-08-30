@@ -286,11 +286,14 @@ proof, unknown count, and claims remaining to
 the target on every canonical Gate.
 
 The completed proof matrix is 1,056/1,056 verified. Public executability remains
-an independent ratchet: the universal block-registry fixture expands the
-official-client census into 96 deterministic `registry-presence` cases, raising
-the public TestKit surface to 1,012/1,056 claims (95.83%). Reaching the same
-98.8% target for reusable automation requires 32 more curated claim promotions;
-an internal or smoke-only proof does not count toward that target.
+an independent ratchet. The universal block-registry fixture expands the
+official-client census into 96 deterministic `registry-presence` cases. The
+public placement/persistence and break/drop fixtures then project legacy runtime
+observations into typed, equatable evidence for simple, oriented, multiblock,
+variant, and coupled-transition cases. Together with the modern lifecycle proof
+reconciliation, this raises the public TestKit surface to 1,050/1,056 claims
+(99.43%), above the 98.8% target. The six remaining internal claims are the
+coherent random-tick-policy subsystem; there are no smoke-only Census claims.
 
 ## Three conformance layers
 

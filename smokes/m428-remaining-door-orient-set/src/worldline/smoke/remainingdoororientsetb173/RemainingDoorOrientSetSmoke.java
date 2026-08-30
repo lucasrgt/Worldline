@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
+import worldline.testkit.*;
 
 /** Places remaining wooden-door 64 look-yaw hinge/face halves 0/8, 1/9, 2/10, 3/11 as one SET. */
 public final class RemainingDoorOrientSetSmoke {
@@ -77,6 +78,20 @@ public final class RemainingDoorOrientSetSmoke {
       require(persisted(after, face0, cx, cz, 0) && persisted(after, face1, cx, cz, 1)
               && persisted(after, face2, cx, cz, 2) && persisted(after, face3, cx, cz, 3),
           "persisted remaining-door-orient-set drift");
+      java.util.List<BlockStateCell> cells = java.util.Arrays.asList(
+          new BlockStateCell(face0, new BlockState(64, 0)),
+          new BlockStateCell(BlockFace.UP.adjacent(face0), new BlockState(64, 8)),
+          new BlockStateCell(face1, new BlockState(64, 1)),
+          new BlockStateCell(BlockFace.UP.adjacent(face1), new BlockState(64, 9)),
+          new BlockStateCell(face2, new BlockState(64, 2)),
+          new BlockStateCell(BlockFace.UP.adjacent(face2), new BlockState(64, 10)),
+          new BlockStateCell(face3, new BlockState(64, 3)),
+          new BlockStateCell(BlockFace.UP.adjacent(face3), new BlockState(64, 11)));
+      require(BlockPlacementPersistenceFixture.execute("b1.7.3:block/064", "oriented-door",
+              true, 324, 4, 0, 4, cells, cells, cells,
+              BlockLifecycleDriver.ReloadBoundary.FRESH_LOGIN).subject()
+                  .equals("b1.7.3:block/064"),
+          "public wooden-door placement/persistence evidence drift");
       String evidence = "column=" + column + ",support=" + top.x() + ":" + top.y() + ":" + top.z()
           + ":1:0,face0=" + token(face0, 0) + ",face1=" + token(face1, 1)
           + ",face2=" + token(face2, 2) + ",face3=" + token(face3, 3)

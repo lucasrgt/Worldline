@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
+import worldline.testkit.*;
 
 /** Packet14-breaks ice 79 and glass 20, then torch-melts a second ice to water. */
 public final class FragileSetSmoke {
@@ -123,6 +124,12 @@ public final class FragileSetSmoke {
               && after.blockAt(local(pad.x(), cx), pad.y(), local(pad.z(), cz)).equals(STONE)
               && afterIce.equals(broken) && afterGlass.equals(AIR) && afterTorch.equals(TORCH),
           "persisted fragile-set leftover drift");
+      java.util.List<BlockCellTransition> glassTransition = java.util.Arrays.asList(
+          new BlockCellTransition(glass, GLASS_BLOCK, AIR));
+      require(BlockBreakDropFixture.execute("b1.7.3:block/020", "fragile-solid", false, 0,
+              glassTransition, glassTransition, BlockLifecycleDropMatrix.exact(java.util.Arrays.asList()),
+              java.util.Arrays.asList()).subject().equals("b1.7.3:block/020"),
+          "public glass break/drop evidence drift");
       String evidence = "column=" + column + ",support=" + cell(top, 1, 0)
           + ",west=" + cell(west, 1, 0) + ",ice=" + cell(ice, 79, 0) + "->" + afterIce.legacyId()
           + ":" + afterIce.metadata() + ",pad=" + cell(pad, 1, 0) + ",torch=" + cell(torch, 50, 5)

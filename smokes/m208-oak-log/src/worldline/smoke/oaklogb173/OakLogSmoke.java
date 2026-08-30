@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
+import worldline.testkit.*;
 
 /** Places official wood/log 17:0 on raised stone and freezes oak upright metadata. */
 public final class OakLogSmoke {
@@ -68,6 +69,12 @@ public final class OakLogSmoke {
                   .equals(new BlockState(1, 0))
               && after.blockAt(local(log.x(), cx), log.y(), local(log.z(), cz)).equals(placed),
           "persisted oak log 17:0 drift");
+      java.util.List<BlockStateCell> cells = java.util.Arrays.asList(new BlockStateCell(log, placed));
+      require(BlockPlacementPersistenceFixture.execute("b1.7.3:block/017", "stateful-log",
+              false, 17, 1, 0, 1, cells, cells, cells,
+              BlockLifecycleDriver.ReloadBoundary.FRESH_LOGIN).subject()
+                  .equals("b1.7.3:block/017"),
+          "public oak-log placement/persistence evidence drift");
       String evidence = "column=" + column + ",support=" + top.x() + ":" + top.y() + ":" + top.z()
           + ":1:0,log=" + log.x() + ":" + log.y() + ":" + log.z() + ":17:" + placed.metadata()
           + ",persisted=true,clients=2,disconnect=clean";
