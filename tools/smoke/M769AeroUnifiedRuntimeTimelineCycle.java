@@ -39,6 +39,7 @@ public final class M769AeroUnifiedRuntimeTimelineCycle {
             System.exit(2);
         }
         try {
+            M769TimelineAnalyzer.selfTest();
             new M769AeroUnifiedRuntimeTimelineCycle().execute();
         } catch (Exception error) {
             System.err.println("M769 unified runtime timeline failed: " + error.getMessage());
@@ -218,6 +219,13 @@ final class M769TimelineAnalyzer {
 
     private M769TimelineAnalyzer() {}
 
+    static void selfTest() {
+        List<M769Anchor> anchors = List.of(new M769Anchor(-1L, 0L, 100_000_000L),
+                new M769Anchor(0L, 10L, 1_010L), new M769Anchor(128L, 20L, 1_021L));
+        SmokeSupport.require(medianOffset(anchors) == 1_000L,
+                "M769 bootstrap anchor contaminated frame calibration");
+    }
+
     static M769TimelineResult analyze(Path profiler, Path jfr, long minimumMillis)
             throws Exception {
         SmokeSupport.require(Files.isRegularFile(profiler) && Files.size(profiler) > 0L,
@@ -271,10 +279,14 @@ final class M769TimelineAnalyzer {
     }
 
     private static long medianOffset(List<M769Anchor> anchors) {
-        long[] offsets = new long[anchors.size()];
+        List<M769Anchor> calibration = anchors.stream()
+                .filter(anchor -> anchor.sequence() >= 0L).toList();
+        SmokeSupport.require(calibration.size() >= 2,
+                "M769 frame clock anchors absent");
+        long[] offsets = new long[calibration.size()];
         for (int index = 0; index < offsets.length; index++) {
-            offsets[index] = anchors.get(index).epochNanos()
-                    - anchors.get(index).monotonicNanos();
+            offsets[index] = calibration.get(index).epochNanos()
+                    - calibration.get(index).monotonicNanos();
         }
         Arrays.sort(offsets);
         long median = offsets[(offsets.length - 1) / 2];

@@ -50,6 +50,9 @@ public final class TimelineJfrCapture {
             }
             recording.start();
             active = true;
+            // Initialize the custom event class before sampling the bootstrap clocks. The first
+            // construction may initialize JFR metadata and is not part of the clock relationship.
+            new FrameAnchorEvent();
             anchor(-1L, System.nanoTime(), System.currentTimeMillis(), 0);
             System.out.println("[WorldlineM769] jfr-start path=" + output);
         } catch (Exception error) {
