@@ -1,5 +1,7 @@
 package worldline.testkit;
 
+import java.util.Arrays;
+import java.util.Collections;
 import worldline.api.RemoteDroppedItem;
 import worldline.api.RemoteItemStack;
 import worldline.api.RemoteMobDeath;
@@ -16,7 +18,7 @@ public final class SheepLifecycleFixtureTest {
     }
 
     static void execute() {
-        EntityConformancePlan plan = EntityConformancePlanTest.lifecyclePlan();
+        EntityConformancePlan plan = plan();
         SheepLifecycleEvidence first = SheepLifecycleFixture.execute(plan, 8, scenario(10));
         require(first.claims().size() == 5
                 && first.claims().get(0).layer() == ConformanceLayer.UNIVERSAL
@@ -114,6 +116,18 @@ public final class SheepLifecycleFixtureTest {
     private static RemoteDroppedItem wool(int entity, int damage) {
         return new RemoteDroppedItem(entity, new RemoteItemStack(35, 1, damage),
                 entity, 64, 1, 0, 0, 0);
+    }
+
+    private static EntityConformancePlan plan() {
+        EntityConformanceProfile sheep = new EntityConformanceProfile(
+                "b1.7.3:entity/091", Collections.singletonList("animal"), false,
+                Collections.<String, ConformanceLayer>emptyMap());
+        return new EntityConformancePlan(Collections.singletonList(sheep), Arrays.asList(
+                new EntityConformanceTemplate("spawn-materialization", ConformanceLayer.UNIVERSAL),
+                new EntityConformanceTemplate("save-reload", ConformanceLayer.UNIVERSAL),
+                new EntityConformanceTemplate("damage-death", ConformanceLayer.ARCHETYPE),
+                new EntityConformanceTemplate("drop-matrix", ConformanceLayer.ARCHETYPE),
+                new EntityConformanceTemplate("interaction-state", ConformanceLayer.ARCHETYPE)));
     }
 
     private static final class FixedLethal implements EntityLifecycleScenario {
