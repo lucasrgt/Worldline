@@ -72,6 +72,7 @@ public final class TestKitContractTest {
         BuiltEnvironmentMaterialsFixtureTest.execute();
         VegetationEcologyFixtureTest.execute();
         RedstoneSignalConsumersFixtureTest.execute();
+        FluidFrozenMatterFixtureTest.execute();
         SnowAccumulationFixtureTest.execute();
         SnowLayerNonstackingFixtureTest.execute();
         NaturalWolfPackFixtureTest.execute();
