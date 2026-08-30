@@ -59,8 +59,9 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
             SmokePins.Entry pin = pins.match(smoke.id, current);
             String prior = required(lock, stem + "current_fingerprint");
             String evidence = required(lock, stem + "evidence_sha256");
-            boolean successor = pin != null && SchemaPinCheck.follows(
-                    schemas, smoke.id, prior, evidence, pin, current);
+            boolean successor = pin != null
+                    && TrainPinCheck.continues(lock, smoke.id, prior, evidence)
+                    && SchemaPinCheck.carries(schemas, smoke.id, pin, current);
             require(carriesProof(pin, current, prior, evidence, successor),
                     "train refresh proof drift: " + smoke.id);
             if (!current.equals(prior)) {
