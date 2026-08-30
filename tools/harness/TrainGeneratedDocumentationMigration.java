@@ -84,6 +84,18 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
                 "docs/generated/MILESTONES.md",
                 "e55084a899ee2b6719ad571034e1a637389bce20db4619bdd65da2d9716b8c02",
                 "0a2a41227387f89d13cb31db4306bc31045dfab4fd74ac1c458a7cf16bf9f3f0")
+                || reviewed(relative, prior, current, "docs/generated/STATUS.md",
+                        "29c2f04b427a39ccc270680a8927536c8d3614ae329acc78c4b2d853260c5c44",
+                        "d6b516c8635d7ad3a2b28d996382fed6b8f652c763a3dcaf59ed89401c1434ea")
+                || reviewed(relative, prior, current, "release/worldline.properties",
+                        "4d2517ee0eb2753071a32024216dc0bca3d89ffc96e9e81eecffc80183ee5244",
+                        "8269550e1943ab537c13b2ccdf0a8bd06f7639ee884628ca000fd60f503756be")
+                || reviewed(relative, prior, current, "smokes/schema-migration.lock",
+                        "4a28258fd3376f13d52f7d3576672ca4290ee9394596a16c0680213999eb4418",
+                        "d68f310efcc0b894a75014f86c647b6fa01e9dc851296b94c421ee43e78237d4")
+                || reviewed(relative, prior, current, "smokes/telemetry-migration.lock",
+                        "f062610f0dcc953e564cdae98b89e3be89e105fef1e1b59ed2ee5fa0a3c0e411",
+                        "f187b58275fc0b287ea3556ecb86878d355316ed13bd30692822f17460c7ed5c")
                 || reviewed(relative, prior, current,
                         "tools/harness/HarnessFeatureSelfTest.java",
                         "2a19f68c15d319a8213493b8ce746abe89f350ead2158a4bf172050aca428be8",
@@ -95,7 +107,27 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
                 || reviewed(relative, prior, current,
                         "tools/harness/TrainPinMigration.java",
                         "d7d1d9d4ee0d109b730581f7947b5727faf9d98b89c7a092f7420c5c52c8e208",
-                        "f08028a332e3d7f890e8c7e8004a02e0f46b5c14064e2b91af7ad5c56a9db9fa");
+                        "f08028a332e3d7f890e8c7e8004a02e0f46b5c14064e2b91af7ad5c56a9db9fa")
+                || reviewed(relative, prior, current,
+                        "smokes/neighbor-testkit-migration.lock",
+                        "5678d701f74242fb12152e9a96c90cccf5d92f67fbf66459d47d52aaba6897d0",
+                        "20ea27b5b90f41f324a6bfdbcb791fa15d91b8c2caa6133d1f3ba683d451d44f")
+                || reviewed(relative, prior, current,
+                        "smokes/bounded-drop-testkit-migration.lock",
+                        "b0cf1803e39b5a2ff722db20e322824f9b3cd16148e54b03c409e680037b97fb",
+                        "f8cec7e9287c29fe08b5655d20d16523c369e250b400a781f68f03ac5c200416")
+                || reviewed(relative, prior, current,
+                        "modules/atlas/src/main/java/worldline/atlas/AtlasSubsystems.java",
+                        "c2d9718619ebc0073b21311793a2f13d53d7f0dcf84341a5ab683dfd2985fe22",
+                        "19fbd78e4812ee6ea37baed2c0e1dacd79ca054eb42cbdeba73b02d87a62f819")
+                || reviewed(relative, prior, current,
+                        "modules/atlas/src/test/java/worldline/atlas/AtlasCoverageTest.java",
+                        "c2bbe69053fae3069f53e65d0d3d88b7e9ada7d9614248290be83bfd8bde8f99",
+                        "a44d7ccbf1b35d87761771a6c175456b5b43bae032f3ba62ff40e820fdb33b7d")
+                || reviewed(relative, prior, current,
+                        "tools/harness/LifecycleClaimTestKitPinCheck.java",
+                        "d0256d7b25407edd7ce7a1b5afe6ac9cd23101b13dce034740b4221eac58fdd2",
+                        "3e4548964acbca47f460ef32a399528909fcad7a1cd667d7dab6afa2c251d97c");
     }
 
     private static boolean reviewed(String relative, String prior, String current,
