@@ -5,7 +5,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | Milestone | Qualification | Contract |
 | --- | --- | --- |
 | `deterministic-world-tick` | CARRIED | server-runtime-equivalence |
-| `controlled-client-tick` | EXECUTED | client-runtime-equivalence |
+| `controlled-client-tick` | CARRIED | client-runtime-equivalence |
 | `testkit-cycle` | EXECUTED | testkit-runtime |
 | `m3-domain-api` | CARRIED | domain-api-equivalence |
 | `m4-durable-snapshot` | CARRIED | durable-snapshot |
@@ -599,6 +599,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m664-flowing-water-freeze` | CARRIED | Flowing-water freeze boundary |
 | `m665-leaf-support-distance` | CARRIED | leaf support distance |
 | `m702-powered-rail-slope-propagation` | CARRIED | powered rail slope propagation |
+| `m767-modloader-forge-testkit-provider` | EXECUTED | ModLoader and Forge TestKit providers |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |

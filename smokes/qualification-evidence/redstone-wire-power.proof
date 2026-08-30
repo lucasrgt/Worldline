@@ -1,5 +1,5 @@
 schema=1
 id=redstone-wire-power
-fingerprint=11c5293f1bcab7406d8dc74d82ffa94ba6d6d4b28c4e6dd282a6078dede7c7a2
+fingerprint=68362fdae8beea59dd46bc3d671ec40401cef669efac02249ddfb57b0c042b56
 observation.sha256=9e732358c31890a2dda2c6fabf5553bcebd81a3808284cfea1bbe85aa4a71645
 source=refactor-equivalent

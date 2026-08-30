@@ -23,6 +23,19 @@ final class LegacyLoaderWorkspace {
 
     static Prepared prepare(Path repository, Path base, Path artifacts, Path java8Home,
             String loader, LegacyProfilerQualificationConfig config) throws Exception {
+        return prepare(repository, base, artifacts, java8Home, loader, config,
+                "legacy-profiler", "qualification-src", "mod_WorldlineProfilerProbe");
+    }
+
+    static Prepared prepareTestKit(Path repository, Path base, Path artifacts, Path java8Home,
+            String loader, LegacyProfilerQualificationConfig config) throws Exception {
+        return prepare(repository, base, artifacts, java8Home, loader, config,
+                "legacy-testkit", "testkit-src", "mod_WorldlineTestKitProbe");
+    }
+
+    private static Prepared prepare(Path repository, Path base, Path artifacts, Path java8Home,
+            String loader, LegacyProfilerQualificationConfig config, String scope,
+            String probeDirectory, String probeName) throws Exception {
         repository = repository.toAbsolutePath().normalize();
         base = base.toAbsolutePath().normalize(); artifacts = artifacts.toAbsolutePath().normalize();
         require("modloader".equals(loader) || "forge".equals(loader), "unknown legacy loader");
@@ -38,7 +51,7 @@ final class LegacyLoaderWorkspace {
         if ("forge".equals(loader)) require(forge.startsWith(artifacts) && Files.isRegularFile(forge)
                 && digest(forge).equals(config.forgeHash()), "Forge artifact drifted");
 
-        Path workspaces = repository.resolve(".worldline/runtime/legacy-profiler/workspaces");
+        Path workspaces = repository.resolve(".worldline/runtime").resolve(scope).resolve("workspaces");
         Path workspace = workspaces.resolve(loader).normalize();
         require(workspace.startsWith(workspaces) && !workspace.equals(workspaces),
                 "unsafe legacy qualification workspace");
@@ -47,7 +60,7 @@ final class LegacyLoaderWorkspace {
         overlayJar(base.resolve("jars/minecraft.jar"), modLoader,
                 "forge".equals(loader) ? forge : null, workspace.resolve("jars/minecraft.jar"));
 
-        Path logs = repository.resolve(".worldline/reports/legacy-profiler");
+        Path logs = repository.resolve(".worldline/reports").resolve(scope);
         Files.createDirectories(logs);
         runStage(workspace, logs.resolve(loader + "-decompile.log"), config.timeoutSeconds() * 3,
                 List.of(javaTool("java"), "-jar", "RetroMCP-CLI.jar", "decompile", "client"));
@@ -57,21 +70,46 @@ final class LegacyLoaderWorkspace {
         if ("forge".equals(loader)) require(Files.readString(source.resolve("forge/ForgeHooks.java"))
                 .contains("revisionVersion = 6"), "Forge 1.0.6 source proof is absent");
         LegacyProfilerInstaller.execute(repository, workspace, loader, true);
-        Path probe = repository.resolve("adapters/modloader-forge/qualification-src")
-                .resolve(loader).resolve("net/minecraft/src/mod_WorldlineProfilerProbe.java");
-        Files.copy(probe, source.resolve("net/minecraft/src/mod_WorldlineProfilerProbe.java"),
+        Path probe = repository.resolve("adapters/modloader-forge").resolve(probeDirectory)
+                .resolve(loader).resolve("net/minecraft/src").resolve(probeName + ".java");
+        Files.copy(probe, source.resolve("net/minecraft/src").resolve(probeName + ".java"),
                 StandardCopyOption.REPLACE_EXISTING);
         runStage(workspace, logs.resolve(loader + "-recompile.log"), config.timeoutSeconds() * 2,
                 List.of(javaTool("java"), "-jar", "RetroMCP-CLI.jar", "recompile"));
-        Path probeClass = workspace.resolve(
-                "minecraft/bin/net/minecraft/src/mod_WorldlineProfilerProbe.class");
+        Path probeClass = workspace.resolve("minecraft/bin/net/minecraft/src")
+                .resolve(probeName + ".class");
         require(classMajor(probeClass) == 52, "legacy probe is not Java 8 bytecode");
-        Path modClass = workspace.resolve(
-                "minecraft/game/mods/worldline/net/minecraft/src/mod_WorldlineProfilerProbe.class");
+        Path modClass = workspace.resolve("minecraft/game/mods/worldline/net/minecraft/src")
+                .resolve(probeName + ".class");
         Files.createDirectories(modClass.getParent());
         Files.copy(probeClass, modClass, StandardCopyOption.REPLACE_EXISTING);
+        if ("legacy-testkit".equals(scope)) writeTestKitManifest(workspace, loader);
         return new Prepared(workspace, java, logs.resolve(loader + "-client.log"),
                 workspace.resolve(".worldline-profiler/runtime/" + loader + ".wlpr"));
+    }
+
+    private static void writeTestKitManifest(Path workspace, String loader) throws Exception {
+        List<Path> entries = new ArrayList<>();
+        entries.add(workspace.resolve("minecraft/bin"));
+        entries.add(workspace.resolve("minecraft/jars/deobfuscated.jar"));
+        try (Stream<Path> paths = Files.walk(workspace.resolve("libraries"))) {
+            entries.addAll(paths.filter(Files::isRegularFile)
+                    .filter(path -> path.toString().endsWith(".jar"))
+                    .filter(path -> !path.toString().endsWith("-sources.jar"))
+                    .sorted().toList());
+        }
+        StringBuilder manifest = new StringBuilder("# Prepared Worldline legacy TestKit client\n")
+                .append("schema=worldline.legacy-testkit-client.v1\nloader=").append(loader)
+                .append("\nnatives=libraries/natives\nprobe.source=minecraft/game/mods/worldline/"
+                        + "net/minecraft/src/mod_WorldlineTestKitProbe.class")
+                .append("\nprobe.target=mods/worldline/net/minecraft/src/"
+                        + "mod_WorldlineTestKitProbe.class\nclasspath.count=")
+                .append(entries.size()).append('\n');
+        for (int index = 0; index < entries.size(); index++)
+            manifest.append("classpath.").append(index + 1).append('=').append(workspace
+                    .relativize(entries.get(index)).toString().replace('\\', '/')).append('\n');
+        Files.writeString(workspace.resolve("worldline-testkit.properties"), manifest,
+                StandardCharsets.UTF_8);
     }
 
     static void patchOptions(Path path, Path workspace) throws Exception {

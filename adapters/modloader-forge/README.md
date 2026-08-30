@@ -65,5 +65,26 @@ and the Java 8 process exits naturally with code zero. Local logs and sealed
 receipts are written under `.worldline/reports/legacy-profiler`.
 
 This proves loader boot, profiler capture, and clean shutdown for the pinned
-minimal clients. It does not infer performance equivalence with StationAPI or
-qualify a generic legacy TestKit provider.
+minimal clients. It does not infer performance equivalence with StationAPI.
+
+## TestKit providers
+
+M767 adds the stable `modloader-b1.7.3` and `forge-b1.7.3` provider IDs. The
+preparation command builds the two reusable local clients:
+
+```text
+java tools/integration/LegacyProfilerQualificationLauncher.java --prepare-testkit-all local/workspaces/b1.7.3 C:\path\to\loader-zips "C:\path\to\java8"
+```
+
+Each TestKit attempt uses a fresh data directory and starts one prepared Java 8
+single-player client. The loopback protocol gates one world tick per command
+and exposes lifecycle, world time, player identity, health, selected slot, and
+pose. The service descriptor under `src/main/resources` publishes both
+providers. M767 intentionally leaves mutation, GUI control, multiplayer parity,
+and cross-loader performance parity unsupported.
+
+The two `qualification-src` and two `testkit-src` probes are handwritten,
+first-party fixtures whose package layout matches the legacy loader contract.
+The release boundary allows only those four exact source names; compiled game
+classes, decompiled sources, loader archives, and Minecraft artifacts remain
+prohibited.

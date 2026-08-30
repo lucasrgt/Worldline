@@ -33,6 +33,9 @@ final class PortableAdapterCheck {
                 adapters.resolve("aero-model-lib"),
                 List.of(classes.resolve("analysis"), classes.resolve("trace")));
         compile(legacySources(), adapters.resolve("modloader-forge-java8"), List.of(), "8");
+        compile(javaFiles(root.resolve("adapters/modloader-forge/src/main/java")),
+                adapters.resolve("modloader-forge-testkit"), List.of(classes.resolve("api"),
+                        classes.resolve("testmodel"), classes.resolve("testapi")), "21");
         System.out.println("  portable adapters: compiled");
     }
 

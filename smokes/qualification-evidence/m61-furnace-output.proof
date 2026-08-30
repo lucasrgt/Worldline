@@ -1,5 +1,5 @@
 schema=1
 id=m61-furnace-output
-fingerprint=f3cc6d63869a8dfb38aab87779bc92a00038b68779c00ec755483689396beacb
+fingerprint=e3179bb44737a3988de47d48f7f97f9dbcc2da94d518cb56d957c65ad1491df5
 observation.sha256=3759ec0bd9b8f31341f5c783a82f30592ab69bc97a54da45bd14708f781ff51c
 source=refactor-equivalent

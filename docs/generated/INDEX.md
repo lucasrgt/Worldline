@@ -1089,6 +1089,7 @@ Generated from the canonical Markdown files in `docs/`. Files remain at stable r
 - [M74_CYCLE.md](../M74_CYCLE.md)
 - [M75_AERO_DENSITY_LADDER.md](../M75_AERO_DENSITY_LADDER.md)
 - [M75_CYCLE.md](../M75_CYCLE.md)
+- [M767_MODLOADER_FORGE_TESTKIT_PROVIDER.md](../M767_MODLOADER_FORGE_TESTKIT_PROVIDER.md)
 - [M76_CYCLE.md](../M76_CYCLE.md)
 - [M76_RENDERER_DECOMPOSITION.md](../M76_RENDERER_DECOMPOSITION.md)
 - [M77_CYCLE.md](../M77_CYCLE.md)

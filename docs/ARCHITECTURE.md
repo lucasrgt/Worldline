@@ -622,10 +622,11 @@ An adapter may depend on the API, kernel, and semantic catalog. The API,
 kernel, and catalog must never depend on an adapter. Runtime drivers are the
 closed `b173-client`, `b173-server`, `modloader-forge`, and `stationapi` set.
 StationAPI is a process-isolated TestKit driver whose qualified surface grows
-only through official-runtime milestones. `modloader-forge` is a profiler-only
-source-injection driver with an independent, hash-pinned ModLoader/Forge boot,
-capture, and clean-shutdown qualifier. That narrow runtime proof does not imply
-a generic legacy TestKit provider or performance equivalence between loaders.
+only through official-runtime milestones. `modloader-forge` combines the
+Java 8 profiler source-injection boundary with process-isolated ModLoader and
+Forge TestKit providers. M767 qualifies fresh single-player boot, controlled
+ticks, read-only player/world state, profiler capture, and clean shutdown for
+both loaders. It does not imply broader gameplay or performance equivalence.
 Mods publish `worldline/extensions/` manifests in their own repositories. Worldline pins
 `aero-model-lib` only as an overlay for oracled smokes. See
 `docs/EXTENSION_SDK.md`. The reusable client adapter is an executable proof of

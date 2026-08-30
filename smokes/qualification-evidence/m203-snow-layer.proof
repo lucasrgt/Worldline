@@ -1,5 +1,5 @@
 schema=1
 id=m203-snow-layer
-fingerprint=1aba189b4db44ccc8bc2b45d60d6bdfca2f3701ec75b93a06031b8e79f5c9524
+fingerprint=f02fb344008a273548862d31a88c037c1715e1d1b43e9a310225b05f2389ac43
 observation.sha256=23163bc78dd8ce876aff379a6292ad170fe0b74e5c26f2ee7177508222aa0178
 source=refactor-equivalent

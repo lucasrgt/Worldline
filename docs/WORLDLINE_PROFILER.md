@@ -139,13 +139,14 @@ closed.
 | Client ecosystem | Binding | Current proof |
 | --- | --- | --- |
 | StationAPI/Babric | Mixin driver | official b1.7.3 two-session runtime receipt |
-| ModLoader | RetroMCP source hooks | hash-pinned b1.7.3 boot, 8-frame WLPR, clean Java 8 shutdown |
-| Forge | RetroMCP source hooks | hash-pinned Forge 1.0.6 boot, 8-frame WLPR, clean Java 8 shutdown |
+| ModLoader | RetroMCP source hooks | hash-pinned boot plus two fresh TestKit sessions with controlled ticks and WLPR |
+| Forge | RetroMCP source hooks | hash-pinned Forge 1.0.6 boot plus two fresh TestKit sessions with controlled ticks and WLPR |
 
 All three bindings expose the same owned `mod.*` extension API and emit the
 same WLPR schema; loader identity is metadata, not a fork of the profiler.
-The legacy runtime proof remains deliberately minimal: it qualifies loader
-lifecycle and profiler wiring, not gameplay equivalence or performance parity.
+The legacy TestKit proof remains deliberately narrow: it qualifies loader
+lifecycle, read-only player/world state, controlled ticks, and profiler wiring,
+not broad gameplay equivalence or performance parity.
 
 ## Capture modes and qualification
 

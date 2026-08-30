@@ -350,6 +350,15 @@ channel. Its M620 surface is deliberately narrow: lifecycle state, world time,
 player identity, health, selected slot, and pose. It does not claim headless
 boot, block or inventory mutation, GUI automation, or broad StationAPI parity.
 
+The `modloader-b1.7.3` and `forge-b1.7.3` adapters are the legacy graphical
+provider families qualified by M767. Each attempt starts a fresh hash-pinned
+single-player Java 8 client with an isolated data directory. A loader-owned
+loopback probe creates the seeded world and advances one official world tick
+per command. Their initial surface matches the read-only StationAPI state
+contract and adds one sealed WLPR per session. Block and inventory mutation,
+teleportation, GUI automation, multiplayer parity, and performance equivalence
+remain fail-closed.
+
 The targeted repository acceptance gate first proves the controlled client
 against the hash-pinned official JAR, then executes all ten Java 8 example
 specs as 30 fresh, serial TestKit sessions:

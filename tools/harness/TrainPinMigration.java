@@ -91,10 +91,10 @@ final class TrainPinMigration {
                 updated.add(migration.entry());
                 continue;
             }
-            imported++; boolean predecessorMilestone =
-                    "milestone".equals(predecessor.getProperty(stem + "kind"));
-            Imported receipt = completeImported(swarm, smoke.id)
-                    ? imported(root, swarm, smoke.id) : null;
+            imported++; boolean predecessorMilestone = "milestone".equals(predecessor.getProperty(stem + "kind"));
+            Imported receipt = completeImported(swarm, smoke.id) ? imported(root, swarm, smoke.id)
+                    : predecessorMilestone && pins.match(smoke.id, current) != null
+                            ? predecessor(predecessor, pins, smoke, current, stem) : null;
             if (receipt == null && (!predecessorMilestone || hasExecuted(root, smoke.id)))
                 receipt = executed(root, cache, smoke, current);
             if (receipt == null && predecessorMilestone)

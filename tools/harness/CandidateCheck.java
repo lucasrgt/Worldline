@@ -70,7 +70,7 @@ final class CandidateCheck {
         if (!tooling && !runtimeBuild) require(Files.isDirectory(source) && !javaFiles(source).isEmpty(),
                 "candidate has no smoke sources");
         if (runtimeBuild) {
-            CandidateRuntimeBuild.validate(directory, this.descriptor);
+            CandidateRuntimeBuild.validate(root, directory, this.descriptor);
         }
         String number = milestoneNumber(id);
         if (number != null && !tooling) {

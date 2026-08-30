@@ -60,9 +60,12 @@ public final class AdapterManifestTest {
         require(server.sites().size() >= 26, "server intercept sites");
         require(legacy != null && "driver".equals(legacy.kind())
                 && legacy.ownerPrefix().equals("worldline/modloader/")
-                && legacy.sites().size() == 4
+                && legacy.sites().size() == 11
                 && legacy.render().contains("CLIENT_TICK_ROOT=")
-                && legacy.render().contains("CHUNK_REBUILD="), "ModLoader/Forge driver boundary");
+                && legacy.render().contains("CHUNK_REBUILD=")
+                && legacy.render().contains("RUNTIME_FACTORY=")
+                && legacy.render().contains("MANUAL_TICK=")
+                && legacy.render().contains("PLAYER_HEALTH="), "ModLoader/Forge driver boundary");
         require(stationapi != null && "driver".equals(stationapi.kind())
                 && stationapi.ownerPrefix().equals("worldline/stationapi/")
                 && stationapi.render().contains("MANUAL_TICK="), "StationAPI driver boundary");

@@ -13,17 +13,25 @@ public final class LegacyProfilerQualification {
             if (Arrays.equals(arguments, new String[] {"--self-test"})) {
                 LegacyProfilerQualificationSelfTest.execute(root); return;
             }
+            boolean prepareTestKit = arguments.length == 4
+                    && "--prepare-testkit-all".equals(arguments[0]);
             require((arguments.length == 4 && "--qualify-all".equals(arguments[0]))
+                    || prepareTestKit
                     || (arguments.length == 5 && "--qualify".equals(arguments[0])), usage());
             Path base = Path.of(arguments[1]), artifacts = Path.of(arguments[2]);
             Path java8 = Path.of(arguments[3]);
-            List<String> loaders = "--qualify-all".equals(arguments[0])
+            List<String> loaders = "--qualify-all".equals(arguments[0]) || prepareTestKit
                     ? List.of("modloader", "forge") : List.of(loader(arguments[4]));
             LegacyProfilerQualificationConfig config = LegacyProfilerQualificationConfig.load(root);
             for (String loader : loaders) {
-                LegacyLoaderWorkspace.Prepared prepared = LegacyLoaderWorkspace.prepare(
-                        root, base, artifacts, java8, loader, config);
-                LegacyProfilerQualificationProcess.execute(root, loader, prepared, config);
+                LegacyLoaderWorkspace.Prepared prepared = prepareTestKit
+                        ? LegacyLoaderWorkspace.prepareTestKit(
+                                root, base, artifacts, java8, loader, config)
+                        : LegacyLoaderWorkspace.prepare(root, base, artifacts, java8, loader, config);
+                if (!prepareTestKit)
+                    LegacyProfilerQualificationProcess.execute(root, loader, prepared, config);
+                else System.out.println("WORLDLINE_LEGACY_TESTKIT_PREPARED=" + loader
+                        + " workspace=" + prepared.workspace());
             }
         } catch (Exception error) {
             System.err.println("legacy profiler qualification failed: " + error.getMessage());
@@ -46,6 +54,7 @@ public final class LegacyProfilerQualification {
 
     private static String usage() {
         return "usage: LegacyProfilerQualification --qualify-all BASE_WORKSPACE ARTIFACT_DIR JAVA8_HOME"
+                + " or --prepare-testkit-all BASE_WORKSPACE ARTIFACT_DIR JAVA8_HOME"
                 + " or --qualify BASE_WORKSPACE ARTIFACT_DIR JAVA8_HOME modloader|forge";
     }
     private static void require(boolean value, String message) {

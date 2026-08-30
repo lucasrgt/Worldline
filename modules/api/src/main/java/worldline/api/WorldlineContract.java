@@ -95,6 +95,9 @@ public final class WorldlineContract {
             "Mapped and official state-world transitions agree for a frozen fixture");
     public static final WorldlineContract STATIONAPI_RUNTIME_PROVIDER = define("stationapi-runtime-provider",
             "SPI-discovered process-isolated StationAPI TestKit runtime sessions");
+    public static final WorldlineContract LEGACY_LOADER_RUNTIME_PROVIDER = define(
+            "legacy-loader-runtime-provider",
+            "SPI-discovered process-isolated ModLoader and Forge TestKit runtime sessions");
     public static final WorldlineContract TESTKIT_RUNTIME = define("testkit-runtime",
             "External Java specifications execute through the isolated TestKit runtime");
     private static final Map<String, WorldlineContract> ALL;
@@ -112,7 +115,7 @@ public final class WorldlineContract {
                 AERO_RUNTIME_SESSION, AERO_PAIRED_EXPERIMENT, AERO_FRAME_CENSUS,
                 AERO_CACHE_LIFECYCLE, AERO_DIAGNOSTIC_CAPTURE, AERO_SAVE_WINDOW,
                 LOGICAL_ITEM_REFERENCE, STATE_WORLD_DIFFERENTIAL,
-                STATIONAPI_RUNTIME_PROVIDER, TESTKIT_RUNTIME);
+                STATIONAPI_RUNTIME_PROVIDER, LEGACY_LOADER_RUNTIME_PROVIDER, TESTKIT_RUNTIME);
         ALL = Collections.unmodifiableMap(new LinkedHashMap<String, WorldlineContract>(DEFINITIONS));
     }
     private final String token, subject;

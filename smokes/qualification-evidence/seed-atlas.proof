@@ -1,5 +1,5 @@
 schema=1
 id=seed-atlas
-fingerprint=b193ab5e021b44f4419c6cc9c695e9ca4a8282180d9c92aa0044c2cebe4ecfc0
+fingerprint=b9418afed890dde227a115394fcbce42d777dcda67274ebb356bf7a36b882c95
 observation.sha256=e72fbb0837463207cab9f2363feb3c43833d8b39a3f4e27022a1eb9346acd405
 source=refactor-equivalent

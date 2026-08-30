@@ -1,5 +1,5 @@
 schema=1
 id=m238-grass
-fingerprint=61e177346a2f2bdecb0626c1d11c561eb7c8bc072c2bc93f1702c064b2b5ab55
+fingerprint=6218f30fc09306c70719e85e5f4a7cb25e50a1b2c6dc78c693fc473ff8ccf38a
 observation.sha256=3056478f663744b460245599a51d711c0d26a0d619c4595bd2def1f6cf3f99d4
 source=refactor-equivalent

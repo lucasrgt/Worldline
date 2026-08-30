@@ -1,5 +1,5 @@
 schema=1
 id=m447-spider-climb-set
-fingerprint=425fc4d392979053d862eb49c83c02bc1eca85cb0bcb3900ec3e479fefa04643
+fingerprint=fedc2301372719711154a4dbf6af637fefc6c0cc4fab221ec2b884b77590dcf7
 observation.sha256=dd9ff5fff66e6f0e70d4f4dd873aa178184ec6e7b407e99cc861cec68916f588
 source=refactor-equivalent

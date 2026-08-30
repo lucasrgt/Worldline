@@ -1,5 +1,5 @@
 schema=1
 id=m605-lava-damage-set
-fingerprint=02c3317ffa61f8959b40be0b0d7ac486eb8d26a710fc0b0a6f313b249756c475
+fingerprint=0bc389d2d3a0ac95f8c5d40a3fcae656aa22419cd2f2e70f198cc13c23f47992
 observation.sha256=8e4dba53b82bfcd4f391812d52c822f40f9a8362342f39bc52e42b4c59208bc0
 source=refactor-equivalent

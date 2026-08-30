@@ -166,8 +166,11 @@ public final class ReleaseCheck {
                     Path relative = root.relativize(path);
                     String name = path.getFileName().toString().toLowerCase();
                     String normalized = relative.toString().replace('\\', '/').toLowerCase();
+                    boolean ownedLegacyProbe = normalized.matches("adapters/modloader-forge/"
+                            + "(qualification-src|testkit-src)/(forge|modloader)/net/minecraft/src/"
+                            + "mod_worldline(profiler|testkit)probe[.]java");
                     require(!name.endsWith(".jar") && !name.endsWith(".class")
-                            && !normalized.contains("minecraft/src/")
+                            && (!normalized.contains("minecraft/src/") || ownedLegacyProbe)
                             && !normalized.contains("minecraft/bin/"),
                             "prohibited public artifact: " + relative);
                 }
