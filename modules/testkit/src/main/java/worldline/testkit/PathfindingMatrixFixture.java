@@ -2,6 +2,7 @@ package worldline.testkit;
 
 import java.util.Objects;
 import worldline.api.WorldlineBehavior;
+import worldline.api.WorldlineHostileBehaviors;
 
 /** Validates direct, obstacle-detour, and sealed-target pathfinder boundaries. */
 public final class PathfindingMatrixFixture {
@@ -19,7 +20,7 @@ public final class PathfindingMatrixFixture {
         require(observed.sealed().endpoint().xMilli() <= 10_500,
                 "sealed route entered the target ring");
         require(WorldlineBehavior.require("pathfinding-matrix")
-                == WorldlineBehavior.PATHFINDING_MATRIX,
+                == WorldlineHostileBehaviors.PATHFINDING_MATRIX,
                 "pathfinding behavior registration drifted");
         return new PathfindingMatrixEvidence(observed);
     }

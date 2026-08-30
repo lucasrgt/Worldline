@@ -42,9 +42,6 @@ public final class WorldlineBehavior {
             "Default spawner Packet24 pig identity and metadata");
     public static final WorldlineBehavior PIG_AI_MOVEMENT = define("pig-ai-movement", WorldlineFamily.WORLD,
             "Pig horizontal Packet31, Packet33, or Packet34 movement");
-    public static final WorldlineBehavior PATHFINDING_MATRIX = define("pathfinding-matrix",
-            WorldlineFamily.HOSTILE,
-            "Pig routes across open, obstacle-detour, and sealed-target terrain");
     public static final WorldlineBehavior PIG_DEATH = define("pig-death", WorldlineFamily.WORLD,
             "Pig hurt, death status, and destroy packets");
     public static final WorldlineBehavior PIG_PORK_DROP = define("pig-pork-drop", WorldlineFamily.ITEM, "Pork drop");

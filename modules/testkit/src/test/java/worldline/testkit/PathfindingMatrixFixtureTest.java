@@ -3,6 +3,7 @@ package worldline.testkit;
 import java.util.Arrays;
 import java.util.Collections;
 import worldline.api.WorldlineBehavior;
+import worldline.api.WorldlineHostileBehaviors;
 
 /** Contract checks for the public pathfinding terrain matrix. */
 final class PathfindingMatrixFixtureTest {
@@ -21,7 +22,7 @@ final class PathfindingMatrixFixtureTest {
         require(first.canonical().contains("open|nodes=2|"),
                 "open path evidence missing");
         require(WorldlineBehavior.require("pathfinding-matrix")
-                        == WorldlineBehavior.PATHFINDING_MATRIX,
+                        == WorldlineHostileBehaviors.PATHFINDING_MATRIX,
                 "pathfinding behavior registration drifted");
 
         rejects(() -> PathfindingMatrixFixture.execute(() -> matrix(
