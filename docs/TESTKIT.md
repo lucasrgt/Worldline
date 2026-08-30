@@ -280,6 +280,23 @@ This promotes the universal spawn claim and both singular orientation/support-lo
 claiming motive selection or native rendering. Wrong anchors, reused identities, repeated facings,
 wrong destroy IDs, and missing or mismatched drops fail closed.
 
+The slime fixture composes two different authoritative surfaces without conflating them. A
+controlled differential supplies the open jump/landing and low-roof vertical envelopes; bounded
+protocol callbacks supply a killed parent plus nearby Packet24 children and a killed size-one
+slime plus its Packet21 slimeball:
+
+```java
+SlimeLifecycleScenario slimes = new SlimeObservationLifecycleScenario(session,
+        motionDriver::observe, splitDriver::attempt, dropDriver::attempt);
+SlimeLifecycleEvidence evidence = SlimeLifecycleFixture.execute(
+        plan, "b1.7.3:entity/055", 8, 12, slimes);
+```
+
+Canonical evidence retains the type-55 and below-y16 spawn law, both motion thresholds, causal
+Packet38/Packet29 death, child locality, size-one drop policy, item 341 count range, and both
+attempt bounds. It normalizes exact spans, attempt numbers, positions, entity IDs, and child count.
+This promotes spawn, motion, split, and drop as one complete singular mini-subsystem.
+
 ### Block lifecycle matrices
 
 `worldline.testkit.BlockConformancePlan` and `BlockLifecyclePlan` are part of

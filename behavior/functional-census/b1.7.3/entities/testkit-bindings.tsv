@@ -17,6 +17,10 @@ b1.7.3:entity/051	drop-matrix	mob-lifecycle	worldline.testkit.EntityLifecycleFix
 b1.7.3:entity/052	spawn-materialization	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m409-spider-string-set
 b1.7.3:entity/052	damage-death	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m409-spider-string-set
 b1.7.3:entity/052	drop-matrix	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m409-spider-string-set
+b1.7.3:entity/055	spawn-materialization	slime-lifecycle	worldline.testkit.SlimeLifecycleFixture#execute	m412-slime-split-set
+b1.7.3:entity/055	movement-policy	slime-lifecycle	worldline.testkit.SlimeLifecycleFixture#execute	m504-m508-sw-entity-dynamics
+b1.7.3:entity/055	interaction-state	slime-lifecycle	worldline.testkit.SlimeLifecycleFixture#execute	m412-slime-split-set
+b1.7.3:entity/055	drop-matrix	slime-lifecycle	worldline.testkit.SlimeLifecycleFixture#execute	m423-slimeball-set
 b1.7.3:entity/057	spawn-materialization	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m411-zombie-pigman-set
 b1.7.3:entity/057	damage-death	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m411-zombie-pigman-set
 b1.7.3:entity/057	drop-matrix	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m411-zombie-pigman-set

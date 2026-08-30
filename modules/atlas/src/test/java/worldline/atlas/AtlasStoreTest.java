@@ -92,6 +92,15 @@ public final class AtlasStoreTest {
                 && first.get("atlas.claim.entity-009.environment-response").refs()
                 .contains("atlas.experiment.m582-painting-support-break-set"),
                 "painting subsystem routes were not indexed");
+        require(first.get("atlas.claim.entity-055.spawn-materialization").control()
+                .contains("layer=UNIVERSAL;applicability=APPLICABLE;automation=PUBLIC_TESTKIT")
+                && first.get("atlas.claim.entity-055.movement-policy").control()
+                .contains("layer=SINGULAR;applicability=APPLICABLE;automation=PUBLIC_TESTKIT")
+                && first.get("atlas.claim.entity-055.interaction-state").refs()
+                .contains("atlas.experiment.m412-slime-split-set")
+                && first.get("atlas.claim.entity-055.drop-matrix").refs()
+                .contains("atlas.experiment.m423-slimeball-set"),
+                "slime subsystem routes were not indexed");
         require(AtlasStatus.UNKNOWN.equals(first.get("atlas.claim.entity-092.drop-matrix").status()),
                 "implicit entity census gap was not materialized");
         require(!AtlasIndex.search(first, "chunk", 20).isEmpty(), "semantic chunk index");
@@ -113,9 +122,9 @@ public final class AtlasStoreTest {
                 && taxonomy.contains("subsystem=tile-entities"), "taxonomy index");
         String tags = AtlasQuery.tags(first);
         require(tags.contains("tag=category-claim")
-                && tags.contains("tag=surface-public-testkit\trecords=1087")
+                && tags.contains("tag=surface-public-testkit\trecords=1091")
                 && !tags.contains("tag=surface-internal-api")
-                && tags.contains("tag=surface-smoke-only\trecords=22"), "tag index");
+                && tags.contains("tag=surface-smoke-only\trecords=18"), "tag index");
         try {
             String documentation = new String(Files.readAllBytes(Paths.get("docs", "ATLAS.md")),
                     StandardCharsets.UTF_8);
