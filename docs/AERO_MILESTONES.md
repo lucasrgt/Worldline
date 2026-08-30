@@ -51,12 +51,15 @@ The causal-performance wave began at `AERO-M111`:
 - `AERO-M115` (`M772`) is complete: it qualified a fair one-chunk non-forced
   autosave candidate, complete forced drainage, reload persistence, and a
   paired hitch-rate improvement.
-- `AERO-M116` is current: visible, age, and debt-aware chunk-work scheduling
-  candidate.
-- `AERO-M117`: real-consumer Aero CPU-path adoption and differential.
+- `AERO-M116` (`M773`) is complete: it qualified the opt-in visible, age, and
+  debt-aware one-rebuild-per-frame scheduler against four counterbalanced
+  pairs, bounded hidden-work starvation, complete backlog drainage, and a
+  no-regression hitch-rate gate.
+- `AERO-M117` is current: real-consumer Aero CPU-path adoption and
+  differential.
 - `AERO-M118`: page rebuild, invalidation, allocation, and cache A/B matrix.
 - `AERO-M119`: GL state, geometry, display-list, and LOD A/B matrix.
 - `AERO-M120`: long-soak, reload, world-transition, leak, and promotion gate.
 
-Entries after `AERO-M116` remain planned milestones, not completed evidence or
+Entries after `AERO-M117` remain planned milestones, not completed evidence or
 performance claims.
