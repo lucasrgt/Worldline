@@ -29,6 +29,8 @@ final class SharedHelperPinCheck {
                             || GuiWorkbenchPinCheck.transportsFile(gui, root, relative,
                                     required(lock, stem + "current_sha256"))
                             || TrainPinCheck.transportsFile(train, root, relative,
+                                    required(lock, stem + "current_sha256"))
+                            || SchemaPinCheck.transportsFile(root, relative,
                                     required(lock, stem + "current_sha256")))
                             && hash(lock, stem + "prior_sha256"),
                     "shared-helper source drift: " + relative);
@@ -144,7 +146,8 @@ final class SharedHelperPinCheck {
                     && (digest(root.resolve(relative)).equals(intermediate)
                     || refreshes(lock, root, relative, intermediate)
                     || TrainPinCheck.transportsFile(
-                            TrainPinCheck.manifest(root), root, relative, intermediate));
+                            TrainPinCheck.manifest(root), root, relative, intermediate)
+                    || SchemaPinCheck.transportsFile(root, relative, intermediate));
         }
         for (String key : new String[] {"combat", "login"})
             if (relative.equals(lock.getProperty(key + ".path")))
