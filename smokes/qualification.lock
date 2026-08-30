@@ -1,6 +1,11 @@
 # Worldline smoke qualification lock v5
 schema=5
 algorithm=worldline-smoke-input-v6-tokens
+smoke.b173-fluid-frozen-matter-lifecycle-conformance-cycle.fingerprint=22e15149b043aeca8d307484ea531b7413bc0768b9d3ae860f6ca6fde9bdb725
+smoke.b173-fluid-frozen-matter-lifecycle-conformance-cycle.observation_sha256=2de82a114538fad96ef9e75e8d6c5941019bd2090b1357cea0437547dd019a83
+smoke.b173-fluid-frozen-matter-lifecycle-conformance-cycle.evidence_sha256=232cd47f144c64c92762ff759e6c998d21b255ca2d59623a224288f475ed7bdb
+smoke.b173-fluid-frozen-matter-lifecycle-conformance-cycle.source=executed
+smoke.b173-fluid-frozen-matter-lifecycle-conformance-cycle.status=passed
 smoke.b173-bed-subsystem-conformance-cycle.fingerprint=f43f18665521d52a47e38a4f017ac3c9c8fa549f8f0f6f9c6ebe2074781bed20
 smoke.b173-bed-subsystem-conformance-cycle.observation_sha256=2c141749ab20b704600ef76a1ae2935e59e02bf4db348fdb2d979b22762b5440
 smoke.b173-bed-subsystem-conformance-cycle.evidence_sha256=3a154accf5cbd006a36141423fcab0904355faf4a00b2a5c90c26c598f9600e7
