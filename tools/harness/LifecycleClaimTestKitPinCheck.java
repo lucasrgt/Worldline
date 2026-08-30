@@ -160,11 +160,13 @@ final class LifecycleClaimTestKitPinCheck {
     private static void verifyFile(Path root, Properties lock, List<String> files, int index)
             throws Exception {
         String stem = "file." + index + ".", relative = required(lock, stem + "path");
+        String sealed = required(lock, stem + "current_sha256");
         require(relative.equals(files.get(index))
                         && (LifecycleClaimTestKitPinMigration.digest(
-                                Files.readAllBytes(root.resolve(relative)))
-                                .equals(required(lock, stem + "current_sha256"))
-                        || DocumentationCatalog.current(root, relative)),
+                                Files.readAllBytes(root.resolve(relative))).equals(sealed)
+                        || DocumentationCatalog.current(root, relative)
+                        || TrainPinCheck.transportsFile(
+                                TrainPinCheck.manifest(root), root, relative, sealed)),
                 "lifecycle-claim current source drift: " + relative);
         byte[] prior = LifecycleClaimTestKitPinMigration.committed(root,
                 LifecycleClaimTestKitPinMigration.BASE, relative);
