@@ -15,6 +15,7 @@ public final class TimelineState {
     private static final int TICKS = Integer.getInteger("worldline.m769.ticks", 3600);
     private static final long MINIMUM_MILLIS = Long.getLong(
             "worldline.m769.minimumMillis", 180_000L);
+    private static final long FRAME_SEAL_MARGIN_MILLIS = 1_000L;
     private static final int DRAIN_FRAMES = 20;
     private static final int LOAD_TIMEOUT_TICKS = 1200;
     private static final int BASE_Y = 63;
@@ -88,11 +89,13 @@ public final class TimelineState {
         place(game.player, retained);
         retained++;
         long elapsedNanos = System.nanoTime() - retainedStartNanos;
-        if (retained < TICKS || elapsedNanos < MINIMUM_MILLIS * 1_000_000L) return;
+        long retainedMillis = elapsedNanos / 1_000_000L;
+        if (retained < TICKS
+                || retainedMillis < MINIMUM_MILLIS + FRAME_SEAL_MARGIN_MILLIS) return;
         ClientProfilerRuntime.finish("retained-complete");
         TimelineJfrCapture.finish();
         System.out.println("[WorldlineM769] retained-complete ticks=" + retained
-                + " millis=" + elapsedNanos / 1_000_000L);
+                + " millis=" + retainedMillis);
         stage = 4;
         game.scheduleStop();
     }
