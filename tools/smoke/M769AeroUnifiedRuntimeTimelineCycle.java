@@ -240,9 +240,8 @@ final class M769TimelineAnalyzer {
         long offset = medianOffset(anchors);
         M769EventTotals totals = events(jfr, census, offset);
         long save = sum(census, SAVE);
-        long gc = sum(census, "jvm.gc.pause.nanos");
         SmokeSupport.require(save > 0L, "M769 observed no native save work");
-        SmokeSupport.require(gc > 0L && totals.gcEvents > 0L,
+        SmokeSupport.require(totals.gcEvents > 0L && totals.joinedGcEvents > 0L,
                 "M769 observed no joined GC evidence");
         SmokeSupport.require(totals.safepointEvents > 0L, "M769 safepoint events absent");
         SmokeSupport.require(totals.allocationBytes > 0L, "M769 allocation samples absent");
@@ -295,8 +294,11 @@ final class M769TimelineAnalyzer {
                 int frame = frame(census, epochNanos(event.getStartTime()) - offset);
                 if (name.equals("jdk.GarbageCollection") || name.equals("jdk.GCPhasePause")) {
                     totals.gcEvents++;
-                    if (frame >= 0) totals.gcNanos[frame] = Math.max(
-                            totals.gcNanos[frame], event.getDuration().toNanos());
+                    if (frame >= 0) {
+                        totals.joinedGcEvents++;
+                        totals.gcNanos[frame] = Math.max(
+                                totals.gcNanos[frame], event.getDuration().toNanos());
+                    }
                 } else if (name.startsWith("jdk.Safepoint")) {
                     totals.safepointEvents++;
                     if (frame >= 0) totals.safepointNanos[frame] = Math.max(
@@ -528,6 +530,7 @@ final class M769EventTotals {
     final long[] ioNanos;
     final long[] ioBytes;
     long gcEvents;
+    long joinedGcEvents;
     long safepointEvents;
     long allocationEvents;
     long fileEvents;
