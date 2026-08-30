@@ -68,6 +68,16 @@ public final class AtlasCoverageTest {
         require("CONTROLLED".equals(mobAi.control())
                 && mobAi.refs().contains("atlas.subsystem.mob-ai"),
                 "mob AI boundary classification");
+        require("1".equals(store.get("atlas.coverage-unit.dimensions.SEMANTIC").control()),
+                "dimension semantics filled");
+        require("1".equals(store.get("atlas.coverage-unit.dimensions.CONTROL").control()),
+                "dimension public boundary controlled");
+        require("1".equals(store.get("atlas.coverage-unit.dimensions.DETERMINISM").control()),
+                "dimension public evidence deterministic");
+        AtlasRecord dimension = store.get("atlas.boundary.DIMENSION");
+        require("CONTROLLED".equals(dimension.control())
+                && dimension.refs().contains("atlas.subsystem.dimensions"),
+                "dimension boundary classification");
         require("1".equals(store.get("atlas.coverage-unit.inventory.ORACLE").control()),
                 "inventory oracle filled");
         require("1".equals(store.get("atlas.coverage-unit.crafting.CONTROL").control()),

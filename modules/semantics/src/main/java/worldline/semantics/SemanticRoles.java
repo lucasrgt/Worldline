@@ -22,6 +22,7 @@ public final class SemanticRoles {
     public static final String LAB = "lab", DOMAIN = "domain", REDSTONE = "redstone";
     public static final String BLOCK_TICK = "block-tick", FLUID = "fluid", LIGHT = "light";
     public static final String WEATHER = "weather", MOB_AI = "mob-ai";
+    public static final String DIMENSION = "dimension";
     public static final String TILE_ENTITY = "tile-entity";
     private static final Map<String, List<String>> REQUIRED = required();
 
@@ -89,6 +90,9 @@ public final class SemanticRoles {
                 "MOB_AI_PATHFINDING_OBSERVATION_TESTKIT",
                 "MOB_AI_PATHFINDING_EVIDENCE_TESTKIT",
                 "MOB_AI_PATHFINDING_FIXTURE_TESTKIT"));
+        roles.put(DIMENSION, list("DIMENSION_TYPED_SESSION_API",
+                "DIMENSION_RESPAWN_SESSION_API", "DIMENSION_PORTAL_REENTRY_TESTKIT",
+                "DIMENSION_PORTAL_BLOCK_TESTKIT"));
         roles.put(TILE_ENTITY, list("TILE_ENTITY_FURNACE_TESTKIT",
                 "TILE_ENTITY_MOB_SPAWNER_TESTKIT", "TILE_ENTITY_PISTON_TESTKIT",
                 "TILE_ENTITY_SIGN_TESTKIT"));
