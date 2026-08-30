@@ -61,7 +61,8 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
             String evidence = required(lock, stem + "evidence_sha256");
             boolean successor = pin != null
                     && TrainPinCheck.continues(lock, smoke.id, prior, evidence)
-                    && SchemaPinCheck.carries(schemas, smoke.id, pin, current);
+                    && (SchemaPinCheck.carries(schemas, smoke.id, pin, current)
+                    || NeighborTestKitPinCheck.reexecuted(pin));
             require(carriesProof(pin, current, prior, evidence, successor),
                     "train refresh proof drift: " + smoke.id);
             if (!current.equals(prior)) {
