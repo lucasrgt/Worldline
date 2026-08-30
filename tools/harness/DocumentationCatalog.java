@@ -36,6 +36,18 @@ final class DocumentationCatalog {
         System.out.println("  documentation catalog: " + rootDocuments().size()
                 + " root documents, " + SmokeDiscovery.discover(root).size() + " milestones");
     }
+    static boolean current(Path root, String relative) {
+        try {
+            DocumentationCatalog catalog = new DocumentationCatalog(root);
+            String expected = switch (relative) {
+                case "docs/generated/INDEX.md" -> catalog.index();
+                case "docs/generated/STATUS.md" -> catalog.status();
+                case "docs/generated/MILESTONES.md" -> catalog.milestones();
+                default -> null;
+            };
+            return expected != null && expected.equals(catalog.read(relative));
+        } catch (Exception error) { return false; }
+    }
     private void write() throws Exception {
         Path generated = root.resolve("docs/generated"); Files.createDirectories(generated);
         Files.writeString(generated.resolve("INDEX.md"), index(), StandardCharsets.UTF_8);

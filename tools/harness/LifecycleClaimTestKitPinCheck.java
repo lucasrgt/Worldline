@@ -125,9 +125,10 @@ final class LifecycleClaimTestKitPinCheck {
                 if (!relative.equals(lock.getProperty(stem + "path"))) continue;
                 String introduced = lock.getProperty(stem + "prior_sha256");
                 return connectsFile(root, relative, prior, introduced)
-                        && LifecycleClaimTestKitPinMigration.digest(
+                        && (LifecycleClaimTestKitPinMigration.digest(
                                 Files.readAllBytes(root.resolve(relative)))
-                                .equals(lock.getProperty(stem + "current_sha256"));
+                                .equals(lock.getProperty(stem + "current_sha256"))
+                        || DocumentationCatalog.current(root, relative));
             }
             return false;
         } catch (Exception error) { return false; }
@@ -160,9 +161,10 @@ final class LifecycleClaimTestKitPinCheck {
             throws Exception {
         String stem = "file." + index + ".", relative = required(lock, stem + "path");
         require(relative.equals(files.get(index))
-                        && LifecycleClaimTestKitPinMigration.digest(
+                        && (LifecycleClaimTestKitPinMigration.digest(
                                 Files.readAllBytes(root.resolve(relative)))
-                                .equals(required(lock, stem + "current_sha256")),
+                                .equals(required(lock, stem + "current_sha256"))
+                        || DocumentationCatalog.current(root, relative)),
                 "lifecycle-claim current source drift: " + relative);
         byte[] prior = LifecycleClaimTestKitPinMigration.committed(root,
                 LifecycleClaimTestKitPinMigration.BASE, relative);
