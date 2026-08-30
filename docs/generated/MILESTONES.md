@@ -5,15 +5,15 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | Milestone | Qualification | Contract |
 | --- | --- | --- |
 | `deterministic-world-tick` | CARRIED | server-runtime-equivalence |
-| `controlled-client-tick` | PENDING | client-runtime-equivalence |
-| `testkit-cycle` | PENDING | testkit-runtime |
+| `controlled-client-tick` | CARRIED | client-runtime-equivalence |
+| `testkit-cycle` | EXECUTED | testkit-runtime |
 | `m3-domain-api` | CARRIED | domain-api-equivalence |
 | `m4-durable-snapshot` | CARRIED | durable-snapshot |
 | `m5-reproduction-bundle` | CARRIED | reproduction-bundle |
 | `m6-trace-explorer` | CARRIED | trace-divergence |
-| `m7-mod-loading` | PENDING | mod-loading |
-| `m8-mod-version-diff` | PENDING | mod-version-difference |
-| `m9-scenario-minimization` | PENDING | scenario-minimization |
+| `m7-mod-loading` | EXECUTED | mod-loading |
+| `m8-mod-version-diff` | EXECUTED | mod-version-difference |
+| `m9-scenario-minimization` | EXECUTED | scenario-minimization |
 | `m10-native-render` | CARRIED | client-runtime-equivalence |
 | `m11-aero-attribution` | CARRIED | aero-diagnostic-capture |
 | `m11-mod-api` | CARRIED | mod-api-lifecycle |
@@ -563,7 +563,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m617-spawn-light-cap-set` | CARRIED | spawn light cap set |
 | `m618-wolf-tame-set` | CARRIED | wolf tame set |
 | `m619-undead-sun-burn-set` | CARRIED | undead sun burn set |
-| `m620-stationapi-testkit-driver` | PENDING | StationAPI TestKit driver |
+| `m620-stationapi-testkit-driver` | EXECUTED | StationAPI TestKit driver |
 | `m621-save-worldgen-set` | CARRIED | save worldgen set |
 | `m622-pathfinding-matrix` | CARRIED | Entity pathfinding matrix |
 | `m623-lighting-engine-matrix` | CARRIED | Lighting engine matrix |
@@ -625,7 +625,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-lifecycle-provider-cycle` | CARRIED | official Beta 1.7.3 public block lifecycle provider |
 | `b173-locked-chest-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 locked-chest subsystem conformance |
 | `b173-mob-spawner-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 mob-spawner subsystem conformance |
-| `b173-multi-drop-mineral-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 multi-drop mineral lifecycle family |
+| `b173-multi-drop-mineral-lifecycle-cycle` | CARRIED | official Beta 1.7.3 multi-drop mineral lifecycle family |
 | `b173-mushroom-random-tick-conformance-cycle` | CARRIED | official Beta 1.7.3 mushroom random-tick conformance subsystem |
 | `b173-native-special-world-render-cycle` | EXECUTED | official Beta 1.7.3 native special world block-render family |
 | `b173-native-tile-entity-render-cycle` | EXECUTED | official Beta 1.7.3 native tile-entity render family |
@@ -649,7 +649,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-static-collision-envelope-cycle` | CARRIED | official Beta 1.7.3 static collision envelopes |
 | `b173-static-light-transport-cycle` | CARRIED | official Beta 1.7.3 static light transport |
 | `b173-static-self-drop-lifecycle-cycle` | CARRIED | official Beta 1.7.3 static self-drop lifecycle family |
-| `b173-support-dependent-plant-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 support-dependent plant lifecycle family |
+| `b173-support-dependent-plant-lifecycle-cycle` | CARRIED | official Beta 1.7.3 support-dependent plant lifecycle family |
 | `b173-support-face-attachment-lifecycle-cycle` | CARRIED | official Beta 1.7.3 support-face attachment lifecycle family |
 | `b173-terrain-crafted-solid-stability-envelope-cycle` | CARRIED | official Beta 1.7.3 terrain-crafted solid bounded stability envelope |
 | `b173-tile-utility-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 tile-utility physical envelopes |
@@ -659,7 +659,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
-| `gui-tree` | PENDING | ui-tree-equivalence |
+| `gui-tree` | EXECUTED | ui-tree-equivalence |
 | `lab-cycle` | CARRIED | runtime-lab |
 | `redstone-lever-button` | CARRIED | redstone-lever-button |
 | `redstone-piston-extend` | CARRIED | redstone-piston-extend |
