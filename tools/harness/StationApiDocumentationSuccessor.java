@@ -31,6 +31,7 @@ final class StationApiDocumentationSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "StationAPI documentation successor allowlist drifted");
+        AeroAtlasSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
