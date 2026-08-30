@@ -1,5 +1,5 @@
 schema=1
 id=b173-locked-chest-subsystem-conformance-cycle
-fingerprint=2a77e9895d94f01e6d3fba5cd7887c404b1daa9444bee288eb8b80c34f3a4357
+fingerprint=0efddbdc5a7f37a6197bd088b9f1e7c01ee61657a9f34e608328023d7a561ab8
 observation.sha256=d19d7b8df03f96788290ed7d7b9a6e54d43a7361ec4353bcfb4927049d1600fd
 source=refactor-equivalent

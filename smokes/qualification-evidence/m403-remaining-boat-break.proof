@@ -1,5 +1,5 @@
 schema=1
 id=m403-remaining-boat-break
-fingerprint=82aa7fa4f5037e947abe37dc5bcf59374f94236da20441ea26181654af335a92
+fingerprint=93547801d043684ea229a7006b33262327ba70004aae9f091b65fa7216169bb5
 observation.sha256=34eb6766ee9194e30d2efd5712a5e932110351176e336e526d7c6f23a877dedc
 source=refactor-equivalent
