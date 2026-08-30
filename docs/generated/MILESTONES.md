@@ -600,7 +600,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m665-leaf-support-distance` | CARRIED | leaf support distance |
 | `m702-powered-rail-slope-propagation` | CARRIED | powered rail slope propagation |
 | `m767-modloader-forge-testkit-provider` | EXECUTED | ModLoader and Forge TestKit providers |
-| `m768-aero-historical-tower-replay` | EXECUTED | Aero historical tower hitch replay |
+| `m768-aero-historical-tower-replay` | CARRIED | Aero historical tower hitch replay |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
