@@ -31,6 +31,7 @@ final class LightingCoverageTrainSourceSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "lighting coverage train successor allowlist drifted");
+        WeatherAtlasTrainSourceSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
