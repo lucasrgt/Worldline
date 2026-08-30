@@ -59,7 +59,8 @@ public final class AdapterManifestTest {
         require(server.sites().size() >= 26, "server intercept sites");
         require(stationapi != null && "driver".equals(stationapi.kind())
                 && stationapi.ownerPrefix().equals("worldline/stationapi/")
-                && stationapi.render().contains("MANUAL_TICK="), "StationAPI driver boundary");
+                && stationapi.render().contains("STATIONAPI_RUNTIME_TICK="),
+                "StationAPI driver boundary");
         require(aero != null && "extension".equals(aero.kind())
                 && aero.ownerPrefix().equals("worldline/aero/"), "aero prefix");
         require(aero.render().contains("kind=extension"), "aero render kind");

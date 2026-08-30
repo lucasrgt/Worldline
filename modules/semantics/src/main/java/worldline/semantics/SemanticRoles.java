@@ -15,6 +15,7 @@ public final class SemanticRoles {
     public static final String FILESYSTEM = "filesystem", NETWORK = "network";
     public static final String DEDICATED_SERVER = "dedicated-server";
     public static final String MAPPINGS = "mappings";
+    public static final String STATIONAPI = "stationapi";
     public static final String SCHEDULER = "scheduler", WORLD = "world", WORLDGEN = "worldgen";
     public static final String BLOCK = "block";
     public static final String CHUNK = "chunk", PLAYER = "player", ENTITY = "entity";
@@ -76,6 +77,10 @@ public final class SemanticRoles {
         roles.put(MAPPINGS, list("MAPPINGS_COVERAGE_REPORT",
                 "MAPPINGS_COVERAGE_GATE", "MAPPINGS_BATCH_REPORT",
                 "MAPPINGS_BATCH_GATE"));
+        roles.put(STATIONAPI, list("STATIONAPI_PROVIDER_OPEN",
+                "STATIONAPI_RUNTIME_TICK", "STATIONAPI_RUNTIME_CLOSE",
+                "STATIONAPI_WORLD_TIME", "STATIONAPI_PLAYER_NAME",
+                "STATIONAPI_PLAYER_HEALTH"));
         roles.put(SCHEDULER, list("TIMER_THREAD", "TASK_SCHEDULER", "SCHEDULER_ADVANCE"));
         roles.put(WORLD, list("WORLD_TYPE", "LOADED_ENTITY_LIST", "TILE_ENTITIES", "BLOCK_ACCESS",
                 "BLOCK_ID_READ", "BLOCK_READ", "BLOCK_WRITE", "BLOCK_NOTIFY", "WORLD_DIFFICULTY",

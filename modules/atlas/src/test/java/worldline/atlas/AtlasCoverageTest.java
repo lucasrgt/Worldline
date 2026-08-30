@@ -138,6 +138,16 @@ public final class AtlasCoverageTest {
         require("CONTROLLED".equals(mappings.control())
                 && mappings.refs().contains("atlas.subsystem.mappings"),
                 "mapping boundary classification");
+        require("1".equals(store.get("atlas.coverage-unit.stationapi.SEMANTIC").control()),
+                "StationAPI driver semantics filled");
+        require("1".equals(store.get("atlas.coverage-unit.stationapi.CONTROL").control()),
+                "StationAPI driver boundary controlled");
+        require("1".equals(store.get("atlas.coverage-unit.stationapi.DETERMINISM").control()),
+                "StationAPI gated ticks deterministic");
+        AtlasRecord stationapi = store.get("atlas.boundary.STATIONAPI");
+        require("INTERCEPTED".equals(stationapi.control())
+                && stationapi.refs().contains("atlas.subsystem.stationapi"),
+                "StationAPI boundary classification");
         List<AtlasRecord> gaps = AtlasGaps.list(store);
         require(!gaps.isEmpty(), "gaps exist");
         boolean worldgenCoverageGap = false;
