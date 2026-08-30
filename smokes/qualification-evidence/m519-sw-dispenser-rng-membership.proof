@@ -1,5 +1,5 @@
 schema=1
 id=m519-sw-dispenser-rng-membership
-fingerprint=1cda0e63bd318e869b9f6773eb1fb2dfa3d6b89f51dfbebd5c9aabfa275e5a6f
+fingerprint=887abdb9227372dcbf1c93d01a1493ac2048e713125bfd24d0074996ece64e74
 observation.sha256=ee4be352a5e761e0091c6c9206d8771151003ad7b2ba731c4b32bf6455dfc8fe
 source=refactor-equivalent

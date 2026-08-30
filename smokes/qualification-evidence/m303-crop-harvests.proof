@@ -1,5 +1,5 @@
 schema=1
 id=m303-crop-harvests
-fingerprint=a94696b64603c97adcf7ed0f2c1d768a1f694406355817c9181b0c8adb3a0077
+fingerprint=d790d0732bc1a69eb17aeea00d5eed45853e4c4154ebde06d5889384f51f3671
 observation.sha256=33bca9f328ddb3c028b792f70233157d997e260e28d47d0115069be6bcba67f0
 source=refactor-equivalent

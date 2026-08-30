@@ -1,5 +1,5 @@
 schema=1
 id=m572-detector-rail-vacate-set
-fingerprint=71d656bf005d70b346a9ed7d13d87a2bc4b660d46368f6d159c1298965530faf
+fingerprint=92a47f745a3294f7e9fed973dcd8faae9f457acbcdde9820188dfad3d4f8d167
 observation.sha256=a3aba39ab10349121818ceb59b01c01a10736ca62c461a412ccf92129c54a50f
 source=refactor-equivalent

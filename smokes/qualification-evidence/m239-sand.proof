@@ -1,5 +1,5 @@
 schema=1
 id=m239-sand
-fingerprint=0712d535e03f53903e74f62862f169a5dbe0e24f39d102f9ed1d7dbfca3d1ce6
+fingerprint=8f8d91eeeb1eb51b6c77e9133a39ead24cd856b1397c0e62374329796bdbab20
 observation.sha256=bb15230ca24298e16113b08fd83f225bd6b7966fbcdd78d7378ecc59c58e1094
 source=refactor-equivalent
