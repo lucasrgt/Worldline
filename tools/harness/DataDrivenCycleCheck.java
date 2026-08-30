@@ -37,10 +37,11 @@ final class DataDrivenCycleCheck {
             String stem = "refresh.fixture." + index + ".";
             String id = migrations.getProperty(stem + "id", "");
             String relative = migrations.getProperty(stem + "path", "");
+            String current = digest(root.resolve(relative));
             require(relative.startsWith("smokes/" + id + "/") && relative.endsWith(".java")
                             && hash(migrations, stem + "prior_sha256")
-                            && digest(root.resolve(relative)).equals(
-                                    migrations.getProperty(stem + "current_sha256")),
+                            && currentOrTrainSuccessor(train, relative,
+                                    migrations.getProperty(stem + "current_sha256"), current),
                     "generic fixture-refactor attestation drift");
         }
         int formattingRefactors = Integer.parseInt(
@@ -50,10 +51,11 @@ final class DataDrivenCycleCheck {
             String stem = "refresh.formatting." + index + ".";
             String id = migrations.getProperty(stem + "id", "");
             String relative = migrations.getProperty(stem + "path", "");
+            String current = digest(root.resolve(relative));
             require(relative.startsWith("smokes/" + id + "/") && relative.endsWith(".java")
                             && hash(migrations, stem + "prior_sha256")
-                            && digest(root.resolve(relative)).equals(
-                                    migrations.getProperty(stem + "current_sha256")),
+                            && currentOrTrainSuccessor(train, relative,
+                                    migrations.getProperty(stem + "current_sha256"), current),
                     "generic formatting-refactor attestation drift");
         }
         int generic = 0, migrated = 0;
@@ -114,6 +116,20 @@ final class DataDrivenCycleCheck {
 
     private static boolean hash(Properties values, String key) {
         return values.getProperty(key, "").matches("[0-9a-f]{64}");
+    }
+    private static boolean currentOrTrainSuccessor(Properties train, String relative,
+            String recorded, String current) {
+        if (current.equals(recorded)) return true;
+        int count = integer(train, "source.count");
+        for (int index = 0; index < count; index++) {
+            String stem = "source." + index + ".";
+            if (relative.equals(train.getProperty(stem + "path"))
+                    && current.equals(train.getProperty(stem + "current_sha256"))) {
+                return recorded.equals(train.getProperty(stem + "prior_sha256"))
+                        || TrainSourceHistory.connects(train, stem, recorded);
+            }
+        }
+        return false;
     }
     private static String digest(Path path) throws Exception {
         return java.util.HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256")

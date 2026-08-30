@@ -33,6 +33,7 @@ final class WorldgenArtifactSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "worldgen artifact successor allowlist drifted");
+        WorldgenDataCycleAttestationSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
