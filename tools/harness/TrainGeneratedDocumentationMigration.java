@@ -156,7 +156,8 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
                 || WorldgenAtlasDocumentationSuccessor.carries(relative, prior, current)
                 || WorldgenArtifactSuccessor.carries(relative, prior, current)
                 || WorldgenDataCycleAttestationSuccessor.carries(relative, prior, current)
-                || DedicatedServerAtlasTrainSourceSuccessor.carries(relative, prior, current);
+                || DedicatedServerAtlasTrainSourceSuccessor.carries(relative, prior, current)
+                || DedicatedServerAtlasDocumentationSuccessor.carries(relative, prior, current);
     }
 
     private static boolean reviewed(String relative, String prior, String current,

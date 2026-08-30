@@ -49,6 +49,7 @@ final class DedicatedServerAtlasTrainSourceSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "dedicated server Atlas successor allowlist drifted");
+        DedicatedServerAtlasDocumentationSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
