@@ -43,6 +43,7 @@ final class MobAiBehaviorCatalogPlacementSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "mob-AI behavior catalog successor allowlist drifted");
+        DimensionAtlasTrainSourceSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
