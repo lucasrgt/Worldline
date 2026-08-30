@@ -17,6 +17,10 @@ For powered consumers, a lever's metadata is written raw, read back as powered, 
 the consumer callback invoked. This orders cause before dispenser scheduling, note rising-edge
 memory, and TNT entity priming. Wire loses support and drops once; jukebox remains unchanged.
 
+Canonical trace:
+
+`v1|seed=17320110855|redstone-consumer-23:time=1,entities=0,column=23.-1.-1.-1.4.1.1|redstone-consumer-25:time=2,entities=0,column=25.-1.-1.-1.10.1.1|redstone-consumer-46:time=3,entities=0,column=46.3.1.25500.10.1.1|redstone-consumer-50:time=4,entities=0,column=50.-1.-1.-1.10.1.-1|redstone-consumer-55:time=5,entities=0,column=55.65535.0.0.10.1.1|redstone-consumer-84:time=6,entities=0,column=84.3.-1.-1.10.1.1`
+
 Frozen signature:
 `8a2b1947b14e0f5b7fcee755cf14693f3a0bc87b19fe301389543def34a0d2f8`.
 

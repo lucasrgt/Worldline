@@ -15,7 +15,8 @@ final class OracleRedstoneSignalConsumersProbe {
         world.B = false;
         int[][] rows = new int[IDS.length][];
         for (int index = 0; index < IDS.length; index++) {
-            int id = IDS[index], x = 8 + index * 5;
+            int id = IDS[index];
+            int x = 8 + index * 5;
             ensureBlock(world, x, 64, 8, 1, "support failed: " + id);
             require(world.b(x, 65, 8, id, 0), "consumer placement failed: " + id);
             int state = stateDomain(world, x, id);
