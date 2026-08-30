@@ -1,15 +1,15 @@
-# M771-AERO-COUNTERBALANCED-HITCH-RATE aero counterbalanced hitch rate
+# M771-AERO-COUNTERBALANCED-HITCH-RATE Aero counterbalanced hitch-rate gate
 
 <!-- Generated from smoke.properties by MilestoneNarrative. -->
 
 ## Claim
 
-This deterministic scaffold publishes no behavior. Replace the draft runner and author the claim before runtime qualification.
+Four AB/BA counterbalanced negative-control pairs replay the same restored 576-machine Aero tower in eight fresh clients and qualify a loader-neutral paired hitch-rate gate over complete WLPR frame censuses.
 
 ## Qualification cycle
 
-M771AeroCounterbalancedHitchRateCycle is deliberately fail-closed while this milestone is a scaffold. Candidate validation may compile it, but runtime qualification must fail until a real deterministic cycle replaces it.
+M771 runs identical reference and candidate labels in AB/BA/BA/AB order for at least one retained minute each, seals every WLPR artifact, counts frames at or above 50 ms, and requires the neutral aggregate-plus-paired-majority gate not to report a false regression beyond 500 parts per million.
 
-Expected signal: `id=m771-aero-counterbalanced-hitch-rate,state=draft,claim=unassigned`.
+Expected signal: `scene=solid-576,pairs=4,arms=8,order=AB+BA+BA+AB,hitch=50ms,gate=negative-control`.
 
-Frozen semantic SHA-256: `1dc0f14effed5c8d7baf1e3fc09878175ee10ae9e9e8f7e6421b5c767a53fb9d`.
+Frozen semantic SHA-256: `7806dcff03e9d9470ac22e35cb3a39c1f837e75e29bae6c7a0addb1738944859`.

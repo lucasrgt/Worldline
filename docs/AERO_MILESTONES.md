@@ -44,9 +44,10 @@ The causal-performance wave began at `AERO-M111`:
   and qualified by Worldline.
 - `AERO-M112` (`M769`) is complete: it qualified the unified frame, JFR, GC,
   safepoint, allocation, and I/O timeline.
-- `AERO-M113` (`M770`) is the current GPU, driver, `Display.update`, and
-  present-attribution qualification.
-- `AERO-M114`: counterbalanced paired statistics and hitch-rate gate.
+- `AERO-M113` (`M770`) is complete: it qualified GPU, driver,
+  `Display.update`, forced-drain, and VSync present attribution.
+- `AERO-M114` (`M771`) is current: counterbalanced paired statistics and the
+  negative-control hitch-rate gate.
 - `AERO-M115`: incremental non-forced autosave candidate and drain invariant.
 - `AERO-M116`: visible, age, and debt-aware chunk-work scheduling candidate.
 - `AERO-M117`: real-consumer Aero CPU-path adoption and differential.
@@ -54,5 +55,5 @@ The causal-performance wave began at `AERO-M111`:
 - `AERO-M119`: GL state, geometry, display-list, and LOD A/B matrix.
 - `AERO-M120`: long-soak, reload, world-transition, leak, and promotion gate.
 
-Entries after `AERO-M113` remain planned milestones, not completed evidence or
+Entries after `AERO-M114` remain planned milestones, not completed evidence or
 performance claims.

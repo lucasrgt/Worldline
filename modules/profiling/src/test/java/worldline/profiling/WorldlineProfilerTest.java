@@ -18,6 +18,7 @@ public final class WorldlineProfilerTest {
         sealedArtifactAndAggregates();
         causalAttribution();
         budgetsComparisonsAndExports();
+        HitchRateGateTest.run();
         atomicArtifactPersistence();
         loaderNeutralClientRuntime();
         System.out.println("WorldlineProfilerTest passed");

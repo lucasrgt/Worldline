@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "worldline.m771.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [],
+  "client": [
+    "HitchBacklogMixin",
+    "HitchFrameMixin",
+    "HitchMinecraftMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
