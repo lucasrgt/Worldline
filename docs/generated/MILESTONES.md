@@ -87,7 +87,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m71-paired-aero-window` | CARRIED | aero-paired-experiment |
 | `m72-aero-server-content` | CARRIED | aero-runtime-session |
 | `m73-paired-aero-content` | CARRIED | aero-paired-experiment |
-| `m74-complete-aero-census` | CARRIED | aero-frame-census |
+| `m74-complete-aero-census` | PENDING | aero-frame-census |
 | `m75-aero-density-ladder` | CARRIED | aero-frame-census |
 | `m76-renderer-decomposition` | CARRIED | aero-frame-census |
 | `m77-direct-stage-timing` | CARRIED | aero-frame-census |
@@ -600,6 +600,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m665-leaf-support-distance` | CARRIED | leaf support distance |
 | `m702-powered-rail-slope-propagation` | CARRIED | powered rail slope propagation |
 | `m767-modloader-forge-testkit-provider` | EXECUTED | ModLoader and Forge TestKit providers |
+| `m768-aero-historical-tower-replay` | PENDING | Aero historical tower hitch replay |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |

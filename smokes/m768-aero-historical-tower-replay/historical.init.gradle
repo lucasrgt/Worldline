@@ -1,0 +1,73 @@
+def script = gradle.startParameter.initScripts.find { it.name == 'historical.init.gradle' }
+if (script == null) throw new GradleException('Worldline M768 script path missing')
+def root = script.parentFile.parentFile.parentFile.canonicalFile
+def requestedJar = gradle.startParameter.projectProperties.get('worldlineAeroJar')
+if (requestedJar != null) {
+    def aeroJar = new File(requestedJar).canonicalFile
+    if (!aeroJar.isFile()) throw new GradleException('Worldline M768 Aero JAR missing')
+    def expectedTestDir = new File(aeroJar.parentFile.parentFile.parentFile, 'test').canonicalFile
+    gradle.beforeProject { candidate ->
+        if (candidate.projectDir.canonicalFile != expectedTestDir) return
+        candidate.configurations.whenObjectAdded { configuration ->
+            if (configuration.name != 'modImplementation') return
+            configuration.withDependencies { dependencies ->
+                def aeroDependencies = dependencies.findAll {
+                    it.group == 'dev.aerocoding' && it.name == 'aero-model-lib'
+                }
+                if (aeroDependencies.size() != 1)
+                    throw new GradleException('Worldline M768 Aero dependency boundary drift')
+                dependencies.removeAll(aeroDependencies)
+                dependencies.add(candidate.dependencies.create(candidate.files(aeroJar)))
+            }
+        }
+    }
+}
+gradle.projectsEvaluated {
+    if (gradle.rootProject.name != 'aero-model-lib-test') return
+    def project = gradle.rootProject
+    def smoke = new File(root, 'smokes/m768-aero-historical-tower-replay')
+    def prop = { name -> project.findProperty(name).toString() }
+    project.sourceSets.main.java.srcDir(new File(smoke, 'runtime-src'))
+    project.dependencies.add('compileOnly', project.files(
+        new File(project.findProperty('worldlineAeroClasses').toString())))
+    project.tasks.named('processResources').configure {
+      outputs.upToDateWhen { false }
+      doLast {
+        copy { from new File(smoke, 'runtime-resources'); into destinationDir }
+        def fabric = new File(destinationDir, 'fabric.mod.json')
+        if (!fabric.isFile()) throw new GradleException('Aero fabric.mod.json missing')
+        def text = fabric.getText('UTF-8')
+        if (!text.contains('worldline-m768.mixins.json')) {
+            text = text.replace('"aerotest.mixins.json"',
+                '"aerotest.mixins.json", "worldline-m768.mixins.json"')
+            fabric.write(text, 'UTF-8')
+        }
+      }
+    }
+    def task = project.tasks.named('runClient').get()
+    if (task.actions.size() != 2 ||
+            !task.actions[0].getClass().name.endsWith('ClosureTaskAction'))
+        throw new GradleException('Aero runClient action shape drifted')
+    task.actions.remove(0)
+    def game = new File(prop('worldlineRunDir')).absoluteFile
+    project.loom.runs.named('client').configure { runDir project.relativePath(game) }
+    game.mkdirs()
+    new File(game, 'options.txt').text = 'fpsLimit:0' + System.lineSeparator()
+    def args = [
+        '-Dworldline.m768.enabled=true',
+        '-Dworldline.m768.arm=' + prop('worldlineArm'),
+        '-Dworldline.m768.prepare=' + prop('worldlinePrepare'),
+        '-Dworldline.m768.ticks=' + prop('worldlineTicks'),
+        '-Dworldline.m768.minimumMillis=' + prop('worldlineMinimumMillis'),
+        '-Dworldline.m768.artifact=' + new File(prop('worldlineArtifact')).absolutePath,
+        '-Daero.mega=true', '-Daero.mega.solidTerrain=true',
+        '-Daero.mega.sideEffects=false', '-Daero.mega.phaseSpread=true',
+        '-Daero.spikelog=true', '-Daero.spikelog.ms=10000',
+        '-Daero.spikelog.heartbeatMs=0', '-Daero.spikelog.flushMs=10000',
+        '-Daero.spikelog.file=',
+        '-Daero.framePacing=false',
+        '-Daero.benchmark.skipNonForcedSaves=' + prop('worldlineSkipSaves'),
+        '-Xms2G', '-Xmx4G'
+    ]
+    task.jvmArgs(args as List)
+}
