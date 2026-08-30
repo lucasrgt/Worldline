@@ -94,6 +94,7 @@ public final class AtlasSubsystems {
         mapped.put("chunk", "chunks");
         mapped.put("entity", "entities");
         mapped.put("tile-entity", "tile-entities");
+        mapped.put("tile_entity", "tile-entities");
         mapped.put("player", "player");
         mapped.put("inventory", "inventory");
         mapped.put("item", "inventory");

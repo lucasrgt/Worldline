@@ -38,6 +38,16 @@ public final class AtlasCoverageTest {
         require("CONTROLLED".equals(crafting.control())
                 && crafting.refs().contains("atlas.subsystem.crafting"),
                 "crafting boundary classification");
+        require("1".equals(store.get("atlas.coverage-unit.tile-entities.SEMANTIC").control()),
+                "tile entity TestKit semantics filled");
+        require("1".equals(store.get("atlas.coverage-unit.tile-entities.CONTROL").control()),
+                "tile entity TestKit boundary controlled");
+        require("1".equals(store.get("atlas.coverage-unit.tile-entities.DETERMINISM").control()),
+                "tile entity public evidence deterministic");
+        AtlasRecord tileEntity = store.get("atlas.boundary.TILE_ENTITY");
+        require("CONTROLLED".equals(tileEntity.control())
+                && tileEntity.refs().contains("atlas.subsystem.tile-entities"),
+                "tile entity boundary classification");
         require("1".equals(store.get("atlas.coverage-unit.aero.TESTABILITY").control()),
                 "aero testability filled");
         require("1".equals(store.get("atlas.coverage-unit.redstone.SEMANTIC").control()),
