@@ -149,7 +149,8 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
                 || MobAiBehaviorManifestSuccessor.carries(relative, prior, current)
                 || MobAiBehaviorCatalogPlacementSuccessor.carries(relative, prior, current)
                 || DimensionAtlasTrainSourceSuccessor.carries(relative, prior, current)
-                || DimensionAtlasDocumentationSuccessor.carries(relative, prior, current);
+                || DimensionAtlasDocumentationSuccessor.carries(relative, prior, current)
+                || DimensionAtlasFormattingSuccessor.carries(relative, prior, current);
     }
 
     private static boolean reviewed(String relative, String prior, String current,

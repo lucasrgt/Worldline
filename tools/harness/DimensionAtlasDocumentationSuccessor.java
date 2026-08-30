@@ -27,6 +27,7 @@ final class DimensionAtlasDocumentationSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "dimension Atlas documentation successor allowlist drifted");
+        DimensionAtlasFormattingSuccessor.selfTest();
     }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);
