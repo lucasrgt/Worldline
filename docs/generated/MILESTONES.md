@@ -5,15 +5,15 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | Milestone | Qualification | Contract |
 | --- | --- | --- |
 | `deterministic-world-tick` | CARRIED | server-runtime-equivalence |
-| `controlled-client-tick` | CARRIED | client-runtime-equivalence |
-| `testkit-cycle` | EXECUTED | testkit-runtime |
+| `controlled-client-tick` | PENDING | client-runtime-equivalence |
+| `testkit-cycle` | PENDING | testkit-runtime |
 | `m3-domain-api` | CARRIED | domain-api-equivalence |
 | `m4-durable-snapshot` | CARRIED | durable-snapshot |
 | `m5-reproduction-bundle` | CARRIED | reproduction-bundle |
 | `m6-trace-explorer` | CARRIED | trace-divergence |
-| `m7-mod-loading` | EXECUTED | mod-loading |
-| `m8-mod-version-diff` | EXECUTED | mod-version-difference |
-| `m9-scenario-minimization` | EXECUTED | scenario-minimization |
+| `m7-mod-loading` | PENDING | mod-loading |
+| `m8-mod-version-diff` | PENDING | mod-version-difference |
+| `m9-scenario-minimization` | PENDING | scenario-minimization |
 | `m10-native-render` | CARRIED | client-runtime-equivalence |
 | `m11-aero-attribution` | CARRIED | aero-diagnostic-capture |
 | `m11-mod-api` | CARRIED | mod-api-lifecycle |
@@ -563,7 +563,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m617-spawn-light-cap-set` | CARRIED | spawn light cap set |
 | `m618-wolf-tame-set` | CARRIED | wolf tame set |
 | `m619-undead-sun-burn-set` | CARRIED | undead sun burn set |
-| `m620-stationapi-testkit-driver` | EXECUTED | StationAPI TestKit driver |
+| `m620-stationapi-testkit-driver` | PENDING | StationAPI TestKit driver |
 | `m621-save-worldgen-set` | CARRIED | save worldgen set |
 | `m622-pathfinding-matrix` | CARRIED | Entity pathfinding matrix |
 | `m623-lighting-engine-matrix` | CARRIED | Lighting engine matrix |
@@ -582,7 +582,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m637-tnt-chain` | CARRIED | TNT chain reaction |
 | `m638-creeper-tnt-differential` | CARRIED | creeper versus TNT differential |
 | `m639-ice-formation` | CARRIED | Natural ice formation |
-| `m640-snow-accumulation` | CARRIED | Natural snow accumulation |
+| `m640-snow-accumulation` | PENDING | Natural snow accumulation |
 | `m641-natural-wolf-pack` | CARRIED | natural wolf pack |
 | `m643-multiplayer-sleep-quorum` | CARRIED | multiplayer sleep quorum |
 | `m645-note-pitch-ladder` | CARRIED | note block pitch ladder |
@@ -591,11 +591,11 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m652-portal-reentry-cooldown` | CARRIED | portal re-entry cooldown |
 | `m653-chunk-restart-persistence` | CARRIED | chunk restart persistence |
 | `m654-sky-brightness-cycle` | CARRIED | sky brightness cycle |
-| `m655-rain-stop-event` | CARRIED | rain stop event |
+| `m655-rain-stop-event` | PENDING | rain stop event |
 | `m656-server-admission-matrix` | CARRIED | server admission matrix |
-| `m659-powered-creeper` | CARRIED | powered creeper |
+| `m659-powered-creeper` | PENDING | powered creeper |
 | `m661-spider-daylight-aggression` | CARRIED | spider daylight aggression |
-| `m663-snow-layer-nonstacking` | CARRIED | snow layer nonstacking |
+| `m663-snow-layer-nonstacking` | PENDING | snow layer nonstacking |
 | `m664-flowing-water-freeze` | CARRIED | Flowing-water freeze boundary |
 | `m665-leaf-support-distance` | CARRIED | leaf support distance |
 | `m702-powered-rail-slope-propagation` | CARRIED | powered rail slope propagation |
@@ -659,7 +659,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
-| `gui-tree` | EXECUTED | ui-tree-equivalence |
+| `gui-tree` | PENDING | ui-tree-equivalence |
 | `lab-cycle` | CARRIED | runtime-lab |
 | `redstone-lever-button` | CARRIED | redstone-lever-button |
 | `redstone-piston-extend` | CARRIED | redstone-piston-extend |

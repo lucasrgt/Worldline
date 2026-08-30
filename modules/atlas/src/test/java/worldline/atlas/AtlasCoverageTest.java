@@ -48,6 +48,16 @@ public final class AtlasCoverageTest {
         require("CONTROLLED".equals(light.control())
                 && light.refs().contains("atlas.subsystem.lighting"),
                 "lighting boundary classification");
+        require("1".equals(store.get("atlas.coverage-unit.weather.SEMANTIC").control()),
+                "weather TestKit semantics filled");
+        require("1".equals(store.get("atlas.coverage-unit.weather.CONTROL").control()),
+                "weather TestKit boundary controlled");
+        require("1".equals(store.get("atlas.coverage-unit.weather.DETERMINISM").control()),
+                "weather public evidence deterministic");
+        AtlasRecord weather = store.get("atlas.boundary.WEATHER");
+        require("CONTROLLED".equals(weather.control())
+                && weather.refs().contains("atlas.subsystem.weather"),
+                "weather boundary classification");
         require("1".equals(store.get("atlas.coverage-unit.inventory.ORACLE").control()),
                 "inventory oracle filled");
         require("1".equals(store.get("atlas.coverage-unit.crafting.CONTROL").control()),

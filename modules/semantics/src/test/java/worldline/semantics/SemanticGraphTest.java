@@ -13,6 +13,7 @@ public final class SemanticGraphTest {
         require(first.tokens().contains("BLOCK_TICK"), "hyphenated category token");
         require(first.tokens().contains("FLUID"), "fluid category token");
         require(first.tokens().contains("LIGHT"), "light category token");
+        require(first.tokens().contains("WEATHER"), "weather category token");
         require(first.tokens().contains("TILE_ENTITY"), "tile entity category token");
         require(!first.readers("BLOCK_TICK").isEmpty(), "block tick readers");
         require(!first.readers("REDSTONE").isEmpty(), "redstone readers");
@@ -20,6 +21,7 @@ public final class SemanticGraphTest {
         require(!first.readers("RECIPE").isEmpty(), "recipe TestKit readers");
         require(!first.readers("FLUID").isEmpty(), "fluid TestKit readers");
         require(!first.readers("LIGHT").isEmpty(), "light TestKit readers");
+        require(!first.readers("WEATHER").isEmpty(), "weather TestKit readers");
         require(!first.readers("TILE_ENTITY").isEmpty(), "tile entity TestKit readers");
         require(!first.readers("CLOCK").isEmpty(), "clock readers");
         require(!first.writers("WORLD").isEmpty(), "world writers");

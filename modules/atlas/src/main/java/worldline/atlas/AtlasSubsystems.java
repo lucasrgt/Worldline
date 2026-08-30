@@ -93,6 +93,7 @@ public final class AtlasSubsystems {
         mapped.put("block_tick", "block-ticks");
         mapped.put("fluid", "fluids");
         mapped.put("light", "lighting");
+        mapped.put("weather", "weather");
         mapped.put("chunk", "chunks");
         mapped.put("entity", "entities");
         mapped.put("tile-entity", "tile-entities");

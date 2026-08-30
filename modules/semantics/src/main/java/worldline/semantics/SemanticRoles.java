@@ -21,6 +21,7 @@ public final class SemanticRoles {
     public static final String SAVE = "save", LIFECYCLE = "lifecycle";
     public static final String LAB = "lab", DOMAIN = "domain", REDSTONE = "redstone";
     public static final String BLOCK_TICK = "block-tick", FLUID = "fluid", LIGHT = "light";
+    public static final String WEATHER = "weather";
     public static final String TILE_ENTITY = "tile-entity";
     private static final Map<String, List<String>> REQUIRED = required();
 
@@ -81,6 +82,9 @@ public final class SemanticRoles {
         roles.put(LIGHT, list("LIGHT_STATIC_TRANSPORT_TESTKIT",
                 "LIGHT_STATIC_FAMILY_TESTKIT", "LIGHT_SKY_BRIGHTNESS_TESTKIT",
                 "LIGHT_DAYLIGHT_RESPONSE_TESTKIT"));
+        roles.put(WEATHER, list("WEATHER_RAIN_STOP_TESTKIT",
+                "WEATHER_SNOW_ACCUMULATION_TESTKIT", "WEATHER_SNOW_NONSTACKING_TESTKIT",
+                "WEATHER_LIGHTNING_CREEPER_TESTKIT"));
         roles.put(TILE_ENTITY, list("TILE_ENTITY_FURNACE_TESTKIT",
                 "TILE_ENTITY_MOB_SPAWNER_TESTKIT", "TILE_ENTITY_PISTON_TESTKIT",
                 "TILE_ENTITY_SIGN_TESTKIT"));
