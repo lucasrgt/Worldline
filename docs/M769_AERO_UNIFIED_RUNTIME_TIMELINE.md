@@ -1,15 +1,15 @@
-# M769-AERO-UNIFIED-RUNTIME-TIMELINE aero unified runtime timeline
+# M769-AERO-UNIFIED-RUNTIME-TIMELINE Aero unified runtime timeline
 
 <!-- Generated from smoke.properties by MilestoneNarrative. -->
 
 ## Claim
 
-This deterministic scaffold publishes no behavior. Replace the draft runner and author the claim before runtime qualification.
+One fresh real StationAPI client replays the restored solid sixteen-floor 576-machine Aero tower for at least three retained post-load minutes and seals a complete WLPR frame census plus a JFR recording joined through monotonic frame anchors.
 
 ## Qualification cycle
 
-M769AeroUnifiedRuntimeTimelineCycle is deliberately fail-closed while this milestone is a scaffold. Candidate validation may compile it, but runtime qualification must fail until a real deterministic cycle replaces it.
+M769 builds the exact pinned Aero revision, prepares and restores a fresh tower world, drains initial chunk work, arms the generic Worldline Profiler and JFR in the same window, executes the fixed stationary and look-jump-spin route, then verifies frame-level joins for GC, safepoint, allocation, file I/O, save, chunk, display, and Aero stage evidence.
 
-Expected signal: `id=m769-aero-unified-runtime-timeline,state=draft,claim=unassigned`.
+Expected signal: `scene=solid-576,timeline=wlpr+jfr,events=gc+safepoint+allocation+file-io,join=frame`.
 
-Frozen semantic SHA-256: `36b4eb49e6aa0847c9bc32803a99b208ee2b6cd66c63f2a37c05388c2e47b1af`.
+Frozen semantic SHA-256: `9c8a961cea0ddf9ebf0b0734f32c44ae8f8424667367cb94b4186574f5ebe8c4`.

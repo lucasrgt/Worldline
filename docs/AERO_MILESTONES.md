@@ -34,15 +34,16 @@ behavioral oracles, runtime evidence, and promotion gates that qualify them.
 An Aero milestone passing in Worldline does not by itself enable an opt-in
 optimization or promote an Aero release.
 
-## Next investigation wave
+## Current investigation wave
 
-The next Aero milestone number is `AERO-M111`. The planned causal-performance
-wave is:
+The causal-performance wave began at `AERO-M111`:
 
-- `AERO-M111`: canonical historical stacked-machine tower post-load hitch
-  replay, specified in
-  [AERO_M111_HISTORICAL_TOWER_REPLAY.md](AERO_M111_HISTORICAL_TOWER_REPLAY.md).
-- `AERO-M112`: unified frame, JFR, GC, safepoint, allocation, and I/O timeline.
+- `AERO-M111` (`M768`) is complete: the canonical historical stacked-machine
+  tower replay is specified in
+  [AERO_M111_HISTORICAL_TOWER_REPLAY.md](AERO_M111_HISTORICAL_TOWER_REPLAY.md)
+  and qualified by Worldline.
+- `AERO-M112` (`M769`) is the current unified frame, JFR, GC, safepoint,
+  allocation, and I/O timeline qualification.
 - `AERO-M113`: GPU, driver, `Display.update`, and present attribution.
 - `AERO-M114`: counterbalanced paired statistics and hitch-rate gate.
 - `AERO-M115`: incremental non-forced autosave candidate and drain invariant.
@@ -52,5 +53,5 @@ wave is:
 - `AERO-M119`: GL state, geometry, display-list, and LOD A/B matrix.
 - `AERO-M120`: long-soak, reload, world-transition, leak, and promotion gate.
 
-These entries are planned milestones, not completed evidence or performance
-claims.
+Entries after `AERO-M112` remain planned milestones, not completed evidence or
+performance claims.
