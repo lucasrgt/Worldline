@@ -26,7 +26,9 @@ final class BehaviorFamilyPinCheck {
             require((hash(prior) || "added".equals(prior))
                             && (digest(root.resolve(relative)).equals(required(lock, stem + "current_sha256"))
                             || TrainPinCheck.transportsFile(TrainPinCheck.manifest(root), root,
-                                    relative, required(lock, stem + "current_sha256"))),
+                                    relative, required(lock, stem + "current_sha256"))
+                            || SchemaPinCheck.transportsFile(root, relative,
+                                    required(lock, stem + "current_sha256"))),
                     "behavior-family source drift: " + relative);
         }
         refreshSources(root, lock);
@@ -36,8 +38,11 @@ final class BehaviorFamilyPinCheck {
             require(entry.getKey().equals(required(lock, stem + "id"))
                             && entry.getValue().equals(required(lock, stem + "token"))
                             && hash(required(lock, stem + "prior_sha256"))
-                            && digest(root.resolve("smokes").resolve(entry.getKey()).resolve("smoke.properties"))
-                                    .equals(required(lock, stem + "current_sha256"))
+                            && (digest(root.resolve("smokes").resolve(entry.getKey())
+                                    .resolve("smoke.properties")).equals(
+                                            required(lock, stem + "current_sha256"))
+                            || SchemaPinCheck.transportsFile(root, "smokes/" + entry.getKey()
+                                    + "/smoke.properties", required(lock, stem + "current_sha256")))
                             && behavior(root, entry.getKey()).equals(entry.getValue()),
                     "behavior-family assignment drift: " + entry.getKey());
         }
@@ -83,8 +88,10 @@ final class BehaviorFamilyPinCheck {
         for (Map.Entry<String, String> entry : BehaviorFamilyAssignments.values().entrySet()) {
             String stem = "assignment." + index++ + ".";
             if (entry.getKey().equals(id)) return prior.equals(lock.getProperty(stem + "prior_sha256"))
-                    && digest(root.resolve("smokes").resolve(id).resolve("smoke.properties"))
-                            .equals(lock.getProperty(stem + "current_sha256"));
+                    && (digest(root.resolve("smokes").resolve(id).resolve("smoke.properties"))
+                            .equals(lock.getProperty(stem + "current_sha256"))
+                    || SchemaPinCheck.transportsFile(root, "smokes/" + id + "/smoke.properties",
+                            lock.getProperty(stem + "current_sha256")));
         }
         return false;
     }
@@ -100,7 +107,8 @@ final class BehaviorFamilyPinCheck {
             return direct || TrainPinCheck.follows(train, id,
                 lock.getProperty(stem + "current_fingerprint"),
                 lock.getProperty(stem + "evidence_sha256"), pin, current)
-                || TrainPinCheck.carriesCurrent(train, id, pin, current); }
+                || TrainPinCheck.carriesCurrent(train, id, pin, current)
+                || SchemaPinCheck.carries(SchemaPinCheck.manifest(root), id, pin, current); }
         catch (Exception error) { return false; }
     }
     static Properties manifest(Path root) throws Exception {
