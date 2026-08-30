@@ -75,7 +75,6 @@ final class LifecycleClaimTestKitPinMigration {
             lock.setProperty(stem + "id", smoke.id);
             lock.setProperty(stem + "prior_fingerprint", prior.fingerprint());
             lock.setProperty(stem + "current_fingerprint", fingerprint);
-            lock.setProperty(stem + "evidence_sha256", prior.evidence());
             SmokePins.Entry replacement;
             if (ANCHORS.contains(smoke.id)) {
                 SmokePins.Entry observed = cache.availablePin(smoke);
@@ -89,6 +88,7 @@ final class LifecycleClaimTestKitPinMigration {
                         prior.evidence(), "refactor-equivalent");
                 lock.setProperty(stem + "source", "refactor-equivalent");
             }
+            lock.setProperty(stem + "evidence_sha256", replacement.evidence());
             next.add(replacement);
         }
         lock.setProperty("carried.count", Integer.toString(carried));
