@@ -106,7 +106,11 @@ final class FormattingPinMigration {
             manifest.setProperty(stem + "current_fingerprint", current);
             manifest.setProperty(stem + "evidence_sha256", pin.evidence());
         }
-        int smokeCount = carried + ProviderDiscoveryPinCheck.pendingCount(providers);
+        Properties schemas = SchemaPinCheck.manifest(root);
+        int successorIntroductions = SchemaPinCheck.introductionsAfter(schemas, manifest);
+        int smokeCount = carried + ProviderDiscoveryPinCheck.pendingCount(providers)
+                - successorIntroductions;
+        require(smokeCount >= 0, "formatting successor introduction census drift");
         manifest.setProperty("smoke.count", Integer.toString(smokeCount));
         pins.write(pins.entries()); store(path, manifest);
         System.out.println("formatting pins refreshed: " + carried + " carried, "
