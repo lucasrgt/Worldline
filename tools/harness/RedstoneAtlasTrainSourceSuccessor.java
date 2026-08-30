@@ -61,6 +61,7 @@ final class RedstoneAtlasTrainSourceSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "redstone Atlas train successor allowlist drifted");
+        RedstoneAtlasDocumentationSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
