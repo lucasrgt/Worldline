@@ -261,6 +261,25 @@ The resulting evidence records Packet23 type and relational thrower policy, neve
 IDs or poses. Arrow, snowball, primed TNT, falling sand, minecart, and boat therefore remain six
 cases of one coherent materialization subsystem rather than six milestone-count atoms.
 
+Paintings use a complete lifecycle fixture because their Packet25 identity, anchored facing, and
+support dependency are one user-visible capability. Two expectations retain the qualified west
+and east anchors while normalizing random motives and fresh IDs. The singular support-loss step
+must destroy the selected painting through Packet29 and yield exactly item 321 through Packet21:
+
+```java
+List<PaintingSpawnExpectation> poses = Arrays.asList(
+        new PaintingSpawnExpectation(5, 72, 4, 1),
+        new PaintingSpawnExpectation(3, 72, 3, 3));
+PaintingLifecycleScenario paintings = new PaintingObservationLifecycleScenario(session,
+        (current, painting) -> removePaintingSupport(current, painting));
+PaintingLifecycleEvidence evidence = PaintingLifecycleFixture.execute(
+        plan, "b1.7.3:entity/009", poses, paintings);
+```
+
+This promotes the universal spawn claim and both singular orientation/support-loss claims without
+claiming motive selection or native rendering. Wrong anchors, reused identities, repeated facings,
+wrong destroy IDs, and missing or mismatched drops fail closed.
+
 ### Block lifecycle matrices
 
 `worldline.testkit.BlockConformancePlan` and `BlockLifecyclePlan` are part of

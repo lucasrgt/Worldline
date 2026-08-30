@@ -234,14 +234,16 @@ The dimensions are registry presence, spawn materialization, save/reload, moveme
 collision shape, damage/death, drop matrix, interaction state, environment response, tick
 lifecycle, and native rendering. Profiles route these through universal, archetype, and singular
 cases. Fifty-three cells are bound to existing qualified official-runtime evidence for projectiles,
-paintings, TNT, falling sand, vehicles, hostile and passive mobs. Twenty-eight of those proofs now
+paintings, TNT, falling sand, vehicles, hostile and passive mobs. Thirty-one of those proofs now
 have a strict public binding ledger. Pig materialization, movement, death and pork drop use the
 universal plus archetype routes, while creeper materialization, death and gunpowder drop exercise
 universal plus singular routes. Skeleton, spider, pig-zombie, sheep, and squid each execute bounded
 materialization, causal death, and historical drop expectations through the universal plus
 archetype routes. A separate universal Packet23 matrix proves arrow, snowball, primed TNT, falling
 sand, minecart, and boat materialization while preserving their qualified thrower and velocity
-constraints. The other 25 remain `SMOKE_ONLY`; the
+constraints. The painting lifecycle fixture binds Packet25 materialization, two distinct anchored
+facings, causal support removal, same-identity Packet29 destruction, and the exact item-321 drop as
+one mini-subsystem. The other 22 remain `SMOKE_ONLY`; the
 remaining 211 cells are explicit `UNKNOWN` Atlas claims.
 
 ## Status and automation
@@ -318,8 +320,8 @@ reconciliation, the block public TestKit surface now covers 1,056/1,056 claims
 (100%), completing that family's automation-surface target. The final six tick-policy claims bind sand and
 gravel scheduling, natural wheat, cactus, and sugar-cane growth, and furnace tile ticks to official
 public fixtures. Across both current families the honest aggregate is 1,109/1,320 verified
-(84.02%) and 1,084/1,320 public TestKit claims (82.12%). The entity family contributes 28 public
-claims, 25 smoke-only claims, and all 211 unknown cells.
+(84.02%) and 1,087/1,320 public TestKit claims (82.35%). The entity family contributes 31 public
+claims, 22 smoke-only claims, and all 211 unknown cells.
 
 ## Three conformance layers
 
