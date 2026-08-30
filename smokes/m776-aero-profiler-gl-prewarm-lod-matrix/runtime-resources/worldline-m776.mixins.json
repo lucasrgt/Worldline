@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "worldline.m776.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "MatrixFrameDriveMixin",
+    "MatrixFrameMetricsMixin",
+    "MatrixMinecraftMixin"
+  ],
+  "injectors": { "defaultRequire": 1 }
+}

@@ -1,0 +1,84 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+def script = gradle.startParameter.initScripts.find { it.name == 'matrix.init.gradle' }
+if (script == null) throw new GradleException('Worldline M776 script path missing')
+def root = script.parentFile.parentFile.parentFile.canonicalFile
+def requestedJar = gradle.startParameter.projectProperties.get('worldlineAeroJar')
+if (requestedJar != null) {
+    def aeroJar = new File(requestedJar).canonicalFile
+    if (!aeroJar.isFile()) throw new GradleException('Worldline M776 Aero JAR missing')
+    def expectedTestDir = new File(aeroJar.parentFile.parentFile.parentFile, 'test').canonicalFile
+    gradle.beforeProject { candidate ->
+        if (candidate.projectDir.canonicalFile != expectedTestDir) return
+        candidate.configurations.whenObjectAdded { configuration ->
+            if (configuration.name != 'modImplementation') return
+            configuration.withDependencies { dependencies ->
+                def aero = dependencies.findAll {
+                    it.group == 'dev.aerocoding' && it.name == 'aero-model-lib'
+                }
+                if (aero.size() != 1)
+                    throw new GradleException('Worldline M776 Aero dependency boundary drift')
+                dependencies.removeAll(aero)
+                dependencies.add(candidate.dependencies.create(candidate.files(aeroJar)))
+            }
+        }
+    }
+}
+
+gradle.projectsEvaluated {
+    if (gradle.rootProject.name != 'aero-model-lib-test') return
+    def project = gradle.rootProject
+    def smoke = new File(root, 'smokes/m776-aero-profiler-gl-prewarm-lod-matrix')
+    def prop = { name -> project.findProperty(name).toString() }
+    project.sourceSets.main.java.srcDir(new File(smoke, 'runtime-src'))
+    project.dependencies.add('compileOnly', project.files(
+        new File(project.findProperty('worldlineAeroClasses').toString())))
+    project.tasks.named('processResources').configure {
+        outputs.upToDateWhen { false }
+        doLast {
+            copy { from new File(smoke, 'runtime-resources'); into destinationDir }
+            def fabric = new File(destinationDir, 'fabric.mod.json')
+            if (!fabric.isFile()) throw new GradleException('Aero fabric.mod.json missing')
+            def json = new JsonSlurper().parse(fabric)
+            def mixins = (json.mixins ?: []) as List
+            if (!mixins.contains('worldline-m776.mixins.json'))
+                mixins.add('worldline-m776.mixins.json')
+            json.mixins = mixins
+            fabric.text = JsonOutput.prettyPrint(JsonOutput.toJson(json)) + '\n'
+        }
+    }
+    def task = project.tasks.named('runClient').get()
+    if (task.actions.size() != 2 ||
+            !task.actions[0].getClass().name.endsWith('ClosureTaskAction'))
+        throw new GradleException('Aero runClient action shape drifted')
+    task.actions.remove(0)
+    def game = new File(prop('worldlineRunDir')).absoluteFile
+    project.loom.runs.named('client').configure { runDir project.relativePath(game) }
+    game.mkdirs()
+    new File(game, 'options.txt').text = 'fpsLimit:0' + System.lineSeparator()
+    def arm = prop('worldlineArm')
+    def lists = arm != 'direct' && arm != 'prepare'
+    def prewarm = arm == 'prewarm' || arm == 'lod'
+    def lod = arm == 'lod'
+    task.jvmArgs([
+        '-Dworldline.m776.enabled=true',
+        '-Dworldline.m776.prepare=' + prop('worldlinePrepare'),
+        '-Dworldline.m776.arm=' + arm,
+        '-Dworldline.m776.frames=' + prop('worldlineFrames'),
+        '-Dworldline.m776.minimumMillis=' + prop('worldlineMinimumMillis'),
+        '-Dworldline.m776.metrics=' + new File(prop('worldlineMetrics')).absolutePath,
+        '-Dworldline.m776.framesFile=' + new File(prop('worldlineFrameArtifact')).absolutePath,
+        '-Daero.atRestLists=' + lists,
+        '-Daero.prewarm=' + prewarm,
+        '-Daero.prewarm.perFrame=1', '-Daero.prewarm.maxMsPerFrame=4',
+        '-Daero.prewarm.maxQueued=64',
+        '-Daero.smartlod=true', '-Daero.animatedLOD=' + (lod ? '28' : '0'),
+        '-Daero.becell.pages=false', '-Daero.bonepages=false',
+        '-Daero.chunkvisibility=false', '-Daero.smallobj=false', '-Daero.frustumcull=true',
+        '-Daero.mega=false', '-Daero.ultra=false', '-Daero.spikelog=true',
+        '-Daero.spikelog.ms=10000', '-Daero.spikelog.heartbeatMs=0',
+        '-Daero.framePacing=false', '-Daero.benchmark.skipNonForcedSaves=true',
+        '-Xms2G', '-Xmx4G'
+    ] as List)
+}
