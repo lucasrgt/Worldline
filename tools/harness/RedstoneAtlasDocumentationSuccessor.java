@@ -31,6 +31,7 @@ final class RedstoneAtlasDocumentationSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "redstone Atlas documentation successor allowlist drifted");
+        CraftingAtlasTrainSourceSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {

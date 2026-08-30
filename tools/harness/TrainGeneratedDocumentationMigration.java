@@ -132,7 +132,8 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
                         "3e4548964acbca47f460ef32a399528909fcad7a1cd667d7dab6afa2c251d97c")
                 || TestKitArtifactTrainSourceSuccessor.carries(relative, prior, current)
                 || RedstoneAtlasTrainSourceSuccessor.carries(relative, prior, current)
-                || RedstoneAtlasDocumentationSuccessor.carries(relative, prior, current);
+                || RedstoneAtlasDocumentationSuccessor.carries(relative, prior, current)
+                || CraftingAtlasTrainSourceSuccessor.carries(relative, prior, current);
     }
 
     private static boolean reviewed(String relative, String prior, String current,
