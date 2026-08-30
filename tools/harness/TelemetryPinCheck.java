@@ -38,6 +38,7 @@ final class TelemetryPinCheck {
                     required(manifest, stem + "current_fingerprint"),
                     required(manifest, stem + "evidence_sha256"), pin, current);
             successor |= TrainPinCheck.carriesCurrent(train, smoke.id, pin, current);
+            successor |= LifecycleClaimTestKitPinCheck.carries(root, smoke.id, pin, current);
             require(hash(manifest, stem + "prior_fingerprint")
                             && (direct || successor)
                             && hash(manifest, stem + "evidence_sha256"),
@@ -46,7 +47,9 @@ final class TelemetryPinCheck {
                             || pin.source().equals("refactor-equivalent")
                             && (pin.evidence().equals(required(manifest, stem + "evidence_sha256"))
                             || SchemaPinCheck.carries(schemas, smoke.id, pin, current)
-                            || TrainPinCheck.carriesCurrent(train, smoke.id, pin, current))),
+                            || TrainPinCheck.carriesCurrent(train, smoke.id, pin, current)
+                            || LifecycleClaimTestKitPinCheck.carries(
+                                    root, smoke.id, pin, current))),
                     "telemetry migration pin drift: " + smoke.id);
         }
         require(changed == integer(manifest, "count")
@@ -67,7 +70,8 @@ final class TelemetryPinCheck {
             return direct || SchemaPinCheck.follows(SchemaPinCheck.manifest(root), id,
                 manifest.getProperty(stem + "current_fingerprint"),
                 manifest.getProperty(stem + "evidence_sha256"), pin, current)
-                || TrainPinCheck.carriesCurrent(TrainPinCheck.manifest(root), id, pin, current); }
+                || TrainPinCheck.carriesCurrent(TrainPinCheck.manifest(root), id, pin, current)
+                || LifecycleClaimTestKitPinCheck.carries(root, id, pin, current); }
         catch (Exception error) { return false; }
     }
     private static boolean hash(Properties values, String key) {
