@@ -32,7 +32,7 @@ public final class AtlasCycle {
     recreate(build);
     compileServerAdapter();
     Result first = launcher("atlas", SEED, "1", build.resolve("first.html").toString());
-    require(first.code == 0 && first.text.contains("WORLDLINE_ATLAS=PASS")
+    require(first.code == 0 && first.text.contains("WORLDLINE_SEED_ATLAS=PASS")
             && first.text.contains("seed=" + SEED) && first.text.contains("radius=1"),
         "first atlas render failed");
     Result second = launcher("atlas", SEED, "1", build.resolve("second.html").toString());
