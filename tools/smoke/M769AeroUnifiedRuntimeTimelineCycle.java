@@ -67,7 +67,12 @@ public final class M769AeroUnifiedRuntimeTimelineCycle {
         Path profiler = measured.resolve("timeline.wlpr");
         Path jfr = measured.resolve("timeline.jfr");
         String output = runClient(checkout, measured, false, profiler, jfr);
-        SmokeSupport.require(output.contains("[WorldlineM769] retained-complete ticks=3600")
+        long retainedTicks = lifecycleValue(output, "ticks=");
+        long retainedMillis = lifecycleValue(output, "millis=");
+        SmokeSupport.require(retainedTicks >= Long.parseLong(
+                            SmokeSupport.value(config, "retained.ticks"))
+                        && retainedMillis >= Long.parseLong(
+                            SmokeSupport.value(config, "minimum.millis"))
                         && output.contains("WORLDLINE_PROFILER_ARTIFACT=")
                         && output.contains("[WorldlineM769] jfr-sealed bytes=")
                         && output.contains("BUILD SUCCESSFUL"),
@@ -85,6 +90,17 @@ public final class M769AeroUnifiedRuntimeTimelineCycle {
                 + SmokeSupport.value(config, "expected.signal"));
         System.out.println("WORLDLINE_M769_TRACE=" + TRACE);
         System.out.println("WORLDLINE_M769_SIGNATURE=" + signature);
+    }
+
+    private static long lifecycleValue(String output, String key) {
+        int line = output.indexOf("[WorldlineM769] retained-complete ");
+        int start = line < 0 ? -1 : output.indexOf(key, line);
+        if (start < 0) return -1L;
+        start += key.length();
+        int end = start;
+        while (end < output.length() && Character.isDigit(output.charAt(end))) end++;
+        try { return Long.parseLong(output.substring(start, end)); }
+        catch (NumberFormatException error) { return -1L; }
     }
 
     private String runClient(Path checkout, Path game, boolean prepare, Path profiler,
