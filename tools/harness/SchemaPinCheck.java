@@ -85,6 +85,9 @@ final class SchemaPinCheck {
     static boolean introduced(Properties manifest, String id) {
         return "true".equals(manifest.getProperty("smoke." + id + ".introduced"));
     }
+    static boolean transportsFile(Path root, String relative, String prior) {
+        return LifecycleClaimTestKitPinCheck.transportsFile(root, relative, prior);
+    }
     static int introductionsAfter(Properties successor, Properties predecessor) {
         return (int) successor.stringPropertyNames().stream()
                 .filter(key -> key.startsWith("smoke.") && key.endsWith(".introduced"))

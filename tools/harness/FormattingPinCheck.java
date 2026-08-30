@@ -33,6 +33,8 @@ final class FormattingPinCheck {
                     || GuiWorkbenchPinCheck.transportsFile(gui, root, relative,
                             required(manifest, stem + "current_sha256"))
                     || TrainPinCheck.transportsFile(train, root, relative,
+                            required(manifest, stem + "current_sha256"))
+                    || SchemaPinCheck.transportsFile(root, relative,
                             required(manifest, stem + "current_sha256"));
             require((direct && digest(FormattingPinMigration.tokens(source)).equals(
                                     required(manifest, stem + "token_sha256")) || successor)
@@ -116,6 +118,8 @@ final class FormattingPinCheck {
             Properties shared = SharedHelperPinCheck.manifest(root);
             return direct || prior.equals(manifest.getProperty(stem + "prior_sha256"))
                     && SharedHelperPinCheck.transportsFile(shared, root, relative,
+                            manifest.getProperty(stem + "current_sha256"))
+                    || SchemaPinCheck.transportsFile(root, relative,
                             manifest.getProperty(stem + "current_sha256"));
         }
         return false;
