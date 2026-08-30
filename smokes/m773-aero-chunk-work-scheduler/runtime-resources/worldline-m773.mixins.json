@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "worldline.m773.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+    "SchedulerBacklogMixin",
+    "SchedulerChunkBuilderMixin",
+    "SchedulerFrameMixin",
+    "SchedulerMinecraftMixin"
+  ],
+  "injectors": { "defaultRequire": 1 }
+}
