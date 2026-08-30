@@ -31,9 +31,11 @@ b1.7.3:entity/090	spawn-materialization	mob-lifecycle	worldline.testkit.EntityLi
 b1.7.3:entity/090	movement-policy	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m148-pig-ai-movement
 b1.7.3:entity/090	damage-death	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m149-pig-death
 b1.7.3:entity/090	drop-matrix	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m150-pig-pork-drop
-b1.7.3:entity/091	spawn-materialization	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m406-sheep-dye-set
-b1.7.3:entity/091	damage-death	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m444-remaining-mob-drops-rest
-b1.7.3:entity/091	drop-matrix	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m444-remaining-mob-drops-rest
+b1.7.3:entity/091	spawn-materialization	sheep-lifecycle	worldline.testkit.SheepLifecycleFixture#execute	m406-sheep-dye-set
+b1.7.3:entity/091	save-reload	sheep-lifecycle	worldline.testkit.SheepLifecycleFixture#execute	m506-sw-sheep-sheared-persistence
+b1.7.3:entity/091	damage-death	sheep-lifecycle	worldline.testkit.SheepLifecycleFixture#execute	m444-remaining-mob-drops-rest
+b1.7.3:entity/091	drop-matrix	sheep-lifecycle	worldline.testkit.SheepLifecycleFixture#execute	m444-remaining-mob-drops-rest
+b1.7.3:entity/091	interaction-state	sheep-lifecycle	worldline.testkit.SheepLifecycleFixture#execute	m406-sheep-dye-set
 b1.7.3:entity/094	spawn-materialization	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m408-squid-ink-set
 b1.7.3:entity/094	damage-death	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m408-squid-ink-set
 b1.7.3:entity/094	drop-matrix	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m408-squid-ink-set

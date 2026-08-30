@@ -37,6 +37,7 @@ public final class TestKitContractTest {
         PaintingLifecycleFixtureTest.execute();
         EntityDynamicsFixtureTest.execute();
         SlimeLifecycleFixtureTest.execute();
+        SheepLifecycleFixtureTest.execute();
         BlockLifecycleDropMatrixTest.execute();
         BlockLifecycleFixtureTest.execute();
         BlockLifecycleClaimFixtureTest.execute();

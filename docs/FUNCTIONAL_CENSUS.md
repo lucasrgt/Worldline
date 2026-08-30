@@ -234,7 +234,7 @@ The dimensions are registry presence, spawn materialization, save/reload, moveme
 collision shape, damage/death, drop matrix, interaction state, environment response, tick
 lifecycle, and native rendering. Profiles route these through universal, archetype, and singular
 cases. Fifty-three cells are bound to existing qualified official-runtime evidence for projectiles,
-paintings, TNT, falling sand, vehicles, hostile and passive mobs. Thirty-eight of those proofs now
+paintings, TNT, falling sand, vehicles, hostile and passive mobs. Forty of those proofs now
 have a strict public binding ledger. Pig materialization, movement, death and pork drop use the
 universal plus archetype routes, while creeper materialization, death and gunpowder drop exercise
 universal plus singular routes. Skeleton, spider, pig-zombie, sheep, and squid each execute bounded
@@ -246,7 +246,9 @@ facings, causal support removal, same-identity Packet29 destruction, and the exa
 one mini-subsystem. The singular slime lifecycle composes bounded Packet24 parent split and
 size-one Packet21 slimeball-drop attempts. A shared controlled-dynamics fixture executes all eight
 qualified open, roof, wall, and rail scenes for minecart, boat, slime, and ghast without
-duplicating their motion laws inside individual lifecycle fixtures. The other 15 remain
+duplicating their motion laws inside individual lifecycle fixtures. The complete sheep lifecycle
+then composes bounded death/drop, paired dye/shear, and three-restart sheared-state persistence
+while retaining exact wool metadata and the untouched white control. The other 13 remain
 `SMOKE_ONLY`; the
 remaining 211 cells are explicit `UNKNOWN` Atlas claims.
 
@@ -324,8 +326,8 @@ reconciliation, the block public TestKit surface now covers 1,056/1,056 claims
 (100%), completing that family's automation-surface target. The final six tick-policy claims bind sand and
 gravel scheduling, natural wheat, cactus, and sugar-cane growth, and furnace tile ticks to official
 public fixtures. Across both current families the honest aggregate is 1,109/1,320 verified
-(84.02%) and 1,094/1,320 public TestKit claims (82.88%). The entity family contributes 38 public
-claims, 15 smoke-only claims, and all 211 unknown cells.
+(84.02%) and 1,096/1,320 public TestKit claims (83.03%). The entity family contributes 40 public
+claims, 13 smoke-only claims, and all 211 unknown cells.
 
 ## Three conformance layers
 

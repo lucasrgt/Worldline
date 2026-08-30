@@ -314,6 +314,27 @@ attempt bounds. It normalizes exact spans, attempt numbers, positions, entity ID
 This promotes spawn, split, and drop as one complete lifecycle mini-subsystem while delegating the
 motion law to the shared dynamics matrix.
 
+Sheep use one complete fixture for all five qualified claims. A general lethal scenario supplies
+bounded Packet24 materialization, causal Packet38/Packet29 death, and the white-wool death drop.
+Two additional driver-owned scenes execute the paired dye/shear interaction and the complete
+three-restart sheared-state sequence:
+
+```java
+SheepLifecycleScenario sheep = new SheepLifecycleScenario() {
+    public EntityLifecycleScenario lethal() { return lethalDriver; }
+    public SheepDyeShearObservation observeDyeAndShear() { return dyeDriver.observe(); }
+    public SheepPersistenceObservation observePersistence() { return saveDriver.observe(); }
+};
+SheepLifecycleEvidence evidence = SheepLifecycleFixture.execute(plan, 8, sheep);
+```
+
+The interaction scene requires two distinct living type-91 sheep, dye inputs `351:1` and
+`351:11`, and first Packet21 wool drops `35:14` and `35:4`. The persistence scene retains the
+red metadata transition `14 -> 30`, persisted `30`, untouched white `0`, no repeated wool from an
+already sheared sheep, the exact `Sheared=true -> false` NBT mutation, one changed sheep, and a
+new `35:14` drop after metadata returns `14 -> 30`. Runtime identities and coordinates are
+normalized; every semantic boundary fails closed.
+
 ### Block lifecycle matrices
 
 `worldline.testkit.BlockConformancePlan` and `BlockLifecyclePlan` are part of
