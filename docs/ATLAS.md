@@ -112,6 +112,10 @@ worldline atlas export
 worldline atlas changed --since <Mn>
 ```
 
+From a verified repository checkout, the canonical source launcher for these
+commands is `java tools/replay/Replay.java atlas ...`. Knowledge queries do not
+launch Minecraft; only the legacy seed renderer requires the verified runtime.
+
 `atlas graph` is a derived neighborhood over catalog READS/WRITES/DEPENDS_ON,
 record refs, and hypothesis controls. `atlas export` is the stable
 `WORLDLINE-ATLAS-STORE/1` document for Workbench consumers. `atlas changed`
