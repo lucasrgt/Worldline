@@ -42,9 +42,10 @@ The causal-performance wave began at `AERO-M111`:
   tower replay is specified in
   [AERO_M111_HISTORICAL_TOWER_REPLAY.md](AERO_M111_HISTORICAL_TOWER_REPLAY.md)
   and qualified by Worldline.
-- `AERO-M112` (`M769`) is the current unified frame, JFR, GC, safepoint,
-  allocation, and I/O timeline qualification.
-- `AERO-M113`: GPU, driver, `Display.update`, and present attribution.
+- `AERO-M112` (`M769`) is complete: it qualified the unified frame, JFR, GC,
+  safepoint, allocation, and I/O timeline.
+- `AERO-M113` (`M770`) is the current GPU, driver, `Display.update`, and
+  present-attribution qualification.
 - `AERO-M114`: counterbalanced paired statistics and hitch-rate gate.
 - `AERO-M115`: incremental non-forced autosave candidate and drain invariant.
 - `AERO-M116`: visible, age, and debt-aware chunk-work scheduling candidate.
@@ -53,5 +54,5 @@ The causal-performance wave began at `AERO-M111`:
 - `AERO-M119`: GL state, geometry, display-list, and LOD A/B matrix.
 - `AERO-M120`: long-soak, reload, world-transition, leak, and promotion gate.
 
-Entries after `AERO-M112` remain planned milestones, not completed evidence or
+Entries after `AERO-M113` remain planned milestones, not completed evidence or
 performance claims.

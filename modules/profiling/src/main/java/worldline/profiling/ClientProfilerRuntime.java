@@ -20,7 +20,8 @@ public final class ClientProfilerRuntime {
     private static int frames, capacity;
     private static long sequence, frameStarted, startedEpoch;
     private static long pendingTick, pendingTickMax, pendingTickCalls, pendingDisplay;
-    private static ProfilerRegistry.Handle tick, tickMax, tickCalls, display, camera;
+    private static long pendingGpuWait;
+    private static ProfilerRegistry.Handle tick, tickMax, tickCalls, display, camera, gpuWait;
     private static String driverId, loaderId;
 
     private ClientProfilerRuntime() {}
@@ -54,7 +55,8 @@ public final class ClientProfilerRuntime {
         session.beginFrame(sequence++, frameStarted); open = true;
         session.set(tick, pendingTick); session.set(tickMax, pendingTickMax);
         session.set(tickCalls, pendingTickCalls); session.set(display, pendingDisplay);
-        pendingTick = pendingTickMax = pendingTickCalls = pendingDisplay = 0L;
+        session.set(gpuWait, pendingGpuWait);
+        pendingTick = pendingTickMax = pendingTickCalls = pendingDisplay = pendingGpuWait = 0L;
     }
 
     public static void endFrame() {
@@ -75,6 +77,11 @@ public final class ClientProfilerRuntime {
     public static void display(long elapsed) {
         if (ENABLED && armed && !sealed && elapsed >= 0L)
             pendingDisplay = Math.addExact(pendingDisplay, elapsed);
+    }
+    /** Records a driver/GPU synchronization wait observed between complete frames. */
+    public static void gpuWait(long elapsed) {
+        if (ENABLED && armed && !sealed && elapsed >= 0L)
+            pendingGpuWait = Math.addExact(pendingGpuWait, elapsed);
     }
     public static void elapsed(String name, long start) {
         if (open && start != 0L) session.addElapsed(registry.require(name), start, System.nanoTime());
@@ -113,7 +120,8 @@ public final class ClientProfilerRuntime {
                 WorldlineProfilerMetrics.CLIENT_TICK_MAX, WorldlineProfilerMetrics.CLIENT_TICK_CALLS,
                 WorldlineProfilerMetrics.RENDER_CAMERA, WorldlineProfilerMetrics.RENDER_WORLD,
                 WorldlineProfilerMetrics.DISPLAY_PRESENT, WorldlineProfilerMetrics.CHUNK_COMPILE,
-                WorldlineProfilerMetrics.CHUNK_REBUILD, "chunk.rebuild.calls", "chunk.backlog.count");
+                WorldlineProfilerMetrics.CHUNK_REBUILD, WorldlineProfilerMetrics.GPU_WAIT,
+                "chunk.rebuild.calls", "chunk.backlog.count");
         JvmProfilerSampler.registerCapabilities(builder);
         for (ClientProfiler.Metric extension : EXTENSIONS) builder.extension(extension.definition);
         registry = builder.build();
@@ -124,6 +132,7 @@ public final class ClientProfilerRuntime {
         tickCalls = registry.require(WorldlineProfilerMetrics.CLIENT_TICK_CALLS);
         display = registry.require(WorldlineProfilerMetrics.DISPLAY_PRESENT);
         camera = registry.require(WorldlineProfilerMetrics.RENDER_CAMERA);
+        gpuWait = registry.require(WorldlineProfilerMetrics.GPU_WAIT);
         capacity = Math.max(1, Math.min(5_000_000,
                 Integer.getInteger("worldline.profiler.capacity", 36_000)));
         session = new ProfilerSession(registry, capacity, new JvmProfilerSampler(registry));
