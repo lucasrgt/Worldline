@@ -31,6 +31,7 @@ final class MobAiAtlasDocumentationSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "mob-AI Atlas documentation successor allowlist drifted");
+        MobAiBehaviorManifestSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
