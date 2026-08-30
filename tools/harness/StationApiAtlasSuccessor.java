@@ -55,6 +55,7 @@ final class StationApiAtlasSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "StationAPI Atlas successor allowlist drifted");
+        StationApiDocumentationSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
