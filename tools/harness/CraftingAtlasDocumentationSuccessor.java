@@ -31,6 +31,7 @@ final class CraftingAtlasDocumentationSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "crafting Atlas documentation successor allowlist drifted");
+        TileEntityAtlasTrainSourceSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
