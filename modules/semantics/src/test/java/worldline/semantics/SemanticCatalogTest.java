@@ -88,9 +88,11 @@ public final class SemanticCatalogTest {
                 "block tick fixture");
         require("execute".equals(first.role("REDSTONE_PISTON_TESTKIT").name()),
                 "redstone TestKit fixture");
+        require("craftPersonal2x2".equals(first.role("CRAFTING_PERSONAL_GRID_TESTKIT").name()),
+                "crafting personal TestKit contract");
         require(first.sha256().equals(second.sha256())
                 && first.sha256().equals(
-                "d07ee9d73b0a6b7e15f788b4393159129680b8a62dbc20d2e1090875dc5237de"),
+                "3081bb64133856404036d1774dedaf0857521f6f1a4b4262f152436e98472bb7"),
                 "catalog hash drifted to " + first.sha256());
         require(first.canonical().equals(second.canonical()), "catalog canonical drifted");
         require(first.render().contains("complete=true"), "render completeness");

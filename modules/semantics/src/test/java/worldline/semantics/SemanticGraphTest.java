@@ -14,6 +14,7 @@ public final class SemanticGraphTest {
         require(!first.readers("BLOCK_TICK").isEmpty(), "block tick readers");
         require(!first.readers("REDSTONE").isEmpty(), "redstone readers");
         require(!first.writers("REDSTONE").isEmpty(), "redstone writers");
+        require(!first.readers("RECIPE").isEmpty(), "recipe TestKit readers");
         require(!first.readers("CLOCK").isEmpty(), "clock readers");
         require(!first.writers("WORLD").isEmpty(), "world writers");
         require(first.render().contains("complete=true"), "graph completeness");

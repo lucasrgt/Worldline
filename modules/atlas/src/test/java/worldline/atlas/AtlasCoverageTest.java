@@ -30,6 +30,14 @@ public final class AtlasCoverageTest {
                 "block tick boundary classification");
         require("1".equals(store.get("atlas.coverage-unit.inventory.ORACLE").control()),
                 "inventory oracle filled");
+        require("1".equals(store.get("atlas.coverage-unit.crafting.CONTROL").control()),
+                "crafting TestKit boundary controlled");
+        require("1".equals(store.get("atlas.coverage-unit.crafting.DETERMINISM").control()),
+                "crafting public evidence deterministic");
+        AtlasRecord crafting = store.get("atlas.boundary.RECIPE");
+        require("CONTROLLED".equals(crafting.control())
+                && crafting.refs().contains("atlas.subsystem.crafting"),
+                "crafting boundary classification");
         require("1".equals(store.get("atlas.coverage-unit.aero.TESTABILITY").control()),
                 "aero testability filled");
         require("1".equals(store.get("atlas.coverage-unit.redstone.SEMANTIC").control()),
