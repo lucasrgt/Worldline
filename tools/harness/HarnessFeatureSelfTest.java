@@ -18,6 +18,7 @@ final class HarnessFeatureSelfTest {
         RepositoryVerify.qualificationBoundarySelfTest();
         TrainSourceHistory.selfTest();
         TrainPinMigration.selfTest();
+        TrainGeneratedDocumentationMigration.selfTest();
         CandidateReadiness.selfTest();
         CandidateSourceClosure.selfTest();
         NeighborTestKitPinCheck.selfTest();

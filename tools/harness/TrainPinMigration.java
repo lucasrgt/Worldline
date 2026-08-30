@@ -33,6 +33,7 @@ final class TrainPinMigration extends TrainPinSupport {
         require(capture(root, "status", "--porcelain", "--untracked-files=all").isBlank()
                 && status(root, "merge-base", "--is-ancestor", BASE, "HEAD") == 0,
                 "train pin migration requires a clean committed source tree and valid base");
+        if (TrainGeneratedDocumentationMigration.apply(root, BASE)) return;
         Properties lock = new Properties(); lock.setProperty("schema", "1");
         Properties predecessor = predecessor(root, "HEAD"); lock.setProperty("base", BASE);
         TrainSourceHistory.load(root).writeSources(root, lock, predecessor, predecessor, BASE);

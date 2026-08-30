@@ -88,6 +88,10 @@ final class SchemaPinCheck {
     static boolean transportsFile(Path root, String relative, String prior) {
         return LifecycleClaimTestKitPinCheck.transportsFile(root, relative, prior);
     }
+    static boolean trainSourceSuccessor(Path root, String relative,
+            String prior, String current) throws Exception {
+        return TrainGeneratedDocumentationMigration.carriesSource(relative, prior, current);
+    }
     static int introductionsAfter(Properties successor, Properties predecessor) {
         return (int) successor.stringPropertyNames().stream()
                 .filter(key -> key.startsWith("smoke.") && key.endsWith(".introduced"))
