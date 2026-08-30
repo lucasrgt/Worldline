@@ -83,6 +83,9 @@ public final class WorldlineWorldBehaviors {
     public static final WorldlineBehavior FLUID_FROZEN_MATTER_SUBSYSTEM = define(
             "fluid-frozen-matter-subsystem",
             "Water, lava, sponge, snow, and ice lifecycle and phase boundaries");
+    public static final WorldlineBehavior OPENABLE_ACCESS_STRUCTURES_SUBSYSTEM = define(
+            "openable-access-structures-subsystem",
+            "Chest, wooden door, and trapdoor physical, timing, and structural boundaries");
     public static final WorldlineBehavior DUNGEON_GENERATION = define("dungeon-generation",
             "Fixed-seed populated chunks contain replay-stable spawners and nonempty loot chests");
     public static final WorldlineBehavior CHUNK_UNLOAD_RELOAD = define("chunk-unload-reload",
