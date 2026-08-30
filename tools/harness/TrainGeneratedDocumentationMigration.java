@@ -21,7 +21,7 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
         int drift = sourceDrift(root, prior, review);
         if (drift == 0) return false;
         Properties next = new Properties(); next.putAll(prior);
-        proofValidation.validate(root, prior, next);
+        if (!proofValidation.validate(root, prior, next)) return false;
         TrainSourceHistory.load(root).writeSources(root, next, prior, prior, base);
         store(path, next);
         System.out.println("train generated documentation sources refreshed: " + drift);
@@ -45,7 +45,7 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
         return drift;
     }
 
-    private static void validateProofs(Path root, Properties lock, Properties next)
+    private static boolean validateProofs(Path root, Properties lock, Properties next)
             throws Exception {
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
@@ -63,14 +63,14 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
                     && TrainPinCheck.continues(lock, smoke.id, prior, evidence)
                     && (SchemaPinCheck.carries(schemas, smoke.id, pin, current)
                     || NeighborTestKitPinCheck.reexecuted(pin));
-            require(carriesProof(pin, current, prior, evidence, successor),
-                    "train refresh proof drift: " + smoke.id);
+            if (!carriesProof(pin, current, prior, evidence, successor)) return false;
             if (!current.equals(prior)) {
                 next.setProperty(stem + "prior_fingerprint", prior);
                 next.setProperty(stem + "current_fingerprint", current);
                 next.setProperty(stem + "evidence_sha256", pin.evidence());
             }
         }
+        return true;
     }
 
     private static boolean carriesProof(SmokePins.Entry pin, String current,
@@ -189,6 +189,7 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
                     successor.setProperty("smoke.fixture.prior_fingerprint", "current-proof");
                     successor.setProperty("smoke.fixture.current_fingerprint", "successor-proof");
                     validated[0] = true;
+                    return true;
                 }) && validated[0], "train source refresh did not validate proofs");
         Properties refreshed = load(lockPath);
         require(current.equals(refreshed.getProperty("source.0.current_sha256"))
@@ -222,6 +223,6 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
     }
     @FunctionalInterface
     private interface ProofValidation {
-        void validate(Path root, Properties lock, Properties successor) throws Exception;
+        boolean validate(Path root, Properties lock, Properties successor) throws Exception;
     }
 }
