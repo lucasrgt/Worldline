@@ -81,7 +81,9 @@ public final class WorldlineHistoricalState {
             world.saveWithLoadingDisplay(true, null);
             System.out.println("[WorldlineM768] template-ready machines=" + expected
                     + " baseY=" + baseY + " backlog=" + backlog);
-            stage = 4; game.scheduleStop(); return;
+            stage = 4;
+            game.scheduleStop();
+            return;
         }
         WorldlineHistoricalCensus.arm(ARM);
         stage = 2;
@@ -90,17 +92,23 @@ public final class WorldlineHistoricalState {
     }
 
     private static void retain(Minecraft game) {
-        if (!WorldlineHistoricalCensus.active()) { place(game.player, 0); return; }
+        if (!WorldlineHistoricalCensus.active()) {
+            place(game.player, 0);
+            return;
+        }
         place(game.player, retained);
         retained++;
         if (retained < TICKS) return;
         WorldlineHistoricalCensus.seal();
         System.out.println("[WorldlineM768] retained-complete arm=" + ARM + " ticks=" + retained);
-        stage = 4; game.scheduleStop();
+        stage = 4;
+        game.scheduleStop();
     }
 
     private static void place(ClientPlayerEntity player, int tick) {
-        double y = baseY + 2.0D; float yaw = 45.0F, pitch = 4.0F;
+        double y = baseY + 2.0D;
+        float yaw = 45.0F;
+        float pitch = 4.0F;
         if (tick >= 2400 && tick < 4800) {
             int route = tick - 2400;
             yaw = 45.0F + route * 9.0F;
@@ -159,9 +167,13 @@ public final class WorldlineHistoricalState {
     }
 
     private static void prepareDisplay(Minecraft game) {
-        game.currentScreen = null; game.paused = false; game.skipGameRender = false;
+        game.currentScreen = null;
+        game.paused = false;
+        game.skipGameRender = false;
         if (game.options != null) {
-            game.options.hideHud = true; game.options.bobView = false; game.options.viewDistance = 3;
+            game.options.hideHud = true;
+            game.options.bobView = false;
+            game.options.viewDistance = 3;
         }
     }
 

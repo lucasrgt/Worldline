@@ -41,10 +41,13 @@ final class WorldlineHistoricalArtifact {
 
     private static void writeBody(DataOutputStream body, String[] metrics, long[] rows,
             int count, int width) throws Exception {
-        body.writeInt(0x574c4643); body.writeInt(1); body.writeInt(metrics.length);
+        body.writeInt(0x574c4643);
+        body.writeInt(1);
+        body.writeInt(metrics.length);
         for (String metric : metrics) {
             byte[] name = metric.getBytes(StandardCharsets.US_ASCII);
-            body.writeByte(name.length); body.write(name);
+            body.writeByte(name.length);
+            body.write(name);
         }
         body.writeInt(count);
         long priorTime = -1L;
@@ -54,7 +57,8 @@ final class WorldlineHistoricalArtifact {
                     "invalid M768 frame identity");
             for (int column = 0; column < width; column++) {
                 long value = rows[base + column];
-                require(value >= 0L, "negative M768 metric"); body.writeLong(value);
+                require(value >= 0L, "negative M768 metric");
+                body.writeLong(value);
             }
             priorTime = rows[base + 1];
         }
@@ -72,7 +76,8 @@ final class WorldlineHistoricalArtifact {
     private static String sha256(Path path) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         try (InputStream input = new BufferedInputStream(Files.newInputStream(path))) {
-            byte[] buffer = new byte[8192]; int length;
+            byte[] buffer = new byte[8192];
+            int length;
             while ((length = input.read(buffer)) >= 0) digest.update(buffer, 0, length);
         }
         return HexFormat.of().formatHex(digest.digest());

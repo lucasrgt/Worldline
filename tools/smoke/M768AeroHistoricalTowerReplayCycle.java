@@ -40,7 +40,8 @@ public final class M768AeroHistoricalTowerReplayCycle {
         try { new M768AeroHistoricalTowerReplayCycle().execute(); }
         catch (Exception error) {
             System.err.println("M768 historical replay failed: " + error.getMessage());
-            error.printStackTrace(System.err); System.exit(1);
+            error.printStackTrace(System.err);
+            System.exit(1);
         }
     }
 
@@ -79,7 +80,8 @@ public final class M768AeroHistoricalTowerReplayCycle {
                         Long.parseLong(SmokeSupport.value(config, "minimum.millis")) * 1_000_000L);
                 if (arm.equals("solid-no-aero")) absent = parsed;
                 if (arm.equals("solid-aero-save")) present = parsed;
-                artifacts.add(parsed); summaries.add("set-" + (set + 1) + "/" + parsed.summary(arm));
+                artifacts.add(parsed);
+                summaries.add("set-" + (set + 1) + "/" + parsed.summary(arm));
                 Files.writeString(workspace.resolve("client-output.txt"), output, StandardCharsets.UTF_8);
                 System.out.println("[M768] " + summaries.get(summaries.size() - 1));
                 M768AeroWorkspace.verifyCheckout(checkout, config);
@@ -88,7 +90,8 @@ public final class M768AeroHistoricalTowerReplayCycle {
             String pair = "pair " + (set + 1) + ": absent:solid-no-aero intervalNs="
                     + absent.intervalSummary() + " | present:solid-aero-save intervalNs="
                     + present.intervalSummary();
-            summaries.add(pair); System.out.println(pair);
+            summaries.add(pair);
+            System.out.println(pair);
         }
         SmokeSupport.require(artifacts.size() == 8, "M768 arm count drift");
         String trace = "v1|scene=mega-solid-16x4x3x3-576|sets=2|order=forward+reverse|fresh-process=true"
@@ -179,7 +182,8 @@ final class M768AeroWorkspace {
 
     static String git(Path checkout, String... arguments) throws Exception {
         ArrayList<String> command = new ArrayList<>();
-        command.add("git"); command.addAll(List.of(arguments));
+        command.add("git");
+        command.addAll(List.of(arguments));
         return SmokeSupport.capture(checkout, command, 60);
     }
 
@@ -212,16 +216,26 @@ final class M768FrameArtifact {
         "aero.visibility.visiblechunks", "aero.visibility.recentchunks"
     };
 
-    final Path path; final int count; final long elapsed, worstFrame;
-    final int worstIndex; final String worstClass, sha256;
+    final Path path;
+    final int count;
+    final long elapsed;
+    final long worstFrame;
+    final int worstIndex;
+    final String worstClass;
+    final String sha256;
     private final long[][] rows;
     private final Map<String, Integer> index = new LinkedHashMap<>();
 
     private M768FrameArtifact(Path path, int count, long elapsed, long worstFrame,
             int worstIndex, String worstClass, String sha256, long[][] rows) {
-        this.path = path; this.count = count; this.elapsed = elapsed;
-        this.worstFrame = worstFrame; this.worstIndex = worstIndex;
-        this.worstClass = worstClass; this.sha256 = sha256; this.rows = rows;
+        this.path = path;
+        this.count = count;
+        this.elapsed = elapsed;
+        this.worstFrame = worstFrame;
+        this.worstIndex = worstIndex;
+        this.worstClass = worstClass;
+        this.sha256 = sha256;
+        this.rows = rows;
         for (int i = 0; i < SCHEMA.length; i++) index.put(SCHEMA[i], i);
     }
 
@@ -232,21 +246,24 @@ final class M768FrameArtifact {
         byte[] sealed = Arrays.copyOfRange(bytes, bytes.length - 32, bytes.length);
         SmokeSupport.require(Arrays.equals(MessageDigest.getInstance("SHA-256").digest(body), sealed),
                 "M768 artifact digest mismatch: " + path);
-        long[][] rows; int count;
+        long[][] rows;
+        int count;
         try (DataInputStream in = new DataInputStream(new ByteArrayInputStream(body))) {
             SmokeSupport.require(in.readInt() == 0x574c4643 && in.readInt() == 1,
                     "M768 artifact header drift");
             int width = in.readInt();
             SmokeSupport.require(width == SCHEMA.length, "M768 metric width drift: " + width);
             for (String expected : SCHEMA) {
-                int length = in.readUnsignedByte(); byte[] name = in.readNBytes(length);
+                int length = in.readUnsignedByte();
+                byte[] name = in.readNBytes(length);
                 SmokeSupport.require(new String(name, StandardCharsets.US_ASCII).equals(expected),
                         "M768 metric schema drift");
             }
             count = in.readInt();
             SmokeSupport.require(count > 0 && count <= 2_000_000,
                     "M768 frame count drift: " + count);
-            rows = new long[count][width + 2]; long prior = -1L;
+            rows = new long[count][width + 2];
+            long prior = -1L;
             for (int frame = 0; frame < count; frame++) {
                 for (int column = 0; column < width + 2; column++) {
                     long value = in.readLong();
@@ -275,7 +292,8 @@ final class M768FrameArtifact {
         boolean[] phase = new boolean[4];
         for (int i = 0; i < count; i++) {
             long p = value(i, "phase");
-            SmokeSupport.require(p >= 1 && p <= 3, "M768 route phase drift"); phase[(int) p] = true;
+            SmokeSupport.require(p >= 1 && p <= 3, "M768 route phase drift");
+            phase[(int) p] = true;
         }
         SmokeSupport.require(phase[1] && phase[2] && phase[3], "M768 route phases incomplete");
         SmokeSupport.require(value(0, "chunkcompile.backlog") == 0L,
@@ -302,9 +320,11 @@ final class M768FrameArtifact {
         long threshold = Math.max(1_000_000L, (frame + 3L) / 4L);
         String[] names = {"SAVE", "GC_RUNTIME", "CHUNK_WORK", "AERO_WORK", "DISPLAY_PRESENT"};
         long[] values = {save, gc, chunk, subject, display};
-        String result = "UNKNOWN"; int material = 0;
+        String result = "UNKNOWN";
+        int material = 0;
         for (int i = 0; i < values.length; i++) if (values[i] >= threshold) {
-            result = names[i]; material++;
+            result = names[i];
+            material++;
         }
         return material > 1 ? "MIXED" : result;
     }

@@ -37,14 +37,17 @@ public final class WorldlineHistoricalCensus {
 
     public static void arm(String value) {
         require(!pending && !active && !sealed, "duplicate census arm");
-        arm = value; pending = true;
+        arm = value;
+        pending = true;
     }
 
     public static void beforeFrame(Minecraft game) {
         if (pending) {
             stable = backlog(game) == 0 ? stable + 1 : 0;
             if (stable < DRAIN_FRAMES) return;
-            pending = false; active = true; start = System.nanoTime();
+            pending = false;
+            active = true;
+            start = System.nanoTime();
             gcCount = Aero_FrameSpikeLogger.gcCollectionCount();
             gcTime = Aero_FrameSpikeLogger.gcCollectionTimeMillis();
             resetOwnTimers();
@@ -55,14 +58,16 @@ public final class WorldlineHistoricalCensus {
         long now = System.nanoTime(), currentGcCount = Aero_FrameSpikeLogger.gcCollectionCount();
         long currentGcTime = Aero_FrameSpikeLogger.gcCollectionTimeMillis();
         int base = count * WIDTH, column = 0;
-        ROWS[base + column++] = count; ROWS[base + column++] = now - start;
+        ROWS[base + column++] = count;
+        ROWS[base + column++] = now - start;
         ROWS[base + column++] = WorldlineHistoricalState.phase();
         ROWS[base + column++] = nonnegative(now - Aero_FrameSpikeLogger.frameStartNanos());
         ROWS[base + column++] = nonnegative(Aero_FrameSpikeLogger.clientTickNanos());
         ROWS[base + column++] = nonnegative(Aero_FrameSpikeLogger.worldSaveNanos());
         ROWS[base + column++] = nonnegative(Aero_FrameSpikeLogger.worldSaveSkipped());
         ROWS[base + column++] = dirty(game);
-        ROWS[base + column++] = written; written = 0;
+        ROWS[base + column++] = written;
+        written = 0;
         ROWS[base + column++] = nonnegative(Aero_FrameSpikeLogger.chunkCompileCalls());
         ROWS[base + column++] = nonnegative(Aero_FrameSpikeLogger.chunkCompileMaxNanos());
         ROWS[base + column++] = backlog(game);
@@ -92,12 +97,16 @@ public final class WorldlineHistoricalCensus {
         ROWS[base + column++] = nonnegative(Aero_ChunkVisibility.visibleChunkCount());
         ROWS[base + column++] = nonnegative(Aero_ChunkVisibility.recentChunkCount());
         require(column == WIDTH, "M768 metric width drift");
-        gcCount = currentGcCount; gcTime = currentGcTime; count++; resetOwnTimers();
+        gcCount = currentGcCount;
+        gcTime = currentGcTime;
+        count++;
+        resetOwnTimers();
     }
 
     public static void seal() {
         require(active && !sealed && count > 0, "invalid census seal");
-        active = false; sealed = true;
+        active = false;
+        sealed = true;
         long minimum = Long.getLong("worldline.m768.minimumMillis", 600000L) * 1_000_000L;
         require(ROWS[(count - 1) * WIDTH + 1] >= minimum, "retained census shorter than minimum");
         try {
@@ -115,9 +124,15 @@ public final class WorldlineHistoricalCensus {
     public static void wroteChunk() { if (active) written++; }
     public static boolean active() { return active; }
     public static void enqueueBegin() { enqueueStart = begin(enqueueStart); }
-    public static void enqueueEnd() { enqueue += end(enqueueStart); enqueueStart = 0L; }
+    public static void enqueueEnd() {
+        enqueue += end(enqueueStart);
+        enqueueStart = 0L;
+    }
     public static void flushBegin() { flushStart = begin(flushStart); }
-    public static void flushEnd() { flush += end(flushStart); flushStart = 0L; }
+    public static void flushEnd() {
+        flush += end(flushStart);
+        flushStart = 0L;
+    }
 
     private static int dirty(Minecraft game) {
         if (game.world == null || !(game.world.getChunkSource() instanceof WorldlineChunkStats)) return 0;
@@ -131,12 +146,14 @@ public final class WorldlineHistoricalCensus {
 
     private static long begin(long prior) {
         if (!active) return 0L;
-        require(prior == 0L, "recursive M768 timer"); return System.nanoTime();
+        require(prior == 0L, "recursive M768 timer");
+        return System.nanoTime();
     }
 
     private static long end(long began) {
         if (!active) return 0L;
-        require(began != 0L, "unstarted M768 timer"); return System.nanoTime() - began;
+        require(began != 0L, "unstarted M768 timer");
+        return System.nanoTime() - began;
     }
 
     private static void resetOwnTimers() {
