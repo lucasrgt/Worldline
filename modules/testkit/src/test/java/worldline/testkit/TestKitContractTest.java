@@ -31,6 +31,8 @@ public final class TestKitContractTest {
     }
     public static void main(String[] arguments) throws Exception {
         BlockConformancePlanTest.execute();
+        EntityConformancePlanTest.execute();
+        EntityLifecycleFixtureTest.execute();
         BlockLifecycleDropMatrixTest.execute();
         BlockLifecycleFixtureTest.execute();
         BlockLifecycleClaimFixtureTest.execute();

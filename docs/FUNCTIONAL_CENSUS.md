@@ -233,10 +233,12 @@ their own future denominator instead of being smuggled into its percentage.
 The dimensions are registry presence, spawn materialization, save/reload, movement policy,
 collision shape, damage/death, drop matrix, interaction state, environment response, tick
 lifecycle, and native rendering. Profiles route these through universal, archetype, and singular
-cases. Fifty-three cells are initially bound to existing qualified official-runtime evidence for
-projectiles, paintings, TNT, falling sand, vehicles, hostile and passive mobs. Those proofs remain
-`SMOKE_ONLY`: historical execution is knowledge, but it is not falsely labeled as a reusable
-public TestKit fixture. The remaining 211 cells are explicit `UNKNOWN` Atlas claims.
+cases. Fifty-three cells are bound to existing qualified official-runtime evidence for projectiles,
+paintings, TNT, falling sand, vehicles, hostile and passive mobs. Seven of those proofs now have a
+strict public binding ledger: pig materialization, movement, death and pork drop use the universal
+plus archetype routes, while creeper materialization, death and gunpowder drop exercise universal
+plus singular routes through `EntityLifecycleFixture`. The other 46 remain `SMOKE_ONLY`; the
+remaining 211 cells are explicit `UNKNOWN` Atlas claims.
 
 ## Status and automation
 
@@ -312,20 +314,29 @@ reconciliation, the block public TestKit surface now covers 1,056/1,056 claims
 (100%), completing that family's automation-surface target. The final six tick-policy claims bind sand and
 gravel scheduling, natural wheat, cactus, and sugar-cane growth, and furnace tile ticks to official
 public fixtures. Across both current families the honest aggregate is 1,109/1,320 verified
-(84.02%) and 1,056/1,320 public TestKit claims (80.00%). The entity family accounts for all 53
-smoke-only claims and all 211 unknown cells.
+(84.02%) and 1,063/1,320 public TestKit claims (80.53%). The entity family contributes seven public
+claims, 46 smoke-only claims, and all 211 unknown cells.
 
 ## Three conformance layers
 
-The public `BlockConformancePlan` expands block profiles and templates deterministically. Entity
-profiles use the same checked routing model in the family manifest; their public fixture surface
-remains intentionally open rather than being declared before an executable provider exists:
+The public `BlockConformancePlan` and `EntityConformancePlan` expand profiles and templates
+deterministically through the same routing rules:
 
 1. Universal cases apply the same law across the registry where the template is universal.
 2. Archetype cases reuse behavior by traits such as solid, gravity, fluid, vegetation, rail,
    redstone, directional, transparent, luminous, or stateful metadata.
 3. Singular cases handle mechanics such as piston, bed, portal, furnace, chest, dispenser,
    jukebox, note block, TNT, sponge, fire, spawner, and cake.
+
+`EntityLifecycleFixture` is the first executable entity mini-subsystem. A driver-neutral
+`EntityLifecycleScenario` performs materialization, optional movement, causal kill/death, and
+optional exact drop observation. `MobObservationEntityScenario` connects that fixture to the
+public protocol-14 `MobObservationSession`. Evidence normalizes fresh entity IDs and coordinates
+while retaining wire family, type, death status, hurt observation, and exact expected item stack,
+so equivalent official runs remain comparable. Drop claims require death, all selected operations
+must resolve to declared plan cases, and a missing or mismatched runtime observation fails closed.
+The entity binding ledger links each promoted claim to this fixture and to its original qualified
+official-runtime evidence; the census checker rejects invented or stale public promotion.
 
 `BlockRegistryFixture` owns the universal base layer. It matches a deterministic
 native registry census against the complete versioned plan, rejects missing,
@@ -362,6 +373,8 @@ claim signatures. It models the exact undamaged-shears result for placed white w
 other four selected tools gain one damage.
 
 `behavior/functional-census/families.tsv` is the closed family manifest. Each listed data directory
-owns the same subjects, profiles, templates, claims, and exceptions contract. The Gate rejects a
+owns the same subjects, profiles, templates, claims, and exceptions contract. Families named by
+`public.binding.manifest.families` additionally own a strict `testkit-bindings.tsv`. The Gate rejects a
 missing registry subject, unprofiled object, duplicate claim, unsupported status, unqualified
-verified signature, unsupported exception, family-path escape, or denominator drift.
+verified signature, unsupported exception, unbound public claim, stale binding evidence,
+family-path escape, or denominator drift.

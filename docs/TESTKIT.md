@@ -205,6 +205,28 @@ each(Arrays.asList("a", "b", "c"))
 `%#` is the zero-based row and `%s` is the value. Values are copied during
 collection so the plan does not retain a mutable source iterable.
 
+### Persistent entity lifecycle matrices
+
+`EntityConformancePlan` expands persistent entity profiles over reusable dimensions and routes
+each case through `UNIVERSAL`, `ARCHETYPE`, or `SINGULAR`. `EntityLifecycleFixture` executes a
+selected coherent lifecycle rather than counting each operation as a milestone:
+
+```java
+EntityLifecycleScenario scenario = new MobObservationEntityScenario(session,
+        (current, entityId) -> current.attackMob(entityId));
+EntityLifecycleEvidence evidence = EntityLifecycleFixture.execute(
+        plan, "b1.7.3:entity/090", 90, new RemoteItemStack(319, 1, 0),
+        new LinkedHashSet<String>(Arrays.asList("spawn-materialization",
+                "movement-policy", "damage-death", "drop-matrix")), scenario);
+```
+
+The caller prepares causal runtime preconditions such as position, selected weapon, and spawned
+fixture. The TestKit then requires a positive Packet24 identity of the expected type, an
+entity-consistent movement transition when selected, Packet38 death status 3 plus Packet29
+removal, and an exact distinct Packet21 drop when selected. Drop cannot be claimed without death.
+Canonical evidence deliberately normalizes fresh entity IDs and poses, which makes equivalent
+runs equatable without weakening the asserted semantics.
+
 ### Block lifecycle matrices
 
 `worldline.testkit.BlockConformancePlan` and `BlockLifecyclePlan` are part of

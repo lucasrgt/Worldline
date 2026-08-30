@@ -70,8 +70,11 @@ public final class AtlasStoreTest {
         AtlasRecord pigSpawn = first.get("atlas.claim.entity-090.spawn-materialization");
         require(AtlasStatus.VERIFIED.equals(pigSpawn.status())
                 && pigSpawn.refs().contains("atlas.subsystem.entities")
-                && pigSpawn.control().contains("automation=SMOKE_ONLY"),
-                "entity census proof was not imported honestly");
+                && pigSpawn.control().contains("automation=PUBLIC_TESTKIT"),
+                "public entity lifecycle proof was not imported honestly");
+        require(first.get("atlas.claim.entity-050.damage-death").control()
+                .contains("layer=SINGULAR;applicability=APPLICABLE;automation=PUBLIC_TESTKIT"),
+                "singular entity lifecycle route was not indexed");
         require(AtlasStatus.UNKNOWN.equals(first.get("atlas.claim.entity-092.drop-matrix").status()),
                 "implicit entity census gap was not materialized");
         require(!AtlasIndex.search(first, "chunk", 20).isEmpty(), "semantic chunk index");
@@ -93,9 +96,9 @@ public final class AtlasStoreTest {
                 && taxonomy.contains("subsystem=tile-entities"), "taxonomy index");
         String tags = AtlasQuery.tags(first);
         require(tags.contains("tag=category-claim")
-                && tags.contains("tag=surface-public-testkit\trecords=1056")
+                && tags.contains("tag=surface-public-testkit\trecords=1063")
                 && !tags.contains("tag=surface-internal-api")
-                && tags.contains("tag=surface-smoke-only\trecords=53"), "tag index");
+                && tags.contains("tag=surface-smoke-only\trecords=46"), "tag index");
         try {
             String documentation = new String(Files.readAllBytes(Paths.get("docs", "ATLAS.md")),
                     StandardCharsets.UTF_8);

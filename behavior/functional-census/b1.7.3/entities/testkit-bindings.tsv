@@ -1,0 +1,8 @@
+subject_id	template_id	fixture	binding	evidence_id
+b1.7.3:entity/050	spawn-materialization	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m421-creeper-gunpowder-set
+b1.7.3:entity/050	damage-death	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m421-creeper-gunpowder-set
+b1.7.3:entity/050	drop-matrix	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m421-creeper-gunpowder-set
+b1.7.3:entity/090	spawn-materialization	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m141-pig-spawner-observation
+b1.7.3:entity/090	movement-policy	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m148-pig-ai-movement
+b1.7.3:entity/090	damage-death	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m149-pig-death
+b1.7.3:entity/090	drop-matrix	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m150-pig-pork-drop

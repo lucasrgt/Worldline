@@ -45,6 +45,8 @@ public final class FunctionalCensusCheck {
         Properties schema = properties(base.resolve("schema.properties"));
         require("2".equals(required(schema, "schema")), "unsupported functional census schema");
         String version = required(schema, "version");
+        Set<String> bindingFamilies = tokens(required(schema,
+                "public.binding.manifest.families"));
         Table families = Table.read(base.resolve("families.tsv"), "family_id", "data_path",
                 "subject_kind", "subjects_expected", "templates_expected",
                 "candidate_claims_expected", "verified_claims_minimum");
@@ -58,18 +60,21 @@ public final class FunctionalCensusCheck {
             require(KINDS.contains(kind), "unsupported subject kind: " + kind);
             Path data = base.resolve(family.get("data_path")).normalize();
             require(data.startsWith(base), "family data escapes census root: " + id);
-            FamilyResult result = validateFamily(data, family, version, kind);
+            FamilyResult result = validateFamily(data, family, version, kind,
+                    bindingFamilies.contains(id));
             total = total.plus(result.result);
             candidates = Math.addExact(candidates, result.candidates);
             print(id, result.subjects, result.templates, result.candidates, result.singular,
                     result.result, schema);
         }
+        require(ids.containsAll(bindingFamilies), "binding manifest names an unknown family");
         System.out.println("  functional census aggregate: " + ids.size() + " families, "
                 + candidates + " candidate claims");
         printCoverage("aggregate", candidates, total, schema);
     }
 
-    private FamilyResult validateFamily(Path data, Row family, String version, String kind)
+    private FamilyResult validateFamily(Path data, Row family, String version, String kind,
+            boolean bindingsRequired)
             throws Exception {
         Table subjects = Table.read(data.resolve("subjects.tsv"),
                 "subject_id", "legacy_id", "name", "registry_class");
@@ -85,7 +90,11 @@ public final class FunctionalCensusCheck {
         Map<String, Row> subjectById = subjects(subjects, version, kind);
         Map<String, Row> templateById = templates(templates);
         Set<String> singular = profiles(profiles, subjectById);
-        Result result = claims(claims, exceptions, subjectById, templateById, singular);
+        Map<String, Row> bindings = bindingsRequired
+                ? bindings(data.resolve("testkit-bindings.tsv"), subjectById, templateById)
+                : Map.of();
+        Result result = claims(claims, exceptions, subjectById, templateById, singular,
+                bindings, bindingsRequired);
         int candidates = Math.multiplyExact(subjects.rows.size(), templates.rows.size());
         require(subjects.rows.size() == integer(family, "subjects_expected"),
                 family.get("family_id") + " subject census drifted");
@@ -154,8 +163,10 @@ public final class FunctionalCensusCheck {
     }
 
     private Result claims(Table claims, Table exceptions, Map<String, Row> subjects,
-            Map<String, Row> templates, Set<String> singular) throws Exception {
+            Map<String, Row> templates, Set<String> singular, Map<String, Row> bindings,
+            boolean bindingsRequired) throws Exception {
         Set<String> claimed = new HashSet<>();
+        Set<String> publicClaims = new HashSet<>();
         int verified = 0, resolved = 0, publicTestkit = 0;
         for (Row row : claims.rows) {
             token(row.get("claim_id"), "claim id");
@@ -176,7 +187,17 @@ public final class FunctionalCensusCheck {
                 require(claimed.add(subject + "#" + template), "duplicate functional claim");
                 if (row.get("status").equals("VERIFIED")) verified++;
                 if (row.get("status").equals("VERIFIED")
-                        && row.get("automation_surface").equals("PUBLIC_TESTKIT")) publicTestkit++;
+                        && row.get("automation_surface").equals("PUBLIC_TESTKIT")) {
+                    publicTestkit++;
+                    String key = subject + "#" + template;
+                    publicClaims.add(key);
+                    if (bindingsRequired) {
+                        Row binding = bindings.get(key);
+                        require(binding != null, "public entity claim lacks TestKit binding: " + key);
+                        require(binding.get("evidence_id").equals(row.get("evidence_id")),
+                                "TestKit binding evidence differs: " + key);
+                    }
+                }
                 if (Set.of("VERIFIED", "NATIVE_NONDETERMINISTIC", "NOT_APPLICABLE", "RETRACTED")
                         .contains(row.get("status"))) resolved++;
             }
@@ -193,8 +214,35 @@ public final class FunctionalCensusCheck {
             require(claimed.add(key), "claim and exception overlap: " + key);
             resolved++;
         }
+        if (bindingsRequired) require(publicClaims.equals(bindings.keySet()),
+                "entity TestKit binding ledger differs from public claims");
         require(publicTestkit <= verified, "public TestKit claims exceed verified claims");
         return new Result(resolved, verified, publicTestkit);
+    }
+
+    private Map<String, Row> bindings(Path path, Map<String, Row> subjects,
+            Map<String, Row> templates) throws Exception {
+        Table table = Table.read(path, "subject_id", "template_id", "fixture", "binding",
+                "evidence_id");
+        Map<String, Row> result = new LinkedHashMap<>();
+        Pattern bindingPattern = Pattern.compile(
+                "(worldline\\.[A-Za-z][A-Za-z0-9.]+)#[a-z][A-Za-z0-9]*");
+        for (Row row : table.rows) {
+            String subject = row.get("subject_id"), template = row.get("template_id");
+            String key = subject + "#" + template;
+            require(subjects.containsKey(subject) && templates.containsKey(template)
+                    && result.put(key, row) == null, "invalid or duplicate TestKit binding: " + key);
+            require(TOKEN.matcher(row.get("fixture")).matches()
+                    && TOKEN.matcher(row.get("evidence_id")).matches(),
+                    "invalid TestKit binding metadata: " + key);
+            java.util.regex.Matcher matcher = bindingPattern.matcher(row.get("binding"));
+            require(matcher.matches(), "invalid public TestKit binding: " + key);
+            Path source = root.resolve("modules/testapi/src/main/java")
+                    .resolve(matcher.group(1).replace('.', '/') + ".java");
+            require(Files.isRegularFile(source), "public TestKit binding source is absent: " + key);
+        }
+        require(!result.isEmpty(), "required TestKit binding ledger is empty");
+        return Map.copyOf(result);
     }
 
     private void evidence(Row row) throws Exception {
@@ -247,6 +295,14 @@ public final class FunctionalCensusCheck {
     }
     private static void token(String value, String label) {
         require(TOKEN.matcher(value).matches(), "invalid " + label + ": " + value);
+    }
+    private static Set<String> tokens(String value) {
+        Set<String> result = new HashSet<>();
+        for (String item : value.split(",", -1)) {
+            require(TOKEN.matcher(item).matches() && result.add(item),
+                    "invalid family token: " + item);
+        }
+        return Set.copyOf(result);
     }
     private static double percent(int numerator, int denominator) {
         return denominator == 0 ? 0 : numerator * 100.0 / denominator;
