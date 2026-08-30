@@ -604,6 +604,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m769-aero-unified-runtime-timeline` | EXECUTED | Aero unified runtime timeline |
 | `m770-aero-gpu-present-attribution` | EXECUTED | Aero GPU and present attribution |
 | `m771-aero-counterbalanced-hitch-rate` | EXECUTED | Aero counterbalanced hitch-rate gate |
+| `m772-aero-incremental-autosave-drain` | EXECUTED | Aero incremental autosave drain |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
