@@ -30,10 +30,10 @@ public final class CensusCycle {
     recreate();
     Result first = launcher("census", build.resolve("first").toString());
     require(first.code == 0 && first.text.contains("WORLDLINE_CENSUS=PASS"),
-        "first census capture failed");
+        "first census capture failed: " + first.summary());
     Result second = launcher("census", build.resolve("second").toString());
     require(second.code == 0 && second.text.contains("WORLDLINE_CENSUS=PASS"),
-        "second census capture failed");
+        "second census capture failed: " + second.summary());
     int blocks = -1, items = -1, recipes = -1, smelts = -1;
     for (String section : Arrays.asList("blocks", "items", "recipes", "smelts")) {
       Path a = build.resolve("first").resolve(section + ".wlcensus");
@@ -169,6 +169,10 @@ public final class CensusCycle {
     Result(int code, String text) {
       this.code = code;
       this.text = text;
+    }
+    String summary() {
+      String value = text.strip().replace('\n', ' ');
+      return "exit=" + code + (value.isEmpty() ? "" : " output=" + value);
     }
   }
 }

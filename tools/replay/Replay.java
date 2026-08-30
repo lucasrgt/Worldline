@@ -101,8 +101,9 @@ public final class Replay {
         paths.add(classes.resolve("coverage"));
         if (atlas) paths.add(classes.resolve("atlas"));
         if (atlasRender) paths.add(root.resolve(".worldline/build/server-adapter"));
-        if (test) paths.addAll(Arrays.asList(classes.resolve("testmodel"),
-                classes.resolve("testapi"), classes.resolve("testkit"),
+        if (test || census) paths.addAll(Arrays.asList(classes.resolve("testmodel"),
+                classes.resolve("testapi"), classes.resolve("testkit")));
+        if (test) paths.addAll(Arrays.asList(
                 root.resolve(".worldline/build/adapter-classes/b173-server"),
                 root.resolve(".worldline/build/adapter-classes/b173-server-testkit")));
         if (game) paths.addAll(Arrays.asList(classes.resolve("kernel"), client.resolve("adapter-classes"),
