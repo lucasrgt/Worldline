@@ -31,6 +31,7 @@ final class MappingReleaseSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "mapping release successor allowlist drifted");
+        MappingDocumentationSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
