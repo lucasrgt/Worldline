@@ -28,6 +28,7 @@ final class DimensionAtlasTrainSourceSuccessor {
             require(!carries(successor[0], successor[1], "unreviewed"), "dimension Atlas train successor accepted drift " + successor[0]);
         }
         require(!carries("unreviewed", "old", "new"), "dimension Atlas train successor allowlist drifted");
+        DimensionAtlasDocumentationSuccessor.selfTest();
     }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);
