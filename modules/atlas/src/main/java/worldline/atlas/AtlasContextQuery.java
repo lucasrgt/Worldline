@@ -6,7 +6,7 @@ import java.util.List;
 public final class AtlasContextQuery {
     private AtlasContextQuery() {}
 
-    public static String index(List<AtlasHit> hits) {
+    public static String index(AtlasStore store, List<AtlasHit> hits) {
         StringBuilder text = new StringBuilder();
         text.append("matches=").append(hits.size()).append('\n');
         for (AtlasHit hit : hits) {
@@ -14,12 +14,13 @@ public final class AtlasContextQuery {
             text.append("score=").append(hit.score()).append('\t').append(record.id())
                     .append('\t').append(record.status()).append('\t')
                     .append(AtlasCertainty.of(record)).append('\t')
+                    .append(join(AtlasTaxonomy.tags(store, record))).append('\t')
                     .append(record.subject()).append('\n');
         }
         return text.toString();
     }
 
-    public static String text(String query, List<AtlasHit> hits) {
+    public static String text(AtlasStore store, String query, List<AtlasHit> hits) {
         StringBuilder text = new StringBuilder();
         text.append("query=").append(query).append('\n');
         text.append("records=").append(hits.size()).append('\n');
@@ -31,13 +32,17 @@ public final class AtlasContextQuery {
             text.append("certainty=").append(AtlasCertainty.of(record)).append('\n');
             text.append("relation=").append(hit.relation()).append('\n');
             text.append("subject=").append(record.subject()).append('\n');
+            text.append("domains=").append(join(AtlasTaxonomy.domains(store, record))).append('\n');
+            text.append("subsystems=").append(join(AtlasTaxonomy.subsystems(store, record)))
+                    .append('\n');
+            text.append("tags=").append(join(AtlasTaxonomy.tags(store, record))).append('\n');
             for (String evidence : record.evidence()) text.append("evidence=").append(evidence).append('\n');
             for (String ref : record.refs()) text.append("ref=").append(ref).append('\n');
         }
         return text.toString();
     }
 
-    public static String json(String query, List<AtlasHit> hits) {
+    public static String json(AtlasStore store, String query, List<AtlasHit> hits) {
         StringBuilder text = new StringBuilder();
         text.append("{\"schema\":\"WORLDLINE-ATLAS-CONTEXT/1\",\"query\":\"")
                 .append(escape(query)).append("\",\"records\":[");
@@ -51,6 +56,10 @@ public final class AtlasContextQuery {
                     .append("\",\"relation\":\"").append(hit.relation())
                     .append("\",\"score\":").append(hit.score())
                     .append(",\"subject\":\"").append(escape(record.subject())).append("\"")
+                    .append(",\"domains\":").append(array(AtlasTaxonomy.domains(store, record)))
+                    .append(",\"subsystems\":")
+                    .append(array(AtlasTaxonomy.subsystems(store, record)))
+                    .append(",\"tags\":").append(array(AtlasTaxonomy.tags(store, record)))
                     .append(",\"evidence\":").append(array(record.evidence()))
                     .append(",\"refs\":").append(array(record.refs())).append('}');
         }
@@ -64,6 +73,15 @@ public final class AtlasContextQuery {
             text.append('\"').append(escape(values.get(index))).append('\"');
         }
         return text.append(']').toString();
+    }
+
+    private static String join(List<String> values) {
+        StringBuilder text = new StringBuilder();
+        for (int index = 0; index < values.size(); index++) {
+            if (index > 0) text.append(',');
+            text.append(values.get(index));
+        }
+        return text.toString();
     }
 
     private static String escape(String value) {

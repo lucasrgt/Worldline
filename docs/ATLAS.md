@@ -32,7 +32,7 @@ worldline atlas index|context|show|gaps|coverage|evidence
 - Agent-ready. Ranked context preserves the exact status while deriving only
   `VERIFIED`, `INFERRED`, or `UNKNOWN` certainty.
 - Frozen target. Every record is scoped to `b1.7.3`.
-- No false precision. Coverage is a 24-by-7 matrix of declared units with
+- No false precision. Coverage is a 25-by-7 matrix of declared units with
   denominator `1`. There is no single Worldline percentage.
 
 ## Schema
@@ -69,10 +69,24 @@ non-claims keep a `map-nonclaims` evidence token.
 
 ## Coverage
 
-Subsystems: tick-lifecycle, worldgen, chunks, lighting, weather, block-ticks,
-fluids, entities, mob-ai, player, inventory, crafting, redstone, saves,
-dimensions, protocol, dedicated-server, rendering, gui, resources,
-mod-ecosystem, mappings, stationapi, aero.
+The versioned taxonomy groups all 25 subsystems without changing their stable
+identities or historical provenance:
+
+| Domain | Subsystems |
+| --- | --- |
+| `simulation` | `tick-lifecycle`, `weather`, `block-ticks`, `redstone` |
+| `world` | `worldgen`, `chunks`, `lighting`, `fluids`, `saves`, `dimensions` |
+| `actors` | `entities`, `tile-entities`, `mob-ai`, `player` |
+| `gameplay` | `inventory`, `crafting` |
+| `runtime` | `protocol`, `dedicated-server`, `rendering`, `gui`, `resources` |
+| `ecosystem` | `mod-ecosystem`, `mappings`, `stationapi`, `aero` |
+
+Every record receives derived facets for domain, subsystem, record category,
+status, certainty, artifact, and applicable conformance layer. Records with no
+subsystem edge remain honestly grouped under the derived `knowledge` domain.
+The Gate validates the closed subsystem-to-domain mapping and every record's
+facet set, so taxonomy evolves with authoritative Atlas inputs instead of a
+parallel hand-maintained milestone catalog.
 
 Dimensions: TESTABILITY, CONTROL, OBSERVABILITY, ORACLE, SEMANTIC,
 REPRODUCIBILITY, DETERMINISM.
@@ -88,6 +102,8 @@ worldline atlas show <id>
 worldline atlas search <term>
 worldline atlas index <query>
 worldline atlas context <query> [--format=json] [--budget=N] [--depth=N]
+worldline atlas taxonomy
+worldline atlas tags
 worldline atlas gaps
 worldline atlas coverage
 worldline atlas evidence <id>
@@ -101,11 +117,15 @@ record refs, and hypothesis controls. `atlas export` is the stable
 `WORLDLINE-ATLAS-STORE/1` document for Workbench consumers. `atlas changed`
 is CLI-only; it is not a Verify gate and does not fail M89.
 
-`atlas index` ranks exact IDs, subjects, evidence, refs, normalized terms, and
-a small versioned synonym set. `atlas context` adds bounded graph neighbors and
-renders either human-readable text or `WORLDLINE-ATLAS-CONTEXT/1` JSON. Ranking,
-tie-breaking, depth, and budgets are deterministic; no network or embedding
-service is required.
+`atlas index` ranks exact IDs, subjects, evidence, refs, normalized terms,
+derived facets, and a small versioned synonym set. Queries such as `chunk`,
+`domain-world`, `category-claim`, and `layer-universal` are therefore stable
+agent entry points. `atlas context` adds bounded graph neighbors and renders
+domains, subsystems, tags, evidence, and refs as human-readable text or
+`WORLDLINE-ATLAS-CONTEXT/1` JSON. `atlas taxonomy` renders the hierarchy and
+record totals; `atlas tags` renders the complete deterministic facet index.
+Ranking, tie-breaking, depth, and budgets are deterministic; no network or
+embedding service is required.
 
 ## Gate synchronization
 

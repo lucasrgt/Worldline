@@ -38,6 +38,9 @@ final class AtlasCommand {
             return index(arguments[2], output, error);
         if (arguments.length >= 3 && "context".equals(arguments[1]))
             return context(arguments, output, error);
+        if (arguments.length == 2 && "taxonomy".equals(arguments[1]))
+            return taxonomy(output, error);
+        if (arguments.length == 2 && "tags".equals(arguments[1])) return tags(output, error);
         if (arguments.length == 2 && "gaps".equals(arguments[1])) return gaps(output, error);
         if (arguments.length == 2 && "coverage".equals(arguments[1]))
             return coverage(output, error);
@@ -53,6 +56,8 @@ final class AtlasCommand {
         error.println("   or: worldline atlas search <term>");
         error.println("   or: worldline atlas index <query>");
         error.println("   or: worldline atlas context <query> [--format=json] [--budget=N] [--depth=N]");
+        error.println("   or: worldline atlas taxonomy");
+        error.println("   or: worldline atlas tags");
         error.println("   or: worldline atlas gaps");
         error.println("   or: worldline atlas coverage");
         error.println("   or: worldline atlas evidence <id>");
@@ -125,8 +130,9 @@ final class AtlasCommand {
 
     private static int index(String query, PrintStream output, PrintStream error) {
         try {
+            AtlasStore store = load();
             output.print("WORLDLINE_ATLAS_INDEX=PASS\n");
-            output.print(AtlasContextQuery.index(AtlasIndex.search(load(), query, 50)));
+            output.print(AtlasContextQuery.index(store, AtlasIndex.search(store, query, 50)));
             return 0;
         } catch (RuntimeException failure) {
             return fail(error, failure);
@@ -143,10 +149,11 @@ final class AtlasCommand {
                 else if (option.startsWith("--depth=")) depth = number(option, "--depth=");
                 else throw new IllegalArgumentException("unknown atlas context option " + option);
             }
-            List<AtlasHit> hits = AtlasContext.build(load(), arguments[2], budget, depth);
+            AtlasStore store = load();
+            List<AtlasHit> hits = AtlasContext.build(store, arguments[2], budget, depth);
             output.print("WORLDLINE_ATLAS_CONTEXT=PASS\n");
-            output.print(json ? AtlasContextQuery.json(arguments[2], hits)
-                    : AtlasContextQuery.text(arguments[2], hits));
+            output.print(json ? AtlasContextQuery.json(store, arguments[2], hits)
+                    : AtlasContextQuery.text(store, arguments[2], hits));
             return 0;
         } catch (RuntimeException failure) {
             return fail(error, failure);
@@ -157,6 +164,26 @@ final class AtlasCommand {
         try { return Integer.parseInt(option.substring(prefix.length())); }
         catch (NumberFormatException failure) {
             throw new IllegalArgumentException("invalid " + prefix.substring(2, prefix.length() - 1));
+        }
+    }
+
+    private static int taxonomy(PrintStream output, PrintStream error) {
+        try {
+            output.print("WORLDLINE_ATLAS_TAXONOMY=PASS\n");
+            output.print(AtlasQuery.taxonomy(load()));
+            return 0;
+        } catch (RuntimeException failure) {
+            return fail(error, failure);
+        }
+    }
+
+    private static int tags(PrintStream output, PrintStream error) {
+        try {
+            output.print("WORLDLINE_ATLAS_TAGS=PASS\n");
+            output.print(AtlasQuery.tags(load()));
+            return 0;
+        } catch (RuntimeException failure) {
+            return fail(error, failure);
         }
     }
 

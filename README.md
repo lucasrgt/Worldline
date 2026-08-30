@@ -349,6 +349,8 @@ worldline atlas status
 worldline atlas show <id>
 worldline atlas index <query>
 worldline atlas context <query> --format=json
+worldline atlas taxonomy
+worldline atlas tags
 worldline atlas coverage
 worldline atlas <seed> <radius-1..4> <output.html>
 worldline mappings report <runtime and mapping inputs>

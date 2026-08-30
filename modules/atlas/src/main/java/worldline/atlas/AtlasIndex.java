@@ -19,7 +19,7 @@ public final class AtlasIndex {
         Set<String> terms = terms(query);
         List<AtlasHit> hits = new ArrayList<AtlasHit>();
         for (AtlasRecord record : store.records()) {
-            int score = score(record, query, terms);
+            int score = score(store, record, query, terms);
             if (score > 0) hits.add(new AtlasHit(record, score, "MATCH"));
         }
         Collections.sort(hits);
@@ -36,7 +36,8 @@ public final class AtlasIndex {
         return result;
     }
 
-    private static int score(AtlasRecord record, String query, Set<String> terms) {
+    private static int score(AtlasStore store, AtlasRecord record, String query,
+            Set<String> terms) {
         String phrase = query.toLowerCase(Locale.US);
         String id = record.id().toLowerCase(Locale.US);
         String subject = record.subject().toLowerCase(Locale.US);
@@ -44,10 +45,12 @@ public final class AtlasIndex {
         if (id.equals(phrase) || AtlasKind.token(record.id()).equals(phrase)) score += 200;
         if (id.contains(phrase)) score += 90;
         if (subject.contains(phrase)) score += 75;
+        List<String> tags = AtlasTaxonomy.tags(store, record);
         for (String term : terms) {
             if (term.isEmpty()) continue;
             if (id.contains(term)) score += 28;
             if (subject.contains(term)) score += 22;
+            if (contains(tags, term)) score += 18;
             if (contains(record.refs(), term)) score += 10;
             if (contains(record.evidence(), term)) score += 6;
         }

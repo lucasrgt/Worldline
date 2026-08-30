@@ -19,10 +19,13 @@ public final class AtlasSubsystems {
             "dedicated-server",
             "rendering", "gui", "resources", "mod-ecosystem", "mappings", "stationapi",
             "aero" };
+    public static final String[] DOMAINS = { "simulation", "world", "actors", "gameplay",
+            "runtime", "ecosystem" };
     public static final String[] DIMENSIONS = { "TESTABILITY", "CONTROL", "OBSERVABILITY",
             "ORACLE", "SEMANTIC", "REPRODUCIBILITY", "DETERMINISM" };
     private static final Map<String, String> CATEGORY = categories();
     private static final Map<String, String> INVARIANT = invariants();
+    private static final Map<String, String> DOMAIN = domains();
 
     private AtlasSubsystems() {}
 
@@ -47,6 +50,35 @@ public final class AtlasSubsystems {
     public static String forInvariant(String name) {
         String mapped = INVARIANT.get(name);
         return mapped == null ? "" : mapped;
+    }
+
+    public static String domain(String subsystem) {
+        if (!known(subsystem)) throw new IllegalArgumentException("unknown subsystem " + subsystem);
+        String mapped = DOMAIN.get(subsystem);
+        if (mapped == null) throw new IllegalStateException("unclassified subsystem " + subsystem);
+        return mapped;
+    }
+
+    private static Map<String, String> domains() {
+        Map<String, String> mapped = new LinkedHashMap<String, String>();
+        assign(mapped, "simulation", "tick-lifecycle", "weather", "block-ticks", "redstone");
+        assign(mapped, "world", "worldgen", "chunks", "lighting", "fluids", "saves",
+                "dimensions");
+        assign(mapped, "actors", "entities", "tile-entities", "mob-ai", "player");
+        assign(mapped, "gameplay", "inventory", "crafting");
+        assign(mapped, "runtime", "protocol", "dedicated-server", "rendering", "gui",
+                "resources");
+        assign(mapped, "ecosystem", "mod-ecosystem", "mappings", "stationapi", "aero");
+        if (mapped.size() != ALL.length) throw new IllegalStateException("subsystem taxonomy drift");
+        return Collections.unmodifiableMap(mapped);
+    }
+
+    private static void assign(Map<String, String> target, String domain, String... subsystems) {
+        for (String subsystem : subsystems) {
+            if (!known(subsystem) || target.put(subsystem, domain) != null) {
+                throw new IllegalStateException("invalid subsystem taxonomy " + subsystem);
+            }
+        }
     }
 
     private static Map<String, String> categories() {

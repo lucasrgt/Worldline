@@ -245,8 +245,24 @@ public final class WorldlineCliTest {
                     new PrintStream(output), new PrintStream(error));
             require(status == 0 && output.toString().contains("WORLDLINE_ATLAS_CONTEXT=PASS")
                     && output.toString().contains("WORLDLINE-ATLAS-CONTEXT/1")
-                    && output.toString().contains("\"certainty\""),
+                    && output.toString().contains("\"certainty\"")
+                    && output.toString().contains("\"domains\"")
+                    && output.toString().contains("\"tags\""),
                     "CLI atlas context failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"atlas", "taxonomy"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("WORLDLINE_ATLAS_TAXONOMY=PASS")
+                    && output.toString().contains("domain=world")
+                    && output.toString().contains("subsystem=tile-entities"),
+                    "CLI atlas taxonomy failed");
+            output.reset(); error.reset();
+            status = WorldlineCli.run(new String[] {"atlas", "tags"},
+                    new PrintStream(output), new PrintStream(error));
+            require(status == 0 && output.toString().contains("WORLDLINE_ATLAS_TAGS=PASS")
+                    && output.toString().contains("tag=category-claim")
+                    && output.toString().contains("tag=layer-universal"),
+                    "CLI atlas tags failed");
             output.reset(); error.reset();
             status = WorldlineCli.run(new String[] {"atlas", "coverage"},
                     new PrintStream(output), new PrintStream(error));

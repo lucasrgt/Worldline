@@ -1,5 +1,7 @@
 package worldline.atlas;
 
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import worldline.semantics.SemanticCatalog;
 import worldline.semantics.SemanticRoles;
@@ -15,6 +17,9 @@ public final class AtlasStoreTest {
         require(first.kind(AtlasKind.ROLE).size() >= 196, "catalog baseline");
         require(first.kind(AtlasKind.INVARIANT).size() == 6, "invariants");
         require(first.kind(AtlasKind.SUBSYSTEM).size() == 25, "subsystems");
+        require(AtlasSubsystems.DOMAINS.length == 6, "taxonomy domains");
+        require("actors".equals(AtlasSubsystems.domain("tile-entities")),
+                "tile entity taxonomy");
         require(first.kind(AtlasKind.COVERAGE_UNIT).size() == 175, "coverage units");
         require(first.kind(AtlasKind.BOUNDARY).size() >= 24, "boundary baseline");
         require(first.kind(AtlasKind.SCENARIO).size() == WorldlineBehavior.all().size() + 1,
@@ -63,10 +68,27 @@ public final class AtlasStoreTest {
         AtlasRecord completed = first.get("atlas.claim.block-054.tick-policy");
         require(AtlasStatus.VERIFIED.equals(completed.status()), "final census claim verified");
         require(!AtlasIndex.search(first, "chunk", 20).isEmpty(), "semantic chunk index");
-        String context = AtlasContextQuery.json("chunk", AtlasContext.build(first, "chunk", 20, 1));
+        String context = AtlasContextQuery.json(first, "chunk",
+                AtlasContext.build(first, "chunk", 20, 1));
         require(context.contains("WORLDLINE-ATLAS-CONTEXT/1")
-                && context.contains("certainty") && context.contains("GRAPH_DEPTH_1"),
+                && context.contains("certainty") && context.contains("GRAPH_DEPTH_1")
+                && context.contains("\"domains\"") && context.contains("subsystem-chunks"),
                 "agent context json");
+        require(!AtlasIndex.search(first, "domain-world", 20).isEmpty(), "domain facet index");
+        require(!AtlasIndex.search(first, "layer-universal", 20).isEmpty(), "layer facet index");
+        AtlasTaxonomy.validate(first);
+        String taxonomy = AtlasQuery.taxonomy(first);
+        require(taxonomy.contains("WORLDLINE-ATLAS-TAXONOMY/1")
+                && taxonomy.contains("domain=world")
+                && taxonomy.contains("subsystem=tile-entities"), "taxonomy index");
+        require(AtlasQuery.tags(first).contains("tag=category-claim"), "tag index");
+        try {
+            String documentation = new String(Files.readAllBytes(Paths.get("docs", "ATLAS.md")),
+                    StandardCharsets.UTF_8);
+            require(documentation.contains(AtlasTaxonomy.markdown()), "taxonomy docs drift");
+        } catch (java.io.IOException error) {
+            throw new AssertionError(error);
+        }
         require(AtlasGaps.list(first).stream().noneMatch(
                 record -> record.id().startsWith("atlas.claim.")),
                 "Functional Census still contains a gap");

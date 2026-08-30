@@ -32,6 +32,7 @@ public final class AtlasSynchronization {
 
     public static void validateAll(Path root) throws IOException {
         AtlasStore store = AtlasStore.standard(root);
+        AtlasTaxonomy.validate(store);
         try (DirectoryStream<Path> dirs = Files.newDirectoryStream(root.resolve("smokes"))) {
             for (Path directory : dirs) {
                 if (Files.isRegularFile(directory.resolve("smoke.properties"))) {
