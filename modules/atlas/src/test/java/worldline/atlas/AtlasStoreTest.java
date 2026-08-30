@@ -101,6 +101,15 @@ public final class AtlasStoreTest {
                 && first.get("atlas.claim.entity-055.drop-matrix").refs()
                 .contains("atlas.experiment.m423-slimeball-set"),
                 "slime subsystem routes were not indexed");
+        require(first.get("atlas.claim.entity-040.movement-policy").control()
+                .contains("layer=SINGULAR;applicability=APPLICABLE;automation=PUBLIC_TESTKIT")
+                && first.get("atlas.claim.entity-041.movement-policy").refs()
+                .contains("atlas.experiment.m504-m508-sw-entity-dynamics")
+                && first.get("atlas.claim.entity-055.movement-policy").refs()
+                .contains("atlas.experiment.m504-m508-sw-entity-dynamics")
+                && first.get("atlas.claim.entity-056.movement-policy").control()
+                .contains("layer=SINGULAR;applicability=APPLICABLE;automation=PUBLIC_TESTKIT"),
+                "complete controlled entity dynamics matrix was not indexed");
         require(AtlasStatus.UNKNOWN.equals(first.get("atlas.claim.entity-092.drop-matrix").status()),
                 "implicit entity census gap was not materialized");
         require(!AtlasIndex.search(first, "chunk", 20).isEmpty(), "semantic chunk index");
@@ -122,9 +131,9 @@ public final class AtlasStoreTest {
                 && taxonomy.contains("subsystem=tile-entities"), "taxonomy index");
         String tags = AtlasQuery.tags(first);
         require(tags.contains("tag=category-claim")
-                && tags.contains("tag=surface-public-testkit\trecords=1091")
+                && tags.contains("tag=surface-public-testkit\trecords=1094")
                 && !tags.contains("tag=surface-internal-api")
-                && tags.contains("tag=surface-smoke-only\trecords=18"), "tag index");
+                && tags.contains("tag=surface-smoke-only\trecords=15"), "tag index");
         try {
             String documentation = new String(Files.readAllBytes(Paths.get("docs", "ATLAS.md")),
                     StandardCharsets.UTF_8);

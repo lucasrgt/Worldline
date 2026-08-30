@@ -7,7 +7,9 @@ b1.7.3:entity/011	spawn-materialization	object-materialization	worldline.testkit
 b1.7.3:entity/020	spawn-materialization	object-materialization	worldline.testkit.ObjectMaterializationFixture#execute	m381-tnt-prime-set
 b1.7.3:entity/021	spawn-materialization	object-materialization	worldline.testkit.ObjectMaterializationFixture#execute	m597-falling-sand-entity-set
 b1.7.3:entity/040	spawn-materialization	object-materialization	worldline.testkit.ObjectMaterializationFixture#execute	m155-minecart-spawn
+b1.7.3:entity/040	movement-policy	entity-dynamics	worldline.testkit.EntityDynamicsFixture#execute	m504-m508-sw-entity-dynamics
 b1.7.3:entity/041	spawn-materialization	object-materialization	worldline.testkit.ObjectMaterializationFixture#execute	m154-boat-spawn
+b1.7.3:entity/041	movement-policy	entity-dynamics	worldline.testkit.EntityDynamicsFixture#execute	m504-m508-sw-entity-dynamics
 b1.7.3:entity/050	spawn-materialization	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m421-creeper-gunpowder-set
 b1.7.3:entity/050	damage-death	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m421-creeper-gunpowder-set
 b1.7.3:entity/050	drop-matrix	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m421-creeper-gunpowder-set
@@ -18,9 +20,10 @@ b1.7.3:entity/052	spawn-materialization	mob-lifecycle	worldline.testkit.EntityLi
 b1.7.3:entity/052	damage-death	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m409-spider-string-set
 b1.7.3:entity/052	drop-matrix	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m409-spider-string-set
 b1.7.3:entity/055	spawn-materialization	slime-lifecycle	worldline.testkit.SlimeLifecycleFixture#execute	m412-slime-split-set
-b1.7.3:entity/055	movement-policy	slime-lifecycle	worldline.testkit.SlimeLifecycleFixture#execute	m504-m508-sw-entity-dynamics
+b1.7.3:entity/055	movement-policy	entity-dynamics	worldline.testkit.EntityDynamicsFixture#execute	m504-m508-sw-entity-dynamics
 b1.7.3:entity/055	interaction-state	slime-lifecycle	worldline.testkit.SlimeLifecycleFixture#execute	m412-slime-split-set
 b1.7.3:entity/055	drop-matrix	slime-lifecycle	worldline.testkit.SlimeLifecycleFixture#execute	m423-slimeball-set
+b1.7.3:entity/056	movement-policy	entity-dynamics	worldline.testkit.EntityDynamicsFixture#execute	m504-m508-sw-entity-dynamics
 b1.7.3:entity/057	spawn-materialization	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m411-zombie-pigman-set
 b1.7.3:entity/057	damage-death	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m411-zombie-pigman-set
 b1.7.3:entity/057	drop-matrix	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m411-zombie-pigman-set

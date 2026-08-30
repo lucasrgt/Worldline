@@ -25,13 +25,7 @@ public final class SlimeLifecycleFixture {
 
         SlimeMotionObservation open = scenario.observeMotion(SlimeMotionScene.OPEN);
         SlimeMotionObservation roof = scenario.observeMotion(SlimeMotionScene.LOW_ROOF);
-        if (open == null || !open.sawAir() || !open.sawGround()
-                || open.verticalSpanMilli() <= 100) {
-            throw new IllegalStateException("open slime jump/landing envelope drifted");
-        }
-        if (roof == null || roof.verticalSpanMilli() >= 700) {
-            throw new IllegalStateException("roof-bounded slime envelope drifted");
-        }
+        EntityDynamicsFixture.validateSlime(vertical(open), vertical(roof));
 
         SlimeSplitObservation split = awaitSplit(splitMaximumAttempts, scenario);
         SlimeDropObservation drop = awaitDrop(dropMaximumAttempts, scenario);
@@ -79,6 +73,12 @@ public final class SlimeLifecycleFixture {
         EntityConformanceCase claim = plan.caseFor(subject, template);
         if (claim.layer() != layer) throw new IllegalArgumentException(template + " must be " + layer);
         return claim;
+    }
+
+    private static EntityDynamicsObservation vertical(SlimeMotionObservation value) {
+        if (value == null) throw new IllegalStateException("slime motion scene absent");
+        return EntityDynamicsObservation.vertical(value.verticalSpanMilli(),
+                value.sawAir(), value.sawGround());
     }
 
     private static void requireSpawn(RemoteMobSpawn spawn) {

@@ -280,9 +280,25 @@ This promotes the universal spawn claim and both singular orientation/support-lo
 claiming motive selection or native rendering. Wrong anchors, reused identities, repeated facings,
 wrong destroy IDs, and missing or mismatched drops fail closed.
 
+Controlled entity motion uses one singular matrix for every scene qualified by the historical
+`m504-m508-sw-entity-dynamics` differential. The driver observes eight bounded scenes: open and
+roofed ghast travel, open and low-roof slime travel, open and wall-bounded boat travel, and short
+and long powered-rail minecart travel. The fixture retains only the authoritative thresholds:
+
+```java
+EntityDynamicsScenario dynamics = new EntityObservationDynamicsScenario(session,
+        motionDriver::observe);
+EntityDynamicsEvidence motion = EntityDynamicsFixture.execute(plan, dynamics);
+```
+
+The evidence binds the singular movement claims for minecart, boat, slime, and ghast as one
+mini-subsystem. Exact positions, velocities, and vertical spans are normalized after the fixture
+has checked collision, jump/landing, roof, and rail/brake envelopes. A missing scene, wrong axis,
+boundary-equal sample, or non-singular route fails closed.
+
 The slime fixture composes two different authoritative surfaces without conflating them. A
-controlled differential supplies the open jump/landing and low-roof vertical envelopes; bounded
-protocol callbacks supply a killed parent plus nearby Packet24 children and a killed size-one
+shared controlled-dynamics callback supplies the open jump/landing and low-roof vertical
+envelopes; bounded protocol callbacks supply a killed parent plus nearby Packet24 children and a killed size-one
 slime plus its Packet21 slimeball:
 
 ```java
@@ -295,7 +311,8 @@ SlimeLifecycleEvidence evidence = SlimeLifecycleFixture.execute(
 Canonical evidence retains the type-55 and below-y16 spawn law, both motion thresholds, causal
 Packet38/Packet29 death, child locality, size-one drop policy, item 341 count range, and both
 attempt bounds. It normalizes exact spans, attempt numbers, positions, entity IDs, and child count.
-This promotes spawn, motion, split, and drop as one complete singular mini-subsystem.
+This promotes spawn, split, and drop as one complete lifecycle mini-subsystem while delegating the
+motion law to the shared dynamics matrix.
 
 ### Block lifecycle matrices
 
