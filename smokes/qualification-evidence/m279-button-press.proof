@@ -1,5 +1,5 @@
 schema=1
 id=m279-button-press
-fingerprint=f192223c9a51015052095643e0ff4aca6043a1f8d98c72d6ba9743d734e8046f
+fingerprint=8d610c37ca073d9470abb06efd9a106776fb7bb8090051dc76fcb75625aba539
 observation.sha256=910692630d2dc89d5acd515f421970042c6dd218a9f6b2fbc97883e672bd3eb7
 source=refactor-equivalent

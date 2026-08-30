@@ -1,5 +1,5 @@
 schema=1
 id=m302-shovel-soft-breaks
-fingerprint=b8fa6005901927156db9a7bc5131f37e6c8902490398c92b9e50f240c37290f8
+fingerprint=8e4d1e89aee0f17f91e677352c11df5a229cc72473d22fc31c13cb7b865b6963
 observation.sha256=83e1acd8df0e978483bdfe1199d46021b2f5b8a4908c646ca1045c002e7228d9
 source=refactor-equivalent

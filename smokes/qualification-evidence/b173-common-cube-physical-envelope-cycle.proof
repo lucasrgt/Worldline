@@ -1,5 +1,5 @@
 schema=1
 id=b173-common-cube-physical-envelope-cycle
-fingerprint=3d92ef8471ebcc5937938530f6557cca94d1b52fe5ae8d5878c2cef28a23480d
+fingerprint=4c58d058eb77a0f43b1f037b658cc023f093a0e711390a6d8b02b1b44ec5fd35
 observation.sha256=abbd841c92c372c50f28a54a5306912fc2de35a425f953fdb04c35685d60fe60
 source=refactor-equivalent
