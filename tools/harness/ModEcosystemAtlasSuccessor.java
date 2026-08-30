@@ -58,6 +58,7 @@ final class ModEcosystemAtlasSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "mod ecosystem Atlas successor allowlist drifted");
+        ModEcosystemDocumentationSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
