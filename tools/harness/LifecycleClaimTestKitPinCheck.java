@@ -165,8 +165,7 @@ final class LifecycleClaimTestKitPinCheck {
                         && (LifecycleClaimTestKitPinMigration.digest(
                                 Files.readAllBytes(root.resolve(relative))).equals(sealed)
                         || DocumentationCatalog.current(root, relative)
-                        || TrainPinCheck.transportsFile(
-                                TrainPinCheck.manifest(root), root, relative, sealed)),
+                        || transportedByTrain(root, relative, sealed)),
                 "lifecycle-claim current source drift: " + relative);
         byte[] prior = LifecycleClaimTestKitPinMigration.committed(root,
                 LifecycleClaimTestKitPinMigration.BASE, relative);
@@ -174,6 +173,16 @@ final class LifecycleClaimTestKitPinCheck {
         require(prior == null ? expected.equals("absent")
                         : LifecycleClaimTestKitPinMigration.digest(prior).equals(expected),
                 "lifecycle-claim prior source drift: " + relative);
+    }
+
+    private static boolean transportedByTrain(Path root, String relative, String sealed)
+            throws Exception {
+        Properties train = TrainPinCheck.manifest(root);
+        if (TrainPinCheck.transportsFile(train, root, relative, sealed)) return true;
+        byte[] introduced = LifecycleClaimTestKitPinMigration.committed(root,
+                LifecycleClaimTestKitPinMigration.INTRODUCTION, relative);
+        return introduced != null && TrainPinCheck.transportsFile(train, root, relative,
+                LifecycleClaimTestKitPinMigration.digest(PortableText.normalize(introduced)));
     }
     private static Properties load(Path root) throws Exception {
         Properties values = new Properties();
