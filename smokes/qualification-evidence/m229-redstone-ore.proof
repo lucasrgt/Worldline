@@ -1,5 +1,5 @@
 schema=1
 id=m229-redstone-ore
-fingerprint=69c283826b5ab1af8b879cfd51fc376bf843e39cb7b3b1d7ec1d4cd33a880ff2
+fingerprint=bcbc8a7dbbac935e22a1451aca8e17f5925526a7d55b3a8f5725dc5878de429e
 observation.sha256=7d3985f4b7402dfe18498e350a010e0aa42df1a87bbb12ac06d7ff9bc4803504
 source=refactor-equivalent

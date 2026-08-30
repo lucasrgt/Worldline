@@ -1,5 +1,5 @@
 schema=1
 id=m306-closables
-fingerprint=ebf683173887a029c8dd35a8a91cd5f3476d6379f7554a145a45f0553d10a447
+fingerprint=c7466c118521a7b96abd3920fecc78daac28c2078121c879e46f2c3f10742431
 observation.sha256=0287dd23ec4f04c0960b98f43f8e16ff75d416ad1fb8ffb16478c579b8bc4865
 source=refactor-equivalent

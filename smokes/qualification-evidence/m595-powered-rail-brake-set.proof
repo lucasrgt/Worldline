@@ -1,5 +1,5 @@
 schema=1
 id=m595-powered-rail-brake-set
-fingerprint=1c8814af78818e9f94742793668510d7d5374c1c0008577d82748e7a0b9119be
+fingerprint=cc1cf9f42c8a227aba25ab4a97e48fe9ea496a2760454f0b0a94d4a4bc614fd2
 observation.sha256=89de5d6547b6da275e4ea06fc32da07706e534c0a39f7f939f456e43dacb90a5
 source=refactor-equivalent

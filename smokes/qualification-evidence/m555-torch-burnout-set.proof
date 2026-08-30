@@ -1,5 +1,5 @@
 schema=1
 id=m555-torch-burnout-set
-fingerprint=ff185cf7ef33bd65b59faba47f3731ec441de3678704daaa803d3d45d9119f9c
+fingerprint=3f2ac66046406f3b84f36e4c79ad4a830be5d5c4dc2e2db0f797fba64123f52e
 observation.sha256=18bb8e9a083d0861b2a55ef541e55b825b6495c88e02d63298e035dad62bbc00
 source=refactor-equivalent
