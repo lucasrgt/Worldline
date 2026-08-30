@@ -147,7 +147,8 @@ final class LifecycleClaimTestKitPinCheck {
     private static boolean trainSuccessor(Path root, Properties lock, String stem,
             String id, SmokePins.Entry pin, String current) throws Exception {
         return pin != null
-                && "refactor-equivalent".equals(lock.getProperty(stem + "source"))
+                && ("refactor-equivalent".equals(lock.getProperty(stem + "source"))
+                        || "executed".equals(lock.getProperty(stem + "source")))
                 && ("refactor-equivalent".equals(pin.source())
                         || "executed".equals(pin.source()))
                 && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"))
