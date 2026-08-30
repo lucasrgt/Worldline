@@ -1,5 +1,5 @@
 schema=1
 id=m376-remaining-shovel-breaks
-fingerprint=06d8c5f93193e349c3a6564a41ba314e93932e0b6d5aa6ff1e14698af01c3c32
+fingerprint=0e6f9729b63ea0d80f57c82166901369ea746d437b4452e5b340c9f3ffe568a2
 observation.sha256=40c64c0c07f6bc2b0dd8ed47b2526c1b5ef81a70c4b44720126cc44bc5d15c52
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=b173-built-environment-materials-subsystem-conformance-cycle
-fingerprint=7b60317defffab531e0c9f29bf750cae4b2121e07526674a1890c8f6feb5cd9b
+fingerprint=21e4bc403460a003df09dc74aa915e5c88ecd91b306fee85ec982b6a266b3d56
 observation.sha256=aeeab0505bf46b000c822d2a5ddfcdc6bcaaa1672d8fd09824c89cc43d7b16b1
 source=refactor-equivalent

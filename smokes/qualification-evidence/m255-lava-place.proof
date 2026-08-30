@@ -1,5 +1,5 @@
 schema=1
 id=m255-lava-place
-fingerprint=0036bac1035d32cfdd600d499daf28b2c748a800b56d49b47f4a31b1f7295dfb
+fingerprint=4179edda15f56789d310d09586ed9f1be47cd3edbd1d76b9374150eec6aef05f
 observation.sha256=62a96d88efc9d70f9cef9dc52f4555dbbaf332fb3b578a2c210abfa722ade72d
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m577-wheat-light-halt-set
-fingerprint=42067fa5467912f9d716788e694cb0f20588f3c661bab95373671895d77beb8c
+fingerprint=65d23c4dad380b6b5bb763f1d9b28c95945d12fbe95ccd4f119a974a25320779
 observation.sha256=d100aa744cbca0cf6c8ef0418848e201791fb8932d5b032063cd2d29db055b92
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m515-sw-fire-support-extinguish
-fingerprint=554bbe327ad211a43e0f97ff96589e0e0898835ac55a138693aaeece13d8eed3
+fingerprint=ba3b55f93fb9a74efb690d3327cc1c9123c8d3db3b2fc6df0112dbc3866fe2db
 observation.sha256=4a1d5934a7e4543cf2631661ef6408677022ac1247d30f1d9b1135e4a5a0a6c7
 source=refactor-equivalent

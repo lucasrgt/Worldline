@@ -1,5 +1,5 @@
 schema=1
 id=m226-iron-ore
-fingerprint=68ad7431f5c5e8a4c0f0a12d5c6480702c5e67b9c2114d0d4692b7a53d06b70b
+fingerprint=6d267a5f51ce20e8c35545d52f67ec42acb1de9ec723a0e36e8c83b9fb84b846
 observation.sha256=a0e1b3a34325710f72942c88c73bd15a8cad197fb7b04c8bbfc5f867b97389b7
 source=refactor-equivalent

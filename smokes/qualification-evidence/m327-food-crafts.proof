@@ -1,5 +1,5 @@
 schema=1
 id=m327-food-crafts
-fingerprint=51f414fe9d5761d99f7b5cf5c640725be5a4eb0bc0facc99bc218f9496d28dbe
+fingerprint=d97ef4e5205a5afe414f3b438d5cdb82b38b80aba18684aa007be055bd0b2462
 observation.sha256=feb202ff5d2172def94a39a6a9e560b5e4ecdba79681b018a8e046bb89703a54
 source=refactor-equivalent

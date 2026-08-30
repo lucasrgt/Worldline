@@ -1,5 +1,5 @@
 schema=1
 id=m360-fishing-catch-set
-fingerprint=67b2b051c4dd48340889c190bf0808e8619c476f2727897449a825a9da00ebac
+fingerprint=5ef4a9934ab17134aebf30be5001a1fdd5339aac6a8e3daf3c95958675e3d8c8
 observation.sha256=b81e3dfcba437f67fee01101898bab64442120affa5b0cdb60dc16f69a2549b0
 source=refactor-equivalent

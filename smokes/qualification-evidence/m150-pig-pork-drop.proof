@@ -1,5 +1,5 @@
 schema=1
 id=m150-pig-pork-drop
-fingerprint=471c74bdc5f41c2d9821e4e32b728d685279e3e279602f7afd1ec1ef88a7c43f
+fingerprint=382eab26ba27969d1a0c63931d82412a58b7839ca37726a36dae5beb41c3be03
 observation.sha256=90cf54607ffd52b403765121c14d821e80e9996702f158c29efe63aee15b0d33
 source=refactor-equivalent

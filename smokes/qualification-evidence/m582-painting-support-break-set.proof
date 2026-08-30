@@ -1,5 +1,5 @@
 schema=1
 id=m582-painting-support-break-set
-fingerprint=2c6ec99871c38e2543a25695d43c784cb93d1a0e887d09c444507390f7344607
+fingerprint=f5a812fadb9cc332eee9acaf8a26e7d553a52dd150a01ae31b97185413170652
 observation.sha256=d805442585b18a549e1e43860b228ce3b77d3049a0c8b1042234762323954517
 source=refactor-equivalent
