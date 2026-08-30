@@ -58,10 +58,13 @@ The causal-performance wave began at `AERO-M111`:
 - `AERO-M117` (`M774`) is complete: the AeroModelLib Java 8 product is now a
   real external Worldline TestKit consumer, with two repeatable runs proving
   morph-array parity plus bounded, visible-first, debt-fair chunk scheduling.
-- `AERO-M118` is current: page rebuild, invalidation, allocation, and cache
-  A/B matrix.
-- `AERO-M119`: GL state, geometry, display-list, and LOD A/B matrix.
+- `AERO-M118` (`M775`) is complete: four counterbalanced three-arm rounds
+  qualified page-cache activation plus camera-aware current, adjacent,
+  visible, and look-ahead chunk pre-bake under a strict one-rebuild-per-frame
+  budget. All backlogs drained; the paired 50 ms hitch rate improved from
+  19,173 ppm to 11,945 ppm without an allocation regression at the median.
+- `AERO-M119` is current: GL state, geometry, display-list, and LOD A/B matrix.
 - `AERO-M120`: long-soak, reload, world-transition, leak, and promotion gate.
 
-Entries after `AERO-M118` remain planned milestones, not completed evidence or
+Entries after `AERO-M119` remain planned milestones, not completed evidence or
 performance claims.

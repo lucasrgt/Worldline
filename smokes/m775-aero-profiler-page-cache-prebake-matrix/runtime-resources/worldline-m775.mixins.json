@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "worldline.m775.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "MatrixBacklogMixin",
+    "MatrixChunkBuilderMixin",
+    "MatrixFrameDriveMixin",
+    "MatrixFrameMetricsMixin",
+    "MatrixMinecraftMixin"
+  ],
+  "injectors": { "defaultRequire": 1 }
+}

@@ -607,6 +607,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m772-aero-incremental-autosave-drain` | EXECUTED | Aero incremental autosave drain |
 | `m773-aero-chunk-work-scheduler` | CARRIED | Aero visible age and debt-aware chunk-work scheduler |
 | `m774-aero-profiler-cpu-adoption` | EXECUTED | AeroModelLib external Worldline CPU-path adoption |
+| `m775-aero-profiler-page-cache-prebake-matrix` | EXECUTED | Aero page cache and camera-aware pre-bake matrix |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
