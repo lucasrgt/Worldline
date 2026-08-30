@@ -58,6 +58,7 @@ final class AeroAtlasSuccessor {
         }
         require(!carries("unreviewed", "old", "new"),
                 "Aero Atlas successor allowlist drifted");
+        AeroDocumentationSuccessor.selfTest();
     }
 
     private static void require(boolean value, String message) {
