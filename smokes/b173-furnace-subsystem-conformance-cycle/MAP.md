@@ -17,6 +17,6 @@ Container packet behavior, client texture selection, particles, and sound remain
 boundaries.
 
 Frozen aggregate signal:
-`family=furnace-subsystem,subjects=2,claims=10,domains=61+62:2..5,materialization=item61+smelt,drop=61+contents,persistence=chunk-nbt-progress,collision=full+full,light=0+13,ticks=tile-200,neighbors=stable+orientation,oracle=MATCH`.
+`family=furnace-subsystem,subjects=2,claims=11,domains=61+62:2..5,materialization=item61+smelt,drop=61+contents,persistence=chunk-nbt-progress,collision=full+full,light=0+13,ticks=tile-200,neighbors=stable+orientation,oracle=MATCH`.
 
 Qualified semantic signature: `81a14731a028188bc83b9a9b7c4637bb939c932e77fae97c31573830a8be100d`.

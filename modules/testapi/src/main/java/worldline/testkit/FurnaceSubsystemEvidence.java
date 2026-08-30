@@ -12,7 +12,8 @@ public final class FurnaceSubsystemEvidence {
     public String canonical() {
         StringBuilder value = new StringBuilder("schema=worldline.furnace-subsystem-evidence.v1\n");
         value.append("subjects=b1.7.3:block/061,b1.7.3:block/062\n");
-        value.append("claims=10|idle:neighbor-response|active:state-domain+gameplay-placement")
+        value.append("claims=11|idle:tick-policy+neighbor-response")
+                .append("|active:state-domain+gameplay-placement")
                 .append("+break-transition+drop-matrix+save-reload+collision-shape")
                 .append("+light-behavior+tick-policy+neighbor-response\n");
         value.append("domains=").append(observation.domains()).append('\n');

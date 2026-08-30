@@ -1,4 +1,5 @@
 claim_id	layer	subject_id	template_id	applicability	status	oracle	evidence_id	signature	automation_surface
+furnace-tick-policy	SINGULAR	b1.7.3:block/061	tick-policy	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-furnace-subsystem-conformance-cycle	81a14731a028188bc83b9a9b7c4637bb939c932e77fae97c31573830a8be100d	PUBLIC_TESTKIT
 furnace-neighbor-response	SINGULAR	b1.7.3:block/061	neighbor-response	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-furnace-subsystem-conformance-cycle	81a14731a028188bc83b9a9b7c4637bb939c932e77fae97c31573830a8be100d	PUBLIC_TESTKIT
 lit-furnace-state-domain	SINGULAR	b1.7.3:block/062	state-domain	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-furnace-subsystem-conformance-cycle	81a14731a028188bc83b9a9b7c4637bb939c932e77fae97c31573830a8be100d	PUBLIC_TESTKIT
 lit-furnace-gameplay-placement	UNIVERSAL	b1.7.3:block/062	gameplay-placement	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-furnace-subsystem-conformance-cycle	81a14731a028188bc83b9a9b7c4637bb939c932e77fae97c31573830a8be100d	PUBLIC_TESTKIT

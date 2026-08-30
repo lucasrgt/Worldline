@@ -14,7 +14,7 @@ public final class FurnaceSubsystemFixtureTest {
                 FurnaceSubsystemFixtureTest::observation);
         require(first.equals(second) && first.hashCode() == second.hashCode(),
                 "furnace evidence is not equatable");
-        require(first.canonical().contains("claims=10|")
+        require(first.canonical().contains("claims=11|idle:tick-policy+neighbor-response")
                 && first.canonical().contains("tile=burn1600+cook200"),
                 "canonical evidence drifted");
         rejects(() -> FurnaceSubsystemFixture.execute(() -> invalidObservation()));

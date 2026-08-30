@@ -20,7 +20,7 @@ public final class FurnaceSubsystemSmoke {
             runtime.loadWorld(WorldSource.at(Paths.get("memory", "worldline-furnace")));
             runtime.tick();
             FurnaceSubsystemEvidence evidence = FurnaceSubsystemFixture.execute(backend);
-            if (!evidence.canonical().contains("claims=10|"))
+            if (!evidence.canonical().contains("claims=11|idle:tick-policy+neighbor-response"))
                 throw new IllegalStateException("furnace claim inventory drifted");
             backend.emit();
         } finally {

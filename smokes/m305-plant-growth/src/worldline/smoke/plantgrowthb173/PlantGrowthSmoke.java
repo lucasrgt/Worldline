@@ -5,8 +5,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.security.MessageDigest;
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
 import worldline.api.*;
 import worldline.b173server.*;
+import worldline.testkit.*;
 
 /** Bonemeal-grows wheat 59:0→59:7 and waits official cactus 81 plus sugar cane 83 to height 2. */
 public final class PlantGrowthSmoke {
@@ -27,9 +30,9 @@ public final class PlantGrowthSmoke {
         new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
     B173WireClient actor = new B173WireClient("127.0.0.1", port, user, timeout), reader = null;
     BlockPosition top, north, south, south2, east, se, se2, west, west2, west2s2, sand1, sand2,
-        cactus, cactus2, cactusTop, cactus2Top, dirtW, dirt1, dirt2, dirt3, water1, wheat, farm,
-        cane, cane2, cane3, caneTop, cane2Top, cane3Top;
-    int column, caneH, cactH;
+        cactus, cactus2, cactusTop, cactus2Top, dirtW, dirt1, dirt2, dirt3, randomDirt, water1,
+        wheat, farm, randomWheat, randomFarm, cane, cane2, cane3, caneTop, cane2Top, cane3Top;
+    int column, caneH, cactH, randomAge;
     try {
       server.boot();
       B173PlayerSeed.writeInventory(workspace, user, 4.5D, 60D, 4.5D,
@@ -104,6 +107,13 @@ public final class PlantGrowthSmoke {
       actor.selectHeldSlot(5);
       actor.useHeldItemOnBlock(wheat, BlockFace.UP);
       require(age(actor, wheat, 59, 7, 40), "bonemeal wheat age jump absent");
+      actor.selectHeldSlot(1);
+      randomDirt = place(actor, west, BlockFace.UP, 3);
+      actor.selectHeldSlot(3);
+      till(actor, randomDirt);
+      randomFarm = randomDirt;
+      actor.selectHeldSlot(4);
+      randomWheat = sow(actor, randomFarm);
       actor.selectHeldSlot(8);
       cane = reed(actor, dirt1);
       cane2 = reed(actor, dirt2);
@@ -114,12 +124,15 @@ public final class PlantGrowthSmoke {
       RemoteWorldView grown = worldline.test.WorldlineSmokeAwait.awaitWorld(actor,
           v
           -> (id(v, caneTop) == 83 || id(v, cane2Top) == 83 || id(v, cane3Top) == 83)
-              && (id(v, cactusTop) == 81 || id(v, cactus2Top) == 81),
-          "cactus and sugar cane growth", windows * window);
+              && (id(v, cactusTop) == 81 || id(v, cactus2Top) == 81)
+              && metadata(v, randomWheat, 59) > 0,
+          "wheat, cactus, and sugar cane random growth", windows * window);
       caneH = 2;
       cactH = 2;
+      randomAge = metadata(grown, randomWheat, 59);
       require(id(grown, cane) == 83 && id(grown, cactus) == 81
-              && grown.blockAt(wheat.x(), wheat.y(), wheat.z()).equals(new BlockState(59, 7)),
+              && grown.blockAt(wheat.x(), wheat.y(), wheat.z()).equals(new BlockState(59, 7))
+              && randomAge > 0,
           "live plant vanished during wait");
       actor.close();
       awaitPlayers(server, 0);
@@ -133,6 +146,8 @@ public final class PlantGrowthSmoke {
           worldline.test.WorldlineSmokeAwait.observe(reader, 5).chunkAt(cx, cz);
       require(at(after, farm, cx, cz).legacyId() == 60
               && at(after, wheat, cx, cz).equals(new BlockState(59, 7))
+              && at(after, randomWheat, cx, cz).legacyId() == 59
+              && at(after, randomWheat, cx, cz).metadata() >= randomAge
               && at(after, cane, cx, cz).legacyId() == 83
               && (at(after, caneTop, cx, cz).legacyId() == 83
                   || at(after, cane2Top, cx, cz).legacyId() == 83
@@ -143,14 +158,27 @@ public final class PlantGrowthSmoke {
               && water(at(after, water1, cx, cz).legacyId()),
           "persisted plant growth drift: "
               + dump(after,
-                  new BlockPosition[] {farm, wheat, cane, caneTop, cane2Top, cane3Top, cactus,
-                      cactusTop, cactus2Top, water1},
+                  new BlockPosition[] {farm, wheat, randomWheat, cane, caneTop, cane2Top, cane3Top,
+                      cactus, cactusTop, cactus2Top, water1},
                   cx, cz));
+      List<BlockTickPolicyScenario> scenarios = Arrays.asList(
+          tick("wheat-random-growth", "059", "59:0-planted", "metadata-increased"),
+          tick("cactus-random-growth", "081", "81:0-height1", "height2+-observed"),
+          tick("sugar-cane-random-growth", "083", "83:0-height1", "height2+-observed"));
+      List<BlockTickPolicyObservation> observations = Arrays.asList(
+          observed(scenarios.get(0)), observed(scenarios.get(1)), observed(scenarios.get(2)));
+      String tickContract = sha(BlockTickPolicyFixture.canonical(
+          BlockTickPolicyFixture.execute(scenarios, observations)));
       String evidence = "column=" + column + ",wheat=" + cell(wheat) + ":59:0->59:7,farm="
-          + cell(farm) + ":60,cane=" + cell(cane) + ":83,cane-height>=2,cactus=" + cell(cactus)
-          + ":81,cactus-height>=2,bonemeal=351:15,plants=59+81+83,persisted=true,clients=2,disconnect=clean";
+          + cell(farm) + ":60,wheat-random=59:0->metadata>0,cane=" + cell(cane)
+          + ":83,cane-height>=2,cactus=" + cell(cactus)
+          + ":81,cactus-height>=2,bonemeal=351:15,plants=59+81+83,persisted=true,testkit="
+          + tickContract + ",clients=2,disconnect=clean";
       String trace = "v1|server=official-b1.7.3|seed=" + seed
-          + "|fixture=raised-dirt3+still-water9+sand12|cause=packet15-bonemeal351:15+item338-reed+item81-cactus|wire=packet53-crops59:7+reed83+cactus81|oracle=bonemeal-wheat-age-jump+official-random-tick-height>=2+fresh-login|"
+          + "|fixture=raised-dirt3+still-water9+sand12"
+          + "|cause=packet15-bonemeal351:15+planted-random-wheat+item338-reed+item81-cactus"
+          + "|wire=packet53-crops59:7+random-crops59:metadata>0+reed83+cactus81"
+          + "|oracle=bonemeal-wheat-age-jump+official-random-tick-growth+fresh-login|"
           + evidence;
       System.out.println("WORLDLINE_M305_GROWTH=" + evidence);
       System.out.println("WORLDLINE_M305_TRACE=" + trace);
@@ -191,6 +219,20 @@ public final class PlantGrowthSmoke {
   }
   private static int id(RemoteWorldView v, BlockPosition p) {
     return v.blockAt(p.x(), p.y(), p.z()).legacyId();
+  }
+  private static int metadata(RemoteWorldView view, BlockPosition position, int legacyId) {
+    BlockState state = view.blockAt(position.x(), position.y(), position.z());
+    return state.legacyId() == legacyId ? state.metadata() : -1;
+  }
+  private static BlockTickPolicyScenario tick(String id, String legacyId,
+      String initial, String effect) {
+    return new BlockTickPolicyScenario(id, "b1.7.3:block/" + legacyId,
+        Arrays.asList("plant-growth"), false, BlockTickPolicyMechanism.RANDOM_BLOCK,
+        initial, effect, true);
+  }
+  private static BlockTickPolicyObservation observed(BlockTickPolicyScenario scenario) {
+    return new BlockTickPolicyObservation(scenario.id(), scenario.mechanism(),
+        scenario.initial(), scenario.effect(), scenario.persisted());
   }
   private static boolean age(B173WireClient a, BlockPosition p, int id, int meta, int windows)
       throws Exception {

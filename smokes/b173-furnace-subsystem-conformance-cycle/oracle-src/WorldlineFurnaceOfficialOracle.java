@@ -17,7 +17,7 @@ public final class WorldlineFurnaceOfficialOracle {
         world.h();
         OracleFurnaceScenario scenario = new OracleFurnaceScenario(world, SEED);
         FurnaceSubsystemEvidence evidence = FurnaceSubsystemFixture.execute(scenario);
-        if (!evidence.canonical().contains("claims=10|"))
+        if (!evidence.canonical().contains("claims=11|idle:tick-policy+neighbor-response"))
             throw new IllegalStateException("official furnace claim inventory drifted");
         scenario.emit();
     }
