@@ -1,9 +1,11 @@
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -15,8 +17,14 @@ final class IntegrationToolsCheck {
     static void execute(Path root, Path build) throws Exception {
         Path output = build.resolve("integration-tools");
         Files.createDirectories(output);
+        Path runtime = output.resolve("legacy-profiler-runtime"); Files.createDirectories(runtime);
+        List<String> runtimeCompile = new ArrayList<>(List.of(javaTool("javac"), "-encoding", "UTF-8",
+                "--release", "8", "-Xlint:all,-options", "-Werror", "-d", runtime.toString()));
+        runtimeCompile.addAll(legacyRuntimeSources(root).stream().map(Path::toString).toList());
+        require(run(root, runtimeCompile, 120) == 0, "legacy profiler runtime did not compile");
         List<String> compile = new ArrayList<>(List.of(javaTool("javac"), "-encoding", "UTF-8",
-                "--release", "21", "-Xlint:all,-options", "-Werror", "-d", output.toString()));
+                "--release", "21", "-Xlint:all,-options", "-Werror", "-classpath",
+                runtime.toString(), "-d", output.toString()));
         try (Stream<Path> paths = Files.list(root.resolve("tools/integration"))) {
             compile.addAll(paths.filter(path -> path.toString().endsWith(".java")).sorted()
                     .map(Path::toString).collect(Collectors.toList()));
@@ -37,8 +45,25 @@ final class IntegrationToolsCheck {
         require(run(root, List.of(javaTool("java"), root.resolve(
                 "tools/integration/LegacyProfilerInstallerLauncher.java").toString(),
                 "--self-test"), 180) == 0, "legacy profiler installer self-test failed");
+        require(run(root, List.of(javaTool("java"), root.resolve(
+                "tools/integration/LegacyProfilerQualificationLauncher.java").toString(),
+                "--self-test"), 180) == 0, "legacy profiler qualification self-test failed");
         selfTest(output);
         System.out.println("  integration tools: compiled and self-tested");
+    }
+
+    private static List<Path> legacyRuntimeSources(Path root) throws Exception {
+        Properties values = new Properties();
+        try (Reader reader = Files.newBufferedReader(root.resolve(
+                "adapters/modloader-forge/runtime-sources.properties"), StandardCharsets.UTF_8)) {
+            values.load(reader);
+        }
+        int count = Integer.parseInt(values.getProperty("count", "0"));
+        require(count == 15, "legacy profiler runtime source census drifted");
+        List<Path> result = new ArrayList<>();
+        for (int index = 1; index <= count; index++)
+            result.add(root.resolve(values.getProperty("source." + index)).normalize());
+        return result;
     }
 
     private static void selfTest(Path classes) throws Exception {

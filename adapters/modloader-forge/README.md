@@ -41,8 +41,29 @@ an unrecognized decompile fails before another source is changed.
 loaders because metric identities, units, aggregation, and WLPR encoding are
 owned by the shared profiling module.
 
-This source boundary is structurally maintained. A dedicated official
-ModLoader/Forge runtime qualification is still required before Worldline may
-claim loader boot or performance equivalence; StationAPI qualification does not
-transport across loaders. That future receipt must name the concrete loader and
-exact game/mod build rather than promoting this compile proof by inference.
+## Controlled runtime qualification
+
+The dedicated qualifier reconstructs both clients from the hash-pinned official
+b1.7.3 JAR, overlays the exact historical loader archives, decompiles with
+RetroMCP, installs this driver, recompiles to Java 8 bytecode, and starts each
+client with a minimal loader-owned probe:
+
+```text
+java tools/integration/LegacyProfilerQualificationLauncher.java --qualify-all local/workspaces/b1.7.3 C:\path\to\loader-zips "C:\path\to\java8"
+```
+
+The artifact directory must contain `ModLoader B1.7.3.zip` and
+`minecraftforge-client-1.0.7-20110907.zip`; their SHA-256 pins and the semantic
+Forge version `1.0.6` live in `qualification.properties`. Generated clients are
+isolated under `.worldline/runtime/legacy-profiler/workspaces` and never modify
+the base workspace.
+
+Qualification passes only when the concrete loader initializes the probe,
+exactly eight frames seal into a checksum-valid WLPR carrying the expected
+loader tags and metric capabilities, the probe requests `Minecraft.shutdown()`,
+and the Java 8 process exits naturally with code zero. Local logs and sealed
+receipts are written under `.worldline/reports/legacy-profiler`.
+
+This proves loader boot, profiler capture, and clean shutdown for the pinned
+minimal clients. It does not infer performance equivalence with StationAPI or
+qualify a generic legacy TestKit provider.

@@ -126,9 +126,9 @@ StationAPI capabilities: frame, tick, display present, world render, chunk
 compile, and chunk rebuild. `worldline.profiler.loader` distinguishes
 `modloader` from `forge` in sealed tags.
 
-The hook boundary and Java 8 closure are maintained structurally. Official
-ModLoader/Forge boot remains a separate qualification requirement and is not
-inferred from the StationAPI runtime receipt.
+The hook boundary and Java 8 closure are maintained structurally. A dedicated
+qualifier independently reconstructs and boots the pinned ModLoader and Forge
+clients; no StationAPI receipt is transported across loader boundaries.
 
 `LegacyProfilerInstallerLauncher` performs a dry-run `--check` or an idempotent
 `--install` against mapped RetroMCP sources. It installs the manifest-pinned
@@ -139,11 +139,13 @@ closed.
 | Client ecosystem | Binding | Current proof |
 | --- | --- | --- |
 | StationAPI/Babric | Mixin driver | official b1.7.3 two-session runtime receipt |
-| ModLoader | RetroMCP source hooks | Java 8 compile plus loader-neutral artifact test |
-| Forge | RetroMCP source hooks | Java 8 compile plus loader-neutral artifact test |
+| ModLoader | RetroMCP source hooks | hash-pinned b1.7.3 boot, 8-frame WLPR, clean Java 8 shutdown |
+| Forge | RetroMCP source hooks | hash-pinned Forge 1.0.6 boot, 8-frame WLPR, clean Java 8 shutdown |
 
 All three bindings expose the same owned `mod.*` extension API and emit the
 same WLPR schema; loader identity is metadata, not a fork of the profiler.
+The legacy runtime proof remains deliberately minimal: it qualifies loader
+lifecycle and profiler wiring, not gameplay equivalence or performance parity.
 
 ## Capture modes and qualification
 
