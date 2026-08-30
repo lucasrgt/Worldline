@@ -87,7 +87,7 @@ public final class Replay {
             System.err.println("   or: java tools/replay/Replay.java test run <spec.jar|classes> [SpecClass] [options]"); return 2; }
         if (game) { int inputs = new ProcessBuilder("java", "tools/harness/RuntimeCheck.java", "--required")
                 .directory(root.toFile()).inheritIO().start().waitFor(); if (inputs != 0) return inputs; }
-        Path classes = root.resolve(".worldline/build/classes");
+        Path classes = productRoot();
         Path client = root.resolve(".worldline/smokes/controlled-client-tick");
         Path workspace = root.resolve("local/workspaces/b1.7.3");
         List<Path> paths = new ArrayList<>(Arrays.asList(classes.resolve("cli"),
@@ -120,5 +120,16 @@ public final class Replay {
                         System.getProperty("path.separator"))), "worldline.cli.WorldlineCli"));
         command.addAll(Arrays.asList(arguments));
         return new ProcessBuilder(command).directory(root.toFile()).inheritIO().start().waitFor();
+    }
+
+    private Path productRoot() {
+        String override = System.getenv("WORLDLINE_PRODUCT_ROOT");
+        Path products = override == null || override.isBlank()
+                ? root.resolve(".worldline/build/classes")
+                : Paths.get(override).toAbsolutePath().normalize();
+        if (!products.startsWith(root.resolve(".worldline").normalize())) {
+            throw new IllegalStateException("launcher product root escapes .worldline");
+        }
+        return products;
     }
 }
