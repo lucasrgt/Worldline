@@ -23,7 +23,8 @@ final class MilestoneIdUniquenessCheck {
         try (var paths = Files.list(root.resolve("smokes"))) {
             for (Path path : paths.filter(Files::isDirectory).toList()) {
                 Matcher match = SMOKE.matcher(path.getFileName().toString());
-                if (match.matches()) smokes.computeIfAbsent(match.group(1), ignored ->
+                if (!match.matches() || empty(path)) continue;
+                smokes.computeIfAbsent(match.group(1), ignored ->
                         new ArrayList<>()).add(path.getFileName().toString());
             }
         }
@@ -52,6 +53,43 @@ final class MilestoneIdUniquenessCheck {
         System.out.println("  milestone IDs: " + smokes.size() + " numeric namespaces, "
                 + collisions + " reviewed legacy collisions, " + documents + " documents ("
                 + historicalDocuments + " pre-descriptor)");
+    }
+
+    /** An interrupted probe leaves directories without files; only a file claims a namespace. */
+    private static boolean empty(Path directory) throws Exception {
+        for (Path path : SafeTreeDelete.paths(directory)) {
+            if (Files.isRegularFile(path, java.nio.file.LinkOption.NOFOLLOW_LINKS)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static void selfTest() throws Exception {
+        Path root = Files.createTempDirectory("worldline-milestone-id-");
+        try {
+            Files.createDirectories(root.resolve("docs"));
+            Files.createDirectories(root.resolve("quality"));
+            Files.writeString(root.resolve("quality/milestone-id-collisions.properties"),
+                    "schema=1\n", StandardCharsets.UTF_8);
+            Path claimed = root.resolve("smokes/m1-alpha");
+            Files.createDirectories(claimed);
+            Files.writeString(claimed.resolve("smoke.properties"), "id=m1-alpha\n",
+                    StandardCharsets.UTF_8);
+            Files.createDirectories(root.resolve("smokes/m1-orphan-probe/nested/empty"));
+            execute(root);
+            Files.writeString(root.resolve("smokes/m1-orphan-probe/smoke.properties"),
+                    "id=m1-orphan-probe\n", StandardCharsets.UTF_8);
+            try {
+                execute(root);
+                throw new IllegalStateException("unreviewed milestone collision passed");
+            } catch (IllegalStateException expected) {
+                require(expected.getMessage().contains("unreviewed numeric milestone collision"),
+                        "unexpected collision failure: " + expected.getMessage());
+            }
+        } finally {
+            SafeTreeDelete.delete(root);
+        }
     }
 
     private static Properties load(Path path) throws Exception {

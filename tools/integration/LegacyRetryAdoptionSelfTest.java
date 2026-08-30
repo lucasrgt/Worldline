@@ -225,18 +225,16 @@ final class LegacyRetryAdoptionSelfTest {
                 LegacyRetryAdoption.sha(archive)});
         require(parsed.preflightBase().equals(base) && parsed.receiptBase().equals(base),
                 "historical migration bases were not parsed independently");
-        String partial = "== nya ==\nNYA-01M0VSCA8F3WSMVW32R9XME7DQ";
-        require(OxAlphaControlMigration.contextAccepted(new OxAlphaControlMigration.Result(1,
-                        partial, "Why This Way is not initialized; run wtw init\n")),
-                "verified partial CSM context was rejected");
-        require(OxAlphaControlMigration.contextAccepted(new OxAlphaControlMigration.Result(1,
-                        "== nya ==\n", "Why This Way is not initialized; run wtw init\n")),
-                "NYA-bearing context without a ranked supervision scar was rejected");
+        String full = "== wtw ==\n== rtw ==\n== nya ==\n== nwc ==\nNYA-01M0VSCA8F3WSMVW32R9XME7DQ";
+        require(OxAlphaControlMigration.contextAccepted(new OxAlphaControlMigration.Result(0,
+                        full, "")), "complete CSM context was rejected");
         require(!OxAlphaControlMigration.contextAccepted(new OxAlphaControlMigration.Result(1,
-                        "no NYA section\n", "Why This Way is not initialized; run wtw init\n")),
-                "partial context without NYA output was accepted");
+                        full, "Why This Way is not initialized; run wtw init\n")),
+                "uninitialized-store context escaped the mandatory bootstrap");
+        require(!OxAlphaControlMigration.contextAccepted(new OxAlphaControlMigration.Result(0,
+                        "== nya ==\n", "")), "partial context fan-out was accepted");
         require(!OxAlphaControlMigration.contextAccepted(new OxAlphaControlMigration.Result(1,
-                        partial, "unknown failure\n")), "unknown CSM context failure was accepted");
+                        full, "unknown failure\n")), "unknown CSM context failure was accepted");
     }
 
     private static Fixture fixture(Path parent, Path root, String base, String id) throws Exception {

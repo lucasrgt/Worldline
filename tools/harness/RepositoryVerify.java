@@ -181,6 +181,7 @@ final class RepositoryVerify {
         }));
         report.step("adapter-kinds", () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "AdapterKindCheck")));
+        report.step("csm-suite", () -> CsmSuiteCheck.execute(root));
         if (requireLocalArtifacts) {
             run(Arrays.asList("java", "tools/toolchains/Bootstrap.java", "retromcp"));
             run(Arrays.asList("java", "tools/mappings/AcquireMappings.java",

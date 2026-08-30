@@ -1,0 +1,20 @@
+schema = 1
+id = "01m16yez7t33jw72nfqtdmvnnh"
+title = "Gate latency SLO ratchet"
+intent = "Keep hot and cold Gate runs inside versioned latency budgets while changing harness stages"
+guidance = "Latency budgets live in quality/gate-latency.properties and are enforced by GateLatencyCheck; a run counts as hot only when every stage is restored and zero suites execute. When a stage legitimately grows, revise the baseline deliberately in the same reviewed change instead of letting the ratchet absorb drift."
+scopes = [
+    "quality/gate-latency.properties",
+    "tools/harness/**",
+]
+tags = [
+    "harness",
+    "performance",
+]
+references = [
+    "quality/gate-latency.properties",
+    "tools/harness/GateLatencyCheck.java",
+]
+recorded_at = "2026-08-29T14:23:31.578367900Z"
+recorded_by = "cursor-fable"
+recorded_commit = "38965bbedbf498429e286486d87299a2c76a6bc4"

@@ -12,10 +12,6 @@ final class SwarmPreflight {
     private static final String SEMANTIC_SCAR = "NYA-01M0YZVBKBPB0SB3CJYVQSPNA9";
     private static final Pattern SUMMARY = Pattern.compile(
             "\"(FAILED_GATE|DIRTY_SUSPENDED|RETRYABLE|STRANDED)\"\\s*:\\s*([0-9]+)");
-    private static final List<String> OPTIONAL_CONTEXT_ERRORS = List.of(
-            "Why This Way is not initialized; run wtw init",
-            "rtw: Right This Way is not initialized; run rtw init",
-            "Now We Can is not initialized; run nwc init");
     private SwarmPreflight() { }
 
     static void run(String id, String baseValue, String goal, Path censusValue, Path closureValue,
@@ -49,10 +45,15 @@ final class SwarmPreflight {
                 && promptText.contains("Nested task/explore/subagent delegation is forbidden")
                 && promptText.contains("A milestone is one coherent mini-subsystem"),
                 "worker base prompt does not enforce the applicable scar");
+        CsmContextPolicy.bootstrap(root);
         SwarmProcess.Result contextResult = SwarmProcess.capture(root,
                 List.of("csm", "context", "--task", goal, "--path", "."), 300);
-        require(contextAccepted(contextResult), "csm context failed outside the optional-store allowance");
+        require(contextAccepted(contextResult),
+                "csm context did not complete the four-tool fan-out");
         String context = contextResult.output();
+        String ways = SwarmProcess.output(root, List.of("csm", "rtw", "guide", "--task", goal,
+                "--path", "smokes/" + id, "--path", "tools/smoke", "--path", "modules/testkit"), 300);
+        require(CsmContextPolicy.guided(ways), "required RTW guidance was absent for the milestone");
         String recall = SwarmProcess.output(root, List.of("csm", "nya", "recall", "--task", goal,
                 "--path", "smokes/" + id, "--path", "tools/smoke", "--path", "modules/testkit"), 300);
         String semanticRecall = SwarmProcess.output(root, List.of("csm", "nya", "recall", "--task",
@@ -94,27 +95,20 @@ final class SwarmPreflight {
         return result;
     }
     static void selfTest() {
-        require(contextAccepted(new SwarmProcess.Result(0, "complete", "")),
-                "successful CSM context was rejected");
-        String partial = "== nya ==\n" + REQUIRED_SCAR;
-        require(contextAccepted(new SwarmProcess.Result(1, partial,
-                OPTIONAL_CONTEXT_ERRORS.get(0) + "\n")), "valid partial CSM context was rejected");
-        require(contextAccepted(new SwarmProcess.Result(1, "== nya ==",
-                OPTIONAL_CONTEXT_ERRORS.get(0))), "NYA-bearing partial context was rejected");
-        require(!contextAccepted(new SwarmProcess.Result(1, "no NYA section",
-                OPTIONAL_CONTEXT_ERRORS.get(0))), "partial context without NYA output passed");
-        require(!contextAccepted(new SwarmProcess.Result(1, partial, "unknown failure\n")),
+        String full = "== wtw ==\n== rtw ==\n== nya ==\n== nwc ==\n" + REQUIRED_SCAR;
+        require(contextAccepted(new SwarmProcess.Result(0, full, "")),
+                "complete CSM context was rejected");
+        require(!contextAccepted(new SwarmProcess.Result(0, "== nya ==\n" + REQUIRED_SCAR, "")),
+                "partial CSM context fan-out was accepted");
+        require(!contextAccepted(new SwarmProcess.Result(1, full,
+                "Why This Way is not initialized; run wtw init\n")),
+                "uninitialized-store context was accepted after mandatory bootstrap");
+        require(!contextAccepted(new SwarmProcess.Result(1, full, "unknown failure\n")),
                 "unknown CSM context failure passed");
+        CsmContextPolicy.selfTest();
     }
     private static boolean contextAccepted(SwarmProcess.Result result) {
-        if (result.exitCode() == 0) {
-            return true;
-        }
-        if (result.exitCode() != 1 || !result.stdout().contains("== nya ==")) {
-            return false;
-        }
-        List<String> errors = result.stderr().lines().filter(line -> !line.isBlank()).toList();
-        return !errors.isEmpty() && errors.stream().allMatch(OPTIONAL_CONTEXT_ERRORS::contains);
+        return CsmContextPolicy.accepted(result.exitCode(), result.stdout());
     }
     private static String shaText(String text) throws Exception {
         Path path = Files.createTempFile("worldline-swarm-text-", ".txt");

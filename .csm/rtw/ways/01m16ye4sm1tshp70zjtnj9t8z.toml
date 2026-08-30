@@ -1,0 +1,14 @@
+schema = 1
+id = "01m16ye4sm1tshp70zjtnj9t8z"
+title = "Executable scar check registration"
+intent = "Turn a corrected NYA scar into a permanently enforced executable check"
+guidance = "Append a numbered block to coordination/swarm/scar-checks.properties naming the scar, a stable check id, a version, type=executable, the handler class, and evidence path. Bump the version whenever the enforced policy changes and update the handler self-test in the same commit."
+scopes = ["coordination/swarm/**"]
+tags = [
+    "csm",
+    "scar",
+]
+references = ["coordination/swarm/scar-checks.properties"]
+recorded_at = "2026-08-29T14:23:04.500237700Z"
+recorded_by = "cursor-fable"
+recorded_commit = "38965bbedbf498429e286486d87299a2c76a6bc4"

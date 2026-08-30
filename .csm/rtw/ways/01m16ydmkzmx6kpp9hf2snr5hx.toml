@@ -1,0 +1,14 @@
+schema = 1
+id = "01m16ydmkzmx6kpp9hf2snr5hx"
+title = "Harness feature self-test registration"
+intent = "Add a deterministic self-test for a new harness feature"
+guidance = "Give the feature class a static selfTest() that throws on violation, then register it in the matching HarnessFeatureSelfTest group (core, smoke, or aero). The gate runs these groups as cached stages; an unregistered self-test never runs."
+scopes = ["tools/harness/**"]
+tags = [
+    "harness",
+    "self-test",
+]
+references = ["tools/harness/HarnessFeatureSelfTest.java"]
+recorded_at = "2026-08-29T14:22:47.935683900Z"
+recorded_by = "cursor-fable"
+recorded_commit = "38965bbedbf498429e286486d87299a2c76a6bc4"

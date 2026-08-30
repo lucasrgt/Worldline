@@ -1,0 +1,20 @@
+schema = 1
+id = "01m16ye4bcaq2nxsj9fkz8ybdz"
+title = "Sealed smoke pin migration"
+intent = "Transport existing smoke PASS proofs across a reviewed recipe or formatting change without reruns"
+guidance = "Model the migration as one sealed, self-testing tool in tools/harness that maps each old qualification fingerprint to its successor, preserves executed provenance and prior_fingerprint chains, and refuses unreviewed drift. Register the migration with SchemaPinCheck evidence and never edit smokes/qualification.lock by hand."
+scopes = [
+    "smokes/qualification.lock",
+    "tools/harness/**",
+]
+tags = [
+    "migration",
+    "smoke",
+]
+references = [
+    "tools/harness/FormattingPinMigration.java",
+    "tools/harness/TrainPinMigration.java",
+]
+recorded_at = "2026-08-29T14:23:04.044740300Z"
+recorded_by = "cursor-fable"
+recorded_commit = "38965bbedbf498429e286486d87299a2c76a6bc4"

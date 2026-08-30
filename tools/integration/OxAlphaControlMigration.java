@@ -18,10 +18,6 @@ import java.util.zip.ZipFile;
 public final class OxAlphaControlMigration {
     private static final String SUPERVISION = "NYA-01M0VSCA8F3WSMVW32R9XME7DQ";
     private static final String CONTROL_BASE = "NYA-01M0ZHW1MB9W4BX3H0AY88CVY0";
-    private static final List<String> OPTIONAL_CONTEXT_ERRORS = List.of(
-            "Why This Way is not initialized; run wtw init",
-            "rtw: Right This Way is not initialized; run rtw init",
-            "Now We Can is not initialized; run nwc init");
 
     private OxAlphaControlMigration() {
     }
@@ -68,6 +64,7 @@ public final class OxAlphaControlMigration {
         } else {
             validateAdoption(root, request);
         }
+        CsmContextPolicy.bootstrap(root);
         Result context = capture(root, List.of("csm", "context", "--task", request.goal,
                 "--path", "."), 300);
         require(contextAccepted(context), "CSM context failed on the new control base");
@@ -219,14 +216,7 @@ public final class OxAlphaControlMigration {
     }
 
     static boolean contextAccepted(Result result) {
-        if (result.exit == 0) {
-            return true;
-        }
-        if (result.exit != 1 || !result.stdout.contains("== nya ==")) {
-            return false;
-        }
-        List<String> errors = result.stderr.lines().filter(line -> !line.isBlank()).toList();
-        return !errors.isEmpty() && errors.stream().allMatch(OPTIONAL_CONTEXT_ERRORS::contains);
+        return CsmContextPolicy.accepted(result.exit, result.stdout);
     }
 
     private static int recallLimit(Path root) throws Exception {

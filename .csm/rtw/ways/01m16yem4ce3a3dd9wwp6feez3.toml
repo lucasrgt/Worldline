@@ -1,0 +1,17 @@
+schema = 1
+id = "01m16yem4ce3a3dd9wwp6feez3"
+title = "Module dependency declaration"
+intent = "Add a maintained module or change what an existing module may depend on"
+guidance = "Declare the module and its explicit dependency list in harness.properties following the existing dependency order. Cycles are forbidden; the harness compiles modules separately to enforce the boundary, so an undeclared dependency fails the build rather than linking silently."
+scopes = [
+    "harness.properties",
+    "modules/**",
+]
+tags = [
+    "architecture",
+    "module",
+]
+references = ["harness.properties"]
+recorded_at = "2026-08-29T14:23:20.205013200Z"
+recorded_by = "cursor-fable"
+recorded_commit = "38965bbedbf498429e286486d87299a2c76a6bc4"

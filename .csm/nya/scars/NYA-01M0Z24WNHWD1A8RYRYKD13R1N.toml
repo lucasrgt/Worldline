@@ -1,12 +1,14 @@
 schema = 1
 id = "NYA-01M0Z24WNHWD1A8RYRYKD13R1N"
-title = "Accept only verified NYA-bearing partial CSM context"
-lesson = "The supervised preflight must execute csm context, but an exit code of 1 is expected when optional WTW, RTW, or NWC stores are uninitialized. Accept that partial result only when the NYA section is present and stderr contains exclusively recognized optional-store initialization messages; every other nonzero context result fails closed. The separate exit-zero NYA recall, not context ranking, must present every mandatory scar before work starts."
+title = "Bootstrap CSM stores and require the complete context fan-out"
+lesson = "The supervised preflight must first bootstrap the durable WTW, RTW, and NWC stores with their idempotent init commands and then require csm context to exit zero while printing all four tool sections; no partial-context allowance remains. The separate exit-zero NYA recall, not context ranking, must present every mandatory scar, and csm rtw guide must present at least one applicable way for the milestone paths before work starts. The repository gate independently fails closed when the tracked scar or way corpus is missing or empty."
 scope = [
     "tools/integration/SwarmPreflight.java",
     "tools/integration/SwarmProcess.java",
+    "tools/integration/CsmContextPolicy.java",
     "tools/integration/OxAlphaControlMigration.java",
     "tools/integration/LegacyRetryAdoptionSelfTest.java",
+    "tools/harness/CsmSuiteCheck.java",
     "coordination/swarm/OX_ALPHA_PROMPT.md",
 ]
 tags = [

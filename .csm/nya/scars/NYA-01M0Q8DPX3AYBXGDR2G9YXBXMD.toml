@@ -1,7 +1,7 @@
 schema = 1
 id = "NYA-01M0Q8DPX3AYBXGDR2G9YXBXMD"
 title = "Classify fixed tick windows before polling migration"
-lesson = "A sustainTicks call followed by an assertion is not always a race: preserve intentional tick-duration claims behind a telemetered observation-window contract, use awaitSlot/awaitBlock/awaitEntity for asynchronous conditions, and require migration transforms to be idempotent. Leave a plan pin unchanged when its computed fingerprint is unchanged. A reviewed shared input may legitimately change multiple computed fingerprints; migrate only those entries through tracked refactor-equivalent proof envelopes that preserve the official observation hash, bind portable LF source hashes, and retain immediate-predecessor source ordering."
+lesson = "A sustainTicks call followed by an assertion is not always a race: preserve intentional tick-duration claims behind a telemetered observation-window contract, use awaitSlot/awaitBlock/awaitEntity for asynchronous conditions, and require migration transforms to be idempotent. Leave a plan pin unchanged when its computed fingerprint is unchanged. A reviewed shared input may legitimately change multiple computed fingerprints; migrate only those entries through tracked refactor-equivalent proof envelopes that preserve the official observation hash, bind portable LF source hashes, and retain immediate-predecessor source ordering. Ancestry is a deduplicated ordered set: when the immediate predecessor digest already leads the recorded ancestors, a reseal legitimately keeps the ancestor count unchanged; require predecessor-first connection, never duplication."
 scope = [
     "modules/smoketest/**",
     "smokes/**",

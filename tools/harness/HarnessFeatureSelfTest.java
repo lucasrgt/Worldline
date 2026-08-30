@@ -13,6 +13,8 @@ final class HarnessFeatureSelfTest {
         CacheRebuildDrill.selfTest();
         VerificationStageCache.selfTest();
         GateLatencyCheck.selfTest();
+        CsmSuiteCheck.selfTest();
+        MilestoneIdUniquenessCheck.selfTest();
         RepositoryVerify.qualificationBoundarySelfTest();
         TrainSourceHistory.selfTest();
         TrainPinMigration.selfTest();
