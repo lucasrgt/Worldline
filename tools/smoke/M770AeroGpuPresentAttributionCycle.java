@@ -75,7 +75,8 @@ public final class M770AeroGpuPresentAttributionCycle {
                             && output.contains("BUILD SUCCESSFUL"),
                     "M770 measured client lifecycle drift: " + arm);
             results.add(M770Analyzer.analyze(arm, profiler, queries,
-                    Long.parseLong(SmokeSupport.value(config, "minimum.millis"))));
+                    Long.parseLong(SmokeSupport.value(config, "minimum.millis")),
+                    Integer.parseInt(SmokeSupport.value(config, "minimum.frames"))));
         }
         M770Analyzer.compare(results);
         String signature = sha256(TRACE);
@@ -206,14 +207,15 @@ final class M770Analyzer {
 
     private M770Analyzer() {}
 
-    static M770ArmResult analyze(String arm, Path profiler, Path queries, long minimumMillis)
-            throws Exception {
+    static M770ArmResult analyze(String arm, Path profiler, Path queries, long minimumMillis,
+            int minimumFrames) throws Exception {
         M770ProfilerArtifact census = M770ProfilerArtifact.read(profiler);
         M770GpuArtifact gpu = M770GpuArtifact.read(queries, arm, census.frames());
         for (String metric : new String[] {FRAME, DISPLAY, GPU_WAIT, "render.world.nanos"}) {
             SmokeSupport.require(census.contains(metric), "M770 metric absent: " + metric);
         }
-        SmokeSupport.require(census.frames() >= 3_000, "M770 frame census too small: " + arm);
+        SmokeSupport.require(census.frames() >= minimumFrames,
+                "M770 frame census too small: " + arm);
         SmokeSupport.require(census.endEpochMillis() - census.startEpochMillis() >= minimumMillis,
                 "M770 retained window too short: " + arm);
         SmokeSupport.require(gpu.results * 10L >= census.frames() * 9L,
