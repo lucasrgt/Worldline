@@ -241,6 +241,26 @@ EntityLifecycleEvidence squid = EntityLifecycleFixture.execute(
                 "damage-death", "drop-matrix")), scenario);
 ```
 
+Packet23 objects use a separate universal materialization fixture so projectiles, vehicles,
+primed TNT, and falling blocks are not forced through Packet24 mob semantics. The caller performs
+the gameplay cause, then the fixture verifies type, positive entity identity, and any qualified
+thrower or zero-velocity constraint:
+
+```java
+ObjectMaterializationScenario objectScenario =
+        new ObjectObservationMaterializationScenario(objectSession);
+ObjectMaterializationEvidence arrow = ObjectMaterializationFixture.execute(
+        plan, "b1.7.3:entity/010",
+        ObjectSpawnExpectation.withThrower(60, actorEntityId), objectScenario);
+ObjectMaterializationEvidence cart = ObjectMaterializationFixture.execute(
+        plan, "b1.7.3:entity/040",
+        ObjectSpawnExpectation.stationary(10, 0), objectScenario);
+```
+
+The resulting evidence records Packet23 type and relational thrower policy, never ephemeral entity
+IDs or poses. Arrow, snowball, primed TNT, falling sand, minecart, and boat therefore remain six
+cases of one coherent materialization subsystem rather than six milestone-count atoms.
+
 ### Block lifecycle matrices
 
 `worldline.testkit.BlockConformancePlan` and `BlockLifecyclePlan` are part of

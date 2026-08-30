@@ -1,4 +1,10 @@
 subject_id	template_id	fixture	binding	evidence_id
+b1.7.3:entity/010	spawn-materialization	object-materialization	worldline.testkit.ObjectMaterializationFixture#execute	m157-bow-arrow
+b1.7.3:entity/011	spawn-materialization	object-materialization	worldline.testkit.ObjectMaterializationFixture#execute	m161-snowball
+b1.7.3:entity/020	spawn-materialization	object-materialization	worldline.testkit.ObjectMaterializationFixture#execute	m381-tnt-prime-set
+b1.7.3:entity/021	spawn-materialization	object-materialization	worldline.testkit.ObjectMaterializationFixture#execute	m597-falling-sand-entity-set
+b1.7.3:entity/040	spawn-materialization	object-materialization	worldline.testkit.ObjectMaterializationFixture#execute	m155-minecart-spawn
+b1.7.3:entity/041	spawn-materialization	object-materialization	worldline.testkit.ObjectMaterializationFixture#execute	m154-boat-spawn
 b1.7.3:entity/050	spawn-materialization	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m421-creeper-gunpowder-set
 b1.7.3:entity/050	damage-death	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m421-creeper-gunpowder-set
 b1.7.3:entity/050	drop-matrix	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m421-creeper-gunpowder-set
