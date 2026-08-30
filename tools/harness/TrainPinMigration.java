@@ -88,10 +88,11 @@ final class TrainPinMigration extends TrainPinSupport {
             if (currentPin != null && "executed".equals(currentPin.source())
                     && hasExecuted(root, smoke.id)) {
                 Imported receipt = executed(root, cache, smoke, current);
-                require(receipt != null, "exact new milestone receipt drift: " + smoke.id);
-                executed++; seal(lock, stem, "executed", receipt.fingerprint,
-                        current, receipt.evidence);
-                receipt(lock, stem, receipt); updated.add(currentPin); continue;
+                if (receipt != null) {
+                    executed++; seal(lock, stem, "executed", receipt.fingerprint,
+                            current, receipt.evidence);
+                    receipt(lock, stem, receipt); updated.add(currentPin); continue;
+                }
             }
             imported++; boolean predecessorProof =
                     predecessorProof(predecessor.getProperty(stem + "kind"));

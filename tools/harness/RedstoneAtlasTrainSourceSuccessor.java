@@ -36,7 +36,10 @@ final class RedstoneAtlasTrainSourceSuccessor {
                 "cc9033f7e59c4a18a2462dbd61d078d5c88976c0a2095cd9479ea5f88528586d"},
         {"tools/harness/HarnessFeatureSelfTest.java",
                 "06214c272a99ab7c40f0d0ad383860e04fe6f0b6b746aef55ccc47314149c622",
-                "01bfff223bfb4cdfdfb7df79ee153b14e4ff4ee39f658c4652771521e56f3043"}
+                "01bfff223bfb4cdfdfb7df79ee153b14e4ff4ee39f658c4652771521e56f3043"},
+        {"tools/harness/TrainPinMigration.java",
+                "f08028a332e3d7f890e8c7e8004a02e0f46b5c14064e2b91af7ad5c56a9db9fa",
+                "32925decb335a2f4152076103c2d490c24413ea492e74344a6fe63e037ef1534"}
     };
 
     private RedstoneAtlasTrainSourceSuccessor() { }
