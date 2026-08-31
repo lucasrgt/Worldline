@@ -2,4 +2,4 @@ schema=1
 id=m781-aero-smooth-light-default-lifecycle
 fingerprint=f18f54fae8f0545cb29499990b723a176bd1c6833ded1206f4fc1ce02b16327f
 observation.sha256=5dc91af9f14383b3a51b37ce1473ace22f41c17dfaed33c63727609e8db95205
-source=refactor-equivalent
+source=executed
