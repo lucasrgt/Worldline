@@ -8,7 +8,6 @@
     "HighMemoryMinecraftMixin",
     "HighMemoryCloudMixin",
     "HighMemoryMegaRendererMixin",
-    "HighMemorySubmitMixin",
     "HighMemoryTranslucentMixin"
   ],
   "injectors": { "defaultRequire": 1 }

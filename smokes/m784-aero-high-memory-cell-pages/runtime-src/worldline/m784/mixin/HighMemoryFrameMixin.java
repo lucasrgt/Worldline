@@ -2,6 +2,7 @@ package worldline.m784.mixin;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -28,6 +29,11 @@ public abstract class HighMemoryFrameMixin {
 
     @Inject(method = "onFrameUpdate(F)V", at = @At("TAIL"))
     private void worldlineCaptureFrame(float tickDelta, CallbackInfo callback) {
+        if (HighMemoryState.fixtureActive() && client.player != null) {
+            Vec3d camera = client.player.getCameraPos(1.0F);
+            HighMemoryState.submitFixture(camera.x, camera.y, camera.z);
+            HighMemoryProbe.flush(camera.x, camera.y, camera.z);
+        }
         HighMemoryProbe.sample(client);
     }
 }

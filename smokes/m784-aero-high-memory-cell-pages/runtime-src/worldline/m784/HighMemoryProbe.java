@@ -26,6 +26,7 @@ public final class HighMemoryProbe {
     private static final boolean[] CAPTURED = new boolean[HighMemoryScene.CHECKPOINTS];
     private static final com.sun.management.ThreadMXBean ALLOC = allocationBean();
     private static long started, allocationStarted, allocatedBytes, heapPeak;
+    private static long explicitFlushCalls, explicitFlushNanos;
     private static int captures, blankCaptures, width, height, pageCalls, pageRebuilds, directCalls;
     private static int maxCachedPages, prewarmDrained, compiledStart, expiredStart, evictedStart;
     private static String arm;
@@ -35,6 +36,7 @@ public final class HighMemoryProbe {
 
     public static void beginArm(String name) {
         arm = name;
+        explicitFlushCalls = explicitFlushNanos = 0L;
         Aero_Profiler.reset();
         compiledStart = Aero_BECellRenderer.compiledCachedPages();
         expiredStart = Aero_BECellRenderer.expiredCachedPages();
@@ -81,6 +83,14 @@ public final class HighMemoryProbe {
     public static int frames() { return WALLS.size(); }
     public static int captures() { return captures; }
 
+    /** Executes and times the one controlled production Cell Page flush for this frame. */
+    public static void flush(double cameraX, double cameraY, double cameraZ) {
+        long start = System.nanoTime();
+        Aero_BECellRenderer.flush(cameraX, cameraY, cameraZ);
+        explicitFlushNanos += System.nanoTime() - start;
+        explicitFlushCalls++;
+    }
+
     public static void write(File metrics, File frames, String name, int machines) throws Exception {
         Runtime runtime = Runtime.getRuntime();
         try (PrintWriter out = new PrintWriter(new FileWriter(metrics))) {
@@ -105,8 +115,10 @@ public final class HighMemoryProbe {
             out.println("page.ttl.frames=" + Aero_BECellRenderer.pageTtlFrames());
             out.println("page.rebuild.budget=" + Aero_BECellRenderer.rebuildsPerFrame());
             out.println("page.cache.max=" + Aero_BECellRenderer.maxCachedPages());
-            out.println("flush.calls=" + Aero_Profiler.callCount("aero.becell.flush"));
-            out.println("flush.nanos=" + Aero_Profiler.totalNanos("aero.becell.flush"));
+            out.println("flush.calls=" + explicitFlushCalls);
+            out.println("flush.nanos=" + explicitFlushNanos);
+            out.println("profiler.flush.calls=" + Aero_Profiler.callCount("aero.becell.flush"));
+            out.println("profiler.flush.nanos=" + Aero_Profiler.totalNanos("aero.becell.flush"));
             out.println("prewarm.enabled=" + Aero_Prewarm.ENABLED);
             out.println("prewarm.queued.total=" + Aero_Prewarm.queuedModelsTotal());
             out.println("prewarm.drained=" + prewarmDrained);

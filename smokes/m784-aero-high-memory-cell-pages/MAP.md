@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=aero-high-memory-cell-pages -->
 <!-- nonclaims=default-enable,weak-gpu-vram-equivalence,driver-memory-bytes -->
-<!-- frozen-trace=7145d5c3f5de611f6a843b860a5439438e73f922d96bc762859d1ced4ccab3af -->
+<!-- frozen-trace=6d54ab2e3227dd72a50e777d5f5cf7a19fbf32d234a3bc876d3f858e4235530d -->
 
 # M784 Aero high-memory Cell Page behavior map
 
@@ -15,6 +15,8 @@ oracle clears unrelated terrain color and depth before the first fixture mesh.
 It submits every fixture through the production Cell Page queue with fixed
 brightness and membership so dispatcher readiness cannot contaminate the A/B.
 Both arms use a minimum page size of one to cover fragmented singleton pages.
+One frame-tail boundary performs exactly one controlled production submission
+and flush per frame, independent of vanilla entity-pass scheduling.
 
 ## Actions
 
@@ -29,7 +31,8 @@ one route of blank checkpoints rejects the capture boundary.
 
 The cycle records complete frame intervals, p99, client-thread allocation,
 heap high-water mark, Cell Page calls/rebuilds/direct fallback/cache size,
-`aero.becell.flush` calls and nanoseconds, prewarm drainage, display-list live,
+controlled flush calls and nanoseconds, `aero.becell.flush` profiler totals,
+prewarm drainage, display-list live,
 peak, denial and failure counts, full-frame pixels and 50 ms hitches.
 
 ## Oracle
@@ -50,4 +53,4 @@ This does not measure driver-owned bytes or claim safety on every weak GPU. It
 can qualify high-memory mode as an explicit production option; it cannot make
 that mode the default.
 
-Signal: `scene=576-static-four-towers-four-chunks,membership=fixed,minInstances=1,jvms=8-fresh-four-counterbalanced-pairs,route=orbit+traverse+spin+teleport,memory=normal-vs-high,flatten=off-vs-on,cell-pages=stable,rgba=0-unexplained+blank-retry<=24,guardrails=bounded,order-strata=both+frame-wins>=3,metrics=classified,decision=promote-opt-in-or-keep-candidate`.
+Signal: `scene=576-static-four-towers-four-chunks,membership=fixed,minInstances=1,jvms=8-fresh-four-counterbalanced-pairs,route=orbit+traverse+spin+teleport,memory=normal-vs-high,flatten=off-vs-on,cell-pages=stable,submission=one-controlled-production-submit+flush,rgba=0-unexplained+blank-retry<=24,guardrails=bounded,order-strata=both+frame-wins>=3,metrics=classified,decision=promote-opt-in-or-keep-candidate`.

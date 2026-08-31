@@ -82,6 +82,7 @@ public final class HighMemoryState {
     }
 
     public static boolean retaining() { return stage == 2 && measuring; }
+    public static boolean fixtureActive() { return stage == 2; }
     public static boolean freezeTicks() { return stage == 2; }
     public static boolean captureFrame() { return capture; }
     public static int checkpoint() { return checkpoint; }
