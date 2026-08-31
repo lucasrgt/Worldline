@@ -23,7 +23,7 @@ public final class M783AeroChunkSchedulerVisualLatencyCycle {
         {"pages", "prebake"}, {"prebake", "pages"},
         {"prebake", "pages"}, {"pages", "prebake"}
     };
-    private static final String TRACE = "v2|scene=restored-576|pairs=4|"
+    private static final String TRACE = "v3|scene=restored-576|pairs=4|"
         + "orders=pages-prebake+prebake-pages+prebake-pages+pages-prebake|"
         + "window=600|fresh-load=per-jvm|route=walk+turn+teleport+mutation+settle+drain|"
         + "dirty=current-visible1+adjacent2+lookahead1-per-eight|pages=on|"
@@ -33,7 +33,7 @@ public final class M783AeroChunkSchedulerVisualLatencyCycle {
         + "decision=promote-or-keep-disabled";
     private static final String SIGNAL = "scene=restored-576,pairs=4,jvms=8-fresh,"
         + "window=600,fresh-load=per-jvm,route=walk+turn+teleport+mutation+settle+drain,"
-        + "pages=on,prebake=off-vs-budget1,visual-latency=measured,visible-backlog=drained,"
+        + "pages=on,prebake=off-vs-budget1,visual-latency=measured,visible-backlog=classified,"
         + "world-reset=observed,hitch=classified,metrics=classified,"
         + "decision=promote-or-keep-disabled";
     private final Path root = Path.of("").toAbsolutePath().normalize();
@@ -263,10 +263,10 @@ final class M783VisualArtifact {
     void verify() {
         SmokeSupport.require(frames >= 600 && machines == 576
             && worldResets >= 1 && finalBacklog >= 0 && maxBacklog > 0
-            && finalBacklog <= maxBacklog && finalVisibleBacklog == 0
-            && maxVisibleBacklog > 0
+            && finalBacklog <= maxBacklog && finalVisibleBacklog >= 0
+            && finalVisibleBacklog <= maxVisibleBacklog && maxVisibleBacklog > 0
             && allocatedBytes > 0L && rebuilds > 0 && rebuildMaximumNanos > 0L
-            && latencySamples > 0 && latencyPending == 0,
+            && latencySamples > 0 && latencyPending >= 0,
             "M783 incomplete artifact: " + summary());
         if (arm.equals("pages")) SmokeSupport.require(prebake == 0,
             "M783 baseline activated scheduler: " + summary());
@@ -352,6 +352,12 @@ final class M783VisualGate {
             value.prebake().latencyMaximum).max().orElseThrow();
         int latencyP99 = source.stream().mapToInt(value ->
             value.prebake().latencyP99).max().orElseThrow();
+        int baselineVisible = source.stream().mapToInt(value ->
+            value.pages().finalVisibleBacklog).max().orElseThrow();
+        int candidateVisible = source.stream().mapToInt(value ->
+            value.prebake().finalVisibleBacklog).max().orElseThrow();
+        int candidatePending = source.stream().mapToInt(value ->
+            value.prebake().latencyPending).max().orElseThrow();
         boolean hitchPass = (Boolean) hitch.getClass().getMethod("passes").invoke(hitch);
         boolean metricsPass = fpsRatio >= Double.parseDouble(SmokeSupport.value(config,
                 "fps.minimum.ratio"))
@@ -363,11 +369,14 @@ final class M783VisualGate {
                 "maximum.visible.latency.frames"))
             && latencyP99 <= Integer.parseInt(SmokeSupport.value(config,
                 "maximum.visible.p99.frames"));
+        boolean visibilityPass = candidateVisible == 0 && candidatePending == 0;
         return new M783VisualResult(number(hitch, "baselineRatePpm"),
             number(hitch, "candidateRatePpm"), number(hitch, "aggregateDeltaPpm"),
             hitchPass, fpsRatio, p99Ratio, allocationRatio, metricsPass,
-            latencyMaximum, latencyP99, latencyPass,
-            hitchPass && metricsPass && latencyPass ? "promote" : "keep-disabled");
+            latencyMaximum, latencyP99, latencyPass, baselineVisible,
+            candidateVisible, candidatePending, visibilityPass,
+            hitchPass && metricsPass && latencyPass && visibilityPass
+                ? "promote" : "keep-disabled");
     }
 
     private static double ratio(List<M783VisualPair> pairs, int metric) {
@@ -406,6 +415,8 @@ record M783VisualResult(long baselineHitchPpm, long candidateHitchPpm,
                         long hitchDeltaPpm, boolean hitchPass, double fpsRatio,
                         double p99Ratio, double allocationRatio, boolean metricsPass,
                         int latencyMaximum, int latencyP99, boolean latencyPass,
+                        int baselineVisible, int candidateVisible, int candidatePending,
+                        boolean visibilityPass,
                         String decision) {
     String summary() {
         return "decision=" + decision + ",hitch.pages.ppm=" + baselineHitchPpm
@@ -414,7 +425,9 @@ record M783VisualResult(long baselineHitchPpm, long candidateHitchPpm,
             + ",p99.ratio=" + round(p99Ratio) + ",allocation.ratio="
             + round(allocationRatio) + ",metrics.pass=" + metricsPass
             + ",latency.max=" + latencyMaximum + ",latency.p99=" + latencyP99
-            + ",latency.pass=" + latencyPass;
+            + ",latency.pass=" + latencyPass + ",visible.pages=" + baselineVisible
+            + ",visible.prebake=" + candidateVisible + ",visible.pending="
+            + candidatePending + ",visible.pass=" + visibilityPass;
     }
 
     private static String round(double value) { return String.format("%.4f", value); }
