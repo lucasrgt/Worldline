@@ -1,9 +1,7 @@
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.MessageDigest;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 
 /** Qualifies the concrete Beta 1.7.3 EntityList physical-envelope matrix twice. */
@@ -25,7 +23,7 @@ public final class EntityPhysicalEnvelopeCycle {
   }
 
   private void execute() throws Exception {
-    recreate(build);
+    SmokeSupport.recreate(root, build);
     capture(build.resolve("first"));
     capture(build.resolve("second"));
     Path first = build.resolve("first/entity-physical-envelope.wlevidence");
@@ -56,7 +54,7 @@ public final class EntityPhysicalEnvelopeCycle {
   }
 
   private void capture(Path output) throws Exception {
-    recreate(output);
+    SmokeSupport.recreate(root, output);
     Process process = new ProcessBuilder("java", "tools/replay/Replay.java", "census",
             output.toString()).directory(root.toFile()).redirectErrorStream(true).start();
     String text = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
@@ -99,25 +97,6 @@ public final class EntityPhysicalEnvelopeCycle {
   private static String summarize(String value) {
     String normalized = value.replace('\r', ' ').replace('\n', ' ').trim();
     return normalized.length() <= 500 ? normalized : normalized.substring(0, 500) + "...";
-  }
-
-  private static void recreate(Path directory) throws Exception {
-    if (Files.exists(directory)) {
-      try (var paths = Files.walk(directory)) {
-        for (Path path : paths.sorted(java.util.Comparator.reverseOrder()).toList()) {
-          Files.delete(path);
-        }
-      }
-    }
-    Files.createDirectories(directory);
-  }
-
-  private static String sha(byte[] value) throws Exception {
-    StringBuilder result = new StringBuilder();
-    for (byte item : MessageDigest.getInstance("SHA-256").digest(value)) {
-      result.append(String.format("%02x", item & 255));
-    }
-    return result.toString();
   }
 
   private static void require(boolean value, String message) {

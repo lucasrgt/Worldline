@@ -190,9 +190,8 @@ public final class BehaviorCompletenessCheck {
             throws IOException {
         Set<String> result = new HashSet<>();
         Path base = root.resolve("behavior/functional-census/b1.7.3");
-        try (Stream<Path> paths = Files.walk(base)) {
-            for (Path path : paths.filter(Files::isRegularFile)
-                    .filter(file -> file.getFileName().toString().equals(name)).toList()) {
+        for (Path path : List.of(base.resolve(name), base.resolve("entities").resolve(name))) {
+            if (Files.isRegularFile(path)) {
                 List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
                 String[] header = lines.get(0).split("\\t", -1);
                 for (int index = 1; index < lines.size(); index++) {

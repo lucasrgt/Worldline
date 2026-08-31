@@ -42,7 +42,7 @@ final class EntityPhysicalEnvelopeSubsystemSuccessor {
                 "0698bfc5024c0e558b90514ceabd7c725f0cebf9c575e6c1cfc4af3375498342"},
         {"tools/harness/BehaviorCompletenessCheck.java",
                 "652e32015f658ad54a8b04471691d00b31d00c90bb08ceeff97bcbaa49401ec5",
-                "8b082f7be998da565f2a11ba2a7fc312307ba79c902788381a440aea5afce5f1"},
+                "ab05d06e9961c9efa8b72fea32168223e38b713ec88f9f1146ec887af923f0f4"},
         {"tools/harness/TrainGeneratedDocumentationMigration.java",
                 "797056371c16b71e63f566a60938416512ba77d03371a82b5f6172d7c22b9bdc",
                 "f278bbba0f658872822714af3e42403699d21dd3db35c439e14d460f4b357909"},
