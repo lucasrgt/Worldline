@@ -34,25 +34,8 @@ public final class EntityPhysicalEnvelopeCycle {
     require(Arrays.equals(evidence, Files.readAllBytes(second)),
         "fresh entity physical envelope captures diverged");
     String canonical = new String(evidence, StandardCharsets.UTF_8);
-    require(canonical.startsWith(
-            "schema=worldline.entity-physical-envelope-evidence.v1\nclaims=23\n"),
-        "entity physical envelope evidence framing drifted");
-    require(occurrences(canonical, "#collision-shape|ARCHETYPE") == 13
-            && occurrences(canonical, "#collision-shape|SINGULAR") == 10,
-        "entity physical envelope layer routing drifted");
-    require(occurrences(canonical, "|centered=true|vertical=true") == 23,
-        "entity physical envelope geometry is incomplete");
-    require(!canonical.contains("entity/048#collision-shape"),
-        "abstract EntityLiving was materialized dishonestly");
-    String evidenceSha = sha(evidence);
-    String signal = "family=entity-physical-envelope,subjects=23,claims=23,"
-        + "layers=ARCHETYPEx13+SINGULARx10,abstract=entity/048:NOT_APPLICABLE,"
-        + "deterministic=true,evidence=" + evidenceSha;
-    String trace = "v1|client=official-mapped-b1.7.3|family=entity-physical-envelope|"
-        + "actions=construct-canonical-entities+normalize-slime+position+inspect-aabb+"
-        + "inspect-contact-dispositions|oracle=public-entity-physical-envelope-evidence|"
-        + "evidence=" + evidenceSha;
-    String signature = sha(trace.getBytes(StandardCharsets.UTF_8));
+    Outcome outcome = smoke(first);
+    String signal = outcome.signal, trace = outcome.trace, signature = outcome.signature;
     Properties descriptor = new Properties();
     try (java.io.Reader reader = Files.newBufferedReader(
             root.resolve("smokes").resolve(ID).resolve("smoke.properties"))) {
@@ -82,10 +65,35 @@ public final class EntityPhysicalEnvelopeCycle {
         "entity physical envelope capture failed: " + summarize(text));
   }
 
-  private static int occurrences(String value, String marker) {
-    int count = 0, start = 0;
-    while ((start = value.indexOf(marker, start)) >= 0) { count++; start += marker.length(); }
-    return count;
+  private Outcome smoke(Path evidence) throws Exception {
+    Path classes = build.resolve("smoke-classes");
+    Files.createDirectories(classes);
+    Path source = root.resolve("smokes").resolve(ID).resolve(
+        "src/worldline/smoke/b173entityphysical/B173EntityPhysicalEnvelopeSmoke.java");
+    Process compile = new ProcessBuilder("javac", "--release", "8", "-encoding", "UTF-8",
+        "-Xlint:all,-options", "-Werror", "-d", classes.toString(), source.toString())
+        .directory(root.toFile()).redirectErrorStream(true).start();
+    String compileText = new String(compile.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+    require(compile.waitFor() == 0, "entity physical smoke compilation failed: "
+        + summarize(compileText));
+    Process run = new ProcessBuilder("java", "-classpath", classes.toString(),
+        "worldline.smoke.b173entityphysical.B173EntityPhysicalEnvelopeSmoke",
+        evidence.toString()).directory(root.toFile()).redirectErrorStream(true).start();
+    String output = new String(run.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+    require(run.waitFor() == 0, "entity physical smoke failed: " + summarize(output));
+    return new Outcome(line(output, "WORLDLINE_B173_ENTITY_PHYSICAL_SET="),
+        line(output, "WORLDLINE_B173_ENTITY_PHYSICAL_TRACE="),
+        line(output, "WORLDLINE_B173_ENTITY_PHYSICAL_SIGNATURE="));
+  }
+
+  private static String line(String output, String prefix) {
+    String found = null;
+    for (String value : output.split("\\R")) if (value.startsWith(prefix)) {
+      require(found == null, "duplicate entity physical smoke output " + prefix);
+      found = value.substring(prefix.length());
+    }
+    require(found != null, "missing entity physical smoke output " + prefix);
+    return found;
   }
 
   private static String summarize(String value) {
@@ -115,4 +123,6 @@ public final class EntityPhysicalEnvelopeCycle {
   private static void require(boolean value, String message) {
     if (!value) throw new IllegalStateException(message);
   }
+
+  private record Outcome(String signal, String trace, String signature) { }
 }
