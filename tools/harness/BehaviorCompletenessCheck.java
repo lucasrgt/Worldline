@@ -21,6 +21,8 @@ public final class BehaviorCompletenessCheck {
     private static final Pattern CATALOG = Pattern.compile("define\\(\\s*\"([a-z][a-z0-9-]+)\"");
     private static final Pattern BINDING = Pattern.compile(
             "([a-z][A-Za-z0-9_.]*[A-Z][A-Za-z0-9_]*)#([a-z][A-Za-z0-9_]*)");
+    private static final Pattern CENSUS_CLAIM = Pattern.compile(
+            "b1\\.7\\.3:(?:block|entity)/[0-9]{3}#[a-z][a-z0-9-]{0,62}");
     private final Path root = Paths.get("").toAbsolutePath().normalize();
     private final Set<String> behaviorCatalog = new HashSet<String>();
     private final Set<String> contractCatalog = new HashSet<String>();
@@ -53,7 +55,13 @@ public final class BehaviorCompletenessCheck {
             String contract = smoke.getProperty("testkit.contract", "").trim();
             require(behavior.isEmpty() || contract.isEmpty(),
                     "manifest declares behavior and tooling contract: " + relative(manifest));
-            if (behavior.isEmpty() && contract.isEmpty()) { requirePending(directory); pending++; }
+            if (behavior.isEmpty() && contract.isEmpty()
+                    && !smoke.getProperty("milestone.census.claims", "").isBlank()) {
+                validateCensusContract(smoke, manifest, directory); complete++;
+            }
+            else if (behavior.isEmpty() && contract.isEmpty()) {
+                requirePending(directory); pending++;
+            }
             else { validateContract(smoke, manifest, behavior.isEmpty() ? contract : behavior,
                     behavior.isEmpty() ? contractCatalog : behaviorCatalog); complete++; }
         }
@@ -128,6 +136,79 @@ public final class BehaviorCompletenessCheck {
                 "behavior signature is pending in " + relative(manifest));
         require(!"pending".equals(required(smoke, "expected.signal")),
                 "behavior signal is pending in " + relative(manifest));
+    }
+
+    private void validateCensusContract(Properties smoke, Path manifest, String milestone)
+            throws IOException {
+        require("behavior-package".equals(required(smoke, "milestone.kind")),
+                "claim-level contract must be a behavior-package in " + relative(manifest));
+        require("not-applicable".equals(required(smoke, "qualification.atlas"))
+                        && "not-applicable".equals(required(smoke, "qualification.testkit")),
+                "claim-level contract must keep aggregate surfaces not-applicable in "
+                        + relative(manifest));
+        require(!required(smoke, "qualification.atlas.reason").isBlank()
+                        && !required(smoke, "qualification.testkit.reason").isBlank(),
+                "claim-level contract requires explicit aggregate-surface reasons in "
+                        + relative(manifest));
+        token(required(smoke, "testkit.fixture"), "fixture", manifest);
+        tokenList(required(smoke, "testkit.actions"), "actions", manifest);
+        tokenList(required(smoke, "testkit.observations"), "observations", manifest);
+        require("equatable".equals(required(smoke, "testkit.evidence")),
+                "testkit.evidence must be equatable in " + relative(manifest));
+        String binding = required(smoke, "testkit.binding");
+        validateBinding(binding, manifest);
+        require(!"pending".equals(required(smoke, "expected.signature"))
+                        && !"pending".equals(required(smoke, "expected.signal")),
+                "claim-level behavior evidence is pending in " + relative(manifest));
+
+        Set<String> declared = new HashSet<>();
+        for (String value : required(smoke, "milestone.census.claims").split(",", -1)) {
+            String claim = value.trim();
+            require(CENSUS_CLAIM.matcher(claim).matches() && declared.add(claim),
+                    "invalid or duplicate census claim in " + relative(manifest));
+        }
+        Set<String> evidenced = censusRows("claims.tsv", milestone, row -> {
+            require("VERIFIED".equals(row.get("status"))
+                            && "PUBLIC_TESTKIT".equals(row.get("automation_surface")),
+                    "claim-level milestone has a non-public or unverified census row: " + milestone);
+            return row.get("subject_id") + "#" + row.get("template_id");
+        });
+        require(declared.equals(evidenced), "claim-level milestone census set drifted in "
+                + relative(manifest));
+        Set<String> bound = censusRows("testkit-bindings.tsv", milestone, row -> {
+            require(required(smoke, "testkit.fixture").equals(row.get("fixture"))
+                            && binding.equals(row.get("binding")),
+                    "claim-level milestone binding drifted: " + milestone);
+            return row.get("subject_id") + "#" + row.get("template_id");
+        });
+        require(declared.equals(bound), "claim-level milestone TestKit set drifted in "
+                + relative(manifest));
+    }
+
+    private Set<String> censusRows(String name, String milestone,
+            java.util.function.Function<java.util.Map<String, String>, String> mapper)
+            throws IOException {
+        Set<String> result = new HashSet<>();
+        Path base = root.resolve("behavior/functional-census/b1.7.3");
+        try (Stream<Path> paths = Files.walk(base)) {
+            for (Path path : paths.filter(Files::isRegularFile)
+                    .filter(file -> file.getFileName().toString().equals(name)).toList()) {
+                List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+                String[] header = lines.get(0).split("\\t", -1);
+                for (int index = 1; index < lines.size(); index++) {
+                    String[] cells = lines.get(index).split("\\t", -1);
+                    java.util.Map<String, String> row = new java.util.HashMap<>();
+                    for (int column = 0; column < header.length; column++)
+                        row.put(header[column], cells[column]);
+                    if (milestone.equals(row.get("evidence_id"))) {
+                        String value = mapper.apply(row);
+                        require(result.add(value), "duplicate claim-level census row: " + value);
+                    }
+                }
+            }
+        }
+        require(!result.isEmpty(), "claim-level milestone has no census evidence: " + milestone);
+        return result;
     }
 
     private void validateBinding(String value, Path manifest) throws IOException {
