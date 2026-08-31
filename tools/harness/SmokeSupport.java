@@ -34,13 +34,13 @@ public final class SmokeSupport {
         try {
             boolean finished = process.waitFor(timeout, TimeUnit.SECONDS);
             if (!finished) destroy(process);
-            String output = Files.readString(log, StandardCharsets.UTF_8);
+            String output = decode(Files.readAllBytes(log));
             if (!finished) throw new IllegalStateException(command.get(0) + " timed out after "
                     + timeout + "s\n" + tail(output, 8_000));
             if (process.exitValue() != 0)
                 throw new IllegalStateException(command.get(0) + " failed\n" + output);
             return output;
-        } finally { Files.deleteIfExists(log); }
+        } finally { deleteTemporary(log); }
     }
 
     public static void recreate(Path root, Path target) throws IOException {
@@ -151,6 +151,23 @@ public final class SmokeSupport {
                 && System.nanoTime() < deadline) Thread.sleep(20L);
         require(descendants.stream().noneMatch(ProcessHandle::isAlive),
                 "smoke descendants did not terminate: " + process.pid());
+    }
+
+    private static void deleteTemporary(Path path) {
+        try { Files.deleteIfExists(path); }
+        catch (IOException locked) { path.toFile().deleteOnExit(); }
+    }
+
+    static void selfTest() throws Exception {
+        require(decode(new byte[] {(byte) 0xc3, 0x28}).contains("\ufffd"),
+                "smoke log decoder must replace malformed legacy bytes");
+        Path temporary = Files.createTempFile("worldline-smoke-support-", ".tmp");
+        deleteTemporary(temporary);
+        require(!Files.exists(temporary), "smoke temporary log cleanup drift");
+    }
+
+    private static String decode(byte[] bytes) {
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 
     private static String tail(String value, int maximum) {

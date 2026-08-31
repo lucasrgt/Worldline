@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.Collections;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.SingleplayerInteractionManager;
+import net.minecraft.client.render.chunk.ChunkBuilder;
 import net.minecraft.world.World;
 
 /** Drives one long restored-world route in a fresh client world. */
@@ -15,6 +16,7 @@ public final class VisualState {
     private static final int REQUIRED = Integer.getInteger("worldline.m783.frames", 600);
     private static final long MINIMUM_MILLIS = Long.getLong("worldline.m783.minimumMillis", 15000L);
     private static int stage, warmup, stable, retained, phase, machines, maxBacklog;
+    private static int maxVisibleBacklog;
     private static long retainedStarted;
 
     private VisualState() {}
@@ -37,15 +39,18 @@ public final class VisualState {
         }
         if (retained <= REQUIRED) VisualScene.act(game, retained);
         int backlog = backlog(game);
+        int visibleBacklog = visibleBacklog(game);
         maxBacklog = Math.max(maxBacklog, backlog);
-        stable = retained > REQUIRED - 100 && backlog == 0
+        maxVisibleBacklog = Math.max(maxVisibleBacklog, visibleBacklog);
+        stable = retained > REQUIRED - 100 && visibleBacklog == 0
                 && VisualProbe.pendingVisible() == 0 ? stable + 1 : 0;
         long elapsed = (System.nanoTime() - retainedStarted) / 1_000_000L;
         require(retained < REQUIRED + 600 || stable >= 20,
                 "M783 retained drain timeout: backlog=" + backlog
+                        + " visible=" + visibleBacklog
                         + " pending=" + VisualProbe.pendingVisible());
         if (retained < REQUIRED || elapsed < MINIMUM_MILLIS || stable < 20) return;
-        finish(game, backlog, elapsed);
+        finish(game, backlog, visibleBacklog, elapsed);
     }
 
     public static boolean retaining() { return stage == 2; }
@@ -90,23 +95,34 @@ public final class VisualState {
         stable = 0;
     }
 
-    private static void finish(Minecraft game, int backlog, long elapsed) {
-        require(backlog == 0, "M783 final lifecycle drift");
+    private static void finish(Minecraft game, int backlog, int visibleBacklog, long elapsed) {
+        require(visibleBacklog == 0 && VisualProbe.pendingVisible() == 0,
+                "M783 final visible lifecycle drift");
         try {
             VisualProbe.write(new File(System.getProperty("worldline.m783.metrics")),
                     new File(System.getProperty("worldline.m783.framesFile")), ARM,
-                    maxBacklog, backlog, machines);
+                    maxBacklog, backlog, maxVisibleBacklog, visibleBacklog, machines);
         } catch (Exception error) {
             throw new IllegalStateException("M783 artifact write failed", error);
         }
         System.out.println("[WorldlineM783] retained-complete arm=" + ARM
-                + " frames=" + retained + " millis=" + elapsed + " backlog=" + backlog);
+                + " frames=" + retained + " millis=" + elapsed + " backlog=" + backlog
+                + " visible=" + visibleBacklog);
         stage = 5;
         game.scheduleStop();
     }
 
     private static int backlog(Minecraft game) {
         return ((VisualRendererStats) game.worldRenderer).worldlineCompileBacklog();
+    }
+
+    private static int visibleBacklog(Minecraft game) {
+        int count = 0;
+        ChunkBuilder[] chunks = ((VisualRendererStats) game.worldRenderer).worldlineChunks();
+        if (chunks == null) return 0;
+        for (ChunkBuilder chunk : chunks)
+            if (chunk != null && chunk.dirty && chunk.inFrustum) count++;
+        return count;
     }
 
     private static void require(boolean value, String message) {

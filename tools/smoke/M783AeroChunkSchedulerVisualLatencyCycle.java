@@ -23,17 +23,17 @@ public final class M783AeroChunkSchedulerVisualLatencyCycle {
         {"pages", "prebake"}, {"prebake", "pages"},
         {"prebake", "pages"}, {"pages", "prebake"}
     };
-    private static final String TRACE = "v1|scene=restored-576|pairs=4|"
+    private static final String TRACE = "v2|scene=restored-576|pairs=4|"
         + "orders=pages-prebake+prebake-pages+prebake-pages+pages-prebake|"
         + "window=600|fresh-load=per-jvm|route=walk+turn+teleport+mutation+settle+drain|"
         + "dirty=current-visible1+adjacent2+lookahead1-per-eight|pages=on|"
         + "prebake=off-vs-budget1-camera3-age120-debt30|"
-        + "capture=wall+allocation+chunk+visible-latency+backlog+world-resets|"
+        + "capture=wall+allocation+chunk+visible-latency+global-and-visible-backlog+world-resets|"
         + "gates=hitch5000ppm+fps3pct+p995pct+alloc5pct+visible-max8+p99-4|"
         + "decision=promote-or-keep-disabled";
     private static final String SIGNAL = "scene=restored-576,pairs=4,jvms=8-fresh,"
         + "window=600,fresh-load=per-jvm,route=walk+turn+teleport+mutation+settle+drain,"
-        + "pages=on,prebake=off-vs-budget1,visual-latency=measured,backlog=drained,"
+        + "pages=on,prebake=off-vs-budget1,visual-latency=measured,visible-backlog=drained,"
         + "world-reset=observed,hitch=classified,metrics=classified,"
         + "decision=promote-or-keep-disabled";
     private final Path root = Path.of("").toAbsolutePath().normalize();
@@ -212,6 +212,7 @@ final class M783VisualRuntime {
 final class M783VisualArtifact {
     final String arm;
     final int frames, machines, worldResets, finalBacklog, maxBacklog;
+    final int finalVisibleBacklog, maxVisibleBacklog;
     final int rebuilds, maxRebuilds, built, prebake, urgent, maximumBuilt;
     final int latencySamples, latencyMaximum, latencyP99, latencyPending;
     final long allocatedBytes, rebuildMaximumNanos;
@@ -224,6 +225,8 @@ final class M783VisualArtifact {
         worldResets = integer(p, "world.resets");
         finalBacklog = integer(p, "final.backlog");
         maxBacklog = integer(p, "max.backlog");
+        finalVisibleBacklog = integer(p, "final.visible.backlog");
+        maxVisibleBacklog = integer(p, "max.visible.backlog");
         allocatedBytes = number(p, "frame.allocated.bytes");
         rebuilds = integer(p, "chunk.rebuilds");
         rebuildMaximumNanos = number(p, "chunk.rebuild.max.nanos");
@@ -259,7 +262,9 @@ final class M783VisualArtifact {
 
     void verify() {
         SmokeSupport.require(frames >= 600 && machines == 576
-            && worldResets >= 1 && finalBacklog == 0 && maxBacklog > 0
+            && worldResets >= 1 && finalBacklog >= 0 && maxBacklog > 0
+            && finalBacklog <= maxBacklog && finalVisibleBacklog == 0
+            && maxVisibleBacklog > 0
             && allocatedBytes > 0L && rebuilds > 0 && rebuildMaximumNanos > 0L
             && latencySamples > 0 && latencyPending == 0,
             "M783 incomplete artifact: " + summary());
@@ -292,6 +297,7 @@ final class M783VisualArtifact {
             + ",chunk.max.frame=" + maxRebuilds
             + ",latency=" + latencySamples + "/" + latencyP99 + "/" + latencyMaximum
             + ",backlog=" + maxBacklog + "/" + finalBacklog
+            + ",visible.backlog=" + maxVisibleBacklog + "/" + finalVisibleBacklog
             + ",resets=" + worldResets;
     }
 

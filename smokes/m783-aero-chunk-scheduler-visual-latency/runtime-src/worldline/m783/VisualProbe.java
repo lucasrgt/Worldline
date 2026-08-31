@@ -74,7 +74,8 @@ public final class VisualProbe {
     public static int pendingVisible() { return PENDING.size(); }
 
     public static void write(File metrics, File frames, String arm, int maxBacklog,
-                             int finalBacklog, int machines) throws Exception {
+                             int finalBacklog, int maxVisibleBacklog,
+                             int finalVisibleBacklog, int machines) throws Exception {
         finishFrame();
         sampleAero();
         try (PrintWriter out = new PrintWriter(new FileWriter(metrics))) {
@@ -84,6 +85,8 @@ public final class VisualProbe {
             out.println("world.resets=" + worldResets);
             out.println("final.backlog=" + finalBacklog);
             out.println("max.backlog=" + maxBacklog);
+            out.println("final.visible.backlog=" + finalVisibleBacklog);
+            out.println("max.visible.backlog=" + maxVisibleBacklog);
             out.println("frame.allocated.bytes=" + allocatedBytes);
             out.println("chunk.rebuilds=" + rebuilds);
             out.println("chunk.rebuild.nanos=" + rebuildNanos);
