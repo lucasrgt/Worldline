@@ -233,8 +233,8 @@ their own future denominator instead of being smuggled into its percentage.
 The dimensions are registry presence, spawn materialization, save/reload, movement policy,
 collision shape, damage/death, drop matrix, interaction state, environment response, tick
 lifecycle, and native rendering. Profiles route these through universal, archetype, and singular
-cases. Fifty-three cells are bound to existing qualified official-runtime evidence for projectiles,
-paintings, TNT, falling sand, vehicles, hostile and passive mobs. Forty of those proofs now
+cases. Fifty-two cells are bound to existing qualified official-runtime evidence for projectiles,
+paintings, TNT, falling sand, vehicles, hostile and passive mobs. Forty-one of those proofs now
 have a strict public binding ledger. Pig materialization, movement, death and pork drop use the
 universal plus archetype routes, while creeper materialization, death and gunpowder drop exercise
 universal plus singular routes. Skeleton, spider, pig-zombie, sheep, and squid each execute bounded
@@ -248,9 +248,11 @@ size-one Packet21 slimeball-drop attempts. A shared controlled-dynamics fixture 
 qualified open, roof, wall, and rail scenes for minecart, boat, slime, and ghast without
 duplicating their motion laws inside individual lifecycle fixtures. The complete sheep lifecycle
 then composes bounded death/drop, paired dye/shear, and three-restart sheared-state persistence
-while retaining exact wool metadata and the untouched white control. The other 13 remain
-`SMOKE_ONLY`; the
-remaining 211 cells are explicit `UNKNOWN` Atlas claims.
+while retaining exact wool metadata and the untouched white control. The chicken-and-egg family
+fixture promotes the proven type-93 materialization and type-62 thrown-egg boundary, but the
+historical 40-tick laying probe allowed no egg and therefore no longer counts as proof of the
+tick-lifecycle claim. The other 11 verified cells remain `SMOKE_ONLY`; the remaining 212 cells are
+explicit `UNKNOWN` Atlas claims.
 
 ## Status and automation
 
@@ -325,9 +327,9 @@ variant, and coupled-transition cases. Together with the modern lifecycle proof
 reconciliation, the block public TestKit surface now covers 1,056/1,056 claims
 (100%), completing that family's automation-surface target. The final six tick-policy claims bind sand and
 gravel scheduling, natural wheat, cactus, and sugar-cane growth, and furnace tile ticks to official
-public fixtures. Across both current families the honest aggregate is 1,109/1,320 verified
-(84.02%) and 1,096/1,320 public TestKit claims (83.03%). The entity family contributes 40 public
-claims, 13 smoke-only claims, and all 211 unknown cells.
+public fixtures. Across both current families the honest aggregate is 1,108/1,320 verified
+(83.94%) and 1,097/1,320 public TestKit claims (83.11%). The entity family contributes 41 public
+claims, 11 smoke-only claims, and all 212 unknown cells.
 
 ## Three conformance layers
 

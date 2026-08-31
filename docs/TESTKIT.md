@@ -335,6 +335,22 @@ already sheared sheep, the exact `Sheared=true -> false` NBT mutation, one chang
 new `35:14` drop after metadata returns `14 -> 30`. Runtime identities and coordinates are
 normalized; every semantic boundary fails closed.
 
+The chicken-and-egg family fixture keeps the historical proof boundary deliberately asymmetric.
+It requires a distinct Packet24 type-93 chicken and a player-thrown Packet23 type-62 egg within
+the qualified platform radius. A Packet21 egg observed during the bounded 40-tick probe is checked
+as item `344`, but its absence is also valid because the official M407 run did not wait through
+the vanilla `6000+`-tick laying interval:
+
+```java
+ChickenEggFamilyEvidence evidence = ChickenEggFamilyFixture.execute(plan,
+        chickenDriver::observeFamily);
+```
+
+Canonical evidence normalizes whether the optional bounded probe happened to see an egg. This
+promotes only `chicken-spawn`; `chicken-egg-tick` remains explicit `UNKNOWN` until a future
+qualified fixture actually observes natural laying. Wrong identities, item/type values, thrower
+relations, or platform bounds fail closed.
+
 ### Block lifecycle matrices
 
 `worldline.testkit.BlockConformancePlan` and `BlockLifecyclePlan` are part of

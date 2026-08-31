@@ -36,6 +36,7 @@ b1.7.3:entity/091	save-reload	sheep-lifecycle	worldline.testkit.SheepLifecycleFi
 b1.7.3:entity/091	damage-death	sheep-lifecycle	worldline.testkit.SheepLifecycleFixture#execute	m444-remaining-mob-drops-rest
 b1.7.3:entity/091	drop-matrix	sheep-lifecycle	worldline.testkit.SheepLifecycleFixture#execute	m444-remaining-mob-drops-rest
 b1.7.3:entity/091	interaction-state	sheep-lifecycle	worldline.testkit.SheepLifecycleFixture#execute	m406-sheep-dye-set
+b1.7.3:entity/093	spawn-materialization	chicken-egg-family	worldline.testkit.ChickenEggFamilyFixture#execute	m407-chicken-egg-set
 b1.7.3:entity/094	spawn-materialization	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m408-squid-ink-set
 b1.7.3:entity/094	damage-death	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m408-squid-ink-set
 b1.7.3:entity/094	drop-matrix	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m408-squid-ink-set
