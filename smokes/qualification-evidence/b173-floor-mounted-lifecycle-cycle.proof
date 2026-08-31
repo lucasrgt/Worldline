@@ -1,5 +1,5 @@
 schema=1
 id=b173-floor-mounted-lifecycle-cycle
-fingerprint=531522d3ebee48c75a1248e650a2e7ab31d7b0a5240836781709283e5c3e4685
+fingerprint=eedd1fcd3afdbe559f79f19cb2b378411fc75ff51a6c74664f203e53fcdcf507
 observation.sha256=feec18c4c92e535ac906ec0fd6b67d15050fc97687d2d3e16da078b0d293a70f
 source=refactor-equivalent
