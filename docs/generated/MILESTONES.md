@@ -612,6 +612,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m777-aero-adaptive-prewarm-repeatability` | CARRIED | Aero adaptive prewarm repeatability |
 | `m778-aero-culling-visual-integrity` | EXECUTED | Aero culling visual integrity |
 | `m779-aero-animated-visual-integrity` | CARRIED | Aero animated visual integrity |
+| `m780-aero-smooth-light-resolved-cache` | PENDING | Aero resolved smooth-light cache |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
