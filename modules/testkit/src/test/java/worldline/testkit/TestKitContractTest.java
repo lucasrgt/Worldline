@@ -42,6 +42,7 @@ public final class TestKitContractTest {
         WolfLifecycleFixtureTest.execute();
         FallingSandLifecycleFixtureTest.execute();
         TntLifecycleFixtureTest.execute();
+        HostileBehaviorFixtureTest.execute();
         BlockLifecycleDropMatrixTest.execute();
         BlockLifecycleFixtureTest.execute();
         BlockLifecycleClaimFixtureTest.execute();

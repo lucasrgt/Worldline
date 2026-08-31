@@ -391,6 +391,20 @@ live mid-fuse entity, and dead/removal at update 81. Constructor motion is zeroe
 block `46` remains a block and never becomes an entity. Network heartbeats and Packet60 timing are
 not treated as the internal entity clock.
 
+Qualified hostile behavior uses one four-row matrix rather than isolated micro-fixtures:
+
+```java
+HostileBehaviorEvidence evidence = HostileBehaviorFixture.execute(plan,
+        hostileDriver::observeMatrix);
+```
+
+The matrix requires distinct Packet24 identities for zombie `54`, skeleton `51`, spider `52`,
+and creeper `50` at night `14000`. It binds two distinct Packet23 type-60 arrows to the skeleton,
+positive-Y spider motion adjacent to both cobblestone `4` and planks `5`, and a proximity-fused
+creeper Packet60 strength `3` that destroys distinct dirt `3` and wool `35` cells which remain air
+after reload. Runtime IDs, coordinates, motion magnitudes, crater shape, and exact creeper fuse
+duration are normalized or explicitly outside the claim.
+
 ### Block lifecycle matrices
 
 `worldline.testkit.BlockConformancePlan` and `BlockLifecyclePlan` are part of

@@ -149,6 +149,17 @@ public final class AtlasStoreTest {
                 && first.get("atlas.claim.entity-020.tick-lifecycle").refs()
                 .contains("atlas.experiment.m518-sw-tnt-fuse-lifecycle"),
                 "complete primed TNT lifecycle was not indexed");
+        require(first.get("atlas.claim.entity-054.spawn-materialization").refs()
+                .contains("atlas.experiment.m363-hostile-identity-set")
+                && first.get("atlas.claim.entity-051.interaction-state").refs()
+                .contains("atlas.experiment.m445-skeleton-ranged-ai-set")
+                && first.get("atlas.claim.entity-052.movement-policy").refs()
+                .contains("atlas.experiment.m447-spider-climb-set")
+                && first.get("atlas.claim.entity-050.tick-lifecycle").refs()
+                .contains("atlas.experiment.m391-creeper-explode-set")
+                && first.get("atlas.claim.entity-050.tick-lifecycle").control()
+                .contains("automation=PUBLIC_TESTKIT"),
+                "complete hostile behavior matrix was not indexed");
         require(AtlasStatus.UNKNOWN.equals(first.get("atlas.claim.entity-092.drop-matrix").status()),
                 "implicit entity census gap was not materialized");
         require(AtlasStatus.UNKNOWN.equals(first.get("atlas.claim.entity-010.tick-lifecycle").status()),
@@ -175,9 +186,9 @@ public final class AtlasStoreTest {
                 && taxonomy.contains("subsystem=tile-entities"), "taxonomy index");
         String tags = AtlasQuery.tags(first);
         require(tags.contains("tag=category-claim")
-                && tags.contains("tag=surface-public-testkit\trecords=1101")
+                && tags.contains("tag=surface-public-testkit\trecords=1105")
                 && !tags.contains("tag=surface-internal-api")
-                && tags.contains("tag=surface-smoke-only\trecords=5"), "tag index");
+                && tags.contains("tag=surface-smoke-only\trecords=1"), "tag index");
         try {
             String documentation = new String(Files.readAllBytes(Paths.get("docs", "ATLAS.md")),
                     StandardCharsets.UTF_8);

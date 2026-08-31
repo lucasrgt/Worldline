@@ -15,12 +15,16 @@ b1.7.3:entity/041	movement-policy	entity-dynamics	worldline.testkit.EntityDynami
 b1.7.3:entity/050	spawn-materialization	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m421-creeper-gunpowder-set
 b1.7.3:entity/050	damage-death	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m421-creeper-gunpowder-set
 b1.7.3:entity/050	drop-matrix	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m421-creeper-gunpowder-set
+b1.7.3:entity/050	tick-lifecycle	hostile-behavior	worldline.testkit.HostileBehaviorFixture#execute	m391-creeper-explode-set
 b1.7.3:entity/051	spawn-materialization	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m363-hostile-identity-set
 b1.7.3:entity/051	damage-death	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m422-skeleton-bone-set
 b1.7.3:entity/051	drop-matrix	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m422-skeleton-bone-set
+b1.7.3:entity/051	interaction-state	hostile-behavior	worldline.testkit.HostileBehaviorFixture#execute	m445-skeleton-ranged-ai-set
 b1.7.3:entity/052	spawn-materialization	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m409-spider-string-set
 b1.7.3:entity/052	damage-death	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m409-spider-string-set
 b1.7.3:entity/052	drop-matrix	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m409-spider-string-set
+b1.7.3:entity/052	movement-policy	hostile-behavior	worldline.testkit.HostileBehaviorFixture#execute	m447-spider-climb-set
+b1.7.3:entity/054	spawn-materialization	hostile-behavior	worldline.testkit.HostileBehaviorFixture#execute	m363-hostile-identity-set
 b1.7.3:entity/055	spawn-materialization	slime-lifecycle	worldline.testkit.SlimeLifecycleFixture#execute	m412-slime-split-set
 b1.7.3:entity/055	movement-policy	entity-dynamics	worldline.testkit.EntityDynamicsFixture#execute	m504-m508-sw-entity-dynamics
 b1.7.3:entity/055	interaction-state	slime-lifecycle	worldline.testkit.SlimeLifecycleFixture#execute	m412-slime-split-set
