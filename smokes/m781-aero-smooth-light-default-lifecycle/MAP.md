@@ -31,4 +31,8 @@ Frozen trace:
 
 `v1|consumer=aero-model-lib|revision=06c0c22ce15454b45b14597332a92241fef0931e|compile=javac-release8|jvms=6-fresh-default+false+true+true+false+default|default=enabled|explicit-false=disabled|explicit-true=enabled|same-world=array-reuse|world-switch=entries1-to0+old-world-miss|oracle=exact`
 
+Frozen signal:
+
+`consumer=aero-model-lib,revision=06c0c22ce15454b45b14597332a92241fef0931e,compile=javac-release8,jvms=6-fresh-counterbalanced,default=enabled,explicit-false=disabled,explicit-true=enabled,same-world=array-reuse,world-switch=entries1-to0+old-world-miss,oracle=exact`
+
 Frozen SHA-256: `8ebf6d22267e4e6fd22f47dc275a5993b15d9b7c7188ea3cf69dd35ec6feef4d`.
