@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=external-aero-runtime-qualification -->
 <!-- nonclaims=no-off-thread-compilation,no-unbounded-world-generalization,no-promotion-without-all-gates -->
-<!-- frozen-trace=97cddf41d7eb1df7d8f0c3f2c7af129cb5e41c21d501b33361ddf02ee14dbce6 -->
+<!-- frozen-trace=adaa023e577059ff7fc77608b1ba5079891e0665d5eeccf845a55eabbe9effa5 -->
 
 # M783 Aero chunk scheduler visual-latency behavior map
 
@@ -13,7 +13,8 @@
   clients. Both arms keep page caching enabled; only `prebake` activates the
   camera-aware scheduler with budget one, radius three, age 120, and debt 30.
 - Each 2,400-frame route repeats walking, turning, teleporting, mutation, and
-  settling four times and reloads the same world in-process at frame 1,200.
+  settling four times and rebinds the active world to the renderer at frame
+  1,200.
 
 ## Actions and observations
 
@@ -23,8 +24,8 @@
    and the frame in which its real `ChunkBuilder.rebuild()` completes.
 3. Each arm also records full frame intervals, current-thread allocation,
    actual rebuild count and duration, scheduler accounting, maximum and final
-   backlog, world-reset count, and reload count.
-4. Every artifact requires 576 machines, one reload, at least two world
+   backlog, world-reset count, and rebind count.
+4. Every artifact requires 576 machines, one rebind, at least two world
    resets, real dirty backlog, real rebuilds, latency samples, zero pending
    visible chunks, and zero final backlog.
 5. The neutral paired hitch-rate gate uses a 50 ms threshold and a 5,000 ppm
@@ -41,6 +42,6 @@ transition. It does not claim off-thread GL compilation, universal results for
 unbounded worlds, or permission to promote when any safety, throughput, memory,
 or visible-latency gate fails.
 
-Frozen trace: `v1|scene=restored-576|pairs=4|orders=pages-prebake+prebake-pages+prebake-pages+pages-prebake|window=2400|reload=1200|route=4x-walk+turn+teleport+mutation+settle|dirty=current-visible1+adjacent1+lookahead1+background1-per-eight|pages=on|prebake=off-vs-budget1-camera3-age120-debt30|capture=wall+allocation+chunk+visible-latency+backlog+world-resets|gates=hitch5000ppm+fps3pct+p995pct+alloc5pct+visible-max8+p99-4|decision=promote-or-keep-disabled`.
+Frozen trace: `v1|scene=restored-576|pairs=4|orders=pages-prebake+prebake-pages+prebake-pages+pages-prebake|window=2400|world-rebind=1200|route=4x-walk+turn+teleport+mutation+settle|dirty=current-visible1+adjacent1+lookahead1+background1-per-eight|pages=on|prebake=off-vs-budget1-camera3-age120-debt30|capture=wall+allocation+chunk+visible-latency+backlog+world-resets|gates=hitch5000ppm+fps3pct+p995pct+alloc5pct+visible-max8+p99-4|decision=promote-or-keep-disabled`.
 
-Expected signal: `scene=restored-576,pairs=4,jvms=8-fresh,window=2400,reload=midpoint,route=walk+turn+teleport+mutation+settle,pages=on,prebake=off-vs-budget1,visual-latency=measured,backlog=drained,world-reset=observed,hitch=classified,metrics=classified,decision=promote-or-keep-disabled`.
+Expected signal: `scene=restored-576,pairs=4,jvms=8-fresh,window=2400,world-rebind=midpoint,route=walk+turn+teleport+mutation+settle,pages=on,prebake=off-vs-budget1,visual-latency=measured,backlog=drained,world-reset=observed,hitch=classified,metrics=classified,decision=promote-or-keep-disabled`.

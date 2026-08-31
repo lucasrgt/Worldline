@@ -25,14 +25,14 @@ public final class M783AeroChunkSchedulerVisualLatencyCycle {
     };
     private static final String TRACE = "v1|scene=restored-576|pairs=4|"
         + "orders=pages-prebake+prebake-pages+prebake-pages+pages-prebake|"
-        + "window=2400|reload=1200|route=4x-walk+turn+teleport+mutation+settle|"
+        + "window=2400|world-rebind=1200|route=4x-walk+turn+teleport+mutation+settle|"
         + "dirty=current-visible1+adjacent1+lookahead1+background1-per-eight|pages=on|"
         + "prebake=off-vs-budget1-camera3-age120-debt30|"
         + "capture=wall+allocation+chunk+visible-latency+backlog+world-resets|"
         + "gates=hitch5000ppm+fps3pct+p995pct+alloc5pct+visible-max8+p99-4|"
         + "decision=promote-or-keep-disabled";
     private static final String SIGNAL = "scene=restored-576,pairs=4,jvms=8-fresh,"
-        + "window=2400,reload=midpoint,route=walk+turn+teleport+mutation+settle,"
+        + "window=2400,world-rebind=midpoint,route=walk+turn+teleport+mutation+settle,"
         + "pages=on,prebake=off-vs-budget1,visual-latency=measured,backlog=drained,"
         + "world-reset=observed,hitch=classified,metrics=classified,"
         + "decision=promote-or-keep-disabled";
@@ -108,7 +108,7 @@ public final class M783AeroChunkSchedulerVisualLatencyCycle {
     private void verifyDesign() {
         SmokeSupport.require(SmokeSupport.value(config, "pairs").equals("4")
             && SmokeSupport.value(config, "retained.frames").equals("2400")
-            && SmokeSupport.value(config, "reload.frame").equals("1200")
+            && SmokeSupport.value(config, "transition.frame").equals("1200")
             && SmokeSupport.value(config, "scheduler.budget").equals("1")
             && SmokeSupport.value(config, "lookahead.radius").equals("3"),
             "M783 acquisition design drift");
@@ -162,7 +162,7 @@ final class M783VisualRuntime {
             "-PworldlineRunDir=" + game, "-PworldlinePrepare=" + prepare,
             "-PworldlineArm=" + arm,
             "-PworldlineFrames=" + SmokeSupport.value(config, "retained.frames"),
-            "-PworldlineReloadFrame=" + SmokeSupport.value(config, "reload.frame"),
+            "-PworldlineTransitionFrame=" + SmokeSupport.value(config, "transition.frame"),
             "-PworldlineMinimumMillis=" + SmokeSupport.value(config, "minimum.millis"),
             "-PworldlineMetrics=" + game.resolve("metrics.properties"),
             "-PworldlineFrameArtifact=" + game.resolve("frames.csv"));
@@ -213,7 +213,7 @@ final class M783VisualRuntime {
 /** One fresh M783 arm's complete retained-window artifact. */
 final class M783VisualArtifact {
     final String arm;
-    final int frames, machines, reloads, worldResets, finalBacklog, maxBacklog;
+    final int frames, machines, rebinds, worldResets, finalBacklog, maxBacklog;
     final int rebuilds, maxRebuilds, built, prebake, urgent;
     final int latencySamples, latencyMaximum, latencyP99, latencyPending;
     final long allocatedBytes, rebuildMaximumNanos;
@@ -223,7 +223,7 @@ final class M783VisualArtifact {
         arm = required(p, "arm");
         frames = integer(p, "frames");
         machines = integer(p, "machines");
-        reloads = integer(p, "reloads");
+        rebinds = integer(p, "world.rebinds");
         worldResets = integer(p, "world.resets");
         finalBacklog = integer(p, "final.backlog");
         maxBacklog = integer(p, "max.backlog");
@@ -260,7 +260,7 @@ final class M783VisualArtifact {
     }
 
     void verify() {
-        SmokeSupport.require(frames >= 2400 && machines == 576 && reloads == 1
+        SmokeSupport.require(frames >= 2400 && machines == 576 && rebinds == 1
             && worldResets >= 2 && finalBacklog == 0 && maxBacklog > 0
             && allocatedBytes > 0L && rebuilds > 0 && rebuildMaximumNanos > 0L
             && latencySamples > 0 && latencyPending == 0,
@@ -292,7 +292,7 @@ final class M783VisualArtifact {
             + ",chunk=" + rebuilds + "/" + built + "/" + prebake + "/" + urgent
             + ",latency=" + latencySamples + "/" + latencyP99 + "/" + latencyMaximum
             + ",backlog=" + maxBacklog + "/" + finalBacklog
-            + ",resets=" + worldResets + ",reloads=" + reloads;
+            + ",resets=" + worldResets + ",rebinds=" + rebinds;
     }
 
     private static String round(double value) { return String.format("%.2f", value); }

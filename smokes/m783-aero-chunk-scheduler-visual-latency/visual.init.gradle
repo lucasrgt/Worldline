@@ -64,7 +64,7 @@ gradle.projectsEvaluated {
         '-Dworldline.m783.prepare=' + prop('worldlinePrepare'),
         '-Dworldline.m783.arm=' + arm,
         '-Dworldline.m783.frames=' + prop('worldlineFrames'),
-        '-Dworldline.m783.reloadFrame=' + prop('worldlineReloadFrame'),
+        '-Dworldline.m783.transitionFrame=' + prop('worldlineTransitionFrame'),
         '-Dworldline.m783.minimumMillis=' + prop('worldlineMinimumMillis'),
         '-Dworldline.m783.metrics=' + new File(prop('worldlineMetrics')).absolutePath,
         '-Dworldline.m783.framesFile=' + new File(prop('worldlineFrameArtifact')).absolutePath,
