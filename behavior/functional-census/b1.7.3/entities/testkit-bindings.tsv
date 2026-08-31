@@ -33,10 +33,11 @@ b1.7.3:entity/056	movement-policy	entity-dynamics	worldline.testkit.EntityDynami
 b1.7.3:entity/057	spawn-materialization	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m411-zombie-pigman-set
 b1.7.3:entity/057	damage-death	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m411-zombie-pigman-set
 b1.7.3:entity/057	drop-matrix	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m411-zombie-pigman-set
-b1.7.3:entity/090	spawn-materialization	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m141-pig-spawner-observation
-b1.7.3:entity/090	movement-policy	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m148-pig-ai-movement
-b1.7.3:entity/090	damage-death	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m149-pig-death
-b1.7.3:entity/090	drop-matrix	mob-lifecycle	worldline.testkit.EntityLifecycleFixture#execute	m150-pig-pork-drop
+b1.7.3:entity/090	spawn-materialization	pig-lifecycle	worldline.testkit.PigLifecycleFixture#execute	m141-pig-spawner-observation
+b1.7.3:entity/090	movement-policy	pig-lifecycle	worldline.testkit.PigLifecycleFixture#execute	m148-pig-ai-movement
+b1.7.3:entity/090	damage-death	pig-lifecycle	worldline.testkit.PigLifecycleFixture#execute	m149-pig-death
+b1.7.3:entity/090	drop-matrix	pig-lifecycle	worldline.testkit.PigLifecycleFixture#execute	m150-pig-pork-drop
+b1.7.3:entity/090	interaction-state	pig-lifecycle	worldline.testkit.PigLifecycleFixture#execute	m405-pig-saddle-set
 b1.7.3:entity/091	spawn-materialization	sheep-lifecycle	worldline.testkit.SheepLifecycleFixture#execute	m406-sheep-dye-set
 b1.7.3:entity/091	save-reload	sheep-lifecycle	worldline.testkit.SheepLifecycleFixture#execute	m506-sw-sheep-sheared-persistence
 b1.7.3:entity/091	damage-death	sheep-lifecycle	worldline.testkit.SheepLifecycleFixture#execute	m444-remaining-mob-drops-rest

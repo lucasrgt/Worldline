@@ -342,8 +342,8 @@ reconciliation, the block public TestKit surface now covers 1,056/1,056 claims
 (100%), completing that family's automation-surface target. The final six tick-policy claims bind sand and
 gravel scheduling, natural wheat, cactus, and sugar-cane growth, and furnace tile ticks to official
 public fixtures. Across both current families the honest aggregate is 1,106/1,320 verified
-(83.79%) and 1,105/1,320 public TestKit claims (83.71%). The entity family contributes 49 public
-claims, 1 smoke-only claim, and all 214 unknown cells.
+(83.79%) and 1,106/1,320 public TestKit claims (83.79%). The entity family contributes 50 public
+claims, no smoke-only claims, and all 214 unknown cells.
 
 ## Three conformance layers
 

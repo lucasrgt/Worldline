@@ -227,6 +227,19 @@ removal, and a matching distinct Packet21 drop when selected. Drop cannot be cla
 Canonical evidence deliberately normalizes fresh entity IDs and poses, which makes equivalent
 runs equatable without weakening the asserted semantics.
 
+The pig-specific fixture composes that general lifecycle with the qualified saddle/mount session,
+so all five pig claims execute as one subsystem instead of exposing M405 as an isolated helper:
+
+```java
+PigLifecycleEvidence pig = PigLifecycleFixture.execute(plan, scenario);
+```
+
+The scenario supplies a complete spawn/movement/death/pork lifecycle plus a living type-90 pig
+interaction. The interaction must consume one saddle `329`, use Packet7 button `0` for both saddle
+and empty-hand mount actions, and finish with Packet39 attaching the actor to that exact pig.
+Canonical evidence normalizes both sessions' entity IDs. It does not claim steering, dismount,
+breeding, or saddle persistence because M405 did not qualify those behaviors.
+
 Probabilistic historical drops use the bounded overload. Each unsuccessful attempt still requires
 an expected Packet24 spawn followed by the caller's causal kill, Packet38 death status 3, and
 Packet29 removal before the fixture materializes another entity. The drop expectation can accept a

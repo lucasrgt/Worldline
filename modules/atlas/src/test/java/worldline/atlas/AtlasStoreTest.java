@@ -72,6 +72,9 @@ public final class AtlasStoreTest {
                 && pigSpawn.refs().contains("atlas.subsystem.entities")
                 && pigSpawn.control().contains("automation=PUBLIC_TESTKIT"),
                 "public entity lifecycle proof was not imported honestly");
+        require(first.get("atlas.claim.entity-090.interaction-state").control()
+                .contains("layer=ARCHETYPE;applicability=APPLICABLE;automation=PUBLIC_TESTKIT"),
+                "complete pig interaction route was not indexed");
         require(first.get("atlas.claim.entity-050.damage-death").control()
                 .contains("layer=SINGULAR;applicability=APPLICABLE;automation=PUBLIC_TESTKIT"),
                 "singular entity lifecycle route was not indexed");
@@ -186,9 +189,9 @@ public final class AtlasStoreTest {
                 && taxonomy.contains("subsystem=tile-entities"), "taxonomy index");
         String tags = AtlasQuery.tags(first);
         require(tags.contains("tag=category-claim")
-                && tags.contains("tag=surface-public-testkit\trecords=1105")
+                && tags.contains("tag=surface-public-testkit\trecords=1106")
                 && !tags.contains("tag=surface-internal-api")
-                && tags.contains("tag=surface-smoke-only\trecords=1"), "tag index");
+                && !tags.contains("tag=surface-smoke-only"), "tag index");
         try {
             String documentation = new String(Files.readAllBytes(Paths.get("docs", "ATLAS.md")),
                     StandardCharsets.UTF_8);
