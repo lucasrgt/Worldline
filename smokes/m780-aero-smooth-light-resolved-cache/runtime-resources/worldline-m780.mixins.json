@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "worldline.m780.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "SmoothLightFrameMixin",
+    "SmoothLightMinecraftMixin",
+    "SmoothLightCloudMixin",
+    "SyntheticWorldLightMixin",
+    "SmoothMegaRendererMixin"
+  ],
+  "injectors": { "defaultRequire": 1 }
+}
