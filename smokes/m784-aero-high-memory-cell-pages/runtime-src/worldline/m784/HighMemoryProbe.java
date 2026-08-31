@@ -37,6 +37,7 @@ public final class HighMemoryProbe {
     public static void beginArm(String name) {
         arm = name;
         explicitFlushCalls = explicitFlushNanos = 0L;
+        pageCalls = pageRebuilds = directCalls = maxCachedPages = 0;
         Aero_Profiler.reset();
         compiledStart = Aero_BECellRenderer.compiledCachedPages();
         expiredStart = Aero_BECellRenderer.expiredCachedPages();
@@ -71,10 +72,6 @@ public final class HighMemoryProbe {
         allocatedBytes += delta;
         Runtime runtime = Runtime.getRuntime();
         heapPeak = Math.max(heapPeak, runtime.totalMemory() - runtime.freeMemory());
-        pageCalls += Aero_BECellRenderer.pageCallsThisFrame();
-        pageRebuilds += Aero_BECellRenderer.pageRebuildsThisFrame();
-        directCalls += Aero_BECellRenderer.directFallbacksThisFrame();
-        maxCachedPages = Math.max(maxCachedPages, Aero_BECellRenderer.cachedPageCount());
         prewarmDrained += Aero_Prewarm.drainedThisFrame();
         int checkpoint = HighMemoryState.checkpoint();
         if (HighMemoryState.captureFrame() && !CAPTURED[checkpoint]) capture(game, checkpoint);
@@ -85,10 +82,17 @@ public final class HighMemoryProbe {
 
     /** Executes and times the one controlled production Cell Page flush for this frame. */
     public static void flush(double cameraX, double cameraY, double cameraZ) {
+        int compiledBefore = Aero_BECellRenderer.compiledCachedPages();
         long start = System.nanoTime();
         Aero_BECellRenderer.flush(cameraX, cameraY, cameraZ);
         explicitFlushNanos += System.nanoTime() - start;
         explicitFlushCalls++;
+        if (HighMemoryState.retaining()) {
+            pageCalls += Aero_BECellRenderer.pageCallsThisFrame();
+            pageRebuilds += Aero_BECellRenderer.compiledCachedPages() - compiledBefore;
+            directCalls += Aero_BECellRenderer.directFallbacksThisFrame();
+            maxCachedPages = Math.max(maxCachedPages, Aero_BECellRenderer.cachedPageCount());
+        }
     }
 
     public static void write(File metrics, File frames, String name, int machines) throws Exception {
