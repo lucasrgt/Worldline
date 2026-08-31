@@ -2,4 +2,4 @@ schema=1
 id=m782-aero-chunk-scheduler-lifecycle-soak
 fingerprint=93582c6783e549a849c74f62decb30393fba5b1fc581e0339a2383516e2aac42
 observation.sha256=c62be36809d4785b391c19e993be83f7448aaedef712bde089cabc4c8e058bd4
-source=executed
+source=refactor-equivalent
