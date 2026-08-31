@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 /** Classifies Aero's camera-aware chunk scheduler with real visual clients. */
 public final class M783AeroChunkSchedulerVisualLatencyCycle {
     private static final String ID = "m783-aero-chunk-scheduler-visual-latency";
-    private static final String REVISION = "82119d67d7ae88e527f1397cd6a0def31f1697ef";
+    private static final String REVISION = "941dd5b09846fa1373c44f37199f9226cb78c8dd";
     private static final String[][] ORDERS = {
         {"pages", "prebake"}, {"prebake", "pages"},
         {"prebake", "pages"}, {"pages", "prebake"}
@@ -214,7 +214,7 @@ final class M783VisualRuntime {
 final class M783VisualArtifact {
     final String arm;
     final int frames, machines, rebinds, worldResets, finalBacklog, maxBacklog;
-    final int rebuilds, maxRebuilds, built, prebake, urgent;
+    final int rebuilds, maxRebuilds, built, prebake, urgent, maximumBuilt;
     final int latencySamples, latencyMaximum, latencyP99, latencyPending;
     final long allocatedBytes, rebuildMaximumNanos;
     final long[] walls;
@@ -234,6 +234,7 @@ final class M783VisualArtifact {
         built = integer(p, "chunk.work.built");
         prebake = integer(p, "chunk.work.prebake");
         urgent = integer(p, "chunk.work.urgent");
+        maximumBuilt = integer(p, "chunk.work.max.frame");
         latencySamples = integer(p, "visible.latency.samples");
         latencyMaximum = integer(p, "visible.latency.maximum.frames");
         latencyP99 = integer(p, "visible.latency.p99.frames");
@@ -267,7 +268,7 @@ final class M783VisualArtifact {
             "M783 incomplete artifact: " + summary());
         if (arm.equals("pages")) SmokeSupport.require(prebake == 0,
             "M783 baseline activated scheduler: " + summary());
-        else SmokeSupport.require(built > 0 && prebake > 0 && maxRebuilds <= 1,
+        else SmokeSupport.require(built > 0 && prebake > 0 && maximumBuilt <= 1,
             "M783 candidate activation drift: " + summary());
     }
 
@@ -290,6 +291,8 @@ final class M783VisualArtifact {
         return arm + ":frames=" + frames + ",fps=" + round(fps())
             + ",p99.ns=" + p99() + ",alloc/frame=" + round(allocationPerFrame())
             + ",chunk=" + rebuilds + "/" + built + "/" + prebake + "/" + urgent
+            + "/" + maximumBuilt
+            + ",chunk.max.frame=" + maxRebuilds
             + ",latency=" + latencySamples + "/" + latencyP99 + "/" + latencyMaximum
             + ",backlog=" + maxBacklog + "/" + finalBacklog
             + ",resets=" + worldResets + ",rebinds=" + rebinds;

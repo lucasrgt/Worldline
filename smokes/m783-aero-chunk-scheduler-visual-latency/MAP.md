@@ -7,7 +7,7 @@
 
 ## Fixture
 
-- AeroModelLib revision `82119d67d7ae88e527f1397cd6a0def31f1697ef`
+- AeroModelLib revision `941dd5b09846fa1373c44f37199f9226cb78c8dd`
   renders a copied 576-machine world in every treatment.
 - Four counterbalanced pairs run `pages` and `prebake` in eight fresh real
   clients. Both arms keep page caching enabled; only `prebake` activates the

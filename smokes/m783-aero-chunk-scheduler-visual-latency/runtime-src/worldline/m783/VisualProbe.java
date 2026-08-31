@@ -23,7 +23,7 @@ public final class VisualProbe {
     private static long lastStart, lastAllocation, allocatedBytes, currentRebuildStarted;
     private static long rebuildNanos, maximumRebuildNanos;
     private static int frame, rebuilds, maxRebuilds, currentRebuilds;
-    private static int chunkBuilt, chunkPrebake, chunkUrgent, worldResets;
+    private static int chunkBuilt, chunkPrebake, chunkUrgent, chunkMaximumBuilt, worldResets;
 
     private VisualProbe() {}
 
@@ -93,6 +93,7 @@ public final class VisualProbe {
             out.println("chunk.work.built=" + chunkBuilt);
             out.println("chunk.work.prebake=" + chunkPrebake);
             out.println("chunk.work.urgent=" + chunkUrgent);
+            out.println("chunk.work.max.frame=" + chunkMaximumBuilt);
             out.println("visible.latency.samples=" + LATENCIES.size());
             out.println("visible.latency.maximum.frames=" + maximumLatency());
             out.println("visible.latency.p99.frames=" + latencyP99());
@@ -119,7 +120,9 @@ public final class VisualProbe {
     }
 
     private static void sampleAero() {
-        chunkBuilt += Aero_ChunkCompileBudget.builtLastFrame();
+        int built = Aero_ChunkCompileBudget.builtLastFrame();
+        chunkBuilt += built;
+        chunkMaximumBuilt = Math.max(chunkMaximumBuilt, built);
         chunkPrebake += Aero_ChunkCompileBudget.prebakeBuiltLastFrame();
         chunkUrgent += Aero_ChunkCompileBudget.urgentBuiltLastFrame();
     }
