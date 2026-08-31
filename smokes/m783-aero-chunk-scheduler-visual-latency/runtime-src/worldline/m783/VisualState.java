@@ -17,6 +17,7 @@ public final class VisualState {
             "worldline.m783.transitionFrame", 1200);
     private static final long MINIMUM_MILLIS = Long.getLong("worldline.m783.minimumMillis", 30000L);
     private static int stage, warmup, stable, retained, phase, machines, maxBacklog, transitions;
+    private static int transitionWait;
     private static long retainedStarted;
 
     private VisualState() {}
@@ -25,7 +26,7 @@ public final class VisualState {
         if (!ENABLED) return;
         VisualFixture.prepareDisplay(game);
         if (stage == 0 && game.world == null) start(game, 1);
-        else if (stage == 3) rebind(game);
+        else if (stage == 3) awaitRebind(game);
         else if (stage == 1 && game.world != null && game.player != null) warm(game);
     }
 
@@ -106,6 +107,14 @@ public final class VisualState {
         stable = warmup = 0;
         VisualFixture.prepareDisplay(game);
         VisualScene.place(game.player, retained);
+    }
+
+    private static void awaitRebind(Minecraft game) {
+        transitionWait++;
+        require(transitionWait <= 600, "M783 rebind drain timeout: backlog="
+                + backlog(game) + " pending=" + VisualProbe.pendingVisible());
+        if (backlog(game) != 0 || VisualProbe.pendingVisible() != 0) return;
+        rebind(game);
     }
 
     private static void finish(Minecraft game, int backlog, long elapsed) {
