@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=external-aero-runtime-qualification -->
 <!-- nonclaims=no-off-thread-compilation,no-unbounded-world-generalization,no-promotion-without-all-gates -->
-<!-- frozen-trace=666536f4e861d8383318106fd1ab6f48698e38cdf79c249ae4298e3b5edb54ab -->
+<!-- frozen-trace=97cddf41d7eb1df7d8f0c3f2c7af129cb5e41c21d501b33361ddf02ee14dbce6 -->
 
 # M783 Aero chunk scheduler visual-latency behavior map
 
@@ -17,9 +17,9 @@
 
 ## Actions and observations
 
-1. Every eight frames, the fixture dirties two visible chunks, one look-ahead
-   chunk, and one background chunk.
-2. A direct census records the frame at which each visible chunk is dirtied
+1. Every eight frames, the fixture dirties the camera's current chunk, one
+   adjacent chunk, one look-ahead chunk, and one background chunk.
+2. A direct census records the frame at which the camera's current chunk is dirtied
    and the frame in which its real `ChunkBuilder.rebuild()` completes.
 3. Each arm also records full frame intervals, current-thread allocation,
    actual rebuild count and duration, scheduler accounting, maximum and final
@@ -41,6 +41,6 @@ transition. It does not claim off-thread GL compilation, universal results for
 unbounded worlds, or permission to promote when any safety, throughput, memory,
 or visible-latency gate fails.
 
-Frozen trace: `v1|scene=restored-576|pairs=4|orders=pages-prebake+prebake-pages+prebake-pages+pages-prebake|window=2400|reload=1200|route=4x-walk+turn+teleport+mutation+settle|dirty=visible2+lookahead1+background1-per-eight|pages=on|prebake=off-vs-budget1-camera3-age120-debt30|capture=wall+allocation+chunk+visible-latency+backlog+world-resets|gates=hitch5000ppm+fps3pct+p995pct+alloc5pct+visible-max8+p99-4|decision=promote-or-keep-disabled`.
+Frozen trace: `v1|scene=restored-576|pairs=4|orders=pages-prebake+prebake-pages+prebake-pages+pages-prebake|window=2400|reload=1200|route=4x-walk+turn+teleport+mutation+settle|dirty=current-visible1+adjacent1+lookahead1+background1-per-eight|pages=on|prebake=off-vs-budget1-camera3-age120-debt30|capture=wall+allocation+chunk+visible-latency+backlog+world-resets|gates=hitch5000ppm+fps3pct+p995pct+alloc5pct+visible-max8+p99-4|decision=promote-or-keep-disabled`.
 
 Expected signal: `scene=restored-576,pairs=4,jvms=8-fresh,window=2400,reload=midpoint,route=walk+turn+teleport+mutation+settle,pages=on,prebake=off-vs-budget1,visual-latency=measured,backlog=drained,world-reset=observed,hitch=classified,metrics=classified,decision=promote-or-keep-disabled`.

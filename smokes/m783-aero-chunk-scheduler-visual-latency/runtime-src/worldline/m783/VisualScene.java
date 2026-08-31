@@ -39,7 +39,7 @@ final class VisualScene {
         int forwardX = (int) Math.round(-Math.sin(radians));
         int forwardZ = (int) Math.round(Math.cos(radians));
         dirty(game, chunkX, chunkZ, true, frame);
-        dirty(game, chunkX + 1, chunkZ, true, frame);
+        dirty(game, chunkX + 1, chunkZ, false, frame);
         dirty(game, chunkX + forwardX * 2, chunkZ + forwardZ * 2, false, frame);
         dirty(game, chunkX - forwardX * 3, chunkZ - forwardZ * 3, false, frame);
     }

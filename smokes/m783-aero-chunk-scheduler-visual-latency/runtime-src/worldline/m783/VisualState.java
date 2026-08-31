@@ -48,6 +48,9 @@ public final class VisualState {
         stable = retained > REQUIRED - 100 && backlog == 0
                 && VisualProbe.pendingVisible() == 0 ? stable + 1 : 0;
         long elapsed = (System.nanoTime() - retainedStarted) / 1_000_000L;
+        require(retained < REQUIRED + 600 || stable >= 20,
+                "M783 retained drain timeout: backlog=" + backlog
+                        + " pending=" + VisualProbe.pendingVisible());
         if (retained < REQUIRED || elapsed < MINIMUM_MILLIS || stable < 20) return;
         finish(game, backlog, elapsed);
     }

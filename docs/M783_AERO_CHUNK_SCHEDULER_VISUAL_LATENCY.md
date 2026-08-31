@@ -12,4 +12,4 @@ M783 prepares one 576-machine save, then runs eight fresh clients over 2,400 ret
 
 Expected signal: `scene=restored-576,pairs=4,jvms=8-fresh,window=2400,reload=midpoint,route=walk+turn+teleport+mutation+settle,pages=on,prebake=off-vs-budget1,visual-latency=measured,backlog=drained,world-reset=observed,hitch=classified,metrics=classified,decision=promote-or-keep-disabled`.
 
-Frozen semantic SHA-256: `666536f4e861d8383318106fd1ab6f48698e38cdf79c249ae4298e3b5edb54ab`.
+Frozen semantic SHA-256: `97cddf41d7eb1df7d8f0c3f2c7af129cb5e41c21d501b33361ddf02ee14dbce6`.
