@@ -28,6 +28,7 @@ public abstract class SmoothMegaRendererMixin {
             callback.cancel();
             return;
         }
+        SmoothLightProbe.beginScene();
         SmoothLightProbe.renderCall();
         Aero_TextureBinder.bind(MegaModelBlockEntityRenderer.TEXTURE);
         Aero_MeshRenderer.renderModel(WORLDLINE_SMOOTH_MODEL,

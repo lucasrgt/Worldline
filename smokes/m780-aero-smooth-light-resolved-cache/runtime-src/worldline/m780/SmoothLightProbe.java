@@ -25,6 +25,7 @@ public final class SmoothLightProbe {
     private static final int[] FRAMES = new int[2];
     private static long started;
     private static int activeArm = -1, captures, width, height;
+    private static boolean sceneCleared;
 
     private SmoothLightProbe() {}
 
@@ -34,7 +35,16 @@ public final class SmoothLightProbe {
     }
 
     public static void beginFrame() {
+        sceneCleared = false;
         started = SmoothLightState.retaining() ? System.nanoTime() : 0L;
+    }
+
+    /** Removes unrelated terrain after it renders and before the first fixture mesh. */
+    public static void beginScene() {
+        if (sceneCleared) return;
+        GL11.glClearColor(0.06F, 0.08F, 0.12F, 1.0F);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        sceneCleared = true;
     }
 
     public static void renderCall() {

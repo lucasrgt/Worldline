@@ -12,7 +12,7 @@ public final class WorldlineM780Rehydrator {
 
     public static void rehydrate(World world) {
         clearOutsideFixture(world);
-        installEnclosure(world);
+        installFloor(world);
         for (int floor = 0; floor < 4; floor++) {
             int y = 72 + floor * 5;
             for (int lane = 0; lane < 8; lane++) {
@@ -49,21 +49,10 @@ public final class WorldlineM780Rehydrator {
         }
     }
 
-    private static void installEnclosure(World world) {
+    private static void installFloor(World world) {
         for (int x = -16; x <= 88; x++) {
             for (int z = -16; z <= 88; z++) {
                 world.setBlockWithoutNotifyingNeighbors(x, 68, z, FLOOR_BLOCK_ID);
-                world.setBlockWithoutNotifyingNeighbors(x, 100, z, FLOOR_BLOCK_ID);
-            }
-        }
-        for (int y = 69; y < 100; y++) {
-            for (int x = -16; x <= 88; x++) {
-                world.setBlockWithoutNotifyingNeighbors(x, y, -16, FLOOR_BLOCK_ID);
-                world.setBlockWithoutNotifyingNeighbors(x, y, 88, FLOOR_BLOCK_ID);
-            }
-            for (int z = -15; z < 88; z++) {
-                world.setBlockWithoutNotifyingNeighbors(-16, y, z, FLOOR_BLOCK_ID);
-                world.setBlockWithoutNotifyingNeighbors(88, y, z, FLOOR_BLOCK_ID);
             }
         }
     }
