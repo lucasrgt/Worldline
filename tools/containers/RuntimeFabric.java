@@ -53,6 +53,9 @@ public final class RuntimeFabric {
         System.out.println("Worldline Runtime Fabric doctor");
         System.out.println("host.os=" + value.os); System.out.println("host.filesystem=" + value.fileSystem);
         row("windows-job", value.windowsJob, value.windowsJob ? "ready" : "requires Windows and the .NET Framework C# compiler");
+        boolean rust = rustExecutor();
+        row("rust-executor-shadow", rust, rust ? "ready for non-qualifying differential fixtures"
+                : "set WORLDLINE_EXECUTOR to an absolute native executor path");
         row("windows-appcontainer", false, "experimental API is never selected automatically; compatibility probe pending");
         row("linux-cgroup", value.linuxCgroup, value.linuxCgroup ? "ready" : "requires Linux, cgroups v2, and a delegated systemd user manager");
         row("linux-sandbox", value.linuxSandbox, value.linuxSandbox ? "ready" : "requires linux-cgroup and bubblewrap");
@@ -126,9 +129,13 @@ public final class RuntimeFabric {
     private static boolean command(String name) { return capture(isWindows() ? List.of("where.exe", name)
             : List.of("sh", "-lc", "command -v " + name), 5).passed; }
     private static boolean isWindows() { return System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows"); }
+    private static boolean rustExecutor() { String value = System.getenv("WORLDLINE_EXECUTOR");
+        try { return value != null && !value.isBlank() && Path.of(value).isAbsolute()
+                && Files.isRegularFile(Path.of(value)); } catch (RuntimeException ignored) { return false; } }
     private static void require(boolean value, String message) { if (!value) throw new IllegalArgumentException(message); }
 
     private static void selfTest() throws Exception {
+        RustExecutorShadow.selfTest();
         Process probe = new ProcessBuilder(java(), "tools/containers/TerminationTreeProbe.java", "parent")
                 .redirectOutput(ProcessBuilder.Redirect.DISCARD)
                 .redirectError(ProcessBuilder.Redirect.DISCARD).start();
