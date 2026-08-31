@@ -20,7 +20,7 @@ public final class M780AeroSmoothLightResolvedCacheCycle {
     private static final String ID = "m780-aero-smooth-light-resolved-cache";
     private static final String[] RUNS = {"round1-off", "round1-on", "round2-on", "round2-off"};
     private static final String[] ARMS = {"cache-off", "cache-on", "cache-on", "cache-off"};
-    private static final String TRACE = "v1|scene=128-static-megacrushers+four-multichunk-panels|"
+    private static final String TRACE = "v2|scene=128-dense-smooth-grid-2048tri+four-multichunk-panels|"
         + "jvms=4-fresh-abba-off+on+on+off|route=240-orbit+traverse+spin+teleport|"
         + "warm=480-route-frames|light=synthetic-grid+phase-change+100ms-convergence|"
         + "cache=immutable-startup+ttl50ms+lru1024+native-hit-miss-cold-stale-eviction-counters|"

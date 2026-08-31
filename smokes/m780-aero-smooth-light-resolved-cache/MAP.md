@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=external-aero-runtime-qualification -->
 <!-- nonclaims=bounded-to-qualified-evidence -->
-<!-- frozen-trace=53e03199b40fde69855920225fc782159e559bb824a92b2092067290aa1a9fe8 -->
+<!-- frozen-trace=ed3c579c66b7c93f9bd6174d3ee8ddf987d0c6514096d45755e3ab047087092a -->
 
 # M780-AERO-SMOOTH-LIGHT-RESOLVED-CACHE behavior map
 
@@ -9,10 +9,12 @@ The boundary is a pinned AeroModelLib StationAPI client observed through
 Worldline's full-frame oracle. It does not claim arbitrary GPUs, dynamic model
 geometry, arbitrary TTLs, or unrelated renderer paths.
 
-Fixture: one restored world contains 128 static MegaCrusher block entities in
-four panels spanning multiple chunks. Ticks, time, weather, entities, clouds,
-HUD, and tick interpolation are controlled. The runtime mixin redirects only
-the fixture's MegaCrusher renderer through Aero's production smooth-light path.
+Fixture: one restored world contains 128 controlled block entities in four
+panels spanning multiple chunks. Each renders a 2,048-triangle smooth grid
+whose cells never overlap, removing model z-fighting from the visual oracle.
+Ticks, time, weather, entities, clouds, HUD, and interpolation are controlled.
+The runtime mixin redirects only the fixture renderer through Aero's
+production smooth-light path.
 A scoped synthetic brightness grid supplies stable, spatially varied samples
 only while that renderer calls the vanilla world-brightness API.
 
@@ -38,6 +40,6 @@ forbids catastrophic 1.5 second frames.
 
 Claim: `scene=128-static-multichunk,jvms=4-fresh-abba,route=orbit+traverse+spin+teleport,light=phase-change+ttl-convergence,pixels=0-unexplained+noise<=10ppm,samples+render=reduced2of2,cache=hits+misses+cold+stale-censused,hitches=censused`.
 
-Frozen trace: `v1|scene=128-static-megacrushers+four-multichunk-panels|jvms=4-fresh-abba-off+on+on+off|route=240-orbit+traverse+spin+teleport|warm=480-route-frames|light=synthetic-grid+phase-change+100ms-convergence|cache=immutable-startup+ttl50ms+lru1024+native-hit-miss-cold-stale-eviction-counters|captures=24-route+2-light-diagnostics-per-jvm|world=frozen+clear-weather+no-clouds|oracle=full-rgba+same-arm-noise10ppm+no-unexplained+light-change+sample-reduction+render-time-reduction+hitch-census`.
+Frozen trace: `v2|scene=128-dense-smooth-grid-2048tri+four-multichunk-panels|jvms=4-fresh-abba-off+on+on+off|route=240-orbit+traverse+spin+teleport|warm=480-route-frames|light=synthetic-grid+phase-change+100ms-convergence|cache=immutable-startup+ttl50ms+lru1024+native-hit-miss-cold-stale-eviction-counters|captures=24-route+2-light-diagnostics-per-jvm|world=frozen+clear-weather+no-clouds|oracle=full-rgba+same-arm-noise10ppm+no-unexplained+light-change+sample-reduction+render-time-reduction+hitch-census`.
 
-SHA-256: `53e03199b40fde69855920225fc782159e559bb824a92b2092067290aa1a9fe8`.
+SHA-256: `ed3c579c66b7c93f9bd6174d3ee8ddf987d0c6514096d45755e3ab047087092a`.

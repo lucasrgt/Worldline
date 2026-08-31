@@ -9,28 +9,31 @@ public final class SmoothLightContract {
 
     private SmoothLightContract() {}
 
-    /** Composes every named OBJ object into one immutable static smooth mesh. */
-    public static Aero_MeshModel flatten(Aero_MeshModel source) {
-        int[] sizes = new int[4];
-        for (int group = 0; group < 4; group++) sizes[group] = source.groups[group].length;
-        Aero_MeshModel.NamedGroup[] named = source.getNamedGroupArray();
-        for (Aero_MeshModel.NamedGroup object : named) {
-            for (int group = 0; group < 4; group++) sizes[group] += object.tris[group].length;
-        }
-        float[][][] merged = new float[4][][];
-        for (int group = 0; group < 4; group++) {
-            merged[group] = new float[sizes[group]][];
-            int cursor = append(merged[group], 0, source.groups[group]);
-            for (Aero_MeshModel.NamedGroup object : named) {
-                cursor = append(merged[group], cursor, object.tris[group]);
+    /** Builds 2,048 non-overlapping triangles with spatially varied centroids. */
+    public static Aero_MeshModel denseGrid() {
+        int side = 32;
+        float[][] top = new float[side * side * 2][];
+        int cursor = 0;
+        for (int z = 0; z < side; z++) {
+            for (int x = 0; x < side; x++) {
+                float x0 = x * 3.0F / side, x1 = (x + 1) * 3.0F / side;
+                float z0 = z * 3.0F / side, z1 = (z + 1) * 3.0F / side;
+                float y = 0.25F + ((x + z) & 3) * 0.03F;
+                top[cursor++] = triangle(x0, y, z0, x1, y, z0, x1, y, z1);
+                top[cursor++] = triangle(x0, y, z0, x1, y, z1, x0, y, z1);
             }
         }
-        return new Aero_MeshModel(source.name + "-worldline-smooth", merged, source.scale,
-            new java.util.HashMap());
+        float[][][] groups = new float[4][][];
+        groups[Aero_MeshModel.GROUP_TOP] = top;
+        groups[Aero_MeshModel.GROUP_BOTTOM] = new float[0][];
+        groups[Aero_MeshModel.GROUP_NS] = new float[0][];
+        groups[Aero_MeshModel.GROUP_EW] = new float[0][];
+        return new Aero_MeshModel("worldline-dense-smooth-grid", groups);
     }
 
-    private static int append(float[][] target, int cursor, float[][] source) {
-        System.arraycopy(source, 0, target, cursor, source.length);
-        return cursor + source.length;
+    private static float[] triangle(float x0, float y0, float z0,
+            float x1, float y1, float z1, float x2, float y2, float z2) {
+        return new float[] {x0, y0, z0, 0.0F, 0.0F, x1, y1, z1, 1.0F, 0.0F,
+            x2, y2, z2, 1.0F, 1.0F};
     }
 }

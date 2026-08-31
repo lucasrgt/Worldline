@@ -17,7 +17,7 @@ import worldline.m780.SmoothLightState;
 @Mixin(value = MegaModelBlockEntityRenderer.class, priority = 1200)
 public abstract class SmoothMegaRendererMixin {
     private static final Aero_MeshModel WORLDLINE_SMOOTH_MODEL =
-        SmoothLightContract.flatten(MegaModelBlockEntityRenderer.MODEL);
+        SmoothLightContract.denseGrid();
 
     @Inject(method = "render(Lnet/minecraft/block/entity/BlockEntity;DDDF)V",
         at = @At("HEAD"), cancellable = true)
