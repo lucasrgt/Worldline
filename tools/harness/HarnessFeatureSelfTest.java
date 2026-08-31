@@ -40,6 +40,7 @@ final class HarnessFeatureSelfTest {
         FallingSandLifecycleSubsystemSuccessor.selfTest();
         TntLifecycleSubsystemSuccessor.selfTest();
         HonestArrowLifecycleCorrectionSuccessor.selfTest();
+        HonestSquidLandResponseCorrectionSuccessor.selfTest();
         CandidateReadiness.selfTest();
         CandidateSourceClosure.selfTest();
         NeighborTestKitPinCheck.selfTest();
