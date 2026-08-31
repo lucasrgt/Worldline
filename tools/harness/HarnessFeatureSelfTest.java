@@ -41,6 +41,7 @@ final class HarnessFeatureSelfTest {
         TntLifecycleSubsystemSuccessor.selfTest();
         HonestArrowLifecycleCorrectionSuccessor.selfTest();
         HonestSquidLandResponseCorrectionSuccessor.selfTest();
+        HostileBehaviorMatrixSuccessor.selfTest();
         CandidateReadiness.selfTest();
         CandidateSourceClosure.selfTest();
         NeighborTestKitPinCheck.selfTest();
