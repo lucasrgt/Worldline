@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=external-aero-runtime-qualification -->
 <!-- nonclaims=bounded-to-qualified-evidence -->
-<!-- frozen-trace=36cb553c7a9d9a5cd946dfb801994449616c8db5e95931a669e7d649982249f7 -->
+<!-- frozen-trace=fb528f884f40f768114c06056818aa268c58a4f04995bd9d9b7e9798e8272491 -->
 
 # M780-AERO-SMOOTH-LIGHT-RESOLVED-CACHE behavior map
 
@@ -34,9 +34,11 @@ convergence interval, and a second diagnostic captures phase-one light at the
 same camera.
 
 Observations: at 24 route checkpoints plus two light diagnostics per JVM, the
-oracle hashes every resolved triangle brightness immediately before Aero calls
-`tess.color`. All two off/on and two same-arm pairs must have identical value
-counts and zero signature differences. Complete RGBA frames are retained and
+oracle hashes every resolved triangle brightness with its block position
+immediately before Aero calls `tess.color`. Instance hashes are aggregated by
+order-independent sum and rotated XOR. All two off/on and two same-arm pairs
+must have identical value counts and zero differences in both signatures.
+Complete RGBA frames are retained and
 hashed as diagnostic artifacts, but unrelated fresh-client raster variation
 does not decide this cache's semantic result. Before and after resolved hashes
 must differ within each run, and on arms report hits, cold and stale misses without
@@ -49,6 +51,6 @@ catastrophic 1.5 second frames.
 
 Claim: `scene=128-static-multichunk,jvms=4-fresh-abba,route=orbit+traverse+spin+teleport,light=phase-change+ttl-convergence,colors=0-resolved-differences,rgba=diagnostic,samples=reduced2of2,cache=hits+misses+cold+stale-censused,decision=promote-or-keep-disabled-by-render+hitches`.
 
-Frozen trace: `v7|scene=128-dense-smooth-grid-2048tri+four-panels+opaque-buffer+stable-be-order|jvms=4-fresh-abba-off+on+on+off|route=240-orbit+traverse+spin+teleport|warm=480-route-frames|light=synthetic-grid+phase-change+100ms-convergence|cache=immutable-startup+ttl50ms+lru1024+native-hit-miss-cold-stale-eviction-counters|captures=24-route+2-light-diagnostics-per-jvm|world=frozen+clear-weather+no-clouds|oracle=resolved-brightness-exact+rgba-diagnostic+light-change+sample-reduction+render-time-classification+hitch-census`.
+Frozen trace: `v8|scene=128-dense-smooth-grid-2048tri+four-panels+opaque-buffer+stable-be-order|jvms=4-fresh-abba-off+on+on+off|route=240-orbit+traverse+spin+teleport|warm=480-route-frames|light=synthetic-grid+phase-change+100ms-convergence|cache=immutable-startup+ttl50ms+lru1024+native-hit-miss-cold-stale-eviction-counters|captures=24-route+2-light-diagnostics-per-jvm|world=frozen+clear-weather+no-clouds|oracle=position-keyed-order-independent-resolved-brightness+rgba-diagnostic+light-change+sample-reduction+render-time-classification+hitch-census`.
 
-SHA-256: `36cb553c7a9d9a5cd946dfb801994449616c8db5e95931a669e7d649982249f7`.
+SHA-256: `fb528f884f40f768114c06056818aa268c58a4f04995bd9d9b7e9798e8272491`.

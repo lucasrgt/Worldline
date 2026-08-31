@@ -29,6 +29,7 @@ public abstract class SmoothMegaRendererMixin {
             return;
         }
         SmoothLightProbe.beginScene();
+        SmoothLightProbe.beginModel(block.x, block.y, block.z);
         SmoothLightProbe.renderCall();
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_TEXTURE_BIT);
         GL11.glDisable(GL11.GL_TEXTURE_2D);

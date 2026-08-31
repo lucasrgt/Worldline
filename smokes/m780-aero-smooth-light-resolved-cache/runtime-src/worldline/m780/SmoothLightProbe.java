@@ -19,8 +19,10 @@ public final class SmoothLightProbe {
     private static final long[][] RENDERS = new long[2][SmoothLightScene.CHECKPOINTS];
     private static final long[][] SAMPLES = new long[2][SmoothLightScene.CHECKPOINTS];
     private static final long[][] RESOLVED = new long[2][SmoothLightScene.CHECKPOINTS];
+    private static final long[][] RESOLVED_XOR = new long[2][SmoothLightScene.CHECKPOINTS];
     private static final long[][] RESOLVED_VALUES = new long[2][SmoothLightScene.CHECKPOINTS];
     private static final long[][] LIGHT_RESOLVED = new long[2][2];
+    private static final long[][] LIGHT_RESOLVED_XOR = new long[2][2];
     private static final long[][] LIGHT_RESOLVED_VALUES = new long[2][2];
     private static final boolean[][] CAPTURED = new boolean[2][SmoothLightScene.CHECKPOINTS];
     private static final long[] RENDER_NS = new long[2];
@@ -30,6 +32,7 @@ public final class SmoothLightProbe {
     private static long started;
     private static int activeArm = -1, captures, width, height;
     private static boolean sceneCleared;
+    private static long modelKey;
 
     private SmoothLightProbe() {}
 
@@ -57,6 +60,14 @@ public final class SmoothLightProbe {
         }
     }
 
+    public static void beginModel(int x, int y, int z) {
+        long key = x * 0x9E3779B97F4A7C15L ^ y * 0xC2B2AE3D27D4EB4FL
+            ^ z * 0x165667B19E3779F9L;
+        key ^= key >>> 30;
+        key *= 0xBF58476D1CE4E5B9L;
+        modelKey = key ^ key >>> 27;
+    }
+
     public static void lightSample() {
         if (SmoothLightState.retaining() && activeArm >= 0) {
             SAMPLES[activeArm][SmoothLightState.checkpoint()]++;
@@ -69,18 +80,19 @@ public final class SmoothLightProbe {
         int diagnostic = SmoothLightState.lightDiagnostic();
         int slot = diagnostic != 0 ? diagnostic - 1 : SmoothLightState.checkpoint();
         if (diagnostic == 0 && !SmoothLightState.captureFrame()) return;
-        long current = diagnostic != 0 ? LIGHT_RESOLVED[activeArm][slot]
-            : RESOLVED[activeArm][slot];
-        if (current == 0L) current = 0xcbf29ce484222325L;
+        long local = 0xcbf29ce484222325L ^ modelKey;
         for (float value : values) {
-            current ^= Float.floatToIntBits(value) & 0xffffffffL;
-            current *= 0x100000001b3L;
+            local ^= Float.floatToIntBits(value) & 0xffffffffL;
+            local *= 0x100000001b3L;
         }
+        long rotated = Long.rotateLeft(local, (int) modelKey & 63);
         if (diagnostic != 0) {
-            LIGHT_RESOLVED[activeArm][slot] = current;
+            LIGHT_RESOLVED[activeArm][slot] += local;
+            LIGHT_RESOLVED_XOR[activeArm][slot] ^= rotated;
             LIGHT_RESOLVED_VALUES[activeArm][slot] += values.length;
         } else {
-            RESOLVED[activeArm][slot] = current;
+            RESOLVED[activeArm][slot] += local;
+            RESOLVED_XOR[activeArm][slot] ^= rotated;
             RESOLVED_VALUES[activeArm][slot] += values.length;
         }
     }
@@ -129,6 +141,8 @@ public final class SmoothLightProbe {
             out.println("light.after.sha256=" + LIGHT_HASHES[arm][1]);
             out.println("light.before.resolved=" + LIGHT_RESOLVED[arm][0]);
             out.println("light.after.resolved=" + LIGHT_RESOLVED[arm][1]);
+            out.println("light.before.resolved.xor=" + LIGHT_RESOLVED_XOR[arm][0]);
+            out.println("light.after.resolved.xor=" + LIGHT_RESOLVED_XOR[arm][1]);
             out.println("light.before.values=" + LIGHT_RESOLVED_VALUES[arm][0]);
             out.println("light.after.values=" + LIGHT_RESOLVED_VALUES[arm][1]);
             for (int i = 0; i < SmoothLightScene.CHECKPOINTS; i++) {
@@ -136,6 +150,7 @@ public final class SmoothLightProbe {
                 out.println("checkpoint." + i + ".renders=" + RENDERS[arm][i]);
                 out.println("checkpoint." + i + ".samples=" + SAMPLES[arm][i]);
                 out.println("checkpoint." + i + ".resolved=" + RESOLVED[arm][i]);
+                out.println("checkpoint." + i + ".resolved.xor=" + RESOLVED_XOR[arm][i]);
                 out.println("checkpoint." + i + ".values=" + RESOLVED_VALUES[arm][i]);
             }
         }

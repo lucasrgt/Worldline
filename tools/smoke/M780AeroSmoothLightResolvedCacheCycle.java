@@ -18,12 +18,12 @@ public final class M780AeroSmoothLightResolvedCacheCycle {
     private static final String ID = "m780-aero-smooth-light-resolved-cache";
     private static final String[] RUNS = {"round1-off", "round1-on", "round2-on", "round2-off"};
     private static final String[] ARMS = {"cache-off", "cache-on", "cache-on", "cache-off"};
-    private static final String TRACE = "v7|scene=128-dense-smooth-grid-2048tri+four-panels+opaque-buffer+stable-be-order|"
+    private static final String TRACE = "v8|scene=128-dense-smooth-grid-2048tri+four-panels+opaque-buffer+stable-be-order|"
         + "jvms=4-fresh-abba-off+on+on+off|route=240-orbit+traverse+spin+teleport|"
         + "warm=480-route-frames|light=synthetic-grid+phase-change+100ms-convergence|"
         + "cache=immutable-startup+ttl50ms+lru1024+native-hit-miss-cold-stale-eviction-counters|"
         + "captures=24-route+2-light-diagnostics-per-jvm|world=frozen+clear-weather+no-clouds|"
-        + "oracle=resolved-brightness-exact+rgba-diagnostic+light-change+sample-reduction+"
+        + "oracle=position-keyed-order-independent-resolved-brightness+rgba-diagnostic+light-change+sample-reduction+"
         + "render-time-classification+hitch-census";
     private final Path root = Path.of("").toAbsolutePath().normalize();
     private final Path smoke = root.resolve("smokes").resolve(ID);
@@ -192,9 +192,10 @@ final class M780Artifact {
     final int machines, frames, captures, width, height, hitches, entries;
     final long renders, samples, renderNs, maxRenderNs, hits, misses, cold, stale, size, evictions;
     final String[] hashes;
-    final long[] resolved, resolvedValues;
+    final long[] resolved, resolvedXor, resolvedValues;
     final String beforeHash, afterHash;
-    final long beforeResolved, afterResolved, beforeValues, afterValues;
+    final long beforeResolved, afterResolved, beforeResolvedXor, afterResolvedXor;
+    final long beforeValues, afterValues;
 
     private M780Artifact(Path game, Properties values) {
         this.game = game;
@@ -218,10 +219,13 @@ final class M780Artifact {
         afterHash = required(values, "light.after.sha256");
         beforeResolved = number(values, "light.before.resolved");
         afterResolved = number(values, "light.after.resolved");
+        beforeResolvedXor = number(values, "light.before.resolved.xor");
+        afterResolvedXor = number(values, "light.after.resolved.xor");
         beforeValues = number(values, "light.before.values");
         afterValues = number(values, "light.after.values");
         hashes = new String[captures];
         resolved = new long[captures];
+        resolvedXor = new long[captures];
         resolvedValues = new long[captures];
         long renderCalls = 0L, lightSamples = 0L;
         for (int i = 0; i < captures; i++) {
@@ -229,6 +233,7 @@ final class M780Artifact {
             renderCalls += number(values, "checkpoint." + i + ".renders");
             lightSamples += number(values, "checkpoint." + i + ".samples");
             resolved[i] = number(values, "checkpoint." + i + ".resolved");
+            resolvedXor[i] = number(values, "checkpoint." + i + ".resolved.xor");
             resolvedValues[i] = number(values, "checkpoint." + i + ".values");
         }
         renders = renderCalls;
@@ -248,7 +253,8 @@ final class M780Artifact {
         boolean cache = arm.equals("cache-on");
         SmokeSupport.require(machines == 128 && frames == 240 && captures == 24
             && width > 0 && height > 0 && renders > 0L && samples > 0L
-            && maxRenderNs < 1_500_000_000L && beforeResolved != afterResolved
+            && maxRenderNs < 1_500_000_000L
+            && (beforeResolved != afterResolved || beforeResolvedXor != afterResolvedXor)
             && beforeValues > 0L && beforeValues == afterValues,
             "M780 incomplete artifact: " + summary());
         SmokeSupport.require(cache
@@ -281,6 +287,11 @@ final class M780Artifact {
     long values(int checkpoint) {
         return checkpoint < captures ? resolvedValues[checkpoint]
             : checkpoint == captures ? beforeValues : afterValues;
+    }
+
+    long resolvedXor(int checkpoint) {
+        return checkpoint < captures ? resolvedXor[checkpoint]
+            : checkpoint == captures ? beforeResolvedXor : afterResolvedXor;
     }
 
     String hash(int checkpoint) {
@@ -319,7 +330,10 @@ record M780VisualPair(String label, M780Artifact baseline, M780Artifact candidat
         for (int checkpoint = 0; checkpoint < baseline.captures + 2; checkpoint++) {
             SmokeSupport.require(baseline.values(checkpoint) == candidate.values(checkpoint),
                 "M780 resolved value count diverged: " + checkpoint);
-            if (baseline.resolved(checkpoint) != candidate.resolved(checkpoint)) resolved++;
+            if (baseline.resolved(checkpoint) != candidate.resolved(checkpoint)
+                    || baseline.resolvedXor(checkpoint) != candidate.resolvedXor(checkpoint)) {
+                resolved++;
+            }
             if (!baseline.hash(checkpoint).equals(candidate.hash(checkpoint))) framebuffers++;
         }
         return new M780VisualPair(label, baseline, candidate, resolved, framebuffers);
