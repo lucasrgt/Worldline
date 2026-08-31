@@ -30,6 +30,7 @@ public final class M784AeroHighMemoryCellPagesCycle {
         + "jvms=8-fresh-four-counterbalanced-pairs|route=1200-min20s-orbit+traverse+spin+teleport|"
         + "warm=480-route-frames+pages-stable|memory=normal-vs-high|"
         + "cell-pages=min1+flatten-off-vs-on+ttl600-vs1800+budget8-vs16+cap-unbounded-vs4096|"
+        + "dispatch=native-fixture-render-suppressed|"
         + "submission=one-controlled-production-submit+flush-per-frame|"
         + "captures=24-full-rgba-isolated-fixture+blank-retry<=24|"
         + "metrics=wall+p99+allocation+heap+flush+pages+display-lists+prewarm+hitches|"
