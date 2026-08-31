@@ -12,7 +12,7 @@ final class WorldlineExecutionReceipt {
             "stderr_sha256", "metrics_sha256", "stdout_observed_bytes", "stderr_observed_bytes",
             "stdout_truncated", "stderr_truncated", "descendants_remaining", "error");
     private static final List<String> METRIC_FIELDS = List.of("schema", "elapsed_ms",
-            "peak_memory_bytes", "memory_measurement", "peak_processes", "cpu_user_100ns",
+            "peak_memory_bytes", "memory_measurement", "peak_processes", "peak_tasks", "cpu_user_100ns",
             "cpu_kernel_100ns", "io_read_bytes", "io_write_bytes", "stdout_observed_bytes",
             "stderr_observed_bytes", "stdout_truncated", "stderr_truncated", "telemetry_qualification");
     private static final Set<String> TERMINATIONS = Set.of("exited", "crashed", "timed_out",
@@ -65,15 +65,20 @@ final class WorldlineExecutionReceipt {
                 "Linux cgroup memory measurement drift");
         Long peakMemory = nullablePositive(value, "peak_memory_bytes");
         Long peakProcesses = nullablePositive(value, "peak_processes");
+        Long peakTasks = nullablePositive(value, "peak_tasks");
         Long user = nullablePositive(value, "cpu_user_100ns");
         Long kernel = nullablePositive(value, "cpu_kernel_100ns");
         Long read = nullablePositive(value, "io_read_bytes");
         Long written = nullablePositive(value, "io_write_bytes");
         if (!plan.isolation().backend().equals("direct")) require(peakMemory != null
-                && peakProcesses != null && user != null && kernel != null && read != null && written != null,
+                && user != null && kernel != null && read != null && written != null,
                 "contained accounting is incomplete");
+        if (plan.isolation().backend().equals("windows_job")) require(peakProcesses != null && peakTasks == null,
+                "Windows Job process accounting drift");
+        else if (plan.isolation().backend().equals("linux_cgroup")) require(peakProcesses == null && peakTasks != null,
+                "Linux cgroup task accounting drift");
         else require(measurement.equals("unavailable") && peakMemory == null && peakProcesses == null
-                && user == null && kernel == null && read == null && written == null,
+                && peakTasks == null && user == null && kernel == null && read == null && written == null,
                 "direct backend claimed unavailable accounting");
         require(positive(value, "stdout_observed_bytes") == positive(receipt, "stdout_observed_bytes"),
                 "stdout metrics drift");
@@ -114,7 +119,8 @@ final class WorldlineExecutionReceipt {
     private static byte[] metricBytes(Map<String, Object> value) {
         String json = "{\"schema\":" + q(value, "schema") + ",\"elapsed_ms\":" + n(value.get("elapsed_ms"))
                 + ",\"peak_memory_bytes\":" + n(value.get("peak_memory_bytes")) + ",\"memory_measurement\":" + q(value, "memory_measurement")
-                + ",\"peak_processes\":" + n(value.get("peak_processes")) + ",\"cpu_user_100ns\":" + n(value.get("cpu_user_100ns"))
+                + ",\"peak_processes\":" + n(value.get("peak_processes")) + ",\"peak_tasks\":" + n(value.get("peak_tasks"))
+                + ",\"cpu_user_100ns\":" + n(value.get("cpu_user_100ns"))
                 + ",\"cpu_kernel_100ns\":" + n(value.get("cpu_kernel_100ns")) + ",\"io_read_bytes\":" + n(value.get("io_read_bytes"))
                 + ",\"io_write_bytes\":" + n(value.get("io_write_bytes")) + ",\"stdout_observed_bytes\":" + n(value.get("stdout_observed_bytes"))
                 + ",\"stderr_observed_bytes\":" + n(value.get("stderr_observed_bytes")) + ",\"stdout_truncated\":" + n(value.get("stdout_truncated"))

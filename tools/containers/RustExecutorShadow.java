@@ -96,9 +96,12 @@ public final class RustExecutorShadow {
         String measurement = plan.isolation().backend().equals("linux_cgroup") ? "cgroup_peak"
                 : direct ? "unavailable" : "job_commit";
         String accounting = direct ? "null" : "1";
+        String processes = plan.isolation().backend().equals("windows_job") ? "1" : "null";
+        String tasks = plan.isolation().backend().equals("linux_cgroup") ? "1" : "null";
         String metrics = "{\"schema\":\"worldline.execution-metrics.v1\",\"elapsed_ms\":1,"
                 + "\"peak_memory_bytes\":" + accounting + ",\"memory_measurement\":\"" + measurement + "\","
-                + "\"peak_processes\":" + accounting + ",\"cpu_user_100ns\":" + accounting
+                + "\"peak_processes\":" + processes + ",\"peak_tasks\":" + tasks
+                + ",\"cpu_user_100ns\":" + accounting
                 + ",\"cpu_kernel_100ns\":" + accounting + ",\"io_read_bytes\":" + accounting
                 + ",\"io_write_bytes\":" + accounting + ",\"stdout_observed_bytes\":0,"
                 + "\"stderr_observed_bytes\":0,\"stdout_truncated\":false,\"stderr_truncated\":false,"
