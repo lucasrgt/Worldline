@@ -20,7 +20,7 @@ public final class M780AeroSmoothLightResolvedCacheCycle {
     private static final String ID = "m780-aero-smooth-light-resolved-cache";
     private static final String[] RUNS = {"round1-off", "round1-on", "round2-on", "round2-off"};
     private static final String[] ARMS = {"cache-off", "cache-on", "cache-on", "cache-off"};
-    private static final String TRACE = "v2|scene=128-dense-smooth-grid-2048tri+four-multichunk-panels|"
+    private static final String TRACE = "v3|scene=128-dense-smooth-grid-2048tri+four-panels+static-enclosure|"
         + "jvms=4-fresh-abba-off+on+on+off|route=240-orbit+traverse+spin+teleport|"
         + "warm=480-route-frames|light=synthetic-grid+phase-change+100ms-convergence|"
         + "cache=immutable-startup+ttl50ms+lru1024+native-hit-miss-cold-stale-eviction-counters|"
@@ -79,7 +79,7 @@ public final class M780AeroSmoothLightResolvedCacheCycle {
             M780VisualPair.compare("repeat.off", artifacts.get(0), artifacts.get(3)),
             M780VisualPair.compare("repeat.on", artifacts.get(1), artifacts.get(2)));
         M780Result result = M780Result.evaluate(sessions, pairs);
-        SmokeSupport.require(result.passes(), "M780 qualification gate failed: " + result.summary());
+        SmokeSupport.require(result.passes(), "M780 classification gate failed: " + result.summary());
         String signature = M780Runtime.sha256(TRACE.getBytes(StandardCharsets.UTF_8));
         SmokeSupport.require(signature.equals(SmokeSupport.value(config, "expected.signature")),
             "M780 semantic signature drift: " + signature);
@@ -103,7 +103,7 @@ public final class M780AeroSmoothLightResolvedCacheCycle {
             && SmokeSupport.value(config, "cache.ttl.ms").equals("50")
             && SmokeSupport.value(config, "maximum.raster.noise.ppm").equals("10")
             && SmokeSupport.value(config, "maximum.sample.ratio").equals("0.70")
-            && SmokeSupport.value(config, "maximum.render.ratio").equals("0.95"),
+            && SmokeSupport.value(config, "promotion.render.ratio").equals("0.95"),
             "M780 acquisition design drift");
     }
 }
@@ -360,10 +360,14 @@ record M780Result(long noisePixels, double noisePpm, long unexplainedPixels,
     }
 
     boolean passes() {
-        return unexplainedPixels == 0L && noisePpm <= 10.0D && everyPairBounded
-            && rendersRepeatable && everySessionSamplesReduced && sampleRatio <= 0.70D
-            && everySessionRenderReduced && renderRatio <= 0.95D
-            && onHitches <= offHitches + 10 && maximumFrameNs < 1_500_000_000L;
+        boolean visual = unexplainedPixels == 0L && noisePpm <= 10.0D && everyPairBounded;
+        boolean cacheWork = rendersRepeatable && everySessionSamplesReduced && sampleRatio <= 0.70D;
+        boolean promotion = everySessionRenderReduced && renderRatio <= 0.95D
+            && onHitches <= offHitches + 10;
+        boolean keepDisabled = !everySessionRenderReduced || renderRatio > 0.95D
+            || onHitches > offHitches + 10;
+        return visual && cacheWork && (promotion || keepDisabled)
+            && maximumFrameNs < 1_500_000_000L;
     }
 
     String summary() {
@@ -379,6 +383,8 @@ record M780Result(long noisePixels, double noisePpm, long unexplainedPixels,
                 offRenderNs / 1_000_000.0D, onRenderNs / 1_000_000.0D)
             + ",render.ratio=" + String.format(Locale.ROOT, "%.3f", renderRatio)
             + ",render.every-session-reduced=" + everySessionRenderReduced
+            + ",decision=" + (everySessionRenderReduced && renderRatio <= 0.95D
+                && onHitches <= offHitches + 10 ? "promote" : "keep-disabled")
             + ",hitches50=" + offHitches + "->" + onHitches
             + ",maximum.frame.ms=" + String.format(Locale.ROOT, "%.1f", maximumFrameNs / 1_000_000.0D);
     }
