@@ -1,0 +1,78 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+def script = gradle.startParameter.initScripts.find { it.name == 'visual.init.gradle' }
+if (script == null) throw new GradleException('Worldline M778 script path missing')
+def root = script.parentFile.parentFile.parentFile.canonicalFile
+def requestedJar = gradle.startParameter.projectProperties.get('worldlineAeroJar')
+if (requestedJar != null) {
+    def aeroJar = new File(requestedJar).canonicalFile
+    if (!aeroJar.isFile()) throw new GradleException('Worldline M778 Aero JAR missing')
+    def expectedTestDir = new File(aeroJar.parentFile.parentFile.parentFile, 'test').canonicalFile
+    gradle.beforeProject { candidate ->
+        if (candidate.projectDir.canonicalFile != expectedTestDir) return
+        candidate.configurations.whenObjectAdded { configuration ->
+            if (configuration.name != 'modImplementation') return
+            configuration.withDependencies { dependencies ->
+                def aero = dependencies.findAll {
+                    it.group == 'dev.aerocoding' && it.name == 'aero-model-lib'
+                }
+                if (aero.size() != 1)
+                    throw new GradleException('Worldline M778 Aero dependency boundary drift')
+                dependencies.removeAll(aero)
+                dependencies.add(candidate.dependencies.create(candidate.files(aeroJar)))
+            }
+        }
+    }
+}
+
+gradle.projectsEvaluated {
+    if (gradle.rootProject.name != 'aero-model-lib-test') return
+    def project = gradle.rootProject
+    def smoke = new File(root, 'smokes/m778-aero-culling-visual-integrity')
+    def prop = { name -> project.findProperty(name).toString() }
+    project.sourceSets.main.java.srcDir(new File(smoke, 'runtime-src'))
+    project.dependencies.add('compileOnly', project.files(
+        new File(project.findProperty('worldlineAeroClasses').toString())))
+    project.tasks.named('processResources').configure {
+        outputs.upToDateWhen { false }
+        doLast {
+            copy { from new File(smoke, 'runtime-resources'); into destinationDir }
+            def fabric = new File(destinationDir, 'fabric.mod.json')
+            if (!fabric.isFile()) throw new GradleException('Aero fabric.mod.json missing')
+            def json = new JsonSlurper().parse(fabric)
+            def mixins = (json.mixins ?: []) as List
+            if (!mixins.contains('worldline-m778.mixins.json'))
+                mixins.add('worldline-m778.mixins.json')
+            json.mixins = mixins
+            fabric.text = JsonOutput.prettyPrint(JsonOutput.toJson(json)) + '\n'
+        }
+    }
+    def task = project.tasks.named('runClient').get()
+    if (task.actions.size() != 2 ||
+            !task.actions[0].getClass().name.endsWith('ClosureTaskAction'))
+        throw new GradleException('Aero runClient action shape drifted')
+    task.actions.remove(0)
+    def game = new File(prop('worldlineRunDir')).absoluteFile
+    project.loom.runs.named('client').configure { runDir project.relativePath(game) }
+    game.mkdirs()
+    new File(game, 'options.txt').text = 'fpsLimit:0' + System.lineSeparator()
+    def arm = prop('worldlineArm')
+    def culling = arm != 'prepare'
+    task.jvmArgs([
+        '-Dworldline.m778.enabled=true',
+        '-Dworldline.m778.prepare=' + prop('worldlinePrepare'),
+        '-Dworldline.m778.arm=' + arm,
+        '-Dworldline.m778.metrics=' + new File(prop('worldlineMetrics')).absolutePath,
+        '-Dworldline.m778.framesDir=' + new File(prop('worldlineFramesDir')).absolutePath,
+        '-Daero.atRestLists=true', '-Daero.prewarm=false',
+        '-Daero.smartlod=false', '-Daero.animatedLOD=0',
+        '-Daero.becell.pages=false', '-Daero.bonepages=false',
+        '-Daero.chunkvisibility=false', '-Daero.smallobj=false',
+        '-Daero.frustumcull=' + culling, '-Daero.beViewCull=false',
+        '-Daero.mega=false', '-Daero.ultra=false', '-Daero.spikelog=true',
+        '-Daero.spikelog.ms=10000', '-Daero.spikelog.heartbeatMs=0',
+        '-Daero.framePacing=false', '-Daero.benchmark.skipNonForcedSaves=true',
+        '-Xms2G', '-Xmx4G'
+    ] as List)
+}

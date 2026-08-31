@@ -1,0 +1,8 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "worldline.m778.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": ["VisualFrameMixin", "VisualMinecraftMixin", "VisualCullingMixin", "VisualCloudMixin"],
+  "injectors": { "defaultRequire": 1 }
+}
