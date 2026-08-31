@@ -351,6 +351,20 @@ promotes only `chicken-spawn`; `chicken-egg-tick` remains explicit `UNKNOWN` unt
 qualified fixture actually observes natural laying. Wrong identities, item/type values, thrower
 relations, or platform bounds fail closed.
 
+Wolf materialization and owner interaction use one complete fixture. The driver supplies the
+controlled Packet24 type-95 spawn, bone-tame status, red-collar observation, and the complete
+Packet40 owner-state sequence:
+
+```java
+WolfLifecycleEvidence evidence = WolfLifecycleFixture.execute(plan,
+        wolfDriver::observeOwnerState);
+```
+
+The fixture requires bone item `352`, tame status `7`, red collar dye damage `4`, stick item
+`280`, Packet7 button `0`, and the exact sitting-standing-sitting-standing flag sequence while the
+wolf remains alive. It exposes `wolf-spawn` at the universal layer and `wolf-sit` at the singular
+layer, normalizing runtime IDs and unrelated legal Packet40 bits.
+
 ### Block lifecycle matrices
 
 `worldline.testkit.BlockConformancePlan` and `BlockLifecyclePlan` are part of

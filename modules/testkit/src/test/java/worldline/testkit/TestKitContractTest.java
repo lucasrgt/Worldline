@@ -39,6 +39,7 @@ public final class TestKitContractTest {
         SlimeLifecycleFixtureTest.execute();
         SheepLifecycleFixtureTest.execute();
         ChickenEggFamilyFixtureTest.execute();
+        WolfLifecycleFixtureTest.execute();
         BlockLifecycleDropMatrixTest.execute();
         BlockLifecycleFixtureTest.execute();
         BlockLifecycleClaimFixtureTest.execute();

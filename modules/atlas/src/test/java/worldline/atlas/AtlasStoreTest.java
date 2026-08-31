@@ -126,6 +126,15 @@ public final class AtlasStoreTest {
                 && AtlasStatus.UNKNOWN.equals(
                         first.get("atlas.claim.entity-093.tick-lifecycle").status()),
                 "honest chicken egg-family boundary was not indexed");
+        require(first.get("atlas.claim.entity-095.spawn-materialization").control()
+                .contains("layer=UNIVERSAL;applicability=APPLICABLE;automation=PUBLIC_TESTKIT")
+                && first.get("atlas.claim.entity-095.spawn-materialization").refs()
+                .contains("atlas.experiment.m420-wolf-tame-set")
+                && first.get("atlas.claim.entity-095.interaction-state").control()
+                .contains("layer=SINGULAR;applicability=APPLICABLE;automation=PUBLIC_TESTKIT")
+                && first.get("atlas.claim.entity-095.interaction-state").refs()
+                .contains("atlas.experiment.m583-wolf-sit-set"),
+                "complete wolf owner-state subsystem was not indexed");
         require(AtlasStatus.UNKNOWN.equals(first.get("atlas.claim.entity-092.drop-matrix").status()),
                 "implicit entity census gap was not materialized");
         require(!AtlasIndex.search(first, "chunk", 20).isEmpty(), "semantic chunk index");
@@ -147,9 +156,9 @@ public final class AtlasStoreTest {
                 && taxonomy.contains("subsystem=tile-entities"), "taxonomy index");
         String tags = AtlasQuery.tags(first);
         require(tags.contains("tag=category-claim")
-                && tags.contains("tag=surface-public-testkit\trecords=1097")
+                && tags.contains("tag=surface-public-testkit\trecords=1099")
                 && !tags.contains("tag=surface-internal-api")
-                && tags.contains("tag=surface-smoke-only\trecords=11"), "tag index");
+                && tags.contains("tag=surface-smoke-only\trecords=9"), "tag index");
         try {
             String documentation = new String(Files.readAllBytes(Paths.get("docs", "ATLAS.md")),
                     StandardCharsets.UTF_8);
