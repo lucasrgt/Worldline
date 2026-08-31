@@ -189,7 +189,8 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
                 || HonestArrowLifecycleCorrectionSuccessor.carries(relative, prior, current)
                 || HonestSquidLandResponseCorrectionSuccessor.carries(relative, prior, current)
                 || HostileBehaviorMatrixSuccessor.carries(relative, prior, current)
-                || HostilePacketIdentityCollisionSuccessor.carries(relative, prior, current);
+                || HostilePacketIdentityCollisionSuccessor.carries(relative, prior, current)
+                || PigLifecycleSubsystemSuccessor.carries(relative, prior, current);
     }
 
     private static boolean reviewed(String relative, String prior, String current,
