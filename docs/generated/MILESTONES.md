@@ -613,8 +613,8 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m778-aero-culling-visual-integrity` | EXECUTED | Aero culling visual integrity |
 | `m779-aero-animated-visual-integrity` | CARRIED | Aero animated visual integrity |
 | `m780-aero-smooth-light-resolved-cache` | EXECUTED | Aero resolved smooth-light cache |
-| `m781-aero-smooth-light-default-lifecycle` | EXECUTED | Aero smooth-light default and world lifecycle |
-| `m782-aero-chunk-scheduler-lifecycle-soak` | EXECUTED | Aero chunk scheduler lifecycle soak |
+| `m781-aero-smooth-light-default-lifecycle` | CARRIED | Aero smooth-light default and world lifecycle |
+| `m782-aero-chunk-scheduler-lifecycle-soak` | CARRIED | Aero chunk scheduler lifecycle soak |
 | `m783-aero-chunk-scheduler-visual-latency` | EXECUTED | Aero chunk scheduler visual-latency classification |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
