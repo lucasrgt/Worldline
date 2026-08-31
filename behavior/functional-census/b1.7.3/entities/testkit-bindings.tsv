@@ -4,7 +4,8 @@ b1.7.3:entity/009	interaction-state	painting-lifecycle	worldline.testkit.Paintin
 b1.7.3:entity/009	environment-response	painting-lifecycle	worldline.testkit.PaintingLifecycleFixture#execute	m582-painting-support-break-set
 b1.7.3:entity/010	spawn-materialization	object-materialization	worldline.testkit.ObjectMaterializationFixture#execute	m157-bow-arrow
 b1.7.3:entity/011	spawn-materialization	object-materialization	worldline.testkit.ObjectMaterializationFixture#execute	m161-snowball
-b1.7.3:entity/020	spawn-materialization	object-materialization	worldline.testkit.ObjectMaterializationFixture#execute	m381-tnt-prime-set
+b1.7.3:entity/020	spawn-materialization	tnt-lifecycle	worldline.testkit.TntLifecycleFixture#execute	m381-tnt-prime-set
+b1.7.3:entity/020	tick-lifecycle	tnt-lifecycle	worldline.testkit.TntLifecycleFixture#execute	m518-sw-tnt-fuse-lifecycle
 b1.7.3:entity/021	spawn-materialization	falling-sand-lifecycle	worldline.testkit.FallingSandLifecycleFixture#execute	m597-falling-sand-entity-set
 b1.7.3:entity/021	tick-lifecycle	falling-sand-lifecycle	worldline.testkit.FallingSandLifecycleFixture#execute	m597-falling-sand-entity-set
 b1.7.3:entity/040	spawn-materialization	object-materialization	worldline.testkit.ObjectMaterializationFixture#execute	m155-minecart-spawn

@@ -378,6 +378,19 @@ air, a distinct Packet23 type-70 object, exact `12:0` landing into the lower cel
 of the upper cell, and the same pair after fresh login. Both qualified observation windows remain
 fixed at 40 ticks; coordinates and entity IDs are normalized from canonical evidence.
 
+Primed TNT uses one fixture across its network materialization and isolated internal tick law:
+
+```java
+TntLifecycleEvidence evidence = TntLifecycleFixture.execute(plan,
+        tntDriver::observeLifecycle);
+```
+
+The Packet23 side requires object type `50`, thrower `0`, and a positive identity distinct from
+the actor. The fuse side requires seed `80`, checkpoints `79`, `40`, `1`, `0`, terminal `-1`, a
+live mid-fuse entity, and dead/removal at update 81. Constructor motion is zeroed; an unprimed TNT
+block `46` remains a block and never becomes an entity. Network heartbeats and Packet60 timing are
+not treated as the internal entity clock.
+
 ### Block lifecycle matrices
 
 `worldline.testkit.BlockConformancePlan` and `BlockLifecyclePlan` are part of
