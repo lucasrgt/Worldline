@@ -18,6 +18,10 @@ public final class SmoothLightProbe {
     private static final String[][] LIGHT_HASHES = new String[2][2];
     private static final long[][] RENDERS = new long[2][SmoothLightScene.CHECKPOINTS];
     private static final long[][] SAMPLES = new long[2][SmoothLightScene.CHECKPOINTS];
+    private static final long[][] RESOLVED = new long[2][SmoothLightScene.CHECKPOINTS];
+    private static final long[][] RESOLVED_VALUES = new long[2][SmoothLightScene.CHECKPOINTS];
+    private static final long[][] LIGHT_RESOLVED = new long[2][2];
+    private static final long[][] LIGHT_RESOLVED_VALUES = new long[2][2];
     private static final boolean[][] CAPTURED = new boolean[2][SmoothLightScene.CHECKPOINTS];
     private static final long[] RENDER_NS = new long[2];
     private static final long[] MAX_RENDER_NS = new long[2];
@@ -56,6 +60,28 @@ public final class SmoothLightProbe {
     public static void lightSample() {
         if (SmoothLightState.retaining() && activeArm >= 0) {
             SAMPLES[activeArm][SmoothLightState.checkpoint()]++;
+        }
+    }
+
+    /** Hashes the exact brightness values consumed by tess.color at checkpoints. */
+    public static void resolved(float[] values) {
+        if (activeArm < 0) return;
+        int diagnostic = SmoothLightState.lightDiagnostic();
+        int slot = diagnostic != 0 ? diagnostic - 1 : SmoothLightState.checkpoint();
+        if (diagnostic == 0 && !SmoothLightState.captureFrame()) return;
+        long current = diagnostic != 0 ? LIGHT_RESOLVED[activeArm][slot]
+            : RESOLVED[activeArm][slot];
+        if (current == 0L) current = 0xcbf29ce484222325L;
+        for (float value : values) {
+            current ^= Float.floatToIntBits(value) & 0xffffffffL;
+            current *= 0x100000001b3L;
+        }
+        if (diagnostic != 0) {
+            LIGHT_RESOLVED[activeArm][slot] = current;
+            LIGHT_RESOLVED_VALUES[activeArm][slot] += values.length;
+        } else {
+            RESOLVED[activeArm][slot] = current;
+            RESOLVED_VALUES[activeArm][slot] += values.length;
         }
     }
 
@@ -101,10 +127,16 @@ public final class SmoothLightProbe {
             out.println("cache.evictions=" + Aero_SmoothLightCache.evictionCount());
             out.println("light.before.sha256=" + LIGHT_HASHES[arm][0]);
             out.println("light.after.sha256=" + LIGHT_HASHES[arm][1]);
+            out.println("light.before.resolved=" + LIGHT_RESOLVED[arm][0]);
+            out.println("light.after.resolved=" + LIGHT_RESOLVED[arm][1]);
+            out.println("light.before.values=" + LIGHT_RESOLVED_VALUES[arm][0]);
+            out.println("light.after.values=" + LIGHT_RESOLVED_VALUES[arm][1]);
             for (int i = 0; i < SmoothLightScene.CHECKPOINTS; i++) {
                 out.println("checkpoint." + i + ".sha256=" + HASHES[arm][i]);
                 out.println("checkpoint." + i + ".renders=" + RENDERS[arm][i]);
                 out.println("checkpoint." + i + ".samples=" + SAMPLES[arm][i]);
+                out.println("checkpoint." + i + ".resolved=" + RESOLVED[arm][i]);
+                out.println("checkpoint." + i + ".values=" + RESOLVED_VALUES[arm][i]);
             }
         }
     }

@@ -9,24 +9,22 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HexFormat;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.Set;
 
 /** Qualifies Aero's resolved smooth-light cache in four fresh GPU clients. */
 public final class M780AeroSmoothLightResolvedCacheCycle {
     private static final String ID = "m780-aero-smooth-light-resolved-cache";
     private static final String[] RUNS = {"round1-off", "round1-on", "round2-on", "round2-off"};
     private static final String[] ARMS = {"cache-off", "cache-on", "cache-on", "cache-off"};
-    private static final String TRACE = "v6|scene=128-dense-smooth-grid-2048tri+four-panels+opaque-buffer+stable-be-order|"
+    private static final String TRACE = "v7|scene=128-dense-smooth-grid-2048tri+four-panels+opaque-buffer+stable-be-order|"
         + "jvms=4-fresh-abba-off+on+on+off|route=240-orbit+traverse+spin+teleport|"
         + "warm=480-route-frames|light=synthetic-grid+phase-change+100ms-convergence|"
         + "cache=immutable-startup+ttl50ms+lru1024+native-hit-miss-cold-stale-eviction-counters|"
         + "captures=24-route+2-light-diagnostics-per-jvm|world=frozen+clear-weather+no-clouds|"
-        + "oracle=full-rgba+same-arm-noise10ppm+no-unexplained+light-change+sample-reduction+"
-        + "render-time-reduction+hitch-census";
+        + "oracle=resolved-brightness-exact+rgba-diagnostic+light-change+sample-reduction+"
+        + "render-time-classification+hitch-census";
     private final Path root = Path.of("").toAbsolutePath().normalize();
     private final Path smoke = root.resolve("smokes").resolve(ID);
     private final Path build = root.resolve(".worldline/build/smoke").resolve(ID);
@@ -101,7 +99,7 @@ public final class M780AeroSmoothLightResolvedCacheCycle {
             && SmokeSupport.value(config, "checkpoints").equals("24")
             && SmokeSupport.value(config, "machines").equals("128")
             && SmokeSupport.value(config, "cache.ttl.ms").equals("50")
-            && SmokeSupport.value(config, "maximum.raster.noise.ppm").equals("10")
+            && SmokeSupport.value(config, "maximum.resolved.differences").equals("0")
             && SmokeSupport.value(config, "maximum.sample.ratio").equals("0.70")
             && SmokeSupport.value(config, "promotion.render.ratio").equals("0.95"),
             "M780 acquisition design drift");
@@ -194,7 +192,9 @@ final class M780Artifact {
     final int machines, frames, captures, width, height, hitches, entries;
     final long renders, samples, renderNs, maxRenderNs, hits, misses, cold, stale, size, evictions;
     final String[] hashes;
+    final long[] resolved, resolvedValues;
     final String beforeHash, afterHash;
+    final long beforeResolved, afterResolved, beforeValues, afterValues;
 
     private M780Artifact(Path game, Properties values) {
         this.game = game;
@@ -216,12 +216,20 @@ final class M780Artifact {
         evictions = number(values, "cache.evictions");
         beforeHash = required(values, "light.before.sha256");
         afterHash = required(values, "light.after.sha256");
+        beforeResolved = number(values, "light.before.resolved");
+        afterResolved = number(values, "light.after.resolved");
+        beforeValues = number(values, "light.before.values");
+        afterValues = number(values, "light.after.values");
         hashes = new String[captures];
+        resolved = new long[captures];
+        resolvedValues = new long[captures];
         long renderCalls = 0L, lightSamples = 0L;
         for (int i = 0; i < captures; i++) {
             hashes[i] = required(values, "checkpoint." + i + ".sha256");
             renderCalls += number(values, "checkpoint." + i + ".renders");
             lightSamples += number(values, "checkpoint." + i + ".samples");
+            resolved[i] = number(values, "checkpoint." + i + ".resolved");
+            resolvedValues[i] = number(values, "checkpoint." + i + ".values");
         }
         renders = renderCalls;
         samples = lightSamples;
@@ -240,7 +248,8 @@ final class M780Artifact {
         boolean cache = arm.equals("cache-on");
         SmokeSupport.require(machines == 128 && frames == 240 && captures == 24
             && width > 0 && height > 0 && renders > 0L && samples > 0L
-            && maxRenderNs < 1_500_000_000L && !beforeHash.equals(afterHash),
+            && maxRenderNs < 1_500_000_000L && beforeResolved != afterResolved
+            && beforeValues > 0L && beforeValues == afterValues,
             "M780 incomplete artifact: " + summary());
         SmokeSupport.require(cache
             ? hits > 0L && misses > 0L && cold > 0L && stale > 0L
@@ -262,6 +271,21 @@ final class M780Artifact {
         String file = checkpoint < captures ? String.format("checkpoint-%02d.rgba", checkpoint)
             : checkpoint == captures ? "light-before.rgba" : "light-after.rgba";
         return Files.readAllBytes(game.resolve("visual-frames").resolve(arm).resolve(file));
+    }
+
+    long resolved(int checkpoint) {
+        return checkpoint < captures ? resolved[checkpoint]
+            : checkpoint == captures ? beforeResolved : afterResolved;
+    }
+
+    long values(int checkpoint) {
+        return checkpoint < captures ? resolvedValues[checkpoint]
+            : checkpoint == captures ? beforeValues : afterValues;
+    }
+
+    String hash(int checkpoint) {
+        return checkpoint < captures ? hashes[checkpoint]
+            : checkpoint == captures ? beforeHash : afterHash;
     }
 
     String summary() {
@@ -286,43 +310,29 @@ record M780Session(int index, M780Artifact off, M780Artifact on) {
 }
 
 record M780VisualPair(String label, M780Artifact baseline, M780Artifact candidate,
-                      long changedPixels, int maxChannelDelta, Set<Long> changedLocations) {
+                      int resolvedDifferences, int framebufferDifferences) {
     static M780VisualPair compare(String label, M780Artifact baseline,
             M780Artifact candidate) throws Exception {
         SmokeSupport.require(baseline.width == candidate.width && baseline.height == candidate.height,
             "M780 framebuffer dimensions diverged");
-        long changed = 0L;
-        int maximum = 0;
-        Set<Long> locations = new HashSet<Long>();
+        int resolved = 0, framebuffers = 0;
         for (int checkpoint = 0; checkpoint < baseline.captures + 2; checkpoint++) {
-            byte[] expected = baseline.pixels(checkpoint), actual = candidate.pixels(checkpoint);
-            SmokeSupport.require(expected.length == actual.length, "M780 frame size diverged");
-            for (int pixel = 0; pixel < expected.length; pixel += 4) {
-                boolean differs = false;
-                for (int channel = 0; channel < 4; channel++) {
-                    int delta = Math.abs((expected[pixel + channel] & 255)
-                        - (actual[pixel + channel] & 255));
-                    maximum = Math.max(maximum, delta);
-                    differs |= delta != 0;
-                }
-                if (differs) {
-                    changed++;
-                    long framePixels = (long) baseline.width * baseline.height;
-                    locations.add(checkpoint * framePixels + pixel / 4);
-                }
-            }
+            SmokeSupport.require(baseline.values(checkpoint) == candidate.values(checkpoint),
+                "M780 resolved value count diverged: " + checkpoint);
+            if (baseline.resolved(checkpoint) != candidate.resolved(checkpoint)) resolved++;
+            if (!baseline.hash(checkpoint).equals(candidate.hash(checkpoint))) framebuffers++;
         }
-        return new M780VisualPair(label, baseline, candidate, changed, maximum, locations);
+        return new M780VisualPair(label, baseline, candidate, resolved, framebuffers);
     }
 
     String summary() {
-        return "visual." + label + ",changedPixels=" + changedPixels
-            + ",maxDelta=" + maxChannelDelta;
+        return "visual." + label + ",resolvedDifferences=" + resolvedDifferences
+            + ",framebufferHashDifferences=" + framebufferDifferences;
     }
 }
 
-record M780Result(long noisePixels, double noisePpm, long unexplainedPixels,
-                  boolean everyPairBounded, boolean rendersRepeatable,
+record M780Result(int resolvedDifferences, int framebufferDifferences,
+                  boolean rendersRepeatable,
                   long offSamples, long onSamples, double sampleRatio,
                   boolean everySessionSamplesReduced,
                   long offRenderNs, long onRenderNs, double renderRatio,
@@ -331,15 +341,12 @@ record M780Result(long noisePixels, double noisePpm, long unexplainedPixels,
     static M780Result evaluate(List<M780Session> sessions, List<M780VisualPair> pairs) {
         long offSamples = 0L, onSamples = 0L, offRender = 0L, onRender = 0L, maximum = 0L;
         int offHitches = 0, onHitches = 0;
-        boolean samplesReduced = true, renderReduced = true, bounded = true;
-        long pixelSamples = (long) pairs.get(0).baseline().width
-            * pairs.get(0).baseline().height * (pairs.get(0).baseline().captures + 2);
-        for (M780VisualPair pair : pairs) bounded &= ppm(pair.changedPixels(), pixelSamples) <= 10.0D;
-        Set<Long> noise = new HashSet<Long>(pairs.get(2).changedLocations());
-        noise.addAll(pairs.get(3).changedLocations());
-        Set<Long> unexplained = new HashSet<Long>(pairs.get(0).changedLocations());
-        unexplained.addAll(pairs.get(1).changedLocations());
-        unexplained.removeAll(noise);
+        int resolved = 0, framebuffers = 0;
+        boolean samplesReduced = true, renderReduced = true;
+        for (M780VisualPair pair : pairs) {
+            resolved += pair.resolvedDifferences();
+            framebuffers += pair.framebufferDifferences();
+        }
         for (M780Session session : sessions) {
             offSamples += session.off().samples;
             onSamples += session.on().samples;
@@ -353,14 +360,14 @@ record M780Result(long noisePixels, double noisePpm, long unexplainedPixels,
         }
         boolean repeatable = sessions.get(0).off().renders == sessions.get(1).off().renders
             && sessions.get(0).on().renders == sessions.get(1).on().renders;
-        return new M780Result(noise.size(), ppm(noise.size(), pixelSamples), unexplained.size(),
-            bounded, repeatable, offSamples, onSamples, (double) onSamples / offSamples,
+        return new M780Result(resolved, framebuffers,
+            repeatable, offSamples, onSamples, (double) onSamples / offSamples,
             samplesReduced, offRender, onRender, (double) onRender / offRender,
             renderReduced, offHitches, onHitches, maximum);
     }
 
     boolean passes() {
-        boolean visual = unexplainedPixels == 0L && noisePpm <= 10.0D && everyPairBounded;
+        boolean visual = resolvedDifferences == 0;
         boolean cacheWork = rendersRepeatable && everySessionSamplesReduced && sampleRatio <= 0.70D;
         boolean promotion = everySessionRenderReduced && renderRatio <= 0.95D
             && onHitches <= offHitches + 10;
@@ -371,10 +378,8 @@ record M780Result(long noisePixels, double noisePpm, long unexplainedPixels,
     }
 
     String summary() {
-        return "visual.noise.locations=" + noisePixels
-            + ",visual.noise.ppm=" + String.format(Locale.ROOT, "%.3f", noisePpm)
-            + ",visual.unexplained.locations=" + unexplainedPixels
-            + ",visual.every-pair-bounded=" + everyPairBounded
+        return "colors.resolved.differences=" + resolvedDifferences
+            + ",framebuffer.hash.differences=" + framebufferDifferences
             + ",renders.same-arm-repeatable=" + rendersRepeatable
             + ",samples=" + offSamples + "->" + onSamples
             + ",sample.ratio=" + String.format(Locale.ROOT, "%.3f", sampleRatio)
@@ -387,9 +392,5 @@ record M780Result(long noisePixels, double noisePpm, long unexplainedPixels,
                 && onHitches <= offHitches + 10 ? "promote" : "keep-disabled")
             + ",hitches50=" + offHitches + "->" + onHitches
             + ",maximum.frame.ms=" + String.format(Locale.ROOT, "%.1f", maximumFrameNs / 1_000_000.0D);
-    }
-
-    private static double ppm(long changed, long samples) {
-        return changed * 1_000_000.0D / samples;
     }
 }

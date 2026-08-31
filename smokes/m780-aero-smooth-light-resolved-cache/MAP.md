@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=external-aero-runtime-qualification -->
 <!-- nonclaims=bounded-to-qualified-evidence -->
-<!-- frozen-trace=96a4ffd9d0574aead20652e1739202e5102ba2a0e2f5b4955915892fadc9154e -->
+<!-- frozen-trace=36cb553c7a9d9a5cd946dfb801994449616c8db5e95931a669e7d649982249f7 -->
 
 # M780-AERO-SMOOTH-LIGHT-RESOLVED-CACHE behavior map
 
@@ -33,12 +33,13 @@ camera, the brightness grid changes, all clients render through a 100 ms
 convergence interval, and a second diagnostic captures phase-one light at the
 same camera.
 
-Observations: 24 route RGBA checkpoints plus two light diagnostics per JVM
-produce two off/on comparisons and independent off/off and on/on repeatability
-pairs. Same-arm pairs form the only raster-noise mask. Every pair and the union
-mask are limited to 10 changed locations per million pixels; all off/on changes
-outside that mask are forbidden. Before and after hashes must differ within
-each run, and on arms must report hits, cold misses, and stale misses without
+Observations: at 24 route checkpoints plus two light diagnostics per JVM, the
+oracle hashes every resolved triangle brightness immediately before Aero calls
+`tess.color`. All two off/on and two same-arm pairs must have identical value
+counts and zero signature differences. Complete RGBA frames are retained and
+hashed as diagnostic artifacts, but unrelated fresh-client raster variation
+does not decide this cache's semantic result. Before and after resolved hashes
+must differ within each run, and on arms report hits, cold and stale misses without
 size mismatches or LRU evictions. Render-call work must repeat, world-light
 samples must decrease in both rounds and to at most 70 percent in aggregate.
 Promotion additionally requires render time to decrease in both rounds and to
@@ -46,8 +47,8 @@ at most 95 percent in aggregate without material hitch regression; otherwise
 the evidence explicitly keeps the candidate disabled. The cycle forbids
 catastrophic 1.5 second frames.
 
-Claim: `scene=128-static-multichunk,jvms=4-fresh-abba,route=orbit+traverse+spin+teleport,light=phase-change+ttl-convergence,pixels=0-unexplained+noise<=10ppm,samples=reduced2of2,cache=hits+misses+cold+stale-censused,decision=promote-or-keep-disabled-by-render+hitches`.
+Claim: `scene=128-static-multichunk,jvms=4-fresh-abba,route=orbit+traverse+spin+teleport,light=phase-change+ttl-convergence,colors=0-resolved-differences,rgba=diagnostic,samples=reduced2of2,cache=hits+misses+cold+stale-censused,decision=promote-or-keep-disabled-by-render+hitches`.
 
-Frozen trace: `v6|scene=128-dense-smooth-grid-2048tri+four-panels+opaque-buffer+stable-be-order|jvms=4-fresh-abba-off+on+on+off|route=240-orbit+traverse+spin+teleport|warm=480-route-frames|light=synthetic-grid+phase-change+100ms-convergence|cache=immutable-startup+ttl50ms+lru1024+native-hit-miss-cold-stale-eviction-counters|captures=24-route+2-light-diagnostics-per-jvm|world=frozen+clear-weather+no-clouds|oracle=full-rgba+same-arm-noise10ppm+no-unexplained+light-change+sample-reduction+render-time-reduction+hitch-census`.
+Frozen trace: `v7|scene=128-dense-smooth-grid-2048tri+four-panels+opaque-buffer+stable-be-order|jvms=4-fresh-abba-off+on+on+off|route=240-orbit+traverse+spin+teleport|warm=480-route-frames|light=synthetic-grid+phase-change+100ms-convergence|cache=immutable-startup+ttl50ms+lru1024+native-hit-miss-cold-stale-eviction-counters|captures=24-route+2-light-diagnostics-per-jvm|world=frozen+clear-weather+no-clouds|oracle=resolved-brightness-exact+rgba-diagnostic+light-change+sample-reduction+render-time-classification+hitch-census`.
 
-SHA-256: `96a4ffd9d0574aead20652e1739202e5102ba2a0e2f5b4955915892fadc9154e`.
+SHA-256: `36cb553c7a9d9a5cd946dfb801994449616c8db5e95931a669e7d649982249f7`.
