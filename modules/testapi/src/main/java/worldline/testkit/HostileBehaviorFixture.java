@@ -47,9 +47,20 @@ public final class HostileBehaviorFixture {
         RemoteObjectSpawn first = value.firstArrow(), second = value.secondArrow();
         int skeleton = value.skeleton().entityId();
         if (!arrow(first, skeleton) || !arrow(second, skeleton)
-                || first.entityId() == second.entityId() || !value.diamondArmorObserved()) {
+                || first.entityId() == second.entityId()
+                || hostileIdentity(value, first.entityId())
+                || hostileIdentity(value, second.entityId())
+                || !value.diamondArmorObserved()) {
             throw new IllegalStateException("skeleton ranged boundary drifted");
         }
+    }
+
+    private static boolean hostileIdentity(HostileBehaviorObservation value, int identity) {
+        return identity == value.actorEntityId()
+                || identity == value.zombie().entityId()
+                || identity == value.skeleton().entityId()
+                || identity == value.spider().entityId()
+                || identity == value.creeper().entityId();
     }
 
     private static boolean arrow(RemoteObjectSpawn value, int skeleton) {
