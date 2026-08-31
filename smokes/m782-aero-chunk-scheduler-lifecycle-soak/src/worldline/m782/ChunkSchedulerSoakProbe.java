@@ -131,8 +131,14 @@ public final class ChunkSchedulerSoakProbe {
             if (name.equals("priority")) return Integer.valueOf(work.visible ? 0 : 3);
             if (name.equals("isPrebake")) return Boolean.FALSE;
             if (name.equals("squaredDistance")) return Double.valueOf(work.id);
-            if (name.equals("rebuild")) { work.built = frame; return null; }
-            if (name.equals("markClean")) { work.dirty = false; return null; }
+            if (name.equals("rebuild")) {
+                work.built = frame;
+                return null;
+            }
+            if (name.equals("markClean")) {
+                work.dirty = false;
+                return null;
+            }
             if (name.equals("hashCode")) return Integer.valueOf(System.identityHashCode(proxy));
             if (name.equals("equals")) return Boolean.valueOf(proxy == arguments[0]);
             if (name.equals("toString")) return "M782Adapter";
