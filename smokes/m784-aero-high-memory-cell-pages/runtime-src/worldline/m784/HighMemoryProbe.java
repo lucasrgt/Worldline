@@ -30,7 +30,7 @@ public final class HighMemoryProbe {
     private static int captures, blankCaptures, width, height, pageCalls, pageRebuilds, directCalls;
     private static int maxCachedPages, prewarmDrained, compiledStart, expiredStart, evictedStart;
     private static String arm;
-    private static boolean sceneCleared;
+    private static boolean sceneCleared, controlledFlush;
 
     private HighMemoryProbe() {}
 
@@ -84,8 +84,13 @@ public final class HighMemoryProbe {
     public static void flush(double cameraX, double cameraY, double cameraZ) {
         int compiledBefore = Aero_BECellRenderer.compiledCachedPages();
         long start = System.nanoTime();
-        Aero_BECellRenderer.flush(cameraX, cameraY, cameraZ);
-        explicitFlushNanos += System.nanoTime() - start;
+        controlledFlush = true;
+        try {
+            Aero_BECellRenderer.flush(cameraX, cameraY, cameraZ);
+        } finally {
+            controlledFlush = false;
+            explicitFlushNanos += System.nanoTime() - start;
+        }
         explicitFlushCalls++;
         if (HighMemoryState.retaining()) {
             pageCalls += Aero_BECellRenderer.pageCallsThisFrame();
@@ -94,6 +99,8 @@ public final class HighMemoryProbe {
             maxCachedPages = Math.max(maxCachedPages, Aero_BECellRenderer.cachedPageCount());
         }
     }
+
+    public static boolean controlledFlush() { return controlledFlush; }
 
     public static void write(File metrics, File frames, String name, int machines) throws Exception {
         Runtime runtime = Runtime.getRuntime();

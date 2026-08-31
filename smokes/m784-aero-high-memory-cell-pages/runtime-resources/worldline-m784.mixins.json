@@ -8,6 +8,7 @@
     "HighMemoryMinecraftMixin",
     "HighMemoryCloudMixin",
     "HighMemoryDistanceMixin",
+    "HighMemoryFlushMixin",
     "HighMemoryMegaRendererMixin",
     "HighMemoryQueueMixin",
     "HighMemoryTranslucentMixin"

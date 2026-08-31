@@ -18,7 +18,8 @@ Both arms use a minimum page size of one to cover fragmented singleton pages.
 Native dispatcher submission is suppressed for only the fixture machines, so
 the harness cannot feed a second brightness-dependent queue in the same frame.
 One frame-tail boundary performs exactly one controlled production submission
-and flush per frame, independent of vanilla entity-pass scheduling.
+and flush per frame; automatic fixture-time flushes are suppressed so vanilla
+entity-pass scheduling cannot create a second measurement boundary.
 
 ## Actions
 
