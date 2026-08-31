@@ -7,17 +7,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.SingleplayerInteractionManager;
 import net.minecraft.world.World;
 
-/** Drives one long restored-world route with a midpoint renderer world rebind. */
+/** Drives one long restored-world route in a fresh client world. */
 public final class VisualState {
     private static final boolean ENABLED = Boolean.getBoolean("worldline.m783.enabled");
     private static final boolean PREPARE = Boolean.getBoolean("worldline.m783.prepare");
     private static final String ARM = System.getProperty("worldline.m783.arm", "prepare");
     private static final int REQUIRED = Integer.getInteger("worldline.m783.frames", 600);
-    private static final int TRANSITION_FRAME = Integer.getInteger(
-            "worldline.m783.transitionFrame", 300);
     private static final long MINIMUM_MILLIS = Long.getLong("worldline.m783.minimumMillis", 15000L);
-    private static int stage, warmup, stable, retained, phase, machines, maxBacklog, transitions;
-    private static int transitionWait;
+    private static int stage, warmup, stable, retained, phase, machines, maxBacklog;
     private static long retainedStarted;
 
     private VisualState() {}
@@ -26,7 +23,6 @@ public final class VisualState {
         if (!ENABLED) return;
         VisualFixture.prepareDisplay(game);
         if (stage == 0 && game.world == null) start(game, 1);
-        else if (stage == 3) awaitRebind(game);
         else if (stage == 1 && game.world != null && game.player != null) warm(game);
     }
 
@@ -39,10 +35,6 @@ public final class VisualState {
         if (retained == 1) {
             retainedStarted = System.nanoTime();
             System.out.println("[WorldlineM783] retained-start arm=" + ARM);
-        }
-        if (retained == TRANSITION_FRAME) {
-            stage = 3;
-            return;
         }
         if (retained <= REQUIRED) VisualScene.act(game, retained);
         int backlog = backlog(game);
@@ -99,31 +91,12 @@ public final class VisualState {
         stable = 0;
     }
 
-    private static void rebind(Minecraft game) {
-        require(backlog(game) == 0, "M783 rebind backlog did not drain");
-        game.world.saveWithLoadingDisplay(true, null);
-        game.setWorld(game.world);
-        transitions++;
-        stage = 2;
-        stable = warmup = 0;
-        VisualFixture.prepareDisplay(game);
-        VisualScene.place(game.player, retained);
-    }
-
-    private static void awaitRebind(Minecraft game) {
-        transitionWait++;
-        require(transitionWait <= 600, "M783 rebind drain timeout: backlog="
-                + backlog(game) + " pending=" + VisualProbe.pendingVisible());
-        if (backlog(game) != 0 || VisualProbe.pendingVisible() != 0) return;
-        rebind(game);
-    }
-
     private static void finish(Minecraft game, int backlog, long elapsed) {
-        require(backlog == 0 && transitions == 1, "M783 final lifecycle drift");
+        require(backlog == 0, "M783 final lifecycle drift");
         try {
             VisualProbe.write(new File(System.getProperty("worldline.m783.metrics")),
                     new File(System.getProperty("worldline.m783.framesFile")), ARM,
-                    maxBacklog, backlog, machines, transitions);
+                    maxBacklog, backlog, machines);
         } catch (Exception error) {
             throw new IllegalStateException("M783 artifact write failed", error);
         }

@@ -74,14 +74,13 @@ public final class VisualProbe {
     public static int pendingVisible() { return PENDING.size(); }
 
     public static void write(File metrics, File frames, String arm, int maxBacklog,
-                             int finalBacklog, int machines, int transitions) throws Exception {
+                             int finalBacklog, int machines) throws Exception {
         finishFrame();
         sampleAero();
         try (PrintWriter out = new PrintWriter(new FileWriter(metrics))) {
             out.println("arm=" + arm);
             out.println("frames=" + WALLS.size());
             out.println("machines=" + machines);
-            out.println("world.rebinds=" + transitions);
             out.println("world.resets=" + worldResets);
             out.println("final.backlog=" + finalBacklog);
             out.println("max.backlog=" + maxBacklog);
