@@ -4,6 +4,7 @@ import aero.modellib.Aero_MeshRenderer;
 import aero.modellib.Aero_TextureBinder;
 import aero.modellib.test.MegaModelBlockEntityRenderer;
 import aero.modellib.test.SmoothLightContract;
+import aero.modellib.test.WorldlineM780Rehydrator;
 import aero.modellib.model.Aero_MeshModel;
 import net.minecraft.block.entity.BlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,6 +24,10 @@ public abstract class SmoothMegaRendererMixin {
     private void worldlineRender(BlockEntity block, double x, double y, double z,
             float tickDelta, CallbackInfo callback) {
         if (!SmoothLightState.ENABLED) return;
+        if (!WorldlineM780Rehydrator.contains(block.x, block.y, block.z)) {
+            callback.cancel();
+            return;
+        }
         SmoothLightProbe.renderCall();
         Aero_TextureBinder.bind(MegaModelBlockEntityRenderer.TEXTURE);
         Aero_MeshRenderer.renderModel(WORLDLINE_SMOOTH_MODEL,

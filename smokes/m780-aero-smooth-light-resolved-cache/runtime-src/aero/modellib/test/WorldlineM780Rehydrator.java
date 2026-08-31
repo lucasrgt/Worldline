@@ -35,6 +35,11 @@ public final class WorldlineM780Rehydrator {
         return count;
     }
 
+    /** True only for one of the 128 controlled fixture positions. */
+    public static boolean contains(int x, int y, int z) {
+        return fixture(x, y, z);
+    }
+
     private static void clearOutsideFixture(World world) {
         for (Object value : new ArrayList<Object>(world.blockEntities)) {
             BlockEntity block = (BlockEntity) value;
