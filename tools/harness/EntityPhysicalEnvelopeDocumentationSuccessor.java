@@ -11,10 +11,10 @@ final class EntityPhysicalEnvelopeDocumentationSuccessor {
                 "ecda9c340434300086f5da7079b5bc43f0ec01bf3618bd7db12b89ebe11f6c5a",
                 "8f8508d24e77f43abb8c4a1ff7cc73719d20ab00d0a14cb9cd36a430b1ede82f"},
         {"tools/harness/TrainGeneratedDocumentationMigration.java",
-                "f278bbba0f658872822714af3e42403699d21dd3db35c439e14d460f4b357909",
+                "797056371c16b71e63f566a60938416512ba77d03371a82b5f6172d7c22b9bdc",
                 "388763ed9d05d0d909e3bb686f44806c37bd55fb5cf426e8f2e05f072cbb2f6c"},
         {"tools/harness/HarnessFeatureSelfTest.java",
-                "4f738e7862fc902e7fc6af7c73c690ec54ea0fde77d0583863a7c4b68285d5d5",
+                "06a3bee7b9e7af8ef3b9026b06f385c60544d7e74d964ef2f5580451f4ed2625",
                 "c1f86ecc69848d1984856d584475c8a72ed4bd0f0a1f57ee8deea1ee143e2e63"}
     };
 
