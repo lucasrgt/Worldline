@@ -12,10 +12,10 @@ public final class VisualState {
     private static final boolean ENABLED = Boolean.getBoolean("worldline.m783.enabled");
     private static final boolean PREPARE = Boolean.getBoolean("worldline.m783.prepare");
     private static final String ARM = System.getProperty("worldline.m783.arm", "prepare");
-    private static final int REQUIRED = Integer.getInteger("worldline.m783.frames", 2400);
+    private static final int REQUIRED = Integer.getInteger("worldline.m783.frames", 600);
     private static final int TRANSITION_FRAME = Integer.getInteger(
-            "worldline.m783.transitionFrame", 1200);
-    private static final long MINIMUM_MILLIS = Long.getLong("worldline.m783.minimumMillis", 30000L);
+            "worldline.m783.transitionFrame", 300);
+    private static final long MINIMUM_MILLIS = Long.getLong("worldline.m783.minimumMillis", 15000L);
     private static int stage, warmup, stable, retained, phase, machines, maxBacklog, transitions;
     private static int transitionWait;
     private static long retainedStarted;
@@ -34,7 +34,8 @@ public final class VisualState {
         if (stage != 2 || game.world == null || game.player == null) return;
         retained++;
         phase = ((retained - 1) % 600) / 100;
-        VisualScene.place(game.player, retained);
+        if (retained <= REQUIRED) VisualScene.place(game.player, retained);
+        else VisualScene.settle(game.player);
         if (retained == 1) {
             retainedStarted = System.nanoTime();
             System.out.println("[WorldlineM783] retained-start arm=" + ARM);
@@ -43,7 +44,7 @@ public final class VisualState {
             stage = 3;
             return;
         }
-        VisualScene.act(game, retained);
+        if (retained <= REQUIRED) VisualScene.act(game, retained);
         int backlog = backlog(game);
         maxBacklog = Math.max(maxBacklog, backlog);
         stable = retained > REQUIRED - 100 && backlog == 0

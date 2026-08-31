@@ -8,8 +8,8 @@ Four counterbalanced pairs classify Aero camera-aware chunk scheduling against t
 
 ## Qualification cycle
 
-M783 prepares one 576-machine save, then runs eight fresh clients over 2,400 retained frames each. Every route walks, turns, teleports, mutates visible, look-ahead, and background chunks, rebinds the active world to the renderer at the midpoint, and ends only after the backlog and visible-latency census drain. The evidence deterministically says promote or keep-disabled.
+M783 prepares one 576-machine save, then runs eight fresh clients over at least 600 retained frames each. Every route walks, turns, teleports, mutates visible, look-ahead, and background chunks, rebinds the active world to the renderer at the midpoint, stops generating work after the acquisition window, and ends only after the backlog and visible-latency census drain. The evidence deterministically says promote or keep-disabled.
 
-Expected signal: `scene=restored-576,pairs=4,jvms=8-fresh,window=2400,world-rebind=midpoint,route=walk+turn+teleport+mutation+settle,pages=on,prebake=off-vs-budget1,visual-latency=measured,backlog=drained,world-reset=observed,hitch=classified,metrics=classified,decision=promote-or-keep-disabled`.
+Expected signal: `scene=restored-576,pairs=4,jvms=8-fresh,window=600,world-rebind=midpoint,route=walk+turn+teleport+mutation+settle+drain,pages=on,prebake=off-vs-budget1,visual-latency=measured,backlog=drained,world-reset=observed,hitch=classified,metrics=classified,decision=promote-or-keep-disabled`.
 
-Frozen semantic SHA-256: `adaa023e577059ff7fc77608b1ba5079891e0665d5eeccf845a55eabbe9effa5`.
+Frozen semantic SHA-256: `9355963e9a77b70cefe1b59c15bc556d99f812fc95bc9af9f7798ca6df495f7d`.

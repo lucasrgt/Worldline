@@ -44,6 +44,11 @@ final class VisualScene {
         dirty(game, chunkX - forwardX * 3, chunkZ - forwardZ * 3, false, frame);
     }
 
+    static void settle(ClientPlayerEntity player) {
+        player.velocityX = player.velocityY = player.velocityZ = 0.0D;
+        player.setPositionAndAngles(8.5D, 100.0D, 8.5D, 0.0F, 4.0F);
+    }
+
     private static void dirty(Minecraft game, int chunkX, int chunkZ,
                               boolean visible, int frame) {
         if (visible) VisualProbe.dirtyVisible(chunkX, chunkZ, frame);
