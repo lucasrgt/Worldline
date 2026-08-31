@@ -191,6 +191,7 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
                 || HostileBehaviorMatrixSuccessor.carries(relative, prior, current)
                 || HostilePacketIdentityCollisionSuccessor.carries(relative, prior, current)
                 || PigLifecycleSubsystemSuccessor.carries(relative, prior, current)
+                || EntityPhysicalEnvelopeSubsystemSuccessor.carries(relative, prior, current)
                 || EntityRegistryCensusSuccessor.carries(relative, prior, current)
                 || EntityRegistrySchemaSuccessor.carries(relative, prior, current)
                 || EntityRegistryDocumentationSuccessor.carries(relative, prior, current);

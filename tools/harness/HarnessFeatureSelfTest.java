@@ -44,6 +44,7 @@ final class HarnessFeatureSelfTest {
         HostileBehaviorMatrixSuccessor.selfTest();
         HostilePacketIdentityCollisionSuccessor.selfTest();
         PigLifecycleSubsystemSuccessor.selfTest();
+        EntityPhysicalEnvelopeSubsystemSuccessor.selfTest();
         EntityRegistryCensusSuccessor.selfTest();
         EntityRegistrySchemaSuccessor.selfTest();
         EntityRegistryDocumentationSuccessor.selfTest();
