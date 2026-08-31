@@ -1,6 +1,9 @@
 /** Exact reviewed generated-document successors for the entity envelope catalog. */
 final class EntityPhysicalEnvelopeDocumentationSuccessor {
     private static final String[][] SUCCESSORS = {
+        {"README.md",
+                "ed7c05e279e35908de6e9ce2d33507ca634a5f2f052816ff0f4ab6ef29a3fbb4",
+                "52580ac27dddae17de84ca825e6b50b679363f8e7435ea58c686d37aa17abb8b"},
         {"docs/generated/INDEX.md",
                 "264ff16d2ea5ede8617be1515839fd07d797e9af5d0963a84bbe00771848287e",
                 "0887e4edde3f9493abcff13fced318e9b0b439334c6a1629c5b20aafbb32950c"},
