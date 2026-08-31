@@ -233,7 +233,7 @@ their own future denominator instead of being smuggled into its percentage.
 The dimensions are registry presence, spawn materialization, save/reload, movement policy,
 collision shape, damage/death, drop matrix, interaction state, environment response, tick
 lifecycle, and native rendering. Profiles route these through universal, archetype, and singular
-cases. Fifty-one cells are bound to existing qualified official-runtime evidence for projectiles,
+cases. Fifty cells are bound to existing qualified official-runtime evidence for projectiles,
 paintings, TNT, falling sand, vehicles, hostile and passive mobs. Forty-five of those proofs now
 have a strict public binding ledger. Pig materialization, movement, death and pork drop use the
 universal plus archetype routes, while creeper materialization, death and gunpowder drop exercise
@@ -260,8 +260,10 @@ materialization with the isolated internal fuse sequence `80,79,40,1,0,-1`, live
 dead/removed terminal states, plus unprimed-block and zero-motion controls. Forty-five verified
 entity claims now have strict public bindings. M436 is deliberately excluded from the arrow
 tick-lifecycle cell: it fires a type-60 projectile but then manually drops and collects a separate
-Packet21 item-262 stack, and its own map excludes in-ground projectile pickup. The other 6
-verified cells remain `SMOKE_ONLY`; the remaining 213 cells are explicit `UNKNOWN` Atlas claims.
+Packet21 item-262 stack, and its own map excludes in-ground projectile pickup. The M466 dry-pen
+scene is also excluded from squid environment-response: it kills the dry squid
+with a sword and explicitly declines to claim land-caused damage. The other 5 verified cells
+remain `SMOKE_ONLY`; the remaining 214 cells are explicit `UNKNOWN` Atlas claims.
 
 ## Status and automation
 
@@ -336,9 +338,9 @@ variant, and coupled-transition cases. Together with the modern lifecycle proof
 reconciliation, the block public TestKit surface now covers 1,056/1,056 claims
 (100%), completing that family's automation-surface target. The final six tick-policy claims bind sand and
 gravel scheduling, natural wheat, cactus, and sugar-cane growth, and furnace tile ticks to official
-public fixtures. Across both current families the honest aggregate is 1,107/1,320 verified
-(83.86%) and 1,101/1,320 public TestKit claims (83.41%). The entity family contributes 45 public
-claims, 6 smoke-only claims, and all 213 unknown cells.
+public fixtures. Across both current families the honest aggregate is 1,106/1,320 verified
+(83.79%) and 1,101/1,320 public TestKit claims (83.41%). The entity family contributes 45 public
+claims, 5 smoke-only claims, and all 214 unknown cells.
 
 ## Three conformance layers
 
