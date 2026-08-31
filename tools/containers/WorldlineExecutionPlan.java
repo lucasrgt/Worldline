@@ -34,6 +34,7 @@ final class WorldlineExecutionPlan {
                 + ",\"limits\":{" + "\"timeout_ms\":" + limits.timeoutMs
                 + ",\"job_memory_bytes\":" + n(limits.jobMemoryBytes)
                 + ",\"active_processes\":" + n(limits.activeProcesses)
+                + ",\"active_tasks\":" + n(limits.activeTasks)
                 + ",\"cpu_rate_percent\":" + n(limits.cpuRatePercent)
                 + ",\"stdout_bytes\":" + n(limits.stdoutBytes)
                 + ",\"stderr_bytes\":" + n(limits.stderrBytes) + "}"
@@ -61,15 +62,23 @@ final class WorldlineExecutionPlan {
                 "invalid executor argv");
         require(limits.timeoutMs >= 1 && limits.timeoutMs <= 86_400_000, "invalid executor timeout");
         positive(limits.jobMemoryBytes, "job memory"); range(limits.activeProcesses, 1, 1024, "active processes");
+        range(limits.activeTasks, 1, 4096, "active tasks");
         range(limits.cpuRatePercent, 1, 100, "CPU rate"); positive(limits.stdoutBytes, "stdout limit");
         positive(limits.stderrBytes, "stderr limit");
-        require(List.of("direct", "windows_job").contains(isolation.backend), "unsupported executor backend");
+        require(List.of("direct", "windows_job", "linux_cgroup").contains(isolation.backend),
+                "unsupported executor backend");
         require(isolation.network.equals("inherit"), "unsupported executor network policy");
         positive(isolation.ownerPid, "owner pid");
         if (isolation.backend.equals("direct")) require(isolation.ownerPid == null
                 && limits.jobMemoryBytes == null && limits.activeProcesses == null
+                && limits.activeTasks == null
                 && limits.cpuRatePercent == null && limits.stdoutBytes == null && limits.stderrBytes == null,
                 "direct executor plan claims unsupported controls");
+        else require(Path.of(argv.get(0)).isAbsolute(), "contained executor command is not absolute");
+        if (isolation.backend.equals("windows_job")) require(limits.activeTasks == null,
+                "Windows Job cannot enforce active tasks");
+        if (isolation.backend.equals("linux_cgroup")) require(limits.activeProcesses == null,
+                "Linux cgroup cannot enforce active processes");
         environment.validate(); outputs.validate(workingDirectory);
     }
 
@@ -87,7 +96,7 @@ final class WorldlineExecutionPlan {
         static Environment empty() { return new Environment(List.of(), List.of(), Map.of()); }
     }
 
-    record Limits(long timeoutMs, Long jobMemoryBytes, Integer activeProcesses,
+    record Limits(long timeoutMs, Long jobMemoryBytes, Integer activeProcesses, Integer activeTasks,
             Integer cpuRatePercent, Long stdoutBytes, Long stderrBytes) { }
     record Isolation(String backend, String network, Long ownerPid) { }
     record Outputs(Path root, Path stdout, Path stderr, Path metrics, Path receipt) {

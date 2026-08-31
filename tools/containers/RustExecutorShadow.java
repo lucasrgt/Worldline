@@ -27,7 +27,7 @@ public final class RustExecutorShadow {
                 "WORLDLINE_EXECUTOR is not an absolute regular file");
         require(planPath.isAbsolute() && planPath.normalize().equals(planPath), "plan path is not normalized");
         plan.write(planPath); Path launcherLog = planPath.resolveSibling(planPath.getFileName() + ".launcher.log");
-        Process process = new ProcessBuilder(executable.toString(), "execute", planPath.toString())
+        Process process = new ProcessBuilder(invocation(executable, planPath, plan))
                 .directory(planPath.getParent().toFile()).redirectErrorStream(true)
                 .redirectOutput(launcherLog.toFile()).start();
         long waitMillis = Math.addExact(plan.limits().timeoutMs(), 30_000L);
@@ -53,6 +53,8 @@ public final class RustExecutorShadow {
             require(canonical[canonical.length - 1] == '\n' && new String(canonical, StandardCharsets.UTF_8)
                     .startsWith("{\"schema\":\"worldline.execution-plan.v1\""), "plan canonical encoding drift");
             synthetic(plan); WorldlineExecutionReceipt.verify(plan);
+            WorldlineExecutionPlan linux = containedPlan(root, "linux_cgroup");
+            synthetic(linux); WorldlineExecutionReceipt.verify(linux);
             Path receipt = plan.outputs().receipt(); String valid = Files.readString(receipt);
             Files.writeString(receipt, valid.replace("{\"schema\"", "{\"unknown\":true,\"schema\""));
             expectFailure(() -> WorldlineExecutionReceipt.verify(plan)); Files.writeString(receipt, valid);
@@ -67,8 +69,21 @@ public final class RustExecutorShadow {
         Path output = root.resolve("synthetic");
         return new WorldlineExecutionPlan("shadow-contract", root, List.of(java(), "-version"),
                 WorldlineExecutionPlan.Environment.empty(),
-                new WorldlineExecutionPlan.Limits(5_000, null, null, null, null, null),
+                new WorldlineExecutionPlan.Limits(5_000, null, null, null, null, null, null),
                 new WorldlineExecutionPlan.Isolation("direct", "inherit", null),
+                new WorldlineExecutionPlan.Outputs(output, output.resolve("stdout.log"),
+                        output.resolve("stderr.log"), output.resolve("metrics.json"),
+                        output.resolve("receipt.json")));
+    }
+
+    private static WorldlineExecutionPlan containedPlan(Path root, String backend) {
+        Path output = root.resolve(backend);
+        return new WorldlineExecutionPlan("shadow-" + backend.replace('_', '-'), root,
+                List.of(java(), "-version"), WorldlineExecutionPlan.Environment.empty(),
+                new WorldlineExecutionPlan.Limits(5_000, 512L << 20,
+                        backend.equals("windows_job") ? 4 : null,
+                        backend.equals("linux_cgroup") ? 128 : null, 100, 1L << 20, 1L << 20),
+                new WorldlineExecutionPlan.Isolation(backend, "inherit", ProcessHandle.current().pid()),
                 new WorldlineExecutionPlan.Outputs(output, output.resolve("stdout.log"),
                         output.resolve("stderr.log"), output.resolve("metrics.json"),
                         output.resolve("receipt.json")));
@@ -77,37 +92,44 @@ public final class RustExecutorShadow {
     private static void synthetic(WorldlineExecutionPlan plan) throws Exception {
         Files.createDirectories(plan.outputs().root()); Files.write(plan.outputs().stdout(), new byte[0]);
         Files.write(plan.outputs().stderr(), new byte[0]);
+        boolean direct = plan.isolation().backend().equals("direct");
+        String measurement = plan.isolation().backend().equals("linux_cgroup") ? "cgroup_peak"
+                : direct ? "unavailable" : "job_commit";
+        String accounting = direct ? "null" : "1";
         String metrics = "{\"schema\":\"worldline.execution-metrics.v1\",\"elapsed_ms\":1,"
-                + "\"peak_memory_bytes\":null,\"memory_measurement\":\"unavailable\","
-                + "\"peak_processes\":null,\"cpu_user_100ns\":null,\"cpu_kernel_100ns\":null,"
-                + "\"io_read_bytes\":null,\"io_write_bytes\":null,\"stdout_observed_bytes\":0,"
+                + "\"peak_memory_bytes\":" + accounting + ",\"memory_measurement\":\"" + measurement + "\","
+                + "\"peak_processes\":" + accounting + ",\"cpu_user_100ns\":" + accounting
+                + ",\"cpu_kernel_100ns\":" + accounting + ",\"io_read_bytes\":" + accounting
+                + ",\"io_write_bytes\":" + accounting + ",\"stdout_observed_bytes\":0,"
                 + "\"stderr_observed_bytes\":0,\"stdout_truncated\":false,\"stderr_truncated\":false,"
                 + "\"telemetry_qualification\":\"observational\"}";
         ExecutionJson.writeAtomic(plan.outputs().metrics(), ExecutionJson.bytes(metrics));
         String empty = ExecutionJson.sha256(new byte[0]);
         String receipt = "{\"schema\":\"worldline.execution-receipt.v1\",\"request_sha256\":"
                 + ExecutionJson.quote(plan.requestSha256()) + ",\"executor_version\":\"self-test\","
-                + "\"backend\":\"direct\",\"exit_code\":0,\"termination\":\"exited\","
+                + "\"backend\":" + ExecutionJson.quote(plan.isolation().backend())
+                + ",\"exit_code\":0,\"termination\":\"exited\","
                 + "\"stdout_sha256\":" + ExecutionJson.quote(empty) + ",\"stderr_sha256\":"
                 + ExecutionJson.quote(empty) + ",\"metrics_sha256\":"
                 + ExecutionJson.quote(ExecutionJson.sha256(plan.outputs().metrics()))
                 + ",\"stdout_observed_bytes\":0,\"stderr_observed_bytes\":0,"
                 + "\"stdout_truncated\":false,\"stderr_truncated\":false,"
-                + "\"descendants_remaining\":null,\"error\":null}";
+                + "\"descendants_remaining\":" + (direct ? "null" : "0") + ",\"error\":null}";
         ExecutionJson.writeAtomic(plan.outputs().receipt(), ExecutionJson.bytes(receipt));
     }
 
     private static void liveProbe(Path root) throws Exception {
         String configured = System.getenv("WORLDLINE_EXECUTOR"); if (configured == null || configured.isBlank()) return;
-        boolean windows = System.getProperty("os.name").toLowerCase().contains("win");
+        String os = System.getProperty("os.name").toLowerCase();
+        boolean windows = os.contains("win"), linux = os.contains("linux"), contained = windows || linux;
         Path output = root.resolve("live"); List<String> command = List.of(java(), "-Xms16m", "-Xmx64m", "-version");
         WorldlineExecutionPlan plan = new WorldlineExecutionPlan(
                 "shadow-live", root, command, WorldlineExecutionPlan.Environment.empty(),
-                new WorldlineExecutionPlan.Limits(10_000, windows ? 512L << 20 : null,
-                        windows ? 4 : null, windows ? 100 : null,
-                        windows ? 1L << 20 : null, windows ? 1L << 20 : null),
-                new WorldlineExecutionPlan.Isolation(windows ? "windows_job" : "direct", "inherit",
-                        windows ? ProcessHandle.current().pid() : null),
+                new WorldlineExecutionPlan.Limits(10_000, contained ? 512L << 20 : null,
+                        windows ? 4 : null, linux ? 128 : null, contained ? 100 : null,
+                        contained ? 1L << 20 : null, contained ? 1L << 20 : null),
+                new WorldlineExecutionPlan.Isolation(windows ? "windows_job" : linux ? "linux_cgroup" : "direct",
+                        "inherit", contained ? ProcessHandle.current().pid() : null),
                 new WorldlineExecutionPlan.Outputs(output, output.resolve("stdout.log"), output.resolve("stderr.log"),
                         output.resolve("metrics.json"), output.resolve("receipt.json")));
         WorldlineExecutionReceipt.Verified result = execute(Path.of(configured).toAbsolutePath().normalize(),
@@ -115,6 +137,13 @@ public final class RustExecutorShadow {
         require("exited".equals(result.termination()) && Long.valueOf(0).equals(result.exitCode()),
                 "live native executor probe failed: " + result);
         if (windows) legacyDifferential(root, command, plan);
+    }
+
+    private static List<String> invocation(Path executable, Path planPath, WorldlineExecutionPlan plan) {
+        if (!plan.isolation().backend().equals("linux_cgroup"))
+            return List.of(executable.toString(), "execute", planPath.toString());
+        return List.of("systemd-run", "--user", "--scope", "--quiet", "--collect", "-p", "Delegate=yes",
+                "--", executable.toString(), "execute", planPath.toString());
     }
 
     private static void legacyDifferential(Path root, List<String> command, WorldlineExecutionPlan rust)

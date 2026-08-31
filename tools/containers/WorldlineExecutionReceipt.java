@@ -40,8 +40,8 @@ final class WorldlineExecutionReceipt {
         validateOutput(plan.outputs().stdout(), plan.limits().stdoutBytes(), stdoutObserved, stdoutTruncated, "stdout");
         validateOutput(plan.outputs().stderr(), plan.limits().stderrBytes(), stderrObserved, stderrTruncated, "stderr");
         Long descendants = nullableLong(receipt, "descendants_remaining");
-        if (plan.isolation().backend().equals("windows_job")) require(Long.valueOf(0).equals(descendants),
-                "Windows Job receipt did not prove an empty job");
+        if (!plan.isolation().backend().equals("direct")) require(Long.valueOf(0).equals(descendants),
+                "contained receipt did not prove an empty process group");
         else require(descendants == null, "direct backend claimed descendant accounting");
         nullableString(receipt, "error"); verifyMetrics(plan, receipt);
         byte[] canonical = receiptBytes(receipt); require(java.util.Arrays.equals(Files.readAllBytes(path), canonical),
@@ -57,18 +57,21 @@ final class WorldlineExecutionReceipt {
         require("worldline.execution-metrics.v1".equals(string(value, "schema")), "metrics schema drift");
         positive(value, "elapsed_ms");
         String measurement = string(value, "memory_measurement");
-        require(Set.of("unavailable", "job_commit").contains(measurement), "unknown memory measurement");
+        require(Set.of("unavailable", "job_commit", "cgroup_peak").contains(measurement),
+                "unknown memory measurement");
         if (plan.isolation().backend().equals("windows_job")) require(measurement.equals("job_commit"),
                 "Windows Job memory measurement drift");
+        if (plan.isolation().backend().equals("linux_cgroup")) require(measurement.equals("cgroup_peak"),
+                "Linux cgroup memory measurement drift");
         Long peakMemory = nullablePositive(value, "peak_memory_bytes");
         Long peakProcesses = nullablePositive(value, "peak_processes");
         Long user = nullablePositive(value, "cpu_user_100ns");
         Long kernel = nullablePositive(value, "cpu_kernel_100ns");
         Long read = nullablePositive(value, "io_read_bytes");
         Long written = nullablePositive(value, "io_write_bytes");
-        if (plan.isolation().backend().equals("windows_job")) require(peakMemory != null
+        if (!plan.isolation().backend().equals("direct")) require(peakMemory != null
                 && peakProcesses != null && user != null && kernel != null && read != null && written != null,
-                "Windows Job accounting is incomplete");
+                "contained accounting is incomplete");
         else require(measurement.equals("unavailable") && peakMemory == null && peakProcesses == null
                 && user == null && kernel == null && read == null && written == null,
                 "direct backend claimed unavailable accounting");
