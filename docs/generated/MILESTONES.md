@@ -609,6 +609,8 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m774-aero-profiler-cpu-adoption` | EXECUTED | AeroModelLib external Worldline CPU-path adoption |
 | `m775-aero-profiler-page-cache-prebake-matrix` | EXECUTED | Aero page cache and camera-aware pre-bake matrix |
 | `m776-aero-profiler-gl-prewarm-lod-matrix` | EXECUTED | Aero predictive GL prewarm and LOD matrix |
+| `m777-aero-adaptive-prewarm-repeatability` | CARRIED | Aero adaptive prewarm repeatability |
+| `m778-aero-culling-visual-integrity` | EXECUTED | Aero culling visual integrity |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
