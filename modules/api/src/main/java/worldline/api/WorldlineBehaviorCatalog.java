@@ -12,7 +12,6 @@ final class WorldlineBehaviorCatalog {
                 || WorldlineRedstoneBehaviors.REPEATER_DIODE == null
                 || WorldlineEnvironmentBehaviors.MUSHROOM_SPREAD == null
                 || WorldlineWorldBehaviors.WHEAT_LIGHT_HALT == null
-                || WorldlineEntityBehaviors.PHYSICAL_ENVELOPE == null
                 || WorldlineVehicleBehaviors.BOAT_CURRENT_PUSH == null
                 || WorldlineItemBehaviors.ITEM_STACK_MERGE == null
                 || WorldlinePlayerBehaviors.WOLF_SIT == null

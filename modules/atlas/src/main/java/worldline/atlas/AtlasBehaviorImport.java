@@ -79,7 +79,6 @@ final class AtlasBehaviorImport {
         if ("item".equals(family)) return "inventory";
         if ("redstone".equals(family)) return "redstone";
         if ("vehicle".equals(family)) return "entities";
-        if ("entity".equals(family)) return "entities";
         return "block-ticks";
     }
 
