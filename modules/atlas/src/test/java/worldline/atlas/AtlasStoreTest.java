@@ -151,6 +151,8 @@ public final class AtlasStoreTest {
                 "complete primed TNT lifecycle was not indexed");
         require(AtlasStatus.UNKNOWN.equals(first.get("atlas.claim.entity-092.drop-matrix").status()),
                 "implicit entity census gap was not materialized");
+        require(AtlasStatus.UNKNOWN.equals(first.get("atlas.claim.entity-010.tick-lifecycle").status()),
+                "dishonest arrow projectile lifecycle claim was not removed");
         require(!AtlasIndex.search(first, "chunk", 20).isEmpty(), "semantic chunk index");
         String context = AtlasContextQuery.json(first, "chunk",
                 AtlasContext.build(first, "chunk", 20, 1));
@@ -172,7 +174,7 @@ public final class AtlasStoreTest {
         require(tags.contains("tag=category-claim")
                 && tags.contains("tag=surface-public-testkit\trecords=1101")
                 && !tags.contains("tag=surface-internal-api")
-                && tags.contains("tag=surface-smoke-only\trecords=7"), "tag index");
+                && tags.contains("tag=surface-smoke-only\trecords=6"), "tag index");
         try {
             String documentation = new String(Files.readAllBytes(Paths.get("docs", "ATLAS.md")),
                     StandardCharsets.UTF_8);
