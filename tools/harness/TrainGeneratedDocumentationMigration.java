@@ -180,7 +180,8 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
                 || SlimeLifecycleSubsystemSuccessor.carries(relative, prior, current)
                 || EntityDynamicsMatrixSuccessor.carries(relative, prior, current)
                 || SheepLifecycleSubsystemSuccessor.carries(relative, prior, current)
-                || SheepLifecycleTestPlanSuccessor.carries(relative, prior, current);
+                || SheepLifecycleTestPlanSuccessor.carries(relative, prior, current)
+                || ChickenEggFamilySubsystemSuccessor.carries(relative, prior, current);
     }
 
     private static boolean reviewed(String relative, String prior, String current,
