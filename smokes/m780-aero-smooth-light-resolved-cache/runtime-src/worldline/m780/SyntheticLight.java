@@ -2,14 +2,10 @@ package worldline.m780;
 
 /** Scoped deterministic brightness source used only inside the smooth renderer. */
 public final class SyntheticLight {
-    private static boolean active;
     private static int phase;
 
     private SyntheticLight() {}
 
-    public static void enter() { active = true; }
-    public static void leave() { active = false; }
-    public static boolean active() { return active; }
     public static void phase(int value) { phase = value; }
 
     public static float brightness(int x, int y, int z) {

@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import worldline.m780.SmoothLightProbe;
 import worldline.m780.SmoothLightState;
-import worldline.m780.SyntheticLight;
 
 @Mixin(value = MegaModelBlockEntityRenderer.class, priority = 1200)
 public abstract class SmoothMegaRendererMixin {
@@ -21,13 +20,8 @@ public abstract class SmoothMegaRendererMixin {
         if (!SmoothLightState.ENABLED) return;
         SmoothLightProbe.renderCall();
         Aero_TextureBinder.bind(MegaModelBlockEntityRenderer.TEXTURE);
-        SyntheticLight.enter();
-        try {
-            Aero_MeshRenderer.renderModel(MegaModelBlockEntityRenderer.MODEL,
-                x, y, z, 0.0F, block.world, block.x, block.y + 1, block.z);
-        } finally {
-            SyntheticLight.leave();
-        }
+        Aero_MeshRenderer.renderModel(MegaModelBlockEntityRenderer.MODEL,
+            x, y, z, 0.0F, block.world, block.x, block.y + 1, block.z);
         callback.cancel();
     }
 }

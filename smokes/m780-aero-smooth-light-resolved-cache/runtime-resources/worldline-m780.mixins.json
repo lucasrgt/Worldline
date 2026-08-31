@@ -7,7 +7,7 @@
     "SmoothLightFrameMixin",
     "SmoothLightMinecraftMixin",
     "SmoothLightCloudMixin",
-    "SyntheticWorldLightMixin",
+    "SmoothResolveMixin",
     "SmoothMegaRendererMixin"
   ],
   "injectors": { "defaultRequire": 1 }
