@@ -1,0 +1,82 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+def script = gradle.startParameter.initScripts.find { it.name == 'visual.init.gradle' }
+if (script == null) throw new GradleException('Worldline M783 script path missing')
+def root = script.parentFile.parentFile.parentFile.canonicalFile
+def requestedJar = gradle.startParameter.projectProperties.get('worldlineAeroJar')
+if (requestedJar != null) {
+    def aeroJar = new File(requestedJar).canonicalFile
+    if (!aeroJar.isFile()) throw new GradleException('Worldline M783 Aero JAR missing')
+    def expectedTestDir = new File(aeroJar.parentFile.parentFile.parentFile, 'test').canonicalFile
+    gradle.beforeProject { candidate ->
+        if (candidate.projectDir.canonicalFile != expectedTestDir) return
+        candidate.configurations.whenObjectAdded { configuration ->
+            if (configuration.name != 'modImplementation') return
+            configuration.withDependencies { dependencies ->
+                def aero = dependencies.findAll {
+                    it.group == 'dev.aerocoding' && it.name == 'aero-model-lib'
+                }
+                if (aero.size() != 1)
+                    throw new GradleException('Worldline M783 Aero dependency boundary drift')
+                dependencies.removeAll(aero)
+                dependencies.add(candidate.dependencies.create(candidate.files(aeroJar)))
+            }
+        }
+    }
+}
+
+gradle.projectsEvaluated {
+    if (gradle.rootProject.name != 'aero-model-lib-test') return
+    def project = gradle.rootProject
+    def smoke = new File(root, 'smokes/m783-aero-chunk-scheduler-visual-latency')
+    def prop = { name -> project.findProperty(name).toString() }
+    project.sourceSets.main.java.srcDir(new File(smoke, 'runtime-src'))
+    project.dependencies.add('compileOnly', project.files(
+        new File(project.findProperty('worldlineAeroClasses').toString())))
+    project.tasks.named('processResources').configure {
+        outputs.upToDateWhen { false }
+        doLast {
+            copy { from new File(smoke, 'runtime-resources'); into destinationDir }
+            def fabric = new File(destinationDir, 'fabric.mod.json')
+            if (!fabric.isFile()) throw new GradleException('Aero fabric.mod.json missing')
+            def json = new JsonSlurper().parse(fabric)
+            def mixins = (json.mixins ?: []) as List
+            if (!mixins.contains('worldline-m783.mixins.json'))
+                mixins.add('worldline-m783.mixins.json')
+            json.mixins = mixins
+            fabric.text = JsonOutput.prettyPrint(JsonOutput.toJson(json)) + '\n'
+        }
+    }
+    def task = project.tasks.named('runClient').get()
+    if (task.actions.size() != 2 ||
+            !task.actions[0].getClass().name.endsWith('ClosureTaskAction'))
+        throw new GradleException('Aero runClient action shape drifted')
+    task.actions.remove(0)
+    def game = new File(prop('worldlineRunDir')).absoluteFile
+    project.loom.runs.named('client').configure { runDir project.relativePath(game) }
+    game.mkdirs()
+    new File(game, 'options.txt').text = 'fpsLimit:0' + System.lineSeparator()
+    def arm = prop('worldlineArm')
+    def prebake = arm == 'prebake'
+    task.jvmArgs([
+        '-Dworldline.m783.enabled=true',
+        '-Dworldline.m783.prepare=' + prop('worldlinePrepare'),
+        '-Dworldline.m783.arm=' + arm,
+        '-Dworldline.m783.frames=' + prop('worldlineFrames'),
+        '-Dworldline.m783.reloadFrame=' + prop('worldlineReloadFrame'),
+        '-Dworldline.m783.minimumMillis=' + prop('worldlineMinimumMillis'),
+        '-Dworldline.m783.metrics=' + new File(prop('worldlineMetrics')).absolutePath,
+        '-Dworldline.m783.framesFile=' + new File(prop('worldlineFrameArtifact')).absolutePath,
+        '-Daero.becell.pages=true',
+        '-Daero.chunkCompileBudget=' + prebake,
+        '-Daero.chunkCompileBudget.chunksPerFrame=1',
+        '-Daero.chunkCompileBudget.maximumAge=120',
+        '-Daero.chunkCompileBudget.debtLimit=30',
+        '-Daero.chunkCompileBudget.lookAheadRadius=3',
+        '-Daero.mega=true', '-Daero.mega.solidTerrain=true',
+        '-Daero.mega.sideEffects=false', '-Daero.mega.phaseSpread=true',
+        '-Daero.spikelog=false', '-Daero.framePacing=false',
+        '-Daero.benchmark.skipNonForcedSaves=true', '-Xms2G', '-Xmx4G'
+    ] as List)
+}

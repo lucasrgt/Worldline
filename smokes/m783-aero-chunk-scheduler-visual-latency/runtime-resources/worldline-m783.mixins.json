@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "worldline.m783.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "VisualBacklogLifecycleMixin",
+    "VisualChunkBuilderMixin",
+    "VisualFrameDriveMixin",
+    "VisualFrameMetricsMixin",
+    "VisualMinecraftMixin"
+  ],
+  "injectors": { "defaultRequire": 1 }
+}
