@@ -395,6 +395,7 @@ The following environment variables are supported:
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
+| `WORLDLINE_OBSERVATION_CACHE` | `on` | Set to `off` for a deliberate fresh runtime observation while retaining prior immutable evidence. |
 | `WORLDLINE_CONTROL_DIR` | OS user runtime-data directory | Shared lock/cache directory |
 | `WORLDLINE_RUNTIME_LOCK` | Auto-detected legacy swarm lock | Compatibility runtime lock |
 | `WORLDLINE_VERIFY_SLOTS` | Half the CPUs, capped at 4 | Concurrent repository gates |

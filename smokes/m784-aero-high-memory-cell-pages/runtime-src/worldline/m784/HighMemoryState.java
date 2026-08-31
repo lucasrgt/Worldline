@@ -76,8 +76,7 @@ public final class HighMemoryState {
         measuring = true;
         int route = retained % HighMemoryScene.ROUTE_FRAMES;
         checkpoint = route / HighMemoryScene.CAPTURE_STRIDE;
-        capture = retained < HighMemoryScene.ROUTE_FRAMES
-            && (route + 1) % HighMemoryScene.CAPTURE_STRIDE == 0;
+        capture = (route + 1) % HighMemoryScene.CAPTURE_STRIDE == 0;
         HighMemoryScene.place(game.player, route);
         retained++;
     }

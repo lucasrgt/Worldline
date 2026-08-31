@@ -24,6 +24,7 @@ final class HarnessFeatureSelfTest {
         CandidateSourceClosure.selfTest();
     }
     static void smoke() throws Exception {
+        SmokeObservationCache.selfTest();
         SmokeScheduleHistory.selfTest();
         SmokeSuiteScheduler.selfTest();
         JavaTokenText.selfTest();

@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=aero-high-memory-cell-pages -->
 <!-- nonclaims=default-enable,weak-gpu-vram-equivalence,driver-memory-bytes -->
-<!-- frozen-trace=9cf3293561530d0be88dca6726ad210bbf934842a1007132e2c4dde97228279c -->
+<!-- frozen-trace=7145d5c3f5de611f6a843b860a5439438e73f922d96bc762859d1ced4ccab3af -->
 
 # M784 Aero high-memory Cell Page behavior map
 
@@ -22,6 +22,8 @@ Eight clients run as four counterbalanced normal/high pairs. Each process
 orbits all towers, traverses between chunks, spins rapidly,
 teleports, and performs close inspection. Twenty-four full RGBA checkpoints are
 captured at identical route positions.
+Blank readbacks are retried at the same positions on the next route; more than
+one route of blank checkpoints rejects the capture boundary.
 
 ## Observations
 
@@ -40,10 +42,12 @@ display-list eviction, denial or failure.
 Cross-arm pixels may differ only at independently observed same-arm raster-noise
 locations. Production opt-in promotion additionally requires at least 3% FPS
 gain, p99 and allocation ratios no worse than 1.05, flush cost no worse than
-0.90, and the paired hitch-rate allowance.
+0.90, both counterbalanced launch-order strata to meet those thresholds, at
+least three of four pairs to win on FPS without p99 regression, and the paired
+hitch-rate allowance. This blocks aggregate wins caused by one slow baseline.
 
 This does not measure driver-owned bytes or claim safety on every weak GPU. It
 can qualify high-memory mode as an explicit production option; it cannot make
 that mode the default.
 
-Signal: `scene=576-static-four-towers-four-chunks,membership=fixed,minInstances=1,jvms=8-fresh-four-counterbalanced-pairs,route=orbit+traverse+spin+teleport,memory=normal-vs-high,flatten=off-vs-on,cell-pages=stable,rgba=0-unexplained,guardrails=bounded,metrics=classified,decision=promote-opt-in-or-keep-candidate`.
+Signal: `scene=576-static-four-towers-four-chunks,membership=fixed,minInstances=1,jvms=8-fresh-four-counterbalanced-pairs,route=orbit+traverse+spin+teleport,memory=normal-vs-high,flatten=off-vs-on,cell-pages=stable,rgba=0-unexplained+blank-retry<=24,guardrails=bounded,order-strata=both+frame-wins>=3,metrics=classified,decision=promote-opt-in-or-keep-candidate`.

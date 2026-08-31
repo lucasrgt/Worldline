@@ -26,7 +26,7 @@ public final class HighMemoryProbe {
     private static final boolean[] CAPTURED = new boolean[HighMemoryScene.CHECKPOINTS];
     private static final com.sun.management.ThreadMXBean ALLOC = allocationBean();
     private static long started, allocationStarted, allocatedBytes, heapPeak;
-    private static int captures, width, height, pageCalls, pageRebuilds, directCalls;
+    private static int captures, blankCaptures, width, height, pageCalls, pageRebuilds, directCalls;
     private static int maxCachedPages, prewarmDrained, compiledStart, expiredStart, evictedStart;
     private static String arm;
     private static boolean sceneCleared;
@@ -88,6 +88,7 @@ public final class HighMemoryProbe {
             out.println("machines=" + machines);
             out.println("frames=" + WALLS.size());
             out.println("captures=" + captures);
+            out.println("captures.blank.rejected=" + blankCaptures);
             out.println("width=" + width);
             out.println("height=" + height);
             out.println("frame.allocated.bytes=" + allocatedBytes);
@@ -136,6 +137,17 @@ public final class HighMemoryProbe {
             GL11.glReadPixels(0, 0, width, height, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, pixels);
             byte[] bytes = new byte[pixels.remaining()];
             pixels.get(bytes);
+            boolean nonzero = false;
+            for (byte value : bytes) {
+                if (value != 0) {
+                    nonzero = true;
+                    break;
+                }
+            }
+            if (!nonzero) {
+                blankCaptures++;
+                return;
+            }
             File directory = new File(System.getProperty("worldline.m784.framesDir"), arm);
             if (!directory.isDirectory() && !directory.mkdirs()) {
                 throw new IllegalStateException("cannot create M784 frame directory");

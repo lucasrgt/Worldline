@@ -30,9 +30,11 @@ public final class M784AeroHighMemoryCellPagesCycle {
         + "jvms=8-fresh-four-counterbalanced-pairs|route=1200-min20s-orbit+traverse+spin+teleport|"
         + "warm=480-route-frames+pages-stable|memory=normal-vs-high|"
         + "cell-pages=min1+flatten-off-vs-on+ttl600-vs1800+budget8-vs16+cap-unbounded-vs4096|"
-        + "captures=24-full-rgba-isolated-fixture|metrics=wall+p99+allocation+heap+flush+pages+display-lists+prewarm+hitches|"
-        + "oracle=no-unexplained-pixels+activation+stable-cache+workdrift<=0.10+guardrails+fps>=1.03+p99<=1.05+"
-        + "alloc<=1.05+flush<=0.90+hitch<=5000ppm|decision=promote-opt-in-or-keep-candidate";
+        + "captures=24-full-rgba-isolated-fixture+blank-retry<=24|"
+        + "metrics=wall+p99+allocation+heap+flush+pages+display-lists+prewarm+hitches|"
+        + "oracle=no-unexplained-pixels+activation+stable-cache+workdrift<=0.10+guardrails+"
+        + "both-order-strata+frame-wins>=3+fps>=1.03+p99<=1.05+alloc<=1.05+flush<=0.90+"
+        + "hitch<=5000ppm|decision=promote-opt-in-or-keep-candidate";
     private final Path root = Path.of("").toAbsolutePath().normalize();
     private final Path smoke = root.resolve("smokes").resolve(ID);
     private final Path build = root.resolve(".worldline/build/smoke").resolve(ID);
@@ -113,7 +115,9 @@ public final class M784AeroHighMemoryCellPagesCycle {
             && SmokeSupport.value(config, "warm.frames").equals("480")
             && SmokeSupport.value(config, "checkpoints").equals("24")
             && SmokeSupport.value(config, "machines").equals("576")
-            && SmokeSupport.value(config, "maximum.workload.drift.ratio").equals("0.10"),
+            && SmokeSupport.value(config, "maximum.workload.drift.ratio").equals("0.10")
+            && SmokeSupport.value(config, "maximum.blank.capture.rejections").equals("24")
+            && SmokeSupport.value(config, "minimum.frame.winning.pairs").equals("3"),
             "M784 acquisition design drift");
     }
 }
@@ -206,7 +210,7 @@ final class M784Runtime {
 final class M784Artifact {
     final Path game;
     final String arm;
-    final int machines, frames, captures, width, height;
+    final int machines, frames, captures, blankCaptures, width, height;
     final int pageCalls, pageRebuilds, directCalls, cachedMax, compiled, expired, evicted;
     final int ttl, rebuildBudget, cacheMax, prewarmPending, displayDenied, displayFailed;
     final int displayLive, displayPeak, displayAllocated, displayMax;
@@ -219,6 +223,7 @@ final class M784Artifact {
         this.game = game;
         arm = required(p, "arm"); machines = integer(p, "machines");
         frames = integer(p, "frames"); captures = integer(p, "captures");
+        blankCaptures = integer(p, "captures.blank.rejected");
         width = integer(p, "width"); height = integer(p, "height");
         allocatedBytes = number(p, "frame.allocated.bytes");
         heapPeak = number(p, "heap.peak.bytes"); heapFinal = number(p, "heap.final.bytes");
@@ -296,7 +301,7 @@ final class M784Artifact {
         return arm + ":frames=" + frames + ",fps=" + fmt(fps()) + ",p99.ms="
             + fmt(p99() / 1_000_000.0D) + ",alloc/frame=" + fmt(allocationPerFrame())
             + ",heap.peak.mb=" + fmt(heapPeak / 1048576.0D) + ",flush.us="
-            + fmt(flushPerCall() / 1000.0D) + ",pages=" + pageCalls + "/"
+            + fmt(flushPerCall() / 1000.0D) + ",blank=" + blankCaptures + ",pages=" + pageCalls + "/"
             + pageRebuilds + "/" + directCalls + "/" + cachedMax + ",lists="
             + displayLive + "/" + displayPeak + "/" + displayAllocated;
     }
@@ -387,14 +392,52 @@ final class M784Gate {
         boolean workloadRepeatable = sameArmWork
             && within(normalWork, highWork, workTolerance)
             && highRebuild <= normalRebuild * 1.05D + 0.001D;
+        boolean capturePass = pairs.stream().allMatch(pair ->
+            pair.normal().blankCaptures <= threshold(config, "maximum.blank.capture.rejections")
+                && pair.high().blankCaptures <= threshold(config, "maximum.blank.capture.rejections"));
+        boolean normalFirstPass = qualifies(pairs, true, config);
+        boolean highFirstPass = qualifies(pairs, false, config);
+        int frameWins = 0;
+        for (M784Pair pair : pairs) {
+            if (pair.high().fps() >= pair.normal().fps()
+                && pair.high().p99() <= pair.normal().p99()
+                    * threshold(config, "p99.maximum.ratio")) {
+                frameWins++;
+            }
+        }
         M784Hitch hitch = hitch(product, pairs, config);
         boolean performance = fpsRatio >= threshold(config, "fps.minimum.ratio")
             && p99Ratio <= threshold(config, "p99.maximum.ratio")
             && allocationRatio <= threshold(config, "allocation.maximum.ratio")
-            && flushRatio <= threshold(config, "flush.maximum.ratio") && hitch.passes();
-        return new M784Result(visualPass, workloadRepeatable,
+            && flushRatio <= threshold(config, "flush.maximum.ratio")
+            && normalFirstPass && highFirstPass
+            && frameWins >= threshold(config, "minimum.frame.winning.pairs") && hitch.passes();
+        return new M784Result(visualPass, workloadRepeatable, capturePass,
             noise.size(), noisePpm, unexplained.size(),
-            fpsRatio, p99Ratio, allocationRatio, flushRatio, hitch, performance);
+            fpsRatio, p99Ratio, allocationRatio, flushRatio, normalFirstPass,
+            highFirstPass, frameWins, hitch, performance);
+    }
+
+    private static boolean qualifies(List<M784Pair> pairs, boolean normalFirst, Properties config) {
+        double normalFps = 0, highFps = 0, normalP99 = 0, highP99 = 0;
+        double normalAlloc = 0, highAlloc = 0, normalFlush = 0, highFlush = 0;
+        for (M784Pair pair : pairs) {
+            if (pair.normalFirst() != normalFirst) {
+                continue;
+            }
+            normalFps += pair.normal().fps();
+            highFps += pair.high().fps();
+            normalP99 += pair.normal().p99();
+            highP99 += pair.high().p99();
+            normalAlloc += pair.normal().allocationPerFrame();
+            highAlloc += pair.high().allocationPerFrame();
+            normalFlush += pair.normal().flushPerCall();
+            highFlush += pair.high().flushPerCall();
+        }
+        return highFps / normalFps >= threshold(config, "fps.minimum.ratio")
+            && highP99 / normalP99 <= threshold(config, "p99.maximum.ratio")
+            && highAlloc / normalAlloc <= threshold(config, "allocation.maximum.ratio")
+            && highFlush / normalFlush <= threshold(config, "flush.maximum.ratio");
     }
 
     private static M784Hitch hitch(Path product, List<M784Pair> source,
@@ -451,20 +494,24 @@ final class M784Gate {
 record M784Hitch(long normalPpm, long highPpm, long deltaPpm,
                  boolean passes, String verdict) {}
 
-record M784Result(boolean visualPass, boolean workloadRepeatable,
+record M784Result(boolean visualPass, boolean workloadRepeatable, boolean capturePass,
                   long noisePixels, double noisePpm,
                   long unexplainedPixels, double fpsRatio, double p99Ratio,
-                  double allocationRatio, double flushRatio, M784Hitch hitch,
+                  double allocationRatio, double flushRatio, boolean normalFirstPass,
+                  boolean highFirstPass, int frameWins, M784Hitch hitch,
                   boolean performancePass) {
-    boolean integrityPass() { return visualPass && workloadRepeatable; }
+    boolean integrityPass() { return visualPass && workloadRepeatable && capturePass; }
     String decision() { return performancePass ? "promote-opt-in" : "keep-candidate"; }
     String summary() {
         return "visual.pass=" + visualPass + ",workload.repeatable=" + workloadRepeatable
+            + ",capture.pass=" + capturePass
             + ",visual.noise.locations=" + noisePixels
             + ",visual.noise.ppm=" + String.format(Locale.ROOT, "%.3f", noisePpm)
             + ",visual.unexplained.locations=" + unexplainedPixels
             + ",fps.ratio=" + format(fpsRatio) + ",p99.ratio=" + format(p99Ratio)
             + ",allocation.ratio=" + format(allocationRatio) + ",flush.ratio=" + format(flushRatio)
+            + ",order.normal-first.pass=" + normalFirstPass
+            + ",order.high-first.pass=" + highFirstPass + ",frame.wins=" + frameWins
             + ",hitch.normal.ppm=" + hitch.normalPpm() + ",hitch.high.ppm=" + hitch.highPpm()
             + ",hitch.delta.ppm=" + hitch.deltaPpm() + ",hitch.verdict=" + hitch.verdict()
             + ",performance.pass=" + performancePass + ",decision=" + decision();
