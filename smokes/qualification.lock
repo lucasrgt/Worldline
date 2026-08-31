@@ -1,4 +1,5 @@
 # Worldline smoke qualification lock v5
+# Reviewed anchor for the entity physical-envelope schema refresh.
 schema=5
 algorithm=worldline-smoke-input-v6-tokens
 # Reviewed anchor for the universal entity registry schema refresh.
