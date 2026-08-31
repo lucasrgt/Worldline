@@ -1,6 +1,8 @@
 package aero.modellib.test;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.world.World;
 
@@ -38,6 +40,20 @@ public final class WorldlineM780Rehydrator {
     /** True only for one of the 128 controlled fixture positions. */
     public static boolean contains(int x, int y, int z) {
         return fixture(x, y, z);
+    }
+
+    /** Stabilizes block-entity draw order across fresh world deserializations. */
+    public static void order(World world) {
+        Collections.sort(world.blockEntities, new Comparator<BlockEntity>() {
+            public int compare(BlockEntity left, BlockEntity right) {
+                int value = Integer.compare(left.y, right.y);
+                if (value == 0) value = Integer.compare(left.x, right.x);
+                if (value == 0) value = Integer.compare(left.z, right.z);
+                if (value == 0) value = left.getClass().getName()
+                    .compareTo(right.getClass().getName());
+                return value;
+            }
+        });
     }
 
     private static void clearOutsideFixture(World world) {

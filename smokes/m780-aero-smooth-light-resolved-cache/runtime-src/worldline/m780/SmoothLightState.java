@@ -105,6 +105,7 @@ public final class SmoothLightState {
             WorldlineM780Rehydrator.rehydrate(world);
             machines = WorldlineM780Rehydrator.count(world);
         }
+        WorldlineM780Rehydrator.order(world);
         if (machines < SmoothLightContract.MACHINES && warmup < 1200) return;
         require(machines == SmoothLightContract.MACHINES, "M780 fixture drift: " + machines);
         SyntheticLight.phase(0);

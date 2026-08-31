@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=external-aero-runtime-qualification -->
 <!-- nonclaims=bounded-to-qualified-evidence -->
-<!-- frozen-trace=7c6d1cfadd9a6a9df001f2fa4bc1aa99471ef7da69f02dde3402a0f8f494c463 -->
+<!-- frozen-trace=96a4ffd9d0574aead20652e1739202e5102ba2a0e2f5b4955915892fadc9154e -->
 
 # M780-AERO-SMOOTH-LIGHT-RESOLVED-CACHE behavior map
 
@@ -12,6 +12,10 @@ geometry, arbitrary TTLs, or unrelated renderer paths.
 Fixture: one restored world contains 128 controlled block entities in four
 panels spanning multiple chunks. Each renders a 2,048-triangle smooth grid
 whose cells never overlap, removing model z-fighting from the visual oracle.
+The fixture emits without texturing or blending, so iteration order cannot
+change transparent material composition.
+The fixture also sorts block entities by coordinates before capture so draw
+order is identical after every fresh deserialization.
 Ticks, time, weather, entities, clouds, HUD, and interpolation are controlled.
 The runtime mixin redirects only the fixture renderer through Aero's
 production smooth-light path. Immediately before the first controlled mesh,
@@ -44,6 +48,6 @@ catastrophic 1.5 second frames.
 
 Claim: `scene=128-static-multichunk,jvms=4-fresh-abba,route=orbit+traverse+spin+teleport,light=phase-change+ttl-convergence,pixels=0-unexplained+noise<=10ppm,samples=reduced2of2,cache=hits+misses+cold+stale-censused,decision=promote-or-keep-disabled-by-render+hitches`.
 
-Frozen trace: `v4|scene=128-dense-smooth-grid-2048tri+four-panels+isolated-buffer|jvms=4-fresh-abba-off+on+on+off|route=240-orbit+traverse+spin+teleport|warm=480-route-frames|light=synthetic-grid+phase-change+100ms-convergence|cache=immutable-startup+ttl50ms+lru1024+native-hit-miss-cold-stale-eviction-counters|captures=24-route+2-light-diagnostics-per-jvm|world=frozen+clear-weather+no-clouds|oracle=full-rgba+same-arm-noise10ppm+no-unexplained+light-change+sample-reduction+render-time-reduction+hitch-census`.
+Frozen trace: `v6|scene=128-dense-smooth-grid-2048tri+four-panels+opaque-buffer+stable-be-order|jvms=4-fresh-abba-off+on+on+off|route=240-orbit+traverse+spin+teleport|warm=480-route-frames|light=synthetic-grid+phase-change+100ms-convergence|cache=immutable-startup+ttl50ms+lru1024+native-hit-miss-cold-stale-eviction-counters|captures=24-route+2-light-diagnostics-per-jvm|world=frozen+clear-weather+no-clouds|oracle=full-rgba+same-arm-noise10ppm+no-unexplained+light-change+sample-reduction+render-time-reduction+hitch-census`.
 
-SHA-256: `7c6d1cfadd9a6a9df001f2fa4bc1aa99471ef7da69f02dde3402a0f8f494c463`.
+SHA-256: `96a4ffd9d0574aead20652e1739202e5102ba2a0e2f5b4955915892fadc9154e`.
