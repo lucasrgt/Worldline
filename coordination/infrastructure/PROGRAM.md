@@ -1,6 +1,6 @@
 # Worldline Infrastructure Program
 
-Status: canonical coordination plan; implementation has not started.
+Status: canonical coordination plan; implementation is in progress.
 
 This document preserves the complete program for evolving Worldline's local
 verification infrastructure into a native, hermetic, explainable, and
@@ -51,6 +51,49 @@ IntegrationTrain / orchestrator
   signed execution receipt and content-addressed outputs
 ```
 
+### 1.1 Implementation ledger (2026-08-31)
+
+The durable plan was established on branch
+`codex/worldline-infrastructure-program` at commit `69059c072`. The native
+mechanism is developed separately in `worldline-executor`; Worldline shadow
+policy remains isolated on branch `codex/executor-shadow-contract`. No native
+backend is yet a qualifying or default runtime lane.
+
+Completed foundation slices:
+
+- execution plan, receipt, and observational metrics v1 contracts, canonical
+  JSON identity, atomic outputs, a direct backend, and hostile fixtures in
+  executor commit `59fb054`;
+- Windows Job Object containment, limits, accounting, bounded capture, owner
+  death, timeout, root-exit cleanup, and executor-death cleanup in `9b69be7`;
+- Linux cgroups v2 containment, pre-exec assignment, pidfds, an independent
+  cleanup watchdog, memory-plus-swap, CPU and task limits, accounting, and
+  empty-cgroup proof in `4ee1d50`;
+- explicit separation of Windows process units from Linux process-plus-thread
+  task units in `e3b269c` and explicit `peak_tasks` telemetry in `5a204b2`;
+- strict Java plan production and receipt verification plus a real Windows
+  legacy/Rust differential in Worldline commit `8e3f53324`;
+- Linux cgroup plan, receipt, telemetry, and delegated-scope shadow verification
+  in `b6103da5c` and explicit task-accounting verification in `3aecd368f`.
+
+Evidence recorded for these slices:
+
+- Rust format, Clippy-with-warnings-as-errors, and complete workspace tests pass
+  on Windows and Ubuntu under WSL2;
+- the containment suite passed ten consecutive Linux runs before the unit-name
+  correction, then passed completely on both platforms after the corrected
+  schema;
+- live Java-to-Rust probes pass through Windows Job Objects and through a
+  delegated Linux `systemd-run` scope;
+- the canonical Worldline Gate reaches `verify passed` with all content stages
+  restored, but the host currently violates the unchanged hot latency SLO
+  (`20361ms >= 7000ms` on the latest run). The budget was not weakened.
+
+Current boundaries remain honest: Linux namespaces, filesystem and network
+isolation, full hostile-fixture coverage, broader legacy differentials, and
+all qualifying promotions remain pending. A1 through A4 are therefore in
+progress; A5 and later have not started.
+
 ## 2. Program principles
 
 1. `java tools/harness/Gate.java` remains the only qualification entry point.
@@ -97,7 +140,8 @@ The canonical request from Java policy to the native executor declares:
 - inherited, removed, and explicitly set environment variables;
 - read-only inputs and writable output roots;
 - stdout, stderr, metrics, and receipt destinations;
-- timeout, memory, CPU, process, and disk limits;
+- timeout, memory, CPU, backend-explicit Windows process or Linux task, and
+  disk limits;
 - backend, network, and parent-death policies;
 - expected tool and input identities;
 - whether the job may access an official local runtime;
@@ -116,7 +160,7 @@ The native executor returns:
 - exit code and structured termination reason;
 - stdout and stderr digests;
 - output-manifest digest;
-- peak resident memory and process count;
+- backend-labeled peak memory plus Windows process or Linux task count;
 - CPU and I/O observations;
 - timeout and limit events;
 - descendant-cleanup outcome;
@@ -208,7 +252,7 @@ tokens and AppContainer remain separate promotions.
 Implement in Rust:
 
 - cgroups v2 ownership;
-- memory, process, and CPU limits;
+- memory, task, and CPU limits;
 - parent-death signaling;
 - optional mount, PID, user, and network namespaces;
 - read-only input mounts and explicit writable roots;
