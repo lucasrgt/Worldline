@@ -6,6 +6,7 @@ final class HarnessFeatureSelfTest {
         CacheUsage.selfTest();
         NightlyQualityCampaign.selfTest();
         MilestoneScaffold.selfTest();
+        MilestoneContract.selfTest();
         ChangelogCheck.selfTest();
         ReadmeStatus.selfTest();
         ModuleCacheMaintenance.main(new String[] {"--self-test"});

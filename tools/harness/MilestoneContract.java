@@ -84,17 +84,12 @@ final class MilestoneContract {
         require(Files.readString(semanticMap, StandardCharsets.UTF_8).contains(value("expected.signal")),
                 relative(semanticMap) + " does not contain the frozen semantic signal");
         String behavior = descriptor.getProperty("behavior");
+        String toolingContract = descriptor.getProperty("testkit.contract");
         String atlas = value("qualification.atlas");
         String testkit = value("qualification.testkit");
         if (behavior == null || behavior.isBlank()) {
-            require("not-applicable".equals(atlas),
-                    "qualification.atlas must be not-applicable when no behavior is published");
-            require(!value("qualification.atlas.reason").isBlank(),
-                    "Atlas non-applicability requires qualification.atlas.reason");
-            require("not-applicable".equals(testkit),
-                    "qualification.testkit must be not-applicable when no behavior is published");
-            require(!value("qualification.testkit.reason").isBlank(),
-                    "TestKit non-applicability requires qualification.testkit.reason");
+            validateToolingQualification(id, toolingContract, atlas, testkit,
+                    value("qualification.atlas.reason"), value("qualification.testkit.reason"));
         } else {
             require(("atlas.scenario." + behavior.trim()).equals(atlas),
                     "qualification.atlas does not match behavior=" + behavior.trim());
@@ -132,7 +127,10 @@ final class MilestoneContract {
 
     void validateTestKit(Path api, Path testmodel, Path testapi) throws Exception {
         String behavior = descriptor.getProperty("behavior");
-        if (behavior == null || behavior.isBlank()) return;
+        if (behavior == null || behavior.isBlank()) {
+            validateToolingContract(api);
+            return;
+        }
         require("behavior-evidence".equals(descriptor.getProperty("qualification.testkit"))
                         || "equatable".equals(descriptor.getProperty("testkit.evidence")),
                 "Atlas behavior must expose equatable TestKit evidence");
@@ -142,6 +140,56 @@ final class MilestoneContract {
             Class<?> atlas = Class.forName("worldline.api.WorldlineBehavior", true, loader);
             expectation.getMethod("toMatchVanilla", atlas, String.class, String.class);
             expectation.getMethod("toMatchVanilla", String.class, String.class, String.class);
+        }
+    }
+
+    private void validateToolingContract(Path api) throws Exception {
+        String contract = descriptor.getProperty("testkit.contract");
+        if (contract == null || contract.isBlank()) return;
+        try (URLClassLoader loader = new URLClassLoader(new URL[] {api.toUri().toURL()}, null)) {
+            Class<?> type = Class.forName("worldline.api.WorldlineContract", true, loader);
+            Object resolved = type.getMethod("require", String.class).invoke(null, contract.trim());
+            require(resolved != null, "TestKit contract did not resolve " + contract.trim());
+        }
+    }
+
+    static void selfTest() {
+        validateToolingQualification("m1-example", "aero-frame-census",
+                "atlas.experiment.m1-example", "contract-evidence", "", "");
+        validateToolingQualification("m1-draft", null, "not-applicable", "not-applicable",
+                "draft has no experiment", "draft has no contract");
+        expectQualificationFailure("m1-example", "aero-frame-census",
+                "atlas.experiment.wrong", "contract-evidence", "", "");
+        expectQualificationFailure("m1-example", null,
+                "atlas.experiment.m1-example", "contract-evidence", "", "");
+    }
+
+    private static void validateToolingQualification(String milestone, String contract,
+            String atlas, String testkit, String atlasReason, String testkitReason) {
+        if ("contract-evidence".equals(testkit)) {
+            require(contract != null && !contract.isBlank(),
+                    "contract-evidence requires testkit.contract");
+            require(("atlas.experiment." + milestone).equals(atlas),
+                    "tooling contract qualification must name its Atlas experiment");
+            return;
+        }
+        require("not-applicable".equals(atlas),
+                "qualification.atlas must name the tooling experiment or be not-applicable");
+        require(atlasReason != null && !atlasReason.isBlank(),
+                "Atlas non-applicability requires qualification.atlas.reason");
+        require("not-applicable".equals(testkit),
+                "qualification.testkit must be contract-evidence or not-applicable");
+        require(testkitReason != null && !testkitReason.isBlank(),
+                "TestKit non-applicability requires qualification.testkit.reason");
+    }
+
+    private static void expectQualificationFailure(String milestone, String contract,
+            String atlas, String testkit, String atlasReason, String testkitReason) {
+        try {
+            validateToolingQualification(milestone, contract, atlas, testkit, atlasReason, testkitReason);
+            throw new IllegalStateException("invalid tooling qualification was accepted");
+        } catch (IllegalStateException expected) {
+            if ("invalid tooling qualification was accepted".equals(expected.getMessage())) throw expected;
         }
     }
 

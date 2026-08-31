@@ -378,6 +378,13 @@ applicable Atlas entry. Also use `qualification.testkit=not-applicable` with a c
 `qualification.testkit.reason`. Atlas-backed behavior instead requires `behavior-evidence`; the
 gate verifies both Atlas resolution and the TestKit evidence-comparison implementation.
 
+A completed tooling milestone that declares `testkit.contract` may qualify that reusable surface
+without pretending it is vanilla behavior. Use
+`qualification.atlas=atlas.experiment.<milestone-id>` and
+`qualification.testkit=contract-evidence`; the gate resolves the contract through
+`WorldlineContract` and binds the qualification to the imported Atlas experiment. Reserve the
+`not-applicable` pair for drafts or structural work that genuinely publishes neither surface.
+
 The gate shares immutable module/test caches between worktrees and publishes private outputs
 under each worktree's `.worldline/`. Module outputs are links to the immutable cache: POSIX uses
 symbolic links and Windows uses directory junctions. Cleanup removes the link without traversing
