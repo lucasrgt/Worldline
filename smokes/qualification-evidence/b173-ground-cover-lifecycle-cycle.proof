@@ -1,5 +1,5 @@
 schema=1
 id=b173-ground-cover-lifecycle-cycle
-fingerprint=9cf61ab40d6107b20ac4ac56033ec55d5ad52dff3debaeb145ba13af18b68d23
+fingerprint=4f1605efd5684e6cf421b97d986a2b2dfc9793a91c8897b588ef569ec0e3a5d7
 observation.sha256=eb9efe929e0ed4bc8ada8e3a6b73eab7aac5f71784191ab551e92822a3cf1f07
 source=refactor-equivalent
