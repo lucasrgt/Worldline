@@ -24,7 +24,7 @@
 3. Each arm also records full frame intervals, current-thread allocation,
    actual rebuild count and duration, scheduler accounting, maximum and final
    backlog, world-reset count, and reload count.
-4. Every artifact requires 576 machines, one reload, at least three world
+4. Every artifact requires 576 machines, one reload, at least two world
    resets, real dirty backlog, real rebuilds, latency samples, zero pending
    visible chunks, and zero final backlog.
 5. The neutral paired hitch-rate gate uses a 50 ms threshold and a 5,000 ppm

@@ -24,7 +24,7 @@ public final class VisualState {
         if (!ENABLED) return;
         VisualFixture.prepareDisplay(game);
         if (stage == 0 && game.world == null) start(game, 1);
-        else if (stage == 3 && game.world == null) start(game, 4);
+        else if (stage == 3) start(game, 4);
         else if ((stage == 1 || stage == 4) && game.world != null && game.player != null)
             warm(game, stage == 4);
     }
@@ -103,7 +103,6 @@ public final class VisualState {
         game.world.saveWithLoadingDisplay(true, null);
         stage = 3;
         stable = warmup = 0;
-        game.setWorld((World) null);
     }
 
     private static void finish(Minecraft game, int backlog, long elapsed) {

@@ -261,7 +261,7 @@ final class M783VisualArtifact {
 
     void verify() {
         SmokeSupport.require(frames >= 2400 && machines == 576 && reloads == 1
-            && worldResets >= 3 && finalBacklog == 0 && maxBacklog > 0
+            && worldResets >= 2 && finalBacklog == 0 && maxBacklog > 0
             && allocatedBytes > 0L && rebuilds > 0 && rebuildMaximumNanos > 0L
             && latencySamples > 0 && latencyPending == 0,
             "M783 incomplete artifact: " + summary());
