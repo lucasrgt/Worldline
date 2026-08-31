@@ -10,6 +10,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import worldline.testkit.B173EntityPhysicalEnvelopeScenario;
 import worldline.analysis.CensusRunner;
 import worldline.testkit.BlockConformancePlan;
 import worldline.testkit.BlockConformanceProfile;
@@ -24,6 +27,8 @@ import worldline.testkit.EntityConformanceTemplate;
 import worldline.testkit.EntityRegistryCensusScenario;
 import worldline.testkit.EntityRegistryEvidence;
 import worldline.testkit.EntityRegistryFixture;
+import worldline.testkit.EntityPhysicalEnvelopeEvidence;
+import worldline.testkit.EntityPhysicalEnvelopeFixture;
 
 /** Captures the controlled b1.7.3 registry census into canonical files. */
 final class CensusCommand {
@@ -64,6 +69,14 @@ final class CensusCommand {
                 StandardOpenOption.WRITE);
         output.println("entity-registry.sha256=" + Checks.sha256(entityRegistryBytes));
         output.println("entity-registry.file=" + entityRegistryFile);
+        EntityPhysicalEnvelopeEvidence entityEnvelope = EntityPhysicalEnvelopeFixture.execute(
+                entityPhysicalEnvelopePlan(), new B173EntityPhysicalEnvelopeScenario("b1.7.3"));
+        Path entityEnvelopeFile = outDir.resolve("entity-physical-envelope.wlevidence");
+        byte[] entityEnvelopeBytes = entityEnvelope.canonical().getBytes(StandardCharsets.UTF_8);
+        Files.write(entityEnvelopeFile, entityEnvelopeBytes, StandardOpenOption.CREATE_NEW,
+                StandardOpenOption.WRITE);
+        output.println("entity-physical-envelope.sha256=" + Checks.sha256(entityEnvelopeBytes));
+        output.println("entity-physical-envelope.file=" + entityEnvelopeFile);
         return 0;
     }
 
@@ -100,5 +113,41 @@ final class CensusCommand {
         }
         return new EntityConformancePlan(profiles, Collections.singletonList(
                 new EntityConformanceTemplate("registry-presence", ConformanceLayer.UNIVERSAL)));
+    }
+
+    private static EntityConformancePlan entityPhysicalEnvelopePlan() throws IOException {
+        Path base = Paths.get("behavior", "functional-census", "b1.7.3", "entities");
+        List<String> subjects = Files.readAllLines(base.resolve("subjects.tsv"),
+                StandardCharsets.UTF_8);
+        List<String> profileRows = Files.readAllLines(base.resolve("profiles.tsv"),
+                StandardCharsets.UTF_8);
+        Checks.require(!subjects.isEmpty() && subjects.get(0).startsWith("subject_id\t")
+                && !profileRows.isEmpty()
+                && profileRows.get(0).equals("subject_id\tsingular\tarchetypes"),
+                "invalid Entity Functional Census physical profiles");
+        Map<String, String[]> profiles = new LinkedHashMap<String, String[]>();
+        for (int line = 1; line < profileRows.size(); line++) {
+            if (profileRows.get(line).trim().isEmpty() || profileRows.get(line).startsWith("#")) {
+                continue;
+            }
+            String[] columns = profileRows.get(line).split("\\t", -1);
+            Checks.require(columns.length == 3 && profiles.put(columns[0], columns) == null,
+                    "invalid entity physical profile");
+        }
+        List<EntityConformanceProfile> expanded = new ArrayList<EntityConformanceProfile>();
+        for (int line = 1; line < subjects.size(); line++) {
+            if (subjects.get(line).trim().isEmpty() || subjects.get(line).startsWith("#")) continue;
+            String subject = subjects.get(line).split("\\t", -1)[0];
+            if ("b1.7.3:entity/048".equals(subject)) continue;
+            String[] profile = profiles.get(subject);
+            Checks.require(profile != null, "entity physical profile is absent");
+            expanded.add(new EntityConformanceProfile(subject,
+                    java.util.Arrays.asList(profile[2].split(",")),
+                    Boolean.parseBoolean(profile[1]),
+                    Collections.<String, ConformanceLayer>emptyMap()));
+        }
+        Checks.require(expanded.size() == 23, "concrete entity physical plan drifted");
+        return new EntityConformancePlan(expanded, Collections.singletonList(
+                new EntityConformanceTemplate("collision-shape", ConformanceLayer.ARCHETYPE)));
     }
 }

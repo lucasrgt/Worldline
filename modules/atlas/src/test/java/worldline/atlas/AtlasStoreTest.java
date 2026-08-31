@@ -84,6 +84,13 @@ public final class AtlasStoreTest {
         require(first.get("atlas.claim.entity-050.damage-death").control()
                 .contains("layer=SINGULAR;applicability=APPLICABLE;automation=PUBLIC_TESTKIT"),
                 "singular entity lifecycle route was not indexed");
+        require(first.get("atlas.claim.entity-001.collision-shape").control()
+                .contains("layer=ARCHETYPE;applicability=APPLICABLE;automation=PUBLIC_TESTKIT")
+                && first.get("atlas.claim.entity-020.collision-shape").control()
+                .contains("layer=SINGULAR;applicability=APPLICABLE;automation=PUBLIC_TESTKIT")
+                && AtlasStatus.NOT_APPLICABLE.equals(
+                        first.get("atlas.claim.entity-048.collision-shape").status()),
+                "entity physical-envelope routes were not indexed honestly");
         require(first.get("atlas.claim.entity-051.drop-matrix").control()
                 .contains("layer=ARCHETYPE;applicability=APPLICABLE;automation=PUBLIC_TESTKIT")
                 && first.get("atlas.claim.entity-094.spawn-materialization").control()
@@ -195,7 +202,7 @@ public final class AtlasStoreTest {
                 && taxonomy.contains("subsystem=tile-entities"), "taxonomy index");
         String tags = AtlasQuery.tags(first);
         require(tags.contains("tag=category-claim")
-                && tags.contains("tag=surface-public-testkit\trecords=1130")
+                && tags.contains("tag=surface-public-testkit\trecords=1153")
                 && !tags.contains("tag=surface-internal-api")
                 && !tags.contains("tag=surface-smoke-only"), "tag index");
         try {

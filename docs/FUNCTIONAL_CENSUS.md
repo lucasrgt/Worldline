@@ -233,9 +233,10 @@ their own future denominator instead of being smuggled into its percentage.
 The dimensions are registry presence, spawn materialization, save/reload, movement policy,
 collision shape, damage/death, drop matrix, interaction state, environment response, tick
 lifecycle, and native rendering. Profiles route these through universal, archetype, and singular
-cases. Seventy-four cells are bound to qualified official-runtime evidence: the exact 24-entry
+cases. Ninety-seven cells are bound to qualified official evidence: the exact 24-entry
 official-client `EntityList` registry plus projectiles, paintings, TNT, falling sand, vehicles,
-hostile mobs, and passive mobs. Every proof has a strict public binding ledger. Pig
+hostile mobs, passive mobs, and the physical envelopes of every concrete registered class. Every
+proof has a strict public binding ledger. Pig
 materialization, movement, death and pork drop use the
 universal plus archetype routes, while creeper materialization, death and gunpowder drop exercise
 universal plus singular routes. Skeleton, spider, pig-zombie, sheep, and squid each execute bounded
@@ -263,13 +264,18 @@ behavior matrix then composes night-time zombie identity, two skeleton-fired arr
 positive-Y motion against both cobblestone and planks, and creeper proximity-fuse strength-three
 destruction with persisted dirt/wool crater cells. The universal official-client
 `EntityList` census now adds exact registry-presence evidence for all 24 entity subjects through
-one reusable fixture. All 74 verified entity claims have strict public bindings. M436 is
+one reusable fixture. The physical-envelope subsystem then constructs the 23 concrete registry
+classes with canonical state, normalizes slime size, fixes a common position, and records exact
+width, height, vertical offset, derived AABB, collidability, pushability, and pair-collision-box
+disposition. Registered type 48 is the abstract `EntityLiving` base and is explicitly
+`NOT_APPLICABLE` for materialized collision shape rather than being replaced by a fabricated
+subclass. All 97 verified entity claims have strict public bindings. M436 is
 deliberately excluded from the arrow
 tick-lifecycle cell: it fires a type-60 projectile but then manually drops and collects a separate
 Packet21 item-262 stack, and its own map excludes in-ground projectile pickup. The M466 dry-pen
 scene is also excluded from squid environment-response: it kills the dry squid
 with a sword and explicitly declines to claim land-caused damage. No verified entity cell remains
-`SMOKE_ONLY`; the remaining 190 cells are explicit `UNKNOWN` Atlas claims.
+`SMOKE_ONLY`; the remaining 166 cells are explicit `UNKNOWN` Atlas claims.
 
 ## Status and automation
 
@@ -331,6 +337,9 @@ The ground-flora conformance subsystem reduces it to 321 while keeping tall-gras
 all four native-render claims explicitly unresolved.
 The mushroom random-tick conformance subsystem reduces it to 311 while keeping native mushroom
 rendering and giant-mushroom growth outside its claims.
+After the block matrix reached completion, the entity physical-envelope subsystem reduces the
+honest aggregate target gap from 175 to 152 with 23 new verified claims; the abstract registered
+`EntityLiving` collision cell becomes resolved but does not inflate the verified numerator.
 The executable check prints the exact current
 proof, unknown count, and claims remaining to
 the target on every canonical Gate.
@@ -344,10 +353,11 @@ variant, and coupled-transition cases. Together with the modern lifecycle proof
 reconciliation, the block public TestKit surface now covers 1,056/1,056 claims
 (100%), completing that family's automation-surface target. The final six tick-policy claims bind sand and
 gravel scheduling, natural wheat, cactus, and sugar-cane growth, and furnace tile ticks to official
-public fixtures. Across both current families the honest aggregate is 1,130/1,320 verified
-(85.61%) and 1,130/1,320 public TestKit claims (85.61%). The entity family contributes 74 public
-claims, no smoke-only claims, and 190 unknown cells. Reaching the aggregate 98.8% target now
-requires 175 more verified claims; the entity family alone requires 187 more claims to reach its
+public fixtures. Across both current families the honest aggregate is 1,153/1,320 verified
+(87.35%) and 1,153/1,320 public TestKit claims (87.35%). The entity family contributes 97 public
+claims, one explicit non-applicable cell, no smoke-only claims, and 166 unknown cells. Reaching
+the aggregate 98.8% target now requires 152 more verified claims; the entity family alone requires
+164 more claims to reach its
 own 261/264 threshold.
 
 ## Three conformance layers

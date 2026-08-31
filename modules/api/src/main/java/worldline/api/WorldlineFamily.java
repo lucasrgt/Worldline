@@ -14,8 +14,11 @@ public final class WorldlineFamily {
     public static final String REDSTONE = "redstone";
     public static final String WORLD = "world";
     public static final String VEHICLE = "vehicle";
+    public static final String ENTITY = "entity";
     private static final Pattern TOKEN = Pattern.compile("[a-z][a-z0-9-]{0,31}");
-    private static final String[] ALL = { HOSTILE, PLAYER, ENVIRONMENT, ITEM, REDSTONE, WORLD, VEHICLE };
+    private static final String[] ALL = {
+        HOSTILE, PLAYER, ENVIRONMENT, ITEM, REDSTONE, WORLD, VEHICLE, ENTITY
+    };
 
     private WorldlineFamily() {}
 
