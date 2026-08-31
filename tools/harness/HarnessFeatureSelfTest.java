@@ -36,6 +36,7 @@ final class HarnessFeatureSelfTest {
         SheepLifecycleTestPlanSuccessor.selfTest();
         ChickenEggFamilySubsystemSuccessor.selfTest();
         HonestEntityVerificationFloorSuccessor.selfTest();
+        WolfOwnerStateSubsystemSuccessor.selfTest();
         CandidateReadiness.selfTest();
         CandidateSourceClosure.selfTest();
         NeighborTestKitPinCheck.selfTest();
