@@ -8,7 +8,7 @@ painting-support-loss	SINGULAR	b1.7.3:entity/009	environment-response	APPLICABLE
 tnt-spawn	UNIVERSAL	b1.7.3:entity/020	spawn-materialization	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m381-tnt-prime-set	6cf1cfe074d14a3c856cf768c9a8b9cdc9cfa573b8ee2e901445db31692bfad5	PUBLIC_TESTKIT
 tnt-fuse	SINGULAR	b1.7.3:entity/020	tick-lifecycle	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m518-sw-tnt-fuse-lifecycle	f6a9810837ac1a3622784617b05e6c957344be3be5493d4b261e359f18076f1d	SMOKE_ONLY
 falling-sand-spawn	UNIVERSAL	b1.7.3:entity/021	spawn-materialization	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m597-falling-sand-entity-set	cc5127dcadf21010c8d1a840f832d3e1b95b803bd2b8d74dd7a5c77984a7328b	PUBLIC_TESTKIT
-falling-sand-lifecycle	SINGULAR	b1.7.3:entity/021	tick-lifecycle	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m597-falling-sand-entity-set	cc5127dcadf21010c8d1a840f832d3e1b95b803bd2b8d74dd7a5c77984a7328b	SMOKE_ONLY
+falling-sand-lifecycle	SINGULAR	b1.7.3:entity/021	tick-lifecycle	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m597-falling-sand-entity-set	cc5127dcadf21010c8d1a840f832d3e1b95b803bd2b8d74dd7a5c77984a7328b	PUBLIC_TESTKIT
 minecart-spawn	UNIVERSAL	b1.7.3:entity/040	spawn-materialization	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m155-minecart-spawn	8bbf2ce26b50b36cdb15763b126864882c8e138b89113c1fe6dcd75988703fab	PUBLIC_TESTKIT
 minecart-motion	SINGULAR	b1.7.3:entity/040	movement-policy	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m504-m508-sw-entity-dynamics	adf4090e04b92ccc22a6adf5a7bd8892fe6ecdd4e6b8c4ba21e2f201962f71db	PUBLIC_TESTKIT
 boat-spawn	UNIVERSAL	b1.7.3:entity/041	spawn-materialization	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m154-boat-spawn	5da646e53a2e386476060c80fb7c8bce2d187f93133cb6adb76ac439e48439a6	PUBLIC_TESTKIT

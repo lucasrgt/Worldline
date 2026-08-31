@@ -365,6 +365,19 @@ The fixture requires bone item `352`, tame status `7`, red collar dye damage `4`
 wolf remains alive. It exposes `wolf-spawn` at the universal layer and `wolf-sit` at the singular
 layer, normalizing runtime IDs and unrelated legal Packet40 bits.
 
+Unsupported sand uses a complete gravity lifecycle fixture. It composes the universal Packet23
+type-70 materialization contract with the singular timed landing claim:
+
+```java
+FallingSandLifecycleEvidence evidence = FallingSandLifecycleFixture.execute(plan,
+        fallingSandDriver::observeLifecycle);
+```
+
+The scene requires a `1:0` lower support and `12:0` upper sand cell, causal support removal to
+air, a distinct Packet23 type-70 object, exact `12:0` landing into the lower cell, exact clearing
+of the upper cell, and the same pair after fresh login. Both qualified observation windows remain
+fixed at 40 ticks; coordinates and entity IDs are normalized from canonical evidence.
+
 ### Block lifecycle matrices
 
 `worldline.testkit.BlockConformancePlan` and `BlockLifecyclePlan` are part of

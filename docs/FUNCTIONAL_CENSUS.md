@@ -234,7 +234,7 @@ The dimensions are registry presence, spawn materialization, save/reload, moveme
 collision shape, damage/death, drop matrix, interaction state, environment response, tick
 lifecycle, and native rendering. Profiles route these through universal, archetype, and singular
 cases. Fifty-two cells are bound to existing qualified official-runtime evidence for projectiles,
-paintings, TNT, falling sand, vehicles, hostile and passive mobs. Forty-three of those proofs now
+paintings, TNT, falling sand, vehicles, hostile and passive mobs. Forty-four of those proofs now
 have a strict public binding ledger. Pig materialization, movement, death and pork drop use the
 universal plus archetype routes, while creeper materialization, death and gunpowder drop exercise
 universal plus singular routes. Skeleton, spider, pig-zombie, sheep, and squid each execute bounded
@@ -253,8 +253,11 @@ fixture promotes the proven type-93 materialization and type-62 thrown-egg bound
 historical 40-tick laying probe allowed no egg and therefore no longer counts as proof of the
 tick-lifecycle claim. A complete wolf owner-state fixture composes controlled type-95
 materialization, bone taming, red-collar observation, and the Packet40 sitting-standing-sitting-
-standing sequence. Forty-three verified entity claims now have strict public bindings. The other
-9 verified cells remain `SMOKE_ONLY`; the remaining 212 cells are explicit `UNKNOWN` Atlas claims.
+standing sequence. The falling-sand lifecycle composes the existing type-70 Packet23
+materialization with causal support removal, exact `12:0` landing, upper-cell clearing, and a
+fresh-login persistence boundary. Forty-four verified entity claims now have strict public
+bindings. The other 8 verified cells remain `SMOKE_ONLY`; the remaining 212 cells are explicit
+`UNKNOWN` Atlas claims.
 
 ## Status and automation
 
@@ -330,8 +333,8 @@ reconciliation, the block public TestKit surface now covers 1,056/1,056 claims
 (100%), completing that family's automation-surface target. The final six tick-policy claims bind sand and
 gravel scheduling, natural wheat, cactus, and sugar-cane growth, and furnace tile ticks to official
 public fixtures. Across both current families the honest aggregate is 1,108/1,320 verified
-(83.94%) and 1,099/1,320 public TestKit claims (83.26%). The entity family contributes 43 public
-claims, 9 smoke-only claims, and all 212 unknown cells.
+(83.94%) and 1,100/1,320 public TestKit claims (83.33%). The entity family contributes 44 public
+claims, 8 smoke-only claims, and all 212 unknown cells.
 
 ## Three conformance layers
 
