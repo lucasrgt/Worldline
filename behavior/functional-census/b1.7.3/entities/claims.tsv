@@ -1,4 +1,5 @@
 claim_id	layer	subject_id	template_id	applicability	status	oracle	evidence_id	signature	automation_surface
+all-entities-registry-presence	UNIVERSAL	*	registry-presence	APPLICABLE	VERIFIED	OFFICIAL_CLIENT	census-cycle	3ee49a2de5599392439f066546ff37ca470ed9380f6b80e32e19cdea39082e51	PUBLIC_TESTKIT
 arrow-spawn	UNIVERSAL	b1.7.3:entity/010	spawn-materialization	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m157-bow-arrow	abf0244450acb0b727df9080a6ca53849fcd0ca4ce62de83a13b815d04c8f917	PUBLIC_TESTKIT
 snowball-spawn	UNIVERSAL	b1.7.3:entity/011	spawn-materialization	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m161-snowball	1865bda95354d11a5a95ac4eaaf3fb8ad521e4b6195e6c651715e6955e7a149d	PUBLIC_TESTKIT
 painting-spawn	UNIVERSAL	b1.7.3:entity/009	spawn-materialization	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m177-painting	05ecb02dc2be9a42ab00eeae2c8c1eaf34609b0fe89c3c60aae4774b5e0e90d4	PUBLIC_TESTKIT

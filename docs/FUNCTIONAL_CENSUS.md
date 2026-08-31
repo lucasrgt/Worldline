@@ -233,9 +233,10 @@ their own future denominator instead of being smuggled into its percentage.
 The dimensions are registry presence, spawn materialization, save/reload, movement policy,
 collision shape, damage/death, drop matrix, interaction state, environment response, tick
 lifecycle, and native rendering. Profiles route these through universal, archetype, and singular
-cases. Fifty cells are bound to existing qualified official-runtime evidence for projectiles,
-paintings, TNT, falling sand, vehicles, hostile and passive mobs. Forty-nine of those proofs now
-have a strict public binding ledger. Pig materialization, movement, death and pork drop use the
+cases. Seventy-four cells are bound to qualified official-runtime evidence: the exact 24-entry
+official-client `EntityList` registry plus projectiles, paintings, TNT, falling sand, vehicles,
+hostile mobs, and passive mobs. Every proof has a strict public binding ledger. Pig
+materialization, movement, death and pork drop use the
 universal plus archetype routes, while creeper materialization, death and gunpowder drop exercise
 universal plus singular routes. Skeleton, spider, pig-zombie, sheep, and squid each execute bounded
 materialization, causal death, and historical drop expectations through the universal plus
@@ -260,13 +261,15 @@ materialization with the isolated internal fuse sequence `80,79,40,1,0,-1`, live
 dead/removed terminal states, plus unprimed-block and zero-motion controls. A shared hostile
 behavior matrix then composes night-time zombie identity, two skeleton-fired arrows, spider
 positive-Y motion against both cobblestone and planks, and creeper proximity-fuse strength-three
-destruction with persisted dirt/wool crater cells. Forty-nine verified entity claims now have
-strict public bindings. M436 is deliberately excluded from the arrow
+destruction with persisted dirt/wool crater cells. The universal official-client
+`EntityList` census now adds exact registry-presence evidence for all 24 entity subjects through
+one reusable fixture. All 74 verified entity claims have strict public bindings. M436 is
+deliberately excluded from the arrow
 tick-lifecycle cell: it fires a type-60 projectile but then manually drops and collects a separate
 Packet21 item-262 stack, and its own map excludes in-ground projectile pickup. The M466 dry-pen
 scene is also excluded from squid environment-response: it kills the dry squid
-with a sword and explicitly declines to claim land-caused damage. The final 1 verified cell
-remains `SMOKE_ONLY`; the remaining 214 cells are explicit `UNKNOWN` Atlas claims.
+with a sword and explicitly declines to claim land-caused damage. No verified entity cell remains
+`SMOKE_ONLY`; the remaining 190 cells are explicit `UNKNOWN` Atlas claims.
 
 ## Status and automation
 
@@ -341,9 +344,11 @@ variant, and coupled-transition cases. Together with the modern lifecycle proof
 reconciliation, the block public TestKit surface now covers 1,056/1,056 claims
 (100%), completing that family's automation-surface target. The final six tick-policy claims bind sand and
 gravel scheduling, natural wheat, cactus, and sugar-cane growth, and furnace tile ticks to official
-public fixtures. Across both current families the honest aggregate is 1,106/1,320 verified
-(83.79%) and 1,106/1,320 public TestKit claims (83.79%). The entity family contributes 50 public
-claims, no smoke-only claims, and all 214 unknown cells.
+public fixtures. Across both current families the honest aggregate is 1,130/1,320 verified
+(85.61%) and 1,130/1,320 public TestKit claims (85.61%). The entity family contributes 74 public
+claims, no smoke-only claims, and 190 unknown cells. Reaching the aggregate 98.8% target now
+requires 175 more verified claims; the entity family alone requires 187 more claims to reach its
+own 261/264 threshold.
 
 ## Three conformance layers
 

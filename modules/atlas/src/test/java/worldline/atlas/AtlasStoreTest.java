@@ -72,6 +72,12 @@ public final class AtlasStoreTest {
                 && pigSpawn.refs().contains("atlas.subsystem.entities")
                 && pigSpawn.control().contains("automation=PUBLIC_TESTKIT"),
                 "public entity lifecycle proof was not imported honestly");
+        AtlasRecord itemRegistry = first.get("atlas.claim.entity-001.registry-presence");
+        require(AtlasStatus.VERIFIED.equals(itemRegistry.status())
+                && itemRegistry.refs().contains("atlas.experiment.census-cycle")
+                && itemRegistry.control().contains(
+                        "layer=UNIVERSAL;applicability=APPLICABLE;automation=PUBLIC_TESTKIT"),
+                "universal EntityList registry proof was not imported honestly");
         require(first.get("atlas.claim.entity-090.interaction-state").control()
                 .contains("layer=ARCHETYPE;applicability=APPLICABLE;automation=PUBLIC_TESTKIT"),
                 "complete pig interaction route was not indexed");
@@ -189,7 +195,7 @@ public final class AtlasStoreTest {
                 && taxonomy.contains("subsystem=tile-entities"), "taxonomy index");
         String tags = AtlasQuery.tags(first);
         require(tags.contains("tag=category-claim")
-                && tags.contains("tag=surface-public-testkit\trecords=1106")
+                && tags.contains("tag=surface-public-testkit\trecords=1130")
                 && !tags.contains("tag=surface-internal-api")
                 && !tags.contains("tag=surface-smoke-only"), "tag index");
         try {

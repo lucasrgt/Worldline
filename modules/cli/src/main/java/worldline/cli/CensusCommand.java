@@ -18,6 +18,12 @@ import worldline.testkit.BlockRegistryCensusScenario;
 import worldline.testkit.BlockRegistryEvidence;
 import worldline.testkit.BlockRegistryFixture;
 import worldline.testkit.ConformanceLayer;
+import worldline.testkit.EntityConformancePlan;
+import worldline.testkit.EntityConformanceProfile;
+import worldline.testkit.EntityConformanceTemplate;
+import worldline.testkit.EntityRegistryCensusScenario;
+import worldline.testkit.EntityRegistryEvidence;
+import worldline.testkit.EntityRegistryFixture;
 
 /** Captures the controlled b1.7.3 registry census into canonical files. */
 final class CensusCommand {
@@ -50,6 +56,14 @@ final class CensusCommand {
                 StandardOpenOption.WRITE);
         output.println("registry.sha256=" + Checks.sha256(registryBytes));
         output.println("registry.file=" + registryFile);
+        EntityRegistryEvidence entityRegistry = EntityRegistryFixture.execute(
+                entityRegistryPlan(), new EntityRegistryCensusScenario(runner, "b1.7.3"));
+        Path entityRegistryFile = outDir.resolve("entity-registry.wlevidence");
+        byte[] entityRegistryBytes = entityRegistry.canonical().getBytes(StandardCharsets.UTF_8);
+        Files.write(entityRegistryFile, entityRegistryBytes, StandardOpenOption.CREATE_NEW,
+                StandardOpenOption.WRITE);
+        output.println("entity-registry.sha256=" + Checks.sha256(entityRegistryBytes));
+        output.println("entity-registry.file=" + entityRegistryFile);
         return 0;
     }
 
@@ -68,5 +82,23 @@ final class CensusCommand {
         }
         return new BlockConformancePlan(profiles, Collections.singletonList(
                 new BlockConformanceTemplate("registry-presence", ConformanceLayer.UNIVERSAL)));
+    }
+
+    private static EntityConformancePlan entityRegistryPlan() throws IOException {
+        Path subjects = Paths.get("behavior", "functional-census", "b1.7.3", "entities",
+                "subjects.tsv");
+        List<String> lines = Files.readAllLines(subjects, StandardCharsets.UTF_8);
+        Checks.require(!lines.isEmpty() && lines.get(0).startsWith("subject_id\t"),
+                "invalid Entity Functional Census subjects");
+        List<EntityConformanceProfile> profiles = new ArrayList<EntityConformanceProfile>();
+        for (int line = 1; line < lines.size(); line++) {
+            if (lines.get(line).trim().isEmpty() || lines.get(line).startsWith("#")) continue;
+            String subject = lines.get(line).split("\\t", -1)[0];
+            profiles.add(new EntityConformanceProfile(subject,
+                    Collections.singletonList("registry"), false,
+                    Collections.<String, ConformanceLayer>emptyMap()));
+        }
+        return new EntityConformancePlan(profiles, Collections.singletonList(
+                new EntityConformanceTemplate("registry-presence", ConformanceLayer.UNIVERSAL)));
     }
 }

@@ -1,5 +1,5 @@
 claim_id	layer	subject_id	template_id	applicability	status	oracle	evidence_id	signature	automation_surface
-all-blocks-registry-presence	UNIVERSAL	*	registry-presence	APPLICABLE	VERIFIED	OFFICIAL_CLIENT	census-cycle	23bff719c5b5c7b5fc67f274f49cf1093128641067da9d68384fee9db340ad82	PUBLIC_TESTKIT
+all-blocks-registry-presence	UNIVERSAL	*	registry-presence	APPLICABLE	VERIFIED	OFFICIAL_CLIENT	census-cycle	3ee49a2de5599392439f066546ff37ca470ed9380f6b80e32e19cdea39082e51	PUBLIC_TESTKIT
 glass-break-transition	UNIVERSAL	b1.7.3:block/020	break-transition	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m308-fragile-set	016e31ada167a1772c3c0ec4d610d946ddf26bc0a93c97ad494019ab72c97ce5	PUBLIC_TESTKIT
 glass-drop-matrix	ARCHETYPE	b1.7.3:block/020	drop-matrix	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m308-fragile-set	016e31ada167a1772c3c0ec4d610d946ddf26bc0a93c97ad494019ab72c97ce5	PUBLIC_TESTKIT
 sand-tick-policy	ARCHETYPE	b1.7.3:block/012	tick-policy	APPLICABLE	VERIFIED	OFFICIAL_SERVER	m342-gravity-block-set	959924fb1c3833226b9a7c0ffeebe212f9be0621ba06ca2f083e08492c72d066	PUBLIC_TESTKIT

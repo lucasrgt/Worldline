@@ -207,6 +207,14 @@ collection so the plan does not retain a mutable source iterable.
 
 ### Persistent entity lifecycle matrices
 
+Before lifecycle-specific fixtures run, the universal entity-registry fixture
+captures the official-client `EntityList` twice and requires exact ID, canonical
+name, and mapped implementation-class parity for every one of the 24 registered
+entity types. One reusable implementation expands that bounded registry into 24
+typed `registry-presence` cases and emits equatable
+`worldline.entity-registry-evidence.v1`; registry membership alone makes no
+claim about spawning, ticking, collision, persistence, rendering, or AI.
+
 `EntityConformancePlan` expands persistent entity profiles over reusable dimensions and routes
 each case through `UNIVERSAL`, `ARCHETYPE`, or `SINGULAR`. `EntityLifecycleFixture` executes a
 selected coherent lifecycle rather than counting each operation as a milestone:
