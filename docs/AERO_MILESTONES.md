@@ -63,8 +63,23 @@ The causal-performance wave began at `AERO-M111`:
   visible, and look-ahead chunk pre-bake under a strict one-rebuild-per-frame
   budget. All backlogs drained; the paired 50 ms hitch rate improved from
   19,173 ppm to 11,945 ppm without an allocation regression at the median.
-- `AERO-M119` is current: GL state, geometry, display-list, and LOD A/B matrix.
-- `AERO-M120`: long-soak, reload, world-transition, leak, and promotion gate.
+- `AERO-M119` (`M776`) is complete: the GL, prewarm, display-list, page-cache,
+  and LOD matrix retained only the combinations that passed activation,
+  framebuffer integrity, throughput, p99, and allocation gates.
+- `AERO-M120` (`M777`) is complete: six fresh JVMs classified adaptive
+  prewarm repeatability and kept the candidate default-off when cross-session
+  evidence did not justify promotion.
+- `AERO-M121` (`M782`) is complete: two fresh Java 8 JVMs executed 256 world
+  transitions and 164,096 rebuilds each, bounded hidden wait to 157 frames,
+  and proved scheduler state was fully released on every reset.
+- `AERO-M122` (`M783`) is complete: four counterbalanced fresh-client pairs
+  measured direct visible dirty-to-rebuild latency plus global and in-frustum
+  residuals. The vanilla-first additive scheduler stayed at one extra rebuild
+  per frame and preserved zero-frame explicit visible latency, but retained
+  only 54.98% of baseline FPS, raised p99 to 9.70x and allocation to 1.78x,
+  and one load ended with 380 visible builders pending. The deterministic
+  decision is `keep-disabled`; Aero records the experiment as rejected for
+  gameplay.
 
-Entries after `AERO-M119` remain planned milestones, not completed evidence or
+Entries after `AERO-M122` remain planned milestones, not completed evidence or
 performance claims.
