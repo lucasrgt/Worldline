@@ -46,6 +46,7 @@ final class HarnessFeatureSelfTest {
         PigLifecycleSubsystemSuccessor.selfTest();
         EntityRegistryCensusSuccessor.selfTest();
         EntityRegistrySchemaSuccessor.selfTest();
+        EntityRegistryDocumentationSuccessor.selfTest();
         CandidateReadiness.selfTest();
         CandidateSourceClosure.selfTest();
         NeighborTestKitPinCheck.selfTest();

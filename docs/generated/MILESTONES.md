@@ -657,7 +657,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-wall-attachment-state-domain-cycle` | CARRIED | official Beta 1.7.3 wall-attachment state domains |
 | `b173-wooden-door-state-domain-cycle` | CARRIED | official Beta 1.7.3 wooden-door reachable state domain |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
-| `census-cycle` | CARRIED | runtime-census |
+| `census-cycle` | EXECUTED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
 | `gui-tree` | EXECUTED | ui-tree-equivalence |
 | `lab-cycle` | CARRIED | runtime-lab |
