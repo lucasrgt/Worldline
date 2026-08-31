@@ -39,7 +39,7 @@ final class EntityPhysicalEnvelopeSubsystemSuccessor {
                 "bc3ccdadd2eaa68b4ee9814dd9c6654a157456f39040bacf769798a3ad26a409"},
         {"release/testkit-artifacts.lock",
                 "44989fe93025ff21e456cc3b70dffb7f3d152a997aa7da9f9771759a86270cbc",
-                "3975d5a137e87a668954aeff7f9aecc076d9366e4e2c23fa3460e7449963a015"},
+                "0698bfc5024c0e558b90514ceabd7c725f0cebf9c575e6c1cfc4af3375498342"},
         {"tools/harness/TrainGeneratedDocumentationMigration.java",
                 "797056371c16b71e63f566a60938416512ba77d03371a82b5f6172d7c22b9bdc",
                 "f278bbba0f658872822714af3e42403699d21dd3db35c439e14d460f4b357909"},
