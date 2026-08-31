@@ -30,8 +30,7 @@ public final class VisualState {
         if (stage != 2 || game.world == null || game.player == null) return;
         retained++;
         phase = ((retained - 1) % 600) / 100;
-        if (retained <= REQUIRED) VisualScene.place(game.player, retained);
-        else VisualScene.settle(game.player);
+        VisualScene.place(game.player, retained);
         if (retained == 1) {
             retainedStarted = System.nanoTime();
             System.out.println("[WorldlineM783] retained-start arm=" + ARM);

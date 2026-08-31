@@ -26,7 +26,7 @@ public final class M783AeroChunkSchedulerVisualLatencyCycle {
     private static final String TRACE = "v1|scene=restored-576|pairs=4|"
         + "orders=pages-prebake+prebake-pages+prebake-pages+pages-prebake|"
         + "window=600|fresh-load=per-jvm|route=walk+turn+teleport+mutation+settle+drain|"
-        + "dirty=current-visible1+adjacent1+lookahead1+background1-per-eight|pages=on|"
+        + "dirty=current-visible1+adjacent2+lookahead1-per-eight|pages=on|"
         + "prebake=off-vs-budget1-camera3-age120-debt30|"
         + "capture=wall+allocation+chunk+visible-latency+backlog+world-resets|"
         + "gates=hitch5000ppm+fps3pct+p995pct+alloc5pct+visible-max8+p99-4|"

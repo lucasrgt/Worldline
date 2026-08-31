@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=external-aero-runtime-qualification -->
 <!-- nonclaims=no-off-thread-compilation,no-unbounded-world-generalization,no-promotion-without-all-gates -->
-<!-- frozen-trace=4b5275f49920f5ebfc1e1a0b2266cadcc91a4188ed9037606521fa6896bc9057 -->
+<!-- frozen-trace=37903527839576445f009e6e6b140595131d069a1bd0d8eb3a1a739e2cf856f1 -->
 
 # M783 Aero chunk scheduler visual-latency behavior map
 
@@ -17,8 +17,8 @@
 
 ## Actions and observations
 
-1. Every eight frames, the fixture dirties the camera's current chunk, one
-   adjacent chunk, one look-ahead chunk, and one background chunk.
+1. Every eight frames through frame 450, the fixture dirties the camera's
+   current chunk, two adjacent chunks, and one look-ahead chunk.
 2. A direct census records the frame at which the camera's current chunk is dirtied
    and the frame in which its real `ChunkBuilder.rebuild()` completes.
 3. Each arm also records full frame intervals, current-thread allocation,
@@ -44,6 +44,6 @@ loads. It does not claim off-thread GL compilation, universal results for
 unbounded worlds, or permission to promote when any safety, throughput, memory,
 or visible-latency gate fails.
 
-Frozen trace: `v1|scene=restored-576|pairs=4|orders=pages-prebake+prebake-pages+prebake-pages+pages-prebake|window=600|fresh-load=per-jvm|route=walk+turn+teleport+mutation+settle+drain|dirty=current-visible1+adjacent1+lookahead1+background1-per-eight|pages=on|prebake=off-vs-budget1-camera3-age120-debt30|capture=wall+allocation+chunk+visible-latency+backlog+world-resets|gates=hitch5000ppm+fps3pct+p995pct+alloc5pct+visible-max8+p99-4|decision=promote-or-keep-disabled`.
+Frozen trace: `v1|scene=restored-576|pairs=4|orders=pages-prebake+prebake-pages+prebake-pages+pages-prebake|window=600|fresh-load=per-jvm|route=walk+turn+teleport+mutation+settle+drain|dirty=current-visible1+adjacent2+lookahead1-per-eight|pages=on|prebake=off-vs-budget1-camera3-age120-debt30|capture=wall+allocation+chunk+visible-latency+backlog+world-resets|gates=hitch5000ppm+fps3pct+p995pct+alloc5pct+visible-max8+p99-4|decision=promote-or-keep-disabled`.
 
 Expected signal: `scene=restored-576,pairs=4,jvms=8-fresh,window=600,fresh-load=per-jvm,route=walk+turn+teleport+mutation+settle+drain,pages=on,prebake=off-vs-budget1,visual-latency=measured,backlog=drained,world-reset=observed,hitch=classified,metrics=classified,decision=promote-or-keep-disabled`.

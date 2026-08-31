@@ -9,30 +9,24 @@ final class VisualScene {
     private VisualScene() {}
 
     static void place(ClientPlayerEntity player, int frame) {
-        int cycle = ((frame - 1) % 600) + 1;
         double x = 8.5D, z = 8.5D;
         float yaw = 0.0F;
-        if (cycle > 100 && cycle <= 220) z = 8.5D + (cycle - 100) * 0.5D;
-        else if (cycle > 220 && cycle <= 340) {
-            z = 68.5D;
-            yaw = (float) ((cycle - 220) * 6 % 360);
-        } else if (cycle > 340 && cycle <= 460) {
+        if (frame > 80 && frame <= 320)
+            z = Math.min(38.5D, 8.5D + (frame - 80) * 0.25D);
+        if (frame > 200 && frame <= 320)
+            yaw = (float) ((frame - 200) * 9 % 360);
+        if (frame > 320) {
             x = z = 72.5D;
-            yaw = (float) ((cycle - 340) * 9 % 360);
-        } else if (cycle > 460 && cycle <= 560) {
-            x = Math.max(8.5D, 72.5D - (cycle - 460) * 0.64D);
-            z = 72.5D;
-            yaw = 90.0F;
+            yaw = (float) ((frame - 320) * 5 % 360);
         }
         player.velocityX = player.velocityY = player.velocityZ = 0.0D;
         player.setPositionAndAngles(x, 100.0D, z, yaw, 4.0F);
     }
 
     static void act(Minecraft game, int frame) {
-        int cycle = ((frame - 1) % 600) + 1;
-        if (cycle == 150) WorldlineM783Rehydrator.mutation(game.world, false);
-        if (cycle == 180) WorldlineM783Rehydrator.mutation(game.world, true);
-        if (cycle > 540 || cycle % 8 != 1) return;
+        if (frame == 150) WorldlineM783Rehydrator.mutation(game.world, false);
+        if (frame == 180) WorldlineM783Rehydrator.mutation(game.world, true);
+        if (frame > 450 || frame % 8 != 1) return;
         int chunkX = floor(game.player.x) >> 4;
         int chunkZ = floor(game.player.z) >> 4;
         double radians = Math.toRadians(game.player.yaw);
@@ -40,13 +34,8 @@ final class VisualScene {
         int forwardZ = (int) Math.round(Math.cos(radians));
         dirty(game, chunkX, chunkZ, true, frame);
         dirty(game, chunkX + 1, chunkZ, false, frame);
+        dirty(game, chunkX - 1, chunkZ, false, frame);
         dirty(game, chunkX + forwardX * 2, chunkZ + forwardZ * 2, false, frame);
-        dirty(game, chunkX - forwardX * 3, chunkZ - forwardZ * 3, false, frame);
-    }
-
-    static void settle(ClientPlayerEntity player) {
-        player.velocityX = player.velocityY = player.velocityZ = 0.0D;
-        player.setPositionAndAngles(8.5D, 100.0D, 8.5D, 0.0F, 4.0F);
     }
 
     private static void dirty(Minecraft game, int chunkX, int chunkZ,
