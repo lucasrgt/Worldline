@@ -1,6 +1,6 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=aero-smooth-light-default-lifecycle -->
-<!-- nonclaims=gpu-performance-or-minecraft-rendering -->
+<!-- nonclaims=gpu-performance,minecraft-rendering -->
 <!-- frozen-trace=8ebf6d22267e4e6fd22f47dc275a5993b15d9b7c7188ea3cf69dd35ec6feef4d -->
 
 # M781 Aero smooth-light default and lifecycle behavior map
