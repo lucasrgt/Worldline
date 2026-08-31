@@ -1,7 +1,7 @@
 # Worldline smoke qualification lock v5
-# Reviewed anchor for the universal entity registry schema refresh.
 schema=5
 algorithm=worldline-smoke-input-v6-tokens
+# Reviewed anchor for the universal entity registry schema refresh.
 smoke.b173-bed-subsystem-conformance-cycle.fingerprint=7906d8a371d161d2c16741797a595a685de457feca71009c34de3ad6d063b302
 smoke.b173-bed-subsystem-conformance-cycle.observation_sha256=2c141749ab20b704600ef76a1ae2935e59e02bf4db348fdb2d979b22762b5440
 smoke.b173-bed-subsystem-conformance-cycle.evidence_sha256=fa642d01c952e9a20b1b6df2a7a6505194cd4b9cd5315bc8c7443d305b015b0a
