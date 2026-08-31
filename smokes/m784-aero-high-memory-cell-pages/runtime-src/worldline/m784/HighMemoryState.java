@@ -24,7 +24,7 @@ public final class HighMemoryState {
         * 1_000_000L;
     private static int stage, worldWarm, routeWarm, convergenceFrames, stablePages, retained, checkpoint;
     private static int machines, lastCached = -1;
-    private static boolean capture, measuring, armBegan;
+    private static boolean capture, measuring, armBegan, controlledSubmission;
     private static long measurementStarted;
     private static Minecraft activeGame;
 
@@ -86,20 +86,26 @@ public final class HighMemoryState {
     public static boolean freezeTicks() { return stage == 2; }
     public static boolean captureFrame() { return capture; }
     public static int checkpoint() { return checkpoint; }
+    public static boolean controlledSubmission() { return controlledSubmission; }
 
     /** Submits the complete fixed fixture immediately before Aero's real flush. */
     public static void submitFixture(double cameraX, double cameraY, double cameraZ) {
         Minecraft game = activeGame;
         if (stage != 2 || game == null || game.world == null) return;
         HighMemoryProbe.beginScene();
-        for (Object value : game.world.blockEntities) {
-            BlockEntity block = (BlockEntity) value;
-            if (!(block instanceof MegaModelBlockEntity)
-                    || !WorldlineM784Rehydrator.contains(block.x, block.y, block.z)) continue;
-            Aero_BECellRenderer.queueAtRest(MegaModelBlockEntityRenderer.MODEL,
-                MegaModelBlockEntityRenderer.TEXTURE, block,
-                block.x - cameraX, block.y - cameraY, block.z - cameraZ,
-                0.0F, 1.0F, Aero_RenderOptions.DEFAULT);
+        controlledSubmission = true;
+        try {
+            for (Object value : game.world.blockEntities) {
+                BlockEntity block = (BlockEntity) value;
+                if (!(block instanceof MegaModelBlockEntity)
+                        || !WorldlineM784Rehydrator.contains(block.x, block.y, block.z)) continue;
+                Aero_BECellRenderer.queueAtRest(MegaModelBlockEntityRenderer.MODEL,
+                    MegaModelBlockEntityRenderer.TEXTURE, block,
+                    block.x - cameraX, block.y - cameraY, block.z - cameraZ,
+                    0.0F, 1.0F, Aero_RenderOptions.DEFAULT);
+            }
+        } finally {
+            controlledSubmission = false;
         }
     }
 

@@ -9,6 +9,7 @@
     "HighMemoryCloudMixin",
     "HighMemoryDistanceMixin",
     "HighMemoryMegaRendererMixin",
+    "HighMemoryQueueMixin",
     "HighMemoryTranslucentMixin"
   ],
   "injectors": { "defaultRequire": 1 }
