@@ -18,8 +18,8 @@ import java.util.stream.Stream;
 public final class TestKitPackage {
     private static final String VERSION = "0.3.1";
     private static final String GROUP = "io.github.lucasrgt.worldline";
-    private static final List<String> API = Arrays.asList("api", "testmodel", "testapi");
-    private static final List<String> RUNNER = Arrays.asList("optimization", "api", "invariants",
+    private static final List<String> API = Arrays.asList("api", "extensions", "testmodel", "testapi");
+    private static final List<String> RUNNER = Arrays.asList("optimization", "api", "extensions", "invariants",
             "semantics", "trace", "kernel", "reproduction", "mods", "analysis", "modtest",
             "minimization", "testmodel", "testapi", "testkit", "cli");
     private TestKitPackage() {}

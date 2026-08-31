@@ -87,7 +87,9 @@ final class MilestoneObjective {
         same(descriptor, "milestone.kind", required("kind"));
         same(descriptor, "milestone.capability", required("capability"));
         sameList(descriptor, "milestone.atoms", list("atoms"));
-        sameList(descriptor, "milestone.layers", list("layers"));
+        if ("behavior-package".equals(required("kind"))) {
+            sameList(descriptor, "milestone.layers", list("layers"));
+        }
         sameList(descriptor, "milestone.census.claims", list("census.claims"));
         sameList(descriptor, "milestone.acceptance", list("acceptance"));
         if ("behavior-package".equals(required("kind"))) {

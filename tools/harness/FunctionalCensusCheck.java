@@ -95,6 +95,7 @@ public final class FunctionalCensusCheck {
                 : Map.of();
         Result result = claims(claims, exceptions, subjectById, templateById, singular,
                 bindings, bindingsRequired);
+        require(bindingsRequired || result.publicTestkit == 0, "public claims require a strict binding ledger");
         int candidates = Math.multiplyExact(subjects.rows.size(), templates.rows.size());
         require(subjects.rows.size() == integer(family, "subjects_expected"),
                 family.get("family_id") + " subject census drifted");
@@ -193,7 +194,7 @@ public final class FunctionalCensusCheck {
                     publicClaims.add(key);
                     if (bindingsRequired) {
                         String binding = bindings.get(key);
-                        require(binding != null, "public entity claim lacks TestKit binding: " + key);
+                        require(binding != null, "public claim lacks TestKit binding: " + key);
                         require(binding.equals(row.get("evidence_id")),
                                 "TestKit binding evidence differs: " + key);
                     }
@@ -215,7 +216,7 @@ public final class FunctionalCensusCheck {
             resolved++;
         }
         if (bindingsRequired) require(publicClaims.equals(bindings.keySet()),
-                "entity TestKit binding ledger differs from public claims");
+                "TestKit binding ledger differs from public claims");
         require(publicTestkit <= verified, "public TestKit claims exceed verified claims");
         return new Result(resolved, verified, publicTestkit);
     }

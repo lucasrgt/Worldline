@@ -132,7 +132,8 @@ final class MilestoneContract {
     }
 
     void validateCompiledAtlas() throws Exception {
-        String[] modules = {"api", "invariants", "semantics", "trace", "minimization", "atlas"};
+        String[] modules = {"api", "extensions", "invariants", "semantics", "trace",
+                "minimization", "atlas"};
         List<URL> urls = new ArrayList<>();
         for (String module : modules) {
             Path output = build.resolve("classes").resolve(module);
@@ -152,7 +153,8 @@ final class MilestoneContract {
     }
 
     static void validateAllCompiledAtlas(Path root, Path build) throws Exception {
-        String[] modules = {"api", "invariants", "semantics", "trace", "minimization", "atlas"};
+        String[] modules = {"api", "extensions", "invariants", "semantics", "trace",
+                "minimization", "atlas"};
         List<URL> urls = new ArrayList<>();
         for (String module : modules) urls.add(build.resolve("classes").resolve(module)
                 .toUri().toURL());

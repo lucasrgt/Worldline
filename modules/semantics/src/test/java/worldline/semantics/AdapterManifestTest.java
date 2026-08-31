@@ -97,9 +97,12 @@ public final class AdapterManifestTest {
                     "worldline/rogue/SaveBudget#cap", "SAVE_CHUNKS", "").getBytes(
                     StandardCharsets.UTF_8));
             failure(() -> AdapterManifest.load(manifest, catalog), "unknown driver");
-            Path extension = temp.resolve("worldline").resolve("extensions")
-                    .resolve("sample-mod").resolve("manifest.properties");
+            Path extensionRoot = temp.resolve("worldline").resolve("extensions").resolve("sample-mod");
+            Path extension = extensionRoot.resolve("semantics.properties");
             Files.createDirectories(extension.getParent());
+            Files.write(extensionRoot.resolve("manifest.properties"),
+                    ("schema=worldline.extension.v1\nid=sample-mod\nversion=1.0.0\n"
+                    + "entrypoint=sample.Extension\nworldline.api=1\n").getBytes(StandardCharsets.UTF_8));
             Files.write(extension, body("sample-mod", "extension", "worldline/sample/",
                     "worldline/sample/Probe#onTick", "CLIENT_TICK_ROOT",
                     "net/minecraft/client/Minecraft.runTick").getBytes(StandardCharsets.UTF_8));
@@ -107,6 +110,7 @@ public final class AdapterManifestTest {
             require("extension".equals(loaded.kind()) && loaded.sites().size() == 1,
                     "worldline/extensions layout");
         } finally {
+            Files.deleteIfExists(temp.resolve("worldline/extensions/sample-mod/semantics.properties"));
             Files.deleteIfExists(temp.resolve("worldline/extensions/sample-mod/manifest.properties"));
             Files.deleteIfExists(temp.resolve("worldline/extensions/sample-mod"));
             Files.deleteIfExists(temp.resolve("worldline/extensions"));

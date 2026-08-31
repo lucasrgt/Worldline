@@ -23,7 +23,7 @@ public final class AdapterManifest {
     public static final String SCHEMA = "worldline.adapter.semantics.v1";
     public static final List<String> DRIVERS = Collections.unmodifiableList(
             Arrays.asList("b173-client", "b173-server", "stationapi"));
-    private static final Pattern ADAPTER = Pattern.compile("[a-z][a-z0-9-]{0,63}");
+    private static final Pattern ADAPTER = Pattern.compile("[a-z][a-z0-9_.-]{0,63}");
     private static final Pattern SITE = Pattern.compile("worldline/[A-Za-z0-9_$./-]+#[A-Za-z0-9_$.]+");
     private final String adapter, kind, prefix;
     private final List<Site> sites;
@@ -138,11 +138,23 @@ public final class AdapterManifest {
         try (DirectoryStream<Path> children = Files.newDirectoryStream(directory)) {
             for (Path child : children) {
                 if (!Files.isDirectory(child)) continue;
-                Path manifest = nested == null ? child.resolve("manifest.properties")
+                Path manifest = nested == null ? extensionSemantics(child)
                         : child.resolve(nested).resolve("manifest.properties");
-                if (Files.isRegularFile(manifest)) manifests.add(load(manifest, catalog));
+                if (manifest != null && Files.isRegularFile(manifest)) manifests.add(load(manifest, catalog));
             }
         }
+    }
+
+    private static Path extensionSemantics(Path directory) throws IOException {
+        Path separate = directory.resolve("semantics.properties");
+        if (Files.isRegularFile(separate)) return separate;
+        Path legacy = directory.resolve("manifest.properties");
+        if (!Files.isRegularFile(legacy)) return null;
+        Properties fields = new Properties();
+        try (java.io.Reader reader = Files.newBufferedReader(legacy, StandardCharsets.UTF_8)) {
+            fields.load(reader);
+        }
+        return SCHEMA.equals(fields.getProperty("schema")) ? legacy : null;
     }
 
     private static List<AdapterManifest> finish(List<AdapterManifest> manifests) {

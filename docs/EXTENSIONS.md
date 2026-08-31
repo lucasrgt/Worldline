@@ -11,8 +11,8 @@ without copying its implementation into Worldline.
 
 ## Status and terminology
 
-In Worldline 0.x, an **extension** is a repository convention, not a loadable
-plugin artifact. An extension can contain:
+In Worldline 0.x, an **extension** is a public Java 8 SDK entrypoint discovered
+from a project-owned manifest. An extension can contain:
 
 - ordinary Java 8 TestKit specs;
 - typed fixtures, actions, and assertions owned by the external project;
@@ -20,10 +20,12 @@ plugin artifact. An extension can contain:
 - project-owned optimization records;
 - frozen test and benchmark evidence.
 
-There is currently no `worldline-extension.properties` format and no public
-mapping-registration API. Do not invent either in an external repository.
-Stable formats will be introduced only after multiple real integrations prove
-the common contract.
+The stable discovery record is
+`worldline/extensions/<id>/manifest.properties` with schema
+`worldline.extension.v1`. Optional promoted semantic bindings live beside it
+in `semantics.properties`; loader-specific classes never enter the SDK. A
+validated extension plan is automatically importable into the canonical Atlas,
+and `worldline atlas extensions <project-root>` reports its versioned records.
 
 ## Choose an integration lane
 
@@ -50,6 +52,9 @@ project/
 |-- worldline-extension/
 |   |-- src/main/java/                typed test helpers, if needed
 |   `-- README.md                     boundary and non-claims
+|-- worldline/extensions/<id>/
+|   |-- manifest.properties           SDK entrypoint and capabilities
+|   `-- semantics.properties          optional promoted role bindings
 |-- optimizations/
 |   |-- catalog/                      project-owned optimization records
 |   `-- evidence/                     bounded summaries or pointers

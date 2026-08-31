@@ -53,6 +53,15 @@ public final class AtlasTaxonomy {
         if (!surface.isEmpty()) {
             tags.add("surface-" + surface.toLowerCase(Locale.US).replace('_', '-'));
         }
+        String extension = control(record.control(), "extension");
+        if (!extension.isEmpty()) {
+            tags.add("extension");
+            tags.add("extension-" + extension);
+            String contributed = control(record.control(), "extension-tags");
+            if (!contributed.isEmpty()) for (String value : contributed.split("\\+", -1)) {
+                if (!value.isEmpty()) tags.add("extension-tag-" + value);
+            }
+        }
         return Collections.unmodifiableList(new ArrayList<String>(tags));
     }
 

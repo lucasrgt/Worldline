@@ -30,6 +30,8 @@ final class AtlasCommand {
         if (arguments.length == 4 && arguments[1].matches("-?[0-9]+"))
             return renderSeed(arguments, output);
         if (arguments.length == 2 && "status".equals(arguments[1])) return status(output, error);
+        if (arguments.length == 3 && "extensions".equals(arguments[1]))
+            return AtlasExtensionCommand.run(arguments[2], output, error);
         if (arguments.length == 3 && "show".equals(arguments[1]))
             return show(arguments[2], output, error);
         if (arguments.length == 3 && "search".equals(arguments[1]))
@@ -52,6 +54,7 @@ final class AtlasCommand {
         if (arguments.length == 4 && "changed".equals(arguments[1]) && "--since".equals(arguments[2]))
             return changed(arguments[3], output, error);
         error.println("usage: worldline atlas status");
+        error.println("   or: worldline atlas extensions <project-root>");
         error.println("   or: worldline atlas show <id>");
         error.println("   or: worldline atlas search <term>");
         error.println("   or: worldline atlas index <query>");

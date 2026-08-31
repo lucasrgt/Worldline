@@ -14,7 +14,8 @@ import java.util.regex.Pattern;
 final class FunctionalCensusBindings {
     private static final Pattern TOKEN = Pattern.compile("[a-z][a-z0-9-]{0,62}");
     private static final Pattern BINDING = Pattern.compile(
-            "(worldline\\.[A-Za-z][A-Za-z0-9.]+)#[a-z][A-Za-z0-9]*");
+            "(worldline\\.testkit\\.[A-Z][A-Za-z0-9]+)#([a-z][A-Za-z0-9]*)");
+    private static final List<String> PUBLIC_MODULES = List.of("testapi", "testkit");
     private static final String HEADER =
             "subject_id\ttemplate_id\tfixture\tbinding\tevidence_id";
 
@@ -49,13 +50,38 @@ final class FunctionalCensusBindings {
                     "invalid TestKit binding metadata: " + key);
             Matcher matcher = BINDING.matcher(fields[3]);
             require(matcher.matches(), "invalid public TestKit binding: " + key);
-            Path source = root.resolve("modules/testapi/src/main/java")
-                    .resolve(matcher.group(1).replace('.', '/') + ".java");
-            require(Files.isRegularFile(source),
-                    "public TestKit binding source is absent: " + key);
+            Path source = publicSource(root, matcher.group(1));
+            require(source != null, "public TestKit binding source is absent: " + key);
+            String java = Files.readString(source, StandardCharsets.UTF_8);
+            String simpleName = matcher.group(1).substring(matcher.group(1).lastIndexOf('.') + 1);
+            require(Pattern.compile("\\bpublic\\s+(?:(?:final|abstract)\\s+)?(?:class|interface)\\s+"
+                    + Pattern.quote(simpleName) + "\\b").matcher(java).find(),
+                    "TestKit binding type is not public: " + key);
+            require(Pattern.compile("\\bpublic\\s+(?:static\\s+)?[^;{}]*\\b"
+                    + Pattern.quote(matcher.group(2)) + "\\s*\\(", Pattern.DOTALL)
+                    .matcher(java).find(), "TestKit binding method is not public: " + key);
+            for (String sourceLine : java.split("\\R", -1)) {
+                String imported = sourceLine.trim();
+                if (!imported.startsWith("import worldline.")) continue;
+                require(imported.startsWith("import worldline.api.")
+                        || imported.startsWith("import worldline.extension.")
+                        || imported.startsWith("import worldline.test.")
+                        || imported.startsWith("import worldline.testkit."),
+                        "public TestKit binding imports internal code: " + key);
+            }
         }
         require(!result.isEmpty(), "required TestKit binding ledger is empty");
         return Map.copyOf(result);
+    }
+
+    private static Path publicSource(Path root, String bindingClass) {
+        String relative = bindingClass.replace('.', '/') + ".java";
+        for (String module : PUBLIC_MODULES) {
+            Path source = root.resolve("modules").resolve(module).resolve("src/main/java")
+                    .resolve(relative);
+            if (Files.isRegularFile(source)) return source;
+        }
+        return null;
     }
 
     private static void require(boolean value, String message) {
