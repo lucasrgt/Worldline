@@ -9,6 +9,7 @@ final class PooledSmokeCheck {
 
     static void execute(String id) throws Exception {
         Path root = Path.of("").toAbsolutePath().normalize(); Properties lease = verify(root);
+        boolean differential = "executor-differential".equals(lease.getProperty("purpose"));
         SmokeGitState state = SmokeGitState.read(root);
         require(state.clean() && state.head().equals(lease.getProperty("head"))
                 && state.tree().equals(lease.getProperty("tree")),
@@ -16,7 +17,8 @@ final class PooledSmokeCheck {
         SmokeDiscovery.Entry smoke = SmokeDiscovery.require(root, id);
         MilestoneContract contract = new MilestoneContract(root, id, root.resolve(".worldline/build"));
         contract.validate(); SmokeReceiptCache cache = new SmokeReceiptCache(root);
-        require(cache.availablePin(smoke) == null, "pooled smoke already has a current proof: " + id);
+        require(differential || cache.availablePin(smoke) == null,
+                "pooled smoke already has a current proof: " + id);
         String fingerprint = cache.fingerprint(smoke);
         SmokeObservationCache observations = new SmokeObservationCache(root);
         String observationFingerprint = observations.fingerprint(smoke);
@@ -37,14 +39,17 @@ final class PooledSmokeCheck {
 
     private static Properties verify(Path root) throws Exception {
         String requested = requiredEnvironment("WORLDLINE_RUNTIME_POOL_FILE");
-        String secret = requiredEnvironment("WORLDLINE_RUNTIME_POOL_TOKEN");
         Path directory = root.resolve(".worldline/runtime-fabric").normalize();
         Path file = Path.of(requested).toAbsolutePath().normalize();
         require(file.startsWith(directory) && Files.isRegularFile(file), "invalid pool lease file");
         Properties values = new Properties(); try (var reader = Files.newBufferedReader(
                 file, StandardCharsets.UTF_8)) { values.load(reader); }
-        require("1".equals(values.getProperty("schema")) && secret.equals(values.getProperty("secret"))
+        require("1".equals(values.getProperty("schema"))
                 && root.toString().equals(values.getProperty("root")), "pool lease identity mismatch");
+        boolean differential = "executor-differential".equals(values.getProperty("purpose"));
+        if (differential) verifyDifferential(values);
+        else require(requiredEnvironment("WORLDLINE_RUNTIME_POOL_TOKEN")
+                .equals(values.getProperty("secret")), "pool lease secret mismatch");
         if ("docker".equals(values.getProperty("backend"))) {
             require("1".equals(System.getenv("WORLDLINE_CONTAINER_ISOLATED"))
                     && Files.isRegularFile(Path.of("/.dockerenv")),
@@ -61,8 +66,22 @@ final class PooledSmokeCheck {
         ProcessHandle owner = ProcessHandle.of(Long.parseLong(parent)).orElseThrow();
         String command = owner.info().commandLine().orElse("").replace('\\', '/');
         require(owner.isAlive() && (command.contains("HostSmokePool")
-                || command.contains("ContainerSmokePool")), "pool lease owner is not active");
+                || command.contains("ContainerSmokePool")
+                || differential && command.contains("ExecutorServerCycle")),
+                "pool lease owner is not active");
         return values;
+    }
+
+    private static void verifyDifferential(Properties values) {
+        require("1".equals(requiredEnvironment("WORLDLINE_RUNTIME_DIFFERENTIAL")),
+                "executor differential capability is absent");
+        String lease = requiredEnvironment("WORLDLINE_RUNTIME_PARENT_LEASE");
+        require(lease.matches("[0-9]+") && lease.equals(values.getProperty("lease.pid")),
+                "executor differential runtime lease mismatch");
+        ProcessHandle owner = ProcessHandle.of(Long.parseLong(lease)).orElseThrow();
+        String command = owner.info().commandLine().orElse("").replace('\\', '/');
+        require(owner.isAlive() && command.contains("FairLeaseCommand"),
+                "canonical runtime lease owner is not active");
     }
 
     private static String requiredEnvironment(String name) {

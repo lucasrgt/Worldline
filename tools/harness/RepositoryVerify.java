@@ -55,6 +55,18 @@ final class RepositoryVerify {
                 System.err.println("train readiness failed: " + error.getMessage()); System.exit(1); }
             return;
         }
+        if (Arrays.equals(arguments, new String[] {"--executor-server"})) {
+            try {
+                String output = ProcessCapture.require(Path.of("").toAbsolutePath().normalize(),
+                        List.of("java", "tools/containers/RuntimeFabricLauncher.java",
+                                "ExecutorServerCycle"), 1_800);
+                System.out.print(output);
+            } catch (Exception error) {
+                System.err.println("executor server qualification failed: " + error.getMessage());
+                System.exit(1);
+            }
+            return;
+        }
         if (Arrays.equals(arguments, new String[] {"--orchestrator"})) {
             orchestrator(); return;
         }

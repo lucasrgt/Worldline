@@ -80,9 +80,9 @@ public final class Gate {
         if (Arrays.equals(arguments, new String[] {"--train-readiness"})) {
             executePhase(arguments, false, true, false); return;
         }
-        boolean smoke = arguments.length > 0 && "--smoke".equals(arguments[0]);
+        boolean smoke = arguments.length > 0 && "--smoke".equals(arguments[0]); boolean executorServer = Arrays.equals(arguments, new String[] {"--executor-server"});
         boolean pinnedSmoke = arguments.length > 0 && "--pinned-smoke".equals(arguments[0]);
-        executePhase(arguments, smoke, true, smoke && !pinnedSmoke);
+        executePhase(arguments, smoke || executorServer, !executorServer, executorServer || smoke && !pinnedSmoke);
     }
 
     private void executeMilestone(String id) throws Exception {
@@ -133,7 +133,7 @@ public final class Gate {
                 || Arrays.equals(arguments, new String[] {"--train-readiness"})
                 || Arrays.equals(arguments, new String[] {"--executor-tooling"})
                 || Arrays.equals(arguments, new String[] {"--executor-environment"})
-                || Arrays.equals(arguments, new String[] {"--executor-filesystem"})
+                || Arrays.equals(arguments, new String[] {"--executor-filesystem"}) || Arrays.equals(arguments, new String[] {"--executor-server"})
                 || Arrays.equals(arguments, new String[] {"--accept-legacy-smoke-baseline"})
                 || arguments.length == 1 && maintenance(arguments[0])
                 || arguments.length == 2 && ("--new-milestone".equals(arguments[0])
@@ -161,7 +161,7 @@ public final class Gate {
                 + "--seal-lane-portability|"
                 + "--module-cache-doctor|--module-cache-gc|--cache-doctor|--cache-gc|"
                 + "--cache-rebuild-drill|"
-                + "--executor-tooling|--executor-environment|--executor-filesystem|"
+                + "--executor-tooling|--executor-environment|--executor-filesystem|--executor-server|"
                 + "--new-milestone ID|--milestone ID|--lane-differential ID|"
                 + "--candidate-ready ID|--candidate ID|--self-test]");
         if (arguments.length == 2 && !arguments[1].matches("[a-z0-9]+(?:-[a-z0-9]+)*"))

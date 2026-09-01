@@ -14,22 +14,33 @@ public final class PoolLeaseToken {
     public static void main(String[] arguments) {
         try {
             if (List.of(arguments).equals(List.of("--self-test"))) { selfTest(); return; }
-            require(arguments.length == 5 && arguments[0].equals("create"),
-                    "usage: PoolLeaseToken create FILE SECRET PARENT_PID LOCK");
-            create(Path.of(arguments[1]), arguments[2], arguments[3], Path.of(arguments[4]), true);
+            require((arguments.length == 5 || arguments.length == 7)
+                            && arguments[0].equals("create"),
+                    "usage: PoolLeaseToken create FILE SECRET PARENT_PID LOCK"
+                            + " [executor-differential LEASE_PID]");
+            String purpose = arguments.length == 7 ? arguments[5] : "smoke-pool";
+            String lease = arguments.length == 7 ? arguments[6] : null;
+            create(Path.of(arguments[1]), arguments[2], arguments[3], Path.of(arguments[4]),
+                    true, purpose, lease);
         } catch (Exception error) {
             System.err.println("pool lease token failed: " + error.getMessage()); System.exit(1);
         }
     }
 
     private static void create(Path requested, String secret, String parent, Path lock,
-            boolean requireClean) throws Exception {
+            boolean requireClean, String purpose, String leasePid) throws Exception {
         Path directory = ROOT.resolve(".worldline/runtime-fabric").normalize();
         Path file = requested.toAbsolutePath().normalize();
         require(file.startsWith(directory) && !file.equals(directory), "token escaped runtime fabric");
         require(secret.matches("[0-9a-f-]{36}") && parent.matches("[0-9]+"), "invalid token identity");
         ProcessHandle owner = ProcessHandle.of(Long.parseLong(parent)).orElseThrow();
         require(owner.isAlive(), "pool owner is not alive");
+        require(List.of("smoke-pool", "executor-differential").contains(purpose),
+                "invalid pool purpose");
+        require((purpose.equals("executor-differential") && leasePid != null
+                        && leasePid.matches("[0-9]+"))
+                        || (purpose.equals("smoke-pool") && leasePid == null),
+                "invalid differential lease identity");
         require(!requireClean || capture("status", "--porcelain", "--untracked-files=all").isBlank(),
                 "pool token requires a clean worktree");
         Properties values = new Properties(); values.setProperty("schema", "1");
@@ -37,6 +48,8 @@ public final class PoolLeaseToken {
         values.setProperty("root", ROOT.toString()); values.setProperty("head", capture("rev-parse", "HEAD"));
         values.setProperty("tree", capture("rev-parse", "HEAD^{tree}"));
         values.setProperty("lock.path", lock.toAbsolutePath().normalize().toString());
+        values.setProperty("purpose", purpose);
+        if (leasePid != null) values.setProperty("lease.pid", leasePid);
         values.setProperty("created", Instant.now().toString()); Files.createDirectories(directory);
         try (var writer = Files.newBufferedWriter(file, StandardCharsets.UTF_8)) {
             values.store(writer, "Worldline official-runtime pool capability");
@@ -58,11 +71,13 @@ public final class PoolLeaseToken {
     private static void selfTest() throws Exception {
         Path file = ROOT.resolve(".worldline/runtime-fabric/token-self-test.properties");
         create(file, "00000000-0000-0000-0000-000000000000",
-                Long.toString(ProcessHandle.current().pid()), file.resolveSibling("lock"), false);
+                Long.toString(ProcessHandle.current().pid()), file.resolveSibling("lock"),
+                false, "smoke-pool", null);
         Properties values = new Properties(); try (var reader = Files.newBufferedReader(file)) {
             values.load(reader);
         }
         require("1".equals(values.getProperty("schema"))
+                && "smoke-pool".equals(values.getProperty("purpose"))
                 && values.getProperty("head").matches("[0-9a-f]{40,64}"), "token self-test drift");
         Files.delete(file); System.out.println("pool lease token self-test passed");
     }
