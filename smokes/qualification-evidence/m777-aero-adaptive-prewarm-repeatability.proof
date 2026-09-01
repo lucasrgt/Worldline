@@ -1,5 +1,5 @@
 schema=1
 id=m777-aero-adaptive-prewarm-repeatability
-fingerprint=d826bc7880a45b74720daf05252c37a9bb5e46714c697836412a22aa737a03a7
+fingerprint=7f0f9ddbdac7d3e432903f4561581001af52caf2d3f67d96bb9946f38601d619
 observation.sha256=fb58e3387b2a9de392a95643f65792b6def76f9731ada1c3aa1bed087a8b6688
 source=refactor-equivalent

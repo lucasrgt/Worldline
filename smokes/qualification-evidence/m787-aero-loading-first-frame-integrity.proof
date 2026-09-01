@@ -1,5 +1,5 @@
 schema=1
 id=m787-aero-loading-first-frame-integrity
-fingerprint=3e58b14cbde0f488409a83229fcb6eaabf6dc17fb65291d90371ea7151ae96a6
+fingerprint=470333f266a3f28741111a327c4a04c4c82dd8ad20c5086f4f413da65d6eb70f
 observation.sha256=372f7c85344a3e6e6352c37853902fb399dd6f0f52c8d3e42b9ac9bd554684a6
-source=executed
+source=refactor-equivalent

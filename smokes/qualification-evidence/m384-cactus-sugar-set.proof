@@ -1,5 +1,5 @@
 schema=1
 id=m384-cactus-sugar-set
-fingerprint=00113ac2d6445adf9d5b44621257a220c0ad73af8933c5ba971ad96a3645d3e9
+fingerprint=dacdd9a07a12184cdb1a91b5ecf45dccc656a296b60402ea42055d98fe122cb0
 observation.sha256=ebe81626228e8dc034975562ddc312713b9877d4020a97cec9b6e38884191824
 source=refactor-equivalent

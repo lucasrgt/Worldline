@@ -1,5 +1,5 @@
 schema=1
 id=m618-wolf-tame-set
-fingerprint=b27ba77b1a0ed21ef2693d3a392c4668bd666013583b1cd4da02c317f1357449
+fingerprint=522af52d99ab5374286814921084caaa37ecbc30ee62d4b9ca6dc3551997589c
 observation.sha256=f93bd28b62d55bab1ddc7a899b1d07dc0040f00a7da63af300bfa3bda044d066
-source=executed
+source=refactor-equivalent

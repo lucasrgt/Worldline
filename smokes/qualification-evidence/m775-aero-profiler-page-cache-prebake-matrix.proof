@@ -1,5 +1,5 @@
 schema=1
 id=m775-aero-profiler-page-cache-prebake-matrix
-fingerprint=6c1394f95540a516a40e5a193c1c3e6e4ae5b18410f7cc0af31d499bd5c8f3c2
+fingerprint=eb02a8bda929f9a413fae7e4795744ba7af5a69fe79a1b73380d6ae287cdede1
 observation.sha256=ad49b7592796a0e834d60d2705eca51ff5bf038ea4a2f6116052a24594967640
-source=executed
+source=refactor-equivalent

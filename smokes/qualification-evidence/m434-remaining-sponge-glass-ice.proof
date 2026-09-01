@@ -1,5 +1,5 @@
 schema=1
 id=m434-remaining-sponge-glass-ice
-fingerprint=c8ef11272449542e4356f58cf9760c32c3cc1a1fae56d48f640aaf1320307854
+fingerprint=a90d13521e78d39084b41c8fee48246d1a39af93e39dd34462c23718c3aaaf68
 observation.sha256=6d7912f026b21209dc1415bbf5670070d8df13f88e82b8fb1411ae9be183c5a8
-source=executed
+source=refactor-equivalent

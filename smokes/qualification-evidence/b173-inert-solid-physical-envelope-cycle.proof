@@ -1,5 +1,5 @@
 schema=1
 id=b173-inert-solid-physical-envelope-cycle
-fingerprint=6ac2c4d7417b8c15a2ccd4db06a0706116e7ff6680dc009c3ac5a9e642e31600
+fingerprint=80e3944a10fccadc5b3ec17fe32d13c51ac0ecb8f99bfc24620f26273f161b29
 observation.sha256=e011b5a9d2645532b26587cbcfdf38f2a28944f99c2ce3d32167fb463923d004
-source=executed
+source=refactor-equivalent

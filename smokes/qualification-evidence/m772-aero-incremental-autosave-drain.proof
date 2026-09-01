@@ -1,5 +1,5 @@
 schema=1
 id=m772-aero-incremental-autosave-drain
-fingerprint=adfce8e3dbbc3912dd6d0a7622fddd41a98543e3921bdf4a4129c55cc9127704
+fingerprint=7e1cff60d271be97c1bc308930b4adbc038ce7a5471ff4654ca200aabf947d8e
 observation.sha256=9a3c2d0652d3734962fe0f835b6e746f6b6cd969dd7b7260102d7068acbc33e6
-source=executed
+source=refactor-equivalent

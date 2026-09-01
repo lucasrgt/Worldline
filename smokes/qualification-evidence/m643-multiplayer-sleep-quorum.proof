@@ -1,5 +1,5 @@
 schema=1
 id=m643-multiplayer-sleep-quorum
-fingerprint=e2d6e6c136729f14a347e5c42f5062adea3c708f6aaa24c570e70f568a325c65
+fingerprint=53c5a3408540edb396310dd73a344183315da4bbc64274f88647c4e90c703fb7
 observation.sha256=9ace8dba37f0d8d61c5146477b494083a1d83b3a1d9e278bc6cf81d404f45869
-source=executed
+source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m636-bonemeal-wheat
-fingerprint=d9d30c49d2e6c58cb8ecfbd4f8fb676af607e5af500686155f7fbd0081124a29
+fingerprint=98871fd22c048956a978687b2f7b97ac126b9869dd3992ac4c3a951d4b6e84b4
 observation.sha256=2bd70fa77f532bf1876ad944f005151bcd994e2fdb9adc08ba8de1f306015220
-source=executed
+source=refactor-equivalent

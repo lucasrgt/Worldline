@@ -1,5 +1,5 @@
 schema=1
 id=m780-aero-smooth-light-resolved-cache
-fingerprint=7ef91fb43eade12d2ff3b5071f528f5986d666134667291eda57fcfc89d8d913
+fingerprint=87039c96d4e85cc53225212171b52f059238c4e3f95087062475f1b6c6ba52a6
 observation.sha256=f6a7032e1c253385aef0680ea6d4e8d4d1e3c843c94abad8fcc19c58e2203afc
-source=executed
+source=refactor-equivalent

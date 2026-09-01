@@ -1,5 +1,5 @@
 schema=1
 id=m593-door-upper-break-set
-fingerprint=5c4bb9b04a8b48f8c2df9b46a461ce51a667daab990ad55a92fe6a3e0c4dd3dc
+fingerprint=ce09d9c5ffe6feff35fa6d6d0b7570dc82393f25497ddd410e14559ab685aa7f
 observation.sha256=33e6ec91b1a370f45add837c315164c13a5f28162fd7bb59a2e2ba45c21e4bfa
-source=executed
+source=refactor-equivalent
