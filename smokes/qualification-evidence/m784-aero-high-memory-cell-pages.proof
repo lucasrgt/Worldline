@@ -2,4 +2,4 @@ schema=1
 id=m784-aero-high-memory-cell-pages
 fingerprint=77c279238a3252eff1be33428b99112a6f7c97f9ebe179da2614c23c39165668
 observation.sha256=72e8173daa418891ebbae69fad2a8bf3813095bfe768fcc37e74cc323158552a
-source=refactor-equivalent
+source=executed
