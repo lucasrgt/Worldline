@@ -40,6 +40,10 @@ final class CandidateCheck {
         List<String> modules = values("modules");
         List<Path> outputs = new ModuleBuild(root, build, config, modules).compileAll();
         compileRunner(smoke);
+        if ("tools/smoke/ExternalRuntimeRun.java".equals(smoke.runner)) {
+            ExternalRuntimeCoordinatorBuild.compile(root, id, descriptor,
+                build.resolve("runner-classes"), build.resolve("coordinator-classes"));
+        }
         compileScenario(outputs);
         new MilestoneContract(root, id, build).validate();
         new TestBuild(root, build, config, modules, outputs).compileAndRun(affectedModules(modules));
@@ -60,7 +64,8 @@ final class CandidateCheck {
         require(Files.isRegularFile(runner), "missing runner: " + smoke.runner);
         boolean dataDriven = "tools/smoke/DataDrivenCycle.java".equals(smoke.runner)
                 || "tools/smoke/CompositeCycle.java".equals(smoke.runner);
-        require("tools/smoke/Run.java".equals(smoke.runner) || dataDriven
+        boolean externalRuntime = "tools/smoke/ExternalRuntimeRun.java".equals(smoke.runner);
+        require("tools/smoke/Run.java".equals(smoke.runner) || dataDriven || externalRuntime
                         || Files.readString(runner, StandardCharsets.UTF_8).contains("\"" + id + "\""),
                 "runner does not declare candidate id");
         if (smoke.runner.equals("tools/smoke/DataDrivenCycle.java")) DataDrivenCyclePlan.load(root, id);
