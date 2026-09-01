@@ -225,6 +225,7 @@ final class TrainPinMigration extends TrainPinSupport {
     private static Imported predecessor(Properties lock, SmokePins pins,
             SmokeDiscovery.Entry smoke, String current, String stem) throws Exception {
         SmokePins.Entry pin = pins.migrationMatch(smoke, current);
+        if (pin == null) pin = pins.entry(smoke.id);
         require(pin != null && pin.evidence().equals(required(lock, stem + "evidence_sha256")),
                 "invalid predecessor milestone proof: " + smoke.id);
         return new Imported(required(lock, stem + "prior_fingerprint"), pin.evidence(),
