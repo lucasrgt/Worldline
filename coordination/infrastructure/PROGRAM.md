@@ -141,10 +141,12 @@ Evidence recorded for these slices:
   objects, and non-loopback clients; HTTP fixtures prove idempotent upload,
   fresh hydration, digest and size revalidation, denied-object isolation, and
   no publication after corrupt input. The exact executor commit passes the
-  complete Windows workspace and the Ubuntu CAS format, Clippy, and test
-  suites. The current full Ubuntu workspace rerun is not claimed: its existing
-  Landlock fixtures fail before execution with `EACCES`, outside the CAS code
-  path, and require a separate backend diagnosis.
+  complete Windows workspace and, from a native WSL ext4 clone, the complete
+  Ubuntu format, Clippy, and workspace suites including cgroups, Landlock,
+  limits, and `network=none`. Running the Landlock fixture directly from the
+  Windows-mounted `/mnt/c` DrvFS tree fails at ELF execution with `EACCES`; the
+  same exact commit passes from ext4, so Linux qualification must use a native
+  filesystem rather than treating DrvFS as a supported Landlock mount.
 - artifact classification rejects unknown families, directory escapes,
   restricted families, unknown policy fields, and binary payloads renamed as
   proof envelopes; the exact clean Worldline branch passes the canonical Gate
