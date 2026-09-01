@@ -438,10 +438,31 @@ Evidence recorded for these slices:
   passes. Windows network policy remains honestly classified as inherited;
   the fixture observes an explicit loopback binding but does not claim OS
   network isolation.
+- Worldline commit `e9ff4e55a` qualifies the real Windows Candidate profile
+  against `m702-powered-rail-slope-propagation`, using executor commit
+  `803861d`. Legacy and Rust Windows Jobs each receive a fresh exact-commit
+  disposable worktree and an independent private build/test cache. Both run
+  canonical `Gate --candidate`, execute all 41 module suites from a cold
+  cache, drain every descendant, and produce the same canonical digest
+  `4f7c075b61162663105b85601c09a0b9da4ef5caa0bfd1d7d665d4d5ba563bf8`
+  over 127 Candidate-owned class files totaling 415,792 bytes. The Rust
+  request digest is
+  `e1d6302c6b0cd7c29a6c5884b43bae9347895fd61ecf4edddda86178c1fa6f1b`
+  and the sanitized telemetry object is
+  `adc060b3bac471febad93aef120bc49cc1a768820ba40b75661db530893f1797`.
+  Its 1,368,981,504-byte peak produces a host-matched 1,711,226,880-byte
+  floor; the configured 2-GiB worker estimate remains authoritative, proving
+  live lower-only behavior without widening admission. The cold run also
+  exposed and repaired an Atlas authority gap: the already-published
+  `animation`, `lifecycle`, and `scheduling` subsystem contracts now generate
+  the complete 196-unit coverage matrix instead of depending on stale cached
+  test receipts. The exact canonical Gate passes cold
+  (`104784ms < 240000ms`), CSM checks ten ways with no deviations, and NYA
+  passes.
 Current boundaries remain honest: Linux mount and PID namespaces,
 OS-enforced loopback-only policy, Windows filesystem/network isolation,
 complete hostile-fixture coverage, the broader server-headless matrix, GUI
-differentials, Candidate promotion, and default runtime selection remain
+differentials, multi-Candidate histories, and default runtime selection remain
 pending. The structural Windows tooling cycle and one official server
 behavior/containment differential are qualified; neither makes Rust the
 default backend. Artifact classification now covers tracked
@@ -461,11 +482,11 @@ cache decisions, cross-commit node differences, and exact module cache
 identities. Qualification and module fingerprints now use their graphs as the
 authority while retaining legacy equality audits. A1 through A4 and D1 through
 D3 and D5 are therefore in progress; A5 is qualified for the
-structural Windows tooling cycle. A6 now has one qualified official Windows
+structural Windows tooling and Candidate cycles. A6 now has one qualified official Windows
 server behavior/containment slice, B1 covers tooling plus server-headless, and
 the post-execution portion of B2 covers disposable server cells without
 claiming write isolation. Native Windows filesystem/network enforcement,
-Candidate and GUI profiles, A7, full A8 promotion, broader runtime histories,
+GUI profiles, A7, full A8 promotion, broader runtime histories,
 and remote transport deployment remain pending.
 
 ## 2. Program principles
@@ -662,6 +683,14 @@ normalized observations, bounded output, successful termination, and empty
 process trees. This does not authorize a Minecraft runtime lane or default
 backend selection.
 
+The Candidate profile is qualified at Worldline commit `e9ff4e55a` by
+`Gate --executor-candidate`. It compares legacy and Rust Windows Jobs over a
+real cold `Gate --candidate m702-powered-rail-slope-propagation` build in
+independent disposable worktrees. Promotion requires byte-identical canonical
+class evidence, complete output, zero remaining descendants, and a valid
+host-bound lower-only admission receipt. This profile still does not make Rust
+the default executor and does not start Minecraft.
+
 ### A6. Server-headless promotion
 
 Run legacy and Rust executions sequentially against fresh official-server
@@ -718,7 +747,9 @@ Status: qualified for the structural tooling profile at Worldline commit
 from the same Java policy. The server profile carries only named tool/runtime
 controls and a delegated lease identity; its capability secret stays outside
 the execution plan. Public descriptors omit all values and reject
-secret-bearing names. GUI environment profiles remain pending.
+secret-bearing names. Commit `e9ff4e55a` adds the Candidate allowlist with
+private temporary/control roots, bounded build workers, and a bounded Gate
+lease wait. GUI environment profiles remain pending.
 
 ### B2. Filesystem manifest
 
@@ -745,6 +776,12 @@ through fresh exact-commit worktrees, local-only official-artifact
 materialization, safe no-follow cleanup, and worktree pruning. This proves
 cell disposal and absence of residue, not prevention of writes while a
 Windows Job is running.
+
+The Candidate slice at commit `e9ff4e55a` applies the same exact-commit cell
+lifecycle to static builds. Its evidence traversal is no-follow, accepts only
+regular `.class` files under Candidate-owned output roots, and bounds both
+file count and bytes. Each arm owns an independent cache and complete cleanup
+leaves no worktree residue. Windows still provides no write-prevention claim.
 
 The same profile now has qualified transactional publication at commit
 `af7138e74`: staging and destination are siblings, publication is atomic and
@@ -798,6 +835,10 @@ is qualified at Worldline commit `7365d9a260`: elapsed 15,906 ms, bootstrap
 15 ms, runtime 15,891 ms, peak Job commit 809,144,320 bytes, peak seven
 processes, complete output, and zero remaining descendants.
 
+The first Candidate profile at commit `e9ff4e55a` records a successful real
+M702 cold build with peak Job commit 1,368,981,504 bytes, canonical compiled
+evidence, complete output, and zero remaining descendants.
+
 ### C2. Historical profiles
 
 Aggregate by lane, smoke ID, executor version, OS, architecture, and relevant
@@ -808,8 +849,10 @@ commit `5d75d057c`. Local samples are immutable by content digest, strictly
 bounded, canonically reparsed, and rebuild into deterministic profile groups.
 Only sanitized observational fields are retained. Commit `7365d9a260` adds the
 first smoke-specific official server sample for `m20-server-bootstrap` on
-Windows 11/amd64. Broader server, GUI, Candidate, and cross-host histories
-remain pending; no history upload is enabled.
+Windows 11/amd64. Commit `e9ff4e55a` adds the first Candidate sample for
+`m702-powered-rail-slope-propagation` on Windows 11/amd64. Broader server,
+GUI, multi-Candidate, and cross-host histories remain pending; no history
+upload is enabled.
 
 ### C3. Conservative admission
 
@@ -819,10 +862,12 @@ the reviewed promotion sequence, repeated frozen waves, and unchanged
 behavioral signatures.
 
 Status: the lower-only policy and file contract are qualified at Worldline
-commit `192061dc5`. Candidate execution still needs promotion onto the Rust
-executor before real `candidate-worker` samples can exercise the policy in a
-live micro-wave. Until then the configured memory floor remains authoritative,
-and structural tooling telemetry has no effect on Candidate width.
+commit `192061dc5`; commit `e9ff4e55a` exercises it with the first real
+`candidate-worker` sample. The measured 1,368,981,504-byte peak plus the exact
+25-percent margin produces a 1,711,226,880-byte host-bound floor. Because that
+is below the configured 2-GiB worker estimate, effective admission stays at
+2 GiB: telemetry cannot raise width. Increasing width still requires repeated
+frozen waves and the reviewed promotion sequence.
 
 ### C4. Failure clustering
 
@@ -835,7 +880,9 @@ read-model fixtures at Worldline commit `3947fa8e0`. Infrastructure,
 provider, and behavioral domains are explicit, and provider failure cannot be
 collapsed into oracle mismatch. The first successful official server sample
 at commit `7365d9a260` rebuilds with zero failures and zero clusters. Real
-failure histories plus Candidate, GUI, and provider samples remain pending.
+failure histories plus GUI and provider samples remain pending. The first
+successful Candidate sample at commit `e9ff4e55a` also rebuilds with zero
+failures and zero clusters.
 
 ## 8. Workstream D: content-addressed transport
 
