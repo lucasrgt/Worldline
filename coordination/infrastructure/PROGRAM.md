@@ -89,6 +89,11 @@ Completed foundation slices:
 - canonical content-addressed stdout, stderr, and metrics manifests in executor
   commit `7d438cc`, with independent Java byte, order, size, digest, and receipt
   binding verification in `ce069be3f`.
+- an immutable local SHA-256 object store with streaming publication, atomic
+  create-if-absent semantics, corruption checks, fresh materialization, and
+  convergent concurrent writers in executor commit `25205aa`. This is a local
+  CAS primitive only; remote transport remains forbidden until D1 artifact
+  classification is executable.
 
 Evidence recorded for these slices:
 
@@ -99,6 +104,8 @@ Evidence recorded for these slices:
   schema;
 - live Java-to-Rust probes pass through Windows Job Objects and through a
   delegated Linux `systemd-run` scope;
+- local CAS format, Clippy, round-trip, corruption, overwrite, and eight-writer
+  convergence fixtures pass on Windows and Ubuntu under WSL2;
 - the canonical Worldline Gate reaches `verify passed` with all content stages
   restored, but the host currently violates the unchanged hot latency SLO
   (`20361ms >= 7000ms` on the latest run). The budget was not weakened.
