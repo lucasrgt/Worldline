@@ -55,11 +55,12 @@ public final class ExecutorToolingCycle {
         require(!Files.exists(run), "executor tooling cycle residue exists: " + run);
         Path temporary = run.resolve("java-tmp"); Files.createDirectories(temporary);
         ExecutionEnvironmentManifest environment = ExecutionEnvironmentManifest.tooling(temporary);
+        ExecutionFilesystemManifest filesystem = ExecutionFilesystemManifest.tooling(root, temporary, run);
         try {
             List<String> command = List.of(java(), root.resolve("tools/harness/Gate.java").toString(),
                     "--self-test");
             byte[] baseline = legacy(root, run.resolve("legacy-baseline"), command, environment);
-            WorldlineExecutionPlan plan = plan(root, run.resolve("rust"), command, environment);
+            WorldlineExecutionPlan plan = plan(root, run.resolve("rust"), command, environment, filesystem);
             WorldlineExecutionReceipt.Verified result = RustExecutorShadow.execute(executable,
                     run.resolve("rust-plan.json"), plan);
             require("exited".equals(result.termination()) && Long.valueOf(0).equals(result.exitCode()),
@@ -75,6 +76,7 @@ public final class ExecutorToolingCycle {
             require(expected.equals(normalize(new String(primary, StandardCharsets.UTF_8)))
                     && expected.equals(normalize(new String(rollback, StandardCharsets.UTF_8))),
                     "legacy/Rust/rollback observable output differential");
+            filesystem.verifyOutput();
             System.out.println("Rust executor tooling cycle passed; command=Gate --self-test; request="
                     + plan.requestSha256() + "; normalized="
                     + ExecutionJson.sha256(expected.getBytes(StandardCharsets.UTF_8))
@@ -83,13 +85,13 @@ public final class ExecutorToolingCycle {
     }
 
     private static WorldlineExecutionPlan plan(Path root, Path output, List<String> command,
-            ExecutionEnvironmentManifest environment) {
+            ExecutionEnvironmentManifest environment, ExecutionFilesystemManifest filesystem) {
         return new WorldlineExecutionPlan("gate-self-test-tooling-cycle", root, command,
                 environment.environment(),
                 new WorldlineExecutionPlan.Limits(TIMEOUT_MS, MEMORY, PROCESSES, null, 100,
                         1L << 20, 1L << 20),
                 new WorldlineExecutionPlan.Isolation("windows_job", "inherit",
-                        ProcessHandle.current().pid()), WorldlineExecutionPlan.Filesystem.inherit(),
+                        ProcessHandle.current().pid()), filesystem.executorPolicy(),
                 new WorldlineExecutionPlan.Outputs(output, output.resolve("stdout.log"),
                         output.resolve("stderr.log"), output.resolve("metrics.json"),
                         output.resolve("manifest.json"), output.resolve("receipt.json")));

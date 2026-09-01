@@ -137,6 +137,7 @@ public final class RuntimeFabric {
     private static void selfTest() throws Exception {
         RustExecutorShadow.selfTest();
         ExecutionEnvironmentManifest.selfTest();
+        ExecutionFilesystemManifest.selfTest();
         ExecutorToolingCycle.selfTest();
         Process probe = new ProcessBuilder(java(), "tools/containers/TerminationTreeProbe.java", "parent")
                 .redirectOutput(ProcessBuilder.Redirect.DISCARD)
