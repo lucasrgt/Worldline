@@ -384,6 +384,22 @@ Evidence recorded for these slices:
   and telemetry object digest
   `04218c510c455c202811010efb71bc32c36cec5ef308ef890de1b5ecee89893e`.
   CSM checks ten ways with no deviations and NYA passes.
+- Worldline commit `192061dc5` connects host-matched `candidate-worker`
+  profiles to the existing adaptive learning barrier through a strict
+  `worldline.telemetry-admission.v1` contract. The observed peak receives a
+  25-percent safety margin and can only raise the per-worker memory floor,
+  which can only preserve or reduce admitted width. It cannot authorize an
+  increase, bypass clean-wave promotion, or change serialized official-runtime
+  admission. The exact canonical Gate passes (`cold 184073ms < 240000ms`) with
+  integration tools compiled and self-tested, 624 current train proofs, and
+  zero pending. A clean structural tooling run produces request digest
+  `a152d2f9015dc4b9a459a3b9f2327368205fae7ffef013d61ff3ba091462bd38`,
+  transaction digest
+  `38139ead50c78ecfdc67bbd0a01703b976161a1d52c28b54e2ea6519af63d999`,
+  and telemetry digest
+  `52827a0f86abca93fde7fe9c2e86178457309dcd53a67533b2dc15fb374d6038`.
+  That non-candidate sample correctly creates no admission floor. CSM checks
+  eight ways with no deviations and NYA passes.
 - the canonical Worldline Gate reaches `verify passed` with all content stages
   restored, but the host currently violates the unchanged hot latency SLO
   (`20361ms >= 7000ms` on the latest run). The budget was not weakened.
@@ -741,6 +757,12 @@ Feed observations into the existing adaptive learning barrier. Measurements
 may lower admission immediately for safety. Increasing width still requires
 the reviewed promotion sequence, repeated frozen waves, and unchanged
 behavioral signatures.
+
+Status: the lower-only policy and file contract are qualified at Worldline
+commit `192061dc5`. Candidate execution still needs promotion onto the Rust
+executor before real `candidate-worker` samples can exercise the policy in a
+live micro-wave. Until then the configured memory floor remains authoritative,
+and structural tooling telemetry has no effect on Candidate width.
 
 ### C4. Failure clustering
 
