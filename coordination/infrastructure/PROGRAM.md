@@ -734,6 +734,38 @@ Evidence recorded for these slices:
   failure. The exact canonical Gate passes cold (`123902ms < 240000ms`),
   `Gate --runtime` passes cold (`5104ms < 240000ms`), CSM checks ten ways with
   no deviations, and NYA passes.
+- Worldline commit `c759a36d2`, integrated at `ae3ceaf0a`, qualifies a sealed
+  minimization replay adapter around `m9-scenario-minimization`. Every replay
+  enters through `Gate --milestone m9-scenario-minimization`; M9 remains the
+  sole authority for the 9-to-3 reduction, exact divergence, one-minimality,
+  canonical artifacts, and public behavior signal. The campaign seed
+  partitions whole M9 replays without changing the sealed scenario or
+  evaluator seed, and the campaign receipt remains explicitly
+  non-authoritative. Seed 207 exposed an eight-process Job limit before the
+  oracle at 1,324,859,392 peak bytes and 15 observed process identities. After
+  the measured full-milestone profile was raised to 24 descendants, seed 208
+  reached compilation and failed closed on a missing prepared mapped workspace
+  at 1,886,822,400 peak bytes and 23 processes. Seed 209 then passed plan
+  `899327142a703f0949f72db11b70543eeb150129b1a5caeeeacecd5b97e46f32`
+  through Rust request
+  `d2f844052ad6b8c33d0bbeab6175d9c1dab9101d158368bb127e3570e7b556de`.
+  Its telemetry object is
+  `c7b87a3951a6710b46c4cb80ea88f8efd5b06732678474bf553be908c4a98356`;
+  Rust observes 576,051 ms, 1,850,286,080 peak bytes, 23 processes, complete
+  output, and zero descendants. The unchanged M9 contract signature is
+  `1919dad99cf82004a5d6ea79fbf57b20aef2233da6a8d3e508cc91636f4a1cfd`,
+  its public signal hashes to
+  `25e48a7353598bd4e4e3847cda7b6a89e42be63936be1303028f3896c4e9ad85`,
+  and the normalized artifact root is
+  `cc85495e98aba1e802cd4c0e32093c5ab3993f7bb4b2370079886fd71a7126d6`.
+  The live Explorer links all three native runs, exposes the two pre-oracle
+  failures, and reports zero orphan, partial, dangling, or missing objects.
+  The single passing history sample correctly yields `insufficient-history`
+  and cannot affect admission. Nightly and structural profiles retain their
+  eight-descendant limit; only full-milestone worldgen and minimization use the
+  measured limit of 24. The exact slice passes `Gate --runtime` cold at
+  178,664 ms and the canonical Gate hot at 3,523 ms; CSM checks ten ways with
+  no deviations, and NYA passes.
 - Worldline commits `91c32c04e` and `14bebceb6` repair a pre-existing Windows
   race in concurrent shared-directory CAS publication discovered by this
   qualification. Publishers now serialize each digest with a bounded local
@@ -1205,9 +1237,9 @@ The first Aero GUI profile at commit `935d0fc41` records M778 at 787,205 ms,
 eleven peak processes, complete output, and zero remaining descendants.
 
 Native campaigns now retain already verified Rust receipt metrics as sanitized
-`campaign-worker` samples. Nightly, structural instability, and official
-worldgen replay samples remain observational and cannot influence Candidate
-admission.
+`campaign-worker` samples. Nightly, structural instability, official worldgen,
+and sealed M9 minimization replay samples remain observational and cannot
+influence Candidate admission.
 
 ### C2. Historical profiles
 
@@ -1234,6 +1266,10 @@ Commit `9dc03ddce` adds two passing structural-instability samples, while failed
 inner runs remain native execution evidence rather than admissible history.
 Commit `a3137efa7` adds the first passing official-worldgen campaign sample. Its
 failed pre-oracle predecessor remains linked native evidence, not history.
+Commit `c759a36d2` adds the first passing sealed-M9 minimization campaign sample.
+Its two pre-oracle predecessors remain linked native evidence, not history;
+with only one passing sample its performance classification is explicitly
+`insufficient-history`.
 Commit `924b97012` qualifies observational campaign performance signals over
 that sanitized history. A reviewed three-sample baseline window is compared
 with the immediately following three-sample recent window by median elapsed
@@ -1449,8 +1485,9 @@ continues to interpret behavior and divergences. Rust schedules, isolates,
 measures, and transports permitted objects.
 
 The base contract, Nightly fuzz-plus-mutation adapter, structural instability
-adapter, fixed official-worldgen matrix replay adapter, and the first
-observational profiling/regression read model are qualified.
+adapter, fixed official-worldgen matrix replay adapter, sealed M9 minimization
+replay adapter, and the first observational profiling/regression read model are
+qualified.
 Plans and receipts are canonical, shards are complete and disjoint, immutable
 publication is fail closed, and aggregation is independent of worker arrival
 order. Native executor dispatch is qualified for the complete Nightly shard
@@ -1460,12 +1497,15 @@ runs through Rust, supports multi-shard local arrival, and records verified
 metrics under the same non-admissible capability; it deliberately does not
 start Minecraft. The worldgen adapter runs the existing M634 oracle through the
 official lease inside Rust containment, while leaving M634 as the sole behavior
-authority. Campaign profiling now has workload-shape-safe historical windows
-and live change signals, but those observations do not schedule follow-up work
-or assert a regression verdict. Arbitrary-seed worldgen, Minecraft-runtime
-instability adapters, differential and minimization execution, automated
-regression triage, plus multi-shard distribution across distinct hosts remain
-pending.
+authority. The minimization adapter similarly executes only the sealed M9
+contract through its milestone Gate, leaving all reduction and behavior
+authority in M9 while measuring the complete isolated replay. Campaign
+profiling now has workload-shape-safe historical windows and live change
+signals, but those observations do not schedule follow-up work or assert a
+regression verdict. Arbitrary-seed worldgen, Minecraft-runtime instability
+adapters, differential execution, arbitrary-input minimization queues,
+automated regression triage, plus multi-shard distribution across distinct
+hosts remain pending.
 
 ## 12. Source and repository strategy
 
