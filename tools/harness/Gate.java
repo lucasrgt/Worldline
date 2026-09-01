@@ -145,7 +145,8 @@ public final class Gate {
     private static DirectTool directTool(String[] arguments) {
         if (Arrays.equals(arguments, new String[] {"--cas-permits"}))
             return new DirectTool("ArtifactTransportPermitQuery", null);
-        if (Arrays.equals(arguments, new String[] {"--cas-shadow"})) return new DirectTool("CasTransportShadow", null);
+        if (Arrays.equals(arguments, new String[] {"--cas-shadow"}))
+            return new DirectTool("CasTransportShadow", null);
         String main = arguments.length == 2 ? queryType(arguments[0]) : null;
         return main == null ? null : new DirectTool(main, arguments[1]);
     }
