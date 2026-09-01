@@ -791,6 +791,27 @@ Evidence recorded for these slices:
   After the concurrent migration exited, the exact same commit passes the
   canonical Gate hot at 3,729 ms. CSM checks eight ways with no deviations,
   and NYA passes.
+- Worldline commit `85969eab4`, integrated at `14687948e`, qualifies
+  conservative failure clustering over validated native campaign links. The
+  live Explorer advances to v4 and exposes stable clusters whose identities
+  bind the domain, class, campaign, executor profile, termination, exit code,
+  and ordered executor-request digests. Timeout, crash, spawn, wait,
+  owner-exit, output truncation, and escaped descendants remain explicit
+  executor-infrastructure classes. A nonzero workload exit is instead fixed to
+  `workload-nonzero-exit` in the `unclassified-workload` domain: the read model
+  never guesses oracle mismatch, provider fault, or infrastructure fault from
+  an exit code. Orphan native runs cannot enter a campaign cluster. The real
+  minimization history contains two such failures, requests
+  `00bd0dac938b0b68c95e0275cf9f858d6f5da7320d9c6d499b329a533de36158`
+  and `195d6dca73aa163651711553d6b7a15472036c285cd07403b61e37807abe3de7`,
+  deterministically grouped into cluster
+  `410025f1422df82881e0172852aab55af6697c4312472a197f30c6a8cb168e41`.
+  The observed result is two unclassified workload failures, zero
+  infrastructure failures, and one cluster. Both the standalone schema and
+  live projection fix verdict, admission, and automatic-execution authority to
+  false. The exact slice Gate passes cold at 149,602 ms, carries 520 train
+  proofs, imports 98, executes six, and leaves zero pending. CSM checks three
+  ways with no deviations, and NYA passes.
 - Worldline commits `91c32c04e` and `14bebceb6` repair a pre-existing Windows
   race in concurrent shared-directory CAS publication discovered by this
   qualification. Publishers now serialize each digest with a bounded local
@@ -1355,6 +1376,12 @@ failures and zero clusters. The successful M10 GUI sample at commit
 `9b3bad608` likewise adds no failure cluster.
 The successful M778 Aero sample at commit `935d0fc41` also adds no failure
 cluster.
+Commit `85969eab4` adds the first qualified real native campaign failure
+history. It validates the complete campaign-to-plan-to-receipt binding and
+groups two minimization exits into one stable `unclassified-workload` cluster.
+It deliberately does not reinterpret those exits as behavioral, provider, or
+infrastructure failures. Executor containment failures remain separate classes,
+and every cluster remains observational with no admission effect.
 
 ## 8. Workstream D: content-addressed transport
 
@@ -1501,7 +1528,10 @@ adapters cannot silently disappear from the combined orphan analysis. A fourth
 live slice derives content-bound regression investigation candidates from
 campaign performance signals and cross-validates them before rendering. The
 projection is rebuildable and cannot schedule work, write dispositions, affect
-admission, or assert a verdict.
+admission, or assert a verdict. A fifth live slice clusters only validated
+campaign-linked native failures. It exposes containment failures as explicit
+executor-infrastructure classes while preserving nonzero workload exits as
+unclassified, content-bound observations rather than guessed verdicts.
 
 ## 11. Workstream G: distributed campaigns
 
@@ -1539,7 +1569,10 @@ authority in M9 while measuring the complete isolated replay. Campaign
 profiling now has workload-shape-safe historical windows and live change
 signals. Deterministic observational triage turns increases and invalid zero
 baselines into content-bound investigation candidates, but still does not
-schedule follow-up work or assert a regression verdict. Arbitrary-seed
+schedule follow-up work or assert a regression verdict. Native campaign
+failure clustering now deduplicates validated containment failures and
+unclassified workload exits without merging them into behavioral divergences
+or changing admission. Arbitrary-seed
 worldgen, Minecraft-runtime instability adapters, differential execution,
 arbitrary-input minimization queues, reviewed automatic follow-up execution,
 plus multi-shard distribution across distinct hosts remain pending.
