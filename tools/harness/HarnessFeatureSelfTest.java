@@ -23,6 +23,7 @@ final class HarnessFeatureSelfTest {
         CandidateSourceClosure.selfTest();
         ModuleCacheBundle.selfTest();
         ModuleCacheIndex.selfTest();
+        ModuleCachePublication.selfTest();
         ModuleCacheRemote.selfTest();
         ArtifactTransportPolicyTest.selfTest();
         ArtifactTransportPolicy.check(java.nio.file.Path.of("").toAbsolutePath().normalize());
