@@ -599,30 +599,90 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m664-flowing-water-freeze` | CARRIED | Flowing-water freeze boundary |
 | `m665-leaf-support-distance` | CARRIED | leaf support distance |
 | `m702-powered-rail-slope-propagation` | CARRIED | powered rail slope propagation |
-| `m767-modloader-forge-testkit-provider` | EXECUTED | ModLoader and Forge TestKit providers |
+| `m703-native-3d-inventory-render` | EXECUTED | official Beta 1.7.3 native 3D inventory render family |
+| `m767-modloader-forge-testkit-provider` | CARRIED | ModLoader and Forge TestKit providers |
 | `m768-aero-historical-tower-replay` | CARRIED | Aero historical tower hitch replay |
-| `m769-aero-unified-runtime-timeline` | EXECUTED | Aero unified runtime timeline |
-| `m770-aero-gpu-present-attribution` | EXECUTED | Aero GPU and present attribution |
-| `m771-aero-counterbalanced-hitch-rate` | EXECUTED | Aero counterbalanced hitch-rate gate |
-| `m772-aero-incremental-autosave-drain` | EXECUTED | Aero incremental autosave drain |
+| `m769-aero-unified-runtime-timeline` | CARRIED | Aero unified runtime timeline |
+| `m770-aero-gpu-present-attribution` | CARRIED | Aero GPU and present attribution |
+| `m771-aero-counterbalanced-hitch-rate` | CARRIED | Aero counterbalanced hitch-rate gate |
+| `m772-aero-incremental-autosave-drain` | CARRIED | Aero incremental autosave drain |
 | `m773-aero-chunk-work-scheduler` | CARRIED | Aero visible age and debt-aware chunk-work scheduler |
-| `m774-aero-profiler-cpu-adoption` | EXECUTED | AeroModelLib external Worldline CPU-path adoption |
-| `m775-aero-profiler-page-cache-prebake-matrix` | EXECUTED | Aero page cache and camera-aware pre-bake matrix |
-| `m776-aero-profiler-gl-prewarm-lod-matrix` | EXECUTED | Aero predictive GL prewarm and LOD matrix |
+| `m774-aero-profiler-cpu-adoption` | CARRIED | AeroModelLib external Worldline CPU-path adoption |
+| `m775-aero-profiler-page-cache-prebake-matrix` | CARRIED | Aero page cache and camera-aware pre-bake matrix |
+| `m776-aero-profiler-gl-prewarm-lod-matrix` | CARRIED | Aero predictive GL prewarm and LOD matrix |
 | `m777-aero-adaptive-prewarm-repeatability` | CARRIED | Aero adaptive prewarm repeatability |
-| `m778-aero-culling-visual-integrity` | EXECUTED | Aero culling visual integrity |
+| `m778-aero-culling-visual-integrity` | CARRIED | Aero culling visual integrity |
 | `m779-aero-animated-visual-integrity` | CARRIED | Aero animated visual integrity |
-| `m780-aero-smooth-light-resolved-cache` | EXECUTED | Aero resolved smooth-light cache |
+| `m780-aero-smooth-light-resolved-cache` | CARRIED | Aero resolved smooth-light cache |
 | `m781-aero-smooth-light-default-lifecycle` | CARRIED | Aero smooth-light default and world lifecycle |
 | `m782-aero-chunk-scheduler-lifecycle-soak` | CARRIED | Aero chunk scheduler lifecycle soak |
-| `m783-aero-chunk-scheduler-visual-latency` | EXECUTED | Aero chunk scheduler visual-latency classification |
-| `m784-aero-high-memory-cell-pages` | EXECUTED | Aero safe high-memory Cell Page qualification |
-| `m787-aero-loading-first-frame-integrity` | EXECUTED | Aero loading and cold first-frame integrity |
-| `m788-aero-ordered-template-performance` | EXECUTED | Aero ordered Cell Page template performance |
-| `m789-aero-cell-page-queue-reuse` | EXECUTED | Aero bounded Cell Page queue reuse |
-| `b173-entity-persistence-envelope-cycle` | EXECUTED | official Beta 1.7.3 entity persistence-envelope subsystem |
+| `m783-aero-chunk-scheduler-visual-latency` | CARRIED | Aero chunk scheduler visual-latency classification |
+| `m784-aero-high-memory-cell-pages` | CARRIED | Aero safe high-memory Cell Page qualification |
+| `m785-public-extensions-sdk` | CARRIED | Public Extensions SDK and external mod fixture |
+| `m786-extensions-completeness` | EXECUTED | Extensions completeness and census-bound public TestKit |
+| `m787-aero-loading-first-frame-integrity` | CARRIED | Aero loading and cold first-frame integrity |
+| `m788-aero-ordered-template-performance` | CARRIED | Aero ordered Cell Page template performance |
+| `m789-aero-cell-page-queue-reuse` | CARRIED | Aero bounded Cell Page queue reuse |
+| `b173-bed-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 bed subsystem conformance |
+| `b173-bedrock-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 bedrock subsystem conformance |
+| `b173-built-environment-materials-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 built-environment material subsystem conformance |
+| `b173-cake-serving-lifecycle-cycle` | CARRIED | official Beta 1.7.3 cake serving lifecycle |
+| `b173-cardinal-placement-state-domain-cycle` | CARRIED | official Beta 1.7.3 cardinal placement state domains |
+| `b173-common-cube-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 common-cube physical envelopes |
+| `b173-deterministic-harvest-lifecycle-cycle` | CARRIED | official Beta 1.7.3 deterministic non-self-drop harvest lifecycle family |
+| `b173-dirt-flora-lifecycle-cycle` | CARRIED | official Beta 1.7.3 dirt-supported flora lifecycle family |
+| `b173-entity-persistence-envelope-cycle` | CARRIED | official Beta 1.7.3 entity persistence-envelope subsystem |
+| `b173-entity-physical-envelope-cycle` | EXECUTED | official Beta 1.7.3 entity physical-envelope subsystem |
+| `b173-farmland-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 farmland subsystem conformance |
+| `b173-fire-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 fire subsystem conformance |
+| `b173-floor-mounted-lifecycle-cycle` | CARRIED | official Beta 1.7.3 floor-mounted block lifecycle family |
+| `b173-flowing-fluid-lifecycle-cycle` | CARRIED | official Beta 1.7.3 flowing-fluid lifecycle |
+| `b173-fluid-frozen-matter-lifecycle-conformance-cycle` | CARRIED | official Beta 1.7.3 fluid and frozen-matter lifecycle conformance |
+| `b173-furnace-state-domain-cycle` | CARRIED | official Beta 1.7.3 furnace facing state domain |
+| `b173-furnace-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 furnace subsystem conformance |
+| `b173-gold-shovel-harvest-lifecycle-cycle` | CARRIED | official Beta 1.7.3 gold-shovel harvest lifecycle family |
+| `b173-ground-cover-lifecycle-cycle` | CARRIED | official Beta 1.7.3 ground-cover plant lifecycle family |
+| `b173-ground-flora-conformance-cycle` | CARRIED | official Beta 1.7.3 ground-flora conformance subsystem |
+| `b173-harvestable-vegetation-lifecycle-cycle` | CARRIED | official Beta 1.7.3 shear-harvested leaf-variant lifecycle family |
+| `b173-inert-solid-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 inert-solid physical envelopes |
+| `b173-inert-solid-stability-envelope-cycle` | CARRIED | official Beta 1.7.3 inert-solid bounded stability envelope |
+| `b173-iron-door-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 iron-door subsystem conformance |
+| `b173-lifecycle-provider-cycle` | CARRIED | official Beta 1.7.3 public block lifecycle provider |
+| `b173-locked-chest-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 locked-chest subsystem conformance |
+| `b173-mob-spawner-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 mob-spawner subsystem conformance |
+| `b173-multi-drop-mineral-lifecycle-cycle` | CARRIED | official Beta 1.7.3 multi-drop mineral lifecycle family |
+| `b173-mushroom-random-tick-conformance-cycle` | CARRIED | official Beta 1.7.3 mushroom random-tick conformance subsystem |
+| `b173-native-special-world-render-cycle` | CARRIED | official Beta 1.7.3 native special world block-render family |
+| `b173-native-tile-entity-render-cycle` | EXECUTED | official Beta 1.7.3 native tile-entity render family |
+| `b173-openable-access-structures-conformance-cycle` | CARRIED | official Beta 1.7.3 openable access structures conformance |
+| `b173-piston-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 piston subsystem conformance |
+| `b173-portal-block-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 portal block subsystem conformance |
+| `b173-rail-network-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 rail-network subsystem conformance |
+| `b173-redstone-device-lifecycle-cycle` | CARRIED | official Beta 1.7.3 redstone device lifecycle family |
+| `b173-redstone-input-controls-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 redstone input-control subsystem conformance |
+| `b173-redstone-ore-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 redstone ore subsystem conformance |
+| `b173-redstone-signal-consumers-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 redstone signal-consumer subsystem conformance |
+| `b173-redstone-torch-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 redstone torch subsystem conformance |
+| `b173-remaining-opaque-cube-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 remaining opaque-cube physical envelopes |
+| `b173-repeater-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 repeater subsystem conformance |
+| `b173-shaded-mushroom-lifecycle-cycle` | CARRIED | official Beta 1.7.3 shaded mushroom lifecycle family |
+| `b173-sign-subsystem-lifecycle-cycle` | CARRIED | official Beta 1.7.3 sign subsystem lifecycle |
+| `b173-slab-lifecycle-cycle` | CARRIED | official Beta 1.7.3 slab state and disassembly lifecycle family |
+| `b173-source-fluid-dynamics-cycle` | CARRIED | official Beta 1.7.3 source-fluid gated dynamics |
+| `b173-source-fluid-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 source-fluid physical envelopes |
+| `b173-special-collision-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 special-collision physical envelopes |
+| `b173-static-collision-envelope-cycle` | CARRIED | official Beta 1.7.3 static collision envelopes |
+| `b173-static-light-transport-cycle` | CARRIED | official Beta 1.7.3 static light transport |
+| `b173-static-self-drop-lifecycle-cycle` | CARRIED | official Beta 1.7.3 static self-drop lifecycle family |
+| `b173-support-dependent-plant-lifecycle-cycle` | CARRIED | official Beta 1.7.3 support-dependent plant lifecycle family |
+| `b173-support-face-attachment-lifecycle-cycle` | CARRIED | official Beta 1.7.3 support-face attachment lifecycle family |
+| `b173-terrain-crafted-solid-stability-envelope-cycle` | CARRIED | official Beta 1.7.3 terrain-crafted solid bounded stability envelope |
+| `b173-tile-utility-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 tile-utility physical envelopes |
+| `b173-vegetation-ecology-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 vegetation ecology subsystem conformance |
+| `b173-wall-attachment-state-domain-cycle` | CARRIED | official Beta 1.7.3 wall-attachment state domains |
+| `b173-wooden-door-state-domain-cycle` | CARRIED | official Beta 1.7.3 wooden-door reachable state domain |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
-| `census-cycle` | CARRIED | runtime-census |
+| `census-cycle` | EXECUTED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
 | `gui-tree` | EXECUTED | ui-tree-equivalence |
 | `lab-cycle` | CARRIED | runtime-lab |
