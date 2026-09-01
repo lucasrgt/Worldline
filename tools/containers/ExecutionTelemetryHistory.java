@@ -100,6 +100,8 @@ public final class ExecutionTelemetryHistory {
             Profile repeated = profiles.stream().filter(value -> value.count() == 2).findFirst().orElseThrow();
             require(Long.valueOf(6).equals(repeated.cpuUserTotal()) && repeated.stdoutTotal() == 14,
                     "telemetry profile aggregation drift");
+            require(repeated.peakTasksMax() == null && repeated.memoryEventsTotal() == null,
+                    "unavailable telemetry did not remain absent");
             String summary = new String(summaryBytes(profiles), java.nio.charset.StandardCharsets.UTF_8);
             require(summary.contains("\"sample_count\":3") && !summary.contains("argv")
                     && !summary.contains("working_directory"), "telemetry summary sanitization drift");
@@ -169,10 +171,16 @@ public final class ExecutionTelemetryHistory {
                 cpuUserTotal, cpuKernelTotal, ioReadTotal, ioWriteTotal, memoryEventsTotal,
                 oomKillsTotal, taskEventsTotal, throttledTotal, stdoutTotal, stderrTotal,
                 truncatedSamples); }
-        private static Long add(Long total, Long value) { return value == null ? total
-                : total == null ? value : Math.addExact(total, value); }
-        private static Long max(Long current, Long value) { return value == null ? current
-                : current == null ? value : Math.max(current, value); }
+        private static Long add(Long total, Long value) {
+            if (value == null) return total;
+            if (total == null) return value;
+            return Math.addExact(total, value);
+        }
+        private static Long max(Long current, Long value) {
+            if (value == null) return current;
+            if (current == null) return value;
+            return Math.max(current, value);
+        }
     }
 
     private static String q(String value) { return ExecutionJson.quote(value); }
