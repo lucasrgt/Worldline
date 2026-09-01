@@ -188,6 +188,7 @@ public final class RustExecutorShadow {
         Properties values = new Properties(); try (var reader = Files.newBufferedReader(metrics)) { values.load(reader); }
         require("windows-job".equals(values.getProperty("backend")) && "0".equals(values.getProperty("exit.code")),
                 "legacy Windows Job metrics drift");
+        require("0".equals(values.getProperty("processes.active")), "legacy Windows Job retained a process");
         require(Arrays.equals(Files.readAllBytes(log), Files.readAllBytes(rust.outputs().stderr()))
                 && Files.size(rust.outputs().stdout()) == 0, "legacy/Rust output differential");
     }

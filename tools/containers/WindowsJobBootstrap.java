@@ -48,6 +48,7 @@ public final class WindowsJobBootstrap {
         Properties values = new Properties(); try (var reader = Files.newBufferedReader(metrics)) { values.load(reader); }
         require("windows-job".equals(values.getProperty("backend")) && "0".equals(values.getProperty("exit.code")),
                 "launcher metrics drift");
+        require("0".equals(values.getProperty("processes.active")), "launcher retained an active process");
         Path timeoutLog = test.resolve("timeout.log"), timeoutMetrics = test.resolve("timeout.properties");
         String marker = "worldline-job-tree-probe";
         Process timeout = new ProcessBuilder(executable.toString(), "--memory", Long.toString(256L << 20),

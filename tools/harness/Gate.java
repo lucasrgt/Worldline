@@ -61,6 +61,10 @@ public final class Gate {
             int exit = waitFor(builder.start(), 600);
             if (exit != 0) System.exit(exit); return;
         }
+        if (Arrays.equals(arguments, new String[] {"--executor-tooling"})) {
+            run(List.of(javaTool("java"), root.resolve("tools/containers/RuntimeFabricLauncher.java").toString(),
+                    "ExecutorToolingCycle"), root, 180); return;
+        }
         Files.createDirectories(control);
         if (arguments.length == 2 && ("--milestone".equals(arguments[0])
                 || "--smoke-id".equals(arguments[0]))) {
@@ -124,6 +128,7 @@ public final class Gate {
                 || Arrays.equals(arguments, new String[] {"--smoke-plan"})
                 || Arrays.equals(arguments, new String[] {"--pinned-smoke"})
                 || Arrays.equals(arguments, new String[] {"--train-readiness"})
+                || Arrays.equals(arguments, new String[] {"--executor-tooling"})
                 || Arrays.equals(arguments, new String[] {"--accept-legacy-smoke-baseline"})
                 || arguments.length == 1 && maintenance(arguments[0])
                 || arguments.length == 2 && ("--new-milestone".equals(arguments[0])
@@ -151,6 +156,7 @@ public final class Gate {
                 + "--seal-lane-portability|"
                 + "--module-cache-doctor|--module-cache-gc|--cache-doctor|--cache-gc|"
                 + "--cache-rebuild-drill|"
+                + "--executor-tooling|"
                 + "--new-milestone ID|--milestone ID|--lane-differential ID|"
                 + "--candidate-ready ID|--candidate ID|--self-test]");
         if (arguments.length == 2 && !arguments[1].matches("[a-z0-9]+(?:-[a-z0-9]+)*"))
