@@ -173,10 +173,12 @@ final class RepositoryVerify {
             run(Arrays.asList("java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"),
                     "OptimizationCatalogCheck"));
         }));
-        report.step("behavior-contracts", () -> stages.execute("behavior-contracts", inputs.behavior(),
-                () -> run(Arrays.asList(
-                "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"),
-                "BehaviorCompletenessCheck"))));
+        report.step("behavior-contracts", () -> stages.execute("behavior-contracts", inputs.behavior(), () -> {
+            run(Arrays.asList("java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"),
+                    "BehaviorCompletenessCheck"));
+            run(Arrays.asList("java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"),
+                    "FunctionalCensusCheck"));
+        }));
         report.step("adapter-kinds", () -> run(Arrays.asList(
                 "java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"), "AdapterKindCheck")));
         report.step("csm-suite", () -> CsmSuiteCheck.execute(root));
@@ -192,41 +194,47 @@ final class RepositoryVerify {
         report.step("source-policy", () -> stages.execute("source-policy", inputs.sourcePolicy(),
                 () -> new RepositorySourcePolicy(root, config, modules).execute()));
         report.step("runtime-fabric-self-test", () -> new RuntimeFabricCheck(root).execute());
-        recreateBuildDirectory();
+        prepareBuildDirectory();
         report.step("integration-tools", () -> stages.execute("integration-tools", inputs.integration(), () -> {
             IntegrationToolsCheck.execute(root, build); OrchestratorPolicyCheck.execute();
         }));
         report.step("smoke-runners", () -> new SmokeRunnerBuild(root, build).compile());
         List<Path> outputs = report.value("modules",
                 () -> new ModuleBuild(root, build, config.values(), modules).compileAll());
+        report.step("portable-adapters", () -> stages.executeDirectory("portable-adapters",
+                inputs.adapters(), build.resolve("adapter-classes"), () -> {
+                    new PortableAdapterCheck(root, build, config.required("java.release")).execute();
+                    run(Arrays.asList("java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"),
+                            "ForeignUiContractCheck"));
+                }));
         report.step("release-artifacts", () -> {
             Path distribution = root.resolve(".worldline/dist/testkit");
             stages.executeDirectory("release-artifacts", inputs.testKitArtifacts(), distribution,
                     () -> {
-                        if (Files.exists(distribution, java.nio.file.LinkOption.NOFOLLOW_LINKS))
-                            SafeTreeDelete.delete(distribution);
-                        run(Arrays.asList("java", "tools/testkit/TestKitPackage.java"));
-                    });
-            TestKitReleasePinCheck.validateDirectory(root, distribution);
+                    if (Files.exists(distribution, java.nio.file.LinkOption.NOFOLLOW_LINKS))
+                        SafeTreeDelete.delete(distribution);
+                    run(Arrays.asList("java", "tools/testkit/TestKitPackage.java"));
+                    TestKitReleasePinCheck.validateDirectory(root, distribution);
+                });
         });
         if (requireLocalArtifacts) report.step("mapping-batches",
                 () -> verifyMappingBatches(outputs, modules));
-        report.step("portable-adapters", () -> stages.execute("portable-adapters", inputs.adapters(), () -> {
-            new PortableAdapterCheck(root, build, config.required("java.release")).execute();
-            run(Arrays.asList("java", "-cp", System.getenv("WORLDLINE_HARNESS_CP"),
-                    "ForeignUiContractCheck"));
-        }));
+        report.step("atlas-synchronization", () -> stages.execute("atlas-synchronization",
+                inputs.atlasSynchronization(),
+                () -> MilestoneContract.validateAllCompiledAtlas(root, build)));
         report.step("milestone-surfaces", () -> stages.execute("milestone-surfaces", inputs.surfaces(), () -> {
             Path api = outputs.get(modules.indexOf("api"));
             Path testmodel = outputs.get(modules.indexOf("testmodel"));
             Path testapi = outputs.get(modules.indexOf("testapi"));
             for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
                 MilestoneContract contract = new MilestoneContract(root, smoke.id, build);
-                contract.validateAtlas(api); contract.validateTestKit(api, testmodel, testapi);
+                contract.validateAtlas(api);
+                contract.validateTestKit(api, testmodel, testapi);
             }
             System.out.println("  milestone Atlas + TestKit surfaces agree with descriptors");
         }));
-        report.step("tests", () -> new TestBuild(root, build, config.values(), modules, outputs).compileAndRun());
+        report.step("tests", () -> stages.execute("tests", inputs.tests(),
+                () -> new TestBuild(root, build, config.values(), modules, outputs).compileAndRun()));
         if (runSmoke) report.step("smokes", this::runSmokeSuite);
     }
 
@@ -281,14 +289,15 @@ final class RepositoryVerify {
     }
 
 
-    private void recreateBuildDirectory() throws IOException {
-        if (Files.exists(build)) {
-            if (!build.startsWith(root) || build.equals(root)) {
-                throw new IllegalStateException("refusing to delete unsafe build path: " + build);
-            }
-            SafeTreeDelete.delete(build);
-        }
+    private void prepareBuildDirectory() throws IOException {
+        if (!build.startsWith(root) || build.equals(root))
+            throw new IllegalStateException("unsafe build path: " + build);
         Files.createDirectories(build);
+        List<String> reusable = List.of("classes", "adapter-classes");
+        try (var children = Files.list(build)) {
+            for (Path child : children.toList())
+                if (!reusable.contains(child.getFileName().toString())) SafeTreeDelete.delete(child);
+        }
     }
 
     private void run(List<String> command) throws Exception {

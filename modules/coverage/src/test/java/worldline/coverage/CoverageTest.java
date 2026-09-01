@@ -57,7 +57,8 @@ public final class CoverageTest {
                 "report header drifted");
         require(text.contains("categories.total=" + SemanticRoles.categories().size())
                 && text.contains("categories.touched=tick,lab")
-                && text.contains("categories.percent=8")
+                && text.contains("categories.percent="
+                        + (2 * 100 / SemanticRoles.categories().size()))
                 && text.contains("steps.tick=1")
                 && text.contains("roles.observed=CLIENT_TICK_COUNTER")
                 && text.endsWith("sha256=" + report.sha256() + "\n"), "report body drifted");

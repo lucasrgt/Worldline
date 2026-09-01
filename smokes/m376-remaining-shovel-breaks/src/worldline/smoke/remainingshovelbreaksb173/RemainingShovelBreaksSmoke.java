@@ -99,9 +99,7 @@ public final class RemainingShovelBreaksSmoke {
         value
         -> value != null && (before == null || value.entityId() != before.entityId()),
         "fresh shovel drop", 40);
-    if (drop == null)
-      drop = a.awaitDroppedItem(expected);
-    require(drop.item().legacyId() > 0 && drop.item().count() >= 1
+    require(drop != null && drop.item().legacyId() > 0 && drop.item().count() >= 1
             && (before == null || drop.entityId() != before.entityId())
             && worldline.test.WorldlineSmokeAwait.observe(a, 1)
                 .blockAt(cell.x(), cell.y(), cell.z())

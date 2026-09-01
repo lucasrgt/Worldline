@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
+import worldline.testkit.*;
 
 /** Holds gold pick 285 and diamond pick 278 and fully breaks mossy cobble 48, gold ore 14, and obsidian 49. */
 public final class RemainingPickBreaksSmoke {
@@ -78,6 +79,13 @@ public final class RemainingPickBreaksSmoke {
               && obsidianDrop.item().legacyId() == 49 && mossyDrop.item().count() == 1
               && goldDrop.item().count() == 1 && obsidianDrop.item().count() == 1,
           "Packet21 remaining-pick family drops absent");
+      java.util.List<BlockCellTransition> mossyTransition = java.util.Arrays.asList(
+          new BlockCellTransition(mossy, new BlockState(48, 0), AIR));
+      java.util.List<RemoteItemStack> mossyDrops = java.util.Arrays.asList(mossyDrop.item());
+      require(BlockBreakDropFixture.execute("b1.7.3:block/048", "simple-solid", false, 285,
+              mossyTransition, mossyTransition, BlockLifecycleDropMatrix.exact(mossyDrops),
+              mossyDrops).subject().equals("b1.7.3:block/048"),
+          "public mossy break/drop evidence drift");
       String evidence = "column=" + column + ",support=" + top.x() + ":" + top.y() + ":" + top.z()
           + ":1:0,mossy=" + mossy.x() + ":" + mossy.y() + ":" + mossy.z()
           + ":48:0->0:0,gold=" + gold.x() + ":" + gold.y() + ":" + gold.z()

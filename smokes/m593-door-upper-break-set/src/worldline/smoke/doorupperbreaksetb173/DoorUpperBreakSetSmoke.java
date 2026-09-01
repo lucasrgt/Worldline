@@ -16,6 +16,7 @@ import worldline.api.RemoteWorldView;
 import worldline.b173server.B173DedicatedServer;
 import worldline.b173server.B173PlayerSeed;
 import worldline.b173server.B173WireClient;
+import worldline.testkit.*;
 
 /** Places wooden door 64, Packet14-breaks the upper half, and freezes both-air plus item 324. */
 public final class DoorUpperBreakSetSmoke {
@@ -105,6 +106,14 @@ public final class DoorUpperBreakSetSmoke {
       require(after.blockAt(local(lower.x(), chunkX), lower.y(), local(lower.z(), chunkZ)).equals(AIR)
               && after.blockAt(local(upper.x(), chunkX), upper.y(), local(upper.z(), chunkZ)).equals(AIR),
           "persisted door-upper-break air drift");
+      java.util.List<BlockCellTransition> transitions = java.util.Arrays.asList(
+          new BlockCellTransition(lower, DOOR_LOW, AIR),
+          new BlockCellTransition(upper, DOOR_HIGH, AIR));
+      java.util.List<RemoteItemStack> drops = java.util.Arrays.asList(drop.item());
+      require(BlockBreakDropFixture.execute("b1.7.3:block/064", "coupled-door", true, 258,
+              transitions, transitions, BlockLifecycleDropMatrix.exact(drops), drops)
+                  .subject().equals("b1.7.3:block/064"),
+          "public wooden-door break/drop evidence drift");
       String evidence = "column=" + column + ",support=" + cell(top, 1, 0) + ",lower=" + cell(lower, 64, 0)
           + "->0:0,upper=" + cell(upper, 64, 8)
           + "->0:0,drops=packet21-324,persisted=true,clients=2,disconnect=clean";

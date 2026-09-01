@@ -24,10 +24,11 @@ final class RepositorySchemaMigration {
     }
 
     private void apply() throws Exception {
-        require(dirtyIndex(), "stage the schema implementation before applying the rewrite");
-        List<SmokeDiscovery.Entry> catalog = SmokeDiscovery.discover(root);
         Path lock = root.resolve("smokes/schema-migration.lock");
         Properties manifest = Files.isRegularFile(lock) ? load(lock) : new Properties();
+        require(reviewed(manifest),
+                "stage a reviewed schema change or commit the shared fingerprint change before refreshing pins");
+        List<SmokeDiscovery.Entry> catalog = SmokeDiscovery.discover(root);
         if ("1".equals(manifest.getProperty("schema"))) {
             refresh(catalog, lock, manifest); return;
         }
@@ -80,6 +81,8 @@ final class RepositorySchemaMigration {
             manifest.setProperty(stem + "map_sha256", digest(row.map));
         }
         require(changed >= 1, "repository schema migration made no changes");
+        manifest.setProperty("fingerprint_source_sha256", digest(
+                root.resolve("tools/harness/SmokeInputFingerprint.java")));
         existing.write(pins); store(lock, manifest);
         System.out.println("repository schemas migrated: " + changed
                 + " changed; 525 descriptors, 526 maps, 36 narratives");
@@ -90,7 +93,8 @@ final class RepositorySchemaMigration {
         SmokePins existing = new SmokePins(root); SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); SmokeReceiptCache cache = new SmokeReceiptCache(root);
         Properties providers = ProviderDiscoveryPinCheck.manifest(root);
-        List<SmokePins.Entry> pins = new ArrayList<>(); int carried = 0, executed = 0;
+        List<SmokePins.Entry> pins = new ArrayList<>();
+        int carried = 0, executed = 0, introduced = 0, introducedNarratives = 0;
         for (SmokeDiscovery.Entry smoke : catalog) {
             String current = fingerprints.compute(smoke); SmokePins.Entry local = cache.availablePin(smoke);
             SmokePins.Entry prior = existing.entry(smoke.id);
@@ -103,17 +107,44 @@ final class RepositorySchemaMigration {
             }
             if (ProviderDiscoveryPinCheck.exemptsLegacy(providers, smoke.id)) continue;
             carried++; String stem = "smoke." + smoke.id + ".";
-            String recorded = required(manifest, stem + "current_fingerprint", null);
             SmokePins.Entry proof = local != null && local.source().equals("executed") ? local : prior;
-            if (!current.equals(recorded)) manifest.setProperty(stem + "prior_fingerprint", recorded);
+            String recorded = manifest.getProperty(stem + "current_fingerprint");
+            Path directory = root.resolve("smokes").resolve(smoke.id);
+            if (recorded == null) {
+                require(local != null && local.source().equals("executed"),
+                        "new schema row lacks exact execution: " + smoke.id);
+                Properties descriptor = load(directory.resolve("smoke.properties"));
+                require("1".equals(descriptor.getProperty("smoke.schema")),
+                        "new schema row lacks smoke.schema=1: " + smoke.id);
+                require(Files.readString(directory.resolve("MAP.md"), StandardCharsets.UTF_8)
+                                .startsWith("<!-- worldline-map-schema=1 -->"),
+                        "new schema row lacks map schema=1: " + smoke.id);
+                manifest.setProperty(stem + "introduced", "true");
+                introduced++;
+                if ("1".equals(descriptor.getProperty("narrative.schema"))) introducedNarratives++;
+            }
+            if (recorded != null && !current.equals(recorded))
+                manifest.setProperty(stem + "prior_fingerprint", recorded);
             manifest.setProperty(stem + "current_fingerprint", current);
             manifest.setProperty(stem + "evidence_sha256", proof.evidence());
+            manifest.setProperty(stem + "descriptor_sha256",
+                    digest(directory.resolve("smoke.properties")));
+            manifest.setProperty(stem + "map_sha256", digest(directory.resolve("MAP.md")));
         }
-        require(carried == 525 - ProviderDiscoveryPinCheck.pendingCount(providers) && executed >= 1,
-                "repository schema refresh census drift: carried=" + carried + ";executed=" + executed);
+        int pending = ProviderDiscoveryPinCheck.pendingCount(providers);
+        int smokeCount = carried + pending;
+        require(executed >= 1,
+                "repository schema refresh lacks exact support proofs: executed=" + executed);
+        manifest.setProperty("smoke.count", Integer.toString(smokeCount));
+        manifest.setProperty("map.count", Integer.toString(smokeCount + 1));
+        manifest.setProperty("narrative.count", Integer.toString(
+                integer(manifest, "narrative.count") + introducedNarratives));
+        manifest.setProperty("fingerprint_source_sha256", digest(
+                root.resolve("tools/harness/SmokeInputFingerprint.java")));
         existing.write(pins); store(lock, manifest);
         System.out.println("repository schema pins refreshed: " + carried
-                + " carried, " + executed + " exact support proofs");
+                + " carried, " + introduced + " introduced, " + executed
+                + " exact support proofs");
     }
 
     private String migrateNarrative(String id, Properties descriptor, String text) throws Exception {
@@ -167,8 +198,40 @@ final class RepositorySchemaMigration {
         String value = values.getProperty(key, fallback); require(value != null && !value.isBlank(),
                 "missing " + key + " for " + values.getProperty("id")); return value.trim();
     }
+    private static int integer(Properties values, String key) {
+        try { return Integer.parseInt(required(values, key, null)); }
+        catch (NumberFormatException error) { throw new IllegalStateException("invalid " + key); }
+    }
     private boolean dirtyIndex() throws Exception { Process process = new ProcessBuilder("git", "diff",
             "--cached", "--quiet").directory(root.toFile()).start(); return process.waitFor() == 1; }
+    private boolean reviewed(Properties manifest) throws Exception {
+        if (dirtyIndex()) return true;
+        if (!"1".equals(manifest.getProperty("schema"))) return false;
+        Process worktree = new ProcessBuilder("git", "diff", "--quiet")
+                .directory(root.toFile()).start();
+        Process index = new ProcessBuilder("git", "diff", "--cached", "--quiet")
+                .directory(root.toFile()).start();
+        String recorded = manifest.getProperty("fingerprint_source_sha256", "");
+        return worktree.waitFor() == 0 && index.waitFor() == 0
+                && (!digest(root.resolve("tools/harness/SmokeInputFingerprint.java"))
+                        .equals(recorded) || headChangesSchemaInput() || censusDrift(manifest));
+    }
+    private boolean censusDrift(Properties manifest) throws Exception {
+        Properties providers = ProviderDiscoveryPinCheck.manifest(root); int carried = 0;
+        for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root))
+            if (!ProviderDiscoveryPinCheck.exemptsLegacy(providers, smoke.id)) carried++;
+        return carried + ProviderDiscoveryPinCheck.pendingCount(providers)
+                != integer(manifest, "smoke.count");
+    }
+    private boolean headChangesSchemaInput() throws Exception {
+        Process process = new ProcessBuilder("git", "diff-tree", "--no-commit-id", "--name-only",
+                "-r", "HEAD").directory(root.toFile()).start();
+        String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        return process.waitFor() == 0 && output.lines().anyMatch(path ->
+                path.matches("smokes/[^/]+/(?:smoke\\.properties|MAP\\.md)")
+                || path.equals("smokes/qualification.lock")
+                || path.matches("smokes/qualification-evidence/[^/]+\\.proof"));
+    }
     private static Properties load(Path path) throws Exception { Properties values = new Properties();
         try (var reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             values.load(reader); } return values;

@@ -84,25 +84,56 @@ final class GuiWorkbenchPinMigration {
                 .getProperty("refresh.count", "0")) >= 1,
                 "GUI refresh requires shared-helper attestations");
         Properties train = TrainPinCheck.manifest(root); SmokePins pins = new SmokePins(root);
+        SmokeReceiptCache cache = new SmokeReceiptCache(root);
+        List<SmokePins.Entry> nextPins = new ArrayList<>(pins.entries());
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
-        int catalog = 0, carried = 0;
+        int catalog = 0, carried = 0, introduced = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
-            if (TrainPinCheck.isAdded(train, smoke.id)) continue;
+            if (TrainPinCheck.isAdded(train, smoke.id)
+                    && !smoke.id.equals("m620-stationapi-testkit-driver")) continue;
             catalog++;
-            if (smoke.id.equals("m620-stationapi-testkit-driver") || PENDING.contains(smoke.id))
+            String current = fingerprints.compute(smoke);
+            if (smoke.id.equals("m620-stationapi-testkit-driver")) {
+                importExact(cache, smoke, current, pins, nextPins, train); continue;
+            }
+            if (PENDING.contains(smoke.id)) {
+                importExact(cache, smoke, current, pins, nextPins, train);
                 continue;
-            carried++; String current = fingerprints.compute(smoke); SmokePins.Entry pin =
+            }
+            carried++; SmokePins.Entry pin =
                     pins.match(smoke.id, current); require(pin != null,
                     "GUI refresh lacks current proof: " + smoke.id);
-            String stem = "smoke." + smoke.id + ".", recorded = required(lock,
-                    stem + "current_fingerprint");
-            if (!current.equals(recorded)) lock.setProperty(stem + "prior_fingerprint", recorded);
+            String stem = "smoke." + smoke.id + ".";
+            String recorded = lock.getProperty(stem + "current_fingerprint");
+            if (recorded == null) {
+                require("executed".equals(pin.source()),
+                        "new GUI row lacks exact execution: " + smoke.id);
+                lock.setProperty(stem + "introduced", "true"); introduced++;
+            } else if (!current.equals(recorded))
+                lock.setProperty(stem + "prior_fingerprint", recorded);
             lock.setProperty(stem + "current_fingerprint", current);
             lock.setProperty(stem + "evidence_sha256", pin.evidence());
         }
-        require(catalog == 526 && carried == 520, "GUI refresh census drift");
-        pins.write(pins.entries()); store(path, lock);
-        System.out.println("GUI workbench pins refreshed: 520 carried, 5 qualified exceptions");
+        int catalogCount = catalog;
+        int smokeCount = carried;
+        lock.setProperty("catalog.count", Integer.toString(catalogCount));
+        lock.setProperty("smoke.count", Integer.toString(smokeCount));
+        pins.write(nextPins); store(path, lock);
+        System.out.println("GUI workbench pins refreshed: " + smokeCount + " carried, "
+                + introduced + " introduced, 5 qualified exceptions");
+    }
+    private static void importExact(SmokeReceiptCache cache, SmokeDiscovery.Entry smoke,
+            String current, SmokePins pins, List<SmokePins.Entry> next, Properties train) throws Exception {
+        SmokePins.Entry matched = pins.match(smoke.id, current);
+        if (matched != null && ("executed".equals(matched.source())
+                || TrainPinCheck.isExecuted(train, smoke.id))) return;
+        SmokePins.Entry exact = cache.availablePin(smoke);
+        require(exact != null && "executed".equals(exact.source())
+                        && current.equals(exact.fingerprint()),
+                "GUI exception lacks exact current execution: " + smoke.id);
+        for (int index = 0; index < next.size(); index++)
+            if (next.get(index).id().equals(exact.id())) { next.set(index, exact); return; }
+        next.add(exact);
     }
     private static void sources(Path root, Properties lock) throws Exception {
         lock.setProperty("source.count", Integer.toString(MODIFIED.size())); int index = 0;

@@ -101,27 +101,121 @@ final class ProviderDiscoveryPinMigration {
         Properties shared = SharedHelperPinCheck.manifest(root);
         require(Integer.parseInt(shared.getProperty("refresh.count", "0")) >= 1,
                 "provider refresh requires shared-helper attestations");
-        sources(root, lock, "modified", MODIFIED, false);
-        sources(root, lock, "added", ADDED, false);
+        int sourceChanges = refreshSources(root, lock);
         Properties train = TrainPinCheck.manifest(root); SmokePins pins = new SmokePins(root);
+        SmokeReceiptCache cache = new SmokeReceiptCache(root);
+        List<SmokePins.Entry> nextPins = new ArrayList<>(pins.entries());
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
-        int discovered = 0, carried = 0;
+        int discovered = 0, carried = 0, introduced = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
-            if (TrainPinCheck.isAdded(train, smoke.id)) continue;
+            if (TrainPinCheck.isAdded(train, smoke.id) && !smoke.id.equals(NEW_SMOKE)) continue;
             discovered++;
-            if (smoke.id.equals(NEW_SMOKE) || PENDING.contains(smoke.id)) continue;
+            if (smoke.id.equals(NEW_SMOKE)) {
+                String current = fingerprints.compute(smoke);
+                SmokePins.Entry matched = pins.match(smoke.id, current);
+                if (matched == null || !("executed".equals(matched.source())
+                        || TrainPinCheck.isExecuted(train, smoke.id))) {
+                    SmokePins.Entry exact = cache.availablePin(smoke);
+                    require(exact != null && "executed".equals(exact.source())
+                                    && current.equals(exact.fingerprint()),
+                            "new provider smoke lacks exact current execution: " + smoke.id);
+                    replace(nextPins, exact);
+                }
+                continue;
+            }
+            if (PENDING.contains(smoke.id)) {
+                String current = fingerprints.compute(smoke);
+                SmokePins.Entry matched = pins.match(smoke.id, current);
+                SmokePins.Entry stored = pins.entry(smoke.id);
+                String stem = "smoke." + smoke.id + ".";
+                boolean valid = matched != null && ("executed".equals(matched.source())
+                        || TrainPinCheck.isExecuted(train, smoke.id))
+                        || matched == null && stored != null
+                        && stored.fingerprint().equals(lock.getProperty(stem + "prior_fingerprint"))
+                        && stored.evidence().equals(lock.getProperty(stem + "evidence_sha256"));
+                if (!valid && !TrainPinCheck.isPending(train, smoke.id)) {
+                    SmokePins.Entry exact = cache.availablePin(smoke);
+                    require(exact != null && "executed".equals(exact.source())
+                                    && current.equals(exact.fingerprint()),
+                            "resolved provider pending smoke lacks exact current execution: " + smoke.id);
+                    replace(nextPins, exact);
+                }
+                continue;
+            }
             carried++; String current = fingerprints.compute(smoke); SmokePins.Entry pin =
                     pins.match(smoke.id, current); require(pin != null,
                     "provider refresh lacks current proof: " + smoke.id);
-            String stem = "smoke." + smoke.id + ".", recorded = required(lock,
-                    stem + "current_fingerprint");
-            if (!current.equals(recorded)) lock.setProperty(stem + "prior_fingerprint", recorded);
+            String stem = "smoke." + smoke.id + ".";
+            String recorded = lock.getProperty(stem + "current_fingerprint");
+            if (recorded == null) {
+                require("executed".equals(pin.source()),
+                        "new provider row lacks exact execution: " + smoke.id);
+                lock.setProperty(stem + "introduced", "true"); introduced++;
+            } else if (!current.equals(recorded))
+                lock.setProperty(stem + "prior_fingerprint", recorded);
             lock.setProperty(stem + "current_fingerprint", current);
             lock.setProperty(stem + "evidence_sha256", pin.evidence());
         }
-        require(discovered == 526 && carried == 521, "provider refresh census drift");
-        pins.write(pins.entries()); store(path, lock);
-        System.out.println("provider-discovery pins refreshed: 521 carried, 4 qualified exceptions");
+        int catalog = discovered;
+        int smokeCount = carried;
+        lock.setProperty("catalog.count", Integer.toString(catalog));
+        lock.setProperty("smoke.count", Integer.toString(smokeCount));
+        pins.write(nextPins); store(path, lock);
+        System.out.println("provider-discovery pins refreshed: " + smokeCount + " carried, "
+                + introduced + " introduced, " + sourceChanges + " source changes");
+    }
+
+    private static int refreshSources(Path root, Properties lock) throws Exception {
+        int priorChanges = Integer.parseInt(lock.getProperty("refresh.source.count", "0"));
+        int changes = 0, appended = 0; Properties train = TrainPinCheck.manifest(root);
+        for (String group : List.of("modified", "added")) {
+            int count = Integer.parseInt(required(lock, group + ".count"));
+            for (int index = 0; index < count; index++) {
+                String stem = group + "." + index + ".";
+                String current = digest(Files.readString(root.resolve(required(lock, stem + "path"))));
+                String prior = required(lock, stem + "current_sha256");
+                if (current.equals(prior)) continue;
+                String relative = required(lock, stem + "path");
+                require(TrainPinCheck.transportsFile(train, root, relative, prior)
+                                || fingerprintExtension(root, relative),
+                        "provider source change lacks reviewed transport: " + relative);
+                int existing = refreshSource(lock, priorChanges, relative);
+                String refresh = "refresh.source." + (existing == 0
+                        ? priorChanges + ++appended : existing) + ".";
+                if (existing != 0) {
+                    require(prior.equals(required(lock, refresh + "current_sha256")),
+                            "provider source history is not contiguous: " + relative);
+                }
+                changes++;
+                lock.setProperty(refresh + "path", relative);
+                if (existing == 0) lock.setProperty(refresh + "prior_sha256", prior);
+                lock.setProperty(refresh + "current_sha256", current);
+                lock.setProperty(stem + "current_sha256", current);
+            }
+        }
+        lock.setProperty("refresh.source.count", Integer.toString(priorChanges + appended));
+        return changes;
+    }
+
+    private static int refreshSource(Properties lock, int count, String relative) {
+        for (int index = 1; index <= count; index++)
+            if (relative.equals(lock.getProperty("refresh.source." + index + ".path"))) return index;
+        return 0;
+    }
+
+    private static void replace(List<SmokePins.Entry> pins, SmokePins.Entry exact) {
+        for (int index = 0; index < pins.size(); index++)
+            if (pins.get(index).id().equals(exact.id())) { pins.set(index, exact); return; }
+        pins.add(exact);
+    }
+
+    private static boolean fingerprintExtension(Path root, String relative) throws Exception {
+        if (!relative.equals("tools/harness/SmokeInputFingerprint.java")) return false;
+        String fingerprint = Files.readString(root.resolve(relative), StandardCharsets.UTF_8);
+        String plan = Files.readString(root.resolve("tools/harness/DataDrivenCyclePlan.java"),
+                StandardCharsets.UTF_8);
+        String boundary = "src/(?:main|testkit)/java";
+        return fingerprint.contains(boundary) && plan.contains(boundary);
     }
 
     private static Map<String, SmokePins.Entry> baseline(Path root) throws Exception {

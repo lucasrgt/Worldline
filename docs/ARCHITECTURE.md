@@ -89,6 +89,9 @@ timeout and retry policy, external snapshots, artifacts, minimization, and
 event-driven reporters. Every official runtime attempt holds a process-local
 and cross-process exclusive lease. The executor remains sequential even when
 a collected test requests concurrency; runtime concurrency fails closed.
+The immutable runtime request carries the collected test's qualified path and bounded per-test
+runtime options. This lets an adapter provision one scenario-specific fixture without leaking
+suite state or a provider-owned scenario catalog into the session.
 
 The CLI discovers top-level specs or loads an explicitly named `WorldlineSpec`
 from a bounded JAR or class directory. A separate bounded classpath exposes the
@@ -97,6 +100,8 @@ mod's own product classes without weakening the spec code-source check. The runt
 class name. Therefore an external mod compiles only against the packaged Java
 8 authoring JAR (`api`, `testmodel`, and `testapi`), while the runner can use
 modern Java without raising the mod's bytecode level.
+The optional official-server lifecycle provider likewise keeps vanilla NBT loadout selection,
+protocol actions, and server ownership inside `adapters/b173-server`.
 
 ### `optimization`
 

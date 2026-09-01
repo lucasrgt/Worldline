@@ -33,8 +33,13 @@ final class CandidateRuntimeBuild {
                 "runtime-build candidate has no runtime-src sources");
         String configured = descriptor.getProperty("runner", "");
         if (!configured.isBlank()) {
-            require(configured.endsWith(".gradle")
-                            && Files.isRegularFile(directory.resolve(configured)),
+            String id = directory.getFileName().toString();
+            boolean local = configured.matches("[A-Za-z0-9._-]+[.]gradle");
+            boolean repository = configured.matches("smokes/" + java.util.regex.Pattern.quote(id)
+                    + "/[A-Za-z0-9._-]+[.]gradle");
+            Path runner = repository
+                    ? directory.getParent().getParent().resolve(configured) : directory.resolve(configured);
+            require((local || repository) && Files.isRegularFile(runner.normalize()),
                     "runtime-build candidate requires a frozen Gradle runner");
             return;
         }

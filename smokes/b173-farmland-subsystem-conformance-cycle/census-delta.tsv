@@ -1,0 +1,9 @@
+claim_id	layer	subject_id	template_id	applicability	status	oracle	evidence_id	signature	automation_surface
+farmland-state-domain	ARCHETYPE	b1.7.3:block/060	state-domain	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-farmland-subsystem-conformance-cycle	7e3ab53109572ad7404382a8ecc0492abb956eb664e0f807e6e5abb731b860ee	PUBLIC_TESTKIT
+farmland-gameplay-placement	UNIVERSAL	b1.7.3:block/060	gameplay-placement	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-farmland-subsystem-conformance-cycle	7e3ab53109572ad7404382a8ecc0492abb956eb664e0f807e6e5abb731b860ee	PUBLIC_TESTKIT
+farmland-break-transition	UNIVERSAL	b1.7.3:block/060	break-transition	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-farmland-subsystem-conformance-cycle	7e3ab53109572ad7404382a8ecc0492abb956eb664e0f807e6e5abb731b860ee	PUBLIC_TESTKIT
+farmland-drop-matrix	ARCHETYPE	b1.7.3:block/060	drop-matrix	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-farmland-subsystem-conformance-cycle	7e3ab53109572ad7404382a8ecc0492abb956eb664e0f807e6e5abb731b860ee	PUBLIC_TESTKIT
+farmland-save-reload	UNIVERSAL	b1.7.3:block/060	save-reload	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-farmland-subsystem-conformance-cycle	7e3ab53109572ad7404382a8ecc0492abb956eb664e0f807e6e5abb731b860ee	PUBLIC_TESTKIT
+farmland-collision-shape	ARCHETYPE	b1.7.3:block/060	collision-shape	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-farmland-subsystem-conformance-cycle	7e3ab53109572ad7404382a8ecc0492abb956eb664e0f807e6e5abb731b860ee	PUBLIC_TESTKIT
+farmland-light-behavior	ARCHETYPE	b1.7.3:block/060	light-behavior	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-farmland-subsystem-conformance-cycle	7e3ab53109572ad7404382a8ecc0492abb956eb664e0f807e6e5abb731b860ee	PUBLIC_TESTKIT
+farmland-neighbor-response	ARCHETYPE	b1.7.3:block/060	neighbor-response	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-farmland-subsystem-conformance-cycle	7e3ab53109572ad7404382a8ecc0492abb956eb664e0f807e6e5abb731b860ee	PUBLIC_TESTKIT

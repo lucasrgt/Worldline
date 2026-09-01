@@ -56,6 +56,7 @@ final class VerificationStageCache {
             if (countMetrics) restoredStages++;
             System.out.println("  verification artifact restored: " + stage); return;
         }
+        if (Files.exists(output, java.nio.file.LinkOption.NOFOLLOW_LINKS)) SafeTreeDelete.delete(output);
         action.run(); require(Files.isDirectory(output), "stage produced no output: " + stage);
         Path temporary = object.resolveSibling(object.getFileName() + ".tmp-"
                 + ProcessHandle.current().pid() + "-" + System.nanoTime());
@@ -112,6 +113,35 @@ final class VerificationStageCache {
                     .execute("source-policy-test", policyInputs, policy);
             require(policyExecutions[0] == 3,
                     "source-policy cache did not invalidate for README or qualification drift");
+            Path directoryInput = root.resolve("directory-input.txt");
+            Files.writeString(directoryInput, "one\n");
+            Path directoryOutput = root.resolve("directory-output"); int[] directoryExecutions = {0};
+            VerifyReport.Checked directoryAction = () -> {
+                directoryExecutions[0]++; Files.createDirectories(directoryOutput);
+                Files.writeString(directoryOutput.resolve("value.txt"),
+                        Files.readString(directoryInput));
+            };
+            VerificationStageCache directoryCache = new VerificationStageCache(
+                    root, root.resolve("objects"), false);
+            directoryCache.executeDirectory("directory-test", List.of(directoryInput),
+                    directoryOutput, directoryAction);
+            directoryCache.executeDirectory("directory-test", List.of(directoryInput),
+                    directoryOutput, directoryAction);
+            require(directoryExecutions[0] == 1
+                            && "one\n".equals(Files.readString(directoryOutput.resolve("value.txt"))),
+                    "directory stage did not restore its immutable output");
+            Files.writeString(directoryOutput.resolve("value.txt"), "tampered\n");
+            directoryCache.executeDirectory("directory-test", List.of(directoryInput),
+                    directoryOutput, directoryAction);
+            require(directoryExecutions[0] == 1
+                            && "one\n".equals(Files.readString(directoryOutput.resolve("value.txt"))),
+                    "directory stage accepted a modified output");
+            Files.writeString(directoryInput, "two\n");
+            new VerificationStageCache(root, root.resolve("objects"), false).executeDirectory(
+                    "directory-test", List.of(directoryInput), directoryOutput, directoryAction);
+            require(directoryExecutions[0] == 2
+                            && "two\n".equals(Files.readString(directoryOutput.resolve("value.txt"))),
+                    "directory stage did not invalidate its immutable output");
         } finally { SafeTreeDelete.delete(root); }
         System.out.println("  verification stage cache self-test: passed");
     }
@@ -212,8 +242,23 @@ final class VerificationStageCache {
     }
 
     private static void restore(Path snapshot, Path output) throws Exception {
+        if (Files.isDirectory(output) && directoryDigest(snapshot).equals(directoryDigest(output))) return;
         if (Files.exists(output, java.nio.file.LinkOption.NOFOLLOW_LINKS)) SafeTreeDelete.delete(output);
         copy(snapshot, output);
+    }
+
+    private static String directoryDigest(Path directory) throws Exception {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        for (Path path : SafeTreeDelete.paths(directory).stream().sorted().toList()) {
+            require(!SafeTreeDelete.linkLike(path),
+                    "verification artifact contains a filesystem link: " + path);
+            Path relative = directory.relativize(path);
+            if (relative.toString().isEmpty()) continue;
+            update(digest, relative.toString().replace('\\', '/'));
+            update(digest, Files.isDirectory(path) ? "directory" : "file");
+            if (Files.isRegularFile(path)) digest.update(Files.readAllBytes(path));
+        }
+        return HexFormat.of().formatHex(digest.digest());
     }
 
     private static void copy(Path source, Path target) throws Exception {

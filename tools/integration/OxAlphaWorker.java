@@ -102,6 +102,7 @@ final class OxAlphaWorker {
         require(request.rolloverReceipt() == null || request.adoptionReceipt() != null,
                 "infrastructure rollover requires the legacy adoption receipt");
         require(!request.goal().isBlank(), "goal is required");
+        MilestoneObjective.load(root, request.id(), request.goal(), request.base());
         String branch = git(root, "branch", "--show-current").trim();
         require(branch.equals("codex/milestone-" + request.id()), "wrong milestone branch: " + branch);
         String head = git(root, "rev-parse", "HEAD").trim();
@@ -112,7 +113,7 @@ final class OxAlphaWorker {
         require(ancestor(root, request.base(), head),
                 "authorized base is not an ancestor of HEAD");
         Path preflight = root.resolve(".worldline/reports/swarm/preflight-" + request.id() + ".json");
-        requireBoundPass(preflight, request.id(), request.base(), true);
+        requireBoundPass(preflight, request.id(), request.base(), request.goal(), true);
         Path prompt = root.resolve(PROMPT);
         require(Files.isRegularFile(prompt), "missing Ox Alpha prompt");
         if (request.phase().equals("checkpoint")) {
@@ -139,7 +140,7 @@ final class OxAlphaWorker {
             require(request.rolloverReceipt() == null,
                     "infrastructure rollover receipt is only valid for checkpoint attempt 2");
             Path readiness = root.resolve(".worldline/reports/swarm/readiness-" + request.id() + ".json");
-            requireBoundPass(readiness, request.id(), request.base(), false);
+            requireBoundPass(readiness, request.id(), request.base(), request.goal(), false);
             require(request.session() != null && !request.session().isBlank(),
                     "qualify phase must resume the supervised checkpoint session");
         }
@@ -150,12 +151,15 @@ final class OxAlphaWorker {
                 .contains("\"session\":\"" + session + "\""), "checkpoint session is not bound to prior receipt");
     }
 
-    private static void requireBoundPass(Path path, String id, String base, boolean head) throws Exception {
+    private static void requireBoundPass(Path path, String id, String base, String goal,
+            boolean head) throws Exception {
         require(Files.isRegularFile(path), "missing supervisor proof: " + path.getFileName());
         String text = Files.readString(path, StandardCharsets.UTF_8);
         require(text.contains("\"id\":\"" + id + "\"") && text.contains("\"base\":\"" + base + "\"")
                 && text.contains("\"status\":\"PASS\""), "supervisor proof is not bound to launch");
         if (head) {
+            require(text.contains("\"goal_sha256\":\"" + sha(goal) + "\""),
+                    "supervisor proof goal differs from launch");
             require(text.contains("\"head\":\"" + base + "\""), "preflight head drifted");
         }
     }

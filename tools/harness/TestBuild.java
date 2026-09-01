@@ -109,11 +109,15 @@ final class TestBuild {
                     + ProcessHandle.current().pid() + "-" + System.nanoTime());
             delete(temporary); Files.createDirectories(temporary);
             try {
-                List<String> command = new ArrayList<>(List.of(javaTool("javac"), "-encoding", "UTF-8",
-                        "--release", required("test.release"), "-Xlint:all,-options", "-Werror", "-d",
-                        temporary.toString(), "-classpath", join(classpath)));
-                sources.forEach(path -> command.add(path.toString()));
-                Result result = execute(command, 180, cache.resolve(module));
+                List<String> arguments = new ArrayList<>(List.of("-encoding", "UTF-8",
+                        "--release", required("test.release"), "-Xlint:all,-options", "-Werror",
+                        "-d", quote(temporary.toString()), "-classpath", quote(join(classpath))));
+                sources.forEach(path -> arguments.add(quote(path.toString())));
+                Path argumentFile = temporary.resolve("javac.args");
+                Files.write(argumentFile, arguments, StandardCharsets.UTF_8);
+                Result result = execute(List.of(javaTool("javac"), "@" + argumentFile),
+                        180, cache.resolve(module));
+                Files.delete(argumentFile);
                 require(result.exit == 0, "test compilation failed for " + module + "\n" + result.output);
                 Files.writeString(temporary.resolve(".complete"), digest + "\n", StandardCharsets.UTF_8);
                 delete(directory); move(temporary, directory);
@@ -236,6 +240,10 @@ final class TestBuild {
         String value = config.getProperty(key);
         if (value == null) throw new IllegalStateException("missing harness property: " + key);
         return value;
+    }
+
+    private static String quote(String value) {
+        return "\"" + value.replace("\\", "/") + "\"";
     }
 
     private Path moduleRoot(String module) { return root.resolve("modules").resolve(module); }

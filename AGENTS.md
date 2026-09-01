@@ -51,6 +51,12 @@ All repository artifacts must be written in English.
     declare a reusable fixture, actions, observations, public binding, and
     equatable evidence in `smoke.properties`. Milestone numbers are progress
     aliases only and may not become the public TestKit identity.
+12. A milestone is a coherent mini-subsystem or user-visible capability package,
+    never one behavior atom or parametrized case. Supervised milestones must bind
+    a reviewed `coordination/swarm/objectives/<id>.properties`; gameplay packages
+    contain at least three related atoms plus Functional Census delta and public
+    TestKit acceptance. Structural and performance packages name their reusable
+    consumers or scenes. Optimize functional coverage and utility, not milestone count.
 
 There is deliberately no repository-wide line cap. Growth must happen through
 small cohesive files and explicit modules rather than oversized source files.

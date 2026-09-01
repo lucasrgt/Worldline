@@ -142,7 +142,7 @@ final class SmokeInputFingerprint {
                 "unsafe data-driven artifact: " + id);
         add(digest, root.resolve(artifact), tokens);
         for (String input : list(descriptor.getProperty("cycle.inputs"))) {
-            require(input.matches("(?:adapters|modules)/[a-z0-9-]+/src/main/java"),
+            require(input.matches("(?:adapters|modules)/[a-z0-9-]+/src/(?:main|testkit)/java"),
                     "unsafe data-driven input: " + input);
             add(digest, root.resolve(input), tokens);
         }

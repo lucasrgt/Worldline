@@ -33,6 +33,8 @@ final class FormattingPinCheck {
                     || GuiWorkbenchPinCheck.transportsFile(gui, root, relative,
                             required(manifest, stem + "current_sha256"))
                     || TrainPinCheck.transportsFile(train, root, relative,
+                            required(manifest, stem + "current_sha256"))
+                    || SchemaPinCheck.transportsFile(root, relative,
                             required(manifest, stem + "current_sha256"));
             require((direct && digest(FormattingPinMigration.tokens(source)).equals(
                                     required(manifest, stem + "token_sha256")) || successor)
@@ -43,17 +45,28 @@ final class FormattingPinCheck {
         SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); int checked = 0;
         Properties provider = ProviderDiscoveryPinCheck.manifest(root);
+        Properties schemas = SchemaPinCheck.manifest(root);
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             if (ProviderDiscoveryPinCheck.exemptsLegacy(provider, smoke.id)) continue;
             checked++; String current = fingerprints.compute(smoke);
             SmokePins.Entry pin = pins.match(smoke.id, current);
+            String stem = "smoke." + smoke.id + ".";
             boolean executed = TrainPinCheck.isExecuted(train, smoke.id)
                     && pin != null && "executed".equals(pin.source());
-            require(pin != null && (executed || carries(manifest, smoke.id, pin, current))
-                            && hash(manifest, "smoke." + smoke.id + ".prior_fingerprint"),
+            boolean introducedEntry = "true".equals(manifest.getProperty(stem + "introduced"));
+            boolean introduced = pin != null && "executed".equals(pin.source())
+                    && introducedEntry
+                    && current.equals(manifest.getProperty(stem + "current_fingerprint"))
+                    && pin.evidence().equals(manifest.getProperty(stem + "evidence_sha256"));
+            boolean schemaIntroduced = pin != null && SchemaPinCheck.introduced(schemas, smoke.id)
+                    && SchemaPinCheck.carries(schemas, smoke.id, pin, current);
+            require(pin != null && (executed || introduced || carries(manifest, smoke.id, pin, current))
+                            && (introducedEntry || hash(manifest, stem + "prior_fingerprint")
+                            || schemaIntroduced),
                     "formatting proof drift: " + smoke.id);
         }
-        require(checked == integer(manifest, "smoke.count")
+        int successorIntroductions = SchemaPinCheck.introductionsAfter(schemas, manifest);
+        require(checked == integer(manifest, "smoke.count") + successorIntroductions
                         - ProviderDiscoveryPinCheck.pendingCount(provider),
                 "formatting proof census drift");
         System.out.println("  formatting proof transport: " + files + " files, " + checked
@@ -69,15 +82,20 @@ final class FormattingPinCheck {
     }
     static boolean carries(Properties manifest, String id, SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
-        boolean direct = hash(manifest, stem + "prior_fingerprint")
+        boolean direct = (hash(manifest, stem + "prior_fingerprint")
+                || "true".equals(manifest.getProperty(stem + "introduced")))
                 && current.equals(manifest.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(manifest.getProperty(stem + "evidence_sha256"));
         try {
             Path root = Path.of("").toAbsolutePath().normalize();
             Properties shared = SharedHelperPinCheck.manifest(root);
-            return direct || SharedHelperPinCheck.follows(shared, id,
-                    manifest.getProperty(stem + "current_fingerprint"),
-                    manifest.getProperty(stem + "evidence_sha256"), pin, current)
+            return direct || DataDrivenCycleCheck.carriesPlan(root, id, pin)
+                    || CompositeCycleCheck.carriesPlan(root, id, pin)
+                    || SchemaPinCheck.carries(SchemaPinCheck.manifest(root), id, pin, current)
+                    || NeighborTestKitPinCheck.reexecuted(pin)
+                    || SharedHelperPinCheck.follows(shared, id,
+                            manifest.getProperty(stem + "current_fingerprint"),
+                            manifest.getProperty(stem + "evidence_sha256"), pin, current)
                     || TrainPinCheck.carriesCurrent(
                             TrainPinCheck.manifest(root), id, pin, current);
         } catch (Exception error) { return false; }
@@ -100,6 +118,8 @@ final class FormattingPinCheck {
             Properties shared = SharedHelperPinCheck.manifest(root);
             return direct || prior.equals(manifest.getProperty(stem + "prior_sha256"))
                     && SharedHelperPinCheck.transportsFile(shared, root, relative,
+                            manifest.getProperty(stem + "current_sha256"))
+                    || SchemaPinCheck.transportsFile(root, relative,
                             manifest.getProperty(stem + "current_sha256"));
         }
         return false;

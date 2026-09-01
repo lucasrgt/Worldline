@@ -4,11 +4,11 @@
 
 ## Claim
 
-This milestone freezes deterministic Beta 1.7.3 entity route construction across open, detour, and sealed terrain.
+This milestone exposes deterministic Beta 1.7.3 entity route construction as a public TestKit mini-subsystem across open, detour, and sealed terrain.
 
 ## Qualification cycle
 
-M622 constructs the same three in-memory terrain fixtures against mapped and official Beta 1.7.3 server classes. Each run requests an EntityPig route to the same coordinate and records every path node. Open terrain must remain direct, the wall fixture must route through its gap, and the sealed target must stop outside its two-block-high ring. Two mapped and two official processes must produce the same canonical trace.
+M622 constructs the same three in-memory terrain fixtures against mapped and official Beta 1.7.3 server classes. Each mapped run captures immutable public route observations and delegates endpoint, obstacle-gap, and sealed-ring invariants to PathfindingMatrixFixture, producing canonical equatable evidence. The independent official oracle still records every path node, and two mapped plus two official processes must produce the same canonical trace.
 
 Expected signal: `official oracle: MATCH`.
 

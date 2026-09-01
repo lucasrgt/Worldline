@@ -37,10 +37,11 @@ final class DataDrivenCycleCheck {
             String stem = "refresh.fixture." + index + ".";
             String id = migrations.getProperty(stem + "id", "");
             String relative = migrations.getProperty(stem + "path", "");
+            String current = digest(root.resolve(relative));
             require(relative.startsWith("smokes/" + id + "/") && relative.endsWith(".java")
                             && hash(migrations, stem + "prior_sha256")
-                            && digest(root.resolve(relative)).equals(
-                                    migrations.getProperty(stem + "current_sha256")),
+                            && currentOrTrainSuccessor(train, relative,
+                                    migrations.getProperty(stem + "current_sha256"), current),
                     "generic fixture-refactor attestation drift");
         }
         int formattingRefactors = Integer.parseInt(
@@ -50,10 +51,11 @@ final class DataDrivenCycleCheck {
             String stem = "refresh.formatting." + index + ".";
             String id = migrations.getProperty(stem + "id", "");
             String relative = migrations.getProperty(stem + "path", "");
+            String current = digest(root.resolve(relative));
             require(relative.startsWith("smokes/" + id + "/") && relative.endsWith(".java")
                             && hash(migrations, stem + "prior_sha256")
-                            && digest(root.resolve(relative)).equals(
-                                    migrations.getProperty(stem + "current_sha256")),
+                            && currentOrTrainSuccessor(train, relative,
+                                    migrations.getProperty(stem + "current_sha256"), current),
                     "generic formatting-refactor attestation drift");
         }
         int generic = 0, migrated = 0;
@@ -71,7 +73,10 @@ final class DataDrivenCycleCheck {
             require(hash(migrations, stem + "source_sha256")
                             && hash(migrations, stem + "prior_fingerprint")
                             && hash(migrations, stem + "evidence_sha256")
-                            && plan.fingerprint().equals(migrations.getProperty(stem + "plan_sha256")),
+                            && (plan.fingerprint().equals(migrations.getProperty(stem + "plan_sha256"))
+                            || LifecycleClaimTestKitPinCheck.transportsPlan(root, smoke.id,
+                                    migrations.getProperty(stem + "plan_sha256"),
+                                    plan.fingerprint())),
                     "data-driven migration evidence drift: " + smoke.id);
             String current = fingerprints.compute(smoke); SmokePins.Entry pin = pins.match(smoke.id, current);
             require(pin != null && (pin.source().equals("executed")
@@ -80,7 +85,9 @@ final class DataDrivenCycleCheck {
                             || TelemetryPinCheck.carries(telemetry, smoke.id, pin, current)
                             || SchemaPinCheck.carries(schemas, smoke.id, pin, current)
                             || FormattingPinCheck.carries(formatting, smoke.id, pin, current)
-                            || TrainPinCheck.carriesCurrent(train, smoke.id, pin, current))),
+                            || TrainPinCheck.carriesCurrent(train, smoke.id, pin, current)
+                            || LifecycleClaimTestKitPinCheck.carries(
+                                    root, smoke.id, pin, current))),
                     "data-driven refactor pin drift: " + smoke.id);
         }
         int expected = integer(migrations, "count");
@@ -91,8 +98,38 @@ final class DataDrivenCycleCheck {
                 + " source-refactor attestations");
     }
 
+    static boolean carriesPlan(Path root, String id, SmokePins.Entry pin) {
+        try {
+            if (pin == null || !pin.source().equals("refactor-equivalent")) return false;
+            Properties migrations = load(root.resolve("smokes/data-driven-migration.lock"));
+            Properties descriptor = load(root.resolve("smokes").resolve(id)
+                    .resolve("smoke.properties"));
+            String stem = "cycle." + id + ".";
+            return descriptor.getProperty("runner.source", "")
+                            .equals("tools/smoke/DataDrivenCycle.java")
+                    && hash(migrations, stem + "evidence_sha256")
+                    && pin.evidence().equals(migrations.getProperty(stem + "evidence_sha256"))
+                    && DataDrivenCyclePlan.load(root, id).fingerprint()
+                            .equals(migrations.getProperty(stem + "plan_sha256"));
+        } catch (Exception error) { return false; }
+    }
+
     private static boolean hash(Properties values, String key) {
         return values.getProperty(key, "").matches("[0-9a-f]{64}");
+    }
+    private static boolean currentOrTrainSuccessor(Properties train, String relative,
+            String recorded, String current) {
+        if (current.equals(recorded)) return true;
+        int count = integer(train, "source.count");
+        for (int index = 0; index < count; index++) {
+            String stem = "source." + index + ".";
+            if (relative.equals(train.getProperty(stem + "path"))
+                    && current.equals(train.getProperty(stem + "current_sha256"))) {
+                return recorded.equals(train.getProperty(stem + "prior_sha256"))
+                        || TrainSourceHistory.connects(train, stem, recorded);
+            }
+        }
+        return false;
     }
     private static String digest(Path path) throws Exception {
         return java.util.HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256")

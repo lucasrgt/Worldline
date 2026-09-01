@@ -7,6 +7,7 @@ public final class AtlasKind {
     public static final String INVARIANT = "invariant";
     public static final String EXPERIMENT = "experiment";
     public static final String SCENARIO = "scenario";
+    public static final String CLAIM = "claim";
     public static final String SUBSYSTEM = "subsystem";
     public static final String COVERAGE_UNIT = "coverage-unit";
     public static final String HYPOTHESIS = "hypothesis";
@@ -17,7 +18,7 @@ public final class AtlasKind {
     public static final String NAMESPACE = "namespace";
     public static final String ECOSYSTEM_CLAIM = "ecosystem-claim";
     private static final String[] ALL = { ECOSYSTEM_CLAIM, COVERAGE_UNIT, MAPPING_SET,
-            HYPOTHESIS, EXPERIMENT, INVARIANT, SUBSYSTEM, NAMESPACE, SCENARIO, BOUNDARY,
+            HYPOTHESIS, EXPERIMENT, INVARIANT, SUBSYSTEM, NAMESPACE, SCENARIO, CLAIM, BOUNDARY,
             LOADER, FIELD, ROLE, API };
 
     private AtlasKind() {}

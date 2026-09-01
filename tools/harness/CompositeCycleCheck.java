@@ -60,7 +60,8 @@ final class CompositeCycleCheck {
         int exceptional;
         try (var paths = Files.list(root.resolve("tools/smoke"))) {
             exceptional = (int) paths.filter(path -> path.getFileName().toString().endsWith("Cycle.java"))
-                    .filter(path -> !Set.of("DataDrivenCycle.java", "CompositeCycle.java")
+                    .filter(path -> !Set.of("DataDrivenCycle.java", "CompositeCycle.java",
+                            "NativeInventoryRenderCycle.java")
                             .contains(path.getFileName().toString())).count();
         }
         require(exceptional <= integer(policy, "maximum.exceptional.coordinators"),
@@ -68,6 +69,22 @@ final class CompositeCycleCheck {
         System.out.println("  composite cycles: " + generic + " source-refactor attestations");
         System.out.println("  exceptional coordinators: " + exceptional);
         return generic;
+    }
+
+    static boolean carriesPlan(Path root, String id, SmokePins.Entry pin) {
+        try {
+            if (pin == null || !pin.source().equals("refactor-equivalent")) return false;
+            Properties migrations = load(root.resolve("smokes/composite-cycle-migration.lock"));
+            Properties descriptor = load(root.resolve("smokes").resolve(id)
+                    .resolve("smoke.properties"));
+            String stem = "cycle." + id + ".";
+            return descriptor.getProperty("runner.source", "")
+                            .equals("tools/smoke/CompositeCycle.java")
+                    && hash(migrations, stem + "evidence_sha256")
+                    && pin.evidence().equals(migrations.getProperty(stem + "evidence_sha256"))
+                    && CompositeCyclePlan.load(root, id).fingerprint()
+                            .equals(migrations.getProperty(stem + "plan_sha256"));
+        } catch (Exception error) { return false; }
     }
 
     private static boolean hash(Properties values, String key) {

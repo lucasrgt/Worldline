@@ -26,6 +26,12 @@ public final class WorldlineEnvironmentBehaviors {
             "Clear Overworld time drives the canonical skylight-subtraction cycle");
     public static final WorldlineBehavior RAIN_STOP_EVENT = define("rain-stop-event",
             "Raining Overworld broadcasts Packet70 reason 2 when its rain countdown ends");
+    public static final WorldlineBehavior BLOCK_LIGHT_CONFORMANCE = define("block-light-conformance",
+            "Public gameplay proof of exact block emission, propagation, and skylight attenuation");
+    public static final WorldlineBehavior BLOCK_RANDOM_TICK_SPREAD_CONFORMANCE = define(
+            "block-random-tick-spread-conformance",
+            "Public bounded random-tick spread, invalid-support control, physical envelope, "
+                    + "causal support loss, and reload conformance");
 
     private WorldlineEnvironmentBehaviors() {}
 

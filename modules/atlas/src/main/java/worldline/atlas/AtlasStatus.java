@@ -12,8 +12,12 @@ public final class AtlasStatus {
     public static final String REJECTED = "REJECTED";
     public static final String UNKNOWN = "UNKNOWN";
     public static final String NATIVE_NONDETERMINISTIC = "NATIVE_NONDETERMINISTIC";
+    public static final String PARTIAL = "PARTIAL";
+    public static final String NOT_APPLICABLE = "NOT_APPLICABLE";
+    public static final String RETRACTED = "RETRACTED";
     private static final String[] ALL = { VERIFIED, STRONG, EXPERIMENTAL, OBSERVATIONAL,
-            REJECTED, UNKNOWN, NATIVE_NONDETERMINISTIC };
+            PARTIAL, REJECTED, RETRACTED, NOT_APPLICABLE, UNKNOWN,
+            NATIVE_NONDETERMINISTIC };
 
     private AtlasStatus() {}
 

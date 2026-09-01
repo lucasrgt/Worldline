@@ -1,0 +1,5 @@
+schema=1
+id=b173-iron-door-subsystem-conformance-cycle
+fingerprint=37599a31014ee00541e7dab7e2af1f886f10de9560236804569a9bb761e59414
+observation.sha256=f8b81d01cec05a6a3957014a6db6eee8601ab09eea77a25f5c9531e93f92b8fd
+source=refactor-equivalent

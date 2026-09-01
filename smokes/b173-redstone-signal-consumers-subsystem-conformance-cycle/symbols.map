@@ -1,0 +1,19 @@
+# owner	kind	descriptor	named	client	server
+net/minecraft/src/World	c	-	net/minecraft/src/World	fd	dj
+net/minecraft/src/IBlockAccess	c	-	net/minecraft/src/IBlockAccess	xp	pb
+net/minecraft/src/Block	c	-	net/minecraft/src/Block	uu	na
+net/minecraft/src/AxisAlignedBB	c	-	net/minecraft/src/AxisAlignedBB	eq	cz
+net/minecraft/src/Chunk	c	-	net/minecraft/src/Chunk	lm	hi
+net/minecraft/src/EntityTNTPrimed	c	-	net/minecraft/src/EntityTNTPrimed	qw	kg
+net/minecraft/src/WorldInfo	c	-	net/minecraft/src/WorldInfo	ei	ct
+net/minecraft/src/WorldProvider	c	-	net/minecraft/src/WorldProvider	xa	os
+net/minecraft/src/ISaveHandler	c	-	net/minecraft/src/ISaveHandler	wt	om
+net/minecraft/src/IPlayerFileData	c	-	net/minecraft/src/IPlayerFileData		fl
+net/minecraft/src/IChunkLoader	c	-	net/minecraft/src/IChunkLoader	bf	an
+net/minecraft/src/World	m	(II)Lnet/minecraft/src/Chunk;	getChunkFromChunkCoords	c	c
+net/minecraft/src/World	m	(III)Z	isBlockIndirectlyGettingPowered	s	r
+net/minecraft/src/World	m	(III)Z	isBlockGettingPowered	r	q
+net/minecraft/src/Chunk	m	(IIII)V	setBlockMetadata	b	b
+net/minecraft/src/Block	m	()I	tickRate	e	c
+net/minecraft/src/Block	m	(Lnet/minecraft/src/World;IIILjava/util/Random;)V	updateTick	a	a
+net/minecraft/src/Block	m	(Lnet/minecraft/src/World;IIII)V	onNeighborBlockChange	b	b

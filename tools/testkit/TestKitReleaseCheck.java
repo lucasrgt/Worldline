@@ -47,20 +47,22 @@ public final class TestKitReleaseCheck {
         Properties lock = load(root.resolve(LOCK));
         require("1".equals(lock.getProperty("schema")) && version.equals(lock.getProperty("version")),
                 "TestKit artifact lock version drifted");
-        for (String artifact : List.of("api", "runner")) verify(output, lock, artifact);
-        require(lock.size() == 12 + integer(lock, "artifact.api.entry.count")
-                        + integer(lock, "artifact.runner.entry.count"),
+        List<String> artifacts = List.of("api", "runner", "provider");
+        for (String artifact : artifacts) verify(output, lock, artifact);
+        require(lock.size() == 17 + artifacts.stream().mapToInt(artifact ->
+                        integer(lock, "artifact." + artifact + ".entry.count")).sum(),
                 "unexpected TestKit artifact lock entries");
         try (var paths = Files.list(output)) {
             List<String> jars = paths.filter(path -> path.getFileName().toString().endsWith(".jar"))
                     .map(path -> path.getFileName().toString()).sorted().toList();
-            require(jars.equals(List.of(required(lock, "artifact.api.file"),
-                    required(lock, "artifact.runner.file")).stream().sorted().toList()),
+            require(jars.equals(artifacts.stream().map(artifact ->
+                    required(lock, "artifact." + artifact + ".file")).sorted().toList()),
                     "unexpected TestKit release artifacts: " + jars);
         }
         System.out.println("WORLDLINE_TESTKIT_RELEASE=PASS version=" + version
                 + " api.classes=" + required(lock, "artifact.api.class.count")
-                + " runner.classes=" + required(lock, "artifact.runner.class.count"));
+                + " runner.classes=" + required(lock, "artifact.runner.class.count")
+                + " provider.classes=" + required(lock, "artifact.provider.class.count"));
     }
 
     private static void verify(Path output, Properties lock, String artifact) throws Exception {
@@ -96,6 +98,8 @@ public final class TestKitReleaseCheck {
         rows.put("schema", "1"); rows.put("version", version);
         capture(output.resolve("worldline-test-api-" + version + ".jar"), rows, "api");
         capture(output.resolve("worldline-test-runner-" + version + ".jar"), rows, "runner");
+        capture(output.resolve("worldline-test-provider-b173-server-lifecycle-" + version + ".jar"),
+                rows, "provider");
         StringBuilder text = new StringBuilder("# Exact deterministic Worldline TestKit artifacts\n");
         rows.forEach((key, value) -> text.append(key).append('=').append(value).append('\n'));
         Files.writeString(root.resolve(LOCK), text, StandardCharsets.UTF_8);

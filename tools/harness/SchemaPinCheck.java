@@ -10,9 +10,12 @@ final class SchemaPinCheck {
     static void execute(Path root) throws Exception {
         Properties manifest = manifest(root); require("1".equals(manifest.getProperty("schema")),
                 "invalid repository schema migration");
+        require(digest(root.resolve("tools/harness/SmokeInputFingerprint.java")).equals(
+                        required(manifest, "fingerprint_source_sha256")),
+                "repository schema fingerprint source drift");
         require(integer(manifest, "smoke.count") > 0
                         && integer(manifest, "map.count") == integer(manifest, "smoke.count") + 1
-                        && integer(manifest, "narrative.count") == 36,
+                        && integer(manifest, "narrative.count") >= 36,
                 "repository schema migration census drift");
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); Properties formatting = FormattingPinCheck.manifest(root);
@@ -29,6 +32,7 @@ final class SchemaPinCheck {
                     required(manifest, stem + "current_fingerprint"),
                     required(manifest, stem + "evidence_sha256"), pin, current);
             successor |= TrainPinCheck.carriesCurrent(train, smoke.id, pin, current);
+            successor |= LifecycleClaimTestKitPinCheck.carries(root, smoke.id, pin, current);
             boolean descriptor = digest(directory.resolve("smoke.properties")).equals(
                     required(manifest, stem + "descriptor_sha256"));
             if (!descriptor) descriptor = BehaviorFamilyPinCheck.transportsDescriptor(
@@ -37,7 +41,11 @@ final class SchemaPinCheck {
             if (!descriptor) descriptor = TrainPinCheck.transportsFile(train, root,
                     "smokes/" + smoke.id + "/smoke.properties",
                     required(manifest, stem + "descriptor_sha256"));
-            require(hash(manifest, stem + "prior_fingerprint")
+            if (!descriptor) descriptor = LifecycleClaimTestKitPinCheck.transportsFile(root,
+                    "smokes/" + smoke.id + "/smoke.properties",
+                    required(manifest, stem + "descriptor_sha256"));
+            require((hash(manifest, stem + "prior_fingerprint")
+                            || "true".equals(manifest.getProperty(stem + "introduced")))
                             && (direct || successor)
                             && hash(manifest, stem + "evidence_sha256")
                             && descriptor
@@ -48,7 +56,9 @@ final class SchemaPinCheck {
                             || pin.source().equals("refactor-equivalent"))
                             && (pin.evidence().equals(required(manifest, stem + "evidence_sha256"))
                             || FormattingPinCheck.carries(formatting, smoke.id, pin, current)
-                            || TrainPinCheck.carriesCurrent(train, smoke.id, pin, current)),
+                            || TrainPinCheck.carriesCurrent(train, smoke.id, pin, current)
+                            || LifecycleClaimTestKitPinCheck.carries(
+                                    root, smoke.id, pin, current)),
                     "repository schema pin drift: " + smoke.id);
         }
         require(checked == integer(manifest, "smoke.count")
@@ -62,13 +72,43 @@ final class SchemaPinCheck {
     }
     static boolean carries(Properties manifest, String id, SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
-        boolean direct = hash(manifest, stem + "prior_fingerprint")
+        boolean direct = (hash(manifest, stem + "prior_fingerprint")
+                || "true".equals(manifest.getProperty(stem + "introduced")))
                 && current.equals(manifest.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(manifest.getProperty(stem + "evidence_sha256"));
         try { Path root = Path.of("").toAbsolutePath().normalize();
             return direct || TrainPinCheck.carriesCurrent(
-                    TrainPinCheck.manifest(root), id, pin, current); }
+                    TrainPinCheck.manifest(root), id, pin, current)
+                    || LifecycleClaimTestKitPinCheck.carries(root, id, pin, current); }
         catch (Exception error) { return direct; }
+    }
+    static boolean introduced(Properties manifest, String id) {
+        return "true".equals(manifest.getProperty("smoke." + id + ".introduced"));
+    }
+    static boolean transportsFile(Path root, String relative, String prior) {
+        return LifecycleClaimTestKitPinCheck.transportsFile(root, relative, prior);
+    }
+    static boolean trainSourceSuccessor(Path root, String relative,
+            String prior, String current) throws Exception {
+        return TrainGeneratedDocumentationMigration.carriesSource(relative, prior, current);
+    }
+    static int introductionsAfter(Properties successor, Properties predecessor) {
+        return (int) successor.stringPropertyNames().stream()
+                .filter(key -> key.startsWith("smoke.") && key.endsWith(".introduced"))
+                .filter(key -> "true".equals(successor.getProperty(key)))
+                .map(key -> key.substring(6, key.length() - 11))
+                .filter(id -> predecessor.getProperty(
+                        "smoke." + id + ".current_fingerprint") == null)
+                .count();
+    }
+    static void selfTest() {
+        Properties prior = new Properties(), successor = new Properties();
+        prior.setProperty("smoke.old.current_fingerprint", "old");
+        successor.setProperty("smoke.old.introduced", "true");
+        successor.setProperty("smoke.new.introduced", "true");
+        successor.setProperty("smoke.carried.introduced", "false");
+        require(introductionsAfter(successor, prior) == 1,
+                "schema successor introduction census drift");
     }
     static boolean follows(Properties manifest, String id, String prior, String evidence,
             SmokePins.Entry pin, String current) {

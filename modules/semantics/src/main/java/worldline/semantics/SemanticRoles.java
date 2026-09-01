@@ -13,13 +13,23 @@ import java.util.Map;
 public final class SemanticRoles {
     public static final String CLOCK = "clock", RNG = "rng", INPUT = "input", TICK = "tick";
     public static final String FILESYSTEM = "filesystem", NETWORK = "network";
-    public static final String SCHEDULER = "scheduler", WORLD = "world", BLOCK = "block";
+    public static final String DEDICATED_SERVER = "dedicated-server";
+    public static final String MAPPINGS = "mappings";
+    public static final String STATIONAPI = "stationapi";
+    public static final String AERO = "aero";
+    public static final String MOD_ECOSYSTEM = "mod-ecosystem";
+    public static final String SCHEDULER = "scheduler", WORLD = "world", WORLDGEN = "worldgen";
+    public static final String BLOCK = "block";
     public static final String CHUNK = "chunk", PLAYER = "player", ENTITY = "entity";
     public static final String INVENTORY = "inventory", ITEM = "item", RECIPE = "recipe";
     public static final String GUI = "gui", RENDER = "render", AUDIO = "audio";
     public static final String RESOURCE = "resource", PERSISTENCE = "persistence";
     public static final String SAVE = "save", LIFECYCLE = "lifecycle";
     public static final String LAB = "lab", DOMAIN = "domain", REDSTONE = "redstone";
+    public static final String BLOCK_TICK = "block-tick", FLUID = "fluid", LIGHT = "light";
+    public static final String WEATHER = "weather", MOB_AI = "mob-ai";
+    public static final String DIMENSION = "dimension";
+    public static final String TILE_ENTITY = "tile-entity";
     private static final Map<String, List<String>> REQUIRED = required();
 
     private SemanticRoles() {}
@@ -63,13 +73,59 @@ public final class SemanticRoles {
                 "PACKET102_WINDOW_CLICK", "PACKET103_SET_SLOT", "PACKET104_WINDOW_ITEMS",
                 "PACKET105_UPDATE_PROGRESSBAR", "PACKET106_TRANSACTION",
                 "PACKET200_STATISTIC"));
+        roles.put(DEDICATED_SERVER, list("DEDICATED_SERVER_BOOT_API",
+                "DEDICATED_SERVER_STATE_API", "DEDICATED_SERVER_ENTRY_POLICY_TESTKIT",
+                "DEDICATED_SERVER_ENTRY_COMPARE_TESTKIT"));
+        roles.put(MAPPINGS, list("MAPPINGS_COVERAGE_REPORT",
+                "MAPPINGS_COVERAGE_GATE", "MAPPINGS_BATCH_REPORT",
+                "MAPPINGS_BATCH_GATE"));
+        roles.put(STATIONAPI, list("STATIONAPI_PROVIDER_OPEN",
+                "STATIONAPI_RUNTIME_TICK", "STATIONAPI_RUNTIME_CLOSE",
+                "STATIONAPI_WORLD_TIME", "STATIONAPI_PLAYER_NAME",
+                "STATIONAPI_PLAYER_HEALTH"));
+        roles.put(AERO, list("AERO_SAVE_BATCH_INTERCEPT",
+                "AERO_COMPILE_BEGIN_INTERCEPT", "AERO_SCHEDULE_INTERCEPT",
+                "AERO_CAPTURE_INTERCEPT", "AERO_SAVE_FORCE",
+                "AERO_RELOAD_INTERCEPT", "AERO_FRAME_BEGIN_INTERCEPT",
+                "AERO_VERTEX_INTERCEPT", "AERO_REBUILD_INTERCEPT"));
+        roles.put(MOD_ECOSYSTEM, list("MOD_DESCRIPTOR_READ",
+                "MOD_ARTIFACT_INSPECT", "MOD_ENTRYPOINT_LOAD",
+                "MOD_DEPENDENCY_ORDER", "MOD_TEST_RUN",
+                "MOD_TEST_RESULT_RECORD", "MOD_TEST_RESULT_PARSE",
+                "MOD_TEST_RESULT_COMPARE"));
         roles.put(SCHEDULER, list("TIMER_THREAD", "TASK_SCHEDULER", "SCHEDULER_ADVANCE"));
         roles.put(WORLD, list("WORLD_TYPE", "LOADED_ENTITY_LIST", "TILE_ENTITIES", "BLOCK_ACCESS",
                 "BLOCK_ID_READ", "BLOCK_READ", "BLOCK_WRITE", "BLOCK_NOTIFY", "WORLD_DIFFICULTY",
                 "WORLD_PROVIDER", "WORLD_SPAWN", "CHUNK_COORDINATES", "CHUNK_COORDINATE_X",
                 "CHUNK_COORDINATE_Y", "CHUNK_COORDINATE_Z"));
+        roles.put(WORLDGEN, list("WORLDGEN_TERRAIN_CENSUS_TESTKIT",
+                "WORLDGEN_TERRAIN_REPLAY_EVIDENCE",
+                "WORLDGEN_TERRAIN_CANONICAL_EVIDENCE",
+                "WORLDGEN_DUNGEON_CENSUS_TESTKIT"));
         roles.put(BLOCK, list("BLOCK_TYPE", "BLOCK_ID", "BLOCK_STONE", "BLOCK_BEDROCK", "BLOCK_SAND",
                 "BLOCK_SAND_TYPE", "BLOCK_SAND_FALL"));
+        roles.put(BLOCK_TICK, list("BLOCK_TICK_POLICY_MECHANISM", "BLOCK_TICK_POLICY_SCENARIO",
+                "BLOCK_TICK_POLICY_OBSERVATION", "BLOCK_TICK_POLICY_FIXTURE",
+                "BLOCK_TICK_POLICY_EVIDENCE"));
+        roles.put(FLUID, list("FLUID_FLOWING_LIFECYCLE_TESTKIT",
+                "FLUID_FROZEN_MATTER_TESTKIT", "FLUID_SOURCE_DYNAMICS_TESTKIT",
+                "FLUID_SOURCE_PHYSICAL_ENVELOPE_TESTKIT"));
+        roles.put(LIGHT, list("LIGHT_STATIC_TRANSPORT_TESTKIT",
+                "LIGHT_STATIC_FAMILY_TESTKIT", "LIGHT_SKY_BRIGHTNESS_TESTKIT",
+                "LIGHT_DAYLIGHT_RESPONSE_TESTKIT"));
+        roles.put(WEATHER, list("WEATHER_RAIN_STOP_TESTKIT",
+                "WEATHER_SNOW_ACCUMULATION_TESTKIT", "WEATHER_SNOW_NONSTACKING_TESTKIT",
+                "WEATHER_LIGHTNING_CREEPER_TESTKIT"));
+        roles.put(MOB_AI, list("MOB_AI_PATHFINDING_SCENARIO_TESTKIT",
+                "MOB_AI_PATHFINDING_OBSERVATION_TESTKIT",
+                "MOB_AI_PATHFINDING_EVIDENCE_TESTKIT",
+                "MOB_AI_PATHFINDING_FIXTURE_TESTKIT"));
+        roles.put(DIMENSION, list("DIMENSION_TYPED_SESSION_API",
+                "DIMENSION_RESPAWN_SESSION_API", "DIMENSION_PORTAL_REENTRY_TESTKIT",
+                "DIMENSION_PORTAL_BLOCK_TESTKIT"));
+        roles.put(TILE_ENTITY, list("TILE_ENTITY_FURNACE_TESTKIT",
+                "TILE_ENTITY_MOB_SPAWNER_TESTKIT", "TILE_ENTITY_PISTON_TESTKIT",
+                "TILE_ENTITY_SIGN_TESTKIT"));
         roles.put(CHUNK, list("CHUNK_TYPE", "CHUNK_LOOKUP", "CHUNK_POPULATE", "CHUNK_POPULATED",
                 "CHUNK_NEVER_SAVE", "CHUNK_RELIGHT", "CHUNK_LOADER", "LOADER_LOAD", "LOADER_SAVE",
                 "LOADER_FLUSH", "CHUNK_PROVIDER", "SAVE_CHUNKS", "CHUNK_MODIFIED",
@@ -87,7 +143,10 @@ public final class SemanticRoles {
         roles.put(ITEM, list("ITEM_STACK", "ITEM_ID", "STACK_SIZE", "ITEM_TYPE", "ITEM_LOOKUP",
                 "ITEM_DAMAGE", "CONTAINER_TYPE", "SLOT_COUNT", "SLOT_GET", "ENTITY_ITEM_STACK"));
         roles.put(RECIPE, list("CRAFTING", "CRAFTING_LIST", "FURNACE", "FURNACE_LIST", "RECIPE_TYPE",
-                "RECIPE_OUTPUT", "RECIPE_SHAPED", "RECIPE_SHAPELESS"));
+                "RECIPE_OUTPUT", "RECIPE_SHAPED", "RECIPE_SHAPELESS",
+                "CRAFTING_RECIPE_CATALOG_TESTKIT", "CRAFTING_STACK_RECIPE_CATALOG_TESTKIT",
+                "CRAFTING_PERSONAL_GRID_TESTKIT", "CRAFTING_WORKBENCH_PREPARE_TESTKIT",
+                "CRAFTING_WORKBENCH_OUTPUT_TESTKIT", "CRAFTING_FURNACE_TESTKIT"));
         roles.put(GUI, list("CURRENT_SCREEN", "INVENTORY_SCREEN", "CONTAINER_CLICK", "HUD_TYPE",
                 "HUD_TICK", "HUD_COUNTER", "GUI_OPEN", "GUI_CLOSE", "GUI_SLOT", "GUI_CLICK",
                 "GUI_SCREEN", "GUI_CONTAINER", "GUI_SLOT_TYPE", "CONTAINER_SLOTS", "WINDOW_ID",
@@ -119,7 +178,10 @@ public final class SemanticRoles {
                 "REDSTONE_BUTTON_TYPE", "REDSTONE_BUTTON", "REDSTONE_SCHEDULE",
                 "REDSTONE_PISTON_TYPE", "REDSTONE_PISTON", "REDSTONE_PISTON_HEAD",
                 "REDSTONE_PISTON_HEAD_TYPE", "REDSTONE_PISTON_MOVING_TYPE", "REDSTONE_PISTON_MOVING",
-                "BLOCK_PROVIDES_POWER", "BLOCK_POWERING_TO", "WORLD_INDIRECT_POWER"));
+                "BLOCK_PROVIDES_POWER", "BLOCK_POWERING_TO", "WORLD_INDIRECT_POWER",
+                "REDSTONE_INPUT_CONTROLS_TESTKIT", "REDSTONE_SIGNAL_CONSUMERS_TESTKIT",
+                "REDSTONE_REPEATER_TESTKIT", "REDSTONE_TORCH_TESTKIT",
+                "REDSTONE_PISTON_TESTKIT", "REDSTONE_ORE_TESTKIT"));
         return Collections.unmodifiableMap(roles);
     }
 

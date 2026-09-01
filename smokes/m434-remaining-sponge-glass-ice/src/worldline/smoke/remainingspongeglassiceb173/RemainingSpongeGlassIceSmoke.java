@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
+import worldline.testkit.*;
 
 /** Places official sponge 19, glass 20, and ice 79 together as one transparent/odd-solid family. */
 public final class RemainingSpongeGlassIceSmoke {
@@ -92,6 +93,20 @@ public final class RemainingSpongeGlassIceSmoke {
                   .equals(glassPlaced)
               && after.blockAt(local(ice.x(), cx), ice.y(), local(ice.z(), cz)).equals(icePlaced),
           "persisted remaining-sponge-glass-ice drift");
+      java.util.List<BlockStateCell> glassCells = java.util.Arrays.asList(
+          new BlockStateCell(glass, glassPlaced));
+      java.util.List<BlockStateCell> iceCells = java.util.Arrays.asList(
+          new BlockStateCell(ice, icePlaced));
+      require(BlockPlacementPersistenceFixture.execute("b1.7.3:block/020",
+              "transparent-solid", false, 20, 1, 0, 1, glassCells, glassCells, glassCells,
+              BlockLifecycleDriver.ReloadBoundary.FRESH_LOGIN).subject()
+                  .equals("b1.7.3:block/020"),
+          "public glass placement/persistence evidence drift");
+      require(BlockPlacementPersistenceFixture.execute("b1.7.3:block/079",
+              "translucent-solid", false, 79, 1, 0, 1, iceCells, iceCells, iceCells,
+              BlockLifecycleDriver.ReloadBoundary.FRESH_LOGIN).subject()
+                  .equals("b1.7.3:block/079"),
+          "public ice placement/persistence evidence drift");
       String evidence = "column=" + column + ",support=" + top.x() + ":" + top.y() + ":" + top.z()
           + ":1:0,sponge=" + sponge.x() + ":" + sponge.y() + ":" + sponge.z()
           + ":19:0,west=" + west.x() + ":" + west.y() + ":" + west.z() + ":1:0,glass=" + glass.x()

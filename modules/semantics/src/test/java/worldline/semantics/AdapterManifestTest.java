@@ -68,16 +68,19 @@ public final class AdapterManifestTest {
                 && legacy.render().contains("PLAYER_HEALTH="), "ModLoader/Forge driver boundary");
         require(stationapi != null && "driver".equals(stationapi.kind())
                 && stationapi.ownerPrefix().equals("worldline/stationapi/")
-                && stationapi.render().contains("MANUAL_TICK="), "StationAPI driver boundary");
+                && stationapi.render().contains("STATIONAPI_RUNTIME_TICK="),
+                "StationAPI driver boundary");
         require(aero != null && "extension".equals(aero.kind())
                 && aero.ownerPrefix().equals("worldline/aero/"), "aero prefix");
         require(aero.render().contains("kind=extension"), "aero render kind");
-        require(aero.render().contains("SAVE_CHUNKS="), "aero lists SAVE_CHUNKS");
-        require(aero.render().contains("COMPILE_CHUNKS="), "aero lists COMPILE_CHUNKS");
-        require(aero.render().contains("LOAD_RENDERERS="), "aero lists LOAD_RENDERERS");
-        require(aero.render().contains("CAMERA_RENDER="), "aero lists CAMERA_RENDER");
-        require(aero.render().contains("ADD_VERTEX="), "aero lists ADD_VERTEX");
-        require(aero.render().contains("CHUNK_REBUILD="), "aero lists CHUNK_REBUILD");
+        require(aero.render().contains("AERO_SAVE_BATCH_INTERCEPT="), "aero save intercept");
+        require(aero.render().contains("AERO_COMPILE_BEGIN_INTERCEPT="), "aero compile intercept");
+        require(aero.render().contains("AERO_RELOAD_INTERCEPT="), "aero reload intercept");
+        require(aero.render().contains("AERO_FRAME_BEGIN_INTERCEPT="), "aero frame intercept");
+        require(aero.render().contains("AERO_VERTEX_INTERCEPT="), "aero vertex intercept");
+        require(aero.render().contains("AERO_REBUILD_INTERCEPT="), "aero rebuild intercept");
+        require(aero.render().contains("subjectRole=SAVE_CHUNKS"),
+                "aero subject role relation");
         require(!aero.render().contains("SORT_RENDERERS="), "aero omits SORT_RENDERERS");
         require(!aero.render().contains("MARK_BLOCKS_FOR_UPDATE="), "aero omits mark-blocks");
         require(!aero.render().contains("AMBIENT_DARKNESS="), "aero omits ambient");
@@ -103,9 +106,12 @@ public final class AdapterManifestTest {
                     "worldline/rogue/SaveBudget#cap", "SAVE_CHUNKS", "").getBytes(
                     StandardCharsets.UTF_8));
             failure(() -> AdapterManifest.load(manifest, catalog), "unknown driver");
-            Path extension = temp.resolve("worldline").resolve("extensions")
-                    .resolve("sample-mod").resolve("manifest.properties");
+            Path extensionRoot = temp.resolve("worldline").resolve("extensions").resolve("sample-mod");
+            Path extension = extensionRoot.resolve("semantics.properties");
             Files.createDirectories(extension.getParent());
+            Files.write(extensionRoot.resolve("manifest.properties"),
+                    ("schema=worldline.extension.v1\nid=sample-mod\nversion=1.0.0\n"
+                    + "entrypoint=sample.Extension\nworldline.api=1\n").getBytes(StandardCharsets.UTF_8));
             Files.write(extension, body("sample-mod", "extension", "worldline/sample/",
                     "worldline/sample/Probe#onTick", "CLIENT_TICK_ROOT",
                     "net/minecraft/client/Minecraft.runTick").getBytes(StandardCharsets.UTF_8));
@@ -113,6 +119,7 @@ public final class AdapterManifestTest {
             require("extension".equals(loaded.kind()) && loaded.sites().size() == 1,
                     "worldline/extensions layout");
         } finally {
+            Files.deleteIfExists(temp.resolve("worldline/extensions/sample-mod/semantics.properties"));
             Files.deleteIfExists(temp.resolve("worldline/extensions/sample-mod/manifest.properties"));
             Files.deleteIfExists(temp.resolve("worldline/extensions/sample-mod"));
             Files.deleteIfExists(temp.resolve("worldline/extensions"));

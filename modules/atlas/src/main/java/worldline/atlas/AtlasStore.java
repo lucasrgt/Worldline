@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import worldline.extension.ExtensionCapabilities;
 import worldline.semantics.SemanticCatalog;
 
 /** Immutable Atlas index. Construction validates the closed schema. */
@@ -24,6 +25,21 @@ public final class AtlasStore {
 
     public static AtlasStore standard(Path root) {
         return AtlasSources.load(root);
+    }
+
+    /** Loads the canonical repository Atlas and discovers extensions from another project root. */
+    public static AtlasStore standard(Path root, Path extensionRoot) {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        if (loader == null) loader = AtlasStore.class.getClassLoader();
+        return standard(root, extensionRoot, loader, ExtensionCapabilities.of(
+                ExtensionCapabilities.TESTKIT_V1, ExtensionCapabilities.ATLAS_V1,
+                ExtensionCapabilities.CUSTOM_CONTRACT_V1));
+    }
+
+    /** Explicit discovery overload for isolated external class loaders and capability hosts. */
+    public static AtlasStore standard(Path root, Path extensionRoot, ClassLoader loader,
+            ExtensionCapabilities capabilities) {
+        return AtlasSources.load(root, extensionRoot, loader, capabilities);
     }
 
     public static AtlasStore of(List<AtlasRecord> records, SemanticCatalog catalog, Path root) {

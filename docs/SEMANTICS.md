@@ -65,6 +65,7 @@ official name.
 | `scheduler` | `TIMER_THREAD`, `TASK_SCHEDULER`, `SCHEDULER_ADVANCE` |
 | `world` | `WORLD_TYPE`, `LOADED_ENTITY_LIST`, `TILE_ENTITIES`, `BLOCK_ACCESS`, `BLOCK_ID_READ`, `BLOCK_READ`, `BLOCK_WRITE`, `BLOCK_NOTIFY`, `WORLD_DIFFICULTY`, `WORLD_PROVIDER`, `WORLD_SPAWN`, `CHUNK_COORDINATES`, `CHUNK_COORDINATE_X`, `CHUNK_COORDINATE_Y`, `CHUNK_COORDINATE_Z` |
 | `block` | `BLOCK_TYPE`, `BLOCK_ID`, `BLOCK_STONE`, `BLOCK_BEDROCK`, `BLOCK_SAND`, `BLOCK_SAND_TYPE`, `BLOCK_SAND_FALL` |
+| `block-tick` | `BLOCK_TICK_POLICY_MECHANISM`, `BLOCK_TICK_POLICY_SCENARIO`, `BLOCK_TICK_POLICY_OBSERVATION`, `BLOCK_TICK_POLICY_FIXTURE`, `BLOCK_TICK_POLICY_EVIDENCE` |
 | `chunk` | `CHUNK_TYPE`, `CHUNK_LOOKUP`, `CHUNK_POPULATE`, `CHUNK_POPULATED`, `CHUNK_NEVER_SAVE`, `CHUNK_RELIGHT`, `CHUNK_LOADER`, `LOADER_LOAD`, `LOADER_SAVE`, `LOADER_FLUSH`, `CHUNK_PROVIDER`, `SAVE_CHUNKS`, `CHUNK_MODIFIED`, `CHUNK_MARK_MODIFIED`, `CHUNK_NEEDS_SAVING`, `NIBBLE_ARRAY`, `NIBBLE_DATA`, `SET_NIBBLE`, `GET_NIBBLE` |
 | `player` | `LOCAL_PLAYER`, `PLAYER_TYPE`, `LIVING_TYPE`, `PLAYER_NAME`, `PLAYER_HEALTH`, `HOTBAR_SLOT`, `PLAYER_INVENTORY`, `INVENTORY_FIELD` |
 | `entity` | `ENTITY_TYPE`, `ENTITY_ID`, `ENTITY_POS_X`, `ENTITY_POS_Y`, `ENTITY_POS_Z`, `ENTITY_YAW`, `ENTITY_MOTION_X`, `ENTITY_MOTION_Y`, `ENTITY_MOTION_Z`, `ENTITY_ON_GROUND`, `ENTITY_HORIZONTAL_COLLISION`, `ENTITY_IN_WEB`, `ENTITY_FALL_DISTANCE`, `ENTITY_DEAD`, `ENTITY_SET_POSITION`, `ENTITY_SET_LOCATION`, `LIVING_MOVE_HEADING`, `ENTITY_ITEM` |
@@ -89,6 +90,11 @@ already executes. There is no energy category. The redstone slice covers wire,
 torch, repeater delays 1-4, lever, button, and piston extension against the
 official server JAR; pressure plates, BUD, and repeater locking remain out.
 
+The `block-tick` category binds the public `BlockTickPolicyFixture` pipeline
+(mechanism, scenario, normalized observation, validation, and equatable evidence)
+to `atlas.boundary.BLOCK_TICK`. This is a controlled Worldline TestKit boundary;
+it does not claim that the native vanilla scheduler itself is virtualized.
+
 ## Stable contracts
 
 | Type | Behavior |
@@ -101,7 +107,7 @@ official server JAR; pressure plates, BUD, and repeater locking remain out.
 | `SemanticCatalog.category` | Immutable snapshot of one category |
 | `SemanticCatalog.symbol` | Exact owner+name lookup; ambiguous or duplicate symbols fail closed |
 | `SemanticCatalog.canonical` / `sha256` | Stable catalog document |
-| `SemanticGraph` | Fail-closed read/write/dep edges over uppercase category tokens |
+| `SemanticGraph` | Fail-closed read/write/dep edges over normalized uppercase category tokens (`block-tick` becomes `BLOCK_TICK`) |
 | `AdapterManifest` | Driver or extension sites bound to catalog roles; Aero types fail closed |
 
 The API owns `SemanticMapping`. The `semantics` module owns roles, category

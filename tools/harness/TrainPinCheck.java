@@ -22,7 +22,8 @@ final class TrainPinCheck {
             String stem = "source." + index + ".", relative = required(lock, stem + "path");
             String current = required(lock, stem + "current_sha256"); Path path = root.resolve(relative);
             require((current.equals("removed") && !Files.exists(path))
-                            || Files.isRegularFile(path) && current.equals(digest(path)),
+                            || Files.isRegularFile(path) && (current.equals(digest(path))
+                            || SchemaPinCheck.transportsFile(root, relative, current)),
                     "train source drift: " + relative);
         }
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
@@ -30,9 +31,13 @@ final class TrainPinCheck {
         int currentCount = 0, pendingCount = 0, imported = 0, executed = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             String stem = "smoke." + smoke.id + ".", current = fingerprints.compute(smoke);
-            require(current.equals(required(lock, stem + "current_fingerprint")),
-                    "train fingerprint drift: " + smoke.id);
+            require(required(lock, stem + "introduced").matches("true|false"),
+                    "invalid train introduction identity: " + smoke.id);
             SmokePins.Entry pin = pins.match(smoke.id, current);
+            boolean successor = SchemaPinCheck.carries(
+                    SchemaPinCheck.manifest(root), smoke.id, pin, current);
+            require(current.equals(required(lock, stem + "current_fingerprint")) || successor,
+                    "train fingerprint drift: " + smoke.id);
             if (isPending(lock, smoke.id)) {
                 pendingCount++; SmokePins.Entry stale = pins.entry(smoke.id);
                 String prior = required(lock, stem + "prior_fingerprint");
@@ -44,8 +49,8 @@ final class TrainPinCheck {
                         "train pending proof drift: " + smoke.id);
                 continue;
             }
-            currentCount++; require(pin != null
-                            && pin.evidence().equals(required(lock, stem + "evidence_sha256")),
+            currentCount++; require(pin != null && (pin.evidence().equals(
+                            required(lock, stem + "evidence_sha256")) || successor),
                     "train proof drift: " + smoke.id);
             if ("milestone".equals(required(lock, stem + "kind"))) {
                 imported++; receipt(lock, stem, smoke.id);
@@ -67,7 +72,7 @@ final class TrainPinCheck {
     }
 
     static boolean isAdded(Properties lock, String id) {
-        return "milestone".equals(lock.getProperty("smoke." + id + ".kind"));
+        return "true".equals(lock.getProperty("smoke." + id + ".introduced"));
     }
     static boolean isPending(Properties lock, String id) {
         return Arrays.asList(lock.getProperty("pending.smokes", "").split(",")).contains(id);
@@ -109,8 +114,12 @@ final class TrainPinCheck {
                                 GuiWorkbenchPinCheck.manifest(root), relative, prior, predecessor)
                         || TestKitReleasePinCheck.transitionsFile(
                                 TestKitReleasePinCheck.manifest(root), relative, prior, predecessor);
-                return connected && digest(root.resolve(relative)).equals(
-                        lock.getProperty(stem + "current_sha256"));
+                connected = connected || SharedHelperPinCheck.transitionsFile(
+                        SharedHelperPinCheck.manifest(root), relative, prior, predecessor);
+                return connected && (digest(root.resolve(relative)).equals(
+                        lock.getProperty(stem + "current_sha256"))
+                        || SchemaPinCheck.transportsFile(root, relative,
+                                lock.getProperty(stem + "current_sha256")));
             }
         }
         return false;

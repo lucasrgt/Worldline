@@ -14,7 +14,10 @@ clocks are not a frozen delay. The frozen oracle is the bonemeal wheat age
 jump plus categorical cactus and cane height `>= 2`.
 
 Frozen semantic SHA-256:
-`b755666b909da0bc4583bf752a32ff032894d3959b4dd0a47c56d3e80c066721`.
+`cad16d48f0b3fac39820f9055cb39978c6307c7f7be9af052d3247f9728f25bd`.
+
+The cactus and sugar-cane random-tick observations are normalized through
+`BlockTickPolicyFixture`; natural wheat aging is independently owned by M577.
 
 This milestone does not claim harvest, hoe durability, trampling, rain, sand
 cane planting, bone meal on cactus or cane, height 3, exact metadata clocks,

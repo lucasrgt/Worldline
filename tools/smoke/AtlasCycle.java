@@ -32,7 +32,7 @@ public final class AtlasCycle {
     recreate(build);
     compileServerAdapter();
     Result first = launcher("atlas", SEED, "1", build.resolve("first.html").toString());
-    require(first.code == 0 && first.text.contains("WORLDLINE_ATLAS=PASS")
+    require(first.code == 0 && first.text.contains("WORLDLINE_SEED_ATLAS=PASS")
             && first.text.contains("seed=" + SEED) && first.text.contains("radius=1"),
         "first atlas render failed");
     Result second = launcher("atlas", SEED, "1", build.resolve("second.html").toString());
@@ -52,6 +52,19 @@ public final class AtlasCycle {
       require(page.contains(marker), "page missing marker: " + marker);
     }
     require(!page.contains("<script"), "atlas page must not embed scripts");
+    Result taxonomy = launcher("atlas", "taxonomy");
+    require(taxonomy.code == 0 && taxonomy.text.contains("WORLDLINE_ATLAS_TAXONOMY=PASS")
+            && taxonomy.text.contains("subsystem=chunks"),
+        "repository launcher did not expose the Atlas taxonomy");
+    Result exact = launcher("atlas", "index", "domain-knowledge");
+    require(exact.code == 0 && exact.text.contains("WORLDLINE_ATLAS_INDEX=PASS")
+            && exact.text.lines().filter(row -> row.startsWith("score="))
+                .allMatch(row -> row.contains("domain-knowledge")),
+        "repository launcher did not preserve exact Atlas facets");
+    Result context = launcher("atlas", "context", "chunk", "--format=json", "--budget=5");
+    require(context.code == 0 && context.text.contains("WORLDLINE_ATLAS_CONTEXT=PASS")
+            && context.text.contains("\"subsystems\":[\"chunks\"]"),
+        "repository launcher did not expose bounded semantic context");
     String report = "seed=" + SEED + "\nradius=1\nservers=3\ndeterministic=true"
         + "\nother-seed.differs=true\nscripts=none\npage.sha256="
         + sha256File(build.resolve("first.html")) + "\n";

@@ -52,6 +52,16 @@ public final class AtlasQuery {
         return text.toString();
     }
 
+    public static String taxonomy(AtlasStore store) {
+        AtlasTaxonomy.validate(store);
+        return AtlasTaxonomy.render(store);
+    }
+
+    public static String tags(AtlasStore store) {
+        AtlasTaxonomy.validate(store);
+        return AtlasTaxonomy.tagIndex(store);
+    }
+
     public static String gaps(List<AtlasRecord> gaps) {
         StringBuilder text = new StringBuilder();
         text.append("gaps=").append(gaps.size()).append('\n');

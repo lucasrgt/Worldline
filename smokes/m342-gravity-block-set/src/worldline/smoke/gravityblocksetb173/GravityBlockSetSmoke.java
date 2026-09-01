@@ -5,8 +5,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.security.MessageDigest;
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
 import worldline.api.*;
 import worldline.b173server.*;
+import worldline.testkit.*;
 
 /** Places supported sand 12 and gravel 13, removes each stone support, and freezes both one-cell settlements. */
 public final class GravityBlockSetSmoke {
@@ -15,7 +18,8 @@ public final class GravityBlockSetSmoke {
   public static void main(String[] a) throws Exception {
     if (a.length != 9)
       throw new IllegalArgumentException(
-          "usage: GravityBlockSetSmoke server.jar workspace port seed username chunkX chunkZ fixtureTicks gravityTicks");
+          "usage: GravityBlockSetSmoke server.jar workspace port seed username chunkX chunkZ "
+              + "fixtureTicks gravityTicks");
     Path jar = Paths.get(a[0]), workspace = Paths.get(a[1]);
     int port = Integer.parseInt(a[2]);
     long seed = Long.parseLong(a[3]);
@@ -114,15 +118,26 @@ public final class GravityBlockSetSmoke {
         reader.close();
       server.close();
     }
+    List<BlockTickPolicyScenario> scenarios = Arrays.asList(
+        tick("sand-fall", "012", "12:0-supported", "entity-70>12:0-landed"),
+        tick("gravel-fall", "013", "13:0-supported", "entity-71>13:0-landed"));
+    List<BlockTickPolicyObservation> observations = Arrays.asList(
+        observed(scenarios.get(0)), observed(scenarios.get(1)));
+    String tickContract = sha(BlockTickPolicyFixture.canonical(
+        BlockTickPolicyFixture.execute(scenarios, observations)));
     String evidence = "column=" + column + ",sand=" + sandSupport.x() + ":" + sandSupport.y() + ":"
         + sandSupport.z() + ":1:0->12:0,sandUpper=" + sand.x() + ":" + sand.y() + ":" + sand.z()
         + ":12:0->0:0,gravel=" + gravelSupport.x() + ":" + gravelSupport.y() + ":"
         + gravelSupport.z() + ":1:0->13:0,gravelUpper=" + gravel.x() + ":" + gravel.y() + ":"
-        + gravel.z() + ":13:0->0:0,packet23=70+71,persisted=true,clients=2,disconnect=clean";
+        + gravel.z() + ":13:0->0:0,packet23=70+71,persisted=true,testkit=" + tickContract
+        + ",clients=2,disconnect=clean";
     String trace = "v1|server=official-b1.7.3|seed=" + seed
         + "|fixture=stone-column+supported-sand12+supported-gravel13|settle=" + fixtureTicks + "+"
         + gravityTicks
-        + "ticks|cause=packet14-remove-support|confirmation=packet53-air|effect=official-falling-sand-and-gravel-settle|observation=packet23-type70+packet23-type71+live-packet53+fresh-login-packet51|"
+        + "ticks|cause=packet14-remove-support|confirmation=packet53-air"
+        + "|effect=official-falling-sand-and-gravel-settle"
+        + "|observation=packet23-type70+packet23-type71+live-packet53"
+        + "+fresh-login-packet51|"
         + evidence;
     System.out.println("WORLDLINE_M342_SET=" + evidence);
     System.out.println("WORLDLINE_M342_TRACE=" + trace);
@@ -149,6 +164,16 @@ public final class GravityBlockSetSmoke {
         id + " did not settle one block: " + opened + " / " + settled + " / " + cleared + " at "
             + support + "/" + upper);
     return fall;
+  }
+  private static BlockTickPolicyScenario tick(String id, String legacyId,
+      String initial, String effect) {
+    return new BlockTickPolicyScenario(id, "b1.7.3:block/" + legacyId,
+        Arrays.asList("gravity-block"), false, BlockTickPolicyMechanism.SCHEDULED_BLOCK,
+        initial, effect, true);
+  }
+  private static BlockTickPolicyObservation observed(BlockTickPolicyScenario scenario) {
+    return new BlockTickPolicyObservation(scenario.id(), scenario.mechanism(),
+        scenario.initial(), scenario.effect(), scenario.persisted());
   }
   private static BlockPosition foundation(RemoteChunkSnapshot q, int cx, int cz) {
     for (int x = 4; x <= 11; x++)

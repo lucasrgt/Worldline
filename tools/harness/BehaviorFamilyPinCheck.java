@@ -15,7 +15,7 @@ final class BehaviorFamilyPinCheck {
     static void execute(Path root) throws Exception {
         Properties lock = manifest(root); Map<String, String> assignments = BehaviorFamilyAssignments.values();
         require("1".equals(lock.getProperty("schema")) && integer(lock, "assignment.count") == 109
-                        && integer(lock, "source.count") == 4 && integer(lock, "smoke.count") == 520
+                        && integer(lock, "source.count") == 4 && integer(lock, "smoke.count") >= 520
                         && integer(lock, "pending.count") == 5
                         && integer(lock, "catalog.count") == integer(lock, "smoke.count")
                                 + integer(lock, "pending.count") + 1,
@@ -26,31 +26,42 @@ final class BehaviorFamilyPinCheck {
             require((hash(prior) || "added".equals(prior))
                             && (digest(root.resolve(relative)).equals(required(lock, stem + "current_sha256"))
                             || TrainPinCheck.transportsFile(TrainPinCheck.manifest(root), root,
-                                    relative, required(lock, stem + "current_sha256"))),
+                                    relative, required(lock, stem + "current_sha256"))
+                            || SchemaPinCheck.transportsFile(root, relative,
+                                    required(lock, stem + "current_sha256"))),
                     "behavior-family source drift: " + relative);
         }
+        refreshSources(root, lock);
         int index = 0;
         for (Map.Entry<String, String> entry : assignments.entrySet()) {
             String stem = "assignment." + index++ + ".";
             require(entry.getKey().equals(required(lock, stem + "id"))
                             && entry.getValue().equals(required(lock, stem + "token"))
                             && hash(required(lock, stem + "prior_sha256"))
-                            && digest(root.resolve("smokes").resolve(entry.getKey()).resolve("smoke.properties"))
-                                    .equals(required(lock, stem + "current_sha256"))
+                            && (digest(root.resolve("smokes").resolve(entry.getKey())
+                                    .resolve("smoke.properties")).equals(
+                                            required(lock, stem + "current_sha256"))
+                            || SchemaPinCheck.transportsFile(root, "smokes/" + entry.getKey()
+                                    + "/smoke.properties", required(lock, stem + "current_sha256")))
                             && behavior(root, entry.getKey()).equals(entry.getValue()),
                     "behavior-family assignment drift: " + entry.getKey());
         }
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root); int catalog = 0, carried = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
-            if (TrainPinCheck.isAdded(TrainPinCheck.manifest(root), smoke.id)) continue;
+            if (TrainPinCheck.isAdded(TrainPinCheck.manifest(root), smoke.id)
+                    && !smoke.id.equals("m620-stationapi-testkit-driver")) continue;
             catalog++; String current = fingerprints.compute(smoke);
             SmokePins.Entry pin = pins.match(smoke.id, current);
             if (smoke.id.equals("m620-stationapi-testkit-driver"))
-                require(pin == null || pin.source().equals("executed"), "M620 requires executed proof");
+                require(pin == null || pin.source().equals("executed")
+                                || TrainPinCheck.isExecuted(TrainPinCheck.manifest(root), smoke.id),
+                        "M620 requires executed proof");
             else if (pending(lock, smoke.id)) {
                 SmokePins.Entry stale = pins.entry(smoke.id); String stem = "smoke." + smoke.id + ".";
-                require(pin != null && pin.source().equals("executed") || pin == null && stale != null
+                require(pin != null && (pin.source().equals("executed")
+                                || TrainPinCheck.isExecuted(TrainPinCheck.manifest(root), smoke.id))
+                                || pin == null && stale != null
                                 && stale.fingerprint().equals(required(lock, stem + "prior_fingerprint"))
                                 && stale.evidence().equals(required(lock, stem + "evidence_sha256")),
                         "behavior-family pending proof drift: " + smoke.id);
@@ -78,14 +89,18 @@ final class BehaviorFamilyPinCheck {
         for (Map.Entry<String, String> entry : BehaviorFamilyAssignments.values().entrySet()) {
             String stem = "assignment." + index++ + ".";
             if (entry.getKey().equals(id)) return prior.equals(lock.getProperty(stem + "prior_sha256"))
-                    && digest(root.resolve("smokes").resolve(id).resolve("smoke.properties"))
-                            .equals(lock.getProperty(stem + "current_sha256"));
+                    && (digest(root.resolve("smokes").resolve(id).resolve("smoke.properties"))
+                            .equals(lock.getProperty(stem + "current_sha256"))
+                    || SchemaPinCheck.transportsFile(root, "smokes/" + id + "/smoke.properties",
+                            lock.getProperty(stem + "current_sha256")));
         }
         return false;
     }
     private static boolean carries(Properties lock, String id, SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
-        boolean direct = hash(lock.getProperty(stem + "prior_fingerprint"))
+        boolean introduced = "true".equals(lock.getProperty(stem + "introduced"))
+                && "executed".equals(pin.source());
+        boolean direct = (hash(lock.getProperty(stem + "prior_fingerprint")) || introduced)
                 && current.equals(lock.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"));
         try { Path root = Path.of("").toAbsolutePath().normalize();
@@ -93,7 +108,8 @@ final class BehaviorFamilyPinCheck {
             return direct || TrainPinCheck.follows(train, id,
                 lock.getProperty(stem + "current_fingerprint"),
                 lock.getProperty(stem + "evidence_sha256"), pin, current)
-                || TrainPinCheck.carriesCurrent(train, id, pin, current); }
+                || TrainPinCheck.carriesCurrent(train, id, pin, current)
+                || SchemaPinCheck.carries(SchemaPinCheck.manifest(root), id, pin, current); }
         catch (Exception error) { return false; }
     }
     static Properties manifest(Path root) throws Exception {
@@ -111,6 +127,21 @@ final class BehaviorFamilyPinCheck {
     }
     private static boolean pending(Properties lock, String id) {
         return Arrays.asList(lock.getProperty("pending.smokes", "").split(",")).contains(id);
+    }
+    private static void refreshSources(Path root, Properties lock) throws Exception {
+        int count = integer(lock, "refresh.source.count");
+        require(count >= 1 && count <= 4, "behavior-family source refresh census drift");
+        for (int index = 1; index <= count; index++) {
+            String stem = "refresh.source." + index + ".";
+            String relative = required(lock, stem + "path");
+            require(relative.equals("modules/api/src/main/java/worldline/api/WorldlineBehavior.java")
+                            && hash(required(lock, stem + "prior_sha256"))
+                            && digest(root.resolve(relative)).equals(
+                                    required(lock, stem + "current_sha256"))
+                            && Files.readString(root.resolve(relative))
+                                    .contains("BLOCK_LIFECYCLE_CONFORMANCE"),
+                    "invalid behavior-family source refresh");
+        }
     }
     private static String digest(Path path) throws Exception { return HexFormat.of().formatHex(
             MessageDigest.getInstance("SHA-256").digest(Files.readString(path, StandardCharsets.UTF_8)

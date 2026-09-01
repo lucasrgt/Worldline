@@ -25,12 +25,13 @@ final class TelemetryPinMigration {
     }
 
     private void apply() throws Exception {
-        require(dirtyIndex(), "stage the telemetry implementation before migrating pins");
+        Path lock = root.resolve("smokes/telemetry-migration.lock");
+        Properties manifest = Files.isRegularFile(lock) ? load(lock) : new Properties();
+        require(reviewed(manifest),
+                "stage a reviewed change or commit the shared fingerprint change before migrating pins");
         SmokePins existing = new SmokePins(root); SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); SmokeReceiptCache cache =
                 new SmokeReceiptCache(root); List<SmokePins.Entry> pins = new ArrayList<>();
-        Path lock = root.resolve("smokes/telemetry-migration.lock");
-        Properties manifest = Files.isRegularFile(lock) ? load(lock) : new Properties();
         Properties providers = ProviderDiscoveryPinCheck.manifest(root);
         int changed = 0, carried = 0, executed = 0;
         manifest.setProperty("schema", "1");
@@ -38,7 +39,10 @@ final class TelemetryPinMigration {
         attest(manifest, "process_source", "tools/harness/SmokeProcess.java");
         attest(manifest, "execution_source", "tools/harness/SmokeExecution.java");
         attest(manifest, "history_source", "tools/harness/SmokeScheduleHistory.java");
+        attest(manifest, "fingerprint_source", "tools/harness/SmokeInputFingerprint.java");
         attest(manifest, "policy", "quality/smoke-telemetry.properties");
+        manifest.setProperty("testkit_source_tree", committedTree(
+                "modules/testkit/src/main/java"));
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             SmokePins.Entry prior = existing.entry(smoke.id);
             String current = fingerprints.compute(smoke);
@@ -99,6 +103,41 @@ final class TelemetryPinMigration {
     }
     private boolean dirtyIndex() throws Exception { Process process = new ProcessBuilder("git", "diff",
             "--cached", "--quiet").directory(root.toFile()).start(); return process.waitFor() == 1; }
+    private boolean reviewed(Properties manifest) throws Exception {
+        if (dirtyIndex()) return true;
+        Process worktree = new ProcessBuilder("git", "diff", "--quiet")
+                .directory(root.toFile()).start();
+        Process index = new ProcessBuilder("git", "diff", "--cached", "--quiet")
+                .directory(root.toFile()).start();
+        String recorded = manifest.getProperty("fingerprint_source.sha256", "");
+        String recordedTestKit = manifest.getProperty("testkit_source_tree", "");
+        boolean clean = worktree.waitFor() == 0 && index.waitFor() == 0;
+        return clean && (!digest(root.resolve("tools/harness/SmokeInputFingerprint.java"))
+                        .equals(recorded)
+                || !committedTree("modules/testkit/src/main/java").equals(recordedTestKit)
+                || censusDrift(manifest));
+    }
+    private boolean censusDrift(Properties manifest) throws Exception {
+        Properties providers = ProviderDiscoveryPinCheck.manifest(root);
+        int tracked = 0;
+        for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            String stem = "smoke." + smoke.id + ".current_fingerprint";
+            if (manifest.getProperty(stem) != null
+                    && !ProviderDiscoveryPinCheck.exemptsLegacy(providers, smoke.id)) tracked++;
+        }
+        int sealed;
+        try { sealed = Integer.parseInt(manifest.getProperty("count", ""))
+                - ProviderDiscoveryPinCheck.pendingCount(providers); }
+        catch (NumberFormatException error) { return true; }
+        return tracked != sealed;
+    }
+    private String committedTree(String relative) throws Exception {
+        Process process = new ProcessBuilder("git", "rev-parse", "HEAD:" + relative)
+                .directory(root.toFile()).redirectErrorStream(true).start();
+        String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        require(process.waitFor() == 0, "missing committed source tree: " + relative);
+        return output.strip();
+    }
     private static String digest(Path path) throws Exception { return HexFormat.of().formatHex(
             MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(path)));
     }

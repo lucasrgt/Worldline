@@ -50,7 +50,8 @@ public final class Replay {
         boolean coverage = (arguments.length == 2 || arguments.length == 3
                 || arguments.length == 4) && arguments[0].equals("coverage");
         boolean census = arguments.length == 2 && arguments[0].equals("census");
-        boolean atlas = arguments.length == 4 && arguments[0].equals("atlas");
+        boolean atlas = arguments.length >= 2 && arguments[0].equals("atlas");
+        boolean atlasRender = arguments.length == 4 && arguments[1].matches("-?[0-9]+");
         boolean ui = arguments.length == 2 && arguments[0].equals("ui");
         boolean test = arguments.length >= 1 && arguments[0].equals("test");
         boolean testRuntime = test && !Arrays.asList(arguments).contains("--no-runtime")
@@ -58,7 +59,7 @@ public final class Replay {
                 && !Arrays.asList(arguments).contains("inspect")
                 && !Arrays.asList(arguments).contains("--help");
         boolean game = replay || modRun || scenarioRun || fuzz || debug || profile
-                || census || atlas || ui || testRuntime;
+                || census || atlasRender || ui || testRuntime;
         if (!replay && !trace && !mod && !scenario && !modRun && !scenarioRun && !fuzz
                 && !debug && !profile && !profiler && !coverage && !census && !atlas && !ui && !test) {
             System.err.println("usage: java tools/replay/Replay.java replay <bundle.wlrb>");
@@ -80,12 +81,15 @@ public final class Replay {
             System.err.println("   or: java tools/replay/Replay.java coverage <scenario> [trace] [min-percent]");
             System.err.println("   or: java tools/replay/Replay.java census <out-dir>");
             System.err.println("   or: java tools/replay/Replay.java atlas <seed> <radius-1..4> <output.html>");
+            System.err.println("   or: java tools/replay/Replay.java atlas index <query>");
+            System.err.println("   or: java tools/replay/Replay.java atlas context <query> [options]");
+            System.err.println("   or: java tools/replay/Replay.java atlas taxonomy|tags|status|gaps|coverage");
             System.err.println("   or: java tools/replay/Replay.java ui <output.html>");
             System.err.println("   or: java tools/replay/Replay.java test [SpecClass]");
             System.err.println("   or: java tools/replay/Replay.java test run <spec.jar|classes> [SpecClass] [options]"); return 2; }
         if (game) { int inputs = new ProcessBuilder("java", "tools/harness/RuntimeCheck.java", "--required")
                 .directory(root.toFile()).inheritIO().start().waitFor(); if (inputs != 0) return inputs; }
-        Path classes = root.resolve(".worldline/build/classes");
+        Path classes = productRoot();
         Path client = root.resolve(".worldline/smokes/controlled-client-tick");
         Path workspace = root.resolve("local/workspaces/b1.7.3");
         List<Path> paths = new ArrayList<>(Arrays.asList(classes.resolve("cli"),
@@ -97,9 +101,13 @@ public final class Replay {
         paths.add(classes.resolve("fuzz"));
         paths.add(classes.resolve("profiling"));
         paths.add(classes.resolve("coverage"));
-        if (atlas) paths.add(root.resolve(".worldline/build/server-adapter"));
+        if (atlas) paths.add(classes.resolve("atlas"));
+        if (atlasRender) paths.add(root.resolve(".worldline/build/server-adapter"));
         if (test || census) paths.addAll(Arrays.asList(classes.resolve("testmodel"),
                 classes.resolve("testapi"), classes.resolve("testkit")));
+        if (test) paths.addAll(Arrays.asList(
+                root.resolve(".worldline/build/adapter-classes/b173-server"),
+                root.resolve(".worldline/build/adapter-classes/b173-server-testkit")));
         if (game) paths.addAll(Arrays.asList(classes.resolve("kernel"), client.resolve("adapter-classes"),
                 client.resolve("instrumented-client"), client.resolve("headless-classes"),
                 workspace.resolve("minecraft/bin"), workspace.resolve("jars/minecraft.jar")));
@@ -115,5 +123,16 @@ public final class Replay {
                         System.getProperty("path.separator"))), "worldline.cli.WorldlineCli"));
         command.addAll(Arrays.asList(arguments));
         return new ProcessBuilder(command).directory(root.toFile()).inheritIO().start().waitFor();
+    }
+
+    private Path productRoot() {
+        String override = System.getenv("WORLDLINE_PRODUCT_ROOT");
+        Path products = override == null || override.isBlank()
+                ? root.resolve(".worldline/build/classes")
+                : Paths.get(override).toAbsolutePath().normalize();
+        if (!products.startsWith(root.resolve(".worldline").normalize())) {
+            throw new IllegalStateException("launcher product root escapes .worldline");
+        }
+        return products;
     }
 }

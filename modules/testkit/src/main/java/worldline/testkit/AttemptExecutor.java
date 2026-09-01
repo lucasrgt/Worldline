@@ -103,10 +103,11 @@ final class AttemptExecutor {
                 if (options.provider != null) {
                     lease = RuntimeLease.acquire(options.runtimeLock);
                     session = options.provider.open(
-                            new TestRuntimeRequest(settings.seed, settings.world, settings.mod));
+                            new TestRuntimeRequest(settings.seed, settings.world,
+                                    settings.mod, test.path, settings.runtimeOptions));
                 }
                 context = new TestExecutionContext(settings.seed, number,
-                        session == null ? null : session.runtime(), artifacts, allowed);
+                        session, artifacts, allowed);
                 activeContext.set(context);
                 SnapshotStore store = new SnapshotStore(options.snapshots,
                         allowed == null && options.updateSnapshots);

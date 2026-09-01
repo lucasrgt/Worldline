@@ -1,12 +1,18 @@
 package worldline.testapi;
 
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import worldline.api.WorldlineBehavior;
 import worldline.api.WorldlineEvidence;
+import worldline.test.TestCase;
+import worldline.test.TestCaseBuilder;
 import worldline.test.TestDefinition;
 import worldline.test.TestNode;
 import worldline.test.TestPlan;
+import worldline.test.TestRuntimeRequest;
 import worldline.test.WorldlineSpec;
 import static worldline.test.Expect.expect;
 import static worldline.test.Worldline.describe;
@@ -15,6 +21,7 @@ import static worldline.test.Worldline.entity;
 import static worldline.test.Worldline.each;
 import static worldline.test.Worldline.it;
 import static worldline.test.Worldline.test;
+import static worldline.test.Worldline.worldline;
 
 /** Collection, aliases, immutability, and assertion contract tests. */
 public final class WorldlineDslTest {
@@ -38,7 +45,37 @@ public final class WorldlineDslTest {
         behaviorEvidence();
         failure(() -> expect(1).toEqual(2), "equality assertion passed");
         failure(() -> test("outside", context -> {}), "DSL worked outside collection");
+        runtimeOptions();
         System.out.println("WorldlineDslTest passed");
+    }
+
+    private static void runtimeOptions() {
+        TestCase configured = worldline().runtime("fake")
+                .runtimeOption("fixture.block", "57:1:0")
+                .run(context -> {});
+        require(configured.runtimeOptions().get("fixture.block").equals("57:1:0"),
+                "runtime option was not retained");
+        failure(() -> configured.runtimeOptions().put("fixture.block", "1:1:0"),
+                "runtime options remained mutable");
+        failure(() -> worldline().runtimeOption("Invalid", "value"),
+                "invalid runtime option key was accepted");
+        failure(() -> worldline().runtimeOption("fixture", "line\nbreak"),
+                "non-visible runtime option value was accepted");
+        TestCaseBuilder duplicate = worldline().runtimeOption("fixture", "stone");
+        failure(() -> duplicate.runtimeOption("fixture", "dirt"),
+                "duplicate runtime option was accepted");
+
+        Map<String, String> source = new LinkedHashMap<String, String>();
+        source.put("fixture", "stone");
+        TestRuntimeRequest request = new TestRuntimeRequest(
+                1L, Paths.get("."), null, "suite > case", source);
+        source.clear();
+        require(request.runtimeOption("fixture").equals("stone"),
+                "runtime request did not copy options");
+        failure(() -> request.runtimeOptions().clear(), "runtime request options remained mutable");
+        source.put("Invalid", "stone");
+        failure(() -> new TestRuntimeRequest(1L, Paths.get("."), null, "case", source),
+                "invalid direct runtime option was accepted");
     }
 
     private static void behaviorEvidence() {
@@ -63,7 +100,8 @@ public final class WorldlineDslTest {
     }
     private static void failure(Action action, String message) {
         try { action.run(); throw new AssertionError(message); }
-        catch (IllegalArgumentException | IllegalStateException | AssertionError expected) {
+        catch (IllegalArgumentException | IllegalStateException | UnsupportedOperationException
+                | AssertionError expected) {
             if (expected instanceof AssertionError && expected.getMessage().equals(message)) throw expected;
         } catch (Exception expected) { /* expected checked failure */ }
     }

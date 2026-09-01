@@ -1,0 +1,7 @@
+# owner kind descriptor named official
+net/minecraft/src/RenderBlocks	c		net/minecraft/src/RenderBlocks	cv
+net/minecraft/src/RenderBlocks	m	(Lnet/minecraft/src/Block;IF)V	renderBlockOnInventory	a
+net/minecraft/src/RenderBlocks	m	(I)Z	renderItemIn3d	a
+net/minecraft/src/Block	c		net/minecraft/src/Block	uu
+net/minecraft/src/Block	f	[Lnet/minecraft/src/Block;	blocksList	m
+net/minecraft/src/Block	m	()I	getRenderType	b

@@ -9,7 +9,7 @@ import java.util.Set;
 import worldline.api.SemanticMapping;
 
 /**
- * Fail-closed static role graph. Tokens are the uppercase category names;
+ * Fail-closed static role graph. Tokens are normalized uppercase category names;
  * unknown read/write/dep tokens fail construction.
  */
 public final class SemanticGraph {
@@ -72,7 +72,7 @@ public final class SemanticGraph {
     private static Set<String> allowedTokens() {
         Set<String> tokens = new LinkedHashSet<String>();
         for (String category : SemanticRoles.categories()) {
-            tokens.add(category.toUpperCase(Locale.US));
+            tokens.add(category.toUpperCase(Locale.US).replace('-', '_'));
         }
         return tokens;
     }

@@ -6,6 +6,9 @@ public final class WorldlineRedstoneBehaviors {
             "Repeater conducts a pulse forward and isolates reverse input");
     public static final WorldlineBehavior REDSTONE_ORE_GLOW = define("redstone-ore-glow",
             "Stepping on or clicking placed redstone ore lights it then darkens");
+    public static final WorldlineBehavior REDSTONE_ORE_SUBSYSTEM = define(
+            "redstone-ore-subsystem",
+            "Inactive and glowing redstone ore registry, lifecycle, persistence, light, and ticks");
     public static final WorldlineBehavior DETECTOR_RAIL_VACATE = define("detector-rail-vacate",
             "Occupied detector rail emits power and unpowers after the cart leaves");
     public static final WorldlineBehavior POWERED_RAIL_SLOPE_PROPAGATION =
@@ -17,6 +20,13 @@ public final class WorldlineRedstoneBehaviors {
             "Piston extension displaces a player or dropped item entity");
     public static final WorldlineBehavior STICKY_PISTON_BUD = define("sticky-piston-bud",
             "Sticky piston QC-latched until a neighbor update extends without direct power");
+    public static final WorldlineBehavior PISTON_SUBSYSTEM = define("piston-subsystem",
+            "Four-block piston state, lifecycle, persistence, physics, and neighbor conformance");
+    public static final WorldlineBehavior REPEATER_SUBSYSTEM = define("repeater-subsystem",
+            "Two-state repeater domain, lifecycle, timing, physics, and neighbor conformance");
+    public static final WorldlineBehavior REDSTONE_TORCH_SUBSYSTEM = define(
+            "redstone-torch-subsystem",
+            "Two-state redstone torch faces, lifecycle, inversion, burnout, and physics");
     public static final WorldlineBehavior REDSTONE_ONE_TICK = define("redstone-one-tick",
             "A 1-tick pulse cuts at lever 69:9 and drops a sticky piston payload");
     public static final WorldlineBehavior DOOR_SOUND_EVENT = define("door-sound-event",

@@ -12,6 +12,9 @@ set. It does not claim long falls, flint drops, entity collisions,
 piston interaction, unloaded chunks, or a second Packet23 tracker.
 
 Frozen semantic SHA-256:
-`d8653266b9cdaa16b9aa3d3fc760642400d2172380078b03499aff10394c84e8`.
+`959924fb1c3833226b9a7c0ffeebe212f9be0621ba06ca2f083e08492c72d066`.
+
+Both scheduled-tick observations are normalized through the public
+`BlockTickPolicyFixture`.
 
 Headless `B173WireClient` only. No GUI. No Aero.

@@ -157,8 +157,13 @@ public final class WorldlineCli {
                 + " <nostalgia.jar> <retromcp.properties> <retromcp.tiny> <coverage.properties>");
         error.println("   or: worldline behaviors list");
         error.println("   or: worldline atlas status");
+        error.println("   or: worldline atlas extensions <project-root>");
         error.println("   or: worldline atlas show <id>");
         error.println("   or: worldline atlas search <term>");
+        error.println("   or: worldline atlas index <query>");
+        error.println("   or: worldline atlas context <query> [--format=json] [--budget=N] [--depth=N]");
+        error.println("   or: worldline atlas taxonomy");
+        error.println("   or: worldline atlas tags");
         error.println("   or: worldline atlas gaps");
         error.println("   or: worldline atlas coverage");
         error.println("   or: worldline atlas evidence <id>");

@@ -46,6 +46,7 @@ final class SwarmPreCandidate {
                 .resolve("smoke.properties"), StandardCharsets.UTF_8)) {
             descriptor.load(reader);
         }
+        MilestoneObjective.load(root, id, goal, base).verifyDescriptor(descriptor);
         List<String> scars = new ArrayList<>(List.of(REQUIRED, SOURCE, SEMANTIC_EXCLUSION));
         if (SwarmProcess.status(root, List.of("git", "cat-file", "-e",
                 base + ":smokes/" + id + "/smoke.properties"), 60) != 0) scars.add(LANES);

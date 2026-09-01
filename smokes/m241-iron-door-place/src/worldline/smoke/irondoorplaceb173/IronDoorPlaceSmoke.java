@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
+import worldline.testkit.*;
 
 /** Places official iron door item 330 as BlockDoor 71 halves and reloads them. */
 public final class IronDoorPlaceSmoke {
@@ -71,6 +72,14 @@ public final class IronDoorPlaceSmoke {
               && after.blockAt(local(upper.x(), cx), upper.y(), local(upper.z(), cz))
                   .equals(new BlockState(71, 8)),
           "persisted iron door drift");
+      java.util.List<BlockStateCell> cells = java.util.Arrays.asList(
+          new BlockStateCell(lower, new BlockState(71, 0)),
+          new BlockStateCell(upper, new BlockState(71, 8)));
+      require(BlockPlacementPersistenceFixture.execute("b1.7.3:block/071", "oriented-door",
+              true, 330, 1, 0, 1, cells, cells, cells,
+              BlockLifecycleDriver.ReloadBoundary.FRESH_LOGIN).subject()
+                  .equals("b1.7.3:block/071"),
+          "public iron-door placement/persistence evidence drift");
       String evidence = "column=" + column + ",support=" + top.x() + ":" + top.y() + ":" + top.z()
           + ":1:0,lower=" + lower.x() + ":" + lower.y() + ":" + lower.z()
           + ":71:0,upper=" + upper.x() + ":" + upper.y() + ":" + upper.z()

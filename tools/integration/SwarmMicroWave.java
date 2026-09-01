@@ -28,11 +28,17 @@ final class SwarmMicroWave {
         require(!ids.isEmpty() && ids.size() <= width && new HashSet<>(ids).size() == ids.size(),
                 "micro-wave exceeds adaptive Candidate width " + width);
         WaveCensus.Snapshot census = WaveCensus.read(censusValue.toAbsolutePath().normalize());
+        Set<String> reservedClaims = new HashSet<>();
         for (String id : ids) {
             WaveCensus.Row row = census.rows().stream().filter(value -> value.id().equals(id))
                     .findFirst().orElseThrow(() -> new IllegalStateException("candidate absent: " + id));
             require("NOT_STARTED".equals(row.state()), "candidate is not pristine: " + id);
-            RejectedContractCheck.requireAllowed(root, id, id.replace('-', ' '));
+            MilestoneObjective objective = MilestoneObjective.load(root, id);
+            for (String claim : objective.claims()) {
+                require(reservedClaims.add(claim),
+                        "functional census claim overlaps parallel objectives: " + claim);
+            }
+            RejectedContractCheck.requireAllowed(root, id, objective.outcome());
         }
         String closureSha = SwarmEvidenceArchive.sha256(closure);
         Path canonical = canonicalReceipt(closure, closureSha);
@@ -75,6 +81,7 @@ final class SwarmMicroWave {
         require(closureSha.equals(string(value, "closure_sha256"))
                 && bool(closureText, "next_candidate_allowed"), "learning barrier receipt drifted");
         require(strings(value, "candidates").contains(id), "worker is outside supervised micro-wave");
+        MilestoneObjective.load(root, id);
         require(integer(value, "width") <= integer(value, "limit"), "micro-wave width exceeded");
     }
 

@@ -48,6 +48,18 @@ public final class RemoteWorldView {
         return chunk.blockAt(Math.floorMod(worldX, 16), localY, Math.floorMod(worldZ, 16));
     }
 
+    public int blockLightAt(int worldX, int worldY, int worldZ) {
+        RemoteChunkSnapshot chunk = chunkAt(Math.floorDiv(worldX, 16), Math.floorDiv(worldZ, 16));
+        return chunk.blockLightAt(Math.floorMod(worldX, 16),
+                worldY - chunk.observation().y(), Math.floorMod(worldZ, 16));
+    }
+
+    public int skyLightAt(int worldX, int worldY, int worldZ) {
+        RemoteChunkSnapshot chunk = chunkAt(Math.floorDiv(worldX, 16), Math.floorDiv(worldZ, 16));
+        return chunk.skyLightAt(Math.floorMod(worldX, 16),
+                worldY - chunk.observation().y(), Math.floorMod(worldZ, 16));
+    }
+
     private static void validate(RemoteChunkSnapshot chunk) {
         if (chunk == null) throw new IllegalArgumentException("null remote chunk");
         RemoteChunkObservation region = chunk.observation();

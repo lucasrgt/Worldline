@@ -1,0 +1,8 @@
+claim_id	layer	subject_id	template_id	applicability	status	oracle	evidence_id	signature	automation_surface
+bed-state-domain	SINGULAR	b1.7.3:block/026	state-domain	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-bed-subsystem-conformance-cycle	9fafcdf57291cb7dd2660a1468035f2d9f40f9b73f599889db777f4600b4a740	PUBLIC_TESTKIT
+bed-break-transition	UNIVERSAL	b1.7.3:block/026	break-transition	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-bed-subsystem-conformance-cycle	9fafcdf57291cb7dd2660a1468035f2d9f40f9b73f599889db777f4600b4a740	PUBLIC_TESTKIT
+bed-drop-matrix	SINGULAR	b1.7.3:block/026	drop-matrix	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-bed-subsystem-conformance-cycle	9fafcdf57291cb7dd2660a1468035f2d9f40f9b73f599889db777f4600b4a740	PUBLIC_TESTKIT
+bed-collision-shape	SINGULAR	b1.7.3:block/026	collision-shape	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-bed-subsystem-conformance-cycle	9fafcdf57291cb7dd2660a1468035f2d9f40f9b73f599889db777f4600b4a740	PUBLIC_TESTKIT
+bed-light-behavior	SINGULAR	b1.7.3:block/026	light-behavior	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-bed-subsystem-conformance-cycle	9fafcdf57291cb7dd2660a1468035f2d9f40f9b73f599889db777f4600b4a740	PUBLIC_TESTKIT
+bed-tick-policy	SINGULAR	b1.7.3:block/026	tick-policy	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-bed-subsystem-conformance-cycle	9fafcdf57291cb7dd2660a1468035f2d9f40f9b73f599889db777f4600b4a740	PUBLIC_TESTKIT
+bed-neighbor-response	SINGULAR	b1.7.3:block/026	neighbor-response	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-bed-subsystem-conformance-cycle	9fafcdf57291cb7dd2660a1468035f2d9f40f9b73f599889db777f4600b4a740	PUBLIC_TESTKIT

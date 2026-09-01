@@ -23,7 +23,7 @@ public final class AdapterManifest {
     public static final String SCHEMA = "worldline.adapter.semantics.v1";
     public static final List<String> DRIVERS = Collections.unmodifiableList(
             Arrays.asList("b173-client", "b173-server", "modloader-forge", "stationapi"));
-    private static final Pattern ADAPTER = Pattern.compile("[a-z][a-z0-9-]{0,63}");
+    private static final Pattern ADAPTER = Pattern.compile("[a-z][a-z0-9_.-]{0,63}");
     private static final Pattern SITE = Pattern.compile("worldline/[A-Za-z0-9_$./-]+#[A-Za-z0-9_$.]+");
     private final String adapter, kind, prefix;
     private final List<Site> sites;
@@ -68,6 +68,7 @@ public final class AdapterManifest {
             site = site.trim();
             String role = required(fields, "role." + index);
             String subject = fields.getProperty("subject." + index, "").trim();
+            String subjectRole = fields.getProperty("subject.role." + index, role).trim();
             if (!SITE.matcher(site).matches() || !site.startsWith(prefix)) {
                 throw new IllegalArgumentException("invalid adapter site " + site);
             }
@@ -78,15 +79,19 @@ public final class AdapterManifest {
                 String owner = subject.substring(0, dot), name = subject.substring(dot + 1);
                 rejectExternal(owner);
                 SemanticMapping symbol = catalog.symbol(owner, name);
-                if (!symbol.role().equals(role)) {
-                    throw new IllegalArgumentException("subject " + subject + " is not " + role);
+                if (!symbol.role().equals(subjectRole)) {
+                    throw new IllegalArgumentException("subject " + subject
+                            + " is not " + subjectRole);
+                }
+                if (!role.equals(subjectRole) && !mapping.owner().startsWith(prefix)) {
+                    throw new IllegalArgumentException("subject role override requires owned site role");
                 }
             }
             if (mapping.owner().startsWith(prefix) && !site.equals(mapping.owner() + "#" + mapping.name())) {
                 throw new IllegalArgumentException("site must name catalog owner " + role);
             }
             if (!seen.add(site)) throw new IllegalArgumentException("duplicate site " + site);
-            sites.add(new Site(site, role, subject));
+            sites.add(new Site(site, role, subject, subjectRole));
         }
         int highest = 0;
         for (String key : fields.stringPropertyNames()) {
@@ -133,11 +138,23 @@ public final class AdapterManifest {
         try (DirectoryStream<Path> children = Files.newDirectoryStream(directory)) {
             for (Path child : children) {
                 if (!Files.isDirectory(child)) continue;
-                Path manifest = nested == null ? child.resolve("manifest.properties")
+                Path manifest = nested == null ? extensionSemantics(child)
                         : child.resolve(nested).resolve("manifest.properties");
-                if (Files.isRegularFile(manifest)) manifests.add(load(manifest, catalog));
+                if (manifest != null && Files.isRegularFile(manifest)) manifests.add(load(manifest, catalog));
             }
         }
+    }
+
+    private static Path extensionSemantics(Path directory) throws IOException {
+        Path separate = directory.resolve("semantics.properties");
+        if (Files.isRegularFile(separate)) return separate;
+        Path legacy = directory.resolve("manifest.properties");
+        if (!Files.isRegularFile(legacy)) return null;
+        Properties fields = new Properties();
+        try (java.io.Reader reader = Files.newBufferedReader(legacy, StandardCharsets.UTF_8)) {
+            fields.load(reader);
+        }
+        return SCHEMA.equals(fields.getProperty("schema")) ? legacy : null;
     }
 
     private static List<AdapterManifest> finish(List<AdapterManifest> manifests) {
@@ -173,6 +190,9 @@ public final class AdapterManifest {
         for (Site site : sites) {
             text.append(site.role).append('=').append(site.site);
             if (!site.subject.isEmpty()) text.append(" subject=").append(site.subject);
+            if (!site.subjectRole.equals(site.role)) {
+                text.append(" subjectRole=").append(site.subjectRole);
+            }
             text.append('\n');
         }
         return text.toString();
@@ -192,12 +212,14 @@ public final class AdapterManifest {
     }
 
     public static final class Site {
-        private final String site, role, subject;
-        private Site(String site, String role, String subject) {
+        private final String site, role, subject, subjectRole;
+        private Site(String site, String role, String subject, String subjectRole) {
             this.site = site; this.role = role; this.subject = subject;
+            this.subjectRole = subjectRole;
         }
         public String site() { return site; }
         public String role() { return role; }
         public String subject() { return subject; }
+        public String subjectRole() { return subjectRole; }
     }
 }
