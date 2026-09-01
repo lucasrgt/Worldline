@@ -1234,6 +1234,26 @@ Commit `9dc03ddce` adds two passing structural-instability samples, while failed
 inner runs remain native execution evidence rather than admissible history.
 Commit `a3137efa7` adds the first passing official-worldgen campaign sample. Its
 failed pre-oracle predecessor remains linked native evidence, not history.
+Commit `924b97012` qualifies observational campaign performance signals over
+that sanitized history. A reviewed three-sample baseline window is compared
+with the immediately following three-sample recent window by median elapsed
+time. The symmetric 150-percent band reports `increase`, `decrease`,
+`within-band`, `zero-baseline`, or explicit `insufficient-history`; the schema
+fixes both `verdict_authority=false` and `admission_effect=false`. Profiles bind
+the campaign ID, budget, shard count/index, and resolved workload case counts,
+plus the existing executor/backend/host dimensions. Seeds remain excluded so
+replays are comparable, while a changed execution shape starts a new history.
+
+Six sequential native structural-instability runs at seeds 201 through 206
+qualify the complete live path for profile
+`structural-instability-b4cb935723713dbb`. The first window median is 30,410 ms
+and the recent window median is 28,770 ms, producing a 94-percent
+`within-band` signal. All six runs are linked, with no failures, orphans,
+partial evidence, truncation, or dangling campaign bindings; the aggregate
+profile reports 174,401 ms elapsed, 669,097,984-byte peak Job commit and seven
+peak processes. The six telemetry object digests begin with `9a2fc72d3f6c`,
+`a98308919183`, `8d5b5c1c90f1`, `2966ceb12ade`, `82c40801c93c`, and
+`ffe6f9dc7692`. The exact slice passes the canonical Gate at 135,250 ms.
 
 ### C3. Conservative admission
 
@@ -1429,7 +1449,8 @@ continues to interpret behavior and divergences. Rust schedules, isolates,
 measures, and transports permitted objects.
 
 The base contract, Nightly fuzz-plus-mutation adapter, structural instability
-adapter, and fixed official-worldgen matrix replay adapter are qualified.
+adapter, fixed official-worldgen matrix replay adapter, and the first
+observational profiling/regression read model are qualified.
 Plans and receipts are canonical, shards are complete and disjoint, immutable
 publication is fail closed, and aggregation is independent of worker arrival
 order. Native executor dispatch is qualified for the complete Nightly shard
@@ -1439,9 +1460,12 @@ runs through Rust, supports multi-shard local arrival, and records verified
 metrics under the same non-admissible capability; it deliberately does not
 start Minecraft. The worldgen adapter runs the existing M634 oracle through the
 official lease inside Rust containment, while leaving M634 as the sole behavior
-authority. Arbitrary-seed worldgen, Minecraft-runtime instability adapters,
-differential, profiling, regression, and minimization execution, plus
-multi-shard distribution across distinct hosts remain pending.
+authority. Campaign profiling now has workload-shape-safe historical windows
+and live change signals, but those observations do not schedule follow-up work
+or assert a regression verdict. Arbitrary-seed worldgen, Minecraft-runtime
+instability adapters, differential and minimization execution, automated
+regression triage, plus multi-shard distribution across distinct hosts remain
+pending.
 
 ## 12. Source and repository strategy
 
