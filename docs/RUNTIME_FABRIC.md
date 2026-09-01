@@ -164,11 +164,12 @@ with the Rust Windows Job backend under one continuous official-runtime lease:
 java tools/harness/Gate.java --executor-server
 ```
 
-The closed matrix covers dedicated-server bootstrap, a protocol-14 multiplayer
-session, and persisted Nether login. Each arm uses one independent disposable
-exact-commit worktree, an explicit environment, a locally verified server JAR,
-and per-behavior output roots. Every milestone still enters through
-`Gate --milestone`; the cycle requires byte-equal canonical evidence, complete
-Rust output, and zero remaining descendants before recording observational
-telemetry. The Windows profile observes explicit loopback use under inherited
-network access and does not claim OS-enforced network isolation.
+The closed matrix covers dedicated-server bootstrap, persisted Nether login,
+and same-dimension player respawn over protocol 14. Each arm uses one
+independent disposable exact-commit worktree, an explicit environment, a
+locally verified server JAR, and per-behavior output roots. Every milestone
+still enters through `Gate --milestone`; the cycle requires byte-equal
+canonical evidence, complete Rust output, and zero remaining descendants
+before recording observational telemetry. The Windows profile observes
+explicit loopback use under inherited network access and does not claim
+OS-enforced network isolation.
