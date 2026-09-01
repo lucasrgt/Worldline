@@ -129,7 +129,9 @@ final class M784Runtime {
     private final Properties config;
 
     M784Runtime(Path smoke, Properties config, Path aero) {
-        this.smoke = smoke; this.config = config; this.aero = aero;
+        this.smoke = smoke;
+        this.config = config;
+        this.aero = aero;
     }
 
     void verifyCheckout() throws Exception {
@@ -198,7 +200,8 @@ final class M784Runtime {
 
     private String git(String... arguments) throws Exception {
         ArrayList<String> command = new ArrayList<String>();
-        command.add("git"); command.addAll(List.of(arguments));
+        command.add("git");
+        command.addAll(List.of(arguments));
         return SmokeSupport.capture(aero, command, 60);
     }
 
@@ -223,25 +226,39 @@ final class M784Artifact {
 
     private M784Artifact(Path game, Properties p, long[][] rows) {
         this.game = game;
-        arm = required(p, "arm"); machines = integer(p, "machines");
-        frames = integer(p, "frames"); captures = integer(p, "captures");
+        arm = required(p, "arm");
+        machines = integer(p, "machines");
+        frames = integer(p, "frames");
+        captures = integer(p, "captures");
         blankCaptures = integer(p, "captures.blank.rejected");
-        width = integer(p, "width"); height = integer(p, "height");
+        width = integer(p, "width");
+        height = integer(p, "height");
         allocatedBytes = number(p, "frame.allocated.bytes");
-        heapPeak = number(p, "heap.peak.bytes"); heapFinal = number(p, "heap.final.bytes");
-        pageCalls = integer(p, "page.calls"); pageRebuilds = integer(p, "page.rebuilds");
-        directCalls = integer(p, "page.direct"); cachedMax = integer(p, "page.cached.max");
-        compiled = integer(p, "page.compiled"); expired = integer(p, "page.expired");
-        evicted = integer(p, "page.evicted"); flattened = bool(p, "page.flattened");
-        ttl = integer(p, "page.ttl.frames"); rebuildBudget = integer(p, "page.rebuild.budget");
-        cacheMax = integer(p, "page.cache.max"); flushCalls = number(p, "flush.calls");
-        flushNanos = number(p, "flush.nanos"); prewarmEnabled = bool(p, "prewarm.enabled");
+        heapPeak = number(p, "heap.peak.bytes");
+        heapFinal = number(p, "heap.final.bytes");
+        pageCalls = integer(p, "page.calls");
+        pageRebuilds = integer(p, "page.rebuilds");
+        directCalls = integer(p, "page.direct");
+        cachedMax = integer(p, "page.cached.max");
+        compiled = integer(p, "page.compiled");
+        expired = integer(p, "page.expired");
+        evicted = integer(p, "page.evicted");
+        flattened = bool(p, "page.flattened");
+        ttl = integer(p, "page.ttl.frames");
+        rebuildBudget = integer(p, "page.rebuild.budget");
+        cacheMax = integer(p, "page.cache.max");
+        flushCalls = number(p, "flush.calls");
+        flushNanos = number(p, "flush.nanos");
+        prewarmEnabled = bool(p, "prewarm.enabled");
         prewarmPending = integer(p, "prewarm.pending");
-        displayLive = integer(p, "display.live"); displayPeak = integer(p, "display.peak");
+        displayLive = integer(p, "display.live");
+        displayPeak = integer(p, "display.peak");
         displayAllocated = integer(p, "display.allocated");
-        displayDenied = integer(p, "display.denied"); displayFailed = integer(p, "display.failed");
+        displayDenied = integer(p, "display.denied");
+        displayFailed = integer(p, "display.failed");
         displayMax = integer(p, "display.max");
-        walls = rows[0]; allocations = rows[1];
+        walls = rows[0];
+        allocations = rows[1];
         hashes = new String[captures];
         for (int i = 0; i < captures; i++) hashes[i] = required(p, "checkpoint." + i + ".sha256");
     }
@@ -256,7 +273,8 @@ final class M784Artifact {
         for (int i = 0; i < lines.size(); i++) {
             String[] columns = lines.get(i).split(",", -1);
             SmokeSupport.require(columns.length == 2, "M784 frame row drift");
-            rows[0][i] = Long.parseLong(columns[0]); rows[1][i] = Long.parseLong(columns[1]);
+            rows[0][i] = Long.parseLong(columns[0]);
+            rows[1][i] = Long.parseLong(columns[1]);
         }
         M784Artifact value = new M784Artifact(game, p, rows);
         SmokeSupport.require(value.arm.equals(expected) && value.frames == lines.size(),
@@ -294,7 +312,8 @@ final class M784Artifact {
 
     double fps() { return walls.length * 1_000_000_000.0D / sum(walls); }
     long p99() {
-        long[] values = walls.clone(); Arrays.sort(values);
+        long[] values = walls.clone();
+        Arrays.sort(values);
         return values[Math.min(values.length - 1, (int) Math.ceil(values.length * 0.99D) - 1)];
     }
     double allocationPerFrame() { return (double) allocatedBytes / frames; }
@@ -308,7 +327,11 @@ final class M784Artifact {
             + displayLive + "/" + displayPeak + "/" + displayAllocated;
     }
 
-    private static long sum(long[] values) { long total = 0L; for (long v : values) total += v; return total; }
+    private static long sum(long[] values) {
+        long total = 0L;
+        for (long value : values) total += value;
+        return total;
+    }
     private static String fmt(double v) { return String.format(Locale.ROOT, "%.2f", v); }
     private static boolean bool(Properties p, String k) { return Boolean.parseBoolean(required(p, k)); }
     private static int integer(Properties p, String k) { return Integer.parseInt(required(p, k)); }
@@ -331,7 +354,9 @@ record M784Visual(String label, M784Artifact baseline, M784Artifact candidate,
                               M784Artifact candidate) throws Exception {
         SmokeSupport.require(baseline.width == candidate.width && baseline.height == candidate.height
             && baseline.captures == candidate.captures, "M784 framebuffer shape diverged");
-        long changed = 0L; int maximum = 0; Set<Long> locations = new HashSet<Long>();
+        long changed = 0L;
+        int maximum = 0;
+        Set<Long> locations = new HashSet<Long>();
         long framePixels = (long) baseline.width * baseline.height;
         for (int checkpoint = 0; checkpoint < baseline.captures; checkpoint++) {
             byte[] left = baseline.pixels(checkpoint), right = candidate.pixels(checkpoint);
@@ -339,9 +364,13 @@ record M784Visual(String label, M784Artifact baseline, M784Artifact candidate,
                 boolean differs = false;
                 for (int channel = 0; channel < 4; channel++) {
                     int delta = Math.abs((left[pixel + channel] & 255) - (right[pixel + channel] & 255));
-                    maximum = Math.max(maximum, delta); differs |= delta != 0;
+                    maximum = Math.max(maximum, delta);
+                    differs |= delta != 0;
                 }
-                if (differs) { changed++; locations.add(checkpoint * framePixels + pixel / 4); }
+                if (differs) {
+                    changed++;
+                    locations.add(checkpoint * framePixels + pixel / 4);
+                }
             }
         }
         return new M784Visual(label, baseline, candidate, changed, maximum, locations);
@@ -372,10 +401,14 @@ final class M784Gate {
         double normalFps = 0, highFps = 0, normalP99 = 0, highP99 = 0;
         double normalAlloc = 0, highAlloc = 0, normalFlush = 0, highFlush = 0;
         for (M784Pair pair : pairs) {
-            normalFps += pair.normal().fps(); highFps += pair.high().fps();
-            normalP99 += pair.normal().p99(); highP99 += pair.high().p99();
-            normalAlloc += pair.normal().allocationPerFrame(); highAlloc += pair.high().allocationPerFrame();
-            normalFlush += pair.normal().flushPerCall(); highFlush += pair.high().flushPerCall();
+            normalFps += pair.normal().fps();
+            highFps += pair.high().fps();
+            normalP99 += pair.normal().p99();
+            highP99 += pair.high().p99();
+            normalAlloc += pair.normal().allocationPerFrame();
+            highAlloc += pair.high().allocationPerFrame();
+            normalFlush += pair.normal().flushPerCall();
+            highFlush += pair.high().flushPerCall();
         }
         double fpsRatio = highFps / normalFps, p99Ratio = highP99 / normalP99;
         double allocationRatio = highAlloc / normalAlloc, flushRatio = highFlush / normalFlush;
@@ -388,8 +421,10 @@ final class M784Gate {
                 && within(rate(pairs.get(0).high()), rate(pairs.get(index).high()), workTolerance);
         }
         for (M784Pair pair : pairs) {
-            normalWork += rate(pair.normal()); highWork += rate(pair.high());
-            normalRebuild += rebuildRate(pair.normal()); highRebuild += rebuildRate(pair.high());
+            normalWork += rate(pair.normal());
+            highWork += rate(pair.high());
+            normalRebuild += rebuildRate(pair.normal());
+            highRebuild += rebuildRate(pair.high());
         }
         boolean workloadRepeatable = sameArmWork
             && within(normalWork, highWork, workTolerance)
@@ -465,9 +500,12 @@ final class M784Gate {
     }
 
     private static Object frame(Method of, long[] durations) throws Exception {
-        long[][] rows = new long[durations.length][3]; long time = 1L;
+        long[][] rows = new long[durations.length][3];
+        long time = 1L;
         for (int i = 0; i < rows.length; i++) {
-            rows[i][0] = i; rows[i][1] = time; rows[i][2] = durations[i];
+            rows[i][0] = i;
+            rows[i][1] = time;
+            rows[i][2] = durations[i];
             time = Math.addExact(time, Math.max(1L, durations[i]));
         }
         return of.invoke(null, new String[] {"frame.wall.nanos"}, rows);
