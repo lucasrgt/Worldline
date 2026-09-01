@@ -14,6 +14,9 @@ final class RepositoryStageInputs {
     List<Path> harnessCoreFeatures() { return paths("tools/harness", "README.md", "changelog",
             "quality/artifact-transport.properties", "smokes/qualification-evidence"); }
     List<Path> harnessSmokeFeatures() { return paths("smokes", "quality",
+            "tools/harness/HarnessFeatureSelfTest.java", "tools/harness/SmokeInputGraph.java",
+            "tools/harness/SmokeInputGraphResult.java", "tools/harness/SmokeInputDependentsQuery.java",
+            "tools/harness/SmokeInputDiffQuery.java", "tools/harness/GitSourceSnapshot.java",
             "tools/harness/SmokeScheduleHistory.java", "tools/harness/LaneDifferential.java",
             "tools/harness/LaneMatrixContract.java", "tools/harness/SmokeScheduleBaselineCheck.java",
             "tools/harness/SmokeStatementBudget.java", "tools/harness/SmokeProductRootTest.java"); }

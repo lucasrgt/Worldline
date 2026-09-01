@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 /** Persists immutable smoke PASS proofs and binds their aggregate to the current tree. */
 final class SmokeReceiptCache {
@@ -44,6 +45,32 @@ final class SmokeReceiptCache {
         if (validProof(smoke.id, fingerprint, proof(smoke.id, fingerprint),
                 evidence(smoke.id, fingerprint))) return true;
         return pins.verifiedMatch(smoke.id, fingerprint) != null;
+    }
+
+    SmokeCacheExplanation explain(SmokeDiscovery.Entry smoke) throws Exception {
+        String fingerprint = fingerprint(smoke);
+        Path proof = proof(smoke.id, fingerprint), evidence = evidence(smoke.id, fingerprint);
+        boolean local = validProof(smoke.id, fingerprint, proof, evidence);
+        boolean pinned = pins.verifiedMatch(smoke.id, fingerprint) != null;
+        String decision, reason;
+        if (!reuse) { decision = "execute"; reason = "cache reuse is disabled"; }
+        else if (local) { decision = "reuse-local"; reason = "verified local immutable PASS proof"; }
+        else if (pinned) { decision = "reuse-pin"; reason = "verified tracked qualification pin"; }
+        else { decision = "execute"; reason = "no verified proof matches the execution fingerprint"; }
+        return new SmokeCacheExplanation(smoke.id, fingerprint, reuse, local, pinned,
+                decision, reason, currentMode(smoke.id, fingerprint));
+    }
+
+    private String currentMode(String id, String fingerprint) throws Exception {
+        Path path = reports.resolve(id + ".properties");
+        if (!Files.isRegularFile(path)) return null;
+        Properties value = load(path); String mode = value.getProperty("mode");
+        return "passed".equals(value.getProperty("status")) && id.equals(value.getProperty("id"))
+                && fingerprint.equals(value.getProperty("fingerprint"))
+                && state.head().equals(value.getProperty("head"))
+                && state.tree().equals(value.getProperty("tree"))
+                && state.clean() && "true".equals(value.getProperty("clean")) && mode != null
+                && Set.of("executed", "reused", "pinned").contains(mode) ? mode : null;
     }
 
     boolean restore(SmokeDiscovery.Entry smoke, String fingerprint) throws Exception {

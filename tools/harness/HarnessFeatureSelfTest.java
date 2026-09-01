@@ -28,11 +28,15 @@ final class HarnessFeatureSelfTest {
         ModuleCacheRemote.selfTest();
         ArtifactTransportPolicyTest.selfTest();
         ArtifactTransportPolicy.check(java.nio.file.Path.of("").toAbsolutePath().normalize());
+        ModuleInputGraph.selfTest();
     }
     static void smoke() throws Exception {
         SmokeScheduleHistory.selfTest();
         SmokeSuiteScheduler.selfTest();
         JavaTokenText.selfTest();
+        SmokeInputGraph.selfTest();
+        SmokeInputDependentsQuery.selfTest();
+        SmokeInputDiffQuery.selfTest();
         WorldTemplate.selfTest();
         LaneDifferential.selfTest();
         SmokeScheduleBaselineCheck.execute(java.nio.file.Path.of("").toAbsolutePath().normalize());
