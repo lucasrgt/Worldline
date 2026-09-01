@@ -204,6 +204,12 @@ Completed foundation slices:
   qualification is explicitly post-execution verification: recursive
   no-follow inspection rejects escapes, links, reparse points, special files,
   and budget excess without claiming filesystem isolation from a Job Object.
+- atomic no-replace workspace promotion in Worldline commits `3188a0360` and
+  `af7138e74`. The tooling cycle hashes the validated staging tree, performs a
+  same-parent atomic move, rehashes the published tree, and publishes success
+  only after source disappearance and digest equality. Existing destinations
+  are never replaced; collision fixtures preserve both staging and destination,
+  and a post-move mismatch attempts atomic rollback before failing closed.
 
 Evidence recorded for these slices:
 
@@ -342,6 +348,12 @@ Evidence recorded for these slices:
   `458b7c9754023057b11ada8cc7b055c26c7ba3559f38d5a9f51d18106fbff32d`.
   CSM checks ten ways with no deviations, NYA passes, and no cycle residue
   remains.
+- the exact transactional-workspace proof commit `af7138e74` passes the
+  canonical Gate (`cold 123996ms < 240000ms`) with 624 current train proofs and
+  zero pending. A clean Rust tooling run preserves normalized observable digest
+  `458b7c9754023057b11ada8cc7b055c26c7ba3559f38d5a9f51d18106fbff32d`,
+  atomically promotes and rehashes the complete bounded workspace, proves the
+  legacy rollback path, leaves zero residue, and passes ten CSM ways plus NYA.
 - the canonical Worldline Gate reaches `verify passed` with all content stages
   restored, but the host currently violates the unchanged hot latency SLO
   (`20361ms >= 7000ms` on the latest run). The budget was not weakened.
@@ -632,6 +644,11 @@ and post-execution output invariant at Worldline commit `1ea3706ff`. Windows
 Job Objects still provide no native filesystem sandbox, so this status does
 not claim write prevention. Linux Landlock enforcement exists in shadow and
 runtime-specific mount declarations remain pending.
+
+The same profile now has qualified transactional publication at commit
+`af7138e74`: staging and destination are siblings, publication is atomic and
+no-replace, pre/post tree digests must agree, collisions preserve both trees,
+and verification failure cannot publish success.
 
 ### B3. Input graph v1
 
