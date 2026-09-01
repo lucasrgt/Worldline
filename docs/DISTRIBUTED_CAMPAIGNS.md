@@ -77,3 +77,11 @@ campaign receipt. The outer Java adapter independently verifies the Rust
 receipt and all referenced output bytes before accepting exit zero. Java still
 owns campaign partitioning, result interpretation, and aggregation; Rust owns
 process containment, limits, cleanup, and observational telemetry.
+
+After full receipt verification, the native cycle stores one sanitized local
+telemetry sample under the `campaign` lane, `nightly-quality` workload, and
+`campaign-worker` runtime capability. The content-addressed history contains
+no argv, paths, environment values, or campaign log content and appears in the
+live Evidence Explorer. Admission remains lower-only and reads exclusively
+from `candidate-worker` samples; campaign observations cannot increase or
+decrease worker admission.

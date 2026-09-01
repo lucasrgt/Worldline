@@ -40,9 +40,12 @@ public final class CampaignExecutorCycle {
                 "native campaign shard did not exit successfully");
         require(!verified.stdoutTruncated() && !verified.stderrTruncated(),
                 "native campaign output was truncated");
+        String telemetry = ExecutionTelemetryHistory.record(
+                root.resolve(".worldline/executor-telemetry"), "campaign", "nightly-quality",
+                "campaign-worker", verified.telemetry());
         System.out.print(Files.readString(plan.outputs().stdout(), StandardCharsets.UTF_8));
         System.out.println("nightly native executor passed: request=" + plan.requestSha256()
-                + ", evidence=" + root.relativize(run));
+                + ", telemetry=" + telemetry + ", evidence=" + root.relativize(run));
     }
 
     private static WorldlineExecutionPlan plan(Path root, Path planPath, Path output,
