@@ -400,6 +400,22 @@ Evidence recorded for these slices:
   `52827a0f86abca93fde7fe9c2e86178457309dcd53a67533b2dc15fb374d6038`.
   That non-candidate sample correctly creates no admission floor. CSM checks
   eight ways with no deviations and NYA passes.
+- Worldline commit `3947fa8e0` adds the canonical
+  `worldline.execution-failure-clusters.v1` read model over validated,
+  sanitized telemetry samples. Stable classes keep OOM, memory-limit,
+  timeout, escaped-descendant, tool-absence, spawn/wait/owner-exit failures,
+  provider failure, process crash, and oracle mismatch distinct; their
+  domains also prevent executor infrastructure, provider infrastructure, and
+  behavioral divergence from being merged. The exact canonical Gate passes
+  (`cold 120299ms < 240000ms`) with 624 current train proofs and zero pending.
+  A clean tooling run produces request digest
+  `c87d7ce8791fe9dcacd3922738b1c5d2f52443de627b4be3648cc4febfa6e2e3`,
+  transaction digest
+  `82106fb418b337565862484c02d37b4eb58f0a8c38c024890e13525d2af5f0f4`,
+  and telemetry digest
+  `7b2e7e486d1d0e4083c80abc06c7f0be3c1d4b95ea0b936d035b16d1811c14d2`.
+  The successful history rebuild reports zero failures and zero clusters.
+  CSM checks nine ways with no deviations and NYA passes.
 - the canonical Worldline Gate reaches `verify passed` with all content stages
   restored, but the host currently violates the unchanged hot latency SLO
   (`20361ms >= 7000ms` on the latest run). The budget was not weakened.
@@ -769,6 +785,13 @@ and structural tooling telemetry has no effect on Candidate width.
 Group infrastructure failures by stable signatures without merging behavioral
 divergences. OOM, timeout, escaped descendant, tool absence, provider failure,
 and oracle mismatch remain distinct classes.
+
+Status: qualified for sanitized structural telemetry and deterministic
+read-model fixtures at Worldline commit `3947fa8e0`. Infrastructure,
+provider, and behavioral domains are explicit, and provider failure cannot be
+collapsed into oracle mismatch. Runtime, Candidate, server, GUI, and real
+provider histories remain pending until those lanes execute through the Rust
+boundary and publish sanitized samples.
 
 ## 8. Workstream D: content-addressed transport
 
