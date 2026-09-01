@@ -17,6 +17,8 @@ final class PooledSmokeCheck {
             require(lock.isValid() && lockHeld(path), "held runtime lock was not observed");
         }
         require(!lockHeld(path), "released runtime lock remained held");
+        require(descendsFrom(ProcessHandle.current(), ProcessHandle.current().pid()),
+                "process ancestry identity drift");
         Files.delete(path);
     }
 
@@ -80,7 +82,8 @@ final class PooledSmokeCheck {
         String command = owner.info().commandLine().orElse("").replace('\\', '/');
         require(owner.isAlive() && (command.contains("HostSmokePool")
                 || command.contains("ContainerSmokePool")
-                || differential && command.contains("ExecutorServerCycle")),
+                || differential && descendsFrom(owner,
+                        Long.parseLong(values.getProperty("lease.pid", "-1")))),
                 "pool lease owner is not active");
         return values;
     }
@@ -105,6 +108,15 @@ final class PooledSmokeCheck {
             try (var lock = channel.tryLock()) { return lock == null; }
         } catch (OverlappingFileLockException error) { return true; }
         catch (java.io.IOException error) { return false; }
+    }
+
+    private static boolean descendsFrom(ProcessHandle process, long ancestorPid) {
+        ProcessHandle current = process;
+        while (true) {
+            if (current.pid() == ancestorPid) return true;
+            current = current.parent().orElse(null);
+            if (current == null) return false;
+        }
     }
 
     private static String requiredEnvironment(String name) {
