@@ -164,8 +164,18 @@ with the Rust Windows Job backend under one continuous official-runtime lease:
 java tools/harness/Gate.java --executor-server
 ```
 
-The closed matrix covers dedicated-server bootstrap, persisted Nether login,
-and same-dimension player respawn over protocol 14. Each arm uses one
+Disposable server cells classify their preparatory full Gate as qualification work through the
+closed `executor-server-prepare` marker. Content checks remain unchanged, while ordinary restored
+Gates retain the hot total and per-stage latency ratchets.
+Failed server legs preserve only their known local logs, output manifests, receipts, and metrics
+under `.worldline/executor-server-failures/` before the disposable worktree is removed. These
+diagnostics remain ignored, non-portable, and non-authoritative.
+
+The closed matrix covers dedicated-server bootstrap, an offline protocol-14
+multiplayer session, persisted Nether login, and same-dimension player respawn.
+The multiplayer contract projects its stable protocol/session signal while
+retaining the server-assigned entity ID only as a diagnostic; that volatile ID
+cannot enter repeat equality or canonical evidence. Each arm uses one
 independent disposable exact-commit worktree, an explicit environment, a
 locally verified server JAR, and per-behavior output roots. Every milestone
 still enters through `Gate --milestone`; the cycle requires byte-equal

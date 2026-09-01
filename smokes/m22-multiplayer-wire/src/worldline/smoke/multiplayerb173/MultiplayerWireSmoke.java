@@ -18,6 +18,8 @@ import worldline.b173server.B173WireClient;
 public final class MultiplayerWireSmoke {
   private static final String TRACE =
       "v1|protocol=14|handshake=offline|login=accepted|players=1|disconnect=clean";
+  private static final String SIGNAL =
+      "protocol=14,handshake=offline,login=accepted,players=1,disconnect=clean,processes=2";
 
   private MultiplayerWireSmoke() {
   }
@@ -55,6 +57,7 @@ public final class MultiplayerWireSmoke {
     System.out.println("WORLDLINE_M22_SOURCE="
         + B173WireClient.class.getProtectionDomain().getCodeSource().getLocation());
     System.out.println("WORLDLINE_M22_ENTITY=" + connected.entityId());
+    System.out.println("WORLDLINE_M22_SIGNAL=" + SIGNAL);
     System.out.println("WORLDLINE_M22_TRACE=" + TRACE);
     System.out.println("WORLDLINE_M22_SIGNATURE=" + sha256(TRACE));
   }

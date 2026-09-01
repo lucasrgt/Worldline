@@ -516,7 +516,9 @@ reviewable migration lock. The gate enforces a non-decreasing generic-milestone 
 Any later shared-runner change invalidates all generic fingerprints. The explicit
 `Gate.java --refresh-data-cycle-pins` transition is fail-closed unless at least one generic
 milestone has a current freshly executed proof; it preserves the other reviewed equivalence rows
-and records hashes of the runner, plan and class-loader support boundary.
+and records hashes of the runner, plan and class-loader support boundary. A semantic plan revision
+must first pass its exact clean `Gate.java --milestone ID` execution. The same refresh command then
+rebinds only that plan and evidence pair; a revised plan without matching executed bytes is rejected.
 
 Exceptional coordinators enter the same bounded EOF policy through the public
 `SmokeRetryBoundary`; the decision, backoff and telemetry remain owned by `SmokeRetry`. The

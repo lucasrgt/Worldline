@@ -44,7 +44,8 @@ final class ExecutorServerWorkspace implements AutoCloseable {
     Path root() { return root; }
 
     void prepare() throws Exception {
-        run(root, List.of(java(), root.resolve("tools/harness/Gate.java").toString()), 600);
+        run(root, List.of(java(), root.resolve("tools/harness/Gate.java").toString()), 600,
+                "executor-server-prepare");
     }
 
     Path authorize(Path lock, RuntimeLeaseIdentity lease) throws Exception {
@@ -78,9 +79,17 @@ final class ExecutorServerWorkspace implements AutoCloseable {
     }
 
     private static void run(Path directory, List<String> command, int seconds) throws Exception {
+        run(directory, command, seconds, null);
+    }
+
+    private static void run(Path directory, List<String> command, int seconds,
+            String qualification) throws Exception {
         Path log = Files.createTempFile("worldline-executor-server-", ".log");
-        Process process = new ProcessBuilder(command).directory(directory.toFile())
-                .redirectErrorStream(true).redirectOutput(log.toFile()).start();
+        ProcessBuilder builder = new ProcessBuilder(command).directory(directory.toFile())
+                .redirectErrorStream(true).redirectOutput(log.toFile());
+        if (qualification != null)
+            builder.environment().put("WORLDLINE_GATE_QUALIFICATION", qualification);
+        Process process = builder.start();
         try {
             require(process.waitFor(seconds, TimeUnit.SECONDS), command.get(0) + " timed out");
             String output = Files.readString(log);
