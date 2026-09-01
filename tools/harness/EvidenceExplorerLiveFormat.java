@@ -5,7 +5,7 @@ final class EvidenceExplorerLiveFormat {
     private EvidenceExplorerLiveFormat() { }
 
     static String json(EvidenceExplorerLiveSnapshot value) {
-        StringBuilder out = new StringBuilder("{\n  \"schema\":\"worldline.evidence-explorer-live.v4\",")
+        StringBuilder out = new StringBuilder("{\n  \"schema\":\"worldline.evidence-explorer-live.v5\",")
                 .append("\n  \"verdict_authority\":false,\n  \"ephemeral_state_included\":true,")
                 .append("\n  \"observed_at_epoch_ms\":").append(value.observedAtEpochMs()).append(',')
                 .append("\n  \"canonical_snapshot_sha256\":")
@@ -15,6 +15,8 @@ final class EvidenceExplorerLiveFormat {
                 .append("\n  \"execution_links\":").append(executionLinks(value.executionLinks())).append(',')
                 .append("\n  \"native_campaign_failure_clusters\":")
                 .append(NativeCampaignFailureClusters.json(value.campaignFailures()).strip()).append(',')
+                .append("\n  \"diagnostic_captures\":")
+                .append(EvidenceExplorerDiagnosticFormat.json(value.diagnosticCaptures())).append(',')
                 .append("\n  \"shared_cas\":").append(sharedCas(value.sharedCas())).append(',')
                 .append("\n  \"admission\":").append(admission(value.admission())).append(',')
                 .append("\n  \"queues\":[");
@@ -43,6 +45,8 @@ final class EvidenceExplorerLiveFormat {
                 .append(card("Unclassified workload failures",
                         value.campaignFailures().unclassifiedWorkloadCount()))
                 .append(card("Orphan native runs", value.executionLinks().orphanNativeRuns()))
+                .append(card("Diagnostic captures", value.diagnosticCaptures().captureCount()))
+                .append(card("Malformed diagnostics", value.diagnosticCaptures().malformedCount()))
                 .append(card("Shared CAS objects", shared(value, "objects")))
                 .append(card("Shared CAS faults", shared(value, "faults")))
                 .append(card("Queued tickets", value.queues().stream().mapToLong(
@@ -81,6 +85,7 @@ final class EvidenceExplorerLiveFormat {
         for (NativeCampaignFailureClusters.Cluster cluster : value.campaignFailures().clusters())
             out.append(campaignFailureRow(cluster));
         out.append("</tbody></table></div></section>")
+                .append(EvidenceExplorerDiagnosticFormat.html(value.diagnosticCaptures()))
                 .append("<section><h2>Lease queues</h2><div class=\"table\"><table><thead><tr>")
                 .append("<th>Queue</th><th>Waiting</th><th>Live</th><th>Abandoned</th>")
                 .append("<th>Partial</th><th>Oldest wait</th></tr></thead><tbody>");
@@ -122,6 +127,10 @@ final class EvidenceExplorerLiveFormat {
                 + value.campaignFailures().infrastructureCount()
                 + ",\"native_unclassified_workload_failures\":"
                 + value.campaignFailures().unclassifiedWorkloadCount()
+                + ",\"diagnostic_captures\":" + value.diagnosticCaptures().captureCount()
+                + ",\"diagnostic_partial\":" + value.diagnosticCaptures().partialCount()
+                + ",\"diagnostic_orphans\":" + value.diagnosticCaptures().orphanCount()
+                + ",\"diagnostic_malformed\":" + value.diagnosticCaptures().malformedCount()
                 + ",\"orphan_native_runs\":" + value.executionLinks().orphanNativeRuns()
                 + ",\"partial_native_runs\":" + value.executionLinks().partialNativeRuns()
                 + ",\"dangling_campaign_bindings\":" + value.executionLinks().danglingCampaignBindings()

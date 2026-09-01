@@ -12,6 +12,7 @@ final class EvidenceExplorerLiveTest {
 
     static void selfTest() throws Exception {
         EvidenceExplorerExecutionLinks.selfTest();
+        EvidenceExplorerDiagnosticCaptures.selfTest();
         Path root = Files.createTempDirectory("worldline-evidence-live-");
         try {
             long now = System.currentTimeMillis(); Path queue = root.resolve("queue");
@@ -36,7 +37,7 @@ final class EvidenceExplorerLiveTest {
             String json = EvidenceExplorerLiveFormat.json(snapshot);
             String html = EvidenceExplorerLiveFormat.html(snapshot);
             require(json.contains("\"verdict_authority\":false")
-                    && json.contains("\"schema\":\"worldline.evidence-explorer-live.v4\"")
+                    && json.contains("\"schema\":\"worldline.evidence-explorer-live.v5\"")
                     && json.contains("\"ephemeral_state_included\":true")
                     && json.contains("\"regression_triage_cases\":1")
                     && json.contains("\"native_campaign_failure_clusters\"")
@@ -118,6 +119,8 @@ final class EvidenceExplorerLiveTest {
                 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, List.of(link));
         return new EvidenceExplorerLiveSnapshot(1L, "b".repeat(64), values, links,
                 NativeCampaignFailureClusters.summarize(links),
+                new EvidenceExplorerDiagnosticCaptures.Snapshot(
+                        0, 0, 0, 0, 0, 0L, 0L, List.of()),
                 null, null, List.of(queue), List.of(cache));
     }
 
