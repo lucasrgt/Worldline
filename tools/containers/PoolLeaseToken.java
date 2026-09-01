@@ -53,6 +53,8 @@ public final class PoolLeaseToken {
                 "pool token requires a clean worktree");
         Properties values = new Properties(); values.setProperty("schema", "1");
         values.setProperty("secret", secret); values.setProperty("parent.pid", parent);
+        values.setProperty("parent.started", Long.toString(
+                owner.info().startInstant().orElseThrow().toEpochMilli()));
         values.setProperty("root", ROOT.toString()); values.setProperty("head", capture("rev-parse", "HEAD"));
         values.setProperty("tree", capture("rev-parse", "HEAD^{tree}"));
         values.setProperty("lock.path", lock.toAbsolutePath().normalize().toString());
@@ -87,6 +89,7 @@ public final class PoolLeaseToken {
         }
         require("1".equals(values.getProperty("schema"))
                 && "smoke-pool".equals(values.getProperty("purpose"))
+                && values.getProperty("parent.started").matches("[0-9]+")
                 && values.getProperty("head").matches("[0-9a-f]{40,64}"), "token self-test drift");
         Files.delete(file); System.out.println("pool lease token self-test passed");
     }
