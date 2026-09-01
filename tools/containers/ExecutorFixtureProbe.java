@@ -15,7 +15,10 @@ public final class ExecutorFixtureProbe {
                 System.exit(Integer.parseInt(arguments[1]));
             }
             case "bulk" -> bulk(Integer.parseInt(required(arguments, 1)));
+            case "crash" -> crash();
             case "environment" -> environment();
+            case "interrupted-root" -> interruptedRoot(required(arguments, 1), required(arguments, 2));
+            case "interrupted-child" -> interruptedChild(required(arguments, 1), required(arguments, 2));
             case "owner-target" -> ownerTarget();
             case "process-limit" -> processLimit();
             case "sleep" -> Thread.sleep(Long.parseLong(required(arguments, 1)));
@@ -44,6 +47,23 @@ public final class ExecutorFixtureProbe {
         require(temporary != null && Path.of(temporary).getFileName().toString().equals("private temp"),
                 "private temporary path drift");
         write(System.out, "environment=injected,removed,space-path\n");
+    }
+
+    private static void crash() throws Exception {
+        write(System.out, "crash=ready\n"); Runtime.getRuntime().halt(-1_073_741_819);
+    }
+
+    private static void interruptedRoot(String marker, String completed) throws Exception {
+        require(!marker.isBlank(), "empty interruption marker");
+        new ProcessBuilder(java(), "-Xms16m", "-Xmx128m", "-XX:-UsePerfData",
+                Path.of("tools/containers/ExecutorFixtureProbe.java").toAbsolutePath().toString(),
+                "interrupted-child", marker, completed).start();
+        write(System.out, "interrupted=ready\n"); Thread.sleep(60_000L);
+    }
+
+    private static void interruptedChild(String marker, String completed) throws Exception {
+        require(!marker.isBlank(), "empty interruption marker"); Thread.sleep(2_000L);
+        java.nio.file.Files.writeString(Path.of(completed), "escaped", StandardCharsets.UTF_8);
     }
 
     private static void ownerTarget() throws Exception {
