@@ -120,12 +120,15 @@ record EvidenceExplorerLiveSnapshot(long observedAtEpochMs, String canonicalSha2
             require(process.exitValue() == 0, "execution evidence summary failed: " + json);
             Map<String, Object> value = MiniJson.object(json);
             require(new ArrayList<>(value.keySet()).equals(List.of(
-                    "schema", "telemetry", "failure_clusters")), "execution overlay fields drifted");
-            require("worldline.execution-evidence-overlay.v1".equals(MiniJson.string(value, "schema")),
+                    "schema", "telemetry", "failure_clusters", "performance_signals")),
+                    "execution overlay fields drifted");
+            require("worldline.execution-evidence-overlay.v2".equals(MiniJson.string(value, "schema")),
                     "execution overlay schema drifted");
             Map<String, Object> telemetry = MiniJson.asObject(value.get("telemetry"), "telemetry");
             Map<String, Object> failures = MiniJson.asObject(value.get("failure_clusters"),
                     "failure_clusters");
+            Map<String, Object> performance = MiniJson.asObject(value.get("performance_signals"),
+                    "performance_signals");
             require("worldline.execution-telemetry-profiles.v1".equals(
                     MiniJson.string(telemetry, "schema")), "telemetry profile schema drifted");
             require("worldline.execution-failure-clusters.v1".equals(
@@ -134,8 +137,72 @@ record EvidenceExplorerLiveSnapshot(long observedAtEpochMs, String canonicalSha2
             long failureCount = MiniJson.integer(failures, "failure_count");
             require(samples >= 0L && failureCount >= 0L && failureCount <= samples,
                     "execution evidence counts drifted");
-            return new Execution(json, samples, failureCount);
+            Performance signals = performance(performance);
+            return new Execution(json, samples, failureCount, signals);
         } finally { Files.deleteIfExists(output); }
+    }
+
+    private static Performance performance(Map<String, Object> value) {
+        exact(value, "schema", "verdict_authority", "admission_effect", "metric",
+                "baseline_window_samples", "recent_window_samples", "change_threshold_percent",
+                "signal_count", "increase_count", "insufficient_history_count", "signals");
+        require("worldline.execution-performance-signals.v1".equals(MiniJson.string(value, "schema"))
+                && !MiniJson.bool(value, "verdict_authority")
+                && !MiniJson.bool(value, "admission_effect")
+                && "elapsed_ms".equals(MiniJson.string(value, "metric")),
+                "performance signals gained authority or changed metric");
+        long baselineWindow = MiniJson.integer(value, "baseline_window_samples");
+        long recentWindow = MiniJson.integer(value, "recent_window_samples");
+        long threshold = MiniJson.integer(value, "change_threshold_percent");
+        require(baselineWindow >= 3L && baselineWindow <= 31L && (baselineWindow & 1L) == 1L
+                && recentWindow >= 3L && recentWindow <= 31L && (recentWindow & 1L) == 1L
+                && threshold >= 110L && threshold <= 1_000L,
+                "invalid performance signal policy projection");
+        List<Signal> signals = new ArrayList<>();
+        for (Object item : MiniJson.array(value, "signals")) signals.add(signal(
+                MiniJson.asObject(item, "performance signal")));
+        long expected = MiniJson.integer(value, "signal_count");
+        long increases = MiniJson.integer(value, "increase_count");
+        long insufficient = MiniJson.integer(value, "insufficient_history_count");
+        require(expected == signals.size()
+                && increases == signals.stream().filter(item -> item.classification().equals("increase")).count()
+                && insufficient == signals.stream().filter(item -> item.classification()
+                        .equals("insufficient-history")).count(), "performance signal counts drifted");
+        return new Performance(expected, increases, insufficient, List.copyOf(signals));
+    }
+
+    private static Signal signal(Map<String, Object> value) {
+        exact(value, "lane", "workload_id", "executor_version", "backend", "os",
+                "architecture", "runtime_capability", "sample_count", "baseline_count",
+                "recent_count", "baseline_median_ms", "recent_median_ms", "ratio_percent",
+                "classification");
+        for (String field : List.of("lane", "workload_id", "executor_version", "backend", "os",
+                "architecture", "runtime_capability")) require(MiniJson.string(value, field)
+                        .matches("[a-z0-9][a-z0-9._-]{0,62}"), "invalid performance signal identity");
+        require("campaign".equals(MiniJson.string(value, "lane"))
+                && "campaign-worker".equals(MiniJson.string(value, "runtime_capability")),
+                "performance signal escaped campaign scope");
+        long samples = MiniJson.integer(value, "sample_count");
+        long baseline = MiniJson.integer(value, "baseline_count");
+        long recent = MiniJson.integer(value, "recent_count");
+        String classification = MiniJson.string(value, "classification");
+        require(Set.of("insufficient-history", "zero-baseline", "increase", "decrease",
+                "within-band").contains(classification) && samples >= 0L && baseline >= 0L
+                && recent >= 0L && baseline + recent <= samples,
+                "invalid performance signal classification or counts");
+        return new Signal(MiniJson.string(value, "workload_id"), MiniJson.string(value, "backend"),
+                MiniJson.string(value, "os"), MiniJson.string(value, "architecture"), samples,
+                baseline, recent, nullable(value, "baseline_median_ms"),
+                nullable(value, "recent_median_ms"), nullable(value, "ratio_percent"), classification);
+    }
+
+    private static Long nullable(Map<String, Object> value, String key) {
+        Object item = value.get(key); require(item == null || item instanceof Long, key + " is not nullable integer");
+        require(item == null || (Long) item >= 0L, key + " is negative"); return (Long) item;
+    }
+    private static void exact(Map<String, Object> value, String... fields) {
+        require(new ArrayList<>(value.keySet()).equals(List.of(fields)),
+                "performance signal fields drifted");
     }
 
     private static Ticket ticket(Path path) throws Exception {
@@ -169,7 +236,12 @@ record EvidenceExplorerLiveSnapshot(long observedAtEpochMs, String canonicalSha2
         if (!value) throw new IllegalArgumentException(message);
     }
 
-    record Execution(String json, long sampleCount, long failureCount) { }
+    record Execution(String json, long sampleCount, long failureCount, Performance performance) { }
+    record Performance(long signalCount, long increaseCount, long insufficientHistoryCount,
+            List<Signal> signals) { }
+    record Signal(String workloadId, String backend, String os, String architecture,
+            long sampleCount, long baselineCount, long recentCount, Long baselineMedianMs,
+            Long recentMedianMs, Long ratioPercent, String classification) { }
     record Admission(String os, String architecture, long sampleCount,
             long observedPeakMemoryBytes, long minimumWorkerMemoryBytes) { }
     record Queue(String label, int waiting, int live, int abandoned, int partial,

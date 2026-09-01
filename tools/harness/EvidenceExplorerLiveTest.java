@@ -42,13 +42,18 @@ final class EvidenceExplorerLiveTest {
     }
 
     private static EvidenceExplorerLiveSnapshot snapshot(EvidenceExplorerLiveSnapshot.Queue queue) {
-        String execution = "{\"schema\":\"worldline.execution-evidence-overlay.v1\","
+        String execution = "{\"schema\":\"worldline.execution-evidence-overlay.v2\","
                 + "\"telemetry\":{\"schema\":\"worldline.execution-telemetry-profiles.v1\","
                 + "\"sample_count\":0,\"profiles\":[]},\"failure_clusters\":{"
                 + "\"schema\":\"worldline.execution-failure-clusters.v1\","
-                + "\"failure_count\":0,\"clusters\":[]}}";
+                + "\"failure_count\":0,\"clusters\":[]},\"performance_signals\":{"
+                + "\"schema\":\"worldline.execution-performance-signals.v1\","
+                + "\"verdict_authority\":false,\"admission_effect\":false,\"metric\":\"elapsed_ms\","
+                + "\"baseline_window_samples\":3,\"recent_window_samples\":3,"
+                + "\"change_threshold_percent\":150,\"signal_count\":0,\"increase_count\":0,"
+                + "\"insufficient_history_count\":0,\"signals\":[]}}";
         EvidenceExplorerLiveSnapshot.Execution values = new EvidenceExplorerLiveSnapshot.Execution(
-                execution, 0, 0);
+                execution, 0, 0, new EvidenceExplorerLiveSnapshot.Performance(0, 0, 0, List.of()));
         EvidenceExplorerLiveSnapshot.CacheDecision cache = new EvidenceExplorerLiveSnapshot.CacheDecision(
                 "sample", "a".repeat(64), true, false, true, "reuse-pin",
                 "unsafe <reason>", null);

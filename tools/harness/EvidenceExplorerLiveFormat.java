@@ -5,7 +5,7 @@ final class EvidenceExplorerLiveFormat {
     private EvidenceExplorerLiveFormat() { }
 
     static String json(EvidenceExplorerLiveSnapshot value) {
-        StringBuilder out = new StringBuilder("{\n  \"schema\":\"worldline.evidence-explorer-live.v1\",")
+        StringBuilder out = new StringBuilder("{\n  \"schema\":\"worldline.evidence-explorer-live.v2\",")
                 .append("\n  \"verdict_authority\":false,\n  \"ephemeral_state_included\":true,")
                 .append("\n  \"observed_at_epoch_ms\":").append(value.observedAtEpochMs()).append(',')
                 .append("\n  \"canonical_snapshot_sha256\":")
@@ -31,6 +31,9 @@ final class EvidenceExplorerLiveFormat {
                 .append("<p>Observational state only; never a verdict source.</p></header><section class=\"cards\">")
                 .append(card("Telemetry samples", value.execution().sampleCount()))
                 .append(card("Failure samples", value.execution().failureCount()))
+                .append(card("Performance increases", value.execution().performance().increaseCount()))
+                .append(card("Profiles needing history", value.execution().performance()
+                        .insufficientHistoryCount()))
                 .append(card("Native campaign links", value.executionLinks().linkedRuns()))
                 .append(card("Failed native runs", value.executionLinks().failedNativeRuns()))
                 .append(card("Orphan native runs", value.executionLinks().orphanNativeRuns()))
@@ -39,6 +42,15 @@ final class EvidenceExplorerLiveFormat {
                 .append(card("Queued tickets", value.queues().stream().mapToLong(
                         EvidenceExplorerLiveSnapshot.Queue::waiting).sum()))
                 .append(card("Cache executions", count(value, "execute"))).append("</section>")
+                .append("<section><h2>Campaign performance signals</h2>")
+                .append("<p>Median-to-median observations only; these signals cannot grant a verdict")
+                .append(" or change admission.</p>")
+                .append("<div class=\"table\"><table><thead><tr><th>Workload</th><th>Host</th>")
+                .append("<th>Samples</th><th>Baseline median</th><th>Recent median</th>")
+                .append("<th>Ratio</th><th>Signal</th></tr></thead><tbody>");
+        for (EvidenceExplorerLiveSnapshot.Signal signal : value.execution().performance().signals())
+            out.append(signalRow(signal));
+        out.append("</tbody></table></div></section>")
                 .append("<section><h2>Native campaign evidence</h2><div class=\"table\"><table><thead><tr>")
                 .append("<th>Request</th><th>Campaign</th><th>Shard</th><th>Backend</th>")
                 .append("<th>Termination</th><th>Exit</th><th>Elapsed</th><th>Peak memory</th>")
@@ -69,6 +81,10 @@ final class EvidenceExplorerLiveFormat {
         long queued = value.queues().stream().mapToLong(EvidenceExplorerLiveSnapshot.Queue::waiting).sum();
         return "{\"telemetry_samples\":" + value.execution().sampleCount()
                 + ",\"failure_samples\":" + value.execution().failureCount()
+                + ",\"performance_signals\":" + value.execution().performance().signalCount()
+                + ",\"performance_increases\":" + value.execution().performance().increaseCount()
+                + ",\"performance_insufficient_history\":"
+                + value.execution().performance().insufficientHistoryCount()
                 + ",\"native_runs\":" + value.executionLinks().nativeRuns()
                 + ",\"linked_native_runs\":" + value.executionLinks().linkedRuns()
                 + ",\"failed_native_runs\":" + value.executionLinks().failedNativeRuns()
@@ -159,6 +175,16 @@ final class EvidenceExplorerLiveFormat {
                 + html(value.backend()) + "</td><td>" + html(value.termination()) + "</td><td>"
                 + numberText(value.exitCode()) + "</td><td>" + value.elapsedMs()
                 + " ms</td><td>" + numberText(value.peakMemoryBytes()) + "</td></tr>";
+    }
+    private static String signalRow(EvidenceExplorerLiveSnapshot.Signal value) {
+        return "<tr><td><strong>" + html(value.workloadId()) + "</strong></td><td>"
+                + html(value.backend() + " / " + value.os() + "-" + value.architecture())
+                + "</td><td>" + value.sampleCount() + " (" + value.baselineCount() + "/"
+                + value.recentCount() + ")</td><td>" + duration(value.baselineMedianMs())
+                + "</td><td>" + duration(value.recentMedianMs()) + "</td><td>"
+                + (value.ratioPercent() == null ? "—" : value.ratioPercent() + "%")
+                + "</td><td><span class=\"tag\">" + html(value.classification())
+                + "</span></td></tr>";
     }
     private static String card(String label, long value) {
         return "<article><strong>" + value + "</strong><span>" + html(label) + "</span></article>";

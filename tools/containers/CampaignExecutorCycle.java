@@ -43,8 +43,10 @@ public final class CampaignExecutorCycle {
                 "native campaign shard did not exit successfully");
         require(!verified.stdoutTruncated() && !verified.stderrTruncated(),
                 "native campaign output was truncated");
+        String profile = CampaignTelemetryProfile.id(root, selection.id, selection.arguments,
+                System.getenv());
         String telemetry = ExecutionTelemetryHistory.record(
-                root.resolve(".worldline/executor-telemetry"), "campaign", selection.id,
+                root.resolve(".worldline/executor-telemetry"), "campaign", profile,
                 "campaign-worker", verified.telemetry());
         System.out.print(Files.readString(plan.outputs().stdout(), StandardCharsets.UTF_8));
         System.out.println(selection.id + " native executor passed: request=" + plan.requestSha256()
@@ -67,6 +69,8 @@ public final class CampaignExecutorCycle {
     }
 
     static void selfTest() {
+        try { CampaignTelemetryProfile.selfTest(); }
+        catch (Exception error) { throw new IllegalStateException(error); }
         Path root = Path.of("").toAbsolutePath().normalize(), run = root.resolve(".worldline/campaign-self-test");
         Path planPath = run.resolve("plan.json"), output = run.resolve("output"), temporary = run.resolve("tmp");
         WorldlineExecutionPlan plan = plan(root, planPath, output, temporary,
