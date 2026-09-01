@@ -8,7 +8,7 @@ public final class AtlasCoverageTest {
 
     public static void main(String[] arguments) {
         AtlasStore store = AtlasStore.standard(Paths.get("."));
-        require(store.kind(AtlasKind.COVERAGE_UNIT).size() == 175, "unit count");
+        require(store.kind(AtlasKind.COVERAGE_UNIT).size() == 182, "unit count");
         require("1".equals(store.get("atlas.coverage-unit.worldgen.TESTABILITY").control()),
                 "worldgen testability filled by explicit smoke scope");
         require(AtlasStatus.UNKNOWN.equals(
@@ -24,6 +24,8 @@ public final class AtlasCoverageTest {
                 "aero testability filled");
         require("1".equals(store.get("atlas.coverage-unit.profiling.TESTABILITY").control()),
                 "profiling testability filled");
+        require("1".equals(store.get("atlas.coverage-unit.animation.TESTABILITY").control()),
+                "animation testability filled");
         require("0".equals(store.get("atlas.coverage-unit.redstone.SEMANTIC").control()),
                 "redstone semantic empty");
         require("1".equals(store.get("atlas.coverage-unit.mappings.SEMANTIC").control()),
