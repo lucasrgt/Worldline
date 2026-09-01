@@ -31,10 +31,11 @@ final class LifecycleClaimTestKitPinCheck {
         for (int index = 0; index < files.size(); index++) verifyFile(root, lock, files, index);
 
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
-        require(pins.entries().size() == LifecycleClaimTestKitPinMigration.BASE_PINS,
+        List<SmokeDiscovery.Entry> catalog = SmokeDiscovery.discover(root);
+        require(pins.entries().size() == catalog.size()
+                        && pins.entries().size() >= LifecycleClaimTestKitPinMigration.BASE_PINS,
                 "lifecycle-claim sealed pin census drift");
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
-        List<SmokeDiscovery.Entry> catalog = SmokeDiscovery.discover(root);
         int carried = integer(lock, "carried.count"), exact = 0;
         Set<String> ids = new HashSet<>();
         for (int index = 0; index < carried; index++) {
