@@ -171,6 +171,12 @@ Completed foundation slices:
   fingerprint engine, and reports added, removed, or changed node identities
   using hashes only. Untracked local artifacts, official JARs, source content,
   environment values, and secrets never enter the snapshot or output.
+- an exact `worldline.module-input-graph.v1` and
+  `Gate --module-input-graph MODULE` query in Worldline commits `b12c1b4d4`
+  and `793e4ee61`. `ModuleBuild` and the query now share one identity
+  authority over module name, Java release and toolchain, dependency cache
+  identities, normalized source paths, and exact source bytes. The read model
+  exposes only paths and digests, and rejects unknown modules and cycles.
 
 Evidence recorded for these slices:
 
@@ -271,6 +277,13 @@ Evidence recorded for these slices:
   clean branch passes canonical Gate (`cold 159638ms < 240000ms`) with all 624
   dual graph roots equal and no provider or train proof pending. CSM RTW reports
   no deviations and NYA passes.
+- the `api` module graph resolves to
+  `e65b171660f90dd55ec26bd12836fe71631496b636972360fb990240dd62b690`,
+  exactly matching the already qualified module bundle input identity. The
+  clean Gate restores every existing module and test cache entry rather than
+  creating new identities, passes at `cold 138096ms < 240000ms`, and reports
+  624 current train proofs with zero pending. CSM checks five ways with no
+  deviations and NYA passes.
 - the canonical Worldline Gate reaches `verify passed` with all content stages
   restored, but the host currently violates the unchanged hot latency SLO
   (`20361ms >= 7000ms` on the latest run). The budget was not weakened.
@@ -291,8 +304,9 @@ provides a cryptographic trust boundary, but production adoption still needs
 protected envelope distribution, stable publisher-key governance,
 authenticated deployment, and an explicit promotion from `shadow`. The input
 graph covers qualification identities in dual mode, current-tree dependents,
-cache decisions, and cross-commit node differences, but does not yet publish
-module cache identity.
+cache decisions, cross-commit node differences, and exact module cache
+identities. Qualification fingerprints still use the legacy engine as their
+authority pending a reviewed all-smoke promotion.
 A1 through A4, B3, and D1 through D3 and D5 are therefore in progress; A5 and
 remote transport deployment have not started.
 
