@@ -61,7 +61,8 @@ public final class Gate {
             int exit = waitFor(builder.start(), 600);
             if (exit != 0) System.exit(exit); return;
         }
-        if (arguments.length == 1 && List.of("--executor-tooling", "--executor-environment", "--executor-filesystem").contains(arguments[0])) {
+        if (arguments.length == 1 && List.of("--executor-tooling", "--executor-environment",
+                "--executor-filesystem").contains(arguments[0])) {
             String main = switch (arguments[0]) { case "--executor-environment" -> "ExecutionEnvironmentManifest";
                 case "--executor-filesystem" -> "ExecutionFilesystemManifest"; default -> "ExecutorToolingCycle"; };
             run(List.of(javaTool("java"), root.resolve("tools/containers/RuntimeFabricLauncher.java").toString(),
