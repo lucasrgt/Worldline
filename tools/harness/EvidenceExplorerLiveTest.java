@@ -9,6 +9,7 @@ final class EvidenceExplorerLiveTest {
     private EvidenceExplorerLiveTest() { }
 
     static void selfTest() throws Exception {
+        EvidenceExplorerExecutionLinks.selfTest();
         Path root = Files.createTempDirectory("worldline-evidence-live-");
         try {
             long now = System.currentTimeMillis(); Path queue = root.resolve("queue");
@@ -51,8 +52,9 @@ final class EvidenceExplorerLiveTest {
         EvidenceExplorerLiveSnapshot.CacheDecision cache = new EvidenceExplorerLiveSnapshot.CacheDecision(
                 "sample", "a".repeat(64), true, false, true, "reuse-pin",
                 "unsafe <reason>", null);
-        return new EvidenceExplorerLiveSnapshot(1L, "b".repeat(64), values, null,
-                List.of(queue), List.of(cache));
+        return new EvidenceExplorerLiveSnapshot(1L, "b".repeat(64), values,
+                new EvidenceExplorerExecutionLinks.Snapshot(0, 0, 0, 0, 0, 0,
+                        0, 0, 0, List.of()), null, List.of(queue), List.of(cache));
     }
 
     private static void ticket(Path root, long sequence, long pid, long started, long created)

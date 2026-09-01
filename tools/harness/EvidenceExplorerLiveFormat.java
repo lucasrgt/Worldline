@@ -12,6 +12,7 @@ final class EvidenceExplorerLiveFormat {
                 .append(EvidenceExplorerFormat.quote(value.canonicalSha256())).append(',')
                 .append("\n  \"summary\":").append(summary(value)).append(',')
                 .append("\n  \"execution\":").append(value.execution().json()).append(',')
+                .append("\n  \"execution_links\":").append(executionLinks(value.executionLinks())).append(',')
                 .append("\n  \"admission\":").append(admission(value.admission())).append(',')
                 .append("\n  \"queues\":[");
         append(out, value.queues().stream().map(EvidenceExplorerLiveFormat::queue).toList());
@@ -29,9 +30,16 @@ final class EvidenceExplorerLiveFormat {
                 .append("<p>Observational state only; never a verdict source.</p></header><section class=\"cards\">")
                 .append(card("Telemetry samples", value.execution().sampleCount()))
                 .append(card("Failure samples", value.execution().failureCount()))
+                .append(card("Native campaign links", value.executionLinks().linkedRuns()))
+                .append(card("Orphan native runs", value.executionLinks().orphanNativeRuns()))
                 .append(card("Queued tickets", value.queues().stream().mapToLong(
                         EvidenceExplorerLiveSnapshot.Queue::waiting).sum()))
                 .append(card("Cache executions", count(value, "execute"))).append("</section>")
+                .append("<section><h2>Native campaign evidence</h2><div class=\"table\"><table><thead><tr>")
+                .append("<th>Request</th><th>Campaign</th><th>Shard</th><th>Backend</th>")
+                .append("<th>Termination</th><th>Elapsed</th><th>Peak memory</th></tr></thead><tbody>");
+        for (EvidenceExplorerExecutionLinks.Link link : value.executionLinks().links()) out.append(linkRow(link));
+        out.append("</tbody></table></div></section>")
                 .append("<section><h2>Lease queues</h2><div class=\"table\"><table><thead><tr>")
                 .append("<th>Queue</th><th>Waiting</th><th>Live</th><th>Abandoned</th>")
                 .append("<th>Partial</th><th>Oldest wait</th></tr></thead><tbody>");
@@ -56,6 +64,14 @@ final class EvidenceExplorerLiveFormat {
         long queued = value.queues().stream().mapToLong(EvidenceExplorerLiveSnapshot.Queue::waiting).sum();
         return "{\"telemetry_samples\":" + value.execution().sampleCount()
                 + ",\"failure_samples\":" + value.execution().failureCount()
+                + ",\"native_runs\":" + value.executionLinks().nativeRuns()
+                + ",\"linked_native_runs\":" + value.executionLinks().linkedRuns()
+                + ",\"orphan_native_runs\":" + value.executionLinks().orphanNativeRuns()
+                + ",\"partial_native_runs\":" + value.executionLinks().partialNativeRuns()
+                + ",\"dangling_campaign_bindings\":" + value.executionLinks().danglingCampaignBindings()
+                + ",\"referenced_logs\":" + value.executionLinks().referencedLogs()
+                + ",\"orphan_logs\":" + value.executionLinks().orphanLogs()
+                + ",\"missing_logs\":" + value.executionLinks().missingLogs()
                 + ",\"queued_tickets\":" + queued + ",\"cache_decisions\":"
                 + value.cache().size() + ",\"cache_execute\":" + count(value, "execute") + "}";
     }
@@ -69,6 +85,29 @@ final class EvidenceExplorerLiveFormat {
                 + value.sampleCount() + ",\"observed_peak_memory_bytes\":"
                 + value.observedPeakMemoryBytes() + ",\"minimum_worker_memory_bytes\":"
                 + value.minimumWorkerMemoryBytes() + "}";
+    }
+    private static String executionLinks(EvidenceExplorerExecutionLinks.Snapshot value) {
+        StringBuilder out = new StringBuilder("{\"native_runs\":").append(value.nativeRuns())
+                .append(",\"linked_runs\":").append(value.linkedRuns())
+                .append(",\"orphan_native_runs\":").append(value.orphanNativeRuns())
+                .append(",\"partial_native_runs\":").append(value.partialNativeRuns())
+                .append(",\"campaign_bindings\":").append(value.campaignBindings())
+                .append(",\"dangling_campaign_bindings\":").append(value.danglingCampaignBindings())
+                .append(",\"referenced_logs\":").append(value.referencedLogs())
+                .append(",\"orphan_logs\":").append(value.orphanLogs())
+                .append(",\"missing_logs\":").append(value.missingLogs()).append(",\"links\":[");
+        append(out, value.links().stream().map(EvidenceExplorerLiveFormat::link).toList());
+        return out.append("]}").toString();
+    }
+    private static String link(EvidenceExplorerExecutionLinks.Link value) {
+        return "{\"request_sha256\":" + quote(value.requestSha256()) + ",\"campaign_id\":"
+                + EvidenceExplorerFormat.nullable(value.campaignId()) + ",\"campaign_plan_sha256\":"
+                + EvidenceExplorerFormat.nullable(value.campaignPlanSha256()) + ",\"shard_index\":"
+                + (value.shardIndex() == null ? "null" : value.shardIndex()) + ",\"backend\":"
+                + quote(value.backend()) + ",\"executor_version\":" + quote(value.executorVersion())
+                + ",\"termination\":" + quote(value.termination()) + ",\"elapsed_ms\":"
+                + value.elapsedMs() + ",\"peak_memory_bytes\":" + number(value.peakMemoryBytes())
+                + ",\"peak_processes\":" + number(value.peakProcesses()) + "}";
     }
     private static String queue(EvidenceExplorerLiveSnapshot.Queue value) {
         return "{\"label\":" + quote(value.label()) + ",\"waiting\":" + value.waiting()
@@ -95,10 +134,19 @@ final class EvidenceExplorerLiveFormat {
                 + html(value.currentTreeMode() == null ? "—" : value.currentTreeMode())
                 + "</td><td>" + html(value.reason()) + "</td></tr>";
     }
+    private static String linkRow(EvidenceExplorerExecutionLinks.Link value) {
+        return "<tr><td><code>" + shortHash(value.requestSha256()) + "</code></td><td>"
+                + html(value.campaignId() == null ? "orphan" : value.campaignId()) + "</td><td>"
+                + (value.shardIndex() == null ? "—" : value.shardIndex()) + "</td><td>"
+                + html(value.backend()) + "</td><td>" + html(value.termination()) + "</td><td>"
+                + value.elapsedMs() + " ms</td><td>" + numberText(value.peakMemoryBytes()) + "</td></tr>";
+    }
     private static String card(String label, long value) {
         return "<article><strong>" + value + "</strong><span>" + html(label) + "</span></article>";
     }
     private static String duration(Long millis) { return millis == null ? "—" : millis + " ms"; }
+    private static String number(Long value) { return value == null ? "null" : value.toString(); }
+    private static String numberText(Long value) { return value == null ? "—" : value.toString(); }
     private static String shortHash(String value) { return html(value.substring(0, 12)); }
     private static String quote(String value) { return EvidenceExplorerFormat.quote(value); }
     private static String html(String value) { return EvidenceExplorerFormat.html(value); }
