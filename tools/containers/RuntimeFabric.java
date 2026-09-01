@@ -139,19 +139,11 @@ public final class RuntimeFabric {
     private static void require(boolean value, String message) { if (!value) throw new IllegalArgumentException(message); }
 
     private static void selfTest() throws Exception {
-        RustExecutorShadow.selfTest();
-        ExecutionEnvironmentManifest.selfTest();
-        ExecutionFilesystemManifest.selfTest();
-        WorkspaceTransaction.selfTest();
-        ExecutorToolingCycle.selfTest();
-        ExecutorServerCycle.selfTest();
-        ExecutorCandidateCycle.selfTest();
-        ExecutorGuiCycle.selfTest();
-        ExecutorAeroCycle.selfTest();
-        CampaignExecutorCycle.selfTest();
-        ExecutionTelemetryHistory.selfTest();
-        ExecutionFailureClusters.selfTest();
-        ExecutionEvidenceSummary.selfTest();
+        for (String type : List.of("RustExecutorShadow", "ExecutionEnvironmentManifest",
+                "ExecutionFilesystemManifest", "WorkspaceTransaction", "ExecutorToolingCycle",
+                "ExecutorServerCycle", "ExecutorCandidateCycle", "ExecutorGuiCycle",
+                "ExecutorAeroCycle", "CampaignExecutorCycle", "ExecutionTelemetryHistory",
+                "ExecutionFailureClusters", "ExecutionEvidenceSummary")) selfTest(type);
         Process probe = new ProcessBuilder(java(), "tools/containers/TerminationTreeProbe.java", "parent")
                 .redirectOutput(ProcessBuilder.Redirect.DISCARD)
                 .redirectError(ProcessBuilder.Redirect.DISCARD).start();
@@ -195,6 +187,11 @@ public final class RuntimeFabric {
         require(optimized >= 36, "optimized smoke cleanup coverage drift: " + optimized);
         require(parentCleanup >= 37, "parent worktree cleanup coverage drift: " + parentCleanup);
         System.out.println("runtime fabric self-test passed");
+    }
+
+    private static void selfTest(String type) throws Exception {
+        var method = Class.forName(type).getDeclaredMethod("selfTest");
+        method.setAccessible(true); method.invoke(null);
     }
 
     private record Result(boolean passed, String output) { }
