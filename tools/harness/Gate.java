@@ -53,6 +53,13 @@ public final class Gate {
             if (exit != 0) System.exit(exit);
             return;
         }
+        if (arguments.length == 2 && "--input-graph".equals(arguments[0])) {
+            Path classes = compileHarness();
+            int exit = waitFor(new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
+                    "SmokeInputGraphQuery", arguments[1]).directory(root.toFile()).inheritIO().start(), 60);
+            if (exit != 0) System.exit(exit);
+            return;
+        }
         if (arguments.length == 1 && maintenance(arguments[0])) {
             Path classes = compileHarness();
             ProcessBuilder builder = new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
@@ -127,6 +134,7 @@ public final class Gate {
                 || Arrays.equals(arguments, new String[] {"--accept-legacy-smoke-baseline"})
                 || arguments.length == 1 && maintenance(arguments[0])
                 || arguments.length == 2 && ("--new-milestone".equals(arguments[0])
+                        || "--input-graph".equals(arguments[0])
                         || "--candidate".equals(arguments[0])
                         || "--candidate-ready".equals(arguments[0])
                         || "--lane-differential".equals(arguments[0])
@@ -151,7 +159,7 @@ public final class Gate {
                 + "--seal-lane-portability|"
                 + "--module-cache-doctor|--module-cache-gc|--cache-doctor|--cache-gc|"
                 + "--cache-rebuild-drill|"
-                + "--new-milestone ID|--milestone ID|--lane-differential ID|"
+                + "--new-milestone ID|--input-graph ID|--milestone ID|--lane-differential ID|"
                 + "--candidate-ready ID|--candidate ID|--self-test]");
         if (arguments.length == 2 && !arguments[1].matches("[a-z0-9]+(?:-[a-z0-9]+)*"))
             throw new IllegalArgumentException("invalid milestone id: " + arguments[1]);

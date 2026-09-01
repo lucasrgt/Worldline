@@ -22,8 +22,8 @@ final class SmokeInputFingerprint {
             "(?:product|productClasses)\\(\\\"([a-z0-9-]+)\\\"\\)"
             + "|\\.worldline/build/classes/([a-z0-9-]+)");
     private static final Pattern RESOLVE = Pattern.compile("\\.resolve\\(\\\"([a-z0-9-]+)\\\"\\)");
-    private static final Pattern ENVIRONMENT = Pattern.compile("System\\.getenv\\(\\\"([A-Z0-9_]+)\\\"\\)");
-    private static final List<String> REPOSITORY_INPUTS = List.of(
+    static final Pattern ENVIRONMENT = Pattern.compile("System\\.getenv\\(\\\"([A-Z0-9_]+)\\\"\\)");
+    static final List<String> REPOSITORY_INPUTS = List.of(
             "adapters/b173-client", "adapters/b173-server", "adapters/modloader-forge",
             "adapters/stationapi",
             "adapters/aero-model-lib",
@@ -148,7 +148,7 @@ final class SmokeInputFingerprint {
         }
     }
 
-    private Set<String> dataDrivenProducts(String id) throws IOException {
+    Set<String> dataDrivenProducts(String id) throws IOException {
         Properties descriptor = descriptor(id); Set<String> result = new HashSet<>();
         result.addAll(list(descriptor.getProperty("cycle.compile.products")));
         result.addAll(list(descriptor.getProperty("cycle.runtime.products"))); return result;
@@ -179,7 +179,7 @@ final class SmokeInputFingerprint {
         }
     }
 
-    private Properties descriptor(String id) throws IOException {
+    Properties descriptor(String id) throws IOException {
         return StrictProperties.load(root.resolve("smokes").resolve(id).resolve("smoke.properties"));
     }
 
@@ -201,11 +201,11 @@ final class SmokeInputFingerprint {
         }
     }
 
-    private static String source(Path path) throws IOException {
+    static String source(Path path) throws IOException {
         return Files.readString(path, StandardCharsets.UTF_8);
     }
 
-    private Set<String> products(String source) {
+    Set<String> products(String source) {
         Set<String> result = new HashSet<>(); Matcher matcher = PRODUCT.matcher(source);
         while (matcher.find()) result.add(matcher.group(1) != null ? matcher.group(1) : matcher.group(2));
         if (source.contains(".worldline/build/classes")) {
@@ -216,7 +216,7 @@ final class SmokeInputFingerprint {
         return result;
     }
 
-    private String module(String name, boolean tokens) throws Exception {
+    String module(String name, boolean tokens) throws Exception {
         String key = (tokens ? "tokens:" : "bytes:") + name;
         String cached = moduleDigests.get(key); if (cached != null) return cached;
         require(modules.getProperty("module." + name + ".dependencies") != null,
@@ -238,7 +238,7 @@ final class SmokeInputFingerprint {
         update(digest, pathDigest(path, tokens));
     }
 
-    private String pathDigest(Path path, boolean tokens) throws Exception {
+    String pathDigest(Path path, boolean tokens) throws Exception {
         String key = (tokens ? "tokens:" : "bytes:") + path;
         String cached = pathDigests.get(key); if (cached != null) return cached;
         require(Files.exists(path), "missing smoke input: " + root.relativize(path));
