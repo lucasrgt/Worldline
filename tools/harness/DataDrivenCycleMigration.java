@@ -116,23 +116,20 @@ final class DataDrivenCycleMigration {
             DataDrivenCyclePlan plan = DataDrivenCyclePlan.load(root, smoke.id);
             SmokePins.Entry existingPin = existing.entry(smoke.id);
             String recordedPlan = manifest.getProperty(stem + "plan_sha256");
-            SmokePins.Entry newPlanPin = null;
-            String recordedEvidence = manifest.getProperty(stem + "evidence_sha256");
-            boolean trainCurrent = existingPin != null
+            SmokePins.Entry newPlanPin = null; boolean trainCurrent = existingPin != null
                     && TrainPinCheck.carriesCurrent(train, smoke.id, existingPin, current);
+            String recordedEvidence = manifest.getProperty(stem + "evidence_sha256");
             if (trainCurrent && !existingPin.evidence().equals(recordedEvidence)) {
                 manifest.setProperty(stem + "evidence_sha256", existingPin.evidence());
                 importedPlans++; }
             if (recordedPlan == null) {
                 require(DataDrivenRefreshEvidence.unchangedMilestone(root, smoke.id),
                         "unregistered generic plan changed with the shared runner: " + smoke.id);
-                SmokePins.Entry prior = cache.availablePin(smoke);
-                boolean milestoneProof = false;
+                SmokePins.Entry prior = cache.availablePin(smoke); boolean milestoneProof = false;
                 if (prior == null && sharedPlanRefactor
                         && DataDrivenPlanReceipt.available(root, smoke.id)) {
                     prior = DataDrivenPlanReceipt.pin(root, smoke, current);
-                    milestoneProof = true;
-                }
+                    milestoneProof = true; }
                 if (prior == null) {
                     prior = requiredEntry(existing, smoke.id);
                     milestoneProof = sharedPlanRefactor;
@@ -159,8 +156,7 @@ final class DataDrivenCycleMigration {
                 pins.add(new SmokePins.Entry(smoke.id, current, newPlanPin.evidence(),
                         current.equals(newPlanPin.fingerprint()) ? newPlanPin.source()
                                 : "refactor-equivalent"));
-                executed++;
-                continue;
+                executed++; continue;
             }
             if (local == null && !current.equals(existingPin.fingerprint())
                     && !sharedPlanRefactor && !sharedProcessRefactor) {
