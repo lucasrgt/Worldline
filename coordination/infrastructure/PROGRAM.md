@@ -86,6 +86,9 @@ Completed foundation slices:
 - observational Linux `memory.max`, OOM-kill, task-limit, and CPU-throttling
   counters with positive limit-event fixtures in executor commit `ca68dad` and
   strict Java telemetry verification in `48df107a6`.
+- canonical content-addressed stdout, stderr, and metrics manifests in executor
+  commit `7d438cc`, with independent Java byte, order, size, digest, and receipt
+  binding verification in `ce069be3f`.
 
 Evidence recorded for these slices:
 
