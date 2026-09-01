@@ -41,6 +41,7 @@ final class HarnessFeatureSelfTest {
         SmokeSuiteScheduler.selfTest();
         JavaTokenText.selfTest();
         SmokeInputGraph.selfTest();
+        DataDrivenPlanRevision.selfTest();
         SmokeInputDependentsQuery.selfTest();
         SmokeInputDiffQuery.selfTest();
         WorldTemplate.selfTest();
