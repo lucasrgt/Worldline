@@ -30,7 +30,8 @@ record CampaignShardReceipt(String planSha256, String campaignId, int shardIndex
                     && result.endExclusive == expected.endExclusive() && result.seed == expected.seed(),
                     "campaign shard assignment drifted");
             require(seen.add(result.workload), "duplicate campaign workload result");
-            require(result.exit >= 0 && result.resultSha256.matches("[0-9a-f]{64}"),
+            require(result.budgetSeconds > 0 && result.elapsedMs >= 0L
+                    && result.resultSha256.matches("[0-9a-f]{64}"),
                     "invalid campaign workload result");
         }
         String status = results.stream().allMatch(result -> result.exit == 0 && !result.timedOut)
@@ -48,11 +49,13 @@ record CampaignShardReceipt(String planSha256, String campaignId, int shardIndex
         List<Result> results = new ArrayList<>();
         for (Object item : MiniJson.array(value, "results")) {
             Map<String, Object> row = MiniJson.asObject(item, "campaign result");
-            exact(row, "workload", "start", "end_exclusive", "seed", "exit", "timed_out",
-                    "result_sha256");
+            exact(row, "workload", "start", "end_exclusive", "seed", "budget_seconds",
+                    "elapsed_ms", "exit", "timed_out", "result_sha256");
             results.add(new Result(MiniJson.string(row, "workload"), MiniJson.integer(row, "start"),
                     MiniJson.integer(row, "end_exclusive"), MiniJson.integer(row, "seed"),
-                    Math.toIntExact(MiniJson.integer(row, "exit")), MiniJson.bool(row, "timed_out"),
+                    Math.toIntExact(MiniJson.integer(row, "budget_seconds")),
+                    MiniJson.integer(row, "elapsed_ms"), Math.toIntExact(MiniJson.integer(row, "exit")),
+                    MiniJson.bool(row, "timed_out"),
                     MiniJson.string(row, "result_sha256")));
         }
         CampaignShardReceipt receipt = create(plan, Math.toIntExact(MiniJson.integer(value,
@@ -99,9 +102,10 @@ record CampaignShardReceipt(String planSha256, String campaignId, int shardIndex
     }
 
     record Result(String workload, long start, long endExclusive, long seed,
-            int exit, boolean timedOut, String resultSha256) {
+            int budgetSeconds, long elapsedMs, int exit, boolean timedOut, String resultSha256) {
         String json() { return "{\"workload\":" + q(workload) + ",\"start\":" + start
                 + ",\"end_exclusive\":" + endExclusive + ",\"seed\":" + seed
+                + ",\"budget_seconds\":" + budgetSeconds + ",\"elapsed_ms\":" + elapsedMs
                 + ",\"exit\":" + exit + ",\"timed_out\":" + timedOut
                 + ",\"result_sha256\":" + q(resultSha256) + "}"; }
         long cases() { return endExclusive - start; }

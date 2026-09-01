@@ -41,3 +41,25 @@ same closed contract can describe world-generation, instability,
 lane-differential, profiling, regression, and minimization workloads. Runtime
 or behavioral campaigns must still enter through the applicable Gate and
 official-runtime lease.
+
+## Nightly shard execution
+
+After the canonical Gate has produced the test classpath, execute one exact
+shard with:
+
+```text
+java -cp .worldline/gate/classes NightlyQualityCampaign --budget-seconds 900 --seed 173 --shard-count 4 --shard-index 0
+```
+
+Workers may finish in any order. Each one atomically publishes the same
+content-addressed plan, immutable workload logs, and one canonical shard
+receipt under `.worldline/reports/nightly-quality/plans/<plan-sha256>/`.
+The last worker to observe a complete receipt set writes `aggregate.json`.
+Publication never replaces different bytes, and aggregation rejects gaps,
+duplicates, changed assignments, or mixed Git trees.
+
+Use `--plan-only` to print the plan without requiring compiled tests or running
+either workload. A single-shard invocation remains compatible with the
+scheduled workflow. `WORLDLINE_CAMPAIGN_EXECUTOR_REQUEST_SHA256` may bind a
+native executor request to the shard receipt; absence explicitly means the
+legacy Java launcher was used.

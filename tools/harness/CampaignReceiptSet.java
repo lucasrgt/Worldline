@@ -17,7 +17,8 @@ final class CampaignReceiptSet {
                 .sorted(Comparator.comparingInt(CampaignShardReceipt::shardIndex)).toList();
         Set<Integer> seen = new HashSet<>(); String head = null, tree = null;
         long cases = 0L; int passed = 0;
-        for (CampaignShardReceipt receipt : receipts) {
+        for (CampaignShardReceipt supplied : receipts) {
+            CampaignShardReceipt receipt = CampaignShardReceipt.parse(plan, supplied.json());
             require(seen.add(receipt.shardIndex()), "duplicate campaign shard receipt");
             require(receipt.shardIndex() >= 0 && receipt.shardIndex() < plan.shardCount()
                     && receipt.shardCount() == plan.shardCount()

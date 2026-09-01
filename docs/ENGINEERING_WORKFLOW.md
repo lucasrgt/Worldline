@@ -264,10 +264,12 @@ repository gate fails closed through `CsmSuiteCheck` when the tracked NYA scar o
 is missing or empty.
 
 The scheduled private workflow runs differential fuzzing and mutation-manifest exploration only
-after the canonical Gate. `NightlyQualityCampaign` splits a hard wall-clock budget between both
-child JVMs, kills timed-out process trees, and publishes seed, volume, duration, status, and logs
-under `.worldline/reports/nightly-quality/`. The `quality` dispatch profile reproduces it manually;
-ordinary local and pull-request gates retain only deterministic short tests.
+after the canonical Gate. `NightlyQualityCampaign` consumes one exact `CampaignPlan` shard, splits
+its hard wall-clock budget between both child JVMs, kills timed-out process trees, and atomically
+publishes content-addressed plan, immutable logs, and a non-authoritative shard receipt under
+`.worldline/reports/nightly-quality/`. Complete shard sets aggregate independently of arrival
+order. The `quality` dispatch profile reproduces a single shard manually; ordinary local and
+pull-request gates retain only deterministic short tests.
 
 Smoke source policy counts semicolons outside comments, strings, and character literals instead
 of rewarding physical-line packing. New runners and scenarios are limited to 300 and 150

@@ -43,6 +43,11 @@ record CampaignSpec(String id, int defaultShards, List<Workload> workloads) {
 
     CampaignPlan plan(long seed) throws Exception {
         int shards = environment("WORLDLINE_CAMPAIGN_SHARDS", defaultShards, 1, 1_024);
+        return plan(seed, shards);
+    }
+
+    CampaignPlan plan(long seed, int shards) throws Exception {
+        require(shards >= 1 && shards <= 1_024, "shards must be between 1 and 1024");
         List<CampaignPlan.Workload> values = workloads.stream().map(workload ->
                 new CampaignPlan.Workload(workload.id, workload.kind,
                         environment(workload.environment, workload.defaultCases, 1, 1_000_000_000)))
