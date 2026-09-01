@@ -479,11 +479,35 @@ Evidence recorded for these slices:
   (`5703ms < 240000ms`), CSM checks ten ways with no deviations, and NYA
   passes. Windows network remains `inherit`; GPU identity is diagnostic and
   excluded from portable evidence.
+- Worldline commit `935d0fc41` qualifies the first pinned `gui-aero`
+  differential against `m778-aero-culling-visual-integrity`, using executor
+  commit `803861d` and Aero commit
+  `091940b8e0cbd839169d8eb977992dfee83faff6`. Legacy and Rust Windows Jobs run
+  sequentially under one canonical runtime lease. Each arm receives a fresh
+  exact-commit Worldline worktree, an exact detached Aero worktree, fixed local
+  official artifacts, and an empty private Gradle home. Both build Aero from
+  source, launch the preparation client plus counterbalanced `off-on` and
+  `on-off` clients, compare 24 full RGBA checkpoints, prove zero changed pixels,
+  and reduce render work in both sessions. Their evidence is byte-equal at
+  `76f09960fe0bebc3f7103b0d1004317883178299e3dae969f53ad867ce0cc796`.
+  The Rust request digest is
+  `b2b9a47acc5f3d3e9997a0a802a01a4cd945913735f00db252427239b021f4be`
+  and telemetry digest is
+  `59e119649f0e49f2e0f298561c7126ab1a1f98ef6b35402a95dadd974f8b9f04`.
+  Its 787,205-ms observation partitions into 15-ms bootstrap and 787,190-ms
+  runtime, peaks at 4,362,235,904 bytes and eleven processes, retains complete
+  output, and proves zero descendants. PID-reuse-safe runtime capabilities now
+  bind both PID and process start time. The exact canonical Gate passes cold
+  (`107861ms < 240000ms`), `Gate --runtime` passes cold
+  (`4818ms < 240000ms`), CSM checks ten ways with no deviations, and NYA
+  passes. Both external and Worldline cells are removed after execution.
+  Windows network remains `inherit`; the private Gradle homes intentionally
+  use that network and are not evidence of network isolation.
 Current boundaries remain honest: Linux mount and PID namespaces,
 OS-enforced loopback-only policy, Windows filesystem/network isolation,
-complete hostile-fixture coverage, the broader server-headless matrix, Aero
-and onscreen GUI differentials, multi-Candidate histories, and default runtime selection remain
-pending. The structural Windows tooling cycle and one official server
+complete hostile-fixture coverage, the broader server-headless matrix,
+broader onscreen GUI/driver profiles, multi-Candidate histories, and default
+runtime selection remain pending. The structural Windows tooling cycle and one official server
 behavior/containment differential are qualified; neither makes Rust the
 default backend. Artifact classification now covers tracked
 smoke pin envelopes and generated Worldline-only module bundles; tests, stages,
@@ -505,9 +529,9 @@ D3 and D5 are therefore in progress; A5 is qualified for the
 structural Windows tooling and Candidate cycles. A6 now has one qualified official Windows
 server behavior/containment slice, B1 covers tooling plus server-headless, and
 the post-execution portion of B2 covers disposable server cells without
-claiming write isolation. A7 now has one qualified native Pbuffer slice.
-Native Windows filesystem/network enforcement, Aero/onscreen GUI profiles,
-full A8 promotion, broader runtime histories,
+claiming write isolation. A7 now has qualified native Pbuffer and pinned Aero
+visual-integrity slices. Native Windows filesystem/network enforcement,
+broader onscreen/driver GUI profiles, full A8 promotion, broader runtime histories,
 and remote transport deployment remain pending.
 
 ## 2. Program principles
@@ -752,7 +776,15 @@ by `Gate --executor-gui`. Legacy and Rust run the same official/mapped M10
 oracle in independent exact-commit cells under one runtime lease. Both arms
 prove four-process repetition, mapped/official frame equality, Pbuffer current
 state, absent onscreen `Display`, correct renderer class origin, complete
-output, and an empty process tree. Aero, onscreen Display, larger profiles,
+output, and an empty process tree.
+
+The pinned Aero slice is qualified at Worldline commit `935d0fc41` by
+`Gate --executor-aero`. M778 builds exact Aero revision
+`091940b8e0cbd839169d8eb977992dfee83faff6` inside independent private Gradle
+homes, launches three graphical clients per arm, and proves exact framebuffer
+equality plus lower culling work across two counterbalanced sessions. The
+12-GiB/64-process profile peaks at 4,362,235,904 bytes and eleven processes
+with complete output and an empty process tree. Broader onscreen profiles,
 driver/GPU diagnostics, and coordinator-death GUI fixtures remain pending.
 
 ### A8. Default and retirement
@@ -780,7 +812,10 @@ secret-bearing names. Commit `e9ff4e55a` adds the Candidate allowlist with
 private temporary/control roots, bounded build workers, and a bounded Gate
 lease wait. Commit `9b3bad608` qualifies the first GUI allowlist with private
 temporary/control roots and a delegated lease whose secret stays outside the
-plan. Aero-specific Gradle and display environment fields remain pending.
+plan. Commit `935d0fc41` qualifies the Aero allowlist with private temporary,
+control, and Gradle-home roots. Delegated runtime capabilities now bind PID
+plus process start time and carry no secret values in the plan. Display and
+GPU identity remain diagnostic rather than portable behavior inputs.
 
 ### B2. Filesystem manifest
 
@@ -819,6 +854,13 @@ b1.7.3 workspace into each disposable exact-commit cell with no-follow
 traversal, regular-file enforcement, and explicit file/byte ceilings. Input
 hashes and mapped class presence are reverified by the M10 oracle. Cleanup
 proves no cell residue, not Windows write prevention.
+
+The Aero slice at commit `935d0fc41` materializes only two bounded official
+artifacts plus an exact detached external checkout in each disposable cell.
+The external worktree is removed and pruned before its containing Worldline
+cell, and timeout paths terminate descendants from deepest child to parent and
+confirm death. Independent private Gradle homes avoid ambient cache coupling;
+Windows still provides no filesystem write-prevention claim.
 
 The same profile now has qualified transactional publication at commit
 `af7138e74`: staging and destination are siblings, publication is atomic and
@@ -880,6 +922,10 @@ The first native GUI profile at commit `9b3bad608` records M10 at 7,166 ms,
 12-ms bootstrap, 7,153-ms runtime, 741,785,600-byte peak Job commit, seven
 peak processes, complete output, and zero remaining descendants.
 
+The first Aero GUI profile at commit `935d0fc41` records M778 at 787,205 ms,
+15-ms bootstrap, 787,190-ms runtime, 4,362,235,904-byte peak Job commit,
+eleven peak processes, complete output, and zero remaining descendants.
+
 ### C2. Historical profiles
 
 Aggregate by lane, smoke ID, executor version, OS, architecture, and relevant
@@ -891,10 +937,13 @@ bounded, canonically reparsed, and rebuild into deterministic profile groups.
 Only sanitized observational fields are retained. Commit `7365d9a260` adds the
 first smoke-specific official server sample for `m20-server-bootstrap` on
 Windows 11/amd64. Commit `e9ff4e55a` adds the first Candidate sample for
-`m702-powered-rail-slope-propagation` on Windows 11/amd64. Broader server,
-multi-Candidate, Aero/onscreen GUI, and cross-host histories remain pending.
+`m702-powered-rail-slope-propagation` on Windows 11/amd64. Broader server and
+multi-Candidate histories remain pending.
 Commit `9b3bad608` adds the first native GUI sample for `m10-native-render` on
 Windows 11/amd64; no history upload is enabled.
+Commit `935d0fc41` adds the first Aero GUI sample for
+`m778-aero-culling-visual-integrity` on Windows 11/amd64. Broader Aero,
+onscreen, and cross-host histories remain pending; no history upload is enabled.
 
 ### C3. Conservative admission
 
@@ -922,10 +971,12 @@ read-model fixtures at Worldline commit `3947fa8e0`. Infrastructure,
 provider, and behavioral domains are explicit, and provider failure cannot be
 collapsed into oracle mismatch. The first successful official server sample
 at commit `7365d9a260` rebuilds with zero failures and zero clusters. Real
-failure histories plus GUI and provider samples remain pending. The first
+failure histories plus provider samples remain pending. The first
 successful Candidate sample at commit `e9ff4e55a` also rebuilds with zero
 failures and zero clusters. The successful M10 GUI sample at commit
 `9b3bad608` likewise adds no failure cluster.
+The successful M778 Aero sample at commit `935d0fc41` also adds no failure
+cluster.
 
 ## 8. Workstream D: content-addressed transport
 
