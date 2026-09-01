@@ -16,8 +16,8 @@ public final class AtlasSubsystems {
     public static final String[] ALL = { "tick-lifecycle", "worldgen", "chunks", "lighting",
             "weather", "block-ticks", "fluids", "entities", "mob-ai", "player", "inventory",
             "crafting", "redstone", "saves", "dimensions", "protocol", "dedicated-server",
-            "profiling", "rendering", "gui", "resources", "mod-ecosystem", "mappings", "stationapi",
-            "aero" };
+            "profiling", "rendering", "animation", "lifecycle", "scheduling", "gui", "resources",
+            "mod-ecosystem", "mappings", "stationapi", "aero" };
     public static final String[] DIMENSIONS = { "TESTABILITY", "CONTROL", "OBSERVABILITY",
             "ORACLE", "SEMANTIC", "REPRODUCIBILITY", "DETERMINISM" };
     private static final Map<String, String> CATEGORY = categories();

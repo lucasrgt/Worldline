@@ -14,15 +14,22 @@ import java.util.Properties;
 final class SmokeObservationCache {
     private final Path objects, logs;
     private final SmokeInputFingerprint fingerprints;
+    private final boolean reuse;
 
     SmokeObservationCache(Path root) throws Exception {
-        this(root, SmokeReceiptCache.cacheRoot(root));
+        this(root, SmokeReceiptCache.cacheRoot(root), !"off".equalsIgnoreCase(
+                System.getenv().getOrDefault("WORLDLINE_SMOKE_CACHE", "on")));
     }
 
     SmokeObservationCache(Path root, Path cache) throws Exception {
+        this(root, cache, true);
+    }
+
+    SmokeObservationCache(Path root, Path cache, boolean reuse) throws Exception {
         this.fingerprints = new SmokeInputFingerprint(root);
         this.objects = cache.resolve("smoke-observations");
         this.logs = root.resolve(".worldline/smoke-logs");
+        this.reuse = reuse;
     }
 
     String fingerprint(SmokeDiscovery.Entry smoke) throws Exception {
@@ -30,6 +37,7 @@ final class SmokeObservationCache {
     }
 
     Observation restore(SmokeDiscovery.Entry smoke, String fingerprint) throws Exception {
+        if (!reuse) return null;
         Path proof = proof(smoke.id, fingerprint), evidence = evidence(smoke.id, fingerprint);
         if (!valid(smoke.id, fingerprint, proof, evidence)) return null;
         CacheUsage.touch(proof);

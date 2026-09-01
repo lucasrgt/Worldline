@@ -57,6 +57,8 @@ internal static class WindowsJobRunner
             else Check(wait == 0, "WaitForMultipleObjects");
             WaitForSingleObject(process.hProcess, 10000);
             uint exitCode; Check(GetExitCodeProcess(process.hProcess, out exitCode), "GetExitCodeProcess");
+            Check(CloseHandle(process.hProcess), "CloseHandle(process)"); process.hProcess = IntPtr.Zero;
+            WaitForDrain(job);
             WriteMetrics(job, options, timedOut, parentExited, exitCode);
             return parentExited ? 130 : timedOut ? 124 : unchecked((int)exitCode);
         }
@@ -66,6 +68,16 @@ internal static class WindowsJobRunner
             if (process.hProcess != IntPtr.Zero) CloseHandle(process.hProcess);
             CloseHandle(log); CloseHandle(job);
         }
+    }
+
+    private static void WaitForDrain(IntPtr job)
+    {
+        for (int attempt = 0; attempt < 1000; attempt++)
+        {
+            if (Query<JOBOBJECT_BASIC_ACCOUNTING_INFORMATION>(job, 1).ActiveProcesses == 0) return;
+            System.Threading.Thread.Sleep(10);
+        }
+        throw new InvalidOperationException("Job Object process tree did not drain");
     }
 
     private static void ConfigureJob(IntPtr job, Options options)
@@ -92,6 +104,7 @@ internal static class WindowsJobRunner
             writer.WriteLine("parent.exited=" + parentExited.ToString().ToLowerInvariant());
             writer.WriteLine("exit.code=" + exitCode.ToString(CultureInfo.InvariantCulture));
             writer.WriteLine("processes.total=" + accounting.TotalProcesses.ToString(CultureInfo.InvariantCulture));
+            writer.WriteLine("processes.active=" + accounting.ActiveProcesses.ToString(CultureInfo.InvariantCulture));
             writer.WriteLine("processes.terminated=" + accounting.TotalTerminatedProcesses.ToString(CultureInfo.InvariantCulture));
             writer.WriteLine("memory.peak.bytes=" + limits.PeakJobMemoryUsed.ToUInt64().ToString(CultureInfo.InvariantCulture));
             writer.WriteLine("user.time.100ns=" + accounting.TotalUserTime.ToString(CultureInfo.InvariantCulture));

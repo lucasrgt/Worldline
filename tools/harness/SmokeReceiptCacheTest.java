@@ -17,6 +17,7 @@ public final class SmokeReceiptCacheTest {
         try {
             repository = Files.createTempDirectory("worldline-smoke-cache-test-");
             execute(repository); SmokeFingerprintCheck.execute(Path.of("").toAbsolutePath().normalize());
+            PooledSmokeCheck.selfTest();
             boolean rejected = false;
             try { PooledSmokeCheck.execute("m59-chest-transfer"); }
             catch (IllegalStateException expected) { rejected = true; }
@@ -88,6 +89,8 @@ public final class SmokeReceiptCacheTest {
         String observationFingerprint = observations.fingerprint(entries.get(0));
         observations.observed(entries.get(0), observationFingerprint, 17L);
         Files.delete(observedLog);
+        require(new SmokeObservationCache(root, cacheRoot, false).restore(entries.get(0),
+                observationFingerprint) == null, "disabled runtime observation cache restored evidence");
         SmokeObservationCache.Observation observation = observations.restore(entries.get(0),
                 observationFingerprint);
         require(observation != null && observation.duration() == 17L

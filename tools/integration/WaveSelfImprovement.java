@@ -148,6 +148,8 @@ final class WaveSelfImprovement {
                 .append(",\"logical_processors\":").append(parallelism.processors())
                 .append(",\"free_memory_bytes\":").append(parallelism.freeBytes())
                 .append(",\"candidate_memory_bytes\":").append(parallelism.workerBytes())
+                .append(",\"configured_candidate_memory_bytes\":").append(parallelism.configuredWorkerBytes())
+                .append(",\"telemetry_lowered_capacity\":").append(parallelism.telemetryLowered())
                 .append(",\"official_runtime_parallelism\":")
                 .append(parallelism.runtimeParallelism())
                 .append(",\"official_runtime_serialized_by_lease\":true},")
