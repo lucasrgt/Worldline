@@ -5,14 +5,17 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HexFormat;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-/** Qualifies one official headless-server behavior through legacy and Rust containment. */
+/** Qualifies an official headless-server behavior matrix through legacy and Rust containment. */
 public final class ExecutorServerCycle {
-    private static final String ID = "m20-server-bootstrap";
+    private static final List<String> IDS = List.of(
+            "m20-server-bootstrap", "m22-multiplayer-wire", "m130-nether-login");
     private static final long TIMEOUT_MS = 600_000L;
     private static final long MEMORY = 3L << 30;
     private static final int PROCESSES = 32;
@@ -28,6 +31,10 @@ public final class ExecutorServerCycle {
     }
 
     static void selfTest() throws Exception {
+        require(IDS.size() == 3 && IDS.stream().distinct().count() == IDS.size()
+                && IDS.get(0).equals("m20-server-bootstrap")
+                && IDS.get(1).equals("m22-multiplayer-wire")
+                && IDS.get(2).equals("m130-nether-login"), "server matrix drifted");
         Properties metrics = new Properties();
         metrics.setProperty("format", "1"); metrics.setProperty("backend", "windows-job");
         metrics.setProperty("timed.out", "false"); metrics.setProperty("parent.exited", "false");
@@ -47,41 +54,51 @@ public final class ExecutorServerCycle {
         Path artifact = officialArtifact(source); Path executor = executor();
         require(noForeignRuntime(), "an official Minecraft runtime is already active");
 
-        byte[] baseline;
+        Map<String, byte[]> baselines = new LinkedHashMap<>();
         try (ExecutorServerWorkspace workspace = ExecutorServerWorkspace.open(
                 source, "legacy", artifact)) {
             workspace.prepare();
             Path token = workspace.authorize(lock, lease);
-            ExecutionEnvironmentManifest environment = environment(workspace.root(), token,
-                    lease, "legacy");
-            baseline = legacy(workspace.root(), command(workspace.root()), environment);
+            for (String id : IDS) {
+                ExecutionEnvironmentManifest environment = environment(workspace.root(), token,
+                        lease, "legacy", id);
+                baselines.put(id, legacy(workspace.root(), command(workspace.root(), id),
+                        environment, id));
+            }
         }
 
-        NativeResult nativeResult;
+        List<String> observations = new ArrayList<>();
         try (ExecutorServerWorkspace workspace = ExecutorServerWorkspace.open(
                 source, "rust", artifact)) {
             workspace.prepare();
             Path token = workspace.authorize(lock, lease);
-            ExecutionEnvironmentManifest environment = environment(workspace.root(), token,
-                    lease, "rust");
-            nativeResult = rust(workspace.root(), executor, command(workspace.root()), environment);
+            for (String id : IDS) {
+                ExecutionEnvironmentManifest environment = environment(workspace.root(), token,
+                        lease, "rust", id);
+                NativeResult result = rust(workspace.root(), executor,
+                        command(workspace.root(), id), environment, id);
+                byte[] baseline = baselines.get(id);
+                require(Arrays.equals(baseline, result.evidence),
+                        "legacy/Rust official server evidence differential: " + id);
+                String telemetry = ExecutionTelemetryHistory.record(
+                        source.resolve(".worldline/executor-telemetry"), "server-headless", id,
+                        "official-windows-job", result.verified.telemetry());
+                observations.add(id + ":request=" + result.request + ":evidence="
+                        + ExecutionJson.sha256(baseline) + ":telemetry=" + telemetry);
+            }
         }
-        require(Arrays.equals(baseline, nativeResult.evidence),
-                "legacy/Rust official server evidence differential");
-        String telemetry = ExecutionTelemetryHistory.record(
-                source.resolve(".worldline/executor-telemetry"), "server-headless", ID,
-                "official-windows-job", nativeResult.verified.telemetry());
-        System.out.println("Rust executor server cycle passed; smoke=" + ID + "; request="
-                + nativeResult.request + "; evidence=" + ExecutionJson.sha256(baseline)
-                + "; telemetry=" + telemetry + "; network=loopback-observed-inherit");
+        require(observations.size() == IDS.size(), "server matrix observation count drifted");
+        System.out.println("Rust executor server matrix passed; count=" + observations.size()
+                + "; observations=" + String.join(",", observations)
+                + "; network=loopback-observed-inherit");
     }
 
     private static NativeResult rust(Path root, Path executor, List<String> command,
-            ExecutionEnvironmentManifest environment) throws Exception {
-        Path output = root.resolve(".worldline/executor-server-cycle/rust");
+            ExecutionEnvironmentManifest environment, String id) throws Exception {
+        Path output = root.resolve(".worldline/executor-server-cycle/rust").resolve(id);
         Files.createDirectories(output.resolve("tmp"));
-        WorldlineExecutionPlan plan = plan(root, output, command, environment);
-        Path planPath = output.getParent().resolve("rust-plan.json");
+        WorldlineExecutionPlan plan = plan(root, output, command, environment, id);
+        Path planPath = output.resolveSibling(id + "-plan.json");
         WorldlineExecutionReceipt.Verified result = RustExecutorShadow.execute(executor, planPath, plan);
         require("exited".equals(result.termination()) && Long.valueOf(0).equals(result.exitCode()),
                 "Rust server execution failed:\n" + Files.readString(plan.outputs().stderr()));
@@ -89,12 +106,12 @@ public final class ExecutorServerCycle {
                 && Long.valueOf(0).equals(result.descendantsRemaining()),
                 "Rust server execution did not prove complete output and an empty process tree");
         require(result.runtimeMs() > 0L, "Rust server execution lacks runtime phase telemetry");
-        return new NativeResult(evidence(root), result, plan.requestSha256());
+        return new NativeResult(evidence(root, id), result, plan.requestSha256());
     }
 
     private static byte[] legacy(Path root, List<String> command,
-            ExecutionEnvironmentManifest environment) throws Exception {
-        Path output = root.resolve(".worldline/executor-server-cycle/legacy");
+            ExecutionEnvironmentManifest environment, String id) throws Exception {
+        Path output = root.resolve(".worldline/executor-server-cycle/legacy").resolve(id);
         Files.createDirectories(output.resolve("tmp")); Path log = output.resolve("console.log");
         Path metrics = output.resolve("metrics.properties");
         List<String> invocation = new ArrayList<>(List.of(WindowsJobBootstrap.ensure().toString(),
@@ -109,12 +126,12 @@ public final class ExecutorServerCycle {
         Properties values = new Properties(); try (var reader = Files.newBufferedReader(metrics)) {
             values.load(reader);
         }
-        verifyLegacy(values); return evidence(root);
+        verifyLegacy(values); return evidence(root, id);
     }
 
     private static WorldlineExecutionPlan plan(Path root, Path output, List<String> command,
-            ExecutionEnvironmentManifest environment) {
-        return new WorldlineExecutionPlan("official-server-headless", root, command,
+            ExecutionEnvironmentManifest environment, String id) {
+        return new WorldlineExecutionPlan("official-server-headless-" + id, root, command,
                 environment.environment(), new WorldlineExecutionPlan.Limits(TIMEOUT_MS, MEMORY,
                         PROCESSES, null, 100, 16L << 20, 16L << 20),
                 new WorldlineExecutionPlan.Isolation("windows_job", "inherit",
@@ -125,20 +142,23 @@ public final class ExecutorServerCycle {
     }
 
     private static ExecutionEnvironmentManifest environment(Path root, Path token,
-            RuntimeLeaseIdentity lease, String label) throws Exception {
-        Path output = root.resolve(".worldline/executor-server-cycle").resolve(label);
+            RuntimeLeaseIdentity lease, String label, String id) throws Exception {
+        require(IDS.contains(id), "server matrix environment escaped the closed set");
+        Path output = root.resolve(".worldline/executor-server-cycle").resolve(label).resolve(id);
         Path control = output.resolve("control"); Files.createDirectories(control);
         return ExecutionEnvironmentManifest.serverHeadless(output.resolve("tmp"), control,
                 token, lease.pid(), lease.started());
     }
 
-    private static List<String> command(Path root) {
+    private static List<String> command(Path root, String id) {
+        require(IDS.contains(id), "server matrix command escaped the closed set");
         return List.of(java(), root.resolve("tools/harness/Gate.java").toString(),
-                "--milestone", ID);
+                "--milestone", id);
     }
 
-    private static byte[] evidence(Path root) throws Exception {
-        Path path = root.resolve(".worldline/smokes").resolve(ID).resolve("evidence.txt");
+    private static byte[] evidence(Path root, String id) throws Exception {
+        require(IDS.contains(id), "server matrix evidence escaped the closed set");
+        Path path = root.resolve(".worldline/smokes").resolve(id).resolve("evidence.txt");
         require(Files.isRegularFile(path), "official server evidence is absent");
         return Files.readAllBytes(path);
     }

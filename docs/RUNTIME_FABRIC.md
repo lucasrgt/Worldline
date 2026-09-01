@@ -154,3 +154,21 @@ through Docker and missing `windows-client-gui` proofs explicitly through the
 Windows Job Object. A missing backend is fail-closed. Runtime Fabric accelerates
 evidence; it does not relax the official JAR oracle, canonical verification,
 mapping review, or frozen-signature requirements.
+
+## Native executor qualification
+
+The Windows server promotion cycle compares the legacy C# Job Object launcher
+with the Rust Windows Job backend under one continuous official-runtime lease:
+
+```text
+java tools/harness/Gate.java --executor-server
+```
+
+The closed matrix covers dedicated-server bootstrap, a protocol-14 multiplayer
+session, and persisted Nether login. Each arm uses one independent disposable
+exact-commit worktree, an explicit environment, a locally verified server JAR,
+and per-behavior output roots. Every milestone still enters through
+`Gate --milestone`; the cycle requires byte-equal canonical evidence, complete
+Rust output, and zero remaining descendants before recording observational
+telemetry. The Windows profile observes explicit loopback use under inherited
+network access and does not claim OS-enforced network isolation.
