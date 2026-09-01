@@ -104,7 +104,8 @@ public final class EntityPersistenceReplay {
     List<Path> paths = new ArrayList<>(Arrays.asList(product("api"), product("trace"),
         product("mods"), product("analysis"), product("modtest"), product("minimization"),
         product("testmodel"), product("testapi"), product("testkit"), headless,
-        root.resolve("local/workspaces/b1.7.3/minecraft/bin")));
+        root.resolve("local/workspaces/b1.7.3/minecraft/bin"),
+        root.resolve("local/workspaces/b1.7.3/jars/minecraft.jar")));
     try (Stream<Path> libraries = Files.walk(root.resolve("local/workspaces/b1.7.3/libraries"))) {
       libraries.filter(path -> path.toString().endsWith(".jar")).sorted().forEach(paths::add);
     }
