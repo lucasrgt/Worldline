@@ -24,5 +24,25 @@ orphan proof envelopes.
 
 The Explorer is not a verdict authority. It cannot promote evidence, alter a
 qualification lock, or replace `Gate.java`. The canonical projection excludes
-ephemeral local executor receipts, leases, and machine state; a future live
-overlay may visualize those inputs without changing the canonical snapshot.
+ephemeral local executor receipts, leases, and machine state. The separate live
+overlay visualizes those inputs without changing the canonical snapshot.
+
+## Local live overlay
+
+Build the explicitly ephemeral overlay with:
+
+```text
+java tools/harness/Gate.java --evidence-explorer-live
+```
+
+This command first rebuilds the canonical files, then writes `live.json` and
+`live.html` beside them. The live JSON binds the canonical `evidence.json` by
+SHA-256 while keeping `ephemeral_state_included=true` and
+`verdict_authority=false`. It contains only sanitized executor telemetry and
+failure clusters, lower-only admission state, aggregate FIFO lease-queue state,
+and the current read-only cache decision for every smoke. It excludes local
+paths, process IDs, argument vectors, environment values, and log content.
+
+Live output changes with local machine state and observation time. It is useful
+for diagnosis and scheduling, but it is never pinned, transported as behavioral
+evidence, or consumed as a qualification verdict.

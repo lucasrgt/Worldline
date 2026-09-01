@@ -92,8 +92,8 @@ final class EvidenceExplorerFormat {
         }
         if (!values.isEmpty()) out.append('\n').append("  ");
     }
-    private static String nullable(String value) { return value == null ? "null" : quote(value); }
-    private static String quote(String value) {
+    static String nullable(String value) { return value == null ? "null" : quote(value); }
+    static String quote(String value) {
         StringBuilder out = new StringBuilder().append('"');
         for (int index = 0; index < value.length(); index++) {
             char character = value.charAt(index);
@@ -113,11 +113,11 @@ final class EvidenceExplorerFormat {
         }
         return out.append('"').toString();
     }
-    private static String html(String value) { return value.replace("&", "&amp;").replace("<", "&lt;")
+    static String html(String value) { return value.replace("&", "&amp;").replace("<", "&lt;")
             .replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&#39;"); }
     private static String shortHash(String value) { return value == null ? "—" : html(
             value.length() <= 12 ? value : value.substring(0, 12)); }
-    private static String css() { return "*{box-sizing:border-box}body{margin:0;background:#0b1020;color:#e8edf7;"
+    static String css() { return "*{box-sizing:border-box}body{margin:0;background:#0b1020;color:#e8edf7;"
             + "font:14px system-ui}main{max-width:1440px;margin:auto;padding:48px}header{padding:28px 0}"
             + ".eyebrow{color:#7dd3fc;text-transform:uppercase;letter-spacing:.18em}h1{font-size:42px;margin:6px 0}"
             + "h2{margin:34px 0 14px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}"
