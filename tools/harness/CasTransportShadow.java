@@ -80,11 +80,12 @@ public final class CasTransportShadow {
                     identity.module(), identity.input(), identity.javaVersion());
             require(lookup != null && lookup.blobSha256().equals(module.sha256())
                     && lookup.blobSize() == module.size(), "module cache index lookup drifted");
-            Path moduleOutput = transport(root, binary, local, fresh, address, permits,
-                    module, run.resolve("hydrated.wmb"));
-            policy.validateHydrated(module, moduleOutput);
+            upload(root, binary, local, address, permits, module);
             Path restored = run.resolve("restored-module");
-            ModuleCacheBundle.extract(moduleOutput, identity.module(), identity.input(), restored);
+            ModuleCacheHydrator hydrator = ModuleCacheHydrator.connect(root, binary, address,
+                    permits, indexOutput, index.sha256(), run.resolve("module-cas"));
+            require(hydrator.hydrate(identity.module(), identity.input(), restored),
+                    "module cache hydrator reported a miss");
             ModuleCacheBundle.requireEqual(moduleEntry, restored);
             System.out.println("CAS transport shadow passed; proof.sha256=" + proof.sha256()
                     + ";proof.size=" + proof.size() + ";module=api;module.input="
@@ -110,14 +111,20 @@ public final class CasTransportShadow {
     private static Path transport(Path root, Path binary, Path local, Path fresh,
             String address, Path permits, ArtifactTransportPolicy.Candidate candidate,
             Path output) throws Exception {
+        upload(root, binary, local, address, permits, candidate);
+        String expected = candidate.sha256() + " " + candidate.size() + "\n";
+        require(expected.equals(command(root, binary, "hydrate", fresh, address, permits,
+                candidate.sha256(), MAXIMUM)), "CAS hydration identity drifted");
+        command(root, binary, "get", fresh, candidate.sha256(), output); return output;
+    }
+
+    private static void upload(Path root, Path binary, Path local, String address,
+            Path permits, ArtifactTransportPolicy.Candidate candidate) throws Exception {
         String expected = candidate.sha256() + " " + candidate.size() + "\n";
         require(expected.equals(command(root, binary, "put", local, candidate.path())),
                 "local CAS publication drifted");
         require(expected.equals(command(root, binary, "upload", local, address, permits,
                 candidate.sha256(), MAXIMUM)), "CAS upload identity drifted");
-        require(expected.equals(command(root, binary, "hydrate", fresh, address, permits,
-                candidate.sha256(), MAXIMUM)), "CAS hydration identity drifted");
-        command(root, binary, "get", fresh, candidate.sha256(), output); return output;
     }
 
     private static Path binary() {
