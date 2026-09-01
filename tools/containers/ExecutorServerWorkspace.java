@@ -43,10 +43,8 @@ final class ExecutorServerWorkspace implements AutoCloseable {
 
     Path root() { return root; }
 
-    void prepare(String smokeId) throws Exception {
-        require(smokeId.matches("[a-z0-9]+(?:-[a-z0-9]+)*"), "invalid smoke ID");
-        run(root, List.of(java(), root.resolve("tools/harness/Gate.java").toString(),
-                "--candidate", smokeId), 600);
+    void prepare() throws Exception {
+        run(root, List.of(java(), root.resolve("tools/harness/Gate.java").toString()), 600);
     }
 
     Path authorize(Path lock, String leasePid) throws Exception {

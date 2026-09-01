@@ -53,7 +53,7 @@ public final class ExecutorServerCycle {
         byte[] baseline;
         try (ExecutorServerWorkspace workspace = ExecutorServerWorkspace.open(
                 source, "legacy", artifact)) {
-            workspace.prepare(ID);
+            workspace.prepare();
             Path token = workspace.authorize(lock, leasePid);
             ExecutionEnvironmentManifest environment = environment(workspace.root(), token,
                     leasePid, "legacy");
@@ -63,7 +63,7 @@ public final class ExecutorServerCycle {
         NativeResult nativeResult;
         try (ExecutorServerWorkspace workspace = ExecutorServerWorkspace.open(
                 source, "rust", artifact)) {
-            workspace.prepare(ID);
+            workspace.prepare();
             Path token = workspace.authorize(lock, leasePid);
             ExecutionEnvironmentManifest environment = environment(workspace.root(), token,
                     leasePid, "rust");

@@ -30,9 +30,7 @@ final class PooledSmokeCheck {
                 && state.tree().equals(lease.getProperty("tree")),
                 "pooled worker tree differs from its lease");
         SmokeDiscovery.Entry smoke = SmokeDiscovery.require(root, id);
-        Path build = differential ? root.resolve(".worldline/candidates").resolve(id)
-                : root.resolve(".worldline/build");
-        MilestoneContract contract = new MilestoneContract(root, id, build);
+        MilestoneContract contract = new MilestoneContract(root, id, root.resolve(".worldline/build"));
         contract.validate(); SmokeReceiptCache cache = new SmokeReceiptCache(root);
         require(differential || cache.availablePin(smoke) == null,
                 "pooled smoke already has a current proof: " + id);
