@@ -466,6 +466,21 @@ Evidence recorded for these slices:
   ephemeral machine state. The exact canonical Gate passes
   (`cold 95923ms < 240000ms`), CSM checks ten ways with no deviations, and
   NYA passes.
+- Worldline commit `a72b1bd0a` adds an explicitly separate local live overlay.
+  `Gate --evidence-explorer-live` first rebuilds and hashes the canonical
+  snapshot, then projects validated executor telemetry profiles, stable failure
+  clusters, lower-only admission state, aggregate FIFO queue health, and all
+  624 current smoke-cache decisions into `live.json` and `live.html`. The
+  projection excludes paths, PIDs, argv, environment values, and log content;
+  it declares both `verdict_authority=false` and
+  `ephemeral_state_included=true`. Queue fixtures distinguish live, abandoned,
+  and partial tickets without mutating the queue, and telemetry fixtures retain
+  two samples with one failure through the existing strict history parsers.
+  The canonical snapshot remains byte-identical at
+  `63c6de3b3065bfc49945325b136323c47606385ad9579bad3d05407481e630c9`.
+  The exact canonical Gate passes (`cold 138942ms < 240000ms`), CSM checks
+  nine ways with no deviations, and NYA passes. Live output hashes are
+  intentionally not pinned.
 - Worldline commit `7365d9a260` qualifies the first official
   `server-headless` Rust-executor differential against
   `m20-server-bootstrap`, using executor commit `803861d`. One canonical
@@ -1179,11 +1194,12 @@ source, train class, hashes, last exact executed head when recorded, disposition
 state, and orphan-envelope counts. It performs no writes to authoritative
 evidence and explicitly declares `verdict_authority=false`.
 
-The remaining Explorer scope is a separate live overlay for executor receipts,
-telemetry histories, queue/lease delays, cache decisions, worker attestations,
-and heavy-log orphan analysis. Those ephemeral inputs must remain visually and
+The second slice adds a separate live overlay for validated telemetry profiles,
+failure clusters, lower-only admission state, queue/lease delays, and all
+current cache decisions. Those ephemeral inputs remain visually and
 structurally separated from the canonical snapshot and cannot change its
-identity or confer PASS.
+identity or confer PASS. Individual executor-receipt linkage, worker
+attestations, and heavy-log orphan analysis remain pending.
 
 ## 11. Workstream G: distributed campaigns
 
