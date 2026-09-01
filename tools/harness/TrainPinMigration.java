@@ -50,7 +50,8 @@ final class TrainPinMigration extends TrainPinSupport {
             lock.setProperty(stem + "current_fingerprint", current);
             lock.setProperty(stem + "introduced", Boolean.toString(prior == null));
             if (QUALIFICATIONS.contains(smoke.id)) {
-                Imported receipt = completeImported(swarm, smoke.id) ? imported(root, swarm, smoke.id) : null;
+                Imported receipt = TrainImportedEvidence.complete(swarm, smoke.id)
+                        ? imported(root, swarm, smoke.id) : null;
                 if (receipt == null && hasExecuted(root, smoke.id)) receipt = executed(root, cache, smoke, current);
                 if (receipt != null) {
                     executed++; qualificationExecuted++; seal(lock, stem, "executed", receipt.fingerprint,
