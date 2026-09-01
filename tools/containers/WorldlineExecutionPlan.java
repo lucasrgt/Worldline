@@ -51,6 +51,7 @@ final class WorldlineExecutionPlan {
                 + ",\"stdout\":" + q(text(outputs.stdout))
                 + ",\"stderr\":" + q(text(outputs.stderr))
                 + ",\"metrics\":" + q(text(outputs.metrics))
+                + ",\"manifest\":" + q(text(outputs.manifest))
                 + ",\"receipt\":" + q(text(outputs.receipt)) + "}}";
         return ExecutionJson.bytes(json);
     }
@@ -128,12 +129,12 @@ final class WorldlineExecutionPlan {
         }
         static Filesystem inherit() { return new Filesystem("inherit", List.of(), List.of()); }
     }
-    record Outputs(Path root, Path stdout, Path stderr, Path metrics, Path receipt) {
+    record Outputs(Path root, Path stdout, Path stderr, Path metrics, Path manifest, Path receipt) {
         Outputs { root = clean(root, "output root"); stdout = clean(stdout, "stdout");
             stderr = clean(stderr, "stderr"); metrics = clean(metrics, "metrics");
-            receipt = clean(receipt, "receipt"); }
+            manifest = clean(manifest, "manifest"); receipt = clean(receipt, "receipt"); }
         void validate(Path working) { require(!working.equals(root), "working directory equals output root");
-            List<Path> values = List.of(stdout, stderr, metrics, receipt);
+            List<Path> values = List.of(stdout, stderr, metrics, manifest, receipt);
             require(values.stream().allMatch(path -> path.startsWith(root) && !path.equals(root)), "output escapes root");
             require(new HashSet<>(values).size() == values.size(), "duplicate executor output path"); }
     }

@@ -73,7 +73,7 @@ public final class RustExecutorShadow {
                 new WorldlineExecutionPlan.Isolation("direct", "inherit", null),
                 WorldlineExecutionPlan.Filesystem.inherit(),
                 new WorldlineExecutionPlan.Outputs(output, output.resolve("stdout.log"),
-                        output.resolve("stderr.log"), output.resolve("metrics.json"),
+                        output.resolve("stderr.log"), output.resolve("metrics.json"), output.resolve("manifest.json"),
                         output.resolve("receipt.json")));
     }
 
@@ -87,7 +87,7 @@ public final class RustExecutorShadow {
                 new WorldlineExecutionPlan.Isolation(backend, "inherit", ProcessHandle.current().pid()),
                 WorldlineExecutionPlan.Filesystem.inherit(),
                 new WorldlineExecutionPlan.Outputs(output, output.resolve("stdout.log"),
-                        output.resolve("stderr.log"), output.resolve("metrics.json"),
+                        output.resolve("stderr.log"), output.resolve("metrics.json"), output.resolve("manifest.json"),
                         output.resolve("receipt.json")));
     }
 
@@ -113,6 +113,13 @@ public final class RustExecutorShadow {
                 + "\"telemetry_qualification\":\"observational\"}";
         ExecutionJson.writeAtomic(plan.outputs().metrics(), ExecutionJson.bytes(metrics));
         String empty = ExecutionJson.sha256(new byte[0]);
+        String manifest = "{\"schema\":\"worldline.execution-output-manifest.v1\",\"files\":["
+                + "{\"name\":\"stdout\",\"sha256\":" + ExecutionJson.quote(empty) + ",\"size\":0},"
+                + "{\"name\":\"stderr\",\"sha256\":" + ExecutionJson.quote(empty) + ",\"size\":0},"
+                + "{\"name\":\"metrics\",\"sha256\":"
+                + ExecutionJson.quote(ExecutionJson.sha256(plan.outputs().metrics())) + ",\"size\":"
+                + Files.size(plan.outputs().metrics()) + "}]}";
+        ExecutionJson.writeAtomic(plan.outputs().manifest(), ExecutionJson.bytes(manifest));
         String receipt = "{\"schema\":\"worldline.execution-receipt.v1\",\"request_sha256\":"
                 + ExecutionJson.quote(plan.requestSha256()) + ",\"executor_version\":\"self-test\","
                 + "\"backend\":" + ExecutionJson.quote(plan.isolation().backend())
@@ -120,6 +127,8 @@ public final class RustExecutorShadow {
                 + "\"stdout_sha256\":" + ExecutionJson.quote(empty) + ",\"stderr_sha256\":"
                 + ExecutionJson.quote(empty) + ",\"metrics_sha256\":"
                 + ExecutionJson.quote(ExecutionJson.sha256(plan.outputs().metrics()))
+                + ",\"output_manifest_sha256\":"
+                + ExecutionJson.quote(ExecutionJson.sha256(plan.outputs().manifest()))
                 + ",\"stdout_observed_bytes\":0,\"stderr_observed_bytes\":0,"
                 + "\"stdout_truncated\":false,\"stderr_truncated\":false,"
                 + "\"descendants_remaining\":" + (direct ? "null" : "0") + ",\"error\":null}";
@@ -141,7 +150,7 @@ public final class RustExecutorShadow {
                         linux ? "none" : "inherit", contained ? ProcessHandle.current().pid() : null),
                 linux ? landlock(root, output) : WorldlineExecutionPlan.Filesystem.inherit(),
                 new WorldlineExecutionPlan.Outputs(output, output.resolve("stdout.log"), output.resolve("stderr.log"),
-                        output.resolve("metrics.json"), output.resolve("receipt.json")));
+                        output.resolve("metrics.json"), output.resolve("manifest.json"), output.resolve("receipt.json")));
         WorldlineExecutionReceipt.Verified result = execute(Path.of(configured).toAbsolutePath().normalize(),
                 root.resolve("live-plan.json"), plan);
         require("exited".equals(result.termination()) && Long.valueOf(0).equals(result.exitCode()),

@@ -16,6 +16,16 @@ final class ExecutionJsonParser {
         return cast((Map<?, ?>) value);
     }
 
+    static List<Map<String, Object>> objects(Object value) {
+        check(value instanceof List<?>, "JSON value is not an array");
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Object item : (List<?>) value) {
+            check(item instanceof Map<?, ?>, "JSON array item is not an object");
+            result.add(cast((Map<?, ?>) item));
+        }
+        return result;
+    }
+
     private Object document() {
         Object value = value(0); whitespace(); require(index == input.length(), "trailing JSON data"); return value;
     }

@@ -9,7 +9,7 @@ import java.util.Set;
 final class WorldlineExecutionReceipt {
     private static final List<String> RECEIPT_FIELDS = List.of("schema", "request_sha256",
             "executor_version", "backend", "exit_code", "termination", "stdout_sha256",
-            "stderr_sha256", "metrics_sha256", "stdout_observed_bytes", "stderr_observed_bytes",
+            "stderr_sha256", "metrics_sha256", "output_manifest_sha256", "stdout_observed_bytes", "stderr_observed_bytes",
             "stdout_truncated", "stderr_truncated", "descendants_remaining", "error");
     private static final List<String> METRIC_FIELDS = List.of("schema", "elapsed_ms",
             "peak_memory_bytes", "memory_measurement", "peak_processes", "peak_tasks", "cpu_user_100ns",
@@ -34,6 +34,8 @@ final class WorldlineExecutionReceipt {
         require(digest(plan.outputs().stdout()).equals(string(receipt, "stdout_sha256")), "stdout digest drift");
         require(digest(plan.outputs().stderr()).equals(string(receipt, "stderr_sha256")), "stderr digest drift");
         require(digest(plan.outputs().metrics()).equals(string(receipt, "metrics_sha256")), "metrics digest drift");
+        require(WorldlineExecutionManifest.verify(plan).equals(string(receipt, "output_manifest_sha256")),
+                "output manifest digest drift");
         long stdoutObserved = positive(receipt, "stdout_observed_bytes");
         long stderrObserved = positive(receipt, "stderr_observed_bytes");
         boolean stdoutTruncated = bool(receipt, "stdout_truncated");
@@ -117,7 +119,8 @@ final class WorldlineExecutionReceipt {
                 + ",\"executor_version\":" + q(value, "executor_version") + ",\"backend\":" + q(value, "backend")
                 + ",\"exit_code\":" + n(value.get("exit_code")) + ",\"termination\":" + q(value, "termination")
                 + ",\"stdout_sha256\":" + q(value, "stdout_sha256") + ",\"stderr_sha256\":" + q(value, "stderr_sha256")
-                + ",\"metrics_sha256\":" + q(value, "metrics_sha256") + ",\"stdout_observed_bytes\":" + n(value.get("stdout_observed_bytes"))
+                + ",\"metrics_sha256\":" + q(value, "metrics_sha256") + ",\"output_manifest_sha256\":" + q(value, "output_manifest_sha256")
+                + ",\"stdout_observed_bytes\":" + n(value.get("stdout_observed_bytes"))
                 + ",\"stderr_observed_bytes\":" + n(value.get("stderr_observed_bytes")) + ",\"stdout_truncated\":" + n(value.get("stdout_truncated"))
                 + ",\"stderr_truncated\":" + n(value.get("stderr_truncated")) + ",\"descendants_remaining\":" + n(value.get("descendants_remaining"))
                 + ",\"error\":" + n(value.get("error")) + "}";
