@@ -611,6 +611,21 @@ Evidence recorded for these slices:
   ways with no deviations, and NYA passes. An earlier non-qualifying run exposed
   and retained a JVM reservation failure under a two-GiB limit; the reviewed
   four-GiB boundary is therefore measured rather than guessed.
+- Worldline commit `01ac94d06` extends only the ephemeral Evidence Explorer
+  overlay with independently validated campaign-to-executor links. It rehashes
+  native plans, receipts, metrics, manifests, stdout, and stderr; correlates
+  exact request digests with canonical campaign receipts; verifies every
+  campaign workload-log digest; and counts linked, orphan, partial, dangling,
+  missing, and unreferenced local objects without exposing paths, PIDs, argv,
+  environment values, or log content. A clean seed-176 native campaign yields
+  one linked Windows Job request
+  `4b4ab00cb680b1a846011a8a0c186b1bd40c4be0f04a6ce18be44ff442857639`,
+  two referenced workload logs, and zero objects in every error class. The
+  native observation is 702 ms, 2,252,918,784 bytes, four processes, and
+  executor version 0.1.0. The canonical Explorer remains byte-identical at
+  `63c6de3b3065bfc49945325b136323c47606385ad9579bad3d05407481e630c9`.
+  The exact canonical Gate passes cold (`126811ms < 240000ms`), CSM checks ten
+  ways with no deviations, and NYA passes.
 Current boundaries remain honest: Linux mount and PID namespaces,
 OS-enforced loopback-only policy, Windows filesystem/network isolation,
 the broader server-headless matrix,
@@ -1239,10 +1254,11 @@ evidence and explicitly declares `verdict_authority=false`.
 
 The second slice adds a separate live overlay for validated telemetry profiles,
 failure clusters, lower-only admission state, queue/lease delays, and all
-current cache decisions. Those ephemeral inputs remain visually and
-structurally separated from the canonical snapshot and cannot change its
-identity or confer PASS. Individual executor-receipt linkage, worker
-attestations, and heavy-log orphan analysis remain pending.
+current cache decisions. A third slice correlates native executor evidence with
+campaign receipts and validates referenced, orphan, and missing campaign logs.
+Those ephemeral inputs remain visually and structurally separated from the
+canonical snapshot and cannot change its identity or confer PASS. Worker
+attestations and non-campaign heavy-log families remain pending.
 
 ## 11. Workstream G: distributed campaigns
 
