@@ -19,7 +19,7 @@ final class TrainPinHistory {
     }
     static TrainPinHistory load(Path root) throws Exception {
         List<Properties> history = new ArrayList<>();
-        for (String commit : capture(root, "log", "--format=%H", "--",
+        for (String commit : capture(root, "log", "--all", "--format=%H", "--",
                 "smokes/train-reconciliation.lock").lines().toList()) {
             Properties lock = new Properties();
             try (StringReader reader = new StringReader(capture(root, "show",
@@ -55,6 +55,22 @@ final class TrainPinHistory {
         }
         return prior;
     }
+
+    Receipt receipt(String stem, String evidence) {
+        for (Properties lock : locks) {
+            if (!evidence.equals(lock.getProperty(stem + "evidence_sha256"))) continue;
+            String head = lock.getProperty(stem + "receipt.head");
+            String tree = lock.getProperty(stem + "receipt.tree");
+            String base = lock.getProperty(stem + "receipt.base");
+            String signature = lock.getProperty(stem + "receipt.signature");
+            if (head != null && tree != null && base != null && signature != null)
+                return new Receipt(lock.getProperty(stem + "prior_fingerprint"),
+                        head, tree, base, signature);
+        }
+        return null;
+    }
+
+    record Receipt(String prior, String head, String tree, String base, String signature) { }
     private static String capture(Path root, String... arguments) throws Exception {
         List<String> command = new ArrayList<>(); command.add("git");
         command.addAll(List.of(arguments));

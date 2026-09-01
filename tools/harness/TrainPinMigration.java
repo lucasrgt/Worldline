@@ -101,7 +101,7 @@ final class TrainPinMigration extends TrainPinSupport {
             if (receipt == null && (!predecessorProof || hasExecuted(root, smoke.id)))
                 receipt = executed(root, cache, smoke, current);
             if (receipt == null && predecessorProof)
-                receipt = predecessor(predecessor, pins, smoke, current, stem);
+                receipt = predecessor(predecessor, pins, history, smoke, current, stem);
             if (receipt == null) receipt = historical(root, smoke);
             if (receipt == null) receipt = imported(root, swarm, smoke.id);
             seal(lock, stem, "milestone", receipt.fingerprint, current, receipt.evidence);
@@ -222,15 +222,19 @@ final class TrainPinMigration extends TrainPinSupport {
                 head, tree, base, signature);
     }
 
-    private static Imported predecessor(Properties lock, SmokePins pins,
+    private static Imported predecessor(Properties lock, SmokePins pins, TrainPinHistory history,
             SmokeDiscovery.Entry smoke, String current, String stem) throws Exception {
         SmokePins.Entry pin = pins.migrationMatch(smoke, current);
         if (pin == null) pin = pins.entry(smoke.id);
-        require(pin != null && pin.evidence().equals(required(lock, stem + "evidence_sha256")),
-                "invalid predecessor milestone proof: " + smoke.id);
-        return new Imported(required(lock, stem + "prior_fingerprint"), pin.evidence(),
-                required(lock, stem + "receipt.head"), required(lock, stem + "receipt.tree"),
-                required(lock, stem + "receipt.base"), required(lock, stem + "receipt.signature"));
+        require(pin != null, "invalid predecessor milestone proof: " + smoke.id);
+        if (pin.evidence().equals(required(lock, stem + "evidence_sha256")))
+            return new Imported(required(lock, stem + "prior_fingerprint"), pin.evidence(),
+                    required(lock, stem + "receipt.head"), required(lock, stem + "receipt.tree"),
+                    required(lock, stem + "receipt.base"), required(lock, stem + "receipt.signature"));
+        TrainPinHistory.Receipt receipt = history.receipt(stem, pin.evidence());
+        require(receipt != null, "missing historical milestone receipt: " + smoke.id);
+        return new Imported(receipt.prior(), pin.evidence(), receipt.head(), receipt.tree(),
+                receipt.base(), receipt.signature());
     }
 
     private static void receipt(Properties lock, String stem, Imported receipt) {
