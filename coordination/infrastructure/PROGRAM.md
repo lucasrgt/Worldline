@@ -593,6 +593,24 @@ Evidence recorded for these slices:
   The exact canonical Gate passes cold (`148102ms < 240000ms`), CSM checks nine
   ways with no deviations, and NYA passes. Elapsed values and aggregate bytes
   remain observational rather than behavioral evidence.
+- Worldline commit `2effebae3` places the complete Java-owned Nightly shard
+  coordinator inside executor commit `803861d`. The native plan binds the
+  hermetic environment, UTF-8 process encoding, four-GiB Job limit, argv,
+  output paths, and exact plan location. The inner Java coordinator hashes the
+  received plan while the outer Java adapter independently verifies the Rust
+  receipt, metrics, manifest, output bytes, exit, truncation, and descendant
+  state. A clean single-shard run at seed 175 executes 8 fuzz and 20 mutation
+  cases on exact head `2effebae310bad1067d48da714fa229248e29ec0` and tree
+  `d8f04cc11f2fc644226e4e2b110e4e28aa5be6db`. The plan file, native receipt,
+  and campaign receipt all bind request
+  `f454e6d3a8740255c0faeba6eb1a902dbd9f3267fda114a55b5992872b2eb3bd`.
+  Rust observes 641 ms, four processes, a 2,253,688,832-byte peak, complete
+  output, and zero descendants; campaign plan identity is
+  `641fbab90eed17d5ca861d5c19e3e98cb998dc9d0243709a7e09b53abd4ea97c`.
+  The exact canonical Gate passes cold (`119270ms < 240000ms`), CSM checks ten
+  ways with no deviations, and NYA passes. An earlier non-qualifying run exposed
+  and retained a JVM reservation failure under a two-GiB limit; the reviewed
+  four-GiB boundary is therefore measured rather than guessed.
 Current boundaries remain honest: Linux mount and PID namespaces,
 OS-enforced loopback-only policy, Windows filesystem/network isolation,
 the broader server-headless matrix,
@@ -1246,9 +1264,10 @@ measures, and transports permitted objects.
 The base contract and the nightly fuzz-plus-mutation adapter are qualified.
 Plans and receipts are canonical, shards are complete and disjoint, immutable
 publication is fail closed, and aggregation is independent of worker arrival
-order. Native executor dispatch, world-generation and instability adapters,
-differential, profiling, regression, and minimization execution, plus optional
-grid distribution remain pending.
+order. Native executor dispatch is qualified for the complete Nightly shard
+coordinator on Windows. World-generation and instability adapters,
+differential, profiling, regression, and minimization execution, multi-shard
+native arrival, plus optional grid distribution remain pending.
 
 ## 12. Source and repository strategy
 
