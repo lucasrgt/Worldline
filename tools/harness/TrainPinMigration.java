@@ -204,7 +204,7 @@ final class TrainPinMigration extends TrainPinSupport {
                         && "passed".equals(attestation.getProperty("status"))
                         && evidence.equals(digest(Files.readAllBytes(log)))
                         && capture(worktree, "status", "--porcelain", "--untracked-files=all").isBlank()
-                        && head.equals(capture(worktree, "rev-parse", "HEAD").strip()),
+                        && status(worktree, "merge-base", "--is-ancestor", head, "HEAD") == 0,
                 "invalid milestone evidence: " + id);
         Properties source = load(worktree.resolve("smokes").resolve(id).resolve("smoke.properties"));
         Properties target = load(root.resolve("smokes").resolve(id).resolve("smoke.properties"));
