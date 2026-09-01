@@ -119,16 +119,18 @@ record EvidenceExplorerLiveSnapshot(long observedAtEpochMs, String canonicalSha2
             String json = Files.readString(output, StandardCharsets.UTF_8).trim();
             require(process.exitValue() == 0, "execution evidence summary failed: " + json);
             Map<String, Object> value = MiniJson.object(json);
-            require(new ArrayList<>(value.keySet()).equals(List.of(
-                    "schema", "telemetry", "failure_clusters", "performance_signals")),
+            require(new ArrayList<>(value.keySet()).equals(List.of("schema", "telemetry",
+                    "failure_clusters", "performance_signals", "regression_triage")),
                     "execution overlay fields drifted");
-            require("worldline.execution-evidence-overlay.v2".equals(MiniJson.string(value, "schema")),
+            require("worldline.execution-evidence-overlay.v3".equals(MiniJson.string(value, "schema")),
                     "execution overlay schema drifted");
             Map<String, Object> telemetry = MiniJson.asObject(value.get("telemetry"), "telemetry");
             Map<String, Object> failures = MiniJson.asObject(value.get("failure_clusters"),
                     "failure_clusters");
             Map<String, Object> performance = MiniJson.asObject(value.get("performance_signals"),
                     "performance_signals");
+            Map<String, Object> triage = MiniJson.asObject(value.get("regression_triage"),
+                    "regression_triage");
             require("worldline.execution-telemetry-profiles.v1".equals(
                     MiniJson.string(telemetry, "schema")), "telemetry profile schema drifted");
             require("worldline.execution-failure-clusters.v1".equals(
@@ -138,7 +140,10 @@ record EvidenceExplorerLiveSnapshot(long observedAtEpochMs, String canonicalSha2
             require(samples >= 0L && failureCount >= 0L && failureCount <= samples,
                     "execution evidence counts drifted");
             Performance signals = performance(performance);
-            return new Execution(json, samples, failureCount, signals);
+            EvidenceExplorerRegressionTriage.Snapshot triageSnapshot =
+                    EvidenceExplorerRegressionTriage.parse(triage);
+            EvidenceExplorerRegressionTriage.requireMatches(signals, triageSnapshot);
+            return new Execution(json, samples, failureCount, signals, triageSnapshot);
         } finally { Files.deleteIfExists(output); }
     }
 
@@ -168,7 +173,8 @@ record EvidenceExplorerLiveSnapshot(long observedAtEpochMs, String canonicalSha2
                 && increases == signals.stream().filter(item -> item.classification().equals("increase")).count()
                 && insufficient == signals.stream().filter(item -> item.classification()
                         .equals("insufficient-history")).count(), "performance signal counts drifted");
-        return new Performance(expected, increases, insufficient, List.copyOf(signals));
+        return new Performance("elapsed_ms", threshold, expected, increases, insufficient,
+                List.copyOf(signals));
     }
 
     private static Signal signal(Map<String, Object> value) {
@@ -190,7 +196,8 @@ record EvidenceExplorerLiveSnapshot(long observedAtEpochMs, String canonicalSha2
                 "within-band").contains(classification) && samples >= 0L && baseline >= 0L
                 && recent >= 0L && baseline + recent <= samples,
                 "invalid performance signal classification or counts");
-        return new Signal(MiniJson.string(value, "workload_id"), MiniJson.string(value, "backend"),
+        return new Signal(MiniJson.string(value, "workload_id"),
+                MiniJson.string(value, "executor_version"), MiniJson.string(value, "backend"),
                 MiniJson.string(value, "os"), MiniJson.string(value, "architecture"), samples,
                 baseline, recent, nullable(value, "baseline_median_ms"),
                 nullable(value, "recent_median_ms"), nullable(value, "ratio_percent"), classification);
@@ -236,10 +243,11 @@ record EvidenceExplorerLiveSnapshot(long observedAtEpochMs, String canonicalSha2
         if (!value) throw new IllegalArgumentException(message);
     }
 
-    record Execution(String json, long sampleCount, long failureCount, Performance performance) { }
-    record Performance(long signalCount, long increaseCount, long insufficientHistoryCount,
-            List<Signal> signals) { }
-    record Signal(String workloadId, String backend, String os, String architecture,
+    record Execution(String json, long sampleCount, long failureCount, Performance performance,
+            EvidenceExplorerRegressionTriage.Snapshot triage) { }
+    record Performance(String metric, long changeThresholdPercent, long signalCount,
+            long increaseCount, long insufficientHistoryCount, List<Signal> signals) { }
+    record Signal(String workloadId, String executorVersion, String backend, String os, String architecture,
             long sampleCount, long baselineCount, long recentCount, Long baselineMedianMs,
             Long recentMedianMs, Long ratioPercent, String classification) { }
     record Admission(String os, String architecture, long sampleCount,

@@ -44,18 +44,21 @@ final class ExecutionPerformanceSignals {
     }
 
     private static Signal signal(List<ExecutionTelemetrySample> samples,
-            ExecutionRegressionPolicy policy) {
+            ExecutionRegressionPolicy policy) throws Exception {
         ExecutionTelemetrySample identity = samples.get(0); int count = samples.size();
         int recentCount = Math.min(policy.recentWindow(), count);
         int baselineCount = Math.min(policy.baselineWindow(), count - recentCount);
+        int split = count - recentCount;
+        List<String> baselineIds = ids(samples.subList(split - baselineCount, split));
+        List<String> recentIds = ids(samples.subList(split, count));
         if (baselineCount < policy.baselineWindow() || recentCount < policy.recentWindow())
             return new Signal(identity, count, baselineCount, recentCount, null, null, null,
-                    "insufficient-history");
-        int split = count - policy.recentWindow();
+                    "insufficient-history", baselineIds, recentIds);
+        split = count - policy.recentWindow();
         long baseline = median(samples.subList(split - policy.baselineWindow(), split));
         long recent = median(samples.subList(split, count));
         if (baseline == 0L) return new Signal(identity, count, baselineCount, recentCount,
-                baseline, recent, null, "zero-baseline");
+                baseline, recent, null, "zero-baseline", baselineIds, recentIds);
         long ratio = BigInteger.valueOf(recent).multiply(BigInteger.valueOf(100L))
                 .divide(BigInteger.valueOf(baseline)).min(BigInteger.valueOf(Long.MAX_VALUE)).longValue();
         BigInteger threshold = BigInteger.valueOf(policy.thresholdPercent());
@@ -65,12 +68,18 @@ final class ExecutionPerformanceSignals {
                 : baselineValue.multiply(BigInteger.valueOf(100L))
                         .compareTo(recentValue.multiply(threshold)) >= 0 ? "decrease" : "within-band";
         return new Signal(identity, count, baselineCount, recentCount, baseline, recent,
-                ratio, classification);
+                ratio, classification, baselineIds, recentIds);
     }
 
     private static long median(List<ExecutionTelemetrySample> samples) {
         List<Long> values = samples.stream().map(value -> value.telemetry().elapsedMs()).sorted().toList();
         return values.get(values.size() / 2);
+    }
+    private static List<String> ids(List<ExecutionTelemetrySample> samples) throws Exception {
+        List<String> result = new ArrayList<>();
+        for (ExecutionTelemetrySample sample : samples)
+            result.add(ExecutionJson.sha256(sample.bytes()));
+        return List.copyOf(result);
     }
     private static String q(String value) { return ExecutionJson.quote(value); }
     private static String n(Long value) { return ExecutionJson.nullable(value); }
@@ -82,7 +91,8 @@ final class ExecutionPerformanceSignals {
     }
     record Signal(ExecutionTelemetrySample identity, int sampleCount, int baselineCount,
             int recentCount, Long baselineMedian, Long recentMedian, Long ratioPercent,
-            String classification) {
+            String classification, List<String> baselineSampleSha256,
+            List<String> recentSampleSha256) {
         String json() { return "{\"lane\":" + q(identity.lane()) + ",\"workload_id\":"
                 + q(identity.workloadId()) + ",\"executor_version\":" + q(identity.executorVersion())
                 + ",\"backend\":" + q(identity.backend()) + ",\"os\":" + q(identity.os())
