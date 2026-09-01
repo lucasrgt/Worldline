@@ -2,10 +2,10 @@ import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 
-/** Strict CLI for one exact nightly campaign shard. */
-record NightlyCampaignOptions(int budgetSeconds, long seed, Integer shardCount,
+/** Strict common CLI for one exact campaign shard. */
+record CampaignOptions(int budgetSeconds, long seed, Integer shardCount,
         int shardIndex, boolean planOnly, Path executorPlan) {
-    static NightlyCampaignOptions parse(String[] arguments) {
+    static CampaignOptions parse(String[] arguments) {
         Integer budget = null, shards = null, index = null; Long seed = null;
         Path executorPlan = null; boolean planOnly = false; Set<String> seen = new HashSet<>();
         for (int cursor = 0; cursor < arguments.length; cursor++) {
@@ -27,20 +27,20 @@ record NightlyCampaignOptions(int budgetSeconds, long seed, Integer shardCount,
         int shardIndex = index == null ? 0 : index;
         if (shards != null) require(shardIndex < shards, "shard index is outside the plan");
         require(executorPlan == null || !planOnly, "executor plan cannot be used with plan-only mode");
-        return new NightlyCampaignOptions(budget, seed, shards, shardIndex, planOnly, executorPlan);
+        return new CampaignOptions(budget, seed, shards, shardIndex, planOnly, executorPlan);
     }
 
     static void selfTest() {
-        NightlyCampaignOptions value = parse(new String[] {"--seed", "7", "--budget-seconds",
+        CampaignOptions value = parse(new String[] {"--seed", "7", "--budget-seconds",
                 "10", "--shard-count", "3", "--shard-index", "2", "--plan-only"});
         require(value.seed == 7L && value.shardCount == 3 && value.shardIndex == 2
-                && value.planOnly && value.executorPlan == null, "nightly campaign option parsing drifted");
+                && value.planOnly && value.executorPlan == null, "campaign option parsing drifted");
         expectFailure(() -> parse(new String[] {"--budget-seconds", "9", "--seed", "7"}));
         expectFailure(() -> parse(new String[] {"--budget-seconds", "10", "--seed", "7",
                 "--shard-count", "2", "--shard-index", "2"}));
     }
 
-    static String usage() { return "usage: NightlyQualityCampaign --budget-seconds N --seed N "
+    static String usage() { return "usage: CAMPAIGN --budget-seconds N --seed N "
             + "[--shard-count N --shard-index N] [--plan-only]"; }
     private static Path path(String value) {
         Path path = Path.of(value).toAbsolutePath().normalize();

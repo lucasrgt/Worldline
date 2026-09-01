@@ -29,7 +29,7 @@ public final class NightlyQualityCampaign {
     }
 
     private void execute(String[] arguments) throws Exception {
-        NightlyCampaignOptions options = NightlyCampaignOptions.parse(arguments);
+        CampaignOptions options = CampaignOptions.parse(arguments);
         CampaignSpec spec = CampaignSpec.load(root, "nightly-quality");
         CampaignPlan plan = options.shardCount() == null ? spec.plan(options.seed())
                 : spec.plan(options.seed(), options.shardCount());
@@ -108,7 +108,7 @@ public final class NightlyQualityCampaign {
     }
 
     static void selfTest() {
-        NightlyCampaignOptions.selfTest();
+        CampaignOptions.selfTest();
         Run run = new Run(124, true, 5, 2L, "c".repeat(64));
         CampaignPlan.Assignment assignment = new CampaignPlan.Assignment("fuzz", 3, 7, 11);
         CampaignShardReceipt.Result result = result(assignment, run);

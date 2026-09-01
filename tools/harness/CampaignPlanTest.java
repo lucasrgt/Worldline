@@ -25,7 +25,8 @@ final class CampaignPlanTest {
         require(!CampaignPlan.create("fixture", 174L, 3, plan.workloads()).sha256().equals(plan.sha256()),
                 "campaign root seed did not affect identity");
         receiptSet(plan);
-        NightlyCampaignOptions.selfTest();
+        CampaignOptions.selfTest();
+        StructuralInstabilityCampaign.selfTest();
         CampaignArtifacts.selfTest();
         System.out.println("  campaign plan self-test: passed");
     }
