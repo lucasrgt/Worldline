@@ -85,12 +85,7 @@ public final class Replay {
             System.err.println("   or: java tools/replay/Replay.java test run <spec.jar|classes> [SpecClass] [options]"); return 2; }
         if (game) { int inputs = new ProcessBuilder("java", "tools/harness/RuntimeCheck.java", "--required")
                 .directory(root.toFile()).inheritIO().start().waitFor(); if (inputs != 0) return inputs; }
-        String productRoot = System.getenv("WORLDLINE_PRODUCT_ROOT");
-        Path classes = productRoot == null || productRoot.isBlank()
-                ? root.resolve(".worldline/build/classes")
-                : Path.of(productRoot).toAbsolutePath().normalize();
-        if (!classes.startsWith(root.resolve(".worldline")))
-            throw new IllegalArgumentException("runtime product root escapes .worldline");
+        Path classes = root.resolve(".worldline/build/classes");
         Path client = root.resolve(".worldline/smokes/controlled-client-tick");
         Path workspace = root.resolve("local/workspaces/b1.7.3");
         List<Path> paths = new ArrayList<>(Arrays.asList(classes.resolve("cli"),

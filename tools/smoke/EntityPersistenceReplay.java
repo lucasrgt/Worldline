@@ -1,8 +1,11 @@
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 /** Qualifies the concrete Beta 1.7.3 EntityList NBT persistence matrix twice. */
 public final class EntityPersistenceReplay {
@@ -24,15 +27,16 @@ public final class EntityPersistenceReplay {
 
   private void execute() throws Exception {
     SmokeSupport.recreate(root, build);
-    capture(build.resolve("first"));
-    capture(build.resolve("second"));
+    String classpath = compile();
+    capture(build.resolve("first"), classpath);
+    capture(build.resolve("second"), classpath);
     Path first = build.resolve("first/entity-persistence.wlevidence");
     Path second = build.resolve("second/entity-persistence.wlevidence");
     byte[] evidence = Files.readAllBytes(first);
     require(Arrays.equals(evidence, Files.readAllBytes(second)),
         "fresh entity persistence captures diverged");
     String canonical = new String(evidence, StandardCharsets.UTF_8);
-    Outcome outcome = smoke(first);
+    Outcome outcome = smoke(first, classpath);
     String signal = outcome.signal, trace = outcome.trace, signature = outcome.signature;
     Properties descriptor = new Properties();
     try (java.io.Reader reader = Files.newBufferedReader(
@@ -50,35 +54,81 @@ public final class EntityPersistenceReplay {
     System.out.println("b173 entity persistence envelope cycle passed");
   }
 
-  private void capture(Path output) throws Exception {
+  private void capture(Path output, String classpath) throws Exception {
     SmokeSupport.recreate(root, output);
-    Process process = new ProcessBuilder("java", "tools/replay/Replay.java", "census",
-            output.toString()).directory(root.toFile()).redirectErrorStream(true).start();
+    Path evidence = output.resolve("entity-persistence.wlevidence");
+    Process process = new ProcessBuilder("java", "-classpath", classpath,
+            "worldline.smoke.b173entitypersistence.B173EntityPersistenceSmoke", "capture",
+            evidence.toString()).directory(root.toFile()).redirectErrorStream(true).start();
     String text = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-    require(process.waitFor() == 0 && text.contains("WORLDLINE_CENSUS=PASS")
-            && text.contains("entity-persistence.sha256="),
+    require(process.waitFor() == 0
+            && text.contains("WORLDLINE_B173_ENTITY_PERSISTENCE_CAPTURE="),
         "entity persistence capture failed: " + summarize(text));
   }
 
-  private Outcome smoke(Path evidence) throws Exception {
+  private String compile() throws Exception {
+    Path headless = build.resolve("headless-classes");
+    Files.createDirectories(headless);
+    List<String> stubs = new ArrayList<>(Arrays.asList("javac", "--release", "8",
+        "-encoding", "UTF-8", "-Xlint:all,-options", "-Werror", "-d", headless.toString()));
+    try (Stream<Path> files = Files.walk(root.resolve("adapters/b173-client/headless-src"))) {
+      files.filter(path -> path.toString().endsWith(".java")).sorted()
+          .forEach(path -> stubs.add(path.toString()));
+    }
+    run(stubs, "headless compilation");
     Path classes = build.resolve("smoke-classes");
     Files.createDirectories(classes);
+    List<Path> runtime = runtime(headless);
     Path source = root.resolve("smokes").resolve(ID).resolve(
         "src/worldline/smoke/b173entitypersistence/B173EntityPersistenceSmoke.java");
-    Process compile = new ProcessBuilder("javac", "--release", "8", "-encoding", "UTF-8",
-        "-Xlint:all,-options", "-Werror", "-d", classes.toString(), source.toString())
-        .directory(root.toFile()).redirectErrorStream(true).start();
-    String compileText = new String(compile.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-    require(compile.waitFor() == 0, "entity persistence smoke compilation failed: "
-        + summarize(compileText));
-    Process run = new ProcessBuilder("java", "-classpath", classes.toString(),
+    String dependencies = join(runtime);
+    run(Arrays.asList("javac", "--release", "8", "-encoding", "UTF-8",
+        "-Xlint:all,-options", "-Werror", "-classpath", dependencies, "-d",
+        classes.toString(), source.toString()), "smoke compilation");
+    runtime.add(0, classes);
+    return join(runtime);
+  }
+
+  private Outcome smoke(Path evidence, String classpath) throws Exception {
+    Process run = new ProcessBuilder("java", "-classpath", classpath,
         "worldline.smoke.b173entitypersistence.B173EntityPersistenceSmoke",
-        evidence.toString()).directory(root.toFile()).redirectErrorStream(true).start();
+        "verify", evidence.toString()).directory(root.toFile()).redirectErrorStream(true).start();
     String output = new String(run.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
     require(run.waitFor() == 0, "entity persistence smoke failed: " + summarize(output));
     return new Outcome(line(output, "WORLDLINE_B173_ENTITY_PERSISTENCE_SET="),
         line(output, "WORLDLINE_B173_ENTITY_PERSISTENCE_TRACE="),
         line(output, "WORLDLINE_B173_ENTITY_PERSISTENCE_SIGNATURE="));
+  }
+
+  private List<Path> runtime(Path headless) throws Exception {
+    List<Path> paths = new ArrayList<>(Arrays.asList(product("api"), product("trace"),
+        product("mods"), product("analysis"), product("modtest"), product("minimization"),
+        product("testmodel"), product("testapi"), product("testkit"), headless,
+        root.resolve("local/workspaces/b1.7.3/minecraft/bin")));
+    try (Stream<Path> libraries = Files.walk(root.resolve("local/workspaces/b1.7.3/libraries"))) {
+      libraries.filter(path -> path.toString().endsWith(".jar")).sorted().forEach(paths::add);
+    }
+    for (Path path : paths) require(Files.exists(path), "missing runtime input " + path);
+    return paths;
+  }
+
+  private Path product(String module) { return SmokeSupport.product(root, module); }
+
+  private void run(List<String> command, String label) throws Exception {
+    Process process = new ProcessBuilder(command).directory(root.toFile())
+        .redirectErrorStream(true).start();
+    String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+    require(process.waitFor() == 0, "entity persistence " + label + " failed: "
+        + summarize(output));
+  }
+
+  private static String join(List<Path> paths) {
+    StringBuilder value = new StringBuilder();
+    for (Path path : paths) {
+      if (value.length() > 0) value.append(System.getProperty("path.separator"));
+      value.append(path);
+    }
+    return value.toString();
   }
 
   private static String line(String output, String prefix) {

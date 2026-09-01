@@ -4,15 +4,31 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.security.MessageDigest;
+import worldline.testkit.B173EntityPersistenceScenario;
+import worldline.testkit.EntityPersistenceEvidence;
+import worldline.testkit.EntityPersistenceFixture;
 
 /** Renders the frozen subsystem signal from canonical public TestKit evidence. */
 public final class B173EntityPersistenceSmoke {
     private B173EntityPersistenceSmoke() { }
 
     public static void main(String[] arguments) throws Exception {
-        if (arguments.length != 1) throw new IllegalArgumentException("usage: evidence file");
-        Path file = Paths.get(arguments[0]);
+        if (arguments.length != 2) throw new IllegalArgumentException(
+                "usage: capture|verify evidence-file");
+        Path file = Paths.get(arguments[1]);
+        if ("capture".equals(arguments[0])) {
+            EntityPersistenceEvidence evidence = EntityPersistenceFixture.execute(
+                    new B173EntityPersistenceScenario("b1.7.3"));
+            byte[] canonical = evidence.canonical().getBytes(StandardCharsets.UTF_8);
+            Files.createDirectories(file.toAbsolutePath().normalize().getParent());
+            Files.write(file, canonical, StandardOpenOption.CREATE_NEW,
+                    StandardOpenOption.WRITE);
+            System.out.println("WORLDLINE_B173_ENTITY_PERSISTENCE_CAPTURE=" + sha(canonical));
+            return;
+        }
+        require("verify".equals(arguments[0]), "unknown entity persistence command");
         byte[] bytes = Files.readAllBytes(file);
         String canonical = new String(bytes, StandardCharsets.UTF_8);
         require(canonical.startsWith(
