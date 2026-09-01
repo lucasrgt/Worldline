@@ -104,6 +104,11 @@ Completed foundation slices:
   pin envelopes are remotely eligible; module, test, stage, smoke, observation,
   and diagnostic caches remain local-private, while official and mapped
   runtimes are explicitly forbidden.
+- deterministic Worldline permit generation in commits `6e3ba4f87` and
+  `5845de037`. `Gate --cas-permits` emits only digest and size for artifacts
+  that pass the content validator and belong to the exact tracked-file set;
+  untracked candidates, repository-root escapes, and duplicate digests fail
+  closed.
 - a secret-free `worldline.smoke-input-graph.v1` read model and
   `Gate --input-graph ID` query in Worldline commits `423a322d3`, `16b9de40a`,
   and `c49b6af20`. The graph remains shadow-only and the legacy fingerprint
@@ -144,6 +149,10 @@ Evidence recorded for these slices:
   restricted families, unknown policy fields, and binary payloads renamed as
   proof envelopes; the exact clean Worldline branch passes the canonical Gate
   (`cold 138151ms < 240000ms`) with 624 current train proofs and zero pending.
+- the exact permit-generation branch emits 624 sorted smoke-proof objects,
+  carries no paths or behavior content, reports no CSM RTW deviations, passes
+  NYA, and passes the canonical Gate (`cold 181197ms < 240000ms`) with zero
+  pending train proofs.
 - all 624 qualification fingerprints are complete, distinct, and byte-equal
   to independently assembled graph roots; graph JSON redacts environment and
   system-property values, provider and train transitions are sealed, CSM has
@@ -169,8 +178,8 @@ loopback-only policy, Windows filesystem/network isolation, complete
 hostile-fixture coverage, broader legacy differentials, and all qualifying
 promotions remain pending. Artifact classification covers only tracked smoke
 pin envelopes; source-derived objects and sanitized diagnostics remain
-disabled. Permit-bound local transport exists, but Worldline permit production,
-hydration lookup integration, authenticated remote deployment, and S3 storage
+disabled. Permit-bound local transport and Worldline permit production exist,
+but automatic upload, hydration lookup integration, authenticated remote deployment, and S3 storage
 remain disabled. The input graph covers qualification identities in
 dual mode, current-tree dependents, cache decisions, and cross-commit node
 differences, but does not yet own cache identity.
