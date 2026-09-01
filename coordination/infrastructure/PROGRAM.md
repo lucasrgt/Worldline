@@ -354,6 +354,21 @@ Evidence recorded for these slices:
   `458b7c9754023057b11ada8cc7b055c26c7ba3559f38d5a9f51d18106fbff32d`,
   atomically promotes and rehashes the complete bounded workspace, proves the
   legacy rollback path, leaves zero residue, and passes ten CSM ways plus NYA.
+- Rust executor commit `803861d` publishes
+  `worldline.execution-metrics.v2` with separately measured bootstrap and
+  runtime durations. Windows and native-ext4 WSL suites pass formatting,
+  Clippy with warnings denied, all workspace tests, Job Object tests, and the
+  Linux cgroup, Landlock, network, limit, and process-tree fixtures. Worldline
+  proof commit `523166a81` validates the phase partition fail closed and passes
+  the canonical Gate (`cold 111419ms < 240000ms`) with 624 current train
+  proofs and zero pending. Its clean tooling differential produces request
+  digest `391964f76b844bba27f4b38a33680138b52f938177a701fdbed097520beeea8c`,
+  normalized observable digest
+  `458b7c9754023057b11ada8cc7b055c26c7ba3559f38d5a9f51d18106fbff32d`,
+  transactional workspace digest
+  `549eaf87c06244b563853527e9d092636ce13378c41bea002a9b90f102c70abd`,
+  and a successful legacy rollback. CSM reports no applicable deviations and
+  NYA passes.
 - the canonical Worldline Gate reaches `verify passed` with all content stages
   restored, but the host currently violates the unchanged hot latency SLO
   (`20361ms >= 7000ms` on the latest run). The budget was not weakened.
@@ -382,8 +397,8 @@ authority while retaining legacy equality audits. A1 through A4 and D1 through
 D3 and D5 are therefore in progress; A5 is qualified for the
 structural Windows tooling cycle, and B1 plus the post-execution portion of B2
 are qualified for that tooling profile. Native Windows filesystem enforcement,
-other runtime profiles, A6, A7, and remote transport deployment have not
-started.
+the remaining C1 profiles, C2 through C4, other runtime profiles, A6, A7, and
+remote transport deployment have not started.
 
 ## 2. Program principles
 
@@ -685,6 +700,14 @@ only as a complete-catalog equality audit.
 Collect peak resident memory, commit charge where available, process count,
 CPU time, I/O, output volume, bootstrap duration, runtime duration, limit
 events, and termination cause.
+
+Status: phase telemetry is qualified for the structural tooling profile at
+Rust executor commit `803861d` and Worldline commit `523166a81`. Metrics v2
+measures one monotonic interval, partitions it at the platform run boundary,
+allows only the one-millisecond integer-rounding difference, and keeps the
+telemetry explicitly observational. Existing memory, process/task, CPU, I/O,
+output, limit-event, and termination fields remain intact. Historical
+aggregation and runtime-specific server and GUI profiles remain pending.
 
 ### C2. Historical profiles
 
