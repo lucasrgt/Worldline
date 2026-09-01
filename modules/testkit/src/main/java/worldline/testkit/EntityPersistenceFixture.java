@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-/** Validates deterministic native persistence observations for concrete entities. */
+/**
+ * Validates deterministic native persistence observations for concrete entities and returns
+ * subject-sorted evidence suitable for exact comparisons across fresh runtime captures.
+ */
 public final class EntityPersistenceFixture {
     private EntityPersistenceFixture() { }
 
