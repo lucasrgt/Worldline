@@ -1,5 +1,5 @@
 schema=1
 id=m19-html
-fingerprint=6ff262dd950483eb40de253d9d85c2527357b6dffe2a3c12e775f14248ec2be4
+fingerprint=a418a09567f780c423e0c60a83c38d284aff93f483cecde66aad7697ecc09db4
 observation.sha256=4f66f57400d1e336194a8dfeb80122a024be1e1dcac53edca290b1d3e3543837
 source=refactor-equivalent
