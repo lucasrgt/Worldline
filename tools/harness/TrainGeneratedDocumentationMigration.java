@@ -18,7 +18,8 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
         if (!Files.isRegularFile(path)) return false;
         Properties prior = load(path);
         if (!"1".equals(prior.getProperty("schema"))) return false;
-        if (Integer.parseInt(prior.getProperty("catalog.count", "-1"))
+        String catalog = prior.getProperty("catalog.count");
+        if (catalog != null && Integer.parseInt(catalog)
                 != SmokeDiscovery.discover(root).size()) return false;
         int drift = sourceDrift(root, prior, review);
         if (drift == 0) return false;
