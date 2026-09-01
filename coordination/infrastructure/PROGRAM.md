@@ -672,6 +672,16 @@ Evidence recorded for these slices:
   `1cdc497facb8590bef5d5c8942a9716e0feaea11a81491540f8c4bafbb65e0ff`.
   The exact canonical Gate passes cold (`142250ms < 240000ms`), CSM checks ten
   ways with no deviations, and NYA passes.
+- Worldline commit `df7a35a9a` retains verified native campaign telemetry as
+  sanitized local history under the distinct `campaign-worker` capability.
+  Seed 178 executes 8 fuzz and 20 mutation cases through Rust request
+  `8baeccfdc57fd21777bf23457d36b2d0734b2294cf6761874c7832f0c242024d`.
+  Sample `434eea8a6146072b3e12060dd7a1eecf6e9f1ecd4d3d32d9f5af80bead09128b`
+  records 1153 ms, 15-ms bootstrap, 2253049856 peak bytes, four processes,
+  complete output, and zero failures in the live Explorer. Admission remains
+  closed to `candidate-worker`, so the campaign creates no admission file. The
+  exact canonical Gate passes cold (`143581ms < 240000ms`), CSM checks five
+  ways with no deviations, and NYA passes.
 Current boundaries remain honest: Linux mount and PID namespaces,
 OS-enforced loopback-only policy, Windows filesystem/network isolation,
 the broader server-headless matrix,
@@ -1132,6 +1142,10 @@ The first Aero GUI profile at commit `935d0fc41` records M778 at 787,205 ms,
 15-ms bootstrap, 787,190-ms runtime, 4,362,235,904-byte peak Job commit,
 eleven peak processes, complete output, and zero remaining descendants.
 
+Native Nightly campaigns now retain the already verified Rust receipt metrics
+as sanitized `campaign-worker` samples. They remain observational and cannot
+influence Candidate admission.
+
 ### C2. Historical profiles
 
 Aggregate by lane, smoke ID, executor version, OS, architecture, and relevant
@@ -1150,6 +1164,9 @@ Windows 11/amd64; no history upload is enabled.
 Commit `935d0fc41` adds the first Aero GUI sample for
 `m778-aero-culling-visual-integrity` on Windows 11/amd64. Broader Aero,
 onscreen, and cross-host histories remain pending; no history upload is enabled.
+Commit `df7a35a9a` adds the first Nightly campaign history sample and exposes it
+through the live Evidence Explorer without argv, paths, environment values, or
+workload log content.
 
 ### C3. Conservative admission
 
@@ -1340,7 +1357,8 @@ The base contract and the nightly fuzz-plus-mutation adapter are qualified.
 Plans and receipts are canonical, shards are complete and disjoint, immutable
 publication is fail closed, and aggregation is independent of worker arrival
 order. Native executor dispatch is qualified for the complete Nightly shard
-coordinator on Windows. World-generation and instability adapters,
+coordinator on Windows, and its verified metrics now enter sanitized local
+history without affecting admission. World-generation and instability adapters,
 differential, profiling, regression, and minimization execution, plus
 multi-shard distribution across distinct hosts remain pending.
 
