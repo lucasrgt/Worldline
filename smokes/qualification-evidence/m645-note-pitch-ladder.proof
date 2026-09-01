@@ -1,5 +1,5 @@
 schema=1
 id=m645-note-pitch-ladder
-fingerprint=124429eeb99557cf0caaf3377f854191ba83799ed65aac23fffd5b2b42268191
+fingerprint=9ff01829382628145c2047987ab0382cbff02e93100b445acf94f312630f9dc9
 observation.sha256=e5ebc4a71803f8a04ec443ecd418e64de9de67c337e3023fe7a4d568735f34e0
-source=refactor-equivalent
+source=executed
