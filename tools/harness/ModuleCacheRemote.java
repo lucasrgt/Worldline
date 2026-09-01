@@ -14,6 +14,18 @@ final class ModuleCacheRemote {
             String inputSha256, Path target, Map<String, String> environment) throws Exception {
         String mode = environment.get("WORLDLINE_MODULE_CAS_MODE");
         if (!enabled(mode)) return false;
+        if ("shared-directory".equals(mode)) {
+            ModuleCacheSharedDirectory backend = ModuleCacheSharedDirectory.connect(
+                    Path.of(required(environment, "WORLDLINE_MODULE_CAS_DIRECTORY")),
+                    Path.of(required(environment, "WORLDLINE_MODULE_CAS_INDEX")),
+                    Path.of(required(environment, "WORLDLINE_MODULE_CAS_INDEX_TRUST")),
+                    required(environment, "WORLDLINE_MODULE_CAS_PUBLIC_KEY"),
+                    required(environment, "WORLDLINE_MODULE_CAS_CHANNEL"),
+                    moduleCache.getParent().resolve("module-downloads"));
+            boolean hydrated = backend.hydrate(module, inputSha256, target);
+            if (hydrated) System.out.println("  hydrated module " + module + " from shared-directory CAS");
+            return hydrated;
+        }
         require("shadow".equals(mode), "unsupported WORLDLINE_MODULE_CAS_MODE");
         ModuleCacheHydrator hydrator = ModuleCacheHydrator.connect(root,
                 Path.of(required(environment, "WORLDLINE_CAS_BINARY")),
@@ -29,9 +41,11 @@ final class ModuleCacheRemote {
         return hydrated;
     }
 
-    static void selfTest() {
-        require(!enabled(null) && !enabled("") && !enabled("off") && enabled("shadow"),
+    static void selfTest() throws Exception {
+        require(!enabled(null) && !enabled("") && !enabled("off") && enabled("shadow")
+                && enabled("shared-directory"),
                 "module CAS mode classifier drifted");
+        ModuleCacheSharedDirectory.selfTest();
         System.out.println("  module cache remote mode self-test: passed");
     }
 
@@ -40,7 +54,7 @@ final class ModuleCacheRemote {
     }
     private static String required(Map<String, String> environment, String name) {
         String value = environment.get(name);
-        require(value != null && !value.isBlank(), name + " is required in module CAS shadow mode");
+        require(value != null && !value.isBlank(), name + " is required in the selected module CAS mode");
         return value;
     }
     private static void require(boolean value, String message) {

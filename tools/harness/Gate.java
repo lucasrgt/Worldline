@@ -133,7 +133,7 @@ public final class Gate {
                 "--smoke-plan", "--pinned-smoke", "--train-readiness", "--executor-tooling",
                 "--executor-environment", "--executor-filesystem", "--executor-candidate",
                 "--accept-legacy-smoke-baseline", "--cas-permits", "--cas-shadow", "--evidence-explorer",
-                "--evidence-explorer-live");
+                "--evidence-explorer-live", "--module-cache-shared-shadow");
         List<String> pair = List.of("--new-milestone", "--candidate", "--candidate-ready",
                 "--lane-differential", "--milestone", "--smoke-id");
         boolean valid = arguments.length == 0 || arguments.length == 1
@@ -155,6 +155,8 @@ public final class Gate {
             return new DirectTool("EvidenceExplorer", null);
         if (Arrays.equals(arguments, new String[] {"--evidence-explorer-live"}))
             return new DirectTool("EvidenceExplorerLive", null);
+        if (Arrays.equals(arguments, new String[] {"--module-cache-shared-shadow"}))
+            return new DirectTool("ModuleCacheSharedShadow", null);
         String main = arguments.length == 2 ? queryType(arguments[0]) : null;
         return main == null ? null : new DirectTool(main, arguments[1]);
     }
