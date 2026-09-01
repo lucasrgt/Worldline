@@ -21,6 +21,7 @@ final class HarnessFeatureSelfTest {
         CandidateReadiness.selfTest();
         CandidateRuntimeBuild.selfTest();
         CandidateSourceClosure.selfTest();
+        ModuleInputGraph.selfTest();
     }
     static void smoke() throws Exception {
         SmokeScheduleHistory.selfTest();
