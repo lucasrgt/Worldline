@@ -13,6 +13,7 @@ final class EvidenceExplorerLiveFormat {
                 .append("\n  \"summary\":").append(summary(value)).append(',')
                 .append("\n  \"execution\":").append(value.execution().json()).append(',')
                 .append("\n  \"execution_links\":").append(executionLinks(value.executionLinks())).append(',')
+                .append("\n  \"shared_cas\":").append(sharedCas(value.sharedCas())).append(',')
                 .append("\n  \"admission\":").append(admission(value.admission())).append(',')
                 .append("\n  \"queues\":[");
         append(out, value.queues().stream().map(EvidenceExplorerLiveFormat::queue).toList());
@@ -32,6 +33,8 @@ final class EvidenceExplorerLiveFormat {
                 .append(card("Failure samples", value.execution().failureCount()))
                 .append(card("Native campaign links", value.executionLinks().linkedRuns()))
                 .append(card("Orphan native runs", value.executionLinks().orphanNativeRuns()))
+                .append(card("Shared CAS objects", shared(value, "objects")))
+                .append(card("Shared CAS faults", shared(value, "faults")))
                 .append(card("Queued tickets", value.queues().stream().mapToLong(
                         EvidenceExplorerLiveSnapshot.Queue::waiting).sum()))
                 .append(card("Cache executions", count(value, "execute"))).append("</section>")
@@ -72,11 +75,21 @@ final class EvidenceExplorerLiveFormat {
                 + ",\"referenced_logs\":" + value.executionLinks().referencedLogs()
                 + ",\"orphan_logs\":" + value.executionLinks().orphanLogs()
                 + ",\"missing_logs\":" + value.executionLinks().missingLogs()
+                + ",\"shared_cas_objects\":" + shared(value, "objects")
+                + ",\"shared_cas_faults\":" + shared(value, "faults")
                 + ",\"queued_tickets\":" + queued + ",\"cache_decisions\":"
                 + value.cache().size() + ",\"cache_execute\":" + count(value, "execute") + "}";
     }
     private static long count(EvidenceExplorerLiveSnapshot value, String decision) {
         return value.cache().stream().filter(item -> decision.equals(item.decision())).count();
+    }
+    private static long shared(EvidenceExplorerLiveSnapshot value, String field) {
+        SharedCasInventory.Snapshot shared = value.sharedCas(); if (shared == null) return 0L;
+        return "objects".equals(field) ? shared.totalObjects() : shared.corruptObjects()
+                + shared.malformedEntries() + shared.missingSignedReferences();
+    }
+    private static String sharedCas(SharedCasInventory.Snapshot value) {
+        return value == null ? "null" : SharedCasInventory.json(value).strip();
     }
     private static String admission(EvidenceExplorerLiveSnapshot.Admission value) {
         if (value == null) return "null";

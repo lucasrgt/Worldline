@@ -39,4 +39,29 @@ java tools/harness/Gate.java --module-cache-shared-shadow
 The shadow publishes the real `api` module bundle, enters through the same
 `ModuleCacheRemote.hydrate` function used by `ModuleBuild`, re-extracts it into
 a fresh immutable target, and re-packs the target to require the original
-canonical bundle identity. All fixture keys and objects are removed afterward.
+canonical bundle identity. It also requires an independently rebuilt inventory
+to find exactly one signed index and one module bundle with no faults. All
+fixture keys and objects are removed afterward.
+
+## Read-only inventory
+
+With the same environment configured, inspect the shared store without
+hydrating or publishing anything:
+
+```text
+java tools/harness/Gate.java --shared-cas-inventory
+```
+
+The canonical JSON reports object digests, sizes, classifications, and states,
+plus aggregate counts for verified module bundles, signed indexes, recognized
+tracked smoke pins, valid orphans, corrupt objects, malformed entries, and
+missing signed references. Paths and content are deliberately absent, and the
+report has no verdict authority. Signed index and module references are
+required; tracked smoke pins are recognized when present but are optional
+because their authoritative copies already travel in the Git checkout.
+
+`Gate --evidence-explorer-live` embeds this inventory when
+`WORLDLINE_MODULE_CAS_MODE=shared-directory`. Disabled mode is represented as
+`null`, not as an empty healthy store. Corruption, malformed layout, or a
+missing signed object remains visible in the overlay and never becomes PASS
+evidence.
