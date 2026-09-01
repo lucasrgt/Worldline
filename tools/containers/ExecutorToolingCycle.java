@@ -3,7 +3,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -54,12 +53,13 @@ public final class ExecutorToolingCycle {
         Path parent = root.resolve(".worldline/executor-tooling-cycle");
         Path run = parent.resolve("current");
         require(!Files.exists(run), "executor tooling cycle residue exists: " + run);
-        Files.createDirectories(run.resolve("java-tmp"));
+        Path temporary = run.resolve("java-tmp"); Files.createDirectories(temporary);
+        ExecutionEnvironmentManifest environment = ExecutionEnvironmentManifest.tooling(temporary);
         try {
             List<String> command = List.of(java(), root.resolve("tools/harness/Gate.java").toString(),
                     "--self-test");
-            byte[] baseline = legacy(root, run.resolve("legacy-baseline"), command);
-            WorldlineExecutionPlan plan = plan(root, run.resolve("rust"), command);
+            byte[] baseline = legacy(root, run.resolve("legacy-baseline"), command, environment);
+            WorldlineExecutionPlan plan = plan(root, run.resolve("rust"), command, environment);
             WorldlineExecutionReceipt.Verified result = RustExecutorShadow.execute(executable,
                     run.resolve("rust-plan.json"), plan);
             require("exited".equals(result.termination()) && Long.valueOf(0).equals(result.exitCode()),
@@ -70,7 +70,7 @@ public final class ExecutorToolingCycle {
                     && Long.valueOf(0).equals(result.descendantsRemaining()),
                     "Rust tooling execution did not prove complete output and an empty process tree");
             byte[] primary = joined(plan.outputs().stderr(), plan.outputs().stdout());
-            byte[] rollback = legacy(root, run.resolve("legacy-rollback"), command);
+            byte[] rollback = legacy(root, run.resolve("legacy-rollback"), command, environment);
             String expected = normalize(new String(baseline, StandardCharsets.UTF_8));
             require(expected.equals(normalize(new String(primary, StandardCharsets.UTF_8)))
                     && expected.equals(normalize(new String(rollback, StandardCharsets.UTF_8))),
@@ -82,11 +82,10 @@ public final class ExecutorToolingCycle {
         } finally { delete(root, run); Files.deleteIfExists(parent); }
     }
 
-    private static WorldlineExecutionPlan plan(Path root, Path output, List<String> command) {
-        String temporary = output.getParent().resolve("java-tmp").toString();
+    private static WorldlineExecutionPlan plan(Path root, Path output, List<String> command,
+            ExecutionEnvironmentManifest environment) {
         return new WorldlineExecutionPlan("gate-self-test-tooling-cycle", root, command,
-                new WorldlineExecutionPlan.Environment(List.of(), List.of(),
-                        Map.of("JAVA_TOOL_OPTIONS", JAVA_OPTIONS, "TEMP", temporary, "TMP", temporary)),
+                environment.environment(),
                 new WorldlineExecutionPlan.Limits(TIMEOUT_MS, MEMORY, PROCESSES, null, 100,
                         1L << 20, 1L << 20),
                 new WorldlineExecutionPlan.Isolation("windows_job", "inherit",
@@ -96,7 +95,8 @@ public final class ExecutorToolingCycle {
                         output.resolve("manifest.json"), output.resolve("receipt.json")));
     }
 
-    private static byte[] legacy(Path root, Path output, List<String> command) throws Exception {
+    private static byte[] legacy(Path root, Path output, List<String> command,
+            ExecutionEnvironmentManifest environment) throws Exception {
         Files.createDirectories(output); Path log = output.resolve("console.log");
         Path metrics = output.resolve("metrics.properties");
         List<String> invocation = new ArrayList<>(List.of(WindowsJobBootstrap.ensure().toString(),
@@ -105,9 +105,7 @@ public final class ExecutorToolingCycle {
                 "--parent-pid", Long.toString(ProcessHandle.current().pid()), "--cwd", root.toString(),
                 "--log", log.toString(), "--metrics", metrics.toString(), "--"));
         invocation.addAll(command); ProcessBuilder builder = new ProcessBuilder(invocation).directory(root.toFile());
-        builder.environment().put("JAVA_TOOL_OPTIONS", JAVA_OPTIONS);
-        String temporary = output.getParent().resolve("java-tmp").toString();
-        builder.environment().put("TEMP", temporary); builder.environment().put("TMP", temporary);
+        environment.apply(builder);
         Process process = builder.start();
         require(process.waitFor(90, TimeUnit.SECONDS) && process.exitValue() == 0,
                 "legacy Windows Job tooling execution failed");
