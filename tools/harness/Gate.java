@@ -44,21 +44,21 @@ public final class Gate {
     }
 
     private void execute(String[] arguments) throws Exception {
-        GateArguments.validate(arguments);
+        validate(arguments);
         if (arguments.length == 2 && "--new-milestone".equals(arguments[0])) {
             Path classes = compileHarness();
             int exit = waitFor(new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
                     "MilestoneScaffold", arguments[1]).directory(root.toFile()).inheritIO().start(), 60);
             if (exit != 0) System.exit(exit); return;
         }
-        GateArguments.DirectTool tool = GateArguments.direct(arguments);
+        DirectTool tool = directTool(arguments);
         if (tool != null) { Path classes = compileHarness(); List<String> command = new ArrayList<>(List.of(
                 javaTool("java"), "-cp", classes.toString(), tool.main()));
             if (tool.operand() != null) command.add(tool.operand());
             Process process = new ProcessBuilder(command).directory(root.toFile()).inheritIO().start();
             process.getOutputStream().close(); int exit = waitFor(process, 60);
             if (exit != 0) System.exit(exit); return; }
-        if (arguments.length == 1 && GateArguments.maintenance(arguments[0])) {
+        if (arguments.length == 1 && maintenance(arguments[0])) {
             Path classes = compileHarness();
             ProcessBuilder builder = new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
                     "GateMaintenance", arguments[0]).directory(root.toFile()).inheritIO();
@@ -124,6 +124,39 @@ public final class Gate {
         try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) { descriptor.load(reader); }
         return !"tooling-cycle".equals(descriptor.getProperty("qualification.proof"));
     }
+
+    private static void validate(String[] arguments) {
+        List<String> one = List.of("--runtime", "--smoke", "--orchestrator", "--pin-smokes",
+                "--smoke-plan", "--pinned-smoke", "--train-readiness", "--executor-tooling",
+                "--executor-environment", "--executor-filesystem", "--executor-candidate",
+                "--accept-legacy-smoke-baseline", "--cas-permits", "--cas-shadow");
+        List<String> pair = List.of("--new-milestone", "--candidate", "--candidate-ready",
+                "--lane-differential", "--milestone", "--smoke-id");
+        boolean valid = arguments.length == 0 || arguments.length == 1
+                && (one.contains(arguments[0]) || maintenance(arguments[0])
+                        || arguments[0].matches("--executor-(server|gui|aero)"))
+                || arguments.length == 2 && (pair.contains(arguments[0]) || queryType(arguments[0]) != null);
+        if (!valid) throw new IllegalArgumentException("usage: java tools/harness/Gate.java [PROFILE|QUERY VALUE]");
+        if (arguments.length == 2 && queryType(arguments[0]) == null
+                && !arguments[1].matches("[a-z0-9]+(?:-[a-z0-9]+)*"))
+            throw new IllegalArgumentException("invalid milestone id: " + arguments[1]);
+    }
+
+    private static DirectTool directTool(String[] arguments) {
+        if (Arrays.equals(arguments, new String[] {"--cas-permits"}))
+            return new DirectTool("ArtifactTransportPermitQuery", null);
+        if (Arrays.equals(arguments, new String[] {"--cas-shadow"})) return new DirectTool("CasTransportShadow", null);
+        String main = arguments.length == 2 ? queryType(arguments[0]) : null;
+        return main == null ? null : new DirectTool(main, arguments[1]);
+    }
+    private static String queryType(String value) { return switch (value) {
+        case "--input-graph" -> "SmokeInputGraphQuery"; case "--module-input-graph" -> "ModuleInputGraphQuery";
+        case "--cache-explain" -> "SmokeCacheQuery"; case "--input-dependents" -> "SmokeInputDependentsQuery";
+        case "--input-diff" -> "SmokeInputDiffQuery"; default -> null; }; }
+    private static boolean maintenance(String value) { return value.startsWith("--migrate-")
+            || value.startsWith("--refresh-") || value.startsWith("--rebalance-")
+            || value.startsWith("--seal-") || value.startsWith("--module-cache-")
+            || value.startsWith("--cache-"); }
 
     private int verifySlots() {
         int configured = integerEnvironment("WORLDLINE_VERIFY_SLOTS",
@@ -275,4 +308,5 @@ public final class Gate {
         Files.createDirectories(target);
     }
 
+    private record DirectTool(String main, String operand) { }
 }
