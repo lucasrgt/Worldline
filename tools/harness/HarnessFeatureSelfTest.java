@@ -21,6 +21,7 @@ final class HarnessFeatureSelfTest {
         CandidateReadiness.selfTest();
         CandidateRuntimeBuild.selfTest();
         CandidateSourceClosure.selfTest();
+        GateArguments.selfTest();
         ModuleCacheBundle.selfTest();
         ModuleCacheIndex.selfTest();
         ModuleCacheIndexTrust.selfTest();

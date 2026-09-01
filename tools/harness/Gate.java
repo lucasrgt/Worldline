@@ -44,28 +44,21 @@ public final class Gate {
     }
 
     private void execute(String[] arguments) throws Exception {
-        validate(arguments);
+        GateArguments.validate(arguments);
         if (arguments.length == 2 && "--new-milestone".equals(arguments[0])) {
             Path classes = compileHarness();
             int exit = waitFor(new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
                     "MilestoneScaffold", arguments[1]).directory(root.toFile()).inheritIO().start(), 60);
             if (exit != 0) System.exit(exit); return;
         }
-        String tool = Arrays.equals(arguments, new String[] {"--cas-permits"})
-                ? "ArtifactTransportPermitQuery" : Arrays.equals(arguments,
-                        new String[] {"--cas-shadow"}) ? "CasTransportShadow" : null;
-        if (tool != null) {
-            Path classes = compileHarness(); Process process = new ProcessBuilder(javaTool("java"),
-                    "-cp", classes.toString(), tool)
-                    .directory(root.toFile()).inheritIO().start(); process.getOutputStream().close();
-            int exit = waitFor(process, 60); if (exit != 0) System.exit(exit); return;
-        }
-        String query = arguments.length == 2 ? queryType(arguments[0]) : null;
-        if (query != null) { Path classes = compileHarness(); Process process = new ProcessBuilder(
-                javaTool("java"), "-cp", classes.toString(), query, arguments[1]).directory(root.toFile())
-                .inheritIO().start(); process.getOutputStream().close(); int exit = waitFor(process, 60);
+        GateArguments.DirectTool tool = GateArguments.direct(arguments);
+        if (tool != null) { Path classes = compileHarness(); List<String> command = new ArrayList<>(List.of(
+                javaTool("java"), "-cp", classes.toString(), tool.main()));
+            if (tool.operand() != null) command.add(tool.operand());
+            Process process = new ProcessBuilder(command).directory(root.toFile()).inheritIO().start();
+            process.getOutputStream().close(); int exit = waitFor(process, 60);
             if (exit != 0) System.exit(exit); return; }
-        if (arguments.length == 1 && maintenance(arguments[0])) {
+        if (arguments.length == 1 && GateArguments.maintenance(arguments[0])) {
             Path classes = compileHarness();
             ProcessBuilder builder = new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
                     "GateMaintenance", arguments[0]).directory(root.toFile()).inheritIO();
@@ -131,71 +124,6 @@ public final class Gate {
         try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) { descriptor.load(reader); }
         return !"tooling-cycle".equals(descriptor.getProperty("qualification.proof"));
     }
-
-    private void validate(String[] arguments) {
-        boolean profile = arguments.length == 0
-                || Arrays.equals(arguments, new String[] {"--runtime"})
-                || Arrays.equals(arguments, new String[] {"--smoke"})
-                || Arrays.equals(arguments, new String[] {"--orchestrator"})
-                || Arrays.equals(arguments, new String[] {"--pin-smokes"})
-                || Arrays.equals(arguments, new String[] {"--smoke-plan"})
-                || Arrays.equals(arguments, new String[] {"--pinned-smoke"})
-                || Arrays.equals(arguments, new String[] {"--train-readiness"})
-                || Arrays.equals(arguments, new String[] {"--executor-tooling"})
-                || Arrays.equals(arguments, new String[] {"--executor-environment"})
-                || Arrays.equals(arguments, new String[] {"--executor-filesystem"})
-                || arguments.length == 1 && arguments[0].matches("--executor-(server|gui|aero)")
-                || Arrays.equals(arguments, new String[] {"--executor-candidate"})
-                || Arrays.equals(arguments, new String[] {"--accept-legacy-smoke-baseline"})
-                || arguments.length == 1 && List.of("--cas-permits", "--cas-shadow").contains(arguments[0])
-                || arguments.length == 2 && queryType(arguments[0]) != null
-                || arguments.length == 1 && maintenance(arguments[0])
-                || arguments.length == 2 && ("--new-milestone".equals(arguments[0])
-                        || "--candidate".equals(arguments[0])
-                        || "--candidate-ready".equals(arguments[0])
-                        || "--lane-differential".equals(arguments[0])
-                        || "--milestone".equals(arguments[0]) || "--smoke-id".equals(arguments[0]));
-        if (!profile) throw new IllegalArgumentException(
-                "usage: java tools/harness/Gate.java "
-                + "[--runtime|--smoke|--pin-smokes|--accept-legacy-smoke-baseline|--orchestrator|"
-                + "--smoke-plan|--pinned-smoke|--train-readiness|--migrate-data-cycles|--refresh-data-cycle-pins|"
-                + "--migrate-composite-cycles|--refresh-composite-cycle-pins|"
-                + "--migrate-telemetry-pins|"
-                + "--migrate-repository-schemas|"
-                + "--migrate-formatting-pins|--migrate-unicode-pins|"
-                + "--migrate-shared-helper-pins|"
-                + "--migrate-adapter-split-pins|"
-                + "--migrate-provider-discovery-pins|"
-                + "--migrate-gui-workbench-pins|"
-                + "--rebalance-behavior-families|--migrate-behavior-family-pins|"
-                + "--migrate-train-pins|"
-                + "--refresh-readme-status|"
-                + "--refresh-testkit-artifact-pins|"
-                + "--refresh-documentation|"
-                + "--seal-lane-portability|"
-                + "--module-cache-doctor|--module-cache-gc|--cache-doctor|--cache-gc|"
-                + "--cache-rebuild-drill|"
-                + "--executor-tooling|--executor-environment|--executor-filesystem|--executor-server|"
-                + "--executor-candidate|--executor-gui|--executor-aero|"
-                + "--cas-permits|--cas-shadow|"
-                + "--new-milestone ID|--input-graph ID|--module-input-graph MODULE|--cache-explain ID|"
-                + "--input-dependents KIND:KEY|--input-diff ID@REF|--milestone ID|--lane-differential ID|"
-                + "--candidate-ready ID|--candidate ID|--self-test]");
-        if (arguments.length == 2 && queryType(arguments[0]) == null && !arguments[1].matches(
-                "[a-z0-9]+(?:-[a-z0-9]+)*")) throw new IllegalArgumentException(
-                "invalid milestone id: " + arguments[1]);
-    }
-
-    private static boolean maintenance(String value) {
-        return value.startsWith("--migrate-") || value.startsWith("--refresh-")
-                || value.startsWith("--rebalance-") || value.startsWith("--seal-")
-                || value.startsWith("--module-cache-") || value.startsWith("--cache-");
-    }
-
-    private static String queryType(String value) { return switch (value) {
-        case "--input-graph" -> "SmokeInputGraphQuery"; case "--module-input-graph" -> "ModuleInputGraphQuery";
-        case "--cache-explain" -> "SmokeCacheQuery"; case "--input-dependents" -> "SmokeInputDependentsQuery";
-        case "--input-diff" -> "SmokeInputDiffQuery"; default -> null; }; }
 
     private int verifySlots() {
         int configured = integerEnvironment("WORLDLINE_VERIFY_SLOTS",
