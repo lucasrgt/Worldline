@@ -626,6 +626,19 @@ Evidence recorded for these slices:
   `63c6de3b3065bfc49945325b136323c47606385ad9579bad3d05407481e630c9`.
   The exact canonical Gate passes cold (`126811ms < 240000ms`), CSM checks ten
   ways with no deviations, and NYA passes.
+- Aggregate commit `0af4d260c` proves native multi-shard arrival without a
+  grid. Seed 177 partitions 8 fuzz and 20 mutation cases into two shards;
+  shard 1 arrives first and leaves aggregation incomplete, then shard 0 closes
+  the exact head/tree set. The plan identity is
+  `6fa40ece4f02444248e8b05c7ecc9b6bebae22cff1ae723d9820efa2f21f0821`.
+  Rust requests `de756bdb56340d1a489220f2fca925526d723c4016c8e41f9b9a841d38dc3b9e`
+  and `a56697498bbab61c0c72ed9f953a710be8bddd4725ddf796b433ae133f4da8c8`
+  both exit cleanly with four processes and zero descendants; their elapsed
+  observations are 630 and 598 ms. The final aggregate binds two passing
+  receipts, 28 cases, and file digest
+  `027d139b3e0825b3694cebbe51559c26acd4b11a93789db7c0107149830d26d4`.
+  The live Explorer independently reports two linked runs, four referenced
+  logs, and zero orphan, partial, dangling, or missing objects.
 Current boundaries remain honest: Linux mount and PID namespaces,
 OS-enforced loopback-only policy, Windows filesystem/network isolation,
 the broader server-headless matrix,
@@ -1282,8 +1295,8 @@ Plans and receipts are canonical, shards are complete and disjoint, immutable
 publication is fail closed, and aggregation is independent of worker arrival
 order. Native executor dispatch is qualified for the complete Nightly shard
 coordinator on Windows. World-generation and instability adapters,
-differential, profiling, regression, and minimization execution, multi-shard
-native arrival, plus optional grid distribution remain pending.
+differential, profiling, regression, and minimization execution, plus
+multi-shard distribution across distinct hosts remain pending.
 
 ## 12. Source and repository strategy
 
