@@ -69,8 +69,9 @@ final class LifecycleClaimTestKitPinCheck {
             require(id.equals(LifecycleClaimTestKitPinMigration.DIRECT.get(index))
                             && ids.contains(id)
                             && required(lock, stem + "prior_plan_sha256").matches("[0-9a-f]{64}")
-                            && DataDrivenCyclePlan.load(root, id).fingerprint().equals(
-                                    required(lock, stem + "current_plan_sha256")),
+                            && (DataDrivenCyclePlan.load(root, id).fingerprint().equals(
+                                    required(lock, stem + "current_plan_sha256"))
+                            || trainPlanSuccessor(root, id)),
                     "lifecycle-claim direct plan drift: " + id);
         }
         System.out.println("  lifecycle-claim TestKit migration: " + carried
@@ -103,6 +104,20 @@ final class LifecycleClaimTestKitPinCheck {
                         && current.equals(lock.getProperty(stem + "current_plan_sha256"));
             }
             return false;
+        } catch (Exception error) { return false; }
+    }
+
+    private static boolean trainPlanSuccessor(Path root, String id) {
+        try {
+            String plan = DataDrivenCyclePlan.load(root, id).fingerprint();
+            Properties migrations = StrictProperties.load(
+                    root.resolve("smokes/data-driven-migration.lock"));
+            if (!plan.equals(migrations.getProperty("cycle." + id + ".plan_sha256"))) return false;
+            SmokeDiscovery.Entry smoke = smoke(SmokeDiscovery.discover(root), id);
+            String current = new SmokeInputFingerprint(root).compute(smoke);
+            SmokePins.Entry pin = new SmokePins(root).match(id, current);
+            return TrainPinCheck.carriesCurrent(
+                    TrainPinCheck.manifest(root), id, pin, current);
         } catch (Exception error) { return false; }
     }
 
