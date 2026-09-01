@@ -77,6 +77,9 @@ public final class CampaignExecutorCycle {
         require(selection(new String[] {"--campaign", "structural-instability",
                 "--budget-seconds", "10", "--seed", "7"}).main.equals(
                         "StructuralInstabilityCampaign"), "campaign executor selection drifted");
+        require(selection(new String[] {"--campaign", "worldgen-matrix",
+                "--budget-seconds", "10", "--seed", "7"}).main.equals(
+                        "WorldGenerationCampaign"), "world-generation executor selection drifted");
     }
 
     private static Selection selection(String[] arguments) {
@@ -84,12 +87,8 @@ public final class CampaignExecutorCycle {
         if (arguments.length >= 2 && arguments[0].equals("--campaign")) {
             id = arguments[1]; first = 2;
         }
-        String main = switch (id) {
-            case "nightly-quality" -> "NightlyQualityCampaign";
-            case "structural-instability" -> "StructuralInstabilityCampaign";
-            default -> throw new IllegalArgumentException("unsupported campaign: " + id);
-        };
-        return new Selection(id, main,
+        CampaignCatalog adapter = CampaignCatalog.require(id);
+        return new Selection(id, adapter.main(),
                 java.util.Arrays.copyOfRange(arguments, first, arguments.length));
     }
 

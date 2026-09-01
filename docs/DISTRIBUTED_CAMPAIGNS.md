@@ -117,3 +117,39 @@ Evidence Explorer correlates plans, receipts, workload logs, and native runs
 from both report families while preserving one combined orphan analysis.
 Every campaign descendant receives the same bounded 512-MiB JVM heap ceiling;
 the outer Rust Job or cgroup limit remains responsible for aggregate memory.
+
+## Official world-generation matrix replays
+
+The third adapter replays the already-qualified
+`m634-cross-lane-seed-matrix` official-runtime contract. It never invokes a
+smoke runner directly: every replay enters through `Gate --milestone`, its
+static preflight, and the serialized official-runtime lease. The M634 contract
+continues to own the three Minecraft seeds, four chunks, observations, and
+behavior verdict. The campaign seed partitions repeated executions of that
+sealed matrix; it does not replace or reinterpret the Minecraft seeds.
+
+After the canonical Gate and runtime profile pass, run one local replay with:
+
+```text
+java -cp .worldline/gate/classes WorldGenerationCampaign \
+  --budget-seconds 1800 --seed 173 --shard-count 1 --shard-index 0
+```
+
+`WORLDLINE_WORLDGEN_MATRIX_REPLAYS` may increase the number of complete matrix
+replays before sharding. Each bounded workload log contains only the plan,
+range, derived campaign seed, replay counts, the existing M634 signature, and a
+normalized result root. It contains no official JAR bytes, raw world, server
+log, path, or runtime output. The campaign receipt remains non-authoritative;
+only the nested Gate may accept the existing behavior contract.
+
+The native form uses the same dispatcher and four-GiB containment boundary:
+
+```text
+java tools/containers/RuntimeFabricLauncher.java CampaignExecutorCycle \
+  --campaign worldgen-matrix --budget-seconds 1800 --seed 173 \
+  --shard-count 1 --shard-index 0
+```
+
+The runtime profile must already be valid in the exact worktree. A failed or
+timed-out Gate publishes a failed campaign receipt, remains visible through
+the native execution evidence, and cannot be aggregated as PASS.

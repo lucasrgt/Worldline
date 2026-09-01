@@ -26,7 +26,9 @@ final class CampaignPlanTest {
                 "campaign root seed did not affect identity");
         receiptSet(plan);
         CampaignOptions.selfTest();
+        CampaignCatalog.selfTest();
         StructuralInstabilityCampaign.selfTest();
+        WorldGenerationCampaign.selfTest();
         CampaignArtifacts.selfTest();
         System.out.println("  campaign plan self-test: passed");
     }
