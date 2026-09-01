@@ -5,7 +5,7 @@ final class EvidenceExplorerLiveFormat {
     private EvidenceExplorerLiveFormat() { }
 
     static String json(EvidenceExplorerLiveSnapshot value) {
-        StringBuilder out = new StringBuilder("{\n  \"schema\":\"worldline.evidence-explorer-live.v3\",")
+        StringBuilder out = new StringBuilder("{\n  \"schema\":\"worldline.evidence-explorer-live.v4\",")
                 .append("\n  \"verdict_authority\":false,\n  \"ephemeral_state_included\":true,")
                 .append("\n  \"observed_at_epoch_ms\":").append(value.observedAtEpochMs()).append(',')
                 .append("\n  \"canonical_snapshot_sha256\":")
@@ -13,6 +13,8 @@ final class EvidenceExplorerLiveFormat {
                 .append("\n  \"summary\":").append(summary(value)).append(',')
                 .append("\n  \"execution\":").append(value.execution().json()).append(',')
                 .append("\n  \"execution_links\":").append(executionLinks(value.executionLinks())).append(',')
+                .append("\n  \"native_campaign_failure_clusters\":")
+                .append(NativeCampaignFailureClusters.json(value.campaignFailures()).strip()).append(',')
                 .append("\n  \"shared_cas\":").append(sharedCas(value.sharedCas())).append(',')
                 .append("\n  \"admission\":").append(admission(value.admission())).append(',')
                 .append("\n  \"queues\":[");
@@ -37,6 +39,9 @@ final class EvidenceExplorerLiveFormat {
                         .insufficientHistoryCount()))
                 .append(card("Native campaign links", value.executionLinks().linkedRuns()))
                 .append(card("Failed native runs", value.executionLinks().failedNativeRuns()))
+                .append(card("Native failure clusters", value.campaignFailures().clusters().size()))
+                .append(card("Unclassified workload failures",
+                        value.campaignFailures().unclassifiedWorkloadCount()))
                 .append(card("Orphan native runs", value.executionLinks().orphanNativeRuns()))
                 .append(card("Shared CAS objects", shared(value, "objects")))
                 .append(card("Shared CAS faults", shared(value, "faults")))
@@ -66,6 +71,15 @@ final class EvidenceExplorerLiveFormat {
                 .append("<th>Termination</th><th>Exit</th><th>Elapsed</th><th>Peak memory</th>")
                 .append("</tr></thead><tbody>");
         for (EvidenceExplorerExecutionLinks.Link link : value.executionLinks().links()) out.append(linkRow(link));
+        out.append("</tbody></table></div></section>")
+                .append("<section><h2>Native campaign failure clusters</h2>")
+                .append("<p>Validated observations only. A nonzero workload exit remains unclassified")
+                .append(" and is never promoted to an oracle or infrastructure verdict.</p>")
+                .append("<div class=\"table\"><table><thead><tr><th>Cluster</th><th>Campaign</th>")
+                .append("<th>Class</th><th>Domain</th><th>Executor</th><th>Termination</th>")
+                .append("<th>Exit</th><th>Runs</th></tr></thead><tbody>");
+        for (NativeCampaignFailureClusters.Cluster cluster : value.campaignFailures().clusters())
+            out.append(campaignFailureRow(cluster));
         out.append("</tbody></table></div></section>")
                 .append("<section><h2>Lease queues</h2><div class=\"table\"><table><thead><tr>")
                 .append("<th>Queue</th><th>Waiting</th><th>Live</th><th>Abandoned</th>")
@@ -103,6 +117,11 @@ final class EvidenceExplorerLiveFormat {
                 + ",\"native_runs\":" + value.executionLinks().nativeRuns()
                 + ",\"linked_native_runs\":" + value.executionLinks().linkedRuns()
                 + ",\"failed_native_runs\":" + value.executionLinks().failedNativeRuns()
+                + ",\"native_failure_clusters\":" + value.campaignFailures().clusters().size()
+                + ",\"native_infrastructure_failures\":"
+                + value.campaignFailures().infrastructureCount()
+                + ",\"native_unclassified_workload_failures\":"
+                + value.campaignFailures().unclassifiedWorkloadCount()
                 + ",\"orphan_native_runs\":" + value.executionLinks().orphanNativeRuns()
                 + ",\"partial_native_runs\":" + value.executionLinks().partialNativeRuns()
                 + ",\"dangling_campaign_bindings\":" + value.executionLinks().danglingCampaignBindings()
@@ -156,7 +175,10 @@ final class EvidenceExplorerLiveFormat {
                 + ",\"termination\":" + quote(value.termination()) + ",\"exit_code\":"
                 + number(value.exitCode()) + ",\"elapsed_ms\":" + value.elapsedMs()
                 + ",\"peak_memory_bytes\":" + number(value.peakMemoryBytes())
-                + ",\"peak_processes\":" + number(value.peakProcesses()) + "}";
+                + ",\"peak_processes\":" + number(value.peakProcesses())
+                + ",\"stdout_truncated\":" + value.stdoutTruncated()
+                + ",\"stderr_truncated\":" + value.stderrTruncated()
+                + ",\"descendants_remaining\":" + number(value.descendantsRemaining()) + "}";
     }
     private static String queue(EvidenceExplorerLiveSnapshot.Queue value) {
         return "{\"label\":" + quote(value.label()) + ",\"waiting\":" + value.waiting()
@@ -190,6 +212,14 @@ final class EvidenceExplorerLiveFormat {
                 + html(value.backend()) + "</td><td>" + html(value.termination()) + "</td><td>"
                 + numberText(value.exitCode()) + "</td><td>" + value.elapsedMs()
                 + " ms</td><td>" + numberText(value.peakMemoryBytes()) + "</td></tr>";
+    }
+    private static String campaignFailureRow(NativeCampaignFailureClusters.Cluster value) {
+        return "<tr><td><code>" + shortHash(value.id()) + "</code></td><td><strong>"
+                + html(value.campaignId()) + "</strong></td><td><span class=\"tag\">"
+                + html(value.failureClass()) + "</span></td><td>" + html(value.domain())
+                + "</td><td>" + html(value.backend() + " / " + value.executorVersion())
+                + "</td><td>" + html(value.termination()) + "</td><td>"
+                + numberText(value.exitCode()) + "</td><td>" + value.requests().size() + "</td></tr>";
     }
     private static String signalRow(EvidenceExplorerLiveSnapshot.Signal value) {
         return "<tr><td><strong>" + html(value.workloadId()) + "</strong></td><td>"

@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 /** Sanitized local-state projection kept separate from canonical evidence. */
 record EvidenceExplorerLiveSnapshot(long observedAtEpochMs, String canonicalSha256,
         Execution execution, EvidenceExplorerExecutionLinks.Snapshot executionLinks,
+        NativeCampaignFailureClusters.Snapshot campaignFailures,
         SharedCasInventory.Snapshot sharedCas, Admission admission,
         List<Queue> queues, List<CacheDecision> cache) {
     static EvidenceExplorerLiveSnapshot build(Path root, Path control, long observedAt) throws Exception {
@@ -40,9 +41,10 @@ record EvidenceExplorerLiveSnapshot(long observedAtEpochMs, String canonicalSha2
             queues.add(queue(path.resolveSibling(path.getFileName() + ".queue"),
                     "legacy-runtime", observedAt));
         }
+        EvidenceExplorerExecutionLinks.Snapshot links = EvidenceExplorerExecutionLinks.build(root);
         return new EvidenceExplorerLiveSnapshot(observedAt,
-                EvidenceExplorerSnapshot.sha256(canonical), execution(root, control),
-                EvidenceExplorerExecutionLinks.build(root),
+                EvidenceExplorerSnapshot.sha256(canonical), execution(root, control), links,
+                NativeCampaignFailureClusters.summarize(links),
                 SharedCasInventory.configured(root, System.getenv()),
                 admission(root.resolve(".worldline/executor-telemetry/admission.properties")),
                 List.copyOf(queues), List.copyOf(cache));

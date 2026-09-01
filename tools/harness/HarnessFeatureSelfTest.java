@@ -32,6 +32,7 @@ final class HarnessFeatureSelfTest {
         ArtifactTransportPolicy.check(java.nio.file.Path.of("").toAbsolutePath().normalize());
         ModuleInputGraph.selfTest();
         EvidenceExplorerTest.selfTest();
+        NativeCampaignFailureClusters.selfTest();
         EvidenceExplorerLiveTest.selfTest();
         CampaignPlanTest.selfTest();
     }
