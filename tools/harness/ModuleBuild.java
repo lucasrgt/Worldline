@@ -83,6 +83,9 @@ final class ModuleBuild {
             if (!lock.isValid()) throw new IllegalStateException("invalid module cache lock " + module);
             if (complete(complete, digest)) { touch(module, digest); return new Artifact(directory, digest, true); }
             require(!Files.exists(directory), "corrupt immutable module cache entry " + directory);
+            if (ModuleCacheRemote.hydrate(root, cache, module, digest, directory)) {
+                touch(module, digest); return new Artifact(directory, digest, true);
+            }
             Path temporary = directory.resolveSibling(digest + ".tmp-"
                     + ProcessHandle.current().pid() + "-" + System.nanoTime());
             delete(temporary); Files.createDirectories(temporary);
