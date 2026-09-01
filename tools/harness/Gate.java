@@ -34,8 +34,7 @@ public final class Gate {
                 new Gate().executeInside(Arrays.copyOfRange(arguments, 1, arguments.length)); return;
             }
             if (arguments.length == 3 && "--hold".equals(arguments[0])) {
-                hold(Path.of(arguments[1]), Long.parseLong(arguments[2]));
-                return;
+                hold(Path.of(arguments[1]), Long.parseLong(arguments[2])); return;
             }
             new Gate().execute(arguments);
         } catch (Exception error) {
@@ -69,8 +68,7 @@ public final class Gate {
         Files.createDirectories(control);
         if (arguments.length == 2 && ("--milestone".equals(arguments[0])
                 || "--smoke-id".equals(arguments[0]))) {
-            executeMilestone(arguments[1]);
-            return;
+            executeMilestone(arguments[1]); return;
         }
         if (arguments.length == 2 && "--lane-differential".equals(arguments[0])) {
             executePhase(arguments, true, false, true); return;
@@ -161,7 +159,8 @@ public final class Gate {
                 + "--input-diff ID@REF|--milestone ID|--lane-differential ID|"
                 + "--candidate-ready ID|--candidate ID|--self-test]");
         if (arguments.length == 2 && queryType(arguments[0]) == null && !arguments[1].matches(
-                "[a-z0-9]+(?:-[a-z0-9]+)*")) throw new IllegalArgumentException("invalid milestone id: " + arguments[1]);
+                "[a-z0-9]+(?:-[a-z0-9]+)*")) throw new IllegalArgumentException(
+                "invalid milestone id: " + arguments[1]);
     }
 
     private static boolean maintenance(String value) {
@@ -172,7 +171,8 @@ public final class Gate {
 
     private static String queryType(String value) { return switch (value) {
         case "--input-graph" -> "SmokeInputGraphQuery"; case "--cache-explain" -> "SmokeCacheQuery";
-        case "--input-dependents" -> "SmokeInputDependentsQuery"; case "--input-diff" -> "SmokeInputDiffQuery"; default -> null; }; }
+        case "--input-dependents" -> "SmokeInputDependentsQuery";
+        case "--input-diff" -> "SmokeInputDiffQuery"; default -> null; }; }
 
     private int verifySlots() {
         int configured = integerEnvironment("WORLDLINE_VERIFY_SLOTS",
