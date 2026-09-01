@@ -20,7 +20,9 @@ final class ModuleCacheRemote {
                 required(environment, "WORLDLINE_MODULE_CAS_ADDRESS"),
                 Path.of(required(environment, "WORLDLINE_MODULE_CAS_PERMITS")),
                 Path.of(required(environment, "WORLDLINE_MODULE_CAS_INDEX")),
-                required(environment, "WORLDLINE_MODULE_CAS_INDEX_SHA256"),
+                Path.of(required(environment, "WORLDLINE_MODULE_CAS_INDEX_TRUST")),
+                required(environment, "WORLDLINE_MODULE_CAS_PUBLIC_KEY"),
+                required(environment, "WORLDLINE_MODULE_CAS_CHANNEL"),
                 moduleCache.getParent().resolve("module-cas-objects"));
         boolean hydrated = hydrator.hydrate(module, inputSha256, target);
         if (hydrated) System.out.println("  hydrated module " + module + " from shadow CAS");

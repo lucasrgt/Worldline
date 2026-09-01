@@ -1,9 +1,6 @@
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
-import java.security.MessageDigest;
-import java.util.HexFormat;
 import java.util.List;
 
 /** Hydrates one index-authorized module bundle through the strict Rust CAS client. */
@@ -23,7 +20,8 @@ final class ModuleCacheHydrator {
     }
 
     static ModuleCacheHydrator connect(Path root, Path binary, String address, Path permits,
-            Path indexPath, String indexSha256, Path cas) throws Exception {
+            Path indexPath, Path trustPath, String publicKey, String channel, Path cas)
+            throws Exception {
         Path executable = binary.toAbsolutePath().normalize();
         require(Files.isRegularFile(executable, LinkOption.NOFOLLOW_LINKS)
                 && !Files.isSymbolicLink(executable), "invalid module CAS binary");
@@ -33,8 +31,7 @@ final class ModuleCacheHydrator {
         require(port <= 65_535, "invalid module CAS port");
         require(Files.isRegularFile(permits, LinkOption.NOFOLLOW_LINKS)
                 && !Files.isSymbolicLink(permits), "invalid module CAS permits");
-        require(indexSha256.matches("[0-9a-f]{64}") && digest(indexPath).equals(indexSha256),
-                "module cache index pin drifted");
+        ModuleCacheIndexTrust.verify(indexPath, trustPath, publicKey, channel);
         require(PROTOCOL.equals(ProcessCapture.require(root,
                 List.of(executable.toString(), "protocol"), 30)),
                 "unsupported module CAS transport protocol");
@@ -69,14 +66,6 @@ final class ModuleCacheHydrator {
         command.add(binary.toString());
         for (Object argument : arguments) command.add(argument.toString());
         return ProcessCapture.require(root, command, 60);
-    }
-    private static String digest(Path path) throws Exception {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        try (InputStream input = Files.newInputStream(path)) {
-            byte[] buffer = new byte[16 * 1024]; int count;
-            while ((count = input.read(buffer)) >= 0) if (count > 0) digest.update(buffer, 0, count);
-        }
-        return HexFormat.of().formatHex(digest.digest());
     }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);

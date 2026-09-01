@@ -23,6 +23,7 @@ final class HarnessFeatureSelfTest {
         CandidateSourceClosure.selfTest();
         ModuleCacheBundle.selfTest();
         ModuleCacheIndex.selfTest();
+        ModuleCacheIndexTrust.selfTest();
         ModuleCachePublication.selfTest();
         ModuleCacheRemote.selfTest();
         ArtifactTransportPolicyTest.selfTest();

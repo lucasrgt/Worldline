@@ -4,7 +4,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -54,6 +57,9 @@ public final class CasTransportShadow {
             ArtifactTransportPolicy.Candidate module = published.candidate();
             ArtifactTransportPolicy.Candidate index = prepared.index();
             Path permits = prepared.permits();
+            KeyPair publisher = KeyPairGenerator.getInstance("Ed25519").generateKeyPair();
+            Path indexTrust = run.resolve("modules.trust");
+            ModuleCacheIndexTrust.sign(index.path(), "shadow", publisher, indexTrust);
             Path local = run.resolve("local"), remote = run.resolve("remote");
             Path fresh = run.resolve("fresh");
             Path errors = run.resolve("server.err");
@@ -81,7 +87,10 @@ public final class CasTransportShadow {
                     "WORLDLINE_MODULE_CAS_ADDRESS", address,
                     "WORLDLINE_MODULE_CAS_PERMITS", permits.toString(),
                     "WORLDLINE_MODULE_CAS_INDEX", indexOutput.toString(),
-                    "WORLDLINE_MODULE_CAS_INDEX_SHA256", index.sha256());
+                    "WORLDLINE_MODULE_CAS_INDEX_TRUST", indexTrust.toString(),
+                    "WORLDLINE_MODULE_CAS_PUBLIC_KEY", Base64.getEncoder().encodeToString(
+                            publisher.getPublic().getEncoded()),
+                    "WORLDLINE_MODULE_CAS_CHANNEL", "shadow");
             require(ModuleCacheRemote.hydrate(root, run.resolve("module-cache"),
                     identity.module(), identity.input(), restored, environment),
                     "module cache hydrator reported a miss");
