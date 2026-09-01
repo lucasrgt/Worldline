@@ -31,6 +31,7 @@ final class HarnessFeatureSelfTest {
         ModuleInputGraph.selfTest();
         EvidenceExplorerTest.selfTest();
         EvidenceExplorerLiveTest.selfTest();
+        CampaignPlanTest.selfTest();
     }
     static void smoke() throws Exception {
         SmokeScheduleHistory.selfTest();

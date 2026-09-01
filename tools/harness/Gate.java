@@ -161,7 +161,8 @@ public final class Gate {
     private static String queryType(String value) { return switch (value) {
         case "--input-graph" -> "SmokeInputGraphQuery"; case "--module-input-graph" -> "ModuleInputGraphQuery";
         case "--cache-explain" -> "SmokeCacheQuery"; case "--input-dependents" -> "SmokeInputDependentsQuery";
-        case "--input-diff" -> "SmokeInputDiffQuery"; default -> null; }; }
+        case "--input-diff" -> "SmokeInputDiffQuery"; case "--campaign-plan" -> "CampaignPlanQuery";
+        default -> null; }; }
     private static boolean maintenance(String value) { return value.startsWith("--migrate-")
             || value.startsWith("--refresh-") || value.startsWith("--rebalance-")
             || value.startsWith("--seal-") || value.startsWith("--module-cache-")
