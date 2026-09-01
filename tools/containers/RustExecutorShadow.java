@@ -71,6 +71,7 @@ public final class RustExecutorShadow {
                 WorldlineExecutionPlan.Environment.empty(),
                 new WorldlineExecutionPlan.Limits(5_000, null, null, null, null, null, null),
                 new WorldlineExecutionPlan.Isolation("direct", "inherit", null),
+                WorldlineExecutionPlan.Filesystem.inherit(),
                 new WorldlineExecutionPlan.Outputs(output, output.resolve("stdout.log"),
                         output.resolve("stderr.log"), output.resolve("metrics.json"),
                         output.resolve("receipt.json")));
@@ -84,6 +85,7 @@ public final class RustExecutorShadow {
                         backend.equals("windows_job") ? 4 : null,
                         backend.equals("linux_cgroup") ? 128 : null, 100, 1L << 20, 1L << 20),
                 new WorldlineExecutionPlan.Isolation(backend, "inherit", ProcessHandle.current().pid()),
+                WorldlineExecutionPlan.Filesystem.inherit(),
                 new WorldlineExecutionPlan.Outputs(output, output.resolve("stdout.log"),
                         output.resolve("stderr.log"), output.resolve("metrics.json"),
                         output.resolve("receipt.json")));
@@ -125,7 +127,8 @@ public final class RustExecutorShadow {
         String configured = System.getenv("WORLDLINE_EXECUTOR"); if (configured == null || configured.isBlank()) return;
         String os = System.getProperty("os.name").toLowerCase();
         boolean windows = os.contains("win"), linux = os.contains("linux"), contained = windows || linux;
-        Path output = root.resolve("live"); List<String> command = List.of(java(), "-Xms16m", "-Xmx64m", "-version");
+        Path output = root.resolve("live");
+        List<String> command = List.of(java(), "-Xms16m", "-Xmx64m", "-XX:-UsePerfData", "-version");
         WorldlineExecutionPlan plan = new WorldlineExecutionPlan(
                 "shadow-live", root, command, WorldlineExecutionPlan.Environment.empty(),
                 new WorldlineExecutionPlan.Limits(10_000, contained ? 512L << 20 : null,
@@ -133,6 +136,7 @@ public final class RustExecutorShadow {
                         contained ? 1L << 20 : null, contained ? 1L << 20 : null),
                 new WorldlineExecutionPlan.Isolation(windows ? "windows_job" : linux ? "linux_cgroup" : "direct",
                         linux ? "none" : "inherit", contained ? ProcessHandle.current().pid() : null),
+                linux ? landlock(root, output) : WorldlineExecutionPlan.Filesystem.inherit(),
                 new WorldlineExecutionPlan.Outputs(output, output.resolve("stdout.log"), output.resolve("stderr.log"),
                         output.resolve("metrics.json"), output.resolve("receipt.json")));
         WorldlineExecutionReceipt.Verified result = execute(Path.of(configured).toAbsolutePath().normalize(),
@@ -140,6 +144,14 @@ public final class RustExecutorShadow {
         require("exited".equals(result.termination()) && Long.valueOf(0).equals(result.exitCode()),
                 "live native executor probe failed: " + result);
         if (windows) legacyDifferential(root, command, plan);
+    }
+
+    private static WorldlineExecutionPlan.Filesystem landlock(Path root, Path output) {
+        List<Path> readOnly = new ArrayList<>(List.of(root, Path.of(System.getProperty("java.home"))));
+        for (String value : List.of("/usr", "/lib", "/lib64", "/etc", "/proc", "/sys", "/dev")) {
+            Path path = Path.of(value); if (Files.exists(path) && !readOnly.contains(path)) readOnly.add(path);
+        }
+        return new WorldlineExecutionPlan.Filesystem("landlock", readOnly, List.of(output));
     }
 
     private static List<String> invocation(Path executable, Path planPath, WorldlineExecutionPlan plan) {

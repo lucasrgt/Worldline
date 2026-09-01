@@ -15,13 +15,14 @@ final class WorldlineExecutionPlan {
     private final Environment environment;
     private final Limits limits;
     private final Isolation isolation;
+    private final Filesystem filesystem;
     private final Outputs outputs;
 
     WorldlineExecutionPlan(String jobId, Path workingDirectory, List<String> argv,
-            Environment environment, Limits limits, Isolation isolation, Outputs outputs) {
+            Environment environment, Limits limits, Isolation isolation, Filesystem filesystem, Outputs outputs) {
         this.jobId = jobId; this.workingDirectory = clean(workingDirectory, "working directory");
         this.argv = List.copyOf(argv); this.environment = environment; this.limits = limits;
-        this.isolation = isolation; this.outputs = outputs; validate();
+        this.isolation = isolation; this.filesystem = filesystem; this.outputs = outputs; validate();
     }
 
     byte[] canonicalBytes() {
@@ -41,6 +42,11 @@ final class WorldlineExecutionPlan {
                 + ",\"isolation\":{" + "\"backend\":" + q(isolation.backend)
                 + ",\"network\":" + q(isolation.network)
                 + ",\"owner_pid\":" + n(isolation.ownerPid) + "}"
+                + ",\"filesystem\":{" + "\"mode\":" + q(filesystem.mode)
+                + ",\"read_only\":" + ExecutionJson.strings(filesystem.readOnly.stream()
+                        .map(Path::toString).toList())
+                + ",\"read_write\":" + ExecutionJson.strings(filesystem.readWrite.stream()
+                        .map(Path::toString).toList()) + "}"
                 + ",\"outputs\":{" + "\"root\":" + q(text(outputs.root))
                 + ",\"stdout\":" + q(text(outputs.stdout))
                 + ",\"stderr\":" + q(text(outputs.stderr))
@@ -81,7 +87,8 @@ final class WorldlineExecutionPlan {
                 "Windows Job cannot enforce active tasks");
         if (isolation.backend.equals("linux_cgroup")) require(limits.activeProcesses == null,
                 "Linux cgroup cannot enforce active processes");
-        environment.validate(); outputs.validate(workingDirectory);
+        environment.validate(); filesystem.validate(workingDirectory, Path.of(argv.get(0)), outputs.root,
+                isolation.backend); outputs.validate(workingDirectory);
     }
 
     record Environment(List<String> inherit, List<String> remove, Map<String, String> set) {
@@ -101,6 +108,26 @@ final class WorldlineExecutionPlan {
     record Limits(long timeoutMs, Long jobMemoryBytes, Integer activeProcesses, Integer activeTasks,
             Integer cpuRatePercent, Long stdoutBytes, Long stderrBytes) { }
     record Isolation(String backend, String network, Long ownerPid) { }
+    record Filesystem(String mode, List<Path> readOnly, List<Path> readWrite) {
+        Filesystem { readOnly = readOnly.stream().map(path -> clean(path, "read-only path")).toList();
+            readWrite = readWrite.stream().map(path -> clean(path, "read-write path")).toList(); }
+        void validate(Path working, Path executable, Path output, String backend) {
+            require(List.of("inherit", "landlock").contains(mode), "unsupported filesystem policy");
+            if (mode.equals("inherit")) { require(readOnly.isEmpty() && readWrite.isEmpty(),
+                    "inherited filesystem policy contains rules"); return; }
+            require(backend.equals("linux_cgroup") && !readOnly.isEmpty() && !readWrite.isEmpty(),
+                    "Landlock requires Linux cgroups and path rules");
+            List<Path> readable = new ArrayList<>(readOnly); readable.addAll(readWrite);
+            require(covered(working, readable) && covered(executable, readable),
+                    "Landlock omits working directory or executable");
+            require(covered(output, readWrite), "Landlock output root is not writable");
+            require(new HashSet<>(readable).size() == readable.size(), "duplicate filesystem path rule");
+        }
+        private static boolean covered(Path path, List<Path> rules) {
+            return rules.stream().anyMatch(path::startsWith);
+        }
+        static Filesystem inherit() { return new Filesystem("inherit", List.of(), List.of()); }
+    }
     record Outputs(Path root, Path stdout, Path stderr, Path metrics, Path receipt) {
         Outputs { root = clean(root, "output root"); stdout = clean(stdout, "stdout");
             stderr = clean(stderr, "stderr"); metrics = clean(metrics, "metrics");
