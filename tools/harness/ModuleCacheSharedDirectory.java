@@ -1,5 +1,7 @@
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
@@ -15,6 +17,7 @@ import java.util.HexFormat;
 
 /** Immutable read-through module bundles on a shared filesystem CAS. */
 final class ModuleCacheSharedDirectory {
+    private static final Object[] LOCAL_LOCKS = localLocks();
     private final Path root, downloads;
     private final ModuleCacheIndex index;
 
@@ -24,6 +27,9 @@ final class ModuleCacheSharedDirectory {
 
     public static void main(String[] arguments) {
         try {
+            if (arguments.length == 5 && "--self-test-publish".equals(arguments[0])) {
+                selfTestPublish(arguments); return;
+            }
             require(java.util.List.of(arguments).equals(java.util.List.of("--self-test")),
                     "usage: ModuleCacheSharedDirectory --self-test");
             selfTest();
@@ -87,6 +93,8 @@ final class ModuleCacheSharedDirectory {
                     java.util.List.of(new ModuleCachePublication.Module("fixture", entry)), java.util.List.of());
             Path shared = fixture.resolve("shared-store"); concurrentPublish(shared, prepared);
             publish(shared, prepared);
+            concurrentProcessPublish(fixture.resolve("shared-process-store"),
+                    prepared.candidates().get(0));
             KeyPair keys = KeyPairGenerator.getInstance("Ed25519").generateKeyPair();
             Path trust = fixture.resolve("index.trust"); ModuleCacheIndexTrust.sign(
                     prepared.index().path(), "shared", keys, trust);
@@ -120,8 +128,49 @@ final class ModuleCacheSharedDirectory {
         }
     }
 
+    private static void concurrentProcessPublish(Path shared,
+            ArtifactTransportPolicy.Candidate candidate) throws Exception {
+        java.util.List<Process> processes = new java.util.ArrayList<>();
+        for (int index = 0; index < 4; index++) processes.add(new ProcessBuilder(javaTool(), "-cp",
+                System.getProperty("java.class.path"), "ModuleCacheSharedDirectory", "--self-test-publish",
+                shared.toString(), candidate.path().toString(), candidate.sha256(),
+                Long.toString(candidate.size())).redirectErrorStream(true).start());
+        for (Process process : processes) {
+            require(process.waitFor(30, java.util.concurrent.TimeUnit.SECONDS),
+                    "shared CAS publisher process timed out");
+            String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            require(process.exitValue() == 0, "shared CAS publisher process failed: " + output);
+        }
+        verify(object(shared, candidate.sha256()), candidate.sha256(), candidate.size());
+    }
+
+    private static void selfTestPublish(String[] arguments) throws Exception {
+        Path shared = Path.of(arguments[1]).toAbsolutePath().normalize();
+        Path source = Path.of(arguments[2]).toAbsolutePath().normalize();
+        String digest = arguments[3]; long size = Long.parseLong(arguments[4]);
+        publish(createRoot(shared), new ArtifactTransportPolicy.Candidate("shared-module-cache",
+                ArtifactTransportClass.PORTABLE_WORLDLINE_SOURCE_DERIVED, digest, size, source));
+    }
+
     private static void publish(Path root, ArtifactTransportPolicy.Candidate candidate) throws Exception {
-        Path target = object(root, candidate.sha256()); safeDirectory(root, target.getParent());
+        Path target = object(root, candidate.sha256());
+        synchronized (localLock(candidate.sha256())) {
+            Path lock = publicationLock(root, candidate.sha256()); safeDirectory(root, lock.getParent());
+            require(!Files.exists(lock, LinkOption.NOFOLLOW_LINKS)
+                    || Files.isRegularFile(lock, LinkOption.NOFOLLOW_LINKS)
+                    && !Files.isSymbolicLink(lock), "shared CAS publication lock is invalid");
+            try (FileChannel channel = FileChannel.open(lock, StandardOpenOption.CREATE,
+                    StandardOpenOption.WRITE, LinkOption.NOFOLLOW_LINKS); FileLock held = channel.lock()) {
+                require(held.isValid() && Files.isRegularFile(lock, LinkOption.NOFOLLOW_LINKS)
+                        && !Files.isSymbolicLink(lock), "shared CAS publication lock drifted");
+                publishLocked(root, target, candidate);
+            }
+        }
+    }
+
+    private static void publishLocked(Path root, Path target,
+            ArtifactTransportPolicy.Candidate candidate) throws Exception {
+        safeDirectory(root, target.getParent());
         if (Files.exists(target, LinkOption.NOFOLLOW_LINKS)) {
             verify(target, candidate.sha256(), candidate.size()); return;
         }
@@ -153,6 +202,24 @@ final class ModuleCacheSharedDirectory {
         Path path = root.resolve("objects/sha256").resolve(digest.substring(0, 2))
                 .resolve(digest.substring(2)).toAbsolutePath().normalize();
         require(path.startsWith(root), "shared CAS object path escaped root"); return path;
+    }
+    private static Path publicationLock(Path root, String digest) {
+        require(digest.matches("[0-9a-f]{64}"), "invalid shared CAS lock digest");
+        Path path = root.resolve("locks/sha256").resolve(digest.substring(0, 2))
+                .resolve(digest.substring(2) + ".lock").toAbsolutePath().normalize();
+        require(path.startsWith(root), "shared CAS publication lock escaped root"); return path;
+    }
+    private static Object localLock(String digest) {
+        return LOCAL_LOCKS[(digest.hashCode() & Integer.MAX_VALUE) % LOCAL_LOCKS.length];
+    }
+    private static Object[] localLocks() {
+        Object[] values = new Object[64];
+        java.util.Arrays.setAll(values, ignored -> new Object()); return values;
+    }
+    private static String javaTool() {
+        boolean windows = System.getProperty("os.name", "").toLowerCase().contains("win");
+        return Path.of(System.getProperty("java.home"), "bin",
+                "java" + (windows ? ".exe" : "")).toString();
     }
     private static void copy(Path source, Path target) throws Exception {
         require(Files.isRegularFile(source, LinkOption.NOFOLLOW_LINKS) && !Files.isSymbolicLink(source),
