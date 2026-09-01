@@ -11,9 +11,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-/** Qualifies one real Candidate build through legacy and Rust containment. */
+/** Qualifies a closed real Candidate build matrix through legacy and Rust containment. */
 public final class ExecutorCandidateCycle {
-    private static final String ID = "m702-powered-rail-slope-propagation";
+    private static final List<String> IDS = List.of("m702-powered-rail-slope-propagation",
+            "m135-player-respawn", "m629-door-sound-event");
     private static final long TIMEOUT_MS = 1_200_000L;
     private static final long MEMORY = 6L << 30;
     private static final int PROCESSES = 64;
@@ -29,6 +30,10 @@ public final class ExecutorCandidateCycle {
     }
 
     static void selfTest() throws Exception {
+        require(IDS.size() == 3 && IDS.stream().distinct().count() == IDS.size()
+                && IDS.get(0).equals("m702-powered-rail-slope-propagation")
+                && IDS.get(1).equals("m135-player-respawn")
+                && IDS.get(2).equals("m629-door-sound-event"), "Candidate matrix drifted");
         Properties metrics = new Properties();
         metrics.setProperty("format", "1"); metrics.setProperty("backend", "windows-job");
         metrics.setProperty("timed.out", "false"); metrics.setProperty("parent.exited", "false");
@@ -41,42 +46,58 @@ public final class ExecutorCandidateCycle {
     private static void execute() throws Exception {
         require(windows(), "the executor Candidate differential currently requires Windows");
         Path source = Path.of("").toAbsolutePath().normalize(); requireClean(source);
-        Path executor = executor(); CandidateBuildEvidence.Evidence baseline;
+        Path executor = executor(); Map<String, CandidateBuildEvidence.Evidence> baselines =
+                new LinkedHashMap<>();
         try (ExecutorCandidateWorkspace workspace = ExecutorCandidateWorkspace.open(source, "legacy")) {
-            Path output = output(workspace.root(), "legacy");
-            ExecutionEnvironmentManifest environment = ExecutionEnvironmentManifest.candidate(
-                    output.resolve("tmp"), output.resolve("control"));
-            legacy(workspace.root(), command(workspace.root()), output, environment);
-            baseline = evidence(workspace.root());
+            for (String id : IDS) {
+                Path output = output(workspace.root(), "legacy", id);
+                ExecutionEnvironmentManifest environment = ExecutionEnvironmentManifest.candidate(
+                        output.resolve("tmp"), output.resolve("control"));
+                legacy(workspace.root(), command(workspace.root(), id), output, environment);
+                baselines.put(id, evidence(workspace.root(), id));
+            }
         }
 
-        NativeResult nativeResult;
+        Map<String, NativeResult> nativeResults = new LinkedHashMap<>();
         try (ExecutorCandidateWorkspace workspace = ExecutorCandidateWorkspace.open(source, "rust")) {
-            Path output = output(workspace.root(), "rust");
-            ExecutionEnvironmentManifest environment = ExecutionEnvironmentManifest.candidate(
-                    output.resolve("tmp"), output.resolve("control"));
-            nativeResult = rust(workspace.root(), executor, command(workspace.root()), output, environment);
+            for (String id : IDS) {
+                Path output = output(workspace.root(), "rust", id);
+                ExecutionEnvironmentManifest environment = ExecutionEnvironmentManifest.candidate(
+                        output.resolve("tmp"), output.resolve("control"));
+                NativeResult result = rust(workspace.root(), executor,
+                        command(workspace.root(), id), output, environment, id);
+                require(baselines.get(id).equals(result.evidence),
+                        "legacy/Rust Candidate build evidence differential: " + id);
+                nativeResults.put(id, result);
+            }
         }
-        require(baseline.equals(nativeResult.evidence), "legacy/Rust Candidate build evidence differential");
         Path telemetryRoot = source.resolve(".worldline/executor-telemetry");
-        String telemetry = ExecutionTelemetryHistory.record(telemetryRoot, "candidate", ID,
-                "candidate-worker", nativeResult.verified.telemetry());
+        List<String> observations = new ArrayList<>(); long peak = 0L;
+        for (String id : IDS) {
+            NativeResult result = nativeResults.get(id); CandidateBuildEvidence.Evidence evidence =
+                    baselines.get(id);
+            String telemetry = ExecutionTelemetryHistory.record(telemetryRoot, "candidate", id,
+                    "candidate-worker", result.verified.telemetry());
+            peak = Math.max(peak, result.verified.telemetry().peakMemoryBytes());
+            observations.add(id + ":request=" + result.request + ":evidence=" + evidence.digest()
+                    + ":files=" + evidence.files() + ":bytes=" + evidence.bytes()
+                    + ":telemetry=" + telemetry);
+        }
         Admission admission = admission(telemetryRoot.resolve("admission.properties"),
-                nativeResult.verified.telemetry().peakMemoryBytes());
+                peak);
         long configured = configuredWorker(source), effective = Math.max(configured, admission.minimum);
         require(effective >= configured, "telemetry admission increased Candidate width");
-        System.out.println("Rust executor Candidate cycle passed; candidate=" + ID + "; request="
-                + nativeResult.request + "; evidence=" + baseline.digest() + "; files=" + baseline.files()
-                + "; bytes=" + baseline.bytes() + "; telemetry=" + telemetry + "; observed-memory="
-                + admission.observed + "; admission-floor=" + admission.minimum + "; effective-worker="
-                + effective + "; lower-only=true");
+        System.out.println("Rust executor Candidate matrix passed; count=" + observations.size()
+                + "; observations=" + String.join(",", observations) + "; observed-memory="
+                + admission.observed + "; admission-floor=" + admission.minimum
+                + "; effective-worker=" + effective + "; lower-only=true");
     }
 
     private static NativeResult rust(Path root, Path executor, List<String> command, Path output,
-            ExecutionEnvironmentManifest environment) throws Exception {
+            ExecutionEnvironmentManifest environment, String id) throws Exception {
         Files.createDirectories(output.resolve("tmp"));
-        WorldlineExecutionPlan plan = plan(root, output, command, environment);
-        Path planPath = output.getParent().resolve("rust-plan.json");
+        WorldlineExecutionPlan plan = plan(root, output, command, environment, id);
+        Path planPath = output.getParent().resolve(id + "-plan.json");
         WorldlineExecutionReceipt.Verified result = RustExecutorShadow.execute(executor, planPath, plan);
         require("exited".equals(result.termination()) && Long.valueOf(0).equals(result.exitCode()),
                 "Rust Candidate execution failed:\n" + Files.readString(plan.outputs().stderr()));
@@ -85,7 +106,7 @@ public final class ExecutorCandidateCycle {
                 "Rust Candidate execution did not prove complete output and an empty process tree");
         require(result.runtimeMs() > 0L && result.telemetry().peakMemoryBytes() != null,
                 "Rust Candidate execution lacks runtime memory telemetry");
-        return new NativeResult(evidence(root), result, plan.requestSha256());
+        return new NativeResult(evidence(root, id), result, plan.requestSha256());
     }
 
     private static void legacy(Path root, List<String> command, Path output,
@@ -108,8 +129,10 @@ public final class ExecutorCandidateCycle {
     }
 
     private static WorldlineExecutionPlan plan(Path root, Path output, List<String> command,
-            ExecutionEnvironmentManifest environment) {
-        return new WorldlineExecutionPlan("candidate-static", root, command, environment.environment(),
+            ExecutionEnvironmentManifest environment, String id) {
+        require(IDS.contains(id), "Candidate plan escaped the closed matrix");
+        return new WorldlineExecutionPlan("candidate-static-" + id, root, command,
+                environment.environment(),
                 new WorldlineExecutionPlan.Limits(TIMEOUT_MS, MEMORY, PROCESSES, null, 100,
                         16L << 20, 16L << 20),
                 new WorldlineExecutionPlan.Isolation("windows_job", "inherit",
@@ -119,14 +142,17 @@ public final class ExecutorCandidateCycle {
                         output.resolve("manifest.json"), output.resolve("receipt.json")));
     }
 
-    private static Path output(Path root, String label) {
-        return root.resolve(".worldline/executor-candidate-cycle").resolve(label);
+    private static Path output(Path root, String label, String id) {
+        require(IDS.contains(id), "Candidate output escaped the closed matrix");
+        return root.resolve(".worldline/executor-candidate-cycle").resolve(label).resolve(id);
     }
-    private static List<String> command(Path root) {
-        return List.of(java(), root.resolve("tools/harness/Gate.java").toString(), "--candidate", ID);
+    private static List<String> command(Path root, String id) {
+        require(IDS.contains(id), "Candidate command escaped the closed matrix");
+        return List.of(java(), root.resolve("tools/harness/Gate.java").toString(), "--candidate", id);
     }
-    private static CandidateBuildEvidence.Evidence evidence(Path root) throws Exception {
-        return CandidateBuildEvidence.read(root.resolve(".worldline/candidates").resolve(ID));
+    private static CandidateBuildEvidence.Evidence evidence(Path root, String id) throws Exception {
+        require(IDS.contains(id), "Candidate evidence escaped the closed matrix");
+        return CandidateBuildEvidence.read(root.resolve(".worldline/candidates").resolve(id));
     }
 
     private static Admission admission(Path path, Long currentPeak) throws Exception {
