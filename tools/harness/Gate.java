@@ -34,8 +34,7 @@ public final class Gate {
                 new Gate().executeInside(Arrays.copyOfRange(arguments, 1, arguments.length)); return;
             }
             if (arguments.length == 3 && "--hold".equals(arguments[0])) {
-                hold(Path.of(arguments[1]), Long.parseLong(arguments[2]));
-                return;
+                hold(Path.of(arguments[1]), Long.parseLong(arguments[2])); return;
             }
             new Gate().execute(arguments);
         } catch (Exception error) {
@@ -50,8 +49,7 @@ public final class Gate {
             Path classes = compileHarness();
             int exit = waitFor(new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
                     "MilestoneScaffold", arguments[1]).directory(root.toFile()).inheritIO().start(), 60);
-            if (exit != 0) System.exit(exit);
-            return;
+            if (exit != 0) System.exit(exit); return;
         }
         if (arguments.length == 1 && maintenance(arguments[0])) {
             Path classes = compileHarness();
@@ -80,7 +78,8 @@ public final class Gate {
         if (Arrays.equals(arguments, new String[] {"--train-readiness"})) {
             executePhase(arguments, false, true, false); return;
         }
-        boolean smoke = arguments.length > 0 && "--smoke".equals(arguments[0]); boolean executorServer = Arrays.equals(arguments, new String[] {"--executor-server"});
+        boolean smoke = arguments.length > 0 && "--smoke".equals(arguments[0]);
+        boolean executorServer = Arrays.equals(arguments, new String[] {"--executor-server"});
         boolean pinnedSmoke = arguments.length > 0 && "--pinned-smoke".equals(arguments[0]);
         executePhase(arguments, smoke || executorServer, !executorServer, executorServer || smoke && !pinnedSmoke);
     }
@@ -133,7 +132,8 @@ public final class Gate {
                 || Arrays.equals(arguments, new String[] {"--train-readiness"})
                 || Arrays.equals(arguments, new String[] {"--executor-tooling"})
                 || Arrays.equals(arguments, new String[] {"--executor-environment"})
-                || Arrays.equals(arguments, new String[] {"--executor-filesystem"}) || Arrays.equals(arguments, new String[] {"--executor-server"})
+                || Arrays.equals(arguments, new String[] {"--executor-filesystem"})
+                || Arrays.equals(arguments, new String[] {"--executor-server"})
                 || Arrays.equals(arguments, new String[] {"--accept-legacy-smoke-baseline"})
                 || arguments.length == 1 && maintenance(arguments[0])
                 || arguments.length == 2 && ("--new-milestone".equals(arguments[0])
