@@ -100,6 +100,7 @@ public final class TestKitContractTest {
         MapDataContentFixtureTest.execute();
         BonemealWheatFixtureTest.execute();
         RemainingOpaqueCubePhysicalEnvelopeFixtureTest.execute();
+        TorchSupportBreakFixtureTest.execute();
         TntChainFixtureTest.execute();
         CreeperTntDifferentialFixtureTest.execute();
         PoweredCreeperFixtureTest.execute();
@@ -107,6 +108,8 @@ public final class TestKitContractTest {
         PathfindingMatrixFixtureTest.execute();
         NotePitchFixtureTest.execute();
         CakeServingFixtureTest.execute();
+        ShearsLeafDurabilityFixtureTest.execute();
+        WallSignSupportBreakFixtureTest.execute();
         Path root = Files.createTempDirectory("worldline-test-contract-");
         Provider provider = new Provider();
         RunnerOptions options = new RunnerOptions().provider(provider).artifacts(root.resolve("artifacts"))

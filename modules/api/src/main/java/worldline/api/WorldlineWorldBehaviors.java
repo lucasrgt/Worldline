@@ -16,6 +16,8 @@ public final class WorldlineWorldBehaviors {
             "Unsupported gravel falls as entity then places or drops an item");
     public static final WorldlineBehavior TORCH_WASH = define("torch-wash",
             "Water occupying a torch cell pops it into a Packet21 drop");
+    public static final WorldlineBehavior TORCH_SUPPORT_BREAK = define("torch-support-break",
+            "A wall torch pops to air and drops torch item 50 when its support block breaks");
     public static final WorldlineBehavior SUGAR_CANE_DRY_BREAK = define("sugar-cane-dry-break",
             "Removing adjacent water from sugar cane pops the cane");
     public static final WorldlineBehavior SAPLING_DARK_HALT = define("sapling-dark-halt",
@@ -105,6 +107,9 @@ public final class WorldlineWorldBehaviors {
             "Public bounded tick and direct-neighbor-removal stability conformance");
     public static final WorldlineBehavior SIGN_SUBSYSTEM = define("sign-subsystem",
             "Standing and wall sign placement, text, physical envelope, support, and persistence lifecycle");
+    public static final WorldlineBehavior WALL_SIGN_SUPPORT_BREAK = define(
+            "wall-sign-support-break",
+            "Digging the supporting block of an attached wall sign pops it to air with a sign item drop");
 
     private WorldlineWorldBehaviors() {}
 

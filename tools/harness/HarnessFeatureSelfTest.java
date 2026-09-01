@@ -26,6 +26,7 @@ final class HarnessFeatureSelfTest {
         EntityLifecycleTestKitSuccessor.selfTest();
         ProviderDiscoveryTrainSuccessor.selfTest();
         MilestoneCatalogTrainSuccessor.selfTest();
+        IntegratedMilestoneTrainDocumentationSuccessor.selfTest();
         EntityLifecycleArtifactTrainSuccessor.selfTest();
         BoundedEntityArchetypeSuccessor.selfTest();
         ObjectMaterializationMatrixSuccessor.selfTest();

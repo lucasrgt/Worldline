@@ -1,5 +1,5 @@
 schema=1
 id=m466-squid-land-death-set
-fingerprint=92db1ddc9584ff0f28c18d7b7043e08f509ad95fc5a6d6399af522c020b89fcf
+fingerprint=1b9290c92efde117c062e54cd30b6b770fd52d8b4e300f3a060bf2917ab99bbd
 observation.sha256=3c3b628471c4ee01b5da67ea523767d75fcc305a6747025b28720ca05ecab8a6
 source=refactor-equivalent

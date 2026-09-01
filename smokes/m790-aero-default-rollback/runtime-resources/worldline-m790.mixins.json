@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "worldline.m790.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "QueueReuseFrameMixin",
+    "QueueReuseMinecraftMixin",
+    "QueueReuseCloudMixin",
+    "QueueReuseDistanceMixin",
+    "QueueReuseFlushMixin",
+    "QueueReuseMegaRendererMixin",
+    "QueueReuseQueueMixin",
+    "QueueReuseTranslucentMixin"
+  ],
+  "injectors": { "defaultRequire": 1 }
+}

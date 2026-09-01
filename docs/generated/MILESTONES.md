@@ -600,6 +600,11 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m665-leaf-support-distance` | CARRIED | leaf support distance |
 | `m702-powered-rail-slope-propagation` | CARRIED | powered rail slope propagation |
 | `m703-native-3d-inventory-render` | EXECUTED | official Beta 1.7.3 native 3D inventory render family |
+| `m743-redstone-ore-dust-drop` | CARRIED | redstone ore dust drop |
+| `m747-shears-leaf-durability` | CARRIED | shears leaf durability |
+| `m751-iron-door-hand-rejection` | CARRIED | iron door hand rejection |
+| `m762-wall-sign-support-break` | CARRIED | wall sign support break |
+| `m763-torch-support-break` | CARRIED | torch support break |
 | `m767-modloader-forge-testkit-provider` | CARRIED | ModLoader and Forge TestKit providers |
 | `m768-aero-historical-tower-replay` | CARRIED | Aero historical tower hitch replay |
 | `m769-aero-unified-runtime-timeline` | CARRIED | Aero unified runtime timeline |
@@ -623,6 +628,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m787-aero-loading-first-frame-integrity` | CARRIED | Aero loading and cold first-frame integrity |
 | `m788-aero-ordered-template-performance` | CARRIED | Aero ordered Cell Page template performance |
 | `m789-aero-cell-page-queue-reuse` | CARRIED | Aero bounded Cell Page queue reuse |
+| `m790-aero-default-rollback` | CARRIED | Aero shipped Cell Page default and rollback |
 | `b173-bed-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 bed subsystem conformance |
 | `b173-bedrock-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 bedrock subsystem conformance |
 | `b173-built-environment-materials-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 built-environment material subsystem conformance |

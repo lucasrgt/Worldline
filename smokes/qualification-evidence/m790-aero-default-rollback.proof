@@ -1,0 +1,5 @@
+schema=1
+id=m790-aero-default-rollback
+fingerprint=f992f14605b78f8c418803015e399e6227e611f23f5a395a89f9d251977c6618
+observation.sha256=93f3119c2eabe36a6bcf3b794b97304af00f3503602062a7c8380ba1c21fef66
+source=refactor-equivalent

@@ -1,0 +1,5 @@
+schema=1
+id=m763-torch-support-break
+fingerprint=07c82eafc755ad261648d156d5af76d3025ffd3560e6bf51e72e0562dd31b57f
+observation.sha256=d7cbe92db04e5a0e5113ae7c9bede1edff14bc8c83484d1243f1c1bb2ceb99c8
+source=refactor-equivalent

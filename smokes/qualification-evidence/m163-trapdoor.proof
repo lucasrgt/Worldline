@@ -1,5 +1,5 @@
 schema=1
 id=m163-trapdoor
-fingerprint=37d54738b45a85a1e36b777fe4bee54db046f50c844973c43ccb86476d870f56
+fingerprint=68646af561294e436da6e0f235c622522330a002424bed20cdacef14b7bfe44b
 observation.sha256=a93d386ba46f2b1dd44b2e91c9fc6c758d267a1b17cda83414f994a1d7d9d1a8
 source=refactor-equivalent

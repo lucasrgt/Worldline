@@ -175,6 +175,8 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
                 || EntityLifecycleTestKitSuccessor.carries(relative, prior, current)
                 || ProviderDiscoveryTrainSuccessor.carries(relative, prior, current)
                 || MilestoneCatalogTrainSuccessor.carries(relative, prior, current)
+                || IntegratedMilestoneTrainDocumentationSuccessor.carries(
+                        relative, prior, current)
                 || EntityLifecycleArtifactTrainSuccessor.carries(relative, prior, current)
                 || BoundedEntityArchetypeSuccessor.carries(relative, prior, current)
                 || ObjectMaterializationMatrixSuccessor.carries(relative, prior, current)
