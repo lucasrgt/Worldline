@@ -105,8 +105,11 @@ public final class ExecutionTelemetryHistory {
                     2, "tooling", "gate-self-test", "windows", "amd64", "structural", telemetry));
             append(root, ExecutionTelemetrySample.create("00000000-0000-0000-0000-000000000003",
                     3, "tooling", "other", "windows", "amd64", "structural", telemetry));
+            append(root, ExecutionTelemetrySample.create("00000000-0000-0000-0000-000000000005",
+                    5, "campaign", "nightly-quality", "windows", "amd64",
+                    "campaign-worker", telemetry));
             List<Profile> profiles = profiles(root);
-            require(profiles.size() == 2 && profiles.stream().mapToLong(Profile::count).sum() == 3,
+            require(profiles.size() == 3 && profiles.stream().mapToLong(Profile::count).sum() == 4,
                     "telemetry profile grouping drift");
             Profile repeated = profiles.stream().filter(value -> value.count() == 2).findFirst().orElseThrow();
             require(Long.valueOf(6).equals(repeated.cpuUserTotal()) && repeated.stdoutTotal() == 14,
@@ -125,7 +128,9 @@ public final class ExecutionTelemetryHistory {
             require(admission.contains("minimum.worker.memory.bytes=4026531840")
                     && admission.contains("direction=lower-only"), "telemetry admission drift");
             String summary = new String(summaryBytes(profiles), java.nio.charset.StandardCharsets.UTF_8);
-            require(summary.contains("\"sample_count\":3") && !summary.contains("argv")
+            require(summary.contains("\"sample_count\":4")
+                    && summary.contains("\"runtime_capability\":\"campaign-worker\"")
+                    && !summary.contains("argv")
                     && !summary.contains("working_directory"), "telemetry summary sanitization drift");
             Path first; try (var paths = Files.list(root.resolve("samples"))) {
                 first = paths.findFirst().orElseThrow();
