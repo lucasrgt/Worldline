@@ -51,7 +51,7 @@ IntegrationTrain / orchestrator
   signed execution receipt and content-addressed outputs
 ```
 
-### 1.1 Implementation ledger (2026-08-31)
+### 1.1 Implementation ledger (2026-09-01)
 
 The durable plan was established on branch
 `codex/worldline-infrastructure-program` at commit `69059c072`. The native
@@ -177,6 +177,14 @@ Completed foundation slices:
   authority over module name, Java release and toolchain, dependency cache
   identities, normalized source paths, and exact source bytes. The read model
   exposes only paths and digests, and rejects unknown modules and cycles.
+- the first qualifying native-executor use in Worldline commits `b3b7fd750`
+  and `dfbb921a9`. `Gate --executor-tooling` runs the real Gate self-test first
+  through the legacy Windows Job launcher, then through the Rust Windows Job
+  backend, and finally through the legacy rollback path. Java remains the
+  verdict authority, requires a clean exact commit and an explicit absolute
+  executor, normalizes only the reported elapsed time, and cleans every
+  transient output. The legacy launcher now waits for the Job Object to drain
+  and records `processes.active=0` before publishing metrics.
 
 Evidence recorded for these slices:
 
@@ -284,15 +292,27 @@ Evidence recorded for these slices:
   creating new identities, passes at `cold 138096ms < 240000ms`, and reports
   624 current train proofs with zero pending. CSM checks five ways with no
   deviations and NYA passes.
+- the exact executor-tooling proof commit `dfbb921a9` passes the canonical Gate
+  (`cold 135022ms < 240000ms`) with 624 current train proofs and zero pending.
+  Its explicit tooling profile then produces Rust request digest
+  `47d48d60bda64a5aef26d95b205ca4a40a306bd083776eb68f3e81e2cca3f419`
+  and normalized observable digest
+  `458b7c9754023057b11ada8cc7b055c26c7ba3559f38d5a9f51d18106fbff32d`.
+  Both legacy executions and the Rust receipt prove an empty contained process
+  tree, output is complete and untruncated, the rollback executes after the
+  Rust path, no official runtime starts, cleanup leaves zero cycle residue,
+  CSM checks ten ways with no deviations, and NYA passes.
 - the canonical Worldline Gate reaches `verify passed` with all content stages
   restored, but the host currently violates the unchanged hot latency SLO
   (`20361ms >= 7000ms` on the latest run). The budget was not weakened.
 
 Current boundaries remain honest: Linux mount and PID namespaces,
 loopback-only policy, Windows filesystem/network isolation, complete
-hostile-fixture coverage, broader legacy differentials, and all qualifying
-promotions remain pending. Artifact classification now covers tracked smoke
-pin envelopes and generated Worldline-only module bundles; tests, stages,
+hostile-fixture coverage, server-headless and GUI differentials, and runtime
+lane promotions remain pending. The structural Windows tooling cycle is the
+first qualified native-executor use; it does not promote Minecraft execution
+or make Rust the default backend. Artifact classification now covers tracked
+smoke pin envelopes and generated Worldline-only module bundles; tests, stages,
 smoke logs, runtime observations, sanitized diagnostics, official runtimes,
 and mapped derivatives remain disabled or forbidden. Permit-bound local
 transport, Worldline permit production, and explicit end-to-end shadows exist,
@@ -306,9 +326,10 @@ authenticated deployment, and an explicit promotion from `shadow`. The input
 graph covers qualification identities in dual mode, current-tree dependents,
 cache decisions, cross-commit node differences, and exact module cache
 identities. Qualification fingerprints still use the legacy engine as their
-authority pending a reviewed all-smoke promotion.
-A1 through A4, B3, and D1 through D3 and D5 are therefore in progress; A5 and
-remote transport deployment have not started.
+authority pending a reviewed all-smoke promotion. A1 through A4, B3, and D1
+through D3 and D5 are therefore in progress; A5 is qualified for the
+structural Windows tooling cycle, while A6, A7, and remote transport
+deployment have not started.
 
 ## 2. Program principles
 
@@ -496,6 +517,13 @@ cannot qualify releases. Required comparisons include:
 
 The first qualifying use is a structural tooling cycle that never starts
 Minecraft. Rollback to the legacy backend is tested and recorded.
+
+Status: qualified on Windows by `Gate --executor-tooling` at Worldline commit
+`dfbb921a9`. The profile runs legacy baseline, Rust primary, and legacy
+rollback sequentially against `Gate --self-test`; it requires byte-equivalent
+normalized observations, bounded output, successful termination, and empty
+process trees. This does not authorize a Minecraft runtime lane or default
+backend selection.
 
 ### A6. Server-headless promotion
 
