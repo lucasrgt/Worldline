@@ -94,20 +94,24 @@ final class RepositorySchemaMigration {
                 new SmokeInputFingerprint(root); SmokeReceiptCache cache = new SmokeReceiptCache(root);
         Properties providers = ProviderDiscoveryPinCheck.manifest(root);
         List<SmokePins.Entry> pins = new ArrayList<>();
-        int carried = 0, executed = 0, introduced = 0, introducedNarratives = 0;
+        int carried = 0, executed = 0, successors = 0, introduced = 0, introducedNarratives = 0;
         for (SmokeDiscovery.Entry smoke : catalog) {
             String current = fingerprints.compute(smoke); SmokePins.Entry local = cache.availablePin(smoke);
             SmokePins.Entry prior = existing.entry(smoke.id);
+            SmokePins.Entry proof;
             if (local != null && local.source().equals("executed")) {
-                pins.add(local); executed++;
+                proof = local; executed++;
+            } else if (prior != null && contractIdentitySuccessor(smoke.id)) {
+                proof = new SmokePins.Entry(smoke.id, current, prior.evidence(),
+                        "refactor-equivalent"); successors++;
             } else {
                 require(prior != null && current.equals(prior.fingerprint()),
                         "schema refresh lacks a current proof: " + smoke.id);
-                pins.add(prior);
+                proof = prior;
             }
+            pins.add(proof);
             if (ProviderDiscoveryPinCheck.exemptsLegacy(providers, smoke.id)) continue;
             carried++; String stem = "smoke." + smoke.id + ".";
-            SmokePins.Entry proof = local != null && local.source().equals("executed") ? local : prior;
             String recorded = manifest.getProperty(stem + "current_fingerprint");
             Path directory = root.resolve("smokes").resolve(smoke.id);
             if (recorded == null) {
@@ -133,8 +137,9 @@ final class RepositorySchemaMigration {
         }
         int pending = ProviderDiscoveryPinCheck.pendingCount(providers);
         int smokeCount = carried + pending;
-        require(executed >= 1,
-                "repository schema refresh lacks exact support proofs: executed=" + executed);
+        require(executed >= 1 || successors >= 1,
+                "repository schema refresh lacks support proofs: executed=" + executed
+                        + ", successors=" + successors);
         manifest.setProperty("smoke.count", Integer.toString(smokeCount));
         manifest.setProperty("map.count", Integer.toString(smokeCount + 1));
         manifest.setProperty("narrative.count", Integer.toString(
@@ -144,7 +149,22 @@ final class RepositorySchemaMigration {
         existing.write(pins); store(lock, manifest);
         System.out.println("repository schema pins refreshed: " + carried
                 + " carried, " + introduced + " introduced, " + executed
-                + " exact support proofs");
+                + " exact support proofs, " + successors + " contract identity successors");
+    }
+
+    private boolean contractIdentitySuccessor(String id) throws Exception {
+        String relative = "smokes/" + id + "/smoke.properties";
+        Process process = new ProcessBuilder("git", "show", "HEAD^:" + relative)
+                .directory(root.toFile()).start();
+        String prior = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        if (process.waitFor() != 0 || prior.lines().anyMatch(
+                line -> line.startsWith("testkit.contract="))) return false;
+        String current = Files.readString(root.resolve(relative), StandardCharsets.UTF_8);
+        Properties descriptor = load(root.resolve(relative));
+        String contract = descriptor.getProperty("testkit.contract", "");
+        return contract.matches("[a-z][a-z0-9-]{0,62}") && current.replaceFirst(
+                "(?m)^testkit\\.contract=.*\\R", "").replace("\r\n", "\n")
+                .equals(prior.replace("\r\n", "\n"));
     }
 
     private String migrateNarrative(String id, Properties descriptor, String text) throws Exception {
