@@ -25,6 +25,8 @@ final class CampaignPlanTest {
         require(!CampaignPlan.create("fixture", 174L, 3, plan.workloads()).sha256().equals(plan.sha256()),
                 "campaign root seed did not affect identity");
         receiptSet(plan);
+        NightlyCampaignOptions.selfTest();
+        CampaignArtifacts.selfTest();
         System.out.println("  campaign plan self-test: passed");
     }
 
@@ -33,7 +35,8 @@ final class CampaignPlanTest {
         for (int index = 0; index < plan.shardCount(); index++) {
             List<CampaignShardReceipt.Result> results = plan.shard(index).assignments().stream()
                     .map(value -> new CampaignShardReceipt.Result(value.workload(), value.start(),
-                            value.endExclusive(), value.seed(), 0, false, "c".repeat(64))).toList();
+                            value.endExclusive(), value.seed(), 5, 2L, 0, false,
+                            "c".repeat(64))).toList();
             receipts.add(CampaignShardReceipt.create(plan, index, "a".repeat(40),
                     "b".repeat(40), null, results));
         }
