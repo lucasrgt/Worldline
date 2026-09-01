@@ -65,6 +65,7 @@ gradle.projectsEvaluated {
         '-Dworldline.m784.frames=' + prop('worldlineFrames'),
         '-Dworldline.m784.minimumMillis=' + prop('worldlineMinimumMillis'),
         '-Dworldline.m784.warmFrames=' + prop('worldlineWarmFrames'),
+        '-Dworldline.m784.maxBlankCaptures=' + prop('worldlineMaxBlankCaptures'),
         '-Dworldline.m784.metrics=' + new File(prop('worldlineMetrics')).absolutePath,
         '-Dworldline.m784.framesFile=' + new File(prop('worldlineFramesFile')).absolutePath,
         '-Dworldline.m784.framesDir=' + new File(prop('worldlineFramesDir')).absolutePath,

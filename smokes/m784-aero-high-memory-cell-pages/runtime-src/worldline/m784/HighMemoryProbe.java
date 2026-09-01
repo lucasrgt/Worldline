@@ -79,6 +79,7 @@ public final class HighMemoryProbe {
 
     public static int frames() { return WALLS.size(); }
     public static int captures() { return captures; }
+    public static int blankCaptures() { return blankCaptures; }
 
     /** Executes and times the one controlled production Cell Page flush for this frame. */
     public static void flush(double cameraX, double cameraY, double cameraZ) {
@@ -157,7 +158,14 @@ public final class HighMemoryProbe {
             width = game.displayWidth;
             height = game.displayHeight;
             ByteBuffer pixels = BufferUtils.createByteBuffer(width * height * 4);
-            GL11.glReadPixels(0, 0, width, height, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, pixels);
+            int previousReadBuffer = GL11.glGetInteger(GL11.GL_READ_BUFFER);
+            try {
+                GL11.glReadBuffer(GL11.GL_BACK);
+                GL11.glReadPixels(0, 0, width, height,
+                    GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, pixels);
+            } finally {
+                GL11.glReadBuffer(previousReadBuffer);
+            }
             byte[] bytes = new byte[pixels.remaining()];
             pixels.get(bytes);
             boolean nonzero = false;

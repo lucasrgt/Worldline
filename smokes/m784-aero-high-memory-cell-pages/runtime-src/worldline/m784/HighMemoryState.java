@@ -20,6 +20,8 @@ public final class HighMemoryState {
     private static final String ARM = System.getProperty("worldline.m784.arm", "prepare");
     private static final int TARGET_FRAMES = Integer.getInteger("worldline.m784.frames", 1200);
     private static final int WARM_FRAMES = Integer.getInteger("worldline.m784.warmFrames", 480);
+    private static final int MAX_BLANK_CAPTURES =
+        Integer.getInteger("worldline.m784.maxBlankCaptures", 24);
     private static final long MINIMUM_NS = Long.getLong("worldline.m784.minimumMillis", 20000L)
         * 1_000_000L;
     private static int stage, worldWarm, routeWarm, convergenceFrames, stablePages, retained, checkpoint;
@@ -70,8 +72,12 @@ public final class HighMemoryState {
         long elapsed = System.nanoTime() - measurementStarted;
         if (retained >= TARGET_FRAMES && elapsed >= MINIMUM_NS
                 && retained % HighMemoryScene.ROUTE_FRAMES == 0) {
-            finish(game);
-            return;
+            require(HighMemoryProbe.blankCaptures() <= MAX_BLANK_CAPTURES,
+                "M784 blank framebuffer retry budget exhausted");
+            if (HighMemoryProbe.captures() == HighMemoryScene.CHECKPOINTS) {
+                finish(game);
+                return;
+            }
         }
         measuring = true;
         int route = retained % HighMemoryScene.ROUTE_FRAMES;

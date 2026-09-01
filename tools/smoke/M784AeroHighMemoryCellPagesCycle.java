@@ -164,6 +164,8 @@ final class M784Runtime {
             "-PworldlineFrames=" + SmokeSupport.value(config, "retained.frames"),
             "-PworldlineMinimumMillis=" + SmokeSupport.value(config, "minimum.millis"),
             "-PworldlineWarmFrames=" + SmokeSupport.value(config, "warm.frames"),
+            "-PworldlineMaxBlankCaptures="
+                + SmokeSupport.value(config, "maximum.blank.capture.rejections"),
             "-PworldlineMetrics=" + game.resolve("metrics.properties"),
             "-PworldlineFramesFile=" + game.resolve("frames.csv"),
             "-PworldlineFramesDir=" + game.resolve("visual-frames"));
