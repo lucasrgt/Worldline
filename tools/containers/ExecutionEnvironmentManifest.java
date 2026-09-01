@@ -87,6 +87,22 @@ public final class ExecutionEnvironmentManifest {
                 Entry.set("WORLDLINE_GATE_WAIT_SECONDS", Effect.TOOL, "600")));
     }
 
+    static ExecutionEnvironmentManifest campaign(Path temporary, Path executorPlan) {
+        Path clean = temporary.toAbsolutePath().normalize();
+        require(clean.equals(temporary) && executorPlan.isAbsolute()
+                && executorPlan.normalize().equals(executorPlan), "campaign environment paths are not normalized");
+        List<Entry> values = new ArrayList<>(List.of(Entry.inherit("PATH", Effect.TOOL),
+                Entry.set("TEMP", Effect.TOOL, clean.toString()), Entry.set("TMP", Effect.TOOL, clean.toString()),
+                Entry.set("WORLDLINE_CAMPAIGN_EXECUTOR_PLAN", Effect.OBSERVATIONAL, executorPlan.toString())));
+        if (System.getProperty("os.name", "").toLowerCase(Locale.ROOT).contains("win")) {
+            values.add(Entry.inherit("PATHEXT", Effect.TOOL)); values.add(Entry.inherit("SYSTEMROOT", Effect.TOOL));
+            values.add(Entry.inherit("WINDIR", Effect.TOOL));
+        }
+        copyNumeric(values, "WORLDLINE_NIGHTLY_FUZZ_CASES");
+        copyNumeric(values, "WORLDLINE_NIGHTLY_MUTATION_CASES");
+        return new ExecutionEnvironmentManifest("nightly-campaign", values);
+    }
+
     static ExecutionEnvironmentManifest guiNative(Path temporary, Path control,
             Path leaseFile, String leasePid, String leaseStarted) {
         Path clean = temporary.toAbsolutePath().normalize();
@@ -173,6 +189,8 @@ public final class ExecutionEnvironmentManifest {
         require(hostile(temporary).environment().set().size() == 3, "hostile environment drift");
         require(candidate(temporary, temporary.resolve("control")).environment().set().size() == 6,
                 "Candidate environment drift");
+        require(campaign(temporary, temporary.resolve("plan.json")).environment().set()
+                .containsKey("WORLDLINE_CAMPAIGN_EXECUTOR_PLAN"), "campaign environment drift");
         require(guiNative(temporary, temporary.resolve("control"), temporary.resolve("lease"), "7", "11")
                 .environment().set().size() == 9, "GUI environment drift");
         require(guiAero(temporary, temporary.resolve("gradle"), temporary.resolve("control"),
@@ -197,10 +215,19 @@ public final class ExecutionEnvironmentManifest {
 
     private static boolean secret(String name) { return name.contains("PASSWORD") || name.contains("TOKEN")
             || name.contains("SECRET") || name.contains("CREDENTIAL") || name.endsWith("_KEY"); }
+    private static void copyNumeric(List<Entry> entries, String name) {
+        String value = System.getenv(name);
+        if (value != null && !value.isBlank()) {
+            require(value.matches("[0-9]+"), "campaign environment is not numeric: " + name);
+            entries.add(Entry.set(name, Effect.BEHAVIOR, value));
+        }
+    }
     private static void expectFailure(Runnable action) { try { action.run();
         throw new IllegalStateException("invalid environment manifest was accepted");
     } catch (IllegalArgumentException expected) { } }
-    private static void require(boolean value, String message) { if (!value) throw new IllegalArgumentException(message); }
+    private static void require(boolean value, String message) {
+        if (!value) throw new IllegalArgumentException(message);
+    }
 
     private enum Mode { INHERIT("inherit"), SET("set"), REMOVE("remove");
         private final String text; Mode(String text) { this.text = text; } }

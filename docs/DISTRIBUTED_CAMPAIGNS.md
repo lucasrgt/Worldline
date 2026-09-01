@@ -60,6 +60,20 @@ duplicates, changed assignments, or mixed Git trees.
 
 Use `--plan-only` to print the plan without requiring compiled tests or running
 either workload. A single-shard invocation remains compatible with the
-scheduled workflow. `WORLDLINE_CAMPAIGN_EXECUTOR_REQUEST_SHA256` may bind a
-native executor request to the shard receipt; absence explicitly means the
+scheduled workflow. Absence of `executor_request_sha256` explicitly means the
 legacy Java launcher was used.
+
+To isolate and measure the complete shard coordinator with the pinned Rust
+executor, set `WORLDLINE_EXECUTOR` to its absolute executable path and run:
+
+```text
+java tools/containers/RuntimeFabricLauncher.java CampaignExecutorCycle --budget-seconds 900 --seed 173 --shard-count 4 --shard-index 0
+```
+
+The native cycle retains the canonical execution plan, receipt, metrics, and
+bounded stdout/stderr under `executor-runs/`. The inner Java coordinator hashes
+the exact plan it received and binds that request digest into its immutable
+campaign receipt. The outer Java adapter independently verifies the Rust
+receipt and all referenced output bytes before accepting exit zero. Java still
+owns campaign partitioning, result interpretation, and aggregation; Rust owns
+process containment, limits, cleanup, and observational telemetry.

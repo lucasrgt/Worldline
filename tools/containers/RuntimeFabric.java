@@ -144,6 +144,7 @@ public final class RuntimeFabric {
         ExecutorCandidateCycle.selfTest();
         ExecutorGuiCycle.selfTest();
         ExecutorAeroCycle.selfTest();
+        CampaignExecutorCycle.selfTest();
         ExecutionTelemetryHistory.selfTest();
         ExecutionFailureClusters.selfTest();
         ExecutionEvidenceSummary.selfTest();
