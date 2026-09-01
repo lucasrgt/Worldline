@@ -78,6 +78,11 @@ Completed foundation slices:
 - unprivileged Linux user/network namespace enforcement for `network=none`,
   with inherited-versus-isolated loopback invariants, in executor commit
   `e251645` and Worldline shadow commit `e6f203728`.
+- concurrent-job receipt independence and interrupted-executor atomic-output
+  invariants in executor commit `1fbafe4`;
+- Linux Landlock read-only/read-write allowlists, positive and negative path
+  fixtures, and a JVM shadow probe combining cgroup, no-network, and filesystem
+  controls in executor commit `2bc7bca` and Worldline commit `51d1536a5`.
 
 Evidence recorded for these slices:
 
@@ -92,10 +97,11 @@ Evidence recorded for these slices:
   restored, but the host currently violates the unchanged hot latency SLO
   (`20361ms >= 7000ms` on the latest run). The budget was not weakened.
 
-Current boundaries remain honest: Linux mount and PID namespaces, filesystem
-isolation, loopback-only policy, full hostile-fixture coverage, broader legacy
-differentials, and all qualifying promotions remain pending. A1 through A4
-are therefore in progress; A5 and later have not started.
+Current boundaries remain honest: Linux mount and PID namespaces,
+loopback-only policy, Windows filesystem/network isolation, complete
+hostile-fixture coverage, broader legacy differentials, and all qualifying
+promotions remain pending. A1 through A4 are therefore in progress; A5 and
+later have not started.
 
 ## 2. Program principles
 
