@@ -416,16 +416,35 @@ Evidence recorded for these slices:
   `7b2e7e486d1d0e4083c80abc06c7f0be3c1d4b95ea0b936d035b16d1811c14d2`.
   The successful history rebuild reports zero failures and zero clusters.
   CSM checks nine ways with no deviations and NYA passes.
-- the canonical Worldline Gate reaches `verify passed` with all content stages
-  restored, but the host currently violates the unchanged hot latency SLO
-  (`20361ms >= 7000ms` on the latest run). The budget was not weakened.
-
+- Worldline commit `7365d9a260` qualifies the first official
+  `server-headless` Rust-executor differential against
+  `m20-server-bootstrap`, using executor commit `803861d`. One canonical
+  runtime lease covers a legacy Windows Job run followed by the Rust Windows
+  Job run. Each side receives a fresh exact-commit disposable worktree, runs
+  the structural Gate before runtime, materializes the already-local official
+  server only under ignored `local/`, executes through `Gate --milestone`, and
+  removes the complete cell afterward. Canonical evidence is byte-equal at
+  digest `290897fd072b76d5d3d01ca8fe5e8a84586c25d4315fa77366c58533c8510cf7`;
+  the Rust request digest is
+  `6a8e33461a6e1b022e15265e26f06b8d68b6d53d2ef69c60077c9fd69a4de52f`
+  and the sanitized telemetry object is
+  `e72c78d81bee91ad9ce8f4f70d3911b9ce1efd21fdbaa08f7b98afadc163a601`.
+  The 15,906-ms observation partitions into 15-ms bootstrap and 15,891-ms
+  runtime, peaks at 809,144,320 bytes and seven processes, retains complete
+  output without truncation, proves zero descendants, and rebuilds with zero
+  failure clusters. The exact canonical Gate passes hot
+  (`3506ms < 7000ms`), `Gate --runtime` passes cold
+  (`6188ms < 240000ms`), CSM checks ten ways with no deviations, and NYA
+  passes. Windows network policy remains honestly classified as inherited;
+  the fixture observes an explicit loopback binding but does not claim OS
+  network isolation.
 Current boundaries remain honest: Linux mount and PID namespaces,
-loopback-only policy, Windows filesystem/network isolation, complete
-hostile-fixture coverage, server-headless and GUI differentials, and runtime
-lane promotions remain pending. The structural Windows tooling cycle is the
-first qualified native-executor use; it does not promote Minecraft execution
-or make Rust the default backend. Artifact classification now covers tracked
+OS-enforced loopback-only policy, Windows filesystem/network isolation,
+complete hostile-fixture coverage, the broader server-headless matrix, GUI
+differentials, Candidate promotion, and default runtime selection remain
+pending. The structural Windows tooling cycle and one official server
+behavior/containment differential are qualified; neither makes Rust the
+default backend. Artifact classification now covers tracked
 smoke pin envelopes and generated Worldline-only module bundles; tests, stages,
 smoke logs, runtime observations, sanitized diagnostics, official runtimes,
 and mapped derivatives remain disabled or forbidden. Permit-bound local
@@ -442,10 +461,12 @@ cache decisions, cross-commit node differences, and exact module cache
 identities. Qualification and module fingerprints now use their graphs as the
 authority while retaining legacy equality audits. A1 through A4 and D1 through
 D3 and D5 are therefore in progress; A5 is qualified for the
-structural Windows tooling cycle, and B1 plus the post-execution portion of B2
-are qualified for that tooling profile. Native Windows filesystem enforcement,
-the remaining C1 profiles, C2 through C4, other runtime profiles, A6, A7, and
-remote transport deployment have not started.
+structural Windows tooling cycle. A6 now has one qualified official Windows
+server behavior/containment slice, B1 covers tooling plus server-headless, and
+the post-execution portion of B2 covers disposable server cells without
+claiming write isolation. Native Windows filesystem/network enforcement,
+Candidate and GUI profiles, A7, full A8 promotion, broader runtime histories,
+and remote transport deployment remain pending.
 
 ## 2. Program principles
 
@@ -653,6 +674,16 @@ workspaces under the same canonical local lease. Require:
 - fresh independent worlds;
 - preserved proof and pin validation.
 
+Status: the first Windows behavior/containment slice is qualified at Worldline
+commit `7365d9a260` with Rust executor commit `803861d`. Legacy and Rust run
+the canonical M20 official-server lifecycle sequentially under one continuous
+lease in independent disposable worktrees. Their canonical evidence is equal,
+both sides drain their process trees, and the Rust receipt proves complete
+output plus zero descendants. Full A6 remains pending a broader server matrix
+and an OS-enforced Windows network boundary; this slice observes the fixture's
+explicit loopback binding under `network=inherit` and does not relabel that as
+network isolation.
+
 ### A7. Windows GUI promotion
 
 Qualify native client and Aero lanes independently. Cover:
@@ -682,10 +713,12 @@ each inherited value is behavior-affecting, tool-affecting, or observational.
 Secrets are never written to plans or receipts.
 
 Status: qualified for the structural tooling profile at Worldline commit
-`69797aede`. Legacy and Rust paths both receive a cleared, explicit environment
-from the same Java policy; the public descriptor omits all values and rejects
-secret-bearing names. Server-headless and GUI environment profiles remain
-pending and cannot inherit this tooling qualification implicitly.
+`69797aede` and for the first server-headless differential at commit
+`7365d9a260`. Legacy and Rust paths receive cleared, explicit environments
+from the same Java policy. The server profile carries only named tool/runtime
+controls and a delegated lease identity; its capability secret stays outside
+the execution plan. Public descriptors omit all values and reject
+secret-bearing names. GUI environment profiles remain pending.
 
 ### B2. Filesystem manifest
 
@@ -706,6 +739,12 @@ and post-execution output invariant at Worldline commit `1ea3706ff`. Windows
 Job Objects still provide no native filesystem sandbox, so this status does
 not claim write prevention. Linux Landlock enforcement exists in shadow and
 runtime-specific mount declarations remain pending.
+
+The server-headless slice at commit `7365d9a260` strengthens output ownership
+through fresh exact-commit worktrees, local-only official-artifact
+materialization, safe no-follow cleanup, and worktree pruning. This proves
+cell disposal and absence of residue, not prevention of writes while a
+Windows Job is running.
 
 The same profile now has qualified transactional publication at commit
 `af7138e74`: staging and destination are siblings, publication is atomic and
@@ -754,7 +793,10 @@ measures one monotonic interval, partitions it at the platform run boundary,
 allows only the one-millisecond integer-rounding difference, and keeps the
 telemetry explicitly observational. Existing memory, process/task, CPU, I/O,
 output, limit-event, and termination fields remain intact. Historical
-aggregation and runtime-specific server and GUI profiles remain pending.
+aggregation and GUI profiles remain pending. The first official server profile
+is qualified at Worldline commit `7365d9a260`: elapsed 15,906 ms, bootstrap
+15 ms, runtime 15,891 ms, peak Job commit 809,144,320 bytes, peak seven
+processes, complete output, and zero remaining descendants.
 
 ### C2. Historical profiles
 
@@ -764,8 +806,10 @@ runtime capability. Measurements remain local or sanitized before upload.
 Status: qualified for the structural Windows tooling profile at Worldline
 commit `5d75d057c`. Local samples are immutable by content digest, strictly
 bounded, canonically reparsed, and rebuild into deterministic profile groups.
-Only sanitized observational fields are retained. Server, GUI, smoke-specific,
-and cross-host histories remain pending; no history upload is enabled.
+Only sanitized observational fields are retained. Commit `7365d9a260` adds the
+first smoke-specific official server sample for `m20-server-bootstrap` on
+Windows 11/amd64. Broader server, GUI, Candidate, and cross-host histories
+remain pending; no history upload is enabled.
 
 ### C3. Conservative admission
 
@@ -789,9 +833,9 @@ and oracle mismatch remain distinct classes.
 Status: qualified for sanitized structural telemetry and deterministic
 read-model fixtures at Worldline commit `3947fa8e0`. Infrastructure,
 provider, and behavioral domains are explicit, and provider failure cannot be
-collapsed into oracle mismatch. Runtime, Candidate, server, GUI, and real
-provider histories remain pending until those lanes execute through the Rust
-boundary and publish sanitized samples.
+collapsed into oracle mismatch. The first successful official server sample
+at commit `7365d9a260` rebuilds with zero failures and zero clusters. Real
+failure histories plus Candidate, GUI, and provider samples remain pending.
 
 ## 8. Workstream D: content-addressed transport
 
