@@ -85,7 +85,12 @@ public final class Replay {
             System.err.println("   or: java tools/replay/Replay.java test run <spec.jar|classes> [SpecClass] [options]"); return 2; }
         if (game) { int inputs = new ProcessBuilder("java", "tools/harness/RuntimeCheck.java", "--required")
                 .directory(root.toFile()).inheritIO().start().waitFor(); if (inputs != 0) return inputs; }
-        Path classes = root.resolve(".worldline/build/classes");
+        String productRoot = System.getenv("WORLDLINE_PRODUCT_ROOT");
+        Path classes = productRoot == null || productRoot.isBlank()
+                ? root.resolve(".worldline/build/classes")
+                : Path.of(productRoot).toAbsolutePath().normalize();
+        if (!classes.startsWith(root.resolve(".worldline")))
+            throw new IllegalArgumentException("runtime product root escapes .worldline");
         Path client = root.resolve(".worldline/smokes/controlled-client-tick");
         Path workspace = root.resolve("local/workspaces/b1.7.3");
         List<Path> paths = new ArrayList<>(Arrays.asList(classes.resolve("cli"),
@@ -98,7 +103,7 @@ public final class Replay {
         paths.add(classes.resolve("profiling"));
         paths.add(classes.resolve("coverage"));
         if (atlas) paths.add(root.resolve(".worldline/build/server-adapter"));
-        if (test) paths.addAll(Arrays.asList(classes.resolve("testmodel"),
+        if (test || census) paths.addAll(Arrays.asList(classes.resolve("testmodel"),
                 classes.resolve("testapi"), classes.resolve("testkit")));
         if (game) paths.addAll(Arrays.asList(classes.resolve("kernel"), client.resolve("adapter-classes"),
                 client.resolve("instrumented-client"), client.resolve("headless-classes"),
