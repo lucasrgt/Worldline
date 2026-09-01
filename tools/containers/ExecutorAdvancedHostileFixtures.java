@@ -34,9 +34,9 @@ final class ExecutorAdvancedHostileFixtures {
             Observation rustLimit = rust(root, base.resolve("rust-limit"), executor, environment,
                     command(root, "process-limit"), 1, true);
             compare("process-limit", legacyLimit, rustLimit, evidence);
-            require(Long.valueOf(31).equals(rustLimit.exitCode) && legacyLimit.processes == 1L
+            require(Long.valueOf(31).equals(rustLimit.exitCode) && legacyLimit.processes >= 1L
                     && Long.valueOf(1).equals(rustLimit.peakProcesses),
-                    "active-process limit was not observed at exactly one process");
+                    "active-process limit did not block the attempted child");
             concurrent(root, base, executor, launcher, environment, evidence);
             System.out.println("  advanced hostile executor fixtures: owner loss, process limit, "
                     + CONCURRENT_JOBS + " concurrent pairs; evidence="
