@@ -92,6 +92,18 @@ Configured paths do not define identity. The frozen client/server byte counts
 and SHA-256 values do, and both `doctor` and runtime gates fail on mismatch.
 An official JAR tracked by the containing Git repository is also a hard error.
 
+For package-manager integration tests, `doctor` also recognizes an optional
+`wpm.lock` beside the conventional `tests/worldline` project when its schema is
+`worldline.wpm-fixture-lock.v1`. This narrow fixture envelope describes one
+bounded package payload under `packages/`, binds its exact SHA-256 digest, and
+must declare `runtime=b1.7.3`, `mode=host-only`, and
+`official.artifacts=external-only`. The payload must be a regular non-link file
+with the qualified fixture content. Unknown fields, duplicate fields,
+noncanonical paths, digest mismatches, embedded-artifact claims, or local
+`minecraft.jar` and `minecraft_server.jar` files fail closed. This fixture
+schema qualifies Worldline/WPM integration; it is not the eventual production
+WPM lockfile format.
+
 The plugin downloads its API and runner from the immutable
 `testkit-v0.3.0` GitHub release and verifies frozen SHA-256 values. Offline
 builds can set `-Pworldline.distributionDir=/path/to/testkit`; both exact JARs
