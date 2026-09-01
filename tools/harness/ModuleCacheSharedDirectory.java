@@ -85,7 +85,8 @@ final class ModuleCacheSharedDirectory {
             ModuleCachePublication.Prepared prepared = ModuleCachePublication.prepare(fixture,
                     fixture.resolve(".worldline/cas-shadow/shared"),
                     java.util.List.of(new ModuleCachePublication.Module("fixture", entry)), java.util.List.of());
-            Path shared = fixture.resolve("shared-store"); publish(shared, prepared); publish(shared, prepared);
+            Path shared = fixture.resolve("shared-store"); concurrentPublish(shared, prepared);
+            publish(shared, prepared);
             KeyPair keys = KeyPairGenerator.getInstance("Ed25519").generateKeyPair();
             Path trust = fixture.resolve("index.trust"); ModuleCacheIndexTrust.sign(
                     prepared.index().path(), "shared", keys, trust);
@@ -104,6 +105,19 @@ final class ModuleCacheSharedDirectory {
                     "corrupt shared module object was accepted");
         } finally { SafeTreeDelete.delete(fixture); }
         System.out.println("  shared-directory module cache self-test: passed");
+    }
+
+    private static void concurrentPublish(Path shared, ModuleCachePublication.Prepared prepared)
+            throws Exception {
+        java.util.concurrent.ExecutorService pool = java.util.concurrent.Executors.newFixedThreadPool(2);
+        try {
+            java.util.concurrent.Future<?> first = pool.submit(() -> { publish(shared, prepared); return null; });
+            java.util.concurrent.Future<?> second = pool.submit(() -> { publish(shared, prepared); return null; });
+            first.get(); second.get();
+        } finally {
+            pool.shutdownNow(); require(pool.awaitTermination(10, java.util.concurrent.TimeUnit.SECONDS),
+                    "shared CAS publisher pool did not terminate");
+        }
     }
 
     private static void publish(Path root, ArtifactTransportPolicy.Candidate candidate) throws Exception {
