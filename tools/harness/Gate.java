@@ -129,7 +129,7 @@ public final class Gate {
         List<String> one = List.of("--runtime", "--smoke", "--orchestrator", "--pin-smokes",
                 "--smoke-plan", "--pinned-smoke", "--train-readiness", "--executor-tooling",
                 "--executor-environment", "--executor-filesystem", "--executor-candidate",
-                "--accept-legacy-smoke-baseline", "--cas-permits", "--cas-shadow");
+                "--accept-legacy-smoke-baseline", "--cas-permits", "--cas-shadow", "--evidence-explorer");
         List<String> pair = List.of("--new-milestone", "--candidate", "--candidate-ready",
                 "--lane-differential", "--milestone", "--smoke-id");
         boolean valid = arguments.length == 0 || arguments.length == 1
@@ -147,6 +147,8 @@ public final class Gate {
             return new DirectTool("ArtifactTransportPermitQuery", null);
         if (Arrays.equals(arguments, new String[] {"--cas-shadow"}))
             return new DirectTool("CasTransportShadow", null);
+        if (Arrays.equals(arguments, new String[] {"--evidence-explorer"}))
+            return new DirectTool("EvidenceExplorer", null);
         String main = arguments.length == 2 ? queryType(arguments[0]) : null;
         return main == null ? null : new DirectTool(main, arguments[1]);
     }
