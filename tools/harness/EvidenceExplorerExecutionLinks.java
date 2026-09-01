@@ -38,26 +38,29 @@ final class EvidenceExplorerExecutionLinks {
     }
 
     static Snapshot build(Path root) throws Exception {
-        Campaigns campaigns = campaigns(root.resolve(".worldline/reports/nightly-quality/plans"));
-        Path runs = root.resolve(".worldline/reports/nightly-quality/executor-runs");
+        List<Path> reports = List.of(root.resolve(".worldline/reports/nightly-quality"),
+                root.resolve(".worldline/reports/structural-instability"));
+        Campaigns campaigns = campaigns(reports.stream().map(path -> path.resolve("plans")).toList());
         List<Link> links = new ArrayList<>(); Set<String> nativeRequests = new HashSet<>();
         int partial = 0;
-        for (Path run : directories(runs)) {
-            Path plan = run.resolve("plan.json"), output = run.resolve("output");
-            if (!complete(plan, output)) { partial++; continue; }
-            Native value = nativeEvidence(run, plan, output);
-            require(nativeRequests.add(value.request), "duplicate native executor request");
-            Binding binding = campaigns.bindings.get(value.request);
-            links.add(new Link(value.request, binding == null ? null : binding.campaign,
-                    binding == null ? null : binding.plan, binding == null ? null : binding.shard,
-                    value.backend, value.version, value.termination, value.elapsed,
-                    value.peakMemory, value.peakProcesses));
-        }
+        for (Path report : reports) for (Path run : directories(report.resolve("executor-runs"))) {
+                Path plan = run.resolve("plan.json"), output = run.resolve("output");
+                if (!complete(plan, output)) { partial++; continue; }
+                Native value = nativeEvidence(run, plan, output);
+                require(nativeRequests.add(value.request), "duplicate native executor request");
+                Binding binding = campaigns.bindings.get(value.request);
+                links.add(new Link(value.request, binding == null ? null : binding.campaign,
+                        binding == null ? null : binding.plan, binding == null ? null : binding.shard,
+                        value.backend, value.version, value.termination, value.exitCode, value.elapsed,
+                        value.peakMemory, value.peakProcesses));
+            }
         links.sort(Comparator.comparing(Link::requestSha256));
         int linked = (int) links.stream().filter(value -> value.campaignId != null).count();
+        int failed = (int) links.stream().filter(value -> !"exited".equals(value.termination)
+                || !Long.valueOf(0L).equals(value.exitCode)).count();
         int dangling = (int) campaigns.bindings.keySet().stream().filter(value ->
                 !nativeRequests.contains(value)).count();
-        return new Snapshot(links.size(), linked, links.size() - linked, partial,
+        return new Snapshot(links.size(), linked, failed, links.size() - linked, partial,
                 campaigns.bindings.size(), dangling, campaigns.referencedLogs,
                 campaigns.orphanLogs, campaigns.missingLogs, List.copyOf(links));
     }
@@ -85,12 +88,29 @@ final class EvidenceExplorerExecutionLinks {
                             assignment.start(), assignment.endExclusive(), assignment.seed(), 5, 3L, 0,
                             false, EvidenceExplorerSnapshot.sha256(log))));
             CampaignArtifacts.publishReceipt(reports, campaign, receipt);
+            CampaignPlan structural = CampaignPlan.create("structural-instability", 9L, 1,
+                    List.of(new CampaignPlan.Workload("gate-self-test", "instability", 1)));
+            Path structuralReports = root.resolve(".worldline/reports/structural-instability");
+            CampaignArtifacts.publishPlan(structuralReports, structural);
+            CampaignPlan.Assignment structuralAssignment = structural.shard(0).assignments().get(0);
+            Path structuralLog = CampaignArtifacts.publishLog(structuralReports, structural, 0,
+                    "gate-self-test", "stable\n");
+            CampaignArtifacts.publishReceipt(structuralReports, structural,
+                    CampaignShardReceipt.create(structural, 0, "a".repeat(40), "b".repeat(40),
+                            null, List.of(new CampaignShardReceipt.Result("gate-self-test",
+                                    structuralAssignment.start(), structuralAssignment.endExclusive(),
+                                    structuralAssignment.seed(), 5, 3L, 0, false,
+                                    EvidenceExplorerSnapshot.sha256(structuralLog)))));
             Path extra = log.resolveSibling("orphan.log"); Files.writeString(extra, "orphan\n");
             Files.createDirectories(run.resolveSibling("run-partial"));
             Snapshot value = build(root);
-            require(value.nativeRuns == 1 && value.linkedRuns == 1 && value.partialNativeRuns == 1
-                    && value.referencedLogs == 1 && value.orphanLogs == 1 && value.missingLogs == 0,
+            require(value.nativeRuns == 1 && value.linkedRuns == 1 && value.failedNativeRuns == 0
+                    && value.partialNativeRuns == 1
+                    && value.referencedLogs == 2 && value.orphanLogs == 1 && value.missingLogs == 0,
                     "execution link classification drifted");
+            Files.writeString(output.resolve("receipt.json"), Files.readString(output.resolve(
+                    "receipt.json")).replace("\"exit_code\":0", "\"exit_code\":1"));
+            require(build(root).failedNativeRuns == 1, "failed native run was hidden");
             Files.writeString(output.resolve("stdout.log"), "changed\n");
             expectFailure(() -> build(root));
         } finally { SafeTreeDelete.delete(root); }
@@ -134,10 +154,10 @@ final class EvidenceExplorerExecutionLinks {
     }
     private static String q(String value) { return EvidenceExplorerFormat.quote(value); }
 
-    private static Campaigns campaigns(Path plans) throws Exception {
+    private static Campaigns campaigns(List<Path> planRoots) throws Exception {
         Map<String, Binding> bindings = new HashMap<>(); Set<Path> referenced = new HashSet<>();
         int missing = 0;
-        for (Path directory : directories(plans)) {
+        for (Path plans : planRoots) for (Path directory : directories(plans)) {
             Path planPath = directory.resolve("plan.json");
             if (!Files.exists(planPath, LinkOption.NOFOLLOW_LINKS)) continue;
             CampaignPlan plan = CampaignPlan.parse(read(planPath, 1L << 20).trim());
@@ -166,13 +186,12 @@ final class EvidenceExplorerExecutionLinks {
             }
         }
         int allLogs = 0;
-        for (Path directory : directories(plans)) for (Path shard : directories(directory.resolve("logs"))) {
-            for (Path log : files(shard)) {
-                require(log.getFileName().toString().matches("[a-z0-9-]+[.]log") && regular(log),
-                        "invalid campaign workload log");
-                allLogs++;
-            }
-        }
+        for (Path plans : planRoots) for (Path directory : directories(plans))
+            for (Path shard : directories(directory.resolve("logs"))) for (Path log : files(shard)) {
+                    require(log.getFileName().toString().matches("[a-z0-9-]+[.]log") && regular(log),
+                            "invalid campaign workload log");
+                    allLogs++;
+                }
         return new Campaigns(bindings, referenced.size(), allLogs - referenced.size(), missing);
     }
 
@@ -202,8 +221,14 @@ final class EvidenceExplorerExecutionLinks {
         require("worldline.execution-metrics.v2".equals(MiniJson.string(metrics, "schema"))
                 && "observational".equals(MiniJson.string(metrics, "telemetry_qualification")),
                 "native metrics authority drifted");
+        String termination = MiniJson.string(receipt, "termination");
+        Long exitCode = nullableInteger(receipt, "exit_code");
+        require(Set.of("exited", "crashed", "timed_out", "spawn_failed", "wait_failed",
+                "owner_exited").contains(termination), "unknown native termination");
+        require("exited".equals(termination) ? exitCode != null && exitCode >= 0L
+                : exitCode == null || "crashed".equals(termination), "native exit identity drifted");
         return new Native(request, backend, MiniJson.string(receipt, "executor_version"),
-                MiniJson.string(receipt, "termination"), MiniJson.integer(metrics, "elapsed_ms"),
+                termination, exitCode, MiniJson.integer(metrics, "elapsed_ms"),
                 nullableInteger(metrics, "peak_memory_bytes"), nullableInteger(metrics, "peak_processes"));
     }
 
@@ -255,14 +280,15 @@ final class EvidenceExplorerExecutionLinks {
     } catch (IllegalArgumentException expected) { } }
     @FunctionalInterface private interface Action { void run() throws Exception; }
 
-    record Snapshot(int nativeRuns, int linkedRuns, int orphanNativeRuns, int partialNativeRuns,
+    record Snapshot(int nativeRuns, int linkedRuns, int failedNativeRuns,
+            int orphanNativeRuns, int partialNativeRuns,
             int campaignBindings, int danglingCampaignBindings, int referencedLogs,
             int orphanLogs, int missingLogs, List<Link> links) { }
     record Link(String requestSha256, String campaignId, String campaignPlanSha256, Integer shardIndex,
-            String backend, String executorVersion, String termination, long elapsedMs,
+            String backend, String executorVersion, String termination, Long exitCode, long elapsedMs,
             Long peakMemoryBytes, Long peakProcesses) { }
     private record Binding(String campaign, String plan, int shard) { }
     private record Campaigns(Map<String, Binding> bindings, int referencedLogs, int orphanLogs, int missingLogs) { }
     private record Native(String request, String backend, String version, String termination,
-            long elapsed, Long peakMemory, Long peakProcesses) { }
+            Long exitCode, long elapsed, Long peakMemory, Long peakProcesses) { }
 }

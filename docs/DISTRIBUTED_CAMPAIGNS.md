@@ -85,3 +85,35 @@ no argv, paths, environment values, or campaign log content and appears in the
 live Evidence Explorer. Admission remains lower-only and reads exclusively
 from `candidate-worker` samples; campaign observations cannot increase or
 decrease worker admission.
+
+## Structural instability shards
+
+The second adapter repeats the deterministic Gate self-test without starting
+Minecraft. Generate its plan with campaign ID `structural-instability`, or run
+one bounded local shard after the canonical Gate:
+
+```text
+java -cp .worldline/gate/classes StructuralInstabilityCampaign \
+  --budget-seconds 120 --seed 173 --shard-count 2 --shard-index 0
+```
+
+`WORLDLINE_INSTABILITY_CASES` controls the reviewed case volume. Each case must
+exit successfully and emit the exact self-test success grammar; elapsed time is
+normalized out of the result root and remains observational. The workload log
+contains only the plan identity, assigned range and seed, executed/passed
+counts, and a normalized root digest. A timeout or unexpected output publishes
+a failed shard receipt and cannot masquerade as complete PASS coverage.
+
+Use the shared native dispatcher by naming the adapter explicitly:
+
+```text
+java tools/containers/RuntimeFabricLauncher.java CampaignExecutorCycle \
+  --campaign structural-instability --budget-seconds 120 --seed 173 \
+  --shard-count 2 --shard-index 0
+```
+
+The Nightly command remains backward compatible without `--campaign`. The
+Evidence Explorer correlates plans, receipts, workload logs, and native runs
+from both report families while preserving one combined orphan analysis.
+Every campaign descendant receives the same bounded 512-MiB JVM heap ceiling;
+the outer Rust Job or cgroup limit remains responsible for aggregate memory.
