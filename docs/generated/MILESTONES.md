@@ -618,6 +618,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m783-aero-chunk-scheduler-visual-latency` | EXECUTED | Aero chunk scheduler visual-latency classification |
 | `m784-aero-high-memory-cell-pages` | EXECUTED | Aero safe high-memory Cell Page qualification |
 | `m787-aero-loading-first-frame-integrity` | EXECUTED | Aero loading and cold first-frame integrity |
+| `m788-aero-ordered-template-performance` | EXECUTED | Aero ordered Cell Page template performance |
 | `b173-entity-persistence-envelope-cycle` | EXECUTED | official Beta 1.7.3 entity persistence-envelope subsystem |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |

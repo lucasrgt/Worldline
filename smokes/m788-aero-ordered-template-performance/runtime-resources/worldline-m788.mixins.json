@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "worldline.m788.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "OrderedTemplateFrameMixin",
+    "OrderedTemplateMinecraftMixin",
+    "OrderedTemplateCloudMixin",
+    "OrderedTemplateDistanceMixin",
+    "OrderedTemplateFlushMixin",
+    "OrderedTemplateMegaRendererMixin",
+    "OrderedTemplateQueueMixin",
+    "OrderedTemplateTranslucentMixin"
+  ],
+  "injectors": { "defaultRequire": 1 }
+}
