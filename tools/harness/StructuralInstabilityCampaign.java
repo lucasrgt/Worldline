@@ -8,6 +8,8 @@ import java.util.concurrent.TimeUnit;
 
 /** Repeats the structural Gate self-test in deterministic campaign shards. */
 public final class StructuralInstabilityCampaign {
+    private static final String CAMPAIGN_JAVA_OPTIONS = "-Dfile.encoding=UTF-8 "
+            + "-Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 -XX:-UsePerfData";
     private final Path root = Path.of("").toAbsolutePath().normalize();
     private final Path reports = root.resolve(".worldline/reports/structural-instability");
 
@@ -81,6 +83,9 @@ public final class StructuralInstabilityCampaign {
     static void selfTest() throws Exception {
         require(normalize("Gate self-test passed; serialized elapsed=17ms\r\n")
                 .equals("gate-self-test-pass"), "instability observation normalization drifted");
+        require(normalize("Picked up JAVA_TOOL_OPTIONS: " + CAMPAIGN_JAVA_OPTIONS
+                + "\nGate self-test passed; serialized elapsed=17ms\n")
+                .equals("gate-self-test-pass"), "campaign JVM banner normalization drifted");
         require(!normalize("Gate self-test failed\n").equals("gate-self-test-pass"),
                 "failed instability observation was accepted");
         System.out.println("structural instability campaign self-test passed");
@@ -101,6 +106,8 @@ public final class StructuralInstabilityCampaign {
     }
     private static String normalize(String output) {
         String value = output.replace("\r\n", "\n").strip();
+        String banner = "Picked up JAVA_TOOL_OPTIONS: " + CAMPAIGN_JAVA_OPTIONS + "\n";
+        if (value.startsWith(banner)) value = value.substring(banner.length());
         return value.matches("Gate self-test passed; serialized elapsed=[0-9]+ms")
                 ? "gate-self-test-pass" : "unexpected-" + digest(value);
     }

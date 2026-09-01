@@ -102,6 +102,7 @@ public final class ExecutionEnvironmentManifest {
         }
         copyNumeric(values, "WORLDLINE_NIGHTLY_FUZZ_CASES");
         copyNumeric(values, "WORLDLINE_NIGHTLY_MUTATION_CASES");
+        copyNumeric(values, "WORLDLINE_INSTABILITY_CASES");
         return new ExecutionEnvironmentManifest("nightly-campaign", values);
     }
 
