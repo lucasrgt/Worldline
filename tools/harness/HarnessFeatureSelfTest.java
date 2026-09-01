@@ -5,6 +5,7 @@ final class HarnessFeatureSelfTest {
         SafeTreeDelete.selfTest();
         CacheUsage.selfTest();
         NightlyQualityCampaign.selfTest();
+        MinimizationReplayCampaign.selfTest();
         MilestoneScaffold.selfTest();
         ChangelogCheck.selfTest();
         ReadmeStatus.selfTest();
