@@ -9,6 +9,9 @@ import java.nio.file.StandardOpenOption;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import worldline.analysis.CensusRunner;
+import worldline.testkit.B173EntityPersistenceScenario;
+import worldline.testkit.EntityPersistenceEvidence;
+import worldline.testkit.EntityPersistenceFixture;
 
 /** Captures the controlled b1.7.3 registry census into canonical files. */
 final class CensusCommand {
@@ -33,6 +36,14 @@ final class CensusCommand {
             output.println(section + ".sha256=" + Checks.sha256(bytes));
             output.println(section + ".file=" + file);
         }
+        EntityPersistenceEvidence persistence = EntityPersistenceFixture.execute(
+                new B173EntityPersistenceScenario("b1.7.3"));
+        Path persistenceFile = outDir.resolve("entity-persistence.wlevidence");
+        byte[] persistenceBytes = persistence.canonical().getBytes(StandardCharsets.UTF_8);
+        Files.write(persistenceFile, persistenceBytes, StandardOpenOption.CREATE_NEW,
+                StandardOpenOption.WRITE);
+        output.println("entity-persistence.sha256=" + Checks.sha256(persistenceBytes));
+        output.println("entity-persistence.file=" + persistenceFile);
         return 0;
     }
 }
