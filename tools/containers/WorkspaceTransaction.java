@@ -15,6 +15,16 @@ import java.util.List;
 final class WorkspaceTransaction {
     private WorkspaceTransaction() { }
 
+    public static void main(String[] arguments) {
+        try {
+            require(List.of(arguments).equals(List.of("--self-test")),
+                    "usage: java WorkspaceTransaction.java --self-test");
+            System.out.println("workspace transaction self-test passed; digest=" + selfTest());
+        } catch (Exception error) {
+            System.err.println("workspace transaction failed: " + error.getMessage()); System.exit(1);
+        }
+    }
+
     static String promote(Path staging, Path target) throws Exception {
         staging = clean(staging); target = clean(target);
         require(staging.getParent().equals(target.getParent()) && !staging.equals(target),
@@ -36,15 +46,16 @@ final class WorkspaceTransaction {
         return after;
     }
 
-    static void selfTest() throws Exception {
+    static String selfTest() throws Exception {
         Path root = Files.createTempDirectory("worldline-workspace-transaction-").toAbsolutePath().normalize();
         Path staging = root.resolve("staging"), target = root.resolve("target");
         Path collision = root.resolve("collision"), occupied = root.resolve("occupied");
+        String promoted;
         try {
             Files.createDirectories(staging.resolve("nested"));
             Files.writeString(staging.resolve("nested/value"), "immutable", StandardCharsets.UTF_8);
-            String digest = promote(staging, target);
-            require(digest.equals(digest(target)) && !Files.exists(staging), "workspace promotion drift");
+            promoted = promote(staging, target);
+            require(promoted.equals(digest(target)) && !Files.exists(staging), "workspace promotion drift");
             Files.createDirectories(collision); Files.writeString(collision.resolve("new"), "new");
             Files.createDirectories(occupied); Files.writeString(occupied.resolve("old"), "old");
             String retained = digest(occupied); expectFailure(() -> promote(collision, occupied));
@@ -54,6 +65,7 @@ final class WorkspaceTransaction {
             deleteKnown(target.resolve("nested/value"), target.resolve("nested"), target,
                     collision.resolve("new"), collision, occupied.resolve("old"), occupied, root);
         }
+        return promoted;
     }
 
     private static String digest(Path root) throws Exception {

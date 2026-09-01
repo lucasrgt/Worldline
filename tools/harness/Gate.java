@@ -38,13 +38,11 @@ public final class Gate {
             }
             new Gate().execute(arguments);
         } catch (Exception error) {
-            System.err.println("gate failed: " + error.getMessage());
-            System.exit(1);
+            System.err.println("gate failed: " + error.getMessage()); System.exit(1);
         }
     }
 
-    private void execute(String[] arguments) throws Exception {
-        validate(arguments);
+    private void execute(String[] arguments) throws Exception { validate(arguments);
         if (arguments.length == 2 && "--new-milestone".equals(arguments[0])) {
             Path classes = compileHarness();
             int exit = waitFor(new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
@@ -70,9 +68,11 @@ public final class Gate {
             if (exit != 0) System.exit(exit); return;
         }
         if (arguments.length == 1 && List.of("--executor-tooling", "--executor-environment",
-                "--executor-filesystem").contains(arguments[0])) {
+                "--executor-filesystem", "--workspace-transaction").contains(arguments[0])) {
             String main = switch (arguments[0]) { case "--executor-environment" -> "ExecutionEnvironmentManifest";
-                case "--executor-filesystem" -> "ExecutionFilesystemManifest"; default -> "ExecutorToolingCycle"; };
+                case "--executor-filesystem" -> "ExecutionFilesystemManifest";
+                case "--workspace-transaction" -> "WorkspaceTransactionQualification";
+                default -> "ExecutorToolingCycle"; };
             run(List.of(javaTool("java"), root.resolve("tools/containers/RuntimeFabricLauncher.java").toString(),
                     main), root, 180); return;
         }
@@ -132,6 +132,7 @@ public final class Gate {
         List<String> one = List.of("--runtime", "--smoke", "--orchestrator", "--pin-smokes",
                 "--smoke-plan", "--pinned-smoke", "--train-readiness", "--executor-tooling",
                 "--executor-environment", "--executor-filesystem", "--executor-candidate",
+                "--workspace-transaction",
                 "--accept-legacy-smoke-baseline", "--cas-permits", "--cas-shadow", "--evidence-explorer",
                 "--evidence-explorer-live", "--module-cache-shared-shadow", "--shared-cas-inventory");
         List<String> pair = List.of("--new-milestone", "--candidate", "--candidate-ready",

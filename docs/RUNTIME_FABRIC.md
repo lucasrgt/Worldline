@@ -201,3 +201,20 @@ stdout and stderr, telemetry, output manifests, canonical receipts, and the
 zero-descendant invariant for every milestone invocation. This promotion does
 not cover GUI lanes, retire the C# source, or strengthen Windows filesystem or
 network isolation claims.
+
+## Cross-platform workspace transaction qualification
+
+The deferred WPM materializer depends on one atomic no-replace workspace
+primitive. Its explicit structural qualification runs the same fixture on
+native Windows NTFS and inside WSL on Linux ext4, then requires one identical
+content digest:
+
+```text
+java tools/harness/Gate.java --workspace-transaction
+```
+
+This profile requires `wsl.exe`, a Linux JDK 21, `findmnt`, and an ext4
+`/var/tmp`. It is intentionally separate from the canonical Gate so ordinary
+Windows verification does not acquire a WSL dependency. The fixture proves
+atomic sibling promotion, collision preservation, digest equality, and known
+path cleanup. It does not yet implement a WPM install plan.

@@ -403,6 +403,14 @@ Evidence recorded for these slices:
   `458b7c9754023057b11ada8cc7b055c26c7ba3559f38d5a9f51d18106fbff32d`,
   atomically promotes and rehashes the complete bounded workspace, proves the
   legacy rollback path, leaves zero residue, and passes ten CSM ways plus NYA.
+- Worldline commit `7da3b7cfb` adds the explicit
+  `Gate --workspace-transaction` cross-platform qualification. Native Windows
+  NTFS and WSL Linux ext4 independently promote the same bounded staging tree,
+  reject replacement of an occupied sibling while preserving both trees, and
+  clean every known fixture path. Both platforms produce transaction digest
+  `610069ffc2153f8317847354a2ab673b316b8c30d2651f6abf27e912c639b995`.
+  The ordinary canonical Gate remains WSL-independent; only this explicit WPM
+  prerequisite profile requires a ready Linux JDK and ext4 filesystem.
 - Rust executor commit `803861d` publishes
   `worldline.execution-metrics.v2` with separately measured bootstrap and
   runtime durations. Windows and native-ext4 WSL suites pass formatting,
@@ -1855,6 +1863,13 @@ unchanged.
 The executor provides process isolation. The CAS provides immutable downloads.
 The input graph identifies the instance. Receipts explain every mutation.
 
+Status: the underlying no-replace workspace transaction is qualified on
+native Windows NTFS and WSL Linux ext4 through
+`Gate --workspace-transaction`, with byte-identical transaction evidence.
+WPM still needs its own full install-plan, provenance, and rollback fixtures;
+this result qualifies the platform primitive rather than the deferred package
+manager itself.
+
 ### 13.9 Legal and distribution boundary
 
 - WPM never downloads or distributes official Minecraft artifacts as package
@@ -1916,8 +1931,9 @@ WPM implementation starts only when all of the following are true:
 - Worldline can verify a package-manager-created fixture instance without
   weakening official-artifact policy.
 
-Status: the one-lane Rust-default prerequisite is now satisfied by the
-Windows `server-headless` pool. The complete WPM prerequisite gate remains
+Status: the one-lane Rust-default prerequisite is satisfied by the Windows
+`server-headless` pool, and the transactional workspace primitive is qualified
+on Windows NTFS and Linux ext4. The complete WPM prerequisite gate remains
 closed until every other item above is independently qualified.
 
 ## 14. Verification matrix
