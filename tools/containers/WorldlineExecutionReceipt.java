@@ -27,7 +27,8 @@ final class WorldlineExecutionReceipt {
         ExecutionJson.exactKeys(receipt, RECEIPT_FIELDS, "execution receipt");
         require("worldline.execution-receipt.v1".equals(string(receipt, "schema")), "receipt schema drift");
         require(plan.requestSha256().equals(string(receipt, "request_sha256")), "receipt request digest drift");
-        require(!string(receipt, "executor_version").isBlank(), "missing executor version");
+        String executorVersion = string(receipt, "executor_version");
+        require(!executorVersion.isBlank(), "missing executor version");
         require(plan.isolation().backend().equals(string(receipt, "backend")), "receipt backend drift");
         String termination = string(receipt, "termination"); require(TERMINATIONS.contains(termination), "unknown termination");
         Long exitCode = nullableLong(receipt, "exit_code"); validateTermination(termination, exitCode);
@@ -46,15 +47,16 @@ final class WorldlineExecutionReceipt {
         if (!plan.isolation().backend().equals("direct")) require(Long.valueOf(0).equals(descendants),
                 "contained receipt did not prove an empty process group");
         else require(descendants == null, "direct backend claimed descendant accounting");
-        nullableString(receipt, "error"); PhaseMetrics metrics = verifyMetrics(plan, receipt);
+        nullableString(receipt, "error"); Metrics metrics = verifyMetrics(plan, receipt);
         byte[] canonical = receiptBytes(receipt); require(java.util.Arrays.equals(Files.readAllBytes(path), canonical),
                 "receipt is not canonically encoded");
+        ExecutionTelemetry telemetry = metrics.telemetry(executorVersion, plan.isolation().backend(),
+                termination, stdoutObserved, stderrObserved, stdoutTruncated, stderrTruncated);
         return new Verified(exitCode, termination, stdoutObserved, stderrObserved,
-                stdoutTruncated, stderrTruncated, descendants, metrics.elapsed(),
-                metrics.bootstrap(), metrics.runtime());
+                stdoutTruncated, stderrTruncated, descendants, telemetry);
     }
 
-    private static PhaseMetrics verifyMetrics(WorldlineExecutionPlan plan,
+    private static Metrics verifyMetrics(WorldlineExecutionPlan plan,
             Map<String, Object> receipt) throws Exception {
         Path path = plan.outputs().metrics(); Map<String, Object> value = ExecutionJsonParser.object(
                 Files.readString(path, StandardCharsets.UTF_8));
@@ -107,7 +109,9 @@ final class WorldlineExecutionReceipt {
         require("observational".equals(string(value, "telemetry_qualification")), "telemetry became qualifying");
         require(java.util.Arrays.equals(Files.readAllBytes(path), metricBytes(value)),
                 "metrics are not canonically encoded");
-        return new PhaseMetrics(elapsed, bootstrap, runtime);
+        return new Metrics(elapsed, bootstrap, runtime, peakMemory, measurement,
+                peakProcesses, peakTasks, user, kernel, read, written, memoryEvents,
+                oomKills, taskEvents, throttled);
     }
 
     private static void validateTermination(String termination, Long exitCode) {
@@ -165,6 +169,21 @@ final class WorldlineExecutionReceipt {
 
     record Verified(Long exitCode, String termination, long stdoutObservedBytes,
             long stderrObservedBytes, boolean stdoutTruncated, boolean stderrTruncated,
-            Long descendantsRemaining, long elapsedMs, long bootstrapMs, long runtimeMs) { }
-    private record PhaseMetrics(long elapsed, long bootstrap, long runtime) { }
+            Long descendantsRemaining, ExecutionTelemetry telemetry) {
+        long elapsedMs() { return telemetry.elapsedMs(); }
+        long bootstrapMs() { return telemetry.bootstrapMs(); }
+        long runtimeMs() { return telemetry.runtimeMs(); }
+    }
+    private record Metrics(long elapsed, long bootstrap, long runtime, Long peakMemory,
+            String measurement, Long peakProcesses, Long peakTasks, Long user, Long kernel,
+            Long read, Long written, Long memoryEvents, Long oomKills, Long taskEvents,
+            Long throttled) {
+        ExecutionTelemetry telemetry(String version, String backend, String termination,
+                long stdout, long stderr, boolean stdoutTruncated, boolean stderrTruncated) {
+            return new ExecutionTelemetry(version, backend, termination, elapsed, bootstrap,
+                    runtime, peakMemory, measurement, peakProcesses, peakTasks, user, kernel,
+                    read, written, memoryEvents, oomKills, taskEvents, throttled, stdout, stderr,
+                    stdoutTruncated, stderrTruncated);
+        }
+    }
 }

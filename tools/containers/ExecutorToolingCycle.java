@@ -80,10 +80,14 @@ public final class ExecutorToolingCycle {
                     "legacy/Rust/rollback observable output differential");
             filesystem.verifyOutput();
             String transaction = WorkspaceTransaction.promote(run, published);
+            String telemetry = ExecutionTelemetryHistory.record(
+                    root.resolve(".worldline/executor-telemetry"), "tooling", "gate-self-test",
+                    "structural-windows-job", result.telemetry());
             System.out.println("Rust executor tooling cycle passed; command=Gate --self-test; request="
                     + plan.requestSha256() + "; normalized="
                     + ExecutionJson.sha256(expected.getBytes(StandardCharsets.UTF_8))
-                    + "; transaction=" + transaction + "; rollback=legacy-windows-job");
+                    + "; transaction=" + transaction + "; telemetry=" + telemetry
+                    + "; rollback=legacy-windows-job");
         } finally { delete(root, run); delete(root, published); Files.deleteIfExists(parent); }
     }
 
