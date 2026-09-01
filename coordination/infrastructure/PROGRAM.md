@@ -411,6 +411,17 @@ Evidence recorded for these slices:
   `610069ffc2153f8317847354a2ab673b316b8c30d2651f6abf27e912c639b995`.
   The ordinary canonical Gate remains WSL-independent; only this explicit WPM
   prerequisite profile requires a ready Linux JDK and ext4 filesystem.
+- Worldline commit `f65c241fe` closes the package-manager fixture prerequisite
+  without implementing WPM itself. A real `WorldlineCli init --host-only`
+  project is wrapped in the strict `worldline.wpm-fixture-lock.v1` test
+  envelope, then `worldline doctor` verifies canonical fields, one bounded
+  package payload, its exact SHA-256 digest, the b1.7.3 runtime identity, and an
+  `external-only` official-artifact policy. Unknown or duplicate fields,
+  noncanonical paths, links, content corruption, embedded-artifact claims, and
+  conventional local oracle JARs fail closed. The fixture contains no official
+  bytes; TestKit API and runner pins are
+  `8a54dab3199a38ac1ae5f6f4180d790ab19590157092f95edda5d9e37bb86834`
+  and `6a0f1fa950a2e5b9441e8e30f7025d5cfce22736badf7111ee0dd959565fd2a6`.
 - Rust executor commit `803861d` publishes
   `worldline.execution-metrics.v2` with separately measured bootstrap and
   runtime durations. Windows and native-ext4 WSL suites pass formatting,
@@ -1866,9 +1877,13 @@ The input graph identifies the instance. Receipts explain every mutation.
 Status: the underlying no-replace workspace transaction is qualified on
 native Windows NTFS and WSL Linux ext4 through
 `Gate --workspace-transaction`, with byte-identical transaction evidence.
-WPM still needs its own full install-plan, provenance, and rollback fixtures;
-this result qualifies the platform primitive rather than the deferred package
-manager itself.
+Worldline doctor also recognizes the deliberately narrow
+`worldline.wpm-fixture-lock.v1` test envelope produced around an actual
+host-only initialized project. It verifies the package payload by content,
+requires external-only official artifacts, and rejects local oracle JARs.
+WPM still needs its production lock schema, resolver, full install plan,
+provenance model, and rollback fixtures; these results qualify prerequisites
+rather than the deferred package manager itself.
 
 ### 13.9 Legal and distribution boundary
 
@@ -1931,10 +1946,15 @@ WPM implementation starts only when all of the following are true:
 - Worldline can verify a package-manager-created fixture instance without
   weakening official-artifact policy.
 
-Status: the one-lane Rust-default prerequisite is satisfied by the Windows
-`server-headless` pool, and the transactional workspace primitive is qualified
-on Windows NTFS and Linux ext4. The complete WPM prerequisite gate remains
-closed until every other item above is independently qualified.
+Status: every listed prerequisite is now independently satisfied. The Windows
+`server-headless` pool supplies the first Rust-default runtime lane; signed,
+content-addressed transport and executable prohibited-artifact checks are
+qualified; authoritative input graphs explain affecting changes; the
+transaction primitive passes on Windows NTFS and Linux ext4; and Worldline
+doctor verifies a package-manager-created fixture under an external-only
+official-artifact policy. WPM implementation may now begin as a separate
+program. This status does not claim that a WPM resolver, registry, production
+lockfile, or installer already exists.
 
 ## 14. Verification matrix
 
