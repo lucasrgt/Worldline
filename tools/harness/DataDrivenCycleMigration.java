@@ -114,10 +114,9 @@ final class DataDrivenCycleMigration {
             generic++; String stem = "cycle." + smoke.id + ".";
             String current = cache.fingerprint(smoke); DataDrivenCyclePlan plan = DataDrivenCyclePlan.load(root, smoke.id);
             SmokePins.Entry existingPin = existing.entry(smoke.id); String recordedPlan = manifest.getProperty(stem + "plan_sha256");
-            SmokePins.Entry newPlanPin = null;
+            SmokePins.Entry newPlanPin = null; String recordedEvidence = manifest.getProperty(stem + "evidence_sha256");
             boolean trainCurrent = existingPin != null
                     && TrainPinCheck.carriesCurrent(train, smoke.id, existingPin, current);
-            String recordedEvidence = manifest.getProperty(stem + "evidence_sha256");
             if (trainCurrent && !existingPin.evidence().equals(recordedEvidence)) {
                 manifest.setProperty(stem + "evidence_sha256", existingPin.evidence());
                 importedPlans++; }
