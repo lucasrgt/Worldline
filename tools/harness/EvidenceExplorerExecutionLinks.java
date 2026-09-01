@@ -97,9 +97,9 @@ final class EvidenceExplorerExecutionLinks {
     }
 
     private static String fixturePlan(Path root, Path output) {
-        return "{\"schema\":\"worldline.execution-plan.v1\",\"job_id\":\"fixture\"," 
+        return "{\"schema\":\"worldline.execution-plan.v1\",\"job_id\":\"fixture\","
                 + "\"working_directory\":" + q(root.toString()) + ",\"argv\":[\"java\"],"
-                + "\"environment\":{},\"limits\":{},\"isolation\":{" 
+                + "\"environment\":{},\"limits\":{},\"isolation\":{"
                 + "\"backend\":\"windows_job\",\"network\":\"inherit\",\"owner_pid\":1},"
                 + "\"filesystem\":{},\"outputs\":{\"root\":" + q(output.toString())
                 + ",\"stdout\":" + q(output.resolve("stdout.log").toString())
