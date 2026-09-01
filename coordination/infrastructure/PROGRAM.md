@@ -204,6 +204,18 @@ Completed foundation slices:
   `f6a1b1e423bdac97ce94868b8f597ae22f008705442884c6627207c32b0d3e4d`.
   The exact canonical Gate passes cold (`113621ms < 240000ms`), CSM checks
   seven ways with no deviations, and NYA passes.
+- Worldline commit `8709ff93c` adds the advanced hostile boundary matrix to
+  the same structural tooling cycle. Legacy and Rust agree when an observed
+  owner exits after the child announces readiness, when an active-process
+  limit of one rejects a real child launch, and across four simultaneous
+  legacy/Rust job pairs with isolated outputs and receipts. The advanced
+  evidence digest is
+  `570493952dde00db21e3f3f757291357014089c54e8174b49b0742258ec6cacc`;
+  the complete tooling request is
+  `f768ec0345d2963b050c1c6d9b1eaa1e533d7fb6c6117894081b4677205b3fbf`.
+  Every contained job proves zero remaining descendants. The canonical Gate
+  passes cold (`18808ms < 240000ms`) and hot (`2642ms < 7000ms`), CSM checks
+  eight ways with no deviations, and NYA passes.
 - a secret-free `worldline.execution-environment-manifest.v1` in Worldline
   commits `38ee643ab` and `69797aede`. `Gate --executor-environment` exposes
   only variable names, set/inherit/remove modes, and behavior/tool/observation
@@ -688,9 +700,10 @@ schema and platform mechanisms. Worldline commit `d0f0f1fc1` adds qualifying
 legacy/Rust coverage for seven observable process boundaries: normal/nonzero
 exit, separate streams, pipe-scale output, Unicode/spaced argv, explicit
 environment removal/injection, a three-process timeout tree, and restart after
-that tree is abandoned. Crash signals, abrupt owner loss, limit exhaustion,
-concurrent jobs, partial receipts, and interrupted executor shutdown remain
-pending as Worldline-level qualifying differentials.
+that tree is abandoned. Commit `8709ff93c` adds owner loss, deliberate
+active-process exhaustion, and four concurrent legacy/Rust pairs. Crash
+signals, partial receipts, and interrupted executor shutdown remain pending as
+Worldline-level qualifying boundaries.
 
 ### A2. Windows backend
 
@@ -742,9 +755,10 @@ Status: the basic live shadow and tooling promotion remain qualified, and
 commit `d0f0f1fc1` adds a deterministic seven-scenario legacy/Rust matrix with
 exact termination and output comparison. Timeout cleanup orders descendants
 by ancestry depth, kills children before parents, confirms death, and proves a
-subsequent clean execution. Applied memory/process limits are present on every
-fixture but deliberate exhaustion and concurrent-job differentials remain
-pending.
+subsequent clean execution. Commit `8709ff93c` proves owner-loss containment,
+deliberate active-process exhaustion, and receipt/output independence across
+four simultaneous legacy/Rust pairs. Crash and interrupted-executor atomicity
+remain pending at the Worldline qualifying boundary.
 
 ### A5. Tooling-cycle promotion
 
@@ -761,6 +775,10 @@ backend selection.
 Commit `d0f0f1fc1` extends the same qualifying command with the seven hostile
 differentials before the original baseline/Rust/rollback sequence. The
 extension remains structural and never starts Minecraft.
+
+Commit `8709ff93c` follows those fixtures with owner-loss, process-limit, and
+four-pair concurrency differentials. It remains structural, runs no official
+runtime, and preserves the original legacy rollback after every added check.
 
 The Candidate profile is qualified at Worldline commit `e9ff4e55a` by
 `Gate --executor-candidate`. It compares legacy and Rust Windows Jobs over a
