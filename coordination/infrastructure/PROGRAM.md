@@ -109,6 +109,16 @@ Completed foundation slices:
   that pass the content validator and belong to the exact tracked-file set;
   untracked candidates, repository-root escapes, and duplicate digests fail
   closed.
+- an exact, versioned Rust CAS protocol handshake in executor commit
+  `fa9bdcb`. `worldline-cas protocol` identifies the permit schema and
+  loopback transport without inference, while `serve` publishes one flushed,
+  machine-readable ephemeral listen address before accepting requests.
+- an explicit Java-to-Rust transport shadow in Worldline commits `cc7f3c7a5`
+  and `f789b210f`. `Gate --cas-shadow` verifies the exact Rust protocol,
+  generates policy permits, uploads one authorized tracked proof, hydrates a
+  fresh store, materializes it, and independently repeats Worldline content,
+  class, size, digest, and byte-equality validation. It never starts Minecraft,
+  mutates the canonical cache, or treats transport success as behavioral PASS.
 - a secret-free `worldline.smoke-input-graph.v1` read model and
   `Gate --input-graph ID` query in Worldline commits `423a322d3`, `16b9de40a`,
   and `c49b6af20`. The graph remains shadow-only and the legacy fingerprint
@@ -155,6 +165,12 @@ Evidence recorded for these slices:
   carries no paths or behavior content, reports no CSM RTW deviations, passes
   NYA, and passes the canonical Gate (`cold 181197ms < 240000ms`) with zero
   pending train proofs.
+- the exact Java-to-Rust shadow transported and revalidated the authorized
+  object `sha256=440c21f7aaeae78cf0771594589cf05299f4af1aa6509511fe8599cd5306f709`
+  at 225 bytes, left zero entries under the shadow workspace after cleanup,
+  and fails closed when the exact Rust binary or protocol is absent. Its clean
+  branch reports no CSM RTW deviations, passes NYA, and passes canonical Gate
+  (`cold 141899ms < 240000ms`) with 624 current train proofs and zero pending.
 - all 624 qualification fingerprints are complete, distinct, and byte-equal
   to independently assembled graph roots; graph JSON redacts environment and
   system-property values, provider and train transitions are sealed, CSM has
@@ -181,10 +197,14 @@ hostile-fixture coverage, broader legacy differentials, and all qualifying
 promotions remain pending. Artifact classification covers only tracked smoke
 pin envelopes; source-derived objects and sanitized diagnostics remain
 disabled. Permit-bound local transport and Worldline permit production exist,
-but automatic upload, hydration lookup integration, authenticated remote deployment, and S3 storage
-remain disabled. The input graph covers qualification identities in
-dual mode, current-tree dependents, cache decisions, and cross-commit node
-differences, but does not yet own cache identity.
+and an explicit end-to-end shadow proves their boundary, but automatic cache
+lookup, upload, hydration, authenticated remote deployment, and S3 storage
+remain disabled. Tracked pin envelopes are already available through Git, so
+they do not yet establish a useful remote cache-miss path; production adoption
+requires a separately reviewed portable evidence family. The input graph
+covers qualification identities in dual mode, current-tree dependents, cache
+decisions, and cross-commit node differences, but does not yet own cache
+identity.
 A1 through A4, B3, and D1 through D2 are therefore in progress; A5 and remote
 transport deployment have not started.
 
