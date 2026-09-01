@@ -112,19 +112,15 @@ final class DataDrivenCycleMigration {
                 pins.add(requiredEntry(existing, smoke.id)); continue;
             }
             generic++; String stem = "cycle." + smoke.id + ".";
-            String current = cache.fingerprint(smoke);
-            DataDrivenCyclePlan plan = DataDrivenCyclePlan.load(root, smoke.id);
-            SmokePins.Entry existingPin = existing.entry(smoke.id);
-            String recordedPlan = manifest.getProperty(stem + "plan_sha256");
+            String current = cache.fingerprint(smoke); DataDrivenCyclePlan plan = DataDrivenCyclePlan.load(root, smoke.id);
+            SmokePins.Entry existingPin = existing.entry(smoke.id); String recordedPlan = manifest.getProperty(stem + "plan_sha256");
             SmokePins.Entry newPlanPin = null;
-            boolean trainCurrent = existingPin != null && TrainPinCheck.carriesCurrent(
-                    train, smoke.id, existingPin, current);
-            if (trainCurrent
-                    && !existingPin.evidence().equals(manifest.getProperty(
-                            stem + "evidence_sha256"))) {
+            boolean trainCurrent = existingPin != null
+                    && TrainPinCheck.carriesCurrent(train, smoke.id, existingPin, current);
+            String recordedEvidence = manifest.getProperty(stem + "evidence_sha256");
+            if (trainCurrent && !existingPin.evidence().equals(recordedEvidence)) {
                 manifest.setProperty(stem + "evidence_sha256", existingPin.evidence());
-                importedPlans++;
-            }
+                importedPlans++; }
             if (recordedPlan == null) {
                 require(DataDrivenRefreshEvidence.unchangedMilestone(root, smoke.id),
                         "unregistered generic plan changed with the shared runner: " + smoke.id);
@@ -149,9 +145,8 @@ final class DataDrivenCycleMigration {
                 manifest.setProperty(stem + "plan_sha256", plan.fingerprint());
                 manifest.setProperty(stem + "evidence_sha256", prior.evidence());
             } else if (!plan.fingerprint().equals(recordedPlan)) {
-                require((sharedProcessRefactor || trainCurrent) && existingPin != null
-                                && DataDrivenRefreshEvidence.unchangedMilestone(root, smoke.id),
-                        "plan changed outside the reviewed migration: " + smoke.id);
+                require((sharedProcessRefactor || trainCurrent) && existingPin != null &&
+                        DataDrivenRefreshEvidence.unchangedMilestone(root, smoke.id), "plan changed outside the reviewed migration: " + smoke.id);
                 manifest.setProperty(stem + "plan_sha256", plan.fingerprint());
                 manifest.setProperty(stem + "evidence_sha256", existingPin.evidence());
             }
