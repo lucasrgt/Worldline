@@ -369,6 +369,21 @@ Evidence recorded for these slices:
   `549eaf87c06244b563853527e9d092636ce13378c41bea002a9b90f102c70abd`,
   and a successful legacy rollback. CSM reports no applicable deviations and
   NYA passes.
+- Worldline commit `5d75d057c` adds a closed, canonical, content-addressed
+  local history for verified executor telemetry. Samples are grouped by lane,
+  workload ID, executor version, backend, OS, architecture, runtime capability,
+  and termination; rebuilt profiles retain duration, memory, process/task,
+  CPU, I/O, limit-event, output-volume, and truncation aggregates while
+  preserving unavailable platform metrics as `null`. The schema contains no
+  argv, path, environment, stdout/stderr content, or official-artifact field.
+  The exact canonical Gate passes (`cold 120345ms < 240000ms`) with 624 current
+  train proofs and zero pending. A clean tooling differential produces request
+  digest `9e93797a11fb674439de94e1a02eea098995a2e0cddd8990fa0e437f827468f1`,
+  transaction digest
+  `959ff65f7b553a46cc82976a62eb76d3197bca2d68a25bec1206bc331e8d2442`,
+  and telemetry object digest
+  `04218c510c455c202811010efb71bc32c36cec5ef308ef890de1b5ecee89893e`.
+  CSM checks ten ways with no deviations and NYA passes.
 - the canonical Worldline Gate reaches `verify passed` with all content stages
   restored, but the host currently violates the unchanged hot latency SLO
   (`20361ms >= 7000ms` on the latest run). The budget was not weakened.
@@ -713,6 +728,12 @@ aggregation and runtime-specific server and GUI profiles remain pending.
 
 Aggregate by lane, smoke ID, executor version, OS, architecture, and relevant
 runtime capability. Measurements remain local or sanitized before upload.
+
+Status: qualified for the structural Windows tooling profile at Worldline
+commit `5d75d057c`. Local samples are immutable by content digest, strictly
+bounded, canonically reparsed, and rebuild into deterministic profile groups.
+Only sanitized observational fields are retained. Server, GUI, smoke-specific,
+and cross-host histories remain pending; no history upload is enabled.
 
 ### C3. Conservative admission
 
