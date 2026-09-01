@@ -63,5 +63,7 @@ final class AdaptiveParallelism {
         if (!value) throw new IllegalStateException(message);
     }
     record Decision(int width, int capacity, int processors, long freeBytes, long workerBytes,
-            long configuredWorkerBytes, long reserveBytes, int runtimeParallelism) { }
+            long configuredWorkerBytes, long reserveBytes, int runtimeParallelism) {
+        boolean telemetryLowered() { return workerBytes > configuredWorkerBytes; }
+    }
 }
