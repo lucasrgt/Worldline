@@ -92,8 +92,12 @@ Completed foundation slices:
 - an immutable local SHA-256 object store with streaming publication, atomic
   create-if-absent semantics, corruption checks, fresh materialization, and
   convergent concurrent writers in executor commit `25205aa`. This is a local
-  CAS primitive only; remote transport remains forbidden until D1 artifact
-  classification is executable.
+  CAS primitive only and does not itself authorize remote transport.
+- a fail-closed Java artifact transport catalog and content validator in
+  Worldline commits `7a0f7a2b5` and `7d8aecce7`. Only canonical tracked smoke
+  pin envelopes are remotely eligible; module, test, stage, smoke, observation,
+  and diagnostic caches remain local-private, while official and mapped
+  runtimes are explicitly forbidden.
 
 Evidence recorded for these slices:
 
@@ -106,6 +110,10 @@ Evidence recorded for these slices:
   delegated Linux `systemd-run` scope;
 - local CAS format, Clippy, round-trip, corruption, overwrite, and eight-writer
   convergence fixtures pass on Windows and Ubuntu under WSL2;
+- artifact classification rejects unknown families, directory escapes,
+  restricted families, unknown policy fields, and binary payloads renamed as
+  proof envelopes; the exact clean Worldline branch passes the canonical Gate
+  (`cold 138151ms < 240000ms`) with 624 current train proofs and zero pending.
 - the canonical Worldline Gate reaches `verify passed` with all content stages
   restored, but the host currently violates the unchanged hot latency SLO
   (`20361ms >= 7000ms` on the latest run). The budget was not weakened.
@@ -113,8 +121,10 @@ Evidence recorded for these slices:
 Current boundaries remain honest: Linux mount and PID namespaces,
 loopback-only policy, Windows filesystem/network isolation, complete
 hostile-fixture coverage, broader legacy differentials, and all qualifying
-promotions remain pending. A1 through A4 are therefore in progress; A5 and
-later have not started.
+promotions remain pending. Artifact classification covers only tracked smoke
+pin envelopes; source-derived objects, sanitized diagnostics, transport, and
+hydration remain disabled. A1 through A4 and D1 are therefore in progress; A5
+and later transport work have not started.
 
 ## 2. Program principles
 
