@@ -1,7 +1,9 @@
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
 import java.time.Instant;
+import java.util.HexFormat;
 import java.util.List;
 
 /** Authority separation, queue inspection, admission, and escaping fixtures. */
@@ -34,7 +36,10 @@ final class EvidenceExplorerLiveTest {
             String json = EvidenceExplorerLiveFormat.json(snapshot);
             String html = EvidenceExplorerLiveFormat.html(snapshot);
             require(json.contains("\"verdict_authority\":false")
+                    && json.contains("\"schema\":\"worldline.evidence-explorer-live.v3\"")
                     && json.contains("\"ephemeral_state_included\":true")
+                    && json.contains("\"regression_triage_cases\":1")
+                    && html.contains("repeat-exact-profile")
                     && html.contains("unsafe &lt;reason&gt;") && !html.contains("unsafe <reason>"),
                     "live overlay authority or escaping drift");
             System.out.println("  evidence explorer live self-test: passed");
@@ -42,7 +47,29 @@ final class EvidenceExplorerLiveTest {
     }
 
     private static EvidenceExplorerLiveSnapshot snapshot(EvidenceExplorerLiveSnapshot.Queue queue) {
-        String execution = "{\"schema\":\"worldline.execution-evidence-overlay.v2\","
+        List<String> baseline = digests(1), recent = digests(4);
+        String material = "schema=worldline.execution-regression-triage-case.v1\n"
+                + "metric=elapsed_ms\nthreshold=150\nlane=campaign\nworkload=fixture-profile\n"
+                + "executor=0.1.0\nbackend=windows_job\nos=windows\narchitecture=amd64\n"
+                + "runtime_capability=campaign-worker\ntermination=exited\nkind=performance-increase\n"
+                + "baseline=" + String.join(",", baseline) + "\nrecent="
+                + String.join(",", recent) + "\n";
+        String triageJson = "{\"schema\":\"worldline.execution-regression-triage.v1\","
+                + "\"verdict_authority\":false,\"admission_effect\":false,"
+                + "\"automatic_execution\":false,\"metric\":\"elapsed_ms\","
+                + "\"change_threshold_percent\":150,\"scope_termination\":\"exited\","
+                + "\"case_count\":1,"
+                + "\"performance_increase_count\":1,\"data_quality_count\":0,\"cases\":[{"
+                + "\"id\":\"" + sha256(material) + "\",\"lane\":\"campaign\","
+                + "\"workload_id\":\"fixture-profile\",\"executor_version\":\"0.1.0\","
+                + "\"backend\":\"windows_job\",\"os\":\"windows\",\"architecture\":\"amd64\","
+                + "\"runtime_capability\":\"campaign-worker\",\"kind\":\"performance-increase\","
+                + "\"disposition\":\"investigation-candidate\",\"sample_count\":6,"
+                + "\"baseline_median_ms\":100,\"recent_median_ms\":160,\"ratio_percent\":160,"
+                + "\"baseline_sample_sha256\":" + strings(baseline)
+                + ",\"recent_sample_sha256\":" + strings(recent) + ","
+                + "\"suggested_next_step\":\"repeat-exact-profile\"}]}";
+        String execution = "{\"schema\":\"worldline.execution-evidence-overlay.v3\","
                 + "\"telemetry\":{\"schema\":\"worldline.execution-telemetry-profiles.v1\","
                 + "\"sample_count\":0,\"profiles\":[]},\"failure_clusters\":{"
                 + "\"schema\":\"worldline.execution-failure-clusters.v1\","
@@ -51,9 +78,32 @@ final class EvidenceExplorerLiveTest {
                 + "\"verdict_authority\":false,\"admission_effect\":false,\"metric\":\"elapsed_ms\","
                 + "\"baseline_window_samples\":3,\"recent_window_samples\":3,"
                 + "\"change_threshold_percent\":150,\"signal_count\":0,\"increase_count\":0,"
-                + "\"insufficient_history_count\":0,\"signals\":[]}}";
+                + "\"insufficient_history_count\":0,\"signals\":[]},\"regression_triage\":"
+                + triageJson + "}";
+        EvidenceExplorerRegressionTriage.Snapshot triage = EvidenceExplorerRegressionTriage.parse(
+                MiniJson.object(triageJson));
+        try {
+            EvidenceExplorerRegressionTriage.parse(MiniJson.object(
+                    triageJson.replace(sha256(material), "c".repeat(64))));
+            throw new IllegalStateException("changed regression triage ID was accepted");
+        } catch (IllegalArgumentException expected) { }
+        EvidenceExplorerLiveSnapshot.Signal signal = new EvidenceExplorerLiveSnapshot.Signal(
+                "fixture-profile", "0.1.0", "windows_job", "windows", "amd64", 6L, 3L, 3L,
+                100L, 160L, 160L, "increase");
+        EvidenceExplorerLiveSnapshot.Performance performance =
+                new EvidenceExplorerLiveSnapshot.Performance("elapsed_ms", 150L,
+                        1L, 1L, 0L, List.of(signal));
+        EvidenceExplorerRegressionTriage.requireMatches(performance, triage);
+        EvidenceExplorerLiveSnapshot.Signal mismatch = new EvidenceExplorerLiveSnapshot.Signal(
+                "fixture-profile", "0.1.0", "windows_job", "windows", "amd64", 6L, 3L, 3L,
+                100L, 161L, 161L, "increase");
+        try {
+            EvidenceExplorerRegressionTriage.requireMatches(new EvidenceExplorerLiveSnapshot.Performance(
+                    "elapsed_ms", 150L, 1L, 1L, 0L, List.of(mismatch)), triage);
+            throw new IllegalStateException("mismatched regression triage was accepted");
+        } catch (IllegalArgumentException expected) { }
         EvidenceExplorerLiveSnapshot.Execution values = new EvidenceExplorerLiveSnapshot.Execution(
-                execution, 0, 0, new EvidenceExplorerLiveSnapshot.Performance(0, 0, 0, List.of()));
+                execution, 0, 0, performance, triage);
         EvidenceExplorerLiveSnapshot.CacheDecision cache = new EvidenceExplorerLiveSnapshot.CacheDecision(
                 "sample", "a".repeat(64), true, false, true, "reuse-pin",
                 "unsafe <reason>", null);
@@ -68,6 +118,18 @@ final class EvidenceExplorerLiveTest {
                 sequence, pid, sequence);
         Files.writeString(root.resolve(name), "pid=" + pid + "\nprocess-start=" + started
                 + "\ncreated=" + Instant.ofEpochMilli(created) + "\n", StandardCharsets.UTF_8);
+    }
+    private static List<String> digests(int start) {
+        return java.util.stream.IntStream.range(start, start + 3).mapToObj(
+                value -> "%064x".formatted(value)).toList();
+    }
+    private static String strings(List<String> values) {
+        return "[\"" + String.join("\",\"", values) + "\"]";
+    }
+    private static String sha256(String value) {
+        try { return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(
+                value.getBytes(StandardCharsets.UTF_8))); }
+        catch (java.security.NoSuchAlgorithmException error) { throw new IllegalStateException(error); }
     }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalArgumentException(message);

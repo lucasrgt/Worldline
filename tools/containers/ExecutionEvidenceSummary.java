@@ -23,16 +23,21 @@ public final class ExecutionEvidenceSummary {
                 ExecutionTelemetryHistory.profiles(root)), StandardCharsets.UTF_8).trim();
         String failures = new String(ExecutionFailureClusters.summaryBytes(
                 ExecutionFailureClusters.clusters(root)), StandardCharsets.UTF_8).trim();
-        String performance = new String(ExecutionPerformanceSignals.summaryBytes(
-                ExecutionPerformanceSignals.summarize(root,
-                        ExecutionRegressionPolicy.load(repository))), StandardCharsets.UTF_8).trim();
-        return "{\"schema\":\"worldline.execution-evidence-overlay.v2\",\"telemetry\":"
+        ExecutionPerformanceSignals.Summary signals = ExecutionPerformanceSignals.summarize(
+                root, ExecutionRegressionPolicy.load(repository));
+        String performance = new String(ExecutionPerformanceSignals.summaryBytes(signals),
+                StandardCharsets.UTF_8).trim();
+        String triage = new String(ExecutionRegressionTriage.summaryBytes(
+                ExecutionRegressionTriage.summarize(signals)), StandardCharsets.UTF_8).trim();
+        return "{\"schema\":\"worldline.execution-evidence-overlay.v3\",\"telemetry\":"
                 + telemetry + ",\"failure_clusters\":" + failures
-                + ",\"performance_signals\":" + performance + "}\n";
+                + ",\"performance_signals\":" + performance
+                + ",\"regression_triage\":" + triage + "}\n";
     }
 
     static void selfTest() throws Exception {
         ExecutionPerformanceSignals.selfTest();
+        ExecutionRegressionTriage.selfTest();
         Path root = Files.createTempDirectory("worldline-execution-evidence-")
                 .toAbsolutePath().normalize();
         try {
@@ -51,6 +56,8 @@ public final class ExecutionEvidenceSummary {
             require(value.contains("\"sample_count\":2")
                     && value.contains("\"failure_count\":1")
                     && value.contains("\"performance_signals\":{")
+                    && value.contains("\"regression_triage\":{")
+                    && value.contains("\"automatic_execution\":false")
                     && value.contains("\"verdict_authority\":false"),
                     "execution evidence counts or authority drifted");
             System.out.println("execution evidence summary self-test passed");

@@ -5,7 +5,7 @@ final class EvidenceExplorerLiveFormat {
     private EvidenceExplorerLiveFormat() { }
 
     static String json(EvidenceExplorerLiveSnapshot value) {
-        StringBuilder out = new StringBuilder("{\n  \"schema\":\"worldline.evidence-explorer-live.v2\",")
+        StringBuilder out = new StringBuilder("{\n  \"schema\":\"worldline.evidence-explorer-live.v3\",")
                 .append("\n  \"verdict_authority\":false,\n  \"ephemeral_state_included\":true,")
                 .append("\n  \"observed_at_epoch_ms\":").append(value.observedAtEpochMs()).append(',')
                 .append("\n  \"canonical_snapshot_sha256\":")
@@ -32,6 +32,7 @@ final class EvidenceExplorerLiveFormat {
                 .append(card("Telemetry samples", value.execution().sampleCount()))
                 .append(card("Failure samples", value.execution().failureCount()))
                 .append(card("Performance increases", value.execution().performance().increaseCount()))
+                .append(card("Regression triage cases", value.execution().triage().caseCount()))
                 .append(card("Profiles needing history", value.execution().performance()
                         .insufficientHistoryCount()))
                 .append(card("Native campaign links", value.executionLinks().linkedRuns()))
@@ -50,6 +51,15 @@ final class EvidenceExplorerLiveFormat {
                 .append("<th>Ratio</th><th>Signal</th></tr></thead><tbody>");
         for (EvidenceExplorerLiveSnapshot.Signal signal : value.execution().performance().signals())
             out.append(signalRow(signal));
+        out.append("</tbody></table></div></section>")
+                .append("<section><h2>Regression triage</h2>")
+                .append("<p>Rebuildable investigation candidates only; no run is scheduled")
+                .append(" and no verdict is asserted.</p>")
+                .append("<div class=\"table\"><table><thead><tr><th>Case</th><th>Workload</th>")
+                .append("<th>Kind</th><th>Host</th><th>Baseline</th><th>Recent</th>")
+                .append("<th>Ratio</th><th>Suggested next step</th></tr></thead><tbody>");
+        for (EvidenceExplorerRegressionTriage.Case item : value.execution().triage().cases())
+            out.append(triageRow(item));
         out.append("</tbody></table></div></section>")
                 .append("<section><h2>Native campaign evidence</h2><div class=\"table\"><table><thead><tr>")
                 .append("<th>Request</th><th>Campaign</th><th>Shard</th><th>Backend</th>")
@@ -83,6 +93,11 @@ final class EvidenceExplorerLiveFormat {
                 + ",\"failure_samples\":" + value.execution().failureCount()
                 + ",\"performance_signals\":" + value.execution().performance().signalCount()
                 + ",\"performance_increases\":" + value.execution().performance().increaseCount()
+                + ",\"regression_triage_cases\":" + value.execution().triage().caseCount()
+                + ",\"regression_triage_performance_increases\":"
+                + value.execution().triage().performanceIncreaseCount()
+                + ",\"regression_triage_data_quality\":"
+                + value.execution().triage().dataQualityCount()
                 + ",\"performance_insufficient_history\":"
                 + value.execution().performance().insufficientHistoryCount()
                 + ",\"native_runs\":" + value.executionLinks().nativeRuns()
@@ -185,6 +200,16 @@ final class EvidenceExplorerLiveFormat {
                 + (value.ratioPercent() == null ? "—" : value.ratioPercent() + "%")
                 + "</td><td><span class=\"tag\">" + html(value.classification())
                 + "</span></td></tr>";
+    }
+    private static String triageRow(EvidenceExplorerRegressionTriage.Case value) {
+        return "<tr><td><code>" + shortHash(value.id()) + "</code></td><td><strong>"
+                + html(value.workloadId()) + "</strong></td><td><span class=\"tag\">"
+                + html(value.kind()) + "</span></td><td>"
+                + html(value.backend() + " / " + value.os() + "-" + value.architecture())
+                + "</td><td>" + duration(value.baselineMedianMs()) + "</td><td>"
+                + duration(value.recentMedianMs()) + "</td><td>"
+                + (value.ratioPercent() == null ? "—" : value.ratioPercent() + "%")
+                + "</td><td>" + html(value.suggestedNextStep()) + "</td></tr>";
     }
     private static String card(String label, long value) {
         return "<article><strong>" + value + "</strong><span>" + html(label) + "</span></article>";

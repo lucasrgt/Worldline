@@ -175,6 +175,32 @@ The root seed is deliberately excluded, so repeated seeds remain comparable;
 changing the execution shape starts a separate history rather than polluting
 an existing baseline.
 
+Until both windows are complete, the profile is `insufficient-history`. A
+reviewed 150-percent symmetric band labels a complete comparison as
+`increase`, `decrease`, or `within-band`; a zero baseline is reported
+separately. The result is deliberately a signal, not a regression verdict.
+Its schema carries `verdict_authority=false` and `admission_effect=false`, and
+the admission path remains closed to every capability except
+`candidate-worker`. Executor upgrades and host/backend changes begin a new
+history instead of borrowing an incompatible baseline.
+
+## Observational regression triage
+
+The live read model derives one deterministic investigation candidate from
+each current `increase` signal and one data-quality candidate from each
+`zero-baseline` signal. A case ID binds the metric and threshold, the complete
+sanitized profile identity, and the exact ordered SHA-256 identities of the
+baseline and recent sample objects. Rebuilding the same history produces the
+same sorted cases; advancing a window produces a new identity instead of
+mutating the prior observation.
+
+Performance increases suggest `repeat-exact-profile`. Zero baselines suggest
+`inspect-profile-history`. These are labels for a human or a future reviewed
+coordinator, not commands: the triage schema fixes `automatic_execution=false`
+alongside `verdict_authority=false` and `admission_effect=false`. It creates no
+queue, writes no disposition, starts no campaign, and cannot turn an elapsed
+time observation into a behavioral regression.
+
 ## Sealed minimization replays
 
 The fourth adapter repeats the existing `m9-scenario-minimization` contract.
@@ -213,12 +239,3 @@ Nightly and structural-instability retain the tighter eight-process ceiling.
 This adapter proves replay orchestration for one already-sealed minimization
 contract. It does not yet accept arbitrary divergence bundles or create a
 general minimization queue.
-
-Until both windows are complete, the profile is `insufficient-history`. A
-reviewed 150-percent symmetric band labels a complete comparison as
-`increase`, `decrease`, or `within-band`; a zero baseline is reported
-separately. The result is deliberately a signal, not a regression verdict.
-Its schema carries `verdict_authority=false` and `admission_effect=false`, and
-the admission path remains closed to every capability except
-`candidate-worker`. Executor upgrades and host/backend changes begin a new
-history instead of borrowing an incompatible baseline.
