@@ -136,7 +136,7 @@ final class ModuleCacheBundle {
 
     private static List<FileEntry> readClasses(Path root) throws Exception {
         List<FileEntry> files = new ArrayList<>();
-        for (Path path : SafeTreeDelete.paths(root).stream().sorted(Comparator.naturalOrder()).toList()) {
+        for (Path path : SafeTreeDelete.paths(root)) {
             require(!SafeTreeDelete.linkLike(path), "module cache entry contains a filesystem link");
             if (!Files.isRegularFile(path) || path.getFileName().toString().equals(".complete")) continue;
             String relative = root.relativize(path).toString().replace('\\', '/');
@@ -144,6 +144,7 @@ final class ModuleCacheBundle {
             byte[] bytes = Files.readAllBytes(path);
             files.add(new FileEntry(relative, HexFormat.of().formatHex(sha256(bytes)), bytes));
         }
+        files.sort(Comparator.comparing(FileEntry::path));
         return List.copyOf(files);
     }
 
