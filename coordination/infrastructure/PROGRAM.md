@@ -177,6 +177,12 @@ Completed foundation slices:
   authority over module name, Java release and toolchain, dependency cache
   identities, normalized source paths, and exact source bytes. The read model
   exposes only paths and digests, and rejects unknown modules and cycles.
+- authoritative qualification fingerprints in Worldline commits `63b8bb0fb`
+  through `3acea88fc`. Normal cache, pin, receipt, and qualification consumers
+  now receive the root produced by `worldline.smoke-input-graph.v1`; the former
+  monolithic computation remains callable only by the catalog equivalence
+  audit. Provider-discovery and train proofs were transported through their
+  sealed migrations without changing any of the 624 fingerprint roots.
 - the first qualifying native-executor use in Worldline commits `b3b7fd750`
   and `dfbb921a9`. `Gate --executor-tooling` runs the real Gate self-test first
   through the legacy Windows Job launcher, then through the Rust Windows Job
@@ -305,6 +311,11 @@ Evidence recorded for these slices:
   creating new identities, passes at `cold 138096ms < 240000ms`, and reports
   624 current train proofs with zero pending. CSM checks five ways with no
   deviations and NYA passes.
+- the exact qualification-graph authority commit `3acea88fc` passes the
+  canonical Gate (`cold 126816ms < 240000ms`) with all 624 fingerprints
+  complete, distinct, graph-authoritative, and legacy-equal. Provider discovery
+  carries 521 proofs with zero pending, the train carries 624 current proofs
+  with zero pending, CSM checks ten ways with no deviations, and NYA passes.
 - the exact executor-tooling proof commit `dfbb921a9` passes the canonical Gate
   (`cold 135022ms < 240000ms`) with 624 current train proofs and zero pending.
   Its explicit tooling profile then produces Rust request digest
@@ -354,9 +365,9 @@ protected envelope distribution, stable publisher-key governance,
 authenticated deployment, and an explicit promotion from `shadow`. The input
 graph covers qualification identities in dual mode, current-tree dependents,
 cache decisions, cross-commit node differences, and exact module cache
-identities. Qualification fingerprints still use the legacy engine as their
-authority pending a reviewed all-smoke promotion. A1 through A4, B3, and D1
-through D3 and D5 are therefore in progress; A5 is qualified for the
+identities. Qualification and module fingerprints now use their graphs as the
+authority while retaining legacy equality audits. A1 through A4 and D1 through
+D3 and D5 are therefore in progress; A5 is qualified for the
 structural Windows tooling cycle, and B1 plus the post-execution portion of B2
 are qualified for that tooling profile. Native Windows filesystem enforcement,
 other runtime profiles, A6, A7, and remote transport deployment have not
@@ -644,6 +655,11 @@ Add commands that report:
 The graph becomes authoritative only after the legacy and graph fingerprints
 have a reviewed migration for every smoke. No bulk silent invalidation or
 transport is allowed.
+
+Status: qualified at Worldline commit `3acea88fc`. Every one of the 624 smoke
+roots remained byte-identical during promotion, provider and train source pins
+were migrated through their sealed tools, and the legacy algorithm is retained
+only as a complete-catalog equality audit.
 
 ## 7. Workstream C: execution telemetry and adaptive admission
 
