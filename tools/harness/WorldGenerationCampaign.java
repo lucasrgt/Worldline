@@ -44,7 +44,8 @@ public final class WorldGenerationCampaign {
                 git("HEAD"), git("HEAD^{tree}"), executorRequest(options.executorPlan()), List.of(result));
         Path receiptPath = CampaignArtifacts.publishReceipt(reports, plan, receipt);
         CampaignReceiptSet.Aggregate aggregate = CampaignArtifacts.aggregateIfComplete(reports, plan);
-        require(run.exit == 0, "world-generation replay failed; inspect " + root.relativize(receiptPath));
+        require(run.exit == 0, "world-generation replay failed; inspect "
+                + root.relativize(receiptPath) + "\n" + run.failureTail);
         System.out.println("world-generation shard passed: index=" + options.shardIndex()
                 + "/" + plan.shardCount() + ", replays=" + assignment.cases()
                 + ", contract=" + contract.signature + ", plan=" + plan.sha256()
@@ -57,6 +58,7 @@ public final class WorldGenerationCampaign {
                 + TimeUnit.SECONDS.toNanos(options.budgetSeconds());
         MessageDigest normalized = MessageDigest.getInstance("SHA-256");
         long executed = 0L, passed = 0L; boolean timedOut = false; int exit = 0;
+        String failureDigest = "-", failureTail = "";
         for (long index = assignment.start(); index < assignment.endExclusive(); index++) {
             long remaining = TimeUnit.NANOSECONDS.toSeconds(deadline - System.nanoTime());
             if (remaining <= 0L) { timedOut = true; exit = 1; break; }
@@ -66,9 +68,11 @@ public final class WorldGenerationCampaign {
             executed++; boolean accepted = result.exit() == 0 && !result.timedOut();
             update(normalized, Long.toString(index)); update(normalized, Long.toString(assignment.seed()));
             update(normalized, TARGET); update(normalized, contract.signature);
-            update(normalized, accepted ? "gate-milestone-pass" : "gate-milestone-fail");
+            failureDigest = accepted ? "-" : sha256(result.output());
+            update(normalized, accepted ? "gate-milestone-pass" : "gate-milestone-fail-" + failureDigest);
             if (accepted) passed++;
-            else { timedOut |= result.timedOut(); exit = result.exit() == 0 ? 1 : result.exit(); break; }
+            else { timedOut |= result.timedOut(); exit = result.exit() == 0 ? 1 : result.exit();
+                failureTail = ProcessCapture.tail(result.output(), 8_000); break; }
         }
         String rootHash = HexFormat.of().formatHex(normalized.digest());
         long elapsed = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - started);
@@ -77,8 +81,9 @@ public final class WorldGenerationCampaign {
                 + "\nrange=" + assignment.start() + ":" + assignment.endExclusive()
                 + "\nseed=" + assignment.seed() + "\nexecuted=" + executed + "\npassed=" + passed
                 + "\ncontract.signature=" + contract.signature
+                + "\nfailure.output.sha256=" + failureDigest
                 + "\nverdict.authority=false\nnormalized.root.sha256=" + rootHash + "\n";
-        return new Run(exit, timedOut, elapsed, rootHash, log);
+        return new Run(exit, timedOut, elapsed, rootHash, log, failureTail);
     }
 
     private Contract contract() throws Exception {
@@ -120,6 +125,10 @@ public final class WorldGenerationCampaign {
     private static void update(MessageDigest digest, String value) {
         digest.update(value.getBytes(StandardCharsets.UTF_8)); digest.update((byte) 0);
     }
+    private static String sha256(String value) throws Exception {
+        return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
+                .digest(value.getBytes(StandardCharsets.UTF_8)));
+    }
     private static String javaTool() { boolean windows = System.getProperty("os.name", "")
             .toLowerCase(java.util.Locale.ROOT).contains("win"); return Path.of(
             System.getProperty("java.home"), "bin", "java" + (windows ? ".exe" : "")).toString(); }
@@ -128,5 +137,5 @@ public final class WorldGenerationCampaign {
     }
     private record Contract(String signature) { }
     private record Run(int exit, boolean timedOut, long elapsedMs,
-            String normalizedRoot, String log) { }
+            String normalizedRoot, String log, String failureTail) { }
 }

@@ -142,7 +142,10 @@ normalized result root. It contains no official JAR bytes, raw world, server
 log, path, or runtime output. The campaign receipt remains non-authoritative;
 only the nested Gate may accept the existing behavior contract.
 
-The native form uses the same dispatcher and four-GiB containment boundary:
+The native form uses the same dispatcher, four-GiB containment boundary, and
+512-MiB descendant heaps. Its Windows profile permits at most 24 active
+processes because the canonical milestone Gate compiles modules in parallel;
+other campaign adapters retain their tighter eight-process ceiling.
 
 ```text
 java tools/containers/RuntimeFabricLauncher.java CampaignExecutorCycle \
@@ -152,4 +155,6 @@ java tools/containers/RuntimeFabricLauncher.java CampaignExecutorCycle \
 
 The runtime profile must already be valid in the exact worktree. A failed or
 timed-out Gate publishes a failed campaign receipt, remains visible through
-the native execution evidence, and cannot be aggregated as PASS.
+the native execution evidence, and cannot be aggregated as PASS. Its workload
+log binds the failure-output digest while the bounded diagnostic tail remains
+only in the native stderr object and is never projected by the Explorer.
