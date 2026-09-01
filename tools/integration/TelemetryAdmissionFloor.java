@@ -71,6 +71,8 @@ final class TelemetryAdmissionFloor {
         boolean failed = false; try { action.run(); } catch (IllegalStateException expected) { failed = true; }
         require(failed, "invalid telemetry admission was accepted");
     }
-    private static void require(boolean value, String message) { if (!value) throw new IllegalStateException(message); }
+    private static void require(boolean value, String message) {
+        if (!value) throw new IllegalStateException(message);
+    }
     @FunctionalInterface private interface Checked { void run() throws Exception; }
 }
