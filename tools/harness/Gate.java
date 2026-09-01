@@ -172,8 +172,7 @@ public final class Gate {
 
     private static String queryType(String value) { return switch (value) {
         case "--input-graph" -> "SmokeInputGraphQuery"; case "--cache-explain" -> "SmokeCacheQuery";
-        case "--input-dependents" -> "SmokeInputDependentsQuery"; case "--input-diff" -> "SmokeInputDiffQuery";
-        default -> null; }; }
+        case "--input-dependents" -> "SmokeInputDependentsQuery"; case "--input-diff" -> "SmokeInputDiffQuery"; default -> null; }; }
 
     private int verifySlots() {
         int configured = integerEnvironment("WORLDLINE_VERIFY_SLOTS",
