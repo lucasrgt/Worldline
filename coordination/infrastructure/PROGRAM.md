@@ -93,6 +93,12 @@ Completed foundation slices:
   create-if-absent semantics, corruption checks, fresh materialization, and
   convergent concurrent writers in executor commit `25205aa`. This is a local
   CAS primitive only and does not itself authorize remote transport.
+- a permit-bound loopback HTTP object transport in executor commit `8573cda`.
+  Strict policy-produced manifests authorize exact digest-and-size objects for
+  both upload and hydration; every byte stream is rehashed through the local
+  store, requests are bounded, publication is idempotent, and the service
+  never asserts PASS. This is a local qualification boundary, not permission
+  for remote network deployment.
 - a fail-closed Java artifact transport catalog and content validator in
   Worldline commits `7a0f7a2b5` and `7d8aecce7`. Only canonical tracked smoke
   pin envelopes are remotely eligible; module, test, stage, smoke, observation,
@@ -117,7 +123,8 @@ Completed foundation slices:
 Evidence recorded for these slices:
 
 - Rust format, Clippy-with-warnings-as-errors, and complete workspace tests pass
-  on Windows and Ubuntu under WSL2;
+  on Windows and passed on Ubuntu under WSL2 at the preceding executor
+  checkpoints;
 - the containment suite passed ten consecutive Linux runs before the unit-name
   correction, then passed completely on both platforms after the corrected
   schema;
@@ -125,6 +132,14 @@ Evidence recorded for these slices:
   delegated Linux `systemd-run` scope;
 - local CAS format, Clippy, round-trip, corruption, overwrite, and eight-writer
   convergence fixtures pass on Windows and Ubuntu under WSL2;
+- permit manifests reject unknown fields, duplicate digests, oversized
+  objects, and non-loopback clients; HTTP fixtures prove idempotent upload,
+  fresh hydration, digest and size revalidation, denied-object isolation, and
+  no publication after corrupt input. The exact executor commit passes the
+  complete Windows workspace and the Ubuntu CAS format, Clippy, and test
+  suites. The current full Ubuntu workspace rerun is not claimed: its existing
+  Landlock fixtures fail before execution with `EACCES`, outside the CAS code
+  path, and require a separate backend diagnosis.
 - artifact classification rejects unknown families, directory escapes,
   restricted families, unknown policy fields, and binary payloads renamed as
   proof envelopes; the exact clean Worldline branch passes the canonical Gate
@@ -153,12 +168,14 @@ Current boundaries remain honest: Linux mount and PID namespaces,
 loopback-only policy, Windows filesystem/network isolation, complete
 hostile-fixture coverage, broader legacy differentials, and all qualifying
 promotions remain pending. Artifact classification covers only tracked smoke
-pin envelopes; source-derived objects, sanitized diagnostics, transport, and
-hydration remain disabled. The input graph covers qualification identities in
+pin envelopes; source-derived objects and sanitized diagnostics remain
+disabled. Permit-bound local transport exists, but Worldline permit production,
+hydration lookup integration, authenticated remote deployment, and S3 storage
+remain disabled. The input graph covers qualification identities in
 dual mode, current-tree dependents, cache decisions, and cross-commit node
 differences, but does not yet own cache identity.
-A1 through A4, B3, and D1 are therefore in progress; A5 and later transport
-work have not started.
+A1 through A4, B3, and D1 through D2 are therefore in progress; A5 and remote
+transport deployment have not started.
 
 ## 2. Program principles
 
