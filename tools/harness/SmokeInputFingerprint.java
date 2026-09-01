@@ -51,7 +51,11 @@ final class SmokeInputFingerprint {
     }
 
     String compute(SmokeDiscovery.Entry smoke) throws Exception {
-        return compute(smoke, true);
+        return new SmokeInputGraph(root, this).qualification(smoke).rootSha256();
+    }
+
+    String computeLegacyQualification(SmokeDiscovery.Entry smoke) throws Exception {
+        return computeLegacy(smoke, true);
     }
 
     String computeExecution(SmokeDiscovery.Entry smoke) throws Exception {
@@ -69,10 +73,10 @@ final class SmokeInputFingerprint {
     }
 
     String computeRuntime(SmokeDiscovery.Entry smoke) throws Exception {
-        return compute(smoke, false);
+        return computeLegacy(smoke, false);
     }
 
-    private String compute(SmokeDiscovery.Entry smoke, boolean qualification) throws Exception {
+    private String computeLegacy(SmokeDiscovery.Entry smoke, boolean qualification) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         boolean portable = qualification;
         update(digest, portable ? "worldline-smoke-input-v6-tokens"

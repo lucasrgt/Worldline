@@ -10,14 +10,14 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
 
-/** Dual-mode qualification graph whose root must equal the legacy fingerprint. */
+/** Authoritative qualification graph with a retained legacy-equivalence audit. */
 final class SmokeInputGraph {
     private static final String ALGORITHM = "worldline-smoke-input-v6-tokens";
     private final Path root;
-    private final SmokeInputFingerprint legacy;
+    private final SmokeInputFingerprint inputs;
 
-    SmokeInputGraph(Path root, SmokeInputFingerprint legacy) {
-        this.root = root.toAbsolutePath().normalize(); this.legacy = legacy;
+    SmokeInputGraph(Path root, SmokeInputFingerprint inputs) {
+        this.root = root.toAbsolutePath().normalize(); this.inputs = inputs;
     }
 
     SmokeInputGraphResult qualification(SmokeDiscovery.Entry smoke) throws Exception {
@@ -38,9 +38,9 @@ final class SmokeInputGraph {
         if (dataDriven) dataDrivenInputs(graph, smoke.id);
         else for (String input : SmokeInputFingerprint.REPOSITORY_INPUTS)
             if (source.contains(input)) add(graph, root.resolve(input));
-        Set<String> products = dataDriven ? legacy.dataDrivenProducts(smoke.id)
-                : legacy.products(source);
-        for (String product : products) graph.module(product, legacy.module(product, true));
+        Set<String> products = dataDriven ? inputs.dataDrivenProducts(smoke.id)
+                : inputs.products(source);
+        for (String product : products) graph.module(product, inputs.module(product, true));
         require(!source.contains(".worldline/build/classes") || !products.isEmpty(),
                 "cannot identify product inputs for smoke " + smoke.id);
         return graph.finish();
@@ -70,7 +70,7 @@ final class SmokeInputGraph {
     }
 
     private void dataDrivenInputs(Collector graph, String id) throws Exception {
-        Properties descriptor = legacy.descriptor(id);
+        Properties descriptor = inputs.descriptor(id);
         String artifact = descriptor.getProperty("cycle.artifact", "").trim();
         require(artifact.matches("artifacts/[a-z0-9.-]+\\.properties"),
                 "unsafe data-driven artifact: " + id);
@@ -83,7 +83,7 @@ final class SmokeInputGraph {
     }
 
     private void sharedInputs(Collector graph, String id) throws Exception {
-        Properties descriptor = legacy.descriptor(id);
+        Properties descriptor = inputs.descriptor(id);
         for (String path : list(descriptor.getProperty("shared.inputs"))) {
             require(path.matches("smokes/shared/[a-z0-9/-]+"), "unsafe shared smoke input: " + path);
             add(graph, root.resolve(path));
@@ -110,7 +110,7 @@ final class SmokeInputGraph {
             if (name.equals("WORLDLINE_AERO_PREBUILT") && !value.isBlank()) {
                 Path file = Path.of(value).toAbsolutePath().normalize();
                 require(Files.isRegularFile(file), "missing smoke environment input: " + file);
-                String digest = legacy.pathDigest(file, false);
+                String digest = inputs.pathDigest(file, false);
                 graph.raw("environment-file", name, digest, digest);
             }
         }
@@ -119,7 +119,7 @@ final class SmokeInputGraph {
     private void add(Collector graph, Path path) throws Exception {
         path = path.toAbsolutePath().normalize();
         require(path.startsWith(root), "smoke input graph escaped repository: " + path);
-        graph.path(root.relativize(path).toString().replace('\\', '/'), legacy.pathDigest(path, true));
+        graph.path(root.relativize(path).toString().replace('\\', '/'), inputs.pathDigest(path, true));
     }
 
     static void selfTest() throws Exception {

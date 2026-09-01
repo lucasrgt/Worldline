@@ -21,16 +21,17 @@ public final class SmokeFingerprintCheck {
         Set<String> values = new HashSet<>();
         for (SmokeDiscovery.Entry smoke : smokes) {
             String value = fingerprints.compute(smoke);
+            String legacy = fingerprints.computeLegacyQualification(smoke);
             SmokeInputGraphResult graph = graphs.qualification(smoke);
             if (!value.matches("[0-9a-f]{64}"))
                 throw new IllegalStateException("invalid smoke fingerprint: " + smoke.id);
-            if (!value.equals(graph.rootSha256()) || graph.nodes().isEmpty())
+            if (!value.equals(graph.rootSha256()) || !value.equals(legacy) || graph.nodes().isEmpty())
                 throw new IllegalStateException("smoke input graph drift: " + smoke.id);
             if (!values.add(value)) throw new IllegalStateException(
                     "smokes share an input fingerprint: " + smoke.id);
         }
         SmokePins pins = new SmokePins(root); pins.validateCatalog(smokes); pins.validateEvidence();
         System.out.println("  smoke fingerprints: " + smokes.size()
-                + " complete, distinct, and dual-graph equal");
+                + " complete, distinct, graph-authoritative, and legacy-equal");
     }
 }
