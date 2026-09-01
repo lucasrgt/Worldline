@@ -191,6 +191,13 @@ Completed foundation slices:
   classifications. Values never enter the read model, secret-bearing names
   fail closed, and the qualified tooling cycle now clears ambient legacy state
   before applying the exact same Java-owned environment policy used by Rust.
+- a `worldline.execution-filesystem-manifest.v1` and output-budget invariant in
+  Worldline commits `3bcf9cec9` through `1ea3706ff`. The tooling profile
+  declares source, temporary, and output roots, no official-artifact mounts,
+  a 32-file/4-MiB ceiling, and all undeclared outputs as forbidden. Windows
+  qualification is explicitly post-execution verification: recursive
+  no-follow inspection rejects escapes, links, reparse points, special files,
+  and budget excess without claiming filesystem isolation from a Job Object.
 
 Evidence recorded for these slices:
 
@@ -316,6 +323,14 @@ Evidence recorded for these slices:
   `ddec5b5536d3a6590e1daa14c6bd25a19423ef45dd4459afbabf44ad725691c8`.
   CSM checks ten ways with no deviations, NYA passes, and cleanup leaves no
   executor-tooling residue.
+- the exact filesystem-manifest proof commit `1ea3706ff` passes the canonical
+  Gate (`cold 153166ms < 240000ms`) with 624 current train proofs and zero
+  pending. The final tooling request digest is
+  `ce1be625afbc566c0984d9a5ed5101fa0f5478df7658b07ff5b7cfe13781714b`;
+  the normalized observable digest remains unchanged at
+  `458b7c9754023057b11ada8cc7b055c26c7ba3559f38d5a9f51d18106fbff32d`.
+  CSM checks ten ways with no deviations, NYA passes, and no cycle residue
+  remains.
 - the canonical Worldline Gate reaches `verify passed` with all content stages
   restored, but the host currently violates the unchanged hot latency SLO
   (`20361ms >= 7000ms` on the latest run). The budget was not weakened.
@@ -342,9 +357,10 @@ cache decisions, cross-commit node differences, and exact module cache
 identities. Qualification fingerprints still use the legacy engine as their
 authority pending a reviewed all-smoke promotion. A1 through A4, B3, and D1
 through D3 and D5 are therefore in progress; A5 is qualified for the
-structural Windows tooling cycle, and B1 is qualified for that tooling profile.
-Other runtime environment profiles, A6, A7, and remote transport deployment
-have not started.
+structural Windows tooling cycle, and B1 plus the post-execution portion of B2
+are qualified for that tooling profile. Native Windows filesystem enforcement,
+other runtime profiles, A6, A7, and remote transport deployment have not
+started.
 
 ## 2. Program principles
 
@@ -599,6 +615,12 @@ Declare:
 
 The executor rejects path escapes, reparse-point escapes, and unexpected
 writes when the backend can enforce them.
+
+Status: the structural tooling profile has a qualified Java-owned declaration
+and post-execution output invariant at Worldline commit `1ea3706ff`. Windows
+Job Objects still provide no native filesystem sandbox, so this status does
+not claim write prevention. Linux Landlock enforcement exists in shadow and
+runtime-specific mount declarations remain pending.
 
 ### B3. Input graph v1
 
