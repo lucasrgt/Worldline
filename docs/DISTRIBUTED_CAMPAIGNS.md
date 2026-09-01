@@ -158,3 +158,22 @@ timed-out Gate publishes a failed campaign receipt, remains visible through
 the native execution evidence, and cannot be aggregated as PASS. Its workload
 log binds the failure-output digest while the bounded diagnostic tail remains
 only in the native stderr object and is never projected by the Explorer.
+
+## Observational performance signals
+
+Successful native campaign runs feed a deterministic elapsed-time comparison
+without becoming qualification evidence. The reviewed policy in
+`tools/containers/execution-regression.properties` selects only exited `campaign-worker`
+samples, then compares the median of the latest three observations with the
+median of the immediately preceding three observations inside the exact same
+workload, executor version, backend, operating system, architecture, and
+termination profile.
+
+Until both windows are complete, the profile is `insufficient-history`. A
+reviewed 150-percent symmetric band labels a complete comparison as
+`increase`, `decrease`, or `within-band`; a zero baseline is reported
+separately. The result is deliberately a signal, not a regression verdict.
+Its schema carries `verdict_authority=false` and `admission_effect=false`, and
+the admission path remains closed to every capability except
+`candidate-worker`. Executor upgrades and host/backend changes begin a new
+history instead of borrowing an incompatible baseline.

@@ -39,14 +39,16 @@ This command first rebuilds the canonical files, then writes `live.json` and
 `live.html` beside them. The live JSON binds the canonical `evidence.json` by
 SHA-256 while keeping `ephemeral_state_included=true` and
 `verdict_authority=false`. It contains only sanitized executor telemetry and
-failure clusters, lower-only admission state, aggregate FIFO lease-queue state,
-the current read-only cache decision for every smoke, and validated local links
-from campaign receipts to native execution plans, receipts, metrics, and output
-manifests. It reports linked, orphan, partial, and dangling native evidence,
-then verifies campaign workload-log digests and counts referenced, orphan, and
-missing logs. It exposes identities and aggregate measurements only; local
-paths, process IDs, argument vectors, environment values, and log content remain
-excluded.
+failure clusters, observational campaign performance signals, lower-only
+admission state, aggregate FIFO lease-queue state, the current read-only cache
+decision for every smoke, and validated local links from campaign receipts to
+native execution plans, receipts, metrics, and output manifests. It reports
+linked, orphan, partial, and dangling native evidence, then verifies campaign
+workload-log digests and counts referenced, orphan, and missing logs. The
+performance table shows complete median windows or explicit insufficient
+history; it cannot grant PASS or change worker admission. The overlay exposes
+identities and aggregate measurements only; local paths, process IDs, argument
+vectors, environment values, and log content remain excluded.
 
 Live output changes with local machine state and observation time. It is useful
 for diagnosis and scheduling, but it is never pinned, transported as behavioral
