@@ -79,11 +79,14 @@ final class PooledSmokeCheck {
         String parent = values.getProperty("parent.pid", ""); require(parent.matches("[0-9]+"),
                 "invalid pool parent");
         ProcessHandle owner = ProcessHandle.of(Long.parseLong(parent)).orElseThrow();
-        String command = owner.info().commandLine().orElse("").replace('\\', '/');
-        require(owner.isAlive() && (command.contains("HostSmokePool")
-                || command.contains("ContainerSmokePool")
-                || differential && descendsFrom(owner,
-                        Long.parseLong(values.getProperty("lease.pid", "-1")))),
+        String started = values.getProperty("parent.started", "");
+        Path lock = Path.of(values.getProperty("lock.path", "")).toAbsolutePath().normalize();
+        require(started.matches("[0-9]+") && owner.isAlive()
+                        && owner.info().startInstant().orElseThrow().toEpochMilli()
+                                == Long.parseLong(started)
+                        && "official-b173.lock".equals(lock.getFileName().toString())
+                        && lockHeld(lock) && (!differential || descendsFrom(owner,
+                                Long.parseLong(values.getProperty("lease.pid", "-1")))),
                 "pool lease owner is not active");
         return values;
     }
