@@ -162,6 +162,11 @@ Completed foundation slices:
   store. Concurrent publishers converge through atomic create-if-absent,
   readers reject links and corruption, and the normal `ModuleBuild` miss path
   remains responsible for local validation and immutable installation.
+- a read-only sanitized shared-CAS inventory in Worldline commit `3be362322`.
+  It correlates object identities with the signed module index and optional
+  tracked smoke pins, detects missing signed references, corrupt objects,
+  malformed layout, and valid orphans, and exposes no paths or content. The
+  live Evidence Explorer embeds it only when the shared backend is configured.
 - a secret-free `worldline.smoke-input-graph.v1` read model and
   `Gate --input-graph ID` query in Worldline commits `423a322d3`, `16b9de40a`,
   and `c49b6af20`. The graph remains shadow-only and the legacy fingerprint
@@ -656,6 +661,17 @@ Evidence recorded for these slices:
   trust, and unauthorized publication fail closed. The exact canonical Gate
   passes cold (`197469ms < 240000ms`), CSM checks nine ways with no deviations,
   and NYA passes.
+- Worldline commit `3be362322` makes that backend inspectable without reading,
+  hydrating, or publishing through it. The deterministic inventory distinguishes
+  required signed index and module objects from optional recognized smoke pins
+  and valid orphans, while reporting corruption, malformed entries, and absent
+  signed references without paths or content. Hostile fixtures cover all four
+  fault classes. The real `api` shadow finds exactly two verified objects, one
+  signed index and one 369086-byte bundle, with zero faults and the unchanged
+  bundle digest
+  `1cdc497facb8590bef5d5c8942a9716e0feaea11a81491540f8c4bafbb65e0ff`.
+  The exact canonical Gate passes cold (`142250ms < 240000ms`), CSM checks ten
+  ways with no deviations, and NYA passes.
 Current boundaries remain honest: Linux mount and PID namespaces,
 OS-enforced loopback-only policy, Windows filesystem/network isolation,
 the broader server-headless matrix,
@@ -675,7 +691,9 @@ exercised both in shadow and against the shared directory. Signed index
 verification provides a cryptographic trust boundary, but broader production
 adoption still needs protected envelope distribution, stable publisher-key
 governance, authenticated deployment, audit policy, and an explicit promotion
-from `shadow`. The input
+from `shadow`. A sanitized read-only inventory and live Explorer projection
+cover shared-store integrity, but they are not a durable deployment audit log.
+The input
 graph covers qualification identities in dual mode, current-tree dependents,
 cache decisions, cross-commit node differences, and exact module cache
 identities. Qualification and module fingerprints now use their graphs as the
@@ -1206,6 +1224,8 @@ concerns. Object identity and local validation remain backend-independent.
 The local shared-directory backend is implemented for signed module bundles.
 It is opt-in, preserves the common immutable object layout, admits only a
 prepared publication plan, and independently revalidates every hydrated byte.
+Its read-only inventory verifies signed references and classifies corrupt,
+malformed, missing, and orphaned objects without leaking paths or content.
 S3-compatible storage and its TLS, authentication, retention, audit, and
 publisher-governance policies remain pending rather than being inferred from
 the shared filesystem boundary.
