@@ -80,8 +80,10 @@ public final class Gate {
         }
         boolean smoke = arguments.length > 0 && "--smoke".equals(arguments[0]);
         boolean executorServer = Arrays.equals(arguments, new String[] {"--executor-server"});
+        boolean executorCandidate = Arrays.equals(arguments, new String[] {"--executor-candidate"});
         boolean pinnedSmoke = arguments.length > 0 && "--pinned-smoke".equals(arguments[0]);
-        executePhase(arguments, smoke || executorServer, !executorServer, executorServer || smoke && !pinnedSmoke);
+        executePhase(arguments, smoke || executorServer, !executorServer && !executorCandidate,
+                executorServer || smoke && !pinnedSmoke);
     }
 
     private void executeMilestone(String id) throws Exception {
@@ -94,8 +96,7 @@ public final class Gate {
 
     private void executePhase(String[] arguments, boolean runtime, boolean useSlot, boolean runtimeLease)
             throws Exception {
-        int slots = useSlot ? verifySlots() : 0;
-        Path legacy = runtime ? legacyRuntimeLock() : null;
+        int slots = useSlot ? verifySlots() : 0; Path legacy = runtime ? legacyRuntimeLock() : null;
         List<String> command = new ArrayList<>(List.of(javaTool("java"),
                 root.resolve("tools/harness/FairLeaseCommand.java").toString(), root.toString(),
                 control.toString(), Long.toString(waitMillis), Integer.toString(slots),
@@ -107,17 +108,14 @@ public final class Gate {
     }
 
     private void executeInside(String[] arguments) throws Exception {
-        Path classes = compileHarness();
-        int exit = launchVerify(classes, arguments, false);
+        Path classes = compileHarness(); int exit = launchVerify(classes, arguments, false);
         if (exit != 0) System.exit(exit);
     }
 
     private boolean milestoneUsesOfficialRuntime(String id) throws java.io.IOException {
         Path path = root.resolve("smokes").resolve(id).resolve("smoke.properties");
         Properties descriptor = new Properties();
-        try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-            descriptor.load(reader);
-        }
+        try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) { descriptor.load(reader); }
         return !"tooling-cycle".equals(descriptor.getProperty("qualification.proof"));
     }
 
@@ -134,6 +132,7 @@ public final class Gate {
                 || Arrays.equals(arguments, new String[] {"--executor-environment"})
                 || Arrays.equals(arguments, new String[] {"--executor-filesystem"})
                 || Arrays.equals(arguments, new String[] {"--executor-server"})
+                || Arrays.equals(arguments, new String[] {"--executor-candidate"})
                 || Arrays.equals(arguments, new String[] {"--accept-legacy-smoke-baseline"})
                 || arguments.length == 1 && maintenance(arguments[0])
                 || arguments.length == 2 && ("--new-milestone".equals(arguments[0])
@@ -162,6 +161,7 @@ public final class Gate {
                 + "--module-cache-doctor|--module-cache-gc|--cache-doctor|--cache-gc|"
                 + "--cache-rebuild-drill|"
                 + "--executor-tooling|--executor-environment|--executor-filesystem|--executor-server|"
+                + "--executor-candidate|"
                 + "--new-milestone ID|--milestone ID|--lane-differential ID|"
                 + "--candidate-ready ID|--candidate ID|--self-test]");
         if (arguments.length == 2 && !arguments[1].matches("[a-z0-9]+(?:-[a-z0-9]+)*"))
