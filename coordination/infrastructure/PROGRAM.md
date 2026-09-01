@@ -568,6 +568,31 @@ Evidence recorded for these slices:
   passes. Both external and Worldline cells are removed after execution.
   Windows network remains `inherit`; the private Gradle homes intentionally
   use that network and are not evidence of network isolation.
+- Worldline commit `31806d362` qualifies deterministic campaign contracts for
+  protocol fuzzing, mutation, world generation, instability, differential,
+  profiling, regression, and minimization workloads. Canonical plans divide
+  every sorted workload into complete, disjoint half-open ranges and derive a
+  stable signed seed for every workload-and-shard pair. Non-authoritative shard
+  receipts bind the plan, exact Git head and tree, assignments, seeds, result
+  hashes, and optional executor request; aggregation rejects incomplete,
+  duplicate, mixed-commit, or changed-assignment sets independently of arrival
+  order. The frozen three-shard fixture has plan digest
+  `ebc7330c479f65db7e45204078cc3e418e4f32000bd9267fcdcf2eb1aa34286d`.
+  The exact canonical Gate passes cold (`132955ms < 240000ms`), CSM checks nine
+  ways with no deviations, and NYA passes.
+- Worldline commit `c7859123d` adapts the real nightly fuzz and mutation
+  campaign to those contracts. Each invocation executes exactly one shard,
+  publishes an immutable content-addressed plan, bounded per-workload logs,
+  and an atomic receipt, and emits an aggregate only after the complete set is
+  present. A reverse-arrival two-shard run at seed 173 executes 8 fuzz and 20
+  mutation cases: shard 1 leaves the set incomplete, then shard 0 completes two
+  passing receipts on the same head and tree. Its plan identity is
+  `a6e0adfb9fd03e263d56333cf3463188fb101a576b840c984df5c1fd1499c908`;
+  the observed aggregate file digest is
+  `a89216cb356a5bafdebf9c5cc03c142a183a48243045d1d5b2cafafc41c2950e`.
+  The exact canonical Gate passes cold (`148102ms < 240000ms`), CSM checks nine
+  ways with no deviations, and NYA passes. Elapsed values and aggregate bytes
+  remain observational rather than behavioral evidence.
 Current boundaries remain honest: Linux mount and PID namespaces,
 OS-enforced loopback-only policy, Windows filesystem/network isolation,
 the broader server-headless matrix,
@@ -1217,6 +1242,13 @@ Use the executor, input graph, CAS, and optional grid for:
 Campaign roots deterministically derive shard seeds and case ranges. Java
 continues to interpret behavior and divergences. Rust schedules, isolates,
 measures, and transports permitted objects.
+
+The base contract and the nightly fuzz-plus-mutation adapter are qualified.
+Plans and receipts are canonical, shards are complete and disjoint, immutable
+publication is fail closed, and aggregation is independent of worker arrival
+order. Native executor dispatch, world-generation and instability adapters,
+differential, profiling, regression, and minimization execution, plus optional
+grid distribution remain pending.
 
 ## 12. Source and repository strategy
 
