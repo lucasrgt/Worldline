@@ -59,12 +59,12 @@ final class ExecutorGuiWorkspace implements AutoCloseable {
         run(root, List.of(java(), root.resolve("tools/harness/Gate.java").toString()), 600);
     }
 
-    Path authorize(Path lock, String leasePid) throws Exception {
+    Path authorize(Path lock, RuntimeLeaseIdentity lease) throws Exception {
         String secret = UUID.randomUUID().toString();
         Path token = root.resolve(".worldline/runtime-fabric/executor-gui.properties");
         run(root, List.of(java(), root.resolve("tools/containers/PoolLeaseToken.java").toString(),
                 "create", token.toString(), secret, Long.toString(ProcessHandle.current().pid()),
-                lock.toString(), "executor-differential", leasePid), 60);
+                lock.toString(), "executor-differential", lease.pid(), lease.started()), 60);
         return token;
     }
 

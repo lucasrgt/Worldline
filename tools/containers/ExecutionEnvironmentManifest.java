@@ -40,11 +40,12 @@ public final class ExecutionEnvironmentManifest {
     }
 
     static ExecutionEnvironmentManifest serverHeadless(Path temporary, Path control,
-            Path leaseFile, String leasePid) {
+            Path leaseFile, String leasePid, String leaseStarted) {
         Path clean = temporary.toAbsolutePath().normalize();
         require(clean.equals(temporary) && control.isAbsolute() && leaseFile.isAbsolute(),
                 "server environment paths are not absolute and normalized");
         require(leasePid.matches("[0-9]+"), "invalid runtime lease identity");
+        require(leaseStarted.matches("[0-9]+"), "invalid runtime lease start identity");
         return new ExecutionEnvironmentManifest("server-headless", List.of(
                 Entry.inherit("PATH", Effect.TOOL),
                 Entry.inherit("PATHEXT", Effect.TOOL),
@@ -57,6 +58,7 @@ public final class ExecutionEnvironmentManifest {
                 Entry.set("WORLDLINE_CONTROL_DIR", Effect.TOOL, control.toString()),
                 Entry.set("WORLDLINE_RUNTIME_DIFFERENTIAL", Effect.BEHAVIOR, "1"),
                 Entry.set("WORLDLINE_RUNTIME_PARENT_LEASE", Effect.TOOL, leasePid),
+                Entry.set("WORLDLINE_RUNTIME_PARENT_STARTED", Effect.TOOL, leaseStarted),
                 Entry.set("WORLDLINE_RUNTIME_POOL_FILE", Effect.TOOL, leaseFile.toString()),
                 Entry.set("WORLDLINE_SMOKE_CACHE", Effect.BEHAVIOR, "off")));
     }
@@ -76,11 +78,12 @@ public final class ExecutionEnvironmentManifest {
     }
 
     static ExecutionEnvironmentManifest guiNative(Path temporary, Path control,
-            Path leaseFile, String leasePid) {
+            Path leaseFile, String leasePid, String leaseStarted) {
         Path clean = temporary.toAbsolutePath().normalize();
         require(clean.equals(temporary) && control.isAbsolute() && leaseFile.isAbsolute(),
                 "GUI environment paths are not absolute and normalized");
         require(leasePid.matches("[0-9]+"), "invalid runtime lease identity");
+        require(leaseStarted.matches("[0-9]+"), "invalid runtime lease start identity");
         return new ExecutionEnvironmentManifest("gui-native", List.of(
                 Entry.inherit("PATH", Effect.TOOL), Entry.inherit("PATHEXT", Effect.TOOL),
                 Entry.inherit("SYSTEMROOT", Effect.TOOL), Entry.inherit("WINDIR", Effect.TOOL),
@@ -89,6 +92,29 @@ public final class ExecutionEnvironmentManifest {
                 Entry.set("WORLDLINE_CONTROL_DIR", Effect.TOOL, control.toString()),
                 Entry.set("WORLDLINE_RUNTIME_DIFFERENTIAL", Effect.BEHAVIOR, "1"),
                 Entry.set("WORLDLINE_RUNTIME_PARENT_LEASE", Effect.TOOL, leasePid),
+                Entry.set("WORLDLINE_RUNTIME_PARENT_STARTED", Effect.TOOL, leaseStarted),
+                Entry.set("WORLDLINE_RUNTIME_POOL_FILE", Effect.TOOL, leaseFile.toString()),
+                Entry.set("WORLDLINE_SMOKE_CACHE", Effect.BEHAVIOR, "off")));
+    }
+
+    static ExecutionEnvironmentManifest guiAero(Path temporary, Path gradleHome, Path control,
+            Path leaseFile, String leasePid, String leaseStarted) {
+        Path clean = temporary.toAbsolutePath().normalize();
+        require(clean.equals(temporary) && gradleHome.isAbsolute() && gradleHome.normalize().equals(gradleHome)
+                && control.isAbsolute() && leaseFile.isAbsolute(),
+                "Aero environment paths are not absolute and normalized");
+        require(leasePid.matches("[0-9]+"), "invalid runtime lease identity");
+        require(leaseStarted.matches("[0-9]+"), "invalid runtime lease start identity");
+        return new ExecutionEnvironmentManifest("gui-aero", List.of(
+                Entry.inherit("PATH", Effect.TOOL), Entry.inherit("PATHEXT", Effect.TOOL),
+                Entry.inherit("SYSTEMROOT", Effect.TOOL), Entry.inherit("WINDIR", Effect.TOOL),
+                Entry.set("GRADLE_USER_HOME", Effect.TOOL, gradleHome.toString()),
+                Entry.set("JAVA_TOOL_OPTIONS", Effect.TOOL, "-Xms16m -Xmx2048m -XX:-UsePerfData"),
+                Entry.set("TEMP", Effect.TOOL, clean.toString()), Entry.set("TMP", Effect.TOOL, clean.toString()),
+                Entry.set("WORLDLINE_CONTROL_DIR", Effect.TOOL, control.toString()),
+                Entry.set("WORLDLINE_RUNTIME_DIFFERENTIAL", Effect.BEHAVIOR, "1"),
+                Entry.set("WORLDLINE_RUNTIME_PARENT_LEASE", Effect.TOOL, leasePid),
+                Entry.set("WORLDLINE_RUNTIME_PARENT_STARTED", Effect.TOOL, leaseStarted),
                 Entry.set("WORLDLINE_RUNTIME_POOL_FILE", Effect.TOOL, leaseFile.toString()),
                 Entry.set("WORLDLINE_SMOKE_CACHE", Effect.BEHAVIOR, "off")));
     }
@@ -136,8 +162,11 @@ public final class ExecutionEnvironmentManifest {
         require(manifest.environment().set().size() == 3, "tooling environment drift");
         require(candidate(temporary, temporary.resolve("control")).environment().set().size() == 6,
                 "Candidate environment drift");
-        require(guiNative(temporary, temporary.resolve("control"), temporary.resolve("lease"), "7")
-                .environment().set().size() == 8, "GUI environment drift");
+        require(guiNative(temporary, temporary.resolve("control"), temporary.resolve("lease"), "7", "11")
+                .environment().set().size() == 9, "GUI environment drift");
+        require(guiAero(temporary, temporary.resolve("gradle"), temporary.resolve("control"),
+                temporary.resolve("lease"), "7", "11").environment().set().size() == 10,
+                "Aero environment drift");
         expectFailure(() -> new ExecutionEnvironmentManifest("secret", List.of(
                 Entry.set("API_TOKEN", Effect.TOOL, "forbidden"))));
         expectFailure(() -> new ExecutionEnvironmentManifest("duplicate", List.of(

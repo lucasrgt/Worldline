@@ -14,21 +14,22 @@ public final class PoolLeaseToken {
     public static void main(String[] arguments) {
         try {
             if (List.of(arguments).equals(List.of("--self-test"))) { selfTest(); return; }
-            require((arguments.length == 5 || arguments.length == 7)
+            require((arguments.length == 5 || arguments.length == 8)
                             && arguments[0].equals("create"),
                     "usage: PoolLeaseToken create FILE SECRET PARENT_PID LOCK"
-                            + " [executor-differential LEASE_PID]");
-            String purpose = arguments.length == 7 ? arguments[5] : "smoke-pool";
-            String lease = arguments.length == 7 ? arguments[6] : null;
+                            + " [executor-differential LEASE_PID [LEASE_STARTED]]");
+            String purpose = arguments.length == 8 ? arguments[5] : "smoke-pool";
+            String lease = arguments.length == 8 ? arguments[6] : null;
+            String leaseStarted = arguments.length == 8 ? arguments[7] : null;
             create(Path.of(arguments[1]), arguments[2], arguments[3], Path.of(arguments[4]),
-                    true, purpose, lease);
+                    true, purpose, lease, leaseStarted);
         } catch (Exception error) {
             System.err.println("pool lease token failed: " + error.getMessage()); System.exit(1);
         }
     }
 
     private static void create(Path requested, String secret, String parent, Path lock,
-            boolean requireClean, String purpose, String leasePid) throws Exception {
+            boolean requireClean, String purpose, String leasePid, String leaseStarted) throws Exception {
         Path directory = ROOT.resolve(".worldline/runtime-fabric").normalize();
         Path file = requested.toAbsolutePath().normalize();
         require(file.startsWith(directory) && !file.equals(directory), "token escaped runtime fabric");
@@ -41,6 +42,13 @@ public final class PoolLeaseToken {
                         && leasePid.matches("[0-9]+"))
                         || (purpose.equals("smoke-pool") && leasePid == null),
                 "invalid differential lease identity");
+        if (purpose.equals("executor-differential")) {
+            require(leaseStarted != null, "differential lease start identity is absent");
+            require(leaseStarted.matches("[0-9]+"), "invalid differential lease start identity");
+            ProcessHandle lease = ProcessHandle.of(Long.parseLong(leasePid)).orElseThrow();
+            require(lease.isAlive() && lease.info().startInstant().orElseThrow().toEpochMilli()
+                    == Long.parseLong(leaseStarted), "differential lease PID/start identity mismatch");
+        }
         require(!requireClean || capture("status", "--porcelain", "--untracked-files=all").isBlank(),
                 "pool token requires a clean worktree");
         Properties values = new Properties(); values.setProperty("schema", "1");
@@ -50,6 +58,7 @@ public final class PoolLeaseToken {
         values.setProperty("lock.path", lock.toAbsolutePath().normalize().toString());
         values.setProperty("purpose", purpose);
         if (leasePid != null) values.setProperty("lease.pid", leasePid);
+        if (leaseStarted != null) values.setProperty("lease.started", leaseStarted);
         values.setProperty("created", Instant.now().toString()); Files.createDirectories(directory);
         try (var writer = Files.newBufferedWriter(file, StandardCharsets.UTF_8)) {
             values.store(writer, "Worldline official-runtime pool capability");
@@ -72,7 +81,7 @@ public final class PoolLeaseToken {
         Path file = ROOT.resolve(".worldline/runtime-fabric/token-self-test.properties");
         create(file, "00000000-0000-0000-0000-000000000000",
                 Long.toString(ProcessHandle.current().pid()), file.resolveSibling("lock"),
-                false, "smoke-pool", null);
+                false, "smoke-pool", null, null);
         Properties values = new Properties(); try (var reader = Files.newBufferedReader(file)) {
             values.load(reader);
         }

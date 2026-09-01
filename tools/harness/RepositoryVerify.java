@@ -56,13 +56,13 @@ final class RepositoryVerify {
             return;
         }
         if (arguments.length == 1 && List.of("--executor-server", "--executor-candidate",
-                "--executor-gui").contains(arguments[0])) {
-            try {
-                String main = arguments[0].contains("server")
-                        ? "ExecutorServerCycle" : arguments[0].contains("gui")
-                                ? "ExecutorGuiCycle" : "ExecutorCandidateCycle";
-                String output = ProcessCapture.require(Path.of("").toAbsolutePath().normalize(),
-                        List.of("java", "tools/containers/RuntimeFabricLauncher.java", main), 3_000);
+                "--executor-gui", "--executor-aero").contains(arguments[0])) {
+            try { qualificationBoundary();
+                String main = switch (arguments[0]) { case "--executor-server" -> "ExecutorServerCycle";
+                    case "--executor-gui" -> "ExecutorGuiCycle"; case "--executor-aero" -> "ExecutorAeroCycle";
+                    default -> "ExecutorCandidateCycle"; };
+                String output = ProcessCapture.require(Path.of("").toAbsolutePath().normalize(), List.of("java",
+                        "tools/containers/RuntimeFabricLauncher.java", main), arguments[0].contains("aero") ? 14_400 : 3_000);
                 System.out.print(output);
             } catch (Exception error) {
                 System.err.println("executor qualification failed: " + error.getMessage());
