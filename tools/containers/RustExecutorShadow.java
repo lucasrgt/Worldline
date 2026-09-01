@@ -100,12 +100,15 @@ public final class RustExecutorShadow {
         String accounting = direct ? "null" : "1";
         String processes = plan.isolation().backend().equals("windows_job") ? "1" : "null";
         String tasks = plan.isolation().backend().equals("linux_cgroup") ? "1" : "null";
+        String linuxEvents = plan.isolation().backend().equals("linux_cgroup") ? "0" : "null";
         String metrics = "{\"schema\":\"worldline.execution-metrics.v1\",\"elapsed_ms\":1,"
                 + "\"peak_memory_bytes\":" + accounting + ",\"memory_measurement\":\"" + measurement + "\","
                 + "\"peak_processes\":" + processes + ",\"peak_tasks\":" + tasks
                 + ",\"cpu_user_100ns\":" + accounting
                 + ",\"cpu_kernel_100ns\":" + accounting + ",\"io_read_bytes\":" + accounting
-                + ",\"io_write_bytes\":" + accounting + ",\"stdout_observed_bytes\":0,"
+                + ",\"io_write_bytes\":" + accounting + ",\"memory_limit_events\":" + linuxEvents
+                + ",\"oom_kill_events\":" + linuxEvents + ",\"task_limit_events\":" + linuxEvents
+                + ",\"cpu_throttled_100ns\":" + linuxEvents + ",\"stdout_observed_bytes\":0,"
                 + "\"stderr_observed_bytes\":0,\"stdout_truncated\":false,\"stderr_truncated\":false,"
                 + "\"telemetry_qualification\":\"observational\"}";
         ExecutionJson.writeAtomic(plan.outputs().metrics(), ExecutionJson.bytes(metrics));

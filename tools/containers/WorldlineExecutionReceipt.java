@@ -13,7 +13,8 @@ final class WorldlineExecutionReceipt {
             "stdout_truncated", "stderr_truncated", "descendants_remaining", "error");
     private static final List<String> METRIC_FIELDS = List.of("schema", "elapsed_ms",
             "peak_memory_bytes", "memory_measurement", "peak_processes", "peak_tasks", "cpu_user_100ns",
-            "cpu_kernel_100ns", "io_read_bytes", "io_write_bytes", "stdout_observed_bytes",
+            "cpu_kernel_100ns", "io_read_bytes", "io_write_bytes", "memory_limit_events",
+            "oom_kill_events", "task_limit_events", "cpu_throttled_100ns", "stdout_observed_bytes",
             "stderr_observed_bytes", "stdout_truncated", "stderr_truncated", "telemetry_qualification");
     private static final Set<String> TERMINATIONS = Set.of("exited", "crashed", "timed_out",
             "spawn_failed", "wait_failed", "owner_exited");
@@ -70,15 +71,22 @@ final class WorldlineExecutionReceipt {
         Long kernel = nullablePositive(value, "cpu_kernel_100ns");
         Long read = nullablePositive(value, "io_read_bytes");
         Long written = nullablePositive(value, "io_write_bytes");
+        Long memoryEvents = nullablePositive(value, "memory_limit_events");
+        Long oomKills = nullablePositive(value, "oom_kill_events");
+        Long taskEvents = nullablePositive(value, "task_limit_events");
+        Long throttled = nullablePositive(value, "cpu_throttled_100ns");
         if (!plan.isolation().backend().equals("direct")) require(peakMemory != null
                 && user != null && kernel != null && read != null && written != null,
                 "contained accounting is incomplete");
-        if (plan.isolation().backend().equals("windows_job")) require(peakProcesses != null && peakTasks == null,
+        if (plan.isolation().backend().equals("windows_job")) require(peakProcesses != null && peakTasks == null
+                && memoryEvents == null && oomKills == null && taskEvents == null && throttled == null,
                 "Windows Job process accounting drift");
-        else if (plan.isolation().backend().equals("linux_cgroup")) require(peakProcesses == null && peakTasks != null,
+        else if (plan.isolation().backend().equals("linux_cgroup")) require(peakProcesses == null && peakTasks != null
+                && memoryEvents != null && oomKills != null && taskEvents != null && throttled != null,
                 "Linux cgroup task accounting drift");
         else require(measurement.equals("unavailable") && peakMemory == null && peakProcesses == null
-                && peakTasks == null && user == null && kernel == null && read == null && written == null,
+                && peakTasks == null && user == null && kernel == null && read == null && written == null
+                && memoryEvents == null && oomKills == null && taskEvents == null && throttled == null,
                 "direct backend claimed unavailable accounting");
         require(positive(value, "stdout_observed_bytes") == positive(receipt, "stdout_observed_bytes"),
                 "stdout metrics drift");
@@ -122,7 +130,9 @@ final class WorldlineExecutionReceipt {
                 + ",\"peak_processes\":" + n(value.get("peak_processes")) + ",\"peak_tasks\":" + n(value.get("peak_tasks"))
                 + ",\"cpu_user_100ns\":" + n(value.get("cpu_user_100ns"))
                 + ",\"cpu_kernel_100ns\":" + n(value.get("cpu_kernel_100ns")) + ",\"io_read_bytes\":" + n(value.get("io_read_bytes"))
-                + ",\"io_write_bytes\":" + n(value.get("io_write_bytes")) + ",\"stdout_observed_bytes\":" + n(value.get("stdout_observed_bytes"))
+                + ",\"io_write_bytes\":" + n(value.get("io_write_bytes")) + ",\"memory_limit_events\":" + n(value.get("memory_limit_events"))
+                + ",\"oom_kill_events\":" + n(value.get("oom_kill_events")) + ",\"task_limit_events\":" + n(value.get("task_limit_events"))
+                + ",\"cpu_throttled_100ns\":" + n(value.get("cpu_throttled_100ns")) + ",\"stdout_observed_bytes\":" + n(value.get("stdout_observed_bytes"))
                 + ",\"stderr_observed_bytes\":" + n(value.get("stderr_observed_bytes")) + ",\"stdout_truncated\":" + n(value.get("stdout_truncated"))
                 + ",\"stderr_truncated\":" + n(value.get("stderr_truncated")) + ",\"telemetry_qualification\":" + q(value, "telemetry_qualification") + "}";
         return ExecutionJson.bytes(json);
