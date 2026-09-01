@@ -108,22 +108,18 @@ public final class HostSmokePool {
 
     private Outcome runTask(Task task, Config config, Profile profile, Path prebuilt, Path batch, AtomicInteger active, AtomicInteger peak, Path token, String secret) {
         int now = active.incrementAndGet(); peak.accumulateAndGet(now, Math::max);
-        Path output = batch.resolve(task.id), log = output.resolve("console.log"), tmp = output.resolve("tmp");
+        Path output = batch.resolve(task.id), tmp = output.resolve("tmp");
         Path evidence = root.resolve(".worldline/smokes").resolve(task.argument).normalize();
         try {
             require(evidence.startsWith(root.resolve(".worldline/smokes")), "unsafe evidence path");
             deleteTree(evidence); Files.createDirectories(tmp);
             List<String> command = new ArrayList<>(List.of(java(), "tools/harness/Gate.java", "--milestone", task.argument));
-            ProcessBuilder builder = isolated(config, profile, task, output, log, command).directory(root.toFile());
-            builder.environment().put("JAVA_TOOL_OPTIONS", "-XX:+UseSerialGC -Xms16m -Xmx" + profile.heap);
-            builder.environment().put("TEMP", tmp.toString()); builder.environment().put("TMP", tmp.toString());
-            builder.environment().put("GRADLE_USER_HOME", (prebuilt == null ? output.resolve("gradle") : root.resolve(".worldline/runtime-fabric/gradle").resolve(task.id)).toString());
-            builder.environment().put("WORLDLINE_RUNTIME_SLOT", task.id);
-            builder.environment().put("WORLDLINE_RUNTIME_POOL_FILE", token.toString()); builder.environment().put("WORLDLINE_RUNTIME_POOL_TOKEN", secret);
-            if (prebuilt != null) { builder.environment().put("WORLDLINE_AERO_PREBUILT", prebuilt.toString()); builder.environment().put("WORLDLINE_RUNTIME_TIMEOUT_EXTRA", "900"); }
-            Process process = builder.start(); boolean finished = process.waitFor(task.timeoutSeconds + 15L, TimeUnit.SECONDS);
-            if (!finished) killTree(process); require(finished, "timeout after " + task.timeoutSeconds + "s");
-            require(process.exitValue() == 0, "exit " + process.exitValue() + "; see " + log);
+            Path gradle = prebuilt == null ? output.resolve("gradle")
+                    : root.resolve(".worldline/runtime-fabric/gradle").resolve(task.id);
+            HostSmokeTaskRunner.execute(new HostSmokeTaskRunner.Request(root, config.backend,
+                    task.id, task.timeoutSeconds, profile.heap, profile.memoryLimitBytes,
+                    profile.cpuUnits, profile.processLimit, hostCpus(), output, tmp, gradle,
+                    token, secret, prebuilt, command));
             if (Files.isDirectory(evidence)) copyTree(evidence, output.resolve("evidence"));
             System.out.println("PASS " + task.id); return new Outcome(task.id, true, "passed");
         } catch (Exception error) {
@@ -140,7 +136,13 @@ public final class HostSmokePool {
     private void verify() throws Exception { Process process = new ProcessBuilder(java(), "tools/harness/Gate.java").directory(root.toFile()).inheritIO().start(); require(process.waitFor(10, TimeUnit.MINUTES) && process.exitValue() == 0, "host Gate failed"); }
 
     private void prepareBackend(String backend) throws Exception {
-        if (backend.equals("windows-job")) {
+        if (backend.equals("rust-windows-job")) {
+            require(isWindows(), "rust-windows-job requires Windows");
+            String configured = System.getenv("WORLDLINE_EXECUTOR");
+            require(configured != null && !configured.isBlank() && Path.of(configured).isAbsolute()
+                    && Files.isRegularFile(Path.of(configured)),
+                    "rust-windows-job requires an absolute WORLDLINE_EXECUTOR");
+        } else if (backend.equals("windows-job")) {
             require(isWindows(), "windows-job requires Windows");
             Process process = new ProcessBuilder(java(), "tools/containers/WindowsJobBootstrap.java", "ensure")
                     .directory(root.toFile()).inheritIO().start();
@@ -152,25 +154,6 @@ public final class HostSmokePool {
                     .directory(root.toFile()).inheritIO().start();
             require(process.waitFor(15, TimeUnit.SECONDS) && process.exitValue() == 0, "Linux isolation doctor failed");
         }
-    }
-
-    private ProcessBuilder isolated(Config config, Profile profile, Task task, Path output, Path log, List<String> command) {
-        if (config.backend.equals("windows-job")) {
-            int cpuRate = Math.max(1, (int) Math.floor(10_000.0 * profile.cpuUnits / Host.measure().cpus));
-            List<String> wrapped = new ArrayList<>(List.of(root.resolve(".worldline/tools/WindowsJobRunner.exe").toString(),
-                    "--memory", Long.toString(profile.memoryLimitBytes), "--cpu-rate", Integer.toString(cpuRate),
-                    "--active-processes", Integer.toString(profile.processLimit), "--timeout-seconds", Integer.toString(task.timeoutSeconds), "--parent-pid", Long.toString(ProcessHandle.current().pid()),
-                    "--cwd", root.toString(), "--log", log.toString(), "--metrics", output.resolve("metrics.properties").toString(), "--"));
-            wrapped.addAll(command); return new ProcessBuilder(wrapped).redirectErrorStream(true)
-                    .redirectOutput(output.resolve("launcher.log").toFile());
-        }
-        List<String> wrapped = new ArrayList<>(List.of("bash", "tools/containers/linux-runtime.sh", "run", "--mode",
-                config.backend.equals("linux-sandbox") ? "sandbox" : "cgroup", "--memory", Long.toString(profile.memoryLimitBytes),
-                "--cpu-percent", Integer.toString(Math.max(1, (int) Math.ceil(profile.cpuUnits * 100))),
-                "--processes", Integer.toString(profile.processLimit), "--timeout-seconds", Integer.toString(task.timeoutSeconds),
-                "--cwd", root.toString(), "--log", log.toString(), "--metrics", output.resolve("metrics.properties").toString(), "--"));
-        wrapped.addAll(command); return new ProcessBuilder(wrapped).redirectErrorStream(true)
-                .redirectOutput(output.resolve("launcher.log").toFile());
     }
 
     private boolean noForeignRuntime() {
@@ -221,11 +204,10 @@ public final class HostSmokePool {
         try (Stream<Path> paths = Files.walk(target)) { for (Path path : paths.sorted(Comparator.reverseOrder()).toList()) Files.delete(path); }
     }
 
-    private static void killTree(Process process) throws InterruptedException {
-        ProcessTreeTermination.kill(process, "worker");
-    }
-    private static String java() { return Path.of(System.getProperty("java.home"), "bin", "java").toString(); }
+    private static String java() { return Path.of(System.getProperty("java.home"), "bin",
+            "java" + (isWindows() ? ".exe" : "")).toString(); }
     private static boolean isWindows() { return System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows"); }
+    private static int hostCpus() { return Runtime.getRuntime().availableProcessors(); }
     private static double gib(long bytes) { return bytes / (1024.0 * 1024 * 1024); }
     private static long size(String value) { String text = value.toLowerCase(Locale.ROOT);
         require(text.matches("[1-9][0-9]*[mg]"), "size must use m or g: " + value);
@@ -234,6 +216,7 @@ public final class HostSmokePool {
 
     private static void selfTest() throws Exception {
         ProcessTreeTermination.selfTest();
+        HostSmokeTaskRunner.selfTest();
         Path root = Path.of("").toAbsolutePath().normalize();
         require(parse(root.resolve("tools/containers/smokes-25.tsv"), root).size() == 25, "bundled manifest drift");
         Config config = Config.load(root, Options.parse(new String[] {"simulate", "tools/containers/smokes-25.tsv", "--jobs", "25"}));
@@ -282,7 +265,7 @@ public final class HostSmokePool {
             require(parallelism >= 0 && parallelism <= max && max <= 25, "parallelism must be auto or 1.." + max);
             String heap = required(values, "worker.heap"); long heapBytes = size(heap);
             String backend = options.backend != null ? options.backend : required(values, "backend");
-            if (backend.equals("auto")) backend = isWindows() ? "windows-job" : "linux-cgroup";
+            if (backend.equals("auto")) backend = isWindows() ? "rust-windows-job" : "linux-cgroup";
             String lock = options.lock != null ? options.lock : values.getProperty("runtime.lock.path", "").trim();
             long worker = size(required(values, "worker.memory.estimate")); double cpu = Double.parseDouble(required(values, "worker.cpu.units"));
             long limit = size(required(values, "worker.memory.limit")); int processes = Integer.parseInt(required(values, "worker.process.limit"));

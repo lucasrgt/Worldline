@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -23,13 +24,25 @@ public final class RustExecutorShadow {
 
     static WorldlineExecutionReceipt.Verified execute(Path executable, Path planPath,
             WorldlineExecutionPlan plan) throws Exception {
+        return execute(executable, planPath, plan, Map.of());
+    }
+
+    static WorldlineExecutionReceipt.Verified execute(Path executable, Path planPath,
+            WorldlineExecutionPlan plan, Map<String, String> launcherEnvironment) throws Exception {
         require(executable.isAbsolute() && Files.isRegularFile(executable),
                 "WORLDLINE_EXECUTOR is not an absolute regular file");
         require(planPath.isAbsolute() && planPath.normalize().equals(planPath), "plan path is not normalized");
         plan.write(planPath); Path launcherLog = planPath.resolveSibling(planPath.getFileName() + ".launcher.log");
-        Process process = new ProcessBuilder(invocation(executable, planPath, plan))
+        ProcessBuilder builder = new ProcessBuilder(invocation(executable, planPath, plan))
                 .directory(planPath.getParent().toFile()).redirectErrorStream(true)
-                .redirectOutput(launcherLog.toFile()).start();
+                .redirectOutput(launcherLog.toFile());
+        for (Map.Entry<String, String> entry : launcherEnvironment.entrySet()) {
+            require(entry.getKey().matches("[A-Za-z_][A-Za-z0-9_]*")
+                    && entry.getValue() != null && entry.getValue().indexOf(0) < 0,
+                    "invalid native launcher environment");
+            builder.environment().put(entry.getKey(), entry.getValue());
+        }
+        Process process = builder.start();
         long waitMillis = Math.addExact(plan.limits().timeoutMs(), 30_000L);
         if (!process.waitFor(waitMillis, TimeUnit.MILLISECONDS)) {
             ProcessTreeTermination.kill(process, "native executor");

@@ -11,7 +11,8 @@ import java.util.concurrent.TimeUnit;
 public final class RuntimeFabric {
     private static final Path ROOT = Path.of("").toAbsolutePath().normalize();
     private static final List<String> BACKENDS = List.of(
-            "auto", "windows-job", "windows-appcontainer", "linux-cgroup", "linux-sandbox", "docker");
+            "auto", "rust-windows-job", "windows-job", "windows-appcontainer",
+            "linux-cgroup", "linux-sandbox", "docker");
 
     public static void main(String[] arguments) {
         try {
@@ -52,10 +53,11 @@ public final class RuntimeFabric {
         Capabilities value = Capabilities.detect();
         System.out.println("Worldline Runtime Fabric doctor");
         System.out.println("host.os=" + value.os); System.out.println("host.filesystem=" + value.fileSystem);
-        row("windows-job", value.windowsJob, value.windowsJob ? "ready" : "requires Windows and the .NET Framework C# compiler");
-        boolean rust = rustExecutor();
-        row("rust-executor-shadow", rust, rust ? "ready for non-qualifying differential fixtures"
-                : "set WORLDLINE_EXECUTOR to an absolute native executor path");
+        row("rust-windows-job", value.rustExecutor,
+                value.rustExecutor ? "default for Windows server-headless pools"
+                        : "required for Windows auto; set WORLDLINE_EXECUTOR to an absolute native path");
+        row("windows-job", value.windowsJob,
+                value.windowsJob ? "qualified explicit rollback" : "rollback unavailable");
         row("windows-appcontainer", false, "experimental API is never selected automatically; compatibility probe pending");
         row("linux-cgroup", value.linuxCgroup, value.linuxCgroup ? "ready" : "requires Linux, cgroups v2, and a delegated systemd user manager");
         row("linux-sandbox", value.linuxSandbox, value.linuxSandbox ? "ready" : "requires linux-cgroup and bubblewrap");
@@ -78,13 +80,14 @@ public final class RuntimeFabric {
         if (!requested.equals("auto")) return requested;
         if (value.windows) {
             if (isolation.equals("sealed")) return "windows-appcontainer";
-            return "windows-job";
+            return "rust-windows-job";
         }
         if (isolation.equals("sealed")) return "linux-sandbox";
         return "linux-cgroup";
     }
     private static boolean available(String backend, Capabilities value) {
         return switch (backend) {
+            case "rust-windows-job" -> value.windows && value.rustExecutor;
             case "windows-job" -> value.windowsJob; case "windows-appcontainer" -> false;
             case "linux-cgroup" -> value.linuxCgroup && !value.onWslWindowsMount;
             case "linux-sandbox" -> value.linuxSandbox && !value.onWslWindowsMount;
@@ -93,6 +96,7 @@ public final class RuntimeFabric {
     }
     private static String unavailable(String backend, Capabilities value) {
         if (backend.equals("windows-appcontainer")) return "windows-appcontainer is experimental and has not passed Java/loopback compatibility; choose balanced or an explicit proven backend";
+        if (backend.equals("rust-windows-job")) return "Windows auto requires the qualified Rust executor; set WORLDLINE_EXECUTOR to an absolute regular file or choose --backend windows-job for rollback";
         if (backend.startsWith("linux-") && value.onWslWindowsMount) return "Linux dense mode requires the repository on WSL ext4, not /mnt";
         return "backend is unavailable on this host: " + backend + "; run doctor";
     }
@@ -156,13 +160,22 @@ public final class RuntimeFabric {
             Thread.sleep(20L);
         require(probe.descendants().findAny().isPresent(), "termination probe did not create a child");
         terminate(probe);
-        Capabilities windows = new Capabilities(true, "windows", "ntfs", true, false, false, false, false, true, false);
-        require(select("auto", "balanced", windows).equals("windows-job"), "Windows auto-selection drift");
+        Capabilities windows = new Capabilities(true, "windows", "ntfs", true, true,
+                false, false, false, false, true, false);
+        require(select("auto", "balanced", windows).equals("rust-windows-job"),
+                "Windows auto-selection drift");
+        require(available("rust-windows-job", windows), "qualified Rust backend availability drift");
+        Capabilities missingRust = new Capabilities(true, "windows", "ntfs", true, false,
+                false, false, false, false, true, false);
+        require(!available(select("auto", "balanced", missingRust), missingRust),
+                "Windows auto silently weakened without Rust");
         require(select("auto", "sealed", windows).equals("windows-appcontainer"), "Windows sealed fail-closed drift");
-        Capabilities linux = new Capabilities(false, "linux", "ext4", false, true, true, false, false, false, false);
+        Capabilities linux = new Capabilities(false, "linux", "ext4", false, false,
+                true, true, false, false, false, false);
         require(select("auto", "fast", linux).equals("linux-cgroup"), "Linux auto-selection drift");
         require(select("auto", "sealed", linux).equals("linux-sandbox"), "Linux sealed selection drift");
-        require(!available("linux-cgroup", new Capabilities(false, "linux", "drvfs", false, true, true, false, true, false, true)),
+        require(!available("linux-cgroup", new Capabilities(false, "linux", "drvfs", false,
+                false, true, true, false, true, false, true)),
                 "WSL Windows-mount rejection drift");
         if (isWindows()) require(capture(List.of(java(), "tools/containers/WindowsJobBootstrap.java", "--self-test"), 90).passed,
                 "Windows Job launcher self-test failed");
@@ -186,7 +199,7 @@ public final class RuntimeFabric {
 
     private record Result(boolean passed, String output) { }
     private record Capabilities(boolean windows, String os, String fileSystem, boolean windowsJob,
-                                boolean linuxCgroup, boolean linuxSandbox, boolean docker,
+                                boolean rustExecutor, boolean linuxCgroup, boolean linuxSandbox, boolean docker,
                                 boolean wsl, boolean appContainer, boolean onWslWindowsMount) {
         static Capabilities detect() {
             boolean windows = isWindows(), wsl = windows && capture(List.of("wsl.exe", "--status"), 5).passed;
@@ -199,7 +212,9 @@ public final class RuntimeFabric {
             boolean docker = command("docker") && capture(List.of("docker", "version", "--format", "{{.Server.Version}}"), 5).passed;
             String cwd = ROOT.toString().replace('\\', '/'); boolean mounted = !windows && cwd.startsWith("/mnt/");
             String fileSystem = windows ? "windows-native" : capture(List.of("findmnt", "-n", "-o", "FSTYPE", ROOT.toString()), 5).output.trim();
-            return new Capabilities(windows, os, fileSystem, job, cgroup, sandbox, docker, wsl, false, mounted);
+            return new Capabilities(windows, os, fileSystem, job, RuntimeFabric.rustExecutor(),
+                    cgroup, sandbox,
+                    docker, wsl, false, mounted);
         }
     }
     private record Options(String action, Path manifest, String backend, String isolation, String jobs,
@@ -207,7 +222,7 @@ public final class RuntimeFabric {
         static Options parse(String[] arguments) {
             require(arguments.length >= 2 && List.of("simulate", "run").contains(arguments[0]),
                     "usage: java tools/containers/RuntimeFabric.java doctor|simulate|run MANIFEST"
-                            + " [--backend auto|windows-job|windows-appcontainer|linux-cgroup|linux-sandbox|docker]"
+                            + " [--backend auto|rust-windows-job|windows-job|windows-appcontainer|linux-cgroup|linux-sandbox|docker]"
                             + " [--isolation fast|balanced|sealed] [--jobs auto|1..25] [--config FILE] [--lock FILE] [--skip-verify]");
             String backend = "auto", isolation = "balanced", jobs = "auto", lock = null; Path config = null; boolean skip = false;
             for (int index = 2; index < arguments.length; index++) switch (arguments[index]) {
