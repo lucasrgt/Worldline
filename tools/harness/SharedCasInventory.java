@@ -134,6 +134,10 @@ final class SharedCasInventory {
                     "shared CAS inventory classification drifted");
             require(!json.contains(root.toString()) && json.contains("\"paths_included\":false"),
                     "shared CAS inventory leaked a path");
+            Path badLock = shared.resolve("locks/sha256/zz/bad.lock");
+            Files.createDirectories(badLock.getParent()); Files.writeString(badLock, "bad");
+            require(inspect(shared, references).malformedEntries == 2,
+                    "malformed shared CAS publication lock was hidden");
         } finally { SafeTreeDelete.delete(root); }
         System.out.println("  shared CAS inventory self-test: passed");
     }
@@ -141,7 +145,9 @@ final class SharedCasInventory {
     private static void scanRoot(Path root, Map<String, Reference> references, Counter counter,
             List<ObjectEntry> objects) throws Exception {
         List<Path> children = children(root);
-        for (Path child : children) if (!child.getFileName().toString().equals("objects")) counter.malformed++;
+        for (Path child : children) if (!Set.of("objects", "locks").contains(
+                child.getFileName().toString())) counter.malformed++;
+        scanLocks(root, counter);
         Path objectRoot = root.resolve("objects"); if (!Files.exists(objectRoot)) return;
         if (!directory(objectRoot)) { counter.malformed++; return; }
         for (Path child : children(objectRoot)) if (!child.getFileName().toString().equals("sha256"))
@@ -152,6 +158,25 @@ final class SharedCasInventory {
             String head = prefix.getFileName().toString();
             if (!head.matches(PREFIX) || !directory(prefix)) { counter.malformed++; continue; }
             for (Path path : children(prefix)) inspectObject(path, head, references, counter, objects);
+        }
+    }
+
+    private static void scanLocks(Path root, Counter counter) throws Exception {
+        Path locks = root.resolve("locks"); if (!Files.exists(locks)) return;
+        if (!directory(locks)) { counter.malformed++; return; }
+        for (Path child : children(locks)) if (!child.getFileName().toString().equals("sha256"))
+            counter.malformed++;
+        Path shaRoot = locks.resolve("sha256"); if (!Files.exists(shaRoot)) return;
+        if (!directory(shaRoot)) { counter.malformed++; return; }
+        for (Path prefix : children(shaRoot)) {
+            String head = prefix.getFileName().toString();
+            if (!head.matches(PREFIX) || !directory(prefix)) { counter.malformed++; continue; }
+            for (Path lock : children(prefix)) {
+                String tail = lock.getFileName().toString();
+                if (!tail.matches("[0-9a-f]{62}[.]lock")
+                        || !Files.isRegularFile(lock, LinkOption.NOFOLLOW_LINKS)
+                        || Files.isSymbolicLink(lock) || Files.size(lock) != 0L) counter.malformed++;
+            }
         }
     }
 
