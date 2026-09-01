@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Stream;
 
 /** Qualifies the concrete Beta 1.7.3 EntityList NBT persistence matrix twice. */
 public final class EntityPersistenceReplay {
@@ -71,10 +70,7 @@ public final class EntityPersistenceReplay {
     Files.createDirectories(headless);
     List<String> stubs = new ArrayList<>(Arrays.asList("javac", "--release", "8",
         "-encoding", "UTF-8", "-Xlint:all,-options", "-Werror", "-d", headless.toString()));
-    try (Stream<Path> files = Files.walk(root.resolve("adapters/b173-client/headless-src"))) {
-      files.filter(path -> path.toString().endsWith(".java")).sorted()
-          .forEach(path -> stubs.add(path.toString()));
-    }
+    stubs.addAll(SmokeSupport.javaFiles(root.resolve("adapters/b173-client/headless-src")));
     run(stubs, "headless compilation");
     Path classes = build.resolve("smoke-classes");
     Files.createDirectories(classes);
@@ -106,9 +102,6 @@ public final class EntityPersistenceReplay {
         product("testmodel"), product("testapi"), product("testkit"), headless,
         root.resolve("local/workspaces/b1.7.3/minecraft/bin"),
         root.resolve("local/workspaces/b1.7.3/jars/minecraft.jar")));
-    try (Stream<Path> libraries = Files.walk(root.resolve("local/workspaces/b1.7.3/libraries"))) {
-      libraries.filter(path -> path.toString().endsWith(".jar")).sorted().forEach(paths::add);
-    }
     for (Path path : paths) require(Files.exists(path), "missing runtime input " + path);
     return paths;
   }
