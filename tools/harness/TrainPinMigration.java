@@ -86,10 +86,12 @@ final class TrainPinMigration extends TrainPinSupport {
             }
             SmokePins.Entry currentPin = pins.match(smoke.id, current);
             SmokePins.Entry predecessorPin = pins.entry(smoke.id);
-            if (predecessor.getProperty(stem + "kind") == null && currentPin != null) {
+            if (predecessor.getProperty(stem + "kind") == null && predecessorPin != null) {
                 carried++;
-                seal(lock, stem, "baseline", current, current, currentPin.evidence());
-                updated.add(currentPin);
+                seal(lock, stem, "baseline", predecessorPin.fingerprint(), current,
+                        predecessorPin.evidence());
+                updated.add(currentPin != null ? currentPin : new SmokePins.Entry(
+                        smoke.id, current, predecessorPin.evidence(), "refactor-equivalent"));
                 continue;
             }
             if ("baseline".equals(predecessor.getProperty(stem + "kind"))
