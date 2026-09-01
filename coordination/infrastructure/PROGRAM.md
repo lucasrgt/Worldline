@@ -107,6 +107,12 @@ Completed foundation slices:
   and `6c653b5e3`. Cache explanations preserve the exact local-proof-before-pin
   lookup order and distinguish the predicted decision from a clean
   current-tree receipt.
+- a source-only `Gate --input-diff ID@GIT_REF` query in Worldline commits
+  `814aa6b45` through `9e51cf43d`. It applies the current graph engine to an
+  exact tracked Git snapshot, verifies both graph roots against the legacy
+  fingerprint engine, and reports added, removed, or changed node identities
+  using hashes only. Untracked local artifacts, official JARs, source content,
+  environment values, and secrets never enter the snapshot or output.
 
 Evidence recorded for these slices:
 
@@ -132,6 +138,13 @@ Evidence recorded for these slices:
   pin decisions; dependency queries cover paths, modules, and environment
   inputs, reject traversal, remain non-mutating, and pass the exact clean
   canonical Gate (`cold 143048ms < 240000ms`).
+- cross-commit input comparison returns zero changes for an adjacent
+  documentation-only commit and eleven changed module nodes for the historical
+  `testkit-cycle` fixture at `44052f060`; unsafe traversal refs fail closed,
+  temporary snapshots are deleted after success and failure, and the exact
+  clean branch passes canonical Gate (`cold 159638ms < 240000ms`) with all 624
+  dual graph roots equal and no provider or train proof pending. CSM RTW reports
+  no deviations and NYA passes.
 - the canonical Worldline Gate reaches `verify passed` with all content stages
   restored, but the host currently violates the unchanged hot latency SLO
   (`20361ms >= 7000ms` on the latest run). The budget was not weakened.
@@ -142,8 +155,8 @@ hostile-fixture coverage, broader legacy differentials, and all qualifying
 promotions remain pending. Artifact classification covers only tracked smoke
 pin envelopes; source-derived objects, sanitized diagnostics, transport, and
 hydration remain disabled. The input graph covers qualification identities in
-dual mode and current-tree dependents, but does not yet explain cross-commit
-node differences or own cache identity.
+dual mode, current-tree dependents, cache decisions, and cross-commit node
+differences, but does not yet own cache identity.
 A1 through A4, B3, and D1 are therefore in progress; A5 and later transport
 work have not started.
 
