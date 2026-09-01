@@ -166,10 +166,12 @@ final class ExecutorAdvancedHostileFixtures {
                 output.resolve("manifest.json"), output.resolve("receipt.json")));
     }
 
-    private static void compareOwner(Observation legacy, Observation rust, StringBuilder evidence) {
+    private static void compareOwner(Observation legacy, Observation rust, StringBuilder evidence)
+            throws Exception {
         compare("owner-exit", legacy, rust, evidence);
     }
-    private static void compare(String id, Observation legacy, Observation rust, StringBuilder evidence) {
+    private static void compare(String id, Observation legacy, Observation rust, StringBuilder evidence)
+            throws Exception {
         require(legacy.termination.equals(rust.termination)
                 && java.util.Objects.equals(legacy.exitCode, rust.exitCode), id + " termination differential");
         require(Arrays.equals(legacy.bytes, rust.bytes), id + " output differential");
