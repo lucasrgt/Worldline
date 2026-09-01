@@ -17,6 +17,7 @@ public final class SmokeReceiptCacheTest {
         try {
             repository = Files.createTempDirectory("worldline-smoke-cache-test-");
             execute(repository); SmokeFingerprintCheck.execute(Path.of("").toAbsolutePath().normalize());
+            PooledSmokeCheck.selfTest();
             boolean rejected = false;
             try { PooledSmokeCheck.execute("m59-chest-transfer"); }
             catch (IllegalStateException expected) { rejected = true; }

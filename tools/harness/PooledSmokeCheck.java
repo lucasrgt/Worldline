@@ -1,11 +1,24 @@
+import java.nio.channels.FileChannel;
+import java.nio.channels.OverlappingFileLockException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Properties;
 
 /** Validates a pool capability before one Gate-owned runtime-only milestone execution. */
 final class PooledSmokeCheck {
     private PooledSmokeCheck() {}
+
+    static void selfTest() throws Exception {
+        Path path = Files.createTempFile("worldline-pooled-lock-", ".lock");
+        try (FileChannel channel = FileChannel.open(path, StandardOpenOption.READ,
+                StandardOpenOption.WRITE); var lock = channel.lock()) {
+            require(lock.isValid() && lockHeld(path), "held runtime lock was not observed");
+        }
+        require(!lockHeld(path), "released runtime lock remained held");
+        Files.delete(path);
+    }
 
     static void execute(String id) throws Exception {
         Path root = Path.of("").toAbsolutePath().normalize(); Properties lease = verify(root);
@@ -79,9 +92,19 @@ final class PooledSmokeCheck {
         require(lease.matches("[0-9]+") && lease.equals(values.getProperty("lease.pid")),
                 "executor differential runtime lease mismatch");
         ProcessHandle owner = ProcessHandle.of(Long.parseLong(lease)).orElseThrow();
-        String command = owner.info().commandLine().orElse("").replace('\\', '/');
-        require(owner.isAlive() && command.contains("FairLeaseCommand"),
+        Path lock = Path.of(values.getProperty("lock.path", "")).toAbsolutePath().normalize();
+        require(owner.isAlive() && "official-b173.lock".equals(lock.getFileName().toString())
+                        && lockHeld(lock),
                 "canonical runtime lease owner is not active");
+    }
+
+    private static boolean lockHeld(Path path) {
+        if (!Files.isRegularFile(path)) return false;
+        try (FileChannel channel = FileChannel.open(path, StandardOpenOption.READ,
+                StandardOpenOption.WRITE)) {
+            try (var lock = channel.tryLock()) { return lock == null; }
+        } catch (OverlappingFileLockException error) { return true; }
+        catch (java.io.IOException error) { return false; }
     }
 
     private static String requiredEnvironment(String name) {
