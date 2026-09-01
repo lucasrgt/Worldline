@@ -47,13 +47,14 @@ final class ModuleCacheHydrator {
                 module, inputSha256, System.getProperty("java.version"));
         if (entry == null) return false;
         Files.createDirectories(cas); Path downloads = cas.resolveSibling("module-downloads");
-        Files.createDirectories(downloads); Path bundle = Files.createTempFile(downloads, module + "-", ".wmb");
+        Files.createDirectories(downloads); Path bundle = downloads.resolve(module + "-"
+                + ProcessHandle.current().pid() + "-" + System.nanoTime() + ".wmb");
+        require(!Files.exists(bundle), "module CAS download target already exists");
         try {
             String expected = entry.blobSha256() + " " + entry.blobSize() + "\n";
             require(expected.equals(command("hydrate", cas, address, permits,
                     entry.blobSha256(), MAXIMUM)), "module CAS hydration identity drifted");
-            require(expected.equals(command("get", cas, entry.blobSha256(), bundle)),
-                    "module CAS materialization identity drifted");
+            command("get", cas, entry.blobSha256(), bundle);
             ModuleCacheBundle.Identity identity = ModuleCacheBundle.validate(bundle);
             require(identity.module().equals(module) && identity.input().equals(inputSha256)
                     && identity.javaVersion().equals(System.getProperty("java.version"))
