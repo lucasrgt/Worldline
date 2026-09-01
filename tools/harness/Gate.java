@@ -53,13 +53,11 @@ public final class Gate {
             if (exit != 0) System.exit(exit);
             return;
         }
-        if (arguments.length == 2 && "--input-graph".equals(arguments[0])) {
-            Path classes = compileHarness();
-            int exit = waitFor(new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
-                    "SmokeInputGraphQuery", arguments[1]).directory(root.toFile()).inheritIO().start(), 60);
-            if (exit != 0) System.exit(exit);
-            return;
-        }
+        String query = arguments.length == 2 ? queryType(arguments[0]) : null;
+        if (query != null) { Path classes = compileHarness(); Process process = new ProcessBuilder(
+                javaTool("java"), "-cp", classes.toString(), query, arguments[1]).directory(root.toFile())
+                .inheritIO().start(); process.getOutputStream().close(); int exit = waitFor(process, 60);
+            if (exit != 0) System.exit(exit); return; }
         if (arguments.length == 1 && maintenance(arguments[0])) {
             Path classes = compileHarness();
             ProcessBuilder builder = new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
@@ -132,9 +130,9 @@ public final class Gate {
                 || Arrays.equals(arguments, new String[] {"--pinned-smoke"})
                 || Arrays.equals(arguments, new String[] {"--train-readiness"})
                 || Arrays.equals(arguments, new String[] {"--accept-legacy-smoke-baseline"})
+                || arguments.length == 2 && queryType(arguments[0]) != null
                 || arguments.length == 1 && maintenance(arguments[0])
                 || arguments.length == 2 && ("--new-milestone".equals(arguments[0])
-                        || "--input-graph".equals(arguments[0])
                         || "--candidate".equals(arguments[0])
                         || "--candidate-ready".equals(arguments[0])
                         || "--lane-differential".equals(arguments[0])
@@ -159,9 +157,11 @@ public final class Gate {
                 + "--seal-lane-portability|"
                 + "--module-cache-doctor|--module-cache-gc|--cache-doctor|--cache-gc|"
                 + "--cache-rebuild-drill|"
-                + "--new-milestone ID|--input-graph ID|--milestone ID|--lane-differential ID|"
+                + "--new-milestone ID|--input-graph ID|--cache-explain ID|"
+                + "--input-dependents KIND:KEY|--milestone ID|--lane-differential ID|"
                 + "--candidate-ready ID|--candidate ID|--self-test]");
-        if (arguments.length == 2 && !arguments[1].matches("[a-z0-9]+(?:-[a-z0-9]+)*"))
+        if (arguments.length == 2 && queryType(arguments[0]) == null
+                && !arguments[1].matches("[a-z0-9]+(?:-[a-z0-9]+)*"))
             throw new IllegalArgumentException("invalid milestone id: " + arguments[1]);
     }
 
@@ -170,6 +170,10 @@ public final class Gate {
                 || value.startsWith("--rebalance-") || value.startsWith("--seal-")
                 || value.startsWith("--module-cache-") || value.startsWith("--cache-");
     }
+
+    private static String queryType(String value) { return switch (value) {
+        case "--input-graph" -> "SmokeInputGraphQuery"; case "--cache-explain" -> "SmokeCacheQuery";
+        case "--input-dependents" -> "SmokeInputDependentsQuery"; default -> null; }; }
 
     private int verifySlots() {
         int configured = integerEnvironment("WORLDLINE_VERIFY_SLOTS",

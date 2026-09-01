@@ -94,12 +94,18 @@ public final class SmokeReceiptCacheTest {
                         && Files.readString(observedLog).equals("raw observation\n"),
                 "runtime observation was not restored");
         SmokeReceiptCache writer = new SmokeReceiptCache(root, cacheRoot, true);
+        require(writer.explain(entries.get(0)).decision().equals("execute"),
+                "cache miss explanation did not request execution");
         for (SmokeDiscovery.Entry entry : entries) {
             Path log = root.resolve(".worldline/smoke-logs").resolve(entry.id + ".log");
             write(log, entry.id + " PASS\n"); writer.passed(entry, writer.fingerprint(entry), 1L);
         }
         writer.finish(entries.size());
         SmokeReceiptCache reader = new SmokeReceiptCache(root, cacheRoot, true);
+        require(reader.explain(entries.get(0)).decision().equals("reuse-local"),
+                "local proof explanation drifted");
+        require(new SmokeReceiptCache(root, cacheRoot, false).explain(entries.get(0))
+                .decision().equals("execute"), "disabled cache explanation drifted");
         for (SmokeDiscovery.Entry entry : entries)
             require(reader.restore(entry, reader.fingerprint(entry)), "PASS proof was not reused: " + entry.id);
         reader.finish(entries.size());
@@ -110,6 +116,8 @@ public final class SmokeReceiptCacheTest {
         for (SmokeDiscovery.Entry entry : entries) pins.add(reader.availablePin(entry));
         new SmokePins(root).write(pins); delete(cacheRoot);
         SmokeReceiptCache clone = new SmokeReceiptCache(root, cacheRoot, true);
+        require(clone.explain(entries.get(0)).decision().equals("reuse-pin"),
+                "tracked pin explanation drifted");
         for (SmokeDiscovery.Entry entry : entries)
             require(clone.restore(entry, clone.fingerprint(entry)), "tracked pin was not reused: " + entry.id);
         clone.finish(entries.size());

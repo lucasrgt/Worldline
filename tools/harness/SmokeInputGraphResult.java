@@ -21,7 +21,7 @@ record SmokeInputGraphResult(String smoke, String rootSha256, List<Node> nodes) 
         return value.append("  ]\n}\n").toString();
     }
 
-    private static String escape(String input) {
+    static String escape(String input) {
         StringBuilder value = new StringBuilder();
         for (int index = 0; index < input.length(); index++) {
             char character = input.charAt(index);
