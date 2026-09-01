@@ -63,6 +63,8 @@ final class ModuleCacheIndex {
         return entries.get(new Key(module, inputSha256, javaVersion));
     }
 
+    List<Entry> entries() { return List.copyOf(sorted()); }
+
     static void selfTest() throws Exception {
         Path root = Files.createTempDirectory("worldline-module-index-");
         try {

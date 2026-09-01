@@ -43,6 +43,13 @@ public final class ModuleCacheSharedShadow {
                     "WORLDLINE_MODULE_CAS_PUBLIC_KEY",
                     Base64.getEncoder().encodeToString(keys.getPublic().getEncoded()),
                     "WORLDLINE_MODULE_CAS_CHANNEL", "shared-shadow");
+            SharedCasInventory.Snapshot inventory = SharedCasInventory.configured(root, environment);
+            require(inventory != null && inventory.totalObjects() == 2
+                    && inventory.verifiedObjects() == 2 && inventory.moduleObjects() == 1
+                    && inventory.indexObjects() == 1 && inventory.orphanObjects() == 0
+                    && inventory.corruptObjects() == 0 && inventory.malformedEntries() == 0
+                    && inventory.missingSignedReferences() == 0,
+                    "shared module CAS inventory drifted");
             Path local = staging.resolve("local/modules"), target = local.resolve("api/")
                     .resolve(published.identity().input());
             require(ModuleCacheRemote.hydrate(root, local, "api", published.identity().input(),
@@ -55,7 +62,8 @@ public final class ModuleCacheSharedShadow {
             require(!ModuleCacheRemote.hydrate(root, local, "api", "f".repeat(64),
                     staging.resolve("miss"), environment), "shared module miss was not preserved");
             System.out.println("shared module cache shadow passed: module=api, input="
-                    + identity.input() + ", bundle=" + identity.sha256() + ", size=" + identity.size());
+                    + identity.input() + ", bundle=" + identity.sha256() + ", size=" + identity.size()
+                    + ", inventory=" + inventory.verifiedObjects());
         } finally { SafeTreeDelete.delete(staging); }
     }
 

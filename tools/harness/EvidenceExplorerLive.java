@@ -20,7 +20,9 @@ public final class EvidenceExplorerLive {
             System.out.println("live evidence overlay built: " + output + "; telemetry="
                     + snapshot.execution().sampleCount() + "; failures="
                     + snapshot.execution().failureCount() + "; native-links="
-                    + snapshot.executionLinks().linkedRuns() + "; cache=" + snapshot.cache().size());
+                    + snapshot.executionLinks().linkedRuns() + "; shared-cas="
+                    + (snapshot.sharedCas() == null ? "off" : snapshot.sharedCas().verifiedObjects())
+                    + "; cache=" + snapshot.cache().size());
         } catch (Exception error) {
             System.err.println("live evidence overlay failed: " + error.getMessage());
             System.exit(1);
