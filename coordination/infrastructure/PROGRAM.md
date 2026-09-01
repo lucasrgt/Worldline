@@ -766,6 +766,31 @@ Evidence recorded for these slices:
   measured limit of 24. The exact slice passes `Gate --runtime` cold at
   178,664 ms and the canonical Gate hot at 3,523 ms; CSM checks ten ways with
   no deviations, and NYA passes.
+- Worldline commit `f556e0f7b`, integrated at `467577afe`, qualifies
+  observational regression triage over the current campaign performance read
+  model. Each `increase` becomes one performance investigation candidate and
+  each `zero-baseline` becomes one data-quality candidate. A stable case ID
+  binds the metric, threshold, complete sanitized profile identity, and the
+  ordered SHA-256 identities of every baseline and recent telemetry object.
+  The strict Explorer parser recomputes that ID, requires every case to match
+  one current signal with identical medians and ratio, rejects changed IDs or
+  observations, and requires unique canonical ordering. The execution overlay
+  and live Explorer advance to v3 and expose counts plus a bounded triage table.
+  Both schemas fix `verdict_authority=false`, `admission_effect=false`, and
+  `automatic_execution=false`: suggestions never create a queue, start a
+  campaign, write a disposition, or assert a regression. Deterministic fixtures
+  cover increases, zero baselines, ignored classifications, input-order
+  independence, sanitization, changed IDs, and signal mismatch. The slice
+  carries 520 train proofs, imports 98, executes six, and leaves zero pending.
+  Its unchanged Gate first exposed external disk/CPU contention from another
+  active `TrainPinMigration`: complete functional passes missed the cold and
+  hot SLOs at 383,234 and 38,231 ms. Those reports are preserved outside the
+  repository at SHA-256
+  `8b313fa22ab95b9ffd2d22c7a9fca9143f0ab5231467dc77e131d02cc14de9d0`
+  and `73c0464dec0c27da6f37f3cc78106e7f06b0af66c4f7550fe7bb8075a8ba0156`.
+  After the concurrent migration exited, the exact same commit passes the
+  canonical Gate hot at 3,729 ms. CSM checks eight ways with no deviations,
+  and NYA passes.
 - Worldline commits `91c32c04e` and `14bebceb6` repair a pre-existing Windows
   race in concurrent shared-directory CAS publication discovered by this
   qualification. Publishers now serialize each digest with a bounded local
@@ -1291,6 +1316,13 @@ peak processes. The six telemetry object digests begin with `9a2fc72d3f6c`,
 `a98308919183`, `8d5b5c1c90f1`, `2966ceb12ade`, `82c40801c93c`, and
 `ffe6f9dc7692`. The exact slice passes the canonical Gate at 135,250 ms.
 
+Commit `f556e0f7b` adds a deterministic triage projection above these signals.
+It produces investigation candidates only for `increase` and `zero-baseline`,
+binds every case to the exact telemetry-object windows, and independently
+cross-validates the case against its current signal in the live Explorer. It
+does not schedule a replay or confer performance, behavior, or admission
+authority.
+
 ### C3. Conservative admission
 
 Feed observations into the existing adaptive learning barrier. Measurements
@@ -1465,7 +1497,11 @@ also validate termination and exit identity, count nonzero or non-exited runs,
 and expose their exit codes. This prevents a failed inner campaign coordinator
 from appearing healthy merely because the outer Rust executor exited normally.
 A closed campaign catalog now supplies every report root, so newly registered
-adapters cannot silently disappear from the combined orphan analysis.
+adapters cannot silently disappear from the combined orphan analysis. A fourth
+live slice derives content-bound regression investigation candidates from
+campaign performance signals and cross-validates them before rendering. The
+projection is rebuildable and cannot schedule work, write dispositions, affect
+admission, or assert a verdict.
 
 ## 11. Workstream G: distributed campaigns
 
@@ -1501,11 +1537,12 @@ authority. The minimization adapter similarly executes only the sealed M9
 contract through its milestone Gate, leaving all reduction and behavior
 authority in M9 while measuring the complete isolated replay. Campaign
 profiling now has workload-shape-safe historical windows and live change
-signals, but those observations do not schedule follow-up work or assert a
-regression verdict. Arbitrary-seed worldgen, Minecraft-runtime instability
-adapters, differential execution, arbitrary-input minimization queues,
-automated regression triage, plus multi-shard distribution across distinct
-hosts remain pending.
+signals. Deterministic observational triage turns increases and invalid zero
+baselines into content-bound investigation candidates, but still does not
+schedule follow-up work or assert a regression verdict. Arbitrary-seed
+worldgen, Minecraft-runtime instability adapters, differential execution,
+arbitrary-input minimization queues, reviewed automatic follow-up execution,
+plus multi-shard distribution across distinct hosts remain pending.
 
 ## 12. Source and repository strategy
 
