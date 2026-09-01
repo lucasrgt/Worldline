@@ -72,7 +72,7 @@ non-claims keep a `map-nonclaims` evidence token.
 
 ## Coverage
 
-The versioned taxonomy groups all 25 subsystems without changing their stable
+The versioned taxonomy groups all 27 subsystems without changing their stable
 identities or historical provenance:
 
 | Domain | Subsystems |
@@ -81,7 +81,7 @@ identities or historical provenance:
 | `world` | `worldgen`, `chunks`, `lighting`, `fluids`, `saves`, `dimensions` |
 | `actors` | `entities`, `tile-entities`, `mob-ai`, `player` |
 | `gameplay` | `inventory`, `crafting` |
-| `runtime` | `protocol`, `dedicated-server`, `rendering`, `gui`, `resources` |
+| `runtime` | `protocol`, `dedicated-server`, `profiling`, `rendering`, `animation`, `gui`, `resources` |
 | `ecosystem` | `mod-ecosystem`, `mappings`, `stationapi`, `aero` |
 
 Every record receives derived facets for domain, subsystem, record category,
@@ -96,8 +96,10 @@ REPRODUCIBILITY, DETERMINISM.
 
 A cell is `1/1` only when an importer linked qualifying evidence. Empty cells
 are `UNKNOWN` and appear in `worldline atlas gaps`. The current finite matrix
-is 175/175 declared units; this is completeness of the evidence-backed
-taxonomy, not a claim that the simulation's state space is finite or exhausted.
+is 189 declared units, with 183 evidence-backed cells. The six explicit gaps
+are the CONTROL, SEMANTIC, and DETERMINISM dimensions for profiling and
+animation; this is an honest evidence boundary, not a claim that the
+simulation's state space is finite or exhausted.
 
 ## CLI
 

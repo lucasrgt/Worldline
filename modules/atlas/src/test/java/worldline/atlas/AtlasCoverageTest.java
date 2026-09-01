@@ -1,7 +1,9 @@
 package worldline.atlas;
 
 import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public final class AtlasCoverageTest {
     private AtlasCoverageTest() {}
@@ -177,13 +179,20 @@ public final class AtlasCoverageTest {
                 "mod ecosystem boundary classification");
         List<AtlasRecord> gaps = AtlasGaps.list(store);
         require(!gaps.isEmpty(), "gaps exist");
-        boolean coverageGap = false;
+        Set<String> coverageGaps = new HashSet<String>();
         for (AtlasRecord gap : gaps) {
-            if (gap.id().startsWith("atlas.coverage-unit.")) coverageGap = true;
+            if (gap.id().startsWith("atlas.coverage-unit.")) coverageGaps.add(gap.id());
         }
-        require(!coverageGap, "declared coverage matrix is incomplete");
+        require(coverageGaps.size() == 6
+                        && coverageGaps.contains("atlas.coverage-unit.profiling.CONTROL")
+                        && coverageGaps.contains("atlas.coverage-unit.profiling.SEMANTIC")
+                        && coverageGaps.contains("atlas.coverage-unit.profiling.DETERMINISM")
+                        && coverageGaps.contains("atlas.coverage-unit.animation.CONTROL")
+                        && coverageGaps.contains("atlas.coverage-unit.animation.SEMANTIC")
+                        && coverageGaps.contains("atlas.coverage-unit.animation.DETERMINISM"),
+                "declared coverage matrix gap set drifted");
         String matrix = AtlasQuery.coverage(store);
-        require(!matrix.contains("0/1") && matrix.contains("1/1")
+        require(matrix.contains("0/1") && matrix.contains("1/1")
                 && matrix.contains("source=declared-coverage-unit"), "coverage matrix");
         System.out.println("AtlasCoverageTest passed");
     }
