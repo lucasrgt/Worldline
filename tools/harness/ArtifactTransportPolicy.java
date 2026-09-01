@@ -16,6 +16,7 @@ import java.util.Set;
 final class ArtifactTransportPolicy {
     private static final String SCHEMA = "worldline.artifact-transport.v1";
     private static final String PROOF_VALIDATOR = "smoke-pin-envelope-v1";
+    private static final String MODULE_VALIDATOR = "module-cache-bundle-v1";
     private static final Set<String> REQUIRED = Set.of(
             "tracked-smoke-pin-envelope", "shared-module-cache", "shared-test-cache",
             "verification-stage-cache", "smoke-proof-cache", "runtime-observation-cache",
@@ -40,7 +41,8 @@ final class ArtifactTransportPolicy {
         Map<String, ArtifactTransportFamily> families = new HashMap<>();
         for (int index = 0; index < count; index++) {
             String prefix = "family." + index + ".";
-            for (String field : Set.of("id", "class", "root", "suffix", "max.bytes", "validator"))
+            for (String field : Set.of("id", "class", "source", "root", "suffix",
+                    "max.bytes", "validator"))
                 expected.add(prefix + field);
             ArtifactTransportFamily family = family(values, prefix);
             require(families.putIfAbsent(family.id(), family) == null,
@@ -64,6 +66,18 @@ final class ArtifactTransportPolicy {
 
     Candidate authorize(String familyId, Path path) throws Exception {
         ArtifactTransportFamily family = required(familyId);
+        require(family.source().tracked(), "artifact family is not tracked: " + familyId);
+        return authorize(family, path);
+    }
+
+    Candidate authorizeGenerated(String familyId, Path path) throws Exception {
+        ArtifactTransportFamily family = required(familyId);
+        require(family.source().generated(), "artifact family is not generated: " + familyId);
+        return authorize(family, path);
+    }
+
+    private Candidate authorize(ArtifactTransportFamily family, Path path) throws Exception {
+        String familyId = family.id();
         require(family.classification().remotelyEligible(),
                 "artifact family is not remotely eligible: " + familyId);
         Path declaredRoot = repository.resolve(family.root()).normalize();
@@ -85,7 +99,7 @@ final class ArtifactTransportPolicy {
 
     List<Candidate> eligibleCandidates(Set<Path> tracked) throws Exception {
         List<ArtifactTransportFamily> eligible = families.values().stream()
-                .filter(family -> family.classification().remotelyEligible())
+                .filter(family -> family.classification().remotelyEligible() && family.source().tracked())
                 .sorted(java.util.Comparator.comparing(ArtifactTransportFamily::id)).toList();
         java.util.ArrayList<Candidate> candidates = new java.util.ArrayList<>();
         for (ArtifactTransportFamily family : eligible) {
@@ -125,6 +139,7 @@ final class ArtifactTransportPolicy {
         require(id.matches("[a-z0-9]+(?:-[a-z0-9]+)*"), "invalid artifact family id: " + id);
         ArtifactTransportClass classification = ArtifactTransportClass.parse(
                 required(values, prefix + "class"));
+        ArtifactTransportSource source = ArtifactTransportSource.parse(required(values, prefix + "source"));
         String root = required(values, prefix + "root");
         String suffix = required(values, prefix + "suffix");
         long maxBytes = number(values, prefix + "max.bytes");
@@ -135,14 +150,21 @@ final class ArtifactTransportPolicy {
                     "remotely eligible family has invalid root: " + id);
             require(suffix.startsWith(".") && suffix.length() > 1,
                     "remotely eligible family has invalid suffix: " + id);
-            require(maxBytes > 0 && maxBytes <= 1_048_576, "invalid artifact size limit: " + id);
-            require(PROOF_VALIDATOR.equals(validator), "unknown artifact validator: " + validator);
-        } else require(root.equals("-") && suffix.equals("-") && maxBytes == 0
-                && validator.equals("none"), "restricted artifact family exposes transport fields: " + id);
-        return new ArtifactTransportFamily(id, classification, root, suffix, maxBytes, validator);
+            long ceiling = MODULE_VALIDATOR.equals(validator) ? 8L * 1024L * 1024L : 1_048_576L;
+            require(maxBytes > 0 && maxBytes <= ceiling, "invalid artifact size limit: " + id);
+            require(Set.of(PROOF_VALIDATOR, MODULE_VALIDATOR).contains(validator),
+                    "unknown artifact validator: " + validator);
+            require(source != ArtifactTransportSource.NONE,
+                    "remotely eligible family has no transport source: " + id);
+        } else require(source == ArtifactTransportSource.NONE && root.equals("-")
+                && suffix.equals("-") && maxBytes == 0 && validator.equals("none"),
+                "restricted artifact family exposes transport fields: " + id);
+        return new ArtifactTransportFamily(id, classification, source, root, suffix,
+                maxBytes, validator);
     }
 
     private static void validate(String validator, Path path) throws Exception {
+        if (MODULE_VALIDATOR.equals(validator)) { ModuleCacheBundle.validate(path); return; }
         require(PROOF_VALIDATOR.equals(validator), "artifact validator is not implemented");
         String text = Files.readString(path, StandardCharsets.UTF_8);
         Properties values = StrictProperties.load(path);

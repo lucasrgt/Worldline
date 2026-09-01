@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -13,7 +14,7 @@ public final class CasTransportShadow {
     private static final String PROTOCOL = "{\"schema\":\"worldline.cas-transport-protocol.v1\","
             + "\"permits_schema\":\"worldline.cas-transport-permits.v1\","
             + "\"transport\":\"http-loopback-v1\"}\n";
-    private static final String MAXIMUM = "1048576";
+    private static final String MAXIMUM = "8388608";
 
     private CasTransportShadow() { }
 
@@ -38,40 +39,71 @@ public final class CasTransportShadow {
         require(PROTOCOL.equals(ProcessCapture.require(root, List.of(binary.toString(), "protocol"), 30)),
                 "unsupported CAS transport protocol");
         ArtifactTransportPolicy policy = ArtifactTransportPolicy.load(root);
-        List<ArtifactTransportPolicy.Candidate> candidates = policy.eligibleCandidates(
+        List<ArtifactTransportPolicy.Candidate> tracked = policy.eligibleCandidates(
                 SmokeTrackedFiles.read(root));
-        require(!candidates.isEmpty(), "no CAS transport candidates");
-        ArtifactTransportPolicy.Candidate candidate = candidates.get(0);
+        require(!tracked.isEmpty(), "no tracked CAS transport candidates");
         Path base = root.resolve(".worldline/cas-shadow"); Files.createDirectories(base);
         Path run = Files.createTempDirectory(base, "run-");
         Process server = null;
         try {
+            Path moduleEntry = moduleEntry(root, "api");
+            Path bundle = run.resolve("api.wmb");
+            ModuleCacheBundle.Identity identity = ModuleCacheBundle.pack("api", moduleEntry, bundle);
+            ArtifactTransportPolicy.Candidate module = policy.authorizeGenerated(
+                    "shared-module-cache", bundle);
+            List<ArtifactTransportPolicy.Candidate> candidates = new ArrayList<>(tracked);
+            candidates.add(module);
             Path permits = run.resolve("permits.json");
             Files.writeString(permits, ArtifactTransportPermitQuery.manifest(candidates),
                     StandardCharsets.UTF_8);
             Path local = run.resolve("local"), remote = run.resolve("remote");
-            Path fresh = run.resolve("fresh"), output = run.resolve("hydrated.proof");
-            String expected = candidate.sha256() + " " + candidate.size() + "\n";
-            require(expected.equals(command(root, binary, "put", local, candidate.path())),
-                    "local CAS publication drifted");
+            Path fresh = run.resolve("fresh");
             Path errors = run.resolve("server.err");
             server = start(root, binary, remote, permits, errors);
             String address = listen(server, errors);
-            require(expected.equals(command(root, binary, "upload", local, address, permits,
-                    candidate.sha256(), MAXIMUM)), "CAS upload identity drifted");
-            require(expected.equals(command(root, binary, "hydrate", fresh, address, permits,
-                    candidate.sha256(), MAXIMUM)), "CAS hydration identity drifted");
-            command(root, binary, "get", fresh, candidate.sha256(), output);
-            policy.validateHydrated(candidate, output);
-            require(Files.mismatch(candidate.path(), output) == -1L,
+            ArtifactTransportPolicy.Candidate proof = tracked.get(0);
+            Path proofOutput = transport(root, binary, local, fresh, address, permits,
+                    proof, run.resolve("hydrated.proof"));
+            policy.validateHydrated(proof, proofOutput);
+            require(Files.mismatch(proof.path(), proofOutput) == -1L,
                     "hydrated bytes differ from authorized source");
-            System.out.println("CAS transport shadow passed; sha256=" + candidate.sha256()
-                    + ";size=" + candidate.size());
+            Path moduleOutput = transport(root, binary, local, fresh, address, permits,
+                    module, run.resolve("hydrated.wmb"));
+            policy.validateHydrated(module, moduleOutput);
+            Path restored = run.resolve("restored-module");
+            ModuleCacheBundle.extract(moduleOutput, identity.module(), identity.input(), restored);
+            ModuleCacheBundle.requireEqual(moduleEntry, restored);
+            System.out.println("CAS transport shadow passed; proof.sha256=" + proof.sha256()
+                    + ";proof.size=" + proof.size() + ";module=api;module.input="
+                    + identity.input() + ";module.sha256=" + module.sha256()
+                    + ";module.size=" + module.size());
         } finally {
             try {
                 if (server != null && server.isAlive()) ProcessCapture.destroy(server);
             } finally { SafeTreeDelete.delete(run); }
         }
+    }
+
+    private static Path moduleEntry(Path root, String module) throws Exception {
+        Path output = root.resolve(".worldline/build/classes").resolve(module);
+        require(Files.isDirectory(output), "run canonical Gate before CAS module shadow");
+        Path entry = output.toRealPath();
+        require(Files.isRegularFile(entry.resolve(".complete")),
+                "compiled module cache entry is incomplete: " + module);
+        return entry;
+    }
+
+    private static Path transport(Path root, Path binary, Path local, Path fresh,
+            String address, Path permits, ArtifactTransportPolicy.Candidate candidate,
+            Path output) throws Exception {
+        String expected = candidate.sha256() + " " + candidate.size() + "\n";
+        require(expected.equals(command(root, binary, "put", local, candidate.path())),
+                "local CAS publication drifted");
+        require(expected.equals(command(root, binary, "upload", local, address, permits,
+                candidate.sha256(), MAXIMUM)), "CAS upload identity drifted");
+        require(expected.equals(command(root, binary, "hydrate", fresh, address, permits,
+                candidate.sha256(), MAXIMUM)), "CAS hydration identity drifted");
+        command(root, binary, "get", fresh, candidate.sha256(), output); return output;
     }
 
     private static Path binary() {

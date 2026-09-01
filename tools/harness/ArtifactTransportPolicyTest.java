@@ -22,6 +22,20 @@ final class ArtifactTransportPolicyTest {
             require(candidate.classification() == ArtifactTransportClass.PORTABLE_BEHAVIOR_PROOF
                     && candidate.sha256().matches("[0-9a-f]{64}") && candidate.size() > 0,
                     "valid portable proof was not classified");
+            Path moduleEntry = root.resolve("module-entry");
+            Files.createDirectories(moduleEntry.resolve("example"));
+            Files.writeString(moduleEntry.resolve(".complete"), "3".repeat(64) + "\n");
+            Files.write(moduleEntry.resolve("example/Fixture.class"),
+                    new byte[] {-54, -2, -70, -66, 0, 1});
+            Path bundle = root.resolve(".worldline/cas-shadow/fixture.wmb");
+            ModuleCacheBundle.pack("fixture", moduleEntry, bundle);
+            ArtifactTransportPolicy.Candidate generated = policy.authorizeGenerated(
+                    "shared-module-cache", bundle);
+            require(generated.classification()
+                    == ArtifactTransportClass.PORTABLE_WORLDLINE_SOURCE_DERIVED,
+                    "valid generated module bundle was not classified");
+            rejected(() -> policy.authorize("shared-module-cache", bundle),
+                    "generated module bundle was accepted as tracked");
             rejected(() -> policy.eligibleCandidates(java.util.Set.of()),
                     "untracked portable proof received a transport permit");
             rejected(() -> policy.authorize("official-runtime", proof),
@@ -54,13 +68,22 @@ final class ArtifactTransportPolicyTest {
             String prefix = "family." + index + ".";
             value.append(prefix).append("id=").append(ids[index]).append('\n');
             if (index == 0) value.append(prefix).append("class=portable-behavior-proof\n")
+                    .append(prefix).append("source=tracked-repository\n")
                     .append(prefix).append("root=smokes/qualification-evidence\n")
                     .append(prefix).append("suffix=.proof\n")
                     .append(prefix).append("max.bytes=4096\n")
                     .append(prefix).append("validator=smoke-pin-envelope-v1\n");
+            else if (index == 1) value.append(prefix)
+                    .append("class=portable-worldline-source-derived\n")
+                    .append(prefix).append("source=generated-local\n")
+                    .append(prefix).append("root=.worldline/cas-shadow\n")
+                    .append(prefix).append("suffix=.wmb\n")
+                    .append(prefix).append("max.bytes=8388608\n")
+                    .append(prefix).append("validator=module-cache-bundle-v1\n");
             else value.append(prefix).append("class=")
                     .append(index >= 7 ? "official-or-derived-forbidden" : "local-private")
-                    .append('\n').append(prefix).append("root=-\n")
+                    .append('\n').append(prefix).append("source=none\n")
+                    .append(prefix).append("root=-\n")
                     .append(prefix).append("suffix=-\n").append(prefix).append("max.bytes=0\n")
                     .append(prefix).append("validator=none\n");
         }
