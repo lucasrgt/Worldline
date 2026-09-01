@@ -51,8 +51,8 @@ public final class ExecutorToolingCycle {
         require(executable.isAbsolute() && Files.isRegularFile(executable),
                 "WORLDLINE_EXECUTOR is not an absolute regular file");
         Path parent = root.resolve(".worldline/executor-tooling-cycle");
-        Path run = parent.resolve("current");
-        require(!Files.exists(run), "executor tooling cycle residue exists: " + run);
+        Path run = parent.resolve("current"), published = parent.resolve("published");
+        require(!Files.exists(run) && !Files.exists(published), "executor tooling cycle residue exists");
         Path temporary = run.resolve("java-tmp"); Files.createDirectories(temporary);
         ExecutionEnvironmentManifest environment = ExecutionEnvironmentManifest.tooling(temporary);
         ExecutionFilesystemManifest filesystem = ExecutionFilesystemManifest.tooling(root, temporary, run);
@@ -77,11 +77,12 @@ public final class ExecutorToolingCycle {
                     && expected.equals(normalize(new String(rollback, StandardCharsets.UTF_8))),
                     "legacy/Rust/rollback observable output differential");
             filesystem.verifyOutput();
+            String transaction = WorkspaceTransaction.promote(run, published);
             System.out.println("Rust executor tooling cycle passed; command=Gate --self-test; request="
                     + plan.requestSha256() + "; normalized="
                     + ExecutionJson.sha256(expected.getBytes(StandardCharsets.UTF_8))
-                    + "; rollback=legacy-windows-job");
-        } finally { delete(root, run); Files.deleteIfExists(parent); }
+                    + "; transaction=" + transaction + "; rollback=legacy-windows-job");
+        } finally { delete(root, run); delete(root, published); Files.deleteIfExists(parent); }
     }
 
     private static WorldlineExecutionPlan plan(Path root, Path output, List<String> command,
