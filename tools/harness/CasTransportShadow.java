@@ -51,8 +51,14 @@ public final class CasTransportShadow {
             ModuleCacheBundle.Identity identity = ModuleCacheBundle.pack("api", moduleEntry, bundle);
             ArtifactTransportPolicy.Candidate module = policy.authorizeGenerated(
                     "shared-module-cache", bundle);
+            Path indexPath = run.resolve("modules.wmi");
+            ModuleCacheIndex.write(indexPath, List.of(new ModuleCacheIndex.Entry(
+                    identity.module(), identity.input(), identity.javaVersion(),
+                    module.sha256(), module.size())));
+            ArtifactTransportPolicy.Candidate index = policy.authorizeGenerated(
+                    "module-cache-index", indexPath);
             List<ArtifactTransportPolicy.Candidate> candidates = new ArrayList<>(tracked);
-            candidates.add(module);
+            candidates.add(module); candidates.add(index);
             Path permits = run.resolve("permits.json");
             Files.writeString(permits, ArtifactTransportPermitQuery.manifest(candidates),
                     StandardCharsets.UTF_8);
@@ -67,6 +73,13 @@ public final class CasTransportShadow {
             policy.validateHydrated(proof, proofOutput);
             require(Files.mismatch(proof.path(), proofOutput) == -1L,
                     "hydrated bytes differ from authorized source");
+            Path indexOutput = transport(root, binary, local, fresh, address, permits,
+                    index, run.resolve("hydrated.wmi"));
+            policy.validateHydrated(index, indexOutput);
+            ModuleCacheIndex.Entry lookup = ModuleCacheIndex.read(indexOutput).lookup(
+                    identity.module(), identity.input(), identity.javaVersion());
+            require(lookup != null && lookup.blobSha256().equals(module.sha256())
+                    && lookup.blobSize() == module.size(), "module cache index lookup drifted");
             Path moduleOutput = transport(root, binary, local, fresh, address, permits,
                     module, run.resolve("hydrated.wmb"));
             policy.validateHydrated(module, moduleOutput);
@@ -76,7 +89,8 @@ public final class CasTransportShadow {
             System.out.println("CAS transport shadow passed; proof.sha256=" + proof.sha256()
                     + ";proof.size=" + proof.size() + ";module=api;module.input="
                     + identity.input() + ";module.sha256=" + module.sha256()
-                    + ";module.size=" + module.size());
+                    + ";module.size=" + module.size() + ";index.sha256=" + index.sha256()
+                    + ";index.size=" + index.size());
         } finally {
             try {
                 if (server != null && server.isAlive()) ProcessCapture.destroy(server);

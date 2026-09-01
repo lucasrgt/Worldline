@@ -36,6 +36,13 @@ final class ArtifactTransportPolicyTest {
                     "valid generated module bundle was not classified");
             rejected(() -> policy.authorize("shared-module-cache", bundle),
                     "generated module bundle was accepted as tracked");
+            Path index = root.resolve(".worldline/cas-shadow/fixture.wmi");
+            ModuleCacheIndex.write(index, java.util.List.of(new ModuleCacheIndex.Entry(
+                    "fixture", "3".repeat(64), System.getProperty("java.version"),
+                    generated.sha256(), generated.size())));
+            require(policy.authorizeGenerated("module-cache-index", index).classification()
+                    == ArtifactTransportClass.PORTABLE_WORLDLINE_SOURCE_DERIVED,
+                    "valid generated module index was not classified");
             rejected(() -> policy.eligibleCandidates(java.util.Set.of()),
                     "untracked portable proof received a transport permit");
             rejected(() -> policy.authorize("official-runtime", proof),
@@ -62,8 +69,8 @@ final class ArtifactTransportPolicyTest {
     private static String policy() {
         String[] ids = {"tracked-smoke-pin-envelope", "shared-module-cache", "shared-test-cache",
                 "verification-stage-cache", "smoke-proof-cache", "runtime-observation-cache",
-                "diagnostic-bundle", "official-runtime", "mapped-runtime"};
-        StringBuilder value = new StringBuilder("schema=worldline.artifact-transport.v1\nfamily.count=9\n");
+                "diagnostic-bundle", "official-runtime", "mapped-runtime", "module-cache-index"};
+        StringBuilder value = new StringBuilder("schema=worldline.artifact-transport.v1\nfamily.count=10\n");
         for (int index = 0; index < ids.length; index++) {
             String prefix = "family." + index + ".";
             value.append(prefix).append("id=").append(ids[index]).append('\n');
@@ -80,6 +87,13 @@ final class ArtifactTransportPolicyTest {
                     .append(prefix).append("suffix=.wmb\n")
                     .append(prefix).append("max.bytes=8388608\n")
                     .append(prefix).append("validator=module-cache-bundle-v1\n");
+            else if (index == 9) value.append(prefix)
+                    .append("class=portable-worldline-source-derived\n")
+                    .append(prefix).append("source=generated-local\n")
+                    .append(prefix).append("root=.worldline/cas-shadow\n")
+                    .append(prefix).append("suffix=.wmi\n")
+                    .append(prefix).append("max.bytes=1048576\n")
+                    .append(prefix).append("validator=module-cache-index-v1\n");
             else value.append(prefix).append("class=")
                     .append(index >= 7 ? "official-or-derived-forbidden" : "local-private")
                     .append('\n').append(prefix).append("source=none\n")

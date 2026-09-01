@@ -17,10 +17,11 @@ final class ArtifactTransportPolicy {
     private static final String SCHEMA = "worldline.artifact-transport.v1";
     private static final String PROOF_VALIDATOR = "smoke-pin-envelope-v1";
     private static final String MODULE_VALIDATOR = "module-cache-bundle-v1";
+    private static final String INDEX_VALIDATOR = "module-cache-index-v1";
     private static final Set<String> REQUIRED = Set.of(
             "tracked-smoke-pin-envelope", "shared-module-cache", "shared-test-cache",
             "verification-stage-cache", "smoke-proof-cache", "runtime-observation-cache",
-            "diagnostic-bundle", "official-runtime", "mapped-runtime");
+            "diagnostic-bundle", "official-runtime", "mapped-runtime", "module-cache-index");
     private static final Set<String> PROOF_KEYS = Set.of(
             "schema", "id", "fingerprint", "observation.sha256", "source");
     private final Path repository;
@@ -152,7 +153,7 @@ final class ArtifactTransportPolicy {
                     "remotely eligible family has invalid suffix: " + id);
             long ceiling = MODULE_VALIDATOR.equals(validator) ? 8L * 1024L * 1024L : 1_048_576L;
             require(maxBytes > 0 && maxBytes <= ceiling, "invalid artifact size limit: " + id);
-            require(Set.of(PROOF_VALIDATOR, MODULE_VALIDATOR).contains(validator),
+            require(Set.of(PROOF_VALIDATOR, MODULE_VALIDATOR, INDEX_VALIDATOR).contains(validator),
                     "unknown artifact validator: " + validator);
             require(source != ArtifactTransportSource.NONE,
                     "remotely eligible family has no transport source: " + id);
@@ -165,6 +166,7 @@ final class ArtifactTransportPolicy {
 
     private static void validate(String validator, Path path) throws Exception {
         if (MODULE_VALIDATOR.equals(validator)) { ModuleCacheBundle.validate(path); return; }
+        if (INDEX_VALIDATOR.equals(validator)) { ModuleCacheIndex.validate(path); return; }
         require(PROOF_VALIDATOR.equals(validator), "artifact validator is not implemented");
         String text = Files.readString(path, StandardCharsets.UTF_8);
         Properties values = StrictProperties.load(path);
