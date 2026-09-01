@@ -36,8 +36,14 @@ final class SmokeInputFingerprint {
     private final Map<String, String> moduleDigests = new HashMap<>();
 
     SmokeInputFingerprint(Path root) throws IOException {
+        this(root, SmokeTrackedFiles.read(root.toAbsolutePath().normalize()));
+    }
+
+    SmokeInputFingerprint(Path root, Set<Path> tracked) throws IOException {
         this.root = root.toAbsolutePath().normalize();
-        this.tracked = SmokeTrackedFiles.read(this.root);
+        require(!tracked.isEmpty() && tracked.stream().allMatch(path -> path.startsWith(this.root)),
+                "invalid explicit smoke tracked-file set");
+        this.tracked = Set.copyOf(tracked);
         try (java.io.Reader reader = Files.newBufferedReader(
                 this.root.resolve("harness.properties"), StandardCharsets.UTF_8)) {
             modules.load(reader);

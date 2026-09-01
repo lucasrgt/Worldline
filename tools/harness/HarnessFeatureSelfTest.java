@@ -28,6 +28,7 @@ final class HarnessFeatureSelfTest {
         JavaTokenText.selfTest();
         SmokeInputGraph.selfTest();
         SmokeInputDependentsQuery.selfTest();
+        SmokeInputDiffQuery.selfTest();
         WorldTemplate.selfTest();
         LaneDifferential.selfTest();
         SmokeScheduleBaselineCheck.execute(java.nio.file.Path.of("").toAbsolutePath().normalize());

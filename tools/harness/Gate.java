@@ -157,12 +157,11 @@ public final class Gate {
                 + "--seal-lane-portability|"
                 + "--module-cache-doctor|--module-cache-gc|--cache-doctor|--cache-gc|"
                 + "--cache-rebuild-drill|"
-                + "--new-milestone ID|--input-graph ID|--cache-explain ID|"
-                + "--input-dependents KIND:KEY|--milestone ID|--lane-differential ID|"
+                + "--new-milestone ID|--input-graph ID|--cache-explain ID|--input-dependents KIND:KEY|"
+                + "--input-diff ID@REF|--milestone ID|--lane-differential ID|"
                 + "--candidate-ready ID|--candidate ID|--self-test]");
-        if (arguments.length == 2 && queryType(arguments[0]) == null
-                && !arguments[1].matches("[a-z0-9]+(?:-[a-z0-9]+)*"))
-            throw new IllegalArgumentException("invalid milestone id: " + arguments[1]);
+        if (arguments.length == 2 && queryType(arguments[0]) == null && !arguments[1].matches(
+                "[a-z0-9]+(?:-[a-z0-9]+)*")) throw new IllegalArgumentException("invalid milestone id: " + arguments[1]);
     }
 
     private static boolean maintenance(String value) {
@@ -173,7 +172,8 @@ public final class Gate {
 
     private static String queryType(String value) { return switch (value) {
         case "--input-graph" -> "SmokeInputGraphQuery"; case "--cache-explain" -> "SmokeCacheQuery";
-        case "--input-dependents" -> "SmokeInputDependentsQuery"; default -> null; }; }
+        case "--input-dependents" -> "SmokeInputDependentsQuery"; case "--input-diff" -> "SmokeInputDiffQuery";
+        default -> null; }; }
 
     private int verifySlots() {
         int configured = integerEnvironment("WORLDLINE_VERIFY_SLOTS",
