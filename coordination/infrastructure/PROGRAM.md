@@ -185,6 +185,12 @@ Completed foundation slices:
   executor, normalizes only the reported elapsed time, and cleans every
   transient output. The legacy launcher now waits for the Job Object to drain
   and records `processes.active=0` before publishing metrics.
+- a secret-free `worldline.execution-environment-manifest.v1` in Worldline
+  commits `38ee643ab` and `69797aede`. `Gate --executor-environment` exposes
+  only variable names, set/inherit/remove modes, and behavior/tool/observation
+  classifications. Values never enter the read model, secret-bearing names
+  fail closed, and the qualified tooling cycle now clears ambient legacy state
+  before applying the exact same Java-owned environment policy used by Rust.
 
 Evidence recorded for these slices:
 
@@ -302,6 +308,14 @@ Evidence recorded for these slices:
   tree, output is complete and untruncated, the rollback executes after the
   Rust path, no official runtime starts, cleanup leaves zero cycle residue,
   CSM checks ten ways with no deviations, and NYA passes.
+- the exact environment-manifest proof commit `69797aede` passes the canonical
+  Gate (`cold 113046ms < 240000ms`) with 624 current train proofs and zero
+  pending. The hermetic tooling differential retains normalized observable
+  digest `458b7c9754023057b11ada8cc7b055c26c7ba3559f38d5a9f51d18106fbff32d`
+  while the explicit environment changes the request digest to
+  `ddec5b5536d3a6590e1daa14c6bd25a19423ef45dd4459afbabf44ad725691c8`.
+  CSM checks ten ways with no deviations, NYA passes, and cleanup leaves no
+  executor-tooling residue.
 - the canonical Worldline Gate reaches `verify passed` with all content stages
   restored, but the host currently violates the unchanged hot latency SLO
   (`20361ms >= 7000ms` on the latest run). The budget was not weakened.
@@ -328,8 +342,9 @@ cache decisions, cross-commit node differences, and exact module cache
 identities. Qualification fingerprints still use the legacy engine as their
 authority pending a reviewed all-smoke promotion. A1 through A4, B3, and D1
 through D3 and D5 are therefore in progress; A5 is qualified for the
-structural Windows tooling cycle, while A6, A7, and remote transport
-deployment have not started.
+structural Windows tooling cycle, and B1 is qualified for that tooling profile.
+Other runtime environment profiles, A6, A7, and remote transport deployment
+have not started.
 
 ## 2. Program principles
 
@@ -564,6 +579,12 @@ boundary is required.
 Move from ambient inheritance to explicit environment allowlists. Record why
 each inherited value is behavior-affecting, tool-affecting, or observational.
 Secrets are never written to plans or receipts.
+
+Status: qualified for the structural tooling profile at Worldline commit
+`69797aede`. Legacy and Rust paths both receive a cleared, explicit environment
+from the same Java policy; the public descriptor omits all values and rejects
+secret-bearing names. Server-headless and GUI environment profiles remain
+pending and cannot inherit this tooling qualification implicitly.
 
 ### B2. Filesystem manifest
 
