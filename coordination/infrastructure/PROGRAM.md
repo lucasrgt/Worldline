@@ -191,6 +191,19 @@ Completed foundation slices:
   executor, normalizes only the reported elapsed time, and cleans every
   transient output. The legacy launcher now waits for the Job Object to drain
   and records `processes.active=0` before publishing metrics.
+- Worldline commit `d0f0f1fc1` extends that same qualifying tooling entry point
+  with seven hostile legacy/Rust differentials. It covers normal and nonzero
+  exits, independent stdout and stderr, Unicode and spaced argv, 256-KiB output
+  beyond ordinary pipe buffers, cleared/injected environment state, a
+  parent-child-grandchild timeout, and a successful run immediately after the
+  abandoned tree is drained. Every pair agrees on termination, exit code, and
+  exact selected-stream bytes; all jobs report zero active descendants. The
+  hostile evidence digest is
+  `66dd0e115049a4d7d190b25d9addf31a7c1bd532f8f8415beb9674459002b857`.
+  The original Gate self-test and legacy rollback still pass with Rust request
+  `f6a1b1e423bdac97ce94868b8f597ae22f008705442884c6627207c32b0d3e4d`.
+  The exact canonical Gate passes cold (`113621ms < 240000ms`), CSM checks
+  seven ways with no deviations, and NYA passes.
 - a secret-free `worldline.execution-environment-manifest.v1` in Worldline
   commits `38ee643ab` and `69797aede`. `Gate --executor-environment` exposes
   only variable names, set/inherit/remove modes, and behavior/tool/observation
@@ -505,7 +518,7 @@ Evidence recorded for these slices:
   use that network and are not evidence of network isolation.
 Current boundaries remain honest: Linux mount and PID namespaces,
 OS-enforced loopback-only policy, Windows filesystem/network isolation,
-complete hostile-fixture coverage, the broader server-headless matrix,
+broader hostile-fixture coverage, the broader server-headless matrix,
 broader onscreen GUI/driver profiles, multi-Candidate histories, and default
 runtime selection remain pending. The structural Windows tooling cycle and one official server
 behavior/containment differential are qualified; neither makes Rust the
@@ -670,6 +683,15 @@ Create the execution-plan and execution-receipt schemas plus fixtures for:
 
 Java owns a strict receipt verifier before any production integration exists.
 
+Status: the strict plan/receipt verifier and executor-owned fixtures cover the
+schema and platform mechanisms. Worldline commit `d0f0f1fc1` adds qualifying
+legacy/Rust coverage for seven observable process boundaries: normal/nonzero
+exit, separate streams, pipe-scale output, Unicode/spaced argv, explicit
+environment removal/injection, a three-process timeout tree, and restart after
+that tree is abandoned. Crash signals, abrupt owner loss, limit exhaustion,
+concurrent jobs, partial receipts, and interrupted executor shutdown remain
+pending as Worldline-level qualifying differentials.
+
 ### A2. Windows backend
 
 Implement in Rust:
@@ -716,6 +738,14 @@ cannot qualify releases. Required comparisons include:
 - output manifests;
 - path and environment behavior.
 
+Status: the basic live shadow and tooling promotion remain qualified, and
+commit `d0f0f1fc1` adds a deterministic seven-scenario legacy/Rust matrix with
+exact termination and output comparison. Timeout cleanup orders descendants
+by ancestry depth, kills children before parents, confirms death, and proves a
+subsequent clean execution. Applied memory/process limits are present on every
+fixture but deliberate exhaustion and concurrent-job differentials remain
+pending.
+
 ### A5. Tooling-cycle promotion
 
 The first qualifying use is a structural tooling cycle that never starts
@@ -727,6 +757,10 @@ rollback sequentially against `Gate --self-test`; it requires byte-equivalent
 normalized observations, bounded output, successful termination, and empty
 process trees. This does not authorize a Minecraft runtime lane or default
 backend selection.
+
+Commit `d0f0f1fc1` extends the same qualifying command with the seven hostile
+differentials before the original baseline/Rust/rollback sequence. The
+extension remains structural and never starts Minecraft.
 
 The Candidate profile is qualified at Worldline commit `e9ff4e55a` by
 `Gate --executor-candidate`. It compares legacy and Rust Windows Jobs over a
