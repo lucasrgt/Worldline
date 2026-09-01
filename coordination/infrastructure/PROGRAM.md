@@ -453,6 +453,19 @@ Evidence recorded for these slices:
   `7b2e7e486d1d0e4083c80abc06c7f0be3c1d4b95ea0b936d035b16d1811c14d2`.
   The successful history rebuild reports zero failures and zero clusters.
   CSM checks nine ways with no deviations and NYA passes.
+- Worldline commit `35e92b6f5` completes the canonical first Evidence
+  Explorer slice. `Gate --evidence-explorer` validates all 624 tracked smoke
+  descriptors against the qualification lock, proof-envelope bytes, and train
+  reconciliation; it also projects 60 supervised dispositions and reports
+  orphan proof envelopes. Rebuilds produce byte-identical canonical JSON and
+  dependency-free static HTML at SHA-256
+  `63c6de3b3065bfc49945325b136323c47606385ad9579bad3d05407481e630c9`
+  and `684fcf208547df318476f5193c2d8158431527dad87ac14f1f60f75ed6c28ae6`.
+  Tampered envelopes fail closed, unsafe text is escaped, zero orphan proofs
+  are present, and the output declares itself non-authoritative and free of
+  ephemeral machine state. The exact canonical Gate passes
+  (`cold 95923ms < 240000ms`), CSM checks ten ways with no deviations, and
+  NYA passes.
 - Worldline commit `7365d9a260` qualifies the first official
   `server-headless` Rust-executor differential against
   `m20-server-bootstrap`, using executor commit `803861d`. One canonical
@@ -542,7 +555,7 @@ Evidence recorded for these slices:
   use that network and are not evidence of network isolation.
 Current boundaries remain honest: Linux mount and PID namespaces,
 OS-enforced loopback-only policy, Windows filesystem/network isolation,
-broader hostile-fixture coverage, the broader server-headless matrix,
+the broader server-headless matrix,
 broader onscreen GUI/driver profiles, multi-Candidate histories, and default
 runtime selection remain pending. The structural Windows tooling cycle and one official server
 behavior/containment differential are qualified; neither makes Rust the
@@ -1157,6 +1170,20 @@ Initial output is static HTML and machine-readable JSON. It must answer:
 
 The explorer is never an evidence source. It is a derived, rebuildable read
 model.
+
+The first canonical slice is qualified. `Gate --evidence-explorer` validates
+and projects every tracked smoke descriptor, qualification pin, proof envelope,
+train provenance record, and supervised disposition into deterministic JSON
+and dependency-free static HTML. The projection exposes proof class, pin
+source, train class, hashes, last exact executed head when recorded, disposition
+state, and orphan-envelope counts. It performs no writes to authoritative
+evidence and explicitly declares `verdict_authority=false`.
+
+The remaining Explorer scope is a separate live overlay for executor receipts,
+telemetry histories, queue/lease delays, cache decisions, worker attestations,
+and heavy-log orphan analysis. Those ephemeral inputs must remain visually and
+structurally separated from the canonical snapshot and cannot change its
+identity or confer PASS.
 
 ## 11. Workstream G: distributed campaigns
 
