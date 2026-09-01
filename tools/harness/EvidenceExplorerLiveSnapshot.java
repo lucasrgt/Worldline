@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 record EvidenceExplorerLiveSnapshot(long observedAtEpochMs, String canonicalSha256,
         Execution execution, EvidenceExplorerExecutionLinks.Snapshot executionLinks,
         NativeCampaignFailureClusters.Snapshot campaignFailures,
+        EvidenceExplorerDiagnosticCaptures.Snapshot diagnosticCaptures,
         SharedCasInventory.Snapshot sharedCas, Admission admission,
         List<Queue> queues, List<CacheDecision> cache) {
     static EvidenceExplorerLiveSnapshot build(Path root, Path control, long observedAt) throws Exception {
@@ -45,6 +46,7 @@ record EvidenceExplorerLiveSnapshot(long observedAtEpochMs, String canonicalSha2
         return new EvidenceExplorerLiveSnapshot(observedAt,
                 EvidenceExplorerSnapshot.sha256(canonical), execution(root, control), links,
                 NativeCampaignFailureClusters.summarize(links),
+                EvidenceExplorerDiagnosticCaptures.build(root),
                 SharedCasInventory.configured(root, System.getenv()),
                 admission(root.resolve(".worldline/executor-telemetry/admission.properties")),
                 List.copyOf(queues), List.copyOf(cache));

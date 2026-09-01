@@ -657,6 +657,15 @@ Evidence recorded for these slices:
   `63c6de3b3065bfc49945325b136323c47606385ad9579bad3d05407481e630c9`.
   The exact canonical Gate passes cold (`126811ms < 240000ms`), CSM checks ten
   ways with no deviations, and NYA passes.
+- Worldline commit `f572cb9cf` adds the first non-campaign heavy-diagnostic
+  family to the same ephemeral Explorer. It scans only the bounded captures
+  retained by failed official server qualification cells, accepts canonical
+  legacy/Rust names and nine closed artifact kinds, and emits content digests,
+  sizes, completeness, and tracked-workload linkage without paths or log
+  content. Unknown files, links, excessive cardinality, and byte-budget excess
+  cannot become valid captures. Partial, orphan, and malformed counts remain
+  local observations and confer neither verdict authority nor transport
+  eligibility.
 - Aggregate commit `0af4d260c` proves native multi-shard arrival without a
   grid. Seed 177 partitions 8 fuzz and 20 mutation cases into two shards;
   shard 1 arrives first and leaves aggregation incomplete, then shard 0 closes
@@ -1632,7 +1641,7 @@ current cache decisions. A third slice correlates native executor evidence with
 campaign receipts and validates referenced, orphan, and missing campaign logs.
 Those ephemeral inputs remain visually and structurally separated from the
 canonical snapshot and cannot change its identity or confer PASS. Worker
-attestations and non-campaign heavy-log families remain pending. Native links
+attestations and additional non-campaign heavy-log families remain pending. Native links
 also validate termination and exit identity, count nonzero or non-exited runs,
 and expose their exit codes. This prevents a failed inner campaign coordinator
 from appearing healthy merely because the outer Rust executor exited normally.
@@ -1645,6 +1654,11 @@ admission, or assert a verdict. A fifth live slice clusters only validated
 campaign-linked native failures. It exposes containment failures as explicit
 executor-infrastructure classes while preserving nonzero workload exits as
 unclassified, content-bound observations rather than guessed verdicts.
+The first non-campaign family now inventories official server qualification
+failure captures through a closed, bounded schema. It publishes only artifact
+kinds, sizes, SHA-256 identities, completeness, and workload linkage; local
+paths and log content remain excluded, and malformed captures are counted
+rather than trusted.
 
 ## 11. Workstream G: distributed campaigns
 
