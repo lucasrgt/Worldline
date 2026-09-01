@@ -9,9 +9,9 @@ import worldline.m784.HighMemoryProbe;
 import worldline.m784.HighMemoryState;
 
 /** Enforces the fixture's single controlled production flush boundary. */
-@Mixin(value = Aero_BECellRenderer.class, priority = 1300)
+@Mixin(value = Aero_BECellRenderer.class, priority = 1300, remap = false)
 public abstract class HighMemoryFlushMixin {
-    @Inject(method = "flush", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "flush", at = @At("HEAD"), cancellable = true, remap = false)
     private static void worldlineSuppressAutomaticFlush(double x, double y, double z,
             CallbackInfo callback) {
         if (HighMemoryState.fixtureActive() && !HighMemoryProbe.controlledFlush()) {
