@@ -40,6 +40,7 @@ final class ArtifactTransportPolicyTest {
             rejected(() -> ArtifactTransportPolicy.load(root),
                     "unknown policy field was accepted");
             ArtifactTransportPermitQuery.selfTest();
+            CasTransportShadow.selfTest();
         } finally { SafeTreeDelete.delete(root); }
         System.out.println("  artifact transport policy self-test: passed");
     }

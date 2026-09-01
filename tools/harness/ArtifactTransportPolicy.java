@@ -103,6 +103,17 @@ final class ArtifactTransportPolicy {
         return List.copyOf(candidates);
     }
 
+    void validateHydrated(Candidate candidate, Path path) throws Exception {
+        ArtifactTransportFamily family = required(candidate.family());
+        require(candidate.classification() == family.classification()
+                && family.classification().remotelyEligible(), "hydrated artifact class drifted");
+        require(Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS)
+                && !Files.isSymbolicLink(path), "hydrated artifact is not a regular file");
+        require(Files.size(path) == candidate.size() && digest(path).equals(candidate.sha256()),
+                "hydrated artifact identity drifted");
+        validate(family.validator(), path);
+    }
+
     private ArtifactTransportFamily required(String id) {
         ArtifactTransportFamily family = families.get(id);
         require(family != null, "undeclared artifact transport family: " + id);

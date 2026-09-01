@@ -33,7 +33,7 @@ public final class ArtifactTransportPermitQuery {
         rejected(() -> manifest(List.of(first, first)), "duplicate CAS digest was emitted");
     }
 
-    private static String manifest(List<ArtifactTransportPolicy.Candidate> input) {
+    static String manifest(List<ArtifactTransportPolicy.Candidate> input) {
         List<ArtifactTransportPolicy.Candidate> candidates = new ArrayList<>(input);
         candidates.sort(Comparator.comparing(ArtifactTransportPolicy.Candidate::sha256));
         Set<String> digests = new HashSet<>();
