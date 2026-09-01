@@ -83,6 +83,9 @@ Completed foundation slices:
 - Linux Landlock read-only/read-write allowlists, positive and negative path
   fixtures, and a JVM shadow probe combining cgroup, no-network, and filesystem
   controls in executor commit `2bc7bca` and Worldline commit `51d1536a5`.
+- observational Linux `memory.max`, OOM-kill, task-limit, and CPU-throttling
+  counters with positive limit-event fixtures in executor commit `ca68dad` and
+  strict Java telemetry verification in `48df107a6`.
 
 Evidence recorded for these slices:
 
