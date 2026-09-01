@@ -136,6 +136,13 @@ Completed foundation slices:
   Strict parsing, canonical encoding, bounded cardinality, unique logical
   keys, closed fields, and artifact-policy validation keep lookup authority in
   Java while Rust remains a dumb blob service.
+- an opt-in `ModuleBuild` hydration path in Worldline commits `3ae9d4ebb`
+  through `3c9745a31`. `WORLDLINE_MODULE_CAS_MODE=shadow` requires an exact
+  Rust protocol, loopback address, permit manifest, index path, and pinned
+  index digest. A local miss consults the validated logical index, hydrates the
+  permitted blob, validates bundle identity and every class, then publishes
+  the immutable module entry without replacement. Disabled mode performs no
+  CAS configuration or network work.
 - a secret-free `worldline.smoke-input-graph.v1` read model and
   `Gate --input-graph ID` query in Worldline commits `423a322d3`, `16b9de40a`,
   and `c49b6af20`. The graph remains shadow-only and the legacy fingerprint
@@ -210,6 +217,14 @@ Evidence recorded for these slices:
   passes canonical Gate (`cold 190406ms < 240000ms`) with 624 current train
   proofs and zero pending; CSM checks nine ways with no deviations and NYA
   passes.
+- the configured miss-path shadow traverses the same `ModuleCacheRemote`
+  function called by `ModuleBuild`, reports `hydrated module api from shadow
+  CAS`, repeats the qualified index and bundle hashes, and leaves zero shadow
+  entries. Pre-existing output is rejected rather than replaced, and Rust
+  materialization output is trusted only after Java validates the pinned index
+  and bundle bytes. The exact clean branch passes canonical Gate
+  (`cold 172892ms < 240000ms`) with 624 current train proofs and zero pending;
+  CSM checks ten ways with no deviations and NYA passes.
 - all 624 qualification fingerprints are complete, distinct, and byte-equal
   to independently assembled graph roots; graph JSON redacts environment and
   system-property values, provider and train transitions are sealed, CSM has
@@ -240,11 +255,12 @@ and mapped derivatives remain disabled or forbidden. Permit-bound local
 transport, Worldline permit production, and explicit end-to-end shadows exist,
 but automatic cache lookup, upload, hydration, authenticated remote deployment,
 and S3 storage remain disabled. Module bundles now have a canonical logical
-lookup index exercised end-to-end in shadow, but production adoption still
-needs trusted index distribution, authenticated deployment, and integration
-with the normal module-cache miss path. The input graph covers qualification
-identities in dual mode, current-tree dependents, cache decisions, and
-cross-commit node differences, but does not yet publish module cache identity.
+lookup index and an opt-in normal miss path exercised end-to-end in shadow,
+but production adoption still needs producer-side publication, trusted index
+distribution, authenticated deployment, and an explicit promotion from
+`shadow`. The input graph covers qualification identities in dual mode,
+current-tree dependents, cache decisions, and cross-commit node differences,
+but does not yet publish module cache identity.
 A1 through A4, B3, and D1 through D3 and D5 are therefore in progress; A5 and
 remote transport deployment have not started.
 
