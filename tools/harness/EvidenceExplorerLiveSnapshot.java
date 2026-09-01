@@ -15,7 +15,8 @@ import java.util.concurrent.TimeUnit;
 
 /** Sanitized local-state projection kept separate from canonical evidence. */
 record EvidenceExplorerLiveSnapshot(long observedAtEpochMs, String canonicalSha256,
-        Execution execution, Admission admission, List<Queue> queues, List<CacheDecision> cache) {
+        Execution execution, EvidenceExplorerExecutionLinks.Snapshot executionLinks,
+        Admission admission, List<Queue> queues, List<CacheDecision> cache) {
     static EvidenceExplorerLiveSnapshot build(Path root, Path control, long observedAt) throws Exception {
         Path canonical = EvidenceExplorer.output(root).resolve("evidence.json");
         require(Files.isRegularFile(canonical), "canonical explorer snapshot is missing");
@@ -40,6 +41,7 @@ record EvidenceExplorerLiveSnapshot(long observedAtEpochMs, String canonicalSha2
         }
         return new EvidenceExplorerLiveSnapshot(observedAt,
                 EvidenceExplorerSnapshot.sha256(canonical), execution(root, control),
+                EvidenceExplorerExecutionLinks.build(root),
                 admission(root.resolve(".worldline/executor-telemetry/admission.properties")),
                 List.copyOf(queues), List.copyOf(cache));
     }
