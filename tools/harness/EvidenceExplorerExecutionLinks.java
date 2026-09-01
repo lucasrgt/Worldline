@@ -38,8 +38,7 @@ final class EvidenceExplorerExecutionLinks {
     }
 
     static Snapshot build(Path root) throws Exception {
-        List<Path> reports = List.of(root.resolve(".worldline/reports/nightly-quality"),
-                root.resolve(".worldline/reports/structural-instability"));
+        List<Path> reports = CampaignCatalog.reportRoots(root);
         Campaigns campaigns = campaigns(reports.stream().map(path -> path.resolve("plans")).toList());
         List<Link> links = new ArrayList<>(); Set<String> nativeRequests = new HashSet<>();
         int partial = 0;

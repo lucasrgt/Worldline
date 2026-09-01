@@ -57,7 +57,8 @@ public final class CampaignExecutorCycle {
         return new WorldlineExecutionPlan(campaign + "-shard", root, command,
                 ExecutionEnvironmentManifest.campaign(temporary, planPath).environment(),
                 new WorldlineExecutionPlan.Limits((budget + 60L) * 1_000L, MEMORY,
-                        windows ? 8 : null, windows ? null : 128, 100, OUTPUT_LIMIT, OUTPUT_LIMIT),
+                        windows ? processLimit(campaign) : null, windows ? null : 128,
+                        100, OUTPUT_LIMIT, OUTPUT_LIMIT),
                 new WorldlineExecutionPlan.Isolation(windows ? "windows_job" : "linux_cgroup",
                         "inherit", ProcessHandle.current().pid()), WorldlineExecutionPlan.Filesystem.inherit(),
                 new WorldlineExecutionPlan.Outputs(output, output.resolve("stdout.log"),
@@ -73,10 +74,18 @@ public final class CampaignExecutorCycle {
                 10, "nightly-quality");
         require(plan.limits().timeoutMs() == 70_000L && plan.canonicalBytes().length > 0,
                 "campaign executor plan drifted");
+        WorldlineExecutionPlan worldgen = plan(root, planPath, output, temporary,
+                List.of(javaTool(), "-version", "--executor-plan", planPath.toString()),
+                10, "worldgen-matrix");
+        if (isWindows()) require(Integer.valueOf(24).equals(worldgen.limits().activeProcesses()),
+                "world-generation process bound drifted");
         expectFailure(() -> budget(new String[] {"--budget-seconds", "9"}));
         require(selection(new String[] {"--campaign", "structural-instability",
                 "--budget-seconds", "10", "--seed", "7"}).main.equals(
                         "StructuralInstabilityCampaign"), "campaign executor selection drifted");
+        require(selection(new String[] {"--campaign", "worldgen-matrix",
+                "--budget-seconds", "10", "--seed", "7"}).main.equals(
+                        "WorldGenerationCampaign"), "world-generation executor selection drifted");
     }
 
     private static Selection selection(String[] arguments) {
@@ -87,6 +96,7 @@ public final class CampaignExecutorCycle {
         String main = switch (id) {
             case "nightly-quality" -> "NightlyQualityCampaign";
             case "structural-instability" -> "StructuralInstabilityCampaign";
+            case "worldgen-matrix" -> "WorldGenerationCampaign";
             default -> throw new IllegalArgumentException("unsupported campaign: " + id);
         };
         return new Selection(id, main,
@@ -104,6 +114,9 @@ public final class CampaignExecutorCycle {
         }
         require(value != null && value >= 10 && value <= 7_200, "campaign budget must be between 10 and 7200");
         return value;
+    }
+    private static int processLimit(String campaign) {
+        return campaign.equals("worldgen-matrix") ? 24 : 8;
     }
 
     private static Path executor() {
