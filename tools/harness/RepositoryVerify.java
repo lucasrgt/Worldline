@@ -62,7 +62,7 @@ final class RepositoryVerify {
                     case "--executor-gui" -> "ExecutorGuiCycle"; case "--executor-aero" -> "ExecutorAeroCycle";
                     default -> "ExecutorCandidateCycle"; };
                 String output = ProcessCapture.require(Path.of("").toAbsolutePath().normalize(), List.of("java",
-                        "tools/containers/RuntimeFabricLauncher.java", main), arguments[0].contains("aero") ? 14_400 : 3_000);
+                        "tools/containers/RuntimeFabricLauncher.java", main), main.contains("Aero") ? 14_400 : 3_000);
                 System.out.print(output);
             } catch (Exception error) {
                 System.err.println("executor qualification failed: " + error.getMessage());
