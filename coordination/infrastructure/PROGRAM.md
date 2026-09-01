@@ -711,6 +711,39 @@ Evidence recorded for these slices:
   zero, without making the overlay authoritative. The exact canonical Gate
   passes cold (`116548ms < 240000ms`), CSM checks ten ways with no deviations,
   and NYA passes.
+- Worldline commit `a3137efa7` qualifies the third campaign adapter by replaying
+  the existing official `m634-cross-lane-seed-matrix` contract. Every replay
+  enters through `Gate --milestone` and the official-runtime lease; M634 still
+  owns the three Minecraft seeds, four chunks, solid-occupancy oracle, and
+  behavior verdict. The campaign seed partitions whole sealed-matrix replays,
+  and its receipt remains explicitly non-authoritative. An initial seed-184
+  request `22d740fb5d7daa0afe0b3d6bc65a992d4f5bb6b31ebec5648552a34c07b00fad`
+  failed in the static phase when the eight-process Job could not start another
+  `javac`; it reached no Minecraft oracle. Rust observed 1361678336 peak bytes
+  and 15 process identities. The measured worldgen profile now permits at most
+  24 active descendants while retaining the four-GiB Job and 512-MiB JVM heap
+  ceilings. Seed 185 then passes the unchanged M634 signature
+  `e7e55219d0ff2afc770f220ab309cf77ad0b0ed92928b5dd5342ed7494e79576`
+  at plan `02abb9edffd41dad928b95fc66965d66baf91f42c2bf576db626e11549080469`
+  through Rust request
+  `a030d25940429b494b9236cd94cfefe3f0a39910a88766bdc57b8c8a3d715ed5`.
+  Sample `57dbfdf034af95a9977342d3d15199cf7e073ceaf1f64ec08197e4c80c0fe97d`
+  records 85526 ms, 9-ms bootstrap, 1889628160 peak bytes, 25 observed process
+  identities including the executor, complete output, and zero descendants.
+  The live Explorer independently reports both linked runs and exactly one
+  failure. The exact canonical Gate passes cold (`123902ms < 240000ms`),
+  `Gate --runtime` passes cold (`5104ms < 240000ms`), CSM checks ten ways with
+  no deviations, and NYA passes.
+- Worldline commits `91c32c04e` and `14bebceb6` repair a pre-existing Windows
+  race in concurrent shared-directory CAS publication discovered by this
+  qualification. Publishers now serialize each digest with a bounded local
+  lock stripe plus a persistent cross-process file lock before the immutable
+  move and read-only transition. Twenty repeated fixtures, each using two
+  threads and four independent processes, complete with zero failures after the
+  original code failed five of twenty thread-only rounds. The read-only
+  inventory accepts only canonical zero-byte lock files under `locks/sha256`,
+  excludes them from object counts, and classifies malformed lock namespaces,
+  names, links, or content as faults.
 Current boundaries remain honest: Linux mount and PID namespaces,
 OS-enforced loopback-only policy, Windows filesystem/network isolation,
 the broader server-headless matrix,
@@ -1172,8 +1205,9 @@ The first Aero GUI profile at commit `935d0fc41` records M778 at 787,205 ms,
 eleven peak processes, complete output, and zero remaining descendants.
 
 Native campaigns now retain already verified Rust receipt metrics as sanitized
-`campaign-worker` samples. Nightly and structural instability samples remain
-observational and cannot influence Candidate admission.
+`campaign-worker` samples. Nightly, structural instability, and official
+worldgen replay samples remain observational and cannot influence Candidate
+admission.
 
 ### C2. Historical profiles
 
@@ -1198,6 +1232,8 @@ through the live Evidence Explorer without argv, paths, environment values, or
 workload log content.
 Commit `9dc03ddce` adds two passing structural-instability samples, while failed
 inner runs remain native execution evidence rather than admissible history.
+Commit `a3137efa7` adds the first passing official-worldgen campaign sample. Its
+failed pre-oracle predecessor remains linked native evidence, not history.
 
 ### C3. Conservative admission
 
@@ -1274,6 +1310,9 @@ It is opt-in, preserves the common immutable object layout, admits only a
 prepared publication plan, and independently revalidates every hydrated byte.
 Its read-only inventory verifies signed references and classifies corrupt,
 malformed, missing, and orphaned objects without leaking paths or content.
+Per-digest local and cross-process locks serialize publication across Gates;
+the inventory validates their separate zero-byte namespace without counting
+locks as content objects.
 S3-compatible storage and its TLS, authentication, retention, audit, and
 publisher-governance policies remain pending rather than being inferred from
 the shared filesystem boundary.
@@ -1369,6 +1408,8 @@ attestations and non-campaign heavy-log families remain pending. Native links
 also validate termination and exit identity, count nonzero or non-exited runs,
 and expose their exit codes. This prevents a failed inner campaign coordinator
 from appearing healthy merely because the outer Rust executor exited normally.
+A closed campaign catalog now supplies every report root, so newly registered
+adapters cannot silently disappear from the combined orphan analysis.
 
 ## 11. Workstream G: distributed campaigns
 
@@ -1387,8 +1428,8 @@ Campaign roots deterministically derive shard seeds and case ranges. Java
 continues to interpret behavior and divergences. Rust schedules, isolates,
 measures, and transports permitted objects.
 
-The base contract, Nightly fuzz-plus-mutation adapter, and structural
-instability adapter are qualified.
+The base contract, Nightly fuzz-plus-mutation adapter, structural instability
+adapter, and fixed official-worldgen matrix replay adapter are qualified.
 Plans and receipts are canonical, shards are complete and disjoint, immutable
 publication is fail closed, and aggregation is independent of worker arrival
 order. Native executor dispatch is qualified for the complete Nightly shard
@@ -1396,7 +1437,9 @@ coordinator on Windows, and its verified metrics now enter sanitized local
 history without affecting admission. The structural instability adapter also
 runs through Rust, supports multi-shard local arrival, and records verified
 metrics under the same non-admissible capability; it deliberately does not
-start Minecraft. World-generation and Minecraft-runtime instability adapters,
+start Minecraft. The worldgen adapter runs the existing M634 oracle through the
+official lease inside Rust containment, while leaving M634 as the sole behavior
+authority. Arbitrary-seed worldgen, Minecraft-runtime instability adapters,
 differential, profiling, regression, and minimization execution, plus
 multi-shard distribution across distinct hosts remain pending.
 
