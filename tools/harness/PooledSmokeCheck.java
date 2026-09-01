@@ -95,6 +95,11 @@ final class PooledSmokeCheck {
         require(lease.matches("[0-9]+") && lease.equals(values.getProperty("lease.pid")),
                 "executor differential runtime lease mismatch");
         ProcessHandle owner = ProcessHandle.of(Long.parseLong(lease)).orElseThrow();
+        String started = requiredEnvironment("WORLDLINE_RUNTIME_PARENT_STARTED");
+        require(started.matches("[0-9]+")
+                && started.equals(values.getProperty("lease.started"))
+                && owner.info().startInstant().orElseThrow().toEpochMilli() == Long.parseLong(started),
+                "executor differential runtime lease start mismatch");
         Path lock = Path.of(values.getProperty("lock.path", "")).toAbsolutePath().normalize();
         require(owner.isAlive() && "official-b173.lock".equals(lock.getFileName().toString())
                         && lockHeld(lock),

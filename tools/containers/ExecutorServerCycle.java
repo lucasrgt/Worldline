@@ -39,10 +39,7 @@ public final class ExecutorServerCycle {
     private static void execute() throws Exception {
         require(windows(), "the executor server differential currently requires Windows");
         Path source = Path.of("").toAbsolutePath().normalize(); requireClean(source);
-        String leasePid = requiredEnvironment("WORLDLINE_RUNTIME_LEASE");
-        require(leasePid.matches("[0-9]+")
-                && ProcessHandle.of(Long.parseLong(leasePid)).filter(ProcessHandle::isAlive).isPresent(),
-                "canonical runtime lease is not active");
+        RuntimeLeaseIdentity lease = RuntimeLeaseIdentity.environment();
         Path control = Path.of(requiredEnvironment("WORLDLINE_GATE_CONTROL"))
                 .toAbsolutePath().normalize();
         Path lock = control.resolve("official-b173.lock"); require(Files.isRegularFile(lock),
@@ -54,9 +51,9 @@ public final class ExecutorServerCycle {
         try (ExecutorServerWorkspace workspace = ExecutorServerWorkspace.open(
                 source, "legacy", artifact)) {
             workspace.prepare();
-            Path token = workspace.authorize(lock, leasePid);
+            Path token = workspace.authorize(lock, lease);
             ExecutionEnvironmentManifest environment = environment(workspace.root(), token,
-                    leasePid, "legacy");
+                    lease, "legacy");
             baseline = legacy(workspace.root(), command(workspace.root()), environment);
         }
 
@@ -64,9 +61,9 @@ public final class ExecutorServerCycle {
         try (ExecutorServerWorkspace workspace = ExecutorServerWorkspace.open(
                 source, "rust", artifact)) {
             workspace.prepare();
-            Path token = workspace.authorize(lock, leasePid);
+            Path token = workspace.authorize(lock, lease);
             ExecutionEnvironmentManifest environment = environment(workspace.root(), token,
-                    leasePid, "rust");
+                    lease, "rust");
             nativeResult = rust(workspace.root(), executor, command(workspace.root()), environment);
         }
         require(Arrays.equals(baseline, nativeResult.evidence),
@@ -128,11 +125,11 @@ public final class ExecutorServerCycle {
     }
 
     private static ExecutionEnvironmentManifest environment(Path root, Path token,
-            String leasePid, String label) throws Exception {
+            RuntimeLeaseIdentity lease, String label) throws Exception {
         Path output = root.resolve(".worldline/executor-server-cycle").resolve(label);
         Path control = output.resolve("control"); Files.createDirectories(control);
         return ExecutionEnvironmentManifest.serverHeadless(output.resolve("tmp"), control,
-                token, leasePid);
+                token, lease.pid(), lease.started());
     }
 
     private static List<String> command(Path root) {

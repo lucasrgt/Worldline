@@ -53,8 +53,12 @@ public final class FairLeaseCommand {
             for (int index = 7; index < arguments.length; index++) command.add(arguments[index]);
             ProcessBuilder builder = new ProcessBuilder(command).directory(root.toFile()).inheritIO();
             builder.environment().put("WORLDLINE_GATE_INTERNAL", "true");
-            if (runtimeLease) builder.environment().put(
-                    "WORLDLINE_RUNTIME_LEASE", Long.toString(ProcessHandle.current().pid()));
+            if (runtimeLease) {
+                builder.environment().put("WORLDLINE_RUNTIME_LEASE",
+                        Long.toString(ProcessHandle.current().pid()));
+                builder.environment().put("WORLDLINE_RUNTIME_LEASE_STARTED",
+                        Long.toString(ProcessHandle.current().info().startInstant().orElseThrow().toEpochMilli()));
+            }
             Process process = builder.start();
             try { return process.waitFor(); }
             catch (InterruptedException error) {

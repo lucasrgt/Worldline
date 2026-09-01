@@ -79,7 +79,7 @@ public final class Gate {
             executePhase(arguments, false, true, false); return;
         }
         boolean smoke = arguments.length > 0 && "--smoke".equals(arguments[0]);
-        boolean executorRuntime = arguments.length == 1 && arguments[0].matches("--executor-(server|gui)");
+        boolean executorRuntime = arguments.length == 1 && arguments[0].matches("--executor-(server|gui|aero)");
         boolean executorCandidate = Arrays.equals(arguments, new String[] {"--executor-candidate"});
         boolean pinnedSmoke = arguments.length > 0 && "--pinned-smoke".equals(arguments[0]);
         executePhase(arguments, smoke || executorRuntime, !executorRuntime && !executorCandidate,
@@ -131,7 +131,7 @@ public final class Gate {
                 || Arrays.equals(arguments, new String[] {"--executor-tooling"})
                 || Arrays.equals(arguments, new String[] {"--executor-environment"})
                 || Arrays.equals(arguments, new String[] {"--executor-filesystem"})
-                || arguments.length == 1 && arguments[0].matches("--executor-(server|gui)")
+                || arguments.length == 1 && arguments[0].matches("--executor-(server|gui|aero)")
                 || Arrays.equals(arguments, new String[] {"--executor-candidate"})
                 || Arrays.equals(arguments, new String[] {"--accept-legacy-smoke-baseline"})
                 || arguments.length == 1 && maintenance(arguments[0])
@@ -161,7 +161,7 @@ public final class Gate {
                 + "--module-cache-doctor|--module-cache-gc|--cache-doctor|--cache-gc|"
                 + "--cache-rebuild-drill|"
                 + "--executor-tooling|--executor-environment|--executor-filesystem|--executor-server|"
-                + "--executor-candidate|--executor-gui|"
+                + "--executor-candidate|--executor-gui|--executor-aero|"
                 + "--new-milestone ID|--milestone ID|--lane-differential ID|"
                 + "--candidate-ready ID|--candidate ID|--self-test]");
         if (arguments.length == 2 && !arguments[1].matches("[a-z0-9]+(?:-[a-z0-9]+)*"))
