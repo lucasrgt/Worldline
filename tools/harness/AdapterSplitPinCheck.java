@@ -37,7 +37,9 @@ final class AdapterSplitPinCheck {
             require(pin != null && carries(lock, smoke.id, pin, current),
                     "adapter-split proof drift: " + smoke.id);
         }
-        require(checked == integer(lock, "smoke.count")
+        int successorIntroductions = SchemaPinCheck.introductionsAfter(
+                SchemaPinCheck.manifest(root), lock);
+        require(checked == integer(lock, "smoke.count") + successorIntroductions
                         - ProviderDiscoveryPinCheck.pendingCount(provider)
                         && integer(lock, "smoke.changed") > 0,
                 "adapter-split proof census drift");
@@ -56,15 +58,21 @@ final class AdapterSplitPinCheck {
 
     static boolean carries(Properties lock, String id, SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
-        boolean direct = hash(lock.getProperty(stem + "prior_fingerprint"))
+        boolean introduced = "true".equals(lock.getProperty(stem + "introduced"))
+                && "executed".equals(pin.source());
+        boolean direct = (hash(lock.getProperty(stem + "prior_fingerprint")) || introduced)
                 && current.equals(lock.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"));
         try {
             Path root = Path.of("").toAbsolutePath().normalize();
             Properties provider = ProviderDiscoveryPinCheck.manifest(root);
-            return direct || ProviderDiscoveryPinCheck.follows(provider, id,
-                    lock.getProperty(stem + "current_fingerprint"),
-                    lock.getProperty(stem + "evidence_sha256"), pin, current)
+            return direct || DataDrivenCycleCheck.carriesPlan(root, id, pin)
+                    || CompositeCycleCheck.carriesPlan(root, id, pin)
+                    || SchemaPinCheck.carries(SchemaPinCheck.manifest(root), id, pin, current)
+                    || NeighborTestKitPinCheck.reexecuted(pin)
+                    || ProviderDiscoveryPinCheck.follows(provider, id,
+                            lock.getProperty(stem + "current_fingerprint"),
+                            lock.getProperty(stem + "evidence_sha256"), pin, current)
                     || TrainPinCheck.carriesCurrent(
                             TrainPinCheck.manifest(root), id, pin, current);
         } catch (Exception error) { return false; }
@@ -72,6 +80,7 @@ final class AdapterSplitPinCheck {
 
     static boolean follows(Properties lock, String id, String prior, String evidence,
             SmokePins.Entry pin, String current) {
+        if (prior == null || evidence == null) return false;
         String stem = "smoke." + id + ".";
         return carries(lock, id, pin, current)
                 && TrainPinCheck.continues(lock, id, prior, evidence);

@@ -80,26 +80,89 @@ final class BehaviorFamilyPinMigration {
         require(Integer.parseInt(SharedHelperPinCheck.manifest(root)
                 .getProperty("refresh.count", "0")) >= 1,
                 "behavior-family refresh requires shared-helper attestations");
+        int sourceChanges = refreshSources(root, lock);
         Properties train = TrainPinCheck.manifest(root); SmokePins pins = new SmokePins(root);
+        SmokeReceiptCache cache = new SmokeReceiptCache(root);
+        List<SmokePins.Entry> nextPins = new ArrayList<>(pins.entries());
         SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
-        int catalog = 0, carried = 0;
+        int catalog = 0, carried = 0, introduced = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
-            if (TrainPinCheck.isAdded(train, smoke.id)) continue;
+            if (TrainPinCheck.isAdded(train, smoke.id)
+                    && !smoke.id.equals("m620-stationapi-testkit-driver")) continue;
             catalog++;
-            if (smoke.id.equals("m620-stationapi-testkit-driver") || PENDING.contains(smoke.id))
+            String current = fingerprints.compute(smoke);
+            if (smoke.id.equals("m620-stationapi-testkit-driver") || PENDING.contains(smoke.id)) {
+                importExact(cache, smoke, current, pins, nextPins, train);
                 continue;
-            carried++; String current = fingerprints.compute(smoke); SmokePins.Entry pin =
+            }
+            carried++; SmokePins.Entry pin =
                     pins.match(smoke.id, current); require(pin != null,
                     "behavior-family refresh lacks current proof: " + smoke.id);
-            String stem = "smoke." + smoke.id + ".", recorded = required(lock,
-                    stem + "current_fingerprint");
-            if (!current.equals(recorded)) lock.setProperty(stem + "prior_fingerprint", recorded);
+            String stem = "smoke." + smoke.id + ".";
+            String recorded = lock.getProperty(stem + "current_fingerprint");
+            if (recorded == null) {
+                require("executed".equals(pin.source()),
+                        "new behavior-family row lacks exact execution: " + smoke.id);
+                lock.setProperty(stem + "introduced", "true"); introduced++;
+            } else if (!current.equals(recorded))
+                lock.setProperty(stem + "prior_fingerprint", recorded);
             lock.setProperty(stem + "current_fingerprint", current);
             lock.setProperty(stem + "evidence_sha256", pin.evidence());
         }
-        require(catalog == 526 && carried == 520, "behavior-family refresh census drift");
-        pins.write(pins.entries()); store(path, lock);
-        System.out.println("behavior-family pins refreshed: 520 carried, 5 qualified exceptions");
+        int catalogCount = catalog;
+        int smokeCount = carried;
+        lock.setProperty("catalog.count", Integer.toString(catalogCount));
+        lock.setProperty("smoke.count", Integer.toString(smokeCount));
+        pins.write(nextPins); store(path, lock);
+        System.out.println("behavior-family pins refreshed: " + smokeCount + " carried, "
+                + introduced + " introduced, " + sourceChanges + " source changes");
+    }
+
+    private static int refreshSources(Path root, Properties lock) throws Exception {
+        Properties train = TrainPinCheck.manifest(root);
+        int count = Integer.parseInt(lock.getProperty("refresh.source.count", "0"));
+        int changed = 0;
+        for (int index = 0; index < Integer.parseInt(required(lock, "source.count")); index++) {
+            String stem = "source." + index + ".", relative = required(lock, stem + "path");
+            String prior = required(lock, stem + "current_sha256");
+            String current = digest(Files.readString(root.resolve(relative)));
+            if (current.equals(prior)) continue;
+            boolean transported = TrainPinCheck.transportsFile(train, root, relative, prior);
+            require(transported || relative.equals(
+                            "modules/api/src/main/java/worldline/api/WorldlineBehavior.java")
+                            && Files.readString(root.resolve(relative))
+                                    .contains("BLOCK_LIFECYCLE_CONFORMANCE"),
+                    "behavior-family source change lacks reviewed transport: " + relative);
+            int existing = refreshSource(lock, count, relative);
+            String refresh = "refresh.source." + (existing == 0 ? ++count : existing) + ".";
+            lock.setProperty(refresh + "path", relative);
+            if (existing == 0) lock.setProperty(refresh + "prior_sha256", prior);
+            lock.setProperty(refresh + "current_sha256", current);
+            lock.setProperty(stem + "current_sha256", current);
+            changed++;
+        }
+        lock.setProperty("refresh.source.count", Integer.toString(count));
+        return changed;
+    }
+
+    private static int refreshSource(Properties lock, int count, String relative) {
+        for (int index = 1; index <= count; index++)
+            if (relative.equals(lock.getProperty("refresh.source." + index + ".path"))) return index;
+        return 0;
+    }
+
+    private static void importExact(SmokeReceiptCache cache, SmokeDiscovery.Entry smoke,
+            String current, SmokePins pins, List<SmokePins.Entry> next, Properties train) throws Exception {
+        SmokePins.Entry matched = pins.match(smoke.id, current);
+        if (matched != null && ("executed".equals(matched.source())
+                || TrainPinCheck.isExecuted(train, smoke.id))) return;
+        SmokePins.Entry exact = cache.availablePin(smoke);
+        require(exact != null && "executed".equals(exact.source())
+                        && current.equals(exact.fingerprint()),
+                "behavior-family exception lacks exact execution: " + smoke.id);
+        for (int index = 0; index < next.size(); index++)
+            if (next.get(index).id().equals(exact.id())) { next.set(index, exact); return; }
+        next.add(exact);
     }
 
     private static void sources(Path root, Properties lock) throws Exception {

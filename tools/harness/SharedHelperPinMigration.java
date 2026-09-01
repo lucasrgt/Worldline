@@ -95,23 +95,55 @@ final class SharedHelperPinMigration {
         lock.setProperty("variant.count", Integer.toString(variantCount()));
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); Properties providers =
-                ProviderDiscoveryPinCheck.manifest(root); int carried = 0;
+                ProviderDiscoveryPinCheck.manifest(root); int carried = 0, introduced = 0;
+        refreshAeroParser(lock, pins, fingerprints);
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             if (ProviderDiscoveryPinCheck.exemptsLegacy(providers, smoke.id)) continue;
             carried++; String current = fingerprints.compute(smoke); SmokePins.Entry pin =
                     pins.match(smoke.id, current); require(pin != null,
                     "shared-helper refresh lacks current proof: " + smoke.id);
             String stem = "smoke." + smoke.id + ".";
-            String recorded = required(lock, stem + "current_fingerprint");
-            if (!current.equals(recorded)) lock.setProperty(stem + "prior_fingerprint", recorded);
+            String recorded = lock.getProperty(stem + "current_fingerprint");
+            if (recorded == null) {
+                require("executed".equals(pin.source()),
+                        "new shared-helper row lacks exact execution: " + smoke.id);
+                lock.setProperty(stem + "introduced", "true"); introduced++;
+            } else if (!current.equals(recorded))
+                lock.setProperty(stem + "prior_fingerprint", recorded);
             lock.setProperty(stem + "current_fingerprint", current);
             lock.setProperty(stem + "evidence_sha256", pin.evidence());
         }
-        require(carried == 525 - ProviderDiscoveryPinCheck.pendingCount(providers),
-                "shared-helper refresh smoke census drift");
+        Properties schemas = SchemaPinCheck.manifest(root);
+        int successorIntroductions = SchemaPinCheck.introductionsAfter(schemas, lock);
+        int smokeCount = carried + ProviderDiscoveryPinCheck.pendingCount(providers)
+                - successorIntroductions;
+        require(smokeCount >= 0, "shared-helper successor introduction census drift");
+        lock.setProperty("smoke.count", Integer.toString(smokeCount));
         pins.write(pins.entries()); store(path, lock);
         System.out.println("shared-helper pins refreshed: " + refactors
-                + " canonical refactors, " + carried + " carried");
+                + " canonical refactors, " + carried + " carried, " + introduced
+                + " introduced");
+    }
+
+    private void refreshAeroParser(Properties lock, SmokePins pins,
+            SmokeInputFingerprint fingerprints) throws Exception {
+        String relative = required(lock, "aero_parser.path");
+        String prior = required(lock, "aero_parser.current_sha256");
+        String current = digest(Files.readString(root.resolve(relative), StandardCharsets.UTF_8));
+        if (current.equals(prior)) return;
+        String source = Files.readString(root.resolve(relative), StandardCharsets.UTF_8);
+        require(source.contains("public final class AeroLogRow")
+                        && source.contains("public static AeroLogRow parse(String row)")
+                        && source.contains("public long whole(String name)"),
+                "Aero parser visibility change is not the reviewed source-launcher repair");
+        SmokeDiscovery.Entry smoke = SmokeDiscovery.require(root, "m70-aero-combat-window");
+        SmokePins.Entry anchor = pins.match(smoke.id, fingerprints.compute(smoke));
+        require(anchor != null && anchor.source().equals("executed"),
+                "Aero parser repair lacks exact M70 proof");
+        lock.setProperty("aero_parser.prior_sha256", prior);
+        lock.setProperty("aero_parser.current_sha256", current);
+        lock.setProperty("aero_parser.anchor", smoke.id);
+        lock.setProperty("aero_parser.evidence_sha256", anchor.evidence());
     }
 
     private int variantCount() throws Exception {

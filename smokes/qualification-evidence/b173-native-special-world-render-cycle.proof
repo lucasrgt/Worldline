@@ -1,0 +1,5 @@
+schema=1
+id=b173-native-special-world-render-cycle
+fingerprint=af2693c8c0b13df36ee9e7584d822c16c0f1a94cbaa78c91cd0479a44f4287fe
+observation.sha256=9e85f280d7704f42a235c45d9f2f1a1aa34d4e48064d3406169272cad95e786c
+source=refactor-equivalent

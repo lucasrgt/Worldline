@@ -1,5 +1,5 @@
 schema=1
 id=m788-aero-ordered-template-performance
-fingerprint=ce2950f8217c3e98445531377c744c8d961d1b3b5f6d1dbb5dfa6fb2188aaa4b
+fingerprint=c2b5a024828a9c233f06585226245dca2771c382056ef55fea0d187f59d8b94c
 observation.sha256=6d5c35f828b32aa01cbceb3a8418184c08b15f8c3a8a8132d13daf54a14d5e07
-source=executed
+source=refactor-equivalent

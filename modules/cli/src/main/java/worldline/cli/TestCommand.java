@@ -55,7 +55,6 @@ final class TestCommand {
                 return 0;
             }
         }
-        parsed.provider = provider(parsed.providerName);
         if ("watch".equals(arguments[1])) return TestWatch.run(parsed, output, error);
         if ("minimize".equals(arguments[1])) parsed.minimize = true;
         return execute(parsed, output).passed() ? 0 : 1;
@@ -64,6 +63,7 @@ final class TestCommand {
     static TestRunResult execute(Parsed parsed, PrintStream output)
             throws IOException, ReflectiveOperationException {
         try (TestSpecLoader loader = new TestSpecLoader(parsed.source, parsed.classpath)) {
+            parsed.provider = provider(parsed.providerName, loader.classLoader());
             List<WorldlineSpec> specs = loader.loadAll(parsed.spec); RunnerOptions options = parsed.options();
             List<TestReporter> reporters = parsed.reporters(output);
             TestReporter reporter = reporters.size() == 1 ? reporters.get(0)
@@ -109,9 +109,10 @@ final class TestCommand {
         return parsed;
     }
 
-    private static TestRuntimeProvider provider(String name) throws ReflectiveOperationException {
+    private static TestRuntimeProvider provider(String name, ClassLoader loader)
+            throws ReflectiveOperationException {
         if ("none".equals(name)) return null;
-        return TestRuntimeProviders.discover(name);
+        return TestRuntimeProviders.discover(name, loader);
     }
     private static boolean command(String value) {
         return "run".equals(value) || "list".equals(value) || "inspect".equals(value)

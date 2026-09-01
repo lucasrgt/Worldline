@@ -77,7 +77,13 @@ final class SmokeProcess {
         if (Files.isRegularFile(path)) try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             descriptor.load(reader);
         }
-        return positive(descriptor.getProperty("timeout.seconds", "900"), id + " timeout.seconds");
+        int result = positive(descriptor.getProperty("timeout.seconds", "900"),
+                id + " timeout.seconds");
+        String child = descriptor.getProperty("child.timeout.seconds", "").trim();
+        if (!child.isEmpty() && result < positive(child, id + " child.timeout.seconds"))
+            throw new IllegalArgumentException(id
+                    + " timeout.seconds must cover child.timeout.seconds");
+        return result;
     }
 
     private static int positive(String value, String name) {

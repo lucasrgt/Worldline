@@ -11,9 +11,9 @@ There is no GUI and no Aero path. One official EOF is retried after a
 Run directly with:
 
 ```text
-java tools/smoke/GravityBlockSetCycle.java m342-gravity-block-set
+java tools/harness/Gate.java --milestone m342-gravity-block-set
 ```
 
 Canonical evidence uses two official server JVMs and four client sessions.
 The frozen semantic SHA-256 is
-`d8653266b9cdaa16b9aa3d3fc760642400d2172380078b03499aff10394c84e8`.
+`959924fb1c3833226b9a7c0ffeebe212f9be0621ba06ca2f083e08492c72d066`.

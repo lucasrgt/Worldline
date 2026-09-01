@@ -1,5 +1,5 @@
 schema=1
 id=m72-aero-server-content
-fingerprint=6e38a60085cc9787ee28bdb25318c8874113b1a4e8032bb37415491472a928ba
+fingerprint=bffc5cff907686d8e14a07c8dc5a9c4c0c72a2e33a205f361c54409c67b14659
 observation.sha256=6dff186ed904bdce57466038dd32a9824888d6de7ddb1a20041663cb8cec0501
 source=refactor-equivalent

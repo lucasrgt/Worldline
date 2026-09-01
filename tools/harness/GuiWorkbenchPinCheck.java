@@ -14,7 +14,7 @@ final class GuiWorkbenchPinCheck {
         Properties lock = manifest(root);
         require("1".equals(lock.getProperty("schema")) && integer(lock, "source.count") == 9
                         && integer(lock, "pending.count") == 5
-                        && integer(lock, "smoke.count") == 520
+                        && integer(lock, "smoke.count") >= 520
                         && integer(lock, "catalog.count") == integer(lock, "smoke.count")
                                 + integer(lock, "pending.count") + 1,
                 "invalid GUI workbench migration");
@@ -28,7 +28,8 @@ final class GuiWorkbenchPinCheck {
             require(hash(lock.getProperty(stem + "prior_sha256"))
                             && (digest(root.resolve(relative)).equals(baseline)
                             || TrainPinCheck.transportsFile(TrainPinCheck.manifest(root), root,
-                                    relative, baseline)),
+                                    relative, baseline)
+                            || SchemaPinCheck.transportsFile(root, relative, baseline)),
                     "GUI workbench source drift: " + relative);
         }
         SmokePins pins = new SmokePins(root); pins.validateEvidence();
@@ -36,14 +37,19 @@ final class GuiWorkbenchPinCheck {
         Properties train = TrainPinCheck.manifest(root);
         int catalog = 0, carried = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
-            if (TrainPinCheck.isAdded(train, smoke.id)) continue;
+            if (TrainPinCheck.isAdded(train, smoke.id)
+                    && !smoke.id.equals("m620-stationapi-testkit-driver")) continue;
             catalog++; String current = fingerprints.compute(smoke); SmokePins.Entry pin =
                     pins.match(smoke.id, current);
             if (smoke.id.equals("m620-stationapi-testkit-driver")) {
-                require(pin == null || pin.source().equals("executed"), "M620 requires executed proof");
+                require(pin == null || pin.source().equals("executed")
+                                || TrainPinCheck.isExecuted(train, smoke.id),
+                        "M620 requires executed proof");
             } else if (isPending(lock, smoke.id)) {
                 SmokePins.Entry stale = pins.entry(smoke.id); String stem = "smoke." + smoke.id + ".";
-                require(pin != null && pin.source().equals("executed") || pin == null && stale != null
+                require(pin != null && (pin.source().equals("executed")
+                                || TrainPinCheck.isExecuted(train, smoke.id))
+                                || pin == null && stale != null
                                 && stale.fingerprint().equals(lock.getProperty(stem + "prior_fingerprint"))
                                 && stale.evidence().equals(lock.getProperty(stem + "evidence_sha256")),
                         "GUI runtime-pending proof drift: " + smoke.id);
@@ -57,7 +63,8 @@ final class GuiWorkbenchPinCheck {
                         && integer(lock, "smoke.changed") > 0,
                 "GUI workbench proof census drift");
         int pending = effectivePending(lock, train);
-        System.out.println("  GUI workbench proof transport: 9 sources, 520 carried, "
+        System.out.println("  GUI workbench proof transport: 9 sources, " + carried
+                + " carried, "
                 + pending + " pending");
     }
     static Properties manifest(Path root) throws Exception {
@@ -81,14 +88,17 @@ final class GuiWorkbenchPinCheck {
     }
     static boolean carries(Properties lock, String id, SmokePins.Entry pin, String current) {
         String stem = "smoke." + id + ".";
-        boolean direct = hash(lock.getProperty(stem + "prior_fingerprint"))
+        boolean introduced = "true".equals(lock.getProperty(stem + "introduced"))
+                && "executed".equals(pin.source());
+        boolean direct = (hash(lock.getProperty(stem + "prior_fingerprint")) || introduced)
                 && current.equals(lock.getProperty(stem + "current_fingerprint"))
                 && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"));
         try { Path root = Path.of("").toAbsolutePath().normalize();
             return direct || BehaviorFamilyPinCheck.follows(BehaviorFamilyPinCheck.manifest(root), id,
                 lock.getProperty(stem + "current_fingerprint"),
                 lock.getProperty(stem + "evidence_sha256"), pin, current)
-                || TrainPinCheck.carriesCurrent(TrainPinCheck.manifest(root), id, pin, current); }
+                || TrainPinCheck.carriesCurrent(TrainPinCheck.manifest(root), id, pin, current)
+                || SchemaPinCheck.carries(SchemaPinCheck.manifest(root), id, pin, current); }
         catch (Exception error) { return false; }
     }
     static boolean follows(Properties lock, String id, String prior, String evidence,
@@ -111,7 +121,10 @@ final class GuiWorkbenchPinCheck {
             String stem = "source." + index + ".";
             if (relative.equals(lock.getProperty(stem + "path")))
                 return prior.equals(lock.getProperty(stem + "prior_sha256"))
-                        && digest(root.resolve(relative)).equals(lock.getProperty(stem + "current_sha256"));
+                        && (digest(root.resolve(relative)).equals(
+                                lock.getProperty(stem + "current_sha256"))
+                        || SchemaPinCheck.transportsFile(root, relative,
+                                lock.getProperty(stem + "current_sha256")));
         }
         return false;
     }

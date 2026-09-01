@@ -2,6 +2,8 @@ package worldline.api;
 
 /** Qualified world-state boundaries kept outside the primary compatibility catalog. */
 public final class WorldlineWorldBehaviors {
+    public static final WorldlineBehavior FURNACE_SUBSYSTEM = define("furnace-subsystem",
+            "Idle and active furnace domains, smelting, persistence, lifecycle, and physics");
     public static final WorldlineBehavior WHEAT_LIGHT_HALT = define("wheat-light-halt",
             "Wheat on farmland does not increment age in darkness while a lit crop can age");
     public static final WorldlineBehavior CACTUS_ADJACENT_BREAK = define("cactus-adjacent-break",
@@ -39,6 +41,51 @@ public final class WorldlineWorldBehaviors {
     public static final WorldlineBehavior PORTAL_REENTRY_COOLDOWN = define(
             "portal-reentry-cooldown",
             "Arrival-side portal contact suppresses an immediate return until the player exits for a cooldown window");
+    public static final WorldlineBehavior PORTAL_BLOCK_SUBSYSTEM = define(
+            "portal-block-subsystem",
+            "Portal frame materialization, lifecycle, persistence, physics, ticks, and collapse");
+    public static final WorldlineBehavior BEDROCK_SUBSYSTEM = define(
+            "bedrock-subsystem",
+            "Bedrock item placement, unbreakable lifecycle, persistence, physics, and stability");
+    public static final WorldlineBehavior LOCKED_CHEST_SUBSYSTEM = define(
+            "locked-chest-subsystem",
+            "Locked chest placement, instant harvest, persistence, physics, and timed removal");
+    public static final WorldlineBehavior FIRE_SUBSYSTEM = define(
+            "fire-subsystem",
+            "Fire age domain, placement, empty harvest, persistence, physics, and support loss");
+    public static final WorldlineBehavior FARMLAND_SUBSYSTEM = define(
+            "farmland-subsystem",
+            "Farmland moisture, placement, dirt harvest, persistence, physics, and cover response");
+    public static final WorldlineBehavior BED_SUBSYSTEM = define(
+            "bed-subsystem",
+            "Bed two-cell metadata, break and drop asymmetry, physics, ticks, and orphan cleanup");
+    public static final WorldlineBehavior IRON_DOOR_SUBSYSTEM = define(
+            "iron-door-subsystem",
+            "Iron door two-cell metadata, lifecycle, physics, ticks, and structural cleanup");
+    public static final WorldlineBehavior MOB_SPAWNER_SUBSYSTEM = define(
+            "mob-spawner-subsystem",
+            "Mob-spawner registry, item placement, lifecycle, persistence, activation, and stability");
+    public static final WorldlineBehavior REDSTONE_INPUT_CONTROLS_SUBSYSTEM = define(
+            "redstone-input-controls-subsystem",
+            "Lever, button, and pressure-plate state, geometry, light, timing, and support response");
+    public static final WorldlineBehavior RAIL_NETWORK_SUBSYSTEM = define(
+            "rail-network-subsystem",
+            "Normal, powered, and detector rail routing, geometry, timing, and support response");
+    public static final WorldlineBehavior BUILT_ENVIRONMENT_MATERIALS_SUBSYSTEM = define(
+            "built-environment-materials-subsystem",
+            "Construction blocks across metadata, geometry, light, ticking, and structural response");
+    public static final WorldlineBehavior VEGETATION_ECOLOGY_SUBSYSTEM = define(
+            "vegetation-ecology-subsystem",
+            "Grass, saplings, leaves, ground vegetation, crops, and cane across native ecology boundaries");
+    public static final WorldlineBehavior REDSTONE_SIGNAL_CONSUMERS_SUBSYSTEM = define(
+            "redstone-signal-consumers-subsystem",
+            "Dispenser, note block, TNT, torch, wire, and jukebox signal-consumer boundaries");
+    public static final WorldlineBehavior FLUID_FROZEN_MATTER_SUBSYSTEM = define(
+            "fluid-frozen-matter-subsystem",
+            "Water, lava, sponge, snow, and ice lifecycle and phase boundaries");
+    public static final WorldlineBehavior OPENABLE_ACCESS_STRUCTURES_SUBSYSTEM = define(
+            "openable-access-structures-subsystem",
+            "Chest, wooden door, and trapdoor physical, timing, and structural boundaries");
     public static final WorldlineBehavior DUNGEON_GENERATION = define("dungeon-generation",
             "Fixed-seed populated chunks contain replay-stable spawners and nonempty loot chests");
     public static final WorldlineBehavior CHUNK_UNLOAD_RELOAD = define("chunk-unload-reload",
@@ -53,6 +100,11 @@ public final class WorldlineWorldBehaviors {
             "A held map converges to replay-stable Packet131 colors at a fixed seed and position");
     public static final WorldlineBehavior BONEMEAL_WHEAT = define("bonemeal-wheat",
             "Beta bonemeal damage fifteen matures planted wheat from age zero to seven");
+    public static final WorldlineBehavior BLOCK_STABILITY_CONFORMANCE = define(
+            "block-stability-conformance",
+            "Public bounded tick and direct-neighbor-removal stability conformance");
+    public static final WorldlineBehavior SIGN_SUBSYSTEM = define("sign-subsystem",
+            "Standing and wall sign placement, text, physical envelope, support, and persistence lifecycle");
 
     private WorldlineWorldBehaviors() {}
 

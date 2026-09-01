@@ -4,6 +4,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import net.minecraft.src.Block;
 import net.minecraft.src.CraftingManager;
+import net.minecraft.src.EntityList;
 import net.minecraft.src.FurnaceRecipes;
 import net.minecraft.src.IRecipe;
 import net.minecraft.src.Item;
@@ -32,6 +33,27 @@ final class B173Registries {
                     item.getClass().getSimpleName()
                             + "|stack=" + item.getItemStackLimit()
                             + "|damage=" + item.getMaxDamage());
+        }
+        return rows;
+    }
+
+    static TreeMap<String, String> entities() {
+        @SuppressWarnings("unchecked")
+        java.util.Map<Integer, Class<?>> byId = (java.util.Map<Integer, Class<?>>)
+                B173Reflect.get(EntityList.class, "IDtoClassMapping", null);
+        @SuppressWarnings("unchecked")
+        java.util.Map<Class<?>, String> byClass = (java.util.Map<Class<?>, String>)
+                B173Reflect.get(EntityList.class, "classToStringMapping", null);
+        TreeMap<String, String> rows = new TreeMap<>();
+        for (java.util.Map.Entry<Integer, Class<?>> entry : byId.entrySet()) {
+            int id = entry.getKey();
+            Class<?> type = entry.getValue();
+            String name = byClass.get(type);
+            if (id < 0 || id > 999 || name == null || name.isEmpty()) {
+                throw new IllegalStateException("invalid EntityList mapping " + id);
+            }
+            rows.put(String.format("e%03d", id),
+                    "name=" + name + "|class=" + type.getSimpleName());
         }
         return rows;
     }

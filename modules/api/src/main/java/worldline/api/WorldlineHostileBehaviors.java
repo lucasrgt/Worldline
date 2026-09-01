@@ -18,6 +18,8 @@ public final class WorldlineHostileBehaviors {
     public static final WorldlineBehavior SPIDER_DAYLIGHT_AGGRESSION =
             define("spider-daylight-aggression",
                     "One spider ignores the same nearby player in daylight and selects that player at night");
+    public static final WorldlineBehavior PATHFINDING_MATRIX = define("pathfinding-matrix",
+            "Pig routes across open, obstacle-detour, and sealed-target terrain");
 
     private WorldlineHostileBehaviors() {
     }

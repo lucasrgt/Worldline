@@ -6,11 +6,13 @@ import java.time.Duration;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.RemoteChunkSnapshot;
+import worldline.api.RemoteDroppedItem;
 import worldline.api.RemoteWorldView;
 import worldline.b173server.B173DedicatedServer;
 import worldline.b173server.B173PlayerSeed;
 import worldline.b173server.B173WireClient;
 import worldline.test.WorldlineSmokeAwait;
+import worldline.testkit.*;
 
 /** Official sticky 29 extend then Packet14-break of head 34, freezing leftover base cleanup. */
 public final class StickyHeadBreakSetSmoke {
@@ -56,7 +58,7 @@ public final class StickyHeadBreakSetSmoke {
               && settled.blockAt(arm.pushed.x(), arm.pushed.y(), arm.pushed.z()).equals(new BlockState(0, 0)),
           "sticky 29 precondition drift");
       arm.extend(actor, signal);
-      arm.breakHead(actor, signal);
+      RemoteDroppedItem drop = arm.breakHead(actor, signal);
       actor.close();
       StickyHeadBreakSetArm.awaitPlayers(server, 0);
       server.save();
@@ -65,6 +67,15 @@ public final class StickyHeadBreakSetSmoke {
       reader.synchronizePose();
       RemoteChunkSnapshot after = reader.awaitRemoteChunk(chunkX, chunkZ).chunkAt(chunkX, chunkZ);
       arm.persist(after, chunkX, chunkZ);
+      java.util.List<BlockCellTransition> transitions = java.util.Arrays.asList(
+          new BlockCellTransition(arm.piston, new BlockState(29, 12), new BlockState(0, 0)),
+          new BlockCellTransition(arm.head, new BlockState(34, 12), new BlockState(0, 0)));
+      java.util.List<worldline.api.RemoteItemStack> drops = java.util.Arrays.asList(drop.item());
+      StickyHeadBreakSetArm.require(BlockBreakDropFixture.execute("b1.7.3:block/029",
+              "coupled-sticky-piston", true, 257, transitions, transitions,
+              BlockLifecycleDropMatrix.exact(drops), drops).subject()
+                  .equals("b1.7.3:block/029"),
+          "public sticky-piston break/drop evidence drift");
       String evidence = "column=" + column[0] + ",extend=29:4->12,head-break=34:12->0,base-left=29:12->0,piston="
           + StickyHeadBreakSetArm.cell(arm.piston) + ":29:4->12->0,head=" + StickyHeadBreakSetArm.cell(arm.head)
           + ":1:0->34:12->0:0,pushed=" + StickyHeadBreakSetArm.cell(arm.pushed)

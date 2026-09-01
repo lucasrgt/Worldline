@@ -71,19 +71,24 @@ public final class Run {
     Path serverJar = workspace.resolve("jars/minecraft_server.jar");
     Path output = compileScenario("src", "classes",
         classpath(serverClasses, productClasses("api"), productClasses("trace"),
-            productClasses("kernel")),
+            productClasses("kernel"), contractClasses()),
         "smoke compilation");
     verifyControlPath(output, serverClasses);
     Path oracle = compileScenario("oracle-src", "oracle-classes",
-        classpath(productClasses("trace"), serverJar), "official oracle compilation");
+        classpath(productClasses("api"), productClasses("trace"), contractClasses(), serverJar),
+        "official oracle compilation");
     Outcome first = scenario(required("worldline.main"), output, productClasses("api"),
-        productClasses("trace"), productClasses("kernel"), serverClasses, serverJar);
+        productClasses("trace"), productClasses("kernel"), contractClasses(),
+        serverClasses, serverJar);
     Outcome second = scenario(required("worldline.main"), output, productClasses("api"),
-        productClasses("trace"), productClasses("kernel"), serverClasses, serverJar);
+        productClasses("trace"), productClasses("kernel"), contractClasses(),
+        serverClasses, serverJar);
     Outcome officialFirst =
-        scenario(required("oracle.main"), oracle, productClasses("trace"), serverJar);
+        scenario(required("oracle.main"), oracle, productClasses("api"), productClasses("trace"),
+            contractClasses(), serverJar);
     Outcome officialSecond =
-        scenario(required("oracle.main"), oracle, productClasses("trace"), serverJar);
+        scenario(required("oracle.main"), oracle, productClasses("api"), productClasses("trace"),
+            contractClasses(), serverJar);
     requireSame(first, second, "Worldline processes");
     requireSame(officialFirst, officialSecond, "official oracle processes");
     requireSame(first, officialFirst, "Worldline and official oracle");
@@ -205,7 +210,7 @@ public final class Run {
 
   private void verifyControlPath(Path output, Path serverClasses) throws Exception {
     String paths = classpath(output, productClasses("api"), productClasses("trace"),
-        productClasses("kernel"), serverClasses);
+        productClasses("kernel"), contractClasses(), serverClasses);
     String driver =
         capture(root, "javap", "-classpath", paths, "-c", "-p", required("control.driver"));
     String backend =
@@ -230,6 +235,10 @@ public final class Run {
       throw new IllegalStateException("smoke product root escapes .worldline");
     }
     return products.resolve(module);
+  }
+
+  private Path contractClasses() {
+    return productClasses(smoke.getProperty("control.contract.module", "api"));
   }
 
   private String classpath(Path... paths) {

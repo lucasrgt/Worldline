@@ -33,7 +33,8 @@ final class SmokePins {
         require(algorithm.equals(ALGORITHM) || LEGACY_ALGORITHMS.contains(algorithm),
                 "invalid smoke qualification lock algorithm");
         this.entries = read(lines);
-        this.comments = comments(lines);
+        this.comments = fixedWaitComments(path.getParent()
+                .resolve("fixed-wait-migration.lock"), comments(lines));
     }
 
     Entry match(String id, String fingerprint) {
@@ -179,6 +180,29 @@ final class SmokePins {
             if (line.matches("smoke[.][a-z0-9-]+[.]fingerprint=.*")) {
                 String id = line.substring(6, line.indexOf(".fingerprint="));
                 if (!pending.isEmpty()) result.put(id, List.copyOf(pending)); pending.clear();
+            }
+        }
+        return Map.copyOf(result);
+    }
+
+    private static Map<String, List<String>> fixedWaitComments(Path manifest,
+            Map<String, List<String>> preserved) throws Exception {
+        Map<String, List<String>> result = new HashMap<>(preserved);
+        if (!Files.isRegularFile(manifest)) return Map.copyOf(result);
+        Properties values = new Properties();
+        try (var reader = Files.newBufferedReader(manifest, StandardCharsets.UTF_8)) {
+            values.load(reader);
+        }
+        String suffix = ".current_fingerprint";
+        for (String key : values.stringPropertyNames()) {
+            if (!key.startsWith("milestone.") || !key.endsWith(suffix)) continue;
+            String id = key.substring(10, key.length() - suffix.length());
+            String comment = "# fixed-wait-refactor-proof=smokes/fixed-wait-migration.lock:milestone."
+                    + id;
+            List<String> existing = result.getOrDefault(id, List.of());
+            if (!existing.contains(comment)) {
+                List<String> updated = new ArrayList<>(existing); updated.add(comment);
+                result.put(id, List.copyOf(updated));
             }
         }
         return Map.copyOf(result);

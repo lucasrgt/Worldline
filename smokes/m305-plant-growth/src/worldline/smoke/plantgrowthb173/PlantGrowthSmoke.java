@@ -5,8 +5,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.security.MessageDigest;
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
 import worldline.api.*;
 import worldline.b173server.*;
+import worldline.testkit.*;
 
 /** Bonemeal-grows wheat 59:0→59:7 and waits official cactus 81 plus sugar cane 83 to height 2. */
 public final class PlantGrowthSmoke {
@@ -146,11 +149,21 @@ public final class PlantGrowthSmoke {
                   new BlockPosition[] {farm, wheat, cane, caneTop, cane2Top, cane3Top, cactus,
                       cactusTop, cactus2Top, water1},
                   cx, cz));
+      List<BlockTickPolicyScenario> scenarios = Arrays.asList(
+          tick("cactus-random-growth", "081", "81:0-height1", "height2+-observed"),
+          tick("sugar-cane-random-growth", "083", "83:0-height1", "height2+-observed"));
+      List<BlockTickPolicyObservation> observations = Arrays.asList(
+          observed(scenarios.get(0)), observed(scenarios.get(1)));
+      String tickContract = sha(BlockTickPolicyFixture.canonical(
+          BlockTickPolicyFixture.execute(scenarios, observations)));
       String evidence = "column=" + column + ",wheat=" + cell(wheat) + ":59:0->59:7,farm="
           + cell(farm) + ":60,cane=" + cell(cane) + ":83,cane-height>=2,cactus=" + cell(cactus)
-          + ":81,cactus-height>=2,bonemeal=351:15,plants=59+81+83,persisted=true,clients=2,disconnect=clean";
+          + ":81,cactus-height>=2,bonemeal=351:15,plants=59+81+83,persisted=true,testkit="
+          + tickContract + ",clients=2,disconnect=clean";
       String trace = "v1|server=official-b1.7.3|seed=" + seed
-          + "|fixture=raised-dirt3+still-water9+sand12|cause=packet15-bonemeal351:15+item338-reed+item81-cactus|wire=packet53-crops59:7+reed83+cactus81|oracle=bonemeal-wheat-age-jump+official-random-tick-height>=2+fresh-login|"
+          + "|fixture=raised-dirt3+still-water9+sand12|cause=packet15-bonemeal351:15"
+          + "+item338-reed+item81-cactus|wire=packet53-crops59:7+reed83+cactus81"
+          + "|oracle=bonemeal-wheat-age-jump+official-random-tick-height>=2+fresh-login|"
           + evidence;
       System.out.println("WORLDLINE_M305_GROWTH=" + evidence);
       System.out.println("WORLDLINE_M305_TRACE=" + trace);
@@ -191,6 +204,16 @@ public final class PlantGrowthSmoke {
   }
   private static int id(RemoteWorldView v, BlockPosition p) {
     return v.blockAt(p.x(), p.y(), p.z()).legacyId();
+  }
+  private static BlockTickPolicyScenario tick(String id, String legacyId,
+      String initial, String effect) {
+    return new BlockTickPolicyScenario(id, "b1.7.3:block/" + legacyId,
+        Arrays.asList("plant-growth"), false, BlockTickPolicyMechanism.RANDOM_BLOCK,
+        initial, effect, true);
+  }
+  private static BlockTickPolicyObservation observed(BlockTickPolicyScenario scenario) {
+    return new BlockTickPolicyObservation(scenario.id(), scenario.mechanism(),
+        scenario.initial(), scenario.effect(), scenario.persisted());
   }
   private static boolean age(B173WireClient a, BlockPosition p, int id, int meta, int windows)
       throws Exception {

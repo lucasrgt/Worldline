@@ -59,13 +59,21 @@ public final class DataDrivenCyclePlan {
         require(!arguments.isEmpty() && arguments.stream().allMatch(DataDrivenCyclePlan::propertyName),
                 "invalid cycle arguments: " + id);
         require(!inputs.isEmpty() && inputs.stream().allMatch(value ->
-                value.matches("(?:adapters|modules)/[a-z0-9-]+/src/main/java")),
+                value.matches("(?:adapters|modules)/[a-z0-9-]+/src/(?:main|testkit)/java")),
                 "invalid cycle inputs: " + id);
         require(compileProducts.stream().allMatch(DataDrivenCyclePlan::moduleName)
                         && runtimeProducts.stream().allMatch(DataDrivenCyclePlan::moduleName),
                 "invalid cycle products: " + id);
         for (String prefix : List.of(tracePrefix, signaturePrefix, signalPrefix))
             require(prefix.matches("WORLDLINE_[A-Z0-9_]+="), "invalid output prefix: " + id);
+        for (List<String> fragments : List.of(outputContains, signalContains,
+                signalExcludes, traceContains, traceExcludes)) {
+            require(fragments.stream().distinct().count() == fragments.size(),
+                    "duplicate cycle assertion: " + id);
+        }
+        for (String fragment : outputContains) if (fragment.contains("_SIGNATURE="))
+            require(fragment.matches("WORLDLINE_[A-Z0-9_]+_SIGNATURE=[0-9a-f]{64}"),
+                    "invalid frozen component signature: " + id);
     }
 
     private List<String> list(String key) {

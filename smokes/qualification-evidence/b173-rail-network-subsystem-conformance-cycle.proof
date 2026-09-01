@@ -1,0 +1,5 @@
+schema=1
+id=b173-rail-network-subsystem-conformance-cycle
+fingerprint=780cb3cdde422727f2a71c46b89e856f0d9e0213f7d297031cd90bca5895a378
+observation.sha256=ec04e33969d050eb32b1d9669aa4efe1e9b4d49fc99b05fc153289c2a6a749c4
+source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m783-aero-chunk-scheduler-visual-latency
-fingerprint=9c089713b35eafa1d28940e8c7f9af10bf75db8423c94699b46847de92f785b8
+fingerprint=44e780b3f3f641de171c817d2b12d92e7e6f76e76cf5c83512fc5c6ceba129c5
 observation.sha256=d914e9b2bcd0178bb5eb376bea3c26366c8ab3425a8c0371f1b78aa768021810
-source=executed
+source=refactor-equivalent

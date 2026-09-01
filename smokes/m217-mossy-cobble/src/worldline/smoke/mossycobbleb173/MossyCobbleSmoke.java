@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
+import worldline.testkit.*;
 
 /** Places official mossy cobblestone 48 on raised stone and freezes live block 48:0. */
 public final class MossyCobbleSmoke {
@@ -69,6 +70,12 @@ public final class MossyCobbleSmoke {
               && after.blockAt(local(mossy.x(), cx), mossy.y(), local(mossy.z(), cz))
                   .equals(placed),
           "persisted mossy cobble drift");
+      java.util.List<BlockStateCell> cells = java.util.Arrays.asList(new BlockStateCell(mossy, placed));
+      require(BlockPlacementPersistenceFixture.execute("b1.7.3:block/048", "simple-solid",
+              false, 48, 1, 0, 1, cells, cells, cells,
+              BlockLifecycleDriver.ReloadBoundary.FRESH_LOGIN).subject()
+                  .equals("b1.7.3:block/048"),
+          "public mossy placement/persistence evidence drift");
       String evidence = "column=" + column + ",support=" + top.x() + ":" + top.y() + ":" + top.z()
           + ":1:0,mossy=" + mossy.x() + ":" + mossy.y() + ":" + mossy.z()
           + ":48:" + placed.metadata() + ",persisted=true,clients=2,disconnect=clean";

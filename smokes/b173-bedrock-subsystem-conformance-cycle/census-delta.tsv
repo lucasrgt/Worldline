@@ -1,0 +1,10 @@
+claim_id	layer	subject_id	template_id	applicability	status	oracle	evidence_id	signature	automation_surface
+bedrock-state-domain	ARCHETYPE	b1.7.3:block/007	state-domain	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-bedrock-subsystem-conformance-cycle	92c66dfc942102809b5319da6632cb9dd22f382c12dd1db9d7472e2b5bac2e34	PUBLIC_TESTKIT
+bedrock-gameplay-placement	UNIVERSAL	b1.7.3:block/007	gameplay-placement	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-bedrock-subsystem-conformance-cycle	92c66dfc942102809b5319da6632cb9dd22f382c12dd1db9d7472e2b5bac2e34	PUBLIC_TESTKIT
+bedrock-break-transition	UNIVERSAL	b1.7.3:block/007	break-transition	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-bedrock-subsystem-conformance-cycle	92c66dfc942102809b5319da6632cb9dd22f382c12dd1db9d7472e2b5bac2e34	PUBLIC_TESTKIT
+bedrock-drop-matrix	ARCHETYPE	b1.7.3:block/007	drop-matrix	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-bedrock-subsystem-conformance-cycle	92c66dfc942102809b5319da6632cb9dd22f382c12dd1db9d7472e2b5bac2e34	PUBLIC_TESTKIT
+bedrock-save-reload	UNIVERSAL	b1.7.3:block/007	save-reload	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-bedrock-subsystem-conformance-cycle	92c66dfc942102809b5319da6632cb9dd22f382c12dd1db9d7472e2b5bac2e34	PUBLIC_TESTKIT
+bedrock-collision-shape	ARCHETYPE	b1.7.3:block/007	collision-shape	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-bedrock-subsystem-conformance-cycle	92c66dfc942102809b5319da6632cb9dd22f382c12dd1db9d7472e2b5bac2e34	PUBLIC_TESTKIT
+bedrock-light-behavior	ARCHETYPE	b1.7.3:block/007	light-behavior	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-bedrock-subsystem-conformance-cycle	92c66dfc942102809b5319da6632cb9dd22f382c12dd1db9d7472e2b5bac2e34	PUBLIC_TESTKIT
+bedrock-tick-policy	ARCHETYPE	b1.7.3:block/007	tick-policy	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-bedrock-subsystem-conformance-cycle	92c66dfc942102809b5319da6632cb9dd22f382c12dd1db9d7472e2b5bac2e34	PUBLIC_TESTKIT
+bedrock-neighbor-response	ARCHETYPE	b1.7.3:block/007	neighbor-response	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-bedrock-subsystem-conformance-cycle	92c66dfc942102809b5319da6632cb9dd22f382c12dd1db9d7472e2b5bac2e34	PUBLIC_TESTKIT

@@ -1,0 +1,23 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=b173-static-collision-envelope-cycle -->
+<!-- nonclaims=dynamic-neighbor-shapes,entity-pathfinding,selection-raytrace,native-render -->
+<!-- frozen-trace=66f8fcd3fd38c91324e3a174aeeeca221d11c1c0e31211f454c16902fa9c392a -->
+
+# Beta 1.7.3 static collision envelopes
+
+Five public TestKit rows compare identical Packet13 trajectories before and after official
+gameplay placement. Stone, stone slab, wooden stairs, adjacent fence, and standing torch cover
+full-cube, half-step, directional-step, raised-fence, and no-collision envelopes. The stair row
+uses metadata `2`, whose official north half is low, and keeps the player's width wholly inside
+that half with a `+0.6 Z`, `+0.5 Y` treatment. Each trajectory
+returns to the same origin before the next probe, and every treatment geometry survives a clean
+save plus fresh login.
+
+The package contains five Functional Census atoms and ten treatment trajectories inside one
+coherent collision mini-subsystem. It does not create one milestone per block or per height.
+
+This map does not claim dynamic neighbor-dependent shape closure, mob pathfinding, client
+selection ray tracing, or native rendering.
+
+Frozen signal:
+`provider=b1.7.3-server-collision,family=static-envelope,rows=5,passed=5,probes=10,reload=FRESH_LOGINx5,evidence=1217fa92a0118efeef73a2a2b5735e223e844a854ff54b76d7276c9246654edc,isolation=5-fresh-worlds`.

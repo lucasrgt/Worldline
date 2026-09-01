@@ -55,12 +55,21 @@ public final class AdapterKindCheck {
         try (DirectoryStream<Path> children = Files.newDirectoryStream(directory)) {
             for (Path child : children) {
                 if (!Files.isDirectory(child)) continue;
-                Path manifest = nested == null ? child.resolve("manifest.properties")
+                Path manifest = nested == null ? extensionSemantics(child)
                         : child.resolve(nested).resolve("manifest.properties");
-                if (!Files.isRegularFile(manifest)) continue;
+                if (manifest == null || !Files.isRegularFile(manifest)) continue;
                 classify(manifest, child.getFileName().toString(), drivers, extensions);
             }
         }
+    }
+
+    private Path extensionSemantics(Path directory) throws IOException {
+        Path separate = directory.resolve("semantics.properties");
+        if (Files.isRegularFile(separate)) return separate;
+        Path legacy = directory.resolve("manifest.properties");
+        if (!Files.isRegularFile(legacy)) return null;
+        Properties fields = load(legacy);
+        return "worldline.adapter.semantics.v1".equals(fields.getProperty("schema")) ? legacy : null;
     }
 
     private void classify(Path manifest, String adapter, Set<String> drivers,

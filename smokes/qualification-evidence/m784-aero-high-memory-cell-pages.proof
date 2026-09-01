@@ -1,5 +1,5 @@
 schema=1
 id=m784-aero-high-memory-cell-pages
-fingerprint=77c279238a3252eff1be33428b99112a6f7c97f9ebe179da2614c23c39165668
+fingerprint=4861694cd2ae95532fe5846cdd71eda41de5a9da6713d5c28b3c3cffacd59a03
 observation.sha256=72e8173daa418891ebbae69fad2a8bf3813095bfe768fcc37e74cc323158552a
-source=executed
+source=refactor-equivalent

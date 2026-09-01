@@ -53,22 +53,32 @@ final class UnicodePinMigration {
                 "Unicode refresh requires shared-helper attestations");
         SmokePins pins = new SmokePins(root); SmokeInputFingerprint fingerprints =
                 new SmokeInputFingerprint(root); Properties providers =
-                ProviderDiscoveryPinCheck.manifest(root); int carried = 0;
+                ProviderDiscoveryPinCheck.manifest(root); int carried = 0, introduced = 0;
         for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
             if (ProviderDiscoveryPinCheck.exemptsLegacy(providers, smoke.id)) continue;
             carried++; String current = fingerprints.compute(smoke); SmokePins.Entry pin =
                     pins.match(smoke.id, current); require(pin != null,
                     "Unicode refresh lacks current proof: " + smoke.id);
-            String stem = "smoke." + smoke.id + ".", recorded = required(lock,
-                    stem + "current_fingerprint");
-            if (!current.equals(recorded)) lock.setProperty(stem + "prior_fingerprint", recorded);
+            String stem = "smoke." + smoke.id + ".";
+            String recorded = lock.getProperty(stem + "current_fingerprint");
+            if (recorded == null) {
+                require("executed".equals(pin.source()),
+                        "new Unicode row lacks exact execution: " + smoke.id);
+                lock.setProperty(stem + "introduced", "true"); introduced++;
+            } else if (!current.equals(recorded))
+                lock.setProperty(stem + "prior_fingerprint", recorded);
             lock.setProperty(stem + "current_fingerprint", current);
             lock.setProperty(stem + "evidence_sha256", pin.evidence());
         }
-        require(carried == 525 - ProviderDiscoveryPinCheck.pendingCount(providers),
-                "Unicode refresh census drift");
+        Properties schemas = SchemaPinCheck.manifest(root);
+        int successorIntroductions = SchemaPinCheck.introductionsAfter(schemas, lock);
+        int smokeCount = carried + ProviderDiscoveryPinCheck.pendingCount(providers)
+                - successorIntroductions;
+        require(smokeCount >= 0, "Unicode successor introduction census drift");
+        lock.setProperty("smoke.count", Integer.toString(smokeCount));
         pins.write(pins.entries()); store(path, lock);
-        System.out.println("Unicode-normalized pins refreshed: " + carried + " carried");
+        System.out.println("Unicode-normalized pins refreshed: " + carried + " carried, "
+                + introduced + " introduced");
     }
     private static void store(Path path, Properties values) throws Exception {
         StringBuilder output = new StringBuilder("# Worldline portable UTF-8 normalization v1\n");

@@ -1,0 +1,5 @@
+schema=1
+id=b173-farmland-subsystem-conformance-cycle
+fingerprint=5dfddba11cbe84d1a799c15aaa7c4104fe6d097d0c4c8d25da8059c8ecef965d
+observation.sha256=1291b81800a6e9b9f7c4bb4d03b7aa62294780100680730f55ee1dc872f67261
+source=refactor-equivalent

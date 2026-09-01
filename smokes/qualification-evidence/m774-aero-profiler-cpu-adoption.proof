@@ -1,5 +1,5 @@
 schema=1
 id=m774-aero-profiler-cpu-adoption
-fingerprint=e4f59ca6b25b6ec845299c06e4ad1a0d2634e855515af4c6813fabff3174d985
+fingerprint=b210d000b3cd52d33c613da3b3f52f4837d7aaf8812f2119a7c17fe1aed9ee7e
 observation.sha256=cf747098f87365792d38d5cfd1a510d9c0a02d280c450e1f59ec028264bf34de
-source=executed
+source=refactor-equivalent

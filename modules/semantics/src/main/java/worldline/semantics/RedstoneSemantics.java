@@ -86,6 +86,42 @@ final class RedstoneSemantics {
         mappings.add(SemanticMapping.of("redstone", "WORLD_INDIRECT_POWER",
                 "net/minecraft/src/World", "method", "isBlockIndirectlyGettingPowered", "(III)Z",
                 "WORLD,REDSTONE", "", "WORLD", "redstone-wire-power,symbols.map", "s", 9998));
+        mappings.add(SemanticMapping.of("redstone", "REDSTONE_INPUT_CONTROLS_TESTKIT",
+                "worldline/testkit/RedstoneInputControlsSubsystemFixture", "method", "execute",
+                "(Lworldline/testkit/RedstoneInputControlsSubsystemScenario;)"
+                        + "Lworldline/testkit/RedstoneInputControlsSubsystemEvidence;",
+                "REDSTONE", "REDSTONE", "REDSTONE",
+                "b173-redstone-input-controls-subsystem-conformance-cycle", "", 9998));
+        mappings.add(SemanticMapping.of("redstone", "REDSTONE_SIGNAL_CONSUMERS_TESTKIT",
+                "worldline/testkit/RedstoneSignalConsumersFixture", "method", "execute",
+                "(Lworldline/testkit/RedstoneSignalConsumersScenario;)"
+                        + "Lworldline/testkit/RedstoneSignalConsumersEvidence;",
+                "REDSTONE", "REDSTONE", "REDSTONE",
+                "b173-redstone-signal-consumers-subsystem-conformance-cycle", "", 9998));
+        mappings.add(SemanticMapping.of("redstone", "REDSTONE_REPEATER_TESTKIT",
+                "worldline/testkit/RepeaterSubsystemFixture", "method", "execute",
+                "(Lworldline/testkit/RepeaterSubsystemScenario;)"
+                        + "Lworldline/testkit/RepeaterSubsystemEvidence;",
+                "REDSTONE", "REDSTONE", "REDSTONE",
+                "b173-repeater-subsystem-conformance-cycle", "", 9998));
+        mappings.add(SemanticMapping.of("redstone", "REDSTONE_TORCH_TESTKIT",
+                "worldline/testkit/RedstoneTorchSubsystemFixture", "method", "execute",
+                "(Lworldline/testkit/RedstoneTorchSubsystemScenario;)"
+                        + "Lworldline/testkit/RedstoneTorchSubsystemEvidence;",
+                "REDSTONE", "REDSTONE", "REDSTONE",
+                "b173-redstone-torch-subsystem-conformance-cycle", "", 9998));
+        mappings.add(SemanticMapping.of("redstone", "REDSTONE_PISTON_TESTKIT",
+                "worldline/testkit/PistonSubsystemFixture", "method", "execute",
+                "(Lworldline/testkit/PistonSubsystemScenario;)"
+                        + "Lworldline/testkit/PistonSubsystemEvidence;",
+                "REDSTONE", "REDSTONE", "REDSTONE",
+                "b173-piston-subsystem-conformance-cycle", "", 9998));
+        mappings.add(SemanticMapping.of("redstone", "REDSTONE_ORE_TESTKIT",
+                "worldline/testkit/RedstoneOreSubsystemFixture", "method", "execute",
+                "(Lworldline/testkit/RedstoneOreSubsystemScenario;)"
+                        + "Lworldline/testkit/RedstoneOreSubsystemEvidence;",
+                "REDSTONE", "REDSTONE", "REDSTONE",
+                "b173-redstone-ore-subsystem-conformance-cycle", "", 9998));
         return Collections.unmodifiableList(mappings);
     }
 }

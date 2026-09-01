@@ -21,7 +21,7 @@ public final class SemanticCatalogTest {
         SemanticCatalog first = SemanticCatalog.standard();
         SemanticCatalog second = SemanticCatalog.standard();
         require(first.size() == SemanticRoles.roleCount(), "role count");
-        require(first.categories().size() == 25, "category count");
+        require(first.categories().size() == 38, "category count");
         require("k".equals(first.role("CLIENT_TICK_ROOT").official()), "official alias");
         require(first.role("CLIENT_CLOCK_SOURCE").official().isEmpty(), "worldline-only alias");
         require("u".equals(first.role("BLOCK_STONE").official()), "stone alias");
@@ -84,9 +84,39 @@ public final class SemanticCatalogTest {
         require("getStack".equals(first.role("SLOT_STACK").name()), "slot stack");
         require("BlockRedstoneWire".equals(first.role("REDSTONE_WIRE_TYPE").name()),
                 "redstone wire type");
+        require("execute".equals(first.role("BLOCK_TICK_POLICY_FIXTURE").name()),
+                "block tick fixture");
+        require("execute".equals(first.role("REDSTONE_PISTON_TESTKIT").name()),
+                "redstone TestKit fixture");
+        require("craftPersonal2x2".equals(first.role("CRAFTING_PERSONAL_GRID_TESTKIT").name()),
+                "crafting personal TestKit contract");
+        require("execute".equals(first.role("TILE_ENTITY_SIGN_TESTKIT").name()),
+                "tile entity sign TestKit fixture");
+        require("execute".equals(first.role("FLUID_SOURCE_DYNAMICS_TESTKIT").name()),
+                "source fluid dynamics TestKit fixture");
+        require("observe".equals(first.role("LIGHT_SKY_BRIGHTNESS_TESTKIT").name()),
+                "sky brightness TestKit fixture");
+        require("observe".equals(first.role("WEATHER_RAIN_STOP_TESTKIT").name()),
+                "rain stop TestKit fixture");
+        require("execute".equals(first.role("MOB_AI_PATHFINDING_FIXTURE_TESTKIT").name()),
+                "mob AI pathfinding TestKit fixture");
+        require("verify".equals(first.role("DIMENSION_PORTAL_REENTRY_TESTKIT").name()),
+                "dimension portal re-entry TestKit fixture");
+        require("observe".equals(first.role("WORLDGEN_TERRAIN_CENSUS_TESTKIT").name()),
+                "worldgen terrain TestKit fixture");
+        require("boot".equals(first.role("DEDICATED_SERVER_BOOT_API").name()),
+                "dedicated server boot API");
+        require("verify".equals(first.role("MAPPINGS_BATCH_GATE").name()),
+                "mapping qualification gate");
+        require("open".equals(first.role("STATIONAPI_PROVIDER_OPEN").name()),
+                "StationAPI provider open boundary");
+        require("worldlineRebuilt".equals(first.role("AERO_REBUILD_INTERCEPT").name()),
+                "Aero rebuild intercept");
+        require("createExecuted".equals(first.role("MOD_TEST_RESULT_RECORD").name()),
+                "mod test result boundary");
         require(first.sha256().equals(second.sha256())
                 && first.sha256().equals(
-                "0a1484f9f6c8eb990289fac906c9a5741798259c34c1f528e862154f059c30e0"),
+                "d673f7b2514781bd8897f11503c04016d9d2203f8cbea65f334baf1945151399"),
                 "catalog hash drifted to " + first.sha256());
         require(first.canonical().equals(second.canonical()), "catalog canonical drifted");
         require(first.render().contains("complete=true"), "render completeness");

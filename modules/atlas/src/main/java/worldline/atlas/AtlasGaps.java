@@ -24,6 +24,10 @@ public final class AtlasGaps {
         for (AtlasRecord record : store.kind(AtlasKind.HYPOTHESIS)) {
             if (AtlasStatus.UNKNOWN.equals(record.status())) gaps.add(record);
         }
+        for (AtlasRecord record : store.kind(AtlasKind.CLAIM)) {
+            if (AtlasStatus.UNKNOWN.equals(record.status())
+                    || AtlasStatus.PARTIAL.equals(record.status())) gaps.add(record);
+        }
         return Collections.unmodifiableList(gaps);
     }
 

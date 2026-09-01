@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
+import worldline.testkit.*;
 
 /** Stone axe 275 fully breaks oak 17:0, spruce 17:1, and birch 17:2, each dropping the matching log item. */
 public final class AxeLogBreaksSmoke {
@@ -97,6 +98,16 @@ public final class AxeLogBreaksSmoke {
       require(dropBirch.item().equals(BIRCH) && dropBirch.item().damage() == 2
               && dropBirch.entityId() != dropSpruce.entityId(),
           "stone-axe Packet21 birch 17:2 drop absent");
+      java.util.List<BlockCellTransition> transitions = java.util.Arrays.asList(
+          new BlockCellTransition(oak, new BlockState(17, 0), AIR),
+          new BlockCellTransition(spruce, new BlockState(17, 1), AIR),
+          new BlockCellTransition(birch, new BlockState(17, 2), AIR));
+      java.util.List<RemoteItemStack> drops = java.util.Arrays.asList(
+          dropOak.item(), dropSpruce.item(), dropBirch.item());
+      require(BlockBreakDropFixture.execute("b1.7.3:block/017", "stateful-log", false, 275,
+              transitions, transitions, BlockLifecycleDropMatrix.exact(drops), drops)
+                  .subject().equals("b1.7.3:block/017"),
+          "public log break/drop evidence drift");
       String evidence = "column=" + column + ",support=" + top.x() + ":" + top.y() + ":" + top.z()
           + ":1:0,oak=" + oak.x() + ":" + oak.y() + ":" + oak.z()
           + ":17:0->0:0,spruce=" + spruce.x() + ":" + spruce.y() + ":" + spruce.z()

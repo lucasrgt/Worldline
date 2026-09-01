@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
+import worldline.testkit.*;
 
 /** Places remaining Overworld bed 26 west, north, and east foot/head halves as one SET. */
 public final class RemainingBedOrientSetSmoke {
@@ -85,6 +86,18 @@ public final class RemainingBedOrientSetSmoke {
               && cell(after, northFoot, cx, cz, 2) && cell(after, northHead, cx, cz, 10)
               && cell(after, eastFoot, cx, cz, 3) && cell(after, eastHead, cx, cz, 11),
           "persisted remaining-bed-orient-set drift");
+      java.util.List<BlockStateCell> cells = java.util.Arrays.asList(
+          new BlockStateCell(westFoot, new BlockState(26, 1)),
+          new BlockStateCell(westHead, new BlockState(26, 9)),
+          new BlockStateCell(northFoot, new BlockState(26, 2)),
+          new BlockStateCell(northHead, new BlockState(26, 10)),
+          new BlockStateCell(eastFoot, new BlockState(26, 3)),
+          new BlockStateCell(eastHead, new BlockState(26, 11)));
+      require(BlockPlacementPersistenceFixture.execute("b1.7.3:block/026", "oriented-bed",
+              true, 355, 3, 0, 3, cells, cells, cells,
+              BlockLifecycleDriver.ReloadBoundary.FRESH_LOGIN).subject()
+                  .equals("b1.7.3:block/026"),
+          "public bed placement/persistence evidence drift");
       String evidence = "dimension=0,column=" + column + ",support=" + token(top, 1, 0)
           + ",west=" + token(westFoot, 26, 1) + "+" + token(westHead, 26, 9)
           + ",north=" + token(northFoot, 26, 2) + "+" + token(northHead, 26, 10)

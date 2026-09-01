@@ -8,11 +8,11 @@ import worldline.analysis.CensusRunner;
 
 /**
  * Captures the controlled b1.7.3 client registry census: blocks, items,
- * crafting recipes, and furnace smelts as canonical documents.
+ * entities, crafting recipes, and furnace smelts as canonical documents.
  */
 public final class B173CensusRunner implements CensusRunner {
     private static final List<String> SECTIONS =
-            Arrays.asList("blocks", "items", "recipes", "smelts");
+            Arrays.asList("blocks", "items", "entities", "recipes", "smelts");
 
     @Override
     public List<String> sections() { return SECTIONS; }
@@ -28,6 +28,7 @@ public final class B173CensusRunner implements CensusRunner {
         switch (name) {
             case "blocks": return B173Registries.blocks();
             case "items": return B173Registries.items();
+            case "entities": return B173Registries.entities();
             case "recipes": return B173Registries.recipes();
             case "smelts": return B173Registries.smelts();
             default: return null;

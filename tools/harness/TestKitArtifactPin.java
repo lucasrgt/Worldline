@@ -11,7 +11,7 @@ import java.util.jar.JarFile;
 
 /** Seals exact deterministic TestKit package bytes after an exact static build. */
 final class TestKitArtifactPin {
-    private static final List<String> ARTIFACTS = List.of("api", "runner");
+    private static final List<String> ARTIFACTS = List.of("api", "runner", "provider");
     private TestKitArtifactPin() { }
 
     public static void main(String[] arguments) {
@@ -22,8 +22,11 @@ final class TestKitArtifactPin {
             require(clean(root), "TestKit artifact refresh requires a clean committed tree");
             RepositoryConfiguration configuration = new RepositoryConfiguration(root);
             configuration.load();
-            new ModuleBuild(root, root.resolve(".worldline/build"), configuration.values(),
+            Path build = root.resolve(".worldline/build");
+            new ModuleBuild(root, build, configuration.values(),
                     configuration.modules()).compileAll();
+            new PortableAdapterCheck(root, build,
+                    configuration.required("java.release")).execute();
             Process packaging = new ProcessBuilder("java", "tools/testkit/TestKitPackage.java")
                     .directory(root.toFile()).inheritIO().start();
             require(packaging.waitFor() == 0, "exact TestKit packaging failed");
@@ -46,7 +49,9 @@ final class TestKitArtifactPin {
     private static void seal(Properties lock, Path output, String artifact, String version)
             throws Exception {
         String prefix = "artifact." + artifact + ".";
-        String file = "worldline-test-" + artifact + "-" + version + ".jar";
+        String file = artifact.equals("provider")
+                ? "worldline-test-provider-b173-server-lifecycle-" + version + ".jar"
+                : "worldline-test-" + artifact + "-" + version + ".jar";
         Path path = output.resolve(file);
         require(Files.isRegularFile(path), "missing exact TestKit artifact: " + artifact);
         lock.setProperty(prefix + "file", file);

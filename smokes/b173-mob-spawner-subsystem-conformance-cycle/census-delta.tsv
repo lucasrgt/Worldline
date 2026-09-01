@@ -1,0 +1,8 @@
+claim_id	layer	subject_id	template_id	applicability	status	oracle	evidence_id	signature	automation_surface
+mob-spawner-registry-presence	UNIVERSAL	b1.7.3:block/052	registry-presence	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-mob-spawner-subsystem-conformance-cycle	59bee5c5d91affa8c14f6444cc85de3e1b4cb3c94fb2fd0f68d4b106897a2a46	PUBLIC_TESTKIT
+mob-spawner-gameplay-placement	UNIVERSAL	b1.7.3:block/052	gameplay-placement	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-mob-spawner-subsystem-conformance-cycle	59bee5c5d91affa8c14f6444cc85de3e1b4cb3c94fb2fd0f68d4b106897a2a46	PUBLIC_TESTKIT
+mob-spawner-break-transition	UNIVERSAL	b1.7.3:block/052	break-transition	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-mob-spawner-subsystem-conformance-cycle	59bee5c5d91affa8c14f6444cc85de3e1b4cb3c94fb2fd0f68d4b106897a2a46	PUBLIC_TESTKIT
+mob-spawner-drop-matrix	SINGULAR	b1.7.3:block/052	drop-matrix	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-mob-spawner-subsystem-conformance-cycle	59bee5c5d91affa8c14f6444cc85de3e1b4cb3c94fb2fd0f68d4b106897a2a46	PUBLIC_TESTKIT
+mob-spawner-save-reload	UNIVERSAL	b1.7.3:block/052	save-reload	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-mob-spawner-subsystem-conformance-cycle	59bee5c5d91affa8c14f6444cc85de3e1b4cb3c94fb2fd0f68d4b106897a2a46	PUBLIC_TESTKIT
+mob-spawner-tick-policy	SINGULAR	b1.7.3:block/052	tick-policy	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-mob-spawner-subsystem-conformance-cycle	59bee5c5d91affa8c14f6444cc85de3e1b4cb3c94fb2fd0f68d4b106897a2a46	PUBLIC_TESTKIT
+mob-spawner-neighbor-response	SINGULAR	b1.7.3:block/052	neighbor-response	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-mob-spawner-subsystem-conformance-cycle	59bee5c5d91affa8c14f6444cc85de3e1b4cb3c94fb2fd0f68d4b106897a2a46	PUBLIC_TESTKIT

@@ -4,6 +4,7 @@ import java.nio.file.*;
 import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
+import worldline.testkit.*;
 
 /** Places remaining piston 33 and sticky 29 facings 0,2,3,4,5 as one SET. */
 public final class RemainingPistonOrientSetSmoke {
@@ -82,6 +83,30 @@ public final class RemainingPistonOrientSetSmoke {
       RemainingPistonOrientSetArm.persist(after, cx, cz, s29, 29, 3, "south sticky 29:3");
       RemainingPistonOrientSetArm.persist(after, cx, cz, w29, 29, 4, "west sticky 29:4");
       RemainingPistonOrientSetArm.persist(after, cx, cz, e29, 29, 5, "east sticky 29:5");
+      java.util.List<BlockStateCell> pistonCells = java.util.Arrays.asList(
+          new BlockStateCell(down33, new BlockState(33, 0)),
+          new BlockStateCell(n33, new BlockState(33, 2)),
+          new BlockStateCell(s33, new BlockState(33, 3)),
+          new BlockStateCell(w33, new BlockState(33, 4)),
+          new BlockStateCell(e33, new BlockState(33, 5)));
+      java.util.List<BlockStateCell> stickyCells = java.util.Arrays.asList(
+          new BlockStateCell(down29, new BlockState(29, 0)),
+          new BlockStateCell(n29, new BlockState(29, 2)),
+          new BlockStateCell(s29, new BlockState(29, 3)),
+          new BlockStateCell(w29, new BlockState(29, 4)),
+          new BlockStateCell(e29, new BlockState(29, 5)));
+      RemainingPistonOrientSetArm.require(BlockPlacementPersistenceFixture.execute(
+              "b1.7.3:block/033", "oriented-piston", true, 33, 8, 3, 5,
+              pistonCells, pistonCells, pistonCells,
+              BlockLifecycleDriver.ReloadBoundary.FRESH_LOGIN).subject()
+                  .equals("b1.7.3:block/033"),
+          "public piston placement/persistence evidence drift");
+      RemainingPistonOrientSetArm.require(BlockPlacementPersistenceFixture.execute(
+              "b1.7.3:block/029", "oriented-sticky-piston", true, 29, 8, 3, 5,
+              stickyCells, stickyCells, stickyCells,
+              BlockLifecycleDriver.ReloadBoundary.FRESH_LOGIN).subject()
+                  .equals("b1.7.3:block/029"),
+          "public sticky-piston placement/persistence evidence drift");
       String evidence = "column=" + column[0]
           + ",support=" + RemainingPistonOrientSetArm.token(top, 1, 0)
           + ",piston=" + RemainingPistonOrientSetArm.token(down33, 33, 0) + "+"

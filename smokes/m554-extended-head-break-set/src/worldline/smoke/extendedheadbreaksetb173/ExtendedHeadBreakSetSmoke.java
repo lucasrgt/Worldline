@@ -4,6 +4,7 @@ import java.nio.file.*;
 import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
+import worldline.testkit.*;
 
 /** Official piston 33 extend then Packet14-break of the extended base, freezing head-34 leftover cleanup. */
 public final class ExtendedHeadBreakSetSmoke {
@@ -50,7 +51,7 @@ public final class ExtendedHeadBreakSetSmoke {
                   .equals(new BlockState(0, 0)),
           "piston 33 precondition drift");
       arm.extend(actor, signal);
-      arm.breakBase(actor, signal);
+      RemoteDroppedItem drop = arm.breakBase(actor, signal);
       actor.close();
       ExtendedHeadBreakSetArm.awaitPlayers(server, 0);
       server.save();
@@ -59,6 +60,15 @@ public final class ExtendedHeadBreakSetSmoke {
       reader.synchronizePose();
       RemoteChunkSnapshot after = reader.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
       arm.persist(after, cx, cz);
+      java.util.List<BlockCellTransition> transitions = java.util.Arrays.asList(
+          new BlockCellTransition(arm.piston, new BlockState(33, 12), new BlockState(0, 0)),
+          new BlockCellTransition(arm.head, new BlockState(34, 4), new BlockState(0, 0)));
+      java.util.List<RemoteItemStack> drops = java.util.Arrays.asList(drop.item());
+      ExtendedHeadBreakSetArm.require(BlockBreakDropFixture.execute("b1.7.3:block/033",
+              "coupled-piston", true, 257, transitions, transitions,
+              BlockLifecycleDropMatrix.exact(drops), drops).subject()
+                  .equals("b1.7.3:block/033"),
+          "public piston break/drop evidence drift");
       String evidence = "column=" + column[0] + ",extend=33:4->12,head-break=33:12->0,piston="
           + cell(arm.piston) + ":33:4->12->0,head=" + cell(arm.head)
           + ":1:0->34:4->0:0,pushed=" + cell(arm.pushed) + ":0:0->1:0->1:0,lever=" + cell(arm.lever)

@@ -1,5 +1,51 @@
 # Worldline changelog — Unreleased
 
+## Unreleased - Beta 1.7.3 Sign Subsystem
+
+Status: GO.
+
+- Added a public `SignSubsystemFixture` covering standing sign `63` and wall sign `68` as one
+  coherent lifecycle instead of atomizing their behavior into small milestone counts.
+- Official server evidence proves all sixteen standing rotations, gameplay item consumption,
+  direct break and sign-item drop, paired Packet130 text persistence, passable collision, light
+  transport, 240-tick stability, support invalidation, and final persisted air.
+- Added 13 verified Functional Census claims, raising coverage to 704 of 1,056 claims (66.67%)
+  and reducing the remaining distance to the 98.8% target to 340 claims.
+- Data-driven cycle plans now reject duplicate output assertions before runtime qualification.
+
+## Unreleased - Functional Census Physical Envelopes
+
+Status: GO.
+
+- Added public, data-driven physical-envelope families for remaining opaque cubes, common cubes,
+  and special-collision blocks. The official Beta 1.7.3 cycles jointly prove state domain,
+  collision, light behavior, and fresh-login persistence without per-block milestone inflation.
+- Corrected the remaining opaque-cube milestone identity so its objective, smoke, documentation,
+  semantic map, and evidence rows describe the capability actually executed.
+- Kept snow-block tick policy partial: the bounded dark-survival fixture does not prove the
+  independently causal high-light random-tick melt boundary.
+- The audited Functional Census now contains 587 of 1,056 verified claims (55.59%), leaving 457
+  claims to the 98.8% target.
+- Shared physical-placement support changes are carried through reviewed refactor-equivalent
+  proof migrations only when their tracked official observation hashes remain unchanged.
+- Composite and telemetry pin migrations retain their prior official evidence envelopes while
+  binding the new shared TestKit fingerprint; exact wave receipts remain `executed`.
+- Repository-schema, neighbor, support-face, bounded-drop, and downstream TestKit migrations are
+  regenerated as ordered proof transitions; unchanged pins retain their immediate predecessor
+  identity.
+- Added a singular tile-utility physical-envelope package for dispenser, note block, mob spawner,
+  chest, furnace, and jukebox. It coordinates five state rows and six collision/light rows while
+  explicitly withholding occupied-jukebox metadata until a record-action loadout is proved.
+
+## Unreleased - Ground-Cover Lifecycle Family
+
+Status: GO.
+
+- Public `BlockLifecycleFamilyCycle` family `ground-cover` proves tall-grass on dirt, dead-bush
+  on sand, and age-zero wheat from seeds on protocol-provisioned farmland.
+- Official Beta 1.7.3 drop identity is bounded: seeds `295` 0..1 from tall grass, sticks `280`
+  0..2 from dead bush, and seeds `295` 0..3 from age-zero wheat. Farmland is admin setup only.
+
 ## Unreleased - Integration Hygiene and Anti-Slop Audit
 
 Status: developer tooling; not a vanilla SET GO.

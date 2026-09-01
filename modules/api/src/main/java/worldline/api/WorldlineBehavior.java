@@ -44,8 +44,7 @@ public final class WorldlineBehavior {
             "Pig horizontal Packet31, Packet33, or Packet34 movement");
     public static final WorldlineBehavior PIG_DEATH = define("pig-death", WorldlineFamily.WORLD,
             "Pig hurt, death status, and destroy packets");
-    public static final WorldlineBehavior PIG_PORK_DROP = define("pig-pork-drop", WorldlineFamily.ITEM,
-            "Pig death Packet21 porkchop drop");
+    public static final WorldlineBehavior PIG_PORK_DROP = define("pig-pork-drop", WorldlineFamily.ITEM, "Pork drop");
     public static final WorldlineBehavior BED_SLEEP_SKIP = define("bed-sleep-skip", WorldlineFamily.PLAYER,
             "Day refusal, night Packet17 occupancy, and SMP time skip");
     public static final WorldlineBehavior MULTIPLAYER_SLEEP_QUORUM = define("multiplayer-sleep-quorum",
@@ -77,6 +76,16 @@ public final class WorldlineBehavior {
             WorldlineFamily.PLAYER, "Nether death and Packet9 respawn into the Overworld");
     public static final WorldlineBehavior BLOCK_PLACEMENT_PERSISTENCE = define("block-placement-persistence",
             WorldlineFamily.WORLD, "Server-authoritative held-block placement across fresh login");
+    public static final WorldlineBehavior BLOCK_LIFECYCLE_CONFORMANCE = define(
+            "block-lifecycle-conformance", WorldlineFamily.WORLD,
+            "Public placement, reload, tool-qualified break, and exact drop conformance");
+    public static final WorldlineBehavior BLOCK_STATE_DOMAIN_CONFORMANCE = define(
+            "block-state-domain-conformance", WorldlineFamily.WORLD,
+            "Public causal execution and reload proof of reachable block metadata states");
+    public static final WorldlineBehavior BLOCK_COLLISION_CONFORMANCE = define("block-collision-conformance",
+            WorldlineFamily.ENVIRONMENT, "Public air-control and gameplay-placed block collision envelope conformance");
+    public static final WorldlineBehavior NATIVE_3D_INVENTORY_RENDER = define("native-3d-inventory-render",
+            WorldlineFamily.WORLD, "Official client textured 3D inventory rendering for canonical block states");
     public static final WorldlineBehavior FOOD_CONSUMPTION = define("food-consumption", WorldlineFamily.ITEM,
             "Selected food consumption, health restoration, and container result");
     public static final WorldlineBehavior ENVIRONMENTAL_DAMAGE = define("environmental-damage",
@@ -232,16 +241,13 @@ public final class WorldlineBehavior {
     private static final Map<String, WorldlineBehavior> BY_TOKEN = WorldlineBehaviorCatalog.freeze();
     private final String token, family, subject;
 
-    WorldlineBehavior(String token, String family, String subject) {
-        this.token = token; this.family = family; this.subject = subject;
-    }
+    WorldlineBehavior(String t, String f, String s) { token = t; family = f; subject = s; }
 
     public String token() { return token; } public String family() { return family; }
     public String subject() { return subject; } public String atlasId() { return "atlas.scenario." + token; }
 
     public static WorldlineBehavior require(String tokenOrAtlasOrProgress) {
-        return WorldlineBehaviorRegistry.require(BY_TOKEN, tokenOrAtlasOrProgress);
-    }
+        return WorldlineBehaviorRegistry.require(BY_TOKEN, tokenOrAtlasOrProgress); }
 
     public static Map<String, WorldlineBehavior> all() { return BY_TOKEN; }
 
@@ -254,6 +260,5 @@ public final class WorldlineBehavior {
     @Override public int hashCode() { return Objects.hash(token); }
 
     static WorldlineBehavior define(String token, String family, String subject) {
-        return WorldlineBehaviorRegistry.define(token, family, subject);
-    }
+        return WorldlineBehaviorRegistry.define(token, family, subject); }
 }

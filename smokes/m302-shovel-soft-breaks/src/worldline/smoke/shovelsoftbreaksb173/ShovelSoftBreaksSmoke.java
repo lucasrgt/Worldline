@@ -90,12 +90,11 @@ public final class ShovelSoftBreaksSmoke {
     a.sustainTicks(5);
     a.finishBreak(cell);
     a.awaitBlock(cell, AIR);
-    RemoteDroppedItem drop = a.peekDroppedItem(expected);
-    if (drop == null && id == 13)
-      drop = a.peekDroppedItem(FLINT);
-    if (drop == null)
-      drop = a.awaitDroppedItem(expected);
-    require(drop.item().legacyId() > 0 && drop.item().count() >= 1
+    RemoteDroppedItem drop = worldline.test.WorldlineSmokeAwait.awaitEntity(a, () -> {
+      RemoteDroppedItem candidate = a.peekDroppedItem(expected);
+      return candidate == null && id == 13 ? a.peekDroppedItem(FLINT) : candidate;
+    }, value -> value != null, "shovel drop " + id, 40);
+    require(drop != null && drop.item().legacyId() > 0 && drop.item().count() >= 1
             && a.sustainTicks(1).blockAt(cell.x(), cell.y(), cell.z()).equals(AIR),
         "Packet21 drop or cell " + id + "->0 absent");
     String name = id == 3 ? "dirt" : id == 12 ? "sand" : id == 13 ? "gravel" : "clay";

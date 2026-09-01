@@ -1,5 +1,5 @@
 schema=1
 id=m622-pathfinding-matrix
-fingerprint=43b8e41d36e041265ee69ddf5c77ad9a1a05f0f1fdd61e90773a699a3e134c6c
+fingerprint=f15314f81ac463d1703d376233294f71d8289b3fe3231ad11fb5a3ff326899ef
 observation.sha256=4a31aad4c63c79c7737f9d7039b1c6449cbfe1a17979b2a0a88ed51057c775c8
 source=refactor-equivalent

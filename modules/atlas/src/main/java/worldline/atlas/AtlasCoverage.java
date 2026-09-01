@@ -35,7 +35,8 @@ final class AtlasCoverage {
                     || hasKind(existing, subsystem, AtlasKind.NAMESPACE);
         }
         if ("CONTROL".equals(dimension)) return controlled(existing, subsystem);
-        if ("TESTABILITY".equals(dimension)) return hasKind(existing, subsystem, AtlasKind.EXPERIMENT);
+        if ("TESTABILITY".equals(dimension)) return hasKind(existing, subsystem, AtlasKind.EXPERIMENT)
+                || signedKind(existing, subsystem, AtlasKind.CLAIM);
         if ("ORACLE".equals(dimension)) return oracle(existing, subsystem);
         if ("REPRODUCIBILITY".equals(dimension)) return signed(existing, subsystem);
         if ("OBSERVABILITY".equals(dimension)) {
@@ -45,7 +46,8 @@ final class AtlasCoverage {
                     || hasKind(existing, subsystem, AtlasKind.LOADER)
                     || hasKind(existing, subsystem, AtlasKind.API)
                     || hasKind(existing, subsystem, AtlasKind.MAPPING_SET)
-                    || hasKind(existing, subsystem, AtlasKind.NAMESPACE);
+                    || hasKind(existing, subsystem, AtlasKind.NAMESPACE)
+                    || hasKind(existing, subsystem, AtlasKind.CLAIM);
         }
         if ("DETERMINISM".equals(dimension)) return determinism(existing, subsystem);
         throw new IllegalArgumentException("dimension " + dimension);
@@ -90,13 +92,25 @@ final class AtlasCoverage {
     }
 
     private static boolean oracle(List<AtlasRecord> existing, String subsystem) {
-        if (hasKind(existing, subsystem, AtlasKind.INVARIANT)) return true;
+        if (hasKind(existing, subsystem, AtlasKind.INVARIANT)
+                || signedKind(existing, subsystem, AtlasKind.CLAIM)) return true;
         return signed(existing, subsystem);
     }
 
     private static boolean signed(List<AtlasRecord> existing, String subsystem) {
         for (AtlasRecord record : existing) {
-            if (!AtlasKind.EXPERIMENT.equals(record.kind()) || !refers(record, subsystem)) continue;
+            if ((!AtlasKind.EXPERIMENT.equals(record.kind())
+                    && !AtlasKind.CLAIM.equals(record.kind())) || !refers(record, subsystem)) continue;
+            for (String item : record.evidence()) {
+                if (item.startsWith("expected.signature=") || AtlasSchema.shaToken(item)) return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean signedKind(List<AtlasRecord> existing, String subsystem, String kind) {
+        for (AtlasRecord record : existing) {
+            if (!kind.equals(record.kind()) || !refers(record, subsystem)) continue;
             for (String item : record.evidence()) {
                 if (item.startsWith("expected.signature=") || AtlasSchema.shaToken(item)) return true;
             }

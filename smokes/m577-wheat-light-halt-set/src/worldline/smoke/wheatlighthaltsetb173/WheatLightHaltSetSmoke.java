@@ -3,8 +3,10 @@ package worldline.smoke.wheatlighthaltsetb173;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.Arrays;
 import worldline.api.*;
 import worldline.b173server.*;
+import worldline.testkit.*;
 
 /** Places lit wheat 59 plus covered wheat 59, then waits official random-tick age. */
 public final class WheatLightHaltSetSmoke {
@@ -82,11 +84,19 @@ public final class WheatLightHaltSetSmoke {
       reader.synchronizePose();
       RemoteChunkSnapshot after = reader.awaitRemoteChunk(cx, cz).chunkAt(cx, cz);
       WheatLightHaltSetArm.persist(after, cx, cz, plots, lit, wheatS, cover, water);
+      BlockTickPolicyScenario scenario = new BlockTickPolicyScenario("wheat-random-growth",
+          "b1.7.3:block/059", Arrays.asList("plant-growth"), false,
+          BlockTickPolicyMechanism.RANDOM_BLOCK, "59:0-planted", "metadata-increased", true);
+      BlockTickPolicyObservation observation = new BlockTickPolicyObservation(scenario.id(),
+          scenario.mechanism(), scenario.initial(), scenario.effect(), scenario.persisted());
+      String tickContract = WheatLightHaltSetArm.sha(BlockTickPolicyFixture.canonical(
+          BlockTickPolicyFixture.execute(Arrays.asList(scenario), Arrays.asList(observation))));
       String evidence = "column=" + column[0] + ",support=" + WheatLightHaltSetArm.token(top, 1, 0)
           + ",water=" + WheatLightHaltSetArm.token(water, 9, 0) + ",hoe=290,seeds=295,wheat=59,lit="
           + WheatLightHaltSetArm.cells(lit) + ",covered=" + WheatLightHaltSetArm.token(wheatS, 59, 0)
           + ",cover=" + WheatLightHaltSetArm.token(cover, 1, 0)
-          + ",lit-age>=1,dark-stay=true,persisted=true,clients=2,disconnect=clean";
+          + ",lit-age>=1,dark-stay=true,persisted=true,testkit=" + tickContract
+          + ",clients=2,disconnect=clean";
       String trace = "v1|server=official-b1.7.3|seed=" + seed
           + "|fixture=raised-stone+hydrated-farmland60+lit-wheat59+covered-wheat59"
           + "|cause=packet15-hoe290+seeds295+random-ticks"

@@ -1,5 +1,5 @@
 schema=1
 id=m770-aero-gpu-present-attribution
-fingerprint=b4959569aff97e875b1bcd17bf2542ca0d9b998588698042a8c0df96a8452a67
+fingerprint=3062b8abfd95c7c3888b5e3f3295b08fa8ae3211161a68f3f74429c9313e5f6e
 observation.sha256=cd274c19fb08b3a8ab7a3daf702c5ab75caa2a0141c3eb626ac442b977928cd5
-source=executed
+source=refactor-equivalent

@@ -30,12 +30,12 @@ public final class CensusCycle {
     recreate();
     Result first = launcher("census", build.resolve("first").toString());
     require(first.code == 0 && first.text.contains("WORLDLINE_CENSUS=PASS"),
-        "first census capture failed");
+        "first census capture failed: " + first.summary());
     Result second = launcher("census", build.resolve("second").toString());
     require(second.code == 0 && second.text.contains("WORLDLINE_CENSUS=PASS"),
-        "second census capture failed");
-    int blocks = -1, items = -1, recipes = -1, smelts = -1;
-    for (String section : Arrays.asList("blocks", "items", "recipes", "smelts")) {
+        "second census capture failed: " + second.summary());
+    int blocks = -1, items = -1, entities = -1, recipes = -1, smelts = -1;
+    for (String section : Arrays.asList("blocks", "items", "entities", "recipes", "smelts")) {
       Path a = build.resolve("first").resolve(section + ".wlcensus");
       Path b = build.resolve("second").resolve(section + ".wlcensus");
       require(Arrays.equals(Files.readAllBytes(a), Files.readAllBytes(b)),
@@ -48,17 +48,27 @@ public final class CensusCycle {
         blocks = rows;
       else if (section.equals("items"))
         items = rows;
+      else if (section.equals("entities"))
+        entities = rows;
       else if (section.equals("recipes"))
         recipes = rows;
       else
         smelts = rows;
       require(text.endsWith("sha256=" + bodySha(text) + "\n"), section + " digest drifted");
     }
-    require(blocks >= 90 && items >= 100 && recipes >= 100 && smelts >= 10,
-        "implausible census sizes " + blocks + "/" + items + "/" + recipes + "/" + smelts);
+    require(blocks >= 90 && items >= 100 && entities == 24 && recipes >= 100 && smelts >= 10,
+        "implausible census sizes " + blocks + "/" + items + "/" + entities + "/"
+            + recipes + "/" + smelts);
     String glass = new String(Files.readAllBytes(build.resolve("first").resolve("blocks.wlcensus")),
         StandardCharsets.UTF_8);
     require(glass.contains("b020="), "glass block row missing");
+    String entityRows = new String(
+        Files.readAllBytes(build.resolve("first").resolve("entities.wlcensus")),
+        StandardCharsets.UTF_8);
+    require(entityRows.contains("e001=name=Item|class=EntityItem\n")
+            && entityRows.contains("e041=name=Boat|class=EntityBoat\n")
+            && entityRows.contains("e090=name=Pig|class=EntityPig\n"),
+        "known EntityList rows are missing");
     String ironSmelt =
         new String(Files.readAllBytes(build.resolve("first").resolve("smelts.wlcensus")),
             StandardCharsets.UTF_8);
@@ -69,9 +79,27 @@ public final class CensusCycle {
       }
     }
     require(ironFound, "iron smelt row missing");
-    String report = "blocks=" + blocks + "\nitems=" + items + "\nrecipes=" + recipes
+    Path registryA = build.resolve("first").resolve("registry.wlevidence");
+    Path registryB = build.resolve("second").resolve("registry.wlevidence");
+    require(Arrays.equals(Files.readAllBytes(registryA), Files.readAllBytes(registryB)),
+        "public registry evidence is not deterministic");
+    String registry = new String(Files.readAllBytes(registryA), StandardCharsets.UTF_8);
+    require(registry.startsWith("schema=worldline.block-registry-evidence.v1\nclaims=96\n")
+            && occurrences(registry, "#registry-presence|UNIVERSAL") == 96,
+        "public registry evidence does not cover all universal claims");
+    Path entityRegistryA = build.resolve("first").resolve("entity-registry.wlevidence");
+    Path entityRegistryB = build.resolve("second").resolve("entity-registry.wlevidence");
+    require(Arrays.equals(Files.readAllBytes(entityRegistryA), Files.readAllBytes(entityRegistryB)),
+        "public entity registry evidence is not deterministic");
+    String entityRegistry = new String(Files.readAllBytes(entityRegistryA), StandardCharsets.UTF_8);
+    require(entityRegistry.startsWith("schema=worldline.entity-registry-evidence.v1\nclaims=24\n")
+            && occurrences(entityRegistry, "#registry-presence|UNIVERSAL") == 24,
+        "public entity registry evidence does not cover all universal claims");
+    String report = "blocks=" + blocks + "\nitems=" + items + "\nentities=" + entities
+        + "\nrecipes=" + recipes
         + "\nsmelts=" + smelts + "\nsections.deterministic=true\niron.smelt=present"
-        + "\nglass.row=present\ndigests.sha256=" + sectionDigests() + "\n";
+        + "\nglass.row=present\nentity.rows=present\ndigests.sha256=" + sectionDigests()
+        + "\n";
     String signature = sha256(report);
     Properties expected = new Properties();
     try (java.io.Reader reader = Files.newBufferedReader(
@@ -83,13 +111,14 @@ public final class CensusCycle {
     Files.write(build.resolve("evidence.txt"), report.getBytes(StandardCharsets.UTF_8));
     System.out.println("Census cycle passed");
     System.out.println(
-        "  blocks=" + blocks + " items=" + items + " recipes=" + recipes + " smelts=" + smelts);
+        "  blocks=" + blocks + " items=" + items + " entities=" + entities
+            + " recipes=" + recipes + " smelts=" + smelts);
     System.out.println("  evidence SHA-256: " + signature);
   }
 
   private String sectionDigests() throws Exception {
     StringBuilder digests = new StringBuilder();
-    for (String section : List.of("blocks", "items", "recipes", "smelts")) {
+    for (String section : List.of("blocks", "items", "entities", "recipes", "smelts")) {
       digests.append(section)
           .append(':')
           .append(sha256(Files.readAllBytes(build.resolve("first").resolve(section + ".wlcensus"))))
@@ -101,6 +130,15 @@ public final class CensusCycle {
   private String bodySha(String text) throws Exception {
     int cut = text.lastIndexOf("sha256=");
     return sha256(text.substring(0, cut).getBytes(StandardCharsets.UTF_8));
+  }
+
+  private int occurrences(String text, String marker) {
+    int count = 0, start = 0;
+    while ((start = text.indexOf(marker, start)) >= 0) {
+      count++;
+      start += marker.length();
+    }
+    return count;
   }
 
   private Result launcher(String... arguments) throws Exception {
@@ -152,6 +190,10 @@ public final class CensusCycle {
     Result(int code, String text) {
       this.code = code;
       this.text = text;
+    }
+    String summary() {
+      String value = text.strip().replace('\n', ' ');
+      return "exit=" + code + (value.isEmpty() ? "" : " output=" + value);
     }
   }
 }

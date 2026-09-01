@@ -1,0 +1,8 @@
+claim_id	layer	subject_id	template_id	applicability	status	oracle	evidence_id	signature	automation_surface
+iron-door-state-domain	SINGULAR	b1.7.3:block/071	state-domain	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-iron-door-subsystem-conformance-cycle	2614fe16b13374a50f90bbb989d8c3919a1c5b421b87b52902a5eb8a717d0bcf	PUBLIC_TESTKIT
+iron-door-break-transition	UNIVERSAL	b1.7.3:block/071	break-transition	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-iron-door-subsystem-conformance-cycle	2614fe16b13374a50f90bbb989d8c3919a1c5b421b87b52902a5eb8a717d0bcf	PUBLIC_TESTKIT
+iron-door-drop-matrix	SINGULAR	b1.7.3:block/071	drop-matrix	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-iron-door-subsystem-conformance-cycle	2614fe16b13374a50f90bbb989d8c3919a1c5b421b87b52902a5eb8a717d0bcf	PUBLIC_TESTKIT
+iron-door-collision-shape	SINGULAR	b1.7.3:block/071	collision-shape	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-iron-door-subsystem-conformance-cycle	2614fe16b13374a50f90bbb989d8c3919a1c5b421b87b52902a5eb8a717d0bcf	PUBLIC_TESTKIT
+iron-door-light-behavior	SINGULAR	b1.7.3:block/071	light-behavior	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-iron-door-subsystem-conformance-cycle	2614fe16b13374a50f90bbb989d8c3919a1c5b421b87b52902a5eb8a717d0bcf	PUBLIC_TESTKIT
+iron-door-tick-policy	SINGULAR	b1.7.3:block/071	tick-policy	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-iron-door-subsystem-conformance-cycle	2614fe16b13374a50f90bbb989d8c3919a1c5b421b87b52902a5eb8a717d0bcf	PUBLIC_TESTKIT
+iron-door-neighbor-response	SINGULAR	b1.7.3:block/071	neighbor-response	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-iron-door-subsystem-conformance-cycle	2614fe16b13374a50f90bbb989d8c3919a1c5b421b87b52902a5eb8a717d0bcf	PUBLIC_TESTKIT

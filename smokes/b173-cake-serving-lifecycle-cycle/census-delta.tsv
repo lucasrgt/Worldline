@@ -1,0 +1,6 @@
+claim_id	layer	subject_id	template_id	applicability	status	oracle	evidence_id	signature	automation_surface
+cake-state-domain	SINGULAR	b1.7.3:block/092	state-domain	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-cake-serving-lifecycle-cycle	18c34cfdbe2bf571425ca2cff6e9853721f79a022593cc45fb47e969591c13b9	PUBLIC_TESTKIT
+cake-collision-shape	SINGULAR	b1.7.3:block/092	collision-shape	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-cake-serving-lifecycle-cycle	18c34cfdbe2bf571425ca2cff6e9853721f79a022593cc45fb47e969591c13b9	PUBLIC_TESTKIT
+cake-light-behavior	SINGULAR	b1.7.3:block/092	light-behavior	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-cake-serving-lifecycle-cycle	18c34cfdbe2bf571425ca2cff6e9853721f79a022593cc45fb47e969591c13b9	PUBLIC_TESTKIT
+cake-tick-policy	SINGULAR	b1.7.3:block/092	tick-policy	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-cake-serving-lifecycle-cycle	18c34cfdbe2bf571425ca2cff6e9853721f79a022593cc45fb47e969591c13b9	PUBLIC_TESTKIT
+cake-neighbor-response	SINGULAR	b1.7.3:block/092	neighbor-response	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-cake-serving-lifecycle-cycle	18c34cfdbe2bf571425ca2cff6e9853721f79a022593cc45fb47e969591c13b9	PUBLIC_TESTKIT

@@ -15,6 +15,7 @@ import worldline.minimization.Scenario;
 import worldline.test.TestContext;
 import worldline.test.TestHook;
 import worldline.test.TestObservation;
+import worldline.test.TestRuntimeSession;
 import worldline.trace.CanonicalStateTrace;
 
 /** Mutable state owned by exactly one isolated attempt. */
@@ -23,6 +24,7 @@ final class TestExecutionContext implements TestContext {
             "x_bits", "y_bits", "z_bits", "entities"};
     private final long seed;
     private final int attempt;
+    private final TestRuntimeSession session;
     private final AutomatedMinecraftRuntime runtime;
     private final ArtifactStore artifacts;
     private final CanonicalStateTrace trace;
@@ -31,9 +33,10 @@ final class TestExecutionContext implements TestContext {
     private final Set<String> allowed;
     private int ticks, sequence;
 
-    TestExecutionContext(long seed, int attempt, AutomatedMinecraftRuntime runtime,
+    TestExecutionContext(long seed, int attempt, TestRuntimeSession session,
             ArtifactStore artifacts, List<String> allowedSteps) {
-        this.seed = seed; this.attempt = attempt; this.runtime = runtime; this.artifacts = artifacts;
+        this.seed = seed; this.attempt = attempt; this.session = session;
+        this.runtime = optionalRuntime(session); this.artifacts = artifacts;
         allowed = allowedSteps == null ? null : new HashSet<>(allowedSteps);
         trace = runtime == null ? null : new CanonicalStateTrace(seed, TRACE_FIELDS);
         if (trace != null) record("start");
@@ -44,6 +47,10 @@ final class TestExecutionContext implements TestContext {
     @Override public AutomatedMinecraftRuntime runtime() {
         if (runtime == null) throw new IllegalStateException("test did not configure a runtime provider");
         return runtime;
+    }
+    @Override public <T> T capability(Class<T> type) {
+        if (session == null) throw new IllegalStateException("test did not configure a runtime provider");
+        return session.capability(type);
     }
     @Override public java.nio.file.Path artifactDirectory() { return artifacts.directory(); }
     @Override public void attach(String name, byte[] bytes) {
@@ -131,5 +138,11 @@ final class TestExecutionContext implements TestContext {
                 runtime.player().selectedHotbarSlot(), Double.doubleToLongBits(position.x()),
                 Double.doubleToLongBits(position.y()), Double.doubleToLongBits(position.z()),
                 runtime.world().entities().size());
+    }
+
+    private static AutomatedMinecraftRuntime optionalRuntime(TestRuntimeSession session) {
+        if (session == null) return null;
+        try { return session.runtime(); }
+        catch (IllegalStateException unavailable) { return null; }
     }
 }

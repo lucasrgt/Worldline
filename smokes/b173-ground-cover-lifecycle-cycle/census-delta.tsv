@@ -1,0 +1,13 @@
+claim_id	layer	subject_id	template_id	applicability	status	oracle	evidence_id	signature	automation_surface
+tall-grass-gameplay-placement	UNIVERSAL	b1.7.3:block/031	gameplay-placement	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-ground-cover-lifecycle-cycle	dfbb3c9f3a5a4916dbb4ea35228ef40089e85003cf9287241276b8d4398601c9	PUBLIC_TESTKIT
+tall-grass-save-reload	UNIVERSAL	b1.7.3:block/031	save-reload	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-ground-cover-lifecycle-cycle	dfbb3c9f3a5a4916dbb4ea35228ef40089e85003cf9287241276b8d4398601c9	PUBLIC_TESTKIT
+tall-grass-break-transition	UNIVERSAL	b1.7.3:block/031	break-transition	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-ground-cover-lifecycle-cycle	dfbb3c9f3a5a4916dbb4ea35228ef40089e85003cf9287241276b8d4398601c9	PUBLIC_TESTKIT
+tall-grass-drop-matrix	ARCHETYPE	b1.7.3:block/031	drop-matrix	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-ground-cover-lifecycle-cycle	dfbb3c9f3a5a4916dbb4ea35228ef40089e85003cf9287241276b8d4398601c9	PUBLIC_TESTKIT
+dead-bush-gameplay-placement	UNIVERSAL	b1.7.3:block/032	gameplay-placement	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-ground-cover-lifecycle-cycle	dfbb3c9f3a5a4916dbb4ea35228ef40089e85003cf9287241276b8d4398601c9	PUBLIC_TESTKIT
+dead-bush-save-reload	UNIVERSAL	b1.7.3:block/032	save-reload	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-ground-cover-lifecycle-cycle	dfbb3c9f3a5a4916dbb4ea35228ef40089e85003cf9287241276b8d4398601c9	PUBLIC_TESTKIT
+dead-bush-break-transition	UNIVERSAL	b1.7.3:block/032	break-transition	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-ground-cover-lifecycle-cycle	dfbb3c9f3a5a4916dbb4ea35228ef40089e85003cf9287241276b8d4398601c9	PUBLIC_TESTKIT
+dead-bush-drop-matrix	ARCHETYPE	b1.7.3:block/032	drop-matrix	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-ground-cover-lifecycle-cycle	dfbb3c9f3a5a4916dbb4ea35228ef40089e85003cf9287241276b8d4398601c9	PUBLIC_TESTKIT
+crops-gameplay-placement	UNIVERSAL	b1.7.3:block/059	gameplay-placement	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-ground-cover-lifecycle-cycle	dfbb3c9f3a5a4916dbb4ea35228ef40089e85003cf9287241276b8d4398601c9	PUBLIC_TESTKIT
+crops-save-reload	UNIVERSAL	b1.7.3:block/059	save-reload	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-ground-cover-lifecycle-cycle	dfbb3c9f3a5a4916dbb4ea35228ef40089e85003cf9287241276b8d4398601c9	PUBLIC_TESTKIT
+crops-break-transition	UNIVERSAL	b1.7.3:block/059	break-transition	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-ground-cover-lifecycle-cycle	dfbb3c9f3a5a4916dbb4ea35228ef40089e85003cf9287241276b8d4398601c9	PUBLIC_TESTKIT
+crops-drop-matrix	ARCHETYPE	b1.7.3:block/059	drop-matrix	APPLICABLE	VERIFIED	OFFICIAL_SERVER	b173-ground-cover-lifecycle-cycle	dfbb3c9f3a5a4916dbb4ea35228ef40089e85003cf9287241276b8d4398601c9	PUBLIC_TESTKIT
