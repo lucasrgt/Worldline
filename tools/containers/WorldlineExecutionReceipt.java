@@ -11,8 +11,8 @@ final class WorldlineExecutionReceipt {
             "executor_version", "backend", "exit_code", "termination", "stdout_sha256",
             "stderr_sha256", "metrics_sha256", "output_manifest_sha256", "stdout_observed_bytes", "stderr_observed_bytes",
             "stdout_truncated", "stderr_truncated", "descendants_remaining", "error");
-    private static final List<String> METRIC_FIELDS = List.of("schema", "elapsed_ms",
-            "peak_memory_bytes", "memory_measurement", "peak_processes", "peak_tasks", "cpu_user_100ns",
+    private static final List<String> METRIC_FIELDS = List.of("schema", "elapsed_ms", "bootstrap_ms",
+            "runtime_ms", "peak_memory_bytes", "memory_measurement", "peak_processes", "peak_tasks", "cpu_user_100ns",
             "cpu_kernel_100ns", "io_read_bytes", "io_write_bytes", "memory_limit_events",
             "oom_kill_events", "task_limit_events", "cpu_throttled_100ns", "stdout_observed_bytes",
             "stderr_observed_bytes", "stdout_truncated", "stderr_truncated", "telemetry_qualification");
@@ -46,19 +46,27 @@ final class WorldlineExecutionReceipt {
         if (!plan.isolation().backend().equals("direct")) require(Long.valueOf(0).equals(descendants),
                 "contained receipt did not prove an empty process group");
         else require(descendants == null, "direct backend claimed descendant accounting");
-        nullableString(receipt, "error"); verifyMetrics(plan, receipt);
+        nullableString(receipt, "error"); PhaseMetrics metrics = verifyMetrics(plan, receipt);
         byte[] canonical = receiptBytes(receipt); require(java.util.Arrays.equals(Files.readAllBytes(path), canonical),
                 "receipt is not canonically encoded");
         return new Verified(exitCode, termination, stdoutObserved, stderrObserved,
-                stdoutTruncated, stderrTruncated, descendants);
+                stdoutTruncated, stderrTruncated, descendants, metrics.elapsed(),
+                metrics.bootstrap(), metrics.runtime());
     }
 
-    private static void verifyMetrics(WorldlineExecutionPlan plan, Map<String, Object> receipt) throws Exception {
+    private static PhaseMetrics verifyMetrics(WorldlineExecutionPlan plan,
+            Map<String, Object> receipt) throws Exception {
         Path path = plan.outputs().metrics(); Map<String, Object> value = ExecutionJsonParser.object(
                 Files.readString(path, StandardCharsets.UTF_8));
         ExecutionJson.exactKeys(value, METRIC_FIELDS, "execution metrics");
-        require("worldline.execution-metrics.v1".equals(string(value, "schema")), "metrics schema drift");
-        positive(value, "elapsed_ms");
+        require("worldline.execution-metrics.v2".equals(string(value, "schema")), "metrics schema drift");
+        long elapsed = positive(value, "elapsed_ms");
+        long bootstrap = positive(value, "bootstrap_ms");
+        long runtime = positive(value, "runtime_ms");
+        require(bootstrap <= elapsed, "bootstrap duration exceeds elapsed duration");
+        long remainder = elapsed - bootstrap;
+        require(runtime == remainder || (runtime < Long.MAX_VALUE && runtime + 1L == remainder),
+                "phase durations do not partition elapsed duration");
         String measurement = string(value, "memory_measurement");
         require(Set.of("unavailable", "job_commit", "cgroup_peak").contains(measurement),
                 "unknown memory measurement");
@@ -99,6 +107,7 @@ final class WorldlineExecutionReceipt {
         require("observational".equals(string(value, "telemetry_qualification")), "telemetry became qualifying");
         require(java.util.Arrays.equals(Files.readAllBytes(path), metricBytes(value)),
                 "metrics are not canonically encoded");
+        return new PhaseMetrics(elapsed, bootstrap, runtime);
     }
 
     private static void validateTermination(String termination, Long exitCode) {
@@ -129,6 +138,8 @@ final class WorldlineExecutionReceipt {
 
     private static byte[] metricBytes(Map<String, Object> value) {
         String json = "{\"schema\":" + q(value, "schema") + ",\"elapsed_ms\":" + n(value.get("elapsed_ms"))
+                + ",\"bootstrap_ms\":" + n(value.get("bootstrap_ms"))
+                + ",\"runtime_ms\":" + n(value.get("runtime_ms"))
                 + ",\"peak_memory_bytes\":" + n(value.get("peak_memory_bytes")) + ",\"memory_measurement\":" + q(value, "memory_measurement")
                 + ",\"peak_processes\":" + n(value.get("peak_processes")) + ",\"peak_tasks\":" + n(value.get("peak_tasks"))
                 + ",\"cpu_user_100ns\":" + n(value.get("cpu_user_100ns"))
@@ -154,5 +165,6 @@ final class WorldlineExecutionReceipt {
 
     record Verified(Long exitCode, String termination, long stdoutObservedBytes,
             long stderrObservedBytes, boolean stdoutTruncated, boolean stderrTruncated,
-            Long descendantsRemaining) { }
+            Long descendantsRemaining, long elapsedMs, long bootstrapMs, long runtimeMs) { }
+    private record PhaseMetrics(long elapsed, long bootstrap, long runtime) { }
 }

@@ -52,9 +52,13 @@ public final class RustExecutorShadow {
             byte[] canonical = plan.canonicalBytes();
             require(canonical[canonical.length - 1] == '\n' && new String(canonical, StandardCharsets.UTF_8)
                     .startsWith("{\"schema\":\"worldline.execution-plan.v1\""), "plan canonical encoding drift");
-            synthetic(plan); WorldlineExecutionReceipt.verify(plan);
+            synthetic(plan); WorldlineExecutionReceipt.Verified direct = WorldlineExecutionReceipt.verify(plan);
+            require(direct.elapsedMs() == 1L && direct.bootstrapMs() == 0L && direct.runtimeMs() == 1L,
+                    "phase telemetry was not retained");
             WorldlineExecutionPlan linux = containedPlan(root, "linux_cgroup");
             synthetic(linux); WorldlineExecutionReceipt.verify(linux);
+            synthetic(plan, 1, 1, 1); expectFailure(() -> WorldlineExecutionReceipt.verify(plan));
+            synthetic(plan);
             Path receipt = plan.outputs().receipt(); String valid = Files.readString(receipt);
             Files.writeString(receipt, valid.replace("{\"schema\"", "{\"unknown\":true,\"schema\""));
             expectFailure(() -> WorldlineExecutionReceipt.verify(plan)); Files.writeString(receipt, valid);
@@ -92,6 +96,11 @@ public final class RustExecutorShadow {
     }
 
     private static void synthetic(WorldlineExecutionPlan plan) throws Exception {
+        synthetic(plan, 1, 0, 1);
+    }
+
+    private static void synthetic(WorldlineExecutionPlan plan, long elapsed,
+            long bootstrap, long runtime) throws Exception {
         Files.createDirectories(plan.outputs().root()); Files.write(plan.outputs().stdout(), new byte[0]);
         Files.write(plan.outputs().stderr(), new byte[0]);
         boolean direct = plan.isolation().backend().equals("direct");
@@ -101,7 +110,8 @@ public final class RustExecutorShadow {
         String processes = plan.isolation().backend().equals("windows_job") ? "1" : "null";
         String tasks = plan.isolation().backend().equals("linux_cgroup") ? "1" : "null";
         String linuxEvents = plan.isolation().backend().equals("linux_cgroup") ? "0" : "null";
-        String metrics = "{\"schema\":\"worldline.execution-metrics.v1\",\"elapsed_ms\":1,"
+        String metrics = "{\"schema\":\"worldline.execution-metrics.v2\",\"elapsed_ms\":" + elapsed
+                + ",\"bootstrap_ms\":" + bootstrap + ",\"runtime_ms\":" + runtime + ","
                 + "\"peak_memory_bytes\":" + accounting + ",\"memory_measurement\":\"" + measurement + "\","
                 + "\"peak_processes\":" + processes + ",\"peak_tasks\":" + tasks
                 + ",\"cpu_user_100ns\":" + accounting

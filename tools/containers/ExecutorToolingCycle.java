@@ -70,6 +70,8 @@ public final class ExecutorToolingCycle {
             require(!result.stdoutTruncated() && !result.stderrTruncated()
                     && Long.valueOf(0).equals(result.descendantsRemaining()),
                     "Rust tooling execution did not prove complete output and an empty process tree");
+            require(result.runtimeMs() > 0L && result.bootstrapMs() <= result.elapsedMs(),
+                    "Rust tooling execution did not report real phase telemetry");
             byte[] primary = joined(plan.outputs().stderr(), plan.outputs().stdout());
             byte[] rollback = legacy(root, run.resolve("legacy-rollback"), command, environment);
             String expected = normalize(new String(baseline, StandardCharsets.UTF_8));
