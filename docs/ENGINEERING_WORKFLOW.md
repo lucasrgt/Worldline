@@ -269,7 +269,10 @@ its hard wall-clock budget between both child JVMs, kills timed-out process tree
 publishes content-addressed plan, immutable logs, and a non-authoritative shard receipt under
 `.worldline/reports/nightly-quality/`. Complete shard sets aggregate independently of arrival
 order. The `quality` dispatch profile reproduces a single shard manually; ordinary local and
-pull-request gates retain only deterministic short tests.
+pull-request gates retain only deterministic short tests. `CampaignExecutorCycle` optionally
+places the complete Java shard coordinator inside the pinned Rust executor. Its campaign receipt
+binds the exact native request while the outer Java adapter revalidates the native receipt and
+referenced bytes; the executor still has no behavioral or aggregation authority.
 
 Smoke source policy counts semicolons outside comments, strings, and character literals instead
 of rewarding physical-line packing. New runners and scenarios are limited to 300 and 150

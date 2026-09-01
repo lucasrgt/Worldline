@@ -55,7 +55,7 @@ public final class NightlyQualityCampaign {
         List<CampaignShardReceipt.Result> results = List.of(
                 result(fuzzAssignment, fuzz), result(mutationAssignment, mutation));
         CampaignShardReceipt receipt = CampaignShardReceipt.create(plan, options.shardIndex(),
-                head, tree, executorRequest(), results);
+                head, tree, executorRequest(options.executorPlan()), results);
         Path receiptPath = CampaignArtifacts.publishReceipt(reports, plan, receipt);
         CampaignReceiptSet.Aggregate aggregate = CampaignArtifacts.aggregateIfComplete(reports, plan);
         require(fuzz.exit == 0 && mutation.exit == 0,
@@ -118,11 +118,15 @@ public final class NightlyQualityCampaign {
         System.out.println("nightly quality campaign self-test passed");
     }
 
-    private static String executorRequest() {
-        String value = System.getenv("WORLDLINE_CAMPAIGN_EXECUTOR_REQUEST_SHA256");
-        if (value == null || value.isBlank()) return null;
-        require(value.matches("[0-9a-f]{64}"), "invalid campaign executor request digest");
-        return value;
+    private static String executorRequest(Path plan) throws Exception {
+        String marker = System.getenv("WORLDLINE_CAMPAIGN_EXECUTOR_PLAN");
+        if (plan == null) {
+            require(marker == null || marker.isBlank(), "unexpected campaign executor plan marker");
+            return null;
+        }
+        require(plan.toString().equals(marker), "campaign executor plan marker drifted");
+        require(Files.isRegularFile(plan) && !Files.isSymbolicLink(plan), "campaign executor plan is invalid");
+        return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(plan)));
     }
     private static String sha256(String value) throws Exception {
         return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
