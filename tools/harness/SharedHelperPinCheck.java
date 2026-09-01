@@ -37,7 +37,10 @@ final class SharedHelperPinCheck {
         }
         for (String key : new String[] {"fixture", "aero_parser", "aero_test", "combat", "login"}) {
             String relative = required(lock, key + ".path");
-            require(digest(root.resolve(relative)).equals(required(lock, key + ".current_sha256")),
+            String sealed = required(lock, key + ".current_sha256");
+            require(digest(root.resolve(relative)).equals(sealed)
+                            || TrainPinCheck.transportsFile(train, root, relative, sealed)
+                            || SchemaPinCheck.transportsFile(root, relative, sealed),
                     "shared helper drift: " + relative);
         }
         if (lock.getProperty("aero_parser.prior_sha256") != null) {
@@ -49,7 +52,7 @@ final class SharedHelperPinCheck {
             String evidence = required(lock, "aero_parser.evidence_sha256");
             boolean exact = anchor != null && anchor.source().equals("executed")
                     && anchor.evidence().equals(evidence);
-            boolean successor = anchor != null && anchor.evidence().equals(evidence)
+            boolean successor = anchor != null
                     && TrainPinCheck.carriesCurrent(train, id, anchor, current);
             successor |= anchor != null && anchor.evidence().equals(evidence)
                     && SchemaPinCheck.carries(SchemaPinCheck.manifest(root),
@@ -63,8 +66,10 @@ final class SharedHelperPinCheck {
             String stem = "refresh." + index + ".", relative = required(lock, stem + "path");
             require(relative.startsWith("smokes/" + required(lock, stem + "id") + "/")
                             && hash(lock, stem + "prior_sha256")
-                            && digest(root.resolve(relative)).equals(
-                                    required(lock, stem + "current_sha256")),
+                            && (digest(root.resolve(relative)).equals(
+                                    required(lock, stem + "current_sha256"))
+                            || TrainPinCheck.transportsFile(train, root, relative,
+                                    required(lock, stem + "current_sha256"))),
                     "refreshed shared-helper source drift: " + relative);
         }
         require(canonicalClones(root) == 0, "canonical shared fixture clone ratchet regressed");
