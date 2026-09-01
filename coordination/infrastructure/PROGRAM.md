@@ -682,6 +682,35 @@ Evidence recorded for these slices:
   closed to `candidate-worker`, so the campaign creates no admission file. The
   exact canonical Gate passes cold (`143581ms < 240000ms`), CSM checks five
   ways with no deviations, and NYA passes.
+- Worldline commit `9dc03ddce` qualifies structural instability as the second
+  Rust-executed campaign adapter. The generic dispatcher selects either the
+  existing Nightly fuzz-plus-mutation workload or deterministic Gate self-test
+  cases while preserving the same canonical plan, shard, receipt, executor,
+  telemetry, and aggregation boundaries. The adapter is explicitly structural:
+  it executes no official Minecraft runtime and claims no behavioral coverage.
+  An initial two-shard seed-180 run correctly failed when descendant JVMs tried
+  to reserve about 960 MiB each inside the four-GiB Job. The two failed Rust
+  requests are
+  `5855e42974ed2f6c24b6f877fdfd17f62be1e9810cab83885fd526d7884f53bd`
+  and `6de1ff22cea6054027ff5863e228fd44bfbed37c2486b90516d4746097751229`;
+  their preserved local crash logs hash to
+  `97f2b3976ea0419e8b7898504d4b468dd2345d29a4a53287714005d3039d8e28`
+  and `331797f388116073e21bcf1790fc815980208dc73d7c523bab362f0f27c25606`.
+  The controlled campaign environment now bounds each descendant JVM at
+  512 MiB. A reverse-arrival two-shard seed-182 qualification then passes four
+  cases at plan
+  `59959f08d0553abcc50d9e160a9a28fca2fa154230c25a9fc757b9ed5c19bfc9`
+  through requests
+  `2e1afe6dd0a5e3ffd78956d0bd439a3c5c3d2ffbb7df0a9d8efa2ebb6e3a3d3b`
+  and `541055fcd45a6ba7ee5c0899379bfa4ae40562bbce1b1cd39891ea2fb522d78f`.
+  Their peak Job observations are 671682560 and 659865600 bytes with seven
+  processes. A seed-183 Nightly regression still passes all 28 cases through
+  request `c5b12f0115bd74a365ad169cc35d98df0c2a6910d56a6d5d5029ba9596851861`
+  with a 228057088-byte peak. The live Explorer independently classifies the
+  two historical failures with `exit_code=1` and the three successful runs with
+  zero, without making the overlay authoritative. The exact canonical Gate
+  passes cold (`116548ms < 240000ms`), CSM checks ten ways with no deviations,
+  and NYA passes.
 Current boundaries remain honest: Linux mount and PID namespaces,
 OS-enforced loopback-only policy, Windows filesystem/network isolation,
 the broader server-headless matrix,
@@ -1142,9 +1171,9 @@ The first Aero GUI profile at commit `935d0fc41` records M778 at 787,205 ms,
 15-ms bootstrap, 787,190-ms runtime, 4,362,235,904-byte peak Job commit,
 eleven peak processes, complete output, and zero remaining descendants.
 
-Native Nightly campaigns now retain the already verified Rust receipt metrics
-as sanitized `campaign-worker` samples. They remain observational and cannot
-influence Candidate admission.
+Native campaigns now retain already verified Rust receipt metrics as sanitized
+`campaign-worker` samples. Nightly and structural instability samples remain
+observational and cannot influence Candidate admission.
 
 ### C2. Historical profiles
 
@@ -1167,6 +1196,8 @@ onscreen, and cross-host histories remain pending; no history upload is enabled.
 Commit `df7a35a9a` adds the first Nightly campaign history sample and exposes it
 through the live Evidence Explorer without argv, paths, environment values, or
 workload log content.
+Commit `9dc03ddce` adds two passing structural-instability samples, while failed
+inner runs remain native execution evidence rather than admissible history.
 
 ### C3. Conservative admission
 
@@ -1334,7 +1365,10 @@ current cache decisions. A third slice correlates native executor evidence with
 campaign receipts and validates referenced, orphan, and missing campaign logs.
 Those ephemeral inputs remain visually and structurally separated from the
 canonical snapshot and cannot change its identity or confer PASS. Worker
-attestations and non-campaign heavy-log families remain pending.
+attestations and non-campaign heavy-log families remain pending. Native links
+also validate termination and exit identity, count nonzero or non-exited runs,
+and expose their exit codes. This prevents a failed inner campaign coordinator
+from appearing healthy merely because the outer Rust executor exited normally.
 
 ## 11. Workstream G: distributed campaigns
 
@@ -1353,12 +1387,16 @@ Campaign roots deterministically derive shard seeds and case ranges. Java
 continues to interpret behavior and divergences. Rust schedules, isolates,
 measures, and transports permitted objects.
 
-The base contract and the nightly fuzz-plus-mutation adapter are qualified.
+The base contract, Nightly fuzz-plus-mutation adapter, and structural
+instability adapter are qualified.
 Plans and receipts are canonical, shards are complete and disjoint, immutable
 publication is fail closed, and aggregation is independent of worker arrival
 order. Native executor dispatch is qualified for the complete Nightly shard
 coordinator on Windows, and its verified metrics now enter sanitized local
-history without affecting admission. World-generation and instability adapters,
+history without affecting admission. The structural instability adapter also
+runs through Rust, supports multi-shard local arrival, and records verified
+metrics under the same non-admissible capability; it deliberately does not
+start Minecraft. World-generation and Minecraft-runtime instability adapters,
 differential, profiling, regression, and minimization execution, plus
 multi-shard distribution across distinct hosts remain pending.
 
