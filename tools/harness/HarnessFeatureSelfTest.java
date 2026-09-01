@@ -29,6 +29,7 @@ final class HarnessFeatureSelfTest {
         ArtifactTransportPolicyTest.selfTest();
         ArtifactTransportPolicy.check(java.nio.file.Path.of("").toAbsolutePath().normalize());
         ModuleInputGraph.selfTest();
+        EvidenceExplorerTest.selfTest();
     }
     static void smoke() throws Exception {
         SmokeScheduleHistory.selfTest();
