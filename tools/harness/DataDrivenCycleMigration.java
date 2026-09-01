@@ -117,6 +117,13 @@ final class DataDrivenCycleMigration {
             SmokePins.Entry existingPin = existing.entry(smoke.id);
             String recordedPlan = manifest.getProperty(stem + "plan_sha256");
             SmokePins.Entry newPlanPin = null;
+            if (existingPin != null && TrainPinCheck.carriesCurrent(
+                    train, smoke.id, existingPin, current)
+                    && !existingPin.evidence().equals(manifest.getProperty(
+                            stem + "evidence_sha256"))) {
+                manifest.setProperty(stem + "evidence_sha256", existingPin.evidence());
+                importedPlans++;
+            }
             if (recordedPlan == null) {
                 require(DataDrivenRefreshEvidence.unchangedMilestone(root, smoke.id),
                         "unregistered generic plan changed with the shared runner: " + smoke.id);

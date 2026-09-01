@@ -23,7 +23,23 @@ final class DataDrivenRefreshEvidence {
                 || !digest(root.resolve("tools/harness/DataDrivenCyclePlan.java"))
                         .equals(recordedPlan)
                 || !digest(root.resolve("tools/harness/SmokeProcess.java"))
-                        .equals(recordedProcess));
+                        .equals(recordedProcess)
+                || trainEvidenceChanged(root, manifest));
+    }
+
+    private static boolean trainEvidenceChanged(Path root, Properties manifest) throws Exception {
+        SmokePins pins = new SmokePins(root);
+        SmokeInputFingerprint fingerprints = new SmokeInputFingerprint(root);
+        Properties train = TrainPinCheck.manifest(root);
+        for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            if (!smoke.runner.equals("tools/smoke/DataDrivenCycle.java")) continue;
+            String current = fingerprints.compute(smoke);
+            SmokePins.Entry pin = pins.match(smoke.id, current);
+            if (pin != null && TrainPinCheck.carriesCurrent(train, smoke.id, pin, current)
+                    && !pin.evidence().equals(manifest.getProperty(
+                            "cycle." + smoke.id + ".evidence_sha256"))) return true;
+        }
+        return false;
     }
 
     static boolean unchangedMilestone(Path root, String id) throws Exception {
