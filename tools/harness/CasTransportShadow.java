@@ -82,9 +82,15 @@ public final class CasTransportShadow {
                     && lookup.blobSize() == module.size(), "module cache index lookup drifted");
             upload(root, binary, local, address, permits, module);
             Path restored = run.resolve("restored-module");
-            ModuleCacheHydrator hydrator = ModuleCacheHydrator.connect(root, binary, address,
-                    permits, indexOutput, index.sha256(), run.resolve("module-cas"));
-            require(hydrator.hydrate(identity.module(), identity.input(), restored),
+            java.util.Map<String, String> environment = java.util.Map.of(
+                    "WORLDLINE_MODULE_CAS_MODE", "shadow",
+                    "WORLDLINE_CAS_BINARY", binary.toString(),
+                    "WORLDLINE_MODULE_CAS_ADDRESS", address,
+                    "WORLDLINE_MODULE_CAS_PERMITS", permits.toString(),
+                    "WORLDLINE_MODULE_CAS_INDEX", indexOutput.toString(),
+                    "WORLDLINE_MODULE_CAS_INDEX_SHA256", index.sha256());
+            require(ModuleCacheRemote.hydrate(root, run.resolve("module-cache"),
+                    identity.module(), identity.input(), restored, environment),
                     "module cache hydrator reported a miss");
             ModuleCacheBundle.requireEqual(moduleEntry, restored);
             System.out.println("CAS transport shadow passed; proof.sha256=" + proof.sha256()

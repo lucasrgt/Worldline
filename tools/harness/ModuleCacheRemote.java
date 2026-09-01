@@ -7,7 +7,11 @@ final class ModuleCacheRemote {
 
     static boolean hydrate(Path root, Path moduleCache, String module,
             String inputSha256, Path target) throws Exception {
-        Map<String, String> environment = System.getenv();
+        return hydrate(root, moduleCache, module, inputSha256, target, System.getenv());
+    }
+
+    static boolean hydrate(Path root, Path moduleCache, String module,
+            String inputSha256, Path target, Map<String, String> environment) throws Exception {
         String mode = environment.get("WORLDLINE_MODULE_CAS_MODE");
         if (!enabled(mode)) return false;
         require("shadow".equals(mode), "unsupported WORLDLINE_MODULE_CAS_MODE");
