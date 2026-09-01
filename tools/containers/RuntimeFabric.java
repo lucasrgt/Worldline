@@ -146,6 +146,7 @@ public final class RuntimeFabric {
         ExecutorAeroCycle.selfTest();
         ExecutionTelemetryHistory.selfTest();
         ExecutionFailureClusters.selfTest();
+        ExecutionEvidenceSummary.selfTest();
         Process probe = new ProcessBuilder(java(), "tools/containers/TerminationTreeProbe.java", "parent")
                 .redirectOutput(ProcessBuilder.Redirect.DISCARD)
                 .redirectError(ProcessBuilder.Redirect.DISCARD).start();

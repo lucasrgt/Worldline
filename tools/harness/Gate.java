@@ -55,8 +55,11 @@ public final class Gate {
         if (tool != null) { Path classes = compileHarness(); List<String> command = new ArrayList<>(List.of(
                 javaTool("java"), "-cp", classes.toString(), tool.main()));
             if (tool.operand() != null) command.add(tool.operand());
-            Process process = new ProcessBuilder(command).directory(root.toFile()).inheritIO().start();
-            process.getOutputStream().close(); int exit = waitFor(process, 60);
+            ProcessBuilder builder = new ProcessBuilder(command).directory(root.toFile()).inheritIO();
+            builder.environment().put("WORLDLINE_GATE_CONTROL", control.toString());
+            Process process = builder.start();
+            process.getOutputStream().close(); int timeout = tool.main().equals("EvidenceExplorerLive") ? 180 : 60;
+            int exit = waitFor(process, timeout);
             if (exit != 0) System.exit(exit); return; }
         if (arguments.length == 1 && maintenance(arguments[0])) {
             Path classes = compileHarness();
@@ -129,7 +132,8 @@ public final class Gate {
         List<String> one = List.of("--runtime", "--smoke", "--orchestrator", "--pin-smokes",
                 "--smoke-plan", "--pinned-smoke", "--train-readiness", "--executor-tooling",
                 "--executor-environment", "--executor-filesystem", "--executor-candidate",
-                "--accept-legacy-smoke-baseline", "--cas-permits", "--cas-shadow", "--evidence-explorer");
+                "--accept-legacy-smoke-baseline", "--cas-permits", "--cas-shadow", "--evidence-explorer",
+                "--evidence-explorer-live");
         List<String> pair = List.of("--new-milestone", "--candidate", "--candidate-ready",
                 "--lane-differential", "--milestone", "--smoke-id");
         boolean valid = arguments.length == 0 || arguments.length == 1
@@ -149,6 +153,8 @@ public final class Gate {
             return new DirectTool("CasTransportShadow", null);
         if (Arrays.equals(arguments, new String[] {"--evidence-explorer"}))
             return new DirectTool("EvidenceExplorer", null);
+        if (Arrays.equals(arguments, new String[] {"--evidence-explorer-live"}))
+            return new DirectTool("EvidenceExplorerLive", null);
         String main = arguments.length == 2 ? queryType(arguments[0]) : null;
         return main == null ? null : new DirectTool(main, arguments[1]);
     }

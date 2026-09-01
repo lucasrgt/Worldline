@@ -12,10 +12,8 @@ public final class EvidenceExplorer {
         try {
             require(arguments.length == 0, "usage: EvidenceExplorer");
             Path root = Path.of("").toAbsolutePath().normalize();
-            EvidenceExplorerSnapshot snapshot = EvidenceExplorerSnapshot.build(root);
-            Path output = root.resolve(".worldline/reports/evidence-explorer");
-            write(output.resolve("evidence.json"), EvidenceExplorerFormat.json(snapshot));
-            write(output.resolve("index.html"), EvidenceExplorerFormat.html(snapshot));
+            EvidenceExplorerSnapshot snapshot = build(root);
+            Path output = output(root);
             System.out.println("evidence explorer built: " + output + "; smokes=" + snapshot.smokes().size()
                     + "; dispositions=" + snapshot.dispositions().size() + "; orphan-proofs="
                     + snapshot.orphanProofs().size());
@@ -24,7 +22,17 @@ public final class EvidenceExplorer {
         }
     }
 
-    private static void write(Path target, String value) throws Exception {
+    static EvidenceExplorerSnapshot build(Path root) throws Exception {
+        EvidenceExplorerSnapshot snapshot = EvidenceExplorerSnapshot.build(root);
+        Path output = output(root);
+        write(output.resolve("evidence.json"), EvidenceExplorerFormat.json(snapshot));
+        write(output.resolve("index.html"), EvidenceExplorerFormat.html(snapshot));
+        return snapshot;
+    }
+
+    static Path output(Path root) { return root.resolve(".worldline/reports/evidence-explorer"); }
+
+    static void write(Path target, String value) throws Exception {
         Files.createDirectories(target.getParent()); Path temporary = target.resolveSibling(
                 target.getFileName() + ".tmp-" + ProcessHandle.current().pid());
         Files.deleteIfExists(temporary);
