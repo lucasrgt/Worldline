@@ -22,6 +22,8 @@ final class ArtifactTransportPolicyTest {
             require(candidate.classification() == ArtifactTransportClass.PORTABLE_BEHAVIOR_PROOF
                     && candidate.sha256().matches("[0-9a-f]{64}") && candidate.size() > 0,
                     "valid portable proof was not classified");
+            rejected(() -> policy.eligibleCandidates(java.util.Set.of()),
+                    "untracked portable proof received a transport permit");
             rejected(() -> policy.authorize("official-runtime", proof),
                     "official runtime family was transportable");
             rejected(() -> policy.authorize("unknown-family", proof),
@@ -37,6 +39,7 @@ final class ArtifactTransportPolicyTest {
                     policy() + "unexpected=true\n", StandardCharsets.UTF_8);
             rejected(() -> ArtifactTransportPolicy.load(root),
                     "unknown policy field was accepted");
+            ArtifactTransportPermitQuery.selfTest();
         } finally { SafeTreeDelete.delete(root); }
         System.out.println("  artifact transport policy self-test: passed");
     }

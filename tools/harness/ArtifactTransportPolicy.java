@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.HexFormat;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -70,14 +71,36 @@ final class ArtifactTransportPolicy {
         require(candidate.startsWith(declaredRoot), "artifact escaped its declared family root");
         require(Files.isRegularFile(candidate, LinkOption.NOFOLLOW_LINKS)
                 && !Files.isSymbolicLink(candidate), "artifact candidate is not a regular file");
+        Path repositoryRoot = repository.toRealPath();
         Path realRoot = declaredRoot.toRealPath(), real = candidate.toRealPath();
+        require(realRoot.startsWith(repositoryRoot), "artifact family root resolved outside repository");
         require(real.startsWith(realRoot), "artifact resolved outside its declared family root");
         require(real.getFileName().toString().endsWith(family.suffix()),
                 "artifact suffix is not allowed for family: " + familyId);
         long size = Files.size(real);
         require(size > 0 && size <= family.maxBytes(), "artifact candidate size is not allowed");
         validate(family.validator(), real);
-        return new Candidate(family.id(), family.classification(), digest(real), size);
+        return new Candidate(family.id(), family.classification(), digest(real), size, candidate);
+    }
+
+    List<Candidate> eligibleCandidates(Set<Path> tracked) throws Exception {
+        List<ArtifactTransportFamily> eligible = families.values().stream()
+                .filter(family -> family.classification().remotelyEligible())
+                .sorted(java.util.Comparator.comparing(ArtifactTransportFamily::id)).toList();
+        java.util.ArrayList<Candidate> candidates = new java.util.ArrayList<>();
+        for (ArtifactTransportFamily family : eligible) {
+            Path directory = repository.resolve(family.root()).normalize();
+            try (var paths = Files.list(directory)) {
+                for (Path path : paths.filter(item -> item.toString().endsWith(family.suffix()))
+                        .sorted().toList()) {
+                    Path normalized = path.toAbsolutePath().normalize();
+                    require(tracked.contains(normalized), "transport candidate is not tracked: "
+                            + repository.relativize(normalized));
+                    candidates.add(authorize(family.id(), normalized));
+                }
+            }
+        }
+        return List.copyOf(candidates);
     }
 
     private ArtifactTransportFamily required(String id) {
@@ -153,5 +176,6 @@ final class ArtifactTransportPolicy {
         if (!value) throw new IllegalStateException(message);
     }
 
-    record Candidate(String family, ArtifactTransportClass classification, String sha256, long size) { }
+    record Candidate(String family, ArtifactTransportClass classification,
+            String sha256, long size, Path path) { }
 }

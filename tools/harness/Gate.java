@@ -53,6 +53,12 @@ public final class Gate {
             if (exit != 0) System.exit(exit);
             return;
         }
+        if (Arrays.equals(arguments, new String[] {"--cas-permits"})) {
+            Path classes = compileHarness(); Process process = new ProcessBuilder(javaTool("java"),
+                    "-cp", classes.toString(), "ArtifactTransportPermitQuery")
+                    .directory(root.toFile()).inheritIO().start(); process.getOutputStream().close();
+            int exit = waitFor(process, 60); if (exit != 0) System.exit(exit); return;
+        }
         if (arguments.length == 1 && maintenance(arguments[0])) {
             Path classes = compileHarness();
             ProcessBuilder builder = new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
@@ -125,6 +131,7 @@ public final class Gate {
                 || Arrays.equals(arguments, new String[] {"--pinned-smoke"})
                 || Arrays.equals(arguments, new String[] {"--train-readiness"})
                 || Arrays.equals(arguments, new String[] {"--accept-legacy-smoke-baseline"})
+                || Arrays.equals(arguments, new String[] {"--cas-permits"})
                 || arguments.length == 1 && maintenance(arguments[0])
                 || arguments.length == 2 && ("--new-milestone".equals(arguments[0])
                         || "--candidate".equals(arguments[0])
@@ -151,6 +158,7 @@ public final class Gate {
                 + "--seal-lane-portability|"
                 + "--module-cache-doctor|--module-cache-gc|--cache-doctor|--cache-gc|"
                 + "--cache-rebuild-drill|"
+                + "--cas-permits|"
                 + "--new-milestone ID|--milestone ID|--lane-differential ID|"
                 + "--candidate-ready ID|--candidate ID|--self-test]");
         if (arguments.length == 2 && !arguments[1].matches("[a-z0-9]+(?:-[a-z0-9]+)*"))
