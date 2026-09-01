@@ -156,6 +156,12 @@ Completed foundation slices:
   remote index only after Java verifies the configured public key, channel,
   envelope signature, exact bytes, and semantic index format. The signing key
   remains outside the repository and outside the hydration path.
+- an opt-in immutable shared-directory module backend in Worldline commit
+  `27e3260e1`. It reuses the signed index, bundle, publication-plan, and trust
+  boundaries while addressing objects by the same SHA-256 layout as the Rust
+  store. Concurrent publishers converge through atomic create-if-absent,
+  readers reject links and corruption, and the normal `ModuleBuild` miss path
+  remains responsible for local validation and immutable installation.
 - a secret-free `worldline.smoke-input-graph.v1` read model and
   `Gate --input-graph ID` query in Worldline commits `423a322d3`, `16b9de40a`,
   and `c49b6af20`. The graph remains shadow-only and the legacy fingerprint
@@ -639,6 +645,17 @@ Evidence recorded for these slices:
   `027d139b3e0825b3694cebbe51559c26acd4b11a93789db7c0107149830d26d4`.
   The live Explorer independently reports two linked runs, four referenced
   logs, and zero orphan, partial, dangling, or missing objects.
+- Worldline commit `27e3260e1` completes the first D4 backend with a signed,
+  immutable shared directory. Two concurrent publishers and an idempotent
+  repeat converge on the same object, and the ordinary `ModuleBuild` miss path
+  hydrates `api` at input digest
+  `e65b171660f90dd55ec26bd12836fe71631496b636972360fb990240dd62b690`.
+  The 369086-byte bundle remains
+  `1cdc497facb8590bef5d5c8942a9716e0feaea11a81491540f8c4bafbb65e0ff`;
+  extraction and repacking are exact. Corrupt objects, symbolic links, wrong
+  trust, and unauthorized publication fail closed. The exact canonical Gate
+  passes cold (`197469ms < 240000ms`), CSM checks nine ways with no deviations,
+  and NYA passes.
 Current boundaries remain honest: Linux mount and PID namespaces,
 OS-enforced loopback-only policy, Windows filesystem/network isolation,
 the broader server-headless matrix,
@@ -649,14 +666,16 @@ default backend. Artifact classification now covers tracked
 smoke pin envelopes and generated Worldline-only module bundles; tests, stages,
 smoke logs, runtime observations, sanitized diagnostics, official runtimes,
 and mapped derivatives remain disabled or forbidden. Permit-bound local
-transport, Worldline permit production, and explicit end-to-end shadows exist,
-but automatic production lookup, authenticated remote deployment, and S3
-storage remain disabled. Module bundles now have a canonical logical lookup
-index, an opt-in normal miss path, and permit-bound two-phase producer
-publication exercised end-to-end in shadow. Signed index verification now
-provides a cryptographic trust boundary, but production adoption still needs
-protected envelope distribution, stable publisher-key governance,
-authenticated deployment, and an explicit promotion from `shadow`. The input
+transport, Worldline permit production, explicit end-to-end shadows, and an
+opt-in signed shared-directory module backend exist. Automatic production
+lookup outside that backend, authenticated remote deployment, and S3 storage
+remain disabled. Module bundles now have a canonical logical lookup index, an
+opt-in normal miss path, and permit-bound two-phase producer publication
+exercised both in shadow and against the shared directory. Signed index
+verification provides a cryptographic trust boundary, but broader production
+adoption still needs protected envelope distribution, stable publisher-key
+governance, authenticated deployment, audit policy, and an explicit promotion
+from `shadow`. The input
 graph covers qualification identities in dual mode, current-tree dependents,
 cache decisions, cross-commit node differences, and exact module cache
 identities. Qualification and module fingerprints now use their graphs as the
@@ -1183,6 +1202,13 @@ verified local object
 Support a local shared directory first, then an S3-compatible object store.
 Authentication, encryption, retention, and audit logging are deployment
 concerns. Object identity and local validation remain backend-independent.
+
+The local shared-directory backend is implemented for signed module bundles.
+It is opt-in, preserves the common immutable object layout, admits only a
+prepared publication plan, and independently revalidates every hydrated byte.
+S3-compatible storage and its TLS, authentication, retention, audit, and
+publisher-governance policies remain pending rather than being inferred from
+the shared filesystem boundary.
 
 ### D5. Cache families
 
