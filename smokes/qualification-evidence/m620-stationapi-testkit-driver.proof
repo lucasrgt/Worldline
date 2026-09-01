@@ -1,5 +1,5 @@
 schema=1
 id=m620-stationapi-testkit-driver
-fingerprint=3c6c0f32e1a33c60650432f98efb139605e246171d8454bdd1f884906f936977
+fingerprint=bae021d8d2df436d610ab383afc8bd93829b5d4e2cb7f32400476a4900c764b9
 observation.sha256=d3905cc96385b090822ef11c1c7212cf16483ec19e19fc4600c213950de9ceb7
-source=executed
+source=refactor-equivalent
