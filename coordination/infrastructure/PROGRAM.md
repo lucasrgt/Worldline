@@ -55,9 +55,10 @@ IntegrationTrain / orchestrator
 
 The durable plan was established on branch
 `codex/worldline-infrastructure-program` at commit `69059c072`. The native
-mechanism is developed separately in `worldline-executor`; Worldline shadow
-policy remains isolated on branch `codex/executor-shadow-contract`. No native
-backend is yet a qualifying or default runtime lane.
+mechanism is developed separately in `worldline-executor`; Worldline owns the
+Java policy and qualification boundary. The Rust Windows Job backend is now
+the qualified default for the `server-headless` host-pool lane; other lanes
+remain explicit and fail closed.
 
 Completed foundation slices:
 
@@ -858,6 +859,22 @@ Evidence recorded for these slices:
   passes `Gate --runtime` cold at 122,664 ms, canonical Gate hot at 3,908 ms,
   and final `Gate --milestone m22-multiplayer-wire`; CSM checks ten ways
   without deviations and NYA passes.
+- Worldline commits `d39ee917b` through `b24f2df59` promote the qualified Rust
+  Windows Job executor to the `server-headless` HostSmokePool default. Windows
+  `auto` fails closed when `WORLDLINE_EXECUTOR` is absent or invalid, while
+  `windows-job` retains the legacy C# launcher as an explicit rollback. The
+  child plan inherits only the pool capability name; its value is injected
+  into the native launcher environment and is absent from the plan, receipt,
+  metrics, and logs. Pool ownership now binds PID, process start identity, and
+  the held canonical runtime lease instead of brittle command-line text. On
+  the exact clean commit, both the Rust default and legacy rollback pass M20
+  with evidence
+  `290897fd072b76d5d3d01ca8fe5e8a84586c25d4315fa77366c58533c8510cf7`.
+  The Rust request is
+  `b6fcdd4cfe4ea3ee1acd2b730dec330037960690a310ebb05a232d815874758c`;
+  its receipt reports complete stdout and stderr, exit zero, 39,367 ms of
+  runtime, a 484,220,928-byte peak, seven peak processes, and zero remaining
+  descendants.
 - Worldline commits `91c32c04e` and `14bebceb6` repair a pre-existing Windows
   race in concurrent shared-directory CAS publication discovered by this
   qualification. Publishers now serialize each digest with a bounded local
@@ -870,11 +887,11 @@ Evidence recorded for these slices:
   names, links, or content as faults.
 Current boundaries remain honest: Linux mount and PID namespaces,
 OS-enforced loopback-only policy, Windows filesystem/network isolation,
-remaining server-headless families,
-broader onscreen GUI/driver profiles, multi-Candidate histories, and default
-runtime selection remain pending. The structural Windows tooling cycle and one official server
-behavior/containment matrix are qualified; neither makes Rust the
-default backend. Artifact classification now covers tracked
+remaining server-headless families, broader onscreen GUI/driver profiles, and
+multi-Candidate histories remain pending. The structural Windows tooling
+cycle and one official server behavior/containment matrix are qualified; Rust
+is the default only for the Windows `server-headless` host-pool lane. Artifact
+classification now covers tracked
 smoke pin envelopes and generated Worldline-only module bundles; tests, stages,
 smoke logs, runtime observations, sanitized diagnostics, official runtimes,
 and mapped derivatives remain disabled or forbidden. Permit-bound local
@@ -900,7 +917,8 @@ server behavior/containment matrix, B1 covers tooling plus server-headless, and
 the post-execution portion of B2 covers disposable server cells without
 claiming write isolation. A7 now has qualified native Pbuffer and pinned Aero
 visual-integrity slices. Native Windows filesystem/network enforcement,
-broader onscreen/driver GUI profiles, full A8 promotion, broader runtime histories,
+broader onscreen/driver GUI profiles, promotion of additional A8 lanes,
+broader runtime histories,
 and remote transport deployment remain pending.
 
 ## 2. Program principles
@@ -1197,6 +1215,14 @@ Enable the Rust backend only after the rollback path and every applicable lane
 pass. Retire the C# and shell launchers in a later reviewed increment, not in
 the enabling change. Docker remains available when its stronger filesystem
 boundary is required.
+
+Status: the first A8 lane is promoted at Worldline commit `b24f2df59`.
+`server-headless` selects Rust on Windows through `auto`; missing executor
+identity is a hard failure and the C# launcher remains available only through
+explicit `windows-job`. M20 passes through both routes with byte-equal
+canonical evidence, and the Rust receipt proves bounded complete output and
+an empty descendant tree. GUI lanes, Linux default replacement, and launcher
+retirement remain pending and require their own reviewed qualifications.
 
 ## 6. Workstream B: hermetic execution and input graphs
 
@@ -1889,6 +1915,10 @@ WPM implementation starts only when all of the following are true:
 - transactional workspace fixtures pass on Windows and Linux;
 - Worldline can verify a package-manager-created fixture instance without
   weakening official-artifact policy.
+
+Status: the one-lane Rust-default prerequisite is now satisfied by the
+Windows `server-headless` pool. The complete WPM prerequisite gate remains
+closed until every other item above is independently qualified.
 
 ## 14. Verification matrix
 
