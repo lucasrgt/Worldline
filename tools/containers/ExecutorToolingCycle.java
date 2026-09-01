@@ -42,6 +42,7 @@ public final class ExecutorToolingCycle {
         expectFailure(() -> verifyLegacy(valid));
         ExecutorHostileFixtures.selfTest();
         ExecutorAdvancedHostileFixtures.selfTest();
+        ExecutorInterruptionFixtures.selfTest();
     }
 
     private static void execute() throws Exception {
@@ -54,6 +55,7 @@ public final class ExecutorToolingCycle {
                 "WORLDLINE_EXECUTOR is not an absolute regular file");
         ExecutorHostileFixtures.execute(root, executable);
         ExecutorAdvancedHostileFixtures.execute(root, executable);
+        ExecutorInterruptionFixtures.execute(root, executable);
         Path parent = root.resolve(".worldline/executor-tooling-cycle");
         Path run = parent.resolve("current"), published = parent.resolve("published");
         require(!Files.exists(run) && !Files.exists(published), "executor tooling cycle residue exists");
