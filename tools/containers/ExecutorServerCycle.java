@@ -43,6 +43,7 @@ public final class ExecutorServerCycle {
         metrics.setProperty("exit.code", "0"); metrics.setProperty("processes.total", "8");
         metrics.setProperty("processes.active", "0"); verifyLegacy(metrics);
         metrics.setProperty("processes.active", "1"); expectFailure(() -> verifyLegacy(metrics));
+        ExecutorServerFailureCapture.selfTest();
     }
 
     private static void execute() throws Exception {
@@ -64,8 +65,12 @@ public final class ExecutorServerCycle {
             for (String id : IDS) {
                 ExecutionEnvironmentManifest environment = environment(workspace.root(), token,
                         lease, "legacy", id);
-                baselines.put(id, legacy(workspace.root(), command(workspace.root(), id),
-                        environment, id));
+                try { baselines.put(id, legacy(workspace.root(), command(workspace.root(), id),
+                            environment, id));
+                } catch (Exception error) {
+                    ExecutorServerFailureCapture.capture(
+                            source, workspace.root(), "legacy", id, error); throw error;
+                }
             }
         }
 
@@ -77,8 +82,13 @@ public final class ExecutorServerCycle {
             for (String id : IDS) {
                 ExecutionEnvironmentManifest environment = environment(workspace.root(), token,
                         lease, "rust", id);
-                NativeResult result = rust(workspace.root(), executor,
-                        command(workspace.root(), id), environment, id);
+                NativeResult result;
+                try { result = rust(workspace.root(), executor,
+                            command(workspace.root(), id), environment, id);
+                } catch (Exception error) {
+                    ExecutorServerFailureCapture.capture(
+                            source, workspace.root(), "rust", id, error); throw error;
+                }
                 byte[] baseline = baselines.get(id);
                 require(Arrays.equals(baseline, result.evidence),
                         "legacy/Rust official server evidence differential: " + id);

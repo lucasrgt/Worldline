@@ -167,6 +167,9 @@ java tools/harness/Gate.java --executor-server
 Disposable server cells classify their preparatory full Gate as qualification work through the
 closed `executor-server-prepare` marker. Content checks remain unchanged, while ordinary restored
 Gates retain the hot total and per-stage latency ratchets.
+Failed server legs preserve only their known local logs, output manifests, receipts, and metrics
+under `.worldline/executor-server-failures/` before the disposable worktree is removed. These
+diagnostics remain ignored, non-portable, and non-authoritative.
 
 The closed matrix covers dedicated-server bootstrap, an offline protocol-14
 multiplayer session, persisted Nether login, and same-dimension player respawn.
