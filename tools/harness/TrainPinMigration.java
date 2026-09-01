@@ -85,6 +85,19 @@ final class TrainPinMigration extends TrainPinSupport {
                 continue;
             }
             SmokePins.Entry currentPin = pins.match(smoke.id, current);
+            SmokePins.Entry predecessorPin = pins.entry(smoke.id);
+            if ("baseline".equals(predecessor.getProperty(stem + "kind"))
+                    && predecessorPin != null && predecessorPin.evidence().equals(
+                            predecessor.getProperty(stem + "evidence_sha256"))) {
+                carried++;
+                String predecessorFingerprint = predecessor.getProperty(
+                        stem + "current_fingerprint", predecessorPin.fingerprint());
+                seal(lock, stem, "baseline", predecessorFingerprint, current,
+                        predecessorPin.evidence());
+                updated.add(currentPin != null ? currentPin : new SmokePins.Entry(
+                        smoke.id, current, predecessorPin.evidence(), "refactor-equivalent"));
+                continue;
+            }
             if (currentPin != null && "executed".equals(currentPin.source())
                     && hasExecuted(root, smoke.id)) {
                 Imported receipt = executed(root, cache, smoke, current);
@@ -159,14 +172,15 @@ final class TrainPinMigration extends TrainPinSupport {
                 && Files.isRegularFile(root.resolve(".worldline/reports/smokes").resolve(id + ".properties"))
                 && Files.isRegularFile(root.resolve(".worldline/smoke-logs").resolve(id + ".log")); }
 
-    private static boolean completeImported(Path swarm, String id) { Path worktree = swarm.resolve(id);
+    private static boolean completeImported(Path swarm, String id) throws Exception {
+        Path worktree = importedWorktree(swarm, id);
         return Files.isRegularFile(worktree.resolve(".worldline/reports/milestones").resolve(id + ".json"))
                 && Files.isRegularFile(worktree.resolve(".worldline/reports/smokes").resolve(id + ".properties"))
                 && Files.isRegularFile(worktree.resolve(".worldline/smoke-logs").resolve(id + ".log"));
     }
 
     private static Imported imported(Path root, Path swarm, String id) throws Exception {
-        Path worktree = swarm.resolve(id), report = worktree.resolve(
+        Path worktree = importedWorktree(swarm, id), report = worktree.resolve(
                 ".worldline/reports/milestones").resolve(id + ".json");
         Path smokeReport = worktree.resolve(".worldline/reports/smokes").resolve(id + ".properties");
         Path log = worktree.resolve(".worldline/smoke-logs").resolve(id + ".log");
@@ -195,6 +209,23 @@ final class TrainPinMigration extends TrainPinSupport {
                 "reconciled milestone oracle drift: " + id);
         return new Imported(attestation.getProperty("fingerprint"), evidence,
                 head, tree, base, signature);
+    }
+
+    private static Path importedWorktree(Path swarm, String id) throws Exception {
+        if (hasImported(swarm, id)) return swarm;
+        Path direct = swarm.resolve(id);
+        if (hasImported(direct, id)) return direct;
+        try (var directories = Files.list(swarm)) {
+            List<Path> matches = directories.filter(Files::isDirectory)
+                    .filter(path -> hasImported(path, id)).toList();
+            require(matches.size() <= 1, "ambiguous milestone evidence: " + id);
+            return matches.isEmpty() ? direct : matches.get(0);
+        }
+    }
+
+    private static boolean hasImported(Path worktree, String id) {
+        return Files.isRegularFile(worktree.resolve(".worldline/reports/milestones")
+                .resolve(id + ".json"));
     }
 
     private static Imported historical(Path root, SmokeDiscovery.Entry smoke) throws Exception {
