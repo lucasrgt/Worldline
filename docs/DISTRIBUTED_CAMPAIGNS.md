@@ -169,6 +169,12 @@ median of the immediately preceding three observations inside the exact same
 workload, executor version, backend, operating system, architecture, and
 termination profile.
 
+The workload profile is a sanitized token derived from the campaign ID,
+budget, shard count and index, and resolved case volume for every workload.
+The root seed is deliberately excluded, so repeated seeds remain comparable;
+changing the execution shape starts a separate history rather than polluting
+an existing baseline.
+
 Until both windows are complete, the profile is `insufficient-history`. A
 reviewed 150-percent symmetric band labels a complete comparison as
 `increase`, `decrease`, or `within-band`; a zero baseline is reported
