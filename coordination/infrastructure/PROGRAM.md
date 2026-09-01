@@ -119,6 +119,17 @@ Completed foundation slices:
   fresh store, materializes it, and independently repeats Worldline content,
   class, size, digest, and byte-equality validation. It never starts Minecraft,
   mutates the canonical cache, or treats transport success as behavioral PASS.
+- canonical portable module-cache bundles in Worldline commits `f3248d873`
+  through `6c623cc6a`. The binary envelope binds module name, module-input
+  digest, Java toolchain, sorted normalized class paths, sizes, per-class
+  digests, and exact bytes. Pack, validation, and extraction reject links,
+  traversal, non-class payloads, truncation, trailing data, corrupt content,
+  toolchain drift, and replacement of an existing immutable target.
+- fixed-length Rust hydration for objects above the HTTP library's 32-KiB
+  chunking threshold in executor commit `372887f`. The server preserves an
+  exact `Content-Length` response instead of expanding the strict client to a
+  second framing mode; a 64-KiB round-trip fixture permanently covers the
+  previously untested boundary.
 - a secret-free `worldline.smoke-input-graph.v1` read model and
   `Gate --input-graph ID` query in Worldline commits `423a322d3`, `16b9de40a`,
   and `c49b6af20`. The graph remains shadow-only and the legacy fingerprint
@@ -171,6 +182,20 @@ Evidence recorded for these slices:
   and fails closed when the exact Rust binary or protocol is absent. Its clean
   branch reports no CSM RTW deviations, passes NYA, and passes canonical Gate
   (`cold 141899ms < 240000ms`) with 624 current train proofs and zero pending.
+- the portable-module shadow transported the same 225-byte proof plus the
+  current `api` module bundle, bound to module-input digest
+  `e65b171660f90dd55ec26bd12836fe71631496b636972360fb990240dd62b690`.
+  The 369086-byte bundle had SHA-256
+  `1cdc497facb8590bef5d5c8942a9716e0feaea11a81491540f8c4bafbb65e0ff`,
+  was hydrated into a fresh store, extracted, and compared class-by-class and
+  byte-for-byte with the Gate-produced immutable module entry. The clean
+  shadow repeated the exact hashes and left zero workspace entries.
+- the exact Rust fixed-length commit passes format, Clippy with warnings as
+  errors, and the complete workspace suite on Windows; the CAS format,
+  Clippy, and suite also pass under Linux/WSL with an isolated target. The
+  exact clean Worldline branch passes canonical Gate
+  (`cold 149630ms < 240000ms`) with 624 current train proofs and zero pending;
+  CSM checks seven ways with no deviations and NYA passes.
 - all 624 qualification fingerprints are complete, distinct, and byte-equal
   to independently assembled graph roots; graph JSON redacts environment and
   system-property values, provider and train transitions are sealed, CSM has
@@ -194,19 +219,20 @@ Evidence recorded for these slices:
 Current boundaries remain honest: Linux mount and PID namespaces,
 loopback-only policy, Windows filesystem/network isolation, complete
 hostile-fixture coverage, broader legacy differentials, and all qualifying
-promotions remain pending. Artifact classification covers only tracked smoke
-pin envelopes; source-derived objects and sanitized diagnostics remain
-disabled. Permit-bound local transport and Worldline permit production exist,
-and an explicit end-to-end shadow proves their boundary, but automatic cache
-lookup, upload, hydration, authenticated remote deployment, and S3 storage
-remain disabled. Tracked pin envelopes are already available through Git, so
-they do not yet establish a useful remote cache-miss path; production adoption
-requires a separately reviewed portable evidence family. The input graph
+promotions remain pending. Artifact classification now covers tracked smoke
+pin envelopes and generated Worldline-only module bundles; tests, stages,
+smoke logs, runtime observations, sanitized diagnostics, official runtimes,
+and mapped derivatives remain disabled or forbidden. Permit-bound local
+transport, Worldline permit production, and explicit end-to-end shadows exist,
+but automatic cache lookup, upload, hydration, authenticated remote deployment,
+and S3 storage remain disabled. Module bundles establish a useful portable
+object, but production adoption still needs an authoritative mapping from the
+logical module-input digest to the transport blob digest. The input graph
 covers qualification identities in dual mode, current-tree dependents, cache
-decisions, and cross-commit node differences, but does not yet own cache
-identity.
-A1 through A4, B3, and D1 through D2 are therefore in progress; A5 and remote
-transport deployment have not started.
+decisions, and cross-commit node differences, but does not yet own that cache
+identity or lookup index.
+A1 through A4, B3, D1 through D2, and D5 are therefore in progress; A5, D3,
+and remote transport deployment have not started.
 
 ## 2. Program principles
 
