@@ -459,10 +459,30 @@ Evidence recorded for these slices:
   test receipts. The exact canonical Gate passes cold
   (`104784ms < 240000ms`), CSM checks ten ways with no deviations, and NYA
   passes.
+- Worldline commit `9b3bad608` qualifies the first official `gui-native`
+  differential against `m10-native-render`, using executor commit `803861d`.
+  One canonical runtime lease covers legacy then Rust Windows Jobs. Each arm
+  receives a fresh exact-commit worktree and a bounded, no-follow private copy
+  of the 3,871-file, 104,484,942-byte local b1.7.3 workspace. The canonical
+  milestone launches four fresh Pbuffer JVMs per arm, proves mapped and
+  official Tessellator frame equality, verifies mapped/JAR class provenance,
+  keeps `Display` absent, and emits byte-equal evidence at digest
+  `a7213d74d2086714e148c06f5cf06b7d083bd9dae1ca79321dbb1c9996cf0f14`.
+  The Rust request digest is
+  `837fb3ba1f8198eb366981e434f0e7e55f9e8b71c038e95aacbce049e2ef8050`
+  and telemetry digest is
+  `83afd7b5b04421dfae55c6dc6f8a61b63420a26db34da61ecf66ad2561557c6f`.
+  Its 7,166-ms observation partitions into 12-ms bootstrap and 7,153-ms
+  runtime, peaks at 741,785,600 bytes and seven processes, retains complete
+  output, and proves zero descendants. The exact canonical Gate passes hot
+  (`3355ms < 7000ms`), `Gate --runtime` passes cold
+  (`5703ms < 240000ms`), CSM checks ten ways with no deviations, and NYA
+  passes. Windows network remains `inherit`; GPU identity is diagnostic and
+  excluded from portable evidence.
 Current boundaries remain honest: Linux mount and PID namespaces,
 OS-enforced loopback-only policy, Windows filesystem/network isolation,
-complete hostile-fixture coverage, the broader server-headless matrix, GUI
-differentials, multi-Candidate histories, and default runtime selection remain
+complete hostile-fixture coverage, the broader server-headless matrix, Aero
+and onscreen GUI differentials, multi-Candidate histories, and default runtime selection remain
 pending. The structural Windows tooling cycle and one official server
 behavior/containment differential are qualified; neither makes Rust the
 default backend. Artifact classification now covers tracked
@@ -485,8 +505,9 @@ D3 and D5 are therefore in progress; A5 is qualified for the
 structural Windows tooling and Candidate cycles. A6 now has one qualified official Windows
 server behavior/containment slice, B1 covers tooling plus server-headless, and
 the post-execution portion of B2 covers disposable server cells without
-claiming write isolation. Native Windows filesystem/network enforcement,
-GUI profiles, A7, full A8 promotion, broader runtime histories,
+claiming write isolation. A7 now has one qualified native Pbuffer slice.
+Native Windows filesystem/network enforcement, Aero/onscreen GUI profiles,
+full A8 promotion, broader runtime histories,
 and remote transport deployment remain pending.
 
 ## 2. Program principles
@@ -726,6 +747,14 @@ Qualify native client and Aero lanes independently. Cover:
 - framebuffer observation equivalence;
 - driver and GPU provenance that remains outside portable behavior roots.
 
+Status: the native Pbuffer slice is qualified at Worldline commit `9b3bad608`
+by `Gate --executor-gui`. Legacy and Rust run the same official/mapped M10
+oracle in independent exact-commit cells under one runtime lease. Both arms
+prove four-process repetition, mapped/official frame equality, Pbuffer current
+state, absent onscreen `Display`, correct renderer class origin, complete
+output, and an empty process tree. Aero, onscreen Display, larger profiles,
+driver/GPU diagnostics, and coordinator-death GUI fixtures remain pending.
+
 ### A8. Default and retirement
 
 Enable the Rust backend only after the rollback path and every applicable lane
@@ -749,7 +778,9 @@ controls and a delegated lease identity; its capability secret stays outside
 the execution plan. Public descriptors omit all values and reject
 secret-bearing names. Commit `e9ff4e55a` adds the Candidate allowlist with
 private temporary/control roots, bounded build workers, and a bounded Gate
-lease wait. GUI environment profiles remain pending.
+lease wait. Commit `9b3bad608` qualifies the first GUI allowlist with private
+temporary/control roots and a delegated lease whose secret stays outside the
+plan. Aero-specific Gradle and display environment fields remain pending.
 
 ### B2. Filesystem manifest
 
@@ -782,6 +813,12 @@ lifecycle to static builds. Its evidence traversal is no-follow, accepts only
 regular `.class` files under Candidate-owned output roots, and bounds both
 file count and bytes. Each arm owns an independent cache and complete cleanup
 leaves no worktree residue. Windows still provides no write-prevention claim.
+
+The native GUI slice at commit `9b3bad608` copies only the bounded local
+b1.7.3 workspace into each disposable exact-commit cell with no-follow
+traversal, regular-file enforcement, and explicit file/byte ceilings. Input
+hashes and mapped class presence are reverified by the M10 oracle. Cleanup
+proves no cell residue, not Windows write prevention.
 
 The same profile now has qualified transactional publication at commit
 `af7138e74`: staging and destination are siblings, publication is atomic and
@@ -839,6 +876,10 @@ The first Candidate profile at commit `e9ff4e55a` records a successful real
 M702 cold build with peak Job commit 1,368,981,504 bytes, canonical compiled
 evidence, complete output, and zero remaining descendants.
 
+The first native GUI profile at commit `9b3bad608` records M10 at 7,166 ms,
+12-ms bootstrap, 7,153-ms runtime, 741,785,600-byte peak Job commit, seven
+peak processes, complete output, and zero remaining descendants.
+
 ### C2. Historical profiles
 
 Aggregate by lane, smoke ID, executor version, OS, architecture, and relevant
@@ -851,8 +892,9 @@ Only sanitized observational fields are retained. Commit `7365d9a260` adds the
 first smoke-specific official server sample for `m20-server-bootstrap` on
 Windows 11/amd64. Commit `e9ff4e55a` adds the first Candidate sample for
 `m702-powered-rail-slope-propagation` on Windows 11/amd64. Broader server,
-GUI, multi-Candidate, and cross-host histories remain pending; no history
-upload is enabled.
+multi-Candidate, Aero/onscreen GUI, and cross-host histories remain pending.
+Commit `9b3bad608` adds the first native GUI sample for `m10-native-render` on
+Windows 11/amd64; no history upload is enabled.
 
 ### C3. Conservative admission
 
@@ -882,7 +924,8 @@ collapsed into oracle mismatch. The first successful official server sample
 at commit `7365d9a260` rebuilds with zero failures and zero clusters. Real
 failure histories plus GUI and provider samples remain pending. The first
 successful Candidate sample at commit `e9ff4e55a` also rebuilds with zero
-failures and zero clusters.
+failures and zero clusters. The successful M10 GUI sample at commit
+`9b3bad608` likewise adds no failure cluster.
 
 ## 8. Workstream D: content-addressed transport
 
