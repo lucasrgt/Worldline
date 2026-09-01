@@ -60,7 +60,12 @@ final class ExecutorServerWorkspace implements AutoCloseable {
         if (!attached) return;
         attached = false;
         try {
-            git(List.of("worktree", "remove", "--force", root.toString()), 180);
+            try { git(List.of("worktree", "remove", "--force", root.toString()), 180); }
+            catch (Exception ignored) { }
+            if (Files.exists(root)) run(source, List.of(java(), source.resolve(
+                    "tools/harness/SafeTreeDelete.java").toString(), root.toString(),
+                    source.getParent().toString()), 60);
+            git(List.of("worktree", "prune"), 60);
             require(!Files.exists(root), "executor server workspace cleanup was incomplete");
         } catch (Exception error) {
             throw new IllegalStateException("executor server workspace cleanup failed", error);
