@@ -130,6 +130,12 @@ Completed foundation slices:
   exact `Content-Length` response instead of expanding the strict client to a
   second framing mode; a 64-KiB round-trip fixture permanently covers the
   previously untested boundary.
+- a canonical Java-owned module transport index in Worldline commits
+  `5033fa0d7` and `f961565f4`. It maps the logical tuple of module name,
+  module-input digest, and Java toolchain to one opaque bundle digest and size.
+  Strict parsing, canonical encoding, bounded cardinality, unique logical
+  keys, closed fields, and artifact-policy validation keep lookup authority in
+  Java while Rust remains a dumb blob service.
 - a secret-free `worldline.smoke-input-graph.v1` read model and
   `Gate --input-graph ID` query in Worldline commits `423a322d3`, `16b9de40a`,
   and `c49b6af20`. The graph remains shadow-only and the legacy fingerprint
@@ -196,6 +202,14 @@ Evidence recorded for these slices:
   exact clean Worldline branch passes canonical Gate
   (`cold 149630ms < 240000ms`) with 624 current train proofs and zero pending;
   CSM checks seven ways with no deviations and NYA passes.
+- the module-index shadow hydrates and revalidates the 298-byte index object
+  `sha256=1420b88f692113c38e738d6577bd7dc448e32947cb389295ca941d2e2523a55d`
+  before lookup. Its exact logical key selects the already qualified 369086-byte
+  `api` bundle and no other object; extraction remains class-by-class and
+  byte-equal, and cleanup leaves zero shadow entries. The exact clean branch
+  passes canonical Gate (`cold 190406ms < 240000ms`) with 624 current train
+  proofs and zero pending; CSM checks nine ways with no deviations and NYA
+  passes.
 - all 624 qualification fingerprints are complete, distinct, and byte-equal
   to independently assembled graph roots; graph JSON redacts environment and
   system-property values, provider and train transitions are sealed, CSM has
@@ -225,14 +239,14 @@ smoke logs, runtime observations, sanitized diagnostics, official runtimes,
 and mapped derivatives remain disabled or forbidden. Permit-bound local
 transport, Worldline permit production, and explicit end-to-end shadows exist,
 but automatic cache lookup, upload, hydration, authenticated remote deployment,
-and S3 storage remain disabled. Module bundles establish a useful portable
-object, but production adoption still needs an authoritative mapping from the
-logical module-input digest to the transport blob digest. The input graph
-covers qualification identities in dual mode, current-tree dependents, cache
-decisions, and cross-commit node differences, but does not yet own that cache
-identity or lookup index.
-A1 through A4, B3, D1 through D2, and D5 are therefore in progress; A5, D3,
-and remote transport deployment have not started.
+and S3 storage remain disabled. Module bundles now have a canonical logical
+lookup index exercised end-to-end in shadow, but production adoption still
+needs trusted index distribution, authenticated deployment, and integration
+with the normal module-cache miss path. The input graph covers qualification
+identities in dual mode, current-tree dependents, cache decisions, and
+cross-commit node differences, but does not yet publish module cache identity.
+A1 through A4, B3, and D1 through D3 and D5 are therefore in progress; A5 and
+remote transport deployment have not started.
 
 ## 2. Program principles
 
