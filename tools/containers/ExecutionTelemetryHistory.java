@@ -52,10 +52,18 @@ public final class ExecutionTelemetryHistory {
     }
 
     static List<Profile> profiles(Path root) throws Exception {
+        Map<String, Accumulator> grouped = new LinkedHashMap<>();
+        for (ExecutionTelemetrySample sample : samples(root))
+            grouped.computeIfAbsent(sample.profileKey(), ignored -> new Accumulator(sample)).add(sample);
+        return grouped.values().stream().map(Accumulator::profile)
+                .sorted(Comparator.comparing(Profile::key)).toList();
+    }
+
+    static List<ExecutionTelemetrySample> samples(Path root) throws Exception {
         Path samples = root.resolve("samples"); if (!Files.exists(samples)) return List.of();
         require(Files.isDirectory(samples, LinkOption.NOFOLLOW_LINKS)
                 && !Files.isSymbolicLink(samples), "invalid telemetry sample directory");
-        Map<String, Accumulator> grouped = new LinkedHashMap<>(); int count = 0;
+        List<ExecutionTelemetrySample> result = new ArrayList<>(); int count = 0;
         List<Path> paths = new ArrayList<>();
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(samples)) {
             for (Path path : stream) paths.add(path);
@@ -70,11 +78,9 @@ public final class ExecutionTelemetryHistory {
             require(Files.size(path) <= MAX_SAMPLE_BYTES, "telemetry sample exceeds size budget");
             byte[] bytes = Files.readAllBytes(path);
             require(name.equals(ExecutionJson.sha256(bytes) + ".json"), "telemetry object digest drift");
-            ExecutionTelemetrySample sample = ExecutionTelemetrySample.parse(bytes);
-            grouped.computeIfAbsent(sample.profileKey(), ignored -> new Accumulator(sample)).add(sample);
+            result.add(ExecutionTelemetrySample.parse(bytes));
         }
-        return grouped.values().stream().map(Accumulator::profile)
-                .sorted(Comparator.comparing(Profile::key)).toList();
+        return List.copyOf(result);
     }
 
     static byte[] summaryBytes(List<Profile> profiles) {
