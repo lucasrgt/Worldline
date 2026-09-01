@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 /** Runs one Java-owned campaign shard inside the native executor. */
 public final class CampaignExecutorCycle {
@@ -83,6 +84,11 @@ public final class CampaignExecutorCycle {
                 10, "worldgen-matrix");
         if (isWindows()) require(Integer.valueOf(24).equals(worldgen.limits().activeProcesses()),
                 "world-generation process bound drifted");
+        WorldlineExecutionPlan minimization = plan(root, planPath, output, temporary,
+                List.of(javaTool(), "-version", "--executor-plan", planPath.toString()),
+                10, "minimization-replay");
+        if (isWindows()) require(Integer.valueOf(24).equals(minimization.limits().activeProcesses()),
+                "minimization process bound drifted");
         expectFailure(() -> budget(new String[] {"--budget-seconds", "9"}));
         require(selection(new String[] {"--campaign", "structural-instability",
                 "--budget-seconds", "10", "--seed", "7"}).main.equals(
@@ -124,7 +130,7 @@ public final class CampaignExecutorCycle {
         return value;
     }
     private static int processLimit(String campaign) {
-        return campaign.equals("worldgen-matrix") ? 24 : 8;
+        return Set.of("minimization-replay", "worldgen-matrix").contains(campaign) ? 24 : 8;
     }
 
     private static Path executor() {

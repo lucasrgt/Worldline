@@ -206,6 +206,10 @@ java tools/containers/RuntimeFabricLauncher.java CampaignExecutorCycle \
   --shard-count 1 --shard-index 0
 ```
 
+On Windows this adapter receives the same 24-descendant ceiling as worldgen,
+because both enter a complete milestone Gate that compiles modules in parallel.
+Nightly and structural-instability retain the tighter eight-process ceiling.
+
 This adapter proves replay orchestration for one already-sealed minimization
 contract. It does not yet accept arbitrary divergence bundles or create a
 general minimization queue.
