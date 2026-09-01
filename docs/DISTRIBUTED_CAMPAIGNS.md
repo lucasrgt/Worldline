@@ -115,3 +115,5 @@ java tools/containers/RuntimeFabricLauncher.java CampaignExecutorCycle \
 The Nightly command remains backward compatible without `--campaign`. The
 Evidence Explorer correlates plans, receipts, workload logs, and native runs
 from both report families while preserving one combined orphan analysis.
+Every campaign descendant receives the same bounded 512-MiB JVM heap ceiling;
+the outer Rust Job or cgroup limit remains responsible for aggregate memory.

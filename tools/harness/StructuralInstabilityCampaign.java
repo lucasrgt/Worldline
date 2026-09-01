@@ -8,8 +8,9 @@ import java.util.concurrent.TimeUnit;
 
 /** Repeats the structural Gate self-test in deterministic campaign shards. */
 public final class StructuralInstabilityCampaign {
-    private static final String CAMPAIGN_JAVA_OPTIONS = "-Dfile.encoding=UTF-8 "
-            + "-Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 -XX:-UsePerfData";
+    private static final String CAMPAIGN_JAVA_OPTIONS = "-Xms16m -Xmx512m "
+            + "-Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 "
+            + "-Dstderr.encoding=UTF-8 -XX:-UsePerfData";
     private final Path root = Path.of("").toAbsolutePath().normalize();
     private final Path reports = root.resolve(".worldline/reports/structural-instability");
 
