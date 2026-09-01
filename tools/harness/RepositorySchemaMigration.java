@@ -154,17 +154,29 @@ final class RepositorySchemaMigration {
 
     private boolean contractIdentitySuccessor(String id) throws Exception {
         String relative = "smokes/" + id + "/smoke.properties";
-        Process process = new ProcessBuilder("git", "show", "HEAD^:" + relative)
-                .directory(root.toFile()).start();
-        String prior = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-        if (process.waitFor() != 0 || prior.lines().anyMatch(
+        String revision = gitText("log", "-1", "--format=%H", "-G",
+                "^testkit\\.contract=", "--", relative).strip();
+        if (revision.isEmpty()) return false;
+        String prior = gitText("show", revision + "^:" + relative);
+        String introduced = gitText("show", revision + ":" + relative);
+        if (prior.lines().anyMatch(
                 line -> line.startsWith("testkit.contract="))) return false;
         String current = Files.readString(root.resolve(relative), StandardCharsets.UTF_8);
         Properties descriptor = load(root.resolve(relative));
         String contract = descriptor.getProperty("testkit.contract", "");
-        return contract.matches("[a-z][a-z0-9-]{0,62}") && current.replaceFirst(
+        return current.replace("\r\n", "\n").equals(introduced.replace("\r\n", "\n"))
+                && contract.matches("[a-z][a-z0-9-]{0,62}") && current.replaceFirst(
                 "(?m)^testkit\\.contract=.*\\R", "").replace("\r\n", "\n")
                 .equals(prior.replace("\r\n", "\n"));
+    }
+
+    private String gitText(String... arguments) throws Exception {
+        List<String> command = new ArrayList<>(List.of("git")); command.addAll(List.of(arguments));
+        Process process = new ProcessBuilder(command).directory(root.toFile())
+                .redirectErrorStream(true).start();
+        String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        require(process.waitFor() == 0, "git command failed: " + String.join(" ", command));
+        return output;
     }
 
     private String migrateNarrative(String id, Properties descriptor, String text) throws Exception {
@@ -234,7 +246,17 @@ final class RepositorySchemaMigration {
         String recorded = manifest.getProperty("fingerprint_source_sha256", "");
         return worktree.waitFor() == 0 && index.waitFor() == 0
                 && (!digest(root.resolve("tools/harness/SmokeInputFingerprint.java"))
-                        .equals(recorded) || headChangesSchemaInput() || censusDrift(manifest));
+                        .equals(recorded) || headChangesSchemaInput() || censusDrift(manifest)
+                        || contractIdentityDrift(manifest));
+    }
+    private boolean contractIdentityDrift(Properties manifest) throws Exception {
+        for (SmokeDiscovery.Entry smoke : SmokeDiscovery.discover(root)) {
+            String stem = "smoke." + smoke.id + ".";
+            if (!digest(root.resolve("smokes").resolve(smoke.id).resolve("smoke.properties"))
+                    .equals(manifest.getProperty(stem + "descriptor_sha256"))
+                    && contractIdentitySuccessor(smoke.id)) return true;
+        }
+        return false;
     }
     private boolean censusDrift(Properties manifest) throws Exception {
         Properties providers = ProviderDiscoveryPinCheck.manifest(root); int carried = 0;
