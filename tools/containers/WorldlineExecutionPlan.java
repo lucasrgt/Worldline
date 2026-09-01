@@ -67,7 +67,9 @@ final class WorldlineExecutionPlan {
         positive(limits.stderrBytes, "stderr limit");
         require(List.of("direct", "windows_job", "linux_cgroup").contains(isolation.backend),
                 "unsupported executor backend");
-        require(isolation.network.equals("inherit"), "unsupported executor network policy");
+        require(List.of("inherit", "none").contains(isolation.network), "unsupported executor network policy");
+        if (isolation.network.equals("none")) require(isolation.backend.equals("linux_cgroup"),
+                "network isolation requires Linux cgroups");
         positive(isolation.ownerPid, "owner pid");
         if (isolation.backend.equals("direct")) require(isolation.ownerPid == null
                 && limits.jobMemoryBytes == null && limits.activeProcesses == null

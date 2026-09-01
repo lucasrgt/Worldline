@@ -132,7 +132,7 @@ public final class RustExecutorShadow {
                         windows ? 4 : null, linux ? 128 : null, contained ? 100 : null,
                         contained ? 1L << 20 : null, contained ? 1L << 20 : null),
                 new WorldlineExecutionPlan.Isolation(windows ? "windows_job" : linux ? "linux_cgroup" : "direct",
-                        "inherit", contained ? ProcessHandle.current().pid() : null),
+                        linux ? "none" : "inherit", contained ? ProcessHandle.current().pid() : null),
                 new WorldlineExecutionPlan.Outputs(output, output.resolve("stdout.log"), output.resolve("stderr.log"),
                         output.resolve("metrics.json"), output.resolve("receipt.json")));
         WorldlineExecutionReceipt.Verified result = execute(Path.of(configured).toAbsolutePath().normalize(),
