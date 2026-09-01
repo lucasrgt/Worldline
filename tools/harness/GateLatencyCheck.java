@@ -7,16 +7,20 @@ import java.util.Map;
 
 /** Enforces versioned hot/cold gate latency SLOs and their measured trend. */
 final class GateLatencyCheck {
+    private static final String QUALIFICATION = "WORLDLINE_GATE_QUALIFICATION";
     private GateLatencyCheck() { }
 
     static String enforce(Path root, long elapsedMillis, Map<String, Long> stages) throws IOException {
         VerificationStageCache.Metrics metrics = VerificationStageCache.metrics();
         if (metrics.restored() + metrics.executed() == 0) return "not-applicable";
         String rebuild = System.getenv("WORLDLINE_CACHE_REBUILD_TOKEN");
+        String qualification = System.getenv(QUALIFICATION);
         Path policy = root.resolve("quality/gate-latency.properties");
         Properties values = StrictProperties.load(policy);
         require("2".equals(required(values, "schema")), "unsupported gate latency schema");
-        String mode = classify(rebuild, metrics, GateWorkMetrics.metrics());
+        require(qualification == null || qualification.equals("executor-server-prepare"),
+                "invalid Gate qualification classification");
+        String mode = classify(rebuild, qualification, metrics, GateWorkMetrics.metrics());
         long limit = mode.equals("rebuild") ? rebuildLimit(root, rebuild)
                 : Long.parseLong(required(values, "slo." + mode + ".millis"));
         require(elapsedMillis < limit, mode + " gate latency SLO exceeded: "
@@ -30,28 +34,32 @@ final class GateLatencyCheck {
     static void selfTest() {
         VerificationStageCache.Metrics hotStages = new VerificationStageCache.Metrics(1, 0);
         GateWorkMetrics.Metrics hotWork = new GateWorkMetrics.Metrics(0, 0, 0, 0, 0);
-        require("hot".equals(classify(null, hotStages, hotWork)), "restored Gate was not hot");
-        require("cold".equals(classify(null, hotStages,
+        require("hot".equals(classify(null, null, hotStages, hotWork)), "restored Gate was not hot");
+        require("cold".equals(classify(null, null, hotStages,
                 new GateWorkMetrics.Metrics(1, 0, 0, 0, 0))), "module compilation was hot");
-        require("cold".equals(classify(null, hotStages,
+        require("cold".equals(classify(null, null, hotStages,
                 new GateWorkMetrics.Metrics(0, 1, 0, 0, 0))), "test compilation was hot");
-        require("cold".equals(classify(null, hotStages,
+        require("cold".equals(classify(null, null, hotStages,
                 new GateWorkMetrics.Metrics(0, 0, 1, 0, 0))), "test execution was hot");
-        require("cold".equals(classify(null, hotStages,
+        require("cold".equals(classify(null, null, hotStages,
                 new GateWorkMetrics.Metrics(0, 0, 0, 1, 0))), "runner compilation was hot");
-        require("cold".equals(classify(null, hotStages,
+        require("cold".equals(classify(null, null, hotStages,
                 new GateWorkMetrics.Metrics(0, 0, 0, 0, 1))), "qualification validation was hot");
-        require("cold".equals(classify(null, new VerificationStageCache.Metrics(0, 1), hotWork)),
+        require("cold".equals(classify(null, null,
+                new VerificationStageCache.Metrics(0, 1), hotWork)),
                 "executed verification stage was hot");
-        require("rebuild".equals(classify("token", hotStages, hotWork)),
+        require("cold".equals(classify(null, "executor-server-prepare", hotStages, hotWork)),
+                "nested qualification preparation was hot");
+        require("rebuild".equals(classify("token", null, hotStages, hotWork)),
                 "authorized rebuild was not classified");
         System.out.println("  gate latency classifier self-test: passed");
     }
 
-    private static String classify(String rebuild, VerificationStageCache.Metrics stages,
-            GateWorkMetrics.Metrics work) {
+    private static String classify(String rebuild, String qualification,
+            VerificationStageCache.Metrics stages, GateWorkMetrics.Metrics work) {
         if (stages.restored() + stages.executed() == 0) return "not-applicable";
         if (rebuild != null && !rebuild.isBlank()) return "rebuild";
+        if (qualification != null) return "cold";
         return stages.executed() == 0 && work.fullyRestored() ? "hot" : "cold";
     }
 

@@ -164,6 +164,10 @@ with the Rust Windows Job backend under one continuous official-runtime lease:
 java tools/harness/Gate.java --executor-server
 ```
 
+Disposable server cells classify their preparatory full Gate as qualification work through the
+closed `executor-server-prepare` marker. Content checks remain unchanged, while ordinary restored
+Gates retain the hot total and per-stage latency ratchets.
+
 The closed matrix covers dedicated-server bootstrap, an offline protocol-14
 multiplayer session, persisted Nether login, and same-dimension player respawn.
 The multiplayer contract projects its stable protocol/session signal while
