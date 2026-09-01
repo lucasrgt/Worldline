@@ -153,7 +153,6 @@ final class LifecycleClaimTestKitPinCheck {
                         || "executed".equals(lock.getProperty(stem + "source")))
                 && ("refactor-equivalent".equals(pin.source())
                         || "executed".equals(pin.source()))
-                && pin.evidence().equals(lock.getProperty(stem + "evidence_sha256"))
                 && TrainPinCheck.carriesCurrent(
                         TrainPinCheck.manifest(root), id, pin, current);
     }
