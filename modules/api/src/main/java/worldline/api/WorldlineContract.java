@@ -55,6 +55,8 @@ public final class WorldlineContract {
             "Integrated snapshot, replay, branching, UI, and mod laboratory boundary");
     public static final WorldlineContract RUNTIME_CENSUS = define("runtime-census",
             "Canonical registry census sections and rows from the controlled runtime");
+    public static final WorldlineContract ENTITY_PERSISTENCE = define("entity-persistence",
+            "Deterministic native entity NBT reconstruction with exact type and state evidence");
     public static final WorldlineContract SEED_ATLAS = define("seed-atlas",
             "Deterministic official-server terrain pages for a seed and radius");
     public static final WorldlineContract UI_EXPORT = define("ui-export",
@@ -108,7 +110,7 @@ public final class WorldlineContract {
                 SCENARIO_DEBUGGING, SCENARIO_PROFILING, SCENARIO_COVERAGE, TRACE_HTML,
                 CLIENT_RUNTIME_EQUIVALENCE, SERVER_RUNTIME_EQUIVALENCE, DOMAIN_API_EQUIVALENCE,
                 DURABLE_SNAPSHOT, UI_TREE_EQUIVALENCE, UI_ACTION_EQUIVALENCE,
-                RUNTIME_LAB, RUNTIME_CENSUS,
+                RUNTIME_LAB, RUNTIME_CENSUS, ENTITY_PERSISTENCE,
                 SEED_ATLAS, UI_EXPORT, DEDICATED_SERVER_CONTROL, MULTIPLAYER_SESSION,
                 PLAYER_PERSISTENCE, PLAYER_POSE, REMOTE_WORLD_VIEW, MOVEMENT_ROUTE,
                 INVENTORY_SESSION, CONTAINER_TRANSACTION, COMBAT_SESSION,

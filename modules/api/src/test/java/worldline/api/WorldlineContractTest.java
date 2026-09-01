@@ -4,11 +4,13 @@ final class WorldlineContractTest {
     private WorldlineContractTest() {}
 
     static void run() {
-        if (WorldlineContract.all().size() != 44
+        if (WorldlineContract.all().size() != 45
                 || WorldlineContract.require("trace-divergence") != WorldlineContract.TRACE_DIVERGENCE
                 || !WorldlineContract.MOD_LOADING.subject().contains("mod loading")
                 || WorldlineContract.require("scenario-coverage") != WorldlineContract.SCENARIO_COVERAGE
                 || WorldlineContract.require("runtime-census") != WorldlineContract.RUNTIME_CENSUS
+                || WorldlineContract.require("entity-persistence")
+                        != WorldlineContract.ENTITY_PERSISTENCE
                 || WorldlineContract.require("ui-action-equivalence")
                         != WorldlineContract.UI_ACTION_EQUIVALENCE
                 || WorldlineContract.require("aero-cache-lifecycle") != WorldlineContract.AERO_CACHE_LIFECYCLE
