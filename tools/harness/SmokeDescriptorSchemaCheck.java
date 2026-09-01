@@ -23,7 +23,8 @@ final class SmokeDescriptorSchemaCheck {
                     "runner declaration drift: " + smoke.id);
             require(hash(values, "expected.signature") && present(values, "expected.signal"),
                     "behavior identity incomplete: " + smoke.id);
-            require((present(values, "testkit.contract") || present(values, "behavior"))
+            require((present(values, "testkit.contract") || present(values, "behavior")
+                            || present(values, "milestone.census.claims"))
                             && present(values, "testkit.fixture")
                             && present(values, "testkit.actions") && present(values, "testkit.observations")
                             && present(values, "testkit.binding") && present(values, "testkit.evidence"),
