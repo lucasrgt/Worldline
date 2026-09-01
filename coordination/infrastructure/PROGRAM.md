@@ -143,6 +143,13 @@ Completed foundation slices:
   permitted blob, validates bundle identity and every class, then publishes
   the immutable module entry without replacement. Disabled mode performs no
   CAS configuration or network work.
+- a two-phase producer-side module publication boundary in Worldline commits
+  `e1dcb331c` and `45b53eabc`. Java first prepares canonical bundles, the
+  logical index, and one exact permit manifest without remote activity. Only
+  after a CAS server starts with that immutable manifest may the second phase
+  upload the prepared module objects and index. The transport shadow also
+  proves that a locally stored object omitted from the plan is rejected by the
+  remote service.
 - a secret-free `worldline.smoke-input-graph.v1` read model and
   `Gate --input-graph ID` query in Worldline commits `423a322d3`, `16b9de40a`,
   and `c49b6af20`. The graph remains shadow-only and the legacy fingerprint
@@ -225,6 +232,14 @@ Evidence recorded for these slices:
   and bundle bytes. The exact clean branch passes canonical Gate
   (`cold 172892ms < 240000ms`) with 624 current train proofs and zero pending;
   CSM checks ten ways with no deviations and NYA passes.
+- the producer publication shadow prepares the exact existing 369086-byte
+  `api` bundle and 298-byte index before server startup, binds them and the
+  tracked proof to one permit manifest, uploads only the generated objects in
+  phase two, rejects an unplanned object, and then traverses the configured
+  `ModuleBuild` hydration boundary. It repeats the qualified hashes and leaves
+  zero shadow entries. The exact clean branch passes canonical Gate
+  (`cold 132273ms < 240000ms`) with 624 current train proofs and zero pending;
+  CSM checks nine ways with no deviations and NYA passes.
 - all 624 qualification fingerprints are complete, distinct, and byte-equal
   to independently assembled graph roots; graph JSON redacts environment and
   system-property values, provider and train transitions are sealed, CSM has
@@ -253,14 +268,14 @@ pin envelopes and generated Worldline-only module bundles; tests, stages,
 smoke logs, runtime observations, sanitized diagnostics, official runtimes,
 and mapped derivatives remain disabled or forbidden. Permit-bound local
 transport, Worldline permit production, and explicit end-to-end shadows exist,
-but automatic cache lookup, upload, hydration, authenticated remote deployment,
-and S3 storage remain disabled. Module bundles now have a canonical logical
-lookup index and an opt-in normal miss path exercised end-to-end in shadow,
-but production adoption still needs producer-side publication, trusted index
-distribution, authenticated deployment, and an explicit promotion from
-`shadow`. The input graph covers qualification identities in dual mode,
-current-tree dependents, cache decisions, and cross-commit node differences,
-but does not yet publish module cache identity.
+but automatic production lookup, authenticated remote deployment, and S3
+storage remain disabled. Module bundles now have a canonical logical lookup
+index, an opt-in normal miss path, and permit-bound two-phase producer
+publication exercised end-to-end in shadow, but production adoption still
+needs trusted index distribution, authenticated deployment, and an explicit
+promotion from `shadow`. The input graph covers qualification identities in
+dual mode, current-tree dependents, cache decisions, and cross-commit node
+differences, but does not yet publish module cache identity.
 A1 through A4, B3, and D1 through D3 and D5 are therefore in progress; A5 and
 remote transport deployment have not started.
 
