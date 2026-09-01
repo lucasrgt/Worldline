@@ -12,8 +12,16 @@ public final class QualificationLockMerge {
     public static void main(String[] arguments) {
         try {
             if (arguments.length == 1 && arguments[0].equals("--self-test")) { selfTest(); return; }
+            if (arguments.length == 3 && arguments[0].equals("--union-prefer-current")) {
+                Path current = Path.of(arguments[1]), other = Path.of(arguments[2]);
+                Lock merged = union(read(current), read(other));
+                Files.writeString(current, merged.render(), StandardCharsets.UTF_8);
+                System.out.println("qualification lock union: " + merged.entries.size() + " pins");
+                return;
+            }
             if (arguments.length != 3) throw new IllegalArgumentException(
-                    "usage: QualificationLockMerge.java BASE CURRENT OTHER");
+                    "usage: QualificationLockMerge.java BASE CURRENT OTHER | "
+                            + "--union-prefer-current CURRENT OTHER");
             Path base = Path.of(arguments[0]), current = Path.of(arguments[1]), other = Path.of(arguments[2]);
             Lock merged = merge(read(base), read(current), read(other));
             Files.writeString(current, merged.render(), StandardCharsets.UTF_8);
@@ -41,6 +49,15 @@ public final class QualificationLockMerge {
         return new Lock(current.header, result);
     }
 
+    private static Lock union(Lock current, Lock other) {
+        require(current.header.equals(other.header),
+                "lock header/schema differs; migrate algorithms before merging");
+        Map<String, String> result = new TreeMap<>(current.entries);
+        for (Map.Entry<String, String> entry : other.entries.entrySet())
+            result.putIfAbsent(entry.getKey(), entry.getValue());
+        return new Lock(current.header, result);
+    }
+
     private static Lock read(Path path) throws Exception {
         return parse(Files.readString(path, StandardCharsets.UTF_8));
     }
@@ -55,7 +72,7 @@ public final class QualificationLockMerge {
         String header = lines[0] + "\n" + lines[1] + "\n" + lines[2] + "\n";
         Map<String, ArrayList<String>> rows = new TreeMap<>();
         for (int index = 3; index < lines.length; index++) {
-            if (lines[index].isBlank()) continue;
+            if (lines[index].isBlank() || lines[index].startsWith("#")) continue;
             String line = lines[index]; require(line.startsWith("smoke."), "invalid lock row: " + line);
             int field = line.indexOf('.', 6); require(field > 6, "invalid lock key: " + line);
             String id = line.substring(6, field);
@@ -96,6 +113,9 @@ public final class QualificationLockMerge {
         try { merge(base, left, parse(header + pin("m1-one", "f") + pin("m2-two", "b"))); }
         catch (IllegalStateException expected) { rejected = true; }
         require(rejected, "same-pin conflict was accepted");
+        require(union(left, right).render().equals(header + pin("m1-one", "c")
+                + pin("m2-two", "b") + pin("m3-three", "e")),
+                "preferred union drifted");
         String sealedHeader = "# Worldline smoke qualification lock v5\nschema=5\n"
                 + "algorithm=worldline-smoke-input-v6-tokens\n";
         Lock sealedBase = parse(sealedHeader + sealedPin("m1-one", "a") + sealedPin("m2-two", "b"));
