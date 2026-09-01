@@ -30,7 +30,12 @@ public final class ExecutionTelemetryHistory {
 
     static String record(Path root, String lane, String workloadId, String capability,
             ExecutionTelemetry telemetry) throws Exception {
-        return append(root, ExecutionTelemetrySample.live(lane, workloadId, capability, telemetry));
+        String digest = append(root, ExecutionTelemetrySample.live(lane, workloadId, capability, telemetry));
+        byte[] admission = ExecutionTelemetryAdmission.recommendation(profiles(root),
+                ExecutionTelemetrySample.hostToken(System.getProperty("os.name")),
+                ExecutionTelemetrySample.hostToken(System.getProperty("os.arch")));
+        if (admission != null) ExecutionJson.writeAtomic(root.resolve("admission.properties"), admission);
+        return digest;
     }
 
     static String append(Path root, ExecutionTelemetrySample sample) throws Exception {
@@ -102,6 +107,17 @@ public final class ExecutionTelemetryHistory {
                     "telemetry profile aggregation drift");
             require(repeated.peakTasksMax() == null && repeated.memoryEventsTotal() == null,
                     "unavailable telemetry did not remain absent");
+            byte[] none = ExecutionTelemetryAdmission.recommendation(profiles, "windows", "amd64");
+            require(none == null, "non-candidate telemetry influenced admission");
+            ExecutionTelemetry candidate = new ExecutionTelemetry("0.1.0", "windows_job", "exited",
+                    12, 2, 10, 3L << 30, "job_commit", 1L, null, 3L, 4L, 5L, 6L,
+                    null, null, null, null, 7, 8, false, false);
+            append(root, ExecutionTelemetrySample.create("00000000-0000-0000-0000-000000000004",
+                    4, "candidate", "m1-fixture", "windows", "amd64", "candidate-worker", candidate));
+            String admission = new String(ExecutionTelemetryAdmission.recommendation(
+                    profiles(root), "windows", "amd64"), java.nio.charset.StandardCharsets.UTF_8);
+            require(admission.contains("minimum.worker.memory.bytes=4026531840")
+                    && admission.contains("direction=lower-only"), "telemetry admission drift");
             String summary = new String(summaryBytes(profiles), java.nio.charset.StandardCharsets.UTF_8);
             require(summary.contains("\"sample_count\":3") && !summary.contains("argv")
                     && !summary.contains("working_directory"), "telemetry summary sanitization drift");

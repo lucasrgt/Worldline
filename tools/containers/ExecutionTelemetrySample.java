@@ -103,6 +103,7 @@ record ExecutionTelemetrySample(String sampleId, long observedAtEpochMs, String 
                 .replaceAll("(^-+|-+$)", "");
         token(normalized); return normalized;
     }
+    static String hostToken(String value) { return normalizeHost(value); }
     private static void token(String value) { require(value != null && value.matches("[a-z0-9][a-z0-9._-]{0,62}"),
             "invalid telemetry dimension"); }
     private static String q(String value) { return ExecutionJson.quote(value); }

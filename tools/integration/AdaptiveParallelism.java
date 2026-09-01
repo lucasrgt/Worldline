@@ -18,7 +18,8 @@ final class AdaptiveParallelism {
         require("1".equals(values.getProperty("schema")), "invalid parallelism schema");
         int start = integer(values, "candidate.start"), maximum = integer(values, "candidate.max");
         int cpuUnits = integer(values, "candidate.cpu.units");
-        long worker = gib(values, "candidate.memory.gib"), reserve = gib(values,
+        long configuredWorker = gib(values, "candidate.memory.gib");
+        long worker = TelemetryAdmissionFloor.workerBytes(root, configuredWorker), reserve = gib(values,
                 "host.memory.reserve.gib");
         int processors = Runtime.getRuntime().availableProcessors();
         long free = freeMemory();
@@ -29,13 +30,15 @@ final class AdaptiveParallelism {
                 : cleanDelta >= 2 ? capacity : Math.min(start, capacity);
         require(width >= 1 && width <= capacity && maximum <= 25,
                 "adaptive Candidate width escaped capacity");
-        return new Decision(width, capacity, processors, free, worker, reserve,
+        return new Decision(width, capacity, processors, free, worker, configuredWorker, reserve,
                 integer(values, "runtime.parallelism"));
     }
 
     static void selfTest() {
         require(Runtime.getRuntime().availableProcessors() > 0 && freeMemory() > 0,
                 "host capacity probe is unavailable");
+        try { TelemetryAdmissionFloor.selfTest(); }
+        catch (Exception error) { throw new IllegalStateException("telemetry admission self-test failed", error); }
     }
 
     private static long freeMemory() {
@@ -60,5 +63,5 @@ final class AdaptiveParallelism {
         if (!value) throw new IllegalStateException(message);
     }
     record Decision(int width, int capacity, int processors, long freeBytes, long workerBytes,
-            long reserveBytes, int runtimeParallelism) { }
+            long configuredWorkerBytes, long reserveBytes, int runtimeParallelism) { }
 }
