@@ -16,6 +16,9 @@ public final class ExecutorFixtureProbe {
             }
             case "bulk" -> bulk(Integer.parseInt(required(arguments, 1)));
             case "environment" -> environment();
+            case "owner-target" -> ownerTarget();
+            case "process-limit" -> processLimit();
+            case "sleep" -> Thread.sleep(Long.parseLong(required(arguments, 1)));
             case "tree-root" -> tree("tree-child", true);
             case "tree-child" -> tree("tree-leaf", false);
             case "tree-leaf" -> Thread.sleep(60_000L);
@@ -41,6 +44,22 @@ public final class ExecutorFixtureProbe {
         require(temporary != null && Path.of(temporary).getFileName().toString().equals("private temp"),
                 "private temporary path drift");
         write(System.out, "environment=injected,removed,space-path\n");
+    }
+
+    private static void ownerTarget() throws Exception {
+        write(System.out, "owner-target=ready\n"); Thread.sleep(60_000L);
+    }
+
+    private static void processLimit() throws Exception {
+        try {
+            Process child = new ProcessBuilder(java(), "-Xms16m", "-Xmx128m", "-XX:-UsePerfData",
+                    Path.of("tools/containers/ExecutorFixtureProbe.java").toAbsolutePath().toString(),
+                    "normal", "unexpected-child").start();
+            child.destroyForcibly(); child.waitFor();
+            throw new IllegalStateException("active-process limit allowed a child");
+        } catch (java.io.IOException expected) {
+            write(System.err, "process-limit=blocked\n"); System.exit(31);
+        }
     }
 
     private static void tree(String child, boolean announce) throws Exception {
