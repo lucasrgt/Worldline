@@ -102,6 +102,11 @@ Completed foundation slices:
   `Gate --input-graph ID` query in Worldline commits `423a322d3`, `16b9de40a`,
   and `c49b6af20`. The graph remains shadow-only and the legacy fingerprint
   remains authoritative.
+- read-only `Gate --cache-explain ID` and
+  `Gate --input-dependents KIND:KEY` queries in Worldline commits `9fc37a523`
+  and `6c653b5e3`. Cache explanations preserve the exact local-proof-before-pin
+  lookup order and distinguish the predicted decision from a clean
+  current-tree receipt.
 
 Evidence recorded for these slices:
 
@@ -123,6 +128,10 @@ Evidence recorded for these slices:
   system-property values, provider and train transitions are sealed, CSM has
   no deviations, and the exact branch passes canonical Gate
   (`cold 141024ms < 240000ms`).
+- cache explanation fixtures cover miss, disabled, verified-local, and tracked
+  pin decisions; dependency queries cover paths, modules, and environment
+  inputs, reject traversal, remain non-mutating, and pass the exact clean
+  canonical Gate (`cold 143048ms < 240000ms`).
 - the canonical Worldline Gate reaches `verify passed` with all content stages
   restored, but the host currently violates the unchanged hot latency SLO
   (`20361ms >= 7000ms` on the latest run). The budget was not weakened.
@@ -133,7 +142,8 @@ hostile-fixture coverage, broader legacy differentials, and all qualifying
 promotions remain pending. Artifact classification covers only tracked smoke
 pin envelopes; source-derived objects, sanitized diagnostics, transport, and
 hydration remain disabled. The input graph covers qualification identities in
-dual mode but does not yet explain cross-commit misses or own cache identity.
+dual mode and current-tree dependents, but does not yet explain cross-commit
+node differences or own cache identity.
 A1 through A4, B3, and D1 are therefore in progress; A5 and later transport
 work have not started.
 
