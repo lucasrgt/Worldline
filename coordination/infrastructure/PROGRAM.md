@@ -841,6 +841,23 @@ Evidence recorded for these slices:
   at 3,708 ms after an unrelated refactor-pin refresh exited. CSM checks seven
   ways with no deviations, and NYA passes. Windows networking remains
   explicitly inherited rather than relabeled as isolated.
+- Worldline commit `7c9eb94c9`, integrated at `6550c3814`, repairs M22 and
+  expands the official differential to a four-contract matrix. The portable
+  signal now binds protocol 14, offline handshake, accepted login, one player,
+  clean disconnect, and the two-process topology; the volatile server entity
+  ID remains diagnostic only. A reviewed data-driven plan revision requires
+  exact `source=executed` bytes before rebinding a migrated plan, and promotes
+  M22, M130, and M135 without hand-editing qualification pins. M22 records
+  request `01b3559091dbc3f57cf28018538247c209af386df7fde06632c01831da7aedb8`,
+  evidence `e7414e412f04e768965a336aefc65e1942f1f9d0bbadd14bb20276f6b68149af`,
+  and telemetry
+  `3a8e6df4125a716e0818bc2500fd9ced2192c08def6003924766446fe9dc0440`.
+  Disposable preparation Gates are explicitly cold qualification work, while
+  ordinary hot Gates retain every total and per-stage ratchet. Failed cells
+  preserve only a fixed local diagnostic set before cleanup. The exact slice
+  passes `Gate --runtime` cold at 122,664 ms, canonical Gate hot at 3,908 ms,
+  and final `Gate --milestone m22-multiplayer-wire`; CSM checks ten ways
+  without deviations and NYA passes.
 - Worldline commits `91c32c04e` and `14bebceb6` repair a pre-existing Windows
   race in concurrent shared-directory CAS publication discovered by this
   qualification. Publishers now serialize each digest with a bounded local
@@ -856,7 +873,7 @@ OS-enforced loopback-only policy, Windows filesystem/network isolation,
 remaining server-headless families,
 broader onscreen GUI/driver profiles, multi-Candidate histories, and default
 runtime selection remain pending. The structural Windows tooling cycle and one official server
-behavior/containment differential are qualified; neither makes Rust the
+behavior/containment matrix are qualified; neither makes Rust the
 default backend. Artifact classification now covers tracked
 smoke pin envelopes and generated Worldline-only module bundles; tests, stages,
 smoke logs, runtime observations, sanitized diagnostics, official runtimes,
@@ -1139,8 +1156,9 @@ expands it into a closed M20/M130/M135 matrix spanning lifecycle, protocol-14
 dimension state, and respawn. Legacy and Rust run sequentially under one
 continuous lease in independent disposable worktrees. Every canonical evidence
 pair is equal, both sides drain their process trees, and each Rust receipt
-proves complete output plus zero descendants. M22 exposed a pre-existing
-volatile signal binding and remains excluded until repaired. Further server
+proves complete output plus zero descendants. Commit `7c9eb94c9` repairs the
+M22 stable signal and qualifies it as the fourth matrix member with exact
+legacy/Rust evidence equality, complete output, and zero descendants. Further server
 families and an OS-enforced Windows network boundary remain pending; explicit
 loopback use under `network=inherit` is not relabeled as network isolation.
 
@@ -1307,6 +1325,15 @@ processes, plus M135 at 55,239 ms, 583-ms bootstrap, 54,656-ms runtime,
 907,493,376 peak bytes, and nine processes. All outputs are complete and all
 three Jobs drain to zero descendants.
 
+Commit `7c9eb94c9` refreshes the four-contract matrix. M20 records 14,394 ms
+elapsed, 15-ms bootstrap, 14,379-ms runtime, 799,154,176 peak bytes, and seven
+processes. M22 records 18,253 ms, 12-ms bootstrap, 18,241-ms runtime,
+897,585,152 peak bytes, and nine processes. M130 records 39,284 ms, 9-ms
+bootstrap, 39,274-ms runtime, 991,621,120 peak bytes, and nine processes. M135
+records 44,072 ms, 12-ms bootstrap, 44,059-ms runtime, 927,719,424 peak bytes,
+and nine processes. All four outputs are complete and every Job drains to zero
+descendants.
+
 The first Candidate profile at commit `e9ff4e55a` records a successful real
 M702 cold build with peak Job commit 1,368,981,504 bytes, canonical compiled
 evidence, complete output, and zero remaining descendants.
@@ -1338,8 +1365,9 @@ Windows 11/amd64. Commit `e9ff4e55a` adds the first Candidate sample for
 `m702-powered-rail-slope-propagation` on Windows 11/amd64. Broader server and
 multi-Candidate histories remain pending.
 Commit `7e12751d9` adds current M20 plus the first M130 and M135 server samples
-on the same Windows 11/amd64 executor profile. M22 is not sampled because its
-own fresh-run determinism check failed before a Rust comparison could begin.
+on the same Windows 11/amd64 executor profile. Commit `7c9eb94c9` adds the first
+M22 sample after its stable signal repair and refreshes all four members on the
+same Windows 11/amd64 executor profile.
 Commit `9b3bad608` adds the first native GUI sample for `m10-native-render` on
 Windows 11/amd64; no history upload is enabled.
 Commit `935d0fc41` adds the first Aero GUI sample for
