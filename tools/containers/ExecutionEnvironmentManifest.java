@@ -92,6 +92,8 @@ public final class ExecutionEnvironmentManifest {
         require(clean.equals(temporary) && executorPlan.isAbsolute()
                 && executorPlan.normalize().equals(executorPlan), "campaign environment paths are not normalized");
         List<Entry> values = new ArrayList<>(List.of(Entry.inherit("PATH", Effect.TOOL),
+                Entry.set("JAVA_TOOL_OPTIONS", Effect.TOOL,
+                        "-Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 -XX:-UsePerfData"),
                 Entry.set("TEMP", Effect.TOOL, clean.toString()), Entry.set("TMP", Effect.TOOL, clean.toString()),
                 Entry.set("WORLDLINE_CAMPAIGN_EXECUTOR_PLAN", Effect.OBSERVATIONAL, executorPlan.toString())));
         if (System.getProperty("os.name", "").toLowerCase(Locale.ROOT).contains("win")) {

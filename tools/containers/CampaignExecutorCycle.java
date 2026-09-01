@@ -7,7 +7,7 @@ import java.util.Locale;
 
 /** Runs one Java-owned campaign shard inside the native executor. */
 public final class CampaignExecutorCycle {
-    private static final long MEMORY = 2L << 30;
+    private static final long MEMORY = 4L << 30;
     private static final long OUTPUT_LIMIT = 1L << 20;
 
     private CampaignExecutorCycle() { }
