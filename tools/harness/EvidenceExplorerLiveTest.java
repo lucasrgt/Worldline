@@ -54,7 +54,7 @@ final class EvidenceExplorerLiveTest {
                 "unsafe <reason>", null);
         return new EvidenceExplorerLiveSnapshot(1L, "b".repeat(64), values,
                 new EvidenceExplorerExecutionLinks.Snapshot(0, 0, 0, 0, 0, 0,
-                        0, 0, 0, List.of()), null, null, List.of(queue), List.of(cache));
+                        0, 0, 0, 0, List.of()), null, null, List.of(queue), List.of(cache));
     }
 
     private static void ticket(Path root, long sequence, long pid, long started, long created)

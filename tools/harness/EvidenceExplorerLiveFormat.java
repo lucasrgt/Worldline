@@ -32,6 +32,7 @@ final class EvidenceExplorerLiveFormat {
                 .append(card("Telemetry samples", value.execution().sampleCount()))
                 .append(card("Failure samples", value.execution().failureCount()))
                 .append(card("Native campaign links", value.executionLinks().linkedRuns()))
+                .append(card("Failed native runs", value.executionLinks().failedNativeRuns()))
                 .append(card("Orphan native runs", value.executionLinks().orphanNativeRuns()))
                 .append(card("Shared CAS objects", shared(value, "objects")))
                 .append(card("Shared CAS faults", shared(value, "faults")))
@@ -40,7 +41,8 @@ final class EvidenceExplorerLiveFormat {
                 .append(card("Cache executions", count(value, "execute"))).append("</section>")
                 .append("<section><h2>Native campaign evidence</h2><div class=\"table\"><table><thead><tr>")
                 .append("<th>Request</th><th>Campaign</th><th>Shard</th><th>Backend</th>")
-                .append("<th>Termination</th><th>Elapsed</th><th>Peak memory</th></tr></thead><tbody>");
+                .append("<th>Termination</th><th>Exit</th><th>Elapsed</th><th>Peak memory</th>")
+                .append("</tr></thead><tbody>");
         for (EvidenceExplorerExecutionLinks.Link link : value.executionLinks().links()) out.append(linkRow(link));
         out.append("</tbody></table></div></section>")
                 .append("<section><h2>Lease queues</h2><div class=\"table\"><table><thead><tr>")
@@ -69,6 +71,7 @@ final class EvidenceExplorerLiveFormat {
                 + ",\"failure_samples\":" + value.execution().failureCount()
                 + ",\"native_runs\":" + value.executionLinks().nativeRuns()
                 + ",\"linked_native_runs\":" + value.executionLinks().linkedRuns()
+                + ",\"failed_native_runs\":" + value.executionLinks().failedNativeRuns()
                 + ",\"orphan_native_runs\":" + value.executionLinks().orphanNativeRuns()
                 + ",\"partial_native_runs\":" + value.executionLinks().partialNativeRuns()
                 + ",\"dangling_campaign_bindings\":" + value.executionLinks().danglingCampaignBindings()
@@ -102,6 +105,7 @@ final class EvidenceExplorerLiveFormat {
     private static String executionLinks(EvidenceExplorerExecutionLinks.Snapshot value) {
         StringBuilder out = new StringBuilder("{\"native_runs\":").append(value.nativeRuns())
                 .append(",\"linked_runs\":").append(value.linkedRuns())
+                .append(",\"failed_runs\":").append(value.failedNativeRuns())
                 .append(",\"orphan_native_runs\":").append(value.orphanNativeRuns())
                 .append(",\"partial_native_runs\":").append(value.partialNativeRuns())
                 .append(",\"campaign_bindings\":").append(value.campaignBindings())
@@ -118,8 +122,9 @@ final class EvidenceExplorerLiveFormat {
                 + EvidenceExplorerFormat.nullable(value.campaignPlanSha256()) + ",\"shard_index\":"
                 + (value.shardIndex() == null ? "null" : value.shardIndex()) + ",\"backend\":"
                 + quote(value.backend()) + ",\"executor_version\":" + quote(value.executorVersion())
-                + ",\"termination\":" + quote(value.termination()) + ",\"elapsed_ms\":"
-                + value.elapsedMs() + ",\"peak_memory_bytes\":" + number(value.peakMemoryBytes())
+                + ",\"termination\":" + quote(value.termination()) + ",\"exit_code\":"
+                + number(value.exitCode()) + ",\"elapsed_ms\":" + value.elapsedMs()
+                + ",\"peak_memory_bytes\":" + number(value.peakMemoryBytes())
                 + ",\"peak_processes\":" + number(value.peakProcesses()) + "}";
     }
     private static String queue(EvidenceExplorerLiveSnapshot.Queue value) {
@@ -152,7 +157,8 @@ final class EvidenceExplorerLiveFormat {
                 + html(value.campaignId() == null ? "orphan" : value.campaignId()) + "</td><td>"
                 + (value.shardIndex() == null ? "—" : value.shardIndex()) + "</td><td>"
                 + html(value.backend()) + "</td><td>" + html(value.termination()) + "</td><td>"
-                + value.elapsedMs() + " ms</td><td>" + numberText(value.peakMemoryBytes()) + "</td></tr>";
+                + numberText(value.exitCode()) + "</td><td>" + value.elapsedMs()
+                + " ms</td><td>" + numberText(value.peakMemoryBytes()) + "</td></tr>";
     }
     private static String card(String label, long value) {
         return "<article><strong>" + value + "</strong><span>" + html(label) + "</span></article>";
