@@ -201,6 +201,24 @@ alongside `verdict_authority=false` and `admission_effect=false`. It creates no
 queue, writes no disposition, starts no campaign, and cannot turn an elapsed
 time observation into a behavioral regression.
 
+## Native campaign failure clusters
+
+The live Evidence Explorer derives conservative clusters only after it has
+validated a native plan, receipt, metrics, output manifest, output digests, and
+the campaign-receipt binding. Timeout, crash, spawn, wait, owner-exit,
+truncation, and escaped-descendant observations describe the executor boundary
+and are grouped under `executor-infrastructure`. A normal process exit with a
+nonzero code is grouped as `workload-nonzero-exit` in the
+`unclassified-workload` domain. Worldline does not guess whether that exit was
+an oracle mismatch, test failure, provider fault, or infrastructure failure.
+
+Cluster IDs bind the campaign and exact execution profile together with the
+ordered executor-request identities. The projection is rebuildable, carries
+`verdict_authority=false` and `admission_effect=false`, and neither changes
+admission nor schedules another campaign; `automatic_execution=false` makes
+that boundary machine-readable. Orphan native runs are reported by the link
+layer but are excluded because no validated campaign owns them.
+
 ## Sealed minimization replays
 
 The fourth adapter repeats the existing `m9-scenario-minimization` contract.

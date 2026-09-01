@@ -48,7 +48,18 @@ then verifies campaign workload-log digests and counts referenced, orphan, and
 missing logs. The performance table shows complete median windows or explicit
 insufficient history. Its triage table projects deterministic investigation
 candidates for increases and zero baselines, but fixes automatic execution,
-verdict authority, and admission effects to false. The overlay exposes
+verdict authority, and admission effects to false.
+
+The overlay also groups failures from linked native campaign runs. Each stable
+cluster identity binds its conservative failure class, campaign, backend,
+executor version, termination, exit code, and ordered executor-request
+identities. Executor containment observations such as timeouts, truncation, or
+escaped descendants remain in the executor-infrastructure domain. A nonzero
+workload exit is deliberately labeled `unclassified-workload`; the Explorer
+does not infer an oracle mismatch, a provider fault, or an infrastructure
+failure from an exit code. Orphan native runs remain visible in link counts but
+cannot enter a campaign cluster. These clusters are observational and have no
+verdict or admission authority. The overlay exposes
 identities and aggregate measurements only; local paths, process IDs, argument
 vectors, environment values, and log content remain excluded.
 

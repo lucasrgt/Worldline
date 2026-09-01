@@ -51,12 +51,12 @@ final class EvidenceExplorerExecutionLinks {
                 links.add(new Link(value.request, binding == null ? null : binding.campaign,
                         binding == null ? null : binding.plan, binding == null ? null : binding.shard,
                         value.backend, value.version, value.termination, value.exitCode, value.elapsed,
-                        value.peakMemory, value.peakProcesses));
+                        value.peakMemory, value.peakProcesses, value.stdoutTruncated,
+                        value.stderrTruncated, value.descendantsRemaining));
             }
         links.sort(Comparator.comparing(Link::requestSha256));
         int linked = (int) links.stream().filter(value -> value.campaignId != null).count();
-        int failed = (int) links.stream().filter(value -> !"exited".equals(value.termination)
-                || !Long.valueOf(0L).equals(value.exitCode)).count();
+        int failed = (int) links.stream().filter(EvidenceExplorerExecutionLinks::failed).count();
         int dangling = (int) campaigns.bindings.keySet().stream().filter(value ->
                 !nativeRequests.contains(value)).count();
         return new Snapshot(links.size(), linked, failed, links.size() - linked, partial,
@@ -226,15 +226,24 @@ final class EvidenceExplorerExecutionLinks {
                 "owner_exited").contains(termination), "unknown native termination");
         require("exited".equals(termination) ? exitCode != null && exitCode >= 0L
                 : exitCode == null || "crashed".equals(termination), "native exit identity drifted");
+        Long descendants = nullableInteger(receipt, "descendants_remaining");
+        require(descendants == null || descendants >= 0L, "negative native descendant count");
         return new Native(request, backend, MiniJson.string(receipt, "executor_version"),
                 termination, exitCode, MiniJson.integer(metrics, "elapsed_ms"),
-                nullableInteger(metrics, "peak_memory_bytes"), nullableInteger(metrics, "peak_processes"));
+                nullableInteger(metrics, "peak_memory_bytes"), nullableInteger(metrics, "peak_processes"),
+                MiniJson.bool(receipt, "stdout_truncated"), MiniJson.bool(receipt, "stderr_truncated"),
+                descendants);
     }
 
     private static boolean complete(Path plan, Path output) {
         return regular(plan) && regular(output.resolve("receipt.json")) && regular(output.resolve("metrics.json"))
                 && regular(output.resolve("manifest.json")) && regular(output.resolve("stdout.log"))
                 && regular(output.resolve("stderr.log"));
+    }
+    private static boolean failed(Link value) {
+        return !"exited".equals(value.termination) || !Long.valueOf(0L).equals(value.exitCode)
+                || value.stdoutTruncated || value.stderrTruncated
+                || value.descendantsRemaining != null && value.descendantsRemaining > 0L;
     }
     private static void verifyDigest(Path path, Map<String, Object> receipt, String field) throws Exception {
         require(regular(path) && EvidenceExplorerSnapshot.sha256(path).equals(MiniJson.string(receipt, field)),
@@ -285,9 +294,11 @@ final class EvidenceExplorerExecutionLinks {
             int orphanLogs, int missingLogs, List<Link> links) { }
     record Link(String requestSha256, String campaignId, String campaignPlanSha256, Integer shardIndex,
             String backend, String executorVersion, String termination, Long exitCode, long elapsedMs,
-            Long peakMemoryBytes, Long peakProcesses) { }
+            Long peakMemoryBytes, Long peakProcesses, boolean stdoutTruncated,
+            boolean stderrTruncated, Long descendantsRemaining) { }
     private record Binding(String campaign, String plan, int shard) { }
     private record Campaigns(Map<String, Binding> bindings, int referencedLogs, int orphanLogs, int missingLogs) { }
     private record Native(String request, String backend, String version, String termination,
-            Long exitCode, long elapsed, Long peakMemory, Long peakProcesses) { }
+            Long exitCode, long elapsed, Long peakMemory, Long peakProcesses,
+            boolean stdoutTruncated, boolean stderrTruncated, Long descendantsRemaining) { }
 }

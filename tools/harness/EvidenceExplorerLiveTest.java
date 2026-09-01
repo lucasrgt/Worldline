@@ -36,10 +36,14 @@ final class EvidenceExplorerLiveTest {
             String json = EvidenceExplorerLiveFormat.json(snapshot);
             String html = EvidenceExplorerLiveFormat.html(snapshot);
             require(json.contains("\"verdict_authority\":false")
-                    && json.contains("\"schema\":\"worldline.evidence-explorer-live.v3\"")
+                    && json.contains("\"schema\":\"worldline.evidence-explorer-live.v4\"")
                     && json.contains("\"ephemeral_state_included\":true")
                     && json.contains("\"regression_triage_cases\":1")
+                    && json.contains("\"native_campaign_failure_clusters\"")
+                    && json.contains("\"native_unclassified_workload_failures\":1")
+                    && json.contains("\"stdout_truncated\":false")
                     && html.contains("repeat-exact-profile")
+                    && html.contains("workload-nonzero-exit")
                     && html.contains("unsafe &lt;reason&gt;") && !html.contains("unsafe <reason>"),
                     "live overlay authority or escaping drift");
             System.out.println("  evidence explorer live self-test: passed");
@@ -107,9 +111,14 @@ final class EvidenceExplorerLiveTest {
         EvidenceExplorerLiveSnapshot.CacheDecision cache = new EvidenceExplorerLiveSnapshot.CacheDecision(
                 "sample", "a".repeat(64), true, false, true, "reuse-pin",
                 "unsafe <reason>", null);
-        return new EvidenceExplorerLiveSnapshot(1L, "b".repeat(64), values,
-                new EvidenceExplorerExecutionLinks.Snapshot(0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, List.of()), null, null, List.of(queue), List.of(cache));
+        EvidenceExplorerExecutionLinks.Link link = new EvidenceExplorerExecutionLinks.Link(
+                "d".repeat(64), "fixture", "e".repeat(64), 0, "windows_job", "0.1.0",
+                "exited", 1L, 7L, 8L, 1L, false, false, 0L);
+        EvidenceExplorerExecutionLinks.Snapshot links = new EvidenceExplorerExecutionLinks.Snapshot(
+                1, 1, 1, 0, 0, 1, 0, 1, 0, 0, List.of(link));
+        return new EvidenceExplorerLiveSnapshot(1L, "b".repeat(64), values, links,
+                NativeCampaignFailureClusters.summarize(links),
+                null, null, List.of(queue), List.of(cache));
     }
 
     private static void ticket(Path root, long sequence, long pid, long started, long created)
