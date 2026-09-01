@@ -75,6 +75,9 @@ Completed foundation slices:
   legacy/Rust differential in Worldline commit `8e3f53324`;
 - Linux cgroup plan, receipt, telemetry, and delegated-scope shadow verification
   in `b6103da5c` and explicit task-accounting verification in `3aecd368f`.
+- unprivileged Linux user/network namespace enforcement for `network=none`,
+  with inherited-versus-isolated loopback invariants, in executor commit
+  `e251645` and Worldline shadow commit `e6f203728`.
 
 Evidence recorded for these slices:
 
@@ -89,10 +92,10 @@ Evidence recorded for these slices:
   restored, but the host currently violates the unchanged hot latency SLO
   (`20361ms >= 7000ms` on the latest run). The budget was not weakened.
 
-Current boundaries remain honest: Linux namespaces, filesystem and network
-isolation, full hostile-fixture coverage, broader legacy differentials, and
-all qualifying promotions remain pending. A1 through A4 are therefore in
-progress; A5 and later have not started.
+Current boundaries remain honest: Linux mount and PID namespaces, filesystem
+isolation, loopback-only policy, full hostile-fixture coverage, broader legacy
+differentials, and all qualifying promotions remain pending. A1 through A4
+are therefore in progress; A5 and later have not started.
 
 ## 2. Program principles
 
