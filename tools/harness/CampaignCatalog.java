@@ -5,6 +5,7 @@ import java.util.List;
 record CampaignCatalog(String id, String main) {
     private static final List<CampaignCatalog> VALUES = List.of(
             new CampaignCatalog("nightly-quality", "NightlyQualityCampaign"),
+            new CampaignCatalog("minimization-replay", "MinimizationReplayCampaign"),
             new CampaignCatalog("structural-instability", "StructuralInstabilityCampaign"),
             new CampaignCatalog("worldgen-matrix", "WorldGenerationCampaign"));
 
@@ -20,6 +21,8 @@ record CampaignCatalog(String id, String main) {
     static void selfTest() {
         require(require("worldgen-matrix").main.equals("WorldGenerationCampaign"),
                 "world-generation campaign registration drifted");
+        require(require("minimization-replay").main.equals("MinimizationReplayCampaign"),
+                "minimization campaign registration drifted");
         require(VALUES.stream().map(CampaignCatalog::id).distinct().count() == VALUES.size(),
                 "duplicate campaign adapter id");
         expectFailure(() -> require("unknown"));

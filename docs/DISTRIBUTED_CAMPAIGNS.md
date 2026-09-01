@@ -175,6 +175,41 @@ The root seed is deliberately excluded, so repeated seeds remain comparable;
 changing the execution shape starts a separate history rather than polluting
 an existing baseline.
 
+## Sealed minimization replays
+
+The fourth adapter repeats the existing `m9-scenario-minimization` contract.
+M9 remains the only authority for its nine-to-three-step reduction, exact
+divergence predicate, one-minimality proof, and canonical scenario artifacts.
+The campaign always enters through `Gate --milestone`; it never invokes the
+smoke runner or the minimizer directly. The campaign seed partitions complete
+M9 replays and does not alter M9's scenario or evaluator seed.
+
+After the canonical Gate and runtime profile pass, run one local replay with:
+
+```text
+java -cp .worldline/gate/classes MinimizationReplayCampaign \
+  --budget-seconds 900 --seed 173 --shard-count 1 --shard-index 0
+```
+
+`WORLDLINE_MINIMIZATION_REPLAYS` controls the bounded number of complete M9
+replays. The workload log contains plan/range identity, replay counts, the M9
+signature, a digest of its public signal, and a normalized result root. It
+contains no scenario bytes, mod artifacts, runtime paths, or process output.
+The receipt and aggregate remain non-authoritative.
+
+The native form selects the same closed dispatcher and records the verified
+metrics under a workload-shape-bound `campaign-worker` profile:
+
+```text
+java tools/containers/RuntimeFabricLauncher.java CampaignExecutorCycle \
+  --campaign minimization-replay --budget-seconds 900 --seed 173 \
+  --shard-count 1 --shard-index 0
+```
+
+This adapter proves replay orchestration for one already-sealed minimization
+contract. It does not yet accept arbitrary divergence bundles or create a
+general minimization queue.
+
 Until both windows are complete, the profile is `insufficient-history`. A
 reviewed 150-percent symmetric band labels a complete comparison as
 `increase`, `decrease`, or `within-band`; a zero baseline is reported

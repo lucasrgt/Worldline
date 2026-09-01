@@ -90,6 +90,9 @@ public final class CampaignExecutorCycle {
         require(selection(new String[] {"--campaign", "worldgen-matrix",
                 "--budget-seconds", "10", "--seed", "7"}).main.equals(
                         "WorldGenerationCampaign"), "world-generation executor selection drifted");
+        require(selection(new String[] {"--campaign", "minimization-replay",
+                "--budget-seconds", "10", "--seed", "7"}).main.equals(
+                        "MinimizationReplayCampaign"), "minimization executor selection drifted");
     }
 
     private static Selection selection(String[] arguments) {
@@ -99,6 +102,7 @@ public final class CampaignExecutorCycle {
         }
         String main = switch (id) {
             case "nightly-quality" -> "NightlyQualityCampaign";
+            case "minimization-replay" -> "MinimizationReplayCampaign";
             case "structural-instability" -> "StructuralInstabilityCampaign";
             case "worldgen-matrix" -> "WorldGenerationCampaign";
             default -> throw new IllegalArgumentException("unsupported campaign: " + id);
