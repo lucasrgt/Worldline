@@ -117,8 +117,9 @@ final class DataDrivenCycleMigration {
             SmokePins.Entry existingPin = existing.entry(smoke.id);
             String recordedPlan = manifest.getProperty(stem + "plan_sha256");
             SmokePins.Entry newPlanPin = null;
-            if (existingPin != null && TrainPinCheck.carriesCurrent(
-                    train, smoke.id, existingPin, current)
+            boolean trainCurrent = existingPin != null && TrainPinCheck.carriesCurrent(
+                    train, smoke.id, existingPin, current);
+            if (trainCurrent
                     && !existingPin.evidence().equals(manifest.getProperty(
                             stem + "evidence_sha256"))) {
                 manifest.setProperty(stem + "evidence_sha256", existingPin.evidence());
@@ -148,7 +149,7 @@ final class DataDrivenCycleMigration {
                 manifest.setProperty(stem + "plan_sha256", plan.fingerprint());
                 manifest.setProperty(stem + "evidence_sha256", prior.evidence());
             } else if (!plan.fingerprint().equals(recordedPlan)) {
-                require(sharedProcessRefactor && existingPin != null
+                require((sharedProcessRefactor || trainCurrent) && existingPin != null
                                 && DataDrivenRefreshEvidence.unchangedMilestone(root, smoke.id),
                         "plan changed outside the reviewed migration: " + smoke.id);
                 manifest.setProperty(stem + "plan_sha256", plan.fingerprint());
