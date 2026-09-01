@@ -157,8 +157,7 @@ final class RepositorySchemaMigration {
         String revision = gitText("log", "-1", "--format=%H", "-G",
                 "^testkit\\.contract=", "--", relative).strip();
         if (revision.isEmpty()) return false;
-        String prior;
-        try { prior = gitText("show", revision + "^:" + relative); }
+        String prior; try { prior = gitText("show", revision + "^:" + relative); }
         catch (IllegalStateException introducedFile) { return false; }
         String introduced = gitText("show", revision + ":" + relative);
         if (prior.lines().anyMatch(
