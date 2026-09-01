@@ -18,7 +18,7 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
 
-/** Qualifies Aero's high-memory flattened Cell Pages in four fresh GPU clients. */
+/** Qualifies Aero's safe high-memory Cell Page preset in four fresh GPU clients. */
 public final class M784AeroHighMemoryCellPagesCycle {
     private static final String ID = "m784-aero-high-memory-cell-pages";
     private static final String[] RUNS = {"round1-normal", "round1-high",
@@ -29,7 +29,7 @@ public final class M784AeroHighMemoryCellPagesCycle {
     private static final String TRACE = "v1|scene=576-static-four-towers-four-chunks+fixed-membership-brightness|"
         + "jvms=8-fresh-four-counterbalanced-pairs|route=1200-min20s-orbit+traverse+spin+teleport|"
         + "warm=480-route-frames+pages-stable|memory=normal-vs-high|"
-        + "cell-pages=min1+flatten-off-vs-on+ttl600-vs1800+budget8-vs16+cap-unbounded-vs4096|"
+        + "cell-pages=min1+flatten-off-vs-off+ttl600-vs1800+budget8-vs16+cap-unbounded-vs4096|"
         + "dispatch=native-fixture-render-suppressed|"
         + "submission=one-controlled-production-submit+flush-per-frame|"
         + "captures=24-full-rgba-isolated-fixture+blank-retry<=24|"
@@ -271,7 +271,7 @@ final class M784Artifact {
             && pageCalls > 0 && directCalls <= frames && cachedMax > 0
             && flushCalls > 0L && flushNanos > 0L,
             "M784 incomplete artifact: " + summary());
-        SmokeSupport.require(flattened == high && ttl == (high ? 1800 : 600)
+        SmokeSupport.require(!flattened && ttl == (high ? 1800 : 600)
             && rebuildBudget == (high ? 16 : 8) && cacheMax == (high ? 4096 : -1)
             && prewarmEnabled == high, "M784 preset activation drift: " + summary());
         SmokeSupport.require(pageRebuilds <= frames * 2 && compiled == pageRebuilds

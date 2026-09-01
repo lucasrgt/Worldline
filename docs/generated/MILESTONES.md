@@ -616,6 +616,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m781-aero-smooth-light-default-lifecycle` | CARRIED | Aero smooth-light default and world lifecycle |
 | `m782-aero-chunk-scheduler-lifecycle-soak` | CARRIED | Aero chunk scheduler lifecycle soak |
 | `m783-aero-chunk-scheduler-visual-latency` | EXECUTED | Aero chunk scheduler visual-latency classification |
+| `m784-aero-high-memory-cell-pages` | PENDING | Aero safe high-memory Cell Page qualification |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |

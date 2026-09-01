@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=aero-high-memory-cell-pages -->
 <!-- nonclaims=default-enable,weak-gpu-vram-equivalence,driver-memory-bytes -->
-<!-- frozen-trace=69cd162fa15627e98089153225a2cea186f502c59736219fd5d5c65a1ba3a79e -->
+<!-- frozen-trace=e12615b246f815b6f815ff88d9101e8d54b8cc8296052e23c16cba61f30b7f45 -->
 
 # M784 Aero high-memory Cell Page behavior map
 
@@ -40,8 +40,9 @@ peak, denial and failure counts, full-frame pixels and 50 ms hitches.
 
 ## Oracle
 
-The high-memory arm must activate flattened pages, TTL 1,800, rebuild budget
-16 and page cap 4,096 while the normal arm retains false/600/8/unbounded.
+Both arms must keep flattened pages disabled. The high-memory arm must activate
+TTL 1,800, rebuild budget 16 and page cap 4,096 while the normal arm retains
+false/600/8/unbounded.
 Both arms must finish with bounded rebuild and direct-fallback rates,
 normalized page-call drift within 10%, a drained prewarm queue and no
 display-list eviction, denial or failure.
@@ -56,4 +57,4 @@ This does not measure driver-owned bytes or claim safety on every weak GPU. It
 can qualify high-memory mode as an explicit production option; it cannot make
 that mode the default.
 
-Signal: `scene=576-static-four-towers-four-chunks,membership=fixed,minInstances=1,jvms=8-fresh-four-counterbalanced-pairs,route=orbit+traverse+spin+teleport,memory=normal-vs-high,flatten=off-vs-on,cell-pages=stable,dispatch=isolated,submission=one-controlled-production-submit+flush,rgba=0-unexplained+blank-retry<=24,guardrails=bounded,order-strata=both+frame-wins>=3,metrics=classified,decision=promote-opt-in-or-keep-candidate`.
+Signal: `scene=576-static-four-towers-four-chunks,membership=fixed,minInstances=1,jvms=8-fresh-four-counterbalanced-pairs,route=orbit+traverse+spin+teleport,memory=normal-vs-high,flatten=off-vs-off,cell-pages=stable,dispatch=isolated,submission=one-controlled-production-submit+flush,rgba=0-unexplained+blank-retry<=24,guardrails=bounded,order-strata=both+frame-wins>=3,metrics=classified,decision=promote-opt-in-or-keep-candidate`.
