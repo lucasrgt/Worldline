@@ -150,6 +150,12 @@ Completed foundation slices:
   upload the prepared module objects and index. The transport shadow also
   proves that a locally stored object omitted from the plan is rejected by the
   remote service.
+- an Ed25519 module-index trust envelope in Worldline commits `9adc71d4a`
+  and `4185b9b8a`. The canonical envelope binds a release channel, publisher
+  public-key digest, index digest, and index size. `ModuleBuild` now accepts a
+  remote index only after Java verifies the configured public key, channel,
+  envelope signature, exact bytes, and semantic index format. The signing key
+  remains outside the repository and outside the hydration path.
 - a secret-free `worldline.smoke-input-graph.v1` read model and
   `Gate --input-graph ID` query in Worldline commits `423a322d3`, `16b9de40a`,
   and `c49b6af20`. The graph remains shadow-only and the legacy fingerprint
@@ -240,6 +246,15 @@ Evidence recorded for these slices:
   zero shadow entries. The exact clean branch passes canonical Gate
   (`cold 132273ms < 240000ms`) with 624 current train proofs and zero pending;
   CSM checks nine ways with no deviations and NYA passes.
+- the signed-index shadow uses an ephemeral publisher solely as a trust
+  fixture, hydrates the same 298-byte index through the dumb Rust CAS, and
+  requires the configured `ModuleBuild` miss path to verify its Ed25519
+  envelope before lookup. Self-tests reject a wrong key, wrong channel,
+  changed signature, unknown envelope field, and corrupt index; the verifier
+  also rejects symbolic-link inputs. The exact clean branch passes canonical Gate
+  (`cold 148432ms < 240000ms`) with 624 current train proofs and zero pending;
+  CSM checks nine ways with no deviations and NYA passes, and the end-to-end
+  shadow leaves zero workspace entries.
 - all 624 qualification fingerprints are complete, distinct, and byte-equal
   to independently assembled graph roots; graph JSON redacts environment and
   system-property values, provider and train transitions are sealed, CSM has
@@ -271,11 +286,13 @@ transport, Worldline permit production, and explicit end-to-end shadows exist,
 but automatic production lookup, authenticated remote deployment, and S3
 storage remain disabled. Module bundles now have a canonical logical lookup
 index, an opt-in normal miss path, and permit-bound two-phase producer
-publication exercised end-to-end in shadow, but production adoption still
-needs trusted index distribution, authenticated deployment, and an explicit
-promotion from `shadow`. The input graph covers qualification identities in
-dual mode, current-tree dependents, cache decisions, and cross-commit node
-differences, but does not yet publish module cache identity.
+publication exercised end-to-end in shadow. Signed index verification now
+provides a cryptographic trust boundary, but production adoption still needs
+protected envelope distribution, stable publisher-key governance,
+authenticated deployment, and an explicit promotion from `shadow`. The input
+graph covers qualification identities in dual mode, current-tree dependents,
+cache decisions, and cross-commit node differences, but does not yet publish
+module cache identity.
 A1 through A4, B3, and D1 through D3 and D5 are therefore in progress; A5 and
 remote transport deployment have not started.
 
