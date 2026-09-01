@@ -87,8 +87,13 @@ public final class CampaignExecutorCycle {
         if (arguments.length >= 2 && arguments[0].equals("--campaign")) {
             id = arguments[1]; first = 2;
         }
-        CampaignCatalog adapter = CampaignCatalog.require(id);
-        return new Selection(id, adapter.main(),
+        String main = switch (id) {
+            case "nightly-quality" -> "NightlyQualityCampaign";
+            case "structural-instability" -> "StructuralInstabilityCampaign";
+            case "worldgen-matrix" -> "WorldGenerationCampaign";
+            default -> throw new IllegalArgumentException("unsupported campaign: " + id);
+        };
+        return new Selection(id, main,
                 java.util.Arrays.copyOfRange(arguments, first, arguments.length));
     }
 
