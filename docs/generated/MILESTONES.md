@@ -35,7 +35,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m19-html` | CARRIED | trace-html |
 | `m20-server-bootstrap` | CARRIED | dedicated-server-control |
 | `m21-server-control` | CARRIED | dedicated-server-control |
-| `m22-multiplayer-wire` | CARRIED | multiplayer-session |
+| `m22-multiplayer-wire` | EXECUTED | multiplayer-session |
 | `m23-player-persistence` | CARRIED | player-persistence |
 | `m24-play-pose` | CARRIED | player-pose |
 | `m25-player-movement` | CARRIED | player-pose |
@@ -143,12 +143,12 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m127-cross-chunk-redstone-recovery` | CARRIED | m127-cross-chunk-redstone-recovery |
 | `m128-cross-chunk-iron-door` | CARRIED | m128-cross-chunk-iron-door |
 | `m129-cross-chunk-iron-door-recovery` | CARRIED | m129-cross-chunk-iron-door-recovery |
-| `m130-nether-login` | CARRIED | m130-nether-login |
+| `m130-nether-login` | EXECUTED | m130-nether-login |
 | `m131-dual-dimension-session` | CARRIED | m131-dual-dimension-session |
 | `m132-nether-portal-activation` | CARRIED | m132-nether-portal-activation |
 | `m133-nether-portal-traversal` | CARRIED | m133-nether-portal-traversal |
 | `m134-nether-portal-roundtrip` | CARRIED | m134-nether-portal-roundtrip |
-| `m135-player-respawn` | CARRIED | m135-player-respawn |
+| `m135-player-respawn` | EXECUTED | m135-player-respawn |
 | `m136-nether-death-respawn` | CARRIED | m136-nether-death-respawn |
 | `m137-tnt-explosion` | CARRIED | m137-tnt-explosion |
 | `m138-horizontal-lava` | CARRIED | m138-horizontal-lava |
