@@ -75,6 +75,24 @@ public final class ExecutionEnvironmentManifest {
                 Entry.set("WORLDLINE_GATE_WAIT_SECONDS", Effect.TOOL, "600")));
     }
 
+    static ExecutionEnvironmentManifest guiNative(Path temporary, Path control,
+            Path leaseFile, String leasePid) {
+        Path clean = temporary.toAbsolutePath().normalize();
+        require(clean.equals(temporary) && control.isAbsolute() && leaseFile.isAbsolute(),
+                "GUI environment paths are not absolute and normalized");
+        require(leasePid.matches("[0-9]+"), "invalid runtime lease identity");
+        return new ExecutionEnvironmentManifest("gui-native", List.of(
+                Entry.inherit("PATH", Effect.TOOL), Entry.inherit("PATHEXT", Effect.TOOL),
+                Entry.inherit("SYSTEMROOT", Effect.TOOL), Entry.inherit("WINDIR", Effect.TOOL),
+                Entry.set("JAVA_TOOL_OPTIONS", Effect.TOOL, "-Xms16m -Xmx512m -XX:-UsePerfData"),
+                Entry.set("TEMP", Effect.TOOL, clean.toString()), Entry.set("TMP", Effect.TOOL, clean.toString()),
+                Entry.set("WORLDLINE_CONTROL_DIR", Effect.TOOL, control.toString()),
+                Entry.set("WORLDLINE_RUNTIME_DIFFERENTIAL", Effect.BEHAVIOR, "1"),
+                Entry.set("WORLDLINE_RUNTIME_PARENT_LEASE", Effect.TOOL, leasePid),
+                Entry.set("WORLDLINE_RUNTIME_POOL_FILE", Effect.TOOL, leaseFile.toString()),
+                Entry.set("WORLDLINE_SMOKE_CACHE", Effect.BEHAVIOR, "off")));
+    }
+
     WorldlineExecutionPlan.Environment environment() {
         List<String> inherit = new ArrayList<>(), remove = new ArrayList<>();
         Map<String, String> set = new TreeMap<>();
@@ -118,6 +136,8 @@ public final class ExecutionEnvironmentManifest {
         require(manifest.environment().set().size() == 3, "tooling environment drift");
         require(candidate(temporary, temporary.resolve("control")).environment().set().size() == 6,
                 "Candidate environment drift");
+        require(guiNative(temporary, temporary.resolve("control"), temporary.resolve("lease"), "7")
+                .environment().set().size() == 8, "GUI environment drift");
         expectFailure(() -> new ExecutionEnvironmentManifest("secret", List.of(
                 Entry.set("API_TOKEN", Effect.TOOL, "forbidden"))));
         expectFailure(() -> new ExecutionEnvironmentManifest("duplicate", List.of(

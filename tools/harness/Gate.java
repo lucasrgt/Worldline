@@ -79,11 +79,11 @@ public final class Gate {
             executePhase(arguments, false, true, false); return;
         }
         boolean smoke = arguments.length > 0 && "--smoke".equals(arguments[0]);
-        boolean executorServer = Arrays.equals(arguments, new String[] {"--executor-server"});
+        boolean executorRuntime = arguments.length == 1 && arguments[0].matches("--executor-(server|gui)");
         boolean executorCandidate = Arrays.equals(arguments, new String[] {"--executor-candidate"});
         boolean pinnedSmoke = arguments.length > 0 && "--pinned-smoke".equals(arguments[0]);
-        executePhase(arguments, smoke || executorServer, !executorServer && !executorCandidate,
-                executorServer || smoke && !pinnedSmoke);
+        executePhase(arguments, smoke || executorRuntime, !executorRuntime && !executorCandidate,
+                executorRuntime || smoke && !pinnedSmoke);
     }
 
     private void executeMilestone(String id) throws Exception {
@@ -131,7 +131,7 @@ public final class Gate {
                 || Arrays.equals(arguments, new String[] {"--executor-tooling"})
                 || Arrays.equals(arguments, new String[] {"--executor-environment"})
                 || Arrays.equals(arguments, new String[] {"--executor-filesystem"})
-                || Arrays.equals(arguments, new String[] {"--executor-server"})
+                || arguments.length == 1 && arguments[0].matches("--executor-(server|gui)")
                 || Arrays.equals(arguments, new String[] {"--executor-candidate"})
                 || Arrays.equals(arguments, new String[] {"--accept-legacy-smoke-baseline"})
                 || arguments.length == 1 && maintenance(arguments[0])
@@ -161,7 +161,7 @@ public final class Gate {
                 + "--module-cache-doctor|--module-cache-gc|--cache-doctor|--cache-gc|"
                 + "--cache-rebuild-drill|"
                 + "--executor-tooling|--executor-environment|--executor-filesystem|--executor-server|"
-                + "--executor-candidate|"
+                + "--executor-candidate|--executor-gui|"
                 + "--new-milestone ID|--milestone ID|--lane-differential ID|"
                 + "--candidate-ready ID|--candidate ID|--self-test]");
         if (arguments.length == 2 && !arguments[1].matches("[a-z0-9]+(?:-[a-z0-9]+)*"))
