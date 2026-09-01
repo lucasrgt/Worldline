@@ -21,6 +21,8 @@ final class HarnessFeatureSelfTest {
         CandidateReadiness.selfTest();
         CandidateRuntimeBuild.selfTest();
         CandidateSourceClosure.selfTest();
+        ArtifactTransportPolicyTest.selfTest();
+        ArtifactTransportPolicy.check(java.nio.file.Path.of("").toAbsolutePath().normalize());
     }
     static void smoke() throws Exception {
         SmokeScheduleHistory.selfTest();
