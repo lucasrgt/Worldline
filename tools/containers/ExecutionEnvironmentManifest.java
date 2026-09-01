@@ -45,7 +45,6 @@ public final class ExecutionEnvironmentManifest {
         return new ExecutionEnvironmentManifest("hostile-fixtures", List.of(
                 Entry.inherit("PATH", Effect.TOOL), Entry.inherit("PATHEXT", Effect.TOOL),
                 Entry.inherit("SYSTEMROOT", Effect.TOOL), Entry.inherit("WINDIR", Effect.TOOL),
-                Entry.set("JAVA_TOOL_OPTIONS", Effect.TOOL, JAVA_OPTIONS),
                 Entry.set("TEMP", Effect.TOOL, clean.toString()), Entry.set("TMP", Effect.TOOL, clean.toString()),
                 Entry.set("WORLDLINE_FIXTURE_VALUE", Effect.BEHAVIOR, "injected-value")));
     }
@@ -171,7 +170,7 @@ public final class ExecutionEnvironmentManifest {
         require(!descriptor.contains(JAVA_OPTIONS) && !descriptor.contains(temporary.toString()),
                 "environment descriptor disclosed a value");
         require(manifest.environment().set().size() == 3, "tooling environment drift");
-        require(hostile(temporary).environment().set().size() == 4, "hostile environment drift");
+        require(hostile(temporary).environment().set().size() == 3, "hostile environment drift");
         require(candidate(temporary, temporary.resolve("control")).environment().set().size() == 6,
                 "Candidate environment drift");
         require(guiNative(temporary, temporary.resolve("control"), temporary.resolve("lease"), "7", "11")

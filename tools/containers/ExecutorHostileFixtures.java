@@ -102,7 +102,7 @@ final class ExecutorHostileFixtures {
     }
 
     private static List<String> command(Path root, Scenario scenario) {
-        List<String> command = new ArrayList<>(List.of(java(),
+        List<String> command = new ArrayList<>(List.of(java(), "-Xms16m", "-Xmx128m", "-XX:-UsePerfData",
                 root.resolve("tools/containers/ExecutorFixtureProbe.java").toString()));
         command.addAll(scenario.arguments); return command;
     }

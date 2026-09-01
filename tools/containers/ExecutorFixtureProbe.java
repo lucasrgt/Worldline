@@ -44,8 +44,8 @@ public final class ExecutorFixtureProbe {
     }
 
     private static void tree(String child, boolean announce) throws Exception {
-        new ProcessBuilder(java(), Path.of("tools/containers/ExecutorFixtureProbe.java").toAbsolutePath().toString(),
-                child).start();
+        new ProcessBuilder(java(), "-Xms16m", "-Xmx128m", "-XX:-UsePerfData",
+                Path.of("tools/containers/ExecutorFixtureProbe.java").toAbsolutePath().toString(), child).start();
         if (announce) write(System.out, "tree=ready\n");
         Thread.sleep(60_000L);
     }
