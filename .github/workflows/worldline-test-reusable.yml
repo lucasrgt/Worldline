@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
         with:
           name: ${{ inputs.artifact-name }}
           path: ${{ inputs.project-directory }}/.local/oracles/b1.7.3
@@ -22,7 +22,7 @@ jobs:
         with:
           project-directory: ${{ inputs.project-directory }}
       - if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: worldline-test-results
           path: |

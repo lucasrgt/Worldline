@@ -181,6 +181,7 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
                         relative, prior, current)
                 || FinalArtifactHashTrainSourceSuccessor.carries(
                         relative, prior, current)
+                || GithubActionsTrainSourceSuccessor.carries(relative, prior, current)
                 || ReconciledTrainSourceSuccessor.carries(relative, prior, current)
                 || EntityLifecycleArtifactTrainSuccessor.carries(relative, prior, current)
                 || BoundedEntityArchetypeSuccessor.carries(relative, prior, current)
@@ -217,6 +218,7 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
     static void selfTest() throws Exception {
         FinalReconciliationTrainSourceSuccessor.selfTest();
         FinalArtifactHashTrainSourceSuccessor.selfTest();
+        GithubActionsTrainSourceSuccessor.selfTest();
         require(!carriesSource("unreviewed", "old", "new"),
                 "train generated-documentation source allowlist drifted");
         SmokePins.Entry executed = new SmokePins.Entry(

@@ -31,11 +31,11 @@ jobs:
       WORLDLINE_TEST_CACHE_RECHECK_PERCENT: '10'
       WORLDLINE_TEST_CACHE_RECHECK_SEED: ${{ github.run_id }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           clean: false
           fetch-depth: 0
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '21.0.12+8'
@@ -133,7 +133,7 @@ jobs:
             printf '## Worldline Gate\n\nNo `verify.json` was produced.\n' >> "$GITHUB_STEP_SUMMARY"
           fi
       - if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: runtime-reports
           path: |
