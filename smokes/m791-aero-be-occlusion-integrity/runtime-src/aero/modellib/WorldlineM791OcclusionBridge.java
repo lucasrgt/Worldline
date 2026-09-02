@@ -5,6 +5,6 @@ public final class WorldlineM791OcclusionBridge {
     private WorldlineM791OcclusionBridge() {}
 
     public static void clearHistory() {
-        Aero_BECellOcclusion.snapshot(null);
+        Aero_BECellOcclusion.clearCamera();
     }
 }
