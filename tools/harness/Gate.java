@@ -135,7 +135,7 @@ public final class Gate {
                 "--workspace-transaction",
                 "--accept-legacy-smoke-baseline", "--cas-permits", "--cas-shadow", "--evidence-explorer",
                 "--evidence-explorer-live", "--campaign-follow-up", "--module-cache-shared-shadow",
-                "--shared-cas-inventory");
+                "--module-cache-s3-shadow", "--shared-cas-inventory");
         List<String> pair = List.of("--new-milestone", "--candidate", "--candidate-ready",
                 "--lane-differential", "--milestone", "--smoke-id");
         boolean valid = arguments.length == 0 || arguments.length == 1
@@ -156,8 +156,8 @@ public final class Gate {
             return new DirectTool("EvidenceExplorer", null);
         if ("--evidence-explorer-live".equals(flag)) return new DirectTool("EvidenceExplorerLive", null);
         if ("--campaign-follow-up".equals(flag)) return new DirectTool("NativeCampaignFollowUpPlan", null);
-        if (Arrays.equals(arguments, new String[] {"--module-cache-shared-shadow"}))
-            return new DirectTool("ModuleCacheSharedShadow", null);
+        if ("--module-cache-shared-shadow".equals(flag)) return new DirectTool("ModuleCacheSharedShadow", null);
+        if ("--module-cache-s3-shadow".equals(flag)) return new DirectTool("ModuleCacheS3Shadow", null);
         if (Arrays.equals(arguments, new String[] {"--shared-cas-inventory"}))
             return new DirectTool("SharedCasInventory", null);
         String main = arguments.length == 2 ? queryType(arguments[0]) : null;

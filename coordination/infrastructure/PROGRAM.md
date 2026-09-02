@@ -1664,6 +1664,12 @@ credentials, and corrupt remote bytes. This is structural protocol evidence,
 not qualification of a production store. Deployment TLS, scoped credentials,
 server-side encryption, retention, access audit, replication, recovery, and
 publisher-governance policies remain pending and require real infrastructure.
+The explicit `Gate --module-cache-s3-shadow` integration additionally packages
+the real `api` module, republishes it idempotently, enters through the normal
+`ModuleCacheRemote` miss path, and requires extraction to reproduce the exact
+canonical bundle identity. Its endpoint and credentials remain ephemeral
+loopback fixture inputs, so it strengthens client-boundary evidence without
+claiming a deployed service.
 
 ### D5. Cache families
 

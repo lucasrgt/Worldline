@@ -105,3 +105,16 @@ encryption, access logs, lifecycle rules, replication, publisher governance,
 and operational recovery remain deployment responsibilities. Transport never
 asserts behavioral PASS and never grants official or mapped runtime bytes
 upload authority.
+
+After the canonical Gate, exercise the complete S3-compatible boundary with:
+
+```text
+java tools/harness/Gate.java --module-cache-s3-shadow
+```
+
+The shadow packages the real `api` module, signs its index with an ephemeral
+key, publishes both immutable objects twice through authenticated conditional
+requests, and enters through the normal `ModuleCacheRemote.hydrate` miss path.
+It then re-packs the extracted target and requires byte-identical canonical
+bundle identity. The endpoint, credentials, key, objects, and extracted files
+exist only inside the bounded loopback fixture and are removed afterward.

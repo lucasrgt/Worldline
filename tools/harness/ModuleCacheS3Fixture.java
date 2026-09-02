@@ -48,6 +48,8 @@ final class ModuleCacheS3Fixture implements AutoCloseable {
         }
     }
 
+    int objectCount() { synchronized (objects) { return objects.size(); } }
+
     private void handle(HttpExchange exchange) {
         try {
             require(authenticated(exchange), "request authentication failed");
