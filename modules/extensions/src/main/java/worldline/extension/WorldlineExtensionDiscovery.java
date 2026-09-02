@@ -36,7 +36,8 @@ public final class WorldlineExtensionDiscovery {
                 if (!Files.isDirectory(entry)) {
                     String name = entry.getFileName().toString();
                     if ("TEMPLATE.properties".equals(name)
-                            || "SEMANTICS_TEMPLATE.properties".equals(name)) continue;
+                            || "SEMANTICS_TEMPLATE.properties".equals(name)
+                            || "README.md".equals(name)) continue;
                     throw new IllegalArgumentException(
                             "extension entry must be a directory: " + entry.getFileName());
                 }
