@@ -5,6 +5,7 @@ final class HarnessFeatureSelfTest {
         SafeTreeDelete.selfTest();
         CacheUsage.selfTest();
         NightlyQualityCampaign.selfTest();
+        MinimizationReplayCampaign.selfTest();
         MilestoneScaffold.selfTest();
         MilestoneContract.selfTest();
         ChangelogCheck.selfTest();
@@ -12,11 +13,13 @@ final class HarnessFeatureSelfTest {
         ModuleCacheMaintenance.main(new String[] {"--self-test"});
         SharedCacheMaintenance.main(new String[] {"--self-test"});
         CacheRebuildDrill.selfTest();
+        ImmutableCachePublish.selfTest();
         VerificationStageCache.selfTest();
         GateLatencyCheck.selfTest();
         CsmSuiteCheck.selfTest();
         MilestoneIdUniquenessCheck.selfTest();
         RepositoryVerify.qualificationBoundarySelfTest();
+        GitObjectBatch.selfTest(java.nio.file.Path.of("").toAbsolutePath().normalize());
         TrainSourceHistory.selfTest();
         TrainPinMigration.selfTest();
         TrainGeneratedDocumentationMigration.selfTest();
@@ -57,11 +60,26 @@ final class HarnessFeatureSelfTest {
         CandidateSourceClosure.selfTest();
         NeighborTestKitPinCheck.selfTest();
         SchemaPinCheck.selfTest();
+        ProviderDiscoveryPinMigration.selfTest();
         HexDigest.selfTest();
         ColumnLift.selfTest();
         OfficialServerBootstrap.selfTest();
         DuplicatePatternCheck.selfTest();
         JdkPinCheck.selfTest();
+        ModuleCacheBundle.selfTest();
+        ModuleCacheIndex.selfTest();
+        ModuleCacheIndexTrust.selfTest();
+        ModuleCachePublication.selfTest();
+        ModuleCacheRemote.selfTest();
+        SharedCasInventory.selfTest();
+        ArtifactTransportPolicyTest.selfTest();
+        ArtifactTransportPolicy.check(java.nio.file.Path.of("").toAbsolutePath().normalize());
+        ModuleInputGraph.selfTest();
+        EvidenceExplorerTest.selfTest();
+        NativeCampaignFailureClusters.selfTest();
+        NativeCampaignFollowUpPlan.selfTest();
+        EvidenceExplorerLiveTest.selfTest();
+        CampaignPlanTest.selfTest();
     }
     static void smoke() throws Exception {
         SmokeFingerprintWork.selfTest();
@@ -69,6 +87,10 @@ final class HarnessFeatureSelfTest {
         SmokeScheduleHistory.selfTest();
         SmokeSuiteScheduler.selfTest();
         JavaTokenText.selfTest();
+        SmokeInputGraph.selfTest();
+        DataDrivenPlanRevision.selfTest();
+        SmokeInputDependentsQuery.selfTest();
+        SmokeInputDiffQuery.selfTest();
         WorldTemplate.selfTest();
         LaneDifferential.selfTest();
         SmokeScheduleBaselineCheck.execute(java.nio.file.Path.of("").toAbsolutePath().normalize());

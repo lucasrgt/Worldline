@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 /** Persists immutable smoke PASS proofs and binds their aggregate to the current tree. */
 final class SmokeReceiptCache {
@@ -44,6 +45,32 @@ final class SmokeReceiptCache {
         if (validProof(smoke.id, fingerprint, proof(smoke.id, fingerprint),
                 evidence(smoke.id, fingerprint))) return true;
         return pins.verifiedMatch(smoke.id, fingerprint) != null;
+    }
+
+    SmokeCacheExplanation explain(SmokeDiscovery.Entry smoke) throws Exception {
+        String fingerprint = fingerprint(smoke);
+        Path proof = proof(smoke.id, fingerprint), evidence = evidence(smoke.id, fingerprint);
+        boolean local = validProof(smoke.id, fingerprint, proof, evidence);
+        boolean pinned = pins.verifiedMatch(smoke.id, fingerprint) != null;
+        String decision, reason;
+        if (!reuse) { decision = "execute"; reason = "cache reuse is disabled"; }
+        else if (local) { decision = "reuse-local"; reason = "verified local immutable PASS proof"; }
+        else if (pinned) { decision = "reuse-pin"; reason = "verified tracked qualification pin"; }
+        else { decision = "execute"; reason = "no verified proof matches the execution fingerprint"; }
+        return new SmokeCacheExplanation(smoke.id, fingerprint, reuse, local, pinned,
+                decision, reason, currentMode(smoke.id, fingerprint));
+    }
+
+    private String currentMode(String id, String fingerprint) throws Exception {
+        Path path = reports.resolve(id + ".properties");
+        if (!Files.isRegularFile(path)) return null;
+        Properties value = load(path); String mode = value.getProperty("mode");
+        return "passed".equals(value.getProperty("status")) && id.equals(value.getProperty("id"))
+                && fingerprint.equals(value.getProperty("fingerprint"))
+                && state.head().equals(value.getProperty("head"))
+                && state.tree().equals(value.getProperty("tree"))
+                && state.clean() && "true".equals(value.getProperty("clean")) && mode != null
+                && Set.of("executed", "reused", "pinned").contains(mode) ? mode : null;
     }
 
     boolean restore(SmokeDiscovery.Entry smoke, String fingerprint) throws Exception {
@@ -92,7 +119,7 @@ final class SmokeReceiptCache {
 
     void finish(int expected) throws Exception {
         require(results.size() == expected, "smoke suite has incomplete receipts");
-        MessageDigest aggregate = MessageDigest.getInstance("SHA-256");
+        MessageDigest aggregate = HexDigest.sha256();
         int executed = 0, pinned = 0;
         for (Result result : results) {
             update(aggregate, result.id); update(aggregate, result.fingerprint); update(aggregate, result.proof);
@@ -127,7 +154,7 @@ final class SmokeReceiptCache {
         cache.pins.validateCatalog(smokes);
         require(smokes.size() == MiniJson.integer(document, "count"),
                 "smoke suite receipt count drifted");
-        MessageDigest aggregate = MessageDigest.getInstance("SHA-256");
+        MessageDigest aggregate = HexDigest.sha256();
         for (SmokeDiscovery.Entry smoke : smokes) cache.validate(smoke, head, tree, aggregate);
         require(HexFormat.of().formatHex(aggregate.digest()).equals(
                 MiniJson.string(document, "root_sha256")),
@@ -249,7 +276,7 @@ final class SmokeReceiptCache {
         Files.move(source, target, StandardCopyOption.REPLACE_EXISTING);
     } }
     private static String digest(Path path) throws Exception { return HexFormat.of().formatHex(
-            MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(path))); }
+            HexDigest.sha256().digest(Files.readAllBytes(path))); }
     static Path cacheRoot(Path root) {
         String control = System.getenv("WORLDLINE_GATE_CONTROL");
         if (control != null && !control.isBlank()) return Path.of(control).resolve("cache");

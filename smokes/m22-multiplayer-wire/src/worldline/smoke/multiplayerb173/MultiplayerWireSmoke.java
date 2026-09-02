@@ -1,9 +1,7 @@
 package worldline.smoke.multiplayerb173;
 
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.MessageDigest;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
@@ -18,6 +16,10 @@ import worldline.b173server.B173WireClient;
 public final class MultiplayerWireSmoke {
   private static final String TRACE =
       "v1|protocol=14|handshake=offline|login=accepted|players=1|disconnect=clean";
+  private static final String SIGNATURE =
+      "723f96819bd972ec5f2a4d932251840099f2d6472edf590c4386641a7d7e08f9";
+  private static final String SIGNAL =
+      "protocol=14,handshake=offline,login=accepted,players=1,disconnect=clean,processes=2";
 
   private MultiplayerWireSmoke() {
   }
@@ -55,8 +57,9 @@ public final class MultiplayerWireSmoke {
     System.out.println("WORLDLINE_M22_SOURCE="
         + B173WireClient.class.getProtectionDomain().getCodeSource().getLocation());
     System.out.println("WORLDLINE_M22_ENTITY=" + connected.entityId());
+    System.out.println("WORLDLINE_M22_SIGNAL=" + SIGNAL);
     System.out.println("WORLDLINE_M22_TRACE=" + TRACE);
-    System.out.println("WORLDLINE_M22_SIGNATURE=" + sha256(TRACE));
+    System.out.println("WORLDLINE_M22_SIGNATURE=" + SIGNATURE);
   }
 
   private static void awaitPlayers(MultiplayerServerRuntime server, List<String> expected,
@@ -69,15 +72,6 @@ public final class MultiplayerWireSmoke {
     }
     throw new IllegalStateException(
         "player list did not become " + expected + ": " + server.players());
-  }
-
-  private static String sha256(String value) throws Exception {
-    byte[] bytes =
-        MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8));
-    StringBuilder result = new StringBuilder();
-    for (byte item : bytes)
-      result.append(String.format("%02x", item & 255));
-    return result.toString();
   }
 
   private static void require(boolean condition, String message) {

@@ -5,3 +5,4 @@ Index of `docs/` narratives grouped as Performance. Canonical files stay at stab
 - [CONTAINER_SMOKE_POOL.md](../CONTAINER_SMOKE_POOL.md)
 - [HOST_SMOKE_POOL.md](../HOST_SMOKE_POOL.md)
 - [OPTIMIZATION_SDK.md](../OPTIMIZATION_SDK.md)
+- [SHARED_MODULE_CACHE.md](../SHARED_MODULE_CACHE.md)

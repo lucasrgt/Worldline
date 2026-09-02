@@ -16,11 +16,17 @@ public final class AtlasStoreTest {
         require(first.kind(AtlasKind.ROLE).size() == SemanticRoles.roleCount(), "role count");
         require(first.kind(AtlasKind.ROLE).size() >= 196, "catalog baseline");
         require(first.kind(AtlasKind.INVARIANT).size() == 6, "invariants");
-        require(first.kind(AtlasKind.SUBSYSTEM).size() == 27, "subsystems");
+        require(AtlasSubsystems.ALL.length == 29, "subsystem denominator");
+        require(first.kind(AtlasKind.SUBSYSTEM).size() == AtlasSubsystems.ALL.length,
+                "subsystems");
         require(AtlasSubsystems.DOMAINS.length == 6, "taxonomy domains");
         require("actors".equals(AtlasSubsystems.domain("tile-entities")),
                 "tile entity taxonomy");
-        require(first.kind(AtlasKind.COVERAGE_UNIT).size() == 189, "coverage units");
+        require("simulation".equals(AtlasSubsystems.domain("scheduling")),
+                "scheduling taxonomy");
+        require(first.kind(AtlasKind.COVERAGE_UNIT).size()
+                == AtlasSubsystems.ALL.length * AtlasSubsystems.DIMENSIONS.length,
+                "coverage units");
         require(first.kind(AtlasKind.BOUNDARY).size() >= 24, "boundary baseline");
         require(first.kind(AtlasKind.SCENARIO).size() == WorldlineBehavior.all().size() + 1,
                 "behavior scenarios");

@@ -179,7 +179,7 @@ final class ProviderDiscoveryPinMigration {
                 require(TrainPinCheck.transportsFile(train, root, relative, prior)
                                 || fingerprintExtension(root, relative),
                         "provider source change lacks reviewed transport: " + relative);
-                int existing = refreshSource(lock, priorChanges, relative);
+                int existing = refreshSource(lock, priorChanges, relative, prior);
                 String refresh = "refresh.source." + (existing == 0
                         ? priorChanges + ++appended : existing) + ".";
                 if (existing != 0) {
@@ -197,10 +197,25 @@ final class ProviderDiscoveryPinMigration {
         return changes;
     }
 
-    private static int refreshSource(Properties lock, int count, String relative) {
+    private static int refreshSource(Properties lock, int count,
+            String relative, String prior) {
         for (int index = 1; index <= count; index++)
-            if (relative.equals(lock.getProperty("refresh.source." + index + ".path"))) return index;
+            if (relative.equals(lock.getProperty("refresh.source." + index + ".path"))
+                    && prior.equals(lock.getProperty(
+                            "refresh.source." + index + ".current_sha256"))) return index;
         return 0;
+    }
+
+    static void selfTest() {
+        Properties lock = new Properties();
+        lock.setProperty("refresh.source.1.path", "same.properties");
+        lock.setProperty("refresh.source.1.current_sha256", "older");
+        lock.setProperty("refresh.source.2.path", "same.properties");
+        lock.setProperty("refresh.source.2.current_sha256", "current");
+        require(refreshSource(lock, 2, "same.properties", "current") == 2,
+                "provider refresh did not select the contiguous source edge");
+        require(refreshSource(lock, 2, "same.properties", "newer") == 0,
+                "provider refresh reused a non-contiguous source edge");
     }
 
     private static void replace(List<SmokePins.Entry> pins, SmokePins.Entry exact) {

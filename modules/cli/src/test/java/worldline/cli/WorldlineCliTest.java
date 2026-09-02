@@ -226,7 +226,7 @@ public final class WorldlineCliTest {
                     new PrintStream(output), new PrintStream(error));
             require(status == 0 && output.toString().contains("WORLDLINE_ATLAS=PASS")
                     && output.toString().contains("role=")
-                    && output.toString().contains("coverage_unit=189")
+                    && output.toString().contains("coverage_unit=203")
                     && output.toString().contains("mapping_set=2"),
                     "CLI atlas status failed");
             output.reset(); error.reset();

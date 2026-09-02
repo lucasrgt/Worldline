@@ -55,6 +55,12 @@ final class RepositoryVerify {
                 System.err.println("train readiness failed: " + error.getMessage()); System.exit(1); }
             return;
         }
+        if (ExecutorQualification.matches(arguments)) {
+            try { ExecutorQualification.execute(arguments[0]); }
+            catch (Exception error) { System.err.println(
+                    "executor qualification failed: " + error.getMessage()); System.exit(1); }
+            return;
+        }
         if (Arrays.equals(arguments, new String[] {"--orchestrator"})) {
             orchestrator(); return;
         }

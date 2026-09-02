@@ -150,6 +150,8 @@ final class WaveSelfImprovement {
                 .append(",\"logical_processors\":").append(parallelism.processors())
                 .append(",\"free_memory_bytes\":").append(parallelism.freeBytes())
                 .append(",\"candidate_memory_bytes\":").append(parallelism.workerBytes())
+                .append(",\"configured_candidate_memory_bytes\":").append(parallelism.configuredWorkerBytes())
+                .append(",\"telemetry_lowered_capacity\":").append(parallelism.telemetryLowered())
                 .append(",\"official_runtime_parallelism\":")
                 .append(parallelism.runtimeParallelism())
                 .append(",\"official_runtime_serialized_by_lease\":true},")
@@ -232,9 +234,8 @@ final class WaveSelfImprovement {
                 if (row.candidateAttempts() > 1 || row.objectiveInterlock()) value.preCandidateMilestones++;
                 value.preCandidateEvents += Math.max(0, row.preCandidatePreventions());
                 if (row.candidateAttempts() > 1 && row.officialAttempts() >= 0
-                        && row.officialAttempts() <= 1) {
+                        && row.officialAttempts() <= 1)
                     value.preRuntimeMilestones++;
-                }
                 if (row.receiptSeconds() >= 0) times.add(row.receiptSeconds());
                 if (row.integrated() && (!row.qualified() || !row.receiptExact())) value.falsePromotions++;
                 row.recurrenceScars().forEach(scar -> value.scars.merge(scar, 1, Integer::sum));

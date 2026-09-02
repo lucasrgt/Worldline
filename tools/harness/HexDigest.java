@@ -14,8 +14,12 @@ public final class HexDigest {
         throw new IllegalArgumentException("usage: HexDigest --sha256-text VALUE");
     }
 
-    static MessageDigest sha256() throws Exception {
-        return MessageDigest.getInstance("SHA-256");
+    static MessageDigest sha256() {
+        try {
+            return MessageDigest.getInstance("SHA-256");
+        } catch (java.security.NoSuchAlgorithmException error) {
+            throw new IllegalStateException("SHA-256 is unavailable", error);
+        }
     }
 
     static String hex(byte[] digest) {

@@ -264,7 +264,7 @@ public final class ClientCycle {
 
   private void verifyHash(Path path, String expected) throws Exception {
     require(Files.isRegularFile(path), "missing frozen client input: " + path);
-    MessageDigest digest = MessageDigest.getInstance("SHA-256");
+    MessageDigest digest = HexDigest.sha256();
     try (java.io.InputStream input = Files.newInputStream(path)) {
       byte[] buffer = new byte[8192];
       int count;
@@ -328,7 +328,7 @@ public final class ClientCycle {
   }
 
   private Path product(String module) {
-    return root.resolve(".worldline/build/classes").resolve(module);
+    return SmokeSupport.product(root, module);
   }
 
   private List<Path> paths(Path... paths) {
@@ -380,7 +380,7 @@ public final class ClientCycle {
   }
 
   private static String digest(String value) throws Exception {
-    MessageDigest digest = MessageDigest.getInstance("SHA-256");
+    MessageDigest digest = HexDigest.sha256();
     digest.update(value.getBytes(StandardCharsets.UTF_8));
     return HexFormat.of().formatHex(digest.digest());
   }

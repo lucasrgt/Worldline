@@ -2,9 +2,10 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Instant;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -28,38 +29,49 @@ public final class NightlyQualityCampaign {
     }
 
     private void execute(String[] arguments) throws Exception {
-        require(arguments.length == 4 && arguments[0].equals("--budget-seconds")
-                && arguments[2].equals("--seed"), usage());
-        int total = integer(arguments[1], 10, 7_200, "budget");
-        long seed = Long.parseLong(arguments[3]);
+        CampaignOptions options = CampaignOptions.parse(arguments);
+        CampaignSpec spec = CampaignSpec.load(root, "nightly-quality");
+        CampaignPlan plan = options.shardCount() == null ? spec.plan(options.seed())
+                : spec.plan(options.seed(), options.shardCount());
+        require(options.shardIndex() < plan.shardCount(), "shard index is outside the campaign plan");
+        if (options.planOnly()) { System.out.print(plan.envelope()); return; }
+        CampaignArtifacts.publishPlan(reports, plan);
+        CampaignPlan.Assignment fuzzAssignment = assignment(plan, options.shardIndex(), "fuzz");
+        CampaignPlan.Assignment mutationAssignment = assignment(plan, options.shardIndex(), "mutation");
+        int total = options.budgetSeconds();
         int fuzzBudget = Math.max(1, total / 2), mutationBudget = total - fuzzBudget;
         require(mutationBudget > 0, "budget must cover both campaigns");
         String classpath = classpath();
-        Files.createDirectories(reports);
-        int fuzzCases = environment("WORLDLINE_NIGHTLY_FUZZ_CASES", 4_096, 1, 4_096);
-        int mutationCases = environment("WORLDLINE_NIGHTLY_MUTATION_CASES", 100_000, 1, 1_000_000);
+        int fuzzCases = Math.toIntExact(fuzzAssignment.cases());
+        int mutationCases = Math.toIntExact(mutationAssignment.cases());
         Run fuzz = run("fuzz", List.of(javaTool(), "-ea", "-cp", classpath,
-                "worldline.fuzz.FuzzTest", "--explore", Long.toString(seed),
-                Integer.toString(fuzzCases), "32"), fuzzBudget);
+                "worldline.fuzz.FuzzTest", "--explore", Long.toString(fuzzAssignment.seed()),
+                Integer.toString(fuzzCases), "32"), fuzzBudget, plan, options.shardIndex());
         Run mutation = run("mutation", List.of(javaTool(), "-ea", "-cp", classpath,
                 "worldline.testapi.MutationCoverageTest", "--explore",
-                Long.toString(seed ^ 0x574c4e494748544cL), Integer.toString(mutationCases)),
-                mutationBudget);
+                Long.toString(mutationAssignment.seed()), Integer.toString(mutationCases)),
+                mutationBudget, plan, options.shardIndex());
         String head = gitIdentity("HEAD"), tree = gitIdentity("HEAD^{tree}");
-        String summary = summary(head, tree, seed, total, fuzzCases, mutationCases, fuzz, mutation);
-        Files.writeString(reports.resolve("summary.json"), summary, StandardCharsets.UTF_8);
+        List<CampaignShardReceipt.Result> results = List.of(
+                result(fuzzAssignment, fuzz), result(mutationAssignment, mutation));
+        CampaignShardReceipt receipt = CampaignShardReceipt.create(plan, options.shardIndex(),
+                head, tree, executorRequest(options.executorPlan()), results);
+        Path receiptPath = CampaignArtifacts.publishReceipt(reports, plan, receipt);
+        CampaignReceiptSet.Aggregate aggregate = CampaignArtifacts.aggregateIfComplete(reports, plan);
         require(fuzz.exit == 0 && mutation.exit == 0,
-                "campaign failure; inspect " + root.relativize(reports.resolve("summary.json")));
-        System.out.println("nightly quality campaign passed: fuzz=" + fuzzCases
-                + ", mutation=" + mutationCases + ", seed=" + seed);
+                "campaign failure; inspect " + root.relativize(receiptPath));
+        System.out.println("nightly quality campaign shard passed: index=" + options.shardIndex()
+                + "/" + plan.shardCount() + ", fuzz=" + fuzzCases + ", mutation=" + mutationCases
+                + ", plan=" + plan.sha256() + ", aggregate=" + (aggregate != null));
     }
 
-    private Run run(String name, List<String> command, int budget) throws Exception {
+    private Run run(String name, List<String> command, int budget, CampaignPlan plan,
+            int shard) throws Exception {
         long started = System.nanoTime();
         ProcessCapture.Result result = ProcessCapture.run(root, command, budget);
         long elapsed = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - started);
-        Files.writeString(reports.resolve(name + ".log"), result.output(), StandardCharsets.UTF_8);
-        return new Run(result.exit(), result.timedOut(), budget, elapsed);
+        CampaignArtifacts.publishLog(reports, plan, shard, name, result.output());
+        return new Run(result.exit(), result.timedOut(), budget, elapsed, sha256(result.output()));
     }
 
     private String classpath() throws Exception {
@@ -84,54 +96,49 @@ public final class NightlyQualityCampaign {
         return value;
     }
 
-    private static String summary(String head, String tree, long seed, int budget,
-            int fuzzCases, int mutationCases, Run fuzz, Run mutation) {
-        return "{\n  \"schema\":1,\n  \"created\":\"" + Instant.now() + "\",\n"
-                + "  \"head\":\"" + head + "\",\n  \"tree\":\"" + tree + "\",\n"
-                + "  \"seed\":" + seed + ",\n  \"budget_seconds\":" + budget + ",\n"
-                + "  \"fuzz\":" + result(fuzzCases, fuzz) + ",\n"
-                + "  \"mutation\":" + result(mutationCases, mutation) + "\n}\n";
+    private static CampaignPlan.Assignment assignment(CampaignPlan plan, int shard, String workload) {
+        return plan.shard(shard).assignments().stream()
+                .filter(value -> value.workload().equals(workload)).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("campaign workload is missing: " + workload));
     }
-
-    private static String result(int cases, Run run) {
-        return "{\"cases\":" + cases + ",\"budget_seconds\":" + run.budget
-                + ",\"elapsed_ms\":" + run.elapsed + ",\"exit\":" + run.exit
-                + ",\"timed_out\":" + run.timedOut + "}";
+    private static CampaignShardReceipt.Result result(CampaignPlan.Assignment assignment, Run run) {
+        return new CampaignShardReceipt.Result(assignment.workload(), assignment.start(),
+                assignment.endExclusive(), assignment.seed(), run.budget, run.elapsed,
+                run.exit, run.timedOut, run.outputSha256);
     }
 
     static void selfTest() {
-        require(integer("10", 10, 20, "value") == 10, "lower budget bound drifted");
-        boolean rejected = false;
-        try { integer("9", 10, 20, "value"); } catch (IllegalArgumentException expected) { rejected = true; }
-        require(rejected, "invalid budget was accepted");
-        String summary = summary("a".repeat(40), "b".repeat(40), 7L, 10, 20, 30,
-                new Run(0, false, 5, 2),
-                new Run(124, true, 5, 5));
-        require(summary.contains("\"seed\":7") && summary.contains("\"timed_out\":true"),
-                "nightly summary drifted");
+        CampaignOptions.selfTest();
+        Run run = new Run(124, true, 5, 2L, "c".repeat(64));
+        CampaignPlan.Assignment assignment = new CampaignPlan.Assignment("fuzz", 3, 7, 11);
+        CampaignShardReceipt.Result result = result(assignment, run);
+        require(result.start() == 3 && result.endExclusive() == 7 && result.seed() == 11
+                && result.timedOut() && result.resultSha256().equals("c".repeat(64)),
+                "nightly shard result drifted");
         System.out.println("nightly quality campaign self-test passed");
     }
 
-    private static int environment(String name, int fallback, int minimum, int maximum) {
-        String value = System.getenv(name);
-        return value == null || value.isBlank() ? fallback : integer(value, minimum, maximum, name);
+    private static String executorRequest(Path plan) throws Exception {
+        String marker = System.getenv("WORLDLINE_CAMPAIGN_EXECUTOR_PLAN");
+        if (plan == null) {
+            require(marker == null || marker.isBlank(), "unexpected campaign executor plan marker");
+            return null;
+        }
+        require(plan.toString().equals(marker), "campaign executor plan marker drifted");
+        require(Files.isRegularFile(plan) && !Files.isSymbolicLink(plan), "campaign executor plan is invalid");
+        return HexFormat.of().formatHex(HexDigest.sha256().digest(Files.readAllBytes(plan)));
     }
-    private static int integer(String value, int minimum, int maximum, String name) {
-        try {
-            int parsed = Integer.parseInt(value);
-            if (parsed >= minimum && parsed <= maximum) return parsed;
-        } catch (NumberFormatException ignored) { }
-        throw new IllegalArgumentException(name + " must be between " + minimum + " and " + maximum);
+    private static String sha256(String value) throws Exception {
+        return HexFormat.of().formatHex(HexDigest.sha256()
+                .digest(value.getBytes(StandardCharsets.UTF_8)));
     }
     private static String javaTool() {
         boolean windows = System.getProperty("os.name", "").toLowerCase().contains("win");
         return Path.of(System.getProperty("java.home"), "bin", "java" + (windows ? ".exe" : "")).toString();
     }
-    private static String usage() {
-        return "usage: NightlyQualityCampaign --budget-seconds N --seed N";
-    }
     private static void require(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);
     }
-    private record Run(int exit, boolean timedOut, int budget, long elapsed) { }
+    private record Run(int exit, boolean timedOut, int budget, long elapsed,
+            String outputSha256) { }
 }

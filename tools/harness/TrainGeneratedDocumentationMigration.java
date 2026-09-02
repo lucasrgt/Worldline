@@ -8,8 +8,14 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
     private TrainGeneratedDocumentationMigration() { }
 
     static boolean apply(Path root, String base) throws Exception {
-        return apply(root, base, TrainGeneratedDocumentationMigration::carriesSource,
-                TrainGeneratedDocumentationMigration::validateProofs);
+        try {
+            return apply(root, base, TrainGeneratedDocumentationMigration::carriesSource,
+                    TrainGeneratedDocumentationMigration::validateProofs);
+        } catch (IllegalStateException error) {
+            if (error.getMessage() != null
+                    && error.getMessage().startsWith("unreviewed train source refresh: ")) return false;
+            throw error;
+        }
     }
 
     private static boolean apply(Path root, String base, SourceReview review,

@@ -92,7 +92,8 @@ final class DataDrivenCycleMigration {
                 .equals(manifest.getProperty("plan_source_sha256", ""));
         boolean sharedProcessRefactor = !digest(root.resolve("tools/harness/SmokeProcess.java"))
                 .equals(manifest.getProperty("process_source_sha256", ""));
-        int generic = 0, executed = 0, importedPlans = 0;
+        DataDrivenPlanRevision revisions = new DataDrivenPlanRevision(root, manifest, cache);
+        int generic = 0, executed = 0, importedPlans = 0, revisedPlans = 0;
         int fixtureRefactors = integer(manifest, "refresh.fixture.count"), newRefactors = 0;
         int formattingRefactors = Integer.parseInt(
                 manifest.getProperty("refresh.formatting.count", "0"));
@@ -104,6 +105,7 @@ final class DataDrivenCycleMigration {
             String current = cache.fingerprint(smoke);
             DataDrivenCyclePlan plan = DataDrivenCyclePlan.load(root, smoke.id);
             SmokePins.Entry existingPin = existing.entry(smoke.id);
+            SmokePins.Entry local = cache.availablePin(smoke);
             String recordedPlan = manifest.getProperty(stem + "plan_sha256");
             SmokePins.Entry newPlanPin = null; boolean trainCurrent = existingPin != null
                     && TrainPinCheck.carriesCurrent(train, smoke.id, existingPin, current);
@@ -120,8 +122,7 @@ final class DataDrivenCycleMigration {
                     prior = DataDrivenPlanReceipt.pin(root, smoke, current);
                     milestoneProof = true; }
                 if (prior == null) {
-                    prior = requiredEntry(existing, smoke.id);
-                    milestoneProof = sharedPlanRefactor;
+                    prior = requiredEntry(existing, smoke.id); milestoneProof = sharedPlanRefactor;
                 }
                 newPlanPin = prior;
                 if (!"executed".equals(prior.source()) && !milestoneProof && !sharedProcessRefactor) {
@@ -133,13 +134,17 @@ final class DataDrivenCycleMigration {
                 manifest.setProperty(stem + "plan_sha256", plan.fingerprint());
                 manifest.setProperty(stem + "evidence_sha256", prior.evidence());
             } else if (!plan.fingerprint().equals(recordedPlan)) {
-                require((sharedProcessRefactor || trainCurrent) && existingPin != null
-                                && DataDrivenRefreshEvidence.unchangedMilestone(root, smoke.id),
-                        "plan changed outside the reviewed migration: " + smoke.id);
-                manifest.setProperty(stem + "plan_sha256", plan.fingerprint());
-                manifest.setProperty(stem + "evidence_sha256", existingPin.evidence());
+                if (local != null && "executed".equals(local.source())) {
+                    require(revisions.refresh(smoke, plan, local),
+                            "executed plan revision was not recorded: " + smoke.id); revisedPlans++;
+                } else {
+                    require((sharedProcessRefactor || trainCurrent) && existingPin != null
+                                    && DataDrivenRefreshEvidence.unchangedMilestone(root, smoke.id),
+                            "plan changed outside the reviewed migration: " + smoke.id);
+                    manifest.setProperty(stem + "plan_sha256", plan.fingerprint());
+                    manifest.setProperty(stem + "evidence_sha256", existingPin.evidence());
+                }
             }
-            SmokePins.Entry local = cache.availablePin(smoke);
             if (existingPin == null) {
                 require(newPlanPin != null, "new generic plan lacks exact execution: " + smoke.id);
                 pins.add(new SmokePins.Entry(smoke.id, current, newPlanPin.evidence(),
@@ -195,7 +200,7 @@ final class DataDrivenCycleMigration {
         System.out.println("data-driven pins refreshed: " + generic + " generic, " + executed
                 + " freshly executed, " + importedPlans + " train-imported plans, " + fixtureRefactors
                 + " canonical fixture refactors, " + formattingRefactors
-                + " token-equivalent source refactors");
+                + " token-equivalent source refactors, " + revisedPlans + " executed plan revisions");
     }
 
     private Plan parse(Path source, String text) {
@@ -280,9 +285,9 @@ final class DataDrivenCycleMigration {
             .append(".count=").append(values.size()).append('\n'); for (int index = 0; index < values.size(); index++)
         output.append(key).append('.').append(index + 1).append('=').append(values.get(index)).append('\n'); }
     private static String digest(String value) throws Exception { return HexFormat.of().formatHex(
-            MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8))); }
+            HexDigest.sha256().digest(value.getBytes(StandardCharsets.UTF_8))); }
     private static String digest(Path path) throws Exception { return HexFormat.of().formatHex(
-            MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(path))); }
+            HexDigest.sha256().digest(Files.readAllBytes(path))); }
     private static Properties load(Path path) throws Exception { Properties values = new Properties();
         try (var reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             values.load(reader); } return values; }

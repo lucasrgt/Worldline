@@ -10,7 +10,10 @@ public final class AtlasCoverageTest {
 
     public static void main(String[] arguments) {
         AtlasStore store = AtlasStore.standard(Paths.get("."));
-        require(store.kind(AtlasKind.COVERAGE_UNIT).size() == 189, "unit count");
+        require(AtlasSubsystems.ALL.length == 29, "subsystem denominator");
+        require(store.kind(AtlasKind.COVERAGE_UNIT).size()
+                == AtlasSubsystems.ALL.length * AtlasSubsystems.DIMENSIONS.length,
+                "unit count");
         require("1".equals(store.get("atlas.coverage-unit.worldgen.TESTABILITY").control()),
                 "worldgen testability filled by explicit smoke scope");
         require("1".equals(store.get("atlas.coverage-unit.worldgen.SEMANTIC").control()),
@@ -183,13 +186,18 @@ public final class AtlasCoverageTest {
         for (AtlasRecord gap : gaps) {
             if (gap.id().startsWith("atlas.coverage-unit.")) coverageGaps.add(gap.id());
         }
-        require(coverageGaps.size() == 6
-                        && coverageGaps.contains("atlas.coverage-unit.profiling.CONTROL")
-                        && coverageGaps.contains("atlas.coverage-unit.profiling.SEMANTIC")
-                        && coverageGaps.contains("atlas.coverage-unit.profiling.DETERMINISM")
-                        && coverageGaps.contains("atlas.coverage-unit.animation.CONTROL")
-                        && coverageGaps.contains("atlas.coverage-unit.animation.SEMANTIC")
-                        && coverageGaps.contains("atlas.coverage-unit.animation.DETERMINISM"),
+        Set<String> expectedGaps = new HashSet<String>();
+        for (String subsystem : new String[] {"lifecycle", "scheduling"}) {
+            for (String coverageDimension : AtlasSubsystems.DIMENSIONS) {
+                expectedGaps.add("atlas.coverage-unit." + subsystem + "." + coverageDimension);
+            }
+        }
+        for (String subsystem : new String[] {"profiling", "animation"}) {
+            for (String coverageDimension : new String[] {"CONTROL", "SEMANTIC", "DETERMINISM"}) {
+                expectedGaps.add("atlas.coverage-unit." + subsystem + "." + coverageDimension);
+            }
+        }
+        require(coverageGaps.equals(expectedGaps),
                 "declared coverage matrix gap set drifted");
         String matrix = AtlasQuery.coverage(store);
         require(matrix.contains("0/1") && matrix.contains("1/1")
