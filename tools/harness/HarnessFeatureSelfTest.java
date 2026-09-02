@@ -34,6 +34,7 @@ final class HarnessFeatureSelfTest {
         ModuleInputGraph.selfTest();
         EvidenceExplorerTest.selfTest();
         NativeCampaignFailureClusters.selfTest();
+        NativeCampaignFollowUpPlan.selfTest();
         EvidenceExplorerLiveTest.selfTest();
         CampaignPlanTest.selfTest();
     }

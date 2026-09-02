@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 record EvidenceExplorerLiveSnapshot(long observedAtEpochMs, String canonicalSha256,
         Execution execution, EvidenceExplorerExecutionLinks.Snapshot executionLinks,
         NativeCampaignFailureClusters.Snapshot campaignFailures,
+        NativeCampaignFollowUpPlan.Snapshot campaignFollowUps,
         EvidenceExplorerDiagnosticCaptures.Snapshot diagnosticCaptures,
         SharedCasInventory.Snapshot sharedCas, Admission admission,
         List<Queue> queues, List<CacheDecision> cache) {
@@ -43,9 +44,10 @@ record EvidenceExplorerLiveSnapshot(long observedAtEpochMs, String canonicalSha2
                     "legacy-runtime", observedAt));
         }
         EvidenceExplorerExecutionLinks.Snapshot links = EvidenceExplorerExecutionLinks.build(root);
+        NativeCampaignFailureClusters.Snapshot failures = NativeCampaignFailureClusters.summarize(links);
         return new EvidenceExplorerLiveSnapshot(observedAt,
                 EvidenceExplorerSnapshot.sha256(canonical), execution(root, control), links,
-                NativeCampaignFailureClusters.summarize(links),
+                failures, NativeCampaignFollowUpPlan.build(failures),
                 EvidenceExplorerDiagnosticCaptures.build(root),
                 SharedCasInventory.configured(root, System.getenv()),
                 admission(root.resolve(".worldline/executor-telemetry/admission.properties")),
