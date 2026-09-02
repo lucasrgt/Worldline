@@ -24,7 +24,7 @@ jobs:
           gradle-version: '8.14.4'
       - uses: ./.github/actions/setup-tokei
       - name: Restore content-addressed Gate cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: .worldline/control/cache
           key: worldline-gate-${{ runner.os }}-java21-${{ github.sha }}
