@@ -204,7 +204,9 @@ under `.worldline/executor-server-failures/` before the disposable worktree is r
 diagnostics remain ignored, non-portable, and non-authoritative.
 
 The closed matrix covers dedicated-server bootstrap, an offline protocol-14
-multiplayer session, persisted Nether login, and same-dimension player respawn.
+multiplayer session, persisted Nether login, same-dimension player respawn, a
+peer-observed wooden-door sound event, and powered-rail propagation across a
+slope boundary.
 The multiplayer contract projects its stable protocol/session signal while
 retaining the server-assigned entity ID only as a diagnostic; that volatile ID
 cannot enter repeat equality or canonical evidence. Each arm uses one
