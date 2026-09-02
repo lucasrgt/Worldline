@@ -23,6 +23,9 @@ final class WorldlinePackageInstance {
     static boolean verify(Path project, PrintStream output) throws Exception {
         Path instance = project.getParent() == null ? null : project.getParent().getParent();
         if (instance == null || !project.equals(instance.resolve("tests/worldline"))) return false;
+        Path attestation = instance.resolve("wpm.worldline.properties");
+        if (Files.exists(attestation, LinkOption.NOFOLLOW_LINKS))
+            return WorldlinePackageAttestation.verify(instance, output);
         Path lock = instance.resolve("wpm.lock");
         if (!Files.exists(lock, LinkOption.NOFOLLOW_LINKS)) return false;
         require(Files.isRegularFile(lock, LinkOption.NOFOLLOW_LINKS)

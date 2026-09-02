@@ -422,6 +422,17 @@ Evidence recorded for these slices:
   bytes; TestKit API and runner pins are
   `8a54dab3199a38ac1ae5f6f4180d790ab19590157092f95edda5d9e37bb86834`
   and `6a0f1fa950a2e5b9441e8e30f7025d5cfce22736badf7111ee0dd959565fd2a6`.
+- The separate `worldline-package-manager` foundation now resolves reviewed
+  registry snapshots with deterministic backtracking, verifies an Ed25519
+  channel signature and pinned registry digest, emits a canonical production
+  lock, acquires exact local or HTTPS package objects into a SHA-256 store,
+  and promotes a fully verified staging instance without replacing an
+  existing target. Modrinth and GitHub adapters produce bounded canonical
+  provenance snapshots but do not invent missing compatibility facts.
+  Worldline accepts the resulting `worldline.wpm-instance-attestation.v1`
+  only after independently hashing the production lock and every installed
+  package, rejecting links, path escape, duplicate paths, aggregate overflow,
+  embedded official digests, and non-external official-artifact policy.
 - Rust executor commit `803861d` publishes
   `worldline.execution-metrics.v2` with separately measured bootstrap and
   runtime durations. Windows and native-ext4 WSL suites pass formatting,
@@ -1993,9 +2004,12 @@ Worldline doctor also recognizes the deliberately narrow
 `worldline.wpm-fixture-lock.v1` test envelope produced around an actual
 host-only initialized project. It verifies the package payload by content,
 requires external-only official artifacts, and rejects local oracle JARs.
-WPM still needs its production lock schema, resolver, full install plan,
-provenance model, and rollback fixtures; these results qualify prerequisites
-rather than the deferred package manager itself.
+The separate WPM foundation now supplies the production lock schema,
+deterministic resolver, signed registry boundary, upstream provenance
+snapshots, exact-object acquisition, and first no-replace install plan.
+Generation selection and rollback, the maintained registry corpus, broader
+legacy patch transforms, SBOM/export commands, and cross-platform install
+qualification remain pending.
 
 ### 13.9 Legal and distribution boundary
 
@@ -2064,9 +2078,11 @@ content-addressed transport and executable prohibited-artifact checks are
 qualified; authoritative input graphs explain affecting changes; the
 transaction primitive passes on Windows NTFS and Linux ext4; and Worldline
 doctor verifies a package-manager-created fixture under an external-only
-official-artifact policy. WPM implementation may now begin as a separate
-program. This status does not claim that a WPM resolver, registry, production
-lockfile, or installer already exists.
+official-artifact policy. WPM implementation has now begun in the separate
+`worldline-package-manager` repository. Its foundation includes the resolver,
+signed registry model, production lockfile, source adapters, CAS acquisition,
+initial installer, and the production doctor attestation described above; it
+is not yet a complete package-manager release.
 
 ## 14. Verification matrix
 

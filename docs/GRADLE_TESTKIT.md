@@ -104,6 +104,17 @@ noncanonical paths, digest mismatches, embedded-artifact claims, or local
 schema qualifies Worldline/WPM integration; it is not the eventual production
 WPM lockfile format.
 
+Production WPM instances instead carry `wpm.lock` plus the bounded
+`wpm.worldline.properties` attestation. The attestation binds the production
+lock by SHA-256, declares `official.artifacts=external-only`, and enumerates
+each installed package by canonical path, exact size, and SHA-256. `doctor`
+revalidates those files without reimplementing WPM resolution. Unknown or
+misordered fields, lock drift, path escape, links, duplicate paths, aggregate
+size overflow, payload drift, the official client/server digests, and
+conventional embedded oracle paths fail closed. The attestation is a
+structural instance binding; WPM remains responsible for registry-signature
+and lock-graph verification before installation.
+
 The plugin downloads its API and runner from the immutable
 `testkit-v0.3.0` GitHub release and verifies frozen SHA-256 values. Offline
 builds can set `-Pworldline.distributionDir=/path/to/testkit`; both exact JARs

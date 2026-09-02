@@ -14,6 +14,7 @@ public final class WorldlineProjectCommandTest {
     public static void main(String[] arguments) throws Exception {
         Path root = Files.createTempDirectory("worldline-project-command-");
         try { initializesAndDiagnoses(root); diagnosesPackageManagerFixture(root);
+            diagnosesProductionPackageManagerInstance(root);
             initializesGuiTemplate(root); migratesLegacySpecs(root); }
         finally { delete(root); }
         System.out.println("WorldlineProjectCommandTest passed");
@@ -66,6 +67,36 @@ public final class WorldlineProjectCommandTest {
         Files.writeString(lockPath, lock); Files.writeString(payload, "corrupt\n");
         require(WorldlineCli.run(new String[] {"doctor", target.toString()}, System.out,
                 new PrintStream(error)) == 1, "corrupt WPM fixture package was accepted");
+    }
+    private static void diagnosesProductionPackageManagerInstance(Path root) throws Exception {
+        Path instance = root.resolve("wpm-production"), target = instance.resolve("tests/worldline");
+        int status = WorldlineCli.run(new String[] {"init", "--target=" + target,
+                "--host-only", "--template=basic", "--no-wrapper"}, System.out, System.err);
+        require(status == 0, "WPM production TestKit init");
+        Path payload = instance.resolve("mods/example.jar"); Files.createDirectories(payload.getParent());
+        Files.writeString(payload, "fixture\n", StandardCharsets.UTF_8);
+        String lock = "{\n  \"schema\": \"worldline.package-lock.v1\",\n"
+                + "  \"official_artifacts\": \"external-only\",\n  \"packages\": []\n}\n";
+        Path lockPath = instance.resolve("wpm.lock"); Files.writeString(lockPath, lock);
+        String attestation = "schema=worldline.wpm-instance-attestation.v1\nruntime=b1.7.3\n"
+                + "loader=stationapi\nside=client\nofficial.artifacts=external-only\n"
+                + "lock.path=wpm.lock\nlock.sha256=" + PinnedDownload.digest(lockPath)
+                + "\npackage.count=1\npackage.0.id=example\npackage.0.version=1.0.0\n"
+                + "package.0.path=mods/example.jar\npackage.0.sha256="
+                + PinnedDownload.digest(payload) + "\npackage.0.size=" + Files.size(payload) + "\n";
+        Path attestationPath = instance.resolve("wpm.worldline.properties");
+        Files.writeString(attestationPath, attestation);
+        ByteArrayOutputStream output = new ByteArrayOutputStream(), error = new ByteArrayOutputStream();
+        status = WorldlineCli.run(new String[] {"doctor", target.toString()},
+                new PrintStream(output), new PrintStream(error));
+        require(status == 0 && output.toString(StandardCharsets.UTF_8)
+                .contains("WPM production instance verified"), "WPM production doctor");
+        Files.writeString(attestationPath, attestation.replace("external-only", "embedded"));
+        require(WorldlineCli.run(new String[] {"doctor", target.toString()}, System.out,
+                new PrintStream(error)) == 1, "production embedded-artifact policy was accepted");
+        Files.writeString(attestationPath, attestation); Files.writeString(payload, "corrupt\n");
+        require(WorldlineCli.run(new String[] {"doctor", target.toString()}, System.out,
+                new PrintStream(error)) == 1, "corrupt WPM production package was accepted");
     }
     private static void migratesLegacySpecs(Path root) throws Exception {
         Path repository = root.resolve("legacy"); Path source = repository.resolve(
