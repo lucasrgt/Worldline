@@ -16,7 +16,8 @@ import java.util.concurrent.TimeUnit;
 public final class ExecutorServerCycle {
     private static final List<String> IDS = List.of(
             "m20-server-bootstrap", "m22-multiplayer-wire", "m130-nether-login",
-            "m135-player-respawn");
+            "m135-player-respawn", "m629-door-sound-event",
+            "m702-powered-rail-slope-propagation");
     private static final long TIMEOUT_MS = 600_000L;
     private static final long MEMORY = 3L << 30;
     private static final int PROCESSES = 32;
@@ -32,11 +33,14 @@ public final class ExecutorServerCycle {
     }
 
     static void selfTest() throws Exception {
-        require(IDS.size() == 4 && IDS.stream().distinct().count() == IDS.size()
+        require(IDS.size() == 6 && IDS.stream().distinct().count() == IDS.size()
                 && IDS.get(0).equals("m20-server-bootstrap")
                 && IDS.get(1).equals("m22-multiplayer-wire")
                 && IDS.get(2).equals("m130-nether-login")
-                && IDS.get(3).equals("m135-player-respawn"), "server matrix drifted");
+                && IDS.get(3).equals("m135-player-respawn")
+                && IDS.get(4).equals("m629-door-sound-event")
+                && IDS.get(5).equals("m702-powered-rail-slope-propagation"),
+                "server matrix drifted");
         Properties metrics = new Properties();
         metrics.setProperty("format", "1"); metrics.setProperty("backend", "windows-job");
         metrics.setProperty("timed.out", "false"); metrics.setProperty("parent.exited", "false");
