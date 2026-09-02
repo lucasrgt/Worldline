@@ -26,6 +26,17 @@ final class ModuleCacheRemote {
             if (hydrated) System.out.println("  hydrated module " + module + " from shared-directory CAS");
             return hydrated;
         }
+        if ("s3".equals(mode)) {
+            ModuleCacheS3 backend = ModuleCacheS3.connect(ModuleCacheS3Config.from(environment),
+                    Path.of(required(environment, "WORLDLINE_MODULE_CAS_INDEX")),
+                    Path.of(required(environment, "WORLDLINE_MODULE_CAS_INDEX_TRUST")),
+                    required(environment, "WORLDLINE_MODULE_CAS_PUBLIC_KEY"),
+                    required(environment, "WORLDLINE_MODULE_CAS_CHANNEL"),
+                    moduleCache.getParent().resolve("module-s3-downloads"));
+            boolean hydrated = backend.hydrate(module, inputSha256, target);
+            if (hydrated) System.out.println("  hydrated module " + module + " from S3-compatible CAS");
+            return hydrated;
+        }
         require("shadow".equals(mode), "unsupported WORLDLINE_MODULE_CAS_MODE");
         ModuleCacheHydrator hydrator = ModuleCacheHydrator.connect(root,
                 Path.of(required(environment, "WORLDLINE_CAS_BINARY")),
@@ -43,9 +54,9 @@ final class ModuleCacheRemote {
 
     static void selfTest() throws Exception {
         require(!enabled(null) && !enabled("") && !enabled("off") && enabled("shadow")
-                && enabled("shared-directory"),
+                && enabled("shared-directory") && enabled("s3"),
                 "module CAS mode classifier drifted");
-        ModuleCacheSharedDirectory.selfTest();
+        ModuleCacheSharedDirectory.selfTest(); ModuleCacheS3.selfTest();
         System.out.println("  module cache remote mode self-test: passed");
     }
 

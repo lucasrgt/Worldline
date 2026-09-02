@@ -1654,9 +1654,16 @@ malformed, missing, and orphaned objects without leaking paths or content.
 Per-digest local and cross-process locks serialize publication across Gates;
 the inventory validates their separate zero-byte namespace without counting
 locks as content objects.
-S3-compatible storage and its TLS, authentication, retention, audit, and
-publisher-governance policies remain pending rather than being inferred from
-the shared filesystem boundary.
+An S3-compatible backend is now implemented for the same signed module index
+and immutable object layout. It uses Signature Version 4, conditional
+create-if-absent publication, closed metadata, bounded downloads, and exact
+post-PUT byte revalidation even when the store reports that an object already
+exists. Its authenticated loopback fixture is anchored to AWS's published
+signing vector and covers create, idempotent republish, hydration, miss, wrong
+credentials, and corrupt remote bytes. This is structural protocol evidence,
+not qualification of a production store. Deployment TLS, scoped credentials,
+server-side encryption, retention, access audit, replication, recovery, and
+publisher-governance policies remain pending and require real infrastructure.
 
 ### D5. Cache families
 

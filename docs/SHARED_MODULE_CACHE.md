@@ -1,4 +1,4 @@
-# Shared-directory Module Cache
+# Shared Module Cache
 
 Worldline can hydrate signed, source-derived module bundles from an immutable
 filesystem CAS shared by local worktrees, CI jobs, or a mounted network volume.
@@ -65,3 +65,43 @@ because their authoritative copies already travel in the Git checkout.
 `null`, not as an empty healthy store. Corruption, malformed layout, or a
 missing signed object remains visible in the overlay and never becomes PASS
 evidence.
+
+## S3-compatible hydration
+
+The same signed index and canonical bundle format can be hydrated from an
+S3-compatible path-style endpoint. Select the backend and provide its closed
+configuration together with the existing index trust values:
+
+```text
+WORLDLINE_MODULE_CAS_MODE=s3
+WORLDLINE_MODULE_CAS_INDEX=<absolute canonical modules.wmi>
+WORLDLINE_MODULE_CAS_INDEX_TRUST=<absolute signed trust envelope>
+WORLDLINE_MODULE_CAS_PUBLIC_KEY=<canonical Ed25519 public key>
+WORLDLINE_MODULE_CAS_CHANNEL=<reviewed release channel>
+WORLDLINE_MODULE_S3_ENDPOINT=https://objects.example.invalid
+WORLDLINE_MODULE_S3_BUCKET=worldline-cache
+WORLDLINE_MODULE_S3_PREFIX=modules/v1
+WORLDLINE_MODULE_S3_REGION=us-east-1
+WORLDLINE_MODULE_S3_ACCESS_KEY=<scoped access key>
+WORLDLINE_MODULE_S3_SECRET_KEY=<secret supplied outside the repository>
+WORLDLINE_MODULE_S3_SESSION_TOKEN=<optional short-lived token>
+```
+
+Objects use the common
+`objects/sha256/<first-two-hex>/<remaining-hex>` layout below the bucket and
+optional prefix. Requests are signed with AWS Signature Version 4. Publication
+uses `If-None-Match: *`; both a successful create and an existing-object reply
+are followed by a complete authenticated download, exact metadata check,
+bounded byte count, and local SHA-256 revalidation. Redirects, query-bearing
+endpoints, unbounded responses, wrong credentials, missing objects, corrupt
+objects, and non-HTTPS remote endpoints fail closed. Plain HTTP exists only
+for the explicit loopback protocol fixture.
+
+The local fixture anchors signing to AWS's published SigV4 example and proves
+authenticated create, idempotent republish, hydration, miss, credential
+rejection, and corruption rejection. It does not qualify a production object
+store. Real TLS certificates, scoped credentials, retention, server-side
+encryption, access logs, lifecycle rules, replication, publisher governance,
+and operational recovery remain deployment responsibilities. Transport never
+asserts behavioral PASS and never grants official or mapped runtime bytes
+upload authority.
