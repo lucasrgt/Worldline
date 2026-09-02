@@ -902,6 +902,22 @@ Evidence recorded for these slices:
   passes `Gate --runtime` cold at 122,664 ms, canonical Gate hot at 3,908 ms,
   and final `Gate --milestone m22-multiplayer-wire`; CSM checks ten ways
   without deviations and NYA passes.
+- Worldline commit `30ae2a8af` expands that official differential to six
+  contracts by adding M629 peer-observed wooden-door sound and M702
+  powered-rail slope propagation. All six legacy/Rust pairs pass on the first
+  matrix attempt under one continuous runtime lease, with byte-equal canonical
+  evidence, complete output, and drained process trees. M629 records request
+  `e152368ef434126ee82a93cb52a2e619a9166bf09ea4364ac0f8438fb87d853d`,
+  evidence `6bb920e869422b22c4dfe6b5c83e8b5105bab6cd94ecde564ba00850348445dd`,
+  and telemetry
+  `c60f3e3178f126a6d34055b417b9947c5f9453f747a4620de7b9a1a172fb8f05`.
+  M702 records request
+  `b71277e9abdb8296831624f6401b97c24f7a07499b7463be13516b641126fd85`,
+  evidence `cddc2929c80ac965df0a7af998486a4a0745bc991faa042164a83b400c841bc6`,
+  and telemetry
+  `4c6ecd5679d2feb9c620ee13c8041b302a03a42b58526859a618dd77b9e1256e`.
+  The exact clean commit passes the canonical Gate and `Gate --runtime` before
+  the official matrix. Networking remains explicit inherited loopback.
 - Worldline commits `d39ee917b` through `b24f2df59` promote the qualified Rust
   Windows Job executor to the `server-headless` HostSmokePool default. Windows
   `auto` fails closed when `WORLDLINE_EXECUTOR` is absent or invalid, while
@@ -930,7 +946,7 @@ Evidence recorded for these slices:
   names, links, or content as faults.
 Current boundaries remain honest: Linux mount and PID namespaces,
 OS-enforced loopback-only policy, Windows filesystem/network isolation,
-remaining server-headless families and broader onscreen GUI/driver profiles
+additional server-headless families and broader onscreen GUI/driver profiles
 remain pending. The structural Windows tooling
 cycle and one official server behavior/containment matrix are qualified; Rust
 is the default only for the Windows `server-headless` host-pool lane. Artifact
@@ -1229,7 +1245,10 @@ pair is equal, both sides drain their process trees, and each Rust receipt
 proves complete output plus zero descendants. Commit `7c9eb94c9` repairs the
 M22 stable signal and qualifies it as the fourth matrix member with exact
 legacy/Rust evidence equality, complete output, and zero descendants. Further server
-families and an OS-enforced Windows network boundary remain pending; explicit
+families and an OS-enforced Windows network boundary remain pending. Commit
+`30ae2a8af` adds M629 door-sound peer observation and M702 powered-rail slope
+propagation as the fifth and sixth members; all twelve official legs agree and
+drain on the first matrix attempt. Explicit
 loopback use under `network=inherit` is not relabeled as network isolation.
 
 ### A7. Windows GUI promotion
@@ -1412,6 +1431,12 @@ records 44,072 ms, 12-ms bootstrap, 44,059-ms runtime, 927,719,424 peak bytes,
 and nine processes. All four outputs are complete and every Job drains to zero
 descendants.
 
+Commit `30ae2a8af` adds M629 at 33,196 ms elapsed, 14-ms bootstrap,
+33,182-ms runtime, 908,742,656 peak bytes, and nine processes. M702 records
+37,311 ms elapsed, 14-ms bootstrap, 37,296-ms runtime, 912,044,032 peak bytes,
+and nine processes. Both outputs are complete and both Jobs drain to zero
+descendants.
+
 The first Candidate profile at commit `e9ff4e55a` records a successful real
 M702 cold build with peak Job commit 1,368,981,504 bytes, canonical compiled
 evidence, complete output, and zero remaining descendants.
@@ -1455,6 +1480,8 @@ Commit `7e12751d9` adds current M20 plus the first M130 and M135 server samples
 on the same Windows 11/amd64 executor profile. Commit `7c9eb94c9` adds the first
 M22 sample after its stable signal repair and refreshes all four members on the
 same Windows 11/amd64 executor profile.
+Commit `30ae2a8af` adds the first official-server M629 and M702 samples on that
+same profile, expanding the current server history to six behavior families.
 Commit `9b3bad608` adds the first native GUI sample for `m10-native-render` on
 Windows 11/amd64; no history upload is enabled.
 Commit `935d0fc41` adds the first Aero GUI sample for
