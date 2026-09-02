@@ -133,7 +133,7 @@ jobs:
             printf '## Worldline Gate\n\nNo `verify.json` was produced.\n' >> "$GITHUB_STEP_SUMMARY"
           fi
       - if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: runtime-reports
           path: |
