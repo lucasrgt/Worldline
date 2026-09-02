@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.HexFormat;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -18,11 +19,13 @@ final class TrainSourceHistory {
 
     static TrainSourceHistory load(Path root) throws Exception {
         Map<String, Set<String>> values = new HashMap<>();
-        for (String commit : capture(root, "log", "--format=%H", "--",
-                "smokes/train-reconciliation.lock").lines().toList()) {
+        List<String> commits = capture(root, "log", "--format=%H", "--",
+                "smokes/train-reconciliation.lock").lines().filter(value -> !value.isBlank()).toList();
+        List<String> objects = commits.stream().map(commit ->
+                commit + ":smokes/train-reconciliation.lock").toList();
+        for (String content : GitObjectBatch.read(root, objects, false)) {
             Properties lock = new Properties();
-            try (StringReader reader = new StringReader(capture(root, "show",
-                    commit + ":smokes/train-reconciliation.lock"))) { lock.load(reader); }
+            try (StringReader reader = new StringReader(content)) { lock.load(reader); }
             int count = integer(lock.getProperty("source.count", "0"));
             for (int index = 0; index < count; index++) {
                 String stem = "source." + index + ".";
@@ -80,10 +83,12 @@ final class TrainSourceHistory {
                         && !value.startsWith("smokes/qualification-evidence/"))
                 .sorted().toList();
         java.util.List<String> paths = stablePaths(ordering, discovered);
+        List<String> priorSources = GitObjectBatch.read(root, paths.stream().map(relative ->
+                base + ":" + relative).toList(), true);
         target.setProperty("source.count", Integer.toString(paths.size())); int index = 0;
         for (String relative : paths) {
             String stem = "source." + index++ + "."; Path current = root.resolve(relative);
-            String prior = show(root, base + ":" + relative);
+            String prior = priorSources.get(index - 1);
             target.setProperty(stem + "path", relative);
             target.setProperty(stem + "prior_sha256", prior == null ? "added"
                     : digest(prior.getBytes(StandardCharsets.UTF_8)));
@@ -161,13 +166,6 @@ final class TrainSourceHistory {
         process.getInputStream().transferTo(output);
         if (process.waitFor() != 0) throw new IllegalStateException("git source history query failed");
         return output.toString(StandardCharsets.UTF_8);
-    }
-
-    private static String show(Path root, String object) throws Exception {
-        Process process = new ProcessBuilder("git", "show", object).directory(root.toFile()).start();
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        process.getInputStream().transferTo(output);
-        return process.waitFor() == 0 ? output.toString(StandardCharsets.UTF_8) : null;
     }
 
     private static String digest(byte[] bytes) throws Exception {
