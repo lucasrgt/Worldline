@@ -15,7 +15,13 @@ import java.util.Set;
 /** Preserves portable source-digest ancestry across repeated train reseals. */
 final class TrainSourceHistory {
     private final Map<String, Set<String>> committed;
-    private TrainSourceHistory(Map<String, Set<String>> committed) { this.committed = committed; }
+    private final Map<String, String> previous;
+    private TrainSourceHistory(Map<String, Set<String>> committed) {
+        this(committed, Map.of());
+    }
+    private TrainSourceHistory(Map<String, Set<String>> committed, Map<String, String> previous) {
+        this.committed = committed; this.previous = previous;
+    }
 
     static TrainSourceHistory load(Path root) throws Exception {
         Map<String, Set<String>> values = new HashMap<>();
@@ -23,7 +29,8 @@ final class TrainSourceHistory {
                 "smokes/train-reconciliation.lock").lines().filter(value -> !value.isBlank()).toList();
         List<String> objects = commits.stream().map(commit ->
                 commit + ":smokes/train-reconciliation.lock").toList();
-        for (String content : GitObjectBatch.read(root, objects, false)) {
+        List<String> contents = GitObjectBatch.read(root, objects, false);
+        for (String content : contents) {
             Properties lock = new Properties();
             try (StringReader reader = new StringReader(content)) { lock.load(reader); }
             int count = integer(lock.getProperty("source.count", "0"));
@@ -31,14 +38,25 @@ final class TrainSourceHistory {
                 String stem = "source." + index + ".";
                 Set<String> digests = values.computeIfAbsent(
                         lock.getProperty(stem + "path"), ignored -> new LinkedHashSet<>());
-                add(digests, lock.getProperty(stem + "prior_sha256"));
                 add(digests, lock.getProperty(stem + "current_sha256"));
+            }
+        }
+        for (String content : contents) {
+            Properties lock = new Properties();
+            try (StringReader reader = new StringReader(content)) { lock.load(reader); }
+            int count = integer(lock.getProperty("source.count", "0"));
+            for (int index = 0; index < count; index++) {
+                String stem = "source." + index + ".";
+                Set<String> digests = values.computeIfAbsent(
+                        lock.getProperty(stem + "path"), ignored -> new LinkedHashSet<>());
                 int ancestors = integer(lock.getProperty(stem + "ancestor.count", "0"));
                 for (int item = 0; item < ancestors; item++)
                     add(digests, lock.getProperty(stem + "ancestor." + item + ".sha256"));
+                add(digests, lock.getProperty(stem + "prior_sha256"));
             }
         }
-        return new TrainSourceHistory(Map.copyOf(values));
+        Map<String, String> previous = contents.size() < 2 ? Map.of() : currents(contents.get(1));
+        return new TrainSourceHistory(Map.copyOf(values), previous);
     }
 
     void write(Properties predecessor, Properties target, String stem, String relative) {
@@ -46,31 +64,56 @@ final class TrainSourceHistory {
         if (priorStem != null && java.util.Objects.equals(
                 predecessor.getProperty(priorStem + "current_sha256"),
                 target.getProperty(stem + "current_sha256"))) {
-            copyAncestors(predecessor, target, priorStem, stem);
+            writeAncestors(target, stem, orderedRecorded(predecessor, priorStem, relative));
             return;
         }
         Set<String> ancestors = new LinkedHashSet<>();
-        ancestors.addAll(committed.getOrDefault(relative, Set.of()));
         if (priorStem != null) {
-            add(ancestors, predecessor.getProperty(priorStem + "prior_sha256"));
             add(ancestors, predecessor.getProperty(priorStem + "current_sha256"));
-            int count = integer(predecessor.getProperty(priorStem + "ancestor.count", "0"));
-            for (int index = 0; index < count; index++)
-                add(ancestors, predecessor.getProperty(priorStem + "ancestor." + index + ".sha256"));
+            ancestors.addAll(orderedRecorded(predecessor, priorStem, relative));
+            add(ancestors, predecessor.getProperty(priorStem + "prior_sha256"));
         }
+        for (String digest : committed.getOrDefault(relative, Set.of()))
+            if (!digest.equals(target.getProperty(stem + "current_sha256"))) add(ancestors, digest);
+        writeAncestors(target, stem, ancestors);
+    }
+
+    private Set<String> orderedRecorded(Properties source, String sourceStem, String relative) {
+        Set<String> recorded = new LinkedHashSet<>();
+        int count = integer(source.getProperty(sourceStem + "ancestor.count", "0"));
+        for (int index = 0; index < count; index++)
+            add(recorded, source.getProperty(sourceStem + "ancestor." + index + ".sha256"));
+        boolean changedInPriorLock = !java.util.Objects.equals(
+                source.getProperty(sourceStem + "current_sha256"), previous.get(relative));
+        if (!changedInPriorLock || recorded.isEmpty() || !java.util.List.of("added", "removed")
+                    .contains(recorded.iterator().next())) return recorded;
+        String predecessor = committed.getOrDefault(relative, Set.of()).stream()
+                .filter(value -> value.matches("[0-9a-f]{64}") && recorded.contains(value))
+                .findFirst().orElse(null);
+        if (predecessor == null) return recorded;
+        Set<String> ordered = new LinkedHashSet<>(); ordered.add(predecessor);
+        ordered.addAll(recorded); return ordered;
+    }
+
+    private static void writeAncestors(Properties target, String stem, Set<String> ancestors) {
         target.setProperty(stem + "ancestor.count", Integer.toString(ancestors.size()));
         int index = 0;
         for (String digest : ancestors)
             target.setProperty(stem + "ancestor." + index++ + ".sha256", digest);
     }
 
-    private static void copyAncestors(Properties source, Properties target,
-            String sourceStem, String targetStem) {
-        int count = integer(source.getProperty(sourceStem + "ancestor.count", "0"));
-        target.setProperty(targetStem + "ancestor.count", Integer.toString(count));
-        for (int index = 0; index < count; index++)
-            target.setProperty(targetStem + "ancestor." + index + ".sha256",
-                    source.getProperty(sourceStem + "ancestor." + index + ".sha256"));
+    private static Map<String, String> currents(String content) throws Exception {
+        Properties lock = new Properties();
+        try (StringReader reader = new StringReader(content)) { lock.load(reader); }
+        Map<String, String> values = new HashMap<>();
+        int count = integer(lock.getProperty("source.count", "0"));
+        for (int index = 0; index < count; index++) {
+            String stem = "source." + index + ".";
+            String path = lock.getProperty(stem + "path");
+            String digest = lock.getProperty(stem + "current_sha256");
+            if (path != null && digest != null) values.put(path, digest);
+        }
+        return Map.copyOf(values);
     }
 
     void writeSources(Path root, Properties target, Properties predecessor,
@@ -124,6 +167,28 @@ final class TrainSourceHistory {
                         && "b".repeat(64).equals(
                                 target.getProperty("source.0.ancestor.0.sha256")),
                 "unchanged train source ancestry advanced");
+        prior.setProperty("source.0.prior_sha256", "added");
+        target.setProperty("source.0.current_sha256", "d".repeat(64));
+        Set<String> committed = new LinkedHashSet<>(java.util.List.of(
+                digest, "c".repeat(64), "added"));
+        new TrainSourceHistory(Map.of("same", committed))
+                .write(prior, target, "source.0.", "same");
+        require("4".equals(target.getProperty("source.0.ancestor.count"))
+                        && digest.equals(target.getProperty("source.0.ancestor.0.sha256"))
+                        && "b".repeat(64).equals(target.getProperty("source.0.ancestor.1.sha256"))
+                        && "added".equals(target.getProperty("source.0.ancestor.2.sha256"))
+                        && "c".repeat(64).equals(target.getProperty("source.0.ancestor.3.sha256")),
+                "changed train source did not preserve predecessor-first ancestry");
+        prior.setProperty("source.0.current_sha256", "d".repeat(64));
+        prior.setProperty("source.0.ancestor.0.sha256", "added");
+        prior.setProperty("source.0.ancestor.1.sha256", digest);
+        prior.setProperty("source.0.ancestor.count", "2");
+        target = new Properties(); target.setProperty("source.0.current_sha256", "d".repeat(64));
+        new TrainSourceHistory(Map.of("same", committed), Map.of("same", digest))
+                .write(prior, target, "source.0.", "same");
+        require(digest.equals(target.getProperty("source.0.ancestor.0.sha256"))
+                        && "added".equals(target.getProperty("source.0.ancestor.1.sha256")),
+                "recent sentinel-first ancestry was not repaired narrowly");
     }
 
     private static java.util.List<String> stablePaths(
