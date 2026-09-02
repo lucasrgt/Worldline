@@ -65,8 +65,20 @@ public final class ModuleCacheS3Shadow {
     }
 
     static void selfTest() throws Exception {
+        Path source = Path.of("").toAbsolutePath().normalize();
         Path root = Files.createTempDirectory("worldline-s3-shadow-").toAbsolutePath().normalize();
-        try { rejected(() -> execute(root), "S3 shadow accepted an absent api module"); }
+        try {
+            rejected(() -> execute(root), "S3 shadow accepted an absent api module");
+            Files.createDirectories(root.resolve("quality"));
+            Files.copy(source.resolve("quality/artifact-transport.properties"),
+                    root.resolve("quality/artifact-transport.properties"));
+            Path entry = root.resolve(".worldline/build/classes/api");
+            Files.createDirectories(entry.resolve("worldline/fixture"));
+            Files.writeString(entry.resolve(".complete"), "a".repeat(64) + "\n");
+            Files.write(entry.resolve("worldline/fixture/Api.class"),
+                    new byte[] {-54, -2, -70, -66, 0, 1});
+            execute(root);
+        }
         finally { SafeTreeDelete.delete(root); }
     }
 
