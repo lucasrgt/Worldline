@@ -3,10 +3,8 @@ import java.io.Reader;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -100,7 +98,9 @@ final class ModuleBuild {
                 run(command, 180, cache.resolve(module));
                 Files.writeString(temporary.resolve(".complete"), digest + "\n", StandardCharsets.UTF_8);
                 require(!Files.exists(directory), "module cache target appeared during publication");
-                move(temporary, directory); touch(module, digest);
+                ImmutableCachePublish.move(temporary, directory);
+                require(complete(complete, digest), "published module cache identity drifted");
+                touch(module, digest);
             } finally { delete(temporary); }
         }
         return new Artifact(directory, digest, false);
@@ -149,11 +149,6 @@ final class ModuleBuild {
         process.descendants().sorted(Comparator.comparingLong(ProcessHandle::pid).reversed())
                 .forEach(ProcessHandle::destroyForcibly);
         process.destroyForcibly();
-    }
-
-    private static void move(Path source, Path target) throws IOException {
-        try { Files.move(source, target, StandardCopyOption.ATOMIC_MOVE); }
-        catch (AtomicMoveNotSupportedException error) { Files.move(source, target); }
     }
 
     private static boolean complete(Path marker, String digest) throws IOException {

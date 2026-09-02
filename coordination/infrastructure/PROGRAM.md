@@ -555,6 +555,21 @@ Evidence recorded for these slices:
   test receipts. The exact canonical Gate passes cold
   (`104784ms < 240000ms`), CSM checks ten ways with no deviations, and NYA
   passes.
+- Worldline commit `0ad1b67a8` expands that profile into a closed three-member
+  matrix: M702 powered-rail propagation, M135 player respawn, and M629
+  multiplayer door sound. Commit `9f4459e5d` repairs a recurrent Windows
+  `AccessDenied` boundary exposed first in the legacy test cache and then in
+  the Rust module cache. Private immutable publication now retries only an
+  absent-target sibling move, remains bounded to eight attempts, preserves
+  staging on exhaustion, rejects occupied targets, and revalidates the exact
+  `.complete` digest after success. The exact clean matrix produces byte-equal
+  legacy/Rust evidence for all three workloads. Requests are
+  `90e93f04eef9e109b8f6a216d060b12a5a9e9057dd7f2efbe1db99e286c49172`,
+  `a726a6eb6b79541bd0e5b6bd264f5255cd8f570b1ae223f45d1c509c4961f873`,
+  and `2fdf6af5fe60a087052bf783b2f6c2468d0852e00103e8de11bb59405202a723`.
+  Their class-evidence digests are `4f7c075b61162663105b85601c09a0b9da4ef5caa0bfd1d7d665d4d5ba563bf8`,
+  `c368ff73dba82cd8b0e747b7a944048be0426f2861a4c892dff9d52c8a4642eb`,
+  and `0bdd5327c829e0b3744d3d2ef2bb6c2f88e162d9ab5af13fdfcaa996427272a3`.
 - Worldline commit `9b3bad608` qualifies the first official `gui-native`
   differential against `m10-native-render`, using executor commit `803861d`.
   One canonical runtime lease covers legacy then Rust Windows Jobs. Each arm
@@ -915,8 +930,8 @@ Evidence recorded for these slices:
   names, links, or content as faults.
 Current boundaries remain honest: Linux mount and PID namespaces,
 OS-enforced loopback-only policy, Windows filesystem/network isolation,
-remaining server-headless families, broader onscreen GUI/driver profiles, and
-multi-Candidate histories remain pending. The structural Windows tooling
+remaining server-headless families and broader onscreen GUI/driver profiles
+remain pending. The structural Windows tooling
 cycle and one official server behavior/containment matrix are qualified; Rust
 is the default only for the Windows `server-headless` host-pool lane. Artifact
 classification now covers tracked
@@ -1184,6 +1199,15 @@ class evidence, complete output, zero remaining descendants, and a valid
 host-bound lower-only admission receipt. This profile still does not make Rust
 the default executor and does not start Minecraft.
 
+Commit `0ad1b67a8` extends the same profile to M135 and M629 while retaining
+M702. Each workload has an independent plan, output root, compiled evidence,
+and sanitized telemetry sample inside the two disposable arm worktrees. All
+three legacy/Rust pairs agree byte for byte and drain their Jobs. Commit
+`9f4459e5d` provides the bounded private-cache publication retry required after
+the qualification reproduced Windows `AccessDenied` in both test and module
+cache moves; collision, interruption, invalid staging, and exhaustion still
+fail closed.
+
 ### A6. Server-headless promotion
 
 Run legacy and Rust executions sequentially against fresh official-server
@@ -1392,6 +1416,14 @@ The first Candidate profile at commit `e9ff4e55a` records a successful real
 M702 cold build with peak Job commit 1,368,981,504 bytes, canonical compiled
 evidence, complete output, and zero remaining descendants.
 
+The three-member Candidate matrix records M702 at 76,905 ms and 1,352,196,096
+peak bytes, M135 at 45,842 ms and 1,326,718,976 peak bytes, and M629 at 52,742
+ms and 1,353,334,784 peak bytes. Each peaks at seventeen processes, retains
+complete output, and drains to zero descendants. Their telemetry identities are
+`1f5dc4bc76a5ca6ca0ae211e741bfa045b84b0e21440d220a3b7c105f0e28279`,
+`dcb4a921e5f8f494a660f51ee203fac8c009fede9407397a350de9dec0fac5e5`,
+and `b5894d3b9902ad81153a7c7e13efedf967b89874ac6c13a414135514c41cc6b7`.
+
 The first native GUI profile at commit `9b3bad608` records M10 at 7,166 ms,
 12-ms bootstrap, 7,153-ms runtime, 741,785,600-byte peak Job commit, seven
 peak processes, complete output, and zero remaining descendants.
@@ -1416,8 +1448,9 @@ bounded, canonically reparsed, and rebuild into deterministic profile groups.
 Only sanitized observational fields are retained. Commit `7365d9a260` adds the
 first smoke-specific official server sample for `m20-server-bootstrap` on
 Windows 11/amd64. Commit `e9ff4e55a` adds the first Candidate sample for
-`m702-powered-rail-slope-propagation` on Windows 11/amd64. Broader server and
-multi-Candidate histories remain pending.
+`m702-powered-rail-slope-propagation` on Windows 11/amd64. The three-member
+matrix adds current M702 plus the first M135 and M629 Candidate samples on the
+same executor profile. Broader server histories remain pending.
 Commit `7e12751d9` adds current M20 plus the first M130 and M135 server samples
 on the same Windows 11/amd64 executor profile. Commit `7c9eb94c9` adds the first
 M22 sample after its stable signal repair and refreshes all four members on the
@@ -1480,6 +1513,11 @@ commit `192061dc5`; commit `e9ff4e55a` exercises it with the first real
 is below the configured 2-GiB worker estimate, effective admission stays at
 2 GiB: telemetry cannot raise width. Increasing width still requires repeated
 frozen waves and the reviewed promotion sequence.
+
+The current three-member matrix observes a maximum 1,353,334,784-byte peak and
+derives a 1,691,668,480-byte floor. It also remains below the configured 2-GiB
+estimate, so the added histories neither increase width nor reduce the existing
+worker reservation.
 
 ### C4. Failure clustering
 

@@ -12,6 +12,7 @@ final class HarnessFeatureSelfTest {
         ModuleCacheMaintenance.main(new String[] {"--self-test"});
         SharedCacheMaintenance.main(new String[] {"--self-test"});
         CacheRebuildDrill.selfTest();
+        ImmutableCachePublish.selfTest();
         VerificationStageCache.selfTest();
         GateLatencyCheck.selfTest();
         CsmSuiteCheck.selfTest();

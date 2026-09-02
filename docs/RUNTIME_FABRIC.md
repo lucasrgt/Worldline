@@ -167,6 +167,28 @@ mapping review, or frozen-signature requirements.
 
 ## Native executor qualification
 
+The structural Candidate promotion compares three static milestone builds
+without starting Minecraft:
+
+```text
+java tools/harness/Gate.java --executor-candidate
+```
+
+The closed matrix covers powered-rail propagation, player respawn, and the
+multiplayer door-sound event. Legacy and Rust arms use independent disposable
+exact-commit worktrees and private build/test caches. Within each arm, every
+workload receives a separate `Gate --candidate`, output root, plan, compiled
+class digest, and telemetry sample. Promotion requires byte-equal legacy/Rust
+class evidence, complete output, zero descendants, and a lower-only admission
+floor that cannot increase worker width.
+
+Private immutable module and test cache publication retries only Windows
+`AccessDenied` from an absent-target sibling move. The retry is bounded to
+eight attempts with less than one second of total backoff. An occupied target,
+an invalid staging tree, interruption, or exhaustion fails closed; the caller
+then revalidates the exact `.complete` digest. No retry may replace an existing
+cache entry.
+
 The Windows server promotion cycle compares the legacy C# Job Object launcher
 with the Rust Windows Job backend under one continuous official-runtime lease:
 
