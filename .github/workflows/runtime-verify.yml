@@ -31,7 +31,7 @@ jobs:
       WORLDLINE_TEST_CACHE_RECHECK_PERCENT: '10'
       WORLDLINE_TEST_CACHE_RECHECK_SEED: ${{ github.run_id }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           clean: false
           fetch-depth: 0
