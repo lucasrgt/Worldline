@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.FurnaceSubsystemEvidence;
+import worldline.testapi.FurnaceSubsystemFixture;
+import worldline.testapi.FurnaceSubsystemObservation;
 
 /** Contract tests for reusable furnace subsystem evidence. */
 public final class FurnaceSubsystemFixtureTest {

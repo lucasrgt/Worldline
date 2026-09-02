@@ -27,6 +27,7 @@ final class HarnessFeatureSelfTest {
         ProviderDiscoveryTrainSuccessor.selfTest();
         MilestoneCatalogTrainSuccessor.selfTest();
         IntegratedMilestoneTrainDocumentationSuccessor.selfTest();
+        ReconciledTrainSourceSuccessor.selfTest();
         EntityLifecycleArtifactTrainSuccessor.selfTest();
         BoundedEntityArchetypeSuccessor.selfTest();
         ObjectMaterializationMatrixSuccessor.selfTest();
@@ -56,8 +57,14 @@ final class HarnessFeatureSelfTest {
         CandidateSourceClosure.selfTest();
         NeighborTestKitPinCheck.selfTest();
         SchemaPinCheck.selfTest();
+        HexDigest.selfTest();
+        ColumnLift.selfTest();
+        OfficialServerBootstrap.selfTest();
+        DuplicatePatternCheck.selfTest();
+        JdkPinCheck.selfTest();
     }
     static void smoke() throws Exception {
+        SmokeFingerprintWork.selfTest();
         SmokeObservationCache.selfTest();
         SmokeScheduleHistory.selfTest();
         SmokeSuiteScheduler.selfTest();

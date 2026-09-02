@@ -3,8 +3,8 @@ package worldline.smoke.b173redstoneinputs;
 import net.minecraft.src.World;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
-import worldline.testkit.RedstoneInputControlsSubsystemObservation;
-import worldline.testkit.RedstoneInputControlsSubsystemScenario;
+import worldline.testapi.RedstoneInputControlsSubsystemObservation;
+import worldline.testapi.RedstoneInputControlsSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Mapped official-world backend for the complete redstone input-control package. */

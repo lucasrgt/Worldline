@@ -7,9 +7,9 @@ import worldline.api.RemoteItemStack;
 import worldline.b173server.B173LifecycleScenarioFactory;
 import worldline.b173server.B173ServerLifecycleTestRuntimeProvider;
 import worldline.testkit.BlockLifecycleFamilyCycle;
-import worldline.testkit.BlockLifecycleNeighbor;
-import worldline.testkit.BlockLifecycleScenario;
-import worldline.testkit.BlockLifecycleSlot;
+import worldline.testapi.BlockLifecycleNeighbor;
+import worldline.testapi.BlockLifecycleScenario;
+import worldline.testapi.BlockLifecycleSlot;
 
 /** Support- and hydration-sensitive cactus and sugar-cane gameplay lifecycles. */
 public final class B173SupportDependentPlantLifecycleSmoke {

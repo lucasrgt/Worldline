@@ -1,4 +1,9 @@
 package worldline.testkit;
+import worldline.testapi.BlockConformanceCase;
+import worldline.testapi.BlockConformancePlan;
+import worldline.testapi.BlockConformanceProfile;
+import worldline.testapi.BlockConformanceTemplate;
+import worldline.testapi.ConformanceLayer;
 
 import java.util.List;
 import java.util.Map;

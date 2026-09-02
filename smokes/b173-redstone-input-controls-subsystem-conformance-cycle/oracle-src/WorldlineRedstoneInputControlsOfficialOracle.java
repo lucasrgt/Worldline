@@ -1,5 +1,5 @@
-import worldline.testkit.RedstoneInputControlsSubsystemEvidence;
-import worldline.testkit.RedstoneInputControlsSubsystemFixture;
+import worldline.testapi.RedstoneInputControlsSubsystemEvidence;
+import worldline.testapi.RedstoneInputControlsSubsystemFixture;
 
 /** Complete redstone input-control subsystem against the untouched official server JAR. */
 public final class WorldlineRedstoneInputControlsOfficialOracle {

@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.RailNetworkSubsystemEvidence;
+import worldline.testapi.RailNetworkSubsystemFixture;
+import worldline.testapi.RailNetworkSubsystemObservation;
 
 /** Contract test for stable rail-network evidence. */
 public final class RailNetworkSubsystemFixtureTest {

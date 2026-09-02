@@ -1,5 +1,5 @@
-import worldline.testkit.VegetationEcologyEvidence;
-import worldline.testkit.VegetationEcologyFixture;
+import worldline.testapi.VegetationEcologyEvidence;
+import worldline.testapi.VegetationEcologyFixture;
 
 /** Vegetation ecology matrix against the untouched official server JAR. */
 public final class WorldlineVegetationEcologyOfficialOracle {

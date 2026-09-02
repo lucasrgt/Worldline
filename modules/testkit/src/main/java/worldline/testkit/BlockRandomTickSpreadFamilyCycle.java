@@ -1,4 +1,6 @@
 package worldline.testkit;
+import worldline.testapi.BlockRandomTickSpreadPlan;
+import worldline.testapi.BlockRandomTickSpreadScenario;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;

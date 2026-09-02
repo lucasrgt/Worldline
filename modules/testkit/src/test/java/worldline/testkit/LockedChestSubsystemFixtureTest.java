@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.LockedChestSubsystemEvidence;
+import worldline.testapi.LockedChestSubsystemFixture;
+import worldline.testapi.LockedChestSubsystemObservation;
 
 /** Locks the public locked-chest mini-subsystem contract. */
 public final class LockedChestSubsystemFixtureTest {

@@ -1,4 +1,12 @@
 package worldline.testkit;
+import worldline.testapi.BlockConformancePlan;
+import worldline.testapi.BlockConformanceProfile;
+import worldline.testapi.BlockConformanceTemplate;
+import worldline.testapi.BlockLifecycleSlot;
+import worldline.testapi.BlockStabilityEvidence;
+import worldline.testapi.BlockStabilityFixture;
+import worldline.testapi.BlockStabilityScenario;
+import worldline.testapi.ConformanceLayer;
 
 import java.util.ArrayList;
 import java.util.Arrays;

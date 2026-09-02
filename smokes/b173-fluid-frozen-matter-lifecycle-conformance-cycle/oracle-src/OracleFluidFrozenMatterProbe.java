@@ -1,5 +1,5 @@
 import java.util.Random;
-import worldline.testkit.FluidFrozenMatterObservation;
+import worldline.testapi.FluidFrozenMatterObservation;
 
 /** Official-name counterpart of the fluid and frozen-matter lifecycle matrix. */
 final class OracleFluidFrozenMatterProbe {

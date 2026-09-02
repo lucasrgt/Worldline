@@ -1,5 +1,5 @@
-import worldline.testkit.BedrockSubsystemEvidence;
-import worldline.testkit.BedrockSubsystemFixture;
+import worldline.testapi.BedrockSubsystemEvidence;
+import worldline.testapi.BedrockSubsystemFixture;
 
 /** Complete bedrock subsystem against the untouched obfuscated server JAR. */
 public final class WorldlineBedrockOfficialOracle {

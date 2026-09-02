@@ -13,6 +13,7 @@ import worldline.api.RemoteItemStack;
 import worldline.b173server.B173DedicatedServer;
 import worldline.b173server.B173PlayerSeed;
 import worldline.b173server.B173WireClient;
+import worldline.b173server.OfficialServerBootstrap;
 import worldline.testkit.TorchSupportBreakFixture;
 
 /** Packet14-breaks the support of an official wall torch and freezes its air-drop lifecycle. */
@@ -38,7 +39,8 @@ public final class TorchSupportBreakSmoke {
     require(seed == 17320110707L && "TorchBrk763".equals(user) && user.length() <= 16,
         "torch-support-break identity drift");
     Duration timeout = Duration.ofSeconds(180);
-    B173DedicatedServer server = new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+    B173DedicatedServer server = OfficialServerBootstrap.start(
+        jar, workspace, port, seed, timeout);
     B173WireClient actor = new B173WireClient("127.0.0.1", port, user, timeout);
     B173WireClient reader = null;
     try {

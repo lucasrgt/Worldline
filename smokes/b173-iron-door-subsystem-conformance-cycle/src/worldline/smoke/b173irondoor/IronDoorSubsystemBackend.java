@@ -3,8 +3,8 @@ package worldline.smoke.b173irondoor;
 import net.minecraft.src.World;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
-import worldline.testkit.IronDoorSubsystemObservation;
-import worldline.testkit.IronDoorSubsystemScenario;
+import worldline.testapi.IronDoorSubsystemObservation;
+import worldline.testapi.IronDoorSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Mapped official-world backend for complete iron-door conformance. */

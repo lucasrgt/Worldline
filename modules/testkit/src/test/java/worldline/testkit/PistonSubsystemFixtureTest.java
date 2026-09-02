@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.PistonSubsystemEvidence;
+import worldline.testapi.PistonSubsystemFixture;
+import worldline.testapi.PistonSubsystemObservation;
 
 /** Contract tests for the reusable four-block piston subsystem evidence. */
 public final class PistonSubsystemFixtureTest {

@@ -100,12 +100,22 @@ final class GuiWorkbenchPinMigration {
                 importExact(cache, smoke, current, pins, nextPins, train);
                 continue;
             }
-            carried++; SmokePins.Entry pin =
-                    pins.match(smoke.id, current); require(pin != null,
-                    "GUI refresh lacks current proof: " + smoke.id);
+            carried++; SmokePins.Entry pin = pins.match(smoke.id, current);
+            if (pin == null) {
+                pin = cache.availablePin(smoke);
+                require(pin != null && "executed".equals(pin.source()),
+                        "GUI refresh lacks current proof: " + smoke.id);
+                replace(nextPins, pin);
+            }
             String stem = "smoke." + smoke.id + ".";
             String recorded = lock.getProperty(stem + "current_fingerprint");
             if (recorded == null) {
+                if (!"executed".equals(pin.source())) {
+                    SmokePins.Entry exact = cache.availablePin(smoke);
+                    require(exact != null && "executed".equals(exact.source()),
+                            "new GUI row lacks exact execution: " + smoke.id);
+                    pin = exact; replace(nextPins, exact);
+                }
                 require("executed".equals(pin.source()),
                         "new GUI row lacks exact execution: " + smoke.id);
                 lock.setProperty(stem + "introduced", "true"); introduced++;
@@ -134,6 +144,11 @@ final class GuiWorkbenchPinMigration {
         for (int index = 0; index < next.size(); index++)
             if (next.get(index).id().equals(exact.id())) { next.set(index, exact); return; }
         next.add(exact);
+    }
+    private static void replace(List<SmokePins.Entry> entries, SmokePins.Entry exact) {
+        for (int index = 0; index < entries.size(); index++)
+            if (entries.get(index).id().equals(exact.id())) { entries.set(index, exact); return; }
+        entries.add(exact);
     }
     private static void sources(Path root, Properties lock) throws Exception {
         lock.setProperty("source.count", Integer.toString(MODIFIED.size())); int index = 0;

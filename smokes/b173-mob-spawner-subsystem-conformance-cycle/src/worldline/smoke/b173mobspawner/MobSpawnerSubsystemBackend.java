@@ -3,8 +3,8 @@ package worldline.smoke.b173mobspawner;
 import net.minecraft.src.World;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
-import worldline.testkit.MobSpawnerSubsystemObservation;
-import worldline.testkit.MobSpawnerSubsystemScenario;
+import worldline.testapi.MobSpawnerSubsystemObservation;
+import worldline.testapi.MobSpawnerSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Mapped official-world backend for complete mob-spawner conformance. */

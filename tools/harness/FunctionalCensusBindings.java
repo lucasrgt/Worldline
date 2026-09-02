@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 final class FunctionalCensusBindings {
     private static final Pattern TOKEN = Pattern.compile("[a-z][a-z0-9-]{0,62}");
     private static final Pattern BINDING = Pattern.compile(
-            "(worldline\\.testkit\\.[A-Z][A-Za-z0-9]+)#([a-z][A-Za-z0-9]*)");
+            "(worldline\\.(?:testkit|testapi)\\.[A-Z][A-Za-z0-9]+)#([a-z][A-Za-z0-9]*)");
     private static final List<String> PUBLIC_MODULES = List.of("testapi", "testkit");
     private static final String HEADER =
             "subject_id\ttemplate_id\tfixture\tbinding\tevidence_id";
@@ -66,6 +66,7 @@ final class FunctionalCensusBindings {
                 require(imported.startsWith("import worldline.api.")
                         || imported.startsWith("import worldline.extension.")
                         || imported.startsWith("import worldline.test.")
+                        || imported.startsWith("import worldline.testapi.")
                         || imported.startsWith("import worldline.testkit."),
                         "public TestKit binding imports internal code: " + key);
             }

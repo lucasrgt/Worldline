@@ -4,8 +4,8 @@ import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
-import worldline.testkit.RepeaterSubsystemEvidence;
-import worldline.testkit.RepeaterSubsystemFixture;
+import worldline.testapi.RepeaterSubsystemEvidence;
+import worldline.testapi.RepeaterSubsystemFixture;
 
 /** Executes the public repeater subsystem fixture against mapped Beta 1.7.3. */
 public final class RepeaterSubsystemSmoke {

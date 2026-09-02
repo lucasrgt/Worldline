@@ -57,6 +57,9 @@ public final class Worldline {
     public static SemanticSelector item(String key) { return SemanticSelectors.require(key, Kind.ITEM); }
     public static SemanticSelector entity(String key) { return SemanticSelectors.require(key, Kind.ENTITY); }
     public static SemanticSelector packet(String key) { return SemanticSelectors.require(key, Kind.PACKET); }
+    public static WorldlineAwait awaitPolls(int maximumPolls) {
+        return new WorldlineAwait(maximumPolls);
+    }
 
     static String name(String value, String role) {
         if (value == null || value.trim().isEmpty()) throw new IllegalArgumentException(role + " name is blank");

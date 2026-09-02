@@ -8,6 +8,7 @@ import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
 import worldline.testkit.*;
+import worldline.testapi.*;
 
 /** Stone axe 275 fully breaks oak 17:0, spruce 17:1, and birch 17:2, each dropping the matching log item. */
 public final class AxeLogBreaksSmoke {

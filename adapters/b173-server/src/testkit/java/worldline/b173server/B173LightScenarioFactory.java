@@ -6,15 +6,15 @@ import java.util.List;
 import worldline.api.BlockFace;
 import worldline.api.BlockState;
 import worldline.api.RemoteItemStack;
-import worldline.testkit.BlockConformancePlan;
-import worldline.testkit.BlockConformanceProfile;
-import worldline.testkit.BlockConformanceTemplate;
-import worldline.testkit.BlockLifecycleSlot;
-import worldline.testkit.BlockLightExpectation;
-import worldline.testkit.BlockLightPlacement;
-import worldline.testkit.BlockLightProbe;
-import worldline.testkit.BlockLightScenario;
-import worldline.testkit.ConformanceLayer;
+import worldline.testapi.BlockConformancePlan;
+import worldline.testapi.BlockConformanceProfile;
+import worldline.testapi.BlockConformanceTemplate;
+import worldline.testapi.BlockLifecycleSlot;
+import worldline.testapi.BlockLightExpectation;
+import worldline.testapi.BlockLightPlacement;
+import worldline.testapi.BlockLightProbe;
+import worldline.testapi.BlockLightScenario;
+import worldline.testapi.ConformanceLayer;
 
 /** Official b1.7.3 static skylight attenuation and block-light propagation rows. */
 public final class B173LightScenarioFactory {

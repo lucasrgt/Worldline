@@ -1,5 +1,5 @@
 schema=1
 id=m374-remaining-food-eat
-fingerprint=61a71eda807f89c33c40143301273d52239357c565a896d539a9a482c0f52fc6
+fingerprint=e81d9afb92d668f5014c25df7794ebc49b73b9715e8c3ec61f90f703dd66f1a8
 observation.sha256=8039053be1dc2477fd129e75dd6f6facd47634f0d8dc9e0be131b9750c9e2215
 source=refactor-equivalent

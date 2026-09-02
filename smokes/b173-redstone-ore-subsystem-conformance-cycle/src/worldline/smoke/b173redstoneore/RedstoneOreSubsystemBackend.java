@@ -3,8 +3,8 @@ package worldline.smoke.b173redstoneore;
 import net.minecraft.src.World;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
-import worldline.testkit.RedstoneOreSubsystemObservation;
-import worldline.testkit.RedstoneOreSubsystemScenario;
+import worldline.testapi.RedstoneOreSubsystemObservation;
+import worldline.testapi.RedstoneOreSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Mapped official-world backend for complete redstone-ore conformance. */

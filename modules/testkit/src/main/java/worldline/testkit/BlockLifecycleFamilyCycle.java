@@ -1,4 +1,6 @@
 package worldline.testkit;
+import worldline.testapi.BlockLifecyclePlan;
+import worldline.testapi.BlockLifecycleScenario;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;

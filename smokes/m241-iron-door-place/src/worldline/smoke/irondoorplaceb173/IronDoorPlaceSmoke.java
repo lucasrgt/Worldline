@@ -8,6 +8,7 @@ import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
 import worldline.testkit.*;
+import worldline.testapi.*;
 
 /** Places official iron door item 330 as BlockDoor 71 halves and reloads them. */
 public final class IronDoorPlaceSmoke {

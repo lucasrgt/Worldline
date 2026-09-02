@@ -13,6 +13,9 @@ import worldline.test.TestDefinition;
 import worldline.test.TestNode;
 import worldline.test.TestPlan;
 import worldline.test.TestRuntimeRequest;
+import worldline.test.CheckedValue;
+import worldline.test.Expect;
+import worldline.test.WorldlineAssertionError;
 import worldline.test.WorldlineSpec;
 import static worldline.test.Expect.expect;
 import static worldline.test.Worldline.describe;
@@ -37,6 +40,16 @@ public final class WorldlineDslTest {
                 "test modifiers");
         failure(first::skip, "collected plan remained mutable");
         expect("worldline").toContain("line"); expect(4).toBeGreaterThan(3);
+        expect(4).toBeGreaterThanOrEqual(4); expect(3).toBeLessThan(4);
+        expect(3).toBeLessThanOrEqual(3); expect("worldline").toStartWith("world");
+        expect("worldline").toEndWith("line"); expect("worldline").notToContain("xyz");
+        expect("ab").toHaveSize(2); expect(java.util.Collections.emptyList()).toBeEmpty();
+        expect("worldline").toBeInstanceOf(String.class);
+        worldline.test.WorldlineAwait waits = worldline.test.Worldline.awaitPolls(2);
+        String ready = waits.awaitEntity(() -> "ready", "ready"::equals, "ready");
+        require("ready".equals(ready) && waits.telemetry().polls() == 1,
+                "WorldlineAwait is not usable from TestKit authoring");
+        Expect.expectThrown(NullPointerException.class, () -> Expect.expect((CheckedValue<String>) null));
         final int[] value = {1};
         expect(() -> value[0]).toChangeFromTo(1, 2, () -> value[0]++);
         require(block("b1.7.3:glass").legacyId() == 20

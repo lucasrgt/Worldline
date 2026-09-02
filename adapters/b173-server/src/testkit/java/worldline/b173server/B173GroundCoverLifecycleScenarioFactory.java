@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import worldline.api.BlockState;
 import worldline.api.RemoteItemStack;
-import worldline.testkit.BlockLifecycleDropMatrix;
-import worldline.testkit.BlockLifecycleScenario;
+import worldline.testapi.BlockLifecycleDropMatrix;
+import worldline.testapi.BlockLifecycleScenario;
 
 /** Caller-owned tall-grass, dead-bush, and crop rows over the shared lifecycle factory. */
 public final class B173GroundCoverLifecycleScenarioFactory {

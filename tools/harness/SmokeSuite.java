@@ -30,8 +30,15 @@ final class SmokeSuite {
     static void run() throws Exception { run(false); }
 
     static void run(boolean pinnedOnly) throws Exception {
-        Path root = Path.of("").toAbsolutePath().normalize();
+        run(pinnedOnly, Path.of("").toAbsolutePath().normalize());
+    }
+
+    static void run(boolean pinnedOnly, Path root) throws Exception {
         List<SmokeDiscovery.Entry> smokes = SmokeDiscovery.discover(root);
+        if (SmokeFingerprintWork.skipWhenUnchanged(root, smokes.size())) {
+            System.out.println("  smoke fingerprints skipped: 0 executions");
+            return;
+        }
         SmokeReceiptCache cache = new SmokeReceiptCache(root);
         Map<String, String> fingerprints = new HashMap<>();
         List<SmokeDiscovery.Entry> misses = new ArrayList<>();

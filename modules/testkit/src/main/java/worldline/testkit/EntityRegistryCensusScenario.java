@@ -1,4 +1,6 @@
 package worldline.testkit;
+import worldline.testapi.EntityRegistryObservation;
+import worldline.testapi.EntityRegistryScenario;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

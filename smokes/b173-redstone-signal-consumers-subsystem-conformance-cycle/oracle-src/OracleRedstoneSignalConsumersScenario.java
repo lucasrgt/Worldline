@@ -1,5 +1,5 @@
-import worldline.testkit.RedstoneSignalConsumersObservation;
-import worldline.testkit.RedstoneSignalConsumersScenario;
+import worldline.testapi.RedstoneSignalConsumersObservation;
+import worldline.testapi.RedstoneSignalConsumersScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Official-name counterpart of the mapped signal-consumer scenario. */

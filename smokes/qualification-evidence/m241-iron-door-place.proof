@@ -1,5 +1,5 @@
 schema=1
 id=m241-iron-door-place
-fingerprint=3466877f2e4da49884ece4385fd7a0e0b1916cc11c2fec4b405601b50562b057
+fingerprint=d9f6a71f2a3707c3d6052feacb562ed76a57f91ebf263540b12c24cab786f06c
 observation.sha256=66125895507a0173b179122403324dae5741fd7ff3d0fa0496f8b171bccd4b83
 source=refactor-equivalent

@@ -1,5 +1,5 @@
-import worldline.testkit.PistonSubsystemEvidence;
-import worldline.testkit.PistonSubsystemFixture;
+import worldline.testapi.PistonSubsystemEvidence;
+import worldline.testapi.PistonSubsystemFixture;
 
 /** Complete piston subsystem against the untouched obfuscated server JAR. */
 public final class WorldlinePistonOfficialOracle {

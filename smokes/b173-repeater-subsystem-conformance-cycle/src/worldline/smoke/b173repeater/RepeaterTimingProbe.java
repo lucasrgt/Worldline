@@ -4,7 +4,7 @@ import net.minecraft.src.Block;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityItem;
 import net.minecraft.src.World;
-import worldline.testkit.TestObservationWindow;
+import worldline.testapi.TestObservationWindow;
 
 /** Proves both metadata domains and exact signal-driven transition timing. */
 final class RepeaterTimingProbe {

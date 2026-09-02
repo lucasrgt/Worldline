@@ -1,5 +1,5 @@
-import worldline.testkit.PistonSubsystemObservation;
-import worldline.testkit.PistonSubsystemScenario;
+import worldline.testapi.PistonSubsystemObservation;
+import worldline.testapi.PistonSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Official-name counterpart of the mapped piston scenario. */

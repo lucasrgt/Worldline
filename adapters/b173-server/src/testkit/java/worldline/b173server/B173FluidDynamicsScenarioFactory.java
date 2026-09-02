@@ -7,13 +7,13 @@ import java.util.List;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.RemoteItemStack;
-import worldline.testkit.BlockConformanceCase;
-import worldline.testkit.BlockConformancePlan;
-import worldline.testkit.BlockConformanceProfile;
-import worldline.testkit.BlockConformanceTemplate;
-import worldline.testkit.BlockLifecycleSlot;
-import worldline.testkit.ConformanceLayer;
-import worldline.testkit.FluidDynamicsScenario;
+import worldline.testapi.BlockConformanceCase;
+import worldline.testapi.BlockConformancePlan;
+import worldline.testapi.BlockConformanceProfile;
+import worldline.testapi.BlockConformanceTemplate;
+import worldline.testapi.BlockLifecycleSlot;
+import worldline.testapi.ConformanceLayer;
+import worldline.testapi.FluidDynamicsScenario;
 
 /** Public source-water and source-lava propagation rows for the official server. */
 public final class B173FluidDynamicsScenarioFactory {

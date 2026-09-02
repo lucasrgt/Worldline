@@ -13,18 +13,6 @@ import java.util.regex.Pattern;
 
 /** Reviewed migration of deterministic composite coordinators to declarative plans. */
 final class CompositeCycleMigration {
-    private static final Pattern ID = Pattern.compile(
-            "private\\s+static\\s+final\\s+String\\s+ID\\s*=\\s*\"([^\"]+)\"");
-    private static final Pattern MAIN = Pattern.compile(
-            "\"(worldline\\.(?:smoke|b173server)\\.[A-Za-z0-9_.]+)\"");
-    private static final Pattern VALUE = Pattern.compile("value\\(config,\\s*\"([^\"]+)\"\\)");
-    private static final Pattern PRODUCT = Pattern.compile("product\\(\\s*\"([a-z0-9-]+)\"\\)");
-    private static final Pattern INPUT = Pattern.compile(
-            "javaFiles\\(root\\.resolve\\(\\s*\"([^\"]+)\"\\)\\)");
-    private static final Pattern PREFIX = Pattern.compile("line\\(output,\\s*\"([^\"]+)\"\\)");
-    private static final Pattern OUTPUT = Pattern.compile("output\\.contains\\(\\s*\"([^\"]+)\"\\)");
-    private static final Pattern CONTAINS = Pattern.compile(
-            "(!?)(?:first\\.)?(signal|trace)\\.contains\\(\\s*\"([^\"]+)\"\\)");
     private final Path root;
 
     private CompositeCycleMigration(Path root) { this.root = root.toAbsolutePath().normalize(); }
@@ -119,10 +107,15 @@ final class CompositeCycleMigration {
                 manifest.setProperty(stem + "plan_sha256", plan.fingerprint());
                 manifest.setProperty(stem + "evidence_sha256", prior.evidence());
                 imported++;
-            } else require(plan.fingerprint().equals(recordedPlan),
-                    "composite plan changed outside the reviewed migration: " + smoke.id);
-            pins.add(new SmokePins.Entry(smoke.id, cache.fingerprint(smoke),
-                    requiredHash(manifest, stem + "evidence_sha256"), "refactor-equivalent"));
+            } else if (!plan.fingerprint().equals(recordedPlan)) {
+                require(local != null && local.source().equals("executed"),
+                        "composite plan changed without exact execution: " + smoke.id);
+                manifest.setProperty(stem + "plan_sha256", plan.fingerprint());
+                manifest.setProperty(stem + "evidence_sha256", local.evidence());
+            }
+            pins.add(local != null && local.source().equals("executed") ? local
+                    : new SmokePins.Entry(smoke.id, cache.fingerprint(smoke),
+                            requiredHash(manifest, stem + "evidence_sha256"), "refactor-equivalent"));
         }
         require(composite == integer(manifest, "count") + imported && (executed >= 1 || imported >= 1),
                 "composite refresh requires an exact support proof or current train receipt");
@@ -144,19 +137,22 @@ final class CompositeCycleMigration {
     }
 
     private Plan parse(Path source, String text) {
-        String id = one(ID, text, "id", source); int runStart = text.indexOf("private Outcome run");
+        String id = one(CompositeCycleSyntax.ID, text, "id", source);
+        int runStart = text.indexOf("private Outcome run");
         int compileStart = text.indexOf("private Path compile");
         require(runStart > 0 && compileStart > 0, "unsupported cycle sections: " + source);
         String run = text.substring(runStart), compile = text.substring(compileStart);
-        List<String> mains = matches(MAIN, run); require(!mains.isEmpty(), "unsupported main: " + source);
+        List<String> mains = matches(CompositeCycleSyntax.MAIN, run);
+        require(!mains.isEmpty(), "unsupported main: " + source);
         String main = mains.get(mains.size() - 1); int mainPosition = run.indexOf(main);
         int mainEnd = run.indexOf('"', mainPosition + main.length());
         int commandStart = run.lastIndexOf("Arrays.asList(", mainPosition);
         int commandEnd = run.indexOf("));", mainEnd);
         require(commandStart >= 0 && commandEnd > mainEnd, "unsupported command: " + source);
         String command = run.substring(commandStart, commandEnd);
-        List<String> arguments = matches(VALUE, run.substring(mainEnd, commandEnd));
-        List<String> prefixes = unique(matches(PREFIX, run));
+        List<String> arguments = matches(CompositeCycleSyntax.VALUE,
+                run.substring(mainEnd, commandEnd));
+        List<String> prefixes = unique(matches(CompositeCycleSyntax.PREFIX, run));
         List<String> traces = prefixes.stream().filter(value -> value.contains("_TRACE=")).toList();
         List<String> signatures = prefixes.stream().filter(value -> value.contains("_SIGNATURE=")).toList();
         List<String> signals = prefixes.stream().filter(value -> !traces.contains(value)
@@ -166,9 +162,11 @@ final class CompositeCycleMigration {
         boolean compare = Pattern.compile("first\\.[A-Za-z]+\\.equals\\(second\\.[A-Za-z]+\\)")
                 .matcher(text).find();
         boolean expected = signals.size() == 1 && text.contains("expected.signal");
-        return new Plan(id, main, arguments, unique(matches(INPUT, compile)),
-                unique(matches(PRODUCT, compile)), unique(matches(PRODUCT, command)), traces.get(0),
-                signatures.get(0), signals, unique(matches(OUTPUT, run)),
+        return new Plan(id, main, arguments,
+                unique(matches(CompositeCycleSyntax.INPUT, compile)),
+                unique(matches(CompositeCycleSyntax.PRODUCT, compile)),
+                unique(matches(CompositeCycleSyntax.PRODUCT, command)), traces.get(0),
+                signatures.get(0), signals, unique(matches(CompositeCycleSyntax.OUTPUT, run)),
                 assertions(text, "signal", false), assertions(text, "signal", true),
                 assertions(text, "trace", false), assertions(text, "trace", true), compare, expected);
     }
@@ -238,7 +236,8 @@ final class CompositeCycleMigration {
         while (matcher.find()) values.add(matcher.group(1)); return values;
     }
     private static List<String> assertions(String text, String field, boolean excluded) {
-        List<String> values = new ArrayList<>(); Matcher matcher = CONTAINS.matcher(text);
+        List<String> values = new ArrayList<>();
+        Matcher matcher = CompositeCycleSyntax.CONTAINS.matcher(text);
         while (matcher.find()) if (matcher.group(2).equals(field)
                 && matcher.group(1).equals(excluded ? "!" : "")) values.add(matcher.group(3));
         return unique(values);

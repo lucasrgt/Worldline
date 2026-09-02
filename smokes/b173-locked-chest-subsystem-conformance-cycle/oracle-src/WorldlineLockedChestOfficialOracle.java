@@ -1,5 +1,5 @@
-import worldline.testkit.LockedChestSubsystemEvidence;
-import worldline.testkit.LockedChestSubsystemFixture;
+import worldline.testapi.LockedChestSubsystemEvidence;
+import worldline.testapi.LockedChestSubsystemFixture;
 
 /** Complete locked-chest subsystem against the untouched obfuscated server JAR. */
 public final class WorldlineLockedChestOfficialOracle {

@@ -4,8 +4,8 @@ import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
-import worldline.testkit.RedstoneSignalConsumersEvidence;
-import worldline.testkit.RedstoneSignalConsumersFixture;
+import worldline.testapi.RedstoneSignalConsumersEvidence;
+import worldline.testapi.RedstoneSignalConsumersFixture;
 
 /** Executes the public redstone signal-consumer fixture against mapped Beta 1.7.3. */
 public final class RedstoneSignalConsumersSmoke {

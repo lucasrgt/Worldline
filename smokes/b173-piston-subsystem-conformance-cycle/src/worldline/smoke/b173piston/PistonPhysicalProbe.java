@@ -5,7 +5,7 @@ import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.Block;
 import net.minecraft.src.BlockPistonMoving;
 import net.minecraft.src.World;
-import worldline.testkit.TestObservationWindow;
+import worldline.testapi.TestObservationWindow;
 
 /** Proves piston collision, light, tick policy, and causal neighbor transitions. */
 final class PistonPhysicalProbe {

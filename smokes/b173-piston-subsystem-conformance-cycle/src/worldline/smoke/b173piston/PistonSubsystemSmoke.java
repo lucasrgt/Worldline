@@ -4,8 +4,8 @@ import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
-import worldline.testkit.PistonSubsystemEvidence;
-import worldline.testkit.PistonSubsystemFixture;
+import worldline.testapi.PistonSubsystemEvidence;
+import worldline.testapi.PistonSubsystemFixture;
 
 /** Executes the public piston subsystem fixture against mapped Beta 1.7.3. */
 public final class PistonSubsystemSmoke {

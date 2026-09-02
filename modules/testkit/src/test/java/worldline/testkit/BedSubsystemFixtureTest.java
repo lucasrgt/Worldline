@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.BedSubsystemEvidence;
+import worldline.testapi.BedSubsystemFixture;
+import worldline.testapi.BedSubsystemObservation;
 
 /** Locks the public bed mini-subsystem contract. */
 public final class BedSubsystemFixtureTest {

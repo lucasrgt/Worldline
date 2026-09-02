@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.NativeBlockRenderObservation;
+import worldline.testapi.NativeBlockRenderPlan;
+import worldline.testapi.NativeBlockRenderSubject;
 
 import java.util.List;
 

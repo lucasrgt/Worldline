@@ -33,6 +33,14 @@ final class DocumentationCatalog {
         require(status().equals(read("docs/generated/STATUS.md")), "generated status drift");
         require(milestones().equals(read("docs/generated/MILESTONES.md")),
                 "generated milestone catalog drift");
+        require(treeIndex("Milestones").equals(read("docs/milestones/INDEX.md")),
+                "milestone documentation index drift");
+        require(treeIndex("Features").equals(read("docs/features/INDEX.md")),
+                "feature documentation index drift");
+        require(treeIndex("Performance").equals(read("docs/performance/INDEX.md")),
+                "performance documentation index drift");
+        require(treeIndex("Project").equals(read("docs/project/INDEX.md")),
+                "project documentation index drift");
         System.out.println("  documentation catalog: " + rootDocuments().size()
                 + " root documents, " + SmokeDiscovery.discover(root).size() + " milestones");
     }
@@ -43,6 +51,10 @@ final class DocumentationCatalog {
                 case "docs/generated/INDEX.md" -> catalog.index();
                 case "docs/generated/STATUS.md" -> catalog.status();
                 case "docs/generated/MILESTONES.md" -> catalog.milestones();
+                case "docs/milestones/INDEX.md" -> catalog.treeIndex("Milestones");
+                case "docs/features/INDEX.md" -> catalog.treeIndex("Features");
+                case "docs/performance/INDEX.md" -> catalog.treeIndex("Performance");
+                case "docs/project/INDEX.md" -> catalog.treeIndex("Project");
                 default -> null;
             };
             return expected != null && expected.equals(catalog.read(relative));
@@ -53,7 +65,27 @@ final class DocumentationCatalog {
         Files.writeString(generated.resolve("INDEX.md"), index(), StandardCharsets.UTF_8);
         Files.writeString(generated.resolve("STATUS.md"), status(), StandardCharsets.UTF_8);
         Files.writeString(generated.resolve("MILESTONES.md"), milestones(), StandardCharsets.UTF_8);
+        writeTree("docs/milestones/INDEX.md", treeIndex("Milestones"));
+        writeTree("docs/features/INDEX.md", treeIndex("Features"));
+        writeTree("docs/performance/INDEX.md", treeIndex("Performance"));
+        writeTree("docs/project/INDEX.md", treeIndex("Project"));
         System.out.println("documentation catalog updated");
+    }
+    private void writeTree(String relative, String text) throws Exception {
+        Path path = root.resolve(relative);
+        Files.createDirectories(path.getParent());
+        Files.writeString(path, text, StandardCharsets.UTF_8);
+    }
+    private String treeIndex(String title) throws Exception {
+        StringBuilder text = new StringBuilder("# ").append(title).append("\n\n");
+        text.append("Index of `docs/` narratives grouped as ").append(title)
+                .append(". Canonical files stay at stable `docs/*.md` paths.\n\n");
+        for (Path path : rootDocuments()) {
+            if (!title.equals(group(path.getFileName().toString()))) continue;
+            text.append("- [").append(path.getFileName()).append("](../")
+                    .append(path.getFileName()).append(")\n");
+        }
+        return text.toString();
     }
     private String index() throws Exception {
         Map<String, List<Path>> groups = new LinkedHashMap<>();

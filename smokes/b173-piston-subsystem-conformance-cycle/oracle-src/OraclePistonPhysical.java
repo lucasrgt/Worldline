@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import worldline.testkit.TestObservationWindow;
+import worldline.testapi.TestObservationWindow;
 
 /** Official-name collision, light, tick, and neighbor transition probe. */
 final class OraclePistonPhysical {

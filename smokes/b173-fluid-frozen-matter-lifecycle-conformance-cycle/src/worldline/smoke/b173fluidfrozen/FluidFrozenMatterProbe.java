@@ -8,7 +8,7 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
-import worldline.testkit.FluidFrozenMatterObservation;
+import worldline.testapi.FluidFrozenMatterObservation;
 
 /** Proves the remaining fluid, sponge, snow, and ice lifecycle boundaries. */
 final class FluidFrozenMatterProbe {

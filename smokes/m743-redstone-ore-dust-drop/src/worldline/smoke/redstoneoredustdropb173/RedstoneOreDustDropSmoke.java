@@ -24,8 +24,8 @@ public final class RedstoneOreDustDropSmoke {
     String user = a[4];
     int cx = Integer.parseInt(a[5]), cz = Integer.parseInt(a[6]);
     Duration timeout = Duration.ofSeconds(90);
-    B173DedicatedServer server =
-        new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+    B173DedicatedServer server = OfficialServerBootstrap.start(
+        jar, workspace, port, seed, timeout);
     B173WireClient actor = new B173WireClient("127.0.0.1", port, user, timeout);
     BlockPosition top, ore;
     int column;
@@ -47,11 +47,8 @@ public final class RedstoneOreDustDropSmoke {
         actor.moveAndObserve(0D, 1D, 0D, 1);
         require(++column <= 15, "water column exceeded redstone-ore-dust-drop fixture");
       }
-      for (int lift = 0; lift < 8; lift++) {
-        top = place(actor, top, BlockFace.UP, 1);
-        actor.moveAndObserve(0D, 1D, 0D, 1);
-        column++;
-      }
+      top = raiseColumn(actor, top, 8);
+      column += 8;
       actor.selectHeldSlot(1);
       ore = place(actor, top, BlockFace.UP, ORE);
       RemoteWorldView live = worldline.test.WorldlineSmokeAwait.observe(actor, 5);

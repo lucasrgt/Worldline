@@ -8,6 +8,7 @@ import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
 import worldline.testkit.*;
+import worldline.testapi.*;
 
 /** Places official wood/log 17:0 on raised stone and freezes oak upright metadata. */
 public final class OakLogSmoke {

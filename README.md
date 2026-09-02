@@ -199,19 +199,13 @@ screenshots, and image diffs are distinct contracts. Butter can expose its
 semantic tree through the reflection boundary; vanilla and Aero remain
 independently qualified consumers.
 
-### Visual GUI builder
+### Visual GUI authoring
 
-[`tools/gui-builder`](tools/gui-builder) is the standalone visual authoring
-surface for the same semantic GUI contract. It builds a Flutter-inspired
-widget tree, previews the vanilla-sized panel, and exports `GameUiSpec` JSON
-or `Ui.screen(...)` Java without generating containers or runtime hooks.
-
-```text
-cd tools/gui-builder
-npm install
-npm test
-npm run dev
-```
+Butter owns the visual GUI builder and widget metadata. Its
+[`editors/gui-builder`](https://github.com/lucasrgt/butter/tree/main/editors/gui-builder)
+surface authors native `.butter` components and may export neutral
+`GameUiSpec` JSON for verification here. Worldline owns only the semantic
+contract, runtime observations, and comparison tooling.
 
 ### Create a TestKit project
 
@@ -367,10 +361,12 @@ incompatible artifacts return non-zero status instead of selecting defaults.
 | Mods and extensions | [`MOD_API_V2.md`](docs/MOD_API_V2.md), [`MOD_GRAPH.md`](docs/MOD_GRAPH.md), [`EXTENSIONS.md`](docs/EXTENSIONS.md) |
 | Semantics and complete mappings | [`SEMANTICS.md`](docs/SEMANTICS.md), [`SEMANTICS_AUDIT.md`](docs/SEMANTICS_AUDIT.md), [`ECOSYSTEM_MAPPINGS.md`](docs/ECOSYSTEM_MAPPINGS.md) |
 | Atlas knowledge and seed maps | [`ATLAS.md`](docs/ATLAS.md), [`SEED_ATLAS.md`](docs/SEED_ATLAS.md) |
-| GUI contracts and builder | [`GUI_TREE.md`](docs/GUI_TREE.md), [`GUI_SPEC.md`](docs/GUI_SPEC.md), [`tools/gui-builder`](tools/gui-builder) |
+| GUI contracts and external builder | [`GUI_TREE.md`](docs/GUI_TREE.md), [`GUI_SPEC.md`](docs/GUI_SPEC.md), [Butter GUI builder](https://github.com/lucasrgt/butter/tree/main/editors/gui-builder) |
 | Reproduction and analysis | [`SCENARIO_DSL.md`](docs/SCENARIO_DSL.md), [`M18_COVERAGE.md`](docs/M18_COVERAGE.md), [`M17_PROFILE.md`](docs/M17_PROFILE.md) |
 | Optimization evidence | [`OPTIMIZATION_SDK.md`](docs/OPTIMIZATION_SDK.md) |
 | Release history and direction | [`ROADMAP.md`](docs/ROADMAP.md), [`CHANGELOG.md`](CHANGELOG.md) |
+| Contributing, security, and FAQ | [`CONTRIBUTING.md`](CONTRIBUTING.md), [`SECURITY.md`](SECURITY.md), [`FAQ.md`](docs/FAQ.md) |
+| Grouped narrative indexes | [`docs/milestones`](docs/milestones/INDEX.md), [`docs/features`](docs/features/INDEX.md), [`docs/performance`](docs/performance/INDEX.md), [`docs/project`](docs/project/INDEX.md) |
 
 Each promoted smoke owns a local `MAP.md`, `smoke.properties`, executable
 scenario, and frozen signature. Those local files are the precise evidence;

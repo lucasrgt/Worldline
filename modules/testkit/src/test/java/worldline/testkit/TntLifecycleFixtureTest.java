@@ -1,4 +1,11 @@
 package worldline.testkit;
+import worldline.testapi.ConformanceLayer;
+import worldline.testapi.EntityConformancePlan;
+import worldline.testapi.EntityConformanceProfile;
+import worldline.testapi.EntityConformanceTemplate;
+import worldline.testapi.TntFuseLifecycleObservation;
+import worldline.testapi.TntLifecycleEvidence;
+import worldline.testapi.TntLifecycleFixture;
 
 import java.util.Arrays;
 import java.util.Collections;

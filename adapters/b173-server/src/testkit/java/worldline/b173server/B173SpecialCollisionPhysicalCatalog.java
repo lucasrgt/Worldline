@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import worldline.api.BlockState;
-import worldline.testkit.BlockCollisionExpectation;
-import worldline.testkit.BlockCollisionProbe;
+import worldline.testapi.BlockCollisionExpectation;
+import worldline.testapi.BlockCollisionProbe;
 
 /** Caller-owned special-collision subjects and official AABB probes. */
 final class B173SpecialCollisionPhysicalCatalog {

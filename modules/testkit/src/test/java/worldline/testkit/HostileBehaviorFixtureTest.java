@@ -1,4 +1,11 @@
 package worldline.testkit;
+import worldline.testapi.ConformanceLayer;
+import worldline.testapi.EntityConformancePlan;
+import worldline.testapi.EntityConformanceProfile;
+import worldline.testapi.EntityConformanceTemplate;
+import worldline.testapi.HostileBehaviorEvidence;
+import worldline.testapi.HostileBehaviorFixture;
+import worldline.testapi.HostileBehaviorObservation;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,5 +1,5 @@
-import worldline.testkit.FluidFrozenMatterObservation;
-import worldline.testkit.FluidFrozenMatterScenario;
+import worldline.testapi.FluidFrozenMatterObservation;
+import worldline.testapi.FluidFrozenMatterScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Official-name scenario for the fluid and frozen-matter lifecycle matrix. */

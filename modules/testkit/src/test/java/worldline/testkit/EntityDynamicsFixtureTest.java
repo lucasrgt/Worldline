@@ -1,4 +1,15 @@
 package worldline.testkit;
+import worldline.testapi.ConformanceLayer;
+import worldline.testapi.EntityConformanceCase;
+import worldline.testapi.EntityConformancePlan;
+import worldline.testapi.EntityConformanceProfile;
+import worldline.testapi.EntityConformanceTemplate;
+import worldline.testapi.EntityDynamicsEvidence;
+import worldline.testapi.EntityDynamicsFixture;
+import worldline.testapi.EntityDynamicsObservation;
+import worldline.testapi.EntityDynamicsScenario;
+import worldline.testapi.EntityDynamicsScene;
+import worldline.testapi.EntityObservationDynamicsScenario;
 
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;

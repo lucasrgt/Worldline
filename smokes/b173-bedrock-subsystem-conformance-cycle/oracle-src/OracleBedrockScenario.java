@@ -1,5 +1,5 @@
-import worldline.testkit.BedrockSubsystemObservation;
-import worldline.testkit.BedrockSubsystemScenario;
+import worldline.testapi.BedrockSubsystemObservation;
+import worldline.testapi.BedrockSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Official-name counterpart of the mapped bedrock scenario. */

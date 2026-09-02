@@ -6,8 +6,8 @@ import java.nio.file.Paths;
 import java.util.List;
 import worldline.test.TestRuntimeProviders;
 import worldline.test.TestRuntimeRequest;
-import worldline.testkit.BlockLifecycleScenario;
-import worldline.testkit.ConformanceLayer;
+import worldline.testapi.BlockLifecycleScenario;
+import worldline.testapi.ConformanceLayer;
 
 /** Static extension checks that do not require or distribute the official server. */
 public final class B173ServerLifecycleProviderTest {
@@ -67,6 +67,13 @@ public final class B173ServerLifecycleProviderTest {
                 && rows.get(25).breakSlot().before().legacyId() == 258,
                 "lifecycle provisioned slots drifted");
         B173LifecycleSupportTest.verify();
+        Path bootstrapJar = Files.createTempFile("worldline-official-bootstrap-", ".jar");
+        try {
+            B173DedicatedServer server = OfficialServerBootstrap.start(bootstrapJar,
+                    bootstrapJar.getParent(), 25565, 1L, java.time.Duration.ofSeconds(1));
+            require(server != null, "official server factory returned null");
+            server.close();
+        } finally { Files.deleteIfExists(bootstrapJar); }
         rejects(new Checked() { @Override public void run() {
             B173LifecycleLoadout.from(new TestRuntimeRequest(B173ServerLifecycleFixtures.SEED,
                     Paths.get("."), null, "external", java.util.Collections.<String, String>emptyMap()));

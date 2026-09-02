@@ -5,14 +5,14 @@ import java.util.Collections;
 import worldline.api.BlockFace;
 import worldline.api.BlockState;
 import worldline.api.RemoteItemStack;
-import worldline.testkit.BlockConformancePlan;
-import worldline.testkit.BlockConformanceProfile;
-import worldline.testkit.BlockConformanceTemplate;
-import worldline.testkit.BlockLifecycleScenario;
-import worldline.testkit.BlockLifecycleNeighbor;
-import worldline.testkit.BlockLifecycleSlot;
-import worldline.testkit.BlockLifecycleDropMatrix;
-import worldline.testkit.ConformanceLayer;
+import worldline.testapi.BlockConformancePlan;
+import worldline.testapi.BlockConformanceProfile;
+import worldline.testapi.BlockConformanceTemplate;
+import worldline.testapi.BlockLifecycleScenario;
+import worldline.testapi.BlockLifecycleNeighbor;
+import worldline.testapi.BlockLifecycleSlot;
+import worldline.testapi.BlockLifecycleDropMatrix;
+import worldline.testapi.ConformanceLayer;
 
 /** Builds external official-server lifecycle rows without a provider-owned catalog. */
 public final class B173LifecycleScenarioFactory {

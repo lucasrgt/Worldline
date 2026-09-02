@@ -10,6 +10,7 @@ import java.util.List;
 import worldline.api.*;
 import worldline.b173server.*;
 import worldline.testkit.*;
+import worldline.testapi.*;
 
 /** Bonemeal-grows wheat 59:0→59:7 and waits official cactus 81 plus sugar cane 83 to height 2. */
 public final class PlantGrowthSmoke {

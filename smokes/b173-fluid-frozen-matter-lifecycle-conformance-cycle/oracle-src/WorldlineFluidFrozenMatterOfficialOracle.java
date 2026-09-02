@@ -1,5 +1,5 @@
-import worldline.testkit.FluidFrozenMatterEvidence;
-import worldline.testkit.FluidFrozenMatterFixture;
+import worldline.testapi.FluidFrozenMatterEvidence;
+import worldline.testapi.FluidFrozenMatterFixture;
 
 /** Fluid and frozen-matter matrix against the untouched official server JAR. */
 public final class WorldlineFluidFrozenMatterOfficialOracle {

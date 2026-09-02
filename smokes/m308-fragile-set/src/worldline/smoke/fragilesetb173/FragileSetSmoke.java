@@ -8,6 +8,7 @@ import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
 import worldline.testkit.*;
+import worldline.testapi.*;
 
 /** Packet14-breaks ice 79 and glass 20, then torch-melts a second ice to water. */
 public final class FragileSetSmoke {

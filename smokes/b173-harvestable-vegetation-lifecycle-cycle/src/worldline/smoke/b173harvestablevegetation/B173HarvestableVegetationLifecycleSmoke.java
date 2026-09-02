@@ -6,7 +6,7 @@ import worldline.api.RemoteItemStack;
 import worldline.b173server.B173LifecycleScenarioFactory;
 import worldline.b173server.B173ServerLifecycleTestRuntimeProvider;
 import worldline.testkit.BlockLifecycleFamilyCycle;
-import worldline.testkit.BlockLifecycleScenario;
+import worldline.testapi.BlockLifecycleScenario;
 
 /** Shear-obtained leaf-variant lifecycle family. */
 public final class B173HarvestableVegetationLifecycleSmoke {

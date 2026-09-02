@@ -1,4 +1,6 @@
 package worldline.testkit;
+import worldline.testapi.BlockLightPlan;
+import worldline.testapi.BlockLightScenario;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;

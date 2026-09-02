@@ -3,8 +3,8 @@ package worldline.smoke.b173farmland;
 import net.minecraft.src.World;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
-import worldline.testkit.FarmlandSubsystemObservation;
-import worldline.testkit.FarmlandSubsystemScenario;
+import worldline.testapi.FarmlandSubsystemObservation;
+import worldline.testapi.FarmlandSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Mapped official-world backend for complete farmland conformance. */

@@ -1,5 +1,5 @@
 import java.util.Random;
-import worldline.testkit.OpenableAccessStructuresObservation;
+import worldline.testapi.OpenableAccessStructuresObservation;
 
 /** Proves the final chest, wooden-door, and trapdoor census boundaries. */
 final class OracleOpenableAccessStructuresProbe {

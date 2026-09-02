@@ -1,4 +1,16 @@
 package worldline.testkit;
+import worldline.testapi.ConformanceLayer;
+import worldline.testapi.EntityConformancePlan;
+import worldline.testapi.EntityConformanceProfile;
+import worldline.testapi.EntityConformanceTemplate;
+import worldline.testapi.SlimeDropObservation;
+import worldline.testapi.SlimeLifecycleEvidence;
+import worldline.testapi.SlimeLifecycleFixture;
+import worldline.testapi.SlimeLifecycleScenario;
+import worldline.testapi.SlimeMotionObservation;
+import worldline.testapi.SlimeMotionScene;
+import worldline.testapi.SlimeObservationLifecycleScenario;
+import worldline.testapi.SlimeSplitObservation;
 
 import java.lang.reflect.Proxy;
 import java.util.Arrays;

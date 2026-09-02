@@ -1,5 +1,5 @@
-import worldline.testkit.FurnaceSubsystemEvidence;
-import worldline.testkit.FurnaceSubsystemFixture;
+import worldline.testapi.FurnaceSubsystemEvidence;
+import worldline.testapi.FurnaceSubsystemFixture;
 
 /** Complete furnace subsystem against the untouched obfuscated server JAR. */
 public final class WorldlineFurnaceOfficialOracle {

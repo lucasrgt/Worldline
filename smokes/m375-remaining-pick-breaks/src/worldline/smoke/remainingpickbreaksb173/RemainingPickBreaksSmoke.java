@@ -8,6 +8,7 @@ import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
 import worldline.testkit.*;
+import worldline.testapi.*;
 
 /** Holds gold pick 285 and diamond pick 278 and fully breaks mossy cobble 48, gold ore 14, and obsidian 49. */
 public final class RemainingPickBreaksSmoke {

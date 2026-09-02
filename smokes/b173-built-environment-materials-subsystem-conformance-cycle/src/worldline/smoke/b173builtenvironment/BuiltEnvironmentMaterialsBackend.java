@@ -3,8 +3,8 @@ package worldline.smoke.b173builtenvironment;
 import net.minecraft.src.World;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
-import worldline.testkit.BuiltEnvironmentMaterialsObservation;
-import worldline.testkit.BuiltEnvironmentMaterialsScenario;
+import worldline.testapi.BuiltEnvironmentMaterialsObservation;
+import worldline.testapi.BuiltEnvironmentMaterialsScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Mapped official-world backend for the complete construction-material matrix. */

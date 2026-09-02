@@ -3,8 +3,8 @@ package worldline.smoke.b173furnace;
 import net.minecraft.src.World;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
-import worldline.testkit.FurnaceSubsystemObservation;
-import worldline.testkit.FurnaceSubsystemScenario;
+import worldline.testapi.FurnaceSubsystemObservation;
+import worldline.testapi.FurnaceSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Mapped official-world backend for complete furnace conformance. */

@@ -1,4 +1,11 @@
 package worldline.testkit;
+import worldline.testapi.BlockConformancePlan;
+import worldline.testapi.BlockConformanceProfile;
+import worldline.testapi.BlockConformanceTemplate;
+import worldline.testapi.BlockRegistryEvidence;
+import worldline.testapi.BlockRegistryFixture;
+import worldline.testapi.BlockRegistryObservation;
+import worldline.testapi.ConformanceLayer;
 
 import java.util.Arrays;
 import java.util.Collections;

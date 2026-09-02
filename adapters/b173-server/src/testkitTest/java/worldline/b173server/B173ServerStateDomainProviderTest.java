@@ -6,9 +6,9 @@ import java.util.Map;
 import worldline.api.BlockState;
 import worldline.test.TestRuntimeProviders;
 import worldline.test.TestRuntimeRequest;
-import worldline.testkit.BlockStateDomainPlan;
-import worldline.testkit.BlockStateDomainScenario;
-import worldline.testkit.ConformanceLayer;
+import worldline.testapi.BlockStateDomainPlan;
+import worldline.testapi.BlockStateDomainScenario;
+import worldline.testapi.ConformanceLayer;
 /** Static checks for the public state-domain provider and official scenario rows. */
 public final class B173ServerStateDomainProviderTest {
     private B173ServerStateDomainProviderTest() { }

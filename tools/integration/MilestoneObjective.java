@@ -285,7 +285,7 @@ final class MilestoneObjective {
                 + "acceptance=registry-expansion,oracle-evidence,public-testkit\n"
                 + "public.fixture=block-matrix\npublic.actions=place-block,break-block\n"
                 + "public.observations=placed-state,drop-set\n"
-                + "public.binding=worldline.testkit.BlockConformancePlan#cases\n";
+                + "public.binding=worldline.testapi.BlockConformancePlan#cases\n";
         Properties values = new Properties();
         values.load(new StringReader(text));
         MilestoneObjective objective = new MilestoneObjective(Path.of("objective"), values);
@@ -303,7 +303,7 @@ final class MilestoneObjective {
         descriptor.setProperty("testkit.fixture", "block-matrix");
         descriptor.setProperty("testkit.actions", "place-block,break-block");
         descriptor.setProperty("testkit.observations", "placed-state,drop-set");
-        descriptor.setProperty("testkit.binding", "worldline.testkit.BlockConformancePlan#cases");
+        descriptor.setProperty("testkit.binding", "worldline.testapi.BlockConformancePlan#cases");
         objective.verifyDescriptor(descriptor);
     }
 

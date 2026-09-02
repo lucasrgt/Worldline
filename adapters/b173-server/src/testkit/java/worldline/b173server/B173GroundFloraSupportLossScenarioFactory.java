@@ -5,13 +5,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import worldline.api.RemoteItemStack;
-import worldline.testkit.BlockConformanceCase;
-import worldline.testkit.BlockConformancePlan;
-import worldline.testkit.BlockConformanceProfile;
-import worldline.testkit.BlockConformanceTemplate;
-import worldline.testkit.BlockLifecycleSlot;
-import worldline.testkit.BlockSupportLossScenario;
-import worldline.testkit.ConformanceLayer;
+import worldline.testapi.BlockConformanceCase;
+import worldline.testapi.BlockConformancePlan;
+import worldline.testapi.BlockConformanceProfile;
+import worldline.testapi.BlockConformanceTemplate;
+import worldline.testapi.BlockLifecycleSlot;
+import worldline.testapi.BlockSupportLossScenario;
+import worldline.testapi.ConformanceLayer;
 
 /** Official lifecycle rows for bounded stability and causal ground-support loss. */
 public final class B173GroundFloraSupportLossScenarioFactory {

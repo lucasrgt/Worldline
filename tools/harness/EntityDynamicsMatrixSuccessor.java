@@ -19,7 +19,7 @@ final class EntityDynamicsMatrixSuccessor {
         {"modules/atlas/src/test/java/worldline/atlas/AtlasStoreTest.java",
                 "37df0e1f6889d45efbd05cbfe1fa80e5a2654bffac10b7499d0fce686a7da357",
                 "b61afbba5e89477b0625ea241512c6296ae7b18181aaa6ff1e65987e674306b4"},
-        {"modules/testapi/src/main/java/worldline/testkit/SlimeLifecycleFixture.java",
+        {"modules/testapi/src/main/java/worldline/testapi/SlimeLifecycleFixture.java",
                 "0f02f3366886ade709a960f29ac0e294f666bf2c76e1685624c4f1b3c578064f",
                 "3d3933b7485140195c7b28d589011df7caf1278596373adfdb0bd6ed66ac85de"},
         {"modules/testkit/src/test/java/worldline/testkit/TestKitContractTest.java",

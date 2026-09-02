@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.CakeServingEvidence;
+import worldline.testapi.CakeServingFixture;
+import worldline.testapi.CakeServingObservation;
 
 import java.util.Arrays;
 import worldline.api.BlockLifecycleDriver.ReloadBoundary;

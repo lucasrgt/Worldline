@@ -1,5 +1,5 @@
 schema=1
 id=m196-glass
-fingerprint=148fa1241e793725675aa575e9e68a661aabad43e015aa571e62caaca8e67c6f
+fingerprint=bd95dd8e94e26baf4416a38e2f3c8c30bb791dd4c1617784f50caad7eb7db15c
 observation.sha256=559e9d38c638c27b461ef834cc558063696964fbdff90e68a729877cb3daa13e
 source=refactor-equivalent

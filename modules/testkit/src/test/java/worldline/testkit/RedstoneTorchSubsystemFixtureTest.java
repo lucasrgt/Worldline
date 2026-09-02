@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.RedstoneTorchSubsystemEvidence;
+import worldline.testapi.RedstoneTorchSubsystemFixture;
+import worldline.testapi.RedstoneTorchSubsystemObservation;
 
 /** Contract tests for reusable redstone torch subsystem evidence. */
 public final class RedstoneTorchSubsystemFixtureTest {

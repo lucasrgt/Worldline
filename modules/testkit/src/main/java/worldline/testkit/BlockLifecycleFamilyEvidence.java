@@ -1,4 +1,5 @@
 package worldline.testkit;
+import worldline.testapi.BlockLifecycleScenario;
 
 import java.util.List;
 import java.util.Map;

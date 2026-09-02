@@ -428,7 +428,7 @@ duration are normalized or explicitly outside the claim.
 
 ### Block lifecycle matrices
 
-`worldline.testkit.BlockConformancePlan` and `BlockLifecyclePlan` are part of
+`worldline.testapi.BlockConformancePlan` and `BlockLifecyclePlan` are part of
 the Java 8 authoring JAR. They let an external mod describe a block matrix as
 data while the runner registers one isolated test per scenario:
 

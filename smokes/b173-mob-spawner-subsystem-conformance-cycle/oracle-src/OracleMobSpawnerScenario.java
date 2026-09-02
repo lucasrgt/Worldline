@@ -1,5 +1,5 @@
-import worldline.testkit.MobSpawnerSubsystemObservation;
-import worldline.testkit.MobSpawnerSubsystemScenario;
+import worldline.testapi.MobSpawnerSubsystemObservation;
+import worldline.testapi.MobSpawnerSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Official-name counterpart of the mapped mob-spawner scenario. */

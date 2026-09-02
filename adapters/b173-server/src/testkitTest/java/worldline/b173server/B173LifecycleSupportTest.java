@@ -7,10 +7,10 @@ import worldline.api.BlockState;
 import worldline.api.BlockFace;
 import worldline.api.RemoteItemStack;
 import worldline.test.TestRuntimeRequest;
-import worldline.testkit.BlockLifecyclePlan;
-import worldline.testkit.BlockLifecycleNeighbor;
-import worldline.testkit.BlockLifecycleSlot;
-import worldline.testkit.BlockLifecycleScenario;
+import worldline.testapi.BlockLifecyclePlan;
+import worldline.testapi.BlockLifecycleNeighbor;
+import worldline.testapi.BlockLifecycleSlot;
+import worldline.testapi.BlockLifecycleScenario;
 
 /** Static contract checks for scenario-declared lifecycle substrates and item variants. */
 final class B173LifecycleSupportTest {

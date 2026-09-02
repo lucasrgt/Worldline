@@ -4,8 +4,8 @@ import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
-import worldline.testkit.VegetationEcologyEvidence;
-import worldline.testkit.VegetationEcologyFixture;
+import worldline.testapi.VegetationEcologyEvidence;
+import worldline.testapi.VegetationEcologyFixture;
 
 /** Executes the public vegetation ecology fixture against mapped Beta 1.7.3. */
 public final class VegetationEcologySmoke {

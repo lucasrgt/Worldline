@@ -1,5 +1,5 @@
 schema=1
 id=b173-native-tile-entity-render-cycle
-fingerprint=6c996a7f34d1d498f2a4af92046bea6bca12e4757a08b0216f056c95e1afa86a
+fingerprint=646d4e09b9975c7e7639bf38ddc922ffa8b13489906bbf2be89bf68d81fbb51c
 observation.sha256=575f6b04e7dacd8f0ff9774c0c3a95ca52d7eb39d8221dbac3fe477f2f9d3b08
-source=executed
+source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=b173-entity-physical-envelope-cycle
-fingerprint=244cef35d003c3259530a64793dea8f7b258d1fc84b5971399e141c019f5bb1c
+fingerprint=3b2903d277e6e37054ccb5f7676a65eeea38a8c85b30e31f0f24339d0cd33186
 observation.sha256=8b119a1a3726805d48bdfd54362b9bd2ee1b9057b915f29997eb956d263000be
-source=executed
+source=refactor-equivalent

@@ -4,7 +4,7 @@ import worldline.api.RemoteItemStack;
 import worldline.api.BlockFace;
 import worldline.api.BlockState;
 import worldline.test.TestRuntimeRequest;
-import worldline.testkit.BlockLifecyclePlan;
+import worldline.testapi.BlockLifecyclePlan;
 
 /** Validated neutral lifecycle slot options translated to an official player loadout. */
 final class B173LifecycleLoadout {

@@ -1,4 +1,6 @@
 package worldline.testkit;
+import worldline.testapi.BlockSupportLossPlan;
+import worldline.testapi.BlockSupportLossScenario;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;

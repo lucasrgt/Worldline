@@ -5,6 +5,7 @@ import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
 import worldline.testkit.*;
+import worldline.testapi.*;
 
 /** Places remaining piston 33 and sticky 29 facings 0,2,3,4,5 as one SET. */
 public final class RemainingPistonOrientSetSmoke {

@@ -4,8 +4,8 @@ import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
-import worldline.testkit.RedstoneInputControlsSubsystemEvidence;
-import worldline.testkit.RedstoneInputControlsSubsystemFixture;
+import worldline.testapi.RedstoneInputControlsSubsystemEvidence;
+import worldline.testapi.RedstoneInputControlsSubsystemFixture;
 
 /** Executes the public redstone input-control fixture against mapped Beta 1.7.3. */
 public final class RedstoneInputControlsSmoke {

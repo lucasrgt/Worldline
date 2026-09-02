@@ -1,5 +1,5 @@
-import worldline.testkit.RedstoneOreSubsystemObservation;
-import worldline.testkit.RedstoneOreSubsystemScenario;
+import worldline.testapi.RedstoneOreSubsystemObservation;
+import worldline.testapi.RedstoneOreSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Official-name counterpart of the mapped redstone-ore scenario. */

@@ -1,5 +1,5 @@
-import worldline.testkit.IronDoorSubsystemEvidence;
-import worldline.testkit.IronDoorSubsystemFixture;
+import worldline.testapi.IronDoorSubsystemEvidence;
+import worldline.testapi.IronDoorSubsystemFixture;
 
 /** Complete iron-door subsystem against the untouched obfuscated server JAR. */
 public final class WorldlineIronDoorOfficialOracle {

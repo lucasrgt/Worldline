@@ -13,21 +13,6 @@ import java.util.regex.Pattern;
 
 /** One reviewed mechanical migration from packed ordinary cycles to declarative plans. */
 final class DataDrivenCycleMigration {
-    private static final Pattern ID = Pattern.compile(
-            "private\\s+static\\s+final\\s+String\\s+ID\\s*=\\s*\\\"([^\\\"]+)\\\"");
-    private static final Pattern MAIN = Pattern.compile("\\\"(worldline\\.smoke\\.[^\\\"]+)\\\"");
-    private static final Pattern VALUE = Pattern.compile(
-            "value\\(config,\\s*\\\"([^\\\"]+)\\\"\\)");
-    private static final Pattern PRODUCT = Pattern.compile(
-            "product\\(\\s*\\\"([a-z0-9-]+)\\\"\\)");
-    private static final Pattern INPUT = Pattern.compile(
-            "javaFiles\\(root\\.resolve\\(\\s*\\\"([^\\\"]+)\\\"\\)\\)");
-    private static final Pattern PREFIX = Pattern.compile(
-            "line\\(output,\\s*\\\"([^\\\"]+)\\\"\\)");
-    private static final Pattern OUTPUT = Pattern.compile(
-            "output\\.contains\\(\\s*\\\"([^\\\"]+)\\\"\\)");
-    private static final Pattern CONTAINS = Pattern.compile(
-            "(!?)(?:first\\.)?(signal|trace)\\.contains\\(\\s*\\\"([^\\\"]+)\\\"\\)");
     private final Path root;
 
     DataDrivenCycleMigration(Path root) { this.root = root.toAbsolutePath().normalize(); }
@@ -99,6 +84,10 @@ final class DataDrivenCycleMigration {
         SmokePins existing = new SmokePins(root);
         Properties train = TrainPinCheck.manifest(root);
         SmokeReceiptCache cache = new SmokeReceiptCache(root); List<SmokePins.Entry> pins = new ArrayList<>();
+        boolean sharedRunnerRefactor = !digest(root.resolve("tools/smoke/DataDrivenCycle.java"))
+                .equals(manifest.getProperty("runner_sha256", ""));
+        boolean sharedSupportRefactor = !digest(root.resolve("tools/harness/SmokeSupport.java"))
+                .equals(manifest.getProperty("runtime_support_source_sha256", ""));
         boolean sharedPlanRefactor = !digest(root.resolve("tools/harness/DataDrivenCyclePlan.java"))
                 .equals(manifest.getProperty("plan_source_sha256", ""));
         boolean sharedProcessRefactor = !digest(root.resolve("tools/harness/SmokeProcess.java"))
@@ -159,6 +148,7 @@ final class DataDrivenCycleMigration {
                 executed++; continue;
             }
             if (local == null && !current.equals(existingPin.fingerprint())
+                    && !sharedRunnerRefactor && !sharedSupportRefactor
                     && !sharedPlanRefactor && !sharedProcessRefactor) {
                 DataDrivenRefreshEvidence.FixtureRefactor refactor =
                         DataDrivenRefreshEvidence.fixture(root, smoke.id);
@@ -187,6 +177,7 @@ final class DataDrivenCycleMigration {
                     requiredHash(manifest, stem + "evidence_sha256"), "refactor-equivalent"));
         }
         require(generic >= 300 && (executed >= 1 || newRefactors >= 1 || importedPlans >= 1
+                        || sharedRunnerRefactor || sharedSupportRefactor
                         || sharedPlanRefactor || sharedProcessRefactor),
                 "refresh requires an exact proof, train receipt, or canonical fixture refactor");
         manifest.setProperty("refresh.fixture.count", Integer.toString(fixtureRefactors));
@@ -208,22 +199,26 @@ final class DataDrivenCycleMigration {
     }
 
     private Plan parse(Path source, String text) {
-        String id = one(ID, text, "id", source); int runStart = text.indexOf("private Outcome run");
+        String id = one(DataDrivenCycleSyntax.ID, text, "id", source);
+        int runStart = text.indexOf("private Outcome run");
         int compileStart = text.indexOf("private Path compile");
         require(runStart > 0 && compileStart > 0, "unsupported cycle sections: " + source);
         String run = text.substring(runStart), compile = text.substring(compileStart);
-        String main = one(MAIN, run, "main", source); int mainPosition = run.indexOf(main);
+        String main = one(DataDrivenCycleSyntax.MAIN, run, "main", source);
+        int mainPosition = run.indexOf(main);
         int mainEnd = run.indexOf('"', mainPosition + main.length());
         int commandStart = run.lastIndexOf("Arrays.asList(", mainPosition);
         int commandEnd = run.indexOf("));", mainEnd);
         require(commandStart >= 0 && commandEnd > mainEnd, "unsupported command: " + source);
         String command = run.substring(commandStart, commandEnd);
-        List<String> arguments = matches(VALUE, run.substring(mainEnd, commandEnd));
-        List<String> prefixes = matches(PREFIX, run);
+        List<String> arguments = matches(DataDrivenCycleSyntax.VALUE,
+                run.substring(mainEnd, commandEnd));
+        List<String> prefixes = matches(DataDrivenCycleSyntax.PREFIX, run);
         require(!arguments.isEmpty() && prefixes.size() == 3, "unsupported outputs: " + source);
-        return new Plan(id, main, arguments, unique(matches(INPUT, compile)),
-                unique(matches(PRODUCT, compile)), unique(matches(PRODUCT, command)), prefixes,
-                unique(matches(OUTPUT, run)), assertions(text, "signal", false),
+        return new Plan(id, main, arguments, unique(matches(DataDrivenCycleSyntax.INPUT, compile)),
+                unique(matches(DataDrivenCycleSyntax.PRODUCT, compile)),
+                unique(matches(DataDrivenCycleSyntax.PRODUCT, command)), prefixes,
+                unique(matches(DataDrivenCycleSyntax.OUTPUT, run)), assertions(text, "signal", false),
                 assertions(text, "signal", true), assertions(text, "trace", false),
                 assertions(text, "trace", true));
     }
@@ -275,7 +270,7 @@ final class DataDrivenCycleMigration {
         while (matcher.find()) values.add(matcher.group(1)); return values; }
     private static List<String> assertions(String text, String field, boolean excluded) {
         List<String> values = new ArrayList<>();
-        Matcher matcher = CONTAINS.matcher(text); while (matcher.find())
+        Matcher matcher = DataDrivenCycleSyntax.CONTAINS.matcher(text); while (matcher.find())
             if (matcher.group(2).equals(field) && matcher.group(1).equals(excluded ? "!" : ""))
                 values.add(matcher.group(3)); return unique(values); }
     private static List<String> unique(List<String> values) { return List.copyOf(new LinkedHashSet<>(values)); }

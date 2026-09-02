@@ -4,8 +4,8 @@ import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
-import worldline.testkit.RedstoneTorchSubsystemEvidence;
-import worldline.testkit.RedstoneTorchSubsystemFixture;
+import worldline.testapi.RedstoneTorchSubsystemEvidence;
+import worldline.testapi.RedstoneTorchSubsystemFixture;
 
 /** Executes the public redstone torch fixture against mapped Beta 1.7.3. */
 public final class RedstoneTorchSubsystemSmoke {

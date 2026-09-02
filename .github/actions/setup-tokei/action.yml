@@ -1,17 +1,38 @@
 name: Setup pinned tokei
-description: Restore the pinned source counter or install it once on cache miss
+description: Restore the digest-pinned source counter or install it from the hashed tarball
 runs:
   using: composite
   steps:
+    - id: pins
+      shell: bash
+      run: |
+        set -euo pipefail
+        version="$(awk -F= '/^version=/{print $2}' quality/tokei-pins.properties)"
+        digest="$(awk -F= '/^source.sha256=/{print $2}' quality/tokei-pins.properties)"
+        echo "version=$version" >> "$GITHUB_OUTPUT"
+        echo "digest=$digest" >> "$GITHUB_OUTPUT"
     - id: cache
       uses: actions/cache@v4
       with:
         path: |
           ~/.cargo/bin/tokei
           ~/.cargo/bin/tokei.exe
-        key: worldline-tokei-${{ runner.os }}-14.0.0
+        key: worldline-tokei-${{ runner.os }}-${{ steps.pins.outputs.version }}-${{ steps.pins.outputs.digest }}
+    - if: steps.cache.outputs.cache-hit != 'true'
+      uses: dtolnay/rust-toolchain@stable
     - if: steps.cache.outputs.cache-hit != 'true'
       shell: bash
-      run: cargo install tokei --version 14.0.0 --locked
+      run: |
+        set -euo pipefail
+        version="$(awk -F= '/^version=/{print $2}' quality/tokei-pins.properties)"
+        digest="$(awk -F= '/^source.sha256=/{print $2}' quality/tokei-pins.properties)"
+        url="$(awk -F= '/^source.url=/{print $2}' quality/tokei-pins.properties)"
+        archive="/tmp/tokei-${version}.tar.gz"
+        curl -sL --fail -o "$archive" "$url"
+        echo "${digest}  ${archive}" | sha256sum -c -
+        rm -rf "/tmp/tokei-${version}"
+        mkdir -p "/tmp/tokei-${version}"
+        tar -xzf "$archive" -C "/tmp/tokei-${version}" --strip-components=1
+        cargo install --path "/tmp/tokei-${version}" --locked --force
     - shell: bash
       run: tokei --version

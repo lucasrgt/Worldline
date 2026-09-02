@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.SignSubsystemEvidence;
+import worldline.testapi.SignSubsystemFixture;
+import worldline.testapi.SignSubsystemObservation;
 
 import java.util.Arrays;
 import worldline.api.BlockLifecycleDriver.ReloadBoundary;

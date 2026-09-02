@@ -1,5 +1,5 @@
-import worldline.testkit.PortalBlockSubsystemEvidence;
-import worldline.testkit.PortalBlockSubsystemFixture;
+import worldline.testapi.PortalBlockSubsystemEvidence;
+import worldline.testapi.PortalBlockSubsystemFixture;
 
 /** Complete portal-block subsystem against the untouched obfuscated server JAR. */
 public final class WorldlinePortalBlockOfficialOracle {

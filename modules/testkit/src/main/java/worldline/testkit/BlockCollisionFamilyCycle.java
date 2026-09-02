@@ -1,4 +1,6 @@
 package worldline.testkit;
+import worldline.testapi.BlockCollisionPlan;
+import worldline.testapi.BlockCollisionScenario;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;

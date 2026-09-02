@@ -1,5 +1,5 @@
-import worldline.testkit.BuiltEnvironmentMaterialsEvidence;
-import worldline.testkit.BuiltEnvironmentMaterialsFixture;
+import worldline.testapi.BuiltEnvironmentMaterialsEvidence;
+import worldline.testapi.BuiltEnvironmentMaterialsFixture;
 
 /** Construction-material matrix against the untouched official server JAR. */
 public final class WorldlineBuiltEnvironmentMaterialsOfficialOracle {

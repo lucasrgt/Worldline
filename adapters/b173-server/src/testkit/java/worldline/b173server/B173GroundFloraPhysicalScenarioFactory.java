@@ -7,21 +7,21 @@ import worldline.api.BlockFace;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.RemoteItemStack;
-import worldline.testkit.BlockCollisionPlacement;
-import worldline.testkit.BlockCollisionScenario;
-import worldline.testkit.BlockConformanceCase;
-import worldline.testkit.BlockConformancePlan;
-import worldline.testkit.BlockConformanceProfile;
-import worldline.testkit.BlockConformanceTemplate;
-import worldline.testkit.BlockLifecycleSlot;
-import worldline.testkit.BlockLightExpectation;
-import worldline.testkit.BlockLightPlacement;
-import worldline.testkit.BlockLightProbe;
-import worldline.testkit.BlockLightScenario;
-import worldline.testkit.BlockStateDomainScenario;
-import worldline.testkit.BlockStateDomainStep;
-import worldline.testkit.BlockStateObservation;
-import worldline.testkit.ConformanceLayer;
+import worldline.testapi.BlockCollisionPlacement;
+import worldline.testapi.BlockCollisionScenario;
+import worldline.testapi.BlockConformanceCase;
+import worldline.testapi.BlockConformancePlan;
+import worldline.testapi.BlockConformanceProfile;
+import worldline.testapi.BlockConformanceTemplate;
+import worldline.testapi.BlockLifecycleSlot;
+import worldline.testapi.BlockLightExpectation;
+import worldline.testapi.BlockLightPlacement;
+import worldline.testapi.BlockLightProbe;
+import worldline.testapi.BlockLightScenario;
+import worldline.testapi.BlockStateDomainScenario;
+import worldline.testapi.BlockStateDomainStep;
+import worldline.testapi.BlockStateObservation;
+import worldline.testapi.ConformanceLayer;
 
 /** Data-driven official physical rows for small ground flora. */
 public final class B173GroundFloraPhysicalScenarioFactory {

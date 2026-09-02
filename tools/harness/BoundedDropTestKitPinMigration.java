@@ -17,10 +17,10 @@ final class BoundedDropTestKitPinMigration {
     static final int BASE_PINS = 625;
     static final List<String> FILES = List.of(
             "adapters/b173-server/src/testkit/java/worldline/b173server/B173LifecycleScenarioFactory.java",
-            "modules/testapi/src/main/java/worldline/testkit/BlockLifecycleDropMatrix.java",
-            "modules/testapi/src/main/java/worldline/testkit/BlockLifecycleEvidence.java",
-            "modules/testapi/src/main/java/worldline/testkit/BlockLifecycleFixture.java",
-            "modules/testapi/src/main/java/worldline/testkit/BlockLifecycleScenario.java",
+            "modules/testapi/src/main/java/worldline/testapi/BlockLifecycleDropMatrix.java",
+            "modules/testapi/src/main/java/worldline/testapi/BlockLifecycleEvidence.java",
+            "modules/testapi/src/main/java/worldline/testapi/BlockLifecycleFixture.java",
+            "modules/testapi/src/main/java/worldline/testapi/BlockLifecycleScenario.java",
             "modules/testkit/src/main/java/worldline/testkit/BlockLifecycleFamilyEvidence.java",
             "modules/testkit/src/test/java/worldline/testkit/BlockLifecycleDropMatrixTest.java",
             "modules/testkit/src/test/java/worldline/testkit/TestKitContractTest.java");

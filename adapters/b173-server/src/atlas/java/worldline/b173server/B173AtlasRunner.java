@@ -19,8 +19,8 @@ public final class B173AtlasRunner implements AtlasRunner {
         int radius = request.radius();
         int side = radius * 2 + 1;
         int port = freePort();
-        B173DedicatedServer server = new B173DedicatedServer(request.serverJar(),
-                request.workspace(), port, request.seed(), TIMEOUT, 3, true);
+        B173DedicatedServer server = OfficialServerBootstrap.start(request.serverJar(),
+                request.workspace(), port, request.seed(), TIMEOUT);
         B173WireClient client = new B173WireClient("127.0.0.1", port, "atlas", TIMEOUT);
         TreeMap<Integer, Integer> palette = new TreeMap<>();
         StringBuilder cells = new StringBuilder();

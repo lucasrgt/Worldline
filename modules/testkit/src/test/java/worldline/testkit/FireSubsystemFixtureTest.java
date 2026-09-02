@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.FireSubsystemEvidence;
+import worldline.testapi.FireSubsystemFixture;
+import worldline.testapi.FireSubsystemObservation;
 
 /** Locks the public fire mini-subsystem contract. */
 public final class FireSubsystemFixtureTest {

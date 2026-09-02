@@ -1,5 +1,5 @@
-import worldline.testkit.RedstoneOreSubsystemEvidence;
-import worldline.testkit.RedstoneOreSubsystemFixture;
+import worldline.testapi.RedstoneOreSubsystemEvidence;
+import worldline.testapi.RedstoneOreSubsystemFixture;
 
 /** Complete redstone-ore subsystem against the untouched obfuscated server JAR. */
 public final class WorldlineRedstoneOreOfficialOracle {

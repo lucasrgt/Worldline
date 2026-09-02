@@ -1,5 +1,5 @@
-import worldline.testkit.RedstoneTorchSubsystemEvidence;
-import worldline.testkit.RedstoneTorchSubsystemFixture;
+import worldline.testapi.RedstoneTorchSubsystemEvidence;
+import worldline.testapi.RedstoneTorchSubsystemFixture;
 
 /** Complete redstone torch subsystem against the untouched obfuscated server JAR. */
 public final class WorldlineRedstoneTorchOfficialOracle {

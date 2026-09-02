@@ -1,4 +1,6 @@
 package worldline.testkit;
+import worldline.testapi.BlockStabilityPlan;
+import worldline.testapi.BlockStabilityScenario;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;

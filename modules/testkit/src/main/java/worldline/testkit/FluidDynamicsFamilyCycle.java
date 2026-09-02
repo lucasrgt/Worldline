@@ -1,4 +1,6 @@
 package worldline.testkit;
+import worldline.testapi.FluidDynamicsPlan;
+import worldline.testapi.FluidDynamicsScenario;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;

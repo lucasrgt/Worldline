@@ -4,8 +4,8 @@ import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
-import worldline.testkit.BuiltEnvironmentMaterialsEvidence;
-import worldline.testkit.BuiltEnvironmentMaterialsFixture;
+import worldline.testapi.BuiltEnvironmentMaterialsEvidence;
+import worldline.testapi.BuiltEnvironmentMaterialsFixture;
 
 /** Executes the public construction-material fixture against mapped Beta 1.7.3. */
 public final class BuiltEnvironmentMaterialsSmoke {

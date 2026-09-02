@@ -1,4 +1,15 @@
 package worldline.testkit;
+import worldline.testapi.BlockConformanceCase;
+import worldline.testapi.BlockConformancePlan;
+import worldline.testapi.BlockConformanceProfile;
+import worldline.testapi.BlockConformanceTemplate;
+import worldline.testapi.BlockLifecycleEvidence;
+import worldline.testapi.BlockLifecycleFixture;
+import worldline.testapi.BlockLifecycleNeighbor;
+import worldline.testapi.BlockLifecyclePlan;
+import worldline.testapi.BlockLifecycleScenario;
+import worldline.testapi.BlockLifecycleSlot;
+import worldline.testapi.ConformanceLayer;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;

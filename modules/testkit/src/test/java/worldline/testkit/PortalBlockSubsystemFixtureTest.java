@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.PortalBlockSubsystemEvidence;
+import worldline.testapi.PortalBlockSubsystemFixture;
+import worldline.testapi.PortalBlockSubsystemObservation;
 
 /** Contract tests for reusable portal-block subsystem evidence. */
 public final class PortalBlockSubsystemFixtureTest {

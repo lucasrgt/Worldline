@@ -4,8 +4,8 @@ import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
-import worldline.testkit.LockedChestSubsystemEvidence;
-import worldline.testkit.LockedChestSubsystemFixture;
+import worldline.testapi.LockedChestSubsystemEvidence;
+import worldline.testapi.LockedChestSubsystemFixture;
 
 /** Executes the public locked-chest fixture against mapped Beta 1.7.3. */
 public final class LockedChestSubsystemSmoke {

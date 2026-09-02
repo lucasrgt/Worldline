@@ -1,5 +1,5 @@
-import worldline.testkit.RailNetworkSubsystemObservation;
-import worldline.testkit.RailNetworkSubsystemScenario;
+import worldline.testapi.RailNetworkSubsystemObservation;
+import worldline.testapi.RailNetworkSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Official-name counterpart of the mapped rail-network scenario. */

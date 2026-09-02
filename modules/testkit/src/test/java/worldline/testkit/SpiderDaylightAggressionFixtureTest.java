@@ -1,7 +1,7 @@
 package worldline.testkit;
 
-import worldline.api.SpiderDaylightAggressionActions;
-import worldline.api.SpiderDaylightAggressionEvidence;
+import worldline.api.scenario.SpiderDaylightAggressionActions;
+import worldline.api.scenario.SpiderDaylightAggressionEvidence;
 import worldline.api.WorldlineBehavior;
 import worldline.api.WorldlineHostileBehaviors;
 

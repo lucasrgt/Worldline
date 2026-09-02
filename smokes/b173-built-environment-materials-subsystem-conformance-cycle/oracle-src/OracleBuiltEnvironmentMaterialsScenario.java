@@ -1,5 +1,5 @@
-import worldline.testkit.BuiltEnvironmentMaterialsObservation;
-import worldline.testkit.BuiltEnvironmentMaterialsScenario;
+import worldline.testapi.BuiltEnvironmentMaterialsObservation;
+import worldline.testapi.BuiltEnvironmentMaterialsScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Official-name counterpart of the mapped construction-material scenario. */

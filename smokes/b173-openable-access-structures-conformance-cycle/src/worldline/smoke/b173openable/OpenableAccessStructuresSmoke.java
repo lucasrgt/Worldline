@@ -4,8 +4,8 @@ import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
-import worldline.testkit.OpenableAccessStructuresEvidence;
-import worldline.testkit.OpenableAccessStructuresFixture;
+import worldline.testapi.OpenableAccessStructuresEvidence;
+import worldline.testapi.OpenableAccessStructuresFixture;
 
 /** Executes the public openable access structures fixture against mapped Beta 1.7.3. */
 public final class OpenableAccessStructuresSmoke {

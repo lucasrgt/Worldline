@@ -6,15 +6,15 @@ import java.util.List;
 import worldline.api.BlockFace;
 import worldline.api.BlockState;
 import worldline.api.RemoteItemStack;
-import worldline.testkit.BlockCollisionExpectation;
-import worldline.testkit.BlockCollisionPlacement;
-import worldline.testkit.BlockCollisionProbe;
-import worldline.testkit.BlockCollisionScenario;
-import worldline.testkit.BlockConformancePlan;
-import worldline.testkit.BlockConformanceProfile;
-import worldline.testkit.BlockConformanceTemplate;
-import worldline.testkit.BlockLifecycleSlot;
-import worldline.testkit.ConformanceLayer;
+import worldline.testapi.BlockCollisionExpectation;
+import worldline.testapi.BlockCollisionPlacement;
+import worldline.testapi.BlockCollisionProbe;
+import worldline.testapi.BlockCollisionScenario;
+import worldline.testapi.BlockConformancePlan;
+import worldline.testapi.BlockConformanceProfile;
+import worldline.testapi.BlockConformanceTemplate;
+import worldline.testapi.BlockLifecycleSlot;
+import worldline.testapi.ConformanceLayer;
 
 /** Official b1.7.3 static collision-envelope rows. */
 public final class B173CollisionScenarioFactory {

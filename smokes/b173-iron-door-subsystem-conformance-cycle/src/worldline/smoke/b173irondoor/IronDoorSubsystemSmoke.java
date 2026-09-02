@@ -4,8 +4,8 @@ import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
-import worldline.testkit.IronDoorSubsystemEvidence;
-import worldline.testkit.IronDoorSubsystemFixture;
+import worldline.testapi.IronDoorSubsystemEvidence;
+import worldline.testapi.IronDoorSubsystemFixture;
 
 /** Executes the public iron-door fixture against mapped Beta 1.7.3. */
 public final class IronDoorSubsystemSmoke {

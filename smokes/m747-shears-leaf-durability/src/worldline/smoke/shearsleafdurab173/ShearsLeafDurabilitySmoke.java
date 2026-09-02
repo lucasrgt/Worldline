@@ -15,6 +15,7 @@ import worldline.api.RemoteWorldView;
 import worldline.b173server.B173DedicatedServer;
 import worldline.b173server.B173PlayerSeed;
 import worldline.b173server.B173WireClient;
+import worldline.b173server.OfficialServerBootstrap;
 import worldline.testkit.ShearsLeafDurabilityFixture;
 
 /** Breaks one oak leaf with pristine shears 359 and freezes the exact one-point durability move. */
@@ -32,8 +33,8 @@ public final class ShearsLeafDurabilitySmoke {
     String user = args[4];
     int cx = Integer.parseInt(args[5]), cz = Integer.parseInt(args[6]);
     Duration timeout = Duration.ofMinutes(8);
-    B173DedicatedServer server =
-        new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+    B173DedicatedServer server = OfficialServerBootstrap.start(
+        jar, workspace, port, seed, timeout);
     B173WireClient actor = new B173WireClient("127.0.0.1", port, user, timeout);
     try {
       server.boot();
@@ -52,11 +53,8 @@ public final class ShearsLeafDurabilitySmoke {
         actor.moveAndObserve(0D, 1D, 0D, 1);
         require(++column <= 15, "water column exceeded shears durability fixture");
       }
-      for (int lift = 0; lift < 8; lift++) {
-        top = place(actor, top, BlockFace.UP, 1);
-        actor.moveAndObserve(0D, 1D, 0D, 1);
-        column++;
-      }
+      top = raiseColumn(actor, top, 8);
+      column += 8;
       actor.selectHeldSlot(1);
       BlockPosition log = place(actor, top, BlockFace.EAST, 17);
       actor.selectHeldSlot(2);

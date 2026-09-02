@@ -1,5 +1,5 @@
-import worldline.testkit.PortalBlockSubsystemObservation;
-import worldline.testkit.PortalBlockSubsystemScenario;
+import worldline.testapi.PortalBlockSubsystemObservation;
+import worldline.testapi.PortalBlockSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Official-name counterpart of the mapped portal-block scenario. */

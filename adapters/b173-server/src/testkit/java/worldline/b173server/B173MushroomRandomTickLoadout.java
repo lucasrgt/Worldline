@@ -2,7 +2,7 @@ package worldline.b173server;
 
 import worldline.api.RemoteItemStack;
 import worldline.test.TestRuntimeRequest;
-import worldline.testkit.BlockRandomTickSpreadPlan;
+import worldline.testapi.BlockRandomTickSpreadPlan;
 
 /** Validated species and break-tool slots for the mushroom spread arena. */
 final class B173MushroomRandomTickLoadout {

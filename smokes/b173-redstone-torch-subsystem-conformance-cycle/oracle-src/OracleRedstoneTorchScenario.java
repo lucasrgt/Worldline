@@ -1,5 +1,5 @@
-import worldline.testkit.RedstoneTorchSubsystemObservation;
-import worldline.testkit.RedstoneTorchSubsystemScenario;
+import worldline.testapi.RedstoneTorchSubsystemObservation;
+import worldline.testapi.RedstoneTorchSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Official-name counterpart of the mapped redstone torch scenario. */

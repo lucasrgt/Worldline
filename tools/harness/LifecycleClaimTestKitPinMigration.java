@@ -112,7 +112,16 @@ final class LifecycleClaimTestKitPinMigration {
 
     static List<String> files(Path root) throws Exception {
         return capture(root, "diff", "--name-only", BASE, INTRODUCTION).lines()
-                .filter(value -> !value.isBlank()).sorted().toList();
+                .filter(value -> !value.isBlank())
+                .map(LifecycleClaimTestKitPinMigration::relocatedTestApi)
+                .sorted().toList();
+    }
+
+    private static String relocatedTestApi(String relative) {
+        String prefix = "modules/testapi/src/main/java/worldline/testkit/";
+        if (!relative.startsWith(prefix)) return relative;
+        return "modules/testapi/src/main/java/worldline/testapi/"
+                + relative.substring(prefix.length());
     }
 
     private void attest(Properties lock, int index, String relative) throws Exception {

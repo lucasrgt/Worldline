@@ -3,8 +3,8 @@ package worldline.smoke.b173portalblock;
 import net.minecraft.src.World;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
-import worldline.testkit.PortalBlockSubsystemObservation;
-import worldline.testkit.PortalBlockSubsystemScenario;
+import worldline.testapi.PortalBlockSubsystemObservation;
+import worldline.testapi.PortalBlockSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Mapped official-world backend for complete portal-block conformance. */

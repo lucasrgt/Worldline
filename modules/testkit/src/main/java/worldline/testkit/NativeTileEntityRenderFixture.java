@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.NativeTileEntityRenderObservation;
+import worldline.testapi.NativeTileEntityRenderPlan;
+import worldline.testapi.NativeTileEntityRenderSubject;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,5 +1,5 @@
 schema=1
 id=m214-diamond-block
-fingerprint=2316d2e4dbfd63368987164656f0e5320c496471f5065a926011da6e736c0812
+fingerprint=aca82c389fa377d6b65d99f88319da23697d948c300cc2f837f5ae922a8d3ade
 observation.sha256=8915ac3e6a21fca55c8386b8affce516f9b29aa3d4fcb00dca48fec0fb8f4eed
 source=refactor-equivalent

@@ -4,7 +4,7 @@ import java.util.Arrays;
 import worldline.b173server.B173LifecycleScenarioFactory;
 import worldline.b173server.B173ServerLifecycleTestRuntimeProvider;
 import worldline.testkit.BlockLifecycleFamilyCycle;
-import worldline.testkit.BlockLifecycleScenario;
+import worldline.testapi.BlockLifecycleScenario;
 
 /** Five independently signed static self-drop rows over the public lifecycle provider. */
 public final class B173StaticSelfDropLifecycleSmoke {

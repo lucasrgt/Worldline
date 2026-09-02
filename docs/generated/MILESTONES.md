@@ -37,7 +37,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m21-server-control` | CARRIED | dedicated-server-control |
 | `m22-multiplayer-wire` | CARRIED | multiplayer-session |
 | `m23-player-persistence` | CARRIED | player-persistence |
-| `m24-play-pose` | CARRIED | player-pose |
+| `m24-play-pose` | EXECUTED | player-pose |
 | `m25-player-movement` | CARRIED | player-pose |
 | `m26-native-multiplayer` | CARRIED | multiplayer-session |
 | `m27-multiplayer-chat` | CARRIED | multiplayer-session |
@@ -88,7 +88,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m72-aero-server-content` | CARRIED | aero-runtime-session |
 | `m73-paired-aero-content` | CARRIED | aero-paired-experiment |
 | `m74-complete-aero-census` | CARRIED | aero-frame-census |
-| `m75-aero-density-ladder` | CARRIED | aero-frame-census |
+| `m75-aero-density-ladder` | EXECUTED | aero-frame-census |
 | `m76-renderer-decomposition` | CARRIED | aero-frame-census |
 | `m77-direct-stage-timing` | CARRIED | aero-frame-census |
 | `m78-paged-stage-timing` | CARRIED | aero-frame-census |
@@ -599,12 +599,12 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m664-flowing-water-freeze` | CARRIED | Flowing-water freeze boundary |
 | `m665-leaf-support-distance` | CARRIED | leaf support distance |
 | `m702-powered-rail-slope-propagation` | CARRIED | powered rail slope propagation |
-| `m703-native-3d-inventory-render` | EXECUTED | official Beta 1.7.3 native 3D inventory render family |
-| `m743-redstone-ore-dust-drop` | CARRIED | redstone ore dust drop |
-| `m747-shears-leaf-durability` | CARRIED | shears leaf durability |
-| `m751-iron-door-hand-rejection` | CARRIED | iron door hand rejection |
-| `m762-wall-sign-support-break` | CARRIED | wall sign support break |
-| `m763-torch-support-break` | CARRIED | torch support break |
+| `m703-native-3d-inventory-render` | CARRIED | official Beta 1.7.3 native 3D inventory render family |
+| `m743-redstone-ore-dust-drop` | EXECUTED | redstone ore dust drop |
+| `m747-shears-leaf-durability` | EXECUTED | shears leaf durability |
+| `m751-iron-door-hand-rejection` | EXECUTED | iron door hand rejection |
+| `m762-wall-sign-support-break` | EXECUTED | wall sign support break |
+| `m763-torch-support-break` | EXECUTED | torch support break |
 | `m767-modloader-forge-testkit-provider` | CARRIED | ModLoader and Forge TestKit providers |
 | `m768-aero-historical-tower-replay` | CARRIED | Aero historical tower hitch replay |
 | `m769-aero-unified-runtime-timeline` | CARRIED | Aero unified runtime timeline |
@@ -628,7 +628,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m787-aero-loading-first-frame-integrity` | CARRIED | Aero loading and cold first-frame integrity |
 | `m788-aero-ordered-template-performance` | CARRIED | Aero ordered Cell Page template performance |
 | `m789-aero-cell-page-queue-reuse` | CARRIED | Aero bounded Cell Page queue reuse |
-| `m790-aero-default-rollback` | CARRIED | Aero shipped Cell Page default and rollback |
+| `m790-aero-default-rollback` | EXECUTED | Aero shipped Cell Page default and rollback |
 | `b173-bed-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 bed subsystem conformance |
 | `b173-bedrock-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 bedrock subsystem conformance |
 | `b173-built-environment-materials-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 built-environment material subsystem conformance |
@@ -638,7 +638,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-deterministic-harvest-lifecycle-cycle` | CARRIED | official Beta 1.7.3 deterministic non-self-drop harvest lifecycle family |
 | `b173-dirt-flora-lifecycle-cycle` | CARRIED | official Beta 1.7.3 dirt-supported flora lifecycle family |
 | `b173-entity-persistence-envelope-cycle` | CARRIED | official Beta 1.7.3 entity persistence-envelope subsystem |
-| `b173-entity-physical-envelope-cycle` | EXECUTED | official Beta 1.7.3 entity physical-envelope subsystem |
+| `b173-entity-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 entity physical-envelope subsystem |
 | `b173-farmland-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 farmland subsystem conformance |
 | `b173-fire-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 fire subsystem conformance |
 | `b173-floor-mounted-lifecycle-cycle` | CARRIED | official Beta 1.7.3 floor-mounted block lifecycle family |
@@ -659,7 +659,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-multi-drop-mineral-lifecycle-cycle` | CARRIED | official Beta 1.7.3 multi-drop mineral lifecycle family |
 | `b173-mushroom-random-tick-conformance-cycle` | CARRIED | official Beta 1.7.3 mushroom random-tick conformance subsystem |
 | `b173-native-special-world-render-cycle` | CARRIED | official Beta 1.7.3 native special world block-render family |
-| `b173-native-tile-entity-render-cycle` | EXECUTED | official Beta 1.7.3 native tile-entity render family |
+| `b173-native-tile-entity-render-cycle` | CARRIED | official Beta 1.7.3 native tile-entity render family |
 | `b173-openable-access-structures-conformance-cycle` | CARRIED | official Beta 1.7.3 openable access structures conformance |
 | `b173-piston-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 piston subsystem conformance |
 | `b173-portal-block-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 portal block subsystem conformance |
@@ -688,7 +688,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-wall-attachment-state-domain-cycle` | CARRIED | official Beta 1.7.3 wall-attachment state domains |
 | `b173-wooden-door-state-domain-cycle` | CARRIED | official Beta 1.7.3 wooden-door reachable state domain |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
-| `census-cycle` | EXECUTED | runtime-census |
+| `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
 | `gui-tree` | EXECUTED | ui-tree-equivalence |
 | `lab-cycle` | CARRIED | runtime-lab |

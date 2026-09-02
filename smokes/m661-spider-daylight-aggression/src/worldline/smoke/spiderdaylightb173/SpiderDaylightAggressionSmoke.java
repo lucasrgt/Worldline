@@ -2,8 +2,8 @@ package worldline.smoke.spiderdaylightb173;
 
 import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
-import worldline.api.SpiderDaylightAggressionActions;
-import worldline.api.SpiderDaylightAggressionEvidence;
+import worldline.api.scenario.SpiderDaylightAggressionActions;
+import worldline.api.scenario.SpiderDaylightAggressionEvidence;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
 import worldline.trace.CanonicalTrace;

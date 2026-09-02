@@ -4,8 +4,8 @@ import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
-import worldline.testkit.RedstoneOreSubsystemEvidence;
-import worldline.testkit.RedstoneOreSubsystemFixture;
+import worldline.testapi.RedstoneOreSubsystemEvidence;
+import worldline.testapi.RedstoneOreSubsystemFixture;
 
 /** Executes the public redstone-ore fixture against mapped Beta 1.7.3. */
 public final class RedstoneOreSubsystemSmoke {

@@ -17,6 +17,7 @@ import worldline.b173server.B173DedicatedServer;
 import worldline.b173server.B173PlayerSeed;
 import worldline.b173server.B173WireClient;
 import worldline.testkit.*;
+import worldline.testapi.*;
 
 /** Places wooden door 64, Packet14-breaks the upper half, and freezes both-air plus item 324. */
 public final class DoorUpperBreakSetSmoke {

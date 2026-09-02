@@ -1,7 +1,7 @@
 package worldline.testkit;
 
-import worldline.api.PoweredCreeperActions;
-import worldline.api.PoweredCreeperEvidence;
+import worldline.api.scenario.PoweredCreeperActions;
+import worldline.api.scenario.PoweredCreeperEvidence;
 
 /** Reusable action and comparison fixture for a causal powered-creeper trial. */
 public final class PoweredCreeperFixture {

@@ -2,7 +2,7 @@ package worldline.b173server;
 
 import worldline.api.RemoteItemStack;
 import worldline.test.TestRuntimeRequest;
-import worldline.testkit.BlockStateDomainPlan;
+import worldline.testapi.BlockStateDomainPlan;
 
 /** Validated neutral state-domain slot option translated to an official loadout. */
 final class B173StateDomainLoadout {

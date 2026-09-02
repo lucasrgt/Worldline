@@ -6,12 +6,12 @@ import java.util.List;
 import worldline.api.BlockFace;
 import worldline.api.BlockState;
 import worldline.api.RemoteItemStack;
-import worldline.testkit.BlockConformancePlan;
-import worldline.testkit.BlockConformanceProfile;
-import worldline.testkit.BlockConformanceTemplate;
-import worldline.testkit.BlockLifecycleScenario;
-import worldline.testkit.BlockLifecycleSlot;
-import worldline.testkit.ConformanceLayer;
+import worldline.testapi.BlockConformancePlan;
+import worldline.testapi.BlockConformanceProfile;
+import worldline.testapi.BlockConformanceTemplate;
+import worldline.testapi.BlockLifecycleScenario;
+import worldline.testapi.BlockLifecycleSlot;
+import worldline.testapi.ConformanceLayer;
 
 /** The exact official b1.7.3 lifecycle rows currently provisioned by the provider. */
 public final class B173ServerLifecycleFixtures {

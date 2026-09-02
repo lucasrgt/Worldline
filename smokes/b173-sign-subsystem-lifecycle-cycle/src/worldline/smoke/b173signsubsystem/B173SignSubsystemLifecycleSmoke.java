@@ -5,8 +5,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import worldline.b173server.B173SignSubsystemScenario;
-import worldline.testkit.SignSubsystemEvidence;
-import worldline.testkit.SignSubsystemFixture;
+import worldline.testapi.SignSubsystemEvidence;
+import worldline.testapi.SignSubsystemFixture;
 
 /** Qualifies both native sign variants through one public official-server subsystem. */
 public final class B173SignSubsystemLifecycleSmoke {

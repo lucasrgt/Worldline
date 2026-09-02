@@ -8,6 +8,7 @@ import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
 import worldline.testkit.*;
+import worldline.testapi.*;
 
 /** Places remaining Overworld bed 26 west, north, and east foot/head halves as one SET. */
 public final class RemainingBedOrientSetSmoke {

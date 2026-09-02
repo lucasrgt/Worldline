@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.BedrockSubsystemEvidence;
+import worldline.testapi.BedrockSubsystemFixture;
+import worldline.testapi.BedrockSubsystemObservation;
 
 /** Locks the public bedrock mini-subsystem contract. */
 public final class BedrockSubsystemFixtureTest {

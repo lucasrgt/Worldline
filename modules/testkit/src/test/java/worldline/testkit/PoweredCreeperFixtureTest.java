@@ -1,7 +1,7 @@
 package worldline.testkit;
 
-import worldline.api.PoweredCreeperActions;
-import worldline.api.PoweredCreeperEvidence;
+import worldline.api.scenario.PoweredCreeperActions;
+import worldline.api.scenario.PoweredCreeperEvidence;
 import worldline.api.WorldlineBehavior;
 import worldline.api.WorldlineHostileBehaviors;
 

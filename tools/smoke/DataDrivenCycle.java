@@ -3,6 +3,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
 
@@ -69,7 +70,7 @@ public final class DataDrivenCycle {
     Files.createDirectories(output);
     List<String> command = new ArrayList<>(Arrays.asList(
         "javac", "-encoding", "UTF-8", "--release", "8", "-Xlint:all,-options", "-Werror"));
-    String classpath = classpath(plan.compileProducts, null);
+    String classpath = classpath(products(plan.compileProducts), null);
     if (!classpath.isEmpty())
       command.addAll(List.of("-classpath", classpath));
     command.addAll(List.of("-d", output.toString()));
@@ -84,7 +85,7 @@ public final class DataDrivenCycle {
     return SmokeRetry.onceOnEof(id, attempt -> {
       DataDrivenSupport.recreate(root, workspace);
       List<String> command = new ArrayList<>(List.of("java", "-classpath",
-          classpath(plan.runtimeProducts, classes), plan.mainClass, official.toString(),
+          classpath(products(plan.runtimeProducts), classes), plan.mainClass, official.toString(),
           workspace.toString(), Integer.toString(DataDrivenSupport.freePort())));
       for (String key : plan.arguments)
         command.add(value(key));
@@ -103,6 +104,12 @@ public final class DataDrivenCycle {
     for (String product : products)
       values.add(DataDrivenSupport.product(root, product).toString());
     return String.join(System.getProperty("path.separator"), values);
+  }
+
+  private List<String> products(List<String> declared) {
+    LinkedHashSet<String> values = new LinkedHashSet<>(declared);
+    if (plan.inputs.contains("modules/smoketest/src/main/java")) values.add("testapi");
+    return List.copyOf(values);
   }
 
   private String value(String key) {

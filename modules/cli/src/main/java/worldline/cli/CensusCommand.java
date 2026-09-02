@@ -17,21 +17,21 @@ import worldline.analysis.CensusRunner;
 import worldline.testkit.B173EntityPersistenceScenario;
 import worldline.testkit.EntityPersistenceEvidence;
 import worldline.testkit.EntityPersistenceFixture;
-import worldline.testkit.BlockConformancePlan;
-import worldline.testkit.BlockConformanceProfile;
-import worldline.testkit.BlockConformanceTemplate;
+import worldline.testapi.BlockConformancePlan;
+import worldline.testapi.BlockConformanceProfile;
+import worldline.testapi.BlockConformanceTemplate;
 import worldline.testkit.BlockRegistryCensusScenario;
-import worldline.testkit.BlockRegistryEvidence;
-import worldline.testkit.BlockRegistryFixture;
-import worldline.testkit.ConformanceLayer;
-import worldline.testkit.EntityConformancePlan;
-import worldline.testkit.EntityConformanceProfile;
-import worldline.testkit.EntityConformanceTemplate;
+import worldline.testapi.BlockRegistryEvidence;
+import worldline.testapi.BlockRegistryFixture;
+import worldline.testapi.ConformanceLayer;
+import worldline.testapi.EntityConformancePlan;
+import worldline.testapi.EntityConformanceProfile;
+import worldline.testapi.EntityConformanceTemplate;
 import worldline.testkit.EntityRegistryCensusScenario;
-import worldline.testkit.EntityRegistryEvidence;
-import worldline.testkit.EntityRegistryFixture;
-import worldline.testkit.EntityPhysicalEnvelopeEvidence;
-import worldline.testkit.EntityPhysicalEnvelopeFixture;
+import worldline.testapi.EntityRegistryEvidence;
+import worldline.testapi.EntityRegistryFixture;
+import worldline.testapi.EntityPhysicalEnvelopeEvidence;
+import worldline.testapi.EntityPhysicalEnvelopeFixture;
 
 /** Captures the controlled b1.7.3 registry census into canonical files. */
 final class CensusCommand {

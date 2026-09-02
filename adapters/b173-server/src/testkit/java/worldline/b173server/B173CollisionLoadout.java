@@ -2,7 +2,7 @@ package worldline.b173server;
 
 import worldline.api.RemoteItemStack;
 import worldline.test.TestRuntimeRequest;
-import worldline.testkit.BlockCollisionPlan;
+import worldline.testapi.BlockCollisionPlan;
 
 /** Validated neutral collision slot option translated to an official loadout. */
 final class B173CollisionLoadout {

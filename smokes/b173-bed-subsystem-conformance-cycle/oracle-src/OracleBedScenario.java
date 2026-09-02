@@ -1,5 +1,5 @@
-import worldline.testkit.BedSubsystemObservation;
-import worldline.testkit.BedSubsystemScenario;
+import worldline.testapi.BedSubsystemObservation;
+import worldline.testapi.BedSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Official-name counterpart of the mapped bed scenario. */

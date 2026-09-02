@@ -1,7 +1,7 @@
 package worldline.testkit;
 
-import worldline.api.SpiderDaylightAggressionActions;
-import worldline.api.SpiderDaylightAggressionEvidence;
+import worldline.api.scenario.SpiderDaylightAggressionActions;
+import worldline.api.scenario.SpiderDaylightAggressionEvidence;
 
 /** Reusable bounded fixture for a spider daylight-to-night target differential. */
 public final class SpiderDaylightAggressionFixture {

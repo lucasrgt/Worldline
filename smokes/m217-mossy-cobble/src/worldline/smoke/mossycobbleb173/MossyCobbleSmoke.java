@@ -8,6 +8,7 @@ import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
 import worldline.testkit.*;
+import worldline.testapi.*;
 
 /** Places official mossy cobblestone 48 on raised stone and freezes live block 48:0. */
 public final class MossyCobbleSmoke {

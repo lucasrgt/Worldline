@@ -11,9 +11,9 @@ import worldline.b173.B173SpecialWorldRender;
 import worldline.b173.B173WorldBlockFrame;
 import worldline.testkit.NativeWorldBlockRenderEvidence;
 import worldline.testkit.NativeWorldBlockRenderFixture;
-import worldline.testkit.NativeWorldBlockRenderObservation;
-import worldline.testkit.NativeWorldBlockRenderPlan;
-import worldline.testkit.NativeWorldBlockRenderSubject;
+import worldline.testapi.NativeWorldBlockRenderObservation;
+import worldline.testapi.NativeWorldBlockRenderPlan;
+import worldline.testapi.NativeWorldBlockRenderSubject;
 
 /** Renders every special RenderBlocks route through mapped or official classes. */
 public final class B173NativeSpecialWorldRenderSmoke {

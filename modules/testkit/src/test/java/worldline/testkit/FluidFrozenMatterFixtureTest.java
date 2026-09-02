@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.FluidFrozenMatterEvidence;
+import worldline.testapi.FluidFrozenMatterFixture;
+import worldline.testapi.FluidFrozenMatterObservation;
 
 /** Contract test for stable fluid and frozen-matter evidence. */
 public final class FluidFrozenMatterFixtureTest {

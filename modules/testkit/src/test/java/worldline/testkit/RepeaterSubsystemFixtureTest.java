@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.RepeaterSubsystemEvidence;
+import worldline.testapi.RepeaterSubsystemFixture;
+import worldline.testapi.RepeaterSubsystemObservation;
 
 /** Contract tests for the reusable two-block repeater subsystem evidence. */
 public final class RepeaterSubsystemFixtureTest {

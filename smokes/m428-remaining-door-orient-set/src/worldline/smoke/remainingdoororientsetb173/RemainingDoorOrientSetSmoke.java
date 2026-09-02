@@ -8,6 +8,7 @@ import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
 import worldline.testkit.*;
+import worldline.testapi.*;
 
 /** Places remaining wooden-door 64 look-yaw hinge/face halves 0/8, 1/9, 2/10, 3/11 as one SET. */
 public final class RemainingDoorOrientSetSmoke {

@@ -1,4 +1,4 @@
-import worldline.testkit.TestObservationWindow;
+import worldline.testapi.TestObservationWindow;
 
 /** Official-name metadata-domain and transition-timing probe. */
 final class OracleRepeaterTiming {

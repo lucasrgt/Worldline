@@ -3,8 +3,8 @@ package worldline.smoke.b173railnetwork;
 import net.minecraft.src.World;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
-import worldline.testkit.RailNetworkSubsystemObservation;
-import worldline.testkit.RailNetworkSubsystemScenario;
+import worldline.testapi.RailNetworkSubsystemObservation;
+import worldline.testapi.RailNetworkSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Mapped official-world backend for the complete rail-network package. */

@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.RedstoneInputControlsSubsystemEvidence;
+import worldline.testapi.RedstoneInputControlsSubsystemFixture;
+import worldline.testapi.RedstoneInputControlsSubsystemObservation;
 
 /** Contract test for stable redstone input-control evidence. */
 public final class RedstoneInputControlsSubsystemFixtureTest {

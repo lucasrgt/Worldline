@@ -3,8 +3,8 @@ package worldline.smoke.b173repeater;
 import net.minecraft.src.World;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
-import worldline.testkit.RepeaterSubsystemObservation;
-import worldline.testkit.RepeaterSubsystemScenario;
+import worldline.testapi.RepeaterSubsystemObservation;
+import worldline.testapi.RepeaterSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Mapped official-world backend for complete repeater conformance. */

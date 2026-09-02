@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.OpenableAccessStructuresEvidence;
+import worldline.testapi.OpenableAccessStructuresFixture;
+import worldline.testapi.OpenableAccessStructuresObservation;
 
 /** Contract tests for the public openable access-structures fixture. */
 public final class OpenableAccessStructuresFixtureTest {

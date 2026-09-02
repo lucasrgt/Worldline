@@ -1,5 +1,5 @@
-import worldline.testkit.FurnaceSubsystemObservation;
-import worldline.testkit.FurnaceSubsystemScenario;
+import worldline.testapi.FurnaceSubsystemObservation;
+import worldline.testapi.FurnaceSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Official-name counterpart of the mapped furnace scenario. */

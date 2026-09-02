@@ -3,8 +3,8 @@ package worldline.smoke.b173redstonetorch;
 import net.minecraft.src.World;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
-import worldline.testkit.RedstoneTorchSubsystemObservation;
-import worldline.testkit.RedstoneTorchSubsystemScenario;
+import worldline.testapi.RedstoneTorchSubsystemObservation;
+import worldline.testapi.RedstoneTorchSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Mapped official-world backend for complete redstone torch conformance. */

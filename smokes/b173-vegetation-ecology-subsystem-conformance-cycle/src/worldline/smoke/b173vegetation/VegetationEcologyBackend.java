@@ -3,8 +3,8 @@ package worldline.smoke.b173vegetation;
 import net.minecraft.src.World;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
-import worldline.testkit.VegetationEcologyObservation;
-import worldline.testkit.VegetationEcologyScenario;
+import worldline.testapi.VegetationEcologyObservation;
+import worldline.testapi.VegetationEcologyScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Mapped official-world backend for the complete vegetation ecology matrix. */

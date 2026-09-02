@@ -1,5 +1,5 @@
-import worldline.testkit.RedstoneInputControlsSubsystemObservation;
-import worldline.testkit.RedstoneInputControlsSubsystemScenario;
+import worldline.testapi.RedstoneInputControlsSubsystemObservation;
+import worldline.testapi.RedstoneInputControlsSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Official-name counterpart of the mapped redstone input-control scenario. */

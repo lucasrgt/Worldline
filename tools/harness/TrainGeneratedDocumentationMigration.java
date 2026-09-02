@@ -177,6 +177,11 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
                 || MilestoneCatalogTrainSuccessor.carries(relative, prior, current)
                 || IntegratedMilestoneTrainDocumentationSuccessor.carries(
                         relative, prior, current)
+                || FinalReconciliationTrainSourceSuccessor.carries(
+                        relative, prior, current)
+                || FinalArtifactHashTrainSourceSuccessor.carries(
+                        relative, prior, current)
+                || ReconciledTrainSourceSuccessor.carries(relative, prior, current)
                 || EntityLifecycleArtifactTrainSuccessor.carries(relative, prior, current)
                 || BoundedEntityArchetypeSuccessor.carries(relative, prior, current)
                 || ObjectMaterializationMatrixSuccessor.carries(relative, prior, current)
@@ -210,6 +215,8 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
     }
 
     static void selfTest() throws Exception {
+        FinalReconciliationTrainSourceSuccessor.selfTest();
+        FinalArtifactHashTrainSourceSuccessor.selfTest();
         require(!carriesSource("unreviewed", "old", "new"),
                 "train generated-documentation source allowlist drifted");
         SmokePins.Entry executed = new SmokePins.Entry(

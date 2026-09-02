@@ -1,5 +1,5 @@
-import worldline.testkit.OpenableAccessStructuresEvidence;
-import worldline.testkit.OpenableAccessStructuresFixture;
+import worldline.testapi.OpenableAccessStructuresEvidence;
+import worldline.testapi.OpenableAccessStructuresFixture;
 
 /** Openable access-structure matrix against the untouched official server JAR. */
 public final class WorldlineOpenableAccessStructuresOfficialOracle {

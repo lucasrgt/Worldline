@@ -1,4 +1,11 @@
 package worldline.testkit;
+import worldline.testapi.ConformanceLayer;
+import worldline.testapi.EntityConformancePlan;
+import worldline.testapi.EntityConformanceProfile;
+import worldline.testapi.EntityConformanceTemplate;
+import worldline.testapi.WolfLifecycleEvidence;
+import worldline.testapi.WolfLifecycleFixture;
+import worldline.testapi.WolfOwnerStateObservation;
 
 import java.util.Arrays;
 import java.util.Collections;

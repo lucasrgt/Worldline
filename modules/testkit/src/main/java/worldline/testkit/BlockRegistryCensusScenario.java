@@ -1,4 +1,6 @@
 package worldline.testkit;
+import worldline.testapi.BlockRegistryObservation;
+import worldline.testapi.BlockRegistryScenario;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

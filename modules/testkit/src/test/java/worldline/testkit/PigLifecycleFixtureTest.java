@@ -1,4 +1,13 @@
 package worldline.testkit;
+import worldline.testapi.ConformanceLayer;
+import worldline.testapi.EntityConformancePlan;
+import worldline.testapi.EntityConformanceProfile;
+import worldline.testapi.EntityConformanceTemplate;
+import worldline.testapi.EntityLifecycleScenario;
+import worldline.testapi.PigLifecycleEvidence;
+import worldline.testapi.PigLifecycleFixture;
+import worldline.testapi.PigLifecycleScenario;
+import worldline.testapi.PigSaddleMountObservation;
 
 import java.util.Arrays;
 import java.util.Collections;

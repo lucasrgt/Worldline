@@ -3,8 +3,8 @@ package worldline.smoke.b173bed;
 import net.minecraft.src.World;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
-import worldline.testkit.BedSubsystemObservation;
-import worldline.testkit.BedSubsystemScenario;
+import worldline.testapi.BedSubsystemObservation;
+import worldline.testapi.BedSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Mapped official-world backend for complete bed conformance. */

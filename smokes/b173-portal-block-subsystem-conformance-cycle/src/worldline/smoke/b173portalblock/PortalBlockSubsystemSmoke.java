@@ -4,8 +4,8 @@ import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
-import worldline.testkit.PortalBlockSubsystemEvidence;
-import worldline.testkit.PortalBlockSubsystemFixture;
+import worldline.testapi.PortalBlockSubsystemEvidence;
+import worldline.testapi.PortalBlockSubsystemFixture;
 
 /** Executes the public portal-block fixture against mapped Beta 1.7.3. */
 public final class PortalBlockSubsystemSmoke {

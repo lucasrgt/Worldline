@@ -4,8 +4,8 @@ import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
-import worldline.testkit.FireSubsystemEvidence;
-import worldline.testkit.FireSubsystemFixture;
+import worldline.testapi.FireSubsystemEvidence;
+import worldline.testapi.FireSubsystemFixture;
 
 /** Executes the public fire fixture against mapped Beta 1.7.3. */
 public final class FireSubsystemSmoke {

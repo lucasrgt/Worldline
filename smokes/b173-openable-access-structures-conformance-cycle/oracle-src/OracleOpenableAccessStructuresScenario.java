@@ -1,5 +1,5 @@
-import worldline.testkit.OpenableAccessStructuresObservation;
-import worldline.testkit.OpenableAccessStructuresScenario;
+import worldline.testapi.OpenableAccessStructuresObservation;
+import worldline.testapi.OpenableAccessStructuresScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Official-name scenario for the openable access structures lifecycle matrix. */

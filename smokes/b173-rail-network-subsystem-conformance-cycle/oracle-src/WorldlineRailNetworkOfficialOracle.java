@@ -1,5 +1,5 @@
-import worldline.testkit.RailNetworkSubsystemEvidence;
-import worldline.testkit.RailNetworkSubsystemFixture;
+import worldline.testapi.RailNetworkSubsystemEvidence;
+import worldline.testapi.RailNetworkSubsystemFixture;
 
 /** Complete rail-network subsystem against the untouched official server JAR. */
 public final class WorldlineRailNetworkOfficialOracle {

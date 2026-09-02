@@ -1,4 +1,11 @@
 package worldline.testkit;
+import worldline.testapi.ChickenEggFamilyEvidence;
+import worldline.testapi.ChickenEggFamilyFixture;
+import worldline.testapi.ChickenEggFamilyObservation;
+import worldline.testapi.ConformanceLayer;
+import worldline.testapi.EntityConformancePlan;
+import worldline.testapi.EntityConformanceProfile;
+import worldline.testapi.EntityConformanceTemplate;
 
 import java.util.Collections;
 import worldline.api.RemoteDroppedItem;

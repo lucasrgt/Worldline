@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 import worldline.api.RemoteItemStack;
-import worldline.testkit.BlockLifecycleScenario;
+import worldline.testapi.BlockLifecycleScenario;
 
 /** Renders the exact public scenario contract independently of runtime artifacts. */
 final class B173LifecycleEvidenceOracle {

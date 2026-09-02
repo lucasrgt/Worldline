@@ -1,5 +1,5 @@
-import worldline.testkit.MobSpawnerSubsystemEvidence;
-import worldline.testkit.MobSpawnerSubsystemFixture;
+import worldline.testapi.MobSpawnerSubsystemEvidence;
+import worldline.testapi.MobSpawnerSubsystemFixture;
 
 /** Complete mob-spawner subsystem against the untouched obfuscated server JAR. */
 public final class WorldlineMobSpawnerOfficialOracle {

@@ -5,6 +5,7 @@ import java.time.Duration;
 import worldline.api.*;
 import worldline.b173server.*;
 import worldline.testkit.*;
+import worldline.testapi.*;
 
 /** Official piston 33 extend then Packet14-break of the extended base, freezing head-34 leftover cleanup. */
 public final class ExtendedHeadBreakSetSmoke {

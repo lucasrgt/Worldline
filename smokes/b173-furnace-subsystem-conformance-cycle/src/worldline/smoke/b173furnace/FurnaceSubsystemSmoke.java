@@ -4,8 +4,8 @@ import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
-import worldline.testkit.FurnaceSubsystemEvidence;
-import worldline.testkit.FurnaceSubsystemFixture;
+import worldline.testapi.FurnaceSubsystemEvidence;
+import worldline.testapi.FurnaceSubsystemFixture;
 
 /** Executes the public furnace fixture against mapped Beta 1.7.3. */
 public final class FurnaceSubsystemSmoke {

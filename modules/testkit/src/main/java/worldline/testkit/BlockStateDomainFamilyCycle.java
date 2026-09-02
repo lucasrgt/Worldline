@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.BlockStateDomainPlan;
+import worldline.testapi.BlockStateDomainScenario;
+import worldline.testapi.BlockStateDomainStep;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;

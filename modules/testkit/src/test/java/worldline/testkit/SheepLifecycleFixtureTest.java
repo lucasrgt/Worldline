@@ -1,4 +1,14 @@
 package worldline.testkit;
+import worldline.testapi.ConformanceLayer;
+import worldline.testapi.EntityConformancePlan;
+import worldline.testapi.EntityConformanceProfile;
+import worldline.testapi.EntityConformanceTemplate;
+import worldline.testapi.EntityLifecycleScenario;
+import worldline.testapi.SheepDyeShearObservation;
+import worldline.testapi.SheepLifecycleEvidence;
+import worldline.testapi.SheepLifecycleFixture;
+import worldline.testapi.SheepLifecycleScenario;
+import worldline.testapi.SheepPersistenceObservation;
 
 import java.util.Arrays;
 import java.util.Collections;

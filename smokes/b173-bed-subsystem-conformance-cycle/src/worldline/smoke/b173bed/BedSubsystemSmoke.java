@@ -4,8 +4,8 @@ import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
-import worldline.testkit.BedSubsystemEvidence;
-import worldline.testkit.BedSubsystemFixture;
+import worldline.testapi.BedSubsystemEvidence;
+import worldline.testapi.BedSubsystemFixture;
 
 /** Executes the public bed fixture against mapped Beta 1.7.3. */
 public final class BedSubsystemSmoke {

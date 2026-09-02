@@ -1,5 +1,7 @@
 package worldline.api;
 
+import worldline.api.scenario.PoweredCreeperEvidence;
+
 final class PoweredCreeperEvidenceTest {
     private PoweredCreeperEvidenceTest() { }
 

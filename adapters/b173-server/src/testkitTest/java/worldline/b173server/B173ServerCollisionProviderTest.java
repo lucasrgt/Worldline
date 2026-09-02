@@ -8,10 +8,10 @@ import worldline.api.BlockState;
 import worldline.api.RemoteItemStack;
 import worldline.test.TestRuntimeProviders;
 import worldline.test.TestRuntimeRequest;
-import worldline.testkit.BlockCollisionExpectation;
-import worldline.testkit.BlockCollisionPlan;
-import worldline.testkit.BlockCollisionScenario;
-import worldline.testkit.ConformanceLayer;
+import worldline.testapi.BlockCollisionExpectation;
+import worldline.testapi.BlockCollisionPlan;
+import worldline.testapi.BlockCollisionScenario;
+import worldline.testapi.ConformanceLayer;
 
 /** Static checks for the public collision provider and official scenario rows. */
 public final class B173ServerCollisionProviderTest {

@@ -1,4 +1,12 @@
 package worldline.testkit;
+import worldline.testapi.ConformanceLayer;
+import worldline.testapi.EntityConformancePlan;
+import worldline.testapi.EntityConformanceProfile;
+import worldline.testapi.EntityConformanceTemplate;
+import worldline.testapi.EntityPhysicalEnvelopeEvidence;
+import worldline.testapi.EntityPhysicalEnvelopeFixture;
+import worldline.testapi.EntityPhysicalEnvelopeObservation;
+import worldline.testapi.EntityPhysicalEnvelopeScenario;
 
 import java.util.Arrays;
 import java.util.Collections;

@@ -3,8 +3,8 @@ package worldline.smoke.b173fire;
 import net.minecraft.src.World;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
-import worldline.testkit.FireSubsystemObservation;
-import worldline.testkit.FireSubsystemScenario;
+import worldline.testapi.FireSubsystemObservation;
+import worldline.testapi.FireSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Mapped official-world backend for complete fire conformance. */

@@ -3,8 +3,8 @@ package worldline.smoke.b173piston;
 import net.minecraft.src.World;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
-import worldline.testkit.PistonSubsystemObservation;
-import worldline.testkit.PistonSubsystemScenario;
+import worldline.testapi.PistonSubsystemObservation;
+import worldline.testapi.PistonSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Mapped official-world backend for the complete piston conformance probe. */

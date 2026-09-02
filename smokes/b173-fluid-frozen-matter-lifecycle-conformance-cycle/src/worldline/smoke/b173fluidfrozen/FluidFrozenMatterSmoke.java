@@ -4,8 +4,8 @@ import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
-import worldline.testkit.FluidFrozenMatterEvidence;
-import worldline.testkit.FluidFrozenMatterFixture;
+import worldline.testapi.FluidFrozenMatterEvidence;
+import worldline.testapi.FluidFrozenMatterFixture;
 
 /** Executes the public fluid and frozen-matter fixture against mapped Beta 1.7.3. */
 public final class FluidFrozenMatterSmoke {

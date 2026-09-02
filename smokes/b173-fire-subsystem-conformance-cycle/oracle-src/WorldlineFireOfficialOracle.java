@@ -1,5 +1,5 @@
-import worldline.testkit.FireSubsystemEvidence;
-import worldline.testkit.FireSubsystemFixture;
+import worldline.testapi.FireSubsystemEvidence;
+import worldline.testapi.FireSubsystemFixture;
 
 /** Complete fire subsystem against the untouched obfuscated server JAR. */
 public final class WorldlineFireOfficialOracle {

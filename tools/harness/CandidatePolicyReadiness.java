@@ -1,8 +1,6 @@
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.MessageDigest;
-import java.util.HexFormat;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Pattern;
@@ -196,8 +194,7 @@ final class CandidatePolicyReadiness {
     }
 
     private static String digest(String value) throws Exception {
-        return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
-                .digest(value.getBytes(StandardCharsets.UTF_8)));
+        return HexDigest.sha256Hex(value.getBytes(StandardCharsets.UTF_8));
     }
 
     private static String required(Properties values, String key) {

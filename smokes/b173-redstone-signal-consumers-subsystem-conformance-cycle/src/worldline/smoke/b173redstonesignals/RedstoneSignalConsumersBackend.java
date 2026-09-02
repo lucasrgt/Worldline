@@ -3,8 +3,8 @@ package worldline.smoke.b173redstonesignals;
 import net.minecraft.src.World;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
-import worldline.testkit.RedstoneSignalConsumersObservation;
-import worldline.testkit.RedstoneSignalConsumersScenario;
+import worldline.testapi.RedstoneSignalConsumersObservation;
+import worldline.testapi.RedstoneSignalConsumersScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Mapped official-world backend for the complete redstone signal-consumer matrix. */

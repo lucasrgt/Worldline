@@ -13,4 +13,14 @@ public final class Expect {
         if (sample == null) throw new NullPointerException("sample");
         return new ChangeExpectation<>(sample);
     }
+    public static void expectThrown(Class<? extends RuntimeException> type, Runnable action) {
+        if (type == null || action == null) throw new NullPointerException("thrown expectation");
+        try {
+            action.run();
+        } catch (RuntimeException error) {
+            if (type.isInstance(error)) return;
+            throw new WorldlineAssertionError("unexpected exception type", type, error.getClass());
+        }
+        throw new WorldlineAssertionError("expected exception was not thrown", type, null);
+    }
 }

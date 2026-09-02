@@ -7,15 +7,15 @@ import java.util.List;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.RemoteItemStack;
-import worldline.testkit.BlockCollisionExpectation;
-import worldline.testkit.BlockCollisionProbe;
-import worldline.testkit.BlockConformanceCase;
-import worldline.testkit.BlockConformancePlan;
-import worldline.testkit.BlockConformanceProfile;
-import worldline.testkit.BlockConformanceTemplate;
-import worldline.testkit.BlockLifecycleSlot;
-import worldline.testkit.BlockRandomTickSpreadScenario;
-import worldline.testkit.ConformanceLayer;
+import worldline.testapi.BlockCollisionExpectation;
+import worldline.testapi.BlockCollisionProbe;
+import worldline.testapi.BlockConformanceCase;
+import worldline.testapi.BlockConformancePlan;
+import worldline.testapi.BlockConformanceProfile;
+import worldline.testapi.BlockConformanceTemplate;
+import worldline.testapi.BlockLifecycleSlot;
+import worldline.testapi.BlockRandomTickSpreadScenario;
+import worldline.testapi.ConformanceLayer;
 
 /** Brown and red mushroom rows over the shared roofed official arena. */
 public final class B173MushroomRandomTickScenarioFactory {

@@ -4,8 +4,8 @@ import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
-import worldline.testkit.RailNetworkSubsystemEvidence;
-import worldline.testkit.RailNetworkSubsystemFixture;
+import worldline.testapi.RailNetworkSubsystemEvidence;
+import worldline.testapi.RailNetworkSubsystemFixture;
 
 /** Executes the public rail-network fixture against mapped Beta 1.7.3. */
 public final class RailNetworkSubsystemSmoke {

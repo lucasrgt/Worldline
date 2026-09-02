@@ -6,12 +6,12 @@ import java.util.Collections;
 import java.util.List;
 import worldline.api.BlockState;
 import worldline.api.RemoteItemStack;
-import worldline.testkit.BlockConformancePlan;
-import worldline.testkit.BlockConformanceProfile;
-import worldline.testkit.BlockConformanceTemplate;
-import worldline.testkit.BlockLifecycleSlot;
-import worldline.testkit.BlockStabilityScenario;
-import worldline.testkit.ConformanceLayer;
+import worldline.testapi.BlockConformancePlan;
+import worldline.testapi.BlockConformanceProfile;
+import worldline.testapi.BlockConformanceTemplate;
+import worldline.testapi.BlockLifecycleSlot;
+import worldline.testapi.BlockStabilityScenario;
+import worldline.testapi.ConformanceLayer;
 
 /** Official rows for non-singular simple solids with no context-dependent tick transition. */
 public final class B173InertSolidStabilityScenarioFactory {

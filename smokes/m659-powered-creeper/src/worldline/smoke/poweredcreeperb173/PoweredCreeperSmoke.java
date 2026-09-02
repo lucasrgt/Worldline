@@ -2,7 +2,7 @@ package worldline.smoke.poweredcreeperb173;
 
 import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
-import worldline.api.PoweredCreeperEvidence;
+import worldline.api.scenario.PoweredCreeperEvidence;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
 import worldline.trace.CanonicalTrace;

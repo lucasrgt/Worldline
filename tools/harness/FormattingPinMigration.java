@@ -112,6 +112,22 @@ final class FormattingPinMigration {
                 - successorIntroductions;
         require(smokeCount >= 0, "formatting successor introduction census drift");
         manifest.setProperty("smoke.count", Integer.toString(smokeCount));
+        int files = Integer.parseInt(manifest.getProperty("file.count", "0"));
+        for (int index = 0; index < files; index++) {
+            String fileStem = "file." + index + ".";
+            String relative = manifest.getProperty(fileStem + "path");
+            if (relative == null) continue;
+            Path sourcePath = root.resolve(relative);
+            if (!Files.isRegularFile(sourcePath)) continue;
+            String source = Files.readString(sourcePath, StandardCharsets.UTF_8);
+            String currentHash = digest(source);
+            if (currentHash.equals(manifest.getProperty(fileStem + "current_sha256")))
+                continue;
+            String recorded = manifest.getProperty(fileStem + "current_sha256");
+            if (recorded != null) manifest.setProperty(fileStem + "prior_sha256", recorded);
+            manifest.setProperty(fileStem + "current_sha256", currentHash);
+            manifest.setProperty(fileStem + "token_sha256", digest(tokens(source)));
+        }
         pins.write(pins.entries()); store(path, manifest);
         System.out.println("formatting pins refreshed: " + carried + " carried, "
                 + introduced + " introduced");

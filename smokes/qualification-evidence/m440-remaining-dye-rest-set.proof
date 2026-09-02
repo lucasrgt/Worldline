@@ -1,5 +1,5 @@
 schema=1
 id=m440-remaining-dye-rest-set
-fingerprint=ba953c530776d19f8e6530d0bf67a7fba2380cca8ba7bfc59e93288894b93d9d
+fingerprint=bc888f0f699258151bf2556c32f92c4697b1a65fb9a34c77e811b550f21c8a2e
 observation.sha256=0334f546ce0368581cb95d0fcb41d97e63d257acb76e91c53b41c849cfac594d
 source=refactor-equivalent

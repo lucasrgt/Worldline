@@ -4,8 +4,8 @@ import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
-import worldline.testkit.FarmlandSubsystemEvidence;
-import worldline.testkit.FarmlandSubsystemFixture;
+import worldline.testapi.FarmlandSubsystemEvidence;
+import worldline.testapi.FarmlandSubsystemFixture;
 
 /** Executes the public farmland fixture against mapped Beta 1.7.3. */
 public final class FarmlandSubsystemSmoke {

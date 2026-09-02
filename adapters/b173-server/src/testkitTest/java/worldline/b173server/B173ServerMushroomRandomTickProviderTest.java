@@ -7,9 +7,9 @@ import java.util.Map;
 import worldline.api.RemoteItemStack;
 import worldline.test.TestRuntimeProviders;
 import worldline.test.TestRuntimeRequest;
-import worldline.testkit.BlockRandomTickSpreadPlan;
-import worldline.testkit.BlockRandomTickSpreadScenario;
-import worldline.testkit.ConformanceLayer;
+import worldline.testapi.BlockRandomTickSpreadPlan;
+import worldline.testapi.BlockRandomTickSpreadScenario;
+import worldline.testapi.ConformanceLayer;
 
 /** Static provider, arena-row, and bounded-RNG contract checks. */
 public final class B173ServerMushroomRandomTickProviderTest {

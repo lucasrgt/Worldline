@@ -26,7 +26,8 @@ public final class WallSignSupportBreakSmoke {
     Duration timeout = Duration.ofSeconds(90);
     require(seed == 17320110707L && user.equals("SignSup762") && user.length() <= 16,
         "wall-sign-support-break identity drift");
-    B173DedicatedServer server = new B173DedicatedServer(jar, workspace, port, seed, timeout, 3, true);
+    B173DedicatedServer server = OfficialServerBootstrap.start(
+        jar, workspace, port, seed, timeout);
     B173WireClient actor = new B173WireClient("127.0.0.1", port, user, timeout), reader = null;
     BlockPosition top, cell, support, sign;
     int column;
@@ -47,11 +48,8 @@ public final class WallSignSupportBreakSmoke {
         actor.moveAndObserve(0D, 1D, 0D, 1);
         require(++column <= 15, "water column exceeded wall-sign-support-break fixture");
       }
-      for (int lift = 0; lift < 8; lift++) {
-        top = place(actor, top, BlockFace.UP, 1);
-        actor.moveAndObserve(0D, 1D, 0D, 1);
-        column++;
-      }
+      top = raiseColumn(actor, top, 8);
+      column += 8;
       support = top;
       cell = BlockFace.EAST.adjacent(top);
       require(initial.blockAt(local(cell.x(), cx), cell.y(), local(cell.z(), cz)).legacyId() == 0,

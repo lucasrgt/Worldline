@@ -3,8 +3,8 @@ package worldline.smoke.b173lockedchest;
 import net.minecraft.src.World;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
-import worldline.testkit.LockedChestSubsystemObservation;
-import worldline.testkit.LockedChestSubsystemScenario;
+import worldline.testapi.LockedChestSubsystemObservation;
+import worldline.testapi.LockedChestSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Mapped official-world backend for complete locked-chest conformance. */

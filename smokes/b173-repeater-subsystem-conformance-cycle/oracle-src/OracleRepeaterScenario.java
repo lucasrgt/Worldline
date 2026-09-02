@@ -1,5 +1,5 @@
-import worldline.testkit.RepeaterSubsystemObservation;
-import worldline.testkit.RepeaterSubsystemScenario;
+import worldline.testapi.RepeaterSubsystemObservation;
+import worldline.testapi.RepeaterSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Official-name counterpart of the mapped repeater scenario. */

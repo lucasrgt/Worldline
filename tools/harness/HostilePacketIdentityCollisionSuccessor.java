@@ -1,7 +1,7 @@
 /** Exact reviewed successors for rejecting hostile packet identity collisions. */
 final class HostilePacketIdentityCollisionSuccessor {
     private static final String[][] SUCCESSORS = {
-        {"modules/testapi/src/main/java/worldline/testkit/HostileBehaviorFixture.java",
+        {"modules/testapi/src/main/java/worldline/testapi/HostileBehaviorFixture.java",
                 "26d7089413af36f0af066d0b436449c453f6d360de610238c3a08d5523e9c988",
                 "fbd209e564c8ae24d246acca807cb5fa178c7f9a1afaecee4006c391dc8ac1c6"},
         {"release/testkit-artifacts.lock",

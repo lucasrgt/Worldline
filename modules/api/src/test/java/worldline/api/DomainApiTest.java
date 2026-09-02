@@ -1,5 +1,10 @@
 package worldline.api;
 
+import worldline.api.query.ClientTopology;
+import worldline.api.query.EntityQuery;
+import worldline.api.query.EventQuery;
+import worldline.api.query.WeatherQuery;
+
 public final class DomainApiTest {
     private DomainApiTest() {}
 
@@ -36,10 +41,28 @@ public final class DomainApiTest {
         RemoteRainStartTest.run();
         RemoteRainStopTest.run();
         PoweredCreeperEvidenceTest.run();
+        ApiSurfaceDoctor.verify();
+        queryPrimitivesAreExactAndFailClosed();
         RemoteDispenserLoadTest.run();
         WorldlineEvidenceTest.run();
         peerSwingValuesAreExactAndFailClosed();
         System.out.println("DomainApiTest passed");
+    }
+
+    private static void queryPrimitivesAreExactAndFailClosed() {
+        EntityQuery pigs = EntityQuery.ofType("minecraft:pig");
+        EventQuery click = EventQuery.ofEffect(1002);
+        WeatherQuery clear = WeatherQuery.clear();
+        ClientTopology two = ClientTopology.of("a", "b");
+        if (!pigs.isEmpty() || click.size() != 0 || !clear.clearSkies() || two.size() != 2)
+            throw new AssertionError("query primitives drifted");
+        failure(() -> EntityQuery.ofType(""));
+        failure(() -> EventQuery.ofEffect(-1));
+        failure(() -> WeatherQuery.of(false, true));
+        failure(() -> ClientTopology.of(""));
+        if (!"worldline.api.scenario".equals(
+                worldline.api.scenario.PoweredCreeperEvidence.class.getPackage().getName()))
+            throw new AssertionError("scenario types remain in the root API package");
     }
 
     private static void peerSwingValuesAreExactAndFailClosed() {

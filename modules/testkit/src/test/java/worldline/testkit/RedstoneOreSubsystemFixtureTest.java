@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.RedstoneOreSubsystemEvidence;
+import worldline.testapi.RedstoneOreSubsystemFixture;
+import worldline.testapi.RedstoneOreSubsystemObservation;
 
 /** Contract tests for reusable redstone-ore subsystem evidence. */
 public final class RedstoneOreSubsystemFixtureTest {

@@ -1,5 +1,5 @@
-import worldline.testkit.FireSubsystemObservation;
-import worldline.testkit.FireSubsystemScenario;
+import worldline.testapi.FireSubsystemObservation;
+import worldline.testapi.FireSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Official-name counterpart of the mapped fire scenario. */

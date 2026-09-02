@@ -1,4 +1,13 @@
 package worldline.testkit;
+import worldline.testapi.ConformanceLayer;
+import worldline.testapi.EntityConformancePlan;
+import worldline.testapi.EntityConformanceProfile;
+import worldline.testapi.EntityConformanceTemplate;
+import worldline.testapi.PaintingLifecycleEvidence;
+import worldline.testapi.PaintingLifecycleFixture;
+import worldline.testapi.PaintingLifecycleScenario;
+import worldline.testapi.PaintingObservationLifecycleScenario;
+import worldline.testapi.PaintingSpawnExpectation;
 
 import java.lang.reflect.Proxy;
 import java.util.Arrays;

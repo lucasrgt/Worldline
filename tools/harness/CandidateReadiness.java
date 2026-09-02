@@ -1,10 +1,8 @@
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -309,8 +307,7 @@ final class CandidateReadiness {
     }
 
     private static String digest(byte[] value) throws Exception {
-        return HexFormat.of().formatHex(
-                MessageDigest.getInstance("SHA-256").digest(value));
+        return HexDigest.sha256Hex(value);
     }
 
     private static void require(boolean value, String message) {

@@ -1,4 +1,6 @@
 package worldline.testkit;
+import worldline.testapi.EntityPhysicalEnvelopeObservation;
+import worldline.testapi.EntityPhysicalEnvelopeScenario;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

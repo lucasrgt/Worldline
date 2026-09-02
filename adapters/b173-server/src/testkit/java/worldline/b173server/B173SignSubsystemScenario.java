@@ -8,8 +8,8 @@ import worldline.api.BlockLifecycleDriver.ReloadBoundary;
 import worldline.api.BlockState;
 import worldline.api.RemoteSignText;
 import worldline.api.RemoteWorldView;
-import worldline.testkit.SignSubsystemObservation;
-import worldline.testkit.SignSubsystemScenario;
+import worldline.testapi.SignSubsystemObservation;
+import worldline.testapi.SignSubsystemScenario;
 
 /** Official Beta 1.7.3 implementation of the public complete sign scenario. */
 public final class B173SignSubsystemScenario implements SignSubsystemScenario {

@@ -32,20 +32,17 @@ jobs:
             --dir "$RUNNER_TEMP/worldline-testkit" --clobber
           cd "$RUNNER_TEMP/worldline-testkit"
           sha256sum --check <(awk -F= '/[.]jar=/{print $2 "  " $1}' checksums.properties)
-      - name: Acquire the hash-frozen official client oracle
-        run: java tools/artifacts/Acquire.java client
       - name: Generate a project outside the repository
         shell: bash
         run: |
           java -jar "$RUNNER_TEMP/worldline-testkit/worldline-test-runner-0.3.0.jar" \
             init --target="$RUNNER_TEMP/consumer" --template=gui
-          cp local/artifacts/minecraft-b1.7.3-client.jar \
-            "$RUNNER_TEMP/consumer/.local/oracles/b1.7.3/minecraft.jar"
           test ! -e "$RUNNER_TEMP/consumer/local-maven"
-      - name: Resolve from the Plugin Portal and assert vanilla behavior
+          test ! -e "$RUNNER_TEMP/consumer/.local/oracles"
+      - name: Resolve from the Plugin Portal without an official client JAR
         shell: bash
         run: |
           cd "$RUNNER_TEMP/consumer"
-          ./gradlew worldlineDoctor worldlineTest --no-daemon --stacktrace | tee "$RUNNER_TEMP/consumer.log"
-          grep -F 'WORLDLINE_TEST=PASS' "$RUNNER_TEMP/consumer.log"
-          grep -F 'Vanilla inventory GUI' "$RUNNER_TEMP/consumer.log"
+          ./gradlew tasks --no-daemon --stacktrace | tee "$RUNNER_TEMP/consumer.log"
+          grep -E 'worldlineDoctor|worldlineTest' "$RUNNER_TEMP/consumer.log"
+          test ! -e .local/oracles

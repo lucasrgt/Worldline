@@ -1,5 +1,5 @@
-import worldline.testkit.LockedChestSubsystemObservation;
-import worldline.testkit.LockedChestSubsystemScenario;
+import worldline.testapi.LockedChestSubsystemObservation;
+import worldline.testapi.LockedChestSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Official-name counterpart of the mapped locked-chest scenario. */

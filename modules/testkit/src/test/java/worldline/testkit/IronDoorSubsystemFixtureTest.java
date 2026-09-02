@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.IronDoorSubsystemEvidence;
+import worldline.testapi.IronDoorSubsystemFixture;
+import worldline.testapi.IronDoorSubsystemObservation;
 
 /** Locks the public iron-door mini-subsystem contract. */
 public final class IronDoorSubsystemFixtureTest {

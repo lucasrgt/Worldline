@@ -1,5 +1,5 @@
 schema=1
 id=m570-repeater-diode-set
-fingerprint=bb1844f6f2aa60fe68ac9eef7baed044b063f2709db60adea7dd8edd132834f2
+fingerprint=391a0f66c5a2a1a88160e38b9c5f4249c41462fd5cf120a6586fb63bfba211f7
 observation.sha256=8de5e4084e27f735bc9fb5c11cc3e2b729bbf26d49bd3ea73156fd7a740d50fd
 source=refactor-equivalent

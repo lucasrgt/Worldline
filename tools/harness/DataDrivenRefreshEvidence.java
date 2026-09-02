@@ -15,11 +15,13 @@ final class DataDrivenRefreshEvidence {
         if (staged(root)) return true;
         boolean worktreeClean = git(root, "diff", "--quiet") == 0;
         boolean indexClean = git(root, "diff", "--cached", "--quiet") == 0;
+        String recordedRunner = manifest.getProperty("runner_sha256", "");
         String recordedRuntime = manifest.getProperty("runtime_support_source_sha256", "");
         String recordedPlan = manifest.getProperty("plan_source_sha256", "");
         String recordedProcess = manifest.getProperty("process_source_sha256", "");
         return worktreeClean && indexClean
-                && (!digest(root.resolve("tools/harness/SmokeSupport.java")).equals(recordedRuntime)
+                && (!digest(root.resolve("tools/smoke/DataDrivenCycle.java")).equals(recordedRunner)
+                || !digest(root.resolve("tools/harness/SmokeSupport.java")).equals(recordedRuntime)
                 || !digest(root.resolve("tools/harness/DataDrivenCyclePlan.java"))
                         .equals(recordedPlan)
                 || !digest(root.resolve("tools/harness/SmokeProcess.java"))

@@ -7,6 +7,7 @@ import java.util.Arrays;
 import worldline.api.*;
 import worldline.b173server.*;
 import worldline.testkit.*;
+import worldline.testapi.*;
 
 /** Places lit wheat 59 plus covered wheat 59, then waits official random-tick age. */
 public final class WheatLightHaltSetSmoke {

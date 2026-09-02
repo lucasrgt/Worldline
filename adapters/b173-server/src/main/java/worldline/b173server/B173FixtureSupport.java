@@ -32,6 +32,17 @@ public final class B173FixtureSupport {
         throw new IllegalStateException("player count drift");
     }
 
+    public static BlockPosition raiseColumn(B173WireClient client, BlockPosition support,
+            int blocks) throws Exception {
+        if (blocks < 0) throw new IllegalArgumentException("negative column height");
+        BlockPosition top = support;
+        for (int index = 0; index < blocks; index++) {
+            top = place(client, top, BlockFace.UP, 1);
+            client.moveAndObserve(0D, 1D, 0D, 1);
+        }
+        return top;
+    }
+
     public static int local(int coordinate, int chunk) {
         return coordinate - chunk * 16;
     }

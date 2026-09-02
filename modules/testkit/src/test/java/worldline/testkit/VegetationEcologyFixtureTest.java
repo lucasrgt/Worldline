@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.VegetationEcologyEvidence;
+import worldline.testapi.VegetationEcologyFixture;
+import worldline.testapi.VegetationEcologyObservation;
 
 /** Contract test for stable vegetation ecology evidence. */
 public final class VegetationEcologyFixtureTest {

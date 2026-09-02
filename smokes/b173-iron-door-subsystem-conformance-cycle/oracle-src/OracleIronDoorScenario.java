@@ -1,5 +1,5 @@
-import worldline.testkit.IronDoorSubsystemObservation;
-import worldline.testkit.IronDoorSubsystemScenario;
+import worldline.testapi.IronDoorSubsystemObservation;
+import worldline.testapi.IronDoorSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Official-name counterpart of the mapped iron-door scenario. */

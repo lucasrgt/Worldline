@@ -1,5 +1,5 @@
-import worldline.testkit.FarmlandSubsystemObservation;
-import worldline.testkit.FarmlandSubsystemScenario;
+import worldline.testapi.FarmlandSubsystemObservation;
+import worldline.testapi.FarmlandSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Official-name counterpart of the mapped farmland scenario. */

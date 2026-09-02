@@ -5,8 +5,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import worldline.b173server.B173CakeServingScenario;
-import worldline.testkit.CakeServingEvidence;
-import worldline.testkit.CakeServingFixture;
+import worldline.testapi.CakeServingEvidence;
+import worldline.testapi.CakeServingFixture;
 
 /** Qualifies the complete public cake-serving lifecycle on the official server. */
 public final class B173CakeServingLifecycleSmoke {

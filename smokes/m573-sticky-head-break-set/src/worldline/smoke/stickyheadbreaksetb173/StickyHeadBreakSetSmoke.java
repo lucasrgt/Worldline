@@ -13,6 +13,7 @@ import worldline.b173server.B173PlayerSeed;
 import worldline.b173server.B173WireClient;
 import worldline.test.WorldlineSmokeAwait;
 import worldline.testkit.*;
+import worldline.testapi.*;
 
 /** Official sticky 29 extend then Packet14-break of head 34, freezing leftover base cleanup. */
 public final class StickyHeadBreakSetSmoke {

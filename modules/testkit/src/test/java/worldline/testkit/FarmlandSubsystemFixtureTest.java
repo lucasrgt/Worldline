@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.FarmlandSubsystemEvidence;
+import worldline.testapi.FarmlandSubsystemFixture;
+import worldline.testapi.FarmlandSubsystemObservation;
 
 /** Locks the public farmland mini-subsystem contract. */
 public final class FarmlandSubsystemFixtureTest {

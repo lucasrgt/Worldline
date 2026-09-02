@@ -11,9 +11,9 @@ import worldline.b173.B173BlockInventoryFrame;
 import worldline.b173.B173BlockInventoryRender;
 import worldline.testkit.NativeBlockRenderEvidence;
 import worldline.testkit.NativeBlockRenderFixture;
-import worldline.testkit.NativeBlockRenderObservation;
-import worldline.testkit.NativeBlockRenderPlan;
-import worldline.testkit.NativeBlockRenderSubject;
+import worldline.testapi.NativeBlockRenderObservation;
+import worldline.testapi.NativeBlockRenderPlan;
+import worldline.testapi.NativeBlockRenderSubject;
 
 /** Renders one declarative 3D inventory family through mapped or official classes. */
 public final class B173Native3dInventoryRenderSmoke {

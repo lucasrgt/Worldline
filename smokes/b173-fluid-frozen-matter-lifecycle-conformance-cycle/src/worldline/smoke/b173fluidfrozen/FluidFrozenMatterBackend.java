@@ -3,8 +3,8 @@ package worldline.smoke.b173fluidfrozen;
 import net.minecraft.src.World;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
-import worldline.testkit.FluidFrozenMatterObservation;
-import worldline.testkit.FluidFrozenMatterScenario;
+import worldline.testapi.FluidFrozenMatterObservation;
+import worldline.testapi.FluidFrozenMatterScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Mapped official-world backend for the fluid and frozen-matter matrix. */

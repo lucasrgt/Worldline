@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.RedstoneSignalConsumersEvidence;
+import worldline.testapi.RedstoneSignalConsumersFixture;
+import worldline.testapi.RedstoneSignalConsumersObservation;
 
 /** Contract test for stable redstone signal-consumer evidence. */
 public final class RedstoneSignalConsumersFixtureTest {

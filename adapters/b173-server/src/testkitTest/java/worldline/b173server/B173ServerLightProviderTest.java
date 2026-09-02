@@ -8,10 +8,10 @@ import worldline.api.BlockState;
 import worldline.api.RemoteItemStack;
 import worldline.test.TestRuntimeProviders;
 import worldline.test.TestRuntimeRequest;
-import worldline.testkit.BlockLightExpectation;
-import worldline.testkit.BlockLightPlan;
-import worldline.testkit.BlockLightScenario;
-import worldline.testkit.ConformanceLayer;
+import worldline.testapi.BlockLightExpectation;
+import worldline.testapi.BlockLightPlan;
+import worldline.testapi.BlockLightScenario;
+import worldline.testapi.ConformanceLayer;
 
 /** Static checks for the public light provider and official scenario rows. */
 public final class B173ServerLightProviderTest {

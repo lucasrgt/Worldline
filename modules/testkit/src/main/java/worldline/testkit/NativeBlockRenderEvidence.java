@@ -1,4 +1,5 @@
 package worldline.testkit;
+import worldline.testapi.NativeBlockRenderObservation;
 
 import java.util.ArrayList;
 import java.util.Collections;

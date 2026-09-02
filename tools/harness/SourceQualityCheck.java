@@ -27,6 +27,8 @@ final class SourceQualityCheck {
             new SmokeStatementBudget(root).execute();
             SharedSmokeSourceCheck.execute(root);
             TestSurfaceCheck.execute(root);
+            DuplicatePatternCheck.execute(root);
+            JdkPinCheck.execute(root);
         }
         catch (IOException error) { throw error; }
         catch (Exception error) { throw new IllegalStateException(error); }

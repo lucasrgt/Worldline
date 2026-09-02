@@ -9,8 +9,8 @@ import worldline.api.BlockLifecycleDriver.ReloadBoundary;
 import worldline.api.BlockState;
 import worldline.api.MovementDisposition;
 import worldline.api.RemoteWorldView;
-import worldline.testkit.CakeServingObservation;
-import worldline.testkit.CakeServingScenario;
+import worldline.testapi.CakeServingObservation;
+import worldline.testapi.CakeServingScenario;
 
 /** Official Beta 1.7.3 implementation of the public complete cake-serving scenario. */
 public final class B173CakeServingScenario implements CakeServingScenario {

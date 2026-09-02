@@ -1,5 +1,5 @@
-import worldline.testkit.RedstoneSignalConsumersEvidence;
-import worldline.testkit.RedstoneSignalConsumersFixture;
+import worldline.testapi.RedstoneSignalConsumersEvidence;
+import worldline.testapi.RedstoneSignalConsumersFixture;
 
 /** Signal-consumer matrix against the untouched official server JAR. */
 public final class WorldlineRedstoneSignalConsumersOfficialOracle {

@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.BuiltEnvironmentMaterialsEvidence;
+import worldline.testapi.BuiltEnvironmentMaterialsFixture;
+import worldline.testapi.BuiltEnvironmentMaterialsObservation;
 
 /** Contract test for stable built-environment evidence. */
 public final class BuiltEnvironmentMaterialsFixtureTest {

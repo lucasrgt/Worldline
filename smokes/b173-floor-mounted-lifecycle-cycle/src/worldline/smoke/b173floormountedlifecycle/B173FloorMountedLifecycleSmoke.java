@@ -5,7 +5,7 @@ import worldline.api.RemoteItemStack;
 import worldline.b173server.B173LifecycleScenarioFactory;
 import worldline.b173server.B173ServerLifecycleTestRuntimeProvider;
 import worldline.testkit.BlockLifecycleFamilyCycle;
-import worldline.testkit.BlockLifecycleScenario;
+import worldline.testapi.BlockLifecycleScenario;
 
 /** Six floor-mounted directional and attachment rows over the public lifecycle provider. */
 public final class B173FloorMountedLifecycleSmoke {

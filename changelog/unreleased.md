@@ -1,5 +1,12 @@
 # Worldline changelog — Unreleased
 
+## Unreleased - GUI Builder Ownership
+
+- Moved the visual GUI builder to Butter's `editors/gui-builder` tree.
+  Worldline retains only neutral GUI contracts, runtime observation, and
+  interoperability verification; Butter owns visual authoring and widget
+  metadata.
+
 ## Unreleased - Beta 1.7.3 Sign Subsystem
 
 Status: GO.

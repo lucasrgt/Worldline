@@ -1,5 +1,5 @@
-import worldline.testkit.BedSubsystemEvidence;
-import worldline.testkit.BedSubsystemFixture;
+import worldline.testapi.BedSubsystemEvidence;
+import worldline.testapi.BedSubsystemFixture;
 
 /** Complete bed subsystem against the untouched obfuscated server JAR. */
 public final class WorldlineBedOfficialOracle {

@@ -4,8 +4,8 @@ import java.nio.file.Paths;
 import worldline.api.MinecraftRuntime;
 import worldline.api.WorldSource;
 import worldline.kernel.ControlledMinecraftRuntime;
-import worldline.testkit.MobSpawnerSubsystemEvidence;
-import worldline.testkit.MobSpawnerSubsystemFixture;
+import worldline.testapi.MobSpawnerSubsystemEvidence;
+import worldline.testapi.MobSpawnerSubsystemFixture;
 
 /** Executes the public mob-spawner fixture against mapped Beta 1.7.3. */
 public final class MobSpawnerSubsystemSmoke {

@@ -3,8 +3,8 @@ package worldline.smoke.b173bedrock;
 import net.minecraft.src.World;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
-import worldline.testkit.BedrockSubsystemObservation;
-import worldline.testkit.BedrockSubsystemScenario;
+import worldline.testapi.BedrockSubsystemObservation;
+import worldline.testapi.BedrockSubsystemScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Mapped official-world backend for complete bedrock conformance. */

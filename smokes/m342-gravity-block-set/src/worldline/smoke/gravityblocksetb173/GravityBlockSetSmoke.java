@@ -10,6 +10,7 @@ import java.util.List;
 import worldline.api.*;
 import worldline.b173server.*;
 import worldline.testkit.*;
+import worldline.testapi.*;
 
 /** Places supported sand 12 and gravel 13, removes each stone support, and freezes both one-cell settlements. */
 public final class GravityBlockSetSmoke {

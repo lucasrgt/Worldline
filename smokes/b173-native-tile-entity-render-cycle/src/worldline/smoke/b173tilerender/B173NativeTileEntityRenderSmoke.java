@@ -12,9 +12,9 @@ import worldline.b173.B173TileEntityFrame;
 import worldline.b173.B173TileEntityRender;
 import worldline.testkit.NativeTileEntityRenderEvidence;
 import worldline.testkit.NativeTileEntityRenderFixture;
-import worldline.testkit.NativeTileEntityRenderObservation;
-import worldline.testkit.NativeTileEntityRenderPlan;
-import worldline.testkit.NativeTileEntityRenderSubject;
+import worldline.testapi.NativeTileEntityRenderObservation;
+import worldline.testapi.NativeTileEntityRenderPlan;
+import worldline.testapi.NativeTileEntityRenderSubject;
 
 /** Renders every render-type -1 block through mapped or official tile renderers. */
 public final class B173NativeTileEntityRenderSmoke {

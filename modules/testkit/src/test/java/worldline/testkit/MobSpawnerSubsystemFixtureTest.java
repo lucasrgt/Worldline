@@ -1,4 +1,7 @@
 package worldline.testkit;
+import worldline.testapi.MobSpawnerSubsystemEvidence;
+import worldline.testapi.MobSpawnerSubsystemFixture;
+import worldline.testapi.MobSpawnerSubsystemObservation;
 
 /** Locks the public mob-spawner mini-subsystem contract. */
 public final class MobSpawnerSubsystemFixtureTest {

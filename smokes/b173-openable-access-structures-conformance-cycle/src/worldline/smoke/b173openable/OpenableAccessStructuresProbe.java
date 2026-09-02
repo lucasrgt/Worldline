@@ -7,7 +7,7 @@ import net.minecraft.src.BlockDoor;
 import net.minecraft.src.Chunk;
 import net.minecraft.src.EntityItem;
 import net.minecraft.src.World;
-import worldline.testkit.OpenableAccessStructuresObservation;
+import worldline.testapi.OpenableAccessStructuresObservation;
 
 /** Proves the final chest, wooden-door, and trapdoor census boundaries. */
 final class OpenableAccessStructuresProbe {

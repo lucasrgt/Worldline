@@ -9,14 +9,14 @@ import worldline.api.BlockFace;
 import worldline.api.BlockPosition;
 import worldline.api.BlockState;
 import worldline.api.RemoteItemStack;
-import worldline.testkit.BlockConformancePlan;
-import worldline.testkit.BlockConformanceProfile;
-import worldline.testkit.BlockConformanceTemplate;
-import worldline.testkit.BlockLifecycleSlot;
-import worldline.testkit.BlockStateDomainScenario;
-import worldline.testkit.BlockStateDomainStep;
-import worldline.testkit.BlockStateObservation;
-import worldline.testkit.ConformanceLayer;
+import worldline.testapi.BlockConformancePlan;
+import worldline.testapi.BlockConformanceProfile;
+import worldline.testapi.BlockConformanceTemplate;
+import worldline.testapi.BlockLifecycleSlot;
+import worldline.testapi.BlockStateDomainScenario;
+import worldline.testapi.BlockStateDomainStep;
+import worldline.testapi.BlockStateObservation;
+import worldline.testapi.ConformanceLayer;
 
 /** Official b1.7.3 state-domain rows bound to the provider's gameplay arena. */
 public final class B173StateDomainScenarioFactory {

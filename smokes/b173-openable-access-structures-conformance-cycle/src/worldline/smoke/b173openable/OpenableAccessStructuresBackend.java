@@ -3,8 +3,8 @@ package worldline.smoke.b173openable;
 import net.minecraft.src.World;
 import worldline.api.WorldSource;
 import worldline.kernel.GameBackend;
-import worldline.testkit.OpenableAccessStructuresObservation;
-import worldline.testkit.OpenableAccessStructuresScenario;
+import worldline.testapi.OpenableAccessStructuresObservation;
+import worldline.testapi.OpenableAccessStructuresScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Mapped official-world backend for the openable access structures matrix. */

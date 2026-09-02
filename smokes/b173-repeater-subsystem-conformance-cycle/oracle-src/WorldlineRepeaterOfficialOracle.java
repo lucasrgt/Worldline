@@ -1,5 +1,5 @@
-import worldline.testkit.RepeaterSubsystemEvidence;
-import worldline.testkit.RepeaterSubsystemFixture;
+import worldline.testapi.RepeaterSubsystemEvidence;
+import worldline.testapi.RepeaterSubsystemFixture;
 
 /** Complete repeater subsystem against the untouched obfuscated server JAR. */
 public final class WorldlineRepeaterOfficialOracle {

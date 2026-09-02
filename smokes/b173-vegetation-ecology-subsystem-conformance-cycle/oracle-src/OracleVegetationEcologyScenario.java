@@ -1,5 +1,5 @@
-import worldline.testkit.VegetationEcologyObservation;
-import worldline.testkit.VegetationEcologyScenario;
+import worldline.testapi.VegetationEcologyObservation;
+import worldline.testapi.VegetationEcologyScenario;
 import worldline.trace.CanonicalTrace;
 
 /** Official-name counterpart of the mapped vegetation ecology scenario. */
