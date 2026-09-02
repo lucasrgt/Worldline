@@ -2006,10 +2006,14 @@ host-only initialized project. It verifies the package payload by content,
 requires external-only official artifacts, and rejects local oracle JARs.
 The separate WPM foundation now supplies the production lock schema,
 deterministic resolver, signed registry boundary, upstream provenance
-snapshots, exact-object acquisition, and first no-replace install plan.
-Generation selection and rollback, the maintained registry corpus, broader
-legacy patch transforms, SBOM/export commands, and cross-platform install
-qualification remain pending.
+snapshots, exact-object acquisition, a closed instance inventory, generation
+selection, two-way rollback, CycloneDX/audit output, and permitted offline
+bundle export. Implementation commit `2c945ab` passes the same 16-test corpus
+on native Windows NTFS and WSL Linux with transaction temporaries on ext4; the
+qualification record is WPM commit `c52e817`. The maintained public registry
+corpus, executable legacy patch transforms, Maven ingestion, Gradle
+integration, and remote publication remain pending rather than being inferred
+from upstream metadata.
 
 ### 13.9 Legal and distribution boundary
 
@@ -2078,11 +2082,13 @@ content-addressed transport and executable prohibited-artifact checks are
 qualified; authoritative input graphs explain affecting changes; the
 transaction primitive passes on Windows NTFS and Linux ext4; and Worldline
 doctor verifies a package-manager-created fixture under an external-only
-official-artifact policy. WPM implementation has now begun in the separate
-`worldline-package-manager` repository. Its foundation includes the resolver,
-signed registry model, production lockfile, source adapters, CAS acquisition,
-initial installer, and the production doctor attestation described above; it
-is not yet a complete package-manager release.
+official-artifact policy. The separate `worldline-package-manager` repository
+now has a cross-platform-qualified 0.1 foundation: resolver, signed registry
+model, production lockfile, Modrinth/GitHub evidence adapters, CAS acquisition,
+closed transactional instances, generation rollback, audit/SBOM/export, and
+the production doctor attestation described above. This is a package-manager
+foundation, not a claim that a public legacy registry or executable patch
+catalog is complete.
 
 ## 14. Verification matrix
 

@@ -248,7 +248,11 @@ This profile requires `wsl.exe`, a Linux JDK 21, `findmnt`, and an ext4
 `/var/tmp`. It is intentionally separate from the canonical Gate so ordinary
 Windows verification does not acquire a WSL dependency. The fixture proves
 atomic sibling promotion, collision preservation, digest equality, and known
-path cleanup. The separate WPM repository now has its own verified staging,
-content-addressed acquisition, and no-replace promotion path, but it does not
-yet call this Worldline-owned primitive. Worldline consumes only WPM's bounded
-post-install attestation and retains independent official-artifact policy.
+path cleanup. The separate WPM repository has its own closed staging,
+content-addressed acquisition, generation update, and two-way rollback path.
+Its 16-test corpus passes on native Windows NTFS and WSL Linux with transaction
+temporaries placed on ext4 at implementation commit `2c945ab`; WPM records the
+qualification at `c52e817`. It does not call this Worldline-owned primitive,
+so the two implementations remain independent invariant evidence rather than
+shared code. Worldline consumes only WPM's bounded post-install attestation and
+retains independent official-artifact policy.
