@@ -19,7 +19,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '21.0.12+8'
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v6
         with:
           gradle-version: '8.14.4'
       - uses: ./.github/actions/setup-tokei
