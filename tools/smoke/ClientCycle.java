@@ -328,7 +328,7 @@ public final class ClientCycle {
   }
 
   private Path product(String module) {
-    return root.resolve(".worldline/build/classes").resolve(module);
+    return SmokeSupport.product(root, module);
   }
 
   private List<Path> paths(Path... paths) {
