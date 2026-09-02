@@ -51,14 +51,18 @@ candidates for increases and zero baselines, but fixes automatic execution,
 verdict authority, and admission effects to false.
 
 The live overlay also inventories the bounded local captures retained after a
-failed `ExecutorServerCycle` cell. It recognizes only the closed
-`server-qualification-failure` family and canonical legacy/Rust capture names.
+failed `ExecutorServerCycle`, `ExecutorGuiCycle`, or `ExecutorAeroCycle` cell.
+It recognizes only the closed `server-qualification-failure`,
+`gui-native-qualification-failure`, and `gui-aero-qualification-failure`
+families and canonical legacy/Rust capture names.
 Each row exposes the backend, workload, complete/partial and orphan state,
 aggregate byte count, and content identities for the fixed artifact kinds.
 Capture paths and artifact content are never serialized. Unknown files,
-non-directories, links, excess files, and over-budget captures cannot become a
-valid row and are counted as malformed local diagnostics. These identities are
-diagnostic only; they are neither behavioral evidence nor transport permits.
+non-directories, links, excess files, unknown family roots, and over-budget
+captures cannot become a valid row and are counted as malformed local
+diagnostics. The 128-capture ceiling applies across all three roots. These
+identities are diagnostic only; they are neither behavioral evidence nor
+transport permits.
 
 The overlay also groups failures from linked native campaign runs. Each stable
 cluster identity binds its conservative failure class, campaign, backend,

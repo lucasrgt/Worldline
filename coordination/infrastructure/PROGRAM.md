@@ -681,6 +681,15 @@ Evidence recorded for these slices:
   cannot become valid captures. Partial, orphan, and malformed counts remain
   local observations and confer neither verdict authority nor transport
   eligibility.
+- Worldline commit `f28c2fb04` closes the equivalent pre-cleanup diagnostic
+  boundary for native GUI and Aero qualification cells. Each legacy or Rust
+  arm captures only a fixed 11-kind allowlist before its disposable worktree
+  closes, while capture errors remain suppressed on the original failure.
+  The live Explorer inventory now accepts three closed family roots under one
+  aggregate 128-capture, 16-MiB/file, and 32-MiB/capture policy. It exposes
+  only family, backend, workload, completeness, orphan state, sizes, and
+  SHA-256 identities; paths and content remain excluded. Synthetic fixtures
+  cover both new roots without starting Minecraft.
 - Aggregate commit `0af4d260c` proves native multi-shard arrival without a
   grid. Seed 177 partitions 8 fuzz and 20 mutation cases into two shards;
   shard 1 arrives first and leaves aggregation incomplete, then shard 0 closes
@@ -1741,11 +1750,11 @@ unclassified, content-bound observations rather than guessed verdicts.
 The sixth live slice compiles those clusters into bounded, review-only
 follow-up suggestions. It selects no command and has no queue, execution,
 admission, disposition, or verdict authority.
-The first non-campaign family now inventories official server qualification
-failure captures through a closed, bounded schema. It publishes only artifact
-kinds, sizes, SHA-256 identities, completeness, and workload linkage; local
-paths and log content remain excluded, and malformed captures are counted
-rather than trusted.
+Three non-campaign families now inventory official server, native GUI, and Aero
+qualification failure captures through one closed, bounded schema. It
+publishes only artifact kinds, sizes, SHA-256 identities, completeness, and
+workload linkage; local paths and log content remain excluded, and malformed
+captures are counted rather than trusted.
 
 ## 11. Workstream G: distributed campaigns
 

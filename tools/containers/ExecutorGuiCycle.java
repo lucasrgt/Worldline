@@ -32,6 +32,7 @@ public final class ExecutorGuiCycle {
         metrics.setProperty("processes.active", "0"); verifyLegacy(metrics);
         metrics.setProperty("processes.active", "1"); expectFailure(() -> verifyLegacy(metrics));
         ExecutorGuiWorkspace.selfTest();
+        ExecutorGuiFailureCapture.selfTest();
     }
 
     private static void execute() throws Exception {
@@ -46,16 +47,26 @@ public final class ExecutorGuiCycle {
 
         byte[] baseline;
         try (ExecutorGuiWorkspace workspace = ExecutorGuiWorkspace.open(source, "legacy", workspaceSource)) {
-            workspace.prepare(); Path token = workspace.authorize(lock, lease);
-            ExecutionEnvironmentManifest environment = environment(workspace.root(), token, lease, "legacy");
-            baseline = legacy(workspace.root(), command(workspace.root()), environment);
+            try {
+                workspace.prepare(); Path token = workspace.authorize(lock, lease);
+                ExecutionEnvironmentManifest environment = environment(workspace.root(), token, lease, "legacy");
+                baseline = legacy(workspace.root(), command(workspace.root()), environment);
+            } catch (Exception failure) {
+                ExecutorGuiFailureCapture.capture(source, workspace.root(), "gui", "legacy", ID, failure);
+                throw failure;
+            }
         }
 
         NativeResult nativeResult;
         try (ExecutorGuiWorkspace workspace = ExecutorGuiWorkspace.open(source, "rust", workspaceSource)) {
-            workspace.prepare(); Path token = workspace.authorize(lock, lease);
-            ExecutionEnvironmentManifest environment = environment(workspace.root(), token, lease, "rust");
-            nativeResult = rust(workspace.root(), executor, command(workspace.root()), environment);
+            try {
+                workspace.prepare(); Path token = workspace.authorize(lock, lease);
+                ExecutionEnvironmentManifest environment = environment(workspace.root(), token, lease, "rust");
+                nativeResult = rust(workspace.root(), executor, command(workspace.root()), environment);
+            } catch (Exception failure) {
+                ExecutorGuiFailureCapture.capture(source, workspace.root(), "gui", "rust", ID, failure);
+                throw failure;
+            }
         }
         require(Arrays.equals(baseline, nativeResult.evidence),
                 "legacy/Rust native-render evidence differential");

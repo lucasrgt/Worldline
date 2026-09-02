@@ -203,6 +203,13 @@ Failed server legs preserve only their known local logs, output manifests, recei
 under `.worldline/executor-server-failures/` before the disposable worktree is removed. These
 diagnostics remain ignored, non-portable, and non-authoritative.
 
+Failed native GUI and Aero legs apply the same pre-cleanup boundary under
+`.worldline/executor-gui-failures/` and `.worldline/executor-aero-failures/`.
+Only the closed console, smoke log, legacy metrics, Rust streams, metrics,
+manifest, receipt, plan, verification report, and failure metadata set may be
+retained. Capture failure is suppressed onto the original qualification error;
+it can never replace the runtime verdict.
+
 The closed matrix covers dedicated-server bootstrap, an offline protocol-14
 multiplayer session, persisted Nether login, same-dimension player respawn, a
 peer-observed wooden-door sound event, and powered-rail propagation across a
