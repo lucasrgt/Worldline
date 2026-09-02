@@ -866,6 +866,15 @@ Evidence recorded for these slices:
   same canonical plan. Both fix automatic execution, queue mutation, verdict
   authority, and admission effect to false and exclude commands, paths,
   environment values, process IDs, and log content.
+- Worldline commit `f60d25514` removes the train reseal's unbounded
+  process-per-object Git loops. One shared `git cat-file --batch` session now
+  serves each history or base-source pass with exact blob type, object hash,
+  bounded size, byte count, and delimiter validation. Missing base sources are
+  accepted only by the source-diff caller; history readers remain strict. A
+  real fixture covers one tracked lock plus strict and permitted missing-object
+  modes. This repair became necessary when the prior implementation exceeded
+  its own 600-second maintenance timeout after 342 lock versions and 2,090
+  changed base paths accumulated.
 - Worldline commit `7e12751d9`, integrated at `74acad699`, expands the
   official Windows server differential from one bootstrap contract to a
   three-contract matrix. One continuous runtime lease covers independent
