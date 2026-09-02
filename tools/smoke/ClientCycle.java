@@ -328,13 +328,7 @@ public final class ClientCycle {
   }
 
   private Path product(String module) {
-    String override = System.getenv("WORLDLINE_PRODUCT_ROOT");
-    Path products = override == null || override.isBlank()
-        ? root.resolve(".worldline/build/classes")
-        : Paths.get(override).toAbsolutePath().normalize();
-    require(products.startsWith(root.resolve(".worldline").normalize()),
-        "smoke product root escapes .worldline");
-    return products.resolve(module);
+    return SmokeSupport.product(root, module);
   }
 
   private List<Path> paths(Path... paths) {

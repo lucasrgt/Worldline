@@ -34,7 +34,7 @@ public final class TestKitCycle {
   private void execute() throws Exception {
     Path build = root.resolve(".worldline/smokes/testkit-cycle");
     SmokeSupport.recreate(root, build);
-    Path classes = root.resolve(".worldline/build/classes");
+    Path classes = SmokeSupport.product(root, "api").getParent();
     Path client = root.resolve(".worldline/smokes/controlled-client-tick");
     Properties smoke = properties(root.resolve("smokes/controlled-client-tick/smoke.properties"));
     Path workspace = root.resolve(smoke.getProperty("workspace")).normalize();
