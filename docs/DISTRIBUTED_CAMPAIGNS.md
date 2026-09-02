@@ -219,6 +219,21 @@ admission nor schedules another campaign; `automatic_execution=false` makes
 that boundary machine-readable. Orphan native runs are reported by the link
 layer but are excluded because no validated campaign owns them.
 
+## Review-only native follow-up plan
+
+`Gate --campaign-follow-up` deterministically compiles validated clusters into
+inert suggestions. One item represents one cluster and binds the cluster ID,
+campaign, conservative domain and class, suggested action, one representative
+request digest, source request count, attempt limit, and review requirement.
+Infrastructure observations suggest one exact-request repeat. Unclassified
+workload exits suggest preparing a minimization review; they do not assert that
+minimization is valid or that the workload exposed a behavioral divergence.
+
+The same plan appears in the live Evidence Explorer v6. Its schema fixes
+`automatic_execution=false`, `queue_mutation=false`,
+`verdict_authority=false`, and `admission_effect=false`. Rebuilding it never
+creates a ticket, runs an executor, writes a disposition, or changes admission.
+
 ## Sealed minimization replays
 
 The fourth adapter repeats the existing `m9-scenario-minimization` contract.

@@ -856,6 +856,16 @@ Evidence recorded for these slices:
   false. The exact slice Gate passes cold at 149,602 ms, carries 520 train
   proofs, imports 98, executes six, and leaves zero pending. CSM checks three
   ways with no deviations, and NYA passes.
+- Worldline commit `5879a901e` compiles those validated native clusters into a
+  deterministic review-only follow-up plan. One item per cluster selects one
+  representative request, binds the source request count, permits at most one
+  suggested attempt, and requires review. Executor-infrastructure clusters
+  suggest `repeat-exact-request`; unclassified workload exits suggest
+  `prepare-minimization-review` without claiming a behavioral divergence. The
+  standalone `Gate --campaign-follow-up` query and live Explorer v6 expose the
+  same canonical plan. Both fix automatic execution, queue mutation, verdict
+  authority, and admission effect to false and exclude commands, paths,
+  environment values, process IDs, and log content.
 - Worldline commit `7e12751d9`, integrated at `74acad699`, expands the
   official Windows server differential from one bootstrap contract to a
   three-contract matrix. One continuous runtime lease covers independent
@@ -1719,6 +1729,9 @@ admission, or assert a verdict. A fifth live slice clusters only validated
 campaign-linked native failures. It exposes containment failures as explicit
 executor-infrastructure classes while preserving nonzero workload exits as
 unclassified, content-bound observations rather than guessed verdicts.
+The sixth live slice compiles those clusters into bounded, review-only
+follow-up suggestions. It selects no command and has no queue, execution,
+admission, disposition, or verdict authority.
 The first non-campaign family now inventories official server qualification
 failure captures through a closed, bounded schema. It publishes only artifact
 kinds, sizes, SHA-256 identities, completeness, and workload linkage; local
@@ -1764,7 +1777,9 @@ baselines into content-bound investigation candidates, but still does not
 schedule follow-up work or assert a regression verdict. Native campaign
 failure clustering now deduplicates validated containment failures and
 unclassified workload exits without merging them into behavioral divergences
-or changing admission. Arbitrary-seed
+or changing admission. A deterministic follow-up compiler now turns each
+cluster into one bounded, review-required suggestion without scheduling work
+or mutating a queue. Arbitrary-seed
 worldgen, Minecraft-runtime instability adapters, differential execution,
 arbitrary-input minimization queues, reviewed automatic follow-up execution,
 plus multi-shard distribution across distinct hosts remain pending.

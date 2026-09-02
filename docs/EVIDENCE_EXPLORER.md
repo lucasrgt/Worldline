@@ -73,6 +73,20 @@ verdict or admission authority. The overlay exposes
 identities and aggregate measurements only; local paths, process IDs, argument
 vectors, environment values, and log content remain excluded.
 
+Each cluster also produces one bounded, review-only follow-up item. Rebuild the
+standalone plan with:
+
+```text
+java tools/harness/Gate.java --campaign-follow-up
+```
+
+Executor-infrastructure clusters suggest `repeat-exact-request`; unclassified
+workload exits suggest `prepare-minimization-review`. The item selects only the
+lexically first request identity, limits the suggestion to one attempt, and
+requires review. The schema fixes automatic execution, queue mutation, verdict
+authority, and admission effect to false. It contains no command, path,
+environment value, process ID, or log content.
+
 Live output changes with local machine state and observation time. It is useful
 for diagnosis and scheduling, but it is never pinned, transported as behavioral
 evidence, or consumed as a qualification verdict.
