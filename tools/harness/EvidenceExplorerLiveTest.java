@@ -37,14 +37,17 @@ final class EvidenceExplorerLiveTest {
             String json = EvidenceExplorerLiveFormat.json(snapshot);
             String html = EvidenceExplorerLiveFormat.html(snapshot);
             require(json.contains("\"verdict_authority\":false")
-                    && json.contains("\"schema\":\"worldline.evidence-explorer-live.v5\"")
+                    && json.contains("\"schema\":\"worldline.evidence-explorer-live.v6\"")
                     && json.contains("\"ephemeral_state_included\":true")
                     && json.contains("\"regression_triage_cases\":1")
                     && json.contains("\"native_campaign_failure_clusters\"")
+                    && json.contains("\"native_campaign_follow_up_plan\"")
+                    && json.contains("\"native_follow_up_items\":1")
                     && json.contains("\"native_unclassified_workload_failures\":1")
                     && json.contains("\"stdout_truncated\":false")
                     && html.contains("repeat-exact-profile")
                     && html.contains("workload-nonzero-exit")
+                    && html.contains("prepare-minimization-review")
                     && html.contains("unsafe &lt;reason&gt;") && !html.contains("unsafe <reason>"),
                     "live overlay authority or escaping drift");
             System.out.println("  evidence explorer live self-test: passed");
@@ -117,8 +120,9 @@ final class EvidenceExplorerLiveTest {
                 "exited", 1L, 7L, 8L, 1L, false, false, 0L);
         EvidenceExplorerExecutionLinks.Snapshot links = new EvidenceExplorerExecutionLinks.Snapshot(
                 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, List.of(link));
+        NativeCampaignFailureClusters.Snapshot failures = NativeCampaignFailureClusters.summarize(links);
         return new EvidenceExplorerLiveSnapshot(1L, "b".repeat(64), values, links,
-                NativeCampaignFailureClusters.summarize(links),
+                failures, NativeCampaignFollowUpPlan.build(failures),
                 new EvidenceExplorerDiagnosticCaptures.Snapshot(
                         0, 0, 0, 0, 0, 0L, 0L, List.of()),
                 null, null, List.of(queue), List.of(cache));

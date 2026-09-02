@@ -19,11 +19,13 @@ final class TrainPinHistory {
     }
     static TrainPinHistory load(Path root) throws Exception {
         List<Properties> history = new ArrayList<>();
-        for (String commit : capture(root, "log", "--format=%H", "--",
-                "smokes/train-reconciliation.lock").lines().toList()) {
+        List<String> commits = capture(root, "log", "--format=%H", "--",
+                "smokes/train-reconciliation.lock").lines().filter(value -> !value.isBlank()).toList();
+        List<String> objects = commits.stream().map(commit ->
+                commit + ":smokes/train-reconciliation.lock").toList();
+        for (String content : GitObjectBatch.read(root, objects, false)) {
             Properties lock = new Properties();
-            try (StringReader reader = new StringReader(capture(root, "show",
-                    commit + ":smokes/train-reconciliation.lock"))) { lock.load(reader); }
+            try (StringReader reader = new StringReader(content)) { lock.load(reader); }
             history.add(lock);
         }
         Set<String> anchors = new HashSet<>();

@@ -5,7 +5,7 @@ final class EvidenceExplorerLiveFormat {
     private EvidenceExplorerLiveFormat() { }
 
     static String json(EvidenceExplorerLiveSnapshot value) {
-        StringBuilder out = new StringBuilder("{\n  \"schema\":\"worldline.evidence-explorer-live.v5\",")
+        StringBuilder out = new StringBuilder("{\n  \"schema\":\"worldline.evidence-explorer-live.v6\",")
                 .append("\n  \"verdict_authority\":false,\n  \"ephemeral_state_included\":true,")
                 .append("\n  \"observed_at_epoch_ms\":").append(value.observedAtEpochMs()).append(',')
                 .append("\n  \"canonical_snapshot_sha256\":")
@@ -15,6 +15,8 @@ final class EvidenceExplorerLiveFormat {
                 .append("\n  \"execution_links\":").append(executionLinks(value.executionLinks())).append(',')
                 .append("\n  \"native_campaign_failure_clusters\":")
                 .append(NativeCampaignFailureClusters.json(value.campaignFailures()).strip()).append(',')
+                .append("\n  \"native_campaign_follow_up_plan\":")
+                .append(NativeCampaignFollowUpPlan.json(value.campaignFollowUps()).strip()).append(',')
                 .append("\n  \"diagnostic_captures\":")
                 .append(EvidenceExplorerDiagnosticFormat.json(value.diagnosticCaptures())).append(',')
                 .append("\n  \"shared_cas\":").append(sharedCas(value.sharedCas())).append(',')
@@ -42,6 +44,7 @@ final class EvidenceExplorerLiveFormat {
                 .append(card("Native campaign links", value.executionLinks().linkedRuns()))
                 .append(card("Failed native runs", value.executionLinks().failedNativeRuns()))
                 .append(card("Native failure clusters", value.campaignFailures().clusters().size()))
+                .append(card("Review-only follow-ups", value.campaignFollowUps().items().size()))
                 .append(card("Unclassified workload failures",
                         value.campaignFailures().unclassifiedWorkloadCount()))
                 .append(card("Orphan native runs", value.executionLinks().orphanNativeRuns()))
@@ -84,6 +87,13 @@ final class EvidenceExplorerLiveFormat {
                 .append("<th>Exit</th><th>Runs</th></tr></thead><tbody>");
         for (NativeCampaignFailureClusters.Cluster cluster : value.campaignFailures().clusters())
             out.append(campaignFailureRow(cluster));
+        out.append("</tbody></table></div></section><section><h2>Review-only campaign follow-ups</h2>")
+                .append("<p>Suggestions are bounded and inert: review is required before any execution.</p>")
+                .append("<div class=\"table\"><table><thead><tr><th>Item</th><th>Campaign</th>")
+                .append("<th>Class</th><th>Action</th><th>Request</th><th>Attempts</th></tr>")
+                .append("</thead><tbody>");
+        for (NativeCampaignFollowUpPlan.Item item : value.campaignFollowUps().items())
+            out.append(followUpRow(item));
         out.append("</tbody></table></div></section>")
                 .append(EvidenceExplorerDiagnosticFormat.html(value.diagnosticCaptures()))
                 .append("<section><h2>Lease queues</h2><div class=\"table\"><table><thead><tr>")
@@ -123,6 +133,7 @@ final class EvidenceExplorerLiveFormat {
                 + ",\"linked_native_runs\":" + value.executionLinks().linkedRuns()
                 + ",\"failed_native_runs\":" + value.executionLinks().failedNativeRuns()
                 + ",\"native_failure_clusters\":" + value.campaignFailures().clusters().size()
+                + ",\"native_follow_up_items\":" + value.campaignFollowUps().items().size()
                 + ",\"native_infrastructure_failures\":"
                 + value.campaignFailures().infrastructureCount()
                 + ",\"native_unclassified_workload_failures\":"
@@ -229,6 +240,13 @@ final class EvidenceExplorerLiveFormat {
                 + "</td><td>" + html(value.backend() + " / " + value.executorVersion())
                 + "</td><td>" + html(value.termination()) + "</td><td>"
                 + numberText(value.exitCode()) + "</td><td>" + value.requests().size() + "</td></tr>";
+    }
+    private static String followUpRow(NativeCampaignFollowUpPlan.Item value) {
+        return "<tr><td><code>" + shortHash(value.id()) + "</code></td><td><strong>"
+                + html(value.campaignId()) + "</strong></td><td>" + html(value.failureClass())
+                + "</td><td><span class=\"tag\">" + html(value.action()) + "</span></td><td><code>"
+                + shortHash(value.requestSha256()) + "</code></td><td>" + value.attemptLimit()
+                + " / review required</td></tr>";
     }
     private static String signalRow(EvidenceExplorerLiveSnapshot.Signal value) {
         return "<tr><td><strong>" + html(value.workloadId()) + "</strong></td><td>"

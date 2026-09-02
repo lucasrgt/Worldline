@@ -18,6 +18,7 @@ final class HarnessFeatureSelfTest {
         CsmSuiteCheck.selfTest();
         MilestoneIdUniquenessCheck.selfTest();
         RepositoryVerify.qualificationBoundarySelfTest();
+        GitObjectBatch.selfTest(java.nio.file.Path.of("").toAbsolutePath().normalize());
         TrainSourceHistory.selfTest();
         TrainPinMigration.selfTest();
         CandidateReadiness.selfTest();
@@ -34,6 +35,7 @@ final class HarnessFeatureSelfTest {
         ModuleInputGraph.selfTest();
         EvidenceExplorerTest.selfTest();
         NativeCampaignFailureClusters.selfTest();
+        NativeCampaignFollowUpPlan.selfTest();
         EvidenceExplorerLiveTest.selfTest();
         CampaignPlanTest.selfTest();
     }
