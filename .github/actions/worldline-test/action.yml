@@ -14,7 +14,7 @@ runs:
       uses: actions/setup-java@v5
       with:
         distribution: temurin
-        java-version: '21.0.12+8'
+        java-version: '21.0.12+8.0.LTS'
     - name: Run Worldline
       shell: pwsh
       env:

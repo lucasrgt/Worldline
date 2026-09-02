@@ -6,7 +6,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: testkit-external-consumer-${{ github.ref }}-${{ matrix.java }}
+  group: testkit-external-consumer-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   portal-consumer:

@@ -8,7 +8,7 @@ All repository artifacts must be written in English.
 | --- | --- |
 | Product / mod-facing API | Java 8 (`java.release=8`) |
 | Host tests and harness | JDK 21 (`test.release=21`) |
-| GitHub Actions Temurin pin | `21.0.12+8` |
+| GitHub Actions Temurin pin | `21.0.12+8.0.LTS` |
 | Gradle TestKit plugin toolchain | JDK 17 |
 | External consumer matrix | 21 and 25 |
 
