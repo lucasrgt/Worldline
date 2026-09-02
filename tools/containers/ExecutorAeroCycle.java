@@ -47,18 +47,28 @@ public final class ExecutorAeroCycle {
 
         byte[] baseline;
         try (ExecutorAeroWorkspace workspace = ExecutorAeroWorkspace.open(source, "legacy", donor, REVISION)) {
-            workspace.prepare(); Path token = workspace.authorize(lock, lease);
-            ExecutionEnvironmentManifest environment = environment(
-                    workspace.root(), token, lease, "legacy");
-            baseline = legacy(workspace.root(), command(workspace.root()), environment);
+            try {
+                workspace.prepare(); Path token = workspace.authorize(lock, lease);
+                ExecutionEnvironmentManifest environment = environment(
+                        workspace.root(), token, lease, "legacy");
+                baseline = legacy(workspace.root(), command(workspace.root()), environment);
+            } catch (Exception failure) {
+                ExecutorGuiFailureCapture.capture(source, workspace.root(), "aero", "legacy", ID, failure);
+                throw failure;
+            }
         }
 
         NativeResult nativeResult;
         try (ExecutorAeroWorkspace workspace = ExecutorAeroWorkspace.open(source, "rust", donor, REVISION)) {
-            workspace.prepare(); Path token = workspace.authorize(lock, lease);
-            ExecutionEnvironmentManifest environment = environment(
-                    workspace.root(), token, lease, "rust");
-            nativeResult = rust(workspace.root(), executor, command(workspace.root()), environment);
+            try {
+                workspace.prepare(); Path token = workspace.authorize(lock, lease);
+                ExecutionEnvironmentManifest environment = environment(
+                        workspace.root(), token, lease, "rust");
+                nativeResult = rust(workspace.root(), executor, command(workspace.root()), environment);
+            } catch (Exception failure) {
+                ExecutorGuiFailureCapture.capture(source, workspace.root(), "aero", "rust", ID, failure);
+                throw failure;
+            }
         }
         require(Arrays.equals(baseline, nativeResult.evidence),
                 "legacy/Rust Aero visual evidence differential");
