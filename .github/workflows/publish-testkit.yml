@@ -59,7 +59,7 @@ jobs:
       - name: Validate Gradle plugin
         run: gradle -p tooling/gradle-plugin --project-cache-dir .worldline/gradle-plugin/cache test validatePlugins
       - name: Publish pinned release artifacts
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: |
             .worldline/dist/testkit/worldline-test-api-*.jar
