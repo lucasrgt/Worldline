@@ -74,6 +74,9 @@ public final class OcclusionProbe {
 
     private static void capture(Minecraft game, int arm, int checkpoint) {
         try {
+            if (game.currentScreen != null || !game.options.hideHud) {
+                throw new IllegalStateException("menu or HUD contaminated M791 capture");
+            }
             width = game.displayWidth;
             height = game.displayHeight;
             ByteBuffer pixels = BufferUtils.createByteBuffer(width * height * 4);

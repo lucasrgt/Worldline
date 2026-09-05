@@ -9,6 +9,11 @@ import worldline.m791.OcclusionState;
 
 @Mixin(value = Minecraft.class, priority = 900)
 public abstract class OcclusionMinecraftMixin {
+    @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
+    private void worldlinePreventCaptureMenu(CallbackInfo callback) {
+        if (OcclusionState.retaining()) callback.cancel();
+    }
+
     @Inject(method = "tick()V", at = @At("HEAD"), cancellable = true)
     private void worldlineDrive(CallbackInfo callback) {
         try {
