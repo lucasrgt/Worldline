@@ -1,6 +1,7 @@
 package aero.modellib.test;
 
 import aero.modellib.Aero_MeshRenderer;
+import aero.modellib.Aero_RenderDistanceBlockEntity;
 import java.util.ArrayList;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.world.World;
@@ -38,6 +39,24 @@ public final class WorldlineM791Rehydrator {
     public static void prewarm() {
         Aero_MeshRenderer.prewarmModel(MegaModelBlockEntityRenderer.MODEL);
         Aero_MeshRenderer.prewarmModel(AnimatedMegaModelBlockEntityRenderer.MODEL);
+    }
+
+    public static void verifyPopulation(World world) {
+        int staticCount = 0, animatedCount = 0;
+        for (Object value : world.blockEntities) {
+            if (!(value instanceof Aero_RenderDistanceBlockEntity)) continue;
+            BlockEntity block = (BlockEntity) value;
+            if (block.isRemoved()) continue;
+            if (!fixture(block.x, block.y, block.z)) {
+                throw new IllegalStateException("foreign Aero BE in M791 fixture");
+            }
+            if (block.getClass() == MegaModelBlockEntity.class) staticCount++;
+            else if (block.getClass() == AnimatedMegaModelBlockEntity.class) animatedCount++;
+            else throw new IllegalStateException("unexpected M791 machine type");
+        }
+        if (staticCount != 256 || animatedCount != 256) {
+            throw new IllegalStateException("M791 population drift: " + staticCount + "/" + animatedCount);
+        }
     }
 
     private static void layer(World world, int originX, int originZ, int y, int parity) {

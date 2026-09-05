@@ -9,12 +9,12 @@ import java.util.Properties;
 public final class M791AeroBeOcclusionIntegrity {
     private static final String ID = "m791-aero-be-occlusion-integrity";
     private static final String[] ORDERS = {"off-on", "on-off"};
-    private static final String TRACE = "v2|extension=ultra-journey-sdk-v1|"
+    private static final String TRACE = "v3|extension=ultra-journey-sdk-v1|"
         + "scene=4chunks-512-mixed-2layers+double-slab|sessions=2|orders=off-on+on-off|"
         + "cameras=covered-up8x45+reveal4x90|hold=20|camera-settle=3+confirm=2|advanced-opengl=on|"
-        + "world=frozen-tick+time6000+clear-weather+no-entities+no-clouds|"
+        + "world=frozen-tick+time6000+clear-weather+no-entities+no-clouds+no-demo-population|"
         + "contrast=be-cell-occlusion-off-vs-on|other-culls=off|"
-        + "oracle=exact-rgba+activation+submission-reduction|captures=12-per-arm";
+        + "oracle=exact-rgba+activation+submission-reduction-including-pages|captures=12-per-arm";
     private final Path root = Path.of("").toAbsolutePath().normalize();
     private final Path smoke = root.resolve("smokes").resolve(ID);
     private final Path build = root.resolve(".worldline/build/smoke").resolve(ID);
@@ -50,7 +50,6 @@ public final class M791AeroBeOcclusionIntegrity {
             M791VisualPair.compare(2, sessions.get(0).on(), sessions.get(1).off()));
         M791Result result = M791Result.evaluate(sessions, pairs);
         double maximum = Double.parseDouble(SmokeSupport.value(config, "maximum.work.ratio"));
-        SmokeSupport.require(result.passes(maximum), "M791 gate failed: " + result.summary());
         String signature = M791Runtime.sha256(TRACE);
         SmokeSupport.require(signature.equals(SmokeSupport.value(config, "expected.signature")),
             "M791 semantic signature drift: " + signature);
@@ -60,6 +59,7 @@ public final class M791AeroBeOcclusionIntegrity {
         evidence.append(result.summary()).append("\ntrace=").append(TRACE)
             .append("\nsignature=").append(signature).append('\n');
         Files.writeString(build.resolve("evidence.txt"), evidence, StandardCharsets.UTF_8);
+        SmokeSupport.require(result.passes(maximum), "M791 gate failed: " + result.summary());
         System.out.println("M791 Aero BE occlusion integrity passed");
         System.out.println("WORLDLINE_M791_SIGNAL=" + SmokeSupport.value(config, "expected.signal"));
         System.out.println("WORLDLINE_M791_TRACE=" + TRACE);

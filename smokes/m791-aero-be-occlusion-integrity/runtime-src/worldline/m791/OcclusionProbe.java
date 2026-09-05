@@ -9,7 +9,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
-import java.security.MessageDigest;
+import com.google.common.hash.Hashing;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -101,9 +101,6 @@ public final class OcclusionProbe {
     }
 
     private static String hash(byte[] bytes) throws Exception {
-        byte[] digest = MessageDigest.getInstance("SHA-256").digest(bytes);
-        StringBuilder result = new StringBuilder(digest.length * 2);
-        for (byte value : digest) result.append(String.format("%02x", value & 255));
-        return result.toString();
+        return Hashing.sha256().hashBytes(bytes).toString();
     }
 }

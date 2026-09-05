@@ -5,9 +5,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.HexFormat;
 import java.util.List;
 import java.util.Properties;
 
@@ -100,8 +98,7 @@ final class M791Runtime {
     }
 
     static String sha256(String value) throws Exception {
-        return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
-            .digest(value.getBytes(StandardCharsets.UTF_8)));
+        return HexDigest.sha256Hex(value.getBytes(StandardCharsets.UTF_8));
     }
 
     private String git(String... arguments) throws Exception {

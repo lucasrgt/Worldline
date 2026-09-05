@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=external-aero-render-occlusion -->
 <!-- nonclaims=no-triangle-level-or-arbitrary-gpu-claim -->
-<!-- frozen-trace=db0dad16290a5c038ad2744b63d53f73918f0db4ade5bdb7540e7f5524542b86 -->
+<!-- frozen-trace=73fd05460f8f833d2bfb2d3070bc7ffcf8fa19bc6da3805dcf0832fad65f74a8 -->
 
 # M791 Aero block-entity cell occlusion behavior map
 
@@ -32,6 +32,6 @@ submitted work must fall in both sessions, and aggregate work may not exceed
 
 Claim: `scene=4chunks-512-mixed-2layers+double-slab,sdk=discovered,sessions=2-counterbalanced,cameras=covered-up8x45+reveal4x90,camera-settle=3+confirm2,pixels=exact24of24,occlusion=activated2of2,work=reduced2of2`.
 
-Frozen trace: `v2|extension=ultra-journey-sdk-v1|scene=4chunks-512-mixed-2layers+double-slab|sessions=2|orders=off-on+on-off|cameras=covered-up8x45+reveal4x90|hold=20|camera-settle=3+confirm=2|advanced-opengl=on|world=frozen-tick+time6000+clear-weather+no-entities+no-clouds|contrast=be-cell-occlusion-off-vs-on|other-culls=off|oracle=exact-rgba+activation+submission-reduction|captures=12-per-arm`.
+Frozen trace: `v3|extension=ultra-journey-sdk-v1|scene=4chunks-512-mixed-2layers+double-slab|sessions=2|orders=off-on+on-off|cameras=covered-up8x45+reveal4x90|hold=20|camera-settle=3+confirm=2|advanced-opengl=on|world=frozen-tick+time6000+clear-weather+no-entities+no-clouds+no-demo-population|contrast=be-cell-occlusion-off-vs-on|other-culls=off|oracle=exact-rgba+activation+submission-reduction-including-pages|captures=12-per-arm`.
 
-SHA-256: `db0dad16290a5c038ad2744b63d53f73918f0db4ade5bdb7540e7f5524542b86`.
+SHA-256: `73fd05460f8f833d2bfb2d3070bc7ffcf8fa19bc6da3805dcf0832fad65f74a8`.

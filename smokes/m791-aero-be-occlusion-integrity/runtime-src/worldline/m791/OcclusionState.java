@@ -32,6 +32,7 @@ public final class OcclusionState {
         if (stage != 2 || game.world == null || game.player == null) return;
         prepareDisplay(game);
         if (!prewarmed) { WorldlineM791Rehydrator.prewarm(); prewarmed = true; }
+        WorldlineM791Rehydrator.verifyPopulation(game.world);
         if (OcclusionProbe.captures() == OcclusionScene.CHECKPOINTS * 2) { finish(game); return; }
         int nextSample = retained / OcclusionScene.HOLD_FRAMES;
         if (sample != nextSample) configure(nextSample);
@@ -69,6 +70,7 @@ public final class OcclusionState {
         require(machines == 512, "M791 machine fixture drift: " + machines);
         OcclusionScene.place(game.player, 0);
         if (++stable < 80) return;
+        WorldlineM791Rehydrator.verifyPopulation(world);
         if (PREPARE) {
             world.saveWithLoadingDisplay(true, null);
             System.out.println("[WorldlineM791] template-ready machines=512");

@@ -2,8 +2,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.MessageDigest;
-import java.util.HexFormat;
 import java.util.Properties;
 
 /** One complete rollback or candidate arm. */
@@ -37,7 +35,8 @@ final class M791Artifact {
         pageCalls = pages;
         animated = animation;
         culled = rejected;
-        submitted = rest + animation;
+        // Non-flattened, fixed-light Cell Pages issue one call per submitted model.
+        submitted = rest + pages + animation;
         slices = stable;
     }
 
@@ -74,7 +73,7 @@ final class M791Artifact {
     }
 
     private static String sha256(byte[] value) throws Exception {
-        return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(value));
+        return HexDigest.sha256Hex(value);
     }
     private static int integer(Properties values, String key) {
         return Integer.parseInt(required(values, key));
