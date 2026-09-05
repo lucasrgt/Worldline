@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=external-aero-render-occlusion -->
 <!-- nonclaims=no-triangle-level-or-arbitrary-gpu-claim -->
-<!-- frozen-trace=af349fda52e491caebd457baca78b44d2ff3c1e20a89e812ea6bbf024ee705e2 -->
+<!-- frozen-trace=798100d32f212767276755e3aa18239589fe8d977be84645e81affc1314ec294 -->
 
 # M791 Aero block-entity cell occlusion behavior map
 
@@ -35,11 +35,16 @@ submitted work must fall in both sessions, and aggregate work may not exceed
 
 Claim: `scene=4chunks-512-mixed-2layers+double-slab,sdk=discovered,sessions=2-counterbalanced,cameras=covered-up8x45+reveal4x90,camera-settle=3+confirm2,pixels=exact24of24,occlusion=activated2of2,work=reduced2of2,profiles=4-diagnostic`.
 
-Frozen trace: `v4|extension=ultra-journey-sdk-v1|scene=4chunks-512-mixed-2layers+double-slab|sessions=2|orders=off-on+on-off|cameras=covered-up8x45+reveal4x90|hold=20|camera-settle=3+confirm=2|advanced-opengl=on|world=frozen-tick+time6000+clear-weather+no-entities+no-clouds+no-demo-population|contrast=be-cell-occlusion-off-vs-on|other-culls=off|oracle=exact-rgba+activation+submission-reduction-including-pages|captures=12-per-arm|profile=diagnostic-wlpr`.
+Frozen trace: `v5|extension=ultra-journey-sdk-v1|scene=4chunks-512-mixed-2layers+double-slab|sessions=2|orders=off-on+on-off|cameras=covered-up8x45+reveal4x90|hold=20|camera-settle=3+confirm=2|advanced-opengl=on|world=frozen-tick+time6000+clear-weather+no-entities+no-clouds+no-demo-population+be-order-yzx|contrast=be-cell-occlusion-off-vs-on|other-culls=off|oracle=exact-rgba+activation+submission-reduction-including-pages|captures=12-per-arm|profile=diagnostic-wlpr`.
 
-SHA-256: `af349fda52e491caebd457baca78b44d2ff3c1e20a89e812ea6bbf024ee705e2`.
+SHA-256: `798100d32f212767276755e3aa18239589fe8d977be84645e81affc1314ec294`.
 
 Diagnostic Worldline Profiler artifacts record 240 samples per arm. The mixed
 window includes camera and chunk warmup; render-update timing excludes display
 and framebuffer reads. Stage times overlap and must not be added. These
 artifacts locate work for follow-up; they are not promotion or hitch proofs.
+
+Beta ChunkBuilder updates the global BE renderer list using HashSet.addAll.
+M791 sorts that list by Y/Z/X at renderEntities entry in both arms, retaining
+its complete membership and native renderer dispatch. This fixes a fixture
+input order; it is not a production sorting optimization.

@@ -3,6 +3,6 @@
   "minVersion": "0.8",
   "package": "worldline.m791.mixin",
   "compatibilityLevel": "JAVA_17",
-  "client": ["OcclusionFrameMixin", "OcclusionMinecraftMixin", "OcclusionToggleMixin", "OcclusionCloudMixin", "OcclusionPopulationMixin"],
+  "client": ["OcclusionFrameMixin", "OcclusionMinecraftMixin", "OcclusionToggleMixin", "OcclusionCloudMixin", "OcclusionPopulationMixin", "OcclusionOrderMixin"],
   "injectors": { "defaultRequire": 1 }
 }

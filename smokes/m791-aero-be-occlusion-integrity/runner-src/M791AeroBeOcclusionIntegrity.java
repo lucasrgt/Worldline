@@ -9,10 +9,10 @@ import java.util.Properties;
 public final class M791AeroBeOcclusionIntegrity {
     private static final String ID = "m791-aero-be-occlusion-integrity";
     private static final String[] ORDERS = {"off-on", "on-off"};
-    private static final String TRACE = "v4|extension=ultra-journey-sdk-v1|"
+    private static final String TRACE = "v5|extension=ultra-journey-sdk-v1|"
         + "scene=4chunks-512-mixed-2layers+double-slab|sessions=2|orders=off-on+on-off|"
         + "cameras=covered-up8x45+reveal4x90|hold=20|camera-settle=3+confirm=2|advanced-opengl=on|"
-        + "world=frozen-tick+time6000+clear-weather+no-entities+no-clouds+no-demo-population|"
+        + "world=frozen-tick+time6000+clear-weather+no-entities+no-clouds+no-demo-population+be-order-yzx|"
         + "contrast=be-cell-occlusion-off-vs-on|other-culls=off|"
         + "oracle=exact-rgba+activation+submission-reduction-including-pages|captures=12-per-arm|profile=diagnostic-wlpr";
     private final Path root = Path.of("").toAbsolutePath().normalize();
