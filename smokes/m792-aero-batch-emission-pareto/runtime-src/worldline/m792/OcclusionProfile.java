@@ -5,19 +5,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.lang.management.ManagementFactory;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import worldline.profiling.*;
 
 /** Separated render windows with allocation, cache activation and tail guardrails. */
 public final class OcclusionProfile {
-    private static final String[] NAMES = {"render", "animated", "pages", "allocation", "matches", "bytes",
-        "animatedAllocation", "pageAllocation"};
-    private static final ProfilerSchema SCHEMA = ProfilerSchema.of(Arrays.asList(
-        duration("render"), duration("animated"), duration("pages"), bytes("allocation"),
-        WorldlineProfilerMetrics.extensionCounter("mod.aero.matches", "aero"), bytes("bytes"),
-        bytes("animatedAllocation"), bytes("pageAllocation")));
+    private static final String[] NAMES = OcclusionMetricSchema.NAMES;
+    private static final ProfilerSchema SCHEMA = OcclusionMetricSchema.SCHEMA;
     private static final int CAPACITY = 4 * (OcclusionScene.HOLD_FRAMES - OcclusionScene.WARM_FRAMES);
     private static final ProfilerRecorder[][] RECORDERS = new ProfilerRecorder[2][3];
     private static final long EPOCH = System.currentTimeMillis();
@@ -90,13 +85,6 @@ public final class OcclusionProfile {
         return RECORDERS[arm][scene];
     }
 
-    private static ProfilerMetric duration(String name) {
-        return WorldlineProfilerMetrics.extensionDuration("mod.aero." + name, "aero");
-    }
-    private static ProfilerMetric bytes(String name) {
-        return ProfilerMetric.of("mod.aero." + name, "aero", ProfilerMetric.Unit.BYTES,
-            ProfilerMetric.Kind.GAUGE, ProfilerMetric.Causality.DIAGNOSTIC);
-    }
     private static com.sun.management.ThreadMXBean allocation() {
         com.sun.management.ThreadMXBean bean = (com.sun.management.ThreadMXBean) ManagementFactory.getThreadMXBean();
         if (!bean.isThreadAllocatedMemorySupported()) throw new IllegalStateException("allocation observer unavailable");

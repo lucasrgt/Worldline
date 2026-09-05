@@ -39,8 +39,9 @@ final class M792Runtime {
         sources.addAll(SmokeSupport.javaFiles(aero.resolve(
             "worldline/extensions/ultra-journey/src/main/java")));
         sources.addAll(SmokeSupport.javaFiles(smoke.resolve("extension-probe-src")));
+        sources.add(smoke.resolve("runtime-src/worldline/m792/OcclusionMetricSchema.java").toString());
         List<Path> products = List.of(SmokeSupport.product(root, "api"),
-            SmokeSupport.product(root, "extensions"));
+            SmokeSupport.product(root, "extensions"), SmokeSupport.product(root, "profiling"));
         List<String> compile = new ArrayList<String>(List.of("javac", "--release", "8",
             "-encoding", "UTF-8", "-Xlint:all,-options", "-Werror", "-classpath",
             join(products), "-d", output.toString()));
@@ -52,6 +53,9 @@ final class M792Runtime {
             "worldline.m792.ExtensionProbe", aero.toString()), 60);
         SmokeSupport.require(observed.contains("WORLDLINE_M792_EXTENSION=PASS"),
             "M792 public extension discovery drift");
+        String schema = SmokeSupport.capture(root, List.of("java", "-classpath", join(runtime),
+            "worldline.m792.OcclusionMetricSchema"), 60);
+        SmokeSupport.require(schema.contains("WORLDLINE_M792_PROFILE_SCHEMA=PASS"), "M792 profile schema drift");
     }
 
     void buildAero() throws Exception {
