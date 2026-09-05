@@ -22,7 +22,7 @@ public final class HexDigest {
         return HexFormat.of().formatHex(digest);
     }
 
-    static String sha256Hex(byte[] payload) throws Exception {
+    public static String sha256Hex(byte[] payload) throws Exception {
         if (payload == null) throw new IllegalArgumentException("null digest payload");
         return hex(sha256().digest(payload));
     }
@@ -34,7 +34,27 @@ public final class HexDigest {
                 "SHA-256 empty-vector drift");
         require(abc.equals("ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"),
                 "SHA-256 abc-vector drift");
+        isolatedCallerSelfTest(abc);
         System.out.println("  hex digest self-test: passed");
+    }
+
+    private static void isolatedCallerSelfTest(String expected) throws Exception {
+        java.nio.file.Path directory = java.nio.file.Files.createTempDirectory("worldline-digest-");
+        try {
+            java.nio.file.Path source = directory.resolve("IsolatedDigestProbe.java");
+            java.nio.file.Files.writeString(source,
+                    "public class IsolatedDigestProbe { public static String digest() throws Exception {"
+                    + "return HexDigest.sha256Hex(new byte[] {97,98,99}); }}");
+            int result = javax.tools.ToolProvider.getSystemJavaCompiler().run(null, null, null,
+                    "-classpath", System.getProperty("java.class.path"), "-d", directory.toString(),
+                    source.toString());
+            require(result == 0, "isolated digest caller did not compile");
+            try (java.net.URLClassLoader loader = new java.net.URLClassLoader(
+                    new java.net.URL[] {directory.toUri().toURL()}, HexDigest.class.getClassLoader())) {
+                Object observed = loader.loadClass("IsolatedDigestProbe").getMethod("digest").invoke(null);
+                require(expected.equals(observed), "isolated digest caller failed");
+            }
+        } finally { SafeTreeDelete.delete(directory); }
     }
 
     private static void require(boolean value, String message) {
