@@ -1,6 +1,6 @@
 package worldline.m792;
 
-import aero.modellib.Aero_BatchEmissionCache;
+import aero.modellib.Aero_BatchDrawRuns;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -12,10 +12,10 @@ import worldline.profiling.*;
 
 /** Separated render windows with allocation, cache activation and tail guardrails. */
 public final class OcclusionProfile {
-    private static final String[] NAMES = {"render", "animated", "pages", "allocation", "hits", "bytes"};
+    private static final String[] NAMES = {"render", "animated", "pages", "allocation", "joins", "bytes"};
     private static final ProfilerSchema SCHEMA = ProfilerSchema.of(Arrays.asList(
         duration("render"), duration("animated"), duration("pages"), bytes("allocation"),
-        WorldlineProfilerMetrics.extensionCounter("mod.aero.hits", "aero"), bytes("bytes")));
+        WorldlineProfilerMetrics.extensionCounter("mod.aero.joins", "aero"), bytes("bytes")));
     private static final int CAPACITY = 4 * (OcclusionScene.HOLD_FRAMES - OcclusionScene.WARM_FRAMES);
     private static final ProfilerRecorder[][] RECORDERS = new ProfilerRecorder[2][3];
     private static final long EPOCH = System.currentTimeMillis();
@@ -41,8 +41,8 @@ public final class OcclusionProfile {
         recorder.set(1, OcclusionStages.nanos(0));
         recorder.set(2, OcclusionStages.nanos(1));
         recorder.set(3, bytes);
-        recorder.set(4, Aero_BatchEmissionCache.hitsThisFrame());
-        recorder.set(5, Aero_BatchEmissionCache.retainedBytes());
+        recorder.set(4, Aero_BatchDrawRuns.joinedThisFrame());
+        recorder.set(5, Aero_BatchDrawRuns.bufferBytes());
         recorder.endFrame();
         started = 0L;
     }

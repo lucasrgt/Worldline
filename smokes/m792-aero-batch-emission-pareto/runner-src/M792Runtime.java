@@ -60,7 +60,7 @@ final class M792Runtime {
             "--no-daemon", "compileJava", "remapJar", "--rerun-tasks"), timeout("build.timeout.seconds"));
         SmokeSupport.require(output.contains("BUILD SUCCESSFUL") && Files.isRegularFile(
             project.resolve("build/libs/aero-model-lib-3.0.0.jar")) && Files.isRegularFile(project.resolve(
-            "build/classes/java/main/aero/modellib/Aero_BECellOcclusion.class")),
+            "build/classes/java/main/aero/modellib/Aero_BatchDrawRuns.class")),
             "M792 Aero build drift");
     }
 

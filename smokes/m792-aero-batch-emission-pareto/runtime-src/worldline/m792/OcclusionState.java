@@ -12,7 +12,7 @@ public final class OcclusionState {
     public static final boolean ENABLED = Boolean.getBoolean("worldline.m792.enabled");
     private static final boolean PREPARE = Boolean.getBoolean("worldline.m792.prepare");
     private static final String ARM = System.getProperty("worldline.m792.arm", "prepare");
-    private static int stage, warmup, stable, retained, checkpoint, machines, sample = -1;
+    private static int stage, warmup, stable, retained, checkpoint, machines, renderWarm, sample = -1;
     private static boolean capture, candidate, prewarmed;
 
     private OcclusionState() {}
@@ -33,6 +33,11 @@ public final class OcclusionState {
         prepareDisplay(game);
         if (!prewarmed) { WorldlineM792Rehydrator.prewarm(); prewarmed = true; }
         WorldlineM792Rehydrator.verifyPopulation(game.world);
+        if (renderWarm < OcclusionScene.CHECKPOINTS * 120) {
+            OcclusionScene.place(game.player, renderWarm++ / 120);
+            WorldlineM792Rehydrator.pose(game.world, 10);
+            return;
+        }
         if (OcclusionProbe.captures() == OcclusionScene.CHECKPOINTS * 2) { finish(game); return; }
         int nextSample = retained / OcclusionScene.HOLD_FRAMES;
         if (sample != nextSample) configure(nextSample);
@@ -44,6 +49,7 @@ public final class OcclusionState {
     }
 
     public static boolean retaining() { return stage == 2; }
+    public static boolean acquiring() { return retaining() && retained > 0; }
     public static boolean freezeTicks() { return stage == 2; }
     public static boolean captureFrame() { return capture; }
     public static int checkpoint() { return checkpoint; }

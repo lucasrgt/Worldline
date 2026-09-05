@@ -32,10 +32,10 @@ final class M792Performance {
                 double off = total(runs, first, scene, 0, "render.mean");
                 double on = total(runs, first, scene, 1, "render.mean");
                 double ratio = on / off;
-                double p99 = total(runs, first, scene, 1, "render.p99")
-                    / total(runs, first, scene, 0, "render.p99");
-                double allocation = total(runs, first, scene, 1, "allocation.mean")
-                    / Math.max(1, total(runs, first, scene, 0, "allocation.mean"));
+                double p99 = ratio(total(runs, first, scene, 1, "render.p99"),
+                    total(runs, first, scene, 0, "render.p99"));
+                double allocation = ratio(total(runs, first, scene, 1, "allocation.mean"),
+                    total(runs, first, scene, 0, "allocation.mean"));
                 long hitchesOff = total(runs, first, scene, 0, "render.hitches");
                 long hitchesOn = total(runs, first, scene, 1, "render.hitches");
                 boolean scenePass = ratio <= (scene == 0 ? 0.90 : 1.03)
@@ -52,10 +52,10 @@ final class M792Performance {
         }
         for (M792Performance run : runs) {
             for (int scene = 0; scene < 3; scene++) {
-                passes &= run.number(0, scene, "hits.total") == 0;
+                passes &= run.number(0, scene, "joins.total") == 0;
                 passes &= run.number(1, scene, "bytes.maximum") <= 16L * 1024 * 1024;
             }
-            passes &= run.number(1, 0, "hits.total") > 0;
+            passes &= run.number(1, 0, "joins.total") > 0;
         }
         return passes;
     }
@@ -66,6 +66,18 @@ final class M792Performance {
         return total;
     }
     private long number(int arm, int scene, String key) {
-        return Long.parseLong(SmokeSupport.value(values[arm][scene], key));
+        long value = Long.parseLong(SmokeSupport.value(values[arm][scene], key));
+        SmokeSupport.require(value >= 0, "negative M792 observation: " + key);
+        return value;
+    }
+
+    private static double ratio(long candidate, long baseline) {
+        return candidate / (double) Math.max(1L, baseline);
+    }
+
+    static void selfTest() {
+        SmokeSupport.require(ratio(110, 100) > 1.05 && ratio(103, 100) > 1.02
+            && ratio(99, 100) == 0.99 && ratio(0, 0) == 0.0,
+            "M792 fractional ratio or empty allocation regression");
     }
 }

@@ -29,7 +29,7 @@ public final class OcclusionProbe {
     private OcclusionProbe() {}
 
     public static void sample(Minecraft game) {
-        if (!OcclusionState.retaining()) return;
+        if (!OcclusionState.acquiring()) return;
         int checkpoint = OcclusionState.checkpoint();
         if (checkpoint < 0 || checkpoint >= N) return;
         int arm = OcclusionState.candidateEnabled() ? 1 : 0;

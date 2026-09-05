@@ -8,12 +8,13 @@ import java.util.Properties;
 /** Exact raster and counterbalanced render/allocation frontier for emission replay. */
 public final class M792AeroBatchEmissionPareto {
     private static final String ID = "m792-aero-batch-emission-pareto";
-    static final String TRACE = "v1|sdk=public|machines=512-mixed-four-chunks|sessions=4|"
+    static final String TRACE = "v2|candidate=bounded-draw-runs|sdk=public|machines=512-mixed-four-chunks|sessions=4|"
         + "orders=off-on,on-off,on-off,off-on|scenes=stationary,moving,advancing-diverse|"
-        + "views=12|hold=180|discard=60|pixels=exact|render-ratio=0.95|"
-        + "moving-advancing-ratio=1.03|p99=1.05|allocation=1.02|cache=16MiB|hitches=no-increase";
+        + "views=12|prewarm=12x120|hold=180|discard=60|pixels=exact|render-ratio=0.95|"
+        + "moving-advancing-ratio=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase";
 
     public void execute(String id) throws Exception {
+        M792Performance.selfTest();
         SmokeSupport.require(ID.equals(id), "M792 identity drift");
         Path root = Path.of("").toAbsolutePath().normalize(), smoke = root.resolve("smokes/" + ID);
         Path build = root.resolve(".worldline/build/smoke/" + ID);
