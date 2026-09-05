@@ -52,10 +52,10 @@ final class M792Performance {
         }
         for (M792Performance run : runs) {
             for (int scene = 0; scene < 3; scene++) {
-                passes &= run.number(0, scene, "joins.total") == 0;
+                passes &= run.number(0, scene, "matches.total") == 0;
                 passes &= run.number(1, scene, "bytes.maximum") <= 16L * 1024 * 1024;
             }
-            passes &= run.number(1, 0, "joins.total") > 0;
+            passes &= run.number(1, 0, "matches.total") > 0;
         }
         return passes;
     }
