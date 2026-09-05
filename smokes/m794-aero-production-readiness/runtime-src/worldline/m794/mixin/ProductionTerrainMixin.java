@@ -14,10 +14,15 @@ abstract class ProductionTerrainMixin {
   @Shadow private ChunkBuilder[] sortedChunks;
   @Shadow double prevCameraX, prevCameraY, prevCameraZ;
   private int worldlineLastReset = -1;
+  private int worldlinePrepared = -2;
 
   /** Replays the same native chunk-sort starting state in every arm. */
   @Inject(method = "render", at = @At("HEAD"))
   private void worldlineResetSort(CallbackInfoReturnable<Integer> callback) {
+    if (ProductionState.retaining() && ProductionState.preparing() && worldlinePrepared != ProductionState.sampleId()) {
+      worldlinePrepared = ProductionState.sampleId();
+      prevCameraX = prevCameraY = prevCameraZ = -9999D;
+    }
     if (!ProductionState.acquiring() || ProductionState.localFrame() != 0
         || worldlineLastReset == ProductionState.frameId())
       return;
@@ -31,7 +36,7 @@ abstract class ProductionTerrainMixin {
     int dirty = 0;
     if (chunks != null)
       for (ChunkBuilder chunk : chunks)
-        if (chunk != null && chunk.inFrustum && chunk.dirty)
+        if (chunk != null && chunk.dirty)
           dirty++;
     ProductionTerrain.dirty(dirty);
   }

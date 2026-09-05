@@ -14,7 +14,7 @@ public final class ProductionState {
   private static final boolean PREPARE = Boolean.getBoolean("worldline.m794.prepare");
   private static final String ARM = System.getProperty("worldline.m794.arm", "prepare");
   private static int stage, warmup, stable, retained, checkpoint, machines, sample = -1;
-  private static boolean capture, candidate;
+  private static boolean capture, candidate, preparing = true;
 
   private ProductionState() {}
 
@@ -35,6 +35,7 @@ public final class ProductionState {
     if (stage != 2 || game.world == null || game.player == null)
       return;
     prepareDisplay(game);
+    capture = false;
     WorldlineM794Rehydrator.verifyPopulation(game.world);
     if (!ProductionTerrain.ready()) {
       ProductionTerrain.place(game);
@@ -48,6 +49,9 @@ public final class ProductionState {
     if (sample != nextSample)
       configure(nextSample);
     int scene = sample / 2;
+    preparing = !ProductionTerrain.armReady(game, scene, sample);
+    if (preparing)
+      return;
     retained++;
     checkpoint = scene * 3 + localFrame() / 60;
     capture = retained % 60 == 0;
@@ -61,7 +65,13 @@ public final class ProductionState {
     return stage == 2;
   }
   public static boolean acquiring() {
-    return retaining() && retained > 0;
+    return retaining() && retained > 0 && !preparing;
+  }
+  public static boolean preparing() {
+    return preparing;
+  }
+  public static int sampleId() {
+    return sample;
   }
   public static boolean freezeTicks() {
     return stage == 2;

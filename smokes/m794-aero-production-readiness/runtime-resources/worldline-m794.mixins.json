@@ -20,8 +20,7 @@
     "DiagnosticPackingMixin",
     "DiagnosticUniqueMixin",
     "DiagnosticDriverMixin",
-    "ProductionTextureMixin",
-    "ProductionSortMixin"
+    "ProductionTextureMixin"
   ],
   "injectors": {
     "defaultRequire": 1

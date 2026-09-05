@@ -5,7 +5,9 @@ final class ProductionScene {
   static final int CASES = 12, CHECKPOINTS = CASES * 3, HOLD_FRAMES = 180, WARM_FRAMES = 60;
   private ProductionScene() {}
   static void place(ClientPlayerEntity player, int scene) {
-    int frame = Math.max(0, ProductionState.localFrame());
+    place(player, scene, Math.max(0, ProductionState.localFrame()));
+  }
+  static void place(ClientPlayerEntity player, int scene, int frame) {
     double x = 16.5D, y = 76D;
     float yaw = 0F, pitch = -20F;
     if (scene == 11) {

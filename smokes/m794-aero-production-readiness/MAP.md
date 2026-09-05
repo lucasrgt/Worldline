@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=external-aero-production-matrix -->
 <!-- nonclaims=no-occlusion-no-end-to-end-fps-no-all-platform-promotion -->
-<!-- frozen-trace=a3786b1646c3f7402b4e0d5fbd326c1dfe3fb39c8a5eb7621f0efaa4bd4621fc -->
+<!-- frozen-trace=0a5ab4f61cdd96435d4fdca9787a0e5d60dd4dc21123a4fd6aedfe5ee40d47f5 -->
 # M794 production qualification map
 
 The public Extensions SDK discovers both immutable Aero checkouts. Eight fresh
@@ -25,9 +25,9 @@ reveals the upper layer. It does not claim forced chunk unload or world replacem
 
 Signal: sdk=discovered,sessions=8-counterbalanced,cases=12,pixels=exact,default=guarded,poses=bounded,tail=guarded,allocation=guarded
 
-Trace: v2|sdk=public|aero=currentc83afe6,baseline88adc8e|versions=B,C,C,B|orders=off-on,on-off|sessions=8|cases=cold,1,20,64,128,256,transition,custom,nested,identity,blocks,chunks|hold=180|discard=60-except-cold|terrain-prewarm=5-views-no-dirty-exact8x15-no-models|captures=3-per-arm-case|pixels=exact|gain20-64=0.90|other=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase|diagnostic=separate-inclusive-stage-cpu|surface=owned-rgba8-depth24|vanilla-occlusion=off|spikelog=off|chunk-sort=coordinate-ties|textures=seed173-32ticks|jvm=cpu-gc-jit|terrain=snapshot-after-timing
+Trace: v3|sdk=public|aero=currentc83afe6,baseline88adc8e|versions=B,C,C,B|orders=off-on,on-off|sessions=8|cases=cold,1,20,64,128,256,transition,custom,nested,identity,blocks,chunks|hold=180|discard=60-except-cold|terrain-prewarm=5-views-plus-each-arm-all-chunks-exact8x15-no-models|captures=3-per-arm-case|pixels=exact|gain20-64=0.90|other=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase|diagnostic=separate-inclusive-stage-cpu|surface=owned-rgba8-depth24|vanilla-occlusion=off|spikelog=off|chunk-sort=arm-reset|textures=arsenic-seed173-32ticks|jvm=cpu-gc-jit|terrain=snapshot-after-timing
 
-SHA-256: a3786b1646c3f7402b4e0d5fbd326c1dfe3fb39c8a5eb7621f0efaa4bd4621fc.
+SHA-256: 0a5ab4f61cdd96435d4fdca9787a0e5d60dd4dc21123a4fd6aedfe5ee40d47f5.
 
 A ninth, separate diagnostic client receives stage hooks omitted from qualification
 clients. Its inclusive CPU call durations are attribution, never gain evidence.
@@ -43,3 +43,5 @@ retains its separate advanced-OpenGL occlusion contract.
 
 Each arm resets the native previous-camera sort sentinel and initial chunk-array
 ordering. Vanilla then applies its own displacement threshold and chunk sorting.
+
+Every arm prepares its starting camera until the entire native chunk ring is clean and eight complete RGBA frames match. Model submission is canceled during this input preparation. Arsenic water and lava binders use a seeded, bounded native update clock. Vanilla distance comparison is unchanged.

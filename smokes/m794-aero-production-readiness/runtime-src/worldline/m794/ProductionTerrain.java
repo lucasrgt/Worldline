@@ -7,6 +7,8 @@ import org.lwjgl.opengl.GL11;
 /** Observed terrain readiness; model submission stays canceled throughout. */
 public final class ProductionTerrain {
   private static int view, frames, stable, dirty;
+  private static int arm = -1;
+  private static boolean armStable;
   private static byte[] previous;
   private static ByteBuffer pixels;
   private ProductionTerrain() {}
@@ -15,6 +17,17 @@ public final class ProductionTerrain {
   }
   static boolean ready() {
     return view == 5;
+  }
+  static boolean armReady(Minecraft game, int scene, int sample) {
+    if (arm != sample) {
+      arm = sample;
+      armStable = false;
+      frames = stable = 0;
+      previous = null;
+    }
+    if (!armStable)
+      ProductionScene.place(game.player, scene, 0);
+    return armStable;
   }
   static void place(Minecraft game) {
     if (view >= 5)
@@ -26,7 +39,7 @@ public final class ProductionTerrain {
     game.player.setPositionAndAngles(x, y, 16.5D, yaw, view == 3 ? 20F : -20F);
   }
   public static void sample(Minecraft game) {
-    if (!ProductionState.retaining() || ProductionState.acquiring() || ready())
+    if (!ProductionState.retaining() || ProductionState.acquiring() || ready() && !ProductionState.preparing())
       return;
     if (++frames > 20000)
       throw new IllegalStateException("M794 terrain did not settle");
@@ -46,6 +59,11 @@ public final class ProductionTerrain {
     previous = current;
     if (stable < 8)
       return;
+    if (ready()) {
+      armStable = true;
+      System.out.println("[M794 terrain arm] sample=" + arm + " frames=" + frames + " dirty=" + dirty);
+      return;
+    }
     System.out.println("[M794 terrain] view=" + view + " frames=" + frames + " dirty=" + dirty);
     view++;
     frames = stable = 0;
