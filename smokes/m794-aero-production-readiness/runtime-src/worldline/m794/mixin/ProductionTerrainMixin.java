@@ -27,6 +27,7 @@ abstract class ProductionTerrainMixin {
   }
   @Inject(method = "render", at = @At("RETURN"))
   private void worldlineTerrain(CallbackInfoReturnable<Integer> callback) {
+    worldline.m794.ProductionTerrainSnapshot.observe(sortedChunks);
     int dirty = 0;
     if (chunks != null)
       for (ChunkBuilder chunk : chunks)

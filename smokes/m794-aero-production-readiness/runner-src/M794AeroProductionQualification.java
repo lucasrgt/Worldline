@@ -8,11 +8,12 @@ import java.util.Properties;
 public final class M794AeroProductionQualification {
   private static final String ID = "m794-aero-production-readiness";
   static final String TRACE =
-      "v1|sdk=public|aero=currentc83afe6,baseline88adc8e|versions=B,C,C,B|orders=off-on,on-off|sessions=8|cases=cold,1,"
+      "v2|sdk=public|aero=currentc83afe6,baseline88adc8e|versions=B,C,C,B|orders=off-on,on-off|sessions=8|cases=cold,1,"
       + "20,64,128,256,transition,custom,nested,identity,blocks,chunks|hold=180|discard=60-except-cold|terrain-prewarm="
       + "5-views-no-dirty-exact8x15-no-models|captures=3-per-arm-case|pixels=exact|gain20-64=0.90|other=1.03|p99=1.05|"
       + "allocation=1.02|staging=16MiB|hitches=no-increase|diagnostic=separate-inclusive-stage-cpu|surface=owned-rgba8-"
-      + "depth24|vanilla-occlusion=off|spikelog=off|chunk-sort=coordinate-ties|textures=seed173-32ticks|jvm=cpu-gc-jit";
+      + "depth24|vanilla-occlusion=off|spikelog=off|chunk-sort=coordinate-ties|textures=seed173-32ticks|jvm=cpu-gc-jit|"
+        + "terrain=snapshot-after-timing";
   public void execute(String id) throws Exception {
     M794Performance.selfTest();
     M794Artifact.selfTest();
@@ -60,6 +61,7 @@ public final class M794AeroProductionQualification {
         evidence.append(pair.summary()).append('\n');
         profiles.add(M794Performance.read(game, current, order == 0));
         Files.writeString(build.resolve("evidence.txt"), evidence, StandardCharsets.UTF_8);
+        SmokeSupport.require(visual, "M794 native oracle failed; preserve terrain snapshots before continuing");
       }
     }
     for (int i = 2; i < 8; i++) {

@@ -33,6 +33,7 @@ public abstract class ProductionFrameMixin {
   @Inject(method = "onFrameUpdate(F)V", at = @At("TAIL"))
   private void worldlineCaptureFrame(float tickDelta, CallbackInfo callback) {
     ProductionProfile.sample();
+    worldline.m794.ProductionTerrainSnapshot.sample();
     ProductionProbe.sample(client);
     ProductionTerrain.sample(client);
     ProductionFramebuffer.end();
