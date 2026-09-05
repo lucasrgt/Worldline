@@ -8,9 +8,9 @@ import java.util.Properties;
 /** Exact raster and counterbalanced render/allocation frontier for emission replay. */
 public final class M792AeroBatchEmissionPareto {
     private static final String ID = "m792-aero-batch-emission-pareto";
-    static final String TRACE = "v3|candidate=exact-multi-pose-reuse|sdk=public|machines=512-mixed-four-chunks|sessions=4|"
+    static final String TRACE = "v4|candidate=exact-multi-pose-reuse|sdk=public|machines=512-mixed-four-chunks|sessions=4|"
         + "orders=off-on,on-off,on-off,off-on|scenes=stationary,moving,advancing-diverse|"
-        + "views=12|prewarm=12x120|hold=180|discard=60|pixels=exact|render-ratio=0.95|"
+        + "views=12|prewarm=12x2x120|hold=180|discard=60|pixels=exact|render-ratio=0.95|"
         + "moving-advancing-ratio=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase";
 
     public void execute(String id) throws Exception {

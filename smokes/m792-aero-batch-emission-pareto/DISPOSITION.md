@@ -53,3 +53,24 @@ inside one dense batch. Standard non-transitioning playbacks only participate;
 saturation and unknown cases retain normal rendering. Scratch is bounded to
 1 MiB, no prior-frame geometry is retained, and triangle order is unchanged.
 All acquisition scenes and numerical acceptance thresholds remain unchanged.
+
+
+The first exact-pose acquisition at `631cc9a09267` failed: one entire RGBA
+readback in each on-off client was zero, and the first client's render window
+contained long stalls. Its complete measurements remain in
+`.worldline/evidence/m792-multi-pose-631cc9a09.zip`. These are unresolved
+acquisition failures, not evidence of correctness or a promoted gain.
+
+The unchanged Aero candidate repeated at Worldline `e7ddeef7e` with GL error
+checks. All 48 pairs were exact, all six scene/stratum render ratios improved
+(0.717859..0.795192), p99 improved, and every 50ms hitch count was zero.
+However, stationary on-off allocation ratio 1.224956 failed the unchanged 1.02
+limit. The complete measurements remain in
+`.worldline/evidence/m792-multi-pose-e7ddeef7e.zip`. This run is a failed gate.
+
+The previous fixture warmed only the disabled path. The v4 fixture warms both
+arms before steady-state measurement and attributes allocations separately to
+animated and page flushes. No gain, p99, allocation or pixel threshold changed.
+The candidate implementation remains exactly the same. Runtime console logs
+now persist GL readback diagnostics. A warmed pass cannot explain the original
+zero captures or qualify cold activation, so default promotion remains barred.

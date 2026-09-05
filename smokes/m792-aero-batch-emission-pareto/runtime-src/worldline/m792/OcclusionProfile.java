@@ -12,10 +12,12 @@ import worldline.profiling.*;
 
 /** Separated render windows with allocation, cache activation and tail guardrails. */
 public final class OcclusionProfile {
-    private static final String[] NAMES = {"render", "animated", "pages", "allocation", "matches", "bytes"};
+    private static final String[] NAMES = {"render", "animated", "pages", "allocation", "matches", "bytes",
+        "animatedAllocation", "pageAllocation"};
     private static final ProfilerSchema SCHEMA = ProfilerSchema.of(Arrays.asList(
         duration("render"), duration("animated"), duration("pages"), bytes("allocation"),
-        WorldlineProfilerMetrics.extensionCounter("mod.aero.matches", "aero"), bytes("bytes")));
+        WorldlineProfilerMetrics.extensionCounter("mod.aero.matches", "aero"), bytes("bytes"),
+        bytes("animatedAllocation"), bytes("pageAllocation")));
     private static final int CAPACITY = 4 * (OcclusionScene.HOLD_FRAMES - OcclusionScene.WARM_FRAMES);
     private static final ProfilerRecorder[][] RECORDERS = new ProfilerRecorder[2][3];
     private static final long EPOCH = System.currentTimeMillis();
@@ -23,6 +25,7 @@ public final class OcclusionProfile {
     private static long started, allocated;
 
     private OcclusionProfile() {}
+    static long allocationNow() { return ALLOCATION.getThreadAllocatedBytes(Thread.currentThread().getId()); }
 
     public static void begin() {
         OcclusionStages.reset();
@@ -43,6 +46,8 @@ public final class OcclusionProfile {
         recorder.set(3, bytes);
         recorder.set(4, Aero_MultiPoseReuse.matchedThisFrame());
         recorder.set(5, Aero_MultiPoseReuse.bufferBytes());
+        recorder.set(6, OcclusionStages.bytes(0));
+        recorder.set(7, OcclusionStages.bytes(1));
         recorder.endFrame();
         started = 0L;
     }

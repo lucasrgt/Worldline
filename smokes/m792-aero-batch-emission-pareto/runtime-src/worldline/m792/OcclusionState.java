@@ -33,9 +33,12 @@ public final class OcclusionState {
         prepareDisplay(game);
         if (!prewarmed) { WorldlineM792Rehydrator.prewarm(); prewarmed = true; }
         WorldlineM792Rehydrator.verifyPopulation(game.world);
-        if (renderWarm < OcclusionScene.CHECKPOINTS * 120) {
-            OcclusionScene.place(game.player, renderWarm++ / 120);
-            WorldlineM792Rehydrator.pose(game.world, 10);
+        if (renderWarm < OcclusionScene.CHECKPOINTS * 240) {
+            int camera = renderWarm / 240;
+            candidate = (renderWarm / 120 & 1) != 0;
+            OcclusionScene.place(game.player, camera);
+            WorldlineM792Rehydrator.pose(game.world, camera >= 8 ? renderWarm % 120 : 10);
+            renderWarm++;
             return;
         }
         if (OcclusionProbe.captures() == OcclusionScene.CHECKPOINTS * 2) { finish(game); return; }

@@ -15,7 +15,9 @@ deterministically advancing coordinate-diverse poses. The world tick remains
 frozen; the fixture owns exact animation phase and replayed camera coordinates.
 No LOD, geometry reduction, pose approximation or changed-pixel allowance is used.
 
-Every camera is rendered for 120 candidate-off frames before acquisition.
+Every camera is rendered for 120 frames per arm before acquisition, including
+advancing reveal poses. This contract measures warmed rendering; it does not
+qualify cold activation. Animated and page allocation channels attribute costs.
 Four clients run off-on, on-off, on-off, off-on. Every checkpoint holds each arm
 for 180 frames, discarding 60 before measurement. The last frame of each arm
 is compared exactly, totaling 48 paired full-frame comparisons. Each client
@@ -36,6 +38,6 @@ Frozen trace and digest are generated below before execution.
 
 Signal: sdk=discovered,sessions=4-counterbalanced,scenes=stationary-moving-advancing,pixels=exact48of48,poses=shared,render=improved,tail=guarded,allocation=guarded,staging=bounded
 
-Trace: v3|candidate=exact-multi-pose-reuse|sdk=public|machines=512-mixed-four-chunks|sessions=4|orders=off-on,on-off,on-off,off-on|scenes=stationary,moving,advancing-diverse|views=12|prewarm=12x120|hold=180|discard=60|pixels=exact|render-ratio=0.95|moving-advancing-ratio=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase.
+Trace: v4|candidate=exact-multi-pose-reuse|sdk=public|machines=512-mixed-four-chunks|sessions=4|orders=off-on,on-off,on-off,off-on|scenes=stationary,moving,advancing-diverse|views=12|prewarm=12x2x120|hold=180|discard=60|pixels=exact|render-ratio=0.95|moving-advancing-ratio=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase.
 
-SHA-256: de14104789e5dc69c4e0ba0586efcb14762cb63ea79cb6a8b9aba9f3c8abf6ca.
+SHA-256: db086a101ac2a62740ef5aae5deb05598f21483318d4c5a93bee008af6725fab.

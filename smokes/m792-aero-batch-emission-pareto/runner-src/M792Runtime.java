@@ -76,6 +76,7 @@ final class M792Runtime {
             "-PworldlineFramesDir=" + game.resolve("visual-frames"));
         System.out.println("[M792] start prepare=" + prepare + " arm=" + arm);
         String output = SmokeSupport.capture(project, command, timeout("child.timeout.seconds"));
+        Files.writeString(game.resolve("runtime-console.log"), output);
         SmokeSupport.require(output.contains("[WorldlineM792] start prepare=" + prepare
             + " arm=" + arm) && output.contains("BUILD SUCCESSFUL"),
             "M792 client lifecycle drift: " + arm + "\n" + output);
