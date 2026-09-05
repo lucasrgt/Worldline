@@ -103,3 +103,28 @@ Diagnostic overlays now measure animated and Cell Page flush durations
 separately and retain exact pose/vertex reuse counters. They instrument method
 entry/return without changing draw order or product behavior. These channels
 remain diagnostic, with the same 240-frame mixed-window limitations above.
+
+The first attribution acquisition at `61a59f051949` was invalid: focus loss
+opened the pause menu inside the render boundary. Its 9,829,856 changed pixels
+and decoded captures are retained in
+`.worldline/evidence/m791-pareto-focus-contamination-61a59f051`. It is not
+performance or visual qualification evidence. A fixture-only `setScreen`
+guard and explicit menu/HUD capture rejection address the observed cause.
+
+The corrected run at Worldline `0518f917d9b5` and Aero
+`88adc8e6e219b2381766303dbaa4c26ee5c2199d` restored exact pixels in both
+comparisons. Submissions remain 244672 -> 244672 with zero useful culls,
+reproducing the existing rejection evidence digest
+`9995c3b56eac2bc26360a8d25676abd069b3d0ef9afd30259740169a3f180990`.
+
+| Order / arm | Animated flush ms | Cell Page flush ms |
+| --- | ---: | ---: |
+| off-on / off | 6.822 | 0.484 |
+| off-on / on | 6.787 | 0.451 |
+| on-off / off | 7.043 | 0.456 |
+| on-off / on | 7.291 | 0.496 |
+
+The animated boundary accounts for approximately 94 percent of these two
+flush stages. The next isolated candidate therefore targets exact animated
+vertex emission rather than further static-page or query-source work. This
+attribution does not imply that animation pose evaluation dominates emission.
