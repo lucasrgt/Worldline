@@ -90,7 +90,11 @@ public final class OcclusionState {
     }
 
     private static void finish(Minecraft game) {
-        try { OcclusionProbe.write(new File(System.getProperty("worldline.m791.metrics")), ARM, machines); }
+        try {
+            File metrics = new File(System.getProperty("worldline.m791.metrics"));
+            OcclusionProbe.write(metrics, ARM, machines);
+            OcclusionProfile.write(metrics.getParentFile(), ARM);
+        }
         catch (Exception error) { throw new IllegalStateException("M791 artifact write failed", error); }
         System.out.println("[WorldlineM791] capture-complete arm=" + ARM
             + " checkpoints=" + OcclusionProbe.captures());

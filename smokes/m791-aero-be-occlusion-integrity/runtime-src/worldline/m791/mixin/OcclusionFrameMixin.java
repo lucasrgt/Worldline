@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import worldline.m791.OcclusionProbe;
+import worldline.m791.OcclusionProfile;
 import worldline.m791.OcclusionState;
 
 @Mixin(value = GameRenderer.class, priority = 1200)
@@ -23,10 +24,12 @@ public abstract class OcclusionFrameMixin {
     @Inject(method = "onFrameUpdate(F)V", at = @At("HEAD"))
     private void worldlineDriveFrame(float tickDelta, CallbackInfo callback) {
         OcclusionState.frame(client);
+        OcclusionProfile.begin();
     }
 
     @Inject(method = "onFrameUpdate(F)V", at = @At("TAIL"))
     private void worldlineCaptureFrame(float tickDelta, CallbackInfo callback) {
+        OcclusionProfile.sample();
         OcclusionProbe.sample(client);
     }
 }

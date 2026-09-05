@@ -32,6 +32,14 @@ gradle.projectsEvaluated {
     def smoke = new File(root, 'smokes/m791-aero-be-occlusion-integrity')
     def prop = { name -> project.findProperty(name).toString() }
     project.sourceSets.main.java.srcDir(new File(smoke, 'runtime-src'))
+    def profilerRoot = new File(root, 'modules/profiling/src/main/java/worldline/profiling')
+    def profilerTypes = ['FrameCensus', 'FrameCensusCodec', 'ProfilerArtifacts', 'ProfilerMetric',
+        'ProfilerRecorder', 'ProfilerRun', 'ProfilerRunCodec', 'ProfilerSchema',
+        'ProfilerSummary', 'WorldlineProfilerMetrics']
+    def profilerSources = profilerTypes.collect { new File(profilerRoot, it + '.java') }
+    if (!profilerSources.every { it.isFile() })
+        throw new GradleException('Worldline M791 profiler closure is incomplete')
+    project.tasks.named('compileJava').configure { source(profilerSources) }
     project.dependencies.add('compileOnly', project.files(
         new File(project.findProperty('worldlineAeroClasses').toString())))
     project.tasks.named('processResources').configure {

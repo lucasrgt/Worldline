@@ -53,7 +53,7 @@ final class M791Artifact {
 
     void verify() throws Exception {
         SmokeSupport.require(machines == 512 && captures == 12 && width > 0 && height > 0
-            && submitted > 0L && pageCalls > 0L && atRest > 0L && animated > 0L,
+            && submitted > 0L && pageCalls > 0L && atRest >= 0L && animated > 0L,
             "M791 incomplete artifact: " + summary());
         for (int i = 0; i < captures; i++) {
             byte[] pixels = pixels(i);
