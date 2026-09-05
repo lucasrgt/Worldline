@@ -630,6 +630,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m789-aero-cell-page-queue-reuse` | CARRIED | Aero bounded Cell Page queue reuse |
 | `m790-aero-default-rollback` | EXECUTED | Aero shipped Cell Page default and rollback |
 | `m792-aero-batch-emission-pareto` | CARRIED | Aero exact multi-pose Pareto qualification |
+| `m794-aero-production-readiness` | PENDING | Aero production readiness matrix |
 | `b173-bed-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 bed subsystem conformance |
 | `b173-bedrock-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 bedrock subsystem conformance |
 | `b173-built-environment-materials-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 built-environment material subsystem conformance |
