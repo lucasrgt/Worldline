@@ -80,10 +80,19 @@ public final class OcclusionProbe {
             width = game.displayWidth;
             height = game.displayHeight;
             ByteBuffer pixels = BufferUtils.createByteBuffer(width * height * 4);
+            int before = GL11.glGetError();
             GL11.glReadPixels(0, 0, width, height, GL11.GL_RGBA,
                 GL11.GL_UNSIGNED_BYTE, pixels);
+            int after = GL11.glGetError();
             byte[] bytes = new byte[pixels.remaining()];
             pixels.get(bytes);
+            System.out.println("[M792 capture] arm=" + arm + " checkpoint=" + checkpoint
+                + " gl.before=" + before + " gl.after=" + after
+                + " read.buffer=" + GL11.glGetInteger(GL11.GL_READ_BUFFER)
+                + " visible=" + org.lwjgl.opengl.Display.isVisible()
+                + " first.rgba=" + (bytes[0] & 255) + "," + (bytes[1] & 255)
+                + "," + (bytes[2] & 255) + "," + (bytes[3] & 255));
+            if (before != 0 || after != 0) throw new IllegalStateException("M792 OpenGL capture error");
             String name = arm == 0 ? "replay-off" : "replay-on";
             File directory = new File(System.getProperty("worldline.m792.framesDir"), name);
             if (!directory.isDirectory() && !directory.mkdirs()) {
