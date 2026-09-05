@@ -1,0 +1,15 @@
+schema = 1
+id = "NYA-01M1SMHH0C4KCEDHC3XDCS9E2V"
+title = "Minimized Display back buffers are not framebuffer oracles"
+lesson = "LWJGL reported Display.isVisible=false with GL_NO_ERROR while glReadPixels returned entirely zero RGBA. Keep the failed raw acquisition. Qualification uses a private RGBA8 depth24 framebuffer for both version arms, preserves exact thresholds, and rejects zero alpha or constant frames. This changes the measured surface explicitly and is not evidence of an Aero visual regression."
+scope = ["smokes/m793-aero-production-qualification/**"]
+tags = []
+created_at = "2026-09-05T20:35:43Z"
+
+[[occurrences]]
+occurred_at = "2026-09-05T20:35:43Z"
+source = "local runtime 21f17e30b; baseline-only capture arm1 checkpoint1 visible=false first.rgba=0,0,0,0"
+reported_by = "agent:codex"
+corrected_by = "agent:codex"
+recorded_by = "agent:codex"
+commit = "21f17e30b"
