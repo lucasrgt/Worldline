@@ -26,7 +26,7 @@ public final class HexDigest {
         return HexFormat.of().formatHex(digest);
     }
 
-    static String sha256Hex(byte[] payload) throws Exception {
+    public static String sha256Hex(byte[] payload) throws Exception {
         if (payload == null) throw new IllegalArgumentException("null digest payload");
         return hex(sha256().digest(payload));
     }
