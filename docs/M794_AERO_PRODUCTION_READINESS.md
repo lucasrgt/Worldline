@@ -12,4 +12,4 @@ Native chunk snapshots are collected after timing at the three traversal capture
 
 Expected signal: `sdk=discovered,sessions=8-counterbalanced,cases=12,pixels=exact,default=guarded,poses=bounded,tail=guarded,allocation=guarded`.
 
-Frozen semantic SHA-256: `0a5ab4f61cdd96435d4fdca9787a0e5d60dd4dc21123a4fd6aedfe5ee40d47f5`.
+Frozen semantic SHA-256: `f24bc79f5ba7a0398cc38a2643082e9b0eff157af2954cd87523cc49724506fd`.

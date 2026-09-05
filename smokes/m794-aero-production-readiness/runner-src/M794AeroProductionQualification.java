@@ -8,7 +8,7 @@ import java.util.Properties;
 public final class M794AeroProductionQualification {
   private static final String ID = "m794-aero-production-readiness";
   static final String TRACE =
-      "v3|sdk=public|aero=currentc83afe6,baseline88adc8e|versions=B,C,C,B|orders=off-on,on-off|sessions=8|cases=cold,1,"
+      "v3|sdk=public|aero=currenta3079d7,baseline88adc8e|versions=B,C,C,B|orders=off-on,on-off|sessions=8|cases=cold,1,"
       + "20,64,128,256,transition,custom,nested,identity,blocks,chunks|hold=180|discard=60-except-cold|terrain-prewarm="
       + "5-views-plus-each-arm-all-chunks-exact8x15-no-models|captures=3-per-arm-case|pixels=exact|gain20-64=0.90|"
       + "other=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase|diagnostic=separate-inclusive-stage-cpu|"
