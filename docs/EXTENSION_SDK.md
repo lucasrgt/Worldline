@@ -24,10 +24,8 @@ provides=example-content.v1
 
 `WorldlineExtensionDiscovery` scans the directories in stable order, validates
 the schema, negotiates every required capability, and only then constructs the
-entrypoint. The two templates and an optional root `README.md` are ignored;
-every other non-directory entry fails closed. Unknown keys, duplicate IDs,
-missing capabilities, mismatched directory names, and invalid entrypoints fail
-closed.
+entrypoint. Unknown keys, duplicate IDs, missing capabilities, mismatched
+directory names, and invalid entrypoints fail closed.
 
 ## Entrypoint and registrations
 

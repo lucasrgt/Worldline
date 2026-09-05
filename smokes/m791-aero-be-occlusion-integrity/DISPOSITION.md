@@ -89,3 +89,17 @@ Remaining integration blockers: the full Worldline gate detects
 Extensions SDK change; the isolated branch also requires reconciliation with
 main `0ddee0e5a8c9dfe214243cdc556cb18122c1e59a`. No qualification pins were
 rewritten, no thresholds were relaxed, and no main merge or push was performed.
+
+## Pareto attribution follow-up
+
+The SDK README exception was removed from this isolated optimization branch.
+Aero's authoring documentation now lives in `docs/WORLDLINE_EXTENSIONS.md`,
+outside discovery. The previously qualified SDK implementation and tests are
+restored byte-for-byte; no legacy qualification fingerprints were rewritten.
+The general runtime gate now clears M638 and stops at the unqualified M791
+schema entry, which remains a separate integration blocker.
+
+Diagnostic overlays now measure animated and Cell Page flush durations
+separately and retain exact pose/vertex reuse counters. They instrument method
+entry/return without changing draw order or product behavior. These channels
+remain diagnostic, with the same 240-frame mixed-window limitations above.

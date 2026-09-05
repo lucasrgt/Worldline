@@ -18,8 +18,6 @@ public final class WorldlineExtensionTest {
                 + "id=example.probe\nversion=1.2.3\nentrypoint=" + ProbeExtension.class.getName()
                 + "\nworldline.api=1\nrequires=testkit.v1,atlas.v1\n"
                 + "provides=custom-contract.v1\n").getBytes(StandardCharsets.UTF_8));
-        Files.write(manifest.getParent().getParent().resolve("README.md"),
-                "# Extensions\n".getBytes(StandardCharsets.UTF_8));
         ExtensionCapabilities host = ExtensionCapabilities.of(
                 ExtensionCapabilities.TESTKIT_V1, ExtensionCapabilities.ATLAS_V1);
         List<WorldlineExtensionPlan> plans = WorldlineExtensionDiscovery.discover(root,
@@ -41,12 +39,6 @@ public final class WorldlineExtensionTest {
                 ExtensionCapabilities.of(ExtensionCapabilities.TESTKIT_V1)); }
         catch (IllegalArgumentException expected) { rejected = true; }
         require(rejected, "missing capability was accepted");
-        Files.write(manifest.getParent().getParent().resolve("NOTES.txt"),
-                "unexpected\n".getBytes(StandardCharsets.UTF_8));
-        rejected = false;
-        try { WorldlineExtensionDiscovery.discover(root, WorldlineExtensionTest.class.getClassLoader(), host); }
-        catch (IllegalArgumentException expected) { rejected = true; }
-        require(rejected, "unknown extension-root file was accepted");
         System.out.println("WorldlineExtensionTest passed");
     }
 
