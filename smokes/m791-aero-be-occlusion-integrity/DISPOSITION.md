@@ -34,3 +34,58 @@ the oracle's cross-client ordering and warmup determinism. Reuse of this
 fixture must preserve terrain depth, mixed static/animated machines, reveal
 cameras, opposite order strata and full-frame comparisons. New measurements
 must retain failed evidence as well as successful evidence.
+
+## Exact-oracle follow-up
+
+Executed Worldline: `b429a6f105c9ac49bfaa12a9ad938e26626e4ddc`.
+Executed Aero: `17a1af3a7946b5b9887035eb704e4d58bf9384ff`.
+Both phase comparisons are now exact: zero changed RGBA pixels and zero delta.
+The gate remains red because activation and work-reduction acceptance still fail.
+
+| Session | Off submissions | On submissions | Useful culls |
+| --- | ---: | ---: | ---: |
+| off-on | 121792 | 122880 | 0 |
+| on-off | 122880 | 121792 | 0 |
+| Total | 244672 | 244672 | 0 |
+
+Unlike the original accounting, these totals include Cell Page model calls.
+The opposite per-session changes follow acquisition phase and are not a gain.
+Neither activation nor reduced work was established in both order strata.
+`maximum.changed.pixels=0` and `maximum.work.ratio=0.80` remain unchanged.
+
+The observed cause of the remaining cross-client raster noise was Beta's
+HashSet-derived global BE list order. Sorting that list by Y/Z/X only in the
+fixture makes both comparisons exact while preserving membership, native
+dispatch and terrain depth. The earlier 86-pixel failure and full captures are
+archived in `.worldline/evidence/m791-unsorted/` as the negative reproduction.
+Demo population suppression and 256/256 population assertions prevent unrelated
+test-mod content from contaminating either arm.
+
+Current full evidence: `.worldline/build/smoke/m791-aero-be-occlusion-integrity/evidence.txt`,
+SHA-256 `9995c3b56eac2bc26360a8d25676abd069b3d0ef9afd30259740169a3f180990`.
+Runtime log SHA-256: `9142a36a75ef600e28ee6fed06436c2a62ee79847155e45f2ccac8119d65d320`.
+
+## General optimization measurements
+
+Each client writes one checksum-verified Worldline Profiler `.wlpr` per arm,
+with 240 mixed render-update samples. Stage means in milliseconds:
+
+| Order / arm | Render update | Combined Aero flush | BE enqueue |
+| --- | ---: | ---: | ---: |
+| off-on / off | 10.601 | 7.406 | 0.309 |
+| off-on / on | 9.629 | 7.168 | 0.280 |
+| on-off / off | 10.081 | 7.360 | 0.329 |
+| on-off / on | 11.550 | 7.774 | 0.400 |
+
+The concrete hot boundary is `WorldRendererBatchFlushMixin`'s combined
+`Aero_AnimatedBatcher.flush()` / `Aero_BECellRenderer.flush()` drain. The current
+observer cannot attribute the two separately. Do not choose or promote a product
+optimization from the aggregate alone. Render-update maxima are 18.86-108.21 ms;
+these short mixed windows include startup/camera work, exclude display and
+framebuffer reads, and prove neither hitch freedom nor a throughput improvement.
+
+Remaining integration blockers: the full Worldline gate detects
+`composite refactor pin drift: m638-creeper-tnt-differential` after the shared
+Extensions SDK change; the isolated branch also requires reconciliation with
+main `0ddee0e5a8c9dfe214243cdc556cb18122c1e59a`. No qualification pins were
+rewritten, no thresholds were relaxed, and no main merge or push was performed.
