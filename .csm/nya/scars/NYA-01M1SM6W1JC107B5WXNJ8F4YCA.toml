@@ -1,0 +1,15 @@
+schema = 1
+id = "NYA-01M1SM6W1JC107B5WXNJ8F4YCA"
+title = "Cold Aero qualification must await observed terrain completion"
+lesson = "Fixed render warmup left distant terrain incomplete even in the immutable baseline. Preserve the failed acquisition; keep model submissions canceled while visible dirty chunks drain and full terrain frame samples stabilize. Attribute model cold cost only after this boundary. Package-private harness helpers also cannot be invoked from the external runner class loader."
+scope = ["smokes/m793-aero-production-qualification/**"]
+tags = []
+created_at = "2026-09-05T20:29:54Z"
+
+[[occurrences]]
+occurred_at = "2026-09-05T20:29:54Z"
+source = "local runtime 01f1a9050, baseline controls changed 30157 and 30154 pixels only in distant terrain"
+reported_by = "agent:codex"
+corrected_by = "agent:codex"
+recorded_by = "agent:codex"
+commit = "01f1a9050"
