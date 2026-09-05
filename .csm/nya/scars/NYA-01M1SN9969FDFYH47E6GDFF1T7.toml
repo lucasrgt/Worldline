@@ -1,0 +1,15 @@
+schema = 1
+id = "NYA-01M1SN9969FDFYH47E6GDFF1T7"
+title = "Counterbalanced camera arms must reset native chunk-sort history"
+lesson = "Beta only repositions and sorts render chunks after camera displacement exceeds its native threshold. Identical paths entered from different predecessor heights therefore render different distant terrain at the first chunk crossing. Reset the native previous-camera sentinel and initial chunk ordering once per arm, then let vanilla execute the same path. Never mask terrain pixels or relax exact RGBA comparison."
+scope = ["smokes/m793-aero-production-qualification/**"]
+tags = []
+created_at = "2026-09-05T20:48:42Z"
+
+[[occurrences]]
+occurred_at = "2026-09-05T20:48:42Z"
+source = "d3bfed526 baseline checkpoint33 changed679 pixels at distant water; WorldRenderer bytecode confirms displacement-gated sortChunks and Arrays.sort"
+reported_by = "agent:codex"
+corrected_by = "agent:codex"
+recorded_by = "agent:codex"
+commit = "d3bfed526"
