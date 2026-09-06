@@ -12,4 +12,4 @@ The existing native-loader preparation verifies the official Beta 1.7.3 client, 
 
 Expected signal: `sdk=discovered,loaders=modloader-forge,sessions=4,java=8,builds=native,rgba=exact28,caches=active,dispose=verified,animation=advanced,nbt=restored`.
 
-Frozen semantic SHA-256: `c4a412c20823cf38308843f97f8519e391df2264a2a625c3bbeda2837b5c52c8`.
+Frozen semantic SHA-256: `cdea26f78ab35058a57ea859488de41794fe038b8d63bda5f3fbd418fa15794a`.
