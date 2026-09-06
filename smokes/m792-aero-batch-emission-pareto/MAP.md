@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=external-aero-exact-multi-pose -->
 <!-- nonclaims=no-occlusion-no-end-to-end-fps-no-all-platform-promotion -->
-<!-- frozen-trace=4014d5202a8eaed56f6c09ab71e476b866bc840d5fec282f5a433a1cb08fbce5 -->
+<!-- frozen-trace=fb56c1bd4d812ed5d515bc12e811f76fa1fbfb1eb48a4eb35e32d0f4ee7b7efd -->
 
 # M792 exact multi-pose reuse map
 
@@ -46,9 +46,9 @@ Frozen trace and digest are generated below before execution.
 
 Signal: sdk=discovered,sessions=4-counterbalanced,scenes=stationary-moving-advancing,pixels=exact64of64,poses=shared,render=improved,tail=guarded,allocation=guarded,staging=bounded
 
-Trace: v8|candidate=exact-multi-pose-reuse|sdk=public|machines=512-mixed-four-chunks|sessions=4|orders=off-on,on-off,on-off,off-on|scenes=stationary,moving,advancing-diverse|views=16|prewarm=16x2x120|hold=180|discard=60|pixels=exact|render-ratio=0.95|moving-advancing-ratio=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase|surface=owned-rgba8-depth24|spikelog=off|counter-reset=independent|single-pose=legacy-ratio1.03-p99-1.05|attribution=thread-cpu-gc-jit-no-frame-exclusion|host=windows-high-four-logical|window=post-capture-preview.
+Trace: v9|candidate=exact-multi-pose-reuse|sdk=public|machines=512-mixed-four-chunks|sessions=4|orders=off-on,on-off,on-off,off-on|scenes=stationary,moving,advancing-diverse|views=16|prewarm=16x2x120|hold=180|discard=60|pixels=exact|render-ratio=0.95|moving-advancing-ratio=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase|surface=owned-rgba8-depth24|spikelog=off|counter-reset=independent|single-pose=legacy-ratio1.03-p99-1.05|attribution=thread-cpu-gc-jit-no-frame-exclusion|host=windows-high-four-physical-vm4|window=post-capture-preview|aero=41dc5a8.
 
-SHA-256: 4014d5202a8eaed56f6c09ab71e476b866bc840d5fec282f5a433a1cb08fbce5.
+SHA-256: fb56c1bd4d812ed5d515bc12e811f76fa1fbfb1eb48a4eb35e32d0f4ee7b7efd.
 
 The reconciled runner owns an RGBA8/depth24 framebuffer with the native depth
 precision. Spike logging is off and frame counter reset is independent.
@@ -65,3 +65,7 @@ The controlled Windows host profile applies before world loading and is verified
 from each client log. The shared implementation is explicitly fingerprinted.
 No frame exclusion or acceptance threshold changes with this host profile.
 After timing and exact readback, each client presents its owned framebuffer in the native window and reports view progress in the title. 
+
+The controlled host selects one logical processor on each of four distinct physical
+cores and fixes JVM ActiveProcessorCount at four. The observed log must confirm
+logical=4, physical=4, vm=4 and High priority before world loading.
