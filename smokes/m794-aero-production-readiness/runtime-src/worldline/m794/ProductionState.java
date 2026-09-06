@@ -25,6 +25,7 @@ public final class ProductionState {
       return;
     prepareDisplay(game);
     if (stage == 0 && game.world == null) {
+      worldline.benchmark.BenchmarkHost.prepare();
       stage = 1;
       game.interactionManager = new SingleplayerInteractionManager(game);
       System.out.println("[WorldlineM794] start prepare=" + PREPARE + " arm=" + ARM);

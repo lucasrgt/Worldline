@@ -80,6 +80,7 @@ final class M794Runtime {
     String output = SmokeSupport.capture(project, command, timeout("child.timeout.seconds"));
     Files.writeString(game.resolve("runtime-console.log"), output);
     SmokeSupport.require(output.contains("[WorldlineM794] start prepare=" + prepare + " arm=" + arm)
+            && output.contains(SmokeSupport.value(config, "host.signal"))
             && output.contains("BUILD SUCCESSFUL"),
         "M794 client lifecycle drift: " + arm + "\n" + output);
     String expected = prepare ? "template-ready machines=512" : "capture-complete arm=" + arm + " checkpoints=36";

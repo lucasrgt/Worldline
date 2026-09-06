@@ -39,7 +39,11 @@ gradle.projectsEvaluated {
     def profilerSources = profilerTypes.collect { new File(profilerRoot, it + '.java') }
     if (!profilerSources.every { it.isFile() })
         throw new GradleException('Worldline M794 profiler closure is incomplete')
-    project.tasks.named('compileJava').configure { source(profilerSources) }
+    project.tasks.named('compileJava').configure {
+        source(profilerSources)
+        source(new File(root,
+            'smokes/shared/aero-benchmark-host/runtime-src/worldline/benchmark/BenchmarkHost.java'))
+    }
     project.dependencies.add('compileOnly', project.files(
         new File(project.findProperty('worldlineAeroClasses').toString())))
     project.tasks.named('processResources').configure {

@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=external-aero-production-matrix -->
 <!-- nonclaims=no-occlusion-no-end-to-end-fps-no-all-platform-promotion -->
-<!-- frozen-trace=20006c2d7b419d881a892d885300f9cc6ffe288f802d5c0559d37254de582d42 -->
+<!-- frozen-trace=e63ba6c49e004938815c7584f6ce693c68172931e127054dd5b76d097be9f0b7 -->
 # M794 production qualification map
 
 The public Extensions SDK discovers both immutable Aero checkouts. Twelve fresh
@@ -26,9 +26,9 @@ reveals the upper layer. It does not claim forced chunk unload or world replacem
 
 Signal: sdk=discovered,sessions=12-counterbalanced,cases=12,pixels=exact,default=guarded,poses=bounded,tail=guarded,allocation=guarded
 
-Trace: v6|sdk=public|aero=current9abdcc5,baseline88adc8e|triplets=Boff-Coff-Con,Con-Coff-Boff,Con-Coff-Boff,Boff-Coff-Con|sessions=12|cases=cold,1,20,64,128,256,transition,custom,nested,identity,blocks,chunks|hold=180|discard=60-except-cold|terrain-prewarm=5-views-plus-each-case-all-chunks-exact8x15-no-models|model-warm=300-fixed-view-except-cold|captures=3-per-case|pixels=exact|saturation128-256=fallback|gain20-64=0.90|other=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase|diagnostic=separate-inclusive-stage-cpu|surface=owned-rgba8-depth24|vanilla-occlusion=off|spikelog=off|chunk-sort=arm-reset|textures=arsenic-seed173-32ticks|jvm=fixed-production-mode-cpu-gc-jit|terrain=snapshot-after-timing|window=post-capture-preview.
+Trace: v7|sdk=public|aero=current9abdcc5,baseline88adc8e|triplets=Boff-Coff-Con,Con-Coff-Boff,Con-Coff-Boff,Boff-Coff-Con|sessions=12|cases=cold,1,20,64,128,256,transition,custom,nested,identity,blocks,chunks|hold=180|discard=60-except-cold|terrain-prewarm=5-views-plus-each-case-all-chunks-exact8x15-no-models|model-warm=300-fixed-view-except-cold|captures=3-per-case|pixels=exact|saturation128-256=fallback|gain20-64=0.90|other=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase|diagnostic=separate-inclusive-stage-cpu|surface=owned-rgba8-depth24|vanilla-occlusion=off|spikelog=off|chunk-sort=arm-reset|textures=arsenic-seed173-32ticks|jvm=fixed-production-mode-cpu-gc-jit|terrain=snapshot-after-timing|window=post-capture-preview|host=windows-high-four-logical|fixture=direct-renderer-primitive-light.
 
-SHA-256: 20006c2d7b419d881a892d885300f9cc6ffe288f802d5c0559d37254de582d42.
+SHA-256: e63ba6c49e004938815c7584f6ce693c68172931e127054dd5b76d097be9f0b7.
 
 A thirteenth, separate diagnostic client receives stage hooks omitted from qualification
 clients. Its inclusive CPU call durations are attribution, never gain evidence.
@@ -54,3 +54,8 @@ multiple poses through a separate named-group emission loop. Both 128- and
 The native window previews the owned framebuffer only after timing and exact capture.
 Case progress appears in the window title. This prevents stale loading-screen
 back buffers from looking like an endless load. No capture or metric is substituted.
+
+The controlled Windows host profile applies before world loading and is verified
+from each client log. The shared implementation is explicitly fingerprinted.
+No frame exclusion or acceptance threshold changes with this host profile.
+The fixture registers a direct consumer renderer once through the StationAPI renderer event and adjusts brightness through a primitive return value; no cancellable callback is allocated for each model or brightness sample. 
