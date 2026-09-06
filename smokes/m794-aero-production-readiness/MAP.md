@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=external-aero-production-matrix -->
 <!-- nonclaims=no-occlusion-no-end-to-end-fps-no-all-platform-promotion -->
-<!-- frozen-trace=e63ba6c49e004938815c7584f6ce693c68172931e127054dd5b76d097be9f0b7 -->
+<!-- frozen-trace=64fdd00bccbce02a63394867ec6a96075def91f8459b8ccd36fbc78364fbd34a -->
 # M794 production qualification map
 
 The public Extensions SDK discovers both immutable Aero checkouts. Twelve fresh
@@ -59,3 +59,10 @@ The controlled Windows host profile applies before world loading and is verified
 from each client log. The shared implementation is explicitly fingerprinted.
 No frame exclusion or acceptance threshold changes with this host profile.
 The fixture registers a direct consumer renderer once through the StationAPI renderer event and adjusts brightness through a primitive return value; no cancellable callback is allocated for each model or brightness sample. 
+
+Two allocation diagnostic clients precede the qualification matrix and record JFR
+allocation events with stacks. They compare historical and current default-off
+renderers across the same twelve scenes, using copied worlds and exact captures.
+The recordings must contain allocation stacks. These instrumented profiles never
+enter M794Performance; the twelve qualification clients have no Flight Recorder
+flags. The shared template contains no measured model work.

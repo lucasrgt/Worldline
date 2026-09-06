@@ -87,4 +87,10 @@ gradle.projectsEvaluated {
         '-Daero.framePacing=false', '-Daero.benchmark.skipNonForcedSaves=true',
         '-Xms2G', '-Xmx4G'
     ] as List)
+    if (prop('worldlineArm') == 'allocation-off') {
+        def settings = new File(smoke, 'allocation.jfc').absolutePath
+        def recording = new File(game, 'allocations.jfr').absolutePath
+        task.jvmArgs('-XX:StartFlightRecording=name=M794Allocation,settings=' + settings +
+            ',filename=' + recording + ',dumponexit=true')
+    }
 }

@@ -7,7 +7,7 @@ import java.util.Properties;
 /** Production matrix and default regression against an immutable previous renderer. */
 public final class M794AeroProductionQualification {
   private static final String ID = "m794-aero-production-readiness";
-  static final String TRACE = "v7|sdk=public|aero=current9abdcc5,baseline88adc8e|triplets=Boff-Coff-Con,Con-Coff-Boff,"
+  static final String TRACE = "v8|sdk=public|aero=current9abdcc5,baseline88adc8e|triplets=Boff-Coff-Con,Con-Coff-Boff,"
       + "Con-Coff-Boff,Boff-Coff-Con|sessions=12|cases=cold,1,"
       + "20,64,128,256,transition,custom,nested,identity,blocks,chunks|hold=180|discard=60-except-cold|terrain-prewarm="
       + "5-views-plus-each-case-all-chunks-exact8x15-no-models|model-warm=300-fixed-view-except-cold|captures=3-per-"
@@ -15,7 +15,8 @@ public final class M794AeroProductionQualification {
       + "other=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase|diagnostic=separate-inclusive-stage-cpu|"
       + "surface=owned-rgba8-depth24|vanilla-occlusion=off|spikelog=off|chunk-sort=arm-reset|textures=arsenic-seed173-"
       + "32ticks|jvm=fixed-production-mode-cpu-gc-jit|terrain=snapshot-after-timing|window=post-capture-preview"
-      + "|host=windows-high-four-logical|fixture=direct-renderer-primitive-light";
+      + "|host=windows-high-four-logical|fixture=direct-renderer-primitive-light"
+      + "|allocation-diagnostic=preflight-baseline-off-current-off-jfr-separate";
   public void execute(String id) throws Exception {
     M794Performance.selfTest();
     M794Artifact.selfTest();
@@ -31,6 +32,7 @@ public final class M794AeroProductionQualification {
     SmokeSupport.require(
         M794Runtime.sha256(TRACE).equals(config.getProperty("expected.signature")), "M794 signature drift");
     SmokeSupport.recreate(root, build);
+    M794AllocationDiagnostic.run(root, smoke, build, config);
     List<M794Performance> profiles = new ArrayList<M794Performance>();
     List<M794Artifact> defaults = new ArrayList<M794Artifact>();
     StringBuilder evidence = new StringBuilder("id=" + ID + "\n");
@@ -50,8 +52,6 @@ public final class M794AeroProductionQualification {
         runtime.verifyExtension();
         runtime.buildAero();
         Path template = build.resolve("template");
-        if (group == 0 && position == 0)
-          runtime.runClient(template, true, "prepare");
         String arm = candidate ? "replay-on" : "replay-off";
         Path game = build.resolve("group" + group + "-" + (current ? "current-" : "baseline-") + arm);
         M794Runtime.copyWorld(template.resolve("saves/WorldlineAero"), game.resolve("saves/WorldlineAero"));
