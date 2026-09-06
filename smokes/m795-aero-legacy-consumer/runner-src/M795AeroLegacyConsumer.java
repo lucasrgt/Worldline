@@ -7,7 +7,7 @@ import java.util.Properties;
 /** Native source-consumer qualification for the unchanged legacy renderer platform. */
 public final class M795AeroLegacyConsumer {
   private static final String ID = "m795-aero-legacy-consumer";
-  static final String TRACE = "v1|aero=9abdcc5|sdk=public|native=modloader+forge1.0.6|sessions=2-per-loader|java=8"
+  static final String TRACE = "v2|aero=41dc5a8|sdk=public|native=modloader+forge1.0.6|sessions=2-per-loader|java=8"
       + "|source=complete-core-and-adapter|surface=rgba8-depth24-128x128|draw=direct-list-cached-rebuilt"
       + "|animation=zero-advanced-nbt-restored|pixels=exact-cross-session-cross-loader|dispose=gl-lists-released"
       + "|profiler=disabled|performance=unclaimed";
