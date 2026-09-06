@@ -1,13 +1,15 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=external-aero-exact-multi-pose -->
 <!-- nonclaims=no-occlusion-no-end-to-end-fps-no-all-platform-promotion -->
-<!-- frozen-trace=e5a46a39076ea2b32a4d71259ce41ae52ea3f37640f5b3abb341b2ddde015a57 -->
+<!-- frozen-trace=4014d5202a8eaed56f6c09ab71e476b866bc840d5fec282f5a433a1cb08fbce5 -->
 
 # M792 exact multi-pose reuse map
 
 Requalification pins Aero `9abdcc51272f5e844ace6619116aab0b5d5af8b0` after
 isolating multi-pose draw dispatch and restoring the original fallback emitter.
-The existing trace, acquisition protocol and every threshold remain unchanged.
+The model/camera acquisition protocol and every numerical threshold remain
+unchanged; the current trace also binds visible presentation and verified
+process scheduling.
 The earlier receipt does not qualify this changed external implementation.
 
 The reused M791 fixture preserves four chunks, two machine layers, 256 static
@@ -44,9 +46,9 @@ Frozen trace and digest are generated below before execution.
 
 Signal: sdk=discovered,sessions=4-counterbalanced,scenes=stationary-moving-advancing,pixels=exact64of64,poses=shared,render=improved,tail=guarded,allocation=guarded,staging=bounded
 
-Trace: v7|candidate=exact-multi-pose-reuse|sdk=public|machines=512-mixed-four-chunks|sessions=4|orders=off-on,on-off,on-off,off-on|scenes=stationary,moving,advancing-diverse|views=16|prewarm=16x2x120|hold=180|discard=60|pixels=exact|render-ratio=0.95|moving-advancing-ratio=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase|surface=owned-rgba8-depth24|spikelog=off|counter-reset=independent|single-pose=legacy-ratio1.03-p99-1.05|attribution=thread-cpu-gc-jit-no-frame-exclusion.
+Trace: v8|candidate=exact-multi-pose-reuse|sdk=public|machines=512-mixed-four-chunks|sessions=4|orders=off-on,on-off,on-off,off-on|scenes=stationary,moving,advancing-diverse|views=16|prewarm=16x2x120|hold=180|discard=60|pixels=exact|render-ratio=0.95|moving-advancing-ratio=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase|surface=owned-rgba8-depth24|spikelog=off|counter-reset=independent|single-pose=legacy-ratio1.03-p99-1.05|attribution=thread-cpu-gc-jit-no-frame-exclusion|host=windows-high-four-logical|window=post-capture-preview.
 
-SHA-256: e5a46a39076ea2b32a4d71259ce41ae52ea3f37640f5b3abb341b2ddde015a57.
+SHA-256: 4014d5202a8eaed56f6c09ab71e476b866bc840d5fec282f5a433a1cb08fbce5.
 
 The reconciled runner owns an RGBA8/depth24 framebuffer with the native depth
 precision. Spike logging is off and frame counter reset is independent.
@@ -58,3 +60,8 @@ original static representative emitter and report zero multi-pose matches.
 This scene separately requires mean ratio <= 1.03, p99 <= 1.05, allocation
 <= 1.02 and non-increasing hitches; it is excluded from the original three-scene
 five-percent aggregate gain requirement. No historical threshold is relaxed.
+
+The controlled Windows host profile applies before world loading and is verified
+from each client log. The shared implementation is explicitly fingerprinted.
+No frame exclusion or acceptance threshold changes with this host profile.
+After timing and exact readback, each client presents its owned framebuffer in the native window and reports view progress in the title. 

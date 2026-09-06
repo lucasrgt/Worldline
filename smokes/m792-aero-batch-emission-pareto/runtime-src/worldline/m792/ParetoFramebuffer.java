@@ -1,6 +1,7 @@
 package worldline.m792;
 
 import net.minecraft.client.Minecraft;
+import org.lwjgl.opengl.EXTFramebufferBlit;
 import org.lwjgl.opengl.EXTFramebufferObject;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
@@ -33,7 +34,29 @@ public final class ParetoFramebuffer {
     EXTFramebufferObject.glBindFramebufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, prior);
     GL11.glDrawBuffer(draw);
     GL11.glReadBuffer(read);
+    present();
     bound = false;
+  }
+
+  private static void present() {
+    if (prior != 0)
+      return;
+    GL11.glPushAttrib(GL11.GL_SCISSOR_BIT | GL11.GL_COLOR_BUFFER_BIT);
+    GL11.glDisable(GL11.GL_SCISSOR_TEST);
+    if (GLContext.getCapabilities().GL_EXT_framebuffer_blit) {
+      EXTFramebufferObject.glBindFramebufferEXT(EXTFramebufferBlit.GL_READ_FRAMEBUFFER_EXT, framebuffer);
+      GL11.glReadBuffer(EXTFramebufferObject.GL_COLOR_ATTACHMENT0_EXT);
+      EXTFramebufferBlit.glBlitFramebufferEXT(
+          0, 0, width, height, 0, 0, width, height, GL11.GL_COLOR_BUFFER_BIT, GL11.GL_NEAREST);
+      EXTFramebufferObject.glBindFramebufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, prior);
+    } else {
+      GL11.glColorMask(true, true, true, true);
+      GL11.glClearColor(0.08F, 0.08F, 0.1F, 1F);
+      GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+    }
+    GL11.glPopAttrib();
+    GL11.glDrawBuffer(draw);
+    GL11.glReadBuffer(read);
   }
 
   private static void create(Minecraft game) {

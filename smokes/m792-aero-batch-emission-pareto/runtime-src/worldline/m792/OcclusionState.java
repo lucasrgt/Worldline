@@ -22,6 +22,7 @@ public final class OcclusionState {
       return;
     prepareDisplay(game);
     if (stage == 0 && game.world == null) {
+      worldline.benchmark.BenchmarkHost.prepare();
       stage = 1;
       game.interactionManager = new SingleplayerInteractionManager(game);
       System.out.println("[WorldlineM792] start prepare=" + PREPARE + " arm=" + ARM);
@@ -90,15 +91,19 @@ public final class OcclusionState {
     sample = nextSample;
     boolean startsOn = ARM.contains("on-off");
     candidate = (sample & 1) == 0 ? startsOn : !startsOn;
+    org.lwjgl.opengl.Display.setTitle("Worldline M792 - view " + (sample / 2 + 1)
+        + "/16 - " + (candidate ? "replay-on" : "replay-off") + " - automated test");
   }
 
   private static void warm(Minecraft game) {
     World world = game.world;
     stabilize(game, world);
-    if (warmup++ == 0)
+    if (warmup++ == 0) {
+      org.lwjgl.opengl.Display.setTitle("Worldline M792 - warming camera views - automated test");
       for (int x = -4; x <= 5; x++) {
         for (int z = -4; z <= 5; z++) world.getChunk(x, z);
       }
+    }
     machines = WorldlineM792Rehydrator.count(world);
     if (warmup == 2 && machines != 512) {
       WorldlineM792Rehydrator.rehydrate(world);
