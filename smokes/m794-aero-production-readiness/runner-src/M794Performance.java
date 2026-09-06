@@ -37,7 +37,7 @@ final class M794Performance {
     for (M794Performance run : runs)
       for (int scene = 0; scene < 12; scene++) {
         passes &= run.number(scene, "bytes.maximum") <= 16L * 1024 * 1024;
-        if (!run.candidate || !run.current || scene == 1 || scene >= 5 && scene <= 8)
+        if (!run.candidate || !run.current || scene == 1 || scene >= 4 && scene <= 8)
           passes &= run.number(scene, "matches.total") == 0;
         if (run.current && run.candidate && (scene == 2 || scene == 3))
           passes &= run.number(scene, "matches.total") > 0;

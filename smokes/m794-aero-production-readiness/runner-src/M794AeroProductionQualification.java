@@ -7,11 +7,11 @@ import java.util.Properties;
 /** Production matrix and default regression against an immutable previous renderer. */
 public final class M794AeroProductionQualification {
   private static final String ID = "m794-aero-production-readiness";
-  static final String TRACE = "v4|sdk=public|aero=currenta3079d7,baseline88adc8e|triplets=Boff-Coff-Con,Con-Coff-Boff,"
-                              + "Con-Coff-Boff,Boff-Coff-Con|sessions=12|cases=cold,1,"
+  static final String TRACE = "v5|sdk=public|aero=current9abdcc5,baseline88adc8e|triplets=Boff-Coff-Con,Con-Coff-Boff,"
+      + "Con-Coff-Boff,Boff-Coff-Con|sessions=12|cases=cold,1,"
       + "20,64,128,256,transition,custom,nested,identity,blocks,chunks|hold=180|discard=60-except-cold|terrain-prewarm="
       + "5-views-plus-each-case-all-chunks-exact8x15-no-models|model-warm=300-fixed-view-except-cold|captures=3-per-"
-        + "case|pixels=exact|gain20-64=0.90|"
+      + "case|pixels=exact|saturation128-256=fallback|gain20-64=0.90|"
       + "other=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase|diagnostic=separate-inclusive-stage-cpu|"
       + "surface=owned-rgba8-depth24|vanilla-occlusion=off|spikelog=off|chunk-sort=arm-reset|textures=arsenic-seed173-"
       + "32ticks|jvm=fixed-production-mode-cpu-gc-jit|terrain=snapshot-after-timing";
