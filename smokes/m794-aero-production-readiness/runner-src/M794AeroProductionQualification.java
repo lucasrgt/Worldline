@@ -7,7 +7,7 @@ import java.util.Properties;
 /** Production matrix and default regression against an immutable previous renderer. */
 public final class M794AeroProductionQualification {
   private static final String ID = "m794-aero-production-readiness";
-  static final String TRACE = "v12-gpu-quiescence-acquisition|sdk=public|aero=current41dc5a8,baseline88adc8e|triplets=Boff-Coff-Con,Con-Coff-Boff,"
+  static final String TRACE = "v15-assembly-acquisition|sdk=public|aero=current2b7726e,baseline88adc8e|triplets=Boff-Coff-Con,Con-Coff-Boff,"
       + "Con-Coff-Boff,Boff-Coff-Con|sessions=12|cases=cold,1,"
       + "20,64,128,256,transition,custom,nested,identity,blocks,chunks|hold=180|discard=60-except-cold|terrain-prewarm="
       + "5-views-plus-each-case-all-chunks-exact8x15-no-models|model-warm=300-fixed-view-except-cold|captures=3-per-"
@@ -17,7 +17,7 @@ public final class M794AeroProductionQualification {
       + "32ticks|jvm=fixed-production-mode-cpu-gc-jit|terrain=snapshot-after-timing|window=post-capture-preview"
       + "|host=windows-high-four-physical-vm4|fixture=direct-renderer-primitive-light"
       + "|allocation-diagnostic=preflight-baseline-off-current-off-jfr-separate"
-      + "|chunk-dispatch=registered-pixels-vanilla-null-success-failure-returns|mixinextras=0.5.0-both-arms|cpu-acquisition=6-counterbalanced-jfr-jit-logs|gpu-entry=finish-separate-drain-and-inclusive|clock=instant-midpoint-minspan16|production-qualification=not-attempted";
+      + "|chunk-dispatch=registered-pixels-vanilla-null-success-failure-returns|mixinextras=0.5.0-both-arms|cpu-acquisition=6-current-off-aa-jfr-jit-assembly|gpu-entry=no-drain|clock=instant-midpoint-minspan16|samples=1ms-requested|assembly=selected-aero-only|production-qualification=not-attempted";
   public void execute(String id) throws Exception {
     M794Performance.selfTest();
     M794Artifact.selfTest();
@@ -36,8 +36,8 @@ public final class M794AeroProductionQualification {
     M794AllocationDiagnostic.run(root, smoke, build, config);
     if (Boolean.parseBoolean(config.getProperty("diagnostic.acquisition.only", "false"))) {
       Files.writeString(build.resolve("diagnostic-disposition.txt"),
-          "Six GPU-quiescence CPU/JIT acquisitions completed. Production qualification was not attempted.\n");
-      throw new IllegalStateException("M794 GPU-quiescence acquisition complete; production qualification not attempted");
+          "Six same-source current-off assembly acquisitions completed. Production qualification was not attempted.\n");
+      throw new IllegalStateException("M794 assembly acquisition complete; production qualification not attempted");
     }
     List<M794Performance> profiles = new ArrayList<M794Performance>();
     List<M794Artifact> defaults = new ArrayList<M794Artifact>();

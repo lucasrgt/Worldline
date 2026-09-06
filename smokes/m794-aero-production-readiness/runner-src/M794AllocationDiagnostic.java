@@ -11,25 +11,18 @@ final class M794AllocationDiagnostic {
     M794Artifact baseline = null;
     Properties baselineDispatch = null;
     for (int step = 0; step < 6; step++) {
-      int mode = step < 3 ? step : 5 - step;
-      boolean current = mode != 0, candidate = mode == 2;
-      Properties pin = new Properties();
-      pin.putAll(config);
-      if (!current)
-        pin.setProperty("aero.revision", config.getProperty("baseline.revision"));
-      M794Runtime runtime = new M794Runtime(root, smoke, build, pin,
-          root.resolve(config.getProperty(current ? "aero.path" : "baseline.path")).normalize());
+      M794Runtime runtime = new M794Runtime(root, smoke, build, config,
+          root.resolve(config.getProperty("aero.path")).normalize());
       runtime.verifyCheckout();
       runtime.verifyExtension();
       runtime.buildAero();
       Path template = build.resolve("template");
       if (step == 0)
         runtime.runClient(template, true, "prepare");
-      Path game = build.resolve("cpu-group" + step / 3 + "-"
-          + (current ? "current-" : "baseline-") + (candidate ? "on" : "off"));
+      Path game = build.resolve("assembly-repeat" + step + "-current-off");
       M794Runtime.copyWorld(template.resolve("saves/WorldlineAero"), game.resolve("saves/WorldlineAero"));
-      runtime.runClient(game, false, candidate ? "allocation-on" : "allocation-off");
-      M794Artifact artifact = M794Artifact.read(game, candidate ? "replay-on" : "replay-off");
+      runtime.runClient(game, false, "allocation-off");
+      M794Artifact artifact = M794Artifact.read(game, "replay-off");
       artifact.verify();
       for (int scene = 0; scene < 12; scene++) {
         Properties profile = new Properties();
@@ -37,7 +30,7 @@ final class M794AllocationDiagnostic {
         long drain = Long.parseLong(profile.getProperty("gpudrain.total"));
         long render = Long.parseLong(profile.getProperty("render.total"));
         long inclusive = Long.parseLong(profile.getProperty("renderwithdrain.total"));
-        SmokeSupport.require(drain > 0L && inclusive == render + drain, "M794 GPU drain accounting drift");
+        SmokeSupport.require(drain == 0L && inclusive == render, "M794 unexpected GPU drain");
       }
       if (baseline != null)
         SmokeSupport.require(M794VisualPair.compare(0, baseline, artifact).changedPixels() == 0,
@@ -55,7 +48,12 @@ final class M794AllocationDiagnostic {
       verifyRecording(game.resolve("allocations.jfr"));
       SmokeSupport.require(Files.size(game.resolve("compilation.xml")) > 0,
           "M794 JIT compilation log absent");
-      System.out.println("[M794] allocation recording complete: " + game.getFileName());
+      String assembly = Files.readString(game.resolve("runtime-console.log"));
+      SmokeSupport.require(assembly.contains("Compiled method (c2)") && assembly.contains("[MachCode]")
+              && assembly.contains("Aero_TessellatorBulkWriter::write")
+              && assembly.contains("Aero_MeshBatchDraw::drawBucket"),
+          "M794 selected Aero compilation output absent");
+      System.out.println("[M794] assembly recording complete: " + game.getFileName());
     }
   }
 

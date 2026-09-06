@@ -15,11 +15,11 @@
   </event>
   <event name="jdk.ExecutionSample">
     <setting name="enabled">true</setting>
-    <setting name="period">10 ms</setting>
+    <setting name="period">1 ms</setting>
   </event>
   <event name="jdk.NativeMethodSample">
     <setting name="enabled">true</setting>
-    <setting name="period">20 ms</setting>
+    <setting name="period">1 ms</setting>
   </event>
   <event name="jdk.Compilation">
     <setting name="enabled">true</setting>
