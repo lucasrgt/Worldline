@@ -63,8 +63,8 @@ public final class ProductionProfile {
   }
 
   public static void write(File directory, String order) throws Exception {
-    for (int arm = 0; arm < 2; arm++)
-      for (int scene = 0; scene < ProductionScene.CASES; scene++) writeArm(directory, order, arm, scene);
+    int arm = ProductionState.candidateEnabled() ? 1 : 0;
+    for (int scene = 0; scene < ProductionScene.CASES; scene++) writeArm(directory, order, arm, scene);
   }
 
   private static void writeArm(File directory, String order, int arm, int scene) throws Exception {

@@ -4,26 +4,26 @@ import java.util.List;
 import java.util.Properties;
 /** Per-order, per-case guardrails plus immutable baseline regression checks. */
 final class M794Performance {
-  final boolean current, offFirst;
-  private final Properties[][] values = new Properties[2][12];
-  private M794Performance(boolean current, boolean offFirst) {
+  final boolean current, candidate, offFirst;
+  private final Properties[] values = new Properties[12];
+  private M794Performance(boolean current, boolean candidate, boolean offFirst) {
     this.current = current;
+    this.candidate = candidate;
     this.offFirst = offFirst;
   }
-  static M794Performance read(Path game, boolean current, boolean offFirst) throws Exception {
-    M794Performance result = new M794Performance(current, offFirst);
-    for (int arm = 0; arm < 2; arm++)
-      for (int scene = 0; scene < 12; scene++) {
-        String stem = "profile-" + (arm == 0 ? "replay-off" : "replay-on") + "-" + scene;
-        Properties properties = new Properties();
-        SmokeSupport.load(game.resolve(stem + ".properties"), properties);
-        SmokeSupport.require(M794Digest.sha256Hex(Files.readAllBytes(game.resolve(stem + ".wlpr")))
-                                 .equals(properties.getProperty("artifact.sha256")),
-            "M794 profiler checksum drift");
-        SmokeSupport.require(Integer.toString(scene == 0 ? 180 : 120).equals(properties.getProperty("frames")),
-            "M794 profile incomplete");
-        result.values[arm][scene] = properties;
-      }
+  static M794Performance read(Path game, boolean current, boolean candidate, boolean offFirst) throws Exception {
+    M794Performance result = new M794Performance(current, candidate, offFirst);
+    for (int scene = 0; scene < 12; scene++) {
+      String stem = "profile-" + (candidate ? "replay-on" : "replay-off") + "-" + scene;
+      Properties properties = new Properties();
+      SmokeSupport.load(game.resolve(stem + ".properties"), properties);
+      SmokeSupport.require(M794Digest.sha256Hex(Files.readAllBytes(game.resolve(stem + ".wlpr")))
+                               .equals(properties.getProperty("artifact.sha256")),
+          "M794 profiler checksum drift");
+      SmokeSupport.require(
+          Integer.toString(scene == 0 ? 180 : 120).equals(properties.getProperty("frames")), "M794 profile incomplete");
+      result.values[scene] = properties;
+    }
     return result;
   }
   static boolean evaluate(List<M794Performance> runs, StringBuilder evidence) {
@@ -31,24 +31,18 @@ final class M794Performance {
     for (boolean first : new boolean[] {true, false})
       for (int scene = 0; scene < 12; scene++) {
         passes &= compare(runs, evidence, first, scene, "default", false, 0, true, 0, 1.03);
-        if (scene == 0) {
-          // Only the first arm in a fresh JVM is cold. Never compare it with its warmed second arm.
-          int coldArm = first ? 0 : 1;
-          passes &= compare(runs, evidence, first, scene, "cold", false, coldArm, true, coldArm, 1.03);
-        } else
-          passes &= compare(
-              runs, evidence, first, scene, "candidate", true, 0, true, 1, scene == 2 || scene == 3 ? 0.90 : 1.03);
+        passes &= compare(
+            runs, evidence, first, scene, "candidate", true, 0, true, 1, scene == 2 || scene == 3 ? 0.90 : 1.03);
       }
     for (M794Performance run : runs)
       for (int scene = 0; scene < 12; scene++) {
-        passes &= run.number(0, scene, "matches.total") == 0;
-        passes &= run.number(1, scene, "bytes.maximum") <= 16L * 1024 * 1024;
-        if (!run.current || scene >= 5 && scene <= 8)
-          passes &= run.number(1, scene, "matches.total") == 0;
-        if (run.current && (scene == 2 || scene == 3))
-          passes &= run.number(1, scene, "matches.total") > 0;
+        passes &= run.number(scene, "bytes.maximum") <= 16L * 1024 * 1024;
+        if (!run.candidate || !run.current || scene == 1 || scene >= 5 && scene <= 8)
+          passes &= run.number(scene, "matches.total") == 0;
+        if (run.current && run.candidate && (scene == 2 || scene == 3))
+          passes &= run.number(scene, "matches.total") > 0;
         if (scene == 10)
-          passes &= run.number(0, scene, "rebuilds.total") > 0 && run.number(1, scene, "rebuilds.total") > 0;
+          passes &= run.number(scene, "rebuilds.total") > 0;
       }
     return passes;
   }
@@ -65,7 +59,7 @@ final class M794Performance {
     boolean passes = render <= limit && p99 <= 1.05 && allocation <= 1.02 && after <= before;
     evidence.append(label)
         .append(",order=")
-        .append(first ? "off-on" : "on-off")
+        .append(first ? "baseline-first" : "candidate-first")
         .append(",case=")
         .append(scene)
         .append(",render=")
@@ -88,15 +82,15 @@ final class M794Performance {
     long total = 0;
     int count = 0;
     for (M794Performance run : runs)
-      if (run.current == current && run.offFirst == first) {
-        total += run.number(arm, scene, key);
+      if (run.current == current && run.candidate == (arm == 1) && run.offFirst == first) {
+        total += run.number(scene, key);
         count++;
       }
     SmokeSupport.require(count == 2, "M794 counterbalance incomplete");
     return total;
   }
-  private long number(int arm, int scene, String key) {
-    long value = Long.parseLong(SmokeSupport.value(values[arm][scene], key));
+  private long number(int scene, String key) {
+    long value = Long.parseLong(SmokeSupport.value(values[scene], key));
     SmokeSupport.require(value >= 0, "negative M794 observation: " + key);
     return value;
   }

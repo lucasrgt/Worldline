@@ -29,7 +29,7 @@ public final class ProductionProbe {
   private ProductionProbe() {}
 
   public static void sample(Minecraft game) {
-    if (!ProductionState.acquiring())
+    if (!ProductionState.acquiring() || ProductionState.warming())
       return;
     int checkpoint = ProductionState.checkpoint();
     if (checkpoint < 0 || checkpoint >= N)
@@ -50,8 +50,9 @@ public final class ProductionProbe {
   }
 
   public static void write(File metrics, String order, int machines) throws Exception {
-    writeArm(artifact(metrics, "replay-off"), "replay-off", 0, order, machines);
-    writeArm(artifact(metrics, "replay-on"), "replay-on", 1, order, machines);
+    int arm = ProductionState.candidateEnabled() ? 1 : 0;
+    String name = arm == 0 ? "replay-off" : "replay-on";
+    writeArm(artifact(metrics, name), name, arm, order, machines);
   }
 
   private static void writeArm(File metrics, String name, int arm, String order, int machines) throws Exception {

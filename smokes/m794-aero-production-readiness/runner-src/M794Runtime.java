@@ -82,7 +82,7 @@ final class M794Runtime {
     SmokeSupport.require(output.contains("[WorldlineM794] start prepare=" + prepare + " arm=" + arm)
             && output.contains("BUILD SUCCESSFUL"),
         "M794 client lifecycle drift: " + arm + "\n" + output);
-    String expected = prepare ? "template-ready machines=512" : "capture-complete arm=" + arm + " checkpoints=72";
+    String expected = prepare ? "template-ready machines=512" : "capture-complete arm=" + arm + " checkpoints=36";
     SmokeSupport.require(
         output.contains("[WorldlineM794] " + expected), "M794 completion drift: " + arm + "\n" + output);
   }

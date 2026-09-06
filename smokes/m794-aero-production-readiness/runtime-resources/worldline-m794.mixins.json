@@ -6,7 +6,6 @@
   "client": [
     "ProductionFrameMixin",
     "ProductionMinecraftMixin",
-    "ProductionToggleMixin",
     "ProductionCloudMixin",
     "ProductionPopulationMixin",
     "ProductionOrderMixin",

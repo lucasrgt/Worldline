@@ -72,6 +72,7 @@ gradle.projectsEvaluated {
         '-Dworldline.m794.arm=' + prop('worldlineArm'),
         '-Dworldline.m794.metrics=' + new File(prop('worldlineMetrics')).absolutePath,
         '-Dworldline.m794.framesDir=' + new File(prop('worldlineFramesDir')).absolutePath,
+        '-Daero.multiPoseReuse=' + prop('worldlineArm').endsWith('-on'),
         '-Daero.atRestLists=true', '-Daero.prewarm=false',
         '-Daero.smartlod=false', '-Daero.animatedLOD=2048',
         '-Daero.becell.pages=true', '-Daero.bonepages=true',

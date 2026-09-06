@@ -14,7 +14,9 @@ public final class ProductionState {
   private static final boolean PREPARE = Boolean.getBoolean("worldline.m794.prepare");
   private static final String ARM = System.getProperty("worldline.m794.arm", "prepare");
   private static int stage, warmup, stable, retained, checkpoint, machines, sample = -1;
-  private static boolean capture, candidate, preparing = true;
+  private static final boolean CANDIDATE = Boolean.getBoolean("aero.multiPoseReuse");
+  private static boolean capture, warming, preparing = true;
+  private static int modelWarmFrame;
 
   private ProductionState() {}
 
@@ -41,17 +43,24 @@ public final class ProductionState {
       ProductionTerrain.place(game);
       return;
     }
-    if (ProductionProbe.captures() == ProductionScene.CHECKPOINTS * 2) {
+    if (ProductionProbe.captures() == ProductionScene.CHECKPOINTS) {
       finish(game);
       return;
     }
     int nextSample = retained / ProductionScene.HOLD_FRAMES;
     if (sample != nextSample)
       configure(nextSample);
-    int scene = sample / 2;
+    int scene = sample;
     preparing = !ProductionTerrain.armReady(game, scene, sample);
     if (preparing)
       return;
+    if (scene > 0 && modelWarmFrame < 300) {
+      warming = true;
+      ProductionScene.place(game.player, scene, 0);
+      ProductionModels.update(scene, modelWarmFrame++ % ProductionScene.HOLD_FRAMES, 1000 + scene);
+      return;
+    }
+    warming = false;
     retained++;
     checkpoint = scene * 3 + localFrame() / 60;
     capture = retained % 60 == 0;
@@ -65,7 +74,10 @@ public final class ProductionState {
     return stage == 2;
   }
   public static boolean acquiring() {
-    return retaining() && retained > 0 && !preparing;
+    return retaining() && (retained > 0 || warming) && !preparing;
+  }
+  public static boolean warming() {
+    return warming;
   }
   public static boolean preparing() {
     return preparing;
@@ -80,7 +92,7 @@ public final class ProductionState {
     return capture;
   }
   public static int scene() {
-    return sample < 0 ? -1 : sample / 2;
+    return sample;
   }
   public static int frameId() {
     return retained;
@@ -89,19 +101,19 @@ public final class ProductionState {
     return checkpoint;
   }
   public static boolean candidateEnabled() {
-    return candidate;
+    return CANDIDATE;
   }
   public static int localFrame() {
-    return (retained - 1) % ProductionScene.HOLD_FRAMES;
+    return warming ? (modelWarmFrame - 1) % ProductionScene.HOLD_FRAMES : (retained - 1) % ProductionScene.HOLD_FRAMES;
   }
   public static boolean measured() {
-    return acquiring() && (scene() == 0 || localFrame() >= ProductionScene.WARM_FRAMES);
+    return acquiring() && !warming && (scene() == 0 || localFrame() >= ProductionScene.WARM_FRAMES);
   }
 
   private static void configure(int nextSample) {
     sample = nextSample;
-    boolean startsOn = ARM.contains("on-off");
-    candidate = (sample & 1) == 0 ? startsOn : !startsOn;
+    modelWarmFrame = 0;
+    warming = false;
   }
 
   private static void warm(Minecraft game) {
