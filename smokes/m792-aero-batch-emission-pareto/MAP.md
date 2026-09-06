@@ -5,6 +5,11 @@
 
 # M792 exact multi-pose reuse map
 
+Requalification pins Aero `9abdcc51272f5e844ace6619116aab0b5d5af8b0` after
+isolating multi-pose draw dispatch and restoring the original fallback emitter.
+The existing trace, acquisition protocol and every threshold remain unchanged.
+The earlier receipt does not qualify this changed external implementation.
+
 The reused M791 fixture preserves four chunks, two machine layers, 256 static
 and 256 animated models, terrain depth, exact RGBA capture and Y/Z/X native BE
 dispatch order. M792 changes the candidate and acquisition contract explicitly:
