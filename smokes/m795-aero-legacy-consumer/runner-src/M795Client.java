@@ -40,7 +40,7 @@ final class M795Client {
     Files.createDirectories(output);
     String suffix = System.getProperty("os.name").startsWith("Windows") ? ".exe" : "";
     List<String> command = new ArrayList<>(List.of(inputs.java8.resolve("bin/java" + suffix).toString(), "-Xms256M",
-        "-Xmx512M", "-Djava.library.path=" + sdk.resolve("libraries/natives"),
+        "-Xmx512M", "-Dfile.encoding=UTF-8", "-Djava.library.path=" + sdk.resolve("libraries/natives"),
         "-Dworldline.aero.legacy.output=" + output, "-Daero.atRestLists=true", "-Daero.frustumcull=false",
         "-Dworldline.aero.legacy.loader=" + loader, "-Daero.spikelog=false", "-Dminecraft.launcher.brand=Worldline",
         "-Dminecraft.launcher.version=aero-consumer-v1", "-cp", classpath, "org.mcphackers.launchwrapper.Launch",
