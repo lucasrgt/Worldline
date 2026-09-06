@@ -17,6 +17,7 @@ public final class ProductionProfile {
   private static final int CAPACITY = ProductionScene.HOLD_FRAMES;
   private static final ProfilerRecorder[][] RECORDERS = new ProfilerRecorder[2][ProductionScene.CASES];
   private static final long EPOCH = System.currentTimeMillis();
+  private static final long EPOCH_NANOS = System.nanoTime();
   private static final com.sun.management.ThreadMXBean ALLOCATION = allocation();
   private static long started, allocated;
 
@@ -74,6 +75,8 @@ public final class ProductionProfile {
       throw new IllegalStateException("incomplete M794 profile " + name);
     Map<String, String> tags = new HashMap<String, String>();
     tags.put("scenario", "m794-aero-production-readiness");
+    tags.put("clock.epoch.nanos", Long.toString(EPOCH_NANOS));
+    tags.put("clock.epoch.millis", Long.toString(EPOCH));
     tags.put("order", order);
     tags.put("arm", name);
     tags.put("boundary", "render-update-excludes-display-and-framebuffer-read");

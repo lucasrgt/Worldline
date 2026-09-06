@@ -164,7 +164,7 @@ public final class ProductionState {
       File metrics = new File(System.getProperty("worldline.m794.metrics"));
       ProductionProbe.write(metrics, ARM, machines);
       ProductionProfile.write(metrics.getParentFile(), ARM);
-      if ("allocation-off".equals(ARM))
+      if (ARM.startsWith("allocation-"))
         ProductionChunkDispatchProbe.run(game);
     } catch (Exception error) {
       throw new IllegalStateException("M794 artifact write failed", error);

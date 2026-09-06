@@ -7,7 +7,7 @@ import java.util.Properties;
 /** Production matrix and default regression against an immutable previous renderer. */
 public final class M794AeroProductionQualification {
   private static final String ID = "m794-aero-production-readiness";
-  static final String TRACE = "v10|sdk=public|aero=current41dc5a8,baseline88adc8e|triplets=Boff-Coff-Con,Con-Coff-Boff,"
+  static final String TRACE = "v11-cpu-acquisition|sdk=public|aero=current41dc5a8,baseline88adc8e|triplets=Boff-Coff-Con,Con-Coff-Boff,"
       + "Con-Coff-Boff,Boff-Coff-Con|sessions=12|cases=cold,1,"
       + "20,64,128,256,transition,custom,nested,identity,blocks,chunks|hold=180|discard=60-except-cold|terrain-prewarm="
       + "5-views-plus-each-case-all-chunks-exact8x15-no-models|model-warm=300-fixed-view-except-cold|captures=3-per-"
@@ -17,7 +17,7 @@ public final class M794AeroProductionQualification {
       + "32ticks|jvm=fixed-production-mode-cpu-gc-jit|terrain=snapshot-after-timing|window=post-capture-preview"
       + "|host=windows-high-four-physical-vm4|fixture=direct-renderer-primitive-light"
       + "|allocation-diagnostic=preflight-baseline-off-current-off-jfr-separate"
-      + "|chunk-dispatch=registered-pixels-vanilla-null-success-failure-returns|mixinextras=0.5.0-both-arms";
+      + "|chunk-dispatch=registered-pixels-vanilla-null-success-failure-returns|mixinextras=0.5.0-both-arms|cpu-acquisition=6-counterbalanced-jfr-jit-logs|production-qualification=not-attempted";
   public void execute(String id) throws Exception {
     M794Performance.selfTest();
     M794Artifact.selfTest();
@@ -34,6 +34,11 @@ public final class M794AeroProductionQualification {
         M794Runtime.sha256(TRACE).equals(config.getProperty("expected.signature")), "M794 signature drift");
     SmokeSupport.recreate(root, build);
     M794AllocationDiagnostic.run(root, smoke, build, config);
+    if (Boolean.parseBoolean(config.getProperty("diagnostic.acquisition.only", "false"))) {
+      Files.writeString(build.resolve("diagnostic-disposition.txt"),
+          "Six CPU/JIT acquisitions completed. Production qualification was not attempted.\n");
+      throw new IllegalStateException("M794 CPU acquisition complete; production qualification not attempted");
+    }
     List<M794Performance> profiles = new ArrayList<M794Performance>();
     List<M794Artifact> defaults = new ArrayList<M794Artifact>();
     StringBuilder evidence = new StringBuilder("id=" + ID + "\n");
