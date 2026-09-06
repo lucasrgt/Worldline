@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=external-aero-production-matrix -->
 <!-- nonclaims=no-occlusion-no-end-to-end-fps-no-all-platform-promotion -->
-<!-- frozen-trace=ae9246e03667a6a09f43ab1a99ef693bc8eba474ec6933828f98c97e6c387c53 -->
+<!-- frozen-trace=b3177e9d4169842f43f51b6c15fda08633fd9fcb1b20524ca440bb77b44e3373 -->
 # M794 production qualification map
 
 The public Extensions SDK discovers both immutable Aero checkouts. Twelve fresh
@@ -26,9 +26,9 @@ reveals the upper layer. It does not claim forced chunk unload or world replacem
 
 Signal: sdk=discovered,sessions=12-counterbalanced,cases=12,pixels=exact,default=guarded,poses=bounded,tail=guarded,allocation=guarded
 
-Trace: v9|sdk=public|aero=current41dc5a8,baseline88adc8e|triplets=Boff-Coff-Con,Con-Coff-Boff,Con-Coff-Boff,Boff-Coff-Con|sessions=12|cases=cold,1,20,64,128,256,transition,custom,nested,identity,blocks,chunks|hold=180|discard=60-except-cold|terrain-prewarm=5-views-plus-each-case-all-chunks-exact8x15-no-models|model-warm=300-fixed-view-except-cold|captures=3-per-case|pixels=exact|saturation128-256=fallback|gain20-64=0.90|other=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase|diagnostic=separate-inclusive-stage-cpu|surface=owned-rgba8-depth24|vanilla-occlusion=off|spikelog=off|chunk-sort=arm-reset|textures=arsenic-seed173-32ticks|jvm=fixed-production-mode-cpu-gc-jit|terrain=snapshot-after-timing|window=post-capture-preview|host=windows-high-four-physical-vm4|fixture=direct-renderer-primitive-light|allocation-diagnostic=preflight-baseline-off-current-off-jfr-separate|chunk-dispatch=registered-pixels-vanilla-null-success-failure-returns.
+Trace: v10|sdk=public|aero=current41dc5a8,baseline88adc8e|triplets=Boff-Coff-Con,Con-Coff-Boff,Con-Coff-Boff,Boff-Coff-Con|sessions=12|cases=cold,1,20,64,128,256,transition,custom,nested,identity,blocks,chunks|hold=180|discard=60-except-cold|terrain-prewarm=5-views-plus-each-case-all-chunks-exact8x15-no-models|model-warm=300-fixed-view-except-cold|captures=3-per-case|pixels=exact|saturation128-256=fallback|gain20-64=0.90|other=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase|diagnostic=separate-inclusive-stage-cpu|surface=owned-rgba8-depth24|vanilla-occlusion=off|spikelog=off|chunk-sort=arm-reset|textures=arsenic-seed173-32ticks|jvm=fixed-production-mode-cpu-gc-jit|terrain=snapshot-after-timing|window=post-capture-preview|host=windows-high-four-physical-vm4|fixture=direct-renderer-primitive-light|allocation-diagnostic=preflight-baseline-off-current-off-jfr-separate|chunk-dispatch=registered-pixels-vanilla-null-success-failure-returns|mixinextras=0.5.0-both-arms.
 
-SHA-256: ae9246e03667a6a09f43ab1a99ef693bc8eba474ec6933828f98c97e6c387c53.
+SHA-256: b3177e9d4169842f43f51b6c15fda08633fd9fcb1b20524ca440bb77b44e3373.
 
 A thirteenth, separate diagnostic client receives stage hooks omitted from qualification
 clients. Its inclusive CPU call durations are attribution, never gain evidence.
@@ -75,3 +75,8 @@ A registered chunk-baked mesh is included in the exact framebuffer oracle. After
 allocation preflight captures, native dispatch probes compare vanilla and null
 behavior, successful registered meshes, and controlled bake failure returns.
 The current client must report activation of the composable dispatch wrapper.
+
+Both arms pin MixinExtras 0.5.0 and verify its runtime service marker. This
+qualifies the optional composable wrapper under that explicit dependency
+condition. MixinExtras 0.3.2 selects the preserved legacy callback; its completed
+v9 preflight is retained as fallback behavior evidence, not wrapper evidence.

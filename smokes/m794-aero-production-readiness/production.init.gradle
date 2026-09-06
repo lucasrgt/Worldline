@@ -21,6 +21,7 @@ if (requestedJar != null) {
                     throw new GradleException('Worldline M794 Aero dependency boundary drift')
                 dependencies.removeAll(aero)
                 dependencies.add(candidate.dependencies.create(candidate.files(aeroJar)))
+                dependencies.add(candidate.dependencies.create('io.github.llamalad7:mixinextras-fabric:0.5.0'))
             }
         }
     }
