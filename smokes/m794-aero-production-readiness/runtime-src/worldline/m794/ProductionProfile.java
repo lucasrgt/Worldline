@@ -16,10 +16,9 @@ public final class ProductionProfile {
   private static final ProfilerSchema SCHEMA = ProductionMetricSchema.SCHEMA;
   private static final int CAPACITY = ProductionScene.HOLD_FRAMES;
   private static final ProfilerRecorder[][] RECORDERS = new ProfilerRecorder[2][ProductionScene.CASES];
-  private static final long EPOCH = System.currentTimeMillis();
-  private static final long EPOCH_NANOS = System.nanoTime();
+  private static final long EPOCH = ProductionClock.UTC / 1000000L;
   private static final com.sun.management.ThreadMXBean ALLOCATION = allocation();
-  private static long started, allocated;
+  private static long started, allocated, gpuDrain;
 
   private ProductionProfile() {}
   static long allocationNow() {
@@ -28,6 +27,7 @@ public final class ProductionProfile {
 
   public static void begin() {
     ProductionStages.reset();
+    gpuDrain = ProductionGpuDrain.await();
     if (ProductionState.measured())
       ProductionJvmSample.begin();
     started = ProductionState.measured() ? System.nanoTime() : 0L;
@@ -59,6 +59,8 @@ public final class ProductionProfile {
     recorder.set(13, Aero_AnimatedBatcher.immediateRendersThisFrame());
     for (int stage = 2; stage < 7; stage++) recorder.set(12 + stage, ProductionStages.nanos(stage));
     ProductionJvmSample.record(recorder);
+    recorder.set(22, gpuDrain);
+    recorder.set(23, ended - started + gpuDrain);
     recorder.endFrame();
     started = 0L;
   }
@@ -75,8 +77,11 @@ public final class ProductionProfile {
       throw new IllegalStateException("incomplete M794 profile " + name);
     Map<String, String> tags = new HashMap<String, String>();
     tags.put("scenario", "m794-aero-production-readiness");
-    tags.put("clock.epoch.nanos", Long.toString(EPOCH_NANOS));
+    tags.put("clock.epoch.nanos", Long.toString(ProductionClock.MONOTONIC));
     tags.put("clock.epoch.millis", Long.toString(EPOCH));
+    tags.put("clock.utc.nanos", Long.toString(ProductionClock.UTC));
+    tags.put("clock.calibration.halfspan.nanos", Long.toString(ProductionClock.UNCERTAINTY));
+    tags.put("gpu.drain", Boolean.toString(ProductionGpuDrain.ENABLED));
     tags.put("order", order);
     tags.put("arm", name);
     tags.put("boundary", "render-update-excludes-display-and-framebuffer-read");

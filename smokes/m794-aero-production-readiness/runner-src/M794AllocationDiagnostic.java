@@ -31,6 +31,14 @@ final class M794AllocationDiagnostic {
       runtime.runClient(game, false, candidate ? "allocation-on" : "allocation-off");
       M794Artifact artifact = M794Artifact.read(game, candidate ? "replay-on" : "replay-off");
       artifact.verify();
+      for (int scene = 0; scene < 12; scene++) {
+        Properties profile = new Properties();
+        SmokeSupport.load(game.resolve("profile-" + artifact.arm + "-" + scene + ".properties"), profile);
+        long drain = Long.parseLong(profile.getProperty("gpudrain.total"));
+        long render = Long.parseLong(profile.getProperty("render.total"));
+        long inclusive = Long.parseLong(profile.getProperty("renderwithdrain.total"));
+        SmokeSupport.require(drain > 0L && inclusive == render + drain, "M794 GPU drain accounting drift");
+      }
       if (baseline != null)
         SmokeSupport.require(M794VisualPair.compare(0, baseline, artifact).changedPixels() == 0,
             "M794 allocation diagnostic pixel mismatch");

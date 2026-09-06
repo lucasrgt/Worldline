@@ -7,13 +7,13 @@ import worldline.profiling.*;
 public final class ProductionMetricSchema {
   static final String[] NAMES = {"render", "animated", "pages", "allocation", "matches", "bytes", "animatedallocation",
       "pageallocation", "rebuilds", "resolved", "reused", "transformed", "vertexreuse", "immediate", "posetime",
-      "transformtime", "packtime", "uniquetime", "drivertime", "threadcpu", "gc", "jit"};
+      "transformtime", "packtime", "uniquetime", "drivertime", "threadcpu", "gc", "jit", "gpudrain", "renderwithdrain"};
   static final ProfilerSchema SCHEMA = ProfilerSchema.of(Arrays.asList(duration("render"), duration("animated"),
       duration("pages"), bytes("allocation"), WorldlineProfilerMetrics.extensionCounter("mod.aero.matches", "aero"),
       bytes("bytes"), bytes("animatedallocation"), bytes("pageallocation"), counter("rebuilds"), counter("resolved"),
       counter("reused"), counter("transformed"), counter("vertexreuse"), counter("immediate"), duration("posetime"),
       duration("transformtime"), duration("packtime"), duration("uniquetime"), duration("drivertime"),
-      duration("threadcpu"), duration("gc"), duration("jit")));
+      duration("threadcpu"), duration("gc"), duration("jit"), duration("gpudrain"), duration("renderwithdrain")));
 
   private ProductionMetricSchema() {}
 

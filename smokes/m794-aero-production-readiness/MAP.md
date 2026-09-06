@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=external-aero-production-matrix -->
 <!-- nonclaims=no-occlusion-no-end-to-end-fps-no-all-platform-promotion -->
-<!-- frozen-trace=9ccb8711e61fcbdbaf01d38955b2b34a66536e64a992905f6f48c364adfc617e -->
+<!-- frozen-trace=e537a91896dbe19bd8b3f17e8fbea58067876ac144213394bc2c84c19dabbf9b -->
 # M794 production qualification map
 
 The public Extensions SDK discovers both immutable Aero checkouts. Twelve fresh
@@ -26,9 +26,9 @@ reveals the upper layer. It does not claim forced chunk unload or world replacem
 
 Signal: sdk=discovered,sessions=12-counterbalanced,cases=12,pixels=exact,default=guarded,poses=bounded,tail=guarded,allocation=guarded
 
-Trace: v11-cpu-acquisition|sdk=public|aero=current41dc5a8,baseline88adc8e|triplets=Boff-Coff-Con,Con-Coff-Boff,Con-Coff-Boff,Boff-Coff-Con|sessions=12|cases=cold,1,20,64,128,256,transition,custom,nested,identity,blocks,chunks|hold=180|discard=60-except-cold|terrain-prewarm=5-views-plus-each-case-all-chunks-exact8x15-no-models|model-warm=300-fixed-view-except-cold|captures=3-per-case|pixels=exact|saturation128-256=fallback|gain20-64=0.90|other=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase|diagnostic=separate-inclusive-stage-cpu|surface=owned-rgba8-depth24|vanilla-occlusion=off|spikelog=off|chunk-sort=arm-reset|textures=arsenic-seed173-32ticks|jvm=fixed-production-mode-cpu-gc-jit|terrain=snapshot-after-timing|window=post-capture-preview|host=windows-high-four-physical-vm4|fixture=direct-renderer-primitive-light|allocation-diagnostic=preflight-baseline-off-current-off-jfr-separate|chunk-dispatch=registered-pixels-vanilla-null-success-failure-returns|mixinextras=0.5.0-both-arms|cpu-acquisition=6-counterbalanced-jfr-jit-logs|production-qualification=not-attempted.
+Trace: v12-gpu-quiescence-acquisition|sdk=public|aero=current41dc5a8,baseline88adc8e|triplets=Boff-Coff-Con,Con-Coff-Boff,Con-Coff-Boff,Boff-Coff-Con|sessions=12|cases=cold,1,20,64,128,256,transition,custom,nested,identity,blocks,chunks|hold=180|discard=60-except-cold|terrain-prewarm=5-views-plus-each-case-all-chunks-exact8x15-no-models|model-warm=300-fixed-view-except-cold|captures=3-per-case|pixels=exact|saturation128-256=fallback|gain20-64=0.90|other=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase|diagnostic=separate-inclusive-stage-cpu|surface=owned-rgba8-depth24|vanilla-occlusion=off|spikelog=off|chunk-sort=arm-reset|textures=arsenic-seed173-32ticks|jvm=fixed-production-mode-cpu-gc-jit|terrain=snapshot-after-timing|window=post-capture-preview|host=windows-high-four-physical-vm4|fixture=direct-renderer-primitive-light|allocation-diagnostic=preflight-baseline-off-current-off-jfr-separate|chunk-dispatch=registered-pixels-vanilla-null-success-failure-returns|mixinextras=0.5.0-both-arms|cpu-acquisition=6-counterbalanced-jfr-jit-logs|gpu-entry=finish-separate-drain-and-inclusive|clock=instant-midpoint-minspan16|production-qualification=not-attempted.
 
-SHA-256: 9ccb8711e61fcbdbaf01d38955b2b34a66536e64a992905f6f48c364adfc617e.
+SHA-256: e537a91896dbe19bd8b3f17e8fbea58067876ac144213394bc2c84c19dabbf9b.
 
 A thirteenth, separate diagnostic client receives stage hooks omitted from qualification
 clients. Its inclusive CPU call durations are attribution, never gain evidence.
@@ -85,3 +85,8 @@ This temporary acquisition-only branch runs six counterbalanced CPU/JIT clients,
 retains their exact images and native return probes, then deliberately reports
 non-qualification before the production matrix. It cannot issue a production
 PASS receipt. Java/native samples and compilation logs are attribution only.
+
+The GPU-quiescence diagnostic drains prior commands before each acquisition frame,
+including warmup. gpudrain retains the complete wait; renderwithdrain includes it.
+The product remains unchanged. UTC calibration uses the minimum-span midpoint
+of sixteen startup pairs; recorded halfspan excludes OS precision and clock drift.
