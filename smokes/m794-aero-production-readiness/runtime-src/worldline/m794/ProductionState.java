@@ -112,6 +112,8 @@ public final class ProductionState {
 
   private static void configure(int nextSample) {
     sample = nextSample;
+    org.lwjgl.opengl.Display.setTitle(
+        "Worldline M794 - case " + (sample + 1) + "/12 - " + ARM + " - automated test");
     modelWarmFrame = 0;
     warming = false;
   }
@@ -119,10 +121,12 @@ public final class ProductionState {
   private static void warm(Minecraft game) {
     World world = game.world;
     stabilize(game, world);
-    if (warmup++ == 0)
+    if (warmup++ == 0) {
+      org.lwjgl.opengl.Display.setTitle("Worldline M794 - preparing terrain - automated test");
       for (int x = -4; x <= 5; x++) {
         for (int z = -4; z <= 5; z++) world.getChunk(x, z);
       }
+    }
     machines = WorldlineM794Rehydrator.count(world);
     if (warmup == 2 && machines != 512) {
       WorldlineM794Rehydrator.rehydrate(world);
