@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=external-aero-production-matrix -->
 <!-- nonclaims=no-occlusion-no-end-to-end-fps-no-all-platform-promotion -->
-<!-- frozen-trace=64fdd00bccbce02a63394867ec6a96075def91f8459b8ccd36fbc78364fbd34a -->
+<!-- frozen-trace=ae9246e03667a6a09f43ab1a99ef693bc8eba474ec6933828f98c97e6c387c53 -->
 # M794 production qualification map
 
 The public Extensions SDK discovers both immutable Aero checkouts. Twelve fresh
@@ -26,9 +26,9 @@ reveals the upper layer. It does not claim forced chunk unload or world replacem
 
 Signal: sdk=discovered,sessions=12-counterbalanced,cases=12,pixels=exact,default=guarded,poses=bounded,tail=guarded,allocation=guarded
 
-Trace: v7|sdk=public|aero=current9abdcc5,baseline88adc8e|triplets=Boff-Coff-Con,Con-Coff-Boff,Con-Coff-Boff,Boff-Coff-Con|sessions=12|cases=cold,1,20,64,128,256,transition,custom,nested,identity,blocks,chunks|hold=180|discard=60-except-cold|terrain-prewarm=5-views-plus-each-case-all-chunks-exact8x15-no-models|model-warm=300-fixed-view-except-cold|captures=3-per-case|pixels=exact|saturation128-256=fallback|gain20-64=0.90|other=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase|diagnostic=separate-inclusive-stage-cpu|surface=owned-rgba8-depth24|vanilla-occlusion=off|spikelog=off|chunk-sort=arm-reset|textures=arsenic-seed173-32ticks|jvm=fixed-production-mode-cpu-gc-jit|terrain=snapshot-after-timing|window=post-capture-preview|host=windows-high-four-logical|fixture=direct-renderer-primitive-light.
+Trace: v9|sdk=public|aero=current41dc5a8,baseline88adc8e|triplets=Boff-Coff-Con,Con-Coff-Boff,Con-Coff-Boff,Boff-Coff-Con|sessions=12|cases=cold,1,20,64,128,256,transition,custom,nested,identity,blocks,chunks|hold=180|discard=60-except-cold|terrain-prewarm=5-views-plus-each-case-all-chunks-exact8x15-no-models|model-warm=300-fixed-view-except-cold|captures=3-per-case|pixels=exact|saturation128-256=fallback|gain20-64=0.90|other=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase|diagnostic=separate-inclusive-stage-cpu|surface=owned-rgba8-depth24|vanilla-occlusion=off|spikelog=off|chunk-sort=arm-reset|textures=arsenic-seed173-32ticks|jvm=fixed-production-mode-cpu-gc-jit|terrain=snapshot-after-timing|window=post-capture-preview|host=windows-high-four-physical-vm4|fixture=direct-renderer-primitive-light|allocation-diagnostic=preflight-baseline-off-current-off-jfr-separate|chunk-dispatch=registered-pixels-vanilla-null-success-failure-returns.
 
-SHA-256: e63ba6c49e004938815c7584f6ce693c68172931e127054dd5b76d097be9f0b7.
+SHA-256: ae9246e03667a6a09f43ab1a99ef693bc8eba474ec6933828f98c97e6c387c53.
 
 A thirteenth, separate diagnostic client receives stage hooks omitted from qualification
 clients. Its inclusive CPU call durations are attribution, never gain evidence.
@@ -66,3 +66,12 @@ renderers across the same twelve scenes, using copied worlds and exact captures.
 The recordings must contain allocation stacks. These instrumented profiles never
 enter M794Performance; the twelve qualification clients have no Flight Recorder
 flags. The shared template contains no measured model work.
+
+The controlled host selects one logical processor on each of four distinct physical
+cores and fixes JVM ActiveProcessorCount at four. The observed log must confirm
+logical=4, physical=4, vm=4 and High priority before world loading.
+
+A registered chunk-baked mesh is included in the exact framebuffer oracle. After
+allocation preflight captures, native dispatch probes compare vanilla and null
+behavior, successful registered meshes, and controlled bake failure returns.
+The current client must report activation of the composable dispatch wrapper.

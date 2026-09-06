@@ -79,6 +79,9 @@ final class M794Runtime {
     System.out.println("[M794] start prepare=" + prepare + " arm=" + arm);
     String output = SmokeSupport.capture(project, command, timeout("child.timeout.seconds"));
     Files.writeString(game.resolve("runtime-console.log"), output);
+    if (!config.getProperty("aero.revision").equals(config.getProperty("baseline.revision")))
+      SmokeSupport.require(output.contains(SmokeSupport.value(config, "current.dispatch.signal")),
+          "M794 current chunk dispatch path was not activated");
     SmokeSupport.require(output.contains("[WorldlineM794] start prepare=" + prepare + " arm=" + arm)
             && output.contains(SmokeSupport.value(config, "host.signal"))
             && output.contains("BUILD SUCCESSFUL"),

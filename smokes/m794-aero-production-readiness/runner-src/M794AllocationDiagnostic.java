@@ -9,6 +9,7 @@ final class M794AllocationDiagnostic {
 
   static void run(Path root, Path smoke, Path build, Properties config) throws Exception {
     M794Artifact baseline = null;
+    Properties baselineDispatch = null;
     for (boolean current : new boolean[] {false, true}) {
       Properties pin = new Properties();
       pin.putAll(config);
@@ -31,6 +32,15 @@ final class M794AllocationDiagnostic {
         SmokeSupport.require(M794VisualPair.compare(0, baseline, artifact).changedPixels() == 0,
             "M794 allocation diagnostic pixel mismatch");
       baseline = artifact;
+      Properties dispatch = new Properties();
+      SmokeSupport.load(game.resolve("dispatch.properties"), dispatch);
+      SmokeSupport.require("return:true".equals(dispatch.getProperty("registered"))
+              && "return:false".equals(dispatch.getProperty("failed"))
+              && dispatch.getProperty("vanilla") != null && dispatch.getProperty("null") != null,
+          "M794 native chunk dispatch observations missing");
+      SmokeSupport.require(baselineDispatch == null || baselineDispatch.equals(dispatch),
+          "M794 native chunk dispatch return or exception mismatch");
+      baselineDispatch = dispatch;
       verifyRecording(game.resolve("allocations.jfr"));
       System.out.println("[M794] allocation recording complete: " + game.getFileName());
     }

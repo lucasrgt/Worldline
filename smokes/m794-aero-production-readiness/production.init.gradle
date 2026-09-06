@@ -32,6 +32,7 @@ gradle.projectsEvaluated {
     def smoke = new File(root, 'smokes/m794-aero-production-readiness')
     def prop = { name -> project.findProperty(name).toString() }
     project.sourceSets.main.java.srcDir(new File(smoke, 'runtime-src'))
+    project.sourceSets.main.resources.srcDir(new File(root, 'smokes/shared/aero-benchmark-host/runtime-resources'))
     def profilerRoot = new File(root, 'modules/profiling/src/main/java/worldline/profiling')
     def profilerTypes = ['FrameCensus', 'FrameCensusCodec', 'ProfilerArtifacts', 'ProfilerMetric',
         'ProfilerRecorder', 'ProfilerRun', 'ProfilerRunCodec', 'ProfilerSchema',
@@ -70,6 +71,7 @@ gradle.projectsEvaluated {
     game.mkdirs()
     new File(game, 'options.txt').text = 'fpsLimit:0\nadvancedOpengl:false\n'
     task.jvmArgs([
+        '-XX:ActiveProcessorCount=4',
         '-Dworldline.m794.enabled=true',
         '-Dworldline.m794.diagnostic=' + prop('worldlineArm').startsWith('diagnostic'),
         '-Dworldline.m794.prepare=' + prop('worldlinePrepare'),

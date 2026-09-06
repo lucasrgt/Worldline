@@ -25,6 +25,7 @@ public final class WorldlineM794Rehydrator {
         layer(world, chunkX << 4, chunkZ << 4, UPPER_Y, 1);
       }
     }
+    world.setBlockWithoutNotifyingNeighbors(16, 84, 29, AeroTestMod.chunkBakedShowcaseBlock.id);
   }
 
   public static int count(World world) {
@@ -53,6 +54,8 @@ public final class WorldlineM794Rehydrator {
   }
 
   public static void verifyPopulation(World world) {
+    if (world.getBlockId(16, 84, 29) != AeroTestMod.chunkBakedShowcaseBlock.id)
+      throw new IllegalStateException("M794 registered chunk mesh is absent");
     int staticCount = 0, animatedCount = 0;
     for (Object value : world.blockEntities) {
       if (!(value instanceof Aero_RenderDistanceBlockEntity))
