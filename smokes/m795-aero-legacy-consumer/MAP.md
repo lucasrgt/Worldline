@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=external-aero-native-source-consumer -->
 <!-- nonclaims=no-legacy-performance-no-gameplay-census-no-fps -->
-<!-- frozen-trace=adf87227dcf2814f4444ff433c2ebc43526f9db631c8c5d583d8ec5fa862e425 -->
+<!-- frozen-trace=aae126685d8d4c4e16c03a1a204f0be8cb256afe7666dda7af80d2af28a39686 -->
 # M795 Aero native consumer map
 
 The external Aero pin and its public SDK discovery own library identity.
@@ -20,9 +20,9 @@ all other generated Minecraft source trees and binary artifacts remain prohibite
 
 Signal: sdk=discovered,loaders=modloader-forge,sessions=4,java=8,builds=native,rgba=exact28,caches=active,dispose=verified,animation=advanced,nbt=restored
 
-Trace: v2|aero=41dc5a8|sdk=public|native=modloader+forge1.0.6|sessions=2-per-loader|java=8|source=complete-core-and-adapter|surface=rgba8-depth24-128x128|draw=direct-list-cached-rebuilt|animation=zero-advanced-nbt-restored|pixels=exact-cross-session-cross-loader|dispose=gl-lists-released|profiler=disabled|performance=unclaimed.
+Trace: v3|aero=2b7726e|sdk=public|native=modloader+forge1.0.6|sessions=2-per-loader|java=8|source=complete-core-and-adapter|surface=rgba8-depth24-128x128|draw=direct-list-cached-rebuilt|animation=zero-advanced-nbt-restored|pixels=exact-cross-session-cross-loader|dispose=gl-lists-released|profiler=disabled|performance=unclaimed.
 
-SHA-256: adf87227dcf2814f4444ff433c2ebc43526f9db631c8c5d583d8ec5fa862e425.
+SHA-256: aae126685d8d4c4e16c03a1a204f0be8cb256afe7666dda7af80d2af28a39686.
 
 This is a native source-consumer and renderer lifecycle contract. The separate
 StationAPI production matrix owns the multi-pose optimization and timing claims.
