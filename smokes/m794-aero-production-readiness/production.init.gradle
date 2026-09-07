@@ -95,11 +95,7 @@ gradle.projectsEvaluated {
             '-XX:CompileCommand=print,aero.modellib.Aero_BatchVertexReuse::*',
             '-XX:CompileCommand=print,aero.modellib.Aero_MeshBatchDraw::*',
             '-XX:CompileCommand=print,aero.modellib.Aero_MeshBatchRenderer2::emitBoneInstanceBatched')
-        def settings = new File(smoke, 'allocation.jfc').absolutePath
-        def recording = new File(game, 'allocations.jfr').absolutePath
         task.jvmArgs('-XX:+UnlockDiagnosticVMOptions', '-XX:+LogCompilation',
             '-XX:LogFile=' + new File(game, 'compilation.xml').absolutePath)
-        task.jvmArgs('-XX:StartFlightRecording=name=M794Allocation,settings=' + settings +
-            ',filename=' + recording + ',dumponexit=true')
     }
 }

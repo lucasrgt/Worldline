@@ -1,9 +1,8 @@
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
-import jdk.jfr.consumer.RecordingFile;
 
-/** Separate allocation recordings never enter the performance qualification matrix. */
+/** Separate assembly acquisitions never enter the performance qualification matrix. */
 final class M794AllocationDiagnostic {
   private M794AllocationDiagnostic() {}
 
@@ -19,7 +18,7 @@ final class M794AllocationDiagnostic {
       Path template = build.resolve("template");
       if (step == 0)
         runtime.runClient(template, true, "prepare");
-      Path game = build.resolve("assembly-repeat" + step + "-current-off");
+      Path game = build.resolve("assembly-nojfr-repeat" + step + "-current-off");
       M794Runtime.copyWorld(template.resolve("saves/WorldlineAero"), game.resolve("saves/WorldlineAero"));
       runtime.runClient(game, false, "allocation-off");
       M794Artifact artifact = M794Artifact.read(game, "replay-off");
@@ -45,11 +44,14 @@ final class M794AllocationDiagnostic {
       SmokeSupport.require(baselineDispatch == null || baselineDispatch.equals(dispatch),
           "M794 native chunk dispatch return or exception mismatch");
       baselineDispatch = dispatch;
-      verifyRecording(game.resolve("allocations.jfr"));
+      SmokeSupport.require(!Files.exists(game.resolve("allocations.jfr")),
+          "M794 unexpected JFR recording in assembly-only acquisition");
       SmokeSupport.require(Files.size(game.resolve("compilation.xml")) > 0,
           "M794 JIT compilation log absent");
       String assembly = Files.readString(game.resolve("runtime-console.log"));
-      SmokeSupport.require(assembly.contains("Compiled method (c2)") && assembly.contains("[MachCode]")
+      SmokeSupport.require(!assembly.contains("Started recording")
+              && !assembly.contains("StartFlightRecording")
+              && assembly.contains("Compiled method (c2)") && assembly.contains("[MachCode]")
               && assembly.contains("Aero_TessellatorBulkWriter::write")
               && assembly.contains("Aero_MeshBatchDraw::drawBucket"),
           "M794 selected Aero compilation output absent");
@@ -57,21 +59,4 @@ final class M794AllocationDiagnostic {
     }
   }
 
-  private static void verifyRecording(Path file) throws Exception {
-    SmokeSupport.require(Files.isRegularFile(file) && Files.size(file) > 0,
-        "M794 allocation recording absent: " + file);
-    boolean allocation = false, execution = false, compilation = false;
-    try (RecordingFile recording = new RecordingFile(file)) {
-      while (recording.hasMoreEvents()) {
-        var event = recording.readEvent();
-        execution |= event.getEventType().getName().equals("jdk.ExecutionSample");
-        compilation |= event.getEventType().getName().equals("jdk.Compilation");
-        if (event.getEventType().getName().startsWith("jdk.ObjectAllocation")
-            && event.getStackTrace() != null)
-          allocation = true;
-      }
-    }
-    SmokeSupport.require(allocation && execution && compilation,
-        "M794 recording lacks allocation stacks, CPU samples or compilation events");
-  }
 }
