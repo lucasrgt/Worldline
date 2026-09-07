@@ -1,7 +1,7 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=external-aero-exact-multi-pose -->
 <!-- nonclaims=no-occlusion-no-end-to-end-fps-no-all-platform-promotion -->
-<!-- frozen-trace=fb56c1bd4d812ed5d515bc12e811f76fa1fbfb1eb48a4eb35e32d0f4ee7b7efd -->
+<!-- frozen-trace=a68eea695489267dd3d50c76ae9ef68a5db5afcad79fab035bc2a0a7c2413d5b -->
 
 # M792 exact multi-pose reuse map
 
@@ -46,9 +46,9 @@ Frozen trace and digest are generated below before execution.
 
 Signal: sdk=discovered,sessions=4-counterbalanced,scenes=stationary-moving-advancing,pixels=exact64of64,poses=shared,render=improved,tail=guarded,allocation=guarded,staging=bounded
 
-Trace: v9|candidate=exact-multi-pose-reuse|sdk=public|machines=512-mixed-four-chunks|sessions=4|orders=off-on,on-off,on-off,off-on|scenes=stationary,moving,advancing-diverse|views=16|prewarm=16x2x120|hold=180|discard=60|pixels=exact|render-ratio=0.95|moving-advancing-ratio=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase|surface=owned-rgba8-depth24|spikelog=off|counter-reset=independent|single-pose=legacy-ratio1.03-p99-1.05|attribution=thread-cpu-gc-jit-no-frame-exclusion|host=windows-high-four-physical-vm4|window=post-capture-preview|aero=41dc5a8.
+Trace: v10|candidate=exact-multi-pose-reuse|sdk=public|machines=512-mixed-four-chunks|sessions=4|orders=off-on,on-off,on-off,off-on|scenes=stationary,moving,advancing-diverse|views=16|prewarm=16x2x120|hold=180|discard=60|pixels=exact|render-ratio=0.95|moving-advancing-ratio=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase|surface=owned-rgba8-depth24|spikelog=off|counter-reset=independent|single-pose=legacy-ratio1.03-p99-1.05|attribution=thread-cpu-gc-jit-no-frame-exclusion|host=windows-high-four-physical-vm4|window=post-capture-preview|aero=2b7726e.
 
-SHA-256: fb56c1bd4d812ed5d515bc12e811f76fa1fbfb1eb48a4eb35e32d0f4ee7b7efd.
+SHA-256: a68eea695489267dd3d50c76ae9ef68a5db5afcad79fab035bc2a0a7c2413d5b.
 
 The reconciled runner owns an RGBA8/depth24 framebuffer with the native depth
 precision. Spike logging is off and frame counter reset is independent.

@@ -8,13 +8,13 @@ import java.util.Properties;
 /** Exact raster and counterbalanced render/allocation frontier for emission replay. */
 public final class M792AeroBatchEmissionPareto {
   private static final String ID = "m792-aero-batch-emission-pareto";
-  static final String TRACE = "v9|candidate=exact-multi-pose-reuse|sdk=public|machines=512-mixed-four-chunks|sessions=4"
+  static final String TRACE = "v10|candidate=exact-multi-pose-reuse|sdk=public|machines=512-mixed-four-chunks|sessions=4"
       + "|orders=off-on,on-off,on-off,off-on|scenes=stationary,moving,advancing-diverse|views=16"
       + "|prewarm=16x2x120|hold=180|discard=60|pixels=exact|render-ratio=0.95"
       + "|moving-advancing-ratio=1.03|p99=1.05|allocation=1.02|staging=16MiB|hitches=no-increase"
       + "|surface=owned-rgba8-depth24|spikelog=off|counter-reset=independent"
       + "|single-pose=legacy-ratio1.03-p99-1.05|attribution=thread-cpu-gc-jit-no-frame-exclusion"
-      + "|host=windows-high-four-physical-vm4|window=post-capture-preview|aero=41dc5a8";
+      + "|host=windows-high-four-physical-vm4|window=post-capture-preview|aero=2b7726e";
 
   public void execute(String id) throws Exception {
     M792Performance.selfTest();

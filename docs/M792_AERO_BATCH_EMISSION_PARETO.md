@@ -12,4 +12,4 @@ After timing and exact readback, each client presents its owned framebuffer in t
 
 Expected signal: `sdk=discovered,sessions=4-counterbalanced,scenes=stationary-moving-advancing,pixels=exact64of64,poses=shared,render=improved,tail=guarded,allocation=guarded,staging=bounded`.
 
-Frozen semantic SHA-256: `fb56c1bd4d812ed5d515bc12e811f76fa1fbfb1eb48a4eb35e32d0f4ee7b7efd`.
+Frozen semantic SHA-256: `a68eea695489267dd3d50c76ae9ef68a5db5afcad79fab035bc2a0a7c2413d5b`.
