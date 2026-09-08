@@ -100,6 +100,8 @@ public final class WorldlineContract {
             "SPI-discovered process-isolated ModLoader and Forge TestKit runtime sessions");
     public static final WorldlineContract TESTKIT_RUNTIME = define("testkit-runtime",
             "External Java specifications execute through the isolated TestKit runtime");
+    public static final WorldlineContract TESTKIT_EXTERNAL_MATURITY = define("testkit-external-maturity",
+            "Two public external mod consumers and evidence-based sustained-use release readiness");
     private static final Map<String, WorldlineContract> ALL;
     static {
         register(REPRODUCTION_BUNDLE, TRACE_DIVERGENCE, MOD_LOADING,
@@ -115,7 +117,7 @@ public final class WorldlineContract {
                 AERO_RUNTIME_SESSION, AERO_PAIRED_EXPERIMENT, AERO_FRAME_CENSUS,
                 AERO_CACHE_LIFECYCLE, AERO_DIAGNOSTIC_CAPTURE, AERO_SAVE_WINDOW,
                 LOGICAL_ITEM_REFERENCE, STATE_WORLD_DIFFERENTIAL,
-                STATIONAPI_RUNTIME_PROVIDER, LEGACY_LOADER_RUNTIME_PROVIDER, TESTKIT_RUNTIME);
+                STATIONAPI_RUNTIME_PROVIDER, LEGACY_LOADER_RUNTIME_PROVIDER, TESTKIT_RUNTIME, TESTKIT_EXTERNAL_MATURITY);
         ALL = Collections.unmodifiableMap(new LinkedHashMap<String, WorldlineContract>(DEFINITIONS));
     }
     private final String token, subject;

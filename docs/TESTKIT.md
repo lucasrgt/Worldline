@@ -807,3 +807,9 @@ a multi-mod dependency resolver, or an API for every promoted milestone. It
 does not make the official runtime concurrent and does not convert decompiled
 source into an oracle. Promotion to 1.0 requires sustained use by at least two
 external mods without repository-private access.
+
+The executable [external maturity gate](TESTKIT_EXTERNAL_MATURITY.md) qualifies
+two real public-artifact consumers and assesses their dated execution evidence.
+Its reviewed sustained-use policy requires two successful dates spanning at least
+seven days per mod. The 2026-09-08 baseline has one sustained consumer; 1.0 promotion
+remains blocked until a second mod meets that condition.
