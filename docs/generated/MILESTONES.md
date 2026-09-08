@@ -640,6 +640,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-dirt-flora-lifecycle-cycle` | CARRIED | official Beta 1.7.3 dirt-supported flora lifecycle family |
 | `b173-entity-persistence-envelope-cycle` | CARRIED | official Beta 1.7.3 entity persistence-envelope subsystem |
 | `b173-entity-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 entity physical-envelope subsystem |
+| `b173-entity-state-conformance-cycle` | CARRIED | native entity contexts and visual state conformance |
 | `b173-farmland-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 farmland subsystem conformance |
 | `b173-fire-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 fire subsystem conformance |
 | `b173-floor-mounted-lifecycle-cycle` | CARRIED | official Beta 1.7.3 floor-mounted block lifecycle family |
@@ -662,7 +663,8 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-native-entity-dynamics-cycle` | CARRIED | native entity movement, environment and timed-state contrasts |
 | `b173-native-entity-render-cycle` | CARRIED | official Beta 1.7.3 native entity render family |
 | `b173-native-entity-stimulus-cycle` | CARRIED | native entity materialization, damage, drops and causal contacts |
-| `b173-native-particle-lifecycle-cycle` | EXECUTED | official native particle lifecycle and frames |
+| `b173-native-particle-lifecycle-cycle` | CARRIED | official native particle lifecycle and frames |
+| `b173-native-random-outcomes-cycle` | CARRIED | native gravel and fishing finite random outcomes |
 | `b173-native-special-world-render-cycle` | CARRIED | official Beta 1.7.3 native special world block-render family |
 | `b173-native-tile-entity-render-cycle` | CARRIED | official Beta 1.7.3 native tile-entity render family |
 | `b173-openable-access-structures-conformance-cycle` | CARRIED | official Beta 1.7.3 openable access structures conformance |
@@ -685,6 +687,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-static-collision-envelope-cycle` | CARRIED | official Beta 1.7.3 static collision envelopes |
 | `b173-static-light-transport-cycle` | CARRIED | official Beta 1.7.3 static light transport |
 | `b173-static-self-drop-lifecycle-cycle` | CARRIED | official Beta 1.7.3 static self-drop lifecycle family |
+| `b173-stationapi-world-controls-cycle` | EXECUTED | StationAPI native local-world controls |
 | `b173-support-dependent-plant-lifecycle-cycle` | CARRIED | official Beta 1.7.3 support-dependent plant lifecycle family |
 | `b173-support-face-attachment-lifecycle-cycle` | CARRIED | official Beta 1.7.3 support-face attachment lifecycle family |
 | `b173-terrain-crafted-solid-stability-envelope-cycle` | CARRIED | official Beta 1.7.3 terrain-crafted solid bounded stability envelope |
@@ -703,4 +706,5 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `redstone-repeater-delays` | CARRIED | redstone-repeater-delays |
 | `redstone-wire-power` | CARRIED | redstone-wire-power |
 | `seed-atlas` | CARRIED | seed-atlas |
+| `testkit-external-maturity-cycle` | EXECUTED | public external mod consumption and honest 1.0 readiness |
 | `ui-export` | CARRIED | ui-export |
