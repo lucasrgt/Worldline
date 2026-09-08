@@ -3,14 +3,10 @@ package worldline.testkit;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import worldline.extension.ExtensionCapabilities;
-import worldline.extension.ExtensionContract;
-import worldline.extension.ExtensionEvidence;
+import worldline.extension.ExtensionContracts;
 import worldline.extension.ExtensionMode;
-import worldline.extension.ExtensionOracles;
 import worldline.extension.ExtensionSubject;
 import worldline.extension.ExtensionSubjectKind;
 import worldline.extension.WorldlineExtension;
@@ -37,12 +33,12 @@ public final class ExtensionTestSpecsTest {
         Path artifacts = root.resolve("results");
         TestRunResult result = new TestRunner().run(specs, new RunnerOptions().artifacts(artifacts),
                 new TestReporter() {});
-        require(result.passed() && result.count(TestStatus.PASSED) == 1,
+        require(result.passed() && result.count(TestStatus.PASSED) == 2,
                 "extension TestKit execution failed");
         try (java.util.stream.Stream<Path> paths = Files.walk(artifacts)) {
             long evidence = paths.filter(Files::isRegularFile).filter(path -> path.getFileName()
                     .toString().endsWith(".evidence.properties")).count();
-            require(evidence == 1, "extension evidence artifact missing");
+            require(evidence == 2, "extension evidence artifact missing");
         }
         System.out.println("ExtensionTestSpecsTest passed");
     }
@@ -50,16 +46,33 @@ public final class ExtensionTestSpecsTest {
     public static final class CounterExtension implements WorldlineExtension {
         private int count;
         @Override public void register(WorldlineExtensionRegistry registry) {
-            registry.subject(ExtensionSubject.of("example.counter:counter",
-                    ExtensionSubjectKind.SUBSYSTEM, "Counter"));
             registry.fixture("empty", context -> count = 0);
-            registry.action("increment", context -> count++);
-            registry.observation("count", context -> Integer.toString(count));
-            registry.oracle("equatable", ExtensionOracles.equatable());
-            Map<String, String> expected = new LinkedHashMap<String, String>(); expected.put("count", "1");
-            registry.contract(ExtensionContract.builder("increment", "example.counter:counter")
-                    .fixture("empty").action("increment").observation("count").oracle("equatable")
-                    .mode(ExtensionMode.CUSTOM_CONTRACT).custom(ExtensionEvidence.signature(expected)).build());
+            CounterContracts.register(registry, this);
+            MeterContracts.register(registry, this);
+        }
+    }
+
+    private static final class CounterContracts {
+        static void register(WorldlineExtensionRegistry registry, CounterExtension state) {
+            registry.subject(ExtensionSubject.of("example.counter:counter",
+                    ExtensionSubjectKind.BLOCK, "Counter block"));
+            ExtensionContracts.custom("increment", "example.counter:counter")
+                    .fixture("empty")
+                    .action("increment", context -> state.count++)
+                    .expect("count", context -> Integer.toString(state.count), "1")
+                    .registerInto(registry);
+        }
+    }
+
+    private static final class MeterContracts {
+        static void register(WorldlineExtensionRegistry registry, CounterExtension state) {
+            registry.subject(ExtensionSubject.of("example.counter:meter",
+                    ExtensionSubjectKind.BLOCK, "Meter block"));
+            ExtensionContracts.custom("meter-read", "example.counter:meter")
+                    .fixture("empty").action("increment")
+                    .expect("count", "1")
+                    .expect("meter-ready", context -> Boolean.toString(state.count > 0), "true")
+                    .registerInto(registry);
         }
     }
 

@@ -103,6 +103,7 @@ final class TestCommand {
             else if (option.equals("--shuffle")) parsed.shuffle = true;
             else if (option.equals("--pass-with-no-tests")) parsed.allowEmpty = true;
             else if (option.equals("--no-unicode")) parsed.unicode = false;
+            else if (option.equals("--overlay")) parsed.overlay = true;
             else if (option.equals("--no-runtime")) parsed.providerName = "none";
             else throw new IllegalArgumentException("unknown test option: " + option);
         }
@@ -158,7 +159,7 @@ final class TestCommand {
         output.println("usage: worldline test <run|watch|list|inspect|minimize> <spec.jar|classes> [spec.class] [options]");
         output.println("options: --classpath=PATHS --mod=JAR --world=DIR --provider=CLASS|none --reporter=default,verbose,dot,json,junit,agent");
         output.println("         --name=REGEX --file=REGEX --tag=TAG --line=N --seed=N --timeout=MS --retry=N --bail=N");
-        output.println("         --ci --allow-only -u --minimize --shuffle --pass-with-no-tests --no-unicode");
+        output.println("         --ci --allow-only -u --minimize --shuffle --pass-with-no-tests --no-unicode --overlay");
         return status;
     }
 
@@ -169,13 +170,13 @@ final class TestCommand {
         Path json, junit; String providerName = DEFAULT_PROVIDER, reporterNames = "default", tag;
         final List<Path> classpath = new ArrayList<>();
         Pattern name, file; TestRuntimeProvider provider; long seed = 173L, timeout; int retry, bail, line;
-        boolean ci, allowOnly, update, minimize, shuffle, allowEmpty, unicode = true;
+        boolean ci, allowOnly, update, minimize, shuffle, allowEmpty, overlay, unicode = true;
         Parsed(Path source, String spec) { this.source = source; this.spec = spec; }
         RunnerOptions options() {
             RunnerOptions value = new RunnerOptions().provider(provider).world(world).artifacts(artifacts)
                     .snapshots(snapshots).runtimeLock(runtimeLock).seed(seed).retry(retry).bail(bail).line(line).ci(ci)
                     .allowOnly(allowOnly).updateSnapshots(update).minimize(minimize).shuffle(shuffle).file(file)
-                    .passWithNoTests(allowEmpty).unicode(unicode).name(name).tag(tag);
+                    .passWithNoTests(allowEmpty).unicode(unicode).overlay(overlay).name(name).tag(tag);
             if (mod != null) value.mod(mod); if (timeout > 0) value.timeout(timeout); return value;
         }
         List<TestReporter> reporters(PrintStream output) {

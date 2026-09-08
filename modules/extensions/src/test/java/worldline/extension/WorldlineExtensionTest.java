@@ -39,6 +39,7 @@ public final class WorldlineExtensionTest {
                 ExtensionCapabilities.of(ExtensionCapabilities.TESTKIT_V1)); }
         catch (IllegalArgumentException expected) { rejected = true; }
         require(rejected, "missing capability was accepted");
+        ExtensionContractsTest.run(plan.manifest());
         System.out.println("WorldlineExtensionTest passed");
     }
 

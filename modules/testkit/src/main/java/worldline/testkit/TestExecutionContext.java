@@ -32,6 +32,11 @@ final class TestExecutionContext implements TestContext {
     private final List<String> steps = new ArrayList<>();
     private final Set<String> allowed;
     private int ticks, sequence;
+    private RunnerProgress.Attempt progress;
+    private String phase = "Preparing";
+
+    void progress(RunnerProgress.Attempt value) { progress = value; }
+    void phase(String value) { phase = value; if (progress != null) progress.phase(value); }
 
     TestExecutionContext(long seed, int attempt, TestRuntimeSession session,
             ArtifactStore artifacts, List<String> allowedSteps) {
@@ -71,7 +76,11 @@ final class TestExecutionContext implements TestContext {
             if (item < 0x20 || item > 0x7e) throw new IllegalArgumentException("step name must be visible ASCII");
         }
         String token = String.format("%04d:%s", ++sequence, clean); steps.add(token);
-        if (allowed == null || allowed.contains(token)) action.run(this);
+        if (allowed == null || allowed.contains(token)) {
+            String previous = phase; phase(clean);
+            try { action.run(this); }
+            finally { phase(previous); }
+        }
     }
     @Override public void onFinished(TestHook hook) {
         if (hook == null) throw new NullPointerException("hook"); dynamicFinished.add(0, hook);
@@ -79,7 +88,10 @@ final class TestExecutionContext implements TestContext {
     @Override public void onFailed(TestHook hook) {
         if (hook == null) throw new NullPointerException("hook"); dynamicFailed.add(0, hook);
     }
-    @Override public void tick() { runtime().tick(); ticks++; record("tick" + ticks); }
+    @Override public void tick() {
+        runtime().tick(); ticks++; record("tick" + ticks);
+        if (progress != null) progress.tick();
+    }
     @Override public GameUi ui() {
         observe("ui.tree", "GUI_TREE");
         return TestContext.super.ui();

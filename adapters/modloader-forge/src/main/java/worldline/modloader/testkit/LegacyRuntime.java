@@ -17,12 +17,28 @@ final class LegacyRuntime implements AutomatedMinecraftRuntime {
     private final LegacyPlayer player;
     private volatile LegacySnapshot snapshot;
     private volatile RuntimeState state = RuntimeState.WORLD_LOADED;
+    private final boolean progress;
 
     LegacyRuntime(Path worldPath, LegacyProtocol protocol, LegacyClientProcess process,
-            int timeoutSeconds, LegacySnapshot snapshot) {
+            int timeoutSeconds, LegacySnapshot snapshot, boolean progress) {
         this.worldPath = worldPath.toAbsolutePath().normalize(); this.protocol = protocol;
         this.process = process; this.timeoutSeconds = timeoutSeconds; this.snapshot = snapshot;
         world = new LegacyWorld(this); player = new LegacyPlayer(this);
+        this.progress = progress;
+    }
+
+    synchronized void showProgress(java.util.List<String> lines) {
+        requireOpen(); if (!progress) return;
+        try {
+            LegacySnapshot observed = protocol.progress(lines);
+            if (observed.tick != snapshot.tick || observed.time != snapshot.time
+                    || observed.health != snapshot.health || observed.selected != snapshot.selected
+                    || observed.entity != snapshot.entity || !observed.username.equals(snapshot.username)
+                    || Double.compare(observed.position.x(), snapshot.position.x()) != 0
+                    || Double.compare(observed.position.y(), snapshot.position.y()) != 0
+                    || Double.compare(observed.position.z(), snapshot.position.z()) != 0)
+                throw new IllegalStateException("progress display changed controlled game state");
+        } catch (Exception error) { throw new IllegalStateException("legacy progress failed", error); }
     }
 
     @Override public void bootHeadless() {

@@ -89,6 +89,7 @@ public final class M767ModloaderForgeTestkitProviderCycle {
         List<String> command = new ArrayList<String>(Arrays.asList(javaTool(),
                 "-Dworldline.legacy." + loader + ".workspace=" + workspace,
                 "-Dworldline.legacy.java8Home=" + java8,
+                "-Dworldline.legacy.testkit.hud.capture=true",
                 "-Dworldline.legacy.timeoutSeconds=" + SmokeSupport.value(descriptor,
                         "session.timeout.seconds"), "-classpath", join(runtime),
                 "worldline.cli.WorldlineCli", "test", "run", specs.toString(),
@@ -97,7 +98,7 @@ public final class M767ModloaderForgeTestkitProviderCycle {
                 "--artifacts=" + build.resolve("results").resolve(loader),
                 "--snapshots=" + build.resolve("snapshots").resolve(loader),
                 "--runtime-lock=" + build.resolve(loader + "-runtime.lock"), "--reporter=agent",
-                "--timeout=600000"));
+                "--timeout=600000", "--overlay"));
         return capture(loader, command, Integer.parseInt(SmokeSupport.value(descriptor, "timeout.seconds")));
     }
 
@@ -118,6 +119,9 @@ public final class M767ModloaderForgeTestkitProviderCycle {
                     .resolve(loader + "-" + session).resolve("profiler.wlpr");
             SmokeSupport.require(Files.isRegularFile(artifact) && Files.size(artifact) > 64L,
                     "missing legacy profiler artifact " + artifact);
+            String clientLog = Files.readString(artifact.getParent().resolve("client.log"), StandardCharsets.ISO_8859_1);
+            SmokeSupport.require(count(clientLog, "WORLDLINE_TEST_HUD=rendered") == 1,
+                    "native TestKit HUD was not rendered for " + session);
             String inspection = SmokeSupport.capture(root, Arrays.asList(javaTool(),
                     "-Djava.awt.headless=true", "-classpath", join(productRuntime(productClasses())),
                     "worldline.cli.WorldlineCli", "profiler", "inspect", artifact.toString()));

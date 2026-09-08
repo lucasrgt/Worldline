@@ -22,6 +22,7 @@ public final class RuntimeCapabilitySessionTest {
         require(result.passed(), "capability-only test failed");
         require(provider.opened.get() == 1 && provider.closed.get() == 1,
                 "capability-only session was not isolated and closed");
+        RunnerProgressTest.run();
         System.out.println("RuntimeCapabilitySessionTest passed");
     }
 
