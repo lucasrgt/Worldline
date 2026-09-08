@@ -12,6 +12,12 @@ envelopes, and an air-control comparison proves source-cell skylight for transpa
 opaque treatments. Cactus sits on gameplay-placed sand; the other three subjects use the default
 stone pad.
 
+The static cactus state-domain arena places a stone roof above the four future
+cacti before placement, with its support pillar two cells away. Occupied upper
+cells prevent native random-tick aging; the exact metadata-zero assertions before
+and after fresh login remain unchanged. This preparation applies only to cactus
+state-domain loadouts. Collision and skylight arenas retain their open upper cells.
+
 The package contains twelve Functional Census atoms inside one coherent physical-envelope
 mini-subsystem. Every dimension is isolated into four fresh worlds and crosses a clean save
 plus fresh login. The smoke coordinates public family executors; it does not own an oracle helper.

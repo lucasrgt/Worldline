@@ -1,0 +1,21 @@
+schema = 1
+id = "NYA-01M207C3WGG689M3V189594ZP4"
+title = "Exclude cactus aging from static metadata fixtures"
+lesson = "A cactus metadata-zero placement and fresh-login fixture can race native random-tick aging while retaining block ID 81. Before planting, place a roof through normal gameplay above the future cactus cells and keep horizontal neighbors clear. Retain exact metadata assertions, and qualify both fresh-world executions against the unchanged signature. Apply this preparation only to the static state-domain arena; growth, collision, and skylight families keep their own fixtures."
+scope = [
+    "adapters/b173-server/src/testkit/java/worldline/b173server/B173StateDomainArena.java",
+    "smokes/b173-special-collision-physical-envelope-cycle/MAP.md",
+]
+tags = [
+    "fixture",
+    "random-ticks",
+]
+created_at = "2026-09-08T10:00:16Z"
+
+[[occurrences]]
+occurred_at = "2026-09-08T10:00:15Z"
+source = "manual:2026-09-08-cactus-static-reload; failed-log-sha256=460fc4f4ef1a70333b505ce1bfd0ee8a79606d780e71c79e404880aacfeb0311; qualified-log-sha256=db635b24cae8191d5fa03fb0d3d03f7e2ed3c85822919da4d50df49b919d66f2; signature=af7d27ecf0fe74412eb4107a31313459adc913fcedf1c63506f6df5db1b0fd2b"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "7a48cbde1"

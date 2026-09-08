@@ -18,7 +18,7 @@ public final class LegacyDriverSpec extends WorldlineSpec {
         afterAll(() -> expect(USERS.size()).toEqual(2));
     }
 
-    private static void exercise(worldline.test.TestContext context) {
+    private static void exercise(worldline.test.TestContext context) throws Exception {
         expect(context.runtime().state()).toEqual(RuntimeState.WORLD_LOADED);
         String username = context.runtime().player().username();
         if (!USERS.add(username)) throw new AssertionError("legacy session identity was reused");
@@ -28,7 +28,7 @@ public final class LegacyDriverSpec extends WorldlineSpec {
         if (!Double.isFinite(position.x()) || !Double.isFinite(position.y())
                 || !Double.isFinite(position.z())) throw new AssertionError("non-finite legacy pose");
         long before = context.runtime().world().time();
-        context.runtime().tick();
+        context.step("Advance one controlled tick", step -> step.tick());
         long after = context.runtime().world().time();
         if (after <= before) throw new AssertionError("legacy controlled tick did not advance world time");
     }

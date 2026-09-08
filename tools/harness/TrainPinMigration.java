@@ -144,6 +144,7 @@ final class TrainPinMigration extends TrainPinSupport {
         lock.setProperty("executed.count", Integer.toString(executed));
         lock.setProperty("pending.count", Integer.toString(pending.size()));
         lock.setProperty("pending.smokes", String.join(",", pending.stream().sorted().toList()));
+        TrainPinHistory.preserveUnchanged(predecessor, lock);
         pins.write(updated); store(root.resolve("smokes/train-reconciliation.lock"), lock);
         System.out.println("train proofs: " + carried + " carried, " + imported
                 + " imported, " + executed + " executed, " + pending.size() + " pending");
