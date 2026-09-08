@@ -1,27 +1,29 @@
 package worldline.stationapi;
 
 import java.nio.file.Path;
-import worldline.api.AutomatedMinecraftRuntime;
 import worldline.api.GamePlayer;
 import worldline.api.GameWorld;
 import worldline.api.RuntimeState;
 import worldline.api.WorldSource;
 
 /** Real external StationAPI client controlled one game tick at a time over localhost. */
-public final class StationApiRuntime implements AutomatedMinecraftRuntime {
+public final class StationApiRuntime implements worldline.api.UiMinecraftRuntime {
     private final String session;
     private final Path worldPath;
     private final StationApiProtocol protocol;
     private final StationApiProcesses processes;
     private final StationApiWorld world;
     private final StationApiPlayer player;
+    private final boolean localWorld;
+    private final StationApiUi ui;
+    private long request;
     private volatile StationApiSnapshot snapshot;
     private volatile RuntimeState state = RuntimeState.WORLD_LOADED;
 
     StationApiRuntime(String session, Path worldPath, StationApiProtocol protocol,
-            StationApiProcesses processes) throws Exception {
+            StationApiProcesses processes, boolean localWorld) throws Exception {
         this.session = session; this.worldPath = worldPath.toAbsolutePath().normalize();
-        this.protocol = protocol; this.processes = processes;
+        this.protocol = protocol; this.processes = processes; this.localWorld = localWorld; ui = new StationApiUi(this);
         snapshot = protocol.ready(session); world = new StationApiWorld(this); player = new StationApiPlayer(this);
     }
 
@@ -45,6 +47,23 @@ public final class StationApiRuntime implements AutomatedMinecraftRuntime {
     @Override public RuntimeState state() { return state; }
     @Override public GameWorld world() { requireLoaded(); return world; }
     @Override public GamePlayer player() { requireLoaded(); return player; }
+    @Override public worldline.api.GameUi ui() { requireLocal(); return ui; }
+    String session() { return session; }
+    void mutate(String command) {
+        if (!"ok".equals(control(command))) throw new IllegalStateException("invalid mutation acknowledgement");
+    }
+    synchronized String control(String command) {
+        requireLocal(); long before = snapshot.tick;
+        try {
+            StationApiControlReply reply = protocol.control(session, ++request, command);
+            if (reply.snapshot.tick != before) throw new IllegalStateException("command advanced a game tick");
+            snapshot = reply.snapshot; return reply.value;
+        } catch (Exception error) { throw new IllegalStateException("StationAPI command failed", error); }
+    }
+    private void requireLocal() {
+        requireLoaded();
+        if (!localWorld) throw new UnsupportedOperationException("StationAPI world controls require the local-world profile");
+    }
     StationApiSnapshot snapshot() { requireLoaded(); return snapshot; }
 
     @Override public synchronized void close() {

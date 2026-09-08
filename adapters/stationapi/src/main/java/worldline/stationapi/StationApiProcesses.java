@@ -36,9 +36,11 @@ final class StationApiProcesses implements AutoCloseable {
                 StandardCharsets.ISO_8859_1);
         StationApiProcess server = null, client = null;
         try {
-            server = StationApiProcess.start(serverRoot, root.resolve("server.log"),
+            if (!settings.localWorld) {
+                server = StationApiProcess.start(serverRoot, root.resolve("server.log"),
                     Arrays.asList(javaTool(), "-Xms64m", "-Xmx256m", "-jar", "server.jar", "nogui"));
-            server.awaitText("Done (", settings.timeoutSeconds);
+                server.awaitText("Done (", settings.timeoutSeconds);
+            }
             List<String> command = new ArrayList<String>();
             command.add(settings.wrapper().toString()); command.add("--no-daemon");
             command.add("--init-script"); command.add(settings.initScript.toString());
@@ -50,12 +52,16 @@ final class StationApiProcesses implements AutoCloseable {
             command.add("-PworldlineServerPort=" + serverPort);
             command.add("-PworldlineUsername=" + username);
             command.add("-PworldlineSession=" + session);
+            command.add("-PworldlineWorldPath=" + root.resolve("client-world"));
+            command.add("-PworldlineSeed=" + seed);
             client = StationApiProcess.start(settings.project(), root.resolve("client.log"), command);
             return new StationApiProcesses(settings, server, client);
         } catch (Exception error) {
             if (client != null) client.close(); if (server != null) server.close(); throw error;
         }
     }
+
+    void verifyClientAlive() throws java.io.IOException { client.requireAlive(); }
 
     void verifyClientStarted() throws Exception {
         client.awaitText("[WorldlineStationAPI] connect", settings.timeoutSeconds);
@@ -68,7 +74,7 @@ final class StationApiProcesses implements AutoCloseable {
             if (error instanceof InterruptedException) Thread.currentThread().interrupt();
             failure = error; client.close();
         }
-        try { server.write("save-all\nstop"); server.awaitExit(45, "official server"); }
+        try { if (server != null) { server.write("save-all\nstop"); server.awaitExit(45, "official server"); } }
         catch (Throwable error) {
             if (error instanceof InterruptedException) Thread.currentThread().interrupt();
             if (failure == null) failure = error; else failure.addSuppressed(error); server.close();

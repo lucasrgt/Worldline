@@ -68,7 +68,12 @@ public final class AdapterManifestTest {
                 && legacy.render().contains("PLAYER_HEALTH="), "ModLoader/Forge driver boundary");
         require(stationapi != null && "driver".equals(stationapi.kind())
                 && stationapi.ownerPrefix().equals("worldline/stationapi/")
-                && stationapi.render().contains("STATIONAPI_RUNTIME_TICK="),
+                && stationapi.render().contains("STATIONAPI_RUNTIME_TICK=")
+                && stationapi.sites().size() == 24
+                && stationapi.render().contains("READ_BLOCK=")
+                && stationapi.render().contains("WRITE_BLOCK=")
+                && stationapi.render().contains("TELEPORT=")
+                && stationapi.render().contains("GUI_CLICK="),
                 "StationAPI driver boundary");
         require(aero != null && "extension".equals(aero.kind())
                 && aero.ownerPrefix().equals("worldline/aero/"), "aero prefix");
