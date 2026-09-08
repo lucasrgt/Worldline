@@ -3,7 +3,6 @@ import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.HexFormat;
 import java.util.LinkedHashSet;
@@ -188,7 +187,7 @@ final class TrainSourceHistory {
     }
 
     private static String digest(byte[] bytes) throws Exception {
-        return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
+        return HexFormat.of().formatHex(HexDigest.sha256()
                 .digest(PortableText.normalize(bytes)));
     }
 
