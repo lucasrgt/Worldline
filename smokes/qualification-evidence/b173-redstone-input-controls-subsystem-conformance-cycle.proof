@@ -1,5 +1,5 @@
 schema=1
 id=b173-redstone-input-controls-subsystem-conformance-cycle
-fingerprint=e48c57627f05cab111e033868ca650f9c397f775a1a5463ba0430b30ee70a221
+fingerprint=9e2e0b095d4715f9e82f8c8b1712212d656e385373f542b4d01b85d1dfea1de2
 observation.sha256=7745680430ed9929caa4c05777a24a3dfc0b197bbd8b1bbdaa195265d3eeb39f
 source=refactor-equivalent

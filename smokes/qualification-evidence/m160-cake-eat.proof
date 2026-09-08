@@ -1,5 +1,5 @@
 schema=1
 id=m160-cake-eat
-fingerprint=1accc8c810e3c2cdb5aea9ac180921dfbecb23ca38b529ebdd3965af0c2bc2b8
+fingerprint=6b350d7fdba39ad26354c07efc075d2c55073144afb6ae6c60c6304b2b7cc3d9
 observation.sha256=ec442ce01a43be294030f3c3fb48319afc75e6eb99291a4e24cab8a54f3d8074
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m762-wall-sign-support-break
-fingerprint=2cc99396c173f606ff1fdabb93b55dcdd6118819b615d525f2d34e8a1aeffa2c
+fingerprint=503cee9fe441da02ba99e073f0d5546065cc61525d8a9338f0ebeecabd2d40c8
 observation.sha256=cf6ba2aa833ca1b8dca2f3658877a6262052e96938c19ad36706fcb9dbf26fe7
-source=executed
+source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m352-tool-durability-set
-fingerprint=600cc193e2ece6b66c29afd05a62c45c1144d62adc8c7dd22464f11a78da308d
+fingerprint=0e367a50ac7059a2f1c2627a3aee543cb30eb75066c3992b9b47eb7e58793dbb
 observation.sha256=46cbf98b50d0745eafee30276fb3d3adafbbd1381f71bf7106012dbe80b75a30
 source=refactor-equivalent

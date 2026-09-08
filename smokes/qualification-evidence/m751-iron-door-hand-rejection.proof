@@ -1,5 +1,5 @@
 schema=1
 id=m751-iron-door-hand-rejection
-fingerprint=219431bfbe9948daeb79fafae943253ef21ae28aaea4e49de7072598ae7f4ba8
+fingerprint=64af92505272d15656fafec2b112ebae0ae968c94ff074f36901fcd731ae97d7
 observation.sha256=20d50b19dbf91d1fe25a4004ed9b2fca458b7f78f1cf9b6b73db4c4a9616ae92
-source=executed
+source=refactor-equivalent
