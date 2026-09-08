@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** Argument files keep complete multi-adapter candidate closures below Windows process limits. */
-final class CandidateCompiler {
+public final class CandidateCompiler {
     private CandidateCompiler() { }
-    static String compile(Path root, List<String> command, int timeout) throws Exception {
+    public static String compile(Path root, List<String> command, int timeout) throws Exception {
         Path directory = root.resolve(".worldline"); Files.createDirectories(directory);
         Path arguments = Files.createTempFile(directory, "candidate-javac-", ".args");
         try {
@@ -21,7 +21,7 @@ final class CandidateCompiler {
     }
     static void selfTest() throws Exception {
         Path root = Path.of("").toAbsolutePath().normalize();
-        Path directory = Files.createTempDirectory(root.resolve(".worldline"), "candidate compiler spaces ");
+        Path directory = Files.createTempDirectory(root.resolve(".worldline"), "candidate compiler spaces \u00e9 ");
         try {
             Path source = directory.resolve("ArgumentProbe.java");
             Files.writeString(source, "final class ArgumentProbe {}\n", StandardCharsets.UTF_8);

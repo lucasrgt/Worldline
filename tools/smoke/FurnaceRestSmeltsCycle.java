@@ -110,16 +110,16 @@ public final class FurnaceRestSmeltsCycle {
     List<String> command = new ArrayList<>(Arrays.asList("javac", "-encoding", "UTF-8", "--release",
         "8", "-Xlint:all,-options", "-Werror", "-classpath", classpath(output),
         "-d", output.toString()));
-    command.addAll(javaFiles(root.resolve("modules/api/src/main/java")));
     command.addAll(javaFiles(root.resolve("modules/smoketest/src/main/java")));
     command.addAll(javaFiles(root.resolve("adapters/b173-server/src/main/java")));
     command.addAll(javaFiles(smoke.resolve("src")));
-    capture(command);
+    CandidateCompiler.compile(root, command, 180);
     return output;
   }
 
   private String classpath(Path classes) {
-    return classes + System.getProperty("path.separator") + product("testapi");
+    String separator = System.getProperty("path.separator");
+    return classes + separator + product("api") + separator + product("testapi");
   }
   private Path product(String name) {
     return SmokeSupport.product(root, name);
