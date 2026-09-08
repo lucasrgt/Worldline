@@ -109,7 +109,7 @@ final class S3CasInventory {
             Files.write(entry.resolve("fixture/Example.class"),
                     new byte[] {-54, -2, -70, -66, 0, 1});
             ModuleCachePublication.Prepared prepared = ModuleCachePublication.prepare(root,
-                    root.resolve("prepared"), List.of(
+                    root.resolve(".worldline/cas-shadow/inventory"), List.of(
                             new ModuleCachePublication.Module("fixture", entry)), List.of());
             KeyPair keys = KeyPairGenerator.getInstance("Ed25519").generateKeyPair();
             Path trust = root.resolve("index.trust"); ModuleCacheIndexTrust.sign(
