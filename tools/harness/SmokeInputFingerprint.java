@@ -116,8 +116,13 @@ final class SmokeInputFingerprint {
         }
         if (source.contains("modules/smoketest"))
             add(digest, root.resolve("modules/smoketest"), qualification);
+        if (source.contains("NativeDifferentialCapture")) {
+            add(digest, root.resolve("tools/harness/NativeDifferentialCapture.java"), qualification);
+            add(digest, root.resolve("tools/harness/SmokeSupport.java"), qualification);
+        }
         boolean dataDriven = Set.of("tools/smoke/DataDrivenCycle.java",
-                "tools/smoke/CompositeCycle.java").contains(smoke.runner);
+                "tools/smoke/CompositeCycle.java").contains(smoke.runner)
+                || descriptor(smoke.id).containsKey("native.capture.schema");
         if (dataDriven) addDataDrivenInputs(digest, smoke.id, qualification);
         else for (String input : REPOSITORY_INPUTS)
             if (source.contains(input)) add(digest, root.resolve(input), qualification);

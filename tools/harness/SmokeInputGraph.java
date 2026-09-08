@@ -34,7 +34,8 @@ final class SmokeInputGraph {
         add(graph, root.resolve("tools/harness/SmokeProcess.java"));
         conditionalInputs(graph, source);
         boolean dataDriven = Set.of("tools/smoke/DataDrivenCycle.java",
-                "tools/smoke/CompositeCycle.java").contains(smoke.runner);
+                "tools/smoke/CompositeCycle.java").contains(smoke.runner)
+                || inputs.descriptor(smoke.id).containsKey("native.capture.schema");
         if (dataDriven) dataDrivenInputs(graph, smoke.id);
         else for (String input : SmokeInputFingerprint.REPOSITORY_INPUTS)
             if (source.contains(input)) add(graph, root.resolve(input));
@@ -67,6 +68,10 @@ final class SmokeInputGraph {
             add(graph, root.resolve("tools/harness/SmokeSupport.java"));
         }
         if (source.contains("modules/smoketest")) add(graph, root.resolve("modules/smoketest"));
+        if (source.contains("NativeDifferentialCapture")) {
+            add(graph, root.resolve("tools/harness/NativeDifferentialCapture.java"));
+            add(graph, root.resolve("tools/harness/SmokeSupport.java"));
+        }
     }
 
     private void dataDrivenInputs(Collector graph, String id) throws Exception {

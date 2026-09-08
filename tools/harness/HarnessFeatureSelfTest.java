@@ -4,6 +4,7 @@ final class HarnessFeatureSelfTest {
     static void core() throws Exception {
         FunctionalCensusCoverage.selfTest();
         EntityAtlasDocumentationSuccessor.selfTest();
+        NativeDifferentialCapture.selfTest();
         ProviderRefreshAncestrySuccessor.selfTest();
         SourceLauncherQualificationSuccessor.selfTest();
         SafeTreeDelete.selfTest();
