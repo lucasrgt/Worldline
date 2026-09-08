@@ -186,22 +186,12 @@ public final class AtlasCoverageTest {
         for (AtlasRecord gap : gaps) {
             if (gap.id().startsWith("atlas.coverage-unit.")) coverageGaps.add(gap.id());
         }
-        Set<String> expectedGaps = new HashSet<String>();
-        for (String subsystem : new String[] {"lifecycle", "scheduling"}) {
-            for (String coverageDimension : AtlasSubsystems.DIMENSIONS) {
-                expectedGaps.add("atlas.coverage-unit." + subsystem + "." + coverageDimension);
-            }
-        }
-        for (String subsystem : new String[] {"profiling", "animation"}) {
-            for (String coverageDimension : new String[] {"CONTROL", "SEMANTIC", "DETERMINISM"}) {
-                expectedGaps.add("atlas.coverage-unit." + subsystem + "." + coverageDimension);
-            }
-        }
-        require(coverageGaps.equals(expectedGaps),
+        require(coverageGaps.isEmpty(),
                 "declared coverage matrix gap set drifted");
         String matrix = AtlasQuery.coverage(store);
-        require(matrix.contains("0/1") && matrix.contains("1/1")
+        require(!matrix.contains("0/1") && matrix.contains("1/1")
                 && matrix.contains("source=declared-coverage-unit"), "coverage matrix");
+        AtlasSemanticEvidenceLinksTest.verify(store);
         System.out.println("AtlasCoverageTest passed");
     }
 

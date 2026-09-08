@@ -96,10 +96,18 @@ REPRODUCIBILITY, DETERMINISM.
 
 A cell is `1/1` only when an importer linked qualifying evidence. Empty cells
 are `UNKNOWN` and appear in `worldline atlas gaps`. The current finite matrix
-is 203 declared units, with 183 evidence-backed cells. The 20 explicit gaps
-are every dimension for lifecycle and scheduling plus the CONTROL, SEMANTIC,
-and DETERMINISM dimensions for profiling and animation; this is an honest evidence boundary, not a claim that the
-simulation's state space is finite or exhausted.
+is 203 declared units, with 203 evidence-backed cells. This finite declared
+matrix does not claim that the simulation's state space is exhausted.
+
+Catalog evidence IDs join only the identically named existing experiment;
+the join preserves its signature, status, and original scope. Lifecycle uses
+`controlled-client-tick` for boot, load, tick, and close. Scheduling uses
+`lab-cycle` for tick-scheduled actions. Profiling uses `m17-profile` for
+sample aggregates and budget decisions: elapsed wall-clock samples remain
+machine-relative. Animation uses `m69-peer-swing` for the held-item arm swing
+request and named peer Packet18 observation; it does not claim deterministic
+raster timing or coverage of every visual animation. Missing experiments and
+unsigned evidence cannot gain oracle or reproducibility coverage from a join.
 
 ## CLI
 

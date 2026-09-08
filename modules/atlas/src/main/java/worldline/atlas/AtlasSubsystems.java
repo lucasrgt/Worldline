@@ -87,8 +87,8 @@ public final class AtlasSubsystems {
         mapped.put("rng", "tick-lifecycle");
         mapped.put("input", "tick-lifecycle");
         mapped.put("tick", "tick-lifecycle");
-        mapped.put("scheduler", "tick-lifecycle");
-        mapped.put("lifecycle", "tick-lifecycle");
+        mapped.put("scheduler", "scheduling");
+        mapped.put("lifecycle", "lifecycle");
         mapped.put("worldgen", "worldgen");
         mapped.put("block-tick", "block-ticks");
         mapped.put("block_tick", "block-ticks");
