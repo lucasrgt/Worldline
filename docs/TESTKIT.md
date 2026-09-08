@@ -215,6 +215,51 @@ typed `registry-presence` cases and emits equatable
 `worldline.entity-registry-evidence.v1`; registry membership alone makes no
 claim about spawning, ticking, collision, persistence, rendering, or AI.
 
+`NativeEntityDynamicsFixture#verify` validates an explicit ordered family of native displacement,
+world-condition and timed-state contrasts. `NativeEntityDynamicsCase` declares each subject,
+layer and rule; `NativeEntityDynamicsObservation` holds exact normalized native measurements.
+The equatable result binds `native-entity-dynamics` to all 66 cases captured in four independent
+mapped/official server processes. Short-entity water flags, painting breakage and neighboring
+expiry controls are explicit parts of the contract. These observations do not imply exhaustive
+AI behavior, combat, drops, world restarts or network materialization.
+
+`NativeEntityStimulusFixture#verify` accepts ordered native spawn, damage, drop and interaction
+contrasts through the same caller-owned case and observation types. Its independent equatable
+result binds `native-entity-stimulus` to 53 cases over 20 registrations, with four matching native
+server captures. It checks tracker-produced spawn payloads, delayed lethal removal, eight-seed
+native item bags, actual inventory pickup, reciprocal mounting, milking, collision impulses and
+combat controls. The player constructor shell inherits native `EntityPlayer` methods without
+overrides. The contract covers the declared stimuli; socket delivery, exhaustive loot contexts
+and all damage causes remain outside this bounded proof.
+
+`NativeEntityRenderFixture#verify` checks an explicit ordered family against native renderer
+identities, nonempty RGBA captures and exact frame hashes. Its equatable evidence preserves
+each subject's Functional Census layer. The `native-entity-render` behavior publishes the
+complete 23-concrete-subject Beta family, qualified by two mapped and two untouched official
+client processes. This canonical body-render scene excludes shadow/fire passes, exhaustive
+animation states and cross-GPU pixel portability. Native class provenance is a separate
+qualification guard.
+
+`EntityStateFixture#verify` extends the declared native gameplay boundary with
+damage-cause contrasts, seeded contextual drops and AI target state. The related
+`EntityVisualStateFixture#verify` compares fourteen Pig/Zombie native render
+states, including animation, hurt, shadow and fire passes. These are the finite
+scenes in [the entity state package](B173_ENTITY_STATE_CONFORMANCE.md).
+`EntityGpuPortabilityFixture` accepts independently captured frames from distinct
+GPU vendors/renderers and checks the published pixel tolerances. The available
+NVIDIA captures qualify same-device parity; cross-GPU qualification is pending
+a real second-device capture.
+
+`RandomOutcomeFixture#verify` publishes the complete ordered gravel and fishing
+draw matrix, catch windows and controlled first-bite schedules. See
+[native random outcomes](B173_NATIVE_RANDOM_OUTCOMES.md) for its conditional
+probabilities and geometry limits; seed quality and unconditioned waiting times
+are outside this contract.
+
+`EntityPersistenceFixture` supplies the native serialization/reconstruction boundary for all
+23 concrete persistent entity types. These public bindings preserve the stronger independent
+sheep world-restart proof; native NBT equality alone is not a full world-restart claim.
+
 `EntityConformancePlan` expands persistent entity profiles over reusable dimensions and routes
 each case through `UNIVERSAL`, `ARCHETYPE`, or `SINGULAR`. `EntityLifecycleFixture` executes a
 selected coherent lifecycle rather than counting each operation as a milestone:
@@ -650,6 +695,15 @@ channel. Its M620 surface is deliberately narrow: lifecycle state, world time,
 player identity, health, selected slot, and pose. It does not claim headless
 boot, block or inventory mutation, GUI automation, or broad StationAPI parity.
 
+The opt-in local-world profile (`-Dworldline.stationapi.localWorld=true`) adds
+the [StationAPI world controls package](B173_STATIONAPI_WORLD_CONTROLS.md): native
+block ID/metadata reads and writes, teleportation, hotbar selection, item insertion
+and census, inventory GUI frames and clicks, save access and sealed profiling.
+`WorldControlFixture` checks conservation and explicit tick accounting across
+two fresh sessions. Commands require matching session and sequence acknowledgments.
+This profile does not widen M620's multiplayer boundary or claim arbitrary mod
+GUIs, extended IDs, keyboard/pointer control or broad StationAPI parity.
+
 The `modloader-b1.7.3` and `forge-b1.7.3` adapters are the legacy graphical
 provider families qualified by M767. Each attempt starts a fresh hash-pinned
 single-player Java 8 client with an isolated data directory. A loader-owned
@@ -778,3 +832,9 @@ a multi-mod dependency resolver, or an API for every promoted milestone. It
 does not make the official runtime concurrent and does not convert decompiled
 source into an oracle. Promotion to 1.0 requires sustained use by at least two
 external mods without repository-private access.
+
+The executable [external maturity gate](TESTKIT_EXTERNAL_MATURITY.md) qualifies
+two real public-artifact consumers and assesses their dated execution evidence.
+Its reviewed sustained-use policy requires two successful dates spanning at least
+seven days per mod. The 2026-09-08 baseline has one sustained consumer; 1.0 promotion
+remains blocked until a second mod meets that condition.

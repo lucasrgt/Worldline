@@ -263,7 +263,7 @@ final class CandidateSourceClosure {
     }
 
     private static String compile(Path root, List<String> command, int timeout) throws Exception {
-        return ProcessCapture.require(root, command, timeout);
+        return CandidateCompiler.compile(root, command, timeout);
     }
 
     private static String javaTool(String name) {

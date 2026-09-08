@@ -1,5 +1,5 @@
 schema=1
 id=m133-nether-portal-traversal
-fingerprint=b7ee3071821d3112fe5cd7746089dcf589849306809aa6529faf04a51ded8658
+fingerprint=02f9bde79f549b072aab2d8c9f3db034ad73a95fb3c336264fb8f5fc6593951a
 observation.sha256=5c8ac40f2065949243c4a0e77c0ae9f5757aa4d89247915f6878de01cb72ed5d
 source=refactor-equivalent

@@ -285,10 +285,15 @@ repository gate fails closed through `CsmSuiteCheck` when the tracked NYA scar o
 is missing or empty.
 
 The scheduled private workflow runs differential fuzzing and mutation-manifest exploration only
-after the canonical Gate. `NightlyQualityCampaign` splits a hard wall-clock budget between both
-child JVMs, kills timed-out process trees, and publishes seed, volume, duration, status, and logs
-under `.worldline/reports/nightly-quality/`. The `quality` dispatch profile reproduces it manually;
-ordinary local and pull-request gates retain only deterministic short tests.
+after the canonical Gate. `NightlyQualityCampaign` consumes one exact `CampaignPlan` shard, splits
+its hard wall-clock budget between both child JVMs, kills timed-out process trees, and atomically
+publishes content-addressed plan, immutable logs, and a non-authoritative shard receipt under
+`.worldline/reports/nightly-quality/`. Complete shard sets aggregate independently of arrival
+order. The `quality` dispatch profile reproduces a single shard manually; ordinary local and
+pull-request gates retain only deterministic short tests. `CampaignExecutorCycle` optionally
+places the complete Java shard coordinator inside the pinned Rust executor. Its campaign receipt
+binds the exact native request while the outer Java adapter revalidates the native receipt and
+referenced bytes; the executor still has no behavioral or aggregation authority.
 
 Smoke source policy counts semicolons outside comments, strings, and character literals instead
 of rewarding physical-line packing. New runners and scenarios are limited to 300 and 150
@@ -542,7 +547,9 @@ reviewable migration lock. The gate enforces a non-decreasing generic-milestone 
 Any later shared-runner change invalidates all generic fingerprints. The explicit
 `Gate.java --refresh-data-cycle-pins` transition is fail-closed unless at least one generic
 milestone has a current freshly executed proof; it preserves the other reviewed equivalence rows
-and records hashes of the runner, plan and class-loader support boundary.
+and records hashes of the runner, plan and class-loader support boundary. A semantic plan revision
+must first pass its exact clean `Gate.java --milestone ID` execution. The same refresh command then
+rebinds only that plan and evidence pair; a revised plan without matching executed bytes is rejected.
 
 Exceptional coordinators enter the same bounded EOF policy through the public
 `SmokeRetryBoundary`; the decision, backoff and telemetry remain owned by `SmokeRetry`. The

@@ -23,6 +23,7 @@ public final class WorldlineCliTest {
     private WorldlineCliTest() {}
 
     public static void main(String[] arguments) throws Exception {
+        RepositoryLauncherTest.main(arguments);
         ProfilerCommandTest.main(arguments);
         String testClasses = System.getProperty("worldline.test.classes", ".worldline/build/test-classes");
         Path bundle = Files.createTempFile("worldline-cli-test", ".wlrb");
@@ -226,7 +227,7 @@ public final class WorldlineCliTest {
                     new PrintStream(output), new PrintStream(error));
             require(status == 0 && output.toString().contains("WORLDLINE_ATLAS=PASS")
                     && output.toString().contains("role=")
-                    && output.toString().contains("coverage_unit=189")
+                    && output.toString().contains("coverage_unit=203")
                     && output.toString().contains("mapping_set=2"),
                     "CLI atlas status failed");
             output.reset(); error.reset();

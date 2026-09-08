@@ -72,12 +72,12 @@ non-claims keep a `map-nonclaims` evidence token.
 
 ## Coverage
 
-The versioned taxonomy groups all 27 subsystems without changing their stable
+The versioned taxonomy groups all 29 subsystems without changing their stable
 identities or historical provenance:
 
 | Domain | Subsystems |
 | --- | --- |
-| `simulation` | `tick-lifecycle`, `weather`, `block-ticks`, `redstone` |
+| `simulation` | `tick-lifecycle`, `weather`, `block-ticks`, `redstone`, `lifecycle`, `scheduling` |
 | `world` | `worldgen`, `chunks`, `lighting`, `fluids`, `saves`, `dimensions` |
 | `actors` | `entities`, `tile-entities`, `mob-ai`, `player` |
 | `gameplay` | `inventory`, `crafting` |
@@ -96,10 +96,18 @@ REPRODUCIBILITY, DETERMINISM.
 
 A cell is `1/1` only when an importer linked qualifying evidence. Empty cells
 are `UNKNOWN` and appear in `worldline atlas gaps`. The current finite matrix
-is 189 declared units, with 183 evidence-backed cells. The six explicit gaps
-are the CONTROL, SEMANTIC, and DETERMINISM dimensions for profiling and
-animation; this is an honest evidence boundary, not a claim that the
-simulation's state space is finite or exhausted.
+is 203 declared units, with 203 evidence-backed cells. This finite declared
+matrix does not claim that the simulation's state space is exhausted.
+
+Catalog evidence IDs join only the identically named existing experiment;
+the join preserves its signature, status, and original scope. Lifecycle uses
+`controlled-client-tick` for boot, load, tick, and close. Scheduling uses
+`lab-cycle` for tick-scheduled actions. Profiling uses `m17-profile` for
+sample aggregates and budget decisions: elapsed wall-clock samples remain
+machine-relative. Animation uses `m69-peer-swing` for the held-item arm swing
+request and named peer Packet18 observation; it does not claim deterministic
+raster timing or coverage of every visual animation. Missing experiments and
+unsigned evidence cannot gain oracle or reproducibility coverage from a join.
 
 ## CLI
 
@@ -145,10 +153,10 @@ Functional Census claims also expose their automation surface. The
 facets distinguish reusable public fixtures from knowledge that still needs
 promotion, so the Atlas can drive the next high-value subsystem instead of a
 raw milestone count. The completed block family exposes all 1,056 claims through
-the public TestKit. The entity family has 97 registry, lifecycle, materialization, interaction,
-controlled-dynamics, and physical-envelope claims on `surface-public-testkit`, no remaining
-qualified proof on `surface-smoke-only`, one explicit abstract-class non-applicable boundary, and
-166 explicit unknown cells. Every public entity claim is
+the public TestKit. The entity family has 201 registry, lifecycle, materialization, interaction,
+controlled-dynamics, physical-envelope, native-persistence, and native-render claims on `surface-public-testkit`,
+no remaining qualified proof on `surface-smoke-only`, ten explicit abstract-class non-applicable
+boundaries, and 53 explicit unknown cells. Every public entity claim is
 paired with a strict fixture/evidence ledger entry; none is promoted from a smoke
 by label alone. These facets evolve directly from the
 canonical Functional Census rather than from a hand-maintained secondary

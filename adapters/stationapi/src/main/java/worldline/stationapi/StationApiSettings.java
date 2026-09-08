@@ -9,6 +9,7 @@ final class StationApiSettings {
     final Path checkout, initScript, serverJar, clientJar;
     final String clientSha256;
     final int timeoutSeconds;
+    final boolean localWorld = Boolean.getBoolean("worldline.stationapi.localWorld");
 
     private StationApiSettings(Path checkout, Path initScript, Path serverJar, Path clientJar,
             String clientSha256, int timeoutSeconds) {

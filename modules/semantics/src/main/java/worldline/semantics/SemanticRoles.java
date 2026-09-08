@@ -30,6 +30,7 @@ public final class SemanticRoles {
     public static final String WEATHER = "weather", MOB_AI = "mob-ai";
     public static final String DIMENSION = "dimension";
     public static final String TILE_ENTITY = "tile-entity";
+    public static final String PROFILING = "profiling", ANIMATION = "animation";
     private static final Map<String, List<String>> REQUIRED = required();
 
     private SemanticRoles() {}
@@ -94,6 +95,9 @@ public final class SemanticRoles {
                 "MOD_TEST_RESULT_RECORD", "MOD_TEST_RESULT_PARSE",
                 "MOD_TEST_RESULT_COMPARE"));
         roles.put(SCHEDULER, list("TIMER_THREAD", "TASK_SCHEDULER", "SCHEDULER_ADVANCE"));
+        roles.put(PROFILING, list("PROFILE_SAMPLES", "PROFILE_PERCENTILE", "PROFILE_BUDGET"));
+        roles.put(ANIMATION, list("ANIMATION_SWING_REQUEST", "ANIMATION_PEER_OBSERVATION",
+                "ANIMATION_PEER_KIND"));
         roles.put(WORLD, list("WORLD_TYPE", "LOADED_ENTITY_LIST", "TILE_ENTITIES", "BLOCK_ACCESS",
                 "BLOCK_ID_READ", "BLOCK_READ", "BLOCK_WRITE", "BLOCK_NOTIFY", "WORLD_DIFFICULTY",
                 "WORLD_PROVIDER", "WORLD_SPAWN", "CHUNK_COORDINATES", "CHUNK_COORDINATE_X",

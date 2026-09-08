@@ -5,7 +5,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | Milestone | Qualification | Contract |
 | --- | --- | --- |
 | `deterministic-world-tick` | CARRIED | server-runtime-equivalence |
-| `controlled-client-tick` | EXECUTED | client-runtime-equivalence |
+| `controlled-client-tick` | CARRIED | client-runtime-equivalence |
 | `testkit-cycle` | EXECUTED | testkit-runtime |
 | `m3-domain-api` | CARRIED | domain-api-equivalence |
 | `m4-durable-snapshot` | CARRIED | durable-snapshot |
@@ -37,7 +37,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m21-server-control` | CARRIED | dedicated-server-control |
 | `m22-multiplayer-wire` | CARRIED | multiplayer-session |
 | `m23-player-persistence` | CARRIED | player-persistence |
-| `m24-play-pose` | EXECUTED | player-pose |
+| `m24-play-pose` | CARRIED | player-pose |
 | `m25-player-movement` | CARRIED | player-pose |
 | `m26-native-multiplayer` | CARRIED | multiplayer-session |
 | `m27-multiplayer-chat` | CARRIED | multiplayer-session |
@@ -221,7 +221,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m205-brick` | CARRIED | m205-brick |
 | `m206-sponge` | CARRIED | m206-sponge |
 | `m207-sandstone` | CARRIED | m207-sandstone |
-| `m208-oak-log` | EXECUTED | m208-oak-log |
+| `m208-oak-log` | CARRIED | m208-oak-log |
 | `m209-leaves` | CARRIED | m209-leaves |
 | `m210-oak-planks` | CARRIED | m210-oak-planks |
 | `m211-double-slab` | CARRIED | m211-double-slab |
@@ -230,7 +230,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m214-diamond-block` | CARRIED | m214-diamond-block |
 | `m215-lapis-block` | CARRIED | m215-lapis-block |
 | `m216-obsidian` | CARRIED | m216-obsidian |
-| `m217-mossy-cobble` | EXECUTED | m217-mossy-cobble |
+| `m217-mossy-cobble` | CARRIED | m217-mossy-cobble |
 | `m218-gravel` | CARRIED | m218-gravel |
 | `m219-tnt-place` | CARRIED | m219-tnt-place |
 | `m220-workbench` | CARRIED | m220-workbench |
@@ -254,7 +254,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m238-grass` | CARRIED | m238-grass |
 | `m239-sand` | CARRIED | m239-sand |
 | `m240-bed-place` | CARRIED | m240-bed-place |
-| `m241-iron-door-place` | EXECUTED | m241-iron-door-place |
+| `m241-iron-door-place` | CARRIED | m241-iron-door-place |
 | `m242-lever-place` | CARRIED | m242-lever-place |
 | `m243-redstone-wire` | CARRIED | m243-redstone-wire |
 | `m244-cake-place` | CARRIED | m244-cake-place |
@@ -314,14 +314,14 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m298-wood-tool-crafts` | CARRIED | m298-wood-tool-crafts |
 | `m299-stone-tool-crafts` | CARRIED | m299-stone-tool-crafts |
 | `m300-ore-pick-breaks` | CARRIED | m300-ore-pick-breaks |
-| `m301-axe-log-breaks` | EXECUTED | m301-axe-log-breaks |
+| `m301-axe-log-breaks` | CARRIED | m301-axe-log-breaks |
 | `m302-shovel-soft-breaks` | CARRIED | m302-shovel-soft-breaks |
 | `m303-crop-harvests` | CARRIED | m303-crop-harvests |
 | `m304-farmland-set` | CARRIED | m304-farmland-set |
-| `m305-plant-growth` | EXECUTED | m305-plant-growth |
+| `m305-plant-growth` | CARRIED | m305-plant-growth |
 | `m306-closables` | CARRIED | m306-closables |
 | `m307-env-damage` | CARRIED | m307-env-damage |
-| `m308-fragile-set` | EXECUTED | m308-fragile-set |
+| `m308-fragile-set` | CARRIED | m308-fragile-set |
 | `m309-rail-power` | CARRIED | m309-rail-power |
 | `m310-vehicle-rides` | CARRIED | multiplayer-session |
 | `m311-storage-carts` | CARRIED | container-transaction |
@@ -355,7 +355,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m339-sapling-growth-set` | CARRIED | m339-sapling-growth-set |
 | `m340-redstone-input-set` | CARRIED | m340-redstone-input-set |
 | `m341-repeater-delay-set` | CARRIED | m341-repeater-delay-set |
-| `m342-gravity-block-set` | EXECUTED | m342-gravity-block-set |
+| `m342-gravity-block-set` | CARRIED | m342-gravity-block-set |
 | `m343-fire-family-set` | CARRIED | m343-fire-family-set |
 | `m344-bucket-fluid-set` | CARRIED | m344-bucket-fluid-set |
 | `m345-ore-block-crafts` | CARRIED | m345-ore-block-crafts |
@@ -388,7 +388,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m372-placeable-item-crafts` | CARRIED | m372-placeable-item-crafts |
 | `m373-milk-bucket-set` | CARRIED | m373-milk-bucket-set |
 | `m374-remaining-food-eat` | CARRIED | m374-remaining-food-eat |
-| `m375-remaining-pick-breaks` | EXECUTED | m375-remaining-pick-breaks |
+| `m375-remaining-pick-breaks` | CARRIED | m375-remaining-pick-breaks |
 | `m376-remaining-shovel-breaks` | CARRIED | m376-remaining-shovel-breaks |
 | `m377-powered-rail-motion` | CARRIED | m377-powered-rail-motion |
 | `m378-boat-water-set` | CARRIED | multiplayer-session |
@@ -440,14 +440,14 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m424-furnace-cart-motion-set` | CARRIED | m424-furnace-cart-motion-set |
 | `m425-remaining-machine-faces` | CARRIED | m425-remaining-machine-faces |
 | `m426-remaining-redstone-faces` | CARRIED | m426-remaining-redstone-faces |
-| `m427-remaining-piston-orient-set` | EXECUTED | m427-remaining-piston-orient-set |
-| `m428-remaining-door-orient-set` | EXECUTED | m428-remaining-door-orient-set |
+| `m427-remaining-piston-orient-set` | CARRIED | m427-remaining-piston-orient-set |
+| `m428-remaining-door-orient-set` | CARRIED | m428-remaining-door-orient-set |
 | `m429-remaining-attach-faces` | CARRIED | m429-remaining-attach-faces |
 | `m430-remaining-painting-motives` | CARRIED | m430-remaining-painting-motives |
-| `m431-remaining-bed-orient-set` | EXECUTED | m431-remaining-bed-orient-set |
+| `m431-remaining-bed-orient-set` | CARRIED | m431-remaining-bed-orient-set |
 | `m432-remaining-rail-geometry-set` | CARRIED | m432-remaining-rail-geometry-set |
 | `m433-remaining-chest-orient-set` | CARRIED | m433-remaining-chest-orient-set |
-| `m434-remaining-sponge-glass-ice` | EXECUTED | m434-remaining-sponge-glass-ice |
+| `m434-remaining-sponge-glass-ice` | CARRIED | m434-remaining-sponge-glass-ice |
 | `m435-remaining-natural-spawns` | CARRIED | m435-remaining-natural-spawns |
 | `m436-remaining-arrow-life-set` | CARRIED | m436-remaining-arrow-life-set |
 | `m437-lightning-pig-set` | CARRIED | m437-lightning-pig-set |
@@ -508,7 +508,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m548-piston-bud-set` | CARRIED | Piston bud set |
 | `m550-dispenser-qc-set` | CARRIED | Dispenser qc set |
 | `m553-piston-immovable-set` | CARRIED | Piston immovable set |
-| `m554-extended-head-break-set` | EXECUTED | Extended head break set |
+| `m554-extended-head-break-set` | CARRIED | Extended head break set |
 | `m555-torch-burnout-set` | CARRIED | Torch burnout set |
 | `m556-rs-nor-latch-set` | CARRIED | Rs nor latch set |
 | `m559-double-extender-set` | CARRIED | Double extender set |
@@ -520,11 +520,11 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m570-repeater-diode-set` | CARRIED | repeater diode set |
 | `m571-redstone-ore-glow-set` | CARRIED | redstone ore glow set |
 | `m572-detector-rail-vacate-set` | CARRIED | detector rail vacate set |
-| `m573-sticky-head-break-set` | EXECUTED | sticky head break set |
+| `m573-sticky-head-break-set` | CARRIED | sticky head break set |
 | `m574-mushroom-spread-set` | CARRIED | mushroom spread set |
 | `m575-grass-die-cover-set` | CARRIED | grass die cover set |
 | `m576-farmland-trample-set` | CARRIED | farmland trample set |
-| `m577-wheat-light-halt-set` | EXECUTED | wheat light halt set |
+| `m577-wheat-light-halt-set` | CARRIED | wheat light halt set |
 | `m578-cactus-adjacent-break-set` | CARRIED | cactus adjacent break set |
 | `m579-boat-current-push-set` | CARRIED | boat current push |
 | `m580-minecart-derail-set` | CARRIED | minecart derail set |
@@ -539,10 +539,10 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m590-ghast-fireball-punch-set` | CARRIED | Ghast fireball punch set |
 | `m591-furnace-smelt-interrupt-set` | CARRIED | furnace smelt interrupt set |
 | `m592-chest-break-spill-set` | CARRIED | chest break spill set |
-| `m593-door-upper-break-set` | EXECUTED | door upper break set |
+| `m593-door-upper-break-set` | CARRIED | door upper break set |
 | `m594-netherrack-fire-persist-set` | CARRIED | netherrack fire persist |
 | `m595-powered-rail-brake-set` | CARRIED | powered rail brake set |
-| `m596-furnace-cart-push-set` | EXECUTED | furnace cart push set |
+| `m596-furnace-cart-push-set` | CARRIED | furnace cart push set |
 | `m597-falling-sand-entity-set` | CARRIED | falling sand entity set |
 | `m598-gravel-fall-set` | CARRIED | gravel fall set |
 | `m599-torch-wash-set` | CARRIED | torch wash set |
@@ -561,38 +561,38 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m615-redstone-one-tick-set` | CARRIED | redstone one tick set |
 | `m616-portal-search-radius-set` | CARRIED | portal search radius set |
 | `m617-spawn-light-cap-set` | CARRIED | spawn light cap set |
-| `m618-wolf-tame-set` | EXECUTED | wolf tame set |
+| `m618-wolf-tame-set` | CARRIED | wolf tame set |
 | `m619-undead-sun-burn-set` | CARRIED | undead sun burn set |
 | `m620-stationapi-testkit-driver` | EXECUTED | StationAPI TestKit driver |
-| `m621-save-worldgen-set` | EXECUTED | save worldgen set |
+| `m621-save-worldgen-set` | CARRIED | save worldgen set |
 | `m622-pathfinding-matrix` | CARRIED | Entity pathfinding matrix |
 | `m623-lighting-engine-matrix` | CARRIED | Lighting engine matrix |
 | `m624-weather-state-matrix` | CARRIED | Weather state matrix |
 | `m625-multiplayer-edge-set` | CARRIED | Multiplayer edge set |
-| `m626-dungeon-generation-census` | EXECUTED | dungeon generation census |
-| `m627-chunk-unload-reload` | EXECUTED | chunk unload and reload persistence |
-| `m628-minecart-booster-bug` | EXECUTED | minecart booster bug |
-| `m629-door-sound-event` | EXECUTED | door sound event |
-| `m630-server-acl-matrix` | EXECUTED | server acl matrix |
-| `m631-protocol14-edge-packets` | EXECUTED | protocol14 edge packets |
-| `m632-map-data-content` | EXECUTED | map data content |
+| `m626-dungeon-generation-census` | CARRIED | dungeon generation census |
+| `m627-chunk-unload-reload` | CARRIED | chunk unload and reload persistence |
+| `m628-minecart-booster-bug` | CARRIED | minecart booster bug |
+| `m629-door-sound-event` | CARRIED | door sound event |
+| `m630-server-acl-matrix` | CARRIED | server acl matrix |
+| `m631-protocol14-edge-packets` | CARRIED | protocol14 edge packets |
+| `m632-map-data-content` | CARRIED | map data content |
 | `m634-cross-lane-seed-matrix` | CARRIED | cross-lane seed matrix |
-| `m635-natural-slime-spawn` | EXECUTED | natural slime spawn |
-| `m636-bonemeal-wheat` | EXECUTED | bonemeal wheat |
-| `m637-tnt-chain` | EXECUTED | TNT chain reaction |
-| `m638-creeper-tnt-differential` | EXECUTED | creeper versus TNT differential |
+| `m635-natural-slime-spawn` | CARRIED | natural slime spawn |
+| `m636-bonemeal-wheat` | CARRIED | bonemeal wheat |
+| `m637-tnt-chain` | CARRIED | TNT chain reaction |
+| `m638-creeper-tnt-differential` | CARRIED | creeper versus TNT differential |
 | `m639-ice-formation` | CARRIED | Natural ice formation |
 | `m640-snow-accumulation` | CARRIED | Natural snow accumulation |
 | `m641-natural-wolf-pack` | CARRIED | natural wolf pack |
-| `m643-multiplayer-sleep-quorum` | EXECUTED | multiplayer sleep quorum |
-| `m645-note-pitch-ladder` | EXECUTED | note block pitch ladder |
-| `m649-chest-access-constraints` | EXECUTED | chest access constraints |
-| `m651-portal-invalid-frame` | EXECUTED | portal invalid frame rejection |
-| `m652-portal-reentry-cooldown` | EXECUTED | portal re-entry cooldown |
-| `m653-chunk-restart-persistence` | EXECUTED | chunk restart persistence |
+| `m643-multiplayer-sleep-quorum` | CARRIED | multiplayer sleep quorum |
+| `m645-note-pitch-ladder` | CARRIED | note block pitch ladder |
+| `m649-chest-access-constraints` | CARRIED | chest access constraints |
+| `m651-portal-invalid-frame` | CARRIED | portal invalid frame rejection |
+| `m652-portal-reentry-cooldown` | CARRIED | portal re-entry cooldown |
+| `m653-chunk-restart-persistence` | CARRIED | chunk restart persistence |
 | `m654-sky-brightness-cycle` | CARRIED | sky brightness cycle |
-| `m655-rain-stop-event` | EXECUTED | rain stop event |
-| `m656-server-admission-matrix` | EXECUTED | server admission matrix |
+| `m655-rain-stop-event` | CARRIED | rain stop event |
+| `m656-server-admission-matrix` | CARRIED | server admission matrix |
 | `m659-powered-creeper` | CARRIED | powered creeper |
 | `m661-spider-daylight-aggression` | CARRIED | spider daylight aggression |
 | `m663-snow-layer-nonstacking` | CARRIED | snow layer nonstacking |
@@ -600,12 +600,12 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m665-leaf-support-distance` | CARRIED | leaf support distance |
 | `m702-powered-rail-slope-propagation` | CARRIED | powered rail slope propagation |
 | `m703-native-3d-inventory-render` | CARRIED | official Beta 1.7.3 native 3D inventory render family |
-| `m743-redstone-ore-dust-drop` | EXECUTED | redstone ore dust drop |
-| `m747-shears-leaf-durability` | EXECUTED | shears leaf durability |
-| `m751-iron-door-hand-rejection` | EXECUTED | iron door hand rejection |
-| `m762-wall-sign-support-break` | EXECUTED | wall sign support break |
-| `m763-torch-support-break` | EXECUTED | torch support break |
-| `m767-modloader-forge-testkit-provider` | EXECUTED | ModLoader and Forge TestKit providers |
+| `m743-redstone-ore-dust-drop` | CARRIED | redstone ore dust drop |
+| `m747-shears-leaf-durability` | CARRIED | shears leaf durability |
+| `m751-iron-door-hand-rejection` | CARRIED | iron door hand rejection |
+| `m762-wall-sign-support-break` | CARRIED | wall sign support break |
+| `m763-torch-support-break` | CARRIED | torch support break |
+| `m767-modloader-forge-testkit-provider` | CARRIED | ModLoader and Forge TestKit providers |
 | `m768-aero-historical-tower-replay` | CARRIED | Aero historical tower hitch replay |
 | `m769-aero-unified-runtime-timeline` | CARRIED | Aero unified runtime timeline |
 | `m770-aero-gpu-present-attribution` | CARRIED | Aero GPU and present attribution |
@@ -623,12 +623,13 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m782-aero-chunk-scheduler-lifecycle-soak` | CARRIED | Aero chunk scheduler lifecycle soak |
 | `m783-aero-chunk-scheduler-visual-latency` | CARRIED | Aero chunk scheduler visual-latency classification |
 | `m784-aero-high-memory-cell-pages` | CARRIED | Aero safe high-memory Cell Page qualification |
-| `m785-public-extensions-sdk` | EXECUTED | Public Extensions SDK and external mod fixture |
+| `m785-public-extensions-sdk` | CARRIED | Public Extensions SDK and external mod fixture |
 | `m786-extensions-completeness` | EXECUTED | Extensions completeness and census-bound public TestKit |
 | `m787-aero-loading-first-frame-integrity` | CARRIED | Aero loading and cold first-frame integrity |
 | `m788-aero-ordered-template-performance` | CARRIED | Aero ordered Cell Page template performance |
 | `m789-aero-cell-page-queue-reuse` | CARRIED | Aero bounded Cell Page queue reuse |
 | `m790-aero-default-rollback` | EXECUTED | Aero shipped Cell Page default and rollback |
+| `m792-aero-batch-emission-pareto` | CARRIED | Aero exact multi-pose Pareto qualification |
 | `b173-bed-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 bed subsystem conformance |
 | `b173-bedrock-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 bedrock subsystem conformance |
 | `b173-built-environment-materials-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 built-environment material subsystem conformance |
@@ -637,8 +638,9 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-common-cube-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 common-cube physical envelopes |
 | `b173-deterministic-harvest-lifecycle-cycle` | CARRIED | official Beta 1.7.3 deterministic non-self-drop harvest lifecycle family |
 | `b173-dirt-flora-lifecycle-cycle` | CARRIED | official Beta 1.7.3 dirt-supported flora lifecycle family |
-| `b173-entity-persistence-envelope-cycle` | EXECUTED | official Beta 1.7.3 entity persistence-envelope subsystem |
+| `b173-entity-persistence-envelope-cycle` | CARRIED | official Beta 1.7.3 entity persistence-envelope subsystem |
 | `b173-entity-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 entity physical-envelope subsystem |
+| `b173-entity-state-conformance-cycle` | CARRIED | native entity contexts and visual state conformance |
 | `b173-farmland-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 farmland subsystem conformance |
 | `b173-fire-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 fire subsystem conformance |
 | `b173-floor-mounted-lifecycle-cycle` | CARRIED | official Beta 1.7.3 floor-mounted block lifecycle family |
@@ -658,6 +660,11 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-mob-spawner-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 mob-spawner subsystem conformance |
 | `b173-multi-drop-mineral-lifecycle-cycle` | CARRIED | official Beta 1.7.3 multi-drop mineral lifecycle family |
 | `b173-mushroom-random-tick-conformance-cycle` | CARRIED | official Beta 1.7.3 mushroom random-tick conformance subsystem |
+| `b173-native-entity-dynamics-cycle` | CARRIED | native entity movement, environment and timed-state contrasts |
+| `b173-native-entity-render-cycle` | CARRIED | official Beta 1.7.3 native entity render family |
+| `b173-native-entity-stimulus-cycle` | CARRIED | native entity materialization, damage, drops and causal contacts |
+| `b173-native-particle-lifecycle-cycle` | CARRIED | official native particle lifecycle and frames |
+| `b173-native-random-outcomes-cycle` | CARRIED | native gravel and fishing finite random outcomes |
 | `b173-native-special-world-render-cycle` | CARRIED | official Beta 1.7.3 native special world block-render family |
 | `b173-native-tile-entity-render-cycle` | CARRIED | official Beta 1.7.3 native tile-entity render family |
 | `b173-openable-access-structures-conformance-cycle` | CARRIED | official Beta 1.7.3 openable access structures conformance |
@@ -676,17 +683,18 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-slab-lifecycle-cycle` | CARRIED | official Beta 1.7.3 slab state and disassembly lifecycle family |
 | `b173-source-fluid-dynamics-cycle` | CARRIED | official Beta 1.7.3 source-fluid gated dynamics |
 | `b173-source-fluid-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 source-fluid physical envelopes |
-| `b173-special-collision-physical-envelope-cycle` | EXECUTED | official Beta 1.7.3 special-collision physical envelopes |
-| `b173-static-collision-envelope-cycle` | EXECUTED | official Beta 1.7.3 static collision envelopes |
-| `b173-static-light-transport-cycle` | EXECUTED | official Beta 1.7.3 static light transport |
-| `b173-static-self-drop-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 static self-drop lifecycle family |
-| `b173-support-dependent-plant-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 support-dependent plant lifecycle family |
-| `b173-support-face-attachment-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 support-face attachment lifecycle family |
-| `b173-terrain-crafted-solid-stability-envelope-cycle` | EXECUTED | official Beta 1.7.3 terrain-crafted solid bounded stability envelope |
-| `b173-tile-utility-physical-envelope-cycle` | EXECUTED | official Beta 1.7.3 tile-utility physical envelopes |
+| `b173-special-collision-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 special-collision physical envelopes |
+| `b173-static-collision-envelope-cycle` | CARRIED | official Beta 1.7.3 static collision envelopes |
+| `b173-static-light-transport-cycle` | CARRIED | official Beta 1.7.3 static light transport |
+| `b173-static-self-drop-lifecycle-cycle` | CARRIED | official Beta 1.7.3 static self-drop lifecycle family |
+| `b173-stationapi-world-controls-cycle` | CARRIED | StationAPI native local-world controls |
+| `b173-support-dependent-plant-lifecycle-cycle` | CARRIED | official Beta 1.7.3 support-dependent plant lifecycle family |
+| `b173-support-face-attachment-lifecycle-cycle` | CARRIED | official Beta 1.7.3 support-face attachment lifecycle family |
+| `b173-terrain-crafted-solid-stability-envelope-cycle` | CARRIED | official Beta 1.7.3 terrain-crafted solid bounded stability envelope |
+| `b173-tile-utility-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 tile-utility physical envelopes |
 | `b173-vegetation-ecology-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 vegetation ecology subsystem conformance |
-| `b173-wall-attachment-state-domain-cycle` | EXECUTED | official Beta 1.7.3 wall-attachment state domains |
-| `b173-wooden-door-state-domain-cycle` | EXECUTED | official Beta 1.7.3 wooden-door reachable state domain |
+| `b173-wall-attachment-state-domain-cycle` | CARRIED | official Beta 1.7.3 wall-attachment state domains |
+| `b173-wooden-door-state-domain-cycle` | CARRIED | official Beta 1.7.3 wooden-door reachable state domain |
 | `betavault-item-reference` | CARRIED | logical-item-reference |
 | `census-cycle` | CARRIED | runtime-census |
 | `gui-actions` | CARRIED | ui-action-equivalence |
@@ -698,4 +706,5 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `redstone-repeater-delays` | CARRIED | redstone-repeater-delays |
 | `redstone-wire-power` | CARRIED | redstone-wire-power |
 | `seed-atlas` | CARRIED | seed-atlas |
+| `testkit-external-maturity-cycle` | EXECUTED | public external mod consumption and honest 1.0 readiness |
 | `ui-export` | CARRIED | ui-export |

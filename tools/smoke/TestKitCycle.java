@@ -34,7 +34,7 @@ public final class TestKitCycle {
   private void execute() throws Exception {
     Path build = root.resolve(".worldline/smokes/testkit-cycle");
     SmokeSupport.recreate(root, build);
-    Path classes = root.resolve(".worldline/build/classes");
+    Path classes = SmokeSupport.product(root, "api").getParent();
     Path client = root.resolve(".worldline/smokes/controlled-client-tick");
     Properties smoke = properties(root.resolve("smokes/controlled-client-tick/smoke.properties"));
     Path workspace = root.resolve(smoke.getProperty("workspace")).normalize();
@@ -83,7 +83,7 @@ public final class TestKitCycle {
         "external example suite did not pass all 31 collected tests");
     Properties descriptor = properties(root.resolve("smokes/testkit-cycle/smoke.properties"));
     String signature = HexFormat.of().formatHex(
-        MessageDigest.getInstance("SHA-256").digest(SIGNAL.getBytes(StandardCharsets.UTF_8)));
+        HexDigest.sha256().digest(SIGNAL.getBytes(StandardCharsets.UTF_8)));
     require(SIGNAL.equals(descriptor.getProperty("expected.signal")), "TestKit signal drifted");
     require(signature.equals(descriptor.getProperty("expected.signature")),
         "TestKit signature drifted");

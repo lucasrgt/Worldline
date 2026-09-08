@@ -112,6 +112,42 @@ final class SchemaPinCheck {
         successor.setProperty("smoke.carried.introduced", "false");
         require(introductionsAfter(successor, prior) == 1,
                 "schema successor introduction census drift");
+        sourceTransportTest();
+    }
+    private static void sourceTransportTest() {
+        Path directory = null, file = null;
+        java.util.List<Path> manifests = new java.util.ArrayList<>();
+        try {
+            directory = Files.createTempDirectory("worldline-schema-source-");
+            Files.createDirectory(directory.resolve("smokes"));
+            for (String name : new String[] {"gui-workbench.lock", "testkit-release-0.3.lock",
+                    "shared-helper-migration.lock"}) {
+                Path path = directory.resolve("smokes").resolve(name); manifests.add(path);
+                Files.writeString(path, "source.count=0\nfile.count=0\n");
+            }
+            file = directory.resolve("Fingerprint.java"); Files.writeString(file, "current");
+            Properties train = new Properties(); train.setProperty("source.count", "1");
+            train.setProperty("source.0.path", "Fingerprint.java");
+            train.setProperty("source.0.prior_sha256", "prior");
+            train.setProperty("source.0.current_sha256", digest(file));
+            require(TrainPinCheck.transportsFile(train, directory, "Fingerprint.java", "prior"),
+                    "schema rejected a sealed source successor");
+            Files.writeString(file, "tampered");
+            require(!TrainPinCheck.transportsFile(train, directory, "Fingerprint.java", "prior"),
+                    "schema accepted unsealed current source bytes");
+            Files.writeString(file, "current");
+            require(!TrainPinCheck.transportsFile(train, directory, "Fingerprint.java", "unlinked"),
+                    "schema accepted an unlinked source predecessor");
+        } catch (Exception error) {
+            throw new IllegalStateException("schema source transport regression", error);
+        } finally {
+            try {
+                for (Path path : manifests) Files.deleteIfExists(path);
+                if (file != null) Files.deleteIfExists(file);
+                if (directory != null) Files.deleteIfExists(directory.resolve("smokes"));
+                if (directory != null) Files.deleteIfExists(directory);
+            } catch (Exception error) { throw new IllegalStateException("schema test cleanup", error); }
+        }
     }
     static boolean follows(Properties manifest, String id, String prior, String evidence,
             SmokePins.Entry pin, String current) {

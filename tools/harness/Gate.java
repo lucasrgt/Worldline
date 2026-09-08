@@ -34,25 +34,31 @@ public final class Gate {
                 new Gate().executeInside(Arrays.copyOfRange(arguments, 1, arguments.length)); return;
             }
             if (arguments.length == 3 && "--hold".equals(arguments[0])) {
-                hold(Path.of(arguments[1]), Long.parseLong(arguments[2]));
-                return;
+                hold(Path.of(arguments[1]), Long.parseLong(arguments[2])); return;
             }
             new Gate().execute(arguments);
         } catch (Exception error) {
-            System.err.println("gate failed: " + error.getMessage());
-            System.exit(1);
+            System.err.println("gate failed: " + error.getMessage()); System.exit(1);
         }
     }
 
-    private void execute(String[] arguments) throws Exception {
-        validate(arguments);
+    private void execute(String[] arguments) throws Exception { validate(arguments);
         if (arguments.length == 2 && "--new-milestone".equals(arguments[0])) {
             Path classes = compileHarness();
             int exit = waitFor(new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
                     "MilestoneScaffold", arguments[1]).directory(root.toFile()).inheritIO().start(), 60);
-            if (exit != 0) System.exit(exit);
-            return;
+            if (exit != 0) System.exit(exit); return;
         }
+        DirectTool tool = directTool(arguments);
+        if (tool != null) { Path classes = compileHarness(); List<String> command = new ArrayList<>(List.of(
+                javaTool("java"), "-cp", classes.toString(), tool.main()));
+            if (tool.operand() != null) command.add(tool.operand());
+            ProcessBuilder builder = new ProcessBuilder(command).directory(root.toFile()).inheritIO();
+            builder.environment().put("WORLDLINE_GATE_CONTROL", control.toString());
+            Process process = builder.start();
+            process.getOutputStream().close(); int timeout = tool.main().equals("EvidenceExplorerLive") ? 180 : 60;
+            int exit = waitFor(process, timeout);
+            if (exit != 0) System.exit(exit); return; }
         if (arguments.length == 1 && maintenance(arguments[0])) {
             Path classes = compileHarness();
             ProcessBuilder builder = new ProcessBuilder(javaTool("java"), "-cp", classes.toString(),
@@ -61,11 +67,19 @@ public final class Gate {
             int exit = waitFor(builder.start(), 600);
             if (exit != 0) System.exit(exit); return;
         }
+        if (arguments.length == 1 && List.of("--executor-tooling", "--executor-environment",
+                "--executor-filesystem", "--workspace-transaction").contains(arguments[0])) {
+            String main = switch (arguments[0]) { case "--executor-environment" -> "ExecutionEnvironmentManifest";
+                case "--executor-filesystem" -> "ExecutionFilesystemManifest";
+                case "--workspace-transaction" -> "WorkspaceTransactionQualification";
+                default -> "ExecutorToolingCycle"; };
+            run(List.of(javaTool("java"), root.resolve("tools/containers/RuntimeFabricLauncher.java").toString(),
+                    main), root, 180); return;
+        }
         Files.createDirectories(control);
         if (arguments.length == 2 && ("--milestone".equals(arguments[0])
                 || "--smoke-id".equals(arguments[0]))) {
-            executeMilestone(arguments[1]);
-            return;
+            executeMilestone(arguments[1]); return;
         }
         if (arguments.length == 2 && "--lane-differential".equals(arguments[0])) {
             executePhase(arguments, true, false, true); return;
@@ -74,8 +88,11 @@ public final class Gate {
             executePhase(arguments, false, true, false); return;
         }
         boolean smoke = arguments.length > 0 && "--smoke".equals(arguments[0]);
+        boolean executorRuntime = arguments.length == 1 && arguments[0].matches("--executor-(server|gui|aero)");
+        boolean executorCandidate = Arrays.equals(arguments, new String[] {"--executor-candidate"});
         boolean pinnedSmoke = arguments.length > 0 && "--pinned-smoke".equals(arguments[0]);
-        executePhase(arguments, smoke, true, smoke && !pinnedSmoke);
+        executePhase(arguments, smoke || executorRuntime, !executorRuntime && !executorCandidate,
+                executorRuntime || smoke && !pinnedSmoke);
     }
 
     private void executeMilestone(String id) throws Exception {
@@ -88,8 +105,7 @@ public final class Gate {
 
     private void executePhase(String[] arguments, boolean runtime, boolean useSlot, boolean runtimeLease)
             throws Exception {
-        int slots = useSlot ? verifySlots() : 0;
-        Path legacy = runtime ? legacyRuntimeLock() : null;
+        int slots = useSlot ? verifySlots() : 0; Path legacy = runtime ? legacyRuntimeLock() : null;
         List<String> command = new ArrayList<>(List.of(javaTool("java"),
                 root.resolve("tools/harness/FairLeaseCommand.java").toString(), root.toString(),
                 control.toString(), Long.toString(waitMillis), Integer.toString(slots),
@@ -101,70 +117,61 @@ public final class Gate {
     }
 
     private void executeInside(String[] arguments) throws Exception {
-        Path classes = compileHarness();
-        int exit = launchVerify(classes, arguments, false);
+        Path classes = compileHarness(); int exit = launchVerify(classes, arguments, false);
         if (exit != 0) System.exit(exit);
     }
 
     private boolean milestoneUsesOfficialRuntime(String id) throws java.io.IOException {
         Path path = root.resolve("smokes").resolve(id).resolve("smoke.properties");
         Properties descriptor = new Properties();
-        try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-            descriptor.load(reader);
-        }
+        try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) { descriptor.load(reader); }
         return !"tooling-cycle".equals(descriptor.getProperty("qualification.proof"));
     }
 
-    private void validate(String[] arguments) {
-        boolean profile = arguments.length == 0
-                || Arrays.equals(arguments, new String[] {"--runtime"})
-                || Arrays.equals(arguments, new String[] {"--smoke"})
-                || Arrays.equals(arguments, new String[] {"--orchestrator"})
-                || Arrays.equals(arguments, new String[] {"--pin-smokes"})
-                || Arrays.equals(arguments, new String[] {"--smoke-plan"})
-                || Arrays.equals(arguments, new String[] {"--pinned-smoke"})
-                || Arrays.equals(arguments, new String[] {"--train-readiness"})
-                || Arrays.equals(arguments, new String[] {"--accept-legacy-smoke-baseline"})
-                || arguments.length == 1 && maintenance(arguments[0])
-                || arguments.length == 2 && ("--new-milestone".equals(arguments[0])
-                        || "--candidate".equals(arguments[0])
-                        || "--candidate-ready".equals(arguments[0])
-                        || "--lane-differential".equals(arguments[0])
-                        || "--milestone".equals(arguments[0]) || "--smoke-id".equals(arguments[0]));
-        if (!profile) throw new IllegalArgumentException(
-                "usage: java tools/harness/Gate.java "
-                + "[--runtime|--smoke|--pin-smokes|--accept-legacy-smoke-baseline|--orchestrator|"
-                + "--smoke-plan|--pinned-smoke|--train-readiness|--migrate-data-cycles|--refresh-data-cycle-pins|"
-                + "--migrate-composite-cycles|--refresh-composite-cycle-pins|"
-                + "--migrate-telemetry-pins|"
-                + "--migrate-repository-schemas|"
-                + "--migrate-neighbor-testkit-pins|"
-                + "--migrate-bounded-drop-testkit-pins|"
-                + "--migrate-lifecycle-claim-testkit-pins|"
-                + "--migrate-formatting-pins|--migrate-unicode-pins|"
-                + "--migrate-shared-helper-pins|"
-                + "--migrate-adapter-split-pins|"
-                + "--migrate-provider-discovery-pins|"
-                + "--migrate-gui-workbench-pins|"
-                + "--rebalance-behavior-families|--migrate-behavior-family-pins|"
-                + "--migrate-train-pins|"
-                + "--refresh-readme-status|"
-                + "--refresh-testkit-artifact-pins|"
-                + "--refresh-documentation|"
-                + "--seal-lane-portability|"
-                + "--module-cache-doctor|--module-cache-gc|--cache-doctor|--cache-gc|"
-                + "--cache-rebuild-drill|"
-                + "--new-milestone ID|--milestone ID|--lane-differential ID|"
-                + "--candidate-ready ID|--candidate ID|--self-test]");
-        if (arguments.length == 2 && !arguments[1].matches("[a-z0-9]+(?:-[a-z0-9]+)*"))
+    private static void validate(String[] arguments) {
+        List<String> one = List.of("--runtime", "--smoke", "--orchestrator", "--pin-smokes",
+                "--smoke-plan", "--pinned-smoke", "--train-readiness", "--executor-tooling",
+                "--executor-environment", "--executor-filesystem", "--executor-candidate",
+                "--workspace-transaction",
+                "--accept-legacy-smoke-baseline", "--cas-permits", "--cas-shadow", "--evidence-explorer",
+                "--evidence-explorer-live", "--campaign-follow-up", "--module-cache-shared-shadow",
+                "--shared-cas-inventory");
+        List<String> pair = List.of("--new-milestone", "--candidate", "--candidate-ready",
+                "--lane-differential", "--milestone", "--smoke-id");
+        boolean valid = arguments.length == 0 || arguments.length == 1
+                && (one.contains(arguments[0]) || maintenance(arguments[0])
+                        || arguments[0].matches("--executor-(server|gui|aero)"))
+                || arguments.length == 2 && (pair.contains(arguments[0]) || queryType(arguments[0]) != null);
+        if (!valid) throw new IllegalArgumentException("usage: java tools/harness/Gate.java [PROFILE|QUERY VALUE]");
+        if (arguments.length == 2 && queryType(arguments[0]) == null
+                && !arguments[1].matches("[a-z0-9]+(?:-[a-z0-9]+)*"))
             throw new IllegalArgumentException("invalid milestone id: " + arguments[1]);
     }
 
-    private static boolean maintenance(String value) {
-        return value.startsWith("--migrate-") || value.startsWith("--refresh-")
-                || value.startsWith("--rebalance-") || value.startsWith("--seal-")
-                || value.startsWith("--module-cache-") || value.startsWith("--cache-");
+    private static DirectTool directTool(String[] arguments) {
+        String flag = arguments.length == 1 ? arguments[0] : "";
+        if ("--cas-permits".equals(flag)) return new DirectTool("ArtifactTransportPermitQuery", null);
+        if ("--cas-shadow".equals(flag)) return new DirectTool("CasTransportShadow", null);
+        if (Arrays.equals(arguments, new String[] {"--evidence-explorer"}))
+            return new DirectTool("EvidenceExplorer", null);
+        if ("--evidence-explorer-live".equals(flag)) return new DirectTool("EvidenceExplorerLive", null);
+        if ("--campaign-follow-up".equals(flag)) return new DirectTool("NativeCampaignFollowUpPlan", null);
+        if (Arrays.equals(arguments, new String[] {"--module-cache-shared-shadow"}))
+            return new DirectTool("ModuleCacheSharedShadow", null);
+        if (Arrays.equals(arguments, new String[] {"--shared-cas-inventory"}))
+            return new DirectTool("SharedCasInventory", null);
+        String main = arguments.length == 2 ? queryType(arguments[0]) : null;
+        return main == null ? null : new DirectTool(main, arguments[1]);
     }
+    private static String queryType(String value) { return switch (value) {
+        case "--input-graph" -> "SmokeInputGraphQuery"; case "--module-input-graph" -> "ModuleInputGraphQuery";
+        case "--cache-explain" -> "SmokeCacheQuery"; case "--input-dependents" -> "SmokeInputDependentsQuery";
+        case "--input-diff" -> "SmokeInputDiffQuery"; case "--campaign-plan" -> "CampaignPlanQuery";
+        default -> null; }; }
+    private static boolean maintenance(String value) { return value.startsWith("--migrate-")
+            || value.startsWith("--refresh-") || value.startsWith("--rebalance-")
+            || value.startsWith("--seal-") || value.startsWith("--module-cache-")
+            || value.startsWith("--cache-"); }
 
     private int verifySlots() {
         int configured = integerEnvironment("WORLDLINE_VERIFY_SLOTS",
@@ -179,18 +186,18 @@ public final class Gate {
         List<Path> sources;
         try (Stream<Path> stream = Files.list(sourceRoot)) {
             sources = stream.filter(path -> path.toString().endsWith(".java"))
-                    .sorted().toList();
-        }
+                    .sorted().toList(); }
         Path output = root.resolve(".worldline/gate/classes");
         Path marker = output.getParent().resolve("sources.sha256");
         String digest = digest(sources);
         if (Files.isRegularFile(output.resolve("RepositoryVerify.class")) && Files.isRegularFile(marker)
                 && Files.readString(marker, StandardCharsets.UTF_8).trim().equals(digest)) return output;
         recreate(output);
-        List<String> command = new ArrayList<>(List.of(javaTool("javac"), "-encoding", "UTF-8",
-                "--release", "21", "-Xlint:all,-options", "-Werror", "-d", output.toString()));
-        sources.forEach(path -> command.add(path.toString()));
-        run(command, root, 180);
+        List<String> arguments = new ArrayList<>(List.of("-encoding", "UTF-8", "--release", "21",
+                "-Xlint:all,-options", "-Werror", "-d", quote(output.toString())));
+        sources.forEach(path -> arguments.add(quote(path.toString())));
+        Path args = output.getParent().resolve("javac.args"); Files.write(args, arguments, StandardCharsets.UTF_8);
+        run(List.of(javaTool("javac"), "@" + args), root, 180); Files.delete(args);
         Files.writeString(marker, digest + "\n", StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         return output;
@@ -254,6 +261,8 @@ public final class Gate {
         if (exit != 0) throw new IllegalStateException(command.get(0) + " exited " + exit);
     }
 
+    private static String quote(String value) { return "\"" + value.replace("\\", "/") + "\""; }
+
     private static void destroyTree(Process process) {
         process.descendants().sorted(Comparator.comparingLong(ProcessHandle::pid).reversed())
                 .forEach(ProcessHandle::destroyForcibly);
@@ -266,8 +275,7 @@ public final class Gate {
         for (Path source : sources) {
             digest.update(root.relativize(source).toString().replace('\\', '/')
                     .getBytes(StandardCharsets.UTF_8));
-            digest.update(Files.readAllBytes(source));
-        }
+            digest.update(Files.readAllBytes(source)); }
         return HexFormat.of().formatHex(digest.digest());
     }
 
@@ -316,4 +324,5 @@ public final class Gate {
         Files.createDirectories(target);
     }
 
+    private record DirectTool(String main, String operand) { }
 }

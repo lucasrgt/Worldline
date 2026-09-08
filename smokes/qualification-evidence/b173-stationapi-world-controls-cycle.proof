@@ -1,0 +1,5 @@
+schema=1
+id=b173-stationapi-world-controls-cycle
+fingerprint=48d1f7284fc515eee701b3b8f4d38f28fb6a0e41a4fb25b8efee3aecc1096941
+observation.sha256=e81c7b564c90e23a9da94a768c1bc5d311dcc24027d07139e4c94e2b1422f535
+source=refactor-equivalent

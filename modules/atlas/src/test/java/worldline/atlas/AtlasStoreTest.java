@@ -16,11 +16,17 @@ public final class AtlasStoreTest {
         require(first.kind(AtlasKind.ROLE).size() == SemanticRoles.roleCount(), "role count");
         require(first.kind(AtlasKind.ROLE).size() >= 196, "catalog baseline");
         require(first.kind(AtlasKind.INVARIANT).size() == 6, "invariants");
-        require(first.kind(AtlasKind.SUBSYSTEM).size() == 27, "subsystems");
+        require(AtlasSubsystems.ALL.length == 29, "subsystem denominator");
+        require(first.kind(AtlasKind.SUBSYSTEM).size() == AtlasSubsystems.ALL.length,
+                "subsystems");
         require(AtlasSubsystems.DOMAINS.length == 6, "taxonomy domains");
         require("actors".equals(AtlasSubsystems.domain("tile-entities")),
                 "tile entity taxonomy");
-        require(first.kind(AtlasKind.COVERAGE_UNIT).size() == 189, "coverage units");
+        require("simulation".equals(AtlasSubsystems.domain("scheduling")),
+                "scheduling taxonomy");
+        require(first.kind(AtlasKind.COVERAGE_UNIT).size()
+                == AtlasSubsystems.ALL.length * AtlasSubsystems.DIMENSIONS.length,
+                "coverage units");
         require(first.kind(AtlasKind.BOUNDARY).size() >= 24, "boundary baseline");
         require(first.kind(AtlasKind.SCENARIO).size() == WorldlineBehavior.all().size() + 1,
                 "behavior scenarios");
@@ -139,9 +145,9 @@ public final class AtlasStoreTest {
                 .contains("layer=UNIVERSAL;applicability=APPLICABLE;automation=PUBLIC_TESTKIT")
                 && first.get("atlas.claim.entity-093.spawn-materialization").refs()
                 .contains("atlas.experiment.m407-chicken-egg-set")
-                && AtlasStatus.UNKNOWN.equals(
-                        first.get("atlas.claim.entity-093.tick-lifecycle").status()),
-                "honest chicken egg-family boundary was not indexed");
+                && first.get("atlas.claim.entity-093.tick-lifecycle").refs().contains(
+                        "atlas.experiment.b173-native-entity-dynamics-cycle"),
+                "chicken spawn and independent native recovery boundaries were not indexed");
         require(first.get("atlas.claim.entity-095.spawn-materialization").control()
                 .contains("layer=UNIVERSAL;applicability=APPLICABLE;automation=PUBLIC_TESTKIT")
                 && first.get("atlas.claim.entity-095.spawn-materialization").refs()
@@ -176,13 +182,15 @@ public final class AtlasStoreTest {
                 && first.get("atlas.claim.entity-050.tick-lifecycle").control()
                 .contains("automation=PUBLIC_TESTKIT"),
                 "complete hostile behavior matrix was not indexed");
-        require(AtlasStatus.UNKNOWN.equals(first.get("atlas.claim.entity-092.drop-matrix").status()),
-                "implicit entity census gap was not materialized");
-        require(AtlasStatus.UNKNOWN.equals(first.get("atlas.claim.entity-010.tick-lifecycle").status()),
-                "dishonest arrow projectile lifecycle claim was not removed");
-        require(AtlasStatus.UNKNOWN.equals(
-                first.get("atlas.claim.entity-094.environment-response").status()),
-                "unproven squid land-response claim was not removed");
+        require(first.get("atlas.claim.entity-092.drop-matrix").refs().contains(
+                "atlas.experiment.b173-native-entity-stimulus-cycle"),
+                "cow drops lack the paired native seeded matrix");
+        require(first.get("atlas.claim.entity-010.tick-lifecycle").refs().contains(
+                "atlas.experiment.b173-native-entity-dynamics-cycle"),
+                "arrow lifecycle lacks the paired native ground-expiry proof");
+        require(first.get("atlas.claim.entity-094.environment-response").refs().contains(
+                "atlas.experiment.b173-native-entity-dynamics-cycle"),
+                "squid environment response lacks the paired native immersion proof");
         require(!AtlasIndex.search(first, "chunk", 20).isEmpty(), "semantic chunk index");
         String context = AtlasContextQuery.json(first, "chunk",
                 AtlasContext.build(first, "chunk", 20, 1));
@@ -202,7 +210,7 @@ public final class AtlasStoreTest {
                 && taxonomy.contains("subsystem=tile-entities"), "taxonomy index");
         String tags = AtlasQuery.tags(first);
         require(tags.contains("tag=category-claim")
-                && tags.contains("tag=surface-public-testkit\trecords=1153")
+                && tags.contains("tag=surface-public-testkit\trecords=1310")
                 && !tags.contains("tag=surface-internal-api")
                 && !tags.contains("tag=surface-smoke-only"), "tag index");
         try {
@@ -215,9 +223,10 @@ public final class AtlasStoreTest {
         require(AtlasGaps.list(first).stream().noneMatch(
                 record -> record.id().startsWith("atlas.claim.block-")),
                 "completed block Census regressed");
-        require(AtlasGaps.list(first).stream().anyMatch(
+        EntityPersistenceCensusTest.execute(first);
+        require(AtlasGaps.list(first).stream().noneMatch(
                 record -> record.id().startsWith("atlas.claim.entity-")),
-                "entity Census gaps were hidden");
+                "completed entity Census regressed");
         try { AtlasSynchronization.validateAll(Paths.get(".")); }
         catch (java.io.IOException error) { throw new AssertionError(error); }
         require(first.get("atlas.role.CLIENT_TICK_ROOT").canonical()
@@ -226,6 +235,9 @@ public final class AtlasStoreTest {
         require(AtlasStatus.UNKNOWN.equals(first.get(
                 "atlas.ecosystem-claim.mapping-completeness-ranking").status()),
                 "community completeness claim stays unknown");
+        NativeEntityRenderCensusTest.verify(first);
+        NativeEntityDynamicsCensusTest.verify(first);
+        NativeEntityStimulusCensusTest.verify(first);
         System.out.println("AtlasStoreTest passed");
     }
 

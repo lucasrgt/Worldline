@@ -16,8 +16,8 @@ public final class AtlasSubsystems {
     public static final String[] ALL = { "tick-lifecycle", "worldgen", "chunks", "lighting",
             "weather", "block-ticks", "fluids", "entities", "tile-entities", "mob-ai",
             "player", "inventory", "crafting", "redstone", "saves", "dimensions", "protocol",
-            "dedicated-server", "profiling", "rendering", "animation", "gui", "resources",
-            "mod-ecosystem", "mappings", "stationapi", "aero" };
+            "dedicated-server", "profiling", "rendering", "animation", "lifecycle", "scheduling",
+            "gui", "resources", "mod-ecosystem", "mappings", "stationapi", "aero" };
     public static final String[] DOMAINS = { "simulation", "world", "actors", "gameplay",
             "runtime", "ecosystem" };
     public static final String[] DIMENSIONS = { "TESTABILITY", "CONTROL", "OBSERVABILITY",
@@ -60,7 +60,8 @@ public final class AtlasSubsystems {
 
     private static Map<String, String> domains() {
         Map<String, String> mapped = new LinkedHashMap<String, String>();
-        assign(mapped, "simulation", "tick-lifecycle", "weather", "block-ticks", "redstone");
+        assign(mapped, "simulation", "tick-lifecycle", "weather", "block-ticks", "redstone",
+                "lifecycle", "scheduling");
         assign(mapped, "world", "worldgen", "chunks", "lighting", "fluids", "saves",
                 "dimensions");
         assign(mapped, "actors", "entities", "tile-entities", "mob-ai", "player");
@@ -86,8 +87,8 @@ public final class AtlasSubsystems {
         mapped.put("rng", "tick-lifecycle");
         mapped.put("input", "tick-lifecycle");
         mapped.put("tick", "tick-lifecycle");
-        mapped.put("scheduler", "tick-lifecycle");
-        mapped.put("lifecycle", "tick-lifecycle");
+        mapped.put("scheduler", "scheduling");
+        mapped.put("lifecycle", "lifecycle");
         mapped.put("worldgen", "worldgen");
         mapped.put("block-tick", "block-ticks");
         mapped.put("block_tick", "block-ticks");

@@ -93,6 +93,8 @@ public final class WorldlineContract {
             "Controlled logical item identity across copy, wire sync, save, and restart");
     public static final WorldlineContract STATE_WORLD_DIFFERENTIAL = define("state-world-differential",
             "Mapped and official state-world transitions agree for a frozen fixture");
+    public static final WorldlineContract STATIONAPI_WORLD_CONTROLS = define("stationapi-world-controls",
+            "Acknowledged native local-world block, player, inventory and semantic GUI control");
     public static final WorldlineContract STATIONAPI_RUNTIME_PROVIDER = define("stationapi-runtime-provider",
             "SPI-discovered process-isolated StationAPI TestKit runtime sessions");
     public static final WorldlineContract LEGACY_LOADER_RUNTIME_PROVIDER = define(
@@ -100,6 +102,8 @@ public final class WorldlineContract {
             "SPI-discovered process-isolated ModLoader and Forge TestKit runtime sessions");
     public static final WorldlineContract TESTKIT_RUNTIME = define("testkit-runtime",
             "External Java specifications execute through the isolated TestKit runtime");
+    public static final WorldlineContract TESTKIT_EXTERNAL_MATURITY = define("testkit-external-maturity",
+            "Two public external mod consumers and evidence-based sustained-use release readiness");
     private static final Map<String, WorldlineContract> ALL;
     static {
         register(REPRODUCTION_BUNDLE, TRACE_DIVERGENCE, MOD_LOADING,
@@ -115,7 +119,8 @@ public final class WorldlineContract {
                 AERO_RUNTIME_SESSION, AERO_PAIRED_EXPERIMENT, AERO_FRAME_CENSUS,
                 AERO_CACHE_LIFECYCLE, AERO_DIAGNOSTIC_CAPTURE, AERO_SAVE_WINDOW,
                 LOGICAL_ITEM_REFERENCE, STATE_WORLD_DIFFERENTIAL,
-                STATIONAPI_RUNTIME_PROVIDER, LEGACY_LOADER_RUNTIME_PROVIDER, TESTKIT_RUNTIME);
+                STATIONAPI_WORLD_CONTROLS, STATIONAPI_RUNTIME_PROVIDER, LEGACY_LOADER_RUNTIME_PROVIDER,
+                TESTKIT_RUNTIME, TESTKIT_EXTERNAL_MATURITY);
         ALL = Collections.unmodifiableMap(new LinkedHashMap<String, WorldlineContract>(DEFINITIONS));
     }
     private final String token, subject;

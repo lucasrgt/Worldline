@@ -1,5 +1,5 @@
 schema=1
 id=m635-natural-slime-spawn
-fingerprint=7cef62b7bc1bb5859e71d5a54a6529d6c8b116c7ce5931c4e49c33136602b6ff
+fingerprint=2e46e4095a3b74c2f54019d49ea3b279d93209a364b69575a366c9b1108ace4d
 observation.sha256=61d30f60f8347283e1e843dd2a9fc2989427d6da5d22bde90e780c5779e1a238
-source=executed
+source=refactor-equivalent

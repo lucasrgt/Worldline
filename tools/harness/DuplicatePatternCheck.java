@@ -115,6 +115,13 @@ public final class DuplicatePatternCheck {
             census.sleep += sleepCount(relative, source);
             return;
         }
+        if (relative.equals("tools/harness/BoundedSleep.java")
+                || relative.equals("tools/containers/BoundedSleep.java")) {
+            census.sha256 += count(SHA, source);
+            census.lift += count(LIFT, source);
+            census.server += count(SERVER, source);
+            return;
+        }
         census.sha256 += count(SHA, source);
         census.lift += count(LIFT, source);
         census.sleep += sleepCount(relative, source);

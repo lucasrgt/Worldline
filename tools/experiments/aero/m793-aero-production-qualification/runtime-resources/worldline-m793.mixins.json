@@ -1,0 +1,28 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "worldline.m793.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "ProductionFrameMixin",
+    "ProductionMinecraftMixin",
+    "ProductionToggleMixin",
+    "ProductionCloudMixin",
+    "ProductionPopulationMixin",
+    "ProductionOrderMixin",
+    "ProductionBatchMixin",
+    "ProductionPageMixin",
+    "ProductionModelMixin",
+    "ProductionBrightnessMixin",
+    "ProductionTerrainMixin",
+    "DiagnosticPoseMixin",
+    "DiagnosticTransformMixin",
+    "DiagnosticPackingMixin",
+    "DiagnosticUniqueMixin",
+    "DiagnosticDriverMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "plugin": "worldline.m793.ProductionMixinPlugin"
+}

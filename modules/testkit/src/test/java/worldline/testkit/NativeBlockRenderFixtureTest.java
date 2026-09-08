@@ -10,6 +10,8 @@ public final class NativeBlockRenderFixtureTest {
     private NativeBlockRenderFixtureTest() { }
 
     public static void main(String[] arguments) {
+        NativeEntityDynamicsFixtureTest.execute();
+        NativeEntityStimulusFixtureTest.execute();
         NativeBlockRenderSubject cube = subject(1, 0);
         NativeBlockRenderSubject stairs = subject(53, 10);
         NativeBlockRenderPlan plan = new NativeBlockRenderPlan(
@@ -27,6 +29,7 @@ public final class NativeBlockRenderFixtureTest {
                 observation(cube, 2048, "a".repeat(64), 6))));
         NativeWorldBlockRenderFixtureTest.main(arguments);
         NativeTileEntityRenderFixtureTest.main(arguments);
+        NativeEntityRenderFixtureTest.main(arguments);
         System.out.println("NativeBlockRenderFixtureTest passed");
     }
 

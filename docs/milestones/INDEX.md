@@ -1055,6 +1055,7 @@ Index of `docs/` narratives grouped as Milestones. Canonical files stay at stabl
 - [M78_CYCLE.md](../M78_CYCLE.md)
 - [M78_PAGED_STAGE_TIMING.md](../M78_PAGED_STAGE_TIMING.md)
 - [M790_AERO_DEFAULT_ROLLBACK.md](../M790_AERO_DEFAULT_ROLLBACK.md)
+- [M792_AERO_BATCH_EMISSION_PARETO.md](../M792_AERO_BATCH_EMISSION_PARETO.md)
 - [M79_COLD_PAGE_REBUILD.md](../M79_COLD_PAGE_REBUILD.md)
 - [M79_CYCLE.md](../M79_CYCLE.md)
 - [M7_CYCLE.md](../M7_CYCLE.md)

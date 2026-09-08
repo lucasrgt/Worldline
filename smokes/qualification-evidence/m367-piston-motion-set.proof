@@ -1,5 +1,5 @@
 schema=1
 id=m367-piston-motion-set
-fingerprint=d6bdbb5ed4b121e186a62094a4b4a5335adad2372ae673cc922d4e5111892e34
+fingerprint=25f28661943f0e7f61c520b22caeec046a027efad6c84f2090a9aac883edbee6
 observation.sha256=eeb597ce51f18b3841a00e606375efae5dfb531672564e34670469f420f304a8
 source=refactor-equivalent

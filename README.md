@@ -49,7 +49,7 @@ not redistribute those JARs, Mojang assets, or decompiled game source.
 <!-- worldline-status:start -->
 | Release | Milestone | Behavior contracts | Portable smoke proofs |
 | --- | --- | --- | --- |
-| v1.463.0 GO | `m625-multiplayer-edge-set` | 695/695 complete | 695/695 pinned |
+| v1.463.0 GO | `m625-multiplayer-edge-set` | 704/704 complete | 704/704 pinned |
 <!-- worldline-status:end -->
 
 The current release is declared in

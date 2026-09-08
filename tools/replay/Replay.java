@@ -4,6 +4,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Properties;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -92,19 +95,8 @@ public final class Replay {
         Path classes = productRoot();
         Path client = root.resolve(".worldline/smokes/controlled-client-tick");
         Path workspace = root.resolve("local/workspaces/b1.7.3");
-        List<Path> paths = new ArrayList<>(Arrays.asList(classes.resolve("cli"),
-                classes.resolve("reproduction"), classes.resolve("api"), classes.resolve("invariants"),
-                classes.resolve("semantics"),
-                classes.resolve("trace"), classes.resolve("mods"), classes.resolve("analysis"),
-                classes.resolve("modtest")));
-        paths.add(classes.resolve("minimization"));
-        paths.add(classes.resolve("fuzz"));
-        paths.add(classes.resolve("profiling"));
-        paths.add(classes.resolve("coverage"));
-        if (atlas) paths.add(classes.resolve("atlas"));
+        List<Path> paths = productPaths(classes);
         if (atlasRender) paths.add(root.resolve(".worldline/build/server-adapter"));
-        if (test || census) paths.addAll(Arrays.asList(classes.resolve("testmodel"),
-                classes.resolve("testapi"), classes.resolve("testkit")));
         if (test) paths.addAll(Arrays.asList(
                 root.resolve(".worldline/build/adapter-classes/b173-server"),
                 root.resolve(".worldline/build/adapter-classes/b173-server-testkit")));
@@ -123,6 +115,32 @@ public final class Replay {
                         System.getProperty("path.separator"))), "worldline.cli.WorldlineCli"));
         command.addAll(Arrays.asList(arguments));
         return new ProcessBuilder(command).directory(root.toFile()).inheritIO().start().waitFor();
+    }
+
+    private List<Path> productPaths(Path classes) throws Exception {
+        Properties config = new Properties();
+        try (java.io.Reader reader = Files.newBufferedReader(root.resolve("harness.properties"))) {
+            config.load(reader);
+        }
+        Set<String> modules = new LinkedHashSet<>();
+        addModule(config, "cli", modules, new LinkedHashSet<>());
+        return modules.stream().map(classes::resolve)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private static void addModule(Properties config, String module, Set<String> modules,
+            Set<String> visiting) {
+        if (!module.matches("[a-z0-9]+(?:-[a-z0-9]+)*"))
+            throw new IllegalArgumentException("invalid module " + module);
+        if (modules.contains(module)) return;
+        if (!visiting.add(module)) throw new IllegalStateException("cyclic module " + module);
+        String dependencies = config.getProperty("module." + module + ".dependencies");
+        if (dependencies == null) throw new IllegalStateException("undeclared module " + module);
+        for (String dependency : dependencies.split(",", -1)) {
+            if (!dependency.isBlank()) addModule(config, dependency.trim(), modules, visiting);
+        }
+        visiting.remove(module);
+        modules.add(module);
     }
 
     private Path productRoot() {

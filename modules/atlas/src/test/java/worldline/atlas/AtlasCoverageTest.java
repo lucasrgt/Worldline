@@ -10,7 +10,10 @@ public final class AtlasCoverageTest {
 
     public static void main(String[] arguments) {
         AtlasStore store = AtlasStore.standard(Paths.get("."));
-        require(store.kind(AtlasKind.COVERAGE_UNIT).size() == 189, "unit count");
+        require(AtlasSubsystems.ALL.length == 29, "subsystem denominator");
+        require(store.kind(AtlasKind.COVERAGE_UNIT).size()
+                == AtlasSubsystems.ALL.length * AtlasSubsystems.DIMENSIONS.length,
+                "unit count");
         require("1".equals(store.get("atlas.coverage-unit.worldgen.TESTABILITY").control()),
                 "worldgen testability filled by explicit smoke scope");
         require("1".equals(store.get("atlas.coverage-unit.worldgen.SEMANTIC").control()),
@@ -183,17 +186,12 @@ public final class AtlasCoverageTest {
         for (AtlasRecord gap : gaps) {
             if (gap.id().startsWith("atlas.coverage-unit.")) coverageGaps.add(gap.id());
         }
-        require(coverageGaps.size() == 6
-                        && coverageGaps.contains("atlas.coverage-unit.profiling.CONTROL")
-                        && coverageGaps.contains("atlas.coverage-unit.profiling.SEMANTIC")
-                        && coverageGaps.contains("atlas.coverage-unit.profiling.DETERMINISM")
-                        && coverageGaps.contains("atlas.coverage-unit.animation.CONTROL")
-                        && coverageGaps.contains("atlas.coverage-unit.animation.SEMANTIC")
-                        && coverageGaps.contains("atlas.coverage-unit.animation.DETERMINISM"),
+        require(coverageGaps.isEmpty(),
                 "declared coverage matrix gap set drifted");
         String matrix = AtlasQuery.coverage(store);
-        require(matrix.contains("0/1") && matrix.contains("1/1")
+        require(!matrix.contains("0/1") && matrix.contains("1/1")
                 && matrix.contains("source=declared-coverage-unit"), "coverage matrix");
+        AtlasSemanticEvidenceLinksTest.verify(store);
         System.out.println("AtlasCoverageTest passed");
     }
 

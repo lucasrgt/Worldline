@@ -1,5 +1,5 @@
 schema=1
 id=m169-egg-throw
-fingerprint=c4bf70831669c5ce1998eeec8132b89baffac50491dbd57e32e9fa5ff30ba981
+fingerprint=c9e9eebad2a4035a1671880c2bf7e3ed1b03adee101e1ce7b41eaa428e8eff81
 observation.sha256=928748cb1070c773bf7991f2ccaa4384b51c7910f12d20cb86102e337da19585
 source=refactor-equivalent
