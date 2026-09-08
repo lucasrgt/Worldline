@@ -1,5 +1,5 @@
 schema=1
 id=b173-native-random-outcomes-cycle
-fingerprint=4999b27bb1b0cfdcadfc9ec90ced7530d4f8d87a1f2e7cb5e1acabb3dd51493c
+fingerprint=46f8d8e3cbd1475118d7de63f1c0a8602ede2fc60b8d610a557e87e31d2b3b24
 observation.sha256=31b79d4a2cd37c2745e8cbadc6cdd1662afab8f8951dd241033f90beab74f290
 source=refactor-equivalent
