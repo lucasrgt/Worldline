@@ -37,7 +37,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m21-server-control` | CARRIED | dedicated-server-control |
 | `m22-multiplayer-wire` | CARRIED | multiplayer-session |
 | `m23-player-persistence` | CARRIED | player-persistence |
-| `m24-play-pose` | EXECUTED | player-pose |
+| `m24-play-pose` | CARRIED | player-pose |
 | `m25-player-movement` | CARRIED | player-pose |
 | `m26-native-multiplayer` | CARRIED | multiplayer-session |
 | `m27-multiplayer-chat` | CARRIED | multiplayer-session |
@@ -600,11 +600,11 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m665-leaf-support-distance` | CARRIED | leaf support distance |
 | `m702-powered-rail-slope-propagation` | CARRIED | powered rail slope propagation |
 | `m703-native-3d-inventory-render` | CARRIED | official Beta 1.7.3 native 3D inventory render family |
-| `m743-redstone-ore-dust-drop` | EXECUTED | redstone ore dust drop |
-| `m747-shears-leaf-durability` | EXECUTED | shears leaf durability |
-| `m751-iron-door-hand-rejection` | EXECUTED | iron door hand rejection |
-| `m762-wall-sign-support-break` | EXECUTED | wall sign support break |
-| `m763-torch-support-break` | EXECUTED | torch support break |
+| `m743-redstone-ore-dust-drop` | CARRIED | redstone ore dust drop |
+| `m747-shears-leaf-durability` | CARRIED | shears leaf durability |
+| `m751-iron-door-hand-rejection` | CARRIED | iron door hand rejection |
+| `m762-wall-sign-support-break` | CARRIED | wall sign support break |
+| `m763-torch-support-break` | CARRIED | torch support break |
 | `m767-modloader-forge-testkit-provider` | CARRIED | ModLoader and Forge TestKit providers |
 | `m768-aero-historical-tower-replay` | CARRIED | Aero historical tower hitch replay |
 | `m769-aero-unified-runtime-timeline` | CARRIED | Aero unified runtime timeline |
@@ -659,8 +659,9 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-mob-spawner-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 mob-spawner subsystem conformance |
 | `b173-multi-drop-mineral-lifecycle-cycle` | CARRIED | official Beta 1.7.3 multi-drop mineral lifecycle family |
 | `b173-mushroom-random-tick-conformance-cycle` | CARRIED | official Beta 1.7.3 mushroom random-tick conformance subsystem |
+| `b173-native-entity-render-cycle` | EXECUTED | official Beta 1.7.3 native entity render family |
 | `b173-native-special-world-render-cycle` | CARRIED | official Beta 1.7.3 native special world block-render family |
-| `b173-native-tile-entity-render-cycle` | CARRIED | official Beta 1.7.3 native tile-entity render family |
+| `b173-native-tile-entity-render-cycle` | EXECUTED | official Beta 1.7.3 native tile-entity render family |
 | `b173-openable-access-structures-conformance-cycle` | CARRIED | official Beta 1.7.3 openable access structures conformance |
 | `b173-piston-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 piston subsystem conformance |
 | `b173-portal-block-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 portal block subsystem conformance |
