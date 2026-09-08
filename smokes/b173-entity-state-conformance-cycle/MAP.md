@@ -31,4 +31,6 @@ all fourteen raw RGBA frames, at least 99 percent foreground overlap, at most 0.
 channels differing by more than four levels, and mean absolute channel error at most one.
 `tools/integration/EntityGpuComparison.java` applies this contract offline to two retained
 frame directories. Same-device repetitions and driver-version-only changes are rejected.
+Supply the packaged TestKit API and runner JARs on Java's `--class-path` when
+launching this JDK-only integration tool; it invokes the public fixture at runtime.
 Native qualification on a second GPU is still required before portability can be claimed.
