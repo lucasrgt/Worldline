@@ -11,12 +11,14 @@ public final class WorldControlEvidence {
         if (observations == null) throw new NullPointerException("observations");
         this.observations = Collections.unmodifiableList(new ArrayList<String>(observations));
         for (String row : this.observations)
-            if (row == null || row.isEmpty() || row.contains("\n")) throw new IllegalArgumentException("invalid observation");
+            if (row == null || row.isEmpty() || row.contains("\n"))
+                throw new IllegalArgumentException("invalid observation");
     }
     public List<String> observations() { return observations; }
     public String canonical() { return "schema=worldline.world-controls.v1|" + String.join("|", observations); }
     @Override public boolean equals(Object other) {
-        return other instanceof WorldControlEvidence && observations.equals(((WorldControlEvidence) other).observations);
+        return other instanceof WorldControlEvidence
+                && observations.equals(((WorldControlEvidence) other).observations);
     }
     @Override public int hashCode() { return observations.hashCode(); }
 }

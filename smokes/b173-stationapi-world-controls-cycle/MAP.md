@@ -1,5 +1,6 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=stationapi-world-controls -->
+<!-- nonclaims=authoritative-multiplayer-writes,extended-block-ids,arbitrary-mod-guis,keyboard-pointer-control,broad-stationapi-parity -->
 <!-- frozen-trace=67d63d5b713f90f0c8efe9049d3a14f110d8ebdb521be2b0ab186d357352a048 -->
 
 # StationAPI world control structural capability

@@ -22,7 +22,8 @@ public final class StationApiLocalChannel {
     private boolean ready, closed;
     public StationApiLocalChannel(Minecraft client) throws Exception {
         this.client = client;
-        socket = new Socket(InetAddress.getLoopbackAddress(), Integer.getInteger("worldline.stationapi.controlPort", -1));
+        socket = new Socket(InetAddress.getLoopbackAddress(),
+                Integer.getInteger("worldline.stationapi.controlPort", -1));
         socket.setTcpNoDelay(true); socket.setSoTimeout(240000);
         input = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
         output = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
@@ -41,7 +42,8 @@ public final class StationApiLocalChannel {
                 client.setWorld(null); client.scheduleStop(); return;
             }
             String prefix = "CONTROL session=" + session + " request=" + (request + 1) + " ";
-            if (command == null || !command.startsWith(prefix)) throw new IllegalStateException("command identity drift");
+            if (command == null || !command.startsWith(prefix))
+                throw new IllegalStateException("command identity drift");
             String value = StationApiLocalActions.execute(client, command.substring(prefix.length())); request++;
             line("RESULT session=" + session + " request=" + request + " value=" + value); emit("STATE");
         }

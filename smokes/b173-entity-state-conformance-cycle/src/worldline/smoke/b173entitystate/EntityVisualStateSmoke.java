@@ -18,7 +18,8 @@ public final class EntityVisualStateSmoke {
         }
         boolean official = a[0].equals("official");
         Path output = Paths.get(a[3]);
-        Map<String, String> values = B173EntityStateRender.observe(Paths.get(a[1]), official, output.resolveSibling(output.getFileName()+"-frames"));
+        Map<String, String> values = B173EntityStateRender.observe(Paths.get(a[1]), official,
+                output.resolveSibling(output.getFileName()+"-frames"));
         Files.write(output.resolveSibling(output.getFileName()+".observed"),
                 values.toString().getBytes(StandardCharsets.UTF_8));
         byte[] canonical = EntityVisualStateFixture.verify(values).canonical().getBytes(StandardCharsets.UTF_8);

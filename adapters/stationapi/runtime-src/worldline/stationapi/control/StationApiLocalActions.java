@@ -42,7 +42,8 @@ final class StationApiLocalActions {
             client.gameRenderer.onFrameUpdate(0F); return "ok";
         case "CLOSE_UI": width(words, 1); client.setScreen(null); return "ok";
         case "CLICK":
-            width(words, 4); StationApiLocalInventory.click(client, integer(words, 1), integer(words, 2), integer(words, 3));
+            width(words, 4);
+            StationApiLocalInventory.click(client, integer(words, 1), integer(words, 2), integer(words, 3));
             return "ok";
         default: throw new IllegalArgumentException("unknown local control command");
         }
@@ -59,8 +60,12 @@ final class StationApiLocalActions {
     }
     private static int integer(String[] words, int index) { return Integer.parseInt(words[index]); }
     private static double decimal(String[] words, int index) {
-        double value = Double.parseDouble(words[index]); require(Double.isFinite(value), "non-finite pose"); return value;
+        double value = Double.parseDouble(words[index]);
+        require(Double.isFinite(value), "non-finite pose");
+        return value;
     }
     private static void width(String[] words, int expected) { require(words.length == expected, "command width"); }
-    private static void require(boolean value, String message) { if (!value) throw new IllegalArgumentException(message); }
+    private static void require(boolean value, String message) {
+        if (!value) throw new IllegalArgumentException(message);
+    }
 }

@@ -61,9 +61,12 @@ public final class StationApiWorldControlsCycle {
         Files.createDirectories(service.getParent());
         Files.writeString(service, "worldline.stationapi.StationApiTestRuntimeProvider\n",
                 StandardCharsets.UTF_8);
-        List<Path> specApi = new ArrayList<Path>(testApi); specApi.add(adapter); specApi.add(classes.resolve("testkit"));
+        List<Path> specApi = new ArrayList<Path>(testApi);
+        specApi.add(adapter);
+        specApi.add(classes.resolve("testkit"));
         compile(specs, "8", specApi, root.resolve("adapters/stationapi/src/test/java"));
-        specApi.add(specs); compile(specs, "8", specApi, smoke.resolve("spec-src"));
+        specApi.add(specs);
+        compile(specs, "8", specApi, smoke.resolve("spec-src"));
         String output = runTestKit(checkout, server, client, classes, adapter, specs);
         verifyOutput(output);
         verifyProfilerArtifacts();

@@ -24,7 +24,8 @@ final class WorldlineContractTest {
                 || WorldlineContract.require("legacy-loader-runtime-provider")
                         != WorldlineContract.LEGACY_LOADER_RUNTIME_PROVIDER
                 || WorldlineContract.require("testkit-runtime") != WorldlineContract.TESTKIT_RUNTIME
-                || WorldlineContract.require("testkit-external-maturity") != WorldlineContract.TESTKIT_EXTERNAL_MATURITY)
+                || WorldlineContract.require("testkit-external-maturity")
+                        != WorldlineContract.TESTKIT_EXTERNAL_MATURITY)
             throw new AssertionError("TestKit contract catalog drifted");
         try { WorldlineContract.all().clear(); throw new AssertionError("mutable TestKit contract catalog"); }
         catch (UnsupportedOperationException expected) { }

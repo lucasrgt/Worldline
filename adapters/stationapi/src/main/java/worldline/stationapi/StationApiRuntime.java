@@ -62,7 +62,8 @@ public final class StationApiRuntime implements worldline.api.UiMinecraftRuntime
     }
     private void requireLocal() {
         requireLoaded();
-        if (!localWorld) throw new UnsupportedOperationException("StationAPI world controls require the local-world profile");
+        if (!localWorld)
+            throw new UnsupportedOperationException("StationAPI world controls require the local-world profile");
     }
     StationApiSnapshot snapshot() { requireLoaded(); return snapshot; }
 

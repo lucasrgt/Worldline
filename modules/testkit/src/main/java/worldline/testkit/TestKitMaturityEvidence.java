@@ -21,7 +21,8 @@ public final class TestKitMaturityEvidence {
         if (!readyForOne()) throw new IllegalStateException("TestKit 1.0 needs sustained public use by two mods");
     }
     @Override public boolean equals(Object other) {
-        return other instanceof TestKitMaturityEvidence && canonical.equals(((TestKitMaturityEvidence) other).canonical);
+        return other instanceof TestKitMaturityEvidence
+                && canonical.equals(((TestKitMaturityEvidence) other).canonical);
     }
     @Override public int hashCode() { return canonical.hashCode(); }
 }

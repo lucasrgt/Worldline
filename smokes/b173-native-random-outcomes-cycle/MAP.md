@@ -1,5 +1,6 @@
 <!-- worldline-map-schema=1 -->
 <!-- boundary=native-random-outcomes -->
+<!-- nonclaims=seed-generator-quality,unconditioned-waiting-times,moving-hook-trajectories,all-water-geometries,post-beta-loot -->
 <!-- frozen-trace=d736cd87b51d13ee63548d9710b1ad4eb0d6e8d8db5a189529efbe1e372ec59c -->
 
 # Native random outcome semantic map

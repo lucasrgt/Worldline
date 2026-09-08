@@ -12,7 +12,8 @@ public final class B173NativeRandomOutcomes {
         B173NativeServerSymbols names = new B173NativeServerSymbols(mappings, official);
         for (String type : new String[] {"Block", "Item", "BlockGravel", "EntityFish", "World"}) {
             String origin = names.type(type).getProtectionDomain().getCodeSource().getLocation().toString();
-            B173NativeEntityScene.require(origin.contains(official ? "jars/minecraft_server.jar" : "minecraft_server/bin/"),
+            B173NativeEntityScene.require(origin.contains(official
+                    ? "jars/minecraft_server.jar" : "minecraft_server/bin/"),
                     "native random outcome provenance differs: " + origin);
         }
         List<RandomOutcomeObservation> rows = new ArrayList<RandomOutcomeObservation>();

@@ -37,7 +37,8 @@ public final class StationApiTestRuntimeProvider implements TestRuntimeProvider 
             Socket socket = accept(control, processes, settings.timeoutSeconds);
             socket.setSoTimeout(settings.timeoutSeconds * 1000);
             protocol = new StationApiProtocol(socket);
-            StationApiRuntime runtime = new StationApiRuntime(id, requestedWorld, protocol, processes, settings.localWorld);
+            StationApiRuntime runtime = new StationApiRuntime(
+                    id, requestedWorld, protocol, processes, settings.localWorld);
             System.out.println("WORLDLINE_STATIONAPI_SESSION_OPEN=" + id);
             return new Session(runtime);
         } catch (Exception | Error error) {

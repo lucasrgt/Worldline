@@ -20,14 +20,17 @@ final class StationApiWorld implements GameWorld {
     }
     @Override public boolean setBlock(BlockPosition position, BlockState state) {
         if (state == null) throw new NullPointerException("state");
-        String reply = runtime.control("SET_BLOCK " + coordinates(position) + " " + state.legacyId() + " " + state.metadata());
-        if (!reply.equals("true") && !reply.equals("false")) throw new IllegalStateException("invalid block write reply");
+        String reply = runtime.control("SET_BLOCK " + coordinates(position)
+                + " " + state.legacyId() + " " + state.metadata());
+        if (!reply.equals("true") && !reply.equals("false"))
+            throw new IllegalStateException("invalid block write reply");
         return Boolean.parseBoolean(reply);
     }
     private static String coordinates(BlockPosition position) {
         if (position == null) throw new NullPointerException("position");
         if (position.y() < 0 || position.y() > 127 || Math.abs((long) position.x()) >= 30000000
-                || Math.abs((long) position.z()) >= 30000000) throw new IllegalArgumentException("position outside Beta world");
+                || Math.abs((long) position.z()) >= 30000000)
+            throw new IllegalArgumentException("position outside Beta world");
         return position.x() + " " + position.y() + " " + position.z();
     }
     @Override public List<GameEntity> entities() {

@@ -15,7 +15,8 @@ final class StationApiPlayer implements GamePlayer {
     @Override public void teleport(GamePosition position) {
         if (position == null) throw new NullPointerException("position");
         if (Math.abs(position.x()) >= 30000000 || position.y() < 0 || position.y() >= 128
-                || Math.abs(position.z()) >= 30000000) throw new IllegalArgumentException("position outside Beta world");
+                || Math.abs(position.z()) >= 30000000)
+            throw new IllegalArgumentException("position outside Beta world");
         runtime.mutate("TELEPORT " + position.x() + " " + position.y() + " " + position.z());
     }
     @Override public String username() { return state().username; }

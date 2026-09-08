@@ -40,9 +40,11 @@ final class StationApiLocalInventory {
         client.interactionManager.clickSlot(client.player.currentScreenHandler.syncId, slot, 0, false, client.player);
     }
     private static void add(Map<Integer, Integer> items, ItemStack stack) {
-        if (stack != null && stack.count > 0) items.put(stack.itemId, items.getOrDefault(stack.itemId, 0) + stack.count);
+        if (stack != null && stack.count > 0)
+            items.put(stack.itemId, items.getOrDefault(stack.itemId, 0) + stack.count);
     }
     private static void requireInventory(Minecraft client) {
-        if (!(client.currentScreen instanceof InventoryScreen)) throw new IllegalStateException("inventory is not open");
+        if (!(client.currentScreen instanceof InventoryScreen))
+            throw new IllegalStateException("inventory is not open");
     }
 }

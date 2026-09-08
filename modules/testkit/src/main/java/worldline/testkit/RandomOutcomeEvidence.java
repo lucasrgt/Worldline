@@ -18,7 +18,8 @@ public final class RandomOutcomeEvidence {
         return text.toString();
     }
     @Override public boolean equals(Object other) {
-        return other instanceof RandomOutcomeEvidence && canonical().equals(((RandomOutcomeEvidence) other).canonical());
+        return other instanceof RandomOutcomeEvidence
+                && canonical().equals(((RandomOutcomeEvidence) other).canonical());
     }
     @Override public int hashCode() { return canonical().hashCode(); }
 }
