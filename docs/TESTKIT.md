@@ -215,6 +215,14 @@ typed `registry-presence` cases and emits equatable
 `worldline.entity-registry-evidence.v1`; registry membership alone makes no
 claim about spawning, ticking, collision, persistence, rendering, or AI.
 
+`NativeEntityDynamicsFixture#verify` validates an explicit ordered family of native displacement,
+world-condition and timed-state contrasts. `NativeEntityDynamicsCase` declares each subject,
+layer and rule; `NativeEntityDynamicsObservation` holds exact normalized native measurements.
+The equatable result binds `native-entity-dynamics` to all 66 cases captured in four independent
+mapped/official server processes. Short-entity water flags, painting breakage and neighboring
+expiry controls are explicit parts of the contract. These observations do not imply exhaustive
+AI behavior, combat, drops, world restarts or network materialization.
+
 `NativeEntityRenderFixture#verify` checks an explicit ordered family against native renderer
 identities, nonempty RGBA captures and exact frame hashes. Its equatable evidence preserves
 each subject's Functional Census layer. The `native-entity-render` behavior publishes the

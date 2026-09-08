@@ -10,6 +10,7 @@ public final class NativeBlockRenderFixtureTest {
     private NativeBlockRenderFixtureTest() { }
 
     public static void main(String[] arguments) {
+        NativeEntityDynamicsFixtureTest.execute();
         NativeBlockRenderSubject cube = subject(1, 0);
         NativeBlockRenderSubject stairs = subject(53, 10);
         NativeBlockRenderPlan plan = new NativeBlockRenderPlan(

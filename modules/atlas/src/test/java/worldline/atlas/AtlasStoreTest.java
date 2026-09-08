@@ -145,9 +145,9 @@ public final class AtlasStoreTest {
                 .contains("layer=UNIVERSAL;applicability=APPLICABLE;automation=PUBLIC_TESTKIT")
                 && first.get("atlas.claim.entity-093.spawn-materialization").refs()
                 .contains("atlas.experiment.m407-chicken-egg-set")
-                && AtlasStatus.UNKNOWN.equals(
-                        first.get("atlas.claim.entity-093.tick-lifecycle").status()),
-                "honest chicken egg-family boundary was not indexed");
+                && first.get("atlas.claim.entity-093.tick-lifecycle").refs().contains(
+                        "atlas.experiment.b173-native-entity-dynamics-cycle"),
+                "chicken spawn and independent native recovery boundaries were not indexed");
         require(first.get("atlas.claim.entity-095.spawn-materialization").control()
                 .contains("layer=UNIVERSAL;applicability=APPLICABLE;automation=PUBLIC_TESTKIT")
                 && first.get("atlas.claim.entity-095.spawn-materialization").refs()
@@ -184,11 +184,12 @@ public final class AtlasStoreTest {
                 "complete hostile behavior matrix was not indexed");
         require(AtlasStatus.UNKNOWN.equals(first.get("atlas.claim.entity-092.drop-matrix").status()),
                 "implicit entity census gap was not materialized");
-        require(AtlasStatus.UNKNOWN.equals(first.get("atlas.claim.entity-010.tick-lifecycle").status()),
-                "dishonest arrow projectile lifecycle claim was not removed");
-        require(AtlasStatus.UNKNOWN.equals(
-                first.get("atlas.claim.entity-094.environment-response").status()),
-                "unproven squid land-response claim was not removed");
+        require(first.get("atlas.claim.entity-010.tick-lifecycle").refs().contains(
+                "atlas.experiment.b173-native-entity-dynamics-cycle"),
+                "arrow lifecycle lacks the paired native ground-expiry proof");
+        require(first.get("atlas.claim.entity-094.environment-response").refs().contains(
+                "atlas.experiment.b173-native-entity-dynamics-cycle"),
+                "squid environment response lacks the paired native immersion proof");
         require(!AtlasIndex.search(first, "chunk", 20).isEmpty(), "semantic chunk index");
         String context = AtlasContextQuery.json(first, "chunk",
                 AtlasContext.build(first, "chunk", 20, 1));
@@ -208,7 +209,7 @@ public final class AtlasStoreTest {
                 && taxonomy.contains("subsystem=tile-entities"), "taxonomy index");
         String tags = AtlasQuery.tags(first);
         require(tags.contains("tag=category-claim")
-                && tags.contains("tag=surface-public-testkit\trecords=1198")
+                && tags.contains("tag=surface-public-testkit\trecords=1257")
                 && !tags.contains("tag=surface-internal-api")
                 && !tags.contains("tag=surface-smoke-only"), "tag index");
         try {
@@ -234,6 +235,7 @@ public final class AtlasStoreTest {
                 "atlas.ecosystem-claim.mapping-completeness-ranking").status()),
                 "community completeness claim stays unknown");
         NativeEntityRenderCensusTest.verify(first);
+        NativeEntityDynamicsCensusTest.verify(first);
         System.out.println("AtlasStoreTest passed");
     }
 
