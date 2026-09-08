@@ -50,14 +50,14 @@ final class TrainSourceHistory {
             return;
         }
         Set<String> ancestors = new LinkedHashSet<>();
-        ancestors.addAll(committed.getOrDefault(relative, Set.of()));
         if (priorStem != null) {
-            add(ancestors, predecessor.getProperty(priorStem + "prior_sha256"));
             add(ancestors, predecessor.getProperty(priorStem + "current_sha256"));
+            add(ancestors, predecessor.getProperty(priorStem + "prior_sha256"));
             int count = integer(predecessor.getProperty(priorStem + "ancestor.count", "0"));
             for (int index = 0; index < count; index++)
                 add(ancestors, predecessor.getProperty(priorStem + "ancestor." + index + ".sha256"));
         }
+        ancestors.addAll(committed.getOrDefault(relative, Set.of()));
         target.setProperty(stem + "ancestor.count", Integer.toString(ancestors.size()));
         int index = 0;
         for (String digest : ancestors)
@@ -124,6 +124,17 @@ final class TrainSourceHistory {
                         && "b".repeat(64).equals(
                                 target.getProperty("source.0.ancestor.0.sha256")),
                 "unchanged train source ancestry advanced");
+        prior.setProperty("source.0.prior_sha256", "d".repeat(64));
+        target.setProperty("source.0.current_sha256", "e".repeat(64));
+        new TrainSourceHistory(Map.of("same", new LinkedHashSet<>(
+                List.of("c".repeat(64), digest))))
+                .write(prior, target, "source.0.", "same");
+        require(digest.equals(target.getProperty("source.0.ancestor.0.sha256"))
+                        && "4".equals(target.getProperty("source.0.ancestor.count"))
+                        && connects(target, "source.0.", "b".repeat(64))
+                        && connects(target, "source.0.", "c".repeat(64))
+                        && !connects(target, "source.0.", "unreviewed"),
+                "changed train source must lead with its immediate predecessor without duplicates");
     }
 
     private static java.util.List<String> stablePaths(

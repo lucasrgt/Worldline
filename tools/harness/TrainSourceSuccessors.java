@@ -80,6 +80,7 @@ final class TrainSourceSuccessors {
                 || EntityRegistryDocumentationSuccessor.carries(relative, prior, current)
                 || AtlasLauncherSourceSuccessor.carries(relative, prior, current)
                 || AtlasLauncherPortabilitySuccessor.carries(relative, prior, current)
-                || ProviderRefreshAncestrySuccessor.carries(relative, prior, current);
+                || ProviderRefreshAncestrySuccessor.carries(relative, prior, current)
+                || SourceLauncherQualificationSuccessor.carries(relative, prior, current);
     }
 }

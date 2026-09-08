@@ -14,7 +14,7 @@ public final class HexDigest {
         throw new IllegalArgumentException("usage: HexDigest --sha256-text VALUE");
     }
 
-    static MessageDigest sha256() {
+    public static MessageDigest sha256() {
         try {
             return MessageDigest.getInstance("SHA-256");
         } catch (java.security.NoSuchAlgorithmException error) {
@@ -22,7 +22,7 @@ public final class HexDigest {
         }
     }
 
-    static String hex(byte[] digest) {
+    public static String hex(byte[] digest) {
         return HexFormat.of().formatHex(digest);
     }
 
@@ -32,6 +32,12 @@ public final class HexDigest {
     }
 
     static void selfTest() throws Exception {
+        SourceLauncherQualificationSuccessor.selfTest();
+        require(java.lang.reflect.Modifier.isPublic(
+                HexDigest.class.getDeclaredMethod("sha256").getModifiers())
+                && java.lang.reflect.Modifier.isPublic(
+                HexDigest.class.getDeclaredMethod("hex", byte[].class).getModifiers()),
+                "source-file launchers require public digest methods across class loaders");
         String empty = sha256Hex(new byte[0]);
         String abc = sha256Hex("abc".getBytes(StandardCharsets.UTF_8));
         require(empty.equals("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"),
