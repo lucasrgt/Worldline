@@ -19,13 +19,11 @@ final class TrainPinHistory {
     }
     static TrainPinHistory load(Path root) throws Exception {
         List<Properties> history = new ArrayList<>();
-        List<String> commits = capture(root, "log", "--all", "--format=%H", "--",
-                "smokes/train-reconciliation.lock").lines().filter(value -> !value.isBlank()).toList();
-        List<String> objects = commits.stream().map(commit ->
-                commit + ":smokes/train-reconciliation.lock").toList();
-        for (String content : GitObjectBatch.read(root, objects, false)) {
+        for (String commit : capture(root, "log", "--all", "--format=%H", "--",
+                "smokes/train-reconciliation.lock").lines().toList()) {
             Properties lock = new Properties();
-            try (StringReader reader = new StringReader(content)) { lock.load(reader); }
+            try (StringReader reader = new StringReader(capture(root, "show",
+                    commit + ":smokes/train-reconciliation.lock"))) { lock.load(reader); }
             history.add(lock);
         }
         Set<String> anchors = new HashSet<>();
@@ -72,42 +70,6 @@ final class TrainPinHistory {
         return null;
     }
 
-    static void preserveUnchangedOrigins(Properties next, Properties previous) {
-        for (String key : previous.stringPropertyNames()) {
-            if (!key.startsWith("smoke.") || !key.endsWith(".prior_fingerprint")) continue;
-            String stem = key.substring(0, key.length() - "prior_fingerprint".length());
-            String fingerprint = previous.getProperty(stem + "current_fingerprint");
-            String evidence = previous.getProperty(stem + "evidence_sha256");
-            if (fingerprint != null && evidence != null
-                    && fingerprint.equals(next.getProperty(stem + "current_fingerprint"))
-                    && evidence.equals(next.getProperty(stem + "evidence_sha256"))) {
-                next.setProperty(key, previous.getProperty(key));
-            }
-        }
-    }
-    static void selfTest() {
-        Properties previous = new Properties(), next = new Properties();
-        for (String id : List.of("entity-persistence", "wall-sign", "torch", "modloader-forge")) {
-            String stem = "smoke." + id + ".";
-            previous.setProperty(stem + "prior_fingerprint", "origin");
-            previous.setProperty(stem + "current_fingerprint", "current");
-            previous.setProperty(stem + "evidence_sha256", "proof");
-        }
-        next.putAll(previous);
-        for (String key : previous.stringPropertyNames()) if (key.endsWith(".prior_fingerprint"))
-            next.setProperty(key, "current");
-        preserveUnchangedOrigins(next, previous);
-        if (!next.equals(previous)) throw new IllegalStateException("unchanged proof origin drift");
-        next.setProperty("smoke.torch.current_fingerprint", "changed");
-        next.setProperty("smoke.torch.prior_fingerprint", "new-origin");
-        next.setProperty("smoke.wall-sign.evidence_sha256", "new-proof");
-        next.setProperty("smoke.wall-sign.prior_fingerprint", "new-origin");
-        preserveUnchangedOrigins(next, previous);
-        if (!"new-origin".equals(next.getProperty("smoke.torch.prior_fingerprint"))
-                || !"new-origin".equals(next.getProperty("smoke.wall-sign.prior_fingerprint"))) {
-            throw new IllegalStateException("changed proof origin overwritten");
-        }
-    }
     record Receipt(String prior, String head, String tree, String base, String signature) { }
 
     static int preserveUnchanged(Path root, Properties target) throws Exception {
