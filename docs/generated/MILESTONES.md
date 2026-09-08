@@ -661,7 +661,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-mushroom-random-tick-conformance-cycle` | CARRIED | official Beta 1.7.3 mushroom random-tick conformance subsystem |
 | `b173-native-entity-render-cycle` | EXECUTED | official Beta 1.7.3 native entity render family |
 | `b173-native-special-world-render-cycle` | CARRIED | official Beta 1.7.3 native special world block-render family |
-| `b173-native-tile-entity-render-cycle` | EXECUTED | official Beta 1.7.3 native tile-entity render family |
+| `b173-native-tile-entity-render-cycle` | CARRIED | official Beta 1.7.3 native tile-entity render family |
 | `b173-openable-access-structures-conformance-cycle` | CARRIED | official Beta 1.7.3 openable access structures conformance |
 | `b173-piston-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 piston subsystem conformance |
 | `b173-portal-block-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 portal block subsystem conformance |
