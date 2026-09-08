@@ -72,7 +72,7 @@ public final class PistonPushLimitCycle {
   }
   private String run(Path classes, Path official, Path workspace, String count) throws Exception {
     String output = capture(root,
-        Arrays.asList("java", "-classpath", classes + separator() + product("api"),
+        Arrays.asList("java", "-classpath", classpath(classes),
             "worldline.smoke.pistonlimitb173.PistonPushLimitSmoke", official.toString(),
             workspace.toString(), Integer.toString(freePort()), value(config, "seed"),
             value(config, "username") + count, value(config, "target.chunk.x"),
@@ -85,7 +85,7 @@ public final class PistonPushLimitCycle {
     Files.createDirectories(output);
     List<String> command = new ArrayList<>(
         Arrays.asList("javac", "-encoding", "UTF-8", "--release", "8", "-Xlint:all,-options",
-            "-Werror", "-classpath", product("api").toString(), "-d", output.toString()));
+            "-Werror", "-classpath", classpath(output), "-d", output.toString()));
     command.addAll(javaFiles(root.resolve("modules/smoketest/src/main/java")));
     command.addAll(javaFiles(root.resolve("adapters/b173-server/src/main/java")));
     command.addAll(javaFiles(smoke.resolve("src")));
@@ -119,6 +119,10 @@ public final class PistonPushLimitCycle {
   }
   private int freePort() throws IOException {
     return SmokeSupport.freePort();
+  }
+  private String classpath(Path classes) {
+    return classes + System.getProperty("path.separator") + product("api")
+        + System.getProperty("path.separator") + product("testapi");
   }
   private Path product(String n) {
     return SmokeSupport.product(root, n);

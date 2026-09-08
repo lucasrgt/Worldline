@@ -91,7 +91,7 @@ public final class NetherExitCreateSetCycle {
         if (Files.exists(workspace))
           recreate(workspace);
         String output = capture(Arrays.asList("java", "-classpath",
-            classes + System.getProperty("path.separator") + product("api"),
+            classpath(classes),
             "worldline.smoke.netherexitcreatesetb173.NetherExitCreateSetSmoke", official.toString(),
             workspace.toString(), Integer.toString(freePort()), value(config, "seed"),
             value(config, "username"), value(config, "chunk.x"), value(config, "chunk.z"),
@@ -113,7 +113,7 @@ public final class NetherExitCreateSetCycle {
     Files.createDirectories(output);
     List<String> command = new ArrayList<>(
         Arrays.asList("javac", "-encoding", "UTF-8", "--release", "8", "-Xlint:all,-options",
-            "-Werror", "-classpath", product("api").toString(), "-d", output.toString()));
+            "-Werror", "-classpath", classpath(output), "-d", output.toString()));
     command.addAll(javaFiles(root.resolve("modules/smoketest/src/main/java")));
     command.addAll(javaFiles(root.resolve("adapters/b173-server/src/main/java")));
     command.addAll(javaFiles(smoke.resolve("src")));
@@ -180,6 +180,10 @@ public final class NetherExitCreateSetCycle {
     return result.trim();
   }
 
+  private String classpath(Path classes) {
+    return classes + System.getProperty("path.separator") + product("api")
+        + System.getProperty("path.separator") + product("testapi");
+  }
   private Path product(String name) {
     return root.resolve(".worldline/build/classes").resolve(name);
   }

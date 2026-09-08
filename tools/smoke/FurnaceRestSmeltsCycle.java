@@ -89,7 +89,7 @@ public final class FurnaceRestSmeltsCycle {
       try {
         if (Files.exists(workspace))
           recreate(workspace);
-        String output = capture(Arrays.asList("java", "-classpath", classes.toString(),
+        String output = capture(Arrays.asList("java", "-classpath", classpath(classes),
             "worldline.smoke.furnacerestsmeltsb173.FurnaceRestSmeltsSmoke", official.toString(),
             workspace.toString(), Integer.toString(freePort()), value(config, "seed"),
             value(config, "username"), value(config, "chunk.x"), value(config, "chunk.z")));
@@ -108,13 +108,21 @@ public final class FurnaceRestSmeltsCycle {
     Path output = build.resolve("adapter-classes");
     Files.createDirectories(output);
     List<String> command = new ArrayList<>(Arrays.asList("javac", "-encoding", "UTF-8", "--release",
-        "8", "-Xlint:all,-options", "-Werror", "-d", output.toString()));
+        "8", "-Xlint:all,-options", "-Werror", "-classpath", classpath(output),
+        "-d", output.toString()));
     command.addAll(javaFiles(root.resolve("modules/api/src/main/java")));
     command.addAll(javaFiles(root.resolve("modules/smoketest/src/main/java")));
     command.addAll(javaFiles(root.resolve("adapters/b173-server/src/main/java")));
     command.addAll(javaFiles(smoke.resolve("src")));
     capture(command);
     return output;
+  }
+
+  private String classpath(Path classes) {
+    return classes + System.getProperty("path.separator") + product("testapi");
+  }
+  private Path product(String name) {
+    return SmokeSupport.product(root, name);
   }
 
   private int freePort() throws Exception {
