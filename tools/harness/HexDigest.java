@@ -32,7 +32,6 @@ public final class HexDigest {
     }
 
     static void selfTest() throws Exception {
-        SourceLauncherQualificationSuccessor.selfTest();
         require(java.lang.reflect.Modifier.isPublic(
                 HexDigest.class.getDeclaredMethod("sha256").getModifiers())
                 && java.lang.reflect.Modifier.isPublic(

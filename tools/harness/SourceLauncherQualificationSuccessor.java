@@ -13,6 +13,18 @@ final class SourceLauncherQualificationSuccessor {
         {"tools/harness/ProviderRefreshAncestrySuccessor.java",
                 "e688e46ce2216f7588ceb33ae646f5a2971bce021499770eaa83a291b408ade8",
                 "050675aacfadae744986bccdb70ae97f8889846ae14f0fe04dff96b1e0ee8646"},
+        {"tools/harness/HexDigest.java",
+                "dd084ae18c679222aa951a8bbf79a444726e92e6c94d994f24fd7499cc331057",
+                "e44e2721bc7c3b9b20573880bde45735768911a08318611043666cfbd7e398b9"},
+        {"tools/harness/HexDigest.java",
+                "77a27e4874f54bd6e60569295d27dd946bcdeddb8092ce2fb365a79df82f38bc",
+                "e44e2721bc7c3b9b20573880bde45735768911a08318611043666cfbd7e398b9"},
+        {"tools/harness/HarnessFeatureSelfTest.java",
+                "08917360058a3b0cea98a4186214721e1ebc3e9155e8755e8aadbd6a38a4fa54",
+                "b8b574470596c0e8a8648e71398045dc248bf9a91b38fe2e574360b38c67e94c"},
+        {"tools/harness/HarnessFeatureSelfTest.java",
+                "e0c7b2e6f75d514ab02ba0a6dfcd48acefdeae5f02922c38c5303c21d4cbb8ed",
+                "b8b574470596c0e8a8648e71398045dc248bf9a91b38fe2e574360b38c67e94c"},
     };
     private SourceLauncherQualificationSuccessor() { }
     static boolean carries(String path, String prior, String current) {
