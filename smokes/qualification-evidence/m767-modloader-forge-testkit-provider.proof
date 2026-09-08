@@ -1,5 +1,5 @@
 schema=1
 id=m767-modloader-forge-testkit-provider
-fingerprint=e8fa99c762a3a4080a4497f77153e2dc9bbc09a5f03b740ec8cf9744cd73a240
+fingerprint=b225f03226e687f3c8e9f64290e893d7404c539b72071f2e27364a88643e4de7
 observation.sha256=b20a7a8662dcb2dc0b6ecb33ccb65687e41cfeb526639e3a122f1de95b20736e
 source=refactor-equivalent

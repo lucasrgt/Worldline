@@ -1,5 +1,5 @@
 schema=1
 id=m743-redstone-ore-dust-drop
-fingerprint=007c20cd4152f33ca0dd62ab2ad0e5eb4b49ca970e2bd5d6d1234ba7ea4e5adf
+fingerprint=c07d97ea04a7695c8f7498ed676c137c29fadf85a299720d43b1462b37c1e811
 observation.sha256=978c2080be4691e185d954651d98744f95926996ece0379312eddabf772b03d9
 source=refactor-equivalent

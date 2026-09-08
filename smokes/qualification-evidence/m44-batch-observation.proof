@@ -1,5 +1,5 @@
 schema=1
 id=m44-batch-observation
-fingerprint=bb034beb528f339f159d9c343fba6931bfb1dd13d1b2475ae49e60ff38796db3
+fingerprint=f25a93571a727f385fe68210d9544b60235565b052db72ec8e5eab66b0531df4
 observation.sha256=1af778eb857cbe670cf0def60d74df1102913d5b5d04d475c5b5a4cde04f1113
 source=refactor-equivalent

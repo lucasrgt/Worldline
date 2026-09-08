@@ -659,6 +659,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-mob-spawner-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 mob-spawner subsystem conformance |
 | `b173-multi-drop-mineral-lifecycle-cycle` | CARRIED | official Beta 1.7.3 multi-drop mineral lifecycle family |
 | `b173-mushroom-random-tick-conformance-cycle` | CARRIED | official Beta 1.7.3 mushroom random-tick conformance subsystem |
+| `b173-native-entity-dynamics-cycle` | EXECUTED | native entity movement, environment and timed-state contrasts |
 | `b173-native-entity-render-cycle` | EXECUTED | official Beta 1.7.3 native entity render family |
 | `b173-native-special-world-render-cycle` | CARRIED | official Beta 1.7.3 native special world block-render family |
 | `b173-native-tile-entity-render-cycle` | CARRIED | official Beta 1.7.3 native tile-entity render family |

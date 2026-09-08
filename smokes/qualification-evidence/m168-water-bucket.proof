@@ -1,5 +1,5 @@
 schema=1
 id=m168-water-bucket
-fingerprint=89f8764abb55fc74ee101d9e4fc541535160eb4d9e389aaf9350753f031e4d07
+fingerprint=4e2148b3d2561bcbfaa11e242cf0a35f44251a3fa2f9abb0068f04d50b2add9a
 observation.sha256=4ce39f3401e15de5c720a314091f69acf985c459785d211d52f84f4af9e47a7d
 source=refactor-equivalent

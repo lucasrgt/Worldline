@@ -1,5 +1,5 @@
 schema=1
 id=m629-door-sound-event
-fingerprint=8def9eb010a43f1ad4d2ff704ef62a16697ab6d3ccb66c9913d796e7c7d63a44
+fingerprint=0e90928f7499fb7619565ce5872084a65b229dee0054a28ddc38f073c83880dc
 observation.sha256=a8720dacfe2869d6edf8ba367dcaa1749300824d2a3d0235f9e01c2e469e4d66
 source=refactor-equivalent
