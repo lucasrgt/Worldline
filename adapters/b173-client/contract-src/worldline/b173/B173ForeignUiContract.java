@@ -8,6 +8,7 @@ import worldline.api.GameUi;
 import worldline.api.GameUiCapability;
 import worldline.api.GameUiContract;
 import worldline.api.GameUiNode;
+import worldline.api.GameUiKey;
 
 /** Host-only acceptance of the optional Butter reflection bridge. */
 public final class B173ForeignUiContract {
@@ -25,17 +26,22 @@ public final class B173ForeignUiContract {
                 && "search".equals(screen.secondary) && screen.value == 7, "extended actions drifted");
         require(ui.getByRole(GameUiNode.TEXT_FIELD).shouldBeFocused().single().enabled(),
                 "node attributes drifted");
+        require("Provider description".equals(ui.getByLabel("Search").single().attributes().get("description"))
+                && "observed".equals(ui.getByLabel("Search").single().attributes().get("text")), "provider attributes lost");
+        require(ui.supports(GameUiCapability.KEYBOARD), "optional keyboard capability missing");
+        ui.press(GameUiKey.REVERSE_TAB); require("SHIFT_TAB".equals(screen.key), "reverse tab translation");
         System.out.println("B173ForeignUiContract passed");
     }
 
     private static final class Screen implements HostUi {
-        String focused, typed = "", secondary; int value;
+        String focused, typed = "", secondary, key; int value;
         @Override public String screen() { return "butter"; }
         @Override public List<HostUiNode> nodes() {
             return Arrays.asList(new HostUiNode("screen", "butter", "", -1, -1, 0, true, false),
                     new HostUiNode("textbox", "search", "Search", -1, -1, 0, true,
                             "search".equals(focused)));
         }
+        public void press(String input) { key = input; }
         @Override public void click(String name) { focused = name; }
         @Override public void type(char item) { typed += item; }
         @Override public void backspace() {

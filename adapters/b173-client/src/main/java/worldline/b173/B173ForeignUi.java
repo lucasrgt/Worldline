@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -41,6 +40,7 @@ final class B173ForeignUi implements GameUiInput {
         if (has("rightClick", String.class)) value.add(GameUiCapability.SECONDARY_CLICK);
         if (has("setValue", String.class, Integer.TYPE)) value.add(GameUiCapability.VALUE_INPUT);
         if (hasFocusedNode()) value.add(GameUiCapability.FOCUS);
+        if (has("press", String.class)) value.add(GameUiCapability.KEYBOARD);
         return Collections.unmodifiableSet(value);
     }
 
@@ -92,6 +92,10 @@ final class B173ForeignUi implements GameUiInput {
     @Override public void fill(GameUiNode node, String text) { throw unavailable(GameUiCapability.TEXT_REPLACE); }
 
     @Override public void press(GameUiKey key) {
+        if (has("press", String.class)) {
+            invoke("press", key == GameUiKey.REVERSE_TAB ? "SHIFT_TAB" : key.name());
+            return;
+        }
         if (key != GameUiKey.BACKSPACE) throw unavailable(GameUiCapability.KEYBOARD);
         requireForeign(GameUiCapability.TEXT_INPUT);
         invoke("backspace");
@@ -111,10 +115,7 @@ final class B173ForeignUi implements GameUiInput {
     private GameUiNode node(Object value) {
         try {
             Class<?> type = value.getClass();
-            Map<String, String> attributes = new LinkedHashMap<String, String>();
-            optional(type, value, "id", attributes); optional(type, value, "label", attributes);
-            optional(type, value, "enabled", attributes);
-            optional(type, value, "focused", attributes);
+            Map<String, String> attributes = B173ForeignAttributes.read(value);
             return new GameUiNode(
                     (String) type.getMethod("role").invoke(value),
                     (String) type.getMethod("name").invoke(value),
@@ -160,13 +161,6 @@ final class B173ForeignUi implements GameUiInput {
     private static boolean has(Class<?> type, String name) {
         try { type.getMethod(name); return true; }
         catch (NoSuchMethodException ignored) { return false; }
-    }
-
-    private static void optional(Class<?> type, Object value, String name, Map<String, String> target)
-            throws ReflectiveOperationException {
-        if (!has(type, name)) return;
-        String result = String.valueOf(type.getMethod(name).invoke(value));
-        if (!"label".equals(name) || !result.isEmpty()) target.put(name, result);
     }
 
     private void requireForeign(GameUiCapability capability) {
