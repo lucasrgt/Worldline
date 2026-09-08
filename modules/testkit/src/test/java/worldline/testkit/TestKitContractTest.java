@@ -31,6 +31,7 @@ public final class TestKitContractTest {
     }
     public static void main(String[] arguments) throws Exception {
         RandomOutcomeFixtureTest.execute();
+        WorldControlFixtureTest.execute();
         ParticleLifecycleFixtureTest.execute();
         EntityPersistenceFixtureTest.execute();
         BlockConformancePlanTest.execute();

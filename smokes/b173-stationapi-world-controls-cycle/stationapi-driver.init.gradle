@@ -1,0 +1,67 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+gradle.projectsEvaluated {
+    if (gradle.rootProject.name != 'aero-bare-stapi') return
+    def project = gradle.rootProject
+    def smoke = new File(project.property('worldlineDriverRoot').toString()).canonicalFile
+    def minecraft = project.configurations.minecraft.dependencies as List
+    if (minecraft.size() != 1 || minecraft[0].group != 'com.mojang'
+            || minecraft[0].name != 'minecraft' || minecraft[0].version != 'b1.7.3')
+        throw new GradleException('StationAPI Minecraft dependency drifted')
+    def officialClient = new File(project.property('worldlineClientJar').toString()).canonicalFile
+    if (!officialClient.isFile()) throw new GradleException('StationAPI official client is absent')
+    def digest = java.security.MessageDigest.getInstance('SHA-256')
+    officialClient.withInputStream { input ->
+        byte[] buffer = new byte[8192]
+        for (int count = input.read(buffer); count >= 0; count = input.read(buffer))
+            digest.update(buffer, 0, count)
+    }
+    def actualClient = digest.digest().encodeHex().toString()
+    if (actualClient != project.property('worldlineClientSha256').toString())
+        throw new GradleException('StationAPI official client SHA-256 drifted: ' + actualClient)
+    def worldline = smoke.parentFile.parentFile
+    project.sourceSets.main.java.srcDir(new File(smoke, 'runtime-src'))
+    project.sourceSets.main.java.srcDir(new File(worldline, 'adapters/stationapi/runtime-src'))
+    def profilerRoot = new File(worldline, 'modules/profiling/src/main/java/worldline/profiling')
+    def profilerTypes = ['ClientProfiler', 'ClientProfilerRuntime', 'FrameCensus',
+        'FrameCensusCodec', 'JvmProfilerSampler', 'ProfilerArtifacts',
+        'ProfilerMetric', 'ProfilerRecorder', 'ProfilerRegistry', 'ProfilerRun',
+        'ProfilerRunCodec', 'ProfilerSchema', 'ProfilerSession', 'WorldlineProfilerMetrics']
+    def profilerSources = profilerTypes.collect { new File(profilerRoot, it + '.java') }
+    if (!profilerSources.every { it.isFile() })
+        throw new GradleException('Worldline profiler runtime closure is incomplete')
+    project.tasks.named('compileJava').configure { source(profilerSources) }
+    project.tasks.named('processResources').configure {
+        doLast {
+            copy {
+                from new File(smoke, 'runtime-resources/worldline-stationapi-driver.mixins.json')
+                into destinationDir
+            }
+            def manifest = new File(destinationDir, 'fabric.mod.json')
+            def json = new JsonSlurper().parse(manifest)
+            json.mixins = ['worldline-stationapi-driver.mixins.json']
+            manifest.text = JsonOutput.prettyPrint(JsonOutput.toJson(json)) + '\n'
+        }
+    }
+    def task = project.tasks.named('runClient').get()
+    if (task.class.name != 'net.fabricmc.loom.task.RunGameTask_Decorated'
+            || task.mainClass.getOrNull() != 'net.fabricmc.devlaunchinjector.Main')
+        throw new GradleException('StationAPI runClient task identity drifted')
+    def profilerOutput = new File(worldline, '.worldline/smokes/b173-stationapi-world-controls-cycle/'
+            + 'profiler-' + project.property('worldlineSession') + '.wlpr')
+    task.jvmArgs([
+        '-Dworldline.stationapi.localWorld=true',
+        '-Dworldline.stationapi.worldPath=' + project.property('worldlineWorldPath'),
+        '-Dworldline.stationapi.seed=' + project.property('worldlineSeed'),
+        '-Dworldline.stationapi.controlPort=' + project.property('worldlineControlPort'),
+        '-Dworldline.stationapi.serverPort=' + project.property('worldlineServerPort'),
+        '-Dworldline.stationapi.username=' + project.property('worldlineUsername'),
+        '-Dworldline.stationapi.session=' + project.property('worldlineSession'),
+        '-Dworldline.profiler.enabled=true',
+        '-Dworldline.profiler.capacity=2048',
+        '-Dworldline.profiler.scenario=stationapi-world-controls',
+        '-Dworldline.profiler.output=' + profilerOutput,
+        '-Xms512m', '-Xmx1G'
+    ] as List)
+}

@@ -28,20 +28,16 @@ public final class StationApiTestRuntimeProvider implements TestRuntimeProvider 
         if (parent == null) throw new IllegalArgumentException("StationAPI world has no parent");
         Files.createDirectories(parent);
         ServerSocket control = new ServerSocket(0, 1, InetAddress.getLoopbackAddress());
-        control.setSoTimeout(settings.timeoutSeconds * 1000);
+        control.setSoTimeout(250);
         StationApiProcesses processes = null; StationApiProtocol protocol = null;
         try {
             processes = StationApiProcesses.start(settings, root, request.seed(), id, username,
                     control.getLocalPort());
             processes.verifyClientStarted();
-            Socket socket;
-            try { socket = control.accept(); }
-            catch (SocketTimeoutException error) {
-                throw new IllegalStateException("StationAPI control connection timed out", error);
-            }
+            Socket socket = accept(control, processes, settings.timeoutSeconds);
             socket.setSoTimeout(settings.timeoutSeconds * 1000);
             protocol = new StationApiProtocol(socket);
-            StationApiRuntime runtime = new StationApiRuntime(id, requestedWorld, protocol, processes);
+            StationApiRuntime runtime = new StationApiRuntime(id, requestedWorld, protocol, processes, settings.localWorld);
             System.out.println("WORLDLINE_STATIONAPI_SESSION_OPEN=" + id);
             return new Session(runtime);
         } catch (Exception | Error error) {
@@ -49,6 +45,15 @@ public final class StationApiTestRuntimeProvider implements TestRuntimeProvider 
             if (processes != null) try { processes.close(); } catch (Exception close) { error.addSuppressed(close); }
             throw error;
         } finally { control.close(); }
+    }
+
+    private static Socket accept(ServerSocket control, StationApiProcesses processes, int timeout) throws Exception {
+        long deadline = System.nanoTime() + java.util.concurrent.TimeUnit.SECONDS.toNanos(timeout);
+        while (System.nanoTime() < deadline) {
+            processes.verifyClientAlive();
+            try { return control.accept(); } catch (SocketTimeoutException pending) { /* bounded startup poll */ }
+        }
+        throw new IllegalStateException("StationAPI control connection timed out");
     }
 
     private static final class Session implements TestRuntimeSession {

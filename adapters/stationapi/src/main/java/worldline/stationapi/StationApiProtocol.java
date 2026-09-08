@@ -27,6 +27,13 @@ final class StationApiProtocol implements AutoCloseable {
         send("TICK"); return StationApiSnapshot.parse(input.readLine(), "STATE", session);
     }
 
+    StationApiControlReply control(String session, long request, String command) throws Exception {
+        send("CONTROL session=" + session + " request=" + request + " " + command);
+        String reply = input.readLine();
+        return new StationApiControlReply(reply, session, request,
+                StationApiSnapshot.parse(input.readLine(), "STATE", session));
+    }
+
     void stop(String session) throws Exception {
         send("CLOSE");
         StationApiSnapshot.parse(input.readLine(), "CLOSED", session);
