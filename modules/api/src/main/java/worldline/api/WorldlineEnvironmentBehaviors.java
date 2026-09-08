@@ -2,6 +2,8 @@ package worldline.api;
 
 /** Qualified environment boundaries kept outside the primary compatibility catalog. */
 public final class WorldlineEnvironmentBehaviors {
+    public static final WorldlineBehavior NATIVE_ENTITY_STIMULUS = define("native-entity-stimulus",
+            "Native entity materialization, damage, drop matrices and causal interaction outcomes");
     public static final WorldlineBehavior NATIVE_ENTITY_DYNAMICS = define("native-entity-dynamics",
             "Native concrete entity displacement, world-condition contrasts and timed state transitions");
     public static final WorldlineBehavior MUSHROOM_SPREAD = define("mushroom-spread",

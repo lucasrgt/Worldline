@@ -8,7 +8,8 @@ public final class NativeEntityDynamicsCase {
         SUPPORT_ARREST("environment-response"), SUPPORT_SETTLE("environment-response"),
         RAIL_DRAG("environment-response"), COOLDOWN("tick-lifecycle"),
         ITEM_EXPIRY("tick-lifecycle"), PROJECTILE_EXPIRY("tick-lifecycle"),
-        SUPPORT_RECHECK("tick-lifecycle");
+        SUPPORT_RECHECK("tick-lifecycle"), SPAWN("spawn-materialization"), DAMAGE("damage-death"),
+        DROPS("drop-matrix"), INTERACTION("interaction-state");
         private final String template;
         Rule(String template) { this.template = template; }
         public String template() { return template; }
@@ -21,7 +22,8 @@ public final class NativeEntityDynamicsCase {
     public NativeEntityDynamicsCase(int legacyId, String runtimeClass, String layer, Rule rule) {
         if (legacyId < 1 || legacyId > 999 || runtimeClass == null
                 || !runtimeClass.matches("Entity[A-Za-z0-9]+") || rule == null
-                || !("ARCHETYPE".equals(layer) || "SINGULAR".equals(layer))) {
+                || !("ARCHETYPE".equals(layer) || "SINGULAR".equals(layer)
+                || (rule == Rule.SPAWN && "UNIVERSAL".equals(layer)))) {
             throw new IllegalArgumentException("native entity dynamics case");
         }
         this.legacyId = legacyId;

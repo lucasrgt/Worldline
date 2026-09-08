@@ -72,8 +72,13 @@ public final class NativeEntityDynamicsFixture {
                         && v.value("active-two") == 0 && v.value("control-before") == 0
                         && v.value("control-two") == 0, "native timed recovery differs");
                 break;
-            default:
+            case ITEM_EXPIRY:
+            case PROJECTILE_EXPIRY:
+            case SUPPORT_RECHECK:
                 expiry(v);
+                break;
+            default:
+                throw new IllegalArgumentException("unsupported dynamics rule: " + v.scene().rule());
         }
     }
     private static void expiry(NativeEntityDynamicsObservation v) {
