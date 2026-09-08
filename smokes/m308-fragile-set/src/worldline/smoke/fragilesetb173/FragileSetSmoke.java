@@ -69,8 +69,8 @@ public final class FragileSetSmoke {
                   .equals(ICE),
           "live ice-break drift");
       harvest(actor, ice, 80);
-      broken =
-          worldline.test.WorldlineSmokeAwait.observe(actor, 20).blockAt(ice.x(), ice.y(), ice.z());
+      broken = worldline.test.WorldlineSmokeAwait.awaitBlockMatching(
+          actor, ice, s -> water(s.legacyId()), "broken ice water acknowledgement", window);
       require(broken.legacyId() != 79, "ice cell still 79 after Packet14: " + broken);
       actor.selectHeldSlot(2);
       glass = place(actor, riser, BlockFace.UP, 20);
