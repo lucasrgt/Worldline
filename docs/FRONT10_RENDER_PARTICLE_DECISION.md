@@ -1,37 +1,25 @@
 # FRONT-10 client render and particle decision
 
-Worldline explicitly does **not** claim vanilla client particle rendering in
-the current release line. This is a registered boundary, not an untracked gap.
+Worldline publishes a **bounded official claim** for smoke, flame and red dust particles
+through `b173-native-particle-lifecycle-cycle`. The official Beta 1.7.3 client is the oracle.
 
-## Evidence boundary
+Native constructors establish live age-zero layer-zero particles and a positive bounded lifetime.
+The controlled scene fixes camera orientation, lifetime, scale, color, position, velocity and entity RNG.
+`EffectRenderer.updateEffects` then owns motion, aging and removal; native `renderParticles`
+produces each live frame and the empty frame after removal. Two fresh mapped processes and two
+fresh untouched official processes must produce identical lifecycle observations and RGBA evidence.
 
-The maintained semantic map identifies `EffectRenderer.updateEffects` as
-`EFFECT_TICK` and the texture-effect update path as `TEXTURE_EFFECT_TICK`.
-Those bytecode-anchored identities prove where the client behavior lives; they
-do not prove particle creation, lifetime, motion, batching, color, texture,
-camera-facing geometry, or final pixels.
+The reusable TestKit contract is `worldline.testkit.ParticleLifecycleFixture#verify`.
+It verifies an explicit ordered family, ten ticks per subject, exact age and manager membership,
+visible live frames and empty terminal output. Evidence retains position bits and every frame hash.
+The semantic anchors `EFFECT_TICK` and `TEXTURE_EFFECT_TICK` remain independently enforced.
 
-Existing Aero evidence is narrower. It proves block-model content reaches the
-renderer and freezes frame/stage census and timing observations. It does not
-use Aero's instrumentation as a substitute oracle for vanilla particles and it
-does not generalize block-model observations to `EffectRenderer`.
+This replaces the previous unqualified pilot decision. It does not qualify world particle emission
+causes, every particle class, constructor random distributions, or exact pixel portability across GPUs.
+Aero block-model and frame-census evidence remains separate from the native particle oracle.
+The rendering package has no delta in the finite block/entity registry Functional Census; it adds
+three particle acceptance atoms and one public Atlas behavior boundary.
 
-## Decision
-
-FRONT-10 selects the explicit non-claim route. A one-particle pilot is deferred
-until it can satisfy all of these conditions in one reviewed milestone:
-
-- an official Beta 1.7.3 client is the behavioral oracle;
-- one deterministic particle cause is isolated from ambient effects;
-- two fresh replicas agree on creation, bounded lifetime, and final observable
-  evidence;
-- the observation is exposed through a reusable TestKit contract rather than a
-  smoke-local or decompiled-source assertion;
-- client/GUI lane identity, official-runtime locking, and content-addressed
-  qualification evidence remain intact.
-
-The machine-readable decision is
-`quality/client-render-particle-boundary.properties`. The canonical Gate fails
-if the file, this document, the semantic anchors, or the absence of a qualified
-client-particle behavior drifts. Adding a real pilot therefore requires an
-explicit constitution update instead of silently broadening existing claims.
+The machine-readable policy is `quality/client-render-particle-boundary.properties`.
+The gate requires the frozen native capture and public equatable contract, and rejects a private
+Minecraft binding. Full details and the frozen signature are in `B173_NATIVE_PARTICLE_LIFECYCLE.md`.
