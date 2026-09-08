@@ -278,13 +278,20 @@ subjects through four independent mapped/official framebuffer captures. The nati
 package contributes 59 further public cells from 66 paired cases over those same concrete types:
 wall-constrained motion, painting movement breakage, immersion queries and tick flags, supported
 TNT/sand, minecart rail drag, native recovery and neighboring expiry/support-check boundaries.
-All 201 verified entity claims have strict public bindings. M436 is
+The native stimulus package closes the remaining 53 cells with five spawn materializations,
+sixteen damage/death contrasts, fifteen eight-seed drop matrices and seventeen causal contacts.
+All 254 verified entity claims have strict public bindings. The four independent native captures
+agree on `a2aeebbf1d438995fc7c998a19e7a590ceda27505c7765e31b1dff287be9b5d9`.
+The new arrow contact proof actually transfers one arrow into a native player's inventory and
+removes the grounded projectile; a shaking-arrow control suppresses that transfer. M436 remains
 deliberately excluded from the arrow
 tick-lifecycle cell: it fires a type-60 projectile but then manually drops and collects a separate
 Packet21 item-262 stack, and its own map excludes in-ground projectile pickup. The M466 dry-pen
 scene is also excluded from squid environment-response: it kills the dry squid
 with a sword and explicitly declines to claim land-caused damage. No verified entity cell remains
-`SMOKE_ONLY`; the remaining 53 cells are explicit `UNKNOWN` Atlas claims.
+`SMOKE_ONLY` or `UNKNOWN`. Ten non-applicable cells belong to the abstract type 48;
+its registry-presence claim remains verified. The finite Census is complete without implying
+exhaustive coverage of every damage cause, AI path, loot context, or rendering state.
 
 ## Status and automation
 
@@ -362,15 +369,16 @@ variant, and coupled-transition cases. Together with the modern lifecycle proof
 reconciliation, the block public TestKit surface now covers 1,056/1,056 claims
 (100%), completing that family's automation-surface target. The final six tick-policy claims bind sand and
 gravel scheduling, natural wheat, cactus, and sugar-cane growth, and furnace tile ticks to official
-public fixtures. Across both current families the aggregate is 1,198 verified and public
+public fixtures. Across both current families the aggregate is 1,310 verified and public
 TestKit claims. The full candidate matrix remains 1,320 cells; ten evidence-backed abstract
-entity exclusions leave 1,310 applicable cells, for 95.95% proof and public coverage.
-The entity family contributes 201 public claims, ten explicit non-applicable cells, no
-smoke-only claims, and 53 unknown cells. Its applicable denominator is 254 (79.13% proof).
+entity exclusions leave 1,310 applicable cells, for 100% proof and public coverage.
+The entity family contributes 254 public claims, ten explicit non-applicable cells, no
+smoke-only claims, and no unknown cells. Its applicable denominator is 254 (100% proof).
 Only explicit NOT_APPLICABLE statuses are excluded; unknown, partial, retracted, and native
 nondeterministic cells remain in the denominator, and exclusions never count as verification.
-Reaching the aggregate 98.8% target requires 97 more verified claims; the entity family
-alone requires 109 more claims to reach its own 251/254 threshold.
+Both families and their aggregate exceed the 98.8% target. Future templates or registered
+subjects must add explicit denominator cells and may introduce new gaps; the current zero-gap
+result must not silently grant proof to a broader contract.
 
 ## Three conformance layers
 

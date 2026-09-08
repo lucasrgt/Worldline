@@ -223,6 +223,15 @@ mapped/official server processes. Short-entity water flags, painting breakage an
 expiry controls are explicit parts of the contract. These observations do not imply exhaustive
 AI behavior, combat, drops, world restarts or network materialization.
 
+`NativeEntityStimulusFixture#verify` accepts ordered native spawn, damage, drop and interaction
+contrasts through the same caller-owned case and observation types. Its independent equatable
+result binds `native-entity-stimulus` to 53 cases over 20 registrations, with four matching native
+server captures. It checks tracker-produced spawn payloads, delayed lethal removal, eight-seed
+native item bags, actual inventory pickup, reciprocal mounting, milking, collision impulses and
+combat controls. The player constructor shell inherits native `EntityPlayer` methods without
+overrides. The contract covers the declared stimuli; socket delivery, exhaustive loot contexts
+and all damage causes remain outside this bounded proof.
+
 `NativeEntityRenderFixture#verify` checks an explicit ordered family against native renderer
 identities, nonempty RGBA captures and exact frame hashes. Its equatable evidence preserves
 each subject's Functional Census layer. The `native-entity-render` behavior publishes the

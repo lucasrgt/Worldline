@@ -182,8 +182,9 @@ public final class AtlasStoreTest {
                 && first.get("atlas.claim.entity-050.tick-lifecycle").control()
                 .contains("automation=PUBLIC_TESTKIT"),
                 "complete hostile behavior matrix was not indexed");
-        require(AtlasStatus.UNKNOWN.equals(first.get("atlas.claim.entity-092.drop-matrix").status()),
-                "implicit entity census gap was not materialized");
+        require(first.get("atlas.claim.entity-092.drop-matrix").refs().contains(
+                "atlas.experiment.b173-native-entity-stimulus-cycle"),
+                "cow drops lack the paired native seeded matrix");
         require(first.get("atlas.claim.entity-010.tick-lifecycle").refs().contains(
                 "atlas.experiment.b173-native-entity-dynamics-cycle"),
                 "arrow lifecycle lacks the paired native ground-expiry proof");
@@ -209,7 +210,7 @@ public final class AtlasStoreTest {
                 && taxonomy.contains("subsystem=tile-entities"), "taxonomy index");
         String tags = AtlasQuery.tags(first);
         require(tags.contains("tag=category-claim")
-                && tags.contains("tag=surface-public-testkit\trecords=1257")
+                && tags.contains("tag=surface-public-testkit\trecords=1310")
                 && !tags.contains("tag=surface-internal-api")
                 && !tags.contains("tag=surface-smoke-only"), "tag index");
         try {
@@ -223,9 +224,9 @@ public final class AtlasStoreTest {
                 record -> record.id().startsWith("atlas.claim.block-")),
                 "completed block Census regressed");
         EntityPersistenceCensusTest.execute(first);
-        require(AtlasGaps.list(first).stream().anyMatch(
+        require(AtlasGaps.list(first).stream().noneMatch(
                 record -> record.id().startsWith("atlas.claim.entity-")),
-                "entity Census gaps were hidden");
+                "completed entity Census regressed");
         try { AtlasSynchronization.validateAll(Paths.get(".")); }
         catch (java.io.IOException error) { throw new AssertionError(error); }
         require(first.get("atlas.role.CLIENT_TICK_ROOT").canonical()
@@ -236,6 +237,7 @@ public final class AtlasStoreTest {
                 "community completeness claim stays unknown");
         NativeEntityRenderCensusTest.verify(first);
         NativeEntityDynamicsCensusTest.verify(first);
+        NativeEntityStimulusCensusTest.verify(first);
         System.out.println("AtlasStoreTest passed");
     }
 

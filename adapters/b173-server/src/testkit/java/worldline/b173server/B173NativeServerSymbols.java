@@ -44,6 +44,12 @@ final class B173NativeServerSymbols {
         return result;
     }
     Object get(Object target, String name) throws Exception { return field(target.getClass(), name).get(target); }
+    Object getAs(Object target, String owner, String name) throws Exception {
+        return field(type(owner), name).get(target);
+    }
+    void setAs(Object target, String owner, String name, Object value) throws Exception {
+        field(type(owner), name).set(target, value);
+    }
     Object constant(String owner, String name) throws Exception { return field(type(owner), name).get(null); }
     void set(Object target, String name, Object value) throws Exception {
         field(target.getClass(), name).set(target, value);
