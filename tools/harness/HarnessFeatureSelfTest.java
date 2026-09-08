@@ -63,6 +63,7 @@ final class HarnessFeatureSelfTest {
         CandidateReadiness.selfTest();
         CandidateRuntimeBuild.selfTest();
         CandidateSourceClosure.selfTest();
+        CandidateCompiler.selfTest();
         NeighborTestKitPinCheck.selfTest();
         SchemaPinCheck.selfTest();
         ProviderDiscoveryPinMigration.selfTest();

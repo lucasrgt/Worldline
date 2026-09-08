@@ -4,6 +4,8 @@ package worldline.api;
 public final class WorldlineEnvironmentBehaviors {
     public static final WorldlineBehavior NATIVE_RANDOM_OUTCOMES = define("native-random-outcomes",
             "Exhaustive controlled gravel and fishing draws, weather and depth contrasts, and catch-window timing");
+    public static final WorldlineBehavior ENTITY_STATE_CONFORMANCE = define("entity-state-conformance",
+            "Native environmental causes, contextual drops, conditional AI and visual state contrasts");
     public static final WorldlineBehavior NATIVE_ENTITY_STIMULUS = define("native-entity-stimulus",
             "Native entity materialization, damage, drop matrices and causal interaction outcomes");
     public static final WorldlineBehavior NATIVE_ENTITY_DYNAMICS = define("native-entity-dynamics",

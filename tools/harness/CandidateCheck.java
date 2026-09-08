@@ -186,7 +186,8 @@ final class CandidateCheck {
                     .map(Path::toString).collect(Collectors.toList()));
         }
         command.addAll(javaFiles(source).stream().map(Path::toString).collect(Collectors.toList()));
-        run(command, root, 240);
+        String compilation = CandidateCompiler.compile(root, command, 240);
+        if (!compilation.isBlank()) System.out.print(compilation);
         System.out.println("  compiled " + (clientOnly ? "client" : "server")
                 + " adapter and candidate smoke");
     }
