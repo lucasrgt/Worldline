@@ -208,7 +208,7 @@ public final class AtlasStoreTest {
                 && taxonomy.contains("subsystem=tile-entities"), "taxonomy index");
         String tags = AtlasQuery.tags(first);
         require(tags.contains("tag=category-claim")
-                && tags.contains("tag=surface-public-testkit\trecords=1153")
+                && tags.contains("tag=surface-public-testkit\trecords=1176")
                 && !tags.contains("tag=surface-internal-api")
                 && !tags.contains("tag=surface-smoke-only"), "tag index");
         try {
@@ -232,6 +232,7 @@ public final class AtlasStoreTest {
         require(AtlasStatus.UNKNOWN.equals(first.get(
                 "atlas.ecosystem-claim.mapping-completeness-ranking").status()),
                 "community completeness claim stays unknown");
+        NativeEntityRenderCensusTest.verify(first);
         System.out.println("AtlasStoreTest passed");
     }
 

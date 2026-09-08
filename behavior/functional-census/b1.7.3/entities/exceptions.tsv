@@ -1,2 +1,3 @@
 subject_id	template_id	status	justification	evidence_id
 b1.7.3:entity/048	collision-shape	NOT_APPLICABLE	EntityList type 48 is the abstract EntityLiving base class and cannot be materialized as a native runtime entity.	b173-entity-physical-envelope-cycle
+b1.7.3:entity/048	native-render	NOT_APPLICABLE	Both official and mapped EntityList registries bind type 48 to abstract EntityLiving; a concrete native render instance cannot be created.	b173-native-entity-render-cycle

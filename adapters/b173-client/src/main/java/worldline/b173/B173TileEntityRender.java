@@ -3,7 +3,6 @@ package worldline.b173;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Path;
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 import org.lwjgl.BufferUtils;
@@ -100,11 +99,7 @@ public final class B173TileEntityRender {
     }
 
     private static String sha256(ByteBuffer pixels) throws Exception {
-        ByteBuffer copy = pixels.duplicate(); copy.clear();
-        MessageDigest digest = MessageDigest.getInstance("SHA-256"); digest.update(copy);
-        StringBuilder value = new StringBuilder();
-        for (byte item : digest.digest()) value.append(String.format("%02x", item & 255));
-        return value.toString();
+        return B173RgbaDigest.hash(pixels);
     }
 
     private static void deleteTexture(int texture) {
