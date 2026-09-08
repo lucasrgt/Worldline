@@ -1,5 +1,5 @@
 schema=1
 id=m317-slow-blocks
-fingerprint=adcffd07cb42420e45ea4bb59af02d912934a5a7ad5903d81b1e37cc3df26ed9
+fingerprint=3bbe22fc71962120097347cdc8dfcbdd3f1a0f002d840083f86a0bf6648d9cb9
 observation.sha256=bcae75456216b2655361256edd97079669619d908394782145a21a076e9e676a
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m610-ice-melt-light-set
-fingerprint=e07fd119a2a3fd58f5a810c443b1247e105724a6546f235c8ca6382efdebf4ec
+fingerprint=247dc23c4dcadb9bd1cf7ee5ab675ea66e642db5f6adadae48a22b2a7252fc03
 observation.sha256=1190131222702f25fd3833d11b9000f07fae96dbc87de664812ab7367017baa2
 source=refactor-equivalent

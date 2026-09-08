@@ -1,5 +1,5 @@
 schema=1
 id=m386-ice-snow-melt-set
-fingerprint=4dd4d4d95e8199c46aeaece7c8276f406a6a0ba0708a26f9b3da24d7f4eeb604
+fingerprint=ff605a9ea2b88751bb3842bdb1ef442c07535d3f453bc02c6b43189b4a13db80
 observation.sha256=00d10f8cca091d8efcf6f005b84e192d110161deafabfb6a71d69862a5de6b7a
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=b173-furnace-subsystem-conformance-cycle
-fingerprint=3b484ec2724a19d4183bdca094c5fa8b1e275338baf707e200ad51d094678cea
+fingerprint=6c71de1088fbde8c7328765a9becbe8bcd7dc4bd57c2cc794c3d5867dd322410
 observation.sha256=5d5fb1d2dbe269b9d39d32a7ff7e76570ca9d3e6a7bbbbee3bbfc1017cc7d685
 source=refactor-equivalent

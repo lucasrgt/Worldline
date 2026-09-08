@@ -1,5 +1,5 @@
 schema=1
 id=b173-redstone-torch-subsystem-conformance-cycle
-fingerprint=2c9c28c0e7872239b514dfc121259b794d0a8034e96c7d55dad6a1472913ee3f
+fingerprint=ee8489621f2f109b0ede167e2b680cdadabf6b460d9d930a63f60eeb485f3844
 observation.sha256=2f24abb131c8fe6138e07cec6d6d08be427b20b5bf485eb4b48d16aeffe3defc
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=m319-stair-slab-crafts
-fingerprint=0c9dd88da003cfa26d241814f017202680a712aa9e7ce8806439e52b59693e3d
+fingerprint=3e2a0cb3549f4eb81d635279bcef0dda20518a0a4016f329c0bdf15e392d0aa7
 observation.sha256=cec4e38d37d31058c744ff1e9c806d2567fcf878603f2e63cdf7347058f5d553
 source=refactor-equivalent
