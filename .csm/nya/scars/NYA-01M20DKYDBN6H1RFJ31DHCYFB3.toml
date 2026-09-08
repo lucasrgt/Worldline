@@ -1,0 +1,23 @@
+schema = 1
+id = "NYA-01M20DKYDBN6H1RFJ31DHCYFB3"
+title = "Distinguish imported execution anchors from source ancestry"
+lesson = "Treat source-digest ancestry and imported smoke execution anchors as distinct contracts. TrainPinMigration seals smoke.<id>.prior_fingerprint from the imported receipt fingerprint, not necessarily from the previous train current_fingerprint. An independently verified exact execution therefore has prior_fingerprint equal to current_fingerprint. A new real execution followed by a reviewed source-only change may use its executed fingerprint as the prior anchor even when that differs from the previous train fingerprint. Before accepting either case, validate the complete immutable receipt/attestation/raw-log tuple (head, tree, base, signature, fingerprint, log hash) and require executed proof provenance for the anchor; if current inputs differ, require explicit reviewed refactor-equivalent transport preserving the observation. Never manufacture runtime proof or infer equivalence from equal hashes alone. Preserve prior_fingerprint when every other field of the whole smoke record is unchanged. The immediate-predecessor ordering rule still applies to source.*.prior_sha256 and source.*.ancestor.*; an independent executed smoke anchor is not a source ancestry loop."
+scope = [
+    "smokes/train-reconciliation.lock",
+    "tools/harness/TrainPinMigration.java",
+    "tools/harness/TrainPinHistory.java",
+]
+tags = [
+    "smoke",
+    "lockfile",
+    "execution-evidence",
+]
+created_at = "2026-09-08T11:49:24Z"
+
+[[occurrences]]
+occurred_at = "2026-09-08T11:49:23Z"
+source = "manual:2026-09-08-verified-execution-anchor-review; .worldline/integration-draft/csm-ledger-context-gap and .worldline/integration-import-receipts; cake anchor54f4401e/logb979f2b0; collision anchor0c89cf98/logdb635b24; full immutable tuples independently matched to canonical train"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "d245725c4"

@@ -15,7 +15,9 @@ final class OxAlphaWorkerSelfTest {
         String head = git(root, "rev-parse", "HEAD").trim();
         OxAlphaRequest checkpoint = new OxAlphaRequest("m1-contract", "Prove a real behavior",
                 head, head, "checkpoint", 1, null, 60, null, null);
-        List<String> valid = OxAlphaWorker.command(OxAlphaWorker.message(checkpoint), null, false);
+        List<String> valid = OxAlphaWorker.command("fixture-opencode",
+                OxAlphaWorker.message(checkpoint), null, false);
+        require(valid.get(0).equals("fixture-opencode"), "command fixture resolved a machine-local executable");
         require(OxAlphaWorker.messagePrecedesFiles(valid), "canonical argument order was rejected");
         int print = valid.indexOf("--print-logs");
         int log = valid.indexOf("--log-level");
@@ -33,9 +35,9 @@ final class OxAlphaWorkerSelfTest {
         OxAlphaTelemetry.selfTest();
         OxAlphaProviderFailure.selfTest();
         OxAlphaTerminalMonitor.selfTest();
-        require(OxAlphaWorker.command(OxAlphaWorker.message(checkpoint), null, false)
+        require(OxAlphaWorker.command("fixture-opencode", OxAlphaWorker.message(checkpoint), null, false)
                 .contains(OxAlphaProfile.DEFAULT_MODEL), "default Ox Alpha model is not allowlisted");
-        require(OxAlphaWorker.command(OxAlphaWorker.message(checkpoint), "session", true)
+        require(OxAlphaWorker.command("fixture-opencode", OxAlphaWorker.message(checkpoint), "session", true)
                 .contains(OxAlphaProfile.DEFAULT_FALLBACK_MODEL),
                 "fallback model is not allowlisted");
         require(OxAlphaWorker.message(checkpoint).contains(

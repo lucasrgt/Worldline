@@ -40,6 +40,7 @@ final class TrainSourceHistory {
 
     void write(Properties predecessor, Properties target, String stem, String relative) {
         String priorStem = find(predecessor, relative);
+        target.keySet().removeIf(key -> key.toString().startsWith(stem + "ancestor."));
         if (priorStem != null && java.util.Objects.equals(
                 predecessor.getProperty(priorStem + "current_sha256"),
                 target.getProperty(stem + "current_sha256"))) {
@@ -47,14 +48,15 @@ final class TrainSourceHistory {
             return;
         }
         Set<String> ancestors = new LinkedHashSet<>();
-        ancestors.addAll(committed.getOrDefault(relative, Set.of()));
         if (priorStem != null) {
-            add(ancestors, predecessor.getProperty(priorStem + "prior_sha256"));
             add(ancestors, predecessor.getProperty(priorStem + "current_sha256"));
             int count = integer(predecessor.getProperty(priorStem + "ancestor.count", "0"));
             for (int index = 0; index < count; index++)
                 add(ancestors, predecessor.getProperty(priorStem + "ancestor." + index + ".sha256"));
+            add(ancestors, predecessor.getProperty(priorStem + "prior_sha256"));
         }
+        ancestors.addAll(committed.getOrDefault(relative, Set.of()));
+        ancestors.remove(target.getProperty(stem + "current_sha256"));
         target.setProperty(stem + "ancestor.count", Integer.toString(ancestors.size()));
         int index = 0;
         for (String digest : ancestors)
@@ -113,12 +115,27 @@ final class TrainSourceHistory {
         prior.setProperty("source.0.ancestor.0.sha256", "b".repeat(64));
         Properties target = new Properties();
         target.setProperty("source.0.current_sha256", digest);
+        target.setProperty("source.0.ancestor.9.sha256", "stale");
         new TrainSourceHistory(Map.of("same", Set.of("c".repeat(64))))
                 .write(prior, target, "source.0.", "same");
-        require("1".equals(target.getProperty("source.0.ancestor.count"))
+        require(!target.containsKey("source.0.ancestor.9.sha256")
+                        && "1".equals(target.getProperty("source.0.ancestor.count"))
                         && "b".repeat(64).equals(
                                 target.getProperty("source.0.ancestor.0.sha256")),
                 "unchanged train source ancestry advanced");
+        target.setProperty("source.0.current_sha256", "d".repeat(64));
+        prior.setProperty("source.0.prior_sha256", "c".repeat(64));
+        TrainSourceHistory history = new TrainSourceHistory(
+                Map.of("same", Set.of("c".repeat(64), "d".repeat(64))));
+        history.write(prior, target, "source.0.", "same");
+        require("3".equals(target.getProperty("source.0.ancestor.count"))
+                        && digest.equals(target.getProperty("source.0.ancestor.0.sha256"))
+                        && "b".repeat(64).equals(target.getProperty("source.0.ancestor.1.sha256"))
+                        && "c".repeat(64).equals(target.getProperty("source.0.ancestor.2.sha256")),
+                "changed source lost predecessor-first deduplicated ancestry");
+        Properties repeated = new Properties(); repeated.putAll(target);
+        history.write(prior, repeated, "source.0.", "same");
+        require(target.equals(repeated), "changed source ancestry reseal was not idempotent");
     }
 
     private static java.util.List<String> stablePaths(

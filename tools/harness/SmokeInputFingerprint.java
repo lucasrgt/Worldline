@@ -250,7 +250,7 @@ final class SmokeInputFingerprint {
         } else {
             List<Path> files = tracked.stream().filter(item -> item.startsWith(path))
                     .filter(Files::isRegularFile).sorted(Comparator.comparing(
-                            item -> path.relativize(item).toString())).collect(Collectors.toList());
+                            item -> directoryOrder(path.relativize(item).toString()))).collect(Collectors.toList());
             require(!files.isEmpty(), "smoke input has no tracked files: " + root.relativize(path));
             for (Path file : files) {
                 update(digest, path.relativize(file).toString().replace('\\', '/'));
@@ -279,6 +279,20 @@ final class SmokeInputFingerprint {
 
     private static void update(MessageDigest digest, String value) {
         digest.update(value.getBytes(StandardCharsets.UTF_8)); digest.update((byte) 0);
+    }
+
+    /** Keeps the established Windows-qualified order identical on every host. */
+    private static String directoryOrder(String relative) { return relative.replace('/', '\\'); }
+
+    static void selfTest() {
+        List<String> paths = List.of("src/testkit/java/Provider.java", "src/testkitTest/java/ProviderTest.java");
+        List<String> windows = paths.stream().map(path -> path.replace('/', '\\')).toList();
+        List<String> expected = List.of(paths.get(1), paths.get(0));
+        require(paths.stream().sorted(Comparator.comparing(SmokeInputFingerprint::directoryOrder))
+                        .toList().equals(expected), "portable directory ordering changed qualified identities");
+        require(windows.stream().sorted(Comparator.comparing(SmokeInputFingerprint::directoryOrder))
+                        .map(path -> path.replace('\\', '/')).toList().equals(expected),
+                "native separators changed the directory fingerprint order");
     }
 
     private static void require(boolean condition, String message) {

@@ -4,6 +4,9 @@ import worldline.api.AutomatedMinecraftRuntime;
 
 /** One fresh runtime and its adapter-owned resources. */
 public interface TestRuntimeSession extends AutoCloseable {
+    /** Optional diagnostic HUD in controlled graphical sessions; never advances a game tick. */
+    default void showProgress(java.util.List<String> lines) {}
+
     default AutomatedMinecraftRuntime runtime() {
         throw new IllegalStateException("runtime session does not expose AutomatedMinecraftRuntime");
     }

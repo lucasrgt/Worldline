@@ -70,6 +70,12 @@ final class LegacyLoaderWorkspace {
         if ("forge".equals(loader)) require(Files.readString(source.resolve("forge/ForgeHooks.java"))
                 .contains("revisionVersion = 6"), "Forge 1.0.6 source proof is absent");
         LegacyProfilerInstaller.execute(repository, workspace, loader, true);
+        if ("legacy-testkit".equals(scope)) {
+            String hud = "worldline/modloader/testkit/LegacyProgressHud.java";
+            Files.createDirectories(source.resolve(hud).getParent());
+            Files.copy(repository.resolve("adapters/modloader-forge/runtime-src").resolve(hud),
+                    source.resolve(hud), StandardCopyOption.REPLACE_EXISTING);
+        }
         Path probe = repository.resolve("adapters/modloader-forge").resolve(probeDirectory)
                 .resolve(loader).resolve("net/minecraft/src").resolve(probeName + ".java");
         Files.copy(probe, source.resolve("net/minecraft/src").resolve(probeName + ".java"),
@@ -99,7 +105,8 @@ final class LegacyLoaderWorkspace {
                     .sorted().toList());
         }
         StringBuilder manifest = new StringBuilder("# Prepared Worldline legacy TestKit client\n")
-                .append("schema=worldline.legacy-testkit-client.v1\nloader=").append(loader)
+                .append("schema=worldline.legacy-testkit-client.v1\n"
+                        + "progress.protocol=worldline.test-progress.v1\nloader=").append(loader)
                 .append("\nnatives=libraries/natives\nprobe.source=minecraft/game/mods/worldline/"
                         + "net/minecraft/src/mod_WorldlineTestKitProbe.class")
                 .append("\nprobe.target=mods/worldline/net/minecraft/src/"

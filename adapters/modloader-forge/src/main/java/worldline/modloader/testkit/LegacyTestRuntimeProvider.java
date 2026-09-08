@@ -42,7 +42,7 @@ abstract class LegacyTestRuntimeProvider implements TestRuntimeProvider {
             protocol = new LegacyProtocol(loader, session, socket);
             LegacySnapshot ready = protocol.ready();
             LegacyRuntime runtime = new LegacyRuntime(
-                    requestedWorld, protocol, process, settings.timeoutSeconds, ready);
+                    requestedWorld, protocol, process, settings.timeoutSeconds, ready, settings.progress);
             System.out.println("WORLDLINE_LEGACY_SESSION_OPEN=" + loader + ":" + session);
             return new Session(runtime, loader);
         } catch (Exception | Error error) {
@@ -66,6 +66,7 @@ abstract class LegacyTestRuntimeProvider implements TestRuntimeProvider {
         private final LegacyRuntime runtime; private final String loader;
         Session(LegacyRuntime runtime, String loader) { this.runtime = runtime; this.loader = loader; }
         @Override public AutomatedMinecraftRuntime runtime() { return runtime; }
+        @Override public void showProgress(java.util.List<String> lines) { runtime.showProgress(lines); }
         @Override public void close() {
             runtime.close(); System.out.println("WORLDLINE_LEGACY_SESSION_CLOSE=" + loader + ":CLOSED");
         }

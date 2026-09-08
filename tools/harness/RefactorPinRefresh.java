@@ -56,9 +56,13 @@ final class RefactorPinRefresh extends TrainPinSupport {
             }
         }
         pins.write(updated);
-        TrainSourceHistory.load(root).writeSources(root, next, train, train, BASE);
+        Properties parent = new Properties();
+        try (var reader = new java.io.StringReader(capture(root, "show",
+                "HEAD^:smokes/train-reconciliation.lock"))) { parent.load(reader); }
+        TrainSourceHistory.load(root).writeSources(root, next, parent, train, BASE);
+        int preserved = TrainPinHistory.preserveUnchanged(root, next);
         store(root.resolve("smokes/train-reconciliation.lock"), next);
         System.out.println("refactor pin refresh: " + changed + " fingerprints, "
-                + catalog.size() + " catalog");
+                + catalog.size() + " catalog, " + preserved + " unchanged histories preserved");
     }
 }

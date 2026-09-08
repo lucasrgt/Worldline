@@ -1,5 +1,21 @@
 # Worldline changelog — Unreleased
 
+## Unreleased - Extension Registration and Native Test Progress
+
+- Added `ExtensionContracts.custom` for explicit, composable custom contracts
+  with inline or shared providers and equatable expected observations.
+- Documented one extension entrypoint per mod with separate machine registration
+  groups and a consumer migration handoff.
+- Added opt-in native TestKit progress text for prepared ModLoader/Forge clients,
+  including labeled steps, results, timing, retries, runtime, seed, and ticks.
+  Progress updates preserve the controlled game snapshot and runtime tick count.
+- Restored explicit TestKit wait-module dependencies in fifteen smoke process
+  classpaths found incomplete during integration qualification.
+- Made the protocol-14 smoke await the sign acknowledgement before selecting
+  its map, preserving the required observed packet order.
+- Capped the static cactus state-domain fixture through gameplay placement so
+  native aging cannot race its exact metadata comparison across fresh login.
+
 ## Unreleased - GUI Builder Ownership
 
 - Moved the visual GUI builder to Butter's `editors/gui-builder` tree.

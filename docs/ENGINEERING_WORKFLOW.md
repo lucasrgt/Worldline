@@ -440,6 +440,8 @@ with the same fingerprint.
 The tracked `smokes/qualification.lock` is the portable layer above that machine-local cache. It
 normalizes Git text inputs to LF before hashing, so a clean CRLF checkout and a clean LF checkout
 resolve to the same behavior identity. Binary inputs remain byte-exact. It
+uses a fixed separator ordering for directory entries, preserving existing Windows-qualified
+fingerprints when the same tracked inputs are checked on Linux. It
 records the fingerprint, PASS status, and evidence hash for each explicitly pinned milestone.
 A fresh clone may reuse a matching reviewed pin without downloading the heavy log. The lockfile
 is deliberately outside every milestone fingerprint, so committing updated pins does not create
@@ -606,6 +608,11 @@ writing the qualified plan; it cannot combine multiple candidates. Train pin mig
 the immediate predecessor's source order. A source whose current digest did not change must retain
 the predecessor ancestor count and ordered ancestor digests exactly; only a changed source may
 advance its ancestry. The migration self-test enforces this before generated locks are committed.
+For a source-only refactor reseal, source digest ancestry starts from the committed parent
+(`HEAD^`); stable source indices still follow the input train ledger. Changed sources put that
+parent's current digest first, retain older distinct digests, and exclude their own current digest.
+This keeps an amended single-commit reconciliation connected to its actual parent while preserving
+intermediate reviewed source hashes. Repeating the same reseal must produce the same ordered set.
 Pin migration starts only from a clean committed source tree, verified with `git status
 --porcelain --untracked-files=all`; untracked sources cannot participate in the ancestry census and
 therefore fail closed before any lock is written.

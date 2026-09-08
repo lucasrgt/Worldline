@@ -25,6 +25,8 @@ final class LegacyClientCommand {
                 "-Dworldline.legacy.testkit.session=" + session,
                 "-Dworldline.legacy.testkit.world=worldline-" + session,
                 "-Dworldline.legacy.testkit.seed=" + seed,
+                "-Dworldline.legacy.testkit.hud.capture="
+                        + Boolean.getBoolean("worldline.legacy.testkit.hud.capture"),
                 "-Dworldline.profiler.enabled=true", "-Dworldline.profiler.autoStart=false",
                 "-Dworldline.profiler.capacity=64",
                 "-Dworldline.profiler.loader=" + settings.loader,

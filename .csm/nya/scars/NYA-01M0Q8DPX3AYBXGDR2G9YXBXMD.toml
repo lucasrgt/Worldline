@@ -100,3 +100,11 @@ reported_by = "codex:worldline-supervisor"
 corrected_by = "codex:worldline-supervisor"
 recorded_by = "codex:worldline-supervisor"
 commit = "e590803fa"
+
+[[occurrences]]
+occurred_at = "2026-09-08T11:47:46Z"
+source = "manual:2026-09-08-execution-anchor-audit; archived cake 54f4401e/b979f2b0 and special-collision 0c89cf98/db635b24 receipt, attestation, raw-log and train tuples independently matched; separate 21 no-op rewrites fixed through canonical preservation"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "d245725c4"

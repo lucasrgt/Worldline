@@ -88,3 +88,20 @@ first-party fixtures whose package layout matches the legacy loader contract.
 The release boundary allows only those four exact source names; compiled game
 classes, decompiled sources, loader archives, and Minecraft artifacts remain
 prohibited.
+
+### Controlled test progress
+
+Re-preparing the clients also installs the Java 8 `LegacyProgressHud` renderer
+and advertises `progress.protocol=worldline.test-progress.v1` in the local
+prepared-client manifest. `worldline test run ... --overlay` enables the runner's
+native-font HUD at the bottom-right edge, beside the hotbar. It has no background
+and always shows all diagnostic rows, independently of F3. The default is disabled.
+The ModLoader and Forge probes accept bounded `HUD` messages while waiting for a
+tick command, restore OpenGL state after drawing, and acknowledge the unchanged
+game snapshot. The renderer restores a saved strip of the underlying frame
+before replacing text, without calling the world renderer or executing extra ticks.
+
+The M767 provider cycle runs both loaders with the HUD enabled, checks the native
+render marker for all four isolated clients, and retains the same controlled-tick
+and clean-shutdown checks. Diagnostic screenshots are written to each client's
+private game directory when `worldline.legacy.testkit.hud.capture=true` is set.

@@ -33,6 +33,8 @@ final class TestBatchRunner {
         if (selected == 0) return finish(sink, new ArrayList<>(), started,
                 options.passWithNoTests ? null : "no tests matched", options.passWithNoTests);
         List<TestResult> results = new ArrayList<>(); String fatal = null; RunControl control = new RunControl();
+        control.progress = new RunnerProgress(selected, options.overlay,
+                options.provider == null ? "none" : options.provider.runtimeId());
         for (TestPlan plan : plans) {
             TestRunResult part = new TestPlanExecutor().run(plan, options, sink, hasOnly, control);
             results.addAll(part.tests());
