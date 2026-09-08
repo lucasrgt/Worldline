@@ -31,6 +31,9 @@ final class AttemptExecutor {
     private final TestSettings settings;
     private final ArtifactStore artifacts;
     private final AtomicReference<TestExecutionContext> activeContext = new AtomicReference<>();
+    private RunnerProgress.Attempt progress;
+
+    void progress(RunnerProgress.Attempt value) { progress = value; }
 
     AttemptExecutor(CollectedTest test, RunnerOptions options, TestSettings settings, ArtifactStore artifacts) {
         this.test = test; this.options = options; this.settings = settings; this.artifacts = artifacts;
@@ -92,6 +95,7 @@ final class AttemptExecutor {
 
     private final class Attempt implements Callable<AttemptOutcome> {
         private final int number; private final List<String> allowed; private final boolean writeFailure;
+        private final RunnerProgress.Attempt progress = AttemptExecutor.this.progress;
         Attempt(int number, List<String> allowed, boolean writeFailure) {
             this.number = number; this.allowed = allowed; this.writeFailure = writeFailure;
         }
@@ -108,17 +112,23 @@ final class AttemptExecutor {
                 }
                 context = new TestExecutionContext(settings.seed, number,
                         session, artifacts, allowed);
+                if (allowed == null && progress != null) {
+                    context.progress(progress); progress.open(session);
+                }
                 activeContext.set(context);
                 SnapshotStore store = new SnapshotStore(options.snapshots,
                         allowed == null && options.updateSnapshots);
                 SnapshotExpectation.install((name, value) -> store.match(test.path, name, value));
                 for (TestHook hook : test.beforeEach) hook.run(context);
+                context.phase("Test body");
                 test.definition.body().run(context);
             } catch (SkipSignal signal) { skipped = signal.getMessage(); }
             catch (Throwable caught) { failure = caught; }
             finally {
                 SnapshotExpectation.clear();
                 if (context != null) {
+                    try { context.phase("Cleanup"); }
+                    catch (Throwable displayFailure) { failure = combine(failure, displayFailure); }
                     if (failure != null) failure = hooks(test.failed, context, failure);
                     if (failure != null) failure = hooks(context.dynamicFailed(), context, failure);
                     failure = hooks(test.afterEach, context, failure);
@@ -126,6 +136,11 @@ final class AttemptExecutor {
                     if (skipped == null) failure = hooks(test.finished, context, failure);
                     if (writeFailure && failure != null) try { context.writeFailure(failure); }
                     catch (Throwable artifactFailure) { failure.addSuppressed(artifactFailure); }
+                }
+                if (allowed == null && progress != null) {
+                    try { progress.result(failure, skipped); }
+                    catch (Throwable displayFailure) { failure = combine(failure, displayFailure); }
+                    finally { progress.close(); }
                 }
                 if (session != null) try { session.close(); }
                 catch (Throwable closeFailure) { failure = combine(failure, closeFailure); }

@@ -71,6 +71,55 @@ final class TrainPinHistory {
     }
 
     record Receipt(String prior, String head, String tree, String base, String signature) { }
+
+    static int preserveUnchanged(Path root, Properties target) throws Exception {
+        Properties parent = new Properties();
+        try (StringReader reader = new StringReader(capture(root, "show",
+                "HEAD^:smokes/train-reconciliation.lock"))) { parent.load(reader); }
+        return preserveUnchanged(parent, target);
+    }
+
+    static int preserveUnchanged(Properties predecessor, Properties target) {
+        Set<String> keys = new HashSet<>(predecessor.stringPropertyNames());
+        keys.addAll(target.stringPropertyNames()); int preserved = 0;
+        for (String key : target.stringPropertyNames()) {
+            if (!key.startsWith("smoke.") || !key.endsWith(".prior_fingerprint")) continue;
+            String prior = predecessor.getProperty(key);
+            if (prior == null || prior.equals(target.getProperty(key))) continue;
+            String stem = key.substring(0, key.length() - "prior_fingerprint".length());
+            boolean unchanged = keys.stream().filter(item -> item.startsWith(stem) && !item.equals(key))
+                    .allMatch(item -> java.util.Objects.equals(
+                            predecessor.getProperty(item), target.getProperty(item)));
+            if (unchanged) { target.setProperty(key, prior); preserved++; }
+        }
+        return preserved;
+    }
+
+    static void selfTest() {
+        Properties predecessor = new Properties(); String stem = "smoke.fixture.";
+        predecessor.setProperty(stem + "prior_fingerprint", "old");
+        predecessor.setProperty(stem + "current_fingerprint", "current");
+        predecessor.setProperty(stem + "evidence_sha256", "evidence");
+        predecessor.setProperty(stem + "kind", "baseline");
+        Properties target = new Properties(); target.putAll(predecessor);
+        target.setProperty(stem + "prior_fingerprint", "current");
+        if (preserveUnchanged(predecessor, target) != 1
+                || !"old".equals(target.getProperty(stem + "prior_fingerprint"))
+                || preserveUnchanged(predecessor, target) != 0)
+            throw new IllegalStateException("unchanged train history was not preserved idempotently");
+        for (String field : List.of("current_fingerprint", "evidence_sha256", "kind", "receipt.head")) {
+            target.clear(); target.putAll(predecessor);
+            target.setProperty(stem + "prior_fingerprint", "current");
+            target.setProperty(stem + field, "changed");
+            if (preserveUnchanged(predecessor, target) != 0)
+                throw new IllegalStateException("changed train proof inherited an unrelated predecessor");
+        }
+        target.clear(); target.putAll(predecessor);
+        target.setProperty(stem + "prior_fingerprint", "current");
+        target.remove(stem + "kind");
+        if (preserveUnchanged(predecessor, target) != 0)
+            throw new IllegalStateException("incomplete train proof inherited a predecessor");
+    }
     private static String capture(Path root, String... arguments) throws Exception {
         List<String> command = new ArrayList<>(); command.add("git");
         command.addAll(List.of(arguments));

@@ -165,7 +165,11 @@ final class OxAlphaWorker {
     }
 
     static List<String> command(String message, String session, boolean fallback) {
-        List<String> result = new ArrayList<>(List.of(opencodeTool(), "--print-logs",
+        return command(opencodeTool(), message, session, fallback);
+    }
+
+    static List<String> command(String executable, String message, String session, boolean fallback) {
+        List<String> result = new ArrayList<>(List.of(executable, "--print-logs",
                 "--log-level", "INFO", "run", message,
                 "--pure", "--auto", "--agent", AGENT, "--model", OxAlphaProfile.model(fallback),
                 "--format", "json", "--title", "Worldline Ox Alpha"));

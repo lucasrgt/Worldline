@@ -46,14 +46,16 @@ public final class ExtensionTestSpecs {
     private static void execute(WorldlineExtensionPlan plan, ExtensionContract contract,
             ExtensionMode mode, TestContext test) throws Exception {
         ExtensionContext context = new Context(test);
-        plan.fixture(contract.fixtureId()).prepare(context);
+        test.step("extension-fixture:" + contract.fixtureId(), ignored ->
+                plan.fixture(contract.fixtureId()).prepare(context));
         for (String id : contract.actionIds()) {
             ExtensionAction action = plan.action(id);
             test.step("extension-action:" + id, ignored -> action.perform(context));
         }
         Map<String, String> observations = new LinkedHashMap<String, String>();
         for (String id : contract.observationIds())
-            observations.put(id, plan.observation(id).observe(context));
+            test.step("extension-observation:" + id, ignored ->
+                    observations.put(id, plan.observation(id).observe(context)));
         ExtensionEvidence evidence = ExtensionEvidence.capture(plan.manifest(), contract, mode,
                 observations);
         String stem = "extension-" + plan.manifest().id() + "-" + contract.id()
@@ -64,7 +66,8 @@ public final class ExtensionTestSpecs {
                 plan.atlasDocument().getBytes(StandardCharsets.UTF_8));
         if (mode == ExtensionMode.DIFFERENTIAL) test.attach(stem + ".diff.properties",
                 differential(contract, evidence).getBytes(StandardCharsets.UTF_8));
-        plan.oracle(contract.oracleId()).verify(mode, evidence, contract.expectedSignature(mode));
+        test.step("extension-oracle:" + contract.oracleId(), ignored ->
+                plan.oracle(contract.oracleId()).verify(mode, evidence, contract.expectedSignature(mode)));
     }
 
     private static String differential(ExtensionContract contract, ExtensionEvidence evidence) {

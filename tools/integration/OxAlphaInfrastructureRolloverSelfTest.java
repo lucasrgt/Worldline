@@ -19,7 +19,7 @@ final class OxAlphaInfrastructureRolloverSelfTest {
     }
 
     public static void main(String[] arguments) throws Exception {
-        Path parent = Files.createTempDirectory("worldline-rollover-");
+        Path parent = Files.createTempDirectory("worldline-rollover-").toRealPath();
         String priorHome = System.getProperty("user.home");
         System.setProperty("user.home", parent.toString());
         try {

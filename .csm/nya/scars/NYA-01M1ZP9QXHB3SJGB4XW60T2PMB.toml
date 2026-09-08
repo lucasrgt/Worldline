@@ -1,0 +1,22 @@
+schema = 1
+id = "NYA-01M1ZP9QXHB3SJGB4XW60T2PMB"
+title = "Inspect native TestKit HUD layout in the real client"
+lesson = "A successful native render marker and unchanged game-state acknowledgements do not prove HUD layout usability. Inspect a real client screenshot at the target GUI scale: use the native F3 font and shadow, keep the HUD transparent and anchored at the lower-right edge, reserve the hotbar area for short rows, and present requested diagnostics as explicit labeled rows. Preserve a background strip when replacing text while controlled execution is paused."
+scope = [
+    "adapters/modloader-forge/runtime-src/worldline/modloader/testkit/**",
+    "tools/smoke/M767ModloaderForgeTestkitProviderCycle.java",
+]
+tags = [
+    "testkit",
+    "native-hud",
+    "visual-validation",
+]
+created_at = "2026-09-08T05:01:52Z"
+
+[[occurrences]]
+occurred_at = "2026-09-08T05:01:52Z"
+source = "manual:2026-09-08 native HUD screenshot review; oversized opaque layout corrected and qualified at 099793c4328d2f7e232e2f4e8757048d3c3a0152"
+reported_by = "user:lucas"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "099793c43"

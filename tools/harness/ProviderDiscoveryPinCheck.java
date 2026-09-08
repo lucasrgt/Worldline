@@ -152,13 +152,50 @@ final class ProviderDiscoveryPinCheck {
                     && Files.readString(root.resolve(relative)).contains("src/(?:main|testkit)/java")
                     && Files.readString(root.resolve("tools/harness/DataDrivenCyclePlan.java"))
                             .contains("src/(?:main|testkit)/java");
-            boolean successor = SchemaPinCheck.transportsFile(root, relative, current);
+            boolean successor = SchemaPinCheck.transportsFile(root, relative, current)
+                    || TrainPinCheck.transportsFile(train, root, relative, current);
             require(hash(prior) && (digest(root.resolve(relative)).equals(current)
                             && (fingerprint
                             || TrainPinCheck.transportsFile(train, root, relative, prior))
                             || successor),
                     "invalid provider source refresh: " + relative);
         }
+    }
+    static void selfTest() throws Exception {
+        Path root = Files.createTempDirectory("provider-refresh-successor-");
+        Path source = root.resolve("provider.java"), directory = root.resolve("smokes");
+        Path ledger = directory.resolve("train-reconciliation.lock");
+        try {
+            Files.writeString(source, "before"); String predecessor = digest(source);
+            Files.writeString(source, "after"); String current = digest(source);
+            Properties train = new Properties(), refresh = new Properties();
+            train.setProperty("source.count", "1");
+            train.setProperty("source.0.path", "provider.java");
+            train.setProperty("source.0.prior_sha256", predecessor);
+            train.setProperty("source.0.current_sha256", current);
+            Files.createDirectories(directory);
+            try (var writer = Files.newBufferedWriter(ledger)) { train.store(writer, null); }
+            refresh.setProperty("refresh.source.count", "1");
+            refresh.setProperty("refresh.source.1.path", "provider.java");
+            refresh.setProperty("refresh.source.1.prior_sha256", "0".repeat(64));
+            refresh.setProperty("refresh.source.1.current_sha256", predecessor);
+            refreshSources(root, refresh);
+            Files.writeString(source, "unreviewed");
+            rejectsRefresh(root, refresh);
+            Files.writeString(source, "after");
+            refresh.setProperty("refresh.source.1.path", "untracked.java");
+            Files.writeString(root.resolve("untracked.java"), "after");
+            rejectsRefresh(root, refresh);
+        } finally {
+            Files.deleteIfExists(root.resolve("untracked.java"));
+            Files.deleteIfExists(ledger); Files.deleteIfExists(directory);
+            Files.deleteIfExists(source); Files.deleteIfExists(root);
+        }
+    }
+    private static void rejectsRefresh(Path root, Properties refresh) throws Exception {
+        try { refreshSources(root, refresh); }
+        catch (IllegalStateException expected) { return; }
+        throw new IllegalStateException("unreviewed provider refresh was accepted");
     }
     private static String digest(Path path) throws Exception { return HexFormat.of().formatHex(
             MessageDigest.getInstance("SHA-256").digest(Files.readString(path,

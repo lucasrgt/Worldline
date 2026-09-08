@@ -22,16 +22,19 @@ final class TestPlanExecutor {
             if (options.bail > 0 && control.failures >= options.bail) {
                 TestResult interrupted = terminal(test, index, plan.specName(), TestStatus.INTERRUPTED,
                         "bail threshold reached", options.seed);
-                results.add(interrupted); sink.testFinished(interrupted); continue;
+                results.add(interrupted); sink.testFinished(interrupted);
+                control.progress.finished(interrupted); continue;
             }
             if (!test.skipped && !test.todo) try { transition(active, test.suites); }
             catch (RuntimeException | Error failure) {
                 fatal = "suite hook failed: " + describe(failure); break;
             }
-            sink.testQueued(test.path); TestResult result = execute(index, plan.specName(), test, options, sink);
+            sink.testQueued(test.path);
+            TestResult result = execute(index, plan.specName(), test, options, sink, control.progress);
             results.add(result);
             for (java.nio.file.Path artifact : result.artifacts()) sink.artifactRecorded(test.path, artifact);
             sink.testFinished(result);
+            control.progress.finished(result);
             if (RuntimeIsolationException.class.getName().equals(result.errorType())) {
                 fatal = result.errorMessage(); break;
             }
@@ -44,7 +47,7 @@ final class TestPlanExecutor {
     }
 
     private TestResult execute(int index, String spec, CollectedTest test, RunnerOptions options,
-            TestReporter reporter) {
+            TestReporter reporter, RunnerProgress progress) {
         TestSettings settings = TestSettings.resolve(test.definition.body(), options);
         if (test.todo) return terminal(test, index, spec, TestStatus.TODO, "todo", settings.seed);
         if (test.skipped) return terminal(test, index, spec, TestStatus.SKIPPED, "skipped", settings.seed);
@@ -56,10 +59,12 @@ final class TestPlanExecutor {
         try { artifacts = new ArtifactStore(options.artifacts, id); }
         catch (Exception failure) { return failure(test, index, spec, 0, 0, settings.seed, failure, null); }
         int retries = Math.max(options.retry, test.definition.retries()); long duration = 0;
-        AttemptOutcome last = null; AttemptExecutor executor = new AttemptExecutor(test, options, settings, artifacts);
+        AttemptOutcome last = null;
+        AttemptExecutor executor = new AttemptExecutor(test, options, settings, artifacts);
         for (int attempt = 1; attempt <= retries + 1; attempt++) {
             reporter.testStarted(test.path, attempt);
             long timeout = options.timeoutOverride ? options.timeout : test.definition.timeoutMillis();
+            executor.progress(progress.attempt(spec, test.path, attempt, retries + 1, settings.seed, timeout));
             last = executor.execute(attempt, timeout, null, true); duration += last.durationMillis;
             if (last.skipReason != null && last.failure == null) return result(test, id, spec,
                     TestStatus.SKIPPED, last.skipReason, null, duration, attempt, settings.seed, artifacts);

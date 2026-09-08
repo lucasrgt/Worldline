@@ -58,6 +58,7 @@ final class B173StateDomainArena {
             require(column == 17 && Arrays.asList(top, northEast, southWest, southEast)
                     .equals(SUPPORTS), "state-domain support grid drift");
             overlay(client, loadout);
+            if (loadout.item.legacyId() == 81) capCactus(client);
             for (BlockPosition support : SUPPORTS) {
                 client.awaitBlock(support, SUPPORT_STATE);
                 BlockState above = loadout.support.hotbar == 0
@@ -85,6 +86,25 @@ final class B173StateDomainArena {
                 new int[] {1, item.legacyId(), support.legacyId()},
                 new int[] {48, item.count(), support.count()},
                 new int[] {0, item.damage(), support.damage()});
+    }
+
+    private static void capCactus(B173WireClient client) throws Exception {
+        // Static metadata excludes native aging: keep each future cactus's upper cell occupied.
+        BlockPosition pillar = SUPPORTS.get(0);
+        for (int north = 0; north < 2; north++)
+            pillar = B173FixtureSupport.place(client, pillar, BlockFace.NORTH, 1);
+        for (int up = 0; up < 3; up++)
+            pillar = B173FixtureSupport.place(client, pillar, BlockFace.UP, 1);
+        for (int south = 0; south < 2; south++)
+            pillar = B173FixtureSupport.place(client, pillar, BlockFace.SOUTH, 1);
+        for (int row = 0; row < 3; row++) {
+            BlockPosition east = pillar;
+            for (int column = 0; column < 2; column++)
+                east = B173FixtureSupport.place(client, east, BlockFace.EAST, 1);
+            if (row < 2) pillar = B173FixtureSupport.place(client, pillar, BlockFace.SOUTH, 1);
+        }
+        for (BlockPosition pad : SUPPORTS)
+            client.awaitBlock(new BlockPosition(pad.x(), pad.y() + 3, pad.z()), SUPPORT_STATE);
     }
 
     private static void overlay(B173WireClient client, B173StateDomainLoadout loadout)

@@ -11,7 +11,10 @@ final class SchemaPinCheck {
         Properties manifest = manifest(root); require("1".equals(manifest.getProperty("schema")),
                 "invalid repository schema migration");
         require(digest(root.resolve("tools/harness/SmokeInputFingerprint.java")).equals(
-                        required(manifest, "fingerprint_source_sha256")),
+                        required(manifest, "fingerprint_source_sha256"))
+                        || TrainPinCheck.transportsFile(TrainPinCheck.manifest(root), root,
+                                "tools/harness/SmokeInputFingerprint.java",
+                                required(manifest, "fingerprint_source_sha256")),
                 "repository schema fingerprint source drift");
         require(integer(manifest, "smoke.count") > 0
                         && integer(manifest, "map.count") == integer(manifest, "smoke.count") + 1
