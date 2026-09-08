@@ -2,6 +2,19 @@
 final class TrainSourceSuccessors {
     private TrainSourceSuccessors() { }
 
+    static void selfTest() {
+        boolean launcher = carries("tools/replay/Replay.java",
+                "52fff7782a711481254b526af31b967fcb63a96b008b8b0f57b830e9dc7ea3e1",
+                "d5eefbdb24b53509dfe3902f4cfd6cc70c44d362c779f801fd6f7ab61db4782f");
+        boolean sdk = carries("README.md",
+                "20af1156f488c2af8fbcf68adcf08c1eca8045476f3a2b158f34c25f0d2c7612",
+                "2a402179a8cf5bec79d58129cdde09bb87cb716789e26862468a5af0e815c8ff");
+        if (!launcher || !sdk || carries("unreviewed", "old", "new")
+                || carries("README.md", "unreviewed", "new")) {
+            throw new IllegalStateException("closed train successor routing drifted");
+        }
+    }
+
     static boolean carries(String relative, String prior, String current) {
         return TestKitArtifactTrainSourceSuccessor.carries(relative, prior, current)
                 || RedstoneAtlasTrainSourceSuccessor.carries(relative, prior, current)

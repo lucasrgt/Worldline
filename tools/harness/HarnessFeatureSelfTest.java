@@ -26,6 +26,7 @@ final class HarnessFeatureSelfTest {
         RepositoryVerify.qualificationBoundarySelfTest();
         GitObjectBatch.selfTest(java.nio.file.Path.of("").toAbsolutePath().normalize());
         TrainSourceHistory.selfTest();
+        TrainSourceSuccessors.selfTest();
         TrainPinHistory.selfTest();
         TrainPinMigration.selfTest();
         TrainGeneratedDocumentationMigration.selfTest();

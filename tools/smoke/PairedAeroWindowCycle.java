@@ -247,7 +247,7 @@ public final class PairedAeroWindowCycle {
     Files.createDirectories(output);
     List<String> command = new ArrayList<>(
         Arrays.asList("javac", "-encoding", "UTF-8", "--release", "8", "-Xlint:all,-options",
-            "-Werror", "-classpath", product("api").toString(), "-d", output.toString()));
+            "-Werror", "-classpath", classpath(output), "-d", output.toString()));
     command.addAll(javaFiles(root.resolve("modules/smoketest/src/main/java")));
     command.addAll(javaFiles(root.resolve("adapters/b173-server/src/main/java")));
     command.addAll(javaFiles(smoke.resolve("src")));
@@ -340,7 +340,8 @@ public final class PairedAeroWindowCycle {
         MessageDigest.getInstance("SHA-256").digest(text.getBytes(StandardCharsets.UTF_8)));
   }
   private String classpath(Path classes) {
-    return classes + System.getProperty("path.separator") + product("api");
+    return classes + System.getProperty("path.separator") + product("api")
+        + System.getProperty("path.separator") + product("testapi");
   }
   private Path product(String name) {
     return root.resolve(".worldline/build/classes").resolve(name);
