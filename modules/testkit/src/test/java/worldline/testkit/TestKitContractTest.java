@@ -33,6 +33,7 @@ public final class TestKitContractTest {
         RandomOutcomeFixtureTest.execute();
         WorldControlFixtureTest.execute();
         EntityStateFixtureTest.execute();
+        TestKitMaturityFixtureTest.execute();
         ParticleLifecycleFixtureTest.execute();
         EntityPersistenceFixtureTest.execute();
         BlockConformancePlanTest.execute();
