@@ -12,6 +12,15 @@ public final class HostUiNode {
         this.itemId = itemId; this.count = count; this.enabled = enabled; this.focused = focused;
     }
 
+    public java.util.Map<String, String> attributes() {
+        java.util.Map<String, String> attributes = new java.util.LinkedHashMap<String, String>();
+        attributes.put("description", "Provider description");
+        attributes.put("visible", "true");
+        if ("textbox".equals(role)) {
+            attributes.put("tabIndex", "3"); attributes.put("text", "observed"); attributes.put("readOnly", "false");
+        }
+        return attributes;
+    }
     public String role() { return role; }
     public String name() { return name; }
     public String label() { return label; }
