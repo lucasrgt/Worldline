@@ -80,6 +80,8 @@ final class HarnessFeatureSelfTest {
         ModuleCacheIndexTrust.selfTest();
         ModuleCachePublication.selfTest();
         ModuleCacheRemote.selfTest();
+        ModuleCacheS3Shadow.selfTest();
+        S3CasInventory.selfTest();
         SharedCasInventory.selfTest();
         ArtifactTransportPolicyTest.selfTest();
         ArtifactTransportPolicy.check(java.nio.file.Path.of("").toAbsolutePath().normalize());
