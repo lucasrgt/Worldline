@@ -27,7 +27,8 @@ public final class B173ForeignUiContract {
         require(ui.getByRole(GameUiNode.TEXT_FIELD).shouldBeFocused().single().enabled(),
                 "node attributes drifted");
         require("Provider description".equals(ui.getByLabel("Search").single().attributes().get("description"))
-                && "observed".equals(ui.getByLabel("Search").single().attributes().get("text")), "provider attributes lost");
+                && "observed".equals(ui.getByLabel("Search").single().attributes().get("text")),
+                "provider attributes lost");
         require(ui.supports(GameUiCapability.KEYBOARD), "optional keyboard capability missing");
         ui.press(GameUiKey.REVERSE_TAB); require("SHIFT_TAB".equals(screen.key), "reverse tab translation");
         System.out.println("B173ForeignUiContract passed");

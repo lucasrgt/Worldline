@@ -25,7 +25,8 @@ public final class ForeignUiContractCheck {
                 "--release", "8", "-Xlint:all,-options", "-Werror", "-classpath", api.toString(),
                 "-d", output.toString(), root.resolve(
                         "adapters/b173-client/src/main/java/worldline/b173/B173ForeignUi.java").toString(),
-                root.resolve("adapters/b173-client/src/main/java/worldline/b173/B173ForeignAttributes.java").toString()));
+                root.resolve("adapters/b173-client/src/main/java/worldline/b173/B173ForeignAttributes.java")
+                        .toString()));
         compile.addAll(javaFiles(root.resolve("adapters/b173-client/contract-src")));
         run(compile);
         run(Arrays.asList("java", "-classpath", output + System.getProperty("path.separator") + api,
