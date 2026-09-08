@@ -16,7 +16,8 @@ public final class EntityVisualStateSmoke {
         if (a.length != 4 || !(a[0].equals("mapped") || a[0].equals("official"))) {
             throw new IllegalArgumentException("role mappings subjects output required");
         }
-        boolean official = a[0].equals("official"); Path output = Paths.get(a[3]);
+        boolean official = a[0].equals("official");
+        Path output = Paths.get(a[3]);
         Map<String, String> values = B173EntityStateRender.observe(Paths.get(a[1]), official, output.resolveSibling(output.getFileName()+"-frames"));
         Files.write(output.resolveSibling(output.getFileName()+".observed"),
                 values.toString().getBytes(StandardCharsets.UTF_8));

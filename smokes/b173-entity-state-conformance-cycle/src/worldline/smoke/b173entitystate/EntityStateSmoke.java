@@ -16,7 +16,8 @@ public final class EntityStateSmoke {
         if (a.length != 4 || !(a[0].equals("mapped") || a[0].equals("official"))) {
             throw new IllegalArgumentException("role mappings subjects output required");
         }
-        boolean official = a[0].equals("official"); Path output = Paths.get(a[3]);
+        boolean official = a[0].equals("official");
+        Path output = Paths.get(a[3]);
         Map<String, Long> values = B173EntityStateConformance.observe(Paths.get(a[1]), official);
         Files.write(output.resolveSibling(output.getFileName()+".observed"),
                 values.toString().getBytes(StandardCharsets.UTF_8));
