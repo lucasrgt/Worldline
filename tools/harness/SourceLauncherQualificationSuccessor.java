@@ -1,11 +1,14 @@
 /** Exact repairs for source-launcher digest visibility and ordered source ancestry. */
 final class SourceLauncherQualificationSuccessor {
     private static final String[][] SOURCES = {
-        {"tools/harness/HexDigest.java", "dd084ae18c679222aa951a8bbf79a444726e92e6c94d994f24fd7499cc331057",
+        {"tools/harness/HexDigest.java",
+                "dd084ae18c679222aa951a8bbf79a444726e92e6c94d994f24fd7499cc331057",
                 "77a27e4874f54bd6e60569295d27dd946bcdeddb8092ce2fb365a79df82f38bc"},
-        {"tools/harness/TrainSourceHistory.java", "67f1fe87b5070faa810081efd0ed247b7172e6540d30debaccca328ed19eb296",
+        {"tools/harness/TrainSourceHistory.java",
+                "67f1fe87b5070faa810081efd0ed247b7172e6540d30debaccca328ed19eb296",
                 "445a483b577d6524e9679126f9ca8d9b750c157c2437b9809af4e563fcd01e36"},
-        {"tools/harness/TrainSourceSuccessors.java", "d2152909fde1463d7cd550ddc6dc22cb40694749b26f50182bb5e498c7e8accd",
+        {"tools/harness/TrainSourceSuccessors.java",
+                "d2152909fde1463d7cd550ddc6dc22cb40694749b26f50182bb5e498c7e8accd",
                 "f4e599158e15c363168e2297115210c7aa03f061fd61c448e1e631761c85f45c"},
         {"tools/harness/ProviderRefreshAncestrySuccessor.java",
                 "e688e46ce2216f7588ceb33ae646f5a2971bce021499770eaa83a291b408ade8",
