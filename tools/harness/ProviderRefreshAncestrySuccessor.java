@@ -1,11 +1,14 @@
 /** Exact source successors for provider refresh validation through sealed train ancestry. */
 final class ProviderRefreshAncestrySuccessor {
     private static final String[][] SOURCES = {
-        {"tools/harness/ProviderDiscoveryPinCheck.java", "6615b732549092f86d38928c518a83da6403b6cc04f88ff3e1643d9bc1d6fe6d",
+        {"tools/harness/ProviderDiscoveryPinCheck.java",
+                "6615b732549092f86d38928c518a83da6403b6cc04f88ff3e1643d9bc1d6fe6d",
                 "027442d897705c6062c5693973c0981ad15f52c0c08c6b4ec9fc436a1f3a4889"},
-        {"tools/harness/TrainSourceSuccessors.java", "0bd43f07435f7440a0414a9c3379d6c95c312a167c4c17dad92d78060a550fc6",
+        {"tools/harness/TrainSourceSuccessors.java",
+                "0bd43f07435f7440a0414a9c3379d6c95c312a167c4c17dad92d78060a550fc6",
                 "d2152909fde1463d7cd550ddc6dc22cb40694749b26f50182bb5e498c7e8accd"},
-        {"tools/harness/HarnessFeatureSelfTest.java", "08917360058a3b0cea98a4186214721e1ebc3e9155e8755e8aadbd6a38a4fa54",
+        {"tools/harness/HarnessFeatureSelfTest.java",
+                "08917360058a3b0cea98a4186214721e1ebc3e9155e8755e8aadbd6a38a4fa54",
                 "e0c7b2e6f75d514ab02ba0a6dfcd48acefdeae5f02922c38c5303c21d4cbb8ed"},
     };
     private ProviderRefreshAncestrySuccessor() { }

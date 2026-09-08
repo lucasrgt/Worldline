@@ -7,6 +7,9 @@ final class SourceLauncherQualificationSuccessor {
                 "445a483b577d6524e9679126f9ca8d9b750c157c2437b9809af4e563fcd01e36"},
         {"tools/harness/TrainSourceSuccessors.java", "d2152909fde1463d7cd550ddc6dc22cb40694749b26f50182bb5e498c7e8accd",
                 "f4e599158e15c363168e2297115210c7aa03f061fd61c448e1e631761c85f45c"},
+        {"tools/harness/ProviderRefreshAncestrySuccessor.java",
+                "e688e46ce2216f7588ceb33ae646f5a2971bce021499770eaa83a291b408ade8",
+                "050675aacfadae744986bccdb70ae97f8889846ae14f0fe04dff96b1e0ee8646"},
     };
     private SourceLauncherQualificationSuccessor() { }
     static boolean carries(String path, String prior, String current) {
