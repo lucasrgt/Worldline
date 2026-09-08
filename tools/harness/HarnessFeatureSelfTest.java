@@ -2,6 +2,7 @@
 final class HarnessFeatureSelfTest {
     private HarnessFeatureSelfTest() { }
     static void core() throws Exception {
+        ProviderRefreshAncestrySuccessor.selfTest();
         SafeTreeDelete.selfTest();
         CacheUsage.selfTest();
         NightlyQualityCampaign.selfTest();

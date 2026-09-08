@@ -152,7 +152,8 @@ final class ProviderDiscoveryPinCheck {
                     && Files.readString(root.resolve(relative)).contains("src/(?:main|testkit)/java")
                     && Files.readString(root.resolve("tools/harness/DataDrivenCyclePlan.java"))
                             .contains("src/(?:main|testkit)/java");
-            boolean successor = SchemaPinCheck.transportsFile(root, relative, current);
+            boolean successor = SchemaPinCheck.transportsFile(root, relative, current)
+                    || TrainPinCheck.transportsFile(train, root, relative, current);
             require(hash(prior) && (digest(root.resolve(relative)).equals(current)
                             && (fingerprint
                             || TrainPinCheck.transportsFile(train, root, relative, prior))
