@@ -222,12 +222,11 @@ final class IntegrationToolsCheck {
     }
 
     private static int run(Path directory, List<String> command, int seconds) throws Exception {
-        Process process = new ProcessBuilder(command).directory(directory.toFile())
-                .redirectErrorStream(true).redirectOutput(ProcessBuilder.Redirect.DISCARD).start();
-        if (!process.waitFor(seconds, TimeUnit.SECONDS)) {
-            process.destroyForcibly(); throw new IllegalStateException(command.get(0) + " timed out");
-        }
-        return process.exitValue();
+        ProcessCapture.Result result = ProcessCapture.run(directory, command, seconds);
+        if (result.timedOut()) throw new IllegalStateException(command.get(0) + " timed out\n"
+                + ProcessCapture.tail(result.output(), 8_000));
+        if (result.exit() != 0) System.err.print(ProcessCapture.tail(result.output(), 8_000));
+        return result.exit();
     }
 
     private static void delete(Path target) throws Exception {

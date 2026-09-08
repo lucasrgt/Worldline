@@ -16,6 +16,8 @@ public final class mod_WorldlineTestKitProbe extends BaseMod {
     private Socket socket;
     private BufferedReader input;
     private BufferedWriter output;
+    private final worldline.modloader.testkit.LegacyProgressHud hud =
+            new worldline.modloader.testkit.LegacyProgressHud();
 
     public mod_WorldlineTestKitProbe() {
         requireLoader("forge");
@@ -42,7 +44,12 @@ public final class mod_WorldlineTestKitProbe extends BaseMod {
             if (!ready) {
                 open(); ClientProfilerRuntime.startCapture(); emit("READY", client); ready = true;
             } else emit("STATE", client);
+            hud.draw(client, false);
             String command = input.readLine();
+            while (command != null && command.startsWith("HUD ")) {
+                hud.update(command.substring(4)); hud.draw(client, true); emit("HUD", client);
+                command = input.readLine();
+            }
             if ("CLOSE".equals(command)) {
                 ClientProfilerRuntime.finish("controlled-close"); emit("CLOSED", client);
                 System.out.println("WORLDLINE_LEGACY_TESTKIT_SHUTDOWN=forge");

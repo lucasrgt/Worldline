@@ -14,7 +14,7 @@ public final class RunnerOptions {
     long seed = 173L, timeout = 5_000L;
     int retry, bail, line, minimizeBudget = 64;
     boolean ci, allowOnly, updateSnapshots, minimize, shuffle, passWithNoTests, unicode = true;
-    boolean timeoutOverride;
+    boolean timeoutOverride, overlay;
     Pattern namePattern, filePattern;
     String tag;
 
@@ -41,6 +41,7 @@ public final class RunnerOptions {
     public RunnerOptions shuffle(boolean value) { shuffle = value; return this; }
     public RunnerOptions passWithNoTests(boolean value) { passWithNoTests = value; return this; }
     public RunnerOptions unicode(boolean value) { unicode = value; return this; }
+    public RunnerOptions overlay(boolean value) { overlay = value; return this; }
     public RunnerOptions name(Pattern value) { namePattern = value; return this; }
     public RunnerOptions file(Pattern value) { filePattern = value; return this; }
     public RunnerOptions tag(String value) { tag = value; return this; }

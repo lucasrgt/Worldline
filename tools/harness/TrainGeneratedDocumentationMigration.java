@@ -207,7 +207,8 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
                 || EntityPhysicalEnvelopeDocumentationSuccessor.carries(relative, prior, current)
                 || EntityRegistryCensusSuccessor.carries(relative, prior, current)
                 || EntityRegistrySchemaSuccessor.carries(relative, prior, current)
-                || EntityRegistryDocumentationSuccessor.carries(relative, prior, current);
+                || EntityRegistryDocumentationSuccessor.carries(relative, prior, current)
+                || ExtensionSdkProgressTrainSuccessor.carries(relative, prior, current);
     }
 
     private static boolean reviewed(String relative, String prior, String current,

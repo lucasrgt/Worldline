@@ -440,6 +440,8 @@ with the same fingerprint.
 The tracked `smokes/qualification.lock` is the portable layer above that machine-local cache. It
 normalizes Git text inputs to LF before hashing, so a clean CRLF checkout and a clean LF checkout
 resolve to the same behavior identity. Binary inputs remain byte-exact. It
+uses a fixed separator ordering for directory entries, preserving existing Windows-qualified
+fingerprints when the same tracked inputs are checked on Linux. It
 records the fingerprint, PASS status, and evidence hash for each explicitly pinned milestone.
 A fresh clone may reuse a matching reviewed pin without downloading the heavy log. The lockfile
 is deliberately outside every milestone fingerprint, so committing updated pins does not create

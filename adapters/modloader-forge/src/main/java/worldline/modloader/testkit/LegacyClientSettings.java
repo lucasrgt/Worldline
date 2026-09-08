@@ -16,12 +16,14 @@ final class LegacyClientSettings {
     final String probeTarget;
     final List<Path> classpath;
     final int timeoutSeconds;
+    final boolean progress;
 
     private LegacyClientSettings(String loader, Path workspace, Path java, Path natives,
-            Path probe, String probeTarget, List<Path> classpath, int timeoutSeconds) {
+            Path probe, String probeTarget, List<Path> classpath, int timeoutSeconds, boolean progress) {
         this.loader = loader; this.workspace = workspace; this.java = java;
         this.natives = natives; this.probe = probe; this.probeTarget = probeTarget;
         this.classpath = classpath; this.timeoutSeconds = timeoutSeconds;
+        this.progress = progress;
     }
 
     static LegacyClientSettings load(String loader) throws Exception {
@@ -48,7 +50,8 @@ final class LegacyClientSettings {
         int timeout = Integer.parseInt(System.getProperty("worldline.legacy.timeoutSeconds", "180"));
         require(timeout >= 30 && timeout <= 900, "legacy timeout must be 30..900 seconds");
         return new LegacyClientSettings(loader, workspace, java, natives, probe, probeTarget,
-                Collections.unmodifiableList(classpath), timeout);
+                Collections.unmodifiableList(classpath), timeout,
+                "worldline.test-progress.v1".equals(values.getProperty("progress.protocol")));
     }
 
     private static Path child(Path root, String relative, boolean regularOrDirectory) {

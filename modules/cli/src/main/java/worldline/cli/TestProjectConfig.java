@@ -16,7 +16,7 @@ import java.util.TreeSet;
 /** Strict convention file that makes plain {@code worldline test} deterministic. */
 final class TestProjectConfig {
     private static final Set<String> KEYS = new TreeSet<>(Arrays.asList("format", "source", "spec",
-            "classpath", "mod", "world", "provider", "reporter", "artifacts", "snapshots", "runtime.lock"));
+            "classpath", "mod", "world", "provider", "reporter", "artifacts", "snapshots", "runtime.lock", "overlay"));
     private TestProjectConfig() {}
 
     static String[] expand(String[] arguments) throws IOException {
@@ -41,6 +41,9 @@ final class TestProjectConfig {
         option(properties, expanded, "artifacts", "--artifacts=");
         option(properties, expanded, "snapshots", "--snapshots=");
         option(properties, expanded, "runtime.lock", "--runtime-lock=");
+        String overlay = properties.getProperty("overlay", "false").trim();
+        require("true".equals(overlay) || "false".equals(overlay), "overlay must be true or false");
+        if ("true".equals(overlay)) expanded.add("--overlay");
         return expanded.toArray(new String[0]);
     }
     private static void option(Properties source, List<String> target, String key, String prefix) {
