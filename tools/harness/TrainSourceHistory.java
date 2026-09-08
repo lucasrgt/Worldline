@@ -82,10 +82,12 @@ final class TrainSourceHistory {
                         && !value.startsWith("smokes/qualification-evidence/"))
                 .sorted().toList();
         java.util.List<String> paths = stablePaths(ordering, discovered);
+        java.util.List<String> priorSources = GitObjectBatch.read(root, paths.stream()
+                .map(relative -> base + ":" + relative).toList(), true);
         target.setProperty("source.count", Integer.toString(paths.size())); int index = 0;
         for (String relative : paths) {
             String stem = "source." + index++ + "."; Path current = root.resolve(relative);
-            String prior = show(root, base + ":" + relative);
+            String prior = priorSources.get(index - 1);
             target.setProperty(stem + "path", relative);
             target.setProperty(stem + "prior_sha256", prior == null ? "added"
                     : digest(prior.getBytes(StandardCharsets.UTF_8)));

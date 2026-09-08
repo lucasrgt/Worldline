@@ -1,5 +1,5 @@
 schema=1
 id=b173-native-particle-lifecycle-cycle
-fingerprint=700a8546ee4b427cd9af0746e4a99bdf71f16ef6adc56bfae684b1b45e6b482e
+fingerprint=37cfa9ac32db21aaf9d8078f7d8465b5fe840cb1d4bda6f19002509d10f0c6bb
 observation.sha256=a55a9c2e3955173e3c9856f95053115c56814e5bbac199119162c5d95ff6ecb7
 source=refactor-equivalent

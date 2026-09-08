@@ -106,6 +106,13 @@ of intermittent tail latency, and a native ModLoader/Forge consumer qualificatio
 This is an explicit stopping boundary for this integration, not a claim that all
 possible optimizations have been exhausted.
 
+The later M795 package closes the declared native ModLoader/Forge source-consumer
+and renderer lifecycle boundary at Aero `2b7726ee861c2f9d86a3952512857e611aa95e28`.
+Its four official-client executions compare 28 complete images and exercise
+display-list disposal, animation and native NBT restoration. This is a distinct
+revision and contract from M792 v7; it makes no legacy performance or general
+production claim. See `M795_AERO_LEGACY_CONSUMER.md` and `MAIN_CONSOLIDATION.md`.
+
 
 Integration normalizes the M792 map's required frozen-trace header to its
 already executed v7 signature. This documentation-only input change is carried

@@ -1,5 +1,5 @@
 schema=1
 id=b173-harvestable-vegetation-lifecycle-cycle
-fingerprint=1f942e048f6475b663e6702659fb59101188eed54f1c8d1413f949848a230955
+fingerprint=3797ad6a0a156213ffbce06265b964a396758bc696b32d11f22b67da87c0a414
 observation.sha256=7b001441c5854115396382a7900a4a8a5dcbc5d6b7b559a3219d67abe2d6374b
 source=refactor-equivalent

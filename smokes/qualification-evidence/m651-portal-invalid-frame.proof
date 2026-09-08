@@ -1,5 +1,5 @@
 schema=1
 id=m651-portal-invalid-frame
-fingerprint=f316228546ffcf1fb3891154a1b3697366049a509d2de4fd4798278ffc76c625
+fingerprint=9adfa7cab9cbab215d11d825c9914d080a5eab8caeaa9946825d894ceded9109
 observation.sha256=ae858387c77a284d0801976aa7f6e9a90d066d1cfb12e0078ed20b2663a836a6
 source=refactor-equivalent

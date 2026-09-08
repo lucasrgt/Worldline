@@ -1,5 +1,5 @@
 schema=1
 id=b173-entity-state-conformance-cycle
-fingerprint=ead4f51a559a2ce97dc46c645bd648a4699bac1ae25b275299ce605ffb469789
+fingerprint=ffcd323352389627f464879a8a4d03c295a15d8d3cb01e9399c273aa7704bde2
 observation.sha256=e71b110c23afa51f0ddbf2cf80c70fe0af0454f5b1ca5df25944f3c22626ed81
 source=refactor-equivalent
