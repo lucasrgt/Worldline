@@ -78,7 +78,8 @@ public final class NativeDifferentialCapture {
         }
         Path evidence = build.resolve("evidence.txt"); Files.writeString(evidence, baseline, StandardCharsets.UTF_8);
         String signature = SmokeSupport.digest(evidence, "SHA-256");
-        require(signature.equals(value(config, "expected.signature")), "native frozen signature differs: " + signature);
+        require(signature.equals(value(config, "expected.signature")),
+                "native frozen signature differs: " + signature);
         System.out.println(prefix + "SET=" + value(config, "expected.signal"));
         System.out.println(prefix + "TRACE=" + value(config, "expected.trace"));
         System.out.println(prefix + "SIGNATURE=" + signature);
@@ -88,7 +89,8 @@ public final class NativeDifferentialCapture {
         require(sourcePath("modules/testapi/src/main/java/worldline/testapi/Subject.java")
                 && sourcePath("adapters/b173-server/src/testkit/java/worldline/b173server/Native.java")
                 && !sourcePath("modules/api/src/test/java/Probe.java")
-                && !sourcePath("adapters/b173-server/src/main/java/../../Foreign.java"), "native source confinement drift");
+                && !sourcePath("adapters/b173-server/src/main/java/../../Foreign.java"),
+                "native source confinement drift");
         equivalent("subject=one\n", "subject=one\n");
         try {
             equivalent("subject=one\n", "subject=two\n");
@@ -96,7 +98,8 @@ public final class NativeDifferentialCapture {
         } catch (IllegalArgumentException expected) { }
     }
     private static void equivalent(String first, String next) {
-        if (first.isEmpty() || !first.equals(next)) throw new IllegalArgumentException("native replica/oracle divergence");
+        if (first.isEmpty() || !first.equals(next))
+            throw new IllegalArgumentException("native replica/oracle divergence");
     }
     private static boolean sourcePath(String path) {
         return path.matches("(?:modules|adapters)/[a-z0-9-]+/src/(?:main|testkit)/java/[A-Za-z0-9_/]+[.]java");
