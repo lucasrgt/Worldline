@@ -153,10 +153,10 @@ Functional Census claims also expose their automation surface. The
 facets distinguish reusable public fixtures from knowledge that still needs
 promotion, so the Atlas can drive the next high-value subsystem instead of a
 raw milestone count. The completed block family exposes all 1,056 claims through
-the public TestKit. The entity family has 142 registry, lifecycle, materialization, interaction,
+the public TestKit. The entity family has 201 registry, lifecycle, materialization, interaction,
 controlled-dynamics, physical-envelope, native-persistence, and native-render claims on `surface-public-testkit`,
 no remaining qualified proof on `surface-smoke-only`, ten explicit abstract-class non-applicable
-boundaries, and 112 explicit unknown cells. Every public entity claim is
+boundaries, and 53 explicit unknown cells. Every public entity claim is
 paired with a strict fixture/evidence ledger entry; none is promoted from a smoke
 by label alone. These facets evolve directly from the
 canonical Functional Census rather than from a hand-maintained secondary
