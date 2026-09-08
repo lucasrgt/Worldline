@@ -12,5 +12,9 @@ public final class WorldlineRenderBehaviors {
             "native-entity-render", WorldlineFamily.WORLD,
             "Official client body rendering for every concrete registry entity in a canonical scene");
 
+    public static final WorldlineBehavior PARTICLES = WorldlineBehavior.define(
+            "client-particle-render", WorldlineFamily.WORLD,
+            "Official client smoke, flame and red dust creation, controlled lifetime and native frames");
+
     private WorldlineRenderBehaviors() { }
 }
