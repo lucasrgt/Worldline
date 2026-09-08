@@ -39,7 +39,8 @@ public final class NativeInventoryRenderCycle {
         load(smoke.resolve("smoke.properties"));
         require(id.equals(value("id")), "smoke descriptor id mismatch");
         if (config.containsKey("native.capture.schema")) {
-            NativeDifferentialCapture.execute(root, id, config); return;
+            NativeDifferentialCapture.execute(root, id, config);
+            return;
         }
         require(System.getProperty("os.name").startsWith("Windows"), "Windows is required");
         Path workspace = local(value("workspace"));

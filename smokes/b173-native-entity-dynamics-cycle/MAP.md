@@ -1,3 +1,8 @@
+<!-- worldline-map-schema=1 -->
+<!-- boundary=native-entity-dynamics -->
+<!-- nonclaims=all-ai-navigation,combat-and-drops,network-delivery,world-restarts,all-entity-states -->
+<!-- frozen-trace=ad1d0d856769c15c32bdaf03705659dccf6eaf28effa872e587860a3f491e64a -->
+
 # Native entity dynamics semantic map
 
 Public behavior: `native-entity-dynamics` (`WorldlineEnvironmentBehaviors.NATIVE_ENTITY_DYNAMICS`).
