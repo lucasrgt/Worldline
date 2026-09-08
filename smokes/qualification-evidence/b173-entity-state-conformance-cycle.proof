@@ -2,4 +2,4 @@ schema=1
 id=b173-entity-state-conformance-cycle
 fingerprint=015bad20eedfb6fab2eff307281f4b12737471623162b9f1514c996a970d98cf
 observation.sha256=e71b110c23afa51f0ddbf2cf80c70fe0af0454f5b1ca5df25944f3c22626ed81
-source=refactor-equivalent
+source=executed
