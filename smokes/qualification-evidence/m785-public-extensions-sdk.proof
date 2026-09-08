@@ -1,5 +1,5 @@
 schema=1
 id=m785-public-extensions-sdk
-fingerprint=f3464a98c6786c3acd16b5d60b759cece6a2527580a17a0db8b778d42890e2d0
+fingerprint=56545999d6ed80b89a06039d4d6206d74b955f2e70af5f3eb5accfab99ddc993
 observation.sha256=38a9a288a1666c1bd94793b2639765db935a1265213eadf1f9c256f14cc3ce5e
 source=refactor-equivalent

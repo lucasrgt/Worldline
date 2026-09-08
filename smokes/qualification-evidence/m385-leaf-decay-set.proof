@@ -1,5 +1,5 @@
 schema=1
 id=m385-leaf-decay-set
-fingerprint=146c97e43e0fb4233e6c7f0162c434a45b961e31a0e21ffafcb3e48618b4572d
+fingerprint=0d8be19c34522b2507cd949e66329c4af3b7d9bc7fd0c1e1d6ab4e0fddc4dd41
 observation.sha256=3974fe1e9ab8e39e20e8122dce05d183745ba923b5b1dd4306f63c308e0f2e1c
 source=refactor-equivalent

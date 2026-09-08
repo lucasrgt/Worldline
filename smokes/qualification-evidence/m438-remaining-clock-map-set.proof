@@ -1,5 +1,5 @@
 schema=1
 id=m438-remaining-clock-map-set
-fingerprint=f3dd3e9b630b409585ff13e35f3ac3af261857763dac05e1398c85500757d5cb
+fingerprint=e71d36fb6183ed8ae5d62718c4f3f211b9015b6754462c7bc5231d03849311eb
 observation.sha256=9ebe2cca746ab29d741407b8788d0b10a7e942cd691b868eb0d1d2f00e83eb58
 source=refactor-equivalent

@@ -1,5 +1,5 @@
 schema=1
 id=b173-entity-persistence-envelope-cycle
-fingerprint=ce6e1ab90a7d12bbbd4935648db6db66da86488c605b206551c6a28ba8460352
+fingerprint=9877149fa2c0c5084e5cb4f8e6edbe7d88ac52ca51430400ad0c736f91875a6f
 observation.sha256=632c75f2503935a788c539fa01623ace2ed47aa9994e05a83581dc882ce32325
 source=refactor-equivalent

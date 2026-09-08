@@ -1,5 +1,5 @@
 schema=1
 id=b173-bedrock-subsystem-conformance-cycle
-fingerprint=0a7475265b7f33d5d08bc18368cdcb65e91accba5f10f45c4181f70122635fe7
+fingerprint=6e5d1c6a0e14bd32d71ffb49b6829292bb62d03893e7b00659a213ddbc05aff4
 observation.sha256=79ffc978859b805efdb906ddc977d21ba92813c1e7981ff833e7b8bb39bb7eba
 source=refactor-equivalent

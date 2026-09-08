@@ -1,5 +1,5 @@
 schema=1
 id=m335-cake-slice-set
-fingerprint=d938706ebe14fc80a4e582783ab8c4f43ac596a0e4a58179b97c6cdbd41211b2
+fingerprint=bcf8a7deebb1e96081391ede948e25e8f7e7fd415d83031e22cd467f8b3c9378
 observation.sha256=3ef77cdef925e0457ef17467a33321cc83aaffe183eb51cc6fc7768273ff2f68
 source=refactor-equivalent

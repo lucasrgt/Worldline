@@ -1,5 +1,5 @@
 schema=1
 id=b173-redstone-ore-subsystem-conformance-cycle
-fingerprint=fd3cb9fb3e81cf6bccf02ab5263e44c97fe1f242d773c3723b5e935e2338533a
+fingerprint=b7634e0f8f11ffc66470e9bcd7ae8721bfc1940a11ce1cbb9f11b5bd0d48674f
 observation.sha256=5cdc7c6dee48b7f9dc2666049b2d52ef3b4a66aae05245cf42a3e9960bf36256
 source=refactor-equivalent

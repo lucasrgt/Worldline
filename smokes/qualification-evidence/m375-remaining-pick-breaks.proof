@@ -1,5 +1,5 @@
 schema=1
 id=m375-remaining-pick-breaks
-fingerprint=eab7d64db1b5161a34b0570f1832b9bc2a294f0d586846d01387a667218f09d4
+fingerprint=e93b23b29fb0a48ec66f998df7382d3afd4773f025c07e4707441f49fce418c4
 observation.sha256=2a13d2a6534843649dea3d11d1b57171bc40e6ba4df234ee47b50595dc287122
 source=refactor-equivalent

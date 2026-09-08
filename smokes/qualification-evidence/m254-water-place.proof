@@ -1,5 +1,5 @@
 schema=1
 id=m254-water-place
-fingerprint=841df2c7fc273c8ccb208179a14d30a36c3f2741211d577b42138f2d1c42fdab
+fingerprint=401d085a196a286a211d5c89919c3f69f2b109f8e2035091b4be7a4b0204b383
 observation.sha256=7349aeca365432ce5e3996f11aa401973978fa83d7fe895578999c7cd306cac2
 source=refactor-equivalent

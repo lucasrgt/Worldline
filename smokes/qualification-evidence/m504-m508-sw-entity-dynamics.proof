@@ -1,5 +1,5 @@
 schema=1
 id=m504-m508-sw-entity-dynamics
-fingerprint=e9a8a934ac138320e8fe7f9f22565e1f77cfef48cf94ab2974d2acea05af09de
+fingerprint=60aef079b73a7491da57185e4e036b089e0ce204ef8aa4af410a1bd56af15fd1
 observation.sha256=adf4090e04b92ccc22a6adf5a7bd8892fe6ecdd4e6b8c4ba21e2f201962f71db
 source=refactor-equivalent
