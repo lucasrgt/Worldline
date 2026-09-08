@@ -687,7 +687,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-static-collision-envelope-cycle` | CARRIED | official Beta 1.7.3 static collision envelopes |
 | `b173-static-light-transport-cycle` | CARRIED | official Beta 1.7.3 static light transport |
 | `b173-static-self-drop-lifecycle-cycle` | CARRIED | official Beta 1.7.3 static self-drop lifecycle family |
-| `b173-stationapi-world-controls-cycle` | EXECUTED | StationAPI native local-world controls |
+| `b173-stationapi-world-controls-cycle` | CARRIED | StationAPI native local-world controls |
 | `b173-support-dependent-plant-lifecycle-cycle` | CARRIED | official Beta 1.7.3 support-dependent plant lifecycle family |
 | `b173-support-face-attachment-lifecycle-cycle` | CARRIED | official Beta 1.7.3 support-face attachment lifecycle family |
 | `b173-terrain-crafted-solid-stability-envelope-cycle` | CARRIED | official Beta 1.7.3 terrain-crafted solid bounded stability envelope |
