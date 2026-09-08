@@ -240,6 +240,22 @@ client processes. This canonical body-render scene excludes shadow/fire passes, 
 animation states and cross-GPU pixel portability. Native class provenance is a separate
 qualification guard.
 
+`EntityStateFixture#verify` extends the declared native gameplay boundary with
+damage-cause contrasts, seeded contextual drops and AI target state. The related
+`EntityVisualStateFixture#verify` compares fourteen Pig/Zombie native render
+states, including animation, hurt, shadow and fire passes. These are the finite
+scenes in [the entity state package](B173_ENTITY_STATE_CONFORMANCE.md).
+`EntityGpuPortabilityFixture` accepts independently captured frames from distinct
+GPU vendors/renderers and checks the published pixel tolerances. The available
+NVIDIA captures qualify same-device parity; cross-GPU qualification is pending
+a real second-device capture.
+
+`RandomOutcomeFixture#verify` publishes the complete ordered gravel and fishing
+draw matrix, catch windows and controlled first-bite schedules. See
+[native random outcomes](B173_NATIVE_RANDOM_OUTCOMES.md) for its conditional
+probabilities and geometry limits; seed quality and unconditioned waiting times
+are outside this contract.
+
 `EntityPersistenceFixture` supplies the native serialization/reconstruction boundary for all
 23 concrete persistent entity types. These public bindings preserve the stronger independent
 sheep world-restart proof; native NBT equality alone is not a full world-restart claim.
@@ -678,6 +694,15 @@ then gates the client game thread one tick at a time over a loopback control
 channel. Its M620 surface is deliberately narrow: lifecycle state, world time,
 player identity, health, selected slot, and pose. It does not claim headless
 boot, block or inventory mutation, GUI automation, or broad StationAPI parity.
+
+The opt-in local-world profile (`-Dworldline.stationapi.localWorld=true`) adds
+the [StationAPI world controls package](B173_STATIONAPI_WORLD_CONTROLS.md): native
+block ID/metadata reads and writes, teleportation, hotbar selection, item insertion
+and census, inventory GUI frames and clicks, save access and sealed profiling.
+`WorldControlFixture` checks conservation and explicit tick accounting across
+two fresh sessions. Commands require matching session and sequence acknowledgments.
+This profile does not widen M620's multiplayer boundary or claim arbitrary mod
+GUIs, extended IDs, keyboard/pointer control or broad StationAPI parity.
 
 The `modloader-b1.7.3` and `forge-b1.7.3` adapters are the legacy graphical
 provider families qualified by M767. Each attempt starts a fresh hash-pinned
