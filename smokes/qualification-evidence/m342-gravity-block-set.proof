@@ -1,5 +1,5 @@
 schema=1
 id=m342-gravity-block-set
-fingerprint=082096fe967ffa2a79c95d6dd0e764ec16a4302217406bb24c3402e263986602
+fingerprint=13ff3f34000dbc9541f8d3de17926c0c439a13abe112cae07c185a25703f85cf
 observation.sha256=0ae026d1b603485ca4a985c0e886dc0ddef46c2d0aafef9822c0cbb7b51d7d15
-source=refactor-equivalent
+source=executed

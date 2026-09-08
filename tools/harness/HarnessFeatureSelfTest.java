@@ -25,6 +25,7 @@ final class HarnessFeatureSelfTest {
         EntityCensusAtlasSuccessor.selfTest();
         EntityLifecycleTestKitSuccessor.selfTest();
         ProviderDiscoveryTrainSuccessor.selfTest();
+        ProviderDiscoveryPinCheck.selfTest();
         MilestoneCatalogTrainSuccessor.selfTest();
         IntegratedMilestoneTrainDocumentationSuccessor.selfTest();
         ReconciledTrainSourceSuccessor.selfTest();
@@ -52,6 +53,7 @@ final class HarnessFeatureSelfTest {
         EntityRegistryCensusSuccessor.selfTest();
         EntityRegistrySchemaSuccessor.selfTest();
         EntityRegistryDocumentationSuccessor.selfTest();
+        ExtensionSdkProgressTrainSuccessor.selfTest();
         CandidateReadiness.selfTest();
         CandidateRuntimeBuild.selfTest();
         CandidateSourceClosure.selfTest();

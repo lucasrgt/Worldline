@@ -67,11 +67,12 @@ public final class Protocol14EdgeSmoke {
       actor.useHeldItemOnBlock(top, BlockFace.UP);
       worldline.test.WorldlineSmokeAwait.awaitBlockMatching(
           actor, signCell, value -> value.legacyId() == 63, "standing sign", 40);
-      actor.selectHeldSlot(2);
       RemoteSignText expectedSign = new RemoteSignText(
           signCell, "World", "line", "M631", "edge");
       B173Protocol14Access.reset(actor);
       B173SignAccess.update(actor, expectedSign);
+      B173SignAccess.await(actor, expectedSign);
+      actor.selectHeldSlot(2);
       actor.moveAndObserve(1D, 0D, 0D, 20);
       RemoteProtocol14Chain chain = B173Protocol14Access.awaitSignThenMap(actor, expectedSign);
       actor.close();
