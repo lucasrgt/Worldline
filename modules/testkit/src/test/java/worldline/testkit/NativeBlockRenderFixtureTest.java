@@ -27,6 +27,7 @@ public final class NativeBlockRenderFixtureTest {
                 observation(cube, 2048, "a".repeat(64), 6))));
         NativeWorldBlockRenderFixtureTest.main(arguments);
         NativeTileEntityRenderFixtureTest.main(arguments);
+        NativeEntityRenderFixtureTest.main(arguments);
         System.out.println("NativeBlockRenderFixtureTest passed");
     }
 

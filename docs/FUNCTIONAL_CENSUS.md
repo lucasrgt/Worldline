@@ -269,13 +269,19 @@ classes with canonical state, normalizes slime size, fixes a common position, an
 width, height, vertical offset, derived AABB, collidability, pushability, and pair-collision-box
 disposition. Registered type 48 is the abstract `EntityLiving` base and is explicitly
 `NOT_APPLICABLE` for materialized collision shape rather than being replaced by a fabricated
-subclass. All 97 verified entity claims have strict public bindings. M436 is
+subclass. The existing native persistence envelope now contributes 22 further public claims,
+while retaining the independent sheep restart proof and its public fixture. It proves native NBT
+serialization and reconstruction for all 23 concrete registry types; it does not generalize that
+bounded proof to complete world save/restart behavior. Abstract type 48 is also explicitly
+non-applicable for this persistence operation. Native entity rendering adds all 23 concrete
+subjects through four independent mapped/official framebuffer captures. All 142 verified entity claims have strict public
+bindings. M436 is
 deliberately excluded from the arrow
 tick-lifecycle cell: it fires a type-60 projectile but then manually drops and collects a separate
 Packet21 item-262 stack, and its own map excludes in-ground projectile pickup. The M466 dry-pen
 scene is also excluded from squid environment-response: it kills the dry squid
 with a sword and explicitly declines to claim land-caused damage. No verified entity cell remains
-`SMOKE_ONLY`; the remaining 166 cells are explicit `UNKNOWN` Atlas claims.
+`SMOKE_ONLY`; the remaining 112 cells are explicit `UNKNOWN` Atlas claims.
 
 ## Status and automation
 
@@ -353,12 +359,15 @@ variant, and coupled-transition cases. Together with the modern lifecycle proof
 reconciliation, the block public TestKit surface now covers 1,056/1,056 claims
 (100%), completing that family's automation-surface target. The final six tick-policy claims bind sand and
 gravel scheduling, natural wheat, cactus, and sugar-cane growth, and furnace tile ticks to official
-public fixtures. Across both current families the honest aggregate is 1,153/1,320 verified
-(87.35%) and 1,153/1,320 public TestKit claims (87.35%). The entity family contributes 97 public
-claims, one explicit non-applicable cell, no smoke-only claims, and 166 unknown cells. Reaching
-the aggregate 98.8% target now requires 152 more verified claims; the entity family alone requires
-164 more claims to reach its
-own 261/264 threshold.
+public fixtures. Across both current families the aggregate is 1,198 verified and public
+TestKit claims. The full candidate matrix remains 1,320 cells; ten evidence-backed abstract
+entity exclusions leave 1,310 applicable cells, for 91.45% proof and public coverage.
+The entity family contributes 142 public claims, ten explicit non-applicable cells, no
+smoke-only claims, and 112 unknown cells. Its applicable denominator is 254 (55.91% proof).
+Only explicit NOT_APPLICABLE statuses are excluded; unknown, partial, retracted, and native
+nondeterministic cells remain in the denominator, and exclusions never count as verification.
+Reaching the aggregate 98.8% target requires 97 more verified claims; the entity family
+alone requires 109 more claims to reach its own 251/254 threshold.
 
 ## Three conformance layers
 

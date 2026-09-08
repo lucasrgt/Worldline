@@ -129,6 +129,7 @@ public final class NativeInventoryRenderCycle {
                 "adapters/b173-client/src/main/java/worldline/b173/B173WorldBlockAccess.java",
                 "adapters/b173-client/src/main/java/worldline/b173/B173TerrainTexture.java",
                 "adapters/b173-client/src/main/java/worldline/b173/B173TileEntityFrame.java",
+                "adapters/b173-client/src/main/java/worldline/b173/B173RgbaDigest.java",
                 "adapters/b173-client/src/main/java/worldline/b173/B173ChunkProviderAccess.java",
                 "adapters/b173-client/src/main/java/worldline/b173/B173ReflectionObjects.java",
                 "adapters/b173-client/src/main/java/worldline/b173/B173HeadlessClientResources.java",

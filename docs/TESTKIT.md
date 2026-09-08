@@ -215,6 +215,18 @@ typed `registry-presence` cases and emits equatable
 `worldline.entity-registry-evidence.v1`; registry membership alone makes no
 claim about spawning, ticking, collision, persistence, rendering, or AI.
 
+`NativeEntityRenderFixture#verify` checks an explicit ordered family against native renderer
+identities, nonempty RGBA captures and exact frame hashes. Its equatable evidence preserves
+each subject's Functional Census layer. The `native-entity-render` behavior publishes the
+complete 23-concrete-subject Beta family, qualified by two mapped and two untouched official
+client processes. This canonical body-render scene excludes shadow/fire passes, exhaustive
+animation states and cross-GPU pixel portability. Native class provenance is a separate
+qualification guard.
+
+`EntityPersistenceFixture` supplies the native serialization/reconstruction boundary for all
+23 concrete persistent entity types. These public bindings preserve the stronger independent
+sheep world-restart proof; native NBT equality alone is not a full world-restart claim.
+
 `EntityConformancePlan` expands persistent entity profiles over reusable dimensions and routes
 each case through `UNIVERSAL`, `ARCHETYPE`, or `SINGULAR`. `EntityLifecycleFixture` executes a
 selected coherent lifecycle rather than counting each operation as a milestone:

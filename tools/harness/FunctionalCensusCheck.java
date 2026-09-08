@@ -51,7 +51,7 @@ public final class FunctionalCensusCheck {
                 "candidate_claims_expected", "verified_claims_minimum");
         require(!families.rows.isEmpty(), "functional census has no families");
         Set<String> ids = new HashSet<>();
-        Result total = new Result(0, 0, 0);
+        Result total = new Result(0, 0, 0, 0);
         int candidates = 0;
         for (Row family : families.rows) {
             String id = family.get("family_id"), kind = family.get("subject_kind");
@@ -69,7 +69,8 @@ public final class FunctionalCensusCheck {
         require(ids.containsAll(bindingFamilies), "binding manifest names an unknown family");
         System.out.println("  functional census aggregate: " + ids.size() + " families, "
                 + candidates + " candidate claims");
-        printCoverage("aggregate", candidates, total, schema);
+        FunctionalCensusCoverage.print("aggregate", candidates, total.verified, total.publicTestkit,
+                total.excluded, schema);
     }
 
     private FamilyResult validateFamily(Path data, Row family, String version, String kind,
@@ -218,7 +219,12 @@ public final class FunctionalCensusCheck {
         if (bindingsRequired) require(publicClaims.equals(bindings.keySet()),
                 "TestKit binding ledger differs from public claims");
         require(publicTestkit <= verified, "public TestKit claims exceed verified claims");
-        return new Result(resolved, verified, publicTestkit);
+        int excluded = (int) exceptions.rows.stream().filter(
+                row -> row.get("status").equals("NOT_APPLICABLE")).count();
+        excluded += (int) claims.rows.stream().filter(
+                row -> row.get("status").equals("NOT_APPLICABLE"))
+                .mapToLong(row -> row.get("subject_id").equals("*") ? subjects.size() : 1).sum();
+        return new Result(resolved, verified, publicTestkit, excluded);
     }
 
     private void evidence(Row row) throws Exception {
@@ -238,21 +244,8 @@ public final class FunctionalCensusCheck {
                 + templates + " templates = " + candidates + " candidate claims");
         System.out.println("    verified=" + result.verified + ", resolved=" + result.resolved
                 + ", unknown=" + (candidates - result.resolved) + ", singular-subjects=" + singular);
-        printCoverage(id, candidates, result, schema);
-    }
-
-    private static void printCoverage(String id, int candidates, Result result, Properties schema) {
-        double target = Double.parseDouble(required(schema, "target.proof.percent"));
-        double publicTarget = Double.parseDouble(required(schema, "target.public-testkit.percent"));
-        int targetClaims = (int) Math.ceil(candidates * target / 100.0);
-        int publicClaims = (int) Math.ceil(candidates * publicTarget / 100.0);
-        System.out.println("    " + id + " proof=" + decimal(percent(result.verified, candidates))
-                + "%, target=" + decimal(target) + "%, verified-claims-to-target="
-                + Math.max(0, targetClaims - result.verified));
-        System.out.println("    " + id + " public-testkit=" + result.publicTestkit + "/" + candidates
-                + ", coverage=" + decimal(percent(result.publicTestkit, candidates)) + "%, target="
-                + decimal(publicTarget) + "%, claims-to-target="
-                + Math.max(0, publicClaims - result.publicTestkit));
+        FunctionalCensusCoverage.print(id, candidates, result.verified, result.publicTestkit,
+                result.excluded, schema);
     }
 
     private static Properties properties(Path path) throws Exception {
@@ -272,15 +265,10 @@ public final class FunctionalCensusCheck {
     private static void token(String value, String label) {
         require(TOKEN.matcher(value).matches(), "invalid " + label + ": " + value);
     }
-    private static double percent(int numerator, int denominator) {
-        return denominator == 0 ? 0 : numerator * 100.0 / denominator;
-    }
-    private static String decimal(double value) { return String.format(Locale.ROOT, "%.2f", value); }
-
-    private record Result(int resolved, int verified, int publicTestkit) {
+    private record Result(int resolved, int verified, int publicTestkit, int excluded) {
         Result plus(Result other) {
             return new Result(resolved + other.resolved, verified + other.verified,
-                    publicTestkit + other.publicTestkit);
+                    publicTestkit + other.publicTestkit, excluded + other.excluded);
         }
     }
     private record FamilyResult(int subjects, int templates, int candidates, int singular,
