@@ -4,11 +4,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import worldline.api.RuntimeSnapshot;
 import worldline.b173server.B173NativeEntityDynamics;
 import worldline.testapi.NativeEntityDynamicsCase;
 import worldline.testapi.NativeEntityDynamicsCase.Rule;
@@ -39,7 +39,7 @@ public final class NativeEntityDynamicsSmoke {
         Files.write(output, bytes);
         System.out.println("WORLDLINE_ENTITY_DYNAMICS_ROLE=" + role);
         System.out.println("WORLDLINE_ENTITY_DYNAMICS_SUBJECTS=23");
-        System.out.println("WORLDLINE_ENTITY_DYNAMICS_SIGNATURE=" + hash(bytes));
+        System.out.println("WORLDLINE_ENTITY_DYNAMICS_SIGNATURE=" + RuntimeSnapshot.of(bytes).sha256());
         System.out.println("WORLDLINE_ENTITY_DYNAMICS_PROVENANCE=all-native-entities:"
                 + (role.equals("official") ? "jars/minecraft_server.jar" : "minecraft_server/bin/"));
     }
@@ -66,14 +66,6 @@ public final class NativeEntityDynamicsSmoke {
         }
         require(subjects.size() == 23 && cases.size() == 66, "native dynamics family is incomplete");
         return cases;
-    }
-    private static String hash(byte[] bytes) throws Exception {
-        StringBuilder value = new StringBuilder();
-        for (byte item : MessageDigest.getInstance("SHA-256").digest(bytes)) {
-            value.append(Character.forDigit((item >>> 4) & 15, 16));
-            value.append(Character.forDigit(item & 15, 16));
-        }
-        return value.toString();
     }
     private static void require(boolean condition, String message) {
         if (!condition)
