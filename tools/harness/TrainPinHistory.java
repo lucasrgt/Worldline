@@ -72,6 +72,42 @@ final class TrainPinHistory {
         return null;
     }
 
+    static void preserveUnchangedOrigins(Properties next, Properties previous) {
+        for (String key : previous.stringPropertyNames()) {
+            if (!key.startsWith("smoke.") || !key.endsWith(".prior_fingerprint")) continue;
+            String stem = key.substring(0, key.length() - "prior_fingerprint".length());
+            String fingerprint = previous.getProperty(stem + "current_fingerprint");
+            String evidence = previous.getProperty(stem + "evidence_sha256");
+            if (fingerprint != null && evidence != null
+                    && fingerprint.equals(next.getProperty(stem + "current_fingerprint"))
+                    && evidence.equals(next.getProperty(stem + "evidence_sha256"))) {
+                next.setProperty(key, previous.getProperty(key));
+            }
+        }
+    }
+    static void selfTest() {
+        Properties previous = new Properties(), next = new Properties();
+        for (String id : List.of("entity-persistence", "wall-sign", "torch", "modloader-forge")) {
+            String stem = "smoke." + id + ".";
+            previous.setProperty(stem + "prior_fingerprint", "origin");
+            previous.setProperty(stem + "current_fingerprint", "current");
+            previous.setProperty(stem + "evidence_sha256", "proof");
+        }
+        next.putAll(previous);
+        for (String key : previous.stringPropertyNames()) if (key.endsWith(".prior_fingerprint"))
+            next.setProperty(key, "current");
+        preserveUnchangedOrigins(next, previous);
+        if (!next.equals(previous)) throw new IllegalStateException("unchanged proof origin drift");
+        next.setProperty("smoke.torch.current_fingerprint", "changed");
+        next.setProperty("smoke.torch.prior_fingerprint", "new-origin");
+        next.setProperty("smoke.wall-sign.evidence_sha256", "new-proof");
+        next.setProperty("smoke.wall-sign.prior_fingerprint", "new-origin");
+        preserveUnchangedOrigins(next, previous);
+        if (!"new-origin".equals(next.getProperty("smoke.torch.prior_fingerprint"))
+                || !"new-origin".equals(next.getProperty("smoke.wall-sign.prior_fingerprint"))) {
+            throw new IllegalStateException("changed proof origin overwritten");
+        }
+    }
     record Receipt(String prior, String head, String tree, String base, String signature) { }
     private static String capture(Path root, String... arguments) throws Exception {
         List<String> command = new ArrayList<>(); command.add("git");

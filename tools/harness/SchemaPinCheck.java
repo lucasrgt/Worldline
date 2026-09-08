@@ -11,7 +11,10 @@ final class SchemaPinCheck {
         Properties manifest = manifest(root); require("1".equals(manifest.getProperty("schema")),
                 "invalid repository schema migration");
         require(digest(root.resolve("tools/harness/SmokeInputFingerprint.java")).equals(
-                        required(manifest, "fingerprint_source_sha256")),
+                        required(manifest, "fingerprint_source_sha256"))
+                        || TrainPinCheck.transportsFile(TrainPinCheck.manifest(root), root,
+                                "tools/harness/SmokeInputFingerprint.java",
+                                required(manifest, "fingerprint_source_sha256")),
                 "repository schema fingerprint source drift");
         require(integer(manifest, "smoke.count") > 0
                         && integer(manifest, "map.count") == integer(manifest, "smoke.count") + 1
@@ -109,6 +112,33 @@ final class SchemaPinCheck {
         successor.setProperty("smoke.carried.introduced", "false");
         require(introductionsAfter(successor, prior) == 1,
                 "schema successor introduction census drift");
+        sourceTransportTest();
+    }
+    private static void sourceTransportTest() {
+        Path directory = null, file = null;
+        try {
+            directory = Files.createTempDirectory("worldline-schema-source-");
+            file = directory.resolve("Fingerprint.java"); Files.writeString(file, "current");
+            Properties train = new Properties(); train.setProperty("source.count", "1");
+            train.setProperty("source.0.path", "Fingerprint.java");
+            train.setProperty("source.0.prior_sha256", "prior");
+            train.setProperty("source.0.current_sha256", digest(file));
+            require(TrainPinCheck.transportsFile(train, directory, "Fingerprint.java", "prior"),
+                    "schema rejected a sealed source successor");
+            Files.writeString(file, "tampered");
+            require(!TrainPinCheck.transportsFile(train, directory, "Fingerprint.java", "prior"),
+                    "schema accepted unsealed current source bytes");
+            Files.writeString(file, "current");
+            require(!TrainPinCheck.transportsFile(train, directory, "Fingerprint.java", "unlinked"),
+                    "schema accepted an unlinked source predecessor");
+        } catch (Exception error) {
+            throw new IllegalStateException("schema source transport regression", error);
+        } finally {
+            try {
+                if (file != null) Files.deleteIfExists(file);
+                if (directory != null) Files.deleteIfExists(directory);
+            } catch (Exception error) { throw new IllegalStateException("schema test cleanup", error); }
+        }
     }
     static boolean follows(Properties manifest, String id, String prior, String evidence,
             SmokePins.Entry pin, String current) {

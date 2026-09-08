@@ -144,6 +144,7 @@ final class TrainPinMigration extends TrainPinSupport {
         lock.setProperty("executed.count", Integer.toString(executed));
         lock.setProperty("pending.count", Integer.toString(pending.size()));
         lock.setProperty("pending.smokes", String.join(",", pending.stream().sorted().toList()));
+        TrainPinHistory.preserveUnchangedOrigins(lock, predecessor);
         pins.write(updated); store(root.resolve("smokes/train-reconciliation.lock"), lock);
         System.out.println("train proofs: " + carried + " carried, " + imported
                 + " imported, " + executed + " executed, " + pending.size() + " pending");
@@ -268,6 +269,7 @@ final class TrainPinMigration extends TrainPinSupport {
         lock.setProperty(stem + "evidence_sha256", evidence);
     }
     static void selfTest() {
+        TrainPinHistory.selfTest();
         require("executed".equals(source("same", "same")),
                 "exact milestone execution was downgraded");
         require("refactor-equivalent".equals(source("current", "prior")),
