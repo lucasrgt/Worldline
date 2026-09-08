@@ -12,8 +12,13 @@ public final class RepositoryLauncherTest {
         Path output = Files.createTempFile("worldline-atlas-launcher", ".log");
         Process child = null;
         try {
-            child = new ProcessBuilder("java", "tools/replay/Replay.java", "atlas", "coverage")
-                    .redirectErrorStream(true).redirectOutput(output.toFile()).start();
+            ProcessBuilder launcher = new ProcessBuilder("java", "tools/replay/Replay.java",
+                    "atlas", "coverage").redirectErrorStream(true).redirectOutput(output.toFile());
+            Path tests = Path.of(System.getProperty("worldline.test.classes",
+                    ".worldline/build/test-classes")).toAbsolutePath().normalize();
+            launcher.environment().put("WORLDLINE_PRODUCT_ROOT",
+                    tests.getParent().resolve("classes").toString());
+            child = launcher.start();
             if (!child.waitFor(45, TimeUnit.SECONDS)) {
                 throw new AssertionError("repository Atlas launcher timed out");
             }
