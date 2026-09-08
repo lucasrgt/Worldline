@@ -640,7 +640,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `b173-dirt-flora-lifecycle-cycle` | CARRIED | official Beta 1.7.3 dirt-supported flora lifecycle family |
 | `b173-entity-persistence-envelope-cycle` | CARRIED | official Beta 1.7.3 entity persistence-envelope subsystem |
 | `b173-entity-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 entity physical-envelope subsystem |
-| `b173-entity-state-conformance-cycle` | EXECUTED | native entity contexts and visual state conformance |
+| `b173-entity-state-conformance-cycle` | CARRIED | native entity contexts and visual state conformance |
 | `b173-farmland-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 farmland subsystem conformance |
 | `b173-fire-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 fire subsystem conformance |
 | `b173-floor-mounted-lifecycle-cycle` | CARRIED | official Beta 1.7.3 floor-mounted block lifecycle family |
