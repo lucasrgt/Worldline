@@ -70,6 +70,7 @@ final class HarnessFeatureSelfTest {
         CandidateCompiler.selfTest();
         NeighborTestKitPinCheck.selfTest();
         SchemaPinCheck.selfTest();
+        FormattingPinCheck.selfTest();
         ProviderDiscoveryPinMigration.selfTest();
         HexDigest.selfTest();
         ColumnLift.selfTest();
