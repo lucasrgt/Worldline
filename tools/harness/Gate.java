@@ -152,15 +152,13 @@ public final class Gate {
         String flag = arguments.length == 1 ? arguments[0] : "";
         if ("--cas-permits".equals(flag)) return new DirectTool("ArtifactTransportPermitQuery", null);
         if ("--cas-shadow".equals(flag)) return new DirectTool("CasTransportShadow", null);
-        if (Arrays.equals(arguments, new String[] {"--evidence-explorer"}))
-            return new DirectTool("EvidenceExplorer", null);
+        if ("--evidence-explorer".equals(flag)) return new DirectTool("EvidenceExplorer", null);
         if ("--evidence-explorer-live".equals(flag)) return new DirectTool("EvidenceExplorerLive", null);
         if ("--campaign-follow-up".equals(flag)) return new DirectTool("NativeCampaignFollowUpPlan", null);
         if ("--module-cache-shared-shadow".equals(flag)) return new DirectTool("ModuleCacheSharedShadow", null);
         if ("--module-cache-s3-shadow".equals(flag)) return new DirectTool("ModuleCacheS3Shadow", null);
         if ("--s3-cas-inventory".equals(flag)) return new DirectTool("S3CasInventory", null);
-        if (Arrays.equals(arguments, new String[] {"--shared-cas-inventory"}))
-            return new DirectTool("SharedCasInventory", null);
+        if ("--shared-cas-inventory".equals(flag)) return new DirectTool("SharedCasInventory", null);
         String main = arguments.length == 2 ? queryType(arguments[0]) : null;
         return main == null ? null : new DirectTool(main, arguments[1]);
     }
