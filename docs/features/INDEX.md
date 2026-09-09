@@ -94,6 +94,7 @@ Index of `docs/` narratives grouped as Features. Canonical files stay at stable 
 - [INVARIANTS.md](../INVARIANTS.md)
 - [INVARIANTS_CYCLE.md](../INVARIANTS_CYCLE.md)
 - [LAB_CYCLE.md](../LAB_CYCLE.md)
+- [MAIN_CONSOLIDATION.md](../MAIN_CONSOLIDATION.md)
 - [MAPPING_CONSTITUTION.md](../MAPPING_CONSTITUTION.md)
 - [MOD_API_V2.md](../MOD_API_V2.md)
 - [MOD_GRAPH.md](../MOD_GRAPH.md)
