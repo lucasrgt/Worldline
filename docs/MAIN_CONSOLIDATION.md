@@ -57,6 +57,18 @@ existing compiler argument-file boundary, with a regression check for a Windows
 command exceeding 32,768 characters and a path containing spaces and non-ASCII
 text. These changes retain the original scenario signatures.
 
+The complete Gate also exposed a worktree census error: a `.git` file was treated
+as an unversioned directory, so four generated legacy-runtime sources were
+counted as maintained duplication. The census now uses Git's tracked inventory
+for either repository layout. A real-worktree regression proves that ignored
+sources are excluded and tracked duplication remains visible. Redundant argument
+comparisons were removed from the Gate launcher to retain its source ceiling.
+
+Legacy formatting and fixed-wait validators now follow exact sealed train source
+ancestors. The formatting regression rejects unrelated predecessors, changed
+paths, modified current bytes, and missing intermediate links. Fixed-wait checks
+retain the original transition digest, await requirement, and raw-debt rejection.
+
 M308 now observes the water transition after breaking ice through the existing
 bounded block predicate. It retains the original dig action, response window,
 outer timeouts and expected signature. Phase diagnostics distinguish breaking
@@ -83,3 +95,9 @@ receipt existed. Its partial evidence was preserved with SHA-256
 The subsequent complete qualification on the same frozen source commit passed
 both species in both fresh replicas in 1,835,576 ms, with zero retries and no
 change to its bounded random-tick windows or expected signature.
+
+All 105 changed-input scenarios passed on the frozen combined source tree. The
+canonical pin command verified all 705 portable proofs. The complete repository
+Gate then passed in 162,282 ms, classified as cold, below the unchanged 240,000 ms
+SLO. The measured trend records this combined workload; hot-stage limits remain
+unchanged.
