@@ -8,16 +8,30 @@ import worldline.api.GameEntity;
 import worldline.api.GameWorld;
 import worldline.api.ItemCensus;
 
-/** Minimal read-only world surface deliberately bounded to the M620 boot contract. */
+/** Acknowledged local-world block controls and the existing lifecycle surface. */
 final class StationApiWorld implements GameWorld {
     private final StationApiRuntime runtime;
     StationApiWorld(StationApiRuntime runtime) { this.runtime = runtime; }
     @Override public long time() { return runtime.snapshot().time; }
     @Override public BlockState block(BlockPosition position) {
-        throw new UnsupportedOperationException("StationAPI block reads are not qualified by M620");
+        String[] values = runtime.control("BLOCK " + coordinates(position)).split(",", -1);
+        if (values.length != 2) throw new IllegalStateException("invalid StationAPI block reply");
+        return new BlockState(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
     }
     @Override public boolean setBlock(BlockPosition position, BlockState state) {
-        throw new UnsupportedOperationException("StationAPI block writes are not qualified by M620");
+        if (state == null) throw new NullPointerException("state");
+        String reply = runtime.control("SET_BLOCK " + coordinates(position)
+                + " " + state.legacyId() + " " + state.metadata());
+        if (!reply.equals("true") && !reply.equals("false"))
+            throw new IllegalStateException("invalid block write reply");
+        return Boolean.parseBoolean(reply);
+    }
+    private static String coordinates(BlockPosition position) {
+        if (position == null) throw new NullPointerException("position");
+        if (position.y() < 0 || position.y() > 127 || Math.abs((long) position.x()) >= 30000000
+                || Math.abs((long) position.z()) >= 30000000)
+            throw new IllegalArgumentException("position outside Beta world");
+        return position.x() + " " + position.y() + " " + position.z();
     }
     @Override public List<GameEntity> entities() {
         return Collections.<GameEntity>singletonList(runtime.player());

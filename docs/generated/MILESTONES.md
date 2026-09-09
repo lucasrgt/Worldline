@@ -14,7 +14,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m7-mod-loading` | EXECUTED | mod-loading |
 | `m8-mod-version-diff` | EXECUTED | mod-version-difference |
 | `m9-scenario-minimization` | EXECUTED | scenario-minimization |
-| `m10-native-render` | CARRIED | client-runtime-equivalence |
+| `m10-native-render` | EXECUTED | client-runtime-equivalence |
 | `m11-aero-attribution` | CARRIED | aero-diagnostic-capture |
 | `m11-mod-api` | CARRIED | mod-api-lifecycle |
 | `m12-aero-reproduction` | CARRIED | aero-diagnostic-capture |
@@ -27,7 +27,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m15-fuzz` | CARRIED | fuzz-campaign |
 | `m16-adaptive-chunks` | CARRIED | aero-diagnostic-capture |
 | `m16-debug` | CARRIED | scenario-debugging |
-| `m17-profile` | CARRIED | scenario-profiling |
+| `m17-profile` | EXECUTED | scenario-profiling |
 | `m17-scheduler-hardening` | CARRIED | aero-diagnostic-capture |
 | `m18-coverage` | CARRIED | scenario-coverage |
 | `m18-save-attribution` | CARRIED | aero-save-window |
@@ -37,7 +37,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m21-server-control` | CARRIED | dedicated-server-control |
 | `m22-multiplayer-wire` | CARRIED | multiplayer-session |
 | `m23-player-persistence` | CARRIED | player-persistence |
-| `m24-play-pose` | EXECUTED | player-pose |
+| `m24-play-pose` | CARRIED | player-pose |
 | `m25-player-movement` | CARRIED | player-pose |
 | `m26-native-multiplayer` | CARRIED | multiplayer-session |
 | `m27-multiplayer-chat` | CARRIED | multiplayer-session |
@@ -83,8 +83,8 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m67-chest-retrieval` | CARRIED | container-transaction |
 | `m68-aero-multiplayer-login` | CARRIED | aero-runtime-session |
 | `m69-peer-swing` | CARRIED | multiplayer-session |
-| `m70-aero-combat-window` | CARRIED | aero-runtime-session |
-| `m71-paired-aero-window` | CARRIED | aero-paired-experiment |
+| `m70-aero-combat-window` | EXECUTED | aero-runtime-session |
+| `m71-paired-aero-window` | EXECUTED | aero-paired-experiment |
 | `m72-aero-server-content` | CARRIED | aero-runtime-session |
 | `m73-paired-aero-content` | CARRIED | aero-paired-experiment |
 | `m74-complete-aero-census` | CARRIED | aero-frame-census |
@@ -160,7 +160,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m144-sticky-piston-pull` | CARRIED | m144-sticky-piston-pull |
 | `m145-two-block-piston` | CARRIED | m145-two-block-piston |
 | `m146-obsidian-piston-rejection` | CARRIED | m146-obsidian-piston-rejection |
-| `m147-piston-push-limit` | CARRIED | m147-piston-push-limit |
+| `m147-piston-push-limit` | EXECUTED | m147-piston-push-limit |
 | `m148-pig-ai-movement` | CARRIED | m148-pig-ai-movement |
 | `m149-pig-death` | CARRIED | m149-pig-death |
 | `m150-pig-pork-drop` | CARRIED | m150-pig-pork-drop |
@@ -337,7 +337,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m321-gold-armor-crafts` | CARRIED | m321-gold-armor-crafts |
 | `m322-diamond-armor-crafts` | CARRIED | m322-diamond-armor-crafts |
 | `m323-iron-tool-crafts` | CARRIED | m323-iron-tool-crafts |
-| `m324-furnace-rest-smelts` | CARRIED | m324-furnace-rest-smelts |
+| `m324-furnace-rest-smelts` | EXECUTED | m324-furnace-rest-smelts |
 | `m325-navigation-crafts` | CARRIED | m325-navigation-crafts |
 | `m326-vehicle-crafts` | CARRIED | m326-vehicle-crafts |
 | `m327-food-crafts` | CARRIED | m327-food-crafts |
@@ -351,7 +351,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m335-cake-slice-set` | CARRIED | m335-cake-slice-set |
 | `m336-slab-meta-crafts` | CARRIED | m336-slab-meta-crafts |
 | `m337-utility-item-crafts` | CARRIED | m337-utility-item-crafts |
-| `m338-furnace-fuel-set` | CARRIED | m338-furnace-fuel-set |
+| `m338-furnace-fuel-set` | EXECUTED | m338-furnace-fuel-set |
 | `m339-sapling-growth-set` | CARRIED | m339-sapling-growth-set |
 | `m340-redstone-input-set` | CARRIED | m340-redstone-input-set |
 | `m341-repeater-delay-set` | CARRIED | m341-repeater-delay-set |
@@ -383,7 +383,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m367-piston-motion-set` | CARRIED | m367-piston-motion-set |
 | `m368-more-dye-wool-crafts` | CARRIED | m368-more-dye-wool-crafts |
 | `m369-cake-full-eat-set` | CARRIED | m369-cake-full-eat-set |
-| `m370-remaining-furnace-smelts` | CARRIED | m370-remaining-furnace-smelts |
+| `m370-remaining-furnace-smelts` | EXECUTED | m370-remaining-furnace-smelts |
 | `m371-machine-block-crafts` | CARRIED | m371-machine-block-crafts |
 | `m372-placeable-item-crafts` | CARRIED | m372-placeable-item-crafts |
 | `m373-milk-bucket-set` | CARRIED | m373-milk-bucket-set |
@@ -513,7 +513,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m556-rs-nor-latch-set` | CARRIED | Rs nor latch set |
 | `m559-double-extender-set` | CARRIED | Double extender set |
 | `m560-portal-scale-set` | CARRIED | Portal scale set |
-| `m563-nether-exit-create-set` | CARRIED | Nether exit create set |
+| `m563-nether-exit-create-set` | EXECUTED | Nether exit create set |
 | `m566-grass-spread-set` | CARRIED | Grass spread set |
 | `m567-bed-spawn-set` | CARRIED | Bed spawn set |
 | `m569-spawner-delay-set` | CARRIED | Spawner delay set |
@@ -599,7 +599,7 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m664-flowing-water-freeze` | CARRIED | Flowing-water freeze boundary |
 | `m665-leaf-support-distance` | CARRIED | leaf support distance |
 | `m702-powered-rail-slope-propagation` | CARRIED | powered rail slope propagation |
-| `m703-native-3d-inventory-render` | CARRIED | official Beta 1.7.3 native 3D inventory render family |
+| `m703-native-3d-inventory-render` | EXECUTED | official Beta 1.7.3 native 3D inventory render family |
 | `m743-redstone-ore-dust-drop` | EXECUTED | redstone ore dust drop |
 | `m747-shears-leaf-durability` | EXECUTED | shears leaf durability |
 | `m751-iron-door-hand-rejection` | EXECUTED | iron door hand rejection |
@@ -629,57 +629,66 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `m788-aero-ordered-template-performance` | CARRIED | Aero ordered Cell Page template performance |
 | `m789-aero-cell-page-queue-reuse` | CARRIED | Aero bounded Cell Page queue reuse |
 | `m790-aero-default-rollback` | EXECUTED | Aero shipped Cell Page default and rollback |
+| `m792-aero-batch-emission-pareto` | CARRIED | Aero exact multi-pose Pareto qualification |
+| `m795-aero-legacy-consumer` | EXECUTED | Aero native ModLoader and Forge consumer |
 | `b173-bed-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 bed subsystem conformance |
 | `b173-bedrock-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 bedrock subsystem conformance |
 | `b173-built-environment-materials-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 built-environment material subsystem conformance |
-| `b173-cake-serving-lifecycle-cycle` | CARRIED | official Beta 1.7.3 cake serving lifecycle |
-| `b173-cardinal-placement-state-domain-cycle` | CARRIED | official Beta 1.7.3 cardinal placement state domains |
-| `b173-common-cube-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 common-cube physical envelopes |
-| `b173-deterministic-harvest-lifecycle-cycle` | CARRIED | official Beta 1.7.3 deterministic non-self-drop harvest lifecycle family |
-| `b173-dirt-flora-lifecycle-cycle` | CARRIED | official Beta 1.7.3 dirt-supported flora lifecycle family |
+| `b173-cake-serving-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 cake serving lifecycle |
+| `b173-cardinal-placement-state-domain-cycle` | EXECUTED | official Beta 1.7.3 cardinal placement state domains |
+| `b173-common-cube-physical-envelope-cycle` | EXECUTED | official Beta 1.7.3 common-cube physical envelopes |
+| `b173-deterministic-harvest-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 deterministic non-self-drop harvest lifecycle family |
+| `b173-dirt-flora-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 dirt-supported flora lifecycle family |
 | `b173-entity-persistence-envelope-cycle` | EXECUTED | official Beta 1.7.3 entity persistence-envelope subsystem |
 | `b173-entity-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 entity physical-envelope subsystem |
+| `b173-entity-state-conformance-cycle` | EXECUTED | native entity contexts and visual state conformance |
 | `b173-farmland-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 farmland subsystem conformance |
 | `b173-fire-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 fire subsystem conformance |
-| `b173-floor-mounted-lifecycle-cycle` | CARRIED | official Beta 1.7.3 floor-mounted block lifecycle family |
+| `b173-floor-mounted-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 floor-mounted block lifecycle family |
 | `b173-flowing-fluid-lifecycle-cycle` | CARRIED | official Beta 1.7.3 flowing-fluid lifecycle |
 | `b173-fluid-frozen-matter-lifecycle-conformance-cycle` | CARRIED | official Beta 1.7.3 fluid and frozen-matter lifecycle conformance |
-| `b173-furnace-state-domain-cycle` | CARRIED | official Beta 1.7.3 furnace facing state domain |
+| `b173-furnace-state-domain-cycle` | EXECUTED | official Beta 1.7.3 furnace facing state domain |
 | `b173-furnace-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 furnace subsystem conformance |
-| `b173-gold-shovel-harvest-lifecycle-cycle` | CARRIED | official Beta 1.7.3 gold-shovel harvest lifecycle family |
-| `b173-ground-cover-lifecycle-cycle` | CARRIED | official Beta 1.7.3 ground-cover plant lifecycle family |
-| `b173-ground-flora-conformance-cycle` | CARRIED | official Beta 1.7.3 ground-flora conformance subsystem |
-| `b173-harvestable-vegetation-lifecycle-cycle` | CARRIED | official Beta 1.7.3 shear-harvested leaf-variant lifecycle family |
-| `b173-inert-solid-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 inert-solid physical envelopes |
-| `b173-inert-solid-stability-envelope-cycle` | CARRIED | official Beta 1.7.3 inert-solid bounded stability envelope |
+| `b173-gold-shovel-harvest-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 gold-shovel harvest lifecycle family |
+| `b173-ground-cover-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 ground-cover plant lifecycle family |
+| `b173-ground-flora-conformance-cycle` | EXECUTED | official Beta 1.7.3 ground-flora conformance subsystem |
+| `b173-harvestable-vegetation-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 shear-harvested leaf-variant lifecycle family |
+| `b173-inert-solid-physical-envelope-cycle` | EXECUTED | official Beta 1.7.3 inert-solid physical envelopes |
+| `b173-inert-solid-stability-envelope-cycle` | EXECUTED | official Beta 1.7.3 inert-solid bounded stability envelope |
 | `b173-iron-door-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 iron-door subsystem conformance |
-| `b173-lifecycle-provider-cycle` | CARRIED | official Beta 1.7.3 public block lifecycle provider |
+| `b173-lifecycle-provider-cycle` | EXECUTED | official Beta 1.7.3 public block lifecycle provider |
 | `b173-locked-chest-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 locked-chest subsystem conformance |
 | `b173-mob-spawner-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 mob-spawner subsystem conformance |
-| `b173-multi-drop-mineral-lifecycle-cycle` | CARRIED | official Beta 1.7.3 multi-drop mineral lifecycle family |
-| `b173-mushroom-random-tick-conformance-cycle` | CARRIED | official Beta 1.7.3 mushroom random-tick conformance subsystem |
-| `b173-native-special-world-render-cycle` | CARRIED | official Beta 1.7.3 native special world block-render family |
-| `b173-native-tile-entity-render-cycle` | CARRIED | official Beta 1.7.3 native tile-entity render family |
+| `b173-multi-drop-mineral-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 multi-drop mineral lifecycle family |
+| `b173-mushroom-random-tick-conformance-cycle` | EXECUTED | official Beta 1.7.3 mushroom random-tick conformance subsystem |
+| `b173-native-entity-dynamics-cycle` | EXECUTED | native entity movement, environment and timed-state contrasts |
+| `b173-native-entity-render-cycle` | EXECUTED | official Beta 1.7.3 native entity render family |
+| `b173-native-entity-stimulus-cycle` | EXECUTED | native entity materialization, damage, drops and causal contacts |
+| `b173-native-particle-lifecycle-cycle` | EXECUTED | official native particle lifecycle and frames |
+| `b173-native-random-outcomes-cycle` | EXECUTED | native gravel and fishing finite random outcomes |
+| `b173-native-special-world-render-cycle` | EXECUTED | official Beta 1.7.3 native special world block-render family |
+| `b173-native-tile-entity-render-cycle` | EXECUTED | official Beta 1.7.3 native tile-entity render family |
 | `b173-openable-access-structures-conformance-cycle` | CARRIED | official Beta 1.7.3 openable access structures conformance |
 | `b173-piston-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 piston subsystem conformance |
 | `b173-portal-block-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 portal block subsystem conformance |
 | `b173-rail-network-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 rail-network subsystem conformance |
-| `b173-redstone-device-lifecycle-cycle` | CARRIED | official Beta 1.7.3 redstone device lifecycle family |
+| `b173-redstone-device-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 redstone device lifecycle family |
 | `b173-redstone-input-controls-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 redstone input-control subsystem conformance |
 | `b173-redstone-ore-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 redstone ore subsystem conformance |
 | `b173-redstone-signal-consumers-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 redstone signal-consumer subsystem conformance |
 | `b173-redstone-torch-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 redstone torch subsystem conformance |
-| `b173-remaining-opaque-cube-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 remaining opaque-cube physical envelopes |
+| `b173-remaining-opaque-cube-physical-envelope-cycle` | EXECUTED | official Beta 1.7.3 remaining opaque-cube physical envelopes |
 | `b173-repeater-subsystem-conformance-cycle` | CARRIED | official Beta 1.7.3 repeater subsystem conformance |
-| `b173-shaded-mushroom-lifecycle-cycle` | CARRIED | official Beta 1.7.3 shaded mushroom lifecycle family |
-| `b173-sign-subsystem-lifecycle-cycle` | CARRIED | official Beta 1.7.3 sign subsystem lifecycle |
-| `b173-slab-lifecycle-cycle` | CARRIED | official Beta 1.7.3 slab state and disassembly lifecycle family |
-| `b173-source-fluid-dynamics-cycle` | CARRIED | official Beta 1.7.3 source-fluid gated dynamics |
-| `b173-source-fluid-physical-envelope-cycle` | CARRIED | official Beta 1.7.3 source-fluid physical envelopes |
+| `b173-shaded-mushroom-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 shaded mushroom lifecycle family |
+| `b173-sign-subsystem-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 sign subsystem lifecycle |
+| `b173-slab-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 slab state and disassembly lifecycle family |
+| `b173-source-fluid-dynamics-cycle` | EXECUTED | official Beta 1.7.3 source-fluid gated dynamics |
+| `b173-source-fluid-physical-envelope-cycle` | EXECUTED | official Beta 1.7.3 source-fluid physical envelopes |
 | `b173-special-collision-physical-envelope-cycle` | EXECUTED | official Beta 1.7.3 special-collision physical envelopes |
 | `b173-static-collision-envelope-cycle` | EXECUTED | official Beta 1.7.3 static collision envelopes |
 | `b173-static-light-transport-cycle` | EXECUTED | official Beta 1.7.3 static light transport |
 | `b173-static-self-drop-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 static self-drop lifecycle family |
+| `b173-stationapi-world-controls-cycle` | CARRIED | StationAPI native local-world controls |
 | `b173-support-dependent-plant-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 support-dependent plant lifecycle family |
 | `b173-support-face-attachment-lifecycle-cycle` | EXECUTED | official Beta 1.7.3 support-face attachment lifecycle family |
 | `b173-terrain-crafted-solid-stability-envelope-cycle` | EXECUTED | official Beta 1.7.3 terrain-crafted solid bounded stability envelope |
@@ -697,5 +706,6 @@ Status is calculated from the current behavioral fingerprint and qualification l
 | `redstone-repeater-delay` | CARRIED | redstone-repeater-delay |
 | `redstone-repeater-delays` | CARRIED | redstone-repeater-delays |
 | `redstone-wire-power` | CARRIED | redstone-wire-power |
-| `seed-atlas` | CARRIED | seed-atlas |
+| `seed-atlas` | EXECUTED | seed-atlas |
+| `testkit-external-maturity-cycle` | EXECUTED | public external mod consumption and honest 1.0 readiness |
 | `ui-export` | CARRIED | ui-export |

@@ -38,6 +38,10 @@ public final class NativeInventoryRenderCycle {
         Path smoke = root.resolve("smokes").resolve(id);
         load(smoke.resolve("smoke.properties"));
         require(id.equals(value("id")), "smoke descriptor id mismatch");
+        if (config.containsKey("native.capture.schema")) {
+            NativeDifferentialCapture.execute(root, id, config);
+            return;
+        }
         require(System.getProperty("os.name").startsWith("Windows"), "Windows is required");
         Path workspace = local(value("workspace"));
         Path mapped = workspace.resolve("minecraft/bin");
@@ -129,6 +133,7 @@ public final class NativeInventoryRenderCycle {
                 "adapters/b173-client/src/main/java/worldline/b173/B173WorldBlockAccess.java",
                 "adapters/b173-client/src/main/java/worldline/b173/B173TerrainTexture.java",
                 "adapters/b173-client/src/main/java/worldline/b173/B173TileEntityFrame.java",
+                "adapters/b173-client/src/main/java/worldline/b173/B173RgbaDigest.java",
                 "adapters/b173-client/src/main/java/worldline/b173/B173ChunkProviderAccess.java",
                 "adapters/b173-client/src/main/java/worldline/b173/B173ReflectionObjects.java",
                 "adapters/b173-client/src/main/java/worldline/b173/B173HeadlessClientResources.java",

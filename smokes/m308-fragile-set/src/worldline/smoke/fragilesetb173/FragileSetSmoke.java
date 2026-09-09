@@ -68,10 +68,12 @@ public final class FragileSetSmoke {
                   .blockAt(ice.x(), ice.y(), ice.z())
                   .equals(ICE),
           "live ice-break drift");
+      phase(workspace, "ice-break");
       harvest(actor, ice, 80);
-      broken =
-          worldline.test.WorldlineSmokeAwait.observe(actor, 20).blockAt(ice.x(), ice.y(), ice.z());
+      broken = worldline.test.WorldlineSmokeAwait.awaitBlockMatching(
+          actor, ice, s -> water(s.legacyId()), "broken ice water acknowledgement", window);
       require(broken.legacyId() != 79, "ice cell still 79 after Packet14: " + broken);
+      phase(workspace, "glass-break");
       actor.selectHeldSlot(2);
       glass = place(actor, riser, BlockFace.UP, 20);
       require(worldline.test.WorldlineSmokeAwait.observe(actor, 5)
@@ -86,6 +88,7 @@ public final class FragileSetSmoke {
                   .equals(AIR)
               && actor.peekDroppedItem(GLASS) == null,
           "live glass air drift");
+      phase(workspace, "torch-melt");
       actor.selectHeldSlot(0);
       pad = place(actor, top, BlockFace.EAST, 1);
       actor.selectHeldSlot(1);
@@ -106,6 +109,7 @@ public final class FragileSetSmoke {
       broken = end.blockAt(ice.x(), ice.y(), ice.z());
       require(broken.legacyId() != 79 && end.blockAt(glass.x(), glass.y(), glass.z()).equals(AIR),
           "fragile leftover drift during melt wait");
+      phase(workspace, "persistence");
       actor.close();
       awaitPlayers(server, 0);
       server.save();
@@ -159,6 +163,10 @@ public final class FragileSetSmoke {
     a.beginBreak(target);
     worldline.test.WorldlineSmokeAwait.observe(a, ticks);
     a.finishBreak(target);
+  }
+  private static void phase(Path workspace, String stage) throws Exception {
+    Files.write(workspace.resolve("phase.log"), (stage + "\n").getBytes(StandardCharsets.UTF_8),
+        StandardOpenOption.CREATE, StandardOpenOption.APPEND);
   }
   private static BlockPosition foundation(RemoteChunkSnapshot q, int cx, int cz) {
     for (int x = 4; x <= 11; x++)

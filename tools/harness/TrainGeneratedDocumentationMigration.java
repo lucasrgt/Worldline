@@ -8,8 +8,14 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
     private TrainGeneratedDocumentationMigration() { }
 
     static boolean apply(Path root, String base) throws Exception {
-        return apply(root, base, TrainGeneratedDocumentationMigration::carriesSource,
-                TrainGeneratedDocumentationMigration::validateProofs);
+        try {
+            return apply(root, base, TrainGeneratedDocumentationMigration::carriesSource,
+                    TrainGeneratedDocumentationMigration::validateProofs);
+        } catch (IllegalStateException error) {
+            if (error.getMessage() != null
+                    && error.getMessage().startsWith("unreviewed train source refresh: ")) return false;
+            throw error;
+        }
     }
 
     private static boolean apply(Path root, String base, SourceReview review,
@@ -133,82 +139,7 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
                         "tools/harness/LifecycleClaimTestKitPinCheck.java",
                         "d0256d7b25407edd7ce7a1b5afe6ac9cd23101b13dce034740b4221eac58fdd2",
                         "3e4548964acbca47f460ef32a399528909fcad7a1cd667d7dab6afa2c251d97c")
-                || TestKitArtifactTrainSourceSuccessor.carries(relative, prior, current)
-                || RedstoneAtlasTrainSourceSuccessor.carries(relative, prior, current)
-                || RedstoneAtlasDocumentationSuccessor.carries(relative, prior, current)
-                || CraftingAtlasTrainSourceSuccessor.carries(relative, prior, current)
-                || CraftingAtlasDocumentationSuccessor.carries(relative, prior, current)
-                || TileEntityAtlasTrainSourceSuccessor.carries(relative, prior, current)
-                || TileEntityAtlasDocumentationSuccessor.carries(relative, prior, current)
-                || FluidAtlasTrainSourceSuccessor.carries(relative, prior, current)
-                || FluidAtlasDocumentationSuccessor.carries(relative, prior, current)
-                || LightingAtlasTrainSourceSuccessor.carries(relative, prior, current)
-                || LightingAtlasDocumentationSuccessor.carries(relative, prior, current)
-                || LightingCoverageTrainSourceSuccessor.carries(relative, prior, current)
-                || WeatherAtlasTrainSourceSuccessor.carries(relative, prior, current)
-                || WeatherAtlasDocumentationSuccessor.carries(relative, prior, current)
-                || MobAiAtlasTrainSourceSuccessor.carries(relative, prior, current)
-                || MobAiAtlasDocumentationSuccessor.carries(relative, prior, current)
-                || MobAiBehaviorManifestSuccessor.carries(relative, prior, current)
-                || MobAiBehaviorCatalogPlacementSuccessor.carries(relative, prior, current)
-                || DimensionAtlasTrainSourceSuccessor.carries(relative, prior, current)
-                || DimensionAtlasDocumentationSuccessor.carries(relative, prior, current)
-                || DimensionAtlasFormattingSuccessor.carries(relative, prior, current)
-                || DimensionArtifactSuccessor.carries(relative, prior, current)
-                || WorldgenAtlasTrainSourceSuccessor.carries(relative, prior, current)
-                || WorldgenAtlasDocumentationSuccessor.carries(relative, prior, current)
-                || WorldgenArtifactSuccessor.carries(relative, prior, current)
-                || WorldgenDataCycleAttestationSuccessor.carries(relative, prior, current)
-                || DedicatedServerAtlasTrainSourceSuccessor.carries(relative, prior, current)
-                || DedicatedServerAtlasDocumentationSuccessor.carries(relative, prior, current)
-                || DedicatedServerArtifactSuccessor.carries(relative, prior, current)
-                || MappingAtlasSuccessor.carries(relative, prior, current)
-                || MappingReleaseSuccessor.carries(relative, prior, current)
-                || MappingDocumentationSuccessor.carries(relative, prior, current)
-                || StationApiAtlasSuccessor.carries(relative, prior, current)
-                || StationApiDocumentationSuccessor.carries(relative, prior, current)
-                || AeroAtlasSuccessor.carries(relative, prior, current)
-                || AeroDocumentationSuccessor.carries(relative, prior, current)
-                || ModEcosystemAtlasSuccessor.carries(relative, prior, current)
-                || ModEcosystemDocumentationSuccessor.carries(relative, prior, current)
-                || EntityCensusAtlasSuccessor.carries(relative, prior, current)
-                || EntityLifecycleTestKitSuccessor.carries(relative, prior, current)
-                || ProviderDiscoveryTrainSuccessor.carries(relative, prior, current)
-                || MilestoneCatalogTrainSuccessor.carries(relative, prior, current)
-                || IntegratedMilestoneTrainDocumentationSuccessor.carries(
-                        relative, prior, current)
-                || FinalReconciliationTrainSourceSuccessor.carries(
-                        relative, prior, current)
-                || FinalArtifactHashTrainSourceSuccessor.carries(
-                        relative, prior, current)
-                || GithubActionsTrainSourceSuccessor.carries(relative, prior, current)
-                || TemurinPinTrainSourceSuccessor.carries(relative, prior, current)
-                || ReconciledTrainSourceSuccessor.carries(relative, prior, current)
-                || EntityLifecycleArtifactTrainSuccessor.carries(relative, prior, current)
-                || BoundedEntityArchetypeSuccessor.carries(relative, prior, current)
-                || ObjectMaterializationMatrixSuccessor.carries(relative, prior, current)
-                || PaintingLifecycleSubsystemSuccessor.carries(relative, prior, current)
-                || PaintingAdapterSplitSuccessor.carries(relative, prior, current)
-                || SlimeLifecycleSubsystemSuccessor.carries(relative, prior, current)
-                || EntityDynamicsMatrixSuccessor.carries(relative, prior, current)
-                || SheepLifecycleSubsystemSuccessor.carries(relative, prior, current)
-                || SheepLifecycleTestPlanSuccessor.carries(relative, prior, current)
-                || ChickenEggFamilySubsystemSuccessor.carries(relative, prior, current)
-                || HonestEntityVerificationFloorSuccessor.carries(relative, prior, current)
-                || WolfOwnerStateSubsystemSuccessor.carries(relative, prior, current)
-                || FallingSandLifecycleSubsystemSuccessor.carries(relative, prior, current)
-                || TntLifecycleSubsystemSuccessor.carries(relative, prior, current)
-                || HonestArrowLifecycleCorrectionSuccessor.carries(relative, prior, current)
-                || HonestSquidLandResponseCorrectionSuccessor.carries(relative, prior, current)
-                || HostileBehaviorMatrixSuccessor.carries(relative, prior, current)
-                || HostilePacketIdentityCollisionSuccessor.carries(relative, prior, current)
-                || PigLifecycleSubsystemSuccessor.carries(relative, prior, current)
-                || EntityPhysicalEnvelopeSubsystemSuccessor.carries(relative, prior, current)
-                || EntityPhysicalEnvelopeDocumentationSuccessor.carries(relative, prior, current)
-                || EntityRegistryCensusSuccessor.carries(relative, prior, current)
-                || EntityRegistrySchemaSuccessor.carries(relative, prior, current)
-                || EntityRegistryDocumentationSuccessor.carries(relative, prior, current)
-                || ExtensionSdkProgressTrainSuccessor.carries(relative, prior, current);
+                || TrainSourceSuccessors.carries(relative, prior, current);
     }
 
     private static boolean reviewed(String relative, String prior, String current,
@@ -218,6 +149,8 @@ final class TrainGeneratedDocumentationMigration extends TrainPinSupport {
     }
 
     static void selfTest() throws Exception {
+        AtlasLauncherSourceSuccessor.selfTest();
+        AtlasLauncherPortabilitySuccessor.selfTest();
         FinalReconciliationTrainSourceSuccessor.selfTest();
         FinalArtifactHashTrainSourceSuccessor.selfTest();
         GithubActionsTrainSourceSuccessor.selfTest();

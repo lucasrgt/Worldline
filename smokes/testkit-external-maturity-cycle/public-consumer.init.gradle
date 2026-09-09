@@ -1,0 +1,56 @@
+settingsEvaluated { settings ->
+    settings.pluginManagement.resolutionStrategy.eachPlugin {
+        if (requested.id.id == 'io.github.lucasrgt.worldline.test') {
+            useVersion('0.3.0')
+        }
+    }
+}
+
+allprojects { project ->
+    project.afterEvaluate {
+        if (!gradle.includedBuilds.empty) {
+            throw new GradleException('Public consumer cannot use included builds')
+        }
+        def extension = project.extensions.findByName('worldline')
+        if (extension == null || !extension.noRuntime.get()) {
+            throw new GradleException('External maturity qualification requires noRuntime=true')
+        }
+        def distribution = new File(project.property('worldline.distributionDir')).canonicalFile.toPath()
+        def plugin = project.plugins.findPlugin('io.github.lucasrgt.worldline.test')
+        def pluginType = Class.forName('dev.worldline.gradle.WorldlinePlugin', false, plugin.class.classLoader)
+        def pluginOrigin = new File(pluginType.protectionDomain.codeSource.location.toURI()).canonicalFile.toPath()
+        if (!pluginOrigin.startsWith(gradle.gradleUserHomeDir.canonicalFile.toPath())) {
+            throw new GradleException('Worldline plugin did not come from the isolated public Gradle cache')
+        }
+        logger.lifecycle('WORLDLINE_PUBLIC_PLUGIN=' + pluginOrigin.fileName)
+        project.tasks.withType(JavaCompile).configureEach { task ->
+            task.doFirst {
+                task.classpath.files.each { file ->
+                    def path = file.canonicalFile.toPath()
+                    if (!path.startsWith(distribution) && !path.startsWith(project.projectDir.canonicalFile.toPath())
+                            && !path.startsWith(project.projectDir.parentFile.parentFile.canonicalFile.toPath())) {
+                        throw new GradleException('External test compilation requested an undeclared dependency: ' + path)
+                    }
+                }
+                logger.lifecycle('WORLDLINE_PUBLIC_COMPILE=' + task.name)
+            }
+        }
+        project.tasks.named('worldlineTest').configure { task ->
+            task.minHeapSize = '32m'
+            task.maxHeapSize = '256m'
+            task.doFirst {
+                if (!task.noRuntime.get() || task.classpath.files.empty) {
+                    throw new GradleException('Public runner configuration differs')
+                }
+                task.classpath.files.each { file ->
+                    def path = file.canonicalFile.toPath()
+                    def consumer = project.projectDir.parentFile.parentFile.canonicalFile.toPath()
+                    if (!path.startsWith(distribution) && !path.startsWith(consumer)) {
+                        throw new GradleException('Worldline execution requested repository-private classes')
+                    }
+                }
+                logger.lifecycle('WORLDLINE_PUBLIC_RUNNER=0.3.0')
+            }
+        }
+    }
+}

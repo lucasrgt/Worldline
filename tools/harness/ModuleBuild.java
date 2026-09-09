@@ -3,16 +3,12 @@ import java.io.Reader;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -68,10 +64,11 @@ final class ModuleBuild {
     private Artifact compile(String module, List<Future<Artifact>> dependencyFutures) throws Exception {
         List<Artifact> dependencies = new ArrayList<>();
         for (Future<Artifact> future : dependencyFutures) dependencies.add(future.get());
-        List<Path> sources = javaFiles(root.resolve("modules").resolve(module).resolve("src/main/java"));
+        List<Path> sources = ModuleInputGraph.sources(root, module);
         String release = config.getProperty("module." + module + ".release",
                 required(config, "java.release"));
-        String digest = digest(module, release, sources, dependencies);
+        String digest = ModuleInputGraph.identity(root, module, release, sources,
+                dependencies.stream().map(value -> value.digest).toList());
         Path directory = cache.resolve(module).resolve(digest);
         Path complete = directory.resolve(".complete");
         if (complete(complete, digest)) { touch(module, digest); return new Artifact(directory, digest, true); }
@@ -83,6 +80,9 @@ final class ModuleBuild {
             if (!lock.isValid()) throw new IllegalStateException("invalid module cache lock " + module);
             if (complete(complete, digest)) { touch(module, digest); return new Artifact(directory, digest, true); }
             require(!Files.exists(directory), "corrupt immutable module cache entry " + directory);
+            if (ModuleCacheRemote.hydrate(root, cache, module, digest, directory)) {
+                touch(module, digest); return new Artifact(directory, digest, true);
+            }
             Path temporary = directory.resolveSibling(digest + ".tmp-"
                     + ProcessHandle.current().pid() + "-" + System.nanoTime());
             delete(temporary); Files.createDirectories(temporary);
@@ -102,22 +102,12 @@ final class ModuleBuild {
                 Files.delete(argumentFile);
                 Files.writeString(temporary.resolve(".complete"), digest + "\n", StandardCharsets.UTF_8);
                 require(!Files.exists(directory), "module cache target appeared during publication");
-                move(temporary, directory); touch(module, digest);
+                ImmutableCachePublish.move(temporary, directory);
+                require(complete(complete, digest), "published module cache identity drifted");
+                touch(module, digest);
             } finally { delete(temporary); }
         }
         return new Artifact(directory, digest, false);
-    }
-
-    private String digest(String module, String release, List<Path> sources,
-            List<Artifact> dependencies) throws Exception {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        update(digest, module); update(digest, release); update(digest, System.getProperty("java.version"));
-        for (Artifact dependency : dependencies) update(digest, dependency.digest);
-        for (Path source : sources) {
-            update(digest, root.relativize(source).toString().replace('\\', '/'));
-            digest.update(Files.readAllBytes(source));
-        }
-        return HexFormat.of().formatHex(digest.digest());
     }
 
     private List<String> dependencies(String module) {
@@ -127,14 +117,6 @@ final class ModuleBuild {
                 .collect(Collectors.toList());
     }
 
-    private static List<Path> javaFiles(Path sourceRoot) throws IOException {
-        try (Stream<Path> paths = Files.walk(sourceRoot)) {
-            List<Path> files = paths.filter(path -> path.toString().endsWith(".java"))
-                    .sorted().collect(Collectors.toList());
-            if (files.isEmpty()) throw new IllegalStateException("no Java sources under " + sourceRoot);
-            return files;
-        }
-    }
 
     private void link(Path source, Path target) throws Exception {
         if (Files.exists(target, java.nio.file.LinkOption.NOFOLLOW_LINKS)
@@ -175,11 +157,6 @@ final class ModuleBuild {
         process.destroyForcibly();
     }
 
-    private static void move(Path source, Path target) throws IOException {
-        try { Files.move(source, target, StandardCopyOption.ATOMIC_MOVE); }
-        catch (AtomicMoveNotSupportedException error) { Files.move(source, target); }
-    }
-
     private static boolean complete(Path marker, String digest) throws IOException {
         return Files.isRegularFile(marker) && Files.readString(marker, StandardCharsets.UTF_8)
                 .trim().equals(digest);
@@ -199,9 +176,6 @@ final class ModuleBuild {
         if (!value) throw new IllegalStateException(message);
     }
 
-    private static void update(MessageDigest digest, String value) {
-        digest.update(value.getBytes(StandardCharsets.UTF_8)); digest.update((byte) 0);
-    }
 
     private static String quote(String value) {
         return "\"" + value.replace("\\", "/") + "\"";

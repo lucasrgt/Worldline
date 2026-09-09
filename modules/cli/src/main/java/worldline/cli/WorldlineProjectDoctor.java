@@ -24,6 +24,7 @@ final class WorldlineProjectDoctor {
         else { fail(output, "JDK 21 or newer is required"); failed = true; }
         if (Files.isDirectory(root.resolve("src/test/java"))) pass(output, "Java test source");
         else { fail(output, "missing src/test/java"); failed = true; }
+        WorldlinePackageInstance.verify(root, output);
         if (!hostOnly) failed |= !oracle(output, "client", client, 1_465_375L, CLIENT, true);
         else pass(output, "host-only mode");
         oracle(output, "server", server, 503_100L, SERVER, false);

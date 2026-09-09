@@ -1,0 +1,19 @@
+schema = 1
+id = "NYA-01M20Y78R77X1BPG78BCA1E5CJ"
+title = "Reuse compiled API products in legacy smoke compilers"
+lesson = "A legacy smoke runner can exceed the Windows CreateProcess command-length limit when it recompiles every API source using absolute worktree paths, even after the candidate gate passed. Consume the Gate-compiled API and required sibling products on both compile and runtime classpaths, and compile only the actual adapter and scenario closure. When a full source compilation is required, use a compiler argument file. Preserve the first launch failure and qualify the unchanged official oracle after correcting the launcher."
+scope = ["tools/smoke/**"]
+tags = [
+    "windows",
+    "smoke",
+    "compiler",
+]
+created_at = "2026-09-08T16:39:34Z"
+
+[[occurrences]]
+occurred_at = "2026-09-08T16:39:34Z"
+source = "manual:2026-09-08-m324-CreateProcess-206 path=.worldline/consolidation-failures/m324-windows-command-length.log sha256=BFE7434687E507AC965B50ABD97C5AA9E07C76BDB16FD6C6FEE66F114F3E6D4C"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "8664df8f4"

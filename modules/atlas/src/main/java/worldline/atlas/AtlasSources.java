@@ -44,6 +44,7 @@ final class AtlasSources {
             records.addAll(AtlasFieldImport.load());
             records.addAll(AtlasHypothesisImport.load());
             records.addAll(AtlasEcosystemImport.load());
+            records = AtlasSemanticEvidenceLinks.link(records);
             records.addAll(AtlasCoverage.units(records));
             return AtlasStore.of(records, catalog, root);
         } catch (IOException error) {

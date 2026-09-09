@@ -1,5 +1,5 @@
 schema=1
 id=b173-iron-door-subsystem-conformance-cycle
-fingerprint=ff8b005b21be50596e3d085109e0e1010e6f8e9215a4b61dae70cb8e0ebd8bde
+fingerprint=139857c20a5bb45e5dda7ef1836a2bb97f4b79cfbe11d856de06dc11853e1dc0
 observation.sha256=f8b81d01cec05a6a3957014a6db6eee8601ab09eea77a25f5c9531e93f92b8fd
 source=refactor-equivalent

@@ -3,7 +3,6 @@ import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.HexFormat;
 import java.util.LinkedHashSet;
@@ -18,11 +17,12 @@ final class TrainSourceHistory {
 
     static TrainSourceHistory load(Path root) throws Exception {
         Map<String, Set<String>> values = new HashMap<>();
-        for (String commit : capture(root, "log", "--format=%H", "--",
-                "smokes/train-reconciliation.lock").lines().toList()) {
+        java.util.List<String> objects = capture(root, "log", "--format=%H", "--",
+                "smokes/train-reconciliation.lock").lines().filter(value -> !value.isBlank())
+                .map(commit -> commit + ":smokes/train-reconciliation.lock").toList();
+        for (String content : GitObjectBatch.read(root, objects, false)) {
             Properties lock = new Properties();
-            try (StringReader reader = new StringReader(capture(root, "show",
-                    commit + ":smokes/train-reconciliation.lock"))) { lock.load(reader); }
+            try (StringReader reader = new StringReader(content)) { lock.load(reader); }
             int count = integer(lock.getProperty("source.count", "0"));
             for (int index = 0; index < count; index++) {
                 String stem = "source." + index + ".";
@@ -82,10 +82,12 @@ final class TrainSourceHistory {
                         && !value.startsWith("smokes/qualification-evidence/"))
                 .sorted().toList();
         java.util.List<String> paths = stablePaths(ordering, discovered);
+        java.util.List<String> priorSources = GitObjectBatch.read(root, paths.stream()
+                .map(relative -> base + ":" + relative).toList(), true);
         target.setProperty("source.count", Integer.toString(paths.size())); int index = 0;
         for (String relative : paths) {
             String stem = "source." + index++ + "."; Path current = root.resolve(relative);
-            String prior = show(root, base + ":" + relative);
+            String prior = priorSources.get(index - 1);
             target.setProperty(stem + "path", relative);
             target.setProperty(stem + "prior_sha256", prior == null ? "added"
                     : digest(prior.getBytes(StandardCharsets.UTF_8)));
@@ -188,7 +190,7 @@ final class TrainSourceHistory {
     }
 
     private static String digest(byte[] bytes) throws Exception {
-        return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
+        return HexFormat.of().formatHex(HexDigest.sha256()
                 .digest(PortableText.normalize(bytes)));
     }
 

@@ -1,7 +1,9 @@
 # Native host smoke pool
 
-The host pool is Runtime Fabric's low-overhead execution engine. On Windows it
-places each complete child tree in a native Job Object. On Linux it delegates
+The host pool is Runtime Fabric's low-overhead execution engine. On Windows,
+the default `server-headless` path places each complete child tree in a native
+Job Object through the qualified Rust executor. The C# launcher remains
+available as explicit `--backend windows-job` rollback. On Linux it delegates
 each tree to cgroups v2, optionally adding namespaces through Bubblewrap. It
 avoids the Docker Desktop VM, overlay filesystem, daemon, and Linux bridge.
 Docker remains available when stronger filesystem and resource isolation is
@@ -97,6 +99,13 @@ Gradle home, slot identity, and smoke evidence directory. The official JAR is
 shared read-only by convention and verified by each smoke. `JAVA_TOOL_OPTIONS`
 applies a small heap and `SerialGC` to the cycle and its child JVM. Timeouts
 forcibly terminate the entire descendant process tree.
+
+The Rust path additionally preserves its canonical execution plan, stdout and
+stderr, metrics, output manifest, and receipt in the task directory. It
+requires complete output and zero remaining descendants before accepting the
+task. The pool-token value is passed out of band to the executor launcher and
+is never serialized. If `WORLDLINE_EXECUTOR` is missing or invalid, Windows
+`auto` fails closed; use the legacy backend only through an explicit option.
 
 The scheduler uses Java 21 virtual threads plus a semaphore, measures actual
 peak concurrency, and saves results under:

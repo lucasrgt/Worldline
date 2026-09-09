@@ -38,6 +38,12 @@ final class StationApiProcess implements AutoCloseable {
         throw new IllegalStateException("process timed out before " + marker + "\n" + tail(text()));
     }
 
+    void requireAlive() throws IOException {
+        String output = text();
+        if (!process.isAlive() || output.contains("Stopping!") || output.contains("BUILD FAILED"))
+            throw new IllegalStateException("StationAPI client terminated before control connection\n" + tail(output));
+    }
+
     void write(String line) throws IOException {
         Writer writer = new OutputStreamWriter(process.getOutputStream(), StandardCharsets.UTF_8);
         writer.write(line); writer.write('\n'); writer.flush();

@@ -108,3 +108,11 @@ reported_by = "codex:root"
 corrected_by = "codex:root"
 recorded_by = "codex:root"
 commit = "d245725c4"
+
+[[occurrences]]
+occurred_at = "2026-09-08T16:18:16Z"
+source = "manual:2026-09-08-m308-second-cycle-ice-acknowledgement archive-sha256=927C54BF30142080C3FB727025F3DAAF2AD97131AF1EAAD626C07EFB5127A1FB evidence=.worldline/consolidation-failures/m308-ice-acknowledgement.txt"
+reported_by = "codex:root"
+corrected_by = "codex:root"
+recorded_by = "codex:root"
+commit = "76837b509"

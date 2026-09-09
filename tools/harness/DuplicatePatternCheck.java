@@ -70,13 +70,39 @@ public final class DuplicatePatternCheck {
         Census bad = scan(planted);
         require(bad.sha256 == 1 && bad.lift == 1 && bad.sleep == 1 && bad.server == 1,
                 "planted duplication was not fail-closed: " + bad);
+        worktreeSelfTest(planted.get("smokes/new/Bad.java"));
         execute(Path.of("").toAbsolutePath().normalize());
         System.out.println("  duplication ratchet self-test: passed");
     }
 
     private static Census census(Path root) throws Exception {
-        if (Files.isDirectory(root.resolve(".git"))) return gitCensus(root);
+        if (Files.exists(root.resolve(".git"))) return gitCensus(root);
         return walk(root);
+    }
+
+    private static void worktreeSelfTest(String planted) throws Exception {
+        Path fixture = Files.createTempDirectory("worldline-duplicate-worktree-");
+        try {
+            Path repository = Files.createDirectories(fixture.resolve("repository"));
+            ProcessCapture.require(repository, List.of("git", "init", "--quiet"), 30);
+            Files.writeString(repository.resolve("Tracked.java"), "final class Tracked {}\n");
+            Files.writeString(repository.resolve(".gitignore"), ".worldline/\n");
+            ProcessCapture.require(repository, List.of("git", "add", "."), 30);
+            ProcessCapture.require(repository, List.of("git", "-c", "user.name=Worldline Test",
+                    "-c", "user.email=worldline@example.invalid", "commit", "--quiet", "-m", "fixture"), 30);
+            Path worktree = fixture.resolve("worktree");
+            ProcessCapture.require(repository,
+                    List.of("git", "worktree", "add", "--quiet", "--detach", worktree.toString()), 30);
+            Path generated = Files.createDirectories(worktree.resolve(".worldline"));
+            Files.writeString(generated.resolve("Bad.java"), planted);
+            require(Files.isRegularFile(worktree.resolve(".git")) && census(worktree).total() == 0,
+                    "worktree census included ignored runtime sources");
+            ProcessCapture.require(worktree, List.of("git", "add", "--force", ".worldline/Bad.java"), 30);
+            Census tracked = census(worktree);
+            require(tracked.sha256 == 1 && tracked.lift == 1
+                            && tracked.server == 1 && tracked.sleep == 0,
+                    "worktree census omitted tracked duplication: " + tracked);
+        } finally { SafeTreeDelete.delete(fixture); }
     }
 
     private static Census gitCensus(Path root) throws Exception {
@@ -113,6 +139,13 @@ public final class DuplicatePatternCheck {
             census.sha256 += count(SHA, source);
             census.lift += count(LIFT, source);
             census.sleep += sleepCount(relative, source);
+            return;
+        }
+        if (relative.equals("tools/harness/BoundedSleep.java")
+                || relative.equals("tools/containers/BoundedSleep.java")) {
+            census.sha256 += count(SHA, source);
+            census.lift += count(LIFT, source);
+            census.server += count(SERVER, source);
             return;
         }
         census.sha256 += count(SHA, source);

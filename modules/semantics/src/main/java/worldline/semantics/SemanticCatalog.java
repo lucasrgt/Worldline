@@ -41,6 +41,8 @@ public final class SemanticCatalog {
         all.addAll(AeroSemantics.mappings());
         all.addAll(ModEcosystemSemantics.mappings());
         all.addAll(SchedulerSemantics.mappings());
+        all.addAll(ProfilingSemantics.mappings());
+        all.addAll(AnimationSemantics.mappings());
         all.addAll(WorldSemantics.mappings());
         all.addAll(WorldgenSemantics.mappings());
         all.addAll(BlockSemantics.mappings());

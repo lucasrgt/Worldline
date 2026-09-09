@@ -22,8 +22,8 @@ final class SmokeInputFingerprint {
             "(?:product|productClasses)\\(\\\"([a-z0-9-]+)\\\"\\)"
             + "|\\.worldline/build/classes/([a-z0-9-]+)");
     private static final Pattern RESOLVE = Pattern.compile("\\.resolve\\(\\\"([a-z0-9-]+)\\\"\\)");
-    private static final Pattern ENVIRONMENT = Pattern.compile("System\\.getenv\\(\\\"([A-Z0-9_]+)\\\"\\)");
-    private static final List<String> REPOSITORY_INPUTS = List.of(
+    static final Pattern ENVIRONMENT = Pattern.compile("System\\.getenv\\(\\\"([A-Z0-9_]+)\\\"\\)");
+    static final List<String> REPOSITORY_INPUTS = List.of(
             "adapters/b173-client", "adapters/b173-server", "adapters/modloader-forge",
             "adapters/stationapi",
             "adapters/aero-model-lib",
@@ -36,8 +36,14 @@ final class SmokeInputFingerprint {
     private final Map<String, String> moduleDigests = new HashMap<>();
 
     SmokeInputFingerprint(Path root) throws IOException {
+        this(root, SmokeTrackedFiles.read(root.toAbsolutePath().normalize()));
+    }
+
+    SmokeInputFingerprint(Path root, Set<Path> tracked) throws IOException {
         this.root = root.toAbsolutePath().normalize();
-        this.tracked = SmokeTrackedFiles.read(this.root);
+        require(!tracked.isEmpty() && tracked.stream().allMatch(path -> path.startsWith(this.root)),
+                "invalid explicit smoke tracked-file set");
+        this.tracked = Set.copyOf(tracked);
         try (java.io.Reader reader = Files.newBufferedReader(
                 this.root.resolve("harness.properties"), StandardCharsets.UTF_8)) {
             modules.load(reader);
@@ -45,14 +51,18 @@ final class SmokeInputFingerprint {
     }
 
     String compute(SmokeDiscovery.Entry smoke) throws Exception {
-        return compute(smoke, true);
+        return new SmokeInputGraph(root, this).qualification(smoke).rootSha256();
+    }
+
+    String computeLegacyQualification(SmokeDiscovery.Entry smoke) throws Exception {
+        return computeLegacy(smoke, true);
     }
 
     String computeExecution(SmokeDiscovery.Entry smoke) throws Exception {
         String qualification = compute(smoke);
         if (LaneDifferential.portableQualification(root, smoke)
                 || LaneDifferential.platform().equals("windows")) return qualification;
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        MessageDigest digest = HexDigest.sha256();
         update(digest, "worldline-smoke-lane-bound-execution-v1");
         update(digest, qualification);
         update(digest, SmokeLane.classify(root, smoke));
@@ -63,11 +73,11 @@ final class SmokeInputFingerprint {
     }
 
     String computeRuntime(SmokeDiscovery.Entry smoke) throws Exception {
-        return compute(smoke, false);
+        return computeLegacy(smoke, false);
     }
 
-    private String compute(SmokeDiscovery.Entry smoke, boolean qualification) throws Exception {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+    private String computeLegacy(SmokeDiscovery.Entry smoke, boolean qualification) throws Exception {
+        MessageDigest digest = HexDigest.sha256();
         boolean portable = qualification;
         update(digest, portable ? "worldline-smoke-input-v6-tokens"
                 : "worldline-smoke-observation-v1");
@@ -106,8 +116,13 @@ final class SmokeInputFingerprint {
         }
         if (source.contains("modules/smoketest"))
             add(digest, root.resolve("modules/smoketest"), qualification);
+        if (source.contains("NativeDifferentialCapture")) {
+            add(digest, root.resolve("tools/harness/NativeDifferentialCapture.java"), qualification);
+            add(digest, root.resolve("tools/harness/SmokeSupport.java"), qualification);
+        }
         boolean dataDriven = Set.of("tools/smoke/DataDrivenCycle.java",
-                "tools/smoke/CompositeCycle.java").contains(smoke.runner);
+                "tools/smoke/CompositeCycle.java").contains(smoke.runner)
+                || descriptor(smoke.id).containsKey("native.capture.schema");
         if (dataDriven) addDataDrivenInputs(digest, smoke.id, qualification);
         else for (String input : REPOSITORY_INPUTS)
             if (source.contains(input)) add(digest, root.resolve(input), qualification);
@@ -148,7 +163,7 @@ final class SmokeInputFingerprint {
         }
     }
 
-    private Set<String> dataDrivenProducts(String id) throws IOException {
+    Set<String> dataDrivenProducts(String id) throws IOException {
         Properties descriptor = descriptor(id); Set<String> result = new HashSet<>();
         result.addAll(list(descriptor.getProperty("cycle.compile.products")));
         result.addAll(list(descriptor.getProperty("cycle.runtime.products"))); return result;
@@ -179,7 +194,7 @@ final class SmokeInputFingerprint {
         }
     }
 
-    private Properties descriptor(String id) throws IOException {
+    Properties descriptor(String id) throws IOException {
         return StrictProperties.load(root.resolve("smokes").resolve(id).resolve("smoke.properties"));
     }
 
@@ -201,11 +216,11 @@ final class SmokeInputFingerprint {
         }
     }
 
-    private static String source(Path path) throws IOException {
+    static String source(Path path) throws IOException {
         return Files.readString(path, StandardCharsets.UTF_8);
     }
 
-    private Set<String> products(String source) {
+    Set<String> products(String source) {
         Set<String> result = new HashSet<>(); Matcher matcher = PRODUCT.matcher(source);
         while (matcher.find()) result.add(matcher.group(1) != null ? matcher.group(1) : matcher.group(2));
         if (source.contains(".worldline/build/classes")) {
@@ -216,12 +231,12 @@ final class SmokeInputFingerprint {
         return result;
     }
 
-    private String module(String name, boolean tokens) throws Exception {
+    String module(String name, boolean tokens) throws Exception {
         String key = (tokens ? "tokens:" : "bytes:") + name;
         String cached = moduleDigests.get(key); if (cached != null) return cached;
         require(modules.getProperty("module." + name + ".dependencies") != null,
                 "unknown smoke product module: " + name);
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        MessageDigest digest = HexDigest.sha256();
         update(digest, name);
         update(digest, modules.getProperty("module." + name + ".release",
                 modules.getProperty("java.release", "")));
@@ -238,11 +253,11 @@ final class SmokeInputFingerprint {
         update(digest, pathDigest(path, tokens));
     }
 
-    private String pathDigest(Path path, boolean tokens) throws Exception {
+    String pathDigest(Path path, boolean tokens) throws Exception {
         String key = (tokens ? "tokens:" : "bytes:") + path;
         String cached = pathDigests.get(key); if (cached != null) return cached;
         require(Files.exists(path), "missing smoke input: " + root.relativize(path));
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        MessageDigest digest = HexDigest.sha256();
         if (Files.isRegularFile(path)) {
             require(!path.startsWith(root) || tracked.contains(path),
                     "untracked smoke input: " + root.relativize(path));

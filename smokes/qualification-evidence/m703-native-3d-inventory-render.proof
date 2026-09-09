@@ -1,5 +1,5 @@
 schema=1
 id=m703-native-3d-inventory-render
-fingerprint=12020423369418e1c27a07656c9d03479bdf76464529d437fb309208c1512d13
+fingerprint=04221704891912228ef1bbb2f2c752a18ea8c8b63bc59858ce5dd581d5b989a9
 observation.sha256=7bba9908ed24b53a8ea7f42de843a01051c60391aafeb18196f43c9fb2a97073
-source=refactor-equivalent
+source=executed

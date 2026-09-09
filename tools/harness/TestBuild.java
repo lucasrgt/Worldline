@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -120,7 +119,9 @@ final class TestBuild {
                 Files.delete(argumentFile);
                 require(result.exit == 0, "test compilation failed for " + module + "\n" + result.output);
                 Files.writeString(temporary.resolve(".complete"), digest + "\n", StandardCharsets.UTF_8);
-                delete(directory); move(temporary, directory);
+                delete(directory); ImmutableCachePublish.move(temporary, directory);
+                require(Files.readString(complete, StandardCharsets.UTF_8).trim().equals(digest),
+                        "published test cache identity drifted");
             } finally { delete(temporary); }
         }
         return new Artifact(directory, digest, false);
@@ -204,7 +205,7 @@ final class TestBuild {
     }
 
     private String digest(String module, List<Path> sources, List<Path> classpath) throws Exception {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        MessageDigest digest = HexDigest.sha256();
         update(digest, module); update(digest, required("test.release"));
         update(digest, System.getProperty("java.version"));
         for (Path path : classpath)
@@ -273,11 +274,6 @@ final class TestBuild {
         pool.shutdownNow();
         if (!pool.awaitTermination(10, TimeUnit.SECONDS))
             throw new IllegalStateException(name + " did not terminate");
-    }
-
-    private static void move(Path source, Path target) throws IOException {
-        try { Files.move(source, target, StandardCopyOption.ATOMIC_MOVE); }
-        catch (AtomicMoveNotSupportedException error) { Files.move(source, target); }
     }
 
     private static void delete(Path target) throws IOException {

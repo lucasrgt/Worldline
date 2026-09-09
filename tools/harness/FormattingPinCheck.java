@@ -112,17 +112,47 @@ final class FormattingPinCheck {
         for (int index = 0; index < files; index++) {
             String stem = "file." + index + ".";
             if (!relative.equals(manifest.getProperty(stem + "path"))) continue;
+            if (!prior.equals(manifest.getProperty(stem + "prior_sha256"))) return false;
             String current = Files.readString(root.resolve(relative), StandardCharsets.UTF_8);
-            boolean direct = prior.equals(manifest.getProperty(stem + "prior_sha256"))
-                    && digest(current).equals(manifest.getProperty(stem + "current_sha256"));
+            String intermediate = manifest.getProperty(stem + "current_sha256");
             Properties shared = SharedHelperPinCheck.manifest(root);
-            return direct || prior.equals(manifest.getProperty(stem + "prior_sha256"))
-                    && SharedHelperPinCheck.transportsFile(shared, root, relative,
-                            manifest.getProperty(stem + "current_sha256"))
-                    || SchemaPinCheck.transportsFile(root, relative,
-                            manifest.getProperty(stem + "current_sha256"));
+            return digest(current).equals(intermediate)
+                    || SharedHelperPinCheck.transportsFile(shared, root, relative, intermediate)
+                    || TrainPinCheck.transportsFile(
+                            TrainPinCheck.manifest(root), root, relative, intermediate)
+                    || SchemaPinCheck.transportsFile(root, relative, intermediate);
         }
         return false;
+    }
+    static void selfTest() throws Exception {
+        Path root = Files.createTempDirectory("worldline-formatting-source-");
+        try {
+            Files.createDirectory(root.resolve("smokes"));
+            for (String name : new String[] {"gui-workbench.lock", "testkit-release-0.3.lock",
+                    "shared-helper-migration.lock"})
+                Files.writeString(root.resolve("smokes").resolve(name), "source.count=0\nfile.count=0\n");
+            String relative = "Fixture.java", source = "final class Fixture { int value; }\n";
+            Files.writeString(root.resolve(relative), source);
+            String prior = digest("final class Fixture{}"), intermediate = digest("final class Fixture { }\n");
+            Properties formatting = new Properties(); formatting.setProperty("file.count", "1");
+            formatting.setProperty("file.0.path", relative);
+            formatting.setProperty("file.0.prior_sha256", prior);
+            formatting.setProperty("file.0.current_sha256", intermediate);
+            Path train = root.resolve("smokes/train-reconciliation.lock");
+            String trainPrefix = "source.count=1\nsource.0.path=" + relative
+                    + "\nsource.0.current_sha256=" + digest(source) + "\nsource.0.prior_sha256=";
+            Files.writeString(train, trainPrefix + intermediate + "\n");
+            require(transportsFile(formatting, root, relative, prior), "sealed formatting/train link was rejected");
+            require(!transportsFile(formatting, root, relative, digest("unlinked")),
+                    "formatting transport accepted an unrelated predecessor");
+            require(!transportsFile(formatting, root, "Other.java", prior), "formatting transport changed paths");
+            Files.writeString(root.resolve(relative), "tampered");
+            require(!transportsFile(formatting, root, relative, prior), "formatting transport accepted source drift");
+            Files.writeString(root.resolve(relative), source);
+            Files.writeString(train, trainPrefix + digest("unlinked") + "\n");
+            require(!transportsFile(formatting, root, relative, prior), "formatting transport skipped a train link");
+        } finally { SafeTreeDelete.delete(root); }
+        System.out.println("  formatting source transport self-test: passed");
     }
     private static String digest(String value) throws Exception { return HexFormat.of().formatHex(
             MessageDigest.getInstance("SHA-256").digest(value.replace("\r\n", "\n")

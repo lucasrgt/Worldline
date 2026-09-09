@@ -22,6 +22,7 @@ final class FixedWaitMigrationCheck {
         Properties telemetry = TelemetryPinCheck.manifest(root);
         Properties schemas = SchemaPinCheck.manifest(root);
         Properties formatting = FormattingPinCheck.manifest(root);
+        Properties train = TrainPinCheck.manifest(root);
         require("1".equals(manifest.getProperty("schema"))
                         && integer(manifest, "source.count") == 226
                         && integer(manifest, "milestone.count") == 216
@@ -41,6 +42,9 @@ final class FixedWaitMigrationCheck {
             String text = Files.readString(source, StandardCharsets.UTF_8);
             require((digest(source).equals(required(manifest, stem + "current_sha256"))
                             || FormattingPinCheck.transportsFile(formatting, root,
+                            required(manifest, stem + "path"),
+                            required(manifest, stem + "current_sha256"))
+                            || TrainPinCheck.transportsFile(train, root,
                             required(manifest, stem + "path"),
                             required(manifest, stem + "current_sha256")))
                             && hash(manifest, stem + "prior_sha256")

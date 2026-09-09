@@ -168,7 +168,9 @@ public final class ReleaseCheck {
                     String normalized = relative.toString().replace('\\', '/').toLowerCase();
                     boolean ownedLegacyProbe = normalized.matches("adapters/modloader-forge/"
                             + "(qualification-src|testkit-src)/(forge|modloader)/net/minecraft/src/"
-                            + "mod_worldline(profiler|testkit)probe[.]java");
+                            + "mod_worldline(profiler|testkit)probe[.]java")
+                            || normalized.equals("smokes/m795-aero-legacy-consumer/runtime-src/"
+                                    + "net/minecraft/src/mod_worldlineaeroprobe.java");
                     require(!name.endsWith(".jar") && !name.endsWith(".class")
                             && (!normalized.contains("minecraft/src/") || ownedLegacyProbe)
                             && !normalized.contains("minecraft/bin/"),
