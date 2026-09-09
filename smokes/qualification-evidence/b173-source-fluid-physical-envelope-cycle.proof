@@ -2,4 +2,4 @@ schema=1
 id=b173-source-fluid-physical-envelope-cycle
 fingerprint=8d3492ecda02b0e3005cc49a274ef0e7979d6602413fd83cbb5d8c6e64514136
 observation.sha256=a572f0fab7900b80b123f2c8cf96db0eef672789ea6e93f3f1db4d8a40d82bbd
-source=refactor-equivalent
+source=executed

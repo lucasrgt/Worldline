@@ -48,3 +48,38 @@ smoke gates. Preserve the staging history, reconcile one commit over published
 main, and require the exact orchestrator authorization and CI before pushing main.
 Historical worktrees and raw evidence remain preserved; duplicate uncommitted
 copies are reconciled only after their integrated content has been checked.
+
+## Integration verification observations
+
+The combined SDK moved the shared await API into `testapi`. Seven legacy runners
+now use that module explicitly. The three legacy furnace runners also use the
+existing compiler argument-file boundary, with a regression check for a Windows
+command exceeding 32,768 characters and a path containing spaces and non-ASCII
+text. These changes retain the original scenario signatures.
+
+M308 now observes the water transition after breaking ice through the existing
+bounded block predicate. It retains the original dig action, response window,
+outer timeouts and expected signature. Phase diagnostics distinguish breaking
+ice, breaking glass, torch melting and persistence. The earlier failed cycles
+remain preserved locally.
+
+The first combined qualification of the inert-solid physical envelope stopped
+on the second replica's obsidian level trajectory: no correction was observed
+inside the unchanged response window. The same server log reported overload.
+The preserved world retained obsidian `49:0` at `(4,72,4)` and the player at
+`(4.5,72,3.5)`, before the obstacle. A delayed response under host pressure is an
+inference from these observations, not proof of a changed collision rule.
+
+One complete requalification on the same source commit passed all 51 claims in
+both fresh replicas, including obsidian, in 1,394,248 ms. No collision assertion,
+signature, response window or retry policy changed. The failed evidence archive
+has SHA-256 `c42f4e72be7cb7a6f9babe6ab40cbb482fba5788b1eefe8560aed32a9fb2b63c`.
+This qualification does not establish first-attempt reliability under host
+pressure; the failed attempt and bounded recovery disposition remain preserved.
+
+The mushroom random-tick qualification was interrupted before a complete PASS
+receipt existed. Its partial evidence was preserved with SHA-256
+`57dd648af31af3feb448fa2547936c1625245d3922df3269ad8c9279b361e353`.
+The subsequent complete qualification on the same frozen source commit passed
+both species in both fresh replicas in 1,835,576 ms, with zero retries and no
+change to its bounded random-tick windows or expected signature.

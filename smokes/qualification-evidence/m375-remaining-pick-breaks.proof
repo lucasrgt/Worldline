@@ -2,4 +2,4 @@ schema=1
 id=m375-remaining-pick-breaks
 fingerprint=02ad14db8bc08f7cf8d774c3ee714f0089bc9140e858ab05500642c7d520e4a5
 observation.sha256=2a13d2a6534843649dea3d11d1b57171bc40e6ba4df234ee47b50595dc287122
-source=refactor-equivalent
+source=executed

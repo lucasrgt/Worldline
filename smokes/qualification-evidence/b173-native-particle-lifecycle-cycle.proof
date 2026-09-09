@@ -2,4 +2,4 @@ schema=1
 id=b173-native-particle-lifecycle-cycle
 fingerprint=37cfa9ac32db21aaf9d8078f7d8465b5fe840cb1d4bda6f19002509d10f0c6bb
 observation.sha256=a55a9c2e3955173e3c9856f95053115c56814e5bbac199119162c5d95ff6ecb7
-source=refactor-equivalent
+source=executed

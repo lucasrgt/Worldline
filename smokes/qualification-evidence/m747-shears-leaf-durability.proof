@@ -2,4 +2,4 @@ schema=1
 id=m747-shears-leaf-durability
 fingerprint=f570ed7bdf06d23f81c8eeddbaf94a748258c9b3e4580eb39f6e789bdd2cd291
 observation.sha256=9b3bb3d78a64fbeeb87f8be9a3ea67d045623721aa5b32ee0460447b34f88725
-source=refactor-equivalent
+source=executed

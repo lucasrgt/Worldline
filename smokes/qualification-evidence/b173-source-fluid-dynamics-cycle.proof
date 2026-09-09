@@ -2,4 +2,4 @@ schema=1
 id=b173-source-fluid-dynamics-cycle
 fingerprint=99bbbc262767ad37b10c32eca8db23bf0603fc4c809ec79c3cb1df944ffc2c24
 observation.sha256=582feb4cc513f0ea0e5515ac3c12d0ce77d9280fa2e3c689cf35e6e30d986771
-source=refactor-equivalent
+source=executed

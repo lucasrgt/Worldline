@@ -2,4 +2,4 @@ schema=1
 id=m573-sticky-head-break-set
 fingerprint=76f4ac8e989650ce9f09ed682b949e44e27ef862d9da774c9758ac273835316e
 observation.sha256=8055f6b0fab63c4c3a66813fb8c4014000cd8c71baf56c794c869526922ebbb3
-source=refactor-equivalent
+source=executed

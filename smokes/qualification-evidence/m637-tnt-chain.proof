@@ -2,4 +2,4 @@ schema=1
 id=m637-tnt-chain
 fingerprint=865deb6bae4847d9a6254a78ba3b78d0b26926ecbe39d3cb394bdd24e9017385
 observation.sha256=36da1bbf241f079894b7ec438a25d1a1a09082caa59bac68c0a59fd94f01d327
-source=refactor-equivalent
+source=executed

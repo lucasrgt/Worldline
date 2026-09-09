@@ -2,4 +2,4 @@ schema=1
 id=m651-portal-invalid-frame
 fingerprint=9adfa7cab9cbab215d11d825c9914d080a5eab8caeaa9946825d894ceded9109
 observation.sha256=ae858387c77a284d0801976aa7f6e9a90d066d1cfb12e0078ed20b2663a836a6
-source=refactor-equivalent
+source=executed

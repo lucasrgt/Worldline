@@ -2,4 +2,4 @@ schema=1
 id=b173-shaded-mushroom-lifecycle-cycle
 fingerprint=a98e645ad758bee94a80be59881ac76fcb8ea12e64450ad123d007ac3fa73766
 observation.sha256=accfc90cf5f4ca3fe1679dadf8d4b284825eab857e76c03a0621549ac3c3bc27
-source=refactor-equivalent
+source=executed

@@ -2,4 +2,4 @@ schema=1
 id=b173-mushroom-random-tick-conformance-cycle
 fingerprint=79df99a52f730de87594a8670149f88cfb568e76a0994bce1cde16e0dbf66740
 observation.sha256=b358fef202bfa5c9af0d40dfd1cb6b583ebc42b1de4d879267f07387288647fe
-source=refactor-equivalent
+source=executed

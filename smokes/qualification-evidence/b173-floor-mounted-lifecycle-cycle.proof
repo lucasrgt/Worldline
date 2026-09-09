@@ -2,4 +2,4 @@ schema=1
 id=b173-floor-mounted-lifecycle-cycle
 fingerprint=49305d1662035b291fbfd50a535ab45b88a7c10db4977a11f9b1c596432bd831
 observation.sha256=feec18c4c92e535ac906ec0fd6b67d15050fc97687d2d3e16da078b0d293a70f
-source=refactor-equivalent
+source=executed

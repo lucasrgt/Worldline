@@ -2,4 +2,4 @@ schema=1
 id=b173-common-cube-physical-envelope-cycle
 fingerprint=43b570bb98b28b33cba269418d0563b6cca7ab33a4fd66b8f1aaf67b3bb81ba2
 observation.sha256=abbd841c92c372c50f28a54a5306912fc2de35a425f953fdb04c35685d60fe60
-source=refactor-equivalent
+source=executed
