@@ -3,7 +3,7 @@ import org.gradle.plugin.compatibility.compatibility
 plugins {
     `java-gradle-plugin`
     `maven-publish`
-    id("com.gradle.plugin-publish") version "2.1.1"
+    id("com.gradle.plugin-publish") version "2.2.1"
 }
 
 group = "io.github.lucasrgt.worldline"
